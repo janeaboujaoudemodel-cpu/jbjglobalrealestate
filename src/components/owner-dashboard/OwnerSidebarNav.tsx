@@ -107,9 +107,10 @@ const NAV_SECTIONS: NavSection[] = [
 
 interface OwnerSidebarNavProps {
   collapsed: boolean;
+  onNavigate?: () => void;
 }
 
-export default function OwnerSidebarNav({ collapsed }: OwnerSidebarNavProps) {
+export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarNavProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -118,6 +119,11 @@ export default function OwnerSidebarNav({ collapsed }: OwnerSidebarNavProps) {
       return location.pathname === "/owner" || location.pathname === "/owner/";
     }
     return location.pathname.startsWith(path);
+  };
+
+  const handleNavClick = (path: string) => {
+    navigate(path);
+    onNavigate?.();
   };
 
   return (
@@ -133,7 +139,7 @@ export default function OwnerSidebarNav({ collapsed }: OwnerSidebarNavProps) {
             {section.items.map((item) => (
               <button
                 key={item.path}
-                onClick={() => navigate(item.path)}
+                onClick={() => handleNavClick(item.path)}
                 className={cn(
                   "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
                   isActivePath(item.path)

@@ -409,185 +409,169 @@ export default function OwnerDashboardOverview() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Owner Command Center</h1>
-          <p className="text-zinc-400">
-            Welcome back, <span className="text-gold font-medium">Jane bou Jaoude</span> — Your integrated dashboard
-          </p>
-        </div>
+    <div className="space-y-6">
+      {/* KPI Tiles */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <KPICard
+          title="Total Leads"
+          value={totalLeads ?? '—'}
+          icon={<Users className="h-6 w-6 text-gold" />}
+          loading={loadingLeads}
+          onClick={() => navigate('/crm/leads')}
+        />
+        <KPICard
+          title="New This Week"
+          value={newLeadsThisWeek ?? '—'}
+          icon={<UserPlus className="h-6 w-6 text-emerald-400" />}
+          loading={loadingNewLeads}
+          onClick={() => navigate('/crm/leads?filter=new')}
+        />
+        <KPICard
+          title="Pending Tasks"
+          value={pendingTasks ?? '—'}
+          icon={<CheckSquare className="h-6 w-6 text-amber-400" />}
+          loading={loadingTasks}
+          onClick={() => navigate('/crm/tasks')}
+        />
+        <KPICard
+          title="Active Chats"
+          value={activeConversations ?? '—'}
+          icon={<MessageSquare className="h-6 w-6 text-purple-400" />}
+          loading={loadingConversations}
+          onClick={() => navigate('/owner/inbox')}
+        />
+      </div>
 
-        {/* KPI Tiles */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <KPICard
-            title="Total Leads"
-            value={totalLeads ?? '—'}
-            icon={<Users className="h-6 w-6 text-gold" />}
-            loading={loadingLeads}
-            onClick={() => navigate('/crm/leads')}
-          />
-          <KPICard
-            title="New This Week"
-            value={newLeadsThisWeek ?? '—'}
-            icon={<UserPlus className="h-6 w-6 text-emerald-400" />}
-            loading={loadingNewLeads}
-            onClick={() => navigate('/crm/leads?filter=new')}
-          />
-          <KPICard
-            title="Pending Tasks"
-            value={pendingTasks ?? '—'}
-            icon={<CheckSquare className="h-6 w-6 text-amber-400" />}
-            loading={loadingTasks}
-            onClick={() => navigate('/crm/tasks')}
-          />
-          <KPICard
-            title="Active Chats"
-            value={activeConversations ?? '—'}
-            icon={<MessageSquare className="h-6 w-6 text-purple-400" />}
-            loading={loadingConversations}
-            onClick={() => navigate('/owner/inbox')}
-          />
-        </div>
+      {/* Quick Actions Grid */}
+      <QuickActionsGrid />
 
-        {/* Quick Actions Grid */}
-        <div className="mb-6">
-          <QuickActionsGrid />
-        </div>
-
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Newest Leads */}
-          <Card className="bg-zinc-900/80 border-zinc-800 lg:col-span-2">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle className="text-lg text-white">Newest Leads</CardTitle>
-                <CardDescription className="text-zinc-400">Most recent 10 contacts</CardDescription>
-              </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => navigate('/crm/leads')}
-                className="text-gold hover:text-gold hover:bg-gold/10"
-              >
-                View All <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {loadingNewestLeads ? (
-                Array.from({ length: 5 }).map((_, i) => (
-                  <Skeleton key={i} className="h-16 bg-zinc-800" />
-                ))
-              ) : newestLeads && newestLeads.length > 0 ? (
-                newestLeads.map((lead) => (
-                  <LeadRow 
-                    key={lead.id} 
-                    lead={lead} 
-                    onOpen={(id) => navigate(`/crm/leads/${id}`)} 
-                  />
-                ))
-              ) : (
-                <div className="text-center py-8">
-                  <Users className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
-                  <p className="text-zinc-500">No leads yet</p>
-                  <Button 
-                    variant="secondary" 
-                    size="sm" 
-                    className="mt-4"
-                    onClick={() => navigate('/crm?action=new-lead')}
-                  >
-                    Add First Lead
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Needs Follow-up */}
-          <Card className="bg-zinc-900/80 border-zinc-800">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle className="text-lg text-white flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-amber-400" />
-                  Needs Follow-up
-                </CardTitle>
-                <CardDescription className="text-zinc-400">Pending items</CardDescription>
-              </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => navigate('/crm/tasks')}
-                className="text-gold hover:text-gold hover:bg-gold/10"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {loadingFollowUp ? (
-                Array.from({ length: 4 }).map((_, i) => (
-                  <Skeleton key={i} className="h-14 bg-zinc-800" />
-                ))
-              ) : followUpItems && followUpItems.length > 0 ? (
-                followUpItems.map((item: any) => (
-                  <FollowUpItem 
-                    key={item.id} 
-                    item={item}
-                    onComplete={item.type === 'task' ? handleCompleteTask : undefined}
-                    onOpen={item.type === 'lead' ? (id) => navigate(`/crm/leads/${id}`) : undefined}
-                  />
-                ))
-              ) : (
-                <div className="text-center py-6">
-                  <CheckSquare className="h-10 w-10 text-zinc-600 mx-auto mb-2" />
-                  <p className="text-sm text-zinc-500">All caught up!</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Recent Conversations */}
-        <Card className="bg-zinc-900/80 border-zinc-800 mt-6">
-          <CardHeader>
-            <CardTitle className="text-lg text-white flex items-center gap-2">
-              <Activity className="h-5 w-5 text-purple-400" />
-              Recent Conversations
-            </CardTitle>
-            <CardDescription className="text-zinc-400">Website chat sessions (last 10)</CardDescription>
+      {/* Main Content Grid */}
+      <div className="grid lg:grid-cols-3 gap-6">
+        {/* Newest Leads */}
+        <Card className="bg-zinc-900/80 border-zinc-800 lg:col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="text-lg text-white">Newest Leads</CardTitle>
+              <CardDescription className="text-zinc-400">Most recent 10 contacts</CardDescription>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate('/crm/leads')}
+              className="text-gold hover:text-gold hover:bg-gold/10"
+            >
+              View All <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
           </CardHeader>
-          <CardContent>
-            {loadingRecentConvos ? (
-              <div className="grid md:grid-cols-2 gap-2">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <Skeleton key={i} className="h-16 bg-zinc-800" />
-                ))}
-              </div>
-            ) : recentConversations && recentConversations.length > 0 ? (
-              <div className="grid md:grid-cols-2 gap-2">
-                {recentConversations.map((convo) => (
-                  <ConversationRow key={convo.id} conversation={convo} />
-                ))}
-              </div>
+          <CardContent className="space-y-2">
+            {loadingNewestLeads ? (
+              Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-16 bg-zinc-800" />
+              ))
+            ) : newestLeads && newestLeads.length > 0 ? (
+              newestLeads.map((lead) => (
+                <LeadRow 
+                  key={lead.id} 
+                  lead={lead} 
+                  onOpen={(id) => navigate(`/crm/leads/${id}`)} 
+                />
+              ))
             ) : (
               <div className="text-center py-8">
-                <MessageSquare className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
-                <p className="text-zinc-500">No conversations yet</p>
+                <Users className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
+                <p className="text-zinc-500">No leads yet</p>
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  className="mt-4"
+                  onClick={() => navigate('/crm?action=new-lead')}
+                >
+                  Add First Lead
+                </Button>
               </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Integration Widgets */}
-        <div className="mt-6">
-          <IntegrationWidgets />
-        </div>
-
-        {/* Department Shortcuts */}
-        <div className="mt-6">
-          <DepartmentShortcuts />
-        </div>
+        {/* Needs Follow-up */}
+        <Card className="bg-zinc-900/80 border-zinc-800">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="text-lg text-white flex items-center gap-2">
+                <Clock className="h-5 w-5 text-amber-400" />
+                Needs Follow-up
+              </CardTitle>
+              <CardDescription className="text-zinc-400">Pending items</CardDescription>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate('/crm/tasks')}
+              className="text-gold hover:text-gold hover:bg-gold/10"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {loadingFollowUp ? (
+              Array.from({ length: 4 }).map((_, i) => (
+                <Skeleton key={i} className="h-14 bg-zinc-800" />
+              ))
+            ) : followUpItems && followUpItems.length > 0 ? (
+              followUpItems.map((item: any) => (
+                <FollowUpItem 
+                  key={item.id} 
+                  item={item}
+                  onComplete={item.type === 'task' ? handleCompleteTask : undefined}
+                  onOpen={item.type === 'lead' ? (id) => navigate(`/crm/leads/${id}`) : undefined}
+                />
+              ))
+            ) : (
+              <div className="text-center py-6">
+                <CheckSquare className="h-10 w-10 text-zinc-600 mx-auto mb-2" />
+                <p className="text-sm text-zinc-500">All caught up!</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
+
+      {/* Recent Conversations */}
+      <Card className="bg-zinc-900/80 border-zinc-800">
+        <CardHeader>
+          <CardTitle className="text-lg text-white flex items-center gap-2">
+            <Activity className="h-5 w-5 text-purple-400" />
+            Recent Conversations
+          </CardTitle>
+          <CardDescription className="text-zinc-400">Website chat sessions (last 10)</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {loadingRecentConvos ? (
+            <div className="grid md:grid-cols-2 gap-2">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <Skeleton key={i} className="h-16 bg-zinc-800" />
+              ))}
+            </div>
+          ) : recentConversations && recentConversations.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-2">
+              {recentConversations.map((convo) => (
+                <ConversationRow key={convo.id} conversation={convo} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <MessageSquare className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
+              <p className="text-zinc-500">No conversations yet</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Integration Widgets */}
+      <IntegrationWidgets />
+
+      {/* Department Shortcuts */}
+      <DepartmentShortcuts />
     </div>
   );
 }

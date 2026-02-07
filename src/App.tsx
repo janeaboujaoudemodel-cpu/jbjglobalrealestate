@@ -131,6 +131,7 @@ import CRMNotes from "./pages/CRMNotes";
 import CRMReminders from "./pages/CRMReminders";
 import CRMEmployees from "./pages/CRMEmployees";
 import OwnerDashboardOverview from "./pages/OwnerDashboardOverview";
+import OwnerDashboardShell from "./pages/OwnerDashboardShell";
 import CRMLeadsInbox from "./pages/CRMLeadsInbox";
 import OwnerInbox from "./pages/OwnerInbox";
 import OwnerTemplates from "./pages/OwnerTemplates";
@@ -283,6 +284,27 @@ const App = () => (
               <Route path="/403" element={<AccessDenied />} />
               {/* Hidden standalone pages - no header/footer */}
               <Route path="/card" element={<DigitalCard />} />
+              
+              {/* Owner Command Center - Dedicated shell with sidebar, outside MainLayoutWrapper */}
+              <Route path="/owner" element={
+                <OwnerGuard>
+                  <OwnerDashboardShell />
+                </OwnerGuard>
+              }>
+                <Route index element={<OwnerDashboardOverview />} />
+                <Route path="inbox" element={<OwnerInbox />} />
+                <Route path="templates" element={<OwnerTemplates />} />
+                <Route path="settings/communication" element={<OwnerCommSettings />} />
+                <Route path="agenda" element={<OwnerAgenda />} />
+                <Route path="features" element={<OwnerFeatureRegistry />} />
+                <Route path="audit" element={<OwnerAuditPage />} />
+                <Route path="integrations" element={<OwnerIntegrationsPage />} />
+                <Route path="safety" element={<OwnerSafetyPage />} />
+                <Route path="properties" element={<PropertyManagement />} />
+                <Route path="documents" element={<Documents />} />
+                <Route path="settings" element={<OwnerCommSettings />} />
+              </Route>
+              
               <Route element={<AdminBypass><MainLayoutWrapper /></AdminBypass>}>
                 <Route path="/vapi-prompt" element={<VapiPrompt />} />
                 <Route path="/" element={<Index />} />
@@ -442,15 +464,7 @@ const App = () => (
                 )} />
                 <Route path="/crm/leads/:id" element={<OwnerGuard><CRMLeadDetail /></OwnerGuard>} />
                 <Route path="/crm/leads" element={<OwnerGuard><CRMLeadsInbox /></OwnerGuard>} />
-                <Route path="/owner" element={<OwnerGuard><OwnerDashboardOverview /></OwnerGuard>} />
-                <Route path="/owner/inbox" element={<OwnerGuard><OwnerInbox /></OwnerGuard>} />
-                <Route path="/owner/templates" element={<OwnerGuard><OwnerTemplates /></OwnerGuard>} />
-                <Route path="/owner/settings/communication" element={<OwnerGuard><OwnerCommSettings /></OwnerGuard>} />
-                <Route path="/owner/agenda" element={<OwnerGuard><OwnerAgenda /></OwnerGuard>} />
-                <Route path="/owner/features" element={<OwnerGuard><OwnerFeatureRegistry /></OwnerGuard>} />
-                <Route path="/owner/audit" element={<OwnerGuard><OwnerAuditPage /></OwnerGuard>} />
-                <Route path="/owner/integrations" element={<OwnerGuard><OwnerIntegrationsPage /></OwnerGuard>} />
-                <Route path="/owner/safety" element={<OwnerGuard><OwnerSafetyPage /></OwnerGuard>} />
+                {/* Owner routes moved to dedicated shell above - these are now handled by OwnerDashboardShell */}
                 <Route path="/crm/tasks" element={<OwnerGuard><CRMTasks /></OwnerGuard>} />
                 <Route path="/crm/calendar" element={<OwnerGuard><CRMCalendar /></OwnerGuard>} />
                 <Route path="/crm/notes" element={<OwnerGuard><CRMNotes /></OwnerGuard>} />
