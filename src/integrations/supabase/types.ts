@@ -18673,6 +18673,39 @@ export type Database = {
         }
         Relationships: []
       }
+      voice_call_logs: {
+        Row: {
+          conversation_id: string | null
+          created_at: string | null
+          duration_seconds: number | null
+          ended_at: string | null
+          id: string
+          metadata: Json | null
+          started_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          conversation_id?: string | null
+          created_at?: string | null
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          metadata?: Json | null
+          started_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          conversation_id?: string | null
+          created_at?: string | null
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          metadata?: Json | null
+          started_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       web_developer_tasks: {
         Row: {
           approved_at: string | null

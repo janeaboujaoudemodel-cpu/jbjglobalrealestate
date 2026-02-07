@@ -171,6 +171,16 @@ const Footer = () => {
     { href: "/studio", label: "Creative Suite" },
   ];
 
+  // Business Suites - Grouped AI Tools
+  const businessSuitesLinks = [
+    { href: "/business-suite/real-estate", label: "Real Estate Suite" },
+    { href: "/business-suite/broker", label: "Broker Intelligence Suite" },
+    { href: "/business-suite/creative", label: "Creative & Communication" },
+    { href: "/business-suite/productivity", label: "Productivity Suite" },
+    { href: "/ai-call-summarizer", label: "AI Call Summarizer" },
+    { href: "/meeting-center", label: "Meeting Center" },
+  ];
+
   // Professional Tools - Complete list
   const professionalTools = [
     // Property Tools

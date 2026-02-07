@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useConversation } from "@elevenlabs/react";
 import { Phone, PhoneOff, X, Mic, Volume2, LogIn } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,6 +28,8 @@ const VoiceConciergeWidget = () => {
   const [isMinimized, setIsMinimized] = useState(getInitialMinimized);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [currentCallLogId, setCurrentCallLogId] = useState<string | null>(null);
+  const callStartTimeRef = useRef<Date | null>(null);
   const navigate = useNavigate();
 
   // Check authentication status
@@ -46,6 +48,61 @@ const VoiceConciergeWidget = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Log call start to database
+  const logCallStart = useCallback(async (conversationId?: string) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) return null;
+
+      const { data, error } = await supabase
+        .from('voice_call_logs')
+        .insert({
+          user_id: session.user.id,
+          conversation_id: conversationId || null,
+          started_at: new Date().toISOString(),
+        })
+        .select('id')
+        .single();
+
+      if (error) {
+        console.error('Failed to log call start:', error);
+        return null;
+      }
+
+      callStartTimeRef.current = new Date();
+      return data?.id || null;
+    } catch (error) {
+      console.error('Error logging call start:', error);
+      return null;
+    }
+  }, []);
+
+  // Log call end to database
+  const logCallEnd = useCallback(async (callLogId: string) => {
+    try {
+      if (!callStartTimeRef.current) return;
+
+      const endTime = new Date();
+      const durationSeconds = Math.round((endTime.getTime() - callStartTimeRef.current.getTime()) / 1000);
+
+      const { error } = await supabase
+        .from('voice_call_logs')
+        .update({
+          ended_at: endTime.toISOString(),
+          duration_seconds: durationSeconds,
+        })
+        .eq('id', callLogId);
+
+      if (error) {
+        console.error('Failed to log call end:', error);
+      }
+
+      callStartTimeRef.current = null;
+    } catch (error) {
+      console.error('Error logging call end:', error);
+    }
+  }, []);
+
   const conversation = useConversation({
     onConnect: () => {
       console.log("Connected to JBJ Global Real Estate Concierge");
@@ -53,6 +110,11 @@ const VoiceConciergeWidget = () => {
     },
     onDisconnect: () => {
       console.log("Disconnected from concierge");
+      // Log call end when disconnected
+      if (currentCallLogId) {
+        logCallEnd(currentCallLogId);
+        setCurrentCallLogId(null);
+      }
     },
     onMessage: (message) => {
       console.log("Concierge message:", message);
@@ -119,10 +181,16 @@ const VoiceConciergeWidget = () => {
       }
 
       // Start the conversation with WebRTC
-      await conversation.startSession({
+      const session = await conversation.startSession({
         conversationToken: data.token,
         connectionType: "webrtc",
       });
+
+      // Log the call start
+      const callLogId = await logCallStart(data.conversationId);
+      if (callLogId) {
+        setCurrentCallLogId(callLogId);
+      }
     } catch (error) {
       console.error("Failed to start conversation:", error);
       toast.error(
@@ -133,11 +201,16 @@ const VoiceConciergeWidget = () => {
     } finally {
       setIsConnecting(false);
     }
-  }, [conversation, navigate]);
+  }, [conversation, navigate, logCallStart]);
 
   const stopConversation = useCallback(async () => {
+    // Log call end before stopping
+    if (currentCallLogId) {
+      await logCallEnd(currentCallLogId);
+      setCurrentCallLogId(null);
+    }
     await conversation.endSession();
-  }, [conversation]);
+  }, [conversation, currentCallLogId, logCallEnd]);
 
   const isConnected = conversation.status === "connected";
 

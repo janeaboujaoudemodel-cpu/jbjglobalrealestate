@@ -31,7 +31,17 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Sell Your Property', href: '/seller-listing', icon: ClipboardCheck },
   ];
 
-  // Column 2: Toolkit (PUBLIC)
+  // Column 2: Business Suites (NEW)
+  const businessSuitesLinks = [
+    { label: 'Real Estate Suite', href: '/business-suite/real-estate', icon: Building2 },
+    { label: 'Broker Intelligence', href: '/business-suite/broker', icon: Users },
+    { label: 'Creative Suite', href: '/business-suite/creative', icon: Sparkles },
+    { label: 'Productivity Suite', href: '/business-suite/productivity', icon: ClipboardCheck },
+    { label: 'Call Summarizer', href: '/ai-call-summarizer', icon: Phone },
+    { label: 'Meeting Center', href: '/meeting-center', icon: Briefcase },
+  ];
+
+  // Column 3: Toolkit (PUBLIC)
   const toolkitLinks = [
     { label: 'All Tools', href: '/toolkit', icon: Sparkles },
     { label: 'Creative Suite', href: '/studio', icon: Sparkles },
@@ -84,7 +94,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     <MegaMenuShell ref={ref} noScroll>
       <div className="max-w-[1600px] mx-auto px-4 lg:px-8 py-4 lg:py-5">
         {/* 5 Columns - Services, Toolkit, Investors, Brokers (conditional), Company */}
-        <div className={`grid grid-cols-1 sm:grid-cols-2 ${isBrokerMode ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-4`}>
+        <div className={`grid grid-cols-1 sm:grid-cols-2 ${isBrokerMode ? 'lg:grid-cols-6' : 'lg:grid-cols-5'} gap-4`}>
           {/* Column 1: Services */}
           <div className="relative">
             <MegaMenuSectionTitle icon={Briefcase} title="Services" />
@@ -103,7 +113,25 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
             <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
           </div>
 
-          {/* Column 2: Toolkit */}
+          {/* Column 2: Business Suites */}
+          <div className="relative">
+            <MegaMenuSectionTitle icon={Layers} title="Business Suites" />
+            <div className="space-y-0">
+              {businessSuitesLinks.map((item) => (
+                <MegaMenuIconLink
+                  key={item.href}
+                  to={item.href}
+                  onClick={onClose}
+                  icon={item.icon}
+                  title={item.label}
+                  compact
+                />
+              ))}
+            </div>
+            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+          </div>
+
+          {/* Column 3: Toolkit */}
           <div className="relative">
             <MegaMenuSectionTitle icon={Sparkles} title="Toolkit" />
             <div className="space-y-0">
@@ -121,7 +149,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
             <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
           </div>
 
-          {/* Column 3: Investors */}
+          {/* Column 4: Investors */}
           <div className="relative">
             <MegaMenuSectionTitle icon={TrendingUp} title="Investors" />
             <div className="space-y-0">
@@ -139,7 +167,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
             <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
           </div>
 
-          {/* Column 4: Brokers - Only visible in Broker Mode */}
+          {/* Column 5: Brokers - Only visible in Broker Mode */}
           {isBrokerMode && (
             <div className="relative">
               <MegaMenuSectionTitle icon={Users} title="Brokers" />
@@ -159,7 +187,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
             </div>
           )}
 
-          {/* Column 5 (or 4): Company */}
+          {/* Column 6 (or 5): Company */}
           <div>
             <MegaMenuSectionTitle icon={Building2} title="Company" />
             <div className="space-y-0">
