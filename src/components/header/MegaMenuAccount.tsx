@@ -182,6 +182,10 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 </Badge>
               </div>
               <div className="flex flex-col items-end gap-2 shrink-0">
+                {/* "Select your mode" label - shown before first selection */}
+                <p className="text-xs text-zinc-500 font-medium">
+                  Select your mode
+                </p>
                 <div 
                   onClick={(e) => e.stopPropagation()} 
                   onPointerDown={(e) => e.stopPropagation()}
