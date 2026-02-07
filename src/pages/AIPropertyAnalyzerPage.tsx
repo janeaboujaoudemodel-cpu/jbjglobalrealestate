@@ -1,5 +1,5 @@
 import { SEOHead } from "@/components/SEOHead";
-import AIPropertyAnalyzer from "@/components/ai-tools/AIPropertyAnalyzer";
+import { AIPropertyAnalyzerPremium } from "@/components/ai-tools/premium";
 
 const AIPropertyAnalyzerPage = () => {
   return (
@@ -9,11 +9,7 @@ const AIPropertyAnalyzerPage = () => {
         description="Deep market analysis powered by AI. Get comprehensive property insights for Dubai real estate including price trends, investment metrics, and area comparisons."
         canonicalPath="/ai-property-analyzer"
       />
-      <div className="min-h-screen bg-background py-8 md:py-12">
-        <div className="container mx-auto px-4 max-w-5xl">
-          <AIPropertyAnalyzer />
-        </div>
-      </div>
+      <AIPropertyAnalyzerPremium />
     </>
   );
 };

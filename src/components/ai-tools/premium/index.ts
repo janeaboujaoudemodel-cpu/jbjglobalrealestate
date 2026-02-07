@@ -7,3 +7,9 @@ export { default as AICompetitorAnalysisPremium } from './AICompetitorAnalysisPr
 export { default as AINeighborhoodInsightsPremium } from './AINeighborhoodInsightsPremium';
 export { default as AIObjectionHandlerPremium } from './AIObjectionHandlerPremium';
 export { default as AIMeetingSummarizerPremium } from './AIMeetingSummarizerPremium';
+export { default as AITranslationHubPremium } from './AITranslationHubPremium';
+export { default as AIMarketReportPremium } from './AIMarketReportPremium';
+export { default as AIDocumentGeneratorPremium } from './AIDocumentGeneratorPremium';
+export { default as AIVideoTourScriptPremium } from './AIVideoTourScriptPremium';
+export { default as AIContractReviewerPremium } from './AIContractReviewerPremium';
+export { default as AIPropertyAnalyzerPremium } from './AIPropertyAnalyzerPremium';
