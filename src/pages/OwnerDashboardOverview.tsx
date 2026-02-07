@@ -28,6 +28,9 @@ import {
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import LeadStatusBadge from "@/components/crm/LeadStatusBadge";
+import QuickActionsGrid from "@/components/owner-dashboard/QuickActionsGrid";
+import DepartmentShortcuts from "@/components/owner-dashboard/DepartmentShortcuts";
+import IntegrationWidgets from "@/components/owner-dashboard/IntegrationWidgets";
 
 interface KPICardProps {
   title: string;
@@ -410,14 +413,14 @@ export default function OwnerDashboardOverview() {
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Owner Dashboard</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Owner Command Center</h1>
           <p className="text-zinc-400">
-            Welcome back, <span className="text-gold font-medium">Jane bou Jaoude</span> — Your command center
+            Welcome back, <span className="text-gold font-medium">Jane bou Jaoude</span> — Your integrated dashboard
           </p>
         </div>
 
         {/* KPI Tiles */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <KPICard
             title="Total Leads"
             value={totalLeads ?? '—'}
@@ -444,7 +447,13 @@ export default function OwnerDashboardOverview() {
             value={activeConversations ?? '—'}
             icon={<MessageSquare className="h-6 w-6 text-purple-400" />}
             loading={loadingConversations}
+            onClick={() => navigate('/owner/inbox')}
           />
+        </div>
+
+        {/* Quick Actions Grid */}
+        <div className="mb-6">
+          <QuickActionsGrid />
         </div>
 
         {/* Main Content Grid */}
@@ -569,157 +578,15 @@ export default function OwnerDashboardOverview() {
           </CardContent>
         </Card>
 
-        {/* Quick Actions - COMPLETE Navigation Grid */}
-        <Card className="bg-zinc-900/80 border-zinc-800 mt-6">
-          <CardHeader>
-            <CardTitle className="text-lg text-white">Quick Navigation</CardTitle>
-            <CardDescription className="text-zinc-400">Access all Owner features — Jane bou Jaoude's Command Center</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* Primary Owner Actions */}
-            <p className="text-xs text-zinc-500 uppercase tracking-wider mb-3">Owner Command Center</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/owner/inbox')}
-              >
-                <MessageSquare className="h-5 w-5 text-emerald-400" />
-                <span className="text-sm">Unified Inbox</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/owner/agenda')}
-              >
-                <Calendar className="h-5 w-5 text-blue-400" />
-                <span className="text-sm">Daily Agenda</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/owner/templates')}
-              >
-                <FileText className="h-5 w-5 text-purple-400" />
-                <span className="text-sm">Templates</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/owner/settings/communication')}
-              >
-                <Settings className="h-5 w-5 text-zinc-400" />
-                <span className="text-sm">Comm Settings</span>
-              </Button>
-            </div>
+        {/* Integration Widgets */}
+        <div className="mt-6">
+          <IntegrationWidgets />
+        </div>
 
-            {/* CRM Modules */}
-            <p className="text-xs text-zinc-500 uppercase tracking-wider mb-3">CRM Modules</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/crm/leads')} 
-              >
-                <Users className="h-5 w-5 text-gold" />
-                <span className="text-sm">Leads Inbox</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/crm/tasks')}
-              >
-                <CheckSquare className="h-5 w-5 text-amber-400" />
-                <span className="text-sm">My Tasks</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/crm/calendar')}
-              >
-                <Calendar className="h-5 w-5 text-cyan-400" />
-                <span className="text-sm">Calendar</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/crm/reminders')}
-              >
-                <Clock className="h-5 w-5 text-rose-400" />
-                <span className="text-sm">Reminders</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/crm/notes')}
-              >
-                <FileText className="h-5 w-5 text-violet-400" />
-                <span className="text-sm">Notes</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/automations')}
-              >
-                <AlertCircle className="h-5 w-5 text-amber-500" />
-                <span className="text-sm">Automations</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/crm/employees')}
-              >
-                <Users className="h-5 w-5 text-teal-400" />
-                <span className="text-sm">Employees</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/owner/features')}
-              >
-                <BookOpen className="h-5 w-5 text-pink-400" />
-                <span className="text-sm">All Features</span>
-              </Button>
-            </div>
-
-            {/* Quick Tools */}
-            <p className="text-xs text-zinc-500 uppercase tracking-wider mb-3">Quick Tools</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/ai-hub')}
-              >
-                <Activity className="h-5 w-5 text-fuchsia-400" />
-                <span className="text-sm">AI Hub</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/executive-assistant')}
-              >
-                <ExternalLink className="h-5 w-5 text-sky-400" />
-                <span className="text-sm">Assistant</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/security-console')}
-              >
-                <AlertCircle className="h-5 w-5 text-red-400" />
-                <span className="text-sm">Security</span>
-              </Button>
-              <Button 
-                variant="outline"
-                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
-                onClick={() => navigate('/jbj-analytics')}
-              >
-                <TrendingUp className="h-5 w-5 text-emerald-400" />
-                <span className="text-sm">Analytics</span>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Department Shortcuts */}
+        <div className="mt-6">
+          <DepartmentShortcuts />
+        </div>
       </div>
     </div>
   );
