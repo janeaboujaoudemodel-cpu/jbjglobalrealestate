@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, Home, Castle, Building, Briefcase, Eye, FileText, DollarSign, TrendingUp, ClipboardCheck } from 'lucide-react';
+import { Building2, Home, Castle, Building, Briefcase, ArrowRight, FileText, DollarSign, TrendingUp, ClipboardCheck } from 'lucide-react';
 import sellPropertyBg from '@/assets/services/sell-property-bg.jpg';
 import dubaiSellingVideo from '@/assets/videos/dubai-selling-hero.mp4';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
@@ -87,8 +87,8 @@ const MegaMenuSell = React.forwardRef<HTMLDivElement, MegaMenuSellProps>(({ onCl
               <MegaMenuCTAButton
                 to="/seller-listing"
                 onClick={onClose}
-                icon={Eye}
-                title="See Selling Services"
+                icon={ArrowRight}
+                title="Start Selling Your Property"
               />
             </div>
           </div>
