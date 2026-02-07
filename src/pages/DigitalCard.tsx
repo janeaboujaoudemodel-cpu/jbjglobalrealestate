@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { 
   Phone, Mail, Globe, Share2, Download, MessageCircle, Video, 
   PhoneCall, X, MapPin, Building2, 
@@ -149,6 +150,7 @@ const openWhatsApp = (phone: string) => {
 };
 
 const DigitalCard = () => {
+  const { isFounderVisible, isLoading } = useFounderVisibility();
   const [showCallOptions, setShowCallOptions] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -156,6 +158,8 @@ const DigitalCard = () => {
 
   // Set noindex meta tag
   useEffect(() => {
+    if (!isFounderVisible) return; // Skip if redirecting
+    
     document.title = `${CONTACT_INFO.name} - Digital Business Card`;
     
     let metaRobots = document.querySelector('meta[name="robots"]');
@@ -179,7 +183,11 @@ const DigitalCard = () => {
       metaRobots?.remove();
       metaGooglebot?.remove();
     };
-  }, []);
+  }, [isFounderVisible]);
+
+  // Redirect to homepage if founder visibility is OFF
+  if (isLoading) return null;
+  if (!isFounderVisible) return <Navigate to="/" replace />;
 
   // Handle video end - freeze on first frame (logo visible)
   const handleVideoEnd = () => {

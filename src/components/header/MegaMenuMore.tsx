@@ -11,6 +11,7 @@ import {
   MegaMenuSectionTitle,
 } from '@/components/header/mega-menu-primitives';
 import { useUserModeContext } from '@/contexts/UserModeContext';
+import { useFounderVisibility } from '@/contexts/FounderVisibilityContext';
 
 interface MegaMenuMoreProps {
   onClose: () => void;
@@ -18,6 +19,7 @@ interface MegaMenuMoreProps {
 
 const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onClose }, ref) => {
   const { isBrokerMode } = useUserModeContext();
+  const { isFounderVisible } = useFounderVisibility();
 
   // Column 1: Services
   const servicesLinks = [
@@ -57,10 +59,10 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Resources', href: '/broker-resources', icon: FolderOpen },
   ];
 
-  // Column 5: Company
+  // Column 5: Company (Founder link is conditional on visibility toggle)
   const companyLinks = [
     { label: 'About JBJ', href: '/about', icon: Building2 },
-    { label: 'About Jane bou Jaoude', href: '/founder', icon: UserCircle },
+    ...(isFounderVisible ? [{ label: 'Founder & Leadership', href: '/founder', icon: UserCircle }] : []),
     { label: 'Meet the Team', href: '/team', icon: Users },
     { label: 'Contact Us', href: '/contact', icon: Phone },
     { label: 'Careers', href: '/join', icon: Briefcase },
