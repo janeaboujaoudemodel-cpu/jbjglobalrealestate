@@ -251,6 +251,11 @@ import Reviews from "./pages/Reviews";
 import ThankYou from "./pages/ThankYou";
 import Disclaimers from "./pages/Disclaimers";
 
+// Owner Pages
+import OwnerAuditPage from "./pages/owner/OwnerAuditPage";
+import OwnerIntegrationsPage from "./pages/owner/OwnerIntegrationsPage";
+import OwnerSafetyPage from "./pages/owner/OwnerSafetyPage";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -443,6 +448,9 @@ const App = () => (
                 <Route path="/owner/settings/communication" element={<OwnerGuard><OwnerCommSettings /></OwnerGuard>} />
                 <Route path="/owner/agenda" element={<OwnerGuard><OwnerAgenda /></OwnerGuard>} />
                 <Route path="/owner/features" element={<OwnerGuard><OwnerFeatureRegistry /></OwnerGuard>} />
+                <Route path="/owner/audit" element={<OwnerGuard><OwnerAuditPage /></OwnerGuard>} />
+                <Route path="/owner/integrations" element={<OwnerGuard><OwnerIntegrationsPage /></OwnerGuard>} />
+                <Route path="/owner/safety" element={<OwnerGuard><OwnerSafetyPage /></OwnerGuard>} />
                 <Route path="/crm/tasks" element={<OwnerGuard><CRMTasks /></OwnerGuard>} />
                 <Route path="/crm/calendar" element={<OwnerGuard><CRMCalendar /></OwnerGuard>} />
                 <Route path="/crm/notes" element={<OwnerGuard><CRMNotes /></OwnerGuard>} />
