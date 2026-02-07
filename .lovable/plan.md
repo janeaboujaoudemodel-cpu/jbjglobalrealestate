@@ -1,225 +1,187 @@
 
+# Update AI Tools Verified Inventory
 
-# Meeting Center Integration Plan
+## Problem
+The `src/data/ai-tools-verified-inventory.ts` file is severely outdated. Many tools are listed as `component_only` with no routes, but they actually have:
+- Routes in `App.tsx`
+- Page components in `src/pages/`
+- Premium UI components in `src/components/ai-tools/premium/`
+- Edge functions in `supabase/functions/`
 
-## Overview
+## Current Inventory Issues
 
-This plan integrates the AI Call Summarizer and ElevenLabs Voice Concierge call logs directly into the Meeting Center, making it a unified hub for all communication summaries.
+### Tools Marked as `component_only` That Actually Have Routes
 
----
+| Tool | Inventory Status | Actual Route | Edge Function |
+|------|------------------|--------------|---------------|
+| AI ROI Calculator | `component_only` | `/ai-roi-calculator` | `ai-roi-calculator` |
+| AI Market Report | `component_only` | `/ai-market-report` | `ai-market-report` |
+| AI Objection Handler | `component_only` | `/ai-objection-handler` | `ai-objection-handler` |
+| AI Follow-up Scheduler | `component_only` | `/ai-followup-scheduler` | `ai-followup-scheduler` |
+| AI Meeting Summarizer | `component_only` | `/ai-meeting-summarizer` | `ai-meeting-summarizer` |
+| AI Translation Hub | `component_only` | `/ai-translation-hub` | `ai-translation-hub` |
+| AI Video Tour Script | `component_only` | `/ai-video-tour-script` | `ai-video-tour-script` |
+| AI Contract Reviewer | `component_only` | `/ai-contract-reviewer` | `ai-contract-reviewer` |
+| AI Document Generator | `component_only` | `/ai-document-generator` | `ai-document-generator` |
 
-## Current State
+### New Tools Missing from Inventory
 
-| Component | Current Location | Database Storage |
-|-----------|-----------------|-----------------|
-| AI Meeting Summarizer | Standalone `/ai-meeting-summarizer` | `ai_job_master` (tool_name = 'ai-meeting-summarizer') |
-| AI Call Summarizer | Standalone `/ai-call-summarizer` | `ai_job_master` (tool_name = 'ai-call-summarizer') |
-| ElevenLabs Voice Calls | Widget only | `voice_call_logs` table |
-| Meeting Center | View-only hub `/meeting-center` | Mock data only |
+| Tool | Route | Edge Function | Visibility |
+|------|-------|---------------|------------|
+| AI Call Summarizer | `/ai-call-summarizer` | `ai-call-summarizer` | Broker |
+| Meeting Center | `/meeting-center` | N/A (hub page) | Broker |
+| Voice Agent Settings | `/voice-settings` | N/A (settings page) | Public |
+| Real Estate Suite | `/business-suite/real-estate` | N/A (hub page) | Public |
+| Broker Suite | `/business-suite/broker` | N/A (hub page) | Broker |
+| Creative Suite | `/business-suite/creative` | N/A (hub page) | Public |
+| Productivity Suite | `/business-suite/productivity` | N/A (hub page) | Public |
 
-## Proposed Architecture
+### Missing Export
+The `AICallSummarizerPremium` component exists in `src/components/ai-tools/premium/` but is not exported from `index.ts`.
 
-```text
-+--------------------------------------------------+
-|              MEETING CENTER                       |
-|              /meeting-center                      |
-+--------------------------------------------------+
-|                                                  |
-|  [Tabs]                                          |
-|  - All | Meetings | Phone Calls | Voice AI Calls |
-|                                                  |
-+--------------------------------------------------+
-|                                                  |
-|  [Quick Actions Bar]                             |
-|  +-------------------+ +--------------------+    |
-|  | New Meeting       | | New Call Summary   |    |
-|  | Summary           | | (inline form)      |    |
-|  +-------------------+ +--------------------+    |
-|                                                  |
-+--------------------------------------------------+
-|                                                  |
-|  [Inline Call Summarizer Form]                   |
-|  - Client Name                                   |
-|  - Call Notes / Audio Upload                     |
-|  - Summarize Button                              |
-|  (Collapsed by default, expands on click)        |
-|                                                  |
-+--------------------------------------------------+
-|                                                  |
-|  [Combined History List]                         |
-|  - Loads from ai_job_master WHERE tool_name      |
-|    IN ('ai-meeting-summarizer',                  |
-|        'ai-call-summarizer')                     |
-|  - Loads from voice_call_logs                    |
-|  - Sorted by date descending                     |
-|  - Type badges: Meeting / Call / Voice AI        |
-|                                                  |
-+--------------------------------------------------+
+## Implementation Plan
+
+### 1. Add Missing Export to Premium Index
+Add `AICallSummarizerPremium` to `src/components/ai-tools/premium/index.ts`
+
+### 2. Update Inventory - Change `component_only` to `working`
+For each of the 9 tools listed above:
+- Change `status` from `component_only` to `working`
+- Update `route` from `null` to the actual route
+- Update `proofPack.routeFile` to `src/App.tsx`
+- Update `proofPack.routeSnippet` with actual route definition
+- Update `navPath` with navigation locations
+- Verify `edgeFunction` name matches actual function
+
+### 3. Add New Tool Entries
+Add 7 new entries to the inventory:
+- AI Call Summarizer
+- Meeting Center
+- Voice Agent Settings  
+- Real Estate Suite
+- Broker Suite
+- Creative Suite
+- Productivity Suite
+
+### 4. Update Summary Counts
+Update the header comment with new counts:
 ```
-
----
-
-## Implementation Details
-
-### 1. Database Queries
-
-**Fetch Meeting & Call Summaries from ai_job_master:**
-```sql
-SELECT id, tool_name, input_payload, output_payload, created_at
-FROM ai_job_master
-WHERE tool_name IN ('ai-meeting-summarizer', 'ai-call-summarizer')
-  AND user_id = auth.uid()
-ORDER BY created_at DESC
-LIMIT 50
+Total: 52 tools (was 45)
+- Working: 41 (was 30)
+- Partial: 4 (was 5 - AI Personal Shopper may need reclassification)
+- Component Only: 1 (AI Virtual Staging only)
+- Coming Soon: 1 (AI Calendar)
 ```
-
-**Fetch ElevenLabs Voice Calls:**
-```sql
-SELECT id, conversation_id, started_at, ended_at, duration_seconds, metadata
-FROM voice_call_logs
-WHERE user_id = auth.uid()
-ORDER BY started_at DESC
-LIMIT 50
-```
-
-### 2. Component Changes
-
-#### MeetingCenter.tsx - Major Refactor
-**Current**: Uses mock data and links out to separate tools
-**New**: 
-- Fetches real data from `ai_job_master` and `voice_call_logs`
-- Embeds the Call Summarizer form inline (collapsible)
-- Adds "Voice AI" tab for ElevenLabs call history
-- Shows actual summaries with expand/collapse
-- Quick actions to view full details
-
-#### Add Inline Call Summarizer
-- Embed `AICallSummarizerPremium` form directly in Meeting Center
-- When submitted, result appears in the list immediately
-- Collapsible section to keep UI clean
-
-#### Add Voice AI Calls Tab
-- Shows history of ElevenLabs conversations
-- Displays: start time, duration, conversation ID
-- Future enhancement: transcripts when available
-
-### 3. Data Model Mapping
-
-**ai_job_master summary display:**
-```typescript
-interface SummaryItem {
-  id: string;
-  type: 'meeting' | 'call' | 'voice-ai';
-  clientName: string;
-  date: string;
-  summary: string;
-  actionItems: string[];
-  source: 'ai_job_master' | 'voice_call_logs';
-}
-
-// Mapping from ai_job_master:
-// - input_payload.clientName or input_payload.meetingTitle -> clientName
-// - output_payload.summary -> summary
-// - output_payload.actionItems -> actionItems
-// - tool_name -> type ('ai-meeting-summarizer' -> 'meeting', 'ai-call-summarizer' -> 'call')
-
-// Mapping from voice_call_logs:
-// - conversation_id -> clientName (or "Voice AI Call")
-// - started_at -> date
-// - metadata.summary -> summary (if available)
-// - type = 'voice-ai'
-```
-
-### 4. UI Enhancements
-
-**Tab Structure:**
-| Tab | Source | Icon | Color |
-|-----|--------|------|-------|
-| All | Combined | Calendar | Violet |
-| Meetings | ai_job_master (meeting) | Video | Violet |
-| Phone Calls | ai_job_master (call) | Phone | Orange |
-| Voice AI | voice_call_logs | Mic | Gold |
-
-**Inline Form:**
-- Collapsible card at top of page
-- "Add Call Summary" button expands the form
-- After submission, collapses and refreshes list
-
-**Summary Cards:**
-- Expandable to show full details
-- Quick actions: Copy, Generate Document, Schedule Follow-up
-- Type badge with appropriate color
-
----
 
 ## Files to Modify
 
-### Primary File
-**`src/pages/MeetingCenter.tsx`**
-- Remove mock data
-- Add Supabase queries for real data
-- Add tabs for different summary types
-- Embed inline call summarizer form
-- Add voice call logs display
+1. **`src/components/ai-tools/premium/index.ts`**
+   - Add: `export { default as AICallSummarizerPremium } from './AICallSummarizerPremium';`
 
-### Supporting Changes
-**`src/components/ai-tools/premium/AICallSummarizerPremium.tsx`**
-- Export as embeddable component (not full page)
-- Add `onSuccess` callback prop for parent notification
-- Make hero section optional via prop
+2. **`src/data/ai-tools-verified-inventory.ts`**
+   - Update 9 existing entries from `component_only` to `working`
+   - Add 7 new tool entries
+   - Update summary counts in header comment
+   - Update `Last verified` date to current date
 
-**`supabase/functions/ai-call-summarizer/index.ts`**
-- Add logging to `ai_job_master` table for history persistence
-- Include user_id from auth header
+## Updated Inventory Entries
 
----
-
-## Technical Implementation
-
-### Step 1: Update Edge Function to Log Results
-
-Add to `ai-call-summarizer/index.ts`:
+### AI ROI Calculator (Update)
 ```typescript
-// After successful summarization, log to ai_job_master
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
-await supabase.from('ai_job_master').insert({
-  user_id: userId,
-  tool_name: 'ai-call-summarizer',
-  status: 'completed',
-  input_payload: { clientName, hasAudio },
-  output_payload: summary,
-});
+{
+  name: 'AI ROI Calculator',
+  route: '/ai-roi-calculator',
+  navPath: 'AI Hub, Business Suite (Real Estate)',
+  visibility: 'Public',
+  status: 'working',
+  edgeFunction: 'ai-roi-calculator',
+  fixNeeded: null,
+  proofPack: {
+    routeFile: 'src/App.tsx',
+    routeSnippet: '<Route path="/ai-roi-calculator" element={<AIROICalculatorPage />} />',
+    navFile: 'src/pages/AIHub.tsx',
+    navSnippet: 'Listed in property tools',
+    apiWiringFile: 'src/components/ai-tools/premium/AIROICalculatorPremium.tsx',
+    apiWiringSnippet: 'Uses AIToolsProvider invokeTool',
+    statusJustification: 'Route verified, premium UI deployed, edge function exists.'
+  },
+  // ... buildSpec
+}
 ```
 
-### Step 2: Create Unified Data Hook
-
-New hook: `useMeetingCenterData.ts`
+### AI Call Summarizer (New)
 ```typescript
-export const useMeetingCenterData = () => {
-  // Fetch from ai_job_master
-  // Fetch from voice_call_logs
-  // Combine and sort by date
-  // Return unified list with refetch function
-};
+{
+  name: 'AI Call Summarizer',
+  route: '/ai-call-summarizer',
+  navPath: 'Meeting Center, Broker Suite',
+  visibility: 'Broker',
+  status: 'working',
+  edgeFunction: 'ai-call-summarizer',
+  fixNeeded: null,
+  proofPack: {
+    routeFile: 'src/App.tsx',
+    routeSnippet: '<Route path="/ai-call-summarizer" element={<BrokerGuard><AICallSummarizerPage /></BrokerGuard>} />',
+    navFile: 'src/pages/MeetingCenter.tsx',
+    navSnippet: 'Embedded in Meeting Center with inline form',
+    apiWiringFile: 'supabase/functions/ai-call-summarizer/index.ts',
+    apiWiringSnippet: 'Auth required, logs to ai_job_master',
+    statusJustification: 'Route verified with BrokerGuard, integrated into Meeting Center hub.'
+  }
+}
 ```
 
-### Step 3: Refactor MeetingCenter Component
+### Meeting Center (New)
+```typescript
+{
+  name: 'Meeting Center',
+  route: '/meeting-center',
+  navPath: 'Broker Suite, Footer',
+  visibility: 'Broker',
+  status: 'working',
+  edgeFunction: null,
+  fixNeeded: null,
+  proofPack: {
+    routeFile: 'src/App.tsx',
+    routeSnippet: '<Route path="/meeting-center" element={<BrokerGuard><MeetingCenter /></BrokerGuard>} />',
+    navFile: 'src/components/Footer.tsx',
+    navSnippet: 'Footer navigation',
+    apiWiringFile: null,
+    apiWiringSnippet: 'Hub page - fetches from ai_job_master and voice_call_logs',
+    statusJustification: 'Unified hub for meeting/call summaries with tabs and inline summarizer.'
+  }
+}
+```
 
-- Use the new data hook
-- Add tab filtering logic
-- Add inline form toggle state
-- Render real data with proper mapping
+### Business Suites (New - 4 entries)
+Each Business Suite follows similar pattern:
+```typescript
+{
+  name: 'Real Estate Business Suite',
+  route: '/business-suite/real-estate',
+  navPath: 'Footer, MegaMenu',
+  visibility: 'Public',
+  status: 'working',
+  edgeFunction: null,
+  fixNeeded: null,
+  proofPack: {
+    routeFile: 'src/App.tsx',
+    routeSnippet: '<Route path="/business-suite/real-estate" element={...}<RealEstateSuite />...',
+    navFile: 'src/components/Footer.tsx',
+    navSnippet: 'Business Suites section',
+    apiWiringFile: null,
+    apiWiringSnippet: 'Hub page linking to individual tools',
+    statusJustification: 'Suite hub page grouping 6 real estate AI tools.'
+  }
+}
+```
 
----
+## Verification Checklist
 
-## Implementation Status: COMPLETED ✅
-
-All components have been implemented:
-- ✅ MeetingCenter.tsx refactored with real data from ai_job_master and voice_call_logs
-- ✅ useMeetingCenterData.ts hook created for unified data fetching
-- ✅ InlineCallSummarizer.tsx created as embeddable form
-- ✅ SummaryCard.tsx created for displaying summary items
-- ✅ ai-call-summarizer edge function updated to log to ai_job_master
-- ✅ Tabs: All, Meetings, Phone Calls, Voice AI
-- ✅ Real-time list refresh after new summary submission
-
+After implementation, verify:
+1. All routes load without 404
+2. Edge functions respond correctly
+3. Premium UI components render
+4. BrokerGuard protects broker-only tools
+5. Navigation links work from all locations
+6. Inventory counts match actual tool count
