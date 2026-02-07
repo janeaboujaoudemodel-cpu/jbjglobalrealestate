@@ -1,81 +1,89 @@
 import React from 'react';
 import { 
-  BookOpen, BarChart3, Building2, Users, Briefcase, Award, 
-  Phone, ClipboardCheck, Heart, MessageCircle, FileText,
-  Newspaper, Scale, Sparkles, MapPin, Calculator,
-  Shield, Map, Compass, Brain, Layers, GraduationCap
+  Briefcase, Building2, Users, Calculator, Scale, Award, 
+  Phone, Heart, FileText, Shield, Sparkles, MapPin,
+  UserCircle, GraduationCap, FolderOpen, ClipboardCheck,
+  BarChart3, TrendingUp, Layers
 } from 'lucide-react';
 import {
   MegaMenuIconLink,
   MegaMenuShell,
   MegaMenuSectionTitle,
 } from '@/components/header/mega-menu-primitives';
+import { useUserModeContext } from '@/contexts/UserModeContext';
 
 interface MegaMenuMoreProps {
   onClose: () => void;
 }
 
 const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onClose }, ref) => {
-  // Column 1: About & Company
-  const aboutLinks = [
-    { label: 'About Us', href: '/about', icon: Building2 },
-    { label: 'Meet the Team', href: '/team', icon: Users },
-    { label: 'Our Brokers', href: '/brokers', icon: Users },
-    { label: 'Careers', href: '/join', icon: Briefcase },
-    { label: 'Our Awards', href: '/awards', icon: Award },
-    { label: 'Press Kit', href: '/press-kit', icon: Newspaper },
-    { label: 'Company Profile', href: '/company-profile', icon: FileText },
-    { label: 'Contact Us', href: '/contact', icon: Phone },
-    { label: 'Testimonials', href: '/services/testimonials', icon: MessageCircle },
-  ];
+  const { isBrokerMode } = useUserModeContext();
 
-  // Column 2: Hubs & Libraries (consolidated entry points)
-  const hubsLinks = [
-    { label: 'Guides Library', href: '/guides', icon: BookOpen },
-    { label: 'Market Intelligence', href: '/market-intelligence', icon: BarChart3 },
-    { label: 'AI Hub', href: '/ai-hub', icon: Brain },
-    { label: 'Investor Hub', href: '/investor-education', icon: Layers },
-    { label: 'Broker Hub', href: '/broker-toolkit', icon: GraduationCap },
-    { label: 'News & Insights', href: '/news', icon: Newspaper },
-    { label: 'Sitemap', href: '/sitemap', icon: Map },
-  ];
-
-  // Column 3: Partners & Tools
-  const partnerLinks = [
-    { label: 'Partners Hub', href: '/partners', icon: Users },
-    { label: 'Mortgage Partners', href: '/partners/mortgage', icon: Calculator },
-    { label: 'Legal Partners', href: '/partners/legal', icon: Scale },
-    { label: 'Company Setup', href: '/partners/company-setup', icon: Building2 },
-    { label: 'Visa Services', href: '/partners/visa-services', icon: Award },
-    { label: 'Referral Partner', href: '/referral-partner', icon: Users },
-    { label: 'AI Home Finder', href: '/quiz', icon: Sparkles },
-    { label: 'Property Map', href: '/map', icon: MapPin },
-    { label: 'Compare Properties', href: '/compare', icon: Layers },
+  // Column 1: Services
+  const servicesLinks = [
+    { label: 'Our Services', href: '/services', icon: Briefcase },
+    { label: 'Property Management', href: '/services/property-management', icon: Building2 },
+    { label: 'Golden Visa', href: '/guides/golden-visa-uae', icon: Award },
+    { label: 'Mortgage Advisory', href: '/partners/mortgage', icon: Calculator },
+    { label: 'Valuation', href: '/sell/valuation', icon: BarChart3 },
     { label: 'Sell Your Property', href: '/seller-listing', icon: ClipboardCheck },
   ];
 
-  // Column 4: Legal & Trust
+  // Column 2: Toolkit (PUBLIC)
+  const toolkitLinks = [
+    { label: 'Toolkit Hub', href: '/toolkit', icon: Sparkles },
+    { label: 'ROI Calculator', href: '/calculator/roi', icon: Calculator },
+    { label: 'Mortgage Calculator', href: '/mortgage-calculator', icon: Calculator },
+    { label: 'Compare Properties', href: '/compare', icon: Layers },
+    { label: 'Property Map', href: '/map', icon: MapPin },
+    { label: 'AI Home Finder', href: '/quiz', icon: Sparkles },
+  ];
+
+  // Column 3: Investors
+  const investorLinks = [
+    { label: 'Investor Dashboard', href: '/investor-dashboard', icon: UserCircle },
+    { label: 'Investor Education', href: '/investor-education', icon: GraduationCap },
+    { label: 'Market Reports', href: '/market-intelligence/reports', icon: FileText },
+    { label: 'Investment Guides', href: '/guides?category=investment', icon: TrendingUp },
+    { label: 'Portfolio Views', href: '/favorites', icon: Heart },
+  ];
+
+  // Column 4: Brokers (MODE + ROLE BASED - visible in Broker Mode)
+  const brokerLinks = [
+    { label: 'Broker Hub', href: '/broker-toolkit', icon: Briefcase },
+    { label: 'Broker Dashboard', href: '/broker-dashboard', icon: UserCircle },
+    { label: 'Broker CRM', href: '/broker/crm', icon: Users },
+    { label: 'Training', href: '/broker-education', icon: GraduationCap },
+    { label: 'Resources', href: '/broker-resources', icon: FolderOpen },
+  ];
+
+  // Column 5: Company
+  const companyLinks = [
+    { label: 'About JBJ', href: '/about', icon: Building2 },
+    { label: 'About Jane bou Jaoude', href: '/founder', icon: UserCircle },
+    { label: 'Meet the Team', href: '/team', icon: Users },
+    { label: 'Contact Us', href: '/contact', icon: Phone },
+    { label: 'Careers', href: '/join', icon: Briefcase },
+    { label: 'Press & Media', href: '/press-kit', icon: FileText },
+  ];
+
+  // Legal & Trust (always visible)
   const legalLinks = [
     { label: 'Terms of Service', href: '/terms', icon: FileText },
     { label: 'Privacy Policy', href: '/privacy', icon: Shield },
-    { label: 'Cookies Policy', href: '/cookies', icon: FileText },
-    { label: 'Trust & Audit Center', href: '/trust-and-audit-center', icon: Shield },
-    { label: 'Intellectual Property', href: '/intellectual-property', icon: Shield },
-    { label: 'Complaint Procedure', href: '/services/complaint-procedures', icon: ClipboardCheck },
-    { label: 'Landlord Portal', href: '/landlord-portal', icon: Building2 },
-    { label: 'Philanthropy', href: '/philanthropy', icon: Heart },
+    { label: 'Trust Center', href: '/trust-and-audit-center', icon: Shield },
   ];
 
   return (
     <MegaMenuShell ref={ref} noScroll>
-      <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-4 lg:py-5">
-        {/* 4 Equal Columns - Hub-Based Organization */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Column 1: About & Company */}
+      <div className="max-w-[1600px] mx-auto px-4 lg:px-8 py-4 lg:py-5">
+        {/* 5 Columns - Services, Toolkit, Investors, Brokers (conditional), Company */}
+        <div className={`grid grid-cols-1 sm:grid-cols-2 ${isBrokerMode ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-4`}>
+          {/* Column 1: Services */}
           <div className="relative">
-            <MegaMenuSectionTitle icon={Building2} title="About & Company" />
+            <MegaMenuSectionTitle icon={Briefcase} title="Services" />
             <div className="space-y-0">
-              {aboutLinks.map((item) => (
+              {servicesLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
                   to={item.href}
@@ -86,15 +94,14 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
                 />
               ))}
             </div>
-            {/* Vertical divider */}
             <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
           </div>
 
-          {/* Column 2: Hubs & Libraries */}
+          {/* Column 2: Toolkit */}
           <div className="relative">
-            <MegaMenuSectionTitle icon={Compass} title="Hubs & Libraries" />
+            <MegaMenuSectionTitle icon={Sparkles} title="Toolkit" />
             <div className="space-y-0">
-              {hubsLinks.map((item) => (
+              {toolkitLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
                   to={item.href}
@@ -105,15 +112,14 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
                 />
               ))}
             </div>
-            {/* Vertical divider */}
             <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
           </div>
 
-          {/* Column 3: Partners & Tools */}
+          {/* Column 3: Investors */}
           <div className="relative">
-            <MegaMenuSectionTitle icon={Users} title="Partners & Tools" />
+            <MegaMenuSectionTitle icon={TrendingUp} title="Investors" />
             <div className="space-y-0">
-              {partnerLinks.map((item) => (
+              {investorLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
                   to={item.href}
@@ -124,14 +130,45 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
                 />
               ))}
             </div>
-            {/* Vertical divider */}
             <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
           </div>
 
-          {/* Column 4: Legal & Trust */}
+          {/* Column 4: Brokers - Only visible in Broker Mode */}
+          {isBrokerMode && (
+            <div className="relative">
+              <MegaMenuSectionTitle icon={Users} title="Brokers" />
+              <div className="space-y-0">
+                {brokerLinks.map((item) => (
+                  <MegaMenuIconLink
+                    key={item.href}
+                    to={item.href}
+                    onClick={onClose}
+                    icon={item.icon}
+                    title={item.label}
+                    compact
+                  />
+                ))}
+              </div>
+              <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+            </div>
+          )}
+
+          {/* Column 5 (or 4): Company */}
           <div>
-            <MegaMenuSectionTitle icon={Shield} title="Legal & Trust" />
+            <MegaMenuSectionTitle icon={Building2} title="Company" />
             <div className="space-y-0">
+              {companyLinks.map((item) => (
+                <MegaMenuIconLink
+                  key={item.href}
+                  to={item.href}
+                  onClick={onClose}
+                  icon={item.icon}
+                  title={item.label}
+                  compact
+                />
+              ))}
+              {/* Divider before legal */}
+              <div className="h-px bg-gold/20 my-2" />
               {legalLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
