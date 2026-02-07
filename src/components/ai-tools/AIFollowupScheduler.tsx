@@ -37,9 +37,15 @@ const AIFollowupScheduler = ({ leadId, leadName = "", onResponse }: AIFollowupSc
       return;
     }
 
+    // Map frontend fields to backend expected format
+    const leadInfo = `Lead: ${formData.leadName}. Status: ${formData.leadStatus}. Notes: ${formData.notes || 'None'}`;
+    const urgency = formData.leadStatus === 'hot' ? 'high' : formData.leadStatus === 'warm' ? 'normal' : 'low';
+
     const result = await invokeTool("ai-followup-scheduler", {
-      ...formData,
-      leadId,
+      leadInfo,
+      lastInteraction: formData.lastInteraction || 'Not specified',
+      interactionType: formData.interactionType,
+      urgency,
     });
 
     if (result.success && onResponse) {
