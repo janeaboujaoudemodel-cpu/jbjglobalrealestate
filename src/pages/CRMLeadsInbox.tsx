@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -37,10 +37,11 @@ import {
   MessageSquare,
   RefreshCw,
   Download,
-  Calendar
+  Calendar,
+  StickyNote
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
-import LeadStatusBadge, { PIPELINE_STATUSES } from "@/components/crm/LeadStatusBadge";
+import { PIPELINE_STATUSES } from "@/components/crm/LeadStatusBadge";
 import InlineStatusSelect from "@/components/crm/InlineStatusSelect";
 import AddNoteDialog from "@/components/crm/AddNoteDialog";
 
@@ -53,6 +54,7 @@ interface Lead {
   pipeline_stage: string;
   created_at: string;
   updated_at: string;
+  last_activity?: string | null;
   tags: string[] | null;
 }
 
@@ -109,9 +111,12 @@ export default function CRMLeadsInbox() {
   const { data: leadsData, isLoading, isFetching } = useQuery({
     queryKey: ['crm-leads-inbox', debouncedSearch, statusFilter, sourceFilter, dateStart, dateEnd, page],
     queryFn: async () => {
+      // Try with last_activity column first, fallback without it
+      const selectFields = 'id, full_name, email_lower, phone_e164, source, pipeline_stage, created_at, updated_at, tags';
+      
       let query = supabase
         .from('crm_leads')
-        .select('id, full_name, email_lower, phone_e164, source, pipeline_stage, created_at, updated_at, tags', { count: 'exact' });
+        .select(selectFields, { count: 'exact' });
 
       // Apply search filter
       if (debouncedSearch) {
@@ -128,12 +133,14 @@ export default function CRMLeadsInbox() {
         query = query.ilike('source', `%${sourceFilter}%`);
       }
 
-      // Apply date range filter
+      // Apply date range filter (timezone-safe)
       if (dateStart) {
-        query = query.gte('created_at', `${dateStart}T00:00:00.000Z`);
+        const startDate = new Date(dateStart + 'T00:00:00');
+        query = query.gte('created_at', startDate.toISOString());
       }
       if (dateEnd) {
-        query = query.lte('created_at', `${dateEnd}T23:59:59.999Z`);
+        const endDate = new Date(dateEnd + 'T23:59:59.999');
+        query = query.lte('created_at', endDate.toISOString());
       }
 
       // Pagination
@@ -188,10 +195,12 @@ export default function CRMLeadsInbox() {
         query = query.ilike('source', `%${sourceFilter}%`);
       }
       if (dateStart) {
-        query = query.gte('created_at', `${dateStart}T00:00:00.000Z`);
+        const startDate = new Date(dateStart + 'T00:00:00');
+        query = query.gte('created_at', startDate.toISOString());
       }
       if (dateEnd) {
-        query = query.lte('created_at', `${dateEnd}T23:59:59.999Z`);
+        const endDate = new Date(dateEnd + 'T23:59:59.999');
+        query = query.lte('created_at', endDate.toISOString());
       }
 
       const { data } = await query.order('created_at', { ascending: false });
@@ -240,6 +249,13 @@ export default function CRMLeadsInbox() {
   const openEmail = (email: string, e: React.MouseEvent) => {
     e.stopPropagation();
     window.open(`mailto:${email}`, '_blank');
+  };
+
+  // Get last activity display value (use last_activity if exists, fallback to updated_at)
+  const getLastActivity = (lead: Lead): string => {
+    const activityDate = lead.last_activity || lead.updated_at;
+    if (!activityDate) return '—';
+    return formatDistanceToNow(new Date(activityDate), { addSuffix: true });
   };
 
   return (
@@ -460,7 +476,7 @@ export default function CRMLeadsInbox() {
                             {formatDistanceToNow(new Date(lead.created_at), { addSuffix: true })}
                           </TableCell>
                           <TableCell className="text-zinc-400 text-sm">
-                            {formatDistanceToNow(new Date(lead.updated_at), { addSuffix: true })}
+                            {getLastActivity(lead)}
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex items-center justify-end gap-1">
@@ -470,6 +486,7 @@ export default function CRMLeadsInbox() {
                                   size="icon"
                                   className="h-8 w-8 text-green-500 hover:text-green-400 hover:bg-green-500/10"
                                   onClick={(e) => openWhatsApp(lead.phone_e164!, e)}
+                                  title="WhatsApp"
                                 >
                                   <MessageSquare className="h-4 w-4" />
                                 </Button>
@@ -480,21 +497,34 @@ export default function CRMLeadsInbox() {
                                   size="icon"
                                   className="h-8 w-8 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
                                   onClick={(e) => openEmail(lead.email_lower!, e)}
+                                  title="Email"
                                 >
                                   <Mail className="h-4 w-4" />
                                 </Button>
                               )}
                               <AddNoteDialog 
                                 leadId={lead.id} 
-                                leadName={lead.full_name} 
+                                leadName={lead.full_name}
+                                trigger={
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
+                                    title="Add Note"
+                                  >
+                                    <StickyNote className="h-4 w-4" />
+                                  </Button>
+                                }
                               />
                               <Button
                                 variant="ghost"
-                                size="icon"
-                                className="h-8 w-8 text-gold hover:text-gold hover:bg-gold/10"
+                                size="sm"
+                                className="h-8 px-2 text-gold hover:text-gold hover:bg-gold/10"
                                 onClick={(e) => { e.stopPropagation(); navigate(`/crm/leads/${lead.id}`); }}
+                                title="Open"
                               >
-                                <ExternalLink className="h-4 w-4" />
+                                Open
+                                <ExternalLink className="h-3 w-3 ml-1" />
                               </Button>
                             </div>
                           </TableCell>
