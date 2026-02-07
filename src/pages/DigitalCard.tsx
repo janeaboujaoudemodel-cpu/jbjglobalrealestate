@@ -156,32 +156,55 @@ const DigitalCard = () => {
   const [copied, setCopied] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Set noindex meta tag
+  // Set noindex meta tag - only for this page, preserve existing global tags
   useEffect(() => {
     if (!isFounderVisible) return; // Skip if redirecting
     
     document.title = `${CONTACT_INFO.name} - Digital Business Card`;
     
-    let metaRobots = document.querySelector('meta[name="robots"]');
-    if (!metaRobots) {
+    // Track if we created these tags
+    let createdRobots = false;
+    let createdGooglebot = false;
+    let previousRobotsContent: string | null = null;
+    let previousGooglebotContent: string | null = null;
+    
+    // Handle robots meta tag
+    let metaRobots = document.querySelector('meta[name="robots"]') as HTMLMetaElement | null;
+    if (metaRobots) {
+      previousRobotsContent = metaRobots.getAttribute("content");
+    } else {
       metaRobots = document.createElement("meta");
       metaRobots.setAttribute("name", "robots");
       document.head.appendChild(metaRobots);
+      createdRobots = true;
     }
     metaRobots.setAttribute("content", "noindex, nofollow, noarchive, nosnippet");
 
-    // Add googlebot-specific meta
-    let metaGooglebot = document.querySelector('meta[name="googlebot"]');
-    if (!metaGooglebot) {
+    // Handle googlebot meta tag
+    let metaGooglebot = document.querySelector('meta[name="googlebot"]') as HTMLMetaElement | null;
+    if (metaGooglebot) {
+      previousGooglebotContent = metaGooglebot.getAttribute("content");
+    } else {
       metaGooglebot = document.createElement("meta");
       metaGooglebot.setAttribute("name", "googlebot");
       document.head.appendChild(metaGooglebot);
+      createdGooglebot = true;
     }
     metaGooglebot.setAttribute("content", "noindex, nofollow");
 
     return () => {
-      metaRobots?.remove();
-      metaGooglebot?.remove();
+      // Only remove if we created them, otherwise restore previous content
+      if (createdRobots && metaRobots) {
+        metaRobots.remove();
+      } else if (metaRobots && previousRobotsContent !== null) {
+        metaRobots.setAttribute("content", previousRobotsContent);
+      }
+      
+      if (createdGooglebot && metaGooglebot) {
+        metaGooglebot.remove();
+      } else if (metaGooglebot && previousGooglebotContent !== null) {
+        metaGooglebot.setAttribute("content", previousGooglebotContent);
+      }
     };
   }, [isFounderVisible]);
 
