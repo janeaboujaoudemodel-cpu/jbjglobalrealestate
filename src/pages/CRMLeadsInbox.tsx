@@ -289,8 +289,8 @@ export default function CRMLeadsInbox() {
               Export
             </Button>
             <Button
+              variant="primary"
               onClick={() => navigate('/crm?action=new-lead')}
-              className="bg-gold hover:bg-gold/90 text-black"
             >
               <Plus className="h-4 w-4 mr-2" />
               New Lead
@@ -404,8 +404,9 @@ export default function CRMLeadsInbox() {
                   </Button>
                 ) : (
                   <Button 
+                    variant="primary"
                     onClick={() => navigate('/crm?action=new-lead')}
-                    className="bg-gold hover:bg-gold/90 text-black mt-2"
+                    className="mt-2"
                   >
                     Add First Lead
                   </Button>

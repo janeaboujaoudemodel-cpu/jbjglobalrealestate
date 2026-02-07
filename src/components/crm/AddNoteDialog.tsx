@@ -99,9 +99,9 @@ export default function AddNoteDialog({ leadId, leadName, trigger }: AddNoteDial
               Cancel
             </Button>
             <Button
+              variant="primary"
               onClick={handleSubmit}
               disabled={!note.trim() || isSubmitting}
-              className="bg-gold hover:bg-gold/90 text-black"
             >
               {isSubmitting ? (
                 <>

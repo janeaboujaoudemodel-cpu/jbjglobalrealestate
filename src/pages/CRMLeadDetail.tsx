@@ -434,8 +434,8 @@ const CRMLeadDetail = () => {
         <User className="h-16 w-16 text-zinc-600" />
         <p className="text-zinc-400 text-lg">Lead not found</p>
         <Button 
+          variant="primary"
           onClick={() => navigate('/crm/leads')}
-          className="bg-gold hover:bg-gold/90 text-black"
         >
           Return to Leads
         </Button>

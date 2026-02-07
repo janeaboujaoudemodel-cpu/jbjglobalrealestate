@@ -569,8 +569,8 @@ export default function OwnerDashboardOverview() {
         {/* Quick Actions */}
         <div className="mt-6 flex flex-wrap gap-3">
           <Button 
+            variant="primary"
             onClick={() => navigate('/crm/leads')} 
-            className="bg-gold hover:bg-gold/90 text-black"
           >
             <Users className="h-4 w-4 mr-2" />
             Open Leads Inbox
