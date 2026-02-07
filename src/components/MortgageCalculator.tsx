@@ -364,18 +364,6 @@ const MortgageCalculator = ({
               *Estimates are for illustrative purposes only. Actual rates may vary based on bank policies and eligibility.
             </p>
 
-            {/* CTA - Premium Gold Button - Centered at bottom */}
-            <div className="pt-6 mt-4 border-t border-gold/20 flex justify-center">
-              <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="block w-full max-w-md">
-                <Button 
-                  variant="primary" 
-                  className="w-full h-14 text-base font-semibold group shadow-lg hover:shadow-[0_14px_45px_rgba(200,167,102,0.4)] hover:-translate-y-1 transition-all duration-300"
-                >
-                  Request Mortgage Partner Introduction
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </a>
-            </div>
           </div>
         </div>
 
