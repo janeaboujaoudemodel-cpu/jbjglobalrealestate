@@ -7,6 +7,8 @@
  * - Never reused across users
  * - Owner has read-only visibility for audit/support
  * 
+ * ACCESS: Public (unauthenticated allowed, but history only saved for authenticated users)
+ * 
  * Intelligence Features:
  * - Confidence Band (Low/Mid/High prediction range)
  * - Comparable Properties (similar transactions)
@@ -50,7 +52,16 @@ serve(async (req) => {
   const startTime = Date.now();
   const clientIp = getClientIp(req);
   const authHeader = req.headers.get("Authorization");
-  const { service: supabaseAdmin } = createSupabaseClients(authHeader);
+  const { service: supabaseAdmin, user: supabaseUser } = createSupabaseClients(authHeader);
+
+  // Get user if authenticated (optional for public tools)
+  let userId: string | null = null;
+  try {
+    const { data: { user } } = await supabaseUser.auth.getUser();
+    userId = user?.id || null;
+  } catch {
+    // Anonymous user - allowed for public tools
+  }
 
   try {
     // 1. IP Blocklist Check
@@ -59,8 +70,9 @@ serve(async (req) => {
       return errorResponse(corsHeaders, blockResult.reason || "Access denied", 403);
     }
 
-    // 2. Rate Limiting
-    const rateResult = await checkRateLimit(supabaseAdmin, clientIp, clientIp, {
+    // 2. Rate Limiting (use IP for anonymous, user ID for authenticated)
+    const rateKey = userId || clientIp;
+    const rateResult = await checkRateLimit(supabaseAdmin, rateKey, clientIp, {
       functionName: "ai-price-predictor",
       windowMinutes: 5,
       maxRequests: 20,
@@ -151,14 +163,17 @@ Provide your price prediction as a JSON object with confidence intervals and com
       temperature: 0.4,
     });
 
+    const processingTimeMs = Date.now() - startTime;
+
     if (!aiResponse.success) {
       await trackAIUsage(supabaseAdmin, {
         functionName: "ai-price-predictor",
+        userId,
         clientIp,
         model: "google/gemini-2.5-flash",
         success: false,
         errorType: aiResponse.error,
-        responseTimeMs: Date.now() - startTime,
+        responseTimeMs: processingTimeMs,
       });
       return errorResponse(corsHeaders, aiResponse.error || "AI processing failed", aiResponse.status || 500);
     }
@@ -183,16 +198,52 @@ Provide your price prediction as a JSON object with confidence intervals and com
       };
     }
 
-    // 7. Track usage
+    // 7. Persist to ai_job_master ONLY IF USER IS AUTHENTICATED
+    if (userId) {
+      const inputPayload = {
+        location: sanitized.location,
+        propertyType: sanitized.propertyType,
+        bedrooms: sanitized.bedrooms,
+        size: sanitized.size,
+        developerName: sanitized.developerName,
+      };
+
+      const outputPayload = {
+        estimatedPrice: predictionData.estimatedPrice,
+        marketPosition: predictionData.marketPosition,
+        trend: predictionData.appreciationForecast?.trend,
+      };
+
+      await supabaseAdmin.from('ai_job_master').insert({
+        user_id: userId,
+        tool_name: 'ai-price-predictor',
+        status: 'completed',
+        input_payload: inputPayload,
+        output_payload: outputPayload,
+        intelligence_features: {
+          confidenceBand: true,
+          marketPosition: true,
+          appreciationForecast: true,
+          neighborhoodFactor: true,
+          bestTimeToSell: true,
+          comparables: true,
+        },
+        processing_time_ms: processingTimeMs,
+        completed_at: new Date().toISOString(),
+      });
+    }
+
+    // 8. Track usage
     await trackAIUsage(supabaseAdmin, {
       functionName: "ai-price-predictor",
+      userId,
       clientIp,
       model: "google/gemini-2.5-flash",
       success: true,
-      responseTimeMs: Date.now() - startTime,
+      responseTimeMs: processingTimeMs,
     });
 
-    console.log(`Price prediction complete: ${predictionData.estimatedPrice} AED (${Date.now() - startTime}ms)`);
+    console.log(`Price prediction complete: ${predictionData.estimatedPrice} AED (${processingTimeMs}ms)`);
 
     return new Response(
       JSON.stringify({
@@ -220,6 +271,7 @@ Provide your price prediction as a JSON object with confidence intervals and com
     console.error("AI Price Predictor error:", error);
     await trackAIUsage(supabaseAdmin, {
       functionName: "ai-price-predictor",
+      userId,
       clientIp,
       model: "google/gemini-2.5-flash",
       success: false,

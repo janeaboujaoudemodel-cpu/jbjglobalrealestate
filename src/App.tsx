@@ -34,6 +34,7 @@ import { ScrollToTopOnMount } from "@/components/ScrollToTop";
 import AdminBypass from "@/components/AdminBypass";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import OwnerGuard from "@/components/OwnerGuard";
+import BrokerGuard from "@/components/BrokerGuard";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import { RedirectWithParams } from "@/components/RedirectWithParams";
@@ -422,7 +423,7 @@ const App = () => (
                 <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
                 <Route path="/property-evaluator" element={<PropertyEvaluator />} />
                 <Route path="/ai-property-analyzer" element={<AIPropertyAnalyzerPage />} />
-                <Route path="/ai-lead-qualification" element={<AILeadQualificationPage />} />
+                <Route path="/ai-lead-qualification" element={<BrokerGuard><AILeadQualificationPage /></BrokerGuard>} />
                 <Route path="/ai-price-predictor" element={<AIPricePredictorPage />} />
                 <Route path="/ai-neighborhood-insights" element={<AINeighborhoodInsightsPage />} />
                 <Route path="/document-scanner" element={<ScanSignDocuments />} />

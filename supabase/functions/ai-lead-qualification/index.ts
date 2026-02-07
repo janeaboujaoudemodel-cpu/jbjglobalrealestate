@@ -66,8 +66,14 @@ serve(async (req) => {
       return errorResponse(corsHeaders, blockResult.reason || "Access denied", 403);
     }
 
-    // 2. Rate Limiting (20 requests per 5 minutes)
-    const rateKey = clientIp;
+    // 2. AUTHENTICATION REQUIRED - Broker tool
+    const { data: { user }, error: authError } = await supabaseUser.auth.getUser();
+    if (authError || !user) {
+      return errorResponse(corsHeaders, "Authentication required. This is a broker-only tool.", 401);
+    }
+
+    // 3. Rate Limiting (20 requests per 5 minutes)
+    const rateKey = user.id;
     const rateResult = await checkRateLimit(supabaseAdmin, rateKey, clientIp, {
       functionName: "ai-lead-qualification",
       windowMinutes: 5,
@@ -162,14 +168,17 @@ Provide your qualification assessment as a JSON object.`;
       temperature: 0.3, // Lower temperature for more consistent scoring
     });
 
+    const processingTimeMs = Date.now() - startTime;
+
     if (!aiResponse.success) {
       await trackAIUsage(supabaseAdmin, {
         functionName: "ai-lead-qualification",
+        userId: user.id,
         clientIp,
         model: "google/gemini-2.5-flash",
         success: false,
         errorType: aiResponse.error,
-        responseTimeMs: Date.now() - startTime,
+        responseTimeMs: processingTimeMs,
       });
       return errorResponse(corsHeaders, aiResponse.error || "AI processing failed", aiResponse.status || 500);
     }
@@ -201,19 +210,54 @@ Provide your qualification assessment as a JSON object.`;
       };
     }
 
-    // 7. Track usage
+    // 7. Persist to ai_job_master (USER-OWNED DATA)
+    const inputPayload = {
+      leadName: sanitizedLead.name,
+      budget: sanitizedLead.budget,
+      propertyInterest: sanitizedLead.propertyInterest,
+      timeline: sanitizedLead.timeline,
+      source: sanitizedLead.source,
+      // Exclude PII (email/phone) from stored input for privacy
+    };
+
+    const outputPayload = {
+      qualificationScore: qualificationData.qualificationScore,
+      classification: qualificationData.classification,
+      temperature: qualificationData.temperature,
+      recommendedAction: qualificationData.recommendedAction,
+    };
+
+    await supabaseAdmin.from('ai_job_master').insert({
+      user_id: user.id,
+      tool_name: 'ai-lead-qualification',
+      status: 'completed',
+      input_payload: inputPayload,
+      output_payload: outputPayload,
+      intelligence_features: {
+        confidenceScoring: true,
+        buyerInvestorClassification: true,
+        objectionPrediction: true,
+        urgencyRanking: true,
+        riskFlagging: true,
+        actionRecommendation: true,
+      },
+      processing_time_ms: processingTimeMs,
+      completed_at: new Date().toISOString(),
+    });
+
+    // 8. Track usage
     await trackAIUsage(supabaseAdmin, {
       functionName: "ai-lead-qualification",
+      userId: user.id,
       clientIp,
       model: "google/gemini-2.5-flash",
       success: true,
-      responseTimeMs: Date.now() - startTime,
+      responseTimeMs: processingTimeMs,
     });
 
-    const responseTimeMs = Date.now() - startTime;
-    console.log(`Lead qualification complete: score=${qualificationData.qualificationScore} (${responseTimeMs}ms)`);
+    console.log(`Lead qualification complete: score=${qualificationData.qualificationScore} (${processingTimeMs}ms)`);
 
-    // 8. Return structured response
+    // 9. Return structured response
     return new Response(
       JSON.stringify({
         success: true,
