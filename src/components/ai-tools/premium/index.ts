@@ -13,3 +13,4 @@ export { default as AIDocumentGeneratorPremium } from './AIDocumentGeneratorPrem
 export { default as AIVideoTourScriptPremium } from './AIVideoTourScriptPremium';
 export { default as AIContractReviewerPremium } from './AIContractReviewerPremium';
 export { default as AIPropertyAnalyzerPremium } from './AIPropertyAnalyzerPremium';
+export { default as AICallSummarizerPremium } from './AICallSummarizerPremium';
