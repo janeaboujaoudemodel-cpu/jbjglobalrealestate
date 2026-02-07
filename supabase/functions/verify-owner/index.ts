@@ -35,10 +35,10 @@ serve(async (req) => {
       );
     }
 
-    const ownerEmail = Deno.env.get("VITE_OWNER_EMAIL");
+    const ownerEmail = Deno.env.get("OWNER_EMAIL");
     
     if (!ownerEmail) {
-      console.error("VITE_OWNER_EMAIL not configured");
+      console.error("OWNER_EMAIL not configured");
       return new Response(
         JSON.stringify({ isOwner: false, reason: "no_config" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
