@@ -213,17 +213,17 @@ export const aiSalesTools: ToolDefinition[] = [
     href: '/ai-lead-qualification',
     icon: Target,
     category: 'ai-sales',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Leads', 'AI', 'CRM'],
   },
   {
-    id: 'ai-follow-up-scheduler',
+    id: 'ai-followup-scheduler',
     name: 'AI Follow-up Scheduler',
     description: 'Smart follow-up scheduling based on lead behavior.',
-    href: '/ai-follow-up-scheduler',
+    href: '/ai-followup-scheduler',
     icon: Calendar,
     category: 'ai-sales',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Follow-up', 'Schedule', 'AI'],
   },
   {
@@ -233,7 +233,7 @@ export const aiSalesTools: ToolDefinition[] = [
     href: '/ai-objection-handler',
     icon: MessageSquare,
     category: 'ai-sales',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Sales', 'AI'],
   },
   {
@@ -254,7 +254,7 @@ export const aiReportTools: ToolDefinition[] = [
     id: 'ai-market-report',
     name: 'AI Market Report',
     description: 'Generate comprehensive market reports with AI analysis.',
-    href: '/market-report',
+    href: '/ai-market-report',
     icon: AreaChart,
     category: 'ai-reports',
     status: 'active',
@@ -267,7 +267,7 @@ export const aiReportTools: ToolDefinition[] = [
     href: '/ai-competitor-analysis',
     icon: TrendingUp,
     category: 'ai-reports',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Competitor', 'Analysis', 'AI'],
   },
   {
@@ -277,7 +277,7 @@ export const aiReportTools: ToolDefinition[] = [
     href: '/ai-roi-calculator',
     icon: Calculator,
     category: 'ai-reports',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['ROI', 'Investment', 'AI'],
   },
   {
@@ -301,7 +301,7 @@ export const aiCommunicationTools: ToolDefinition[] = [
     href: '/ai-meeting-summarizer',
     icon: ClipboardList,
     category: 'ai-communication',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Meeting', 'Summary', 'AI'],
   },
   {
@@ -311,7 +311,7 @@ export const aiCommunicationTools: ToolDefinition[] = [
     href: '/ai-translation-hub',
     icon: Globe,
     category: 'ai-communication',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Translation', 'AI'],
   },
   {
@@ -321,7 +321,7 @@ export const aiCommunicationTools: ToolDefinition[] = [
     href: '/ai-video-tour-script',
     icon: VideoIcon,
     category: 'ai-communication',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Video', 'Script', 'AI'],
   },
   {
@@ -365,7 +365,7 @@ export const aiContentTools: ToolDefinition[] = [
     href: '/ai-contract-reviewer',
     icon: Scale,
     category: 'ai-content',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Contract', 'Legal', 'AI'],
   },
   {
@@ -375,7 +375,7 @@ export const aiContentTools: ToolDefinition[] = [
     href: '/ai-document-generator',
     icon: FileSignature,
     category: 'ai-content',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Document', 'AI'],
   },
 ];
