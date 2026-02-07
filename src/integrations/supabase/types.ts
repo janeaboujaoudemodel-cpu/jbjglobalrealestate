@@ -12012,6 +12012,646 @@ export type Database = {
         }
         Relationships: []
       }
+      owner_comm_ai_drafts: {
+        Row: {
+          ai_confidence: number | null
+          ai_model_used: string | null
+          ai_reasoning: string | null
+          approved_at: string | null
+          content: string
+          created_at: string
+          draft_type: string
+          id: string
+          is_approved: boolean | null
+          sent_message_id: string | null
+          subject: string | null
+          template_id: string | null
+          thread_id: string
+          updated_at: string
+          user_id: string
+          voice_script: string | null
+          voice_url: string | null
+        }
+        Insert: {
+          ai_confidence?: number | null
+          ai_model_used?: string | null
+          ai_reasoning?: string | null
+          approved_at?: string | null
+          content: string
+          created_at?: string
+          draft_type: string
+          id?: string
+          is_approved?: boolean | null
+          sent_message_id?: string | null
+          subject?: string | null
+          template_id?: string | null
+          thread_id: string
+          updated_at?: string
+          user_id: string
+          voice_script?: string | null
+          voice_url?: string | null
+        }
+        Update: {
+          ai_confidence?: number | null
+          ai_model_used?: string | null
+          ai_reasoning?: string | null
+          approved_at?: string | null
+          content?: string
+          created_at?: string
+          draft_type?: string
+          id?: string
+          is_approved?: boolean | null
+          sent_message_id?: string | null
+          subject?: string | null
+          template_id?: string | null
+          thread_id?: string
+          updated_at?: string
+          user_id?: string
+          voice_script?: string | null
+          voice_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "owner_comm_ai_drafts_sent_message_id_fkey"
+            columns: ["sent_message_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "owner_comm_ai_drafts_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "owner_comm_ai_drafts_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      owner_comm_ai_learning: {
+        Row: {
+          applied_count: number | null
+          context: string | null
+          corrected_content: string | null
+          created_at: string
+          id: string
+          importance_score: number | null
+          learning_type: string
+          original_content: string | null
+          tags: string[] | null
+          user_id: string
+        }
+        Insert: {
+          applied_count?: number | null
+          context?: string | null
+          corrected_content?: string | null
+          created_at?: string
+          id?: string
+          importance_score?: number | null
+          learning_type: string
+          original_content?: string | null
+          tags?: string[] | null
+          user_id: string
+        }
+        Update: {
+          applied_count?: number | null
+          context?: string | null
+          corrected_content?: string | null
+          created_at?: string
+          id?: string
+          importance_score?: number | null
+          learning_type?: string
+          original_content?: string | null
+          tags?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      owner_comm_channels: {
+        Row: {
+          assistant_type: Database["public"]["Enums"]["comm_assistant_type"]
+          channel_type: string
+          created_at: string
+          credentials: Json | null
+          display_name: string
+          id: string
+          identifier: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          settings: Json | null
+          sync_status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assistant_type?: Database["public"]["Enums"]["comm_assistant_type"]
+          channel_type: string
+          created_at?: string
+          credentials?: Json | null
+          display_name: string
+          id?: string
+          identifier: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          settings?: Json | null
+          sync_status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assistant_type?: Database["public"]["Enums"]["comm_assistant_type"]
+          channel_type?: string
+          created_at?: string
+          credentials?: Json | null
+          display_name?: string
+          id?: string
+          identifier?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          settings?: Json | null
+          sync_status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      owner_comm_messages: {
+        Row: {
+          ai_model_used: string | null
+          ai_template_id: string | null
+          attachments: Json | null
+          content: string
+          content_type: string | null
+          created_at: string
+          delivered_at: string | null
+          direction: Database["public"]["Enums"]["comm_message_direction"]
+          error_message: string | null
+          external_message_id: string | null
+          id: string
+          is_ai_generated: boolean | null
+          metadata: Json | null
+          read_at: string | null
+          sender_identifier: string
+          sender_name: string | null
+          sent_at: string | null
+          status: string | null
+          thread_id: string
+          user_id: string
+          voice_duration_seconds: number | null
+          voice_url: string | null
+        }
+        Insert: {
+          ai_model_used?: string | null
+          ai_template_id?: string | null
+          attachments?: Json | null
+          content: string
+          content_type?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          direction: Database["public"]["Enums"]["comm_message_direction"]
+          error_message?: string | null
+          external_message_id?: string | null
+          id?: string
+          is_ai_generated?: boolean | null
+          metadata?: Json | null
+          read_at?: string | null
+          sender_identifier: string
+          sender_name?: string | null
+          sent_at?: string | null
+          status?: string | null
+          thread_id: string
+          user_id: string
+          voice_duration_seconds?: number | null
+          voice_url?: string | null
+        }
+        Update: {
+          ai_model_used?: string | null
+          ai_template_id?: string | null
+          attachments?: Json | null
+          content?: string
+          content_type?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          direction?: Database["public"]["Enums"]["comm_message_direction"]
+          error_message?: string | null
+          external_message_id?: string | null
+          id?: string
+          is_ai_generated?: boolean | null
+          metadata?: Json | null
+          read_at?: string | null
+          sender_identifier?: string
+          sender_name?: string | null
+          sent_at?: string | null
+          status?: string | null
+          thread_id?: string
+          user_id?: string
+          voice_duration_seconds?: number | null
+          voice_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "owner_comm_messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      owner_comm_settings: {
+        Row: {
+          ai_draft_by_default: boolean | null
+          auto_link_leads: boolean | null
+          auto_log_to_crm: boolean | null
+          auto_send_enabled: boolean | null
+          created_at: string
+          default_assistant_type:
+            | Database["public"]["Enums"]["comm_assistant_type"]
+            | null
+          id: string
+          notification_settings: Json | null
+          updated_at: string
+          user_id: string
+          voice_enabled: boolean | null
+        }
+        Insert: {
+          ai_draft_by_default?: boolean | null
+          auto_link_leads?: boolean | null
+          auto_log_to_crm?: boolean | null
+          auto_send_enabled?: boolean | null
+          created_at?: string
+          default_assistant_type?:
+            | Database["public"]["Enums"]["comm_assistant_type"]
+            | null
+          id?: string
+          notification_settings?: Json | null
+          updated_at?: string
+          user_id: string
+          voice_enabled?: boolean | null
+        }
+        Update: {
+          ai_draft_by_default?: boolean | null
+          auto_link_leads?: boolean | null
+          auto_log_to_crm?: boolean | null
+          auto_send_enabled?: boolean | null
+          created_at?: string
+          default_assistant_type?:
+            | Database["public"]["Enums"]["comm_assistant_type"]
+            | null
+          id?: string
+          notification_settings?: Json | null
+          updated_at?: string
+          user_id?: string
+          voice_enabled?: boolean | null
+        }
+        Relationships: []
+      }
+      owner_comm_tasks: {
+        Row: {
+          ai_reasoning: string | null
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_at: string | null
+          id: string
+          is_ai_suggested: boolean | null
+          is_completed: boolean | null
+          lead_id: string | null
+          priority: string | null
+          reminder_at: string | null
+          task_type: string | null
+          thread_id: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_reasoning?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          is_ai_suggested?: boolean | null
+          is_completed?: boolean | null
+          lead_id?: string | null
+          priority?: string | null
+          reminder_at?: string | null
+          task_type?: string | null
+          thread_id?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_reasoning?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          is_ai_suggested?: boolean | null
+          is_completed?: boolean | null
+          lead_id?: string | null
+          priority?: string | null
+          reminder_at?: string | null
+          task_type?: string | null
+          thread_id?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "owner_comm_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "owner_comm_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "owner_comm_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "owner_comm_tasks_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      owner_comm_templates: {
+        Row: {
+          category: string
+          channel_types: string[]
+          content: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          last_used_at: string | null
+          name: string
+          subject: string | null
+          updated_at: string
+          use_count: number | null
+          user_id: string
+          variables: Json | null
+          voice_script: string | null
+        }
+        Insert: {
+          category: string
+          channel_types?: string[]
+          content: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          last_used_at?: string | null
+          name: string
+          subject?: string | null
+          updated_at?: string
+          use_count?: number | null
+          user_id: string
+          variables?: Json | null
+          voice_script?: string | null
+        }
+        Update: {
+          category?: string
+          channel_types?: string[]
+          content?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          last_used_at?: string | null
+          name?: string
+          subject?: string | null
+          updated_at?: string
+          use_count?: number | null
+          user_id?: string
+          variables?: Json | null
+          voice_script?: string | null
+        }
+        Relationships: []
+      }
+      owner_comm_threads: {
+        Row: {
+          assistant_type: Database["public"]["Enums"]["comm_assistant_type"]
+          channel_id: string | null
+          channel_type: string
+          contact_avatar_url: string | null
+          contact_identifier: string
+          contact_name: string | null
+          created_at: string
+          id: string
+          last_message_at: string | null
+          last_message_preview: string | null
+          lead_id: string | null
+          metadata: Json | null
+          status: Database["public"]["Enums"]["comm_thread_status"]
+          unread_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assistant_type?: Database["public"]["Enums"]["comm_assistant_type"]
+          channel_id?: string | null
+          channel_type: string
+          contact_avatar_url?: string | null
+          contact_identifier: string
+          contact_name?: string | null
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          last_message_preview?: string | null
+          lead_id?: string | null
+          metadata?: Json | null
+          status?: Database["public"]["Enums"]["comm_thread_status"]
+          unread_count?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assistant_type?: Database["public"]["Enums"]["comm_assistant_type"]
+          channel_id?: string | null
+          channel_type?: string
+          contact_avatar_url?: string | null
+          contact_identifier?: string
+          contact_name?: string | null
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          last_message_preview?: string | null
+          lead_id?: string | null
+          metadata?: Json | null
+          status?: Database["public"]["Enums"]["comm_thread_status"]
+          unread_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "owner_comm_threads_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_channels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "owner_comm_threads_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "owner_comm_threads_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "owner_comm_threads_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      owner_comm_tone_profiles: {
+        Row: {
+          assistant_type: Database["public"]["Enums"]["comm_assistant_type"]
+          created_at: string
+          disclosure_text: string | null
+          emoji_usage: number | null
+          formality_level: number | null
+          id: string
+          is_active: boolean | null
+          language_switching: boolean | null
+          message_length: string | null
+          preferred_languages: string[] | null
+          profile_name: string
+          sample_messages: string[] | null
+          signature: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assistant_type?: Database["public"]["Enums"]["comm_assistant_type"]
+          created_at?: string
+          disclosure_text?: string | null
+          emoji_usage?: number | null
+          formality_level?: number | null
+          id?: string
+          is_active?: boolean | null
+          language_switching?: boolean | null
+          message_length?: string | null
+          preferred_languages?: string[] | null
+          profile_name?: string
+          sample_messages?: string[] | null
+          signature?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assistant_type?: Database["public"]["Enums"]["comm_assistant_type"]
+          created_at?: string
+          disclosure_text?: string | null
+          emoji_usage?: number | null
+          formality_level?: number | null
+          id?: string
+          is_active?: boolean | null
+          language_switching?: boolean | null
+          message_length?: string | null
+          preferred_languages?: string[] | null
+          profile_name?: string
+          sample_messages?: string[] | null
+          signature?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      owner_comm_voice_logs: {
+        Row: {
+          audio_url: string | null
+          characters_used: number | null
+          created_at: string
+          duration_seconds: number | null
+          error_message: string | null
+          generation_time_ms: number | null
+          id: string
+          message_id: string | null
+          script: string
+          status: string | null
+          thread_id: string | null
+          user_id: string
+          voice_id: string
+        }
+        Insert: {
+          audio_url?: string | null
+          characters_used?: number | null
+          created_at?: string
+          duration_seconds?: number | null
+          error_message?: string | null
+          generation_time_ms?: number | null
+          id?: string
+          message_id?: string | null
+          script: string
+          status?: string | null
+          thread_id?: string | null
+          user_id: string
+          voice_id: string
+        }
+        Update: {
+          audio_url?: string | null
+          characters_used?: number | null
+          created_at?: string
+          duration_seconds?: number | null
+          error_message?: string | null
+          generation_time_ms?: number | null
+          id?: string
+          message_id?: string | null
+          script?: string
+          status?: string | null
+          thread_id?: string | null
+          user_id?: string
+          voice_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "owner_comm_voice_logs_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "owner_comm_voice_logs_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       partner_vault_access_logs: {
         Row: {
           access_type: string
@@ -19956,6 +20596,7 @@ export type Database = {
       card_status: "active" | "suspended" | "expired"
       checkin_type: "gps_selfie" | "manual_register" | "qr_scan"
       client_tier: "bronze" | "silver" | "gold" | "platinum" | "diamond"
+      comm_assistant_type: "owner" | "company"
       comm_category:
         | "important"
         | "routine"
@@ -19970,6 +20611,13 @@ export type Database = {
         | "linkedin"
         | "phone"
         | "sms"
+      comm_message_direction: "inbound" | "outbound"
+      comm_thread_status:
+        | "new"
+        | "needs_reply"
+        | "waiting"
+        | "follow_up_due"
+        | "closed"
       compliance_status: "compliant" | "warning" | "violation" | "under_review"
       crm_activity_type:
         | "call"
@@ -20340,6 +20988,7 @@ export const Constants = {
       card_status: ["active", "suspended", "expired"],
       checkin_type: ["gps_selfie", "manual_register", "qr_scan"],
       client_tier: ["bronze", "silver", "gold", "platinum", "diamond"],
+      comm_assistant_type: ["owner", "company"],
       comm_category: ["important", "routine", "recruitment", "flagged", "spam"],
       comm_channel: [
         "email",
@@ -20349,6 +20998,14 @@ export const Constants = {
         "linkedin",
         "phone",
         "sms",
+      ],
+      comm_message_direction: ["inbound", "outbound"],
+      comm_thread_status: [
+        "new",
+        "needs_reply",
+        "waiting",
+        "follow_up_due",
+        "closed",
       ],
       compliance_status: ["compliant", "warning", "violation", "under_review"],
       crm_activity_type: [
