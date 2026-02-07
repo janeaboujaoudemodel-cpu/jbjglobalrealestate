@@ -144,6 +144,16 @@ const Footer = () => {
     { label: t('footer.newsInsights') || "News & Insights", href: "/news" },
   ];
 
+  // Legal Links
+  const legalLinks = [
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Cookie Policy", href: "/cookies" },
+    { label: "Disclaimers", href: "/disclaimers" },
+    { label: "Intellectual Property", href: "/intellectual-property" },
+    { label: "Trust & Audit", href: "/trust-and-audit-center" },
+  ];
+
   // Creative Toolkit - All 9 toolkit tools
   const creativeToolkitLinks = [
     { href: "/toolkit", label: "Toolkit Hub" },
@@ -671,8 +681,24 @@ const Footer = () => {
               <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
                 Careers
               </h4>
-              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
+              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 mb-4 sm:mb-6">
                 {careerLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      to={link.href}
+                      className="text-zinc-700 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                Legal
+              </h4>
+              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
+                {legalLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
