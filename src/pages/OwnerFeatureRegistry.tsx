@@ -7,7 +7,6 @@
  */
 
 import { useNavigate } from "react-router-dom";
-import MainLayout from "@/components/MainLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -406,10 +405,9 @@ export default function OwnerFeatureRegistry() {
   const manualCount = FEATURES.filter(f => f.isManual).length;
 
   return (
-    <MainLayout>
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-        <div className="container mx-auto px-4 py-6 max-w-6xl">
-          {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-zinc-900 via-zinc-900 to-black">
+      <div className="container mx-auto px-4 py-6 max-w-6xl">
+        {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -707,7 +705,6 @@ export default function OwnerFeatureRegistry() {
           </div>
         </div>
       </div>
-    </MainLayout>
   );
 }
 

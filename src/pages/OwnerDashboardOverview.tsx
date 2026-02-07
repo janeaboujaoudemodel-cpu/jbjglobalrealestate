@@ -410,6 +410,16 @@ export default function OwnerDashboardOverview() {
 
   return (
     <div className="space-y-6">
+      {/* Command Center Header */}
+      <div className="mb-2">
+        <h1 className="text-2xl md:text-3xl font-bold text-white">
+          Owner Command Center
+        </h1>
+        <p className="text-zinc-400 mt-1">
+          Welcome back, Jane bou Jaoude — Your integrated dashboard
+        </p>
+      </div>
+
       {/* KPI Tiles */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <KPICard
