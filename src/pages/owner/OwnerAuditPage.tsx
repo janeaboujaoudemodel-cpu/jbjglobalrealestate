@@ -140,118 +140,6 @@ const ROUTE_INVENTORY = [
 
 type AccessLevel = 'owner' | 'broker' | 'investor' | 'authenticated' | 'public';
 
-// Route Inventory - Comprehensive list of all application routes
-const ROUTE_INVENTORY = [
-  // Owner-only routes
-  { path: '/owner', name: 'Owner Dashboard', access: 'owner', dashboard: true, sidebar: true, registry: true },
-  { path: '/owner/audit', name: 'Owner Audit', access: 'owner', dashboard: true, sidebar: true, registry: true },
-  { path: '/owner/inbox', name: 'Owner Inbox', access: 'owner', dashboard: true, sidebar: true, registry: true },
-  { path: '/owner/agenda', name: 'Daily Agenda', access: 'owner', dashboard: true, sidebar: true, registry: true },
-  { path: '/owner/features', name: 'Feature Registry', access: 'owner', dashboard: true, sidebar: true, registry: true },
-  { path: '/owner/integrations', name: 'Integrations Status', access: 'owner', dashboard: true, sidebar: true, registry: true },
-  { path: '/owner/safety', name: 'AI Safety Panel', access: 'owner', dashboard: true, sidebar: true, registry: true },
-  { path: '/crm/leads', name: 'CRM Leads', access: 'owner', dashboard: true, sidebar: true, registry: true },
-  { path: '/admin', name: 'Admin Panel', access: 'owner', dashboard: true, sidebar: true, registry: true },
-  { path: '/admin/crm', name: 'Admin CRM', access: 'owner', dashboard: false, sidebar: true, registry: true },
-  { path: '/listing-admin', name: 'Listing Admin', access: 'owner', dashboard: true, sidebar: true, registry: true },
-  
-  // Broker routes
-  { path: '/broker-dashboard', name: 'Broker Dashboard', access: 'broker', dashboard: true, sidebar: true, registry: true },
-  { path: '/broker-toolkit', name: 'Broker Toolkit', access: 'broker', dashboard: true, sidebar: true, registry: true },
-  { path: '/broker-education', name: 'Broker Education', access: 'broker', dashboard: true, sidebar: true, registry: true },
-  { path: '/broker-resources', name: 'Broker Resources', access: 'broker', dashboard: true, sidebar: true, registry: true },
-  { path: '/broker/crm', name: 'Broker CRM', access: 'broker', dashboard: true, sidebar: true, registry: true },
-  { path: '/broker-partner-dashboard', name: 'Partner Broker Dashboard', access: 'broker', dashboard: true, sidebar: false, registry: true },
-  
-  // Investor routes  
-  { path: '/investor-dashboard', name: 'Investor Dashboard', access: 'investor', dashboard: true, sidebar: true, registry: true },
-  { path: '/investor-education', name: 'Investor Education', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/my-dashboard', name: 'My Dashboard', access: 'authenticated', dashboard: true, sidebar: true, registry: true },
-  
-  // Public property routes
-  { path: '/', name: 'Home', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/properties', name: 'Properties', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/projects', name: 'Projects', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/developers', name: 'Developers', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/areas', name: 'Areas', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/map', name: 'Property Map', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/compare', name: 'Compare Properties', access: 'public', dashboard: false, sidebar: false, registry: true },
-  
-  // Services routes
-  { path: '/services', name: 'Services Hub', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/services/property-management', name: 'Property Management', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/services/buying-advisory', name: 'Buying Advisory', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/services/selling-advisory', name: 'Selling Advisory', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/services/rental-advisory', name: 'Rental Advisory', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/services/investment-advisory', name: 'Investment Advisory', access: 'public', dashboard: false, sidebar: false, registry: true },
-  
-  // Toolkit routes
-  { path: '/toolkit', name: 'Toolkit Hub', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/quiz', name: 'AI Home Finder', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/mortgage-calculator', name: 'Mortgage Calculator', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/calculator/roi', name: 'ROI Calculator', access: 'public', dashboard: false, sidebar: false, registry: true },
-  
-  // Guides & Content
-  { path: '/guides', name: 'Guides Library', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/buyer-guide', name: 'Buyer Guide', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/seller-guide', name: 'Seller Guide', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/tenant-guide', name: 'Tenant Guide', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/landlord-guide', name: 'Landlord Guide', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/guides/golden-visa-uae', name: 'Golden Visa Guide', access: 'public', dashboard: false, sidebar: false, registry: true },
-  
-  // Market Intelligence
-  { path: '/market-intelligence/overview', name: 'Market Overview', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/market-intelligence/areas', name: 'Area Intelligence', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/market-intelligence/reports', name: 'Market Reports', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/news', name: 'News & Insights', access: 'public', dashboard: false, sidebar: false, registry: true },
-  
-  // Company routes
-  { path: '/about', name: 'About Us', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/founder', name: 'About Founder', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/team', name: 'Meet the Team', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/brokers', name: 'Our Brokers', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/contact', name: 'Contact Us', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/join', name: 'Careers', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/awards', name: 'Awards', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/press-kit', name: 'Press Kit', access: 'public', dashboard: false, sidebar: false, registry: true },
-  
-  // Partners
-  { path: '/partners', name: 'Partners Hub', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/partners/mortgage', name: 'Mortgage Partners', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/partners/legal', name: 'Legal Partners', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/partners/company-setup', name: 'Company Setup', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/partners/visa-services', name: 'Visa Services', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/referral-partner', name: 'Referral Partner', access: 'public', dashboard: false, sidebar: false, registry: true },
-  
-  // Legal
-  { path: '/terms', name: 'Terms of Service', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/privacy', name: 'Privacy Policy', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/cookies', name: 'Cookies Policy', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/trust-and-audit-center', name: 'Trust Center', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/intellectual-property', name: 'Intellectual Property', access: 'public', dashboard: false, sidebar: false, registry: true },
-  
-  // FAQ
-  { path: '/faq', name: 'General FAQ', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/investor-faq', name: 'Investor FAQ', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/broker-faq', name: 'Broker FAQ', access: 'public', dashboard: false, sidebar: false, registry: true },
-  
-  // Auth & Account
-  { path: '/auth', name: 'Sign In / Sign Up', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/my-account', name: 'My Account', access: 'authenticated', dashboard: true, sidebar: true, registry: true },
-  { path: '/favorites', name: 'Favorites', access: 'authenticated', dashboard: true, sidebar: true, registry: true },
-  
-  // Seller
-  { path: '/seller-listing', name: 'Sell Your Property', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/sell/valuation', name: 'Property Valuation', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/landlord-portal', name: 'Landlord Portal', access: 'authenticated', dashboard: false, sidebar: false, registry: true },
-  
-  // Misc
-  { path: '/philanthropy', name: 'Philanthropy', access: 'public', dashboard: false, sidebar: false, registry: true },
-  { path: '/sitemap', name: 'Sitemap', access: 'public', dashboard: false, sidebar: false, registry: true },
-];
-
-type AccessLevel = 'owner' | 'broker' | 'investor' | 'authenticated' | 'public';
-
 const OwnerAuditPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [accessFilter, setAccessFilter] = useState<AccessLevel | 'all'>('all');
@@ -312,13 +200,13 @@ const OwnerAuditPage = () => {
 
   // AI Tools stats
   const aiStats = useMemo(() => {
-    const total = AI_TOOLS_INVENTORY.length;
-    const working = AI_TOOLS_INVENTORY.filter(t => t.status === 'working').length;
-    const partial = AI_TOOLS_INVENTORY.filter(t => t.status === 'partial').length;
-    const missing = AI_TOOLS_INVENTORY.filter(t => t.status === '404').length;
-    const componentOnly = AI_TOOLS_INVENTORY.filter(t => t.status === 'component_only').length;
-    const comingSoon = AI_TOOLS_INVENTORY.filter(t => t.status === 'coming_soon').length;
-    const withEdgeFunction = AI_TOOLS_INVENTORY.filter(t => t.edgeFunction).length;
+    const total = AI_TOOLS_INVENTORY_VERIFIED.length;
+    const working = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === 'working').length;
+    const partial = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === 'partial').length;
+    const missing = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === '404').length;
+    const componentOnly = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === 'component_only').length;
+    const comingSoon = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === 'coming_soon').length;
+    const withEdgeFunction = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.edgeFunction).length;
     
     return { total, working, partial, missing, componentOnly, comingSoon, withEdgeFunction };
   }, []);
@@ -618,7 +506,7 @@ const OwnerAuditPage = () => {
                 <CardHeader className="border-b border-gold/20">
                   <CardTitle className="text-white flex items-center gap-2">
                     <Brain className="w-5 h-5 text-gold" />
-                    AI Tools Inventory ({AI_TOOLS_INVENTORY.length} tools)
+                    AI Tools Inventory ({AI_TOOLS_INVENTORY_VERIFIED.length} tools)
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
@@ -636,7 +524,7 @@ const OwnerAuditPage = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {AI_TOOLS_INVENTORY.map((tool) => (
+                        {AI_TOOLS_INVENTORY_VERIFIED.map((tool) => (
                           <tr 
                             key={tool.name} 
                             className={`border-b border-gold/10 hover:bg-gold/5 transition-colors ${tool.status === '404' ? 'bg-red-500/5' : tool.status === 'component_only' ? 'bg-orange-500/5' : ''}`}
