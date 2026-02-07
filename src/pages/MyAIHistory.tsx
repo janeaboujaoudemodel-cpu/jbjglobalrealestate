@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CalendarIcon, Filter, Clock, CheckCircle2, XCircle, Loader2 } from "lucide-react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 /**
  * My AI History Page
@@ -139,9 +139,12 @@ export default function MyAIHistory() {
     enabled: !!user?.id,
   });
 
-  // Redirect to auth if not logged in
+  const location = useLocation();
+
+  // Redirect to auth if not logged in (preserving path + query)
   if (!authLoading && !user) {
-    return <Navigate to="/auth?redirect=/my-ai-history" replace />;
+    const redirectPath = encodeURIComponent(location.pathname + location.search);
+    return <Navigate to={`/auth?redirect=${redirectPath}`} replace />;
   }
 
   // Get unique tool names for filter dropdown
