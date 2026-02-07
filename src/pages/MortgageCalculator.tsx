@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Shield, CheckCircle, Building2, Users, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, Shield, CheckCircle, Building2, Users, ArrowUpRight, ArrowRight } from "lucide-react";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { CONTACT_INFO } from "@/constants/stats";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 
 const advisorBenefits = [
@@ -68,6 +69,24 @@ const MortgageCalculatorPage = () => {
 
           {/* Calculator */}
           <MortgageCalculator />
+
+          {/* CTA Button - Centered at bottom of calculator section */}
+          <div className="mt-8 lg:mt-12 flex justify-center">
+            <a 
+              href={CONTACT_INFO.inquiryFormUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="block w-full max-w-md"
+            >
+              <Button 
+                variant="primary" 
+                className="w-full h-14 text-base font-semibold group shadow-lg hover:shadow-[0_14px_45px_rgba(200,167,102,0.4)] hover:-translate-y-1 transition-all duration-300"
+              >
+                Request Mortgage Partner Introduction
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -82,10 +101,10 @@ const MortgageCalculatorPage = () => {
               className="text-3xl md:text-4xl font-bold text-black mb-4"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Prefer a <span className="text-gold">Mortgage Advisor?</span>
+              Prefer a <span className="text-gold">Mortgage Advisor</span> Through Our Licensed Partners?
             </h2>
             <p className="text-black/70 max-w-2xl mx-auto">
-              Our calculator gives you instant estimates, but for personalized guidance, our dedicated mortgage advisors partner with leading UAE banks to secure the best rates and terms for your property investment.
+              Our calculator gives you instant estimates, but for personalized guidance, through our licensed partners, we connect you with dedicated mortgage advisors who work with leading UAE banks to secure the best rates and terms for your property investment.
             </p>
           </div>
 
