@@ -1,174 +1,432 @@
 
-# AI Tools Premium Fix & Enhancement Plan
 
-## Issues Identified
+# Comprehensive AI Tools & Business Suite Upgrade Plan
 
-### 1. Faded Buttons (Critical)
-The global `Button` component in `button.tsx` has a `sanitizeButtonClassName` function that strips color classes like `bg-gradient-to-r`, `from-cyan-600`, `text-white`. This makes all buttons appear faded/invisible on dark backgrounds.
+## Overview
 
-**Solution**: Add a new `variant="ai-tool"` to the button system that bypasses sanitization and provides tool-specific colored buttons.
-
-### 2. White Text on White Background
-Some components still use default light-themed cards. All AI tools need dark-themed inputs and cards with proper contrast.
-
-### 3. Missing Premium Components (6 tools)
-These tools still use old basic UI:
-- Translation Hub (Amber theme)
-- Market Report (Indigo theme)
-- Document Generator (Lime theme)
-- Video Tour Script (Pink theme)
-- Contract Reviewer (Red theme)
-- Property Analyzer (Sky theme)
-
-### 4. No Tool Guides
-Each tool needs an inline guide explaining:
-- What the tool does (2-line description)
-- How to use it (step-by-step)
-- Benefits and use cases
+This plan addresses all your requested improvements:
+1. Upgrade all AI tools to match the Dubai Rental Index Evaluator premium UI style
+2. Fix the AI Price Predictor layout (full-width property details, centered intro)
+3. Create Business Suites to group related tools
+4. Fix camera issues in Business Card Scanner
+5. Integrate AI Meeting Summarizer with Video Meet and phone calls
+6. Enhance ElevenLabs Voice Concierge with property listing access and document generation
+7. Fix button visibility and text contrast issues
 
 ---
 
-## Implementation Plan
+## Part 1: Premium UI Upgrade (Rental Index Style)
 
-### Phase 1: Fix Button System
-Add AI tool button variants that work on dark backgrounds:
+### Reference Design Analysis
+The Dubai Rental Index Evaluator (`src/pages/RentalIndex.tsx`) uses:
+- Full-page dark background (`bg-black`)
+- Colored gradient hero section (`from-emerald-950/60`)
+- Colored badge with icon ("AI Rental Index")
+- Centered title with gradient text
+- Description paragraph explaining the tool
+- Dark form cards with colored borders (`border-emerald-500/30`)
+- Visible, vibrant buttons (`from-emerald-600 to-green-600`)
+- Colored result cards with metrics
 
-**File**: `src/components/ui/button.tsx`
-- Add `ai-emerald`, `ai-purple`, `ai-blue`, `ai-cyan`, etc. variants
-- These variants use explicit color classes that are NOT sanitized
-- Format: `bg-{color}-600 hover:bg-{color}-500 text-white border-{color}-700`
+### Tools to Upgrade to Rental Index Style
 
-### Phase 2: Create Tool Guide Component
-Create a reusable inline guide component:
+Each tool gets a unique color theme while following the same layout pattern:
 
-**New File**: `src/components/ai-tools/AIToolGuide.tsx`
+| Tool | Color Theme | Current File |
+|------|-------------|--------------|
+| ROI Calculator | Emerald | `AIROICalculatorPremium.tsx` |
+| Lead Qualification | Purple | `AILeadQualificationPremium.tsx` |
+| Price Predictor | Blue | `AIPricePredictorPremium.tsx` |
+| Neighborhood Insights | Teal | `AINeighborhoodInsightsPremium.tsx` |
+| Competitor Analysis | Orange | `AICompetitorAnalysisPremium.tsx` |
+| Market Report | Indigo | `AIMarketReportPremium.tsx` |
+| Objection Handler | Rose | `AIObjectionHandlerPremium.tsx` |
+| Follow-up Scheduler | Cyan | `AIFollowupSchedulerPremium.tsx` |
+| Meeting Summarizer | Violet | `AIMeetingSummarizerPremium.tsx` |
+| Translation Hub | Amber | `AITranslationHubPremium.tsx` |
+| Video Tour Script | Pink | `AIVideoTourScriptPremium.tsx` |
+| Contract Reviewer | Red | `AIContractReviewerPremium.tsx` |
+| Document Generator | Lime | `AIDocumentGeneratorPremium.tsx` |
+| Property Analyzer | Sky | `AIPropertyAnalyzerPremium.tsx` |
+| Business Card Scanner | Gold | `BusinessCardScanner.tsx` |
+| Mortgage Calculator | Gold | `MortgageCalculator.tsx` |
+| AI Home Finder | Purple (keep) | `Quiz.tsx` |
+
+### Layout Structure for Each Tool
+
+```text
++--------------------------------------------------+
+|  [Hero Section - Full Width]                     |
+|  - Colored gradient background                   |
+|  - Badge: "AI [Tool Name]"                       |
+|  - Title with gradient colored word              |
+|  - 2-3 line description of what tool does        |
+|  - "Powered by AI" subtitle                      |
++--------------------------------------------------+
+|                                                  |
+|  [Form Section - Full Width Card]                |
+|  - Dark card with colored border                 |
+|  - Section icon + title                          |
+|  - All input fields (full width, not split)      |
+|  - Vibrant colored submit button                 |
+|                                                  |
++--------------------------------------------------+
+|                                                  |
+|  [Results Section - Appears After Submit]        |
+|  - Main result card with colored accent          |
+|  - Metric cards in grid                          |
+|  - AI insights list                              |
+|  - Disclaimer                                    |
+|                                                  |
++--------------------------------------------------+
 ```
-interface AIToolGuideProps {
-  title: string;
-  description: string;
-  steps: string[];
-  benefits: string[];
-  color: string;
-}
+
+---
+
+## Part 2: Price Predictor Layout Fix
+
+### Current Issues
+- Split layout (2 columns) makes it hard to understand
+- "Ready to Predict" placeholder takes half the screen
+- Property details cramped on left side
+- No intro/description before the form
+
+### Proposed Layout
+
+```text
++--------------------------------------------------+
+|  [Hero Section]                                  |
+|  Badge: "AI Valuation Intelligence"              |
+|  Title: "AI Price Predictor"                     |
+|  Description: "Get AI-powered property           |
+|  valuations with market trend analysis and       |
+|  future price forecasts for Dubai real estate"   |
++--------------------------------------------------+
+|                                                  |
+|  [Property Details - FULL WIDTH]                 |
+|  All input fields in responsive grid             |
+|  - Location, Property Type, Bedrooms             |
+|  - Size, Developer, Completion Year              |
+|  - Current Listed Price                          |
+|                                                  |
+|  [Predict Price Button - FULL WIDTH]             |
+|                                                  |
++--------------------------------------------------+
+|                                                  |
+|  [Results - FULL WIDTH - Only After Submit]      |
+|  - Estimated Fair Value (large, prominent)       |
+|  - Key Metrics grid                              |
+|  - Valuation Analysis                            |
+|  - Full Analysis text                            |
+|                                                  |
++--------------------------------------------------+
 ```
-- Collapsible by default
-- Dark-themed card with colored accents
-- Shows in the header area under subtitle
 
-### Phase 3: Upgrade Remaining 6 Tools to Premium
-
-#### 3.1 Translation Hub (Amber)
-**New File**: `src/components/ai-tools/premium/AITranslationHubPremium.tsx`
-- Language swap animation
-- Side-by-side source/target display
-- Cultural context tips
-- Quick copy buttons for both languages
-
-#### 3.2 Market Report (Indigo)
-**New File**: `src/components/ai-tools/premium/AIMarketReportPremium.tsx`
-- Visual trend indicators
-- Key metrics dashboard
-- Downloadable report format
-- Market outlook badges
-
-#### 3.3 Document Generator (Lime)
-**New File**: `src/components/ai-tools/premium/AIDocumentGeneratorPremium.tsx`
-- Template preview
-- Tone selector with examples
-- Multiple output formats
-- Save to drafts option
-
-#### 3.4 Video Tour Script (Pink)
-**New File**: `src/components/ai-tools/premium/AIVideoTourScriptPremium.tsx`
-- Scene-by-scene breakdown
-- Timing indicators
-- Voice style selector
-- Download script option
-
-#### 3.5 Contract Reviewer (Red - High Alert Color)
-**New File**: `src/components/ai-tools/premium/AIContractReviewerPremium.tsx`
-- Risk highlighting with severity levels
-- Clause-by-clause analysis
-- Comparison against standard terms
-- Legal disclaimer prominent
-
-#### 3.6 Property Analyzer (Sky)
-**New File**: `src/components/ai-tools/premium/AIPropertyAnalyzerPremium.tsx`
-- Multi-metric dashboard
-- Comparable properties cards
-- Investment score gauge
-- Area insights map preview
-
-### Phase 4: Update All Page Components
-Update all 14 page files in `src/pages/AI*.tsx` to:
-- Use the new premium components
-- Remove old wrapper styling
-- Consistent SEO metadata
-
-### Phase 5: Add Inline Guides to All Tools
-Add guide data to each premium component:
-- 2-line description visible on load
-- Expandable "How to Use" section
-- Benefits list with icons
+### Files to Modify
+- `src/components/ai-tools/premium/AIPricePredictorPremium.tsx`
 
 ---
 
-## Technical Changes Summary
+## Part 3: Business Suites
 
-### Files to Create (7 new files)
-1. `src/components/ai-tools/AIToolGuide.tsx` - Reusable guide component
-2. `src/components/ai-tools/premium/AITranslationHubPremium.tsx`
-3. `src/components/ai-tools/premium/AIMarketReportPremium.tsx`
-4. `src/components/ai-tools/premium/AIDocumentGeneratorPremium.tsx`
-5. `src/components/ai-tools/premium/AIVideoTourScriptPremium.tsx`
-6. `src/components/ai-tools/premium/AIContractReviewerPremium.tsx`
-7. `src/components/ai-tools/premium/AIPropertyAnalyzerPremium.tsx`
+### Suite Definitions
 
-### Files to Modify (16 files)
-1. `src/components/ui/button.tsx` - Add AI tool button variants
-2. `src/components/ai-tools/AIToolPremiumLayout.tsx` - Add guide slot
-3. `src/components/ai-tools/premium/index.ts` - Export new components
-4. `src/components/ai-tools/premium/AIROICalculatorPremium.tsx` - Fix button + add guide
-5. `src/components/ai-tools/premium/AILeadQualificationPremium.tsx` - Fix button + add guide
-6. `src/components/ai-tools/premium/AIPricePredictorPremium.tsx` - Fix button + add guide
-7. `src/components/ai-tools/premium/AIFollowupSchedulerPremium.tsx` - Fix button + add guide
-8. `src/components/ai-tools/premium/AICompetitorAnalysisPremium.tsx` - Fix button + add guide
-9. `src/components/ai-tools/premium/AINeighborhoodInsightsPremium.tsx` - Fix button + add guide
-10. `src/components/ai-tools/premium/AIObjectionHandlerPremium.tsx` - Fix button + add guide
-11. `src/components/ai-tools/premium/AIMeetingSummarizerPremium.tsx` - Fix button + add guide
-12. `src/pages/AITranslationHubPage.tsx` - Use premium component
-13. `src/pages/AIMarketReportPage.tsx` - Use premium component
-14. `src/pages/AIDocumentGeneratorPage.tsx` - Use premium component
-15. `src/pages/AIVideoTourScriptPage.tsx` - Use premium component
-16. `src/pages/AIContractReviewerPage.tsx` - Use premium component
+**Real Estate Business Suite** (Route: `/business-suite/real-estate`)
+- Property Analyzer
+- Price Predictor
+- Neighborhood Insights
+- ROI Calculator
+- Market Report
+- Competitor Analysis
+
+**Broker Intelligence Suite** (Route: `/business-suite/broker`)
+- Lead Qualification
+- Objection Handler
+- Follow-up Scheduler
+- Meeting Summarizer
+- Contract Reviewer
+
+**Creative & Communication Suite** (Route: `/business-suite/creative`)
+- Document Generator
+- Translation Hub
+- Video Tour Script
+
+**Productivity Suite** (Route: `/business-suite/productivity`)
+- Business Card Scanner
+- Video Meet
+- Mortgage Calculator
+
+### Suite Page Component Structure
+
+```text
++--------------------------------------------------+
+|  [Suite Hero]                                    |
+|  Suite name, description, tool count             |
++--------------------------------------------------+
+|                                                  |
+|  [Quick Access Grid]                             |
+|  Tool cards with icons, descriptions             |
+|  Click to open tool in same page or navigate     |
+|                                                  |
++--------------------------------------------------+
+|                                                  |
+|  [Active Tool Area]                              |
+|  Embedded tool component (if using same page)    |
+|  OR                                              |
+|  Navigate to individual tool page                |
+|                                                  |
++--------------------------------------------------+
+```
+
+### Files to Create
+- `src/pages/business-suite/RealEstateSuite.tsx`
+- `src/pages/business-suite/BrokerSuite.tsx`
+- `src/pages/business-suite/CreativeSuite.tsx`
+- `src/pages/business-suite/ProductivitySuite.tsx`
+- `src/pages/business-suite/index.ts`
+
+### Navigation Updates
+- Add "Business Suites" section to header navigation
+- Add suite links to footer
+- Keep individual tool links in navigation (both access options)
 
 ---
 
-## Color Scheme (Final)
+## Part 4: Business Card Scanner Camera Fix
 
-| Tool | Theme | Button Class |
-|------|-------|--------------|
-| ROI Calculator | Emerald | `ai-emerald` |
-| Lead Qualification | Purple | `ai-purple` |
-| Price Predictor | Blue | `ai-blue` |
-| Neighborhood Insights | Teal | `ai-teal` |
-| Competitor Analysis | Orange | `ai-orange` |
-| Market Report | Indigo | `ai-indigo` |
-| Objection Handler | Rose | `ai-rose` |
-| Follow-up Scheduler | Cyan | `ai-cyan` |
-| Meeting Summarizer | Violet | `ai-violet` |
-| Translation Hub | Amber | `ai-amber` |
-| Video Tour Script | Pink | `ai-pink` |
-| Contract Reviewer | Red | `ai-red` |
-| Document Generator | Lime | `ai-lime` |
-| Property Analyzer | Sky | `ai-sky` |
+### Current Issues
+- Camera opens automatically but never stops
+- Camera detection not working properly
+- No clear feedback on camera state
+
+### Root Cause Analysis
+The `BusinessCardCamera.tsx` has issues with:
+1. Auto-start timer in useEffect that may conflict with manual start
+2. Camera stream not properly cleaned up
+3. Detection interval running without proper guards
+
+### Fixes Required
+
+1. **Camera Lifecycle Management**
+   - Remove auto-start on mount (wait for user click)
+   - Proper cleanup on unmount and tab switch
+   - Clear detection interval when camera stops
+
+2. **User Experience**
+   - Show clear "Start Camera" button
+   - Display camera status (starting, ready, error)
+   - Add "Stop Camera" option
+
+3. **Error Handling**
+   - Better error messages for permission denied
+   - Fallback to upload when camera unavailable
+   - Retry mechanism for camera start
+
+### Files to Modify
+- `src/components/business-card/BusinessCardCamera.tsx`
+- `src/pages/BusinessCardScanner.tsx` (add premium styling)
+
+---
+
+## Part 5: AI Meeting Summarizer Integration
+
+### Current State
+- Standalone tool at `/ai-meeting-summarizer`
+- `MeetingAIAssistant.tsx` exists in video-meet but is basic
+- No phone call summarizer
+
+### Proposed Architecture
+
+#### 5.1 Video Meet Integration
+- Embed Meeting Summarizer panel in Video Meet page
+- Auto-capture chat transcript during meeting
+- "Summarize Meeting" button during/after call
+- Auto-generate follow-up tasks
+
+#### 5.2 Phone Call Summarizer (New Tool)
+- Route: `/ai-call-summarizer`
+- Input: Voice recording upload OR live transcription
+- Output: Call summary, action items, client needs
+- Integration with CRM for lead updates
+
+#### 5.3 Unified Meeting & Call Center
+- Route: `/meeting-center`
+- View all meeting summaries
+- View all call summaries
+- Quick actions: Schedule follow-up, Generate document
+
+### Files to Create
+- `src/components/ai-tools/premium/AICallSummarizerPremium.tsx`
+- `src/pages/AICallSummarizerPage.tsx`
+- `src/pages/MeetingCenter.tsx`
+
+### Files to Modify
+- `src/pages/VideoMeeting.tsx` - Add summarizer panel
+- `src/components/video-meet/MeetingAIAssistant.tsx` - Enhanced features
+
+---
+
+## Part 6: Enhanced Voice Concierge (ElevenLabs)
+
+### Current State
+- Widget at bottom-right for voice conversation
+- Uses `elevenlabs-conversation-token` edge function
+- Basic conversational AI
+
+### Proposed Enhancements
+
+#### 6.1 Property Listing Access
+- Agent can search and recommend properties from database
+- Answers questions about specific listings
+- Provides pricing, location, developer info
+
+#### 6.2 Document Generation Integration
+- "Generate comparison for Emaar vs Sobha" -> Creates document
+- "Send me a brochure for Palm Jumeirah" -> Triggers document generator
+
+#### 6.3 Call History & Transcription
+- All voice conversations logged to database
+- Transcripts stored and searchable
+- AI summarizes each call
+
+#### 6.4 Business Card Branding
+- User configures their business card details once
+- All generated documents include their branding
+- Settings page for company logo, name, contact
+
+### Backend Changes
+- Enhance `elevenlabs-conversation-token` edge function
+- Create `voice-agent-action` edge function for tool calls
+- Add `voice_call_logs` table for conversation history
+
+### Files to Create
+- `supabase/functions/voice-agent-action/index.ts`
+- `src/pages/VoiceAgentSettings.tsx`
+
+### Files to Modify
+- `src/components/VoiceConciergeWidget.tsx`
+- `supabase/functions/elevenlabs-conversation-token/index.ts`
+
+### Database Changes
+```sql
+-- Voice call logs table
+CREATE TABLE voice_call_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  conversation_id TEXT,
+  started_at TIMESTAMPTZ DEFAULT now(),
+  ended_at TIMESTAMPTZ,
+  transcript JSONB,
+  summary TEXT,
+  action_items JSONB,
+  property_recommendations JSONB,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+```
+
+---
+
+## Part 7: Button & Text Visibility Fixes
+
+### Current Issues
+- Buttons appear faded on dark backgrounds
+- White text on white backgrounds in some cards
+- Button class sanitization stripping custom colors
+
+### Solution
+
+1. **Create AI Tool Button Variants**
+   Add to `src/components/ui/button.tsx`:
+   ```
+   ai-emerald, ai-purple, ai-blue, ai-teal, 
+   ai-orange, ai-indigo, ai-rose, ai-cyan, 
+   ai-violet, ai-amber, ai-pink, ai-red, 
+   ai-lime, ai-sky
+   ```
+
+2. **Bypass Sanitization for AI Variants**
+   AI tool variants use explicit gradient classes that are not stripped
+
+3. **Dark Theme Enforcement**
+   All AI tool components use:
+   - Dark backgrounds (`bg-zinc-900`, `bg-black`)
+   - White/light text (`text-white`, `text-zinc-300`)
+   - Colored accents for emphasis
+
+---
+
+## Implementation Phases
+
+### Phase 1: UI Foundation (Critical)
+1. Add AI button variants to button.tsx
+2. Fix Price Predictor layout (full-width)
+3. Add intro/description sections to all tools
+
+### Phase 2: Premium Styling
+4. Upgrade all 14 AI tools to Rental Index style
+5. Upgrade Business Card Scanner styling
+6. Upgrade Mortgage Calculator styling
+
+### Phase 3: Business Suites
+7. Create suite page components
+8. Add navigation links
+9. Configure routes
+
+### Phase 4: Camera Fix
+10. Fix BusinessCardCamera lifecycle
+11. Add proper error handling
+12. Test on multiple devices
+
+### Phase 5: Meeting Integration
+13. Create Call Summarizer tool
+14. Integrate summarizer into Video Meet
+15. Create Meeting Center page
+
+### Phase 6: Voice Concierge Enhancement
+16. Add property listing access to agent
+17. Add document generation triggers
+18. Add call logging and transcription
+19. Create settings page for branding
+
+---
+
+## Files Summary
+
+### New Files (14)
+- `src/pages/business-suite/RealEstateSuite.tsx`
+- `src/pages/business-suite/BrokerSuite.tsx`
+- `src/pages/business-suite/CreativeSuite.tsx`
+- `src/pages/business-suite/ProductivitySuite.tsx`
+- `src/pages/business-suite/index.ts`
+- `src/components/ai-tools/premium/AICallSummarizerPremium.tsx`
+- `src/pages/AICallSummarizerPage.tsx`
+- `src/pages/MeetingCenter.tsx`
+- `supabase/functions/voice-agent-action/index.ts`
+- `src/pages/VoiceAgentSettings.tsx`
+
+### Modified Files (20+)
+- `src/components/ui/button.tsx` - AI variants
+- All 14 `src/components/ai-tools/premium/*.tsx` - Rental Index style
+- `src/pages/BusinessCardScanner.tsx` - Premium styling
+- `src/components/business-card/BusinessCardCamera.tsx` - Camera fixes
+- `src/components/MortgageCalculator.tsx` - Premium styling
+- `src/pages/VideoMeeting.tsx` - Summarizer integration
+- `src/components/VoiceConciergeWidget.tsx` - Enhanced features
+- `src/App.tsx` - New routes
+- Navigation components - Suite links
 
 ---
 
 ## Expected Outcome
-- All 14 tools have premium dark-themed UI
-- Buttons are vibrant and visible (not faded)
-- Each tool has inline guide with description + how-to-use
-- Text is readable (white on dark, not white on white)
-- All tools work end-to-end with proper field mapping
-- Consistent UX across all AI tools
+
+After implementation:
+- All AI tools have premium dark-themed UI matching Dubai Rental Index style
+- Each tool has unique color identity and clear intro description
+- Business Suites provide grouped access to related tools
+- Individual tool access maintained in navigation
+- Business Card Scanner camera works reliably
+- AI Meeting Summarizer integrated with Video Meet and phone calls
+- Voice Concierge can access property listings and generate documents
+- All buttons are vibrant and visible
+- Text is readable with proper contrast
+
