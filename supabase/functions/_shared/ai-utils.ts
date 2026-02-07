@@ -504,3 +504,77 @@ export function successResponse(
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 }
+
+// ============================================================================
+// BROKER ACCESS VERIFICATION
+// ============================================================================
+
+export interface BrokerAccessResult {
+  authenticated: boolean;
+  hasBrokerAccess: boolean;
+  isOwner: boolean;
+  userId?: string;
+  email?: string;
+}
+
+/**
+ * Verify if the user has broker access (authenticated + broker subscription OR owner)
+ * For use in broker-only edge functions
+ */
+export async function verifyBrokerAccess(
+  supabaseUser: SupabaseClient,
+  supabaseAdmin: SupabaseClient
+): Promise<BrokerAccessResult> {
+  try {
+    // Get authenticated user
+    const { data: { user }, error } = await supabaseUser.auth.getUser();
+    
+    if (error || !user) {
+      return { authenticated: false, hasBrokerAccess: false, isOwner: false };
+    }
+
+    const userId = user.id;
+    const email = user.email?.toLowerCase() || "";
+
+    // Check if owner
+    const ownerEmail = Deno.env.get("OWNER_EMAIL")?.toLowerCase();
+    if (ownerEmail && email === ownerEmail) {
+      return {
+        authenticated: true,
+        hasBrokerAccess: true,
+        isOwner: true,
+        userId,
+        email,
+      };
+    }
+
+    // Check broker subscription
+    const { data: subscription } = await supabaseAdmin
+      .from("broker_subscriptions")
+      .select("status")
+      .eq("user_id", userId)
+      .in("status", ["active", "trialing"])
+      .maybeSingle();
+
+    // Also check CRM users profile as fallback
+    const { data: crmProfile } = await supabaseAdmin
+      .from("crm_users_profile")
+      .select("is_active")
+      .eq("user_id", userId)
+      .eq("is_active", true)
+      .maybeSingle();
+
+    const hasBrokerAccess = !!subscription || !!crmProfile;
+
+    return {
+      authenticated: true,
+      hasBrokerAccess,
+      isOwner: false,
+      userId,
+      email,
+    };
+  } catch (err) {
+    console.error("Broker access verification error:", err);
+    return { authenticated: false, hasBrokerAccess: false, isOwner: false };
+  }
+}
