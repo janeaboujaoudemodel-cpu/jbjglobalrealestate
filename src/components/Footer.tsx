@@ -109,12 +109,7 @@ const Footer = () => {
     { label: "My Dashboard", href: "/my-dashboard" },
   ];
 
-  // Broker Hub
-  const brokerHubLinks = [
-    { label: t('footer.brokerTools') || "Broker Tools", href: "/broker-toolkit" },
-    { label: t('footer.brokerEducation') || "Broker Education", href: "/broker-education" },
-    { label: t('footer.brokerFaqs') || "Broker FAQs", href: "/broker-faq" },
-  ];
+  // Broker Hub - REMOVED per compliance: Footer must be role-agnostic, no CRM/broker links
 
   // Guides
   const guidesLinks = [
@@ -602,21 +597,7 @@ const Footer = () => {
                 </ul>
               </div>
               
-              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                {t('footer.brokerHub') || 'Broker Hub'}
-              </h4>
-              <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
-                {brokerHubLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      to={link.href}
-                      className="text-zinc-700 hover:text-gold transition-all duration-300 text-[10px] sm:text-xs md:text-sm inline-block hover:translate-x-1"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              {/* Broker Hub section REMOVED - Footer is role-agnostic */}
             </div>
 
             {/* Column 3: Guides + Market Intelligence */}

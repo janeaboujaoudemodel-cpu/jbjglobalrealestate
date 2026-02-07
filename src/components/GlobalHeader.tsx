@@ -1336,21 +1336,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   Insights
                   <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'insights' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
-
-                {/* More - Contains Services, Toolkit, Investors, Brokers, Company */}
-                <button
-                  onPointerEnter={() => handleMegaMenuEnter('more')}
-                  onClick={() => handleMegaMenuClick('more')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
-                    isFullyTransparent
-                      ? activeMegaMenu === 'more' ? 'text-gold' : 'text-white hover:text-gold'
-                      : activeMegaMenu === 'more' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
-                  }`}
-                >
-                  More
-                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'more' ? 'rotate-180' : ''}`} />
-                </button>
+                {/* Insights is the last item - no trailing separator */}
               </div>
 
               {/* Mega Menu Panels - Enhanced bridge zone for stable hover transitions */}
@@ -1374,7 +1360,6 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     {activeMegaMenu === 'areas' && <MegaMenuAreas onClose={closeMegaMenu} />}
                     {activeMegaMenu === 'developers' && <MegaMenuDevelopers onClose={closeMegaMenu} />}
                     {activeMegaMenu === 'insights' && <MegaMenuInsights onClose={closeMegaMenu} />}
-                    {activeMegaMenu === 'more' && <MegaMenuMore onClose={closeMegaMenu} />}
                   </div>
                 </>
               )}
