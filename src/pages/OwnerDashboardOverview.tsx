@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 import { 
   Users, 
   MessageSquare, 
@@ -24,11 +25,6 @@ import {
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import LeadStatusBadge from "@/components/crm/LeadStatusBadge";
-
-/**
- * OWNER_EMAIL - Loaded from environment only, no fallback
- */
-const OWNER_EMAIL = import.meta.env.VITE_OWNER_EMAIL;
 
 interface KPICardProps {
   title: string;
@@ -122,7 +118,8 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="text-gold hover:text-gold hover:bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="text-gold hover:text-gold hover:bg-gold/10"
+          onClick={(e) => { e.stopPropagation(); onOpen(lead.id); }}
         >
           Open
           <ExternalLink className="h-3 w-3 ml-1" />
@@ -178,46 +175,69 @@ function ConversationRow({ conversation }: ConversationRowProps) {
   );
 }
 
-interface TaskRowProps {
-  task: {
+interface FollowUpItemProps {
+  item: {
     id: string;
-    title: string;
-    due_at: string | null;
-    status: string;
-    lead_id: string | null;
+    title?: string;
+    full_name?: string;
+    due_at?: string | null;
+    status?: string;
+    pipeline_stage?: string;
+    type: 'task' | 'lead';
   };
-  onComplete: (id: string) => void;
+  onComplete?: (id: string) => void;
+  onOpen?: (id: string) => void;
 }
 
-function TaskRow({ task, onComplete }: TaskRowProps) {
-  const isOverdue = task.due_at && new Date(task.due_at) < new Date() && task.status !== 'completed';
+function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
+  const isOverdue = item.due_at && new Date(item.due_at) < new Date() && item.status !== 'completed';
+  const displayName = item.type === 'task' ? item.title : item.full_name;
   
   return (
     <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50">
       <div className="flex items-center gap-3 min-w-0 flex-1">
-        <button
-          onClick={(e) => { e.stopPropagation(); onComplete(task.id); }}
-          className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 transition-colors ${
-            task.status === 'completed' 
-              ? 'bg-gold border-gold' 
-              : 'border-zinc-600 hover:border-gold'
-          }`}
-        >
-          {task.status === 'completed' && <CheckSquare className="h-3 w-3 text-black" />}
-        </button>
+        {item.type === 'task' && onComplete ? (
+          <button
+            onClick={(e) => { e.stopPropagation(); onComplete(item.id); }}
+            className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 transition-colors ${
+              item.status === 'completed' 
+                ? 'bg-gold border-gold' 
+                : 'border-zinc-600 hover:border-gold'
+            }`}
+          >
+            {item.status === 'completed' && <CheckSquare className="h-3 w-3 text-black" />}
+          </button>
+        ) : (
+          <div className="w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+            <Clock className="h-3 w-3 text-amber-400" />
+          </div>
+        )}
         <div className="min-w-0">
-          <p className={`font-medium text-sm truncate ${task.status === 'completed' ? 'text-zinc-500 line-through' : 'text-white'}`}>
-            {task.title}
+          <p className={`font-medium text-sm truncate ${item.status === 'completed' ? 'text-zinc-500 line-through' : 'text-white'}`}>
+            {displayName}
           </p>
-          {task.due_at && (
+          {item.due_at && (
             <p className={`text-xs flex items-center gap-1 ${isOverdue ? 'text-red-400' : 'text-zinc-400'}`}>
               <Calendar className="h-3 w-3" />
-              {format(new Date(task.due_at), 'MMM d, h:mm a')}
+              {format(new Date(item.due_at), 'MMM d, h:mm a')}
               {isOverdue && <AlertCircle className="h-3 w-3 ml-1" />}
             </p>
           )}
+          {item.pipeline_stage && (
+            <LeadStatusBadge status={item.pipeline_stage} size="sm" />
+          )}
         </div>
       </div>
+      {item.type === 'lead' && onOpen && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-gold hover:text-gold hover:bg-gold/10"
+          onClick={() => onOpen(item.id)}
+        >
+          Open
+        </Button>
+      )}
     </div>
   );
 }
@@ -254,15 +274,21 @@ export default function OwnerDashboardOverview() {
     enabled: !!user,
   });
 
-  // Fetch pending tasks count
+  // Fetch pending tasks count (graceful failure)
   const { data: pendingTasks, isLoading: loadingTasks } = useQuery({
     queryKey: ['owner-kpi-pending-tasks'],
     queryFn: async () => {
-      const { count } = await supabase
-        .from('crm_tasks')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'pending');
-      return count || 0;
+      try {
+        const { count, error } = await supabase
+          .from('crm_tasks')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'pending');
+        if (error) throw error;
+        return count || 0;
+      } catch {
+        // Table missing or permission denied - graceful fallback
+        return 0;
+      }
     },
     enabled: !!user,
   });
@@ -271,11 +297,16 @@ export default function OwnerDashboardOverview() {
   const { data: activeConversations, isLoading: loadingConversations } = useQuery({
     queryKey: ['owner-kpi-active-conversations'],
     queryFn: async () => {
-      const { count } = await supabase
-        .from('chat_conversations')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'active');
-      return count || 0;
+      try {
+        const { count, error } = await supabase
+          .from('chat_conversations')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'active');
+        if (error) throw error;
+        return count || 0;
+      } catch {
+        return 0;
+      }
     },
     enabled: !!user,
   });
@@ -294,20 +325,46 @@ export default function OwnerDashboardOverview() {
     enabled: !!user,
   });
 
-  // Fetch leads/tasks needing follow-up
-  // Logic: pending tasks with due_at <= now OR leads with pipeline_stage in ['new', 'contacted']
-  const { data: followUpTasks, isLoading: loadingFollowUp } = useQuery({
-    queryKey: ['owner-followup-tasks'],
+  // Fetch items needing follow-up (tasks first, then leads as fallback)
+  const { data: followUpItems, isLoading: loadingFollowUp } = useQuery({
+    queryKey: ['owner-followup-items'],
     queryFn: async () => {
       const now = new Date().toISOString();
-      const { data } = await supabase
-        .from('crm_tasks')
-        .select('id, title, due_at, status, lead_id')
-        .eq('status', 'pending')
-        .or(`due_at.lte.${now},due_at.is.null`)
-        .order('due_at', { ascending: true, nullsFirst: false })
-        .limit(10);
-      return data || [];
+      
+      // Try fetching tasks first
+      try {
+        const { data: tasks, error: tasksError } = await supabase
+          .from('crm_tasks')
+          .select('id, title, due_at, status, lead_id')
+          .eq('status', 'pending')
+          .or(`due_at.lte.${now},due_at.is.null`)
+          .order('due_at', { ascending: true, nullsFirst: false })
+          .limit(10);
+        
+        if (!tasksError && tasks && tasks.length > 0) {
+          return tasks.map(t => ({ ...t, type: 'task' as const }));
+        }
+      } catch {
+        // Tasks table missing or inaccessible
+      }
+      
+      // Fallback: Get leads needing follow-up by pipeline_stage
+      try {
+        const { data: leads } = await supabase
+          .from('crm_leads')
+          .select('id, full_name, pipeline_stage, created_at')
+          .in('pipeline_stage', ['new', 'contacted', 'needs_follow_up', 'open'])
+          .order('created_at', { ascending: false })
+          .limit(10);
+        
+        if (leads && leads.length > 0) {
+          return leads.map(l => ({ ...l, type: 'lead' as const }));
+        }
+      } catch {
+        // Leads query failed
+      }
+      
+      return [];
     },
     enabled: !!user,
   });
@@ -316,23 +373,33 @@ export default function OwnerDashboardOverview() {
   const { data: recentConversations, isLoading: loadingRecentConvos } = useQuery({
     queryKey: ['owner-recent-conversations'],
     queryFn: async () => {
-      const { data } = await supabase
-        .from('chat_conversations')
-        .select('id, user_name, user_email, status, created_at, page_source')
-        .order('created_at', { ascending: false })
-        .limit(10);
-      return data || [];
+      try {
+        const { data, error } = await supabase
+          .from('chat_conversations')
+          .select('id, user_name, user_email, status, created_at, page_source')
+          .order('created_at', { ascending: false })
+          .limit(10);
+        if (error) throw error;
+        return data || [];
+      } catch {
+        return [];
+      }
     },
     enabled: !!user,
   });
 
   const handleCompleteTask = async (taskId: string) => {
-    await supabase
-      .from('crm_tasks')
-      .update({ status: 'completed', completed_at: new Date().toISOString() })
-      .eq('id', taskId);
-    queryClient.invalidateQueries({ queryKey: ['owner-followup-tasks'] });
-    queryClient.invalidateQueries({ queryKey: ['owner-kpi-pending-tasks'] });
+    try {
+      await supabase
+        .from('crm_tasks')
+        .update({ status: 'completed', completed_at: new Date().toISOString() })
+        .eq('id', taskId);
+      queryClient.invalidateQueries({ queryKey: ['owner-followup-items'] });
+      queryClient.invalidateQueries({ queryKey: ['owner-kpi-pending-tasks'] });
+      toast.success('Task completed');
+    } catch {
+      toast.error('Failed to complete task');
+    }
   };
 
   return (
@@ -433,7 +500,7 @@ export default function OwnerDashboardOverview() {
                   <Clock className="h-5 w-5 text-amber-400" />
                   Needs Follow-up
                 </CardTitle>
-                <CardDescription className="text-zinc-400">Pending tasks due now</CardDescription>
+                <CardDescription className="text-zinc-400">Pending items</CardDescription>
               </div>
               <Button 
                 variant="ghost" 
@@ -449,12 +516,13 @@ export default function OwnerDashboardOverview() {
                 Array.from({ length: 4 }).map((_, i) => (
                   <Skeleton key={i} className="h-14 bg-zinc-800" />
                 ))
-              ) : followUpTasks && followUpTasks.length > 0 ? (
-                followUpTasks.map((task) => (
-                  <TaskRow 
-                    key={task.id} 
-                    task={task} 
-                    onComplete={handleCompleteTask} 
+              ) : followUpItems && followUpItems.length > 0 ? (
+                followUpItems.map((item: any) => (
+                  <FollowUpItem 
+                    key={item.id} 
+                    item={item}
+                    onComplete={item.type === 'task' ? handleCompleteTask : undefined}
+                    onOpen={item.type === 'lead' ? (id) => navigate(`/crm/leads/${id}`) : undefined}
                   />
                 ))
               ) : (
