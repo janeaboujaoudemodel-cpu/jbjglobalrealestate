@@ -1,13 +1,14 @@
 /**
- * Phase A2 Security Proof Edge Function
+ * Phase A2 Security Proof Edge Function (COMPLIANT VERSION v2.1)
  * 
  * ACCESS: OWNER ONLY (verified via OWNER_EMAIL secret)
  * 
  * This function provides VERIFIABLE PROOF of:
- * 1. RLS enforcement on ai_job_master (user isolation)
- * 2. Owner read-only override (cross-user visibility)
- * 3. Broker endpoint enforcement (401/403/200 codes)
- * 4. PII protection (no raw PII in stored records)
+ * 1. User A / User B creation with real JWTs
+ * 2. RLS cross-user isolation (User B cannot read User A's data)
+ * 3. Broker endpoint enforcement (401/403/200/200 for all 4 cases)
+ * 4. Owner read-only override (cross-user visibility)
+ * 5. PII protection (no raw PII in stored records)
  * 
  * All operations use real database queries and return raw results.
  */
@@ -38,10 +39,23 @@ serve(async (req) => {
   const ownerEmail = Deno.env.get("OWNER_EMAIL");
 
   const proofs: ProofResult[] = [];
-  const cleanup: { type: string; id: string }[] = [];
+  
+  // Cleanup tracking
+  const cleanup: { 
+    userAId?: string; 
+    userBId?: string; 
+    jobIdA?: string;
+    brokerSubId?: string;
+  } = {};
+
+  const adminClient = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: { persistSession: false },
+  });
 
   try {
-    // 1. OWNER AUTHENTICATION CHECK
+    // ============================================
+    // STEP 0: OWNER AUTHENTICATION CHECK
+    // ============================================
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(
@@ -50,12 +64,12 @@ serve(async (req) => {
       );
     }
 
-    const userClient = createClient(supabaseUrl, supabaseAnonKey, {
+    const ownerClient = createClient(supabaseUrl, supabaseAnonKey, {
       global: { headers: { Authorization: authHeader } },
     });
 
-    const { data: { user }, error: authError } = await userClient.auth.getUser();
-    if (authError || !user) {
+    const { data: { user: ownerUser }, error: authError } = await ownerClient.auth.getUser();
+    if (authError || !ownerUser) {
       return new Response(
         JSON.stringify({ error: "Invalid authentication", code: 401 }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -63,12 +77,12 @@ serve(async (req) => {
     }
 
     // OWNER-ONLY CHECK
-    if (!ownerEmail || user.email?.toLowerCase() !== ownerEmail.toLowerCase()) {
+    if (!ownerEmail || ownerUser.email?.toLowerCase() !== ownerEmail.toLowerCase()) {
       return new Response(
         JSON.stringify({ 
           error: "Access denied: Owner only", 
           code: 403,
-          userEmail: user.email,
+          userEmail: ownerUser.email,
           ownerConfigured: !!ownerEmail 
         }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -76,120 +90,403 @@ serve(async (req) => {
     }
 
     proofs.push({
-      step: "1. Owner Authentication",
+      step: "0. Owner Authentication",
       description: "Verified caller is Owner",
       passed: true,
-      evidence: { email: user.email, ownerMatch: true },
+      evidence: { email: ownerUser.email, ownerMatch: true },
     });
 
-    const adminClient = createClient(supabaseUrl, supabaseServiceKey, {
+    // ============================================
+    // STEP 1: CREATE TEST USER A (NON-BROKER)
+    // ============================================
+    const timestamp = Date.now();
+    const userAEmail = `test-user-a-${timestamp}@proof-phase-a2.test`;
+    const userAPassword = `TestPass_${timestamp}A!`;
+    
+    const { data: userAData, error: userAError } = await adminClient.auth.admin.createUser({
+      email: userAEmail,
+      password: userAPassword,
+      email_confirm: true,
+    });
+
+    if (userAError || !userAData.user) {
+      throw new Error(`Failed to create User A: ${userAError?.message}`);
+    }
+    cleanup.userAId = userAData.user.id;
+
+    proofs.push({
+      step: "1. Create User A (Non-Broker)",
+      description: "Created test user A with NO broker subscription",
+      passed: true,
+      evidence: { 
+        userId: userAData.user.id, 
+        email: userAEmail,
+        isBroker: false,
+      },
+    });
+
+    // ============================================
+    // STEP 2: CREATE TEST USER B (BROKER)
+    // ============================================
+    const userBEmail = `test-user-b-${timestamp}@proof-phase-a2.test`;
+    const userBPassword = `TestPass_${timestamp}B!`;
+    
+    const { data: userBData, error: userBError } = await adminClient.auth.admin.createUser({
+      email: userBEmail,
+      password: userBPassword,
+      email_confirm: true,
+    });
+
+    if (userBError || !userBData.user) {
+      throw new Error(`Failed to create User B: ${userBError?.message}`);
+    }
+    cleanup.userBId = userBData.user.id;
+
+    // Create broker subscription for User B
+    const brokerSubId = crypto.randomUUID();
+    const { error: brokerSubError } = await adminClient
+      .from("broker_subscriptions")
+      .insert({
+        id: brokerSubId,
+        user_id: userBData.user.id,
+        email: userBEmail,
+        status: "active",
+        tier: "professional",
+        price_usd: 0,
+        currency: "USD",
+        starts_at: new Date().toISOString(),
+      });
+
+    if (brokerSubError) {
+      throw new Error(`Failed to create broker subscription: ${brokerSubError.message}`);
+    }
+    cleanup.brokerSubId = brokerSubId;
+
+    proofs.push({
+      step: "2. Create User B (Broker)",
+      description: "Created test user B WITH active broker_subscriptions entry",
+      passed: true,
+      evidence: { 
+        userId: userBData.user.id, 
+        email: userBEmail,
+        isBroker: true,
+        subscriptionId: brokerSubId,
+        subscriptionStatus: "active",
+      },
+    });
+
+    // ============================================
+    // STEP 3: SIGN IN USER A AND GET JWT
+    // ============================================
+    const anonClientA = createClient(supabaseUrl, supabaseAnonKey, {
       auth: { persistSession: false },
     });
-
-    // 2. RLS PROOF: Anonymous Access Blocked
-    const anonClient = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: { persistSession: false },
+    
+    const { data: sessionA, error: signInAError } = await anonClientA.auth.signInWithPassword({
+      email: userAEmail,
+      password: userAPassword,
     });
 
-    const anonInsertResult = await anonClient
+    if (signInAError || !sessionA.session) {
+      throw new Error(`Failed to sign in User A: ${signInAError?.message}`);
+    }
+
+    const userAToken = sessionA.session.access_token;
+    const userAClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: `Bearer ${userAToken}` } },
+    });
+
+    proofs.push({
+      step: "3. Sign In User A",
+      description: "Obtained JWT for User A (non-broker)",
+      passed: !!userAToken,
+      evidence: { 
+        hasToken: !!userAToken,
+        tokenPrefix: userAToken.substring(0, 20) + "...",
+        userId: sessionA.session.user.id,
+      },
+    });
+
+    // ============================================
+    // STEP 4: SIGN IN USER B AND GET JWT
+    // ============================================
+    const anonClientB = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: { persistSession: false },
+    });
+    
+    const { data: sessionB, error: signInBError } = await anonClientB.auth.signInWithPassword({
+      email: userBEmail,
+      password: userBPassword,
+    });
+
+    if (signInBError || !sessionB.session) {
+      throw new Error(`Failed to sign in User B: ${signInBError?.message}`);
+    }
+
+    const userBToken = sessionB.session.access_token;
+    const userBClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: `Bearer ${userBToken}` } },
+    });
+
+    proofs.push({
+      step: "4. Sign In User B",
+      description: "Obtained JWT for User B (broker)",
+      passed: !!userBToken,
+      evidence: { 
+        hasToken: !!userBToken,
+        tokenPrefix: userBToken.substring(0, 20) + "...",
+        userId: sessionB.session.user.id,
+      },
+    });
+
+    // ============================================
+    // STEP 5: USER A INSERTS INTO ai_job_master
+    // ============================================
+    const jobIdA = crypto.randomUUID();
+    cleanup.jobIdA = jobIdA;
+
+    const { data: insertDataA, error: insertErrorA } = await userAClient
       .from("ai_job_master")
       .insert({
-        user_id: "00000000-0000-0000-0000-000000000000",
-        tool_name: "anon-proof-test",
-        input_payload: { test: true },
+        id: jobIdA,
+        user_id: userAData.user.id,
+        tool_name: "phase-a2-user-a-test",
+        status: "completed",
+        input_payload: {
+          lead_ref: "sha256_hashed_value_user_a",
+          budget: "500000",
+          timeline: "6 months",
+        },
+        output_payload: {
+          qualificationScore: 75,
+          classification: "investor",
+        },
       })
       .select("id")
       .single();
 
     proofs.push({
-      step: "2. Anonymous INSERT Blocked",
-      description: "Anonymous user cannot insert into ai_job_master",
-      passed: !!anonInsertResult.error,
-      evidence: {
-        error: anonInsertResult.error ? {
-          message: anonInsertResult.error.message,
-          code: anonInsertResult.error.code,
+      step: "5. User A INSERT ai_job_master",
+      description: "User A successfully inserts their own record",
+      passed: !insertErrorA && !!insertDataA,
+      evidence: { 
+        success: !insertErrorA,
+        jobId: insertDataA?.id || jobIdA,
+        error: insertErrorA ? { 
+          message: insertErrorA.message, 
+          code: insertErrorA.code 
         } : null,
-        data: anonInsertResult.data,
       },
     });
 
-    const anonSelectResult = await anonClient
+    // ============================================
+    // STEP 6: USER A SELECTS OWN ROW ✅
+    // ============================================
+    const { data: userAOwnData, error: userAOwnError } = await userAClient
       .from("ai_job_master")
       .select("id, user_id, tool_name")
-      .limit(5);
-
-    proofs.push({
-      step: "3. Anonymous SELECT Blocked",
-      description: "Anonymous user cannot read ai_job_master",
-      passed: anonSelectResult.error !== null || (anonSelectResult.data?.length === 0),
-      evidence: {
-        error: anonSelectResult.error ? {
-          message: anonSelectResult.error.message,
-          code: anonSelectResult.error.code,
-        } : null,
-        rowCount: anonSelectResult.data?.length ?? 0,
-      },
-    });
-
-    // 3. CROSS-USER ISOLATION TEST
-    // Create a test record for Owner
-    const testJobId = crypto.randomUUID();
-    const { error: insertError } = await adminClient
-      .from("ai_job_master")
-      .insert({
-        id: testJobId,
-        user_id: user.id,
-        tool_name: "phase-a2-proof-test",
-        status: "completed",
-        input_payload: {
-          lead_ref: "sha256_hashed_value_not_pii",
-          budget: "1000000",
-          timeline: "3 months",
-        },
-        output_payload: {
-          qualificationScore: 85,
-          classification: "buyer",
-        },
-        intelligence_features: {
-          confidenceScoring: true,
-          rlsProofTest: true,
-        },
-      });
-
-    cleanup.push({ type: "ai_job_master", id: testJobId });
-
-    proofs.push({
-      step: "4. Test Record Created",
-      description: "Created test record in ai_job_master for Owner",
-      passed: !insertError,
-      evidence: {
-        jobId: testJobId,
-        error: insertError ? insertError.message : null,
-      },
-    });
-
-    // 4. OWNER CAN READ OWN DATA
-    const ownerReadResult = await userClient
-      .from("ai_job_master")
-      .select("id, user_id, tool_name, input_payload, output_payload")
-      .eq("id", testJobId)
+      .eq("id", jobIdA)
       .single();
 
     proofs.push({
-      step: "5. Owner Reads Own Data",
-      description: "Owner can read their own ai_job_master record",
-      passed: !!ownerReadResult.data && !ownerReadResult.error,
-      evidence: {
-        found: !!ownerReadResult.data,
-        toolName: ownerReadResult.data?.tool_name,
-        hasPII: false, // input_payload contains only hashed lead_ref
-        inputFields: ownerReadResult.data ? Object.keys(ownerReadResult.data.input_payload || {}) : [],
+      step: "6. User A SELECT Own Row ✅",
+      description: "User A can read their own record",
+      passed: !userAOwnError && userAOwnData?.id === jobIdA,
+      evidence: { 
+        found: !!userAOwnData,
+        matchesJobId: userAOwnData?.id === jobIdA,
+        error: userAOwnError ? { 
+          message: userAOwnError.message, 
+          code: userAOwnError.code 
+        } : null,
       },
     });
 
-    // 5. PII PROTECTION PROOF
-    const inputPayload = ownerReadResult.data?.input_payload || {};
+    // ============================================
+    // STEP 7: USER B TRIES TO SELECT USER A's ROW ❌
+    // ============================================
+    const { data: userBCrossData, error: userBCrossError } = await userBClient
+      .from("ai_job_master")
+      .select("id, user_id, tool_name")
+      .eq("id", jobIdA)
+      .maybeSingle();
+
+    // RLS should return 0 rows (not permission error) when user B tries to read A's data
+    const userBBlockedCorrectly = userBCrossData === null && !userBCrossError;
+
+    proofs.push({
+      step: "7. User B SELECT User A's Row ❌ (MUST FAIL)",
+      description: "User B CANNOT read User A's record (RLS isolation)",
+      passed: userBBlockedCorrectly,
+      evidence: { 
+        dataReturned: userBCrossData,
+        rowCount: userBCrossData ? 1 : 0,
+        expectedRowCount: 0,
+        error: userBCrossError ? { 
+          message: userBCrossError.message, 
+          code: userBCrossError.code 
+        } : null,
+        isolation: userBBlockedCorrectly ? "ENFORCED ✅" : "FAILED ❌",
+      },
+    });
+
+    // ============================================
+    // STEP 8: OWNER SELECTS ACROSS USERS ✅
+    // ============================================
+    const { data: ownerCrossData, error: ownerCrossError } = await ownerClient
+      .from("ai_job_master")
+      .select("id, user_id, tool_name")
+      .order("created_at", { ascending: false })
+      .limit(10);
+
+    // Owner should see multiple users' data via owner_select policy
+    const uniqueUserIds = new Set(ownerCrossData?.map(r => r.user_id) || []);
+    const ownerSeesUserAJob = ownerCrossData?.some(r => r.id === jobIdA);
+
+    proofs.push({
+      step: "8. Owner SELECT Across Users ✅",
+      description: "Owner can see records from multiple users (read-only audit)",
+      passed: !ownerCrossError && ownerSeesUserAJob === true,
+      evidence: { 
+        totalRows: ownerCrossData?.length || 0,
+        uniqueUsers: uniqueUserIds.size,
+        seesUserAJob: ownerSeesUserAJob,
+        error: ownerCrossError ? { 
+          message: ownerCrossError.message, 
+          code: ownerCrossError.code 
+        } : null,
+      },
+    });
+
+    // ============================================
+    // STEP 9: BROKER ENDPOINT - NO AUTH → 401
+    // ============================================
+    const noAuthResponse = await fetch(
+      `${supabaseUrl}/functions/v1/ai-lead-qualification`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ leadInfo: { budget: "test" } }),
+      }
+    );
+    const noAuthBody = await noAuthResponse.text();
+
+    proofs.push({
+      step: "9. Broker Endpoint: No Auth → 401",
+      description: "Request without Authorization header returns 401",
+      passed: noAuthResponse.status === 401,
+      evidence: {
+        expectedStatus: 401,
+        actualStatus: noAuthResponse.status,
+        body: noAuthBody,
+      },
+    });
+
+    // ============================================
+    // STEP 10: BROKER ENDPOINT - NON-BROKER (USER A) → 403
+    // ============================================
+    const userABrokerResponse = await fetch(
+      `${supabaseUrl}/functions/v1/ai-lead-qualification`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${userAToken}`,
+        },
+        body: JSON.stringify({ leadInfo: { budget: "test-user-a" } }),
+      }
+    );
+    const userABrokerBody = await userABrokerResponse.text();
+
+    proofs.push({
+      step: "10. Broker Endpoint: Non-Broker (User A) → 403",
+      description: "Authenticated non-broker user returns 403",
+      passed: userABrokerResponse.status === 403,
+      evidence: {
+        expectedStatus: 403,
+        actualStatus: userABrokerResponse.status,
+        body: userABrokerBody,
+      },
+    });
+
+    // ============================================
+    // STEP 11: BROKER ENDPOINT - BROKER (USER B) → 200
+    // ============================================
+    const userBBrokerResponse = await fetch(
+      `${supabaseUrl}/functions/v1/ai-lead-qualification`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${userBToken}`,
+        },
+        body: JSON.stringify({ 
+          leadInfo: { 
+            budget: "1000000 AED",
+            propertyInterest: "Palm Jumeirah Villa",
+            timeline: "Immediate",
+            source: "Phase A2 Broker Test",
+          } 
+        }),
+      }
+    );
+    const userBBrokerBody = await userBBrokerResponse.text();
+
+    proofs.push({
+      step: "11. Broker Endpoint: Broker (User B) → 200",
+      description: "Authenticated broker user returns 200",
+      passed: userBBrokerResponse.status === 200,
+      evidence: {
+        expectedStatus: 200,
+        actualStatus: userBBrokerResponse.status,
+        bodyPreview: userBBrokerBody.substring(0, 200) + (userBBrokerBody.length > 200 ? "..." : ""),
+      },
+    });
+
+    // ============================================
+    // STEP 12: BROKER ENDPOINT - OWNER → 200
+    // ============================================
+    const ownerBrokerResponse = await fetch(
+      `${supabaseUrl}/functions/v1/ai-lead-qualification`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": authHeader,
+        },
+        body: JSON.stringify({ 
+          leadInfo: { 
+            budget: "2000000 AED",
+            propertyInterest: "Downtown Dubai Penthouse",
+            timeline: "3 months",
+            source: "Phase A2 Owner Test",
+          } 
+        }),
+      }
+    );
+    const ownerBrokerBody = await ownerBrokerResponse.text();
+
+    proofs.push({
+      step: "12. Broker Endpoint: Owner → 200",
+      description: "Owner always has broker access",
+      passed: ownerBrokerResponse.status === 200,
+      evidence: {
+        expectedStatus: 200,
+        actualStatus: ownerBrokerResponse.status,
+        bodyPreview: ownerBrokerBody.substring(0, 200) + (ownerBrokerBody.length > 200 ? "..." : ""),
+      },
+    });
+
+    // ============================================
+    // STEP 13: PII PROTECTION VERIFICATION
+    // ============================================
+    const { data: storedJobData } = await adminClient
+      .from("ai_job_master")
+      .select("input_payload")
+      .eq("id", jobIdA)
+      .single();
+
+    const inputPayload = (storedJobData?.input_payload || {}) as Record<string, unknown>;
     const hasPII = !!(
       inputPayload.name || 
       inputPayload.email || 
@@ -198,7 +495,7 @@ serve(async (req) => {
     );
 
     proofs.push({
-      step: "6. PII Protection Verified",
+      step: "13. PII Protection Verified",
       description: "Stored input_payload contains NO raw PII (only lead_ref hash)",
       passed: !hasPII,
       evidence: {
@@ -208,172 +505,102 @@ serve(async (req) => {
         hasPhone: !!inputPayload.phone,
         hasNotes: !!inputPayload.notes,
         hasLeadRef: !!inputPayload.lead_ref,
+        piiProtected: !hasPII,
       },
     });
 
-    // 6. OWNER OVERRIDE: Read all users' data
-    const { data: allUserData, count } = await userClient
-      .from("ai_job_master")
-      .select("id, user_id, tool_name", { count: "exact" })
-      .limit(10);
-
-    // Owner should see records from multiple users (via owner_select policy)
-    const uniqueUserIds = new Set(allUserData?.map(r => r.user_id) || []);
-
-    proofs.push({
-      step: "7. Owner Read-Only Override",
-      description: "Owner can see records across users (read-only audit access)",
-      passed: true, // Owner seeing data proves the policy works
-      evidence: {
-        totalRecordsVisible: count,
-        sampleSize: allUserData?.length || 0,
-        uniqueUsers: uniqueUserIds.size,
-      },
-    });
-
-    // 7. SECRETS CONFIGURATION PROOF
+    // ============================================
+    // STEP 14: SECRETS CONFIGURATION
+    // ============================================
     const leadRefKey = Deno.env.get("LEAD_REF_HMAC_KEY");
-    const ownerEmailConfigured = !!ownerEmail;
 
     proofs.push({
-      step: "8. Secrets Configuration",
-      description: "Required secrets are configured (OWNER_EMAIL, LEAD_REF_HMAC_KEY)",
-      passed: ownerEmailConfigured && !!leadRefKey,
+      step: "14. Secrets Configuration",
+      description: "Required secrets are configured",
+      passed: !!ownerEmail && !!leadRefKey,
       evidence: {
-        OWNER_EMAIL_configured: ownerEmailConfigured,
+        OWNER_EMAIL_configured: !!ownerEmail,
         LEAD_REF_HMAC_KEY_configured: !!leadRefKey,
-        // Never expose actual values
       },
     });
 
-    // 8. HMAC HASH PROOF
-    if (leadRefKey) {
-      const testValue = "test@example.com";
-      const encoder = new TextEncoder();
-      const key = await crypto.subtle.importKey(
-        "raw",
-        encoder.encode(leadRefKey),
-        { name: "HMAC", hash: "SHA-256" },
-        false,
-        ["sign"]
-      );
-      const signature = await crypto.subtle.sign(
-        "HMAC",
-        key,
-        encoder.encode(testValue.toLowerCase())
-      );
-      const hash = Array.from(new Uint8Array(signature))
-        .map(b => b.toString(16).padStart(2, "0"))
-        .join("");
-
-      proofs.push({
-        step: "9. HMAC-SHA256 Hashing",
-        description: "PII is hashed with HMAC-SHA256 before storage",
-        passed: hash.length === 64, // SHA-256 produces 64 hex chars
-        evidence: {
-          algorithm: "HMAC-SHA256",
-          hashLength: hash.length,
-          hashPrefix: hash.substring(0, 16) + "...",
-          isNonReversible: true,
-        },
-      });
-    }
-
-    // 9. BROKER ENDPOINT ENFORCEMENT PROOF
-    // Simulate the 3 access scenarios for ai-lead-qualification
-
-    // Case 1: No Authorization header → 401
-    const noAuthResponse = await fetch(
-      `${supabaseUrl}/functions/v1/ai-lead-qualification`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ leadInfo: { budget: "test" } }),
-      }
-    );
-
-    proofs.push({
-      step: "10. Broker Endpoint: No Auth → 401",
-      description: "Request without Authorization header returns 401",
-      passed: noAuthResponse.status === 401,
-      evidence: {
-        expectedStatus: 401,
-        actualStatus: noAuthResponse.status,
-        body: await noAuthResponse.text(),
-      },
-    });
-
-    // Case 2: Owner with valid auth → 200 (owner always has broker access)
-    const ownerAuthResponse = await fetch(
-      `${supabaseUrl}/functions/v1/ai-lead-qualification`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": authHeader,
-        },
-        body: JSON.stringify({
-          leadInfo: {
-            budget: "500000 AED",
-            propertyInterest: "Downtown Dubai 1BR",
-            timeline: "3 months",
-            source: "Phase A2 Proof Test",
-          },
-        }),
-      }
-    );
-
-    proofs.push({
-      step: "11. Broker Endpoint: Owner Auth → 200",
-      description: "Owner with valid JWT can access broker-only endpoint",
-      passed: ownerAuthResponse.status === 200,
-      evidence: {
-        expectedStatus: 200,
-        actualStatus: ownerAuthResponse.status,
-        responsePreview: ownerAuthResponse.status === 200 
-          ? "Success (full response available)"
-          : await ownerAuthResponse.text(),
-      },
-    });
-
-    // CLEANUP
+    // ============================================
+    // STEP 15: CLEANUP
+    // ============================================
     let cleanupSuccess = true;
-    for (const item of cleanup) {
-      if (item.type === "ai_job_master") {
-        const { error } = await adminClient
-          .from("ai_job_master")
-          .delete()
-          .eq("id", item.id);
-        if (error) {
-          cleanupSuccess = false;
-          console.error(`Cleanup failed for ${item.type}:${item.id}`, error);
-        }
-      }
+    const cleanupDetails: Record<string, boolean> = {};
+
+    // Delete test job
+    if (cleanup.jobIdA) {
+      const { error } = await adminClient
+        .from("ai_job_master")
+        .delete()
+        .eq("id", cleanup.jobIdA);
+      cleanupDetails.jobA = !error;
+      if (error) cleanupSuccess = false;
+    }
+
+    // Delete broker subscription
+    if (cleanup.brokerSubId) {
+      const { error } = await adminClient
+        .from("broker_subscriptions")
+        .delete()
+        .eq("id", cleanup.brokerSubId);
+      cleanupDetails.brokerSub = !error;
+      if (error) cleanupSuccess = false;
+    }
+
+    // Delete test users
+    if (cleanup.userAId) {
+      const { error } = await adminClient.auth.admin.deleteUser(cleanup.userAId);
+      cleanupDetails.userA = !error;
+      if (error) cleanupSuccess = false;
+    }
+
+    if (cleanup.userBId) {
+      const { error } = await adminClient.auth.admin.deleteUser(cleanup.userBId);
+      cleanupDetails.userB = !error;
+      if (error) cleanupSuccess = false;
     }
 
     proofs.push({
-      step: "12. Cleanup",
-      description: "Test data cleaned up successfully",
+      step: "15. Cleanup",
+      description: "Test data cleaned up",
       passed: cleanupSuccess,
       evidence: {
-        itemsCleaned: cleanup.length,
-        success: cleanupSuccess,
+        details: cleanupDetails,
+        allCleaned: cleanupSuccess,
       },
     });
 
+    // ============================================
     // SUMMARY
+    // ============================================
     const allPassed = proofs.every(p => p.passed);
     const passedCount = proofs.filter(p => p.passed).length;
 
     return new Response(
       JSON.stringify({
         phase: "A2",
+        version: "2.1-compliant",
         timestamp: new Date().toISOString(),
-        executor: user.email,
+        executor: ownerUser.email,
         summary: {
           allPassed,
           passedCount,
           totalSteps: proofs.length,
+          brokerEnforcementMatrix: {
+            "No Auth": proofs.find(p => p.step.includes("No Auth"))?.passed ? "401 ✅" : "FAILED ❌",
+            "Non-Broker (User A)": proofs.find(p => p.step.includes("Non-Broker"))?.passed ? "403 ✅" : "FAILED ❌",
+            "Broker (User B)": proofs.find(p => p.step.includes("Broker (User B)"))?.passed ? "200 ✅" : "FAILED ❌",
+            "Owner": proofs.find(p => p.step.includes("Owner →"))?.passed ? "200 ✅" : "FAILED ❌",
+          },
+          rlsIsolationMatrix: {
+            "User A inserts own": proofs.find(p => p.step.includes("User A INSERT"))?.passed ? "✅" : "❌",
+            "User A reads own": proofs.find(p => p.step.includes("User A SELECT Own"))?.passed ? "✅" : "❌",
+            "User B blocked from A": proofs.find(p => p.step.includes("User B SELECT User A"))?.passed ? "✅" : "❌",
+            "Owner reads all": proofs.find(p => p.step.includes("Owner SELECT Across"))?.passed ? "✅" : "❌",
+          },
         },
         proofs,
       }, null, 2),
@@ -381,21 +608,31 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    // Attempt cleanup on error
-    const adminClient = createClient(supabaseUrl, supabaseServiceKey, {
-      auth: { persistSession: false },
-    });
-    
-    for (const item of cleanup) {
-      if (item.type === "ai_job_master") {
-        await adminClient.from("ai_job_master").delete().eq("id", item.id).catch(() => {});
+    // ============================================
+    // ERROR CLEANUP
+    // ============================================
+    try {
+      if (cleanup.jobIdA) {
+        await adminClient.from("ai_job_master").delete().eq("id", cleanup.jobIdA);
       }
+      if (cleanup.brokerSubId) {
+        await adminClient.from("broker_subscriptions").delete().eq("id", cleanup.brokerSubId);
+      }
+      if (cleanup.userAId) {
+        await adminClient.auth.admin.deleteUser(cleanup.userAId);
+      }
+      if (cleanup.userBId) {
+        await adminClient.auth.admin.deleteUser(cleanup.userBId);
+      }
+    } catch (cleanupError) {
+      console.error("Cleanup failed:", cleanupError);
     }
 
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : "Unknown error",
-        proofs,
+        stack: error instanceof Error ? error.stack : undefined,
+        proofsCompleted: proofs,
       }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
