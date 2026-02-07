@@ -52,7 +52,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
   const brokerLinks = [
     { label: 'Broker Hub', href: '/broker-toolkit', icon: Briefcase },
     { label: 'Broker Dashboard', href: '/broker-dashboard', icon: UserCircle },
-    { label: 'Broker CRM', href: '/broker/crm', icon: Users },
+    { label: 'Broker CRM', href: '/crm', icon: Users },
     { label: 'Training', href: '/broker-education', icon: GraduationCap },
     { label: 'Resources', href: '/broker-resources', icon: FolderOpen },
   ];
