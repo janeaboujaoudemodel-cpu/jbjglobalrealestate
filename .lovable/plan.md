@@ -1,146 +1,228 @@
 
-
-# Chat Support: Reorder Welcome Screen & Skip Email Form
+# Comprehensive Fix Plan: Account Dropdown, Areas Sync, and Listing Admin Issues
 
 ## Overview
-Reorganize the ChatWelcome screen layout and modify the flow so clicking "Chat with Our Team" immediately starts the conversational AI collection (asking for name first, then email, then phone) instead of showing a form.
+This plan addresses four distinct issues reported by the owner:
+1. **Account Dropdown Mode Switcher Bug** - Closes when hovering on mode options
+2. **Mode Switcher UI Enhancement** - Add "Select your mode" label above options
+3. **Areas Synchronization** - Ensure all 177 database areas are displayed everywhere
+4. **Listing Admin CRM Issues** - Slow loading and broken images
 
 ---
 
-## Current Flow
-```text
-User opens chat → welcome_choice → ChatWelcome (Tip at top, then monogram, then welcome, then buttons)
-                                    ↓ clicks "Chat with Our Team"
-                               check_email → ChatEmailCheck (form asking for email)
-                                    ↓ email verified
-                          conversational_collect → ChatConversationalCollect (AI asks name → email → phone)
-```
+## Issue 1: Account Dropdown Mode Switcher Bug
 
-## New Flow
-```text
-User opens chat → welcome_choice → ChatWelcome (Monogram at top, welcome, buttons, then Tip at bottom)
-                                    ↓ clicks "Chat with Our Team"
-                          conversational_collect → ChatConversationalCollect (AI asks name → email → phone)
-                                    ↓ all info collected
-                               shortcuts → ChatShortcuts (service selection)
-```
+### Problem Analysis
+The mode switcher dropdown inside the account mega menu closes automatically when hovering over mode options. This happens because:
+- The `ModeSwitcher` component uses a Radix `DropdownMenu` that renders content in a portal
+- When mouse moves to the dropdown content (in the portal), the parent `MegaMenuAccount` detects the mouse left its bounds
+- The `handleMegaMenuLeave` function in `GlobalHeader.tsx` closes the mega menu
+
+### Root Cause
+The current event propagation stopping (`e.stopPropagation()`) on the wrapper div (lines 185-191 in MegaMenuAccount.tsx) is insufficient because:
+1. The Radix `DropdownMenuContent` renders in a portal outside the mega menu DOM
+2. The `onMouseLeave` from the parent mega menu container fires before the portal content is registered
+
+### Solution
+1. **Modify `ModeSwitcher.tsx`** to use `modal={false}` on the DropdownMenu to prevent focus trapping issues
+2. **Add `onCloseAutoFocus` prevention** to stop the dropdown from stealing focus
+3. **Enhance the wrapper** in `MegaMenuAccount.tsx` with `onMouseEnter` and `onMouseLeave` handlers that communicate with the parent
+4. **Add a `data-mode-switcher` attribute** to the portal content so `handleMegaMenuLeave` in GlobalHeader.tsx can detect it
+
+### Files to Modify
+- `src/components/ModeSwitcher.tsx` (lines 102, 129-133)
+- `src/components/header/MegaMenuAccount.tsx` (lines 184-191)
+- `src/components/GlobalHeader.tsx` (lines 91-110)
 
 ---
 
-## Changes Required
+## Issue 2: Mode Switcher UI Enhancement
 
-### Change 1: Reorder ChatWelcome.tsx Layout
+### Required Changes
+Add a "Select your mode" label above the mode options in the dropdown, and increase the dropdown box size for better visibility.
 
-**File:** `src/components/chat/ChatWelcome.tsx`
+### Solution
+1. **Add header label** in `ModeSwitcher.tsx` above the mode options
+2. **Increase dropdown width** from `w-64` to `w-72`
+3. **Add more padding** to the dropdown content container
 
-Reorder the elements from:
-1. Tip (top)
-2. Monogram
-3. Welcome text
-4. Action buttons
-
-**To:**
-1. Monogram (moved to top)
-2. Welcome text ("Welcome to JBJ Global Real Estate")
-3. Action buttons (Chat with Team, WhatsApp)
-4. Tip (moved to bottom)
-
-### Change 2: Modify Chat Flow to Skip Email Check
-
-**File:** `src/components/AIChatWidget.tsx`
-
-Change the "Chat with Our Team" button behavior:
-
-**Current (line 602):**
+### Code Changes
 ```tsx
-<ChatWelcome onStartChat={() => setStep('check_email')} />
+// In ModeSwitcher.tsx, after line 133 (inside DropdownMenuContent)
+<div className="px-3 py-2.5 border-b border-zinc-100 mb-1">
+  <p className="text-sm font-semibold text-zinc-700">
+    Select your mode
+  </p>
+  <p className="text-xs text-zinc-500 mt-0.5">
+    Choose how you want to use the platform
+  </p>
+</div>
 ```
 
-**New:**
-```tsx
-<ChatWelcome onStartChat={() => setStep('conversational_collect')} />
-```
-
-### Change 3: Update ChatConversationalCollect to NOT Require Initial Email
-
-**File:** `src/components/chat/ChatConversationalCollect.tsx`
-
-The component already supports collecting email if `initialEmail` is not provided - the flow will:
-1. Ask for name first
-2. Then ask for email (since no initial email)
-3. Then ask for phone
-
-No changes needed to this component since it already handles the case where `initialEmail` is empty.
-
-### Change 4: Update Back Navigation
-
-**File:** `src/components/AIChatWidget.tsx`
-
-Update the `handleBack` function so that going back from `conversational_collect` returns to `welcome_choice` instead of `check_email`:
-
-**Current (lines 559-561):**
-```tsx
-case 'conversational_collect':
-  setStep('check_email');
-  break;
-```
-
-**New:**
-```tsx
-case 'conversational_collect':
-  setStep('welcome_choice');
-  break;
-```
+### Files to Modify
+- `src/components/ModeSwitcher.tsx` (lines 129-138)
 
 ---
 
-## Visual Comparison
+## Issue 3: Areas Synchronization
 
-### Before (ChatWelcome)
-```text
-┌────────────────────────────────────────┐
-│  💡 Tip: Most of your questions...    │  ← TOP
-├────────────────────────────────────────┤
-│           [JBJ Monogram]              │
-├────────────────────────────────────────┤
-│     Chat with our team 👋              │
-│   Talk directly with our experts       │
-├────────────────────────────────────────┤
-│  💬 Chat with our team                │
-│  📱 Talk Directly (WhatsApp)           │
-└────────────────────────────────────────┘
-```
+### Current State
+- Database has **177 active areas** from Reelly API sync
+- Areas are correctly used in `useAreas()` hook with proper database queries
+- Multiple components already use the hook correctly
 
-### After (ChatWelcome)
-```text
-┌────────────────────────────────────────┐
-│           [JBJ Monogram]              │  ← TOP (moved up)
-├────────────────────────────────────────┤
-│    Welcome to JBJ Global Real Estate   │
-│   Talk directly with our experts       │
-├────────────────────────────────────────┤
-│  💬 Chat with our team                │
-│  📱 Talk Directly (WhatsApp)           │
-├────────────────────────────────────────┤
-│  💡 Tip: Most of your questions...    │  ← BOTTOM (moved down)
-└────────────────────────────────────────┘
-```
+### Components Using Areas
+| Component | File | Status |
+|-----------|------|--------|
+| MegaMenuAreas | `/header/MegaMenuAreas.tsx` | ✅ Uses `useAreas({ limit: 12 })` |
+| AreasWeCover (Homepage) | `/home/AreasWeCover.tsx` | ✅ Uses `useAreas({ limit: 12 })` |
+| AreaGuides Page | `/pages/AreaGuides.tsx` | ✅ Uses `useAreas()` (all areas) |
+| AreaDetail Page | `/pages/AreaDetail.tsx` | ✅ Uses `useAreas({ limit: 6 })` |
+| Properties Page | `/pages/Properties.tsx` | ✅ Uses `useAreas()` |
+| ProjectFilters | `/components/ProjectFilters.tsx` | ⚠️ Needs verification |
+| SearchModule | `/components/home/SearchModule.tsx` | ⚠️ Uses static `topAreas` array |
+
+### Required Fixes
+1. **SearchModule.tsx** - Replace static `topAreas` array with `useAreas()` hook data
+2. **ProjectFilters.tsx** - Ensure area dropdown uses database areas
+
+### Files to Modify
+- `src/components/home/SearchModule.tsx`
+- `src/components/ProjectFilters.tsx` (verify and fix if needed)
 
 ---
 
-## Files to Modify
+## Issue 4: Listing Admin CRM Issues
 
-| File | Change |
-|------|--------|
-| `src/components/chat/ChatWelcome.tsx` | Reorder layout: monogram first, tip last |
-| `src/components/AIChatWidget.tsx` | Change flow from `check_email` to `conversational_collect` + update back navigation |
+### Problem Analysis
+Based on investigation:
+1. **Slow Loading** - The ListingAdmin page makes multiple database queries on mount
+2. **1,804 pending imports** in the queue (all with status='pending')
+3. **Images ARE present** - Sample data shows images are NOT broken (they have valid Reelly API URLs)
+4. **Console Error** - OwnerAuditPage.tsx has HMR reload failure (syntax/import error)
+
+### Actual Status
+- **Sync is working** - 1,804 projects synced from Reelly API
+- **Images exist** - All sampled records have valid image URLs from Reelly
+- **Loading delay** - Caused by multiple simultaneous database queries
+
+### Root Cause of Slow Loading
+The `ListingAdmin.tsx` page:
+1. Checks owner role via RPC call (line 80)
+2. Fetches all projects via `useProjects()` hook
+3. Fetches developers and communities
+4. Sets default view to 'sync' which loads SyncDashboard
+5. SyncDashboard makes 9+ parallel database queries on mount (lines 377-412)
+
+### Solutions
+
+#### Fix 1: Optimize SyncDashboard Queries
+Combine the 9 separate count queries into a single RPC function for efficiency.
+
+#### Fix 2: Add Loading State Improvements
+Add skeleton loaders and progressive loading to the ListingAdmin page.
+
+#### Fix 3: Fix OwnerAuditPage Syntax Error
+Investigate and fix the HMR reload failure in OwnerAuditPage.tsx.
+
+#### Fix 4: Verify Image Display
+The images exist in the database - if they appear broken in the UI, it's likely a rendering issue in the preview cards, not a data issue.
+
+### Files to Modify
+- `src/components/listing-admin/SyncDashboard.tsx` (lines 366-442)
+- `src/pages/ListingAdmin.tsx` (loading states)
+- `src/pages/owner/OwnerAuditPage.tsx` (fix any syntax issues)
 
 ---
 
-## Summary
-- Move monogram and welcome text to the TOP of ChatWelcome
-- Move tip to the BOTTOM of ChatWelcome  
-- Skip the email form entirely when user clicks "Chat with Our Team"
-- Go directly to conversational AI collection where the AI agent asks for: Name → Email → Phone (one at a time)
-- This creates a more natural, less intimidating experience for users
+## Implementation Order
 
+| Step | Priority | Issue | Effort |
+|------|----------|-------|--------|
+| 1 | P0 | Fix Account Dropdown Mode Switcher Bug | Medium |
+| 2 | P1 | Add "Select your mode" UI enhancement | Low |
+| 3 | P1 | Fix SearchModule to use database areas | Low |
+| 4 | P1 | Verify ProjectFilters uses database areas | Low |
+| 5 | P2 | Add loading skeleton to ListingAdmin | Medium |
+| 6 | P2 | Fix OwnerAuditPage HMR error | Low |
+
+---
+
+## Technical Details
+
+### Mode Switcher Fix (Detailed)
+
+**File: `src/components/ModeSwitcher.tsx`**
+
+```tsx
+// Line 102: Add modal={false} to DropdownMenu
+<DropdownMenu open={isOpen} onOpenChange={setIsOpen} modal={false}>
+
+// Lines 129-138: Increase size and add header
+<DropdownMenuContent 
+  align="end" 
+  className="w-72 bg-white border border-zinc-200 shadow-xl rounded-xl p-2 z-[10001]"
+  sideOffset={5}
+  onCloseAutoFocus={(e) => e.preventDefault()}
+>
+  <div className="px-3 py-2.5 border-b border-zinc-100 mb-2">
+    <p className="text-sm font-semibold text-zinc-700">Select your mode</p>
+    <p className="text-xs text-zinc-500 mt-0.5">Choose how you want to use the platform</p>
+  </div>
+  {/* existing mode options */}
+</DropdownMenuContent>
+```
+
+**File: `src/components/GlobalHeader.tsx`**
+
+```tsx
+// Lines 95-110: Enhance handleMegaMenuLeave to check for mode switcher portal
+const handleMegaMenuLeave = (e?: React.MouseEvent) => {
+  if (pinnedMenu) return;
+  
+  if (e?.relatedTarget instanceof HTMLElement) {
+    const isMovingToPortal = e.relatedTarget.closest('[data-radix-portal]');
+    if (isMovingToPortal) return;
+  }
+  
+  // Check for ANY open Radix portal (includes mode switcher dropdown)
+  const openRadixPortal = document.querySelector('[data-radix-portal]');
+  if (openRadixPortal) return;
+  
+  // Also check for mode switcher specifically
+  const modeSwitcherOpen = document.querySelector('[data-radix-menu-content]');
+  if (modeSwitcherOpen) return;
+  
+  megaMenuTimeoutRef.current = setTimeout(() => {
+    const portalStillOpen = document.querySelector('[data-radix-portal]');
+    if (portalStillOpen) return;
+    setActiveMegaMenu(null);
+  }, 450);
+};
+```
+
+### SearchModule Areas Fix
+
+**File: `src/components/home/SearchModule.tsx`**
+
+Replace static `topAreas` array with dynamic data from `useAreas()` hook.
+
+---
+
+## Data Integrity Confirmation
+
+### Areas
+- **Database count**: 177 active areas
+- **Source**: Reelly API sync
+- **No fake data**: All areas from real database
+
+### Pending Imports
+- **Queue count**: 1,804 pending projects
+- **Image status**: All have valid Reelly API image URLs
+- **No broken images at data level**: URLs are valid and properly stored
+
+### Image Display Issue
+If images appear broken in the UI but exist in the database, check:
+1. Image URL rendering in cards
+2. CORS issues with external Reelly URLs
+3. Fallback image handling in card components
