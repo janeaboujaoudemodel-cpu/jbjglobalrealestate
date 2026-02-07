@@ -44,6 +44,7 @@ import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 
 // Mega Menu Components
 import MegaMenuBuy from "@/components/header/MegaMenuBuy";
+import MegaMenuSell from "@/components/header/MegaMenuSell";
 import MegaMenuRent from "@/components/header/MegaMenuRent";
 import MegaMenuProjects from "@/components/header/MegaMenuProjects";
 import MegaMenuDevelopers from "@/components/header/MegaMenuDevelopers";
@@ -371,6 +372,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/properties?type=villa&transaction=buy", label: "Villas", icon: Home },
     { href: "/buyer-guide", label: "Buyer's Guide", icon: FileText },
     { href: "/mortgage-calculator", label: "Mortgage Calculator", icon: BarChart3 },
+  ];
+
+  // Mobile menu links - Sell section
+  const mobileSellLinks = [
+    { href: "/seller-listing", label: "List Your Property", icon: ClipboardCheck },
+    { href: "/seller-guide", label: "Seller's Guide", icon: FileText },
+    { href: "/sell/valuation", label: "Property Valuation", icon: BarChart3 },
+    { href: "/services/selling-advisory", label: "Selling Advisory", icon: Briefcase },
   ];
 
   // Mobile menu links - Rent section
@@ -711,8 +720,33 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     </Collapsible>
 
                     <div className="h-px bg-gold/20 my-2" />
+
+                    {/* 2. Sell - Collapsible */}
+                    <Collapsible>
+                      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                        <span>Sell</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          {mobileSellLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"
+                            >
+                              <link.icon className="w-4 h-4 text-gold" />
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+
+                    <div className="h-px bg-gold/20 my-2" />
                     
-                    {/* 2. Rent - Collapsible */}
+                    {/* 3. Rent - Collapsible */}
                     <Collapsible defaultOpen>
                       <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
                         <span>Rent</span>
@@ -1263,6 +1297,21 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 </button>
                 {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
 
+                {/* Sell */}
+                <button
+                  onPointerEnter={() => handleMegaMenuEnter('sell')}
+                  onClick={() => handleMegaMenuClick('sell')}
+                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                    isFullyTransparent
+                      ? activeMegaMenu === 'sell' ? 'text-gold' : 'text-white hover:text-gold'
+                      : activeMegaMenu === 'sell' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                  }`}
+                >
+                  Sell
+                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'sell' ? 'rotate-180' : ''}`} />
+                </button>
+                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+
                 {/* Rent */}
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('rent')}
@@ -1355,6 +1404,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     onPointerLeave={handleMegaMenuLeave}
                   >
                     {activeMegaMenu === 'buy' && <MegaMenuBuy onClose={closeMegaMenu} />}
+                    {activeMegaMenu === 'sell' && <MegaMenuSell onClose={closeMegaMenu} />}
                     {activeMegaMenu === 'rent' && <MegaMenuRent onClose={closeMegaMenu} />}
                     {activeMegaMenu === 'projects' && <MegaMenuProjects onClose={closeMegaMenu} />}
                     {activeMegaMenu === 'areas' && <MegaMenuAreas onClose={closeMegaMenu} />}

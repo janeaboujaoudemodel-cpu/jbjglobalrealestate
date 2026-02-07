@@ -84,6 +84,14 @@ const Footer = () => {
     { label: t('footer.listYourProperty') || "List Your Property", href: "/seller-listing" },
   ];
 
+  // Sell
+  const sellLinks = [
+    { label: "Sell Your Property", href: "/seller-listing" },
+    { label: t('footer.sellerGuide') || "Seller's Guide", href: "/seller-guide" },
+    { label: "Property Valuation", href: "/sell/valuation" },
+    { label: "Selling Advisory", href: "/services/selling-advisory" },
+  ];
+
   // Services
   const servicesLinks = [
     { label: "Explore All Services", href: "/services" },
@@ -547,6 +555,24 @@ const Footer = () => {
               <div className="min-h-[72px] sm:min-h-[88px] md:min-h-[110px] mb-3 sm:mb-4 md:mb-6">
                 <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
                   {propertiesLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                Sell
+              </h4>
+              <div className="min-h-[72px] sm:min-h-[88px] md:min-h-[110px] mb-3 sm:mb-4 md:mb-6">
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
+                  {sellLinks.map((link) => (
                     <li key={link.href}>
                       <Link
                         to={link.href}
