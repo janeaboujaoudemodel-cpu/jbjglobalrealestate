@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -408,16 +409,36 @@ const CRMLeadDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
-        <p>Loading...</p>
+      <div className="min-h-screen bg-black p-6">
+        <div className="max-w-6xl mx-auto space-y-6">
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-10 w-10 rounded-full bg-zinc-800" />
+            <div className="space-y-2 flex-1">
+              <Skeleton className="h-6 w-48 bg-zinc-800" />
+              <Skeleton className="h-4 w-32 bg-zinc-800" />
+            </div>
+            <Skeleton className="h-9 w-32 bg-zinc-800" />
+          </div>
+          <div className="grid lg:grid-cols-3 gap-6">
+            <Skeleton className="h-64 bg-zinc-800 rounded-lg" />
+            <Skeleton className="h-96 lg:col-span-2 bg-zinc-800 rounded-lg" />
+          </div>
+        </div>
       </div>
     );
   }
 
   if (!lead) {
     return (
-      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
-        <p>Lead not found</p>
+      <div className="min-h-screen bg-black p-6 flex flex-col items-center justify-center gap-4">
+        <User className="h-16 w-16 text-zinc-600" />
+        <p className="text-zinc-400 text-lg">Lead not found</p>
+        <Button 
+          onClick={() => navigate('/crm/leads')}
+          className="bg-gold hover:bg-gold/90 text-black"
+        >
+          Return to Leads
+        </Button>
       </div>
     );
   }
