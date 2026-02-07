@@ -4,9 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 /**
  * OWNER_EMAIL - The single privileged identity
- * Set via environment variable or fallback to hardcoded owner email
+ * Set via environment variable ONLY - no fallback (fail closed)
  */
-const OWNER_EMAIL = (import.meta.env.VITE_OWNER_EMAIL || "janeaboujaoudenails@gmail.com").toLowerCase();
+const OWNER_EMAIL = import.meta.env.VITE_OWNER_EMAIL;
 
 interface AuthContextType {
   user: User | null;
@@ -40,10 +40,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(nextSession);
       setUser(nextSession?.user ?? null);
 
-      // Check if user is Owner by email match
-      if (nextSession?.user?.email) {
+      // Check if user is Owner by email match (fail closed if OWNER_EMAIL not configured)
+      if (nextSession?.user?.email && OWNER_EMAIL) {
         const userEmail = nextSession.user.email.toLowerCase();
-        setIsOwner(userEmail === OWNER_EMAIL);
+        const ownerEmail = OWNER_EMAIL.toLowerCase();
+        setIsOwner(userEmail === ownerEmail);
       } else {
         setIsOwner(false);
       }

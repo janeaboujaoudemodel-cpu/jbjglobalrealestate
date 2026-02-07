@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -19,9 +19,16 @@ import {
   CheckSquare,
   AlertCircle,
   UserPlus,
-  Activity
+  Activity,
+  ExternalLink
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
+import LeadStatusBadge from "@/components/crm/LeadStatusBadge";
+
+/**
+ * OWNER_EMAIL - Loaded from environment only, no fallback
+ */
+const OWNER_EMAIL = import.meta.env.VITE_OWNER_EMAIL;
 
 interface KPICardProps {
   title: string;
@@ -112,7 +119,14 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
         <span className="text-xs text-zinc-500">
           {formatDistanceToNow(new Date(lead.created_at), { addSuffix: true })}
         </span>
-        <ChevronRight className="h-4 w-4 text-zinc-500 group-hover:text-gold transition-colors" />
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-gold hover:text-gold hover:bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          Open
+          <ExternalLink className="h-3 w-3 ml-1" />
+        </Button>
       </div>
     </div>
   );
@@ -208,9 +222,10 @@ function TaskRow({ task, onComplete }: TaskRowProps) {
   );
 }
 
-export default function OwnerHub() {
+export default function OwnerDashboardOverview() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   // Fetch total leads count
   const { data: totalLeads, isLoading: loadingLeads } = useQuery({
@@ -279,14 +294,17 @@ export default function OwnerHub() {
     enabled: !!user,
   });
 
-  // Fetch tasks needing follow-up (pending + due soon or overdue)
+  // Fetch leads/tasks needing follow-up
+  // Logic: pending tasks with due_at <= now OR leads with pipeline_stage in ['new', 'contacted']
   const { data: followUpTasks, isLoading: loadingFollowUp } = useQuery({
     queryKey: ['owner-followup-tasks'],
     queryFn: async () => {
+      const now = new Date().toISOString();
       const { data } = await supabase
         .from('crm_tasks')
         .select('id, title, due_at, status, lead_id')
         .eq('status', 'pending')
+        .or(`due_at.lte.${now},due_at.is.null`)
         .order('due_at', { ascending: true, nullsFirst: false })
         .limit(10);
       return data || [];
@@ -294,7 +312,7 @@ export default function OwnerHub() {
     enabled: !!user,
   });
 
-  // Fetch recent conversations
+  // Fetch recent conversations (last 10)
   const { data: recentConversations, isLoading: loadingRecentConvos } = useQuery({
     queryKey: ['owner-recent-conversations'],
     queryFn: async () => {
@@ -313,6 +331,8 @@ export default function OwnerHub() {
       .from('crm_tasks')
       .update({ status: 'completed', completed_at: new Date().toISOString() })
       .eq('id', taskId);
+    queryClient.invalidateQueries({ queryKey: ['owner-followup-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['owner-kpi-pending-tasks'] });
   };
 
   return (
@@ -320,7 +340,7 @@ export default function OwnerHub() {
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Owner Hub</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Owner Dashboard</h1>
           <p className="text-zinc-400">
             Your command center for leads, tasks, and conversations
           </p>
@@ -364,7 +384,7 @@ export default function OwnerHub() {
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle className="text-lg text-white">Newest Leads</CardTitle>
-                <CardDescription className="text-zinc-400">Most recent contacts</CardDescription>
+                <CardDescription className="text-zinc-400">Most recent 10 contacts</CardDescription>
               </div>
               <Button 
                 variant="ghost" 
@@ -413,7 +433,7 @@ export default function OwnerHub() {
                   <Clock className="h-5 w-5 text-amber-400" />
                   Needs Follow-up
                 </CardTitle>
-                <CardDescription className="text-zinc-400">Pending tasks</CardDescription>
+                <CardDescription className="text-zinc-400">Pending tasks due now</CardDescription>
               </div>
               <Button 
                 variant="ghost" 
@@ -454,7 +474,7 @@ export default function OwnerHub() {
               <Activity className="h-5 w-5 text-purple-400" />
               Recent Conversations
             </CardTitle>
-            <CardDescription className="text-zinc-400">Website chat sessions</CardDescription>
+            <CardDescription className="text-zinc-400">Website chat sessions (last 10)</CardDescription>
           </CardHeader>
           <CardContent>
             {loadingRecentConvos ? (
@@ -499,7 +519,7 @@ export default function OwnerHub() {
             onClick={() => navigate('/crm/tasks')}
           >
             <CheckSquare className="h-4 w-4 mr-2" />
-            Manage Tasks
+            View Tasks
           </Button>
         </div>
       </div>
