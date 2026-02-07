@@ -1,250 +1,224 @@
 
-# Implementation Status - AI Tools & Business Suites
 
-## ✅ COMPLETED
+# Meeting Center Integration Plan
 
-### Business Suites (Phase 1) - DONE
-- Created 4 Business Suite pages at `/business-suite/*`
-- Real Estate Suite: Property Analyzer, Price Predictor, Neighborhood Insights, ROI Calculator, Market Report, Competitor Analysis
-- Broker Intelligence Suite: Lead Qualification, Objection Handler, Follow-up Scheduler, Meeting Summarizer, Contract Reviewer
-- Creative & Communication Suite: Document Generator, Translation Hub, Video Tour Script
-- Productivity Suite: Business Card Scanner, Video Meet, Mortgage Calculator
+## Overview
 
-### Camera Fixes (Phase 2) - DONE
-- Removed auto-start on mount - camera now requires explicit user click
-- Added proper cleanup in useEffect for stream and detection interval
-- Added guards to prevent detection interval running without active camera
-- Better error messaging for permissions
+This plan integrates the AI Call Summarizer and ElevenLabs Voice Concierge call logs directly into the Meeting Center, making it a unified hub for all communication summaries.
 
 ---
 
-## Phase 1: Business Suites (4 pages)
+## Current State
 
-### 1.1 Real Estate Business Suite
-**Route**: `/business-suite/real-estate`
-**Color**: Gold
-**Tools included**:
-- Property Analyzer (Sky)
-- Price Predictor (Blue)
-- Neighborhood Insights (Teal)
-- ROI Calculator (Emerald)
-- Market Report (Indigo)
-- Competitor Analysis (Orange)
+| Component | Current Location | Database Storage |
+|-----------|-----------------|-----------------|
+| AI Meeting Summarizer | Standalone `/ai-meeting-summarizer` | `ai_job_master` (tool_name = 'ai-meeting-summarizer') |
+| AI Call Summarizer | Standalone `/ai-call-summarizer` | `ai_job_master` (tool_name = 'ai-call-summarizer') |
+| ElevenLabs Voice Calls | Widget only | `voice_call_logs` table |
+| Meeting Center | View-only hub `/meeting-center` | Mock data only |
 
-### 1.2 Broker Intelligence Suite
-**Route**: `/business-suite/broker`
-**Color**: Purple
-**Tools included**:
-- Lead Qualification (Purple)
-- Objection Handler (Rose)
-- Follow-up Scheduler (Cyan)
-- Meeting Summarizer (Violet)
-- Contract Reviewer (Red)
+## Proposed Architecture
 
-### 1.3 Creative & Communication Suite
-**Route**: `/business-suite/creative`
-**Color**: Pink
-**Tools included**:
-- Document Generator (Lime)
-- Translation Hub (Amber)
-- Video Tour Script (Pink)
-
-### 1.4 Productivity Suite
-**Route**: `/business-suite/productivity`
-**Color**: Cyan
-**Tools included**:
-- Business Card Scanner
-- Video Meet
-- Mortgage Calculator
-
-### Files to Create
-- `src/pages/business-suite/RealEstateSuite.tsx`
-- `src/pages/business-suite/BrokerSuite.tsx`
-- `src/pages/business-suite/CreativeSuite.tsx`
-- `src/pages/business-suite/ProductivitySuite.tsx`
-- `src/pages/business-suite/index.ts`
-
----
-
-## Phase 2: Camera Fixes (BusinessCardScanner)
-
-### Current Issues
-- Camera auto-starts on component mount causing conflicts
-- Detection interval runs without guards
-- Stream not properly cleaned up on unmount
-
-### Fixes
-1. Remove auto-start timer - wait for explicit user click
-2. Add proper cleanup in useEffect return
-3. Guard detection interval with camera state check
-4. Add clear start/stop controls
-5. Better error messaging for permissions
-
-### File to Modify
-- `src/components/business-card/BusinessCardCamera.tsx`
+```text
++--------------------------------------------------+
+|              MEETING CENTER                       |
+|              /meeting-center                      |
++--------------------------------------------------+
+|                                                  |
+|  [Tabs]                                          |
+|  - All | Meetings | Phone Calls | Voice AI Calls |
+|                                                  |
++--------------------------------------------------+
+|                                                  |
+|  [Quick Actions Bar]                             |
+|  +-------------------+ +--------------------+    |
+|  | New Meeting       | | New Call Summary   |    |
+|  | Summary           | | (inline form)      |    |
+|  +-------------------+ +--------------------+    |
+|                                                  |
++--------------------------------------------------+
+|                                                  |
+|  [Inline Call Summarizer Form]                   |
+|  - Client Name                                   |
+|  - Call Notes / Audio Upload                     |
+|  - Summarize Button                              |
+|  (Collapsed by default, expands on click)        |
+|                                                  |
++--------------------------------------------------+
+|                                                  |
+|  [Combined History List]                         |
+|  - Loads from ai_job_master WHERE tool_name      |
+|    IN ('ai-meeting-summarizer',                  |
+|        'ai-call-summarizer')                     |
+|  - Loads from voice_call_logs                    |
+|  - Sorted by date descending                     |
+|  - Type badges: Meeting / Call / Voice AI        |
+|                                                  |
++--------------------------------------------------+
+```
 
 ---
 
-## Phase 3: AI Call Summarizer (New Tool)
+## Implementation Details
 
-### Description
-Summarize phone calls with clients - record or upload audio for transcription and AI analysis.
+### 1. Database Queries
 
-**Route**: `/ai-call-summarizer`
-**Color**: Orange
-
-### Features
-- Audio file upload (MP3, WAV, M4A)
-- Live recording option (browser permission)
-- Client name input for context
-- AI-generated: Summary, Action Items, Client Needs, Next Steps
-
-### Files to Create
-- `src/components/ai-tools/premium/AICallSummarizerPremium.tsx`
-- `src/pages/AICallSummarizerPage.tsx`
-- `supabase/functions/ai-call-summarizer/index.ts` (edge function)
-
----
-
-## Phase 4: Meeting Center Page
-
-### Description
-Central hub to view all meeting and call summaries with quick actions.
-
-**Route**: `/meeting-center`
-
-### Features
-- List of recent meeting summaries
-- List of recent call summaries
-- Quick actions: Schedule follow-up, Generate document
-- Filter by date, client name
-
-### Files to Create
-- `src/pages/MeetingCenter.tsx`
-
----
-
-## Phase 5: Voice Concierge Enhancements
-
-### Current State
-- Basic voice conversation widget
-- Uses ElevenLabs token from edge function
-- No property data access
-- No call logging
-
-### Enhancements
-
-#### 5.1 Call Logging
-- Log each voice conversation to database
-- Store conversation metadata (start time, duration)
-- Enable future transcription capability
-
-#### 5.2 Property Listing Access
-- Voice agent can query property database
-- Answer questions about specific listings
-- Provide pricing and developer info
-
-#### 5.3 Document Trigger Integration
-- Voice commands like "Generate comparison for Emaar vs Sobha"
-- Trigger document generator from voice
-
-### Database Table
+**Fetch Meeting & Call Summaries from ai_job_master:**
 ```sql
-CREATE TABLE voice_call_logs (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES auth.users(id),
-  conversation_id TEXT,
-  started_at TIMESTAMPTZ DEFAULT now(),
-  ended_at TIMESTAMPTZ,
-  duration_seconds INTEGER,
-  metadata JSONB,
-  created_at TIMESTAMPTZ DEFAULT now()
-);
+SELECT id, tool_name, input_payload, output_payload, created_at
+FROM ai_job_master
+WHERE tool_name IN ('ai-meeting-summarizer', 'ai-call-summarizer')
+  AND user_id = auth.uid()
+ORDER BY created_at DESC
+LIMIT 50
 ```
 
-### Files to Create
-- `supabase/functions/voice-agent-action/index.ts`
-- `src/pages/VoiceAgentSettings.tsx`
-
-### Files to Modify
-- `src/components/VoiceConciergeWidget.tsx`
-
----
-
-## Phase 6: Navigation Updates
-
-### Add Business Suites to Navigation
-- Add "Business Suites" section to header MegaMenu
-- Add suite links to footer
-- Keep individual tool links (dual access)
-
-### Files to Modify
-- `src/components/header/navigation-data.ts`
-- `src/components/Footer.tsx`
-
----
-
-## Phase 7: Route Configuration
-
-### Add Routes to App.tsx
-```
-/business-suite/real-estate
-/business-suite/broker
-/business-suite/creative
-/business-suite/productivity
-/ai-call-summarizer
-/meeting-center
-/voice-settings
+**Fetch ElevenLabs Voice Calls:**
+```sql
+SELECT id, conversation_id, started_at, ended_at, duration_seconds, metadata
+FROM voice_call_logs
+WHERE user_id = auth.uid()
+ORDER BY started_at DESC
+LIMIT 50
 ```
 
-### File to Modify
-- `src/App.tsx`
+### 2. Component Changes
+
+#### MeetingCenter.tsx - Major Refactor
+**Current**: Uses mock data and links out to separate tools
+**New**: 
+- Fetches real data from `ai_job_master` and `voice_call_logs`
+- Embeds the Call Summarizer form inline (collapsible)
+- Adds "Voice AI" tab for ElevenLabs call history
+- Shows actual summaries with expand/collapse
+- Quick actions to view full details
+
+#### Add Inline Call Summarizer
+- Embed `AICallSummarizerPremium` form directly in Meeting Center
+- When submitted, result appears in the list immediately
+- Collapsible section to keep UI clean
+
+#### Add Voice AI Calls Tab
+- Shows history of ElevenLabs conversations
+- Displays: start time, duration, conversation ID
+- Future enhancement: transcripts when available
+
+### 3. Data Model Mapping
+
+**ai_job_master summary display:**
+```typescript
+interface SummaryItem {
+  id: string;
+  type: 'meeting' | 'call' | 'voice-ai';
+  clientName: string;
+  date: string;
+  summary: string;
+  actionItems: string[];
+  source: 'ai_job_master' | 'voice_call_logs';
+}
+
+// Mapping from ai_job_master:
+// - input_payload.clientName or input_payload.meetingTitle -> clientName
+// - output_payload.summary -> summary
+// - output_payload.actionItems -> actionItems
+// - tool_name -> type ('ai-meeting-summarizer' -> 'meeting', 'ai-call-summarizer' -> 'call')
+
+// Mapping from voice_call_logs:
+// - conversation_id -> clientName (or "Voice AI Call")
+// - started_at -> date
+// - metadata.summary -> summary (if available)
+// - type = 'voice-ai'
+```
+
+### 4. UI Enhancements
+
+**Tab Structure:**
+| Tab | Source | Icon | Color |
+|-----|--------|------|-------|
+| All | Combined | Calendar | Violet |
+| Meetings | ai_job_master (meeting) | Video | Violet |
+| Phone Calls | ai_job_master (call) | Phone | Orange |
+| Voice AI | voice_call_logs | Mic | Gold |
+
+**Inline Form:**
+- Collapsible card at top of page
+- "Add Call Summary" button expands the form
+- After submission, collapses and refreshes list
+
+**Summary Cards:**
+- Expandable to show full details
+- Quick actions: Copy, Generate Document, Schedule Follow-up
+- Type badge with appropriate color
 
 ---
 
-## Implementation Order
+## Files to Modify
 
-1. **Business Suites** - Create 4 suite pages with tool cards
-2. **Camera Fixes** - Fix BusinessCardCamera lifecycle
-3. **Call Summarizer** - New AI tool for phone calls
-4. **Meeting Center** - Central hub page
-5. **Voice Enhancements** - Add call logging and property access
-6. **Navigation** - Add suite links to header/footer
-7. **Routes** - Configure all new routes
+### Primary File
+**`src/pages/MeetingCenter.tsx`**
+- Remove mock data
+- Add Supabase queries for real data
+- Add tabs for different summary types
+- Embed inline call summarizer form
+- Add voice call logs display
+
+### Supporting Changes
+**`src/components/ai-tools/premium/AICallSummarizerPremium.tsx`**
+- Export as embeddable component (not full page)
+- Add `onSuccess` callback prop for parent notification
+- Make hero section optional via prop
+
+**`supabase/functions/ai-call-summarizer/index.ts`**
+- Add logging to `ai_job_master` table for history persistence
+- Include user_id from auth header
 
 ---
 
-## Technical Notes
+## Technical Implementation
 
-### Suite Page Design
-Each suite follows this layout:
-- Dark background matching AI tools
-- Suite-specific gradient hero
-- Grid of tool cards with icons and descriptions
-- Click to navigate to individual tool page
-- "Use All Tools" section showing embedded preview
+### Step 1: Update Edge Function to Log Results
 
-### Tool Card Component
-Create reusable `BusinessSuiteToolCard` component:
-- Tool icon with color accent
-- Tool name and short description
-- "Open Tool" link to individual route
-- Hover animation
+Add to `ai-call-summarizer/index.ts`:
+```typescript
+// After successful summarization, log to ai_job_master
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
+await supabase.from('ai_job_master').insert({
+  user_id: userId,
+  tool_name: 'ai-call-summarizer',
+  status: 'completed',
+  input_payload: { clientName, hasAudio },
+  output_payload: summary,
+});
+```
 
-### Database Migration
-The `voice_call_logs` table will be created with RLS policies:
-- Users can only see their own call logs
-- Owner override for auditing
+### Step 2: Create Unified Data Hook
+
+New hook: `useMeetingCenterData.ts`
+```typescript
+export const useMeetingCenterData = () => {
+  // Fetch from ai_job_master
+  // Fetch from voice_call_logs
+  // Combine and sort by date
+  // Return unified list with refetch function
+};
+```
+
+### Step 3: Refactor MeetingCenter Component
+
+- Use the new data hook
+- Add tab filtering logic
+- Add inline form toggle state
+- Render real data with proper mapping
 
 ---
 
 ## Expected Outcome
 
 After implementation:
-- 4 Business Suite pages grouping related tools
-- Business Card Scanner camera works reliably
-- AI Call Summarizer for phone call notes
-- Meeting Center showing all summaries
-- Voice Concierge logs calls to database
-- Navigation includes suite links
-- All routes configured and accessible
+- Meeting Center shows ALL communication summaries in one place
+- Users can add new call summaries directly from Meeting Center
+- Voice AI call history is visible and filterable
+- Real data from database, no more mock data
+- Consistent with the premium dark theme
+- Quick navigation to individual tool pages still available
+
