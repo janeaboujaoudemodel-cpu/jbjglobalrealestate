@@ -206,9 +206,10 @@ const OwnerAuditPage = () => {
     const missing = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === '404').length;
     const componentOnly = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === 'component_only').length;
     const comingSoon = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === 'coming_soon').length;
+    const apiMissing = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.status === 'api_missing').length;
     const withEdgeFunction = AI_TOOLS_INVENTORY_VERIFIED.filter(t => t.edgeFunction).length;
     
-    return { total, working, partial, missing, componentOnly, comingSoon, withEdgeFunction };
+    return { total, working, partial, missing, componentOnly, comingSoon, apiMissing, withEdgeFunction };
   }, []);
 
   const getAIStatusBadge = (status: AIToolStatus) => {
@@ -223,6 +224,8 @@ const OwnerAuditPage = () => {
         return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">📦 Component Only</Badge>;
       case 'coming_soon':
         return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">🕒 Coming Soon</Badge>;
+      case 'api_missing':
+        return <Badge className="bg-pink-500/20 text-pink-400 border-pink-500/30">🔌 API Missing</Badge>;
     }
   };
 
@@ -609,6 +612,10 @@ const OwnerAuditPage = () => {
                   <div className="flex items-center gap-2">
                     <Badge className="bg-red-500/20 text-red-400 border-red-500/30">❌ 404</Badge>
                     <span className="text-zinc-400">Route not registered</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-pink-500/20 text-pink-400 border-pink-500/30">🔌 API Missing</Badge>
+                    <span className="text-zinc-400">Edge function not found</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">📦 Component Only</Badge>
