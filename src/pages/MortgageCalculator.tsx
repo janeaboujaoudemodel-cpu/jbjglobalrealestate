@@ -55,7 +55,7 @@ const MortgageCalculatorPage = () => {
               AI-Powered Financial Planning
             </span>
             <h1 
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-gold via-[#D4C4A8] to-gold bg-clip-text text-transparent mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               {t('mortgage.title')}
