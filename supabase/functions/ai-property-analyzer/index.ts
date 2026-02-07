@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { callLovableAI, sanitizeContactInfo, sanitizeForPrompt } from "../_shared/ai-utils.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -21,22 +22,24 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY not configured");
-    }
+  const startTime = Date.now();
 
+  try {
     const body: AnalysisRequest = await req.json();
     const { 
-      area, 
-      propertyType, 
+      area: rawArea, 
+      propertyType: rawPropertyType, 
       analysisType = 'full', 
       compareWith = [], 
       measurementUnit = 'sqft',
       currency = 'AED',
       language = 'en'
     } = body;
+
+    // Sanitize inputs to prevent prompt injection
+    const area = sanitizeForPrompt(rawArea, 100);
+    const propertyType = sanitizeForPrompt(rawPropertyType, 50);
+    const sanitizedCompareWith = compareWith.map(a => sanitizeForPrompt(a, 100)).filter(Boolean);
 
     if (!area) {
       return new Response(
@@ -48,19 +51,34 @@ serve(async (req) => {
     console.log(`Analyzing property market: ${area}, ${propertyType}, ${analysisType}`);
 
     // Build the analysis prompt
+    const measurementText = measurementUnit === 'both' 
+      ? 'both sq ft and m²' 
+      : measurementUnit === 'sqm' 
+        ? 'square meters (m²)' 
+        : 'square feet (sq ft)';
+
+    const languageMap: Record<string, string> = {
+      'ar': 'Arabic',
+      'ru': 'Russian', 
+      'zh': 'Chinese',
+      'hi': 'Hindi',
+      'en': 'English'
+    };
+
     const systemPrompt = `You are JBJ Property Analyzer, an expert AI assistant for Dubai real estate market analysis.
 Your task is to provide comprehensive, data-driven analysis for the Dubai property market.
 
 IMPORTANT GUIDELINES:
-- Use ${measurementUnit === 'both' ? 'both sq ft and m²' : measurementUnit === 'sqm' ? 'square meters (m²)' : 'square feet (sq ft)'} for all measurements
+- Use ${measurementText} for all measurements
 - Display prices in ${currency}
-- Respond in ${language === 'ar' ? 'Arabic' : language === 'ru' ? 'Russian' : language === 'zh' ? 'Chinese' : language === 'hi' ? 'Hindi' : 'English'}
+- Respond in ${languageMap[language] || 'English'}
 - Be specific with data and avoid vague statements
-- Reference Dubai Land Department, RERA, and DXB Interact as data sources
-- Provide actionable insights for investors and buyers`;
+- Base your analysis on publicly available market knowledge
+- Provide actionable insights for investors and buyers
+- Include typical price ranges, rental yields, and market trends based on your training data`;
 
-    const comparisonText = compareWith.length > 0 
-      ? `\n\nAlso compare with these areas: ${compareWith.join(', ')}`
+    const comparisonText = sanitizedCompareWith.length > 0 
+      ? `\n\nAlso compare with these areas: ${sanitizedCompareWith.join(', ')}`
       : '';
 
     const userPrompt = `Provide a comprehensive property market analysis for ${area}, Dubai focusing on ${propertyType} properties.${comparisonText}
@@ -77,44 +95,22 @@ Structure your analysis with these sections:
 
 Provide specific numbers, percentages, and data points wherever possible.`;
 
-    // Call Lovable AI Gateway
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt }
-        ],
-      }),
+    // Call Lovable AI Gateway using shared utility
+    const aiResponse = await callLovableAI({
+      model: "google/gemini-2.5-flash",
+      systemPrompt,
+      userPrompt,
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("AI Gateway error:", response.status, errorText);
-      
-      if (response.status === 429) {
-        return new Response(
-          JSON.stringify({ success: false, error: "Rate limit exceeded. Please try again later." }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      if (response.status === 402) {
-        return new Response(
-          JSON.stringify({ success: false, error: "AI credits exhausted. Please add credits to continue." }),
-          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      
-      throw new Error(`AI Gateway error: ${response.status}`);
+    if (!aiResponse.success) {
+      const status = aiResponse.status || 500;
+      return new Response(
+        JSON.stringify({ success: false, error: aiResponse.error }),
+        { status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
-    const aiData = await response.json();
-    const fullAnalysis = aiData.choices?.[0]?.message?.content || "";
+    const fullAnalysis = aiResponse.content || "";
 
     // Parse sections from the analysis
     const sections = {
@@ -126,8 +122,11 @@ Provide specific numbers, percentages, and data points wherever possible.`;
       marketTiming: extractSection(fullAnalysis, "Market Timing"),
       riskFactors: extractSection(fullAnalysis, "Risk Factors"),
       recommendation: extractSection(fullAnalysis, "Recommendation"),
-      comparison: compareWith.length > 0 ? extractSection(fullAnalysis, "Comparison") : null,
+      comparison: sanitizedCompareWith.length > 0 ? extractSection(fullAnalysis, "Comparison") : null,
     };
+
+    const responseTimeMs = Date.now() - startTime;
+    console.log(`Analysis complete for: ${area} (${responseTimeMs}ms)`);
 
     const result = {
       success: true,
@@ -137,10 +136,8 @@ Provide specific numbers, percentages, and data points wherever possible.`;
       sections,
       sources: ["Dubai Land Department", "DXB Interact", "RERA", "Property Finder"],
       generatedAt: new Date().toISOString(),
-      disclaimer: "This analysis is for informational purposes only and should not be considered financial advice. Always conduct your own due diligence before making investment decisions.",
+      disclaimer: "This analysis is AI-generated for informational purposes only and should not be considered financial advice. Data is based on publicly available market knowledge. Always conduct your own due diligence before making investment decisions.",
     };
-
-    console.log("Analysis complete for:", area);
 
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -156,12 +153,17 @@ Provide specific numbers, percentages, and data points wherever possible.`;
   }
 });
 
-// Helper function to extract sections from markdown
+// Helper function to extract sections from markdown (best-effort parsing)
 function extractSection(text: string, sectionName: string): string {
   const patterns = [
-    new RegExp(`\\*\\*${sectionName}[:\\s]*\\*\\*([\\s\\S]*?)(?=\\*\\*[A-Z]|$)`, 'i'),
+    // Match **Section Name:** or **Section Name**
+    new RegExp(`\\*\\*${sectionName}[:\\s]*\\*\\*([\\s\\S]*?)(?=\\*\\*\\d+\\.|\\*\\*[A-Z]|$)`, 'i'),
+    // Match ## Section Name
     new RegExp(`##\\s*${sectionName}[:\\s]*([\\s\\S]*?)(?=##|$)`, 'i'),
-    new RegExp(`${sectionName}[:\\s]*\\n([\\s\\S]*?)(?=\\n\\d+\\.|\\*\\*|$)`, 'i'),
+    // Match numbered sections like "1. Section Name:"
+    new RegExp(`\\d+\\.\\s*\\*\\*${sectionName}[:\\s]*\\*\\*([\\s\\S]*?)(?=\\d+\\.|\\*\\*|$)`, 'i'),
+    // Fallback: just section name followed by content
+    new RegExp(`${sectionName}[:\\s]*\\n([\\s\\S]*?)(?=\\n\\d+\\.|\\*\\*|##|$)`, 'i'),
   ];
 
   for (const pattern of patterns) {
@@ -170,5 +172,7 @@ function extractSection(text: string, sectionName: string): string {
       return match[1].trim();
     }
   }
+  
+  // Return empty string - UI handles "Not available" display
   return "";
 }
