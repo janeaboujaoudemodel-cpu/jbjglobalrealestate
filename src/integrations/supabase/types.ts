@@ -494,6 +494,30 @@ export type Database = {
         }
         Relationships: []
       }
+      app_settings: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          key: string
+          updated_at: string | null
+          value: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          key: string
+          updated_at?: string | null
+          value: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          key?: string
+          updated_at?: string | null
+          value?: string
+        }
+        Relationships: []
+      }
       area_translations: {
         Row: {
           area_id: string
@@ -20357,6 +20381,7 @@ export type Database = {
           status: string
         }[]
       }
+      get_owner_email: { Args: never; Returns: string }
       get_partner_banking_details: {
         Args: { p_partner_id: string }
         Returns: {

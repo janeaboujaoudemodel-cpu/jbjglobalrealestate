@@ -199,19 +199,21 @@ Provide your price prediction as a JSON object with confidence intervals and com
     }
 
     // 7. Persist to ai_job_master ONLY IF USER IS AUTHENTICATED
+    // NO PII stored - only property/location data
     if (userId) {
       const inputPayload = {
-        location: sanitized.location,
         propertyType: sanitized.propertyType,
+        location: sanitized.location,
         bedrooms: sanitized.bedrooms,
         size: sanitized.size,
-        developerName: sanitized.developerName,
+        // NO name, email, phone stored
       };
 
       const outputPayload = {
-        estimatedPrice: predictionData.estimatedPrice,
+        predictedPrice: predictionData.estimatedPrice,
+        confidence: predictionData.confidence,
         marketPosition: predictionData.marketPosition,
-        trend: predictionData.appreciationForecast?.trend,
+        priceRange: predictionData.confidenceBand,
       };
 
       await supabaseAdmin.from('ai_job_master').insert({
@@ -221,12 +223,11 @@ Provide your price prediction as a JSON object with confidence intervals and com
         input_payload: inputPayload,
         output_payload: outputPayload,
         intelligence_features: {
-          confidenceBand: true,
-          marketPosition: true,
+          confidenceBands: true,
+          comparableProperties: true,
+          marketPositioning: true,
           appreciationForecast: true,
-          neighborhoodFactor: true,
-          bestTimeToSell: true,
-          comparables: true,
+          seasonalTiming: true,
         },
         processing_time_ms: processingTimeMs,
         completed_at: new Date().toISOString(),
