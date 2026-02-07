@@ -103,6 +103,7 @@ import AIPropertyAnalyzerPage from "./pages/AIPropertyAnalyzerPage";
 import AILeadQualificationPage from "./pages/AILeadQualificationPage";
 import AIPricePredictorPage from "./pages/AIPricePredictorPage";
 import AINeighborhoodInsightsPage from "./pages/AINeighborhoodInsightsPage";
+import MyAIHistory from "./pages/MyAIHistory";
 import IntellectualProperty from "./pages/IntellectualProperty";
 import Architecture from "./pages/services/Architecture";
 import InteriorDesign from "./pages/services/InteriorDesign";
@@ -438,6 +439,7 @@ const App = () => (
                 {/* Alias: AI Home Finder redirect to quiz */}
                 <Route path="/ai-home-finder" element={<Navigate to="/quiz" replace />} />
                 <Route path="/tools-guide" element={<Navigate to="/ai-hub" replace />} />
+                <Route path="/my-ai-history" element={<MyAIHistory />} />
                 <Route path="/intellectual-property" element={<IntellectualProperty />} />
                 <Route path="/services/architecture" element={<Architecture />} />
                 <Route path="/services/interior-design" element={<InteriorDesign />} />
