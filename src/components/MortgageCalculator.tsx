@@ -320,7 +320,7 @@ const MortgageCalculator = ({
                 <p className="text-foreground font-bold text-xs lg:text-base truncate">{formatCurrency(calculations.downPayment)}</p>
               </div>
               <div className="bg-muted/50 border border-border rounded-xl p-2 lg:p-4 overflow-hidden">
-                <p className="text-muted-foreground text-[9px] lg:text-xs mb-0.5 lg:mb-1 truncate">Total Interest</p>
+                <p className="text-muted-foreground text-[9px] lg:text-xs mb-0.5 lg:mb-1 truncate">Total Interest ({((calculations.totalInterest / calculations.loanAmount) * 100).toFixed(0)}%)</p>
                 <p className="text-foreground font-bold text-xs lg:text-base truncate">{formatCurrency(calculations.totalInterest)}</p>
               </div>
               <div className="bg-muted/50 border border-border rounded-xl p-2 lg:p-4 overflow-hidden">
