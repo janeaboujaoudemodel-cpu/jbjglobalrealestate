@@ -1,12 +1,7 @@
 import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-
-/**
- * OWNER_EMAIL - The single privileged identity
- * Set via environment variable ONLY - no fallback (fail closed)
- */
-const OWNER_EMAIL = import.meta.env.VITE_OWNER_EMAIL;
+import { useOwnerVerification } from "@/hooks/useOwnerVerification";
 
 interface OwnerGuardProps {
   children: ReactNode;
@@ -18,7 +13,7 @@ interface OwnerGuardProps {
  * OwnerGuard - Restricts routes to Owner-only access
  * 
  * Identity model:
- * - OWNER (auth.email === OWNER_EMAIL) → allowed
+ * - OWNER (verified via edge function) → allowed
  * - VISITOR (no session) → redirect to /auth with redirect-back
  * - AUTHENTICATED but NOT OWNER → redirect to /403 (AccessDenied)
  * 
@@ -26,11 +21,12 @@ interface OwnerGuardProps {
  * Server-side enforcement is mandatory in Edge Functions + RLS.
  */
 const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const { isOwner, isLoading: ownerLoading } = useOwnerVerification();
   const location = useLocation();
 
-  // Show loading state while checking auth
-  if (loading && showLoading) {
+  // Show loading state while checking auth or owner status
+  if ((authLoading || ownerLoading) && showLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
@@ -44,17 +40,8 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     return <Navigate to={`/auth?redirect=${redirectPath}`} replace />;
   }
 
-  // Fail closed if OWNER_EMAIL not configured
-  if (!OWNER_EMAIL) {
-    console.error('OWNER_EMAIL environment variable not configured');
-    return <Navigate to="/403" replace />;
-  }
-
   // AUTHENTICATED but NOT OWNER → AccessDenied
-  const userEmail = user.email?.toLowerCase();
-  const ownerEmail = OWNER_EMAIL.toLowerCase();
-  
-  if (userEmail !== ownerEmail) {
+  if (!isOwner) {
     return <Navigate to="/403" replace />;
   }
 
@@ -69,23 +56,6 @@ export default OwnerGuard;
  * Use this for conditional rendering in components
  */
 export function useIsOwner(): { isOwner: boolean; isLoading: boolean } {
-  const { user, loading } = useAuth();
-  
-  if (loading) {
-    return { isOwner: false, isLoading: true };
-  }
-  
-  if (!user?.email) {
-    return { isOwner: false, isLoading: false };
-  }
-  
-  const ownerEmail = import.meta.env.VITE_OWNER_EMAIL;
-  if (!ownerEmail) {
-    console.error('OWNER_EMAIL environment variable not configured');
-    return { isOwner: false, isLoading: false };
-  }
-  
-  const isOwner = user.email.toLowerCase() === ownerEmail.toLowerCase();
-  
-  return { isOwner, isLoading: false };
+  const { isOwner, isLoading } = useOwnerVerification();
+  return { isOwner, isLoading };
 }
