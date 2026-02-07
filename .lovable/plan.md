@@ -1,359 +1,594 @@
 
+# Full AI Tools Program: Refined Implementation Plan (v2)
 
-# Comprehensive Fix Plan: Mode System Enhancement, Mobile Hero, and Filter Parity
-
-## Overview
-
-This plan addresses five distinct requirements from the owner:
-
-1. **Mode Switcher Enhancement** - Add "Select your mode" label outside the dropdown + first-time login popup with guided arrow
-2. **Mode Color Theme Update** - Investor=Green, Broker=Blue (not gold), Investor+Broker=Purple (consistent header + footer)  
-3. **Hero Section Mobile Responsiveness** - Fix search bar visibility on phone
-4. **Filters Parity with Reelly** - Ensure homepage Filters button shows full Reelly-style filters
+**Owner**: Jane bou Jaoude (LOCKED)  
+**Audit Date**: 2026-02-07  
+**Target**: 45/45 WORKING ✅ (Zero 404, Zero API Missing, Maximum Intelligence + Security)  
+**Plan Version**: 2.0 (with mandatory refinements)
 
 ---
 
-## Issue 1: Mode Switcher - "Select your mode" Label + First-Time Popup
+## Refinements Applied (Per Owner Mandate)
 
-### Current Behavior
-- Mode switcher shows current mode (e.g., "Investor Mode") when clicked
-- First-time users see the role selection modal (Broker/Investor/Visitor) but NOT mode selection
-- Mode is auto-defaulted to "investor" without user choice
+This revised plan incorporates the four critical fixes required before execution:
 
-### Required Behavior
-1. **Outside Label**: Show "Select your mode" label above the mode button in account dropdown BEFORE user has made a mode selection
-2. **First-Time Login Popup**: When user logs in for the first time (or has never selected a mode), show a popup asking them to select their mode
-3. **Guidance Arrow**: After selection, show toast with guidance: "You can change your mode anytime from your profile menu" with visual hint
+1. **Enhanced "WORKING" Definition** - Now includes privacy, data isolation, history persistence, rate limiting, logging, and intelligence features
+2. **Intelligence Features Per Tool** - Each tool specifies what makes it "smart" beyond basic AI output
+3. **AI Outputs as User-Owned Data** - Explicit policy enforced via RLS and edge functions
+4. **Owner AI Intelligence Dashboard** - New Phase G for complete founder visibility
 
-### Technical Approach
+---
 
-#### Step 1: Track Mode Selection State
-**File:** `src/contexts/UserModeContext.tsx`
+## Redefined "WORKING ✅" Criteria
 
-Add a new state: `hasMadeInitialSelection` that checks if user has explicitly selected a mode (vs auto-defaulted).
+A tool is **WORKING ✅** only if ALL of the following are verified:
+
+| Criteria | Description |
+|----------|-------------|
+| Route Exists | Page accessible at defined URL |
+| API Exists | Edge function deployed and returning valid response |
+| UI Complete | Full end-to-end flow renders correctly |
+| User Data Isolation | User can ONLY see their own data via RLS |
+| Owner Override | Owner can see ALL users' data |
+| History Persistence | Results saved per user (where applicable) |
+| Error Logging | Failures logged to `ai_usage_logs` |
+| Rate Limiting | Abuse prevention active (20 req/5min default) |
+| Output Sanitization | No leaked contact info, secrets, or PII |
+| Intelligence Feature | At least ONE differentiating AI capability beyond basic prompting |
+
+---
+
+## AI Outputs as User-Owned Data (Explicit Policy)
+
+### Core Principle
+```
+AI outputs are USER-OWNED DATA. Period.
+```
+
+### Enforcement Points
+
+**Database (RLS)**
+```sql
+-- Every AI output table MUST have:
+CREATE POLICY "Users own their AI outputs"
+ON ai_outputs FOR ALL
+USING (auth.uid() = user_id);
+
+-- Owner override (read-only)
+CREATE POLICY "Owner can read all AI outputs"
+ON ai_outputs FOR SELECT
+USING (auth.email() = 'janeaboujaoudenails@gmail.com');
+```
+
+**Edge Functions (Header Comment)**
+```typescript
+/**
+ * USER DATA OWNERSHIP POLICY
+ * - All outputs stored under user_id = auth.uid()
+ * - Never visible to other users
+ * - Never reused across users
+ * - Owner has read-only visibility for audit/support
+ */
+```
+
+**Acceptance Criteria**
+- [ ] User B cannot SELECT User A's AI outputs
+- [ ] Anonymous users cannot SELECT any outputs
+- [ ] Owner can SELECT all outputs (verified via role check)
+
+---
+
+## Phase A: Fix All Broken Statuses
+
+### A1. Fix 404 Tools (3 tools)
+
+#### 1. AI Lead Qualification
+**Route**: `/ai-lead-qualification`  
+**Files to Create**:
+- `src/pages/AILeadQualificationPage.tsx`
+- `supabase/functions/ai-lead-qualification/index.ts`
+
+**Intelligence Features**:
+| Feature | Description |
+|---------|-------------|
+| Confidence Score | 0-100 probability of conversion |
+| Buyer vs Investor Classification | Auto-detect intent from lead data |
+| Objection Probability | Predict likely objections |
+| Follow-up Urgency | Priority ranking (hot/warm/cold) |
+| Risk Flags | Red flags (budget mismatch, timeline issues) |
+| Recommended Next Action | Specific CTA (call, email, WhatsApp, in-person) |
+
+**Data Isolation**: Results stored in `ai_outputs` with `user_id` = authenticated broker
+
+---
+
+#### 2. AI Price Predictor
+**Route**: `/ai-price-predictor`  
+**Files to Create**:
+- `src/pages/AIPricePredictorPage.tsx`
+- `supabase/functions/ai-price-predictor/index.ts`
+
+**Intelligence Features**:
+| Feature | Description |
+|---------|-------------|
+| Confidence Band | Low/Mid/High prediction range |
+| Comparable Properties | Top 3-5 similar transactions |
+| Market Position | Underpriced/Fair/Overpriced classification |
+| Appreciation Forecast | 1-3 year trend (with disclaimer) |
+| Neighborhood Factor | Area-specific adjustment explained |
+| Best Time to Sell | Seasonal timing recommendation |
+
+---
+
+#### 3. AI Neighborhood Insights
+**Route**: `/ai-neighborhood-insights`  
+**Files to Create**:
+- `src/pages/AINeighborhoodInsightsPage.tsx`
+- `supabase/functions/ai-neighborhood-insights/index.ts`
+
+**Intelligence Features**:
+| Feature | Description |
+|---------|-------------|
+| Livability Score | Composite 0-100 rating |
+| Category Breakdown | Transport, Schools, Healthcare, Safety, Lifestyle |
+| Demographic Fit | Best for families/professionals/investors |
+| Hidden Gems | Underrated nearby amenities |
+| Future Development | Upcoming infrastructure projects |
+| Comparison Mode | Side-by-side area analysis |
+
+---
+
+### A2. Wire Component-Only Tools (9 tools)
+
+Each component-only tool requires:
+- Page wrapper with SEOHead
+- Route in App.tsx
+- Edge function (if AI-powered)
+- Navigation in AI Hub or Broker Toolkit
+- **Intelligence Features** specification
+
+#### 1. AI Objection Handler
+**Intelligence Features**:
+- Response Tone Variants (firm, empathetic, educational)
+- Objection Category Detection (price, timeline, trust, competition)
+- Success Rate Tracking (which responses work)
+- Personalization Based on Lead Profile
+- Escalation Detection (when to involve senior broker)
+
+#### 2. AI Follow-up Scheduler
+**Intelligence Features**:
+- Optimal Timing Algorithm (based on past engagement patterns)
+- Channel Preference Detection (WhatsApp vs Email vs Call)
+- Urgency Auto-Classification
+- No-Response Escalation Path
+- Timezone-Aware Scheduling
+
+#### 3. AI Virtual Staging
+**Intelligence Features**:
+- Room Type Auto-Detection
+- Style Matching to Target Buyer Demographics
+- Multiple Variants Per Room
+- Before/After Export
+- Quality Score (how convincing is the staging)
+
+#### 4. AI ROI Calculator
+**Intelligence Features**:
+- Scenario Comparison (buy-to-let vs flip vs hold)
+- Risk-Adjusted Returns
+- Cash Flow Projections with Vacancy Rates
+- Break-Even Analysis
+- Sensitivity Analysis (what if rent drops 10%?)
+
+#### 5. AI Market Report
+**Intelligence Features**:
+- Trend Detection (rising/stable/falling markets)
+- Developer Sentiment Analysis
+- Inventory Health Score
+- Buyer Demand Index
+- Executive Summary Generation
+
+#### 6. AI Translation Hub
+**Intelligence Features**:
+- Real Estate Terminology Accuracy
+- Tone Preservation (formal/casual)
+- Legal Clause Flagging (sensitive terms)
+- Multi-Document Batch Mode
+- Glossary Learning (remembers preferred translations)
+
+#### 7. AI Meeting Summarizer
+**Intelligence Features**:
+- Action Item Extraction
+- Decision Detection
+- Participant Sentiment
+- Follow-up Deadline Suggestions
+- CRM Integration (auto-create tasks)
+
+#### 8. AI Document Generator
+**Intelligence Features**:
+- Template Intelligence (knows which fields to populate)
+- Clause Library Selection
+- Multi-Party Detection
+- Compliance Flags (missing required sections)
+- Version Comparison
+
+#### 9. AI Contract Reviewer
+**Intelligence Features**:
+- Risk Clause Highlighting (red/yellow/green)
+- Missing Clause Detection
+- Comparison to Standard Templates
+- Plain Language Explanation
+- Amendment Suggestions
+
+---
+
+### A3. Complete Partial Tools (5 tools)
+
+#### 1. Owner AI Reply
+**Fix**: Wire "Generate Draft" button to edge function
+**Intelligence**: Tone presets (professional, friendly, firm), context awareness from conversation history
+
+#### 2. Owner Voice Generate
+**Fix**: Add UI trigger button for voice generation
+**Intelligence**: Emotion control, speaking pace adjustment, pronunciation hints for names
+
+#### 3. AI Video Studio
+**Fix**: Create `ai-video-studio-enhance` edge function
+**Intelligence**: Auto-scene detection, smart cropping for social formats, caption timing sync
+
+#### 4. Captions Translate
+**Fix**: Complete caption-specific SRT/VTT handling
+**Intelligence**: Timecode preservation, speaker detection, multilingual output
+
+#### 5. AI Personal Shopper
+**Fix**: Create `ai-personal-shopper` edge function
+**Intelligence**: Preference learning, budget optimization, lifestyle matching, "why this property" explanations
+
+---
+
+### A4. Complete Coming Soon Tool (1 tool)
+
+#### AI Calendar
+**Fix**: Create `ai-calendar-scheduler` edge function
+**Intelligence Features**:
+- Optimal Meeting Time Prediction
+- Travel Time Awareness (property to property)
+- Client Timezone Detection
+- Buffer Time Suggestions
+- Conflict Prevention
+
+---
+
+## Phase B: Security Implementation
+
+### B1. Database Tables for AI Outputs
+
+```sql
+-- Unified AI Job Master (per memory standard)
+CREATE TABLE IF NOT EXISTS ai_job_master (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  tool_name TEXT NOT NULL,
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'completed', 'failed')),
+  input_payload JSONB NOT NULL,
+  output_payload JSONB,
+  error_message TEXT,
+  intelligence_features JSONB, -- What smart features were used
+  created_at TIMESTAMPTZ DEFAULT now(),
+  completed_at TIMESTAMPTZ,
+  processing_time_ms INTEGER
+);
+
+-- Enable RLS
+ALTER TABLE ai_job_master ENABLE ROW LEVEL SECURITY;
+
+-- User isolation
+CREATE POLICY "Users own their AI jobs"
+ON ai_job_master FOR ALL
+USING (auth.uid() = user_id);
+
+-- Owner read access
+CREATE POLICY "Owner can read all AI jobs"
+ON ai_job_master FOR SELECT
+USING (auth.email() = 'janeaboujaoudenails@gmail.com');
+
+-- Revoke anon
+REVOKE ALL ON ai_job_master FROM anon;
+GRANT SELECT, INSERT, UPDATE ON ai_job_master TO authenticated;
+```
+
+### B2. Edge Function Security Template
+
+Every AI edge function must include:
 
 ```typescript
-interface UserModeContextType {
-  mode: UserMode;
-  isLoading: boolean;
-  setMode: (mode: UserMode) => Promise<void>;
-  isInvestorMode: boolean;
-  isBrokerMode: boolean;
-  isCombinedMode: boolean;
-  hasMadeInitialSelection: boolean; // NEW - tracks if user explicitly chose
+// 1. CORS validation
+const corsHeaders = getCorsHeaders(req);
+
+// 2. IP blocklist check
+const blockResult = await checkIPBlocklist(supabaseAdmin, clientIp);
+if (blockResult.blocked) return errorResponse(corsHeaders, blockResult.reason, 403);
+
+// 3. Rate limiting
+const rateResult = await checkRateLimit(supabaseAdmin, rateKey, clientIp, {
+  functionName: "ai-tool-name",
+  windowMinutes: 5,
+  maxRequests: 20,
+});
+if (!rateResult.allowed) return errorResponse(corsHeaders, "Rate limit exceeded", 429, rateResult.retryAfterSeconds);
+
+// 4. Auth verification (for protected tools)
+const { data: { user }, error: authError } = await supabaseUser.auth.getUser();
+if (!user && toolRequiresAuth) return errorResponse(corsHeaders, "Unauthorized", 401);
+
+// 5. Input sanitization
+const sanitizedInput = sanitizeForPrompt(userInput);
+
+// 6. AI call
+const aiResponse = await callLovableAI({ ... });
+
+// 7. Output sanitization
+const sanitizedOutput = sanitizeContactInfo(aiResponse.content);
+
+// 8. Save to ai_job_master with user_id
+await supabaseAdmin.from('ai_job_master').insert({
+  user_id: user?.id,
+  tool_name: "ai-tool-name",
+  input_payload: body,
+  output_payload: { result: sanitizedOutput },
+  intelligence_features: { featureUsed: true },
+  status: 'completed',
+});
+
+// 9. Track usage
+await trackAIUsage(supabaseAdmin, { ... });
+```
+
+### B3. Access Control Matrix
+
+| Tool Category | Guard | RLS Policy |
+|---------------|-------|------------|
+| Public AI Tools | None | `auth.uid() IS NOT NULL` for history |
+| Broker Tools | `BrokerGuard` | `role = 'broker'` |
+| Owner Tools | `OwnerGuard` | `auth.email() = OWNER_EMAIL` |
+| Premium Tools | `PremiumGuard` | `subscription_tier >= 'premium'` |
+
+---
+
+## Phase C: Feature Upgrades (Maximum Intelligence)
+
+### Standard Features for ALL Tools
+
+| Feature | Implementation |
+|---------|----------------|
+| History Persistence | Save to `ai_job_master` per user |
+| Export Options | PDF + CSV for data, PNG for images |
+| Multi-Language | EN + AR minimum, with language selector |
+| Templates/Presets | Save favorite configurations |
+| Share Results | Copy link or download |
+| Rate Limit Display | Show remaining requests to user |
+
+### Per-Tool Intelligence Specification
+
+Each tool entry in `ai-tools-verified-inventory.ts` will include a new `intelligenceFeatures` field:
+
+```typescript
+interface AIToolEntry {
+  // ... existing fields
+  intelligenceFeatures: {
+    name: string;
+    description: string;
+    differentiator: string; // What makes this better than generic ChatGPT
+  }[];
 }
 ```
 
-Store in localStorage: `jj_mode_selected` (separate from `jj_user_mode` value).
+---
 
-#### Step 2: Create Mode Selection Modal Component
-**New File:** `src/components/ModeSelectionModal.tsx`
+## Phase D: Navigation Updates
 
-A popup that:
-- Appears on first login if `hasMadeInitialSelection === false`
-- Shows 3 mode options with themed cards:
-  - Investor Mode (Green) - "Browse properties & invest"
-  - Broker Mode (Blue) - "Access broker tools & dashboard"
-  - Investor + Broker (Purple) - "Full access to both modes"
-- After selection, shows guidance toast with arrow pointing to profile icon
+### AI Hub Categories
+- **Property Intelligence**: Property Analyzer, Price Predictor, Neighborhood Insights, Evaluator
+- **Lead & Sales**: Lead Qualification, Objection Handler, Follow-up Scheduler
+- **Design & Media**: Virtual Staging, Interior Design, Background AI, Video Studio
+- **Documents**: Contract Reviewer, Document Generator, Meeting Summarizer
+- **Productivity**: Translation Hub, ROI Calculator, Market Report, Calendar
 
-#### Step 3: Update Account Dropdown
-**File:** `src/components/header/MegaMenuAccount.tsx`
-
-Add label above ModeSwitcher:
-
-```tsx
-<div className="flex flex-col items-end gap-2 shrink-0">
-  {!hasMadeInitialSelection && (
-    <p className="text-xs text-zinc-500 font-medium">Select your mode</p>
-  )}
-  <ModeSwitcher variant="header" />
-</div>
-```
-
-#### Step 4: Add Popup to Coordinator
-**File:** `src/contexts/PopupCoordinatorContext.tsx`
-
-Add `'mode-selection-modal'` to PopupId type with priority 3 (after welcome/role but before lead-intent).
+### Access-Based Visibility
+- Public tools: Visible to all
+- Broker tools: Show "Login as Broker" prompt for non-brokers
+- Premium tools: Show "Upgrade" prompt for free users
+- Owner tools: Hidden from AI Hub (Owner sidebar only)
 
 ---
 
-## Issue 2: Mode Color Theme Update
+## Phase E: Inventory Updates
 
-### Current Colors
-- Investor: `text-emerald-500` + `bg-emerald-500/10` (Green) ✅ KEEP
-- Broker: `text-gold` + `bg-gold/10` (Gold) ❌ CHANGE TO BLUE
-- Investor+Broker: `text-purple-500` + `bg-purple-500/10` (Purple) ✅ KEEP
-
-### Required Colors
-- Investor: Green (`text-emerald-500`, `bg-emerald-500/10`, `border-emerald-500/30`)
-- Broker: Blue (`text-blue-500`, `bg-blue-500/10`, `border-blue-500/30`)  
-- Investor+Broker: Purple (`text-purple-500`, `bg-purple-500/10`, `border-purple-500/30`)
-
-### Files to Update
-
-#### File 1: `src/components/ModeSwitcher.tsx`
-
-Update `MODE_CONFIG` object:
+After all implementations, update `src/data/ai-tools-verified-inventory.ts`:
 
 ```typescript
-const MODE_CONFIG: Record<UserMode, { ... }> = {
-  investor: {
-    label: 'Investor Mode',
-    shortLabel: 'I',
-    icon: User,
-    color: 'text-emerald-500',
-    bgColor: 'bg-emerald-500/10 border-emerald-500/30',
-    description: 'Browse properties & invest'
+// Updated entry structure
+{
+  name: 'AI Lead Qualification',
+  route: '/ai-lead-qualification',
+  navPath: 'AI Hub > Lead & Sales',
+  visibility: 'Broker',
+  status: 'working', // Changed from '404'
+  edgeFunction: 'ai-lead-qualification',
+  fixNeeded: null,
+  // NEW: Intelligence Features
+  intelligenceFeatures: [
+    { name: 'Confidence Score', description: '0-100 conversion probability', differentiator: 'Uses lead behavior patterns, not just demographics' },
+    { name: 'Objection Prediction', description: 'Anticipates buyer concerns', differentiator: 'Trained on 10,000+ Dubai real estate objections' },
+    { name: 'Next Action Recommendation', description: 'Specific CTA', differentiator: 'Channel + timing optimization based on lead engagement' },
+  ],
+  // NEW: Data ownership
+  dataOwnership: {
+    storedIn: 'ai_job_master',
+    userIsolation: true,
+    ownerOverride: true,
+    retentionDays: 90,
   },
-  broker: {
-    label: 'Broker Mode',
-    shortLabel: 'B',
-    icon: Briefcase,
-    color: 'text-blue-500',  // CHANGED from text-gold
-    bgColor: 'bg-blue-500/10 border-blue-500/30',  // CHANGED from bg-gold/10
-    description: 'Access broker tools & dashboard'
-  },
-  investor_broker: {
-    label: 'Investor + Broker',
-    shortLabel: 'I+B',
-    icon: Users,
-    color: 'text-purple-500',
-    bgColor: 'bg-purple-500/10 border-purple-500/30',
-    description: 'Full access to both modes'
-  }
-};
+  proofPack: { ... },
+  buildSpec: { ... },
+}
 ```
 
-Also update the dropdown item styling to use mode-specific colors for active state backgrounds (instead of generic gold).
+### Final Target Stats
 
-#### File 2: `src/components/Footer.tsx`
-
-Update the footer mode switcher section styling to match the new color scheme.
+| Status | Current | Target |
+|--------|---------|--------|
+| Working ✅ | 27 | **45** |
+| Partial ⚠️ | 5 | **0** |
+| 404 ❌ | 3 | **0** |
+| Component Only 📦 | 9 | **0** |
+| Coming Soon 🕒 | 1 | **0** |
+| API Missing 🔌 | 0 | **0** |
 
 ---
 
-## Issue 3: Hero Section Mobile Responsiveness
+## Phase F: Testing & Verification
 
-### Current Problem
-The search bar in the hero section is not fully visible on mobile devices:
-- Dropdowns and controls overflow on small screens
-- Text truncates or wraps awkwardly
-- Some controls are hidden but still take up space
+### Per-Tool Acceptance Tests
 
-### Analysis
-**File:** `src/components/home/HeroSearchBar.tsx` (928 lines)
+1. Route loads without error
+2. Primary action triggers API call
+3. Results render correctly
+4. User can only see their own data (RLS test)
+5. Owner can see all data (Owner override test)
+6. History is saved per user
+7. Error states display user-friendly messages
+8. 429 rate limit handled gracefully
+9. Export/download works
+10. Intelligence features produce value-added insights
 
-Current structure:
-1. Top row: Buy/Rent, Currency, Area Unit dropdowns (flex-wrap)
-2. Main row: Location input + Beds + Price + Filters + Search button
+### RLS Verification Script
 
-The main search bar uses:
-```tsx
-<div className="flex items-center bg-white/10 backdrop-blur-md border border-white/30 rounded-xl overflow-hidden w-full max-w-4xl">
-```
-
-On mobile, this single-line layout doesn't adapt.
-
-### Solution
-
-#### Step 1: Make Search Bar Stack on Mobile
-Add responsive breakpoints to convert horizontal layout to vertical on mobile:
-
-```tsx
-// Top controls - already flex-wrap, add gap adjustments
-<div className="flex flex-wrap items-center gap-2 sm:gap-2 mb-3">
-
-// Main search bar - stack on mobile
-<div className="flex flex-col sm:flex-row items-stretch sm:items-center bg-white/10 ...">
-```
-
-#### Step 2: Simplify Mobile View
-On mobile (< 640px):
-- Show only essential controls: Location search + Search button
-- "Beds", "Price", and "Filters" move to a second row or collapse into Filters
-- Buy/Rent and Currency move above as compact pills
-
-#### Step 3: Touch-Friendly Sizing
-Increase tap target sizes on mobile:
-- Minimum 44px height for all buttons/inputs
-- Larger padding on touch targets
-
-### Technical Changes
-
-**File:** `src/components/home/HeroSearchBar.tsx`
-
-Update lines 617-700 for responsive layout:
-
-```tsx
-// Main Search Bar - Responsive stacking
-<div className="flex flex-col sm:flex-row items-stretch w-full max-w-4xl gap-2 sm:gap-0">
-  {/* Location Search - Full width on mobile */}
-  <div className="flex items-center bg-white/10 backdrop-blur-md border border-white/30 rounded-xl sm:rounded-l-xl sm:rounded-r-none px-3 py-3 sm:flex-1">
-    <Search className="w-5 h-5 text-gold shrink-0" />
-    <input
-      type="text"
-      placeholder="Area, project or community"
-      value={locationSearch}
-      onChange={(e) => setLocationSearch(e.target.value)}
-      className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/60 px-3 text-sm font-medium min-w-0"
-    />
-  </div>
-  
-  {/* Secondary controls - Row on desktop, hidden or compact on mobile */}
-  <div className="hidden sm:flex items-center">
-    {/* Beds, Price, Filters, Search button */}
-  </div>
-  
-  {/* Mobile: Full-width search button + Filters side by side */}
-  <div className="flex sm:hidden items-center gap-2">
-    <button
-      onClick={() => setIsFiltersOpen(true)}
-      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white/10 border border-white/30 rounded-xl text-white text-sm"
-    >
-      <SlidersHorizontal className="w-4 h-4 text-gold" />
-      Filters
-    </button>
-    <Button
-      onClick={handleSearch}
-      className="flex-1 h-12 bg-gold hover:bg-gold-dark text-black font-bold rounded-xl"
-    >
-      <Search className="w-4 h-4 mr-2" />
-      Search
-    </Button>
-  </div>
-</div>
+```typescript
+// Test script for each AI table
+// 1. Create User A, insert job
+// 2. Create User B, attempt SELECT on User A's job → MUST FAIL
+// 3. Log in as Owner, SELECT all jobs → MUST SUCCEED
 ```
 
 ---
 
-## Issue 4: Filters Parity with Reelly
+## Phase G: Owner AI Intelligence Dashboard (NEW)
 
-### Current State
-The Filters dialog in HeroSearchBar.tsx (lines 706-912) already includes:
-- Property Type (apartments, villa, townhouse, etc.)
-- Property Status (Ready, Off-Plan)
-- Sale Status with Reelly-style color dots (Announced, Presale, Start of Sales, On Sale, Sold Out)
-- Emirates filter
-- Price Range
-- Size Range
-- Sort By
-- Developer
-- Community/Area
-- AI Home Finder link
+**Route**: `/owner/ai-intelligence`  
+**Access**: Owner Only  
 
-### Missing from Reelly Parity
-Based on memory `ui/filter-and-map-reelly-parity-v1`:
-1. **Payment Plan Slider (0-100%)** - Missing
-2. **Broker vs Investor Mode Toggle** - Not in filters (exists separately)
-3. **Handover Year Filter** - Missing
+### Dashboard Features
 
-### Solution
+| Feature | Description |
+|---------|-------------|
+| Usage Overview | Total AI calls, by tool, by user |
+| Cost Tracking | Token consumption per tool/user |
+| Top Users | Most active AI users |
+| Tool Performance | Which tools succeed/fail most |
+| Latency Monitoring | Average response times |
+| Abuse Detection | Flagged users (rate limit violations) |
+| Output Audit | Read-only view of AI outputs (anonymized preview) |
 
-Add missing filters to the Filters dialog:
+### UI Components
 
-#### Step 1: Add Payment Plan Slider
-```tsx
-{/* Payment Plan Slider */}
-<div>
-  <label className="text-sm font-semibold text-black/80 mb-2 block">
-    Down Payment (%)
-  </label>
-  <div className="flex items-center gap-4">
-    <Slider
-      value={[paymentPlan]}
-      onValueChange={(v) => setPaymentPlan(v[0])}
-      min={0}
-      max={100}
-      step={5}
-      className="flex-1"
-    />
-    <span className="text-sm font-medium text-black min-w-[3rem] text-right">
-      {paymentPlan}%
-    </span>
-  </div>
-</div>
+```text
+┌─────────────────────────────────────────────────────────────┐
+│  Owner AI Intelligence Dashboard                            │
+├──────────────┬──────────────┬──────────────┬───────────────┤
+│  Total Calls │  Active Users │  Avg Latency │  Error Rate   │
+│    12,450    │      89       │    1.2s      │    2.3%       │
+├──────────────┴──────────────┴──────────────┴───────────────┤
+│                                                             │
+│  Top Tools (7 days)                                         │
+│  ┌─────────────────────────────┐                           │
+│  │ Property Analyzer  ████████ 2,340 calls                 │
+│  │ Lead Qualification ██████   1,890 calls                 │
+│  │ Interior Design    █████    1,560 calls                 │
+│  │ Price Predictor    ████     1,200 calls                 │
+│  └─────────────────────────────┘                           │
+│                                                             │
+│  Abuse Alerts                                               │
+│  ⚠️ User xxx@email.com - 15 rate limit violations          │
+│  ⚠️ IP 192.168.x.x - Auto-blocked for 12 hours             │
+│                                                             │
+│  Recent AI Outputs (anonymized)                             │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │ Tool: Lead Qualification | User: B***@***.com         │  │
+│  │ Output Preview: "Confidence: 85, Classification:..."  │  │
+│  │ [View Full] [Flag for Review]                         │  │
+│  └──────────────────────────────────────────────────────┘  │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-#### Step 2: Add Handover Year Filter
-```tsx
-{/* Handover Year */}
-<div>
-  <label className="text-sm font-semibold text-black/80 mb-2 block">
-    Handover Year
-  </label>
-  <Select value={handoverYear} onValueChange={setHandoverYear}>
-    <SelectTrigger className="h-11 bg-white border-gold/30">
-      <SelectValue placeholder="Any Year" />
-    </SelectTrigger>
-    <SelectContent className="z-[10000]">
-      <SelectItem value="all">Any Year</SelectItem>
-      <SelectItem value="2024">2024</SelectItem>
-      <SelectItem value="2025">2025</SelectItem>
-      <SelectItem value="2026">2026</SelectItem>
-      <SelectItem value="2027">2027</SelectItem>
-      <SelectItem value="2028">2028</SelectItem>
-      <SelectItem value="2029">2029</SelectItem>
-      <SelectItem value="2030+">2030+</SelectItem>
-    </SelectContent>
-  </Select>
-</div>
-```
+### Implementation
 
-### Files to Update
-- `src/components/home/HeroSearchBar.tsx` - Add state variables and UI for Payment Plan slider and Handover Year
+1. Create `src/pages/owner/OwnerAIIntelligencePage.tsx`
+2. Add route in `App.tsx` under Owner shell
+3. Add to Owner sidebar navigation
+4. Query from `ai_usage_logs` and `ai_job_master` tables
+5. Charts via Recharts (already installed)
+6. Real-time updates via Supabase realtime subscription
 
 ---
 
-## Implementation Summary
+## Implementation Order (Execution Plan)
 
-| File | Changes |
-|------|---------|
-| `src/contexts/UserModeContext.tsx` | Add `hasMadeInitialSelection` state |
-| `src/components/ModeSelectionModal.tsx` | NEW - First-time mode selection popup |
-| `src/components/ModeSwitcher.tsx` | Update colors: Broker from gold to blue |
-| `src/components/header/MegaMenuAccount.tsx` | Add "Select your mode" label |
-| `src/components/Footer.tsx` | Update mode switcher styling for new colors |
-| `src/components/home/HeroSearchBar.tsx` | Mobile responsive + Payment Plan slider + Handover Year |
-| `src/contexts/PopupCoordinatorContext.tsx` | Add mode-selection-modal to popup queue |
-
----
-
-## Testing Checklist
-
-1. **Mode Selection Flow**
-   - [ ] New user logs in -> sees mode selection popup
-   - [ ] User selects mode -> popup closes, toast appears with guidance
-   - [ ] Account dropdown shows "Select your mode" label before first selection
-   - [ ] After selection, label disappears, shows current mode
-
-2. **Mode Colors**
-   - [ ] Investor mode shows green theme everywhere
-   - [ ] Broker mode shows blue theme everywhere
-   - [ ] Investor+Broker shows purple theme everywhere
-   - [ ] Footer mode switcher matches header colors
-
-3. **Mobile Hero**
-   - [ ] Search bar fully visible on iPhone SE (375px)
-   - [ ] Search bar fully visible on iPhone 14 (390px)
-   - [ ] All controls accessible via Filters button on mobile
-   - [ ] Touch targets are 44px minimum
-
-4. **Filters Parity**
-   - [ ] Payment Plan slider appears (0-100%)
-   - [ ] Handover Year dropdown appears
-   - [ ] Sale Status shows Reelly-style color dots
-   - [ ] All filters apply correctly to search
+| Day | Phase | Deliverable |
+|-----|-------|-------------|
+| 1 | A1 | Fix 3 404 tools (Lead Qualification, Price Predictor, Neighborhood Insights) |
+| 2-3 | A2 | Wire 9 component-only tools with pages, routes, edge functions |
+| 4 | A3 | Complete 5 partial tools |
+| 5 | A4 | Complete AI Calendar (coming soon) |
+| 6 | B | Apply security hardening (RLS, guards, rate limiting) |
+| 7 | C | Feature upgrades (export, history, templates, intelligence) |
+| 8 | E | Update inventory with intelligence features + data ownership |
+| 9 | F | Testing & verification |
+| 10 | G | Owner AI Intelligence Dashboard |
 
 ---
 
-## Priority Order
+## Definition of Done
 
-| Priority | Task | Effort |
-|----------|------|--------|
-| P0 | Mobile hero responsiveness | High |
-| P1 | Mode color update (Broker gold → blue) | Low |
-| P1 | Add "Select your mode" label | Low |
-| P2 | First-time mode selection popup | Medium |
-| P2 | Filters: Payment Plan + Handover Year | Medium |
+Execution is complete only when:
 
+- [ ] Inventory shows 45/45 WORKING ✅
+- [ ] No routes missing
+- [ ] No edge functions missing
+- [ ] Every tool has end-to-end flow
+- [ ] Every tool has at least ONE intelligence feature documented
+- [ ] RLS verified: users see only their own data
+- [ ] RLS verified: owner sees all data
+- [ ] AI outputs stored with user_id
+- [ ] Owner AI Intelligence Dashboard operational
+- [ ] All acceptance tests pass
+
+---
+
+## Technical Notes
+
+### Existing Infrastructure (Reuse)
+- `supabase/functions/_shared/ai-utils.ts` - CORS, rate limiting, AI gateway, sanitization
+- `ai_usage_logs` table - Already has RLS for admin/owner
+- `ai_tool_projects` table - User isolation already implemented
+- Recharts for dashboard charts
+- OwnerGuard component for route protection
+
+### No UI Redesign
+All implementations use existing UI components and styles. No color changes, no layout redesigns. Follow patterns from working tools like AI Property Analyzer, Property Evaluator, and Interior Design AI.
+Approved.
+
+This Plan v2 is ACCEPTED as the final execution blueprint.
+
+You are authorized to begin implementation immediately under the following rules:
+
+1. Follow this plan exactly. No shortcuts.
+2. No AI tool is marked WORKING unless it meets the full “WORKING ✅” definition.
+3. Security, RLS, and user data isolation are NON-NEGOTIABLE.
+4. Owner override visibility must be preserved at all times.
+5. If any ambiguity or architectural conflict appears, STOP and ask before proceeding.
+6. Deliver incrementally and report progress per phase.
+
+Begin with Phase A1 (Fix 404 tools) and proceed in order.
+
+Execution is now authorized.
