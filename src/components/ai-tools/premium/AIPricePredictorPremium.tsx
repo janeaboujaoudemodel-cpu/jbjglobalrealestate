@@ -3,13 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   TrendingUp, Loader2, Copy, Check, Sparkles, 
   ArrowUp, ArrowDown, Minus, Building, MapPin,
-  Calendar, Ruler, DollarSign, Target, AlertTriangle
+  Calendar, Ruler, DollarSign, Target, AlertTriangle, CheckCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
   Select,
@@ -21,6 +19,11 @@ import {
 import { useAITool } from "../AIToolsProvider";
 import { toast } from "sonner";
 import AIToolPremiumLayout from "../AIToolPremiumLayout";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+};
 
 const AIPricePredictorPremium = () => {
   const { invokeTool, loading, response } = useAITool();
@@ -75,275 +78,275 @@ const AIPricePredictorPremium = () => {
     <AIToolPremiumLayout
       title="AI Price Predictor"
       subtitle="Get AI-powered property valuations with market trend analysis and future price forecasts for Dubai real estate"
-      icon={<TrendingUp className="h-8 w-8 text-blue-400" />}
+      icon={<TrendingUp className="h-6 w-6" />}
       accentColor="blue"
       gradientFrom="blue"
       badge="Valuation Intelligence"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Input Section */}
-        <div className="space-y-6">
-          <Card className="bg-zinc-900/50 border-zinc-800">
-            <CardContent className="p-6 space-y-6">
-              <div className="flex items-center gap-2 text-blue-400 mb-4">
-                <Building className="h-5 w-5" />
-                <span className="font-semibold">Property Details</span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-blue-400" />
-                    Location / Area *
-                  </Label>
-                  <Input
-                    placeholder="Dubai Marina, Downtown..."
-                    value={formData.location}
-                    onChange={(e) => handleChange("location", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
-                    <Building className="h-4 w-4 text-blue-400" />
-                    Property Type
-                  </Label>
-                  <Select value={formData.propertyType} onValueChange={(v) => handleChange("propertyType", v)}>
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
-                      <SelectItem value="apartment">Apartment</SelectItem>
-                      <SelectItem value="villa">Villa</SelectItem>
-                      <SelectItem value="townhouse">Townhouse</SelectItem>
-                      <SelectItem value="penthouse">Penthouse</SelectItem>
-                      <SelectItem value="studio">Studio</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-zinc-300">Bedrooms</Label>
-                  <Select value={formData.bedrooms} onValueChange={(v) => handleChange("bedrooms", v)}>
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
-                      <SelectItem value="studio">Studio</SelectItem>
-                      <SelectItem value="1">1 Bedroom</SelectItem>
-                      <SelectItem value="2">2 Bedrooms</SelectItem>
-                      <SelectItem value="3">3 Bedrooms</SelectItem>
-                      <SelectItem value="4">4 Bedrooms</SelectItem>
-                      <SelectItem value="5+">5+ Bedrooms</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
-                    <Ruler className="h-4 w-4 text-blue-400" />
-                    Size (sq ft)
-                  </Label>
-                  <Input
-                    placeholder="1200"
-                    value={formData.size}
-                    onChange={(e) => handleChange("size", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-zinc-300">Developer (optional)</Label>
-                  <Input
-                    placeholder="Emaar, DAMAC..."
-                    value={formData.developerName}
-                    onChange={(e) => handleChange("developerName", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-blue-400" />
-                    Completion Year
-                  </Label>
-                  <Input
-                    placeholder="2025"
-                    value={formData.completionYear}
-                    onChange={(e) => handleChange("completionYear", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
-                  />
-                </div>
-
-                <div className="space-y-2 md:col-span-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-blue-400" />
-                    Current Listed Price (AED)
-                  </Label>
-                  <Input
-                    placeholder="2,500,000"
-                    value={formData.currentPrice}
-                    onChange={(e) => handleChange("currentPrice", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
-                  />
-                </div>
-              </div>
-
-              <Button
-                onClick={handleSubmit}
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold py-6"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                    Analyzing Market...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="h-5 w-5 mr-2" />
-                    Predict Price
-                  </>
-                )}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Data Sources */}
-          <div className="flex flex-wrap gap-2 justify-center">
-            {["Dubai Land Dept", "DXB Interact", "Market Data"].map((source) => (
-              <Badge key={source} variant="outline" className="text-zinc-500 border-zinc-700">
-                {source}
-              </Badge>
-            ))}
+      {/* Form Section - FULL WIDTH */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeInUp}
+        className="bg-gradient-to-br from-blue-950/40 via-zinc-900/60 to-blue-950/20 backdrop-blur-sm border border-blue-500/30 rounded-3xl p-8 md:p-10 mb-8"
+      >
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-blue-500/40 flex items-center justify-center">
+            <Building className="w-6 h-6 text-blue-400" />
+          </div>
+          <div>
+            <h2 className="text-white text-xl font-bold">Property Details</h2>
+            <p className="text-blue-400/70 text-sm">Enter property information for price prediction</p>
           </div>
         </div>
 
-        {/* Results Section */}
-        <div className="space-y-6">
-          <AnimatePresence mode="wait">
-            {response ? (
-              <motion.div
-                key="results"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="space-y-4"
-              >
-                {/* Estimated Price */}
-                {response.estimatedPrice && (
-                  <motion.div
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                  >
-                    <Card className="bg-blue-500/10 border-blue-500/30 p-6">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm text-zinc-400">Estimated Fair Value</span>
-                        {response.trend && getTrendIcon(response.trend)}
-                      </div>
-                      <p className="text-4xl font-bold text-blue-400">
-                        AED {Number(response.estimatedPrice).toLocaleString()}
-                      </p>
-                      {response.pricePerSqFt && (
-                        <p className="text-sm text-zinc-400 mt-2">
-                          AED {Number(response.pricePerSqFt).toLocaleString()} per sq ft
-                        </p>
-                      )}
-                      {response.priceRange && (
-                        <div className="mt-4 pt-4 border-t border-blue-500/20">
-                          <p className="text-xs text-zinc-500">Price Range</p>
-                          <p className="text-sm text-zinc-300">
-                            AED {response.priceRange.min?.toLocaleString()} - {response.priceRange.max?.toLocaleString()}
-                          </p>
-                        </div>
-                      )}
-                    </Card>
-                  </motion.div>
-                )}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {/* Location */}
+          <div>
+            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+              <MapPin className="w-4 h-4 inline mr-1 text-blue-400" />
+              Location / Area <span className="text-blue-400">*</span>
+            </Label>
+            <Input
+              placeholder="Dubai Marina, Downtown..."
+              value={formData.location}
+              onChange={(e) => handleChange("location", e.target.value)}
+              className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
+            />
+          </div>
 
-                {/* Key Metrics */}
-                <div className="grid grid-cols-2 gap-3">
-                  {response.confidenceScore && (
-                    <Card className="bg-zinc-900/50 border-zinc-800 p-4">
-                      <Target className="h-5 w-5 mb-2 text-blue-400" />
-                      <p className="text-xs text-zinc-400">Confidence</p>
-                      <p className="text-xl font-bold text-white">{response.confidenceScore}%</p>
-                      <Progress value={response.confidenceScore} className="h-1 mt-2" />
-                    </Card>
-                  )}
-                  {response.marketTrend && (
-                    <Card className="bg-zinc-900/50 border-zinc-800 p-4">
-                      <TrendingUp className="h-5 w-5 mb-2 text-blue-400" />
-                      <p className="text-xs text-zinc-400">Market Trend</p>
-                      <p className="text-xl font-bold text-white capitalize">{response.marketTrend}</p>
-                    </Card>
-                  )}
-                </div>
+          {/* Property Type */}
+          <div>
+            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+              <Building className="w-4 h-4 inline mr-1 text-blue-400" />
+              Property Type
+            </Label>
+            <Select value={formData.propertyType} onValueChange={(v) => handleChange("propertyType", v)}>
+              <SelectTrigger className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-zinc-900 border-blue-500/30">
+                <SelectItem value="apartment" className="text-white hover:bg-blue-500/20">Apartment</SelectItem>
+                <SelectItem value="villa" className="text-white hover:bg-blue-500/20">Villa</SelectItem>
+                <SelectItem value="townhouse" className="text-white hover:bg-blue-500/20">Townhouse</SelectItem>
+                <SelectItem value="penthouse" className="text-white hover:bg-blue-500/20">Penthouse</SelectItem>
+                <SelectItem value="studio" className="text-white hover:bg-blue-500/20">Studio</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-                {/* Valuation Comparison */}
-                {response.comparison && (
-                  <Card className="bg-zinc-900/50 border-zinc-800 p-4">
-                    <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
-                      <Target className="h-4 w-4 text-blue-400" />
-                      Valuation Analysis
-                    </h4>
-                    <div className={`p-3 rounded-lg ${
-                      response.comparison === 'overpriced' 
-                        ? 'bg-red-500/10 border border-red-500/20' 
-                        : response.comparison === 'underpriced'
-                        ? 'bg-emerald-500/10 border border-emerald-500/20'
-                        : 'bg-amber-500/10 border border-amber-500/20'
-                    }`}>
-                      <p className={`text-sm ${
-                        response.comparison === 'overpriced' ? 'text-red-400' :
-                        response.comparison === 'underpriced' ? 'text-emerald-400' : 'text-amber-400'
-                      }`}>
-                        {response.comparison === 'overpriced' && <AlertTriangle className="h-4 w-4 inline mr-1" />}
-                        Property is {response.comparison} compared to market value
-                      </p>
-                    </div>
-                  </Card>
-                )}
+          {/* Bedrooms */}
+          <div>
+            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+              Bedrooms
+            </Label>
+            <Select value={formData.bedrooms} onValueChange={(v) => handleChange("bedrooms", v)}>
+              <SelectTrigger className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-zinc-900 border-blue-500/30">
+                <SelectItem value="studio" className="text-white hover:bg-blue-500/20">Studio</SelectItem>
+                <SelectItem value="1" className="text-white hover:bg-blue-500/20">1 Bedroom</SelectItem>
+                <SelectItem value="2" className="text-white hover:bg-blue-500/20">2 Bedrooms</SelectItem>
+                <SelectItem value="3" className="text-white hover:bg-blue-500/20">3 Bedrooms</SelectItem>
+                <SelectItem value="4" className="text-white hover:bg-blue-500/20">4 Bedrooms</SelectItem>
+                <SelectItem value="5+" className="text-white hover:bg-blue-500/20">5+ Bedrooms</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-                {/* Full Analysis */}
-                <Card className="bg-zinc-900/50 border-zinc-800">
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <h4 className="font-semibold text-white">Full Analysis</h4>
-                      <Button variant="outline" size="sm" onClick={copyToClipboard} className="border-zinc-700">
-                        {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                      </Button>
-                    </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
-                      {response.prediction}
-                    </div>
-                  </CardContent>
-                </Card>
+          {/* Size */}
+          <div>
+            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+              <Ruler className="w-4 h-4 inline mr-1 text-blue-400" />
+              Size (sq ft)
+            </Label>
+            <Input
+              placeholder="1200"
+              value={formData.size}
+              onChange={(e) => handleChange("size", e.target.value)}
+              className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
+            />
+          </div>
 
-                <p className="text-xs text-zinc-500 text-center">
-                  * AI-generated estimate. For legal or mortgage matters, consult licensed professionals.
-                </p>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="placeholder"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center h-[400px] text-center"
-              >
-                <div className="p-6 rounded-full bg-blue-500/10 mb-4">
-                  <TrendingUp className="h-12 w-12 text-blue-400/50" />
-                </div>
-                <h3 className="text-lg font-semibold text-zinc-400">Ready to Predict</h3>
-                <p className="text-sm text-zinc-500 mt-2 max-w-sm">
-                  Enter property details to get AI-powered price predictions with market trend analysis
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Developer */}
+          <div>
+            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+              Developer (optional)
+            </Label>
+            <Input
+              placeholder="Emaar, DAMAC..."
+              value={formData.developerName}
+              onChange={(e) => handleChange("developerName", e.target.value)}
+              className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
+            />
+          </div>
+
+          {/* Completion Year */}
+          <div>
+            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+              <Calendar className="w-4 h-4 inline mr-1 text-blue-400" />
+              Completion Year
+            </Label>
+            <Input
+              placeholder="2025"
+              value={formData.completionYear}
+              onChange={(e) => handleChange("completionYear", e.target.value)}
+              className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
+            />
+          </div>
         </div>
-      </div>
+
+        {/* Current Price - Full Width */}
+        <div className="mb-8">
+          <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <DollarSign className="w-4 h-4 inline mr-1 text-blue-400" />
+            Current Listed Price (AED) - Optional
+          </Label>
+          <Input
+            placeholder="2,500,000"
+            value={formData.currentPrice}
+            onChange={(e) => handleChange("currentPrice", e.target.value)}
+            className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
+          />
+        </div>
+
+        <Button
+          onClick={handleSubmit}
+          disabled={loading || !formData.location}
+          variant="ai-blue"
+          className="w-full font-bold py-6 text-lg rounded-xl"
+        >
+          {loading ? (
+            <>
+              <Sparkles className="w-5 h-5 mr-2 animate-spin" />
+              Analyzing Market...
+            </>
+          ) : (
+            <>
+              <TrendingUp className="w-5 h-5 mr-2" />
+              Predict Price
+            </>
+          )}
+        </Button>
+      </motion.div>
+
+      {/* Results Section - FULL WIDTH */}
+      <AnimatePresence mode="wait">
+        {response && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-6"
+          >
+            {/* Main Result Card */}
+            <div className="bg-gradient-to-br from-blue-500/15 to-blue-600/10 border border-blue-500/40 rounded-3xl p-8 md:p-10">
+              <div className="flex items-center gap-3 mb-6">
+                <DollarSign className="w-8 h-8 text-blue-400" />
+                <div>
+                  <h3 className="text-white text-2xl font-bold">Estimated Fair Value</h3>
+                  <p className="text-blue-400/70 text-sm">{formData.location} • {formData.propertyType} • {formData.bedrooms} BR</p>
+                </div>
+              </div>
+
+              {/* Main Price */}
+              {response.estimatedPrice && (
+                <div className="bg-blue-500/20 border border-blue-400/50 rounded-2xl p-8 text-center mb-8">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <span className="text-blue-400 text-sm font-medium">AI Estimated Value</span>
+                    {response.trend && getTrendIcon(response.trend)}
+                  </div>
+                  <p className="text-white text-5xl font-bold mb-2">
+                    AED {Number(response.estimatedPrice).toLocaleString()}
+                  </p>
+                  {response.pricePerSqFt && (
+                    <p className="text-zinc-400 text-sm">
+                      AED {Number(response.pricePerSqFt).toLocaleString()} per sq ft
+                    </p>
+                  )}
+                  {response.priceRange && (
+                    <div className="mt-4 pt-4 border-t border-blue-500/20">
+                      <p className="text-xs text-zinc-500">Price Range</p>
+                      <p className="text-sm text-zinc-300">
+                        AED {response.priceRange.min?.toLocaleString()} - {response.priceRange.max?.toLocaleString()}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Key Metrics */}
+              <div className="grid md:grid-cols-3 gap-4 mb-6">
+                {response.confidenceScore && (
+                  <div className="bg-zinc-900/60 border border-blue-500/20 rounded-xl p-4">
+                    <Target className="h-5 w-5 mb-2 text-blue-400" />
+                    <p className="text-blue-400/70 text-xs uppercase tracking-wider mb-1">Confidence</p>
+                    <p className="text-white text-2xl font-bold">{response.confidenceScore}%</p>
+                    <Progress value={response.confidenceScore} className="h-1 mt-2" />
+                  </div>
+                )}
+                {response.marketTrend && (
+                  <div className="bg-zinc-900/60 border border-blue-500/20 rounded-xl p-4">
+                    <TrendingUp className="h-5 w-5 mb-2 text-blue-400" />
+                    <p className="text-blue-400/70 text-xs uppercase tracking-wider mb-1">Market Trend</p>
+                    <p className="text-white text-2xl font-bold capitalize">{response.marketTrend}</p>
+                  </div>
+                )}
+                {response.comparison && (
+                  <div className={`rounded-xl p-4 ${
+                    response.comparison === 'overpriced' 
+                      ? 'bg-red-500/10 border border-red-500/20' 
+                      : response.comparison === 'underpriced'
+                      ? 'bg-emerald-500/10 border border-emerald-500/20'
+                      : 'bg-amber-500/10 border border-amber-500/20'
+                  }`}>
+                    {response.comparison === 'overpriced' && <AlertTriangle className="h-5 w-5 mb-2 text-red-400" />}
+                    {response.comparison === 'underpriced' && <CheckCircle className="h-5 w-5 mb-2 text-emerald-400" />}
+                    {response.comparison === 'fairly-priced' && <Target className="h-5 w-5 mb-2 text-amber-400" />}
+                    <p className="text-xs uppercase tracking-wider mb-1 text-zinc-400">Valuation</p>
+                    <p className={`text-lg font-bold capitalize ${
+                      response.comparison === 'overpriced' ? 'text-red-400' :
+                      response.comparison === 'underpriced' ? 'text-emerald-400' : 'text-amber-400'
+                    }`}>{response.comparison}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Full Analysis */}
+              <div className="bg-zinc-900/60 border border-blue-500/20 rounded-xl p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-blue-400" />
+                    <h4 className="text-white font-semibold">Full Analysis</h4>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={copyToClipboard} className="text-zinc-400 hover:text-white">
+                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  </Button>
+                </div>
+                <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                  {response.prediction}
+                </div>
+              </div>
+            </div>
+
+            {/* Disclaimer */}
+            <div className="bg-zinc-800/50 border border-zinc-700 rounded-2xl p-6">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="w-6 h-6 text-zinc-400 flex-shrink-0" />
+                <div>
+                  <h4 className="text-zinc-300 font-semibold mb-2">Important Disclaimer</h4>
+                  <p className="text-zinc-400 text-sm leading-relaxed">
+                    This is an AI-generated estimate for informational purposes only. For legal or mortgage matters, please consult licensed professionals.
+                    Actual property values may vary based on specific conditions, market timing, and other factors.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </AIToolPremiumLayout>
   );
 };

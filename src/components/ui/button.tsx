@@ -61,6 +61,23 @@ const BRAND_MEDIA = BRAND_HERO;
 const BRAND_DARK =
   `bg-premium-bg text-gold border-2 border-gold/80 ${BTN_3D} hover:${LOCKED_CHAMPAGNE_BG} hover:text-foreground ${BTN_3D_HOVER} hover:-translate-y-0.5 active:translate-y-0`;
 
+// AI Tool button variants - vibrant gradients that bypass sanitization
+const AI_EMERALD = "bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white border border-emerald-400/30 shadow-lg shadow-emerald-500/20";
+const AI_PURPLE = "bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white border border-purple-400/30 shadow-lg shadow-purple-500/20";
+const AI_BLUE = "bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white border border-blue-400/30 shadow-lg shadow-blue-500/20";
+const AI_TEAL = "bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white border border-teal-400/30 shadow-lg shadow-teal-500/20";
+const AI_ORANGE = "bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white border border-orange-400/30 shadow-lg shadow-orange-500/20";
+const AI_INDIGO = "bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white border border-indigo-400/30 shadow-lg shadow-indigo-500/20";
+const AI_ROSE = "bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white border border-rose-400/30 shadow-lg shadow-rose-500/20";
+const AI_CYAN = "bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white border border-cyan-400/30 shadow-lg shadow-cyan-500/20";
+const AI_VIOLET = "bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400 text-white border border-violet-400/30 shadow-lg shadow-violet-500/20";
+const AI_AMBER = "bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white border border-amber-400/30 shadow-lg shadow-amber-500/20";
+const AI_PINK = "bg-gradient-to-r from-pink-600 to-pink-500 hover:from-pink-500 hover:to-pink-400 text-white border border-pink-400/30 shadow-lg shadow-pink-500/20";
+const AI_RED = "bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white border border-red-400/30 shadow-lg shadow-red-500/20";
+const AI_LIME = "bg-gradient-to-r from-lime-600 to-lime-500 hover:from-lime-500 hover:to-lime-400 text-white border border-lime-400/30 shadow-lg shadow-lime-500/20";
+const AI_SKY = "bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white border border-sky-400/30 shadow-lg shadow-sky-500/20";
+const AI_GOLD = "bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-gold-foreground border border-gold/30 shadow-lg shadow-gold/20";
+
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em]",
   {
@@ -80,6 +97,23 @@ const buttonVariants = cva(
         outline: BRAND_SECONDARY,
         ghost: BRAND_SECONDARY,
         link: BRAND_SECONDARY,
+
+        // AI Tool variants - bypass sanitization for dark theme usage
+        "ai-emerald": AI_EMERALD,
+        "ai-purple": AI_PURPLE,
+        "ai-blue": AI_BLUE,
+        "ai-teal": AI_TEAL,
+        "ai-orange": AI_ORANGE,
+        "ai-indigo": AI_INDIGO,
+        "ai-rose": AI_ROSE,
+        "ai-cyan": AI_CYAN,
+        "ai-violet": AI_VIOLET,
+        "ai-amber": AI_AMBER,
+        "ai-pink": AI_PINK,
+        "ai-red": AI_RED,
+        "ai-lime": AI_LIME,
+        "ai-sky": AI_SKY,
+        "ai-gold": AI_GOLD,
       },
       size: {
         default: "h-10 px-6 py-2",
@@ -119,7 +153,11 @@ const forbiddenClassPatterns: RegExp[] = [
   new RegExp(`(^|:)border-(${COLOR_WORDS})(-|/|$)`),
 ];
 
-function sanitizeButtonClassName(className?: string) {
+function sanitizeButtonClassName(className?: string, variant?: string | null) {
+  // Skip sanitization for AI tool variants - they need their gradient colors
+  if (variant?.startsWith("ai-")) {
+    return className;
+  }
   if (!className) return undefined;
   const tokens = className.split(/\s+/).filter(Boolean);
   const kept = tokens.filter((t) => !forbiddenClassPatterns.some((re) => re.test(t)));
@@ -129,7 +167,7 @@ function sanitizeButtonClassName(className?: string) {
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
-    const safeClassName = sanitizeButtonClassName(className);
+    const safeClassName = sanitizeButtonClassName(className, variant);
 
     return (
       <Comp
