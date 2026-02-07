@@ -20,65 +20,125 @@ import {
 } from '@/components/ui/select';
 import OwnerGuard from '@/components/OwnerGuard';
 
-// AI Tools Inventory
-type AIToolStatus = 'working' | 'partial' | '404' | 'component_only' | 'coming_soon';
+// Import verified AI Tools inventory
+import { 
+  AI_TOOLS_INVENTORY_VERIFIED, 
+  computeAIToolsStats,
+  type AIToolStatus,
+  type AIToolEntry 
+} from '@/data/ai-tools-verified-inventory';
 
-interface AIToolEntry {
-  name: string;
-  route: string | null;
-  navPath: string;
-  visibility: string;
-  status: AIToolStatus;
-  edgeFunction: string | null;
-  fixNeeded: string | null;
-}
-
-const AI_TOOLS_INVENTORY: AIToolEntry[] = [
-  { name: 'AI Hub', route: '/ai-hub', navPath: 'Header > More > AI Hub', visibility: 'Public', status: 'working', edgeFunction: null, fixNeeded: null },
-  { name: 'Executive Assistant', route: '/executive-assistant', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: 'executive-assistant', fixNeeded: null },
-  { name: "Founder's Assistant", route: '/founder-assistant', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: 'listing-admin-chat', fixNeeded: null },
-  { name: 'Owner AI Reply', route: '/owner/inbox', navPath: 'Owner sidebar (Inbox)', visibility: 'Owner Only', status: 'partial', edgeFunction: 'owner-ai-reply', fixNeeded: 'Verify draft generation' },
-  { name: 'Owner Voice Generate', route: '/owner/inbox', navPath: 'Owner sidebar (Inbox)', visibility: 'Owner Only', status: 'partial', edgeFunction: 'owner-voice-generate', fixNeeded: 'Add UI button, verify ElevenLabs keys' },
-  { name: 'Owner Templates AI', route: '/owner/templates', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: null, fixNeeded: null },
-  { name: 'AI Safety Panel', route: '/owner/safety', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: null, fixNeeded: null },
-  { name: 'Listing Admin Chat', route: '/listing-admin', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: 'listing-admin-chat', fixNeeded: null },
-  { name: 'Interior Design AI', route: '/interior-design-ai', navPath: 'AI Hub, More menu', visibility: 'Public', status: 'working', edgeFunction: 'interior-design-generate', fixNeeded: null },
-  { name: 'Property Evaluator', route: '/property-evaluator', navPath: 'AI Hub, More menu', visibility: 'Public', status: 'working', edgeFunction: 'property-evaluation', fixNeeded: null },
-  { name: 'AI Home Finder (Quiz)', route: '/quiz', navPath: 'Header, AI Hub, Footer', visibility: 'Public', status: 'working', edgeFunction: null, fixNeeded: null },
-  { name: 'AI Calendar', route: '/ai-calendar', navPath: 'AI Hub', visibility: 'Broker/Premium', status: 'coming_soon', edgeFunction: null, fixNeeded: 'Backend scheduling logic' },
-  { name: 'AI Budget Planner', route: '/ai-budget-planner', navPath: 'AI Hub', visibility: 'Public', status: 'working', edgeFunction: null, fixNeeded: null },
-  { name: 'AI Personal Shopper', route: '/ai-personal-shopper', navPath: 'AI Hub', visibility: 'Premium', status: 'partial', edgeFunction: null, fixNeeded: 'AI recommendation engine' },
-  { name: 'Rental Index AI', route: '/rental-index', navPath: 'AI Hub, More menu', visibility: 'Public', status: 'working', edgeFunction: 'rental-index-analysis', fixNeeded: null },
-  { name: 'Property Measurement', route: '/property-measurement', navPath: 'AI Hub', visibility: 'Public', status: 'working', edgeFunction: 'property-measurement', fixNeeded: null },
-  { name: 'AI Broker Workspace', route: '/ai-broker-workspace', navPath: 'Admin (internal)', visibility: 'Owner Only', status: 'working', edgeFunction: null, fixNeeded: null },
-  { name: 'Voice Studio', route: '/toolkit/voice-studio', navPath: 'Toolkit Hub', visibility: 'Public', status: 'working', edgeFunction: 'voice-studio-tts', fixNeeded: null },
-  { name: 'AI Video Studio', route: '/toolkit/ai-video-studio', navPath: 'Toolkit Hub', visibility: 'Public', status: 'partial', edgeFunction: null, fixNeeded: 'Video processing backend' },
-  { name: 'Background AI', route: '/toolkit/background-ai', navPath: 'Toolkit Hub', visibility: 'Public', status: 'working', edgeFunction: 'ai-background-remove', fixNeeded: null },
-  { name: 'Captions Translate', route: '/toolkit/captions-translate', navPath: 'Toolkit Hub', visibility: 'Public', status: 'partial', edgeFunction: 'auto-translate', fixNeeded: 'Caption translation backend' },
-  { name: 'AI Market Insights', route: '/internal/executive/ai-insights', navPath: 'Executive Dashboard', visibility: 'Owner Only', status: 'working', edgeFunction: 'ai-market-narratives', fixNeeded: null },
-  { name: 'AI Governance', route: '/governance/ai', navPath: 'Governance section', visibility: 'Owner Only', status: 'working', edgeFunction: null, fixNeeded: null },
-  { name: 'Smart AI Analysis', route: null, navPath: 'Compare page (embedded)', visibility: 'Public', status: 'working', edgeFunction: 'smart-ai-analysis', fixNeeded: null },
-  { name: 'HR AI Agent', route: '/hr-agent', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: 'hr-ai-agent', fixNeeded: null },
-  { name: 'CRM Assistant Panel', route: null, navPath: 'CRM page (sidebar)', visibility: 'Owner Only', status: 'working', edgeFunction: 'executive-assistant', fixNeeded: null },
-  { name: 'Broker Admin Assistant', route: '/broker-admin-assistant', navPath: 'Owner sidebar', visibility: 'Owner Only', status: 'working', edgeFunction: null, fixNeeded: null },
-  { name: 'AI Property Analyzer', route: '/ai-property-analyzer', navPath: 'Footer, AI Hub (link)', visibility: 'Public', status: '404', edgeFunction: 'smart-ai-analysis', fixNeeded: 'Create route + page' },
-  { name: 'AI Lead Qualification', route: '/ai-lead-qualification', navPath: 'Footer, AI Hub (link)', visibility: 'Broker', status: '404', edgeFunction: null, fixNeeded: 'Create route + page' },
-  { name: 'AI Price Predictor', route: '/ai-price-predictor', navPath: 'Footer (link)', visibility: 'Public', status: '404', edgeFunction: null, fixNeeded: 'Create route + page' },
-  { name: 'AI Neighborhood Insights', route: '/ai-neighborhood-insights', navPath: 'Footer (link)', visibility: 'Public', status: '404', edgeFunction: null, fixNeeded: 'Create route + page' },
-  { name: 'AI Objection Handler', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
-  { name: 'AI Follow-up Scheduler', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
-  { name: 'AI Video Tour Script', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
-  { name: 'AI Virtual Staging', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
-  { name: 'AI ROI Calculator', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
-  { name: 'AI Market Report', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
-  { name: 'AI Translation Hub', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
-  { name: 'AI Meeting Summarizer', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
-  { name: 'AI Document Generator', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
-  { name: 'AI Contract Reviewer', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
-  { name: 'AI Competitor Analysis', route: null, navPath: 'Component only', visibility: 'N/A', status: 'component_only', edgeFunction: null, fixNeeded: 'Create route or embed' },
-  { name: 'Voice Concierge', route: null, navPath: 'Global widget', visibility: 'Public', status: 'working', edgeFunction: 'elevenlabs-conversation-token', fixNeeded: null },
-  { name: 'Chat Support AI', route: null, navPath: 'Global chat widget', visibility: 'Public', status: 'working', edgeFunction: 'ai-chat-support', fixNeeded: null },
+// Route Inventory - Comprehensive list of all application routes
+const ROUTE_INVENTORY = [
+  // Owner-only routes
+  { path: '/owner', name: 'Owner Dashboard', access: 'owner', dashboard: true, sidebar: true, registry: true },
+  { path: '/owner/audit', name: 'Owner Audit', access: 'owner', dashboard: true, sidebar: true, registry: true },
+  { path: '/owner/inbox', name: 'Owner Inbox', access: 'owner', dashboard: true, sidebar: true, registry: true },
+  { path: '/owner/agenda', name: 'Daily Agenda', access: 'owner', dashboard: true, sidebar: true, registry: true },
+  { path: '/owner/features', name: 'Feature Registry', access: 'owner', dashboard: true, sidebar: true, registry: true },
+  { path: '/owner/integrations', name: 'Integrations Status', access: 'owner', dashboard: true, sidebar: true, registry: true },
+  { path: '/owner/safety', name: 'AI Safety Panel', access: 'owner', dashboard: true, sidebar: true, registry: true },
+  { path: '/crm/leads', name: 'CRM Leads', access: 'owner', dashboard: true, sidebar: true, registry: true },
+  { path: '/admin', name: 'Admin Panel', access: 'owner', dashboard: true, sidebar: true, registry: true },
+  { path: '/admin/crm', name: 'Admin CRM', access: 'owner', dashboard: false, sidebar: true, registry: true },
+  { path: '/listing-admin', name: 'Listing Admin', access: 'owner', dashboard: true, sidebar: true, registry: true },
+  
+  // Broker routes
+  { path: '/broker-dashboard', name: 'Broker Dashboard', access: 'broker', dashboard: true, sidebar: true, registry: true },
+  { path: '/broker-toolkit', name: 'Broker Toolkit', access: 'broker', dashboard: true, sidebar: true, registry: true },
+  { path: '/broker-education', name: 'Broker Education', access: 'broker', dashboard: true, sidebar: true, registry: true },
+  { path: '/broker-resources', name: 'Broker Resources', access: 'broker', dashboard: true, sidebar: true, registry: true },
+  { path: '/broker/crm', name: 'Broker CRM', access: 'broker', dashboard: true, sidebar: true, registry: true },
+  { path: '/broker-partner-dashboard', name: 'Partner Broker Dashboard', access: 'broker', dashboard: true, sidebar: false, registry: true },
+  
+  // Investor routes  
+  { path: '/investor-dashboard', name: 'Investor Dashboard', access: 'investor', dashboard: true, sidebar: true, registry: true },
+  { path: '/investor-education', name: 'Investor Education', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/my-dashboard', name: 'My Dashboard', access: 'authenticated', dashboard: true, sidebar: true, registry: true },
+  
+  // Public property routes
+  { path: '/', name: 'Home', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/properties', name: 'Properties', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/projects', name: 'Projects', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/developers', name: 'Developers', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/areas', name: 'Areas', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/map', name: 'Property Map', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/compare', name: 'Compare Properties', access: 'public', dashboard: false, sidebar: false, registry: true },
+  
+  // Services routes
+  { path: '/services', name: 'Services Hub', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/services/property-management', name: 'Property Management', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/services/buying-advisory', name: 'Buying Advisory', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/services/selling-advisory', name: 'Selling Advisory', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/services/rental-advisory', name: 'Rental Advisory', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/services/investment-advisory', name: 'Investment Advisory', access: 'public', dashboard: false, sidebar: false, registry: true },
+  
+  // Toolkit routes
+  { path: '/toolkit', name: 'Toolkit Hub', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/quiz', name: 'AI Home Finder', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/mortgage-calculator', name: 'Mortgage Calculator', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/calculator/roi', name: 'ROI Calculator', access: 'public', dashboard: false, sidebar: false, registry: true },
+  
+  // Guides & Content
+  { path: '/guides', name: 'Guides Library', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/buyer-guide', name: 'Buyer Guide', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/seller-guide', name: 'Seller Guide', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/tenant-guide', name: 'Tenant Guide', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/landlord-guide', name: 'Landlord Guide', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/guides/golden-visa-uae', name: 'Golden Visa Guide', access: 'public', dashboard: false, sidebar: false, registry: true },
+  
+  // Market Intelligence
+  { path: '/market-intelligence/overview', name: 'Market Overview', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/market-intelligence/areas', name: 'Area Intelligence', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/market-intelligence/reports', name: 'Market Reports', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/news', name: 'News & Insights', access: 'public', dashboard: false, sidebar: false, registry: true },
+  
+  // Company routes
+  { path: '/about', name: 'About Us', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/founder', name: 'About Founder', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/team', name: 'Meet the Team', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/brokers', name: 'Our Brokers', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/contact', name: 'Contact Us', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/join', name: 'Careers', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/awards', name: 'Awards', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/press-kit', name: 'Press Kit', access: 'public', dashboard: false, sidebar: false, registry: true },
+  
+  // Partners
+  { path: '/partners', name: 'Partners Hub', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/partners/mortgage', name: 'Mortgage Partners', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/partners/legal', name: 'Legal Partners', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/partners/company-setup', name: 'Company Setup', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/partners/visa-services', name: 'Visa Services', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/referral-partner', name: 'Referral Partner', access: 'public', dashboard: false, sidebar: false, registry: true },
+  
+  // Legal
+  { path: '/terms', name: 'Terms of Service', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/privacy', name: 'Privacy Policy', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/cookies', name: 'Cookies Policy', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/trust-and-audit-center', name: 'Trust Center', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/intellectual-property', name: 'Intellectual Property', access: 'public', dashboard: false, sidebar: false, registry: true },
+  
+  // FAQ
+  { path: '/faq', name: 'General FAQ', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/investor-faq', name: 'Investor FAQ', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/broker-faq', name: 'Broker FAQ', access: 'public', dashboard: false, sidebar: false, registry: true },
+  
+  // Auth & Account
+  { path: '/auth', name: 'Sign In / Sign Up', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/my-account', name: 'My Account', access: 'authenticated', dashboard: true, sidebar: true, registry: true },
+  { path: '/favorites', name: 'Favorites', access: 'authenticated', dashboard: true, sidebar: true, registry: true },
+  
+  // Seller
+  { path: '/seller-listing', name: 'Sell Your Property', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/sell/valuation', name: 'Property Valuation', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/landlord-portal', name: 'Landlord Portal', access: 'authenticated', dashboard: false, sidebar: false, registry: true },
+  
+  // Misc
+  { path: '/philanthropy', name: 'Philanthropy', access: 'public', dashboard: false, sidebar: false, registry: true },
+  { path: '/sitemap', name: 'Sitemap', access: 'public', dashboard: false, sidebar: false, registry: true },
 ];
+
+type AccessLevel = 'owner' | 'broker' | 'investor' | 'authenticated' | 'public';
 
 // Route Inventory - Comprehensive list of all application routes
 const ROUTE_INVENTORY = [
