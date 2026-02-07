@@ -21,7 +21,10 @@ import {
   AlertCircle,
   UserPlus,
   Activity,
-  ExternalLink
+  ExternalLink,
+  FileText,
+  Settings,
+  BookOpen,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import LeadStatusBadge from "@/components/crm/LeadStatusBadge";
@@ -566,30 +569,81 @@ export default function OwnerDashboardOverview() {
           </CardContent>
         </Card>
 
-        {/* Quick Actions */}
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Button 
-            variant="primary"
-            onClick={() => navigate('/crm/leads')} 
-          >
-            <Users className="h-4 w-4 mr-2" />
-            Open Leads Inbox
-          </Button>
-          <Button 
-            variant="secondary" 
-            onClick={() => navigate('/crm?action=new-lead')}
-          >
-            <UserPlus className="h-4 w-4 mr-2" />
-            Add New Lead
-          </Button>
-          <Button 
-            variant="secondary" 
-            onClick={() => navigate('/crm/tasks')}
-          >
-            <CheckSquare className="h-4 w-4 mr-2" />
-            View Tasks
-          </Button>
-        </div>
+        {/* Quick Actions - Full Navigation */}
+        <Card className="bg-zinc-900/80 border-zinc-800 mt-6">
+          <CardHeader>
+            <CardTitle className="text-lg text-white">Quick Navigation</CardTitle>
+            <CardDescription className="text-zinc-400">Access all Owner features</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/crm/leads')} 
+              >
+                <Users className="h-5 w-5 text-gold" />
+                <span className="text-sm">Leads Inbox</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/owner/inbox')}
+              >
+                <MessageSquare className="h-5 w-5 text-emerald-400" />
+                <span className="text-sm">Unified Inbox</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/owner/agenda')}
+              >
+                <Calendar className="h-5 w-5 text-blue-400" />
+                <span className="text-sm">Daily Agenda</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/owner/templates')}
+              >
+                <FileText className="h-5 w-5 text-purple-400" />
+                <span className="text-sm">Templates</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/crm/tasks')}
+              >
+                <CheckSquare className="h-5 w-5 text-amber-400" />
+                <span className="text-sm">Tasks</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/crm/calendar')}
+              >
+                <Calendar className="h-5 w-5 text-cyan-400" />
+                <span className="text-sm">Calendar</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/owner/settings/communication')}
+              >
+                <Settings className="h-5 w-5 text-zinc-400" />
+                <span className="text-sm">Settings</span>
+              </Button>
+              <Button 
+                variant="outline"
+                className="h-auto py-4 flex-col gap-2 border-zinc-700 hover:border-gold/50 hover:bg-gold/5"
+                onClick={() => navigate('/owner/features')}
+              >
+                <BookOpen className="h-5 w-5 text-pink-400" />
+                <span className="text-sm">All Features</span>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

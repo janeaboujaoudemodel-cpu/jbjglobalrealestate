@@ -19,9 +19,20 @@ interface CRMToolsSidebarProps {
 
 const toolCategories = [
   {
+    name: "Owner Command Center",
+    tools: [
+      { name: "Dashboard", href: "/owner", icon: LayoutDashboard, color: "text-gold" },
+      { name: "Daily Agenda", href: "/owner/agenda", icon: Calendar, color: "text-blue-400" },
+      { name: "Unified Inbox", href: "/owner/inbox", icon: MessageSquare, color: "text-emerald-400" },
+      { name: "Message Templates", href: "/owner/templates", icon: FileText, color: "text-purple-400" },
+      { name: "Communication Settings", href: "/owner/settings/communication", icon: Wrench, color: "text-zinc-400" },
+      { name: "Feature Registry", href: "/owner/features", icon: Layers, color: "text-pink-400" },
+    ]
+  },
+  {
     name: "CRM Modules",
     tools: [
-      { name: "Dashboard", href: "/crm", icon: LayoutDashboard, color: "text-gold" },
+      { name: "Leads Inbox", href: "/crm/leads", icon: Users, color: "text-gold" },
       { name: "Automations", href: "/automations", icon: Zap, color: "text-amber-400", adminOnly: true },
       { name: "My Tasks", href: "/crm/tasks", icon: CheckSquare, color: "text-emerald-400" },
       { name: "Calendar", href: "/crm/calendar", icon: Calendar, color: "text-blue-400" },
