@@ -50,7 +50,7 @@ const defaultRules: AutomationRule[] = [
   {
     id: 'hot-lead-alert',
     name: 'Hot Lead Alert',
-    description: 'Notify team when lead shows high purchase intent',
+    description: 'Notify Jane bou Jaoude when lead shows high purchase intent',
     trigger: 'High Intent Detected',
     action: 'Send Alert',
     isActive: true,
@@ -58,14 +58,13 @@ const defaultRules: AutomationRule[] = [
     frequency: 'Instant',
   },
   {
-    id: 'auto-assign-broker',
-    name: 'Auto-Assign to Broker',
-    description: 'Automatically assign new website leads to available brokers',
-    trigger: 'Website Lead',
-    action: 'Assign Broker',
+    id: 'whatsapp-new-lead',
+    name: 'WhatsApp New Lead Greeting',
+    description: 'Send automated WhatsApp greeting to new leads',
+    trigger: 'New Lead Created',
+    action: 'Send WhatsApp',
     isActive: false,
-    icon: Users,
-    adminOnly: true,
+    icon: MessageSquare,
     frequency: 'Instant',
   },
   {
@@ -79,6 +78,16 @@ const defaultRules: AutomationRule[] = [
     frequency: 'Daily at 9 AM',
   },
   {
+    id: 'no-reply-followup',
+    name: 'No Reply Follow-up',
+    description: 'Send WhatsApp follow-up after 48h of no response',
+    trigger: 'No Response 48h',
+    action: 'Send WhatsApp',
+    isActive: false,
+    icon: MessageSquare,
+    frequency: 'Daily Check',
+  },
+  {
     id: 'dormant-lead-reactivation',
     name: 'Dormant Lead Reactivation',
     description: 'Flag leads with no activity for 30+ days for re-engagement',
@@ -86,28 +95,36 @@ const defaultRules: AutomationRule[] = [
     action: 'Flag & Notify',
     isActive: false,
     icon: Clock,
-    adminOnly: true,
     frequency: 'Weekly',
   },
   {
-    id: 'vip-escalation',
-    name: 'VIP Lead Escalation',
-    description: 'Immediately escalate VIP leads to senior brokers',
-    trigger: 'VIP Tag Added',
-    action: 'Escalate to Senior',
+    id: 'status-change-notification',
+    name: 'Status Change Notification',
+    description: 'Notify Owner when lead status changes to qualified/hot',
+    trigger: 'Status Change',
+    action: 'Send Notification',
     isActive: true,
-    icon: Shield,
-    adminOnly: true,
+    icon: Bell,
     frequency: 'Instant',
   },
   {
-    id: 'whatsapp-followup',
-    name: 'WhatsApp Follow-up',
-    description: 'Send WhatsApp message after initial contact attempt',
-    trigger: 'First Call Made',
-    action: 'Queue WhatsApp',
+    id: 'task-creation-on-viewing',
+    name: 'Auto-Create Follow-up Task',
+    description: 'Automatically create follow-up task after viewing completed',
+    trigger: 'Viewing Completed',
+    action: 'Create Task',
+    isActive: true,
+    icon: Users,
+    frequency: 'Instant',
+  },
+  {
+    id: 'email-price-followup',
+    name: 'Price Follow-up Email',
+    description: 'Send email with pricing details after initial inquiry',
+    trigger: 'Initial Contact Made',
+    action: 'Send Email',
     isActive: false,
-    icon: MessageSquare,
+    icon: Mail,
     frequency: 'After 2 hours',
   },
 ];
@@ -230,7 +247,7 @@ const Automations = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-black">Smart Automations</h1>
-                <p className="text-xs text-zinc-600">{activeCount} of {rules.length} active</p>
+                <p className="text-xs text-zinc-600">Owner: Jane bou Jaoude — {activeCount} of {rules.length} active</p>
               </div>
             </div>
           </div>
@@ -316,9 +333,10 @@ const Automations = () => {
               <div>
                 <h3 className="font-semibold text-black">About Smart Automations</h3>
                 <p className="text-sm text-zinc-600 mt-1">
-                  Automations run in the background to help your team work more efficiently. 
-                  Rules marked "Admin Only" can only be modified by administrators. 
-                  All automation activity is logged for compliance and auditing purposes.
+                  Automations run in the background to help Jane bou Jaoude work more efficiently. 
+                  All automation triggers are approval-based by default. 
+                  AI may suggest workflows but will NOT auto-activate without explicit Owner approval.
+                  All automation activity is logged for auditing purposes.
                 </p>
               </div>
             </div>
