@@ -85,10 +85,6 @@ const MortgageCalculator = ({
   };
 
   if (compact) {
-    const interestPercentOfLoan = calculations.loanAmount > 0 
-      ? ((calculations.totalInterest / calculations.loanAmount) * 100).toFixed(1) 
-      : '0';
-    
     return (
       <div className="max-w-4xl mx-auto">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
@@ -139,11 +135,11 @@ const MortgageCalculator = ({
             <div className="w-9 h-9 sm:w-10 sm:h-10 mx-auto mb-2 sm:mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
               <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
             </div>
-            <p className="text-zinc-400 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Total Interest</p>
-            <p className="text-gold font-bold text-lg sm:text-xl truncate" style={{ fontFamily: "Poppins, sans-serif" }}>
-              {interestPercentOfLoan}%
+            <p className="text-zinc-400 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Interest @ {interestRate}%</p>
+            <p className="text-gold font-bold text-lg sm:text-xl" style={{ fontFamily: "Poppins, sans-serif" }}>
+              {loanTermYears} Years
             </p>
-            <p className="text-white font-semibold text-sm sm:text-base truncate mt-1">
+            <p className="text-white font-semibold text-sm sm:text-base mt-1">
               {formatCurrency(calculations.totalInterest)}
             </p>
           </div>
@@ -309,28 +305,32 @@ const MortgageCalculator = ({
               <p className="text-muted-foreground text-[10px] lg:text-xs mt-1 lg:mt-2">per month for {loanTermYears} years</p>
             </div>
 
-            {/* Breakdown Cards - Responsive grid */}
-            <div className="grid grid-cols-2 gap-2 lg:gap-4">
-              <div className="bg-muted/50 border border-border rounded-xl p-2 lg:p-4 overflow-hidden">
-                <p className="text-muted-foreground text-[9px] lg:text-xs mb-0.5 lg:mb-1 truncate">Loan Amount</p>
-                <p className="text-foreground font-bold text-xs lg:text-base truncate">{formatCurrency(calculations.loanAmount)}</p>
+            {/* Breakdown Cards - 2x2 Grid with % and Value */}
+            <div className="grid grid-cols-2 gap-3 lg:gap-4">
+              <div className="bg-muted/50 border border-border rounded-xl p-3 lg:p-4">
+                <p className="text-muted-foreground text-[10px] lg:text-xs mb-1">Loan Amount</p>
+                <p className="text-gold font-bold text-sm lg:text-lg">{100 - downPaymentPercent}%</p>
+                <p className="text-foreground font-semibold text-xs lg:text-base">{formatCurrency(calculations.loanAmount)}</p>
               </div>
-              <div className="bg-muted/50 border border-border rounded-xl p-2 lg:p-4 overflow-hidden">
-                <p className="text-muted-foreground text-[9px] lg:text-xs mb-0.5 lg:mb-1 truncate">Down Payment</p>
-                <p className="text-foreground font-bold text-xs lg:text-base truncate">{formatCurrency(calculations.downPayment)}</p>
+              <div className="bg-muted/50 border border-border rounded-xl p-3 lg:p-4">
+                <p className="text-muted-foreground text-[10px] lg:text-xs mb-1">Down Payment</p>
+                <p className="text-gold font-bold text-sm lg:text-lg">{downPaymentPercent}%</p>
+                <p className="text-foreground font-semibold text-xs lg:text-base">{formatCurrency(calculations.downPayment)}</p>
               </div>
-              <div className="bg-muted/50 border border-border rounded-xl p-2 lg:p-4 overflow-hidden">
-                <p className="text-muted-foreground text-[9px] lg:text-xs mb-0.5 lg:mb-1 truncate">Total Interest ({((calculations.totalInterest / calculations.loanAmount) * 100).toFixed(0)}%)</p>
-                <p className="text-foreground font-bold text-xs lg:text-base truncate">{formatCurrency(calculations.totalInterest)}</p>
+              <div className="bg-muted/50 border border-border rounded-xl p-3 lg:p-4">
+                <p className="text-muted-foreground text-[10px] lg:text-xs mb-1">Interest @ {interestRate}%</p>
+                <p className="text-gold font-bold text-sm lg:text-lg">{loanTermYears} Years</p>
+                <p className="text-foreground font-semibold text-xs lg:text-base">{formatCurrency(calculations.totalInterest)}</p>
               </div>
-              <div className="bg-muted/50 border border-border rounded-xl p-2 lg:p-4 overflow-hidden">
-                <p className="text-muted-foreground text-[9px] lg:text-xs mb-0.5 lg:mb-1 truncate">Total Payment</p>
-                <p className="text-foreground font-bold text-xs lg:text-base truncate">{formatCurrency(calculations.totalPayment)}</p>
+              <div className="bg-muted/50 border border-border rounded-xl p-3 lg:p-4">
+                <p className="text-muted-foreground text-[10px] lg:text-xs mb-1">Total Payment</p>
+                <p className="text-gold font-bold text-sm lg:text-lg">100%</p>
+                <p className="text-foreground font-semibold text-xs lg:text-base">{formatCurrency(calculations.totalPayment)}</p>
               </div>
             </div>
 
-            {/* Payment Visualization - Premium Champagne Active Color */}
-            <div className="space-y-2">
+            {/* Payment Visualization */}
+            <div className="space-y-2 pt-2">
               <p className="text-muted-foreground text-sm">Payment Breakdown</p>
               <div className="h-4 rounded-full overflow-hidden bg-muted/30 flex border border-gold/20">
                 <div 
@@ -351,22 +351,22 @@ const MortgageCalculator = ({
                     className="w-2.5 h-2.5 rounded-full border border-gold/30" 
                     style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
                   />
-                  <span className="text-muted-foreground">Principal</span>
+                  <span className="text-muted-foreground">Principal ({((calculations.loanAmount / calculations.totalPayment) * 100).toFixed(0)}%)</span>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-gold/40 border border-gold/30" />
-                  <span className="text-muted-foreground">Interest</span>
+                  <span className="text-muted-foreground">Interest ({((calculations.totalInterest / calculations.totalPayment) * 100).toFixed(0)}%)</span>
                 </span>
               </div>
             </div>
 
-            <p className="text-muted-foreground text-xs text-center">
+            <p className="text-muted-foreground text-xs text-center pt-2">
               *Estimates are for illustrative purposes only. Actual rates may vary based on bank policies and eligibility.
             </p>
 
-            {/* CTA - Premium Gold Button */}
-            <div className="pt-4 mt-4 border-t border-gold/20">
-              <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="block">
+            {/* CTA - Premium Gold Button - Centered at bottom */}
+            <div className="pt-6 mt-4 border-t border-gold/20 flex justify-center">
+              <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="block w-full max-w-md">
                 <Button 
                   variant="primary" 
                   className="w-full h-14 text-base font-semibold group shadow-lg hover:shadow-[0_14px_45px_rgba(200,167,102,0.4)] hover:-translate-y-1 transition-all duration-300"

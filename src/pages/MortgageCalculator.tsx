@@ -51,14 +51,14 @@ const MortgageCalculatorPage = () => {
           </Link>
           
           <div className="max-w-3xl mb-12">
-            <span className="inline-block px-4 py-1.5 bg-black/10 border border-gold/40 rounded-full text-black/80 text-sm font-medium mb-6">
+            <span className="inline-block px-4 py-1.5 bg-gold/20 border border-gold/40 rounded-full text-gold text-sm font-medium mb-6">
               AI-Powered Financial Planning
             </span>
             <h1 
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              Dubai <span className="bg-gradient-to-r from-gold via-[#D4C4A8] to-gold bg-clip-text text-transparent">{t('mortgage.title')}</span>
+              {t('mortgage.title')}
             </h1>
             <p className="text-black/70 text-lg md:text-xl leading-relaxed">
               {t('mortgage.subtitle')}. Plan your property investment with our advanced mortgage calculator. Get accurate estimates for monthly payments, total interest, and find the perfect financing option for your UAE property purchase.
