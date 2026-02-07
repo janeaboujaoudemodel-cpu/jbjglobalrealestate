@@ -33,7 +33,8 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
 
   // Column 2: Toolkit (PUBLIC)
   const toolkitLinks = [
-    { label: 'Toolkit Hub', href: '/toolkit', icon: Sparkles },
+    { label: 'All Tools', href: '/toolkit', icon: Sparkles },
+    { label: 'Creative Suite', href: '/studio', icon: Sparkles },
     { label: 'ROI Calculator', href: '/calculator/roi', icon: Calculator },
     { label: 'Mortgage Calculator', href: '/mortgage-calculator', icon: Calculator },
     { label: 'Compare Properties', href: '/compare', icon: Layers },
@@ -73,7 +74,10 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
   const legalLinks = [
     { label: 'Terms of Service', href: '/terms', icon: FileText },
     { label: 'Privacy Policy', href: '/privacy', icon: Shield },
-    { label: 'Trust Center', href: '/trust-and-audit-center', icon: Shield },
+    { label: 'Cookie Policy', href: '/cookies', icon: FileText },
+    { label: 'Disclaimers', href: '/disclaimers', icon: FileText },
+    { label: 'Intellectual Property', href: '/intellectual-property', icon: Shield },
+    { label: 'Trust & Audit Center', href: '/trust-and-audit-center', icon: Shield },
   ];
 
   return (

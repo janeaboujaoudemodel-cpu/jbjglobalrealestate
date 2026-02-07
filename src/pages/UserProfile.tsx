@@ -247,14 +247,12 @@ const UserProfile = () => {
       const data = response.data;
       if (data?.error) throw new Error(data.error);
 
-      // Show OTP fallback if provided (domain not verified)
+      // Always show success message - never display OTP to users
+      toast.success("Verification code sent to your email. Please check your inbox and spam folder.");
+      
+      // Log for debugging only (not visible to users)
       if (data?.dev_otp) {
-        toast.info(`Verification code: ${data.dev_otp}`, {
-          description: "Email delivery may be delayed. Use this code to proceed.",
-          duration: 30000
-        });
-      } else {
-        toast.success("Verification code sent to your new email");
+        console.log('[DEV] OTP for debugging:', data.dev_otp);
       }
       
       setEmailChangeStep('verify');

@@ -117,6 +117,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     { href: '/my-dashboard', label: 'My Dashboard', icon: LayoutDashboard, description: 'Your personalized dashboard' },
     { href: '/profile', label: 'My Profile', icon: User, description: 'View and edit your profile' },
     { href: '/favorites', label: 'Favorites', icon: Heart, description: 'Your saved properties' },
+    { href: '/toolkit', label: 'AI Tools', icon: Sparkles, description: 'Professional AI-powered tools' },
   ];
 
   // Filter admin links based on actual access
