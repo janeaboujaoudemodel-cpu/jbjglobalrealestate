@@ -278,6 +278,48 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_job_master: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          id: string
+          input_payload: Json
+          intelligence_features: Json | null
+          output_payload: Json | null
+          processing_time_ms: number | null
+          status: string | null
+          tool_name: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          input_payload?: Json
+          intelligence_features?: Json | null
+          output_payload?: Json | null
+          processing_time_ms?: number | null
+          status?: string | null
+          tool_name: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          input_payload?: Json
+          intelligence_features?: Json | null
+          output_payload?: Json | null
+          processing_time_ms?: number | null
+          status?: string | null
+          tool_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_notes: {
         Row: {
           ai_action_items: Json | null

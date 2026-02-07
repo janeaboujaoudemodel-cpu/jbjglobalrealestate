@@ -7,6 +7,8 @@
  * - Never reused across users
  * - Owner has read-only visibility for audit/support
  * 
+ * ACCESS: Public (unauthenticated allowed, but history only saved for authenticated users)
+ * 
  * Intelligence Features:
  * - Livability Score (composite 0-100)
  * - Category Breakdown (Transport, Schools, Healthcare, Safety, Lifestyle)
@@ -45,7 +47,16 @@ serve(async (req) => {
   const startTime = Date.now();
   const clientIp = getClientIp(req);
   const authHeader = req.headers.get("Authorization");
-  const { service: supabaseAdmin } = createSupabaseClients(authHeader);
+  const { service: supabaseAdmin, user: supabaseUser } = createSupabaseClients(authHeader);
+
+  // Get user if authenticated (optional for public tools)
+  let userId: string | null = null;
+  try {
+    const { data: { user } } = await supabaseUser.auth.getUser();
+    userId = user?.id || null;
+  } catch {
+    // Anonymous user - allowed for public tools
+  }
 
   try {
     // 1. IP Blocklist Check
@@ -54,8 +65,9 @@ serve(async (req) => {
       return errorResponse(corsHeaders, blockResult.reason || "Access denied", 403);
     }
 
-    // 2. Rate Limiting
-    const rateResult = await checkRateLimit(supabaseAdmin, clientIp, clientIp, {
+    // 2. Rate Limiting (use IP for anonymous, user ID for authenticated)
+    const rateKey = userId || clientIp;
+    const rateResult = await checkRateLimit(supabaseAdmin, rateKey, clientIp, {
       functionName: "ai-neighborhood-insights",
       windowMinutes: 5,
       maxRequests: 20,
@@ -144,14 +156,17 @@ Include all category scores, demographic analysis, hidden gems, and future devel
       temperature: 0.5,
     });
 
+    const processingTimeMs = Date.now() - startTime;
+
     if (!aiResponse.success) {
       await trackAIUsage(supabaseAdmin, {
         functionName: "ai-neighborhood-insights",
+        userId,
         clientIp,
         model: "google/gemini-2.5-flash",
         success: false,
         errorType: aiResponse.error,
-        responseTimeMs: Date.now() - startTime,
+        responseTimeMs: processingTimeMs,
       });
       return errorResponse(corsHeaders, aiResponse.error || "AI processing failed", aiResponse.status || 500);
     }
@@ -188,16 +203,49 @@ Include all category scores, demographic analysis, hidden gems, and future devel
       };
     }
 
-    // 7. Track usage
+    // 7. Persist to ai_job_master ONLY IF USER IS AUTHENTICATED
+    if (userId) {
+      const inputPayload = {
+        location,
+        interests,
+      };
+
+      const outputPayload = {
+        livabilityScore: insightsData.livabilityScore,
+        investmentRating: insightsData.investmentPotential?.rating,
+        demographicFit: insightsData.demographicFit?.bestFor,
+      };
+
+      await supabaseAdmin.from('ai_job_master').insert({
+        user_id: userId,
+        tool_name: 'ai-neighborhood-insights',
+        status: 'completed',
+        input_payload: inputPayload,
+        output_payload: outputPayload,
+        intelligence_features: {
+          livabilityScore: true,
+          categoryBreakdown: true,
+          demographicFit: true,
+          hiddenGems: true,
+          futureDevelopment: true,
+          investmentPotential: true,
+        },
+        processing_time_ms: processingTimeMs,
+        completed_at: new Date().toISOString(),
+      });
+    }
+
+    // 8. Track usage
     await trackAIUsage(supabaseAdmin, {
       functionName: "ai-neighborhood-insights",
+      userId,
       clientIp,
       model: "google/gemini-2.5-flash",
       success: true,
-      responseTimeMs: Date.now() - startTime,
+      responseTimeMs: processingTimeMs,
     });
 
-    console.log(`Neighborhood insights complete: score=${insightsData.score}/10 (${Date.now() - startTime}ms)`);
+    console.log(`Neighborhood insights complete: score=${insightsData.score}/10 (${processingTimeMs}ms)`);
 
     return new Response(
       JSON.stringify({
@@ -221,6 +269,7 @@ Include all category scores, demographic analysis, hidden gems, and future devel
     console.error("AI Neighborhood Insights error:", error);
     await trackAIUsage(supabaseAdmin, {
       functionName: "ai-neighborhood-insights",
+      userId,
       clientIp,
       model: "google/gemini-2.5-flash",
       success: false,
