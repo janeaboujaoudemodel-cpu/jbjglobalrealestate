@@ -459,7 +459,7 @@ const OwnerAuditPage = () => {
             {/* AI Tools Tab */}
             <TabsContent value="ai-tools">
               {/* AI Stats Cards */}
-              <div className="grid grid-cols-2 md:grid-cols-7 gap-4 mb-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <Card className="bg-zinc-900/50 border-gold/20">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-white">{aiStats.total}</div>
@@ -469,37 +469,45 @@ const OwnerAuditPage = () => {
                 <Card className="bg-zinc-900/50 border-gold/20">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-green-400">{aiStats.working}</div>
-                    <div className="text-xs text-zinc-400">Working</div>
+                    <div className="text-xs text-zinc-400">✅ Working</div>
                   </CardContent>
                 </Card>
                 <Card className="bg-zinc-900/50 border-gold/20">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-yellow-400">{aiStats.partial}</div>
-                    <div className="text-xs text-zinc-400">Partial</div>
+                    <div className="text-xs text-zinc-400">⚠️ Partial</div>
                   </CardContent>
                 </Card>
                 <Card className="bg-zinc-900/50 border-gold/20">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-red-400">{aiStats.missing}</div>
-                    <div className="text-xs text-zinc-400">404 Missing</div>
+                    <div className="text-xs text-zinc-400">❌ 404 Missing</div>
+                  </CardContent>
+                </Card>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <Card className="bg-zinc-900/50 border-pink-500/20">
+                  <CardContent className="p-4 text-center">
+                    <div className="text-2xl font-bold text-pink-400">{aiStats.apiMissing}</div>
+                    <div className="text-xs text-zinc-400">🔌 API Missing</div>
                   </CardContent>
                 </Card>
                 <Card className="bg-zinc-900/50 border-gold/20">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-orange-400">{aiStats.componentOnly}</div>
-                    <div className="text-xs text-zinc-400">Component Only</div>
+                    <div className="text-xs text-zinc-400">📦 Component Only</div>
                   </CardContent>
                 </Card>
                 <Card className="bg-zinc-900/50 border-gold/20">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-blue-400">{aiStats.comingSoon}</div>
-                    <div className="text-xs text-zinc-400">Coming Soon</div>
+                    <div className="text-xs text-zinc-400">🕒 Coming Soon</div>
                   </CardContent>
                 </Card>
                 <Card className="bg-zinc-900/50 border-gold/20">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-purple-400">{aiStats.withEdgeFunction}</div>
-                    <div className="text-xs text-zinc-400">Edge Functions</div>
+                    <div className="text-xs text-zinc-400">⚡ Edge Functions</div>
                   </CardContent>
                 </Card>
               </div>
