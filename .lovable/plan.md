@@ -1,109 +1,125 @@
 
-# Full Form & Email System Audit Report
+# Footer Reorganization: Swap Services & Investor Hub + Align Grid
 
-## Executive Summary
-The support ticket system is **WORKING** at the edge function level (successfully creates tickets and sends emails), but there are **multiple issues** across the codebase that need to be fixed.
+## Overview
+Reorganize the footer's main link section from 4 unbalanced columns into a properly aligned 4x2 grid layout where:
+- All section titles and dividers are horizontally aligned across each row
+- Services moves up to replace Investor Hub's position
+- Investor Hub moves down to where Services was
 
 ---
 
-## Critical Issues Found
+## Current Structure (Unbalanced)
 
-### Issue 1: CustomerHappiness.tsx - Fake Form Submission (CRITICAL)
-**File:** `src/pages/CustomerHappiness.tsx` (lines 62-84)
-**Problem:** The `SupportTicketForm` component does NOT actually call the edge function. It only simulates submission with a fake delay:
-```typescript
-// Current broken code (line 67):
-await new Promise(resolve => setTimeout(resolve, 1500));
+```text
+Column 1           | Column 2       | Column 3              | Column 4
+-------------------|----------------|----------------------|------------------
+Properties         | Investor Hub   | Guides               | About
+Sell               | (empty space)  | Market Intelligence  | Careers
+Services           |                |                      | Legal
 ```
-**Impact:** Users believe their ticket is submitted but nothing is saved to the database.
-**Fix:** Replace the simulation with an actual call to `supabase.functions.invoke('submit-support-ticket', {...})`.
 
 ---
 
-### Issue 2: send-inquiry-email Schema Mismatch (HIGH)
-**File:** `supabase/functions/send-inquiry-email/index.ts`
-**Problem:** The edge function requires `nationality` and `language` as mandatory fields, but MANY forms don't pass these:
+## New Structure (Aligned 4x2 Grid)
 
-| Form Component | Missing Fields |
-|----------------|----------------|
-| `MeetingBookingModal.tsx` | `language` (line 135-151) |
-| `ConsultationRequestForm.tsx` | `nationality`, `language` (line 110-124) |
-| `AIChatWidget.tsx` | Uses `name` instead of `fullName`, missing proper schema (line 435-444) |
-| `AIPersonalShopper.tsx` | Uses `name` instead of `fullName`, missing `nationality`, `language` (line 187-195) |
+```text
+ROW 1 (Aligned titles + content):
+Properties         | Services       | Guides               | About
 
-**Impact:** All these forms silently fail to send admin notification emails (returns 400 error).
-**Fix:** Either:
-- Option A: Update edge function to make `nationality` and `language` optional
-- Option B: Update all calling forms to include required fields
+ROW 2 (Aligned titles + content):
+Sell               | Investor Hub   | Market Intelligence  | Careers + Legal
+```
 
 ---
 
-### Issue 3: Field Name Inconsistency
-**Problem:** Some components use `name` while the schema requires `fullName`:
-- `AIChatWidget.tsx` line 437: `name: ${userInfo.firstName} ${userInfo.lastName}`
-- `AIPersonalShopper.tsx` line 189: `name: inquiryForm.name`
+## Technical Changes
+
+### File: `src/components/Footer.tsx`
+
+#### Step 1: Restructure Column Layout
+Change from 4 stacked columns to a true grid with two distinct rows:
+
+**Row 1:** 4 equal columns
+- Properties (Column 1)
+- Services (Column 2) - moved from Column 1 bottom
+- Guides (Column 3)
+- About (Column 4)
+
+**Row 2:** 4 equal columns
+- Sell (Column 1)
+- Investor Hub (Column 2) - moved from Column 2 top
+- Market Intelligence (Column 3)
+- Careers + Legal (Column 4)
+
+#### Step 2: Apply Consistent Styling
+Each section in a row gets:
+- Same `min-height` for content area alignment
+- Identical title styling: `font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold`
+- Same padding and spacing
+
+#### Step 3: Add Row Divider
+Insert a gold gradient divider between Row 1 and Row 2 to visually separate the two aligned rows.
 
 ---
 
-## Forms That ARE Working Correctly
+## Layout Diagram
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| `SupportTicketBox.tsx` | ✅ Working | Properly calls `submit-support-ticket` edge function |
-| `InquiryFormModal.tsx` | ✅ Working | Passes all required fields including `nationality`, `language` |
-| `Contact.tsx` | ✅ Working | Passes all required fields |
-| `NewsletterSection.tsx` | ✅ Working | Calls `newsletter-subscribe` correctly |
-| `NewsletterBrevo.tsx` | ✅ Working | Calls `newsletter-subscribe` correctly |
-
----
-
-## Edge Functions Status
-
-| Function | Status | Test Result |
-|----------|--------|-------------|
-| `submit-support-ticket` | ✅ Working | Created ticket `JBJ-20260207-2547` successfully |
-| `newsletter-subscribe` | ✅ Working | Synced to Brevo successfully |
-| `send-inquiry-email` | ⚠️ Partial | Works when all fields provided, 400 error when missing |
-| `capture-lead` | ✅ Working | Used by multiple forms successfully |
-
----
-
-## Implementation Plan
-
-### Step 1: Fix CustomerHappiness.tsx SupportTicketForm
-Replace the simulated submission with actual edge function call, matching the pattern in `SupportTicketBox.tsx`.
-
-### Step 2: Update send-inquiry-email Edge Function
-Make `nationality` and `language` fields optional with sensible defaults:
-- `nationality: "Not specified"` 
-- `language: "English"` (or detect from browser)
-
-### Step 3: Fix Field Names in Forms
-Update `AIChatWidget.tsx` and `AIPersonalShopper.tsx` to use `fullName` instead of `name`.
-
-### Step 4: Add Missing Fields to Forms (if not making them optional)
-Add `nationality` and `language` fields to:
-- `MeetingBookingModal.tsx`
-- `ConsultationRequestForm.tsx`
-- `AIChatWidget.tsx`
-- `AIPersonalShopper.tsx`
+```text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                            CHAMPAGNE CARD                                     │
+├─────────────────┬─────────────────┬─────────────────┬─────────────────────────┤
+│   PROPERTIES    │    SERVICES     │     GUIDES      │        ABOUT            │
+│   ───────────   │   ───────────   │   ───────────   │      ───────────        │
+│   • Buy Props   │   • All Svcs    │   • Buyer Guide │      • About JBJ        │
+│   • Rent Props  │   • Buyer Adv   │   • Seller Guide│      • Founder          │
+│   • Developers  │   • Seller Adv  │   • Landlord    │      • Team             │
+│   • List Prop   │   • Leasing     │   • Tenant      │      • Awards           │
+│                 │   • Investment  │   • Area Guides │      • News             │
+│                 │   • Snagging    │   • Golden Visa │                         │
+│                 │   • Prop Mgmt   │   • FAQs        │                         │
+├─────────────────┴─────────────────┴─────────────────┴─────────────────────────┤
+│                          ═══ GOLD DIVIDER ═══                                 │
+├─────────────────┬─────────────────┬─────────────────┬─────────────────────────┤
+│      SELL       │  INVESTOR HUB   │  MARKET INTEL   │    CAREERS + LEGAL      │
+│   ───────────   │   ───────────   │   ───────────   │      ───────────        │
+│   • Sell Prop   │   • Education   │   • Overview    │      • Apply            │
+│   • Seller Guide│   • FAQs        │   • Area Intel  │      • HR Agent         │
+│   • Valuation   │   • Tools       │   • Reports     │      • Training         │
+│   • Advisory    │   • Dashboard   │   • Methodology │      ───────────        │
+│                 │                 │                 │      LEGAL              │
+│                 │                 │                 │      • Terms            │
+│                 │                 │                 │      • Privacy          │
+└─────────────────┴─────────────────┴─────────────────┴─────────────────────────┘
+```
 
 ---
 
-## Files to Modify
+## Code Changes Summary
 
-1. **`src/pages/CustomerHappiness.tsx`** - Fix the fake SupportTicketForm
-2. **`supabase/functions/send-inquiry-email/index.ts`** - Make nationality/language optional
-3. **`src/components/MeetingBookingModal.tsx`** - Add missing language field (or rely on optional)
-4. **`src/components/ConsultationRequestForm.tsx`** - Add missing fields (or rely on optional)
-5. **`src/components/AIChatWidget.tsx`** - Fix field name from `name` to `fullName`
-6. **`src/pages/AIPersonalShopper.tsx`** - Fix field name from `name` to `fullName`
+### Lines ~545-720: Replace the 4-column layout
+
+**Current structure (lines 545-720):**
+- Single grid with 4 columns, each column stacks multiple sections vertically
+
+**New structure:**
+- Two separate rows, each with a 4-column grid
+- Row 1: Properties | Services | Guides | About
+- Row 2: Sell | Investor Hub | Market Intelligence | Careers + Legal
+- Gold divider between rows
+- Consistent `min-height` per row for alignment
+
+### Styling Consistency
+All 8 sections will use:
+- Title: `font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold`
+- Content spacing: `space-y-1 sm:space-y-1.5 md:space-y-2.5`
+- Link styling: `text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1`
+- Padding: `p-2 sm:p-3 md:p-5`
 
 ---
 
-## Recommended Approach
-**Make fields optional in the edge function** (Step 2) is the safest approach because:
-- It immediately unblocks ALL forms without changing frontend code
-- It's backwards compatible
-- Admin notifications start working for all existing forms
-- Less risk of introducing new bugs
+## Benefits of This Approach
+1. **Visual alignment** - All titles in each row are at the same height
+2. **Clean separation** - Row 1 contains "main" categories, Row 2 contains "secondary" categories
+3. **Swapped positions** - Services is now prominent (Row 1), Investor Hub is in Row 2
+4. **Consistent styling** - Same min-heights ensure dividers and titles align across columns
