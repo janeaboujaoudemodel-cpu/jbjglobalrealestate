@@ -557,7 +557,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
         setStep('shortcuts');
         break;
       case 'conversational_collect':
-        setStep('check_email');
+        setStep('welcome_choice');
         break;
       case 'collect_info':
         setStep('conversational_collect');
@@ -599,7 +599,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
         />
 
         {step === 'welcome_choice' && (
-          <ChatWelcome onStartChat={() => setStep('check_email')} />
+          <ChatWelcome onStartChat={() => setStep('conversational_collect')} />
         )}
 
         {step === 'check_email' && (
