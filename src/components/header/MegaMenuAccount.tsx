@@ -182,7 +182,13 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 </Badge>
               </div>
               <div className="flex flex-col items-end gap-2 shrink-0">
-                <ModeSwitcher variant="header" />
+                <div 
+                  onClick={(e) => e.stopPropagation()} 
+                  onPointerDown={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.stopPropagation()}
+                >
+                  <ModeSwitcher variant="header" />
+                </div>
                 <Link 
                   to="/profile" 
                   onClick={onClose} 

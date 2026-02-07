@@ -426,7 +426,7 @@ const CRM = () => {
 
       {/* Main Content Area */}
       <div className="flex">
-        <main className="flex-1 max-w-[1600px] w-full mx-auto px-6 py-8 space-y-6">
+        <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 md:px-6 py-8 space-y-6 overflow-hidden">
           {/* Deal Value Tracker */}
           <DealValueTracker userId={user?.id || ""} />
 
@@ -559,13 +559,13 @@ const CRM = () => {
               <div className="flex items-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode("table")}
-                  className={`p-2 rounded transition-all ${viewMode === "table" ? "bg-gold text-black" : "text-black hover:bg-gold/10"}`}
+                  className={`p-2 rounded transition-all ${viewMode === "table" ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 text-black" : "text-black hover:bg-gold/10"}`}
                 >
                   <List className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => setViewMode("kanban")}
-                  className={`p-2 rounded transition-all ${viewMode === "kanban" ? "bg-gold text-black" : "text-black hover:bg-gold/10"}`}
+                  className={`p-2 rounded transition-all ${viewMode === "kanban" ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 text-black" : "text-black hover:bg-gold/10"}`}
                 >
                   <LayoutGrid className="h-4 w-4" />
                 </button>
@@ -574,17 +574,17 @@ const CRM = () => {
 
             {/* Leads Section with Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="bg-white/80 border-2 border-gold/30 p-1 mb-4">
+              <TabsList className="bg-white/80 border-2 border-gold/30 p-1 mb-4 flex-wrap">
                 <TabsTrigger 
                   value="all" 
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                  className="tab-trigger-champagne text-black"
                 >
                   <Users className="h-4 w-4 mr-2" />
                   All Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="flagged"
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                  className="tab-trigger-champagne text-black"
                 >
                   <Flag className="h-4 w-4 mr-2" />
                   Flagged
@@ -594,14 +594,14 @@ const CRM = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="vip"
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                  className="tab-trigger-champagne text-black"
                 >
                   <Crown className="h-4 w-4 mr-2" />
                   VIP Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="employees"
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                  className="tab-trigger-champagne text-black"
                 >
                   <Briefcase className="h-4 w-4 mr-2" />
                   Employees Hub

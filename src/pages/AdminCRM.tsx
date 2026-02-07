@@ -309,7 +309,7 @@ const AdminCRM = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-6 space-y-6 pb-24">
+      <main className="max-w-[1600px] w-full mx-auto px-4 md:px-6 py-6 space-y-6 pb-24 overflow-hidden">
         {/* Global Stats */}
         <CRMDashboardCards userId={user?.id || ""} hasOwnerAccess={true} />
 
@@ -323,15 +323,15 @@ const AdminCRM = () => {
 
         <Tabs defaultValue="brokers">
           <TabsList className="bg-white/80 border-2 border-gold/30 p-1">
-            <TabsTrigger value="brokers" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+            <TabsTrigger value="brokers" className="tab-trigger-champagne text-black">
               <Users className="h-4 w-4 mr-2" />
               Brokers
             </TabsTrigger>
-            <TabsTrigger value="leads" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+            <TabsTrigger value="leads" className="tab-trigger-champagne text-black">
               <TrendingUp className="h-4 w-4 mr-2" />
               All Leads
             </TabsTrigger>
-            <TabsTrigger value="audit" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+            <TabsTrigger value="audit" className="tab-trigger-champagne text-black">
               <Activity className="h-4 w-4 mr-2" />
               Audit Logs
             </TabsTrigger>

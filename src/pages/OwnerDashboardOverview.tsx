@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { 
   Users, 
@@ -25,12 +26,21 @@ import {
   FileText,
   Settings,
   BookOpen,
+  Flag,
+  Crown,
+  Briefcase,
+  LayoutDashboard,
+  Shield,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import LeadStatusBadge from "@/components/crm/LeadStatusBadge";
 import QuickActionsGrid from "@/components/owner-dashboard/QuickActionsGrid";
 import DepartmentShortcuts from "@/components/owner-dashboard/DepartmentShortcuts";
 import IntegrationWidgets from "@/components/owner-dashboard/IntegrationWidgets";
+import CRMLeadsTableV2 from "@/components/crm/CRMLeadsTableV2";
+import FlaggedLeadsView from "@/components/crm/FlaggedLeadsView";
+import EmployeesHub from "@/components/crm/EmployeesHub";
+import CRMDashboardCards from "@/components/crm/CRMDashboardCards";
 
 interface KPICardProps {
   title: string;
@@ -253,6 +263,13 @@ export default function OwnerDashboardOverview() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
+  const [activeTab, setActiveTab] = useState("overview");
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleRefresh = () => {
+    setRefreshKey(prev => prev + 1);
+  };
+
   // Fetch total leads count
   const { data: totalLeads, isLoading: loadingLeads } = useQuery({
     queryKey: ['owner-kpi-total-leads'],
@@ -416,7 +433,7 @@ export default function OwnerDashboardOverview() {
           Owner Command Center
         </h1>
         <p className="text-zinc-400 mt-1">
-          Welcome back, Jane bou Jaoude — Your integrated dashboard
+          Welcome back, Jane bou Jaoude — Your integrated CRM dashboard
         </p>
       </div>
 
@@ -427,14 +444,14 @@ export default function OwnerDashboardOverview() {
           value={totalLeads ?? '—'}
           icon={<Users className="h-6 w-6 text-gold" />}
           loading={loadingLeads}
-          onClick={() => navigate('/crm/leads')}
+          onClick={() => setActiveTab('leads')}
         />
         <KPICard
           title="New This Week"
           value={newLeadsThisWeek ?? '—'}
           icon={<UserPlus className="h-6 w-6 text-emerald-400" />}
           loading={loadingNewLeads}
-          onClick={() => navigate('/crm/leads?filter=new')}
+          onClick={() => setActiveTab('leads')}
         />
         <KPICard
           title="Pending Tasks"
@@ -455,133 +472,287 @@ export default function OwnerDashboardOverview() {
       {/* Quick Actions Grid */}
       <QuickActionsGrid />
 
-      {/* Main Content Grid */}
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Newest Leads */}
-        <Card className="bg-zinc-900/80 border-zinc-800 lg:col-span-2">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle className="text-lg text-white">Newest Leads</CardTitle>
-              <CardDescription className="text-zinc-400">Most recent 10 contacts</CardDescription>
-            </div>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate('/crm/leads')}
-              className="text-gold hover:text-gold hover:bg-gold/10"
-            >
-              View All <ChevronRight className="h-4 w-4 ml-1" />
-            </Button>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {loadingNewestLeads ? (
-              Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className="h-16 bg-zinc-800" />
-              ))
-            ) : newestLeads && newestLeads.length > 0 ? (
-              newestLeads.map((lead) => (
-                <LeadRow 
-                  key={lead.id} 
-                  lead={lead} 
-                  onOpen={(id) => navigate(`/crm/leads/${id}`)} 
-                />
-              ))
-            ) : (
-              <div className="text-center py-8">
-                <Users className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
-                <p className="text-zinc-500">No leads yet</p>
+      {/* Main Tabbed Content */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="bg-zinc-800/80 border border-zinc-700 p-1 mb-6 flex-wrap">
+          <TabsTrigger 
+            value="overview" 
+            className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"
+          >
+            <LayoutDashboard className="h-4 w-4 mr-2" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger 
+            value="leads"
+            className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"
+          >
+            <Users className="h-4 w-4 mr-2" />
+            All Leads
+          </TabsTrigger>
+          <TabsTrigger 
+            value="flagged"
+            className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"
+          >
+            <Flag className="h-4 w-4 mr-2" />
+            Flagged
+          </TabsTrigger>
+          <TabsTrigger 
+            value="vip"
+            className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"
+          >
+            <Crown className="h-4 w-4 mr-2" />
+            VIP Leads
+          </TabsTrigger>
+          <TabsTrigger 
+            value="employees"
+            className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"
+          >
+            <Briefcase className="h-4 w-4 mr-2" />
+            Employees Hub
+          </TabsTrigger>
+          <TabsTrigger 
+            value="audit"
+            className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"
+          >
+            <Shield className="h-4 w-4 mr-2" />
+            Audit Logs
+          </TabsTrigger>
+        </TabsList>
+
+        {/* Overview Tab - Original Content */}
+        <TabsContent value="overview" className="space-y-6">
+          {/* CRM Dashboard Cards */}
+          <CRMDashboardCards userId={user?.id || ""} hasOwnerAccess={true} />
+
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-3 gap-6">
+            {/* Newest Leads */}
+            <Card className="bg-zinc-900/80 border-zinc-800 lg:col-span-2">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-lg text-white">Newest Leads</CardTitle>
+                  <CardDescription className="text-zinc-400">Most recent 10 contacts</CardDescription>
+                </div>
                 <Button 
-                  variant="secondary" 
+                  variant="ghost" 
                   size="sm" 
-                  className="mt-4"
-                  onClick={() => navigate('/crm?action=new-lead')}
+                  onClick={() => setActiveTab('leads')}
+                  className="text-gold hover:text-gold hover:bg-gold/10"
                 >
-                  Add First Lead
+                  View All <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {loadingNewestLeads ? (
+                  Array.from({ length: 5 }).map((_, i) => (
+                    <Skeleton key={i} className="h-16 bg-zinc-800" />
+                  ))
+                ) : newestLeads && newestLeads.length > 0 ? (
+                  newestLeads.map((lead) => (
+                    <LeadRow 
+                      key={lead.id} 
+                      lead={lead} 
+                      onOpen={(id) => navigate(`/crm/leads/${id}`)} 
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <Users className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
+                    <p className="text-zinc-500">No leads yet</p>
+                    <Button 
+                      variant="secondary" 
+                      size="sm" 
+                      className="mt-4"
+                      onClick={() => setActiveTab('leads')}
+                    >
+                      Add First Lead
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Needs Follow-up */}
+            <Card className="bg-zinc-900/80 border-zinc-800">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-lg text-white flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-amber-400" />
+                    Needs Follow-up
+                  </CardTitle>
+                  <CardDescription className="text-zinc-400">Pending items</CardDescription>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => navigate('/crm/tasks')}
+                  className="text-gold hover:text-gold hover:bg-gold/10"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {loadingFollowUp ? (
+                  Array.from({ length: 4 }).map((_, i) => (
+                    <Skeleton key={i} className="h-14 bg-zinc-800" />
+                  ))
+                ) : followUpItems && followUpItems.length > 0 ? (
+                  followUpItems.map((item: any) => (
+                    <FollowUpItem 
+                      key={item.id} 
+                      item={item}
+                      onComplete={item.type === 'task' ? handleCompleteTask : undefined}
+                      onOpen={item.type === 'lead' ? (id) => navigate(`/crm/leads/${id}`) : undefined}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-6">
+                    <CheckSquare className="h-10 w-10 text-zinc-600 mx-auto mb-2" />
+                    <p className="text-sm text-zinc-500">All caught up!</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Recent Conversations */}
+          <Card className="bg-zinc-900/80 border-zinc-800">
+            <CardHeader>
+              <CardTitle className="text-lg text-white flex items-center gap-2">
+                <Activity className="h-5 w-5 text-purple-400" />
+                Recent Conversations
+              </CardTitle>
+              <CardDescription className="text-zinc-400">Website chat sessions (last 10)</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loadingRecentConvos ? (
+                <div className="grid md:grid-cols-2 gap-2">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <Skeleton key={i} className="h-16 bg-zinc-800" />
+                  ))}
+                </div>
+              ) : recentConversations && recentConversations.length > 0 ? (
+                <div className="grid md:grid-cols-2 gap-2">
+                  {recentConversations.map((convo) => (
+                    <ConversationRow key={convo.id} conversation={convo} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <MessageSquare className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
+                  <p className="text-zinc-500">No conversations yet</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Integration Widgets */}
+          <IntegrationWidgets />
+
+          {/* Department Shortcuts */}
+          <DepartmentShortcuts />
+        </TabsContent>
+
+        {/* All Leads Tab */}
+        <TabsContent value="leads" className="space-y-4">
+          <Card className="bg-zinc-900/80 border-zinc-800">
+            <CardHeader>
+              <CardTitle className="text-lg text-white">All Leads</CardTitle>
+              <CardDescription className="text-zinc-400">Complete lead management</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <CRMLeadsTableV2 
+                key={`leads-${refreshKey}`}
+                userId={user?.id || ""} 
+                filterType="all"
+                onRefresh={handleRefresh}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Flagged Leads Tab */}
+        <TabsContent value="flagged" className="space-y-4">
+          <Card className="bg-zinc-900/80 border-zinc-800">
+            <CardHeader>
+              <CardTitle className="text-lg text-white flex items-center gap-2">
+                <Flag className="h-5 w-5 text-red-400" />
+                Flagged Leads
+              </CardTitle>
+              <CardDescription className="text-zinc-400">Leads requiring attention</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FlaggedLeadsView 
+                key={`flagged-${refreshKey}`}
+                userId={user?.id || ""} 
+                onRefresh={handleRefresh}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* VIP Leads Tab */}
+        <TabsContent value="vip" className="space-y-4">
+          <Card className="bg-zinc-900/80 border-zinc-800">
+            <CardHeader>
+              <CardTitle className="text-lg text-white flex items-center gap-2">
+                <Crown className="h-5 w-5 text-gold" />
+                VIP Leads
+              </CardTitle>
+              <CardDescription className="text-zinc-400">High-value contacts</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <CRMLeadsTableV2 
+                key={`vip-${refreshKey}`}
+                userId={user?.id || ""} 
+                filterType="vip"
+                onRefresh={handleRefresh}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Employees Hub Tab */}
+        <TabsContent value="employees" className="space-y-4">
+          <Card className="bg-zinc-900/80 border-zinc-800">
+            <CardHeader>
+              <CardTitle className="text-lg text-white flex items-center gap-2">
+                <Briefcase className="h-5 w-5 text-blue-400" />
+                Employees Hub
+              </CardTitle>
+              <CardDescription className="text-zinc-400">Team management</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <EmployeesHub userId={user?.id || ""} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Audit Logs Tab */}
+        <TabsContent value="audit" className="space-y-4">
+          <Card className="bg-zinc-900/80 border-zinc-800">
+            <CardHeader>
+              <CardTitle className="text-lg text-white flex items-center gap-2">
+                <Shield className="h-5 w-5 text-purple-400" />
+                Audit Logs
+              </CardTitle>
+              <CardDescription className="text-zinc-400">System activity tracking</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-12">
+                <Shield className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
+                <p className="text-zinc-400 mb-4">View audit logs for all CRM activity</p>
+                <Button 
+                  variant="secondary"
+                  onClick={() => navigate('/admin/crm')}
+                >
+                  Open Admin CRM
                 </Button>
               </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Needs Follow-up */}
-        <Card className="bg-zinc-900/80 border-zinc-800">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle className="text-lg text-white flex items-center gap-2">
-                <Clock className="h-5 w-5 text-amber-400" />
-                Needs Follow-up
-              </CardTitle>
-              <CardDescription className="text-zinc-400">Pending items</CardDescription>
-            </div>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate('/crm/tasks')}
-              className="text-gold hover:text-gold hover:bg-gold/10"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {loadingFollowUp ? (
-              Array.from({ length: 4 }).map((_, i) => (
-                <Skeleton key={i} className="h-14 bg-zinc-800" />
-              ))
-            ) : followUpItems && followUpItems.length > 0 ? (
-              followUpItems.map((item: any) => (
-                <FollowUpItem 
-                  key={item.id} 
-                  item={item}
-                  onComplete={item.type === 'task' ? handleCompleteTask : undefined}
-                  onOpen={item.type === 'lead' ? (id) => navigate(`/crm/leads/${id}`) : undefined}
-                />
-              ))
-            ) : (
-              <div className="text-center py-6">
-                <CheckSquare className="h-10 w-10 text-zinc-600 mx-auto mb-2" />
-                <p className="text-sm text-zinc-500">All caught up!</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Recent Conversations */}
-      <Card className="bg-zinc-900/80 border-zinc-800">
-        <CardHeader>
-          <CardTitle className="text-lg text-white flex items-center gap-2">
-            <Activity className="h-5 w-5 text-purple-400" />
-            Recent Conversations
-          </CardTitle>
-          <CardDescription className="text-zinc-400">Website chat sessions (last 10)</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {loadingRecentConvos ? (
-            <div className="grid md:grid-cols-2 gap-2">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <Skeleton key={i} className="h-16 bg-zinc-800" />
-              ))}
-            </div>
-          ) : recentConversations && recentConversations.length > 0 ? (
-            <div className="grid md:grid-cols-2 gap-2">
-              {recentConversations.map((convo) => (
-                <ConversationRow key={convo.id} conversation={convo} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <MessageSquare className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
-              <p className="text-zinc-500">No conversations yet</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Integration Widgets */}
-      <IntegrationWidgets />
-
-      {/* Department Shortcuts */}
-      <DepartmentShortcuts />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
