@@ -135,6 +135,8 @@ import CRMLeadsInbox from "./pages/CRMLeadsInbox";
 import OwnerInbox from "./pages/OwnerInbox";
 import OwnerTemplates from "./pages/OwnerTemplates";
 import OwnerCommSettings from "./pages/OwnerCommSettings";
+import OwnerAgenda from "./pages/OwnerAgenda";
+import OwnerFeatureRegistry from "./pages/OwnerFeatureRegistry";
 
 import AdminCRM from "./pages/AdminCRM";
 import JoinApplication from "./pages/JoinApplication";
@@ -439,6 +441,8 @@ const App = () => (
                 <Route path="/owner/inbox" element={<OwnerGuard><OwnerInbox /></OwnerGuard>} />
                 <Route path="/owner/templates" element={<OwnerGuard><OwnerTemplates /></OwnerGuard>} />
                 <Route path="/owner/settings/communication" element={<OwnerGuard><OwnerCommSettings /></OwnerGuard>} />
+                <Route path="/owner/agenda" element={<OwnerGuard><OwnerAgenda /></OwnerGuard>} />
+                <Route path="/owner/features" element={<OwnerGuard><OwnerFeatureRegistry /></OwnerGuard>} />
                 <Route path="/crm/tasks" element={<OwnerGuard><CRMTasks /></OwnerGuard>} />
                 <Route path="/crm/calendar" element={<OwnerGuard><CRMCalendar /></OwnerGuard>} />
                 <Route path="/crm/notes" element={<OwnerGuard><CRMNotes /></OwnerGuard>} />
