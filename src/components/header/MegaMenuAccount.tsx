@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield } from 'lucide-react';
+import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -308,6 +308,25 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                             <span className="text-black/50 text-[10px]">HR, IT, Support, All</span>
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 text-purple-500" />
+                        </Link>
+                      )}
+                      {/* Customer Happiness Center - Ticket Support Hub */}
+                      {isOwner && (
+                        <Link 
+                          to="/customer-happiness" 
+                          onClick={onClose} 
+                          className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 bg-gradient-to-r from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 hover:border-emerald-500/60 group"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border-2 border-emerald-500/40 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
+                            <Headphones className="w-4 h-4 text-emerald-600" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-black font-semibold text-xs group-hover:text-emerald-600 transition-colors block">
+                              Customer Happiness
+                            </span>
+                            <span className="text-black/50 text-[10px]">Ticket Support Hub</span>
+                          </div>
+                          <ChevronRight className="w-3.5 h-3.5 text-emerald-500" />
                         </Link>
                       )}
                       {/* Other Admin Links */}
