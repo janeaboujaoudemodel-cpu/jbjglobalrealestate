@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProjects, useDevelopers, useCommunities } from "@/hooks/useProjects";
@@ -48,6 +48,9 @@ import {
   Settings,
   Brain,
   Home,
+  Ticket,
+  UserCog,
+  Monitor,
 } from "lucide-react";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
 import { RateLimitDashboard } from "@/components/admin/RateLimitDashboard";
@@ -69,6 +72,26 @@ import VoiceRecorder from "@/components/admin/VoiceRecorder";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { FloatingActionBar } from "@/components/ui/floating-action-bar";
 import { Link } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
+
+// Lazy load embedded department components for performance
+const EmbeddedHRDashboard = lazy(() => import("@/components/admin/EmbeddedHRDashboard").then(m => ({ default: m.EmbeddedHRDashboard })));
+const EmbeddedITDepartment = lazy(() => import("@/components/admin/EmbeddedITDepartment").then(m => ({ default: m.EmbeddedITDepartment })));
+const EmbeddedEmployeeHub = lazy(() => import("@/components/admin/EmbeddedEmployeeHub").then(m => ({ default: m.EmbeddedEmployeeHub })));
+const EmbeddedSupportTickets = lazy(() => import("@/components/admin/EmbeddedSupportTickets").then(m => ({ default: m.EmbeddedSupportTickets })));
+
+const TabLoadingFallback = () => (
+  <div className="space-y-4 p-4">
+    <Skeleton className="h-20 w-full" />
+    <div className="grid grid-cols-4 gap-4">
+      <Skeleton className="h-24 w-full" />
+      <Skeleton className="h-24 w-full" />
+      <Skeleton className="h-24 w-full" />
+      <Skeleton className="h-24 w-full" />
+    </div>
+    <Skeleton className="h-64 w-full" />
+  </div>
+);
 
 interface ProjectDocument {
   id: string;
@@ -457,18 +480,30 @@ const Admin = () => {
               <TabsTrigger
                 value="hr-hub"
                 className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
-                onClick={() => navigate("/hr-dashboard")}
               >
-                <Users className="w-4 h-4 mr-2" />
+                <UserCog className="w-4 h-4 mr-2" />
                 HR Hub
               </TabsTrigger>
               <TabsTrigger
                 value="it-department"
                 className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
-                onClick={() => navigate("/it-department")}
               >
-                <Settings className="w-4 h-4 mr-2" />
+                <Monitor className="w-4 h-4 mr-2" />
                 IT Department
+              </TabsTrigger>
+              <TabsTrigger
+                value="employee-hub"
+                className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+              >
+                <Briefcase className="w-4 h-4 mr-2" />
+                Employee Hub
+              </TabsTrigger>
+              <TabsTrigger
+                value="support-tickets"
+                className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+              >
+                <Ticket className="w-4 h-4 mr-2" />
+                Support Tickets
               </TabsTrigger>
               <TabsTrigger value="podcast-studio" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <Mic className="w-4 h-4 mr-2" />
@@ -522,6 +557,30 @@ const Admin = () => {
 
           <TabsContent value="visitor-insights" className="space-y-8">
             <VisitorInsightsDashboard />
+          </TabsContent>
+
+          <TabsContent value="hr-hub" className="space-y-8">
+            <Suspense fallback={<TabLoadingFallback />}>
+              <EmbeddedHRDashboard />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="it-department" className="space-y-8">
+            <Suspense fallback={<TabLoadingFallback />}>
+              <EmbeddedITDepartment />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="employee-hub" className="space-y-8">
+            <Suspense fallback={<TabLoadingFallback />}>
+              <EmbeddedEmployeeHub />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="support-tickets" className="space-y-8">
+            <Suspense fallback={<TabLoadingFallback />}>
+              <EmbeddedSupportTickets />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="podcast-studio" className="space-y-8">

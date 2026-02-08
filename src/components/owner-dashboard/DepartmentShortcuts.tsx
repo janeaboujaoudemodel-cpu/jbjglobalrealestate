@@ -1,9 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { 
   Users, 
-  UserCog, 
-  Server, 
-  Briefcase, 
   ClipboardList, 
   ShieldAlert,
   ChevronRight,
@@ -20,32 +17,18 @@ interface DepartmentCard {
 
 const DEPARTMENTS: DepartmentCard[] = [
   { 
+    label: "Admin Panel", 
+    description: "HR, IT, Support, All Departments", 
+    icon: ShieldAlert, 
+    path: "/admin", 
+    color: "text-gold" 
+  },
+  { 
     label: "CRM Dashboard", 
     description: "Manage leads & deals", 
     icon: Users, 
     path: "/crm", 
-    color: "text-gold" 
-  },
-  { 
-    label: "HR Dashboard", 
-    description: "Team management", 
-    icon: UserCog, 
-    path: "/hr-dashboard", 
     color: "text-emerald-400" 
-  },
-  { 
-    label: "IT Department", 
-    description: "Systems & security", 
-    icon: Server, 
-    path: "/it-department", 
-    color: "text-blue-400" 
-  },
-  { 
-    label: "Employee Hub", 
-    description: "Staff directory", 
-    icon: Briefcase, 
-    path: "/employee-hub", 
-    color: "text-purple-400" 
   },
   { 
     label: "Listing Admin", 

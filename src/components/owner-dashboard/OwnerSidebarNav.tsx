@@ -20,10 +20,6 @@ import {
   Video,
   Kanban,
   Megaphone,
-  HardDrive,
-  UserCog,
-  Briefcase,
-  Server,
   Eye,
   Link,
   ShieldAlert,
@@ -87,11 +83,9 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: "ADMIN",
     items: [
+      { label: "Admin Panel", icon: Shield, path: "/admin" },
       { label: "Analytics", icon: BarChart3, path: "/jbj-analytics" },
       { label: "Documents", icon: FileText, path: "/owner/documents" },
-      { label: "HR Dashboard", icon: UserCog, path: "/hr-dashboard" },
-      { label: "IT Department", icon: Server, path: "/it-department" },
-      { label: "Employee Hub", icon: Briefcase, path: "/employee-hub" },
     ],
   },
   {
