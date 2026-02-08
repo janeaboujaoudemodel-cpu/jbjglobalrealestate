@@ -16,7 +16,10 @@ import {
   Copy,
   Check,
   Mic,
-  Plus
+  Plus,
+  Loader2,
+  RefreshCw,
+  AlertTriangle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +39,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -73,6 +77,16 @@ const PRIORITY_LEVELS = [
   { value: "critical", label: "Critical", color: "text-red-500", description: "Blocking/Urgent" },
 ];
 
+type SubmissionStep = 'idle' | 'uploading' | 'creating' | 'confirming';
+type UploadStatus = 'pending' | 'uploading' | 'done' | 'error';
+
+const STEP_MESSAGES: Record<SubmissionStep, string> = {
+  idle: '',
+  uploading: 'Uploading attachments...',
+  creating: 'Creating your ticket...',
+  confirming: 'Sending confirmation...'
+};
+
 const SupportTicketBox = () => {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -80,6 +94,11 @@ const SupportTicketBox = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [ticketNumber, setTicketNumber] = useState("");
   const [copied, setCopied] = useState(false);
+  
+  // Enhanced loading states
+  const [submissionStep, setSubmissionStep] = useState<SubmissionStep>('idle');
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [uploadStatuses, setUploadStatuses] = useState<Record<number, UploadStatus>>({});
   
   // Get user metadata for pre-filling
   const userMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
@@ -143,6 +162,9 @@ const SupportTicketBox = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Clear any previous error
+    setSubmissionError(null);
 
     if (!formData.serviceCategory || !formData.subject || !formData.description) {
       toast.error("Please fill in all required fields");
@@ -161,28 +183,53 @@ const SupportTicketBox = () => {
     }
 
     setIsSubmitting(true);
+    
+    // Initialize upload statuses
+    if (attachments.length > 0) {
+      const initialStatuses: Record<number, UploadStatus> = {};
+      attachments.forEach((_, idx) => {
+        initialStatuses[idx] = 'pending';
+      });
+      setUploadStatuses(initialStatuses);
+      setSubmissionStep('uploading');
+    } else {
+      setSubmissionStep('creating');
+    }
 
     try {
       // Upload attachments to storage (if any)
       const attachmentUrls: string[] = [];
       
-      for (const file of attachments) {
+      for (let i = 0; i < attachments.length; i++) {
+        const file = attachments[i];
+        setUploadStatuses(prev => ({ ...prev, [i]: 'uploading' }));
+        
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
         const filePath = `${fileName}`;
 
-        // Use secure support-attachments bucket with proper RLS
-        const { error: uploadError } = await supabase.storage
-          .from('support-attachments')
-          .upload(filePath, file);
-
-        if (!uploadError) {
-          const { data: { publicUrl } } = supabase.storage
+        try {
+          // Use secure support-attachments bucket with proper RLS
+          const { error: uploadError } = await supabase.storage
             .from('support-attachments')
-            .getPublicUrl(filePath);
-          attachmentUrls.push(publicUrl);
+            .upload(filePath, file);
+
+          if (!uploadError) {
+            const { data: { publicUrl } } = supabase.storage
+              .from('support-attachments')
+              .getPublicUrl(filePath);
+            attachmentUrls.push(publicUrl);
+            setUploadStatuses(prev => ({ ...prev, [i]: 'done' }));
+          } else {
+            setUploadStatuses(prev => ({ ...prev, [i]: 'error' }));
+          }
+        } catch {
+          setUploadStatuses(prev => ({ ...prev, [i]: 'error' }));
         }
       }
+
+      // Update step to creating
+      setSubmissionStep('creating');
 
       // Build category with "Other" detail
       const fullCategory = formData.serviceCategory === "Other" 
@@ -224,21 +271,42 @@ const SupportTicketBox = () => {
 
       if (response?.error) throw response.error;
 
+      // Update step to confirming
+      setSubmissionStep('confirming');
+      
+      // Brief delay for visual feedback
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       setTicketNumber(response?.data?.ticketNumber || "");
       setIsSubmitted(true);
+      setSubmissionStep('idle');
       toast.success("Support ticket created successfully!");
 
     } catch (error) {
       console.error("Error submitting ticket:", error);
-      toast.error("Failed to submit ticket. Please try again.");
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : "Failed to submit ticket. Please try again.";
+      setSubmissionError(errorMessage);
+      setSubmissionStep('idle');
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const handleRetry = () => {
+    setSubmissionError(null);
+    // Create a synthetic form event for retry
+    const syntheticEvent = { preventDefault: () => {} } as React.FormEvent;
+    handleSubmit(syntheticEvent);
+  };
+
   const resetForm = () => {
     setIsSubmitted(false);
     setTicketNumber("");
+    setSubmissionError(null);
+    setSubmissionStep('idle');
+    setUploadStatuses({});
     setFormData({
       fullName: user?.email?.split('@')[0] || "",
       email: user?.email || "",
@@ -257,6 +325,9 @@ const SupportTicketBox = () => {
   const submitAnotherTicket = () => {
     setIsSubmitted(false);
     setTicketNumber("");
+    setSubmissionError(null);
+    setSubmissionStep('idle');
+    setUploadStatuses({});
     setFormData({
       fullName: formData.fullName,
       email: formData.email,
@@ -269,6 +340,20 @@ const SupportTicketBox = () => {
       escalateToTech: false,
     });
     setAttachments([]);
+  };
+
+  const getUploadStatusIcon = (index: number) => {
+    const status = uploadStatuses[index];
+    switch (status) {
+      case 'uploading':
+        return <Loader2 className="w-4 h-4 text-gold animate-spin" />;
+      case 'done':
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case 'error':
+        return <AlertCircle className="w-4 h-4 text-red-500" />;
+      default:
+        return null;
+    }
   };
 
   const getFileIcon = (file: File) => {
@@ -394,21 +479,60 @@ const SupportTicketBox = () => {
                           {isSubmitted ? (
                             <motion.div
                               key="success"
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
+                              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                              animate={{ opacity: 1, scale: 1, y: 0 }}
                               exit={{ opacity: 0, scale: 0.9 }}
+                              transition={{ type: "spring", stiffness: 200, damping: 20 }}
                               className="py-8 text-center"
                             >
-                              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <CheckCircle className="w-10 h-10 text-green-500" />
-                              </div>
-                              <h3 className="text-xl font-bold text-black mb-2">We've Got Your Ticket!</h3>
-                              <p className="text-zinc-600 mb-6">
+                              {/* Animated success icon with pulsing glow */}
+                              <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
+                                className="relative w-24 h-24 mx-auto mb-6"
+                              >
+                                {/* Pulsing glow ring */}
+                                <motion.div
+                                  animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.2, 0.5] }}
+                                  transition={{ duration: 2, repeat: Infinity }}
+                                  className="absolute inset-0 bg-green-400/30 rounded-full"
+                                />
+                                <div className="relative w-full h-full bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center shadow-lg">
+                                  <motion.div
+                                    initial={{ scale: 0, rotate: -180 }}
+                                    animate={{ scale: 1, rotate: 0 }}
+                                    transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+                                  >
+                                    <CheckCircle className="w-12 h-12 text-green-500" />
+                                  </motion.div>
+                                </div>
+                              </motion.div>
+
+                              <motion.h3 
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.3 }}
+                                className="text-xl font-bold text-black mb-2"
+                              >
+                                We've Got Your Ticket!
+                              </motion.h3>
+                              <motion.p 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.4 }}
+                                className="text-zinc-600 mb-6"
+                              >
                                 We're sorry you're experiencing issues. Our team is on it!
-                              </p>
+                              </motion.p>
 
                               {/* Ticket Number Box */}
-                              <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-6 mb-6">
+                              <motion.div 
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.5 }}
+                                className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-6 mb-6"
+                              >
                                 <p className="text-sm text-zinc-600 mb-2">Your Ticket Number</p>
                                 <div className="flex items-center justify-center gap-3">
                                   <span className="text-2xl font-bold text-gold tracking-wider">{ticketNumber}</span>
@@ -425,14 +549,24 @@ const SupportTicketBox = () => {
                                     )}
                                   </Button>
                                 </div>
-                              </div>
+                              </motion.div>
 
-                              <p className="text-sm text-zinc-500 mb-6">
+                              <motion.p 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.6 }}
+                                className="text-sm text-zinc-500 mb-6"
+                              >
                                 A confirmation email has been sent to <strong>{formData.email}</strong>
-                              </p>
+                              </motion.p>
 
                               {/* Action Buttons */}
-                              <div className="space-y-3">
+                              <motion.div 
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.7 }}
+                                className="space-y-3"
+                              >
                                 <Button
                                   onClick={submitAnotherTicket}
                                   variant="secondary"
@@ -448,7 +582,7 @@ const SupportTicketBox = () => {
                                 >
                                   Close
                                 </Button>
-                              </div>
+                              </motion.div>
                             </motion.div>
                           ) : (
                             <motion.form
@@ -457,8 +591,37 @@ const SupportTicketBox = () => {
                               animate={{ opacity: 1 }}
                               exit={{ opacity: 0 }}
                               onSubmit={handleSubmit}
-                              className="space-y-4 py-4"
+                              className="space-y-4 py-4 relative"
                             >
+                              {/* Form Overlay During Submission */}
+                              <AnimatePresence>
+                                {isSubmitting && (
+                                  <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-20 flex flex-col items-center justify-center rounded-lg"
+                                  >
+                                    <motion.div
+                                      initial={{ scale: 0.8, opacity: 0 }}
+                                      animate={{ scale: 1, opacity: 1 }}
+                                      className="bg-white/90 rounded-xl p-6 shadow-lg border border-gold/20 text-center"
+                                    >
+                                      <Loader2 className="w-10 h-10 text-gold animate-spin mx-auto mb-3" />
+                                      <motion.p
+                                        key={submissionStep}
+                                        initial={{ opacity: 0, y: 5 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="text-sm font-medium text-zinc-700"
+                                      >
+                                        {STEP_MESSAGES[submissionStep]}
+                                      </motion.p>
+                                      <p className="text-xs text-zinc-500 mt-1">Please wait...</p>
+                                    </motion.div>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+
                             {/* Contact Info */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div>
@@ -652,22 +815,30 @@ const SupportTicketBox = () => {
                                 </label>
                               </div>
 
-                              {/* Attachment List */}
+                              {/* Attachment List with upload status */}
                               {attachments.length > 0 && (
                                 <div className="mt-3 space-y-2">
                                   {attachments.map((file, index) => (
                                     <div
                                       key={index}
-                                      className="flex items-center justify-between bg-zinc-50 rounded-lg px-3 py-2"
+                                      className={`flex items-center justify-between rounded-lg px-3 py-2 transition-colors ${
+                                        uploadStatuses[index] === 'error' 
+                                          ? 'bg-red-50 border border-red-200' 
+                                          : uploadStatuses[index] === 'done'
+                                          ? 'bg-green-50 border border-green-200'
+                                          : 'bg-zinc-50'
+                                      }`}
                                     >
                                       <div className="flex items-center gap-2">
                                         {getFileIcon(file)}
-                                        <span className="text-sm text-zinc-700 truncate max-w-[200px]">
+                                        <span className="text-sm text-zinc-700 truncate max-w-[150px]">
                                           {file.name}
                                         </span>
                                         <span className="text-xs text-zinc-400">
                                           ({(file.size / 1024 / 1024).toFixed(2)}MB)
                                         </span>
+                                        {/* Upload status indicator */}
+                                        {isSubmitting && getUploadStatusIcon(index)}
                                       </div>
                                       <Button
                                         type="button"
@@ -675,6 +846,7 @@ const SupportTicketBox = () => {
                                         size="icon"
                                         className="h-6 w-6"
                                         onClick={() => removeAttachment(index)}
+                                        disabled={isSubmitting}
                                       >
                                         <X className="w-4 h-4" />
                                       </Button>
@@ -692,10 +864,51 @@ const SupportTicketBox = () => {
                               </p>
                             </div>
 
+                            {/* Error Display */}
+                            <AnimatePresence>
+                              {submissionError && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                >
+                                  <Alert variant="destructive" className="border-red-300 bg-red-50">
+                                    <AlertTriangle className="h-4 w-4" />
+                                    <AlertDescription className="ml-2">
+                                      <div className="flex flex-col gap-2">
+                                        <span>{submissionError}</span>
+                                        <div className="flex gap-2">
+                                          <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={handleRetry}
+                                            className="text-xs"
+                                          >
+                                            <RefreshCw className="w-3 h-3 mr-1" />
+                                            Retry
+                                          </Button>
+                                          <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => setSubmissionError(null)}
+                                            className="text-xs"
+                                          >
+                                            Dismiss
+                                          </Button>
+                                        </div>
+                                      </div>
+                                    </AlertDescription>
+                                  </Alert>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+
                             <button
                               type="submit"
                               disabled={isSubmitting}
-                              className="w-full relative inline-flex items-center justify-center gap-2 py-5 font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-95 group disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="w-full relative inline-flex items-center justify-center gap-2 py-5 font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-95 group disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
                               style={{
                                 background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
                                 border: '2px solid rgba(200,167,102,0.6)',
@@ -714,8 +927,19 @@ const SupportTicketBox = () => {
                               <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
                               {/* Glow effect on hover */}
                               <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                              
                               {isSubmitting ? (
-                                <span className="relative text-gold">Submitting...</span>
+                                <span className="relative flex items-center justify-center gap-3 text-gold">
+                                  <Loader2 className="w-5 h-5 animate-spin" />
+                                  <motion.span
+                                    key={submissionStep}
+                                    initial={{ opacity: 0, y: 5 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="font-medium"
+                                  >
+                                    {STEP_MESSAGES[submissionStep]}
+                                  </motion.span>
+                                </span>
                               ) : (
                                 <span className="relative flex items-center justify-center gap-2">
                                   <Send className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
