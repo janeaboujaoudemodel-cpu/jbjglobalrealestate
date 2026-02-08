@@ -162,9 +162,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
             <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-gold/40">
               {/* Fixed-size avatar container to prevent layout shift */}
               <div className="w-16 h-16 flex-shrink-0">
-                <Avatar className="h-16 w-16 border-2 border-gold/60">
+                <Avatar className="h-16 w-16 border-2 border-gold/60 bg-transparent">
                   <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
-                  <AvatarFallback className="bg-transparent border-2 border-gold text-gold text-xl font-bold">
+                  <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-gold text-xl font-bold">
                     {avatarInitials}
                   </AvatarFallback>
                 </Avatar>
@@ -182,8 +182,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 </Badge>
               </div>
               <div className="flex flex-col items-end gap-2 shrink-0">
-                {/* "Select your mode" label - shown before first selection */}
-                <p className="text-xs text-zinc-500 font-medium">
+                {/* "Select your mode" label - in gold, connected to mode button */}
+                <p className="text-xs text-gold font-semibold">
                   Select your mode
                 </p>
                 <div 

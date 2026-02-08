@@ -167,14 +167,16 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
               >
                 <div className={cn(
                   "w-8 h-8 rounded-lg flex items-center justify-center border",
-                  isActive ? `${config.bgColor} ${config.borderColor}` : "bg-zinc-100 border-zinc-200"
+                  // Always show mode-specific colors, not just when active
+                  config.bgColor, config.borderColor
                 )}>
-                  <Icon className={cn("w-4 h-4", isActive ? config.color : "text-zinc-500")} />
+                  <Icon className={cn("w-4 h-4", config.color)} />
                 </div>
                 <div className="flex-1">
                   <p className={cn(
                     "text-sm font-medium",
-                    isActive ? config.color : "text-zinc-700"
+                    // Always show mode-specific color for label
+                    config.color
                   )}>
                     {config.label}
                   </p>

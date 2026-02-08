@@ -126,10 +126,10 @@ export default function WhyDubaiCapitalSection() {
               ))}
             </div>
 
-            {/* CTA Button - Matches homepage hero style */}
-            <div className="mt-8 md:mt-10">
-              <PremiumHeroButton href="/guides/investment" size="lg">
-                <T>Explore Investment Opportunities</T>
+            {/* CTA Button - Smaller and more premium */}
+            <div className="mt-6">
+              <PremiumHeroButton href="/guides/investment" size="default">
+                <T>Explore Investments</T>
               </PremiumHeroButton>
             </div>
           </motion.div>
