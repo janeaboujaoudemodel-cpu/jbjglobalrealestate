@@ -1,163 +1,248 @@
 
-## What’s actually broken (confirmed from logs)
-
-### A) Ticket Hub shows 0 tickets + “Failed to load tickets”
-Your browser is getting a **403** when loading tickets. The error is:
-
-- `permission denied for table users`
-
-This is happening because our backend access rules (RLS policies) for `support_tickets` and `support_ticket_messages` are written to read the protected system “users” table (`auth.users`) to get the current email. That table is not readable from the app, so the policy itself crashes and **blocks the whole query**.
-
-Result: Ticket Hub can’t read tickets, so you see total = 0 and “Failed to load tickets”.
-
-### B) “Confirmation email sent” but you never receive it
-Backend logs show the email provider returning:
-
-- `403 validation_error: The JBJGLOBALREALESTATE.COM domain is not verified`
-
-Also, our email code currently treats the Resend response incorrectly (it can return `{ data, error }` without throwing), so the UI can say “sent” even when it failed.
-
-### C) “Create ticket” feels slow
-Current flow can be slow because:
-- Attachments upload sequentially (one by one)
-- The UI adds a hard-coded delay (`500ms`)
-- The backend sends 2 emails sequentially (support team + customer), which adds network time
-- There is retry logic that adds 1s waits if it thinks there was an error
+## Goals (what you will see when this is done)
+1. The **Support Ticket Hub shortcut** is visible in your account dropdown (desktop + mobile) and opens correctly.
+2. **One Owner Dashboard + one Owner CRM experience** (no more “Owner dashboard → Admin dashboard” confusion).
+3. **My Dashboard** stops showing duplicate mode labels, has working “View Full Progress/Activity” links, and quick actions aren’t broken.
+4. Account dropdown polish: **JB initials style matches inside profile**, spacing is clean, and it shows **Jane bou Jaoude** (full name).
+5. Dashboard cards polish: Activity Overview icons become readable (gold/black).
+6. Homepage fixes: **Hero search actually filters results**, Mortgage card removed + layout fixed, Why Dubai scene replaced with Burj Khalifa day→night.
+7. Outgoing emails use **NOREPLY@JBJ.AE** everywhere (and we show accurate status if provider domain isn’t verified yet).
 
 ---
 
-## Changes I will implement (in order)
+## What I found (root causes)
+### A) “Support Ticket Hub shortcut is missing”
+The link **is present in code** in `src/components/header/MegaMenuAccount.tsx`, but it can still be invisible in the UI for two common reasons:
+1) **Menu height / no-scroll**: the account mega menu is configured with `noScroll`, and the “Owner Shortcuts” list can overflow and hide lower items (your Support Ticket Hub link is near the bottom).
+2) **Mobile menu path**: the **mobile account section** in `src/components/GlobalHeader.tsx` has an Owner Shortcuts list, but it currently **does not include** the Support Ticket Hub entry.
 
-## 1) Fix Ticket Hub loading (backend access rules)
-Goal: Ticket Hub must load tickets reliably and show all previously submitted tickets.
+### B) “Two dashboards / two CRMs”
+You currently have multiple parallel systems:
+- New Owner Command Center: `/owner` (standalone shell) + `OwnerDashboardOverview` etc.
+- Legacy owner dashboard: `/owner-dashboard` (old page: `src/pages/OwnerDashboard.tsx`, contains mock content and different UI)
+- “Admin CRM” page: `/admin/crm` (shows “Admin Dashboard” header; `src/pages/AdminCRM.tsx`)
+- Owner CRM: `/crm` + `/crm/*` (currently Owner-guarded and separate from `/owner`)
 
-### 1.1 Update the backend access rules so they never query the protected “users” table
-We will rewrite the affected policies to use the signed-in user’s email directly from the session token via:
-- `auth.jwt() ->> 'email'`
+This causes the exact duplication you described.
 
-This removes the forbidden `SELECT ... FROM auth.users` calls.
+### C) “My Dashboard shows two mode labels”
+`src/pages/MyDashboard.tsx` renders:
+- a **role badge** (e.g. “Investor”)
+- plus an **extra combined-mode badge** (“Investor + Broker”)
+So combined mode shows two badges.
 
-### 1.2 Policies to update (minimum)
-- `public.support_tickets`
-  - `support_tickets_secure_select`
-  - `Users can view own tickets`
-- `public.support_ticket_messages`
-  - `Users can read messages for their tickets`
-  - `Users can reply to their tickets`
+### D) “View Full Progress” doesn’t open
+In `src/components/dashboard/BadgesLevelCard.tsx`, “View Full Progress” links to `/my-dashboard` (the page you’re already on), so it looks like it does nothing.
+Same for “View Full Activity” in `ActivityOverviewCard.tsx`.
 
-### 1.3 Also fix the same issue in other tables (to prevent similar breakages elsewhere)
-There are other policies in your backend doing the same `auth.users` lookup (example: `best_idea_submissions`, `broker_messages`). I will update those too so this problem doesn’t reappear in other areas.
+### E) “Hero search broken”
+`HeroSearchBar` sets URL params like `saleStatus=...`, but `src/pages/PropertiesReelly.tsx` currently reads `status` (different key), so the filter isn’t applied. Several other params the hero sets are also not parsed by the properties page.
 
-### 1.4 What you’ll see after this fix
-- Ticket Hub loads instantly (no more “Failed to load tickets”)
-- Total tickets reflects the real number in the database
-- Clicking a ticket loads the detail panel without permission errors
+### F) Mortgage compact card removal
+The “Total Interest” compact card is in `src/components/MortgageCalculator.tsx` (compact grid). Removing it requires updating the grid columns and the Monthly Payment card span.
 
----
-
-## 2) Fix confirmation email delivery (and stop “fake success”)
-Goal: If email fails, we show the truth; if it succeeds, you actually receive it.
-
-### 2.1 Fix Resend response handling in `submit-support-ticket`
-Update email sending to correctly handle Resend’s return shape:
-- If `{ error }` exists → treat as failed (do not mark “sent”)
-- Only mark `customerEmailSent = true` when `data?.id` is present and `error` is null
-
-### 2.2 Log and store accurate delivery status
-Ensure the ticket row is updated with:
-- `customer_confirmation_status = 'sent' | 'failed'`
-- `customer_confirmation_error` (short, readable)
-- `customer_confirmation_message_id` (only when successful)
-
-### 2.3 Required external fix: verify the sender domain in Resend
-Right now Resend is refusing to send from `@jbjglobalrealestate.com` because it is **not verified in the Resend account tied to the current RESEND_API_KEY**.
-
-In the implementation step, I will:
-- Keep the corporate sender as requested
-- Make the UI show a clear warning if the domain is not verified
-- Provide exact instructions in-app for what must be verified (DNS records) and confirm the RESEND_API_KEY belongs to the correct Resend account
-
-### 2.4 Optional temporary fallback (you choose during implementation)
-If you want emails to start arriving immediately while domain verification is being completed, I can add a temporary fallback sender option (non-corporate sender) when Resend returns “domain not verified”.
-- Default: OFF (to respect corporate sender requirement)
-- Can be enabled temporarily if you approve
+### G) Why Dubai “weird scene / repeated”
+The homepage uses `src/components/home/WhyDubaiCapitalSection.tsx` which rotates through local mp4 scenes. We already have `burj-khalifa-day-to-night.mp4` in `src/assets/videos/` (perfect match for your request). We’ll remove the problematic scene and ensure no duplicates.
 
 ---
 
-## 3) Make ticket creation faster (frontend + backend)
-Goal: user submits ticket and gets a ticket number quickly, without long waits.
+## Implementation approach (phased, to fix fast without breaking the site)
 
-### 3.1 Frontend: remove artificial waits + smarter retry
-In `SupportTicketBox.tsx`:
-- Remove the forced `500ms` delay after submission
-- Keep retry logic only for true network/server failures (not for email validation/domain errors)
-- Update the success UI to reflect:
-  - Ticket created (always)
-  - Email confirmation: sent / failed (based on real backend response)
+### Phase 1 — Make the Support Ticket Hub shortcut visible everywhere
+**Files**
+- `src/components/header/MegaMenuAccount.tsx`
+- `src/components/GlobalHeader.tsx`
 
-### 3.2 Backend: send emails in parallel (reduces total time)
-In `submit-support-ticket`:
-- Send support-team email and customer confirmation email using `Promise.allSettled(...)` so they run concurrently
-- This reduces the “waiting” time for the request to finish
+**Changes**
+1) Move “Support Ticket Hub” **up** in the Owner shortcuts list so it’s directly under “CRM Dashboard” (as requested) and not pushed below fold.
+2) Remove the dependency on “noScroll” hiding the item:
+   - Either enable scrolling inside the right column section, or
+   - Reduce vertical padding and convert the owner shortcuts list into a 2-column grid when it gets long.
+3) Add the same shortcut to the **mobile Owner Shortcuts** section in `GlobalHeader.tsx` (it’s currently missing there).
 
-### 3.3 Attachments performance (if you want it)
-Attachments currently upload sequentially. I can optimize by:
-- Uploading with limited concurrency (e.g., 2 at a time)
-- Keeping your per-file progress UI
-This significantly improves speed when users attach multiple files.
+**Result**
+- You will see “Support Ticket Hub” reliably, desktop + mobile.
 
 ---
 
-## 4) Fix the filter dropdown UI (black text + premium like header)
-Goal: “All Status / All Priority” should be premium and readable, matching header dropdown style.
+### Phase 2 — Merge “Owner Dashboard / Admin Dashboard / CRM” into one Owner Command Center
+**Files**
+- `src/App.tsx`
+- `src/pages/Dashboard.tsx`
+- `src/components/dashboard/StandardUserDashboard.tsx`
+- `src/components/dashboard/QuickActions.tsx`
+- `src/pages/OwnerDashboard.tsx` (legacy)
+- `src/pages/AdminCRM.tsx`
+- `src/pages/CRM.tsx`
+- `src/pages/OwnerDashboardShell.tsx`
+- `src/components/owner-dashboard/OwnerSidebarNav.tsx`
 
-### 4.1 Make filter triggers premium-light with black text
-In `SupportTicketHub.tsx`:
-- Stop overriding SelectTrigger with dark styles
-- Use the existing global Select component default styling (already premium champagne gradient + black text + gold chevron)
+**Strategy**
+- `/owner` becomes the single place for Owner operations (dashboard + CRM tools + broker oversight).
+- Legacy routes become redirects to `/owner` to eliminate duplicates.
 
-### 4.2 Ensure arrow + text fit perfectly
-- Increase trigger width slightly (e.g., `w-[180px]`)
-- Add truncation so long labels don’t collide with the chevron
+**Concrete changes**
+1) Change all Owner redirects to **go to `/owner`**:
+   - `Dashboard.tsx`: role `owner` → navigate to `/owner` (not `/owner-dashboard`)
+   - `StandardUserDashboard.tsx`: owner role redirectPath → `/owner`
+2) Deprecate legacy owner dashboard:
+   - In `App.tsx`, change route `/owner-dashboard` to `<Navigate to="/owner" replace />`
+   - Optionally keep `OwnerDashboard.tsx` but unreachable; or remove later.
+3) Stop sending Owners to “AdminCRM”:
+   - Remove/replace the “Owner Dashboard” button in `src/pages/CRM.tsx` that currently navigates to `/admin/crm`.
+   - In `App.tsx`, change `/admin/crm` to redirect to `/owner` (or `/owner?tab=brokers` if we implement deep linking).
+4) Consolidate CRM navigation under `/owner/*`:
+   - Add nested routes like:
+     - `/owner/leads`
+     - `/owner/tasks`
+     - `/owner/calendar`
+     - `/owner/brokers`
+     - `/owner/audit`
+   - Update `OwnerSidebarNav.tsx` to point to these `/owner/*` routes (right now it points to `/crm/leads`, which breaks the “standalone owner shell” design and contributes to duplication).
+   - Keep `/crm/*` as redirects to `/owner/*` for backward compatibility (so old links still work).
+5) Clean up the account dropdown:
+   - For Owner accounts, replace “My Dashboard” with “Owner Command Center” (or have “My Dashboard” route redirect owners to `/owner`).
 
-### 4.3 Remove any remaining blue highlight
-- Ensure SelectItem styling uses `data-[highlighted]` and `data-[state=checked]` (your Select component already does this globally)
-- Remove any conflicting local classes in Ticket Hub that override the global premium behavior
-
----
-
-## Files that will be changed
-
-### Backend (email + access rules)
-- `supabase/functions/submit-support-ticket/index.ts` (Resend error handling + parallel sends + accurate status)
-
-### Database migration (access rules)
-- Migration SQL to update RLS policies for:
-  - `support_tickets`
-  - `support_ticket_messages`
-  - plus other tables currently referencing `auth.users` (e.g., `best_idea_submissions`, `broker_messages`) to prevent future “permission denied for table users”.
-
-### Frontend (speed + truthful UI + dropdown styling)
-- `src/components/SupportTicketBox.tsx` (remove delay, better retries, show true email status)
-- `src/pages/SupportTicketHub.tsx` (filter SelectTrigger text black / premium, sizing, remove conflicting overrides)
-- (Optional) `src/hooks/useSupportTickets.ts` (select fewer columns for list view to speed up loading)
-
----
-
-## How we will verify it’s fully fixed (end-to-end)
-1) Open Ticket Hub `/customer-happiness/tickets`
-   - Must load tickets (no error)
-   - Total tickets must be > 0 (matching the existing submissions)
-
-2) Create a new ticket
-   - Must feel faster
-   - Ticket must appear in the hub after refresh (or immediately if we add auto-refresh later)
-
-3) Email confirmation
-   - If domain is still unverified: UI must show “email failed” with the real reason (not “sent”)
-   - After domain is verified (or correct key is provided): email must arrive in inbox (and we’ll check spam/promotions too)
+**Result**
+- One Owner dashboard and one Owner CRM flow; no “Owner dashboard → Admin dashboard” confusion.
 
 ---
 
-## Key reason you are not receiving emails (in one line)
-Resend is refusing to send because **the sender domain `JBJGLOBALREALESTATE.COM` is not verified for the RESEND_API_KEY currently configured**, and our code is incorrectly treating that response as success. We will fix both.
+### Phase 3 — Fix “My Dashboard” issues (badges, broken links, quick actions)
+**Files**
+- `src/pages/MyDashboard.tsx`
+- `src/components/dashboard/BadgesLevelCard.tsx`
+- `src/components/dashboard/ActivityOverviewCard.tsx`
+- `src/components/dashboard/QuickActions.tsx`
+- Create new pages:
+  - `src/pages/MyDashboardProgress.tsx` (or `/my-dashboard/progress`)
+  - `src/pages/MyDashboardActivity.tsx` (or `/my-dashboard/activity`)
+
+**Changes**
+1) **One label only**:
+   - If `isCombinedMode`, show only the combined badge (purple) and do not also show “Investor”.
+   - Also align colors with the mode standard (Investor = emerald, Broker = blue, Combined = purple).
+2) Fix “View Full Progress”:
+   - Create a dedicated progress page and route (e.g. `/my-dashboard/progress`).
+   - Update `BadgesLevelCard` button to link there.
+3) Fix “View Full Activity”:
+   - Create `/my-dashboard/activity` and point ActivityOverview there.
+4) Fix Owner quick actions:
+   - Update Owner action URLs in `QuickActions.tsx` away from `/owner-dashboard/*` to the new `/owner/*` equivalents (otherwise owners hit dead routes and think the dashboard is broken).
+5) Activity Overview icons visibility:
+   - Change `Calendar/Flame/TrendingUp` from `text-primary` to `text-gold` (or `text-black` if you prefer) so they remain readable on the champagne/gold card backgrounds.
+
+**Result**
+- My Dashboard is coherent, clickable, and doesn’t show duplicate mode labels.
+
+---
+
+### Phase 4 — Account dropdown polish (avatar, spacing, full name)
+**Files**
+- `src/components/header/MegaMenuAccount.tsx`
+- `src/pages/UserProfile.tsx` (optional enhancement)
+
+**Changes**
+1) Avatar initials style:
+   - Update `AvatarFallback` in MegaMenuAccount to match your inside-profile style: black initials, light gray border, premium background.
+2) Spacing:
+   - Adjust layout so:
+     - “Select your mode” is visually attached to the mode switcher (less gap),
+     - “Edit Profile” sits a bit lower with clear separation.
+3) Name correctness:
+   - For Owner identity, display **Jane bou Jaoude** (locked casing) consistently.
+   - Additionally, ensure profile updates propagate:
+     - When you save name in `UserProfile.tsx`, also update the CRM profile record (so header/menus never show a shortened name).
+
+**Result**
+- The account dropdown looks like a premium “mini profile card” and always shows your correct name.
+
+---
+
+### Phase 5 — Homepage fixes
+#### 5.1 Hero search works
+**Files**
+- `src/pages/PropertiesReelly.tsx`
+- `src/components/home/HeroSearchBar.tsx`
+
+**Fix**
+- Align query param names:
+  - Properties page currently reads `status`, but HeroSearchBar sets `saleStatus`.
+  - Update `PropertiesReelly.tsx` to read `saleStatus` and `constructionStatus` (and apply them into filter state).
+- Ensure the search term reliably maps:
+  - Support both `q` and `search` as synonyms (already partly done).
+  
+**Result**
+- Entering a query in the hero and pressing Search produces visible filtering changes.
+
+#### 5.2 Remove “Total Interest” compact card + fix layout
+**File**
+- `src/components/MortgageCalculator.tsx`
+
+**Fix**
+- Remove the compact “Total Interest” tile.
+- Update compact grid from 5 tiles to 4 tiles:
+  - Adjust `lg:grid-cols-5` → `lg:grid-cols-4`
+  - Rebalance Monthly Payment tile spans so it fits perfectly without awkward gaps.
+
+#### 5.3 Replace the weird Why Dubai scene
+**File**
+- `src/components/home/WhyDubaiCapitalSection.tsx`
+
+**Fix**
+- Remove the problematic scene (likely the Dubai Frame clip causing the “V shape / mosque” confusion).
+- Use the existing `burj-khalifa-day-to-night.mp4` as the centerpiece scene and ensure it appears once (no duplicate shots).
+
+---
+
+### Phase 6 — Set sender email to NOREPLY@JBJ.AE everywhere
+**Files (backend functions)**
+- `supabase/functions/submit-support-ticket/index.ts`
+- `supabase/functions/send-ticket-reply-email/index.ts`
+- `supabase/functions/resend-support-ticket-confirmation/index.ts`
+- `supabase/functions/send-email-otp/index.ts`
+- (and any other mail-sending functions that hardcode the old address)
+
+**Changes**
+- Replace all “from” addresses to `NOREPLY@JBJ.AE`.
+- Update user-facing copy so it no longer references the wrong domain.
+
+**Important note**
+- Even with correct sender, emails will only arrive if the email provider has the `jbj.ae` domain verified. We’ll keep the UI truthful (sent vs failed with reason).
+
+---
+
+## End-to-end verification checklist (what you’ll test after implementation)
+1) Open account menu (desktop): confirm you can see **Support Ticket Hub** under CRM Dashboard and it clicks through.
+2) Open account menu (mobile): confirm the same shortcut exists.
+3) Visit `/owner-dashboard` and `/admin/crm` and `/crm`: confirm they no longer create duplicate dashboards (they should redirect to `/owner`).
+4) Open `/my-dashboard`:
+   - Only one mode label shows (not two).
+   - “View Full Progress” opens a dedicated page.
+   - Quick actions go to valid pages (no dead ends).
+5) Activity Overview icons are readable.
+6) Homepage hero search:
+   - Search for a known term, confirm results change on `/properties`.
+7) Mortgage compact section: “Total Interest” card is gone and layout is clean.
+8) Why Dubai: the weird repeated scene is replaced and the Burj day→night scene plays correctly.
+9) Create a support ticket: confirmation sender displays as `NOREPLY@JBJ.AE` and delivery status is accurate.
+
+---
+
+## Files expected to change (summary)
+- Routing & merge:
+  - `src/App.tsx`, `src/pages/Dashboard.tsx`, `src/pages/CRM.tsx`, `src/pages/AdminCRM.tsx`,
+  - `src/pages/OwnerDashboard.tsx` (legacy), `src/pages/OwnerDashboardShell.tsx`,
+  - `src/components/owner-dashboard/OwnerSidebarNav.tsx`, `src/components/dashboard/StandardUserDashboard.tsx`
+- My Dashboard fixes:
+  - `src/pages/MyDashboard.tsx`, `src/components/dashboard/BadgesLevelCard.tsx`,
+  - `src/components/dashboard/ActivityOverviewCard.tsx`, `src/components/dashboard/QuickActions.tsx`,
+  - new: `src/pages/MyDashboardProgress.tsx`, `src/pages/MyDashboardActivity.tsx`
+- Account menu:
+  - `src/components/header/MegaMenuAccount.tsx`, `src/components/GlobalHeader.tsx`,
+  - optional: `src/pages/UserProfile.tsx`
+- Homepage:
+  - `src/pages/PropertiesReelly.tsx`, `src/components/home/HeroSearchBar.tsx`,
+  - `src/components/MortgageCalculator.tsx`, `src/components/home/WhyDubaiCapitalSection.tsx`
+- Email sender:
+  - `supabase/functions/*` mail-related functions listed above
