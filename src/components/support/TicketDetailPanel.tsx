@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import {
   X,
@@ -13,6 +13,10 @@ import {
   Send,
   Paperclip,
   MessageSquare,
+  Sparkles,
+  ExternalLink,
+  Image as ImageIcon,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +27,8 @@ import {
   useUpdateTicketStatus,
   useSendTicketReply,
 } from "@/hooks/useSupportTickets";
+import { useAITicketSuggestions, type AISuggestion } from "@/hooks/useAITicketSuggestions";
+import { useSignedAttachmentUrl, isImageUrl, getFilenameFromUrl } from "@/hooks/useTicketAttachments";
 import { cn } from "@/lib/utils";
 
 interface TicketDetailPanelProps {
@@ -49,11 +55,127 @@ const statusConfig: Record<
   resolved: { label: "Resolved", className: "bg-green-500/20 text-green-400", icon: CheckCircle },
 };
 
+// Attachment item component with signed URL support
+const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
+  const { getSignedUrl, loading, errors } = useSignedAttachmentUrl();
+  const [signedUrl, setSignedUrl] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const isImage = isImageUrl(url);
+  const filename = getFilenameFromUrl(url);
+
+  useEffect(() => {
+    const fetchSignedUrl = async () => {
+      const signed = await getSignedUrl(url);
+      if (signed) {
+        setSignedUrl(signed);
+        if (isImage) {
+          setImagePreview(signed);
+        }
+      }
+    };
+    fetchSignedUrl();
+  }, [url, getSignedUrl, isImage]);
+
+  const handleClick = () => {
+    if (signedUrl) {
+      window.open(signedUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  if (loading[url]) {
+    return (
+      <div className="flex items-center gap-2 bg-zinc-800 px-3 py-2 rounded-lg text-sm text-zinc-400 border border-zinc-700">
+        <Loader2 className="w-4 h-4 animate-spin" />
+        Loading...
+      </div>
+    );
+  }
+
+  if (errors[url]) {
+    return (
+      <div className="flex items-center gap-2 bg-red-900/20 px-3 py-2 rounded-lg text-sm text-red-400 border border-red-500/30">
+        <AlertCircle className="w-4 h-4" />
+        Attachment unavailable
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      {imagePreview && (
+        <div 
+          onClick={handleClick}
+          className="cursor-pointer rounded-lg overflow-hidden border border-gold/20 hover:border-gold transition-colors"
+        >
+          <img 
+            src={imagePreview} 
+            alt={filename}
+            className="max-w-full max-h-32 object-cover"
+          />
+        </div>
+      )}
+      <button
+        onClick={handleClick}
+        disabled={!signedUrl}
+        className="flex items-center gap-2 bg-zinc-800 px-3 py-2 rounded-lg text-sm text-gold hover:bg-zinc-700 transition-colors border border-gold/20 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isImage ? <ImageIcon className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
+        <span className="truncate max-w-[150px]">{filename || `Attachment ${index + 1}`}</span>
+        <ExternalLink className="w-3 h-3 ml-auto" />
+      </button>
+    </div>
+  );
+};
+
+// AI Suggestion Card Component
+const SuggestionCard = ({ 
+  suggestion, 
+  onSelect,
+  isSelected,
+}: { 
+  suggestion: AISuggestion; 
+  onSelect: () => void;
+  isSelected: boolean;
+}) => {
+  const typeColors = {
+    quick_resolution: 'border-green-500/30 bg-green-500/10',
+    needs_info: 'border-blue-500/30 bg-blue-500/10',
+    acknowledgment: 'border-yellow-500/30 bg-yellow-500/10',
+  };
+
+  return (
+    <button
+      onClick={onSelect}
+      className={cn(
+        "w-full text-left p-3 rounded-lg border transition-all duration-200",
+        typeColors[suggestion.type] || 'border-gold/30 bg-gold/10',
+        isSelected ? 'ring-2 ring-gold' : 'hover:border-gold/50'
+      )}
+    >
+      <p className="text-xs font-semibold text-gold uppercase tracking-wide mb-1">
+        {suggestion.title}
+      </p>
+      <p className="text-xs text-zinc-300 line-clamp-3">
+        {suggestion.message.slice(0, 150)}...
+      </p>
+    </button>
+  );
+};
+
 const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
   const { data, isLoading } = useSupportTicketDetail(ticketId);
   const updateStatus = useUpdateTicketStatus();
   const sendReply = useSendTicketReply();
+  const aiSuggestions = useAITicketSuggestions();
   const [replyMessage, setReplyMessage] = useState("");
+  const [selectedSuggestion, setSelectedSuggestion] = useState<number | null>(null);
+
+  // Clear state when ticket changes
+  useEffect(() => {
+    setReplyMessage("");
+    setSelectedSuggestion(null);
+    aiSuggestions.clearSuggestions();
+  }, [ticketId]);
 
   if (!ticketId) {
     return (
@@ -96,6 +218,15 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
     updateStatus.mutate({ ticketId: ticket.id, status: newStatus });
   };
 
+  const handleGenerateAISuggestions = () => {
+    aiSuggestions.generateSuggestions(ticket, messages);
+  };
+
+  const handleSelectSuggestion = (index: number) => {
+    setSelectedSuggestion(index);
+    setReplyMessage(aiSuggestions.suggestions[index].message);
+  };
+
   const handleSendReply = () => {
     if (!replyMessage.trim()) return;
 
@@ -110,9 +241,24 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
       {
         onSuccess: () => {
           setReplyMessage("");
+          setSelectedSuggestion(null);
+          aiSuggestions.clearSuggestions();
         },
       }
     );
+  };
+
+  const handleEmailClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // If we have AI suggestions and a selected one, use it for email
+    if (aiSuggestions.suggestions.length > 0 && selectedSuggestion !== null) {
+      const subject = `Re: [${ticket.ticket_number}] ${ticket.subject}`;
+      const body = encodeURIComponent(aiSuggestions.suggestions[selectedSuggestion].message);
+      window.location.href = `mailto:${ticket.email}?subject=${encodeURIComponent(subject)}&body=${body}`;
+    } else {
+      // Generate suggestions first, then compose
+      handleGenerateAISuggestions();
+    }
   };
 
   return (
@@ -138,7 +284,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+          className="bg-zinc-800 border border-gold/30 text-white hover:bg-gold/20 hover:border-gold"
         >
           <X className="w-5 h-5" />
         </Button>
@@ -158,12 +304,13 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Mail className="w-4 h-4 text-gold" />
-                <a
-                  href={`mailto:${ticket.email}`}
-                  className="text-gold hover:underline"
+                <button
+                  onClick={handleEmailClick}
+                  className="text-gold hover:underline flex items-center gap-1"
                 >
                   {ticket.email}
-                </a>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
               </div>
               {ticket.phone && (
                 <div className="flex items-center gap-2 text-sm">
@@ -197,20 +344,11 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           {ticket.attachment_urls && ticket.attachment_urls.length > 0 && (
             <div>
               <h3 className="text-sm font-semibold text-gold uppercase tracking-wide mb-3">
-                Attachments
+                Attachments ({ticket.attachment_urls.length})
               </h3>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-3">
                 {ticket.attachment_urls.map((url, idx) => (
-                  <a
-                    key={idx}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 bg-zinc-800 px-3 py-2 rounded-lg text-sm text-gold hover:bg-zinc-700 transition-colors border border-gold/20"
-                  >
-                    <Paperclip className="w-4 h-4" />
-                    Attachment {idx + 1}
-                  </a>
+                  <AttachmentItem key={idx} url={url} index={idx} />
                 ))}
               </div>
             </div>
@@ -270,6 +408,55 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
             </div>
           </div>
 
+          {/* AI Suggestions Section */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-gold uppercase tracking-wide">
+                AI Reply Suggestions
+              </h3>
+              <Button
+                size="sm"
+                onClick={handleGenerateAISuggestions}
+                disabled={aiSuggestions.isLoading}
+                className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white"
+              >
+                {aiSuggestions.isLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                ) : (
+                  <Sparkles className="w-4 h-4 mr-2" />
+                )}
+                Suggest Reply
+              </Button>
+            </div>
+
+            {aiSuggestions.isLoading && (
+              <div className="space-y-2">
+                <Skeleton className="h-16 w-full bg-zinc-800" />
+                <Skeleton className="h-16 w-full bg-zinc-800" />
+                <Skeleton className="h-16 w-full bg-zinc-800" />
+              </div>
+            )}
+
+            {aiSuggestions.error && (
+              <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-3 text-red-400 text-sm">
+                {aiSuggestions.error}
+              </div>
+            )}
+
+            {aiSuggestions.suggestions.length > 0 && (
+              <div className="space-y-2">
+                {aiSuggestions.suggestions.map((suggestion, idx) => (
+                  <SuggestionCard
+                    key={idx}
+                    suggestion={suggestion}
+                    onSelect={() => handleSelectSuggestion(idx)}
+                    isSelected={selectedSuggestion === idx}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Message Thread */}
           <div>
             <h3 className="text-sm font-semibold text-gold uppercase tracking-wide mb-3">
@@ -322,16 +509,11 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 {format(new Date(ticket.customer_confirmation_sent_at), "MMM d, yyyy h:mm a")}
               </p>
             )}
-            {ticket.customer_confirmation_status === "failed" && (
-              <p className="text-red-400">
-                ✗ Confirmation email failed: {ticket.customer_confirmation_error}
-              </p>
-            )}
           </div>
         </div>
       </ScrollArea>
 
-      {/* Reply Composer - Using native textarea for proper dark styling */}
+      {/* Reply Composer */}
       <div className="p-4 border-t border-gold/20 bg-zinc-900/80">
         <div className="flex gap-3">
           <textarea
