@@ -1691,3 +1691,35 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header {
 html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-child {
   background: linear-gradient(180deg, rgba(0,0,0,0.98) 0%, rgba(8,8,8,0.99) 50%, rgba(0,0,0,1) 100%) !important;
 }
+
+/* ============================================================
+ * PREMIUM DARK THEME SELECT DROPDOWNS
+ * For Support Ticket Hub and similar dark-themed pages
+ * ============================================================ */
+
+/* Dark theme variant for SelectTrigger */
+[data-radix-select-trigger].dark-select,
+.dark-select-trigger {
+  @apply bg-zinc-800 border-gold/30 text-white;
+}
+
+/* Dark theme variant for SelectContent */
+[data-radix-select-content].dark-select-content {
+  @apply bg-zinc-800 border-gold/40 text-white;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 4px 15px rgba(200,167,102,0.2);
+}
+
+/* Dark theme SelectItem styling with gold hover */
+.dark-select-item {
+  @apply text-white;
+}
+
+.dark-select-item:hover,
+.dark-select-item:focus,
+.dark-select-item[data-highlighted] {
+  @apply bg-gold/20 text-gold;
+}
+
+.dark-select-item[data-state="checked"] {
+  @apply bg-gold/25 text-gold;
+}

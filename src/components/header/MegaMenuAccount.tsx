@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Heart, Sparkles, Briefcase, Users, FolderOpen, Monitor, Settings, LogOut, ChevronRight, LayoutDashboard } from 'lucide-react';
+import { User, Heart, Sparkles, Briefcase, Users, FolderOpen, Monitor, Settings, LogOut, ChevronRight, LayoutDashboard, Ticket } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -319,6 +319,20 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           </div>
                           <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
                             {t('nav.crm') || 'CRM Dashboard'}
+                          </span>
+                        </Link>
+                      )}
+                      {isOwner && (
+                        <Link 
+                          to="/customer-happiness/tickets" 
+                          onClick={onClose} 
+                          className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-transparent border-2 border-gold/30 flex items-center justify-center group-hover:border-gold group-hover:bg-gold/10 transition-colors">
+                            <Ticket className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+                          </div>
+                          <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
+                            Support Ticket Hub
                           </span>
                         </Link>
                       )}

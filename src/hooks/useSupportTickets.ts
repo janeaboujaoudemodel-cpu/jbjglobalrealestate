@@ -46,6 +46,8 @@ export function useSupportTickets(filters?: TicketFilters) {
   return useQuery({
     queryKey: ["support-tickets", filters],
     queryFn: async () => {
+      console.log("[useSupportTickets] Fetching tickets with filters:", filters);
+      
       let query = supabase
         .from("support_tickets")
         .select("*")
@@ -67,7 +69,12 @@ export function useSupportTickets(filters?: TicketFilters) {
 
       const { data, error } = await query;
 
-      if (error) throw error;
+      if (error) {
+        console.error("[useSupportTickets] Error fetching tickets:", error);
+        throw error;
+      }
+      
+      console.log(`[useSupportTickets] Successfully fetched ${data?.length || 0} tickets`);
       return data as SupportTicket[];
     },
   });

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import {
@@ -10,6 +10,7 @@ import {
   CheckCircle,
   RefreshCw,
   ArrowLeft,
+  ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +23,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useSupportTickets, type TicketFilters } from "@/hooks/useSupportTickets";
 import TicketDetailPanel from "@/components/support/TicketDetailPanel";
 import { cn } from "@/lib/utils";
@@ -48,7 +56,17 @@ const SupportTicketHub = () => {
   });
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
 
-  const { data: tickets, isLoading, refetch, isRefetching } = useSupportTickets(filters);
+  const { data: tickets, isLoading, refetch, isRefetching, error } = useSupportTickets(filters);
+
+  // Debug logging for ticket synchronization
+  useEffect(() => {
+    if (tickets) {
+      console.log(`[SupportTicketHub] Loaded ${tickets.length} tickets`);
+    }
+    if (error) {
+      console.error("[SupportTicketHub] Error loading tickets:", error);
+    }
+  }, [tickets, error]);
 
   const handleSearchChange = (value: string) => {
     setFilters((prev) => ({ ...prev, search: value }));
@@ -130,28 +148,36 @@ const SupportTicketHub = () => {
 
             <div className="flex items-center gap-2">
               <Filter className="w-4 h-4 text-gold/70" />
-              <select
+              <Select
                 value={filters.status}
-                onChange={(e) => setFilters((prev) => ({ ...prev, status: e.target.value }))}
-                className="h-10 px-3 rounded-lg bg-zinc-800 border border-gold/30 text-white focus:outline-none focus:ring-2 focus:ring-gold/50 cursor-pointer"
+                onValueChange={(value) => setFilters((prev) => ({ ...prev, status: value }))}
               >
-                <option value="all">All Status</option>
-                <option value="open">Open</option>
-                <option value="in_progress">In Progress</option>
-                <option value="resolved">Resolved</option>
-              </select>
+                <SelectTrigger className="w-[160px] h-10 bg-zinc-800 border-gold/30 text-white hover:bg-zinc-700 focus:ring-gold/50">
+                  <SelectValue placeholder="All Status" />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-800 border-gold/40 text-white">
+                  <SelectItem value="all" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">All Status</SelectItem>
+                  <SelectItem value="open" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">Open</SelectItem>
+                  <SelectItem value="in_progress" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">In Progress</SelectItem>
+                  <SelectItem value="resolved" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">Resolved</SelectItem>
+                </SelectContent>
+              </Select>
 
-              <select
+              <Select
                 value={filters.priority}
-                onChange={(e) => setFilters((prev) => ({ ...prev, priority: e.target.value }))}
-                className="h-10 px-3 rounded-lg bg-zinc-800 border border-gold/30 text-white focus:outline-none focus:ring-2 focus:ring-gold/50 cursor-pointer"
+                onValueChange={(value) => setFilters((prev) => ({ ...prev, priority: value }))}
               >
-                <option value="all">All Priority</option>
-                <option value="critical">Critical</option>
-                <option value="high">High</option>
-                <option value="normal">Normal</option>
-                <option value="low">Low</option>
-              </select>
+                <SelectTrigger className="w-[160px] h-10 bg-zinc-800 border-gold/30 text-white hover:bg-zinc-700 focus:ring-gold/50">
+                  <SelectValue placeholder="All Priority" />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-800 border-gold/40 text-white">
+                  <SelectItem value="all" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">All Priority</SelectItem>
+                  <SelectItem value="critical" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">Critical</SelectItem>
+                  <SelectItem value="high" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">High</SelectItem>
+                  <SelectItem value="normal" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">Normal</SelectItem>
+                  <SelectItem value="low" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">Low</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
@@ -159,92 +185,109 @@ const SupportTicketHub = () => {
 
       {/* Main Content */}
       <div className="max-w-[1600px] mx-auto px-6 py-6">
-        <div className="flex gap-6">
+        <div className="flex gap-6 min-h-[calc(100vh-380px)]">
           {/* Ticket List */}
-          <div className="flex-1 min-w-0">
-            <div className="bg-gradient-to-b from-zinc-900/80 to-zinc-950/80 rounded-xl border border-gold/20 overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.05)]">
+          <div className="flex-1 min-w-0 flex flex-col">
+            <div className="bg-gradient-to-b from-zinc-900/80 to-zinc-950/80 rounded-xl border border-gold/20 overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.05)] flex-1 flex flex-col">
               {isLoading ? (
-                <div className="p-6 space-y-4">
+                <div className="p-6 space-y-4 flex-1">
                   {[...Array(5)].map((_, i) => (
                     <Skeleton key={i} className="h-16 w-full bg-zinc-800" />
                   ))}
                 </div>
-              ) : tickets && tickets.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-gold/20 hover:bg-transparent">
-                      <TableHead className="text-gold font-semibold">Ticket #</TableHead>
-                      <TableHead className="text-gold font-semibold">Customer</TableHead>
-                      <TableHead className="text-gold font-semibold">Subject</TableHead>
-                      <TableHead className="text-gold font-semibold">Category</TableHead>
-                      <TableHead className="text-gold font-semibold">Priority</TableHead>
-                      <TableHead className="text-gold font-semibold">Status</TableHead>
-                      <TableHead className="text-gold font-semibold">Created</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {tickets.map((ticket) => {
-                      const priority = priorityConfig[ticket.priority] || priorityConfig.normal;
-                      const status = statusConfig[ticket.status] || statusConfig.open;
-                      const StatusIcon = status.icon;
-
-                      return (
-                        <TableRow
-                          key={ticket.id}
-                          onClick={() => setSelectedTicketId(ticket.id)}
-                          className={cn(
-                            "border-gold/10 cursor-pointer transition-all duration-200",
-                            selectedTicketId === ticket.id
-                              ? "bg-gold/15 border-l-4 border-l-gold"
-                              : "hover:bg-zinc-800/50"
-                          )}
-                        >
-                          <TableCell className="font-mono text-gold font-bold">
-                            {ticket.ticket_number}
-                          </TableCell>
-                          <TableCell>
-                            <div>
-                              <p className="text-white font-medium truncate max-w-[150px]">
-                                {ticket.full_name}
-                              </p>
-                              <p className="text-xs text-zinc-400 truncate max-w-[150px]">
-                                {ticket.email}
-                              </p>
-                            </div>
-                          </TableCell>
-                          <TableCell className="max-w-[200px]">
-                            <p className="text-white truncate">{ticket.subject}</p>
-                          </TableCell>
-                          <TableCell>
-                            <span className="text-zinc-300 text-sm truncate block max-w-[120px]">
-                              {ticket.service_category}
-                            </span>
-                          </TableCell>
-                          <TableCell>
-                            <Badge className={cn("border text-xs", priority.className)}>
-                              {priority.label}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Badge className={cn("flex items-center gap-1 w-fit text-xs", status.className)}>
-                              <StatusIcon className="w-3 h-3" />
-                              {status.label}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-zinc-300 text-sm">
-                            {format(new Date(ticket.created_at), "MMM d, h:mm a")}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              ) : (
-                <div className="p-12 text-center">
-                  <Ticket className="w-12 h-12 text-gold/30 mx-auto mb-3" />
-                  <p className="text-zinc-400">No tickets found</p>
+              ) : error ? (
+                <div className="p-12 text-center flex-1 flex flex-col items-center justify-center min-h-[400px]">
+                  <AlertCircle className="w-12 h-12 text-red-400/50 mx-auto mb-3" />
+                  <p className="text-red-400 font-medium">Failed to load tickets</p>
                   <p className="text-zinc-500 text-sm mt-1">
-                    Try adjusting your filters
+                    {error instanceof Error ? error.message : "Please try again"}
+                  </p>
+                  <Button
+                    onClick={() => refetch()}
+                    className="mt-4 bg-gold/20 border border-gold/50 text-gold hover:bg-gold/30"
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Retry
+                  </Button>
+                </div>
+              ) : tickets && tickets.length > 0 ? (
+                <div className="flex-1 overflow-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="border-gold/20 hover:bg-transparent">
+                        <TableHead className="text-gold font-semibold">Ticket #</TableHead>
+                        <TableHead className="text-gold font-semibold">Customer</TableHead>
+                        <TableHead className="text-gold font-semibold">Subject</TableHead>
+                        <TableHead className="text-gold font-semibold">Category</TableHead>
+                        <TableHead className="text-gold font-semibold">Priority</TableHead>
+                        <TableHead className="text-gold font-semibold">Status</TableHead>
+                        <TableHead className="text-gold font-semibold">Created</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {tickets.map((ticket) => {
+                        const priority = priorityConfig[ticket.priority] || priorityConfig.normal;
+                        const status = statusConfig[ticket.status] || statusConfig.open;
+                        const StatusIcon = status.icon;
+
+                        return (
+                          <TableRow
+                            key={ticket.id}
+                            onClick={() => setSelectedTicketId(ticket.id)}
+                            className={cn(
+                              "border-gold/10 cursor-pointer transition-all duration-200",
+                              selectedTicketId === ticket.id
+                                ? "bg-gold/15 border-l-4 border-l-gold"
+                                : "hover:bg-zinc-800/50"
+                            )}
+                          >
+                            <TableCell className="font-mono text-gold font-bold">
+                              {ticket.ticket_number}
+                            </TableCell>
+                            <TableCell>
+                              <div>
+                                <p className="text-white font-medium truncate max-w-[150px]">
+                                  {ticket.full_name}
+                                </p>
+                                <p className="text-xs text-zinc-400 truncate max-w-[150px]">
+                                  {ticket.email}
+                                </p>
+                              </div>
+                            </TableCell>
+                            <TableCell className="max-w-[200px]">
+                              <p className="text-white truncate">{ticket.subject}</p>
+                            </TableCell>
+                            <TableCell>
+                              <span className="text-zinc-300 text-sm truncate block max-w-[120px]">
+                                {ticket.service_category}
+                              </span>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className={cn("border text-xs", priority.className)}>
+                                {priority.label}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className={cn("flex items-center gap-1 w-fit text-xs", status.className)}>
+                                <StatusIcon className="w-3 h-3" />
+                                {status.label}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-zinc-300 text-sm">
+                              {format(new Date(ticket.created_at), "MMM d, h:mm a")}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              ) : (
+                <div className="p-12 text-center flex-1 flex flex-col items-center justify-center min-h-[400px]">
+                  <Ticket className="w-12 h-12 text-gold/30 mx-auto mb-3" />
+                  <p className="text-zinc-400 font-medium">No tickets found</p>
+                  <p className="text-zinc-500 text-sm mt-1">
+                    Try adjusting your filters or check back later
                   </p>
                 </div>
               )}
@@ -252,7 +295,7 @@ const SupportTicketHub = () => {
           </div>
 
           {/* Detail Panel */}
-          <div className="w-[500px] flex-shrink-0">
+          <div className="w-[500px] flex-shrink-0 flex">
             <TicketDetailPanel
               ticketId={selectedTicketId}
               onClose={() => setSelectedTicketId(null)}
