@@ -1,131 +1,154 @@
 
 
-## Mortgage Calculator Cards - Add Property Price & Improve Interest Display
+## Unified Points & Loyalty Program - Implementation Plan
 
 ### Overview
-Enhance the compact mortgage calculator cards on the homepage by adding a Property Price card and improving the clarity of all cards, especially the Interest card which currently shows confusing information.
+Implement a **Unified Points** system where all activities earn into one shared pool regardless of mode. When the user switches modes, only the tier ladder display changes - points never disappear.
 
 ---
 
-### Current Issue Analysis
+### Current State Analysis
 
-**Interest Calculation Verification:**
-The calculation IS mathematically correct:
-- Property: AED 2,000,000
-- Loan Amount: AED 1,600,000 (80%)
-- At 4.5% over 25 years = AED 1,067,000 total interest
+**Database Structure:**
+- `points_ledger` table tracks points with `user_mode` column (for audit)
+- `tier_definitions` has two separate ladders:
+  - **Broker tiers**: Starter (0-499) → Rising (500-1499) → Performer (1500-3999) → Elite (4000-9999) → Legend (10000+)
+  - **Client/Investor tiers**: Explorer (0-199) → Seeker (200-499) → Investor (500-1499) → Premium (1500-3999) → Elite (4000+)
 
-This is accurate - over 25 years, compound interest on AED 1.6M at 4.5% does equal approximately AED 1M. However, the current card shows "25 Years" which doesn't explain the percentage of total cost.
+**Current Hook Behavior (`useTierProgress.ts`):**
+- Sums ALL points from ledger (line 106) - already unified
+- Switches tier ladder based on `isBroker` flag (line 62)
+- Uses `useUserRole` to determine broker status
 
-**Current Problems:**
-1. No Property Price card (users want to see the starting price)
-2. Cards not in logical order
-3. Interest card shows "25 Years" instead of a meaningful percentage
-4. Monthly payment shows "/month" instead of a useful percentage
-
----
-
-### Proposed Changes
-
-**1. Add Property Price Card (New)**
-| Field | Value |
-|-------|-------|
-| Label | Property Price |
-| Percentage | 100% |
-| Amount | AED 2,000,000 |
-| Icon | Building2 |
-
-**2. New Card Order (5 cards total)**
-1. Property Price (100%) - AED 2,000,000
-2. Down Payment (20%) - AED 400,000
-3. Loan Amount (80%) - AED 1,600,000
-4. Total Interest (53% of loan) - AED 1,067,000
-5. Monthly Payment - AED 8,890/month
-
-**3. Interest Card Improvements**
-- Change percentage display from "25 Years" to the **interest as % of loan amount**
-- Formula: `(totalInterest / loanAmount) * 100` = 66.7% (interest adds 67% to your loan)
-- Or show as % of total payment: `(totalInterest / totalPayment) * 100` = 40%
-- Add subtitle showing rate and term: "@ 4.5% | 25 yrs"
-
-**4. Monthly Payment Card Improvements**
-- Show as percentage of total payment divided by months
-- Or show relative affordability indicator
+**Issue to Fix:**
+- Currently uses `useUserRole().isBroker` which checks the user's **role** (permanent)
+- Should use `useUserModeContext()` to check the user's **mode** (can switch anytime)
 
 ---
 
-### Layout Change
+### Implementation Changes
 
-**Current: 4 cards in 2x2 grid on mobile, 4 columns on desktop**
+#### File: `src/hooks/useTierProgress.ts`
+
+**1. Change context source (line 4-5):**
+```typescript
+// BEFORE:
+import { useUserRole } from "@/hooks/useUserRole";
+// ...
+const { isBroker } = useUserRole();
+
+// AFTER:
+import { useUserModeContext } from "@/contexts/UserModeContext";
+// ...
+const { isBrokerMode, isCombinedMode } = useUserModeContext();
 ```
-[Down Payment] [Monthly] [Loan] [Interest]
+
+**2. Update tier type selection logic (line 62):**
+```typescript
+// BEFORE:
+const tierType = isBroker ? 'broker' : 'client';
+
+// AFTER:
+// In combined mode, show broker ladder (more ambitious goals)
+// In broker-only mode, show broker ladder
+// In investor-only mode, show client ladder
+const tierType = isBrokerMode ? 'broker' : 'client';
 ```
 
-**New: 5 cards - 2+3 pattern on mobile, 5 columns on desktop**
+**3. Add mode reactivity to loadProgress dependencies (line 160):**
+```typescript
+// BEFORE:
+}, [user, tierType]);
+
+// AFTER:
+}, [user, isBrokerMode, isCombinedMode]);
 ```
-Mobile:
-[Property Price] [Down Payment]
-[Loan Amount] [Interest] [Monthly]
 
-Desktop:
-[Property] [Down] [Loan] [Interest] [Monthly]
-```
-
----
-
-### Technical Implementation
-
-**File to modify:** `src/components/MortgageCalculator.tsx`
-
-**Changes:**
-
-1. **Add Building2 icon import** (line 2)
-
-2. **Add new calculated values** (inside useMemo, around line 58):
-   ```typescript
-   const interestPercentOfLoan = (totalInterest / loanAmount) * 100;
-   const interestPercentOfTotal = (totalInterest / totalPayment) * 100;
-   ```
-
-3. **Update compact view grid** (line 90):
-   - Change from `grid-cols-2 sm:grid-cols-4` to `grid-cols-2 sm:grid-cols-5`
-
-4. **Add Property Price card first** (before Down Payment card):
-   - Icon: Building2
-   - Label: Property Price
-   - Percentage: 100%
-   - Value: formatCurrency(propertyPrice)
-
-5. **Reorder cards**:
-   - Property Price (new) → Down Payment → Loan Amount → Interest → Monthly Payment
-
-6. **Update Interest card display**:
-   - Change from showing "25 Years" to showing meaningful percentage
-   - Add subtitle with rate and term info
-
-7. **Update Monthly Payment card**:
-   - Keep "/month" indicator
-   - Consider adding percentage of annual income context
-
----
-
-### Visual Outcome
-
-```
-┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-│ 🏢 Property     │ │ 📊 Down Payment │ │ 💰 Loan Amount  │ │ 📈 Interest     │ │ 🧮 Monthly      │
-│ 100%            │ │ 20%             │ │ 80%             │ │ 67% of loan     │ │ /month          │
-│ AED 2,000,000   │ │ AED 400,000     │ │ AED 1,600,000   │ │ AED 1,067,000   │ │ AED 8,890       │
-│                 │ │                 │ │                 │ │ @ 4.5% | 25 yrs │ │                 │
-└─────────────────┘ └─────────────────┘ └─────────────────┘ └─────────────────┘ └─────────────────┘
+**4. Export tier type for UI components:**
+```typescript
+interface TierProgressHook {
+  tierProgress: TierProgress | null;
+  allTiers: TierDefinition[];
+  recentPoints: PointsLedgerEntry[];
+  isLoading: boolean;
+  error: string | null;
+  refreshProgress: () => Promise<void>;
+  currentTierType: 'broker' | 'client';  // NEW
+}
 ```
 
 ---
 
-### Note on Interest Amount
+#### File: `src/components/tier/TierProgressCard.tsx`
 
-The ~AED 1 million interest on a AED 2 million property IS correct:
-- Borrowing AED 1.6M for 25 years at 4.5% = AED 1.07M in interest
-- This is standard mortgage math - over 25 years, interest accumulates significantly
-- The percentage display will help users understand this represents 67% added cost on their loan, not the annual rate
+**Add mode indicator for clarity:**
+
+When user switches modes, show a subtle label indicating which tier ladder they're viewing:
+
+```typescript
+// Add to CardHeader (around line 54-59):
+<span className="text-xs text-white/50">
+  {tierType === 'broker' ? 'Broker Tier' : 'Investor Tier'}
+</span>
+```
+
+---
+
+#### File: `src/components/tier/TierBadge.tsx`
+
+**No changes needed** - already supports both tier types with proper colors and icons.
+
+---
+
+### User Experience Flow
+
+```
+User earns 1000 points total
+
+In Investor Mode:
+┌─────────────────────────────────┐
+│ 🏆 INVESTOR TIER                │
+│ Current: Investor (1000 pts)    │
+│ Next: Premium at 1500 pts       │
+│ Progress: ████████░░ 67%        │
+└─────────────────────────────────┘
+
+Switches to Broker Mode:
+┌─────────────────────────────────┐
+│ 🏆 BROKER TIER                  │
+│ Current: Rising (1000 pts)      │
+│ Next: Performer at 1500 pts     │
+│ Progress: ████████░░ 67%        │
+└─────────────────────────────────┘
+
+Same 1000 points - different tier name!
+```
+
+---
+
+### Benefits of Unified Points
+
+1. **Simplicity**: Users don't lose progress when switching modes
+2. **Motivation**: Combined mode users progress faster on both ladders
+3. **Audit Trail**: `user_mode` column in ledger tracks which mode earned each point
+4. **No Data Migration**: Current ledger structure already supports this
+
+---
+
+### Files to Modify
+
+| File | Changes |
+|------|---------|
+| `src/hooks/useTierProgress.ts` | Switch from `useUserRole` to `useUserModeContext`, add mode reactivity |
+| `src/components/tier/TierProgressCard.tsx` | Add tier type label for clarity |
+
+---
+
+### Testing Checklist
+
+1. Log in as a user with some points
+2. View tier progress in Investor mode - should show client tier
+3. Switch to Broker mode - same points, broker tier name
+4. Switch to Combined mode - should show broker tier (more ambitious)
+5. Verify points total never changes during mode switches
 
