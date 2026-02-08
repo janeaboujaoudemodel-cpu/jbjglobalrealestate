@@ -383,12 +383,8 @@ export function ReellyImportPanel() {
   };
 
   const goToApprovalQueue = () => {
-    // Navigate to Reelly-filtered queue
-    navigate("/listing-admin?view=sync&syncTab=approvals&source=reelly", { replace: true });
-    // Trigger a small delay then force refresh the URL params
-    setTimeout(() => {
-      window.dispatchEvent(new PopStateEvent('popstate'));
-    }, 50);
+    // Navigate to Data Ops view with Approvals tab
+    navigate("/listing-admin?view=data-ops&syncTab=approvals", { replace: true });
   };
 
   /**
@@ -890,6 +886,7 @@ export function ReellyImportPanel() {
             fullSync,
             job_id: currentJobId,
             resume_cursor: cursor,
+            force_overwrite: fullSync, // Full sync always overwrites ALL records
           },
         });
 

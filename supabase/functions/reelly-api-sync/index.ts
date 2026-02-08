@@ -116,6 +116,7 @@ Deno.serve(async (req) => {
     const limit = Math.min(Math.max(body.limit || 100, 1), 200);
     const jobId = body.job_id || null;
     const resumeFromCursor = body.resume_cursor || null;
+    const forceOverwrite = body.force_overwrite === true; // Force overwrite mode for full extraction
 
     // TEST action - just check API connection
     if (action === 'test') {
@@ -172,14 +173,21 @@ Deno.serve(async (req) => {
     for (const p of page.results) {
       try {
         const extId = `reelly_${p.id}`;
-        if (existMap.get(extId) === 'approved') { skipped++; continue; }
+        // Only skip approved if NOT in force overwrite mode
+        if (!forceOverwrite && existMap.get(extId) === 'approved') { skipped++; continue; }
         const areaId = await upsertArea(supabase, p.location, areaCache);
         const devId = await getOrCreateDeveloper(supabase, p.developer);
         const mapped = mapProject(p, areaId, devId);
         const { data: ex } = await supabase.from("pending_project_imports").select("id, status").like("source_url", `%${extId}%`).maybeSingle();
         if (ex) {
-          if (ex.status === 'approved') { skipped++; continue; }
-          await supabase.from("pending_project_imports").update({ ...mapped, updated_at: new Date().toISOString() }).eq("id", ex.id);
+          // In force overwrite mode, update ALL records including approved ones
+          if (!forceOverwrite && ex.status === 'approved') { skipped++; continue; }
+          await supabase.from("pending_project_imports").update({ 
+            ...mapped, 
+            // In force mode, preserve the existing status; otherwise always set to pending
+            status: forceOverwrite ? ex.status : 'pending',
+            updated_at: new Date().toISOString() 
+          }).eq("id", ex.id);
           updated++;
         } else {
           const { error } = await supabase.from("pending_project_imports").insert({ ...mapped, status: "pending", created_at: new Date().toISOString(), updated_at: new Date().toISOString() });
