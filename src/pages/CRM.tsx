@@ -359,8 +359,8 @@ const CRM = () => {
             
             <div className="flex items-center gap-2">
               {isCRMOwner && (
-                <Button variant="secondary" size="sm" onClick={() => navigate("/admin/crm")} className="font-semibold">
-                  Owner Dashboard
+                <Button variant="secondary" size="sm" onClick={() => navigate("/owner")} className="font-semibold">
+                  Owner Command Center
                 </Button>
               )}
               <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-black hover:text-gold hover:bg-gold/10">

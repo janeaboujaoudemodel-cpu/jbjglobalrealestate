@@ -214,6 +214,8 @@ import OwnerDashboard from "./pages/OwnerDashboard";
 import BrokerPartnerDashboard from "./pages/BrokerPartnerDashboard";
 import Dashboard from "./pages/Dashboard";
 import MyDashboard from "./pages/MyDashboard";
+import MyDashboardProgress from "./pages/MyDashboardProgress";
+import MyDashboardActivity from "./pages/MyDashboardActivity";
 import BrokerEducation from "./pages/BrokerEducation";
 import BrokerFAQ from "./pages/BrokerFAQ";
 import JBJAnalyticsDashboard from "./pages/JBJAnalyticsDashboard";
@@ -371,11 +373,13 @@ const App = () => (
                 <Route path="/investor-faq" element={<InvestorFAQ />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/my-dashboard" element={<MyDashboard />} />
+                <Route path="/my-dashboard/progress" element={<MyDashboardProgress />} />
+                <Route path="/my-dashboard/activity" element={<MyDashboardActivity />} />
                 <Route path="/investor-dashboard" element={<InvestorDashboard />} />
                 <Route path="/investor-dashboard/portfolio" element={<PortfolioViews />} />
                 <Route path="/investor-dashboard/reports" element={<ReportAccess />} />
-                <Route path="/owner-dashboard" element={<OwnerDashboard />} />
-                <Route path="/broker-partner-dashboard" element={<BrokerPartnerDashboard />} />
+                <Route path="/owner-dashboard" element={<Navigate to="/owner" replace />} />
+                <Route path="/admin/crm" element={<Navigate to="/owner" replace />} />
                 <Route path="/broker-education" element={<BrokerEducation />} />
                 <Route path="/broker-faq" element={<BrokerFAQ />} />
                 <Route path="/quiz" element={<Quiz />} />

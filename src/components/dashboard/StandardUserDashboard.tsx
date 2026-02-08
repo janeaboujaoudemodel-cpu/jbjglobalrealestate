@@ -61,7 +61,7 @@ const ROLES: RoleOption[] = [
       'Messages from JBJ Team',
       'Document Upload Center'
     ],
-    redirectPath: '/owner-dashboard'
+    redirectPath: '/owner'
   },
   {
     id: 'broker_partner',

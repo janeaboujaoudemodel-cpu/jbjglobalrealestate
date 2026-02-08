@@ -20,7 +20,7 @@ const OFFICIAL_EMAILS = {
 };
 
 // Verified sender domain for outgoing emails
-const VERIFIED_SENDER = 'NOREPLY@JBJGLOBALREALESTATE.COM';
+const VERIFIED_SENDER = 'NOREPLY@JBJ.AE';
 
 interface TicketRequest {
   fullName: string;

@@ -8,7 +8,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const VERIFIED_SENDER = "NOREPLY@JBJGLOBALREALESTATE.COM";
+const VERIFIED_SENDER = "NOREPLY@JBJ.AE";
 
 interface ReplyEmailRequest {
   ticketNumber: string;

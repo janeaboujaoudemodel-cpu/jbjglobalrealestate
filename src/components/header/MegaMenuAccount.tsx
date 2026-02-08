@@ -162,9 +162,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
             <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-gold/40">
               {/* Fixed-size avatar container to prevent layout shift */}
               <div className="w-16 h-16 flex-shrink-0">
-                <Avatar className="h-16 w-16 border-2 border-gold/60 bg-transparent">
+                <Avatar className="h-16 w-16 border-2 border-zinc-300 bg-transparent">
                   <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
-                  <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-gold text-xl font-bold">
+                  <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-zinc-300 text-black text-xl font-bold">
                     {avatarInitials}
                   </AvatarFallback>
                 </Avatar>
@@ -195,9 +195,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                   </Badge>
                 )}
               </div>
-              <div className="flex flex-col items-end gap-2 shrink-0">
-                {/* "Select your mode" label - in gold, connected to mode button */}
-                <p className="text-xs text-gold font-semibold">
+              <div className="flex flex-col items-end gap-1 shrink-0">
+                {/* "Select your mode" label - directly attached to mode switcher */}
+                <p className="text-[10px] text-gold font-semibold uppercase tracking-wider mb-0.5">
                   Select your mode
                 </p>
                 <div 
@@ -207,10 +207,11 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 >
                   <ModeSwitcher variant="header" />
                 </div>
+                {/* Edit Profile with more spacing below mode switcher */}
                 <Link 
                   to="/profile" 
                   onClick={onClose} 
-                  className="flex items-center gap-1.5 text-gold text-sm font-semibold hover:underline transition-colors"
+                  className="flex items-center gap-1.5 text-gold text-sm font-semibold hover:underline transition-colors mt-3"
                 >
                   Edit Profile
                   <ChevronRight className="w-3.5 h-3.5" />
