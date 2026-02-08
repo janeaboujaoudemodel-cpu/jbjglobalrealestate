@@ -77,6 +77,8 @@ export function useSupportTickets(filters?: TicketFilters) {
       console.log(`[useSupportTickets] Successfully fetched ${data?.length || 0} tickets`);
       return data as SupportTicket[];
     },
+    staleTime: 30 * 1000, // 30 seconds - reduces refetches
+    gcTime: 5 * 60 * 1000, // 5 minutes cache
   });
 }
 
@@ -87,30 +89,31 @@ export function useSupportTicketDetail(ticketId: string | null) {
     queryFn: async () => {
       if (!ticketId) return null;
 
-      // Fetch ticket
-      const { data: ticket, error: ticketError } = await supabase
-        .from("support_tickets")
-        .select("*")
-        .eq("id", ticketId)
-        .single();
+      // Fetch ticket and messages in parallel for faster loading
+      const [ticketResult, messagesResult] = await Promise.all([
+        supabase
+          .from("support_tickets")
+          .select("*")
+          .eq("id", ticketId)
+          .single(),
+        supabase
+          .from("support_ticket_messages")
+          .select("*")
+          .eq("ticket_id", ticketId)
+          .order("created_at", { ascending: true }),
+      ]);
 
-      if (ticketError) throw ticketError;
-
-      // Fetch messages
-      const { data: messages, error: messagesError } = await supabase
-        .from("support_ticket_messages")
-        .select("*")
-        .eq("ticket_id", ticketId)
-        .order("created_at", { ascending: true });
-
-      if (messagesError) throw messagesError;
+      if (ticketResult.error) throw ticketResult.error;
+      if (messagesResult.error) throw messagesResult.error;
 
       return {
-        ticket: ticket as SupportTicket,
-        messages: messages as SupportTicketMessage[],
+        ticket: ticketResult.data as SupportTicket,
+        messages: messagesResult.data as SupportTicketMessage[],
       };
     },
     enabled: !!ticketId,
+    staleTime: 10 * 1000, // 10 seconds
+    gcTime: 2 * 60 * 1000, // 2 minutes cache
   });
 }
 

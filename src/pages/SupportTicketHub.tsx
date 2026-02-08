@@ -10,7 +10,10 @@ import {
   CheckCircle,
   RefreshCw,
   ArrowLeft,
-  ChevronDown,
+  Trash2,
+  CheckSquare,
+  Square,
+  ArrowUpDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,15 +33,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useSupportTickets, type TicketFilters } from "@/hooks/useSupportTickets";
+import { useBulkUpdateTicketStatus, useBulkDeleteTickets } from "@/hooks/useBulkTicketActions";
 import TicketDetailPanel from "@/components/support/TicketDetailPanel";
 import { cn } from "@/lib/utils";
 
-const priorityConfig: Record<string, { label: string; className: string }> = {
-  critical: { label: "Critical", className: "bg-red-500/20 text-red-400 border-red-500/30" },
-  high: { label: "High", className: "bg-orange-500/20 text-orange-400 border-orange-500/30" },
-  normal: { label: "Normal", className: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
-  low: { label: "Low", className: "bg-zinc-500/20 text-zinc-400 border-zinc-500/30" },
+const priorityConfig: Record<string, { label: string; className: string; dotColor: string }> = {
+  critical: { label: "Critical", className: "bg-red-500/20 text-red-400 border-red-500/30", dotColor: "bg-red-500" },
+  high: { label: "High", className: "bg-orange-500/20 text-orange-400 border-orange-500/30", dotColor: "bg-orange-500" },
+  normal: { label: "Normal", className: "bg-blue-500/20 text-blue-400 border-blue-500/30", dotColor: "bg-blue-500" },
+  low: { label: "Low", className: "bg-zinc-500/20 text-zinc-400 border-zinc-500/30", dotColor: "bg-zinc-500" },
 };
 
 const statusConfig: Record<string, { label: string; className: string; icon: typeof CheckCircle }> = {
@@ -55,8 +70,20 @@ const SupportTicketHub = () => {
     search: "",
   });
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
+  const [selectedTicketIds, setSelectedTicketIds] = useState<Set<string>>(new Set());
+  const [sortAscending, setSortAscending] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const { data: tickets, isLoading, refetch, isRefetching, error } = useSupportTickets(filters);
+  const bulkUpdate = useBulkUpdateTicketStatus();
+  const bulkDelete = useBulkDeleteTickets();
+
+  // Sort tickets by date
+  const sortedTickets = tickets?.slice().sort((a, b) => {
+    const dateA = new Date(a.created_at).getTime();
+    const dateB = new Date(b.created_at).getTime();
+    return sortAscending ? dateA - dateB : dateB - dateA;
+  });
 
   // Debug logging for ticket synchronization
   useEffect(() => {
@@ -68,8 +95,57 @@ const SupportTicketHub = () => {
     }
   }, [tickets, error]);
 
+  // Clear selection when filters change
+  useEffect(() => {
+    setSelectedTicketIds(new Set());
+  }, [filters]);
+
   const handleSearchChange = (value: string) => {
     setFilters((prev) => ({ ...prev, search: value }));
+  };
+
+  const handleSelectAll = () => {
+    if (!sortedTickets) return;
+    if (selectedTicketIds.size === sortedTickets.length) {
+      setSelectedTicketIds(new Set());
+    } else {
+      setSelectedTicketIds(new Set(sortedTickets.map(t => t.id)));
+    }
+  };
+
+  const handleSelectTicket = (ticketId: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    setSelectedTicketIds(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(ticketId)) {
+        newSet.delete(ticketId);
+      } else {
+        newSet.add(ticketId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleBulkStatusChange = (status: string) => {
+    bulkUpdate.mutate(
+      { ticketIds: Array.from(selectedTicketIds), status },
+      { onSuccess: () => setSelectedTicketIds(new Set()) }
+    );
+  };
+
+  const handleBulkDelete = () => {
+    bulkDelete.mutate(
+      Array.from(selectedTicketIds),
+      { 
+        onSuccess: () => {
+          setSelectedTicketIds(new Set());
+          setShowDeleteDialog(false);
+          if (selectedTicketIds.has(selectedTicketId || '')) {
+            setSelectedTicketId(null);
+          }
+        }
+      }
+    );
   };
 
   const ticketCounts = {
@@ -78,6 +154,9 @@ const SupportTicketHub = () => {
     inProgress: tickets?.filter((t) => t.status === "in_progress").length || 0,
     resolved: tickets?.filter((t) => t.status === "resolved").length || 0,
   };
+
+  const isAllSelected = sortedTickets && sortedTickets.length > 0 && selectedTicketIds.size === sortedTickets.length;
+  const isSomeSelected = selectedTicketIds.size > 0;
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -96,7 +175,7 @@ const SupportTicketHub = () => {
               <div>
                 <h1 className="text-2xl font-bold text-gold flex items-center gap-3">
                   <Ticket className="w-7 h-7" />
-                  Support Ticket Hub
+                  Ticket Support Hub
                 </h1>
                 <p className="text-zinc-400 text-sm mt-1">
                   Manage and respond to customer support tickets
@@ -133,7 +212,7 @@ const SupportTicketHub = () => {
             </div>
           </div>
 
-          {/* Filters - Using inline styles for proper dark theme */}
+          {/* Filters */}
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold/70" />
@@ -157,9 +236,24 @@ const SupportTicketHub = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="open">Open</SelectItem>
-                  <SelectItem value="in_progress">In Progress</SelectItem>
-                  <SelectItem value="resolved">Resolved</SelectItem>
+                  <SelectItem value="open">
+                    <span className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-yellow-500" />
+                      Open
+                    </span>
+                  </SelectItem>
+                  <SelectItem value="in_progress">
+                    <span className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-blue-500" />
+                      In Progress
+                    </span>
+                  </SelectItem>
+                  <SelectItem value="resolved">
+                    <span className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-green-500" />
+                      Resolved
+                    </span>
+                  </SelectItem>
                 </SelectContent>
               </Select>
 
@@ -172,14 +266,77 @@ const SupportTicketHub = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Priority</SelectItem>
-                  <SelectItem value="critical">Critical</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="normal">Normal</SelectItem>
-                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="critical">
+                    <span className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-red-500" />
+                      <span className="text-red-400">Critical</span>
+                    </span>
+                  </SelectItem>
+                  <SelectItem value="high">
+                    <span className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-orange-500" />
+                      <span className="text-orange-400">High</span>
+                    </span>
+                  </SelectItem>
+                  <SelectItem value="normal">
+                    <span className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-blue-500" />
+                      <span className="text-blue-400">Normal</span>
+                    </span>
+                  </SelectItem>
+                  <SelectItem value="low">
+                    <span className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-zinc-500" />
+                      <span className="text-zinc-400">Low</span>
+                    </span>
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
+
+          {/* Bulk Actions Bar */}
+          {isSomeSelected && (
+            <div className="mt-4 flex items-center gap-3 p-3 bg-gold/10 border border-gold/30 rounded-lg">
+              <span className="text-gold font-medium">{selectedTicketIds.size} selected</span>
+              <div className="h-4 w-px bg-gold/30" />
+              <Button
+                size="sm"
+                onClick={() => handleBulkStatusChange("in_progress")}
+                disabled={bulkUpdate.isPending}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <Clock className="w-3 h-3 mr-1" />
+                Mark In Progress
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => handleBulkStatusChange("resolved")}
+                disabled={bulkUpdate.isPending}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                <CheckCircle className="w-3 h-3 mr-1" />
+                Mark Resolved
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => setShowDeleteDialog(true)}
+                disabled={bulkDelete.isPending}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                <Trash2 className="w-3 h-3 mr-1" />
+                Delete
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setSelectedTicketIds(new Set())}
+                className="text-gold hover:bg-gold/10"
+              >
+                Clear Selection
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -210,25 +367,41 @@ const SupportTicketHub = () => {
                     Retry
                   </Button>
                 </div>
-              ) : tickets && tickets.length > 0 ? (
+              ) : sortedTickets && sortedTickets.length > 0 ? (
                 <div className="flex-1 overflow-auto">
                   <Table>
                     <TableHeader>
                       <TableRow className="border-gold/20 hover:bg-transparent">
+                        <TableHead className="w-12">
+                          <Checkbox
+                            checked={isAllSelected}
+                            onCheckedChange={handleSelectAll}
+                            className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold"
+                          />
+                        </TableHead>
                         <TableHead className="text-gold font-semibold">Ticket #</TableHead>
                         <TableHead className="text-gold font-semibold">Customer</TableHead>
                         <TableHead className="text-gold font-semibold">Subject</TableHead>
                         <TableHead className="text-gold font-semibold">Category</TableHead>
                         <TableHead className="text-gold font-semibold">Priority</TableHead>
                         <TableHead className="text-gold font-semibold">Status</TableHead>
-                        <TableHead className="text-gold font-semibold">Created</TableHead>
+                        <TableHead className="text-gold font-semibold">
+                          <button
+                            onClick={() => setSortAscending(!sortAscending)}
+                            className="flex items-center gap-1 hover:text-white transition-colors"
+                          >
+                            Created
+                            <ArrowUpDown className="w-3 h-3" />
+                          </button>
+                        </TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {tickets.map((ticket) => {
+                      {sortedTickets.map((ticket) => {
                         const priority = priorityConfig[ticket.priority] || priorityConfig.normal;
                         const status = statusConfig[ticket.status] || statusConfig.open;
                         const StatusIcon = status.icon;
+                        const isSelected = selectedTicketIds.has(ticket.id);
 
                         return (
                           <TableRow
@@ -238,9 +411,28 @@ const SupportTicketHub = () => {
                               "border-gold/10 cursor-pointer transition-all duration-200",
                               selectedTicketId === ticket.id
                                 ? "bg-gold/15 border-l-4 border-l-gold"
+                                : isSelected
+                                ? "bg-gold/10"
                                 : "hover:bg-zinc-800/50"
                             )}
                           >
+                            <TableCell onClick={(e) => e.stopPropagation()}>
+                              <Checkbox
+                                checked={isSelected}
+                                onCheckedChange={() => {
+                                  setSelectedTicketIds(prev => {
+                                    const newSet = new Set(prev);
+                                    if (newSet.has(ticket.id)) {
+                                      newSet.delete(ticket.id);
+                                    } else {
+                                      newSet.add(ticket.id);
+                                    }
+                                    return newSet;
+                                  });
+                                }}
+                                className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold"
+                              />
+                            </TableCell>
                             <TableCell className="font-mono text-gold font-bold">
                               {ticket.ticket_number}
                             </TableCell>
@@ -303,6 +495,30 @@ const SupportTicketHub = () => {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent className="bg-zinc-900 border-gold/30">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white">Delete {selectedTicketIds.size} Ticket{selectedTicketIds.size > 1 ? 's' : ''}?</AlertDialogTitle>
+            <AlertDialogDescription className="text-zinc-400">
+              This action cannot be undone. All selected tickets and their messages will be permanently deleted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-zinc-800 border-zinc-700 text-white hover:bg-zinc-700">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleBulkDelete}
+              className="bg-red-600 hover:bg-red-700 text-white"
+              disabled={bulkDelete.isPending}
+            >
+              {bulkDelete.isPending ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

@@ -200,3 +200,6 @@ verify_jwt = false
 
 [functions.ai-lead-qualification]
 verify_jwt = false
+
+[functions.ai-ticket-reply-suggest]
+verify_jwt = false
