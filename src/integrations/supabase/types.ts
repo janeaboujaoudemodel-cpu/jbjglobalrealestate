@@ -16648,8 +16648,12 @@ export type Database = {
           full_name: string
           id: string
           internal_notes: string | null
+          is_reopened: boolean | null
           phone: string | null
           priority: string | null
+          reopen_count: number | null
+          reopen_token: string | null
+          reopened_at: string | null
           resolved_at: string | null
           service_category: string
           status: string
@@ -16674,8 +16678,12 @@ export type Database = {
           full_name: string
           id?: string
           internal_notes?: string | null
+          is_reopened?: boolean | null
           phone?: string | null
           priority?: string | null
+          reopen_count?: number | null
+          reopen_token?: string | null
+          reopened_at?: string | null
           resolved_at?: string | null
           service_category: string
           status?: string
@@ -16700,8 +16708,12 @@ export type Database = {
           full_name?: string
           id?: string
           internal_notes?: string | null
+          is_reopened?: boolean | null
           phone?: string | null
           priority?: string | null
+          reopen_count?: number | null
+          reopen_token?: string | null
+          reopened_at?: string | null
           resolved_at?: string | null
           service_category?: string
           status?: string

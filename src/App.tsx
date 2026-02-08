@@ -156,6 +156,7 @@ import CRMLeadDetail from "./pages/CRMLeadDetail";
 import Automations from "./pages/Automations";
 import SupportTicketHub from "./pages/SupportTicketHub";
 import MyTickets from "./pages/client/MyTickets";
+import ReopenTicket from "./pages/ReopenTicket";
 import CRMTasks from "./pages/CRMTasks";
 import CRMCalendar from "./pages/CRMCalendar";
 import CRMNotes from "./pages/CRMNotes";
@@ -585,6 +586,9 @@ const App = () => (
                 
                 {/* My Tickets - Public for tracking */}
                 <Route path="/my-tickets" element={<MyTickets />} />
+                
+                {/* Reopen Ticket - Public for email links */}
+                <Route path="/reopen-ticket" element={<ReopenTicket />} />
                 
                 {/* Communication & Productivity Tools - Owner-only */}
                 <Route path="/automations" element={<OwnerGuard><Automations /></OwnerGuard>} />
