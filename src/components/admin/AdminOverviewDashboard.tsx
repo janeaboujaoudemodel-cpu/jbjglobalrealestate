@@ -83,6 +83,9 @@ export const AdminOverviewDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
+      // Get 24 hours ago timestamp
+      const last24Hours = subDays(new Date(), 1).toISOString();
+
       const [
         projectsRes,
         leadsRes,
@@ -90,6 +93,8 @@ export const AdminOverviewDashboard = () => {
         blockedRes,
         aiLogsRes,
         pendingRes,
+        visitorSessionsRes,
+        visitorEventsRes,
       ] = await Promise.all([
         supabase.from("projects").select("id", { count: "exact", head: true }),
         supabase.from("crm_leads").select("id", { count: "exact", head: true }),
@@ -97,6 +102,10 @@ export const AdminOverviewDashboard = () => {
         supabase.from("ip_blocklist").select("id", { count: "exact", head: true }),
         supabase.from("ai_usage_logs").select("id", { count: "exact", head: true }).gte("created_at", subDays(new Date(), 7).toISOString()),
         supabase.from("pending_project_imports").select("id", { count: "exact", head: true }).eq("status", "pending"),
+        // Real visitor session count (last 24h)
+        supabase.from("visitor_sessions").select("id", { count: "exact", head: true }).gte("started_at", last24Hours),
+        // Real visitor event count (last 24h)
+        supabase.from("visitor_events").select("id", { count: "exact", head: true }).gte("created_at", last24Hours),
       ]);
 
       setStats({
@@ -105,9 +114,9 @@ export const AdminOverviewDashboard = () => {
         totalBrokers: brokersRes.count || 0,
         aiInteractions: aiLogsRes.count || 0,
         blockedIPs: blockedRes.count || 0,
-        activeUsers: Math.floor(Math.random() * 50) + 20, // Placeholder
+        activeUsers: visitorSessionsRes.count || 0, // Real: visitor sessions (24h)
         pendingApprovals: pendingRes.count || 0,
-        todayVisitors: Math.floor(Math.random() * 200) + 100, // Placeholder
+        todayVisitors: visitorEventsRes.count || 0, // Real: visitor events (24h)
       });
 
       // Fetch recent activities (simulated from multiple sources)

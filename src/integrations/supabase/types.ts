@@ -1105,11 +1105,17 @@ export type Database = {
           created_at: string
           draw_ticket_number: string | null
           email: string | null
+          enter_draw: boolean | null
+          expected_benefit: string | null
           full_name: string
           id: string
           idea: string
+          idea_category: string | null
+          idea_title: string | null
           is_anonymous: boolean
           phone: string | null
+          points_awarded: number | null
+          points_awarded_at: string | null
           reviewed_at: string | null
           reviewed_by: string | null
           status: string
@@ -1124,11 +1130,17 @@ export type Database = {
           created_at?: string
           draw_ticket_number?: string | null
           email?: string | null
+          enter_draw?: boolean | null
+          expected_benefit?: string | null
           full_name?: string
           id?: string
           idea: string
+          idea_category?: string | null
+          idea_title?: string | null
           is_anonymous?: boolean
           phone?: string | null
+          points_awarded?: number | null
+          points_awarded_at?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           status?: string
@@ -1143,11 +1155,17 @@ export type Database = {
           created_at?: string
           draw_ticket_number?: string | null
           email?: string | null
+          enter_draw?: boolean | null
+          expected_benefit?: string | null
           full_name?: string
           id?: string
           idea?: string
+          idea_category?: string | null
+          idea_title?: string | null
           is_anonymous?: boolean
           phone?: string | null
+          points_awarded?: number | null
+          points_awarded_at?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           status?: string

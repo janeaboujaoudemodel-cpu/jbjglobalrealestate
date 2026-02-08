@@ -731,47 +731,90 @@ const IdeaBoxForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast({
-      title: "Idea Submitted! 💡",
-      description: "Thank you for sharing your creativity! You've been entered into the monthly draw for electronics and our best idea prize!",
-    });
 
-    setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      ideaTitle: "",
-      ideaCategory: "",
-      ideaDescription: "",
-      expectedBenefit: "",
-      enterDraw: true,
-    });
-    setIsSubmitting(false);
+    try {
+      // Get current user if logged in
+      const { data: { user } } = await supabase.auth.getUser();
+
+      // Generate a draw ticket number
+      const drawTicketNumber = `IDEA-${Date.now().toString(36).toUpperCase()}`;
+
+      // Insert idea into database
+      const { error } = await supabase
+        .from("best_idea_submissions")
+        .insert({
+          user_id: user?.id || null,
+          full_name: formData.fullName,
+          email: formData.email,
+          phone: formData.phone || null,
+          idea: formData.ideaDescription,
+          idea_title: formData.ideaTitle,
+          idea_category: formData.ideaCategory,
+          expected_benefit: formData.expectedBenefit || null,
+          enter_draw: formData.enterDraw,
+          draw_ticket_number: formData.enterDraw ? drawTicketNumber : null,
+          status: "pending",
+          is_anonymous: false,
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Idea Submitted! 💡",
+        description: formData.enterDraw 
+          ? `Thank you! Your ticket #${drawTicketNumber} has been entered into the monthly draw. You'll receive 100 points if your idea is approved!`
+          : "Thank you for sharing your creativity! You'll receive 100 points if your idea is approved!",
+      });
+
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        ideaTitle: "",
+        ideaCategory: "",
+        ideaDescription: "",
+        expectedBenefit: "",
+        enterDraw: true,
+      });
+    } catch (error: any) {
+      console.error("Idea submission error:", error);
+      toast({
+        title: "Submission Failed",
+        description: error.message || "Unable to submit your idea. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Prize Banner */}
-      <div className="bg-gradient-to-r from-purple-900/50 to-gold/20 border border-gold/30 rounded-xl p-4 mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <Trophy className="w-6 h-6 text-gold" />
-          <h3 className="text-white font-semibold">Double Reward Opportunity!</h3>
+      {/* Prize Banner - Premium Readable */}
+      <div className="bg-gradient-to-r from-purple-900/80 to-gold/30 border-2 border-gold/50 rounded-xl p-5 mb-6 shadow-lg">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center">
+            <Trophy className="w-6 h-6 text-gold" />
+          </div>
+          <h3 className="text-white text-lg font-bold">Double Reward Opportunity!</h3>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <div className="flex items-start gap-2">
-            <Gift className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-lg bg-purple-500/30 flex items-center justify-center flex-shrink-0">
+              <Gift className="w-5 h-5 text-purple-300" />
+            </div>
             <div>
-              <p className="text-white font-medium">Monthly Draw</p>
-              <p className="text-zinc-400">Win an iPad Pro or iPhone 16 Pro Max! Draw date announced monthly.</p>
+              <p className="text-white font-semibold text-base mb-1">Monthly Draw</p>
+              <p className="text-white/80 text-sm leading-relaxed">Win an iPad Pro or iPhone 16 Pro Max! Draw date announced monthly.</p>
             </div>
           </div>
-          <div className="flex items-start gap-2">
-            <Sparkles className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gold/30 flex items-center justify-center flex-shrink-0">
+              <Sparkles className="w-5 h-5 text-gold" />
+            </div>
             <div>
-              <p className="text-white font-medium">Best Idea Prize</p>
-              <p className="text-zinc-400">The most creative idea wins a special cash gift or premium reward!</p>
+              <p className="text-white font-semibold text-base mb-1">Best Idea Prize</p>
+              <p className="text-white/80 text-sm leading-relaxed">The most creative idea wins a special cash gift or premium reward!</p>
             </div>
           </div>
         </div>
@@ -842,7 +885,7 @@ const IdeaBoxForm = () => {
         />
       </div>
 
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="ideaDescription" className="text-black">Your Idea *</Label>
         <Textarea
           id="ideaDescription"
@@ -855,7 +898,7 @@ const IdeaBoxForm = () => {
         />
       </div>
 
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="expectedBenefit" className="text-black">Expected Benefit</Label>
         <Textarea
           id="expectedBenefit"
