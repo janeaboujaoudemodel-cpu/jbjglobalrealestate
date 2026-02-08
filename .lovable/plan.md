@@ -1,198 +1,83 @@
 
 
-## Homepage Hero Search Bar & Toolkit Cards Fix Plan
+## Fix Duplicate Header Issue
 
-### Executive Summary
+### Problem Identified
 
-This plan addresses the user's two main issues:
+The header appears twice because:
 
-1. **JBJ Royal Tools Hub - Button Alignment**: Buttons are not aligned at the bottom of cards due to varying description lengths
-2. **Hero Search Bar Issues**: The user mentioned previous requests that weren't implemented (need to verify exact issues based on design requirements)
+1. **MainLayout renders GlobalHeader**: All routes under `MainLayoutWrapper` automatically get the `GlobalHeader` from `MainLayout.tsx` (line 201)
+
+2. **9 pages render GlobalHeader directly**: These pages import and render `GlobalHeader` within their own component, causing a second header
+
+### Affected Files
+
+| File | Line | Issue |
+|------|------|-------|
+| `src/pages/LandlordListForm.tsx` | 6, 105 | Imports and renders GlobalHeader |
+| `src/pages/RequestValuation.tsx` | 6, 108 | Imports and renders GlobalHeader |
+| `src/pages/JoinInvestorList.tsx` | 6, 100 | Imports and renders GlobalHeader |
+| `src/pages/partners/PartnerCompanySetup.tsx` | 19, 85 | Imports and renders GlobalHeader |
+| `src/pages/Disclaimers.tsx` | 4, 91 | Imports and renders GlobalHeader |
+| `src/pages/InvestorServices.tsx` | 5, 131 | Imports and renders GlobalHeader |
+| `src/pages/ThankYou.tsx` | 6, 140 | Imports and renders GlobalHeader |
+| `src/pages/SellWithUs.tsx` | 5, 94 | Imports and renders GlobalHeader |
+| `src/pages/Reviews.tsx` | 5, 94 | Imports and renders GlobalHeader |
 
 ---
 
-### Part 1: JBJ Royal Tools Hub - Card Button Alignment Fix
+### Solution
 
-**Issue**: The buttons (`Get Evaluation`, `Start Comparing`, etc.) appear at different vertical positions because:
-- Each card has variable content height (title + description)
-- The button uses `mt-auto` but the parent container isn't using flexbox with `flex-col`
+Remove the `GlobalHeader` import and JSX usage from all 9 affected page components. The header is already provided by `MainLayout` through the route wrapper.
 
-**File**: `src/components/home/ToolkitShowcaseCard.tsx`
+---
 
-**Current Structure (Lines 131-156)**:
+### Implementation Details
+
+For each file, we need to:
+
+1. **Remove the import statement**:
 ```tsx
-<div className="h-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all ...">
-  {/* Icon */}
-  <div className="w-12 h-12 ...">
-  
-  {/* Title */}
-  <h4 className="text-base font-bold ...">
-  
-  {/* Description */}
-  <p className="text-sm text-zinc-600 mb-4 leading-relaxed">
-  
-  {/* CTA - Button tries to use mt-auto but doesn't work */}
-  <Button variant="primary" size="sm" className="mt-auto">
+// REMOVE this line:
+import GlobalHeader from "@/components/GlobalHeader";
 ```
 
-**Solution**: Convert the inner card div to use flexbox column with the button pushed to the bottom:
-
+2. **Remove the JSX element**:
 ```tsx
-<div className="h-full flex flex-col bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all ...">
-  {/* Icon - fixed height */}
-  <div className="w-12 h-12 rounded-xl ... flex-shrink-0">
-  
-  {/* Title - fixed, no grow */}
-  <h4 className="text-base font-bold ... flex-shrink-0">
-  
-  {/* Description - grows to fill available space */}
-  <p className="text-sm text-zinc-600 mb-4 leading-relaxed flex-grow">
-  
-  {/* CTA - pushed to bottom with mt-auto */}
-  <Button variant="primary" size="sm" className="mt-auto w-full">
-```
-
-**Key Changes**:
-1. Add `flex flex-col` to the card container
-2. Add `flex-shrink-0` to icon and title
-3. Add `flex-grow` to description to push button down
-4. Keep `mt-auto` on button
-5. Add `w-full` to button for consistent width across cards
-
----
-
-### Part 2: Hero Search Bar Issues
-
-Based on the memory context provided (`memory/ui-ux/hero-search-mobile-responsiveness-v1`), the hero search bar should be:
-- Fully responsive across all devices
-- Stack vertically on mobile (`flex-col sm:flex-row`)
-- Touch targets minimum 48px height
-
-**Current Implementation Analysis**:
-The current implementation already has:
-- Mobile stacking (line 622): `flex flex-col sm:flex-row`
-- Touch targets: `min-h-[48px]` on inputs and buttons
-- Mobile-specific filters row (lines 974-990)
-
-**Potential Issues to Fix**:
-1. The top row dropdowns (Buy/Rent, Currency, Area Unit) may overflow on very small screens
-2. Text may not be readable in all contexts
-
-**File**: `src/components/home/HeroSearchBar.tsx`
-
-**Fixes to Apply (Lines 503-619)**:
-
-1. **Make top row wrap properly on mobile**:
-```tsx
-// Line 503 - Change from:
-<div className="flex flex-wrap items-center gap-2 mb-3">
-// To:
-<div className="flex flex-wrap items-center gap-2 mb-3 justify-start">
-```
-
-2. **Ensure dropdown popover backgrounds are solid (not transparent)**:
-The popovers already have solid champagne backgrounds (`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`), which is correct.
-
-3. **Add better visual separation for the search bar on video backgrounds**:
-Consider adding a subtle backdrop to the entire search container for better visibility.
-
----
-
-### Part 3: Ensure Button Readability
-
-**Issue**: The `Button` component in the toolkit cards uses `variant="primary"` which applies a champagne gradient background. On light champagne card backgrounds, this may lack contrast.
-
-**Current Button Appearance**:
-- Primary variant uses champagne gradient background
-- Text is `text-foreground` (black)
-
-**Solution**: The buttons should have sufficient contrast since they use a darker champagne with black text. If needed, we can add a gold border for better definition.
-
----
-
-### Implementation Summary
-
-| File | Changes |
-|------|---------|
-| `src/components/home/ToolkitShowcaseCard.tsx` | Add flex-col layout to cards, push buttons to bottom |
-| `src/components/home/HeroSearchBar.tsx` | Minor improvements for wrapping and visual clarity |
-
----
-
-### Detailed Code Changes
-
-#### File 1: `src/components/home/ToolkitShowcaseCard.tsx`
-
-**Change Card Container (Line 132)**:
-```tsx
-// FROM:
-<div className="h-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
-
-// TO:
-<div className="h-full flex flex-col bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
-```
-
-**Make Description Grow (Line 147)**:
-```tsx
-// FROM:
-<p className="text-sm text-zinc-600 mb-4 leading-relaxed">
-
-// TO:
-<p className="text-sm text-zinc-600 mb-4 leading-relaxed flex-grow">
-```
-
-**Button Full Width (Line 152)**:
-```tsx
-// FROM:
-<Button variant="primary" size="sm" className="mt-auto">
-
-// TO:
-<Button variant="primary" size="sm" className="mt-auto w-full justify-center">
+// REMOVE this line:
+<GlobalHeader />
 ```
 
 ---
 
-### Visual Result
+### Changes Summary
 
-```text
-BEFORE:                          AFTER:
-+---------------+                +---------------+
-|   [Icon]      |                |   [Icon]      |
-|   Title       |                |   Title       |
-|   Desc line 1 |                |   Desc line 1 |
-|   [Button]    |  <- uneven     |   Desc line 2 |
-+---------------+                |               |  <- flex-grow fills space
-                                 |   [Button]    |  <- aligned at bottom
-+---------------+                +---------------+
-|   [Icon]      |
-|   Title       |                +---------------+
-|   Desc line 1 |                |   [Icon]      |
-|   Desc line 2 |                |   Title       |
-|   Desc line 3 |                |   Short desc  |
-|   [Button]    |  <- lower      |               |
-+---------------+                |               |
-                                 |   [Button]    |  <- same position
-                                 +---------------+
-```
+| File | Action |
+|------|--------|
+| `src/pages/LandlordListForm.tsx` | Remove import (line 6) + JSX (line 105) |
+| `src/pages/RequestValuation.tsx` | Remove import (line 6) + JSX (line 108) |
+| `src/pages/JoinInvestorList.tsx` | Remove import (line 6) + JSX (line 100) |
+| `src/pages/partners/PartnerCompanySetup.tsx` | Remove import (line 19) + JSX (line 85) |
+| `src/pages/Disclaimers.tsx` | Remove import (line 4) + JSX (line 91) |
+| `src/pages/InvestorServices.tsx` | Remove import (line 5) + JSX (line 131) |
+| `src/pages/ThankYou.tsx` | Remove import (line 6) + JSX (line 140) |
+| `src/pages/SellWithUs.tsx` | Remove import (line 5) + JSX (line 94) |
+| `src/pages/Reviews.tsx` | Remove import (line 5) + JSX (line 94) |
 
 ---
 
-### Files to Modify
+### Why This Happened
 
-| File | Line Changes | Purpose |
-|------|--------------|---------|
-| `src/components/home/ToolkitShowcaseCard.tsx` | Lines 132, 147, 152 | Flex column layout for card alignment |
-| `src/components/home/HeroSearchBar.tsx` | Minor tweaks if needed | Ensure mobile responsiveness |
+These pages were likely created before the centralized `MainLayout` pattern was established, or they were copied from a template that included the header. Per the architecture memory (`architecture/centralized-footer-and-cta-logic-v1`), all global UI elements (Header, Footer, CTA) should be rendered exclusively in `MainLayout.tsx`.
 
 ---
 
-### Summary
+### Result
 
-| Issue | Fix |
-|-------|-----|
-| Buttons not aligned in toolkit cards | Add `flex flex-col` to card, `flex-grow` to description |
-| Button width inconsistent | Add `w-full justify-center` to buttons |
-| Hero search bar | Already mostly correct, minor polish if needed |
+After this fix:
+- Only ONE header will appear on all pages
+- Consistent header behavior across the entire site
+- Proper transparent/solid header transitions based on scroll
 
-**Total Changes**: 1 file with 3 line modifications
+**Total Files Modified**: 9
 
