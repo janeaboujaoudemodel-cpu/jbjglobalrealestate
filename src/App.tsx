@@ -380,7 +380,7 @@ const App = () => (
                 <Route path="/investor-dashboard/portfolio" element={<PortfolioViews />} />
                 <Route path="/investor-dashboard/reports" element={<ReportAccess />} />
                 <Route path="/owner-dashboard" element={<Navigate to="/owner" replace />} />
-                <Route path="/admin/crm" element={<Navigate to="/owner" replace />} />
+                {/* Removed duplicate /admin/crm route - using redirect below */}
                 <Route path="/broker-education" element={<BrokerEducation />} />
                 <Route path="/broker-faq" element={<BrokerFAQ />} />
                 <Route path="/quiz" element={<Quiz />} />

@@ -1,7 +1,8 @@
 import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useOwnerVerification } from "@/hooks/useOwnerVerification";
+import { Button } from "@/components/ui/button";
+import { RefreshCw, LogOut, Shield, AlertTriangle } from "lucide-react";
 
 interface OwnerGuardProps {
   children: ReactNode;
@@ -17,19 +18,32 @@ interface OwnerGuardProps {
  * - VISITOR (no session) → redirect to /auth with redirect-back
  * - AUTHENTICATED but NOT OWNER → redirect to /403 (AccessDenied)
  * 
+ * This guard now uses centralized owner status from AuthContext only.
+ * No duplicate verify-owner calls are made.
+ * 
  * NOTE: This is UI-layer protection only.
  * Server-side enforcement is mandatory in Edge Functions + RLS.
  */
 const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
-  const { user, loading: authLoading } = useAuth();
-  const { isOwner, isLoading: ownerLoading } = useOwnerVerification();
+  const { 
+    user, 
+    loading: authLoading, 
+    ownerLoading, 
+    ownerError, 
+    isOwner,
+    refreshOwnerVerification,
+    signOut,
+  } = useAuth();
   const location = useLocation();
 
-  // Show loading state while checking auth or owner status
+  // Show loading state while checking auth OR owner status
   if ((authLoading || ownerLoading) && showLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+        <div className="text-center">
+          <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
+          <p className="text-zinc-400">Verifying owner access...</p>
+        </div>
       </div>
     );
   }
@@ -38,6 +52,46 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   if (!user) {
     const redirectPath = encodeURIComponent(location.pathname + location.search);
     return <Navigate to={`/auth?redirect=${redirectPath}`} replace />;
+  }
+
+  // Owner verification failed with an error - show retry UI instead of redirecting
+  if (ownerError && !isOwner) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center p-6">
+        <div className="max-w-md text-center">
+          <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto mb-6">
+            <AlertTriangle className="w-10 h-10 text-amber-500" />
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-3">
+            Verification Temporarily Unavailable
+          </h1>
+          <p className="text-zinc-400 mb-2">
+            We couldn't verify your owner access at this time.
+          </p>
+          <p className="text-zinc-500 text-sm mb-6">
+            Error: {ownerError}
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              onClick={() => refreshOwnerVerification()}
+              className="bg-gold hover:bg-gold/90 text-black"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Retry Verification
+            </Button>
+            <Button
+              onClick={() => signOut()}
+              variant="outline"
+              className="border-zinc-700 text-white hover:bg-zinc-800"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // AUTHENTICATED but NOT OWNER → AccessDenied
@@ -56,6 +110,6 @@ export default OwnerGuard;
  * Use this for conditional rendering in components
  */
 export function useIsOwner(): { isOwner: boolean; isLoading: boolean } {
-  const { isOwner, isLoading } = useOwnerVerification();
-  return { isOwner, isLoading };
+  const { isOwner, ownerLoading } = useAuth();
+  return { isOwner, isLoading: ownerLoading };
 }

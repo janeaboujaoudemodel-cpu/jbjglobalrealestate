@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { Shield, Lock, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -11,40 +12,46 @@ interface ExecutiveAccessGateProps {
 /**
  * ExecutiveAccessGate - Restricts access to executive dashboards
  * Only Founder, Owner, C-level executives, and authorized senior management
- * Full audit logging of all access attempts
+ * 
+ * Owner (verified via AuthContext) always has access.
+ * Full audit logging of all access attempts.
  */
 const ExecutiveAccessGate = ({ children }: ExecutiveAccessGateProps) => {
   const navigate = useNavigate();
+  const { user, loading: authLoading, isOwner, ownerLoading } = useAuth();
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
     const checkExecutiveAccess = async () => {
+      // Wait for auth to finish
+      if (authLoading || ownerLoading) return;
+
+      if (!user) {
+        setHasAccess(false);
+        setIsLoading(false);
+        return;
+      }
+
+      // Owner override - if verified as Owner, allow immediately
+      if (isOwner) {
+        setHasAccess(true);
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-
-        if (!session?.user) {
-          setHasAccess(false);
-          setIsLoading(false);
-          return;
-        }
-
-        setUserEmail(session.user.email || null);
-
         // Check for executive-level roles
-        const [adminResult, ownerResult, crmAdminResult] = await Promise.all([
-          supabase.rpc("has_role", { _user_id: session.user.id, _role: "admin" }),
-          supabase.rpc("has_role", { _user_id: session.user.id, _role: "owner" }),
-          supabase.rpc("is_crm_admin", { _user_id: session.user.id }),
+        const [adminResult, ownerRoleResult, crmAdminResult] = await Promise.all([
+          supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+          supabase.rpc("has_role", { _user_id: user.id, _role: "owner" }),
+          supabase.rpc("is_crm_admin", { _user_id: user.id }),
         ]);
 
         const isExecutive = 
           Boolean(adminResult.data) || 
-          Boolean(ownerResult.data) || 
+          Boolean(ownerRoleResult.data) || 
           Boolean(crmAdminResult.data);
-
-        // Log access attempt (audit logging handled separately)
 
         setHasAccess(isExecutive);
       } catch (error) {
@@ -56,9 +63,9 @@ const ExecutiveAccessGate = ({ children }: ExecutiveAccessGateProps) => {
     };
 
     checkExecutiveAccess();
-  }, []);
+  }, [user, authLoading, isOwner, ownerLoading]);
 
-  if (isLoading) {
+  if (authLoading || ownerLoading || isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">

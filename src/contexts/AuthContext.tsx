@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -14,9 +14,16 @@ import { supabase } from "@/integrations/supabase/client";
 interface AuthContextType {
   user: User | null;
   session: Session | null;
+  /** True while the initial session is being determined */
   loading: boolean;
+  /** True while owner verification is running (separate from auth loading) */
+  ownerLoading: boolean;
+  /** Error message if owner verification failed */
+  ownerError: string | null;
   /** True if authenticated user is verified as the Owner (server-verified) */
   isOwner: boolean;
+  /** Re-run owner verification without page reload */
+  refreshOwnerVerification: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
@@ -31,66 +38,95 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [ownerLoading, setOwnerLoading] = useState(false);
+  const [ownerError, setOwnerError] = useState<string | null>(null);
   const [isOwner, setIsOwner] = useState(false);
+
+  const verifyOwner = useCallback(async (currentSession: Session | null): Promise<boolean> => {
+    if (!currentSession?.access_token) {
+      return false;
+    }
+
+    try {
+      setOwnerLoading(true);
+      setOwnerError(null);
+
+      // Create a timeout promise
+      const timeoutPromise = new Promise<{ data: null; error: Error }>((_, reject) => {
+        setTimeout(() => reject(new Error("Owner verification timeout")), 10000);
+      });
+
+      // Race between the actual call and timeout
+      const result = await Promise.race([
+        supabase.functions.invoke("verify-owner", {
+          headers: {
+            Authorization: `Bearer ${currentSession.access_token}`,
+          },
+        }),
+        timeoutPromise,
+      ]);
+
+      if (result.error) {
+        console.error("verify-owner error:", result.error);
+        setOwnerError(result.error.message || "Verification failed");
+        return false;
+      }
+
+      const ownerStatus = result.data?.isOwner === true;
+      return ownerStatus;
+    } catch (err: any) {
+      console.error("verify-owner failed:", err);
+      setOwnerError(err?.message || "Verification failed");
+      return false;
+    } finally {
+      setOwnerLoading(false);
+    }
+  }, []);
+
+  const refreshOwnerVerification = useCallback(async () => {
+    if (session) {
+      const result = await verifyOwner(session);
+      setIsOwner(result);
+    }
+  }, [session, verifyOwner]);
 
   useEffect(() => {
     let mounted = true;
-    let timeoutId: ReturnType<typeof setTimeout>;
     let applySeq = 0;
-    let lastSettledSeq = 0;
-
-    const verifyOwner = async (): Promise<boolean> => {
-      try {
-        const { data, error } = await supabase.functions.invoke("verify-owner");
-        if (error) {
-          console.error("verify-owner error:", error);
-          return false;
-        }
-        return data?.isOwner === true;
-      } catch (err) {
-        console.error("verify-owner failed:", err);
-        return false;
-      }
-    };
 
     const applySession = async (nextSession: Session | null) => {
       const seq = ++applySeq;
       if (!mounted) return;
 
-      setLoading(true);
+      // Set session and user immediately
       setSession(nextSession);
       setUser(nextSession?.user ?? null);
 
-      // Fail closed by default
-      let nextIsOwner = false;
-
-      // Only verify Owner when authenticated
-      if (nextSession?.user) {
-        nextIsOwner = await verifyOwner();
+      // If no session, we're done loading
+      if (!nextSession?.user) {
+        setIsOwner(false);
+        setOwnerError(null);
+        setLoading(false);
+        return;
       }
+
+      // Mark auth as done loading, but owner verification may still be running
+      setLoading(false);
+
+      // Now verify owner status
+      const ownerStatus = await verifyOwner(nextSession);
 
       if (!mounted || seq !== applySeq) return;
 
-      setIsOwner(nextIsOwner);
-      setLoading(false);
-      lastSettledSeq = seq;
+      setIsOwner(ownerStatus);
 
       if (nextSession?.user?.email) {
         console.info("Owner check resolved", {
           email: nextSession.user.email,
-          isOwner: nextIsOwner,
+          isOwner: ownerStatus,
         });
       }
     };
-
-    // Safety timeout - force loading to false after 5 seconds to prevent infinite loading
-    // NOTE: do NOT rely on React state in this closure (it will be stale).
-    timeoutId = setTimeout(() => {
-      if (mounted && lastSettledSeq < applySeq) {
-        console.warn("Auth loading timeout - forcing completion");
-        setLoading(false);
-      }
-    }, 5000);
 
     // Set up auth state listener FIRST
     const {
@@ -107,10 +143,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => {
       mounted = false;
-      clearTimeout(timeoutId);
       subscription.unsubscribe();
     };
-  }, []);
+  }, [verifyOwner]);
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -167,6 +202,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setSession(null);
       setIsOwner(false);
+      setOwnerError(null);
       
       // Clear any role selection from localStorage
       localStorage.removeItem('jj_role_selected');
@@ -186,7 +222,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         session,
         loading,
+        ownerLoading,
+        ownerError,
         isOwner,
+        refreshOwnerVerification,
         signIn,
         signUp,
         signInWithGoogle,

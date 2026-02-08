@@ -1,6 +1,7 @@
 import { useEffect, useState, ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ListingAdminGuardProps {
   children: ReactNode;
@@ -8,30 +9,39 @@ interface ListingAdminGuardProps {
 
 /**
  * ListingAdminGuard - Restricts /listing-admin to users with:
- * 1. "owner" role
- * 2. "admin" role
- * 3. Active entry in listing_admins table
+ * 1. Verified Owner (from AuthContext - takes precedence)
+ * 2. "owner" role in user_roles table
+ * 3. "admin" role in user_roles table
+ * 4. Active entry in listing_admins table
  * 
  * If not authenticated → redirect to /auth with redirect-back
  * If authenticated but unauthorized → redirect to /
  */
 const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
+  const { user, loading: authLoading, isOwner, ownerLoading } = useAuth();
   const [status, setStatus] = useState<"checking" | "allowed" | "denied" | "unauthenticated">("checking");
   const location = useLocation();
 
   useEffect(() => {
     let cancelled = false;
 
-    const verify = async (sessionOverride?: any) => {
-      const session = sessionOverride || (await supabase.auth.getSession()).data.session;
+    const verify = async () => {
+      // Wait for auth to finish loading
+      if (authLoading || ownerLoading) return;
 
-      // No session = redirect to login
-      if (!session?.user) {
+      // No user = redirect to login
+      if (!user) {
         if (!cancelled) setStatus("unauthenticated");
         return;
       }
 
-      const userId = session.user.id;
+      // Owner override - if verified as Owner, allow immediately
+      if (isOwner) {
+        if (!cancelled) setStatus("allowed");
+        return;
+      }
+
+      const userId = user.id;
 
       try {
         // Check roles in parallel: owner, admin, and listing_admins table
@@ -62,19 +72,15 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
       }
     };
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      verify(session);
-    });
-
     verify();
 
     return () => {
       cancelled = true;
-      subscription.unsubscribe();
     };
-  }, []);
+  }, [user, authLoading, isOwner, ownerLoading]);
 
-  if (status === "checking") {
+  // Still checking auth or owner status
+  if (authLoading || ownerLoading || status === "checking") {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />

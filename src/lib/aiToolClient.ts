@@ -173,6 +173,13 @@ function normalizeError(error: any): AIToolResult {
  * Check if user has broker access
  * Used for UI-level checks before making API calls
  */
+/**
+ * Check if user has broker access
+ * Used for UI-level checks before making API calls
+ * 
+ * NOTE: This function now uses server-side verification for Owner status
+ * instead of relying on build-time env vars.
+ */
 export async function checkBrokerAccess(): Promise<{ hasBrokerAccess: boolean; isOwner: boolean; userId: string | null }> {
   try {
     const { data: { session } } = await supabase.auth.getSession();
@@ -182,11 +189,24 @@ export async function checkBrokerAccess(): Promise<{ hasBrokerAccess: boolean; i
     }
 
     const userId = session.user.id;
-    const userEmail = session.user.email?.toLowerCase();
     
-    // Check if owner
-    const ownerEmail = import.meta.env.VITE_OWNER_EMAIL?.toLowerCase();
-    if (ownerEmail && userEmail === ownerEmail) {
+    // Check owner status via server-side verification
+    let isOwnerVerified = false;
+    try {
+      const { data, error } = await supabase.functions.invoke("verify-owner", {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+      if (!error && data?.isOwner === true) {
+        isOwnerVerified = true;
+      }
+    } catch (e) {
+      // Fail closed - if verification fails, don't grant owner access
+      console.error("Owner verification failed in checkBrokerAccess:", e);
+    }
+
+    if (isOwnerVerified) {
       return { hasBrokerAccess: true, isOwner: true, userId };
     }
 

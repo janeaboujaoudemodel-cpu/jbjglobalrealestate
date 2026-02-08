@@ -63,30 +63,11 @@ interface ProjectDocument {
 const ListingAdmin = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, signOut, isOwner: isOwnerEmail } = useAuth();
+  const { user, signOut, isOwner, ownerLoading } = useAuth();
   const { t } = useLanguage();
   const { isListingAdmin, adminData, isLoading: checkingAdmin } = useListingAdmin();
-  const [isOwner, setIsOwner] = useState(false);
-  const [checkingOwner, setCheckingOwner] = useState(true);
 
-  // Check if user has "owner" role
-  useEffect(() => {
-    const checkOwnerRole = async () => {
-      if (!user) {
-        setCheckingOwner(false);
-        return;
-      }
-      try {
-        const { data } = await supabase.rpc("has_role", { _user_id: user.id, _role: "owner" });
-        setIsOwner(data === true);
-      } catch (error) {
-        console.error("Error checking owner role:", error);
-      } finally {
-        setCheckingOwner(false);
-      }
-    };
-    checkOwnerRole();
-  }, [user]);
+  // Owner is now verified via AuthContext - no need for separate role check
   const { data: projects, refetch: refetchProjects } = useProjects();
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
@@ -148,15 +129,15 @@ const ListingAdmin = () => {
   });
 
   useEffect(() => {
-    if (!checkingAdmin && !checkingOwner && !user) {
+    if (!checkingAdmin && !ownerLoading && !user) {
       navigate("/auth?redirect=/listing-admin");
     }
-  }, [user, checkingAdmin, checkingOwner, navigate]);
+  }, [user, checkingAdmin, ownerLoading, navigate]);
 
-  // Allow access if user is listing admin OR Owner (email-verified)
-  const hasAccess = isListingAdmin || isOwnerEmail || isOwner;
+  // Allow access if user is listing admin OR Owner (verified via AuthContext)
+  const hasAccess = isListingAdmin || isOwner;
 
-  if (checkingAdmin || checkingOwner) {
+  if (checkingAdmin || ownerLoading) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center pt-28 gap-6">
         <div className="flex flex-col items-center gap-4">

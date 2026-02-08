@@ -16,14 +16,15 @@ interface VideoBuilderAccessGateProps {
 }
 
 const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, isOwner, ownerLoading } = useAuth();
   const navigate = useNavigate();
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
     const checkAccess = async () => {
-      if (authLoading) return;
+      // Wait for auth to finish
+      if (authLoading || ownerLoading) return;
 
       if (!user) {
         setHasAccess(false);
@@ -31,14 +32,21 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
         return;
       }
 
+      // Owner override - if verified as Owner, allow immediately
+      if (isOwner) {
+        setHasAccess(true);
+        setIsChecking(false);
+        return;
+      }
+
       try {
-        // Check if user has owner-level access
-        const { data: hasOwnerRole } = await supabase.rpc("has_role", {
+        // Check if user has admin role
+        const { data: hasAdminRole } = await supabase.rpc("has_role", {
           _user_id: user.id,
           _role: "admin",
         });
 
-        if (hasOwnerRole) {
+        if (hasAdminRole) {
           setHasAccess(true);
           setIsChecking(false);
           return;
@@ -76,9 +84,9 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
     };
 
     checkAccess();
-  }, [user, authLoading]);
+  }, [user, authLoading, isOwner, ownerLoading]);
 
-  if (authLoading || isChecking) {
+  if (authLoading || ownerLoading || isChecking) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
