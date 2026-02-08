@@ -54,25 +54,29 @@ interface KPICardProps {
 function KPICard({ title, value, icon, trend, loading, onClick }: KPICardProps) {
   return (
     <Card 
-      className={`bg-zinc-900/80 border-zinc-800 hover:border-gold/40 transition-all ${onClick ? 'cursor-pointer' : ''}`}
+      className={`bg-gradient-to-br from-zinc-900/90 to-zinc-900/70 border-zinc-800/80 hover:border-gold/50 transition-all duration-300 shadow-lg shadow-black/30 hover:shadow-gold/10 ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => e.key === 'Enter' && onClick() : undefined}
+      aria-label={onClick ? `View ${title}` : undefined}
     >
       <CardContent className="p-5">
         <div className="flex items-start justify-between">
           <div>
             {loading ? (
-              <Skeleton className="h-8 w-16 bg-zinc-700 mb-1" />
+              <Skeleton className="h-8 w-16 bg-zinc-700/50 mb-1" />
             ) : (
-              <p className="text-3xl font-bold text-white">{value}</p>
+              <p className="text-3xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">{value}</p>
             )}
-            <p className="text-sm text-zinc-400 mt-1">{title}</p>
+            <p className="text-sm text-zinc-400 mt-1 font-medium">{title}</p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center border border-gold/20 shadow-lg shadow-gold/5">
             {icon}
           </div>
         </div>
         {trend && (
-          <p className="text-xs text-emerald-400 mt-3 flex items-center gap-1">
+          <p className="text-xs text-emerald-400 mt-3 flex items-center gap-1 font-medium">
             <TrendingUp className="h-3 w-3" /> {trend}
           </p>
         )}
@@ -426,13 +430,16 @@ export default function OwnerDashboardOverview() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Command Center Header */}
-      <div className="mb-2">
-        <h1 className="text-2xl md:text-3xl font-bold text-white">
-          Owner Command Center
-        </h1>
-        <p className="text-zinc-400 mt-1">
+    <div className="space-y-8">
+      {/* Command Center Header - Enhanced with gradient accent */}
+      <div className="mb-4">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-1 h-8 bg-gradient-to-b from-gold to-gold/40 rounded-full" />
+          <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+            Owner Command Center
+          </h1>
+        </div>
+        <p className="text-zinc-400 mt-1 ml-4 text-sm md:text-base">
           Welcome back, Jane bou Jaoude — Your integrated CRM dashboard
         </p>
       </div>
@@ -472,9 +479,9 @@ export default function OwnerDashboardOverview() {
       {/* Quick Actions Grid */}
       <QuickActionsGrid />
 
-      {/* Main Tabbed Content */}
+      {/* Main Tabbed Content - Enhanced styling */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="bg-zinc-800/80 border border-zinc-700 p-1 mb-6 flex-wrap">
+        <TabsList className="bg-zinc-900/80 border border-zinc-800/80 p-1.5 mb-6 flex-wrap gap-1 rounded-xl shadow-lg shadow-black/20">
           <TabsTrigger 
             value="overview" 
             className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"

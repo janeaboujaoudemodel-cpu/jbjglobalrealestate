@@ -3,7 +3,7 @@ import {
   Newspaper, BarChart3, FileText, TrendingUp, 
   BookOpen, Calendar, Globe, Target, HelpCircle,
   Briefcase, Building2, Users, Calculator, Award, 
-  Phone, Shield, Sparkles, MapPin,
+  Phone, Shield, Sparkles, MapPin, Palette, Cpu, Wrench,
   UserCircle, GraduationCap, FolderOpen, ClipboardCheck, Layers, LayoutDashboard
 } from 'lucide-react';
 import {
@@ -59,14 +59,13 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Sell Your Property', href: '/seller-listing', icon: ClipboardCheck },
   ];
 
-  // Column 5: Toolkit
-  const toolkitLinks = [
+  // Column 5: Business Suites (AI Tool Suites)
+  const businessSuitesLinks = [
+    { label: 'Real Estate Suite', href: '/business-suite/real-estate', icon: Building2 },
+    { label: 'Broker Intelligence', href: '/business-suite/broker', icon: Cpu },
+    { label: 'Creative Suite', href: '/business-suite/creative', icon: Palette },
+    { label: 'Productivity Suite', href: '/business-suite/productivity', icon: Wrench },
     { label: 'All Tools', href: '/toolkit', icon: Sparkles },
-    { label: 'Creative Suite', href: '/studio', icon: Sparkles },
-    { label: 'ROI Calculator', href: '/calculator/roi', icon: Calculator },
-    { label: 'Mortgage Calculator', href: '/mortgage-calculator', icon: Calculator },
-    { label: 'Compare Properties', href: '/compare', icon: Layers },
-    { label: 'Property Map', href: '/map', icon: MapPin },
   ];
 
   // Column 6: Mode-Conditional (Investor OR Broker OR Both)
@@ -134,6 +133,8 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
 
   return (
     <MegaMenuShell ref={ref} noScroll>
+      {/* Scrollable container with max height to prevent cropping */}
+      <div className="max-h-[calc(100vh-160px)] overflow-y-auto">
       <div className="max-w-[1600px] mx-auto px-4 lg:px-8 py-4 lg:py-5">
         {/* 7 Columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4">
@@ -209,11 +210,11 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
             <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
           </div>
 
-          {/* Column 5: Toolkit */}
+          {/* Column 5: Business Suites */}
           <div className="relative">
-            <MegaMenuSectionTitle icon={Sparkles} title="Toolkit" />
+            <MegaMenuSectionTitle icon={Briefcase} title="Business Suites" />
             <div className="space-y-0">
-              {toolkitLinks.map((item) => (
+              {businessSuitesLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
                   to={item.href}
@@ -286,6 +287,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
             </div>
           </div>
         </div>
+      </div>
       </div>
     </MegaMenuShell>
   );
