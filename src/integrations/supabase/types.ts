@@ -16673,6 +16673,9 @@ export type Database = {
         Row: {
           attachment_urls: string[] | null
           created_at: string
+          email_opened_at: string | null
+          email_sent_at: string | null
+          email_status: string | null
           id: string
           message: string
           sender_type: string
@@ -16682,6 +16685,9 @@ export type Database = {
         Insert: {
           attachment_urls?: string[] | null
           created_at?: string
+          email_opened_at?: string | null
+          email_sent_at?: string | null
+          email_status?: string | null
           id?: string
           message: string
           sender_type: string
@@ -16691,6 +16697,9 @@ export type Database = {
         Update: {
           attachment_urls?: string[] | null
           created_at?: string
+          email_opened_at?: string | null
+          email_sent_at?: string | null
+          email_status?: string | null
           id?: string
           message?: string
           sender_type?: string
@@ -17642,6 +17651,36 @@ export type Database = {
           is_user_generated?: boolean | null
           metadata?: Json | null
           session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_feedback: {
+        Row: {
+          action_ref_id: string | null
+          action_type: string
+          created_at: string
+          feedback_text: string | null
+          id: string
+          rating: number
+          user_id: string | null
+        }
+        Insert: {
+          action_ref_id?: string | null
+          action_type: string
+          created_at?: string
+          feedback_text?: string | null
+          id?: string
+          rating: number
+          user_id?: string | null
+        }
+        Update: {
+          action_ref_id?: string | null
+          action_type?: string
+          created_at?: string
+          feedback_text?: string | null
+          id?: string
+          rating?: number
           user_id?: string | null
         }
         Relationships: []

@@ -425,91 +425,76 @@ const Admin = () => {
       <main className="container mx-auto px-4 py-8 pb-24">
         <Tabs defaultValue="overview" className="space-y-6">
           <div className="w-full overflow-x-auto">
-            <TabsList className="w-max min-w-full justify-start bg-white/80 border-2 border-gold/30 p-1">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsList className="w-max min-w-full justify-start bg-white/80 border-2 border-gold/30 p-1">
+              <TabsTrigger value="overview" className="tab-trigger-champagne text-black">
                 <LayoutDashboard className="w-4 h-4 mr-2" />
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="ai-assistant" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="ai-assistant" className="tab-trigger-champagne text-black">
                 <Bot className="w-4 h-4 mr-2" />
                 AI Assistant
               </TabsTrigger>
-              <TabsTrigger value="security" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="security" className="tab-trigger-champagne text-black">
                 <Activity className="w-4 h-4 mr-2" />
                 Security
               </TabsTrigger>
-              <TabsTrigger value="properties" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="properties" className="tab-trigger-champagne text-black">
                 <Building2 className="w-4 h-4 mr-2" />
                 Properties
               </TabsTrigger>
-              <TabsTrigger value="rate-limits" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="rate-limits" className="tab-trigger-champagne text-black">
                 <Shield className="w-4 h-4 mr-2" />
                 Rate Limits
               </TabsTrigger>
-              <TabsTrigger value="ip-blocklist" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="ip-blocklist" className="tab-trigger-champagne text-black">
                 <ShieldBan className="w-4 h-4 mr-2" />
                 IP Blocklist
               </TabsTrigger>
-              <TabsTrigger value="audit-logs" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="audit-logs" className="tab-trigger-champagne text-black">
                 <ClipboardList className="w-4 h-4 mr-2" />
                 Audit Logs
               </TabsTrigger>
-              <TabsTrigger value="brokers" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="brokers" className="tab-trigger-champagne text-black">
                 <Briefcase className="w-4 h-4 mr-2" />
                 Brokers
               </TabsTrigger>
-              <TabsTrigger value="ai-analytics" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="ai-analytics" className="tab-trigger-champagne text-black">
                 <Brain className="w-4 h-4 mr-2" />
                 AI Analytics
               </TabsTrigger>
-              <TabsTrigger value="marketing" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="marketing" className="tab-trigger-champagne text-black">
                 <Megaphone className="w-4 h-4 mr-2" />
                 Marketing
               </TabsTrigger>
-              <TabsTrigger value="pwa-analytics" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="pwa-analytics" className="tab-trigger-champagne text-black">
                 <Smartphone className="w-4 h-4 mr-2" />
                 PWA Analytics
               </TabsTrigger>
-              <TabsTrigger value="visitor-insights" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="visitor-insights" className="tab-trigger-champagne text-black">
                 <Activity className="w-4 h-4 mr-2" />
                 Visitors
               </TabsTrigger>
-              <TabsTrigger
-                value="hr-hub"
-                className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
-              >
+              <TabsTrigger value="hr-hub" className="tab-trigger-champagne text-black">
                 <UserCog className="w-4 h-4 mr-2" />
                 HR Hub
               </TabsTrigger>
-              <TabsTrigger
-                value="it-department"
-                className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
-              >
+              <TabsTrigger value="it-department" className="tab-trigger-champagne text-black">
                 <Monitor className="w-4 h-4 mr-2" />
                 IT Department
               </TabsTrigger>
-              <TabsTrigger
-                value="employee-hub"
-                className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
-              >
+              <TabsTrigger value="employee-hub" className="tab-trigger-champagne text-black">
                 <Briefcase className="w-4 h-4 mr-2" />
                 Employee Hub
               </TabsTrigger>
-              <TabsTrigger
-                value="support-tickets"
-                className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
-              >
+              <TabsTrigger value="support-tickets" className="tab-trigger-champagne text-black">
                 <Ticket className="w-4 h-4 mr-2" />
                 Support Tickets
               </TabsTrigger>
-              <TabsTrigger
-                value="customer-happiness"
-                className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
-              >
+              <TabsTrigger value="customer-happiness" className="tab-trigger-champagne text-black">
                 <Heart className="w-4 h-4 mr-2" />
                 Customer Happiness
               </TabsTrigger>
-              <TabsTrigger value="podcast-studio" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="podcast-studio" className="tab-trigger-champagne text-black">
                 <Mic className="w-4 h-4 mr-2" />
                 Podcast Studio
               </TabsTrigger>

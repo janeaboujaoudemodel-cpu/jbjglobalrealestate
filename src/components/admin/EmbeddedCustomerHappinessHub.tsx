@@ -236,9 +236,12 @@ export const EmbeddedCustomerHappinessHub = () => {
 
   return (
     <div className="space-y-6">
-      {/* Stats Overview - Color-Coded */}
+      {/* Stats Overview - Color-Coded + Clickable */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-white border-2 border-emerald-500/60 hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300">
+        <Card 
+          className="bg-white border-2 border-emerald-500/60 hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300 cursor-pointer active:scale-95"
+          onClick={() => {}}
+        >
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border-2 border-emerald-500/40 flex items-center justify-center">
@@ -251,7 +254,10 @@ export const EmbeddedCustomerHappinessHub = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-pink-500/60 hover:shadow-lg hover:shadow-pink-500/20 transition-all duration-300">
+        <Card 
+          className="bg-white border-2 border-pink-500/60 hover:shadow-lg hover:shadow-pink-500/20 transition-all duration-300 cursor-pointer active:scale-95"
+          onClick={() => {}}
+        >
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-pink-500/10 border-2 border-pink-500/40 flex items-center justify-center">
@@ -264,7 +270,10 @@ export const EmbeddedCustomerHappinessHub = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-red-500/60 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300">
+        <Card 
+          className="bg-white border-2 border-red-500/60 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 cursor-pointer active:scale-95"
+          onClick={() => {}}
+        >
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-red-500/10 border-2 border-red-500/40 flex items-center justify-center">
@@ -277,7 +286,10 @@ export const EmbeddedCustomerHappinessHub = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300">
+        <Card 
+          className="bg-white border-2 border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer active:scale-95"
+          onClick={() => {}}
+        >
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-purple-500/10 border-2 border-purple-500/40 flex items-center justify-center">
@@ -295,19 +307,19 @@ export const EmbeddedCustomerHappinessHub = () => {
       {/* Sub-Tabs */}
       <Tabs defaultValue="tickets" className="space-y-4">
         <TabsList className="bg-white/80 border-2 border-gold/30 p-1">
-          <TabsTrigger value="tickets" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsTrigger value="tickets" className="tab-trigger-champagne text-black">
             <Ticket className="w-4 h-4 mr-2" />
             Tickets
           </TabsTrigger>
-          <TabsTrigger value="reviews" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsTrigger value="reviews" className="tab-trigger-champagne text-black">
             <MessageSquareHeart className="w-4 h-4 mr-2" />
             Reviews ({pendingReviews})
           </TabsTrigger>
-          <TabsTrigger value="issues" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsTrigger value="issues" className="tab-trigger-champagne text-black">
             <AlertCircle className="w-4 h-4 mr-2" />
             Issues ({openIssues})
           </TabsTrigger>
-          <TabsTrigger value="ideas" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsTrigger value="ideas" className="tab-trigger-champagne text-black">
             <Lightbulb className="w-4 h-4 mr-2" />
             Ideas ({pendingIdeas})
           </TabsTrigger>

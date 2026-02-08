@@ -149,9 +149,12 @@ export function EmbeddedSupportTickets() {
 
   return (
     <div className="space-y-6">
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-white border-2 border-gold/30">
+      {/* Stats - Make all cards clickable */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <Card 
+          className="bg-white border-2 border-gold/30 cursor-pointer hover:border-gold/60 active:scale-95 transition-all"
+          onClick={() => setFilters(prev => ({ ...prev, status: "all" }))}
+        >
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -164,7 +167,10 @@ export function EmbeddedSupportTickets() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-yellow-500/30">
+        <Card 
+          className="bg-white border-2 border-yellow-500/30 cursor-pointer hover:border-yellow-500/60 active:scale-95 transition-all"
+          onClick={() => setFilters(prev => ({ ...prev, status: "open" }))}
+        >
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -177,7 +183,10 @@ export function EmbeddedSupportTickets() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-blue-500/30">
+        <Card 
+          className="bg-white border-2 border-blue-500/30 cursor-pointer hover:border-blue-500/60 active:scale-95 transition-all"
+          onClick={() => setFilters(prev => ({ ...prev, status: "in_progress" }))}
+        >
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -190,7 +199,10 @@ export function EmbeddedSupportTickets() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-green-500/30">
+        <Card 
+          className="bg-white border-2 border-green-500/30 cursor-pointer hover:border-green-500/60 active:scale-95 transition-all"
+          onClick={() => setFilters(prev => ({ ...prev, status: "resolved" }))}
+        >
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -203,22 +215,23 @@ export function EmbeddedSupportTickets() {
             </div>
           </CardContent>
         </Card>
-        {/* Reopened Tickets Card */}
-        {ticketCounts.reopened > 0 && (
-          <Card className="bg-white border-2 border-orange-500/30 col-span-2 md:col-span-1">
-            <CardContent className="pt-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-zinc-500 text-xs">Reopened</p>
-                  <p className="text-2xl font-bold text-orange-600">{ticketCounts.reopened}</p>
-                </div>
-                <div className="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center">
-                  <RotateCcw className="w-5 h-5 text-orange-500" />
-                </div>
+        {/* Reopened Tickets Card - Always visible */}
+        <Card 
+          className="bg-white border-2 border-orange-500/30 cursor-pointer hover:border-orange-500/60 active:scale-95 transition-all"
+          onClick={() => setFilters(prev => ({ ...prev, status: "reopened" }))}
+        >
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-zinc-500 text-xs">Reopened</p>
+                <p className="text-2xl font-bold text-orange-600">{ticketCounts.reopened}</p>
               </div>
-            </CardContent>
-          </Card>
-        )}
+              <div className="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center">
+                <RotateCcw className="w-5 h-5 text-orange-500" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Filters */}
@@ -250,6 +263,7 @@ export function EmbeddedSupportTickets() {
                   <SelectItem value="open">Open</SelectItem>
                   <SelectItem value="in_progress">In Progress</SelectItem>
                   <SelectItem value="resolved">Resolved</SelectItem>
+                  <SelectItem value="reopened">Reopened</SelectItem>
                 </SelectContent>
               </Select>
 

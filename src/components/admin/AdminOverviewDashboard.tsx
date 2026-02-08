@@ -393,7 +393,7 @@ export const AdminOverviewDashboard = () => {
                 { label: "View Projects", icon: <Building2 className="w-4 h-4" />, href: "/admin" },
                 { label: "Listing Admin", icon: <FileText className="w-4 h-4" />, href: "/listing-admin" },
                 { label: "CRM Dashboard", icon: <MessageSquare className="w-4 h-4" />, href: "/admin/crm" },
-                { label: "AI Brokers", icon: <Brain className="w-4 h-4" />, href: "/admin", tabValue: "ai-brokers" },
+                { label: "Brokers", icon: <Brain className="w-4 h-4" />, href: "/admin", tabValue: "ai-brokers" },
                 { label: "Security Logs", icon: <Shield className="w-4 h-4" />, href: "/admin", tabValue: "security" },
                 { label: "HR Hub", icon: <Users className="w-4 h-4" />, href: "/hr-dashboard" },
                 { label: "IT Department", icon: <Server className="w-4 h-4" />, href: "/it-department" },

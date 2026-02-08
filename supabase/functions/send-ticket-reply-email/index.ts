@@ -192,9 +192,9 @@ const handler = async (req: Request): Promise<Response> => {
               </div>
             </div>
             
-            <!-- Staff Reply -->
+            <!-- JBJ Support Team Reply -->
             <div class="reply-box">
-              <h3>💬 Staff Reply</h3>
+              <h3>💬 JBJ Support Team</h3>
               <div class="reply-content">${replyMessage}</div>
             </div>
             
