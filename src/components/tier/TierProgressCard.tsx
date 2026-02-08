@@ -55,11 +55,16 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
           <span className="flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-gold" />
             Your Progress
-            <span className="text-xs font-normal text-white/50">
-              {currentTierType === 'broker' ? 'Broker Tier' : 'Investor Tier'}
+            <span className={cn(
+              "text-xs font-medium px-2 py-0.5 rounded-full",
+              currentTierType === 'broker' 
+                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' 
+                : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+            )}>
+              {currentTierType === 'broker' ? 'Broker Path' : 'Investor Path'}
             </span>
           </span>
-          <TierBadge tierName={currentTier?.tier_name || 'Starter'} />
+          <TierBadge tierName={currentTier?.tier_name || 'Starter'} tierType={currentTierType} />
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
