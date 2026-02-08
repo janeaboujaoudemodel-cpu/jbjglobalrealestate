@@ -1,190 +1,119 @@
 
-
-## Comprehensive Pending Tasks Audit
-
-Based on my thorough investigation of the codebase and testing, here is the complete list of pending tasks:
-
----
-
-### ✅ COMPLETED TASKS
-
-| Task | Status | Verification |
-|------|--------|--------------|
-| **Support Ticket Dropdowns Not Clicking** | ✅ FIXED | Tested - both "Service with Issue" and "Priority Level" dropdowns now open and show all options correctly |
-| **Removed Divider Between Developer Partners and Trust Bar** | ✅ FIXED | Verified visually - the two sections now flow together without a divider |
-| **Podcast Divider Consolidation** | ✅ FIXED | Removed duplicate divider inside PodcastVisibilityGate |
-| **Toolkit Hub Champagne Styling** | ✅ FIXED | Updated to match homepage ToolkitShowcaseCard style |
+## Goal (what will be “fixed”)
+When you open **Create Support Ticket**, both dropdowns:
+- **Service with Issue**
+- **Priority Level**
+must visibly open a menu every time, and selections must be clickable (no “nothing happens”, no hidden menu).
 
 ---
 
-### 🔴 STILL PENDING TASKS
+## What I found in code (why this can still fail even after z-index tweaks)
+### 1) The dropdown menu is rendered in a Radix “Popper portal” outside the dialog
+Your Select menu (`@radix-ui/react-select`) renders its menu in a portal and wraps it in an element with:
+- `data-radix-popper-content-wrapper`
 
-#### 1. **Divider Alignment Issue Near Full-Bleed Sections**
+This is correct, but it creates a common failure mode inside modals: **the dialog can treat the dropdown menu as “outside” the modal** and dismiss/interrupt interaction. The result can look like:
+- click trigger → menu flashes or never appears
+- click does “nothing”
+- menu exists but is unclickable/blocked
 
-**Problem**: The SectionDivider uses `container mx-auto px-4` which constrains the divider line to the container width. However, sections like `WhyDubaiCapitalSection` are full-bleed (edge-to-edge, 100vh) without a container. This creates a visual mismatch where:
-- The divider line appears narrower/centered
-- The Why Dubai section spans the full viewport width
-- The transition looks misaligned
+### 2) SupportTicketBox still overrides SelectContent styling in a risky way
+In `src/components/SupportTicketBox.tsx` both dropdowns use:
+- `SelectContent className="bg-white border border-zinc-200 shadow-lg ..."`
 
-**Files to modify**: `src/components/ui/section-divider.tsx`
+This overrides the shared Select styling (including the premium background/border conventions). Even if it technically opens, on your light dialog background it can be hard to perceive, and it increases risk of CSS conflicts.
 
-**Solution Options**:
-1. **Option A (Recommended)**: Make divider full-width to match full-bleed sections
-   ```tsx
-   // Remove container and use full-width approach
-   <section className="bg-black py-8 md:py-10">
-     <div className="w-full px-4 md:px-8 lg:px-16">
-       {/* divider content */}
-     </div>
-   </section>
-   ```
-
-2. **Option B**: Add a `variant` prop to SectionDivider for full-width dividers
-   ```tsx
-   export function SectionDivider({ className, fullWidth = false }: Props) {
-     const wrapperClass = fullWidth 
-       ? "w-full px-4 md:px-8" 
-       : "container mx-auto px-4";
-     // ...
-   }
-   ```
+### 3) We need a fix that is not “guessing”
+To stop this loop, we’ll implement the fix in a way that:
+- prevents modal dismissal during dropdown interaction (root interaction bug)
+- guarantees the dropdown is above the modal overlay (visual bug)
+- then we will actually test the interaction end-to-end in the preview
 
 ---
 
-#### 2. **Add Dividers Where Missing (Inconsistency)**
+## Implementation plan (do all of this in one pass)
 
-**Current State**: Some section transitions have dividers, some don't. The user mentioned this inconsistency.
+### A) Harden all dialogs against Radix popper portals (core fix)
+**File:** `src/components/ui/dialog.tsx`
 
-**Sections to audit**:
+Add a default guard to `DialogContent` so that when a user clicks inside any Radix Popper portal (Select, DropdownMenu, Popover, etc.), the dialog does **not** treat it as an “outside click”.
 
-| Section Transition | Has Divider? | Action |
-|--------------------|--------------|--------|
-| Hero → Developer Partners | No | Expected (Hero is full-bleed) |
-| Developer Partners → Trust Bar | No ✅ | Correct (just removed per user request) |
-| Featured Listings → Find Your Starting Point | Yes | Keep |
-| Trust Bar → Featured Listings | **No** | **ADD DIVIDER** |
-| Services Grid → Explore Services | **No** | Consider adding |
-| Stats Counter → Support Ticket Box | Yes | Keep |
+Concretely:
+- In `DialogPrimitive.Content`, add `onPointerDownOutside` (and/or `onInteractOutside`) handler that:
+  - checks `const target = e.target as HTMLElement`
+  - if `target.closest('[data-radix-popper-content-wrapper]')` is true → `e.preventDefault()`
+  - otherwise allow default behavior (clicking outside closes dialog as usual)
 
-**File to modify**: `src/pages/Index.tsx`
+Important detail:
+- We will **compose** this with any existing `onPointerDownOutside` / `onInteractOutside` passed by callers so we don’t break special dialogs that already have custom logic (e.g., “don’t close while submitting”).
 
----
-
-#### 3. **Divider Before Trust Bar May Still Be Expected**
-
-Looking at the structure again:
-```
-Developer Partners Marquee
-(No Divider - User requested removal)
-Trust Bar (4 cards)
-Featured Listings
-```
-
-If the user intended dividers to separate ALL major sections EXCEPT between Developer Partners and Trust Bar (because they flow together), we need to ensure there's a divider between Trust Bar and Featured Listings.
-
-**Current Code (Index.tsx ~lines 187-206)**:
-```tsx
-<div id="developer-partners">
-  <DeveloperPartnersMarquee />
-</div>
-
-{/* TRUST BAR */}
-<div id="trust-bar" className="bg-black py-8 md:py-10">
-  ...
-</div>
-
-{/* DIVIDER */}
-<SectionDivider />
-
-{/* FIND YOUR STARTING POINT */}
-```
-
-This already has a divider after Trust Bar → Good.
+Why this is the right fix:
+- It directly addresses the “dropdown is outside modal” interaction issue rather than only changing z-index.
 
 ---
 
-### Summary of Pending Changes
+### B) Make Select menus unmistakably visible above modals (visual + safety)
+**File:** `src/components/ui/select.tsx`
 
-| File | Change | Priority |
-|------|--------|----------|
-| `src/components/ui/section-divider.tsx` | Option to make divider full-width for better alignment with edge-to-edge sections | High |
-| `src/pages/Index.tsx` | Use `fullWidth` variant on dividers adjacent to full-bleed sections (Why Dubai, Hero) | High |
+Adjust `SelectContent` to be safely above dialogs:
+- raise the SelectContent z-index above dialog overlay/content (keep it below toasts if needed)
+- keep a solid, non-transparent premium background and clear border/shadow
 
----
-
-### Implementation Details
-
-#### Fix 1: Update SectionDivider Component
-
-**File**: `src/components/ui/section-divider.tsx`
-
-```tsx
-import { Sparkles } from "lucide-react";
-
-type SectionDividerProps = {
-  className?: string;
-  /** Use full-width layout for dividers adjacent to edge-to-edge sections */
-  fullWidth?: boolean;
-};
-
-export function SectionDivider({ className, fullWidth = false }: SectionDividerProps) {
-  return (
-    <section className={`bg-black py-8 md:py-10 ${className ?? ""}`.trim()}>
-      <div className={fullWidth ? "w-full px-6 md:px-12 lg:px-16" : "container mx-auto px-4"}>
-        <div className="flex items-center justify-center gap-6">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-          <Sparkles className="w-4 h-4 text-gold/50" />
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-        </div>
-      </div>
-    </section>
-  );
-}
-```
-
-#### Fix 2: Apply fullWidth to Relevant Dividers
-
-**File**: `src/pages/Index.tsx`
-
-Update these specific dividers adjacent to full-bleed sections:
-
-```tsx
-{/* DIVIDER - Before Why Dubai (use fullWidth since Why Dubai is edge-to-edge) */}
-<SectionDivider fullWidth />
-
-<Suspense fallback={<SectionLoader />}>
-  <WhyDubaiCapitalSection />
-</Suspense>
-
-{/* JBJ PODCAST SECTION */}
-<PodcastVisibilityGate>
-  <SectionDivider fullWidth />  {/* After Why Dubai is edge-to-edge */}
-  ...
-</PodcastVisibilityGate>
-```
+This ensures that even if another overlay exists, the dropdown cannot end up behind it.
 
 ---
 
-### Visual Result
+### C) Remove risky overrides in SupportTicketBox and use the system Select styling
+**File:** `src/components/SupportTicketBox.tsx`
 
-**Before (Misaligned)**:
-```
-[Mortgage Calculator - Container Width]
-─────── ✦ ─────── (Divider - Container Width)
-[Why Dubai - FULL VIEWPORT WIDTH]
-```
+For both dropdowns:
+- Remove the custom `SelectContent className="bg-white border border-zinc-200 shadow-lg ..."` overrides
+- Use the default `<SelectContent>` styling from `src/components/ui/select.tsx`
+- If we still want a smaller menu height, keep only safe sizing overrides (e.g., `max-h-60`) but do not override background/border/z-index.
 
-**After (Aligned)**:
-```
-[Mortgage Calculator - Container Width]
-──────────── ✦ ──────────── (Divider - Full Width)
-[Why Dubai - FULL VIEWPORT WIDTH]
-```
+Also add small UX polish:
+- Ensure trigger feels clickable: add `cursor-pointer` on `SelectTrigger`
+- Ensure items show pointer: add `cursor-pointer` to `SelectItem` via className or adjust base SelectItem style if desired
 
 ---
 
-### Files to Modify
+## Testing plan (I will actually test it, not assume)
+After implementing A+B+C, I will verify in the Preview environment:
 
-1. **`src/components/ui/section-divider.tsx`** - Add `fullWidth` prop
-2. **`src/pages/Index.tsx`** - Apply `fullWidth` to dividers adjacent to `WhyDubaiCapitalSection`
+1) **Homepage**
+- Open “Create Support Ticket”
+- Click “Service with Issue” → confirm menu appears
+- Select an option → confirm field updates and dialog remains open
+- Click “Priority Level” → confirm menu appears
+- Select “Normal” → confirm it updates
 
+2) **/contact**
+- Repeat dropdown open + select for both fields
+
+3) **/services/customer-happiness-center**
+- Repeat dropdown open + select for both fields
+
+4) **Submission sanity**
+- Fill required fields minimally
+- Submit once to confirm no regressions
+
+If any of these fails, I will immediately apply the fallback below.
+
+---
+
+## Fallback (only if needed)
+If Radix Select still behaves inconsistently on a specific device/browser, we will replace just these two dropdowns in the ticket modal with a Popover-based menu (you already use Popover successfully in `HeroSearchBar.tsx`). This avoids the Select+Dialog edge-cases entirely while preserving the same UI.
+
+---
+
+## Files that will be changed
+- `src/components/ui/dialog.tsx` (interaction guard for Radix popper portals)
+- `src/components/ui/select.tsx` (ensure menu is always above modals, strong background)
+- `src/components/SupportTicketBox.tsx` (remove risky SelectContent overrides; make triggers/items clearly clickable)
+
+---
+
+## Definition of Done (your acceptance criteria)
+- You can open the ticket modal and the dropdown menus are visible and selectable every time.
+- Selecting an item does not close the dialog.
+- This works on all pages where the ticket modal exists (home, contact, customer-happiness-center).
