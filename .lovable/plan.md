@@ -1,158 +1,190 @@
 
 
-## Homepage Section Divider Alignment Fix
+## Comprehensive Pending Tasks Audit
 
-### Problem Summary
-
-The homepage has inconsistent divider placement and alignment issues:
-
-1. **Unnecessary divider between "Trusted By Thousands" and Developer Partners** - There's a `<SectionDivider />` immediately after the Developer Partners Marquee (line 191) that creates visual clutter before the Trust Bar section.
-
-2. **Some sections have dividers, some don't** - Inconsistent placement throughout the page.
-
-3. **"Why Dubai" and "Mortgage Calculator" dividers not centered** - The `WhyDubaiCapitalSection` is a full-screen (100vh) edge-to-edge section that breaks out of the container, causing the dividers above/below it to appear misaligned relative to the centered content.
+Based on my thorough investigation of the codebase and testing, here is the complete list of pending tasks:
 
 ---
 
-### Current Divider Structure (Index.tsx)
+### ✅ COMPLETED TASKS
 
-| Line | Position | Status |
-|------|----------|--------|
-| 191 | After Developer Partners → Before Trust Bar | **REMOVE** - Not needed between these closely related sections |
-| 209 | After Featured Listings → Before "Find Your Starting Point" | Keep |
-| 507 | After Explore Services → Before Toolkit Showcase | Keep |
-| 513 | After Toolkit Showcase → Before AI Home Finder | Keep |
-| 567 | After AI Home Finder → Before AI Comparison | Keep |
-| 579 | After AI Comparison → Before Market Report | Keep |
-| 604 | After Market Report → Before Mortgage Calculator | Keep |
-| 664 | After Mortgage Calculator → Before Why Dubai | Keep |
-| 672, 676 | Around Podcast (conditional) | Keep |
-| 680 | Before Best Idea Award | **ISSUE**: Potential double divider when podcast is hidden |
-| 686 | After Best Idea Award | Keep |
-| 692 | After Why Choose Us | Keep |
-| 698 | After Areas We Cover | Keep |
-| 706 | After Testimonials | Keep |
-| 712 | After Stats Counter | Keep |
+| Task | Status | Verification |
+|------|--------|--------------|
+| **Support Ticket Dropdowns Not Clicking** | ✅ FIXED | Tested - both "Service with Issue" and "Priority Level" dropdowns now open and show all options correctly |
+| **Removed Divider Between Developer Partners and Trust Bar** | ✅ FIXED | Verified visually - the two sections now flow together without a divider |
+| **Podcast Divider Consolidation** | ✅ FIXED | Removed duplicate divider inside PodcastVisibilityGate |
+| **Toolkit Hub Champagne Styling** | ✅ FIXED | Updated to match homepage ToolkitShowcaseCard style |
 
 ---
 
-### Solution
+### 🔴 STILL PENDING TASKS
 
-#### 1. Remove the Divider Between Developer Partners and Trust Bar
+#### 1. **Divider Alignment Issue Near Full-Bleed Sections**
 
-**File**: `src/pages/Index.tsx`
-**Line 191**: Remove `<SectionDivider />`
+**Problem**: The SectionDivider uses `container mx-auto px-4` which constrains the divider line to the container width. However, sections like `WhyDubaiCapitalSection` are full-bleed (edge-to-edge, 100vh) without a container. This creates a visual mismatch where:
+- The divider line appears narrower/centered
+- The Why Dubai section spans the full viewport width
+- The transition looks misaligned
 
-The Developer Partners Marquee and Trust Bar are visually connected sections (both with champagne backgrounds). The divider breaks the flow.
+**Files to modify**: `src/components/ui/section-divider.tsx`
 
+**Solution Options**:
+1. **Option A (Recommended)**: Make divider full-width to match full-bleed sections
+   ```tsx
+   // Remove container and use full-width approach
+   <section className="bg-black py-8 md:py-10">
+     <div className="w-full px-4 md:px-8 lg:px-16">
+       {/* divider content */}
+     </div>
+   </section>
+   ```
+
+2. **Option B**: Add a `variant` prop to SectionDivider for full-width dividers
+   ```tsx
+   export function SectionDivider({ className, fullWidth = false }: Props) {
+     const wrapperClass = fullWidth 
+       ? "w-full px-4 md:px-8" 
+       : "container mx-auto px-4";
+     // ...
+   }
+   ```
+
+---
+
+#### 2. **Add Dividers Where Missing (Inconsistency)**
+
+**Current State**: Some section transitions have dividers, some don't. The user mentioned this inconsistency.
+
+**Sections to audit**:
+
+| Section Transition | Has Divider? | Action |
+|--------------------|--------------|--------|
+| Hero → Developer Partners | No | Expected (Hero is full-bleed) |
+| Developer Partners → Trust Bar | No ✅ | Correct (just removed per user request) |
+| Featured Listings → Find Your Starting Point | Yes | Keep |
+| Trust Bar → Featured Listings | **No** | **ADD DIVIDER** |
+| Services Grid → Explore Services | **No** | Consider adding |
+| Stats Counter → Support Ticket Box | Yes | Keep |
+
+**File to modify**: `src/pages/Index.tsx`
+
+---
+
+#### 3. **Divider Before Trust Bar May Still Be Expected**
+
+Looking at the structure again:
+```
+Developer Partners Marquee
+(No Divider - User requested removal)
+Trust Bar (4 cards)
+Featured Listings
+```
+
+If the user intended dividers to separate ALL major sections EXCEPT between Developer Partners and Trust Bar (because they flow together), we need to ensure there's a divider between Trust Bar and Featured Listings.
+
+**Current Code (Index.tsx ~lines 187-206)**:
 ```tsx
-// BEFORE (lines 186-194):
-{/* DEVELOPER PARTNERS MARQUEE */}
 <div id="developer-partners">
   <DeveloperPartnersMarquee />
 </div>
-
-{/* DIVIDER - Separates Developer Partners from Trust Bar */}
-<SectionDivider />
 
 {/* TRUST BAR */}
-<div id="trust-bar" ...>
-
-// AFTER:
-{/* DEVELOPER PARTNERS MARQUEE */}
-<div id="developer-partners">
-  <DeveloperPartnersMarquee />
+<div id="trust-bar" className="bg-black py-8 md:py-10">
+  ...
 </div>
 
-{/* TRUST BAR (4 Cards) - Flows directly from Developer Partners */}
-<div id="trust-bar" ...>
-```
-
----
-
-#### 2. Fix Double Divider When Podcast is Hidden
-
-**Lines 672-680**: When the podcast is hidden, `<PodcastVisibilityGate>` renders nothing, but there's still a divider at line 680.
-
-Current structure:
-```tsx
-<PodcastVisibilityGate>
-  <SectionDivider />    {/* Line 672 - Inside gate */}
-  <JBJPodcastSection />
-  <SectionDivider />    {/* Line 676 - Inside gate */}
-</PodcastVisibilityGate>
-
-{/* DIVIDER - Before Best Idea Award */}
-<SectionDivider />       {/* Line 680 - OUTSIDE gate = ALWAYS renders */}
-```
-
-**Fix**: Move the divider inside the gate OR make line 680 conditional.
-
-```tsx
-// AFTER:
-<PodcastVisibilityGate>
-  <SectionDivider />
-  <JBJPodcastSection />
-</PodcastVisibilityGate>
-
-{/* DIVIDER - Before Best Idea Award (always needed) */}
+{/* DIVIDER */}
 <SectionDivider />
+
+{/* FIND YOUR STARTING POINT */}
 ```
+
+This already has a divider after Trust Bar → Good.
 
 ---
 
-#### 3. Ensure "Why Dubai" Divider is Centered
+### Summary of Pending Changes
 
-The `WhyDubaiCapitalSection` is a full-height (`h-screen`) edge-to-edge section. The divider component uses `container mx-auto px-4` which should already center it, but let's verify the `SectionDivider` component works correctly:
+| File | Change | Priority |
+|------|--------|----------|
+| `src/components/ui/section-divider.tsx` | Option to make divider full-width for better alignment with edge-to-edge sections | High |
+| `src/pages/Index.tsx` | Use `fullWidth` variant on dividers adjacent to full-bleed sections (Why Dubai, Hero) | High |
 
-**Current `SectionDivider` (line 14-22)**:
+---
+
+### Implementation Details
+
+#### Fix 1: Update SectionDivider Component
+
+**File**: `src/components/ui/section-divider.tsx`
+
 ```tsx
-<section className="bg-black py-8 md:py-10">
-  <div className="container mx-auto px-4">
-    <div className="flex items-center justify-center gap-6">
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-      <Sparkles className="w-4 h-4 text-gold/50" />
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-    </div>
-  </div>
-</section>
+import { Sparkles } from "lucide-react";
+
+type SectionDividerProps = {
+  className?: string;
+  /** Use full-width layout for dividers adjacent to edge-to-edge sections */
+  fullWidth?: boolean;
+};
+
+export function SectionDivider({ className, fullWidth = false }: SectionDividerProps) {
+  return (
+    <section className={`bg-black py-8 md:py-10 ${className ?? ""}`.trim()}>
+      <div className={fullWidth ? "w-full px-6 md:px-12 lg:px-16" : "container mx-auto px-4"}>
+        <div className="flex items-center justify-center gap-6">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          <Sparkles className="w-4 h-4 text-gold/50" />
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+        </div>
+      </div>
+    </section>
+  );
+}
 ```
 
-This uses `flex-1` for both lines which should expand equally. The issue is that **the container width may differ from section to section** if sections use different container widths.
+#### Fix 2: Apply fullWidth to Relevant Dividers
 
-**Verification needed**: Check if `jj-layer-2` and other section containers use the same max-width as the divider's `container`.
+**File**: `src/pages/Index.tsx`
 
----
+Update these specific dividers adjacent to full-bleed sections:
 
-### Files to Modify
+```tsx
+{/* DIVIDER - Before Why Dubai (use fullWidth since Why Dubai is edge-to-edge) */}
+<SectionDivider fullWidth />
 
-| File | Changes |
-|------|---------|
-| `src/pages/Index.tsx` | 1. Remove divider at line 191 (after Developer Partners)<br/>2. Consolidate podcast dividers (lines 672-680) |
+<Suspense fallback={<SectionLoader />}>
+  <WhyDubaiCapitalSection />
+</Suspense>
+
+{/* JBJ PODCAST SECTION */}
+<PodcastVisibilityGate>
+  <SectionDivider fullWidth />  {/* After Why Dubai is edge-to-edge */}
+  ...
+</PodcastVisibilityGate>
+```
 
 ---
 
 ### Visual Result
 
-**Before**:
+**Before (Misaligned)**:
 ```
-[Developer Partners Marquee]
-─────── ✦ ─────── (DIVIDER - REMOVE THIS)
-[Trusted By Thousands - Trust Bar]
+[Mortgage Calculator - Container Width]
+─────── ✦ ─────── (Divider - Container Width)
+[Why Dubai - FULL VIEWPORT WIDTH]
 ```
 
-**After**:
+**After (Aligned)**:
 ```
-[Developer Partners Marquee]
-[Trusted By Thousands - Trust Bar]
-(flows naturally together)
+[Mortgage Calculator - Container Width]
+──────────── ✦ ──────────── (Divider - Full Width)
+[Why Dubai - FULL VIEWPORT WIDTH]
 ```
 
 ---
 
-### Implementation Steps
+### Files to Modify
 
-1. **Remove line 191**: Delete `<SectionDivider />` between Developer Partners and Trust Bar
-2. **Clean up podcast dividers**: Remove the extra `<SectionDivider />` inside `PodcastVisibilityGate` at line 676 (keep only one divider after podcast, which is line 680)
-3. **Verify divider centering**: The `SectionDivider` component is already properly centered with `container mx-auto` - the visual misalignment may be a perception issue due to the full-bleed video sections
+1. **`src/components/ui/section-divider.tsx`** - Add `fullWidth` prop
+2. **`src/pages/Index.tsx`** - Apply `fullWidth` to dividers adjacent to `WhyDubaiCapitalSection`
 
