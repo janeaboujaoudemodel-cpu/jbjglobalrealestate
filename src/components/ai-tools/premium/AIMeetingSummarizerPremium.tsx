@@ -59,10 +59,9 @@ const AIMeetingSummarizerPremium = () => {
       gradientFrom="violet"
       badge="Productivity Intelligence"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="space-y-8">
         {/* Input Section */}
-        <div className="space-y-6">
-          <Card className="bg-violet-900/20 border-violet-500/30">
+        <Card className="bg-violet-900/20 border-violet-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-violet-400 mb-4">
                 <FileAudio className="h-5 w-5" />
@@ -139,13 +138,11 @@ const AIMeetingSummarizerPremium = () => {
                 )}
               </Button>
             </CardContent>
-          </Card>
-        </div>
+        </Card>
 
         {/* Results Section */}
-        <div className="space-y-6">
-          <AnimatePresence mode="wait">
-            {response ? (
+        <AnimatePresence mode="wait">
+          {response ? (
               <motion.div
                 key="results"
                 initial={{ opacity: 0, x: 20 }}
@@ -239,23 +236,22 @@ const AIMeetingSummarizerPremium = () => {
                 </Card>
               </motion.div>
             ) : (
-              <motion.div
-                key="placeholder"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center h-[400px] text-center"
-              >
-                <div className="p-6 rounded-full bg-violet-500/10 mb-4">
-                  <FileAudio className="h-12 w-12 text-violet-400/50" />
-                </div>
-                <h3 className="text-lg font-semibold text-zinc-400">Ready to Summarize</h3>
-                <p className="text-sm text-zinc-500 mt-2 max-w-sm">
-                  Paste your meeting notes to get AI-powered summaries with action items and decisions
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+            <motion.div
+              key="placeholder"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center py-12 text-center"
+            >
+              <div className="p-6 rounded-full bg-violet-500/10 mb-4">
+                <FileAudio className="h-12 w-12 text-violet-400/50" />
+              </div>
+              <h3 className="text-lg font-semibold text-zinc-400">Ready to Summarize</h3>
+              <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+                Paste your meeting notes to get AI-powered summaries with action items and decisions
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </AIToolPremiumLayout>
   );

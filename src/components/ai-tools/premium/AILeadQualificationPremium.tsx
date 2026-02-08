@@ -88,10 +88,9 @@ const AILeadQualificationPremium = () => {
       gradientFrom="purple"
       badge="Sales Intelligence"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="space-y-8">
         {/* Input Section */}
-        <div className="space-y-6">
-          <Card className="bg-purple-900/20 border-purple-500/30">
+        <Card className="bg-purple-900/20 border-purple-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-purple-400 mb-4">
                 <UserCheck className="h-5 w-5" />
@@ -221,13 +220,11 @@ const AILeadQualificationPremium = () => {
                 )}
               </Button>
             </CardContent>
-          </Card>
-        </div>
+        </Card>
 
         {/* Results Section */}
-        <div className="space-y-6">
-          <AnimatePresence mode="wait">
-            {response ? (
+        <AnimatePresence mode="wait">
+          {response ? (
               <motion.div
                 key="results"
                 initial={{ opacity: 0, x: 20 }}
@@ -324,23 +321,22 @@ const AILeadQualificationPremium = () => {
                 </Card>
               </motion.div>
             ) : (
-              <motion.div
-                key="placeholder"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center h-[400px] text-center"
-              >
-                <div className="p-6 rounded-full bg-purple-500/10 mb-4">
-                  <UserCheck className="h-12 w-12 text-purple-400/50" />
-                </div>
-                <h3 className="text-lg font-semibold text-zinc-400">Ready to Qualify</h3>
-                <p className="text-sm text-zinc-500 mt-2 max-w-sm">
-                  Enter lead information to get AI-powered qualification scoring with conversion probability
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+            <motion.div
+              key="placeholder"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center py-12 text-center"
+            >
+              <div className="p-6 rounded-full bg-purple-500/10 mb-4">
+                <UserCheck className="h-12 w-12 text-purple-400/50" />
+              </div>
+              <h3 className="text-lg font-semibold text-zinc-400">Ready to Qualify</h3>
+              <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+                Enter lead information to get AI-powered qualification scoring with conversion probability
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </AIToolPremiumLayout>
   );

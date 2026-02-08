@@ -194,15 +194,15 @@ const AIToolPremiumLayout = ({
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate(-1)}
-              className={`${colors.text} ${colors.bg} ${colors.border} border hover:text-white hover:bg-white/10 mb-6`}
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
-            </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate(-1)}
+            className={`text-white ${colors.bg} ${colors.border} border hover:bg-white/10 mb-6`}
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back
+          </Button>
           </motion.div>
 
           <motion.div

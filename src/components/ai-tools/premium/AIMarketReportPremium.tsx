@@ -108,10 +108,9 @@ ${response.report}
         accentColor="indigo"
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="space-y-8">
         {/* Input Section */}
-        <div className="space-y-6">
-          <Card className="bg-indigo-900/20 border-indigo-500/30">
+        <Card className="bg-indigo-900/20 border-indigo-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-indigo-400 mb-4">
                 <MapPin className="h-5 w-5" />
@@ -197,10 +196,10 @@ ${response.report}
                 )}
               </Button>
             </CardContent>
-          </Card>
+        </Card>
 
-          {/* Report Indicators */}
-          <div className="grid grid-cols-3 gap-3">
+        {/* Report Indicators */}
+        <div className="grid grid-cols-3 gap-3">
             <Card className="bg-indigo-900/20 border-indigo-500/30 p-4 text-center">
               <BarChart3 className="h-5 w-5 mx-auto mb-2 text-indigo-400" />
               <p className="text-xs text-zinc-500">Trend</p>
@@ -216,13 +215,11 @@ ${response.report}
               <p className="text-xs text-zinc-500">Investment</p>
               <p className="text-sm font-semibold text-white">Insights</p>
             </Card>
-          </div>
         </div>
 
         {/* Results Section */}
-        <div className="space-y-6">
-          <AnimatePresence mode="wait">
-            {response ? (
+        <AnimatePresence mode="wait">
+          {response ? (
               <motion.div
                 key="results"
                 initial={{ opacity: 0, x: 20 }}
@@ -298,23 +295,22 @@ ${response.report}
                 </p>
               </motion.div>
             ) : (
-              <motion.div
-                key="placeholder"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center h-[400px] text-center"
-              >
-                <div className="p-6 rounded-full bg-indigo-500/10 mb-4">
-                  <FileBarChart className="h-12 w-12 text-indigo-400/50" />
-                </div>
-                <h3 className="text-lg font-semibold text-zinc-400">Ready to Analyze</h3>
-                <p className="text-sm text-zinc-500 mt-2 max-w-sm">
-                  Enter a location to generate comprehensive market insights with trends and investment recommendations
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+            <motion.div
+              key="placeholder"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center py-12 text-center"
+            >
+              <div className="p-6 rounded-full bg-indigo-500/10 mb-4">
+                <FileBarChart className="h-12 w-12 text-indigo-400/50" />
+              </div>
+              <h3 className="text-lg font-semibold text-zinc-400">Ready to Analyze</h3>
+              <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+                Enter a location to generate comprehensive market insights with trends and investment recommendations
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </AIToolPremiumLayout>
   );
