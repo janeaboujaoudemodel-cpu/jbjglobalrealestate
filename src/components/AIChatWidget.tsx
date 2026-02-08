@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -28,6 +28,7 @@ import CollapsedChatButton from './chat/CollapsedChatButton';
 import ChatAgentJoining from './chat/ChatAgentJoining';
 import ChatShortcuts, { ShortcutType } from './chat/ChatShortcuts';
 import ChatCVSubmission from './chat/ChatCVSubmission';
+import ChatCVConfirmation from './chat/ChatCVConfirmation';
 import ChatFeedback, { FeedbackType } from './chat/ChatFeedback';
 import ChatConversationalCollect from './chat/ChatConversationalCollect';
 
@@ -57,6 +58,28 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
   const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [selectedShortcut, setSelectedShortcut] = useState<ShortcutType | null>(null);
+
+  // Restore session from sessionStorage on mount
+  useEffect(() => {
+    const savedStep = sessionStorage.getItem('jbj_chat_step');
+    const savedUserInfo = sessionStorage.getItem('jbj_chat_user');
+    if (savedStep) {
+      setStep(savedStep as ChatStep);
+    }
+    if (savedUserInfo) {
+      try {
+        setUserInfo(JSON.parse(savedUserInfo));
+      } catch (e) {
+        console.error('Failed to parse saved user info:', e);
+      }
+    }
+  }, []);
+
+  // Persist step and userInfo to sessionStorage
+  useEffect(() => {
+    sessionStorage.setItem('jbj_chat_step', step);
+    sessionStorage.setItem('jbj_chat_user', JSON.stringify(userInfo));
+  }, [step, userInfo]);
 
   // Check email in database
   const checkEmailInDatabase = async (email: string): Promise<{ exists: boolean; data?: any }> => {
@@ -523,7 +546,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
 
   // Handle CV submission success
   const handleCVSubmitSuccess = () => {
-    setStep('feedback');
+    setStep('cv_submitted');
   };
 
   // Handle user info field update
@@ -531,7 +554,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
     setUserInfo(prev => ({ ...prev, [field]: value }));
   };
 
-  // Reset chat
+  // Reset chat and clear session storage
   const resetChat = () => {
     setStep('welcome_choice');
     setIsExistingUser(false);
@@ -542,6 +565,9 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
     setConversationId(null);
     setFormErrors({});
     setChatHistory([]);
+    // Clear session storage
+    sessionStorage.removeItem('jbj_chat_step');
+    sessionStorage.removeItem('jbj_chat_user');
   };
 
   // Handle back navigation
@@ -554,6 +580,9 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
         setStep('check_email');
         break;
       case 'cv_submission':
+        setStep('shortcuts');
+        break;
+      case 'cv_submitted':
         setStep('shortcuts');
         break;
       case 'conversational_collect':
@@ -638,6 +667,14 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
             conversationId={conversationId}
             onSubmitSuccess={handleCVSubmitSuccess}
             onBack={() => setStep('shortcuts')}
+          />
+        )}
+
+        {step === 'cv_submitted' && (
+          <ChatCVConfirmation
+            userFirstName={userInfo.firstName}
+            onStartNewChat={resetChat}
+            onGoToShortcuts={() => setStep('shortcuts')}
           />
         )}
 

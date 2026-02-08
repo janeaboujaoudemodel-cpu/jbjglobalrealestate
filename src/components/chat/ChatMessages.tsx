@@ -185,7 +185,7 @@ const ChatMessages = ({
           <Button
             onClick={onSend}
             disabled={!input.trim() || isLoading}
-            className="bg-gold hover:bg-gold-light text-black h-12 w-12 rounded-xl shadow-lg shadow-gold/30"
+            className="bg-gold hover:bg-gold-light hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] active:bg-gold-dark text-black h-12 w-12 rounded-xl transition-all duration-200"
           >
             <Send className="w-5 h-5" />
           </Button>
