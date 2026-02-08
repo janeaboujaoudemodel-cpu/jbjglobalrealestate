@@ -296,7 +296,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 </div>
 
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  Welcome to JBJ Global
+                  Welcome to JBJ Global Real Estate
                 </h2>
                 <p className="text-gray-600 text-sm mb-8 max-w-sm mx-auto">
                   Take a quick guided tour to learn how to navigate our platform, or explore on your own
