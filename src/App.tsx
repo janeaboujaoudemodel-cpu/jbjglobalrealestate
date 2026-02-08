@@ -122,6 +122,11 @@ import MyAIHistory from "./pages/MyAIHistory";
 import AICallSummarizerPage from "./pages/AICallSummarizerPage";
 import MeetingCenter from "./pages/MeetingCenter";
 import VoiceAgentSettings from "./pages/VoiceAgentSettings";
+import AIClientMatcherPage from "./pages/AIClientMatcherPage";
+import AIEmailGeneratorPage from "./pages/AIEmailGeneratorPage";
+import AISocialMediaPage from "./pages/AISocialMediaPage";
+import AIInvestmentReportPage from "./pages/AIInvestmentReportPage";
+import AIDescriptionWriterPage from "./pages/AIDescriptionWriterPage";
 import IntellectualProperty from "./pages/IntellectualProperty";
 import Architecture from "./pages/services/Architecture";
 import InteriorDesign from "./pages/services/InteriorDesign";
@@ -472,6 +477,12 @@ const App = () => (
                 <Route path="/ai-home-finder" element={<Navigate to="/quiz" replace />} />
                 <Route path="/tools-guide" element={<Navigate to="/ai-hub" replace />} />
                 <Route path="/my-ai-history" element={<MyAIHistory />} />
+                {/* New AI Tools - Recently Developed */}
+                <Route path="/ai-client-matcher" element={<BrokerGuard><AIClientMatcherPage /></BrokerGuard>} />
+                <Route path="/ai-email-generator" element={<AIEmailGeneratorPage />} />
+                <Route path="/ai-social-media" element={<AISocialMediaPage />} />
+                <Route path="/ai-investment-report" element={<AIInvestmentReportPage />} />
+                <Route path="/ai-description-writer" element={<AIDescriptionWriterPage />} />
                 <Route path="/intellectual-property" element={<IntellectualProperty />} />
                 <Route path="/services/architecture" element={<Architecture />} />
                 <Route path="/services/interior-design" element={<InteriorDesign />} />
