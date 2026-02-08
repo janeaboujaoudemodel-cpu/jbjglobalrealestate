@@ -19,8 +19,10 @@ import {
   Plus,
   Loader2,
   RefreshCw,
-  AlertTriangle
+  AlertTriangle,
+  MailCheck
 } from "lucide-react";
+import { useResendTicketConfirmation } from "@/hooks/useResendTicketConfirmation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -89,11 +91,14 @@ const STEP_MESSAGES: Record<SubmissionStep, string> = {
 
 const SupportTicketBox = () => {
   const { user } = useAuth();
+  const { resendConfirmation, isResending } = useResendTicketConfirmation();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [ticketNumber, setTicketNumber] = useState("");
   const [copied, setCopied] = useState(false);
+  const [emailWasSent, setEmailWasSent] = useState(true);
+  const [emailResent, setEmailResent] = useState(false);
   
   // Enhanced loading states
   const [submissionStep, setSubmissionStep] = useState<SubmissionStep>('idle');
@@ -290,6 +295,8 @@ const SupportTicketBox = () => {
 
       const responseData = response?.data;
       setTicketNumber(responseData?.ticketNumber || "");
+      setEmailWasSent(responseData?.customerEmailSent ?? false);
+      setEmailResent(false);
       setIsSubmitted(true);
       setSubmissionStep('idle');
       
@@ -297,8 +304,8 @@ const SupportTicketBox = () => {
       if (responseData?.customerEmailSent) {
         toast.success("Support ticket created! Confirmation email sent.");
       } else {
-        toast.success("Support ticket created!", {
-          description: responseData?.customerEmailError || "Email confirmation could not be sent. Please save your ticket number."
+        toast.warning("Ticket created, but email failed", {
+          description: responseData?.customerEmailError || "Please save your ticket number. You can resend the email below."
         });
       }
 
@@ -328,6 +335,8 @@ const SupportTicketBox = () => {
     setSubmissionStep('idle');
     setUploadStatuses({});
     setFieldErrors({});
+    setEmailWasSent(true);
+    setEmailResent(false);
     setFormData({
       fullName: user?.email?.split('@')[0] || "",
       email: user?.email || "",
@@ -350,6 +359,8 @@ const SupportTicketBox = () => {
     setSubmissionStep('idle');
     setUploadStatuses({});
     setFieldErrors({});
+    setEmailWasSent(true);
+    setEmailResent(false);
     setFormData({
       fullName: formData.fullName,
       email: formData.email,
@@ -573,14 +584,54 @@ const SupportTicketBox = () => {
                                 </div>
                               </motion.div>
 
-                              <motion.p 
+                              {/* Email Status & Resend Button */}
+                              <motion.div 
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.6 }}
-                                className="text-sm text-zinc-500 mb-6"
+                                className="mb-6"
                               >
-                                A confirmation email has been sent to <strong>{formData.email}</strong>
-                              </motion.p>
+                                {emailWasSent || emailResent ? (
+                                  <p className="text-sm text-zinc-500 flex items-center justify-center gap-2">
+                                    <MailCheck className="w-4 h-4 text-green-500" />
+                                    Confirmation email {emailResent ? "resent" : "sent"} to <strong>{formData.email}</strong>
+                                  </p>
+                                ) : (
+                                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-center">
+                                    <div className="flex items-center justify-center gap-2 text-amber-700 mb-2">
+                                      <AlertTriangle className="w-4 h-4" />
+                                      <span className="text-sm font-medium">Email delivery failed</span>
+                                    </div>
+                                    <p className="text-xs text-amber-600 mb-3">
+                                      We couldn't send the confirmation email. Please save your ticket number above.
+                                    </p>
+                                    <Button
+                                      onClick={async () => {
+                                        const result = await resendConfirmation(ticketNumber, formData.email);
+                                        if (result.success) {
+                                          setEmailResent(true);
+                                        }
+                                      }}
+                                      disabled={isResending}
+                                      variant="outline"
+                                      size="sm"
+                                      className="border-amber-400 text-amber-700 hover:bg-amber-100"
+                                    >
+                                      {isResending ? (
+                                        <>
+                                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                          Sending...
+                                        </>
+                                      ) : (
+                                        <>
+                                          <RefreshCw className="w-4 h-4 mr-2" />
+                                          Resend Confirmation Email
+                                        </>
+                                      )}
+                                    </Button>
+                                  </div>
+                                )}
+                              </motion.div>
 
                               {/* Action Buttons */}
                               <motion.div 
