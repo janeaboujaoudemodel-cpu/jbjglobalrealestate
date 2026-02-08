@@ -1272,11 +1272,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               onMouseLeave={handleMegaMenuLeave}
             >
               <div
-                className={`min-w-0 max-w-full flex items-center justify-evenly gap-1 lg:gap-2 xl:gap-3 2xl:gap-4 rounded-full px-2 lg:px-4 xl:px-6 py-1 transition-all duration-300 ${
+                className={cn(
+                  "min-w-0 flex items-center justify-evenly gap-1 lg:gap-2 xl:gap-3 2xl:gap-4 rounded-full px-2 lg:px-4 xl:px-6 py-1 transition-all duration-300",
                   isFullyTransparent
-                    ? 'bg-transparent border-transparent'
-                    : 'border-2 border-gold/40'
-                }`}
+                    ? 'bg-transparent border-transparent max-w-full'
+                    : 'border-2 border-gold/40 w-full max-w-[900px]'
+                )}
                 style={!isFullyTransparent ? {
                   background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
                   boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05)',
