@@ -4,14 +4,12 @@ import { T } from "@/components/ui/T";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
 import burjAlArabVideo from "@/assets/videos/why-dubai-burj-al-arab.mp4";
-import dubaiFrameVideo from "@/assets/videos/why-dubai-dubai-frame.mp4";
-// Use the day-to-night drone shot for Burj Khalifa (moving/aerial)
+// Use the day-to-night drone shot for Burj Khalifa (moving/aerial) - replaces Dubai Frame
 import burjKhalifaVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
 import atlantisPalmVideo from "@/assets/videos/why-dubai-atlantis-palm.mp4";
 
 const scenes = [
   { src: burjAlArabVideo },
-  { src: dubaiFrameVideo },
   { src: burjKhalifaVideo },
   { src: atlantisPalmVideo },
 ];

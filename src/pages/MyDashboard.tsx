@@ -90,12 +90,14 @@ const MyDashboard = () => {
                 <h1 className="text-3xl font-bold text-foreground" style={{ fontFamily: 'Poppins, sans-serif' }}>
                   My <span className="text-gold">Dashboard</span>
                 </h1>
-                <Badge className={getRoleBadgeColor(role)}>
-                  {getRoleLabel(role)}
-                </Badge>
-                {isCombinedMode && (
+                {/* Show only ONE badge based on mode - combined takes priority */}
+                {isCombinedMode ? (
                   <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30">
                     Investor + Broker
+                  </Badge>
+                ) : (
+                  <Badge className={getRoleBadgeColor(role)}>
+                    {getRoleLabel(role)}
                   </Badge>
                 )}
               </div>

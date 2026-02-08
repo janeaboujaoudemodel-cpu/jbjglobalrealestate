@@ -33,7 +33,7 @@ const Dashboard = () => {
           navigate('/investor-dashboard', { replace: true });
           break;
         case 'owner':
-          navigate('/owner-dashboard', { replace: true });
+          navigate('/owner', { replace: true });
           break;
         case 'broker_partner':
           navigate('/broker-partner-dashboard', { replace: true });

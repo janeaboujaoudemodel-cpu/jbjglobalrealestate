@@ -88,28 +88,28 @@ const ActivityOverviewCard = () => {
             <div className="grid grid-cols-3 gap-3">
               {/* Days Active */}
               <div className="text-center p-3 rounded-xl border border-gold/20 bg-gold/5">
-                <Calendar className="w-5 h-5 text-primary mx-auto mb-1" />
+                <Calendar className="w-5 h-5 text-gold mx-auto mb-1" />
                 <p className="text-2xl font-bold text-foreground">{stats.daysActive}</p>
                 <p className="text-xs text-muted-foreground">Days Active</p>
               </div>
 
               {/* Current Streak */}
               <div className="text-center p-3 rounded-xl border border-gold/20 bg-gold/5">
-                <Flame className="w-5 h-5 text-primary mx-auto mb-1" />
+                <Flame className="w-5 h-5 text-gold mx-auto mb-1" />
                 <p className="text-2xl font-bold text-foreground">{stats.currentStreak}</p>
                 <p className="text-xs text-muted-foreground">Day Streak</p>
               </div>
 
               {/* Weekly Points */}
               <div className="text-center p-3 rounded-xl border border-gold/20 bg-gold/5">
-                <TrendingUp className="w-5 h-5 text-primary mx-auto mb-1" />
+                <TrendingUp className="w-5 h-5 text-gold mx-auto mb-1" />
                 <p className="text-2xl font-bold text-foreground">{stats.weeklyPoints}</p>
                 <p className="text-xs text-muted-foreground">This Week</p>
               </div>
             </div>
 
             <Button variant="link" className="w-full text-gold mt-4 p-0" asChild>
-              <Link to="/my-dashboard">
+              <Link to="/my-dashboard/activity">
                 View Full Activity
                 <ChevronRight className="w-4 h-4 ml-1" />
               </Link>

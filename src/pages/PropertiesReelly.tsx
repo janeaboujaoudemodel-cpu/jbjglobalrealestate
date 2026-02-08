@@ -142,23 +142,27 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
    const projects = flattenReellyProjects(data);
    const totalCount = getReellyProjectsTotal(data);
  
-   // Apply URL params on mount
-   useEffect(() => {
-     const keywordParam = searchParams.get('q') || searchParams.get('keyword') || searchParams.get('search');
-     const emirateParam = searchParams.get('emirate');
-     const statusParam = searchParams.get('status');
-     
-     if (keywordParam || emirateParam || statusParam) {
-       const updated: FilterState = {
-         ...defaultFilters,
-         search: keywordParam ?? '',
-         emirate: emirateParam,
-         saleStatus: statusParam,
-       };
-       setFilters(updated);
-       setAppliedFilters(updated);
-     }
-   }, [searchParams]);
+    // Apply URL params on mount - support both HeroSearchBar and direct params
+    useEffect(() => {
+      const keywordParam = searchParams.get('q') || searchParams.get('keyword') || searchParams.get('search');
+      const emirateParam = searchParams.get('emirate') || searchParams.get('location');
+      // Support both 'status' and 'saleStatus' from HeroSearchBar
+      const statusParam = searchParams.get('saleStatus') || searchParams.get('status');
+      // Support 'constructionStatus' from HeroSearchBar
+      const constructionParam = searchParams.get('constructionStatus');
+      
+      if (keywordParam || emirateParam || statusParam || constructionParam) {
+        const updated: FilterState = {
+          ...defaultFilters,
+          search: keywordParam ?? '',
+          emirate: emirateParam,
+          saleStatus: statusParam,
+          constructionStatus: constructionParam,
+        };
+        setFilters(updated);
+        setAppliedFilters(updated);
+      }
+    }, [searchParams]);
  
    // Sort projects client-side (API doesn't support sorting)
    const sortedProjects = useMemo(() => {

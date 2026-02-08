@@ -91,7 +91,7 @@ const MortgageCalculator = ({
   if (compact) {
     return (
       <div className="max-w-5xl mx-auto">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4">
           {/* Property Price */}
           <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 sm:p-5 text-center shadow-md">
             <div className="w-9 h-9 sm:w-10 sm:h-10 mx-auto mb-2 sm:mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
@@ -134,46 +134,8 @@ const MortgageCalculator = ({
             </p>
           </div>
           
-          {/* Total Interest - Compact display with abbreviated values */}
-          <TooltipProvider>
-            <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 sm:p-5 text-center shadow-md relative overflow-hidden">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button className="absolute top-2 right-2 p-1 rounded-full hover:bg-black/10 transition-colors z-10">
-                    <Info className="w-3.5 h-3.5 text-black/40 hover:text-black/70" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="top" className="max-w-[280px] bg-zinc-900 border-gold/30 text-white p-3 z-50">
-                  <p className="text-xs leading-relaxed">
-                    <strong className="text-gold">Full Amount: {formatCurrency(calculations.totalInterest)}</strong>
-                    <br /><br />
-                    With compound interest at {interestRate}% over {loanTermYears} years, total interest equals ~{calculations.interestPercentOfLoan.toFixed(0)}% of your loan.
-                    <br /><br />
-                    <span className="text-gold/80">Tip:</span> Shorter terms or larger down payments reduce total interest.
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-              <div className="w-9 h-9 sm:w-10 sm:h-10 mx-auto mb-2 sm:mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
-                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
-              </div>
-              <p className="text-black/60 text-[10px] sm:text-xs mb-1 uppercase tracking-wider truncate">Total Interest</p>
-              {/* Abbreviated display for large values */}
-              <p className="text-gold font-bold text-base sm:text-lg leading-tight truncate tabular-nums" style={{ fontFamily: "Poppins, sans-serif" }}>
-                {calculations.totalInterest >= 1000000 
-                  ? `AED ${(calculations.totalInterest / 1000000).toFixed(1)}M`
-                  : calculations.totalInterest >= 1000 
-                    ? `AED ${(calculations.totalInterest / 1000).toFixed(0)}K`
-                    : formatCurrency(calculations.totalInterest)
-                }
-              </p>
-              <p className="text-black/70 text-[10px] sm:text-xs mt-1 font-medium leading-tight truncate">
-                {calculations.interestPercentOfLoan.toFixed(0)}% over {loanTermYears}y
-              </p>
-            </div>
-          </TooltipProvider>
-
-          {/* Monthly Payment */}
-          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 sm:p-5 text-center shadow-md col-span-2 sm:col-span-1">
+          {/* Monthly Payment - Now the 4th card */}
+          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 sm:p-5 text-center shadow-md">
             <div className="w-9 h-9 sm:w-10 sm:h-10 mx-auto mb-2 sm:mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
               <Calculator className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
             </div>
