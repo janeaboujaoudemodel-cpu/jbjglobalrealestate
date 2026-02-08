@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Icon, DivIcon } from "leaflet";
-import { useProjects, Project } from "@/hooks/useProjects";
+import { useProjects, Project, useTrendingAreas } from "@/hooks/useProjects";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +15,22 @@ import { Link } from "react-router-dom";
 import { MapPin, Building, Bed, Maximize, Calendar, Filter, List, X, ChevronRight, ExternalLink } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
 import "leaflet/dist/leaflet.css";
+
+// Hook to fetch areas for filter
+function useAreas() {
+  return useQuery({
+    queryKey: ["areas-for-map"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("areas")
+        .select("id, name, slug, emirate")
+        .eq("is_active", true)
+        .order("name");
+      if (error) throw error;
+      return data || [];
+    },
+  });
+}
 
 // Dubai community coordinates (approximate locations)
 const COMMUNITY_COORDINATES: Record<string, [number, number]> = {
@@ -162,6 +180,7 @@ const MapBoundsFitter = ({ projects }: { projects: Project[] }) => {
 
 const PropertyMap = () => {
   const { data: allProjects = [], isLoading } = useProjects();
+  const { data: areas = [] } = useAreas();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showList, setShowList] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -169,6 +188,7 @@ const PropertyMap = () => {
   // Filters
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDeveloper, setSelectedDeveloper] = useState<string>("all");
+  const [selectedArea, setSelectedArea] = useState<string>("all");
   const [selectedBedrooms, setSelectedBedrooms] = useState<string>("all");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000000]);
   const [transactionType, setTransactionType] = useState<'all' | 'buy' | 'rent'>('all');
@@ -211,6 +231,14 @@ const PropertyMap = () => {
         return false;
       }
       
+      // Area filter
+      if (selectedArea !== "all") {
+        const areaMatch = project.area_name?.toLowerCase() === selectedArea.toLowerCase() ||
+                          project.location?.toLowerCase().includes(selectedArea.toLowerCase()) ||
+                          project.community?.name?.toLowerCase() === selectedArea.toLowerCase();
+        if (!areaMatch) return false;
+      }
+      
       // Bedrooms filter
       if (selectedBedrooms !== "all") {
         const beds = parseInt(selectedBedrooms);
@@ -229,12 +257,13 @@ const PropertyMap = () => {
   const clearFilters = () => {
     setSearchTerm("");
     setSelectedDeveloper("all");
+    setSelectedArea("all");
     setSelectedBedrooms("all");
     setPriceRange([0, 50000000]);
     setTransactionType('all');
   };
   
-  const hasActiveFilters = searchTerm || selectedDeveloper !== "all" || selectedBedrooms !== "all" || priceRange[0] > 0 || priceRange[1] < 50000000 || transactionType !== 'all';
+  const hasActiveFilters = searchTerm || selectedDeveloper !== "all" || selectedArea !== "all" || selectedBedrooms !== "all" || priceRange[0] > 0 || priceRange[1] < 50000000 || transactionType !== 'all';
 
   if (isLoading) {
     return (
@@ -336,6 +365,22 @@ const PropertyMap = () => {
                         <SelectItem value="all">All Developers</SelectItem>
                         {developers.map(dev => (
                           <SelectItem key={dev} value={dev}>{dev}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  {/* Area */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Area</label>
+                    <Select value={selectedArea} onValueChange={setSelectedArea}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All Areas" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Areas</SelectItem>
+                        {areas.map(area => (
+                          <SelectItem key={area.id} value={area.name}>{area.name}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>

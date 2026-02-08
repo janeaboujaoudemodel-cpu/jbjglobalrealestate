@@ -149,6 +149,26 @@ export function ReellyImportPanel() {
     error?: string;
   } | null>(null);
   
+  // Backfill state - for backfilling approved projects with missing details
+  const [isBackfilling, setIsBackfilling] = useState(false);
+  const [backfillStats, setBackfillStats] = useState<{
+    total_projects: number;
+    missing_floor_plans: number;
+    missing_amenities: number;
+    missing_documents: number;
+    missing_any: number;
+  } | null>(null);
+  const [backfillResult, setBackfillResult] = useState<{
+    success: boolean;
+    processed?: number;
+    updated?: number;
+    failed?: number;
+    remaining?: number;
+    errors?: string[];
+    message?: string;
+    error?: string;
+  } | null>(null);
+  
   // Resume sync state
   const [hasResumableJob, setHasResumableJob] = useState(false);
   const [resumableJobInfo, setResumableJobInfo] = useState<{
@@ -571,10 +591,99 @@ export function ReellyImportPanel() {
   };
 
   /**
+   * Load backfill stats - count of projects missing detailed data
+   */
+  const handleLoadBackfillStats = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke("reelly-backfill-projects", {
+        body: { mode: "stats" },
+      });
+
+      if (error) throw error;
+
+      if (data?.success && data.stats) {
+        setBackfillStats(data.stats);
+        toast.success(`Found ${data.stats.missing_any} projects needing backfill`);
+      } else {
+        toast.error(data?.error || "Failed to load backfill stats");
+      }
+    } catch (err: any) {
+      console.error("Backfill stats error:", err);
+      toast.error(err.message || "Failed to load backfill stats");
+    }
+  };
+
+  /**
+   * Run backfill - fetch missing details for approved projects
+   */
+  const handleRunBackfill = async (mode: "batch" | "all" = "batch") => {
+    if (mode === "all") {
+      if (!confirm("🔄 FULL BACKFILL\n\nThis will fetch detailed data (floor plans, amenities, documents, etc.) for ALL approved projects from Reelly API.\n\nThis may take 10-20 minutes. Continue?")) {
+        return;
+      }
+    }
+
+    setIsBackfilling(true);
+    setBackfillResult(null);
+
+    try {
+      let aggregated = { processed: 0, updated: 0, failed: 0, remaining: 999 };
+      let batches = 0;
+      const maxBatches = mode === "all" ? 100 : 1;
+
+      while (aggregated.remaining > 0 && batches < maxBatches) {
+        const { data, error } = await supabase.functions.invoke("reelly-backfill-projects", {
+          body: { mode: "batch", batch_size: 50 },
+        });
+
+        if (error) throw error;
+        if (!data?.success) throw new Error(data?.error || "Backfill failed");
+
+        aggregated = {
+          processed: aggregated.processed + (data.processed || 0),
+          updated: aggregated.updated + (data.updated || 0),
+          failed: aggregated.failed + (data.failed || 0),
+          remaining: data.remaining || 0,
+        };
+
+        setBackfillResult({
+          success: true,
+          ...aggregated,
+          message: `Processing batch ${batches + 1}...`,
+        });
+
+        batches++;
+        
+        // Small delay between batches
+        if (aggregated.remaining > 0 && batches < maxBatches) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+      }
+
+      setBackfillResult({
+        success: true,
+        ...aggregated,
+        message: `Backfill complete! Updated ${aggregated.updated} projects.`,
+      });
+
+      toast.success(`Backfilled ${aggregated.updated} projects with detailed data`);
+      
+      // Refresh stats
+      handleLoadBackfillStats();
+    } catch (err: any) {
+      console.error("Backfill error:", err);
+      setBackfillResult({ success: false, error: err.message });
+      toast.error(err.message || "Backfill failed");
+    } finally {
+      setIsBackfilling(false);
+    }
+  };
+
+  /**
    * FULL EXTRACTION - Run all sync steps in sequence
    */
   const handleFullExtraction = async () => {
-    if (!confirm("🚀 FULL EXTRACTION\n\nThis will run all sync steps:\n1. Test API Connection\n2. Sync All Projects (1,805)\n3. Sync All Developers (549)\n4. Fetch Missing Details (gallery, docs, amenities)\n5. Extract Areas\n\nThis may take 5-10 minutes. Continue?")) {
+    if (!confirm("🚀 FULL EXTRACTION\n\nThis will run all sync steps:\n1. Test API Connection\n2. Sync All Projects (1,805)\n3. Sync All Developers (549)\n4. Backfill Missing Details (floor plans, amenities, docs)\n5. Fetch Gallery Details\n6. Extract Areas\n7. Generate AI Interiors\n\nThis may take 15-30 minutes. Continue?")) {
       return;
     }
 
@@ -583,7 +692,7 @@ export function ReellyImportPanel() {
 
     try {
       // Step 1: Test API
-      setFullExtractionStep("Step 1/6: Testing API connection...");
+      setFullExtractionStep("Step 1/7: Testing API connection...");
       await handleTestApiConnection();
       
       if (apiConnected !== true) {
@@ -591,15 +700,35 @@ export function ReellyImportPanel() {
       }
 
       // Step 2: Sync All Projects
-      setFullExtractionStep("Step 2/6: Syncing all projects...");
+      setFullExtractionStep("Step 2/7: Syncing all projects...");
       await handleSyncProjects(true);
 
       // Step 3: Sync All Developers
-      setFullExtractionStep("Step 3/6: Syncing all developers...");
+      setFullExtractionStep("Step 3/7: Syncing all developers...");
       await handleSyncDevelopers("full");
 
-      // Step 4: Fetch Missing Details (run multiple batches)
-      setFullExtractionStep("Step 4/6: Fetching missing details...");
+      // Step 4: Backfill Missing Details (NEW - runs on approved projects)
+      setFullExtractionStep("Step 4/7: Backfilling missing details to approved projects...");
+      let backfillRemaining = 999;
+      let backfillBatches = 0;
+      const maxBackfillBatches = 50;
+      
+      while (backfillRemaining > 0 && backfillBatches < maxBackfillBatches) {
+        const { data } = await supabase.functions.invoke("reelly-backfill-projects", {
+          body: { mode: "batch", batch_size: 50 },
+        });
+        
+        if (!data?.success) break;
+        backfillRemaining = data.remaining || 0;
+        backfillBatches++;
+        
+        setFullExtractionStep(`Step 4/7: Backfilling details (batch ${backfillBatches}, ${backfillRemaining} remaining)...`);
+        
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+
+      // Step 5: Fetch Missing Details for pending imports
+      setFullExtractionStep("Step 5/7: Fetching missing details for queue...");
       let remainingDetails = 999;
       let detailBatches = 0;
       const maxDetailBatches = 50; // Safety limit
@@ -613,18 +742,18 @@ export function ReellyImportPanel() {
         remainingDetails = data.remaining || 0;
         detailBatches++;
         
-        setFullExtractionStep(`Step 4/6: Fetching details (batch ${detailBatches}, ${remainingDetails} remaining)...`);
+        setFullExtractionStep(`Step 5/7: Fetching details (batch ${detailBatches}, ${remainingDetails} remaining)...`);
         
         // Small delay between batches
         await new Promise(resolve => setTimeout(resolve, 500));
       }
 
-      // Step 5: Extract Areas
-      setFullExtractionStep("Step 5/6: Extracting areas...");
+      // Step 6: Extract Areas
+      setFullExtractionStep("Step 6/7: Extracting areas...");
       await handleSyncAreas("extract_from_projects");
 
-      // Step 6: Generate AI Interior Images
-      setFullExtractionStep("Step 6/6: Generating AI interior visuals...");
+      // Step 7: Generate AI Interior Images
+      setFullExtractionStep("Step 7/7: Generating AI interior visuals...");
       let remainingInteriors = 999;
       let interiorBatches = 0;
       const maxInteriorBatches = 50; // Safety limit
@@ -638,14 +767,14 @@ export function ReellyImportPanel() {
         remainingInteriors = data.remaining || 0;
         interiorBatches++;
         
-        setFullExtractionStep(`Step 6/6: Generating interiors (batch ${interiorBatches}, ${remainingInteriors} remaining)...`);
+        setFullExtractionStep(`Step 7/7: Generating interiors (batch ${interiorBatches}, ${remainingInteriors} remaining)...`);
         
         // Longer delay between AI batches to avoid rate limiting
         await new Promise(resolve => setTimeout(resolve, 5000));
         
         // Limit to first 100 projects for initial sync to avoid excessive cost
         if (interiorBatches >= 20) {
-          setFullExtractionStep("Step 6/6: Interior generation paused (limit reached)...");
+          setFullExtractionStep("Step 7/7: Interior generation paused (limit reached)...");
           break;
         }
       }
@@ -1274,6 +1403,142 @@ export function ReellyImportPanel() {
               </div>
             </DialogContent>
           </Dialog>
+        </CardContent>
+      </Card>
+
+      {/* Backfill Missing Details - For Approved Projects */}
+      <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-purple-500">
+              <Database className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <CardTitle className="text-xl text-purple-900 flex items-center gap-2">
+                Backfill Missing Details
+                {backfillStats?.missing_any === 0 && <CheckCircle className="h-5 w-5 text-emerald-500" />}
+              </CardTitle>
+              <CardDescription className="text-purple-700">
+                Fetch floor plans, amenities, documents for approved projects
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Alert className="border-purple-300 bg-purple-50/50">
+            <Info className="h-4 w-4 text-purple-600" />
+            <AlertDescription className="text-purple-700">
+              This fetches detailed data from Reelly API for projects that were approved before detail enrichment.
+              Use this to populate floor plans, amenities, brochures, payment plans, and unit types.
+            </AlertDescription>
+          </Alert>
+
+          <div className="flex flex-wrap gap-2">
+            <Button
+              onClick={handleLoadBackfillStats}
+              disabled={isBackfilling}
+              variant="outline"
+              className="border-purple-300 text-purple-700 hover:bg-purple-100"
+            >
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Check Missing Data
+            </Button>
+            <Button
+              onClick={() => handleRunBackfill("batch")}
+              disabled={isBackfilling}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              {isBackfilling ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Backfilling...
+                </>
+              ) : (
+                <>
+                  <Zap className="h-4 w-4 mr-2" />
+                  Backfill Batch (50)
+                </>
+              )}
+            </Button>
+            <Button
+              onClick={() => handleRunBackfill("all")}
+              disabled={isBackfilling}
+              variant="outline"
+              className="border-purple-300 text-purple-700 hover:bg-purple-100"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Backfill All
+            </Button>
+          </div>
+
+          {backfillStats && (
+            <div className="bg-white/80 rounded-xl p-4 border border-purple-200">
+              <h3 className="font-semibold text-zinc-900 mb-3">Projects Needing Backfill</h3>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <div className="bg-purple-50 rounded-lg p-3 text-center">
+                  <p className="text-xl font-bold text-purple-700">{backfillStats.total_projects.toLocaleString()}</p>
+                  <p className="text-xs text-purple-600">Total with Reelly ID</p>
+                </div>
+                <div className={`rounded-lg p-3 text-center ${backfillStats.missing_floor_plans > 0 ? 'bg-amber-50' : 'bg-emerald-50'}`}>
+                  <p className={`text-xl font-bold ${backfillStats.missing_floor_plans > 0 ? 'text-amber-700' : 'text-emerald-700'}`}>
+                    {backfillStats.missing_floor_plans.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-zinc-600">Missing Floor Plans</p>
+                </div>
+                <div className={`rounded-lg p-3 text-center ${backfillStats.missing_amenities > 0 ? 'bg-amber-50' : 'bg-emerald-50'}`}>
+                  <p className={`text-xl font-bold ${backfillStats.missing_amenities > 0 ? 'text-amber-700' : 'text-emerald-700'}`}>
+                    {backfillStats.missing_amenities.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-zinc-600">Missing Amenities</p>
+                </div>
+                <div className={`rounded-lg p-3 text-center ${backfillStats.missing_documents > 0 ? 'bg-amber-50' : 'bg-emerald-50'}`}>
+                  <p className={`text-xl font-bold ${backfillStats.missing_documents > 0 ? 'text-amber-700' : 'text-emerald-700'}`}>
+                    {backfillStats.missing_documents.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-zinc-600">Missing Brochures</p>
+                </div>
+                <div className={`rounded-lg p-3 text-center ${backfillStats.missing_any > 0 ? 'bg-red-50' : 'bg-emerald-50'}`}>
+                  <p className={`text-xl font-bold ${backfillStats.missing_any > 0 ? 'text-red-700' : 'text-emerald-700'}`}>
+                    {backfillStats.missing_any.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-zinc-600">Need Backfill</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {backfillResult && (
+            <div className={`bg-white/80 rounded-xl p-4 border ${backfillResult.success ? 'border-purple-200' : 'border-red-200'}`}>
+              <h3 className="font-semibold text-zinc-900 mb-3">Backfill Results</h3>
+              {backfillResult.success ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="bg-blue-50 rounded-lg p-3 text-center">
+                    <p className="text-xl font-bold text-blue-600">{backfillResult.processed || 0}</p>
+                    <p className="text-xs text-zinc-500">Processed</p>
+                  </div>
+                  <div className="bg-emerald-50 rounded-lg p-3 text-center">
+                    <p className="text-xl font-bold text-emerald-600">{backfillResult.updated || 0}</p>
+                    <p className="text-xs text-zinc-500">Updated</p>
+                  </div>
+                  <div className="bg-red-50 rounded-lg p-3 text-center">
+                    <p className="text-xl font-bold text-red-600">{backfillResult.failed || 0}</p>
+                    <p className="text-xs text-zinc-500">Failed</p>
+                  </div>
+                  <div className="bg-amber-50 rounded-lg p-3 text-center">
+                    <p className="text-xl font-bold text-amber-600">{backfillResult.remaining || 0}</p>
+                    <p className="text-xs text-zinc-500">Remaining</p>
+                  </div>
+                </div>
+              ) : (
+                <Alert className="border-red-300 bg-red-50">
+                  <XCircle className="h-4 w-4 text-red-600" />
+                  <AlertDescription className="text-red-700">
+                    {backfillResult.error || "Backfill failed"}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
 
