@@ -15,16 +15,16 @@ interface PodcastVisibilityGateProps {
  */
 export const PodcastVisibilityGate = ({ children }: PodcastVisibilityGateProps) => {
   const { isPodcastVisible, isLoading: isVisibilityLoading } = usePodcastVisibility();
-  const { user, isOwner } = useAuth();
+  const { isOwner, loading: isAuthLoading } = useAuth();
 
-  // While checking visibility, don't render
-  if (isVisibilityLoading) {
-    return null;
-  }
-
-  // Owner always sees the podcast section for testing
+  // Owner ALWAYS sees the podcast section - check first, before loading states
   if (isOwner) {
     return <>{children}</>;
+  }
+
+  // For non-owners, wait for both auth AND visibility to resolve
+  if (isAuthLoading || isVisibilityLoading) {
+    return null;
   }
 
   // Non-owner: only show if visibility is enabled
