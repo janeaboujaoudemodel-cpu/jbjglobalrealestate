@@ -1,13 +1,50 @@
 import DOMPurify from 'dompurify';
 
 /**
+ * Strip social media hashtags from text
+ * Removes patterns like #DubaiRealEstate #PropertyInDubai etc.
+ */
+function stripHashtags(text: string): string {
+  return text
+    // Remove hashtags (word characters after #)
+    .replace(/#\w+/g, '')
+    // Clean up multiple spaces left behind
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
+/**
+ * Clean up raw text for premium display
+ * Handles common issues in API-sourced content
+ */
+function cleanRawText(text: string): string {
+  return text
+    // Remove hashtags
+    .replace(/#\w+/gi, '')
+    // Remove excessive exclamation marks
+    .replace(/!{2,}/g, '!')
+    // Remove marketing ALL CAPS phrases (more than 3 words)
+    .replace(/\b[A-Z]{4,}\s+[A-Z]{4,}(\s+[A-Z]{4,})+\b/g, (match) => {
+      return match.charAt(0) + match.slice(1).toLowerCase();
+    })
+    // Clean up multiple newlines
+    .replace(/\n{3,}/g, '\n\n')
+    // Clean up multiple spaces
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
+/**
  * Convert markdown text to safe HTML
  * Handles: headers (#), bold (**), italic (*), lists, links
  */
 export function renderMarkdownToHtml(markdown: string | null): string {
   if (!markdown) return '';
   
-  let html = markdown
+  // First clean the raw text
+  let cleaned = cleanRawText(markdown);
+  
+  let html = cleaned
     // Headers (must process ### before ## before #)
     .replace(/^### (.+)$/gm, '<h4 class="font-semibold text-lg mt-4 mb-2">$1</h4>')
     .replace(/^## (.+)$/gm, '<h3 class="font-bold text-xl mt-6 mb-3">$1</h3>')
@@ -20,6 +57,8 @@ export function renderMarkdownToHtml(markdown: string | null): string {
     // Lists
     .replace(/^- (.+)$/gm, '<li class="ml-4">$1</li>')
     .replace(/^• (.+)$/gm, '<li class="ml-4">$1</li>')
+    // Numbered lists
+    .replace(/^\d+\.\s+(.+)$/gm, '<li class="ml-4">$1</li>')
     // Line breaks - double newline = paragraph break
     .replace(/\n\n/g, '</p><p class="mt-3">')
     // Single newline = line break
@@ -34,7 +73,7 @@ export function renderMarkdownToHtml(markdown: string | null): string {
   html = html.replace(/(<li[^>]*>.*?<\/li>(?:<br\/>)?)+/g, '<ul class="list-disc pl-5 space-y-1 my-3">$&</ul>');
   
   return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['h2', 'h3', 'h4', 'p', 'br', 'strong', 'em', 'ul', 'li', 'a'],
+    ALLOWED_TAGS: ['h2', 'h3', 'h4', 'p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'a'],
     ALLOWED_ATTR: ['href', 'class', 'target', 'rel'],
   });
 }
@@ -45,7 +84,7 @@ export function renderMarkdownToHtml(markdown: string | null): string {
  */
 export function stripMarkdown(markdown: string | null): string {
   if (!markdown) return '';
-  return markdown
+  return cleanRawText(markdown)
     // Remove headers
     .replace(/#{1,6}\s*/g, '')
     // Remove bold/italic
@@ -56,4 +95,19 @@ export function stripMarkdown(markdown: string | null): string {
     // Convert list markers to bullet
     .replace(/^[-*]\s*/gm, '• ')
     .trim();
+}
+
+/**
+ * Truncate text to a maximum length, preserving word boundaries
+ */
+export function truncateText(text: string | null, maxLength: number = 160): string {
+  if (!text) return '';
+  const cleaned = stripMarkdown(text);
+  if (cleaned.length <= maxLength) return cleaned;
+  
+  // Find last space before maxLength
+  const truncated = cleaned.substring(0, maxLength);
+  const lastSpace = truncated.lastIndexOf(' ');
+  
+  return (lastSpace > 0 ? truncated.substring(0, lastSpace) : truncated) + '...';
 }
