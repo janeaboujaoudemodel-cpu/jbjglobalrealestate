@@ -154,6 +154,8 @@ import ReferralPartner from "./pages/ReferralPartner";
 import CRM from "./pages/CRM";
 import CRMLeadDetail from "./pages/CRMLeadDetail";
 import Automations from "./pages/Automations";
+import SupportTicketHub from "./pages/SupportTicketHub";
+import MyTickets from "./pages/client/MyTickets";
 import CRMTasks from "./pages/CRMTasks";
 import CRMCalendar from "./pages/CRMCalendar";
 import CRMNotes from "./pages/CRMNotes";
@@ -573,6 +575,12 @@ const App = () => (
                 <Route path="/governance/ai" element={<OwnerGuard><AIGovernance /></OwnerGuard>} />
                 <Route path="/governance/institutional-lock" element={<OwnerGuard><InstitutionalLock /></OwnerGuard>} />
                 <Route path="/governance/methodology" element={<OwnerGuard><GovernmentMethodology /></OwnerGuard>} />
+                
+                {/* Support Ticket Hub - Owner only */}
+                <Route path="/customer-happiness/tickets" element={<OwnerGuard><SupportTicketHub /></OwnerGuard>} />
+                
+                {/* My Tickets - Public for tracking */}
+                <Route path="/my-tickets" element={<MyTickets />} />
                 
                 {/* Communication & Productivity Tools - Owner-only */}
                 <Route path="/automations" element={<OwnerGuard><Automations /></OwnerGuard>} />
