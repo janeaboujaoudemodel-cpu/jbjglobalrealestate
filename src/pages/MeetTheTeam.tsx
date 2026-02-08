@@ -298,73 +298,73 @@ const MeetTheTeam: React.FC = () => {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-gold/5 rounded-full blur-[150px]" />
           </div>
 
-          <div className="container mx-auto px-4 relative z-10 py-24 md:py-32">
+          <div className="container mx-auto px-4 relative z-10 py-16 md:py-24">
             <motion.div
               initial="hidden"
               animate="visible"
               variants={staggerContainer}
-              className="text-center max-w-4xl mx-auto"
+              className="flex flex-col items-center"
             >
-              <motion.div variants={fadeInUp} className="mb-6">
+              {/* Badge at top */}
+              <motion.div variants={fadeInUp} className="mb-6 text-center">
                 <Badge className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-gold border-gold/40 px-4 py-1.5 shadow-md">
                   <Users className="w-3.5 h-3.5 mr-1.5" />
                   Our Team
                 </Badge>
               </motion.div>
 
-              <motion.h1
-                className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
-                variants={fadeInUp}
-                style={{ fontFamily: "Poppins, sans-serif" }}
-              >
-                <span className="text-white">Meet the </span>
-                <span className="text-gold">
-                  Experts
-                </span>
-              </motion.h1>
-
-              <motion.p
-                className="text-zinc-300 text-lg max-w-2xl mx-auto mb-6"
-                variants={fadeInUp}
-              >
-                A world-class team of professionals dedicated to delivering
-                exceptional real estate experiences in Dubai and beyond.
-              </motion.p>
-
-              {/* Company Summary */}
-              <motion.p
-                className="text-zinc-400 text-sm max-w-3xl mx-auto mb-8 italic"
-                variants={fadeInUp}
-              >
-                {companySummary}
-              </motion.p>
-
+              {/* PHOTO COLLAGE FIRST - Above title */}
               <motion.div
                 variants={fadeInUp}
-                className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-8"
-              />
-
-              {/* Contact Us Button - Hero style for video background */}
-              <motion.div variants={fadeInUp}>
-                <Button
-                  onClick={handleOpenContactForm}
-                  variant="media"
-                  size="lg"
-                >
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Contact Us
-                </Button>
+                className="w-full mb-10"
+              >
+                <TeamHeroCollage />
               </motion.div>
-            </motion.div>
 
-            {/* Premium Animated Team Collage */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="mt-12"
-            >
-              <TeamHeroCollage />
+              {/* THEN Title + Description + CTA - Below collage */}
+              <motion.div className="text-center max-w-4xl mx-auto">
+                <motion.h1
+                  className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
+                  variants={fadeInUp}
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  <span className="text-white">Meet the </span>
+                  <span className="text-gold">Experts</span>
+                </motion.h1>
+
+                <motion.p
+                  className="text-zinc-300 text-lg max-w-2xl mx-auto mb-4"
+                  variants={fadeInUp}
+                >
+                  A world-class team of professionals dedicated to delivering
+                  exceptional real estate experiences in Dubai and beyond.
+                </motion.p>
+
+                {/* Company Summary */}
+                <motion.p
+                  className="text-zinc-400 text-sm max-w-3xl mx-auto mb-6 italic"
+                  variants={fadeInUp}
+                >
+                  {companySummary}
+                </motion.p>
+
+                <motion.div
+                  variants={fadeInUp}
+                  className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-6"
+                />
+
+                {/* Contact Us Button */}
+                <motion.div variants={fadeInUp}>
+                  <Button
+                    onClick={handleOpenContactForm}
+                    variant="media"
+                    size="lg"
+                  >
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Contact Us
+                  </Button>
+                </motion.div>
+              </motion.div>
             </motion.div>
           </div>
         </section>

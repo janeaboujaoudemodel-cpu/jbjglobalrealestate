@@ -43,7 +43,7 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3 }}
-        className="group relative h-[280px] rounded-xl overflow-hidden cursor-pointer"
+        className="group rounded-xl overflow-hidden cursor-pointer flex flex-col h-full"
         style={{
           border: '3px solid hsl(42 45% 59%)',
           boxShadow: `
@@ -53,8 +53,8 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
           `,
         }}
       >
-        {/* Feature Image Background */}
-        <div className="absolute inset-0">
+        {/* Photo Section - Fixed Height */}
+        <div className="relative h-[180px] flex-shrink-0">
           {developer.feature_image_url ? (
             <img
               src={developer.feature_image_url}
@@ -63,76 +63,85 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
-              <Building2 className="w-16 h-16 text-gold/30" />
+            <div className="w-full h-full bg-gradient-to-br from-zinc-800 via-zinc-700 to-zinc-900 flex items-center justify-center">
+              <div className="text-center">
+                <Building2 className="w-12 h-12 text-gold/40 mx-auto mb-2" />
+                <span className="text-gold/60 text-xs uppercase tracking-wider">Developer</span>
+              </div>
             </div>
           )}
           
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+          {/* Tier Badge - Top Right */}
+          {tier && (
+            <div className="absolute top-3 right-3 z-10">
+              <Badge className={`${tier.color} px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg`}>
+                {tier.label}
+              </Badge>
+            </div>
+          )}
         </div>
 
-        {/* Tier Badge - Top Right */}
-        {tier && (
-          <div className="absolute top-3 right-3 z-10">
-            <Badge className={`${tier.color} px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg`}>
-              {tier.label}
-            </Badge>
-          </div>
-        )}
-
-        {/* Content - Bottom */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
-          {/* Logo Plate */}
+        {/* Content Section - Champagne Background */}
+        <div className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col">
+          {/* Logo Plate - Premium White Box with mix-blend-mode for transparency */}
           <div 
-            className="w-full h-16 rounded-lg flex items-center justify-center mb-3 overflow-hidden"
+            className="w-full h-14 rounded-lg flex items-center justify-center mb-3 overflow-hidden flex-shrink-0"
             style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+              background: '#FFFFFF',
               border: '2px solid hsl(42 45% 59%)',
-              boxShadow: `
-                0 4px 12px rgba(200,167,102,0.3),
-                inset 0 1px 2px rgba(255,255,255,0.9),
-                inset 0 -1px 2px rgba(200,167,102,0.1)
-              `,
+              boxShadow: '0 2px 8px rgba(200,167,102,0.2), inset 0 1px 2px rgba(255,255,255,0.9)'
             }}
           >
             {developer.logo_url ? (
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="max-h-12 max-w-[80%] object-contain"
+                className="max-h-10 max-w-[80%] object-contain"
+                style={{ 
+                  mixBlendMode: 'multiply',
+                  backgroundColor: 'white'
+                }}
                 loading="lazy"
               />
             ) : (
-              <span className="text-foreground font-semibold text-sm">{developer.name}</span>
+              <span className="text-zinc-800 font-semibold text-sm">{developer.name}</span>
             )}
           </div>
 
           {/* Developer Name */}
-          <h3 className="text-white font-bold text-lg mb-1 group-hover:text-gold transition-colors line-clamp-1">
+          <h3 className="text-black font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
             {developer.name}
           </h3>
 
-          {/* Description Preview */}
-          {developer.description && (
-            <p className="text-white/70 text-xs line-clamp-2 mb-2">
-              {developer.description}
-            </p>
-          )}
+          {/* Description - Fixed 2 lines */}
+          <div className="flex-1 min-h-[40px]">
+            {developer.description ? (
+              <p className="text-zinc-600 text-xs line-clamp-2">
+                {developer.description}
+              </p>
+            ) : (
+              <p className="text-zinc-400 text-xs italic">
+                Premier developer in the UAE market
+              </p>
+            )}
+          </div>
 
           {/* Stats Row */}
-          <div className="flex items-center gap-3 text-white/80 text-xs">
-            {projectCount > 0 && (
+          <div className="flex items-center gap-3 text-zinc-700 text-xs mt-3 pt-3 border-t border-gold/20">
+            {projectCount > 0 ? (
               <div className="flex items-center gap-1">
                 <Building2 className="w-3.5 h-3.5 text-gold" />
                 <span>{projectCount} Projects</span>
               </div>
-            )}
-            {developer.completed_projects && (
+            ) : null}
+            {developer.completed_projects && developer.completed_projects > 0 ? (
               <div className="flex items-center gap-1">
                 <TrendingUp className="w-3.5 h-3.5 text-gold" />
                 <span>{developer.completed_projects.toLocaleString()}+ Delivered</span>
               </div>
+            ) : null}
+            {!projectCount && (!developer.completed_projects || developer.completed_projects === 0) && (
+              <span className="text-zinc-500 italic">Coming soon</span>
             )}
           </div>
         </div>
