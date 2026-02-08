@@ -1,189 +1,219 @@
 
 
-## Homepage & Favicon Fixes Implementation Plan
+## Combined Mode View - Dual Tier Display Implementation
 
 ### Overview
 
-This plan addresses 4 distinct issues identified by the user:
-
-1. **Why Dubai Capital Section** - Header and section fixes not implemented
-2. **Area Guide Section** - "Green Gate at Dubai Creek Harbour" should just be "Dubai Creek Harbour", and cards should have uniform height
-3. **Testimonials Section** - Remove the pagination dots, keep only arrows with auto-rotate
-4. **Favicon** - Replace with the uploaded premium JBJ logo
+When users are in **Investor + Broker** combined mode, they will see BOTH their investor tier progress AND broker tier progress simultaneously. This gives users visibility into their standing in both tier ladders.
 
 ---
 
-### Issue 1: Area Guide Section - Database Fix
+### Current Behavior
 
-**Problem**: The database has two separate entries:
-- "Green Gate at Dubai Creek Harbour" (slug: green-gate-at-dubai-creek-harbour) - property_count: 0
-- "Dubai Creek Harbour" (slug: dubai-creek-harbour) - property_count: 0
+- Users in combined mode only see the **broker tier ladder** (more ambitious goals)
+- Points are shared across both ladders, but only one is displayed
+- Users cannot see their investor tier progress while in combined mode
 
-The user wants to show "Dubai Creek Harbour" as the main area, not "Green Gate at Dubai Creek Harbour".
+---
 
-**Solution**: 
-- Update the database to either:
-  - Rename "Green Gate at Dubai Creek Harbour" to just "Dubai Creek Harbour", OR
-  - Deactivate "Green Gate" and ensure "Dubai Creek Harbour" has properties and appears in the list
+### Proposed Changes
 
-**Database Migration Required**:
+#### 1. Hook Enhancement: `useTierProgress.ts`
+
+Add new return values for dual-tier support:
+
+```typescript
+interface TierProgressHook {
+  // Existing
+  tierProgress: TierProgress | null;
+  allTiers: TierDefinition[];
+  recentPoints: PointsLedgerEntry[];
+  isLoading: boolean;
+  error: string | null;
+  refreshProgress: () => Promise<void>;
+  currentTierType: 'broker' | 'client';
+  
+  // NEW for combined mode
+  investorTierProgress: TierProgress | null;
+  brokerTierProgress: TierProgress | null;
+  allInvestorTiers: TierDefinition[];
+  allBrokerTiers: TierDefinition[];
+}
+```
+
+**Logic changes:**
+- When `isCombinedMode` is true, fetch BOTH tier ladders from the database
+- Calculate progress for both investor and broker tiers using the same shared points
+- Return both sets of data for components to display
+
+---
+
+#### 2. Badge Level Card: `BadgesLevelCard.tsx`
+
+**Combined Mode Layout:**
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Level & Badges                      [Combined]     │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│  ┌──────────────────┐  ┌──────────────────┐        │
+│  │  INVESTOR PATH   │  │   BROKER PATH    │        │
+│  │  🧭 Explorer     │  │   ⭐ Starter     │        │
+│  │  250 pts         │  │   250 pts        │        │
+│  │  ──────────      │  │   ──────────     │        │
+│  │  Next: Seeker    │  │   Next: Rising   │        │
+│  │  50 pts to go    │  │   250 pts to go  │        │
+│  └──────────────────┘  └──────────────────┘        │
+│                                                     │
+│  Total Points: 250                                  │
+│              [View Full Progress →]                 │
+└─────────────────────────────────────────────────────┘
+```
+
+**Changes:**
+- Detect combined mode using `useUserModeContext().isCombinedMode`
+- Render two side-by-side tier cards with color coding:
+  - **Investor card**: Emerald/green theme (bg-emerald-500/10, border-emerald-500/30)
+  - **Broker card**: Blue theme (bg-blue-500/10, border-blue-500/30)
+- Show purple "Combined" badge in the header
+- Display shared total points at the bottom
+
+---
+
+#### 3. Tier Progress Card: `TierProgressCard.tsx`
+
+Create a conditional layout for combined mode:
+
+**Single Mode (existing):**
+- Shows one tier progress bar
+- One set of benefits
+- One tier history
+
+**Combined Mode (new):**
+- Two columns or stacked cards
+- Each shows:
+  - Tier badge with type indicator
+  - Progress bar to next tier
+  - Points needed
+  - Key benefits (2 per tier)
+- Shared "Your Activity" section at bottom
+
+---
+
+#### 4. Profile Summary Card: `ProfileSummaryCard.tsx`
+
+**Combined mode change:**
+
+Instead of showing one tier badge:
+```tsx
+<Badge>Starter</Badge>
+```
+
+Show both:
+```tsx
+<Badge className="bg-emerald-500/20 text-emerald-400">Explorer</Badge>
+<Badge className="bg-blue-500/20 text-blue-400">Starter</Badge>
+```
+
+---
+
+#### 5. Header Account Menu: `MegaMenuAccount.tsx`
+
+Update the badge display:
+
+**Current:**
+```
+Investor + Broker • 250 pts earned
+```
+
+**Enhanced:**
+```
+Explorer • Starter | 250 pts
+```
+
+Or with dual badges:
+```
+🧭 Explorer | ⭐ Starter • 250 pts
+```
+
+---
+
+#### 6. Golden ID Card: `GoldenIDCard.tsx`
+
+For combined mode, show both tiers on the card:
+
+```
+┌─────────────────────────────────────────────┐
+│  [JB]  John Broker                          │
+│        🧭 Explorer  |  ⭐ Starter           │
+│                                             │
+│  Member ID: JBJ-XXXX-XXXX                   │
+│                                             │
+│  ⭐ 250 pts                Since Jan 2026   │
+│                                             │
+│  [QR Code]            Scan to verify        │
+└─────────────────────────────────────────────┘
+```
+
+---
+
+### File Changes Summary
+
+| File | Changes |
+|------|---------|
+| `src/hooks/useTierProgress.ts` | Add dual-tier fetching for combined mode, new return values |
+| `src/components/dashboard/BadgesLevelCard.tsx` | Render two-column layout in combined mode |
+| `src/components/tier/TierProgressCard.tsx` | Add dual-tier display variant |
+| `src/components/dashboard/ProfileSummaryCard.tsx` | Show dual tier badges in combined mode |
+| `src/components/header/MegaMenuAccount.tsx` | Update tier display for combined mode |
+| `src/components/profile/GoldenIDCard.tsx` | Show both tiers on ID card |
+
+---
+
+### Color Coding Reference
+
+| Mode | Primary Color | Badge Style |
+|------|---------------|-------------|
+| Investor Only | Emerald/Green | `bg-emerald-500/20 text-emerald-400 border-emerald-500/30` |
+| Broker Only | Blue | `bg-blue-500/20 text-blue-400 border-blue-500/30` |
+| Combined Mode | Purple (indicator) + Both colors for respective tiers | Purple badge for mode, then emerald + blue for tier cards |
+
+---
+
+### Database Query Changes
+
+**Current query (single tier type):**
 ```sql
--- Option A: Rename the Green Gate entry
-UPDATE areas 
-SET name = 'Dubai Creek Harbour', 
-    slug = 'dubai-creek-harbour-renamed'
-WHERE slug = 'green-gate-at-dubai-creek-harbour';
+SELECT * FROM tier_definitions 
+WHERE tier_type = 'broker' AND is_active = true
+ORDER BY tier_order
+```
 
--- Option B (Preferred): Deactivate Green Gate and keep Dubai Creek Harbour
-UPDATE areas SET is_active = false WHERE slug = 'green-gate-at-dubai-creek-harbour';
+**Combined mode (both tier types):**
+```sql
+-- Query 1: Investor tiers
+SELECT * FROM tier_definitions 
+WHERE tier_type = 'client' AND is_active = true
+ORDER BY tier_order;
+
+-- Query 2: Broker tiers
+SELECT * FROM tier_definitions 
+WHERE tier_type = 'broker' AND is_active = true
+ORDER BY tier_order;
 ```
 
 ---
 
-### Issue 2: Area Guide Section - Uniform Card Heights
+### Implementation Notes
 
-**File**: `src/components/home/AreasWeCover.tsx`
+1. **Performance**: The dual query approach adds one extra database call, but this is minimal overhead and can be parallelized with `Promise.all`
 
-**Problem**: When area names have different lengths (some on 2 lines), the card sizes become inconsistent.
+2. **Points Sharing**: Both tiers use the SAME point balance - the user earns once, progresses on both ladders simultaneously
 
-**Solution**: Add minimum height and flex layout to ensure uniform sizing regardless of text length.
+3. **Responsive Design**: On mobile, the two-column tier cards should stack vertically
 
-**Changes (Lines 52-60)**:
-
-Before:
-```tsx
-<Link
-  to={`/area/${area.slug}`}
-  className="group block p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/20 hover:border-gold transition-all duration-300 hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] hover:-translate-y-0.5 text-center"
->
-  <h3 className="text-black font-semibold text-sm group-hover:text-gold transition-colors">
-    {area.name}
-  </h3>
-</Link>
-```
-
-After:
-```tsx
-<Link
-  to={`/area/${area.slug}`}
-  className="group flex items-center justify-center min-h-[72px] p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/20 hover:border-gold transition-all duration-300 hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] hover:-translate-y-0.5 text-center"
->
-  <h3 className="text-black font-semibold text-sm group-hover:text-gold transition-colors line-clamp-2">
-    {area.name}
-  </h3>
-</Link>
-```
-
-Key changes:
-- Changed `block` to `flex items-center justify-center` for vertical centering
-- Added `min-h-[72px]` for uniform minimum height
-- Added `line-clamp-2` to limit text to 2 lines maximum
-
----
-
-### Issue 3: Testimonials Section - Remove Pagination Dots
-
-**File**: `src/components/home/TestimonialsSection.tsx`
-
-**Problem**: The three dots (pagination indicators) appear when the testimonial changes. User wants only the navigation arrows, with auto-rotation continuing.
-
-**Solution**: Remove the dots section completely (Lines 143-156).
-
-**Code to Remove**:
-```tsx
-{/* Dots */}
-<div className="flex items-center justify-center gap-2 mt-6">
-  {testimonials.map((_, index) => (
-    <button
-      key={index}
-      onClick={() => setCurrentIndex(index)}
-      className={`w-2 h-2 rounded-full transition-all duration-300 ${
-        index === currentIndex
-          ? 'w-6 bg-gold'
-          : 'bg-black/20 hover:bg-black/40'
-      }`}
-    />
-  ))}
-</div>
-```
-
-The auto-rotate functionality (lines 50-55) and arrow navigation (lines 127-141) will remain unchanged.
-
----
-
-### Issue 4: Favicon Update with Premium JBJ Logo
-
-**Files**: 
-- Copy: `user-uploads://fulllogo-12.png` to `public/favicon.png`
-- Update: `index.html` (already references `/favicon.png`)
-
-**Image Analysis**: The uploaded image shows the premium JBJ monogram:
-- Black background with white "J"s and gold "B"
-- Has a gold vertical line accent through the "B"
-- This is the new premium favicon image
-
-**Steps**:
-1. Copy the uploaded logo to replace the existing favicon:
-   ```
-   lov-copy user-uploads://fulllogo-12.png public/favicon.png
-   ```
-
-2. Also copy as apple-touch-icon for iOS devices:
-   ```
-   lov-copy user-uploads://fulllogo-12.png public/apple-touch-icon.png
-   ```
-
-The `index.html` already has the correct references (lines 21-23):
-```html
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-```
-
-No HTML changes needed - just file replacement.
-
----
-
-### Issue 5: Why Dubai Capital Section - Clarification Needed
-
-**File**: `src/components/home/WhyDubaiCapitalSection.tsx`
-
-I reviewed this component and it appears to be a well-structured section with:
-- Video background with smooth crossfade between 4 Dubai landmark videos
-- Premium badge: "Global Investment Hub"
-- Title: "Why Dubai Became the Capital of Global Investors"
-- Stats cards: 0% Income Tax, 10Y Golden Visa, #1 Safety Rank, 200+ Nationalities
-- CTA button: "Explore Investments"
-
-The user mentioned "the header, everything I told you, till now, you haven't fixed it" - but I don't see specific previous instructions about what needs to be fixed in this section in the current conversation context.
-
-**Request for clarification**: Can you specify what needs to be fixed in the "Why Dubai became the capital of global investors" section? For example:
-- Is it the header/title text?
-- The stats cards?
-- The video backgrounds?
-- The styling/layout?
-
----
-
-### Summary of Implementation
-
-| Task | File(s) | Change Type |
-|------|---------|-------------|
-| Fix area naming | Database migration | SQL Update |
-| Uniform card heights | AreasWeCover.tsx | Code modification |
-| Remove testimonial dots | TestimonialsSection.tsx | Code deletion |
-| Update favicon | public/favicon.png | File copy |
-| Update apple-touch-icon | public/apple-touch-icon.png | File copy |
-
----
-
-### Technical Notes
-
-1. **Database change** will ensure "Green Gate at Dubai Creek Harbour" is either renamed or deactivated, so only the proper main areas appear in the grid.
-
-2. **Card height uniformity** uses `min-h-[72px]` which accommodates 2 lines of text comfortably at the `text-sm` size.
-
-3. **Auto-rotate preserved** - The `useEffect` interval (6 seconds) continues working for testimonials even after dot removal.
-
-4. **Favicon** - The new premium logo has a black background which will look crisp in browser tabs and bookmarks.
+4. **Tier Icons**: Use existing icon maps:
+   - Investor: Compass (Explorer), Search (Seeker), TrendingUp (Investor), Crown (Premium), Trophy (Elite)
+   - Broker: Star (Starter), Zap (Rising), Award (Performer), Crown (Elite), Trophy (Legend)
 
