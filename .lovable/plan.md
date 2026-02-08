@@ -1,59 +1,237 @@
-# Unified Admin Panel - COMPLETED ✓
 
-## Implementation Summary
+# Ticket Support Hub Enhancement & Email Synchronization
 
-The HR Hub, IT Department, Employee Hub, and Ticket Support Hub have been successfully merged into the Admin Panel as embedded tabs. The account dropdown now shows only the consolidated Admin Panel and CRM shortcuts.
+## Summary
 
----
+This plan addresses multiple improvements to the Ticket Support Hub:
 
-## Changes Made
-
-### 1. Created Embedded Components
-- `src/components/admin/EmbeddedHRDashboard.tsx` - HR functionality without layout shell
-- `src/components/admin/EmbeddedITDepartment.tsx` - IT department functionality
-- `src/components/admin/EmbeddedEmployeeHub.tsx` - Employee directory with chat
-- `src/components/admin/EmbeddedSupportTickets.tsx` - Ticket management with AI-powered replies
-
-### 2. Updated Admin Panel (`src/pages/Admin.tsx`)
-- Replaced redirect tabs with embedded content tabs
-- Added lazy loading for performance
-- New tabs: HR Hub, IT Department, Employee Hub, Support Tickets
-
-### 3. Simplified Account Dropdown (`src/components/header/MegaMenuAccount.tsx`)
-- Removed: Employee Hub, HR Hub, IT Department, Ticket Support Hub shortcuts
-- Added: Admin Panel as prominent secondary link (after Owner Dashboard)
-- Kept: My Assistant, Listing Admin, CRM Dashboard
-
-### 4. Updated Owner Dashboard Sidebar (`src/components/owner-dashboard/OwnerSidebarNav.tsx`)
-- Consolidated ADMIN section to show:
-  - Admin Panel (primary hub)
-  - Analytics
-  - Documents
-
-### 5. Updated Department Shortcuts (`src/components/owner-dashboard/DepartmentShortcuts.tsx`)
-- Simplified to 4 cards: Admin Panel, CRM Dashboard, Listing Admin, Security Console
+1. **Email Synchronization**: Ensure staff replies are sent via styled HTML email from SUPPORT@JBJ.AE (not just saved to conversation)
+2. **Reopen Ticket Alert System**: Display visual alerts for reopened tickets in the hub
+3. **UI Button Fixes**: Fix faded button colors (Clear Selection → Red, Status buttons → Green, X close button)
+4. **Calendar/Notes Integration**: Link tickets to the existing AI Calendar system
+5. **Naming**: Rename to "Ticket Support Hub" (cleaner than "Ticketing")
 
 ---
 
-## AI Intelligence Status
+## Current State Analysis
 
-All AI integrations remain fully functional:
+### What's Working
+- Staff reply emails ARE being sent via `send-ticket-reply-email` edge function
+- Email includes styled HTML with ticket summary, staff reply, and "Reopen This Ticket" button
+- `replyTo: SUPPORT@JBJ.AE` is configured so customer replies go to the support inbox
+- Database has `is_reopened`, `reopened_at`, `reopen_count` fields ready
 
-| Feature | Status |
-|---------|--------|
-| Admin AI Assistant | ✓ Active |
-| AI Brokers Dashboard | ✓ Active |
-| AI Analytics | ✓ Active |
-| HR AI Hunting | ✓ Embedded |
-| HR LinkedIn Insights | ✓ Embedded |
-| HR Competitor Tracking | ✓ Embedded |
-| Ticket AI Reply Suggest | ✓ Embedded |
-| Employee Chat AI | ✓ Embedded |
+### Issues Identified
+
+| Issue | Location | Fix |
+|-------|----------|-----|
+| "Clear Selection" button faded gray | EmbeddedSupportTickets.tsx:296-303 | Change `variant="ghost"` to explicit red styling |
+| X close button in detail panel may look gray | TicketDetailPanel.tsx:283-290 | Already has gold styling - verify contrast |
+| No visual alert for reopened tickets | EmbeddedSupportTickets.tsx | Add badge/indicator for `is_reopened` tickets |
+| No calendar/notes integration | TicketDetailPanel.tsx | Add "Add to Calendar" and "Add Note" actions |
 
 ---
 
-## Result
+## Implementation Plan
 
-- **1 Admin Panel** = Full control of HR, IT, Employee Directory, Support Tickets, Security, Analytics, Marketing, and all AI tools
-- **Account Dropdown** = Clean shortcuts to Owner Dashboard, Admin Panel, CRM, and Listing Admin
-- **All AI features** = Fully integrated and accessible from the unified Admin Panel
+### Phase 1: Fix Button Visibility
+
+**File: `src/components/admin/EmbeddedSupportTickets.tsx`**
+
+Change the "Clear" button (line 296-303) from ghost to visible red:
+
+```tsx
+// Before
+<Button
+  size="sm"
+  onClick={() => setSelectedTicketIds(new Set())}
+  variant="ghost"
+  className="h-7 text-xs"
+>
+  Clear
+</Button>
+
+// After
+<Button
+  size="sm"
+  onClick={() => setSelectedTicketIds(new Set())}
+  className="bg-red-600 hover:bg-red-700 text-white h-7 text-xs"
+>
+  <X className="w-3 h-3 mr-1" />
+  Clear Selection
+</Button>
+```
+
+The "In Progress" and "Resolved" buttons are already styled correctly with blue-600 and green-600.
+
+**File: `src/pages/SupportTicketHub.tsx`**
+
+Verify the same styling is applied (already has red Clear Selection button at line 330-336).
+
+**File: `src/components/support/TicketDetailPanel.tsx`**
+
+The X close button (line 283-290) already has gold styling:
+```tsx
+className="bg-gold/20 border-2 border-gold text-gold hover:bg-gold hover:text-black"
+```
+
+This should be visible. If still appearing gray, increase contrast:
+```tsx
+className="bg-gold border-2 border-gold text-black hover:bg-gold/80 transition-all duration-200"
+```
+
+---
+
+### Phase 2: Reopened Ticket Alerts
+
+**File: `src/hooks/useSupportTickets.ts`**
+
+Add `is_reopened`, `reopened_at`, `reopen_count` to the SupportTicket interface:
+
+```typescript
+export interface SupportTicket {
+  // ... existing fields
+  is_reopened: boolean;
+  reopened_at: string | null;
+  reopen_count: number;
+}
+```
+
+**File: `src/components/admin/EmbeddedSupportTickets.tsx`**
+
+Add visual indicator in the ticket row for reopened tickets:
+
+```tsx
+// In the table row, add a "Reopened" badge if is_reopened is true
+{ticket.is_reopened && (
+  <Badge className="bg-orange-500/20 text-orange-600 border-orange-500/30 text-[10px] px-1.5">
+    🔄 Reopened
+  </Badge>
+)}
+```
+
+Add a stats card for reopened tickets:
+
+```tsx
+<Card className="bg-white border-2 border-orange-500/30">
+  <CardContent className="pt-4">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-zinc-500 text-xs">Reopened</p>
+        <p className="text-2xl font-bold text-orange-600">
+          {tickets?.filter((t) => t.is_reopened).length || 0}
+        </p>
+      </div>
+      <div className="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center">
+        <RefreshCw className="w-5 h-5 text-orange-500" />
+      </div>
+    </div>
+  </CardContent>
+</Card>
+```
+
+**File: `src/components/support/TicketDetailPanel.tsx`**
+
+Show alert banner if ticket is reopened:
+
+```tsx
+{ticket.is_reopened && (
+  <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4 mb-4">
+    <div className="flex items-center gap-2 text-orange-400">
+      <RefreshCw className="w-5 h-5" />
+      <span className="font-semibold">Ticket Reopened</span>
+    </div>
+    <p className="text-sm text-orange-300 mt-1">
+      Customer indicated issue not resolved. 
+      Reopened {ticket.reopen_count || 1} time(s) on {format(new Date(ticket.reopened_at || ''), "MMM d, yyyy 'at' HH:mm")}
+    </p>
+  </div>
+)}
+```
+
+---
+
+### Phase 3: Calendar & Notes Integration
+
+**File: `src/components/support/TicketDetailPanel.tsx`**
+
+Add action buttons to link ticket to calendar/notes:
+
+```tsx
+<Button
+  size="sm"
+  onClick={() => handleAddToCalendar()}
+  className="bg-purple-600 hover:bg-purple-700 text-white"
+>
+  <Calendar className="w-4 h-4 mr-2" />
+  Add Follow-up
+</Button>
+
+<Button
+  size="sm"
+  onClick={() => handleAddNote()}
+  className="bg-zinc-700 hover:bg-zinc-600 text-white"
+>
+  <StickyNote className="w-4 h-4 mr-2" />
+  Add Note
+</Button>
+```
+
+Create handlers to navigate to AI Calendar with pre-filled ticket context:
+
+```tsx
+const handleAddToCalendar = () => {
+  // Navigate to AI Calendar with ticket context
+  navigate(`/ai-calendar?ticket=${ticket.ticket_number}&title=Follow-up: ${encodeURIComponent(ticket.subject)}`);
+};
+```
+
+---
+
+### Phase 4: Verify Email Delivery
+
+The `send-ticket-reply-email` edge function (already reviewed) properly:
+- Sends styled HTML email matching the confirmation email design
+- Includes ticket summary, staff reply content, and reopen link
+- Uses `replyTo: SUPPORT@JBJ.AE` so customer replies go to the support inbox
+- Sends from `NOREPLY@JBJ.AE` (verified sender) but customers reply to `SUPPORT@JBJ.AE`
+
+No changes needed here - verify domain is verified in Resend.
+
+---
+
+### Phase 5: Naming Consistency
+
+Update references from "Ticketing Support Hub" to "Ticket Support Hub":
+
+| File | Change |
+|------|--------|
+| Navigation labels | "Ticket Support Hub" |
+| Page titles | "Ticket Support Hub" |
+| Admin Panel tab label | "Support Tickets" |
+
+---
+
+## Files to Modify
+
+| File | Changes |
+|------|---------|
+| `src/hooks/useSupportTickets.ts` | Add `is_reopened`, `reopened_at`, `reopen_count` to interface |
+| `src/components/admin/EmbeddedSupportTickets.tsx` | Fix Clear button, add reopened badge, add reopened stats |
+| `src/pages/SupportTicketHub.tsx` | Same fixes for standalone page version |
+| `src/components/support/TicketDetailPanel.tsx` | Fix X button, add reopened alert, add calendar/notes buttons |
+
+---
+
+## Verification Steps
+
+After implementation:
+1. Submit a new test ticket
+2. Verify confirmation email arrives from NOREPLY@JBJ.AE
+3. Reply from Ticket Support Hub
+4. Verify reply email arrives with styled HTML and reopen link
+5. Click "Reopen This Ticket" in email
+6. Verify ticket shows "Reopened" badge in hub with alert
+7. Test button visibility (Clear = red, In Progress = blue, Resolved = green, X = gold/visible)
+8. Test "Add Follow-up" button navigates to AI Calendar
+
