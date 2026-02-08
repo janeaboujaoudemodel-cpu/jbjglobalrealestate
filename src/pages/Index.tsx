@@ -187,10 +187,7 @@ const Index = () => {
         <DeveloperPartnersMarquee />
       </div>
 
-      {/* DIVIDER - Separates Developer Partners from Trust Bar */}
-      <SectionDivider />
-
-      {/* TRUST BAR (4 Cards) - Centered with proper divider alignment */}
+      {/* TRUST BAR (4 Cards) - Flows directly from Developer Partners */}
       <div id="trust-bar" className="bg-black py-8 md:py-10">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-4 mb-3">
@@ -673,10 +670,9 @@ const Index = () => {
         <Suspense fallback={<SectionLoader />}>
           <JBJPodcastSection />
         </Suspense>
-        <SectionDivider />
       </PodcastVisibilityGate>
 
-      {/* DIVIDER - Before Best Idea Award */}
+      {/* DIVIDER - Before Best Idea Award (always needed) */}
       <SectionDivider />
 
       {/* BEST IDEA AWARD */}
