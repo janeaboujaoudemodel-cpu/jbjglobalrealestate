@@ -80,8 +80,8 @@ const royalTools = [
 
 export function ToolkitShowcaseCard() {
   return (
-    <section className="pt-12 md:pt-16 pb-20 md:pb-24 jj-layer-2">
-      <div className="container mx-auto px-4">
+    <section className="py-12 md:py-16 bg-black">
+      <div className="jj-layer-2">
         <motion.div
           initial="hidden"
           whileInView="visible"
