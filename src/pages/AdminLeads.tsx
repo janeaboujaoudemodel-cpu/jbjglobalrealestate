@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -52,26 +52,32 @@ import {
   XCircle,
   UserCheck,
   ChevronDown,
+  Trash2,
+  MessageCircle,
+  PhoneCall,
+  Video,
 } from "lucide-react";
 import { format } from "date-fns";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "@/components/crm/LeadStatusBadge";
 import ChatTranscriptModal from "@/components/crm/ChatTranscriptModal";
 import LeadContactActions from "@/components/crm/LeadContactActions";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
 
+// Updated interface to match crm_leads table schema
 interface Lead {
   id: string;
   full_name: string | null;
-  email: string;
-  phone: string | null;
-  nationality: string | null;
-  language: string | null;
-  current_location: string | null;
-  age_range: string | null;
-  source: string;
-  page_source: string | null;
-  status: string | null;
-  consent_privacy: boolean | null;
-  consent_accurate: boolean | null;
+  email_lower: string | null;
+  phone_e164: string | null;
+  lead_source_type: string | null;
+  vip: boolean | null;
+  pipeline_stage: string | null; // crm_leads uses pipeline_stage, not status
   created_at: string;
   updated_at: string;
 }
@@ -109,16 +115,19 @@ const AdminLeads = () => {
   const [activeTab, setActiveTab] = useState<"leads" | "chats">("leads");
 
   // Source type categories
-  const WEBSITE_SOURCES = ['ai_chat_support', 'ai_matchmaker', 'contact_form', 'newsletter', 'inquiry_form', 'quiz', 'login', 'signup', 'book', 'video', 'ai_hub', 'property_inquiry'];
-  const DATABASE_SOURCES = ['csv_import', 'excel_import', 'manual_entry', 'broker_import', 'crm_import'];
+  const WEBSITE_SOURCES = ['ai_chat_support', 'ai_matchmaker', 'contact_form', 'newsletter', 'inquiry_form', 'quiz', 'login', 'signup', 'book', 'video', 'ai_hub', 'property_inquiry', 'website', 'chat'];
+  const DATABASE_SOURCES = ['csv_import', 'excel_import', 'manual_entry', 'broker_import', 'crm_import', 'import'];
   
-  const getSourceCategory = (source: string) => {
-    if (WEBSITE_SOURCES.includes(source) || source.includes('chat') || source.includes('form') || source.includes('ai_')) return 'website';
-    if (DATABASE_SOURCES.includes(source) || source.includes('import')) return 'database';
+  const getSourceCategory = useCallback((source: string | null) => {
+    if (!source) return 'other';
+    const s = source.toLowerCase();
+    if (WEBSITE_SOURCES.some(ws => s.includes(ws)) || s.includes('chat') || s.includes('form') || s.includes('ai_') || s.includes('website')) return 'website';
+    if (DATABASE_SOURCES.some(ds => s.includes(ds)) || s.includes('import')) return 'database';
     return 'other';
-  };
+  }, []);
   
-  const getSourceDisplayName = (source: string) => {
+  const getSourceDisplayName = useCallback((source: string | null) => {
+    if (!source) return 'Unknown';
     const sourceMap: Record<string, string> = {
       'ai_chat_support': '💬 Chat Widget',
       'ai_matchmaker': '🤖 AI Matchmaker',
@@ -137,9 +146,11 @@ const AdminLeads = () => {
       'manual_entry': '✍️ Manual Entry',
       'broker_import': '👔 Broker Import',
       'crm_import': '💼 CRM Import',
+      'website': '🌐 Website',
+      'chat': '💬 Chat',
     };
     return sourceMap[source] || source;
-  };
+  }, []);
   // NOTE: Removed page-level redirect logic.
   // Access is now controlled by OwnerGuard at the route level.
   // If this component renders, OwnerGuard has already verified access.
@@ -150,13 +161,14 @@ const AdminLeads = () => {
     }
   }, [isOwner]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setIsLoading(true);
     try {
+      // Use crm_leads table for plaintext PII data (Owner access)
       const [leadsResult, chatsResult] = await Promise.all([
         supabase
-          .from("leads")
-          .select("*")
+          .from("crm_leads")
+          .select("id, full_name, email_lower, phone_e164, lead_source_type, vip, pipeline_stage, created_at, updated_at")
           .order("created_at", { ascending: false }),
         supabase
           .from("chat_conversations")
@@ -174,29 +186,29 @@ const AdminLeads = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const updateLeadStatus = async (leadId: string, newStatus: string) => {
+  const updateLeadStatus = useCallback(async (leadId: string, newStatus: string) => {
     try {
       const { error } = await supabase
-        .from("leads")
-        .update({ status: newStatus })
+        .from("crm_leads")
+        .update({ pipeline_stage: newStatus })
         .eq("id", leadId);
 
       if (error) throw error;
 
       setLeads((prev) =>
         prev.map((lead) =>
-          lead.id === leadId ? { ...lead, status: newStatus } : lead
+          lead.id === leadId ? { ...lead, pipeline_stage: newStatus } : lead
         )
       );
       toast.success("Status updated");
     } catch (error: any) {
       toast.error(error.message || "Failed to update status");
     }
-  };
+  }, []);
 
-  const updateChatStatus = async (chatId: string, newStatus: string) => {
+  const updateChatStatus = useCallback(async (chatId: string, newStatus: string) => {
     try {
       const { error } = await supabase
         .from("chat_conversations")
@@ -214,9 +226,9 @@ const AdminLeads = () => {
     } catch (error: any) {
       toast.error(error.message || "Failed to update status");
     }
-  };
+  }, []);
 
-  const exportToCSV = () => {
+  const exportToCSV = useCallback(() => {
     const data = activeTab === "leads" ? filteredLeads : filteredConversations;
     
     if (data.length === 0) {
@@ -227,9 +239,9 @@ const AdminLeads = () => {
     let csvContent = "";
     
     if (activeTab === "leads") {
-      csvContent = "Name,Email,Phone,Nationality,Language,Location,Age Range,Source,Status,Created At\n";
+      csvContent = "Name,Email,Phone,Source,VIP,Stage,Created At\n";
       (data as Lead[]).forEach((lead) => {
-        csvContent += `"${lead.full_name || ""}","${lead.email}","${lead.phone || ""}","${lead.nationality || ""}","${lead.language || ""}","${lead.current_location || ""}","${lead.age_range || ""}","${lead.source}","${lead.status || "new"}","${format(new Date(lead.created_at), "yyyy-MM-dd HH:mm")}"\n`;
+        csvContent += `"${lead.full_name || ""}","${lead.email_lower || ""}","${lead.phone_e164 || ""}","${lead.lead_source_type || ""}","${lead.vip ? "Yes" : "No"}","${lead.pipeline_stage || "new"}","${format(new Date(lead.created_at), "yyyy-MM-dd HH:mm")}"\n`;
       });
     } else {
       csvContent = "Name,Email,Phone,Service,Status,Messages,Rating,Created At\n";
@@ -245,31 +257,63 @@ const AdminLeads = () => {
     link.download = `${activeTab}-export-${format(new Date(), "yyyy-MM-dd")}.csv`;
     link.click();
     toast.success("Export completed");
-  };
+  }, [activeTab]);
 
-  const filteredLeads = leads.filter((lead) => {
-    const matchesSearch =
-      (lead.full_name?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-      lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (lead.phone || "").includes(searchQuery);
-    const matchesStatus = statusFilter === "all" || lead.status === statusFilter;
-    const matchesSource = sourceFilter === "all" || lead.source === sourceFilter;
-    const matchesSourceType = sourceTypeFilter === "all" || getSourceCategory(lead.source) === sourceTypeFilter;
-    return matchesSearch && matchesStatus && matchesSource && matchesSourceType;
-  });
+  // Memoized filtered data for performance
+  const filteredLeads = useMemo(() => {
+    return leads.filter((lead) => {
+      const matchesSearch =
+        (lead.full_name?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+        (lead.email_lower?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+        (lead.phone_e164 || "").includes(searchQuery);
+      const matchesStatus = statusFilter === "all" || lead.pipeline_stage === statusFilter;
+      const matchesSource = sourceFilter === "all" || lead.lead_source_type === sourceFilter;
+      const matchesSourceType = sourceTypeFilter === "all" || getSourceCategory(lead.lead_source_type) === sourceTypeFilter;
+      return matchesSearch && matchesStatus && matchesSource && matchesSourceType;
+    });
+  }, [leads, searchQuery, statusFilter, sourceFilter, sourceTypeFilter, getSourceCategory]);
 
-  const filteredConversations = conversations.filter((chat) => {
-    const matchesSearch =
-      (chat.user_name?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-      chat.user_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (chat.user_phone || "").includes(searchQuery);
-    const matchesStatus = statusFilter === "all" || chat.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const filteredConversations = useMemo(() => {
+    return conversations.filter((chat) => {
+      const matchesSearch =
+        (chat.user_name?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+        chat.user_email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (chat.user_phone || "").includes(searchQuery);
+      const matchesStatus = statusFilter === "all" || chat.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }, [conversations, searchQuery, statusFilter]);
 
-  // getStatusBadge is replaced by LeadStatusBadge component
+  // Stats calculations - memoized
+  const stats = useMemo(() => {
+    const today = new Date();
+    const newToday = leads.filter((l) => {
+      const leadDate = new Date(l.created_at);
+      return leadDate.toDateString() === today.toDateString();
+    }).length;
+    
+    const qualified = leads.filter((l) => l.pipeline_stage === "qualified").length;
+    const junk = leads.filter((l) => l.pipeline_stage === "junk" || l.pipeline_stage === "disqualified" || l.pipeline_stage === "spam").length;
+    
+    return { newToday, qualified, junk };
+  }, [leads]);
 
-  const uniqueSources = [...new Set(leads.map((l) => l.source))];
+  const uniqueSources = useMemo(() => [...new Set(leads.map((l) => l.lead_source_type).filter(Boolean))], [leads]);
+
+  // Handle tab switch
+  const handleTabSwitch = useCallback((tab: "leads" | "chats") => {
+    setActiveTab(tab);
+  }, []);
+
+  // Handle lead selection
+  const handleSelectLead = useCallback((lead: Lead) => {
+    setSelectedLead(lead);
+  }, []);
+
+  // Handle conversation selection
+  const handleSelectConversation = useCallback((chat: ChatConversation) => {
+    setSelectedConversation(chat);
+  }, []);
 
   if (loading) {
     return (
@@ -292,7 +336,7 @@ const AdminLeads = () => {
             <Button
               variant="ghost"
               onClick={() => navigate("/admin")}
-              className="text-gray-400 hover:text-white"
+              className="text-gray-400 hover:text-white cursor-pointer active:scale-95 transition-all"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Admin
@@ -305,14 +349,14 @@ const AdminLeads = () => {
             <Button
               variant="outline"
               onClick={fetchData}
-              className="border-zinc-700 text-white hover:bg-zinc-800"
+              className="border-zinc-700 text-white hover:bg-zinc-800 cursor-pointer active:scale-95 transition-all"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Refresh
             </Button>
             <Button
               onClick={exportToCSV}
-              className="bg-gold hover:bg-gold/90 text-black"
+              className="bg-gold hover:bg-gold/90 text-black cursor-pointer active:scale-95 transition-all"
             >
               <Download className="w-4 h-4 mr-2" />
               Export CSV
@@ -322,62 +366,94 @@ const AdminLeads = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+        {/* Premium Color-Coded Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+          {/* Total Leads - Gold */}
+          <div className="bg-zinc-900 border-2 border-gold/60 rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-gold/20 transform-gpu">
             <div className="flex items-center gap-3 mb-2">
               <Users className="w-5 h-5 text-gold" />
               <span className="text-gray-400">Total Leads</span>
             </div>
             <p className="text-white text-3xl font-bold">{leads.length}</p>
+            <p className="text-gold/70 text-sm mt-1">All time</p>
           </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+          
+          {/* Chat Conversations - Purple */}
+          <div className="bg-zinc-900 border-2 border-purple-500/60 rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 transform-gpu">
             <div className="flex items-center gap-3 mb-2">
-              <MessageSquare className="w-5 h-5 text-gold" />
-              <span className="text-gray-400">Chat Conversations</span>
+              <MessageSquare className="w-5 h-5 text-purple-500" />
+              <span className="text-gray-400">AI Chat Sessions</span>
             </div>
             <p className="text-white text-3xl font-bold">{conversations.length}</p>
+            <p className="text-purple-400/70 text-sm mt-1">Website chats</p>
           </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+          
+          {/* New Today - Blue */}
+          <div className="bg-zinc-900 border-2 border-blue-500/60 rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 transform-gpu">
             <div className="flex items-center gap-3 mb-2">
               <Clock className="w-5 h-5 text-blue-500" />
               <span className="text-gray-400">New Today</span>
             </div>
-            <p className="text-white text-3xl font-bold">
-              {leads.filter((l) => {
-                const today = new Date();
-                const leadDate = new Date(l.created_at);
-                return leadDate.toDateString() === today.toDateString();
-              }).length}
-            </p>
+            <p className="text-white text-3xl font-bold">{stats.newToday}</p>
+            <p className="text-blue-400/70 text-sm mt-1">Since midnight</p>
           </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+          
+          {/* Qualified - Green */}
+          <div className="bg-zinc-900 border-2 border-green-500/60 rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 transform-gpu">
             <div className="flex items-center gap-3 mb-2">
               <UserCheck className="w-5 h-5 text-green-500" />
               <span className="text-gray-400">Qualified</span>
             </div>
-            <p className="text-white text-3xl font-bold">
-              {leads.filter((l) => l.status === "qualified").length}
-            </p>
+            <p className="text-white text-3xl font-bold">{stats.qualified}</p>
+            <p className="text-green-400/70 text-sm mt-1">Ready for sales</p>
+          </div>
+          
+          {/* Junk - Red */}
+          <div className="bg-zinc-900 border-2 border-red-500/60 rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/20 transform-gpu">
+            <div className="flex items-center gap-3 mb-2">
+              <Trash2 className="w-5 h-5 text-red-500" />
+              <span className="text-gray-400">Junk</span>
+            </div>
+            <p className="text-white text-3xl font-bold">{stats.junk}</p>
+            <p className="text-red-400/70 text-sm mt-1">Disqualified</p>
           </div>
         </div>
 
         {/* Tabs */}
         <div className="flex gap-2 mb-6">
           <Button
-            variant={activeTab === "leads" ? "primary" : "secondary"}
-            onClick={() => setActiveTab("leads")}
+            variant={activeTab === "leads" ? "default" : "outline"}
+            onClick={() => handleTabSwitch("leads")}
+            className={`cursor-pointer active:scale-95 transition-all ${
+              activeTab === "leads" 
+                ? "bg-gold text-black hover:bg-gold/90" 
+                : "border-zinc-700 text-white hover:bg-zinc-800"
+            }`}
           >
             <Users className="w-4 h-4 mr-2" />
             Leads ({leads.length})
           </Button>
-          <Button
-            variant={activeTab === "chats" ? "primary" : "secondary"}
-            onClick={() => setActiveTab("chats")}
-          >
-            <MessageSquare className="w-4 h-4 mr-2" />
-            Chat Transcripts ({conversations.length})
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant={activeTab === "chats" ? "default" : "outline"}
+                  onClick={() => handleTabSwitch("chats")}
+                  className={`cursor-pointer active:scale-95 transition-all ${
+                    activeTab === "chats" 
+                      ? "bg-purple-600 text-white hover:bg-purple-600/90" 
+                      : "border-zinc-700 text-white hover:bg-zinc-800"
+                  }`}
+                >
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  AI Chat Sessions ({conversations.length})
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-zinc-800 border-zinc-700 text-white max-w-xs">
+                <p>Website AI chat widget conversations where visitors interacted with the AI assistant</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
 
         {/* Filters */}
@@ -395,7 +471,7 @@ const AdminLeads = () => {
             <div className="flex items-center gap-2">
               <Filter className="w-4 h-4 text-gray-400" />
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-48 bg-zinc-950 border-zinc-700 text-white">
+                <SelectTrigger className="w-48 bg-zinc-950 border-zinc-700 text-white cursor-pointer">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent className="bg-zinc-900 border-zinc-700 max-h-80">
@@ -434,7 +510,7 @@ const AdminLeads = () => {
               <>
                 {/* Source Type Filter (Website vs Database) */}
                 <Select value={sourceTypeFilter} onValueChange={setSourceTypeFilter}>
-                  <SelectTrigger className="w-44 bg-zinc-950 border-zinc-700 text-white">
+                  <SelectTrigger className="w-44 bg-zinc-950 border-zinc-700 text-white cursor-pointer">
                     <SelectValue placeholder="Source Type" />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-900 border-zinc-700">
@@ -455,20 +531,20 @@ const AdminLeads = () => {
                 
                 {/* Specific Source Filter */}
                 <Select value={sourceFilter} onValueChange={setSourceFilter}>
-                  <SelectTrigger className="w-48 bg-zinc-950 border-zinc-700 text-white">
+                  <SelectTrigger className="w-48 bg-zinc-950 border-zinc-700 text-white cursor-pointer">
                     <SelectValue placeholder="Specific Source" />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-900 border-zinc-700 max-h-64">
                     <SelectItem value="all">All Specific Sources</SelectItem>
                     <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Website</div>
                     {uniqueSources.filter(s => getSourceCategory(s) === 'website').map((source) => (
-                      <SelectItem key={source} value={source}>
+                      <SelectItem key={source} value={source!}>
                         {getSourceDisplayName(source)}
                       </SelectItem>
                     ))}
                     <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Database/Import</div>
                     {uniqueSources.filter(s => getSourceCategory(s) === 'database').map((source) => (
-                      <SelectItem key={source} value={source}>
+                      <SelectItem key={source} value={source!}>
                         {getSourceDisplayName(source)}
                       </SelectItem>
                     ))}
@@ -476,7 +552,7 @@ const AdminLeads = () => {
                       <>
                         <div className="px-2 py-1 text-xs font-semibold text-gray-400 uppercase mt-1">Other</div>
                         {uniqueSources.filter(s => getSourceCategory(s) === 'other').map((source) => (
-                          <SelectItem key={source} value={source}>
+                          <SelectItem key={source} value={source!}>
                             {getSourceDisplayName(source)}
                           </SelectItem>
                         ))}
@@ -492,8 +568,12 @@ const AdminLeads = () => {
         {/* Table */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
           {isLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
+            <div className="p-6 space-y-4">
+              <Skeleton className="h-12 w-full bg-zinc-800" />
+              <Skeleton className="h-12 w-full bg-zinc-800" />
+              <Skeleton className="h-12 w-full bg-zinc-800" />
+              <Skeleton className="h-12 w-full bg-zinc-800" />
+              <Skeleton className="h-12 w-full bg-zinc-800" />
             </div>
           ) : activeTab === "leads" ? (
             <ScrollArea className="h-[600px]">
@@ -502,8 +582,8 @@ const AdminLeads = () => {
                   <TableRow>
                     <TableHead className="text-gray-400">Name</TableHead>
                     <TableHead className="text-gray-400">Contact</TableHead>
-                    <TableHead className="text-gray-400">Location</TableHead>
                     <TableHead className="text-gray-400">Source</TableHead>
+                    <TableHead className="text-gray-400">VIP</TableHead>
                     <TableHead className="text-gray-400">Status</TableHead>
                     <TableHead className="text-gray-400">Date</TableHead>
                     <TableHead className="text-gray-400 text-right">Actions</TableHead>
@@ -518,43 +598,43 @@ const AdminLeads = () => {
                     </TableRow>
                   ) : (
                     filteredLeads.map((lead) => (
-                      <TableRow key={lead.id} className="border-t border-zinc-800 hover:bg-zinc-950/50">
+                      <TableRow key={lead.id} className="border-t border-zinc-800 hover:bg-zinc-950/50 transition-colors">
                         <TableCell>
                           <div>
                             <p className="text-white font-medium">{lead.full_name || "—"}</p>
-                            <p className="text-gray-500 text-sm">{lead.nationality || "—"}</p>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="space-y-1">
                             <div className="flex items-center gap-2 text-gray-300 text-sm">
                               <Mail className="w-3 h-3" />
-                              {lead.email}
+                              {lead.email_lower || "—"}
                             </div>
-                            {lead.phone && (
+                            {lead.phone_e164 && (
                               <div className="flex items-center gap-2 text-gray-400 text-sm">
                                 <Phone className="w-3 h-3" />
-                                {lead.phone}
+                                {lead.phone_e164}
                               </div>
                             )}
                           </div>
                         </TableCell>
                         <TableCell>
-                          <div className="flex items-center gap-2 text-gray-400 text-sm">
-                            <MapPin className="w-3 h-3" />
-                            {lead.current_location || "—"}
-                          </div>
+                          <Badge variant="outline" className="text-gray-300 border-zinc-700">
+                            {getSourceDisplayName(lead.lead_source_type)}
+                          </Badge>
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="text-gray-300 border-zinc-700">
-                            {lead.source}
-                          </Badge>
+                          {lead.vip ? (
+                            <Badge className="bg-gold/20 text-gold border-gold/30">VIP</Badge>
+                          ) : (
+                            <span className="text-gray-500">—</span>
+                          )}
                         </TableCell>
                         <TableCell>
                           <Popover>
                             <PopoverTrigger asChild>
-                              <button className="group flex items-center gap-1">
-                                <LeadStatusBadge status={lead.status || "new"} size="sm" />
+                              <button className="group flex items-center gap-1 cursor-pointer">
+                                <LeadStatusBadge status={lead.pipeline_stage || "new"} size="sm" />
                                 <ChevronDown className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-gray-400" />
                               </button>
                             </PopoverTrigger>
@@ -565,7 +645,7 @@ const AdminLeads = () => {
                                   <button
                                     key={status.value}
                                     onClick={() => updateLeadStatus(lead.id, status.value)}
-                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors cursor-pointer"
                                   >
                                     <span className={`w-2 h-2 rounded-full ${status.color}`} />
                                     <span className="text-sm text-white">{status.label}</span>
@@ -576,7 +656,7 @@ const AdminLeads = () => {
                                   <button
                                     key={status.value}
                                     onClick={() => updateLeadStatus(lead.id, status.value)}
-                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors cursor-pointer"
                                   >
                                     <span className={`w-2 h-2 rounded-full ${status.color}`} />
                                     <span className="text-sm text-white">{status.label}</span>
@@ -587,7 +667,7 @@ const AdminLeads = () => {
                                   <button
                                     key={status.value}
                                     onClick={() => updateLeadStatus(lead.id, status.value)}
-                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors cursor-pointer"
                                   >
                                     <span className={`w-2 h-2 rounded-full ${status.color}`} />
                                     <span className="text-sm text-white">{status.label}</span>
@@ -607,8 +687,8 @@ const AdminLeads = () => {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => setSelectedLead(lead)}
-                            className="text-gold hover:text-gold/80"
+                            onClick={() => handleSelectLead(lead)}
+                            className="text-gold hover:text-gold/80 cursor-pointer active:scale-95 transition-all"
                           >
                             <Eye className="w-4 h-4" />
                           </Button>
@@ -642,7 +722,7 @@ const AdminLeads = () => {
                     </TableRow>
                   ) : (
                     filteredConversations.map((chat) => (
-                      <TableRow key={chat.id} className="border-t border-zinc-800 hover:bg-zinc-950/50">
+                      <TableRow key={chat.id} className="border-t border-zinc-800 hover:bg-zinc-950/50 transition-colors">
                         <TableCell>
                           <p className="text-white font-medium">{chat.user_name || "Anonymous"}</p>
                         </TableCell>
@@ -673,7 +753,7 @@ const AdminLeads = () => {
                         <TableCell>
                           <Popover>
                             <PopoverTrigger asChild>
-                              <button className="group flex items-center gap-1">
+                              <button className="group flex items-center gap-1 cursor-pointer">
                                 <LeadStatusBadge status={chat.status || "new"} size="sm" />
                                 <ChevronDown className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-gray-400" />
                               </button>
@@ -685,7 +765,7 @@ const AdminLeads = () => {
                                   <button
                                     key={status.value}
                                     onClick={() => updateChatStatus(chat.id, status.value)}
-                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors cursor-pointer"
                                   >
                                     <span className={`w-2 h-2 rounded-full ${status.color}`} />
                                     <span className="text-sm text-white">{status.label}</span>
@@ -696,7 +776,7 @@ const AdminLeads = () => {
                                   <button
                                     key={status.value}
                                     onClick={() => updateChatStatus(chat.id, status.value)}
-                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors cursor-pointer"
                                   >
                                     <span className={`w-2 h-2 rounded-full ${status.color}`} />
                                     <span className="text-sm text-white">{status.label}</span>
@@ -707,7 +787,7 @@ const AdminLeads = () => {
                                   <button
                                     key={status.value}
                                     onClick={() => updateChatStatus(chat.id, status.value)}
-                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors"
+                                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-zinc-800 text-left transition-colors cursor-pointer"
                                   >
                                     <span className={`w-2 h-2 rounded-full ${status.color}`} />
                                     <span className="text-sm text-white">{status.label}</span>
@@ -727,8 +807,8 @@ const AdminLeads = () => {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => setSelectedConversation(chat)}
-                            className="text-gold hover:text-gold/80"
+                            onClick={() => handleSelectConversation(chat)}
+                            className="text-gold hover:text-gold/80 cursor-pointer active:scale-95 transition-all"
                           >
                             <Eye className="w-4 h-4" />
                           </Button>
@@ -743,74 +823,116 @@ const AdminLeads = () => {
         </div>
       </main>
 
-      {/* Lead Detail Modal */}
+      {/* Lead Detail Modal - Enhanced with Contact Actions */}
       <Dialog open={!!selectedLead} onOpenChange={() => setSelectedLead(null)}>
         <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold">Lead Details</DialogTitle>
+            <DialogTitle className="text-xl font-bold flex items-center gap-3">
+              Lead Details
+              {selectedLead?.vip && (
+                <Badge className="bg-gold/20 text-gold border-gold/30">VIP</Badge>
+              )}
+            </DialogTitle>
           </DialogHeader>
           {selectedLead && (
             <div className="space-y-6">
+              {/* Contact Quick Actions */}
+              <div className="flex flex-wrap gap-2 p-4 bg-zinc-950 rounded-xl border border-zinc-800">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <a
+                        href={`https://wa.me/${selectedLead.phone_e164?.replace(/[^0-9]/g, '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 ${
+                          selectedLead.phone_e164 
+                            ? 'bg-green-600 hover:bg-green-700 text-white' 
+                            : 'bg-zinc-800 text-gray-500 cursor-not-allowed'
+                        }`}
+                        onClick={(e) => !selectedLead.phone_e164 && e.preventDefault()}
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        WhatsApp
+                      </a>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {selectedLead.phone_e164 ? `Message ${selectedLead.phone_e164}` : 'No phone available'}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <a
+                        href={`tel:${selectedLead.phone_e164}`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 ${
+                          selectedLead.phone_e164 
+                            ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                            : 'bg-zinc-800 text-gray-500 cursor-not-allowed'
+                        }`}
+                        onClick={(e) => !selectedLead.phone_e164 && e.preventDefault()}
+                      >
+                        <PhoneCall className="w-4 h-4" />
+                        Call
+                      </a>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {selectedLead.phone_e164 ? `Call ${selectedLead.phone_e164}` : 'No phone available'}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <a
+                        href={`mailto:${selectedLead.email_lower}`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 ${
+                          selectedLead.email_lower 
+                            ? 'bg-purple-600 hover:bg-purple-700 text-white' 
+                            : 'bg-zinc-800 text-gray-500 cursor-not-allowed'
+                        }`}
+                        onClick={(e) => !selectedLead.email_lower && e.preventDefault()}
+                      >
+                        <Mail className="w-4 h-4" />
+                        Email
+                      </a>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {selectedLead.email_lower ? `Email ${selectedLead.email_lower}` : 'No email available'}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              
               <div className="grid grid-cols-2 gap-4">
-                <div>
+                <div className="p-3 bg-zinc-950 rounded-lg">
                   <p className="text-gray-400 text-sm mb-1">Full Name</p>
-                  <p className="text-white font-medium">{selectedLead.full_name || "—"}</p>
+                  <p className="text-white font-medium text-lg">{selectedLead.full_name || "Not provided"}</p>
                 </div>
-                <div>
+                <div className="p-3 bg-zinc-950 rounded-lg">
                   <p className="text-gray-400 text-sm mb-1">Email</p>
-                  <p className="text-white">{selectedLead.email}</p>
+                  <p className="text-white">{selectedLead.email_lower || "Not provided"}</p>
                 </div>
-                <div>
+                <div className="p-3 bg-zinc-950 rounded-lg">
                   <p className="text-gray-400 text-sm mb-1">Phone</p>
-                  <p className="text-white">{selectedLead.phone || "—"}</p>
+                  <p className="text-white">{selectedLead.phone_e164 || "Not provided"}</p>
                 </div>
-                <div>
-                  <p className="text-gray-400 text-sm mb-1">Nationality</p>
-                  <p className="text-white">{selectedLead.nationality || "—"}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm mb-1">Language</p>
-                  <p className="text-white">{selectedLead.language || "—"}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm mb-1">Location</p>
-                  <p className="text-white">{selectedLead.current_location || "—"}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm mb-1">Age Range</p>
-                  <p className="text-white">{selectedLead.age_range || "—"}</p>
-                </div>
-                <div>
+                <div className="p-3 bg-zinc-950 rounded-lg">
                   <p className="text-gray-400 text-sm mb-1">Source</p>
                   <Badge variant="outline" className="text-gray-300 border-zinc-700">
-                    {selectedLead.source}
+                    {getSourceDisplayName(selectedLead.lead_source_type)}
                   </Badge>
                 </div>
-                <div>
-                  <p className="text-gray-400 text-sm mb-1">Page Source</p>
-                  <p className="text-white text-sm">{selectedLead.page_source || "—"}</p>
+                <div className="p-3 bg-zinc-950 rounded-lg">
+                  <p className="text-gray-400 text-sm mb-1">Status</p>
+                  <LeadStatusBadge status={selectedLead.pipeline_stage || "new"} size="sm" />
                 </div>
-                <div>
+                <div className="p-3 bg-zinc-950 rounded-lg">
                   <p className="text-gray-400 text-sm mb-1">Created</p>
                   <p className="text-white">{format(new Date(selectedLead.created_at), "PPpp")}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 pt-4 border-t border-zinc-800">
-                <div className="flex items-center gap-2">
-                  {selectedLead.consent_privacy ? (
-                    <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  ) : (
-                    <XCircle className="w-4 h-4 text-red-500" />
-                  )}
-                  <span className="text-gray-400 text-sm">Privacy Policy Consent</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  {selectedLead.consent_accurate ? (
-                    <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  ) : (
-                    <XCircle className="w-4 h-4 text-red-500" />
-                  )}
-                  <span className="text-gray-400 text-sm">Data Accuracy Consent</span>
                 </div>
               </div>
             </div>
