@@ -254,8 +254,8 @@ async function sendAutoBlockNotification(
         Authorization: `Bearer ${resendApiKey}`,
       },
       body: JSON.stringify({
-        from: "JBJ Global Real Estate Security <security@jbj.ae>",
-        to: ["contact@jbj.ae"],
+        from: "JBJ Security <NOREPLY@JBJ.AE>",
+        to: ["CONTACT@JBJ.AE"],
         subject: `🚨 Security Alert: IP Auto-Blocked on ${functionName}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

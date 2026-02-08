@@ -341,7 +341,7 @@ serve(async (req: Request): Promise<Response> => {
 
     // Send the email
     const emailResult = await sendEmail(resendApiKey, {
-      from: "JBJ Reports <reports@JBJ.ae>",
+      from: "JBJ Reports <NOREPLY@JBJ.AE>",
       to: recipients,
       subject: `📊 Daily Broker Report - ${formattedDate}${capacityAlerts.length > 0 ? ' ⚠️' : ''}`,
       html: reportHtml,
