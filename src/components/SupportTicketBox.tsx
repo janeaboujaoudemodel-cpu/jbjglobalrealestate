@@ -517,7 +517,7 @@ const SupportTicketBox = () => {
                                 <SelectTrigger className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg">
                                   <SelectValue placeholder="Select the service" />
                                 </SelectTrigger>
-                                <SelectContent className="max-h-60 bg-white border border-zinc-200 shadow-lg z-[200]">
+                                <SelectContent className="max-h-60 bg-white border border-zinc-200 shadow-lg">
                                   {SERVICE_CATEGORIES.map((category) => (
                                     <SelectItem key={category} value={category} className="hover:bg-zinc-100 cursor-pointer">
                                       {category}
@@ -587,7 +587,7 @@ const SupportTicketBox = () => {
                                 <SelectTrigger className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg">
                                   <SelectValue placeholder="Select priority" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-white border border-zinc-200 shadow-lg z-[200]">
+                                <SelectContent className="bg-white border border-zinc-200 shadow-lg">
                                   {PRIORITY_LEVELS.map((level) => (
                                     <SelectItem key={level.value} value={level.value} className="hover:bg-zinc-100 cursor-pointer">
                                       <span className={`font-medium ${level.color}`}>{level.label}</span>

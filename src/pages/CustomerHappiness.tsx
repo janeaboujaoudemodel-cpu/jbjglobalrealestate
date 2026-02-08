@@ -46,6 +46,37 @@ const staggerContainer = {
 };
 
 // Support Ticket Form
+const SUPPORT_SERVICE_CATEGORIES = [
+  "Property Listings",
+  "Account & Login Issues",
+  "Payment & Transactions",
+  "Broker Portal",
+  "AI Tools & Features",
+  "Website Navigation",
+  "Mobile App",
+  "Document Management",
+  "Communication (Email/WhatsApp)",
+  "Technical Bug (Website/App)",
+  "Property Search Issues",
+  "Viewing & Appointments",
+  "Dashboard & Reports",
+  "Notifications & Alerts",
+  "Profile & Settings",
+  "CRM Features",
+  "Marketing Tools",
+  "Analytics & Insights",
+  "Integration Issues",
+  "Performance & Speed",
+  "Other",
+];
+
+const SUPPORT_PRIORITY_LEVELS = [
+  { value: "low", label: "Low", description: "Minor issue, no urgency" },
+  { value: "normal", label: "Normal", description: "Standard priority" },
+  { value: "high", label: "High", description: "Significant impact" },
+  { value: "critical", label: "Critical", description: "Blocking / urgent" },
+] as const;
+
 const SupportTicketForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,8 +85,8 @@ const SupportTicketForm = () => {
     email: "",
     phone: "",
     subject: "",
-    category: "",
-    priority: "medium",
+    serviceCategory: "",
+    priority: "normal",
     description: "",
   });
 
@@ -64,20 +95,20 @@ const SupportTicketForm = () => {
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('submit-support-ticket', {
+      const { data, error } = await supabase.functions.invoke("submit-support-ticket", {
         body: {
           fullName: formData.fullName,
           email: formData.email,
           phone: formData.phone || null,
           subject: formData.subject,
-          category: formData.category,
+          serviceCategory: formData.serviceCategory,
           priority: formData.priority,
           description: formData.description,
         },
       });
 
       if (error) {
-        console.error('Support ticket error:', error);
+        console.error("Support ticket error:", error);
         toast({
           title: "Submission Failed",
           description: "Unable to submit your ticket. Please try again or contact us directly.",
@@ -87,8 +118,8 @@ const SupportTicketForm = () => {
         return;
       }
 
-      const ticketNumber = data?.ticketNumber || 'pending';
-      
+      const ticketNumber = data?.ticketNumber || "pending";
+
       toast({
         title: "Ticket Submitted Successfully! 🎫",
         description: `Your support ticket #${ticketNumber} has been created. We'll get back to you within 24 hours.`,
@@ -99,12 +130,12 @@ const SupportTicketForm = () => {
         email: "",
         phone: "",
         subject: "",
-        category: "",
-        priority: "medium",
+        serviceCategory: "",
+        priority: "normal",
         description: "",
       });
     } catch (err) {
-      console.error('Support ticket submission failed:', err);
+      console.error("Support ticket submission failed:", err);
       toast({
         title: "Submission Failed",
         description: "An unexpected error occurred. Please try again.",
@@ -119,7 +150,9 @@ const SupportTicketForm = () => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="fullName" className="text-black">Full Name *</Label>
+          <Label htmlFor="fullName" className="text-black">
+            Full Name *
+          </Label>
           <Input
             id="fullName"
             value={formData.fullName}
@@ -130,7 +163,9 @@ const SupportTicketForm = () => {
           />
         </div>
         <div>
-          <Label htmlFor="email" className="text-black">Email *</Label>
+          <Label htmlFor="email" className="text-black">
+            Email *
+          </Label>
           <Input
             id="email"
             type="email"
@@ -144,7 +179,9 @@ const SupportTicketForm = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="phone" className="text-black">Phone Number</Label>
+          <Label htmlFor="phone" className="text-black">
+            Phone Number
+          </Label>
           <Input
             id="phone"
             value={formData.phone}
@@ -154,24 +191,30 @@ const SupportTicketForm = () => {
           />
         </div>
         <div>
-          <Label htmlFor="category" className="text-black">Category *</Label>
-          <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
+          <Label htmlFor="serviceCategory" className="text-black">
+            Service with Issue *
+          </Label>
+          <Select
+            value={formData.serviceCategory}
+            onValueChange={(v) => setFormData({ ...formData, serviceCategory: v })}
+          >
             <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
-              <SelectValue placeholder="Select category" />
+              <SelectValue placeholder="Select service" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="property-inquiry">Property Inquiry</SelectItem>
-              <SelectItem value="account-issue">Account Issue</SelectItem>
-              <SelectItem value="payment-billing">Payment & Billing</SelectItem>
-              <SelectItem value="technical-support">Technical Support</SelectItem>
-              <SelectItem value="general-question">General Question</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
+              {SUPPORT_SERVICE_CATEGORIES.map((c) => (
+                <SelectItem key={c} value={c}>
+                  {c}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
       </div>
       <div>
-        <Label htmlFor="subject" className="text-black">Subject *</Label>
+        <Label htmlFor="subject" className="text-black">
+          Subject *
+        </Label>
         <Input
           id="subject"
           value={formData.subject}
@@ -182,20 +225,26 @@ const SupportTicketForm = () => {
         />
       </div>
       <div>
-        <Label htmlFor="priority" className="text-black">Priority</Label>
+        <Label htmlFor="priority" className="text-black">
+          Priority
+        </Label>
         <Select value={formData.priority} onValueChange={(v) => setFormData({ ...formData, priority: v })}>
           <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
-            <SelectValue />
+            <SelectValue placeholder="Select priority" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="low">Low - General inquiry</SelectItem>
-            <SelectItem value="medium">Medium - Need assistance soon</SelectItem>
-            <SelectItem value="high">High - Urgent matter</SelectItem>
+            {SUPPORT_PRIORITY_LEVELS.map((p) => (
+              <SelectItem key={p.value} value={p.value}>
+                {p.label} - {p.description}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
       <div>
-        <Label htmlFor="description" className="text-black">Detailed Description *</Label>
+        <Label htmlFor="description" className="text-black">
+          Detailed Description *
+        </Label>
         <Textarea
           id="description"
           value={formData.description}
@@ -206,18 +255,21 @@ const SupportTicketForm = () => {
           placeholder="Please describe your inquiry in detail..."
         />
       </div>
-      <button 
-        type="submit" 
-        disabled={isSubmitting} 
+      <button
+        type="submit"
+        disabled={isSubmitting}
         className="group relative w-full inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50"
         style={{
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-          border: '2px solid rgba(200,167,102,0.5)',
-          boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
+          background: "linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)",
+          border: "2px solid rgba(200,167,102,0.5)",
+          boxShadow:
+            "0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)",
         }}
       >
         <Send className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
-        <span className="text-black group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit Support"}</span>
+        <span className="text-black group-hover:text-gold transition-colors">
+          {isSubmitting ? "Submitting..." : "Submit Support"}
+        </span>
         <span className="text-gold group-hover:text-black transition-colors">Ticket</span>
       </button>
     </form>
