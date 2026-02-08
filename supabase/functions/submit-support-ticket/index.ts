@@ -204,21 +204,6 @@ const handler = async (req: Request): Promise<Response> => {
     let customerEmailError: string | null = null;
     let customerEmailMessageId: string | null = null;
 
-    // Send to support team using verified domain
-    try {
-      await resend.emails.send({
-        from: `JBJ Support <${VERIFIED_SENDER}>`,
-        to: [OFFICIAL_EMAILS.support],
-        subject: `[${ticket.ticket_number}] New Support Ticket: ${subject}`,
-        html: supportEmailHtml,
-      });
-      supportEmailSent = true;
-      console.log("Support email sent to team");
-    } catch (emailError) {
-      console.error("Failed to send support email to team:", emailError);
-      // Continue - don't fail the whole request
-    }
-
     // Calculate SLA based on priority
     const now = new Date();
     const priorityConfig: Record<string, { hours: number; label: string; color: string; bgColor: string }> = {
@@ -484,25 +469,65 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    // Send confirmation to customer using VERIFIED SENDER
-    try {
-      const customerEmailResult = await resend.emails.send({
+    // Send BOTH emails in parallel for faster response
+    const [supportEmailResult, customerEmailResult] = await Promise.allSettled([
+      // Support team email
+      resend.emails.send({
+        from: `JBJ Support <${VERIFIED_SENDER}>`,
+        to: [OFFICIAL_EMAILS.support],
+        subject: `[${ticket.ticket_number}] New Support Ticket: ${subject}`,
+        html: supportEmailHtml,
+      }),
+      // Customer confirmation email
+      resend.emails.send({
         from: `JBJ Support <${VERIFIED_SENDER}>`,
         to: [email],
         subject: `Ticket Received: ${ticket.ticket_number} - We're on it!`,
         html: customerEmailHtml,
-      });
-      customerEmailSent = true;
-      // Resend v2+ returns { id: "..." } directly, older versions return { data: { id: "..." } }
-      customerEmailMessageId = (customerEmailResult as any)?.id || (customerEmailResult as any)?.data?.id || null;
-      console.log("Customer confirmation email sent successfully:", JSON.stringify(customerEmailResult));
-    } catch (emailError) {
-      console.error("Failed to send customer email:", emailError);
-      customerEmailError = emailError instanceof Error ? emailError.message.substring(0, 200) : "Unknown error";
-      // Continue - don't fail the whole request
+      })
+    ]);
+
+    // Process support email result
+    if (supportEmailResult.status === 'fulfilled') {
+      const result = supportEmailResult.value as any;
+      // Resend returns { data, error } - check for error field
+      if (result?.error) {
+        console.error("Support email failed:", result.error);
+      } else {
+        supportEmailSent = true;
+        console.log("Support email sent to team");
+      }
+    } else {
+      console.error("Failed to send support email:", supportEmailResult.reason);
     }
 
-    // Update ticket with email delivery status
+    // Process customer email result - PROPERLY handle Resend's { data, error } response
+    if (customerEmailResult.status === 'fulfilled') {
+      const result = customerEmailResult.value as any;
+      // Resend SDK returns { data: { id: ... }, error: null } or { data: null, error: { ... } }
+      if (result?.error) {
+        // Email failed - extract error message
+        customerEmailError = result.error?.message || result.error?.name || JSON.stringify(result.error).substring(0, 200);
+        console.error("Customer email FAILED (Resend error):", result.error);
+      } else if (result?.data?.id || result?.id) {
+        // Email succeeded
+        customerEmailSent = true;
+        customerEmailMessageId = result?.data?.id || result?.id;
+        console.log("Customer confirmation email SENT successfully, ID:", customerEmailMessageId);
+      } else {
+        // Unexpected response shape
+        customerEmailError = "Unexpected email response format";
+        console.error("Unexpected Resend response:", JSON.stringify(result));
+      }
+    } else {
+      // Promise rejected (network error, etc)
+      customerEmailError = customerEmailResult.reason instanceof Error 
+        ? customerEmailResult.reason.message.substring(0, 200) 
+        : "Network error sending email";
+      console.error("Failed to send customer email (rejected):", customerEmailResult.reason);
+    }
+
+    // Update ticket with accurate email delivery status
     try {
       await supabaseClient
         .from("support_tickets")
@@ -523,7 +548,7 @@ const handler = async (req: Request): Promise<Response> => {
         ticketNumber: ticket.ticket_number,
         message: "Your support ticket has been created successfully",
         customerEmailSent,
-        customerEmailError: customerEmailSent ? null : "Confirmation email could not be sent. Please save your ticket number.",
+        customerEmailError: customerEmailSent ? null : (customerEmailError || "Confirmation email could not be sent. Please save your ticket number."),
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

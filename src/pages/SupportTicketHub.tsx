@@ -152,14 +152,14 @@ const SupportTicketHub = () => {
                 value={filters.status}
                 onValueChange={(value) => setFilters((prev) => ({ ...prev, status: value }))}
               >
-                <SelectTrigger className="w-[160px] h-10 bg-zinc-800 border-gold/30 text-white hover:bg-zinc-700 focus:ring-gold/50">
+                <SelectTrigger className="w-[180px] h-10">
                   <SelectValue placeholder="All Status" />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-gold/40 text-white">
-                  <SelectItem value="all" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">All Status</SelectItem>
-                  <SelectItem value="open" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">Open</SelectItem>
-                  <SelectItem value="in_progress" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">In Progress</SelectItem>
-                  <SelectItem value="resolved" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">Resolved</SelectItem>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="open">Open</SelectItem>
+                  <SelectItem value="in_progress">In Progress</SelectItem>
+                  <SelectItem value="resolved">Resolved</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -167,15 +167,15 @@ const SupportTicketHub = () => {
                 value={filters.priority}
                 onValueChange={(value) => setFilters((prev) => ({ ...prev, priority: value }))}
               >
-                <SelectTrigger className="w-[160px] h-10 bg-zinc-800 border-gold/30 text-white hover:bg-zinc-700 focus:ring-gold/50">
+                <SelectTrigger className="w-[180px] h-10">
                   <SelectValue placeholder="All Priority" />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-gold/40 text-white">
-                  <SelectItem value="all" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">All Priority</SelectItem>
-                  <SelectItem value="critical" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">Critical</SelectItem>
-                  <SelectItem value="high" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">High</SelectItem>
-                  <SelectItem value="normal" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">Normal</SelectItem>
-                  <SelectItem value="low" className="text-white hover:bg-gold/20 hover:text-gold focus:bg-gold/20 focus:text-gold">Low</SelectItem>
+                <SelectContent>
+                  <SelectItem value="all">All Priority</SelectItem>
+                  <SelectItem value="critical">Critical</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
+                  <SelectItem value="normal">Normal</SelectItem>
+                  <SelectItem value="low">Low</SelectItem>
                 </SelectContent>
               </Select>
             </div>
