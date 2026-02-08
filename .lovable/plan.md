@@ -1,86 +1,131 @@
 
-Goal  
-Make the vertical spacing between the SectionDivider (star divider) and the “JBJ Royal Tools Hub” section match the spacing used between the SectionDivider and the “AI Property Comparison” section.
 
-What’s actually causing the “padding changes didn’t work” problem  
-- `ToolkitShowcaseCard` currently renders as:
-  - `<section className="pt-12 ... pb-20 ... jj-layer-2">`
-- The `.jj-layer-2` class (defined in `src/index.css`) applies `p-2 sm:p-3 md:p-4 lg:p-6` via `@apply`.
-- Because `.jj-layer-2` is a custom class defined after Tailwind utilities, its padding overrides the Tailwind `pt-*` and `pb-*` utilities in practice.
-- Result: changing `pb-16 → pb-24` did not meaningfully change the visible spacing; the divider still appears to “touch” the section.
+## Mortgage Calculator Cards - Add Property Price & Improve Interest Display
 
-Reference for the “correct spacing” to match  
-On the homepage (`src/pages/Index.tsx`), the “AI Comparison” section uses:
-- `<SectionDivider />`
-- then `<section className="py-12 md:py-16 bg-black"> ... </section>`
-That `py-12 md:py-16` is the spacing you’re calling “correct”.
+### Overview
+Enhance the compact mortgage calculator cards on the homepage by adding a Property Price card and improving the clarity of all cards, especially the Interest card which currently shows confusing information.
 
-Implementation approach (match the proven pattern exactly)  
-Update `src/components/home/ToolkitShowcaseCard.tsx` so that:
-1) The OUTER wrapper becomes a standard black section with the same spacing as AI Comparison:
-   - `className="py-12 md:py-16 bg-black"`
-2) Move the “layer-2” styling off the `<section>` (so it can’t override vertical spacing) and apply it to an inner wrapper `<div className="jj-layer-2">`
-3) Keep the existing inner “Main Card” markup unchanged, so only spacing behavior changes.
+---
 
-Concrete code-level changes
+### Current Issue Analysis
 
-File: `src/components/home/ToolkitShowcaseCard.tsx`
+**Interest Calculation Verification:**
+The calculation IS mathematically correct:
+- Property: AED 2,000,000
+- Loan Amount: AED 1,600,000 (80%)
+- At 4.5% over 25 years = AED 1,067,000 total interest
 
-A) Replace the opening wrapper:
+This is accurate - over 25 years, compound interest on AED 1.6M at 4.5% does equal approximately AED 1M. However, the current card shows "25 Years" which doesn't explain the percentage of total cost.
 
-Current:
-```tsx
-<section className="pt-12 md:pt-16 pb-20 md:pb-24 jj-layer-2">
-  <div className="container mx-auto px-4">
-    <motion.div ...>
-      ...
+**Current Problems:**
+1. No Property Price card (users want to see the starting price)
+2. Cards not in logical order
+3. Interest card shows "25 Years" instead of a meaningful percentage
+4. Monthly payment shows "/month" instead of a useful percentage
+
+---
+
+### Proposed Changes
+
+**1. Add Property Price Card (New)**
+| Field | Value |
+|-------|-------|
+| Label | Property Price |
+| Percentage | 100% |
+| Amount | AED 2,000,000 |
+| Icon | Building2 |
+
+**2. New Card Order (5 cards total)**
+1. Property Price (100%) - AED 2,000,000
+2. Down Payment (20%) - AED 400,000
+3. Loan Amount (80%) - AED 1,600,000
+4. Total Interest (53% of loan) - AED 1,067,000
+5. Monthly Payment - AED 8,890/month
+
+**3. Interest Card Improvements**
+- Change percentage display from "25 Years" to the **interest as % of loan amount**
+- Formula: `(totalInterest / loanAmount) * 100` = 66.7% (interest adds 67% to your loan)
+- Or show as % of total payment: `(totalInterest / totalPayment) * 100` = 40%
+- Add subtitle showing rate and term: "@ 4.5% | 25 yrs"
+
+**4. Monthly Payment Card Improvements**
+- Show as percentage of total payment divided by months
+- Or show relative affordability indicator
+
+---
+
+### Layout Change
+
+**Current: 4 cards in 2x2 grid on mobile, 4 columns on desktop**
+```
+[Down Payment] [Monthly] [Loan] [Interest]
 ```
 
-Change to:
-```tsx
-<section className="py-12 md:py-16 bg-black">
-  <div className="jj-layer-2">
-    <motion.div ...>
-      ...
+**New: 5 cards - 2+3 pattern on mobile, 5 columns on desktop**
+```
+Mobile:
+[Property Price] [Down Payment]
+[Loan Amount] [Interest] [Monthly]
+
+Desktop:
+[Property] [Down] [Loan] [Interest] [Monthly]
 ```
 
-B) Remove the now-unneeded closing `</div>` for the container, and instead close the `jj-layer-2` wrapper:
+---
 
-Current ending:
-```tsx
-    </motion.div>
-  </div>
-</section>
+### Technical Implementation
+
+**File to modify:** `src/components/MortgageCalculator.tsx`
+
+**Changes:**
+
+1. **Add Building2 icon import** (line 2)
+
+2. **Add new calculated values** (inside useMemo, around line 58):
+   ```typescript
+   const interestPercentOfLoan = (totalInterest / loanAmount) * 100;
+   const interestPercentOfTotal = (totalInterest / totalPayment) * 100;
+   ```
+
+3. **Update compact view grid** (line 90):
+   - Change from `grid-cols-2 sm:grid-cols-4` to `grid-cols-2 sm:grid-cols-5`
+
+4. **Add Property Price card first** (before Down Payment card):
+   - Icon: Building2
+   - Label: Property Price
+   - Percentage: 100%
+   - Value: formatCurrency(propertyPrice)
+
+5. **Reorder cards**:
+   - Property Price (new) → Down Payment → Loan Amount → Interest → Monthly Payment
+
+6. **Update Interest card display**:
+   - Change from showing "25 Years" to showing meaningful percentage
+   - Add subtitle with rate and term info
+
+7. **Update Monthly Payment card**:
+   - Keep "/month" indicator
+   - Consider adding percentage of annual income context
+
+---
+
+### Visual Outcome
+
+```
+┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
+│ 🏢 Property     │ │ 📊 Down Payment │ │ 💰 Loan Amount  │ │ 📈 Interest     │ │ 🧮 Monthly      │
+│ 100%            │ │ 20%             │ │ 80%             │ │ 67% of loan     │ │ /month          │
+│ AED 2,000,000   │ │ AED 400,000     │ │ AED 1,600,000   │ │ AED 1,067,000   │ │ AED 8,890       │
+│                 │ │                 │ │                 │ │ @ 4.5% | 25 yrs │ │                 │
+└─────────────────┘ └─────────────────┘ └─────────────────┘ └─────────────────┘ └─────────────────┘
 ```
 
-Change to:
-```tsx
-    </motion.div>
-  </div>
-</section>
-```
+---
 
-(Visually it looks similar, but the key difference is: `jj-layer-2` is no longer on the `<section>`.)
+### Note on Interest Amount
 
-Why this will fix it immediately  
-- The distance from the divider to the first visible part of the Toolkit section will now be controlled by `py-12 md:py-16` on a black `<section>`, exactly like the AI Comparison section.
-- The divider will stop “touching” the Toolkit section because there will be real black padding space before the divider, not overridden by `.jj-layer-2`.
+The ~AED 1 million interest on a AED 2 million property IS correct:
+- Borrowing AED 1.6M for 25 years at 4.5% = AED 1.07M in interest
+- This is standard mortgage math - over 25 years, interest accumulates significantly
+- The percentage display will help users understand this represents 67% added cost on their loan, not the annual rate
 
-Verification checklist (what to check in Preview on `/`)  
-1) Scroll to:
-   - Divider after “Explore Our Services”
-   - “JBJ Royal Tools Hub”
-   - Divider above “AI Home Finder”
-2) Compare:
-   - Distance from divider above AI Home Finder to the bottom of the Toolkit card
-   - Distance from divider under AI Home Finder to the top of AI Property Comparison card
-3) Confirm they match on:
-   - Mobile width
-   - Desktop width
-
-Rollback / safety  
-- This change is isolated to `ToolkitShowcaseCard.tsx`.
-- `ToolkitShowcaseCard` is only used on `src/pages/Index.tsx`, so the impact is contained to the homepage.
-
-After approval  
-I will implement the exact wrapper restructure described above (moving `.jj-layer-2` off the `<section>` and restoring `py-12 md:py-16 bg-black` spacing) so the divider spacing matches perfectly.
