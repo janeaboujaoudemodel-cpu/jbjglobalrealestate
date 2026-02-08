@@ -3,16 +3,19 @@ import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
 /**
- * OWNER_EMAIL - The single privileged identity
- * Set via environment variable ONLY - no fallback (fail closed)
+ * Owner verification
+ *
+ * IMPORTANT:
+ * - The client should NOT rely on build-time env vars for privilege checks.
+ * - Owner status is verified via backend function `verify-owner`.
+ * - Fail closed: any error => not Owner.
  */
-const OWNER_EMAIL = import.meta.env.VITE_OWNER_EMAIL;
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  /** True if authenticated user's email matches OWNER_EMAIL */
+  /** True if authenticated user is verified as the Owner (server-verified) */
   isOwner: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
@@ -33,29 +36,58 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true;
     let timeoutId: ReturnType<typeof setTimeout>;
+    let applySeq = 0;
+    let lastSettledSeq = 0;
+
+    const verifyOwner = async (): Promise<boolean> => {
+      try {
+        const { data, error } = await supabase.functions.invoke("verify-owner");
+        if (error) {
+          console.error("verify-owner error:", error);
+          return false;
+        }
+        return data?.isOwner === true;
+      } catch (err) {
+        console.error("verify-owner failed:", err);
+        return false;
+      }
+    };
 
     const applySession = async (nextSession: Session | null) => {
+      const seq = ++applySeq;
       if (!mounted) return;
 
+      setLoading(true);
       setSession(nextSession);
       setUser(nextSession?.user ?? null);
 
-      // Check if user is Owner by email match (fail closed if OWNER_EMAIL not configured)
-      if (nextSession?.user?.email && OWNER_EMAIL) {
-        const userEmail = nextSession.user.email.toLowerCase();
-        const ownerEmail = OWNER_EMAIL.toLowerCase();
-        setIsOwner(userEmail === ownerEmail);
-      } else {
-        setIsOwner(false);
+      // Fail closed by default
+      let nextIsOwner = false;
+
+      // Only verify Owner when authenticated
+      if (nextSession?.user) {
+        nextIsOwner = await verifyOwner();
       }
 
-      if (mounted) setLoading(false);
+      if (!mounted || seq !== applySeq) return;
+
+      setIsOwner(nextIsOwner);
+      setLoading(false);
+      lastSettledSeq = seq;
+
+      if (nextSession?.user?.email) {
+        console.info("Owner check resolved", {
+          email: nextSession.user.email,
+          isOwner: nextIsOwner,
+        });
+      }
     };
 
     // Safety timeout - force loading to false after 5 seconds to prevent infinite loading
+    // NOTE: do NOT rely on React state in this closure (it will be stale).
     timeoutId = setTimeout(() => {
-      if (mounted && loading) {
-        console.warn('Auth loading timeout - forcing completion');
+      if (mounted && lastSettledSeq < applySeq) {
+        console.warn("Auth loading timeout - forcing completion");
         setLoading(false);
       }
     }, 5000);
