@@ -512,14 +512,6 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     }
   };
 
-  // Show confirmation dialog for approving all shown
-  const showApproveAllConfirmation = () => {
-    if (isBulkProcessing || imports.length === 0) return;
-    setConfirmDialogMode("all");
-    setConfirmDialogCount(imports.length);
-    setConfirmDialogOpen(true);
-  };
-
   // Show confirmation dialog for approving selected
   const showApproveSelectedConfirmation = () => {
     if (isBulkProcessing || selectedIds.size === 0) return;
@@ -532,9 +524,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const handleConfirmedApproval = async () => {
     setConfirmDialogOpen(false);
     
-    const itemsToApprove = confirmDialogMode === "all" 
-      ? [...imports]
-      : imports.filter(i => selectedIds.has(i.id));
+    const itemsToApprove = imports.filter(i => selectedIds.has(i.id));
     
     if (itemsToApprove.length === 0) return;
 
@@ -934,15 +924,6 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                   className="border-zinc-300 text-zinc-700"
                 >
                   {selectedIds.size === imports.length ? "Deselect All" : "Select All"}
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={showApproveAllConfirmation}
-                  disabled={isBulkProcessing || isLoading}
-                  className="bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  <Check className="h-4 w-4 mr-2" />
-                  Approve All ({imports.length})
                 </Button>
                 {selectedIds.size > 0 && (
                   <Button
