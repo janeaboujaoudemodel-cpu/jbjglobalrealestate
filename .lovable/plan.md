@@ -1,99 +1,131 @@
 
-# Homepage Services Section & Divider Alignment Fixes
+# Fix All Edge Functions to Use NOREPLY@JBJ.AE Verified Sender
 
-## Overview
-Two changes are needed on the homepage:
+## Issue Summary
 
-1. **Explore Our Services Card** - Remove the slide counter (showing "1 / 12") from the footer
-2. **Section Dividers** - Fix centering issues between Why Dubai section, Best Idea Award, and Mortgage Calculator
+Multiple edge functions are using incorrect or unverified sender email domains. This causes email delivery failures with the error: "domain is not verified."
+
+## Current Domain Usage Analysis
+
+### Functions Already Using Correct Domain (NOREPLY@JBJ.AE)
+These are correctly configured and need **no changes**:
+| Function | Sender |
+|----------|--------|
+| `submit-support-ticket` | `NOREPLY@JBJ.AE` ✅ |
+| `send-ticket-reply-email` | `NOREPLY@JBJ.AE` ✅ |
+| `resend-support-ticket-confirmation` | `NOREPLY@JBJ.AE` ✅ |
+| `send-email-otp` | `NOREPLY@JBJ.AE` ✅ |
+
+### Functions Using Incorrect Domains (MUST FIX)
+
+| Function | Current Domain | Issue |
+|----------|----------------|-------|
+| `send-inquiry-email` | `onboarding@resend.dev` | Resend test domain - not branded |
+| `send-market-report-email` | `onboarding@resend.dev` | Resend test domain - not branded |
+| `send-welcome-email` | `welcome@jbj.ae` | Not verified in Resend |
+| `broker-daily-report` | `reports@JBJ.ae` | Not verified in Resend |
+
+### Functions Using security@jbj.ae for Internal Alerts
+These send security alerts to internal staff (not customers) - should standardize to NOREPLY@JBJ.AE:
+| Function |
+|----------|
+| `ai-travel-concierge` |
+| `rental-index-analysis` |
+| `interior-design-generate` |
+| `property-measurement` |
+| `validate-discount-code` |
+| `property-evaluation` |
+| `user-registration` |
+| `send-inquiry-email` |
+| `send-market-report-email` |
+| `compare-projects` |
+| `generate-property-report` |
 
 ---
 
-## Change 1: Remove Service Counter
+## Implementation Plan
 
-### Current State
-The Explore Our Services slideshow shows a counter in the footer displaying "1 / 12", "2 / 12", etc. as you navigate through the 12 services.
+### Phase 1: Customer-Facing Email Functions (Critical)
 
-### What Will Change
-Remove the numeric counter entirely while keeping the footer bar for visual balance. The slideshow already has navigation arrows and all 12 services rotate automatically or via manual navigation.
+#### 1. `send-inquiry-email/index.ts`
+- **Line ~198**: Change `from: "JBJ Global Real Estate <onboarding@resend.dev>"` 
+- **To**: `from: "JBJ Global Real Estate <NOREPLY@JBJ.AE>"`
+- Add `replyTo: "CONTACT@JBJ.AE"` so customer replies go to contact
 
-### File to Modify
-`src/components/home/ExploreServicesCard.tsx`
+#### 2. `send-market-report-email/index.ts`
+- **Line ~178**: Change `from: "JBJ Global Real Estate <onboarding@resend.dev>"`
+- **To**: `from: "JBJ Global Real Estate <NOREPLY@JBJ.AE>"`
+- Add `replyTo: "CONTACT@JBJ.AE"`
 
-### Technical Details
-Remove lines 324-329 which contain:
-```jsx
-<div className="flex items-center justify-center py-4 md:py-5 border-t border-gold/30 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-  <span className="text-sm text-black/60 font-medium">
-    {currentIndex + 1} / {services.length}
-  </span>
-</div>
+#### 3. `send-welcome-email/index.ts`
+- **Line ~176**: Change `from: "JBJ Global Real Estate <welcome@jbj.ae>"`
+- **To**: `from: "JBJ Global Real Estate <NOREPLY@JBJ.AE>"`
+
+#### 4. `broker-daily-report/index.ts`
+- **Line ~344**: Change `from: "JBJ Reports <reports@JBJ.ae>"`
+- **To**: `from: "JBJ Reports <NOREPLY@JBJ.AE>"`
+
+---
+
+### Phase 2: Security Alert Functions (Internal)
+
+These functions send security alerts when IPs are auto-blocked. Change all to use `NOREPLY@JBJ.AE`:
+
+| Function | Line | Change From | Change To |
+|----------|------|-------------|-----------|
+| `ai-travel-concierge` | ~192 | `security@jbj.ae` | `NOREPLY@JBJ.AE` |
+| `rental-index-analysis` | ~97 | `security@jbj.ae` | `NOREPLY@JBJ.AE` |
+| `interior-design-generate` | ~257 | `security@jbj.ae` | `NOREPLY@JBJ.AE` |
+| `property-measurement` | ~257 | `security@jbj.ae` | `NOREPLY@JBJ.AE` |
+| `validate-discount-code` | ~201 | `security@jbj.ae` | `NOREPLY@JBJ.AE` |
+| `property-evaluation` | ~108 | `security@jbj.ae` | `NOREPLY@JBJ.AE` |
+| `user-registration` | ~210 | `security@jbj.ae` | `NOREPLY@JBJ.AE` |
+| `send-inquiry-email` | ~112 | `security@jbj.ae` | `NOREPLY@JBJ.AE` |
+| `send-market-report-email` | ~101 | `security@jbj.ae` | `NOREPLY@JBJ.AE` |
+| `compare-projects` | ~170 | `security@jbj.ae` | `NOREPLY@JBJ.AE` |
+| `generate-property-report` | ~99 | `security@jbj.ae` | `NOREPLY@JBJ.AE` |
+
+---
+
+## Files to Modify
+
+| File | Changes |
+|------|---------|
+| `supabase/functions/send-inquiry-email/index.ts` | Fix both customer email and security alert senders |
+| `supabase/functions/send-market-report-email/index.ts` | Fix both customer email and security alert senders |
+| `supabase/functions/send-welcome-email/index.ts` | Fix welcome email sender |
+| `supabase/functions/broker-daily-report/index.ts` | Fix report email sender |
+| `supabase/functions/ai-travel-concierge/index.ts` | Fix security alert sender |
+| `supabase/functions/rental-index-analysis/index.ts` | Fix security alert sender |
+| `supabase/functions/interior-design-generate/index.ts` | Fix security alert sender |
+| `supabase/functions/property-measurement/index.ts` | Fix security alert sender |
+| `supabase/functions/validate-discount-code/index.ts` | Fix security alert sender |
+| `supabase/functions/property-evaluation/index.ts` | Fix security alert sender |
+| `supabase/functions/user-registration/index.ts` | Fix security alert sender |
+| `supabase/functions/compare-projects/index.ts` | Fix security alert sender |
+| `supabase/functions/generate-property-report/index.ts` | Fix security alert sender |
+
+**Total: 13 files to update**
+
+---
+
+## Technical Standard
+
+All outgoing emails will follow this pattern:
+```typescript
+const VERIFIED_SENDER = "NOREPLY@JBJ.AE";
+
+// For customer-facing emails
+from: `JBJ Global Real Estate <${VERIFIED_SENDER}>`,
+replyTo: "CONTACT@JBJ.AE"  // or SUPPORT@JBJ.AE for support emails
+
+// For internal security alerts  
+from: `JBJ Security <${VERIFIED_SENDER}>`,
+to: ["CONTACT@JBJ.AE"]
 ```
 
-Replace with a simple progress bar or remove the footer entirely.
-
 ---
 
-## Change 2: Center Dividers Between Sections
+## Deployment
 
-### Current State
-The dividers appear visually off-center because:
-- The **Why Dubai Capital Section** uses `min-h-screen` with no explicit top/bottom padding
-- Surrounding sections use `py-12 md:py-16`
-- This creates uneven visual spacing above and below dividers
-
-### What Will Change
-
-**Option A (Recommended)**: Add consistent padding to the Why Dubai section edges
-- The section currently bleeds edge-to-edge which looks great
-- Add padding AFTER the section ends before the divider appears
-
-**Option B**: Adjust the SectionDivider component padding when adjacent to full-bleed sections
-
-### Files to Modify
-
-1. **`src/pages/Index.tsx`** - Wrap the WhyDubaiCapitalSection in a container that adds margin after the section, OR add an empty spacer div between the fullscreen section and divider
-
-2. Potentially adjust the divider's vertical padding based on context
-
-### Technical Approach
-
-Since WhyDubaiCapitalSection is 100vh (full screen height), the divider that comes BEFORE it and AFTER the Mortgage Calculator needs equal visual spacing.
-
-Current flow:
-```
-Mortgage Calculator (py-12/py-16)
-  ↓
-SectionDivider (py-8/py-10)  ← needs to feel centered
-  ↓
-WhyDubaiCapitalSection (100vh, no padding)
-  ↓
-SectionDivider fullWidth (py-8/py-10)  ← needs to feel centered
-  ↓
-BestIdeaAward (py-12/py-16)
-```
-
-**Solution**: For dividers adjacent to full-viewport sections (like Why Dubai), add extra padding to create visual balance. This can be done by:
-- Creating a wrapper around the divider with additional spacing
-- Or adding margin-top/margin-bottom to the full-height section
-
----
-
-## Summary of Changes
-
-| File | Change |
-|------|--------|
-| `src/components/home/ExploreServicesCard.tsx` | Remove the "X / 12" counter from footer (lines 324-329) |
-| `src/pages/Index.tsx` | Add spacing before/after WhyDubaiCapitalSection to center the adjacent dividers |
-
----
-
-## Visual Before/After
-
-**Services Card Footer:**
-- Before: Shows "3 / 12" counter
-- After: Clean footer bar without counter (or remove footer entirely for cleaner look)
-
-**Divider Spacing:**
-- Before: Dividers appear closer to one section than another due to 100vh section having no padding
-- After: Equal visual spacing above and below each divider, creating balanced rhythm throughout the page
+After updating all files, the edge functions will be automatically deployed. This ensures all emails will send successfully from the verified JBJ.AE domain.
