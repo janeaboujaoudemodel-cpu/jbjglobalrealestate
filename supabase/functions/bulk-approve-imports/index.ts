@@ -7,10 +7,40 @@ const corsHeaders = {
 };
 
 /**
- * Bulk Approve Pending Imports
- * Automatically approves all pending project imports that have valid images
- * and inserts them into the main projects table with their images.
+ * Bulk Approve Pending Imports - FULL REELLY PARITY
+ * Automatically approves all pending project imports and moves them to main projects table
+ * with ALL data including images, documents, videos, amenities, floor plans, etc.
  */
+
+interface ImageData {
+  url: string;
+  alt_text?: string;
+  display_order?: number;
+}
+
+interface DocumentData {
+  url: string;
+  name?: string;
+  type?: string;
+}
+
+interface FloorPlanData {
+  type: string;
+  url: string;
+  label: string;
+  bedrooms?: number;
+}
+
+interface UnitTypeData {
+  type: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  size_min?: number;
+  size_max?: number;
+  price_from?: number;
+  price_to?: number;
+  available?: number;
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -22,16 +52,21 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    const { limit = 100, dryRun = false, minImages = 1 } = await req.json().catch(() => ({}));
+    const { limit = 200, dryRun = false, minImages = 0, updateExisting = false } = await req.json().catch(() => ({}));
 
-    console.log(`[BulkApprove] Starting approval (limit=${limit}, dryRun=${dryRun}, minImages=${minImages})...`);
+    console.log(`[BulkApprove] Starting (limit=${limit}, dryRun=${dryRun}, minImages=${minImages}, updateExisting=${updateExisting})...`);
 
-    // Get developers list for matching (projects table uses 'developers', not 'uae_developers')
+    // Get developers list for matching
     const { data: developersList } = await supabase.from("developers").select("id, name, slug");
     const developers = developersList || [];
     console.log(`[BulkApprove] Loaded ${developers.length} developers for matching`);
 
-    // Get pending imports with valid images
+    // Get areas for matching
+    const { data: areasList } = await supabase.from("areas").select("id, name, slug");
+    const areas = areasList || [];
+    console.log(`[BulkApprove] Loaded ${areas.length} areas for matching`);
+
+    // Get pending imports
     const { data: pendingImports, error: fetchError } = await supabase
       .from("pending_project_imports")
       .select("*")
@@ -61,6 +96,7 @@ serve(async (req) => {
 
     const stats = {
       approved: 0,
+      updated: 0,
       skipped: 0,
       errors: 0,
       noImages: 0,
@@ -71,12 +107,12 @@ serve(async (req) => {
     for (const item of pendingImports) {
       try {
         // Parse images
-        const images = Array.isArray(item.images) 
+        const images: ImageData[] = Array.isArray(item.images) 
           ? item.images 
           : (typeof item.images === 'string' ? JSON.parse(item.images) : []);
 
-        // Validate images
-        if (!images || images.length < minImages) {
+        // Validate images if minimum required
+        if (minImages > 0 && (!images || images.length < minImages)) {
           console.log(`[BulkApprove] Skipping ${item.name} - insufficient images (${images?.length || 0})`);
           stats.noImages++;
           stats.skipped++;
@@ -90,9 +126,19 @@ serve(async (req) => {
           .eq("slug", item.slug)
           .maybeSingle();
 
-        if (existingProject) {
+        if (existingProject && !updateExisting) {
           console.log(`[BulkApprove] Skipping ${item.name} - already exists`);
           stats.skipped++;
+          // Still mark as approved in pending_project_imports
+          await supabase
+            .from("pending_project_imports")
+            .update({ 
+              status: "approved", 
+              matched_project_id: existingProject.id,
+              reviewed_at: new Date().toISOString(),
+              review_notes: "Already exists in projects table"
+            })
+            .eq("id", item.id);
           continue;
         }
 
@@ -102,10 +148,10 @@ serve(async (req) => {
           continue;
         }
 
-        // Match developer by name from the pending import's developer_name field
+        // Match developer by name
         let matchedDeveloperId: string | null = null;
         if (item.developer_name) {
-          const devNameLower = item.developer_name.toLowerCase();
+          const devNameLower = item.developer_name.toLowerCase().trim();
           const matchedDev = developers.find((d: { id: string; name: string; slug: string }) => 
             d.name.toLowerCase() === devNameLower || 
             d.name.toLowerCase().includes(devNameLower) ||
@@ -114,75 +160,169 @@ serve(async (req) => {
           );
           if (matchedDev) {
             matchedDeveloperId = matchedDev.id;
-            console.log(`[BulkApprove] Matched developer: ${item.developer_name} -> ${matchedDev.name}`);
-          } else {
-            console.log(`[BulkApprove] No developer match for: ${item.developer_name}`);
           }
         }
 
-        // Insert into projects table - copy ALL extracted fields
-        // Note: amenities_list is JSONB in pending_project_imports but text[] in projects
-        // Convert JSONB array to text array for proper insertion
-        const amenitiesArray = Array.isArray(item.amenities_list) 
-          ? item.amenities_list.map((a: unknown) => String(a))
-          : (Array.isArray(item.amenities) ? item.amenities : null);
+        // Match area by name - only use if we can verify it exists
+        let matchedAreaId: string | null = null;
+        if (item.area_name) {
+          const areaNameLower = item.area_name.toLowerCase().trim();
+          const matchedArea = areas.find((a: { id: string; name: string; slug: string }) => 
+            a.name.toLowerCase() === areaNameLower ||
+            a.slug === areaNameLower.replace(/\s+/g, '-')
+          );
+          if (matchedArea) {
+            matchedAreaId = matchedArea.id;
+          }
+        }
+        // Verify the area_id from item exists in our areas list before using it
+        if (!matchedAreaId && item.area_id) {
+          const areaExists = areas.find((a: { id: string }) => a.id === item.area_id);
+          if (areaExists) {
+            matchedAreaId = item.area_id;
+          }
+        }
 
-        const projectData = {
+        // Parse all JSONB arrays with proper typing
+        const documents: DocumentData[] = Array.isArray(item.documents) ? item.documents : [];
+        const floorPlanTypes: FloorPlanData[] = Array.isArray(item.floor_plan_types) ? item.floor_plan_types : [];
+        const unitTypes: UnitTypeData[] = Array.isArray(item.unit_types) ? item.unit_types : [];
+        const amenitiesList: string[] = Array.isArray(item.amenities) 
+          ? item.amenities.map((a: unknown) => String(a))
+          : (Array.isArray(item.amenities_list) ? item.amenities_list.map((a: unknown) => String(a)) : []);
+        const highlights: string[] = Array.isArray(item.highlights) ? item.highlights : [];
+        const videoUrls: string[] = Array.isArray(item.video_urls) ? item.video_urls : [];
+
+        // Determine cover image (first image URL)
+        const coverImageUrl = images[0]?.url || null;
+
+        // Extract reelly_id from source_url
+        let reellyId: number | null = null;
+        const reellyMatch = item.source_url?.match(/reelly_(\d+)/);
+        if (reellyMatch) {
+          reellyId = parseInt(reellyMatch[1], 10);
+        }
+
+        // Build complete project data with ALL fields
+        const projectData: Record<string, unknown> = {
           name: item.name,
           slug: item.slug,
-          developer_id: matchedDeveloperId, // Use matched ID from developers table
+          developer_id: matchedDeveloperId,
+          developer_name: item.developer_name || null,
           location: item.location || null,
           emirate: item.emirate || "Dubai",
-          description: item.description || null,
+          description: item.description || item.short_description || null,
+          short_description: item.short_description || null,
           price_from: item.price_from || null,
+          price_to: item.price_to || null,
           bedrooms_min: item.bedrooms_min || null,
           bedrooms_max: item.bedrooms_max || null,
           size_min: item.size_min || null,
           size_max: item.size_max || null,
+          floors: item.floors || null,
+          building_count: item.building_count || null,
+          total_units: item.total_units || null,
           handover_date: item.handover_date || null,
+          expected_completion: item.handover_display || item.handover_date || null,
           payment_plan: item.payment_plan || null,
+          payment_breakdown: item.payment_breakdown || null,
           source_url: item.source_url || null,
           property_type_label: item.property_type_label || null,
-          status_label: item.status_label || null,
+          status_label: item.status_label || item.sale_status || null,
+          construction_status: item.construction_status || null,
+          sale_status: item.sale_status || null,
+          construction_progress: item.construction_progress || null,
+          construction_start_date: item.construction_start_date || null,
           // Amenities as text[] array
-          amenities: amenitiesArray,
+          amenities: amenitiesList.length > 0 ? amenitiesList : null,
+          amenities_list: amenitiesList.length > 0 ? amenitiesList : null,
+        // Location fields
+        latitude: item.latitude || null,
+        longitude: item.longitude || null,
+        // Only set area_id if we found a valid match (avoid FK constraint errors)
+        area_id: matchedAreaId || null,
+          area_id: matchedAreaId,
+          area_name: item.area_name || null,
           // USP fields
           usp_headline: item.usp_headline || null,
           usp_bullets: item.usp_bullets || null,
           usp_image_url: item.usp_image_url || null,
-          // Location fields
+          // Location content fields
           location_headline: item.location_headline || null,
           location_description: item.location_description || null,
           location_distances: item.location_distances || null,
           location_image_url: item.location_image_url || null,
-          // Floor plan types
-          floor_plan_types: item.floor_plan_types || null,
+          // Floor plans
+          floor_plan_types: floorPlanTypes.length > 0 ? floorPlanTypes : null,
           // FAQs
           faqs: item.faqs || null,
-          // Payment breakdown
-          payment_breakdown: item.payment_breakdown || null,
+          // Unit types
+          unit_types: unitTypes.length > 0 ? unitTypes : null,
+          bedroom_types: item.bedroom_types || null,
+          // Highlights
+          highlights: highlights.length > 0 ? highlights : null,
+          // Video
+          video_url: item.video_url || (videoUrls.length > 0 ? videoUrls[0] : null),
+          // Cover image
+          cover_image_url: coverImageUrl,
+          // Reelly fields
+          reelly_id: reellyId,
+          source: 'reelly',
+          import_source: 'reelly',
+          source_updated_at: item.source_updated_at || null,
+          // Flags
           is_offplan: true,
+          is_developer_direct: true,
           is_featured: false,
           is_premium: false,
+          is_published: true,
+          is_sold_out: item.sale_status?.toLowerCase().includes('sold') || item.status_label?.toLowerCase().includes('sold') || false,
         };
 
-        const { data: newProject, error: insertError } = await supabase
-          .from("projects")
-          .insert(projectData)
-          .select("id")
-          .single();
+        let projectId: string;
 
-        if (insertError) {
-          console.error(`[BulkApprove] Failed to insert project ${item.name}:`, insertError);
-          errors.push({ name: item.name, error: insertError.message });
-          stats.errors++;
-          continue;
+        if (existingProject && updateExisting) {
+          // Update existing project
+          const { error: updateError } = await supabase
+            .from("projects")
+            .update({ ...projectData, updated_at: new Date().toISOString() })
+            .eq("id", existingProject.id);
+
+          if (updateError) {
+            console.error(`[BulkApprove] Failed to update project ${item.name}:`, updateError);
+            errors.push({ name: item.name, error: updateError.message });
+            stats.errors++;
+            continue;
+          }
+          projectId = existingProject.id;
+          stats.updated++;
+        } else {
+          // Insert new project
+          const { data: newProject, error: insertError } = await supabase
+            .from("projects")
+            .insert(projectData)
+            .select("id")
+            .single();
+
+          if (insertError) {
+            console.error(`[BulkApprove] Failed to insert project ${item.name}:`, insertError);
+            errors.push({ name: item.name, error: insertError.message });
+            stats.errors++;
+            continue;
+          }
+          projectId = newProject.id;
+          stats.approved++;
         }
 
         // Insert images
-        if (newProject && images.length > 0) {
-          const imageInserts = images.map((img: { url: string; alt_text?: string; display_order?: number }, idx: number) => ({
-            project_id: newProject.id,
+        if (images.length > 0) {
+          // First delete existing images if updating
+          if (existingProject && updateExisting) {
+            await supabase.from("project_images").delete().eq("project_id", projectId);
+          }
+
+          const imageInserts = images.map((img: ImageData, idx: number) => ({
+            project_id: projectId,
             image_url: img.url,
             alt_text: img.alt_text || `${item.name} - Image ${idx + 1}`,
             display_order: img.display_order ?? idx,
@@ -197,18 +337,42 @@ serve(async (req) => {
           }
         }
 
-        // Mark as approved
+        // Insert documents (brochures, floor plans, etc.)
+        if (documents.length > 0) {
+          // First delete existing documents if updating
+          if (existingProject && updateExisting) {
+            await supabase.from("project_documents").delete().eq("project_id", projectId);
+          }
+
+          const docInserts = documents.map((doc: DocumentData, idx: number) => ({
+            project_id: projectId,
+            file_url: doc.url,
+            file_name: doc.name || `Document ${idx + 1}`,
+            document_type: doc.type || 'brochure',
+            display_order: idx,
+          }));
+
+          const { error: docError } = await supabase
+            .from("project_documents")
+            .insert(docInserts);
+
+          if (docError) {
+            console.warn(`[BulkApprove] Document insert warning for ${item.name}:`, docError.message);
+          }
+        }
+
+        // Mark as approved in pending_project_imports
         await supabase
           .from("pending_project_imports")
           .update({ 
             status: "approved", 
+            matched_project_id: projectId,
             reviewed_at: new Date().toISOString(),
-            review_notes: "Auto-approved via bulk-approve-imports"
+            review_notes: "Auto-approved via bulk-approve-imports v2"
           })
           .eq("id", item.id);
 
-        console.log(`[BulkApprove] ✓ Approved: ${item.name} (${images.length} images)`);
-        stats.approved++;
+        console.log(`[BulkApprove] ✓ ${existingProject ? 'Updated' : 'Approved'}: ${item.name} (${images.length} images, ${documents.length} docs)`);
 
       } catch (err) {
         console.error(`[BulkApprove] Error processing ${item.name}:`, err);
@@ -221,7 +385,7 @@ serve(async (req) => {
       success: true,
       dryRun,
       stats,
-      errors: errors.length > 0 ? errors : undefined,
+      errors: errors.length > 0 ? errors.slice(0, 20) : undefined,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
