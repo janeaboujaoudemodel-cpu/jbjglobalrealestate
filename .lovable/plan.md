@@ -1,99 +1,83 @@
 
-# Fix Owner Access & Podcast Visibility Issues
+# Fix Support Ticket Email Confirmation Issue
 
-## Root Cause Analysis
+## Problem Summary
 
-I found **TWO critical configuration issues** preventing your Owner access:
+Your support ticket (JBJ-20260208-4808) was created successfully, but the confirmation email failed to send. The error message shown comes directly from Resend's API:
 
-### Issue 1: Missing VITE_OWNER_EMAIL in .env File
+> "The JBJ.AE domain is not verified. Please, add and verify your domain on https://resend.com/domains"
 
-The `.env` file currently contains ONLY:
-```
-VITE_SUPABASE_PROJECT_ID="mdafrewypkkrildjgtey"
-VITE_SUPABASE_PUBLISHABLE_KEY="..."
-VITE_SUPABASE_URL="https://mdafrewypkkrildjgtey.supabase.co"
-```
+## Database Evidence
 
-**`VITE_OWNER_EMAIL` is NOT present!**
+| Ticket Number | Time (UTC) | Email Status | Error |
+|--------------|------------|--------------|-------|
+| JBJ-20260208-4808 | 18:17 | failed | Domain not verified |
+| JBJ-20260208-4964 | 16:59 | failed | Domain not verified |
+| JBJ-20260208-2993 | 15:53 | sent | None |
+| JBJ-20260208-1116 | 15:22 | sent | None |
+| JBJ-20260208-8123 | 14:58 | sent | None |
 
-The AuthContext checks:
+**Key Finding**: The domain WAS working earlier today (emails sent at 14:58, 15:22, 15:53) but stopped working around 16:59 UTC.
+
+## Root Cause
+
+This is NOT a code issue. The error is returned by Resend's servers, meaning:
+
+1. **DNS Propagation Issue**: Domain DNS records may have been modified or are experiencing propagation delays
+2. **Resend Dashboard vs API Mismatch**: The dashboard may show "verified" but the API endpoints may be using cached/stale verification status
+3. **Domain Verification Expired**: Resend may have re-checked DNS records and found a discrepancy
+
+## Required Actions (User Side)
+
+### Step 1: Verify DNS Records in Resend Dashboard
+1. Go to https://resend.com/domains
+2. Click on JBJ.AE domain
+3. Look for any warning icons or "Re-verify" buttons
+4. Check that ALL required DNS records are present:
+   - SPF record (TXT)
+   - DKIM records (CNAME or TXT)
+   - DMARC record (optional but recommended)
+
+### Step 2: Use Resend's DNS Checker
+1. Go to https://dns.email (Resend's official DNS checker)
+2. Enter: JBJ.AE
+3. Verify all records show green checkmarks
+4. If any show red/yellow, the corresponding records need to be fixed at your domain registrar
+
+### Step 3: Re-verify Domain (if needed)
+1. In Resend dashboard, click "Re-verify" on the JBJ.AE domain
+2. Wait 5-10 minutes for DNS propagation
+3. Try submitting a test support ticket
+
+## Code Changes (After Domain is Fixed)
+
+Once the domain verification issue is resolved, I will add better error handling:
+
+### File: src/components/SupportTicketBox.tsx
+- Improve error message when domain verification fails
+- Add a "Retry Email" button so users can request the confirmation email again without resubmitting the ticket
+
+### File: supabase/functions/submit-support-ticket/index.ts
+- Add specific error detection for domain verification failures
+- Log more detailed diagnostics for email failures
+
+## Technical Details
+
+The edge function `submit-support-ticket/index.ts` uses Resend SDK:
+
 ```typescript
-const OWNER_EMAIL = import.meta.env.VITE_OWNER_EMAIL;
-// ... later ...
-if (nextSession?.user?.email && OWNER_EMAIL) {
-  setIsOwner(userEmail === ownerEmail);
-} else {
-  setIsOwner(false);  // ← This is happening because OWNER_EMAIL is undefined
-}
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+// ...
+resend.emails.send({
+  from: `JBJ Support <NOREPLY@JBJ.AE>`,
+  to: [email],
+  subject: `Ticket Received: ${ticket.ticket_number}`,
+  html: customerEmailHtml,
+})
 ```
 
-Without `VITE_OWNER_EMAIL` in the .env file, the frontend cannot recognize you as the Owner, so `isOwner` is always `false`.
+Resend validates that `NOREPLY@JBJ.AE` belongs to a verified domain before sending. If the domain verification is invalid or expired at Resend's end, the API returns the error you saw.
 
-### Issue 2: Podcast Visibility Set to FALSE
+## Immediate Workaround
 
-The database shows:
-```
-podcast_visibility: { enabled: false }
-```
-
-The `PodcastVisibilityGate` component should still show the podcast for the Owner:
-```typescript
-if (isOwner) {
-  return <>{children}</>;  // Owner always sees podcast
-}
-```
-
-But because of Issue 1, `isOwner` is `false`, so you're treated as a visitor, and the podcast is hidden since `enabled: false`.
-
----
-
-## Solution
-
-### Step 1: Add VITE_OWNER_EMAIL to .env File
-
-Add your email to the `.env` file:
-
-```
-VITE_SUPABASE_PROJECT_ID="mdafrewypkkrildjgtey"
-VITE_SUPABASE_PUBLISHABLE_KEY="..."
-VITE_SUPABASE_URL="https://mdafrewypkkrildjgtey.supabase.co"
-VITE_OWNER_EMAIL="janeaboujaoudenails@gmail.com"
-```
-
-**Note**: Vite requires frontend environment variables to start with `VITE_` to be exposed to the browser. The secret `VITE_OWNER_EMAIL` exists in Lovable Cloud secrets (for edge functions), but it also needs to be in `.env` for the frontend React code.
-
-### Step 2: Verify Owner Recognition
-
-After adding to .env:
-1. The AuthContext will read `VITE_OWNER_EMAIL = "janeaboujaoudenails@gmail.com"`
-2. When you log in with `janeaboujaoudenails@gmail.com`, the comparison will match
-3. `isOwner` will be set to `true`
-4. `PodcastVisibilityGate` will show the podcast section for you
-5. All Owner-guarded routes will work
-
----
-
-## Files to Modify
-
-| File | Change |
-|------|--------|
-| `.env` | Add `VITE_OWNER_EMAIL="janeaboujaoudenails@gmail.com"` |
-
----
-
-## After Implementation
-
-Once the .env is updated:
-- Owner access will work correctly
-- Podcast section will show on homepage (for you only, since `enabled: false` in database)
-- All /owner/* routes will be accessible
-- The "You don't have owner access" error will be resolved
-
----
-
-## Technical Notes
-
-- The `.env` file is auto-managed by Lovable Cloud for Supabase variables
-- Custom frontend variables like `VITE_OWNER_EMAIL` need to be manually added
-- Backend edge functions can access secrets via `Deno.env.get("OWNER_EMAIL")`
-- Frontend React code can only access variables prefixed with `VITE_` from `.env`
+While you fix the domain issue, you can manually resend confirmations using the "Resend Confirmation" feature in the Support Tickets Hub (if available), or I can create that feature if it doesn't exist.
