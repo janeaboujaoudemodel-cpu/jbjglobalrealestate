@@ -1,100 +1,158 @@
 
-## What I found (root cause + why it feels “not clicking”)
 
-### 1) “Service with Issue” + “Priority Level” dropdowns in **Create Support Ticket** are effectively broken (hidden)
-In `src/components/SupportTicketBox.tsx`, both dropdown menus override the shared Select menu styling:
+## Homepage Section Divider Alignment Fix
 
-- They pass `SelectContent className="... z-[200]"`
+### Problem Summary
 
-Your app’s dialog overlay/content uses a very high z-index (`z-[10050]` in `src/components/ui/dialog.tsx`), and the shared Select component is designed to appear above everything (`z-[10100]` in `src/components/ui/select.tsx`).
+The homepage has inconsistent divider placement and alignment issues:
 
-Because the SupportTicketBox overrides that with `z-[200]`, the dropdown content (the list of options) is rendered behind the modal overlay/content, so you don’t see it and it feels like the field is “not clickable”.
+1. **Unnecessary divider between "Trusted By Thousands" and Developer Partners** - There's a `<SectionDivider />` immediately after the Developer Partners Marquee (line 191) that creates visual clutter before the Trust Bar section.
 
-This matches what I observed: I can click the combobox triggers, but no visible menu appears.
+2. **Some sections have dividers, some don't** - Inconsistent placement throughout the page.
 
-### 2) There are multiple “Support Ticket” implementations (inconsistent + harder to QA)
-You currently have at least two different implementations:
-- `src/components/SupportTicketBox.tsx` (used on homepage, /contact, /services/customer-happiness-center)
-- `SupportTicketForm` inside `src/pages/CustomerHappiness.tsx` (owner-only page)
-
-They don’t use the same field names / priority values, and this makes “audit testing” unreliable because one may work while the other breaks.
+3. **"Why Dubai" and "Mortgage Calculator" dividers not centered** - The `WhyDubaiCapitalSection` is a full-screen (100vh) edge-to-edge section that breaks out of the container, causing the dividers above/below it to appear misaligned relative to the centered content.
 
 ---
 
-## Immediate fixes to implement (high priority)
+### Current Divider Structure (Index.tsx)
 
-### A) Fix dropdown visibility/clickability in `SupportTicketBox` (the user-facing issue)
-1. Update **both** `SelectContent` usages in `src/components/SupportTicketBox.tsx`:
-   - Remove the `z-[200]` override entirely (preferred), or set it to something safely above the dialog (e.g. `z-[10150]`).
-   - Keep a solid background (not transparent) and proper border/shadow.
-   - Result: the menu renders on top of the dialog as intended and selections become usable.
-
-2. Small UX hardening:
-   - Ensure the trigger has `cursor-pointer` (optional polish).
-   - Ensure menu items remain clearly hoverable (your shared `SelectItem` already handles this well).
-
-**Expected outcome:** Clicking “Service with Issue” opens the category list; clicking “Priority Level” opens Low/Normal/High/Critical list; selecting updates the form state.
-
----
-
-### B) Standardize ticket payload + priority values across the app (prevents “works here, fails there”)
-1. Align all ticket forms to the backend function contract (`submit-support-ticket` expects `serviceCategory`, and priority values like `low|normal|high|critical`).
-2. `src/pages/CustomerHappiness.tsx` currently uses:
-   - `category` instead of `serviceCategory`
-   - default priority `"medium"` (not in your main priority set)
-3. Choose one approach:
-   - Preferred: reuse the same `SupportTicketBox` component in `CustomerHappiness.tsx`, or extract a shared `<SupportTicketForm/>` component used everywhere.
-   - Alternative: update `SupportTicketForm` inside `CustomerHappiness.tsx` to match the same fields/values and the same Select styling.
-
-**Expected outcome:** every “Create Support Ticket” UI in the product behaves identically.
+| Line | Position | Status |
+|------|----------|--------|
+| 191 | After Developer Partners → Before Trust Bar | **REMOVE** - Not needed between these closely related sections |
+| 209 | After Featured Listings → Before "Find Your Starting Point" | Keep |
+| 507 | After Explore Services → Before Toolkit Showcase | Keep |
+| 513 | After Toolkit Showcase → Before AI Home Finder | Keep |
+| 567 | After AI Home Finder → Before AI Comparison | Keep |
+| 579 | After AI Comparison → Before Market Report | Keep |
+| 604 | After Market Report → Before Mortgage Calculator | Keep |
+| 664 | After Mortgage Calculator → Before Why Dubai | Keep |
+| 672, 676 | Around Podcast (conditional) | Keep |
+| 680 | Before Best Idea Award | **ISSUE**: Potential double divider when podcast is hidden |
+| 686 | After Best Idea Award | Keep |
+| 692 | After Why Choose Us | Keep |
+| 698 | After Areas We Cover | Keep |
+| 706 | After Testimonials | Keep |
+| 712 | After Stats Counter | Keep |
 
 ---
 
-## Deep audit test (so we stop repeating the same issues)
+### Solution
 
-### Audit scope (based on what you’ve repeatedly flagged)
-1. **Support Ticket UX (primary)**
-   - Homepage → Create Support Ticket modal: both dropdowns open and selections save.
-   - `/contact` → Create Support Ticket modal: same.
-   - `/services/customer-happiness-center` → Create Support Ticket modal: same.
-   - Owner `/customer-happiness` page: ticket creation works and uses the same schema/priority options.
+#### 1. Remove the Divider Between Developer Partners and Trust Bar
 
-2. **Ticket submission flow**
-   - Fill minimum required fields.
-   - Submit.
-   - Confirm success UI shows ticket number.
-   - Confirm network call returns success (no 400/500).
-   - Optional: confirm a record exists in the backend `support_tickets` table (internal verification).
+**File**: `src/pages/Index.tsx`
+**Line 191**: Remove `<SectionDivider />`
 
-3. **Regression checks (the other items you raised earlier)**
-   - Home Hero search/filter bar: verify it matches your requested placement/behavior on desktop + mobile.
-   - Homepage “JBJ Royal Tools Hub” card alignment: verify CTA buttons are aligned consistently.
-   - Header duplication: verify only one header renders and the scroll behavior is correct.
-   - Toolkit Hub page styling: verify it matches the homepage’s JBJ Royal Tools Hub style tokens.
+The Developer Partners Marquee and Trust Bar are visually connected sections (both with champagne backgrounds). The divider breaks the flow.
 
-### How I’ll report the audit
-- A checklist with Pass/Fail per page + screenshots if needed
-- If any step fails, it becomes an immediate fix item before moving on
+```tsx
+// BEFORE (lines 186-194):
+{/* DEVELOPER PARTNERS MARQUEE */}
+<div id="developer-partners">
+  <DeveloperPartnersMarquee />
+</div>
 
----
+{/* DIVIDER - Separates Developer Partners from Trust Bar */}
+<SectionDivider />
 
-## Files that will be modified (implementation)
-1. `src/components/SupportTicketBox.tsx`
-   - Remove/raise the `z-[200]` override on both `SelectContent`s
-   - Ensure dropdown background + border + shadow are consistent and non-transparent
+{/* TRUST BAR */}
+<div id="trust-bar" ...>
 
-2. `src/pages/CustomerHappiness.tsx`
-   - Standardize to the same support ticket schema/values (either reuse SupportTicketBox or align the form)
+// AFTER:
+{/* DEVELOPER PARTNERS MARQUEE */}
+<div id="developer-partners">
+  <DeveloperPartnersMarquee />
+</div>
 
-(If during audit we find the homepage hero/search bar still not matching your exact instructions, we’ll include:)
-3. `src/components/home/HeroSearchBar.tsx` (only if audit fails)
-4. Any toolkit homepage section file(s) only if audit fails
+{/* TRUST BAR (4 Cards) - Flows directly from Developer Partners */}
+<div id="trust-bar" ...>
+```
 
 ---
 
-## Success criteria (what “fixed” means)
-- “Service with Issue” and “Priority Level” always open their menus and allow selection on every page where support ticket exists.
-- “Normal” priority is selectable and persisted into the outgoing request.
-- Ticket submission succeeds and returns a ticket number (no silent failures).
-- Audit checklist shows all target flows as PASS (not “looks fixed” — actually verified).
+#### 2. Fix Double Divider When Podcast is Hidden
+
+**Lines 672-680**: When the podcast is hidden, `<PodcastVisibilityGate>` renders nothing, but there's still a divider at line 680.
+
+Current structure:
+```tsx
+<PodcastVisibilityGate>
+  <SectionDivider />    {/* Line 672 - Inside gate */}
+  <JBJPodcastSection />
+  <SectionDivider />    {/* Line 676 - Inside gate */}
+</PodcastVisibilityGate>
+
+{/* DIVIDER - Before Best Idea Award */}
+<SectionDivider />       {/* Line 680 - OUTSIDE gate = ALWAYS renders */}
+```
+
+**Fix**: Move the divider inside the gate OR make line 680 conditional.
+
+```tsx
+// AFTER:
+<PodcastVisibilityGate>
+  <SectionDivider />
+  <JBJPodcastSection />
+</PodcastVisibilityGate>
+
+{/* DIVIDER - Before Best Idea Award (always needed) */}
+<SectionDivider />
+```
+
+---
+
+#### 3. Ensure "Why Dubai" Divider is Centered
+
+The `WhyDubaiCapitalSection` is a full-height (`h-screen`) edge-to-edge section. The divider component uses `container mx-auto px-4` which should already center it, but let's verify the `SectionDivider` component works correctly:
+
+**Current `SectionDivider` (line 14-22)**:
+```tsx
+<section className="bg-black py-8 md:py-10">
+  <div className="container mx-auto px-4">
+    <div className="flex items-center justify-center gap-6">
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+      <Sparkles className="w-4 h-4 text-gold/50" />
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+    </div>
+  </div>
+</section>
+```
+
+This uses `flex-1` for both lines which should expand equally. The issue is that **the container width may differ from section to section** if sections use different container widths.
+
+**Verification needed**: Check if `jj-layer-2` and other section containers use the same max-width as the divider's `container`.
+
+---
+
+### Files to Modify
+
+| File | Changes |
+|------|---------|
+| `src/pages/Index.tsx` | 1. Remove divider at line 191 (after Developer Partners)<br/>2. Consolidate podcast dividers (lines 672-680) |
+
+---
+
+### Visual Result
+
+**Before**:
+```
+[Developer Partners Marquee]
+─────── ✦ ─────── (DIVIDER - REMOVE THIS)
+[Trusted By Thousands - Trust Bar]
+```
+
+**After**:
+```
+[Developer Partners Marquee]
+[Trusted By Thousands - Trust Bar]
+(flows naturally together)
+```
+
+---
+
+### Implementation Steps
+
+1. **Remove line 191**: Delete `<SectionDivider />` between Developer Partners and Trust Bar
+2. **Clean up podcast dividers**: Remove the extra `<SectionDivider />` inside `PodcastVisibilityGate` at line 676 (keep only one divider after podcast, which is line 680)
+3. **Verify divider centering**: The `SectionDivider` component is already properly centered with `container mx-auto` - the visual misalignment may be a perception issue due to the full-bleed video sections
 
