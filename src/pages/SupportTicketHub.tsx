@@ -70,9 +70,7 @@ const SupportTicketHub = () => {
             <div className="flex items-center gap-4">
               <Button
                 onClick={() => navigate(-1)}
-                variant="outline"
-                size="sm"
-                className="border-gold/50 bg-transparent text-gold hover:bg-gold/10 hover:text-gold"
+                className="bg-gold/20 border border-gold/50 text-gold hover:bg-gold/30"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back
