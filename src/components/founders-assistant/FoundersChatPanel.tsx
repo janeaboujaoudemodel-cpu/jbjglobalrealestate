@@ -3,8 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import DOMPurify from 'dompurify';
 import { 
   Send, 
-  Mic, 
-  MicOff,
   Sparkles,
   User,
   Paperclip,
@@ -37,6 +35,7 @@ import { allTeamMembers, TeamMember } from '@/config/team-members';
 import amandaPortrait from "@/assets/team/amanda-clarke-executive-assistant.png";
 import { executeCommand, parseCommand } from '@/utils/slash-command-executor';
 import { useFileUpload, formatFileSize, UploadedFile } from '@/hooks/useFileUpload';
+import { VoiceInputButton } from '@/components/ui/VoiceInputButton';
 
 interface Message {
   id: string;
@@ -78,7 +77,6 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isListening, setIsListening] = useState(false);
   const [showMentions, setShowMentions] = useState(false);
   const [mentionSearch, setMentionSearch] = useState('');
   const [showCommands, setShowCommands] = useState(false);
@@ -338,14 +336,10 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
     }
   };
 
-  const toggleVoice = () => {
-    setIsListening(!isListening);
-    if (!isListening) {
-      toast.info('Voice input activated. Speak now...');
-    } else {
-      toast.info('Voice input deactivated');
-    }
-  };
+  // Handle voice transcript from VoiceInputButton
+  const handleVoiceTranscript = useCallback((text: string) => {
+    setInput(prev => prev ? `${prev} ${text}` : text);
+  }, []);
 
   const handleFileUpload = () => {
     fileInputRef.current?.click();
@@ -643,17 +637,13 @@ Just type naturally or use commands like \`/schedule\`, \`/email\`, or mention t
       {/* Input - Premium Champagne */}
       <div className="p-4 border-t-2 border-gold/30 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         <div className="flex items-center gap-2">
-          <button
-            onClick={toggleVoice}
-            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-              isListening 
-                ? 'bg-red-500 text-white animate-pulse' 
-                : 'bg-white/80 text-gold hover:bg-white border border-gold/30'
-            }`}
-            title={isListening ? 'Stop listening' : 'Voice input'}
-          >
-            {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-          </button>
+          <VoiceInputButton
+            onTranscript={handleVoiceTranscript}
+            disabled={isLoading}
+            variant="ghost"
+            size="icon"
+            className="w-10 h-10 rounded-full bg-white/80 text-gold hover:bg-white border border-gold/30"
+          />
           <button 
             onClick={handleFileUpload}
             disabled={isUploadingFiles}

@@ -10,8 +10,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 import {
   Send,
-  Mic,
-  MicOff,
   Loader2,
   Upload,
   Link as LinkIcon,
@@ -22,6 +20,7 @@ import {
   Trash2,
   Copy,
 } from "lucide-react";
+import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 
 interface Message {
   id: string;
@@ -83,14 +82,9 @@ What would you like me to do?`,
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  const [isProcessingVoice, setIsProcessingVoice] = useState(false);
   const [bulkUploadUrl, setBulkUploadUrl] = useState("");
   const [showBulkUpload, setShowBulkUpload] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
-  const streamRef = useRef<MediaStream | null>(null);
 
   // Load existing chat session on mount
   useEffect(() => {
@@ -437,90 +431,11 @@ Would you like to try a different approach?`,
     }
   };
 
-  const startRecording = useCallback(async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-        } 
-      });
-      
-      streamRef.current = stream;
-      
-      const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
-      const mediaRecorder = new MediaRecorder(stream, { mimeType });
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
-
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = async () => {
-        setIsProcessingVoice(true);
-        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
-        
-        // Convert to base64
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          const base64Audio = (reader.result as string).split(',')[1];
-          
-          try {
-            // Call voice-to-text edge function with language header
-            const { data, error } = await supabase.functions.invoke('voice-to-text', {
-              body: { audio: base64Audio, language: language },
-            });
-            
-            if (error) throw error;
-            
-            if (data?.text) {
-              setInput(data.text);
-              toast.success("Voice transcribed! Review and send.");
-            } else {
-              toast.error(data?.error || "No speech detected. Please try again.");
-            }
-          } catch (err) {
-            console.error("Transcription error:", err);
-            toast.error("Failed to transcribe audio. Please type your message.");
-          } finally {
-            setIsProcessingVoice(false);
-          }
-        };
-        
-        reader.readAsDataURL(audioBlob);
-        
-        // Stop all tracks
-        stream.getTracks().forEach(track => track.stop());
-        streamRef.current = null;
-      };
-
-      mediaRecorder.start();
-      setIsRecording(true);
-      toast.info("Recording... Click again to stop", { duration: 2000 });
-    } catch (error) {
-      console.error("Failed to start recording:", error);
-      toast.error("Could not access microphone. Please check permissions.");
-    }
-  }, [language]);
-
-  const stopRecording = useCallback(() => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
-  }, [isRecording]);
-
-  const toggleRecording = () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
-  };
+  // Handle voice transcript from VoiceInputButton
+  const handleVoiceTranscript = useCallback((text: string) => {
+    setInput(text);
+    toast.success("Voice transcribed! Review and send.");
+  }, []);
 
   return (
     <div className="flex flex-col h-full bg-white overflow-hidden">
@@ -685,35 +600,21 @@ Would you like to try a different approach?`,
           >
             <LinkIcon className="w-5 h-5" />
           </Button>
-          <Button
+          <VoiceInputButton
+            onTranscript={handleVoiceTranscript}
+            disabled={isLoading}
+            language={language}
             variant="ghost"
-            size="sm"
-            onClick={toggleRecording}
-            disabled={isProcessingVoice}
-            className={`h-10 w-10 p-0 transition-all ${
-              isRecording 
-                ? "text-red-500 bg-red-50 animate-pulse" 
-                : isProcessingVoice
-                ? "text-gold bg-gold/10"
-                : "text-zinc-600 hover:text-gold hover:bg-gold/10"
-            }`}
-            title={isRecording ? t('listingAdminChat.stopRecording') || "Stop Recording" : isProcessingVoice ? t('listingAdminChat.processing') || "Processing..." : t('listingAdminChat.voiceMessage') || "Voice Message"}
-          >
-            {isProcessingVoice ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : isRecording ? (
-              <MicOff className="w-5 h-5" />
-            ) : (
-              <Mic className="w-5 h-5" />
-            )}
-          </Button>
+            size="icon"
+            className="h-10 w-10 text-zinc-600 hover:text-gold hover:bg-gold/10"
+          />
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
             placeholder={t('listingAdminChat.askAnything') || "Ask Sarah anything about listings..."}
             className="flex-1 bg-zinc-50 border-zinc-300 text-black"
-            disabled={isLoading || isRecording}
+            disabled={isLoading}
           />
           <Button
             onClick={() => handleSendMessage()}
@@ -727,17 +628,9 @@ Would you like to try a different approach?`,
             )}
           </Button>
         </div>
-        {isRecording && (
-          <div className="flex items-center justify-center gap-2 mt-2 text-sm text-red-500">
-            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-            <span>{t('listingAdminChat.recording') || 'Recording... Click mic to stop'}</span>
-          </div>
-        )}
-        {!isRecording && (
-          <div className="flex items-center justify-center gap-1 mt-2 text-[10px] text-zinc-400">
-            <span>{t('listingAdminChat.poweredByAI') || 'Powered by AI - Sarah can create listings, process bulk uploads, and answer questions'}</span>
-          </div>
-        )}
+        <div className="flex items-center justify-center gap-1 mt-2 text-[10px] text-zinc-400">
+          <span>{t('listingAdminChat.poweredByAI') || 'Powered by AI - Sarah can create listings, process bulk uploads, and answer questions'}</span>
+        </div>
       </div>
     </div>
   );

@@ -4,8 +4,6 @@ import {
   MessageCircle, 
   X, 
   Send, 
-  Mic, 
-  MicOff,
   ChevronDown,
   Sparkles,
   User,
@@ -23,6 +21,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { VoiceInputButton } from '@/components/ui/VoiceInputButton';
 
 interface Message {
   id: string;
@@ -45,7 +44,6 @@ const ExecutiveChatPanel: React.FC<ExecutiveChatPanelProps> = ({ isOpen, onClose
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [isListening, setIsListening] = useState(false);
   const [sessionId] = useState(() => crypto.randomUUID());
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -207,14 +205,9 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
     }
   };
 
-  const toggleVoice = () => {
-    setIsListening(!isListening);
-    if (!isListening) {
-      toast.info('Voice input activated. Speak now...');
-      // Voice recognition would be implemented here
-    } else {
-      toast.info('Voice input deactivated');
-    }
+  // Handle voice transcript from VoiceInputButton
+  const handleVoiceTranscript = (text: string) => {
+    setInput(prev => prev ? `${prev} ${text}` : text);
   };
 
   if (!isOpen) return null;
@@ -324,16 +317,13 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
         {/* Input */}
         <div className="p-4 border-t border-gold/20 bg-[#0E0E0E]">
           <div className="flex items-center gap-2">
-            <button
-              onClick={toggleVoice}
-              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-                isListening 
-                  ? 'bg-red-500 text-white animate-pulse' 
-                  : 'bg-gold/10 text-gold hover:bg-gold/20'
-              }`}
-            >
-              {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-            </button>
+            <VoiceInputButton
+              onTranscript={handleVoiceTranscript}
+              disabled={isLoading}
+              variant="ghost"
+              size="icon"
+              className="w-10 h-10 rounded-full bg-gold/10 text-gold hover:bg-gold/20"
+            />
             <Input
               ref={inputRef}
               value={input}
