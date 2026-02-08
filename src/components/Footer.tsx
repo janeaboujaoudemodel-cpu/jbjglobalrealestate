@@ -28,7 +28,7 @@ const AI_TOOL_COLORS: Record<string, { border: string; text: string; hover: stri
   '/property-evaluator': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
   '/ai-price-predictor': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
   '/rental-index': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
-  '/mortgage-calculator': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/10', bg: 'bg-gold/5' },
+  '/mortgage-calculator': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/30', bg: 'bg-gold/20' },
   '/compare': { border: 'border-sky-500/40', text: 'text-sky-600', hover: 'hover:bg-sky-50', bg: 'bg-sky-50/50' },
   '/quiz': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
   
@@ -74,7 +74,7 @@ const AI_TOOL_COLORS: Record<string, { border: string; text: string; hover: stri
 
 // Creative Toolkit color mapping (unique vibrant colors for each tool)
 const CREATIVE_TOOL_COLORS: Record<string, { border: string; text: string; hover: string; bg: string }> = {
-  '/toolkit': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/10', bg: 'bg-gold/5' },
+  '/toolkit': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/30', bg: 'bg-gold/20' },
   '/toolkit/ai-video-studio': { border: 'border-fuchsia-500/40', text: 'text-fuchsia-600', hover: 'hover:bg-fuchsia-50', bg: 'bg-fuchsia-50/50' },
   '/toolkit/video-resize-pack': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
   '/toolkit/voice-studio': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
