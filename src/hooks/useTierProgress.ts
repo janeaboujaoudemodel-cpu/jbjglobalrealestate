@@ -49,6 +49,57 @@ interface TierProgressHook {
   error: string | null;
   refreshProgress: () => Promise<void>;
   currentTierType: 'broker' | 'client';
+  // NEW: Combined mode support
+  investorTierProgress: TierProgress | null;
+  brokerTierProgress: TierProgress | null;
+  allInvestorTiers: TierDefinition[];
+  allBrokerTiers: TierDefinition[];
+  isCombinedMode: boolean;
+}
+
+// Helper to calculate tier progress from points and tier list
+function calculateTierProgress(
+  totalPoints: number,
+  tiers: TierDefinition[],
+  tierHistory: TierHistoryEntry[]
+): TierProgress {
+  let currentTier: TierDefinition | null = null;
+  let nextTier: TierDefinition | null = null;
+
+  for (let i = 0; i < tiers.length; i++) {
+    const tier = tiers[i];
+    if (totalPoints >= tier.min_points && (tier.max_points === null || totalPoints <= tier.max_points)) {
+      currentTier = tier;
+      nextTier = tiers[i + 1] || null;
+      break;
+    }
+  }
+
+  // Default to first tier if no match
+  if (!currentTier && tiers.length > 0) {
+    currentTier = tiers[0];
+    nextTier = tiers[1] || null;
+  }
+
+  // Calculate progress to next tier
+  let pointsToNextTier = 0;
+  let progressPercent = 100;
+
+  if (nextTier && currentTier) {
+    const tierRange = nextTier.min_points - currentTier.min_points;
+    const pointsInTier = totalPoints - currentTier.min_points;
+    pointsToNextTier = nextTier.min_points - totalPoints;
+    progressPercent = Math.min(100, Math.round((pointsInTier / tierRange) * 100));
+  }
+
+  return {
+    currentTier,
+    nextTier,
+    totalPoints,
+    pointsToNextTier,
+    progressPercent,
+    tierHistory,
+  };
 }
 
 export function useTierProgress(): TierProgressHook {
@@ -59,14 +110,21 @@ export function useTierProgress(): TierProgressHook {
   const [recentPoints, setRecentPoints] = useState<PointsLedgerEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Combined mode state
+  const [investorTierProgress, setInvestorTierProgress] = useState<TierProgress | null>(null);
+  const [brokerTierProgress, setBrokerTierProgress] = useState<TierProgress | null>(null);
+  const [allInvestorTiers, setAllInvestorTiers] = useState<TierDefinition[]>([]);
+  const [allBrokerTiers, setAllBrokerTiers] = useState<TierDefinition[]>([]);
 
-  // Unified points: same pool, different tier ladder based on active mode
-  // Combined mode shows broker ladder (more ambitious goals)
+  // Primary tier type for non-combined mode
   const tierType = isBrokerMode ? 'broker' : 'client';
 
   const loadProgress = useCallback(async () => {
     if (!user) {
       setTierProgress(null);
+      setInvestorTierProgress(null);
+      setBrokerTierProgress(null);
       setIsLoading(false);
       return;
     }
@@ -75,92 +133,104 @@ export function useTierProgress(): TierProgressHook {
     setError(null);
 
     try {
-      // Load all tier definitions for user type
-      const { data: tiers, error: tiersError } = await supabase
-        .from('tier_definitions')
-        .select('*')
-        .eq('tier_type', tierType)
-        .eq('is_active', true)
-        .order('tier_order', { ascending: true });
+      // In combined mode, fetch BOTH tier ladders in parallel
+      // Otherwise just fetch the active one
+      const tierQueries = isCombinedMode
+        ? [
+            supabase
+              .from('tier_definitions')
+              .select('*')
+              .eq('tier_type', 'client')
+              .eq('is_active', true)
+              .order('tier_order', { ascending: true }),
+            supabase
+              .from('tier_definitions')
+              .select('*')
+              .eq('tier_type', 'broker')
+              .eq('is_active', true)
+              .order('tier_order', { ascending: true }),
+          ]
+        : [
+            supabase
+              .from('tier_definitions')
+              .select('*')
+              .eq('tier_type', tierType)
+              .eq('is_active', true)
+              .order('tier_order', { ascending: true }),
+          ];
 
-      if (tiersError) throw tiersError;
+      // Fetch points and history in parallel with tiers
+      const [pointsResult, historyResult, ...tierResults] = await Promise.all([
+        supabase
+          .from('points_ledger')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(50),
+        supabase
+          .from('user_tier_history')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('changed_at', { ascending: false })
+          .limit(10),
+        ...tierQueries,
+      ]);
 
-      const typedTiers: TierDefinition[] = (tiers || []).map(t => ({
-        ...t,
-        tier_type: t.tier_type as 'broker' | 'client',
-        benefits: Array.isArray(t.benefits) ? t.benefits : JSON.parse(t.benefits as string || '[]')
-      }));
+      if (pointsResult.error) throw pointsResult.error;
 
-      setAllTiers(typedTiers);
+      const points = pointsResult.data || [];
+      setRecentPoints(points);
 
-      // Load user's points ledger
-      const { data: points, error: pointsError } = await supabase
-        .from('points_ledger')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(50);
+      // Calculate total points (shared across all tiers)
+      const totalPoints = points.reduce((sum, p) => sum + (p.points_delta || 0), 0);
+      const tierHistory: TierHistoryEntry[] = historyResult.data || [];
 
-      if (pointsError) throw pointsError;
+      // Helper to parse tier data
+      const parseTiers = (data: any[]): TierDefinition[] =>
+        (data || []).map((t) => ({
+          ...t,
+          tier_type: t.tier_type as 'broker' | 'client',
+          benefits: Array.isArray(t.benefits) ? t.benefits : JSON.parse(t.benefits as string || '[]'),
+        }));
 
-      setRecentPoints(points || []);
+      if (isCombinedMode) {
+        // Combined mode: calculate progress for BOTH ladders
+        const investorTiers = parseTiers(tierResults[0]?.data || []);
+        const brokerTiers = parseTiers(tierResults[1]?.data || []);
 
-      // Calculate total points
-      const totalPoints = points?.reduce((sum, p) => sum + (p.points_delta || 0), 0) || 0;
+        setAllInvestorTiers(investorTiers);
+        setAllBrokerTiers(brokerTiers);
 
-      // Find current and next tier
-      let currentTier: TierDefinition | null = null;
-      let nextTier: TierDefinition | null = null;
+        const investorProgress = calculateTierProgress(totalPoints, investorTiers, tierHistory);
+        const brokerProgress = calculateTierProgress(totalPoints, brokerTiers, tierHistory);
 
-      for (let i = 0; i < typedTiers.length; i++) {
-        const tier = typedTiers[i];
-        if (totalPoints >= tier.min_points && (tier.max_points === null || totalPoints <= tier.max_points)) {
-          currentTier = tier;
-          nextTier = typedTiers[i + 1] || null;
-          break;
-        }
+        setInvestorTierProgress(investorProgress);
+        setBrokerTierProgress(brokerProgress);
+
+        // Primary tierProgress uses broker ladder for combined mode (more ambitious)
+        setTierProgress(brokerProgress);
+        setAllTiers(brokerTiers);
+      } else {
+        // Single mode: just one tier ladder
+        const tiers = parseTiers(tierResults[0]?.data || []);
+        setAllTiers(tiers);
+
+        const progress = calculateTierProgress(totalPoints, tiers, tierHistory);
+        setTierProgress(progress);
+
+        // Clear combined mode state
+        setInvestorTierProgress(null);
+        setBrokerTierProgress(null);
+        setAllInvestorTiers([]);
+        setAllBrokerTiers([]);
       }
-
-      // Default to first tier if no match
-      if (!currentTier && typedTiers.length > 0) {
-        currentTier = typedTiers[0];
-        nextTier = typedTiers[1] || null;
-      }
-
-      // Calculate progress to next tier
-      let pointsToNextTier = 0;
-      let progressPercent = 100;
-
-      if (nextTier && currentTier) {
-        const tierRange = nextTier.min_points - currentTier.min_points;
-        const pointsInTier = totalPoints - currentTier.min_points;
-        pointsToNextTier = nextTier.min_points - totalPoints;
-        progressPercent = Math.min(100, Math.round((pointsInTier / tierRange) * 100));
-      }
-
-      // Load tier history
-      const { data: history } = await supabase
-        .from('user_tier_history')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('changed_at', { ascending: false })
-        .limit(10);
-
-      setTierProgress({
-        currentTier,
-        nextTier,
-        totalPoints,
-        pointsToNextTier,
-        progressPercent,
-        tierHistory: history || [],
-      });
     } catch (err) {
       console.error('Error loading tier progress:', err);
       setError('Failed to load progress');
     } finally {
       setIsLoading(false);
     }
-  }, [user, isBrokerMode, isCombinedMode]);
+  }, [user, isBrokerMode, isCombinedMode, tierType]);
 
   useEffect(() => {
     loadProgress();
@@ -174,6 +244,12 @@ export function useTierProgress(): TierProgressHook {
     error,
     refreshProgress: loadProgress,
     currentTierType: tierType,
+    // Combined mode exports
+    investorTierProgress,
+    brokerTierProgress,
+    allInvestorTiers,
+    allBrokerTiers,
+    isCombinedMode,
   };
 }
 

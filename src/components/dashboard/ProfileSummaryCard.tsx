@@ -10,6 +10,7 @@ import { useTierProgress } from "@/hooks/useTierProgress";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 const roleLabels: Record<string, string> = {
   investor: 'Investor',
@@ -22,7 +23,13 @@ const roleLabels: Record<string, string> = {
 const ProfileSummaryCard = () => {
   const { user } = useAuth();
   const { role } = useUserRole();
-  const { tierProgress, isLoading: tierLoading } = useTierProgress();
+  const { 
+    tierProgress, 
+    isLoading: tierLoading,
+    isCombinedMode,
+    investorTierProgress,
+    brokerTierProgress
+  } = useTierProgress();
 
   const { data: crmProfile, isLoading: profileLoading } = useQuery({
     queryKey: ['crm-profile-dashboard', user?.id],
@@ -63,8 +70,12 @@ const ProfileSummaryCard = () => {
 
   const isLoading = profileLoading || tierLoading;
   const roleLabel = roleLabels[role || ''] || 'Member';
-  const tierName = tierProgress?.currentTier?.tier_name || 'Starter';
   const totalPoints = tierProgress?.totalPoints || 0;
+
+  // Get tier names for combined mode
+  const investorTierName = investorTierProgress?.currentTier?.tier_name || 'Explorer';
+  const brokerTierName = brokerTierProgress?.currentTier?.tier_name || 'Starter';
+  const singleTierName = tierProgress?.currentTier?.tier_name || 'Starter';
 
   return (
     <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
@@ -106,9 +117,22 @@ const ProfileSummaryCard = () => {
                   <Badge variant="outline" className="border-gold/40 text-foreground bg-gold/10 text-xs">
                     {roleLabel}
                   </Badge>
-                  <Badge className="bg-gold/20 text-gold border-gold/40 text-xs">
-                    {tierName}
-                  </Badge>
+                  
+                  {/* Show dual tier badges in combined mode */}
+                  {isCombinedMode ? (
+                    <>
+                      <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/40 text-xs">
+                        {investorTierName}
+                      </Badge>
+                      <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/40 text-xs">
+                        {brokerTierName}
+                      </Badge>
+                    </>
+                  ) : (
+                    <Badge className="bg-gold/20 text-gold border-gold/40 text-xs">
+                      {singleTierName}
+                    </Badge>
+                  )}
                 </div>
                 <p className="text-sm text-muted-foreground mt-1">
                   {totalPoints.toLocaleString()} total points
