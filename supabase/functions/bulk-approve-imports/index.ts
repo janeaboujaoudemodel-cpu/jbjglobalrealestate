@@ -42,6 +42,13 @@ interface UnitTypeData {
   available?: number;
 }
 
+/**
+ * Bulk Approve Pending Imports v3 - ALWAYS OVERWRITE MODE
+ * 
+ * Now enforces "Always Overwrite" - Reelly data REPLACES existing records.
+ * This ensures 100% parity with the Reelly API source.
+ */
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -52,7 +59,8 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    const { limit = 200, dryRun = false, minImages = 0, updateExisting = false } = await req.json().catch(() => ({}));
+    // ALWAYS OVERWRITE MODE - updateExisting defaults to TRUE now
+    const { limit = 200, dryRun = false, minImages = 0, updateExisting = true } = await req.json().catch(() => ({}));
 
     console.log(`[BulkApprove] Starting (limit=${limit}, dryRun=${dryRun}, minImages=${minImages}, updateExisting=${updateExisting})...`);
 

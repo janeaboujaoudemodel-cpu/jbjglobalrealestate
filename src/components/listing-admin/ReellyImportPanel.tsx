@@ -139,6 +139,26 @@ export function ReellyImportPanel() {
     error?: string;
   } | null>(null);
   
+  // AI Interior Generation state
+  const [isGeneratingInteriors, setIsGeneratingInteriors] = useState(false);
+  const [interiorsResult, setInteriorsResult] = useState<{
+    success: boolean;
+    generated?: number;
+    failed?: number;
+    remaining?: number;
+    error?: string;
+  } | null>(null);
+  
+  // Resume sync state
+  const [hasResumableJob, setHasResumableJob] = useState(false);
+  const [resumableJobInfo, setResumableJobInfo] = useState<{
+    id: string;
+    status: string;
+    current_page: number;
+    total_pages: number;
+    next_cursor: string | null;
+  } | null>(null);
+  
   // Full extraction state
   const [isFullExtracting, setIsFullExtracting] = useState(false);
   const [fullExtractionStep, setFullExtractionStep] = useState<string | null>(null);
@@ -179,10 +199,47 @@ export function ReellyImportPanel() {
     error?: string;
   } | null>(null);
   
-  // Sync live counts on mount and after sync
+  // Sync live counts on mount and check for resumable jobs
   useEffect(() => {
     refreshCounts();
+    checkForResumableJob();
   }, [refreshCounts]);
+  
+  // Check for interrupted sync jobs that can be resumed
+  const checkForResumableJob = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke("reelly-api-sync", {
+        body: { action: "check_resume" },
+      });
+      
+      if (!error && data?.has_active_job && data.job) {
+        setHasResumableJob(true);
+        setResumableJobInfo(data.job);
+      } else {
+        setHasResumableJob(false);
+        setResumableJobInfo(null);
+      }
+    } catch (err) {
+      console.error("Error checking for resumable jobs:", err);
+    }
+  };
+  
+  // Resume an interrupted sync job
+  const handleResumeSync = async () => {
+    if (!resumableJobInfo?.next_cursor) {
+      toast.error("No resumable job found");
+      return;
+    }
+    
+    toast.info(`Resuming sync from page ${resumableJobInfo.current_page}...`);
+    
+    // Continue the full sync from where it left off
+    await handleSyncProjects(true, resumableJobInfo.next_cursor, resumableJobInfo.id);
+    
+    // Clear resumable state after completion
+    setHasResumableJob(false);
+    setResumableJobInfo(null);
+  };
   
   // Use live API total if available, otherwise use queue count
   const displayTotalProjects = totalProjects ?? liveCounts?.reelly_total_api ?? liveCounts?.reelly_pending_queue ?? null;
@@ -526,7 +583,7 @@ export function ReellyImportPanel() {
 
     try {
       // Step 1: Test API
-      setFullExtractionStep("Step 1/5: Testing API connection...");
+      setFullExtractionStep("Step 1/6: Testing API connection...");
       await handleTestApiConnection();
       
       if (apiConnected !== true) {
@@ -534,15 +591,15 @@ export function ReellyImportPanel() {
       }
 
       // Step 2: Sync All Projects
-      setFullExtractionStep("Step 2/5: Syncing all projects...");
+      setFullExtractionStep("Step 2/6: Syncing all projects...");
       await handleSyncProjects(true);
 
       // Step 3: Sync All Developers
-      setFullExtractionStep("Step 3/5: Syncing all developers...");
+      setFullExtractionStep("Step 3/6: Syncing all developers...");
       await handleSyncDevelopers("full");
 
       // Step 4: Fetch Missing Details (run multiple batches)
-      setFullExtractionStep("Step 4/5: Fetching missing details...");
+      setFullExtractionStep("Step 4/6: Fetching missing details...");
       let remainingDetails = 999;
       let detailBatches = 0;
       const maxDetailBatches = 50; // Safety limit
@@ -556,21 +613,49 @@ export function ReellyImportPanel() {
         remainingDetails = data.remaining || 0;
         detailBatches++;
         
-        setFullExtractionStep(`Step 4/5: Fetching details (batch ${detailBatches}, ${remainingDetails} remaining)...`);
+        setFullExtractionStep(`Step 4/6: Fetching details (batch ${detailBatches}, ${remainingDetails} remaining)...`);
         
         // Small delay between batches
         await new Promise(resolve => setTimeout(resolve, 500));
       }
 
       // Step 5: Extract Areas
-      setFullExtractionStep("Step 5/5: Extracting areas...");
+      setFullExtractionStep("Step 5/6: Extracting areas...");
       await handleSyncAreas("extract_from_projects");
 
+      // Step 6: Generate AI Interior Images
+      setFullExtractionStep("Step 6/6: Generating AI interior visuals...");
+      let remainingInteriors = 999;
+      let interiorBatches = 0;
+      const maxInteriorBatches = 50; // Safety limit
+      
+      while (remainingInteriors > 0 && interiorBatches < maxInteriorBatches) {
+        const { data } = await supabase.functions.invoke("batch-generate-interiors", {
+          body: { mode: "batch", batch_size: 5 }, // Smaller batches for AI generation
+        });
+        
+        if (!data?.success) break;
+        remainingInteriors = data.remaining || 0;
+        interiorBatches++;
+        
+        setFullExtractionStep(`Step 6/6: Generating interiors (batch ${interiorBatches}, ${remainingInteriors} remaining)...`);
+        
+        // Longer delay between AI batches to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        
+        // Limit to first 100 projects for initial sync to avoid excessive cost
+        if (interiorBatches >= 20) {
+          setFullExtractionStep("Step 6/6: Interior generation paused (limit reached)...");
+          break;
+        }
+      }
+
       setFullExtractionStep("✅ Full extraction complete!");
-      toast.success("🎉 Full extraction complete! All 1,805 projects synced with complete data.");
+      toast.success("🎉 Full extraction complete! All projects synced with complete data and AI interiors.");
       
       // Refresh counts
       refreshCounts();
+      checkForResumableJob();
 
     } catch (err: any) {
       console.error("Full extraction error:", err);
@@ -641,7 +726,7 @@ export function ReellyImportPanel() {
     }
   };
 
-  const handleSyncProjects = async (fullSync: boolean = false) => {
+  const handleSyncProjects = async (fullSync: boolean = false, resumeCursor?: string, jobId?: string) => {
     setIsSyncing(true);
     setSyncResult(null);
     setSyncProgress(null);
@@ -652,7 +737,8 @@ export function ReellyImportPanel() {
 
     try {
       const pageSize = fullSync ? 100 : 100; // Increased batch size for faster sync
-      let cursor: string | null = null;
+      let cursor: string | null = resumeCursor || null;
+      let currentJobId: string | null = jobId || null;
       let safety = 0;
 
       let aggregated: ApiSyncResult = {
@@ -673,6 +759,8 @@ export function ReellyImportPanel() {
             limit: pageSize,
             cursor,
             fullSync,
+            job_id: currentJobId,
+            resume_cursor: cursor,
           },
         });
 
@@ -789,6 +877,30 @@ export function ReellyImportPanel() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Resume Sync Banner - Shows if there's an interrupted job */}
+      {hasResumableJob && resumableJobInfo && (
+        <Alert className="border-amber-400 bg-amber-50">
+          <RotateCcw className="h-4 w-4 text-amber-600" />
+          <AlertTitle className="text-amber-900">Interrupted Sync Detected</AlertTitle>
+          <AlertDescription className="text-amber-700">
+            <div className="flex items-center justify-between gap-4 flex-wrap mt-2">
+              <span>
+                Sync was interrupted at page {resumableJobInfo.current_page}. 
+                Progress has been saved - you can resume from where you left off.
+              </span>
+              <Button 
+                onClick={handleResumeSync}
+                disabled={isSyncing}
+                className="bg-amber-600 hover:bg-amber-700 text-white"
+              >
+                <RotateCcw className="h-4 w-4 mr-2" />
+                Resume Sync
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div>
         <h2 className="text-2xl font-bold text-zinc-900 mb-2">Reelly Integration</h2>
