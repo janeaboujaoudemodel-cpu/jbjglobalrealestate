@@ -1,323 +1,307 @@
 
 
-## Global Voice Recorder Fix - Implementation Plan
+## Multi-Issue Fix Plan - Footer, Favicon, SEO, Search Bar, Header, Chat & Performance
 
-### Problem Summary
+### Overview
 
-The voice recorder microphone buttons across the website have two critical issues:
+This plan addresses 8 issues identified in the user's request:
 
-1. **UX Confusion**: When recording, the button shows `MicOff` icon instead of a visual indicator that recording is active. Users expect a "recording in progress" indicator (pulsing mic), not a mute icon.
-
-2. **Inconsistent Behavior**: Different components implement voice recording slightly differently, leading to confusion and potential failures across:
-   - VoiceNoteRecorder (used in Support Ticket, CRM, Lead Detail)
-   - AINoteCenter
-   - ListingAdminChat
-   - SellerAssistant
-   - VoiceSuite / CaptionsTranslate
-   - ExecutiveChatPanel
-   - FoundersChatPanel
-   - EmployeeChatPanel
+1. **Footer Mode Switcher Gold Border** - Remove gold border from investor mode indicator
+2. **Track Record Cards Gold Borders** - Add gold borders to the stats cards on homepage
+3. **Favicon Quality** - Create a premium favicon on black background
+4. **SEO & Founder Toggle** - Ensure all Google-visible founder references respect the visibility toggle
+5. **Hero Search Bar Alignment** - Align Beds, Price Range, and Filters to match location input height
+6. **Header Navigation Stretch** - Stretch "Buy to Insights" to fill header space
+7. **Chat Widget Stability** - Ensure consistent visibility behavior
+8. **Website Performance** - Optimize for faster loading
 
 ---
 
-### Root Cause Analysis
+### Issue 1: Footer Mode Switcher Gold Border
 
-**Issue 1: Wrong Icon During Recording**
+**Current Problem:**
+The mode switcher in the footer (around line 487-490) has a container with `border border-gold/30` that shows a gold border around the entire mode switcher area.
 
-All components currently show `MicOff` when `isRecording === true`:
+**Solution:**
+Remove the gold border wrapper from the footer's mode switcher section.
+
+**File:** `src/components/Footer.tsx` (lines 487-490)
+
+**Change:**
 ```typescript
-// Current (wrong) - shows MicOff when recording
-{isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-```
+// From:
+<div className="p-1 rounded-xl bg-black/40 border border-gold/30">
+  <ModeSwitcher variant="header" />
+</div>
 
-This is semantically incorrect. `MicOff` should mean "microphone is disabled/muted", not "click to stop recording".
-
-**Issue 2: No Visual Feedback for Active Recording**
-
-When recording, users need clear visual feedback that:
-- Recording is in progress (animated indicator)
-- Audio is being captured
-- Click will stop recording
-
----
-
-### Solution: Create Unified VoiceInputButton Component
-
-Create a single, reusable voice input button component that:
-1. Shows the correct icons and states
-2. Handles all microphone permissions consistently
-3. Provides visual feedback (pulse animation, color changes)
-4. Works with the `voice-to-text` edge function
-
-#### New Component: `src/components/ui/VoiceInputButton.tsx`
-
-**States:**
-- **Idle**: `Mic` icon (gold/neutral color) - "Click to record"
-- **Recording**: `Square` icon (red, pulsing) - "Click to stop" 
-- **Processing**: `Loader2` icon (spinning) - "Transcribing..."
-
-**Props:**
-```typescript
-interface VoiceInputButtonProps {
-  onTranscript: (text: string) => void;
-  disabled?: boolean;
-  language?: string;
-  className?: string;
-  size?: "sm" | "default" | "lg";
-}
+// To:
+<div className="p-1 rounded-xl bg-black/40">
+  <ModeSwitcher variant="header" />
+</div>
 ```
 
 ---
 
-### Files to Create/Modify
+### Issue 2: Track Record Cards Gold Borders
 
-| File | Action | Description |
-|------|--------|-------------|
-| `src/components/ui/VoiceInputButton.tsx` | **NEW** | Unified voice input component |
-| `src/components/crm/VoiceNoteRecorder.tsx` | Refactor | Use VoiceInputButton internally |
-| `src/components/SupportTicketBox.tsx` | Update | Use new VoiceInputButton |
-| `src/components/note-center/AINoteCenter.tsx` | Update | Use VoiceInputButton for voice notes |
-| `src/components/listing-admin/ListingAdminChat.tsx` | Update | Replace inline recording with VoiceInputButton |
-| `src/components/seller/SellerAssistant.tsx` | Update | Replace inline recording with VoiceInputButton |
-| `src/components/executive/ExecutiveChatPanel.tsx` | Update | Replace voice input logic |
-| `src/components/founders-assistant/FoundersChatPanel.tsx` | Update | Replace voice input logic |
-| `src/components/employee-hub/EmployeeChatPanel.tsx` | Update | Replace voice input logic |
-| `src/pages/toolkit/VoiceSuite.tsx` | Update | Fix VoiceToTextPanel recording UI |
-| `src/pages/toolkit/CaptionsTranslate.tsx` | Update | Fix recording UI |
-| `src/components/design-studio/AIDesignAssistant.tsx` | Update | Fix voice input |
+**Current Problem:**
+The StatsCounter component's stat cards (lines 116-137) use `border-2 border-gold/40` which shows gold borders, but user wants them more prominent.
 
----
+**Solution:**
+The cards already have gold borders. The user wants gold borders to be more visible. Update to solid gold borders.
 
-### Technical Implementation
+**File:** `src/components/StatsCounter.tsx` (line 118)
 
-#### 1. New VoiceInputButton Component
-
+**Change:**
 ```typescript
-// src/components/ui/VoiceInputButton.tsx
-import { useState, useRef, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { Mic, Square, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+// From:
+<div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-6 md:p-8 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-500">
 
-interface VoiceInputButtonProps {
-  onTranscript: (text: string) => void;
-  disabled?: boolean;
-  language?: string;
-  className?: string;
-  size?: "sm" | "default" | "lg" | "icon";
-  variant?: "outline" | "default" | "ghost";
-}
-
-export function VoiceInputButton({
-  onTranscript,
-  disabled,
-  language = "en",
-  className,
-  size = "icon",
-  variant = "outline"
-}: VoiceInputButtonProps) {
-  const [status, setStatus] = useState<"idle" | "recording" | "processing">("idle");
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
-  const streamRef = useRef<MediaStream | null>(null);
-
-  const startRecording = useCallback(async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
-      });
-      
-      streamRef.current = stream;
-      const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
-      const mediaRecorder = new MediaRecorder(stream, { mimeType });
-      mediaRecorderRef.current = mediaRecorder;
-      chunksRef.current = [];
-
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) chunksRef.current.push(e.data);
-      };
-
-      mediaRecorder.onstop = async () => {
-        setStatus("processing");
-        const audioBlob = new Blob(chunksRef.current, { type: mimeType });
-        
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          const base64Audio = (reader.result as string).split(',')[1];
-          
-          try {
-            const { data, error } = await supabase.functions.invoke('voice-to-text', {
-              body: { audio: base64Audio, language }
-            });
-            
-            if (error) throw error;
-            
-            if (data?.text) {
-              onTranscript(data.text);
-              toast.success("Voice transcribed!");
-            } else {
-              toast.error(data?.error || "No speech detected");
-            }
-          } catch (err) {
-            console.error("Transcription error:", err);
-            toast.error("Failed to transcribe audio");
-          } finally {
-            setStatus("idle");
-          }
-        };
-        
-        reader.readAsDataURL(audioBlob);
-        stream.getTracks().forEach(track => track.stop());
-        streamRef.current = null;
-      };
-
-      mediaRecorder.start();
-      setStatus("recording");
-      toast.info("Recording... Click to stop", { duration: 2000 });
-    } catch (err: any) {
-      console.error("Recording error:", err);
-      if (err.name === 'NotAllowedError') {
-        toast.error("Microphone access denied. Please allow in browser settings.");
-      } else {
-        toast.error("Could not access microphone");
-      }
-      setStatus("idle");
-    }
-  }, [language, onTranscript]);
-
-  const stopRecording = useCallback(() => {
-    if (mediaRecorderRef.current && status === "recording") {
-      mediaRecorderRef.current.stop();
-    }
-  }, [status]);
-
-  const handleClick = () => {
-    if (status === "recording") {
-      stopRecording();
-    } else if (status === "idle") {
-      startRecording();
-    }
-    // Do nothing if processing
-  };
-
-  const getIcon = () => {
-    if (status === "processing") {
-      return <Loader2 className="h-4 w-4 animate-spin" />;
-    }
-    if (status === "recording") {
-      return <Square className="h-4 w-4 fill-current" />; // Solid square = stop
-    }
-    return <Mic className="h-4 w-4" />;
-  };
-
-  const getButtonClasses = () => {
-    if (status === "recording") {
-      return "bg-red-500 hover:bg-red-600 text-white border-red-500 animate-pulse";
-    }
-    return "";
-  };
-
-  return (
-    <Button
-      type="button"
-      variant={status === "recording" ? "destructive" : variant}
-      size={size}
-      onClick={handleClick}
-      disabled={disabled || status === "processing"}
-      className={`${getButtonClasses()} ${className || ""}`}
-      title={
-        status === "recording" ? "Stop recording" :
-        status === "processing" ? "Processing..." :
-        "Start voice input"
-      }
-    >
-      {getIcon()}
-    </Button>
-  );
-}
+// To:
+<div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-6 md:p-8 text-center hover:shadow-lg hover:shadow-gold/30 transition-all duration-500">
 ```
 
 ---
 
-#### 2. Update VoiceNoteRecorder to Use New Component
+### Issue 3: Favicon Quality
+
+**Current Problem:**
+The current favicon shows just "B" on a black square with gold accents. The logo needs to be more premium and readable - showing the full JBJ monogram.
+
+**Solution:**
+Create a new favicon that uses the JBJ monogram centered on a pure black square background for maximum readability in browser tabs and Google search results.
+
+**Approach:**
+1. Use the existing `jbj-monogram-nobuffer.png` (white text version) on a black background
+2. Create a proper 32x32 and 192x192 favicon
+3. Update the `index.html` to reference the new favicon
+
+**Files to update:**
+- `public/favicon.png` - Replace with new premium favicon
+- `index.html` - Already correctly configured
+
+**Note:** User needs to provide or approve a high-quality favicon image, or we need to programmatically generate one using the existing monogram asset. The current favicon image shows the logo but could be improved for clarity at small sizes.
+
+---
+
+### Issue 4: SEO & Founder Toggle Integration
+
+**Current Problem:**
+The SEO meta tags in `src/components/SEOHead.tsx` and `index.html` contain hardcoded references to "Jane Bou Jaoude" that don't respect the founder visibility toggle:
+- Line 16-19: `FOUNDER_NAME` constant and `CORE_KEYWORDS`
+- Line 27, 60: Hardcoded founder name in descriptions
+- Lines 35, 111-154: Various page SEO configs mentioning founder
+
+**Solution:**
+Update SEOHead to conditionally include founder references based on the visibility context.
+
+**File:** `src/components/SEOHead.tsx`
+
+**Changes:**
+1. Import `useFounderVisibility` context
+2. Conditionally include founder name in keywords and descriptions
+3. Update all page SEO configs to have founder-free alternatives
+
+**File:** `index.html` (line 17)
+
+**Change:**
+```html
+// From:
+<meta name="description" content="JBJ Global Real Estate, founded by Jane Bou Jaoude, is Dubai's premier real estate brokerage..." />
+
+// To:
+<meta name="description" content="JBJ Global Real Estate is Dubai's premier real estate brokerage. Buy, sell, or rent luxury properties in Dubai, UAE." />
+```
+
+**Note:** The index.html is the initial meta that gets overwritten by React, but we should make it founder-agnostic as a fallback.
+
+---
+
+### Issue 5: Hero Search Bar Alignment
+
+**Current Problem:**
+The search bar elements (location input, beds dropdown, price range, filters) have different heights/padding causing misalignment.
+
+**Analysis:**
+- Location input: `px-3 py-3 min-h-[48px]` (line 624)
+- Beds dropdown button: `px-3 py-3` (line 644)
+- Price Range button: `px-3 py-3` (line 678)
+- Filters button: `px-3 py-3` (line 712)
+
+The buttons are inside a container with `bg-white/10 backdrop-blur-md border-y border-r border-white/30` (line 637), but the location input has its own container with different borders.
+
+**Solution:**
+Ensure all elements have consistent height (48px minimum) and uniform styling.
+
+**File:** `src/components/home/HeroSearchBar.tsx`
+
+**Changes:**
+1. Add explicit `min-h-[48px]` to the desktop controls container
+2. Ensure all buttons have `h-12` (48px) for consistent height
+3. Fix the container borders to create a seamless single-line appearance
 
 ```typescript
-// src/components/crm/VoiceNoteRecorder.tsx
-import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
+// Line 637-639: Add explicit height
+<div className="hidden sm:flex items-center bg-white/10 backdrop-blur-md border-y border-r border-white/30 overflow-hidden min-h-[48px]">
 
-interface VoiceNoteRecorderProps {
-  onTranscript: (text: string) => void;
-  disabled?: boolean;
-}
+// Line 644: Add explicit height to beds button
+<button className="flex items-center gap-1 px-3 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
 
-const VoiceNoteRecorder = ({ onTranscript, disabled }: VoiceNoteRecorderProps) => {
-  return (
-    <VoiceInputButton
-      onTranscript={onTranscript}
-      disabled={disabled}
-    />
-  );
-};
+// Line 678: Add explicit height to price button
+<button className="flex items-center gap-1 px-3 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
 
-export default VoiceNoteRecorder;
+// Line 712: Add explicit height to filters button
+<button className="flex items-center gap-1 px-3 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors">
 ```
 
 ---
 
-#### 3. Update All Other Components
+### Issue 6: Header Navigation Stretch
 
-For each component with inline voice recording:
-- Remove the duplicated MediaRecorder logic
-- Import and use `VoiceInputButton`
-- Pass the appropriate `onTranscript` callback
+**Current Problem:**
+The navigation items (Buy, Sell, Rent, Projects, Areas, Developers, Insights) don't fill the available header space between the logo and the search/account icons.
 
-**Example for SellerAssistant.tsx:**
+**Solution:**
+Use flexbox with `flex-1` and `justify-center` with wider gaps to stretch the navigation across the available space.
+
+**File:** `src/components/GlobalHeader.tsx`
+
+**Locate the desktop navigation pill container (around line 1000+) and update:**
+
+**Changes:**
+1. Add `flex-1` to the navigation container
+2. Increase gap between items
+3. Use `justify-evenly` or wider `gap-x` values
+
 ```typescript
-// Replace inline toggleVoiceInput logic with:
-import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
-
-// In the JSX:
-<VoiceInputButton
-  onTranscript={(text) => setInput(prev => prev ? `${prev} ${text}` : text)}
-  disabled={isLoading}
-  language="en"
-/>
+// The nav container should use flex-1 to expand and evenly distribute items
+<nav className="flex-1 flex items-center justify-center gap-x-1 xl:gap-x-2 2xl:gap-x-3 px-4 xl:px-8 2xl:px-12">
 ```
 
 ---
 
-### Visual States Summary
+### Issue 7: Chat Widget Stability
 
-| State | Icon | Color | Animation | Title |
-|-------|------|-------|-----------|-------|
-| Idle | `Mic` | Gold/Default | None | "Start voice input" |
-| Recording | `Square` (filled) | Red | Pulse | "Stop recording" |
-| Processing | `Loader2` | Gold | Spin | "Processing..." |
+**Current Problem:**
+The chat widget sometimes appears and disappears unexpectedly due to the popup timing logic in `MainLayout.tsx`.
+
+**Analysis (lines 63-93 in MainLayout.tsx):**
+- On homepage: waits for scroll past hero (50% of viewport height), then 3.5s delay
+- State `popupsReady` controls visibility
+- Widget also has `effectiveCollapsed` logic for back-office routes
+
+**Solution:**
+Make the chat widget always visible (not controlled by `popupsReady`) but keep the attention pulse controlled by the scroll delay.
+
+**File:** `src/components/MainLayout.tsx`
+
+**Changes:**
+```typescript
+// Line 173: Always render chat widget, only delay the attention pulse
+{!isBackOfficeRoute && (
+  <AIChatWidget
+    isCollapsed={effectiveCollapsed}
+    onToggleCollapse={handleToggleChat}
+    onMinimize={handleMinimizeChat}
+    showAttentionPulse={showAttentionPulse && popupsReady}
+  />
+)}
+```
+
+Remove the `popupsReady &&` wrapper from the chat widget rendering, keeping it only for the pulse.
 
 ---
 
-### Benefits of This Approach
+### Issue 8: Website Performance Optimization
 
-1. **Single Source of Truth**: One component handles all voice input logic
-2. **Consistent UX**: Same icons, colors, and animations everywhere
-3. **Correct Semantics**: Stop icon (square) instead of confusing MicOff
-4. **Easy Maintenance**: Fix bugs in one place, all components benefit
-5. **Better Error Handling**: Centralized permission and error handling
-6. **Smaller Bundle**: Remove duplicate code from 12+ files
+**Current Problem:**
+Pages are loading slowly. This could be due to:
+- Large bundle sizes
+- Unoptimized images
+- Heavy component renders
+- Too many API calls
+
+**Solution:**
+Implement multiple performance optimizations:
+
+**A. Code Splitting & Lazy Loading**
+
+**File:** `src/App.tsx` or route definitions
+- Implement `React.lazy()` for heavy page components
+- Add `Suspense` boundaries with loading states
+
+**B. Image Optimization**
+
+- Ensure all images use WebP/AVIF formats where possible
+- Add `loading="lazy"` to below-fold images
+- Use proper image dimensions
+
+**C. Component Memoization**
+
+- Add `React.memo()` to frequently re-rendered components
+- Use `useMemo` and `useCallback` for expensive computations
+
+**D. API Call Optimization**
+
+- Review React Query cache settings
+- Reduce unnecessary refetches
+- Consider increasing stale time for static data
+
+**Specific optimizations for immediate impact:**
+
+**File:** `src/pages/Index.tsx`
+```typescript
+// Lazy load below-fold sections
+const WhyDubaiCapitalSection = lazy(() => import('@/components/home/WhyDubaiCapitalSection'));
+const TestimonialsSection = lazy(() => import('@/components/home/TestimonialsSection'));
+```
+
+**File:** `src/components/StatsCounter.tsx`
+```typescript
+// Memoize the component
+export default React.memo(StatsCounter);
+```
+
+---
+
+### Files to Modify Summary
+
+| File | Changes |
+|------|---------|
+| `src/components/Footer.tsx` | Remove gold border from mode switcher container |
+| `src/components/StatsCounter.tsx` | Make gold borders solid on track record cards |
+| `index.html` | Remove founder name from default meta description |
+| `src/components/SEOHead.tsx` | Integrate founder visibility toggle for SEO meta |
+| `src/components/home/HeroSearchBar.tsx` | Fix element height alignment (48px) |
+| `src/components/GlobalHeader.tsx` | Stretch navigation items with flex-1 |
+| `src/components/MainLayout.tsx` | Decouple chat widget from popupsReady |
+| `src/pages/Index.tsx` | Add lazy loading for heavy sections |
+
+---
+
+### Favicon Note
+
+For the favicon, the current image shows a "B" on black background. To make it premium with the full "JBJ" monogram:
+
+**Option 1:** Use an existing monogram asset (`jbj-monogram-nobuffer.png`) and create a proper favicon
+**Option 2:** User provides a high-resolution favicon image
+
+The favicon should be:
+- 32x32 pixels for browser tabs
+- 192x192 or 512x512 for PWA/mobile
+- Black background (#000000)
+- Gold/white JBJ monogram centered
+- PNG format with transparency where needed
 
 ---
 
 ### Testing Checklist
 
-1. Open Support Ticket form → Click mic → Should show red pulsing square
-2. Stop recording → Should show spinning loader while transcribing
-3. Transcription completes → Should insert text and show mic again
-4. Test in CRM Lead Detail notes section
-5. Test in AI Note Center
-6. Test in Seller Assistant panel
-7. Test in Listing Admin Chat
-8. Test in Voice Suite page
-9. Deny microphone permission → Should show friendly error message
-10. Test with no speech → Should show "No speech detected" message
+1. **Footer:** Verify mode switcher no longer has gold border
+2. **Track Record:** Confirm cards have solid gold borders
+3. **SEO:** Check page source for founder name when toggle is off
+4. **Search Bar:** All elements should be same height (48px)
+5. **Header:** Navigation should fill space between logo and icons
+6. **Chat:** Widget should always appear (collapsed) on public pages
+7. **Performance:** Measure Lighthouse score before/after changes
 
