@@ -202,21 +202,40 @@ ${content}
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-background">
-        {/* Header */}
-        <div className="bg-card border-b border-border px-4 py-2">
-          <div className="flex items-center gap-4">
-            <FileText className="h-8 w-8 text-primary" />
+      <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
+        {/* Themed Header */}
+        <div className="bg-gradient-to-r from-slate-900/40 via-slate-800/30 to-slate-900/40 border-b border-slate-500/30">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center max-w-2xl mx-auto">
+              <div className="inline-flex items-center gap-2 bg-slate-500/20 border border-slate-500/40 rounded-full px-4 py-1 mb-4">
+                <FileText className="w-4 h-4 text-slate-400" />
+                <span className="text-slate-300 text-sm font-medium">Document Editor</span>
+              </div>
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                Documents & <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-zinc-400">Spreadsheets</span>
+              </h1>
+              <p className="text-zinc-400">
+                Create, edit, and export professional documents with rich text formatting
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Document Title Input */}
+        <div className="bg-slate-900/30 border-b border-slate-500/20 px-4 py-3">
+          <div className="flex items-center gap-4 max-w-7xl mx-auto">
+            <FileText className="h-6 w-6 text-slate-400" />
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="text-xl font-medium border-0 bg-transparent focus-visible:ring-0 max-w-md"
+              className="text-xl font-medium border-0 bg-transparent focus-visible:ring-0 max-w-md text-white placeholder:text-zinc-500"
+              placeholder="Untitled Document"
             />
           </div>
         </div>
 
         {/* Toolbar */}
-        <div className="bg-card border-b border-border px-4 py-2 flex flex-wrap items-center gap-1">
+        <div className="bg-slate-900/30 border-b border-slate-500/20 px-4 py-2 flex flex-wrap items-center gap-1">
           {/* Undo/Redo */}
           <Button variant="ghost" size="sm" onClick={() => execCommand('undo')}>
             <Undo className="h-4 w-4" />
@@ -225,7 +244,7 @@ ${content}
             <Redo className="h-4 w-4" />
           </Button>
           
-          <div className="w-px h-6 bg-border mx-1" />
+          <div className="w-px h-6 bg-slate-500/30 mx-1" />
           
           {/* Font Family */}
           <Select value={fontFamily} onValueChange={handleFontFamily}>
@@ -255,7 +274,7 @@ ${content}
             </SelectContent>
           </Select>
           
-          <div className="w-px h-6 bg-border mx-1" />
+          <div className="w-px h-6 bg-slate-500/30 mx-1" />
           
           {/* Text Formatting */}
           <Button variant="ghost" size="sm" onClick={() => execCommand('bold')}>
@@ -268,7 +287,7 @@ ${content}
             <Underline className="h-4 w-4" />
           </Button>
           
-          <div className="w-px h-6 bg-border mx-1" />
+          <div className="w-px h-6 bg-slate-500/30 mx-1" />
           
           {/* Headings */}
           <DropdownMenu>
@@ -294,7 +313,7 @@ ${content}
             </DropdownMenuContent>
           </DropdownMenu>
           
-          <div className="w-px h-6 bg-border mx-1" />
+          <div className="w-px h-6 bg-slate-500/30 mx-1" />
           
           {/* Alignment */}
           <Button variant="ghost" size="sm" onClick={() => execCommand('justifyLeft')}>
@@ -310,7 +329,7 @@ ${content}
             <AlignJustify className="h-4 w-4" />
           </Button>
           
-          <div className="w-px h-6 bg-border mx-1" />
+          <div className="w-px h-6 bg-slate-500/30 mx-1" />
           
           {/* Lists */}
           <Button variant="ghost" size="sm" onClick={() => execCommand('insertUnorderedList')}>
@@ -320,7 +339,7 @@ ${content}
             <ListOrdered className="h-4 w-4" />
           </Button>
           
-          <div className="w-px h-6 bg-border mx-1" />
+          <div className="w-px h-6 bg-slate-500/30 mx-1" />
           
           {/* Insert */}
           <Dialog open={linkDialogOpen} onOpenChange={setLinkDialogOpen}>
@@ -387,7 +406,7 @@ ${content}
         </div>
 
         {/* Editor Area */}
-        <div className="flex justify-center p-8 bg-muted/30 min-h-[calc(100vh-180px)]">
+        <div className="flex justify-center p-8 bg-zinc-900/30 min-h-[calc(100vh-280px)]">
           <div className="bg-white shadow-lg w-full max-w-[816px] min-h-[1056px] p-16">
             <div
               ref={editorRef}

@@ -309,19 +309,19 @@ const AICalendar = () => {
   return (
     <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-900/30 via-blue-800/20 to-blue-900/30 border-b border-blue-500/20">
+      <div className="bg-gradient-to-r from-cyan-900/30 via-cyan-800/20 to-cyan-900/30 border-b border-cyan-500/30">
         <div className="container mx-auto px-4 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/30 rounded-full px-4 py-1 mb-4">
-              <Calendar className="w-4 h-4 text-blue-400" />
-              <span className="text-blue-300 text-sm font-medium">AI-Powered Productivity</span>
+            <div className="inline-flex items-center gap-2 bg-cyan-500/20 border border-cyan-500/40 rounded-full px-4 py-1 mb-4">
+              <Calendar className="w-4 h-4 text-cyan-400" />
+              <span className="text-cyan-300 text-sm font-medium">AI-Powered Productivity</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              AI Notes & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Calendar</span>
+              AI Notes & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">Calendar</span>
             </h1>
             <p className="text-zinc-400 max-w-2xl mx-auto">
               Manage your meetings, notes, and schedules. Automatic email and phone reminders for all your events.
@@ -333,9 +333,9 @@ const AICalendar = () => {
 
       <div className="container mx-auto px-4 py-8">
         {/* Project Bar */}
-        <div className="mb-6 flex flex-wrap items-center gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+        <div className="mb-6 flex flex-wrap items-center gap-4 p-4 bg-cyan-900/20 border border-cyan-500/30 rounded-xl">
           <div className="flex items-center gap-2">
-            <FolderOpen className="w-5 h-5 text-blue-400" />
+            <FolderOpen className="w-5 h-5 text-cyan-400" />
             <span className="text-white font-medium">
               {currentProject ? currentProject.name : "Untitled Project"}
             </span>
@@ -364,7 +364,7 @@ const AICalendar = () => {
                     className="bg-zinc-800 border-zinc-700"
                   />
                 </div>
-                <Button onClick={createProject} className="w-full bg-blue-600">
+                <Button onClick={createProject} className="w-full bg-cyan-600 hover:bg-cyan-700">
                   Create Project
                 </Button>
               </div>
@@ -393,7 +393,7 @@ const AICalendar = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Calendar */}
           <div className="lg:col-span-2">
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-cyan-900/20 border-cyan-500/30">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div className="flex items-center gap-4">
                   <Button size="sm" variant="ghost" onClick={prevMonth}>
@@ -408,7 +408,7 @@ const AICalendar = () => {
                 </div>
                 <Dialog open={showEventModal} onOpenChange={setShowEventModal}>
                   <DialogTrigger asChild>
-                    <Button size="sm" className="bg-blue-600">
+                    <Button size="sm" className="bg-cyan-600 hover:bg-cyan-700">
                       <Plus className="w-4 h-4 mr-1" /> Add Event
                     </Button>
                   </DialogTrigger>
