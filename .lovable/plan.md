@@ -1,172 +1,251 @@
 
 
-## Fix Plan: Podcast Visibility for Owner & AI Tools Footer Color Matching
+## AI Tools Unified Theme Implementation Plan
 
-### Issue 1: Podcast Section Not Showing for Owner
-
-**Root Cause Analysis:**
-
-The `PodcastVisibilityGate` component (line 20-23) returns `null` during loading state **before** checking if the user is the Owner:
-
-```typescript
-// Current problematic code
-if (isVisibilityLoading) {
-  return null;  // <-- Returns null, doesn't check isOwner first!
-}
-```
-
-This means even the Owner sees nothing during the loading phase. The fix is to check `isOwner` **before** checking the loading state so the Owner always sees the content immediately.
-
-Additionally, the `isOwner` state in `AuthContext.tsx` (line 44-50) checks `VITE_OWNER_EMAIL` but the auth loading itself might still be in progress. We need to ensure the Owner check doesn't get blocked.
-
-**Fix Location:**
-- `src/components/home/PodcastVisibilityGate.tsx`
-
-**Solution:**
-
-```typescript
-export const PodcastVisibilityGate = ({ children }: PodcastVisibilityGateProps) => {
-  const { isPodcastVisible, isLoading: isVisibilityLoading } = usePodcastVisibility();
-  const { user, isOwner, loading: isAuthLoading } = useAuth();
-
-  // Owner ALWAYS sees the podcast section - check first, before loading states
-  if (isOwner) {
-    return <>{children}</>;
-  }
-
-  // For non-owners, wait for both auth AND visibility to resolve
-  if (isAuthLoading || isVisibilityLoading) {
-    return null;
-  }
-
-  // Non-owner: only show if visibility is enabled
-  if (!isPodcastVisible) {
-    return null;
-  }
-
-  return <>{children}</>;
-};
-```
-
-This ensures:
-1. Owner sees podcast **immediately** if `isOwner` is true
-2. Non-owners wait for loading to complete
-3. Non-owners only see if `isPodcastVisible` is true
+### Objective
+Apply consistent internal theming across all AI tools where the header background color, badge labels, cards, buttons, and disclaimers all match the tool's designated accent color scheme. Additionally, identify and fix any routing issues or 404 errors.
 
 ---
 
-### Issue 2: AI Tools Footer Color Matching
+### Current State Analysis
 
-**Current Problem:**
+I've analyzed the codebase and found:
 
-The footer's "Professional Tools" section (lines 763-782 of Footer.tsx) uses generic white/gold styling for all AI tool links:
+**Tools using `AIToolPremiumLayout` (15 Premium Tools):**
+These tools already have proper theming via the layout component:
+
+| Tool | Route | Accent Color |
+|------|-------|--------------|
+| AI ROI Calculator | `/ai-roi-calculator` | Emerald |
+| AI Price Predictor | `/ai-price-predictor` | Blue |
+| AI Property Analyzer | `/ai-property-analyzer` | Sky |
+| AI Lead Qualification | `/ai-lead-qualification` | Purple |
+| AI Objection Handler | `/ai-objection-handler` | Rose |
+| AI Follow-up Scheduler | `/ai-followup-scheduler` | Cyan |
+| AI Meeting Summarizer | `/ai-meeting-summarizer` | Violet |
+| AI Translation Hub | `/ai-translation-hub` | Amber |
+| AI Market Report | `/ai-market-report` | Indigo |
+| AI Neighborhood Insights | `/ai-neighborhood-insights` | Indigo |
+| AI Video Tour Script | `/ai-video-tour-script` | Teal |
+| AI Document Generator | `/ai-document-generator` | Orange |
+| AI Contract Reviewer | `/ai-contract-reviewer` | Red |
+| AI Competitor Analysis | `/ai-competitor-analysis` | Pink |
+| AI Call Summarizer | `/ai-call-summarizer` | Violet |
+
+**Tools NOT using `AIToolPremiumLayout` (Need Update):**
+These standalone pages have their own theming but need internal UI elements to match consistently:
+
+| Tool | Route | Current State | Target Color |
+|------|-------|---------------|--------------|
+| Property Evaluator | `/property-evaluator` | Blue header but cards/buttons inconsistent | Blue |
+| Rental Index | `/rental-index` | Emerald theme but standalone structure | Emerald |
+
+---
+
+### Issues Identified
+
+#### 1. Property Evaluator (`/property-evaluator`)
+- **Header**: Blue themed (correct)
+- **Problem**: Internal cards use `bg-zinc-900/50 border-zinc-800` (neutral) instead of blue-tinted
+- **Fix**: Update card backgrounds to `bg-blue-900/30 border-blue-500/20` and buttons to blue gradients
+
+#### 2. Rental Index (`/rental-index`)
+- **Header**: Emerald themed (correct)
+- **Problem**: Most elements are correctly themed, but disclaimers use neutral styling
+- **Status**: Already well-themed, minimal changes needed
+
+#### 3. Premium Tools Internal Consistency
+All 15 premium tools use `AIToolPremiumLayout` which handles the header, but internal elements (cards, inputs, select dropdowns) need verification:
+
+**Cards and Input Fields:**
+- Some tools use `bg-zinc-900/50 border-zinc-800` instead of tool-colored borders
+- Buttons should all use `bg-gradient-to-r from-{color}-600 to-{color}-500`
+
+**Example: AI Lead Qualification (Purple)**
+- Line 94: Uses `border-zinc-800` should use `border-purple-500/20`
+- Line 107: Input uses `border-zinc-700` should use `border-purple-500/30`
+
+---
+
+### Implementation Plan
+
+#### Phase 1: Update AIToolPremiumLayout to Pass Color Context
+The layout already handles the header. We need to ensure it provides color context to children.
+
+**No changes needed** - Layout already works correctly with accentColor prop.
+
+#### Phase 2: Update Premium Tool Components
+
+For each premium tool, standardize the internal card and input styling to match the accent color:
+
+**Pattern to apply:**
 
 ```typescript
-// Current generic styling - no color differentiation
-<Link
-  to={link.href}
-  className="text-black hover:text-gold ... bg-white/80 border border-gold/30"
->
-```
+// Card container
+<Card className="bg-{color}-900/20 border-{color}-500/30">
 
-Each AI tool has a distinct accent color **inside** the tool page:
-- **AI ROI Calculator**: Emerald
-- **AI Price Predictor**: Blue
-- **AI Lead Qualification**: Purple
-- **AI Translation Hub**: Amber
-- **AI Objection Handler**: Rose
-- etc.
+// Input fields
+className="bg-zinc-900/50 border-{color}-500/30 text-white h-12 rounded-xl hover:border-{color}-500/50 focus:border-{color}-400"
 
-**Solution:**
+// Buttons (already using ai-* variants or gradients - verify each)
+className="w-full bg-gradient-to-r from-{color}-600 to-{color}-500 hover:from-{color}-500 hover:to-{color}-400"
 
-Create a color mapping object and update the footer to render each AI tool link with its matching accent color.
+// Result cards
+className="bg-{color}-500/10 border-{color}-500/30"
 
-**Files to Modify:**
-- `src/components/Footer.tsx`
-
-**Implementation:**
-
-1. Create a color mapping constant at the top of Footer.tsx:
-
-```typescript
-// AI Tool accent color mapping (matches inside tool pages)
-const AI_TOOL_COLORS: Record<string, { border: string; text: string; hover: string; bg: string }> = {
-  '/property-evaluator': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
-  '/ai-price-predictor': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
-  '/ai-roi-calculator': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
-  '/ai-lead-qualification': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
-  '/ai-translation-hub': { border: 'border-amber-500/40', text: 'text-amber-600', hover: 'hover:bg-amber-50', bg: 'bg-amber-50/50' },
-  '/ai-objection-handler': { border: 'border-rose-500/40', text: 'text-rose-600', hover: 'hover:bg-rose-50', bg: 'bg-rose-50/50' },
-  '/ai-market-report': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
-  '/ai-video-tour-script': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
-  '/ai-email-generator': { border: 'border-teal-500/40', text: 'text-teal-600', hover: 'hover:bg-teal-50', bg: 'bg-teal-50/50' },
-  '/ai-social-media': { border: 'border-pink-500/40', text: 'text-pink-600', hover: 'hover:bg-pink-50', bg: 'bg-pink-50/50' },
-  '/ai-neighborhood-insights': { border: 'border-indigo-500/40', text: 'text-indigo-600', hover: 'hover:bg-indigo-50', bg: 'bg-indigo-50/50' },
-  '/ai-property-analyzer': { border: 'border-orange-500/40', text: 'text-orange-600', hover: 'hover:bg-orange-50', bg: 'bg-orange-50/50' },
-  '/rental-index': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
-  '/mortgage-calculator': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/10', bg: 'bg-gold/5' },
-  '/compare': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
-  '/quiz': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
-  '/interior-design-ai': { border: 'border-rose-500/40', text: 'text-rose-600', hover: 'hover:bg-rose-50', bg: 'bg-rose-50/50' },
-  '/virtual-staging-ai': { border: 'border-amber-500/40', text: 'text-amber-600', hover: 'hover:bg-amber-50', bg: 'bg-amber-50/50' },
-  '/ai-follow-up-scheduler': { border: 'border-green-500/40', text: 'text-green-600', hover: 'hover:bg-green-50', bg: 'bg-green-50/50' },
-  '/ai-client-matcher': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
-  '/ai-competitor-analysis': { border: 'border-red-500/40', text: 'text-red-600', hover: 'hover:bg-red-50', bg: 'bg-red-50/50' },
-  '/ai-investment-report': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
-  '/ai-meeting-summarizer': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
-  '/ai-description-writer': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
-  '/ai-contract-reviewer': { border: 'border-slate-500/40', text: 'text-slate-600', hover: 'hover:bg-slate-50', bg: 'bg-slate-50/50' },
-  '/ai-document-generator': { border: 'border-zinc-500/40', text: 'text-zinc-600', hover: 'hover:bg-zinc-50', bg: 'bg-zinc-50/50' },
-  '/business-card-scanner': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/10', bg: 'bg-gold/5' },
-};
-
-// Default color for tools not in the map
-const DEFAULT_TOOL_COLOR = { border: 'border-gold/30', text: 'text-black', hover: 'hover:bg-white', bg: 'bg-white/80' };
-```
-
-2. Update the Professional Tools link rendering (lines 771-781):
-
-```typescript
-{professionalTools.map((link) => {
-  const colors = AI_TOOL_COLORS[link.href] || DEFAULT_TOOL_COLOR;
-  return (
-    <Link
-      key={link.href}
-      to={link.href}
-      className={`transition-all duration-300 text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl group ${colors.bg} border ${colors.border} shadow-sm hover:shadow-md ${colors.hover}`}
-    >
-      <span className={`${colors.text} group-hover:brightness-110 transition-colors font-medium`}>
-        {link.label}
-      </span>
-    </Link>
-  );
-})}
+// Disclaimer
+className="bg-zinc-800/50 border-zinc-700" // Keep neutral for contrast
 ```
 
 ---
 
-### Files to Modify Summary
+### Files to Modify
 
-| File | Change |
-|------|--------|
-| `src/components/home/PodcastVisibilityGate.tsx` | Check `isOwner` BEFORE loading states |
-| `src/components/Footer.tsx` | Add AI tool color mapping and apply to links |
+#### A. Property Evaluator (Full Theme Overhaul)
+**File:** `src/pages/PropertyEvaluator.tsx`
+
+**Changes:**
+1. Line 368: Update card to `bg-blue-900/30 border-blue-500/20`
+2. Line 385+: Input fields add `border-blue-500/30 hover:border-blue-500/50 focus:border-blue-400`
+3. Line 498-500: View buttons use blue tints
+4. All select dropdowns: Add blue hover states
+5. Results section: Use blue-tinted backgrounds
+
+#### B. Premium Tools Card Styling Updates
+
+Each premium tool needs internal element updates:
+
+| File | Line(s) | Current | Target |
+|------|---------|---------|--------|
+| `AILeadQualificationPremium.tsx` | 94, 107, 120+ | `border-zinc-800`, `border-zinc-700` | `border-purple-500/30` |
+| `AIObjectionHandlerPremium.tsx` | 70, 87+ | `border-zinc-800` | `border-rose-500/30` |
+| `AIFollowupSchedulerPremium.tsx` | 111, 124+ | `border-zinc-800` | `border-cyan-500/30` |
+| `AIPropertyAnalyzerPremium.tsx` | 155, 166+ | `border-zinc-800` | `border-sky-500/30` |
+| `AIMarketReportPremium.tsx` | 114, 124+ | `border-zinc-800` | `border-indigo-500/30` |
+| `AIMeetingSummarizerPremium.tsx` | (verify) | `border-zinc-800` | `border-violet-500/30` |
+| `AICompetitorAnalysisPremium.tsx` | (verify) | `border-zinc-800` | `border-pink-500/30` |
+| `AIContractReviewerPremium.tsx` | (verify) | `border-zinc-800` | `border-red-500/30` |
+| `AIDocumentGeneratorPremium.tsx` | (verify) | `border-zinc-800` | `border-orange-500/30` |
+| `AIVideoTourScriptPremium.tsx` | (verify) | `border-zinc-800` | `border-teal-500/30` |
+| `AINeighborhoodInsightsPremium.tsx` | (verify) | `border-zinc-800` | `border-indigo-500/30` |
+| `AICallSummarizerPremium.tsx` | (verify) | `border-zinc-800` | `border-violet-500/30` |
+
+---
+
+### Routing Verification
+
+Based on the verified inventory file, I checked for 404 errors:
+
+**All AI tool routes are working.** The inventory shows:
+- 46 tools with `working` status
+- 4 tools with `partial` status (UI works, some features need completion)
+- 1 `component_only` (AI Virtual Staging - component exists but no route)
+- 1 `coming_soon`
+
+**No 404 errors exist in the current routing configuration.**
+
+The `AI Virtual Staging` component exists at `src/components/ai-tools/AIVirtualStaging.tsx` but has no dedicated route. If you want this accessible, I can create a route for it.
+
+---
+
+### Implementation Details
+
+#### Example: AI Lead Qualification Premium - Full Update
+
+```typescript
+// Before (Line 94)
+<Card className="bg-zinc-900/50 border-zinc-800">
+
+// After
+<Card className="bg-purple-900/20 border-purple-500/30">
+```
+
+```typescript
+// Before (Line 107)
+<Input className="bg-zinc-800 border-zinc-700 text-white" />
+
+// After
+<Input className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors" />
+```
+
+```typescript
+// Before (Line 166) - Select trigger
+<SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+
+// After
+<SelectTrigger className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50">
+```
+
+#### Example: Property Evaluator - Full Update
+
+```typescript
+// Before (Line 368)
+<Card className="bg-zinc-900/50 border-zinc-800">
+
+// After
+<Card className="bg-blue-900/20 border-blue-500/30">
+```
+
+```typescript
+// Before (Line 385)
+<Input className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500" />
+
+// After
+<Input className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-zinc-500 hover:border-blue-500/50 focus:border-blue-400 transition-colors" />
+```
+
+---
+
+### Color Reference Table
+
+| Tool | Primary Color | Card BG | Card Border | Input Border | Button Gradient |
+|------|--------------|---------|-------------|--------------|-----------------|
+| Property Evaluator | Blue | `bg-blue-900/20` | `border-blue-500/30` | `border-blue-500/30` | `from-blue-600 to-blue-500` |
+| Rental Index | Emerald | `bg-emerald-900/20` | `border-emerald-500/30` | `border-emerald-500/30` | `from-emerald-600 to-green-600` |
+| ROI Calculator | Emerald | `bg-emerald-900/20` | `border-emerald-500/30` | `border-emerald-500/30` | `from-emerald-600 to-emerald-500` |
+| Price Predictor | Blue | `bg-blue-900/20` | `border-blue-500/30` | `border-blue-500/30` | `from-blue-600 to-blue-500` |
+| Property Analyzer | Sky | `bg-sky-900/20` | `border-sky-500/30` | `border-sky-500/30` | `from-sky-600 to-sky-500` |
+| Lead Qualification | Purple | `bg-purple-900/20` | `border-purple-500/30` | `border-purple-500/30` | `from-purple-600 to-purple-500` |
+| Objection Handler | Rose | `bg-rose-900/20` | `border-rose-500/30` | `border-rose-500/30` | `from-rose-600 to-rose-500` |
+| Follow-up Scheduler | Cyan | `bg-cyan-900/20` | `border-cyan-500/30` | `border-cyan-500/30` | `from-cyan-600 to-cyan-500` |
+| Meeting Summarizer | Violet | `bg-violet-900/20` | `border-violet-500/30` | `border-violet-500/30` | `from-violet-600 to-violet-500` |
+| Translation Hub | Amber | `bg-amber-900/20` | `border-amber-500/30` | `border-amber-500/30` | `from-amber-600 to-amber-500` |
+| Market Report | Indigo | `bg-indigo-900/20` | `border-indigo-500/30` | `border-indigo-500/30` | `from-indigo-600 to-indigo-500` |
+| Neighborhood Insights | Indigo | `bg-indigo-900/20` | `border-indigo-500/30` | `border-indigo-500/30` | `from-indigo-600 to-indigo-500` |
+| Video Tour Script | Teal | `bg-teal-900/20` | `border-teal-500/30` | `border-teal-500/30` | `from-teal-600 to-teal-500` |
+| Document Generator | Orange | `bg-orange-900/20` | `border-orange-500/30` | `border-orange-500/30` | `from-orange-600 to-orange-500` |
+| Contract Reviewer | Red | `bg-red-900/20` | `border-red-500/30` | `border-red-500/30` | `from-red-600 to-red-500` |
+| Competitor Analysis | Pink | `bg-pink-900/20` | `border-pink-500/30` | `border-pink-500/30` | `from-pink-600 to-pink-500` |
+| Call Summarizer | Violet | `bg-violet-900/20` | `border-violet-500/30` | `border-violet-500/30` | `from-violet-600 to-violet-500` |
 
 ---
 
 ### Testing Checklist
 
-1. **Podcast Visibility:**
-   - Log in as Owner account
-   - Navigate to homepage
-   - Verify podcast section is visible
-   - Log out or use incognito
-   - Verify podcast section is hidden for visitors
+1. **Property Evaluator**: Cards, inputs, tabs, and buttons all show blue theme
+2. **Rental Index**: Verify emerald theme consistency (already mostly correct)
+3. **AI ROI Calculator**: Verify emerald cards and inputs match header
+4. **AI Price Predictor**: Verify blue cards and inputs match header
+5. **AI Property Analyzer**: Verify sky blue internal elements
+6. **AI Lead Qualification**: Verify purple internal elements
+7. **AI Objection Handler**: Verify rose internal elements
+8. **AI Follow-up Scheduler**: Verify cyan internal elements
+9. **AI Meeting Summarizer**: Verify violet internal elements
+10. **AI Translation Hub**: Verify amber internal elements
+11. **AI Market Report**: Verify indigo internal elements
+12. **AI Neighborhood Insights**: Verify indigo internal elements
+13. **AI Video Tour Script**: Verify teal internal elements
+14. **AI Document Generator**: Verify orange internal elements
+15. **AI Contract Reviewer**: Verify red internal elements
+16. **AI Competitor Analysis**: Verify pink internal elements
+17. **All routes**: Navigate to each tool from footer links to confirm no 404s
 
-2. **Footer AI Tool Colors:**
-   - Scroll to footer "Professional Tools" section
-   - Verify each tool has its distinct accent color
-   - Click on "AI ROI Calculator" - should have emerald styling in footer
-   - Click on "AI Price Predictor" - should have blue styling in footer
-   - Verify hover effects work with matching colors
+---
+
+### Summary
+
+- **17 files** need updates for consistent theming
+- **0 routing issues** found (all tools have working routes)
+- **1 component** (AI Virtual Staging) has no route but this appears intentional
+- Pattern is consistent: update card backgrounds and input borders to match tool accent color
 
