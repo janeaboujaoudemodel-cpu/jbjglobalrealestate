@@ -14,6 +14,7 @@ import {
   CheckSquare,
   Square,
   ArrowUpDown,
+  RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -153,6 +154,7 @@ const SupportTicketHub = () => {
     open: tickets?.filter((t) => t.status === "open").length || 0,
     inProgress: tickets?.filter((t) => t.status === "in_progress").length || 0,
     resolved: tickets?.filter((t) => t.status === "resolved").length || 0,
+    reopened: tickets?.filter((t) => t.is_reopened).length || 0,
   };
 
   const isAllSelected = sortedTickets && sortedTickets.length > 0 && selectedTicketIds.size === sortedTickets.length;
@@ -193,7 +195,7 @@ const SupportTicketHub = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-4 lg:grid-cols-5 gap-4 mb-6">
             <div className="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 rounded-xl p-4 border border-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.1)]">
               <p className="text-zinc-300 text-sm font-medium">Total Tickets</p>
               <p className="text-3xl font-bold text-white">{ticketCounts.total}</p>
@@ -210,6 +212,16 @@ const SupportTicketHub = () => {
               <p className="text-green-300 text-sm font-medium">Resolved</p>
               <p className="text-3xl font-bold text-green-400">{ticketCounts.resolved}</p>
             </div>
+            {/* Reopened Tickets Card */}
+            {ticketCounts.reopened > 0 && (
+              <div className="bg-gradient-to-br from-orange-900/30 to-orange-950/50 rounded-xl p-4 border border-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.1)]">
+                <div className="flex items-center gap-2">
+                  <RotateCcw className="w-4 h-4 text-orange-400" />
+                  <p className="text-orange-300 text-sm font-medium">Reopened</p>
+                </div>
+                <p className="text-3xl font-bold text-orange-400">{ticketCounts.reopened}</p>
+              </div>
+            )}
           </div>
 
           {/* Filters */}
@@ -454,9 +466,16 @@ const SupportTicketHub = () => {
                               </span>
                             </TableCell>
                             <TableCell>
-                              <Badge className={cn("border text-xs", priority.className)}>
-                                {priority.label}
-                              </Badge>
+                              <div className="flex items-center gap-1.5">
+                                <Badge className={cn("border text-xs", priority.className)}>
+                                  {priority.label}
+                                </Badge>
+                                {ticket.is_reopened && (
+                                  <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30 text-xs">
+                                    🔄 Reopened
+                                  </Badge>
+                                )}
+                              </div>
                             </TableCell>
                             <TableCell>
                               <Badge className={cn("flex items-center gap-1 w-fit text-xs", status.className)}>

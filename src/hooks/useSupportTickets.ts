@@ -23,6 +23,11 @@ export interface SupportTicket {
   customer_confirmation_error: string | null;
   created_at: string;
   updated_at: string;
+  // Reopened ticket tracking
+  is_reopened: boolean;
+  reopened_at: string | null;
+  reopen_count: number;
+  reopen_token: string | null;
 }
 
 export interface SupportTicketMessage {

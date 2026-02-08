@@ -10,6 +10,8 @@ import {
   RefreshCw,
   Trash2,
   ArrowUpDown,
+  X,
+  RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -139,6 +141,7 @@ export function EmbeddedSupportTickets() {
     open: tickets?.filter((t) => t.status === "open").length || 0,
     inProgress: tickets?.filter((t) => t.status === "in_progress").length || 0,
     resolved: tickets?.filter((t) => t.status === "resolved").length || 0,
+    reopened: tickets?.filter((t) => t.is_reopened).length || 0,
   };
 
   const isAllSelected = sortedTickets && sortedTickets.length > 0 && selectedTicketIds.size === sortedTickets.length;
@@ -200,6 +203,22 @@ export function EmbeddedSupportTickets() {
             </div>
           </CardContent>
         </Card>
+        {/* Reopened Tickets Card */}
+        {ticketCounts.reopened > 0 && (
+          <Card className="bg-white border-2 border-orange-500/30 col-span-2 md:col-span-1">
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-zinc-500 text-xs">Reopened</p>
+                  <p className="text-2xl font-bold text-orange-600">{ticketCounts.reopened}</p>
+                </div>
+                <div className="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center">
+                  <RotateCcw className="w-5 h-5 text-orange-500" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* Filters */}
@@ -296,10 +315,10 @@ export function EmbeddedSupportTickets() {
               <Button
                 size="sm"
                 onClick={() => setSelectedTicketIds(new Set())}
-                variant="ghost"
-                className="h-7 text-xs"
+                className="bg-red-600 hover:bg-red-700 text-white h-7 text-xs"
               >
-                Clear
+                <X className="w-3 h-3 mr-1" />
+                Clear Selection
               </Button>
             </div>
           )}
@@ -404,10 +423,17 @@ export function EmbeddedSupportTickets() {
                             </p>
                           </TableCell>
                           <TableCell>
-                            <Badge className={cn("text-[10px] px-1.5", priority.className)}>
-                              <span className={cn("w-1.5 h-1.5 rounded-full mr-1", priority.dotColor)} />
-                              {priority.label}
-                            </Badge>
+                            <div className="flex items-center gap-1.5">
+                              <Badge className={cn("text-[10px] px-1.5", priority.className)}>
+                                <span className={cn("w-1.5 h-1.5 rounded-full mr-1", priority.dotColor)} />
+                                {priority.label}
+                              </Badge>
+                              {ticket.is_reopened && (
+                                <Badge className="bg-orange-500/20 text-orange-600 border-orange-500/30 text-[10px] px-1.5">
+                                  🔄 Reopened
+                                </Badge>
+                              )}
+                            </div>
                           </TableCell>
                           <TableCell>
                             <Badge className={cn("text-[10px] px-1.5", status.className)}>

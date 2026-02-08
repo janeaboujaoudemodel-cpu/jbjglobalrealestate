@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 import {
   X,
   User,
@@ -17,6 +18,9 @@ import {
   ExternalLink,
   Image as ImageIcon,
   FileText,
+  Calendar,
+  StickyNote,
+  RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -163,6 +167,7 @@ const SuggestionCard = ({
 };
 
 const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
+  const navigate = useNavigate();
   const { data, isLoading } = useSupportTicketDetail(ticketId);
   const updateStatus = useUpdateTicketStatus();
   const sendReply = useSendTicketReply();
@@ -284,7 +289,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className="bg-gold/20 border-2 border-gold text-gold hover:bg-gold hover:text-black transition-all duration-200"
+          className="bg-gold border-2 border-gold text-black hover:bg-gold/80 transition-all duration-200"
         >
           <X className="w-5 h-5" />
         </Button>
@@ -292,6 +297,23 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-6">
+          {/* Reopened Ticket Alert */}
+          {ticket.is_reopened && (
+            <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
+              <div className="flex items-center gap-2 text-orange-400">
+                <RotateCcw className="w-5 h-5" />
+                <span className="font-semibold">Ticket Reopened</span>
+              </div>
+              <p className="text-sm text-orange-300 mt-1">
+                Customer indicated issue not resolved. 
+                Reopened {ticket.reopen_count || 1} time(s)
+                {ticket.reopened_at && (
+                  <> on {format(new Date(ticket.reopened_at), "MMM d, yyyy 'at' HH:mm")}</>
+                )}
+              </p>
+            </div>
+          )}
+
           {/* Customer Info */}
           <div className="bg-zinc-800/50 rounded-lg p-4 space-y-3 border border-gold/10">
             <h3 className="text-sm font-semibold text-gold uppercase tracking-wide mb-3">
@@ -405,6 +427,24 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                   Reopen Ticket
                 </Button>
               )}
+              
+              {/* Calendar & Notes Integration */}
+              <Button
+                size="sm"
+                onClick={() => navigate(`/ai-calendar?ticket=${ticket.ticket_number}&title=Follow-up: ${encodeURIComponent(ticket.subject)}`)}
+                className="bg-purple-600 hover:bg-purple-700 text-white"
+              >
+                <Calendar className="w-4 h-4 mr-2" />
+                Add Follow-up
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => navigate(`/ai-notes?ticket=${ticket.ticket_number}&title=${encodeURIComponent(`Note: ${ticket.subject}`)}`)}
+                className="bg-zinc-700 hover:bg-zinc-600 text-white"
+              >
+                <StickyNote className="w-4 h-4 mr-2" />
+                Add Note
+              </Button>
             </div>
           </div>
 
