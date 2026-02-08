@@ -290,15 +290,15 @@ export function FoundersEmotionAnalyticsPanel() {
       {/* Tabs for different views */}
       <Tabs value={activeView} onValueChange={(v) => setActiveView(v as typeof activeView)}>
         <TabsList className="bg-[#1A1A1A] border border-gold/20 p-1">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
             <BarChart3 className="h-4 w-4 mr-2" />
             Overview
           </TabsTrigger>
-          <TabsTrigger value="channels" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="channels" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
             <MessageSquare className="h-4 w-4 mr-2" />
             Channels
           </TabsTrigger>
-          <TabsTrigger value="teams" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="teams" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
             <Users className="h-4 w-4 mr-2" />
             Teams
           </TabsTrigger>

@@ -166,7 +166,7 @@ const AIInsights = () => {
                 <TabsTrigger
                   key={type.id}
                   value={type.id}
-                  className="flex items-center gap-2 data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
+                  className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40"
                 >
                   <type.icon className="w-4 h-4" />
                   <span className="hidden sm:inline">{type.title}</span>

@@ -259,98 +259,98 @@ export default function FoundersAssistant() {
             <TabsList className="w-full bg-white/80 border-2 border-gold/30 p-1 rounded-xl mb-6 flex flex-wrap gap-1 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <TabsTrigger 
                 value="assistant" 
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Assistant
               </TabsTrigger>
               <TabsTrigger 
                 value="tasks"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <CheckSquare className="h-4 w-4 mr-2" />
                 Tasks
               </TabsTrigger>
               <TabsTrigger 
                 value="team"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <Users className="h-4 w-4 mr-2" />
                 Team
               </TabsTrigger>
               <TabsTrigger 
                 value="drafts"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <FileEdit className="h-4 w-4 mr-2" />
                 Drafts
               </TabsTrigger>
               <TabsTrigger 
                 value="ai-tools"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <Wrench className="h-4 w-4 mr-2" />
                 AI Tools
               </TabsTrigger>
               <TabsTrigger 
                 value="hot-leads"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <Flame className="h-4 w-4 mr-2" />
                 Hot Leads
               </TabsTrigger>
               <TabsTrigger 
                 value="activity"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <Activity className="h-4 w-4 mr-2" />
                 Activity
               </TabsTrigger>
               <TabsTrigger 
                 value="video-meet"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <Video className="h-4 w-4 mr-2" />
                 Video Meet
               </TabsTrigger>
               <TabsTrigger 
                 value="escalations"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <Zap className="h-4 w-4 mr-2" />
                 Escalations
               </TabsTrigger>
               <TabsTrigger 
                 value="analytics"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <Heart className="h-4 w-4 mr-2" />
                 Analytics
               </TabsTrigger>
               <TabsTrigger 
                 value="collaboration"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <Network className="h-4 w-4 mr-2" />
                 Collaboration
               </TabsTrigger>
               <TabsTrigger 
                 value="insights"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <Brain className="h-4 w-4 mr-2" />
                 AI Insights
               </TabsTrigger>
               <TabsTrigger 
                 value="notes"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <FileText className="h-4 w-4 mr-2" />
                 Notes
               </TabsTrigger>
               <TabsTrigger 
                 value="decisions"
-                className="flex-1 min-w-[100px] data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+                className="flex-1 min-w-[100px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black"
               >
                 <Brain className="h-4 w-4 mr-2" />
                 Decisions
