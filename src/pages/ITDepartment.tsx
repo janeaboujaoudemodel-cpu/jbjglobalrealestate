@@ -246,15 +246,15 @@ const ITDepartment: React.FC = () => {
         <Tabs defaultValue="applications" className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <TabsList className="bg-white/80 border-2 border-gold/30 p-1">
-              <TabsTrigger value="applications" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <UserPlus className="w-4 h-4 mr-2" />
                 New Joiner Applications
               </TabsTrigger>
-              <TabsTrigger value="tasks" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="tasks" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <FileText className="w-4 h-4 mr-2" />
                 IT Tasks
               </TabsTrigger>
-              <TabsTrigger value="team" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <Users className="w-4 h-4 mr-2" />
                 IT Team
               </TabsTrigger>

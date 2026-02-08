@@ -306,23 +306,23 @@ const EmployeeManagementHub: React.FC = () => {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 p-1">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="applications" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <UserPlus className="w-4 h-4 mr-2" />
                 Applications
               </TabsTrigger>
-              <TabsTrigger value="provisioning" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <Key className="w-4 h-4 mr-2" />
                 IT Provisioning
               </TabsTrigger>
-              <TabsTrigger value="journey" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <Activity className="w-4 h-4 mr-2" />
                 Employee Journey
               </TabsTrigger>
-              <TabsTrigger value="audit" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+              <TabsTrigger value="audit" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <Eye className="w-4 h-4 mr-2" />
                 Activity Audit
               </TabsTrigger>

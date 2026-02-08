@@ -337,19 +337,19 @@ const JBJDesignStudio: React.FC = () => {
         {/* Main Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="bg-zinc-900 border border-zinc-800 p-1">
-            <TabsTrigger value="create" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="create" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
               <Wand2 className="w-4 h-4 mr-2" />
               Create Design
             </TabsTrigger>
-            <TabsTrigger value="projects" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="projects" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
               <FolderOpen className="w-4 h-4 mr-2" />
               My Projects
             </TabsTrigger>
-            <TabsTrigger value="palettes" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="palettes" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
               <Palette className="w-4 h-4 mr-2" />
               Color Palettes
             </TabsTrigger>
-            <TabsTrigger value="team" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
               <Users className="w-4 h-4 mr-2" />
               Design Team
             </TabsTrigger>

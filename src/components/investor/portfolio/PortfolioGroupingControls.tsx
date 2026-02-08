@@ -46,19 +46,19 @@ export default function PortfolioGroupingControls({
       {/* Primary Grouping Tabs */}
       <Tabs value={activeGrouping} onValueChange={(v) => onGroupingChange(v as GroupingType)}>
         <TabsList className="bg-muted/50 h-auto p-1 flex-wrap">
-          <TabsTrigger value="objective" className="gap-2 data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="objective" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
             <Target className="w-4 h-4" />
             By Objective
           </TabsTrigger>
-          <TabsTrigger value="asset-type" className="gap-2 data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="asset-type" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
             <Layers className="w-4 h-4" />
             By Asset Type
           </TabsTrigger>
-          <TabsTrigger value="location" className="gap-2 data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="location" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
             <MapPin className="w-4 h-4" />
             By Location
           </TabsTrigger>
-          <TabsTrigger value="status" className="gap-2 data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="status" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
             <CheckSquare className="w-4 h-4" />
             By Status
           </TabsTrigger>

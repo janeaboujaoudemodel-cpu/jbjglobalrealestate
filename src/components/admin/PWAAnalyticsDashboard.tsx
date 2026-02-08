@@ -139,9 +139,9 @@ const PWAAnalyticsDashboard = () => {
           {pwaGuide && <PageGuide guide={pwaGuide} />}
           <Tabs value={dateRange} onValueChange={(v) => setDateRange(v as typeof dateRange)}>
             <TabsList className="bg-white/80 border-2 border-gold/30">
-              <TabsTrigger value="7d" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">7 Days</TabsTrigger>
-              <TabsTrigger value="30d" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">30 Days</TabsTrigger>
-              <TabsTrigger value="all" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">All Time</TabsTrigger>
+              <TabsTrigger value="7d" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">7 Days</TabsTrigger>
+              <TabsTrigger value="30d" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">30 Days</TabsTrigger>
+              <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">All Time</TabsTrigger>
             </TabsList>
           </Tabs>
           <Button
