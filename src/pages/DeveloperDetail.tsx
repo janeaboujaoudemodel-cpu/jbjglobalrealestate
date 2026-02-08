@@ -5,6 +5,7 @@ import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import ProjectCard from "@/components/ProjectCard";
 import EmiratesTabs from "@/components/EmiratesTabs";
+import { DeveloperProjectsMap } from "@/components/developer/DeveloperProjectsMap";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -171,6 +172,26 @@ const DeveloperDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Developer Projects Map */}
+        {projects && projects.length > 0 && (
+          <div className="mt-8">
+            <DeveloperProjectsMap
+              developerId={developer.id}
+              developerName={developer.name}
+              projects={projects.map(p => ({
+                id: p.id,
+                name: p.name,
+                slug: p.slug,
+                latitude: p.latitude,
+                longitude: p.longitude,
+                price_from: p.price_from,
+                cover_image_url: p.cover_image_url,
+                location: p.location,
+              }))}
+            />
+          </div>
+        )}
 
         {/* Projects section */}
         <div className="mt-8">

@@ -66,8 +66,14 @@ const COMMUNITY_COORDINATES: Record<string, [number, number]> = {
   "default": [25.2048, 55.2708],
 };
 
-// Get coordinates for a project based on its community or location
+// Get coordinates for a project - prefer real lat/lng from database
 const getProjectCoordinates = (project: Project): [number, number] => {
+  // Use real coordinates if available
+  if (project.latitude && project.longitude) {
+    return [project.latitude, project.longitude];
+  }
+  
+  // Fallback to community coordinates
   const communitySlug = project.community?.slug?.toLowerCase() || "";
   const location = project.location?.toLowerCase() || "";
   
