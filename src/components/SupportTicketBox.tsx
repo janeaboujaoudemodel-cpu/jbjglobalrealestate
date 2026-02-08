@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Headphones,
@@ -80,9 +80,16 @@ const SupportTicketBox = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [ticketNumber, setTicketNumber] = useState("");
   const [copied, setCopied] = useState(false);
+  
+  // Get user metadata for pre-filling
+  const userMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
+  const userName = (typeof userMeta.full_name === "string" ? userMeta.full_name : null) ||
+                   (typeof userMeta.name === "string" ? userMeta.name : null) ||
+                   (user?.email ? user.email.split("@")[0] : "");
+  
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
+    fullName: userName,
+    email: user?.email || "",
     phone: "",
     serviceCategory: "",
     otherCategoryDetail: "",
@@ -92,6 +99,17 @@ const SupportTicketBox = () => {
     escalateToTech: false,
   });
   const [attachments, setAttachments] = useState<File[]>([]);
+
+  // Pre-fill form when user logs in or dialog opens
+  React.useEffect(() => {
+    if (user && isOpen) {
+      setFormData(prev => ({
+        ...prev,
+        fullName: prev.fullName || userName,
+        email: prev.email || user.email || "",
+      }));
+    }
+  }, [user, isOpen, userName]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -363,7 +381,7 @@ const SupportTicketBox = () => {
                       </Button>
                     </DialogTrigger>
 
-                    <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-lg max-h-[85vh] z-[100] overflow-y-auto flex flex-col shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)]">
+                    <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-lg max-h-[85vh] z-[10050] overflow-y-auto flex flex-col shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)]">
                       <DialogHeader className="sticky top-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] z-10 pb-4 -mx-6 px-6 -mt-6 pt-6 border-b border-gold/20">
                         <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
                           <Headphones className="w-5 h-5 text-red-500" />
