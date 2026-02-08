@@ -48,7 +48,7 @@ import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPa
 import SyncDashboard from "@/components/listing-admin/SyncDashboard";
 import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel";
 // OffPlanInquiryCTA removed from admin per user request
-import { RefreshCw, Globe } from "lucide-react";
+import { RefreshCw, Globe, Check } from "lucide-react";
 
 interface ProjectDocument {
   id: string;
@@ -83,19 +83,28 @@ const ListingAdmin = () => {
   const [showChat, setShowChat] = useState(false);
   
   // View state - 'chat', 'projects', or 'editor'
-  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-sources' | 'sync' | 'reelly'>('sync');
+  // UNIFIED: Now using 'data-ops' as the single entry for all sync/extraction views
+  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-ops'>('data-ops');
 
-  // Allow deep-links like /listing-admin?view=sync&syncTab=approvals
+  // Allow deep-links like /listing-admin?view=data-ops&tab=reelly
+  // Legacy URLs (sync, reelly, data-sources) all redirect to data-ops
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const view = params.get("view");
-    const allowed = new Set(["chat", "projects", "editor", "data-sources", "sync", "reelly"]);
-    if (view && allowed.has(view) && view !== activeView) {
-      setActiveView(view as any);
+    // Map legacy views to new unified data-ops view
+    const legacyToNew: Record<string, string> = {
+      'sync': 'data-ops',
+      'reelly': 'data-ops', 
+      'data-sources': 'data-ops',
+    };
+    const mappedView = legacyToNew[view || ''] || view;
+    const allowed = new Set(["chat", "projects", "editor", "data-ops"]);
+    if (mappedView && allowed.has(mappedView) && mappedView !== activeView) {
+      setActiveView(mappedView as any);
       // Reset sub-modes when switching views via URL
       setIsEditing(false);
       setIsCreating(false);
-      setShowChat(view === "chat");
+      setShowChat(mappedView === "chat");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
@@ -550,26 +559,13 @@ const ListingAdmin = () => {
                 <FolderOpen className="w-4 h-4 mr-2" />
                 {t('listingAdmin.projects')} ({projects?.length || 0})
               </Button>
+              {/* UNIFIED: Single Data Ops button replaces 3 separate buttons */}
               <Button
-                onClick={() => { setActiveView('data-sources'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
-                variant={activeView === 'data-sources' ? 'primary' : 'secondary'}
+                onClick={() => { setActiveView('data-ops'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
+                variant={activeView === 'data-ops' ? 'primary' : 'secondary'}
               >
                 <Database className="w-4 h-4 mr-2" />
-                Data Sources
-              </Button>
-              <Button
-                onClick={() => { setActiveView('sync'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
-                variant={activeView === 'sync' ? 'primary' : 'secondary'}
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Sync Dashboard
-              </Button>
-              <Button
-                onClick={() => { setActiveView('reelly'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
-                variant={activeView === 'reelly' ? 'primary' : 'secondary'}
-              >
-                <Globe className="w-4 h-4 mr-2" />
-                Reelly Import
+                Data Ops
               </Button>
               <Button
                 onClick={() => { handleCreateNew(); setActiveView('editor'); }}
@@ -604,27 +600,54 @@ const ListingAdmin = () => {
           </div>
         )}
 
-        {/* Data Sources View - Extraction & Approval Queue */}
-        {activeView === 'data-sources' && (
+        {/* UNIFIED Data Ops View - All sync/extraction in one tabbed interface */}
+        {activeView === 'data-ops' && (
           <div className="container mx-auto px-4 py-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <ExtractionJobsPanel />
-              <PendingUpdatesQueue onRefresh={refetchProjects} />
-            </div>
-          </div>
-        )}
-
-        {/* Sync Dashboard View */}
-        {activeView === 'sync' && (
-          <div className="container mx-auto px-4 py-6 space-y-6">
-            <SyncDashboard />
-          </div>
-        )}
-
-        {/* Reelly Import View */}
-        {activeView === 'reelly' && (
-          <div className="container mx-auto px-4 py-6">
-            <ReellyImportPanel />
+            <Tabs defaultValue="reelly" className="space-y-6">
+              <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1">
+                <TabsTrigger 
+                  value="reelly" 
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                >
+                  <Globe className="w-4 h-4 mr-2" />
+                  Reelly Sync
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="provident"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Provident Sync
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="approvals"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                >
+                  <Check className="w-4 h-4 mr-2" />
+                  Approval Queue
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="external"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                >
+                  <Database className="w-4 h-4 mr-2" />
+                  External Sources
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="reelly" className="mt-0">
+                <ReellyImportPanel />
+              </TabsContent>
+              <TabsContent value="provident" className="mt-0">
+                <SyncDashboard />
+              </TabsContent>
+              <TabsContent value="approvals" className="mt-0">
+                <PendingUpdatesQueue onRefresh={refetchProjects} />
+              </TabsContent>
+              <TabsContent value="external" className="mt-0">
+                <ExtractionJobsPanel />
+              </TabsContent>
+            </Tabs>
           </div>
         )}
 

@@ -210,35 +210,35 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
   }
 
   return (
-    <Card className="bg-white border-zinc-200 shadow-sm">
+    <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="flex items-center gap-2 text-zinc-900">
+        <CardTitle className="flex items-center gap-2 text-foreground">
           <Database className="h-5 w-5 text-gold" />
           Pending Updates Queue
           {updates.length > 0 && (
             <Badge variant="secondary" className="bg-amber-100 text-amber-800">{updates.length}</Badge>
           )}
         </CardTitle>
-        <Button variant="outline" size="sm" onClick={fetchPendingUpdates} className="border-zinc-300">
+        <Button variant="outline" size="sm" onClick={fetchPendingUpdates} className="border-gold/30 hover:bg-gold/10">
           <RefreshCw className="h-4 w-4 mr-2" />
           Refresh
         </Button>
       </CardHeader>
       <CardContent>
         {updates.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-8 text-zinc-500">
+          <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
             <Check className="h-12 w-12 mb-4 text-emerald-500" />
-            <p className="text-lg font-medium text-zinc-900">All caught up!</p>
+            <p className="text-lg font-medium text-foreground">All caught up!</p>
             <p className="text-sm">No pending updates require your review</p>
           </div>
         ) : (
           <ScrollArea className="h-[400px] pr-4">
             <div className="space-y-4">
               {updates.map((update) => (
-                <div
-                  key={update.id}
-                  className="border border-zinc-200 rounded-lg p-4 bg-zinc-50 hover:bg-zinc-100 transition-colors"
-                >
+                  <div
+                    key={update.id}
+                    className="border border-gold/20 rounded-lg p-4 bg-white/50 hover:bg-white/80 transition-colors"
+                  >
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <div className="flex items-center gap-2 mb-1">

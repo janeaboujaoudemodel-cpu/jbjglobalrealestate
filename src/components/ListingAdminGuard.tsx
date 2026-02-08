@@ -9,10 +9,13 @@ interface ListingAdminGuardProps {
 
 /**
  * ListingAdminGuard - Restricts /listing-admin to users with:
- * 1. Verified Owner (from AuthContext - takes precedence)
+ * 1. Verified Owner (from AuthContext - takes precedence, no DB calls needed)
  * 2. "owner" role in user_roles table
  * 3. "admin" role in user_roles table
  * 4. Active entry in listing_admins table
+ * 
+ * CRITICAL: Waits for BOTH authLoading AND ownerLoading before making any decisions.
+ * This prevents race conditions that cause premature redirects to /403.
  * 
  * If not authenticated → redirect to /auth with redirect-back
  * If authenticated but unauthorized → redirect to /
@@ -26,8 +29,11 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
     let cancelled = false;
 
     const verify = async () => {
-      // Wait for auth to finish loading
-      if (authLoading || ownerLoading) return;
+      // CRITICAL: Wait for BOTH auth AND owner verification to complete
+      // This is the key fix for the race condition
+      if (authLoading || ownerLoading) {
+        return; // Don't make any decisions yet
+      }
 
       // No user = redirect to login
       if (!user) {
@@ -35,12 +41,14 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
         return;
       }
 
-      // Owner override - if verified as Owner, allow immediately
+      // Owner override - if verified as Owner via AuthContext, allow immediately
+      // No need for any DB calls - owner status is already verified server-side
       if (isOwner) {
         if (!cancelled) setStatus("allowed");
         return;
       }
 
+      // For non-owners, check database roles
       const userId = user.id;
 
       try {
@@ -79,11 +87,15 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
     };
   }, [user, authLoading, isOwner, ownerLoading]);
 
-  // Still checking auth or owner status
+  // CRITICAL: Show loading while EITHER auth OR owner verification is in progress
+  // This prevents premature redirect decisions
   if (authLoading || ownerLoading || status === "checking") {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-zinc-400 text-sm">Verifying access...</p>
+        </div>
       </div>
     );
   }

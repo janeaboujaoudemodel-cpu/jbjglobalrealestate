@@ -143,10 +143,14 @@ export function useSyncJobs() {
     try {
       const { data: user } = await supabase.auth.getUser();
       
+      // CRITICAL FIX: Set source column based on job type for proper job resumption
+      const source = jobType.startsWith('reelly') ? 'reelly' : 'provident';
+      
       const { data, error } = await supabase
         .from("sync_jobs")
         .insert({
           job_type: jobType,
+          source: source, // FIX: This was missing, causing "No resumable job found" errors
           status: "running",
           total_pages: totalExpected,
           current_page: 0,
