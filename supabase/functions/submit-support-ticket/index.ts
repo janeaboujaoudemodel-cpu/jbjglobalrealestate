@@ -493,8 +493,9 @@ const handler = async (req: Request): Promise<Response> => {
         html: customerEmailHtml,
       });
       customerEmailSent = true;
-      customerEmailMessageId = customerEmailResult?.data?.id || null;
-      console.log("Customer confirmation email sent:", customerEmailMessageId);
+      // Resend v2+ returns { id: "..." } directly, older versions return { data: { id: "..." } }
+      customerEmailMessageId = (customerEmailResult as any)?.id || (customerEmailResult as any)?.data?.id || null;
+      console.log("Customer confirmation email sent successfully:", JSON.stringify(customerEmailResult));
     } catch (emailError) {
       console.error("Failed to send customer email:", emailError);
       customerEmailError = emailError instanceof Error ? emailError.message.substring(0, 200) : "Unknown error";
