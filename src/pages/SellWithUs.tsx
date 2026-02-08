@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, FileText, Camera, Globe, Calendar, Handshake, MessageCircle, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
-import GlobalHeader from "@/components/GlobalHeader";
 import { Button } from "@/components/ui/button";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
@@ -91,7 +90,6 @@ const SellWithUs = () => {
         keywords="sell property dubai, sell home dubai, property valuation dubai, sell apartment dubai"
         canonicalPath="/sell"
       />
-      <GlobalHeader />
       
       <main className="min-h-screen bg-black">
         {/* Hero Section */}

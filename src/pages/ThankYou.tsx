@@ -3,8 +3,6 @@ import { motion } from "framer-motion";
 import { CheckCircle, ArrowRight, MessageCircle, Home } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
-import GlobalHeader from "@/components/GlobalHeader";
-
 import { Button } from "@/components/ui/button";
 import { getWhatsAppUrl } from "@/constants/stats";
 
@@ -137,7 +135,6 @@ const ThankYou = () => {
         canonicalPath="/thank-you"
         noIndex={true}
       />
-      <GlobalHeader />
       
       <main className="min-h-screen bg-black flex items-center">
         <section className="w-full py-20">

@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { Star, Quote, MessageCircle, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
-import GlobalHeader from "@/components/GlobalHeader";
 import { Button } from "@/components/ui/button";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 
@@ -91,7 +90,6 @@ const Reviews = () => {
         keywords="jbj real estate reviews, dubai real estate testimonials, client stories"
         canonicalPath="/reviews"
       />
-      <GlobalHeader />
       
       <main className="min-h-screen bg-black">
         {/* Hero Section */}

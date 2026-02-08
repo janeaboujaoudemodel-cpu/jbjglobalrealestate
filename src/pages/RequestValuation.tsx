@@ -3,8 +3,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, Upload, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
-import GlobalHeader from "@/components/GlobalHeader";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -105,7 +103,6 @@ const RequestValuation = () => {
         keywords="property valuation dubai, home valuation dubai, sell property dubai"
         canonicalPath="/sell/valuation"
       />
-      <GlobalHeader />
       
       <main className="min-h-screen bg-black">
         {/* Hero Section */}

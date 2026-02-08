@@ -2,7 +2,6 @@ import { motion, type Variants } from "framer-motion";
 import { ArrowRight, TrendingUp, Search, BarChart3, FileText, Shield, PieChart, Building, Phone, MessageCircle, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
-import GlobalHeader from "@/components/GlobalHeader";
 import { Button } from "@/components/ui/button";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { type ReactNode } from "react";
@@ -128,7 +127,6 @@ const InvestorServices = () => {
         keywords="dubai real estate investment, property investment dubai, investor advisory dubai, dubai market intelligence"
         canonicalPath="/investors"
       />
-      <GlobalHeader />
       
       {/* Sticky Actions - Desktop */}
       <div className="hidden lg:flex fixed right-6 top-1/2 -translate-y-1/2 z-40 flex-col gap-3">
