@@ -52,9 +52,9 @@ const AreasWeCover = () => {
             >
               <Link
                 to={`/area/${area.slug}`}
-                className="group block p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/20 hover:border-gold transition-all duration-300 hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] hover:-translate-y-0.5 text-center"
+                className="group flex items-center justify-center min-h-[72px] p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/20 hover:border-gold transition-all duration-300 hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] hover:-translate-y-0.5 text-center"
               >
-                <h3 className="text-black font-semibold text-sm group-hover:text-gold transition-colors">
+                <h3 className="text-black font-semibold text-sm group-hover:text-gold transition-colors line-clamp-2">
                   {area.name}
                 </h3>
               </Link>
