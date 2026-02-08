@@ -134,17 +134,17 @@ const TeamHeroCollage: React.FC = () => {
   }, [collageMembers]);
 
   return (
-    <div className="relative w-full py-8 overflow-hidden">
+    <div className="relative w-full py-6 pb-12 overflow-visible">
       {/* Gradient overlays for seamless edges */}
-      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black via-black/60 to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black via-black/60 to-transparent z-10 pointer-events-none" />
       
-      {/* Collage Grid */}
-      <div className="flex flex-col items-center gap-3 md:gap-4">
+      {/* Collage Grid - ensure all rows visible */}
+      <div className="flex flex-col items-center gap-2 md:gap-3">
         {rows.map((row, rowIndex) => (
           <motion.div
             key={rowIndex}
-            className={`flex items-center justify-center gap-3 md:gap-4 ${row.offset}`}
+            className={`flex items-center justify-center gap-2 md:gap-3 ${row.offset}`}
             initial={{ opacity: 0, x: rowIndex % 2 === 0 ? -50 : 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: rowIndex * 0.15, duration: 0.6 }}
