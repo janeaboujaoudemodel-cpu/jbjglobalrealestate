@@ -1,288 +1,201 @@
 
-# Complete Reelly × Provident Synchronization System Rebuild
 
-## Executive Summary
+# Add Frontend Validation for Service Category Field
 
-This plan addresses the critical failures in the current synchronization system and implements a robust, enterprise-grade solution that ensures:
-- 100% data extraction from Reelly API (floor plans, brochures, amenities, etc.)
-- Persistent sync state that survives page refresh
-- Premium UI with full Reelly parity for project pages
-- Best-in-class developer directory merging Reelly data with Provident-style UI
+## Overview
 
-## Current State Analysis
+Add inline validation error message for the Service Category field in `SupportTicketBox.tsx` and `CustomerHappiness.tsx` to prevent form submission without a selection, matching the validation pattern used for other required fields.
 
-### Database Statistics
-| Metric | Count | Status |
-|--------|-------|--------|
-| Total Projects | 1,804 | Synced |
-| Projects with Cover Images | 1,802 | 99.9% |
-| Projects with Floor Plans | 0 | CRITICAL |
-| Projects with Amenities | 0 | CRITICAL |
-| Projects with Payment Breakdown | 1 | CRITICAL |
-| Project Documents | 0 | CRITICAL |
-| Developers | 554 | Synced |
-| Developers with Logos | 550 | 99.3% |
-| Developers with Feature Images | 401 | 72.4% |
-| Pending Imports | 1,804 | Queued |
+## Current Behavior
 
-### Critical Issues Identified
+- **SupportTicketBox.tsx**: Uses simple state management (no react-hook-form). Validation only happens on submit via `toast.error()` - no inline error messages are shown.
+- **CustomerHappiness.tsx**: Same pattern - no inline validation, relies on browser's default `required` behavior for inputs but Select components don't have native required validation.
 
-1. **Data Extraction Incomplete**: The `reelly-fetch-details` function only updates `pending_project_imports` table, but the detail data (floor_plans, documents, amenities, unit_types) is NOT being transferred to the live `projects` table during approval.
+## Implementation Approach
 
-2. **Bulk Approve Mapping Gap**: The `bulk-approve-imports` function correctly maps these fields BUT the pending imports don't have the data populated because `reelly-fetch-details` hasn't been run on them.
-
-3. **Sync Order Problem**: Projects are approved before detail enrichment runs, so they end up with null values for floor_plans, amenities, etc.
-
-## Implementation Plan
-
-### Phase 1: Fix Data Pipeline Order
-
-The sync pipeline must execute in this order:
-1. Fetch project list from Reelly API → `pending_project_imports`
-2. Fetch detailed data for each project → Update `pending_project_imports` with floor plans, docs, amenities
-3. Approve and publish → Transfer complete data to `projects` table
+Since the forms use simple `useState` instead of react-hook-form, I'll add a `fieldErrors` state object to track validation errors per field and display inline error messages below the Service Category select component.
 
 ---
 
-### Phase 2: Upgrade Detail Fetcher
+## Changes for `SupportTicketBox.tsx`
 
-**File: `supabase/functions/reelly-fetch-details/index.ts`**
-
-Enhance to fetch ALL detail fields:
-- Extract `floor_plans` array with bedroom types and PDF URLs
-- Extract `brochures` and `documents` array
-- Extract full `amenities` list (not just 5-10 items)
-- Extract `unit_types` with pricing and availability
-- Extract `payment_plan` milestones
-- Extract `faqs` if available
-- Extract `highlights` and `features`
-
-Add a "fill_all" mode that runs on already-approved projects to backfill missing data directly into the `projects` table.
-
----
-
-### Phase 3: Create Backfill Function
-
-**File: `supabase/functions/reelly-backfill-projects/index.ts`** (NEW)
-
-This function will:
-1. Query projects that have `reelly_id` but null `floor_plan_types`, `amenities`, etc.
-2. For each project, fetch detail from Reelly API using the reelly_id
-3. Update the project directly in the `projects` table
-4. Track progress in `sync_jobs` for persistence
-
-```text
-Processing Logic:
-┌──────────────────────────────────────────────────────────────┐
-│  SELECT FROM projects WHERE reelly_id IS NOT NULL            │
-│  AND (floor_plan_types IS NULL OR amenities IS NULL)         │
-│  LIMIT batch_size                                            │
-└────────────────────────────┬─────────────────────────────────┘
-                             │
-                             ▼
-┌──────────────────────────────────────────────────────────────┐
-│  For each project:                                           │
-│  1. Fetch /api/v2/clients/projects/{reelly_id}              │
-│  2. Extract floor_plans, documents, amenities, unit_types    │
-│  3. UPDATE projects SET ... WHERE id = project.id            │
-└──────────────────────────────────────────────────────────────┘
-```
-
----
-
-### Phase 4: Upgrade Admin Panel
-
-**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
-
-Add new workflow step:
-1. **Step 1**: Sync Project List (existing)
-2. **Step 2**: Enrich All Details (NEW - runs reelly-backfill-projects)
-3. **Step 3**: Sync Developers (existing)
-4. **Step 4**: Generate AI Interiors (existing)
-5. **Step 5**: Extract Areas (existing)
-
-Add "Backfill Missing Data" button that:
-- Shows count of projects missing floor plans/amenities
-- Runs backfill in batches
-- Displays progress with persistence
-
-Add resume banner that reads from `sync_jobs` table on mount.
-
----
-
-### Phase 5: Developer Directory Enhancement
-
-**File: `src/pages/Developers.tsx`**
-
-Enhance developer cards to match Provident layout:
-- Hero image (feature_image_url from developer or first project cover)
-- Logo overlay
-- Short description (truncated to 2 lines)
-- Project count
-- "View Developer" CTA
-
-**File: `src/pages/DeveloperDetail.tsx`**
-
-Add sections:
-- Founded year, headquarters, completed projects stats
-- Full description with markdown rendering
-- Interactive map showing only this developer's projects
-- Projects grid filtered by emirate
-
-**File: `src/components/developer/DeveloperProjectsMap.tsx`** (Already exists)
-
-Verify it's properly integrated and filtering works correctly.
-
----
-
-### Phase 6: Project Detail Parity with Reelly
-
-**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
-
-Ensure all sections render when data exists:
-- Floor Plans Gallery (currently shows nothing because data is null)
-- Brochure Download (same issue)
-- Amenities Grid
-- Unit Inventory Table
-- Construction Progress Timeline
-- Payment Plan Visualization
-
-The UI components already exist but are hidden due to missing data.
-
----
-
-### Phase 7: Content Quality Improvements
-
-**File: `src/lib/markdownUtils.ts`**
-
-Enhance `renderMarkdownToHtml` to:
-- Strip hashtags (#PropertyInDubai etc.)
-- Convert bullet lists properly
-- Handle line breaks consistently
-- Limit paragraph lengths for readability
-
-**File: `supabase/functions/batch-generate-interiors/index.ts`** (Already exists)
-
-Verify it generates images for:
-- Kitchen interiors
-- Bathroom styles
-- Living room concepts
-- Color palette boards
-
----
-
-### Phase 8: Global Map Enhancement
-
-**File: `src/pages/PropertyMap.tsx`**
-
-Add features:
-- Developer filter dropdown
-- Buy/Rent toggle (currently shows "all")
-- Area filter
-- Improved marker clustering for dense areas
-
----
-
-## Technical Implementation Details
-
-### Backfill Function Schema
+### 1. Add Field Errors State
 
 ```typescript
-// Input
-interface BackfillRequest {
-  mode: 'batch' | 'all' | 'specific';
-  batch_size?: number; // default 50
-  project_ids?: number[]; // for specific mode
-  force_refresh?: boolean; // overwrite existing data
-}
-
-// Response
-interface BackfillResponse {
-  success: boolean;
-  processed: number;
-  updated: number;
-  failed: number;
-  remaining: number;
-  errors?: string[];
-}
+const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 ```
 
-### Data Mapping
+### 2. Update handleSubmit Validation
 
-```text
-Reelly API Field              → Projects Table Column
-─────────────────────────────────────────────────────
-floor_plans[]                 → floor_plan_types (JSONB)
-documents[] / brochures[]     → project_documents (via junction)
-amenities[] / facilities[]    → amenities (TEXT[])
-units[] / unit_types[]        → unit_types (JSONB)
-payment_plan.milestones       → payment_breakdown (JSONB)
-faqs[]                        → faqs (JSONB)
-highlights[] / features[]     → highlights (JSONB)
+Replace toast-only validation with state-based field error tracking:
+
+```typescript
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  
+  // Clear previous errors
+  const errors: Record<string, string> = {};
+  
+  if (!formData.serviceCategory) {
+    errors.serviceCategory = "Please select a service category";
+  }
+  if (!formData.subject) {
+    errors.subject = "Subject is required";
+  }
+  if (!formData.description) {
+    errors.description = "Description is required";
+  }
+  if (!formData.fullName) {
+    errors.fullName = "Full name is required";
+  }
+  if (!formData.email) {
+    errors.email = "Email is required";
+  }
+  if (formData.serviceCategory === "Other" && !formData.otherCategoryDetail.trim()) {
+    errors.otherCategoryDetail = "Please specify the type of issue";
+  }
+  
+  if (Object.keys(errors).length > 0) {
+    setFieldErrors(errors);
+    return;
+  }
+  
+  setFieldErrors({});
+  // ... rest of submit logic
+};
 ```
 
-### Sync Persistence
+### 3. Add Inline Error Message Below Select
 
-The `sync_jobs` table already has:
-- `id`, `status`, `current_page`, `next_cursor`
-- `stats_created`, `stats_updated`, `stats_skipped`, `stats_errors`
-- `error_log` (JSONB array)
+After the Service Category Select component (around line 696):
 
-Each batch updates this table, allowing resume from any interruption point.
+```tsx
+{/* Service Category */}
+<div>
+  <Label className="text-zinc-700 flex items-center gap-2">
+    <AlertCircle className="w-4 h-4 text-red-500" />
+    Service with Issue *
+  </Label>
+  <Select
+    value={formData.serviceCategory}
+    onValueChange={(value) => {
+      setFormData({ ...formData, serviceCategory: value, otherCategoryDetail: value !== "Other" ? "" : formData.otherCategoryDetail });
+      if (fieldErrors.serviceCategory) {
+        setFieldErrors(prev => ({ ...prev, serviceCategory: '' }));
+      }
+    }}
+  >
+    <SelectTrigger className={`mt-1 bg-white border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-gold/40'} focus:border-gold text-black rounded-lg cursor-pointer`}>
+      <SelectValue placeholder="Select the service" />
+    </SelectTrigger>
+    <SelectContent className="max-h-60">
+      {SERVICE_CATEGORIES.map((category) => (
+        <SelectItem key={category} value={category}>
+          {category}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+  {fieldErrors.serviceCategory && (
+    <p className="text-red-500 text-xs mt-1">{fieldErrors.serviceCategory}</p>
+  )}
+</div>
+```
+
+### 4. Clear Error on Field Change
+
+Add error clearing to the `onValueChange` handler to provide immediate feedback when the user makes a selection.
+
+### 5. Reset Errors on Form Reset
+
+Update `resetForm()` and `submitAnotherTicket()` functions to also clear `fieldErrors`:
+
+```typescript
+const resetForm = () => {
+  // ... existing code
+  setFieldErrors({});
+};
+
+const submitAnotherTicket = () => {
+  // ... existing code
+  setFieldErrors({});
+};
+```
 
 ---
 
-## Execution Order
+## Changes for `CustomerHappiness.tsx`
 
-1. **Create `reelly-backfill-projects` edge function** - New function to backfill existing projects
-2. **Update `ReellyImportPanel.tsx`** - Add backfill step to admin workflow
-3. **Run backfill on all 1,804 projects** - Populate missing floor_plans, amenities, etc.
-4. **Verify data in projects table** - Confirm non-null counts increase
-5. **Test project detail pages** - Floor plans, amenities sections should now render
-6. **Enhance developer pages** - Add map integration and Provident-style layout
-7. **Enhance global map** - Add developer filter
+Apply the same pattern:
+
+### 1. Add Field Errors State
+
+```typescript
+const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+```
+
+### 2. Update handleSubmit with Validation
+
+Add validation check before submission with inline error support.
+
+### 3. Add Inline Error Below Select
+
+```tsx
+<div>
+  <Label htmlFor="serviceCategory" className="text-black">
+    Service with Issue *
+  </Label>
+  <Select
+    value={formData.serviceCategory}
+    onValueChange={(v) => {
+      setFormData({ ...formData, serviceCategory: v });
+      if (fieldErrors.serviceCategory) {
+        setFieldErrors(prev => ({ ...prev, serviceCategory: '' }));
+      }
+    }}
+  >
+    <SelectTrigger className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-gold/40'} text-black`}>
+      <SelectValue placeholder="Select service" />
+    </SelectTrigger>
+    <SelectContent>
+      {SUPPORT_SERVICE_CATEGORIES.map((c) => (
+        <SelectItem key={c} value={c}>
+          {c}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+  {fieldErrors.serviceCategory && (
+    <p className="text-red-500 text-xs mt-1">{fieldErrors.serviceCategory}</p>
+  )}
+</div>
+```
 
 ---
 
-## Success Criteria
+## Visual Behavior
 
-| Requirement | Metric |
-|-------------|--------|
-| Projects with floor plans | > 1,000 (from 0) |
-| Projects with amenities | > 1,500 (from 0) |
-| Projects with brochures | > 500 (from 0) |
-| Sync persistence | Refresh page during sync → resumes from last batch |
-| Developer cards | Show logo, image, description, project count |
-| Developer map | Shows only that developer's project pins |
-| Global map filters | Developer, Buy/Rent, Area dropdowns work |
-| Project detail parity | All Reelly sections visible when data exists |
+| State | Appearance |
+|-------|------------|
+| Default | Gold border (`border-gold/40`) |
+| Error | Red border (`border-red-500`) + error message below |
+| After selection | Error clears immediately, border returns to gold |
 
 ---
-
-## Files to Create
-
-| File | Purpose |
-|------|---------|
-| `supabase/functions/reelly-backfill-projects/index.ts` | Backfill missing detail data to projects table |
 
 ## Files to Modify
 
 | File | Changes |
 |------|---------|
-| `supabase/functions/reelly-fetch-details/index.ts` | Add mode to update projects table directly |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Add backfill step, improve resume UI |
-| `src/pages/Developers.tsx` | Enhance card layout, add project counts |
-| `src/pages/DeveloperDetail.tsx` | Add founder/stats section, verify map works |
-| `src/pages/PropertyMap.tsx` | Add developer filter dropdown |
-| `src/lib/markdownUtils.ts` | Strip hashtags, improve formatting |
+| `src/components/SupportTicketBox.tsx` | Add `fieldErrors` state, update validation, add inline error message |
+| `src/pages/CustomerHappiness.tsx` | Add `fieldErrors` state, update validation, add inline error message |
 
 ---
 
-## Risk Mitigation
+## Technical Notes
 
-1. **API Rate Limiting**: Use 200ms delay between requests, batch size of 50
-2. **Partial Failures**: Track errors in `sync_jobs.error_log`, provide retry-failed button
-3. **Data Corruption**: Always use UPSERT pattern, never DELETE before INSERT
-4. **UI Regression**: Existing components already handle null data gracefully
+- Error message style matches existing patterns: `text-red-500 text-xs mt-1`
+- Border highlight on error uses `border-red-500` matching other form components
+- Errors clear on selection to provide immediate feedback
+- Form reset clears all field errors
 
-This plan prioritizes the data backfill first since the UI components already exist and are just waiting for data to render.
