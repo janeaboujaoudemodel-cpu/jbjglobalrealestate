@@ -657,8 +657,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* DIVIDER - Before Why Dubai */}
-      <SectionDivider />
+      {/* DIVIDER - Before Why Dubai (fullWidth to match edge-to-edge section) */}
+      <SectionDivider fullWidth />
 
       <Suspense fallback={<SectionLoader />}>
         <WhyDubaiCapitalSection />
@@ -666,7 +666,7 @@ const Index = () => {
 
       {/* JBJ PODCAST SECTION - Admin-controlled visibility */}
       <PodcastVisibilityGate>
-        <SectionDivider />
+        <SectionDivider fullWidth />
         <Suspense fallback={<SectionLoader />}>
           <JBJPodcastSection />
         </Suspense>
