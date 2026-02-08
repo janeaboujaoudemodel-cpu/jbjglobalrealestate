@@ -312,7 +312,7 @@ const SupportTicketForm = () => {
   );
 };
 
-// Feedback/Review Form
+// Feedback/Review Form - Connected to Database
 const FeedbackForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -331,17 +331,68 @@ const FeedbackForm = () => {
       toast({ title: "Please select a rating", variant: "destructive" });
       return;
     }
+    if (!formData.serviceType || !formData.review || !formData.wouldRecommend) {
+      toast({ title: "Please fill all required fields", variant: "destructive" });
+      return;
+    }
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast({
-      title: "Review Submitted! ⭐",
-      description: "Thank you for your feedback! Your review will be reviewed by our team before being published.",
-    });
 
-    setFormData({ fullName: "", email: "", serviceType: "", review: "", wouldRecommend: "" });
-    setRating(0);
-    setIsSubmitting(false);
+    try {
+      // Get current user if logged in
+      const { data: { user } } = await supabase.auth.getUser();
+
+      // Check if user has already submitted 3 reviews (max limit)
+      if (user) {
+        const { count } = await supabase
+          .from("customer_reviews")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user.id);
+        
+        if (count && count >= 3) {
+          toast({
+            title: "Review Limit Reached",
+            description: "You can only submit up to 3 reviews. You can edit your existing reviews from your dashboard.",
+            variant: "destructive",
+          });
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // Insert review into database
+      const { error } = await supabase
+        .from("customer_reviews")
+        .insert({
+          user_id: user?.id || null,
+          full_name: formData.fullName,
+          email: formData.email,
+          rating: rating,
+          service_type: formData.serviceType,
+          review_text: formData.review,
+          would_recommend: formData.wouldRecommend,
+          status: "pending_approval",
+          loyalty_points_awarded: 0, // Points awarded upon approval
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Review Submitted! ⭐",
+        description: "Thank you! Your review is pending approval. You'll receive 50 loyalty points once approved.",
+      });
+
+      setFormData({ fullName: "", email: "", serviceType: "", review: "", wouldRecommend: "" });
+      setRating(0);
+    } catch (error: any) {
+      console.error("Review submission error:", error);
+      toast({
+        title: "Submission Failed",
+        description: error.message || "Unable to submit your review. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -426,10 +477,11 @@ const FeedbackForm = () => {
             <SelectValue placeholder="Select option" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="definitely">Definitely Yes!</SelectItem>
-            <SelectItem value="probably">Probably</SelectItem>
-            <SelectItem value="maybe">Maybe</SelectItem>
-            <SelectItem value="no">No</SelectItem>
+            <SelectItem value="absolutely">Absolutely, 100%!</SelectItem>
+            <SelectItem value="definitely">Definitely!</SelectItem>
+            <SelectItem value="most-likely">Most Likely</SelectItem>
+            <SelectItem value="possibly">Possibly</SelectItem>
+            <SelectItem value="not-sure">Not Sure</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -613,14 +665,14 @@ const IssueReportForm = () => {
       </div>
 
       <div>
-        <Label htmlFor="steps" className="text-black">Steps to Reproduce</Label>
+        <Label htmlFor="steps" className="text-black">Steps Taken (Optional)</Label>
         <Textarea
           id="steps"
           value={formData.stepsToReproduce}
           onChange={(e) => setFormData({ ...formData, stepsToReproduce: e.target.value })}
           rows={3}
           className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
-          placeholder="1. Go to page X&#10;2. Click on Y&#10;3. Error appears"
+          placeholder="Optional: List the steps you took when the issue occurred"
         />
       </div>
 
@@ -904,28 +956,31 @@ const CustomerHappiness = () => {
         {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-        {/* Main Content */}
+        {/* Main Content - Wrapped in Background Card */}
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <Tabs defaultValue="support" className="max-w-4xl mx-auto">
-              <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 p-2 rounded-xl mb-8 h-auto">
-                <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
-                  <TicketCheck className="w-4 h-4" />
-                  <span className="hidden sm:inline">Support</span> Ticket
-                </TabsTrigger>
-                <TabsTrigger value="feedback" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
-                  <MessageSquareHeart className="w-4 h-4" />
-                  <span className="hidden sm:inline">Write a</span> Review
-                </TabsTrigger>
-                <TabsTrigger value="issue" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
-                  <AlertCircle className="w-4 h-4" />
-                  Report <span className="hidden sm:inline">Issue</span>
-                </TabsTrigger>
-                <TabsTrigger value="idea" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
-                  <Lightbulb className="w-4 h-4" />
-                  Idea <span className="hidden sm:inline">Box</span>
-                </TabsTrigger>
-              </TabsList>
+            {/* Background Card Wrapper for Premium Look */}
+            <Card className="max-w-4xl mx-auto bg-zinc-900/80 border-2 border-gold/30 backdrop-blur-sm shadow-2xl">
+              <CardContent className="p-6 md:p-8">
+                <Tabs defaultValue="support">
+                  <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 p-2 rounded-xl mb-8 h-auto">
+                    <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
+                      <TicketCheck className="w-4 h-4" />
+                      <span className="hidden sm:inline">Support</span> Ticket
+                    </TabsTrigger>
+                    <TabsTrigger value="feedback" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
+                      <MessageSquareHeart className="w-4 h-4" />
+                      <span className="hidden sm:inline">Write a</span> Review
+                    </TabsTrigger>
+                    <TabsTrigger value="issue" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
+                      <AlertCircle className="w-4 h-4" />
+                      Report <span className="hidden sm:inline">Issue</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="idea" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
+                      <Lightbulb className="w-4 h-4" />
+                      Idea <span className="hidden sm:inline">Box</span>
+                    </TabsTrigger>
+                  </TabsList>
 
               <TabsContent value="support">
                 <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
@@ -1010,11 +1065,13 @@ const CustomerHappiness = () => {
                   </CardContent>
                 </Card>
               </TabsContent>
-            </Tabs>
+                </Tabs>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
-        {/* Quick Contact */}
+        {/* Quick Contact - Premium Color-Coded KPI Cards */}
         <section className="py-16 border-t border-gold/30">
           <div className="container mx-auto px-4">
             <motion.div
@@ -1027,29 +1084,38 @@ const CustomerHappiness = () => {
                 Need Immediate Assistance?
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-blue-500/40 hover:border-blue-500 transition-colors">
+                {/* Call Us - Blue */}
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-blue-500 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 transform-gpu">
                   <CardContent className="p-6 text-center">
-                    <Phone className="w-8 h-8 text-blue-500 mx-auto mb-3" />
-                    <p className="text-black font-medium mb-1">Call Us</p>
-                    <a href="tel:+971565911000" className="text-zinc-600 hover:text-gold">
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-blue-500/10 border-2 border-blue-500/40 flex items-center justify-center">
+                      <Phone className="w-7 h-7 text-blue-500" />
+                    </div>
+                    <p className="text-black font-semibold mb-1">Call Us</p>
+                    <a href="tel:+971565911000" className="text-zinc-600 hover:text-blue-500 transition-colors font-medium">
                       +971 56 591 1000
                     </a>
                   </CardContent>
                 </Card>
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-black/40 hover:border-black transition-colors">
+                {/* Email Us - Purple */}
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-purple-500 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 transform-gpu">
                   <CardContent className="p-6 text-center">
-                    <Mail className="w-8 h-8 text-black mx-auto mb-3" />
-                    <p className="text-black font-medium mb-1">Email Us</p>
-                    <a href="mailto:CONTACT@JBJ.AE" className="text-zinc-600 hover:text-gold">
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-purple-500/10 border-2 border-purple-500/40 flex items-center justify-center">
+                      <Mail className="w-7 h-7 text-purple-500" />
+                    </div>
+                    <p className="text-black font-semibold mb-1">Email Us</p>
+                    <a href="mailto:CONTACT@JBJ.AE" className="text-zinc-600 hover:text-purple-500 transition-colors font-medium">
                       CONTACT@JBJ.AE
                     </a>
                   </CardContent>
                 </Card>
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold transition-colors">
+                {/* Office Hours - Gold */}
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 transform-gpu">
                   <CardContent className="p-6 text-center">
-                    <Calendar className="w-8 h-8 text-gold mx-auto mb-3" />
-                    <p className="text-black font-medium mb-1">Office Hours</p>
-                    <p className="text-zinc-600">Mon–Sun: 9AM–9PM</p>
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-gold/10 border-2 border-gold/40 flex items-center justify-center">
+                      <Calendar className="w-7 h-7 text-gold" />
+                    </div>
+                    <p className="text-black font-semibold mb-1">Office Hours</p>
+                    <p className="text-zinc-600 font-medium">Mon–Sun: 9AM–9PM</p>
                   </CardContent>
                 </Card>
               </div>

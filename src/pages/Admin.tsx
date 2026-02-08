@@ -51,6 +51,7 @@ import {
   Ticket,
   UserCog,
   Monitor,
+  Heart,
 } from "lucide-react";
 import { SmartDocumentUploader } from "@/components/SmartDocumentUploader";
 import { RateLimitDashboard } from "@/components/admin/RateLimitDashboard";
@@ -79,6 +80,7 @@ const EmbeddedHRDashboard = lazy(() => import("@/components/admin/EmbeddedHRDash
 const EmbeddedITDepartment = lazy(() => import("@/components/admin/EmbeddedITDepartment").then(m => ({ default: m.EmbeddedITDepartment })));
 const EmbeddedEmployeeHub = lazy(() => import("@/components/admin/EmbeddedEmployeeHub").then(m => ({ default: m.EmbeddedEmployeeHub })));
 const EmbeddedSupportTickets = lazy(() => import("@/components/admin/EmbeddedSupportTickets").then(m => ({ default: m.EmbeddedSupportTickets })));
+const EmbeddedCustomerHappinessHub = lazy(() => import("@/components/admin/EmbeddedCustomerHappinessHub").then(m => ({ default: m.EmbeddedCustomerHappinessHub })));
 
 const TabLoadingFallback = () => (
   <div className="space-y-4 p-4">
@@ -500,6 +502,13 @@ const Admin = () => {
                 <Ticket className="w-4 h-4 mr-2" />
                 Support Tickets
               </TabsTrigger>
+              <TabsTrigger
+                value="customer-happiness"
+                className="data-[state=active]:bg-gold data-[state=active]:text-black text-black"
+              >
+                <Heart className="w-4 h-4 mr-2" />
+                Customer Happiness
+              </TabsTrigger>
               <TabsTrigger value="podcast-studio" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
                 <Mic className="w-4 h-4 mr-2" />
                 Podcast Studio
@@ -575,6 +584,12 @@ const Admin = () => {
           <TabsContent value="support-tickets" className="space-y-8">
             <Suspense fallback={<TabLoadingFallback />}>
               <EmbeddedSupportTickets />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="customer-happiness" className="space-y-8">
+            <Suspense fallback={<TabLoadingFallback />}>
+              <EmbeddedCustomerHappinessHub />
             </Suspense>
           </TabsContent>
 
