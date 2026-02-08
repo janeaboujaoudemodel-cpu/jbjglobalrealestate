@@ -1,176 +1,181 @@
 
 
-## Summary of Incomplete Tasks
+## Summary of Issues Found
 
-Based on my audit, the following tasks from the approved plan were **NOT completed**:
+### 1. Support Ticket Hub UI Issues
 
-### 1. Staff Support Ticket Hub (Phase 2) - NOT BUILT
-The database infrastructure exists (`support_tickets` table with all columns, `support_ticket_messages` table), but **no UI or page was created** for staff to:
-- View all tickets in a list with filters (status, priority, date)
-- Open ticket detail panels with customer info
-- Post replies (which insert into `support_ticket_messages`)
-- Update ticket status (open/in_progress/resolved)
-- Trigger email notifications to customers when replying
+**Current Problems:**
+- **Text visibility issues**: The Support Ticket Hub page uses a dark theme (`bg-black text-white`), but UI components like `Input`, `Textarea`, and `Select` have their own premium champagne styling with light backgrounds and `text-black`. When these components are used in the dark hub page with override classes like `bg-zinc-800 border-zinc-700 text-white`, the styling conflicts cause readability issues.
+- **Dropdowns appear gray**: The `SelectTrigger` and `SelectContent` in `SupportTicketHub.tsx` apply dark-theme overrides (`bg-zinc-800 border-zinc-700 text-white`) that conflict with the base component styling.
+- **Bottom section layout**: The refresh button and stats cards need more visual polish.
 
-### 2. Resend Confirmation Email Capability (Phase 1.5) - NOT BUILT
-The backend function `resend-support-ticket-confirmation` was **never created**. This function should:
-- Accept `ticketNumber` + `email` as inputs
-- Validate the ticket exists and matches the email
-- Re-send the confirmation email
-- Update the `customer_confirmation_*` columns
+**Specific UI problems in the code:**
+```typescript
+// SupportTicketHub.tsx - Lines 119-142
+// These override classes conflict with the base component:
+<Input className="pl-10 bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500" />
+<SelectTrigger className="w-[140px] bg-zinc-800 border-zinc-700 text-white">
+<SelectContent className="bg-zinc-800 border-zinc-700">
+```
 
-### 3. User-Facing "My Tickets" View (Phase 2.4) - NOT BUILT
-No UI exists for:
-- Logged-in users to see their ticket history + thread
-- Guests to track tickets via email + ticket number lookup
+### 2. Tickets Not Showing in Hub
 
-### 4. Header Nav Pill Expansion on Scroll (Phase 8) - NOT IMPLEMENTED
-The `GlobalHeader.tsx` nav pill does not expand when `isSolid` is true (scrolled state).
+**Finding:** The database query confirms **10 tickets exist** in `support_tickets`. The data fetching should work, but let me check for RLS policy issues:
+- Tickets exist: `JBJ-20260208-8123`, `JBJ-20260208-5309`, `JBJ-20260208-9580`, etc.
+- The hook `useSupportTickets` queries without user restrictions (for staff), so this should work for owners.
 
-### 5. Hero Search Bar Fixes (Phase 7) - NOT VERIFIED/FIXED
-No specific fixes were applied to `HeroSearchBar.tsx` for the reported responsive/interaction issues.
+### 3. Email Confirmation Not Being Received
+
+**Finding from logs:**
+```
+2026-02-08T14:58:33Z INFO Customer confirmation email sent: null
+```
+
+The log shows `null` for the message ID, which means the Resend API returned an unexpected response structure. Looking at the code:
+```typescript
+customerEmailMessageId = customerEmailResult?.data?.id || null;
+```
+
+The issue is that the Resend SDK v2+ changed its response structure. The result is `{ id: "...", ... }` directly, not `{ data: { id: "..." } }`.
+
+**Evidence:** The database shows `customer_confirmation_status: sent` and `customer_confirmation_sent_at: 2026-02-08 14:58:33.902+00` for the latest ticket, meaning the email API call succeeded but the message ID extraction failed. However, if the status is "sent", the email should have been delivered.
+
+**Potential email delivery issue:** The email might be going to spam, or there could be a Resend domain verification issue affecting actual delivery despite the API returning success.
 
 ---
 
 ## Implementation Plan
 
-### Phase A: Staff Support Ticket Hub (Priority 1)
+### Phase 1: Fix Support Ticket Hub UI (Premium Dark Theme)
 
-**Goal**: Build an Owner-protected page where staff can manage all support tickets.
+**Goal:** Create a cohesive, premium dark-themed interface with proper text contrast.
 
-#### A.1 - Create Support Ticket Hub Page
-- **New file**: `src/pages/SupportTicketHub.tsx`
-- Features:
-  - Ticket list table with columns: Ticket #, Customer, Subject, Category, Priority, Status, Created
-  - Filters: Status dropdown, Priority dropdown, Search by ticket # or email
-  - Sort by created date (newest first)
-  - Click row to open detail panel
+**File: `src/pages/SupportTicketHub.tsx`**
 
-#### A.2 - Ticket Detail Panel Component
-- **New file**: `src/components/support/TicketDetailPanel.tsx`
-- Shows:
-  - Full customer info (name, email, phone)
-  - Ticket subject, category, description
-  - Attachment links
-  - Message thread (from `support_ticket_messages`)
-  - Status badge + action buttons (Mark In Progress, Resolve, Reopen)
-  - Reply composer textarea + send button
+Changes:
+1. Replace inline dark-mode overrides on Input/Select with dedicated dark-theme variants
+2. Add proper text colors for all form elements
+3. Improve stats cards with premium gold accents
+4. Add a "Back" button for navigation
+5. Enhance the overall visual hierarchy
 
-#### A.3 - Hooks for Data Fetching
-- **New file**: `src/hooks/useSupportTickets.ts`
-  - `useSupportTickets(filters)` - fetch ticket list with React Query
-  - `useSupportTicketDetail(ticketId)` - fetch single ticket + messages
-  - `useSendTicketReply()` - mutation to insert message + trigger email
+**Specific fixes:**
+- Input: Use custom styling that properly overrides the base component
+- Select dropdowns: Create inline dark-variant styling or use the existing dark background with proper text
+- Table text: Ensure all table cells have readable text colors
+- Cards: Add gold border accents for premium feel
 
-#### A.4 - Backend: Staff Reply Email Notification
-- **New file**: `supabase/functions/send-ticket-reply-email/index.ts`
-- Triggered when staff posts a reply
-- Sends email to ticket owner with the reply content
+### Phase 2: Fix Select/Dropdown Visibility
 
-#### A.5 - Add Route to App.tsx
-- Add `/customer-happiness/tickets` wrapped in `<OwnerGuard>`
+**File: `src/components/support/TicketDetailPanel.tsx`**
 
----
+The detail panel also needs text contrast fixes:
+- Reply textarea: Override the champagne background for dark context
+- Ensure all text in the panel is readable
 
-### Phase B: Resend Confirmation Email Function
+### Phase 3: Fix Email Message ID Extraction
 
-**Goal**: Allow users to resend their confirmation email if it failed.
+**File: `supabase/functions/submit-support-ticket/index.ts`**
 
-#### B.1 - Create Edge Function
-- **New file**: `supabase/functions/resend-support-ticket-confirmation/index.ts`
-- Input: `{ ticketNumber: string, email: string }`
-- Logic:
-  1. Query `support_tickets` where `ticket_number = ticketNumber` AND `email = email`
-  2. If not found, return 404
-  3. Re-send confirmation email using Resend
-  4. Update `customer_confirmation_*` columns
-  5. Return success/failure
+Fix the Resend API response handling:
+```typescript
+// Current (broken):
+customerEmailMessageId = customerEmailResult?.data?.id || null;
 
-#### B.2 - Add Resend Button to Success Screen
-- **Modify**: `src/components/SupportTicketBox.tsx`
-- Show "Resend Confirmation" button if `customerEmailSent === false`
-- Wire to new edge function
+// Fixed (Resend v2+ returns id directly):
+customerEmailMessageId = customerEmailResult?.id || customerEmailResult?.data?.id || null;
+```
 
----
+Also add more detailed logging to diagnose delivery issues.
 
-### Phase C: User "My Tickets" View
+### Phase 4: Verify RLS Policies for Ticket Visibility
 
-**Goal**: Let authenticated users see their ticket history and guests track by ticket number.
+**Check:** Ensure the RLS policies on `support_tickets` allow Owner to read all tickets.
 
-#### C.1 - My Tickets Page
-- **New file**: `src/pages/client/MyTickets.tsx`
-- For authenticated users:
-  - List their tickets (filtered by `user_id` or `email`)
-  - Click to view thread
-- For guests:
-  - "Track Ticket" form: email + ticket number
-  - On match, show read-only ticket + thread
+Current query in `useSupportTickets.ts`:
+```typescript
+let query = supabase
+  .from("support_tickets")
+  .select("*")
+  .order("created_at", { ascending: false });
+```
 
-#### C.2 - Add Route
-- Add `/my-tickets` or `/track-ticket` route
+This should work, but if tickets aren't showing, we need to verify the Owner role has the correct SELECT policy.
 
 ---
 
-### Phase D: Header Nav Pill Expansion on Scroll
+## Technical Details
 
-**Goal**: When header becomes solid (scrolled), expand the nav pill width.
-
-#### D.1 - Modify GlobalHeader.tsx
-- When `isSolid === true`:
-  - Pill wrapper transitions from `w-auto` to `w-full max-w-[900px]`
-  - Maintain `mx-auto` centering
-  - Add `transition-all duration-300` for smooth animation
-- When transparent:
-  - Keep current minimal floating pill
-
----
-
-### Phase E: Hero Search Bar Verification
-
-**Goal**: Ensure the search bar works correctly on all viewports.
-
-#### E.1 - Review Current Issues
-- Check for:
-  - Horizontal overflow on mobile
-  - Button visibility and alignment
-  - Filter dialog z-index issues
-  - Enter key behavior for search submission
-
-#### E.2 - Apply Fixes
-- Add `min-w-0` and `overflow-hidden` where needed
-- Ensure mobile button row is always visible
-- Fix any z-index conflicts with dialogs/popovers
-
----
-
-## Files to Create
-
-| File | Purpose |
-|------|---------|
-| `src/pages/SupportTicketHub.tsx` | Staff ticket management dashboard |
-| `src/components/support/TicketDetailPanel.tsx` | Single ticket detail + reply UI |
-| `src/hooks/useSupportTickets.ts` | Data fetching hooks for tickets |
-| `supabase/functions/send-ticket-reply-email/index.ts` | Email customer when staff replies |
-| `supabase/functions/resend-support-ticket-confirmation/index.ts` | Resend confirmation email |
-| `src/pages/client/MyTickets.tsx` | User ticket history / guest tracking |
-
-## Files to Modify
+### Files to Modify
 
 | File | Changes |
 |------|---------|
-| `src/App.tsx` | Add routes for ticket hub + my tickets |
-| `src/components/SupportTicketBox.tsx` | Add resend button on failure |
-| `src/components/GlobalHeader.tsx` | Nav pill expansion on scroll |
-| `src/components/home/HeroSearchBar.tsx` | Responsive fixes |
+| `src/pages/SupportTicketHub.tsx` | Complete UI overhaul - proper dark theme styling, gold accents, readable text, Back button |
+| `src/components/support/TicketDetailPanel.tsx` | Fix textarea contrast, improve dark panel styling |
+| `supabase/functions/submit-support-ticket/index.ts` | Fix Resend API response handling, add better logging |
+
+### UI Changes Breakdown
+
+**SupportTicketHub.tsx:**
+1. Header section:
+   - Add "Back" button with proper contrast
+   - Keep gold accents on title
+   - Improve refresh button visibility
+
+2. Stats cards:
+   - Add gold border/shadow accents
+   - Ensure numbers are highly visible
+
+3. Filter section:
+   - Override Input to have dark background with WHITE text (not inherited black)
+   - Override SelectTrigger/SelectContent for dark context with proper contrast
+   - Use `!important` overrides if needed or inline style objects
+
+4. Table:
+   - Verify all text is visible against dark background
+   - Keep gold accents for headers and ticket numbers
+
+**TicketDetailPanel.tsx:**
+1. Reply composer textarea:
+   - Override champagne gradient with dark zinc background
+   - Ensure placeholder and input text are white/light
+
+2. Message thread:
+   - Keep existing styling (already uses appropriate dark colors)
+
+### Edge Function Fix
+
+```typescript
+// Line 496-497 - Fix for Resend v2+
+const customerEmailResult = await resend.emails.send({...});
+customerEmailSent = true;
+// Resend v2+ returns { id: "...", from: "...", ... } directly
+// Some versions return { data: { id: "..." } }
+customerEmailMessageId = customerEmailResult?.id || customerEmailResult?.data?.id || null;
+console.log("Customer confirmation email sent:", JSON.stringify(customerEmailResult));
+```
 
 ---
 
 ## Testing Checklist
 
-1. **Staff Hub**: Owner can view all tickets, filter, open details, post replies
-2. **Reply Email**: Customer receives email when staff replies
-3. **Resend Confirmation**: User can resend confirmation email if it failed
-4. **My Tickets**: Authenticated users see their tickets; guests can track by number
-5. **Header**: Nav pill expands on scroll without touching logo/icons
-6. **Search Bar**: Works on mobile/tablet/desktop without overflow or interaction bugs
+1. **UI Visibility:**
+   - All text in Support Ticket Hub is readable (white/light on dark)
+   - Dropdowns show gold/champagne styling with black text when open
+   - Stats cards have visible numbers
+   - Back/Refresh buttons are clearly visible
+
+2. **Ticket Display:**
+   - All submitted tickets appear in the list
+   - Click on ticket opens detail panel correctly
+
+3. **Email Delivery:**
+   - Submit a new test ticket
+   - Verify confirmation email is received
+   - Check edge function logs for proper message ID
+
+4. **Premium Aesthetic:**
+   - Gold accents throughout
+   - Consistent dark theme
+   - Professional, clean appearance
 
