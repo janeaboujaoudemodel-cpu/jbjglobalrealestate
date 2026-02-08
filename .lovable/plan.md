@@ -1,194 +1,215 @@
 
 
-# DEEP AUDIT REPORT: 22-Task Mandate Completion Status
+# Critical Fixes: Listing Admin Access, Sync Progress, and UI Unification
 
-## Executive Summary
+## Issues Identified
 
-After thorough examination of the codebase, I've identified that **many critical tasks remain incomplete**. Below is a detailed breakdown of each task with verification evidence.
+### 1. Access Denied (/403) on Listing Admin - Race Condition
+**Root Cause:** The `/listing-admin` route is wrapped with **BOTH** `OwnerGuard` and `ListingAdminGuard`:
+```tsx
+// App.tsx line 572
+<Route path="/listing-admin" element={<OwnerGuard><ListingAdminGuard><ListingAdmin /></ListingAdminGuard></OwnerGuard>} />
+```
 
----
+The network logs show that `verify-owner` is returning `{"isOwner":true}` correctly, but there's a timing issue:
+- `OwnerGuard` waits for owner verification
+- **BUT** `ListingAdminGuard` **also** makes its own owner check and role checks separately
+- When the page refreshes or navigates quickly, one guard may resolve before the other, causing a brief redirect to `/403`
 
-## ✅ COMPLETED TASKS (10 of 22)
+Additionally, `ListingAdminGuard.tsx` duplicates owner verification logic instead of consuming `isOwner` from AuthContext.
 
-### Task 1: Reviews/Ideas Data Flow ✅
-- **Evidence**: `CustomerHappiness.tsx` lines 340-395 show proper Supabase insert for reviews
-- **Evidence**: `CustomerHappiness.tsx` lines 743-758 show proper Supabase insert for ideas to `best_idea_submissions`
-- **Status**: Forms correctly insert data to database
+### 2. Reelly Sync Progress Loss After Refresh
+**Root Cause:** The `ReellyImportPanel.tsx` stores progress in local React state, not in the database:
+- `syncProgress` and `syncResult` are React useState values
+- When page refreshes, these are lost
+- The `check_resume` action checks `sync_jobs` table for jobs with `source='reelly'`, but `createJob()` in `useSyncJobs.ts` never sets the `source` column!
 
-### Task 2.1: Support Ticket Consolidation ✅
-- **Evidence**: `EmbeddedSupportTickets.tsx` exists as primary ticket system inside Admin → Customer Happiness
-- **Status**: Consolidated
+```typescript
+// useSyncJobs.ts line 146-161 - MISSING: source column
+const { data, error } = await supabase
+  .from("sync_jobs")
+  .insert({
+    job_type: jobType,  // "reelly_quick" or "reelly_full"
+    status: "running",
+    // ...
+    // source: "reelly" ← NOT SET!
+  })
+```
 
-### Task 2.2: Reopened Ticket Status ✅
-- **Evidence**: `EmbeddedSupportTickets.tsx` line 144: `reopened: tickets?.filter((t) => t.is_reopened).length || 0`
-- **Evidence**: Lines 219-234 show Reopened card with orange styling and filter
-- **Status**: Complete
+### 3. UI Styling Inconsistency (Mixed White/Black Backgrounds)
+**Root Cause:** The Listing Admin page has a champagne gradient shell, but child components (`SyncDashboard`, `ReellyImportPanel`, `ExtractionJobsPanel`, `PendingUpdatesQueue`) use their own styling:
+- `SyncDashboard` uses mixed backgrounds
+- `ReellyImportPanel` uses champagne properly
+- `ExtractionJobsPanel` uses default shadcn Card styling
+- `PendingUpdatesQueue` uses `bg-white`
 
-### Task 3: Dashboard Card Clickability ✅
-- **Evidence**: `EmbeddedSupportTickets.tsx` lines 154-234 show all 5 cards with `onClick` handlers and `cursor-pointer`
-- **Evidence**: `EmbeddedCustomerHappinessHub.tsx` lines 241-304 show clickable KPI cards
-- **Status**: Cards are clickable with `active:scale-95` feedback
+### 4. Duplicate Extraction Areas
+**Current Structure:**
+- **Sync Dashboard** tab → Provident sync + test extraction
+- **Reelly Import** tab → Reelly API sync
+- **Data Sources** tab → `ExtractionJobsPanel` + `PendingUpdatesQueue`
 
-### Task 5: Responsive UI Overflow ✅
-- **Evidence**: Email content containment implemented in ticket panels
-- **Status**: Fixed
-
-### Task 6: Email System - Real Emails ✅
-- **Evidence**: `send-ticket-reply-email` edge function exists
-- **Evidence**: Sender identity updated to "JBJ Support Team"
-- **Status**: Real email delivery configured
-
-### Task 8.2: Multi-Character Voice System ✅
-- **Evidence**: `src/components/voice-studio/CharacterManager.tsx` (413 lines) - complete implementation with:
-  - Character creation (name, nationality, languages)
-  - Voice library with ElevenLabs voice IDs
-  - Persona presets (Podcast Host, Narrator, Presenter, Interviewer)
-- **Status**: Complete
-
-### Task 10: HR Hub - Remove Fake Data ✅
-- **Evidence**: HR stats use real database queries from `useHRStats.ts`
-- **Status**: No fake data - shows 0 when no data exists
-
-### Task 11.2: Design Studio Templates ✅
-- **Evidence**: `JBJDesignStudio.tsx` lines 79-100+ show extensive template library including CV templates
-- **Status**: Templates available
-
-### Task 17: Analytics Real Data ✅
-- **Evidence**: `AdminOverviewDashboard.tsx` uses real counts from `visitor_sessions` and `visitor_events`
-- **Status**: Real data only
+User wants: **Unified into one "Data Ops" area with tabs**
 
 ---
 
-## ❌ INCOMPLETE TASKS (12 of 22)
+## Implementation Plan
 
-### Task 4: Global Color Audit ❌ PARTIALLY COMPLETE
-- **Issue**: Found **32 files** still using `data-[state=active]:bg-gold` (bright yellow)
-- **Files affected**: 
-  - `JobOfferManager.tsx`
-  - `JBJAnalyticsDashboard.tsx`
-  - `AdminTrainingGuide.tsx`
-  - `OwnerAuditPage.tsx`
-  - `AIInsights.tsx`
-  - `CampaignEditor.tsx`
-  - `EmbeddedHRDashboard.tsx`
-  - + 25 more files
-- **Required**: Replace all with champagne gradient system
+### Phase 1: Fix Access Denied Race Condition
 
-### Task 7: FeedbackPrompt Integration ❌ NOT INTEGRATED
-- **Issue**: `FeedbackPrompt.tsx` exists but is **NOT imported or used anywhere**
-- **Search result**: Only found in its own definition file
-- **Required**: Integrate after Review, Idea, Ticket, Issue, and Listing submissions
+**File: `src/components/ListingAdminGuard.tsx`**
+- Remove the duplicate `verify-owner` call
+- Consume `isOwner` directly from `AuthContext` (already passed in)
+- Simplify logic: If `isOwner === true`, allow immediately without DB role checks
 
-### Task 8.1: Voice Studio UI Fix ❌ NOT DONE
-- **Issue**: VoiceStudio.tsx still uses inconsistent colors
-- **Evidence**: Lines 30-39 show voice library but hover states not updated to gold/champagne
-- **Required**: Fix UI hover colors to match gold theme
+```tsx
+// BEFORE: Makes separate role checks even when isOwner=true
+if (isOwner) {
+  if (!cancelled) setStatus("allowed");
+  return;
+}
+// Then proceeds to check has_role, listing_admins table...
 
-### Task 9: IT Department Text Visibility ❌ NOT VERIFIED
-- **Issue**: No evidence of systematic audit of IT components
-- **Required**: Audit all IT components for white text on bright backgrounds
+// AFTER: Same logic, but ensure we wait for ownerLoading
+useEffect(() => {
+  if (authLoading || ownerLoading) return; // Wait for both
+  if (!user) { setStatus("unauthenticated"); return; }
+  if (isOwner) { setStatus("allowed"); return; } // Owner override
+  // Only check DB roles for non-owners...
+}, [user, authLoading, isOwner, ownerLoading]);
+```
 
-### Task 11.3: AI Designer Scene-to-Image ❌ NOT IMPLEMENTED
-- **Issue**: No image generation feature connected
-- **Required**: Connect AI prompt to `google/gemini-3-pro-image-preview` for image generation
+**File: `src/App.tsx` line 572**
+- Consider removing redundant `OwnerGuard` wrapper since `ListingAdminGuard` already handles Owner override
+- OR ensure both guards wait for the same ownerLoading state
 
-### Task 11.4: Media Tools Integration ❌ NOT DONE
-- **Issue**: No links to photo-resizer or video-resizer in Design Studio
-- **Search result**: No matches for photo-resizer or video-resizer in JBJDesignStudio.tsx
-- **Required**: Add quick-access buttons to media tools
+### Phase 2: Fix Reelly Sync Progress Persistence
 
-### Task 12: Color Palette System Enhancement ❌ PARTIALLY DONE
-- **Issue**: `ColorPaletteManager.tsx` has JBJ_BRAND_PALETTE but missing:
-  - AI Tools Palette
-  - AI recommendation feature based on project/media type
-- **Required**: Add AI Tools Palette and recommendation logic
+**File: `src/hooks/useSyncJobs.ts`**
+- Add `source` column to `createJob()`:
+```typescript
+const { data, error } = await supabase
+  .from("sync_jobs")
+  .insert({
+    job_type: jobType,
+    source: jobType.startsWith('reelly') ? 'reelly' : 'provident', // ADD THIS
+    status: "running",
+    // ...
+  })
+```
 
-### Task 16: Social + WhatsApp Integration ❌ NOT DONE
-- **Issue**: No `whatsapp-webhook` edge function exists
-- **Issue**: No `shareToFacebook` function in Design Studio
-- **Required**: Create WhatsApp webhook and Facebook share feature
+**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
+- When starting sync, call `createJob('reelly_full', totalProjects)` BEFORE looping
+- Pass `job_id` to each `reelly-api-sync` call
+- On mount, check for existing job and restore UI state from `activeJob`
 
-### Task 18: Marketing Hub AI Email Generator ❌ PARTIALLY DONE
-- **Evidence**: `AIEmailGenerator.tsx` component exists and is functional
-- **Issue**: Not verified if integrated into MarketingHub.tsx main interface
-- **Required**: Verify integration + add bulk actions for campaigns
+```typescript
+// On mount, restore from active job
+useEffect(() => {
+  if (activeJob?.job_type?.startsWith('reelly')) {
+    setIsSyncing(activeJob.status === 'running');
+    setSyncProgress({
+      fetched: activeJob.stats_created + activeJob.stats_updated + activeJob.stats_skipped,
+      total: activeJob.total_pages
+    });
+  }
+}, [activeJob]);
+```
 
-### Task 19: Subscribers Bulk Selection ❌ NOT VISIBLE IN TABLE
-- **Evidence**: `SubscribersPanel.tsx` has `selectedIds` state and bulk handlers (lines 60, 139-176)
-- **Issue**: Table header does NOT have checkbox column visible (lines 274-281)
-- **Required**: Add checkbox column with Select All functionality visible in table
+### Phase 3: Unify UI Styling
 
-### Task 20: Filter Icons Global Fix ❌ NOT VERIFIED
-- **Issue**: No systematic audit of filter buttons across platform
-- **Required**: Ensure all filter icons have dropdown menus attached
+**Files to Update:**
+- `ExtractionJobsPanel.tsx` - Replace default Card with champagne gradient:
+```tsx
+<Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+```
 
-### Task 21: Idea Points Notification ❌ NOT DONE
-- **Issue**: No `send-idea-approved-email` edge function exists
-- **Issue**: No `user_notifications` table found
-- **Required**: Create notification system (email + in-app + toast)
+- `PendingUpdatesQueue.tsx` - Replace `bg-white` with champagne:
+```tsx
+<Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+```
 
-### Task 22: Favorites Badges ❌ NOT IMPLEMENTED
-- **Issue**: `useFavorites.ts` and `useShortlistBadges.ts` exist but no visual badges on items
-- **Required**: Add visual badge indicators on favorited/shortlisted items
+- `SyncDashboard.tsx` - Apply consistent champagne styling to all inner cards
+
+### Phase 4: Consolidate into Single "Data Ops" Area
+
+**File: `src/pages/ListingAdmin.tsx`**
+- Replace three separate views (`data-sources`, `sync`, `reelly`) with ONE unified view
+- Add internal Tabs inside the Data Ops view:
+
+```tsx
+{activeView === 'data-ops' && (
+  <div className="container mx-auto px-4 py-6">
+    <Tabs defaultValue="reelly" className="space-y-6">
+      <TabsList className="bg-zinc-100 border border-zinc-200">
+        <TabsTrigger value="reelly" className="data-[state=active]:bg-gradient-to-r ...">
+          Reelly Sync
+        </TabsTrigger>
+        <TabsTrigger value="provident" className="data-[state=active]:bg-gradient-to-r ...">
+          Provident Sync
+        </TabsTrigger>
+        <TabsTrigger value="approvals" className="data-[state=active]:bg-gradient-to-r ...">
+          Approval Queue
+        </TabsTrigger>
+        <TabsTrigger value="external" className="data-[state=active]:bg-gradient-to-r ...">
+          External Sources
+        </TabsTrigger>
+      </TabsList>
+      
+      <TabsContent value="reelly">
+        <ReellyImportPanel />
+      </TabsContent>
+      <TabsContent value="provident">
+        <SyncDashboard />
+      </TabsContent>
+      <TabsContent value="approvals">
+        <PendingUpdatesQueue onRefresh={refetchProjects} />
+      </TabsContent>
+      <TabsContent value="external">
+        <ExtractionJobsPanel />
+      </TabsContent>
+    </Tabs>
+  </div>
+)}
+```
+
+- Update navigation buttons to show single "Data Ops" button instead of 3 separate buttons
 
 ---
 
-## Implementation Priority
+## Technical Summary
 
-### Phase 1: Critical Fixes (Immediate)
-1. **Task 4**: Replace `bg-gold` in 32 files → champagne gradient
-2. **Task 7**: Integrate FeedbackPrompt into all form submission success handlers
-3. **Task 19**: Fix SubscribersPanel table to show checkbox column
-
-### Phase 2: Feature Completion
-4. **Task 12**: Add AI Tools Palette + recommendation feature
-5. **Task 16**: Create WhatsApp webhook + Facebook share
-6. **Task 21**: Create idea approval notification system
-
-### Phase 3: Final Polish
-7. **Task 8.1**: Voice Studio UI hover colors
-8. **Task 11.3/11.4**: AI image generation + media tools links
-9. **Task 22**: Favorites badge indicators
+| Issue | Root Cause | Fix |
+|-------|-----------|-----|
+| Access Denied (/403) | Race between OwnerGuard and ListingAdminGuard | Simplify guard chain; consume isOwner from context directly |
+| Sync progress lost | `source` column not set; UI state not restored from DB | Set `source='reelly'` in createJob; restore UI from activeJob |
+| Mixed backgrounds | Components use inconsistent styling | Apply champagne gradient to all cards |
+| Duplicate areas | 3 separate tabs for sync/extraction | Consolidate into single "Data Ops" tabbed view |
 
 ---
 
-## Files to Modify
+## Database Changes Required
 
-| Task | Files | Action |
-|------|-------|--------|
-| 4 | 32 files with `bg-gold` | Replace active states |
-| 7 | `CustomerHappiness.tsx`, etc. | Add FeedbackPrompt |
-| 19 | `SubscribersPanel.tsx` | Add checkbox column to table |
-| 12 | `ColorPaletteManager.tsx` | Add AI palette + recommendations |
-| 16 | New edge function + `JBJDesignStudio.tsx` | WhatsApp + Facebook |
-| 21 | New edge function + new table | Notifications |
-| 22 | Property cards, tool cards | Add badge indicators |
+Add `source` default and constraint if not already present:
+```sql
+-- Verify sync_jobs has source column with 'reelly' as valid value
+-- (Column already exists per schema query)
+-- Just need to ensure frontend sets it correctly
+```
 
----
-
-## Edge Functions to Create
-
-1. `supabase/functions/welcome-subscriber/index.ts` - Auto welcome email
-2. `supabase/functions/send-idea-approved-email/index.ts` - Idea approval notification
-3. `supabase/functions/whatsapp-webhook/index.ts` - WhatsApp message handler
+No schema migration needed - the `source` column already exists with default `'reelly'`.
 
 ---
 
-## Database Tables to Create
+## Files Changed
 
-1. `user_notifications` - For in-app notification system
-
----
-
-## Conclusion
-
-**Completion Rate: 45% (10 of 22 tasks fully complete)**
-
-The remaining 12 tasks require:
-- 32+ file color standardization
-- 3 new edge functions
-- 1 new database table
-- Multiple component integrations and UI fixes
-
-Ready to proceed with full implementation upon approval.
+| File | Changes |
+|------|---------|
+| `src/components/ListingAdminGuard.tsx` | Consume isOwner from context; remove redundant checks |
+| `src/hooks/useSyncJobs.ts` | Add `source` column to createJob |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Persist job to DB; restore state on mount |
+| `src/components/listing-admin/ExtractionJobsPanel.tsx` | Apply champagne styling |
+| `src/components/listing-admin/PendingUpdatesQueue.tsx` | Apply champagne styling |
+| `src/components/listing-admin/SyncDashboard.tsx` | Consistent champagne styling |
+| `src/pages/ListingAdmin.tsx` | Consolidate 3 views into 1 "Data Ops" with internal tabs |
 
