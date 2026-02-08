@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Heart, Sparkles, Briefcase, Users, FolderOpen, Monitor, Settings, LogOut, ChevronRight, LayoutDashboard, Ticket } from 'lucide-react';
+import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -120,14 +120,11 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     { href: '/toolkit', label: 'AI Tools', icon: Sparkles, description: 'Professional AI-powered tools' },
   ];
 
-  // Filter admin links based on actual access
+  // Filter admin links based on actual access - consolidated shortcuts
   const adminLinks = useMemo(() => {
     const links = [
       { href: '/founder-assistant', label: 'My Assistant', icon: Sparkles, requiresAdmin: true },
-      { href: '/employee-hub', label: 'Employee Hub', icon: Briefcase, requiresAdmin: true },
-      { href: '/hr-dashboard', label: 'HR Hub', icon: Users, requiresAdmin: true },
       { href: '/listing-admin', label: 'Listing Admin', icon: FolderOpen, requiresListingAdmin: true },
-      { href: '/it-department', label: 'IT Department', icon: Monitor, requiresAdmin: true },
     ];
     
     return links.filter(link => {
@@ -294,6 +291,26 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           <ChevronRight className="w-4 h-4 text-gold" />
                         </Link>
                       )}
+                      {/* Admin Panel - Second Primary Link (Consolidated Hub) */}
+                      {isOwner && (
+                        <Link 
+                          to="/admin" 
+                          onClick={onClose} 
+                          className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 bg-gradient-to-r from-purple-500/10 to-purple-500/5 border border-purple-500/30 hover:border-purple-500/60 group"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-purple-500/10 border-2 border-purple-500/40 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
+                            <Shield className="w-4 h-4 text-purple-600" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-black font-semibold text-xs group-hover:text-purple-600 transition-colors block">
+                              Admin Panel
+                            </span>
+                            <span className="text-black/50 text-[10px]">HR, IT, Support, All</span>
+                          </div>
+                          <ChevronRight className="w-3.5 h-3.5 text-purple-500" />
+                        </Link>
+                      )}
+                      {/* Other Admin Links */}
                       {adminLinks.map((link) => (
                         <Link
                           key={link.href}
@@ -320,34 +337,6 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           </div>
                           <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
                             {t('nav.crm') || 'CRM Dashboard'}
-                          </span>
-                        </Link>
-                      )}
-                      {isOwner && (
-                        <Link 
-                          to="/customer-happiness/tickets" 
-                          onClick={onClose} 
-                          className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
-                        >
-                          <div className="w-8 h-8 rounded-lg bg-transparent border-2 border-gold/30 flex items-center justify-center group-hover:border-gold group-hover:bg-gold/10 transition-colors">
-                            <Ticket className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
-                          </div>
-                          <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
-                            Ticket Support Hub
-                          </span>
-                        </Link>
-                      )}
-                      {isOwner && (
-                        <Link 
-                          to="/admin" 
-                          onClick={onClose} 
-                          className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
-                        >
-                          <div className="w-8 h-8 rounded-lg bg-transparent border-2 border-gold/30 flex items-center justify-center group-hover:border-gold group-hover:bg-gold/10 transition-colors">
-                            <Settings className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
-                          </div>
-                          <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
-                            Admin Panel
                           </span>
                         </Link>
                       )}
