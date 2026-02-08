@@ -298,7 +298,7 @@ const MeetTheTeam: React.FC = () => {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-gold/5 rounded-full blur-[150px]" />
           </div>
 
-          <div className="container mx-auto px-4 relative z-10 py-16 md:py-24">
+          <div className="container mx-auto px-4 relative z-10 pt-24 md:pt-32 lg:pt-36 pb-16 md:pb-24">
             <motion.div
               initial="hidden"
               animate="visible"
