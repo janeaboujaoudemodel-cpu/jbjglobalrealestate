@@ -1,307 +1,172 @@
 
 
-## Multi-Issue Fix Plan - Footer, Favicon, SEO, Search Bar, Header, Chat & Performance
+## Fix Plan: Podcast Visibility for Owner & AI Tools Footer Color Matching
 
-### Overview
+### Issue 1: Podcast Section Not Showing for Owner
 
-This plan addresses 8 issues identified in the user's request:
+**Root Cause Analysis:**
 
-1. **Footer Mode Switcher Gold Border** - Remove gold border from investor mode indicator
-2. **Track Record Cards Gold Borders** - Add gold borders to the stats cards on homepage
-3. **Favicon Quality** - Create a premium favicon on black background
-4. **SEO & Founder Toggle** - Ensure all Google-visible founder references respect the visibility toggle
-5. **Hero Search Bar Alignment** - Align Beds, Price Range, and Filters to match location input height
-6. **Header Navigation Stretch** - Stretch "Buy to Insights" to fill header space
-7. **Chat Widget Stability** - Ensure consistent visibility behavior
-8. **Website Performance** - Optimize for faster loading
-
----
-
-### Issue 1: Footer Mode Switcher Gold Border
-
-**Current Problem:**
-The mode switcher in the footer (around line 487-490) has a container with `border border-gold/30` that shows a gold border around the entire mode switcher area.
-
-**Solution:**
-Remove the gold border wrapper from the footer's mode switcher section.
-
-**File:** `src/components/Footer.tsx` (lines 487-490)
-
-**Change:**
-```typescript
-// From:
-<div className="p-1 rounded-xl bg-black/40 border border-gold/30">
-  <ModeSwitcher variant="header" />
-</div>
-
-// To:
-<div className="p-1 rounded-xl bg-black/40">
-  <ModeSwitcher variant="header" />
-</div>
-```
-
----
-
-### Issue 2: Track Record Cards Gold Borders
-
-**Current Problem:**
-The StatsCounter component's stat cards (lines 116-137) use `border-2 border-gold/40` which shows gold borders, but user wants them more prominent.
-
-**Solution:**
-The cards already have gold borders. The user wants gold borders to be more visible. Update to solid gold borders.
-
-**File:** `src/components/StatsCounter.tsx` (line 118)
-
-**Change:**
-```typescript
-// From:
-<div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-6 md:p-8 text-center hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-500">
-
-// To:
-<div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-6 md:p-8 text-center hover:shadow-lg hover:shadow-gold/30 transition-all duration-500">
-```
-
----
-
-### Issue 3: Favicon Quality
-
-**Current Problem:**
-The current favicon shows just "B" on a black square with gold accents. The logo needs to be more premium and readable - showing the full JBJ monogram.
-
-**Solution:**
-Create a new favicon that uses the JBJ monogram centered on a pure black square background for maximum readability in browser tabs and Google search results.
-
-**Approach:**
-1. Use the existing `jbj-monogram-nobuffer.png` (white text version) on a black background
-2. Create a proper 32x32 and 192x192 favicon
-3. Update the `index.html` to reference the new favicon
-
-**Files to update:**
-- `public/favicon.png` - Replace with new premium favicon
-- `index.html` - Already correctly configured
-
-**Note:** User needs to provide or approve a high-quality favicon image, or we need to programmatically generate one using the existing monogram asset. The current favicon image shows the logo but could be improved for clarity at small sizes.
-
----
-
-### Issue 4: SEO & Founder Toggle Integration
-
-**Current Problem:**
-The SEO meta tags in `src/components/SEOHead.tsx` and `index.html` contain hardcoded references to "Jane Bou Jaoude" that don't respect the founder visibility toggle:
-- Line 16-19: `FOUNDER_NAME` constant and `CORE_KEYWORDS`
-- Line 27, 60: Hardcoded founder name in descriptions
-- Lines 35, 111-154: Various page SEO configs mentioning founder
-
-**Solution:**
-Update SEOHead to conditionally include founder references based on the visibility context.
-
-**File:** `src/components/SEOHead.tsx`
-
-**Changes:**
-1. Import `useFounderVisibility` context
-2. Conditionally include founder name in keywords and descriptions
-3. Update all page SEO configs to have founder-free alternatives
-
-**File:** `index.html` (line 17)
-
-**Change:**
-```html
-// From:
-<meta name="description" content="JBJ Global Real Estate, founded by Jane Bou Jaoude, is Dubai's premier real estate brokerage..." />
-
-// To:
-<meta name="description" content="JBJ Global Real Estate is Dubai's premier real estate brokerage. Buy, sell, or rent luxury properties in Dubai, UAE." />
-```
-
-**Note:** The index.html is the initial meta that gets overwritten by React, but we should make it founder-agnostic as a fallback.
-
----
-
-### Issue 5: Hero Search Bar Alignment
-
-**Current Problem:**
-The search bar elements (location input, beds dropdown, price range, filters) have different heights/padding causing misalignment.
-
-**Analysis:**
-- Location input: `px-3 py-3 min-h-[48px]` (line 624)
-- Beds dropdown button: `px-3 py-3` (line 644)
-- Price Range button: `px-3 py-3` (line 678)
-- Filters button: `px-3 py-3` (line 712)
-
-The buttons are inside a container with `bg-white/10 backdrop-blur-md border-y border-r border-white/30` (line 637), but the location input has its own container with different borders.
-
-**Solution:**
-Ensure all elements have consistent height (48px minimum) and uniform styling.
-
-**File:** `src/components/home/HeroSearchBar.tsx`
-
-**Changes:**
-1. Add explicit `min-h-[48px]` to the desktop controls container
-2. Ensure all buttons have `h-12` (48px) for consistent height
-3. Fix the container borders to create a seamless single-line appearance
+The `PodcastVisibilityGate` component (line 20-23) returns `null` during loading state **before** checking if the user is the Owner:
 
 ```typescript
-// Line 637-639: Add explicit height
-<div className="hidden sm:flex items-center bg-white/10 backdrop-blur-md border-y border-r border-white/30 overflow-hidden min-h-[48px]">
-
-// Line 644: Add explicit height to beds button
-<button className="flex items-center gap-1 px-3 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
-
-// Line 678: Add explicit height to price button
-<button className="flex items-center gap-1 px-3 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
-
-// Line 712: Add explicit height to filters button
-<button className="flex items-center gap-1 px-3 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors">
+// Current problematic code
+if (isVisibilityLoading) {
+  return null;  // <-- Returns null, doesn't check isOwner first!
+}
 ```
+
+This means even the Owner sees nothing during the loading phase. The fix is to check `isOwner` **before** checking the loading state so the Owner always sees the content immediately.
+
+Additionally, the `isOwner` state in `AuthContext.tsx` (line 44-50) checks `VITE_OWNER_EMAIL` but the auth loading itself might still be in progress. We need to ensure the Owner check doesn't get blocked.
+
+**Fix Location:**
+- `src/components/home/PodcastVisibilityGate.tsx`
+
+**Solution:**
+
+```typescript
+export const PodcastVisibilityGate = ({ children }: PodcastVisibilityGateProps) => {
+  const { isPodcastVisible, isLoading: isVisibilityLoading } = usePodcastVisibility();
+  const { user, isOwner, loading: isAuthLoading } = useAuth();
+
+  // Owner ALWAYS sees the podcast section - check first, before loading states
+  if (isOwner) {
+    return <>{children}</>;
+  }
+
+  // For non-owners, wait for both auth AND visibility to resolve
+  if (isAuthLoading || isVisibilityLoading) {
+    return null;
+  }
+
+  // Non-owner: only show if visibility is enabled
+  if (!isPodcastVisible) {
+    return null;
+  }
+
+  return <>{children}</>;
+};
+```
+
+This ensures:
+1. Owner sees podcast **immediately** if `isOwner` is true
+2. Non-owners wait for loading to complete
+3. Non-owners only see if `isPodcastVisible` is true
 
 ---
 
-### Issue 6: Header Navigation Stretch
+### Issue 2: AI Tools Footer Color Matching
 
 **Current Problem:**
-The navigation items (Buy, Sell, Rent, Projects, Areas, Developers, Insights) don't fill the available header space between the logo and the search/account icons.
 
-**Solution:**
-Use flexbox with `flex-1` and `justify-center` with wider gaps to stretch the navigation across the available space.
-
-**File:** `src/components/GlobalHeader.tsx`
-
-**Locate the desktop navigation pill container (around line 1000+) and update:**
-
-**Changes:**
-1. Add `flex-1` to the navigation container
-2. Increase gap between items
-3. Use `justify-evenly` or wider `gap-x` values
+The footer's "Professional Tools" section (lines 763-782 of Footer.tsx) uses generic white/gold styling for all AI tool links:
 
 ```typescript
-// The nav container should use flex-1 to expand and evenly distribute items
-<nav className="flex-1 flex items-center justify-center gap-x-1 xl:gap-x-2 2xl:gap-x-3 px-4 xl:px-8 2xl:px-12">
+// Current generic styling - no color differentiation
+<Link
+  to={link.href}
+  className="text-black hover:text-gold ... bg-white/80 border border-gold/30"
+>
 ```
 
----
-
-### Issue 7: Chat Widget Stability
-
-**Current Problem:**
-The chat widget sometimes appears and disappears unexpectedly due to the popup timing logic in `MainLayout.tsx`.
-
-**Analysis (lines 63-93 in MainLayout.tsx):**
-- On homepage: waits for scroll past hero (50% of viewport height), then 3.5s delay
-- State `popupsReady` controls visibility
-- Widget also has `effectiveCollapsed` logic for back-office routes
+Each AI tool has a distinct accent color **inside** the tool page:
+- **AI ROI Calculator**: Emerald
+- **AI Price Predictor**: Blue
+- **AI Lead Qualification**: Purple
+- **AI Translation Hub**: Amber
+- **AI Objection Handler**: Rose
+- etc.
 
 **Solution:**
-Make the chat widget always visible (not controlled by `popupsReady`) but keep the attention pulse controlled by the scroll delay.
 
-**File:** `src/components/MainLayout.tsx`
+Create a color mapping object and update the footer to render each AI tool link with its matching accent color.
 
-**Changes:**
+**Files to Modify:**
+- `src/components/Footer.tsx`
+
+**Implementation:**
+
+1. Create a color mapping constant at the top of Footer.tsx:
+
 ```typescript
-// Line 173: Always render chat widget, only delay the attention pulse
-{!isBackOfficeRoute && (
-  <AIChatWidget
-    isCollapsed={effectiveCollapsed}
-    onToggleCollapse={handleToggleChat}
-    onMinimize={handleMinimizeChat}
-    showAttentionPulse={showAttentionPulse && popupsReady}
-  />
-)}
+// AI Tool accent color mapping (matches inside tool pages)
+const AI_TOOL_COLORS: Record<string, { border: string; text: string; hover: string; bg: string }> = {
+  '/property-evaluator': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
+  '/ai-price-predictor': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
+  '/ai-roi-calculator': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
+  '/ai-lead-qualification': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
+  '/ai-translation-hub': { border: 'border-amber-500/40', text: 'text-amber-600', hover: 'hover:bg-amber-50', bg: 'bg-amber-50/50' },
+  '/ai-objection-handler': { border: 'border-rose-500/40', text: 'text-rose-600', hover: 'hover:bg-rose-50', bg: 'bg-rose-50/50' },
+  '/ai-market-report': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
+  '/ai-video-tour-script': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
+  '/ai-email-generator': { border: 'border-teal-500/40', text: 'text-teal-600', hover: 'hover:bg-teal-50', bg: 'bg-teal-50/50' },
+  '/ai-social-media': { border: 'border-pink-500/40', text: 'text-pink-600', hover: 'hover:bg-pink-50', bg: 'bg-pink-50/50' },
+  '/ai-neighborhood-insights': { border: 'border-indigo-500/40', text: 'text-indigo-600', hover: 'hover:bg-indigo-50', bg: 'bg-indigo-50/50' },
+  '/ai-property-analyzer': { border: 'border-orange-500/40', text: 'text-orange-600', hover: 'hover:bg-orange-50', bg: 'bg-orange-50/50' },
+  '/rental-index': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
+  '/mortgage-calculator': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/10', bg: 'bg-gold/5' },
+  '/compare': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
+  '/quiz': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
+  '/interior-design-ai': { border: 'border-rose-500/40', text: 'text-rose-600', hover: 'hover:bg-rose-50', bg: 'bg-rose-50/50' },
+  '/virtual-staging-ai': { border: 'border-amber-500/40', text: 'text-amber-600', hover: 'hover:bg-amber-50', bg: 'bg-amber-50/50' },
+  '/ai-follow-up-scheduler': { border: 'border-green-500/40', text: 'text-green-600', hover: 'hover:bg-green-50', bg: 'bg-green-50/50' },
+  '/ai-client-matcher': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
+  '/ai-competitor-analysis': { border: 'border-red-500/40', text: 'text-red-600', hover: 'hover:bg-red-50', bg: 'bg-red-50/50' },
+  '/ai-investment-report': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
+  '/ai-meeting-summarizer': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
+  '/ai-description-writer': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
+  '/ai-contract-reviewer': { border: 'border-slate-500/40', text: 'text-slate-600', hover: 'hover:bg-slate-50', bg: 'bg-slate-50/50' },
+  '/ai-document-generator': { border: 'border-zinc-500/40', text: 'text-zinc-600', hover: 'hover:bg-zinc-50', bg: 'bg-zinc-50/50' },
+  '/business-card-scanner': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/10', bg: 'bg-gold/5' },
+};
+
+// Default color for tools not in the map
+const DEFAULT_TOOL_COLOR = { border: 'border-gold/30', text: 'text-black', hover: 'hover:bg-white', bg: 'bg-white/80' };
 ```
 
-Remove the `popupsReady &&` wrapper from the chat widget rendering, keeping it only for the pulse.
+2. Update the Professional Tools link rendering (lines 771-781):
 
----
-
-### Issue 8: Website Performance Optimization
-
-**Current Problem:**
-Pages are loading slowly. This could be due to:
-- Large bundle sizes
-- Unoptimized images
-- Heavy component renders
-- Too many API calls
-
-**Solution:**
-Implement multiple performance optimizations:
-
-**A. Code Splitting & Lazy Loading**
-
-**File:** `src/App.tsx` or route definitions
-- Implement `React.lazy()` for heavy page components
-- Add `Suspense` boundaries with loading states
-
-**B. Image Optimization**
-
-- Ensure all images use WebP/AVIF formats where possible
-- Add `loading="lazy"` to below-fold images
-- Use proper image dimensions
-
-**C. Component Memoization**
-
-- Add `React.memo()` to frequently re-rendered components
-- Use `useMemo` and `useCallback` for expensive computations
-
-**D. API Call Optimization**
-
-- Review React Query cache settings
-- Reduce unnecessary refetches
-- Consider increasing stale time for static data
-
-**Specific optimizations for immediate impact:**
-
-**File:** `src/pages/Index.tsx`
 ```typescript
-// Lazy load below-fold sections
-const WhyDubaiCapitalSection = lazy(() => import('@/components/home/WhyDubaiCapitalSection'));
-const TestimonialsSection = lazy(() => import('@/components/home/TestimonialsSection'));
-```
-
-**File:** `src/components/StatsCounter.tsx`
-```typescript
-// Memoize the component
-export default React.memo(StatsCounter);
+{professionalTools.map((link) => {
+  const colors = AI_TOOL_COLORS[link.href] || DEFAULT_TOOL_COLOR;
+  return (
+    <Link
+      key={link.href}
+      to={link.href}
+      className={`transition-all duration-300 text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl group ${colors.bg} border ${colors.border} shadow-sm hover:shadow-md ${colors.hover}`}
+    >
+      <span className={`${colors.text} group-hover:brightness-110 transition-colors font-medium`}>
+        {link.label}
+      </span>
+    </Link>
+  );
+})}
 ```
 
 ---
 
 ### Files to Modify Summary
 
-| File | Changes |
-|------|---------|
-| `src/components/Footer.tsx` | Remove gold border from mode switcher container |
-| `src/components/StatsCounter.tsx` | Make gold borders solid on track record cards |
-| `index.html` | Remove founder name from default meta description |
-| `src/components/SEOHead.tsx` | Integrate founder visibility toggle for SEO meta |
-| `src/components/home/HeroSearchBar.tsx` | Fix element height alignment (48px) |
-| `src/components/GlobalHeader.tsx` | Stretch navigation items with flex-1 |
-| `src/components/MainLayout.tsx` | Decouple chat widget from popupsReady |
-| `src/pages/Index.tsx` | Add lazy loading for heavy sections |
-
----
-
-### Favicon Note
-
-For the favicon, the current image shows a "B" on black background. To make it premium with the full "JBJ" monogram:
-
-**Option 1:** Use an existing monogram asset (`jbj-monogram-nobuffer.png`) and create a proper favicon
-**Option 2:** User provides a high-resolution favicon image
-
-The favicon should be:
-- 32x32 pixels for browser tabs
-- 192x192 or 512x512 for PWA/mobile
-- Black background (#000000)
-- Gold/white JBJ monogram centered
-- PNG format with transparency where needed
+| File | Change |
+|------|--------|
+| `src/components/home/PodcastVisibilityGate.tsx` | Check `isOwner` BEFORE loading states |
+| `src/components/Footer.tsx` | Add AI tool color mapping and apply to links |
 
 ---
 
 ### Testing Checklist
 
-1. **Footer:** Verify mode switcher no longer has gold border
-2. **Track Record:** Confirm cards have solid gold borders
-3. **SEO:** Check page source for founder name when toggle is off
-4. **Search Bar:** All elements should be same height (48px)
-5. **Header:** Navigation should fill space between logo and icons
-6. **Chat:** Widget should always appear (collapsed) on public pages
-7. **Performance:** Measure Lighthouse score before/after changes
+1. **Podcast Visibility:**
+   - Log in as Owner account
+   - Navigate to homepage
+   - Verify podcast section is visible
+   - Log out or use incognito
+   - Verify podcast section is hidden for visitors
+
+2. **Footer AI Tool Colors:**
+   - Scroll to footer "Professional Tools" section
+   - Verify each tool has its distinct accent color
+   - Click on "AI ROI Calculator" - should have emerald styling in footer
+   - Click on "AI Price Predictor" - should have blue styling in footer
+   - Verify hover effects work with matching colors
 
