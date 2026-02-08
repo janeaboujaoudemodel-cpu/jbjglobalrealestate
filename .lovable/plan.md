@@ -1,119 +1,174 @@
 
-## Goal (what will be “fixed”)
-When you open **Create Support Ticket**, both dropdowns:
-- **Service with Issue**
-- **Priority Level**
-must visibly open a menu every time, and selections must be clickable (no “nothing happens”, no hidden menu).
+# Add Loading States and Success/Error Feedback to Support Ticket Form
+
+## Overview
+Enhance the Support Ticket form UX with professional loading states, animated feedback, and clear error handling to give users confidence during submission.
+
+## Current State Analysis
+
+The form currently has:
+- Basic `isSubmitting` boolean state
+- Simple "Submitting..." text when loading
+- Toast notifications via `sonner`
+- Success view with ticket number after submission
+
+**What's Missing:**
+- Animated loading spinner during submission
+- Upload progress indication for attachments
+- Clear error state with retry option
+- Field-level validation feedback
+- Submission step indicator
 
 ---
 
-## What I found in code (why this can still fail even after z-index tweaks)
-### 1) The dropdown menu is rendered in a Radix “Popper portal” outside the dialog
-Your Select menu (`@radix-ui/react-select`) renders its menu in a portal and wraps it in an element with:
-- `data-radix-popper-content-wrapper`
+## Implementation Plan
 
-This is correct, but it creates a common failure mode inside modals: **the dialog can treat the dropdown menu as “outside” the modal** and dismiss/interrupt interaction. The result can look like:
-- click trigger → menu flashes or never appears
-- click does “nothing”
-- menu exists but is unclickable/blocked
+### 1. Enhanced Loading State During Submission
 
-### 2) SupportTicketBox still overrides SelectContent styling in a risky way
-In `src/components/SupportTicketBox.tsx` both dropdowns use:
-- `SelectContent className="bg-white border border-zinc-200 shadow-lg ..."`
-
-This overrides the shared Select styling (including the premium background/border conventions). Even if it technically opens, on your light dialog background it can be hard to perceive, and it increases risk of CSS conflicts.
-
-### 3) We need a fix that is not “guessing”
-To stop this loop, we’ll implement the fix in a way that:
-- prevents modal dismissal during dropdown interaction (root interaction bug)
-- guarantees the dropdown is above the modal overlay (visual bug)
-- then we will actually test the interaction end-to-end in the preview
-
----
-
-## Implementation plan (do all of this in one pass)
-
-### A) Harden all dialogs against Radix popper portals (core fix)
-**File:** `src/components/ui/dialog.tsx`
-
-Add a default guard to `DialogContent` so that when a user clicks inside any Radix Popper portal (Select, DropdownMenu, Popover, etc.), the dialog does **not** treat it as an “outside click”.
-
-Concretely:
-- In `DialogPrimitive.Content`, add `onPointerDownOutside` (and/or `onInteractOutside`) handler that:
-  - checks `const target = e.target as HTMLElement`
-  - if `target.closest('[data-radix-popper-content-wrapper]')` is true → `e.preventDefault()`
-  - otherwise allow default behavior (clicking outside closes dialog as usual)
-
-Important detail:
-- We will **compose** this with any existing `onPointerDownOutside` / `onInteractOutside` passed by callers so we don’t break special dialogs that already have custom logic (e.g., “don’t close while submitting”).
-
-Why this is the right fix:
-- It directly addresses the “dropdown is outside modal” interaction issue rather than only changing z-index.
-
----
-
-### B) Make Select menus unmistakably visible above modals (visual + safety)
-**File:** `src/components/ui/select.tsx`
-
-Adjust `SelectContent` to be safely above dialogs:
-- raise the SelectContent z-index above dialog overlay/content (keep it below toasts if needed)
-- keep a solid, non-transparent premium background and clear border/shadow
-
-This ensures that even if another overlay exists, the dropdown cannot end up behind it.
-
----
-
-### C) Remove risky overrides in SupportTicketBox and use the system Select styling
 **File:** `src/components/SupportTicketBox.tsx`
 
-For both dropdowns:
-- Remove the custom `SelectContent className="bg-white border border-zinc-200 shadow-lg ..."` overrides
-- Use the default `<SelectContent>` styling from `src/components/ui/select.tsx`
-- If we still want a smaller menu height, keep only safe sizing overrides (e.g., `max-h-60`) but do not override background/border/z-index.
+Replace the simple "Submitting..." text with an animated multi-step indicator:
 
-Also add small UX polish:
-- Ensure trigger feels clickable: add `cursor-pointer` on `SelectTrigger`
-- Ensure items show pointer: add `cursor-pointer` to `SelectItem` via className or adjust base SelectItem style if desired
+```text
+Step 1: "Uploading attachments..." (if files exist)
+Step 2: "Creating your ticket..."
+Step 3: "Sending confirmation..."
+```
 
----
+Add a proper spinning loader icon (`Loader2` from lucide-react) with smooth animation.
 
-## Testing plan (I will actually test it, not assume)
-After implementing A+B+C, I will verify in the Preview environment:
-
-1) **Homepage**
-- Open “Create Support Ticket”
-- Click “Service with Issue” → confirm menu appears
-- Select an option → confirm field updates and dialog remains open
-- Click “Priority Level” → confirm menu appears
-- Select “Normal” → confirm it updates
-
-2) **/contact**
-- Repeat dropdown open + select for both fields
-
-3) **/services/customer-happiness-center**
-- Repeat dropdown open + select for both fields
-
-4) **Submission sanity**
-- Fill required fields minimally
-- Submit once to confirm no regressions
-
-If any of these fails, I will immediately apply the fallback below.
+**Changes:**
+- Add new state: `submissionStep: 'idle' | 'uploading' | 'creating' | 'confirming'`
+- Update the submit button to show the current step with icon
+- Add subtle progress animation overlay on the form
 
 ---
 
-## Fallback (only if needed)
-If Radix Select still behaves inconsistently on a specific device/browser, we will replace just these two dropdowns in the ticket modal with a Popover-based menu (you already use Popover successfully in `HeroSearchBar.tsx`). This avoids the Select+Dialog edge-cases entirely while preserving the same UI.
+### 2. Upload Progress Indicator
+
+**File:** `src/components/SupportTicketBox.tsx`
+
+When files are being uploaded, show:
+- Individual file upload status (uploading/completed/failed)
+- Visual checkmark when each file completes
+- Overall attachment progress
+
+**Changes:**
+- Add `uploadProgress` state to track per-file status
+- Update the file upload loop to set status for each file
+- Modify attachment list UI to show upload state with icons
 
 ---
 
-## Files that will be changed
-- `src/components/ui/dialog.tsx` (interaction guard for Radix popper portals)
-- `src/components/ui/select.tsx` (ensure menu is always above modals, strong background)
-- `src/components/SupportTicketBox.tsx` (remove risky SelectContent overrides; make triggers/items clearly clickable)
+### 3. Error State with Retry Capability
+
+**File:** `src/components/SupportTicketBox.tsx`
+
+When submission fails, show:
+- Clear error message explaining what went wrong
+- "Retry" button that attempts resubmission
+- Option to save draft locally (localStorage)
+
+**Changes:**
+- Add `submissionError: string | null` state
+- Add error display component within the form
+- Add retry handler that clears error and resubmits
 
 ---
 
-## Definition of Done (your acceptance criteria)
-- You can open the ticket modal and the dropdown menus are visible and selectable every time.
-- Selecting an item does not close the dialog.
-- This works on all pages where the ticket modal exists (home, contact, customer-happiness-center).
+### 4. Form Overlay During Submission
+
+**File:** `src/components/SupportTicketBox.tsx`
+
+Add a semi-transparent overlay on the form during submission to:
+- Prevent accidental edits
+- Show centered loading animation
+- Display current step progress
+
+**Changes:**
+- Add overlay div with `pointer-events-none` when submitting
+- Center the loading indicator with backdrop blur
+
+---
+
+### 5. Success State Enhancements
+
+**File:** `src/components/SupportTicketBox.tsx`
+
+Improve the existing success view with:
+- Confetti or celebration animation (optional)
+- Animated checkmark entrance
+- Clearer next steps messaging
+
+**Changes:**
+- Add entrance animation with framer-motion scale + opacity
+- Enhance the success icon with a pulsing glow effect
+
+---
+
+## Technical Details
+
+### New State Variables
+```typescript
+const [submissionStep, setSubmissionStep] = useState<
+  'idle' | 'uploading' | 'creating' | 'confirming'
+>('idle');
+const [submissionError, setSubmissionError] = useState<string | null>(null);
+const [uploadStatuses, setUploadStatuses] = useState<Record<number, 'pending' | 'uploading' | 'done' | 'error'>>({});
+```
+
+### Updated handleSubmit Flow
+```text
+1. Set submissionStep = 'uploading' (if attachments exist)
+2. Upload each file, updating uploadStatuses per file
+3. Set submissionStep = 'creating'
+4. Call edge function with retry logic
+5. Set submissionStep = 'confirming'
+6. On success: setIsSubmitted(true)
+7. On error: setSubmissionError(message), reset step to 'idle'
+```
+
+### Loading Indicator Component
+```text
+- Loader2 icon with animate-spin
+- Text showing current step
+- Subtle pulsing glow effect matching gold theme
+```
+
+### Error Display Component
+```text
+- Red alert box with error icon
+- Error message text
+- "Retry" button and "Cancel" option
+```
+
+---
+
+## Files to Modify
+
+| File | Changes |
+|------|---------|
+| `src/components/SupportTicketBox.tsx` | Add loading states, error handling, upload progress, form overlay |
+
+---
+
+## Expected UX Flow
+
+1. **User fills form** - Normal state
+2. **User clicks "Create Ticket"** - Button shows spinner + "Uploading files..."
+3. **Files upload** - Each file shows checkmark as it completes
+4. **API call starts** - Button shows "Creating your ticket..."
+5. **Success** - Animated success view with ticket number
+6. **OR Error** - Error message with "Retry" button appears
+
+---
+
+## Visual Design
+
+- **Loading Spinner:** Gold-colored `Loader2` with `animate-spin`
+- **Progress Steps:** Subtle text change with fade transition
+- **Error State:** Red border, red icon, clear message
+- **Success Enhancement:** Green checkmark with scale animation
+- **Form Overlay:** Semi-transparent white with blur during submission
+
+This maintains the existing premium gold/pearl design language while adding professional UX feedback.
