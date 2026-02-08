@@ -1,137 +1,177 @@
 
-
-## Unified Points & Loyalty Program - Implementation Plan
+## Chat Support Memory & Submit Button Fix - Implementation Plan
 
 ### Overview
-Implement a **Unified Points** system where all activities earn into one shared pool regardless of mode. When the user switches modes, only the tier ladder display changes - points never disappear.
+Fix three critical issues in the chat support widget:
+1. Add session persistence so users don't lose their conversation state after CV submission
+2. Fix the submit button hover behavior that "falls down" instead of showing a 3D gold effect
+3. Optimize submission speed across all forms
 
 ---
 
-### Current State Analysis
+### Issue 1: Chat Memory After CV Submission
 
-**Database Structure:**
-- `points_ledger` table tracks points with `user_mode` column (for audit)
-- `tier_definitions` has two separate ladders:
-  - **Broker tiers**: Starter (0-499) → Rising (500-1499) → Performer (1500-3999) → Elite (4000-9999) → Legend (10000+)
-  - **Client/Investor tiers**: Explorer (0-199) → Seeker (200-499) → Investor (500-1499) → Premium (1500-3999) → Elite (4000+)
+**Current Problem:**
+- After submitting a CV, the chat goes to 'feedback' step
+- When user closes and reopens chat, state resets to 'welcome_choice' (no persistence)
+- User sees "Start New Chat" instead of a confirmation of their submission
 
-**Current Hook Behavior (`useTierProgress.ts`):**
-- Sums ALL points from ledger (line 106) - already unified
-- Switches tier ladder based on `isBroker` flag (line 62)
-- Uses `useUserRole` to determine broker status
+**Solution:**
+Add a new step `'cv_submitted'` and persist chat state in sessionStorage.
 
-**Issue to Fix:**
-- Currently uses `useUserRole().isBroker` which checks the user's **role** (permanent)
-- Should use `useUserModeContext()` to check the user's **mode** (can switch anytime)
+#### Changes Required:
+
+**File: `src/components/chat/types.ts`**
+- Add `'cv_submitted'` to the `ChatStep` type
+
+**File: `src/components/AIChatWidget.tsx`**
+1. Add sessionStorage persistence for step and userInfo:
+   ```typescript
+   // On mount, restore from sessionStorage
+   useEffect(() => {
+     const savedStep = sessionStorage.getItem('jbj_chat_step');
+     const savedUserInfo = sessionStorage.getItem('jbj_chat_user');
+     if (savedStep) setStep(savedStep as ChatStep);
+     if (savedUserInfo) setUserInfo(JSON.parse(savedUserInfo));
+   }, []);
+   
+   // Save to sessionStorage on changes
+   useEffect(() => {
+     sessionStorage.setItem('jbj_chat_step', step);
+     sessionStorage.setItem('jbj_chat_user', JSON.stringify(userInfo));
+   }, [step, userInfo]);
+   ```
+
+2. Modify `handleCVSubmitSuccess` to go to `'cv_submitted'` instead of 'feedback':
+   ```typescript
+   const handleCVSubmitSuccess = () => {
+     setStep('cv_submitted');
+   };
+   ```
+
+3. Add a new step render for `'cv_submitted'`:
+   ```typescript
+   {step === 'cv_submitted' && (
+     <ChatCVConfirmation
+       userFirstName={userInfo.firstName}
+       onStartNewChat={resetChat}
+       onGoToShortcuts={() => setStep('shortcuts')}
+     />
+   )}
+   ```
+
+4. Update `handleBack` navigation for the new step
+
+**New File: `src/components/chat/ChatCVConfirmation.tsx`**
+Create a new component showing:
+- Success checkmark icon
+- "Thank You! Your CV Has Been Received"
+- "Your application has been submitted successfully. Our HR team will review your CV and contact you soon."
+- Two buttons: "Back to Main Menu" and "Start New Chat"
 
 ---
 
-### Implementation Changes
+### Issue 2: Submit Button "Falling Down" on Hover
 
-#### File: `src/hooks/useTierProgress.ts`
+**Current Problem:**
+- In `ChatConversationalCollect.tsx`, the Send button uses:
+  ```typescript
+  className="... bg-gold hover:bg-gold-dark ..."
+  ```
+- The global Button component has `active:translate-y-0` which creates a "snap down" effect
+- Missing the 3D gold hover effect that should apply
 
-**1. Change context source (line 4-5):**
+**Solution:**
+Create a dedicated chat send button style that doesn't use translate transforms and applies proper 3D gold effect on hover.
+
+#### Changes Required:
+
+**File: `src/components/chat/ChatConversationalCollect.tsx`**
+Update all three Send buttons (name, email, phone steps) to use a fixed hover effect:
+
 ```typescript
-// BEFORE:
-import { useUserRole } from "@/hooks/useUserRole";
-// ...
-const { isBroker } = useUserRole();
-
-// AFTER:
-import { useUserModeContext } from "@/contexts/UserModeContext";
-// ...
-const { isBrokerMode, isCombinedMode } = useUserModeContext();
+<Button
+  size="icon"
+  onClick={handleNameSubmit}
+  className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold rounded-lg 
+    hover:bg-gold-light hover:shadow-[0_4px_15px_rgba(200,167,102,0.5)] 
+    active:bg-gold-dark transition-all duration-200"
+>
+  <Send className="w-4 h-4 text-black" />
+</Button>
 ```
 
-**2. Update tier type selection logic (line 62):**
-```typescript
-// BEFORE:
-const tierType = isBroker ? 'broker' : 'client';
+Key changes:
+- Remove any translate transforms on hover/active
+- Add `hover:shadow-[...]` for 3D gold glow effect
+- Use `hover:bg-gold-light` for color feedback
+- Add `transition-all duration-200` for smooth transitions
 
-// AFTER:
-// In combined mode, show broker ladder (more ambitious goals)
-// In broker-only mode, show broker ladder
-// In investor-only mode, show client ladder
-const tierType = isBrokerMode ? 'broker' : 'client';
+**File: `src/components/chat/ChatMessages.tsx`**
+Apply same fix to the main chat send button:
+```typescript
+<Button
+  onClick={onSend}
+  disabled={!input.trim() || isLoading}
+  className="bg-gold h-12 w-12 rounded-xl 
+    hover:bg-gold-light hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)]
+    active:bg-gold-dark transition-all duration-200"
+>
+  <Send className="w-5 h-5" />
+</Button>
 ```
 
-**3. Add mode reactivity to loadProgress dependencies (line 160):**
+**Global Fix: `src/components/ui/button.tsx`**
+For icon-sized buttons, remove the `active:translate-y-0` behavior for size="icon":
 ```typescript
-// BEFORE:
-}, [user, tierType]);
-
-// AFTER:
-}, [user, isBrokerMode, isCombinedMode]);
-```
-
-**4. Export tier type for UI components:**
-```typescript
-interface TierProgressHook {
-  tierProgress: TierProgress | null;
-  allTiers: TierDefinition[];
-  recentPoints: PointsLedgerEntry[];
-  isLoading: boolean;
-  error: string | null;
-  refreshProgress: () => Promise<void>;
-  currentTierType: 'broker' | 'client';  // NEW
-}
+size: {
+  default: "h-10 px-6 py-2",
+  sm: "h-9 rounded-md px-4",
+  lg: "h-12 rounded-md px-8 text-base",
+  icon: "h-10 w-10 active:translate-y-0!", // Override to prevent falling
+},
 ```
 
 ---
 
-#### File: `src/components/tier/TierProgressCard.tsx`
+### Issue 3: Faster Submission Speed
 
-**Add mode indicator for clarity:**
+**Current Problem:**
+- CV submission does sequential async calls (upload, then insert)
+- Typing simulation delays add perceived latency
 
-When user switches modes, show a subtle label indicating which tier ladder they're viewing:
+**Solution:**
+Optimize the submission flow:
 
+**File: `src/components/chat/ChatCVSubmission.tsx`**
+1. Run DB insert in parallel with getting public URL (they don't depend on each other):
+   ```typescript
+   // Parallel execution
+   const [urlData, insertResult] = await Promise.all([
+     supabase.storage.from('documents').getPublicUrl(filePath),
+     supabase.from('hr_cv_submissions').insert({...})
+   ]);
+   ```
+
+2. Reduce progress bar steps (remove intermediate delays):
+   ```typescript
+   setUploadProgress(20); // After file selected
+   setUploadProgress(80); // After upload complete
+   setUploadProgress(100); // After DB insert
+   ```
+
+3. Reduce timeout before `onSubmitSuccess`:
+   ```typescript
+   setTimeout(() => { onSubmitSuccess(); }, 800); // Was 2000ms
+   ```
+
+**File: `src/components/chat/ChatConversationalCollect.tsx`**
+Reduce typing simulation delay:
 ```typescript
-// Add to CardHeader (around line 54-59):
-<span className="text-xs text-white/50">
-  {tierType === 'broker' ? 'Broker Tier' : 'Investor Tier'}
-</span>
+const simulateTyping = (callback: () => void, delay = 400) => { // Was 1000ms
+  ...
+};
 ```
-
----
-
-#### File: `src/components/tier/TierBadge.tsx`
-
-**No changes needed** - already supports both tier types with proper colors and icons.
-
----
-
-### User Experience Flow
-
-```
-User earns 1000 points total
-
-In Investor Mode:
-┌─────────────────────────────────┐
-│ 🏆 INVESTOR TIER                │
-│ Current: Investor (1000 pts)    │
-│ Next: Premium at 1500 pts       │
-│ Progress: ████████░░ 67%        │
-└─────────────────────────────────┘
-
-Switches to Broker Mode:
-┌─────────────────────────────────┐
-│ 🏆 BROKER TIER                  │
-│ Current: Rising (1000 pts)      │
-│ Next: Performer at 1500 pts     │
-│ Progress: ████████░░ 67%        │
-└─────────────────────────────────┘
-
-Same 1000 points - different tier name!
-```
-
----
-
-### Benefits of Unified Points
-
-1. **Simplicity**: Users don't lose progress when switching modes
-2. **Motivation**: Combined mode users progress faster on both ladders
-3. **Audit Trail**: `user_mode` column in ledger tracks which mode earned each point
-4. **No Data Migration**: Current ledger structure already supports this
 
 ---
 
@@ -139,16 +179,39 @@ Same 1000 points - different tier name!
 
 | File | Changes |
 |------|---------|
-| `src/hooks/useTierProgress.ts` | Switch from `useUserRole` to `useUserModeContext`, add mode reactivity |
-| `src/components/tier/TierProgressCard.tsx` | Add tier type label for clarity |
+| `src/components/chat/types.ts` | Add 'cv_submitted' to ChatStep type |
+| `src/components/AIChatWidget.tsx` | Add sessionStorage persistence, new step handling |
+| `src/components/chat/ChatCVConfirmation.tsx` | NEW - CV submission confirmation view |
+| `src/components/chat/ChatConversationalCollect.tsx` | Fix button hover, reduce typing delay |
+| `src/components/chat/ChatMessages.tsx` | Fix send button hover style |
+| `src/components/chat/ChatCVSubmission.tsx` | Optimize async calls, reduce delays |
+
+---
+
+### User Experience After Fix
+
+**CV Submission Flow:**
+1. User submits CV
+2. Shows "CV Submitted Successfully!" with fast transition
+3. User closes chat
+4. User reopens chat  
+5. Sees "Thank You! Your CV Has Been Received" with options to:
+   - "Back to Main Menu" (go to shortcuts)
+   - "Start New Chat" (full reset)
+
+**Button Hover Behavior:**
+- Buttons stay in place on hover (no falling)
+- Gold glow effect appears on hover
+- Slight color change to gold-light
+- Smooth transition animation
 
 ---
 
 ### Testing Checklist
 
-1. Log in as a user with some points
-2. View tier progress in Investor mode - should show client tier
-3. Switch to Broker mode - same points, broker tier name
-4. Switch to Combined mode - should show broker tier (more ambitious)
-5. Verify points total never changes during mode switches
-
+1. Submit a CV through the chat widget
+2. Close the chat widget
+3. Reopen - should see CV confirmation, not "Start New Chat"
+4. Click "Back to Main Menu" - should go to shortcuts
+5. Hover on any Send button - should glow gold, not fall down
+6. Test submission speed - should feel noticeably faster
