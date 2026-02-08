@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { Shield, Lock, UserPlus, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 
 interface BrokerCRMAccessGateProps {
   children: React.ReactNode;
@@ -14,35 +14,45 @@ interface BrokerCRMAccessGateProps {
  * BrokerCRMAccessGate - Restricts CRM access to registered brokers only
  * 
  * Checks if user:
- * 1. Is authenticated
- * 2. Has broker_member role in hr_user_roles table (meaning they've completed hiring process)
+ * 1. Is the verified Owner (from AuthContext - takes precedence)
+ * 2. Is authenticated
+ * 3. Has broker_member role in hr_user_roles table (meaning they've completed hiring process)
  * 
  * If not a registered broker, shows prompt to apply via HR/CV submission
  */
 const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAccessGateProps) => {
   const navigate = useNavigate();
+  const { user, loading: authLoading, isOwner, ownerLoading } = useAuth();
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
     const checkBrokerAccess = async () => {
+      // Wait for auth to finish
+      if (authLoading || ownerLoading) return;
+
+      if (!user) {
+        setHasAccess(false);
+        setIsLoading(false);
+        return;
+      }
+
+      setUserEmail(user.email || null);
+
+      // Owner override - if verified as Owner, allow immediately
+      if (isOwner) {
+        setHasAccess(true);
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-
-        if (!session?.user) {
-          setHasAccess(false);
-          setIsLoading(false);
-          return;
-        }
-
-        setUserEmail(session.user.email || null);
-
         // Check if user has broker_member role (completed hiring process)
         const { data: hrRole, error: hrError } = await supabase
           .from("hr_user_roles")
           .select("role, is_active")
-          .eq("user_id", session.user.id)
+          .eq("user_id", user.id)
           .eq("role", "broker_member")
           .eq("is_active", true)
           .maybeSingle();
@@ -53,8 +63,8 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
 
         // Also check for admin/owner roles who always have access
         const [adminResult, ownerResult] = await Promise.all([
-          supabase.rpc("has_role", { _user_id: session.user.id, _role: "admin" }),
-          supabase.rpc("has_role", { _user_id: session.user.id, _role: "owner" }),
+          supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+          supabase.rpc("has_role", { _user_id: user.id, _role: "owner" }),
         ]);
 
         const isExecutive = 
@@ -73,9 +83,9 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
     };
 
     checkBrokerAccess();
-  }, []);
+  }, [user, authLoading, isOwner, ownerLoading]);
 
-  if (isLoading) {
+  if (authLoading || ownerLoading || isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">

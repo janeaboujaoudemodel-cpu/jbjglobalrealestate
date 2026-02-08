@@ -142,14 +142,9 @@ const Admin = () => {
     service_charge: "",
   });
 
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate("/auth");
-    } else if (!loading && user && !isOwner) {
-      toast.error("You don't have Owner access");
-      navigate("/");
-    }
-  }, [user, isOwner, loading, navigate]);
+  // NOTE: Removed page-level redirect logic.
+  // Access is now controlled by OwnerGuard at the route level.
+  // If this component renders, OwnerGuard has already verified access.
 
   // Keyboard shortcut for command palette
   useEffect(() => {
