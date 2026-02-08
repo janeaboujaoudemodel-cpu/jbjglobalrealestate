@@ -135,21 +135,39 @@ const MortgageCalculator = ({
           </div>
           
           {/* Total Interest - Now shows % of loan */}
-          <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 sm:p-5 text-center shadow-md">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 mx-auto mb-2 sm:mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
-              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
+          <TooltipProvider>
+            <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 sm:p-5 text-center shadow-md relative">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button className="absolute top-2 right-2 p-1 rounded-full hover:bg-black/10 transition-colors">
+                    <Info className="w-3.5 h-3.5 text-black/40 hover:text-black/70" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="max-w-[280px] bg-zinc-900 border-gold/30 text-white p-3">
+                  <p className="text-xs leading-relaxed">
+                    <strong className="text-gold">Why {calculations.interestPercentOfLoan.toFixed(0)}% total interest on a {interestRate}% rate?</strong>
+                    <br /><br />
+                    With compound interest, you pay interest on your remaining balance each month for {loanTermYears} years ({loanTermYears * 12} payments). Over time, this accumulates to ~{calculations.interestPercentOfLoan.toFixed(0)}% of your loan amount.
+                    <br /><br />
+                    <span className="text-gold/80">Tip:</span> Shorter loan terms or larger down payments significantly reduce total interest paid.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+              <div className="w-9 h-9 sm:w-10 sm:h-10 mx-auto mb-2 sm:mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
+              </div>
+              <p className="text-black/60 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Total Interest</p>
+              <p className="text-gold font-bold text-lg sm:text-xl" style={{ fontFamily: "Poppins, sans-serif" }}>
+                {calculations.interestPercentOfLoan.toFixed(0)}% of loan
+              </p>
+              <p className="text-black font-semibold text-sm sm:text-base mt-1">
+                {formatCurrency(calculations.totalInterest)}
+              </p>
+              <p className="text-black/50 text-[9px] sm:text-[10px] mt-0.5">
+                @ {interestRate}% | {loanTermYears} yrs
+              </p>
             </div>
-            <p className="text-black/60 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Total Interest</p>
-            <p className="text-gold font-bold text-lg sm:text-xl" style={{ fontFamily: "Poppins, sans-serif" }}>
-              {calculations.interestPercentOfLoan.toFixed(0)}% of loan
-            </p>
-            <p className="text-black font-semibold text-sm sm:text-base mt-1">
-              {formatCurrency(calculations.totalInterest)}
-            </p>
-            <p className="text-black/50 text-[9px] sm:text-[10px] mt-0.5">
-              @ {interestRate}% | {loanTermYears} yrs
-            </p>
-          </div>
+          </TooltipProvider>
 
           {/* Monthly Payment */}
           <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 sm:p-5 text-center shadow-md col-span-2 sm:col-span-1">
