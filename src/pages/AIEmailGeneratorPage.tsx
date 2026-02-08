@@ -1,0 +1,297 @@
+/**
+ * AI Email Generator Page
+ * Generate professional real estate emails using AI
+ */
+
+import { useState } from "react";
+import { Mail, Send, Sparkles, Copy, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import AIToolPremiumLayout from "@/components/ai-tools/AIToolPremiumLayout";
+import AIToolGuide from "@/components/ai-tools/AIToolGuide";
+
+interface EmailResult {
+  subject?: string;
+  greeting?: string;
+  body?: string;
+  callToAction?: string;
+  closing?: string;
+  signature?: string;
+  tips?: string[];
+  alternativeSubjects?: string[];
+}
+
+export default function AIEmailGeneratorPage() {
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<EmailResult | null>(null);
+  const [copied, setCopied] = useState(false);
+  
+  const [emailType, setEmailType] = useState("follow-up");
+  const [recipientName, setRecipientName] = useState("");
+  const [propertyDetails, setPropertyDetails] = useState("");
+  const [purpose, setPurpose] = useState("");
+  const [tone, setTone] = useState("professional");
+  const [additionalContext, setAdditionalContext] = useState("");
+
+  const emailTypes = [
+    { value: "follow-up", label: "Follow-up" },
+    { value: "introduction", label: "Introduction" },
+    { value: "offer", label: "Property Offer" },
+    { value: "listing-alert", label: "Listing Alert" },
+    { value: "market-update", label: "Market Update" },
+    { value: "thank-you", label: "Thank You" },
+    { value: "appointment", label: "Appointment" },
+    { value: "negotiation", label: "Negotiation" },
+  ];
+
+  const handleSubmit = async () => {
+    if (!emailType) {
+      toast.error("Please select an email type");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-email-generator", {
+        body: {
+          emailType,
+          context: {
+            recipientName,
+            propertyDetails,
+            purpose,
+            tone,
+            additionalContext,
+          },
+        },
+      });
+
+      if (error) throw error;
+      if (data?.success) {
+        setResult(data);
+        toast.success("Email generated successfully!");
+      } else {
+        throw new Error(data?.error || "Failed to generate");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to generate email");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const copyToClipboard = () => {
+    if (!result) return;
+    const fullEmail = `Subject: ${result.subject}\n\n${result.greeting}\n\n${result.body}\n\n${result.callToAction}\n\n${result.closing}\n\n${result.signature}`;
+    navigator.clipboard.writeText(fullEmail);
+    setCopied(true);
+    toast.success("Email copied to clipboard!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <AIToolPremiumLayout
+      title="AI Email Generator"
+      subtitle="Generate professional real estate emails instantly with AI"
+      icon={<Mail className="w-8 h-8" />}
+      accentColor="teal"
+      gradientFrom="from-teal-500"
+    >
+      <AIToolGuide
+        description="Create polished, professional emails for any real estate communication need."
+        steps={[
+          "Select the type of email you need",
+          "Enter recipient name and context",
+          "Add property details if relevant",
+          "Choose your preferred tone",
+          "Generate and customize your email"
+        ]}
+        benefits={[
+          "Save time on email composition",
+          "Maintain professional consistency",
+          "Get multiple subject line options",
+          "Receive personalization tips"
+        ]}
+        accentColor="teal"
+      />
+
+      <div className="space-y-8">
+        {/* Input Form */}
+        <Card className="bg-zinc-900/90 border-teal-500/30">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center gap-2">
+              <Mail className="w-5 h-5 text-teal-400" />
+              Email Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-zinc-300">Email Type</Label>
+                <Select value={emailType} onValueChange={setEmailType}>
+                  <SelectTrigger className="bg-zinc-800 border-teal-500/30 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {emailTypes.map(type => (
+                      <SelectItem key={type.value} value={type.value}>{type.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-zinc-300">Tone</Label>
+                <Select value={tone} onValueChange={setTone}>
+                  <SelectTrigger className="bg-zinc-800 border-teal-500/30 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="professional">Professional</SelectItem>
+                    <SelectItem value="friendly">Friendly</SelectItem>
+                    <SelectItem value="formal">Formal</SelectItem>
+                    <SelectItem value="casual">Casual</SelectItem>
+                    <SelectItem value="urgent">Urgent</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div>
+              <Label className="text-zinc-300">Recipient Name</Label>
+              <Input
+                value={recipientName}
+                onChange={(e) => setRecipientName(e.target.value)}
+                placeholder="John Smith"
+                className="bg-zinc-800 border-teal-500/30 text-white"
+              />
+            </div>
+
+            <div>
+              <Label className="text-zinc-300">Property Details (if applicable)</Label>
+              <Textarea
+                value={propertyDetails}
+                onChange={(e) => setPropertyDetails(e.target.value)}
+                placeholder="2BR apartment in Dubai Marina, 1,200 sqft, sea view, AED 2.5M..."
+                className="bg-zinc-800 border-teal-500/30 text-white"
+              />
+            </div>
+
+            <div>
+              <Label className="text-zinc-300">Purpose/Objective</Label>
+              <Input
+                value={purpose}
+                onChange={(e) => setPurpose(e.target.value)}
+                placeholder="Schedule a viewing, follow up on inquiry..."
+                className="bg-zinc-800 border-teal-500/30 text-white"
+              />
+            </div>
+
+            <div>
+              <Label className="text-zinc-300">Additional Context</Label>
+              <Textarea
+                value={additionalContext}
+                onChange={(e) => setAdditionalContext(e.target.value)}
+                placeholder="Any specific details or requirements..."
+                className="bg-zinc-800 border-teal-500/30 text-white"
+              />
+            </div>
+
+            <Button
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-full bg-teal-500 hover:bg-teal-600 text-black font-semibold"
+            >
+              {loading ? (
+                <>
+                  <Sparkles className="w-4 h-4 mr-2 animate-spin" />
+                  Generating Email...
+                </>
+              ) : (
+                <>
+                  <Send className="w-4 h-4 mr-2" />
+                  Generate Email
+                </>
+              )}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Results */}
+        {result && (
+          <Card className="bg-zinc-900/90 border-teal-500/30">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-white flex items-center gap-2">
+                <Mail className="w-5 h-5 text-teal-400" />
+                Generated Email
+              </CardTitle>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={copyToClipboard}
+                className="border-teal-500/30 text-teal-400 hover:bg-teal-500/20"
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              </Button>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {result.subject && (
+                <div className="bg-zinc-800/50 rounded-lg p-4 border border-teal-500/20">
+                  <Label className="text-teal-400 text-xs uppercase">Subject</Label>
+                  <p className="text-white font-medium">{result.subject}</p>
+                </div>
+              )}
+
+              <div className="bg-zinc-800/50 rounded-lg p-4 border border-teal-500/20 space-y-3">
+                {result.greeting && <p className="text-zinc-300">{result.greeting}</p>}
+                {result.body && <p className="text-zinc-300 whitespace-pre-wrap">{result.body}</p>}
+                {result.callToAction && <p className="text-teal-300 font-medium">{result.callToAction}</p>}
+                {result.closing && <p className="text-zinc-300">{result.closing}</p>}
+                {result.signature && <p className="text-zinc-400 text-sm whitespace-pre-line">{result.signature}</p>}
+              </div>
+
+              {result.alternativeSubjects && result.alternativeSubjects.length > 0 && (
+                <div>
+                  <Label className="text-zinc-400 text-sm">Alternative Subject Lines</Label>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {result.alternativeSubjects.map((subj, i) => (
+                      <span key={i} className="text-xs px-3 py-1 bg-zinc-800 rounded-full text-zinc-300 border border-teal-500/20">
+                        {subj}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {result.tips && result.tips.length > 0 && (
+                <div className="bg-teal-500/10 rounded-lg p-4 border border-teal-500/20">
+                  <Label className="text-teal-400 text-sm">Personalization Tips</Label>
+                  <ul className="mt-2 space-y-1">
+                    {result.tips.map((tip, i) => (
+                      <li key={i} className="text-zinc-300 text-sm flex items-start gap-2">
+                        <span className="text-teal-400">•</span>
+                        {tip}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Placeholder */}
+        {!result && !loading && (
+          <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl py-12 text-center">
+            <Mail className="w-12 h-12 text-teal-400/50 mx-auto mb-4" />
+            <p className="text-zinc-400">Configure your email above to generate professional content</p>
+          </div>
+        )}
+      </div>
+    </AIToolPremiumLayout>
+  );
+}
