@@ -138,10 +138,10 @@ const ChatCVSubmission = ({
       setSubmitted(true);
       toast.success('CV submitted successfully!');
 
-      // Wait a moment then proceed
+      // Proceed quickly after success
       setTimeout(() => {
         onSubmitSuccess();
-      }, 2000);
+      }, 800);
 
     } catch (error) {
       console.error('CV submission error:', error);

@@ -25,8 +25,8 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
   const [error, setError] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
-  // Simulate agent typing
-  const simulateTyping = (callback: () => void, delay = 1000) => {
+  // Simulate agent typing - fast for responsiveness
+  const simulateTyping = (callback: () => void, delay = 400) => {
     setIsTyping(true);
     setTimeout(() => {
       setIsTyping(false);
@@ -192,7 +192,7 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
               <Button
                 size="icon"
                 onClick={handleNameSubmit}
-                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-dark rounded-lg"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light hover:shadow-[0_4px_15px_rgba(200,167,102,0.5)] active:bg-gold-dark rounded-lg transition-all duration-200"
               >
                 <Send className="w-4 h-4 text-black" />
               </Button>
@@ -217,7 +217,7 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
               <Button
                 size="icon"
                 onClick={handleEmailSubmit}
-                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-dark rounded-lg"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light hover:shadow-[0_4px_15px_rgba(200,167,102,0.5)] active:bg-gold-dark rounded-lg transition-all duration-200"
               >
                 <Send className="w-4 h-4 text-black" />
               </Button>
@@ -242,7 +242,7 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
               <Button
                 size="icon"
                 onClick={handlePhoneSubmit}
-                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-dark rounded-lg"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light hover:shadow-[0_4px_15px_rgba(200,167,102,0.5)] active:bg-gold-dark rounded-lg transition-all duration-200"
               >
                 <Send className="w-4 h-4 text-black" />
               </Button>
