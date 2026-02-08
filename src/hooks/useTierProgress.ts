@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 
 export interface TierDefinition {
   id: string;
@@ -48,18 +48,21 @@ interface TierProgressHook {
   isLoading: boolean;
   error: string | null;
   refreshProgress: () => Promise<void>;
+  currentTierType: 'broker' | 'client';
 }
 
 export function useTierProgress(): TierProgressHook {
   const { user } = useAuth();
-  const { isBroker } = useUserRole();
+  const { isBrokerMode, isCombinedMode } = useUserModeContext();
   const [tierProgress, setTierProgress] = useState<TierProgress | null>(null);
   const [allTiers, setAllTiers] = useState<TierDefinition[]>([]);
   const [recentPoints, setRecentPoints] = useState<PointsLedgerEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const tierType = isBroker ? 'broker' : 'client';
+  // Unified points: same pool, different tier ladder based on active mode
+  // Combined mode shows broker ladder (more ambitious goals)
+  const tierType = isBrokerMode ? 'broker' : 'client';
 
   const loadProgress = useCallback(async () => {
     if (!user) {
@@ -157,7 +160,7 @@ export function useTierProgress(): TierProgressHook {
     } finally {
       setIsLoading(false);
     }
-  }, [user, tierType]);
+  }, [user, isBrokerMode, isCombinedMode]);
 
   useEffect(() => {
     loadProgress();
@@ -170,6 +173,7 @@ export function useTierProgress(): TierProgressHook {
     isLoading,
     error,
     refreshProgress: loadProgress,
+    currentTierType: tierType,
   };
 }
 

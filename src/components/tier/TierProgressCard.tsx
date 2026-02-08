@@ -12,7 +12,7 @@ interface TierProgressCardProps {
 }
 
 export function TierProgressCard({ className, showHistory = false, compact = false }: TierProgressCardProps) {
-  const { tierProgress, isLoading, error } = useTierProgress();
+  const { tierProgress, isLoading, error, currentTierType } = useTierProgress();
 
   if (isLoading) {
     return (
@@ -55,6 +55,9 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
           <span className="flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-gold" />
             Your Progress
+            <span className="text-xs font-normal text-white/50">
+              {currentTierType === 'broker' ? 'Broker Tier' : 'Investor Tier'}
+            </span>
           </span>
           <TierBadge tierName={currentTier?.tier_name || 'Starter'} />
         </CardTitle>
