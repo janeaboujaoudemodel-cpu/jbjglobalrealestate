@@ -140,20 +140,6 @@ const TestimonialsSection = () => {
               </button>
             </div>
 
-            {/* Dots */}
-            <div className="flex items-center justify-center gap-2 mt-6">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentIndex
-                      ? 'w-6 bg-gold'
-                      : 'bg-black/20 hover:bg-black/40'
-                  }`}
-                />
-              ))}
-            </div>
           </div>
 
           {/* CTA to Testimonials Page */}
