@@ -315,48 +315,61 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-900/30 via-blue-800/20 to-blue-900/30 border-b border-blue-500/30">
-        <div className="container mx-auto px-4 py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center"
-          >
-            <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/40 rounded-full px-4 py-1 mb-4">
-              <Sparkles className="w-4 h-4 text-blue-400" />
-              <span className="text-blue-400 text-sm font-medium">AI-Powered Valuation</span>
+      {/* Hero Section with Video */}
+      <div className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
+        {/* Video Background */}
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
+        >
+          <source src="/videos/dubai-landmarks-hero.mp4" type="video/mp4" />
+        </video>
+        
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-950/80 via-black/70 to-black" />
+        
+        {/* Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="relative text-center px-4 py-16"
+        >
+          <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/40 rounded-full px-4 py-2 mb-6">
+            <Sparkles className="w-5 h-5 text-blue-400" />
+            <span className="text-blue-300 text-sm font-semibold">AI-Powered Valuation</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
+            Property <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Evaluator</span>
+          </h1>
+          <p className="text-xl text-zinc-300 max-w-2xl mx-auto mb-4">
+            Get an AI-powered property valuation based on DLD transaction data, comparable sales, and market analysis.
+          </p>
+          <FounderContent>
+            <div className="text-center">
+              <p className="text-zinc-300 text-sm font-medium">Jane Bou Jaoude</p>
+              <p className="text-blue-400 text-xs mt-0.5">Founder & CEO</p>
+              <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Property <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Evaluator</span>
-            </h1>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
-              Get an AI-powered property valuation based on DLD transaction data, comparable sales, and market analysis.
-            </p>
-            <FounderContent>
-              <div className="mt-3 text-center">
-                <p className="text-zinc-300 text-sm font-medium">Jane Bou Jaoude</p>
-                <p className="text-blue-400 text-xs mt-0.5">Founder & CEO</p>
-                <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
-              </div>
-            </FounderContent>
-          </motion.div>
-        </div>
+          </FounderContent>
+        </motion.div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto bg-zinc-900 border border-blue-500/30 mb-8">
-            <TabsTrigger value="property" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+            <TabsTrigger value="property" className="data-[state=active]:bg-blue-500 data-[state=active]:text-black text-zinc-400">
               Property Details
             </TabsTrigger>
-            <TabsTrigger value="modifications" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+            <TabsTrigger value="modifications" className="data-[state=active]:bg-blue-500 data-[state=active]:text-black text-zinc-400">
               Modifications
             </TabsTrigger>
-            <TabsTrigger value="owner" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+            <TabsTrigger value="owner" className="data-[state=active]:bg-blue-500 data-[state=active]:text-black text-zinc-400">
               Owner Info
             </TabsTrigger>
-            <TabsTrigger value="results" disabled={!evaluation} className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+            <TabsTrigger value="results" disabled={!evaluation} className="data-[state=active]:bg-blue-500 data-[state=active]:text-black text-zinc-400">
               Results
             </TabsTrigger>
           </TabsList>

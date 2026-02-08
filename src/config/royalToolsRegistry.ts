@@ -199,7 +199,7 @@ export const aiPropertyTools: ToolDefinition[] = [
     href: '/virtual-staging-ai',
     icon: Building2,
     category: 'ai-property',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Staging', 'AI'],
   },
 ];
@@ -243,7 +243,7 @@ export const aiSalesTools: ToolDefinition[] = [
     href: '/ai-client-matcher',
     icon: Users,
     category: 'ai-sales',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Matching', 'AI'],
   },
 ];
@@ -287,7 +287,7 @@ export const aiReportTools: ToolDefinition[] = [
     href: '/ai-investment-report',
     icon: FileText,
     category: 'ai-reports',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Investment', 'Reports', 'AI'],
   },
 ];
@@ -331,7 +331,7 @@ export const aiCommunicationTools: ToolDefinition[] = [
     href: '/ai-email-generator',
     icon: Mail,
     category: 'ai-communication',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Email', 'AI'],
   },
 ];
@@ -345,7 +345,7 @@ export const aiContentTools: ToolDefinition[] = [
     href: '/ai-social-media',
     icon: PenTool,
     category: 'ai-content',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Social', 'Content', 'AI'],
   },
   {
@@ -355,7 +355,7 @@ export const aiContentTools: ToolDefinition[] = [
     href: '/ai-description-writer',
     icon: FileText,
     category: 'ai-content',
-    status: 'coming-soon',
+    status: 'active',
     tags: ['Description', 'AI'],
   },
   {
