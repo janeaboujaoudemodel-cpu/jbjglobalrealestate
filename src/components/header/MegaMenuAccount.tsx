@@ -19,7 +19,7 @@ interface MegaMenuAccountProps {
 const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>(({ onClose }, ref) => {
   const { user, isOwner, signOut } = useAuth();
   const { t } = useLanguage();
-  const { tierProgress } = useTierProgress();
+  const { tierProgress, isCombinedMode, investorTierProgress, brokerTierProgress } = useTierProgress();
   const { mode } = useUserModeContext();
   
   const { data: crmProfile, isLoading: crmLoading } = useQuery({
@@ -174,12 +174,26 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                   {accountDisplayName}
                 </p>
                 <p className="text-black/60 text-sm truncate">{user.email}</p>
-                {/* Show mode + points instead of tier name */}
-                <Badge 
-                  className="mt-1.5 text-xs font-semibold border-gold/40 bg-gold/10 text-gold"
-                >
-                  {getModeLabel()} • {tierProgress?.totalPoints?.toLocaleString() || 0} pts earned
-                </Badge>
+                {/* Show mode + tier badges + points */}
+                {isCombinedMode && investorTierProgress && brokerTierProgress ? (
+                  <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                    <Badge className="text-xs font-semibold bg-emerald-500/20 text-emerald-600 border-emerald-500/40">
+                      {investorTierProgress.currentTier?.tier_name || 'Explorer'}
+                    </Badge>
+                    <Badge className="text-xs font-semibold bg-blue-500/20 text-blue-600 border-blue-500/40">
+                      {brokerTierProgress.currentTier?.tier_name || 'Starter'}
+                    </Badge>
+                    <span className="text-xs text-black/60">
+                      • {tierProgress?.totalPoints?.toLocaleString() || 0} pts
+                    </span>
+                  </div>
+                ) : (
+                  <Badge 
+                    className="mt-1.5 text-xs font-semibold border-gold/40 bg-gold/10 text-gold"
+                  >
+                    {getModeLabel()} • {tierProgress?.totalPoints?.toLocaleString() || 0} pts earned
+                  </Badge>
+                )}
               </div>
               <div className="flex flex-col items-end gap-2 shrink-0">
                 {/* "Select your mode" label - in gold, connected to mode button */}

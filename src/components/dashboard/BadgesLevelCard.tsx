@@ -26,18 +26,86 @@ const investorTierIcons: Record<string, React.ReactNode> = {
   elite: <Trophy className="w-4 h-4" />,
 };
 
-const BadgesLevelCard = () => {
-  const { tierProgress, isLoading, currentTierType } = useTierProgress();
+interface TierCardProps {
+  tierName: string;
+  totalPoints: number;
+  nextTierName?: string;
+  pointsToNext: number;
+  progressPercent: number;
+  tierType: 'broker' | 'client';
+  compact?: boolean;
+}
 
+const TierCard = ({ tierName, totalPoints, nextTierName, pointsToNext, progressPercent, tierType, compact = false }: TierCardProps) => {
+  const tierIcons = tierType === 'broker' ? brokerTierIcons : investorTierIcons;
+  const isBroker = tierType === 'broker';
+  
+  const bgClass = isBroker 
+    ? 'border-blue-500/30 bg-blue-500/5' 
+    : 'border-emerald-500/30 bg-emerald-500/5';
+  const iconBgClass = isBroker
+    ? 'bg-blue-500/20 border-blue-500/40'
+    : 'bg-emerald-500/20 border-emerald-500/40';
+  const textClass = isBroker ? 'text-blue-500' : 'text-emerald-500';
+  const badgeClass = isBroker
+    ? 'bg-blue-500/20 text-blue-500 border-blue-500/40'
+    : 'bg-emerald-500/20 text-emerald-500 border-emerald-500/40';
+
+  return (
+    <div className={cn("flex flex-col p-3 rounded-xl border", bgClass)}>
+      <div className="flex items-center gap-2 mb-2">
+        <div className={cn("w-8 h-8 rounded-lg border flex items-center justify-center", iconBgClass)}>
+          <span className={textClass}>
+            {tierIcons[tierName.toLowerCase()] || <Star className="w-4 h-4" />}
+          </span>
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className={cn("text-[10px] uppercase tracking-wide font-semibold", textClass)}>
+            {isBroker ? 'Broker Path' : 'Investor Path'}
+          </p>
+          <Badge className={cn("text-xs", badgeClass)}>
+            {tierName}
+          </Badge>
+        </div>
+      </div>
+      
+      {!compact && (
+        <>
+          <p className="text-lg font-bold text-foreground">
+            {totalPoints.toLocaleString()} <span className="text-xs font-normal text-muted-foreground">pts</span>
+          </p>
+          
+          {nextTierName && (
+            <div className="mt-2 space-y-1">
+              <div className="flex items-center justify-between text-[10px]">
+                <span className="text-muted-foreground">Next: {nextTierName}</span>
+                <span className={cn("font-medium", textClass)}>{pointsToNext} pts</span>
+              </div>
+              <Progress value={progressPercent} className="h-1.5" />
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
+
+const BadgesLevelCard = () => {
+  const { 
+    tierProgress, 
+    isLoading, 
+    currentTierType,
+    isCombinedMode,
+    investorTierProgress,
+    brokerTierProgress
+  } = useTierProgress();
+
+  // Single mode values
   const currentTierName = tierProgress?.currentTier?.tier_name || 'Starter';
   const nextTierName = tierProgress?.nextTier?.tier_name;
   const totalPoints = tierProgress?.totalPoints || 0;
   const pointsToNext = tierProgress?.pointsToNextTier || 0;
   const progressPercent = tierProgress?.progressPercent || 0;
-
-  // Select the right icon set based on tier type
-  const tierIcons = currentTierType === 'broker' ? brokerTierIcons : investorTierIcons;
-  const isBrokerPath = currentTierType === 'broker';
 
   return (
     <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
@@ -47,14 +115,20 @@ const BadgesLevelCard = () => {
             <Award className="w-4 h-4 text-gold" />
           </div>
           Level & Badges
-          <span className={cn(
-            "text-xs font-medium px-2 py-0.5 rounded-full ml-2",
-            isBrokerPath 
-              ? 'bg-blue-500/20 text-blue-600 border border-blue-500/30' 
-              : 'bg-emerald-500/20 text-emerald-600 border border-emerald-500/30'
-          )}>
-            {isBrokerPath ? 'Broker' : 'Investor'}
-          </span>
+          {isCombinedMode ? (
+            <span className="text-xs font-medium px-2 py-0.5 rounded-full ml-2 bg-purple-500/20 text-purple-600 border border-purple-500/30">
+              Combined
+            </span>
+          ) : (
+            <span className={cn(
+              "text-xs font-medium px-2 py-0.5 rounded-full ml-2",
+              currentTierType === 'broker' 
+                ? 'bg-blue-500/20 text-blue-600 border border-blue-500/30' 
+                : 'bg-emerald-500/20 text-emerald-600 border border-emerald-500/30'
+            )}>
+              {currentTierType === 'broker' ? 'Broker' : 'Investor'}
+            </span>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -64,12 +138,49 @@ const BadgesLevelCard = () => {
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-8 w-1/2" />
           </div>
+        ) : isCombinedMode && investorTierProgress && brokerTierProgress ? (
+          // Combined Mode: Show both tier paths side by side
+          <>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <TierCard
+                tierName={investorTierProgress.currentTier?.tier_name || 'Explorer'}
+                totalPoints={investorTierProgress.totalPoints}
+                nextTierName={investorTierProgress.nextTier?.tier_name}
+                pointsToNext={investorTierProgress.pointsToNextTier}
+                progressPercent={investorTierProgress.progressPercent}
+                tierType="client"
+              />
+              <TierCard
+                tierName={brokerTierProgress.currentTier?.tier_name || 'Starter'}
+                totalPoints={brokerTierProgress.totalPoints}
+                nextTierName={brokerTierProgress.nextTier?.tier_name}
+                pointsToNext={brokerTierProgress.pointsToNextTier}
+                progressPercent={brokerTierProgress.progressPercent}
+                tierType="broker"
+              />
+            </div>
+
+            {/* Shared total points */}
+            <div className="text-center py-2 border-t border-border">
+              <p className="text-sm text-muted-foreground">
+                Total Points: <span className="font-bold text-gold">{totalPoints.toLocaleString()}</span>
+              </p>
+            </div>
+
+            <Button variant="link" className="w-full text-gold mt-2 p-0" asChild>
+              <Link to="/my-dashboard">
+                View Full Progress
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Link>
+            </Button>
+          </>
         ) : (
+          // Single Mode: Show one tier path
           <>
             {/* Current Level Badge */}
             <div className="flex items-center gap-4 p-4 rounded-xl border border-gold/30 bg-gold/5 mb-4">
               <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border-2 border-gold/50 flex items-center justify-center">
-                {tierIcons[currentTierName.toLowerCase()] || <Star className="w-6 h-6 text-gold" />}
+                {(currentTierType === 'broker' ? brokerTierIcons : investorTierIcons)[currentTierName.toLowerCase()] || <Star className="w-6 h-6 text-gold" />}
               </div>
               <div className="flex-1">
                 <Badge className="bg-gold/20 text-gold border-gold/40 mb-1">

@@ -25,7 +25,7 @@ interface UserProfile {
 
 export function GoldenIDCard() {
   const { user } = useAuth();
-  const { tierProgress } = useTierProgress();
+  const { tierProgress, isCombinedMode, investorTierProgress, brokerTierProgress } = useTierProgress();
   const [cardData, setCardData] = useState<MembershipCardData | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -124,8 +124,12 @@ export function GoldenIDCard() {
     return profile?.full_name || user.email?.split("@")[0] || "Member";
   };
 
-  const tierName = tierProgress?.currentTier?.tier_name || "Starter";
   const totalPoints = tierProgress?.totalPoints || 0;
+  
+  // Get tier names for display
+  const investorTierName = investorTierProgress?.currentTier?.tier_name || "Explorer";
+  const brokerTierName = brokerTierProgress?.currentTier?.tier_name || "Starter";
+  const singleTierName = tierProgress?.currentTier?.tier_name || "Starter";
 
   return (
     <Card className="relative overflow-hidden bg-gradient-to-br from-amber-900/80 via-yellow-800/60 to-amber-950/90 border-amber-600/50 max-w-md">
@@ -149,11 +153,23 @@ export function GoldenIDCard() {
             </div>
             <div>
               <h3 className="font-bold text-amber-100 text-lg">{getFullName()}</h3>
-              <div className="flex items-center gap-2 mt-0.5">
-                <Badge className="bg-amber-500/30 text-amber-200 border-amber-500/50 text-xs">
-                  <Trophy className="h-3 w-3 mr-1" />
-                  {tierName}
-                </Badge>
+              {/* Show dual tier badges in combined mode */}
+              <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                {isCombinedMode ? (
+                  <>
+                    <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-500/50 text-xs">
+                      {investorTierName}
+                    </Badge>
+                    <Badge className="bg-blue-500/30 text-blue-200 border-blue-500/50 text-xs">
+                      {brokerTierName}
+                    </Badge>
+                  </>
+                ) : (
+                  <Badge className="bg-amber-500/30 text-amber-200 border-amber-500/50 text-xs">
+                    <Trophy className="h-3 w-3 mr-1" />
+                    {singleTierName}
+                  </Badge>
+                )}
               </div>
             </div>
           </div>
