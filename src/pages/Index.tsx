@@ -657,12 +657,21 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Spacer before divider - creates visual centering between Mortgage and Why Dubai */}
+      <div className="bg-black py-6 md:py-8" />
+      
       {/* DIVIDER - Before Why Dubai (fullWidth to match edge-to-edge section) */}
       <SectionDivider fullWidth />
+      
+      {/* Spacer after divider - balances spacing before full-viewport section */}
+      <div className="bg-black py-6 md:py-8" />
 
       <Suspense fallback={<SectionLoader />}>
         <WhyDubaiCapitalSection />
       </Suspense>
+
+      {/* Spacer before divider - creates visual centering between Why Dubai and Best Idea */}
+      <div className="bg-black py-6 md:py-8" />
 
       {/* JBJ PODCAST SECTION - Admin-controlled visibility */}
       <PodcastVisibilityGate>
@@ -674,6 +683,9 @@ const Index = () => {
 
       {/* DIVIDER - Before Best Idea Award (always needed) */}
       <SectionDivider />
+      
+      {/* Spacer after divider - balances spacing before Best Idea Award */}
+      <div className="bg-black py-6 md:py-8" />
 
       {/* BEST IDEA AWARD */}
       <BestIdeaAward />
