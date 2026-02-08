@@ -487,14 +487,14 @@ export const SecurityDashboardSummary = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header - Premium Champagne Theme */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-white text-xl font-semibold flex items-center gap-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-black text-xl font-semibold flex items-center gap-2" style={{ fontFamily: "Poppins, sans-serif" }}>
             <Shield className="w-5 h-5 text-gold" />
             Security Overview
           </h2>
-          <p className="text-gray-400 text-sm mt-1">
+          <p className="text-zinc-500 text-sm mt-1">
             Real-time security monitoring and threat detection
           </p>
         </div>
@@ -503,24 +503,23 @@ export const SecurityDashboardSummary = () => {
             variant="outline"
             size="sm"
             onClick={exportToCSV}
-            className="bg-zinc-800 border-zinc-700 text-gray-300 hover:bg-zinc-700 hover:text-white"
+            className="bg-white border-gold/40 text-black hover:bg-gold/10 hover:border-gold"
           >
-            <FileSpreadsheet className="w-4 h-4 mr-1.5" />
+            <FileSpreadsheet className="w-4 h-4 mr-1.5 text-gold" />
             CSV
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={exportToPDF}
-            className="bg-zinc-800 border-zinc-700 text-gray-300 hover:bg-zinc-700 hover:text-white"
+            className="bg-white border-gold/40 text-black hover:bg-gold/10 hover:border-gold"
           >
-            <FileText className="w-4 h-4 mr-1.5" />
+            <FileText className="w-4 h-4 mr-1.5 text-gold" />
             PDF
           </Button>
           <Badge 
-            className={`gap-1.5 ${isLive ? 'bg-emerald-500/20 text-emerald-400' : 'bg-zinc-700 text-gray-400'}`}
+            className={`gap-1.5 cursor-pointer ${isLive ? 'bg-emerald-500/20 text-emerald-600 border-emerald-500/40' : 'bg-zinc-100 text-zinc-500 border-zinc-300'}`}
             onClick={() => setIsLive(!isLive)}
-            style={{ cursor: 'pointer' }}
           >
             <Radio className={`w-3 h-3 ${isLive ? "animate-pulse" : ""}`} />
             {isLive ? "Live Updates" : "Paused"}
@@ -528,63 +527,63 @@ export const SecurityDashboardSummary = () => {
         </div>
       </div>
 
-      {/* Main Stats Grid */}
+      {/* Main Stats Grid - Premium Champagne Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
+        <Card className="bg-white border-2 border-red-500/40 p-4 hover:shadow-lg hover:shadow-red-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
-            <ShieldBan className="w-4 h-4 text-red-400" />
-            <span className="text-gray-400 text-xs">Total Blocked</span>
+            <ShieldBan className="w-4 h-4 text-red-500" />
+            <span className="text-zinc-500 text-xs">Total Blocked</span>
           </div>
-          <p className="text-white text-2xl font-bold">{totalBlocked}</p>
+          <p className="text-black text-2xl font-bold">{totalBlocked}</p>
         </Card>
         
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
+        <Card className="bg-white border-2 border-amber-500/40 p-4 hover:shadow-lg hover:shadow-amber-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
-            <Zap className="w-4 h-4 text-amber-400" />
-            <span className="text-gray-400 text-xs">Auto Blocked</span>
+            <Zap className="w-4 h-4 text-amber-500" />
+            <span className="text-zinc-500 text-xs">Auto Blocked</span>
           </div>
-          <p className="text-white text-2xl font-bold">{autoBlocked}</p>
+          <p className="text-black text-2xl font-bold">{autoBlocked}</p>
         </Card>
         
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
+        <Card className="bg-white border-2 border-blue-500/40 p-4 hover:shadow-lg hover:shadow-blue-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
-            <Clock className="w-4 h-4 text-blue-400" />
-            <span className="text-gray-400 text-xs">Blocked Today</span>
+            <Clock className="w-4 h-4 text-blue-500" />
+            <span className="text-zinc-500 text-xs">Blocked Today</span>
           </div>
-          <p className="text-white text-2xl font-bold">{blockedToday}</p>
+          <p className="text-black text-2xl font-bold">{blockedToday}</p>
         </Card>
         
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
+        <Card className="bg-white border-2 border-orange-500/40 p-4 hover:shadow-lg hover:shadow-orange-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
-            <Ban className="w-4 h-4 text-orange-400" />
-            <span className="text-gray-400 text-xs">Rate Violations</span>
+            <Ban className="w-4 h-4 text-orange-500" />
+            <span className="text-zinc-500 text-xs">Rate Violations</span>
           </div>
-          <p className="text-white text-2xl font-bold">{rateLimitViolations}</p>
+          <p className="text-black text-2xl font-bold">{rateLimitViolations}</p>
         </Card>
         
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
+        <Card className="bg-white border-2 border-emerald-500/40 p-4 hover:shadow-lg hover:shadow-emerald-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
-            <Activity className="w-4 h-4 text-emerald-400" />
-            <span className="text-gray-400 text-xs">Total Requests</span>
+            <Activity className="w-4 h-4 text-emerald-500" />
+            <span className="text-zinc-500 text-xs">Total Requests</span>
           </div>
-          <p className="text-white text-2xl font-bold">{totalRequests}</p>
+          <p className="text-black text-2xl font-bold">{totalRequests}</p>
         </Card>
         
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
+        <Card className="bg-white border-2 border-purple-500/40 p-4 hover:shadow-lg hover:shadow-purple-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
-            <TrendingUp className="w-4 h-4 text-purple-400" />
-            <span className="text-gray-400 text-xs">Unique IPs</span>
+            <TrendingUp className="w-4 h-4 text-purple-500" />
+            <span className="text-zinc-500 text-xs">Unique IPs</span>
           </div>
-          <p className="text-white text-2xl font-bold">{uniqueIPs}</p>
+          <p className="text-black text-2xl font-bold">{uniqueIPs}</p>
         </Card>
       </div>
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Blocked IPs Over Time */}
-        <Card className="bg-zinc-900 border-zinc-800 p-6">
-          <h3 className="text-white font-medium mb-4 flex items-center gap-2">
-            <BarChart3 className="w-4 h-4 text-red-400" />
+        <Card className="bg-white border-2 border-gold/30 p-6 shadow-lg">
+          <h3 className="text-black font-medium mb-4 flex items-center gap-2">
+            <BarChart3 className="w-4 h-4 text-red-500" />
             Blocked IPs (Last 7 Days)
           </h3>
           <div className="h-[240px]">
@@ -600,7 +599,7 @@ export const SecurityDashboardSummary = () => {
                     <stop offset="95%" stopColor="#f97316" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis 
                   dataKey="date" 
                   stroke="#71717a" 
@@ -615,10 +614,10 @@ export const SecurityDashboardSummary = () => {
                 />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: '#18181b', 
-                    border: '1px solid #27272a',
+                    backgroundColor: '#fff', 
+                    border: '2px solid rgba(200,167,102,0.4)',
                     borderRadius: '8px',
-                    color: '#fff'
+                    color: '#000'
                   }}
                 />
                 <Area 
@@ -643,15 +642,15 @@ export const SecurityDashboardSummary = () => {
         </Card>
 
         {/* Rate Limit Violations Per Hour */}
-        <Card className="bg-zinc-900 border-zinc-800 p-6">
-          <h3 className="text-white font-medium mb-4 flex items-center gap-2">
-            <Activity className="w-4 h-4 text-amber-400" />
+        <Card className="bg-white border-2 border-gold/30 p-6 shadow-lg">
+          <h3 className="text-black font-medium mb-4 flex items-center gap-2">
+            <Activity className="w-4 h-4 text-amber-500" />
             Rate Limit Activity (Last 24 Hours)
           </h3>
           <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={violationsPerHourData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis 
                   dataKey="hour" 
                   stroke="#71717a" 
@@ -667,10 +666,10 @@ export const SecurityDashboardSummary = () => {
                 />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: '#18181b', 
-                    border: '1px solid #27272a',
+                    backgroundColor: '#fff', 
+                    border: '2px solid rgba(200,167,102,0.4)',
                     borderRadius: '8px',
-                    color: '#fff'
+                    color: '#000'
                   }}
                 />
                 <Bar 
@@ -694,9 +693,9 @@ export const SecurityDashboardSummary = () => {
 
       {/* Violations by Function Pie Chart */}
       {violationsByFunctionData.length > 0 && (
-        <Card className="bg-zinc-900 border-zinc-800 p-6">
-          <h3 className="text-white font-medium mb-4 flex items-center gap-2">
-            <Ban className="w-4 h-4 text-orange-400" />
+        <Card className="bg-white border-2 border-gold/30 p-6 shadow-lg">
+          <h3 className="text-black font-medium mb-4 flex items-center gap-2">
+            <Ban className="w-4 h-4 text-orange-500" />
             Rate Limit Violations by Function
           </h3>
           <div className="h-[280px]">
@@ -722,16 +721,16 @@ export const SecurityDashboardSummary = () => {
                 </Pie>
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: '#18181b', 
-                    border: '1px solid #27272a',
+                    backgroundColor: '#fff', 
+                    border: '2px solid rgba(200,167,102,0.4)',
                     borderRadius: '8px',
-                    color: '#fff'
+                    color: '#000'
                   }}
                   formatter={(value: number) => [`${value} violations`, 'Count']}
                 />
                 <Legend 
-                  wrapperStyle={{ color: '#a1a1aa' }}
-                  formatter={(value) => <span style={{ color: '#a1a1aa' }}>{value}</span>}
+                  wrapperStyle={{ color: '#52525b' }}
+                  formatter={(value) => <span style={{ color: '#52525b' }}>{value}</span>}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -741,12 +740,12 @@ export const SecurityDashboardSummary = () => {
 
       {/* Alert Banner */}
       {(rateLimitViolations > 0 || blockedToday > 0) && (
-        <Card className="bg-amber-950/30 border-amber-800/50 p-4">
+        <Card className="bg-amber-50 border-2 border-amber-400/60 p-4 shadow-md">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
+            <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
             <div>
-              <h3 className="text-amber-400 font-medium">Active Security Alerts</h3>
-              <p className="text-amber-400/70 text-sm mt-1">
+              <h3 className="text-amber-800 font-medium">Active Security Alerts</h3>
+              <p className="text-amber-700 text-sm mt-1">
                 {rateLimitViolations > 0 && `${rateLimitViolations} rate limit violation(s) detected. `}
                 {blockedToday > 0 && `${blockedToday} IP(s) blocked today.`}
               </p>
@@ -756,32 +755,32 @@ export const SecurityDashboardSummary = () => {
       )}
 
       {/* Recent Security Events */}
-      <Card className="bg-zinc-900 border-zinc-800 overflow-hidden">
-        <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
-          <h3 className="text-white font-medium flex items-center gap-2">
+      <Card className="bg-white border-2 border-gold/30 overflow-hidden shadow-lg">
+        <div className="p-4 border-b border-gold/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-white">
+          <h3 className="text-black font-medium flex items-center gap-2">
             <Activity className="w-4 h-4 text-gold" />
             Recent Security Events
           </h3>
-          <Badge variant="outline" className="text-gray-400 border-zinc-700">
+          <Badge variant="outline" className="text-zinc-500 border-gold/40">
             Last 20 events
           </Badge>
         </div>
         
         {securityEvents.length === 0 ? (
           <div className="text-center py-12">
-            <Shield className="w-12 h-12 text-zinc-700 mx-auto mb-3" />
-            <p className="text-gray-400">No security events recorded</p>
-            <p className="text-gray-500 text-sm mt-1">
+            <Shield className="w-12 h-12 text-gold/30 mx-auto mb-3" />
+            <p className="text-zinc-500">No security events recorded</p>
+            <p className="text-zinc-400 text-sm mt-1">
               Events will appear here when threats are detected
             </p>
           </div>
         ) : (
           <ScrollArea className="h-[320px]">
-            <div className="divide-y divide-zinc-800">
+            <div className="divide-y divide-gold/10">
               {securityEvents.map((event) => (
                 <div 
                   key={event.id} 
-                  className="p-4 hover:bg-zinc-950/50 transition-colors flex items-center gap-4"
+                  className="p-4 hover:bg-gold/5 transition-colors flex items-center gap-4"
                 >
                   <div className={`p-2 rounded-lg ${getSeverityColor(event.severity)}`}>
                     {getEventIcon(event.type)}
@@ -795,23 +794,23 @@ export const SecurityDashboardSummary = () => {
                         {getEventLabel(event.type)}
                       </Badge>
                       {event.function_name && (
-                        <Badge variant="outline" className="text-xs text-gray-400 border-zinc-700">
+                        <Badge variant="outline" className="text-xs text-zinc-500 border-gold/40">
                           {event.function_name}
                         </Badge>
                       )}
                     </div>
                     <div className="flex items-center gap-2 mt-1">
-                      <code className="text-gray-300 text-sm font-mono">
+                      <code className="text-black text-sm font-mono">
                         {event.ip_address}
                       </code>
                       {event.reason && (
-                        <span className="text-gray-500 text-sm truncate">
+                        <span className="text-zinc-500 text-sm truncate">
                           — {event.reason}
                         </span>
                       )}
                     </div>
                   </div>
-                  <div className="text-right text-sm text-gray-500 shrink-0">
+                  <div className="text-right text-sm text-zinc-500 shrink-0">
                     <div>{format(new Date(event.timestamp), "HH:mm:ss")}</div>
                     <div className="text-xs">
                       {formatDistanceToNow(new Date(event.timestamp), { addSuffix: true })}
@@ -826,9 +825,9 @@ export const SecurityDashboardSummary = () => {
 
       {/* Top Offenders */}
       {blockedIPs.length > 0 && (
-        <Card className="bg-zinc-900 border-zinc-800 p-4">
-          <h3 className="text-white font-medium mb-4 flex items-center gap-2">
-            <ShieldBan className="w-4 h-4 text-red-400" />
+        <Card className="bg-white border-2 border-gold/30 p-4 shadow-lg">
+          <h3 className="text-black font-medium mb-4 flex items-center gap-2">
+            <ShieldBan className="w-4 h-4 text-red-500" />
             Top Blocked IPs
           </h3>
           <div className="flex flex-wrap gap-2">
@@ -836,11 +835,11 @@ export const SecurityDashboardSummary = () => {
               <Badge 
                 key={ip.id}
                 variant="outline" 
-                className="font-mono text-xs bg-red-950/30 text-red-400 border-red-800/50"
+                className="font-mono text-xs bg-red-50 text-red-600 border-red-300"
               >
                 {ip.ip_address}
                 {ip.block_count > 1 && (
-                  <span className="ml-1 text-red-500">×{ip.block_count}</span>
+                  <span className="ml-1 text-red-700 font-bold">×{ip.block_count}</span>
                 )}
               </Badge>
             ))}

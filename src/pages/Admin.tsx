@@ -530,11 +530,12 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="security" className="space-y-8">
+            {/* Security Dashboard - Full Width */}
+            <SecurityDashboardSummary />
+            
+            {/* Toggles Side by Side */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <SecurityDashboardSummary />
               <FounderVisibilityToggle />
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <PodcastVisibilityToggle />
             </div>
           </TabsContent>
