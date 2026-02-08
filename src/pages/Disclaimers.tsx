@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
 import { Shield, Building2, Users, Bot, FileText, Lock } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
-import GlobalHeader from "@/components/GlobalHeader";
-
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -88,7 +86,6 @@ const Disclaimers = () => {
         keywords="jbj disclaimers, real estate licensing dubai, legal notices"
         canonicalPath="/disclaimers"
       />
-      <GlobalHeader />
       
       <main className="min-h-screen bg-black">
         {/* Hero Section */}

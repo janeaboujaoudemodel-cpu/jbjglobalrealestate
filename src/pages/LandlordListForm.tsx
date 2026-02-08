@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
-import GlobalHeader from "@/components/GlobalHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -102,7 +101,6 @@ const LandlordListForm = () => {
         keywords="list rental property dubai, landlord dubai, rent out property dubai"
         canonicalPath="/property-management/list"
       />
-      <GlobalHeader />
       
       <main className="min-h-screen bg-black">
         {/* Hero Section */}
