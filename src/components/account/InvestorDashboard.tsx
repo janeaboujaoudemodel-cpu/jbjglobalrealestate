@@ -318,16 +318,16 @@ const InvestorDashboard = () => {
       {/* Tabs Section */}
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="bg-white border-2 border-gold/30 p-1 shadow-[0_2px_10px_rgba(200,167,102,0.08)]">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
             Overview
           </TabsTrigger>
-          <TabsTrigger value="tickets" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
             Support Tickets
           </TabsTrigger>
-          <TabsTrigger value="ideas" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsTrigger value="ideas" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
             My Ideas
           </TabsTrigger>
-          <TabsTrigger value="settings" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
             Settings
           </TabsTrigger>
         </TabsList>

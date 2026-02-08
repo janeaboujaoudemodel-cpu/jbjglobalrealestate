@@ -485,19 +485,19 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="bg-muted/50">
-          <TabsTrigger value="all" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
             All CVs ({candidates.length})
           </TabsTrigger>
-          <TabsTrigger value="pending" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="pending" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
             Pending ({stats.pending})
           </TabsTrigger>
-          <TabsTrigger value="interviews" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="interviews" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
             Interviews ({stats.interviews})
           </TabsTrigger>
-          <TabsTrigger value="approved" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="approved" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
             Approved ({stats.approved})
           </TabsTrigger>
-          <TabsTrigger value="rejected" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="rejected" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
             Rejected/Hold ({stats.rejected})
           </TabsTrigger>
         </TabsList>

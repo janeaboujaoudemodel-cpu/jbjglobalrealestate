@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
+import { FeedbackPrompt } from "@/components/ui/FeedbackPrompt";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -80,6 +81,7 @@ const SUPPORT_PRIORITY_LEVELS = [
 const SupportTicketForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     fullName: "",
@@ -151,6 +153,7 @@ const SupportTicketForm = () => {
         title: "Ticket Submitted Successfully! 🎫",
         description: `Your support ticket #${ticketNumber} has been created. We'll get back to you within 24 hours.`,
       });
+      setShowFeedback(true);
 
       setFieldErrors({});
       setFormData({
@@ -308,6 +311,13 @@ const SupportTicketForm = () => {
         </span>
         <span className="text-gold group-hover:text-black transition-colors">Ticket</span>
       </button>
+      {showFeedback && (
+        <FeedbackPrompt 
+          actionType="ticket" 
+          onComplete={() => setShowFeedback(false)}
+          onDismiss={() => setShowFeedback(false)}
+        />
+      )}
     </form>
   );
 };

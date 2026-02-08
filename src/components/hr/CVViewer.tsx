@@ -365,10 +365,10 @@ const CVViewer = ({
           <div className="flex-1 p-4 overflow-hidden">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
               <TabsList className="mb-4 bg-gradient-to-r from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30">
-                <TabsTrigger value="preview" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
                   Document Preview
                 </TabsTrigger>
-                <TabsTrigger value="details" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                <TabsTrigger value="details" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
                   Application Details
                 </TabsTrigger>
               </TabsList>
