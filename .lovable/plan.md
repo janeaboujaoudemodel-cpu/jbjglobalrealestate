@@ -1,105 +1,323 @@
 
 
-## Dropdown Z-Index Global Fix - Implementation Plan
+## Global Voice Recorder Fix - Implementation Plan
 
 ### Problem Summary
-Dropdowns and select menus inside Dialogs, Sheets, and other modal components are appearing **behind** the modal instead of on top. This happens because:
 
-- **Dialog** has `z-[10050]`
-- **Sheet** has `z-[9500]`  
-- **Select/Popover/DropdownMenu** have `z-50` or `z-[60]`
+The voice recorder microphone buttons across the website have two critical issues:
 
-When a Select is inside a Dialog, its portal renders at `z-[60]` which is much lower than the Dialog's `z-[10050]`, causing it to appear behind.
+1. **UX Confusion**: When recording, the button shows `MicOff` icon instead of a visual indicator that recording is active. Users expect a "recording in progress" indicator (pulsing mic), not a mute icon.
 
----
-
-### Solution Strategy
-
-Raise the z-index of all Radix UI portal components to `z-[10100]` - which is **above** the highest modal layer (Dialog at `z-[10050]`). This ensures dropdowns always appear on top regardless of their parent container.
-
----
-
-### Files to Modify
-
-| File | Component | Current | New |
-|------|-----------|---------|-----|
-| `src/components/ui/select.tsx` | SelectContent | `z-[60]` | `z-[10100]` |
-| `src/components/ui/popover.tsx` | PopoverContent | `z-50` | `z-[10100]` |
-| `src/components/ui/tooltip.tsx` | TooltipContent | `z-50` | `z-[10100]` |
-| `src/components/ui/context-menu.tsx` | ContextMenuContent, ContextMenuSubContent | `z-50` | `z-[10100]` |
-| `src/components/ui/hover-card.tsx` | HoverCardContent | `z-50` | `z-[10100]` |
-| `src/components/ui/menubar.tsx` | MenubarContent, MenubarSubContent | `z-50` | `z-[10100]` |
-| `src/components/ui/alert-dialog.tsx` | AlertDialogOverlay, AlertDialogContent | `z-50` | `z-[10100]` |
-| `src/components/ui/drawer.tsx` | DrawerOverlay, DrawerContent | `z-50` | `z-[10100]` |
+2. **Inconsistent Behavior**: Different components implement voice recording slightly differently, leading to confusion and potential failures across:
+   - VoiceNoteRecorder (used in Support Ticket, CRM, Lead Detail)
+   - AINoteCenter
+   - ListingAdminChat
+   - SellerAssistant
+   - VoiceSuite / CaptionsTranslate
+   - ExecutiveChatPanel
+   - FoundersChatPanel
+   - EmployeeChatPanel
 
 ---
 
-### Technical Details
+### Root Cause Analysis
 
-**File: `src/components/ui/select.tsx`**
-Line 69: Change `z-[60]` to `z-[10100]`
+**Issue 1: Wrong Icon During Recording**
 
-**File: `src/components/ui/popover.tsx`**  
-Line 20: Change `z-50` to `z-[10100]`
-
-**File: `src/components/ui/tooltip.tsx`**
-Line 20: Change `z-50` to `z-[10100]`
-
-**File: `src/components/ui/context-menu.tsx`**
-Lines 47 and 63: Change `z-50` to `z-[10100]`
-
-**File: `src/components/ui/hover-card.tsx`**
-Line 19: Change `z-50` to `z-[10100]`
-
-**File: `src/components/ui/menubar.tsx`**
-Lines 72 and 91: Change `z-50` to `z-[10100]`
-
-**File: `src/components/ui/alert-dialog.tsx`**
-Lines 19 and 37: Change `z-50` to `z-[10100]`
-
-**File: `src/components/ui/drawer.tsx`**
-Lines 21 and 34: Change `z-50` to `z-[10100]`
-
----
-
-### Z-Index Hierarchy After Fix
-
-```
-z-[11000] - Sonner (toasts) - highest priority
-z-[10100] - Dropdown/Select/Popover portals - above modals
-z-[10050] - Dialog/Modal content and overlay
-z-[10000] - DropdownMenu (already set correctly)
-z-[9500]  - Sheet overlay
-z-[9501]  - Sheet content
-z-[9999]  - Mega menu
+All components currently show `MicOff` when `isRecording === true`:
+```typescript
+// Current (wrong) - shows MicOff when recording
+{isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
 ```
 
-This ensures:
-1. Dropdowns inside modals appear correctly
-2. Toasts still appear above everything
-3. All interactive popovers work regardless of their container
+This is semantically incorrect. `MicOff` should mean "microphone is disabled/muted", not "click to stop recording".
+
+**Issue 2: No Visual Feedback for Active Recording**
+
+When recording, users need clear visual feedback that:
+- Recording is in progress (animated indicator)
+- Audio is being captured
+- Click will stop recording
 
 ---
 
-### Affected Screens After Fix
+### Solution: Create Unified VoiceInputButton Component
 
-This will fix dropdown issues in:
-- Support Ticket form (Dialog with Select)
-- All AI Tools with dropdown filters
-- Any form inside a Sheet or Dialog
-- Property filters in modals
-- CRM forms with select fields
-- Profile settings with dropdowns
-- All other modal-based forms across the application
+Create a single, reusable voice input button component that:
+1. Shows the correct icons and states
+2. Handles all microphone permissions consistently
+3. Provides visual feedback (pulse animation, color changes)
+4. Works with the `voice-to-text` edge function
+
+#### New Component: `src/components/ui/VoiceInputButton.tsx`
+
+**States:**
+- **Idle**: `Mic` icon (gold/neutral color) - "Click to record"
+- **Recording**: `Square` icon (red, pulsing) - "Click to stop" 
+- **Processing**: `Loader2` icon (spinning) - "Transcribing..."
+
+**Props:**
+```typescript
+interface VoiceInputButtonProps {
+  onTranscript: (text: string) => void;
+  disabled?: boolean;
+  language?: string;
+  className?: string;
+  size?: "sm" | "default" | "lg";
+}
+```
+
+---
+
+### Files to Create/Modify
+
+| File | Action | Description |
+|------|--------|-------------|
+| `src/components/ui/VoiceInputButton.tsx` | **NEW** | Unified voice input component |
+| `src/components/crm/VoiceNoteRecorder.tsx` | Refactor | Use VoiceInputButton internally |
+| `src/components/SupportTicketBox.tsx` | Update | Use new VoiceInputButton |
+| `src/components/note-center/AINoteCenter.tsx` | Update | Use VoiceInputButton for voice notes |
+| `src/components/listing-admin/ListingAdminChat.tsx` | Update | Replace inline recording with VoiceInputButton |
+| `src/components/seller/SellerAssistant.tsx` | Update | Replace inline recording with VoiceInputButton |
+| `src/components/executive/ExecutiveChatPanel.tsx` | Update | Replace voice input logic |
+| `src/components/founders-assistant/FoundersChatPanel.tsx` | Update | Replace voice input logic |
+| `src/components/employee-hub/EmployeeChatPanel.tsx` | Update | Replace voice input logic |
+| `src/pages/toolkit/VoiceSuite.tsx` | Update | Fix VoiceToTextPanel recording UI |
+| `src/pages/toolkit/CaptionsTranslate.tsx` | Update | Fix recording UI |
+| `src/components/design-studio/AIDesignAssistant.tsx` | Update | Fix voice input |
+
+---
+
+### Technical Implementation
+
+#### 1. New VoiceInputButton Component
+
+```typescript
+// src/components/ui/VoiceInputButton.tsx
+import { useState, useRef, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Mic, Square, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+interface VoiceInputButtonProps {
+  onTranscript: (text: string) => void;
+  disabled?: boolean;
+  language?: string;
+  className?: string;
+  size?: "sm" | "default" | "lg" | "icon";
+  variant?: "outline" | "default" | "ghost";
+}
+
+export function VoiceInputButton({
+  onTranscript,
+  disabled,
+  language = "en",
+  className,
+  size = "icon",
+  variant = "outline"
+}: VoiceInputButtonProps) {
+  const [status, setStatus] = useState<"idle" | "recording" | "processing">("idle");
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  const startRecording = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+      });
+      
+      streamRef.current = stream;
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
+      const mediaRecorder = new MediaRecorder(stream, { mimeType });
+      mediaRecorderRef.current = mediaRecorder;
+      chunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        setStatus("processing");
+        const audioBlob = new Blob(chunksRef.current, { type: mimeType });
+        
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          const base64Audio = (reader.result as string).split(',')[1];
+          
+          try {
+            const { data, error } = await supabase.functions.invoke('voice-to-text', {
+              body: { audio: base64Audio, language }
+            });
+            
+            if (error) throw error;
+            
+            if (data?.text) {
+              onTranscript(data.text);
+              toast.success("Voice transcribed!");
+            } else {
+              toast.error(data?.error || "No speech detected");
+            }
+          } catch (err) {
+            console.error("Transcription error:", err);
+            toast.error("Failed to transcribe audio");
+          } finally {
+            setStatus("idle");
+          }
+        };
+        
+        reader.readAsDataURL(audioBlob);
+        stream.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
+      };
+
+      mediaRecorder.start();
+      setStatus("recording");
+      toast.info("Recording... Click to stop", { duration: 2000 });
+    } catch (err: any) {
+      console.error("Recording error:", err);
+      if (err.name === 'NotAllowedError') {
+        toast.error("Microphone access denied. Please allow in browser settings.");
+      } else {
+        toast.error("Could not access microphone");
+      }
+      setStatus("idle");
+    }
+  }, [language, onTranscript]);
+
+  const stopRecording = useCallback(() => {
+    if (mediaRecorderRef.current && status === "recording") {
+      mediaRecorderRef.current.stop();
+    }
+  }, [status]);
+
+  const handleClick = () => {
+    if (status === "recording") {
+      stopRecording();
+    } else if (status === "idle") {
+      startRecording();
+    }
+    // Do nothing if processing
+  };
+
+  const getIcon = () => {
+    if (status === "processing") {
+      return <Loader2 className="h-4 w-4 animate-spin" />;
+    }
+    if (status === "recording") {
+      return <Square className="h-4 w-4 fill-current" />; // Solid square = stop
+    }
+    return <Mic className="h-4 w-4" />;
+  };
+
+  const getButtonClasses = () => {
+    if (status === "recording") {
+      return "bg-red-500 hover:bg-red-600 text-white border-red-500 animate-pulse";
+    }
+    return "";
+  };
+
+  return (
+    <Button
+      type="button"
+      variant={status === "recording" ? "destructive" : variant}
+      size={size}
+      onClick={handleClick}
+      disabled={disabled || status === "processing"}
+      className={`${getButtonClasses()} ${className || ""}`}
+      title={
+        status === "recording" ? "Stop recording" :
+        status === "processing" ? "Processing..." :
+        "Start voice input"
+      }
+    >
+      {getIcon()}
+    </Button>
+  );
+}
+```
+
+---
+
+#### 2. Update VoiceNoteRecorder to Use New Component
+
+```typescript
+// src/components/crm/VoiceNoteRecorder.tsx
+import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
+
+interface VoiceNoteRecorderProps {
+  onTranscript: (text: string) => void;
+  disabled?: boolean;
+}
+
+const VoiceNoteRecorder = ({ onTranscript, disabled }: VoiceNoteRecorderProps) => {
+  return (
+    <VoiceInputButton
+      onTranscript={onTranscript}
+      disabled={disabled}
+    />
+  );
+};
+
+export default VoiceNoteRecorder;
+```
+
+---
+
+#### 3. Update All Other Components
+
+For each component with inline voice recording:
+- Remove the duplicated MediaRecorder logic
+- Import and use `VoiceInputButton`
+- Pass the appropriate `onTranscript` callback
+
+**Example for SellerAssistant.tsx:**
+```typescript
+// Replace inline toggleVoiceInput logic with:
+import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
+
+// In the JSX:
+<VoiceInputButton
+  onTranscript={(text) => setInput(prev => prev ? `${prev} ${text}` : text)}
+  disabled={isLoading}
+  language="en"
+/>
+```
+
+---
+
+### Visual States Summary
+
+| State | Icon | Color | Animation | Title |
+|-------|------|-------|-----------|-------|
+| Idle | `Mic` | Gold/Default | None | "Start voice input" |
+| Recording | `Square` (filled) | Red | Pulse | "Stop recording" |
+| Processing | `Loader2` | Gold | Spin | "Processing..." |
+
+---
+
+### Benefits of This Approach
+
+1. **Single Source of Truth**: One component handles all voice input logic
+2. **Consistent UX**: Same icons, colors, and animations everywhere
+3. **Correct Semantics**: Stop icon (square) instead of confusing MicOff
+4. **Easy Maintenance**: Fix bugs in one place, all components benefit
+5. **Better Error Handling**: Centralized permission and error handling
+6. **Smaller Bundle**: Remove duplicate code from 12+ files
 
 ---
 
 ### Testing Checklist
 
-1. Open Support Ticket dialog and click "Select Service" - dropdown should appear on top
-2. Click Priority dropdown - should appear on top
-3. Test AI Tools dropdowns (Translation Hub, Video Tour Script, etc.)
-4. Test any Sheet with Select components
-5. Verify tooltips appear correctly inside modals
-6. Verify toasts still appear above everything
+1. Open Support Ticket form → Click mic → Should show red pulsing square
+2. Stop recording → Should show spinning loader while transcribing
+3. Transcription completes → Should insert text and show mic again
+4. Test in CRM Lead Detail notes section
+5. Test in AI Note Center
+6. Test in Seller Assistant panel
+7. Test in Listing Admin Chat
+8. Test in Voice Suite page
+9. Deny microphone permission → Should show friendly error message
+10. Test with no speech → Should show "No speech detected" message
 
