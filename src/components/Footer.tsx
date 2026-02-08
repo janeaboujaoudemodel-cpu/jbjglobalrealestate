@@ -233,7 +233,7 @@ const Footer = () => {
     { href: "/toolkit/pdf-from-photos", label: "Photo to PDF" },
     { href: "/toolkit/image-resize", label: "Image Resizer" },
     { href: "/toolkit/captions-translate", label: "Captions & Translate" },
-    { href: "/toolkit/background-ai", label: "AI Background" },
+    { href: "/toolkit/background-ai", label: "Background Remover" },
     { href: "/toolkit/beauty-filters", label: "Beauty Filters" },
     { href: "/studio", label: "Creative Suite" },
   ];

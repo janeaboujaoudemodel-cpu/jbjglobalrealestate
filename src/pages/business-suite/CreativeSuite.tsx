@@ -1,4 +1,4 @@
-import { FileText, Languages, Video } from "lucide-react";
+import { FileText, Languages, Video, Wand2 } from "lucide-react";
 import BusinessSuiteToolCard from "@/components/business-suite/BusinessSuiteToolCard";
 
 const tools = [
@@ -32,6 +32,16 @@ const tools = [
     gradientFrom: "from-pink-600",
     gradientTo: "to-rose-600",
   },
+  {
+    icon: Wand2,
+    title: "Background Remover",
+    description: "Remove or replace backgrounds from photos instantly using AI. Perfect for property listings.",
+    href: "/toolkit/background-ai",
+    colorClass: "text-rose-400",
+    borderColorClass: "border-rose-500/30",
+    gradientFrom: "from-rose-600",
+    gradientTo: "to-pink-600",
+  },
 ];
 
 const CreativeSuite = () => {
@@ -60,7 +70,7 @@ const CreativeSuite = () => {
           <div className="flex items-center justify-center gap-4 text-sm text-zinc-500">
             <span className="flex items-center gap-1">
               <span className="w-2 h-2 bg-pink-400 rounded-full" />
-              3 Tools Included
+              4 Tools Included
             </span>
             <span>•</span>
             <span>Powered by AI</span>
@@ -69,8 +79,8 @@ const CreativeSuite = () => {
       </div>
       
       {/* Tools Grid */}
-      <div className="max-w-4xl mx-auto px-4 pb-20">
-        <div className="grid md:grid-cols-3 gap-6">
+      <div className="max-w-5xl mx-auto px-4 pb-20">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {tools.map((tool) => (
             <BusinessSuiteToolCard key={tool.href} {...tool} />
           ))}

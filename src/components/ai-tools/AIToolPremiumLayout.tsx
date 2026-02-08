@@ -198,7 +198,7 @@ const AIToolPremiumLayout = ({
               variant="ghost"
               size="sm"
               onClick={() => navigate(-1)}
-              className={`${colors.text} hover:text-white mb-6`}
+              className={`${colors.text} ${colors.bg} ${colors.border} border hover:text-white hover:bg-white/10 mb-6`}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back

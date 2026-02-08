@@ -149,7 +149,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
         accentColor="sky"
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="space-y-8">
         {/* Input Section */}
         <div className="space-y-6">
           <Card className="bg-sky-900/20 border-sky-500/30">
@@ -418,7 +418,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                 key="placeholder"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center h-[400px] text-center"
+                className="flex flex-col items-center justify-center py-12 text-center"
               >
                 <div className="p-6 rounded-full bg-sky-500/10 mb-4">
                   <Brain className="h-12 w-12 text-sky-400/50" />

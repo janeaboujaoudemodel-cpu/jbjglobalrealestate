@@ -109,231 +109,227 @@ const AIDocumentGeneratorPremium = () => {
         accentColor="lime"
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Input Section */}
-        <div className="space-y-6">
-          <Card className="bg-lime-900/20 border-lime-500/30">
-            <CardContent className="p-6 space-y-6">
-              <div className="flex items-center gap-2 text-lime-400 mb-4">
-                <FilePlus className="h-5 w-5" />
-                <span className="font-semibold">Document Setup</span>
-              </div>
+      <div className="space-y-8">
+        {/* Input Section - Full Width */}
+        <Card className="bg-lime-900/20 border-lime-500/30">
+          <CardContent className="p-6 space-y-6">
+            <div className="flex items-center gap-2 text-lime-400 mb-4">
+              <FilePlus className="h-5 w-5" />
+              <span className="font-semibold">Document Setup</span>
+            </div>
 
-              {/* Document Type Grid */}
+            {/* Document Type Grid */}
+            <div className="space-y-2">
+              <Label className="text-zinc-300">Document Type *</Label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                {DOCUMENT_TYPES.slice(0, 4).map((type) => {
+                  const Icon = type.icon;
+                  return (
+                    <button
+                      key={type.value}
+                      onClick={() => handleChange("documentType", type.value)}
+                      className={`p-3 rounded-lg border text-left transition-all ${
+                        formData.documentType === type.value
+                          ? "bg-lime-500/20 border-lime-500/50 text-white"
+                          : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-600"
+                      }`}
+                    >
+                      <Icon className="h-4 w-4 mb-1" />
+                      <span className="text-xs block">{type.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <Select value={formData.documentType} onValueChange={(v) => handleChange("documentType", v)}>
+                <SelectTrigger className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 mt-2">
+                  <SelectValue placeholder="More document types..." />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-900 border-lime-500/30">
+                  {DOCUMENT_TYPES.map((type) => (
+                    <SelectItem key={type.value} value={type.value} className="text-white">
+                      {type.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Tone Selector */}
+            <div className="space-y-2">
+              <Label className="text-zinc-300">Tone</Label>
+              <Select value={formData.tone} onValueChange={(v) => handleChange("tone", v)}>
+                <SelectTrigger className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-900 border-lime-500/30">
+                  {TONES.map((tone) => (
+                    <SelectItem key={tone.value} value={tone.value} className="text-white">
+                      <div>
+                        <span>{tone.label}</span>
+                        <span className="text-xs text-zinc-500 ml-2">{tone.desc}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-zinc-300">Document Type *</Label>
-                <div className="grid grid-cols-2 gap-2">
-                  {DOCUMENT_TYPES.slice(0, 4).map((type) => {
-                    const Icon = type.icon;
-                    return (
-                      <button
-                        key={type.value}
-                        onClick={() => handleChange("documentType", type.value)}
-                        className={`p-3 rounded-lg border text-left transition-all ${
-                          formData.documentType === type.value
-                            ? "bg-lime-500/20 border-lime-500/50 text-white"
-                            : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-600"
-                        }`}
-                      >
-                        <Icon className="h-4 w-4 mb-1" />
-                        <span className="text-xs block">{type.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-                <Select value={formData.documentType} onValueChange={(v) => handleChange("documentType", v)}>
-                  <SelectTrigger className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 mt-2">
-                    <SelectValue placeholder="More document types..." />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-lime-500/30">
-                    {DOCUMENT_TYPES.map((type) => (
-                      <SelectItem key={type.value} value={type.value} className="text-white">
-                        {type.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Tone Selector */}
-              <div className="space-y-2">
-                <Label className="text-zinc-300">Tone</Label>
-                <Select value={formData.tone} onValueChange={(v) => handleChange("tone", v)}>
-                  <SelectTrigger className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-lime-500/30">
-                    {TONES.map((tone) => (
-                      <SelectItem key={tone.value} value={tone.value} className="text-white">
-                        <div>
-                          <span>{tone.label}</span>
-                          <span className="text-xs text-zinc-500 ml-2">{tone.desc}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-zinc-300">Subject / Title</Label>
-                  <Input
-                    placeholder="Document title..."
-                    value={formData.subject}
-                    onChange={(e) => handleChange("subject", e.target.value)}
-                    className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-zinc-300">Recipient Name</Label>
-                  <Input
-                    placeholder="John Smith"
-                    value={formData.recipientName}
-                    onChange={(e) => handleChange("recipientName", e.target.value)}
-                    className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-zinc-300">Details & Context *</Label>
-                <Textarea
-                  placeholder="Property info, client details, key points to include..."
-                  value={formData.details}
-                  onChange={(e) => handleChange("details", e.target.value)}
-                  className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors min-h-[120px]"
+                <Label className="text-zinc-300">Subject / Title</Label>
+                <Input
+                  placeholder="Document title..."
+                  value={formData.subject}
+                  onChange={(e) => handleChange("subject", e.target.value)}
+                  className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors"
                 />
               </div>
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Recipient Name</Label>
+                <Input
+                  placeholder="John Smith"
+                  value={formData.recipientName}
+                  onChange={(e) => handleChange("recipientName", e.target.value)}
+                  className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors"
+                />
+              </div>
+            </div>
 
-              <Button
-                onClick={handleSubmit}
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-lime-600 to-lime-500 hover:from-lime-500 hover:to-lime-400 text-white font-semibold py-6"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                    Generating Document...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="h-5 w-5 mr-2" />
-                    Generate Document
-                  </>
-                )}
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+            <div className="space-y-2">
+              <Label className="text-zinc-300">Details & Context *</Label>
+              <Textarea
+                placeholder="Property info, client details, key points to include..."
+                value={formData.details}
+                onChange={(e) => handleChange("details", e.target.value)}
+                className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors min-h-[120px]"
+              />
+            </div>
 
-        {/* Results Section */}
-        <div className="space-y-6">
-          <AnimatePresence mode="wait">
-            {response ? (
-              <motion.div
-                key="results"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="space-y-4"
-              >
-                {/* Subject Line (for emails) */}
-                {response.subject && (
-                  <Card className="bg-lime-500/10 border-lime-500/30">
-                    <CardContent className="p-4">
-                      <p className="text-xs text-zinc-400 mb-1">Subject Line</p>
-                      <div className="flex items-center justify-between">
-                        <p className="font-semibold text-white">{response.subject}</p>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyToClipboard(response.subject)}
-                          className="text-zinc-400"
-                        >
-                          <Copy className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
+            <Button
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-lime-600 to-lime-500 hover:from-lime-500 hover:to-lime-400 text-white font-semibold py-6"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                  Generating Document...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-5 w-5 mr-2" />
+                  Generate Document
+                </>
+              )}
+            </Button>
+          </CardContent>
+        </Card>
 
-                {/* Main Document */}
-                <Card className="bg-lime-900/20 border-lime-500/30">
+        {/* Results Section - Below Form */}
+        <AnimatePresence mode="wait">
+          {response ? (
+            <motion.div
+              key="results"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="space-y-4"
+            >
+              {/* Subject Line (for emails) */}
+              {response.subject && (
+                <Card className="bg-lime-500/10 border-lime-500/30">
                   <CardContent className="p-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        <h4 className="font-semibold text-white">Generated Document</h4>
-                        <Badge className="bg-lime-500/20 text-lime-400 border-lime-500/30">
-                          {getDocTypeInfo(formData.documentType)?.label}
-                        </Badge>
-                      </div>
-                      <Button variant="outline" size="sm" onClick={() => copyToClipboard()} className="border-zinc-700 text-zinc-300">
-                        {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    <p className="text-xs text-zinc-400 mb-1">Subject Line</p>
+                    <div className="flex items-center justify-between">
+                      <p className="font-semibold text-white">{response.subject}</p>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(response.subject)}
+                        className="text-zinc-400"
+                      >
+                        <Copy className="h-4 w-4" />
                       </Button>
-                    </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
-                      {response.document}
                     </div>
                   </CardContent>
                 </Card>
+              )}
 
-                {/* Alternative Versions */}
-                {response.alternatives && response.alternatives.length > 0 && (
-                  <Card className="bg-lime-900/20 border-lime-500/30">
-                    <CardContent className="p-4">
-                      <h4 className="font-semibold text-white mb-3">Alternative Versions</h4>
-                      <Tabs defaultValue="0" className="w-full">
-                        <TabsList className="bg-zinc-800 border-zinc-700">
-                          {response.alternatives.map((_: string, idx: number) => (
-                            <TabsTrigger
-                              key={idx}
-                              value={idx.toString()}
-                              className="data-[state=active]:bg-lime-500/20 data-[state=active]:text-lime-400"
-                            >
-                              Version {idx + 2}
-                            </TabsTrigger>
-                          ))}
-                        </TabsList>
-                        {response.alternatives.map((alt: string, idx: number) => (
-                          <TabsContent key={idx} value={idx.toString()}>
-                            <div className="bg-zinc-800/30 p-3 rounded-lg text-sm text-zinc-300 mt-2">
-                              {alt}
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => copyToClipboard(alt)}
-                                className="mt-2 text-zinc-400"
-                              >
-                                <Copy className="h-4 w-4 mr-1" />
-                                Copy
-                              </Button>
-                            </div>
-                          </TabsContent>
+              {/* Main Document */}
+              <Card className="bg-lime-900/20 border-lime-500/30">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-semibold text-white">Generated Document</h4>
+                      <Badge className="bg-lime-500/20 text-lime-400 border-lime-500/30">
+                        {getDocTypeInfo(formData.documentType)?.label}
+                      </Badge>
+                    </div>
+                    <Button variant="outline" size="sm" onClick={() => copyToClipboard()} className="border-zinc-700 text-zinc-300">
+                      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                  <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
+                    {response.document}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Alternative Versions */}
+              {response.alternatives && response.alternatives.length > 0 && (
+                <Card className="bg-lime-900/20 border-lime-500/30">
+                  <CardContent className="p-4">
+                    <h4 className="font-semibold text-white mb-3">Alternative Versions</h4>
+                    <Tabs defaultValue="0" className="w-full">
+                      <TabsList className="bg-zinc-800 border-zinc-700">
+                        {response.alternatives.map((_: string, idx: number) => (
+                          <TabsTrigger
+                            key={idx}
+                            value={idx.toString()}
+                            className="data-[state=active]:bg-lime-500/20 data-[state=active]:text-lime-400"
+                          >
+                            Version {idx + 2}
+                          </TabsTrigger>
                         ))}
-                      </Tabs>
-                    </CardContent>
-                  </Card>
-                )}
-              </motion.div>
-            ) : (
-              <motion.div
-                key="placeholder"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center h-[400px] text-center"
-              >
-                <div className="p-6 rounded-full bg-lime-500/10 mb-4">
-                  <FilePlus className="h-12 w-12 text-lime-400/50" />
-                </div>
-                <h3 className="text-lg font-semibold text-zinc-400">Ready to Create</h3>
-                <p className="text-sm text-zinc-500 mt-2 max-w-sm">
-                  Select a document type and provide details to generate professional content instantly
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+                      </TabsList>
+                      {response.alternatives.map((alt: string, idx: number) => (
+                        <TabsContent key={idx} value={idx.toString()}>
+                          <div className="bg-zinc-800/30 p-3 rounded-lg text-sm text-zinc-300 mt-2">
+                            {alt}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => copyToClipboard(alt)}
+                              className="mt-2 text-zinc-400"
+                            >
+                              <Copy className="h-4 w-4 mr-1" />
+                              Copy
+                            </Button>
+                          </div>
+                        </TabsContent>
+                      ))}
+                    </Tabs>
+                  </CardContent>
+                </Card>
+              )}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="placeholder"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center py-12 text-center"
+            >
+              <div className="p-6 rounded-full bg-lime-500/10 mb-4">
+                <FilePlus className="h-12 w-12 text-lime-400/50" />
+              </div>
+              <h3 className="text-lg font-semibold text-zinc-400">Ready to Create</h3>
+              <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+                Select a document type and provide details to generate professional content instantly
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </AIToolPremiumLayout>
   );
