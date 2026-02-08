@@ -211,12 +211,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       {!isBackOfficeRoute && <Footer />}
       {/* All popups rendered centrally - only when ready */}
       {popupsReady && <PopupLayer />}
-      {!isBackOfficeRoute && popupsReady && (
+      {/* Chat widget always visible (collapsed), only attention pulse waits for popupsReady */}
+      {!isBackOfficeRoute && (
         <AIChatWidget
           isCollapsed={effectiveCollapsed}
           onToggleCollapse={handleToggleChat}
           onMinimize={handleMinimizeChat}
-          showAttentionPulse={showAttentionPulse}
+          showAttentionPulse={showAttentionPulse && popupsReady}
         />
       )}
       {/* Guided Tour for tablet users */}
