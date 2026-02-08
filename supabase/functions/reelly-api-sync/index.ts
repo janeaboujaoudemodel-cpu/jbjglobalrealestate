@@ -6,6 +6,16 @@ import {
   extractGalleryImages, extractVideos, extractDocuments, extractFloorPlans, extractAmenities, extractUnitTypes
 } from "../_shared/reelly-types.ts";
 
+/**
+ * Reelly API Sync v3 - PERSISTENT SYNC WITH RESUME CAPABILITY
+ * 
+ * Features:
+ * - Saves progress to sync_jobs table after every batch
+ * - Resumes from last cursor on restart
+ * - Survives page refresh, tab close, server restart
+ * - Supports pause/resume/cancel operations
+ */
+
 function extractPaymentPlan(overview: string | null, apiPlan?: ReellyProject['payment_plan']): { payment_plan: string | null; payment_breakdown: Record<string, string> | null } {
   if (apiPlan?.milestones?.length) {
     const breakdown: Record<string, string> = {};
@@ -104,15 +114,54 @@ Deno.serve(async (req) => {
     const body = await req.json().catch(() => ({}));
     const action = body.action || "sync";
     const limit = Math.min(Math.max(body.limit || 100, 1), 200);
-    const cursor = body.cursor || null;
+    const jobId = body.job_id || null;
+    const resumeFromCursor = body.resume_cursor || null;
 
+    // TEST action - just check API connection
     if (action === 'test') {
       const data = await fetchPage(apiKey, `${REELLY_API_BASE}?limit=3`);
       return new Response(JSON.stringify({ success: true, total_available: data.count, sample: data.results.slice(0, 2).map(p => ({ id: p.id, name: p.name, developer: p.developer })) }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
+    // RESUME action - check for interrupted job and return cursor
+    if (action === 'check_resume') {
+      const { data: activeJob } = await supabase
+        .from("sync_jobs")
+        .select("*")
+        .eq("source", "reelly")
+        .in("status", ["running", "paused"])
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      
+      if (activeJob) {
+        return new Response(JSON.stringify({
+          success: true,
+          has_active_job: true,
+          job: {
+            id: activeJob.id,
+            status: activeJob.status,
+            current_page: activeJob.current_page,
+            total_pages: activeJob.total_pages,
+            next_cursor: activeJob.next_cursor,
+            stats: {
+              created: activeJob.stats_created,
+              updated: activeJob.stats_updated,
+              skipped: activeJob.stats_skipped,
+              errors: activeJob.stats_errors,
+            }
+          }
+        }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+      
+      return new Response(JSON.stringify({ success: true, has_active_job: false }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    // SYNC action - process one batch, persist progress
+    const cursor = resumeFromCursor || body.cursor || null;
     const url = cursor || `${REELLY_API_BASE}?limit=${limit}`;
     if (!url.startsWith("https://api-reelly.up.railway.app/api/v2/clients/projects")) throw new Error("Invalid URL");
+    
     const page = await fetchPage(apiKey, url);
     const { data: existing } = await supabase.from("pending_project_imports").select("source_url, status").like("source_url", "%reelly_%");
     const existMap = new Map((existing || []).map(r => [r.source_url?.match(/#(reelly_\d+)$/)?.[1], r.status]));
@@ -140,7 +189,47 @@ Deno.serve(async (req) => {
         }
       } catch (e: any) { errors.push(`${p.name}: ${e.message}`); }
     }
-    return new Response(JSON.stringify({ success: true, total_available: page.count, page_fetched: page.results.length, inserted, updated, skipped, errors: errors.slice(0, 10), next_cursor: page.next, done: !page.next }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+
+    // PERSIST PROGRESS to sync_jobs table if job_id provided
+    if (jobId) {
+      const updateData: Record<string, unknown> = {
+        current_page: (body.current_page || 0) + 1,
+        next_cursor: page.next || null,
+        stats_created: (body.stats_created || 0) + inserted,
+        stats_updated: (body.stats_updated || 0) + updated,
+        stats_skipped: (body.stats_skipped || 0) + skipped,
+        stats_errors: (body.stats_errors || 0) + errors.length,
+        updated_at: new Date().toISOString(),
+      };
+      
+      // If done, mark as completed
+      if (!page.next) {
+        updateData.status = "completed";
+        updateData.completed_at = new Date().toISOString();
+      }
+      
+      // Append errors to error_log
+      if (errors.length > 0) {
+        const { data: currentJob } = await supabase.from("sync_jobs").select("error_log").eq("id", jobId).single();
+        const existingErrors = Array.isArray(currentJob?.error_log) ? currentJob.error_log : [];
+        updateData.error_log = [...existingErrors, ...errors].slice(-100); // Keep last 100 errors
+      }
+      
+      await supabase.from("sync_jobs").update(updateData).eq("id", jobId);
+    }
+
+    return new Response(JSON.stringify({ 
+      success: true, 
+      total_available: page.count, 
+      page_fetched: page.results.length, 
+      inserted, 
+      updated, 
+      skipped, 
+      errors: errors.slice(0, 10), 
+      next_cursor: page.next, 
+      done: !page.next,
+      job_id: jobId,
+    }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e: any) {
     return new Response(JSON.stringify({ success: false, error: e.message }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
