@@ -271,16 +271,22 @@ const SupportTicketBox = () => {
 
       if (response?.error) throw response.error;
 
-      // Update step to confirming
+      // Update step to confirming (no artificial delay)
       setSubmissionStep('confirming');
-      
-      // Brief delay for visual feedback
-      await new Promise(resolve => setTimeout(resolve, 500));
 
-      setTicketNumber(response?.data?.ticketNumber || "");
+      const responseData = response?.data;
+      setTicketNumber(responseData?.ticketNumber || "");
       setIsSubmitted(true);
       setSubmissionStep('idle');
-      toast.success("Support ticket created successfully!");
+      
+      // Show success with accurate email status
+      if (responseData?.customerEmailSent) {
+        toast.success("Support ticket created! Confirmation email sent.");
+      } else {
+        toast.success("Support ticket created!", {
+          description: responseData?.customerEmailError || "Email confirmation could not be sent. Please save your ticket number."
+        });
+      }
 
     } catch (error) {
       console.error("Error submitting ticket:", error);
