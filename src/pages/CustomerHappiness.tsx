@@ -80,6 +80,7 @@ const SUPPORT_PRIORITY_LEVELS = [
 const SupportTicketForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -92,6 +93,32 @@ const SupportTicketForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate all required fields with inline error messages
+    const errors: Record<string, string> = {};
+    
+    if (!formData.fullName) {
+      errors.fullName = "Full name is required";
+    }
+    if (!formData.email) {
+      errors.email = "Email is required";
+    }
+    if (!formData.serviceCategory) {
+      errors.serviceCategory = "Please select a service category";
+    }
+    if (!formData.subject) {
+      errors.subject = "Subject is required";
+    }
+    if (!formData.description) {
+      errors.description = "Description is required";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+
+    setFieldErrors({});
     setIsSubmitting(true);
 
     try {
@@ -125,6 +152,7 @@ const SupportTicketForm = () => {
         description: `Your support ticket #${ticketNumber} has been created. We'll get back to you within 24 hours.`,
       });
 
+      setFieldErrors({});
       setFormData({
         fullName: "",
         email: "",
@@ -196,9 +224,14 @@ const SupportTicketForm = () => {
           </Label>
           <Select
             value={formData.serviceCategory}
-            onValueChange={(v) => setFormData({ ...formData, serviceCategory: v })}
+            onValueChange={(v) => {
+              setFormData({ ...formData, serviceCategory: v });
+              if (fieldErrors.serviceCategory) {
+                setFieldErrors(prev => ({ ...prev, serviceCategory: '' }));
+              }
+            }}
           >
-            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
+            <SelectTrigger className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-gold/40'} text-black`}>
               <SelectValue placeholder="Select service" />
             </SelectTrigger>
             <SelectContent>
@@ -209,6 +242,9 @@ const SupportTicketForm = () => {
               ))}
             </SelectContent>
           </Select>
+          {fieldErrors.serviceCategory && (
+            <p className="text-red-500 text-xs mt-1">{fieldErrors.serviceCategory}</p>
+          )}
         </div>
       </div>
       <div>

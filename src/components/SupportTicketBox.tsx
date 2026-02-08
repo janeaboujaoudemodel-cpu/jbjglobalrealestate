@@ -118,6 +118,7 @@ const SupportTicketBox = () => {
     escalateToTech: false,
   });
   const [attachments, setAttachments] = useState<File[]>([]);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   // Pre-fill form when user logs in or dialog opens
   React.useEffect(() => {
@@ -166,21 +167,34 @@ const SupportTicketBox = () => {
     // Clear any previous error
     setSubmissionError(null);
 
-    if (!formData.serviceCategory || !formData.subject || !formData.description) {
-      toast.error("Please fill in all required fields");
-      return;
+    // Validate all required fields with inline error messages
+    const errors: Record<string, string> = {};
+    
+    if (!formData.serviceCategory) {
+      errors.serviceCategory = "Please select a service category";
     }
-
-    if (!formData.fullName || !formData.email) {
-      toast.error("Please provide your name and email");
-      return;
+    if (!formData.subject) {
+      errors.subject = "Subject is required";
     }
-
-    // Validate "Other" category requires detail
+    if (!formData.description) {
+      errors.description = "Description is required";
+    }
+    if (!formData.fullName) {
+      errors.fullName = "Full name is required";
+    }
+    if (!formData.email) {
+      errors.email = "Email is required";
+    }
     if (formData.serviceCategory === "Other" && !formData.otherCategoryDetail.trim()) {
-      toast.error("Please specify the type of issue in the 'Other Issue Details' field");
+      errors.otherCategoryDetail = "Please specify the type of issue";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
       return;
     }
+
+    setFieldErrors({});
 
     setIsSubmitting(true);
     
@@ -313,6 +327,7 @@ const SupportTicketBox = () => {
     setSubmissionError(null);
     setSubmissionStep('idle');
     setUploadStatuses({});
+    setFieldErrors({});
     setFormData({
       fullName: user?.email?.split('@')[0] || "",
       email: user?.email || "",
@@ -334,6 +349,7 @@ const SupportTicketBox = () => {
     setSubmissionError(null);
     setSubmissionStep('idle');
     setUploadStatuses({});
+    setFieldErrors({});
     setFormData({
       fullName: formData.fullName,
       email: formData.email,
@@ -681,9 +697,14 @@ const SupportTicketBox = () => {
                               </Label>
                               <Select
                                 value={formData.serviceCategory}
-                                onValueChange={(value) => setFormData({ ...formData, serviceCategory: value, otherCategoryDetail: value !== "Other" ? "" : formData.otherCategoryDetail })}
+                                onValueChange={(value) => {
+                                  setFormData({ ...formData, serviceCategory: value, otherCategoryDetail: value !== "Other" ? "" : formData.otherCategoryDetail });
+                                  if (fieldErrors.serviceCategory) {
+                                    setFieldErrors(prev => ({ ...prev, serviceCategory: '' }));
+                                  }
+                                }}
                               >
-                                <SelectTrigger className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg cursor-pointer">
+                                <SelectTrigger className={`mt-1 bg-white border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-gold/40'} focus:border-gold text-black rounded-lg cursor-pointer`}>
                                   <SelectValue placeholder="Select the service" />
                                 </SelectTrigger>
                                 <SelectContent className="max-h-60">
@@ -694,6 +715,9 @@ const SupportTicketBox = () => {
                                   ))}
                                 </SelectContent>
                               </Select>
+                              {fieldErrors.serviceCategory && (
+                                <p className="text-red-500 text-xs mt-1">{fieldErrors.serviceCategory}</p>
+                              )}
                             </div>
 
                             {/* Other Category Detail */}
