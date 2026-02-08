@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Users, 
   Mail, 
@@ -16,11 +16,14 @@ import {
   XCircle,
   MoreHorizontal,
   Trash2,
-  RefreshCw
+  RefreshCw,
+  UserMinus,
+  Send
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Table,
   TableBody,
@@ -54,6 +57,7 @@ interface SubscribersPanelProps {
 
 const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const queryClient = useQueryClient();
 
   const { data: subscribers, isLoading, refetch } = useQuery({
@@ -131,6 +135,45 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
   );
 
   const activeCount = subscribers?.filter(s => s.is_active).length || 0;
+
+  // Bulk selection helpers
+  const allSelected = filteredSubscribers && filteredSubscribers.length > 0 && selectedIds.length === filteredSubscribers.length;
+  const someSelected = selectedIds.length > 0;
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked && filteredSubscribers) {
+      setSelectedIds(filteredSubscribers.map(s => s.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleSelectOne = (id: string, checked: boolean) => {
+    if (checked) {
+      setSelectedIds(prev => [...prev, id]);
+    } else {
+      setSelectedIds(prev => prev.filter(i => i !== id));
+    }
+  };
+
+  const handleBulkDeactivate = async () => {
+    for (const id of selectedIds) {
+      await supabase.from('newsletter_subscribers').update({ is_active: false }).eq('id', id);
+    }
+    setSelectedIds([]);
+    queryClient.invalidateQueries({ queryKey: ['newsletter-subscribers'] });
+    toast.success(`${selectedIds.length} subscribers deactivated`);
+  };
+
+  const handleBulkDelete = async () => {
+    for (const id of selectedIds) {
+      await supabase.from('newsletter_subscribers').delete().eq('id', id);
+    }
+    setSelectedIds([]);
+    queryClient.invalidateQueries({ queryKey: ['newsletter-subscribers'] });
+    queryClient.invalidateQueries({ queryKey: ['newsletter-subscriber-count'] });
+    toast.success(`${selectedIds.length} subscribers deleted`);
+  };
 
   return (
     <div className="space-y-4">

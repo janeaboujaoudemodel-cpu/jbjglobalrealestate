@@ -320,9 +320,9 @@ const MarketingHub: React.FC = () => {
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
           <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
             <TabsList className="bg-white/80 border-2 border-gold/30">
-              <TabsTrigger value="campaigns" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">Campaigns</TabsTrigger>
-              <TabsTrigger value="templates" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">Templates</TabsTrigger>
-              <TabsTrigger value="subscribers" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">Subscribers</TabsTrigger>
+              <TabsTrigger value="campaigns" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">Campaigns</TabsTrigger>
+              <TabsTrigger value="templates" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">Templates</TabsTrigger>
+              <TabsTrigger value="subscribers" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">Subscribers</TabsTrigger>
             </TabsList>
 
             <div className="flex items-center gap-2">
