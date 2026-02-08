@@ -1,187 +1,208 @@
 
-# Account Menu Dropdown UI Improvements
 
-## Summary
+# Full Developer and Project Synchronization - Completion Plan
 
-Make 4 improvements to the account dropdown menu (MegaMenuAccount.tsx):
-1. Add gold border around the JB profile avatar circle
-2. Display family name alongside the first name
-3. Improve spacing between "Select your mode", mode switcher, and "Edit Profile" 
-4. Extend the "AI Tools" header divider to span full width across both columns
+## Current Status (After Sync)
 
----
+| Metric | Count | Status |
+|--------|-------|--------|
+| Live Projects | 1,804 | Complete |
+| Pending Imports | 0 | Done |
+| Projects with Cover Image | 1,802 | 99.9% |
+| Project Images | 1,802 | Synced |
+| Projects with Coordinates | 1,804 | 100% |
+| Total Developers | 554 | Synced |
+| Developers with Logos | 550 | 99.3% |
+| Developers with Feature Images | 24 | 4.3% - Needs Fix |
+| Developers with Descriptions | 420 | 75.8% |
 
-## Current Issues
+## Remaining Tasks
 
-| Issue | Location | Problem |
-|-------|----------|---------|
-| Avatar border | Line 162-167 | Border is `border-zinc-300` (grey), not gold |
-| Family name missing | Line 170-172 | Only shows `accountDisplayName`, no separate family name display |
-| Cramped spacing | Lines 196-216 | "Select your mode" label, ModeSwitcher, and "Edit Profile" are too close together |
-| AI Tools divider | Left column only | The divider under left column doesn't extend across to the right column |
+### Task 1: Auto-Fill Developer Feature Images
 
----
+530 developers are missing feature images. We can automatically fill these from their project cover images.
 
-## Implementation Plan
+**Implementation:**
 
-### 1. Gold Border on Avatar
+Create an edge function that:
+1. Queries developers without `feature_image_url`
+2. For each, finds the highest-quality cover image from their projects
+3. Updates the developer record with this image
 
-**File: `src/components/header/MegaMenuAccount.tsx`** (Lines 162-167)
+**File: `supabase/functions/sync-developer-feature-images/index.ts`**
 
-Change avatar border from grey to gold:
-
-```tsx
-// BEFORE
-<Avatar className="h-16 w-16 border-2 border-zinc-300 bg-transparent">
-  ...
-  <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-zinc-300 ...">
-
-// AFTER
-<Avatar className="h-16 w-16 border-2 border-gold bg-transparent">
-  ...
-  <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold ...">
+```typescript
+// For each developer without feature_image:
+UPDATE developers d
+SET feature_image_url = (
+  SELECT p.cover_image_url 
+  FROM projects p 
+  WHERE p.developer_id = d.id 
+  AND p.cover_image_url IS NOT NULL 
+  ORDER BY p.created_at DESC 
+  LIMIT 1
+)
+WHERE d.feature_image_url IS NULL
 ```
 
-### 2. Display Family Name
+### Task 2: Enhance Developer Detail Page with Map
 
-Update the name display to show first name + family name from user metadata:
+The `DeveloperDetail.tsx` page needs a developer-specific map showing all their projects.
 
-**File: `src/components/header/MegaMenuAccount.tsx`** (Update useMemo logic and display)
+**Changes Required:**
 
-Add logic to extract first/last name:
-```tsx
-const firstName = useMemo(() => {
-  const fn = userMeta.first_name as string | null;
-  if (fn) return fn;
-  // Fallback: first word of full_name
-  const fullName = String(accountDisplayName);
-  return fullName.split(' ')[0] || fullName;
-}, [userMeta.first_name, accountDisplayName]);
+1. Add a new section after stats grid showing a map
+2. Filter projects by developer ID
+3. Display all project pins on the map with:
+   - Project name popup
+   - Price indicator
+   - Click to navigate to project
 
-const lastName = useMemo(() => {
-  const ln = userMeta.last_name as string | null;
-  if (ln) return ln;
-  // Fallback: rest of full_name
-  const fullName = String(accountDisplayName);
-  const parts = fullName.split(' ');
-  return parts.slice(1).join(' ') || '';
-}, [userMeta.last_name, accountDisplayName]);
+**Component Structure:**
+```text
+DeveloperDetail
+├── Back Button
+├── Logo + Name + Description
+├── Stats Grid (Founded, Units, Projects, HQ)
+├── NEW: Developer Projects Map ← Add this
+│   └── Leaflet map with all developer project pins
+├── Emirates Tabs
+└── Project Cards Grid
 ```
 
-Update display (Line 170-172):
-```tsx
-// Show "First Last" format
-<p className="text-black font-bold text-lg truncate" style={{ fontFamily: 'Poppins, sans-serif' }}>
-  {firstName} {lastName}
-</p>
+### Task 3: Add Developer-Specific Map Component
+
+Create a new component `DeveloperProjectsMap.tsx` for the developer page:
+
+**File: `src/components/developer/DeveloperProjectsMap.tsx`**
+
+Features:
+- Cluster nearby project markers
+- Custom gold-themed marker icons
+- Click marker → project popup with image
+- Zoom to fit all projects
+- Satellite/Street view toggle
+
+### Task 4: Enhance Project Card Image Gallery
+
+The project cards should use Reelly's image array properly:
+
+Current behavior:
+- Shows first image only on initial load
+- Carousel arrows work but dots limited to 5
+
+Enhancement:
+- Pre-sort images by `display_order`
+- Show image count badge (e.g., "1/12")
+- Lazy load images on carousel
+
+### Task 5: Improve Project Detail Page Sections
+
+Ensure all Reelly sections are visible when data exists:
+
+| Section | Data Source | Current State |
+|---------|-------------|---------------|
+| Details | project.description | Working |
+| Gallery | project_images | Working |
+| Units | unit_types JSONB | Working if data exists |
+| Construction | construction_progress | Working |
+| Developer | developer relation | Working |
+| Floor Plans | floor_plan_types | Working |
+| Amenities | amenities[] | Working |
+| Location | latitude/longitude | Working |
+| Payment Plan | payment_breakdown | Working |
+| FAQs | faqs JSONB | Working |
+
+**Gap identified:** Many projects have null `floor_plan_types`, `documents`, `unit_types` because Reelly API returns these separately. The `reelly-fetch-details` function exists but isn't being run after bulk sync.
+
+### Task 6: Run Detail Enrichment
+
+After bulk sync, run the detail enrichment function to fill:
+- `floor_plan_types`
+- `documents` (brochures)
+- `unit_types`
+- `amenities`
+
+**Run:** `POST /reelly-fetch-details` with `{"mode": "batch", "batch_size": 50}`
+
+### Task 7: Global Projects Map Enhancement
+
+The `PropertyMap.tsx` already exists with:
+- All projects displayed
+- Price markers
+- Filters (price, bedrooms, status)
+
+**Enhancements needed:**
+- Add Buy/Rent filter toggle (currently all are off-plan/buy)
+- Add developer filter dropdown
+- Improve marker clustering for dense areas
+- Add "Developer View" mode that colors pins by developer
+
+## Implementation Priority
+
+| Priority | Task | Effort |
+|----------|------|--------|
+| 1 | Auto-fill developer feature images | Low |
+| 2 | Run detail enrichment for floor plans/docs | Low |
+| 3 | Add DeveloperProjectsMap component | Medium |
+| 4 | Add map to DeveloperDetail page | Low |
+| 5 | Enhance PropertyMap filters | Medium |
+
+## Technical Details
+
+### Developer Feature Image Update SQL
+
+```sql
+-- Run this to auto-fill feature images from project covers
+UPDATE developers d
+SET feature_image_url = sub.cover_url,
+    updated_at = NOW()
+FROM (
+  SELECT DISTINCT ON (p.developer_id) 
+    p.developer_id,
+    p.cover_image_url as cover_url
+  FROM projects p
+  WHERE p.cover_image_url IS NOT NULL
+  ORDER BY p.developer_id, p.created_at DESC
+) sub
+WHERE d.id = sub.developer_id
+AND d.feature_image_url IS NULL;
 ```
 
-### 3. Improve Spacing in Right Section
+### DeveloperProjectsMap Component
 
-**File: `src/components/header/MegaMenuAccount.tsx`** (Lines 195-216)
-
-Add more vertical spacing between elements:
-
-```tsx
-<div className="flex flex-col items-end gap-2 shrink-0">
-  {/* "Select your mode" label */}
-  <p className="text-[10px] text-gold font-semibold uppercase tracking-wider">
-    Select your mode
-  </p>
-  
-  {/* Mode Switcher */}
-  <div onClick={(e) => e.stopPropagation()} ...>
-    <ModeSwitcher variant="header" />
-  </div>
-  
-  {/* Spacer + Edit Profile - more separation */}
-  <Link 
-    to="/profile" 
-    onClick={onClose} 
-    className="flex items-center gap-1.5 text-gold text-sm font-semibold hover:underline transition-colors mt-4"
-  >
-    Edit Profile
-    <ChevronRight className="w-3.5 h-3.5" />
-  </Link>
-</div>
+```typescript
+interface DeveloperProjectsMapProps {
+  developerId: string;
+  developerName: string;
+  projects: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    latitude: number | null;
+    longitude: number | null;
+    price_from: number | null;
+    cover_image_url: string | null;
+  }>;
+}
 ```
 
-Changes:
-- Increase `gap-1` → `gap-2` on the container
-- Remove `mb-0.5` from the label
-- Increase `mt-3` → `mt-4` on the Edit Profile link
+### Files to Create/Modify
 
-### 4. Full-Width Divider Under AI Tools
+| File | Action |
+|------|--------|
+| `supabase/functions/sync-developer-feature-images/index.ts` | Create |
+| `src/components/developer/DeveloperProjectsMap.tsx` | Create |
+| `src/pages/DeveloperDetail.tsx` | Modify - add map section |
+| `src/pages/PropertyMap.tsx` | Modify - add developer filter |
 
-Currently, the divider at line 252 (`border-t border-gold/30`) only spans the left column. To create a full-width divider that goes across both columns (similar to how other mega menus do it), we need to restructure slightly:
-
-**Option A: Add a full-width divider above "Your Account" section header**
-
-Move the column headers above the grid and add a shared divider:
-
-```tsx
-{/* Section Headers Row - Full Width */}
-<div className="grid grid-cols-2 gap-6 mb-2">
-  <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5">
-    Your Account
-  </p>
-  {(isOwner || hasCRMAccess || hasListingAdminAccess) && (
-    <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5">
-      Owner Shortcuts
-    </p>
-  )}
-</div>
-
-{/* Full-width divider under headers */}
-<div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-4" />
-
-{/* Two-Column Content Grid */}
-<div className="grid grid-cols-2 gap-6">
-  ...
-</div>
-```
-
-**Option B (Simpler): Add matching dividers in both columns**
-
-Add an identical divider at the same position in the right column to create visual continuity.
-
----
-
-## Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/components/header/MegaMenuAccount.tsx` | All 4 changes listed above |
-
----
-
-## Visual Before/After
-
-```
-BEFORE:                              AFTER:
-┌─────────────────────────┐          ┌─────────────────────────┐
-│ [JB] Jane bou Jaoude    │          │ [JB] Jane bou Jaoude    │
-│ grey ← Investor+Broker  │          │ GOLD← Investor+Broker   │
-│ border  pts             │          │ border  pts             │
-│         Select your mode│          │                         │
-│         [I | B | I+B]   │          │         Select your mode│
-│         Edit Profile    │ cramped  │         [I | B | I+B]   │
-│                         │          │                         │ spaced
-│                         │          │         Edit Profile    │
-├─────────────────────────┤          ├─────────────────────────┤
-│ Your Account | Shortcuts│          │ Your Account | Shortcuts│
-│ ─────────── |           │ half     │ ─────────────────────── │ full
-│ Links...    | Links...  │          │ Links...    | Links...  │
-└─────────────────────────┘          └─────────────────────────┘
-```
-
----
-
-## Verification Steps
+## Expected Outcomes
 
 After implementation:
-1. Click on account icon in header
-2. Verify avatar has gold border (both the Avatar and AvatarFallback)
-3. Verify first name + family name are displayed correctly
-4. Verify good spacing between "Select your mode", mode switcher, and "Edit Profile"
-5. Verify the divider extends full width across both columns
+
+1. **1,804 projects** fully synced with images, coordinates, all metadata
+2. **554 developers** with logos and feature images
+3. **Developer pages** showing map of all their projects
+4. **Global map** with developer filtering capability
+5. **Parity with Reelly** in data completeness
+
