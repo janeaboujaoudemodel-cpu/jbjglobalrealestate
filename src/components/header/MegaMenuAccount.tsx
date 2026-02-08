@@ -84,6 +84,24 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     }
     return stableDisplayName;
   }, [crmProfile, crmLoading, stableDisplayName]);
+
+  // Extract first and last name for display
+  const firstName = useMemo(() => {
+    const fn = userMeta.first_name as string | null;
+    if (fn) return fn;
+    // Fallback: first word of full_name
+    const fullName = String(accountDisplayName);
+    return fullName.split(' ')[0] || fullName;
+  }, [userMeta.first_name, accountDisplayName]);
+
+  const lastName = useMemo(() => {
+    const ln = userMeta.last_name as string | null;
+    if (ln) return ln;
+    // Fallback: rest of full_name
+    const fullName = String(accountDisplayName);
+    const parts = fullName.split(' ');
+    return parts.slice(1).join(' ') || '';
+  }, [userMeta.last_name, accountDisplayName]);
   
   const accountPhotoUrl = useMemo(() => {
     // Prioritize immediate user_metadata, then CRM if loaded
@@ -159,16 +177,16 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
             <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-gold/40">
               {/* Fixed-size avatar container to prevent layout shift */}
               <div className="w-16 h-16 flex-shrink-0">
-                <Avatar className="h-16 w-16 border-2 border-zinc-300 bg-transparent">
+                <Avatar className="h-16 w-16 border-2 border-gold bg-transparent">
                   <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
-                  <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-zinc-300 text-black text-xl font-bold">
+                  <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black text-xl font-bold">
                     {avatarInitials}
                   </AvatarFallback>
                 </Avatar>
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-black font-bold text-lg truncate" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                  {accountDisplayName}
+                  {firstName} {lastName}
                 </p>
                 <p className="text-black/60 text-sm truncate">{user.email}</p>
                 {/* Show mode + tier badges + points */}
@@ -192,9 +210,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                   </Badge>
                 )}
               </div>
-              <div className="flex flex-col items-end gap-1 shrink-0">
-                {/* "Select your mode" label - directly attached to mode switcher */}
-                <p className="text-[10px] text-gold font-semibold uppercase tracking-wider mb-0.5">
+              <div className="flex flex-col items-end gap-2 shrink-0">
+                {/* "Select your mode" label */}
+                <p className="text-[10px] text-gold font-semibold uppercase tracking-wider">
                   Select your mode
                 </p>
                 <div 
@@ -208,7 +226,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 <Link 
                   to="/profile" 
                   onClick={onClose} 
-                  className="flex items-center gap-1.5 text-gold text-sm font-semibold hover:underline transition-colors mt-3"
+                  className="flex items-center gap-1.5 text-gold text-sm font-semibold hover:underline transition-colors mt-4"
                 >
                   Edit Profile
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -216,13 +234,25 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               </div>
             </div>
 
+            {/* Section Headers Row - Full Width */}
+            <div className="grid grid-cols-2 gap-6 mb-2">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5">
+                Your Account
+              </p>
+              {(isOwner || hasCRMAccess || hasListingAdminAccess) && (
+                <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5">
+                  Owner Shortcuts
+                </p>
+              )}
+            </div>
+
+            {/* Full-width divider under headers */}
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-4" />
+
             {/* Two-Column Layout for Links */}
             <div className="grid grid-cols-2 gap-6">
               {/* Left Column - Account Links */}
               <div>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5 mb-2">
-                  Your Account
-                </p>
                 <div className="space-y-1">
                   {accountLinks.map((link) => (
                     <Link
@@ -268,9 +298,6 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               <div>
               {(isOwner || hasCRMAccess || hasListingAdminAccess) && adminLinks.length > 0 && (
                   <>
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5 mb-2">
-                      Owner Shortcuts
-                    </p>
                     <div className="space-y-1">
                       {/* Owner Dashboard - Primary Link */}
                       {isOwner && (
