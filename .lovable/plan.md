@@ -1,248 +1,344 @@
 
-## Goals (what you will see when this is done)
-1. The **Support Ticket Hub shortcut** is visible in your account dropdown (desktop + mobile) and opens correctly.
-2. **One Owner Dashboard + one Owner CRM experience** (no more “Owner dashboard → Admin dashboard” confusion).
-3. **My Dashboard** stops showing duplicate mode labels, has working “View Full Progress/Activity” links, and quick actions aren’t broken.
-4. Account dropdown polish: **JB initials style matches inside profile**, spacing is clean, and it shows **Jane bou Jaoude** (full name).
-5. Dashboard cards polish: Activity Overview icons become readable (gold/black).
-6. Homepage fixes: **Hero search actually filters results**, Mortgage card removed + layout fixed, Why Dubai scene replaced with Burj Khalifa day→night.
-7. Outgoing emails use **NOREPLY@JBJ.AE** everywhere (and we show accurate status if provider domain isn’t verified yet).
+
+# Ticket Support Hub - AI Intelligence, Bulk Actions & Performance Overhaul
+
+## Executive Summary
+
+This plan transforms the "Support Ticket Hub" into a fully intelligent "Ticket Support Hub" with AI-powered reply suggestions, bulk operations, direct email integration, and significant performance improvements. It also addresses critical storage issues and UI polish.
 
 ---
 
-## What I found (root causes)
-### A) “Support Ticket Hub shortcut is missing”
-The link **is present in code** in `src/components/header/MegaMenuAccount.tsx`, but it can still be invisible in the UI for two common reasons:
-1) **Menu height / no-scroll**: the account mega menu is configured with `noScroll`, and the “Owner Shortcuts” list can overflow and hide lower items (your Support Ticket Hub link is near the bottom).
-2) **Mobile menu path**: the **mobile account section** in `src/components/GlobalHeader.tsx` has an Owner Shortcuts list, but it currently **does not include** the Support Ticket Hub entry.
+## Issues Identified
 
-### B) “Two dashboards / two CRMs”
-You currently have multiple parallel systems:
-- New Owner Command Center: `/owner` (standalone shell) + `OwnerDashboardOverview` etc.
-- Legacy owner dashboard: `/owner-dashboard` (old page: `src/pages/OwnerDashboard.tsx`, contains mock content and different UI)
-- “Admin CRM” page: `/admin/crm` (shows “Admin Dashboard” header; `src/pages/AdminCRM.tsx`)
-- Owner CRM: `/crm` + `/crm/*` (currently Owner-guarded and separate from `/owner`)
+### A) Missing AI Intelligence Integration
+- No AI-generated response suggestions when replying to tickets
+- No smart categorization or auto-triage beyond basic keyword detection
+- No sentiment analysis or urgency scoring visible in the UI
 
-This causes the exact duplication you described.
+### B) Attachment Storage - "Bucket Not Found" Error
+**Root cause confirmed**: The `support-attachments` bucket exists (private bucket) and contains files. However, the attachment URLs are being generated with `getPublicUrl()` which requires the bucket to be **public**. Since `support-attachments` is a **private** bucket (`public: false`), the generated public URLs return 404 errors.
 
-### C) “My Dashboard shows two mode labels”
-`src/pages/MyDashboard.tsx` renders:
-- a **role badge** (e.g. “Investor”)
-- plus an **extra combined-mode badge** (“Investor + Broker”)
-So combined mode shows two badges.
+Files ARE being uploaded successfully (confirmed 5 files in storage), but the public URL pattern doesn't work for private buckets.
 
-### D) “View Full Progress” doesn’t open
-In `src/components/dashboard/BadgesLevelCard.tsx`, “View Full Progress” links to `/my-dashboard` (the page you’re already on), so it looks like it does nothing.
-Same for “View Full Activity” in `ActivityOverviewCard.tsx`.
+### C) UI Issues in Ticket Detail Panel
+- Close button (X) styling is faded/black - needs white or styled box
+- Email link exists but doesn't trigger a composed email with AI-generated content
+- No AI-generated response recommendations visible
 
-### E) “Hero search broken”
-`HeroSearchBar` sets URL params like `saleStatus=...`, but `src/pages/PropertiesReelly.tsx` currently reads `status` (different key), so the filter isn’t applied. Several other params the hero sets are also not parsed by the properties page.
+### D) Domain Verification Error Message
+Old error message still shows: "The jbjglobalrealestate.com domain is not verified" despite domain being verified now as `jbj.ae`
 
-### F) Mortgage compact card removal
-The “Total Interest” compact card is in `src/components/MortgageCalculator.tsx` (compact grid). Removing it requires updating the grid columns and the Monthly Payment card span.
+### E) Missing Bulk Actions
+- No checkbox selection for multiple tickets
+- No "Select All" functionality
+- No bulk status changes (Mark All Resolved)
+- No bulk delete capability
+- No date-based sorting control visible
 
-### G) Why Dubai “weird scene / repeated”
-The homepage uses `src/components/home/WhyDubaiCapitalSection.tsx` which rotates through local mp4 scenes. We already have `burj-khalifa-day-to-night.mp4` in `src/assets/videos/` (perfect match for your request). We’ll remove the problematic scene and ensure no duplicates.
+### F) Priority Dropdown Colors
+Priority options in filter dropdown are plain text - should show colored labels like the ticket list badges
 
----
+### G) Page Title
+Currently "Support Ticket Hub" - should be "Ticket Support Hub"
 
-## Implementation approach (phased, to fix fast without breaking the site)
-
-### Phase 1 — Make the Support Ticket Hub shortcut visible everywhere
-**Files**
-- `src/components/header/MegaMenuAccount.tsx`
-- `src/components/GlobalHeader.tsx`
-
-**Changes**
-1) Move “Support Ticket Hub” **up** in the Owner shortcuts list so it’s directly under “CRM Dashboard” (as requested) and not pushed below fold.
-2) Remove the dependency on “noScroll” hiding the item:
-   - Either enable scrolling inside the right column section, or
-   - Reduce vertical padding and convert the owner shortcuts list into a 2-column grid when it gets long.
-3) Add the same shortcut to the **mobile Owner Shortcuts** section in `GlobalHeader.tsx` (it’s currently missing there).
-
-**Result**
-- You will see “Support Ticket Hub” reliably, desktop + mobile.
+### H) Performance Issues
+- Ticket detail loading has noticeable delay
+- Full website is slow (reported across multiple sections)
+- No data prefetching or caching optimization
 
 ---
 
-### Phase 2 — Merge “Owner Dashboard / Admin Dashboard / CRM” into one Owner Command Center
-**Files**
-- `src/App.tsx`
-- `src/pages/Dashboard.tsx`
-- `src/components/dashboard/StandardUserDashboard.tsx`
-- `src/components/dashboard/QuickActions.tsx`
-- `src/pages/OwnerDashboard.tsx` (legacy)
-- `src/pages/AdminCRM.tsx`
-- `src/pages/CRM.tsx`
-- `src/pages/OwnerDashboardShell.tsx`
-- `src/components/owner-dashboard/OwnerSidebarNav.tsx`
+## Implementation Plan
 
-**Strategy**
-- `/owner` becomes the single place for Owner operations (dashboard + CRM tools + broker oversight).
-- Legacy routes become redirects to `/owner` to eliminate duplicates.
+### Phase 1 - Fix Critical Storage Issue (Attachments)
 
-**Concrete changes**
-1) Change all Owner redirects to **go to `/owner`**:
-   - `Dashboard.tsx`: role `owner` → navigate to `/owner` (not `/owner-dashboard`)
-   - `StandardUserDashboard.tsx`: owner role redirectPath → `/owner`
-2) Deprecate legacy owner dashboard:
-   - In `App.tsx`, change route `/owner-dashboard` to `<Navigate to="/owner" replace />`
-   - Optionally keep `OwnerDashboard.tsx` but unreachable; or remove later.
-3) Stop sending Owners to “AdminCRM”:
-   - Remove/replace the “Owner Dashboard” button in `src/pages/CRM.tsx` that currently navigates to `/admin/crm`.
-   - In `App.tsx`, change `/admin/crm` to redirect to `/owner` (or `/owner?tab=brokers` if we implement deep linking).
-4) Consolidate CRM navigation under `/owner/*`:
-   - Add nested routes like:
-     - `/owner/leads`
-     - `/owner/tasks`
-     - `/owner/calendar`
-     - `/owner/brokers`
-     - `/owner/audit`
-   - Update `OwnerSidebarNav.tsx` to point to these `/owner/*` routes (right now it points to `/crm/leads`, which breaks the “standalone owner shell” design and contributes to duplication).
-   - Keep `/crm/*` as redirects to `/owner/*` for backward compatibility (so old links still work).
-5) Clean up the account dropdown:
-   - For Owner accounts, replace “My Dashboard” with “Owner Command Center” (or have “My Dashboard” route redirect owners to `/owner`).
+**Problem**: Private bucket + public URL = 404
 
-**Result**
-- One Owner dashboard and one Owner CRM flow; no “Owner dashboard → Admin dashboard” confusion.
+**Solution**: Create signed URLs for private bucket access
+
+**Files to modify**:
+- `src/components/support/TicketDetailPanel.tsx`
+- `src/hooks/useSupportTickets.ts`
+
+**Changes**:
+1. Create a new hook `useSignedAttachmentUrl` that generates time-limited signed URLs for private bucket files
+2. Replace direct URL links in `TicketDetailPanel` with signed URL generator
+3. Add inline image preview for image attachments (instead of just linking)
+4. Handle URL generation errors gracefully
+
+**Technical approach**:
+```typescript
+// Generate signed URL for private storage access
+const { data } = await supabase.storage
+  .from('support-attachments')
+  .createSignedUrl(filePath, 3600); // 1 hour expiry
+```
+
+### Phase 2 - AI-Powered Reply Suggestions
+
+**Goal**: When owner clicks to reply, AI analyzes the ticket and suggests a contextual response
+
+**New Edge Function**: `supabase/functions/ai-ticket-reply-suggest/index.ts`
+
+**Functionality**:
+1. Takes ticket details (subject, description, category, priority)
+2. Uses Lovable AI (google/gemini-2.5-flash) to generate professional response draft
+3. Considers ticket history/context
+4. Provides 2-3 response variations (quick resolution, needs more info, escalation)
+5. Owner can select, edit, and send
+
+**Files to create/modify**:
+- `supabase/functions/ai-ticket-reply-suggest/index.ts` (new)
+- `src/components/support/TicketDetailPanel.tsx` (add AI suggestion UI)
+- `src/hooks/useSupportTickets.ts` (add AI suggest mutation)
+
+**AI Response UI in TicketDetailPanel**:
+- "Suggest AI Reply" button next to the compose textarea
+- Shows loading state with shimmer effect
+- Displays suggested responses in cards user can click to populate
+- User can edit before sending
+
+### Phase 3 - Direct Email Compose
+
+**Goal**: Click on customer email opens pre-filled compose with AI-generated content
+
+**Implementation**:
+1. Replace simple `mailto:` link with smart compose button
+2. On click:
+   - Generate AI response suggestion (if not already done)
+   - Open email compose modal OR populate reply textarea
+3. Add "Send as Email" vs "Save as Reply" options
+
+**Alternative approach**: Integrate directly with the existing `useSendTicketReply` hook but add an AI-generated draft step first.
+
+### Phase 4 - Remove Domain Verification Error
+
+**Files to modify**:
+- `src/components/SupportTicketBox.tsx` (remove/update error display logic)
+- `src/components/support/TicketDetailPanel.tsx` (update confirmation status display)
+
+**Changes**:
+1. Remove hardcoded domain verification error message
+2. Only show email errors if they're genuine failures (not domain-specific)
+3. Since domain is now verified (`jbj.ae`), clean up legacy error references
+
+### Phase 5 - Bulk Actions & Selection
+
+**UI Additions to `SupportTicketHub.tsx`**:
+
+1. **Checkbox column** in ticket table (leftmost)
+2. **Header checkbox** for "Select All"
+3. **Bulk action toolbar** (appears when items selected):
+   - "X selected" count
+   - "Mark Selected as Resolved" button
+   - "Mark Selected as In Progress" button
+   - "Delete Selected" button (with confirmation dialog)
+   - "Clear Selection" button
+
+4. **Date sorting control**:
+   - Add sort toggle next to "Created" column header
+   - Shows ascending/descending arrow
+   - Default: descending (newest first)
+
+**New hooks in `useSupportTickets.ts`**:
+- `useBulkUpdateTicketStatus` - batch update multiple tickets
+- `useBulkDeleteTickets` - batch delete with confirmation
+
+**Database considerations**:
+- Bulk operations will use `in()` filter: `.in('id', selectedIds)`
+- Add proper error handling for partial failures
+
+### Phase 6 - Priority Dropdown with Colors
+
+**Modify `SupportTicketHub.tsx` filter dropdowns**:
+
+Current:
+```tsx
+<SelectItem value="critical">Critical</SelectItem>
+```
+
+Updated:
+```tsx
+<SelectItem value="critical" className="flex items-center gap-2">
+  <span className="w-2 h-2 rounded-full bg-red-500" />
+  <span className="text-red-400">Critical</span>
+</SelectItem>
+```
+
+Apply consistent color coding:
+- Critical: red
+- High: orange
+- Normal: blue
+- Low: zinc/gray
+
+### Phase 7 - Close Button (X) UI Fix
+
+**Current state** in `TicketDetailPanel.tsx`:
+```tsx
+<Button
+  variant="ghost"
+  size="icon"
+  onClick={onClose}
+  className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+>
+  <X className="w-5 h-5" />
+</Button>
+```
+
+**Fix**: Style to match other action buttons (gold border, visible icon)
+```tsx
+<Button
+  variant="ghost"
+  size="icon"
+  onClick={onClose}
+  className="bg-zinc-800 border border-gold/30 text-white hover:bg-gold/20 hover:border-gold"
+>
+  <X className="w-5 h-5" />
+</Button>
+```
+
+### Phase 8 - Rename Hub
+
+**Files to modify**:
+- `src/pages/SupportTicketHub.tsx` - Change page title and header text
+- Any navigation/menu references (MegaMenuAccount, GlobalHeader, etc.)
+
+**Changes**:
+- "Support Ticket Hub" → "Ticket Support Hub"
+- Update page meta title
+- Update any sidebar/menu labels
+
+### Phase 9 - Performance Optimization
+
+**A) Ticket List Optimization**:
+1. **Select fewer columns** for list view (defer full description to detail panel)
+2. **Add staleTime** to React Query configuration to reduce refetches
+3. **Prefetch ticket details** on row hover
+
+**B) Ticket Detail Loading**:
+1. **Parallel queries** - fetch ticket and messages simultaneously (already done, verify)
+2. **Skeleton loading states** - already implemented, verify they're optimized
+3. **Optimistic updates** for status changes
+
+**C) Global Performance (broader scope)**:
+1. Add `staleTime` and `cacheTime` to key queries
+2. Ensure image lazy loading across homepage sections
+3. Consider route-based code splitting for heavy pages
+
+**React Query optimization example**:
+```typescript
+useQuery({
+  queryKey: ["support-tickets", filters],
+  queryFn: async () => { ... },
+  staleTime: 30 * 1000, // 30 seconds
+  cacheTime: 5 * 60 * 1000, // 5 minutes
+});
+```
 
 ---
 
-### Phase 3 — Fix “My Dashboard” issues (badges, broken links, quick actions)
-**Files**
-- `src/pages/MyDashboard.tsx`
-- `src/components/dashboard/BadgesLevelCard.tsx`
-- `src/components/dashboard/ActivityOverviewCard.tsx`
-- `src/components/dashboard/QuickActions.tsx`
-- Create new pages:
-  - `src/pages/MyDashboardProgress.tsx` (or `/my-dashboard/progress`)
-  - `src/pages/MyDashboardActivity.tsx` (or `/my-dashboard/activity`)
+## Files to Create
 
-**Changes**
-1) **One label only**:
-   - If `isCombinedMode`, show only the combined badge (purple) and do not also show “Investor”.
-   - Also align colors with the mode standard (Investor = emerald, Broker = blue, Combined = purple).
-2) Fix “View Full Progress”:
-   - Create a dedicated progress page and route (e.g. `/my-dashboard/progress`).
-   - Update `BadgesLevelCard` button to link there.
-3) Fix “View Full Activity”:
-   - Create `/my-dashboard/activity` and point ActivityOverview there.
-4) Fix Owner quick actions:
-   - Update Owner action URLs in `QuickActions.tsx` away from `/owner-dashboard/*` to the new `/owner/*` equivalents (otherwise owners hit dead routes and think the dashboard is broken).
-5) Activity Overview icons visibility:
-   - Change `Calendar/Flame/TrendingUp` from `text-primary` to `text-gold` (or `text-black` if you prefer) so they remain readable on the champagne/gold card backgrounds.
-
-**Result**
-- My Dashboard is coherent, clickable, and doesn’t show duplicate mode labels.
+1. `supabase/functions/ai-ticket-reply-suggest/index.ts`
+   - AI-powered reply suggestion generator
 
 ---
 
-### Phase 4 — Account dropdown polish (avatar, spacing, full name)
-**Files**
-- `src/components/header/MegaMenuAccount.tsx`
-- `src/pages/UserProfile.tsx` (optional enhancement)
+## Files to Modify
 
-**Changes**
-1) Avatar initials style:
-   - Update `AvatarFallback` in MegaMenuAccount to match your inside-profile style: black initials, light gray border, premium background.
-2) Spacing:
-   - Adjust layout so:
-     - “Select your mode” is visually attached to the mode switcher (less gap),
-     - “Edit Profile” sits a bit lower with clear separation.
-3) Name correctness:
-   - For Owner identity, display **Jane bou Jaoude** (locked casing) consistently.
-   - Additionally, ensure profile updates propagate:
-     - When you save name in `UserProfile.tsx`, also update the CRM profile record (so header/menus never show a shortened name).
+### Frontend
+1. `src/pages/SupportTicketHub.tsx`
+   - Rename to "Ticket Support Hub"
+   - Add checkbox column and selection state
+   - Add bulk action toolbar
+   - Add date sorting
+   - Add colored priority labels in dropdown
+   - Performance optimizations (prefetch on hover)
 
-**Result**
-- The account dropdown looks like a premium “mini profile card” and always shows your correct name.
+2. `src/components/support/TicketDetailPanel.tsx`
+   - Fix X button styling
+   - Add "Suggest AI Reply" button
+   - Add AI suggestion display cards
+   - Fix attachment links (signed URLs)
+   - Remove domain verification error
+   - Add direct email compose flow
 
----
+3. `src/hooks/useSupportTickets.ts`
+   - Add signed URL generation for attachments
+   - Add `useAIReplySuggestion` hook
+   - Add `useBulkUpdateTicketStatus` hook
+   - Add `useBulkDeleteTickets` hook
+   - Add staleTime/cacheTime optimization
 
-### Phase 5 — Homepage fixes
-#### 5.1 Hero search works
-**Files**
-- `src/pages/PropertiesReelly.tsx`
-- `src/components/home/HeroSearchBar.tsx`
+4. `src/components/SupportTicketBox.tsx`
+   - Remove domain verification error message display
 
-**Fix**
-- Align query param names:
-  - Properties page currently reads `status`, but HeroSearchBar sets `saleStatus`.
-  - Update `PropertiesReelly.tsx` to read `saleStatus` and `constructionStatus` (and apply them into filter state).
-- Ensure the search term reliably maps:
-  - Support both `q` and `search` as synonyms (already partly done).
-  
-**Result**
-- Entering a query in the hero and pressing Search produces visible filtering changes.
+### Backend
+5. `supabase/functions/ai-ticket-reply-suggest/index.ts` (new)
+   - AI reply suggestion endpoint
 
-#### 5.2 Remove “Total Interest” compact card + fix layout
-**File**
-- `src/components/MortgageCalculator.tsx`
+### Navigation (if needed)
+6. `src/components/header/MegaMenuAccount.tsx`
+   - Update "Support Ticket Hub" → "Ticket Support Hub" label
 
-**Fix**
-- Remove the compact “Total Interest” tile.
-- Update compact grid from 5 tiles to 4 tiles:
-  - Adjust `lg:grid-cols-5` → `lg:grid-cols-4`
-  - Rebalance Monthly Payment tile spans so it fits perfectly without awkward gaps.
-
-#### 5.3 Replace the weird Why Dubai scene
-**File**
-- `src/components/home/WhyDubaiCapitalSection.tsx`
-
-**Fix**
-- Remove the problematic scene (likely the Dubai Frame clip causing the “V shape / mosque” confusion).
-- Use the existing `burj-khalifa-day-to-night.mp4` as the centerpiece scene and ensure it appears once (no duplicate shots).
+7. `src/components/GlobalHeader.tsx`
+   - Update mobile menu label if present
 
 ---
 
-### Phase 6 — Set sender email to NOREPLY@JBJ.AE everywhere
-**Files (backend functions)**
-- `supabase/functions/submit-support-ticket/index.ts`
-- `supabase/functions/send-ticket-reply-email/index.ts`
-- `supabase/functions/resend-support-ticket-confirmation/index.ts`
-- `supabase/functions/send-email-otp/index.ts`
-- (and any other mail-sending functions that hardcode the old address)
+## Technical Details
 
-**Changes**
-- Replace all “from” addresses to `NOREPLY@JBJ.AE`.
-- Update user-facing copy so it no longer references the wrong domain.
+### AI Reply Suggestion Prompt Design
 
-**Important note**
-- Even with correct sender, emails will only arrive if the email provider has the `jbj.ae` domain verified. We’ll keep the UI truthful (sent vs failed with reason).
+```
+System: You are a professional customer support assistant for JBJ Global Real Estate. 
+Generate helpful, empathetic responses to support tickets.
+
+User: [Ticket details]
+- Subject: {subject}
+- Category: {category}
+- Priority: {priority}
+- Issue Description: {description}
+- Previous conversation: {messages}
+
+Generate 3 response options:
+1. Quick Resolution (if issue seems simple)
+2. Needs More Information (ask clarifying questions)
+3. Escalation Notice (for complex issues requiring specialist)
+
+Each response should be professional, warm, and action-oriented.
+```
+
+### Bulk Delete Safety
+
+- Require confirmation dialog with ticket count
+- Show warning: "This action cannot be undone"
+- Log deletions in audit trail (if available)
+- Consider soft delete (status: 'deleted') vs hard delete
+
+### Signed URL Caching
+
+- Generate signed URLs on-demand when user opens ticket
+- Cache signed URLs in component state for 30 minutes
+- Regenerate if expired
+- Handle errors gracefully (show "Attachment unavailable" if generation fails)
 
 ---
 
-## End-to-end verification checklist (what you’ll test after implementation)
-1) Open account menu (desktop): confirm you can see **Support Ticket Hub** under CRM Dashboard and it clicks through.
-2) Open account menu (mobile): confirm the same shortcut exists.
-3) Visit `/owner-dashboard` and `/admin/crm` and `/crm`: confirm they no longer create duplicate dashboards (they should redirect to `/owner`).
-4) Open `/my-dashboard`:
-   - Only one mode label shows (not two).
-   - “View Full Progress” opens a dedicated page.
-   - Quick actions go to valid pages (no dead ends).
-5) Activity Overview icons are readable.
-6) Homepage hero search:
-   - Search for a known term, confirm results change on `/properties`.
-7) Mortgage compact section: “Total Interest” card is gone and layout is clean.
-8) Why Dubai: the weird repeated scene is replaced and the Burj day→night scene plays correctly.
-9) Create a support ticket: confirmation sender displays as `NOREPLY@JBJ.AE` and delivery status is accurate.
+## Verification Checklist
 
----
+After implementation, verify:
 
-## Files expected to change (summary)
-- Routing & merge:
-  - `src/App.tsx`, `src/pages/Dashboard.tsx`, `src/pages/CRM.tsx`, `src/pages/AdminCRM.tsx`,
-  - `src/pages/OwnerDashboard.tsx` (legacy), `src/pages/OwnerDashboardShell.tsx`,
-  - `src/components/owner-dashboard/OwnerSidebarNav.tsx`, `src/components/dashboard/StandardUserDashboard.tsx`
-- My Dashboard fixes:
-  - `src/pages/MyDashboard.tsx`, `src/components/dashboard/BadgesLevelCard.tsx`,
-  - `src/components/dashboard/ActivityOverviewCard.tsx`, `src/components/dashboard/QuickActions.tsx`,
-  - new: `src/pages/MyDashboardProgress.tsx`, `src/pages/MyDashboardActivity.tsx`
-- Account menu:
-  - `src/components/header/MegaMenuAccount.tsx`, `src/components/GlobalHeader.tsx`,
-  - optional: `src/pages/UserProfile.tsx`
-- Homepage:
-  - `src/pages/PropertiesReelly.tsx`, `src/components/home/HeroSearchBar.tsx`,
-  - `src/components/MortgageCalculator.tsx`, `src/components/home/WhyDubaiCapitalSection.tsx`
-- Email sender:
-  - `supabase/functions/*` mail-related functions listed above
+1. **Attachments work**: Click attachment in ticket detail - file opens/downloads without 404
+2. **AI suggestions load**: Click "Suggest AI Reply" - see 2-3 response options
+3. **Email compose works**: Click email address - pre-populated compose appears
+4. **Bulk select works**: Check multiple tickets - bulk toolbar appears
+5. **Bulk actions work**: Mark 3 tickets resolved at once - all update
+6. **Delete works**: Delete test ticket - removes from list
+7. **Priority colors show**: Open priority dropdown - see colored labels
+8. **X button visible**: Close button is styled and clearly visible
+9. **Name changed**: Page header says "Ticket Support Hub"
+10. **No domain error**: Create ticket - no "domain not verified" message
+11. **Faster loading**: Click ticket - detail loads within 500ms
+12. **Date sorting**: Toggle sort - tickets reorder correctly
+
