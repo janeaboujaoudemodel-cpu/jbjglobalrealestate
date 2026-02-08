@@ -68,7 +68,7 @@ const AINeighborhoodInsightsPremium = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Input Section */}
         <div className="space-y-6">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-teal-900/20 border-teal-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-teal-400 mb-4">
                 <MapPin className="h-5 w-5" />
@@ -85,7 +85,7 @@ const AINeighborhoodInsightsPremium = () => {
                     placeholder="Dubai Marina, JBR, Downtown Dubai..."
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-teal-500/30 text-white hover:border-teal-500/50 focus:border-teal-400 transition-colors"
                   />
                 </div>
 
@@ -96,7 +96,7 @@ const AINeighborhoodInsightsPremium = () => {
                     value={interests}
                     onChange={(e) => setInterests(e.target.value)}
                     rows={3}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-teal-500/30 text-white hover:border-teal-500/50 focus:border-teal-400 transition-colors"
                   />
                 </div>
               </div>
@@ -123,17 +123,17 @@ const AINeighborhoodInsightsPremium = () => {
 
           {/* Quick Categories */}
           <div className="grid grid-cols-3 gap-3">
-            <Card className="bg-zinc-900/30 border-zinc-800 p-4 text-center">
+            <Card className="bg-teal-900/20 border-teal-500/30 p-4 text-center">
               <School className="h-5 w-5 mx-auto mb-2 text-teal-400" />
               <p className="text-xs text-zinc-500">Education</p>
               <p className="text-sm font-semibold text-white">Schools</p>
             </Card>
-            <Card className="bg-zinc-900/30 border-zinc-800 p-4 text-center">
+            <Card className="bg-teal-900/20 border-teal-500/30 p-4 text-center">
               <Hospital className="h-5 w-5 mx-auto mb-2 text-teal-400" />
               <p className="text-xs text-zinc-500">Healthcare</p>
               <p className="text-sm font-semibold text-white">Facilities</p>
             </Card>
-            <Card className="bg-zinc-900/30 border-zinc-800 p-4 text-center">
+            <Card className="bg-teal-900/20 border-teal-500/30 p-4 text-center">
               <Train className="h-5 w-5 mx-auto mb-2 text-teal-400" />
               <p className="text-xs text-zinc-500">Transport</p>
               <p className="text-sm font-semibold text-white">Access</p>
@@ -193,7 +193,7 @@ const AINeighborhoodInsightsPremium = () => {
                           initial={{ scale: 0.9, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                         >
-                          <Card className="bg-zinc-900/50 border-zinc-800 p-4">
+                          <Card className="bg-teal-900/20 border-teal-500/30 p-4">
                             <Icon className="h-5 w-5 mb-2 text-teal-400" />
                             <p className="text-xs text-zinc-400 capitalize">{key}</p>
                             <p className="text-lg font-bold text-white">{value}</p>
@@ -206,7 +206,7 @@ const AINeighborhoodInsightsPremium = () => {
 
                 {/* Lifestyle Indicators */}
                 {response.lifestyle && (
-                  <Card className="bg-zinc-900/50 border-zinc-800 p-4">
+                  <Card className="bg-teal-900/20 border-teal-500/30 p-4">
                     <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
                       <Sun className="h-4 w-4 text-teal-400" />
                       Lifestyle Indicators
@@ -245,7 +245,7 @@ const AINeighborhoodInsightsPremium = () => {
                 )}
 
                 {/* Full Analysis */}
-                <Card className="bg-zinc-900/50 border-zinc-800">
+                <Card className="bg-teal-900/20 border-teal-500/30">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-white">Full Analysis</h4>

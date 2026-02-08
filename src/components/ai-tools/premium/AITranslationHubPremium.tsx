@@ -118,16 +118,16 @@ const AITranslationHubPremium = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Source Side */}
         <div className="space-y-4">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-amber-900/20 border-amber-500/30">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">{getLanguageInfo(sourceLanguage)?.flag}</span>
                   <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
-                    <SelectTrigger className="w-[180px] bg-zinc-800 border-zinc-700 text-white">
+                    <SelectTrigger className="w-[180px] bg-zinc-900/50 border-amber-500/30 text-white hover:border-amber-500/50">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
+                    <SelectContent className="bg-zinc-900 border-amber-500/30">
                       {LANGUAGES.map((lang) => (
                         <SelectItem key={lang.code} value={lang.code} className="text-white">
                           {lang.flag} {lang.name}
@@ -150,7 +150,7 @@ const AITranslationHubPremium = () => {
                 placeholder="Enter text to translate..."
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className={`bg-zinc-800 border-zinc-700 text-white min-h-[200px] ${
+                className={`bg-zinc-900/50 border-amber-500/30 text-white min-h-[200px] hover:border-amber-500/50 focus:border-amber-400 transition-colors ${
                   isRTL(sourceLanguage) ? "text-right" : ""
                 }`}
                 dir={isRTL(sourceLanguage) ? "rtl" : "ltr"}
@@ -162,17 +162,17 @@ const AITranslationHubPremium = () => {
           </Card>
 
           {/* Context Selector */}
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-amber-900/20 border-amber-500/30">
             <CardContent className="p-4">
               <Label className="text-zinc-300 flex items-center gap-2 mb-3">
                 <MessageSquare className="h-4 w-4 text-amber-400" />
                 Context
               </Label>
               <Select value={context} onValueChange={setContext}>
-                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                <SelectTrigger className="bg-zinc-900/50 border-amber-500/30 text-white hover:border-amber-500/50">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-zinc-700">
+                <SelectContent className="bg-zinc-900 border-amber-500/30">
                   <SelectItem value="real-estate">🏠 Real Estate</SelectItem>
                   <SelectItem value="legal">⚖️ Legal / Contracts</SelectItem>
                   <SelectItem value="marketing">📣 Marketing</SelectItem>
@@ -211,16 +211,16 @@ const AITranslationHubPremium = () => {
 
         {/* Target Side */}
         <div className="space-y-4">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-amber-900/20 border-amber-500/30">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">{getLanguageInfo(targetLanguage)?.flag}</span>
                   <Select value={targetLanguage} onValueChange={setTargetLanguage}>
-                    <SelectTrigger className="w-[180px] bg-zinc-800 border-zinc-700 text-white">
+                    <SelectTrigger className="w-[180px] bg-zinc-900/50 border-amber-500/30 text-white hover:border-amber-500/50">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
+                    <SelectContent className="bg-zinc-900 border-amber-500/30">
                       {LANGUAGES.map((lang) => (
                         <SelectItem key={lang.code} value={lang.code} className="text-white">
                           {lang.flag} {lang.name}
@@ -316,7 +316,7 @@ const AITranslationHubPremium = () => {
           { icon: MessageSquare, label: "Context Aware" },
           { icon: Languages, label: "RTL Support" },
         ].map(({ icon: Icon, label }) => (
-          <Card key={label} className="bg-zinc-900/30 border-zinc-800 p-3 text-center">
+          <Card key={label} className="bg-amber-900/20 border-amber-500/30 p-3 text-center">
             <Icon className="h-5 w-5 mx-auto mb-1 text-amber-400" />
             <p className="text-xs text-zinc-400">{label}</p>
           </Card>

@@ -111,7 +111,7 @@ ${response.report}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Input Section */}
         <div className="space-y-6">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-indigo-900/20 border-indigo-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-indigo-400 mb-4">
                 <MapPin className="h-5 w-5" />
@@ -125,7 +125,7 @@ ${response.report}
                     placeholder="Dubai Marina, Palm Jumeirah, Downtown..."
                     value={formData.location}
                     onChange={(e) => handleChange("location", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-indigo-500/30 text-white hover:border-indigo-500/50 focus:border-indigo-400 transition-colors"
                   />
                 </div>
 
@@ -133,10 +133,10 @@ ${response.report}
                   <div className="space-y-2">
                     <Label className="text-zinc-300">Property Type</Label>
                     <Select value={formData.propertyType} onValueChange={(v) => handleChange("propertyType", v)}>
-                      <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                      <SelectTrigger className="bg-zinc-900/50 border-indigo-500/30 text-white hover:border-indigo-500/50">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-zinc-800 border-zinc-700">
+                      <SelectContent className="bg-zinc-900 border-indigo-500/30">
                         <SelectItem value="all">All Properties</SelectItem>
                         <SelectItem value="residential">Residential</SelectItem>
                         <SelectItem value="commercial">Commercial</SelectItem>
@@ -149,10 +149,10 @@ ${response.report}
                   <div className="space-y-2">
                     <Label className="text-zinc-300">Timeframe</Label>
                     <Select value={formData.timeframe} onValueChange={(v) => handleChange("timeframe", v)}>
-                      <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                      <SelectTrigger className="bg-zinc-900/50 border-indigo-500/30 text-white hover:border-indigo-500/50">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-zinc-800 border-zinc-700">
+                      <SelectContent className="bg-zinc-900 border-indigo-500/30">
                         <SelectItem value="monthly">Monthly</SelectItem>
                         <SelectItem value="quarterly">Quarterly</SelectItem>
                         <SelectItem value="yearly">Yearly</SelectItem>
@@ -165,10 +165,10 @@ ${response.report}
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Report Focus</Label>
                   <Select value={formData.focus} onValueChange={(v) => handleChange("focus", v)}>
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectTrigger className="bg-zinc-900/50 border-indigo-500/30 text-white hover:border-indigo-500/50">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
+                    <SelectContent className="bg-zinc-900 border-indigo-500/30">
                       <SelectItem value="general">📊 General Overview</SelectItem>
                       <SelectItem value="investment">💰 Investment Analysis</SelectItem>
                       <SelectItem value="rental">🏠 Rental Market</SelectItem>
@@ -201,17 +201,17 @@ ${response.report}
 
           {/* Report Indicators */}
           <div className="grid grid-cols-3 gap-3">
-            <Card className="bg-zinc-900/30 border-zinc-800 p-4 text-center">
+            <Card className="bg-indigo-900/20 border-indigo-500/30 p-4 text-center">
               <BarChart3 className="h-5 w-5 mx-auto mb-2 text-indigo-400" />
               <p className="text-xs text-zinc-500">Trend</p>
               <p className="text-sm font-semibold text-white">Analysis</p>
             </Card>
-            <Card className="bg-zinc-900/30 border-zinc-800 p-4 text-center">
+            <Card className="bg-indigo-900/20 border-indigo-500/30 p-4 text-center">
               <PieChart className="h-5 w-5 mx-auto mb-2 text-indigo-400" />
               <p className="text-xs text-zinc-500">Market</p>
               <p className="text-sm font-semibold text-white">Share</p>
             </Card>
-            <Card className="bg-zinc-900/30 border-zinc-800 p-4 text-center">
+            <Card className="bg-indigo-900/20 border-indigo-500/30 p-4 text-center">
               <Target className="h-5 w-5 mx-auto mb-2 text-indigo-400" />
               <p className="text-xs text-zinc-500">Investment</p>
               <p className="text-sm font-semibold text-white">Insights</p>
@@ -274,7 +274,7 @@ ${response.report}
                 )}
 
                 {/* Full Report */}
-                <Card className="bg-zinc-900/50 border-zinc-800">
+                <Card className="bg-indigo-900/20 border-indigo-500/30">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-white">Full Report</h4>

@@ -67,7 +67,7 @@ const AIObjectionHandlerPremium = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Input Section */}
         <div className="space-y-6">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-rose-900/20 border-rose-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-rose-400 mb-4">
                 <MessageSquareReply className="h-5 w-5" />
@@ -85,7 +85,7 @@ const AIObjectionHandlerPremium = () => {
                     value={objection}
                     onChange={(e) => setObjection(e.target.value)}
                     rows={4}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-rose-500/30 text-white hover:border-rose-500/50 focus:border-rose-400 transition-colors"
                   />
                 </div>
 
@@ -93,10 +93,10 @@ const AIObjectionHandlerPremium = () => {
                   <div className="space-y-2">
                     <Label className="text-zinc-300">Property Type</Label>
                     <Select value={propertyType} onValueChange={setPropertyType}>
-                      <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                      <SelectTrigger className="bg-zinc-900/50 border-rose-500/30 text-white hover:border-rose-500/50">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-zinc-800 border-zinc-700">
+                      <SelectContent className="bg-zinc-900 border-rose-500/30">
                         <SelectItem value="luxury-apartment">Luxury Apartment</SelectItem>
                         <SelectItem value="villa">Villa</SelectItem>
                         <SelectItem value="penthouse">Penthouse</SelectItem>
@@ -110,10 +110,10 @@ const AIObjectionHandlerPremium = () => {
                   <div className="space-y-2">
                     <Label className="text-zinc-300">Lead Profile</Label>
                     <Select value={leadProfile} onValueChange={setLeadProfile}>
-                      <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                      <SelectTrigger className="bg-zinc-900/50 border-rose-500/30 text-white hover:border-rose-500/50">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-zinc-800 border-zinc-700">
+                      <SelectContent className="bg-zinc-900 border-rose-500/30">
                         <SelectItem value="serious-buyer">Serious Buyer</SelectItem>
                         <SelectItem value="first-time-buyer">First-Time Buyer</SelectItem>
                         <SelectItem value="investor">Investor</SelectItem>
@@ -132,7 +132,7 @@ const AIObjectionHandlerPremium = () => {
                     value={context}
                     onChange={(e) => setContext(e.target.value)}
                     rows={2}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-rose-500/30 text-white hover:border-rose-500/50 focus:border-rose-400 transition-colors"
                   />
                 </div>
               </div>
@@ -159,17 +159,17 @@ const AIObjectionHandlerPremium = () => {
 
           {/* Response Strategy */}
           <div className="grid grid-cols-3 gap-3">
-            <Card className="bg-zinc-900/30 border-zinc-800 p-4 text-center">
+            <Card className="bg-rose-900/20 border-rose-500/30 p-4 text-center">
               <Heart className="h-5 w-5 mx-auto mb-2 text-rose-400" />
               <p className="text-xs text-zinc-500">Empathy</p>
               <p className="text-sm font-semibold text-white">First</p>
             </Card>
-            <Card className="bg-zinc-900/30 border-zinc-800 p-4 text-center">
+            <Card className="bg-rose-900/20 border-rose-500/30 p-4 text-center">
               <Target className="h-5 w-5 mx-auto mb-2 text-rose-400" />
               <p className="text-xs text-zinc-500">Value</p>
               <p className="text-sm font-semibold text-white">Focused</p>
             </Card>
-            <Card className="bg-zinc-900/30 border-zinc-800 p-4 text-center">
+            <Card className="bg-rose-900/20 border-rose-500/30 p-4 text-center">
               <Shield className="h-5 w-5 mx-auto mb-2 text-rose-400" />
               <p className="text-xs text-zinc-500">Trust</p>
               <p className="text-sm font-semibold text-white">Building</p>
@@ -209,7 +209,7 @@ const AIObjectionHandlerPremium = () => {
                 {/* Response Confidence */}
                 {response.confidenceScore && (
                   <div className="grid grid-cols-2 gap-3">
-                    <Card className="bg-zinc-900/50 border-zinc-800 p-4">
+                    <Card className="bg-rose-900/20 border-rose-500/30 p-4">
                       <p className="text-xs text-zinc-400">Response Confidence</p>
                       <p className="text-xl font-bold text-rose-400">{response.confidenceScore}%</p>
                     </Card>
@@ -224,7 +224,7 @@ const AIObjectionHandlerPremium = () => {
 
                 {/* Key Points */}
                 {response.keyPoints && (
-                  <Card className="bg-zinc-900/50 border-zinc-800 p-4">
+                  <Card className="bg-rose-900/20 border-rose-500/30 p-4">
                     <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
                       <Lightbulb className="h-4 w-4 text-rose-400" />
                       Key Points to Emphasize
@@ -243,7 +243,7 @@ const AIObjectionHandlerPremium = () => {
                 )}
 
                 {/* Full Response */}
-                <Card className="bg-zinc-900/50 border-zinc-800">
+                <Card className="bg-rose-900/20 border-rose-500/30">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-white">AI Response</h4>
@@ -259,7 +259,7 @@ const AIObjectionHandlerPremium = () => {
 
                 {/* Alternative Approaches */}
                 {response.alternatives && (
-                  <Card className="bg-zinc-900/50 border-zinc-800 p-4">
+                  <Card className="bg-rose-900/20 border-rose-500/30 p-4">
                     <h4 className="font-semibold text-white mb-3">Alternative Approaches</h4>
                     <div className="space-y-2">
                       {response.alternatives.map((alt: string, i: number) => (

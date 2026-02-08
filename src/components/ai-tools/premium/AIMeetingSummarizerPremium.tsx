@@ -62,7 +62,7 @@ const AIMeetingSummarizerPremium = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Input Section */}
         <div className="space-y-6">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-violet-900/20 border-violet-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-violet-400 mb-4">
                 <FileAudio className="h-5 w-5" />
@@ -79,7 +79,7 @@ const AIMeetingSummarizerPremium = () => {
                     placeholder="Client Discovery Call - Palm Jumeirah"
                     value={formData.meetingTitle}
                     onChange={(e) => handleChange("meetingTitle", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50 focus:border-violet-400 transition-colors"
                   />
                 </div>
 
@@ -92,7 +92,7 @@ const AIMeetingSummarizerPremium = () => {
                     placeholder="45 minutes"
                     value={formData.duration}
                     onChange={(e) => handleChange("duration", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50 focus:border-violet-400 transition-colors"
                   />
                 </div>
               </div>
@@ -106,7 +106,7 @@ const AIMeetingSummarizerPremium = () => {
                   placeholder="John Smith (Client), Sarah Ahmed (Agent)"
                   value={formData.participants}
                   onChange={(e) => handleChange("participants", e.target.value)}
-                  className="bg-zinc-800 border-zinc-700 text-white"
+                  className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50 focus:border-violet-400 transition-colors"
                 />
               </div>
 
@@ -117,7 +117,7 @@ const AIMeetingSummarizerPremium = () => {
                   value={formData.notes}
                   onChange={(e) => handleChange("notes", e.target.value)}
                   rows={10}
-                  className="bg-zinc-800 border-zinc-700 text-white"
+                  className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50 focus:border-violet-400 transition-colors"
                 />
               </div>
 
@@ -207,7 +207,7 @@ const AIMeetingSummarizerPremium = () => {
 
                 {/* Follow-ups */}
                 {response.followUps && response.followUps.length > 0 && (
-                  <Card className="bg-zinc-900/50 border-zinc-800 p-4">
+                  <Card className="bg-violet-900/20 border-violet-500/30 p-4">
                     <div className="flex items-center gap-2 mb-3">
                       <Calendar className="h-5 w-5 text-violet-400" />
                       <h4 className="font-semibold text-white">Follow-ups Required</h4>
@@ -224,7 +224,7 @@ const AIMeetingSummarizerPremium = () => {
                 )}
 
                 {/* Full Summary */}
-                <Card className="bg-zinc-900/50 border-zinc-800">
+                <Card className="bg-violet-900/20 border-violet-500/30">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-white">Full Summary</h4>
