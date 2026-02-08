@@ -129,7 +129,7 @@ export function ToolkitShowcaseCard() {
                     transition={{ duration: 0.4, delay: index * 0.05 }}
                   >
                     <Link to={tool.href} className="group block h-full">
-                      <div className="h-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
+                      <div className="h-full flex flex-col bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
                         {/* Icon */}
                         <div className="w-12 h-12 rounded-xl border-2 border-gold/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                           <tool.icon className="w-6 h-6 text-black" />
@@ -144,12 +144,12 @@ export function ToolkitShowcaseCard() {
                         </h4>
 
                         {/* Description */}
-                        <p className="text-sm text-zinc-600 mb-4 leading-relaxed">
+                        <p className="text-sm text-zinc-600 mb-4 leading-relaxed flex-grow">
                           {tool.description}
                         </p>
 
                         {/* CTA */}
-                        <Button variant="primary" size="sm" className="mt-auto">
+                        <Button variant="primary" size="sm" className="mt-auto w-full justify-center">
                           {tool.cta}
                           <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
