@@ -1429,15 +1429,18 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
               } : {}}
             >
-              {/* Search Icon - triggers mega menu on hover (desktop only) */}
+              {/* Search Icon - opens search modal directly */}
               <button
-                onMouseEnter={() => handleMegaMenuEnter('search')}
-                onClick={() => handleMegaMenuClick('search')}
+                onClick={() => {
+                  closeMegaMenu();
+                  setSearchInitialQuery("");
+                  setSearchOpen(true);
+                }}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
                 aria-label="Search"
               >
                 <Search 
-                  className={`w-5 h-5 transition-colors duration-300 text-gold group-hover:text-white ${activeMegaMenu === 'search' ? '!text-gold' : ''}`}
+                  className="w-5 h-5 transition-colors duration-300 text-gold group-hover:text-white"
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
                 />
               </button>
