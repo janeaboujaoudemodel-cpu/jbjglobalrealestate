@@ -142,7 +142,7 @@ ${response.script}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Input Section */}
         <div className="space-y-6">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-pink-900/20 border-pink-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-pink-400 mb-4">
                 <Film className="h-5 w-5" />
@@ -156,7 +156,7 @@ ${response.script}
                     placeholder="Sunset Bay Residences"
                     value={formData.propertyName}
                     onChange={(e) => handleChange("propertyName", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-pink-500/30 text-white hover:border-pink-500/50 focus:border-pink-400 transition-colors"
                   />
                 </div>
                 <div className="space-y-2">
@@ -165,7 +165,7 @@ ${response.script}
                     placeholder="Palm Jumeirah, Dubai"
                     value={formData.location}
                     onChange={(e) => handleChange("location", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-pink-500/30 text-white hover:border-pink-500/50 focus:border-pink-400 transition-colors"
                   />
                 </div>
               </div>
@@ -190,10 +190,10 @@ ${response.script}
                   ))}
                 </div>
                 <Select value={formData.targetAudience} onValueChange={(v) => handleChange("targetAudience", v)}>
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-2">
+                  <SelectTrigger className="bg-zinc-900/50 border-pink-500/30 text-white hover:border-pink-500/50 mt-2">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                <SelectContent className="bg-zinc-900 border-pink-500/30">
                     {AUDIENCES.map((a) => (
                       <SelectItem key={a.value} value={a.value} className="text-white">
                         {a.icon} {a.label}
@@ -207,10 +207,10 @@ ${response.script}
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Tone & Style</Label>
                   <Select value={formData.tone} onValueChange={(v) => handleChange("tone", v)}>
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectTrigger className="bg-zinc-900/50 border-pink-500/30 text-white hover:border-pink-500/50">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
+                    <SelectContent className="bg-zinc-900 border-pink-500/30">
                       {TONES.map((t) => (
                         <SelectItem key={t.value} value={t.value} className="text-white">
                           {t.icon} {t.label}
@@ -222,10 +222,10 @@ ${response.script}
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Duration</Label>
                   <Select value={formData.duration} onValueChange={(v) => handleChange("duration", v)}>
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectTrigger className="bg-zinc-900/50 border-pink-500/30 text-white hover:border-pink-500/50">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
+                    <SelectContent className="bg-zinc-900 border-pink-500/30">
                       <SelectItem value="1">📱 1 min (Social)</SelectItem>
                       <SelectItem value="2-3">🎬 2-3 min (Standard)</SelectItem>
                       <SelectItem value="5">🎥 5 min (Detailed)</SelectItem>
@@ -241,7 +241,7 @@ ${response.script}
                   placeholder="Bedrooms, features, views, amenities, unique selling points..."
                   value={formData.propertyDetails}
                   onChange={(e) => handleChange("propertyDetails", e.target.value)}
-                  className="bg-zinc-800 border-zinc-700 text-white min-h-[100px]"
+                  className="bg-zinc-900/50 border-pink-500/30 text-white hover:border-pink-500/50 focus:border-pink-400 transition-colors min-h-[100px]"
                 />
               </div>
 
@@ -299,7 +299,7 @@ ${response.script}
                 )}
 
                 {/* Full Script */}
-                <Card className="bg-zinc-900/50 border-zinc-800">
+                <Card className="bg-pink-900/20 border-pink-500/30">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-white flex items-center gap-2">

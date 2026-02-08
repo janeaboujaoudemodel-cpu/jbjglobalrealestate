@@ -91,7 +91,7 @@ const AILeadQualificationPremium = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Input Section */}
         <div className="space-y-6">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-purple-900/20 border-purple-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-purple-400 mb-4">
                 <UserCheck className="h-5 w-5" />
@@ -108,7 +108,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="John Smith"
                     value={leadInfo.name}
                     onChange={(e) => handleChange("name", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
 
@@ -122,7 +122,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="john@example.com"
                     value={leadInfo.email}
                     onChange={(e) => handleChange("email", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
 
@@ -135,7 +135,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="+971 50 123 4567"
                     value={leadInfo.phone}
                     onChange={(e) => handleChange("phone", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
 
@@ -148,7 +148,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="AED 2-3 Million"
                     value={leadInfo.budget}
                     onChange={(e) => handleChange("budget", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
 
@@ -161,7 +161,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="2BR in Dubai Marina"
                     value={leadInfo.propertyInterest}
                     onChange={(e) => handleChange("propertyInterest", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
 
@@ -174,7 +174,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="Within 3 months"
                     value={leadInfo.timeline}
                     onChange={(e) => handleChange("timeline", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
 
@@ -187,7 +187,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="Website inquiry, referral, social media..."
                     value={leadInfo.source}
                     onChange={(e) => handleChange("source", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
               </div>
@@ -199,7 +199,7 @@ const AILeadQualificationPremium = () => {
                   value={leadInfo.notes}
                   onChange={(e) => handleChange("notes", e.target.value)}
                   rows={3}
-                  className="bg-zinc-800 border-zinc-700 text-white"
+                  className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                 />
               </div>
 
@@ -290,7 +290,7 @@ const AILeadQualificationPremium = () => {
 
                 {/* Recommended Actions */}
                 {response.recommendedActions && (
-                  <Card className="bg-zinc-900/50 border-zinc-800 p-4">
+                  <Card className="bg-purple-900/20 border-purple-500/30 p-4">
                     <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
                       <Target className="h-4 w-4 text-purple-400" />
                       Recommended Actions
@@ -309,7 +309,7 @@ const AILeadQualificationPremium = () => {
                 )}
 
                 {/* Full Analysis */}
-                <Card className="bg-zinc-900/50 border-zinc-800">
+                <Card className="bg-purple-900/20 border-purple-500/30">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-white">Full Analysis</h4>

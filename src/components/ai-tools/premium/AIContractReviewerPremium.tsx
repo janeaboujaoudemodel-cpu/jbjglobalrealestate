@@ -115,7 +115,7 @@ const AIContractReviewerPremium = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Input Section */}
         <div className="space-y-6">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-red-900/20 border-red-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-red-400 mb-4">
                 <Scale className="h-5 w-5" />
@@ -126,10 +126,10 @@ const AIContractReviewerPremium = () => {
               <div className="space-y-2">
                 <Label className="text-zinc-300">Contract Type</Label>
                 <Select value={contractType} onValueChange={setContractType}>
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                  <SelectTrigger className="bg-zinc-900/50 border-red-500/30 text-white hover:border-red-500/50">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                  <SelectContent className="bg-zinc-900 border-red-500/30">
                     {CONTRACT_TYPES.map((type) => (
                       <SelectItem key={type.value} value={type.value} className="text-white">
                         {type.icon} {type.label}
@@ -146,7 +146,7 @@ const AIContractReviewerPremium = () => {
                   placeholder="Paste your contract text here for review..."
                   value={contractText}
                   onChange={(e) => setContractText(e.target.value)}
-                  className="bg-zinc-800 border-zinc-700 text-white min-h-[300px] font-mono text-sm"
+                  className="bg-zinc-900/50 border-red-500/30 text-white hover:border-red-500/50 focus:border-red-400 transition-colors min-h-[300px] font-mono text-sm"
                 />
                 <p className="text-xs text-zinc-500">{contractText.length} characters</p>
               </div>
@@ -213,7 +213,7 @@ const AIContractReviewerPremium = () => {
 
                 {/* Key Terms */}
                 {response.keyTerms && response.keyTerms.length > 0 && (
-                  <Card className="bg-zinc-900/50 border-zinc-800">
+                  <Card className="bg-red-900/20 border-red-500/30">
                     <CardContent className="p-4">
                       <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
                         <CheckCircle className="h-4 w-4 text-emerald-400" />
@@ -256,7 +256,7 @@ const AIContractReviewerPremium = () => {
                 )}
 
                 {/* Full Review */}
-                <Card className="bg-zinc-900/50 border-zinc-800">
+                <Card className="bg-red-900/20 border-red-500/30">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-white flex items-center gap-2">

@@ -152,7 +152,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Input Section */}
         <div className="space-y-6">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-sky-900/20 border-sky-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-sky-400 mb-4">
                 <MapPin className="h-5 w-5" />
@@ -163,10 +163,10 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Select Area *</Label>
                   <Select value={area} onValueChange={setArea}>
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectTrigger className="bg-zinc-900/50 border-sky-500/30 text-white hover:border-sky-500/50">
                       <SelectValue placeholder="Choose an area" />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700 max-h-60">
+                    <SelectContent className="bg-zinc-900 border-sky-500/30 max-h-60">
                       {DUBAI_AREAS.map((a) => (
                         <SelectItem key={a} value={a} className="text-white">
                           {a}
@@ -182,10 +182,10 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Property Type</Label>
                   <Select value={propertyType} onValueChange={setPropertyType}>
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectTrigger className="bg-zinc-900/50 border-sky-500/30 text-white hover:border-sky-500/50">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
+                    <SelectContent className="bg-zinc-900 border-sky-500/30">
                       {PROPERTY_TYPES.map((t) => (
                         <SelectItem key={t.value} value={t.value} className="text-white">
                           {t.label}
@@ -203,7 +203,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                     placeholder="Enter area name..."
                     value={customArea}
                     onChange={(e) => setCustomArea(e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-sky-500/30 text-white hover:border-sky-500/50 focus:border-sky-400 transition-colors"
                   />
                 </div>
               )}
@@ -223,10 +223,10 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                   ))}
                   {compareWith.length < 3 && (
                     <Select onValueChange={addCompareArea}>
-                      <SelectTrigger className="w-auto bg-zinc-800 border-zinc-700 text-zinc-400 text-sm h-7 px-2">
+                      <SelectTrigger className="w-auto bg-zinc-900/50 border-sky-500/30 text-zinc-400 text-sm h-7 px-2">
                         <span>+ Add area</span>
                       </SelectTrigger>
-                      <SelectContent className="bg-zinc-800 border-zinc-700 max-h-40">
+                      <SelectContent className="bg-zinc-900 border-sky-500/30 max-h-40">
                         {DUBAI_AREAS.filter((a) => a !== area && !compareWith.includes(a)).map((a) => (
                           <SelectItem key={a} value={a} className="text-white text-sm">
                             {a}
@@ -243,10 +243,10 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Unit</Label>
                   <Select value={measurementUnit} onValueChange={(v: "sqft" | "sqm" | "both") => setMeasurementUnit(v)}>
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectTrigger className="bg-zinc-900/50 border-sky-500/30 text-white hover:border-sky-500/50">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
+                    <SelectContent className="bg-zinc-900 border-sky-500/30">
                       <SelectItem value="sqft">Square Feet</SelectItem>
                       <SelectItem value="sqm">Square Meters</SelectItem>
                       <SelectItem value="both">Both</SelectItem>
@@ -256,10 +256,10 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Currency</Label>
                   <Select value={currency} onValueChange={(v: "AED" | "USD" | "EUR" | "GBP") => setCurrency(v)}>
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectTrigger className="bg-zinc-900/50 border-sky-500/30 text-white hover:border-sky-500/50">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
+                    <SelectContent className="bg-zinc-900 border-sky-500/30">
                       <SelectItem value="AED">AED (د.إ)</SelectItem>
                       <SelectItem value="USD">USD ($)</SelectItem>
                       <SelectItem value="EUR">EUR (€)</SelectItem>

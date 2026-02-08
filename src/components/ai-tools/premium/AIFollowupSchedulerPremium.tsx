@@ -108,7 +108,7 @@ const AIFollowupSchedulerPremium = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Input Section */}
         <div className="space-y-6">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-cyan-900/20 border-cyan-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-cyan-400 mb-4">
                 <CalendarClock className="h-5 w-5" />
@@ -125,7 +125,7 @@ const AIFollowupSchedulerPremium = () => {
                     placeholder="John Smith"
                     value={formData.leadName}
                     onChange={(e) => handleChange("leadName", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-cyan-500/30 text-white hover:border-cyan-500/50 focus:border-cyan-400 transition-colors"
                   />
                 </div>
 
@@ -138,17 +138,17 @@ const AIFollowupSchedulerPremium = () => {
                     type="date"
                     value={formData.lastInteraction}
                     onChange={(e) => handleChange("lastInteraction", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-cyan-500/30 text-white hover:border-cyan-500/50 focus:border-cyan-400 transition-colors"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Last Interaction Type</Label>
                   <Select value={formData.interactionType} onValueChange={(v) => handleChange("interactionType", v)}>
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectTrigger className="bg-zinc-900/50 border-cyan-500/30 text-white hover:border-cyan-500/50">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
+                    <SelectContent className="bg-zinc-900 border-cyan-500/30">
                       <SelectItem value="call">
                         <span className="flex items-center gap-2">
                           <Phone className="h-4 w-4" /> Phone Call
@@ -174,10 +174,10 @@ const AIFollowupSchedulerPremium = () => {
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Lead Status</Label>
                   <Select value={formData.leadStatus} onValueChange={(v) => handleChange("leadStatus", v)}>
-                    <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                    <SelectTrigger className="bg-zinc-900/50 border-cyan-500/30 text-white hover:border-cyan-500/50">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-800 border-zinc-700">
+                    <SelectContent className="bg-zinc-900 border-cyan-500/30">
                       <SelectItem value="hot">🔥 Hot - Ready to Buy</SelectItem>
                       <SelectItem value="warm">☀️ Warm - Interested</SelectItem>
                       <SelectItem value="lukewarm">🌤️ Lukewarm - Needs Nurturing</SelectItem>
@@ -195,7 +195,7 @@ const AIFollowupSchedulerPremium = () => {
                   value={formData.notes}
                   onChange={(e) => handleChange("notes", e.target.value)}
                   rows={3}
-                  className="bg-zinc-800 border-zinc-700 text-white"
+                  className="bg-zinc-900/50 border-cyan-500/30 text-white hover:border-cyan-500/50 focus:border-cyan-400 transition-colors"
                 />
               </div>
 
@@ -273,7 +273,7 @@ const AIFollowupSchedulerPremium = () => {
 
                 {/* Optimal Timing */}
                 {response.optimalTiming && (
-                  <Card className="bg-zinc-900/50 border-zinc-800 p-4">
+                  <Card className="bg-cyan-900/20 border-cyan-500/30 p-4">
                     <div className="flex items-center gap-2 mb-3">
                       <Clock className="h-5 w-5 text-cyan-400" />
                       <h4 className="font-semibold text-white">Optimal Timing</h4>
@@ -297,7 +297,7 @@ const AIFollowupSchedulerPremium = () => {
 
                 {/* Suggested Messages */}
                 {response.suggestedMessages && (
-                  <Card className="bg-zinc-900/50 border-zinc-800 p-4">
+                  <Card className="bg-cyan-900/20 border-cyan-500/30 p-4">
                     <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
                       <MessageSquare className="h-4 w-4 text-cyan-400" />
                       Suggested Messages
@@ -325,7 +325,7 @@ const AIFollowupSchedulerPremium = () => {
                 )}
 
                 {/* Full Schedule */}
-                <Card className="bg-zinc-900/50 border-zinc-800">
+                <Card className="bg-cyan-900/20 border-cyan-500/30">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-white">Full Schedule & Recommendations</h4>

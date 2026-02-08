@@ -112,7 +112,7 @@ const AIDocumentGeneratorPremium = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Input Section */}
         <div className="space-y-6">
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-lime-900/20 border-lime-500/30">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center gap-2 text-lime-400 mb-4">
                 <FilePlus className="h-5 w-5" />
@@ -142,10 +142,10 @@ const AIDocumentGeneratorPremium = () => {
                   })}
                 </div>
                 <Select value={formData.documentType} onValueChange={(v) => handleChange("documentType", v)}>
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-2">
+                  <SelectTrigger className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 mt-2">
                     <SelectValue placeholder="More document types..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                  <SelectContent className="bg-zinc-900 border-lime-500/30">
                     {DOCUMENT_TYPES.map((type) => (
                       <SelectItem key={type.value} value={type.value} className="text-white">
                         {type.label}
@@ -159,10 +159,10 @@ const AIDocumentGeneratorPremium = () => {
               <div className="space-y-2">
                 <Label className="text-zinc-300">Tone</Label>
                 <Select value={formData.tone} onValueChange={(v) => handleChange("tone", v)}>
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                  <SelectTrigger className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                  <SelectContent className="bg-zinc-900 border-lime-500/30">
                     {TONES.map((tone) => (
                       <SelectItem key={tone.value} value={tone.value} className="text-white">
                         <div>
@@ -182,7 +182,7 @@ const AIDocumentGeneratorPremium = () => {
                     placeholder="Document title..."
                     value={formData.subject}
                     onChange={(e) => handleChange("subject", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors"
                   />
                 </div>
                 <div className="space-y-2">
@@ -191,7 +191,7 @@ const AIDocumentGeneratorPremium = () => {
                     placeholder="John Smith"
                     value={formData.recipientName}
                     onChange={(e) => handleChange("recipientName", e.target.value)}
-                    className="bg-zinc-800 border-zinc-700 text-white"
+                    className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors"
                   />
                 </div>
               </div>
@@ -202,7 +202,7 @@ const AIDocumentGeneratorPremium = () => {
                   placeholder="Property info, client details, key points to include..."
                   value={formData.details}
                   onChange={(e) => handleChange("details", e.target.value)}
-                  className="bg-zinc-800 border-zinc-700 text-white min-h-[120px]"
+                  className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors min-h-[120px]"
                 />
               </div>
 
@@ -259,7 +259,7 @@ const AIDocumentGeneratorPremium = () => {
                 )}
 
                 {/* Main Document */}
-                <Card className="bg-zinc-900/50 border-zinc-800">
+                <Card className="bg-lime-900/20 border-lime-500/30">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
@@ -280,7 +280,7 @@ const AIDocumentGeneratorPremium = () => {
 
                 {/* Alternative Versions */}
                 {response.alternatives && response.alternatives.length > 0 && (
-                  <Card className="bg-zinc-900/50 border-zinc-800">
+                  <Card className="bg-lime-900/20 border-lime-500/30">
                     <CardContent className="p-4">
                       <h4 className="font-semibold text-white mb-3">Alternative Versions</h4>
                       <Tabs defaultValue="0" className="w-full">
