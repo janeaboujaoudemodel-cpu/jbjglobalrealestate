@@ -85,12 +85,17 @@ const ListingAdmin = () => {
   // View state - 'chat', 'projects', or 'editor'
   // UNIFIED: Now using 'data-ops' as the single entry for all sync/extraction views
   const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-ops'>('data-ops');
+  
+  // Controlled sub-tab state for Data Ops tabs - responds to URL params
+  const [dataOpsTab, setDataOpsTab] = useState<string>("reelly");
 
-  // Allow deep-links like /listing-admin?view=data-ops&tab=reelly
+  // Allow deep-links like /listing-admin?view=data-ops&syncTab=approvals
   // Legacy URLs (sync, reelly, data-sources) all redirect to data-ops
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const view = params.get("view");
+    const syncTab = params.get("syncTab");
+    
     // Map legacy views to new unified data-ops view
     const legacyToNew: Record<string, string> = {
       'sync': 'data-ops',
@@ -99,12 +104,18 @@ const ListingAdmin = () => {
     };
     const mappedView = legacyToNew[view || ''] || view;
     const allowed = new Set(["chat", "projects", "editor", "data-ops"]);
+    
     if (mappedView && allowed.has(mappedView) && mappedView !== activeView) {
       setActiveView(mappedView as any);
       // Reset sub-modes when switching views via URL
       setIsEditing(false);
       setIsCreating(false);
       setShowChat(mappedView === "chat");
+    }
+    
+    // Handle syncTab URL param for Data Ops sub-tabs
+    if (syncTab && ['reelly', 'provident', 'approvals', 'external'].includes(syncTab)) {
+      setDataOpsTab(syncTab);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
@@ -603,7 +614,7 @@ const ListingAdmin = () => {
         {/* UNIFIED Data Ops View - All sync/extraction in one tabbed interface */}
         {activeView === 'data-ops' && (
           <div className="container mx-auto px-4 py-6">
-            <Tabs defaultValue="reelly" className="space-y-6">
+            <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
               <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1">
                 <TabsTrigger 
                   value="reelly" 
