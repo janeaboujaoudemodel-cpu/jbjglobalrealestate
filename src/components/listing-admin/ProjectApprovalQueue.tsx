@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,11 +13,12 @@ import { useToast } from "@/hooks/use-toast";
 import { 
   Check, X, Clock, RefreshCw, Building2, MapPin, Calendar, 
   DollarSign, Bed, Ruler, FileText,
-  ChevronLeft, ChevronRight, Merge, Plus
+  ChevronLeft, ChevronRight, Merge, Plus, CheckSquare
 } from "lucide-react";
 import { format } from "date-fns";
 import type { Json } from "@/integrations/supabase/types";
 import { PendingImportCard } from "@/components/listing-admin/PendingImportCard";
+import { ApprovalConfirmDialog } from "@/components/listing-admin/ApprovalConfirmDialog";
 
 interface ImageData {
   url: string;
@@ -73,6 +75,7 @@ const parseJsonArray = <T,>(json: Json | null, defaultVal: T[] = []): T[] => {
 export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueProps) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { user } = useAuth();
   const [imports, setImports] = useState<PendingImport[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -96,6 +99,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   // Source filter: "all" | "provident" | "reelly"
   const sourceFromUrl = searchParams.get("source") as "all" | "provident" | "reelly" | null;
   const [sourceFilter, setSourceFilter] = useState<"all" | "provident" | "reelly">(sourceFromUrl || "all");
+  // Confirmation dialog state
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [confirmDialogMode, setConfirmDialogMode] = useState<"all" | "selected">("all");
+  const [confirmDialogCount, setConfirmDialogCount] = useState(0);
   const { toast } = useToast();
 
   const PAGE_SIZE = 60;
@@ -440,12 +447,13 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       if (docError) console.error("Error inserting documents:", docError);
     }
 
-    // Mark import as approved
+    // Mark import as approved with reviewer tracking
     const { error: approveErr } = await supabase
       .from("pending_project_imports")
       .update({
         status: "approved",
-        reviewed_at: new Date().toISOString()
+        reviewed_at: new Date().toISOString(),
+        reviewed_by: user?.id || null,
       })
       .eq("id", importData.id);
 
@@ -504,25 +512,42 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     }
   };
 
-  const approveAllShown = async () => {
+  // Show confirmation dialog for approving all shown
+  const showApproveAllConfirmation = () => {
     if (isBulkProcessing || imports.length === 0) return;
-    const confirmed = window.confirm(
-      `Approve ALL ${imports.length} projects currently shown in this queue?\n\n` +
-      `This will create ${imports.length} new projects and remove them from the pending queue.`
-    );
-    if (!confirmed) return;
+    setConfirmDialogMode("all");
+    setConfirmDialogCount(imports.length);
+    setConfirmDialogOpen(true);
+  };
 
-    const snapshot = [...imports];
+  // Show confirmation dialog for approving selected
+  const showApproveSelectedConfirmation = () => {
+    if (isBulkProcessing || selectedIds.size === 0) return;
+    setConfirmDialogMode("selected");
+    setConfirmDialogCount(selectedIds.size);
+    setConfirmDialogOpen(true);
+  };
+
+  // Handle confirmed approval (called from dialog)
+  const handleConfirmedApproval = async () => {
+    setConfirmDialogOpen(false);
+    
+    const itemsToApprove = confirmDialogMode === "all" 
+      ? [...imports]
+      : imports.filter(i => selectedIds.has(i.id));
+    
+    if (itemsToApprove.length === 0) return;
+
     setIsBulkProcessing(true);
     setBulkAction("approve");
     setBulkDone(0);
-    setBulkTotal(snapshot.length);
+    setBulkTotal(itemsToApprove.length);
 
     let ok = 0;
     let failed = 0;
 
     try {
-      for (const item of snapshot) {
+      for (const item of itemsToApprove) {
         try {
           await approveImportInDb(item);
           ok++;
@@ -541,6 +566,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     } finally {
       setIsBulkProcessing(false);
       setBulkAction(null);
+      setSelectedIds(new Set());
       await fetchPendingImports();
       onRefresh?.();
     }
@@ -911,13 +937,24 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 </Button>
                 <Button
                   size="sm"
-                  onClick={approveAllShown}
+                  onClick={showApproveAllConfirmation}
                   disabled={isBulkProcessing || isLoading}
                   className="bg-primary text-primary-foreground hover:bg-primary/90"
                 >
                   <Check className="h-4 w-4 mr-2" />
                   Approve All ({imports.length})
                 </Button>
+                {selectedIds.size > 0 && (
+                  <Button
+                    size="sm"
+                    onClick={showApproveSelectedConfirmation}
+                    disabled={isBulkProcessing || isLoading}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                  >
+                    <CheckSquare className="h-4 w-4 mr-2" />
+                    Approve Selected ({selectedIds.size})
+                  </Button>
+                )}
                 {(totalNeedsWorkCount ?? needsWorkCount) > 0 && (
                   <Button
                     size="sm"
@@ -1467,6 +1504,16 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Approval confirmation dialog */}
+      <ApprovalConfirmDialog
+        open={confirmDialogOpen}
+        onOpenChange={setConfirmDialogOpen}
+        count={confirmDialogCount}
+        approverEmail={user?.email || null}
+        onConfirm={handleConfirmedApproval}
+        mode={confirmDialogMode}
+      />
     </>
   );
 }
