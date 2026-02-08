@@ -1,31 +1,32 @@
-import { useState } from "react";
+import { useState, lazy, Suspense, memo } from "react";
 import DeveloperPartnersMarquee from "@/components/DeveloperPartnersMarquee";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 // Footer removed - handled by MainLayout
 import StatsCounter from "@/components/StatsCounter";
-import AIComparisonWidget from "@/components/AIComparisonWidget";
-import MarketReportCTA from "@/components/MarketReportCTA";
-import MortgageCalculator from "@/components/MortgageCalculator";
-import BrokerOnboardingBanner from "@/components/BrokerOnboardingBanner";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import BestIdeaAward from "@/components/BestIdeaAward";
 import SupportTicketBox from "@/components/SupportTicketBox";
 import ExploreServicesCard from "@/components/home/ExploreServicesCard";
-import WhyDubaiCapitalSection from "@/components/home/WhyDubaiCapitalSection";
 import { ToolkitShowcaseCard } from "@/components/home/ToolkitShowcaseCard";
 
-// Master Blueprint Components
+// Master Blueprint Components - Lazy load below-fold heavy sections
 import TrustBar from "@/components/home/TrustBar";
 import FeaturedListings from "@/components/home/FeaturedListings";
 import ServicesGrid from "@/components/home/ServicesGrid";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import AreasWeCover from "@/components/home/AreasWeCover";
-import TestimonialsSection from "@/components/home/TestimonialsSection";
-// CTABand removed - handled by MainLayout's CombinedContactNewsletter
 import HeroSearchBar from "@/components/home/HeroSearchBar";
 
-import JBJPodcastSection from "@/components/home/JBJPodcastSection";
+// Lazy load heavier below-fold sections for performance
+const WhyDubaiCapitalSection = lazy(() => import("@/components/home/WhyDubaiCapitalSection"));
+const TestimonialsSection = lazy(() => import("@/components/home/TestimonialsSection"));
+const AIComparisonWidget = lazy(() => import("@/components/AIComparisonWidget"));
+const MarketReportCTA = lazy(() => import("@/components/MarketReportCTA"));
+const MortgageCalculator = lazy(() => import("@/components/MortgageCalculator"));
+const BrokerOnboardingBanner = lazy(() => import("@/components/BrokerOnboardingBanner"));
+const JBJPodcastSection = lazy(() => import("@/components/home/JBJPodcastSection"));
+
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
 
@@ -39,6 +40,13 @@ import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 import { CONTACT_INFO } from "@/constants/stats";
+
+// Lazy loading fallback component
+const SectionLoader = () => (
+  <div className="py-12 flex items-center justify-center">
+    <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+  </div>
+);
 
 // Animation variants
 const fadeInUp = {
@@ -65,7 +73,11 @@ const Index = () => {
       <SEOHead {...pagesSEO.home} />
       
       {/* Broker Onboarding Banner - Only for brokers */}
-      {isBroker && <BrokerOnboardingBanner />}
+      {isBroker && (
+        <Suspense fallback={<SectionLoader />}>
+          <BrokerOnboardingBanner />
+        </Suspense>
+      )}
       
       {/* HERO SECTION - LUXURY CINEMATIC VIDEO - MUST BE 100vh */}
       <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
@@ -557,7 +569,9 @@ const Index = () => {
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <section className="py-12 md:py-16 bg-black">
         <div className="jj-layer-2">
-          <AIComparisonWidget />
+          <Suspense fallback={<SectionLoader />}>
+            <AIComparisonWidget />
+          </Suspense>
         </div>
       </section>
 
@@ -579,7 +593,9 @@ const Index = () => {
                 Free Market <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Intelligence Book</span>
               </h2>
             </motion.div>
-            <MarketReportCTA />
+            <Suspense fallback={<SectionLoader />}>
+              <MarketReportCTA />
+            </Suspense>
           </div>
         </div>
       </section>
@@ -612,7 +628,9 @@ const Index = () => {
               </p>
             </motion.div>
             <div className="relative z-10">
-              <MortgageCalculator compact />
+              <Suspense fallback={<SectionLoader />}>
+                <MortgageCalculator compact />
+              </Suspense>
               <p className="text-zinc-500 text-xs text-center mt-4">
                 Estimates only. Introductions to independent licensed mortgage partners.
               </p>
@@ -645,12 +663,16 @@ const Index = () => {
       {/* DIVIDER - Before Why Dubai */}
       <SectionDivider />
 
-      <WhyDubaiCapitalSection />
+      <Suspense fallback={<SectionLoader />}>
+        <WhyDubaiCapitalSection />
+      </Suspense>
 
       {/* JBJ PODCAST SECTION - Admin-controlled visibility */}
       <PodcastVisibilityGate>
         <SectionDivider />
-        <JBJPodcastSection />
+        <Suspense fallback={<SectionLoader />}>
+          <JBJPodcastSection />
+        </Suspense>
         <SectionDivider />
       </PodcastVisibilityGate>
 
@@ -676,7 +698,9 @@ const Index = () => {
       <SectionDivider />
 
       {/* TESTIMONIALS - Master Blueprint: Section 7 (3 testimonials) */}
-      <TestimonialsSection />
+      <Suspense fallback={<SectionLoader />}>
+        <TestimonialsSection />
+      </Suspense>
 
       {/* DIVIDER */}
       <SectionDivider />

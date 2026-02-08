@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useFounderVisibility } from '@/contexts/FounderVisibilityContext';
 
 interface SEOHeadProps {
   title: string;
@@ -13,26 +14,45 @@ interface SEOHeadProps {
 const BASE_URL = 'https://jbj.ae';
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.jpg`;
 const BRAND_NAME = 'JBJ Global Real Estate';
-const FOUNDER_NAME = 'Jane Bou Jaoude';
 
-// Core keywords that should appear across all pages for maximum SEO coverage
-const CORE_KEYWORDS = 'JBJ, JBJ Global Real Estate, Jane Bou Jaoude, Dubai real estate, buy property Dubai, sell property Dubai, rent Dubai, UAE property, real estate brokerage Dubai';
+// Core keywords without founder name - founder name added conditionally
+const CORE_KEYWORDS_BASE = 'JBJ, JBJ Global Real Estate, Dubai real estate, buy property Dubai, sell property Dubai, rent Dubai, UAE property, real estate brokerage Dubai';
+const FOUNDER_KEYWORDS = ', Jane bou Jaoude';
 
 /**
  * SEO Head Component - Sets document title and meta tags for each page
- * Optimized for: JBJ, Jane Bou Jaoude, Dubai real estate, buy/sell/rent
+ * Respects founder visibility toggle for all founder-related SEO content
  */
 export const SEOHead = ({
   title,
-  description = 'JBJ Global Real Estate, founded by Founder & CEO Jane Bou Jaoude, offers premium property brokerage in Dubai. Buy, sell, or rent luxury apartments, villas, and off-plan properties across the UAE.',
-  keywords = CORE_KEYWORDS,
+  description,
+  keywords,
   canonicalPath,
   ogImage = DEFAULT_OG_IMAGE,
   ogType = 'website',
   noIndex = false,
 }: SEOHeadProps) => {
+  const { isFounderVisible } = useFounderVisibility();
+  
+  // Build dynamic description based on founder visibility
+  const defaultDescription = isFounderVisible
+    ? 'JBJ Global Real Estate, founded by Jane bou Jaoude, offers premium property brokerage in Dubai. Buy, sell, or rent luxury apartments, villas, and off-plan properties across the UAE.'
+    : 'JBJ Global Real Estate offers premium property brokerage in Dubai. Buy, sell, or rent luxury apartments, villas, and off-plan properties across the UAE.';
+  
+  const finalDescription = description || defaultDescription;
+  
+  // Build keywords with or without founder name
+  const coreKeywords = isFounderVisible 
+    ? CORE_KEYWORDS_BASE + FOUNDER_KEYWORDS 
+    : CORE_KEYWORDS_BASE;
+  
+  const finalKeywords = keywords || coreKeywords;
+  
+  // Build title with or without founder name
   const fullTitle = title === 'Home' 
-    ? `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent | ${FOUNDER_NAME}`
+    ? isFounderVisible
+      ? `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent | Jane bou Jaoude`
+      : `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent`
     : `${title} | ${BRAND_NAME} Dubai`;
 
   useEffect(() => {
@@ -52,12 +72,17 @@ export const SEOHead = ({
     };
 
     // Enhanced keywords with core terms
-    const enhancedKeywords = `${keywords}, ${CORE_KEYWORDS}`;
+    const enhancedKeywords = `${finalKeywords}, ${coreKeywords}`;
+    
+    // Author field - conditionally include founder
+    const authorField = isFounderVisible 
+      ? `Jane bou Jaoude - ${BRAND_NAME}`
+      : BRAND_NAME;
 
     // Basic SEO meta tags
-    setMetaTag('description', description);
+    setMetaTag('description', finalDescription);
     setMetaTag('keywords', enhancedKeywords);
-    setMetaTag('author', `${FOUNDER_NAME} - ${BRAND_NAME}`);
+    setMetaTag('author', authorField);
     
     // Additional SEO tags
     setMetaTag('robots', noIndex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
@@ -69,7 +94,7 @@ export const SEOHead = ({
 
     // Open Graph meta tags
     setMetaTag('og:title', fullTitle, true);
-    setMetaTag('og:description', description, true);
+    setMetaTag('og:description', finalDescription, true);
     setMetaTag('og:image', ogImage, true);
     setMetaTag('og:image:width', '1200', true);
     setMetaTag('og:image:height', '630', true);
@@ -80,7 +105,7 @@ export const SEOHead = ({
     // Twitter meta tags
     setMetaTag('twitter:card', 'summary_large_image');
     setMetaTag('twitter:title', fullTitle);
-    setMetaTag('twitter:description', description);
+    setMetaTag('twitter:description', finalDescription);
     setMetaTag('twitter:image', ogImage);
     setMetaTag('twitter:site', '@jbjglobalrealestate');
 
@@ -99,7 +124,7 @@ export const SEOHead = ({
     return () => {
       document.title = `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent`;
     };
-  }, [fullTitle, description, keywords, canonicalPath, ogImage, ogType, noIndex]);
+  }, [fullTitle, finalDescription, finalKeywords, coreKeywords, isFounderVisible, canonicalPath, ogImage, ogType, noIndex]);
 
   return null; // This component doesn't render anything
 };

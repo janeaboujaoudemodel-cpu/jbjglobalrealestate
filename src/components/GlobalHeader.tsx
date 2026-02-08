@@ -1267,12 +1267,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           {/* DESKTOP HEADER (lg+): Premium Mega Menu Navigation */}
           {!shouldUseMobileHeader && (
             <nav
-              className="flex-1 min-w-0 mx-0.5 lg:mx-1 xl:mx-2 flex justify-center relative"
+              className="flex-1 min-w-0 mx-2 lg:mx-4 xl:mx-6 flex justify-center relative"
               aria-label="Primary"
               onMouseLeave={handleMegaMenuLeave}
             >
               <div
-                className={`min-w-0 max-w-full flex items-center gap-0 lg:gap-0.5 rounded-full px-1.5 lg:px-2 xl:px-3 py-1 transition-all duration-300 ${
+                className={`min-w-0 max-w-full flex items-center justify-evenly gap-1 lg:gap-2 xl:gap-3 2xl:gap-4 rounded-full px-2 lg:px-4 xl:px-6 py-1 transition-all duration-300 ${
                   isFullyTransparent
                     ? 'bg-transparent border-transparent'
                     : 'border-2 border-gold/40'

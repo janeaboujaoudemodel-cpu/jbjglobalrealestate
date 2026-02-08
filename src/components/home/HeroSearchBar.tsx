@@ -634,14 +634,14 @@ const HeroSearchBar = () => {
         </div>
 
         {/* Desktop-only controls */}
-        <div className="hidden sm:flex items-center bg-white/10 backdrop-blur-md border-y border-r border-white/30 overflow-hidden">
+        <div className="hidden sm:flex items-center bg-white/10 backdrop-blur-md border-y border-r border-white/30 overflow-hidden min-h-[48px]">
           {/* Premium Gradient Divider */}
           <div className="h-8 w-px bg-gradient-to-b from-transparent via-white/40 to-transparent" />
 
           {/* Beds Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-1 px-3 py-3 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
+              <button className="flex items-center gap-1 px-3 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
                 {getBedsLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
@@ -675,7 +675,7 @@ const HeroSearchBar = () => {
           {/* Price Range Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-1 px-3 py-3 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
+              <button className="flex items-center gap-1 px-3 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
                 {getPriceLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
@@ -709,7 +709,7 @@ const HeroSearchBar = () => {
           {/* More Filters Button */}
           <Dialog open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
             <DialogTrigger asChild>
-              <button className="flex items-center gap-1 px-3 py-3 text-white font-medium text-sm hover:bg-white/10 transition-colors">
+              <button className="flex items-center gap-1 px-3 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-gold" />
                 <span className="hidden sm:inline">Filters</span>
               </button>
