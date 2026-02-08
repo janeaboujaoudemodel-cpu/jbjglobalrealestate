@@ -514,12 +514,12 @@ const SupportTicketBox = () => {
                                 value={formData.serviceCategory}
                                 onValueChange={(value) => setFormData({ ...formData, serviceCategory: value, otherCategoryDetail: value !== "Other" ? "" : formData.otherCategoryDetail })}
                               >
-                                <SelectTrigger className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg">
+                                <SelectTrigger className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg cursor-pointer">
                                   <SelectValue placeholder="Select the service" />
                                 </SelectTrigger>
-                                <SelectContent className="max-h-60 bg-white border border-zinc-200 shadow-lg">
+                                <SelectContent className="max-h-60">
                                   {SERVICE_CATEGORIES.map((category) => (
-                                    <SelectItem key={category} value={category} className="hover:bg-zinc-100 cursor-pointer">
+                                    <SelectItem key={category} value={category}>
                                       {category}
                                     </SelectItem>
                                   ))}
@@ -584,12 +584,12 @@ const SupportTicketBox = () => {
                                 value={formData.priority}
                                 onValueChange={(value) => setFormData({ ...formData, priority: value })}
                               >
-                                <SelectTrigger className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg">
+                                <SelectTrigger className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg cursor-pointer">
                                   <SelectValue placeholder="Select priority" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-white border border-zinc-200 shadow-lg">
+                                <SelectContent>
                                   {PRIORITY_LEVELS.map((level) => (
-                                    <SelectItem key={level.value} value={level.value} className="hover:bg-zinc-100 cursor-pointer">
+                                    <SelectItem key={level.value} value={level.value}>
                                       <span className={`font-medium ${level.color}`}>{level.label}</span>
                                       <span className="text-zinc-400 text-xs ml-2">- {level.description}</span>
                                     </SelectItem>
