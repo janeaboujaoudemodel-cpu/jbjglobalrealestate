@@ -19,6 +19,9 @@ const OFFICIAL_EMAILS = {
   security: 'SECURITY@JBJ.AE',
 };
 
+// Verified sender domain for outgoing emails
+const VERIFIED_SENDER = 'NOREPLY@JBJGLOBALREALESTATE.COM';
+
 interface TicketRequest {
   fullName: string;
   email: string;
@@ -195,14 +198,21 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
+    // Track email delivery status
+    let supportEmailSent = false;
+    let customerEmailSent = false;
+    let customerEmailError: string | null = null;
+    let customerEmailMessageId: string | null = null;
+
     // Send to support team using verified domain
     try {
       await resend.emails.send({
-        from: "JBJ Support <NOREPLY@JBJGLOBALREALESTATE.COM>",
+        from: `JBJ Support <${VERIFIED_SENDER}>`,
         to: [OFFICIAL_EMAILS.support],
         subject: `[${ticket.ticket_number}] New Support Ticket: ${subject}`,
         html: supportEmailHtml,
       });
+      supportEmailSent = true;
       console.log("Support email sent to team");
     } catch (emailError) {
       console.error("Failed to send support email to team:", emailError);
@@ -300,7 +310,6 @@ const handler = async (req: Request): Promise<Response> => {
           .rating-stars { margin: 15px 0; }
           .rating-stars span { font-size: 18px; color: #C8A766; }
         </style>
-      </head>
       </head>
       <body>
         <div class="container">
@@ -475,25 +484,45 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    // Send confirmation to customer
+    // Send confirmation to customer using VERIFIED SENDER
     try {
-      await resend.emails.send({
-        from: "JBJ Support <onboarding@resend.dev>",
+      const customerEmailResult = await resend.emails.send({
+        from: `JBJ Support <${VERIFIED_SENDER}>`,
         to: [email],
         subject: `Ticket Received: ${ticket.ticket_number} - We're on it!`,
         html: customerEmailHtml,
       });
-      console.log("Customer confirmation email sent");
+      customerEmailSent = true;
+      customerEmailMessageId = customerEmailResult?.data?.id || null;
+      console.log("Customer confirmation email sent:", customerEmailMessageId);
     } catch (emailError) {
       console.error("Failed to send customer email:", emailError);
+      customerEmailError = emailError instanceof Error ? emailError.message.substring(0, 200) : "Unknown error";
       // Continue - don't fail the whole request
+    }
+
+    // Update ticket with email delivery status
+    try {
+      await supabaseClient
+        .from("support_tickets")
+        .update({
+          customer_confirmation_sent_at: customerEmailSent ? new Date().toISOString() : null,
+          customer_confirmation_status: customerEmailSent ? 'sent' : 'failed',
+          customer_confirmation_error: customerEmailError,
+          customer_confirmation_message_id: customerEmailMessageId,
+        })
+        .eq("id", ticket.id);
+    } catch (updateError) {
+      console.error("Failed to update ticket with email status:", updateError);
     }
 
     return new Response(
       JSON.stringify({
         success: true,
         ticketNumber: ticket.ticket_number,
-        message: "Your support ticket has been created successfully"
+        message: "Your support ticket has been created successfully",
+        customerEmailSent,
+        customerEmailError: customerEmailSent ? null : "Confirmation email could not be sent. Please save your ticket number.",
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
