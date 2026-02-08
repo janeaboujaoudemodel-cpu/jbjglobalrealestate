@@ -1,221 +1,163 @@
 
+## What’s actually broken (confirmed from logs)
 
-## Support Ticket Hub Fixes - Implementation Plan
+### A) Ticket Hub shows 0 tickets + “Failed to load tickets”
+Your browser is getting a **403** when loading tickets. The error is:
 
-This plan addresses all the issues you reported with the Support Ticket Hub layout, dropdown styling, ticket synchronization, and adding a shortcut to the account menu.
+- `permission denied for table users`
 
----
+This is happening because our backend access rules (RLS policies) for `support_tickets` and `support_ticket_messages` are written to read the protected system “users” table (`auth.users`) to get the current email. That table is not readable from the app, so the policy itself crashes and **blocks the whole query**.
 
-## Issues Identified
+Result: Ticket Hub can’t read tickets, so you see total = 0 and “Failed to load tickets”.
 
-### 1. Layout Issues
-- **"No tickets found"** and **"Select a ticket to view details"** sections don't have proper layout - the detail panel doesn't fill the available height
-- The two-column layout needs proper `h-full` constraints to make both panels equal height
+### B) “Confirmation email sent” but you never receive it
+Backend logs show the email provider returning:
 
-### 2. Filter Dropdown Issues
-- **Content doesn't fit inside the box** - Status and Priority dropdowns need proper width with padding for arrow
-- **Blue hover state on options** - Native `<select>` elements use browser default blue hover which doesn't match the premium gold theme
-- Need to replace native selects with styled custom dropdowns or add proper CSS overrides
+- `403 validation_error: The JBJGLOBALREALESTATE.COM domain is not verified`
 
-### 3. Tickets Not Synchronized
-- Database has **11 tickets** but they may not be showing due to RLS policies
-- The `support_tickets_secure_select` policy allows owner access via `has_role(auth.uid(), 'owner'::app_role)`
-- Issue may be the user isn't logged in or the query is failing silently - need to add error handling and loading states
+Also, our email code currently treats the Resend response incorrectly (it can return `{ data, error }` without throwing), so the UI can say “sent” even when it failed.
 
-### 4. Missing Shortcut
-- Need to add "Support Ticket Hub" shortcut in the account mega menu under the CRM Dashboard link
-
----
-
-## Implementation Plan
-
-### Phase 1: Fix Layout Structure
-
-**File: `src/pages/SupportTicketHub.tsx`**
-
-1. **Main content area** - Add proper height constraints:
-   - Change the main flex container to use `min-h-[calc(100vh-300px)]` to ensure panels fill available space
-   - Add `h-full` to both the ticket list and detail panel wrappers
-
-2. **"No tickets found" state** - Center content properly:
-   - Keep the existing styling but ensure the container uses `flex items-center justify-center min-h-[400px]`
-
-3. **Detail Panel wrapper** - Match height of ticket list:
-   - Add `self-stretch` to ensure the detail panel fills the full height
-   - The `flex-1` in TicketDetailPanel already handles internal layout
-
-### Phase 2: Fix Dropdown Styling (Premium Gold Theme)
-
-**File: `src/pages/SupportTicketHub.tsx`**
-
-Replace native `<select>` elements with the Radix Select component from `@/components/ui/select`, but with dark-theme overrides:
-
-**Option A (Recommended): Use styled native selects with CSS**
-
-Add custom CSS to `src/index.css` to style native select options:
-```css
-/* Premium dark theme for native select dropdowns */
-select.dark-theme-select option {
-  background-color: #27272a; /* zinc-800 */
-  color: white;
-}
-select.dark-theme-select option:hover,
-select.dark-theme-select option:focus,
-select.dark-theme-select option:checked {
-  background: linear-gradient(135deg, rgba(200,167,102,0.3), rgba(200,167,102,0.15));
-  color: #C8A766; /* gold */
-}
-```
-
-**Option B: Use Radix Select with dark variant classes**
-
-Replace native selects with Radix UI Select components and override their styling with dark-theme classes.
-
-For this plan, I'll use **Option A** (CSS styling for native selects) as it's simpler and avoids potential z-index/portal issues.
-
-**Changes to selects:**
-- Add fixed width `w-[160px]` to ensure arrow fits
-- Add `pr-8` padding-right for the dropdown arrow
-- Add class `dark-theme-select` for CSS targeting
-- Add `appearance-none` and custom arrow styling
-
-### Phase 3: Ensure All Tickets Load (Error Handling)
-
-**File: `src/hooks/useSupportTickets.ts`**
-
-1. Add better error handling and logging
-2. Ensure the query returns all tickets for owners
-
-**File: `src/pages/SupportTicketHub.tsx`**
-
-1. Add error state display when query fails
-2. Show loading count to verify data is being fetched
-3. Add console logging for debugging
-
-The RLS policies already allow Owner access via `has_role(auth.uid(), 'owner'::app_role)`, so tickets should load if the user is properly authenticated as Owner.
-
-### Phase 4: Add Support Ticket Hub Shortcut to Account Menu
-
-**File: `src/components/header/MegaMenuAccount.tsx`**
-
-Add a "Support Ticket Hub" link in the Owner Shortcuts section, after the CRM Dashboard link:
-
-```tsx
-{isOwner && (
-  <Link 
-    to="/customer-happiness/tickets" 
-    onClick={onClose} 
-    className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gold/15 hover:to-gold/5 group"
-  >
-    <div className="w-8 h-8 rounded-lg bg-transparent border-2 border-gold/30 flex items-center justify-center group-hover:border-gold group-hover:bg-gold/10 transition-colors">
-      <Ticket className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
-    </div>
-    <span className="text-black font-medium text-xs group-hover:text-gold transition-colors truncate">
-      Support Ticket Hub
-    </span>
-  </Link>
-)}
-```
-
-Place this link after the CRM Dashboard link (line ~324).
+### C) “Create ticket” feels slow
+Current flow can be slow because:
+- Attachments upload sequentially (one by one)
+- The UI adds a hard-coded delay (`500ms`)
+- The backend sends 2 emails sequentially (support team + customer), which adds network time
+- There is retry logic that adds 1s waits if it thinks there was an error
 
 ---
 
-## Technical Details
+## Changes I will implement (in order)
 
-### Files to Modify
+## 1) Fix Ticket Hub loading (backend access rules)
+Goal: Ticket Hub must load tickets reliably and show all previously submitted tickets.
 
-| File | Changes |
-|------|---------|
-| `src/pages/SupportTicketHub.tsx` | Fix layout heights, improve select styling with proper widths and custom arrow, add error state |
-| `src/index.css` | Add CSS for premium gold hover states on native select options |
-| `src/components/header/MegaMenuAccount.tsx` | Add Support Ticket Hub shortcut in Owner Shortcuts section |
-| `src/hooks/useSupportTickets.ts` | Add error logging for debugging |
+### 1.1 Update the backend access rules so they never query the protected “users” table
+We will rewrite the affected policies to use the signed-in user’s email directly from the session token via:
+- `auth.jwt() ->> 'email'`
 
-### Layout Fix Details
+This removes the forbidden `SELECT ... FROM auth.users` calls.
 
-**Current layout issue:**
-```tsx
-<div className="flex gap-6">
-  {/* Ticket List - flex-1 */}
-  <div className="flex-1 min-w-0">...</div>
-  
-  {/* Detail Panel - fixed width but no height constraint */}
-  <div className="w-[500px] flex-shrink-0">
-    <TicketDetailPanel />
-  </div>
-</div>
-```
+### 1.2 Policies to update (minimum)
+- `public.support_tickets`
+  - `support_tickets_secure_select`
+  - `Users can view own tickets`
+- `public.support_ticket_messages`
+  - `Users can read messages for their tickets`
+  - `Users can reply to their tickets`
 
-**Fixed layout:**
-```tsx
-<div className="flex gap-6 min-h-[500px]">
-  {/* Ticket List - flex-1 with min-height */}
-  <div className="flex-1 min-w-0 flex flex-col">
-    <div className="bg-gradient-to-b from-zinc-900/80 to-zinc-950/80 rounded-xl border border-gold/20 overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.05)] flex-1 flex flex-col">
-      {/* Content */}
-    </div>
-  </div>
-  
-  {/* Detail Panel - fixed width with self-stretch */}
-  <div className="w-[500px] flex-shrink-0 flex">
-    <TicketDetailPanel />
-  </div>
-</div>
-```
+### 1.3 Also fix the same issue in other tables (to prevent similar breakages elsewhere)
+There are other policies in your backend doing the same `auth.users` lookup (example: `best_idea_submissions`, `broker_messages`). I will update those too so this problem doesn’t reappear in other areas.
 
-### Dropdown Styling Details
-
-**Current select styling (causes blue hover):**
-```tsx
-<select className="h-10 px-3 rounded-lg bg-zinc-800 border border-gold/30 text-white ...">
-  <option value="all">All Status</option>
-</select>
-```
-
-**Fixed styling with premium gold hover:**
-```tsx
-<select 
-  className="h-10 pl-3 pr-8 min-w-[160px] rounded-lg bg-zinc-800 border border-gold/30 text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold/50 [&>option]:bg-zinc-800 [&>option]:text-white [&>option:checked]:bg-gold/30 [&>option:checked]:text-gold"
-  style={{
-    backgroundImage: `url("data:image/svg+xml,...")`, // Gold chevron
-    backgroundPosition: 'right 8px center',
-    backgroundRepeat: 'no-repeat'
-  }}
->
-  <option value="all">All Status</option>
-</select>
-```
-
-### Icon Import for MegaMenuAccount
-
-Add `Ticket` icon import:
-```tsx
-import { User, Heart, Sparkles, Briefcase, Users, FolderOpen, Monitor, Settings, LogOut, ChevronRight, LayoutDashboard, Ticket } from 'lucide-react';
-```
+### 1.4 What you’ll see after this fix
+- Ticket Hub loads instantly (no more “Failed to load tickets”)
+- Total tickets reflects the real number in the database
+- Clicking a ticket loads the detail panel without permission errors
 
 ---
 
-## Testing Checklist
+## 2) Fix confirmation email delivery (and stop “fake success”)
+Goal: If email fails, we show the truth; if it succeeds, you actually receive it.
 
-1. **Layout verification:**
-   - Both "No tickets found" and "Select a ticket" states are properly centered
-   - Detail panel matches height of ticket list
-   - Responsive on different viewport sizes
+### 2.1 Fix Resend response handling in `submit-support-ticket`
+Update email sending to correctly handle Resend’s return shape:
+- If `{ error }` exists → treat as failed (do not mark “sent”)
+- Only mark `customerEmailSent = true` when `data?.id` is present and `error` is null
 
-2. **Dropdown styling:**
-   - Status and Priority dropdowns show gold theme on hover
-   - Arrow fits inside the box
-   - Text is readable when dropdown is open
-   - No blue browser default hover states
+### 2.2 Log and store accurate delivery status
+Ensure the ticket row is updated with:
+- `customer_confirmation_status = 'sent' | 'failed'`
+- `customer_confirmation_error` (short, readable)
+- `customer_confirmation_message_id` (only when successful)
 
-3. **Tickets loading:**
-   - All 11 tickets from database appear in the table
-   - Error states display properly if query fails
-   - Loading skeletons show during fetch
+### 2.3 Required external fix: verify the sender domain in Resend
+Right now Resend is refusing to send from `@jbjglobalrealestate.com` because it is **not verified in the Resend account tied to the current RESEND_API_KEY**.
 
-4. **Shortcut in account menu:**
-   - "Support Ticket Hub" appears under CRM Dashboard in the Owner Shortcuts section
-   - Link navigates to `/customer-happiness/tickets`
-   - Only visible for Owner users
+In the implementation step, I will:
+- Keep the corporate sender as requested
+- Make the UI show a clear warning if the domain is not verified
+- Provide exact instructions in-app for what must be verified (DNS records) and confirm the RESEND_API_KEY belongs to the correct Resend account
 
+### 2.4 Optional temporary fallback (you choose during implementation)
+If you want emails to start arriving immediately while domain verification is being completed, I can add a temporary fallback sender option (non-corporate sender) when Resend returns “domain not verified”.
+- Default: OFF (to respect corporate sender requirement)
+- Can be enabled temporarily if you approve
+
+---
+
+## 3) Make ticket creation faster (frontend + backend)
+Goal: user submits ticket and gets a ticket number quickly, without long waits.
+
+### 3.1 Frontend: remove artificial waits + smarter retry
+In `SupportTicketBox.tsx`:
+- Remove the forced `500ms` delay after submission
+- Keep retry logic only for true network/server failures (not for email validation/domain errors)
+- Update the success UI to reflect:
+  - Ticket created (always)
+  - Email confirmation: sent / failed (based on real backend response)
+
+### 3.2 Backend: send emails in parallel (reduces total time)
+In `submit-support-ticket`:
+- Send support-team email and customer confirmation email using `Promise.allSettled(...)` so they run concurrently
+- This reduces the “waiting” time for the request to finish
+
+### 3.3 Attachments performance (if you want it)
+Attachments currently upload sequentially. I can optimize by:
+- Uploading with limited concurrency (e.g., 2 at a time)
+- Keeping your per-file progress UI
+This significantly improves speed when users attach multiple files.
+
+---
+
+## 4) Fix the filter dropdown UI (black text + premium like header)
+Goal: “All Status / All Priority” should be premium and readable, matching header dropdown style.
+
+### 4.1 Make filter triggers premium-light with black text
+In `SupportTicketHub.tsx`:
+- Stop overriding SelectTrigger with dark styles
+- Use the existing global Select component default styling (already premium champagne gradient + black text + gold chevron)
+
+### 4.2 Ensure arrow + text fit perfectly
+- Increase trigger width slightly (e.g., `w-[180px]`)
+- Add truncation so long labels don’t collide with the chevron
+
+### 4.3 Remove any remaining blue highlight
+- Ensure SelectItem styling uses `data-[highlighted]` and `data-[state=checked]` (your Select component already does this globally)
+- Remove any conflicting local classes in Ticket Hub that override the global premium behavior
+
+---
+
+## Files that will be changed
+
+### Backend (email + access rules)
+- `supabase/functions/submit-support-ticket/index.ts` (Resend error handling + parallel sends + accurate status)
+
+### Database migration (access rules)
+- Migration SQL to update RLS policies for:
+  - `support_tickets`
+  - `support_ticket_messages`
+  - plus other tables currently referencing `auth.users` (e.g., `best_idea_submissions`, `broker_messages`) to prevent future “permission denied for table users”.
+
+### Frontend (speed + truthful UI + dropdown styling)
+- `src/components/SupportTicketBox.tsx` (remove delay, better retries, show true email status)
+- `src/pages/SupportTicketHub.tsx` (filter SelectTrigger text black / premium, sizing, remove conflicting overrides)
+- (Optional) `src/hooks/useSupportTickets.ts` (select fewer columns for list view to speed up loading)
+
+---
+
+## How we will verify it’s fully fixed (end-to-end)
+1) Open Ticket Hub `/customer-happiness/tickets`
+   - Must load tickets (no error)
+   - Total tickets must be > 0 (matching the existing submissions)
+
+2) Create a new ticket
+   - Must feel faster
+   - Ticket must appear in the hub after refresh (or immediately if we add auto-refresh later)
+
+3) Email confirmation
+   - If domain is still unverified: UI must show “email failed” with the real reason (not “sent”)
+   - After domain is verified (or correct key is provided): email must arrive in inbox (and we’ll check spam/promotions too)
+
+---
+
+## Key reason you are not receiving emails (in one line)
+Resend is refusing to send because **the sender domain `JBJGLOBALREALESTATE.COM` is not verified for the RESEND_API_KEY currently configured**, and our code is incorrectly treating that response as success. We will fix both.
