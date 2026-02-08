@@ -1,72 +1,149 @@
 
-# Add Customer Happiness Center Shortcut to Account Menu
+# Account Menu Dropdown UI Improvements
 
 ## Summary
 
-Add the **Customer Happiness Center** shortcut to the Owner Shortcuts section in the account mega menu, positioned after the Admin Panel and near the CRM Dashboard link.
+Make 4 improvements to the account dropdown menu (MegaMenuAccount.tsx):
+1. Add gold border around the JB profile avatar circle
+2. Display family name alongside the first name
+3. Improve spacing between "Select your mode", mode switcher, and "Edit Profile" 
+4. Extend the "AI Tools" header divider to span full width across both columns
 
 ---
 
-## Current State
+## Current Issues
 
-The `MegaMenuAccount.tsx` already has these shortcuts in the "Owner Shortcuts" section (right column):
-
-| Position | Link | Path |
-|----------|------|------|
-| 1 | Owner Dashboard | `/owner` |
-| 2 | Admin Panel | `/admin` |
-| 3 | My Assistant | `/founder-assistant` |
-| 4 | Listing Admin | `/listing-admin` |
-| 5 | CRM Dashboard | `/crm` |
+| Issue | Location | Problem |
+|-------|----------|---------|
+| Avatar border | Line 162-167 | Border is `border-zinc-300` (grey), not gold |
+| Family name missing | Line 170-172 | Only shows `accountDisplayName`, no separate family name display |
+| Cramped spacing | Lines 196-216 | "Select your mode" label, ModeSwitcher, and "Edit Profile" are too close together |
+| AI Tools divider | Left column only | The divider under left column doesn't extend across to the right column |
 
 ---
 
 ## Implementation Plan
 
-### Add Customer Happiness Center Shortcut
+### 1. Gold Border on Avatar
 
-**File: `src/components/header/MegaMenuAccount.tsx`**
+**File: `src/components/header/MegaMenuAccount.tsx`** (Lines 162-167)
 
-Add a new shortcut link for Customer Happiness Center right after Admin Panel (before the `adminLinks.map`):
+Change avatar border from grey to gold:
 
 ```tsx
-{/* Customer Happiness Center - Ticket Support Hub */}
-{isOwner && (
-  <Link 
-    to="/customer-happiness" 
-    onClick={onClose} 
-    className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 bg-gradient-to-r from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 hover:border-emerald-500/60 group"
-  >
-    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border-2 border-emerald-500/40 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
-      <HeadphonesIcon className="w-4 h-4 text-emerald-600" />
-    </div>
-    <div className="flex-1 min-w-0">
-      <span className="text-black font-semibold text-xs group-hover:text-emerald-600 transition-colors block">
-        Customer Happiness
-      </span>
-      <span className="text-black/50 text-[10px]">Ticket Support Hub</span>
-    </div>
-    <ChevronRight className="w-3.5 h-3.5 text-emerald-500" />
-  </Link>
-)}
+// BEFORE
+<Avatar className="h-16 w-16 border-2 border-zinc-300 bg-transparent">
+  ...
+  <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-zinc-300 ...">
+
+// AFTER
+<Avatar className="h-16 w-16 border-2 border-gold bg-transparent">
+  ...
+  <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold ...">
 ```
 
-### Import Required Icon
+### 2. Display Family Name
 
-Add `Headphones` (or `HeartHandshake`) to the Lucide imports at the top of the file.
+Update the name display to show first name + family name from user metadata:
 
----
+**File: `src/components/header/MegaMenuAccount.tsx`** (Update useMemo logic and display)
 
-## New Order in Owner Shortcuts
+Add logic to extract first/last name:
+```tsx
+const firstName = useMemo(() => {
+  const fn = userMeta.first_name as string | null;
+  if (fn) return fn;
+  // Fallback: first word of full_name
+  const fullName = String(accountDisplayName);
+  return fullName.split(' ')[0] || fullName;
+}, [userMeta.first_name, accountDisplayName]);
 
-| Position | Link | Color Theme |
-|----------|------|-------------|
-| 1 | Owner Dashboard | Gold (primary) |
-| 2 | Admin Panel | Purple |
-| 3 | **Customer Happiness** | **Emerald (new)** |
-| 4 | My Assistant | Gold |
-| 5 | Listing Admin | Gold |
-| 6 | CRM Dashboard | Gold |
+const lastName = useMemo(() => {
+  const ln = userMeta.last_name as string | null;
+  if (ln) return ln;
+  // Fallback: rest of full_name
+  const fullName = String(accountDisplayName);
+  const parts = fullName.split(' ');
+  return parts.slice(1).join(' ') || '';
+}, [userMeta.last_name, accountDisplayName]);
+```
+
+Update display (Line 170-172):
+```tsx
+// Show "First Last" format
+<p className="text-black font-bold text-lg truncate" style={{ fontFamily: 'Poppins, sans-serif' }}>
+  {firstName} {lastName}
+</p>
+```
+
+### 3. Improve Spacing in Right Section
+
+**File: `src/components/header/MegaMenuAccount.tsx`** (Lines 195-216)
+
+Add more vertical spacing between elements:
+
+```tsx
+<div className="flex flex-col items-end gap-2 shrink-0">
+  {/* "Select your mode" label */}
+  <p className="text-[10px] text-gold font-semibold uppercase tracking-wider">
+    Select your mode
+  </p>
+  
+  {/* Mode Switcher */}
+  <div onClick={(e) => e.stopPropagation()} ...>
+    <ModeSwitcher variant="header" />
+  </div>
+  
+  {/* Spacer + Edit Profile - more separation */}
+  <Link 
+    to="/profile" 
+    onClick={onClose} 
+    className="flex items-center gap-1.5 text-gold text-sm font-semibold hover:underline transition-colors mt-4"
+  >
+    Edit Profile
+    <ChevronRight className="w-3.5 h-3.5" />
+  </Link>
+</div>
+```
+
+Changes:
+- Increase `gap-1` → `gap-2` on the container
+- Remove `mb-0.5` from the label
+- Increase `mt-3` → `mt-4` on the Edit Profile link
+
+### 4. Full-Width Divider Under AI Tools
+
+Currently, the divider at line 252 (`border-t border-gold/30`) only spans the left column. To create a full-width divider that goes across both columns (similar to how other mega menus do it), we need to restructure slightly:
+
+**Option A: Add a full-width divider above "Your Account" section header**
+
+Move the column headers above the grid and add a shared divider:
+
+```tsx
+{/* Section Headers Row - Full Width */}
+<div className="grid grid-cols-2 gap-6 mb-2">
+  <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5">
+    Your Account
+  </p>
+  {(isOwner || hasCRMAccess || hasListingAdminAccess) && (
+    <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5">
+      Owner Shortcuts
+    </p>
+  )}
+</div>
+
+{/* Full-width divider under headers */}
+<div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent mb-4" />
+
+{/* Two-Column Content Grid */}
+<div className="grid grid-cols-2 gap-6">
+  ...
+</div>
+```
+
+**Option B (Simpler): Add matching dividers in both columns**
+
+Add an identical divider at the same position in the right column to create visual continuity.
 
 ---
 
@@ -74,14 +151,37 @@ Add `Headphones` (or `HeartHandshake`) to the Lucide imports at the top of the f
 
 | File | Changes |
 |------|---------|
-| `src/components/header/MegaMenuAccount.tsx` | Add `Headphones` import, add Customer Happiness shortcut link |
+| `src/components/header/MegaMenuAccount.tsx` | All 4 changes listed above |
+
+---
+
+## Visual Before/After
+
+```
+BEFORE:                              AFTER:
+┌─────────────────────────┐          ┌─────────────────────────┐
+│ [JB] Jane bou Jaoude    │          │ [JB] Jane bou Jaoude    │
+│ grey ← Investor+Broker  │          │ GOLD← Investor+Broker   │
+│ border  pts             │          │ border  pts             │
+│         Select your mode│          │                         │
+│         [I | B | I+B]   │          │         Select your mode│
+│         Edit Profile    │ cramped  │         [I | B | I+B]   │
+│                         │          │                         │ spaced
+│                         │          │         Edit Profile    │
+├─────────────────────────┤          ├─────────────────────────┤
+│ Your Account | Shortcuts│          │ Your Account | Shortcuts│
+│ ─────────── |           │ half     │ ─────────────────────── │ full
+│ Links...    | Links...  │          │ Links...    | Links...  │
+└─────────────────────────┘          └─────────────────────────┘
+```
 
 ---
 
 ## Verification Steps
 
 After implementation:
-1. Click on the account icon in the header
-2. Verify "Customer Happiness" appears in the Owner Shortcuts section
-3. Click the link and verify it navigates to `/customer-happiness`
-4. Verify the emerald color theme looks good alongside the purple Admin Panel
+1. Click on account icon in header
+2. Verify avatar has gold border (both the Avatar and AvatarFallback)
+3. Verify first name + family name are displayed correctly
+4. Verify good spacing between "Select your mode", mode switcher, and "Edit Profile"
+5. Verify the divider extends full width across both columns
