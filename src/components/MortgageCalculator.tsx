@@ -158,13 +158,13 @@ const MortgageCalculator = ({
               </div>
               <p className="text-black/60 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Total Interest</p>
               <p className="text-gold font-bold text-lg sm:text-xl" style={{ fontFamily: "Poppins, sans-serif" }}>
-                {calculations.interestPercentOfLoan.toFixed(0)}% of loan
-              </p>
-              <p className="text-black font-semibold text-sm sm:text-base mt-1">
                 {formatCurrency(calculations.totalInterest)}
               </p>
-              <p className="text-black/50 text-[9px] sm:text-[10px] mt-0.5">
-                @ {interestRate}% | {loanTermYears} yrs
+              <p className="text-black/70 text-xs sm:text-sm mt-1 font-medium">
+                {calculations.interestPercentOfLoan.toFixed(0)}% of loan over {loanTermYears} yrs
+              </p>
+              <p className="text-black/50 text-[9px] sm:text-[10px] mt-1 bg-black/5 rounded px-2 py-0.5 inline-block">
+                Annual Rate: {interestRate}%
               </p>
             </div>
           </TooltipProvider>
