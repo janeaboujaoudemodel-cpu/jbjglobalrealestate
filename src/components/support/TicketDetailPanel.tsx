@@ -357,7 +357,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
             <h3 className="text-sm font-semibold text-gold uppercase tracking-wide mb-3">
               Issue Description
             </h3>
-            <div className="bg-zinc-800/30 rounded-lg p-4 text-white text-sm whitespace-pre-wrap border border-gold/10">
+            <div className="bg-zinc-800/30 rounded-lg p-4 text-white text-sm whitespace-pre-wrap break-words overflow-hidden max-w-full border border-gold/10">
               {ticket.description}
             </div>
           </div>

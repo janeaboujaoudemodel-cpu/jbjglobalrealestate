@@ -247,7 +247,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
             <button
               key={index}
               onClick={() => handleQuickPrompt(prompt.prompt)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-zinc-800/80 hover:bg-gold/20 text-white hover:text-gold border border-zinc-700 hover:border-gold/50 transition-all"
             >
               <prompt.icon className="w-3 h-3" />
               {prompt.label}

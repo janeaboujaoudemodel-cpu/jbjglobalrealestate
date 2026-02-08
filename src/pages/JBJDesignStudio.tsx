@@ -144,6 +144,13 @@ const TEMPLATES = [
   { id: 'book-investor-guide', category: 'books', name: 'Investor Guide', size: '2480x3508', aspect: 'A4' },
   { id: 'book-company-profile', category: 'books', name: 'Company Profile Book', size: '2480x3508', aspect: 'A4' },
   { id: 'book-area-guide', category: 'books', name: 'Area Guide', size: '2480x3508', aspect: 'A4' },
+  // Documents (CV, Cover Letter, LinkedIn)
+  { id: 'cv-professional', category: 'brochure', name: 'Professional CV', size: '2480x3508', aspect: 'A4' },
+  { id: 'cv-modern', category: 'brochure', name: 'Modern Resume', size: '2480x3508', aspect: 'A4' },
+  { id: 'cv-creative', category: 'brochure', name: 'Creative Resume', size: '2480x3508', aspect: 'A4' },
+  { id: 'cover-letter-standard', category: 'brochure', name: 'Cover Letter', size: '2480x3508', aspect: 'A4' },
+  { id: 'cover-letter-modern', category: 'brochure', name: 'Modern Cover Letter', size: '2480x3508', aspect: 'A4' },
+  { id: 'li-cover-personal', category: 'linkedin', name: 'Personal Cover Photo', size: '1584x396', aspect: '4:1' },
 ];
 
 interface SelectedPalette {
