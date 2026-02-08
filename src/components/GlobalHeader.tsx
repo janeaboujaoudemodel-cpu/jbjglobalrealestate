@@ -450,7 +450,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/toolkit/pdf-from-photos", label: "Photo to PDF", icon: FileText },
     { href: "/toolkit/image-resize", label: "Image Resizer", icon: Building2 },
     { href: "/toolkit/captions-translate", label: "Captions & Translate", icon: Building2 },
-    { href: "/toolkit/background-ai", label: "AI Background", icon: Sparkles },
+    { href: "/toolkit/background-ai", label: "Background Remover", icon: Sparkles },
     { href: "/toolkit/beauty-filters", label: "Beauty Filters", icon: Building2 },
   ];
 

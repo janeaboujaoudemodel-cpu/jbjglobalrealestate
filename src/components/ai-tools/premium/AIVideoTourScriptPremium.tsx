@@ -139,7 +139,7 @@ ${response.script}
         accentColor="pink"
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="space-y-8">
         {/* Input Section */}
         <div className="space-y-6">
           <Card className="bg-pink-900/20 border-pink-500/30">
@@ -339,7 +339,7 @@ ${response.script}
                 key="placeholder"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center h-[400px] text-center"
+                className="flex flex-col items-center justify-center py-12 text-center"
               >
                 <div className="p-6 rounded-full bg-pink-500/10 mb-4">
                   <Video className="h-12 w-12 text-pink-400/50" />
