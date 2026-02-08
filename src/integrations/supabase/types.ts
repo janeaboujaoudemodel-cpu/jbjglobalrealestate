@@ -4310,6 +4310,63 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_reviews: {
+        Row: {
+          admin_notes: string | null
+          created_at: string | null
+          email: string
+          full_name: string
+          id: string
+          loyalty_points_awarded: number | null
+          published_at: string | null
+          rating: number
+          review_text: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          service_type: string
+          status: string
+          updated_at: string | null
+          user_id: string | null
+          would_recommend: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string | null
+          email: string
+          full_name: string
+          id?: string
+          loyalty_points_awarded?: number | null
+          published_at?: string | null
+          rating: number
+          review_text: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          service_type: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+          would_recommend: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          loyalty_points_awarded?: number | null
+          published_at?: string | null
+          rating?: number
+          review_text?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          service_type?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+          would_recommend?: string
+        }
+        Relationships: []
+      }
       data_access_rules: {
         Row: {
           access_level: string

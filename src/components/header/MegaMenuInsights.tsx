@@ -57,6 +57,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Mortgage Advisory', href: '/partners/mortgage', icon: Calculator },
     { label: 'Valuation', href: '/sell/valuation', icon: BarChart3 },
     { label: 'Sell Your Property', href: '/seller-listing', icon: ClipboardCheck },
+    { label: 'Customer Happiness', href: '/customer-happiness', icon: Users },
   ];
 
   // Column 5: Business Suites (AI Tool Suites)

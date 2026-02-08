@@ -337,10 +337,10 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           <ChevronRight className="w-3.5 h-3.5 text-purple-500" />
                         </Link>
                       )}
-                      {/* Customer Happiness Center - Ticket Support Hub */}
+                      {/* Ticket Support Hub - Direct Admin Access */}
                       {isOwner && (
                         <Link 
-                          to="/customer-happiness" 
+                          to="/admin?tab=customer-happiness" 
                           onClick={onClose} 
                           className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 bg-gradient-to-r from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 hover:border-emerald-500/60 group"
                         >
@@ -349,9 +349,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           </div>
                           <div className="flex-1 min-w-0">
                             <span className="text-black font-semibold text-xs group-hover:text-emerald-600 transition-colors block">
-                              Customer Happiness
+                              Ticket Support Hub
                             </span>
-                            <span className="text-black/50 text-[10px]">Ticket Support Hub</span>
+                            <span className="text-black/50 text-[10px]">Manage customer tickets</span>
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 text-emerald-500" />
                         </Link>
