@@ -329,9 +329,8 @@ const SupportTicketHub = () => {
               </Button>
               <Button
                 size="sm"
-                variant="ghost"
                 onClick={() => setSelectedTicketIds(new Set())}
-                className="text-gold hover:bg-gold/10"
+                className="bg-red-600 hover:bg-red-700 text-white"
               >
                 Clear Selection
               </Button>

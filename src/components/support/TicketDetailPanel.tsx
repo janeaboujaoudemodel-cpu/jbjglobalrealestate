@@ -284,7 +284,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className="bg-zinc-800 border border-gold/30 text-white hover:bg-gold/20 hover:border-gold"
+          className="bg-gold/20 border-2 border-gold text-gold hover:bg-gold hover:text-black transition-all duration-200"
         >
           <X className="w-5 h-5" />
         </Button>
