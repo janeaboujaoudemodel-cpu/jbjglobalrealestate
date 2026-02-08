@@ -2,7 +2,6 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Mic,
-  MicOff,
   FileText,
   Upload,
   Plus,
@@ -29,7 +28,8 @@ import {
   Brain,
   Target,
   MessageSquare,
-  Save
+  Save,
+  Square
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -507,7 +507,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
               isRecording ? 'bg-red-500 animate-pulse' : 'bg-gold/10'
             }`}>
               {isRecording ? (
-                <MicOff className="w-6 h-6 text-white" />
+                <Square className="w-6 h-6 text-white fill-white" />
               ) : (
                 <Mic className="w-6 h-6 text-gold" />
               )}

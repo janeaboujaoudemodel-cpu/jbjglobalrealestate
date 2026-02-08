@@ -7,7 +7,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Send, Mic, MicOff, X, MessageSquare, 
+  Send, X, MessageSquare, 
   Phone, Video, MoreVertical, Paperclip,
   Smile, ChevronDown, CheckCheck
 } from 'lucide-react';
@@ -20,6 +20,7 @@ import { TeamMember } from "@/config/team-members";
 import { generatePersonaTrainingPrompt } from "@/config/ai-role-specific-training";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 
 interface Message {
   id: string;
@@ -46,7 +47,6 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -232,16 +232,9 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
     }
   };
 
-  const toggleRecording = () => {
-    if (isRecording) {
-      setIsRecording(false);
-      toast.info('Voice note recording stopped');
-      // In production, this would process the recording
-    } else {
-      setIsRecording(true);
-      toast.info('Recording voice note...');
-      // In production, this would start recording
-    }
+  // Handle voice transcript from VoiceInputButton
+  const handleVoiceTranscript = (text: string) => {
+    setInputValue(prev => prev ? `${prev} ${text}` : text);
   };
 
   const formatTime = (date: Date) => {
@@ -385,14 +378,13 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
             </Button>
           </div>
           
-          <Button
+          <VoiceInputButton
+            onTranscript={handleVoiceTranscript}
+            disabled={isLoading}
             variant="ghost"
             size="icon"
-            onClick={toggleRecording}
-            className={`shrink-0 ${isRecording ? 'text-red-500 animate-pulse' : 'text-zinc-400 hover:text-white'}`}
-          >
-            {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-          </Button>
+            className="shrink-0 text-zinc-400 hover:text-white"
+          />
           
           <Button
             onClick={sendMessage}

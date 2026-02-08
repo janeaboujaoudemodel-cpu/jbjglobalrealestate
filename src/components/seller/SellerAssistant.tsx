@@ -4,12 +4,13 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Sparkles, Send, Loader2, X, MessageCircle, 
-  Calculator, FileText, HelpCircle, Lightbulb, Mic, MicOff
+  Calculator, FileText, HelpCircle, Lightbulb
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { CONTACT_INFO } from "@/constants/stats";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 
 interface Message {
   role: "user" | "assistant";
@@ -69,7 +70,6 @@ const SellerAssistant = ({ formData, currentStep, onClose }: SellerAssistantProp
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isListening, setIsListening] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -157,94 +157,9 @@ Help the user complete their listing form and answer questions about the selling
     }
   };
 
-  // Voice input using MediaRecorder + backend STT (replaces Web Speech API)
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
-  const streamRef = useRef<MediaStream | null>(null);
-
-  const toggleVoiceInput = async () => {
-    if (isListening) {
-      // Stop recording
-      if (mediaRecorderRef.current) {
-        mediaRecorderRef.current.stop();
-      }
-      setIsListening(false);
-      return;
-    }
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-        } 
-      });
-      
-      streamRef.current = stream;
-      
-      const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
-      const mediaRecorder = new MediaRecorder(stream, { mimeType });
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
-
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = async () => {
-        setIsListening(false);
-        
-        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
-        
-        // Convert to base64
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          const base64Audio = (reader.result as string).split(',')[1];
-          
-          try {
-            toast.info('Processing voice...', { duration: 2000 });
-            
-            const { data, error } = await supabase.functions.invoke('voice-to-text', {
-              body: { audio: base64Audio, language: 'en' },
-            });
-            
-            if (error) throw error;
-            
-            if (data?.text) {
-              setInput(data.text);
-              toast.success("Voice transcribed! Review and send.");
-            } else {
-              toast.error(data?.error || "No speech detected. Please try again.");
-            }
-          } catch (err) {
-            console.error("Transcription error:", err);
-            toast.error("Voice recognition error. Please try again.");
-          }
-        };
-        
-        reader.readAsDataURL(audioBlob);
-        
-        // Stop all tracks
-        stream.getTracks().forEach(track => track.stop());
-        streamRef.current = null;
-      };
-
-      mediaRecorder.start();
-      setIsListening(true);
-      toast.info('🎤 Recording... Click mic to stop');
-    } catch (error: any) {
-      setIsListening(false);
-      if (error.name === 'NotAllowedError') {
-        toast.error('Microphone access denied. Please allow access in browser settings.');
-      } else if (error.name === 'NotFoundError') {
-        toast.error('Microphone not found. Please check your device.');
-      } else {
-        toast.error('Voice recognition error. Please try again.');
-      }
-    }
+  // Handle voice transcript from VoiceInputButton
+  const handleVoiceTranscript = (text: string) => {
+    setInput(prev => prev ? `${prev} ${text}` : text);
   };
 
   const quickActions = [
@@ -360,22 +275,19 @@ Help the user complete their listing form and answer questions about the selling
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={isListening ? "🎤 Listening..." : "Ask me anything about selling..."}
+              placeholder="Ask me anything about selling..."
               className="bg-white border-gold/30 text-black placeholder:text-zinc-400 pr-10 focus:border-gold"
               disabled={isLoading}
             />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={toggleVoiceInput}
-              className={`absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 ${
-                isListening ? 'bg-gold/20 text-gold animate-pulse' : 'text-gold hover:text-gold hover:bg-gold/10'
-              }`}
-              disabled={isLoading}
-            >
-              <Mic className="w-4 h-4" />
-            </Button>
+            <div className="absolute right-1 top-1/2 -translate-y-1/2">
+              <VoiceInputButton
+                onTranscript={handleVoiceTranscript}
+                disabled={isLoading}
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-gold hover:text-gold hover:bg-gold/10"
+              />
+            </div>
           </div>
           <Button
             type="submit"

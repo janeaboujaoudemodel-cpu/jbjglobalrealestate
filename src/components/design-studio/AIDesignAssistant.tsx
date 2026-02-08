@@ -3,8 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, 
   Send, 
-  Mic, 
-  MicOff, 
   Upload, 
   X, 
   Loader2,
@@ -25,6 +23,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { VoiceInputButton } from '@/components/ui/VoiceInputButton';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -68,11 +67,8 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
-  const [isRecording, setIsRecording] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -221,52 +217,9 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
     }
   };
 
-  const startVoiceRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorderRef.current = new MediaRecorder(stream);
-      audioChunksRef.current = [];
-
-      mediaRecorderRef.current.ondataavailable = (event) => {
-        audioChunksRef.current.push(event.data);
-      };
-
-      mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        
-        // Convert to text using voice-to-text
-        try {
-          const formData = new FormData();
-          formData.append('audio', audioBlob);
-          
-          const { data, error } = await supabase.functions.invoke('voice-to-text', {
-            body: { audio: await audioBlob.text() }
-          });
-
-          if (data?.text) {
-            setInputMessage(prev => prev + ' ' + data.text);
-          }
-        } catch (error) {
-          toast.error('Voice transcription failed');
-        }
-        
-        stream.getTracks().forEach(track => track.stop());
-      };
-
-      mediaRecorderRef.current.start();
-      setIsRecording(true);
-      toast.info('Recording... Click again to stop');
-    } catch (error) {
-      console.error('Failed to start recording:', error);
-      toast.error('Could not access microphone');
-    }
-  };
-
-  const stopVoiceRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
+  // Handle voice transcript from VoiceInputButton
+  const handleVoiceTranscript = (text: string) => {
+    setInputMessage(prev => prev ? `${prev} ${text}` : text);
   };
 
   const handleQuickPrompt = (prompt: string) => {
@@ -400,14 +353,13 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
           >
             <Upload className="w-5 h-5" />
           </Button>
-          <Button
-            size="icon"
+          <VoiceInputButton
+            onTranscript={handleVoiceTranscript}
+            disabled={isGenerating}
             variant="ghost"
-            onClick={isRecording ? stopVoiceRecording : startVoiceRecording}
-            className={`${isRecording ? 'text-red-400 bg-red-500/20' : 'text-zinc-400 hover:text-white hover:bg-zinc-800'}`}
-          >
-            {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-          </Button>
+            size="icon"
+            className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+          />
           <Textarea
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
