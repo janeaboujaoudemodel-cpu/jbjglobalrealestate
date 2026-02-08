@@ -24,33 +24,66 @@ import { ModeSwitcher } from "@/components/ModeSwitcher";
 
 // AI Tool accent color mapping (matches inside tool pages)
 const AI_TOOL_COLORS: Record<string, { border: string; text: string; hover: string; bg: string }> = {
-  '/property-evaluator': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
+  // Property & Valuation Tools
+  '/property-evaluator': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
   '/ai-price-predictor': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
-  '/ai-roi-calculator': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
-  '/ai-lead-qualification': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
-  '/ai-translation-hub': { border: 'border-amber-500/40', text: 'text-amber-600', hover: 'hover:bg-amber-50', bg: 'bg-amber-50/50' },
-  '/ai-objection-handler': { border: 'border-rose-500/40', text: 'text-rose-600', hover: 'hover:bg-rose-50', bg: 'bg-rose-50/50' },
-  '/ai-market-report': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
-  '/ai-video-tour-script': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
-  '/ai-email-generator': { border: 'border-teal-500/40', text: 'text-teal-600', hover: 'hover:bg-teal-50', bg: 'bg-teal-50/50' },
-  '/ai-social-media': { border: 'border-pink-500/40', text: 'text-pink-600', hover: 'hover:bg-pink-50', bg: 'bg-pink-50/50' },
-  '/ai-neighborhood-insights': { border: 'border-indigo-500/40', text: 'text-indigo-600', hover: 'hover:bg-indigo-50', bg: 'bg-indigo-50/50' },
-  '/ai-property-analyzer': { border: 'border-orange-500/40', text: 'text-orange-600', hover: 'hover:bg-orange-50', bg: 'bg-orange-50/50' },
-  '/rental-index': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
+  '/rental-index': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
   '/mortgage-calculator': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/10', bg: 'bg-gold/5' },
-  '/compare': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
+  '/compare': { border: 'border-sky-500/40', text: 'text-sky-600', hover: 'hover:bg-sky-50', bg: 'bg-sky-50/50' },
   '/quiz': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
+  
+  // AI Design & Staging
   '/interior-design-ai': { border: 'border-rose-500/40', text: 'text-rose-600', hover: 'hover:bg-rose-50', bg: 'bg-rose-50/50' },
-  '/virtual-staging-ai': { border: 'border-amber-500/40', text: 'text-amber-600', hover: 'hover:bg-amber-50', bg: 'bg-amber-50/50' },
+  '/virtual-staging-ai': { border: 'border-fuchsia-500/40', text: 'text-fuchsia-600', hover: 'hover:bg-fuchsia-50', bg: 'bg-fuchsia-50/50' },
+  
+  // AI Analytics & Insights
+  '/ai-property-analyzer': { border: 'border-orange-500/40', text: 'text-orange-600', hover: 'hover:bg-orange-50', bg: 'bg-orange-50/50' },
+  '/ai-neighborhood-insights': { border: 'border-teal-500/40', text: 'text-teal-600', hover: 'hover:bg-teal-50', bg: 'bg-teal-50/50' },
+  
+  // AI Sales & CRM
+  '/ai-lead-qualification': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
   '/ai-follow-up-scheduler': { border: 'border-green-500/40', text: 'text-green-600', hover: 'hover:bg-green-50', bg: 'bg-green-50/50' },
-  '/ai-client-matcher': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
-  '/ai-competitor-analysis': { border: 'border-red-500/40', text: 'text-red-600', hover: 'hover:bg-red-50', bg: 'bg-red-50/50' },
-  '/ai-investment-report': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
-  '/ai-meeting-summarizer': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
+  '/ai-objection-handler': { border: 'border-rose-500/40', text: 'text-rose-600', hover: 'hover:bg-rose-50', bg: 'bg-rose-50/50' },
+  '/ai-client-matcher': { border: 'border-indigo-500/40', text: 'text-indigo-600', hover: 'hover:bg-indigo-50', bg: 'bg-indigo-50/50' },
+  
+  // AI Reports & Investment
+  '/ai-market-report': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
+  '/ai-competitor-analysis': { border: 'border-orange-500/40', text: 'text-orange-600', hover: 'hover:bg-orange-50', bg: 'bg-orange-50/50' },
+  '/ai-roi-calculator': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
+  '/ai-investment-report': { border: 'border-green-500/40', text: 'text-green-600', hover: 'hover:bg-green-50', bg: 'bg-green-50/50' },
+  
+  // AI Communication
+  '/ai-meeting-summarizer': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
+  '/ai-translation-hub': { border: 'border-amber-500/40', text: 'text-amber-600', hover: 'hover:bg-amber-50', bg: 'bg-amber-50/50' },
+  '/ai-video-tour-script': { border: 'border-pink-500/40', text: 'text-pink-600', hover: 'hover:bg-pink-50', bg: 'bg-pink-50/50' },
+  '/ai-email-generator': { border: 'border-teal-500/40', text: 'text-teal-600', hover: 'hover:bg-teal-50', bg: 'bg-teal-50/50' },
+  
+  // AI Content
+  '/ai-social-media': { border: 'border-pink-500/40', text: 'text-pink-600', hover: 'hover:bg-pink-50', bg: 'bg-pink-50/50' },
   '/ai-description-writer': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
-  '/ai-contract-reviewer': { border: 'border-slate-500/40', text: 'text-slate-600', hover: 'hover:bg-slate-50', bg: 'bg-slate-50/50' },
-  '/ai-document-generator': { border: 'border-zinc-500/40', text: 'text-zinc-600', hover: 'hover:bg-zinc-50', bg: 'bg-zinc-50/50' },
-  '/business-card-scanner': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/10', bg: 'bg-gold/5' },
+  '/ai-contract-reviewer': { border: 'border-red-500/40', text: 'text-red-600', hover: 'hover:bg-red-50', bg: 'bg-red-50/50' },
+  '/ai-document-generator': { border: 'border-lime-500/40', text: 'text-lime-600', hover: 'hover:bg-lime-50', bg: 'bg-lime-50/50' },
+  
+  // Productivity Tools
+  '/business-card-scanner': { border: 'border-amber-500/40', text: 'text-amber-600', hover: 'hover:bg-amber-50', bg: 'bg-amber-50/50' },
+  '/documents': { border: 'border-slate-500/40', text: 'text-slate-600', hover: 'hover:bg-slate-50', bg: 'bg-slate-50/50' },
+  '/video-meeting': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
+  '/ai-calendar': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
+  '/sitemap': { border: 'border-zinc-500/40', text: 'text-zinc-600', hover: 'hover:bg-zinc-50', bg: 'bg-zinc-50/50' },
+};
+
+// Creative Toolkit color mapping (unique vibrant colors for each tool)
+const CREATIVE_TOOL_COLORS: Record<string, { border: string; text: string; hover: string; bg: string }> = {
+  '/toolkit': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/10', bg: 'bg-gold/5' },
+  '/toolkit/ai-video-studio': { border: 'border-fuchsia-500/40', text: 'text-fuchsia-600', hover: 'hover:bg-fuchsia-50', bg: 'bg-fuchsia-50/50' },
+  '/toolkit/video-resize-pack': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
+  '/toolkit/voice-studio': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
+  '/toolkit/pdf-from-photos': { border: 'border-orange-500/40', text: 'text-orange-600', hover: 'hover:bg-orange-50', bg: 'bg-orange-50/50' },
+  '/toolkit/image-resize': { border: 'border-teal-500/40', text: 'text-teal-600', hover: 'hover:bg-teal-50', bg: 'bg-teal-50/50' },
+  '/toolkit/captions-translate': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
+  '/toolkit/background-ai': { border: 'border-rose-500/40', text: 'text-rose-600', hover: 'hover:bg-rose-50', bg: 'bg-rose-50/50' },
+  '/toolkit/beauty-filters': { border: 'border-pink-500/40', text: 'text-pink-600', hover: 'hover:bg-pink-50', bg: 'bg-pink-50/50' },
+  '/studio': { border: 'border-indigo-500/40', text: 'text-indigo-600', hover: 'hover:bg-indigo-50', bg: 'bg-indigo-50/50' },
 };
 
 // Default color for tools not in the map
@@ -779,15 +812,20 @@ const Footer = () => {
               <p className="text-zinc-600 text-xs sm:text-sm md:text-base font-medium tracking-wider">Free Professional Tools</p>
             </div>
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4">
-              {creativeToolkitLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className="text-black hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl group bg-white/80 border border-gold/30 shadow-sm hover:shadow-md hover:bg-white"
-                >
-                  <span className="group-hover:text-gold transition-colors">{link.label}</span>
-                </Link>
-              ))}
+              {creativeToolkitLinks.map((link) => {
+                const colors = CREATIVE_TOOL_COLORS[link.href] || DEFAULT_TOOL_COLOR;
+                return (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    className={`transition-all duration-300 text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl group ${colors.bg} border ${colors.border} shadow-sm hover:shadow-md ${colors.hover}`}
+                  >
+                    <span className={`${colors.text} group-hover:brightness-110 transition-colors font-medium`}>
+                      {link.label}
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
 

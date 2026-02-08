@@ -591,18 +591,18 @@ const VideoMeeting = () => {
         <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-black flex items-center justify-center p-4">
           <div className="w-full max-w-md">
             <div className="text-center mb-8">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center mx-auto mb-4">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center mx-auto mb-4">
                 <Video className="w-10 h-10 text-white" />
               </div>
-              <h1 className="text-3xl font-bold text-white mb-2">JBJ Video Meet</h1>
+              <h1 className="text-3xl font-bold text-white mb-2">JBJ <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-purple-400">Video Meet</span></h1>
               <p className="text-zinc-400">Free professional video meetings for everyone</p>
-              <div className="flex items-center justify-center gap-2 mt-2 text-green-400 text-xs">
+              <div className="flex items-center justify-center gap-2 mt-2 text-violet-400 text-xs">
                 <Shield className="w-3 h-3" />
                 <span>End-to-end encrypted • Unlimited time</span>
               </div>
             </div>
 
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 space-y-6">
+            <div className="bg-violet-900/20 border border-violet-500/30 rounded-2xl p-6 space-y-6">
               {/* Preview */}
               <div className="relative aspect-video bg-zinc-800 rounded-xl overflow-hidden">
                 <video
@@ -653,7 +653,7 @@ const VideoMeeting = () => {
                 placeholder="Enter your name"
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
-                className="bg-zinc-800 border-zinc-700 text-white"
+                className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50"
               />
 
               {/* Broker Name (Optional) */}
@@ -662,7 +662,7 @@ const VideoMeeting = () => {
                   placeholder="Your title (e.g., Senior Property Consultant)"
                   value={brokerName}
                   onChange={(e) => setBrokerName(e.target.value)}
-                  className="bg-zinc-800 border-zinc-700 text-white"
+                  className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50"
                 />
               )}
 
@@ -672,12 +672,12 @@ const VideoMeeting = () => {
                   placeholder="Enter meeting code"
                   value={roomId}
                   onChange={(e) => setRoomId(e.target.value)}
-                  className="bg-zinc-800 border-zinc-700 text-white"
+                  className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50"
                 />
                 <Button 
                   onClick={() => startMeeting()} 
                   disabled={!roomId}
-                  className="bg-red-500 hover:bg-red-600"
+                  className="bg-violet-500 hover:bg-violet-600"
                 >
                   Join
                 </Button>
@@ -685,16 +685,16 @@ const VideoMeeting = () => {
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-zinc-700" />
+                  <div className="w-full border-t border-violet-500/30" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-zinc-900/50 px-2 text-zinc-500">or</span>
+                  <span className="bg-violet-900/20 px-2 text-zinc-500">or</span>
                 </div>
               </div>
 
               <Button 
                 onClick={createNewMeeting}
-                className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
+                className="w-full bg-gradient-to-r from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700"
               >
                 <Video className="w-4 h-4 mr-2" />
                 Start New Meeting

@@ -365,43 +365,43 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
           <TabsContent value="property">
             <div className="grid md:grid-cols-2 gap-6">
               {/* Basic Info */}
-              <Card className="bg-zinc-900/50 border-zinc-800">
+              <Card className="bg-blue-900/20 border-blue-500/30">
                 <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                     <Building className="w-5 h-5 text-blue-400" />
                     Property Information
                   </CardTitle>
-                  <CardDescription className="text-zinc-500">
+                  <CardDescription className="text-zinc-400">
                     Enter your property's basic details for accurate valuation
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <Label className="text-zinc-400 flex items-center gap-1">
+                      <Label className="text-zinc-300 flex items-center gap-1">
                         Building Name <span className="text-blue-400">*</span>
-                        <HelpCircle className="w-3 h-3 text-zinc-600" />
+                        <HelpCircle className="w-3 h-3 text-zinc-500" />
                       </Label>
                       <Input
                         value={property.buildingName}
                         onChange={(e) => updateProperty('buildingName', e.target.value)}
                         placeholder="e.g., Burj Vista Tower 1"
-                        className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                        className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-zinc-500 hover:border-blue-500/50 focus:border-blue-400"
                       />
-                      <p className="text-xs text-zinc-600">Official building name as registered</p>
+                      <p className="text-xs text-zinc-500">Official building name as registered</p>
                     </div>
                     <div className="space-y-1">
-                      <Label className="text-zinc-400 flex items-center gap-1">
+                      <Label className="text-zinc-300 flex items-center gap-1">
                         Unit Number
-                        <HelpCircle className="w-3 h-3 text-zinc-600" />
+                        <HelpCircle className="w-3 h-3 text-zinc-500" />
                       </Label>
                       <Input
                         value={property.unitNumber}
                         onChange={(e) => updateProperty('unitNumber', e.target.value)}
                         placeholder="e.g., 1505 or 15-A"
-                        className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                        className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-zinc-500 hover:border-blue-500/50 focus:border-blue-400"
                       />
-                      <p className="text-xs text-zinc-600">As shown on title deed</p>
+                      <p className="text-xs text-zinc-500">As shown on title deed</p>
                     </div>
                   </div>
 
