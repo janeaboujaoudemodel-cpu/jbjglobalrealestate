@@ -21,6 +21,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { FounderContent } from "@/components/FounderContent";
 import { ModeSwitcher } from "@/components/ModeSwitcher";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 
 // AI Tool accent color mapping (matches inside tool pages)
 const AI_TOOL_COLORS: Record<string, { border: string; text: string; hover: string; bg: string }> = {
@@ -137,6 +138,7 @@ const DivisionAccordion = ({
 const Footer = () => {
   const { t } = useLanguage();
   const { isFounderVisible } = useFounderVisibility();
+  const { isBrokerMode } = useUserModeContext();
   const currentYear = new Date().getFullYear();
   const location = useLocation();
 
@@ -205,13 +207,27 @@ const Footer = () => {
     { label: t('footer.methodology') || "Methodology & Data Sources", href: "/market-intelligence/methodology" },
   ];
 
-  // About - conditionally include Founder link (Careers removed - has dedicated section)
+  // About & Careers - Combined section
   const aboutLinks = [
     { label: t('footer.aboutJbj') || "About JBJ", href: "/about" },
     ...(isFounderVisible ? [{ label: t('footer.founderLeadership') || "Founder & Leadership", href: "/founder" }] : []),
     { label: t('footer.meetTheTeam') || "Meet the Team", href: "/team" },
     { label: t('footer.awardsRecognition') || "Awards & Recognition", href: "/awards" },
     { label: t('footer.newsInsights') || "News & Insights", href: "/news" },
+  ];
+
+  // Career Links (now part of About section)
+  const careerLinks = [
+    { href: "/join", label: t('footer.applyJoin') || "Apply to Join Our Team" },
+    { href: "/hr-agent", label: "Connect with Our HR" },
+  ];
+
+  // Broker Tools - Only shown in broker mode (includes Training Portal)
+  const brokerToolsLinks = [
+    { href: "/onboarding", label: t('footer.trainingPortal') || "Training Portal" },
+    { href: "/broker-toolkit", label: "Broker Hub" },
+    { href: "/broker-education", label: "Broker Education" },
+    { href: "/broker-resources", label: "Broker Resources" },
   ];
 
   // Legal Links
@@ -291,12 +307,8 @@ const Footer = () => {
     { href: "/sitemap", label: "Sitemap" },
   ];
 
-  // Career Links
-  const careerLinks = [
-    { href: "/join", label: t('footer.applyJoin') || "Apply to Join Our Team" },
-    { href: "/hr-agent", label: "Connect with Our HR" },
-    { href: "/onboarding", label: t('footer.trainingPortal') || "Training Portal" },
-  ];
+  // Education Hub - Link to /guides (contains all books, market reports, guides)
+  const educationHubLink = { href: "/guides", label: "Education Hub" };
 
   return (
     <>
@@ -684,13 +696,27 @@ const Footer = () => {
                 </ul>
               </div>
               
-              {/* Row 1, Col 4: About */}
+              {/* Row 1, Col 4: About & Careers */}
               <div className="p-2 sm:p-3 md:p-5">
                 <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                  About
+                  About & Careers
                 </h4>
                 <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[100px] sm:min-h-[120px] md:min-h-[160px]">
                   {aboutLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                  {/* Divider */}
+                  <li className="pt-2 border-t border-gold/20 mt-2">
+                    <span className="text-xs text-gold/60 uppercase tracking-wider">Careers</span>
+                  </li>
+                  {careerLinks.map((link) => (
                     <li key={link.href}>
                       <Link
                         to={link.href}
@@ -704,7 +730,7 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* ROW 2: Sell | Investor Hub | Market Intelligence | Careers + Legal */}
+            {/* ROW 2: Sell | Education Hub | Legal | Business Suites */}
             <div className="grid grid-cols-2 lg:grid-cols-4">
               
               {/* Row 2, Col 1: Sell */}
@@ -726,12 +752,20 @@ const Footer = () => {
                 </ul>
               </div>
               
-              {/* Row 2, Col 2: Investor Hub (MOVED DOWN from Row 1) */}
+              {/* Row 2, Col 2: Education Hub (Title link to /guides) + Investor Hub */}
               <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20 border-t lg:border-t-0">
-                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                  {t('footer.investorHub') || 'Investor Hub'}
+                <Link 
+                  to={educationHubLink.href}
+                  className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold hover:text-gold/80 transition-colors block"
+                >
+                  📚 Education Hub →
+                </Link>
+                <p className="text-zinc-500 text-xs mb-3">Books, Guides & Market Reports</p>
+                
+                <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-2 pb-1 border-b border-gold/20 text-gold/80">
+                  Investor Hub
                 </h4>
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[80px] sm:min-h-[100px] md:min-h-[120px]">
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[60px]">
                   {investorHubLinks.map((link) => (
                     <li key={link.href}>
                       <Link
@@ -745,47 +779,12 @@ const Footer = () => {
                 </ul>
               </div>
               
-              {/* Row 2, Col 3: Market Intelligence */}
+              {/* Row 2, Col 3: Legal */}
               <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
-                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                  Market Intelligence
-                </h4>
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[80px] sm:min-h-[100px] md:min-h-[120px]">
-                  {marketIntelLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-              {/* Row 2, Col 4: Careers + Legal */}
-              <div className="p-2 sm:p-3 md:p-5">
-                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                  Careers
-                </h4>
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 mb-4 sm:mb-5 md:mb-6">
-                  {careerLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-
                 <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
                   Legal
                 </h4>
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[80px] sm:min-h-[100px] md:min-h-[120px]">
                   {legalLinks.map((link) => (
                     <li key={link.href}>
                       <Link
@@ -798,7 +797,71 @@ const Footer = () => {
                   ))}
                 </ul>
               </div>
+              
+              {/* Row 2, Col 4: Business Suites */}
+              <div className="p-2 sm:p-3 md:p-5">
+                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                  Business Suites
+                </h4>
+                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[80px] sm:min-h-[100px] md:min-h-[120px]">
+                  {businessSuitesLinks.slice(0, 4).map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        to={link.href}
+                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
+
+            {/* ROW 3: Mode-Aware - Broker Tools (only visible in broker mode) */}
+            {isBrokerMode && (
+              <div className="border-t border-gold/20">
+                <div className="grid grid-cols-2 lg:grid-cols-4">
+                  {/* Broker Tools Section */}
+                  <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20 lg:col-span-2">
+                    <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-blue-500/30 text-blue-500">
+                      🏢 Broker Tools
+                    </h4>
+                    <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 grid grid-cols-2 gap-x-4">
+                      {brokerToolsLinks.map((link) => (
+                        <li key={link.href}>
+                          <Link
+                            to={link.href}
+                            className="text-zinc-700 hover:text-blue-500 transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                          >
+                            {link.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  
+                  {/* Market Intelligence (repeated for broker visibility) */}
+                  <div className="p-2 sm:p-3 md:p-5 lg:col-span-2">
+                    <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                      Market Intelligence
+                    </h4>
+                    <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 grid grid-cols-2 gap-x-4">
+                      {marketIntelLinks.map((link) => (
+                        <li key={link.href}>
+                          <Link
+                            to={link.href}
+                            className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                          >
+                            {link.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
 
           {/* Internal Divider */}
           <div className="h-[2px] bg-gradient-to-r from-gold/20 via-gold/80 to-gold/20 mx-6" />
