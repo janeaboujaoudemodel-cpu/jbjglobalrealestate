@@ -270,19 +270,49 @@ const ExploreServicesCard = () => {
                   </Button>
                 )}
 
-                {/* Navigation Arrows */}
+                {/* Navigation Arrows - 3D Premium Style */}
                 <div className="flex items-center gap-3">
                   <button
                     onClick={goToPrevious}
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-pearl/70 hover:bg-pearl backdrop-blur-sm flex items-center justify-center transition-all border border-gold/40 hover:border-gold"
+                    className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(145deg, #FDFBF7, #E8DCC8)',
+                      border: '2px solid rgba(200, 167, 102, 0.7)',
+                      boxShadow: `
+                        0 4px 12px rgba(0,0,0,0.3),
+                        0 2px 4px rgba(0,0,0,0.2),
+                        inset 0 2px 4px rgba(255,255,255,0.9),
+                        inset 0 -2px 4px rgba(200,167,102,0.2),
+                        0 0 15px rgba(200,167,102,0.3)
+                      `,
+                    }}
                   >
-                    <ChevronLeft className="w-6 h-6 md:w-7 md:h-7 text-gold" />
+                    {/* 3D Top highlight */}
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
+                    {/* Hover glow */}
+                    <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.6)' }} />
+                    <ChevronLeft className="w-6 h-6 md:w-7 md:h-7 text-gold relative z-10 group-hover:scale-110 transition-transform" />
                   </button>
                   <button
                     onClick={goToNext}
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-pearl/70 hover:bg-pearl backdrop-blur-sm flex items-center justify-center transition-all border border-gold/40 hover:border-gold"
+                    className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(145deg, #FDFBF7, #E8DCC8)',
+                      border: '2px solid rgba(200, 167, 102, 0.7)',
+                      boxShadow: `
+                        0 4px 12px rgba(0,0,0,0.3),
+                        0 2px 4px rgba(0,0,0,0.2),
+                        inset 0 2px 4px rgba(255,255,255,0.9),
+                        inset 0 -2px 4px rgba(200,167,102,0.2),
+                        0 0 15px rgba(200,167,102,0.3)
+                      `,
+                    }}
                   >
-                    <ChevronRight className="w-6 h-6 md:w-7 md:h-7 text-gold" />
+                    {/* 3D Top highlight */}
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
+                    {/* Hover glow */}
+                    <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.6)' }} />
+                    <ChevronRight className="w-6 h-6 md:w-7 md:h-7 text-gold relative z-10 group-hover:scale-110 transition-transform" />
                   </button>
                 </div>
               </div>
@@ -291,20 +321,11 @@ const ExploreServicesCard = () => {
         </AnimatePresence>
       </div>
 
-      {/* Dots Navigation - Simple gold dots, no elongation/merging */}
-      <div className="flex items-center justify-center gap-2 md:gap-2.5 py-5 md:py-6 border-t border-gold/30 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-        {services.map((service, index) => (
-          <button
-            key={service.id}
-            onClick={() => goToSlide(index)}
-            className={`w-2.5 h-2.5 md:w-3 md:h-3 rounded-full transition-all duration-300 ${
-              index === currentIndex 
-                ? "bg-gold shadow-[0_0_8px_rgba(200,167,102,0.8)]" 
-                : "bg-black/20 hover:bg-black/40"
-            }`}
-            aria-label={`Go to ${service.title}`}
-          />
-        ))}
+      {/* Footer - Slide counter only, no dots */}
+      <div className="flex items-center justify-center py-4 md:py-5 border-t border-gold/30 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+        <span className="text-sm text-black/60 font-medium">
+          {currentIndex + 1} / {services.length}
+        </span>
       </div>
     </div>
   );

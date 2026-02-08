@@ -15,7 +15,11 @@ type SectionDividerProps = {
 export function SectionDivider({ className, fullWidth = false }: SectionDividerProps) {
   return (
     <section className={`bg-black py-8 md:py-10 ${className ?? ""}`.trim()}>
-      <div className={fullWidth ? "w-full px-6 md:px-12 lg:px-16" : "container mx-auto px-4"}>
+      {/* Centered inner wrapper ensures perfect alignment at all breakpoints */}
+      <div className={fullWidth 
+        ? "w-full max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16" 
+        : "container mx-auto px-4"
+      }>
         <div className="flex items-center justify-center gap-6">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
           <Sparkles className="w-4 h-4 text-gold/50" />

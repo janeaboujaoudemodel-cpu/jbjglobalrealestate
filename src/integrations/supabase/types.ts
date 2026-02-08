@@ -16594,12 +16594,54 @@ export type Database = {
         }
         Relationships: []
       }
+      support_ticket_messages: {
+        Row: {
+          attachment_urls: string[] | null
+          created_at: string
+          id: string
+          message: string
+          sender_type: string
+          sender_user_id: string | null
+          ticket_id: string
+        }
+        Insert: {
+          attachment_urls?: string[] | null
+          created_at?: string
+          id?: string
+          message: string
+          sender_type: string
+          sender_user_id?: string | null
+          ticket_id: string
+        }
+        Update: {
+          attachment_urls?: string[] | null
+          created_at?: string
+          id?: string
+          message?: string
+          sender_type?: string
+          sender_user_id?: string | null
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_ticket_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       support_tickets: {
         Row: {
           ai_analyzed_priority: string | null
           assigned_to: string | null
           attachment_urls: string[] | null
           created_at: string
+          customer_confirmation_error: string | null
+          customer_confirmation_message_id: string | null
+          customer_confirmation_sent_at: string | null
+          customer_confirmation_status: string | null
           description: string
           email: string
           escalate_to_tech: boolean | null
@@ -16622,6 +16664,10 @@ export type Database = {
           assigned_to?: string | null
           attachment_urls?: string[] | null
           created_at?: string
+          customer_confirmation_error?: string | null
+          customer_confirmation_message_id?: string | null
+          customer_confirmation_sent_at?: string | null
+          customer_confirmation_status?: string | null
           description: string
           email: string
           escalate_to_tech?: boolean | null
@@ -16644,6 +16690,10 @@ export type Database = {
           assigned_to?: string | null
           attachment_urls?: string[] | null
           created_at?: string
+          customer_confirmation_error?: string | null
+          customer_confirmation_message_id?: string | null
+          customer_confirmation_sent_at?: string | null
+          customer_confirmation_status?: string | null
           description?: string
           email?: string
           escalate_to_tech?: boolean | null
