@@ -14280,6 +14280,7 @@ export type Database = {
           cover_image_url: string | null
           created_at: string
           description: string | null
+          detail_fetched_at: string | null
           developer_id: string | null
           developer_name: string | null
           down_payment_percent: number | null
@@ -14363,6 +14364,7 @@ export type Database = {
           cover_image_url?: string | null
           created_at?: string
           description?: string | null
+          detail_fetched_at?: string | null
           developer_id?: string | null
           developer_name?: string | null
           down_payment_percent?: number | null
@@ -14446,6 +14448,7 @@ export type Database = {
           cover_image_url?: string | null
           created_at?: string
           description?: string | null
+          detail_fetched_at?: string | null
           developer_id?: string | null
           developer_name?: string | null
           down_payment_percent?: number | null
