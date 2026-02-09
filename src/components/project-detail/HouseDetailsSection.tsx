@@ -56,8 +56,21 @@ export default function HouseDetailsSection({
   if (buildingType) {
     details.push({ icon: Home, label: "Building Type", value: buildingType });
   }
-  if (floors) {
-    details.push({ icon: Layers, label: "Number of Floors", value: `${floors} Floors` });
+  if (floors && floors > 0) {
+    // If floors is 1-3, it's likely building_count from API, not actual floor count
+    if (floors <= 3) {
+      details.push({ 
+        icon: Building2, 
+        label: "Buildings", 
+        value: `${floors} Building${floors > 1 ? 's' : ''}` 
+      });
+    } else {
+      details.push({ 
+        icon: Layers, 
+        label: "Number of Floors", 
+        value: `${floors} Floors` 
+      });
+    }
   }
   if (totalUnits) {
     details.push({ icon: Building2, label: "Total Units", value: `${totalUnits} Units` });
