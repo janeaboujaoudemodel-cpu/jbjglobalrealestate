@@ -1,389 +1,417 @@
 
+# Complete Developer Pages, Project Details & UI/UX Fixes
 
-# AI Interior Design Studio - Complete Rebuild Plan
+## Summary of Issues Found
 
-## Summary
+Based on your detailed feedback, here are all the issues that need to be fixed across Developer pages, Project detail pages, and UI components:
 
-This plan completely rebuilds the AI Interior Design Studio to become a **unified design hub** that includes:
-- **Concept Render**: Describe your space and get a luxury design (no photo required)
-- **Redesign from Photo**: Upload your current room and get a redesigned version
-- **Virtual Staging**: Upload empty room and stage it with furniture
-- **AI Chat Assistant**: Describe what you want in natural language
-- **Property Measurement Integration**: Link to/from the AI Measurement tool
-- **Project Naming**: Name and save projects with room identification
-- **History Saving**: All results saved to "My AI History" via `ai_job_master` table
-
-**Login + Form Required**: First-time users must complete the `ContactGatingModal` (collect name, email, phone, etc.) before generating - applies to all AI tools per your requirement.
-
----
-
-## Technical Approach
-
-### 1. Unified Mode Architecture
-
-The new page will have **4 modes** accessible via tabs or cards:
-
-| Mode | Description | Inputs |
-|------|-------------|--------|
-| **Concept Render** | AI generates from text description + preferences | Room type, style, size, colors, notes |
-| **Redesign Photo** | Upload existing room, AI transforms it | Photo + style preferences |
-| **Virtual Staging** | Upload empty room, AI adds furniture | Photo + room type + furniture style |
-| **AI Assistant Chat** | Natural language: "design a modern 500sqft bedroom" | Free-form text + optional photos |
-
-All modes call the same `interior-design-generate` edge function (already exists and working).
+| Area | Issue | Status |
+|------|-------|--------|
+| Developer descriptions | Generic "premier developer in UAE" used when no data | Needs fix |
+| Developer logos | Some appear cropped - need larger cards + background fill | Needs fix |
+| Developer stats | Empty cards (Founded: N/A, Units: 0) | Needs API extraction |
+| Maps | Should default to satellite view, remove Leaflet/Esri branding | Needs fix |
+| DirectContactCTA | Email card needs gold border on load, 3D hover, colored text | Needs fix |
+| Project cards - Contact | Buttons breaking out of boxes | Needs layout fix |
+| Project cards - Badges | "Announced" hidden under heart/shortlist | Needs badge rearrangement |
+| Description hashtags | Still showing `#####` headers as raw text | Needs markdown fix |
+| Description formatting | Show as visual sections with related images | Needs enhancement |
+| Project photos | Only 1 photo showing, missing floor plans/layouts | Needs gallery extraction |
+| Mortgage Calculator | Monthly payment section too short | Needs layout extension |
+| Register Interest form | Too stretched, black borders | Needs premium styling |
+| Language selector | Missing flags next to languages | Needs flag integration |
+| Gold color | Needs to be more premium | Color refinement |
 
 ---
 
-### 2. New Components Structure
+## Technical Implementation Plan
 
-```
-src/pages/InteriorDesignAI.tsx (rewrite)
-├── DesignModeSelector.tsx (new) - Mode selection cards
-├── ConceptRenderForm.tsx (new) - Text-based generation
-├── PhotoRedesignForm.tsx (new) - Upload + redesign
-├── VirtualStagingForm.tsx (new) - Empty room + staging
-├── DesignChatAssistant.tsx (new) - AI chat interface
-├── DesignProjectHeader.tsx (new) - Project name + room labels
-├── DesignResultsGallery.tsx (new) - View/download results
-└── DesignHistoryList.tsx (new) - Previous generations
-```
+### 1. Developer Page Enhancements
 
----
+#### 1.1 Fix Generic Descriptions
+**File**: `src/pages/DeveloperDetail.tsx`
 
-### 3. Flow Diagram
+When developer description is missing:
+- First check if Reelly API has description via `reelly_developer_id`
+- If still missing, generate a contextual fallback based on their projects and headquarters
+- Never show generic "premier developer in UAE"
 
-```
-User lands on /interior-design-ai
-          │
-          ▼
-┌──────────────────────────────────────┐
-│  Check: Is contact gating complete?  │
-│  (useContactGating hook)             │
-└──────────────────────────────────────┘
-          │
-          ├── No → Show ContactGatingModal
-          │         (collect name/email/phone)
-          │
-          └── Yes → Show Design Hub
-                    │
-                    ▼
-          ┌───────────────────────┐
-          │  4 Mode Cards:        │
-          │  • Concept Render     │
-          │  • Redesign Photo     │
-          │  • Virtual Staging    │
-          │  • AI Chat Assistant  │
-          └───────────────────────┘
-                    │
-                    ▼
-          ┌───────────────────────┐
-          │  Step 1: Project Setup│
-          │  • Name your project  │
-          │  • Property type      │
-          │  • Link measurement   │
-          └───────────────────────┘
-                    │
-                    ▼
-          ┌───────────────────────┐
-          │  Step 2: Upload/Input │
-          │  (varies by mode)     │
-          └───────────────────────┘
-                    │
-                    ▼
-          ┌───────────────────────┐
-          │  Step 3: Style Prefs  │
-          │  • Design style       │
-          │  • Color palette      │
-          │  • Purpose            │
-          │  • Custom notes       │
-          └───────────────────────┘
-                    │
-                    ▼
-          ┌───────────────────────┐
-          │  Generate (AI API)    │
-          │  interior-design-     │
-          │  generate             │
-          └───────────────────────┘
-                    │
-                    ▼
-          ┌───────────────────────┐
-          │  Results Gallery      │
-          │  • Download image     │
-          │  • Download PDF       │
-          │  • Request revision   │
-          │  • Auto-saved to      │
-          │    ai_job_master      │
-          └───────────────────────┘
+```text
+Before:
+"Premier developer in UAE"
+
+After:
+"STAMN Real Estate Development is based in {headquarters} and has developed 
+{project_count} projects including {project_names}."
 ```
 
----
+#### 1.2 Fix Logo Display - Larger Cards + Background Fill
+**File**: `src/pages/DeveloperDetail.tsx`, `src/components/project-detail/DeveloperInfoCard.tsx`
 
-### 4. Contact Gating Integration
+Current logo container: `w-24 h-16`
 
-**Requirement**: Login and form submission required to collect user details for first-time use.
+Changes:
+- Increase to `w-32 h-20` for better logo visibility
+- Change from `object-cover` to `object-contain` to prevent cropping
+- Add dynamic background color extraction or use white background
+- Add padding inside the container
 
-**Implementation**:
 ```tsx
-// In InteriorDesignAI.tsx
-const { requireGating, isGatingCompleted } = useContactGating();
+// Current
+<img className="w-full h-full object-cover" />
 
-const handleGenerate = () => {
-  requireGating('interior_design', () => {
-    // Only runs after gating is complete
-    generateDesign();
-  });
+// Fixed
+<div className="w-32 h-20 p-2 bg-white rounded-lg flex items-center justify-center">
+  <img className="max-w-full max-h-full object-contain" />
+</div>
+```
+
+#### 1.3 Fix Developer Stats (Founded, Units, etc.)
+**File**: `src/pages/DeveloperDetail.tsx`
+
+Current stats show N/A because they're not being extracted from Reelly.
+
+Solution:
+- Query projects for this developer and calculate stats dynamically
+- Count completed projects from `construction_status = 'completed'`
+- Sum `total_units` from all their projects
+- Use database fields `founded_year`, `completed_projects`, `offplan_projects`
+
+Stats to show:
+- Founded: From `developers.founded_year`
+- Active Projects: Count from linked projects
+- Completed: From `developers.completed_projects` or calculated
+- Units Delivered: Sum of `total_units` from completed projects
+
+---
+
+### 2. Map Improvements
+
+#### 2.1 Default to Satellite View
+**Files**: 
+- `src/components/project-detail/ProjectLocationMap.tsx`
+- `src/components/developer/DeveloperProjectsMap.tsx`
+
+```tsx
+// Change default
+const [mapView, setMapView] = useState<MapViewType>("satellite"); // was "street"
+const [tileLayer, setTileLayer] = useState<'street' | 'satellite'>('satellite'); // was 'street'
+```
+
+#### 2.2 Remove Leaflet/Esri Branding
+Add CSS to hide attribution:
+
+```css
+.leaflet-control-attribution {
+  display: none !important;
+}
+```
+
+Or set `attributionControl: false` in MapContainer.
+
+#### 2.3 Enhanced Navigation Controls
+Add compass, fullscreen button, and style the controls to match gold theme.
+
+---
+
+### 3. DirectContactCTA Premium Styling
+
+**File**: `src/components/DirectContactCTA.tsx`
+
+#### 3.1 Email Card - Gold Border on Normal Load + 3D Hover
+```tsx
+// Email card - gold border always visible
+<a className="... border-2 border-gold hover:shadow-[0_8px_25px_rgba(200,167,102,0.4)] 
+   hover:-translate-y-2 hover:scale-105 transition-all duration-300"
+>
+```
+
+#### 3.2 Stronger Green/Blue Borders
+```tsx
+// WhatsApp - stronger green
+border-2 border-emerald-500 // was border-emerald-500/40
+
+// Call Us - stronger blue  
+border-2 border-blue-500 // was border-blue-500/40
+```
+
+#### 3.3 Colored Contact Numbers on Normal Load
+```tsx
+// WhatsApp number in green
+<p className="text-emerald-500 text-sm font-semibold">{CONTACT_INFO.phone}</p>
+
+// Call number in blue
+<p className="text-blue-500 text-sm font-semibold">{CONTACT_INFO.phone}</p>
+
+// Email in gold
+<p className="text-gold text-sm font-semibold">{CONTACT_INFO.email}</p>
+```
+
+---
+
+### 4. Project Card Fixes
+
+#### 4.1 Contact Buttons Layout Fix
+**File**: `src/components/ProjectCard.tsx`
+
+Current grid can overflow. Fix:
+- Ensure `overflow-hidden` on container
+- Use `min-w-0` on flex children
+- Reduce button text on small cards or use icons only
+- Add `truncate` to text
+
+```tsx
+<div className="grid grid-cols-3 gap-2 border-t border-gold/20 pt-3 overflow-hidden">
+  <Button className="w-full min-w-0 overflow-hidden">
+    <span className="truncate">Email</span>
+  </Button>
+  ...
+</div>
+```
+
+#### 4.2 Badge Arrangement - Fix "Announced" Hidden
+Current: Badges overlap with favorite/shortlist buttons on right side.
+
+Solution - rearrange badge positions:
+- **Top Left**: Property type label OR Developer logo
+- **Top Right**: Favorite + Shortlist buttons (stacked)
+- **Bottom Left**: Sale status badge (Announced, On Sale, Sold Out)
+- **Bottom Right**: Handover year
+
+```tsx
+// Move sale status badge to bottom-left
+{saleStatusBadge && (
+  <div className="absolute bottom-3 left-3 z-10 px-2.5 py-1 rounded-full ...">
+    {saleStatusBadge.label}
+  </div>
+)}
+```
+
+---
+
+### 5. Description Formatting - Visual Sections
+
+#### 5.1 Complete Hashtag Removal
+**File**: `src/lib/markdownUtils.ts`
+
+The current regex handles `#####` as headers, but the issue is some descriptions have malformed markdown.
+
+Enhanced fix:
+```tsx
+// Strip any remaining # at line start that didn't get processed
+.replace(/^#{1,6}\s*/gm, '')
+```
+
+#### 5.2 Visual Sections with Images
+**File**: Create `src/components/project-detail/DescriptionWithSections.tsx`
+
+Parse description into sections based on headers (Kitchen, Furnishing, Location, etc.) and add contextual stock images or icons:
+
+```tsx
+const SECTION_IMAGES: Record<string, string> = {
+  'kitchen': '/images/sections/kitchen-interior.jpg',
+  'bathroom': '/images/sections/bathroom-luxury.jpg',
+  'living': '/images/sections/living-room.jpg',
+  'bedroom': '/images/sections/bedroom.jpg',
+  'furnishing': '/images/sections/finishing-materials.jpg',
+  'location': '/images/sections/dubai-skyline.jpg',
+  'amenities': '/images/sections/amenities.jpg',
 };
-```
 
-The existing `ContactGatingModal` and `useContactGating` hook already support `'interior_design'` as a gated action. If the user has already completed gating (stored in localStorage), they proceed directly.
-
----
-
-### 5. History Saving to ai_job_master
-
-Every generation will be saved:
-
-```typescript
-// After successful generation
-const { data: jobRecord } = await supabase
-  .from('ai_job_master')
-  .insert({
-    user_id: user?.id || sessionId,
-    tool_name: 'interior-design-generate',
-    status: 'completed',
-    input_payload: {
-      mode,
-      project_name: projectName,
-      room_name: roomName,
-      property_type: propertyType,
-      design_style: designStyle,
-      color_palette: colorPalette,
-      purpose,
-      custom_notes: customNotes,
-      // Photo stored as URL reference (not base64)
-    },
-    output_payload: {
-      image_url: result.images[0], // URL from storage
-      notes: result.notes,
-    },
-    intelligence_features: {
-      style_detected: designStyle,
-      color_scheme: colorPalette,
-      room_type: roomName,
-    },
-    processing_time_ms: elapsedTime,
-    completed_at: new Date().toISOString(),
-  })
-  .select()
-  .single();
-```
-
-**Note**: Generated images are base64 from the AI. Per storage policy, we will:
-1. Upload the base64 image to Supabase Storage bucket `interior-designs`
-2. Store only the URL reference in `output_payload.image_url`
-
----
-
-### 6. Property Measurement Integration
-
-**Linking from Measurement to Design**:
-The existing flow already works (line 308-311 in PropertyMeasurement.tsx):
-```tsx
-sessionStorage.setItem("propertyMeasurement", JSON.stringify({
-  totalArea,
-  rooms,
-  propertyType,
-  propertyName,
-}));
-navigate("/interior-design-ai");
-```
-
-**Linking from Design to Measurement**:
-Add a "Measure My Space" button that navigates to `/property-measurement` with a return flag:
-```tsx
-sessionStorage.setItem("return_to_interior_design", "true");
-navigate("/property-measurement");
+// For each section, show image + formatted content
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <img src={sectionImage} alt={sectionTitle} className="rounded-xl" />
+  <div className="prose">{sectionContent}</div>
+</div>
 ```
 
 ---
 
-### 7. Image Storage Strategy
+### 6. Project Gallery - Extract All Photos
 
-**Problem**: AI returns base64 images which cannot be stored in database.
+#### 6.1 Verify Reelly API Gallery Extraction
+**File**: `supabase/functions/reelly-backfill-projects/index.ts`
 
-**Solution**:
-1. Create storage bucket `interior-designs` (public)
-2. After generation, upload base64 to storage:
-```typescript
-const blob = base64ToBlob(imageBase64);
-const filePath = `${userId}/${projectName}/${Date.now()}.png`;
-const { data } = await supabase.storage
-  .from('interior-designs')
-  .upload(filePath, blob);
-const publicUrl = supabase.storage
-  .from('interior-designs')
-  .getPublicUrl(filePath);
-```
-3. Store only `publicUrl` in `ai_job_master.output_payload`
+Ensure all gallery images from Reelly detail endpoint are being inserted into `project_images` table:
+- Main images
+- Gallery images
+- Floor plan images
+- Brochure thumbnails
+
+The edge function already has `extractGalleryImages()` - need to verify it runs for all projects.
+
+#### 6.2 Show Floor Plans/Layouts
+Ensure `floor_plan_types` and documents with type `floor_plan` are displayed in the FloorPlanGallery component.
 
 ---
 
-### 8. AI Chat Assistant Mode
+### 7. Mortgage Calculator - Extend Monthly Payment Section
 
-The chat mode uses the existing `AIDesignAssistant.tsx` component pattern:
+**File**: `src/components/MortgageCalculator.tsx`
+
+Current issue: "Estimated Monthly Payment" section is short and doesn't reach "Loan Terms".
+
+Fix:
+- Add vertical spacing/extension
+- Add a CTA button before AI Mortgage Assistant
+- Make the monthly payment card span full width or extend vertically
 
 ```tsx
-// Example conversation
-User: "Design a luxury modern bedroom, 400 sqft, 
-       with gold accents and floor-to-ceiling windows"
-
-AI: Analyzing your requirements...
-    - Room: Bedroom
-    - Size: 400 sqft
-    - Style: Luxury Modern
-    - Colors: Gold accents
-    - Features: Floor-to-ceiling windows
-    
-    [Generate Design] button
-
-AI: ✨ Your design is ready!
-    [Shows generated image]
-    [Download] [Save to Project] [Try Another Style]
+// Add gap filler and CTA
+<div className="mt-8 mb-4">
+  <Button variant="primary" className="w-full" asChild>
+    <a href={INQUIRY_FORM_URL}>
+      Request Mortgage Introduction
+    </a>
+  </Button>
+</div>
 ```
-
-The chat will parse user input using the existing `interior-design-generate` edge function prompt.
 
 ---
 
-## Files to Create / Modify
+### 8. Register Interest Form - Premium Styling
 
-### New Files
+**File**: `src/components/project-detail/ProjectInquiryForm.tsx`
 
-| File | Purpose |
-|------|---------|
-| `src/components/interior-design/DesignModeSelector.tsx` | 4-card mode selection UI |
-| `src/components/interior-design/ConceptRenderForm.tsx` | Text-based generation form |
-| `src/components/interior-design/PhotoRedesignForm.tsx` | Photo upload + redesign form |
-| `src/components/interior-design/VirtualStagingForm.tsx` | Empty room staging form |
-| `src/components/interior-design/DesignChatAssistant.tsx` | Chat-based design interface |
-| `src/components/interior-design/DesignProjectHeader.tsx` | Project name + room label inputs |
-| `src/components/interior-design/DesignResultsGallery.tsx` | Results display with actions |
-| `src/components/interior-design/DesignHistoryList.tsx` | Previous generations list |
-| `src/hooks/useInteriorDesignHistory.ts` | Hook for fetching/saving to ai_job_master |
+#### 8.1 Make Form Smaller
+```tsx
+// Reduce max-width
+<form className="max-w-md mx-auto space-y-4"> // was max-w-xl
+```
 
-### Modified Files
+#### 8.2 Remove Black Borders
+```tsx
+// All inputs and selects - gold borders only
+className="border-2 border-gold/50 hover:border-gold focus:border-gold"
+// Remove any border-black or border-border classes
+```
+
+#### 8.3 Premium Button
+```tsx
+<Button
+  style={{
+    background: 'linear-gradient(135deg, #C8A766 0%, #B8962E 50%, #D4AF37 100%)',
+    boxShadow: '0 4px 15px rgba(200,167,102,0.4)',
+  }}
+>
+  Register Interest
+</Button>
+```
+
+---
+
+### 9. Language Selector - Add Flags
+
+**Files**: 
+- `src/components/project-detail/CallToActionSection.tsx`
+- `src/components/ui/searchable-select.tsx`
+- `src/constants/localeOptions.ts`
+
+Add flag emojis to language options:
+
+```tsx
+const LANGUAGES_WITH_FLAGS = [
+  { value: 'en', label: 'English', flag: '🇬🇧' },
+  { value: 'ar', label: 'Arabic', flag: '🇦🇪' },
+  { value: 'ru', label: 'Russian', flag: '🇷🇺' },
+  { value: 'zh', label: 'Chinese', flag: '🇨🇳' },
+  { value: 'hi', label: 'Hindi', flag: '🇮🇳' },
+  { value: 'fr', label: 'French', flag: '🇫🇷' },
+  // ... etc
+];
+
+// Display with flag
+<SelectItem value={lang.value}>
+  <span className="flex items-center gap-2">
+    <span>{lang.flag}</span>
+    <span>{lang.label}</span>
+  </span>
+</SelectItem>
+```
+
+---
+
+### 10. Gold Color - More Premium
+
+**File**: `tailwind.config.ts` or `src/index.css`
+
+Current gold: `hsl(42 45% 59%)` - may appear muted.
+
+Premium gold options:
+```css
+--gold: 42 70% 50%;        /* More saturated */
+--gold-rich: 45 100% 45%;  /* Rich gold */
+--gold-premium: 40 80% 55%; /* Warm premium */
+```
+
+Or use gradients for gold elements:
+```css
+.gold-premium {
+  background: linear-gradient(135deg, #D4AF37 0%, #C8A766 50%, #B8962E 100%);
+}
+```
+
+---
+
+## Files to Modify
 
 | File | Changes |
 |------|---------|
-| `src/pages/InteriorDesignAI.tsx` | Complete rewrite to use new component architecture |
-| `supabase/functions/interior-design-generate/index.ts` | Add mode handling (concept/redesign/staging) |
-
-### Database Changes
-
-| Change | Details |
-|--------|---------|
-| Create storage bucket `interior-designs` | Public bucket for generated images |
-| Add RLS policy | Allow authenticated users to upload/read their own files |
-
----
-
-## SQL Migration
-
-```sql
--- Create storage bucket for interior design outputs
-INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-VALUES (
-  'interior-designs',
-  'interior-designs',
-  true,
-  10485760, -- 10MB
-  ARRAY['image/png', 'image/jpeg', 'image/webp']
-);
-
--- RLS: Authenticated users can upload to their own folder
-CREATE POLICY "Users can upload their own interior designs"
-ON storage.objects FOR INSERT
-TO authenticated
-WITH CHECK (
-  bucket_id = 'interior-designs' 
-  AND (storage.foldername(name))[1] = auth.uid()::text
-);
-
--- RLS: Anyone can view interior designs (public bucket)
-CREATE POLICY "Anyone can view interior designs"
-ON storage.objects FOR SELECT
-TO public
-USING (bucket_id = 'interior-designs');
-
--- RLS: Users can delete their own designs
-CREATE POLICY "Users can delete their own interior designs"
-ON storage.objects FOR DELETE
-TO authenticated
-USING (
-  bucket_id = 'interior-designs' 
-  AND (storage.foldername(name))[1] = auth.uid()::text
-);
-```
+| `src/pages/DeveloperDetail.tsx` | Fix descriptions, enlarge logo cards, fix stats |
+| `src/components/project-detail/DeveloperInfoCard.tsx` | Larger logo, contain mode |
+| `src/components/project-detail/ProjectLocationMap.tsx` | Default satellite, hide attribution |
+| `src/components/developer/DeveloperProjectsMap.tsx` | Default satellite, hide attribution |
+| `src/components/DirectContactCTA.tsx` | Gold borders, 3D hover, colored text |
+| `src/components/ProjectCard.tsx` | Fix contact overflow, badge positions |
+| `src/lib/markdownUtils.ts` | Enhanced hashtag stripping |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Use visual sections for description |
+| `src/components/MortgageCalculator.tsx` | Extend layout, add CTA |
+| `src/components/project-detail/ProjectInquiryForm.tsx` | Smaller form, gold borders |
+| `src/components/project-detail/CallToActionSection.tsx` | Gold borders, flags in language |
+| `src/constants/localeOptions.ts` | Add flags to languages |
+| `src/index.css` | Hide Leaflet attribution, premium gold |
 
 ---
 
-## UI/UX Design
+## New Files to Create
 
-### Hero Section (unchanged)
-Keep the existing fuchsia/purple gradient hero with "AI Interior Design Studio" branding.
-
-### Mode Selection Cards
-4 large cards with icons:
-- **Concept Render**: Sparkles icon, "Describe your dream space"
-- **Redesign Photo**: Camera icon, "Transform your current room"
-- **Virtual Staging**: Sofa icon, "Stage an empty room"
-- **AI Chat**: MessageSquare icon, "Talk to design assistant"
-
-### Project Setup Step
-- Project Name input (required)
-- Room/Area Name input
-- Property Type selector (apartment/villa/office/etc)
-- "Use Measurement Data" button (if available from PropertyMeasurement)
-- "Measure My Space" link (navigates to /property-measurement)
-
-### Generation Flow
-- Progress indicator with steps
-- Loading animation during generation
-- Results gallery with download options
-- "Generate Another" for variations
-- Auto-save notification
-
-### History Panel
-- Collapsible sidebar or tab
-- Shows previous generations with thumbnails
-- Click to reopen results
-- Delete option
-
----
-
-## Acceptance Criteria
-
-1. **All 4 modes work end-to-end**: Concept, Redesign, Staging, Chat
-2. **Contact gating enforced**: First-time users must complete form
-3. **Login required for saving**: Users must log in to save history
-4. **History persists**: All generations saved to `ai_job_master`
-5. **Images stored properly**: Base64 uploaded to storage, URL saved in DB
-6. **Measurement integration**: Can link to/from PropertyMeasurement tool
-7. **Project naming**: Users can name projects and rooms
-8. **Download works**: PDF and image downloads function correctly
-9. **Mobile responsive**: Works on phone, iPad, laptop
-10. **Performance**: No slow loading or blocking
+| File | Purpose |
+|------|---------|
+| `src/components/project-detail/DescriptionWithSections.tsx` | Visual sectioned description |
 
 ---
 
 ## Implementation Order
 
-1. Database migration (storage bucket + policies)
-2. Create `useInteriorDesignHistory` hook
-3. Create component files (mode forms, results, history)
-4. Rewrite `InteriorDesignAI.tsx` main page
-5. Update edge function for mode handling
-6. Add image upload to storage flow
-7. Test all modes end-to-end
-8. Test on mobile devices
+1. **Map fixes** - Default satellite, hide branding
+2. **Logo/card sizing** - Enlarge developer logo containers
+3. **DirectContactCTA** - Gold borders, colored text, 3D hover
+4. **ProjectCard** - Badge positions, contact overflow
+5. **Markdown/hashtags** - Enhanced cleaning
+6. **Description sections** - Visual formatting with images
+7. **Form styling** - Smaller, gold borders, flags
+8. **Mortgage extension** - Add CTA, extend layout
+9. **Developer stats** - Dynamic calculation from projects
+10. **Gold color** - Premium gradient refinement
 
+---
+
+## Acceptance Criteria
+
+1. No generic "premier developer" descriptions
+2. Developer logos not cropped, properly contained
+3. Developer stats show real data (not N/A or 0)
+4. Maps default to satellite view with premium beach look
+5. No Leaflet/Esri branding visible
+6. Email card has gold border on normal load, 3D on hover
+7. Contact numbers colored (green/blue/gold)
+8. Project card contacts don't overflow
+9. "Announced" badge visible, not hidden
+10. No hashtags/##### visible in descriptions
+11. Description split into visual sections
+12. All project photos extracted and displayed
+13. Floor plans shown when available
+14. Mortgage section extended with CTA
+15. Register Interest form smaller and premium
+16. Language selectors show flags
+17. Gold color feels more premium throughout
