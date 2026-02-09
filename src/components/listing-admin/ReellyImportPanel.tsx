@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 import { useSyncJobs } from "@/hooks/useSyncJobs";
 import { 
   RefreshCw, Download, CheckCircle, XCircle, 
@@ -168,6 +169,9 @@ export function ReellyImportPanel() {
     message?: string;
     error?: string;
   } | null>(null);
+  const [backfillProjectList, setBackfillProjectList] = useState<Array<{ name: string; status: string; images?: number; docs?: number }>>([]);
+  const [isBackfillListOpen, setIsBackfillListOpen] = useState(false);
+  const [backfillListFilter, setBackfillListFilter] = useState<"all" | "success" | "failed">("all");
   
   // Resume sync state
   const [hasResumableJob, setHasResumableJob] = useState(false);
@@ -219,12 +223,44 @@ export function ReellyImportPanel() {
     error?: string;
   } | null>(null);
   
-  // Sync live counts on mount and check for resumable jobs
+  // Sync live counts on mount, check for resumable jobs, and load persisted backfill results
   useEffect(() => {
     refreshCounts();
     checkForResumableJob();
+    loadPersistedBackfillResults();
   }, [refreshCounts]);
   
+  // Load persisted backfill results from sync_jobs table
+  const loadPersistedBackfillResults = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("sync_jobs")
+        .select("*")
+        .eq("job_type", "reelly_backfill")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+      
+      if (!error && data) {
+        const errorLog = data.error_log as Array<{ name: string; status: string; images?: number; docs?: number }> | null;
+        const results = errorLog || [];
+        const updated = data.stats_updated || 0;
+        const failed = data.stats_errors || 0;
+        setBackfillResult({
+          success: data.status === "completed" || data.status === "running",
+          processed: updated + failed,
+          updated,
+          failed,
+          remaining: data.stats_skipped || 0,
+          message: data.status === "completed" ? `Backfill complete! Updated ${updated} projects.` : `Backfill in progress...`,
+        });
+        setBackfillProjectList(results);
+      }
+    } catch {
+      // No persisted results yet
+    }
+  };
+
   // Check for interrupted sync jobs that can be resumed
   const checkForResumableJob = async () => {
     try {
@@ -652,11 +688,28 @@ export function ReellyImportPanel() {
 
     setIsBackfilling(true);
     setBackfillResult(null);
+    setBackfillProjectList([]);
 
     try {
       let aggregated = { processed: 0, updated: 0, failed: 0, remaining: 999 };
+      let allResults: Array<{ name: string; status: string; images?: number; docs?: number }> = [];
       let batches = 0;
       const maxBatches = mode === "all" ? 100 : 1;
+
+      // Create a sync_jobs entry for persistence
+      const { data: jobRow } = await supabase
+        .from("sync_jobs")
+        .insert({
+          job_type: "reelly_backfill",
+          status: "running",
+          stats_updated: 0,
+          stats_errors: 0,
+          stats_skipped: 0,
+          error_log: [],
+        })
+        .select("id")
+        .single();
+      const jobId = jobRow?.id;
 
       while (aggregated.remaining > 0 && batches < maxBatches) {
         const { data, error } = await supabase.functions.invoke("reelly-backfill-projects", {
@@ -665,6 +718,10 @@ export function ReellyImportPanel() {
 
         if (error) throw error;
         if (!data?.success) throw new Error(data?.error || "Backfill failed");
+
+        // Collect per-project results from the edge function
+        const batchResults = (data.results || []) as Array<{ name: string; status: string; images?: number; docs?: number }>;
+        allResults = [...allResults, ...batchResults];
 
         aggregated = {
           processed: aggregated.processed + (data.processed || 0),
@@ -678,6 +735,21 @@ export function ReellyImportPanel() {
           ...aggregated,
           message: `Processing batch ${batches + 1}...`,
         });
+        setBackfillProjectList(allResults);
+
+        // Persist progress to sync_jobs
+        if (jobId) {
+          await supabase
+            .from("sync_jobs")
+            .update({
+              stats_updated: aggregated.updated,
+              stats_errors: aggregated.failed,
+              stats_skipped: aggregated.remaining,
+              error_log: allResults.slice(-500) as unknown as Json[],
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", jobId);
+        }
 
         batches++;
         
@@ -692,6 +764,21 @@ export function ReellyImportPanel() {
         ...aggregated,
         message: `Backfill complete! Updated ${aggregated.updated} projects.`,
       });
+
+      // Mark job as completed
+      if (jobId) {
+        await supabase
+          .from("sync_jobs")
+          .update({
+            status: "completed",
+            completed_at: new Date().toISOString(),
+            stats_updated: aggregated.updated,
+            stats_errors: aggregated.failed,
+            stats_skipped: aggregated.remaining,
+            error_log: allResults.slice(-500) as unknown as Json[],
+          })
+          .eq("id", jobId);
+      }
 
       toast.success(`Backfilled ${aggregated.updated} projects with detailed data`);
       
@@ -1553,26 +1640,67 @@ export function ReellyImportPanel() {
 
           {backfillResult && (
             <div className={`bg-white/80 rounded-xl p-4 border ${backfillResult.success ? 'border-purple-200' : 'border-red-200'}`}>
-              <h3 className="font-semibold text-zinc-900 mb-3">Backfill Results</h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-zinc-900">Backfill Results</h3>
+                {backfillProjectList.length > 0 && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setBackfillResult(null);
+                      setBackfillProjectList([]);
+                      // Also clear from DB
+                      supabase
+                        .from("sync_jobs")
+                        .delete()
+                        .eq("job_type", "reelly_backfill")
+                        .then(() => {});
+                    }}
+                    className="text-xs text-zinc-500 hover:text-red-600"
+                  >
+                    <Trash2 className="h-3 w-3 mr-1" />
+                    Clear
+                  </Button>
+                )}
+              </div>
               {backfillResult.success ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <div className="bg-blue-50 rounded-lg p-3 text-center">
-                    <p className="text-xl font-bold text-blue-600">{backfillResult.processed || 0}</p>
-                    <p className="text-xs text-zinc-500">Processed</p>
+                <>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <button
+                      type="button"
+                      className="bg-blue-50 rounded-lg p-3 text-center hover:shadow-md transition cursor-pointer"
+                      onClick={() => { setBackfillListFilter("all"); setIsBackfillListOpen(true); }}
+                    >
+                      <p className="text-xl font-bold text-blue-600">{backfillResult.processed || 0}</p>
+                      <p className="text-xs text-zinc-500">Processed</p>
+                    </button>
+                    <button
+                      type="button"
+                      className="bg-emerald-50 rounded-lg p-3 text-center hover:shadow-md transition cursor-pointer"
+                      onClick={() => { setBackfillListFilter("success"); setIsBackfillListOpen(true); }}
+                    >
+                      <p className="text-xl font-bold text-emerald-600">{backfillResult.updated || 0}</p>
+                      <p className="text-xs text-zinc-500">Updated</p>
+                    </button>
+                    <button
+                      type="button"
+                      className="bg-red-50 rounded-lg p-3 text-center hover:shadow-md transition cursor-pointer"
+                      onClick={() => { setBackfillListFilter("failed"); setIsBackfillListOpen(true); }}
+                    >
+                      <p className="text-xl font-bold text-red-600">{backfillResult.failed || 0}</p>
+                      <p className="text-xs text-zinc-500">Failed</p>
+                    </button>
+                    <div className="bg-amber-50 rounded-lg p-3 text-center">
+                      <p className="text-xl font-bold text-amber-600">{backfillResult.remaining || 0}</p>
+                      <p className="text-xs text-zinc-500">Remaining</p>
+                    </div>
                   </div>
-                  <div className="bg-emerald-50 rounded-lg p-3 text-center">
-                    <p className="text-xl font-bold text-emerald-600">{backfillResult.updated || 0}</p>
-                    <p className="text-xs text-zinc-500">Updated</p>
-                  </div>
-                  <div className="bg-red-50 rounded-lg p-3 text-center">
-                    <p className="text-xl font-bold text-red-600">{backfillResult.failed || 0}</p>
-                    <p className="text-xs text-zinc-500">Failed</p>
-                  </div>
-                  <div className="bg-amber-50 rounded-lg p-3 text-center">
-                    <p className="text-xl font-bold text-amber-600">{backfillResult.remaining || 0}</p>
-                    <p className="text-xs text-zinc-500">Remaining</p>
-                  </div>
-                </div>
+                  {backfillProjectList.length > 0 && (
+                    <p className="text-xs text-purple-600 mt-2 text-center cursor-pointer hover:underline" onClick={() => { setBackfillListFilter("all"); setIsBackfillListOpen(true); }}>
+                      Click any count to see project details →
+                    </p>
+                  )}
+                </>
               ) : (
                 <Alert className="border-red-300 bg-red-50">
                   <XCircle className="h-4 w-4 text-red-600" />
@@ -1583,6 +1711,57 @@ export function ReellyImportPanel() {
               )}
             </div>
           )}
+
+          {/* Backfill Project List Dialog */}
+          <Dialog open={isBackfillListOpen} onOpenChange={setIsBackfillListOpen}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>
+                  Backfill Results — {backfillListFilter === "all" ? "All" : backfillListFilter === "success" ? "Updated" : "Failed"} Projects
+                </DialogTitle>
+              </DialogHeader>
+              <div className="flex gap-2 mb-3">
+                {(["all", "success", "failed"] as const).map(f => (
+                  <Button
+                    key={f}
+                    variant={backfillListFilter === f ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setBackfillListFilter(f)}
+                  >
+                    {f === "all" ? `All (${backfillProjectList.length})` : f === "success" ? `Updated (${backfillProjectList.filter(p => p.status === "success").length})` : `Failed (${backfillProjectList.filter(p => p.status !== "success").length})`}
+                  </Button>
+                ))}
+              </div>
+              <div className="max-h-[420px] overflow-y-auto space-y-1.5 pr-2">
+                {backfillProjectList
+                  .filter(p => backfillListFilter === "all" ? true : backfillListFilter === "success" ? p.status === "success" : p.status !== "success")
+                  .map((p, i) => (
+                    <div key={i} className="flex items-center justify-between gap-3 border rounded-lg p-2">
+                      <div className="min-w-0">
+                        <div className="font-medium text-zinc-900 truncate text-sm">{p.name}</div>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        {p.status === "success" ? (
+                          <>
+                            {(p.images ?? 0) > 0 && <Badge variant="outline" className="text-xs">{p.images} imgs</Badge>}
+                            {(p.docs ?? 0) > 0 && <Badge variant="outline" className="text-xs">{p.docs} docs</Badge>}
+                            <Badge className="bg-emerald-500 text-xs">✓</Badge>
+                          </>
+                        ) : (
+                          <Badge variant="destructive" className="text-xs">{p.status}</Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                {backfillProjectList.filter(p => backfillListFilter === "all" ? true : backfillListFilter === "success" ? p.status === "success" : p.status !== "success").length === 0 && (
+                  <p className="text-sm text-zinc-500 text-center py-4">No projects in this category</p>
+                )}
+              </div>
+              <div className="flex justify-end mt-2">
+                <Button variant="outline" onClick={() => setIsBackfillListOpen(false)}>Close</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </CardContent>
       </Card>
 

@@ -140,11 +140,12 @@ Deno.serve(async (req) => {
           // Delete existing single cover image and re-insert full gallery
           await supabase.from("project_images").delete().eq("project_id", p.id);
 
-          const imageRows = galleryImages.map((img: { url: string; alt?: string }, idx: number) => ({
+          const imageRows = galleryImages.map((img: { url: string; alt_text?: string }, idx: number) => ({
             project_id: p.id,
-            url: img.url,
-            alt: img.alt || `${p.name} - Image ${idx + 1}`,
+            image_url: img.url,
+            alt_text: img.alt_text || `${p.name} - Image ${idx + 1}`,
             display_order: idx,
+            data_source: "reelly",
           }));
 
           await supabase.from("project_images").insert(imageRows);
@@ -161,9 +162,10 @@ Deno.serve(async (req) => {
         if ((docCount || 0) === 0) {
           const docRows = documents.map((doc: { type: string; url: string; name?: string }) => ({
             project_id: p.id,
-            type: doc.type,
-            url: doc.url,
-            name: doc.name || `${p.name} - ${doc.type}`,
+            document_type: doc.type,
+            file_url: doc.url,
+            file_name: doc.name || `${p.name} - ${doc.type}`,
+            data_source: "reelly",
           }));
 
           await supabase.from("project_documents").insert(docRows);
