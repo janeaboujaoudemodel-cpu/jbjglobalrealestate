@@ -1,164 +1,130 @@
 
-# Premium Card Style Unification - Header Dropdowns & Footer
+# HR Hub Complete Integration & Performance Fixes
 
-## Summary
+## Summary of Issues
 
-Apply the premium champagne card style from the **MegaMenuInsights** dropdown to:
-1. **All other header mega-menu dropdowns** (content sections only - featured photo cards remain unchanged)
-2. **Footer navigation grid** (same 4-column card layout)
+Based on your feedback, I've identified the following problems:
 
-The key styling to replicate is the `MenuBlock` pattern:
-- Champagne gradient background: `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`
-- Gold border with hover enhancement: `border border-gold/30 hover:border-gold/50`
-- Rounded corners: `rounded-xl`
-- Inner padding: `p-4`
-- Section title with icon using `MegaMenuSectionTitle`
+| Issue | Location | Status |
+|-------|----------|--------|
+| CV/CV Collection missing from HR Hub | `HRDashboard.tsx`, `EmbeddedHRDashboard.tsx` | Not integrated |
+| Slow section loading | Multiple HR panel components | Performance issue |
+| "Customer Happiness Hub" named as just "Hub" | `Admin.tsx` line 496 | Wrong label |
+| No CV stats in HR Hub header | `HRDashboard.tsx` stats section | Missing stat |
 
 ---
 
-## Current vs Target State
+## Technical Implementation Plan
 
-### Current State
-- **MegaMenuInsights**: Uses premium champagne gradient cards in 4x2 grid
-- **Other mega menus (Buy, Sell, Rent, Areas, Developers, Services, Projects)**: Use plain list-style links without card containers
-- **Footer navigation**: Uses plain text links in a grid without card styling
+### 1. Add CV Center Tab to HR Hub
 
-### Target State
-- **All mega menus**: Content sections wrapped in champagne gradient cards (photo sections unchanged)
-- **Footer**: Navigation sections wrapped in champagne gradient cards in 4-column grid, matching the Insights dropdown
+**Files to modify:**
+- `src/pages/HRDashboard.tsx`
+- `src/components/admin/EmbeddedHRDashboard.tsx`
 
----
+**Changes:**
+1. Import `CVCenter` component
+2. Add new "CV Center" tab trigger with FileText icon
+3. Add TabsContent for CV Center
+4. Add CV stats to the header cards (pending CVs, total CVs collected)
 
-## Technical Implementation
-
-### Part 1: Create Reusable MenuBlock Component
-
-Extract the `MenuBlock` pattern from MegaMenuInsights into the shared mega-menu-primitives file so all menus can use it:
-
-**File: `src/components/header/mega-menu-primitives.tsx`**
-
-Add new `MegaMenuCard` component:
 ```tsx
-export function MegaMenuCard({
-  icon,
-  title,
-  children,
-  className,
-}: {
-  icon: LucideIcon;
-  title: string;
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <div className={cn(
-      "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]",
-      "border border-gold/30 rounded-xl p-4",
-      "hover:border-gold/50 transition-all",
-      className
-    )}>
-      <MegaMenuSectionTitle icon={icon} title={title} />
-      <div className="space-y-0 max-h-[220px] overflow-y-auto">
-        {children}
-      </div>
-    </div>
-  );
-}
+// New tab in HRDashboard.tsx
+<TabsTrigger value="cv-center" className="gap-2 rounded-lg ...">
+  <FileText className="h-4 w-4" />
+  CV Center
+</TabsTrigger>
+
+// New tab content
+<TabsContent value="cv-center" className="mt-6">
+  <CVCenter userId={user?.id || ''} />
+</TabsContent>
 ```
 
-### Part 2: Update Header Mega Menus
+### 2. Add CV Stats to Header
 
-For each mega menu, wrap the link sections in the new `MegaMenuCard` component:
+**Files to modify:**
+- `src/hooks/useHRStats.ts`
+- `src/pages/HRDashboard.tsx`
+- `src/components/admin/EmbeddedHRDashboard.tsx`
 
-| Menu | Current Structure | New Structure |
-|------|-------------------|---------------|
-| MegaMenuBuy | 2 columns of plain links | 2 `MegaMenuCard` blocks |
-| MegaMenuSell | 2 columns of plain links | 2 `MegaMenuCard` blocks |
-| MegaMenuRent | 2 columns of plain links | 2 `MegaMenuCard` blocks |
-| MegaMenuAreas | Grid of plain links | 1 or 2 `MegaMenuCard` blocks |
-| MegaMenuDevelopers | Grid of plain links | 1 or 2 `MegaMenuCard` blocks |
-| MegaMenuServices | Grid of plain links | 2 `MegaMenuCard` blocks |
-| MegaMenuProjects | Single list of links | 1 `MegaMenuCard` block |
-| MegaMenuMore | 5-6 columns of plain links | 5-6 `MegaMenuCard` blocks |
-| MegaMenuToolkit | 5 suite cards | Already styled, minor alignment |
-| MegaMenuInsights | Already using MenuBlock | No change needed |
-
-**Example transformation for MegaMenuBuy:**
-
-Before:
+**Changes to useHRStats:**
 ```tsx
-<div className="relative flex flex-col">
-  <MegaMenuSectionTitle icon={Building2} title="Properties by Type" />
-  <div className="space-y-1 min-h-[180px]">
-    {propertyTypes.map((item) => (
-      <MegaMenuIconLink ... />
-    ))}
-  </div>
-</div>
+// Add CV counts to stats
+const { count: pendingCVs } = await supabase
+  .from("hr_applications")
+  .select("*", { count: "exact", head: true })
+  .eq("status", "pending");
+
+const { count: totalCVs } = await supabase
+  .from("hr_applications")
+  .select("*", { count: "exact", head: true });
+
+// Also count from hr_cv_submissions (chat widget submissions)
+const { count: chatCVs } = await supabase
+  .from("hr_cv_submissions")
+  .select("*", { count: "exact", head: true });
 ```
 
-After:
+**New stat card:**
 ```tsx
-<MegaMenuCard icon={Building2} title="Properties by Type">
-  {propertyTypes.map((item) => (
-    <MegaMenuIconLink ... />
-  ))}
-</MegaMenuCard>
+<PremiumStatCard
+  title="CVs Collected"
+  value={statsLoading ? "..." : String(stats?.totalCVs || 0)}
+  subtitle={`${stats?.pendingCVs || 0} pending review`}
+  icon={FileText}
+  accentColor="amber"
+/>
 ```
 
-### Part 3: Update Footer Navigation Grid
+### 3. Fix Performance - Parallel Queries & Lazy Loading
 
-Transform the footer navigation sections to use the same card styling:
+**Files to modify:**
+- `src/hooks/useHRStats.ts`
+- `src/components/admin/EmbeddedHRDashboard.tsx`
 
-**File: `src/components/Footer.tsx`**
+**Current issue:** Sequential database queries slow down loading.
 
-Create a `FooterCard` component (or reuse MegaMenuCard if importing):
+**Solution:** Use `Promise.all` for parallel queries:
 
 ```tsx
-const FooterCard = ({ 
-  title, 
-  children 
-}: { 
-  title: string; 
-  children: React.ReactNode 
-}) => (
-  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-    <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
-      <span className="w-4 h-4 text-gold">✦</span>
-      {title}
-    </h4>
-    <div className="space-y-2">
-      {children}
-    </div>
-  </div>
-);
+// Before (sequential)
+const { count: employeeCount } = await supabase...;
+const { count: positionsCount } = await supabase...;
+const { count: newHiresCount } = await supabase...;
+
+// After (parallel)
+const [employeesResult, positionsResult, hiresResult, cvsResult] = await Promise.all([
+  supabase.from("crm_users_profile").select("*", { count: "exact", head: true }).eq("is_active", true),
+  supabase.from("hr_job_offers").select("*", { count: "exact", head: true }).eq("is_active", true),
+  supabase.from("crm_users_profile").select("*", { count: "exact", head: true }).gte("created_at", thirtyDaysAgo),
+  supabase.from("hr_applications").select("*", { count: "exact", head: true }),
+]);
 ```
 
-Transform footer grid from:
+**Additional optimizations:**
+- Add `staleTime: 120000` (2 minutes) to reduce refetching
+- Use React.lazy for panel components not immediately visible
+- Add loading skeletons for each panel
+
+### 4. Fix Customer Happiness Hub Naming
+
+**File to modify:** `src/pages/Admin.tsx`
+
+**Line 494-497 (current):**
 ```tsx
-<div className="grid grid-cols-2 lg:grid-cols-4 border-b border-gold/20">
-  <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
-    <h4 className="font-bold ... text-gold">Properties</h4>
-    <ul>...</ul>
-  </div>
-  ...
-</div>
+<TabsTrigger value="customer-happiness" className="tab-trigger-champagne text-black">
+  <Heart className="w-4 h-4 mr-2" />
+  Hub
+</TabsTrigger>
 ```
 
-To:
+**Change to:**
 ```tsx
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-  <FooterCard title="Properties">
-    {propertiesLinks.map((link) => (
-      <Link to={link.href} className="block text-zinc-700 hover:text-gold text-sm">
-        {link.label}
-      </Link>
-    ))}
-  </FooterCard>
-  <FooterCard title="Services">...</FooterCard>
-  <FooterCard title="Guides">...</FooterCard>
-  <FooterCard title="About & Careers">...</FooterCard>
-</div>
+<TabsTrigger value="customer-happiness" className="tab-trigger-champagne text-black">
+  <Heart className="w-4 h-4 mr-2" />
+  Customer Happiness Hub
+</TabsTrigger>
 ```
 
 ---
@@ -167,70 +133,56 @@ To:
 
 | File | Changes |
 |------|---------|
-| `src/components/header/mega-menu-primitives.tsx` | Add `MegaMenuCard` component |
-| `src/components/header/MegaMenuBuy.tsx` | Wrap link sections in `MegaMenuCard` |
-| `src/components/header/MegaMenuSell.tsx` | Wrap link sections in `MegaMenuCard` |
-| `src/components/header/MegaMenuRent.tsx` | Wrap link sections in `MegaMenuCard` |
-| `src/components/header/MegaMenuAreas.tsx` | Wrap link section in `MegaMenuCard` |
-| `src/components/header/MegaMenuDevelopers.tsx` | Wrap link section in `MegaMenuCard` |
-| `src/components/header/MegaMenuServices.tsx` | Wrap link sections in `MegaMenuCard` |
-| `src/components/header/MegaMenuProjects.tsx` | Wrap link section in `MegaMenuCard` |
-| `src/components/header/MegaMenuMore.tsx` | Wrap each column in `MegaMenuCard` |
-| `src/components/header/MegaMenuInsights.tsx` | Refactor to use shared `MegaMenuCard` |
-| `src/components/Footer.tsx` | Replace navigation grid with `FooterCard` components |
+| `src/pages/HRDashboard.tsx` | Add CV Center tab, add CV stat card |
+| `src/components/admin/EmbeddedHRDashboard.tsx` | Add CV Center tab, add CV stat card |
+| `src/hooks/useHRStats.ts` | Add CV stats queries, optimize with Promise.all |
+| `src/pages/Admin.tsx` | Fix "Hub" → "Customer Happiness Hub" (line 496) |
 
 ---
 
-## Visual Design Specification
+## Updated HR Hub Structure After Changes
 
-### Card Styling (Consistent Across All)
-- **Background**: `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]` (champagne gradient)
-- **Border**: `border border-gold/30` (subtle gold)
-- **Border Hover**: `hover:border-gold/50` (enhanced gold on hover)
-- **Corners**: `rounded-xl`
-- **Padding**: `p-4`
-- **Title**: Bold, uppercase, black text with gold icon
-- **Links**: Black text with gold hover, compact spacing
-
-### Footer-Specific Adjustments
-- Cards arranged in 4-column grid on desktop, 2 on tablet, 1 on mobile
-- Each card contains section title + list of links
-- Maintains existing link structure but wrapped in premium cards
-- Gap between cards: `gap-4`
-
-### Header Menu Layout
-- Featured photo card remains on the left (unchanged)
-- Right side content wrapped in premium cards
-- Vertical gold divider between photo and content sections (unchanged)
-- CTA buttons at bottom remain outside the cards
+```text
+HR Command Center
+├── Stats Row
+│   ├── Active Employees
+│   ├── Open Positions
+│   ├── New Hires
+│   ├── CVs Collected (NEW)
+│   └── AI Insights
+│
+├── Tabs
+│   ├── Performance
+│   ├── Hunting
+│   ├── CV Center (NEW) ← Added tab
+│   ├── Positions
+│   ├── Leave
+│   ├── Approvals
+│   ├── Warnings
+│   ├── Job Offers
+│   ├── Payroll
+│   ├── Benchmarks
+│   ├── LinkedIn
+│   └── Competitors
+```
 
 ---
 
 ## Implementation Order
 
-1. Add `MegaMenuCard` component to `mega-menu-primitives.tsx`
-2. Update `MegaMenuInsights.tsx` to use the shared component (refactor)
-3. Update each header mega menu to use `MegaMenuCard`:
-   - MegaMenuBuy
-   - MegaMenuSell
-   - MegaMenuRent
-   - MegaMenuAreas
-   - MegaMenuDevelopers
-   - MegaMenuServices
-   - MegaMenuProjects
-   - MegaMenuMore
-4. Update Footer.tsx navigation grid with `FooterCard` pattern
-5. Test on all breakpoints (mobile, tablet, desktop)
+1. **Fix naming** - Change "Hub" to "Customer Happiness Hub" in Admin.tsx
+2. **Add CV stats** - Update useHRStats.ts with CV counts and parallel queries
+3. **Add CV Center tab** - Update HRDashboard.tsx and EmbeddedHRDashboard.tsx
+4. **Performance optimizations** - Add staleTime, lazy loading for panels
+5. **Test all tabs** - Verify CV Center loads correctly with real data
 
 ---
 
 ## Acceptance Criteria
 
-1. All header mega-menus use champagne gradient cards for link sections
-2. Featured photo sections remain unchanged
-3. Footer navigation uses same card style as header dropdowns
-4. 4-column grid layout in footer matches Insights dropdown
-5. Cards have gold borders with hover enhancement
-6. Responsive behavior maintained (stacks on mobile)
-7. No visual regression in other areas
-8. Consistent typography and spacing across all cards
+1. HR Hub has "CV Center" tab visible in both standalone and embedded versions
+2. Stats section shows "CVs Collected" with pending count
+3. CV Center tab loads and displays CVs from `hr_applications` table
+4. All tabs load faster (parallel queries instead of sequential)
+5. Admin panel tab reads "Customer Happiness Hub" instead of "Hub"
+6. No breaking changes to existing HR functionality
