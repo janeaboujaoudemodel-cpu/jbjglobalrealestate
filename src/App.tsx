@@ -255,6 +255,7 @@ import CompanyComm from "./pages/CompanyComm";
 // Creative Suite
 import Studio from "./pages/Studio";
 import StudioEditor from "./pages/StudioEditor";
+import StudioSettings from "./pages/StudioSettings";
 import EmailClient from "./pages/EmailClient";
 import TeamChat from "./pages/TeamChat";
 import KanbanBoard from "./pages/KanbanBoard";
@@ -604,6 +605,10 @@ const App = () => (
                 {/* Creative Suite - Owner-only */}
                 <Route path="/studio" element={<OwnerGuard><Studio /></OwnerGuard>} />
                 <Route path="/studio/editor/:projectId" element={<OwnerGuard><StudioEditor /></OwnerGuard>} />
+                <Route path="/studio/settings" element={<OwnerGuard><StudioSettings /></OwnerGuard>} />
+                
+                {/* Settings redirect - prevent 404 */}
+                <Route path="/settings" element={<Navigate to="/profile?tab=settings" replace />} />
                 
 {/* Toolkit Routes */}
                 <Route path="/toolkit" element={

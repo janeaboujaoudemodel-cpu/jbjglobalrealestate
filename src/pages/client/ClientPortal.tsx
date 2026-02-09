@@ -147,7 +147,7 @@ const ClientPortal = () => {
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" onClick={() => navigate("/settings")}>
+              <Button variant="outline" size="sm" onClick={() => navigate("/profile?tab=settings")}>
                 <Settings className="w-4 h-4 mr-2" />
                 Preferences
               </Button>
