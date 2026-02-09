@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 // Simple inline validation (avoiding external zod import for deployment stability)
 const validateRequest = (data: unknown): { success: boolean; data?: any; error?: string } => {
