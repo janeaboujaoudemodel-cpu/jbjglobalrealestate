@@ -40,10 +40,11 @@ export default function DeveloperInfoCard({ developer, projectName }: DeveloperI
     <div className="w-full jj-section-champagne border-y border-gold/20">
       <div className="container mx-auto px-4 md:px-8 py-8 md:py-12">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
-          {/* Developer Logo - Full bleed logo fills frame */}
+          {/* Developer Logo - Object Contain with White BG, No Cropping */}
           <div 
-            className="w-20 h-14 rounded-lg overflow-hidden flex-shrink-0"
+            className="w-20 h-14 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0"
             style={{
+              background: '#FFFFFF',
               border: '2px solid hsl(42 45% 59%)',
               boxShadow: '0 2px 8px rgba(200,167,102,0.2)'
             }}
@@ -52,12 +53,10 @@ export default function DeveloperInfoCard({ developer, projectName }: DeveloperI
               <img 
                 src={developer.logo_url} 
                 alt={`${developer.name} logo`}
-                className="w-full h-full object-cover"
+                className="max-h-10 max-w-[90%] object-contain"
               />
             ) : (
-              <div className="w-full h-full bg-white flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-zinc-400" />
-              </div>
+              <Building2 className="w-6 h-6 text-zinc-400" />
             )}
           </div>
 
