@@ -52,8 +52,9 @@ export function SourceCountsPanel({ reellyApiTotal }: SourceCountsPanelProps) {
           {/* API Stats Row */}
           <div className="grid grid-cols-4 gap-3">
             <div 
-              className="text-center p-3 bg-white rounded-lg border border-gold/30 cursor-pointer hover:border-gold transition-colors"
-              title="Expected from Reelly API"
+              className="text-center p-3 bg-white rounded-lg border border-gold/30 cursor-pointer hover:border-gold hover:bg-gold/5 transition-colors"
+              onClick={() => navigate('/listing-admin?view=data-ops&syncTab=approvals&source=reelly')}
+              title="Click to view all Reelly projects"
             >
               <p className="text-xs text-zinc-600 mb-1 font-medium">Expected</p>
               <p className="text-xl font-bold text-zinc-800">

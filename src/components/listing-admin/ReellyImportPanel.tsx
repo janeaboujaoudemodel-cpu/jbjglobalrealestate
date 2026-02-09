@@ -244,6 +244,37 @@ export function ReellyImportPanel() {
     }
   };
   
+  // Clear stuck jobs that are paused with no cursor (non-resumable)
+  const handleClearStuckJobs = async () => {
+    try {
+      // Cancel all paused jobs with no next_cursor (these are stuck and can't resume)
+      const { data, error } = await supabase
+        .from("sync_jobs")
+        .update({ 
+          status: 'completed', 
+          completed_at: new Date().toISOString()
+        })
+        .eq("status", "paused")
+        .is("next_cursor", null)
+        .select("id");
+      
+      if (error) throw error;
+      
+      const clearedCount = data?.length || 0;
+      if (clearedCount > 0) {
+        toast.success(`Cleared ${clearedCount} stuck sync jobs`);
+        // Refresh state
+        checkForResumableJob();
+        refreshCounts();
+      } else {
+        toast.info("No stuck jobs found to clear");
+      }
+    } catch (err: any) {
+      console.error("Error clearing stuck jobs:", err);
+      toast.error(err.message || "Failed to clear stuck jobs");
+    }
+  };
+  
   // Resume an interrupted sync job
   const handleResumeSync = async () => {
     if (!resumableJobInfo?.next_cursor) {
@@ -687,11 +718,11 @@ export function ReellyImportPanel() {
     setFullExtractionStep("testing");
 
     try {
-      // Step 1: Test API
+      // Step 1: Test API - use direct result, not stale state
       setFullExtractionStep("Step 1/7: Testing API connection...");
-      await handleTestApiConnection();
+      const isConnected = await handleTestApiConnection();
       
-      if (apiConnected !== true) {
+      if (!isConnected) {
         throw new Error("API connection failed. Please check your API key.");
       }
 
@@ -809,7 +840,7 @@ export function ReellyImportPanel() {
     }
   }, []);
 
-  const handleTestApiConnection = async () => {
+  const handleTestApiConnection = async (): Promise<boolean> => {
     setIsTestingApi(true);
     // Don't reset apiConnected here - keep previous result visible
 
@@ -838,14 +869,17 @@ export function ReellyImportPanel() {
         toast.success(`API connected! ${apiTotal?.toLocaleString()} projects available`);
         // Refresh database counts too
         refreshCounts();
+        return true;
       } else {
         setApiConnected(false);
         toast.error(data?.error || "API connection failed");
+        return false;
       }
     } catch (err: any) {
       console.error("API test error:", err);
       setApiConnected(false);
       toast.error(err.message || "Failed to test API connection");
+      return false;
     } finally {
       setIsTestingApi(false);
     }
@@ -1028,11 +1062,24 @@ export function ReellyImportPanel() {
         </Alert>
       )}
 
-      <div>
-        <h2 className="text-2xl font-bold text-zinc-900 mb-2">Reelly Integration</h2>
-        <p className="text-zinc-600">
-          Import projects from Reelly via API
-        </p>
+      {/* Clear Stuck Jobs Button - Admin maintenance tool */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-zinc-900 mb-2">Reelly Integration</h2>
+          <p className="text-zinc-600">
+            Import projects from Reelly via API
+          </p>
+        </div>
+        <Button 
+          onClick={handleClearStuckJobs}
+          variant="outline"
+          size="sm"
+          className="text-amber-700 border-amber-300 hover:bg-amber-50"
+          title="Clear paused sync jobs that cannot be resumed"
+        >
+          <Trash2 className="h-3 w-3 mr-1" />
+          Clear Stuck Jobs
+        </Button>
       </div>
       
       {/* Live Counts Banner - Single Source of Truth */}

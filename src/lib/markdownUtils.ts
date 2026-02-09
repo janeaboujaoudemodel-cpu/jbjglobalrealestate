@@ -45,7 +45,10 @@ export function renderMarkdownToHtml(markdown: string | null): string {
   let cleaned = cleanRawText(markdown);
   
   let html = cleaned
-    // Headers (must process ### before ## before #)
+    // Headers (must process ###### before ##### before #### before ### before ## before #)
+    .replace(/^###### (.+)$/gm, '<h6 class="font-medium text-sm mt-2 mb-1 text-muted-foreground">$1</h6>')
+    .replace(/^##### (.+)$/gm, '<h5 class="font-medium text-base mt-3 mb-1.5">$1</h5>')
+    .replace(/^#### (.+)$/gm, '<h4 class="font-semibold text-lg mt-4 mb-2">$1</h4>')
     .replace(/^### (.+)$/gm, '<h4 class="font-semibold text-lg mt-4 mb-2">$1</h4>')
     .replace(/^## (.+)$/gm, '<h3 class="font-bold text-xl mt-6 mb-3">$1</h3>')
     .replace(/^# (.+)$/gm, '<h2 class="font-bold text-2xl mt-8 mb-4">$1</h2>')
@@ -73,7 +76,7 @@ export function renderMarkdownToHtml(markdown: string | null): string {
   html = html.replace(/(<li[^>]*>.*?<\/li>(?:<br\/>)?)+/g, '<ul class="list-disc pl-5 space-y-1 my-3">$&</ul>');
   
   return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['h2', 'h3', 'h4', 'p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'a'],
+    ALLOWED_TAGS: ['h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'a'],
     ALLOWED_ATTR: ['href', 'class', 'target', 'rel'],
   });
 }
