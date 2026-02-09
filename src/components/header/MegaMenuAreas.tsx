@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { MapPin, Eye, ArrowRight } from 'lucide-react';
+import { MapPin, Eye } from 'lucide-react';
 import menuDowntownSkyline from '@/assets/menu-downtown-dubai-skyline.jpg';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 import { useAreas } from '@/hooks/useAreas';
 
 interface MegaMenuAreasProps {
@@ -16,11 +15,6 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
   const displayAreas = areas && areas.length > 0 
     ? areas.map(a => ({ name: a.name, slug: a.slug }))
     : [];
-
-  // Split into two columns
-  const half = Math.ceil(displayAreas.length / 2);
-  const firstColumn = displayAreas.slice(0, half);
-  const secondColumn = displayAreas.slice(half);
 
   return (
     <MegaMenuShell ref={ref}>
@@ -41,43 +35,29 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
           </div>
 
           <div className="lg:col-span-7 lg:border-l lg:border-gold/30 lg:pl-8">
-            <MegaMenuSectionTitle
-              icon={MapPin}
-              title="Top Areas in Dubai"
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
-              {firstColumn.map((area) => (
-                <MegaMenuIconLink
-                  key={area.slug}
-                  to={`/area/${area.slug}`}
-                  onClick={onClose}
-                  icon={MapPin}
-                  title={area.name}
-                  compact
-                />
-              ))}
-              {secondColumn.map((area) => (
-                <MegaMenuIconLink
-                  key={area.slug}
-                  to={`/area/${area.slug}`}
-                  onClick={onClose}
-                  icon={MapPin}
-                  title={area.name}
-                  compact
-                />
-              ))}
-            </div>
+            {/* Single Premium Card for Areas */}
+            <MegaMenuCard icon={MapPin} title="Top Areas in Dubai">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
+                {displayAreas.map((area) => (
+                  <MegaMenuIconLink
+                    key={area.slug}
+                    to={`/area/${area.slug}`}
+                    onClick={onClose}
+                    icon={MapPin}
+                    title={area.name}
+                    compact
+                  />
+                ))}
+              </div>
+            </MegaMenuCard>
             
-            {/* View All - emphasized */}
-            <div className="mt-3">
-              <MegaMenuIconLink
+            {/* View All CTA */}
+            <div className="mt-4">
+              <MegaMenuCTAButton
                 to="/areas"
                 onClick={onClose}
                 icon={Eye}
                 title="View All Areas"
-                compact
-                emphasis
               />
             </div>
           </div>

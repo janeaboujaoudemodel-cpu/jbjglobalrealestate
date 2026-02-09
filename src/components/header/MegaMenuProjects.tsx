@@ -2,7 +2,7 @@ import React from 'react';
 import { Building2, Calendar, Check, Sparkles, Eye } from 'lucide-react';
 import menuOffplanProject from '@/assets/menu-offplan-project.jpg';
 import dubaiLandmarksVideo from '@/assets/videos/dubai-landmarks-hero.mp4';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuProjectsProps {
   onClose: () => void;
@@ -34,21 +34,23 @@ const MegaMenuProjects = React.forwardRef<HTMLDivElement, MegaMenuProjectsProps>
             />
           </div>
 
-          {/* Right: Categories (with divider) */}
+          {/* Right: Categories in Premium Card */}
           <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
-            <MegaMenuSectionTitle icon={Building2} title="Project Categories" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-              {projectCategories.map((item) => (
-                <MegaMenuIconLink
-                  key={item.label}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </div>
+            <MegaMenuCard icon={Building2} title="Project Categories">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                {projectCategories.map((item) => (
+                  <MegaMenuIconLink
+                    key={item.label}
+                    to={item.href}
+                    onClick={onClose}
+                    icon={item.icon}
+                    title={item.label}
+                    compact
+                  />
+                ))}
+              </div>
+            </MegaMenuCard>
+            
             {/* Full-width CTA Button */}
             <div className="mt-6">
               <MegaMenuCTAButton

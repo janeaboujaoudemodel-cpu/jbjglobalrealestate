@@ -9,7 +9,7 @@ import {
 import {
   MegaMenuIconLink,
   MegaMenuShell,
-  MegaMenuSectionTitle,
+  MegaMenuCard,
 } from '@/components/header/mega-menu-primitives';
 import { useFounderVisibility } from '@/contexts/FounderVisibilityContext';
 import { useUserModeContext } from '@/contexts/UserModeContext';
@@ -122,35 +122,6 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
 
   const modeLinks = getModeLinks();
 
-  // Section component for consistent styling
-  const MenuBlock = ({ 
-    icon, 
-    title, 
-    links, 
-    showDivider = false 
-  }: { 
-    icon: typeof Newspaper; 
-    title: string; 
-    links: Array<{ label: string; href: string; icon: typeof Newspaper }>; 
-    showDivider?: boolean;
-  }) => (
-    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-      <MegaMenuSectionTitle icon={icon} title={title} />
-      <div className="space-y-0 max-h-[220px] overflow-y-auto">
-        {links.map((item) => (
-          <MegaMenuIconLink
-            key={item.href}
-            to={item.href}
-            onClick={onClose}
-            icon={item.icon}
-            title={item.label}
-            compact
-          />
-        ))}
-      </div>
-    </div>
-  );
-
   return (
     <MegaMenuShell ref={ref} noScroll>
       {/* Scrollable container with max height to prevent cropping */}
@@ -159,19 +130,113 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
         style={{ maxHeight: 'calc(100dvh - 140px)' }}
       >
         <div className="max-w-[1400px] mx-auto px-4 lg:px-6 py-4 lg:py-5">
-          {/* 4 + 4 Grid Layout */}
+          {/* 4 + 4 Grid Layout using shared MegaMenuCard */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Row 1 */}
-            <MenuBlock icon={Newspaper} title="News & Updates" links={newsLinks} />
-            <MenuBlock icon={BarChart3} title="Market Intelligence" links={intelligenceLinks} />
-            <MenuBlock icon={BookOpen} title="Guides" links={guidesLinks} />
-            <MenuBlock icon={Briefcase} title="Services" links={servicesLinks} />
+            <MegaMenuCard icon={Newspaper} title="News & Updates">
+              {newsLinks.map((item) => (
+                <MegaMenuIconLink
+                  key={item.href}
+                  to={item.href}
+                  onClick={onClose}
+                  icon={item.icon}
+                  title={item.label}
+                  compact
+                />
+              ))}
+            </MegaMenuCard>
+            
+            <MegaMenuCard icon={BarChart3} title="Market Intelligence">
+              {intelligenceLinks.map((item) => (
+                <MegaMenuIconLink
+                  key={item.href}
+                  to={item.href}
+                  onClick={onClose}
+                  icon={item.icon}
+                  title={item.label}
+                  compact
+                />
+              ))}
+            </MegaMenuCard>
+            
+            <MegaMenuCard icon={BookOpen} title="Guides">
+              {guidesLinks.map((item) => (
+                <MegaMenuIconLink
+                  key={item.href}
+                  to={item.href}
+                  onClick={onClose}
+                  icon={item.icon}
+                  title={item.label}
+                  compact
+                />
+              ))}
+            </MegaMenuCard>
+            
+            <MegaMenuCard icon={Briefcase} title="Services">
+              {servicesLinks.map((item) => (
+                <MegaMenuIconLink
+                  key={item.href}
+                  to={item.href}
+                  onClick={onClose}
+                  icon={item.icon}
+                  title={item.label}
+                  compact
+                />
+              ))}
+            </MegaMenuCard>
             
             {/* Row 2 */}
-            <MenuBlock icon={Sparkles} title="Business Suites" links={businessSuitesLinks} />
-            <MenuBlock icon={LayoutDashboard} title={getModeTitle()} links={modeLinks} />
-            <MenuBlock icon={Building2} title="Company" links={companyLinks} />
-            <MenuBlock icon={Shield} title="Legal" links={legalLinks} />
+            <MegaMenuCard icon={Sparkles} title="Business Suites">
+              {businessSuitesLinks.map((item) => (
+                <MegaMenuIconLink
+                  key={item.href}
+                  to={item.href}
+                  onClick={onClose}
+                  icon={item.icon}
+                  title={item.label}
+                  compact
+                />
+              ))}
+            </MegaMenuCard>
+            
+            <MegaMenuCard icon={LayoutDashboard} title={getModeTitle()}>
+              {modeLinks.map((item) => (
+                <MegaMenuIconLink
+                  key={item.href}
+                  to={item.href}
+                  onClick={onClose}
+                  icon={item.icon}
+                  title={item.label}
+                  compact
+                />
+              ))}
+            </MegaMenuCard>
+            
+            <MegaMenuCard icon={Building2} title="Company">
+              {companyLinks.map((item) => (
+                <MegaMenuIconLink
+                  key={item.href}
+                  to={item.href}
+                  onClick={onClose}
+                  icon={item.icon}
+                  title={item.label}
+                  compact
+                />
+              ))}
+            </MegaMenuCard>
+            
+            <MegaMenuCard icon={Shield} title="Legal">
+              {legalLinks.map((item) => (
+                <MegaMenuIconLink
+                  key={item.href}
+                  to={item.href}
+                  onClick={onClose}
+                  icon={item.icon}
+                  title={item.label}
+                  compact
+                />
+              ))}
+            </MegaMenuCard>
           </div>
         </div>
       </div>

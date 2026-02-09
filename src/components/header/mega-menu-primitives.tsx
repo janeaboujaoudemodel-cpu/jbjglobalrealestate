@@ -304,3 +304,35 @@ export function MegaMenuSectionDivider() {
     <div className="my-4 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
   );
 }
+
+type MegaMenuCardProps = {
+  icon: LucideIcon;
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+};
+
+/**
+ * Premium champagne gradient card for mega menu sections
+ * Matches the MegaMenuInsights premium card styling
+ */
+export function MegaMenuCard({
+  icon,
+  title,
+  children,
+  className,
+}: MegaMenuCardProps) {
+  return (
+    <div className={cn(
+      "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]",
+      "border border-gold/30 rounded-xl p-4",
+      "hover:border-gold/50 transition-all",
+      className
+    )}>
+      <MegaMenuSectionTitle icon={icon} title={title} />
+      <div className="space-y-0 max-h-[220px] overflow-y-auto">
+        {children}
+      </div>
+    </div>
+  );
+}
