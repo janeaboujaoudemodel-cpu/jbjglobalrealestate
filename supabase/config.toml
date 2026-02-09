@@ -237,3 +237,21 @@ verify_jwt = false
 
 [functions.repair-project-extraction]
 verify_jwt = false
+
+[functions.batch-extract-pending]
+verify_jwt = false
+
+[functions.reelly-backfill-projects]
+verify_jwt = false
+
+[functions.repair-approved-projects]
+verify_jwt = false
+
+[functions.reelly-scrape]
+verify_jwt = false
+
+[functions.scheduled-extraction]
+verify_jwt = false
+
+[functions.extract-developers-provident]
+verify_jwt = false

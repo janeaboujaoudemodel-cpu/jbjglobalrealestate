@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2";
 import { fetchWithRetry, sleep } from "../_shared/provident/http.ts";
 import { extractProvidentProjectFromScrape, type ExtractedProjectData } from "../_shared/provident/extract.ts";
 import { fetchProvidentPageDataPdfUrls } from "../_shared/provident/pagedata.ts";
