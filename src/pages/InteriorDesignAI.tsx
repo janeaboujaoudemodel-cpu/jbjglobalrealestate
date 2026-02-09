@@ -346,9 +346,8 @@ ${customNotes ? `Additional requirements: ${customNotes}` : ''}`;
         {step !== 'mode' && step !== 'processing' && (
           <div className="max-w-4xl mx-auto mb-6">
             <Button
-              variant="ghost"
+              variant="dark-outline"
               onClick={step === 'form' && selectedMode !== 'chat' ? handleBackToProject : handleBackToMode}
-              className="text-zinc-400 hover:text-white"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               {step === 'form' && selectedMode !== 'chat' ? 'Back to Project Setup' : 'Back to Mode Selection'}
@@ -404,7 +403,8 @@ ${customNotes ? `Additional requirements: ${customNotes}` : ''}`;
                 onClick={handleContinueToForm}
                 disabled={!projectName.trim()}
                 size="lg"
-                className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-500 hover:to-purple-500 text-white px-8"
+                variant="ai-fuchsia"
+                className="px-8"
               >
                 Continue to Design
                 <Sparkles className="w-4 h-4 ml-2" />
@@ -517,6 +517,7 @@ ${customNotes ? `Additional requirements: ${customNotes}` : ''}`;
               onRequestRevision={handleRequestRevision}
               onGenerateAnother={handleGenerateAnother}
               isSaving={isSaving}
+              mode={selectedMode || undefined}
             />
           </motion.div>
         )}

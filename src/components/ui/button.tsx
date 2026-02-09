@@ -77,6 +77,11 @@ const AI_RED = "bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hove
 const AI_LIME = "bg-gradient-to-r from-lime-600 to-lime-500 hover:from-lime-500 hover:to-lime-400 text-white border border-lime-400/30 shadow-lg shadow-lime-500/20";
 const AI_SKY = "bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white border border-sky-400/30 shadow-lg shadow-sky-500/20";
 const AI_GOLD = "bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-gold-foreground border border-gold/30 shadow-lg shadow-gold/20";
+const AI_FUCHSIA = "bg-gradient-to-r from-fuchsia-600 to-fuchsia-500 hover:from-fuchsia-500 hover:to-fuchsia-400 text-white border border-fuchsia-400/30 shadow-lg shadow-fuchsia-500/20";
+
+// Dark theme variants for buttons on dark backgrounds
+const DARK_GHOST = "bg-transparent text-white border-2 border-zinc-600 hover:bg-white/10 hover:border-white/40 transition-all";
+const DARK_OUTLINE = "bg-transparent text-white border-2 border-white/40 hover:bg-white/10 hover:border-white/60 transition-all";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em]",
@@ -114,6 +119,11 @@ const buttonVariants = cva(
         "ai-lime": AI_LIME,
         "ai-sky": AI_SKY,
         "ai-gold": AI_GOLD,
+        "ai-fuchsia": AI_FUCHSIA,
+
+        // Dark theme variants - visible on dark backgrounds
+        "dark-ghost": DARK_GHOST,
+        "dark-outline": DARK_OUTLINE,
       },
       size: {
         default: "h-10 px-6 py-2",
@@ -154,8 +164,8 @@ const forbiddenClassPatterns: RegExp[] = [
 ];
 
 function sanitizeButtonClassName(className?: string, variant?: string | null) {
-  // Skip sanitization for AI tool variants - they need their gradient colors
-  if (variant?.startsWith("ai-")) {
+  // Skip sanitization for AI tool variants and dark theme variants - they need their colors
+  if (variant?.startsWith("ai-") || variant?.startsWith("dark-")) {
     return className;
   }
   if (!className) return undefined;

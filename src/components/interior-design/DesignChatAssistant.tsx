@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import { MessageSquare, Send, Sparkles, Upload, X, Bot, User } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -133,8 +132,8 @@ What would you like to create today?`,
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden">
+    <div className="w-full">
+      <div className="bg-zinc-900/60 border border-orange-500/30 rounded-2xl overflow-hidden">
         {/* Header */}
         <div className="p-4 border-b border-zinc-800 flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
@@ -156,12 +155,12 @@ What would you like to create today?`,
               <div className={`
                 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
                 ${message.role === 'user' 
-                  ? 'bg-fuchsia-500/20' 
+                  ? 'bg-orange-500/20' 
                   : 'bg-gradient-to-br from-amber-500 to-orange-500'
                 }
               `}>
                 {message.role === 'user' 
-                  ? <User className="w-4 h-4 text-fuchsia-300" />
+                  ? <User className="w-4 h-4 text-orange-300" />
                   : <Bot className="w-4 h-4 text-white" />
                 }
               </div>
@@ -169,7 +168,7 @@ What would you like to create today?`,
               <div className={`
                 max-w-[80%] rounded-2xl p-4
                 ${message.role === 'user' 
-                  ? 'bg-fuchsia-500/20 text-white' 
+                  ? 'bg-orange-500/20 text-white' 
                   : 'bg-zinc-800/80 text-zinc-200'
                 }
               `}>
@@ -237,11 +236,10 @@ What would you like to create today?`,
           <div className="flex gap-2">
             <Button
               type="button"
-              variant="outline"
+              variant="dark-outline"
               size="icon"
               onClick={() => fileInputRef.current?.click()}
               disabled={isProcessing}
-              className="border-zinc-700 hover:bg-zinc-800"
             >
               <Upload className="w-4 h-4" />
             </Button>
@@ -251,14 +249,14 @@ What would you like to create today?`,
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Describe your dream interior..."
-              className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 min-h-[44px] max-h-[120px] resize-none flex-1"
+              className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[44px] max-h-[120px] resize-none flex-1 focus:border-orange-500/50"
               disabled={isProcessing}
             />
             
             <Button
               onClick={handleSend}
               disabled={isProcessing || (!input.trim() && photos.length === 0)}
-              className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500"
+              variant="ai-orange"
             >
               {isProcessing ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

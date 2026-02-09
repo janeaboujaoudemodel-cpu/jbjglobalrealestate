@@ -96,10 +96,10 @@ const PhotoRedesignForm = ({
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto space-y-8">
+    <div className="w-full space-y-6">
       {/* Photo Upload */}
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
+      <div className="bg-zinc-900/60 border border-blue-500/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
           <Camera className="w-5 h-5 text-blue-400" />
           <h3 className="text-lg font-semibold text-white">Upload Your Room Photos</h3>
           <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30">
@@ -151,9 +151,9 @@ const PhotoRedesignForm = ({
       </div>
 
       {/* Design Style */}
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
-          <Wand2 className="w-5 h-5 text-purple-400" />
+      <div className="bg-zinc-900/60 border border-blue-500/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
+          <Wand2 className="w-5 h-5 text-blue-400" />
           <h3 className="text-lg font-semibold text-white">Target Design Style</h3>
         </div>
         
@@ -168,7 +168,7 @@ const PhotoRedesignForm = ({
                 className={`
                   p-4 rounded-xl border text-center transition-all
                   ${isSelected
-                    ? 'bg-purple-500/20 border-purple-500/50 text-white'
+                    ? 'bg-blue-500/20 border-blue-500/50 text-white'
                     : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300'
                   }
                 `}
@@ -182,9 +182,9 @@ const PhotoRedesignForm = ({
       </div>
 
       {/* Color Palette */}
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-5 h-5 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500" />
+      <div className="bg-zinc-900/60 border border-blue-500/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500" />
           <h3 className="text-lg font-semibold text-white">Color Palette</h3>
         </div>
         
@@ -199,7 +199,7 @@ const PhotoRedesignForm = ({
                 className={`
                   p-4 rounded-xl border transition-all
                   ${isSelected
-                    ? 'bg-zinc-800/80 border-white/30'
+                    ? 'bg-blue-500/20 border-blue-500/50'
                     : 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-600'
                   }
                 `}
@@ -221,8 +221,8 @@ const PhotoRedesignForm = ({
       </div>
 
       {/* Custom Notes */}
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
+      <div className="bg-zinc-900/60 border border-blue-500/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Redesign Instructions</h3>
           <Badge className="bg-zinc-700 text-zinc-300">Optional</Badge>
         </div>
@@ -231,18 +231,19 @@ const PhotoRedesignForm = ({
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe what you'd like to change: remove furniture, add plants, change lighting, update color scheme..."
-          className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 min-h-[100px]"
+          className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[100px] focus:border-blue-500/50"
           maxLength={1000}
         />
       </div>
 
       {/* Generate Button */}
-      <div className="flex justify-center pt-4">
+      <div className="flex justify-center pt-2">
         <Button
           onClick={onGenerate}
           disabled={isProcessing || !canGenerate || photos.length === 0}
+          variant="ai-blue"
           size="lg"
-          className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white px-8 py-6 text-lg rounded-xl shadow-lg shadow-blue-500/25"
+          className="px-8 py-6 text-lg rounded-xl"
         >
           {isProcessing ? (
             <>

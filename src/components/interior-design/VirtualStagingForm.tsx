@@ -95,10 +95,10 @@ const VirtualStagingForm = ({
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto space-y-8">
+    <div className="w-full space-y-6">
       {/* Empty Room Photo Upload */}
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
+      <div className="bg-zinc-900/60 border border-emerald-500/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
           <Sofa className="w-5 h-5 text-emerald-400" />
           <h3 className="text-lg font-semibold text-white">Upload Empty Room Photos</h3>
           <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
@@ -150,8 +150,8 @@ const VirtualStagingForm = ({
       </div>
 
       {/* Room Type */}
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
+      <div className="bg-zinc-900/60 border border-emerald-500/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Room Type</h3>
         </div>
         
@@ -181,8 +181,8 @@ const VirtualStagingForm = ({
       </div>
 
       {/* Furniture Style */}
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
+      <div className="bg-zinc-900/60 border border-emerald-500/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Furniture Style</h3>
         </div>
         
@@ -213,8 +213,8 @@ const VirtualStagingForm = ({
       </div>
 
       {/* Custom Notes */}
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
+      <div className="bg-zinc-900/60 border border-emerald-500/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Staging Preferences</h3>
           <Badge className="bg-zinc-700 text-zinc-300">Optional</Badge>
         </div>
@@ -223,18 +223,19 @@ const VirtualStagingForm = ({
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe specific furniture you want: L-shaped sofa, marble coffee table, statement artwork, indoor plants..."
-          className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 min-h-[100px]"
+          className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[100px] focus:border-emerald-500/50"
           maxLength={1000}
         />
       </div>
 
       {/* Generate Button */}
-      <div className="flex justify-center pt-4">
+      <div className="flex justify-center pt-2">
         <Button
           onClick={onGenerate}
           disabled={isProcessing || !canGenerate || photos.length === 0}
+          variant="ai-emerald"
           size="lg"
-          className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-8 py-6 text-lg rounded-xl shadow-lg shadow-emerald-500/25"
+          className="px-8 py-6 text-lg rounded-xl"
         >
           {isProcessing ? (
             <>

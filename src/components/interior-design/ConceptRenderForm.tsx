@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -60,11 +59,11 @@ const ConceptRenderForm = ({
   canGenerate,
 }: ConceptRenderFormProps) => {
   return (
-    <div className="w-full max-w-3xl mx-auto space-y-8">
+    <div className="w-full space-y-6">
       {/* Design Style */}
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
-          <Wand2 className="w-5 h-5 text-purple-400" />
+      <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
+          <Wand2 className="w-5 h-5 text-fuchsia-400" />
           <h3 className="text-lg font-semibold text-white">Design Style</h3>
         </div>
         
@@ -79,7 +78,7 @@ const ConceptRenderForm = ({
                 className={`
                   p-4 rounded-xl border text-center transition-all
                   ${isSelected
-                    ? 'bg-purple-500/20 border-purple-500/50 text-white'
+                    ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-white'
                     : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300'
                   }
                 `}
@@ -93,9 +92,9 @@ const ConceptRenderForm = ({
       </div>
 
       {/* Color Palette */}
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-5 h-5 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500" />
+      <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-5 h-5 rounded-full bg-gradient-to-r from-fuchsia-500 via-purple-500 to-pink-500" />
           <h3 className="text-lg font-semibold text-white">Color Palette</h3>
         </div>
         
@@ -110,7 +109,7 @@ const ConceptRenderForm = ({
                 className={`
                   p-4 rounded-xl border transition-all
                   ${isSelected
-                    ? 'bg-zinc-800/80 border-white/30'
+                    ? 'bg-fuchsia-500/20 border-fuchsia-500/50'
                     : 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-600'
                   }
                 `}
@@ -132,8 +131,8 @@ const ConceptRenderForm = ({
       </div>
 
       {/* Purpose */}
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
+      <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Purpose</h3>
         </div>
         
@@ -162,8 +161,8 @@ const ConceptRenderForm = ({
       </div>
 
       {/* Custom Notes */}
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
+      <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl p-6">
+        <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Additional Notes</h3>
           <Badge className="bg-zinc-700 text-zinc-300">Optional</Badge>
         </div>
@@ -172,7 +171,7 @@ const ConceptRenderForm = ({
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe any specific features you want: floor-to-ceiling windows, marble floors, gold accents, specific furniture pieces, lighting preferences..."
-          className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 min-h-[120px]"
+          className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[120px] focus:border-fuchsia-500/50"
           maxLength={1000}
         />
         <p className="text-xs text-zinc-500 mt-2 text-right">
@@ -181,12 +180,13 @@ const ConceptRenderForm = ({
       </div>
 
       {/* Generate Button */}
-      <div className="flex justify-center pt-4">
+      <div className="flex justify-center pt-2">
         <Button
           onClick={onGenerate}
           disabled={isProcessing || !canGenerate}
+          variant="ai-fuchsia"
           size="lg"
-          className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-500 hover:to-purple-500 text-white px-8 py-6 text-lg rounded-xl shadow-lg shadow-fuchsia-500/25"
+          className="px-8 py-6 text-lg rounded-xl"
         >
           {isProcessing ? (
             <>

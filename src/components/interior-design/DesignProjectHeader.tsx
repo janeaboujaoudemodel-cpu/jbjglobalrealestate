@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select';
 import { Ruler, FileText, Building2, Home, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { DesignMode } from './DesignModeSelector';
 
 interface DesignProjectHeaderProps {
   projectName: string;
@@ -22,6 +23,7 @@ interface DesignProjectHeaderProps {
   propertySize: string;
   onPropertySizeChange: (size: string) => void;
   hasMeasurementData: boolean;
+  selectedMode?: DesignMode;
 }
 
 const propertyTypes = [
@@ -51,6 +53,52 @@ const roomTypes = [
   'Other',
 ];
 
+// Mode-specific colors
+const getModeColors = (mode?: DesignMode) => {
+  switch (mode) {
+    case 'concept':
+      return {
+        border: 'border-fuchsia-500/30',
+        selectedBorder: 'border-fuchsia-500/50',
+        selectedBg: 'bg-fuchsia-500/20',
+        selectedText: 'text-fuchsia-300',
+        icon: 'text-fuchsia-400',
+      };
+    case 'redesign':
+      return {
+        border: 'border-blue-500/30',
+        selectedBorder: 'border-blue-500/50',
+        selectedBg: 'bg-blue-500/20',
+        selectedText: 'text-blue-300',
+        icon: 'text-blue-400',
+      };
+    case 'staging':
+      return {
+        border: 'border-emerald-500/30',
+        selectedBorder: 'border-emerald-500/50',
+        selectedBg: 'bg-emerald-500/20',
+        selectedText: 'text-emerald-300',
+        icon: 'text-emerald-400',
+      };
+    case 'chat':
+      return {
+        border: 'border-orange-500/30',
+        selectedBorder: 'border-orange-500/50',
+        selectedBg: 'bg-orange-500/20',
+        selectedText: 'text-orange-300',
+        icon: 'text-orange-400',
+      };
+    default:
+      return {
+        border: 'border-fuchsia-500/30',
+        selectedBorder: 'border-fuchsia-500/50',
+        selectedBg: 'bg-fuchsia-500/20',
+        selectedText: 'text-fuchsia-300',
+        icon: 'text-fuchsia-400',
+      };
+  }
+};
+
 const DesignProjectHeader = ({
   projectName,
   onProjectNameChange,
@@ -61,8 +109,10 @@ const DesignProjectHeader = ({
   propertySize,
   onPropertySizeChange,
   hasMeasurementData,
+  selectedMode,
 }: DesignProjectHeaderProps) => {
   const navigate = useNavigate();
+  const colors = getModeColors(selectedMode);
 
   const handleMeasureSpace = () => {
     sessionStorage.setItem('return_to_interior_design', 'true');
@@ -70,10 +120,10 @@ const DesignProjectHeader = ({
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-8">
+    <div className="w-full">
+      <div className={`bg-zinc-900/60 border ${colors.border} rounded-2xl p-6`}>
         <div className="flex items-center gap-3 mb-6">
-          <FileText className="w-5 h-5 text-fuchsia-400" />
+          <FileText className={`w-5 h-5 ${colors.icon}`} />
           <h3 className="text-lg font-semibold text-white">Project Details</h3>
           {hasMeasurementData && (
             <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
@@ -82,7 +132,7 @@ const DesignProjectHeader = ({
           )}
         </div>
 
-        <div className="grid gap-6">
+        <div className="grid gap-5">
           {/* Project Name */}
           <div className="space-y-2">
             <Label htmlFor="project-name" className="text-zinc-300">
@@ -93,7 +143,7 @@ const DesignProjectHeader = ({
               value={projectName}
               onChange={(e) => onProjectNameChange(e.target.value)}
               placeholder="e.g., Downtown Apartment Redesign"
-              className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500"
+              className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 focus:border-zinc-400"
             />
           </div>
 
@@ -103,12 +153,12 @@ const DesignProjectHeader = ({
               Room / Area Name
             </Label>
             <Select value={roomName} onValueChange={onRoomNameChange}>
-              <SelectTrigger className="bg-zinc-800/50 border-zinc-700 text-white">
+              <SelectTrigger className="bg-zinc-800/50 border-zinc-600 text-white hover:border-zinc-500">
                 <SelectValue placeholder="Select room type" />
               </SelectTrigger>
               <SelectContent className="bg-zinc-900 border-zinc-700">
                 {roomTypes.map((room) => (
-                  <SelectItem key={room} value={room} className="text-white hover:bg-zinc-800">
+                  <SelectItem key={room} value={room} className="text-white hover:bg-zinc-800 focus:bg-zinc-800">
                     {room}
                   </SelectItem>
                 ))}
@@ -119,7 +169,7 @@ const DesignProjectHeader = ({
           {/* Property Type */}
           <div className="space-y-2">
             <Label className="text-zinc-300">Property Type</Label>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {propertyTypes.map((type) => {
                 const Icon = type.icon;
                 const isSelected = propertyType === type.id;
@@ -131,7 +181,7 @@ const DesignProjectHeader = ({
                     className={`
                       flex items-center gap-2 p-3 rounded-xl border transition-all
                       ${isSelected
-                        ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-fuchsia-300'
+                        ? `${colors.selectedBg} ${colors.selectedBorder} ${colors.selectedText}`
                         : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300'
                       }
                     `}
@@ -156,13 +206,12 @@ const DesignProjectHeader = ({
                 value={propertySize}
                 onChange={(e) => onPropertySizeChange(e.target.value)}
                 placeholder="e.g., 1500"
-                className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 flex-1"
+                className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 focus:border-zinc-400 flex-1"
               />
               <Button
                 type="button"
-                variant="outline"
+                variant="dark-outline"
                 onClick={handleMeasureSpace}
-                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
               >
                 <Ruler className="w-4 h-4 mr-2" />
                 Measure
