@@ -82,12 +82,12 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
           
           {/* Logo Overlay - Top Left - Larger box with object-contain, no cropping */}
           <div className="absolute top-3 left-3 z-10">
-            <div className="w-24 h-24 rounded-lg overflow-hidden shadow-lg">
+            <div className="w-24 h-24 rounded-lg overflow-hidden shadow-lg bg-white">
               {developer.logo_url ? (
                 <img
                   src={developer.logo_url}
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-fill"
+                  className="w-full h-full object-contain p-1"
                   loading="lazy"
                 />
               ) : (
