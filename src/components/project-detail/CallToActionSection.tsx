@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
-import { getLanguageList } from "@/constants/localeOptions";
+import { getLanguageList, LANGUAGE_FLAGS } from "@/constants/localeOptions";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { MessageCircle, Phone, Send, Loader2, CheckCircle, Clock, Calendar } from "lucide-react";
 
@@ -216,14 +216,23 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-black font-medium">Preferred Language *</FormLabel>
-                        <FormControl>
-                          <SearchableSelect
-                            options={languageOptions}
-                            value={field.value}
-                            onChange={field.onChange}
-                            placeholder="Select language"
-                          />
-                        </FormControl>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="bg-white border-2 border-gold/50 hover:border-gold focus:border-gold text-black rounded-lg">
+                              <SelectValue placeholder="Select language" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {languageOptions.map((lang) => (
+                              <SelectItem key={lang} value={lang}>
+                                <span className="flex items-center gap-2">
+                                  <span>{LANGUAGE_FLAGS[lang] || ""}</span>
+                                  <span>{lang}</span>
+                                </span>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -305,10 +314,15 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
 
                   <Button 
                     type="submit" 
-                    variant="primary"
                     size="lg"
                     className="w-full"
                     disabled={isSubmitting}
+                    style={{
+                      background: 'linear-gradient(135deg, #C8A766 0%, #B8962E 50%, #D4AF37 100%)',
+                      boxShadow: '0 4px 15px rgba(200,167,102,0.4)',
+                      color: '#000',
+                      fontWeight: 600,
+                    }}
                   >
                     {isSubmitting ? (
                       <>

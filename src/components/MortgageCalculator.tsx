@@ -368,6 +368,21 @@ const MortgageCalculator = ({
               *Estimates are for illustrative purposes only. Actual rates may vary based on bank policies and eligibility.
             </p>
 
+            {/* Request Mortgage Introduction CTA */}
+            <div className="mt-6 pt-4 border-t border-gold/20">
+              <p className="text-center text-muted-foreground text-sm mb-3">Prefer a Mortgage Advisor Through Our Licensed Partners?</p>
+              <Button 
+                variant="primary" 
+                size="lg" 
+                className="w-full"
+                asChild
+              >
+                <a href={INQUIRY_FORM_URL}>
+                  Request Mortgage Introduction
+                </a>
+              </Button>
+            </div>
+
           </div>
         </div>
 

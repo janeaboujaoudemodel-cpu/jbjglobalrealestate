@@ -122,42 +122,42 @@ const DirectContactCTA = ({
 
         {/* Contact Buttons Grid - 3 columns */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-6">
-          {/* WhatsApp - Green border */}
+          {/* WhatsApp - Strong Green border + 3D hover */}
           <a 
             href={getWhatsAppUrl()}
-            className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-emerald-500/40 hover:border-emerald-500 rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-1"
+            className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-emerald-500 rounded-xl p-5 transition-all duration-300 group hover:shadow-[0_8px_25px_rgba(16,185,129,0.4)] hover:-translate-y-2 hover:scale-[1.02]"
           >
-            <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-emerald-500/30">
+            <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-emerald-500/50">
               <MessageCircle className="w-6 h-6 text-emerald-600" />
             </div>
             <div>
               <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
                 WhatsApp
               </h3>
-              <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
+              <p className="text-emerald-600 text-sm font-semibold">{CONTACT_INFO.phone}</p>
             </div>
           </a>
 
-          {/* Call Us - Blue border */}
+          {/* Call Us - Strong Blue border + 3D hover */}
           <a 
             href={getCallUrl()}
-            className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-blue-500/40 hover:border-blue-500 rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-blue-500/20 hover:-translate-y-1"
+            className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-blue-500 rounded-xl p-5 transition-all duration-300 group hover:shadow-[0_8px_25px_rgba(59,130,246,0.4)] hover:-translate-y-2 hover:scale-[1.02]"
           >
-            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/30">
+            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/50">
               <Phone className="w-6 h-6 text-blue-600" />
             </div>
             <div>
               <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Call Us
               </h3>
-              <p className="text-gold text-sm">{CONTACT_INFO.phone}</p>
+              <p className="text-blue-600 text-sm font-semibold">{CONTACT_INFO.phone}</p>
             </div>
           </a>
 
-          {/* Email Us - Gold border */}
+          {/* Email Us - Gold border on normal load + 3D hover */}
           <a 
             href={`mailto:${CONTACT_INFO.email}`}
-            className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/20 hover:-translate-y-1"
+            className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-5 transition-all duration-300 group hover:shadow-[0_8px_25px_rgba(200,167,102,0.4)] hover:-translate-y-2 hover:scale-[1.02]"
           >
             <div className="w-12 h-12 bg-gradient-to-br from-gold/30 to-handover/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)]">
               <Mail className="w-6 h-6 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.8)]" />
@@ -166,7 +166,7 @@ const DirectContactCTA = ({
               <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Email Us
               </h3>
-              <p className="text-gold text-sm">{CONTACT_INFO.email}</p>
+              <p className="text-gold text-sm font-semibold">{CONTACT_INFO.email}</p>
             </div>
           </a>
         </div>

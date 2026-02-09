@@ -175,19 +175,19 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         "hover:shadow-[0_0_26px_hsl(var(--gold)/0.18),0_26px_75px_hsl(0_0%_0%/0.20)]"
       }
     >
-      {/* Favorite Button */}
-      {showFavorite && (
-        <div className="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
-          <FavoriteButton projectId={project.id} size="sm" />
-        </div>
-      )}
-
-      {/* Badge Button */}
-      {showBadgeButton && (
-        <div className="absolute top-12 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
-          <ShortlistBadgeButton projectId={project.id} size="sm" showBadgeIndicator={true} />
-        </div>
-      )}
+      {/* Top-Right: Favorite + Shortlist Buttons (stacked) */}
+      <div className="absolute top-3 right-3 z-20 flex flex-col gap-1.5">
+        {showFavorite && (
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+            <FavoriteButton projectId={project.id} size="sm" />
+          </div>
+        )}
+        {showBadgeButton && (
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+            <ShortlistBadgeButton projectId={project.id} size="sm" showBadgeIndicator={true} />
+          </div>
+        )}
+      </div>
 
       <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
         {/* Image with Carousel - LANDSCAPE aspect ratio (16:10 - Premium Hybrid) */}
@@ -261,9 +261,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           )}
           
-          {/* Top-Right: Sale Status Badge (Reelly-style) */}
-          {saleStatusBadge && (
-            <div className={`absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
+          {/* Bottom-Left: Sale Status Badge (visible, not hidden under buttons) */}
+          {saleStatusBadge && !project.is_sold_out && (
+            <div className={`absolute bottom-3 left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
               {saleStatusBadge.label}
             </div>
           )}
@@ -349,29 +349,30 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         </div>
       </Link>
 
-      {/* CTA Buttons - Email, Call, WhatsApp */}
-      <div className="px-4 pb-4 pt-0">
-        <div className="grid grid-cols-3 gap-2 border-t border-gold/20 pt-3">
-          <Button asChild variant="secondary" size="sm" className="w-full">
+      {/* CTA Buttons - Email, Call, WhatsApp - Fixed overflow */}
+      <div className="px-4 pb-4 pt-0 overflow-hidden">
+        <div className="grid grid-cols-3 gap-1.5 border-t border-gold/20 pt-3">
+          <Button asChild variant="secondary" size="sm" className="w-full min-w-0 overflow-hidden px-2">
             <a
               href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
               onClick={(e) => e.stopPropagation()}
               aria-label={`Email about ${project.name}`}
+              className="flex items-center justify-center gap-1"
             >
-              <Mail className="w-4 h-4" />
-              <span>Email</span>
+              <Mail className="w-3.5 h-3.5 flex-shrink-0" />
+              <span className="truncate text-xs">Email</span>
             </a>
           </Button>
-          <Button asChild variant="secondary" size="sm" className="w-full">
-            <a href={callHref} onClick={(e) => e.stopPropagation()} aria-label={`Call about ${project.name}`}>
-              <Phone className="w-4 h-4" />
-              <span>Call</span>
+          <Button asChild variant="secondary" size="sm" className="w-full min-w-0 overflow-hidden px-2">
+            <a href={callHref} onClick={(e) => e.stopPropagation()} aria-label={`Call about ${project.name}`} className="flex items-center justify-center gap-1">
+              <Phone className="w-3.5 h-3.5 flex-shrink-0" />
+              <span className="truncate text-xs">Call</span>
             </a>
           </Button>
-          <Button asChild variant="secondary" size="sm" className="w-full">
-            <a href={whatsappHref} onClick={(e) => e.stopPropagation()} aria-label={`WhatsApp about ${project.name}`}>
-              <MessageCircle className="w-4 h-4" />
-              <span>WhatsApp</span>
+          <Button asChild variant="secondary" size="sm" className="w-full min-w-0 overflow-hidden px-2">
+            <a href={whatsappHref} onClick={(e) => e.stopPropagation()} aria-label={`WhatsApp about ${project.name}`} className="flex items-center justify-center gap-1">
+              <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" />
+              <span className="truncate text-xs">Chat</span>
             </a>
           </Button>
         </div>
