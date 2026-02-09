@@ -124,7 +124,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
       const map = L.map(mapContainerRef.current, {
         center,
         zoom: 11,
-        scrollWheelZoom: true,
+        scrollWheelZoom: false,
       });
 
       mapInstanceRef.current = map;

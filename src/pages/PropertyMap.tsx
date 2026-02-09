@@ -449,6 +449,8 @@ const PropertyMap = () => {
         <MapContainer
           center={[25.2048, 55.2708]}
           zoom={11}
+          scrollWheelZoom={false}
+          zoomControl={true}
           style={{ height: "100%", width: "100%" }}
           className="z-0"
         >
