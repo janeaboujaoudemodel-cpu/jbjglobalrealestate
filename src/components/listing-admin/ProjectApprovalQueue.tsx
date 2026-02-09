@@ -540,7 +540,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       try {
         while (true) {
           const { data, error } = await supabase.functions.invoke("bulk-approve-imports", {
-            body: { limit: 500 },
+            body: { limit: 50 },
           });
 
           if (error) {
