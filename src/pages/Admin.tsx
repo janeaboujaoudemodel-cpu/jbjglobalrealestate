@@ -493,7 +493,7 @@ const Admin = () => {
               </TabsTrigger>
               <TabsTrigger value="customer-happiness" className="tab-trigger-champagne text-black">
                 <Heart className="w-4 h-4 mr-2" />
-                Hub
+                Customer Happiness Hub
               </TabsTrigger>
               <TabsTrigger value="podcast-studio" className="tab-trigger-champagne text-black">
                 <Mic className="w-4 h-4 mr-2" />

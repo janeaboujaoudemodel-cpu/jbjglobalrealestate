@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, TrendingUp, UserCheck, Brain, Calendar, AlertTriangle, CheckSquare, Target, Plus } from "lucide-react";
+import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, TrendingUp, UserCheck, Brain, Calendar, AlertTriangle, CheckSquare, Target, Plus, FolderOpen } from "lucide-react";
 import JobOfferManager from "@/components/hr/JobOfferManager";
 import { EmployeePerformanceDashboard } from "@/components/hr/EmployeePerformanceDashboard";
 import { LinkedInInsightsPanel } from "@/components/hr/LinkedInInsightsPanel";
@@ -12,17 +12,20 @@ import { WarningsPanel } from "@/components/hr/WarningsPanel";
 import { ApprovalWorkflowPanel } from "@/components/hr/ApprovalWorkflowPanel";
 import { HuntingDashboard } from "@/components/hr/hunting/HuntingDashboard";
 import { OpenPositionsPanel } from "@/components/hr/OpenPositionsPanel";
+import CVCenter from "@/components/crm/CVCenter";
 import { useHRStats } from "@/hooks/useHRStats";
+import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
 
 export function EmbeddedHRDashboard() {
   const [activeTab, setActiveTab] = useState("performance");
   const { data: stats, isLoading: statsLoading } = useHRStats();
+  const { user } = useAuth();
 
   return (
     <div className="space-y-6">
       {/* Stats Section */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card className="bg-white border-2 border-gold/30">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
@@ -62,6 +65,20 @@ export function EmbeddedHRDashboard() {
             </div>
           </CardContent>
         </Card>
+        <Card className="bg-white border-2 border-amber-500/30">
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-zinc-500 text-xs">CVs Collected</p>
+                <p className="text-2xl font-bold text-amber-600">{statsLoading ? "..." : String(stats?.totalCVs || 0)}</p>
+                <p className="text-[10px] text-zinc-400">{stats?.pendingCVs || 0} pending</p>
+              </div>
+              <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center">
+                <FileText className="w-5 h-5 text-amber-500" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
         <Card className="bg-white border-2 border-purple-500/30">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
@@ -93,6 +110,13 @@ export function EmbeddedHRDashboard() {
           >
             <Target className="h-3.5 w-3.5" />
             Hunting
+          </TabsTrigger>
+          <TabsTrigger 
+            value="cv-center" 
+            className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 data-[state=active]:shadow-sm text-xs"
+          >
+            <FolderOpen className="h-3.5 w-3.5" />
+            CV Center
           </TabsTrigger>
           <TabsTrigger 
             value="positions" 
@@ -152,7 +176,7 @@ export function EmbeddedHRDashboard() {
           </TabsTrigger>
           <TabsTrigger 
             value="competitors" 
-            className="gap-2 rounded-lg data-[state=active]:bg-gold data-[state=active]:text-black data-[state=active]:shadow-sm text-xs"
+            className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 data-[state=active]:shadow-sm text-xs"
           >
             <Building2 className="h-3.5 w-3.5" />
             Competitors
@@ -165,6 +189,10 @@ export function EmbeddedHRDashboard() {
 
         <TabsContent value="hunting" className="mt-4">
           <HuntingDashboard />
+        </TabsContent>
+
+        <TabsContent value="cv-center" className="mt-4">
+          <CVCenter userId={user?.id || ''} />
         </TabsContent>
 
         <TabsContent value="positions" className="mt-4">
