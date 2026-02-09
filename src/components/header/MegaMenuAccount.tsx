@@ -348,7 +348,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           <ChevronRight className="w-3.5 h-3.5 text-purple-500" />
                         </Link>
                       )}
-                      {/* Ticket Support Hub - Direct Admin Access */}
+                      {/* Customer Happiness Hub - Direct Admin Access */}
                       {isOwner && (
                         <Link 
                           to="/admin?tab=customer-happiness" 
@@ -360,9 +360,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           </div>
                           <div className="flex-1 min-w-0">
                             <span className="text-black font-semibold text-xs group-hover:text-emerald-600 transition-colors block">
-                              Ticket Support Hub
+                              Customer Happiness Hub
                             </span>
-                            <span className="text-black/50 text-[10px]">Manage customer tickets</span>
+                            <span className="text-black/50 text-[10px]">Reviews, Tickets & Ideas</span>
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 text-emerald-500" />
                         </Link>
