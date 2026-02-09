@@ -12,9 +12,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import {
@@ -163,35 +163,35 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Select Area *</Label>
                   <Select value={area} onValueChange={setArea}>
-                    <SelectTrigger className="bg-zinc-900/50 border-sky-500/30 text-white hover:border-sky-500/50">
+                    <SelectTriggerDark className="border-sky-500/30 hover:border-sky-500/50">
                       <SelectValue placeholder="Choose an area" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-sky-500/30 max-h-60">
+                    </SelectTriggerDark>
+                    <SelectContentDark className="border-sky-500/30 max-h-60">
                       {DUBAI_AREAS.map((a) => (
-                        <SelectItem key={a} value={a} className="text-white">
+                        <SelectItemDark key={a} value={a}>
                           {a}
-                        </SelectItem>
+                        </SelectItemDark>
                       ))}
-                      <SelectItem value="custom" className="text-sky-400">
+                      <SelectItemDark value="custom" className="text-sky-400">
                         ✏️ Enter Custom Area
-                      </SelectItem>
-                    </SelectContent>
+                      </SelectItemDark>
+                    </SelectContentDark>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Property Type</Label>
                   <Select value={propertyType} onValueChange={setPropertyType}>
-                    <SelectTrigger className="bg-zinc-900/50 border-sky-500/30 text-white hover:border-sky-500/50">
+                    <SelectTriggerDark className="border-sky-500/30 hover:border-sky-500/50">
                       <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-sky-500/30">
+                    </SelectTriggerDark>
+                    <SelectContentDark className="border-sky-500/30">
                       {PROPERTY_TYPES.map((t) => (
-                        <SelectItem key={t.value} value={t.value} className="text-white">
+                        <SelectItemDark key={t.value} value={t.value}>
                           {t.label}
-                        </SelectItem>
+                        </SelectItemDark>
                       ))}
-                    </SelectContent>
+                    </SelectContentDark>
                   </Select>
                 </div>
               </div>
@@ -223,16 +223,16 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                   ))}
                   {compareWith.length < 3 && (
                     <Select onValueChange={addCompareArea}>
-                      <SelectTrigger className="w-auto bg-zinc-900/50 border-sky-500/30 text-zinc-400 text-sm h-7 px-2">
+                      <SelectTriggerDark className="w-auto border-sky-500/30 text-zinc-400 text-sm h-7 px-2">
                         <span>+ Add area</span>
-                      </SelectTrigger>
-                      <SelectContent className="bg-zinc-900 border-sky-500/30 max-h-40">
+                      </SelectTriggerDark>
+                      <SelectContentDark className="border-sky-500/30 max-h-40">
                         {DUBAI_AREAS.filter((a) => a !== area && !compareWith.includes(a)).map((a) => (
-                          <SelectItem key={a} value={a} className="text-white text-sm">
+                          <SelectItemDark key={a} value={a} className="text-sm">
                             {a}
-                          </SelectItem>
+                          </SelectItemDark>
                         ))}
-                      </SelectContent>
+                      </SelectContentDark>
                     </Select>
                   )}
                 </div>
@@ -243,28 +243,28 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Unit</Label>
                   <Select value={measurementUnit} onValueChange={(v: "sqft" | "sqm" | "both") => setMeasurementUnit(v)}>
-                    <SelectTrigger className="bg-zinc-900/50 border-sky-500/30 text-white hover:border-sky-500/50">
+                    <SelectTriggerDark className="border-sky-500/30 hover:border-sky-500/50">
                       <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-sky-500/30">
-                      <SelectItem value="sqft">Square Feet</SelectItem>
-                      <SelectItem value="sqm">Square Meters</SelectItem>
-                      <SelectItem value="both">Both</SelectItem>
-                    </SelectContent>
+                    </SelectTriggerDark>
+                    <SelectContentDark className="border-sky-500/30">
+                      <SelectItemDark value="sqft">Square Feet</SelectItemDark>
+                      <SelectItemDark value="sqm">Square Meters</SelectItemDark>
+                      <SelectItemDark value="both">Both</SelectItemDark>
+                    </SelectContentDark>
                   </Select>
                 </div>
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Currency</Label>
                   <Select value={currency} onValueChange={(v: "AED" | "USD" | "EUR" | "GBP") => setCurrency(v)}>
-                    <SelectTrigger className="bg-zinc-900/50 border-sky-500/30 text-white hover:border-sky-500/50">
+                    <SelectTriggerDark className="border-sky-500/30 hover:border-sky-500/50">
                       <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-sky-500/30">
-                      <SelectItem value="AED">AED (د.إ)</SelectItem>
-                      <SelectItem value="USD">USD ($)</SelectItem>
-                      <SelectItem value="EUR">EUR (€)</SelectItem>
-                      <SelectItem value="GBP">GBP (£)</SelectItem>
-                    </SelectContent>
+                    </SelectTriggerDark>
+                    <SelectContentDark className="border-sky-500/30">
+                      <SelectItemDark value="AED">AED (د.إ)</SelectItemDark>
+                      <SelectItemDark value="USD">USD ($)</SelectItemDark>
+                      <SelectItemDark value="EUR">EUR (€)</SelectItemDark>
+                      <SelectItemDark value="GBP">GBP (£)</SelectItemDark>
+                    </SelectContentDark>
                   </Select>
                 </div>
               </div>
@@ -325,10 +325,10 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                         </p>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={copyToClipboard} className="border-zinc-700 text-zinc-300">
+                        <Button variant="dark-outline" size="sm" onClick={copyToClipboard}>
                           {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                         </Button>
-                        <Button variant="outline" size="sm" onClick={downloadReport} className="border-zinc-700 text-zinc-300">
+                        <Button variant="dark-outline" size="sm" onClick={downloadReport}>
                           <Download className="h-4 w-4" />
                         </Button>
                       </div>

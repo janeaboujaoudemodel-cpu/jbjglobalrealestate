@@ -12,9 +12,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { useAITool } from "../AIToolsProvider";
@@ -131,32 +131,32 @@ ${response.report}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label className="text-zinc-300">Property Type</Label>
-                    <Select value={formData.propertyType} onValueChange={(v) => handleChange("propertyType", v)}>
-                      <SelectTrigger className="bg-zinc-900/50 border-indigo-500/30 text-white hover:border-indigo-500/50">
+                  <Select value={formData.propertyType} onValueChange={(v) => handleChange("propertyType", v)}>
+                      <SelectTriggerDark className="border-indigo-500/30 hover:border-indigo-500/50">
                         <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-zinc-900 border-indigo-500/30">
-                        <SelectItem value="all">All Properties</SelectItem>
-                        <SelectItem value="residential">Residential</SelectItem>
-                        <SelectItem value="commercial">Commercial</SelectItem>
-                        <SelectItem value="off-plan">Off-Plan</SelectItem>
-                        <SelectItem value="luxury">Luxury Segment</SelectItem>
-                      </SelectContent>
+                      </SelectTriggerDark>
+                      <SelectContentDark className="border-indigo-500/30">
+                        <SelectItemDark value="all">All Properties</SelectItemDark>
+                        <SelectItemDark value="residential">Residential</SelectItemDark>
+                        <SelectItemDark value="commercial">Commercial</SelectItemDark>
+                        <SelectItemDark value="off-plan">Off-Plan</SelectItemDark>
+                        <SelectItemDark value="luxury">Luxury Segment</SelectItemDark>
+                      </SelectContentDark>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
                     <Label className="text-zinc-300">Timeframe</Label>
                     <Select value={formData.timeframe} onValueChange={(v) => handleChange("timeframe", v)}>
-                      <SelectTrigger className="bg-zinc-900/50 border-indigo-500/30 text-white hover:border-indigo-500/50">
+                      <SelectTriggerDark className="border-indigo-500/30 hover:border-indigo-500/50">
                         <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-zinc-900 border-indigo-500/30">
-                        <SelectItem value="monthly">Monthly</SelectItem>
-                        <SelectItem value="quarterly">Quarterly</SelectItem>
-                        <SelectItem value="yearly">Yearly</SelectItem>
-                        <SelectItem value="5-year">5-Year Outlook</SelectItem>
-                      </SelectContent>
+                      </SelectTriggerDark>
+                      <SelectContentDark className="border-indigo-500/30">
+                        <SelectItemDark value="monthly">Monthly</SelectItemDark>
+                        <SelectItemDark value="quarterly">Quarterly</SelectItemDark>
+                        <SelectItemDark value="yearly">Yearly</SelectItemDark>
+                        <SelectItemDark value="5-year">5-Year Outlook</SelectItemDark>
+                      </SelectContentDark>
                     </Select>
                   </div>
                 </div>
@@ -164,16 +164,16 @@ ${response.report}
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Report Focus</Label>
                   <Select value={formData.focus} onValueChange={(v) => handleChange("focus", v)}>
-                    <SelectTrigger className="bg-zinc-900/50 border-indigo-500/30 text-white hover:border-indigo-500/50">
+                    <SelectTriggerDark className="border-indigo-500/30 hover:border-indigo-500/50">
                       <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-indigo-500/30">
-                      <SelectItem value="general">📊 General Overview</SelectItem>
-                      <SelectItem value="investment">💰 Investment Analysis</SelectItem>
-                      <SelectItem value="rental">🏠 Rental Market</SelectItem>
-                      <SelectItem value="development">🏗️ New Developments</SelectItem>
-                      <SelectItem value="price-trends">📈 Price Trends</SelectItem>
-                    </SelectContent>
+                    </SelectTriggerDark>
+                    <SelectContentDark className="border-indigo-500/30">
+                      <SelectItemDark value="general">📊 General Overview</SelectItemDark>
+                      <SelectItemDark value="investment">💰 Investment Analysis</SelectItemDark>
+                      <SelectItemDark value="rental">🏠 Rental Market</SelectItemDark>
+                      <SelectItemDark value="development">🏗️ New Developments</SelectItemDark>
+                      <SelectItemDark value="price-trends">📈 Price Trends</SelectItemDark>
+                    </SelectContentDark>
                   </Select>
                 </div>
               </div>
@@ -276,10 +276,10 @@ ${response.report}
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-white">Full Report</h4>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={copyToClipboard} className="border-zinc-700 text-zinc-300">
+                        <Button variant="dark-outline" size="sm" onClick={copyToClipboard}>
                           {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                         </Button>
-                        <Button variant="outline" size="sm" onClick={downloadReport} className="border-zinc-700 text-zinc-300">
+                        <Button variant="dark-outline" size="sm" onClick={downloadReport}>
                           <Download className="h-4 w-4" />
                         </Button>
                       </div>

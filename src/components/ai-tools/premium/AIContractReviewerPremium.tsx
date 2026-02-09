@@ -12,9 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { useAITool } from "../AIToolsProvider";
@@ -124,18 +124,18 @@ const AIContractReviewerPremium = () => {
               {/* Contract Type */}
               <div className="space-y-2">
                 <Label className="text-zinc-300">Contract Type</Label>
-                <Select value={contractType} onValueChange={setContractType}>
-                  <SelectTrigger className="bg-zinc-900/50 border-red-500/30 text-white hover:border-red-500/50">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-red-500/30">
-                    {CONTRACT_TYPES.map((type) => (
-                      <SelectItem key={type.value} value={type.value} className="text-white">
-                        {type.icon} {type.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <Select value={contractType} onValueChange={setContractType}>
+                <SelectTriggerDark className="border-red-500/30 hover:border-red-500/50">
+                  <SelectValue />
+                </SelectTriggerDark>
+                <SelectContentDark className="border-red-500/30">
+                  {CONTRACT_TYPES.map((type) => (
+                    <SelectItemDark key={type.value} value={type.value}>
+                      {type.icon} {type.label}
+                    </SelectItemDark>
+                  ))}
+                </SelectContentDark>
+              </Select>
               </div>
 
               {/* Contract Text */}
@@ -260,7 +260,7 @@ const AIContractReviewerPremium = () => {
                         <FileText className="h-4 w-4 text-red-400" />
                         Full Review
                       </h4>
-                      <Button variant="outline" size="sm" onClick={copyToClipboard} className="border-zinc-700 text-zinc-300">
+                      <Button variant="dark-outline" size="sm" onClick={copyToClipboard}>
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </Button>
                     </div>

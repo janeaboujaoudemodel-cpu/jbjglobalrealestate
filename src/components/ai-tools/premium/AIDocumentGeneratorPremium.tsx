@@ -13,9 +13,9 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { useAITool } from "../AIToolsProvider";
@@ -141,16 +141,16 @@ const AIDocumentGeneratorPremium = () => {
                 })}
               </div>
               <Select value={formData.documentType} onValueChange={(v) => handleChange("documentType", v)}>
-                <SelectTrigger className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 mt-2">
+                <SelectTriggerDark className="border-lime-500/30 hover:border-lime-500/50 mt-2">
                   <SelectValue placeholder="More document types..." />
-                </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-lime-500/30">
+                </SelectTriggerDark>
+                <SelectContentDark className="border-lime-500/30">
                   {DOCUMENT_TYPES.map((type) => (
-                    <SelectItem key={type.value} value={type.value} className="text-white">
+                    <SelectItemDark key={type.value} value={type.value}>
                       {type.label}
-                    </SelectItem>
+                    </SelectItemDark>
                   ))}
-                </SelectContent>
+                </SelectContentDark>
               </Select>
             </div>
 
@@ -158,19 +158,19 @@ const AIDocumentGeneratorPremium = () => {
             <div className="space-y-2">
               <Label className="text-zinc-300">Tone</Label>
               <Select value={formData.tone} onValueChange={(v) => handleChange("tone", v)}>
-                <SelectTrigger className="bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50">
+                <SelectTriggerDark className="border-lime-500/30 hover:border-lime-500/50">
                   <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-lime-500/30">
+                </SelectTriggerDark>
+                <SelectContentDark className="border-lime-500/30">
                   {TONES.map((tone) => (
-                    <SelectItem key={tone.value} value={tone.value} className="text-white">
+                    <SelectItemDark key={tone.value} value={tone.value}>
                       <div>
                         <span>{tone.label}</span>
                         <span className="text-xs text-zinc-500 ml-2">{tone.desc}</span>
                       </div>
-                    </SelectItem>
+                    </SelectItemDark>
                   ))}
-                </SelectContent>
+                </SelectContentDark>
               </Select>
             </div>
 
@@ -265,7 +265,7 @@ const AIDocumentGeneratorPremium = () => {
                         {getDocTypeInfo(formData.documentType)?.label}
                       </Badge>
                     </div>
-                    <Button variant="outline" size="sm" onClick={() => copyToClipboard()} className="border-zinc-700 text-zinc-300">
+                    <Button variant="dark-outline" size="sm" onClick={() => copyToClipboard()}>
                       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
@@ -297,10 +297,10 @@ const AIDocumentGeneratorPremium = () => {
                           <div className="bg-zinc-800/30 p-3 rounded-lg text-sm text-zinc-300 mt-2">
                             {alt}
                             <Button
-                              variant="ghost"
+                              variant="dark-ghost"
                               size="sm"
                               onClick={() => copyToClipboard(alt)}
-                              className="mt-2 text-zinc-400"
+                              className="mt-2"
                             >
                               <Copy className="h-4 w-4 mr-1" />
                               Copy

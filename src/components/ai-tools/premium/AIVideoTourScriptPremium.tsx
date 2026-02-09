@@ -12,9 +12,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { useAITool } from "../AIToolsProvider";
@@ -190,16 +190,16 @@ ${response.script}
                   ))}
                 </div>
                 <Select value={formData.targetAudience} onValueChange={(v) => handleChange("targetAudience", v)}>
-                  <SelectTrigger className="bg-zinc-900/50 border-pink-500/30 text-white hover:border-pink-500/50 mt-2">
+                  <SelectTriggerDark className="border-pink-500/30 hover:border-pink-500/50 mt-2">
                     <SelectValue />
-                  </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-pink-500/30">
+                  </SelectTriggerDark>
+                  <SelectContentDark className="border-pink-500/30">
                     {AUDIENCES.map((a) => (
-                      <SelectItem key={a.value} value={a.value} className="text-white">
+                      <SelectItemDark key={a.value} value={a.value}>
                         {a.icon} {a.label}
-                      </SelectItem>
+                      </SelectItemDark>
                     ))}
-                  </SelectContent>
+                  </SelectContentDark>
                 </Select>
               </div>
 
@@ -207,30 +207,30 @@ ${response.script}
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Tone & Style</Label>
                   <Select value={formData.tone} onValueChange={(v) => handleChange("tone", v)}>
-                    <SelectTrigger className="bg-zinc-900/50 border-pink-500/30 text-white hover:border-pink-500/50">
+                    <SelectTriggerDark className="border-pink-500/30 hover:border-pink-500/50">
                       <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-pink-500/30">
+                    </SelectTriggerDark>
+                    <SelectContentDark className="border-pink-500/30">
                       {TONES.map((t) => (
-                        <SelectItem key={t.value} value={t.value} className="text-white">
+                        <SelectItemDark key={t.value} value={t.value}>
                           {t.icon} {t.label}
-                        </SelectItem>
+                        </SelectItemDark>
                       ))}
-                    </SelectContent>
+                    </SelectContentDark>
                   </Select>
                 </div>
                 <div className="space-y-2">
                   <Label className="text-zinc-300">Duration</Label>
                   <Select value={formData.duration} onValueChange={(v) => handleChange("duration", v)}>
-                    <SelectTrigger className="bg-zinc-900/50 border-pink-500/30 text-white hover:border-pink-500/50">
+                    <SelectTriggerDark className="border-pink-500/30 hover:border-pink-500/50">
                       <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-pink-500/30">
-                      <SelectItem value="1">📱 1 min (Social)</SelectItem>
-                      <SelectItem value="2-3">🎬 2-3 min (Standard)</SelectItem>
-                      <SelectItem value="5">🎥 5 min (Detailed)</SelectItem>
-                      <SelectItem value="10">🎞️ 10 min (Full Tour)</SelectItem>
-                    </SelectContent>
+                    </SelectTriggerDark>
+                    <SelectContentDark className="border-pink-500/30">
+                      <SelectItemDark value="1">📱 1 min (Social)</SelectItemDark>
+                      <SelectItemDark value="2-3">🎬 2-3 min (Standard)</SelectItemDark>
+                      <SelectItemDark value="5">🎥 5 min (Detailed)</SelectItemDark>
+                      <SelectItemDark value="10">🎞️ 10 min (Full Tour)</SelectItemDark>
+                    </SelectContentDark>
                   </Select>
                 </div>
               </div>
@@ -307,10 +307,10 @@ ${response.script}
                         Full Script
                       </h4>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => copyToClipboard()} className="border-zinc-700 text-zinc-300">
+                        <Button variant="dark-outline" size="sm" onClick={() => copyToClipboard()}>
                           {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                         </Button>
-                        <Button variant="outline" size="sm" onClick={downloadScript} className="border-zinc-700 text-zinc-300">
+                        <Button variant="dark-outline" size="sm" onClick={downloadScript}>
                           <Download className="h-4 w-4" />
                         </Button>
                       </div>
