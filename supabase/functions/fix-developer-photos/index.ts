@@ -200,6 +200,22 @@ serve(async (req) => {
         }
       }
 
+      // If no image found from projects, try Provident data
+      if (!selectedImage) {
+        const { data: providentData } = await supabase
+          .from("pending_developer_imports")
+          .select("feature_image_url, logo_url")
+          .eq("slug", developer.slug)
+          .eq("source", "provident_estate")
+          .maybeSingle();
+        
+        if (providentData?.feature_image_url && !usedImages.has(providentData.feature_image_url)) {
+          selectedImage = providentData.feature_image_url;
+          usedImages.add(selectedImage);
+          console.log(`[FixDevPhotos] Found Provident image for ${developer.name}`);
+        }
+      }
+
       if (selectedImage) {
         const { error } = await supabase
           .from("developers")
