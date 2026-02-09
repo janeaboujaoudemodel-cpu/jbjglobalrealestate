@@ -136,6 +136,11 @@ Deno.serve(async (req) => {
         .maybeSingle();
       
       if (activeJob) {
+        // If job has no cursor, it's stale — auto-complete it
+        if (!activeJob.next_cursor) {
+          await supabase.from("sync_jobs").update({ status: "completed", completed_at: new Date().toISOString() }).eq("id", activeJob.id);
+          return new Response(JSON.stringify({ success: true, has_active_job: false }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
         return new Response(JSON.stringify({
           success: true,
           has_active_job: true,
