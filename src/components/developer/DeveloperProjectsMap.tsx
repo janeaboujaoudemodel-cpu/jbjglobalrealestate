@@ -1,10 +1,7 @@
-import { useMemo, useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { DivIcon, LatLngBounds } from "leaflet";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState, useCallback } from "react";
+import L from "leaflet";
 import { Button } from "@/components/ui/button";
-import { SafeImage } from "@/components/SafeImage";
-import { ChevronRight, Layers } from "lucide-react";
+import { Layers, AlertTriangle, RefreshCw } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 
 interface DeveloperProject {
@@ -24,61 +21,11 @@ interface DeveloperProjectsMapProps {
   projects: DeveloperProject[];
 }
 
-// Custom gold marker icon
-const createCustomIcon = (price: number | null) => {
-  const priceText = price ? `${(price / 1000000).toFixed(1)}M` : "TBA";
-
-  return new DivIcon({
-    className: "custom-marker",
-    html: `
-      <div style="
-        background: linear-gradient(135deg, #d4af37 0%, #b8962e 100%);
-        color: #1a1a2e;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-weight: bold;
-        font-size: 12px;
-        white-space: nowrap;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        border: 2px solid #fff;
-        cursor: pointer;
-        transition: transform 0.2s;
-      ">
-        ${priceText}
-      </div>
-    `,
-    iconSize: [70, 32],
-    iconAnchor: [35, 32],
-  });
-};
-
 // Format price for popup
 const formatPrice = (price: number | null) => {
   if (!price) return "Price TBA";
   if (price >= 1000000) return `AED ${(price / 1000000).toFixed(1)}M`;
   return `AED ${(price / 1000).toFixed(0)}K`;
-};
-
-// Component to fit map bounds to all projects
-const MapBoundsFitter = ({ projects }: { projects: DeveloperProject[] }) => {
-  const map = useMap();
-
-  useEffect(() => {
-    const validProjects = projects.filter(p => p.latitude && p.longitude);
-    if (validProjects.length === 0) return;
-
-    if (validProjects.length === 1) {
-      map.setView([validProjects[0].latitude!, validProjects[0].longitude!], 13);
-      return;
-    }
-
-    const bounds = new LatLngBounds(
-      validProjects.map(p => [p.latitude!, p.longitude!] as [number, number])
-    );
-    map.fitBounds(bounds, { padding: [50, 50] });
-  }, [projects, map]);
-
-  return null;
 };
 
 // Tile layer options
@@ -94,14 +41,176 @@ const TILE_LAYERS = {
 };
 
 export function DeveloperProjectsMap({ developerId, developerName, projects }: DeveloperProjectsMapProps) {
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
+  const tileLayerRef = useRef<L.TileLayer | null>(null);
+  const markersRef = useRef<L.Marker[]>([]);
+  
   const [tileLayer, setTileLayer] = useState<'street' | 'satellite'>('street');
+  const [mapError, setMapError] = useState<string | null>(null);
 
   // Filter to projects with coordinates
-  const projectsWithCoords = useMemo(() => 
-    projects.filter(p => p.latitude && p.longitude),
-    [projects]
-  );
+  const projectsWithCoords = projects.filter(p => p.latitude && p.longitude);
 
+  // Create marker icon
+  const createMarkerIcon = useCallback((price: number | null) => {
+    const priceText = price ? `${(price / 1000000).toFixed(1)}M` : "TBA";
+    
+    return L.divIcon({
+      className: "custom-marker",
+      html: `
+        <div style="
+          background: linear-gradient(135deg, #d4af37 0%, #b8962e 100%);
+          color: #1a1a2e;
+          padding: 6px 12px;
+          border-radius: 20px;
+          font-weight: bold;
+          font-size: 12px;
+          white-space: nowrap;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          border: 2px solid #fff;
+          cursor: pointer;
+          transition: transform 0.2s;
+        ">
+          ${priceText}
+        </div>
+      `,
+      iconSize: [70, 32],
+      iconAnchor: [35, 32],
+    });
+  }, []);
+
+  // Create popup content
+  const createPopupContent = useCallback((project: DeveloperProject) => {
+    const imageHtml = project.cover_image_url 
+      ? `<div style="height: 112px; margin: -12px -12px 8px -12px; overflow: hidden; border-radius: 8px 8px 0 0;">
+           <img src="${project.cover_image_url}" alt="${project.name}" style="width: 100%; height: 100%; object-fit: cover;" />
+         </div>`
+      : '';
+    
+    const locationHtml = project.location 
+      ? `<p style="font-size: 12px; color: #666; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${project.location}</p>`
+      : '';
+
+    return `
+      <div style="width: 224px; padding: 0;">
+        ${imageHtml}
+        <h4 style="font-weight: 600; font-size: 14px; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${project.name}</h4>
+        ${locationHtml}
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-weight: 700; color: #d4af37; font-size: 14px;">${formatPrice(project.price_from)}</span>
+          <a href="/project/${project.slug}" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 12px; text-decoration: none; color: #333;">
+            View →
+          </a>
+        </div>
+      </div>
+    `;
+  }, []);
+
+  // Initialize map
+  useEffect(() => {
+    if (!mapContainerRef.current || projectsWithCoords.length === 0) return;
+    
+    // Don't reinitialize if map already exists
+    if (mapInstanceRef.current) return;
+
+    try {
+      // Calculate center from first project or use Dubai default
+      const center: [number, number] = projectsWithCoords[0]
+        ? [projectsWithCoords[0].latitude!, projectsWithCoords[0].longitude!]
+        : [25.2048, 55.2708];
+
+      // Create map instance
+      const map = L.map(mapContainerRef.current, {
+        center,
+        zoom: 11,
+        scrollWheelZoom: true,
+      });
+
+      mapInstanceRef.current = map;
+
+      // Add initial tile layer
+      const initialTileLayer = L.tileLayer(TILE_LAYERS.street.url, {
+        attribution: TILE_LAYERS.street.attribution,
+      });
+      initialTileLayer.addTo(map);
+      tileLayerRef.current = initialTileLayer;
+
+      // Add markers
+      projectsWithCoords.forEach((project) => {
+        const marker = L.marker(
+          [project.latitude!, project.longitude!],
+          { icon: createMarkerIcon(project.price_from) }
+        );
+        
+        marker.bindPopup(createPopupContent(project), {
+          maxWidth: 250,
+          className: 'developer-map-popup',
+        });
+        
+        marker.addTo(map);
+        markersRef.current.push(marker);
+      });
+
+      // Fit bounds
+      if (projectsWithCoords.length === 1) {
+        map.setView([projectsWithCoords[0].latitude!, projectsWithCoords[0].longitude!], 13);
+      } else {
+        const bounds = L.latLngBounds(
+          projectsWithCoords.map(p => [p.latitude!, p.longitude!] as [number, number])
+        );
+        map.fitBounds(bounds, { padding: [50, 50] });
+      }
+
+      setMapError(null);
+    } catch (err) {
+      console.error("Failed to initialize developer map:", err);
+      setMapError("Failed to load map. Please try again.");
+    }
+
+    // Cleanup
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+        tileLayerRef.current = null;
+        markersRef.current = [];
+      }
+    };
+  }, [projectsWithCoords, createMarkerIcon, createPopupContent]);
+
+  // Handle tile layer toggle
+  useEffect(() => {
+    if (!mapInstanceRef.current || !tileLayerRef.current) return;
+
+    try {
+      // Remove old tile layer
+      tileLayerRef.current.remove();
+
+      // Add new tile layer
+      const newTileLayer = L.tileLayer(TILE_LAYERS[tileLayer].url, {
+        attribution: TILE_LAYERS[tileLayer].attribution,
+      });
+      newTileLayer.addTo(mapInstanceRef.current);
+      tileLayerRef.current = newTileLayer;
+    } catch (err) {
+      console.error("Failed to switch tile layer:", err);
+    }
+  }, [tileLayer]);
+
+  // Handle retry
+  const handleRetry = useCallback(() => {
+    setMapError(null);
+    // Force re-mount by clearing refs
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.remove();
+      mapInstanceRef.current = null;
+      tileLayerRef.current = null;
+      markersRef.current = [];
+    }
+  }, []);
+
+  // No projects with coordinates
   if (projectsWithCoords.length === 0) {
     return (
       <div className="rounded-xl border-2 border-gold/30 bg-champagne/20 p-8 text-center">
@@ -110,10 +219,27 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
     );
   }
 
-  // Calculate center from first project or use Dubai default
-  const center: [number, number] = projectsWithCoords[0]
-    ? [projectsWithCoords[0].latitude!, projectsWithCoords[0].longitude!]
-    : [25.2048, 55.2708];
+  // Error state
+  if (mapError) {
+    return (
+      <div className="rounded-xl border-2 border-amber-500/40 bg-amber-50/50 dark:bg-amber-950/20 p-8 h-[400px] flex items-center justify-center">
+        <div className="text-center">
+          <AlertTriangle className="w-12 h-12 text-amber-500 mx-auto mb-3" />
+          <h3 className="text-foreground font-semibold mb-2">Map could not be loaded</h3>
+          <p className="text-muted-foreground text-sm mb-4">{mapError}</p>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={handleRetry}
+            className="gap-2"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-xl overflow-hidden border-2 border-gold/40" style={{
@@ -141,59 +267,13 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
       </div>
 
       {/* Map Container */}
-      <div className="h-[400px]">
-        <MapContainer
-          center={center}
-          zoom={11}
-          style={{ height: "100%", width: "100%" }}
-          scrollWheelZoom={true}
-        >
-          <TileLayer
-            attribution={TILE_LAYERS[tileLayer].attribution}
-            url={TILE_LAYERS[tileLayer].url}
-          />
-
-          <MapBoundsFitter projects={projectsWithCoords} />
-
-          {projectsWithCoords.map((project) => (
-            <Marker
-              key={project.id}
-              position={[project.latitude!, project.longitude!]}
-              icon={createCustomIcon(project.price_from)}
-            >
-              <Popup>
-                <div className="w-56 p-0">
-                  {project.cover_image_url && (
-                    <div className="relative h-28 -mx-3 -mt-3 mb-2">
-                      <SafeImage
-                        src={project.cover_image_url}
-                        alt={project.name}
-                        className="w-full h-full object-cover rounded-t-lg"
-                      />
-                    </div>
-                  )}
-                  <h4 className="font-semibold text-sm mb-1 line-clamp-2">{project.name}</h4>
-                  {project.location && (
-                    <p className="text-xs text-muted-foreground mb-2 line-clamp-1">
-                      {project.location}
-                    </p>
-                  )}
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-primary text-sm">
-                      {formatPrice(project.price_from)}
-                    </span>
-                    <Link to={`/project/${project.slug}`}>
-                      <Button size="sm" variant="outline" className="h-7 text-xs gap-1">
-                        View <ChevronRight className="h-3 w-3" />
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
-      </div>
+      <div 
+        ref={mapContainerRef} 
+        className="h-[400px] w-full"
+        style={{ background: '#e5e3df' }}
+      />
     </div>
   );
 }
+
+export default DeveloperProjectsMap;
