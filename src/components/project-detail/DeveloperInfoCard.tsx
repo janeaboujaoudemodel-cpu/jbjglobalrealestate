@@ -39,20 +39,27 @@ export default function DeveloperInfoCard({ developer, projectName }: DeveloperI
     <div className="w-full jj-section-champagne border-y border-gold/20">
       <div className="container mx-auto px-4 md:px-8 py-8 md:py-12">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
-          {/* Developer Logo - White Box */}
-          <div className="flex-shrink-0">
+          {/* Developer Logo - Standardized Small Box with Grayscale Treatment */}
+          <div 
+            className="w-20 h-14 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0"
+            style={{
+              background: '#FFFFFF',
+              border: '2px solid hsl(42 45% 59%)',
+              boxShadow: '0 2px 8px rgba(200,167,102,0.2)'
+            }}
+          >
             {developer.logo_url ? (
-              <div className="w-28 h-28 md:w-36 md:h-36 rounded-xl border-2 border-gold/30 bg-white flex items-center justify-center overflow-hidden shadow-lg">
-                <img 
-                  src={developer.logo_url} 
-                  alt={`${developer.name} logo`}
-                  className="w-24 h-24 md:w-32 md:h-32 object-contain"
-                />
-              </div>
+              <img 
+                src={developer.logo_url} 
+                alt={`${developer.name} logo`}
+                className="max-h-10 max-w-[90%] object-contain"
+                style={{ 
+                  mixBlendMode: 'multiply',
+                  filter: 'grayscale(100%) contrast(1.2)'
+                }}
+              />
             ) : (
-              <div className="w-28 h-28 md:w-36 md:h-36 rounded-xl border-2 border-gold/30 bg-white flex items-center justify-center shadow-lg">
-                <Building2 className="w-12 h-12 text-gold/50" />
-              </div>
+              <Building2 className="w-6 h-6 text-zinc-400" />
             )}
           </div>
 

@@ -53,8 +53,8 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
           `,
         }}
       >
-        {/* Photo Section - Fixed Height */}
-        <div className="relative h-[180px] flex-shrink-0">
+        {/* Photo Section - Increased Height */}
+        <div className="relative h-[220px] flex-shrink-0">
           {developer.feature_image_url ? (
             <img
               src={developer.feature_image_url}
@@ -63,13 +63,40 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-zinc-800 via-zinc-700 to-zinc-900 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-[#1a1a2e] via-[#2d2d44] to-[#1a1a2e] flex items-center justify-center">
               <div className="text-center">
-                <Building2 className="w-12 h-12 text-gold/40 mx-auto mb-2" />
-                <span className="text-gold/60 text-xs uppercase tracking-wider">Developer</span>
+                <Building2 className="w-16 h-16 text-gold/30 mx-auto mb-3" />
+                <span className="text-gold/50 text-sm font-medium tracking-wider uppercase">Developer</span>
               </div>
             </div>
           )}
+          
+          {/* Logo Overlay - Top Left Small Box */}
+          <div className="absolute top-3 left-3 z-10">
+            <div 
+              className="w-20 h-12 rounded-lg flex items-center justify-center overflow-hidden"
+              style={{
+                background: '#FFFFFF',
+                border: '2px solid hsl(42 45% 59%)',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+              }}
+            >
+              {developer.logo_url ? (
+                <img
+                  src={developer.logo_url}
+                  alt={`${developer.name} logo`}
+                  className="max-h-9 max-w-[90%] object-contain"
+                  style={{ 
+                    mixBlendMode: 'multiply',
+                    filter: 'grayscale(100%) contrast(1.2)'
+                  }}
+                  loading="lazy"
+                />
+              ) : (
+                <Building2 className="w-5 h-5 text-zinc-400" />
+              )}
+            </div>
+          </div>
           
           {/* Tier Badge - Top Right */}
           {tier && (
@@ -83,31 +110,6 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
 
         {/* Content Section - Champagne Background */}
         <div className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col">
-          {/* Logo Plate - Premium White Box with mix-blend-mode for transparency */}
-          <div 
-            className="w-full h-14 rounded-lg flex items-center justify-center mb-3 overflow-hidden flex-shrink-0"
-            style={{
-              background: '#FFFFFF',
-              border: '2px solid hsl(42 45% 59%)',
-              boxShadow: '0 2px 8px rgba(200,167,102,0.2), inset 0 1px 2px rgba(255,255,255,0.9)'
-            }}
-          >
-            {developer.logo_url ? (
-              <img
-                src={developer.logo_url}
-                alt={`${developer.name} logo`}
-                className="max-h-10 max-w-[80%] object-contain"
-                style={{ 
-                  mixBlendMode: 'multiply',
-                  backgroundColor: 'white'
-                }}
-                loading="lazy"
-              />
-            ) : (
-              <span className="text-zinc-800 font-semibold text-sm">{developer.name}</span>
-            )}
-          </div>
-
           {/* Developer Name */}
           <h3 className="text-black font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
             {developer.name}
