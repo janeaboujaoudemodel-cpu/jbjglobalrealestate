@@ -14906,6 +14906,13 @@ export type Database = {
             referencedRelation: "rental_listings_public"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "rental_listing_approvals_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "v_rental_listings_safe"
+            referencedColumns: ["id"]
+          },
         ]
       }
       rental_listing_notifications: {
@@ -14955,6 +14962,13 @@ export type Database = {
             columns: ["listing_id"]
             isOneToOne: false
             referencedRelation: "rental_listings_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rental_listing_notifications_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "v_rental_listings_safe"
             referencedColumns: ["id"]
           },
         ]
@@ -20195,6 +20209,129 @@ export type Database = {
         }
         Relationships: []
       }
+      v_rental_listings_safe: {
+        Row: {
+          address: string | null
+          admin_approved_at: string | null
+          admin_approved_by: string | null
+          amenities: string[] | null
+          annual_rent: number | null
+          assistant_approved_at: string | null
+          assistant_approved_by: string | null
+          bathrooms: number | null
+          bedrooms: number | null
+          building_name: string | null
+          community: string | null
+          created_at: string | null
+          description: string | null
+          documents: string[] | null
+          emirate: string | null
+          founder_approved_at: string | null
+          founder_approved_by: string | null
+          furnished: string | null
+          id: string | null
+          images: string[] | null
+          landlord_email: string | null
+          landlord_name: string | null
+          landlord_nationality: string | null
+          landlord_phone: string | null
+          leadership_approved_at: string | null
+          leadership_approved_by: string | null
+          ownership_type: string | null
+          payment_terms: string | null
+          property_title: string | null
+          property_type: string | null
+          rejection_reason: string | null
+          security_deposit: number | null
+          size_sqft: number | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+          video_url: string | null
+          went_live_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          admin_approved_at?: string | null
+          admin_approved_by?: string | null
+          amenities?: string[] | null
+          annual_rent?: number | null
+          assistant_approved_at?: string | null
+          assistant_approved_by?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_name?: string | null
+          community?: string | null
+          created_at?: string | null
+          description?: string | null
+          documents?: string[] | null
+          emirate?: string | null
+          founder_approved_at?: string | null
+          founder_approved_by?: string | null
+          furnished?: string | null
+          id?: string | null
+          images?: string[] | null
+          landlord_email?: never
+          landlord_name?: never
+          landlord_nationality?: never
+          landlord_phone?: never
+          leadership_approved_at?: string | null
+          leadership_approved_by?: string | null
+          ownership_type?: string | null
+          payment_terms?: string | null
+          property_title?: string | null
+          property_type?: string | null
+          rejection_reason?: string | null
+          security_deposit?: number | null
+          size_sqft?: number | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          video_url?: string | null
+          went_live_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          admin_approved_at?: string | null
+          admin_approved_by?: string | null
+          amenities?: string[] | null
+          annual_rent?: number | null
+          assistant_approved_at?: string | null
+          assistant_approved_by?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          building_name?: string | null
+          community?: string | null
+          created_at?: string | null
+          description?: string | null
+          documents?: string[] | null
+          emirate?: string | null
+          founder_approved_at?: string | null
+          founder_approved_by?: string | null
+          furnished?: string | null
+          id?: string | null
+          images?: string[] | null
+          landlord_email?: never
+          landlord_name?: never
+          landlord_nationality?: never
+          landlord_phone?: never
+          leadership_approved_at?: string | null
+          leadership_approved_by?: string | null
+          ownership_type?: string | null
+          payment_terms?: string | null
+          property_title?: string | null
+          property_type?: string | null
+          rejection_reason?: string | null
+          security_deposit?: number | null
+          size_sqft?: number | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          video_url?: string | null
+          went_live_at?: string | null
+        }
+        Relationships: []
+      }
       vapi_call_logs_masked: {
         Row: {
           access_count: number | null
@@ -20395,6 +20532,7 @@ export type Database = {
         Args: { p_event_type: string; p_user_id: string }
         Returns: boolean
       }
+      can_view_landlord_pii: { Args: { _user_id: string }; Returns: boolean }
       check_chat_rate_limit: {
         Args: { p_session_id: string }
         Returns: boolean
