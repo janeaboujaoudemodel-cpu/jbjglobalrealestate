@@ -1,268 +1,167 @@
 
+## Why the issues still remain (root cause, confirmed from the current data + code)
+### 1) “Repaired Amelia residence” but still **0 images / 0 documents**
+What’s happening right now is that the **Repair** button in the Listing Admin approval queue calls the backend function `repair-project-extraction`.
 
-# Developer Section Overhaul - Implementation Plan
+That function currently tries to extract images mainly from **CloudFront/Provident-style URLs** (it explicitly checks for `cloudfront.net`).  
+But your “Amelia residence” case is actually the Reelly listing (we can see the matching records are “Camelia Villas”):
+- `projects` has the Camelia projects, each with **only 1 image** and **0 documents**
+- `pending_project_imports` for those slugs is still **status=pending** and has **only a cover image** and **documents empty/null**
 
-## Summary of Changes
+So the “Repair” flow can report “Repaired” yet return 0 assets because:
+- the repair extractor is **not compatible with Reelly vault/gallery URLs** (it’s looking in the wrong place)
+- Reelly **list** sync often brings only a cover image; you must fetch **Reelly detail** to get full gallery/floorplans/docs
+- your current “repair images for approved projects” function doesn’t help if the project already has 1 image (or if the source is still pending and not in approved/merged status)
 
-This plan addresses the following issues based on your feedback:
-
-1. **Logo fit in project developer section** - Logo not filling the white card properly
-2. **Black layer rounded corners** - Developer info card border not matching rounded style
-3. **Stats showing "N/A"** - Extract from Reelly + compute from local projects
-4. **"Back to Developers" button using old yellow/gold** - Replace with premium button
-5. **Description section** - Add visuals, more spacing, premium styling
-6. **Developers directory ordering** - Show elite developers first in exact order
-7. **Logo cropping in DeveloperCard** - Fix object-fit or increase box size
-
----
-
-## Part 1: Fix Logo Fit in Project Developer Section
-
-### Problem
-The logo box in `DeveloperInfoCard.tsx` uses `object-contain` which doesn't fill the white card. Some logos have excessive white space or don't scale properly.
-
-### Solution
-Update the logo container to:
-1. Remove internal padding so the logo can use the full space
-2. Use `object-contain` but with larger dimensions
-3. Add a fallback to detect logo aspect ratio and apply appropriate sizing
-
-### File: `src/components/project-detail/DeveloperInfoCard.tsx`
-
-Changes at lines 43-61:
-- Increase logo box size from `w-32 h-20` to `w-40 h-24` for more space
-- Add `p-3` for comfortable internal padding
-- Keep `object-contain` to prevent cropping
-- Add background color detection fallback
+### 2) “Media pending verification” and “Incomplete” flags
+In the approval cards, “Incomplete” is triggered when core fields are missing (especially **description**, **developer not unknown**, and **images length**). Since the repair isn’t pulling Reelly images correctly, it remains incomplete and shows the placeholder state.
 
 ---
 
-## Part 2: Round the Black Layer Border
+## What will be implemented (time-critical fixes)
+### A) Make “Repair” actually fix Reelly listings (including Amelia/Camelia) — not just Provident
+**Goal:** Clicking “Repair” on a Reelly pending import must populate:
+- gallery images (more than 1 when available)
+- documents (brochure/payment plan if available from Reelly detail)
+- floor plans when available
+- and remove the “Incomplete” state when core fields are satisfied
 
-### Problem
-The developer info card's outer container uses `jj-section-champagne` class but the inner container doesn't have rounded corners on the black background.
+**Implementation approach**
+1) Update backend function `repair-project-extraction`:
+   - Detect Reelly imports via `source_url` containing `reelly_(\d+)` (e.g. `...#reelly_2643`)
+   - If Reelly: **do not use Firecrawl/cloudfront-only extraction**
+   - Instead: fetch Reelly **detail** via the same endpoint used by `reelly-fetch-details`, then use shared extractors:
+     - `extractGalleryImages(detail)` (cover + gallery)
+     - `extractDocuments(detail)`
+     - `extractFloorPlans(detail)`
+     - `extractAmenities(detail)`
+     - `extractUnitTypes(detail)`
+   - Update `pending_project_imports.images/documents/floor_plan_types/...` from those extracted values
+   - If after Reelly detail the docs/floorplans are still empty, optionally run a second pass using `reelly-fill-missing-assets` (Firecrawl) for PDFs/floorplans (best-effort).
 
-### Solution
-The `jj-section-champagne` class applies champagne styling to child containers. The issue is that the container structure doesn't match expected patterns.
+2) Prevent “false success”:
+   - If the repaired result is still `images=0`, return a structured error payload and show the admin UI a real message like:
+     - “No images found from source; try Fetch Details” (instead of “Repaired”).
 
-### File: `src/components/project-detail/DeveloperInfoCard.tsx`
+3) Update the approval UI (`PendingImportCard.tsx`) “Repair” action:
+   - Keep one button named “Repair”
+   - Under the hood:
+     - if `source_url` is Reelly → call the upgraded repair that uses Reelly detail
+     - otherwise → keep existing scrape-based repair
+   - Update the toast copy to show accurate counts + whether the item is now complete.
 
-Changes at lines 39-41:
-- Replace the section wrapper with proper `jj-layer-2` for the inner champagne card
-- Ensure the outer section has `bg-black` and the inner card has `rounded-2xl`
-- Apply `border-2 border-gold/40` for consistency
-
----
-
-## Part 3: Fix Developer Stats (Founded, Units Delivered, etc.)
-
-### Problem
-Stats show "N/A" because:
-1. Reelly API provides `founded_year`, `projects_count`, `total_units` but these may be null for many developers
-2. The sync function maps them but many developers don't have the data
-
-### Solution: Dual Approach
-1. **Immediate (compute)**: Calculate `offplan_projects` from our projects table count
-2. **Long-term (sync)**: Expand the Reelly developer detail fetch to get more stats
-
-### File: `src/hooks/useProjects.ts`
-
-Changes at lines 296-310:
-- Update `useDeveloper` to also fetch project count from projects table
-- Or create a new hook that enriches developer data with computed stats
-
-### File: `src/components/project-detail/DeveloperInfoCard.tsx`
-
-Changes at lines 28-32:
-- Show computed project count if API stats are null
-- Display "View Portfolio" instead of "N/A" for unknown values
-
-### File: `supabase/functions/reelly-developers-sync/index.ts`
-
-Changes at lines 117-153:
-- Fetch additional fields from Reelly API `/developers/{id}` endpoint if available
-- Map more fields like `founded_year` properly
+**Acceptance check for Amelia/Camelia**
+- Pending import shows >1 image if Reelly provides gallery; otherwise at least the cover always.
+- “Repair” no longer ends with 0/0.
+- “Incomplete” badge should drop if core fields are satisfied.
 
 ---
 
-## Part 4: Replace "Back to Developers" Button with Premium Style
+### B) Fix the **approved project page** to also gain the repaired assets (not only the pending queue)
+Right now, even if the pending import gets more images later, the already-created `projects` rows and `project_images` won’t automatically update.
 
-### Problem
-The button uses hardcoded `bg-gold border-gold` which is the old yellow style.
+**Goal:** When we repair/fetch details for a pending import that matches an existing project, the public listing must show the new gallery/docs.
 
-### Solution
-Use the locked `Button` component with `variant="primary"` which applies the champagne gradient system.
+**Implementation approach**
+1) Add (or extend an existing) backend function to “sync assets from pending import → project”:
+   - Inputs: `project_id` OR `slug`
+   - Steps:
+     - load `pending_project_imports` by slug and ensure it has images/documents
+     - insert missing `project_images` (dedupe by URL)
+     - insert missing `project_documents` (dedupe by URL)
+2) Add an Owner-only button in Listing Admin project editor:
+   - “Sync assets from source”
+   - Runs the above function and then refreshes the project.
 
-### File: `src/pages/DeveloperDetail.tsx`
-
-Changes at lines 112-118:
-```tsx
-// Before
-<Link 
-  to="/developers" 
-  className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gold bg-gold text-black font-medium text-sm transition-all duration-200 hover:bg-transparent hover:text-gold"
->
-
-// After
-<Link to="/developers">
-  <Button variant="primary" size="sm" className="group">
-    <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
-    <span>Back to Developers</span>
-  </Button>
-</Link>
-```
+**Acceptance check**
+- The Amelia/Camelia project page gallery shows more than 1 image once details are available.
+- Documents/floorplans appear when available.
 
 ---
 
-## Part 5: Premium Description Section with Visuals
+## UI fixes requested for the property listing page (forms + colors)
+You asked for all of these changes specifically on the project listing page:
 
-### Problem
-Developer description is plain text with minimal styling.
+### C) “Register Interest” form should be **longer and slimmer**, not tall/narrow
+**Target file:** `src/components/project-detail/ProjectInquiryForm.tsx`
 
-### Solution
-1. Add more spacing between title and description (increase `mb-3` to `mb-5`)
-2. Add visual elements like icon accents
-3. Create a card-like container for the description
-4. Add subtle background gradient
+**Changes**
+- Replace `max-w-md` centered stacked layout with a responsive grid:
+  - Desktop: 2-column grid for main fields (Name/Email, Phone/Language, etc.)
+  - Mobile: stays single column
+- Keep visual spacing premium, but reduce unnecessary vertical stacking.
 
-### File: `src/components/project-detail/DeveloperInfoCard.tsx`
+**Acceptance check**
+- On desktop: the form looks wider, more horizontal, less “skinny”.
+- On mobile: still readable and stacked.
 
-Changes at lines 63-77 and 94-127:
-- Wrap description in a styled container
-- Add icon decorations
-- Increase spacing between elements
-- Add a subtle divider line
+### D) Remove black borders / old yellow button styling in “Request a Call Back Now”
+**Target file:** `src/components/project-detail/CallToActionSection.tsx`
 
----
+**Changes**
+1) Remove hardcoded inline yellow gradient styles on the submit button:
+   - Use the platform button system (`<Button variant="primary" ...>`) so it matches your premium style rules and avoids the old yellow.
+2) Ensure borders on buttons/inputs aren’t black:
+   - Identify the “black border” source: your global button variants currently use `border-foreground/..` which becomes dark on light backgrounds.
+   - Update `src/components/ui/button.tsx` so primary/secondary borders use **gold-tinted borders** (e.g. `border-gold/40`) instead of “foreground” borders, while keeping the champagne gradients intact.
+3) Remove the “white blocks” behind the phone input:
+   - In this CTA, the PhoneInput currently uses default styling that can appear as separate white blocks.
+   - Update `src/components/ui/phone-input.tsx` light variant to match the champagne input system:
+     - background should be champagne gradient (like `Input`)
+     - borders gold (`border-gold/40`)
+     - no stark white fill
 
-## Part 6: Developers Directory - Elite First (Exact Order)
-
-### Problem
-Developers are sorted by `rank` column but many elites have `rank=0` which doesn't differentiate them.
-
-### Solution
-Create a hardcoded priority order for elite developers and sort by:
-1. First by priority order (if in the list)
-2. Then by rank (for others)
-3. Finally alphabetically
-
-### File: `src/pages/Developers.tsx`
-
-Changes at lines 68-93:
-```typescript
-// Define exact elite order
-const ELITE_PRIORITY_ORDER = [
-  'emaar', 'omniyat', 'nakheel', 'sobha', 'aldar', 
-  'ellington', 'damac', 'meraas', 'dubai-properties'
-];
-
-// In filteredDevelopers useMemo:
-filtered.sort((a, b) => {
-  const aIdx = ELITE_PRIORITY_ORDER.indexOf(a.slug?.toLowerCase() || '');
-  const bIdx = ELITE_PRIORITY_ORDER.indexOf(b.slug?.toLowerCase() || '');
-  
-  // Both are in priority list
-  if (aIdx >= 0 && bIdx >= 0) return aIdx - bIdx;
-  // Only a is in priority list
-  if (aIdx >= 0) return -1;
-  // Only b is in priority list
-  if (bIdx >= 0) return 1;
-  // Neither in priority list - sort by rank then name
-  const rankDiff = (a.rank ?? 999) - (b.rank ?? 999);
-  if (rankDiff !== 0) return rankDiff;
-  return a.name.localeCompare(b.name);
-});
-```
+**Acceptance check**
+- No old-yellow submit button.
+- No black borders around the CTA buttons/fields.
+- Phone input blends with the champagne card (no separate white rectangles behind country selector / number).
 
 ---
 
-## Part 7: Fix Logo Cropping in Developer Cards
+## Exact files that will be modified
+### Backend functions
+- `supabase/functions/repair-project-extraction/index.ts`  
+  Add Reelly-detail repair path + accurate success/failure responses.
+- (If needed) new or extended function to sync pending-import assets into `projects`:
+  - Either extend `repair-project-images` to also handle “has 1 image but pending has more”
+  - Or add a dedicated “sync assets to project” function.
 
-### Problem
-Logo uses `object-cover` which crops logos, but `object-contain` may leave too much empty space.
+### Listing Admin UI
+- `src/components/listing-admin/PendingImportCard.tsx`  
+  Repair button behavior + messaging for Reelly.
 
-### Solution
-1. Change to `object-contain` 
-2. Increase box size slightly
-3. Add padding so logos don't touch edges
-
-### File: `src/components/DeveloperCard.tsx`
-
-Changes at lines 83-103:
-```tsx
-// Before
-<div 
-  className="w-20 h-12 rounded-lg flex items-center justify-center overflow-hidden"
-  ...
->
-  <img
-    src={developer.logo_url}
-    className="w-full h-full object-cover"  // Causes cropping
-  />
-
-// After
-<div 
-  className="w-24 h-14 rounded-lg flex items-center justify-center overflow-hidden p-2"
-  ...
->
-  <img
-    src={developer.logo_url}
-    className="max-w-full max-h-full object-contain"  // No cropping
-  />
-```
-
-Also update `DeveloperDetail.tsx` logo box at lines 126-144 with same pattern.
+### Project page UI
+- `src/components/project-detail/ProjectInquiryForm.tsx`  
+  Wider/slimmer layout.
+- `src/components/project-detail/CallToActionSection.tsx`  
+  Remove inline gold/yellow styling, ensure premium button variants, remove black borders.
+- `src/components/ui/phone-input.tsx`  
+  Light/champagne styling alignment.
+- `src/components/ui/button.tsx`  
+  Replace “foreground” borders with gold-tinted borders for premium consistency on light surfaces.
 
 ---
 
-## Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/components/project-detail/DeveloperInfoCard.tsx` | Logo sizing, rounded border, description styling, spacing |
-| `src/pages/DeveloperDetail.tsx` | Premium back button, logo box sizing |
-| `src/pages/Developers.tsx` | Elite-first sorting logic |
-| `src/components/DeveloperCard.tsx` | Logo `object-contain` instead of `object-cover`, larger box |
-| `src/hooks/useProjects.ts` | Optionally add computed stats to developer data |
-| `supabase/functions/reelly-developers-sync/index.ts` | Fetch more developer detail fields (long-term) |
-
----
-
-## Technical Details
-
-### Logo Container Sizing
-- **Project developer section**: `w-40 h-24` with `p-3` internal padding
-- **Developer card overlay**: `w-24 h-14` with `p-2` internal padding
-- **Developer detail header**: `w-36 h-24` with `p-3` internal padding
-
-### Color System Compliance
-- All buttons use `Button` component with proper variants
-- No hardcoded `bg-gold` - use `variant="primary"` which uses champagne gradient
-- Border colors use `border-gold/40` for consistency
-
-### Elite Developer Order
-1. Emaar
-2. Omniyat
-3. Nakheel
-4. Sobha
-5. Aldar
-6. Ellington
-7. DAMAC
-8. Meraas
-9. Dubai Properties
-10. (rest by rank, then alphabetical)
+## Rollout / verification checklist (what you will test right after implementation)
+1) Listing Admin → Approvals → find Amelia/Camelia → click **Repair**
+   - Confirm toast shows non-zero images (and docs if available)
+   - Confirm card no longer shows “Media pending verification” if images exist
+2) Open the public project page for that listing
+   - Confirm gallery shows images (more than 1 if available)
+   - Confirm documents/floorplans appear when available
+3) Project page → “Register Your Interest”
+   - Confirm it’s wider and more horizontal on desktop
+4) Project page → “Request a Call Back Now”
+   - Confirm champagne card + gold borders
+   - Confirm phone input has no ugly white blocks
+   - Confirm submit button is premium (no old yellow, no black border)
 
 ---
 
-## Test Checklist
+## Notes / constraints (so expectations are aligned)
+- Some Reelly projects may genuinely have no brochures/floorplans available. In that case we will:
+  - still ensure images display correctly
+  - still remove “fake repaired” messaging
+  - show a clear “Docs not provided by source” state rather than pretending they exist.
 
-After implementation:
-1. Navigate to any project detail page with a developer section
-2. Verify logo fills the white box without being cropped
-3. Verify the champagne card has rounded corners on all sides
-4. Verify stats show values (or graceful fallbacks, not "N/A")
-5. Navigate to /developers directory
-6. Verify elite developers appear at the top in the exact order
-7. Verify logo overlays on cards are not cropped
-8. Click "Back to Developers" button - verify it uses premium styling
-
+If you want me to proceed with implementing these fixes, send a new request saying: “Continue with implementation now (fix Amelia/Camelia + CTA form styling)”, and I’ll execute the changes in the code + backend functions.
