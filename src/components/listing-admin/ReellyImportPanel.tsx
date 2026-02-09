@@ -690,6 +690,9 @@ export function ReellyImportPanel() {
     setBackfillResult(null);
     setBackfillProjectList([]);
 
+    // Capture start time ONCE for the entire run so progress tracking works
+    const backfillStartedAt = new Date().toISOString();
+
     try {
       let aggregated = { processed: 0, updated: 0, failed: 0, remaining: 999 };
       let allResults: Array<{ name: string; status: string; images?: number; docs?: number }> = [];
@@ -713,7 +716,7 @@ export function ReellyImportPanel() {
 
       while (aggregated.remaining > 0 && batches < maxBatches) {
         const { data, error } = await supabase.functions.invoke("reelly-backfill-projects", {
-        body: { mode: "batch", batch_size: 50, force_refresh: true },
+        body: { mode: "batch", batch_size: 50, force_refresh: true, started_at: backfillStartedAt },
         });
 
         if (error) throw error;

@@ -31,6 +31,7 @@ interface BackfillRequest {
   project_ids?: string[];
   force_refresh?: boolean; // Overwrite existing data
   job_id?: string; // For resumable sync tracking
+  started_at?: string; // Timestamp cursor for force_refresh progress tracking
 }
 
 interface BackfillResponse {
@@ -93,6 +94,7 @@ Deno.serve(async (req) => {
     const batchSize = Math.min(body.batch_size || 50, 100);
     const forceRefresh = body.force_refresh || false;
     const specificIds = body.project_ids || [];
+    const startedAt = body.started_at || new Date().toISOString();
 
     // Stats mode - just return counts
     if (mode === "stats") {
@@ -210,7 +212,12 @@ Deno.serve(async (req) => {
     if (!forceRefresh) {
       // Only get projects not yet fetched from detail API
       query = query.is("detail_fetched_at", null);
+    } else {
+      // For force_refresh: only process projects not yet refreshed in this run
+      query = query.or(`detail_fetched_at.is.null,detail_fetched_at.lt.${startedAt}`);
     }
+
+    query = query.order("detail_fetched_at", { ascending: true, nullsFirst: true });
 
     const { data: projectsToBackfill, error: queryError } = await query.limit(batchSize);
 
@@ -233,11 +240,18 @@ Deno.serve(async (req) => {
     }
 
     // Get remaining count for progress tracking
-    const { count: remainingCount } = await supabase
+    let remainingQuery = supabase
       .from("projects")
       .select("*", { count: "exact", head: true })
-      .not("reelly_id", "is", null)
-      .is("detail_fetched_at", null);
+      .not("reelly_id", "is", null);
+
+    if (!forceRefresh) {
+      remainingQuery = remainingQuery.is("detail_fetched_at", null);
+    } else {
+      remainingQuery = remainingQuery.or(`detail_fetched_at.is.null,detail_fetched_at.lt.${startedAt}`);
+    }
+
+    const { count: remainingCount } = await remainingQuery;
 
     let updated = 0;
     let failed = 0;
