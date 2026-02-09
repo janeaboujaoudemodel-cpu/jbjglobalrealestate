@@ -109,24 +109,25 @@ const DeveloperDetail = () => {
       <div className="jj-layer-2 mt-6 md:mt-8 mb-12">
         {/* Developer header */}
         <div className="flex flex-col md:flex-row md:items-start gap-6">
-          {/* Logo plate - Clean white box without gray overlay */}
+          {/* Logo plate - Full bleed logo fills frame */}
           <div 
-            className="w-24 h-16 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0"
+            className="w-24 h-16 rounded-lg overflow-hidden flex-shrink-0"
             style={{
-              background: '#FFFFFF',
               border: '3px solid hsl(42 45% 59%)',
               boxShadow: '0 4px 12px rgba(200,167,102,0.25)'
             }}
           >
-            {(developer.logo_url_processed || developer.logo_url) ? (
+            {developer.logo_url ? (
               <img
-                src={developer.logo_url_processed || developer.logo_url}
+                src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="max-h-14 max-w-[90%] object-contain"
+                className="w-full h-full object-cover"
                 loading="eager"
               />
             ) : (
-              <Building2 className="w-8 h-8 text-zinc-400" />
+              <div className="w-full h-full bg-white flex items-center justify-center">
+                <Building2 className="w-8 h-8 text-zinc-400" />
+              </div>
             )}
           </div>
 

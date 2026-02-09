@@ -120,15 +120,9 @@ function mapReellyDeveloperToDb(dev: ReellyDeveloper): {
   logo_url: string | null;
   description: string | null;
   headquarters: string | null;
-  website: string | null;
-  email: string | null;
-  phone: string | null;
-  social_links: Record<string, string> | null;
-  working_hours: string | null;
-  offices: ReellyOffice[] | null;
   founded_year: number | null;
-  projects_count: number | null;
-  reelly_id: number;
+  completed_projects: number | null;
+  offplan_projects: number | null;
 } | null {
   // Skip developers with null/empty names
   if (!dev.name || typeof dev.name !== 'string' || !dev.name.trim()) {
@@ -142,20 +136,10 @@ function mapReellyDeveloperToDb(dev: ReellyDeveloper): {
   let headquarters: string | null = null;
   if (mainOffice) {
     const parts: string[] = [];
-    if (mainOffice.address) parts.push(mainOffice.address);
     if (mainOffice.city) parts.push(mainOffice.city);
     if (mainOffice.region) parts.push(mainOffice.region);
     headquarters = parts.length > 0 ? parts.join(', ') : null;
   }
-
-  // Extract social links
-  const socialLinks = extractSocialLinks(dev.social_links);
-
-  // Format working hours
-  const workingHours = formatWorkingHours(dev.working_hours);
-
-  // Get phone from main office if not on developer
-  const phone = dev.phone || mainOffice?.phone || null;
 
   return {
     name: dev.name.trim(),
@@ -163,15 +147,9 @@ function mapReellyDeveloperToDb(dev: ReellyDeveloper): {
     logo_url: dev.logo?.url || null,
     description: dev.description || null,
     headquarters: headquarters,
-    website: dev.website || null,
-    email: dev.email || null,
-    phone: phone,
-    social_links: socialLinks,
-    working_hours: workingHours,
-    offices: dev.offices?.length > 0 ? dev.offices : null,
     founded_year: dev.founded_year || null,
-    projects_count: dev.projects_count || null,
-    reelly_id: dev.id,
+    completed_projects: dev.total_units || null,
+    offplan_projects: dev.projects_count || null,
   };
 }
 
@@ -314,16 +292,13 @@ Deno.serve(async (req) => {
     // Get existing developers for matching
     const { data: existingDevs } = await supabase
       .from("developers")
-      .select("id, name, slug, reelly_id");
+      .select("id, name, slug");
     
     const existingBySlug = new Map(
       (existingDevs || []).map(d => [d.slug, d])
     );
     const existingByName = new Map(
       (existingDevs || []).map(d => [d.name.toLowerCase().trim(), d])
-    );
-    const existingByReellyId = new Map(
-      (existingDevs || []).filter(d => d.reelly_id).map(d => [d.reelly_id, d])
     );
 
     for (const dev of developers) {
@@ -337,11 +312,10 @@ Deno.serve(async (req) => {
           continue;
         }
         
-        // Check if developer already exists by Reelly ID, slug, or name
-        const existingByIdMatch = existingByReellyId.get(dev.id);
+        // Check if developer already exists by slug or name
         const existingBySlugMatch = existingBySlug.get(mapped.slug);
         const existingByNameMatch = existingByName.get(mapped.name.toLowerCase().trim());
-        const existing = existingByIdMatch || existingBySlugMatch || existingByNameMatch;
+        const existing = existingBySlugMatch || existingByNameMatch;
 
         if (existing) {
           // Update existing developer with enhanced data
@@ -353,15 +327,9 @@ Deno.serve(async (req) => {
           if (mapped.logo_url) updateData.logo_url = mapped.logo_url;
           if (mapped.description) updateData.description = mapped.description;
           if (mapped.headquarters) updateData.headquarters = mapped.headquarters;
-          if (mapped.website) updateData.website = mapped.website;
-          if (mapped.email) updateData.email = mapped.email;
-          if (mapped.phone) updateData.phone = mapped.phone;
-          if (mapped.social_links) updateData.social_links = mapped.social_links;
-          if (mapped.working_hours) updateData.working_hours = mapped.working_hours;
-          if (mapped.offices) updateData.offices = mapped.offices;
           if (mapped.founded_year) updateData.founded_year = mapped.founded_year;
-          if (mapped.projects_count) updateData.projects_count = mapped.projects_count;
-          if (mapped.reelly_id) updateData.reelly_id = mapped.reelly_id;
+          if (mapped.completed_projects) updateData.completed_projects = mapped.completed_projects;
+          if (mapped.offplan_projects) updateData.offplan_projects = mapped.offplan_projects;
 
           const { error: updateError } = await supabase
             .from("developers")
@@ -376,23 +344,16 @@ Deno.serve(async (req) => {
             updated++;
           }
         } else {
-          // Insert new developer with all data
+          // Insert new developer with only valid columns
           const insertData = {
             name: mapped.name,
             slug: mapped.slug,
             logo_url: mapped.logo_url,
             description: mapped.description,
             headquarters: mapped.headquarters,
-            website: mapped.website,
-            email: mapped.email,
-            phone: mapped.phone,
-            social_links: mapped.social_links,
-            working_hours: mapped.working_hours,
-            offices: mapped.offices,
             founded_year: mapped.founded_year,
-            projects_count: mapped.projects_count,
-            reelly_id: mapped.reelly_id,
-            is_active: true,
+            completed_projects: mapped.completed_projects,
+            offplan_projects: mapped.offplan_projects,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           };
