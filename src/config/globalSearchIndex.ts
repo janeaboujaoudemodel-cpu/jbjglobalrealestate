@@ -77,21 +77,23 @@ const adminRoutes: SearchItem[] = [
   { id: 'ai-hub', label: 'AI Hub', route: '/ai-hub', keywords: ['ai hub', 'artificial intelligence', 'ai tools', 'ai center'], description: 'AI tools hub', icon: Brain, access: 'public', category: 'admin' },
 ];
 
-// Convert tools registry to search items
-const toolsFromRegistry: SearchItem[] = allTools.map(tool => ({
-  id: tool.id,
-  label: tool.name,
-  route: tool.href,
-  keywords: [
-    ...tool.tags.map(t => t.toLowerCase()),
-    tool.name.toLowerCase(),
-    ...tool.description.toLowerCase().split(' ').filter(w => w.length > 3),
-  ],
-  description: tool.description,
-  icon: tool.icon,
-  access: 'public' as SearchItemAccess,
-  category: 'tool' as const,
-}));
+// Convert tools registry to search items - filter out any with undefined icons
+const toolsFromRegistry: SearchItem[] = allTools
+  .filter(tool => tool.icon && typeof tool.icon === 'function')
+  .map(tool => ({
+    id: tool.id,
+    label: tool.name,
+    route: tool.href,
+    keywords: [
+      ...tool.tags.map(t => t.toLowerCase()),
+      tool.name.toLowerCase(),
+      ...tool.description.toLowerCase().split(' ').filter(w => w.length > 3),
+    ],
+    description: tool.description,
+    icon: tool.icon,
+    access: 'public' as SearchItemAccess,
+    category: 'tool' as const,
+  }));
 
 // Additional tool aliases for better search
 const toolAliases: SearchItem[] = [
