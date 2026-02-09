@@ -712,9 +712,9 @@ const Footer = () => {
                       </Link>
                     </li>
                   ))}
-                  {/* Divider */}
-                  <li className="pt-2 border-t border-gold/20 mt-2">
-                    <span className="text-xs text-gold/60 uppercase tracking-wider">Careers</span>
+                  {/* Careers Divider */}
+                  <li className="pt-2 border-t border-gold/30 mt-2">
+                    <span className="text-xs text-gold font-medium uppercase tracking-wider">Careers</span>
                   </li>
                   {careerLinks.map((link) => (
                     <li key={link.href}>
@@ -758,7 +758,7 @@ const Footer = () => {
                   to={educationHubLink.href}
                   className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold hover:text-gold/80 transition-colors block"
                 >
-                  📚 Education Hub →
+                  Education Hub
                 </Link>
                 <p className="text-zinc-500 text-xs mb-3">Books, Guides & Market Reports</p>
                 
@@ -818,21 +818,21 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* ROW 3: Mode-Aware - Broker Tools (only visible in broker mode) */}
+            {/* ROW 3: Mode-Aware - Broker Tools (only visible in broker mode) - NOW GOLD STYLED */}
             {isBrokerMode && (
               <div className="border-t border-gold/20">
                 <div className="grid grid-cols-2 lg:grid-cols-4">
-                  {/* Broker Tools Section */}
+                  {/* Broker Tools Section - GOLD styling, no emoji */}
                   <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20 lg:col-span-2">
-                    <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-blue-500/30 text-blue-500">
-                      🏢 Broker Tools
+                    <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                      Broker Tools
                     </h4>
                     <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 grid grid-cols-2 gap-x-4">
                       {brokerToolsLinks.map((link) => (
                         <li key={link.href}>
                           <Link
                             to={link.href}
-                            className="text-zinc-700 hover:text-blue-500 transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                            className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
                           >
                             {link.label}
                           </Link>

@@ -44,6 +44,7 @@ import {
 import ListingSearchFilters from "@/components/listing-admin/ListingSearchFilters";
 import ListingAdminChat from "@/components/listing-admin/ListingAdminChat";
 import { PendingUpdatesQueue } from "@/components/listing-admin/PendingUpdatesQueue";
+import { ProjectApprovalQueue } from "@/components/listing-admin/ProjectApprovalQueue";
 import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPanel";
 import SyncDashboard from "@/components/listing-admin/SyncDashboard";
 import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel";
@@ -114,8 +115,8 @@ const ListingAdmin = () => {
       setShowChat(mappedView === "chat");
     }
     
-    // Handle syncTab URL param for Data Ops sub-tabs
-    if (syncTab && ['reelly', 'provident', 'approvals', 'external'].includes(syncTab)) {
+    // Handle syncTab URL param for Data Ops sub-tabs (updated tab names)
+    if (syncTab && ['reelly', 'approvals', 'updates', 'external'].includes(syncTab)) {
       setDataOpsTab(syncTab);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -615,7 +616,7 @@ const ListingAdmin = () => {
         {/* UNIFIED Data Ops View - All sync/extraction in one tabbed interface */}
         {activeView === 'data-ops' && (
           <div className="container mx-auto px-4 py-6 space-y-6">
-            {/* SOURCE COUNTS PANEL - Separated Reelly vs Provident */}
+            {/* SOURCE COUNTS PANEL - Reelly Only (Provident removed) */}
             <SourceCountsPanel />
             
             <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
@@ -628,18 +629,18 @@ const ListingAdmin = () => {
                   Reelly Sync
                 </TabsTrigger>
                 <TabsTrigger 
-                  value="provident"
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
-                >
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Provident Sync
-                </TabsTrigger>
-                <TabsTrigger 
                   value="approvals"
                   className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
                 >
                   <Check className="w-4 h-4 mr-2" />
-                  Approval Queue
+                  Project Approvals
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="updates"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Pending Updates
                 </TabsTrigger>
                 <TabsTrigger 
                   value="external"
@@ -653,10 +654,12 @@ const ListingAdmin = () => {
               <TabsContent value="reelly" className="mt-0">
                 <ReellyImportPanel />
               </TabsContent>
-              <TabsContent value="provident" className="mt-0">
-                <SyncDashboard />
-              </TabsContent>
               <TabsContent value="approvals" className="mt-0">
+                {/* ProjectApprovalQueue shows project cards with photos */}
+                <ProjectApprovalQueue onRefresh={refetchProjects} />
+              </TabsContent>
+              <TabsContent value="updates" className="mt-0">
+                {/* PendingUpdatesQueue shows data table for updates */}
                 <PendingUpdatesQueue onRefresh={refetchProjects} />
               </TabsContent>
               <TabsContent value="external" className="mt-0">

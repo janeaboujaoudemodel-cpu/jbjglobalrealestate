@@ -1,112 +1,139 @@
-import { Building2, TrendingUp, MapPin, Calculator, FileBarChart, BarChart3 } from "lucide-react";
-import BusinessSuiteToolCard from "@/components/business-suite/BusinessSuiteToolCard";
+/**
+ * Real Estate Business Suite - Combined tabbed interface for all 6 AI real estate tools
+ * Opens directly into the suite with tabs, no intermediate cards
+ */
 
-const tools = [
-  {
-    icon: Building2,
-    title: "Property Analyzer",
-    description: "AI-powered property analysis with market positioning, appreciation forecasts, and investment metrics.",
-    href: "/ai-property-analyzer",
-    colorClass: "text-sky-400",
-    borderColorClass: "border-sky-500/30",
-    gradientFrom: "from-sky-600",
-    gradientTo: "to-blue-600",
-  },
-  {
-    icon: TrendingUp,
-    title: "Price Predictor",
-    description: "Get AI valuations with market trend analysis and future price forecasts for Dubai properties.",
-    href: "/ai-price-predictor",
-    colorClass: "text-blue-400",
-    borderColorClass: "border-blue-500/30",
-    gradientFrom: "from-blue-600",
-    gradientTo: "to-indigo-600",
-  },
-  {
-    icon: MapPin,
-    title: "Neighborhood Insights",
-    description: "Comprehensive area analysis including amenities, demographics, and livability scores.",
-    href: "/ai-neighborhood-insights",
-    colorClass: "text-teal-400",
-    borderColorClass: "border-teal-500/30",
-    gradientFrom: "from-teal-600",
-    gradientTo: "to-cyan-600",
-  },
-  {
-    icon: Calculator,
-    title: "ROI Calculator",
-    description: "Calculate investment returns with scenario comparisons and cash flow projections.",
-    href: "/ai-roi-calculator",
-    colorClass: "text-emerald-400",
-    borderColorClass: "border-emerald-500/30",
-    gradientFrom: "from-emerald-600",
-    gradientTo: "to-green-600",
-  },
-  {
-    icon: FileBarChart,
-    title: "Market Report",
-    description: "Generate comprehensive market analysis reports with trends and forecasts.",
-    href: "/ai-market-report",
-    colorClass: "text-indigo-400",
-    borderColorClass: "border-indigo-500/30",
-    gradientFrom: "from-indigo-600",
-    gradientTo: "to-purple-600",
-  },
-  {
-    icon: BarChart3,
-    title: "Competitor Analysis",
-    description: "Compare properties and developers with detailed competitive intelligence.",
-    href: "/ai-competitor-analysis",
-    colorClass: "text-orange-400",
-    borderColorClass: "border-orange-500/30",
-    gradientFrom: "from-orange-600",
-    gradientTo: "to-amber-600",
-  },
-];
+import React, { lazy, Suspense } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { SEOHead } from '@/components/SEOHead';
+import { Building2, TrendingUp, MapPin, Calculator, FileBarChart, BarChart3 } from 'lucide-react';
+import { ToolSuiteHeader } from '@/components/toolkit/ToolSuiteHeader';
+
+// Lazy load the REAL existing tool pages
+const AIPropertyAnalyzerPage = lazy(() => import('@/pages/AIPropertyAnalyzerPage'));
+const AIPricePredictorPage = lazy(() => import('@/pages/AIPricePredictorPage'));
+const AINeighborhoodInsightsPage = lazy(() => import('@/pages/AINeighborhoodInsightsPage'));
+const AIROICalculatorPage = lazy(() => import('@/pages/AIROICalculatorPage'));
+const AIMarketReportPage = lazy(() => import('@/pages/AIMarketReportPage'));
+const AICompetitorAnalysisPage = lazy(() => import('@/pages/AICompetitorAnalysisPage'));
+
+const LoadingSpinner = () => (
+  <div className="min-h-[60vh] flex items-center justify-center">
+    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div>
+  </div>
+);
 
 const RealEstateSuite = () => {
   return (
-    <div className="min-h-screen bg-black">
-      {/* Hero Section */}
-      <div className="relative py-16 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-gold/10 via-black to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gold/20 via-transparent to-transparent opacity-50" />
-        
-        <div className="relative max-w-6xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full mb-6">
-            <Building2 className="w-5 h-5 text-gold" />
-            <span className="text-gold font-medium text-sm">Real Estate Business Suite</span>
-          </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Property <span className="text-gold">Intelligence</span> Suite
-          </h1>
-          
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto mb-8">
-            Complete AI-powered toolkit for property analysis, valuation, and market intelligence. 
-            Make data-driven decisions with professional-grade analytics.
-          </p>
-          
-          <div className="flex items-center justify-center gap-4 text-sm text-zinc-500">
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 bg-gold rounded-full" />
-              6 Tools Included
-            </span>
-            <span>•</span>
-            <span>Powered by AI</span>
-          </div>
-        </div>
-      </div>
+    <>
+      <SEOHead 
+        title="Real Estate Intelligence Suite | JBJ Global"
+        description="Complete AI-powered toolkit for property analysis, valuation, and market intelligence."
+      />
       
-      {/* Tools Grid */}
-      <div className="max-w-6xl mx-auto px-4 pb-20">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools.map((tool) => (
-            <BusinessSuiteToolCard key={tool.href} {...tool} />
-          ))}
-        </div>
+      <div className="min-h-screen bg-black">
+        {/* Header with readable back button */}
+        <ToolSuiteHeader
+          title="Property "
+          titleHighlight="Intelligence"
+          subtitle="AI-powered property analysis, valuation, and market intelligence"
+          icon={Building2}
+          backHref="/toolkit"
+          backText="Back to Toolkit"
+        />
+
+        {/* Tabs - 6 tabs with REAL tools */}
+        <Tabs defaultValue="analyzer" className="flex flex-col">
+          <div className="border-b border-gold/20 bg-zinc-900/50">
+            <div className="max-w-7xl mx-auto px-4">
+              <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 overflow-x-auto">
+                <TabsTrigger
+                  value="analyzer"
+                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
+                >
+                  <Building2 className="w-4 h-4" />
+                  <span className="hidden sm:inline">Property Analyzer</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="predictor"
+                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
+                >
+                  <TrendingUp className="w-4 h-4" />
+                  <span className="hidden sm:inline">Price Predictor</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="neighborhood"
+                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
+                >
+                  <MapPin className="w-4 h-4" />
+                  <span className="hidden sm:inline">Neighborhood</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="roi"
+                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
+                >
+                  <Calculator className="w-4 h-4" />
+                  <span className="hidden sm:inline">ROI Calculator</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="report"
+                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
+                >
+                  <FileBarChart className="w-4 h-4" />
+                  <span className="hidden sm:inline">Market Report</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="competitor"
+                  className="relative px-4 md:px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2 whitespace-nowrap"
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  <span className="hidden sm:inline">Competitor</span>
+                </TabsTrigger>
+              </TabsList>
+            </div>
+          </div>
+
+          {/* Tab Content - REAL TOOL PAGES embedded */}
+          <div className="flex-1 overflow-auto">
+            <TabsContent value="analyzer" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}>
+                <AIPropertyAnalyzerPage />
+              </Suspense>
+            </TabsContent>
+
+            <TabsContent value="predictor" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}>
+                <AIPricePredictorPage />
+              </Suspense>
+            </TabsContent>
+
+            <TabsContent value="neighborhood" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}>
+                <AINeighborhoodInsightsPage />
+              </Suspense>
+            </TabsContent>
+
+            <TabsContent value="roi" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}>
+                <AIROICalculatorPage />
+              </Suspense>
+            </TabsContent>
+
+            <TabsContent value="report" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}>
+                <AIMarketReportPage />
+              </Suspense>
+            </TabsContent>
+
+            <TabsContent value="competitor" className="mt-0">
+              <Suspense fallback={<LoadingSpinner />}>
+                <AICompetitorAnalysisPage />
+              </Suspense>
+            </TabsContent>
+          </div>
+        </Tabs>
       </div>
-    </div>
+    </>
   );
 };
 
