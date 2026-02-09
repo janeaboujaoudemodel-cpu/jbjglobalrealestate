@@ -33,6 +33,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
 
   // Column 2: Business Suites (NEW)
   const businessSuitesLinks = [
+    { label: 'All Tools Suite', href: '/business-suite/all', icon: Layers },
     { label: 'Real Estate Suite', href: '/business-suite/real-estate', icon: Building2 },
     { label: 'Broker Intelligence', href: '/business-suite/broker', icon: Users },
     { label: 'Creative Suite', href: '/business-suite/creative', icon: Sparkles },
