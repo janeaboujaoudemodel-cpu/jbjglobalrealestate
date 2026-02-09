@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ArrowRight } from "lucide-react";
+import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
@@ -14,6 +14,26 @@ interface GlobalSearchModalProps {
   initialQuery?: string;
   onClose: () => void;
 }
+
+// Quick access shortcuts - always visible
+const QUICK_SHORTCUTS = [
+  { label: "Properties", route: "/properties", icon: Building2, color: "bg-blue-500" },
+  { label: "Developers", route: "/developers", icon: Users, color: "bg-emerald-500" },
+  { label: "Areas", route: "/areas", icon: Map, color: "bg-purple-500" },
+  { label: "Market Report", route: "/market-report", icon: FileText, color: "bg-amber-500" },
+  { label: "Mortgage", route: "/mortgage-calculator", icon: Calculator, color: "bg-pink-500" },
+  { label: "AI Tools", route: "/toolkit", icon: Sparkles, color: "bg-indigo-500" },
+];
+
+// Popular pages
+const POPULAR_PAGES = [
+  { label: "Home", route: "/", icon: Home },
+  { label: "Favorites", route: "/favorites", icon: Heart },
+  { label: "Buyer Guide", route: "/buyer-guide", icon: BookOpen },
+  { label: "Golden Visa", route: "/guides/golden-visa-uae", icon: Award },
+  { label: "Contact", route: "/contact", icon: Phone },
+  { label: "FAQ", route: "/faq", icon: HelpCircle },
+];
 
 const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose }: GlobalSearchModalProps) => {
   const [query, setQuery] = useState("");
@@ -68,18 +88,6 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose }: GlobalSearchM
     limit: 12,
   }).filter(item => item.icon && typeof item.icon === 'function');
 
-  // Default results when no query
-  const defaultResults = searchItems("", {
-    isOwner: isOwner,
-    hasCRMAccess: hasCRMAccess || false,
-    hasListingAdminAccess: hasListingAdminAccess || false,
-    isBroker: isBroker,
-    isAuthenticated: !!user,
-    limit: 8,
-  }).filter(item => item.icon && typeof item.icon === 'function');
-
-  const displayResults = query.trim() ? results : defaultResults;
-
   useEffect(() => {
     if (isOpen) {
       const q = (initialQuery || "").trim();
@@ -91,13 +99,12 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose }: GlobalSearchM
   const handleSelect = (route: string) => {
     navigate(route);
     onClose();
-    // Scroll to top for better UX
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && displayResults.length > 0) {
-      handleSelect(displayResults[0].route);
+    if (e.key === "Enter" && results.length > 0 && query.trim()) {
+      handleSelect(results[0].route);
     } else if (e.key === "Escape") {
       onClose();
     }
@@ -116,76 +123,185 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose }: GlobalSearchM
             onClick={onClose}
           />
 
-          {/* Modal - Responsive positioning */}
+          {/* Modal - LARGE Premium Panel */}
           <motion.div
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed left-1/2 -translate-x-1/2 w-full max-w-xl z-50 px-4 top-4 sm:top-16 md:top-20"
+            className="fixed left-1/2 -translate-x-1/2 w-full max-w-3xl z-50 px-4 top-4 sm:top-12 md:top-16"
             style={{ maxHeight: 'calc(100dvh - 2rem)' }}
           >
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 3rem)' }}>
-              {/* Search Input */}
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 3rem)' }}>
+              {/* Search Input - Larger */}
               <div className="relative border-b border-gold/30 flex-shrink-0">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
+                <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-gold" />
                 <Input
                   ref={inputRef}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Search pages, tools, guides..."
-                  className="w-full h-14 pl-12 pr-12 bg-transparent border-0 text-black text-lg placeholder:text-gold/70 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  placeholder="Search by keyword... Search anything"
+                  className="w-full h-16 pl-14 pr-14 bg-transparent border-0 text-black text-xl placeholder:text-gold/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
                 <button
                   onClick={onClose}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-gold/10 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg hover:bg-gold/10 transition-colors"
                 >
-                  <X className="w-5 h-5 text-black" />
+                  <X className="w-6 h-6 text-black" />
                 </button>
               </div>
 
-              {/* Results - Scrollable */}
-              <div className="overflow-y-auto p-2 flex-1" style={{ maxHeight: 'calc(100dvh - 10rem)' }}>
-                {displayResults.length > 0 ? (
-                  displayResults.map((item, idx) => (
-                    <button
-                      key={`${item.id}-${idx}`}
-                      onClick={() => handleSelect(item.route)}
-                      className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all ${
-                        idx === 0 && query.trim() 
-                          ? "bg-black/10 border border-gold/40" 
-                          : "hover:bg-gold/10"
-                      }`}
-                    >
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center border ${
-                        idx === 0 && query.trim() 
-                          ? "bg-black text-gold border-gold/50" 
-                          : "bg-white border-gold/30 text-gold"
-                      }`}>
-                        {item.icon && <item.icon className="w-5 h-5" />}
+              {/* Main Content - Scrollable */}
+              <div className="overflow-y-auto p-4 flex-1" style={{ maxHeight: 'calc(100dvh - 12rem)' }}>
+                {/* Show search results when typing */}
+                {query.trim() ? (
+                  <div>
+                    <p className="text-sm font-semibold text-gold mb-3 px-1">
+                      {results.length > 0 ? `${results.length} results found` : 'No results found'}
+                    </p>
+                    {results.length > 0 ? (
+                      <div className="space-y-1">
+                        {results.map((item, idx) => (
+                          <button
+                            key={`${item.id}-${idx}`}
+                            onClick={() => handleSelect(item.route)}
+                            className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all ${
+                              idx === 0
+                                ? "bg-black/10 border border-gold/40" 
+                                : "hover:bg-gold/10"
+                            }`}
+                          >
+                            <div className={`w-11 h-11 rounded-lg flex items-center justify-center border ${
+                              idx === 0
+                                ? "bg-black text-gold border-gold/50" 
+                                : "bg-white border-gold/30 text-gold"
+                            }`}>
+                              {item.icon && <item.icon className="w-5 h-5" />}
+                            </div>
+                            <div className="flex-1 text-left">
+                              <p className="font-semibold text-black">{item.label}</p>
+                              <p className="text-gold text-sm truncate">{item.description}</p>
+                            </div>
+                            <ArrowRight className="w-5 h-5 flex-shrink-0 text-gold" />
+                          </button>
+                        ))}
                       </div>
-                      <div className="flex-1 text-left">
-                        <p className={`font-medium ${idx === 0 && query.trim() ? "text-black" : "text-black"}`}>
-                          {item.label}
-                        </p>
-                        <p className="text-gold text-sm truncate">{item.description}</p>
+                    ) : (
+                      <div className="p-8 text-center">
+                        <p className="text-zinc-500">No results found for "{query}"</p>
+                        <p className="text-sm text-zinc-400 mt-1">Try a different search term</p>
                       </div>
-                      <ArrowRight className={`w-4 h-4 flex-shrink-0 ${idx === 0 && query.trim() ? "text-black" : "text-gold"}`} />
-                    </button>
-                  ))
-                ) : query.trim() ? (
-                  <div className="p-8 text-center">
-                    <p className="text-zinc-500">No results found for "{query}"</p>
-                    <p className="text-sm text-zinc-400 mt-1">Try a different search term</p>
+                    )}
                   </div>
-                ) : null}
+                ) : (
+                  /* Show shortcuts and suggestions when NOT typing */
+                  <div className="space-y-6">
+                    {/* Quick Access Shortcuts */}
+                    <div>
+                      <p className="text-sm font-bold text-black/70 mb-3 px-1 uppercase tracking-wider">
+                        Quick Access
+                      </p>
+                      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                        {QUICK_SHORTCUTS.map((shortcut) => (
+                          <button
+                            key={shortcut.route}
+                            onClick={() => handleSelect(shortcut.route)}
+                            className="flex flex-col items-center gap-2 p-3 rounded-xl bg-white border border-gold/20 hover:border-gold/50 hover:shadow-md transition-all group"
+                          >
+                            <div className={`w-10 h-10 rounded-lg ${shortcut.color} flex items-center justify-center text-white group-hover:scale-110 transition-transform`}>
+                              <shortcut.icon className="w-5 h-5" />
+                            </div>
+                            <span className="text-xs font-medium text-black text-center">{shortcut.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Popular Pages */}
+                    <div>
+                      <p className="text-sm font-bold text-black/70 mb-3 px-1 uppercase tracking-wider">
+                        Popular Pages
+                      </p>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {POPULAR_PAGES.map((page) => (
+                          <button
+                            key={page.route}
+                            onClick={() => handleSelect(page.route)}
+                            className="flex items-center gap-3 p-3 rounded-xl bg-white/50 border border-gold/10 hover:bg-white hover:border-gold/30 transition-all"
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center text-gold">
+                              <page.icon className="w-4 h-4" />
+                            </div>
+                            <span className="text-sm font-medium text-black">{page.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Admin Shortcuts - Only for authenticated users with access */}
+                    {(isOwner || hasCRMAccess || hasListingAdminAccess) && (
+                      <div>
+                        <p className="text-sm font-bold text-black/70 mb-3 px-1 uppercase tracking-wider">
+                          Admin Shortcuts
+                        </p>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                          {isOwner && (
+                            <button
+                              onClick={() => handleSelect('/owner')}
+                              className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-gold/20 to-amber-100 border border-gold/30 hover:shadow-md transition-all"
+                            >
+                              <LayoutDashboard className="w-5 h-5 text-gold" />
+                              <span className="text-sm font-semibold text-black">Owner</span>
+                            </button>
+                          )}
+                          {isOwner && (
+                            <button
+                              onClick={() => handleSelect('/admin')}
+                              className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-purple-100 to-purple-50 border border-purple-300 hover:shadow-md transition-all"
+                            >
+                              <Briefcase className="w-5 h-5 text-purple-600" />
+                              <span className="text-sm font-semibold text-black">Admin</span>
+                            </button>
+                          )}
+                          {(hasCRMAccess || isOwner) && (
+                            <button
+                              onClick={() => handleSelect('/crm')}
+                              className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-blue-100 to-blue-50 border border-blue-300 hover:shadow-md transition-all"
+                            >
+                              <Users className="w-5 h-5 text-blue-600" />
+                              <span className="text-sm font-semibold text-black">CRM</span>
+                            </button>
+                          )}
+                          {(hasListingAdminAccess || isOwner) && (
+                            <button
+                              onClick={() => handleSelect('/listing-admin')}
+                              className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-emerald-100 to-emerald-50 border border-emerald-300 hover:shadow-md transition-all"
+                            >
+                              <Building2 className="w-5 h-5 text-emerald-600" />
+                              <span className="text-sm font-semibold text-black">Listings</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Search Hint */}
+                    <div className="text-center pt-2">
+                      <p className="text-sm text-gold/80">
+                        Start typing to search projects, developers, tools, pages, and more...
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Footer hint */}
-              <div className="p-3 border-t border-gold/30 bg-white/50 flex-shrink-0">
-                <p className="text-zinc-600 text-xs text-center">
-                  Press <kbd className="px-1.5 py-0.5 bg-black/10 rounded text-black">Enter</kbd> to go • <kbd className="px-1.5 py-0.5 bg-black/10 rounded text-black">Esc</kbd> to close
+              <div className="p-4 border-t border-gold/30 bg-white/50 flex-shrink-0">
+                <p className="text-zinc-600 text-sm text-center">
+                  <kbd className="px-2 py-1 bg-black/10 rounded text-black font-mono text-xs">Enter</kbd> to select first result 
+                  <span className="mx-3">•</span>
+                  <kbd className="px-2 py-1 bg-black/10 rounded text-black font-mono text-xs">Esc</kbd> to close
                 </p>
               </div>
             </div>

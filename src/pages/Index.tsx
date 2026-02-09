@@ -81,21 +81,23 @@ const Index = () => {
       
       {/* HERO SECTION - LUXURY CINEMATIC VIDEO - MUST BE 100vh */}
       <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        {/* Video Background - Luxury Dubai Drone Footage */}
+        {/* Video Background - Luxury Dubai Drone Footage - Optimized for performance */}
         <div className="absolute inset-0">
-          {/* Fallback image - always visible as base layer */}
+          {/* Fallback image - always visible as base layer for instant load */}
           <img 
             src={luxuryVillaHero} 
             alt="Luxury Dubai Real Estate" 
             className="absolute inset-0 w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
           />
-          {/* Video overlays the image when it loads/plays - optimized for faster loading */}
+          {/* Video overlays the image when it loads/plays - deferred for performance */}
           <video 
             autoPlay 
             loop 
             muted 
             playsInline
-            preload="metadata"
+            preload="none"
             poster={luxuryVillaHero}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
@@ -103,6 +105,14 @@ const Index = () => {
             style={{ 
               WebkitTransform: 'translateZ(0)',
               backfaceVisibility: 'hidden',
+            }}
+            onLoadStart={(e) => {
+              // Delay video load to prioritize initial page render
+              const video = e.currentTarget;
+              setTimeout(() => {
+                video.preload = "auto";
+                video.load();
+              }, 1000);
             }}
           >
             <source src="/videos/hero-video.mp4" type="video/mp4" />

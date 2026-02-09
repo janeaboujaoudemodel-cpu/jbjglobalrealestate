@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     // PWA plugin completely disabled to prevent install prompts
   ].filter(Boolean),
-  // Optimized build settings for large projects
+  // Optimized build settings for large projects - PERFORMANCE CRITICAL
   build: {
     // Disable source maps to reduce memory usage during build
     sourcemap: false,
@@ -23,12 +23,27 @@ export default defineConfig(({ mode }) => ({
     reportCompressedSize: false,
     // Increase chunk size warning limit
     chunkSizeWarningLimit: 2000,
+    // Target modern browsers for smaller bundle
+    target: 'es2020',
+    // Minification for production
+    minify: 'esbuild',
     rollupOptions: {
       output: {
         // Stable entry filename
         entryFileNames: "assets/app.js",
         chunkFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/[name]-[hash][extname]",
+        // Code splitting for performance - split vendor chunks
+        manualChunks: {
+          // React core
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          // UI library
+          'ui-vendor': ['framer-motion', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-popover'],
+          // Data fetching
+          'data-vendor': ['@tanstack/react-query', '@supabase/supabase-js'],
+          // Charts (heavy, rarely needed on initial load)
+          'charts-vendor': ['recharts'],
+        },
       },
     },
   },
@@ -38,5 +53,9 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  // Optimize dependencies
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom', '@tanstack/react-query'],
   },
 }));
