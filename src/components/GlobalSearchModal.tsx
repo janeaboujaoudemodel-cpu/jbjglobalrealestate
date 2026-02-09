@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { searchItems, allSearchItems } from "@/config/globalSearchIndex";
+import { searchItems } from "@/config/globalSearchIndex";
+import type { SearchItem } from "@/config/globalSearchIndex";
 
 interface GlobalSearchModalProps {
   isOpen: boolean;
@@ -57,7 +58,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose }: GlobalSearchM
 
   const isBroker = crmProfile?.crm_role === 'broker_member';
 
-  // Get filtered results
+  // Get filtered results - filter out any items without valid icons
   const results = searchItems(query, {
     isOwner: isOwner,
     hasCRMAccess: hasCRMAccess || false,
@@ -65,7 +66,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose }: GlobalSearchM
     isBroker: isBroker,
     isAuthenticated: !!user,
     limit: 12,
-  });
+  }).filter(item => item.icon && typeof item.icon === 'function');
 
   // Default results when no query
   const defaultResults = searchItems("", {
@@ -75,7 +76,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose }: GlobalSearchM
     isBroker: isBroker,
     isAuthenticated: !!user,
     limit: 8,
-  });
+  }).filter(item => item.icon && typeof item.icon === 'function');
 
   const displayResults = query.trim() ? results : defaultResults;
 
@@ -162,7 +163,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose }: GlobalSearchM
                           ? "bg-black text-gold border-gold/50" 
                           : "bg-white border-gold/30 text-gold"
                       }`}>
-                        <item.icon className="w-5 h-5" />
+                        {item.icon && <item.icon className="w-5 h-5" />}
                       </div>
                       <div className="flex-1 text-left">
                         <p className={`font-medium ${idx === 0 && query.trim() ? "text-black" : "text-black"}`}>
