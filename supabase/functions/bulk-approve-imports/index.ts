@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -249,7 +249,6 @@ serve(async (req) => {
         longitude: item.longitude || null,
         // Only set area_id if we found a valid match (avoid FK constraint errors)
         area_id: matchedAreaId || null,
-          area_id: matchedAreaId,
           area_name: item.area_name || null,
           // USP fields
           usp_headline: item.usp_headline || null,

@@ -228,3 +228,12 @@ verify_jwt = false
 
 [functions.esign-send-reminder]
 verify_jwt = false
+
+[functions.bulk-approve-imports]
+verify_jwt = false
+
+[functions.repair-project-images]
+verify_jwt = false
+
+[functions.repair-project-extraction]
+verify_jwt = false
