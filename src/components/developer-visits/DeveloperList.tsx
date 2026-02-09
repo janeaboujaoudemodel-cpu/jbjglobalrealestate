@@ -92,7 +92,7 @@ export function DeveloperList({ onSelectDeveloper, onRequestVisit, onCheckIn }: 
                       <img
                         src={developer.logo_url}
                         alt={developer.name}
-                        className="max-h-9 max-w-[90%] object-contain"
+                        className="w-full h-full object-cover"
                       />
                     ) : (
                       <Building2 className="h-6 w-6 text-muted-foreground" />
