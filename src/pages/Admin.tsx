@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, lazy, Suspense } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProjects, useDevelopers, useCommunities } from "@/hooks/useProjects";
 import { supabase } from "@/integrations/supabase/client";
@@ -107,7 +107,12 @@ interface ProjectDocument {
 
 const Admin = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, isOwner, loading, signOut } = useAuth();
+  
+  // Read tab from URL parameter for deep-linking (e.g., /admin?tab=customer-happiness)
+  const tabFromUrl = searchParams.get("tab");
+  const [activeTab, setActiveTab] = useState(tabFromUrl || "overview");
   const { data: projects, refetch: refetchProjects } = useProjects();
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
@@ -423,7 +428,7 @@ const Admin = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 pb-24">
-        <Tabs defaultValue="overview" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <div className="w-full overflow-x-auto">
           <TabsList className="w-max min-w-full justify-start bg-white/80 border-2 border-gold/30 p-1">
               <TabsTrigger value="overview" className="tab-trigger-champagne text-black">
@@ -486,13 +491,9 @@ const Admin = () => {
                 <Briefcase className="w-4 h-4 mr-2" />
                 Employee Hub
               </TabsTrigger>
-              <TabsTrigger value="support-tickets" className="tab-trigger-champagne text-black">
-                <Ticket className="w-4 h-4 mr-2" />
-                Support Tickets
-              </TabsTrigger>
               <TabsTrigger value="customer-happiness" className="tab-trigger-champagne text-black">
                 <Heart className="w-4 h-4 mr-2" />
-                Customer Happiness
+                Hub
               </TabsTrigger>
               <TabsTrigger value="podcast-studio" className="tab-trigger-champagne text-black">
                 <Mic className="w-4 h-4 mr-2" />
@@ -564,12 +565,6 @@ const Admin = () => {
           <TabsContent value="employee-hub" className="space-y-8">
             <Suspense fallback={<TabLoadingFallback />}>
               <EmbeddedEmployeeHub />
-            </Suspense>
-          </TabsContent>
-
-          <TabsContent value="support-tickets" className="space-y-8">
-            <Suspense fallback={<TabLoadingFallback />}>
-              <EmbeddedSupportTickets />
             </Suspense>
           </TabsContent>
 
