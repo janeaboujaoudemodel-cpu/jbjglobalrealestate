@@ -256,12 +256,11 @@ const Footer = () => {
 
   // Business Suites - Grouped AI Tools
   const businessSuitesLinks = [
+    { href: "/business-suite/all", label: "All Tools Suite" },
     { href: "/business-suite/real-estate", label: "Real Estate Suite" },
     { href: "/business-suite/broker", label: "Broker Intelligence Suite" },
     { href: "/business-suite/creative", label: "Creative & Communication" },
     { href: "/business-suite/productivity", label: "Productivity Suite" },
-    { href: "/ai-call-summarizer", label: "AI Call Summarizer" },
-    { href: "/meeting-center", label: "Meeting Center" },
   ];
 
   // Professional Tools - Complete list
@@ -636,8 +635,8 @@ const Footer = () => {
             
             {/* Navigation Grid Section - Premium Card Layout */}
             <div className="p-4 sm:p-6 md:p-8">
-              {/* ROW 1: 4 Premium Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+              {/* ROW 1: 4 Premium Cards - Auto height, no scroll */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 auto-rows-auto">
                 
                 {/* Card 1: Properties */}
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
@@ -734,14 +733,14 @@ const Footer = () => {
                 </div>
               </div>
 
-              {/* ROW 2: 4 Premium Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* ROW 2: 4 Premium Cards - Auto height, no scroll */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-auto">
                 
                 {/* Card 5: Sell */}
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
                   <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
                     <span className="text-gold">✦</span>
-                    Sell
+                    <span className="text-gold">Sell</span>
                   </h4>
                   <ul className="space-y-2">
                     {sellLinks.map((link) => (
@@ -761,10 +760,10 @@ const Footer = () => {
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
                   <Link 
                     to={educationHubLink.href}
-                    className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-2 pb-2 border-b border-gold/30 text-black hover:text-gold transition-colors flex items-center gap-2"
+                    className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-2 pb-2 border-b border-gold/30 text-gold hover:text-gold/80 transition-colors flex items-center gap-2"
                   >
                     <span className="text-gold">✦</span>
-                    Education Hub
+                    <span className="text-gold">Education Hub</span>
                   </Link>
                   <p className="text-zinc-500 text-xs mb-3">Books, Guides & Market Reports</p>
                   

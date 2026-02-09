@@ -8,7 +8,8 @@ import { SEOHead } from '@/components/SEOHead';
 import { 
   Building2, TrendingUp, MapPin, Calculator, FileBarChart, BarChart3,
   Home, Mail, Languages, Video, FileText, FileSearch, CalendarDays,
-  Palette, Sofa, DollarSign, Users, MessageSquare, Sparkles
+  Palette, Sofa, DollarSign, Users, MessageSquare, Sparkles, Phone,
+  CreditCard, Layers
 } from 'lucide-react';
 import { ToolSuiteHeader } from '@/components/toolkit/ToolSuiteHeader';
 import { cn } from '@/lib/utils';
@@ -27,8 +28,17 @@ const AIContractReviewerPage = lazy(() => import('@/pages/AIContractReviewerPage
 const AIObjectionHandlerPage = lazy(() => import('@/pages/AIObjectionHandlerPage'));
 const AIMeetingSummarizerPage = lazy(() => import('@/pages/AIMeetingSummarizerPage'));
 const AILeadQualificationPage = lazy(() => import('@/pages/AILeadQualificationPage'));
+const AIEmailGeneratorPage = lazy(() => import('@/pages/AIEmailGeneratorPage'));
+const AICalendar = lazy(() => import('@/pages/AICalendar'));
+const VideoMeeting = lazy(() => import('@/pages/VideoMeeting'));
+const BusinessCardScanner = lazy(() => import('@/pages/BusinessCardScanner'));
+const MortgageCalculator = lazy(() => import('@/pages/MortgageCalculator'));
+const RentalIndex = lazy(() => import('@/pages/RentalIndex'));
+const PropertyEvaluator = lazy(() => import('@/pages/PropertyEvaluator'));
+const Compare = lazy(() => import('@/pages/Compare'));
+const Quiz = lazy(() => import('@/pages/Quiz'));
 
-// Tool sections configuration
+// Tool sections configuration - Expanded with all real estate tools
 const SECTIONS = [
   {
     id: 'analysis',
@@ -39,6 +49,9 @@ const SECTIONS = [
       { id: 'analyzer', name: 'Property Analyzer', icon: Building2 },
       { id: 'predictor', name: 'Price Predictor', icon: TrendingUp },
       { id: 'neighborhood', name: 'Neighborhood Insights', icon: MapPin },
+      { id: 'evaluator', name: 'Property Evaluator', icon: DollarSign },
+      { id: 'compare', name: 'Property Comparison', icon: Layers },
+      { id: 'quiz', name: 'AI Home Finder', icon: Sparkles },
     ],
   },
   {
@@ -48,6 +61,8 @@ const SECTIONS = [
     color: 'emerald',
     tools: [
       { id: 'roi', name: 'ROI Calculator', icon: Calculator },
+      { id: 'mortgage', name: 'Mortgage Calculator', icon: Calculator },
+      { id: 'rental-index', name: 'Rental Index', icon: BarChart3 },
     ],
   },
   {
@@ -66,6 +81,7 @@ const SECTIONS = [
     icon: MessageSquare,
     color: 'amber',
     tools: [
+      { id: 'email', name: 'Email Generator', icon: Mail },
       { id: 'translation', name: 'Translation Hub', icon: Languages },
       { id: 'video-script', name: 'Video Tour Script', icon: Video },
       { id: 'objection', name: 'Objection Handler', icon: MessageSquare },
@@ -89,6 +105,9 @@ const SECTIONS = [
     tools: [
       { id: 'meeting', name: 'Meeting Summarizer', icon: CalendarDays },
       { id: 'lead', name: 'Lead Qualification', icon: Users },
+      { id: 'calendar', name: 'Calendar & Notes', icon: CalendarDays },
+      { id: 'video-meet', name: 'Video Meet', icon: Video },
+      { id: 'card-scanner', name: 'Business Card Scanner', icon: CreditCard },
     ],
   },
 ];
@@ -111,7 +130,7 @@ const LoadingSpinner = () => (
 );
 
 // Map tool IDs to their respective page components
-const toolComponents: Record<string, React.LazyExoticComponent<() => JSX.Element>> = {
+const toolComponents: Record<string, React.LazyExoticComponent<any>> = {
   analyzer: AIPropertyAnalyzerPage,
   predictor: AIPricePredictorPage,
   neighborhood: AINeighborhoodInsightsPage,
@@ -125,6 +144,15 @@ const toolComponents: Record<string, React.LazyExoticComponent<() => JSX.Element
   objection: AIObjectionHandlerPage,
   meeting: AIMeetingSummarizerPage,
   lead: AILeadQualificationPage,
+  email: AIEmailGeneratorPage,
+  calendar: AICalendar,
+  'video-meet': VideoMeeting,
+  'card-scanner': BusinessCardScanner,
+  mortgage: MortgageCalculator,
+  'rental-index': RentalIndex,
+  evaluator: PropertyEvaluator,
+  compare: Compare,
+  quiz: Quiz,
 };
 
 const RealEstateSuite = () => {
