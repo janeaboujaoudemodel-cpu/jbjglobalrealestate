@@ -46,7 +46,7 @@ const TrustBar = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5, duration: 0.6 }}
-      className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 lg:gap-6 max-w-[1100px] mx-auto py-6 md:py-8 px-4 md:px-6"
+      className="grid grid-cols-2 md:grid-cols-4 auto-rows-fr gap-3 md:gap-5 lg:gap-6 max-w-[1100px] mx-auto py-6 md:py-8 px-4 md:px-6"
     >
       {trustItems.map((item, index) => (
         <motion.div
@@ -58,10 +58,10 @@ const TrustBar = () => {
         >
           {/* Premium 3D champagne-gold card */}
           <div 
-            className={`flex items-center gap-3 px-5 py-3 rounded-xl transition-all duration-300 cursor-default ${
+            className={`flex items-center gap-2 md:gap-3 px-3 py-2 md:px-5 md:py-3 rounded-xl transition-all duration-300 cursor-default h-full overflow-hidden ${
               item.highlight 
-                ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/60' 
-                : 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 hover:border-gold/70'
+                ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/60 md:border-2' 
+                : 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 hover:border-gold/70'
             }`}
             style={{
               boxShadow: item.highlight
@@ -82,26 +82,26 @@ const TrustBar = () => {
           >
             {/* Icon with premium styling */}
             <div 
-              className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${
+              className={`w-8 h-8 md:w-11 md:h-11 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
                 item.highlight 
                   ? 'bg-black shadow-lg' 
                   : 'bg-black/90 group-hover:bg-black shadow-md'
               }`}
             >
               <item.icon 
-                className="w-5 h-5 text-gold transition-colors duration-300" 
+                className="w-4 h-4 md:w-5 md:h-5 text-gold transition-colors duration-300" 
               />
             </div>
             
             {/* Text content */}
-            <div className="flex flex-col">
+            <div className="flex flex-col min-w-0 flex-1">
               <span 
-                className={`text-sm md:text-[15px] font-bold tracking-wide leading-tight text-black transition-colors duration-300`}
+                className="text-xs md:text-[15px] font-bold tracking-wide leading-tight text-black transition-colors duration-300 break-words"
               >
                 {item.text}
               </span>
               {item.subtext && (
-                <span className="text-[11px] md:text-xs text-zinc-600 font-medium tracking-wide transition-colors duration-300">
+                <span className="text-[10px] md:text-xs text-zinc-600 font-medium tracking-wide transition-colors duration-300 break-words">
                   {item.subtext}
                 </span>
               )}

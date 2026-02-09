@@ -649,7 +649,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 </SheetTrigger>
                 <SheetContent
                   side="right"
-                  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] p-0 flex flex-col !top-[80px] sm:!top-[112px] lg:!top-[128px] !h-[calc(100dvh-80px)] sm:!h-[calc(100dvh-112px)] lg:!h-[calc(100dvh-128px)] !inset-y-auto"
+                  className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] sm:w-[360px] p-0 flex flex-col h-[100dvh] top-0 inset-y-0"
                 >
                 {/* Menu Header - CHAT SUPPORT LOGO (light bg version), proper spacing */}
                 <div className="relative border-b border-gold/30 flex items-center gap-4 px-5 py-4 shrink-0">
