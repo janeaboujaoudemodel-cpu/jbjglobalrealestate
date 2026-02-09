@@ -1,374 +1,325 @@
 
-# Broker Intelligence Unification & Global UI Fixes
 
-## Summary of Issues Identified
+# Complete Global UI Fix & Business Suite Unification
 
-| Issue | Location | Root Cause |
-|-------|----------|------------|
-| Broker Intelligence tools are separate pages | `BrokerIntelligence.tsx` is standalone; components in `broker-intelligence/` are not unified | No unified hub |
-| Back button not working in AI Follow-up Scheduler | `AIToolPremiumLayout.tsx` uses `navigate(-1)` which may fail if there's no history | Navigation logic |
-| Faded/invisible back button | Uses `variant="outline"` which applies champagne styling on dark backgrounds | Button variant issue |
-| White text on white boxes (dropdowns) | 31+ files override `SelectContent` with `bg-zinc-900` but items still get champagne styling from base component | Style conflict |
-| Gray/gold dropdown colors | Base `select.tsx` uses champagne background, but AI tools override with `bg-zinc-900` creating inconsistencies | Mixed styling |
-| Calendar, Notes, DocuSign not integrated | Exist as separate CRM pages, not integrated into Broker Intelligence hub | Missing integration |
+## Executive Summary
+
+This plan addresses the user's remaining requirements:
+
+1. **Global dropdown fix** - Update ALL remaining AI tools to use dark Select variants (currently 6+ files still using inline `SelectContent className="bg-zinc-900"` overrides)
+2. **Global button fix** - Replace `variant="outline"` / `variant="ghost"` on dark backgrounds with proper dark-theme variants
+3. **Footer no-scroll fix** - Remove `max-h-[180px] overflow-y-auto` from Services card; show all links without scrolling
+4. **Footer titles in gold** - Make all main section titles (Properties, Services, Guides, etc.) use gold color
+5. **Unified Real Estate Tools Suite** - Replace existing `RealEstateSuite.tsx` with an expanded tabbed interface containing ALL real estate related tools
+6. **Real DocuSign integration** - Set up DocuSign API integration for both Brokers and Investors with envelope sending
 
 ---
 
-## Part 1: Unified Broker Intelligence Hub
+## Part 1: Global Dropdown Fix (6+ Files)
+
+### Files Still Using Inline Overrides Instead of Dark Variants
+
+These files use `SelectContent className="bg-zinc-900"` + `SelectItem className="text-white"` instead of the proper `SelectContentDark` / `SelectItemDark` components:
+
+| File | Accent Color | Fix |
+|------|--------------|-----|
+| `AITranslationHubPremium.tsx` | Amber | Replace imports and components |
+| `AIDocumentGeneratorPremium.tsx` | Lime | Replace imports and components |
+| `AIVideoTourScriptPremium.tsx` | Pink | Replace imports and components |
+| `AIMarketReportPremium.tsx` | Indigo | Replace imports and components |
+| `AIPropertyAnalyzerPremium.tsx` | Sky | Replace imports and components |
+| `AIContractReviewerPremium.tsx` | Red | Replace imports and components |
+
+### Changes Required (Example for AITranslationHubPremium.tsx)
+
+**Current:**
+```tsx
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+...
+<SelectTrigger className="bg-zinc-900/50 border-amber-500/30 text-white">
+<SelectContent className="bg-zinc-900 border-amber-500/30">
+  <SelectItem value="en" className="text-white">English</SelectItem>
+```
+
+**Fixed:**
+```tsx
+import {
+  Select, SelectContentDark, SelectItemDark, SelectTriggerDark, SelectValue,
+} from "@/components/ui/select";
+...
+<SelectTriggerDark className="border-amber-500/30">
+<SelectContentDark className="border-amber-500/30">
+  <SelectItemDark value="en">English</SelectItemDark>
+```
+
+---
+
+## Part 2: Global Button Fix (14+ Files)
+
+### Files Using `variant="outline"` or `variant="ghost"` on Dark Backgrounds
+
+Replace with `variant="dark-outline"` or `variant="dark-ghost"` to ensure visibility:
+
+| File | Current | Fix |
+|------|---------|-----|
+| `AIObjectionHandlerPremium.tsx` | `variant="outline"` + `className="border-zinc-700"` | `variant="dark-outline"` |
+| `AINeighborhoodInsightsPremium.tsx` | `variant="outline"` + `className="border-zinc-700"` | `variant="dark-outline"` |
+| `AIMeetingSummarizerPremium.tsx` | `variant="outline"` + `className="border-zinc-700"` | `variant="dark-outline"` |
+| `AIPropertyAnalyzerPremium.tsx` | `variant="outline"` + `className="border-zinc-700"` | `variant="dark-outline"` |
+| `AIVideoTourScriptPremium.tsx` | `variant="outline"` + `className="border-zinc-700"` | `variant="dark-outline"` |
+| `AIDocumentGeneratorPremium.tsx` | `variant="ghost"` / `variant="outline"` | `variant="dark-ghost"` / `variant="dark-outline"` |
+| `AIMarketReportPremium.tsx` | `variant="outline"` | `variant="dark-outline"` |
+| `AIContractReviewerPremium.tsx` | `variant="outline"` | `variant="dark-outline"` |
+| `AIROICalculatorPremium.tsx` | `variant="ghost"` | `variant="dark-ghost"` |
+| `AILeadQualificationPremium.tsx` | `variant="outline"` | `variant="dark-outline"` |
+| `AICallSummarizerPremium.tsx` | `variant="outline"` | `variant="dark-outline"` |
+
+---
+
+## Part 3: Footer Fixes
+
+### 3a. Remove Scroll from Services Card
+
+**File:** `src/components/Footer.tsx`
+
+**Current (line ~668):**
+```tsx
+<ul className="space-y-2 max-h-[180px] overflow-y-auto">
+  {servicesLinks.slice(0, 7).map((link) => (
+```
+
+**Fixed:**
+```tsx
+<ul className="space-y-2">
+  {servicesLinks.map((link) => (
+```
+
+- Remove `max-h-[180px] overflow-y-auto`
+- Remove `.slice(0, 7)` to show ALL services links
+- Footer becomes taller but no internal scrolling
+
+### 3b. Make All Section Titles Gold
+
+**Current:** Section titles use `text-black`:
+```tsx
+<h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+```
+
+**Fixed:** Change to `text-gold`:
+```tsx
+<h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
+```
+
+Apply to ALL 8 cards:
+- Properties
+- Services
+- Guides
+- About & Careers
+- Sell
+- Education Hub / Investor Hub
+- Legal
+- Business Suites
+
+---
+
+## Part 4: Unified Real Estate Tools Suite (Replaces Existing)
 
 ### Current State
-- `src/pages/market-intelligence/internal/BrokerIntelligence.tsx` - Basic table view
-- `src/components/broker-intelligence/` - Three separate components:
-  - `TodaysMarketSignals.tsx`
-  - `LeadMarketContext.tsx`
-  - `BrokerAIAssistant.tsx`
 
-### Target: Single-Screen Unified Hub
+`RealEstateSuite.tsx` has 6 tabs loading separate page components via lazy loading.
+
+### New Structure
+
+Replace with a comprehensive suite containing ALL real estate related tools organized into sections:
+
+**Tools to Include:**
+
+| Section | Tools |
+|---------|-------|
+| Property Analysis | AI Property Analyzer, AI Price Predictor, AI Neighborhood Insights, Property Evaluator |
+| Investment | AI ROI Calculator, Mortgage Calculator |
+| Market Intelligence | AI Market Report, AI Competitor Analysis |
+| Communication | AI Email Generator, AI Translation Hub, AI Video Tour Script |
+| Documents | AI Contract Reviewer, AI Document Generator |
+| Productivity | Calendar & Notes, Video Meet, Business Card Scanner |
+| Design | AI Interior Design, AI Virtual Staging |
+
+### Layout Architecture
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  Broker Intelligence Hub                                                │
+│  Real Estate Tools Suite                                                 │
+│  "Complete AI-powered toolkit for property professionals"               │
 ├─────────────────────────────────────────────────────────────────────────┤
-│  [Signals] [Market Context] [AI Assistant] [Calendar] [Notes] [DocuSign]│
+│  SECTIONS (horizontal tabs/pills):                                      │
+│  [Analysis] [Investment] [Market] [Communication] [Documents] [Design]  │
 ├─────────────────────────────────────────────────────────────────────────┤
 │  ┌─────────────────────────────────────────────────────────────────────┐│
 │  │                                                                     ││
-│  │   Active Tab Content (full width, same frame)                       ││
-│  │                                                                     ││
-│  │   Each section loads within the same page frame                     ││
+│  │   Selected Tool Content (lazy loaded, same frame)                   ││
+│  │   Tool uses its own accent color internally                         ││
+│  │   Shared header/frame remains consistent                            ││
 │  │                                                                     ││
 │  └─────────────────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Implementation
+### Color Per Section
 
-**File: `src/pages/market-intelligence/internal/BrokerIntelligence.tsx`**
+| Section | Accent Color | Tab Color |
+|---------|--------------|-----------|
+| Property Analysis | Sky Blue | `text-sky-400` |
+| Investment | Emerald | `text-emerald-400` |
+| Market Intelligence | Indigo | `text-indigo-400` |
+| Communication | Amber | `text-amber-400` |
+| Documents | Lime | `text-lime-400` |
+| Design | Fuchsia | `text-fuchsia-400` |
 
-Transform to tabbed single-page layout:
-1. Import all broker intelligence components
-2. Add tabs for: Signals, Market Context, AI Assistant, Calendar, Notes, DocuSign
-3. Each tab renders its content within the same frame (no navigation)
-4. Add Calendar widget (CRM calendar mini-view)
-5. Add Notes widget (quick notes interface)
-6. Add DocuSign placeholder (contract signing integration)
+---
 
-```tsx
-// Tab structure
-<Tabs defaultValue="signals" className="w-full">
-  <TabsList className="bg-zinc-900 border border-gold/30">
-    <TabsTrigger value="signals">Market Signals</TabsTrigger>
-    <TabsTrigger value="context">Lead Context</TabsTrigger>
-    <TabsTrigger value="assistant">AI Assistant</TabsTrigger>
-    <TabsTrigger value="calendar">Calendar</TabsTrigger>
-    <TabsTrigger value="notes">Notes</TabsTrigger>
-    <TabsTrigger value="docusign">DocuSign</TabsTrigger>
-  </TabsList>
+## Part 5: Real DocuSign Integration
+
+### Overview
+
+DocuSign integration for real contract signing. Available to:
+- Brokers (listing agreements, agency contracts)
+- Investors (purchase agreements, tenancy contracts)
+- CRM (auto-populate from lead records)
+
+### Technical Requirements
+
+1. **DocuSign Developer Account** - User needs to create at https://developers.docusign.com/
+2. **Integration Key (Client ID)** - OAuth2 client credentials
+3. **Secret Key** - OAuth2 client secret
+4. **User ID** - For JWT auth
+5. **Account ID** - DocuSign account identifier
+6. **Base URL** - Demo or production endpoint
+
+### Infrastructure to Create
+
+**Edge Function:** `supabase/functions/docusign-integration/index.ts`
+
+Endpoints:
+- `POST /send-envelope` - Send document for signature
+- `GET /envelope-status/:envelopeId` - Check signature status
+- `POST /webhook` - Receive status updates from DocuSign
+
+**Database Table:** `docusign_envelopes`
+```sql
+CREATE TABLE docusign_envelopes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  envelope_id TEXT NOT NULL,
+  user_id UUID REFERENCES auth.users(id),
+  lead_id UUID REFERENCES crm_leads(id),
+  template_name TEXT,
+  recipient_email TEXT,
+  recipient_name TEXT,
+  status TEXT DEFAULT 'sent',
+  sent_at TIMESTAMPTZ DEFAULT now(),
+  completed_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE docusign_envelopes ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own envelopes" ON docusign_envelopes
+  FOR SELECT USING (auth.uid() = user_id);
   
-  <TabsContent value="signals">
-    <TodaysMarketSignals />
-  </TabsContent>
-  <TabsContent value="context">
-    <LeadMarketContext leadArea={selectedArea} leadIntent="buy" />
-  </TabsContent>
-  <TabsContent value="assistant">
-    <BrokerAIAssistant />
-  </TabsContent>
-  <TabsContent value="calendar">
-    <BrokerCalendarWidget />
-  </TabsContent>
-  <TabsContent value="notes">
-    <BrokerNotesWidget />
-  </TabsContent>
-  <TabsContent value="docusign">
-    <DocuSignIntegration />
-  </TabsContent>
-</Tabs>
+CREATE POLICY "Users can create envelopes" ON docusign_envelopes
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
 ```
 
----
+### Secrets Required
 
-## Part 2: DocuSign Integration Components
+| Secret Name | Description |
+|-------------|-------------|
+| `DOCUSIGN_INTEGRATION_KEY` | OAuth2 Client ID |
+| `DOCUSIGN_SECRET_KEY` | OAuth2 Client Secret |
+| `DOCUSIGN_USER_ID` | DocuSign User ID for JWT auth |
+| `DOCUSIGN_ACCOUNT_ID` | DocuSign Account ID |
+| `DOCUSIGN_BASE_URL` | `https://demo.docusign.net` (dev) or `https://docusign.net` (prod) |
 
-### New Components to Create
+### UI Integration Points
 
-**File: `src/components/broker-intelligence/DocuSignIntegration.tsx`**
-- Contract templates selection
-- Signature request workflow
-- Integration with CRM leads (auto-populate client info)
-- Status tracking for pending signatures
-- For both Investors and Brokers
-
-**File: `src/components/broker-intelligence/BrokerCalendarWidget.tsx`**
-- Mini calendar view
-- Quick event creation
-- Upcoming meetings list
-- Link to full CRM calendar
-
-**File: `src/components/broker-intelligence/BrokerNotesWidget.tsx`**
-- Quick notes input
-- Recent notes list
-- Link to full CRM notes
+1. **Broker Intelligence Hub** - Already has `DocuSignIntegration` component (update to use real API)
+2. **CRM Lead Detail** - New `DocuSignPanel` for sending contracts to leads
+3. **Investor Portal** - Add DocuSign access for purchase agreements
 
 ---
 
-## Part 3: Fix Back Button (Not Working + Faded)
+## Implementation Phases
 
-### Problem 1: `navigate(-1)` fails when no history
+### Phase 1: Global UI Fixes (Highest Priority)
 
-**File: `src/components/ai-tools/AIToolPremiumLayout.tsx`**
+1. Update 6 AI tool files to use `SelectTriggerDark`/`SelectContentDark`/`SelectItemDark`
+2. Update 11+ files to use `variant="dark-outline"` or `variant="dark-ghost"`
+3. Fix Footer: remove scroll, show all links, make titles gold
 
-Current (line 200):
-```tsx
-onClick={() => navigate(-1)}
-```
+### Phase 2: Unified Real Estate Suite
 
-Fix:
-```tsx
-onClick={() => {
-  if (window.history.length > 1) {
-    navigate(-1);
-  } else {
-    navigate('/toolkit'); // Fallback to toolkit hub
-  }
-}}
-```
+4. Replace `src/pages/business-suite/RealEstateSuite.tsx` with comprehensive tabbed suite
+5. Update route in `App.tsx` (same path `/business-suite/real-estate`)
+6. Test all embedded tools load correctly
 
-### Problem 2: Faded button styling
+### Phase 3: DocuSign Integration
 
-Current (line 198-202):
-```tsx
-<Button
-  variant="outline"
-  size="sm"
-  onClick={() => navigate(-1)}
-  className="bg-white/10 border-white/30 text-white hover:bg-white/20 hover:text-white mb-6"
->
-```
-
-Fix - use `dark-outline` variant:
-```tsx
-<Button
-  variant="dark-outline"
-  size="sm"
-  onClick={() => { /* fixed navigation */ }}
-  className="mb-6"
->
-```
+7. Create database table with RLS
+8. Create edge function with OAuth2 JWT auth flow
+9. Add secrets via Lovable Cloud
+10. Update `DocuSignIntegration.tsx` to call real API
+11. Create `DocuSignPanel.tsx` for CRM integration
 
 ---
-
-## Part 4: Global Dropdown Fix (White Text on White)
-
-### Root Cause Analysis
-
-The base `select.tsx` defines:
-- `SelectContent`: `bg-[#FDFBF7] text-black` (champagne, correct)
-- `SelectItem`: `text-black` (correct)
-
-But 31+ files override with:
-- `SelectContent className="bg-zinc-900 border-zinc-700"` (dark background)
-- `SelectItem className="text-white"` (white text)
-
-This creates conflicts where base styles leak through or mix.
-
-### Solution: Dark Select Variant
-
-**File: `src/components/ui/select.tsx`**
-
-Add dark variants for SelectTrigger, SelectContent, and SelectItem:
-
-```tsx
-// Dark trigger variant (for AI tools on dark backgrounds)
-const SelectTriggerDark = React.forwardRef<...>(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "flex h-10 w-full cursor-pointer items-center justify-between rounded-lg border",
-      "bg-zinc-800/80 border-zinc-600 text-white",
-      "hover:border-zinc-500 focus:ring-2 focus:ring-zinc-500/50",
-      className
-    )}
-    {...props}
-  >
-    {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 text-zinc-400 opacity-70" />
-    </SelectPrimitive.Icon>
-  </SelectPrimitive.Trigger>
-));
-
-// Dark content variant
-const SelectContentDark = React.forwardRef<...>(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Portal>
-    <SelectPrimitive.Content
-      ref={ref}
-      className={cn(
-        "relative z-[10200] max-h-96 min-w-[8rem] overflow-hidden rounded-xl",
-        "bg-zinc-900 border-2 border-zinc-700 text-white",
-        "shadow-[0_10px_40px_rgba(0,0,0,0.5)]",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </SelectPrimitive.Content>
-  </SelectPrimitive.Portal>
-));
-
-// Dark item variant  
-const SelectItemDark = React.forwardRef<...>(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Item
-    ref={ref}
-    className={cn(
-      "relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm",
-      "text-white outline-none",
-      "hover:bg-zinc-700 hover:text-white",
-      "focus:bg-zinc-700 focus:text-white",
-      className
-    )}
-    {...props}
-  >
-    {children}
-  </SelectPrimitive.Item>
-));
-```
-
-### Update All 31 Affected Files
-
-Replace inline overrides with proper dark variants. Files to update:
-- `src/components/PropertySearchBar.tsx`
-- `src/components/ai-tools/premium/AIObjectionHandlerPremium.tsx`
-- `src/components/ai-tools/premium/AIFollowupSchedulerPremium.tsx`
-- All other AI tool components using Select on dark backgrounds
-- `src/components/broker-intelligence/BrokerAIAssistant.tsx`
-- `src/components/crm/LeadSourceFilter.tsx`
-- And 25+ more files
-
----
-
-## Part 5: CRM Integration for Calendar, Notes, DocuSign
-
-### Integration Points
-
-| Integration | For Brokers | For Investors | In CRM |
-|-------------|-------------|---------------|--------|
-| Calendar | Yes - `/crm/calendar` embedded | Yes - meeting booking | Yes - existing |
-| Notes | Yes - quick notes | Yes - property notes | Yes - existing |
-| DocuSign | Yes - listing agreements | Yes - purchase agreements | New |
-
-### DocuSign CRM Integration
-
-**File: `src/components/crm/DocuSignPanel.tsx`**
-
-Create new component for CRM integration:
-- Link to lead record
-- Auto-populate contract fields from lead data
-- Track signature status in CRM
-- Add to lead timeline when signed
-
----
-
-## Part 6: Global Audit - All Affected Files
-
-### Files with Dropdown Issues (31 files)
-
-1. `src/components/PropertySearchBar.tsx`
-2. `src/components/crm/LeadSourceFilter.tsx`
-3. `src/components/ai-broker/AIBrokerCallDialog.tsx`
-4. `src/components/ai-tools/premium/AIObjectionHandlerPremium.tsx`
-5. `src/components/ai-tools/premium/AIFollowupSchedulerPremium.tsx`
-6. `src/components/ai-tools/premium/AILeadQualificationPremium.tsx`
-7. `src/components/ai-tools/premium/AIROICalculatorPremium.tsx`
-8. `src/components/ai-tools/premium/AIPricePredictorPremium.tsx`
-9. `src/components/ai-tools/premium/AIMarketReportPremium.tsx`
-10. `src/components/ai-tools/premium/AINeighborhoodInsightsPremium.tsx`
-11. `src/components/ai-tools/premium/AIVideoTourScriptPremium.tsx`
-12. `src/components/ai-tools/premium/AICompetitorAnalysisPremium.tsx`
-13. `src/components/ai-tools/premium/AITranslationHubPremium.tsx`
-14. `src/components/ai-tools/premium/AIContractReviewerPremium.tsx`
-15. `src/components/ai-tools/premium/AICallSummarizerPremium.tsx`
-16. `src/components/interior-design/DesignProjectHeader.tsx`
-17. `src/components/interior-design/ConceptRenderForm.tsx`
-18. `src/components/interior-design/PhotoRedesignForm.tsx`
-19. `src/components/interior-design/VirtualStagingForm.tsx`
-20. `src/components/broker-intelligence/BrokerAIAssistant.tsx`
-21. `src/pages/PropertyMeasurement.tsx`
-22. `src/pages/PropertyEvaluator.tsx`
-23. `src/pages/RentalIndex.tsx`
-24. `src/pages/Compare.tsx`
-25. And 6+ more discovered during implementation
-
-### Files with Back Button Issues (11 files using navigate(-1))
-
-1. `src/components/ai-tools/AIToolPremiumLayout.tsx` ← Primary fix
-2. `src/pages/Quiz.tsx`
-3. `src/pages/SupportTicketHub.tsx`
-4. `src/pages/broker/BrokerTraining.tsx`
-5. `src/pages/governance/InstitutionalLock.tsx`
-6. `src/pages/governance/AIGovernance.tsx`
-7. `src/pages/AdminRoleManagement.tsx`
-8. `src/pages/Compare.tsx`
-9. `src/pages/EmployeeChatPage.tsx`
-10. `src/pages/SecurityConsole.tsx`
-11. `src/pages/governance/GovernmentMethodology.tsx`
-
----
-
-## Implementation Order
-
-### Phase 1: Core Fixes (Highest Priority)
-1. Add dark variants to `src/components/ui/select.tsx`
-2. Fix `AIToolPremiumLayout.tsx` back button (navigation + styling)
-3. Update `AIFollowupSchedulerPremium.tsx` dropdowns to use dark variants
-
-### Phase 2: Broker Intelligence Hub
-4. Create `DocuSignIntegration.tsx`
-5. Create `BrokerCalendarWidget.tsx`
-6. Create `BrokerNotesWidget.tsx`
-7. Refactor `BrokerIntelligence.tsx` to unified tabbed hub
-
-### Phase 3: Global Dropdown Fix
-8. Update all 31 files to use dark Select variants
-9. Remove inline `bg-zinc-900` overrides
-10. Ensure consistent `text-white` on dark, `text-black` on light
-
-### Phase 4: CRM Integration
-11. Create `DocuSignPanel.tsx` for CRM
-12. Add DocuSign to lead detail view
-13. Add DocuSign to investor portal
-
----
-
-## Files to Create
-
-| File | Purpose |
-|------|---------|
-| `src/components/broker-intelligence/DocuSignIntegration.tsx` | Contract signing workflow |
-| `src/components/broker-intelligence/BrokerCalendarWidget.tsx` | Mini calendar for brokers |
-| `src/components/broker-intelligence/BrokerNotesWidget.tsx` | Quick notes widget |
-| `src/components/crm/DocuSignPanel.tsx` | CRM integration for contracts |
 
 ## Files to Modify
 
+### Core UI Fixes
 | File | Changes |
 |------|---------|
-| `src/components/ui/select.tsx` | Add `SelectTriggerDark`, `SelectContentDark`, `SelectItemDark` |
-| `src/components/ai-tools/AIToolPremiumLayout.tsx` | Fix back button navigation and use `dark-outline` variant |
-| `src/pages/market-intelligence/internal/BrokerIntelligence.tsx` | Convert to unified tabbed hub |
-| `src/components/broker-intelligence/index.ts` | Export new components |
-| 31+ files with dropdown issues | Use dark Select variants |
+| `src/components/ai-tools/premium/AITranslationHubPremium.tsx` | Use dark Select variants, use `variant="ai-amber"` |
+| `src/components/ai-tools/premium/AIDocumentGeneratorPremium.tsx` | Use dark Select variants, use `variant="dark-ghost"` |
+| `src/components/ai-tools/premium/AIVideoTourScriptPremium.tsx` | Use dark Select variants, use `variant="dark-outline"` |
+| `src/components/ai-tools/premium/AIMarketReportPremium.tsx` | Use dark Select variants |
+| `src/components/ai-tools/premium/AIPropertyAnalyzerPremium.tsx` | Use dark Select variants |
+| `src/components/ai-tools/premium/AIContractReviewerPremium.tsx` | Use dark Select variants |
+| `src/components/ai-tools/premium/AIObjectionHandlerPremium.tsx` | Use `variant="dark-outline"` |
+| `src/components/ai-tools/premium/AINeighborhoodInsightsPremium.tsx` | Use `variant="dark-outline"` |
+| `src/components/ai-tools/premium/AIMeetingSummarizerPremium.tsx` | Use `variant="dark-outline"` |
+| `src/components/ai-tools/premium/AILeadQualificationPremium.tsx` | Use `variant="dark-outline"` |
+| `src/components/ai-tools/premium/AIROICalculatorPremium.tsx` | Use `variant="dark-ghost"` |
+| `src/components/ai-tools/premium/AICallSummarizerPremium.tsx` | Use `variant="dark-outline"` |
+
+### Footer
+| File | Changes |
+|------|---------|
+| `src/components/Footer.tsx` | Remove scroll, show all links, gold titles |
+
+### Real Estate Suite
+| File | Changes |
+|------|---------|
+| `src/pages/business-suite/RealEstateSuite.tsx` | Complete rewrite with all tools |
+
+### DocuSign
+| File | Changes |
+|------|---------|
+| `supabase/functions/docusign-integration/index.ts` | New edge function |
+| `src/components/broker-intelligence/DocuSignIntegration.tsx` | Connect to real API |
+| `src/components/crm/DocuSignPanel.tsx` | New CRM component |
 
 ---
 
 ## Acceptance Criteria
 
-1. Broker Intelligence is a single-page hub with tabbed sections
-2. All sections (Signals, Context, AI, Calendar, Notes, DocuSign) accessible from one screen
-3. Back button works on all AI tool pages (fallback to /toolkit if no history)
-4. Back button is clearly visible (high contrast) on dark backgrounds
-5. All dropdowns on dark backgrounds have white text on dark background
-6. All dropdowns on light backgrounds have black text on champagne background
-7. No white text on white boxes anywhere
-8. DocuSign integration available for Investors, Brokers, and CRM
-9. Calendar and Notes integrated into Broker Intelligence hub
+1. All 6 AI tool files use `SelectTriggerDark`/`SelectContentDark`/`SelectItemDark` - no inline overrides
+2. All copy/download buttons on dark backgrounds use `variant="dark-outline"` or `variant="dark-ghost"`
+3. Footer Services section shows ALL links without scrolling
+4. Footer section titles (Properties, Services, Guides, etc.) are gold colored
+5. Real Estate Suite at `/business-suite/real-estate` contains all real estate tools in organized sections
+6. Each tool in the suite loads within the same frame, keeping the suite header visible
+7. DocuSign integration sends real envelopes via API
+8. DocuSign status tracking works with webhook updates
+9. No white text on white/light backgrounds anywhere
+10. No faded/invisible buttons anywhere
+
