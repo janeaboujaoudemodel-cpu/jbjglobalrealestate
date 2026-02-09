@@ -11,9 +11,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { useAITool } from "../AIToolsProvider";
@@ -124,23 +124,22 @@ const AITranslationHubPremium = () => {
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">{getLanguageInfo(sourceLanguage)?.flag}</span>
                   <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
-                    <SelectTrigger className="w-[180px] bg-zinc-900/50 border-amber-500/30 text-white hover:border-amber-500/50">
+                    <SelectTriggerDark className="w-[180px] border-amber-500/30 hover:border-amber-500/50">
                       <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-amber-500/30">
+                    </SelectTriggerDark>
+                    <SelectContentDark className="border-amber-500/30">
                       {LANGUAGES.map((lang) => (
-                        <SelectItem key={lang.code} value={lang.code} className="text-white">
+                        <SelectItemDark key={lang.code} value={lang.code}>
                           {lang.flag} {lang.name}
-                        </SelectItem>
+                        </SelectItemDark>
                       ))}
-                    </SelectContent>
+                    </SelectContentDark>
                   </Select>
                 </div>
                 <Button
-                  variant="ghost"
+                  variant="dark-ghost"
                   size="sm"
                   onClick={() => copyToClipboard("source")}
-                  className="text-zinc-400 hover:text-white"
                   disabled={!text}
                 >
                   {copied === "source" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
@@ -169,16 +168,16 @@ const AITranslationHubPremium = () => {
                 Context
               </Label>
               <Select value={context} onValueChange={setContext}>
-                <SelectTrigger className="bg-zinc-900/50 border-amber-500/30 text-white hover:border-amber-500/50">
+                <SelectTriggerDark className="border-amber-500/30 hover:border-amber-500/50">
                   <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-amber-500/30">
-                  <SelectItem value="real-estate">🏠 Real Estate</SelectItem>
-                  <SelectItem value="legal">⚖️ Legal / Contracts</SelectItem>
-                  <SelectItem value="marketing">📣 Marketing</SelectItem>
-                  <SelectItem value="formal">💼 Formal / Business</SelectItem>
-                  <SelectItem value="casual">💬 Casual / Conversational</SelectItem>
-                </SelectContent>
+                </SelectTriggerDark>
+                <SelectContentDark className="border-amber-500/30">
+                  <SelectItemDark value="real-estate">🏠 Real Estate</SelectItemDark>
+                  <SelectItemDark value="legal">⚖️ Legal / Contracts</SelectItemDark>
+                  <SelectItemDark value="marketing">📣 Marketing</SelectItemDark>
+                  <SelectItemDark value="formal">💼 Formal / Business</SelectItemDark>
+                  <SelectItemDark value="casual">💬 Casual / Conversational</SelectItemDark>
+                </SelectContentDark>
               </Select>
             </CardContent>
           </Card>
@@ -199,13 +198,12 @@ const AITranslationHubPremium = () => {
         {/* Mobile Swap Button */}
         <div className="flex lg:hidden justify-center -my-2">
           <Button
-            variant="ghost"
+            variant="dark-ghost"
             size="sm"
             onClick={swapLanguages}
-            className="text-amber-400"
           >
-            <ArrowLeftRight className="h-4 w-4 mr-2" />
-            Swap Languages
+            <ArrowLeftRight className="h-4 w-4 mr-2 text-amber-400" />
+            <span className="text-amber-400">Swap Languages</span>
           </Button>
         </div>
 
@@ -217,23 +215,22 @@ const AITranslationHubPremium = () => {
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">{getLanguageInfo(targetLanguage)?.flag}</span>
                   <Select value={targetLanguage} onValueChange={setTargetLanguage}>
-                    <SelectTrigger className="w-[180px] bg-zinc-900/50 border-amber-500/30 text-white hover:border-amber-500/50">
+                    <SelectTriggerDark className="w-[180px] border-amber-500/30 hover:border-amber-500/50">
                       <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-amber-500/30">
+                    </SelectTriggerDark>
+                    <SelectContentDark className="border-amber-500/30">
                       {LANGUAGES.map((lang) => (
-                        <SelectItem key={lang.code} value={lang.code} className="text-white">
+                        <SelectItemDark key={lang.code} value={lang.code}>
                           {lang.flag} {lang.name}
-                        </SelectItem>
+                        </SelectItemDark>
                       ))}
-                    </SelectContent>
+                    </SelectContentDark>
                   </Select>
                 </div>
                 <Button
-                  variant="ghost"
+                  variant="dark-ghost"
                   size="sm"
                   onClick={() => copyToClipboard("target")}
-                  className="text-zinc-400 hover:text-white"
                   disabled={!response?.translation}
                 >
                   {copied === "target" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}

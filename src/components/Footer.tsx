@@ -641,7 +641,7 @@ const Footer = () => {
                 
                 {/* Card 1: Properties */}
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
                     <span className="text-gold">✦</span>
                     {t('footer.properties') || 'Properties'}
                   </h4>
@@ -661,12 +661,12 @@ const Footer = () => {
                 
                 {/* Card 2: Services */}
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
                     <span className="text-gold">✦</span>
                     {t('footer.servicesSection') || 'Services'}
                   </h4>
-                  <ul className="space-y-2 max-h-[180px] overflow-y-auto">
-                    {servicesLinks.slice(0, 7).map((link) => (
+                  <ul className="space-y-2">
+                    {servicesLinks.map((link) => (
                       <li key={link.href}>
                         <Link
                           to={link.href}
@@ -681,7 +681,7 @@ const Footer = () => {
                 
                 {/* Card 3: Guides */}
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
                     <span className="text-gold">✦</span>
                     {t('footer.guides') || 'Guides'}
                   </h4>
@@ -701,7 +701,7 @@ const Footer = () => {
                 
                 {/* Card 4: About & Careers */}
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
                     <span className="text-gold">✦</span>
                     About & Careers
                   </h4>
@@ -739,7 +739,7 @@ const Footer = () => {
                 
                 {/* Card 5: Sell */}
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
                     <span className="text-gold">✦</span>
                     Sell
                   </h4>
@@ -788,7 +788,7 @@ const Footer = () => {
                 
                 {/* Card 7: Legal */}
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
                     <span className="text-gold">✦</span>
                     Legal
                   </h4>
@@ -808,7 +808,7 @@ const Footer = () => {
                 
                 {/* Card 8: Business Suites */}
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
                     <span className="text-gold">✦</span>
                     Business Suites
                   </h4>
@@ -832,7 +832,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                   {/* Card: Broker Tools */}
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                    <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                    <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
                       <span className="text-gold">✦</span>
                       Broker Tools
                     </h4>
@@ -852,7 +852,7 @@ const Footer = () => {
                   
                   {/* Card: Market Intelligence */}
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                    <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                    <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
                       <span className="text-gold">✦</span>
                       Market Intelligence
                     </h4>

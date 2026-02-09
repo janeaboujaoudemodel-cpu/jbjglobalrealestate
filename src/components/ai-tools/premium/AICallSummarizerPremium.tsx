@@ -159,9 +159,9 @@ const AICallSummarizerPremium = () => {
               <div className="flex flex-wrap gap-3">
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="dark-outline"
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-orange-500/50 text-orange-400 hover:bg-orange-500/10"
+                  className="border-orange-500/50 hover:bg-orange-500/10"
                 >
                   <Upload className="w-4 h-4 mr-2" />
                   Upload Audio
@@ -177,9 +177,9 @@ const AICallSummarizerPremium = () => {
                 {!isRecording ? (
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="dark-outline"
                     onClick={startRecording}
-                    className="border-orange-500/50 text-orange-400 hover:bg-orange-500/10"
+                    className="border-orange-500/50 hover:bg-orange-500/10"
                   >
                     <Mic className="w-4 h-4 mr-2" />
                     Record

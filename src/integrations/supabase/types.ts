@@ -5454,6 +5454,82 @@ export type Database = {
         }
         Relationships: []
       }
+      docusign_envelopes: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          document_name: string | null
+          envelope_id: string
+          id: string
+          lead_id: string | null
+          metadata: Json | null
+          recipient_email: string
+          recipient_name: string | null
+          sent_at: string | null
+          status: string | null
+          template_name: string | null
+          updated_at: string | null
+          user_id: string
+          voided_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          document_name?: string | null
+          envelope_id: string
+          id?: string
+          lead_id?: string | null
+          metadata?: Json | null
+          recipient_email: string
+          recipient_name?: string | null
+          sent_at?: string | null
+          status?: string | null
+          template_name?: string | null
+          updated_at?: string | null
+          user_id: string
+          voided_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          document_name?: string | null
+          envelope_id?: string
+          id?: string
+          lead_id?: string | null
+          metadata?: Json | null
+          recipient_email?: string
+          recipient_name?: string | null
+          sent_at?: string | null
+          status?: string | null
+          template_name?: string | null
+          updated_at?: string | null
+          user_id?: string
+          voided_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "docusign_envelopes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "docusign_envelopes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "docusign_envelopes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       draw_entries: {
         Row: {
           activity_points_at_entry: number
