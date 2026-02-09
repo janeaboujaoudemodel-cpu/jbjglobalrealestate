@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useCallback, useContext, forwardRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUp, ArrowDown, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LanguageContext } from "@/contexts/LanguageContext";
 
@@ -70,52 +70,68 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
   const previous = stack.length >= 2 ? stack[stack.length - 2] : null;
   const hasPrevious = previous && previous !== current;
 
+  // Always allow going back - fallback to browser history or home
+  const handleGoBack = useCallback(() => {
+    if (hasPrevious && previous) {
+      navigate(previous);
+    } else if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/");
+    }
+  }, [hasPrevious, previous, navigate]);
+
   // NOTE: We intentionally use native <button> here.
   // The global <Button /> component sanitizes bg/gradient classes by design,
   // which would strip the active champagne fill.
   const buttonBaseClass = cn(
-    "h-10 w-10 rounded-full",
+    "h-12 w-12 rounded-full",
     "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark",
     "border-2 border-gold/70",
     "shadow-lg transition-all duration-300",
     // Hover keeps same fill; only border/shadow intensity changes
     "hover:border-gold hover:shadow-[0_6px_26px_hsl(var(--gold)_/_0.45)]",
     "focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2",
-    "flex items-center justify-center"
+    "flex items-center justify-center",
+    // CRITICAL: Ensure clickability
+    "pointer-events-auto select-none touch-manipulation cursor-pointer"
   );
 
   return (
     <div 
       ref={ref}
       className={cn(
-        "fixed bottom-6 z-[9999] flex flex-col gap-2",
+        // Raised z-index above dialogs (10050) and mega-menu (9999)
+        "fixed bottom-6 z-[11000] flex flex-col gap-3",
+        // Explicit pointer-events-auto on container
+        "pointer-events-auto",
         isRTL ? "right-6" : "left-6"
-      )}>
+      )}
+      style={{ touchAction: "manipulation" }}
+    >
       {/* Scroll to Top */}
       <button
         type="button"
         onClick={scrollToTop}
         className={cn(
           buttonBaseClass,
-          "transition-opacity",
+          "transition-opacity duration-200",
           showScrollTop ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         aria-label="Scroll to top"
       >
-        <ArrowUp className="w-4 h-4 text-black" />
+        <ArrowUp className="w-5 h-5 text-black" />
       </button>
 
-      {/* Back to Previous Page */}
-      {hasPrevious && (
-        <button
-          type="button"
-          onClick={() => navigate(previous)}
-          className={buttonBaseClass}
-          aria-label="Go back"
-        >
-          {isRTL ? <ArrowRight className="w-4 h-4 text-black" /> : <ArrowLeft className="w-4 h-4 text-black" />}
-        </button>
-      )}
+      {/* Back to Previous Page - ALWAYS SHOW (no longer conditional) */}
+      <button
+        type="button"
+        onClick={handleGoBack}
+        className={buttonBaseClass}
+        aria-label="Go back"
+      >
+        {isRTL ? <ArrowRight className="w-5 h-5 text-black" /> : <ArrowLeft className="w-5 h-5 text-black" />}
+      </button>
 
       {/* Scroll to Bottom */}
       <button
@@ -123,12 +139,12 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
         onClick={scrollToBottom}
         className={cn(
           buttonBaseClass,
-          "transition-opacity",
+          "transition-opacity duration-200",
           showScrollBottom ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         aria-label="Scroll to bottom"
       >
-        <ArrowDown className="w-4 h-4 text-black" />
+        <ArrowDown className="w-5 h-5 text-black" />
       </button>
     </div>
   );

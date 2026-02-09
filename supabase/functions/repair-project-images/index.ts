@@ -62,12 +62,12 @@ serve(async (req) => {
         continue;
       }
 
-      // Find corresponding approved import
+      // Find corresponding approved OR merged import (supports both statuses)
       const { data: importRecord } = await supabase
         .from("pending_project_imports")
         .select("id, images")
         .eq("slug", project.slug)
-        .eq("status", "approved")
+        .in("status", ["approved", "merged"])
         .maybeSingle();
 
       if (!importRecord || !importRecord.images) {

@@ -75,15 +75,14 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => refreshOwnerVerification()}
-              className="bg-gold hover:bg-gold/90 text-black"
+              className="bg-gold hover:bg-gold/90 text-black font-semibold"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Verification
             </Button>
             <Button
               onClick={() => signOut()}
-              variant="outline"
-              className="border-zinc-700 text-white hover:bg-zinc-800"
+              className="bg-white hover:bg-zinc-100 text-black border-2 border-white font-semibold"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out

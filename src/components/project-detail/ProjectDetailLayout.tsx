@@ -837,7 +837,12 @@ export default function ProjectDetailLayout({
                     <h4 className="text-lg font-semibold text-foreground mb-2">{project.location_headline}</h4>
                   )}
                   {project.location_description && (
-                    <p className="text-muted-foreground leading-relaxed">{project.location_description}</p>
+                    <div 
+                      className="text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert max-w-none"
+                      dangerouslySetInnerHTML={{ 
+                        __html: renderMarkdownToHtml(project.location_description) 
+                      }}
+                    />
                   )}
                 </div>
               )}

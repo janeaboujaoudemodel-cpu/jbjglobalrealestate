@@ -50,7 +50,8 @@ const NotFound = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center py-12">
+      {/* Add top padding to account for fixed header (h-24 sm:h-28 lg:h-32) */}
+      <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center py-12 pt-32 lg:pt-40">
         {/* Decorative background elements */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
@@ -67,12 +68,12 @@ const NotFound = () => {
               animate="visible"
               variants={staggerContainer}
             >
-              {/* Logo */}
-              <motion.div variants={fadeInUp} className="mb-4">
+              {/* Logo - Larger monogram */}
+              <motion.div variants={fadeInUp} className="mb-6">
                 <img
                   src={jbjMonogramLightBg}
                   alt="JBJ Global Real Estate"
-                  className="w-20 h-20 mx-auto object-contain"
+                  className="w-28 h-28 md:w-32 md:h-32 mx-auto object-contain"
                 />
               </motion.div>
 
