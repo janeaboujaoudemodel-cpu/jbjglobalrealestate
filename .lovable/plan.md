@@ -2,23 +2,25 @@
 
 # Fix Project Approval - Both Individual and Bulk
 
-## Root Causes Found
+## Root Causes
 
-### Problem 1: Bulk Approve button fails with edge function error
-The `bulk-approve-imports` edge function is **not registered** in `supabase/config.toml`. Without an entry, it defaults to `verify_jwt = true`, which is incompatible with the signing-keys system and causes the browser request to be rejected at the gateway level before your code even runs.
+### Bulk Approve: Edge function not registered
+The `bulk-approve-imports` function is missing from `supabase/config.toml`, so it defaults to `verify_jwt = true` which blocks all requests before the code runs.
 
-### Problem 2: Individual card approve fails with duplicate slug error
-When you click the approve button on a single project card, the code tries to INSERT into the `projects` table. However, many projects already exist there (from previous syncs), and the `slug` column has a **unique constraint**. The insert fails because a project with the same slug already exists.
+### Individual Approve: Duplicate slug insert error
+`PendingImportCard.tsx` does a direct INSERT into `projects`, but projects with the same slug already exist, causing a unique constraint violation.
+
+### Bulk Approve: Deprecated import + duplicate field
+The edge function uses `esm.sh` import (causes deployment failures) and has a duplicate `area_id` assignment on lines 251-252.
 
 ---
 
-## Fix Plan
+## Changes
 
-### A) Register edge functions in config.toml
+### 1. Register missing edge functions in config.toml
 **File:** `supabase/config.toml`
 
-Add the missing entries:
-
+Add after the last entry:
 ```toml
 [functions.bulk-approve-imports]
 verify_jwt = false
@@ -30,58 +32,58 @@ verify_jwt = false
 verify_jwt = false
 ```
 
-This will allow the browser to call these functions successfully.
-
-### B) Fix the bulk-approve-imports edge function import
+### 2. Fix bulk-approve-imports edge function
 **File:** `supabase/functions/bulk-approve-imports/index.ts`
 
-Change the deprecated import:
-- FROM: `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";`
-- TO: `import { createClient } from "npm:@supabase/supabase-js@2";`
+- Line 2: Change `import { createClient } from "https://esm.sh/@supabase/supabase-js@2"` to `import { createClient } from "npm:@supabase/supabase-js@2"`
+- Lines 251-252: Remove the duplicate `area_id` line (keep only one)
 
-Also fix the duplicate `area_id` assignment on lines 251-252 (currently set twice).
-
-### C) Fix individual card approval to handle existing projects
+### 3. Fix individual approval with upsert logic
 **File:** `src/components/listing-admin/PendingImportCard.tsx`
 
-Update `handleApprove` to check if a project with the same slug already exists before inserting. If it exists, update it instead of inserting a new one. This mirrors what the bulk-approve edge function already does (upsert logic).
+Update `handleApprove` (lines 131-201) to:
+1. First check if a project with the same slug already exists
+2. If exists: UPDATE the existing project, delete old images/documents, re-insert new ones
+3. If not exists: INSERT new project (current behavior)
+4. Mark import as approved
 
-The updated flow:
-1. Check if a project with the same slug already exists
-2. If yes: UPDATE the existing project and use its ID for images/documents
-3. If no: INSERT a new project
-4. Then proceed with images, documents, and marking the import as approved
+```text
+Updated flow:
+  const slug = item.slug || item.name.toLowerCase().replace(/\s+/g, '-');
+  
+  // Check for existing project
+  const { data: existing } = await supabase
+    .from("projects")
+    .select("id")
+    .eq("slug", slug)
+    .maybeSingle();
+
+  let projectId: string;
+
+  if (existing) {
+    // UPDATE existing project
+    await supabase.from("projects").update(projectData).eq("id", existing.id);
+    projectId = existing.id;
+    // Delete old images/documents before re-inserting
+    await supabase.from("project_images").delete().eq("project_id", projectId);
+    await supabase.from("project_documents").delete().eq("project_id", projectId);
+  } else {
+    // INSERT new project
+    const { data: newProject } = await supabase
+      .from("projects").insert(projectData).select().single();
+    projectId = newProject.id;
+  }
+
+  // Then insert images, documents, and mark as approved
+```
 
 ---
 
 ## Files to Modify
 
-| File | Action | Description |
-|------|--------|-------------|
-| `supabase/config.toml` | MODIFY | Add 3 missing function entries with `verify_jwt = false` |
-| `supabase/functions/bulk-approve-imports/index.ts` | MODIFY | Fix `esm.sh` import to `npm:` specifier; fix duplicate `area_id` line |
-| `src/components/listing-admin/PendingImportCard.tsx` | MODIFY | Add upsert logic to handle duplicate slugs on individual approval |
-
----
-
-## Technical Details
-
-### PendingImportCard.tsx - Updated handleApprove logic
-
-```text
-1. Query: SELECT id FROM projects WHERE slug = item.slug
-2. If existing project found:
-   - UPDATE projects SET ... WHERE id = existing.id
-   - DELETE old images/documents for that project
-   - INSERT new images/documents
-3. If no existing project:
-   - INSERT new project (current behavior)
-4. Mark pending_project_imports status = "approved"
-```
-
-### config.toml additions
-Three functions need `verify_jwt = false` to work with the signing-keys gateway:
-- `bulk-approve-imports` (bulk approval)
-- `repair-project-images` (image repair button)
-- `repair-project-extraction` (repair button on individual cards)
+| File | Change |
+|------|--------|
+| `supabase/config.toml` | Add 3 function entries with `verify_jwt = false` |
+| `supabase/functions/bulk-approve-imports/index.ts` | Fix import to `npm:`, remove duplicate `area_id` |
+| `src/components/listing-admin/PendingImportCard.tsx` | Add upsert logic for individual approval |
 
