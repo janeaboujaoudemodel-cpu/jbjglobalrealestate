@@ -261,9 +261,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           )}
           
-          {/* Bottom-Left: Sale Status Badge (visible, not hidden under buttons) */}
+          {/* Top-Left: Sale Status Badge (below developer logo if present) */}
           {saleStatusBadge && !project.is_sold_out && (
-            <div className={`absolute bottom-3 left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
+            <div className={`absolute ${(project.developer as any)?.logo_url ? 'top-16' : 'top-3'} left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
               {saleStatusBadge.label}
             </div>
           )}
