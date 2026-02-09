@@ -198,13 +198,16 @@ const AIToolPremiumLayout = ({
               variant="dark-outline"
               size="sm"
               onClick={() => {
-                if (window.history.length > 1) {
+                // Check referrer to determine if there's a real previous page
+                const referrer = document.referrer;
+                const hasRealHistory = referrer && referrer.includes(window.location.hostname);
+                if (hasRealHistory) {
                   navigate(-1);
                 } else {
                   navigate('/toolkit');
                 }
               }}
-              className="mb-6"
+              className="mb-6 relative z-10"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
