@@ -7,9 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import {
@@ -471,94 +471,94 @@ const AdminLeads = () => {
             <div className="flex items-center gap-2">
               <Filter className="w-4 h-4 text-gray-400" />
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-48 bg-zinc-950 border-zinc-700 text-white cursor-pointer">
+                <SelectTriggerDark className="w-48 cursor-pointer">
                   <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-700 max-h-80">
-                  <SelectItem value="all">All Statuses</SelectItem>
+                </SelectTriggerDark>
+                <SelectContentDark className="max-h-80">
+                  <SelectItemDark value="all">All Statuses</SelectItemDark>
                   <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Positive</div>
                   {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
-                    <SelectItem key={status.value} value={status.value}>
+                    <SelectItemDark key={status.value} value={status.value}>
                       <div className="flex items-center gap-2">
                         <span className={`w-2 h-2 rounded-full ${status.color}`} />
                         {status.label}
                       </div>
-                    </SelectItem>
+                    </SelectItemDark>
                   ))}
                   <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Neutral</div>
                   {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
-                    <SelectItem key={status.value} value={status.value}>
+                    <SelectItemDark key={status.value} value={status.value}>
                       <div className="flex items-center gap-2">
                         <span className={`w-2 h-2 rounded-full ${status.color}`} />
                         {status.label}
                       </div>
-                    </SelectItem>
+                    </SelectItemDark>
                   ))}
                   <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">🔴 Negative</div>
                   {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
-                    <SelectItem key={status.value} value={status.value}>
+                    <SelectItemDark key={status.value} value={status.value}>
                       <div className="flex items-center gap-2">
                         <span className={`w-2 h-2 rounded-full ${status.color}`} />
                         {status.label}
                       </div>
-                    </SelectItem>
+                    </SelectItemDark>
                   ))}
-                </SelectContent>
+                </SelectContentDark>
               </Select>
             </div>
             {activeTab === "leads" && (
               <>
                 {/* Source Type Filter (Website vs Database) */}
                 <Select value={sourceTypeFilter} onValueChange={setSourceTypeFilter}>
-                  <SelectTrigger className="w-44 bg-zinc-950 border-zinc-700 text-white cursor-pointer">
+                  <SelectTriggerDark className="w-44 cursor-pointer">
                     <SelectValue placeholder="Source Type" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700">
-                    <SelectItem value="all">
+                  </SelectTriggerDark>
+                  <SelectContentDark>
+                    <SelectItemDark value="all">
                       <span className="flex items-center gap-2">📊 All Sources</span>
-                    </SelectItem>
-                    <SelectItem value="website">
+                    </SelectItemDark>
+                    <SelectItemDark value="website">
                       <span className="flex items-center gap-2">🌐 Website Leads</span>
-                    </SelectItem>
-                    <SelectItem value="database">
+                    </SelectItemDark>
+                    <SelectItemDark value="database">
                       <span className="flex items-center gap-2">💾 Database/Import</span>
-                    </SelectItem>
-                    <SelectItem value="other">
+                    </SelectItemDark>
+                    <SelectItemDark value="other">
                       <span className="flex items-center gap-2">📁 Other</span>
-                    </SelectItem>
-                  </SelectContent>
+                    </SelectItemDark>
+                  </SelectContentDark>
                 </Select>
                 
                 {/* Specific Source Filter */}
                 <Select value={sourceFilter} onValueChange={setSourceFilter}>
-                  <SelectTrigger className="w-48 bg-zinc-950 border-zinc-700 text-white cursor-pointer">
+                  <SelectTriggerDark className="w-48 cursor-pointer">
                     <SelectValue placeholder="Specific Source" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-zinc-700 max-h-64">
-                    <SelectItem value="all">All Specific Sources</SelectItem>
+                  </SelectTriggerDark>
+                  <SelectContentDark className="max-h-64">
+                    <SelectItemDark value="all">All Specific Sources</SelectItemDark>
                     <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Website</div>
                     {uniqueSources.filter(s => getSourceCategory(s) === 'website').map((source) => (
-                      <SelectItem key={source} value={source!}>
+                      <SelectItemDark key={source} value={source!}>
                         {getSourceDisplayName(source)}
-                      </SelectItem>
+                      </SelectItemDark>
                     ))}
                     <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Database/Import</div>
                     {uniqueSources.filter(s => getSourceCategory(s) === 'database').map((source) => (
-                      <SelectItem key={source} value={source!}>
+                      <SelectItemDark key={source} value={source!}>
                         {getSourceDisplayName(source)}
-                      </SelectItem>
+                      </SelectItemDark>
                     ))}
                     {uniqueSources.filter(s => getSourceCategory(s) === 'other').length > 0 && (
                       <>
                         <div className="px-2 py-1 text-xs font-semibold text-gray-400 uppercase mt-1">Other</div>
                         {uniqueSources.filter(s => getSourceCategory(s) === 'other').map((source) => (
-                          <SelectItem key={source} value={source!}>
+                          <SelectItemDark key={source} value={source!}>
                             {getSourceDisplayName(source)}
-                          </SelectItem>
+                          </SelectItemDark>
                         ))}
                       </>
                     )}
-                  </SelectContent>
+                  </SelectContentDark>
                 </Select>
               </>
             )}
