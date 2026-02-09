@@ -400,6 +400,7 @@ const HeroSearchBar = () => {
   const [communityId, setCommunityId] = useState('all');
   const [emirate, setEmirate] = useState('all');
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   // NEW: Reelly parity filters
   const [paymentPlan, setPaymentPlan] = useState(0);
   const [handoverYear, setHandoverYear] = useState('all');
@@ -431,6 +432,7 @@ const HeroSearchBar = () => {
   })();
 
   const handleSearch = () => {
+    setIsSearching(true);
     const params = new URLSearchParams();
     
     params.set('transaction', purpose);
@@ -475,7 +477,11 @@ const HeroSearchBar = () => {
       });
     }
 
-    navigate(`/properties?${params.toString()}`);
+    // Navigate with slight delay for visual feedback
+    setTimeout(() => {
+      navigate(`/properties?${params.toString()}`);
+      setIsSearching(false);
+    }, 100);
   };
 
   // Get price ranges for current currency (fallback to AED if not available)
@@ -964,10 +970,15 @@ const HeroSearchBar = () => {
           {/* Search Button - Desktop only in this row */}
           <Button
             onClick={handleSearch}
-            className="h-full px-6 py-3.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-r-xl transition-all duration-300 shadow-lg hover:shadow-gold/30"
+            disabled={isSearching}
+            className="h-full px-6 py-3.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-r-xl transition-all duration-300 shadow-lg hover:shadow-gold/30 disabled:opacity-70"
           >
-            <Search className="w-4 h-4 mr-1.5" />
-            Search
+            {isSearching ? (
+              <div className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin mr-1.5" />
+            ) : (
+              <Search className="w-4 h-4 mr-1.5" />
+            )}
+            {isSearching ? 'Searching...' : 'Search'}
           </Button>
         </div>
 
@@ -982,10 +993,15 @@ const HeroSearchBar = () => {
           </button>
           <Button
             onClick={handleSearch}
-            className="flex-1 min-h-[48px] bg-gold hover:bg-gold-dark text-black font-bold rounded-xl shadow-lg"
+            disabled={isSearching}
+            className="flex-1 min-h-[48px] bg-gold hover:bg-gold-dark text-black font-bold rounded-xl shadow-lg disabled:opacity-70"
           >
-            <Search className="w-4 h-4 mr-2" />
-            Search
+            {isSearching ? (
+              <div className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin mr-2" />
+            ) : (
+              <Search className="w-4 h-4 mr-2" />
+            )}
+            {isSearching ? 'Searching...' : 'Search'}
           </Button>
         </div>
       </div>

@@ -105,6 +105,8 @@ const Index = () => {
             style={{ 
               WebkitTransform: 'translateZ(0)',
               backfaceVisibility: 'hidden',
+              opacity: 0,
+              transition: 'opacity 0.5s ease-in-out',
             }}
             onLoadStart={(e) => {
               // Delay video load to prioritize initial page render
@@ -112,7 +114,15 @@ const Index = () => {
               setTimeout(() => {
                 video.preload = "auto";
                 video.load();
-              }, 1000);
+              }, 2000);
+            }}
+            onCanPlay={(e) => {
+              // Fade in video when ready to play
+              e.currentTarget.style.opacity = '1';
+            }}
+            onError={(e) => {
+              // Hide video on error, fallback image already visible
+              e.currentTarget.style.display = 'none';
             }}
           >
             <source src="/videos/hero-video.mp4" type="video/mp4" />
