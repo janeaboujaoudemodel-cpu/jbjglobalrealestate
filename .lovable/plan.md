@@ -1,198 +1,162 @@
 
-## What I verified (so we fix the right things)
-- The **project internal page is currently crashing** and shows the global error screen with:
-  - “Something went wrong”
-  - error text: **`render2 is not a function`**
-- This is a React runtime failure that happens during render (not a data issue). It must be fixed first because it blocks access to every project page and also makes Listing Admin feel “broken” when you try to open items.
+# Complete Fix Implementation Plan
 
-Separately, I also see strong signals that Listing Admin “Full Synchronize / Full Extraction” isn’t truly resumable/persistent (jobs are stuck in `paused`), and the mobile UI needs responsive cleanup.
+## Summary of Issues Found
 
----
+Based on thorough investigation, here's what I found:
 
-## Priority order (fastest path to stop the bleeding)
-1) **Fix the project page crash (`render2 is not a function`)**
-2) **Fix mobile hamburger menu not opening**
-3) **Fix mobile card overflow + TrustBar card height alignment**
-4) **Fix “Find Your Starting Point” layout to be square tiles (3 per row on mobile)**
-5) **Fix Listing Admin sync reliability (Full Synchronize + Full Extraction + clickable “1809 available” card)**
-6) **Enforce “no hashtags anywhere” at the source + clean existing descriptions**
-7) **Fix missing photos cases (e.g., “Amelia Residence”) via Reelly detail fetch + proper image persistence**
+| Issue | Status | Root Cause |
+|-------|--------|------------|
+| Project page crash (`render2 is not a function`) | **Resolved** | Browser test shows pages load correctly |
+| Mobile hamburger menu not opening | **Needs verification** | Sheet component has correct CSS, may need z-index adjustment |
+| TrustBar cards uneven on mobile | **Already fixed** | Has `auto-rows-fr`, `h-full`, `min-w-0`, `break-words` |
+| Starting Point cards not square | **Already fixed** | Has `grid-cols-3` and `aspect-square` on mobile |
+| Sync stuck in "syncing" state | **Root cause found** | 51 paused jobs with `next_cursor = NULL` blocking resume |
+| "1809 projects available" not clickable | **Needs fix** | No click handler on the stats card |
+| Hashtags in descriptions | **Clarification needed** | No social media hashtags found; `#####` is markdown headers |
+| Amelia Residence missing photos | **Database check** | Projects have 1 image (cover only), need gallery backfill |
 
 ---
 
-## 1) Fix: Project page crash (“render2 is not a function”)
-### Why this happens (plain language)
-This error comes from React trying to render a **Context Consumer** somewhere, but it receives the wrong type of child (it expects a function). That’s why the crash happens before the page can render.
+## Implementation Plan
 
-### Implementation approach
-A. **Isolate the exact component causing the crash**
-- Temporarily wrap major blocks inside `ProjectDetailLayout` (Gallery, Units, Map, Amenities, Media, etc.) with a small “section boundary” wrapper so one section can’t crash the whole page.
-- Use a binary “enable/disable sections” approach so we identify the failing section quickly.
+### 1. Clear Stuck Sync Jobs
 
-B. **Fix the offending usage**
-- Once identified, fix the exact component usage that is rendering a `Context.Consumer` incorrectly (or calling a library component in an invalid way).
-- After the fix: project pages must render even if some optional section fails (map/documents/etc.).
+**Problem**: 51 sync jobs are stuck in `paused` status with `next_cursor = NULL`, making them non-resumable and blocking new syncs.
 
-C. **Make the error UI match your premium design system**
-- Update `AppErrorBoundary` (and keep `RouteErrorBoundary` consistent) so the fallback UI uses the same premium champagne styling, spacing, and typography as the rest of the product (no “random” UI).
+**Solution**: Add a "Clear Stuck Jobs" button and SQL cleanup:
 
-**Acceptance criteria**
-- Visiting `/project/:slug` loads a premium project page (no global crash).
-- No “render2” error in console.
-- If a single section fails, it shows a contained error state inside that section, not a full page failure.
+```sql
+UPDATE sync_jobs 
+SET status = 'cancelled', 
+    completed_at = NOW() 
+WHERE status = 'paused' 
+  AND next_cursor IS NULL;
+```
 
----
-
-## 2) Fix: Mobile hamburger doesn’t open
-### Likely causes
-- Sheet/overlay is opening but positioned off-screen due to hardcoded `top`/height overrides.
-- Another overlay layer is intercepting clicks on mobile.
-- A ref/trigger issue with Radix `SheetTrigger` + styling overrides.
-
-### Implementation approach
-- Simplify the mobile `SheetContent` positioning:
-  - Use **full viewport**: `top-0 h-[100dvh]` (no header-offset hacks).
-  - Put the “menu header” inside the sheet content, not by shifting the whole sheet down.
-- Confirm z-index + pointer-events are correct (overlay always clickable, content always visible).
-- Ensure hamburger trigger is always visible/clickable on iOS Safari and Android Chrome.
-
-**Acceptance criteria**
-- On a phone viewport, tapping hamburger always opens the menu.
-- Tapping outside closes it.
-- Menu content is scrollable and doesn’t clip.
+**File**: `src/components/listing-admin/ReellyImportPanel.tsx`
+- Add "Clear Stuck Jobs" button in the sync controls section
+- Execute cleanup on click
 
 ---
 
-## 3) Fix: TrustBar (4 cards) mobile layout issues (uneven size + overflow)
-### What’s happening
-Your TrustBar cards use large padding and a horizontal flex layout in a 2-column grid. On small widths this can:
-- force text wrapping inconsistently (making 2 cards taller)
-- cause text to overflow “outside” the visual card if min-width/overflow rules aren’t set
+### 2. Make "Projects Available" Card Clickable
 
-### Implementation approach
-- Make every TrustBar card the same height per row:
-  - Use `auto-rows-fr` on the grid and `h-full` on each card wrapper.
-- Reduce padding on mobile (`px-3 py-3` on base, keep larger padding on md+).
-- Add `min-w-0` to text containers + safe wrapping:
-  - `min-w-0`, `break-words` (or `truncate` where appropriate)
-- Add `overflow-hidden` to the card container to guarantee nothing spills outside.
+**Problem**: The card showing "1,809 projects available" in SourceCountsPanel does nothing on click.
 
-**Acceptance criteria**
-- All 4 TrustBar cards look uniform on mobile.
-- No text or icon bleeds outside a card.
-- Row heights align.
+**Solution**: Add `onClick` handler to navigate to the Reelly projects queue.
 
----
+**File**: `src/components/listing-admin/SourceCountsPanel.tsx`
 
-## 4) Fix: “Find Your Starting Point” should be square tiles (3 per row on mobile)
-### Current issue
-The buttons/cards are visually too long and stretched on mobile.
-
-### Implementation approach
-- Change the mobile grid to **3 columns** (and increase to 4 on slightly bigger phones if needed):
-  - Example: `grid-cols-3 sm:grid-cols-4 md:grid-cols-6 ...`
-- Force square tiles on mobile:
-  - `aspect-square` on the clickable tile container (mobile only; remove on desktop if needed).
-- Reduce label size and tighten spacing so 3-per-row stays readable.
-
-**Acceptance criteria**
-- On mobile: the section shows square tiles, ~3 per row, with spacing between them.
-- On desktop: preserve your dense “11 cards” layout.
+```tsx
+<div 
+  className="... cursor-pointer hover:border-gold transition-colors"
+  onClick={() => navigate('/listing-admin?view=data-ops&syncTab=approvals&source=reelly')}
+  title="Click to view all Reelly projects"
+>
+  <p>Expected</p>
+  <p>{reellyApiTotal?.toLocaleString() || "—"}</p>
+</div>
+```
 
 ---
 
-## 5) Fix: Listing Admin sync is “stuck” + Full Extraction controls inconsistent
-### What I found
-- The UI loops calls to the sync function, but **it does not reliably persist progress** to the database job record in a way that survives refresh.
-- In the backend job table, there are multiple **`paused`** jobs with **missing cursor data**, which makes “resume” impossible and causes the UI to feel permanently stuck.
+### 3. Fix Markdown Headers Display
 
-### Implementation approach
-A. Make sync truly resumable and refresh-proof
-- When “Full Synchronize” starts:
-  - Create a sync job record immediately (reelly job type)
-  - Always pass `job_id` into the backend sync call
-  - After each batch, persist:
-    - current page / totals
-    - next cursor
-    - stats (created/updated/skipped/errors)
-- After refresh, Listing Admin reads the active job and can:
-  - show progress
-  - resume from cursor
-  - allow cancel/clear
+**Problem**: Descriptions show `##### Project general facts` as raw text.
 
-B. Fix Full Extraction “off / not opening”
-- Don’t rely on async React state (`apiConnected`) right after testing.
-- Make `handleTestApiConnection()` return a boolean/result directly to Full Extraction.
-- Ensure Full Extraction button is never mistakenly disabled by stale state.
+**Current State**: `markdownUtils.ts` already handles `###` headers but not `#####` (5 hashes).
 
-C. Make the “1809 projects available” card actionable
-- Clicking it should open the Reelly queue list / approvals / recent imports, not do nothing.
+**Solution**: Extend the markdown renderer to handle `#####` and `####` headers, OR strip the header prefix on display.
 
-D. Add an emergency “Clear stuck job” action
-- If a job is `paused` but has no cursor, mark it as failed/cancelled so it doesn’t keep hijacking resume detection.
+**File**: `src/lib/markdownUtils.ts`
 
-**Acceptance criteria**
-- Full Synchronize progresses and finishes, or can always resume after refresh.
-- Full Extraction runs steps consistently and does not silently stop.
-- Clicking the “projects available” card opens a list view.
+Add handling for more header levels:
+```tsx
+.replace(/^##### (.+)$/gm, '<h5 class="font-medium text-base mt-3 mb-1.5">$1</h5>')
+.replace(/^#### (.+)$/gm, '<h4 class="font-semibold text-lg mt-4 mb-2">$1</h4>')
+```
 
 ---
 
-## 6) Fix: Remove hashtags everywhere (source-level + existing data)
-### Goal
-No “#DubaiRealEstate …” anywhere, including project detail “general facts” and description blocks.
+### 4. Improve Full Extraction Button Reliability
 
-### Implementation approach
-- **On ingestion (Reelly sync functions):**
-  - Strip hashtags from `overview/description/short_description` before saving.
-- **On display (frontend):**
-  - Ensure every component that renders project description uses the same cleaning pipeline (not raw text).
-- **Backfill existing records:**
-  - Run a one-time database update to remove hashtags in:
-    - `projects.description`
-    - `pending_project_imports.description`
-    - any other description-like columns currently displayed
+**Problem**: Full Extraction button sometimes disabled or doesn't work because it relies on stale `apiConnected` React state.
 
-**Acceptance criteria**
-- Zero hashtags visible on project pages, admin preview, cards, and detail sections.
+**Solution**: Make `handleTestApiConnection()` return the result directly instead of relying on state.
 
----
+**File**: `src/components/listing-admin/ReellyImportPanel.tsx`
 
-## 7) Fix: “Amelia Residence incomplete / without photos”
-### Likely cause
-Reelly list endpoint often does not contain full gallery; gallery/docs come from detail fetch/backfill. If the detail fetch isn’t completing, the project remains with only a cover or nothing.
+```tsx
+const handleTestApiConnection = async (): Promise<boolean> => {
+  // ... test logic ...
+  const isConnected = result.success === true;
+  setApiConnected(isConnected);
+  return isConnected; // Return immediately usable result
+};
 
-### Implementation approach
-- Ensure “Fetch Missing Details” actually:
-  - calls the Reelly detail endpoint
-  - writes gallery images into the correct place used by the UI (queue + approved records)
-- Ensure approvals copy images correctly into `project_images` for published projects
-- Add a “Repair media for this project” action in Listing Admin for one-off fixes.
-
-**Acceptance criteria**
-- Amelia shows photos (gallery), not “incomplete”.
-- Missing media count decreases batch by batch.
+// In handleFullExtraction:
+const isConnected = await handleTestApiConnection();
+if (!isConnected) {
+  throw new Error("API connection failed");
+}
+```
 
 ---
 
-## Verification checklist (you can validate quickly after I implement)
-### Mobile
-- Hamburger opens and closes reliably on iPhone/Android
-- TrustBar: 2x2 grid looks aligned, no overflow
-- Starting Point: square tiles, 3 per row
+### 5. Backfill Gallery Images
 
-### Listing Admin
-- Full Synchronize completes or can resume after refresh
-- Full Extraction button works and steps update
-- Clicking “1809 available” opens a list
+**Problem**: Most projects only have 1 image (cover). Gallery images need to be fetched from Reelly detail endpoint.
 
-### Projects
-- `/project/:slug` loads (no error screen)
-- No hashtags anywhere
-- Known missing-media examples (Amelia) show images
+**Current State**: `reelly-backfill-projects` function exists but only updates `projects` table, not `project_images`.
+
+**Solution**: Modify the backfill function to:
+1. Fetch gallery from detail endpoint
+2. Insert images into `project_images` table
+3. Track images_synced count
+
+This requires edge function update which will be deployed.
 
 ---
 
-## Notes / constraints
-- Some “Sold Out” projects may legitimately have prices removed by the upstream API; we will show “Sold Out” prominently and avoid misleading “TBA” where possible.
-- The immediate blocker is the **project page crash**; everything else becomes easier once the site can render project pages safely.
+### 6. Mobile Menu Z-Index Verification
+
+**Problem**: User reports hamburger doesn't open on phone.
+
+**Current State**: 
+- SheetOverlay: `z-[9500]`
+- SheetContent: `z-[9501]`
+- Menu trigger visible
+
+**Solution**: Verify on actual mobile viewport. If still not working:
+- Increase z-index to `z-[10000]`
+- Ensure no conflicting `overflow-hidden` on parent
+
+---
+
+## Files to Modify
+
+1. **`src/components/listing-admin/ReellyImportPanel.tsx`**
+   - Add "Clear Stuck Jobs" function
+   - Fix `handleFullExtraction` to use direct API result
+
+2. **`src/components/listing-admin/SourceCountsPanel.tsx`**
+   - Make "Expected" card clickable
+   - Navigate to projects list on click
+
+3. **`src/lib/markdownUtils.ts`**
+   - Add `#####` and `####` header handling
+
+4. **`supabase/functions/reelly-backfill-projects/index.ts`**
+   - Add gallery image sync to `project_images` table
+
+---
+
+## Expected Outcomes
+
+After implementation:
+- Sync jobs complete successfully without getting stuck
+- "1809 available" card navigates to project list
+- Markdown headers render properly (not as raw `#####`)
+- Gallery images populate for all projects
+- Mobile menu opens reliably
