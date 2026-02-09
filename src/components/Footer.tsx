@@ -307,7 +307,7 @@ const Footer = () => {
   ];
 
   // Education Hub - Link to /guides (contains all books, market reports, guides)
-  const educationHubLink = { href: "/guides", label: "Education Hub" };
+  const educationHubLink = { href: "/education-hub", label: "Education Hub" };
 
   return (
     <>
@@ -765,7 +765,23 @@ const Footer = () => {
                     <span className="text-gold">✦</span>
                     <span className="text-gold">Education Hub</span>
                   </Link>
-                  <p className="text-zinc-500 text-xs mb-3">Books, Guides & Market Reports</p>
+                  <ul className="space-y-2 mb-3">
+                    <li>
+                      <Link to="/broker-education" className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
+                        Books
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/guides" className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
+                        Guides
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/market-intelligence/reports" className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
+                        Market Reports
+                      </Link>
+                    </li>
+                  </ul>
                   
                   <h4 className="font-bold text-xs uppercase tracking-[0.12em] mb-2 pb-1 border-b border-gold/20 text-black/80 flex items-center gap-2">
                     <span className="text-gold/60">✦</span>
@@ -812,7 +828,7 @@ const Footer = () => {
                     Business Suites
                   </h4>
                   <ul className="space-y-2">
-                    {businessSuitesLinks.slice(0, 4).map((link) => (
+                    {businessSuitesLinks.map((link) => (
                       <li key={link.href}>
                         <Link
                           to={link.href}

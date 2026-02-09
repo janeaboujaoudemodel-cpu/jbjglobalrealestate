@@ -29,6 +29,7 @@ const RealEstateSuite = lazy(() => import("./pages/business-suite/RealEstateSuit
 const BrokerSuite = lazy(() => import("./pages/business-suite/BrokerSuite"));
 const CreativeSuite = lazy(() => import("./pages/business-suite/CreativeSuite"));
 const ProductivitySuite = lazy(() => import("./pages/business-suite/ProductivitySuite"));
+const EducationHub = lazy(() => import("./pages/EducationHub"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -383,6 +384,7 @@ const App = () => (
                 <Route path="/seller-listing" element={<SellerListing />} />
                 <Route path="/golden-visa" element={<Navigate to="/guides/golden-visa-uae" replace />} />
                 <Route path="/guides" element={<Guides />} />
+                <Route path="/education-hub" element={<EducationHub />} />
                 <Route path="/guides/golden-visa-uae" element={<GoldenVisaGuide />} />
                 <Route path="/rent-guide" element={<RentGuide />} />
                 <Route path="/tenant-guide" element={<TenantGuide />} />
