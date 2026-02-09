@@ -267,7 +267,7 @@ export default function ProjectDetailLayout({
     const hasUsp = (project.usp_bullets?.length ?? 0) > 0;
     const hasFloorPlans = floorPlanDocs.length > 0 || (project.floor_plan_types?.length ?? 0) > 0;
     const hasAmenities = (project.amenities?.length ?? 0) > 0;
-    const hasPayment = !!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown;
+    const hasPayment = !!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown || !!project.down_payment_percent;
     const hasUsefulInfo = (project.faqs?.length ?? 0) > 0;
     const hasBrochure = brochureDocs.length > 0;
     // Reelly-style sections
@@ -375,6 +375,42 @@ export default function ProjectDetailLayout({
       ? `Benefit from extended payment terms until ${year} handover`
       : "Benefit from extended payment terms";
   }, [project.handover_date, project.payment_plan]);
+
+  // Helper: Derive bedroom range from unit_types array when min/max are null
+  const deriveBedroomsFromUnitTypes = (unitTypes: ProjectDetailData['unit_types']): string | null => {
+    if (!unitTypes || unitTypes.length === 0) return null;
+    
+    const types = unitTypes.map(u => u.type?.toLowerCase() || '');
+    const hasStudio = types.some(t => t.includes('studio'));
+    const brMatches = types.flatMap(t => {
+      const match = t.match(/(\d+)\s*(?:br|bed|bedroom)/i);
+      return match ? [parseInt(match[1])] : [];
+    });
+    
+    if (brMatches.length === 0 && hasStudio) return 'Studio';
+    if (brMatches.length === 0) return null;
+    
+    const minBr = Math.min(...brMatches);
+    const maxBr = Math.max(...brMatches);
+    
+    if (hasStudio) return `Studio - ${maxBr} BR`;
+    if (minBr === maxBr) return `${minBr} BR`;
+    return `${minBr} - ${maxBr} BR`;
+  };
+
+  // Helper: Derive size range from unit_types array when min/max are null
+  const deriveSizeFromUnitTypes = (unitTypes: ProjectDetailData['unit_types']): string | null => {
+    if (!unitTypes || unitTypes.length === 0) return null;
+    
+    const sizes = unitTypes.flatMap(u => [u.size_from, u.size_to].filter(Boolean)) as number[];
+    if (sizes.length === 0) return null;
+    
+    const minSize = Math.min(...sizes);
+    const maxSize = Math.max(...sizes);
+    
+    if (minSize === maxSize) return `${minSize.toLocaleString()} sqft`;
+    return `${minSize.toLocaleString()} - ${maxSize.toLocaleString()} sqft`;
+  };
 
   // Format bedrooms text - prefer bedroom_types array if available
   const bedroomsText = useMemo(() => {
@@ -576,7 +612,9 @@ export default function ProjectDetailLayout({
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Starting Price</p>
               <p className="mt-2 text-xl font-bold text-gold">
-                {typeof project.price_from === "number" ? formatPriceUtil(project.price_from) : "On request"}
+                {typeof project.price_from === "number" && project.price_from > 0 
+                  ? formatPriceUtil(project.price_from) 
+                  : "Price TBA"}
               </p>
             </div>
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
@@ -586,13 +624,13 @@ export default function ProjectDetailLayout({
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>
               <p className="mt-2 text-xl font-bold text-foreground">
-                {bedroomsText || (project.bedrooms_min ? `${project.bedrooms_min} BR` : "View Details")}
+                {bedroomsText || deriveBedroomsFromUnitTypes(project.unit_types) || "TBA"}
               </p>
             </div>
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Size</p>
               <p className="mt-2 text-xl font-bold text-foreground">
-                {sizeText || (project.size_min ? `${project.size_min.toLocaleString()} sqft` : "View Details")}
+                {sizeText || deriveSizeFromUnitTypes(project.unit_types) || "TBA"}
               </p>
             </div>
           </div>

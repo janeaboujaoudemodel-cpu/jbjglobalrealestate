@@ -54,7 +54,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
           <div className="flex flex-col lg:flex-row gap-8 items-start">
             {/* Developer Logo - Larger Card, Full Fit, White BG */}
             <div 
-              className="w-44 h-28 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
+              className="w-48 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
               style={{
                 background: '#FFFFFF',
                 border: '3px solid hsl(42 45% 59%)',
@@ -65,10 +65,10 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 <img 
                   src={developer.logo_url} 
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-contain p-3"
+                  className="w-full h-full object-contain p-4"
                 />
               ) : (
-                <Building2 className="w-10 h-10 text-zinc-400" />
+                <Building2 className="w-12 h-12 text-zinc-400" />
               )}
             </div>
 
