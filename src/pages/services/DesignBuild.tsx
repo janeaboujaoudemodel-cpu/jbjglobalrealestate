@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import DirectContactCTA from "@/components/DirectContactCTA";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -67,8 +67,9 @@ const aiTools = [
     title: "AI Interior Designer",
     description: "Design your space with AI-powered visualization and style recommendations",
     icon: Paintbrush,
-    link: "/interior-design-studio",
+    link: "/interior-design-ai",
     badge: "AI-Powered",
+    cta: "Start Designing with AI",
   },
   {
     id: "property-measurement",
@@ -77,6 +78,7 @@ const aiTools = [
     icon: Ruler,
     link: "/property-measurement",
     badge: "Precision Tool",
+    cta: "Measure Your Property",
   },
 ];
 
@@ -315,7 +317,7 @@ const DesignBuild = () => {
                       </div>
                       <p className="text-zinc-600 mb-6">{tool.description}</p>
                       <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
-                        {tool.id === "interior-designer" ? "Design Your Space with AI" : "Measure Your Property with AI"}
+                        {tool.cta}
                         <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
                     </CardContent>
@@ -391,8 +393,7 @@ const DesignBuild = () => {
         </div>
       </section>
 
-      {/* Standardized Direct Contact CTA */}
-      <DirectContactCTA />
+      {/* Global CTA handled by MainLayout */}
     </section>
   );
 };

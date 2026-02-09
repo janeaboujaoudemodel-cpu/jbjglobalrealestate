@@ -22,7 +22,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
   const { isFounderVisible } = useFounderVisibility();
   const { isInvestorMode, isBrokerMode } = useUserModeContext();
 
-  // Column 1: News & Updates
+  // Block 1: News & Updates
   const newsLinks = [
     { label: 'Latest News', href: '/news', icon: Newspaper },
     { label: 'Market Updates', href: '/news?category=market', icon: TrendingUp },
@@ -30,7 +30,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Press Releases', href: '/press-kit', icon: FileText },
   ];
 
-  // Column 2: Market Intelligence (FULL TEXT)
+  // Block 2: Market Intelligence
   const intelligenceLinks = [
     { label: 'Market Overview', href: '/market-intelligence/overview', icon: BarChart3 },
     { label: 'Area Intelligence', href: '/market-intelligence/areas', icon: Target },
@@ -38,19 +38,17 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Methodology', href: '/market-intelligence/methodology', icon: BookOpen },
   ];
 
-  // Column 3: Guides & Education (EXPANDED)
+  // Block 3: Guides & Education
   const guidesLinks = [
     { label: 'Guides Library', href: '/guides', icon: BookOpen },
     { label: 'Buyer Guide', href: '/buyer-guide', icon: FileText },
     { label: 'Seller Guide', href: '/seller-guide', icon: FileText },
     { label: 'Landlord Guide', href: '/landlord-guide', icon: FileText },
     { label: 'Tenant Guide', href: '/tenant-guide', icon: FileText },
-    { label: 'Rent Guide', href: '/rent-guide', icon: FileText },
     { label: 'Golden Visa', href: '/guides/golden-visa-uae', icon: Award },
-    { label: 'FAQ', href: '/faq', icon: HelpCircle },
   ];
 
-  // Column 4: Services
+  // Block 4: Services
   const servicesLinks = [
     { label: 'Our Services', href: '/services', icon: Briefcase },
     { label: 'Property Management', href: '/services/property-management', icon: Building2 },
@@ -60,7 +58,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Customer Happiness', href: '/customer-happiness', icon: Users },
   ];
 
-  // Column 5: Business Suites (AI Tool Suites)
+  // Block 5: Business Suites (AI Tool Suites)
   const businessSuitesLinks = [
     { label: 'Real Estate Suite', href: '/business-suite/real-estate', icon: Building2 },
     { label: 'Broker Intelligence', href: '/business-suite/broker', icon: Cpu },
@@ -69,50 +67,42 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'All Tools', href: '/toolkit', icon: Sparkles },
   ];
 
-  // Column 6: Mode-Conditional (Investor OR Broker OR Both)
+  // Block 6: Mode-Conditional (Investor OR Broker OR Both)
   const investorLinks = [
     { label: 'Investor Dashboard', href: '/investor-dashboard', icon: LayoutDashboard },
     { label: 'Investor Education', href: '/investor-education', icon: GraduationCap },
     { label: 'Investor FAQ', href: '/investor-faq', icon: HelpCircle },
-    { label: 'Investor Services', href: '/investor-services', icon: Briefcase },
   ];
 
   const brokerLinks = [
     { label: 'Broker Dashboard', href: '/broker-dashboard', icon: LayoutDashboard },
     { label: 'Broker Hub', href: '/broker-toolkit', icon: Briefcase },
     { label: 'Broker Training', href: '/broker-education', icon: GraduationCap },
-    { label: 'Certifications', href: '/verify-certificate', icon: Award },
     { label: 'Broker FAQ', href: '/broker-faq', icon: HelpCircle },
-    { label: 'Broker Resources', href: '/broker-resources', icon: FolderOpen },
   ];
 
-  // Column 7: Company + Legal
+  // Block 7: Company
   const companyLinks = [
     { label: 'About JBJ', href: '/about', icon: Building2 },
     ...(isFounderVisible ? [{ label: 'Founder & Leadership', href: '/founder', icon: UserCircle }] : []),
     { label: 'Meet the Team', href: '/team', icon: Users },
     { label: 'Contact Us', href: '/contact', icon: Phone },
-  ];
-
-  const careersLinks = [
     { label: 'Careers', href: '/join', icon: Briefcase },
-    { label: 'Apply Now', href: '/join-application', icon: FileText },
   ];
 
+  // Block 8: Legal
   const legalLinks = [
     { label: 'Terms of Service', href: '/terms', icon: FileText },
     { label: 'Privacy Policy', href: '/privacy', icon: Shield },
     { label: 'Cookie Policy', href: '/cookies', icon: FileText },
     { label: 'Disclaimers', href: '/disclaimers', icon: FileText },
-    { label: 'Intellectual Property', href: '/intellectual-property', icon: Shield },
-    { label: 'Trust & Audit Center', href: '/trust-and-audit-center', icon: Shield },
+    { label: 'Trust & Audit', href: '/trust-and-audit-center', icon: Shield },
   ];
 
   // Determine mode-conditional links to display
   const getModeLinks = () => {
     if (isInvestorMode && isBrokerMode) {
-      // Combined mode: show both
-      return [...investorLinks, ...brokerLinks];
+      return [...investorLinks.slice(0, 2), ...brokerLinks.slice(0, 2)];
     } else if (isBrokerMode) {
       return brokerLinks;
     } else {
@@ -132,163 +122,58 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
 
   const modeLinks = getModeLinks();
 
+  // Section component for consistent styling
+  const MenuBlock = ({ 
+    icon, 
+    title, 
+    links, 
+    showDivider = false 
+  }: { 
+    icon: typeof Newspaper; 
+    title: string; 
+    links: Array<{ label: string; href: string; icon: typeof Newspaper }>; 
+    showDivider?: boolean;
+  }) => (
+    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+      <MegaMenuSectionTitle icon={icon} title={title} />
+      <div className="space-y-0 max-h-[220px] overflow-y-auto">
+        {links.map((item) => (
+          <MegaMenuIconLink
+            key={item.href}
+            to={item.href}
+            onClick={onClose}
+            icon={item.icon}
+            title={item.label}
+            compact
+          />
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <MegaMenuShell ref={ref} noScroll>
       {/* Scrollable container with max height to prevent cropping */}
-      <div className="max-h-[calc(100vh-160px)] overflow-y-auto">
-      <div className="max-w-[1600px] mx-auto px-4 lg:px-8 py-4 lg:py-5">
-        {/* 7 Columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4">
-          {/* Column 1: News & Updates */}
-          <div className="relative">
-            <MegaMenuSectionTitle icon={Newspaper} title="News & Updates" />
-            <div className="space-y-0">
-              {newsLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </div>
-            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-          </div>
-
-          {/* Column 2: Market Intelligence (FULL TEXT) */}
-          <div className="relative">
-            <MegaMenuSectionTitle icon={BarChart3} title="Market Intelligence" />
-            <div className="space-y-0">
-              {intelligenceLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </div>
-            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-          </div>
-
-          {/* Column 3: Guides & Education (EXPANDED) */}
-          <div className="relative">
-            <MegaMenuSectionTitle icon={BookOpen} title="Guides" />
-            <div className="space-y-0">
-              {guidesLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </div>
-            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-          </div>
-
-          {/* Column 4: Services */}
-          <div className="relative">
-            <MegaMenuSectionTitle icon={Briefcase} title="Services" />
-            <div className="space-y-0">
-              {servicesLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </div>
-            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-          </div>
-
-          {/* Column 5: Business Suites */}
-          <div className="relative">
-            <MegaMenuSectionTitle icon={Briefcase} title="Business Suites" />
-            <div className="space-y-0">
-              {businessSuitesLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </div>
-            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-          </div>
-
-          {/* Column 6: Mode-Conditional (Investor/Broker/Both) */}
-          <div className="relative">
-            <MegaMenuSectionTitle icon={LayoutDashboard} title={getModeTitle()} />
-            <div className="space-y-0 max-h-[320px] overflow-y-auto">
-              {modeLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </div>
-            <div className="hidden lg:block absolute top-0 -right-2 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-          </div>
-
-          {/* Column 7: Company + Careers + Legal */}
-          <div>
-            <MegaMenuSectionTitle icon={Building2} title="Company" />
-            <div className="space-y-0">
-              {companyLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-              {/* Careers section */}
-              <div className="h-px bg-gold/20 my-2" />
-              {careersLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-              {/* Legal section */}
-              <div className="h-px bg-gold/20 my-2" />
-              {legalLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </div>
+      <div 
+        className="overflow-y-auto"
+        style={{ maxHeight: 'calc(100dvh - 140px)' }}
+      >
+        <div className="max-w-[1400px] mx-auto px-4 lg:px-6 py-4 lg:py-5">
+          {/* 4 + 4 Grid Layout */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Row 1 */}
+            <MenuBlock icon={Newspaper} title="News & Updates" links={newsLinks} />
+            <MenuBlock icon={BarChart3} title="Market Intelligence" links={intelligenceLinks} />
+            <MenuBlock icon={BookOpen} title="Guides" links={guidesLinks} />
+            <MenuBlock icon={Briefcase} title="Services" links={servicesLinks} />
+            
+            {/* Row 2 */}
+            <MenuBlock icon={Sparkles} title="Business Suites" links={businessSuitesLinks} />
+            <MenuBlock icon={LayoutDashboard} title={getModeTitle()} links={modeLinks} />
+            <MenuBlock icon={Building2} title="Company" links={companyLinks} />
+            <MenuBlock icon={Shield} title="Legal" links={legalLinks} />
           </div>
         </div>
-      </div>
       </div>
     </MegaMenuShell>
   );

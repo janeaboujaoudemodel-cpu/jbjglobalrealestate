@@ -188,21 +188,21 @@ const AIToolPremiumLayout = ({
       {/* Hero Section - Colored Gradient Theme */}
       <section className={`pt-32 pb-16 bg-gradient-to-b ${gradient}`}>
         <div className="container mx-auto px-4">
-          {/* Back Button */}
+          {/* Back Button - Always readable on dark backgrounds */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3 }}
           >
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate(-1)}
-            className={`text-white ${colors.bg} ${colors.border} border hover:bg-white/10 mb-6`}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
-          </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate(-1)}
+              className="bg-white/10 border-white/30 text-white hover:bg-white/20 hover:text-white mb-6"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
           </motion.div>
 
           <motion.div

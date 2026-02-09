@@ -395,7 +395,7 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-zinc-900/50 border border-teal-500/30">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Building2 className="w-5 h-5 text-teal-400" />

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones } from 'lucide-react';
+import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -17,7 +17,8 @@ interface MegaMenuAccountProps {
 }
 
 const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>(({ onClose }, ref) => {
-  const { user, isOwner, signOut } = useAuth();
+  // IMPORTANT: Get ownerLoading from AuthContext to handle owner verification timing
+  const { user, isOwner, ownerLoading, signOut } = useAuth();
   const { t } = useLanguage();
   const { tierProgress, isCombinedMode, investorTierProgress, brokerTierProgress } = useTierProgress();
   const { mode } = useUserModeContext();
@@ -239,7 +240,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5">
                 Your Account
               </p>
-              {(isOwner || hasCRMAccess || hasListingAdminAccess) && (
+              {/* LOCK: Owner shortcuts header - Always reserve space for Owner Shortcuts column when verifying or when owner has access */}
+              {(ownerLoading || isOwner || hasCRMAccess || hasListingAdminAccess) && (
                 <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5">
                   Owner Shortcuts
                 </p>
@@ -294,9 +296,18 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 </div>
               </div>
 
-              {/* Right Column - Owner Links (only show if user has Owner access) */}
+              {/* Right Column - Owner Links (LOCKED: Always show during loading or when owner has access) */}
               <div>
-              {(isOwner || hasCRMAccess || hasListingAdminAccess) && adminLinks.length > 0 && (
+              {/* Show loading state while verifying owner status */}
+              {ownerLoading && (
+                <div className="flex items-center gap-3 p-4 rounded-xl bg-gold/5 border border-gold/20">
+                  <Loader2 className="w-5 h-5 text-gold animate-spin" />
+                  <span className="text-sm text-gold/70">Verifying owner access...</span>
+                </div>
+              )}
+              
+              {/* LOCK: Do not remove owner shortcuts - Show when owner verified */}
+              {!ownerLoading && (isOwner || hasCRMAccess || hasListingAdminAccess) && adminLinks.length > 0 && (
                   <>
                     <div className="space-y-1">
                       {/* Owner Dashboard - Primary Link */}
