@@ -400,14 +400,15 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
     const { data: newProject, error: projectError } = await supabase
       .from("projects")
-      .insert(projectData)
+      .upsert(projectData, { onConflict: 'slug' })
       .select()
       .single();
 
     if (projectError) throw projectError;
 
-    // Insert images
+    // Insert images (delete old ones first to avoid duplicates)
     if (importData.images.length > 0 && newProject) {
+      await supabase.from("project_images").delete().eq("project_id", newProject.id);
       const imageInserts = importData.images.map((img, index) => ({
         project_id: newProject.id,
         image_url: img.url,
@@ -422,8 +423,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       if (imgError) console.error("Error inserting images:", imgError);
     }
 
-    // Insert documents
+    // Insert documents (delete old ones first to avoid duplicates)
     if (importData.documents.length > 0 && newProject) {
+      await supabase.from("project_documents").delete().eq("project_id", newProject.id);
       const docInserts = importData.documents.map((doc, idx) => ({
         project_id: newProject.id,
         file_url: doc.url,
@@ -591,7 +593,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     try {
       for (const item of itemsToApprove) {
         try {
-          await approveImportInDb(item);
+          await approveImportInDb(item, true);
           ok++;
         } catch (e) {
           failed++;
