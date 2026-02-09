@@ -37,9 +37,14 @@ export default function PDFSuite() {
           <div className="max-w-7xl mx-auto px-4 py-6">
             <div className="flex items-center gap-4 mb-4">
               <Link to="/toolkit">
-                <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Toolkit
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="hover:bg-zinc-800 border border-zinc-700 hover:border-zinc-600"
+                  style={{ color: '#a1a1aa', backgroundColor: 'transparent' }}
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" style={{ color: '#a1a1aa' }} />
+                  <span style={{ color: '#a1a1aa' }}>Back to Toolkit</span>
                 </Button>
               </Link>
             </div>

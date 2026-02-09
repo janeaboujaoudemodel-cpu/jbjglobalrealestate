@@ -29,13 +29,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// Select removed - replaced with type pills
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -226,10 +220,28 @@ export default function Studio() {
     return matchesSearch && matchesType;
   });
 
+  // Type filter pills configuration
+  const typeFilters = [
+    { value: "all", label: "All", icon: Grid },
+    { value: "video", label: "Video", icon: Film },
+    { value: "image", label: "Image", icon: ImageIcon },
+    { value: "pdf", label: "PDF", icon: FileText },
+    { value: "marketing_pack", label: "Marketing", icon: Package },
+  ];
+
+  // Creative toolkit shortcuts
+  const creativeShortcuts = [
+    { href: "/toolkit/background-ai", label: "Background Remover", icon: Sparkles },
+    { href: "/toolkit/captions-translate", label: "Captions", icon: FileText },
+    { href: "/toolkit/image-resize", label: "Image Resizer", icon: ImageIcon },
+    { href: "/toolkit/pdf-from-photos", label: "PDF Tools", icon: FileText },
+    { href: "/toolkit/voice-studio", label: "Voice Studio", icon: Film },
+  ];
+
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-xl border-b border-gold/20">
+      <header className="sticky top-0 z-50 bg-black/90 backdrop-blur-xl border-b border-gold/20">
         <div className="flex items-center justify-between px-6 py-4">
           <Link to="/studio" className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
@@ -339,39 +351,47 @@ export default function Studio() {
             </Dialog>
           </div>
 
-          {/* Filters & Search */}
+          {/* Type Filter Pills + Search */}
+          <div className="flex flex-wrap items-center gap-3">
+            {typeFilters.map((type) => {
+              const Icon = type.icon;
+              const isActive = filterType === type.value;
+              return (
+                <button
+                  key={type.value}
+                  onClick={() => setFilterType(type.value)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all border ${
+                    isActive 
+                      ? "bg-gold/20 border-gold text-gold" 
+                      : "bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500"
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span className="text-sm font-medium">{type.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Search & View Toggle */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search projects..."
-                className="pl-10 bg-background border-gold/30"
+                className="pl-10 bg-zinc-900 border-gold/30 text-white placeholder:text-zinc-500"
               />
             </div>
 
-            <Select value={filterType} onValueChange={setFilterType}>
-              <SelectTrigger className="w-40 bg-background border-gold/30">
-                <SelectValue placeholder="All types" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                {projectTypes.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <div className="flex items-center gap-1 p-1 rounded-lg bg-background/50 border border-gold/20">
+            <div className="flex items-center gap-1 p-1 rounded-lg bg-zinc-900/50 border border-gold/20">
               <button
                 onClick={() => setViewMode("grid")}
                 className={`p-2 rounded-md transition-colors ${
                   viewMode === "grid"
                     ? "bg-gold/10 text-gold"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-zinc-500 hover:text-white"
                 }`}
               >
                 <Grid className="w-4 h-4" />
@@ -381,12 +401,30 @@ export default function Studio() {
                 className={`p-2 rounded-md transition-colors ${
                   viewMode === "list"
                     ? "bg-gold/10 text-gold"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-zinc-500 hover:text-white"
                 }`}
               >
                 <List className="w-4 h-4" />
               </button>
             </div>
+          </div>
+
+          {/* Creative Toolkit Shortcuts */}
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gold/10">
+            <span className="text-xs text-zinc-500 uppercase tracking-wider mr-2">Quick Tools:</span>
+            {creativeShortcuts.map((shortcut) => {
+              const Icon = shortcut.icon;
+              return (
+                <Link
+                  key={shortcut.href}
+                  to={shortcut.href}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-gold hover:border-gold/50 transition-all"
+                >
+                  <Icon className="w-3 h-3" />
+                  {shortcut.label}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Projects Grid */}
