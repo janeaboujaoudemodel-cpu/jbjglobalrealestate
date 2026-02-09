@@ -640,7 +640,7 @@ export default function ProjectDetailLayout({
             <QuickFactsBar
               propertyType={project.property_type_label}
               totalUnits={project.total_units}
-              floors={project.floors}
+              floors={project.floors && project.floors > 3 ? project.floors : undefined}
               availabilityStatus={project.availability_status}
               statusLabel={project.status_label}
               handoverDate={project.handover_date}

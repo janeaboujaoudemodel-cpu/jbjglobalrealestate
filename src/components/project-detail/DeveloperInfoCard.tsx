@@ -41,7 +41,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
     : developer.description;
 
   return (
-    <div className="w-full bg-black py-6 md:py-8">
+    <div className="w-full bg-black py-6 md:py-8 rounded-2xl">
       <div className="container mx-auto px-4 md:px-8">
         {/* Premium champagne card with rounded corners */}
         <div 
@@ -65,7 +65,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 <img 
                   src={developer.logo_url} 
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-contain p-4"
+                  className="w-full h-full object-cover"
                 />
               ) : (
                 <Building2 className="w-12 h-12 text-zinc-400" />

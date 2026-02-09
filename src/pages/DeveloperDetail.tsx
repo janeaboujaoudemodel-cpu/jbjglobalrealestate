@@ -109,7 +109,7 @@ const DeveloperDetail = () => {
     <section className="relative w-full min-h-screen bg-premium-bg">
       {/* Hero feature image */}
       {developer.feature_image_url && (
-        <div className="relative w-full h-[280px] md:h-[380px] overflow-hidden">
+        <div className="relative w-full h-screen min-h-[500px] overflow-hidden">
           <img
             src={developer.feature_image_url}
             alt={`${developer.name} featured project`}
@@ -157,7 +157,7 @@ const DeveloperDetail = () => {
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="w-full h-full object-contain p-3"
+                className="w-full h-full object-cover"
                 loading="eager"
               />
             ) : (
