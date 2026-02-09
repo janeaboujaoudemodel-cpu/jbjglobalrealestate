@@ -1,266 +1,334 @@
 
-## Scope recap (what will be fixed end-to-end)
-You reported multiple regressions across Footer, Business Suites, Creative Suite (Studio), Settings routing, and Listing Admin approvals/source isolation. The work will be delivered as a single consistency pass (not UI-only), ensuring:
-- Footer navigation consistency (no emojis/arrows, no “blue broker tools” in footer, aligned dividers, Careers styling).
-- Real Estate Suite symmetry + behavior change (open the combined suite immediately, not a grid of cards).
-- Back buttons across tools are readable (remove faded/stripped classes and standardize).
-- Creative Suite (Studio) premium gold/champagne styling (no white page) + improved “type” access UX.
-- “Settings” never 404 again (add missing routes + redirects + fix links).
-- Listing Admin approvals show correct **Reelly pending project cards with photos**, and **never** leak Provident when user filtered Reelly.
+## Goal (what will change)
+You asked for global, non-regressing fixes across:
+1) Header “Insights” dropdown layout + fit (desktop + iPad)  
+2) Header Search modal: never cropped, mobile/iPad-safe, and it must deep-link to any tool/page (CRM, Graphic Designer, etc.) with role-based visibility  
+3) “Ready to Get Started / Connect With Our Team” duplication + contact-card border color rules (green/blue/gold) globally  
+4) AI Design Studio missing/unclickable CTAs and routes (must open the working tool)  
+5) Tool theme consistency: accent color must control borders consistently inside tools (Property Measurement already looks great, but borders must match the tool color everywhere)  
+6) Owner shortcuts in Account mega menu must never “disappear again” (stability guard against owner-verification timing)
+
+No partial work; everything below is designed as one cohesive pass.
 
 ---
 
-## Key findings from the codebase (root causes)
-### 1) Footer inconsistencies are hard-coded in `src/components/Footer.tsx`
-- “Education Hub” is currently rendered as: `📚 Education Hub →` (emoji + arrow) instead of matching other headers.
-- “Broker Tools” footer section is explicitly styled **blue** (`text-blue-500`, `border-blue-500/30`) and includes emoji `🏢`.
-- Careers divider exists, but label is muted gold and formatting differs from other link sections.
-- Some border/divider classes differ between columns, which can create misalignment at breakpoints.
+## A) Header “Insights” dropdown: 2 sections (4 up / 4 down) + fit + no cropping
 
-### 2) “Real Estate Suite cards not symmetric”
-- `BusinessSuiteToolCard` is not using an equal-height layout (`h-full` + flex column). Content length differences cause uneven card heights.
+### Current state (found)
+- `src/components/header/MegaMenuInsights.tsx` renders **7 columns** (`lg:grid-cols-7`), which is dense and prone to cropping.
+- It already has an internal scroll wrapper: `max-h-[calc(100vh-160px)] overflow-y-auto`, but the layout is not your requested “4 + 4” grid.
 
-### 3) “Click Real Estate Suite should open combined suite immediately”
-- `/business-suite/real-estate` currently renders a grid of tool cards (links), not a combined embedded suite.
-- You already have an embedded “suite” pattern working in `src/pages/toolkit/PropertySuite.tsx` (tabs + lazy-loaded tool pages).
+### Implementation approach
+1) Refactor `MegaMenuInsights.tsx` into **8 uniform blocks** laid out as:
+   - Desktop: `lg:grid-cols-4` with 2 rows (4 top / 4 bottom)
+   - Tablet/iPad widths: `md:grid-cols-2` or `md:grid-cols-3` depending on space
+   - Mobile: `grid-cols-1` (stacked), with clean dividers and safe scrolling
 
-### 4) “Back button faded/unreadable” is caused by Button sanitization + inconsistent usage
-- The global Button system (`src/components/ui/button.tsx`) **strips** `text-*color*` classes for non `ai-*` variants.
-- Many tool headers try to override text colors via className; those get removed, producing “faded” or wrong-contrast results.
-- Some pages use plain `<Link className="text-slate-400">…</Link>` instead of Button variants, making contrast inconsistent.
+2) Convert the old 7-column model into 8 consistent sections (proposed mapping that preserves your content, but fits your layout rule):
+   1. News & Updates  
+   2. Market Intelligence  
+   3. Guides  
+   4. Services  
+   5. Business Suites  
+   6. Toolkit & AI (All Tools + key tool hubs)  
+   7. For You (mode-conditional Investor/Broker/Both)  
+   8. Company + Careers + Legal (still separated internally with gold dividers)
 
-### 5) Creative Suite “Settings” 404 is a real missing route
-- Studio links to `/studio/settings`, but **App routing does not define** `/studio/settings`. Only `/studio` and `/studio/editor/:projectId` exist.
+3) Each block becomes a “mini card” (same padding, same title height, same divider, same internal link spacing), so the grid looks premium and aligned.
 
-### 6) Listing Admin “Approvals” is showing the wrong queue
-You are currently on:
-`/listing-admin?view=data-ops&syncTab=approvals&source=reelly&status=pending`
+4) Fit/cropping improvements:
+   - Keep the scroll wrapper, but ensure it wraps the entire content and uses:
+     - `max-h-[calc(100dvh-var(--header-height,128px)-24px)]`
+     - `overflow-y-auto`
+   - Ensure the menu never spills off-screen on iPad by keeping consistent horizontal padding and max-width.
 
-But in `src/pages/ListingAdmin.tsx`, the `approvals` tab renders:
-- `PendingUpdatesQueue` (table: `listing_pending_updates`) — not the Reelly project approvals.
-So you see items like “Low 0%”, “Source Provident…”, “Current value empty”, and **no project cards with photos**.
-This is why filtering to Reelly still shows Provident-looking items: you are not viewing the Reelly pending project imports at all.
+### Files touched
+- `src/components/header/MegaMenuInsights.tsx`
 
-Also, `ProjectApprovalQueue` reads `source` from URL only once at initialization (state isn’t synced on later URL changes), which can cause filter mismatch when navigation updates query params.
-
----
-
-## Implementation plan (sequenced, no partial delivery)
-
-### A) Footer fixes (consistency + alignment) — `src/components/Footer.tsx`
-1) **Education Hub header**
-   - Remove emoji and arrow.
-   - Render Education Hub like other section headers (`<h4>` with gold text + border-bottom).
-   - Keep the link as the first item inside the list (consistent with other columns).
-
-2) **Broker Tools section must NOT be blue in the footer**
-   - Remove emoji from the title.
-   - Change heading + links to gold styling (same as other footer headings).
-   - Keep it mode-conditional if you still want it visible only in Broker/Combined modes, but do not use blue in footer.
-
-3) **Careers styling**
-   - Keep the Careers divider, but make it fully consistent:
-     - Divider line: subtle gold (`border-gold/20` or gradient line)
-     - “Careers” label: gold (not muted), same uppercase tracking as other headings but smaller.
-   - Ensure link hover behavior matches other footer items (gold hover, slight translate).
-
-4) **Divider alignment across the four columns**
-   - Normalize column padding and border classes so ROW 1 and ROW 2 columns align at all breakpoints.
-   - Remove “special-case” borders like `border-b lg:border-b-0` on one column that create misaligned divider lines.
-
-Acceptance check:
-- Footer has **no** emoji/arrow in Education Hub, no blue Broker Tools, Careers divider looks premium and consistent, and column dividers align.
+### Acceptance checks
+- Hover/click “Insights” shows **8 blocks** in a 4+4 grid (desktop).
+- No cropping on shorter screens: scroll activates smoothly.
+- iPad/Tablet: blocks wrap cleanly; nothing is cut off.
 
 ---
 
-### B) Make Business Suite cards equal height — `src/components/business-suite/BusinessSuiteToolCard.tsx`
-Update card layout so every card is the same height:
-- Add `className="h-full"` to the motion wrapper.
-- Make the `<Link>` a flex column container: `flex flex-col h-full`.
-- Put description in a flexible region (or fixed min-height) and push CTA to bottom with `mt-auto`.
+## B) Search modal: keep the UI exactly the same, but make it never-cropped + “type anything → deep link” + role/mode aware
 
-Acceptance check:
-- Real Estate Suite / other suite grids show perfectly symmetric cards.
+### Current state (found)
+- The header search icon opens `GlobalSearchModal` directly (`src/components/GlobalHeader.tsx`).
+- `src/components/GlobalSearchModal.tsx` uses a static `SEARCHABLE_ITEMS` list mostly for public pages; it does **not** include:
+  - CRM
+  - Owner routes (/owner, /admin, /listing-admin, /studio)
+  - Tools registry (Graphic Designer → `/jbj-design-studio`, etc.)
+- The modal is positioned `fixed top-20 ... max-w-xl`, which can crop on mobile/iPad.
 
----
+### Implementation approach
 
-### C) Real Estate Suite must open the combined suite immediately (remove the grid) — `src/pages/business-suite/RealEstateSuite.tsx`
-Replace the current “cards grid” page with a **combined embedded suite** (same proven pattern as `PropertySuite.tsx`), but tailored to Real Estate tools:
-- Tabs (6):
-  - Property Analyzer
-  - Price Predictor
-  - Neighborhood Insights
-  - ROI Calculator
-  - Market Report
-  - Competitor Analysis
-- Each tab lazy-loads the real existing tool pages:
-  - `AIPropertyAnalyzerPage`, `AIPricePredictorPage`, `AINeighborhoodInsightsPage`, `AIROICalculatorPage`, `AIMarketReportPage`, `AICompetitorAnalysisPage`
-- Add a consistent readable “Back” button (see section D).
+#### B1) Make the modal un-croppable on mobile/iPad (no design change)
+In `GlobalSearchModal.tsx`:
+- Keep the exact card look and gradients.
+- Change the modal positioning strategy:
+  - Use `top-4` on small screens (instead of `top-20`)
+  - Use `max-height: calc(100dvh - 2rem)` and ensure the results container scrolls
+  - Ensure the modal container uses safe spacing on iOS (dvh + padding)
 
-Also update “Real Estate Suite” links platform-wide to point to this combined experience (Footer already links `/business-suite/real-estate`; we keep that route but change what it renders).
+Result: same UI, but always fully visible.
 
-Acceptance check:
-- Clicking Real Estate Suite opens the **suite tabs immediately**, no intermediate cards.
+#### B2) Replace static search list with a single global registry-backed index
+Create a central, maintainable search index that can include:
+- Public pages (Home, Properties, Guides, etc.)
+- All tools from `src/config/royalToolsRegistry.ts` (`allTools`)
+- Owner/admin/back-office destinations (Owner Command Center, Listing Admin, Studio, Admin Panel, CRM)
 
----
+New file:
+- `src/config/globalSearchIndex.ts`
 
-### D) Back button readability audit (global toolkit/suite headers)
-Goal: eliminate faded or unreadable back buttons by standardizing on Button variants that don’t rely on stripped className colors.
+It will export:
+- `type SearchItem = { id; label; route; keywords; description?; access; modeVisibility? }`
+- `buildSearchIndex()` combining:
+  - Existing public shortcuts
+  - `allTools.map(tool => …)` so “Graphic Designer”, “Video Producer”, “CRM”, “Property Measurement” etc. all become searchable
+  - Admin/owner routes as explicit items
 
-1) Introduce a single reusable header/back component:
-- New component (example): `src/components/toolkit/ToolSuiteHeader.tsx`
-  - Uses `<Button variant="dark" asChild>` (or a dedicated safe variant) for contrast on black.
-  - No `text-…` className overrides that get sanitized.
-  - Provides consistent spacing, border, and icon sizing.
+#### B3) Role-based + mode-based filtering (Owner sees everything)
+In `GlobalSearchModal.tsx`, when modal is open:
+- Use `useAuth()` to get `user`, `isOwner`, `ownerLoading`
+- If user is logged in, fetch lightweight access flags (reusing patterns already in code):
+  - `hasCRMAccess` via `crm_users_profile` (same as header/account menu)
+  - `hasListingAdminAccess` via `has_role` + `listing_admins` (same as MegaMenuAccount)
+- Filter search items by:
+  - Owner: show all (including /owner, /admin, /studio, /listing-admin, /crm, /jbj-design-studio)
+  - Broker mode: show broker destinations + CRM only if allowed
+  - Investor mode: hide broker-only destinations
+  - Logged-out: show only public + public tools
 
-2) Update suite pages to use it:
-- `src/pages/toolkit/PropertySuite.tsx`
-- `src/pages/toolkit/VideoSuite.tsx`
-- `src/pages/toolkit/VoiceSuite.tsx`
-- (and any other toolkit pages where “Back to Toolkit” is currently a plain Link)
+Important: This only affects *visibility*, not authorization. Actual pages remain protected by route guards.
 
-Acceptance check:
-- All back buttons are readable on dark backgrounds and consistent across tools/suites.
+#### B4) Ranking so “CRM” becomes first when you type CRM
+Implement a scoring function:
+- Exact label match > starts-with > keyword match > substring
+- Add keyword synonyms:
+  - “crm”, “leads”, “pipeline” → CRM
+  - “graphic designer”, “brochure”, “marketing pack” → `/jbj-design-studio`
+  - “design studio”, “ai interior”, “interior design” → `/interior-design-ai`
+- If user isOwner, allow admin results to rank high.
+- Return top N results (e.g., 10), not just 5.
 
----
+#### B5) “Click anything → go directly”
+- Ensure every result button always calls `navigate(route)` and closes modal.
+- If route equals current route, force a “soft refresh” behavior (scroll-to-top + close modal) so it still feels responsive.
 
-### E) Creative Suite (Studio) UX + premium styling (remove white page) — `src/pages/Studio.tsx`
-1) Styling:
-- Replace `bg-background text-foreground` with a premium black + champagne layered container (rounded, gold border).
-- Ensure no full-white page background.
+### Files touched/added
+- Edit: `src/components/GlobalSearchModal.tsx`
+- Add: `src/config/globalSearchIndex.ts`
+- (Optional small update): `src/components/GlobalHeader.tsx` only if we need to pass user/mode context explicitly (likely not; modal can read it itself)
 
-2) Replace the “All Types” dropdown with a premium, obvious, easy-access UI:
-- Use icon pills or tabs for:
-  - All
-  - Video
-  - Image
-  - PDF
-  - Marketing Pack
-- This matches your “around it / easy accessible” intent better than a dropdown.
-
-3) Add a “Creative Toolkit shortcuts” block inside Studio:
-- Quick links to the related toolkit tools (Background Remover, Captions & Translate, Image Resizer, PDF tools, etc.)
-- Keeps Creative Suite aligned with “all tools related to creative suite”.
-
-Acceptance check:
-- Studio looks premium (gold/champagne on black), and type selection is immediate and obvious.
-
----
-
-### F) Fix Settings 404 permanently (no more broken Settings links)
-#### 1) Add missing Studio Settings route — `src/App.tsx`
-- Add:
-  - `/studio/settings` guarded with OwnerGuard
-
-#### 2) Create Studio Settings page
-- New file: `src/pages/StudioSettings.tsx`
-  - Premium layout
-  - Minimal settings scaffold (even if “coming soon”), but it must never 404
-
-#### 3) Fix the other Settings 404 (`/settings`)
-- In `src/pages/client/ClientPortal.tsx` change `navigate("/settings")` to `navigate("/profile?tab=settings")`.
-- Add a route alias in `src/App.tsx`:
-  - `/settings` → redirect to `/profile?tab=settings`
-This ensures old or accidental `/settings` links do not 404.
-
-Acceptance check:
-- `/studio/settings` loads.
-- `/settings` never 404s; it redirects to the correct profile settings.
+### Acceptance checks
+- Mobile/iPad: search modal is never cropped.
+- Typing “CRM” shows CRM as first result (for Owner; for brokers only if they have access).
+- Typing “graphic designer” deep-links to the Graphic Designer tool (`/jbj-design-studio`) instantly (Owner).
+- Suggestions cover both frontend + backend destinations depending on access.
 
 ---
 
-### G) Listing Admin: fix approvals to show Reelly pending projects with photos + source isolation
-This is the critical operational bug on your current screen.
+## C) Remove duplicate “Connect With Our Team” sections; keep only the bottom global section
 
-1) Fix the Approvals tab content — `src/pages/ListingAdmin.tsx`
-- Replace `PendingUpdatesQueue` as the primary view under `syncTab=approvals`.
-- Render `ProjectApprovalQueue` (uses `PendingImportCard` which displays photos/cards and links to preview).
+### Current state (found)
+- `MainLayout.tsx` always renders `CombinedContactNewsletter` globally for public pages.
+- Some pages still render `DirectContactCTA` explicitly:
+  - `src/pages/services/Architecture.tsx`
+  - `src/pages/RentGuide.tsx`
+  - `src/pages/services/DesignBuild.tsx`
+This creates the “two sections” effect you described.
 
-2) Keep Pending Updates available but not as the “Approval Queue” default
-- Add a nested tab or secondary section inside approvals:
-  - “Project Approvals” (default)
-  - “Pending Updates” (existing `PendingUpdatesQueue`)
+### Implementation approach
+1) Remove per-page `<DirectContactCTA />` from those pages, relying solely on the global `CombinedContactNewsletter` at the bottom.
+2) Keep the hero style “Creating Exceptional Spaces” unchanged (your “lock it” request is satisfied by leaving it intact).
 
-3) Ensure URL params actually control filtering — `src/components/listing-admin/ProjectApprovalQueue.tsx`
-- Add a `useEffect` to sync `sourceFilter` state whenever `source` query param changes.
-- Add support for `status=pending|approved|merged|rejected`:
-  - Map this param to the DB query `.eq("status", statusParam)` instead of hardcoding pending.
-  - This makes counters/links deterministic.
+### Files touched
+- `src/pages/services/Architecture.tsx`
+- `src/pages/RentGuide.tsx`
+- `src/pages/services/DesignBuild.tsx`
 
-4) Remove Provident exposure in Reelly workflows (UI + navigation)
-- `src/components/listing-admin/SourceCountsPanel.tsx`:
-  - Remove/hide Provident card and copy (you explicitly forbid Provident extraction).
-  - Keep only Reelly counts and “Reelly API Source”.
-- `src/pages/ListingAdmin.tsx`:
-  - Remove the Provident Data Ops tab OR clearly label it disabled and non-actionable (preferred: remove to avoid confusion).
-
-Acceptance check:
-- On `/listing-admin?view=data-ops&syncTab=approvals&source=reelly&status=pending` you see the Reelly project cards with photos, and reviewing opens `/listing-admin/preview/:id`.
-- No Provident “source” appears when you’re filtering Reelly approvals.
+### Acceptance checks
+- You see only one contact CTA area (the bottom global one), not two.
 
 ---
 
-### H) Data integrity safety (Reelly-only enforcement)
-To fully respect your non-negotiable rule (“no Provident extraction”), we will:
-- Remove Provident UI entry points (tabs/cards/counters) in Listing Admin.
-- Add a visible “Reelly-only mode” lock banner in Data Ops pages.
-- Provide a safe cleanup action using existing backend functions (already present in your codebase) to purge any Provident artifacts if they exist (pending suggestions, enrichments).
+## D) Contact cards: border color rules (WhatsApp green, Call blue, Email gold) globally
+
+### Current state (found)
+- `CombinedContactNewsletter.tsx` has gold borders for cards (`border border-gold/30`).
+- `DirectContactCTA.tsx` also uses gold borders for all three cards.
+
+### Implementation approach
+Apply consistent border rules in both components (even if DirectContactCTA becomes less used, it should still obey the global standard):
+- WhatsApp card: `border-2 border-emerald-500/40 hover:border-emerald-500`
+- Call card: `border-2 border-blue-500/40 hover:border-blue-500`
+- Email card: `border-2 border-gold/40 hover:border-gold`
+
+Also update hover shadows to match the card’s border color subtly (emerald glow / blue glow / gold glow) while keeping the same premium palette.
+
+### Files touched
+- `src/components/CombinedContactNewsletter.tsx`
+- `src/components/DirectContactCTA.tsx`
+
+### Acceptance checks
+- In the “Ready to Get Started” section, each card border matches its icon color rule.
+- Same behavior anywhere else these cards appear.
 
 ---
 
-## Files to be changed / added (implementation checklist)
-### Footer
-- Edit: `src/components/Footer.tsx`
+## E) AI Design Studio CTA + “missing tool” confusion: make it unmistakably clickable and route-correct
 
-### Suites + card symmetry
-- Edit: `src/components/business-suite/BusinessSuiteToolCard.tsx`
-- Edit: `src/pages/business-suite/RealEstateSuite.tsx`
+### Current state (found)
+- DesignBuild page AI tools array links “AI Interior Designer” to `/interior-design-studio`, which redirects to `/interior-design-ai`. This works, but it’s indirect and can feel broken.
+- In `InteriorDesignAI.tsx`, the “AI Design Studio” path is started by `setShowComparison(false)`; it works but can feel like “not opening a tool” because you remain on the same page.
 
-### Back button audit / shared header
-- Add: `src/components/toolkit/ToolSuiteHeader.tsx` (or similar)
-- Edit: `src/pages/toolkit/PropertySuite.tsx`
-- Edit: `src/pages/toolkit/VideoSuite.tsx`
-- Edit: `src/pages/toolkit/VoiceSuite.tsx`
-- Targeted edits: other toolkit pages with “Back to Toolkit” links (search-driven pass)
+### Implementation approach
+1) In `src/pages/services/DesignBuild.tsx`
+   - Change the AI Interior tool link to **directly** `/interior-design-ai` (no redirect chain).
+   - Add explicit CTA copy on the card button:
+     - “Start designing with our AI Design Studio”
+     - “Professional designer — connect with our licensed partner”
+   - Ensure both are clearly actionable and consistent.
 
-### Creative Suite / Studio
-- Edit: `src/pages/Studio.tsx`
+2) In `src/pages/InteriorDesignAI.tsx`
+   - Make the entire “AI Design Studio” card clickable (not only the button), so it never feels dead.
+   - Keep your current UI, but make the action explicit:
+     - Button remains, but copy becomes your requested CTA language.
+   - When clicked, it should:
+     - Hide the comparison section
+     - Scroll smoothly to the tool form section so it feels like “opening the tool”
 
-### Settings routing
-- Edit: `src/App.tsx`
-- Add: `src/pages/StudioSettings.tsx`
-- Edit: `src/pages/client/ClientPortal.tsx`
+### Files touched
+- `src/pages/services/DesignBuild.tsx`
+- `src/pages/InteriorDesignAI.tsx`
 
-### Listing Admin approvals + source correctness
-- Edit: `src/pages/ListingAdmin.tsx`
-- Edit: `src/components/listing-admin/ProjectApprovalQueue.tsx`
-- Edit: `src/components/listing-admin/SourceCountsPanel.tsx`
+### Acceptance checks
+- “AI Design Studio” is always clearly clickable.
+- The tool experience starts immediately and visibly (no confusion).
 
 ---
 
-## Final acceptance tests (what you should verify in preview)
-1) Footer:
-   - Education Hub has no emoji/arrow.
-   - Broker Tools in footer is not blue and no emoji.
-   - Careers divider is gold and consistent.
-   - Dividers align across the 4 columns.
+## F) Tool theme border consistency (Property Measurement: keep style, fix borders to match accent) + global pattern
 
-2) Real Estate Suite:
-   - Opens directly into the combined tabbed suite (no cards).
-   - Tabs switch properly and tools render.
+### Current state (found)
+- `PropertyMeasurement.tsx` uses teal accents in many places, but the main step cards are still `border-zinc-800`, and some key panels don’t consistently reflect the teal theme.
+- `AIToolPremiumLayout.tsx` back button uses `variant="ghost"` with `className="text-white ..."`, but `Button` sanitization strips `text-white` and border color classes for non `ai-*` variants. This is a primary cause of “faded/unreadable” back buttons in tools.
 
-3) Back buttons:
-   - In suites and toolkit tools, back button is readable (no fading).
+### Implementation approach
 
-4) Creative Suite (Studio):
-   - No white page; premium styling.
-   - Type selection is immediate and easy (no confusing dropdown).
+#### F1) Fix Property Measurement borders (without changing its look)
+In `src/pages/PropertyMeasurement.tsx`:
+- Keep the color scheme exactly as-is
+- Update the “main card” borders per step to use teal accent borders, e.g.:
+  - Main step card: `border-teal-500/20` (or `border-teal-500/30`) instead of zinc
+  - Inner step panels and selected states keep teal
+- Ensure “Step 1: Property Information” card border matches the teal theme (your explicit request)
 
-5) Settings:
-   - `/studio/settings` works.
-   - `/settings` never 404s and redirects correctly.
-   - Clicking “Preferences/Settings” links no longer produces 404.
+#### F2) Fix the “faded back button” problem at the root (AIToolPremiumLayout)
+In `src/components/ai-tools/AIToolPremiumLayout.tsx`:
+- Replace the back button styling so it does not rely on sanitized `text-white` / border color overrides.
+- Use `variant="dark"` (which is already a locked, readable style) and only apply safe layout classes.
+- If we still want accent, add a small accent indicator element (not via Button className that gets sanitized).
 
-6) Listing Admin approvals (your current issue):
-   - On `/listing-admin?view=data-ops&syncTab=approvals&source=reelly&status=pending` you see **project cards with photos** (PendingImportCard).
-   - No Provident source leakage when Reelly is selected.
+#### F3) Global audit pass (targeted, not guesswork)
+Search for other places using:
+- `variant="ghost"` + `text-white` on Buttons
+- tool pages using `border-zinc-800` while clearly themed (teal/purple/emerald/etc.)
+
+Then standardize:
+- Back buttons: always readable
+- “Main card” borders: match the tool’s accent color
+
+### Files touched
+- `src/pages/PropertyMeasurement.tsx`
+- `src/components/ai-tools/AIToolPremiumLayout.tsx`
+- Additional tool pages found by audit search (we will keep the changes minimal and consistent)
+
+### Acceptance checks
+- Property Measurement tool: borders match teal theme everywhere you expect.
+- Tool back buttons are readable across all themed tools (no fading).
+
+---
+
+## G) Account menu: restore and “lock” Owner shortcuts so they don’t disappear again
+
+### Current state (found)
+- `MegaMenuAccount.tsx` still contains Owner Dashboard (gold), Admin Panel (purple), Ticket Support Hub (emerald).
+- If you’re not seeing them, the most likely cause is timing/state:
+  - `isOwner` is server-verified and initially false until `verify-owner` resolves
+  - While that resolves, the “Owner Shortcuts” column can be hidden
+
+### Implementation approach
+1) In `src/components/header/MegaMenuAccount.tsx`
+   - Add a **stable reserved Owner Shortcuts block** for the owner verification window:
+     - If `ownerLoading === true`, show a premium “Verifying owner access…” placeholder area
+     - Once verified, render the actual shortcut links
+   - Add explicit “LOCK: do not remove owner shortcuts” comments around the three shortcuts.
+2) In `src/components/GlobalHeader.tsx`
+   - When opening account mega menu, trigger `refreshOwnerVerification()` (already available in AuthContext) to reduce the chance of stale owner state when the menu opens.
+
+Security note: This does not grant access; it only stabilizes UI so owner shortcuts don’t flicker/disappear.
+
+### Files touched
+- `src/components/header/MegaMenuAccount.tsx`
+- `src/components/GlobalHeader.tsx`
+- (Only if needed): `src/contexts/AuthContext.tsx` (to ensure refresh function is exposed/used consistently; current API already includes it)
+
+### Acceptance checks
+- Owner shortcuts never “vanish” due to loading; at worst you see “Verifying…” for a moment, then the real shortcuts.
+- Non-owners do not gain access; protected routes remain protected.
+
+---
+
+## Testing checklist (desktop + phone + iPad)
+1) Desktop:
+   - Hover “Insights”: 4 up / 4 down layout, no cropping, scroll works.
+   - Click Search: modal opens perfectly centered, no cut-off.
+   - Type “CRM”: CRM is first result (Owner), clicking navigates instantly.
+
+2) Phone (iPhone/Android):
+   - Search modal fits fully (no cropping), results scroll.
+   - Tap any result: navigates and closes modal.
+
+3) iPad:
+   - Insights mega menu fits; no right/left clipping.
+   - Search modal fits; no top/bottom cropping.
+
+4) Design Build / Interior Design:
+   - AI Design Studio is clearly clickable and launches the actual workflow.
+   - Only one bottom contact section exists.
+
+5) Property Measurement:
+   - Step 1 main card border matches teal theme; same for other major themed cards.
+   - Back buttons in AI tools are readable (no fading).
+
+---
+
+## Work items summary (files)
+### Header + Search
+- Edit: `src/components/header/MegaMenuInsights.tsx`
+- Edit: `src/components/GlobalSearchModal.tsx`
+- Add: `src/config/globalSearchIndex.ts`
+- Edit (small): `src/components/GlobalHeader.tsx`
+
+### CTA sections
+- Edit: `src/components/CombinedContactNewsletter.tsx`
+- Edit: `src/components/DirectContactCTA.tsx`
+- Edit: `src/pages/services/Architecture.tsx` (remove duplicate DirectContactCTA)
+- Edit: `src/pages/RentGuide.tsx` (remove duplicate DirectContactCTA)
+- Edit: `src/pages/services/DesignBuild.tsx` (remove duplicate DirectContactCTA + CTA copy/link fixes)
+
+### AI Design Studio clarity
+- Edit: `src/pages/InteriorDesignAI.tsx`
+
+### Tool theme consistency
+- Edit: `src/pages/PropertyMeasurement.tsx`
+- Edit: `src/components/ai-tools/AIToolPremiumLayout.tsx`
+- Additional small edits to other tool pages discovered by audit (readability + accent-border consistency)
+
+### Account shortcuts stability
+- Edit: `src/components/header/MegaMenuAccount.tsx`
+
