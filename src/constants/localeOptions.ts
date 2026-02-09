@@ -10,6 +10,89 @@ export const PRIORITY_COUNTRIES = [
   "Thailand",
 ];
 
+// Language flags mapping
+export const LANGUAGE_FLAGS: Record<string, string> = {
+  "Afrikaans": "🇿🇦",
+  "Albanian": "🇦🇱",
+  "Amharic": "🇪🇹",
+  "Arabic": "🇦🇪",
+  "Armenian": "🇦🇲",
+  "Azerbaijani": "🇦🇿",
+  "Bengali": "🇧🇩",
+  "Bosnian": "🇧🇦",
+  "Bulgarian": "🇧🇬",
+  "Burmese": "🇲🇲",
+  "Chinese (Cantonese)": "🇭🇰",
+  "Chinese (Mandarin)": "🇨🇳",
+  "Chinese (Simplified)": "🇨🇳",
+  "Chinese (Traditional)": "🇹🇼",
+  "Croatian": "🇭🇷",
+  "Czech": "🇨🇿",
+  "Danish": "🇩🇰",
+  "Dutch": "🇳🇱",
+  "English": "🇬🇧",
+  "Estonian": "🇪🇪",
+  "Filipino": "🇵🇭",
+  "Finnish": "🇫🇮",
+  "French": "🇫🇷",
+  "Georgian": "🇬🇪",
+  "German": "🇩🇪",
+  "Greek": "🇬🇷",
+  "Gujarati": "🇮🇳",
+  "Hebrew": "🇮🇱",
+  "Hindi": "🇮🇳",
+  "Hungarian": "🇭🇺",
+  "Icelandic": "🇮🇸",
+  "Indonesian": "🇮🇩",
+  "Irish": "🇮🇪",
+  "Italian": "🇮🇹",
+  "Japanese": "🇯🇵",
+  "Kannada": "🇮🇳",
+  "Kazakh": "🇰🇿",
+  "Khmer": "🇰🇭",
+  "Korean": "🇰🇷",
+  "Kurdish": "🇮🇶",
+  "Kyrgyz": "🇰🇬",
+  "Lao": "🇱🇦",
+  "Latvian": "🇱🇻",
+  "Lithuanian": "🇱🇹",
+  "Macedonian": "🇲🇰",
+  "Malay": "🇲🇾",
+  "Malayalam": "🇮🇳",
+  "Maltese": "🇲🇹",
+  "Marathi": "🇮🇳",
+  "Mongolian": "🇲🇳",
+  "Nepali": "🇳🇵",
+  "Norwegian": "🇳🇴",
+  "Pashto": "🇦🇫",
+  "Persian": "🇮🇷",
+  "Polish": "🇵🇱",
+  "Portuguese": "🇵🇹",
+  "Punjabi": "🇮🇳",
+  "Romanian": "🇷🇴",
+  "Russian": "🇷🇺",
+  "Serbian": "🇷🇸",
+  "Sinhala": "🇱🇰",
+  "Slovak": "🇸🇰",
+  "Slovenian": "🇸🇮",
+  "Somali": "🇸🇴",
+  "Spanish": "🇪🇸",
+  "Swahili": "🇹🇿",
+  "Swedish": "🇸🇪",
+  "Tagalog": "🇵🇭",
+  "Tamil": "🇮🇳",
+  "Telugu": "🇮🇳",
+  "Thai": "🇹🇭",
+  "Turkish": "🇹🇷",
+  "Ukrainian": "🇺🇦",
+  "Urdu": "🇵🇰",
+  "Uzbek": "🇺🇿",
+  "Vietnamese": "🇻🇳",
+  "Welsh": "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
+  "Yoruba": "🇳🇬",
+  "Zulu": "🇿🇦",
+};
+
 // Comprehensive global language list - all major world languages
 const ALL_LANGUAGES = [
   "Afrikaans",
@@ -213,4 +296,24 @@ export function getLanguageList(): string[] {
   // English first, then alphabetical, no "Other" option
   const sorted = uniqSorted(ALL_LANGUAGES.filter(l => l !== "English"));
   return ["English", ...sorted];
+}
+
+/**
+ * Get language with flag for display
+ */
+export function getLanguageWithFlag(language: string): string {
+  const flag = LANGUAGE_FLAGS[language] || "";
+  return flag ? `${flag} ${language}` : language;
+}
+
+/**
+ * Get languages with flags as objects for select options
+ */
+export function getLanguageOptionsWithFlags(): { value: string; label: string; flag: string }[] {
+  const languages = getLanguageList();
+  return languages.map(lang => ({
+    value: lang,
+    label: lang,
+    flag: LANGUAGE_FLAGS[lang] || "",
+  }));
 }

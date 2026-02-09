@@ -40,23 +40,23 @@ export default function DeveloperInfoCard({ developer, projectName }: DeveloperI
     <div className="w-full jj-section-champagne border-y border-gold/20">
       <div className="container mx-auto px-4 md:px-8 py-8 md:py-12">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
-          {/* Developer Logo - Object Contain with White BG, No Cropping */}
+          {/* Developer Logo - Larger Card, Object Contain with White BG, No Cropping */}
           <div 
-            className="w-20 h-14 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0"
+            className="w-32 h-20 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 p-2"
             style={{
               background: '#FFFFFF',
-              border: '2px solid hsl(42 45% 59%)',
-              boxShadow: '0 2px 8px rgba(200,167,102,0.2)'
+              border: '3px solid hsl(42 45% 59%)',
+              boxShadow: '0 4px 12px rgba(200,167,102,0.25)'
             }}
           >
-          {developer.logo_url ? (
+            {developer.logo_url ? (
               <img 
                 src={developer.logo_url} 
                 alt={`${developer.name} logo`}
-                className="w-full h-full object-cover"
+                className="max-w-full max-h-full object-contain"
               />
             ) : (
-              <Building2 className="w-6 h-6 text-zinc-400" />
+              <Building2 className="w-8 h-8 text-zinc-400" />
             )}
           </div>
 

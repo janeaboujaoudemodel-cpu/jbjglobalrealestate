@@ -251,6 +251,7 @@ export default function ProjectLocationMap({
         scrollWheelZoom={true}
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
+        attributionControl={false}
       >
         <DynamicTileLayer mapView={mapView} />
         <MapControls 

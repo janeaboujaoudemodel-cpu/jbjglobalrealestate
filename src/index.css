@@ -1723,3 +1723,20 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 .dark-select-item[data-state="checked"] {
   @apply bg-gold/25 text-gold;
 }
+
+/* ============================================================
+ * LEAFLET MAP ATTRIBUTION HIDE (Premium UI)
+ * ============================================================ */
+.leaflet-control-attribution {
+  display: none !important;
+}
+
+.leaflet-container a.leaflet-control-attribution {
+  display: none !important;
+}
+
+/* Hide Esri attribution text */
+.leaflet-control-attribution span,
+.leaflet-control-attribution a {
+  display: none !important;
+}

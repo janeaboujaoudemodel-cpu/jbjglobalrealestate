@@ -122,9 +122,9 @@ const DeveloperDetail = () => {
       <div className="jj-layer-2 mt-6 md:mt-8 mb-12">
         {/* Developer header */}
         <div className="flex flex-col md:flex-row md:items-start gap-6">
-          {/* Logo plate - Full contain with padding, white background, no cropping */}
+          {/* Logo plate - Larger card, object-contain with padding, white background, no cropping */}
           <div 
-            className="w-24 h-16 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0"
+            className="w-32 h-20 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 p-2"
             style={{
               background: '#FFFFFF',
               border: '3px solid hsl(42 45% 59%)',
@@ -135,7 +135,7 @@ const DeveloperDetail = () => {
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="w-full h-full object-cover"
+                className="max-w-full max-h-full object-contain"
                 loading="eager"
               />
             ) : (

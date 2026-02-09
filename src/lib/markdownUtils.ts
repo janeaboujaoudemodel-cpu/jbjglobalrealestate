@@ -44,14 +44,10 @@ export function renderMarkdownToHtml(markdown: string | null): string {
   // First clean the raw text
   let cleaned = cleanRawText(markdown);
   
+  // Additional pass: strip any remaining # symbols at line start (malformed markdown)
+  cleaned = cleaned.replace(/^#{1,6}\s*/gm, '');
+  
   let html = cleaned
-    // Headers (must process ###### before ##### before #### before ### before ## before #)
-    .replace(/^###### (.+)$/gm, '<h6 class="font-medium text-sm mt-2 mb-1 text-muted-foreground">$1</h6>')
-    .replace(/^##### (.+)$/gm, '<h5 class="font-medium text-base mt-3 mb-1.5">$1</h5>')
-    .replace(/^#### (.+)$/gm, '<h4 class="font-semibold text-lg mt-4 mb-2">$1</h4>')
-    .replace(/^### (.+)$/gm, '<h4 class="font-semibold text-lg mt-4 mb-2">$1</h4>')
-    .replace(/^## (.+)$/gm, '<h3 class="font-bold text-xl mt-6 mb-3">$1</h3>')
-    .replace(/^# (.+)$/gm, '<h2 class="font-bold text-2xl mt-8 mb-4">$1</h2>')
     // Bold & italic
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
@@ -88,7 +84,8 @@ export function renderMarkdownToHtml(markdown: string | null): string {
 export function stripMarkdown(markdown: string | null): string {
   if (!markdown) return '';
   return cleanRawText(markdown)
-    // Remove headers
+    // Remove headers (any # at line start or inline)
+    .replace(/^#{1,6}\s*/gm, '')
     .replace(/#{1,6}\s*/g, '')
     // Remove bold/italic
     .replace(/\*\*(.+?)\*\*/g, '$1')

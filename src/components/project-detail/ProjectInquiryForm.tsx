@@ -249,7 +249,7 @@ export function ProjectInquiryForm({
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="max-w-xl mx-auto space-y-5">
+      <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
         {/* Name */}
         <div className="space-y-2">
           <Label htmlFor="name" className="text-foreground text-sm font-medium">Full Name *</Label>
@@ -258,7 +258,7 @@ export function ProjectInquiryForm({
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Your full name"
-            className="h-14 text-base px-5"
+            className="h-12 text-base px-4 border-2 border-gold/50 hover:border-gold focus:border-gold"
             required
           />
         </div>
@@ -272,7 +272,7 @@ export function ProjectInquiryForm({
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             placeholder="your@email.com"
-            className="h-14 text-base px-5"
+            className="h-12 text-base px-4 border-2 border-gold/50 hover:border-gold focus:border-gold"
             required
           />
         </div>
@@ -286,13 +286,12 @@ export function ProjectInquiryForm({
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             placeholder="+971 XX XXX XXXX"
-            className="h-14 text-base px-5"
+            className="h-12 text-base px-4 border-2 border-gold/50 hover:border-gold focus:border-gold"
             required
           />
         </div>
 
-        {/* Two Column Grid for Optional Fields */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Bedrooms with 6 and 7+ */}
           <div className="space-y-2">
             <Label htmlFor="bedrooms" className="text-foreground text-sm font-medium">Bedrooms</Label>
@@ -300,7 +299,7 @@ export function ProjectInquiryForm({
               value={formData.bedrooms}
               onValueChange={(value) => setFormData({ ...formData, bedrooms: value })}
             >
-              <SelectTrigger className="h-14 text-base px-5">
+              <SelectTrigger className="h-12 text-base px-4 border-2 border-gold/50 hover:border-gold focus:border-gold">
                 <SelectValue placeholder="Select bedrooms" />
               </SelectTrigger>
               <SelectContent className="bg-background border-border z-[9999]">

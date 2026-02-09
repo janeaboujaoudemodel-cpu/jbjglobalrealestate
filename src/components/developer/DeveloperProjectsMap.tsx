@@ -46,7 +46,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   const tileLayerRef = useRef<L.TileLayer | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
   
-  const [tileLayer, setTileLayer] = useState<'street' | 'satellite'>('street');
+  const [tileLayer, setTileLayer] = useState<'street' | 'satellite'>('satellite');
   const [mapError, setMapError] = useState<string | null>(null);
 
   // Filter to projects with coordinates
@@ -129,11 +129,14 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
 
       mapInstanceRef.current = map;
 
-      // Add initial tile layer
-      const initialTileLayer = L.tileLayer(TILE_LAYERS.street.url, {
-        attribution: TILE_LAYERS.street.attribution,
+      // Add initial tile layer - default satellite for premium view
+      const initialTileLayer = L.tileLayer(TILE_LAYERS.satellite.url, {
+        attribution: '',
       });
       initialTileLayer.addTo(map);
+      
+      // Hide Leaflet attribution
+      map.attributionControl.remove();
       tileLayerRef.current = initialTileLayer;
 
       // Add markers
