@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { SafeTooltipProvider } from "@/components/ui/SafeTooltipProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 
@@ -304,7 +304,7 @@ const queryClient = new QueryClient();
 const App = () => (
   <AppErrorBoundary>
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
+      <SafeTooltipProvider>
         <LanguageProvider>
           <GlobalSEO />
           <Toaster />
@@ -781,7 +781,7 @@ const App = () => (
             </AuthProvider>
           </BrowserRouter>
         </LanguageProvider>
-      </TooltipProvider>
+      </SafeTooltipProvider>
     </QueryClientProvider>
   </AppErrorBoundary>
 );

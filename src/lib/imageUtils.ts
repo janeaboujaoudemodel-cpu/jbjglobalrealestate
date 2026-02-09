@@ -10,6 +10,7 @@ const PLACEHOLDER_PATTERNS = [
   /\[object Object\]/i,
 ];
 
+// These patterns filter out site UI elements - NOT property images
 const SITE_ASSET_PATTERNS = [
   /navbar/i,
   /header/i,
@@ -17,18 +18,10 @@ const SITE_ASSET_PATTERNS = [
   /menu/i,
   /widget/i,
   /sidebar/i,
-  /banner/i,
-  /thumbnail/i,
-  /thumb_/i,
   /social/i,
   /share/i,
   /button/i,
   /btn_/i,
-  /grid_\d+/i,
-  /general_brochure/i,
-  /brochure/i,
-  /payment[-_]?plan/i,
-  /floor[-_]?plan/i,
   /logo/i,
   /icon/i,
   /avatar/i,
@@ -36,7 +29,47 @@ const SITE_ASSET_PATTERNS = [
   /favicon/i,
 ];
 
+// Document patterns - these are PDFs/docs, not gallery images
+const DOCUMENT_PATTERNS = [
+  /general_brochure/i,
+  /brochure\.pdf/i,
+  /payment[-_]?plan\.pdf/i,
+  /floor[-_]?plan\.pdf/i,
+];
+
+// Trusted image domains - NEVER filter images from these sources
+const TRUSTED_IMAGE_DOMAINS = [
+  "mdafrewypkkrildjgtey.supabase.co", // Our Supabase storage
+  "reelly.io",
+  "reelly-assets",
+  "provident.ae",
+  "cloudfront.net",
+  "bayut.com",
+  "propertyfinder.ae",
+  "dubizzle.com",
+  "zaapi.ae",
+  "emaar.com",
+  "damacproperties.com",
+  "sobharealty.com",
+  "meraas.com",
+  "nakheel.com",
+  "aldar.com",
+  "ellington.ae",
+  "object.properties",
+  "select.ae",
+  "uploads.mangopulse",
+  "cdn.sanity.io",
+  "images.unsplash.com",
+];
+
 const SAFE_IMAGE_SIZE = "464x312";
+
+/**
+ * Check if URL is from a trusted image source
+ */
+function isTrustedImageSource(url: string): boolean {
+  return TRUSTED_IMAGE_DOMAINS.some(domain => url.includes(domain));
+}
 
 /**
  * Check if an image URL is valid (not a placeholder, not a site asset, etc.)
@@ -48,12 +81,21 @@ export function isValidImageUrl(url: unknown): url is string {
   // Must start with http(s)
   if (!url.startsWith("http://") && !url.startsWith("https://")) return false;
   
-  // Check for placeholder patterns
+  // Check for placeholder patterns (always reject these)
   for (const pattern of PLACEHOLDER_PATTERNS) {
     if (pattern.test(url)) return false;
   }
   
-  // Check for site asset patterns (exclude brochure/floor plan images from gallery)
+  // If from trusted domain, allow it (skip site asset filtering)
+  if (isTrustedImageSource(url)) {
+    // Still filter out explicit document files even from trusted sources
+    for (const pattern of DOCUMENT_PATTERNS) {
+      if (pattern.test(url)) return false;
+    }
+    return true;
+  }
+  
+  // Check for site asset patterns (only for untrusted domains)
   for (const pattern of SITE_ASSET_PATTERNS) {
     if (pattern.test(url)) return false;
   }
