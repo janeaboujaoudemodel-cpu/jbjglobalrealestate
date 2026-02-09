@@ -1,100 +1,116 @@
 
 
-# Fix Developer Duplicates, Logo Sizing, Header Transparency, and Project Detail Quality
+# Fix Developer Logos, Project Data Quality, and Gallery Extraction
 
-## Issues Identified
+## Issues Found
 
-### 1. More Duplicate Developers Still Exist
-Despite the previous merge, new duplicates remain:
-- **"Ellington and RAK Properties"** (19 projects) -- This is a combined entry that should NOT exist. "Ellington" and "RAK" are two completely different developers. The 19 projects under this combined entry need to be split: Ellington projects go to "Ellington Properties" (slug: `ellington`, 49 projects), and RAK projects go to "RAK Properties" (slug: `rak-properties`, 0 projects).
-- **"Imtiaz Development"** (0 projects) vs **"Imtiaz Developments"** (36 projects) -- Need to merge, keeping "Imtiaz Developments" which has all 36 projects.
+### 1. Logo Styling -- `object-cover` Crops Logos
+The previous fix changed logos from `object-contain` to `object-cover`, which crops rectangular logos instead of fitting them. The correct approach is `object-contain` WITHOUT padding -- this fills the container while showing the full logo. The Imtiaz example works because their logo happens to be square.
 
-### 2. Logo Sizing -- Not Full-Fit
-The logos in DeveloperCard.tsx use `max-w-full max-h-full object-contain p-2` which leaves padding/whitespace. The user wants logos to fill the entire container edge-to-edge.
+**Fix**: Change all three files back to `object-contain` (no padding) so logos display fully without cropping:
+- `DeveloperCard.tsx` line 97: `"w-full h-full object-contain"` 
+- `DeveloperDetail.tsx` line 160: `"w-full h-full object-contain"`
+- `DeveloperInfoCard.tsx` line 68: `"w-full h-full object-contain"`
 
-**Fix**: Change logo img class from `max-w-full max-h-full object-contain p-2` to `w-full h-full object-cover` (no padding) in:
-- `DeveloperCard.tsx` (line 97) -- external card
-- `DeveloperDetail.tsx` (line 160) -- internal detail page
-- `DeveloperInfoCard.tsx` (line 65) -- project detail developer section
+### 2. "Ellington and RAK Properties" -- Already Fixed
+The database query confirms this combined entry has already been deleted. Ellington Properties has 49 projects and RAK Properties has 19 projects, each as separate entries. No further action needed.
 
-### 3. Header Transparency
-The header already has transparent-on-load behavior (GlobalHeader.tsx lines 211-248). It initializes `isSolid = false` and sets solid after scrolling past 80px. This appears to already work correctly. Will verify and ensure it functions on all pages including developer detail and project detail pages.
+### 3. Imtiaz Duplicate -- Already Fixed
+Only one "Imtiaz Developments" record exists with 36 projects. The duplicate "Imtiaz Development" was already deleted. No further action needed.
 
-### 4. Project Detail Issues (Sunset Bay Grand)
-- **"1 Floors"** showing -- The `floors` field is `1` which is incorrect data from Reelly (likely `building_count`). The HouseDetailsSection already has logic (line 65-70) to show "1 Building" for floors <= 3, but QuickFactsBar may show it differently. Need to hide floor count of 1 as it's meaningless.
-- **Description formatting** -- Has `#####` markdown headers and hashtag-like formatting. The `renderMarkdownToHtml` function handles markdown, but the raw description contains `#####` headers that render as tiny headings. Need to upgrade these to proper styled sections and strip any hashtag symbols.
-- **Gallery showing only 1 photo** -- The project only has 1 image in the `project_images` table. The Reelly API likely has more photos. This is a backfill/sync issue -- the sync currently only saves the cover image, not all project images.
-- **Payment plan not extracted** -- Same backfill gap; payment plan data from Reelly is not being saved during sync.
+### 4. Project "Sunset Bay Grand" -- Data Issues
 
-### 5. Developer Detail Page -- Hero Image Too Small
-Currently `h-[280px] md:h-[380px]`. User wants full-screen hero. Change to `h-screen min-h-[500px]`.
+**Problem A: "1 Floor" showing**
+The `floors` field is `1` (from Reelly's `building_count`). The QuickFactsBar guard (`> 3`) was already added, but the `HouseDetailsSection` still shows "Building 1" for `floors <= 3`. Since `building_count` is NULL, the `floors=1` value is being misinterpreted. Fix: Also guard HouseDetailsSection to skip `floors=1`.
+
+**Problem B: Description has hashtags and `#####` headers**
+The raw description starts with `##### Project general facts` and contains hashtag-style content. The markdown renderer was updated to convert `#####` to `h4` headings, which is correct. But `cleanRawText()` in `markdownUtils.ts` strips hashtags BEFORE the header conversion, breaking `#####` headers. The hashtag stripper `/#\w+/gi` matches `##### Project` and strips the `#####`. Fix: Update `cleanRawText` to not strip lines that start with markdown headers (`#` followed by a space after the hashes).
+
+**Problem C: Gallery only has 1 photo**
+The Reelly API list endpoint only returns `cover_image` -- not the full gallery. The `extractGalleryImages` function relies on `project.images` or `project.gallery` arrays, but those are only available from the Reelly DETAIL endpoint (`/projects/{id}`), not the list endpoint used by the sync. The detail endpoint needs to be called per-project to get full galleries, floor plans, payment plans, amenities, and documents. This is what the `repair-project-extraction` function does, but it wasn't run for all Reelly projects.
+
+**Fix**: Update the sync function to also call the detail endpoint for each project to extract full gallery, or create a batch backfill function that fetches details for projects with only 1 image.
+
+**Problem D: Payment plan not extracted**
+Same root cause -- the list API doesn't include payment plan data. The detail endpoint does.
+
+### 5. Description Section -- Remove Hashtags but Keep Markdown Headers
+
+**Fix in `markdownUtils.ts`**: Update `cleanRawText` so the `/#\w+/gi` pattern doesn't match markdown headers. Change it to only strip hashtags that are NOT at the start of a line (inline hashtags like `#DubaiRealEstate`).
+
+### 6. Developer Info Card Description -- Gap After "..."
+
+The description is truncated at 250 chars with "..." but the layout has a gap. The `DESCRIPTION_PREVIEW_LENGTH` is too short and the "Read More" button is too far away. Increase to 500 chars and make the "Read More" link inline or closer.
+
+### 7. HouseDetailsSection -- "Building 1, Total Unit 27"
+
+The `floors=1` is being shown as "Building 1" due to the `<= 3` logic. Since `building_count` is NULL/not stored on the project, `floors=1` is a misinterpreted value. Fix: Don't show building count when it's 1 -- it's not meaningful.
 
 ## Plan
 
-### Step 1: Database -- Merge Duplicates
+### Step 1: Fix Logo Styling (3 files)
 
-**Split "Ellington and RAK Properties":**
-- Query the 19 projects under this combined developer
-- Identify which ones are Ellington projects vs RAK projects (by project name)
-- Reassign Ellington projects to "Ellington Properties" (id: `01949ea2-12a9-444a-8c44-dcf4bc10e643`)
-- Reassign RAK projects to "RAK Properties" (id: `692ec896-fa22-49af-89d8-31866651822e`)
-- Delete the combined "Ellington and RAK Properties" row
+| File | Line | Change |
+|------|------|--------|
+| `src/components/DeveloperCard.tsx` | 97 | `object-cover` to `object-contain` |
+| `src/pages/DeveloperDetail.tsx` | 160 | `object-cover` to `object-contain` |
+| `src/components/project-detail/DeveloperInfoCard.tsx` | 68 | `object-cover` to `object-contain` |
 
-**Merge "Imtiaz Development" into "Imtiaz Developments":**
-- Copy best logo/description/feature_image from "Imtiaz Development" to "Imtiaz Developments"
-- Reassign any projects (currently 0) from duplicate
-- Delete "Imtiaz Development" (id: `344b94ac-083a-4316-a7af-135c4463b990`)
+### Step 2: Fix Markdown Hashtag Stripping
 
-### Step 2: Logo Full-Fit (3 files)
+**File**: `src/lib/markdownUtils.ts`
 
-**`src/components/DeveloperCard.tsx`** (line 97):
+Change the hashtag stripper in `cleanRawText` from:
 ```
-// FROM: className="max-w-full max-h-full object-contain p-2"
-// TO:   className="w-full h-full object-cover"
+.replace(/#\w+/gi, '')
 ```
-
-**`src/pages/DeveloperDetail.tsx`** (line 160):
+to only strip inline hashtags (not at line start):
 ```
-// FROM: className="w-full h-full object-contain p-3"
-// TO:   className="w-full h-full object-cover"
+.replace(/(?<=\s)#\w+/g, '')
+.replace(/^#\w+$/gm, '')  // standalone hashtag lines
 ```
+This preserves `##### Header` markdown while still stripping `#DubaiRealEstate` style hashtags.
 
-**`src/components/project-detail/DeveloperInfoCard.tsx`** (line 65):
+### Step 3: Fix HouseDetailsSection Floor Guard
+
+**File**: `src/components/project-detail/HouseDetailsSection.tsx`
+
+Change the condition at line 63 from `floors > 0` to `floors > 1` so that `floors=1` (meaningless building_count) is never displayed.
+
+### Step 4: Fix Developer Description Truncation
+
+**File**: `src/components/project-detail/DeveloperInfoCard.tsx`
+
+Increase `DESCRIPTION_PREVIEW_LENGTH` from 250 to 500, and make the "Read More" button more prominent and closer to the truncated text.
+
+### Step 5: Create Reelly Detail Backfill Function
+
+**New Edge Function**: `reelly-backfill-details`
+
+This function will:
+1. Query `projects` for Reelly-sourced entries with only 1 image (or no payment plan)
+2. Fetch the full detail from `REELLY_API_BASE/{id}` for each
+3. Insert all gallery images into `project_images`
+4. Update `payment_plan`, `payment_breakdown`, `documents`, `floor_plan_types`, `amenities` on the project
+5. Process in batches of 10 to avoid timeouts
+
+### Step 6: Fix Sunset Bay Grand `floors` value
+
+**Database**: Update the project to set `floors = NULL` since `1` is not meaningful.
+
+```sql
+UPDATE projects SET floors = NULL WHERE id = 'f0483cf4-716d-4d96-9bd9-15b04c61e1fd' AND floors = 1;
 ```
-// FROM: className="w-full h-full object-contain p-4"
-// TO:   className="w-full h-full object-cover"
-```
-
-### Step 3: Developer Detail -- Full-Screen Hero
-
-**`src/pages/DeveloperDetail.tsx`** (line 112):
-```
-// FROM: className="relative w-full h-[280px] md:h-[380px] overflow-hidden"
-// TO:   className="relative w-full h-screen min-h-[500px] overflow-hidden"
-```
-
-### Step 4: Fix Project Detail -- Hide Invalid Floor Count
-
-**`src/components/project-detail/ProjectDetailLayout.tsx`**:
-In the QuickFactsBar area, the `floors` value of 1 should not be passed. Add a guard: only pass `floors` when it's greater than 3 (matching HouseDetailsSection logic).
-
-### Step 5: Fix Description Formatting
-
-**`src/components/project-detail/ProjectDetailLayout.tsx`**:
-The description rendering already uses `renderMarkdownToHtml`. The issue is that the raw description has `#####` (h5) headers that render too small. Need to update the markdown renderer or add CSS to style `h5` elements within the description as proper section headers. Also strip any standalone hashtag lines.
-
-### Step 6: Developer Info Card -- Rounded Borders on Black Background
-
-**`src/components/project-detail/DeveloperInfoCard.tsx`**:
-The outer `div` with `bg-black` needs rounded corners to match the inner card. Add `rounded-2xl` to the outer container.
 
 ## Files to Modify
 
 | File | Change |
 |------|--------|
-| Database | Split "Ellington and RAK Properties" into separate developers; merge "Imtiaz Development" duplicate |
-| `src/components/DeveloperCard.tsx` | Logo: `object-cover` instead of `object-contain p-2` |
-| `src/pages/DeveloperDetail.tsx` | Logo: `object-cover`; Hero: full-screen height |
-| `src/components/project-detail/DeveloperInfoCard.tsx` | Logo: `object-cover`; outer container: rounded corners |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Guard floors <= 3 from QuickFactsBar; improve description heading styles |
+| `src/components/DeveloperCard.tsx` | Logo: `object-contain` (no padding) |
+| `src/pages/DeveloperDetail.tsx` | Logo: `object-contain` |
+| `src/components/project-detail/DeveloperInfoCard.tsx` | Logo: `object-contain`; increase description preview length |
+| `src/lib/markdownUtils.ts` | Fix hashtag stripping to preserve markdown headers |
+| `src/components/project-detail/HouseDetailsSection.tsx` | Skip floors=1 |
+| `supabase/functions/reelly-backfill-details/index.ts` | New function to fetch full project details from Reelly API |
+| Database | Fix Sunset Bay Grand floors value |
 
