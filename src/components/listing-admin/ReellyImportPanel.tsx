@@ -232,7 +232,7 @@ export function ReellyImportPanel() {
         body: { action: "check_resume" },
       });
       
-      if (!error && data?.has_active_job && data.job) {
+      if (!error && data?.has_active_job && data.job?.next_cursor) {
         setHasResumableJob(true);
         setResumableJobInfo(data.job);
       } else {
