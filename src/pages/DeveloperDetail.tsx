@@ -1,14 +1,27 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, lazy, Suspense } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useDeveloper, useProjectsByDeveloper, useCommunities, useTrendingAreas } from "@/hooks/useProjects";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import ProjectCard from "@/components/ProjectCard";
 import EmiratesTabs from "@/components/EmiratesTabs";
-import { DeveloperProjectsMap } from "@/components/developer/DeveloperProjectsMap";
+import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp } from "lucide-react";
+import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+// Lazy load map component to prevent boot errors from react-leaflet context issues
+const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
+
+// Map loading fallback
+const MapLoadingFallback = () => (
+  <div className="rounded-xl border-2 border-gold/40 bg-champagne/20 p-8 h-[400px] flex items-center justify-center">
+    <div className="text-center">
+      <MapIcon className="w-12 h-12 text-gold/50 mx-auto mb-3 animate-pulse" />
+      <p className="text-foreground/70">Loading map...</p>
+    </div>
+  </div>
+);
 
 const DeveloperDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -109,10 +122,11 @@ const DeveloperDetail = () => {
       <div className="jj-layer-2 mt-6 md:mt-8 mb-12">
         {/* Developer header */}
         <div className="flex flex-col md:flex-row md:items-start gap-6">
-          {/* Logo plate - Full bleed logo fills frame */}
+          {/* Logo plate - Full contain with padding, white background, no cropping */}
           <div 
-            className="w-24 h-16 rounded-lg overflow-hidden flex-shrink-0"
+            className="w-24 h-16 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0"
             style={{
+              background: '#FFFFFF',
               border: '3px solid hsl(42 45% 59%)',
               boxShadow: '0 4px 12px rgba(200,167,102,0.25)'
             }}
@@ -121,13 +135,11 @@ const DeveloperDetail = () => {
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="w-full h-full object-cover"
+                className="max-h-12 max-w-[90%] object-contain"
                 loading="eager"
               />
             ) : (
-              <div className="w-full h-full bg-white flex items-center justify-center">
-                <Building2 className="w-8 h-8 text-zinc-400" />
-              </div>
+              <Building2 className="w-8 h-8 text-zinc-400" />
             )}
           </div>
 
@@ -165,23 +177,27 @@ const DeveloperDetail = () => {
           </div>
         </div>
 
-        {/* Developer Projects Map */}
+        {/* Developer Projects Map - Wrapped in error boundary */}
         {projects && projects.length > 0 && (
           <div className="mt-8">
-            <DeveloperProjectsMap
-              developerId={developer.id}
-              developerName={developer.name}
-              projects={projects.map(p => ({
-                id: p.id,
-                name: p.name,
-                slug: p.slug,
-                latitude: p.latitude,
-                longitude: p.longitude,
-                price_from: p.price_from,
-                cover_image_url: p.cover_image_url,
-                location: p.location,
-              }))}
-            />
+            <MapErrorBoundary>
+              <Suspense fallback={<MapLoadingFallback />}>
+                <DeveloperProjectsMap
+                  developerId={developer.id}
+                  developerName={developer.name}
+                  projects={projects.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    slug: p.slug,
+                    latitude: p.latitude,
+                    longitude: p.longitude,
+                    price_from: p.price_from,
+                    cover_image_url: p.cover_image_url,
+                    location: p.location,
+                  }))}
+                />
+              </Suspense>
+            </MapErrorBoundary>
           </div>
         )}
 

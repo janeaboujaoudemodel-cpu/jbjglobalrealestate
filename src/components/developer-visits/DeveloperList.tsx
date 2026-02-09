@@ -87,17 +87,15 @@ export function DeveloperList({ onSelectDeveloper, onRequestVisit, onCheckIn }: 
               <CardContent className="p-4">
                 <div className="flex items-center gap-4">
                   {/* Logo */}
-                  <div className="flex-shrink-0 w-12 h-12 rounded-lg border border-gold/20 overflow-hidden">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-white border border-gold/20 flex items-center justify-center overflow-hidden">
                     {developer.logo_url ? (
                       <img
                         src={developer.logo_url}
                         alt={developer.name}
-                        className="w-full h-full object-cover"
+                        className="max-h-9 max-w-[90%] object-contain"
                       />
                     ) : (
-                      <div className="w-full h-full bg-white flex items-center justify-center">
-                        <Building2 className="h-6 w-6 text-muted-foreground" />
-                      </div>
+                      <Building2 className="h-6 w-6 text-muted-foreground" />
                     )}
                   </div>
 

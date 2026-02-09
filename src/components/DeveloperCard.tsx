@@ -80,11 +80,12 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
             </div>
           )}
           
-          {/* Logo Overlay - Top Left Small Box */}
+          {/* Logo Overlay - Top Left Small Box - Object Contain with White BG */}
           <div className="absolute top-3 left-3 z-10">
             <div 
-              className="w-20 h-12 rounded-lg overflow-hidden"
+              className="w-20 h-12 rounded-lg flex items-center justify-center overflow-hidden"
               style={{
+                background: '#FFFFFF',
                 border: '2px solid hsl(42 45% 59%)',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
               }}
@@ -93,13 +94,11 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
                 <img
                   src={developer.logo_url}
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-cover"
+                  className="max-h-9 max-w-[85%] object-contain"
                   loading="lazy"
                 />
               ) : (
-                <div className="w-full h-full bg-white flex items-center justify-center">
-                  <Building2 className="w-5 h-5 text-zinc-400" />
-                </div>
+                <Building2 className="w-5 h-5 text-zinc-400" />
               )}
             </div>
           </div>
