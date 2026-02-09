@@ -101,6 +101,12 @@ import PropertyEvaluator from "./pages/PropertyEvaluator";
 import ScanSignDocuments from "./pages/ScanSignDocuments";
 import PropertyMeasurement from "./pages/PropertyMeasurement";
 import RentalIndex from "./pages/RentalIndex";
+
+// E-Signature Pages
+const ESignatureDashboard = lazy(() => import("./pages/e-signature/ESignatureDashboard"));
+const CreateEnvelope = lazy(() => import("./pages/e-signature/CreateEnvelope"));
+const EnvelopeDetail = lazy(() => import("./pages/e-signature/EnvelopeDetail"));
+const SignDocument = lazy(() => import("./pages/e-signature/SignDocument"));
 import AICalendar from "./pages/AICalendar";
 import AIFinancialAdvisor from "./pages/AIFinancialAdvisor";
 import AIPersonalShopper from "./pages/AIPersonalShopper";
@@ -319,6 +325,13 @@ const App = () => (
               <Route path="/403" element={<AccessDenied />} />
               {/* Hidden standalone pages - no header/footer */}
               <Route path="/card" element={<DigitalCard />} />
+              
+              {/* Public E-Signature Signing Page - No auth required */}
+              <Route path="/sign/:token" element={
+                <Suspense fallback={<div className="min-h-screen bg-amber-50 flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                  <SignDocument />
+                </Suspense>
+              } />
               
               {/* Owner Command Center - Dedicated shell with sidebar, outside MainLayoutWrapper */}
               <Route path="/owner" element={
@@ -606,6 +619,29 @@ const App = () => (
                 <Route path="/studio" element={<OwnerGuard><Studio /></OwnerGuard>} />
                 <Route path="/studio/editor/:projectId" element={<OwnerGuard><StudioEditor /></OwnerGuard>} />
                 <Route path="/studio/settings" element={<OwnerGuard><StudioSettings /></OwnerGuard>} />
+                
+                {/* E-Signature Routes */}
+                <Route path="/e-signature" element={
+                  <OwnerGuard>
+                    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                      <ESignatureDashboard />
+                    </Suspense>
+                  </OwnerGuard>
+                } />
+                <Route path="/e-signature/create" element={
+                  <OwnerGuard>
+                    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                      <CreateEnvelope />
+                    </Suspense>
+                  </OwnerGuard>
+                } />
+                <Route path="/e-signature/:id" element={
+                  <OwnerGuard>
+                    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                      <EnvelopeDetail />
+                    </Suspense>
+                  </OwnerGuard>
+                } />
                 
                 {/* Settings redirect - prevent 404 */}
                 <Route path="/settings" element={<Navigate to="/profile?tab=settings" replace />} />
