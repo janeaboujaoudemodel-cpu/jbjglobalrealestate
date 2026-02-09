@@ -1521,7 +1521,7 @@ export function ReellyImportPanel() {
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                 <div className="bg-purple-50 rounded-lg p-3 text-center">
                   <p className="text-xl font-bold text-purple-700">{backfillStats.total_projects.toLocaleString()}</p>
-                  <p className="text-xs text-purple-600">Total with Reelly ID</p>
+                  <p className="text-xs text-purple-600">Total Projects</p>
                 </div>
                 <div className={`rounded-lg p-3 text-center ${backfillStats.missing_floor_plans > 0 ? 'bg-amber-50' : 'bg-emerald-50'}`}>
                   <p className={`text-xl font-bold ${backfillStats.missing_floor_plans > 0 ? 'text-amber-700' : 'text-emerald-700'}`}>
@@ -1545,7 +1545,7 @@ export function ReellyImportPanel() {
                   <p className={`text-xl font-bold ${backfillStats.missing_any > 0 ? 'text-red-700' : 'text-emerald-700'}`}>
                     {backfillStats.missing_any.toLocaleString()}
                   </p>
-                  <p className="text-xs text-zinc-600">Need Backfill</p>
+                  <p className="text-xs text-zinc-600">Not Yet Fetched</p>
                 </div>
               </div>
             </div>

@@ -126,12 +126,12 @@ Deno.serve(async (req) => {
         .not("reelly_id", "is", null);
       const missingDocuments = (allReelyProjects || []).filter((p: any) => !projectIdsWithDocs.has(p.id)).length;
 
-      // Count projects missing ANY detail data
+      // Count projects not yet fetched from detail API
       const { count: missingAny } = await supabase
         .from("projects")
         .select("*", { count: "exact", head: true })
         .not("reelly_id", "is", null)
-        .or("floor_plan_types.is.null,amenities.is.null");
+        .is("detail_fetched_at", null);
 
       return new Response(
         JSON.stringify({
@@ -208,8 +208,8 @@ Deno.serve(async (req) => {
       .not("reelly_id", "is", null);
 
     if (!forceRefresh) {
-      // Only get projects missing at least one field
-      query = query.or("floor_plan_types.is.null,amenities.is.null");
+      // Only get projects not yet fetched from detail API
+      query = query.is("detail_fetched_at", null);
     }
 
     const { data: projectsToBackfill, error: queryError } = await query.limit(batchSize);
@@ -237,7 +237,7 @@ Deno.serve(async (req) => {
       .from("projects")
       .select("*", { count: "exact", head: true })
       .not("reelly_id", "is", null)
-      .or("floor_plan_types.is.null,amenities.is.null");
+      .is("detail_fetched_at", null);
 
     let updated = 0;
     let failed = 0;
@@ -265,6 +265,8 @@ Deno.serve(async (req) => {
       if (!detail) {
         failed++;
         errors.push(`API fetch failed: ${project.name}`);
+        // Still mark as fetched so we don't retry infinitely
+        await supabase.from("projects").update({ detail_fetched_at: new Date().toISOString() }).eq("id", project.id);
         continue;
       }
 
@@ -399,17 +401,13 @@ async function updateProjectWithDetails(
       updatedFields.push("handover_date");
     }
 
-    // Floor plans
-    if (floorPlans.length > 0) {
-      updateData.floor_plan_types = floorPlans;
-      updatedFields.push("floor_plans");
-    }
+    // Floor plans - always set (empty array means "checked, none found")
+    updateData.floor_plan_types = floorPlans;
+    if (floorPlans.length > 0) updatedFields.push("floor_plans");
 
-    // Amenities (as text array)
-    if (amenities.length > 0) {
-      updateData.amenities = amenities;
-      updatedFields.push("amenities");
-    }
+    // Amenities - always set (empty array means "checked, none found")
+    updateData.amenities = amenities.length > 0 ? amenities : [];
+    if (amenities.length > 0) updatedFields.push("amenities");
 
     // Documents are stored in project_documents table (handled below)
     if (documents.length > 0) {
@@ -462,11 +460,8 @@ async function updateProjectWithDetails(
       updatedFields.push("service_charge");
     }
 
-    // Only update if we have data to update
-    if (Object.keys(updateData).length === 0) {
-      return { success: true, fields: ["none - no new data from API"] };
-    }
-
+    // Always mark as fetched so we don't re-process
+    updateData.detail_fetched_at = new Date().toISOString();
     updateData.updated_at = new Date().toISOString();
 
     const { error } = await supabase
