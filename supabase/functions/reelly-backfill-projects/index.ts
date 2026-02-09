@@ -113,18 +113,25 @@ Deno.serve(async (req) => {
         .not("reelly_id", "is", null)
         .or("amenities.is.null,amenities.eq.{}");
 
-      const { count: missingDocuments } = await supabase
+      // Count projects missing documents (check project_documents table)
+      const { data: projectsWithDocs } = await supabase
+        .from("project_documents")
+        .select("project_id")
+        .limit(10000);
+      const projectIdsWithDocs = new Set((projectsWithDocs || []).map((d: any) => d.project_id));
+      
+      const { data: allReelyProjects } = await supabase
         .from("projects")
-        .select("*", { count: "exact", head: true })
-        .not("reelly_id", "is", null)
-        .is("brochure_url", null);
+        .select("id")
+        .not("reelly_id", "is", null);
+      const missingDocuments = (allReelyProjects || []).filter((p: any) => !projectIdsWithDocs.has(p.id)).length;
 
       // Count projects missing ANY detail data
       const { count: missingAny } = await supabase
         .from("projects")
         .select("*", { count: "exact", head: true })
         .not("reelly_id", "is", null)
-        .or("floor_plan_types.is.null,amenities.is.null,brochure_url.is.null");
+        .or("floor_plan_types.is.null,amenities.is.null");
 
       return new Response(
         JSON.stringify({
@@ -197,12 +204,12 @@ Deno.serve(async (req) => {
     // Batch/All mode - find projects missing data
     let query = supabase
       .from("projects")
-      .select("id, reelly_id, name, floor_plan_types, amenities, brochure_url")
+      .select("id, reelly_id, name, floor_plan_types, amenities")
       .not("reelly_id", "is", null);
 
     if (!forceRefresh) {
       // Only get projects missing at least one field
-      query = query.or("floor_plan_types.is.null,amenities.is.null,brochure_url.is.null");
+      query = query.or("floor_plan_types.is.null,amenities.is.null");
     }
 
     const { data: projectsToBackfill, error: queryError } = await query.limit(batchSize);
@@ -230,7 +237,7 @@ Deno.serve(async (req) => {
       .from("projects")
       .select("*", { count: "exact", head: true })
       .not("reelly_id", "is", null)
-      .or("floor_plan_types.is.null,amenities.is.null,brochure_url.is.null");
+      .or("floor_plan_types.is.null,amenities.is.null");
 
     let updated = 0;
     let failed = 0;
@@ -350,13 +357,9 @@ async function updateProjectWithDetails(
       updatedFields.push("amenities");
     }
 
-    // Documents - set brochure_url to first brochure
+    // Documents are stored in project_documents table (handled below)
     if (documents.length > 0) {
-      const brochure = documents.find((d) => d.type === "brochure") || documents[0];
-      if (brochure?.url) {
-        updateData.brochure_url = brochure.url;
-        updatedFields.push("brochure");
-      }
+      updatedFields.push("documents");
     }
 
     // Unit types
