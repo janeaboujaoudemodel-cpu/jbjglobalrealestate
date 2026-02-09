@@ -513,13 +513,13 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       onChange(digits ? `${currentCode} ${formatted}` : '');
     };
 
-    // Theme-based styling - GOLD borders for all variants
+    // Theme-based styling - CHAMPAGNE gradient for light variant, GOLD borders
     const isLight = variant === 'light';
     const buttonStyles = isLight 
-      ? "bg-white border-2 border-gold/50 text-black hover:bg-zinc-50 hover:text-black hover:border-gold focus:border-gold"
+      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black hover:border-gold focus:border-gold"
       : "bg-zinc-900 border-2 border-gold/50 text-white hover:bg-zinc-800 hover:text-white hover:border-gold focus:border-gold";
     const inputStyles = isLight
-      ? "bg-white border-2 border-gold/50 text-black placeholder:text-zinc-400 focus:border-gold hover:border-gold"
+      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold hover:border-gold"
       : "bg-zinc-900 border-2 border-gold/50 text-white placeholder:text-zinc-500 focus:border-gold hover:border-gold";
     const popoverStyles = isLight
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50"

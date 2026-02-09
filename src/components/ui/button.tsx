@@ -38,17 +38,17 @@ const BTN_3D =
 const BTN_3D_HOVER =
   "hover:shadow-[0_14px_45px_hsl(var(--primary)/0.32),0_10px_25px_hsl(0_0%_0%/0.28),inset_0_1px_0_hsl(0_0%_100%/0.65)]";
 
-// PRIMARY: Active (Layer 2) champagne gradient (NO gold/yellow).
+// PRIMARY: Active (Layer 2) champagne gradient with GOLD borders (not black).
 const BRAND_PRIMARY =
-  `${ACTIVE_CHAMPAGNE_BG} text-foreground border-2 border-foreground/70 ${BTN_3D} ${BTN_3D_HOVER} hover:-translate-y-0.5 active:translate-y-0`;
+  `${ACTIVE_CHAMPAGNE_BG} text-foreground border-2 border-gold/60 ${BTN_3D} ${BTN_3D_HOVER} hover:-translate-y-0.5 active:translate-y-0 hover:border-gold`;
 
-// SECONDARY: transparent on load with DARK TEXT for readability; on hover becomes locked champagne.
+// SECONDARY: transparent on load with DARK TEXT for readability; gold borders (not black).
 const BRAND_SECONDARY =
-  `bg-transparent text-foreground border-2 border-foreground/60 ${BTN_3D} hover:${LOCKED_CHAMPAGNE_BG} hover:text-foreground hover:border-primary/80 hover:-translate-y-0.5 active:translate-y-0 ${BTN_3D_HOVER}`;
+  `bg-transparent text-foreground border-2 border-gold/50 ${BTN_3D} hover:${LOCKED_CHAMPAGNE_BG} hover:text-foreground hover:border-gold hover:-translate-y-0.5 active:translate-y-0 ${BTN_3D_HOVER}`;
 
-// TERTIARY: For dark backgrounds (filled) with dark text.
+// TERTIARY: For dark backgrounds (filled) with dark text and gold borders.
 const BRAND_TERTIARY =
-  `${LOCKED_CHAMPAGNE_BG} text-foreground border-2 border-foreground/70 ${BTN_3D} ${BTN_3D_HOVER} hover:border-gold/80`;
+  `${LOCKED_CHAMPAGNE_BG} text-foreground border-2 border-gold/60 ${BTN_3D} ${BTN_3D_HOVER} hover:border-gold`;
 
 // HERO: matches homepage hero button behavior (transparent → locked champagne on hover).
 const BRAND_HERO =
