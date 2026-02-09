@@ -401,10 +401,14 @@ async function updateProjectWithDetails(
       updatedFields.push("building_count");
     }
 
-    // Description
+    // Description (strip markdown headers)
     if (detail.overview || detail.short_description) {
-      updateData.description = detail.overview || detail.short_description;
-      updatedFields.push("description");
+      let cleanDesc = (detail.overview || detail.short_description || '');
+      cleanDesc = cleanDesc.replace(/^#{1,6}\s*/gm, '').replace(/\n{3,}/g, '\n\n').trim();
+      if (cleanDesc) {
+        updateData.description = cleanDesc;
+        updatedFields.push("description");
+      }
     }
     if (detail.short_description) {
       updateData.short_description = detail.short_description;

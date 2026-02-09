@@ -219,7 +219,7 @@ serve(async (req) => {
           developer_name: item.developer_name || null,
           location: item.location || null,
           emirate: item.emirate || "Dubai",
-          description: item.description || item.short_description || null,
+          description: ((item.description || item.short_description || '').replace(/^#{1,6}\s*/gm, '').replace(/\n{3,}/g, '\n\n').trim()) || null,
           short_description: item.short_description || null,
           price_from: item.price_from || null,
           price_to: item.price_to || null,
