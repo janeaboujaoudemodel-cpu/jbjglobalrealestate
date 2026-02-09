@@ -195,10 +195,16 @@ const AIToolPremiumLayout = ({
             transition={{ duration: 0.3 }}
           >
             <Button
-              variant="outline"
+              variant="dark-outline"
               size="sm"
-              onClick={() => navigate(-1)}
-              className="bg-white/10 border-white/30 text-white hover:bg-white/20 hover:text-white mb-6"
+              onClick={() => {
+                if (window.history.length > 1) {
+                  navigate(-1);
+                } else {
+                  navigate('/toolkit');
+                }
+              }}
+              className="mb-6"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back

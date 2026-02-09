@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContentDark, SelectItemDark, SelectTriggerDark, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Bot, Send, Loader2, MessageSquare, MapPin, Shield, AlertTriangle, Sparkles } from "lucide-react";
@@ -118,27 +118,27 @@ export function BrokerAIAssistant() {
           {/* Common Controls */}
           <div className="grid grid-cols-2 gap-3 mt-4">
             <Select value={selectedArea} onValueChange={setSelectedArea}>
-              <SelectTrigger className="bg-zinc-800 border-zinc-700">
+              <SelectTriggerDark>
                 <SelectValue placeholder="Select area" />
-              </SelectTrigger>
-              <SelectContent>
+              </SelectTriggerDark>
+              <SelectContentDark>
                 {DUBAI_AREAS_MARKET_DATA.map((area) => (
-                  <SelectItem key={area.area} value={area.area}>
+                  <SelectItemDark key={area.area} value={area.area}>
                     {area.area}
-                  </SelectItem>
+                  </SelectItemDark>
                 ))}
-              </SelectContent>
+              </SelectContentDark>
             </Select>
 
             <Select value={transactionType} onValueChange={(v) => setTransactionType(v as "buy" | "sell" | "rent")}>
-              <SelectTrigger className="bg-zinc-800 border-zinc-700">
+              <SelectTriggerDark>
                 <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="buy">BUY</SelectItem>
-                <SelectItem value="sell">SELL</SelectItem>
-                <SelectItem value="rent">RENT</SelectItem>
-              </SelectContent>
+              </SelectTriggerDark>
+              <SelectContentDark>
+                <SelectItemDark value="buy">BUY</SelectItemDark>
+                <SelectItemDark value="sell">SELL</SelectItemDark>
+                <SelectItemDark value="rent">RENT</SelectItemDark>
+              </SelectContentDark>
             </Select>
           </div>
 
@@ -181,7 +181,7 @@ export function BrokerAIAssistant() {
         <Button
           onClick={handleSubmit}
           disabled={isLoading}
-          variant="secondary"
+          variant="ai-gold"
           className="w-full"
         >
           {isLoading ? (

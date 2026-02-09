@@ -11,9 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { useAITool } from "../AIToolsProvider";
@@ -92,34 +92,34 @@ const AIObjectionHandlerPremium = () => {
                   <div className="space-y-2">
                     <Label className="text-zinc-300">Property Type</Label>
                     <Select value={propertyType} onValueChange={setPropertyType}>
-                      <SelectTrigger className="bg-zinc-900/50 border-rose-500/30 text-white hover:border-rose-500/50">
+                      <SelectTriggerDark className="border-rose-500/30 hover:border-rose-500/50">
                         <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-zinc-900 border-rose-500/30">
-                        <SelectItem value="luxury-apartment">Luxury Apartment</SelectItem>
-                        <SelectItem value="villa">Villa</SelectItem>
-                        <SelectItem value="penthouse">Penthouse</SelectItem>
-                        <SelectItem value="townhouse">Townhouse</SelectItem>
-                        <SelectItem value="off-plan">Off-Plan</SelectItem>
-                        <SelectItem value="commercial">Commercial</SelectItem>
-                      </SelectContent>
+                      </SelectTriggerDark>
+                      <SelectContentDark className="border-rose-500/30">
+                        <SelectItemDark value="luxury-apartment">Luxury Apartment</SelectItemDark>
+                        <SelectItemDark value="villa">Villa</SelectItemDark>
+                        <SelectItemDark value="penthouse">Penthouse</SelectItemDark>
+                        <SelectItemDark value="townhouse">Townhouse</SelectItemDark>
+                        <SelectItemDark value="off-plan">Off-Plan</SelectItemDark>
+                        <SelectItemDark value="commercial">Commercial</SelectItemDark>
+                      </SelectContentDark>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
                     <Label className="text-zinc-300">Lead Profile</Label>
                     <Select value={leadProfile} onValueChange={setLeadProfile}>
-                      <SelectTrigger className="bg-zinc-900/50 border-rose-500/30 text-white hover:border-rose-500/50">
+                      <SelectTriggerDark className="border-rose-500/30 hover:border-rose-500/50">
                         <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-zinc-900 border-rose-500/30">
-                        <SelectItem value="serious-buyer">Serious Buyer</SelectItem>
-                        <SelectItem value="first-time-buyer">First-Time Buyer</SelectItem>
-                        <SelectItem value="investor">Investor</SelectItem>
-                        <SelectItem value="relocating">Relocating</SelectItem>
-                        <SelectItem value="upgrade-buyer">Upgrade Buyer</SelectItem>
-                        <SelectItem value="hesitant">Hesitant Buyer</SelectItem>
-                      </SelectContent>
+                      </SelectTriggerDark>
+                      <SelectContentDark className="border-rose-500/30">
+                        <SelectItemDark value="serious-buyer">Serious Buyer</SelectItemDark>
+                        <SelectItemDark value="first-time-buyer">First-Time Buyer</SelectItemDark>
+                        <SelectItemDark value="investor">Investor</SelectItemDark>
+                        <SelectItemDark value="relocating">Relocating</SelectItemDark>
+                        <SelectItemDark value="upgrade-buyer">Upgrade Buyer</SelectItemDark>
+                        <SelectItemDark value="hesitant">Hesitant Buyer</SelectItemDark>
+                      </SelectContentDark>
                     </Select>
                   </div>
                 </div>
@@ -139,7 +139,8 @@ const AIObjectionHandlerPremium = () => {
               <Button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-semibold py-6"
+                variant="ai-rose"
+                className="w-full font-semibold py-6"
               >
                 {loading ? (
                   <>
