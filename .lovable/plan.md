@@ -1,91 +1,141 @@
 
-# Move Sale Status Labels to Top-Left Corner
+# Fix Footer Education Hub Links & Create Education Hub Page
 
-## Summary
+## Issues Identified
 
-This change will ensure all sale status labels (On Sale, Sold Out, Announced, Presale, etc.) are consistently positioned in the **top-left corner** of all property/project listing cards across the platform.
+1. **Non-clickable text in Education Hub card**: The text "Books, Guides & Market Reports" at line 768 is just a paragraph (`<p>` tag), not individual clickable links
+2. **Business Suites truncated**: Only showing 4 of 5 business suites due to `.slice(0, 4)` on line 815
+3. **Missing Education Hub page**: No dedicated `/education-hub` page exists - it currently just links to `/guides`
 
-## Current State
+---
 
-| Component | Sale Status Badge Position | Other Top-Left Content |
-|-----------|---------------------------|------------------------|
-| `ProjectCard.tsx` | Bottom-left | Developer logo or property type |
-| `ReellyProjectCard.tsx` | Top-right | None |
-| `FeaturedListings.tsx` | Top-left (purpose badge) | Already correct |
-| `PortfolioAssetCard.tsx` | Top-left (objective badge) | Already has content |
+## Solution
 
-## Proposed Changes
+### 1. Update Footer - Education Hub Card
 
-### 1. `ProjectCard.tsx`
-- Move the sale status badge from `bottom-3 left-3` to `top-3 left-3`
-- Stack it below the developer logo if present (add vertical offset)
-- If no developer logo, place it at absolute top-left
+**File: `src/components/Footer.tsx`**
 
-**Before:**
+Replace the static paragraph with three clickable links:
+
 ```tsx
-{/* Bottom-Left: Sale Status Badge */}
-{saleStatusBadge && !project.is_sold_out && (
-  <div className={`absolute bottom-3 left-3 z-10 px-2.5 py-1 ...`}>
+// Current (non-clickable):
+<p className="text-zinc-500 text-xs mb-3">Books, Guides & Market Reports</p>
+
+// Updated (clickable links):
+<ul className="space-y-2 mb-3">
+  <li>
+    <Link to="/broker-education" className="text-zinc-700 hover:text-gold text-xs sm:text-sm inline-block hover:translate-x-1">
+      Books
+    </Link>
+  </li>
+  <li>
+    <Link to="/guides" className="text-zinc-700 hover:text-gold text-xs sm:text-sm inline-block hover:translate-x-1">
+      Guides
+    </Link>
+  </li>
+  <li>
+    <Link to="/market-intelligence/reports" className="text-zinc-700 hover:text-gold text-xs sm:text-sm inline-block hover:translate-x-1">
+      Market Reports
+    </Link>
+  </li>
+</ul>
 ```
 
-**After:**
+### 2. Update Footer - Business Suites Card
+
+**File: `src/components/Footer.tsx`**
+
+Remove the `.slice(0, 4)` to show all 5 business suites:
+
 ```tsx
-{/* Top-Left: Sale Status Badge (below developer logo if present) */}
-{saleStatusBadge && !project.is_sold_out && (
-  <div className={`absolute ${developerHasLogo ? 'top-16' : 'top-3'} left-3 z-10 px-2.5 py-1 ...`}>
+// Current:
+{businessSuitesLinks.slice(0, 4).map((link) => (
+
+// Updated:
+{businessSuitesLinks.map((link) => (
 ```
 
-### 2. `ReellyProjectCard.tsx`
-- Move sale status badge from `top-3 right-3` to `top-3 left-3`
-- This makes it consistent with the main ProjectCard
+This will now display:
+- All Tools Suite
+- Real Estate Suite
+- Broker Intelligence Suite
+- Creative & Communication
+- Productivity Suite
 
-**Before:**
+### 3. Create Dedicated Education Hub Page
+
+**New File: `src/pages/EducationHub.tsx`**
+
+Create a central hub page that consolidates all educational resources:
+
+- **Section 1: Books** - Links to `/broker-education` with 3D book cards
+- **Section 2: Guides** - Links to the Guides Library at `/guides` with categorized guides
+- **Section 3: Market Reports** - Links to `/market-intelligence/reports` with monthly/quarterly/annual reports
+
+The page will use the same champagne/gold premium styling as the existing Guides page.
+
+### 4. Add Route for Education Hub
+
+**File: `src/App.tsx`**
+
+Add lazy import and route:
+
 ```tsx
-{/* Top-Right: Sale Status Badge */}
-{saleStatusBadge && (
-  <div className={`absolute top-3 right-3 z-10 ...`}>
+// Import
+const EducationHub = lazy(() => import("./pages/EducationHub"));
+
+// Route
+<Route path="/education-hub" element={<EducationHub />} />
 ```
 
-**After:**
+### 5. Update Footer Link
+
+**File: `src/components/Footer.tsx`**
+
+Update the Education Hub link destination:
+
 ```tsx
-{/* Top-Left: Sale Status Badge */}
-{saleStatusBadge && (
-  <div className={`absolute top-3 left-3 z-10 ...`}>
+// Current:
+const educationHubLink = { href: "/guides", label: "Education Hub" };
+
+// Updated:
+const educationHubLink = { href: "/education-hub", label: "Education Hub" };
 ```
 
-### 3. Additional Considerations
+---
 
-**Conflict Resolution:**
-- In `ProjectCard.tsx`, if both developer logo AND sale status exist, the status badge will be positioned below the logo (`top-16`) to avoid overlap
-- If only property type label exists (no logo), the sale status will take priority at `top-3`
-- The Sold Out badge currently at top-right will also move to top-left for consistency
+## Files to Create/Modify
 
-## Files to Modify
+| File | Action | Description |
+|------|--------|-------------|
+| `src/pages/EducationHub.tsx` | **CREATE** | New page consolidating Books, Guides, Market Reports |
+| `src/components/Footer.tsx` | **MODIFY** | Make Education Hub links clickable, show all 5 business suites |
+| `src/App.tsx` | **MODIFY** | Add `/education-hub` route |
 
-| File | Change |
-|------|--------|
-| `src/components/ProjectCard.tsx` | Move sale status from bottom-left to top-left, handle logo conflict |
-| `src/components/ReellyProjectCard.tsx` | Move sale status from top-right to top-left |
+---
 
-## Visual Layout After Change
+## Education Hub Page Structure
 
 ```
-+----------------------------------+
-| [Status]  [Logo?]    [Fav] [Pin] |  <- Status in top-left corner
-|                                  |
-|           [Image]                |
-|                                  |
-|                      [Handover]  |  <- Handover stays bottom-right
-+----------------------------------+
-| Project Name                     |
-| Location                         |
-| Price | Developer                |
-| [Email] [Call] [WhatsApp]        |
-+----------------------------------+
+/education-hub
+├── Hero Section (video placeholder)
+├── Section: Books Library
+│   ├── Premium 3D book cards
+│   └── Link to /broker-education
+├── Section: Guides Library  
+│   ├── Categorized guide cards (Buyer, Seller, Landlord, etc.)
+│   └── Link to /guides
+├── Section: Market Intelligence
+│   ├── Report type cards (Monthly, Quarterly, Annual)
+│   └── Link to /market-intelligence/reports
+└── CTA Section
 ```
 
-## Implementation Notes
+---
 
-- The sale status badge styling remains unchanged (colors: emerald for On Sale, red for Sold Out, gold for Announced, amber for Presale)
-- Z-index will be maintained at `z-10` to stay above the image but below favorite buttons
-- The property type label will be hidden when sale status is present to avoid clutter
+## Technical Notes
+
+- The Education Hub page will follow the existing Guides page styling (black background, gold accents, champagne cards)
+- Uses existing `BookCard` component from Guides page for consistency
+- All sections will have "View All" links to their respective full pages
+- The page will be public (no auth required)
