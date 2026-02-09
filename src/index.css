@@ -1740,3 +1740,8 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 .leaflet-control-attribution a {
   display: none !important;
 }
+
+/* Leaflet touch fix: prevent browser zoom on map containers */
+.leaflet-container {
+  touch-action: none;
+}

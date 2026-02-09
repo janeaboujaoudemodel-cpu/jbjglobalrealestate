@@ -14,6 +14,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Link } from "react-router-dom";
 import { MapPin, Building, Bed, Maximize, Calendar, Filter, List, X, ChevronRight, ExternalLink } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
+import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import "leaflet/dist/leaflet.css";
 
 // Hook to fetch areas for filter
@@ -450,7 +451,9 @@ const PropertyMap = () => {
           center={[25.2048, 55.2708]}
           zoom={11}
           scrollWheelZoom={false}
-          zoomControl={true}
+          touchZoom={true}
+          dragging={true}
+          zoomControl={false}
           style={{ height: "100%", width: "100%" }}
           className="z-0"
         >
@@ -459,6 +462,7 @@ const PropertyMap = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           
+          <MapNavigationControls latitude={25.2048} longitude={55.2708} />
           <MapBoundsFitter projects={filteredProjects} />
           
           {filteredProjects.map((project) => {
