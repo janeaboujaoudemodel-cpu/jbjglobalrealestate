@@ -19,7 +19,7 @@ interface DeveloperInfoCardProps {
   projectCount?: number;
 }
 
-const DESCRIPTION_PREVIEW_LENGTH = 250;
+const DESCRIPTION_PREVIEW_LENGTH = 500;
 
 export default function DeveloperInfoCard({ developer, projectName, projectCount }: DeveloperInfoCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -65,7 +65,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 <img 
                   src={developer.logo_url} 
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               ) : (
                 <Building2 className="w-12 h-12 text-zinc-400" />
