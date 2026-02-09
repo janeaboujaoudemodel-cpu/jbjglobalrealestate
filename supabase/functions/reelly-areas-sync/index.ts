@@ -386,34 +386,62 @@ Deno.serve(async (req) => {
 
     // ========== Extract from projects table ==========
     if (action === "extract_from_projects") {
-      // Extract areas from the projects table itself
+      // Extract areas from the projects table itself, including emirate
       const { data: projects } = await supabase
         .from("projects")
-        .select("area_name")
+        .select("area_name, emirate")
         .not("area_name", "is", null)
         .neq("area_name", "");
 
-      const areas = new Map<string, { name: string; count: number }>();
+      const areas = new Map<string, { name: string; count: number; emirate: string }>();
       for (const p of projects || []) {
         if (p.area_name) {
           const key = p.area_name.toLowerCase().trim();
           const existing = areas.get(key);
-          if (existing) existing.count++;
-          else areas.set(key, { name: p.area_name.trim(), count: 1 });
+          if (existing) {
+            existing.count++;
+          } else {
+            areas.set(key, { name: p.area_name.trim(), count: 1, emirate: p.emirate || "Dubai" });
+          }
         }
       }
 
-      const { data: existingAreas } = await supabase.from("areas").select("slug");
-      const existingSlugs = new Set((existingAreas || []).map(a => a.slug));
+      const { data: existingAreas } = await supabase.from("areas").select("id, slug, description");
+      const existingBySlug = new Map((existingAreas || []).map((a: any) => [a.slug, a]));
 
       let inserted = 0;
-      let skipped = 0;
+      let updated = 0;
       let descriptionsGenerated = 0;
+      const now = new Date().toISOString();
 
       for (const [, area] of areas) {
         const slug = generateSlug(area.name);
-        if (existingSlugs.has(slug)) { skipped++; continue; }
+        const existing = existingBySlug.get(slug);
 
+        if (existing) {
+          // UPSERT: update existing area with latest property_count and correct emirate
+          const updates: Record<string, unknown> = {
+            property_count: area.count,
+            emirate: area.emirate,
+            updated_at: now,
+          };
+
+          // Generate description if missing
+          if (!existing.description && enrichDescriptions) {
+            const desc = await generateAreaDescription(area.name, area.count);
+            if (desc) {
+              updates.description = desc;
+              descriptionsGenerated++;
+            }
+          }
+
+          const { error } = await supabase.from("areas").update(updates).eq("id", existing.id);
+          if (!error) updated++;
+          else console.warn(`Update ${area.name}: ${error.message}`);
+          continue;
+        }
+
+        // INSERT new area
         let description: string | null = null;
         if (enrichDescriptions) {
           description = await generateAreaDescription(area.name, area.count);
@@ -423,17 +451,16 @@ Deno.serve(async (req) => {
         const { error } = await supabase.from("areas").insert({
           name: area.name,
           slug,
-          emirate: "Dubai",
+          emirate: area.emirate,
           property_count: area.count,
           description,
           is_active: true,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          created_at: now,
+          updated_at: now,
         });
 
         if (!error) inserted++;
         else if (error.code !== "23505") console.warn(`Insert ${area.name}: ${error.message}`);
-        else skipped++;
       }
 
       return new Response(JSON.stringify({
@@ -441,7 +468,7 @@ Deno.serve(async (req) => {
         action: "extract_from_projects",
         unique_areas: areas.size,
         inserted,
-        skipped,
+        updated,
         descriptions_generated: descriptionsGenerated,
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
