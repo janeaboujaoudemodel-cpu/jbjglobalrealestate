@@ -109,12 +109,11 @@ const DeveloperDetail = () => {
     <section className="relative w-full min-h-screen bg-premium-bg">
       {/* Top spacing + back action */}
       <div className="container mx-auto px-4 pt-8 md:pt-12">
-        <Link 
-          to="/developers" 
-          className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gold bg-gold text-black font-medium text-sm transition-all duration-200 hover:bg-transparent hover:text-gold"
-        >
-          <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
-          <span>Back to Developers</span>
+        <Link to="/developers">
+          <Button variant="primary" size="sm" className="group">
+            <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+            <span>Back to Developers</span>
+          </Button>
         </Link>
       </div>
 
@@ -122,24 +121,24 @@ const DeveloperDetail = () => {
       <div className="jj-layer-2 mt-6 md:mt-8 mb-12">
         {/* Developer header */}
         <div className="flex flex-col md:flex-row md:items-start gap-6">
-          {/* Logo plate - Larger card, object-contain with padding, white background, no cropping */}
+          {/* Logo plate - Larger card with full-fit object-contain */}
           <div 
-            className="w-32 h-20 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 p-2"
+            className="w-40 h-24 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
             style={{
               background: '#FFFFFF',
               border: '3px solid hsl(42 45% 59%)',
-              boxShadow: '0 4px 12px rgba(200,167,102,0.25)'
+              boxShadow: '0 4px 16px rgba(200,167,102,0.3)'
             }}
           >
             {developer.logo_url ? (
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="max-w-full max-h-full object-contain"
+                className="w-full h-full object-contain p-3"
                 loading="eager"
               />
             ) : (
-              <Building2 className="w-8 h-8 text-zinc-400" />
+              <Building2 className="w-10 h-10 text-zinc-400" />
             )}
           </div>
 
