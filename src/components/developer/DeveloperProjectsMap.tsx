@@ -23,7 +23,7 @@ interface DeveloperProjectsMapProps {
 
 // Format price for popup
 const formatPrice = (price: number | null) => {
-  if (!price) return "Price TBA";
+  if (!price) return "POA";
   if (price >= 1000000) return `AED ${(price / 1000000).toFixed(1)}M`;
   return `AED ${(price / 1000).toFixed(0)}K`;
 };
@@ -54,7 +54,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
 
   // Create marker icon
   const createMarkerIcon = useCallback((price: number | null) => {
-    const priceText = price ? `${(price / 1000000).toFixed(1)}M` : "TBA";
+    const priceText = price ? `${(price / 1000000).toFixed(1)}M` : "POA";
     
     return L.divIcon({
       className: "custom-marker",

@@ -406,8 +406,10 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
           <span className="text-muted-foreground">From </span>
           {item.price_from ? (
             <span className="font-semibold text-foreground">{formatPrice(item.price_from)}</span>
+          ) : item.status_label?.toLowerCase().includes('sold') ? (
+            <span className="font-semibold text-red-500">Sold Out</span>
           ) : (
-            <span className="font-semibold text-handover">TBA</span>
+            <span className="font-semibold text-handover">POA</span>
           )}
         </div>
 

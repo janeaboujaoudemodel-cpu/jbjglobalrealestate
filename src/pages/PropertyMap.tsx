@@ -118,7 +118,7 @@ const getProjectCoordinates = (project: Project): [number, number] => {
 
 // Custom marker icon
 const createCustomIcon = (price: number | null) => {
-  const priceText = price ? `${(price / 1000000).toFixed(1)}M` : "TBA";
+  const priceText = price ? `${(price / 1000000).toFixed(1)}M` : "POA";
   
   return new DivIcon({
     className: "custom-marker",
@@ -146,7 +146,7 @@ const createCustomIcon = (price: number | null) => {
 
 // Format price
 const formatPrice = (price: number | null) => {
-  if (!price) return "Price TBA";
+  if (!price) return "POA";
   if (price >= 1000000) return `AED ${(price / 1000000).toFixed(1)}M`;
   return `AED ${(price / 1000).toFixed(0)}K`;
 };
