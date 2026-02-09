@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import L from "leaflet";
 import { Button } from "@/components/ui/button";
 import { Layers, AlertTriangle, RefreshCw } from "lucide-react";
+import { MapNavigationControlsStandalone } from "@/components/maps/MapNavigationControls";
 import "leaflet/dist/leaflet.css";
 
 interface DeveloperProject {
@@ -125,6 +126,9 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
         center,
         zoom: 11,
         scrollWheelZoom: false,
+        touchZoom: true,
+        dragging: true,
+        zoomControl: false,
       });
 
       mapInstanceRef.current = map;
@@ -270,11 +274,18 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
       </div>
 
       {/* Map Container */}
-      <div 
-        ref={mapContainerRef} 
-        className="h-[400px] w-full"
-        style={{ background: '#e5e3df' }}
-      />
+      <div className="relative">
+        <div 
+          ref={mapContainerRef} 
+          className="h-[400px] w-full"
+          style={{ background: '#e5e3df' }}
+        />
+        <MapNavigationControlsStandalone
+          mapInstance={mapInstanceRef.current}
+          latitude={projectsWithCoords[0]?.latitude || 25.2048}
+          longitude={projectsWithCoords[0]?.longitude || 55.2708}
+        />
+      </div>
     </div>
   );
 }

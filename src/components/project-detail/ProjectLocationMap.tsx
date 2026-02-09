@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
-import { Layers, Navigation, ZoomIn, ZoomOut, Maximize } from "lucide-react";
+import { Layers, Maximize } from "lucide-react";
+import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -37,8 +38,8 @@ const MAP_TILES: Record<MapViewType, { url: string; attribution: string }> = {
   },
 };
 
-// Control component for map operations
-function MapControls({ 
+// View toggle controls (satellite/street/terrain)
+function MapViewToggle({ 
   mapView, 
   onViewChange,
   onOpenExternal,
@@ -47,83 +48,29 @@ function MapControls({
   onViewChange: (view: MapViewType) => void;
   onOpenExternal: () => void;
 }) {
-  const map = useMap();
-
-  const handleZoomIn = () => map.zoomIn();
-  const handleZoomOut = () => map.zoomOut();
-  const handleRecenter = () => {
-    const center = map.getCenter();
-    map.setView(center, 15, { animate: true });
-  };
-
   return (
-    <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
-      {/* View Toggle */}
-      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-gold/30 shadow-lg p-1 flex flex-col gap-1">
-        <button
-          onClick={() => onViewChange("satellite")}
-          className={`px-3 py-1.5 text-xs font-medium rounded transition-all ${
-            mapView === "satellite" 
-              ? "bg-gold text-foreground" 
-              : "hover:bg-gold/20 text-muted-foreground"
-          }`}
-        >
-          Satellite
-        </button>
-        <button
-          onClick={() => onViewChange("street")}
-          className={`px-3 py-1.5 text-xs font-medium rounded transition-all ${
-            mapView === "street" 
-              ? "bg-gold text-foreground" 
-              : "hover:bg-gold/20 text-muted-foreground"
-          }`}
-        >
-          Street
-        </button>
-        <button
-          onClick={() => onViewChange("terrain")}
-          className={`px-3 py-1.5 text-xs font-medium rounded transition-all ${
-            mapView === "terrain" 
-              ? "bg-gold text-foreground" 
-              : "hover:bg-gold/20 text-muted-foreground"
-          }`}
-        >
-          Terrain
-        </button>
+    <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
+      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-gold/40 shadow-lg p-1 flex flex-col gap-1">
+        {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
+          <button
+            key={view}
+            onClick={() => onViewChange(view)}
+            className={`px-3 py-2 text-xs font-medium rounded transition-all ${
+              mapView === view 
+                ? "bg-gold text-foreground" 
+                : "hover:bg-gold/20 text-muted-foreground"
+            }`}
+          >
+            {view.charAt(0).toUpperCase() + view.slice(1)}
+          </button>
+        ))}
       </div>
-
-      {/* Zoom Controls */}
-      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-gold/30 shadow-lg p-1 flex flex-col gap-1">
-        <button
-          onClick={handleZoomIn}
-          className="p-2 hover:bg-gold/20 rounded transition-all"
-          aria-label="Zoom in"
-        >
-          <ZoomIn className="w-4 h-4 text-foreground" />
-        </button>
-        <button
-          onClick={handleZoomOut}
-          className="p-2 hover:bg-gold/20 rounded transition-all"
-          aria-label="Zoom out"
-        >
-          <ZoomOut className="w-4 h-4 text-foreground" />
-        </button>
-        <button
-          onClick={handleRecenter}
-          className="p-2 hover:bg-gold/20 rounded transition-all"
-          aria-label="Recenter"
-        >
-          <Navigation className="w-4 h-4 text-foreground" />
-        </button>
-      </div>
-
-      {/* Open External */}
       <button
         onClick={onOpenExternal}
-        className="bg-card/95 backdrop-blur-sm rounded-lg border border-gold/30 shadow-lg p-2 hover:bg-gold/20 transition-all"
+        className="w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-gold/40 shadow-lg hover:bg-gold/20 active:bg-gold/30 transition-all"
         aria-label="Open in Google Maps"
       >
-        <Maximize className="w-4 h-4 text-foreground" />
+        <Maximize className="w-5 h-5 text-foreground" />
       </button>
     </div>
   );
@@ -249,16 +196,19 @@ export default function ProjectLocationMap({
         center={coordinates}
         zoom={15}
         scrollWheelZoom={false}
+        touchZoom={true}
+        dragging={true}
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
         attributionControl={false}
       >
         <DynamicTileLayer mapView={mapView} />
-        <MapControls 
+        <MapViewToggle 
           mapView={mapView} 
           onViewChange={setMapView}
           onOpenExternal={handleOpenExternal}
         />
+        <MapNavigationControls latitude={coordinates[0]} longitude={coordinates[1]} />
         <Marker position={coordinates}>
           <Popup>
             <div className="text-sm font-medium">{projectName}</div>
