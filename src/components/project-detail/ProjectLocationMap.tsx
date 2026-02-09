@@ -195,7 +195,7 @@ export default function ProjectLocationMap({
       <MapContainer
         center={coordinates}
         zoom={15}
-        scrollWheelZoom={false}
+        scrollWheelZoom={true}
         touchZoom={true}
         dragging={true}
         style={{ height: "100%", width: "100%" }}

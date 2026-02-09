@@ -450,7 +450,7 @@ const PropertyMap = () => {
         <MapContainer
           center={[25.2048, 55.2708]}
           zoom={11}
-          scrollWheelZoom={false}
+          scrollWheelZoom={true}
           touchZoom={true}
           dragging={true}
           zoomControl={false}
