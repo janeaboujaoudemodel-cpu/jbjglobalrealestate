@@ -8,6 +8,7 @@ interface DeveloperInfoCardProps {
     name: string;
     slug?: string | null;
     logo_url?: string | null;
+    logo_url_processed?: string | null;
     founded_year?: number | null;
     completed_projects?: number | null;
     offplan_projects?: number | null;
@@ -48,15 +49,11 @@ export default function DeveloperInfoCard({ developer, projectName }: DeveloperI
               boxShadow: '0 2px 8px rgba(200,167,102,0.2)'
             }}
           >
-            {developer.logo_url ? (
+          {(developer.logo_url_processed || developer.logo_url) ? (
               <img 
-                src={developer.logo_url} 
+                src={developer.logo_url_processed || developer.logo_url} 
                 alt={`${developer.name} logo`}
                 className="max-h-10 max-w-[90%] object-contain"
-                style={{ 
-                  mixBlendMode: 'multiply',
-                  filter: 'grayscale(100%) contrast(1.2)'
-                }}
               />
             ) : (
               <Building2 className="w-6 h-6 text-zinc-400" />

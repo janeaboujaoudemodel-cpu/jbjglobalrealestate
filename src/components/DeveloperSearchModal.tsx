@@ -90,11 +90,11 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                   </div>
                   
                   {/* Logo */}
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden ${
-                    isTopTier ? "bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20" : "bg-zinc-800"
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden bg-white ${
+                    isTopTier ? "border-2 border-gold/30" : "border border-zinc-700"
                   }`}>
                     {developer.logo_url ? (
-                      <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-cover" />
+                      <img src={developer.logo_url} alt={developer.name} className="max-h-10 max-w-[90%] object-contain" />
                     ) : (
                       <Building2 className={`w-7 h-7 ${isTopTier ? "text-gold" : "text-zinc-500"}`} />
                     )}

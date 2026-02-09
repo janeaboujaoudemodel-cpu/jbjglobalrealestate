@@ -118,9 +118,9 @@ const DeveloperDetail = () => {
               boxShadow: '0 4px 12px rgba(200,167,102,0.25)'
             }}
           >
-            {developer.logo_url ? (
+            {(developer.logo_url_processed || developer.logo_url) ? (
               <img
-                src={developer.logo_url}
+                src={developer.logo_url_processed || developer.logo_url}
                 alt={`${developer.name} logo`}
                 className="max-h-14 max-w-[90%] object-contain"
                 loading="eager"

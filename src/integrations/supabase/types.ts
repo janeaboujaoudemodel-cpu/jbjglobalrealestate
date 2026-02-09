@@ -5286,6 +5286,8 @@ export type Database = {
           headquarters: string | null
           id: string
           logo_url: string | null
+          logo_url_dark: string | null
+          logo_url_processed: string | null
           name: string
           offplan_projects: number | null
           portfolio_worth: number | null
@@ -5302,6 +5304,8 @@ export type Database = {
           headquarters?: string | null
           id?: string
           logo_url?: string | null
+          logo_url_dark?: string | null
+          logo_url_processed?: string | null
           name: string
           offplan_projects?: number | null
           portfolio_worth?: number | null
@@ -5318,6 +5322,8 @@ export type Database = {
           headquarters?: string | null
           id?: string
           logo_url?: string | null
+          logo_url_dark?: string | null
+          logo_url_processed?: string | null
           name?: string
           offplan_projects?: number | null
           portfolio_worth?: number | null

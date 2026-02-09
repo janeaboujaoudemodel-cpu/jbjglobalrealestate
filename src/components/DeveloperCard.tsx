@@ -63,10 +63,19 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#1a1a2e] via-[#2d2d44] to-[#1a1a2e] flex items-center justify-center">
-              <div className="text-center">
-                <Building2 className="w-16 h-16 text-gold/30 mx-auto mb-3" />
-                <span className="text-gold/50 text-sm font-medium tracking-wider uppercase">Developer</span>
+            <div className="w-full h-full relative">
+              <img
+                src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80"
+                alt="Dubai Skyline"
+                className="w-full h-full object-cover opacity-70"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center">
+                  <Building2 className="w-12 h-12 text-gold/70 mx-auto mb-2" />
+                  <span className="text-gold/90 text-xs font-medium tracking-wider uppercase">Developer</span>
+                </div>
               </div>
             </div>
           )}
@@ -81,9 +90,9 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
                 boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
               }}
             >
-              {developer.logo_url ? (
+              {(developer.logo_url_processed || developer.logo_url) ? (
                 <img
-                  src={developer.logo_url}
+                  src={developer.logo_url_processed || developer.logo_url}
                   alt={`${developer.name} logo`}
                   className="max-h-10 max-w-[85%] object-contain"
                   loading="lazy"
@@ -139,7 +148,7 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
               </div>
             ) : null}
             {!projectCount && (!developer.completed_projects || developer.completed_projects === 0) && (
-              <span className="text-zinc-500 italic">Coming soon</span>
+              <span className="text-zinc-500 text-xs">View developer portfolio</span>
             )}
           </div>
         </div>
