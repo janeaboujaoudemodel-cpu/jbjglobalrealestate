@@ -1,110 +1,112 @@
 
-# Provident Data Enrichment, Map Fix, and Area Sync
+# Fix Backfill Data Pipeline, Persist Results, and Enrich Sunset Bay Grand
 
-## Overview
+## Critical Bugs Found
 
-This plan creates a new edge function that matches existing Reelly projects with their Provident counterparts, extracts the missing details (gallery photos, payment plans, floor plans, brochures, amenities, USPs, FAQs, location distances), and merges them into the database without duplicating data. It also fixes the map scroll behavior and enhances the area sync system.
+### 1. Column Name Mismatches -- Why Images and Documents Are Not Being Saved
 
-## Current State
+Both backfill functions have **wrong column names** that cause silent insert failures:
 
-- **1,795 Reelly projects** in the database, most with only 0-1 images and no payment plans, floor plans, or brochures
-- **Sunset Bay Grand** (reelly_id 3003): 0 images, 0 documents, no amenities/payment plan despite `detail_fetched_at` being set (Reelly detail returned empty for these fields)
-- **178 active areas** but no descriptions or photos for most
-- **Map**: `scrollWheelZoom={true}` causes two-finger scroll to zoom instead of page scroll
-- **Provident page-data detail extractor** already exists and can extract: images, USPs, amenities, payment breakdown, floor plans, FAQs, location distances, brochures, and PDFs
+**`project_images` table actual columns**: `image_url`, `alt_text`, `display_order`, `data_source`
+
+| Function | Uses (WRONG) | Should Be |
+|----------|-------------|-----------|
+| `reelly-backfill-details` | `url`, `alt` | `image_url`, `alt_text` |
+| `reelly-backfill-projects` | `image_url`, `alt_text` | Correct |
+
+**`project_documents` table actual columns**: `file_url`, `file_name`, `document_type`, `data_source`
+
+| Function | Uses (WRONG) | Should Be |
+|----------|-------------|-----------|
+| `reelly-backfill-details` | `url`, `name`, `type` | `file_url`, `file_name`, `document_type` |
+| `reelly-backfill-projects` | `url`, `name`, `type` | `file_url`, `file_name`, `document_type` |
+
+This is the root cause of zero images and zero documents being saved for all 1,500+ backfilled projects.
+
+### 2. Backfill Results Not Persisting Across Refreshes
+
+The backfill stats and results are stored in React `useState` only -- they reset on page refresh. The `sync_jobs` table exists but the UI never reads from it on mount.
+
+### 3. Backfill Results Not Clickable
+
+The processed/updated/failed counts are plain text divs -- not clickable to see which projects were affected.
+
+### 4. Sunset Bay Grand Missing All Data
+
+The project has `detail_fetched_at` set but zero images and zero documents due to the column mismatch bug above. It also needs the previously uploaded brochure data restored.
 
 ## Plan
 
-### 1. New Edge Function: `provident-enrich-projects`
+### Step 1: Fix Column Names in Both Backfill Functions
 
-Creates a new function that:
-1. Queries projects that are missing key data (no images, no payment plan, no amenities)
-2. For each project, generates a Provident slug from the project name (e.g., "Sunset Bay Grand" becomes "sunset-bay-grand")
-3. Calls `fetchProvidentPageDataDetail(slug)` from the existing shared module
-4. If Provident has the data, merges it into the project WITHOUT overwriting existing Reelly data:
-   - **Images**: Insert into `project_images` table (only if project has fewer than 3 images)
-   - **Documents**: Insert brochures, payment plan PDFs, floor plan PDFs into `project_documents`
-   - **Amenities**: Update `amenities` JSON column (only if currently NULL)
-   - **Payment plan/breakdown**: Update `payment_plan` and `payment_breakdown` columns
-   - **USPs**: Store in description or a new section (append to existing description)
-   - **FAQs**: Update `faqs` JSON column
-   - **Location distances**: Update `location_distances` JSON column
-   - **Floor plan types**: Update `floor_plan_types` JSON column
-5. Processes in configurable batches (default 10) with 1s delay between to avoid rate limits
-6. Supports `project_id` parameter for single-project enrichment
-7. Tracks what was enriched with `data_source: 'provident'` on images and documents
+**File: `supabase/functions/reelly-backfill-details/index.ts`**
 
-**File**: `supabase/functions/provident-enrich-projects/index.ts`
-
-### 2. Fix Map Scroll Behavior
-
-**File**: `src/components/project-detail/ProjectLocationMap.tsx`
-
-Change `scrollWheelZoom={true}` to `scrollWheelZoom={false}` so that two-finger scroll on the page scrolls the page (not zooms the map). Users can still zoom via:
-- Double-click to zoom in
-- The existing zoom +/- buttons
-- Pinch-to-zoom (touch gesture)
-
-### 3. Enhanced Area Sync from Both Sources
-
-**File**: `supabase/functions/reelly-areas-sync/index.ts`
-
-The current area sync only fetches the first 500 projects from Reelly. Update to:
-1. **Paginate through ALL Reelly projects** (1,795) to extract every unique area
-2. **Also extract areas from Provident** using the page-data discovery module (which finds ~1,336 projects with location data)
-3. **Merge without duplicates**: Match by normalized area name/slug
-4. **Enrich area data**: For areas without descriptions or images, use AI to generate a premium description based on known project data in that area
-
-### 4. Sunset Bay Grand Specific Fix
-
-Run the enrichment for Sunset Bay Grand specifically to pull from Provident:
-- Full gallery photos
-- Payment plan PDF and breakdown
-- Floor plans
-- Brochure
-- Amenities list
-- USPs
-- Location distances
-
-## Technical Details
-
-### Provident Slug Matching Strategy
-
-The function will try multiple slug variations to find a match:
-```text
-"Sunset Bay Grand" -> try slugs:
-  1. "sunset-bay-grand"
-  2. "sunset-bay-grand-dubai-islands"  (append location)
-  3. "sunset-bay-grand-imtiaz"  (append developer)
+Fix image insert (lines 143-148):
+```
+// FROM: { project_id, url: img.url, alt: img.alt, display_order }
+// TO:   { project_id, image_url: img.url, alt_text: img.alt, display_order }
 ```
 
-### Data Merge Rules (No Overwrites)
+Fix document insert (lines 162-167):
+```
+// FROM: { project_id, type: doc.type, url: doc.url, name: doc.name }
+// TO:   { project_id, document_type: doc.type, file_url: doc.url, file_name: doc.name }
+```
 
-| Field | Rule |
-|-------|------|
-| `amenities` | Only set if currently NULL |
-| `payment_plan` | Only set if currently NULL |
-| `payment_breakdown` | Only set if currently NULL |
-| `floor_plan_types` | Only set if currently NULL |
-| `faqs` | Only set if currently NULL |
-| `location_distances` | Only set if currently NULL |
-| `description` | Keep Reelly description; append Provident USPs as a new section |
-| Images | Only add if project has < 3 images; tag with `data_source: 'provident'` |
-| Documents | Only add if no existing document of same type; tag with `data_source: 'provident'` |
+**File: `supabase/functions/reelly-backfill-projects/index.ts`**
 
-### Map Interaction Changes
+Fix document upsert (lines 478-491):
+```
+// FROM: { project_id, url: doc.url, name: doc.name, type: doc.type, data_source }
+// TO:   { project_id, file_url: doc.url, file_name: doc.name, document_type: doc.type, data_source }
+```
 
-| Action | Before | After |
-|--------|--------|-------|
-| Two-finger scroll | Zooms map | Scrolls page |
-| Double-click | Zooms map | Zooms map (unchanged) |
-| Zoom buttons | Zoom in/out | Zoom in/out (unchanged) |
-| Pinch gesture | Zooms map | Zooms map (unchanged) |
+Also fix the `onConflict` from `"project_id,url"` to `"project_id,file_url"`.
 
-## Files to Create/Modify
+### Step 2: Re-Run Backfill for Already-Fetched Projects
+
+Since 1,501 projects were "backfilled" but their images/documents silently failed, we need to:
+- Reset `detail_fetched_at` to NULL for projects that have 0 images so the backfill can re-process them
+- OR add a "Force Re-Backfill" button that passes `force_refresh: true`
+
+Database fix:
+```sql
+UPDATE projects SET detail_fetched_at = NULL 
+WHERE reelly_id IS NOT NULL 
+AND detail_fetched_at IS NOT NULL
+AND id NOT IN (SELECT DISTINCT project_id FROM project_images);
+```
+
+### Step 3: Persist Backfill Results in `sync_jobs` Table
+
+**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
+
+- On component mount, query `sync_jobs` for the latest `reelly_backfill` job to restore previous results
+- After each backfill batch, save cumulative results to `sync_jobs`
+- Show persisted results when returning to the page
+- Add a "Clear Results" button to reset
+
+### Step 4: Make Backfill Results Clickable
+
+**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
+
+- Store the list of processed project names/IDs in the backfill result
+- Make the "Processed", "Updated", "Failed" count cards clickable
+- On click, show a scrollable list/modal of the project names with links to their detail pages
+
+### Step 5: Restore Sunset Bay Grand Data
+
+Query the database for any previously uploaded brochure/document data. If not found in the database, the project needs manual re-enrichment. Reset its `detail_fetched_at` to NULL so the fixed backfill can re-fetch from Reelly with correct column names.
+
+```sql
+UPDATE projects SET detail_fetched_at = NULL WHERE id = 'f0483cf4-716d-4d96-9bd9-15b04c61e1fd';
+```
+
+## Files to Modify
 
 | File | Change |
 |------|--------|
-| `supabase/functions/provident-enrich-projects/index.ts` | New edge function for Provident data enrichment |
-| `src/components/project-detail/ProjectLocationMap.tsx` | `scrollWheelZoom={false}` to fix two-finger scroll |
-| `supabase/functions/reelly-areas-sync/index.ts` | Full pagination + Provident area extraction + AI descriptions |
+| `supabase/functions/reelly-backfill-details/index.ts` | Fix `url`->`image_url`, `alt`->`alt_text`, `type`->`document_type`, `name`->`file_name` |
+| `supabase/functions/reelly-backfill-projects/index.ts` | Fix document columns: `url`->`file_url`, `name`->`file_name`, `type`->`document_type` |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Persist backfill results in sync_jobs; load on mount; make counts clickable with project list |
+| Database | Reset `detail_fetched_at` for projects with 0 images; reset Sunset Bay Grand specifically |
