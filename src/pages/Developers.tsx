@@ -37,6 +37,12 @@ const PREMIUM_DEVELOPERS = ["ellington"];
 const TOP_TIER_DEVELOPERS = ["binghatti", "majid-al-futtaim", "majid al futtaim"];
 const ESTABLISHED_DEVELOPERS = ["danube", "azizi"];
 
+// Exact order for elite developers at the top of the directory
+const ELITE_PRIORITY_ORDER = [
+  'emaar', 'omniyat', 'nakheel', 'sobha', 'aldar', 
+  'ellington', 'damac', 'meraas', 'dubai-properties'
+];
+
 function getDeveloperTierKey(slug: string): string {
   const normalizedSlug = slug.toLowerCase();
   if (ELITE_DEVELOPERS.some(d => normalizedSlug.includes(d))) return "elite";
@@ -87,8 +93,31 @@ const Developers = () => {
       );
     }
     
-    // Sort by rank
-    filtered.sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
+    // Sort: Elite priority order first, then by rank, then alphabetically
+    filtered.sort((a, b) => {
+      const aSlug = a.slug?.toLowerCase() || '';
+      const bSlug = b.slug?.toLowerCase() || '';
+      
+      // Check if either is in the elite priority order
+      const aIdx = ELITE_PRIORITY_ORDER.findIndex(d => aSlug.includes(d));
+      const bIdx = ELITE_PRIORITY_ORDER.findIndex(d => bSlug.includes(d));
+      
+      // Both are in priority list - sort by priority order
+      if (aIdx >= 0 && bIdx >= 0) return aIdx - bIdx;
+      // Only a is in priority list - a comes first
+      if (aIdx >= 0) return -1;
+      // Only b is in priority list - b comes first
+      if (bIdx >= 0) return 1;
+      
+      // Neither in priority list - sort by rank (treat 0 as unranked/last)
+      const aRank = a.rank && a.rank > 0 ? a.rank : 999;
+      const bRank = b.rank && b.rank > 0 ? b.rank : 999;
+      const rankDiff = aRank - bRank;
+      if (rankDiff !== 0) return rankDiff;
+      
+      // Same rank - sort alphabetically
+      return a.name.localeCompare(b.name);
+    });
     
     return filtered;
   }, [developers, searchQuery, tierFilter]);
