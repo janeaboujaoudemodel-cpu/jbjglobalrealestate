@@ -313,13 +313,14 @@ async function sendAutoBlockNotification(
 
 // Input validation schema
 const RequestSchema = z.object({
+  mode: z.enum(['concept', 'redesign', 'staging', 'chat']).optional(),
   propertyType: z.string().max(100).trim().optional(),
   propertyName: z.string().max(200).trim().optional(),
   propertySize: z.string().max(100).trim().optional(),
   designStyle: z.string().max(100).trim().optional(),
   colorPalette: z.string().max(200).trim().optional(),
   purpose: z.string().max(200).trim().optional(),
-  customNotes: z.string().max(1000).trim().optional(),
+  customNotes: z.string().max(2000).trim().optional(),
   photos: z.array(z.string().max(5000000)).max(4).optional(),
   floorPlan: z.string().max(5000000).optional(),
 });
@@ -420,6 +421,7 @@ serve(async (req) => {
     }
 
     const {
+      mode,
       propertyType,
       propertyName,
       propertySize,
@@ -435,11 +437,13 @@ serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
     const safe = (v: string | undefined) => (v ? v.slice(0, 800) : "Not specified");
-
-    const content: any[] = [
-      {
-        type: "text",
-        text: `Generate ONE premium, photorealistic interior design render (a single viewpoint) based on the inputs.
+    
+    // Build mode-specific prompt
+    let promptText = '';
+    const currentMode = mode || 'concept';
+    
+    if (currentMode === 'concept') {
+      promptText = `Generate ONE premium, photorealistic interior design render (a single viewpoint) based on the inputs.
 
 CONTEXT:
 - Property type: ${safe(propertyType)}
@@ -454,7 +458,51 @@ REQUIREMENTS:
 - Make it look like a high-end Dubai interior.
 - Include realistic lighting, materials, and furnishings.
 - Output must include an image.
-- Also return 3-5 bullet points describing the key design choices.`,
+- Also return 3-5 bullet points describing the key design choices.`;
+    } else if (currentMode === 'redesign') {
+      promptText = `Redesign the room shown in the uploaded photo(s). Transform it into a ${safe(designStyle)} style interior.
+
+TARGET STYLE:
+- Design style: ${safe(designStyle)}
+- Color palette: ${safe(colorPalette)}
+- Special requests: ${safe(customNotes)}
+
+REQUIREMENTS:
+- Keep the room's basic structure and layout.
+- Replace furniture, decor, and finishes with ${safe(designStyle)} alternatives.
+- Make it look like a high-end Dubai interior.
+- Include realistic lighting and materials.
+- Output must include a redesigned image.
+- Also return 3-5 bullet points describing the changes made.`;
+    } else if (currentMode === 'staging') {
+      promptText = `Stage the empty room shown in the uploaded photo(s) with furniture and decor.
+
+STAGING REQUIREMENTS:
+- Room type: ${safe(propertyType)}
+- Furniture style: ${safe(designStyle)}
+- Special requests: ${safe(customNotes)}
+
+REQUIREMENTS:
+- Add realistic furniture appropriate for the room type.
+- Include rugs, artwork, plants, and decorative accessories.
+- Make it look professionally staged for a real estate listing.
+- Output must include a fully staged room image.
+- Also return 3-5 bullet points describing the staging choices.`;
+    } else {
+      // Chat mode - use custom notes as the main prompt
+      promptText = `${safe(customNotes)}
+
+REQUIREMENTS:
+- Create a high-end Dubai interior design.
+- Include realistic lighting, materials, and furnishings.
+- Output must include an image.
+- Also return 3-5 bullet points describing the key design choices.`;
+    }
+
+    const content: any[] = [
+      {
+        type: "text",
+        text: promptText,
       },
     ];
 
