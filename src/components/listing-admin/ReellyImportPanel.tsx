@@ -169,7 +169,7 @@ export function ReellyImportPanel() {
     message?: string;
     error?: string;
   } | null>(null);
-  const [backfillProjectList, setBackfillProjectList] = useState<Array<{ name: string; status: string; images?: number; docs?: number }>>([]);
+  const [backfillProjectList, setBackfillProjectList] = useState<Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>>([]);
   const [isBackfillListOpen, setIsBackfillListOpen] = useState(false);
   const [backfillListFilter, setBackfillListFilter] = useState<"all" | "success" | "failed">("all");
   
@@ -695,7 +695,7 @@ export function ReellyImportPanel() {
 
     try {
       let aggregated = { processed: 0, updated: 0, failed: 0, remaining: 999 };
-      let allResults: Array<{ name: string; status: string; images?: number; docs?: number }> = [];
+      let allResults: Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }> = [];
       let batches = 0;
       const maxBatches = mode === "all" ? 100 : 1;
 
@@ -723,7 +723,7 @@ export function ReellyImportPanel() {
         if (!data?.success) throw new Error(data?.error || "Backfill failed");
 
         // Collect per-project results from the edge function
-        const batchResults = (data.results || []) as Array<{ name: string; status: string; images?: number; docs?: number }>;
+        const batchResults = (data.results || []) as Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>;
         allResults = [...allResults, ...batchResults];
 
         aggregated = {
@@ -1739,9 +1739,16 @@ export function ReellyImportPanel() {
                 {backfillProjectList
                   .filter(p => backfillListFilter === "all" ? true : backfillListFilter === "success" ? p.status === "success" : p.status !== "success")
                   .map((p, i) => (
-                    <div key={i} className="flex items-center justify-between gap-3 border rounded-lg p-2">
+                    <div key={i} className="flex items-center justify-between gap-3 border rounded-lg p-2 hover:bg-zinc-50 transition-colors">
                       <div className="min-w-0">
-                        <div className="font-medium text-zinc-900 truncate text-sm">{p.name}</div>
+                        {p.slug ? (
+                          <a href={`/projects/${p.slug}`} target="_blank" rel="noopener noreferrer" className="font-medium text-zinc-900 truncate text-sm hover:text-blue-600 hover:underline flex items-center gap-1">
+                            {p.name}
+                            <ExternalLink className="h-3 w-3 flex-shrink-0 opacity-50" />
+                          </a>
+                        ) : (
+                          <div className="font-medium text-zinc-900 truncate text-sm">{p.name}</div>
+                        )}
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
                         {p.status === "success" ? (

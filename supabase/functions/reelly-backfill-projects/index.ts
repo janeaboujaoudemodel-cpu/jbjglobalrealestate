@@ -206,7 +206,7 @@ Deno.serve(async (req) => {
     // Batch/All mode - find projects missing data
     let query = supabase
       .from("projects")
-      .select("id, reelly_id, name, floor_plan_types, amenities")
+      .select("id, reelly_id, name, slug, floor_plan_types, amenities")
       .not("reelly_id", "is", null);
 
     if (!forceRefresh) {
@@ -256,7 +256,7 @@ Deno.serve(async (req) => {
     let updated = 0;
     let failed = 0;
     const errors: string[] = [];
-    const results: Array<{ name: string; status: string; images?: number; docs?: number }> = [];
+    const results: Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }> = [];
 
     // Create or update sync job for persistence
     let jobId = body.job_id;
@@ -280,7 +280,7 @@ Deno.serve(async (req) => {
       if (!detail) {
         failed++;
         errors.push(`API fetch failed: ${project.name}`);
-        results.push({ name: project.name, status: "api_fetch_failed" });
+        results.push({ name: project.name, slug: project.slug, status: "api_fetch_failed" });
         // Still mark as fetched so we don't retry infinitely
         await supabase.from("projects").update({ detail_fetched_at: new Date().toISOString() }).eq("id", project.id);
         continue;
@@ -291,12 +291,12 @@ Deno.serve(async (req) => {
         updated++;
         const imgCount = updateResult.fields?.find(f => f.startsWith("images("))?.match(/\d+/)?.[0];
         const docCount = updateResult.fields?.includes("documents") ? 1 : 0;
-        results.push({ name: project.name, status: "success", images: imgCount ? parseInt(imgCount) : 0, docs: docCount });
+        results.push({ name: project.name, slug: project.slug, status: "success", images: imgCount ? parseInt(imgCount) : 0, docs: docCount });
         console.log(`✓ Updated ${project.name} with: ${updateResult.fields?.join(", ") || "all fields"}`);
       } else {
         failed++;
         errors.push(updateResult.error || `DB update failed: ${project.name}`);
-        results.push({ name: project.name, status: updateResult.error || "update_failed" });
+        results.push({ name: project.name, slug: project.slug, status: updateResult.error || "update_failed" });
       }
 
       // Rate limiting to avoid API throttling
