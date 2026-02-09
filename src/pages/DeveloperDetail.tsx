@@ -109,7 +109,7 @@ const DeveloperDetail = () => {
       <div className="jj-layer-2 mt-6 md:mt-8 mb-12">
         {/* Developer header */}
         <div className="flex flex-col md:flex-row md:items-start gap-6">
-          {/* Logo plate - Standardized small box with grayscale treatment */}
+          {/* Logo plate - Clean white box without gray overlay */}
           <div 
             className="w-24 h-16 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0"
             style={{
@@ -122,11 +122,7 @@ const DeveloperDetail = () => {
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="max-h-12 max-w-[90%] object-contain"
-                style={{ 
-                  mixBlendMode: 'multiply',
-                  filter: 'grayscale(100%) contrast(1.2)'
-                }}
+                className="max-h-14 max-w-[90%] object-contain"
                 loading="eager"
               />
             ) : (

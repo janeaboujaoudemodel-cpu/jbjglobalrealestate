@@ -54,7 +54,7 @@ export default function VideoSuite() {
               </div>
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-white">
-                  Video <span className="text-gold">Suite</span>
+                  Creative <span className="text-gold">Video Suite</span>
                 </h1>
                 <p className="text-zinc-400 text-sm">Edit, resize, and add captions</p>
               </div>

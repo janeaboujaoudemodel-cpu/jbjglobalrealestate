@@ -48,18 +48,7 @@ const ToolCard: React.FC<ToolCardProps> = ({ tool }) => {
   return (
     <Link to={tool.href} className="group block h-full">
       <div className="h-full flex flex-col bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
-        {/* Flagship/New Badge */}
-        {tool.isNew && (
-          <span className="absolute -top-2 -right-2 bg-gold text-black text-xs font-bold px-2 py-0.5 rounded-full z-10">
-            NEW
-          </span>
-        )}
-        {tool.isFlagship && (
-          <span className="absolute -top-2 -right-2 bg-gradient-to-r from-gold to-amber-500 text-black text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 z-10">
-            <Sparkles className="h-3 w-3" />
-            FLAGSHIP
-          </span>
-        )}
+        {/* Badges removed per plan */}
         
         {/* Icon - Transparent with gold border matching homepage */}
         <div className="w-12 h-12 rounded-xl border-2 border-gold/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">

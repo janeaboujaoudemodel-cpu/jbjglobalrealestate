@@ -32,14 +32,13 @@ export interface ToolDefinition {
 export const mediaTools: ToolDefinition[] = [
   {
     id: 'ai-video-studio',
-    name: 'JBJ AI Video Studio™',
+    name: 'Creative Video Suite',
     description: 'Professional CapCut-style video editor with multi-track timeline, AI captions, voiceover, effects, and smart reframing.',
     href: '/toolkit/ai-video-studio',
     icon: Play,
     category: 'media',
     status: 'active',
     tags: ['Video', 'AI', 'Captions', 'Effects'],
-    isFlagship: true,
   },
   {
     id: 'video-resize-pack',
@@ -90,7 +89,6 @@ export const mediaTools: ToolDefinition[] = [
     category: 'media',
     status: 'active',
     tags: ['Captions', 'Translate', 'Subtitles'],
-    isNew: true,
   },
   {
     id: 'background-ai',
@@ -101,7 +99,6 @@ export const mediaTools: ToolDefinition[] = [
     category: 'media',
     status: 'active',
     tags: ['AI', 'Background', 'Photos'],
-    isNew: true,
   },
   {
     id: 'beauty-filters',
@@ -112,7 +109,6 @@ export const mediaTools: ToolDefinition[] = [
     category: 'media',
     status: 'active',
     tags: ['Filters', 'Enhancement', 'Photos'],
-    isNew: true,
   },
 ];
 
