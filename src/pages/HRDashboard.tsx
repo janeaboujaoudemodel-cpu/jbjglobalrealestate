@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, TrendingUp, UserCheck, Brain, Calendar, AlertTriangle, CheckSquare, Target, Plus } from "lucide-react";
+import { Users, FileText, Activity, Linkedin, Building2, DollarSign, Briefcase, Wallet, TrendingUp, UserCheck, Brain, Calendar, AlertTriangle, CheckSquare, Target, Plus, FolderOpen } from "lucide-react";
 import JobOfferManager from "@/components/hr/JobOfferManager";
 import { EmployeePerformanceDashboard } from "@/components/hr/EmployeePerformanceDashboard";
 import { LinkedInInsightsPanel } from "@/components/hr/LinkedInInsightsPanel";
@@ -12,7 +12,9 @@ import { WarningsPanel } from "@/components/hr/WarningsPanel";
 import { ApprovalWorkflowPanel } from "@/components/hr/ApprovalWorkflowPanel";
 import { HuntingDashboard } from "@/components/hr/hunting/HuntingDashboard";
 import { OpenPositionsPanel } from "@/components/hr/OpenPositionsPanel";
+import CVCenter from "@/components/crm/CVCenter";
 import { useHRStats } from "@/hooks/useHRStats";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   PremiumBackendLayout, 
   PremiumPageHeader, 
@@ -27,6 +29,7 @@ import {
 export default function HRDashboard() {
   const [activeTab, setActiveTab] = useState("performance");
   const { data: stats, isLoading: statsLoading } = useHRStats();
+  const { user } = useAuth();
 
   return (
     <PremiumBackendLayout>
@@ -51,7 +54,7 @@ export default function HRDashboard() {
       {/* Stats Section - Real Data */}
       <PremiumSection variant="cream" className="py-6">
         <PremiumContainer>
-          <PremiumGrid cols={4} gap="md">
+          <PremiumGrid cols={5} gap="md">
             <PremiumStatCard
               title="Active Employees"
               value={statsLoading ? "..." : String(stats?.activeEmployees || 0)}
@@ -75,6 +78,13 @@ export default function HRDashboard() {
               icon={UserCheck}
               trend={stats?.newHires ? "up" : undefined}
               accentColor="green"
+            />
+            <PremiumStatCard
+              title="CVs Collected"
+              value={statsLoading ? "..." : String(stats?.totalCVs || 0)}
+              subtitle={`${stats?.pendingCVs || 0} pending review`}
+              icon={FileText}
+              accentColor="orange"
             />
             <PremiumStatCard
               title="AI Insights"
@@ -105,6 +115,13 @@ export default function HRDashboard() {
               >
                 <Target className="h-4 w-4" />
                 Hunting
+              </TabsTrigger>
+              <TabsTrigger 
+                value="cv-center" 
+                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 data-[state=active]:shadow-sm"
+              >
+                <FolderOpen className="h-4 w-4" />
+                CV Center
               </TabsTrigger>
               <TabsTrigger 
                 value="positions" 
@@ -177,6 +194,10 @@ export default function HRDashboard() {
 
             <TabsContent value="hunting" className="mt-6">
               <HuntingDashboard />
+            </TabsContent>
+
+            <TabsContent value="cv-center" className="mt-6">
+              <CVCenter userId={user?.id || ''} />
             </TabsContent>
 
             <TabsContent value="positions" className="mt-6">

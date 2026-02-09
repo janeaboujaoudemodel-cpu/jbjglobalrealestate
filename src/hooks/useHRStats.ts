@@ -7,42 +7,66 @@ export interface HRStats {
   newHires: number;
   aiInsights: number;
   avgPerformance: number;
+  totalCVs: number;
+  pendingCVs: number;
 }
 
 export function useHRStats() {
   return useQuery({
     queryKey: ["hr-stats"],
     queryFn: async (): Promise<HRStats> => {
-      // Get active employees count
-      const { count: employeeCount } = await supabase
-        .from("crm_users_profile")
-        .select("*", { count: "exact", head: true })
-        .eq("is_active", true);
-
-      // Get open positions count
-      const { count: positionsCount } = await supabase
-        .from("hr_job_offers")
-        .select("*", { count: "exact", head: true })
-        .eq("is_active", true);
-
-      // Get new hires in last 30 days (employees created recently)
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      
-      const { count: newHiresCount } = await supabase
-        .from("crm_users_profile")
-        .select("*", { count: "exact", head: true })
-        .gte("created_at", thirtyDaysAgo.toISOString());
+
+      // Run all queries in parallel for better performance
+      const [
+        employeesResult,
+        positionsResult,
+        hiresResult,
+        totalCVsResult,
+        pendingCVsResult,
+      ] = await Promise.all([
+        // Get active employees count
+        supabase
+          .from("crm_users_profile")
+          .select("*", { count: "exact", head: true })
+          .eq("is_active", true),
+        
+        // Get open positions count
+        supabase
+          .from("hr_job_offers")
+          .select("*", { count: "exact", head: true })
+          .eq("is_active", true),
+        
+        // Get new hires in last 30 days
+        supabase
+          .from("crm_users_profile")
+          .select("*", { count: "exact", head: true })
+          .gte("created_at", thirtyDaysAgo.toISOString()),
+        
+        // Get total CVs from hr_applications
+        supabase
+          .from("hr_applications")
+          .select("*", { count: "exact", head: true }),
+        
+        // Get pending CVs
+        supabase
+          .from("hr_applications")
+          .select("*", { count: "exact", head: true })
+          .eq("status", "pending"),
+      ]);
 
       return {
-        activeEmployees: employeeCount || 0,
-        openPositions: positionsCount || 0,
-        newHires: newHiresCount || 0,
+        activeEmployees: employeesResult.count || 0,
+        openPositions: positionsResult.count || 0,
+        newHires: hiresResult.count || 0,
         aiInsights: 0, // Will be populated when hunting system has data
         avgPerformance: 0, // Will be calculated from performance data
+        totalCVs: totalCVsResult.count || 0,
+        pendingCVs: pendingCVsResult.count || 0,
       };
     },
-    staleTime: 60000, // 1 minute
+    staleTime: 120000, // 2 minutes - reduces refetching
   });
 }
 
@@ -59,5 +83,6 @@ export function useOpenPositions() {
       if (error) throw error;
       return data || [];
     },
+    staleTime: 120000, // 2 minutes
   });
 }
