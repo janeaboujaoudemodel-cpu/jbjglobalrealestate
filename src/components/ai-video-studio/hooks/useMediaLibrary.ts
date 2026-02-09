@@ -189,7 +189,7 @@ export function useMediaLibrary() {
       const stockItems: StockAsset[] = filteredData.map((item) => ({
         id: item.id,
         name: item.name || '',
-        type: item.asset_type === 'music' ? 'audio' as const : (item.asset_type as 'video' | 'audio' | 'image'),
+        type: (item.asset_type === 'music' || item.asset_type === 'sfx') ? 'audio' as const : (item.asset_type as 'video' | 'audio' | 'image'),
         url: item.file_path || '',
         thumbnailUrl: item.thumbnail_path || undefined,
         duration: item.duration_ms ? item.duration_ms / 1000 : undefined,

@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { toast } from 'sonner';
 import { 
   Upload, 
   FolderOpen, 
@@ -241,7 +242,11 @@ export function MediaLibraryPanel({
                 <p className="text-xs text-slate-400 mb-3">
                   Generate cinematic drone-style footage from text prompts
                 </p>
-                <Button size="sm" className="w-full bg-gold/20 text-gold hover:bg-gold/30 border border-gold/30">
+                <Button 
+                  size="sm" 
+                  className="w-full bg-gold text-black hover:bg-gold/90 border border-gold"
+                  onClick={() => toast.info('AI Scene Generator coming soon! Use the Photos tab to upload your own images.')}
+                >
                   <Wand2 className="w-4 h-4 mr-2" />
                   Generate Scene
                 </Button>
@@ -255,7 +260,11 @@ export function MediaLibraryPanel({
                 <p className="text-xs text-slate-400 mb-3">
                   Generate professional voiceovers with AI voices
                 </p>
-                <Button size="sm" className="w-full bg-gold/20 text-gold hover:bg-gold/30 border border-gold/30">
+                <Button 
+                  size="sm" 
+                  className="w-full bg-gold text-black hover:bg-gold/90 border border-gold"
+                  onClick={() => toast.info('Open the Voice Suite from the Toolkit to create professional voiceovers with AI!')}
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Create Voiceover
                 </Button>
@@ -273,7 +282,11 @@ export function MediaLibraryPanel({
                   placeholder="Add applause at 00:12..."
                   className="h-8 bg-slate-800 border-slate-700 text-sm mb-2"
                 />
-                <Button size="sm" className="w-full bg-gold/20 text-gold hover:bg-gold/30 border border-gold/30">
+                <Button 
+                  size="sm" 
+                  className="w-full bg-gold text-black hover:bg-gold/90 border border-gold"
+                  onClick={() => toast.info('AI SFX command coming soon! Browse the Stock tab for available sound effects.')}
+                >
                   <Wand2 className="w-4 h-4 mr-2" />
                   Apply Command
                 </Button>
