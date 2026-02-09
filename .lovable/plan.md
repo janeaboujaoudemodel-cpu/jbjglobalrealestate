@@ -1,117 +1,70 @@
 
 
-## Goal
-Fix three issues:
-1. "Select All" should select and approve ALL 1,809 pending imports (not just the 60 loaded on screen)
-2. Projects remain editable/repairable after approval
-3. Remove duplicate developer entries from the database
+# Fix All Edge Function "Failed to Send Request" Errors
 
----
+## Root Cause
 
-## Root Causes
+Multiple edge functions used in the sync, extraction, and repair flows are **not registered** in `supabase/config.toml`. Without an entry, they default to `verify_jwt = true`, which is incompatible with the signing-keys gateway and causes every browser request to be rejected before your code runs.
 
-### Issue 1: Select All only selects 60 items
-- `PAGE_SIZE = 60` in `ProjectApprovalQueue.tsx` (line 108)
-- `selectAll()` (line 727) only selects from `imports` array, which contains at most 60 loaded items
-- The bulk approval then loops through only those 60 items one by one via `handleConfirmedApproval`
+Additionally, two of these functions use deprecated `esm.sh` imports that can cause deployment timeouts.
 
-### Issue 2: Edge function also limited
-- `bulk-approve-imports` edge function defaults to `limit = 200` per call
-- Even if called directly, it only processes 200 at a time
+## Missing Functions (6 total)
 
-### Issue 3: Duplicate developers in database
-Found 4 developers with duplicate entries (same name, different slugs):
-- "Adventz and East and West International Group" (2 rows)
-- "Arabian Hills Investment and Real Estate Development" (2 rows)
-- "PREDMET.CONSTRUCTION" (2 rows)
-- "ZaZEN Properties" (2 rows)
+These functions exist as deployed code but have no `config.toml` entry:
 
----
+| Function | Used For |
+|----------|----------|
+| `batch-extract-pending` | Extract project data during sync |
+| `reelly-backfill-projects` | Backfill missing Reelly projects |
+| `repair-approved-projects` | Repair approved project metadata |
+| `reelly-scrape` | Legacy Reelly import |
+| `scheduled-extraction` | Scheduled data extraction jobs |
+| `extract-developers-provident` | Extract developers from Provident |
 
-## Implementation Plan
+## Changes
 
-### A) Add "Approve ALL Pending" button that calls the edge function in a loop
+### 1. Register all 6 missing functions in config.toml
+**File:** `supabase/config.toml`
 
-**File:** `src/components/listing-admin/ProjectApprovalQueue.tsx`
+Add entries with `verify_jwt = false`:
 
-Instead of trying to load all 1,809 items into the browser and process them one by one, the "Select All + Approve" flow should call the `bulk-approve-imports` edge function repeatedly in batches until all items are processed.
+```toml
+[functions.batch-extract-pending]
+verify_jwt = false
 
-Changes:
-1. Add a new **"Approve ALL (1,809)"** button alongside the existing "Select All" button that appears when there are more items than loaded
-2. This button triggers a confirmation dialog (using the existing `ApprovalConfirmDialog` with the full count, requiring manual count typing since it exceeds 100)
-3. On confirmation, call the `bulk-approve-imports` edge function in a loop:
-   - Each call processes up to 500 items (pass `limit: 500`)
-   - Loop continues until the function returns `approved: 0` (nothing left)
-   - Progress bar updates after each batch
-   - Final toast shows total approved count
+[functions.reelly-backfill-projects]
+verify_jwt = false
 
-New function `handleApproveAllPending`:
-```text
-async handleApproveAllPending():
-  setConfirmDialogMode("all")
-  setConfirmDialogCount(totalCount)  // 1,809
-  setConfirmDialogOpen(true)
-  
-  // On confirm:
-  setIsBulkProcessing(true)
-  setBulkAction("approve")
-  let totalApproved = 0
-  
-  loop:
-    response = supabase.functions.invoke("bulk-approve-imports", {
-      body: { limit: 500 }
-    })
-    totalApproved += response.stats.approved
-    setBulkDone(totalApproved)
-    if response.stats.approved === 0: break
-  
-  toast("All done: {totalApproved} approved")
-  fetchPendingImports()
+[functions.repair-approved-projects]
+verify_jwt = false
+
+[functions.reelly-scrape]
+verify_jwt = false
+
+[functions.scheduled-extraction]
+verify_jwt = false
+
+[functions.extract-developers-provident]
+verify_jwt = false
 ```
 
-4. Update `handleConfirmedApproval` to detect when `confirmDialogMode === "all"` and call the edge-function loop instead of the item-by-item client loop
+### 2. Fix deprecated imports in 2 functions
 
-### B) Keep existing Select All for partial selections
-The current "Select All" button will continue to work for the loaded page (for selective operations like delete). But the new "Approve ALL" button handles the full queue.
+**File:** `supabase/functions/batch-extract-pending/index.ts` (line 2)
+- FROM: `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";`
+- TO: `import { createClient } from "npm:@supabase/supabase-js@2";`
 
-### C) Delete duplicate developers from database
-**Action:** Data cleanup via SQL
+**File:** `supabase/functions/repair-approved-projects/index.ts` (line 2)
+- FROM: `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";`
+- TO: `import { createClient } from "npm:@supabase/supabase-js@2";`
 
-Delete the duplicate developer rows, keeping the one with the cleaner slug (without "and-" articles):
-
-```sql
--- Keep: adventz-east-west-international-group, delete: adventz-and-east-and-west-international-group
--- Keep: arabian-hills-investment-real-estate-development, delete: arabian-hills-investment-and-real-estate-development
--- Keep: predmet-construction, delete: predmetconstruction  
--- Keep: zazen-properties, delete: zzen-properties
-
-DELETE FROM developers WHERE id IN (
-  'ee71594f-835e-4d02-9f6b-afecc80353b1',
-  'd34f01bd-e689-48c7-b0ff-1fc87056c6a3', 
-  '16db3698-d395-42a6-a07b-6a21873865b1',
-  '8d01fcdc-b875-4ce0-a21c-d55c6eabd9cd'
-);
-```
-
-First reassign any projects pointing to the deleted developer IDs to the kept ones.
-
-### D) Projects remain editable after approval
-This already works -- approved projects go into the `projects` table and are fully editable from the Admin panel. The "repair" and "edit" functionality on the Admin listing pages operates on the `projects` table. No code changes needed for this.
-
----
+(The other 4 functions already use `npm:` imports or don't need changes.)
 
 ## Files to Modify
 
-| File | Action | Description |
-|------|--------|-------------|
-| `src/components/listing-admin/ProjectApprovalQueue.tsx` | MODIFY | Add "Approve ALL Pending" button that calls edge function in a loop for the full 1,809 queue |
-| Database | DATA DELETE | Remove 4 duplicate developer rows, reassign any linked projects |
+| File | Change |
+|------|--------|
+| `supabase/config.toml` | Add 6 missing function entries |
+| `supabase/functions/batch-extract-pending/index.ts` | Fix `esm.sh` to `npm:` import |
+| `supabase/functions/repair-approved-projects/index.ts` | Fix `esm.sh` to `npm:` import |
 
----
-
-## QA Checklist
-1. Click "Approve ALL" -- confirmation dialog shows full count (1,809) and requires typing the number
-2. After confirming, progress bar updates as batches complete
-3. All 1,809 items get approved (pending queue becomes empty)
-4. Developer directory shows no duplicate cards
-5. Approved projects appear in the main listings and can be edited from Admin
