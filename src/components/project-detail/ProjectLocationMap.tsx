@@ -248,7 +248,7 @@ export default function ProjectLocationMap({
       <MapContainer
         center={coordinates}
         zoom={15}
-        scrollWheelZoom={true}
+        scrollWheelZoom={false}
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
         attributionControl={false}
