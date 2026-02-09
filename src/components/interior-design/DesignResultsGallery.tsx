@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { PDFDocument, StandardFonts } from 'pdf-lib';
+import { DesignMode } from './DesignModeSelector';
 
 interface DesignResultsGalleryProps {
   images: string[];
@@ -21,7 +22,24 @@ interface DesignResultsGalleryProps {
   onRequestRevision: () => void;
   onGenerateAnother: () => void;
   isSaving: boolean;
+  mode?: DesignMode;
 }
+
+// Get button variant based on mode
+const getButtonVariant = (mode?: DesignMode): "ai-fuchsia" | "ai-blue" | "ai-emerald" | "ai-orange" => {
+  switch (mode) {
+    case 'concept':
+      return 'ai-fuchsia';
+    case 'redesign':
+      return 'ai-blue';
+    case 'staging':
+      return 'ai-emerald';
+    case 'chat':
+      return 'ai-orange';
+    default:
+      return 'ai-fuchsia';
+  }
+};
 
 const DesignResultsGallery = ({
   images,
@@ -30,6 +48,7 @@ const DesignResultsGallery = ({
   onRequestRevision,
   onGenerateAnother,
   isSaving,
+  mode,
 }: DesignResultsGalleryProps) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -195,8 +214,10 @@ const DesignResultsGallery = ({
     }
   };
 
+  const buttonVariant = getButtonVariant(mode);
+
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -257,7 +278,7 @@ const DesignResultsGallery = ({
           <Button
             onClick={downloadImage}
             disabled={isDownloading}
-            className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-500 hover:to-purple-500"
+            variant={buttonVariant}
           >
             <Download className="w-4 h-4 mr-2" />
             Download Image
@@ -266,8 +287,7 @@ const DesignResultsGallery = ({
           <Button
             onClick={downloadPdf}
             disabled={isDownloading}
-            variant="outline"
-            className="border-zinc-700 hover:bg-zinc-800"
+            variant="dark-outline"
           >
             <FileText className="w-4 h-4 mr-2" />
             Download PDF
@@ -275,8 +295,7 @@ const DesignResultsGallery = ({
           
           <Button
             onClick={shareDesign}
-            variant="outline"
-            className="border-zinc-700 hover:bg-zinc-800"
+            variant="dark-outline"
           >
             <Share2 className="w-4 h-4 mr-2" />
             Share
@@ -286,8 +305,7 @@ const DesignResultsGallery = ({
           
           <Button
             onClick={onGenerateAnother}
-            variant="outline"
-            className="border-zinc-700 hover:bg-zinc-800"
+            variant="dark-outline"
           >
             <Sparkles className="w-4 h-4 mr-2" />
             Generate Another
@@ -295,8 +313,7 @@ const DesignResultsGallery = ({
           
           <Button
             onClick={onRequestRevision}
-            variant="outline"
-            className="border-zinc-700 hover:bg-zinc-800"
+            variant="dark-outline"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             Request Revision
