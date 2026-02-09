@@ -200,12 +200,12 @@
              </>
            )}
            
-           {/* Top-Right: Sale Status Badge */}
-           {saleStatusBadge && (
-             <div className={`absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
-               {saleStatusBadge.label}
-             </div>
-           )}
+            {/* Top-Left: Sale Status Badge */}
+            {saleStatusBadge && (
+              <div className={`absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
+                {saleStatusBadge.label}
+              </div>
+            )}
            
            {/* Bottom-Right: Handover Year */}
            {project.handover_date && (
