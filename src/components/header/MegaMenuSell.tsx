@@ -2,7 +2,7 @@ import React from 'react';
 import { Building2, Home, Castle, Building, Briefcase, ArrowRight, FileText, DollarSign, TrendingUp, ClipboardCheck } from 'lucide-react';
 import sellPropertyBg from '@/assets/services/sell-property-bg.jpg';
 import dubaiSellingVideo from '@/assets/videos/dubai-selling-hero.mp4';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuSellProps {
   onClose: () => void;
@@ -42,44 +42,36 @@ const MegaMenuSell = React.forwardRef<HTMLDivElement, MegaMenuSellProps>(({ onCl
             />
           </div>
 
-          {/* Right: Links (with divider) */}
+          {/* Right: Links in Premium Cards */}
           <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Column 1: What You Can Sell */}
-              <div className="relative flex flex-col">
-                <MegaMenuSectionTitle icon={Building2} title="What You Can Sell" />
-                <div className="space-y-1 min-h-[180px]">
-                  {propertyTypes.map((item) => (
-                    <MegaMenuIconLink
-                      key={item.label}
-                      to={item.href}
-                      onClick={onClose}
-                      icon={item.icon}
-                      title={item.label}
-                      compact
-                    />
-                  ))}
-                </div>
-                {/* Vertical divider between columns */}
-                <div className="hidden sm:block absolute top-0 -right-3 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Card 1: What You Can Sell */}
+              <MegaMenuCard icon={Building2} title="What You Can Sell">
+                {propertyTypes.map((item) => (
+                  <MegaMenuIconLink
+                    key={item.label}
+                    to={item.href}
+                    onClick={onClose}
+                    icon={item.icon}
+                    title={item.label}
+                    compact
+                  />
+                ))}
+              </MegaMenuCard>
 
-              {/* Column 2: Seller Resources */}
-              <div className="flex flex-col">
-                <MegaMenuSectionTitle icon={FileText} title="Seller Resources" />
-                <div className="space-y-1 min-h-[180px]">
-                  {sellerResources.map((item) => (
-                    <MegaMenuIconLink
-                      key={item.label}
-                      to={item.href}
-                      onClick={onClose}
-                      icon={item.icon}
-                      title={item.label}
-                      compact
-                    />
-                  ))}
-                </div>
-              </div>
+              {/* Card 2: Seller Resources */}
+              <MegaMenuCard icon={FileText} title="Seller Resources">
+                {sellerResources.map((item) => (
+                  <MegaMenuIconLink
+                    key={item.label}
+                    to={item.href}
+                    onClick={onClose}
+                    icon={item.icon}
+                    title={item.label}
+                    compact
+                  />
+                ))}
+              </MegaMenuCard>
             </div>
             
             {/* Full-width CTA Button at bottom */}

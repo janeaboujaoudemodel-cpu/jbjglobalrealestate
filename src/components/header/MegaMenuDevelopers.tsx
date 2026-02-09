@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Building2, Eye, ArrowRight } from 'lucide-react';
+import { Building2, Eye } from 'lucide-react';
 import menuDubaiSkyline from '@/assets/menu-dubai-skyline.jpg';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSectionTitle } from '@/components/header/mega-menu-primitives';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuDevelopersProps {
   onClose: () => void;
@@ -25,13 +24,6 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
     { name: 'Aldar Properties', slug: 'aldar' },
   ];
 
-  // Build links with correct route pattern: /developer/:slug (singular)
-
-  // Split into two columns
-  const half = Math.ceil(developers.length / 2);
-  const firstColumn = developers.slice(0, half);
-  const secondColumn = developers.slice(half);
-
   return (
     <MegaMenuShell ref={ref}>
       {/* Reduced padding for smaller menu */}
@@ -52,43 +44,29 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
           </div>
 
           <div className="lg:col-span-7 lg:border-l lg:border-gold/30 lg:pl-8">
-            <MegaMenuSectionTitle
-              icon={Building2}
-              title="Top Developers in Dubai"
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
-              {firstColumn.map((dev) => (
-                <MegaMenuIconLink
-                  key={dev.slug}
-                  to={`/developer/${dev.slug}`}
-                  onClick={onClose}
-                  icon={Building2}
-                  title={dev.name}
-                  compact
-                />
-              ))}
-              {secondColumn.map((dev) => (
-                <MegaMenuIconLink
-                  key={dev.slug}
-                  to={`/developer/${dev.slug}`}
-                  onClick={onClose}
-                  icon={Building2}
-                  title={dev.name}
-                  compact
-                />
-              ))}
-            </div>
+            {/* Single Premium Card for Developers */}
+            <MegaMenuCard icon={Building2} title="Top Developers in Dubai">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
+                {developers.map((dev) => (
+                  <MegaMenuIconLink
+                    key={dev.slug}
+                    to={`/developer/${dev.slug}`}
+                    onClick={onClose}
+                    icon={Building2}
+                    title={dev.name}
+                    compact
+                  />
+                ))}
+              </div>
+            </MegaMenuCard>
             
-            {/* View All - emphasized */}
-            <div className="mt-3">
-              <MegaMenuIconLink
+            {/* View All CTA */}
+            <div className="mt-4">
+              <MegaMenuCTAButton
                 to="/developers"
                 onClick={onClose}
                 icon={Eye}
                 title="View All Developers"
-                compact
-                emphasis
               />
             </div>
           </div>

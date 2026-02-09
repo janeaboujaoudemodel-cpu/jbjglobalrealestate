@@ -634,205 +634,214 @@ const Footer = () => {
           {/* Premium Champagne Inner Layer - Wraps Navigation + Tools + Contact - Fills to gold border */}
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] m-1 overflow-hidden">
             
-            {/* Navigation Grid Section - 2 Aligned Rows of 4 Columns Each */}
-            
-            {/* ROW 1: Properties | Services | Guides | About */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 border-b border-gold/20">
-              
-              {/* Row 1, Col 1: Properties */}
-              <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
-                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                  {t('footer.properties') || 'Properties'}
-                </h4>
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[100px] sm:min-h-[120px] md:min-h-[160px]">
-                  {propertiesLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-              {/* Row 1, Col 2: Services (MOVED UP from Row 2) */}
-              <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20 border-b lg:border-b-0">
-                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                  {t('footer.servicesSection') || 'Services'}
-                </h4>
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[100px] sm:min-h-[120px] md:min-h-[160px]">
-                  {servicesLinks.slice(0, 7).map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-              {/* Row 1, Col 3: Guides */}
-              <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
-                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                  {t('footer.guides') || 'Guides'}
-                </h4>
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[100px] sm:min-h-[120px] md:min-h-[160px]">
-                  {guidesLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-              {/* Row 1, Col 4: About & Careers */}
-              <div className="p-2 sm:p-3 md:p-5">
-                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                  About & Careers
-                </h4>
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[100px] sm:min-h-[120px] md:min-h-[160px]">
-                  {aboutLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                  {/* Careers Divider */}
-                  <li className="pt-2 border-t border-gold/30 mt-2">
-                    <span className="text-xs text-gold font-medium uppercase tracking-wider">Careers</span>
-                  </li>
-                  {careerLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* ROW 2: Sell | Education Hub | Legal | Business Suites */}
-            <div className="grid grid-cols-2 lg:grid-cols-4">
-              
-              {/* Row 2, Col 1: Sell */}
-              <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
-                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                  Sell
-                </h4>
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[80px] sm:min-h-[100px] md:min-h-[120px]">
-                  {sellLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-              {/* Row 2, Col 2: Education Hub (Title link to /guides) + Investor Hub */}
-              <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20 border-t lg:border-t-0">
-                <Link 
-                  to={educationHubLink.href}
-                  className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold hover:text-gold/80 transition-colors block"
-                >
-                  Education Hub
-                </Link>
-                <p className="text-zinc-500 text-xs mb-3">Books, Guides & Market Reports</p>
+            {/* Navigation Grid Section - Premium Card Layout */}
+            <div className="p-4 sm:p-6 md:p-8">
+              {/* ROW 1: 4 Premium Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                 
-                <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-2 pb-1 border-b border-gold/20 text-gold/80">
-                  Investor Hub
-                </h4>
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[60px]">
-                  {investorHubLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
+                {/* Card 1: Properties */}
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                    <span className="text-gold">✦</span>
+                    {t('footer.properties') || 'Properties'}
+                  </h4>
+                  <ul className="space-y-2">
+                    {propertiesLinks.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          to={link.href}
+                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                {/* Card 2: Services */}
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                    <span className="text-gold">✦</span>
+                    {t('footer.servicesSection') || 'Services'}
+                  </h4>
+                  <ul className="space-y-2 max-h-[180px] overflow-y-auto">
+                    {servicesLinks.slice(0, 7).map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          to={link.href}
+                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                {/* Card 3: Guides */}
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                    <span className="text-gold">✦</span>
+                    {t('footer.guides') || 'Guides'}
+                  </h4>
+                  <ul className="space-y-2">
+                    {guidesLinks.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          to={link.href}
+                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                {/* Card 4: About & Careers */}
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                    <span className="text-gold">✦</span>
+                    About & Careers
+                  </h4>
+                  <ul className="space-y-2">
+                    {aboutLinks.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          to={link.href}
+                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                    {/* Careers Divider */}
+                    <li className="pt-2 border-t border-gold/30 mt-2">
+                      <span className="text-xs text-gold font-medium uppercase tracking-wider">Careers</span>
                     </li>
-                  ))}
-                </ul>
+                    {careerLinks.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          to={link.href}
+                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              
-              {/* Row 2, Col 3: Legal */}
-              <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20">
-                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                  Legal
-                </h4>
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[80px] sm:min-h-[100px] md:min-h-[120px]">
-                  {legalLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-              {/* Row 2, Col 4: Business Suites */}
-              <div className="p-2 sm:p-3 md:p-5">
-                <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
-                  Business Suites
-                </h4>
-                <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 min-h-[80px] sm:min-h-[100px] md:min-h-[120px]">
-                  {businessSuitesLinks.slice(0, 4).map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        to={link.href}
-                        className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
 
-            {/* ROW 3: Mode-Aware - Broker Tools (only visible in broker mode) - NOW GOLD STYLED */}
-            {isBrokerMode && (
-              <div className="border-t border-gold/20">
-                <div className="grid grid-cols-2 lg:grid-cols-4">
-                  {/* Broker Tools Section - GOLD styling, no emoji */}
-                  <div className="p-2 sm:p-3 md:p-5 border-r border-gold/20 lg:col-span-2">
-                    <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+              {/* ROW 2: 4 Premium Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                {/* Card 5: Sell */}
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                    <span className="text-gold">✦</span>
+                    Sell
+                  </h4>
+                  <ul className="space-y-2">
+                    {sellLinks.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          to={link.href}
+                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                {/* Card 6: Education Hub + Investor Hub */}
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+                  <Link 
+                    to={educationHubLink.href}
+                    className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-2 pb-2 border-b border-gold/30 text-black hover:text-gold transition-colors flex items-center gap-2"
+                  >
+                    <span className="text-gold">✦</span>
+                    Education Hub
+                  </Link>
+                  <p className="text-zinc-500 text-xs mb-3">Books, Guides & Market Reports</p>
+                  
+                  <h4 className="font-bold text-xs uppercase tracking-[0.12em] mb-2 pb-1 border-b border-gold/20 text-black/80 flex items-center gap-2">
+                    <span className="text-gold/60">✦</span>
+                    Investor Hub
+                  </h4>
+                  <ul className="space-y-2">
+                    {investorHubLinks.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          to={link.href}
+                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                {/* Card 7: Legal */}
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                    <span className="text-gold">✦</span>
+                    Legal
+                  </h4>
+                  <ul className="space-y-2">
+                    {legalLinks.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          to={link.href}
+                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                {/* Card 8: Business Suites */}
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                    <span className="text-gold">✦</span>
+                    Business Suites
+                  </h4>
+                  <ul className="space-y-2">
+                    {businessSuitesLinks.slice(0, 4).map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          to={link.href}
+                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* ROW 3: Mode-Aware - Broker Tools (only visible in broker mode) */}
+              {isBrokerMode && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                  {/* Card: Broker Tools */}
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+                    <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                      <span className="text-gold">✦</span>
                       Broker Tools
                     </h4>
-                    <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 grid grid-cols-2 gap-x-4">
+                    <ul className="space-y-2 grid grid-cols-2 gap-x-4">
                       {brokerToolsLinks.map((link) => (
                         <li key={link.href}>
                           <Link
                             to={link.href}
-                            className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                            className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
                           >
                             {link.label}
                           </Link>
@@ -841,17 +850,18 @@ const Footer = () => {
                     </ul>
                   </div>
                   
-                  {/* Market Intelligence (repeated for broker visibility) */}
-                  <div className="p-2 sm:p-3 md:p-5 lg:col-span-2">
-                    <h4 className="font-bold text-xs sm:text-sm md:text-base uppercase tracking-[0.12em] mb-2 sm:mb-3 md:mb-4 pb-1 sm:pb-2 border-b border-gold/30 text-gold">
+                  {/* Card: Market Intelligence */}
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+                    <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-black flex items-center gap-2">
+                      <span className="text-gold">✦</span>
                       Market Intelligence
                     </h4>
-                    <ul className="space-y-1 sm:space-y-1.5 md:space-y-2.5 grid grid-cols-2 gap-x-4">
+                    <ul className="space-y-2 grid grid-cols-2 gap-x-4">
                       {marketIntelLinks.map((link) => (
                         <li key={link.href}>
                           <Link
                             to={link.href}
-                            className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base inline-block hover:translate-x-1"
+                            className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
                           >
                             {link.label}
                           </Link>
@@ -860,8 +870,8 @@ const Footer = () => {
                     </ul>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
           {/* Internal Divider */}
           <div className="h-[2px] bg-gradient-to-r from-gold/20 via-gold/80 to-gold/20 mx-6" />
