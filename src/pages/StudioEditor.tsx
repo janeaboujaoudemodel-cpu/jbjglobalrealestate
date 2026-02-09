@@ -276,7 +276,7 @@ export default function StudioEditor() {
   };
 
   const formatPrice = (price?: number) => {
-    if (!price) return "Price TBA";
+    if (!price) return "POA";
     if (price >= 1000000) return `AED ${(price / 1000000).toFixed(1)}M`;
     return `AED ${(price / 1000).toFixed(0)}K`;
   };

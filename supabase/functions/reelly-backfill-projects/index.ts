@@ -345,6 +345,63 @@ async function updateProjectWithDetails(
     const gallery = extractGalleryImages(detail);
     const videos = extractVideos(detail);
 
+    // CRITICAL: Always update core fields from Reelly API
+    // Prices - only update if Reelly has valid prices
+    if (detail.min_price > 0) {
+      updateData.price_from = detail.min_price;
+      updatedFields.push("price_from");
+    }
+    if (detail.max_price > 0) {
+      updateData.price_to = detail.max_price;
+      updatedFields.push("price_to");
+    }
+
+    // Size data
+    if (detail.min_size > 0) {
+      updateData.size_min = detail.min_size;
+      updatedFields.push("size_min");
+    }
+    if (detail.max_size > 0) {
+      updateData.size_max = detail.max_size;
+      updatedFields.push("size_max");
+    }
+
+    // Units count
+    if (detail.units_count > 0) {
+      updateData.total_units = detail.units_count;
+      updatedFields.push("units_count");
+    }
+
+    // Building count
+    if (detail.building_count > 0) {
+      updateData.floors = detail.building_count;
+      updatedFields.push("building_count");
+    }
+
+    // Description
+    if (detail.overview || detail.short_description) {
+      updateData.description = detail.overview || detail.short_description;
+      updatedFields.push("description");
+    }
+    if (detail.short_description) {
+      updateData.short_description = detail.short_description;
+    }
+
+    // Cover image
+    if (detail.cover_image?.url) {
+      updateData.cover_image_url = detail.cover_image.url;
+      updatedFields.push("cover_image");
+    }
+
+    // Handover dates
+    if (detail.completion_datetime || detail.construction_end_date || detail.completion_date) {
+      updateData.handover_date = detail.completion_datetime?.split('T')[0] || detail.construction_end_date || detail.completion_date;
+      updatedFields.push("handover_date");
+    }
+    if (detail.completion_date) {
+      updateData.handover_display = detail.completion_date;
+    }
+
     // Floor plans
     if (floorPlans.length > 0) {
       updateData.floor_plan_types = floorPlans;
