@@ -1,346 +1,266 @@
 
-# Developer Listing & Developer Page - Full UI, Data & Stability Fix
-
-## Executive Summary
-
-This plan addresses all issues with the Developer Listing and Developer Detail pages:
-1. **Critical Boot Error** - Fix `render2 is not a function` error crashing developer pages
-2. **Card Size & Image Visibility** - Increase card dimensions for premium appearance
-3. **Logo Treatment** - Standardized small white box with gold border in top-left
-4. **Missing Photos** - Automated extraction from Reelly project images
-5. **UI Consistency** - Global standardization across all developer-related components
+## Scope recap (what will be fixed end-to-end)
+You reported multiple regressions across Footer, Business Suites, Creative Suite (Studio), Settings routing, and Listing Admin approvals/source isolation. The work will be delivered as a single consistency pass (not UI-only), ensuring:
+- Footer navigation consistency (no emojis/arrows, no “blue broker tools” in footer, aligned dividers, Careers styling).
+- Real Estate Suite symmetry + behavior change (open the combined suite immediately, not a grid of cards).
+- Back buttons across tools are readable (remove faded/stripped classes and standardize).
+- Creative Suite (Studio) premium gold/champagne styling (no white page) + improved “type” access UX.
+- “Settings” never 404 again (add missing routes + redirects + fix links).
+- Listing Admin approvals show correct **Reelly pending project cards with photos**, and **never** leak Provident when user filtered Reelly.
 
 ---
 
-## Issue Analysis
+## Key findings from the codebase (root causes)
+### 1) Footer inconsistencies are hard-coded in `src/components/Footer.tsx`
+- “Education Hub” is currently rendered as: `📚 Education Hub →` (emoji + arrow) instead of matching other headers.
+- “Broker Tools” footer section is explicitly styled **blue** (`text-blue-500`, `border-blue-500/30`) and includes emoji `🏢`.
+- Careers divider exists, but label is muted gold and formatting differs from other link sections.
+- Some border/divider classes differ between columns, which can create misalignment at breakpoints.
 
-### Issue 1: Critical Boot Error on Developer Detail Page
+### 2) “Real Estate Suite cards not symmetric”
+- `BusinessSuiteToolCard` is not using an equal-height layout (`h-full` + flex column). Content length differences cause uneven card heights.
 
-**Root Cause Identified:**
-```
-TypeError: render2 is not a function
-at updateContextConsumer
-```
+### 3) “Click Real Estate Suite should open combined suite immediately”
+- `/business-suite/real-estate` currently renders a grid of tool cards (links), not a combined embedded suite.
+- You already have an embedded “suite” pattern working in `src/pages/toolkit/PropertySuite.tsx` (tabs + lazy-loaded tool pages).
 
-This is a **React 18 + react-leaflet v5.0.0 compatibility issue**. The `MapBoundsFitter` component in `DeveloperProjectsMap.tsx` incorrectly uses `useMemo` for side effects:
+### 4) “Back button faded/unreadable” is caused by Button sanitization + inconsistent usage
+- The global Button system (`src/components/ui/button.tsx`) **strips** `text-*color*` classes for non `ai-*` variants.
+- Many tool headers try to override text colors via className; those get removed, producing “faded” or wrong-contrast results.
+- Some pages use plain `<Link className="text-slate-400">…</Link>` instead of Button variants, making contrast inconsistent.
 
-```tsx
-// INCORRECT - Line 66-79
-useMemo(() => {
-  map.setView(...);  // Side effect inside useMemo!
-  map.fitBounds(...); // Side effect inside useMemo!
-}, [projects, map]);
-```
+### 5) Creative Suite “Settings” 404 is a real missing route
+- Studio links to `/studio/settings`, but **App routing does not define** `/studio/settings`. Only `/studio` and `/studio/editor/:projectId` exist.
 
-**Fix:** Replace `useMemo` with `useEffect` for map side effects.
+### 6) Listing Admin “Approvals” is showing the wrong queue
+You are currently on:
+`/listing-admin?view=data-ops&syncTab=approvals&source=reelly&status=pending`
 
----
+But in `src/pages/ListingAdmin.tsx`, the `approvals` tab renders:
+- `PendingUpdatesQueue` (table: `listing_pending_updates`) — not the Reelly project approvals.
+So you see items like “Low 0%”, “Source Provident…”, “Current value empty”, and **no project cards with photos**.
+This is why filtering to Reelly still shows Provident-looking items: you are not viewing the Reelly pending project imports at all.
 
-### Issue 2: Developer Card Size Too Small
-
-**Current State:**
-- Image section: `h-[180px]` (too small)
-- Logo plate: `w-full h-14` (full-width, inconsistent)
-- Card has good structure but needs larger dimensions
-
-**Fix:** Increase overall card size and image prominence:
-- Image section: `h-[220px]` → `h-[240px]`
-- Overall card feels more premium with larger image area
+Also, `ProjectApprovalQueue` reads `source` from URL only once at initialization (state isn’t synced on later URL changes), which can cause filter mismatch when navigation updates query params.
 
 ---
 
-### Issue 3: Logo Treatment Inconsistent
+## Implementation plan (sequenced, no partial delivery)
 
-**Current Issues:**
-1. Logo container is full-width (`w-full h-14`)
-2. Some logos have colored backgrounds visible
-3. No standardized small box positioning
+### A) Footer fixes (consistency + alignment) — `src/components/Footer.tsx`
+1) **Education Hub header**
+   - Remove emoji and arrow.
+   - Render Education Hub like other section headers (`<h4>` with gold text + border-bottom).
+   - Keep the link as the first item inside the list (consistent with other columns).
 
-**Required Treatment:**
-1. Small fixed-size container (80×48px) with white background + gold border
-2. Position in **top-left corner** of the card (overlapping image)
-3. Use `mix-blend-mode: multiply` to remove white backgrounds from logos
-4. Convert logos to appear black on white for consistency
+2) **Broker Tools section must NOT be blue in the footer**
+   - Remove emoji from the title.
+   - Change heading + links to gold styling (same as other footer headings).
+   - Keep it mode-conditional if you still want it visible only in Broker/Combined modes, but do not use blue in footer.
 
----
+3) **Careers styling**
+   - Keep the Careers divider, but make it fully consistent:
+     - Divider line: subtle gold (`border-gold/20` or gradient line)
+     - “Careers” label: gold (not muted), same uppercase tracking as other headings but smaller.
+   - Ensure link hover behavior matches other footer items (gold hover, slight translate).
 
-### Issue 4: Missing Developer Photos
+4) **Divider alignment across the four columns**
+   - Normalize column padding and border classes so ROW 1 and ROW 2 columns align at all breakpoints.
+   - Remove “special-case” borders like `border-b lg:border-b-0` on one column that create misaligned divider lines.
 
-**Current State:**
-- 554 total developers
-- 401 have feature images ✓
-- 153 missing feature images
-- Only 1 developer with projects but missing image (Vantage Ventures)
-
-**Solution:** 
-1. Update `sync-developer-feature-images` edge function to run automatically
-2. For developers without projects, show a premium placeholder gradient
-3. Never allow stock/fake photos - only real project images or styled placeholders
+Acceptance check:
+- Footer has **no** emoji/arrow in Education Hub, no blue Broker Tools, Careers divider looks premium and consistent, and column dividers align.
 
 ---
 
-## Implementation Plan
+### B) Make Business Suite cards equal height — `src/components/business-suite/BusinessSuiteToolCard.tsx`
+Update card layout so every card is the same height:
+- Add `className="h-full"` to the motion wrapper.
+- Make the `<Link>` a flex column container: `flex flex-col h-full`.
+- Put description in a flexible region (or fixed min-height) and push CTA to bottom with `mt-auto`.
 
-### Phase 1: Fix Critical Boot Error (DeveloperProjectsMap.tsx)
-
-**File:** `src/components/developer/DeveloperProjectsMap.tsx`
-
-```tsx
-// BEFORE (Line 63-82)
-const MapBoundsFitter = ({ projects }: { projects: DeveloperProject[] }) => {
-  const map = useMap();
-  useMemo(() => {
-    // Side effects in useMemo = BAD
-    map.setView(...);
-  }, [projects, map]);
-  return null;
-};
-
-// AFTER
-const MapBoundsFitter = ({ projects }: { projects: DeveloperProject[] }) => {
-  const map = useMap();
-  useEffect(() => {
-    const validProjects = projects.filter(p => p.latitude && p.longitude);
-    if (validProjects.length === 0) return;
-
-    if (validProjects.length === 1) {
-      map.setView([validProjects[0].latitude!, validProjects[0].longitude!], 13);
-      return;
-    }
-
-    const bounds = new LatLngBounds(
-      validProjects.map(p => [p.latitude!, p.longitude!] as [number, number])
-    );
-    map.fitBounds(bounds, { padding: [50, 50] });
-  }, [projects, map]);
-
-  return null;
-};
-```
-
-Also add import for `useEffect`:
-```tsx
-import { useMemo, useState, useEffect } from "react";
-```
+Acceptance check:
+- Real Estate Suite / other suite grids show perfectly symmetric cards.
 
 ---
 
-### Phase 2: Upgrade Developer Card (DeveloperCard.tsx)
+### C) Real Estate Suite must open the combined suite immediately (remove the grid) — `src/pages/business-suite/RealEstateSuite.tsx`
+Replace the current “cards grid” page with a **combined embedded suite** (same proven pattern as `PropertySuite.tsx`), but tailored to Real Estate tools:
+- Tabs (6):
+  - Property Analyzer
+  - Price Predictor
+  - Neighborhood Insights
+  - ROI Calculator
+  - Market Report
+  - Competitor Analysis
+- Each tab lazy-loads the real existing tool pages:
+  - `AIPropertyAnalyzerPage`, `AIPricePredictorPage`, `AINeighborhoodInsightsPage`, `AIROICalculatorPage`, `AIMarketReportPage`, `AICompetitorAnalysisPage`
+- Add a consistent readable “Back” button (see section D).
 
-**File:** `src/components/DeveloperCard.tsx`
+Also update “Real Estate Suite” links platform-wide to point to this combined experience (Footer already links `/business-suite/real-estate`; we keep that route but change what it renders).
 
-**Changes:**
-
-1. **Increase Image Height:**
-```tsx
-// Line 57: Change from h-[180px] to h-[220px]
-<div className="relative h-[220px] flex-shrink-0">
-```
-
-2. **Move Logo to Top-Left Overlay (Small Box):**
-```tsx
-// Remove the current full-width logo plate from content section
-// Add logo overlay inside the image section
-
-<div className="relative h-[220px] flex-shrink-0">
-  {/* Photo */}
-  {developer.feature_image_url ? (
-    <img ... />
-  ) : (
-    <div className="w-full h-full bg-gradient-to-br from-zinc-800 via-zinc-700 to-zinc-900 ...">
-      ...
-    </div>
-  )}
-  
-  {/* Logo Overlay - Top Left */}
-  <div className="absolute top-3 left-3 z-10">
-    <div 
-      className="w-20 h-12 rounded-lg flex items-center justify-center overflow-hidden"
-      style={{
-        background: '#FFFFFF',
-        border: '2px solid hsl(42 45% 59%)',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
-      }}
-    >
-      {developer.logo_url ? (
-        <img
-          src={developer.logo_url}
-          alt={`${developer.name} logo`}
-          className="max-h-9 max-w-[90%] object-contain"
-          style={{ 
-            mixBlendMode: 'multiply',
-            filter: 'grayscale(100%) contrast(1.2)'
-          }}
-        />
-      ) : (
-        <Building2 className="w-5 h-5 text-zinc-400" />
-      )}
-    </div>
-  </div>
-  
-  {/* Tier Badge - Top Right (keep existing) */}
-  {tier && (
-    <div className="absolute top-3 right-3 z-10">
-      <Badge ...>{tier.label}</Badge>
-    </div>
-  )}
-</div>
-```
-
-3. **Remove Old Logo Plate from Content Section:**
-Delete lines 86-109 (the full-width logo plate in the champagne content area).
-
-4. **Premium Placeholder for Missing Images:**
-```tsx
-// For developers without feature_image_url, show styled gradient
-<div className="w-full h-full bg-gradient-to-br from-[#1a1a2e] via-[#2d2d44] to-[#1a1a2e] flex items-center justify-center">
-  <div className="text-center">
-    <Building2 className="w-16 h-16 text-gold/30 mx-auto mb-3" />
-    <span className="text-gold/50 text-sm font-medium tracking-wider uppercase">Developer</span>
-  </div>
-</div>
-```
+Acceptance check:
+- Clicking Real Estate Suite opens the **suite tabs immediately**, no intermediate cards.
 
 ---
 
-### Phase 3: Update Developer Detail Page Logo (DeveloperDetail.tsx)
+### D) Back button readability audit (global toolkit/suite headers)
+Goal: eliminate faded or unreadable back buttons by standardizing on Button variants that don’t rely on stripped className colors.
 
-**File:** `src/pages/DeveloperDetail.tsx`
+1) Introduce a single reusable header/back component:
+- New component (example): `src/components/toolkit/ToolSuiteHeader.tsx`
+  - Uses `<Button variant="dark" asChild>` (or a dedicated safe variant) for contrast on black.
+  - No `text-…` className overrides that get sanitized.
+  - Provides consistent spacing, border, and icon sizing.
 
-Apply same logo treatment to the detail page:
-1. Reduce logo plate size from `h-28` to a smaller fixed box
-2. Apply `grayscale(100%)` filter for consistency
-3. Add proper fallback for missing logos
+2) Update suite pages to use it:
+- `src/pages/toolkit/PropertySuite.tsx`
+- `src/pages/toolkit/VideoSuite.tsx`
+- `src/pages/toolkit/VoiceSuite.tsx`
+- (and any other toolkit pages where “Back to Toolkit” is currently a plain Link)
 
-```tsx
-// Line 113-140: Update logo container
-<div 
-  className="w-24 h-16 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0"
-  style={{
-    background: '#FFFFFF',
-    border: '3px solid hsl(42 45% 59%)',
-    boxShadow: '0 4px 12px rgba(200,167,102,0.25)'
-  }}
->
-  {developer.logo_url ? (
-    <img
-      src={developer.logo_url}
-      alt={`${developer.name} logo`}
-      className="max-h-12 max-w-[90%] object-contain"
-      style={{ 
-        mixBlendMode: 'multiply',
-        filter: 'grayscale(100%) contrast(1.2)'
-      }}
-    />
-  ) : (
-    <Building2 className="w-8 h-8 text-zinc-400" />
-  )}
-</div>
-```
+Acceptance check:
+- All back buttons are readable on dark backgrounds and consistent across tools/suites.
 
 ---
 
-### Phase 4: Auto-Backfill Missing Feature Images
+### E) Creative Suite (Studio) UX + premium styling (remove white page) — `src/pages/Studio.tsx`
+1) Styling:
+- Replace `bg-background text-foreground` with a premium black + champagne layered container (rounded, gold border).
+- Ensure no full-white page background.
 
-**Edge Function:** Already exists at `sync-developer-feature-images`
+2) Replace the “All Types” dropdown with a premium, obvious, easy-access UI:
+- Use icon pills or tabs for:
+  - All
+  - Video
+  - Image
+  - PDF
+  - Marketing Pack
+- This matches your “around it / easy accessible” intent better than a dropdown.
 
-Add a trigger to run this automatically after Reelly sync completes. Modify `reelly-api-sync` to call this function at the end:
+3) Add a “Creative Toolkit shortcuts” block inside Studio:
+- Quick links to the related toolkit tools (Background Remover, Captions & Translate, Image Resizer, PDF tools, etc.)
+- Keeps Creative Suite aligned with “all tools related to creative suite”.
 
-```tsx
-// At end of reelly-api-sync, after main sync
-if (action === "sync" && !cursor) {
-  // Trigger feature image backfill for developers
-  await supabase.functions.invoke("sync-developer-feature-images", {
-    body: { dryRun: false }
-  });
-}
-```
-
----
-
-### Phase 5: DeveloperInfoCard Update (Project Detail Page)
-
-**File:** `src/components/project-detail/DeveloperInfoCard.tsx`
-
-Apply consistent logo treatment:
-```tsx
-// Line 43-53: Update logo container
-<div 
-  className="w-20 h-14 rounded-lg flex items-center justify-center overflow-hidden"
-  style={{
-    background: '#FFFFFF',
-    border: '2px solid hsl(42 45% 59%)',
-    boxShadow: '0 2px 8px rgba(200,167,102,0.2)'
-  }}
->
-  {developer.logo_url ? (
-    <img 
-      src={developer.logo_url} 
-      alt={`${developer.name} logo`}
-      className="max-h-10 max-w-[90%] object-contain"
-      style={{ 
-        mixBlendMode: 'multiply',
-        filter: 'grayscale(100%) contrast(1.2)'
-      }}
-    />
-  ) : (
-    <Building2 className="w-6 h-6 text-zinc-400" />
-  )}
-</div>
-```
+Acceptance check:
+- Studio looks premium (gold/champagne on black), and type selection is immediate and obvious.
 
 ---
 
-## Technical Summary
+### F) Fix Settings 404 permanently (no more broken Settings links)
+#### 1) Add missing Studio Settings route — `src/App.tsx`
+- Add:
+  - `/studio/settings` guarded with OwnerGuard
 
-| File | Changes |
-|------|---------|
-| `src/components/developer/DeveloperProjectsMap.tsx` | Fix `useMemo` → `useEffect` for map bounds (boot error fix) |
-| `src/components/DeveloperCard.tsx` | Increase image height, move logo to top-left overlay box, add grayscale filter |
-| `src/pages/DeveloperDetail.tsx` | Standardize logo container size and treatment |
-| `src/components/project-detail/DeveloperInfoCard.tsx` | Apply consistent logo styling |
-| `supabase/functions/reelly-api-sync/index.ts` | Auto-trigger feature image backfill |
+#### 2) Create Studio Settings page
+- New file: `src/pages/StudioSettings.tsx`
+  - Premium layout
+  - Minimal settings scaffold (even if “coming soon”), but it must never 404
 
----
+#### 3) Fix the other Settings 404 (`/settings`)
+- In `src/pages/client/ClientPortal.tsx` change `navigate("/settings")` to `navigate("/profile?tab=settings")`.
+- Add a route alias in `src/App.tsx`:
+  - `/settings` → redirect to `/profile?tab=settings`
+This ensures old or accidental `/settings` links do not 404.
 
-## Visual Before/After
-
-**Before:**
-```
-┌─────────────────────────┐
-│  [PHOTO - 180px tall]   │
-│  Badge (right)          │
-├─────────────────────────┤
-│ [Full-width logo plate] │
-│ Developer Name          │
-│ Description...          │
-│ Stats                   │
-└─────────────────────────┘
-```
-
-**After:**
-```
-┌─────────────────────────┐
-│ [Logo]        [Badge]   │ ← Small white box with gold border
-│                         │
-│  [PHOTO - 220px tall]   │ ← Larger, more premium
-│                         │
-├─────────────────────────┤
-│ Developer Name          │
-│ Description...          │
-│ Stats                   │
-└─────────────────────────┘
-```
+Acceptance check:
+- `/studio/settings` loads.
+- `/settings` never 404s; it redirects to the correct profile settings.
 
 ---
 
-## Acceptance Criteria
+### G) Listing Admin: fix approvals to show Reelly pending projects with photos + source isolation
+This is the critical operational bug on your current screen.
 
-- [x] Boot error fixed - all developer pages load without crashes
-- [x] Card images increased to 220px height
-- [x] Logos in small white/gold boxes in top-left corner
-- [x] Logos display in black/grayscale (no colored backgrounds)
-- [x] All logo boxes same size (80×48px on cards, 96×64px on detail page)
-- [x] Missing feature images auto-filled from project covers
-- [x] No stock/fake images - only real project photos or styled placeholders
-- [x] Consistent styling across all developer references platform-wide
+1) Fix the Approvals tab content — `src/pages/ListingAdmin.tsx`
+- Replace `PendingUpdatesQueue` as the primary view under `syncTab=approvals`.
+- Render `ProjectApprovalQueue` (uses `PendingImportCard` which displays photos/cards and links to preview).
+
+2) Keep Pending Updates available but not as the “Approval Queue” default
+- Add a nested tab or secondary section inside approvals:
+  - “Project Approvals” (default)
+  - “Pending Updates” (existing `PendingUpdatesQueue`)
+
+3) Ensure URL params actually control filtering — `src/components/listing-admin/ProjectApprovalQueue.tsx`
+- Add a `useEffect` to sync `sourceFilter` state whenever `source` query param changes.
+- Add support for `status=pending|approved|merged|rejected`:
+  - Map this param to the DB query `.eq("status", statusParam)` instead of hardcoding pending.
+  - This makes counters/links deterministic.
+
+4) Remove Provident exposure in Reelly workflows (UI + navigation)
+- `src/components/listing-admin/SourceCountsPanel.tsx`:
+  - Remove/hide Provident card and copy (you explicitly forbid Provident extraction).
+  - Keep only Reelly counts and “Reelly API Source”.
+- `src/pages/ListingAdmin.tsx`:
+  - Remove the Provident Data Ops tab OR clearly label it disabled and non-actionable (preferred: remove to avoid confusion).
+
+Acceptance check:
+- On `/listing-admin?view=data-ops&syncTab=approvals&source=reelly&status=pending` you see the Reelly project cards with photos, and reviewing opens `/listing-admin/preview/:id`.
+- No Provident “source” appears when you’re filtering Reelly approvals.
+
+---
+
+### H) Data integrity safety (Reelly-only enforcement)
+To fully respect your non-negotiable rule (“no Provident extraction”), we will:
+- Remove Provident UI entry points (tabs/cards/counters) in Listing Admin.
+- Add a visible “Reelly-only mode” lock banner in Data Ops pages.
+- Provide a safe cleanup action using existing backend functions (already present in your codebase) to purge any Provident artifacts if they exist (pending suggestions, enrichments).
+
+---
+
+## Files to be changed / added (implementation checklist)
+### Footer
+- Edit: `src/components/Footer.tsx`
+
+### Suites + card symmetry
+- Edit: `src/components/business-suite/BusinessSuiteToolCard.tsx`
+- Edit: `src/pages/business-suite/RealEstateSuite.tsx`
+
+### Back button audit / shared header
+- Add: `src/components/toolkit/ToolSuiteHeader.tsx` (or similar)
+- Edit: `src/pages/toolkit/PropertySuite.tsx`
+- Edit: `src/pages/toolkit/VideoSuite.tsx`
+- Edit: `src/pages/toolkit/VoiceSuite.tsx`
+- Targeted edits: other toolkit pages with “Back to Toolkit” links (search-driven pass)
+
+### Creative Suite / Studio
+- Edit: `src/pages/Studio.tsx`
+
+### Settings routing
+- Edit: `src/App.tsx`
+- Add: `src/pages/StudioSettings.tsx`
+- Edit: `src/pages/client/ClientPortal.tsx`
+
+### Listing Admin approvals + source correctness
+- Edit: `src/pages/ListingAdmin.tsx`
+- Edit: `src/components/listing-admin/ProjectApprovalQueue.tsx`
+- Edit: `src/components/listing-admin/SourceCountsPanel.tsx`
+
+---
+
+## Final acceptance tests (what you should verify in preview)
+1) Footer:
+   - Education Hub has no emoji/arrow.
+   - Broker Tools in footer is not blue and no emoji.
+   - Careers divider is gold and consistent.
+   - Dividers align across the 4 columns.
+
+2) Real Estate Suite:
+   - Opens directly into the combined tabbed suite (no cards).
+   - Tabs switch properly and tools render.
+
+3) Back buttons:
+   - In suites and toolkit tools, back button is readable (no fading).
+
+4) Creative Suite (Studio):
+   - No white page; premium styling.
+   - Type selection is immediate and easy (no confusing dropdown).
+
+5) Settings:
+   - `/studio/settings` works.
+   - `/settings` never 404s and redirects correctly.
+   - Clicking “Preferences/Settings” links no longer produces 404.
+
+6) Listing Admin approvals (your current issue):
+   - On `/listing-admin?view=data-ops&syncTab=approvals&source=reelly&status=pending` you see **project cards with photos** (PendingImportCard).
+   - No Provident source leakage when Reelly is selected.
