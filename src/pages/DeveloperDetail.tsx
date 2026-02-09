@@ -157,7 +157,7 @@ const DeveloperDetail = () => {
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
                 loading="eager"
               />
             ) : (
