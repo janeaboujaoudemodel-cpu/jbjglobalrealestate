@@ -8486,16 +8486,13 @@ export type Database = {
           certifications: string[] | null
           created_at: string
           created_by: string
-          cv_url: string | null
           cv_url_encrypted: string | null
           department: string | null
-          email: string
           email_encrypted: string | null
           email_hash: string | null
           employee_status: string | null
           full_name: string
           id: string
-          phone: string | null
           phone_encrypted: string | null
           phone_hash: string | null
           position: string
@@ -8509,16 +8506,13 @@ export type Database = {
           certifications?: string[] | null
           created_at?: string
           created_by: string
-          cv_url?: string | null
           cv_url_encrypted?: string | null
           department?: string | null
-          email: string
           email_encrypted?: string | null
           email_hash?: string | null
           employee_status?: string | null
           full_name: string
           id?: string
-          phone?: string | null
           phone_encrypted?: string | null
           phone_hash?: string | null
           position: string
@@ -8532,16 +8526,13 @@ export type Database = {
           certifications?: string[] | null
           created_at?: string
           created_by?: string
-          cv_url?: string | null
           cv_url_encrypted?: string | null
           department?: string | null
-          email?: string
           email_encrypted?: string | null
           email_hash?: string | null
           employee_status?: string | null
           full_name?: string
           id?: string
-          phone?: string | null
           phone_encrypted?: string | null
           phone_hash?: string | null
           position?: string
@@ -20044,14 +20035,14 @@ export type Database = {
           certifications: string[] | null
           created_at: string | null
           created_by: string | null
-          cv_url: string | null
+          cv_url_encrypted: string | null
           department: string | null
-          email: string | null
+          email_encrypted: string | null
           email_hash: string | null
           employee_status: string | null
           full_name: string | null
           id: string | null
-          phone: string | null
+          phone_encrypted: string | null
           phone_hash: string | null
           position: string | null
           skills: string[] | null
@@ -20064,14 +20055,14 @@ export type Database = {
           certifications?: string[] | null
           created_at?: string | null
           created_by?: string | null
-          cv_url?: string | null
+          cv_url_encrypted?: string | null
           department?: string | null
-          email?: string | null
+          email_encrypted?: string | null
           email_hash?: string | null
           employee_status?: string | null
           full_name?: string | null
           id?: string | null
-          phone?: string | null
+          phone_encrypted?: string | null
           phone_hash?: string | null
           position?: string | null
           skills?: string[] | null
@@ -20084,14 +20075,14 @@ export type Database = {
           certifications?: string[] | null
           created_at?: string | null
           created_by?: string | null
-          cv_url?: string | null
+          cv_url_encrypted?: string | null
           department?: string | null
-          email?: string | null
+          email_encrypted?: string | null
           email_hash?: string | null
           employee_status?: string | null
           full_name?: string | null
           id?: string | null
-          phone?: string | null
+          phone_encrypted?: string | null
           phone_hash?: string | null
           position?: string | null
           skills?: string[] | null
