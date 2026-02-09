@@ -32,7 +32,7 @@ import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import { GuideSection } from "@/components/guides/GuideSection";
 import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
 import { GuideCTA } from "@/components/guides/GuideCTA";
-import DirectContactCTA from "@/components/DirectContactCTA";
+
 
 const RentGuide = () => {
   const rentalProcess = [
@@ -456,8 +456,7 @@ const RentGuide = () => {
         </div>
       </div>
 
-      {/* Standardized Direct Contact CTA */}
-      <DirectContactCTA />
+      {/* Global CTA handled by MainLayout */}
     </div>
   );
 };

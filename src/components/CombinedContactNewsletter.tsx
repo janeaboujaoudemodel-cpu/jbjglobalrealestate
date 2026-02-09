@@ -26,6 +26,8 @@ const CombinedContactNewsletter = ({
       href: getWhatsAppUrl(),
       iconBg: "bg-emerald-500/20",
       iconColor: "text-emerald-500",
+      borderColor: "border-emerald-500/40 hover:border-emerald-500",
+      shadowColor: "hover:shadow-emerald-500/20",
     },
     {
       icon: Phone,
@@ -34,6 +36,8 @@ const CombinedContactNewsletter = ({
       href: getCallUrl(),
       iconBg: "bg-blue-500/20",
       iconColor: "text-blue-500",
+      borderColor: "border-blue-500/40 hover:border-blue-500",
+      shadowColor: "hover:shadow-blue-500/20",
     },
     {
       icon: Mail,
@@ -42,6 +46,8 @@ const CombinedContactNewsletter = ({
       href: `mailto:${CONTACT_INFO.email}`,
       iconBg: "bg-gold/20",
       iconColor: "text-gold",
+      borderColor: "border-gold/40 hover:border-gold",
+      shadowColor: "hover:shadow-gold/20",
     },
   ];
 
@@ -74,7 +80,7 @@ const CombinedContactNewsletter = ({
               href={card.href}
               target={card.label === "WhatsApp" ? "_blank" : undefined}
               rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
-              className="group flex flex-col items-center gap-3 p-4 rounded-xl border border-gold/30 bg-white/50 hover:border-gold hover:shadow-lg transition-all duration-300"
+              className={`group flex flex-col items-center gap-3 p-4 rounded-xl border-2 bg-white/50 hover:shadow-lg transition-all duration-300 ${card.borderColor} ${card.shadowColor}`}
             >
               <div className={`w-12 h-12 rounded-full ${card.iconBg} flex items-center justify-center`}>
                 <card.icon className={`w-6 h-6 ${card.iconColor}`} />

@@ -122,13 +122,13 @@ const DirectContactCTA = ({
 
         {/* Contact Buttons Grid - 3 columns */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-6">
-          {/* WhatsApp - Using direct href without target="_blank" for iframe/mobile compatibility */}
+          {/* WhatsApp - Green border */}
           <a 
             href={getWhatsAppUrl()}
-            className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
+            className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-emerald-500/40 hover:border-emerald-500 rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-1"
           >
-            <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-green-500/30">
-              <MessageCircle className="w-6 h-6 text-green-600" />
+            <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-emerald-500/30">
+              <MessageCircle className="w-6 h-6 text-emerald-600" />
             </div>
             <div>
               <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
@@ -138,12 +138,12 @@ const DirectContactCTA = ({
             </div>
           </a>
 
-          {/* Call Us */}
+          {/* Call Us - Blue border */}
           <a 
             href={getCallUrl()}
-            className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
+            className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-blue-500/40 hover:border-blue-500 rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-blue-500/20 hover:-translate-y-1"
           >
-            <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/30">
+            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/30">
               <Phone className="w-6 h-6 text-blue-600" />
             </div>
             <div>
@@ -154,10 +154,10 @@ const DirectContactCTA = ({
             </div>
           </a>
 
-          {/* Email Us - Luxury Gold Icon */}
+          {/* Email Us - Gold border */}
           <a 
             href={`mailto:${CONTACT_INFO.email}`}
-            className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
+            className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/20 hover:-translate-y-1"
           >
             <div className="w-12 h-12 bg-gradient-to-br from-gold/30 to-handover/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)]">
               <Mail className="w-6 h-6 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.8)]" />
