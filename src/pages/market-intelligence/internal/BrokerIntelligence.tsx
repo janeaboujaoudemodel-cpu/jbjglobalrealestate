@@ -1,34 +1,42 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Users, TrendingUp, TrendingDown, Lock, ArrowLeft, Target, DollarSign, Clock, AlertTriangle } from "lucide-react";
+import { Users, Lock, ArrowLeft, Activity, MapPin, Bot, Calendar, FileText, FileSignature } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  Select,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
+  SelectValue,
+} from "@/components/ui/select";
 import { DUBAI_AREAS_MARKET_DATA } from "@/config/open-data-config";
+
+// Import all broker intelligence components
+import { TodaysMarketSignals } from "@/components/broker-intelligence/TodaysMarketSignals";
+import { LeadMarketContext } from "@/components/broker-intelligence/LeadMarketContext";
+import { BrokerAIAssistant } from "@/components/broker-intelligence/BrokerAIAssistant";
+import { BrokerCalendarWidget } from "@/components/broker-intelligence/BrokerCalendarWidget";
+import { BrokerNotesWidget } from "@/components/broker-intelligence/BrokerNotesWidget";
+import { DocuSignIntegration } from "@/components/broker-intelligence/DocuSignIntegration";
 
 const BrokerIntelligence = () => {
   const { user } = useAuth();
+  const [selectedArea, setSelectedArea] = useState<string>("");
+  const [leadIntent, setLeadIntent] = useState<"buy" | "sell" | "rent">("buy");
 
   if (!user) {
     return <Navigate to="/auth" replace />;
   }
 
-  // Generate broker-specific intelligence
-  const areaConversion = DUBAI_AREAS_MARKET_DATA.map(area => ({
-    area: area.area,
-    conversionRate: Math.floor(Math.random() * 20) + 5,
-    rentVsSale: area.rentalIndex > area.priceIndex ? 'rent' : 'sale',
-    priceSensitivity: area.priceIndex > 140 ? 'low' : area.priceIndex > 110 ? 'medium' : 'high',
-    saturationWarning: area.supplyScore > 70,
-    hotLeadSignal: area.demandScore > 85,
-  }));
-
   return (
     <div className="min-h-screen bg-black">
       <SEOHead 
-        title="Broker Intelligence | JBJ Global Real Estate"
-        description="Internal broker intelligence panels for JBJ team members."
+        title="Broker Intelligence Hub | JBJ Global Real Estate"
+        description="Unified broker intelligence hub with market signals, AI assistant, calendar, notes, and DocuSign integration."
         canonicalPath="/internal/market-intelligence/brokers"
       />
 
@@ -36,148 +44,182 @@ const BrokerIntelligence = () => {
       <div className="bg-amber-500/10 border-b border-amber-500/30 py-3">
         <div className="container mx-auto px-4 flex items-center justify-center gap-3">
           <Lock className="w-4 h-4 text-amber-400" />
-          <span className="text-amber-400 text-sm font-medium">INTERNAL USE ONLY — Broker Intelligence</span>
+          <span className="text-amber-400 text-sm font-medium">INTERNAL USE ONLY — Broker Intelligence Hub</span>
         </div>
       </div>
 
       {/* Header */}
-      <section className="py-12 border-b border-zinc-900">
+      <section className="py-8 border-b border-zinc-900">
         <div className="container mx-auto px-4">
           <Link to="/internal/market-intelligence/dashboard" className="inline-flex items-center gap-2 text-gold hover:text-gold-light mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back to Dashboard
           </Link>
 
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
-              <Users className="w-6 h-6 text-gold" />
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
+                <Users className="w-6 h-6 text-gold" />
+              </div>
+              <div>
+                <h1 className="text-white text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  Broker Intelligence Hub
+                </h1>
+                <p className="text-zinc-500">All tools in one place • Market signals • AI Assistant • Contracts</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-white text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Broker Intelligence Panels
-              </h1>
-              <p className="text-zinc-500">Conversion signals and performance optimization</p>
+
+            {/* Area & Intent Selectors */}
+            <div className="flex items-center gap-3">
+              <Select value={selectedArea} onValueChange={setSelectedArea}>
+                <SelectTriggerDark className="w-[180px]">
+                  <SelectValue placeholder="Select area" />
+                </SelectTriggerDark>
+                <SelectContentDark>
+                  {DUBAI_AREAS_MARKET_DATA.map((area) => (
+                    <SelectItemDark key={area.area} value={area.area}>
+                      {area.area}
+                    </SelectItemDark>
+                  ))}
+                </SelectContentDark>
+              </Select>
+
+              <Select value={leadIntent} onValueChange={(v) => setLeadIntent(v as "buy" | "sell" | "rent")}>
+                <SelectTriggerDark className="w-[120px]">
+                  <SelectValue />
+                </SelectTriggerDark>
+                <SelectContentDark>
+                  <SelectItemDark value="buy">BUY</SelectItemDark>
+                  <SelectItemDark value="sell">SELL</SelectItemDark>
+                  <SelectItemDark value="rent">RENT</SelectItemDark>
+                </SelectContentDark>
+              </Select>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Key Insights */}
-      <section className="py-8 border-b border-zinc-900">
+      {/* Main Content - Tabbed Interface */}
+      <section className="py-8">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="bg-emerald-500/10 border-emerald-500/30">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <Target className="w-5 h-5 text-emerald-400" />
-                  <div>
-                    <p className="text-zinc-400 text-xs">Hot Lead Areas</p>
-                    <p className="text-white text-xl font-bold">
-                      {areaConversion.filter(a => a.hotLeadSignal).length}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-blue-500/10 border-blue-500/30">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <DollarSign className="w-5 h-5 text-blue-400" />
-                  <div>
-                    <p className="text-zinc-400 text-xs">Rent Momentum Areas</p>
-                    <p className="text-white text-xl font-bold">
-                      {areaConversion.filter(a => a.rentVsSale === 'rent').length}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-purple-500/10 border-purple-500/30">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <TrendingUp className="w-5 h-5 text-purple-400" />
-                  <div>
-                    <p className="text-zinc-400 text-xs">Sale Momentum Areas</p>
-                    <p className="text-white text-xl font-bold">
-                      {areaConversion.filter(a => a.rentVsSale === 'sale').length}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-red-500/10 border-red-500/30">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <AlertTriangle className="w-5 h-5 text-red-400" />
-                  <div>
-                    <p className="text-zinc-400 text-xs">Saturation Warnings</p>
-                    <p className="text-white text-xl font-bold">
-                      {areaConversion.filter(a => a.saturationWarning).length}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
+          <Tabs defaultValue="signals" className="w-full">
+            <TabsList className="bg-zinc-900 border border-zinc-800 w-full flex flex-wrap justify-start gap-1 h-auto p-1">
+              <TabsTrigger 
+                value="signals" 
+                className="flex items-center gap-2 data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
+              >
+                <Activity className="w-4 h-4" />
+                <span className="hidden sm:inline">Market Signals</span>
+                <span className="sm:hidden">Signals</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="context" 
+                className="flex items-center gap-2 data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400"
+              >
+                <MapPin className="w-4 h-4" />
+                <span className="hidden sm:inline">Lead Context</span>
+                <span className="sm:hidden">Context</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="assistant" 
+                className="flex items-center gap-2 data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400"
+              >
+                <Bot className="w-4 h-4" />
+                <span className="hidden sm:inline">AI Assistant</span>
+                <span className="sm:hidden">AI</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="calendar" 
+                className="flex items-center gap-2 data-[state=active]:bg-emerald-500/20 data-[state=active]:text-emerald-400"
+              >
+                <Calendar className="w-4 h-4" />
+                Calendar
+              </TabsTrigger>
+              <TabsTrigger 
+                value="notes" 
+                className="flex items-center gap-2 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400"
+              >
+                <FileText className="w-4 h-4" />
+                Notes
+              </TabsTrigger>
+              <TabsTrigger 
+                value="docusign" 
+                className="flex items-center gap-2 data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400"
+              >
+                <FileSignature className="w-4 h-4" />
+                DocuSign
+              </TabsTrigger>
+            </TabsList>
 
-      {/* Conversion Table */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-white text-xl font-bold mb-6">Area Conversion Intelligence</h2>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-zinc-800">
-                  <th className="text-left text-zinc-500 text-sm py-3 px-4">Area</th>
-                  <th className="text-center text-zinc-500 text-sm py-3 px-4">Conv. Rate</th>
-                  <th className="text-center text-zinc-500 text-sm py-3 px-4">Momentum</th>
-                  <th className="text-center text-zinc-500 text-sm py-3 px-4">Price Sensitivity</th>
-                  <th className="text-center text-zinc-500 text-sm py-3 px-4">Signals</th>
-                </tr>
-              </thead>
-              <tbody>
-                {areaConversion.map((area) => (
-                  <tr key={area.area} className="border-b border-zinc-900 hover:bg-zinc-900/50">
-                    <td className="py-4 px-4">
-                      <span className="text-white font-medium">{area.area}</span>
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <span className={`font-semibold ${area.conversionRate > 15 ? 'text-emerald-400' : area.conversionRate > 10 ? 'text-gold' : 'text-zinc-400'}`}>
-                        {area.conversionRate}%
-                      </span>
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <Badge className={area.rentVsSale === 'rent' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' : 'bg-purple-500/20 text-purple-400 border-purple-500/30'}>
-                        {area.rentVsSale === 'rent' ? 'RENT' : 'SALE'}
-                      </Badge>
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <Badge className={
-                        area.priceSensitivity === 'low' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
-                        area.priceSensitivity === 'medium' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' :
-                        'bg-red-500/20 text-red-400 border-red-500/30'
-                      }>
-                        {area.priceSensitivity.toUpperCase()}
-                      </Badge>
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        {area.hotLeadSignal && (
-                          <span className="text-emerald-400 text-xs bg-emerald-500/10 px-2 py-1 rounded">🔥 Hot</span>
-                        )}
-                        {area.saturationWarning && (
-                          <span className="text-red-400 text-xs bg-red-500/10 px-2 py-1 rounded">⚠️ Saturated</span>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+            {/* Tab Contents */}
+            <div className="mt-6">
+              <TabsContent value="signals" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <TodaysMarketSignals />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="context" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <LeadMarketContext leadArea={selectedArea} leadIntent={leadIntent} />
+                  {!selectedArea && (
+                    <div className="mt-4 p-4 bg-zinc-800/30 rounded-lg border border-zinc-700/50 text-center">
+                      <MapPin className="w-6 h-6 text-zinc-600 mx-auto mb-2" />
+                      <p className="text-zinc-500 text-sm">Select an area from the dropdown above to view market context</p>
+                    </div>
+                  )}
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="assistant" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <BrokerAIAssistant />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="calendar" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <BrokerCalendarWidget />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="notes" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <BrokerNotesWidget />
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="docusign" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <DocuSignIntegration />
+                </motion.div>
+              </TabsContent>
+            </div>
+          </Tabs>
         </div>
       </section>
     </div>

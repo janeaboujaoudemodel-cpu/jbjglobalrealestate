@@ -13,9 +13,9 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { useAITool } from "../AIToolsProvider";
@@ -144,45 +144,45 @@ const AIFollowupSchedulerPremium = () => {
               <div className="space-y-2">
                 <Label className="text-zinc-300">Last Interaction Type</Label>
                 <Select value={formData.interactionType} onValueChange={(v) => handleChange("interactionType", v)}>
-                  <SelectTrigger className="bg-zinc-900/50 border-cyan-500/30 text-white hover:border-cyan-500/50">
+                  <SelectTriggerDark className="border-cyan-500/30 hover:border-cyan-500/50">
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-cyan-500/30">
-                    <SelectItem value="call">
+                  </SelectTriggerDark>
+                  <SelectContentDark className="border-cyan-500/30">
+                    <SelectItemDark value="call">
                       <span className="flex items-center gap-2">
                         <Phone className="h-4 w-4" /> Phone Call
                       </span>
-                    </SelectItem>
-                    <SelectItem value="email">
+                    </SelectItemDark>
+                    <SelectItemDark value="email">
                       <span className="flex items-center gap-2">
                         <Mail className="h-4 w-4" /> Email
                       </span>
-                    </SelectItem>
-                    <SelectItem value="whatsapp">
+                    </SelectItemDark>
+                    <SelectItemDark value="whatsapp">
                       <span className="flex items-center gap-2">
                         <MessageSquare className="h-4 w-4" /> WhatsApp
                       </span>
-                    </SelectItem>
-                    <SelectItem value="meeting">In-Person Meeting</SelectItem>
-                    <SelectItem value="viewing">Property Viewing</SelectItem>
-                    <SelectItem value="inquiry">Website Inquiry</SelectItem>
-                  </SelectContent>
+                    </SelectItemDark>
+                    <SelectItemDark value="meeting">In-Person Meeting</SelectItemDark>
+                    <SelectItemDark value="viewing">Property Viewing</SelectItemDark>
+                    <SelectItemDark value="inquiry">Website Inquiry</SelectItemDark>
+                  </SelectContentDark>
                 </Select>
               </div>
 
               <div className="space-y-2">
                 <Label className="text-zinc-300">Lead Status</Label>
                 <Select value={formData.leadStatus} onValueChange={(v) => handleChange("leadStatus", v)}>
-                  <SelectTrigger className="bg-zinc-900/50 border-cyan-500/30 text-white hover:border-cyan-500/50">
+                  <SelectTriggerDark className="border-cyan-500/30 hover:border-cyan-500/50">
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-zinc-900 border-cyan-500/30">
-                    <SelectItem value="hot">🔥 Hot - Ready to Buy</SelectItem>
-                    <SelectItem value="warm">☀️ Warm - Interested</SelectItem>
-                    <SelectItem value="lukewarm">🌤️ Lukewarm - Needs Nurturing</SelectItem>
-                    <SelectItem value="cold">❄️ Cold - Initial Contact</SelectItem>
-                    <SelectItem value="follow-up">📋 Follow-up Required</SelectItem>
-                  </SelectContent>
+                  </SelectTriggerDark>
+                  <SelectContentDark className="border-cyan-500/30">
+                    <SelectItemDark value="hot">🔥 Hot - Ready to Buy</SelectItemDark>
+                    <SelectItemDark value="warm">☀️ Warm - Interested</SelectItemDark>
+                    <SelectItemDark value="lukewarm">🌤️ Lukewarm - Needs Nurturing</SelectItemDark>
+                    <SelectItemDark value="cold">❄️ Cold - Initial Contact</SelectItemDark>
+                    <SelectItemDark value="follow-up">📋 Follow-up Required</SelectItemDark>
+                  </SelectContentDark>
                 </Select>
               </div>
             </div>
@@ -201,7 +201,8 @@ const AIFollowupSchedulerPremium = () => {
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white font-semibold py-6"
+              variant="ai-cyan"
+              className="w-full font-semibold py-6"
             >
               {loading ? (
                 <>
@@ -326,7 +327,7 @@ const AIFollowupSchedulerPremium = () => {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="font-semibold text-white">Full Schedule & Recommendations</h4>
-                    <Button variant="outline" size="sm" onClick={copyToClipboard} className="border-zinc-700">
+                    <Button variant="dark-outline" size="sm" onClick={copyToClipboard}>
                       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>

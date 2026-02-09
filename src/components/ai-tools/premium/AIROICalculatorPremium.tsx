@@ -12,9 +12,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { useAITool } from "../AIToolsProvider";
@@ -170,16 +170,16 @@ const AIROICalculatorPremium = () => {
               Property Type
             </Label>
             <Select value={formData.propertyType} onValueChange={(v) => handleChange("propertyType", v)}>
-              <SelectTrigger className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors">
+              <SelectTriggerDark className="h-12 rounded-xl border-emerald-500/30 hover:border-emerald-500/50">
                 <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-emerald-500/30">
-                <SelectItem value="apartment" className="text-white hover:bg-emerald-500/20">Apartment</SelectItem>
-                <SelectItem value="villa" className="text-white hover:bg-emerald-500/20">Villa</SelectItem>
-                <SelectItem value="townhouse" className="text-white hover:bg-emerald-500/20">Townhouse</SelectItem>
-                <SelectItem value="penthouse" className="text-white hover:bg-emerald-500/20">Penthouse</SelectItem>
-                <SelectItem value="commercial" className="text-white hover:bg-emerald-500/20">Commercial</SelectItem>
-              </SelectContent>
+              </SelectTriggerDark>
+              <SelectContentDark className="border-emerald-500/30">
+                <SelectItemDark value="apartment">Apartment</SelectItemDark>
+                <SelectItemDark value="villa">Villa</SelectItemDark>
+                <SelectItemDark value="townhouse">Townhouse</SelectItemDark>
+                <SelectItemDark value="penthouse">Penthouse</SelectItemDark>
+                <SelectItemDark value="commercial">Commercial</SelectItemDark>
+              </SelectContentDark>
             </Select>
           </div>
 
@@ -189,16 +189,16 @@ const AIROICalculatorPremium = () => {
               Holding Period
             </Label>
             <Select value={formData.holdingPeriod} onValueChange={(v) => handleChange("holdingPeriod", v)}>
-              <SelectTrigger className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors">
+              <SelectTriggerDark className="h-12 rounded-xl border-emerald-500/30 hover:border-emerald-500/50">
                 <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-emerald-500/30">
-                <SelectItem value="1" className="text-white hover:bg-emerald-500/20">1 Year</SelectItem>
-                <SelectItem value="3" className="text-white hover:bg-emerald-500/20">3 Years</SelectItem>
-                <SelectItem value="5" className="text-white hover:bg-emerald-500/20">5 Years</SelectItem>
-                <SelectItem value="10" className="text-white hover:bg-emerald-500/20">10 Years</SelectItem>
-                <SelectItem value="15" className="text-white hover:bg-emerald-500/20">15 Years</SelectItem>
-              </SelectContent>
+              </SelectTriggerDark>
+              <SelectContentDark className="border-emerald-500/30">
+                <SelectItemDark value="1">1 Year</SelectItemDark>
+                <SelectItemDark value="3">3 Years</SelectItemDark>
+                <SelectItemDark value="5">5 Years</SelectItemDark>
+                <SelectItemDark value="10">10 Years</SelectItemDark>
+                <SelectItemDark value="15">15 Years</SelectItemDark>
+              </SelectContentDark>
             </Select>
           </div>
         </div>

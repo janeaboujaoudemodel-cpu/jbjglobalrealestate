@@ -11,9 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { useAITool } from "../AIToolsProvider";
@@ -123,16 +123,16 @@ const AIPricePredictorPremium = () => {
               Property Type
             </Label>
             <Select value={formData.propertyType} onValueChange={(v) => handleChange("propertyType", v)}>
-              <SelectTrigger className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors">
+              <SelectTriggerDark className="h-12 rounded-xl border-blue-500/30 hover:border-blue-500/50">
                 <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-blue-500/30">
-                <SelectItem value="apartment" className="text-white hover:bg-blue-500/20">Apartment</SelectItem>
-                <SelectItem value="villa" className="text-white hover:bg-blue-500/20">Villa</SelectItem>
-                <SelectItem value="townhouse" className="text-white hover:bg-blue-500/20">Townhouse</SelectItem>
-                <SelectItem value="penthouse" className="text-white hover:bg-blue-500/20">Penthouse</SelectItem>
-                <SelectItem value="studio" className="text-white hover:bg-blue-500/20">Studio</SelectItem>
-              </SelectContent>
+              </SelectTriggerDark>
+              <SelectContentDark className="border-blue-500/30">
+                <SelectItemDark value="apartment">Apartment</SelectItemDark>
+                <SelectItemDark value="villa">Villa</SelectItemDark>
+                <SelectItemDark value="townhouse">Townhouse</SelectItemDark>
+                <SelectItemDark value="penthouse">Penthouse</SelectItemDark>
+                <SelectItemDark value="studio">Studio</SelectItemDark>
+              </SelectContentDark>
             </Select>
           </div>
 
@@ -142,17 +142,17 @@ const AIPricePredictorPremium = () => {
               Bedrooms
             </Label>
             <Select value={formData.bedrooms} onValueChange={(v) => handleChange("bedrooms", v)}>
-              <SelectTrigger className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors">
+              <SelectTriggerDark className="h-12 rounded-xl border-blue-500/30 hover:border-blue-500/50">
                 <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-blue-500/30">
-                <SelectItem value="studio" className="text-white hover:bg-blue-500/20">Studio</SelectItem>
-                <SelectItem value="1" className="text-white hover:bg-blue-500/20">1 Bedroom</SelectItem>
-                <SelectItem value="2" className="text-white hover:bg-blue-500/20">2 Bedrooms</SelectItem>
-                <SelectItem value="3" className="text-white hover:bg-blue-500/20">3 Bedrooms</SelectItem>
-                <SelectItem value="4" className="text-white hover:bg-blue-500/20">4 Bedrooms</SelectItem>
-                <SelectItem value="5+" className="text-white hover:bg-blue-500/20">5+ Bedrooms</SelectItem>
-              </SelectContent>
+              </SelectTriggerDark>
+              <SelectContentDark className="border-blue-500/30">
+                <SelectItemDark value="studio">Studio</SelectItemDark>
+                <SelectItemDark value="1">1 Bedroom</SelectItemDark>
+                <SelectItemDark value="2">2 Bedrooms</SelectItemDark>
+                <SelectItemDark value="3">3 Bedrooms</SelectItemDark>
+                <SelectItemDark value="4">4 Bedrooms</SelectItemDark>
+                <SelectItemDark value="5+">5+ Bedrooms</SelectItemDark>
+              </SelectContentDark>
             </Select>
           </div>
 
