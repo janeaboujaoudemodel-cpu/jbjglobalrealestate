@@ -17,8 +17,8 @@ const TIER_CONFIG: Record<string, { label: string; color: string }> = {
   ESTABLISHED: { label: "ESTABLISHED", color: "bg-gradient-to-r from-slate-600 to-slate-500 text-white" },
 };
 
-const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "aldar", "omniyat"];
-const PREMIUM_DEVELOPERS = ["ellington"];
+const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "omniyat"];
+const PREMIUM_DEVELOPERS = ["ellington", "aldar"];
 const TOP_TIER_DEVELOPERS = ["binghatti", "majid-al-futtaim", "majid al futtaim"];
 const ESTABLISHED_DEVELOPERS = ["danube", "azizi"];
 
