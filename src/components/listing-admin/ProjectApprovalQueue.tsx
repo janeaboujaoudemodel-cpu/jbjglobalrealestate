@@ -382,7 +382,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       community_id: null,
       location: importData.location,
       emirate: importData.emirate,
-      description: importData.description,
+      description: (importData.description || '').replace(/^#{1,6}\s*/gm, '').replace(/\n{3,}/g, '\n\n').trim() || null,
       price_from: importData.price_from,
       price_to: importData.price_to,
       bedrooms_min: importData.bedrooms_min,

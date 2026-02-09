@@ -19,7 +19,9 @@ function stripHashtags(text: string): string {
  */
 function cleanRawText(text: string): string {
   return text
-    // Remove inline hashtags (e.g. #DubaiRealEstate) but preserve markdown headers (e.g. ##### Header)
+    // Strip markdown headers (##### Header → Header)
+    .replace(/^#{1,6}\s*/gm, '')
+    // Remove inline hashtags (e.g. #DubaiRealEstate)
     .replace(/(?<=\s)#\w+/g, '')
     .replace(/^#\w+$/gm, '')
     // Remove excessive exclamation marks
@@ -85,6 +87,18 @@ export function renderMarkdownToHtml(markdown: string | null): string {
  * Strip all markdown formatting for plain text display
  * Useful for meta descriptions, previews, etc.
  */
+/**
+ * Clean description text for database storage
+ * Strips all markdown headers and cleans up formatting
+ */
+export function cleanDescription(text: string | null): string | null {
+  if (!text) return null;
+  return text
+    .replace(/^#{1,6}\s*/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim() || null;
+}
+
 export function stripMarkdown(markdown: string | null): string {
   if (!markdown) return '';
   return cleanRawText(markdown)
