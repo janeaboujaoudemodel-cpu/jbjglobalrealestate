@@ -1,69 +1,81 @@
 
-# Fix: Selected Bulk Approve Fails Due to Duplicate Check
+# Backfill Approved Listings and Remove Markdown Headers from Descriptions
 
-## Root Cause
+## Problem Summary
 
-When you select items and click "Approve", the code calls `approveImportInDb(item)` for each one (line 592 in ProjectApprovalQueue.tsx). This function checks if a project with the same name already exists in the `projects` table (line 332-354). Since these projects were already synced/updated by previous operations, they all exist -- so all 60 get rejected with a "DUPLICATE" error.
+1. **"Hashtags" in descriptions**: 1,801 projects have Reelly descriptions containing markdown headers like `##### Project general facts`, `##### Finishing and materials`, `##### Kitchen and appliances`, `##### Furnishing`, `##### Location description and benefits`. These display as styled headings on the page but the user wants them completely removed.
 
-The "Approve ALL" button uses the edge function which does upsert (update-or-insert). But the "selected items" approve path uses a client-side insert that blocks on duplicates.
+2. **Missing data on approved listings**: Many approved projects are missing amenities (1,264), floor plans, documents, payment plans, and other enrichment data that could come from Reelly detail API, Provident, or developer websites.
 
-## Fix
+---
 
-**File: `src/components/listing-admin/ProjectApprovalQueue.tsx` (line 592-594)**
+## Part 1: Remove All Markdown Headers from Descriptions (Database Fix)
 
-In the selected bulk approve loop, change `approveImportInDb(item)` to `approveImportInDb(item, true)` — passing `skipDuplicateCheck = true`. The user explicitly selected these items, so they intend to approve them. If a project already exists, the function should upsert (update) instead of blocking.
+Run a single SQL UPDATE to strip all markdown header markers (`#####`, `####`, `###`, `##`, `#` at line starts) from ALL 1,801 project descriptions. This converts section headers into plain paragraph text.
 
-Additionally, update `approveImportInDb` itself: when a duplicate IS found and `skipDuplicateCheck` is false, instead of throwing, it should **update the existing project** with the new data (same upsert behavior the edge function uses).
-
-### Change 1: Skip duplicate check in bulk selected mode (line 594)
-```typescript
-// Current:
-await approveImportInDb(item);
-
-// Fixed:
-await approveImportInDb(item, true);
+**SQL to execute:**
+```sql
+UPDATE projects
+SET description = regexp_replace(
+  regexp_replace(description, E'^#{1,6}\\s*', '', 'gm'),
+  E'\\n{3,}', E'\\n\\n', 'g'
+)
+WHERE description LIKE '%#####%';
 ```
 
-### Change 2: Make approveImportInDb use upsert instead of insert-only (lines 401-407)
+Also update the `renderMarkdownToHtml` function in `src/lib/markdownUtils.ts` to strip any remaining `#` header markers so future imports are also cleaned.
 
-Replace the insert with an upsert using `.upsert()` on the `slug` column, so if the project already exists it gets updated rather than failing:
+Also update the `bulk-approve-imports` edge function and `reelly-backfill-projects` edge function to strip markdown headers from descriptions BEFORE saving to the database, so new imports and backfills never re-introduce them.
 
-```typescript
-// Current (line 401-405):
-const { data: newProject, error: projectError } = await supabase
-  .from("projects")
-  .insert(projectData)
-  .select()
-  .single();
+---
 
-// Fixed:
-const { data: newProject, error: projectError } = await supabase
-  .from("projects")
-  .upsert(projectData, { onConflict: 'slug' })
-  .select()
-  .single();
-```
+## Part 2: Enhanced Backfill System
 
-This way even if a project with that slug exists, it updates the record instead of failing.
+The existing backfill infrastructure already has:
+- `reelly-backfill-projects` -- fetches detail data from Reelly API for approved projects
+- `provident-enrich-projects` -- enriches projects with Provident data (amenities, PDFs, images)
+- UI controls in `ReellyImportPanel.tsx`
 
-### Change 3: Handle images for existing projects (lines 409-423)
+### What needs to change:
 
-Before inserting images, delete old ones for the project to avoid duplicates:
+**A. Clean descriptions during backfill** -- Update `reelly-backfill-projects/index.ts` (line 405-408) to strip markdown headers from `detail.overview` before saving:
 
 ```typescript
-if (importData.images.length > 0 && newProject) {
-  // Delete old images first
-  await supabase.from("project_images").delete().eq("project_id", newProject.id);
-  
-  // Then insert new ones
-  const imageInserts = ...
+// Before saving description
+let cleanDesc = detail.overview || detail.short_description || '';
+cleanDesc = cleanDesc.replace(/^#{1,6}\s*/gm, '').replace(/\n{3,}/g, '\n\n').trim();
+if (cleanDesc) {
+  updateData.description = cleanDesc;
 }
 ```
 
-Same for documents (lines 426-439).
+**B. Clean descriptions during bulk approve** -- Update `bulk-approve-imports/index.ts` (line 222) to strip headers from the description field before inserting:
+
+```typescript
+description: (item.description || item.short_description || '')
+  .replace(/^#{1,6}\s*/gm, '')
+  .replace(/\n{3,}/g, '\n\n')
+  .trim() || null,
+```
+
+**C. Clean descriptions in client-side approve** -- Update `ProjectApprovalQueue.tsx` `approveImportInDb` function to strip headers when building `projectData.description`.
+
+---
+
+## Part 3: Prevent Future Markdown Headers
+
+Update `src/lib/markdownUtils.ts`:
+- Modify `cleanRawText()` to also strip `#####` style headers (not just inline hashtags)
+- Add a `cleanDescription()` export that strips all markdown headers for use in import pipelines
+
+---
 
 ## Files to Modify
 
 | File | Change |
 |---|---|
-| `src/components/listing-admin/ProjectApprovalQueue.tsx` | 1. Use upsert instead of insert in `approveImportInDb` 2. Delete old images/docs before inserting 3. Pass `skipDuplicateCheck=true` in bulk loop |
+| Database (SQL) | Strip `#####` headers from all 1,801 descriptions |
+| `supabase/functions/reelly-backfill-projects/index.ts` | Strip headers from description before saving |
+| `supabase/functions/bulk-approve-imports/index.ts` | Strip headers from description before inserting |
+| `src/components/listing-admin/ProjectApprovalQueue.tsx` | Strip headers in client-side approve |
+| `src/lib/markdownUtils.ts` | Add `cleanDescription()` helper; update `cleanRawText()` to strip `#####` headers |
