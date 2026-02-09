@@ -1,74 +1,34 @@
 
-# Fix Developer Logos, Clean Duplicates, and Fix All Maps
+# Fix Developer Logo Containers -- Square Shape with No Cropping
 
-## Issues Confirmed
+## Problem
 
-### 1. Logo White Borders
-All three logo containers use `object-contain` which preserves aspect ratio but leaves white gaps on the sides for rectangular logos. The user wants logos to FILL the container completely with NO white borders visible.
+The logo containers are wide rectangles (`w-32 h-20` = 128x80px on cards, `w-40 h-24` = 160x96px on detail, `w-48 h-32` = 192x128px on info card). Combined with `object-cover`, logos with different aspect ratios get cropped on sides or top/bottom.
 
-**Solution**: Change `object-contain` to `object-cover` on all logo images. This stretches/crops to fill the container completely, eliminating white gaps. Since logos are already roughly the right proportion, minimal cropping will occur, but the white borders will be gone.
+## Solution
 
-### 2. Duplicate/Merged Developers Still in Database
-The audit found these problematic entries that need deletion (0 projects, safe to remove):
+Change the containers to **square** dimensions and switch back to `object-contain` so logos are never cropped, but remove the white background and instead use a subtle champagne/transparent tint so there are no harsh white borders visible against the card.
 
-| Developer to DELETE | Reason | Projects |
-|---|---|---|
-| Ellington and RAK Properties | Fake merged entry -- both exist separately | 0 |
-| Imtiaz Development | Duplicate of "Imtiaz Developments" (36 projects) | 0 |
-| Al Hamra Construction and Development | Duplicate of "Al Hamra" (8 projects) | 0 |
-| East and West International Group | Subset of "Adventz and East and West" (3 projects) | 0 |
-| Meraki Developers | Duplicate of "Meraki" (4 projects) | 0 |
-| Nshama Group | Duplicate of "Nshama" (33 projects) | 0 |
-| Kappa Acca Real Estate Development | Subset of merged Khamas+Kappa entry (2 projects) | 0 |
+| Location | Current Size | New Size | Ratio |
+|---|---|---|---|
+| DeveloperCard.tsx (directory cards) | `w-32 h-20` (128x80) | `w-24 h-24` (96x96) | 1:1 square |
+| DeveloperDetail.tsx (detail page header) | `w-40 h-24` (160x96) | `w-32 h-32` (128x128) | 1:1 square |
+| DeveloperInfoCard.tsx (project page) | `w-48 h-32` (192x128) | `w-36 h-36` (144x144) | 1:1 square |
 
-### 3. Map Scroll Zoom -- Still Broken in 2 of 3 Maps
-`ProjectLocationMap.tsx` was fixed (`scrollWheelZoom={false}`), but TWO other maps still have scroll zoom enabled:
-- `DeveloperProjectsMap.tsx` line 127: `scrollWheelZoom: true`
-- `PropertyMap.tsx` line 449-454: No `scrollWheelZoom` prop (defaults to `true`)
+### Styling Changes (all 3 files)
+- Container: change to square dimensions as above
+- Image: `object-cover` back to `object-contain` with `p-1.5` padding so logos breathe
+- Background: keep `#FFFFFF` (white is standard for logo display and ensures readability)
 
-All maps need `scrollWheelZoom: false` and visible zoom/navigation controls.
-
-## Plan
-
-### Step 1: Fix Logo Styling -- `object-cover` to Fill Container (3 files)
-
-| File | Line | Change |
-|---|---|---|
-| `src/components/DeveloperCard.tsx` | 97 | `object-contain` to `object-cover` |
-| `src/pages/DeveloperDetail.tsx` | 160 | `object-contain` to `object-cover` |
-| `src/components/project-detail/DeveloperInfoCard.tsx` | 68 | `object-contain` to `object-cover` |
-
-### Step 2: Delete 7 Duplicate/Fake Developer Entries (Database)
-
-```sql
-DELETE FROM developers WHERE id IN (
-  '6bf5f4aa-46e6-41bd-8870-163e5b428e43',  -- Ellington and RAK Properties
-  'a9e195b7-7e10-48ff-af92-427b05879647',  -- Imtiaz Development
-  '297d620d-7944-4890-a26f-8644f9f579c6',  -- Al Hamra Construction and Development
-  '447f3a4e-858b-468b-8a52-2f3d165b1630',  -- East and West International Group
-  'fbdcdb92-3671-4a8b-a048-f25d4019a314',  -- Meraki Developers
-  '874bac24-85a9-490b-b525-3e29edc3e31c',  -- Nshama Group
-  '8635effb-1671-4e0e-afd7-000039569601'   -- Kappa Acca Real Estate Development
-);
-```
-
-All 7 have 0 projects so no data will be lost.
-
-### Step 3: Fix Map Scroll in DeveloperProjectsMap.tsx
-
-Change line 127 from `scrollWheelZoom: true` to `scrollWheelZoom: false`. The map already has zoom controls via buttons.
-
-### Step 4: Fix Map Scroll in PropertyMap.tsx
-
-Add `scrollWheelZoom={false}` and `zoomControl={true}` to the MapContainer props (lines 449-454). The PropertyMap is the full-page map view and currently has no explicit scroll zoom setting (defaults to true).
+This ensures:
+- No cropping -- every logo is fully visible
+- No awkward white gaps on sides -- square container matches most logo proportions
+- Consistent sizing across all developers
 
 ## Files to Modify
 
 | File | Change |
 |---|---|
-| `src/components/DeveloperCard.tsx` | Logo: `object-cover` |
-| `src/pages/DeveloperDetail.tsx` | Logo: `object-cover` |
-| `src/components/project-detail/DeveloperInfoCard.tsx` | Logo: `object-cover` |
-| `src/components/developer/DeveloperProjectsMap.tsx` | `scrollWheelZoom: false` |
-| `src/pages/PropertyMap.tsx` | `scrollWheelZoom={false}` |
-| Database | Delete 7 duplicate developer entries |
+| `src/components/DeveloperCard.tsx` | Line 86: `w-32 h-20` to `w-24 h-24`; Line 97: `object-cover` to `object-contain p-1.5` |
+| `src/pages/DeveloperDetail.tsx` | Line 149: `w-40 h-24` to `w-32 h-32`; Line 160: `object-cover` to `object-contain p-2` |
+| `src/components/project-detail/DeveloperInfoCard.tsx` | Line 59: `w-48 h-32` to `w-36 h-36`; Line 68: `object-cover` to `object-contain p-2` |
