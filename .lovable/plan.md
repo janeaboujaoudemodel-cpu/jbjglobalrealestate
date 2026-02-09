@@ -1,89 +1,117 @@
 
 
-# Fix Project Approval - Both Individual and Bulk
-
-## Root Causes
-
-### Bulk Approve: Edge function not registered
-The `bulk-approve-imports` function is missing from `supabase/config.toml`, so it defaults to `verify_jwt = true` which blocks all requests before the code runs.
-
-### Individual Approve: Duplicate slug insert error
-`PendingImportCard.tsx` does a direct INSERT into `projects`, but projects with the same slug already exist, causing a unique constraint violation.
-
-### Bulk Approve: Deprecated import + duplicate field
-The edge function uses `esm.sh` import (causes deployment failures) and has a duplicate `area_id` assignment on lines 251-252.
+## Goal
+Fix three issues:
+1. "Select All" should select and approve ALL 1,809 pending imports (not just the 60 loaded on screen)
+2. Projects remain editable/repairable after approval
+3. Remove duplicate developer entries from the database
 
 ---
 
-## Changes
+## Root Causes
 
-### 1. Register missing edge functions in config.toml
-**File:** `supabase/config.toml`
+### Issue 1: Select All only selects 60 items
+- `PAGE_SIZE = 60` in `ProjectApprovalQueue.tsx` (line 108)
+- `selectAll()` (line 727) only selects from `imports` array, which contains at most 60 loaded items
+- The bulk approval then loops through only those 60 items one by one via `handleConfirmedApproval`
 
-Add after the last entry:
-```toml
-[functions.bulk-approve-imports]
-verify_jwt = false
+### Issue 2: Edge function also limited
+- `bulk-approve-imports` edge function defaults to `limit = 200` per call
+- Even if called directly, it only processes 200 at a time
 
-[functions.repair-project-images]
-verify_jwt = false
+### Issue 3: Duplicate developers in database
+Found 4 developers with duplicate entries (same name, different slugs):
+- "Adventz and East and West International Group" (2 rows)
+- "Arabian Hills Investment and Real Estate Development" (2 rows)
+- "PREDMET.CONSTRUCTION" (2 rows)
+- "ZaZEN Properties" (2 rows)
 
-[functions.repair-project-extraction]
-verify_jwt = false
-```
+---
 
-### 2. Fix bulk-approve-imports edge function
-**File:** `supabase/functions/bulk-approve-imports/index.ts`
+## Implementation Plan
 
-- Line 2: Change `import { createClient } from "https://esm.sh/@supabase/supabase-js@2"` to `import { createClient } from "npm:@supabase/supabase-js@2"`
-- Lines 251-252: Remove the duplicate `area_id` line (keep only one)
+### A) Add "Approve ALL Pending" button that calls the edge function in a loop
 
-### 3. Fix individual approval with upsert logic
-**File:** `src/components/listing-admin/PendingImportCard.tsx`
+**File:** `src/components/listing-admin/ProjectApprovalQueue.tsx`
 
-Update `handleApprove` (lines 131-201) to:
-1. First check if a project with the same slug already exists
-2. If exists: UPDATE the existing project, delete old images/documents, re-insert new ones
-3. If not exists: INSERT new project (current behavior)
-4. Mark import as approved
+Instead of trying to load all 1,809 items into the browser and process them one by one, the "Select All + Approve" flow should call the `bulk-approve-imports` edge function repeatedly in batches until all items are processed.
 
+Changes:
+1. Add a new **"Approve ALL (1,809)"** button alongside the existing "Select All" button that appears when there are more items than loaded
+2. This button triggers a confirmation dialog (using the existing `ApprovalConfirmDialog` with the full count, requiring manual count typing since it exceeds 100)
+3. On confirmation, call the `bulk-approve-imports` edge function in a loop:
+   - Each call processes up to 500 items (pass `limit: 500`)
+   - Loop continues until the function returns `approved: 0` (nothing left)
+   - Progress bar updates after each batch
+   - Final toast shows total approved count
+
+New function `handleApproveAllPending`:
 ```text
-Updated flow:
-  const slug = item.slug || item.name.toLowerCase().replace(/\s+/g, '-');
+async handleApproveAllPending():
+  setConfirmDialogMode("all")
+  setConfirmDialogCount(totalCount)  // 1,809
+  setConfirmDialogOpen(true)
   
-  // Check for existing project
-  const { data: existing } = await supabase
-    .from("projects")
-    .select("id")
-    .eq("slug", slug)
-    .maybeSingle();
-
-  let projectId: string;
-
-  if (existing) {
-    // UPDATE existing project
-    await supabase.from("projects").update(projectData).eq("id", existing.id);
-    projectId = existing.id;
-    // Delete old images/documents before re-inserting
-    await supabase.from("project_images").delete().eq("project_id", projectId);
-    await supabase.from("project_documents").delete().eq("project_id", projectId);
-  } else {
-    // INSERT new project
-    const { data: newProject } = await supabase
-      .from("projects").insert(projectData).select().single();
-    projectId = newProject.id;
-  }
-
-  // Then insert images, documents, and mark as approved
+  // On confirm:
+  setIsBulkProcessing(true)
+  setBulkAction("approve")
+  let totalApproved = 0
+  
+  loop:
+    response = supabase.functions.invoke("bulk-approve-imports", {
+      body: { limit: 500 }
+    })
+    totalApproved += response.stats.approved
+    setBulkDone(totalApproved)
+    if response.stats.approved === 0: break
+  
+  toast("All done: {totalApproved} approved")
+  fetchPendingImports()
 ```
+
+4. Update `handleConfirmedApproval` to detect when `confirmDialogMode === "all"` and call the edge-function loop instead of the item-by-item client loop
+
+### B) Keep existing Select All for partial selections
+The current "Select All" button will continue to work for the loaded page (for selective operations like delete). But the new "Approve ALL" button handles the full queue.
+
+### C) Delete duplicate developers from database
+**Action:** Data cleanup via SQL
+
+Delete the duplicate developer rows, keeping the one with the cleaner slug (without "and-" articles):
+
+```sql
+-- Keep: adventz-east-west-international-group, delete: adventz-and-east-and-west-international-group
+-- Keep: arabian-hills-investment-real-estate-development, delete: arabian-hills-investment-and-real-estate-development
+-- Keep: predmet-construction, delete: predmetconstruction  
+-- Keep: zazen-properties, delete: zzen-properties
+
+DELETE FROM developers WHERE id IN (
+  'ee71594f-835e-4d02-9f6b-afecc80353b1',
+  'd34f01bd-e689-48c7-b0ff-1fc87056c6a3', 
+  '16db3698-d395-42a6-a07b-6a21873865b1',
+  '8d01fcdc-b875-4ce0-a21c-d55c6eabd9cd'
+);
+```
+
+First reassign any projects pointing to the deleted developer IDs to the kept ones.
+
+### D) Projects remain editable after approval
+This already works -- approved projects go into the `projects` table and are fully editable from the Admin panel. The "repair" and "edit" functionality on the Admin listing pages operates on the `projects` table. No code changes needed for this.
 
 ---
 
 ## Files to Modify
 
-| File | Change |
-|------|--------|
-| `supabase/config.toml` | Add 3 function entries with `verify_jwt = false` |
-| `supabase/functions/bulk-approve-imports/index.ts` | Fix import to `npm:`, remove duplicate `area_id` |
-| `src/components/listing-admin/PendingImportCard.tsx` | Add upsert logic for individual approval |
+| File | Action | Description |
+|------|--------|-------------|
+| `src/components/listing-admin/ProjectApprovalQueue.tsx` | MODIFY | Add "Approve ALL Pending" button that calls edge function in a loop for the full 1,809 queue |
+| Database | DATA DELETE | Remove 4 duplicate developer rows, reassign any linked projects |
 
+---
+
+## QA Checklist
+1. Click "Approve ALL" -- confirmation dialog shows full count (1,809) and requires typing the number
+2. After confirming, progress bar updates as batches complete
+3. All 1,809 items get approved (pending queue becomes empty)
+4. Developer directory shows no duplicate cards
+5. Approved projects appear in the main listings and can be edited from Admin
