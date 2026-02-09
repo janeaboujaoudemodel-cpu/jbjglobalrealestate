@@ -1,166 +1,87 @@
 
-## Goal
-Fix the footer “Education Hub” section so **Books / Guides / Market Reports are individually clickable**, ensure **all 5 Business Suites** show (not 4), and **create the /education-hub page** exactly as previously specified (premium black + gold + champagne styling consistent with `/guides`).
+
+# Fix Project Approval - Both Individual and Bulk
+
+## Root Causes Found
+
+### Problem 1: Bulk Approve button fails with edge function error
+The `bulk-approve-imports` edge function is **not registered** in `supabase/config.toml`. Without an entry, it defaults to `verify_jwt = true`, which is incompatible with the signing-keys system and causes the browser request to be rejected at the gateway level before your code even runs.
+
+### Problem 2: Individual card approve fails with duplicate slug error
+When you click the approve button on a single project card, the code tries to INSERT into the `projects` table. However, many projects already exist there (from previous syncs), and the `slug` column has a **unique constraint**. The insert fails because a project with the same slug already exists.
 
 ---
 
-## What I found in the current code
-### Footer issues (confirmed in `src/components/Footer.tsx`)
-1. **Non-clickable Education Hub sub-items**
-   - The footer currently renders:
-     - `Books, Guides & Market Reports` as a plain `<p>` (line ~768), so there is nothing clickable.
+## Fix Plan
 
-2. **Business Suites truncated to 4**
-   - Footer uses:
-     - `businessSuitesLinks.slice(0, 4)` (line ~815), which hides the 5th suite.
+### A) Register edge functions in config.toml
+**File:** `supabase/config.toml`
 
-3. **Education Hub title currently links to `/guides`**
-   - `const educationHubLink = { href: "/guides", label: "Education Hub" };` (line ~310)
-   - Needs to point to the new `/education-hub`.
+Add the missing entries:
 
-### Routing status (confirmed in `src/App.tsx`)
-- `/guides`, `/broker-education`, and `/market-intelligence/reports` routes already exist.
-- `/education-hub` does **not** exist yet and must be added (lazy import + route).
+```toml
+[functions.bulk-approve-imports]
+verify_jwt = false
 
----
+[functions.repair-project-images]
+verify_jwt = false
 
-## Implementation plan (code changes)
-
-### A) Fix footer Education Hub sub-links (make them clickable)
-**File:** `src/components/Footer.tsx`
-
-1. Update the Education Hub title link target:
-- Change:
-  - `educationHubLink.href` from `"/guides"` → `"/education-hub"`
-
-2. Replace the non-clickable paragraph with three separate `<Link>` items:
-- Replace this:
-```tsx
-<p className="text-zinc-500 text-xs mb-3">Books, Guides & Market Reports</p>
-```
-- With a small list of links styled exactly like other footer lists:
-```tsx
-<ul className="space-y-2 mb-3">
-  <li>
-    <Link to="/broker-education" className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
-      Books
-    </Link>
-  </li>
-  <li>
-    <Link to="/guides" className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
-      Guides
-    </Link>
-  </li>
-  <li>
-    <Link to="/market-intelligence/reports" className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
-      Market Reports
-    </Link>
-  </li>
-</ul>
+[functions.repair-project-extraction]
+verify_jwt = false
 ```
 
-Acceptance check:
-- All three items must be clickable and route correctly.
-- No nested-link invalid structure (they will be siblings of the title `<Link>`, not nested inside it).
+This will allow the browser to call these functions successfully.
+
+### B) Fix the bulk-approve-imports edge function import
+**File:** `supabase/functions/bulk-approve-imports/index.ts`
+
+Change the deprecated import:
+- FROM: `import { createClient } from "https://esm.sh/@supabase/supabase-js@2";`
+- TO: `import { createClient } from "npm:@supabase/supabase-js@2";`
+
+Also fix the duplicate `area_id` assignment on lines 251-252 (currently set twice).
+
+### C) Fix individual card approval to handle existing projects
+**File:** `src/components/listing-admin/PendingImportCard.tsx`
+
+Update `handleApprove` to check if a project with the same slug already exists before inserting. If it exists, update it instead of inserting a new one. This mirrors what the bulk-approve edge function already does (upsert logic).
+
+The updated flow:
+1. Check if a project with the same slug already exists
+2. If yes: UPDATE the existing project and use its ID for images/documents
+3. If no: INSERT a new project
+4. Then proceed with images, documents, and marking the import as approved
 
 ---
 
-### B) Show all 5 Business Suites in the footer
-**File:** `src/components/Footer.tsx`
+## Files to Modify
 
-- Change:
-```tsx
-{businessSuitesLinks.slice(0, 4).map(...)}
-```
-- To:
-```tsx
-{businessSuitesLinks.map(...)}
-```
-
-Acceptance check:
-- Footer shows all 5:
-  - All Tools Suite
-  - Real Estate Suite
-  - Broker Intelligence Suite
-  - Creative & Communication
-  - Productivity Suite
+| File | Action | Description |
+|------|--------|-------------|
+| `supabase/config.toml` | MODIFY | Add 3 missing function entries with `verify_jwt = false` |
+| `supabase/functions/bulk-approve-imports/index.ts` | MODIFY | Fix `esm.sh` import to `npm:` specifier; fix duplicate `area_id` line |
+| `src/components/listing-admin/PendingImportCard.tsx` | MODIFY | Add upsert logic to handle duplicate slugs on individual approval |
 
 ---
 
-### C) Create the Education Hub page at `/education-hub`
-**File (new):** `src/pages/EducationHub.tsx`
+## Technical Details
 
-This page will follow the **same premium pattern as `src/pages/Guides.tsx`**:
-- `min-h-screen bg-black`
-- Hero uses `jj-hero-fullscreen` with a **video placeholder style block** (like Guides)
-- Content sections use:
-  - `.jj-layer-2` (champagne outer wrapper)
-  - `.jj-card-inner` (champagne inner cards)
-- Animations via `framer-motion` (`fadeInUp`, `staggerContainer`) consistent with Guides.
+### PendingImportCard.tsx - Updated handleApprove logic
 
-#### Page structure (exactly as previously specified)
-1. **Hero**
-   - Title: “Education Hub”
-   - Subtitle: explains the hub consolidates Books, Guides, Market Reports
-   - CTA buttons:
-     - Jump to resources section (anchor)
-     - Contact / Ask a Question
-
-2. **Books Library section**
-   - Preview cards (champagne cards) linking to: `/broker-education`
-   - Copy aligned with premium institutional tone.
-
-3. **Guides Library section**
-   - Preview cards linking to: `/guides`
-   - Emphasize categories (Buyer/Seller/Landlord/Tenant etc.)
-
-4. **Market Intelligence section**
-   - Preview cards linking to: `/market-intelligence/reports`
-   - Include “Monthly / Quarterly / Annual” style preview cards (all route to the reports hub)
-
-5. **CTA section**
-   - “Need help choosing what to read?” with buttons to `/contact` and `/contact?type=support`
-
-Acceptance check:
-- Page loads with correct styling (black background + champagne sections like Guides).
-- No duplicated footer rendering inside this page (footer remains global via layout).
-
----
-
-### D) Register the new route in the router
-**File:** `src/App.tsx`
-
-1. Add lazy import near other core pages:
-```tsx
-const EducationHub = lazy(() => import("./pages/EducationHub"));
+```text
+1. Query: SELECT id FROM projects WHERE slug = item.slug
+2. If existing project found:
+   - UPDATE projects SET ... WHERE id = existing.id
+   - DELETE old images/documents for that project
+   - INSERT new images/documents
+3. If no existing project:
+   - INSERT new project (current behavior)
+4. Mark pending_project_imports status = "approved"
 ```
 
-2. Add route inside the `<Route element={<AdminBypass><MainLayoutWrapper /></AdminBypass>}>` block, near `/guides`:
-```tsx
-<Route path="/education-hub" element={<EducationHub />} />
-```
+### config.toml additions
+Three functions need `verify_jwt = false` to work with the signing-keys gateway:
+- `bulk-approve-imports` (bulk approval)
+- `repair-project-images` (image repair button)
+- `repair-project-extraction` (repair button on individual cards)
 
-Acceptance check:
-- Navigating directly to `/education-hub` renders the new hub page.
-- Footer “Education Hub” title links to `/education-hub`.
-
----
-
-## QA / Test checklist (must pass)
-1. From `/` (home), scroll to footer:
-   - Click **Books** → lands on `/broker-education`
-   - Click **Guides** → lands on `/guides`
-   - Click **Market Reports** → lands on `/market-intelligence/reports`
-2. Footer **Business Suites** shows all 5 suites.
-3. Click footer **Education Hub** title → lands on `/education-hub`.
-4. On `/education-hub`, verify:
-   - Sections render correctly on mobile + desktop
-   - Buttons and preview cards route correctly
-   - No layout duplication (footer/contact sections not double-rendering)
-
----
-
-## Files involved
-- **Modify:** `src/components/Footer.tsx`
-- **Create:** `src/pages/EducationHub.tsx`
-- **Modify:** `src/App.tsx`
