@@ -713,7 +713,7 @@ export function ReellyImportPanel() {
 
       while (aggregated.remaining > 0 && batches < maxBatches) {
         const { data, error } = await supabase.functions.invoke("reelly-backfill-projects", {
-          body: { mode: "batch", batch_size: 50 },
+        body: { mode: "batch", batch_size: 50, force_refresh: true },
         });
 
         if (error) throw error;
@@ -829,7 +829,7 @@ export function ReellyImportPanel() {
       
       while (backfillRemaining > 0 && backfillBatches < maxBackfillBatches) {
         const { data } = await supabase.functions.invoke("reelly-backfill-projects", {
-          body: { mode: "batch", batch_size: 50 },
+        body: { mode: "batch", batch_size: 50, force_refresh: true },
         });
         
         if (!data?.success) break;
