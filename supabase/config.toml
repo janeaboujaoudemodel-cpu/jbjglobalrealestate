@@ -215,3 +215,16 @@ verify_jwt = false
 
 [functions.fill-developer-feature-images]
 verify_jwt = false
+
+# E-Signature Functions
+[functions.esign-send-for-signature]
+verify_jwt = false
+
+[functions.esign-process-signature]
+verify_jwt = false
+
+[functions.esign-complete-envelope]
+verify_jwt = false
+
+[functions.esign-send-reminder]
+verify_jwt = false

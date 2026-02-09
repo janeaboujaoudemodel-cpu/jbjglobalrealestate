@@ -6491,6 +6491,334 @@ export type Database = {
         }
         Relationships: []
       }
+      esign_audit_log: {
+        Row: {
+          action: Database["public"]["Enums"]["esign_audit_action"]
+          actor_email: string | null
+          actor_id: string | null
+          actor_name: string | null
+          created_at: string
+          description: string
+          envelope_id: string
+          id: string
+          ip_address: unknown
+          metadata: Json | null
+          recipient_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: Database["public"]["Enums"]["esign_audit_action"]
+          actor_email?: string | null
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          description: string
+          envelope_id: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          recipient_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: Database["public"]["Enums"]["esign_audit_action"]
+          actor_email?: string | null
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          description?: string
+          envelope_id?: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          recipient_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "esign_audit_log_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "esign_envelopes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "esign_audit_log_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "esign_recipients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      esign_envelopes: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          document_filename: string
+          document_size_bytes: number | null
+          document_url: string
+          email_message: string | null
+          email_subject: string | null
+          expires_at: string | null
+          id: string
+          max_reminders: number | null
+          metadata: Json | null
+          name: string
+          page_count: number | null
+          reminder_frequency_days: number | null
+          reminders_sent: number | null
+          sender_email: string
+          sender_id: string
+          sender_name: string | null
+          signed_document_url: string | null
+          status: Database["public"]["Enums"]["esign_envelope_status"]
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          document_filename: string
+          document_size_bytes?: number | null
+          document_url: string
+          email_message?: string | null
+          email_subject?: string | null
+          expires_at?: string | null
+          id?: string
+          max_reminders?: number | null
+          metadata?: Json | null
+          name: string
+          page_count?: number | null
+          reminder_frequency_days?: number | null
+          reminders_sent?: number | null
+          sender_email: string
+          sender_id: string
+          sender_name?: string | null
+          signed_document_url?: string | null
+          status?: Database["public"]["Enums"]["esign_envelope_status"]
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          document_filename?: string
+          document_size_bytes?: number | null
+          document_url?: string
+          email_message?: string | null
+          email_subject?: string | null
+          expires_at?: string | null
+          id?: string
+          max_reminders?: number | null
+          metadata?: Json | null
+          name?: string
+          page_count?: number | null
+          reminder_frequency_days?: number | null
+          reminders_sent?: number | null
+          sender_email?: string
+          sender_id?: string
+          sender_name?: string | null
+          signed_document_url?: string | null
+          status?: Database["public"]["Enums"]["esign_envelope_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      esign_fields: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          envelope_id: string
+          field_type: Database["public"]["Enums"]["esign_field_type"]
+          field_value: string | null
+          height: number
+          id: string
+          is_completed: boolean
+          is_required: boolean
+          page_number: number
+          placeholder: string | null
+          recipient_id: string
+          updated_at: string
+          width: number
+          x_position: number
+          y_position: number
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          envelope_id: string
+          field_type?: Database["public"]["Enums"]["esign_field_type"]
+          field_value?: string | null
+          height?: number
+          id?: string
+          is_completed?: boolean
+          is_required?: boolean
+          page_number?: number
+          placeholder?: string | null
+          recipient_id: string
+          updated_at?: string
+          width?: number
+          x_position: number
+          y_position: number
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          envelope_id?: string
+          field_type?: Database["public"]["Enums"]["esign_field_type"]
+          field_value?: string | null
+          height?: number
+          id?: string
+          is_completed?: boolean
+          is_required?: boolean
+          page_number?: number
+          placeholder?: string | null
+          recipient_id?: string
+          updated_at?: string
+          width?: number
+          x_position?: number
+          y_position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "esign_fields_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "esign_envelopes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "esign_fields_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "esign_recipients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      esign_recipients: {
+        Row: {
+          created_at: string
+          decline_reason: string | null
+          declined_at: string | null
+          email: string
+          envelope_id: string
+          id: string
+          initials_data: string | null
+          name: string
+          phone: string | null
+          sent_at: string | null
+          signature_data: string | null
+          signed_at: string | null
+          signed_ip_address: unknown
+          signed_user_agent: string | null
+          signing_order: number
+          signing_token: string
+          status: Database["public"]["Enums"]["esign_recipient_status"]
+          token_expires_at: string | null
+          updated_at: string
+          viewed_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          decline_reason?: string | null
+          declined_at?: string | null
+          email: string
+          envelope_id: string
+          id?: string
+          initials_data?: string | null
+          name: string
+          phone?: string | null
+          sent_at?: string | null
+          signature_data?: string | null
+          signed_at?: string | null
+          signed_ip_address?: unknown
+          signed_user_agent?: string | null
+          signing_order?: number
+          signing_token?: string
+          status?: Database["public"]["Enums"]["esign_recipient_status"]
+          token_expires_at?: string | null
+          updated_at?: string
+          viewed_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          decline_reason?: string | null
+          declined_at?: string | null
+          email?: string
+          envelope_id?: string
+          id?: string
+          initials_data?: string | null
+          name?: string
+          phone?: string | null
+          sent_at?: string | null
+          signature_data?: string | null
+          signed_at?: string | null
+          signed_ip_address?: unknown
+          signed_user_agent?: string | null
+          signing_order?: number
+          signing_token?: string
+          status?: Database["public"]["Enums"]["esign_recipient_status"]
+          token_expires_at?: string | null
+          updated_at?: string
+          viewed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "esign_recipients_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "esign_envelopes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      esign_signed_documents: {
+        Row: {
+          certificate_data: Json | null
+          certificate_url: string | null
+          created_at: string
+          document_filename: string
+          document_hash: string | null
+          document_size_bytes: number | null
+          document_url: string
+          envelope_id: string
+          id: string
+        }
+        Insert: {
+          certificate_data?: Json | null
+          certificate_url?: string | null
+          created_at?: string
+          document_filename: string
+          document_hash?: string | null
+          document_size_bytes?: number | null
+          document_url: string
+          envelope_id: string
+          id?: string
+        }
+        Update: {
+          certificate_data?: Json | null
+          certificate_url?: string | null
+          created_at?: string
+          document_filename?: string
+          document_hash?: string | null
+          document_size_bytes?: number | null
+          document_url?: string
+          envelope_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "esign_signed_documents_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "esign_envelopes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ethics_violations: {
         Row: {
           action_required: string | null
@@ -21199,6 +21527,34 @@ export type Database = {
         | "verified"
         | "rejected"
         | "cancelled"
+      esign_audit_action:
+        | "created"
+        | "sent"
+        | "viewed"
+        | "signed"
+        | "declined"
+        | "reminder_sent"
+        | "downloaded"
+        | "voided"
+        | "expired"
+        | "completed"
+      esign_envelope_status:
+        | "draft"
+        | "sent"
+        | "viewed"
+        | "partially_signed"
+        | "completed"
+        | "declined"
+        | "expired"
+        | "voided"
+      esign_field_type: "signature" | "initials" | "date" | "text" | "checkbox"
+      esign_recipient_status:
+        | "pending"
+        | "sent"
+        | "delivered"
+        | "viewed"
+        | "signed"
+        | "declined"
       hr_application_status: "pending" | "approved" | "rejected"
       hr_module_track: "company_knowledge" | "real_estate_basics"
       hr_question_type: "mcq" | "true_false" | "short_answer"
@@ -21593,6 +21949,37 @@ export const Constants = {
         "verified",
         "rejected",
         "cancelled",
+      ],
+      esign_audit_action: [
+        "created",
+        "sent",
+        "viewed",
+        "signed",
+        "declined",
+        "reminder_sent",
+        "downloaded",
+        "voided",
+        "expired",
+        "completed",
+      ],
+      esign_envelope_status: [
+        "draft",
+        "sent",
+        "viewed",
+        "partially_signed",
+        "completed",
+        "declined",
+        "expired",
+        "voided",
+      ],
+      esign_field_type: ["signature", "initials", "date", "text", "checkbox"],
+      esign_recipient_status: [
+        "pending",
+        "sent",
+        "delivered",
+        "viewed",
+        "signed",
+        "declined",
       ],
       hr_application_status: ["pending", "approved", "rejected"],
       hr_module_track: ["company_knowledge", "real_estate_basics"],
