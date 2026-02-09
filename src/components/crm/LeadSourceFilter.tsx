@@ -1,6 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Database } from "lucide-react";
+import { Database, Globe, Upload, Users, Megaphone, UserPlus, Link2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface LeadSourceFilterProps {
   value: string;
@@ -13,6 +20,18 @@ interface ImportSourceOption {
   source_name: string;
   created_at: string;
 }
+
+// GLOBAL LEAD SOURCES - All sources must be clickable and functional
+const LEAD_SOURCES = [
+  { value: "all", label: "All Sources", icon: Database, color: "text-zinc-400" },
+  { value: "website", label: "Website", icon: Globe, color: "text-emerald-500" },
+  { value: "imported", label: "Database Import", icon: Upload, color: "text-blue-500" },
+  { value: "broker", label: "Broker", icon: Users, color: "text-purple-500" },
+  { value: "referral", label: "Referral", icon: UserPlus, color: "text-amber-500" },
+  { value: "campaign", label: "Campaign", icon: Megaphone, color: "text-pink-500" },
+  { value: "manual", label: "Manual Entry", icon: UserPlus, color: "text-cyan-500" },
+  { value: "third_party", label: "Third-party Platform", icon: Link2, color: "text-orange-500" },
+] as const;
 
 const LeadSourceFilter = ({ value, onChange }: LeadSourceFilterProps) => {
   const [sources, setSources] = useState<ImportSourceOption[]>([]);
@@ -46,28 +65,63 @@ const LeadSourceFilter = ({ value, onChange }: LeadSourceFilterProps) => {
     return sources.filter((s) => (s.source_group || "").toLowerCase() !== "website");
   }, [sources]);
 
+  const selectedSource = LEAD_SOURCES.find(s => s.value === value) || LEAD_SOURCES[0];
+  const SelectedIcon = selectedSource.icon;
+
   return (
     <div className="flex items-center gap-2">
-      <Database className="h-4 w-4 text-gold" />
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="h-10 max-w-[320px] px-3 rounded-md border border-border bg-card text-foreground font-semibold focus:outline-none focus:ring-2 focus:ring-ring"
-      >
-        <option value="all">All Sources</option>
-        <option value="website">website · Web Form</option>
-        <option value="imported">All Imports</option>
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger className="h-10 min-w-[220px] max-w-[320px] bg-zinc-900 border-zinc-700 text-white">
+          <div className="flex items-center gap-2">
+            <SelectedIcon className={`h-4 w-4 ${selectedSource.color}`} />
+            <SelectValue placeholder="Select Source" />
+          </div>
+        </SelectTrigger>
+        <SelectContent className="bg-zinc-800 border-zinc-700">
+          {/* Main Sources - All Clickable */}
+          <div className="px-2 py-1.5 text-xs font-bold text-zinc-400 uppercase tracking-wide border-b border-zinc-700/50">
+            Lead Sources
+          </div>
+          {LEAD_SOURCES.map((source) => {
+            const Icon = source.icon;
+            return (
+              <SelectItem 
+                key={source.value} 
+                value={source.value}
+                className="text-white hover:bg-zinc-700 cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <Icon className={`h-4 w-4 ${source.color}`} />
+                  <span>{source.label}</span>
+                </div>
+              </SelectItem>
+            );
+          })}
 
-        {importOptions.length > 0 && (
-          <optgroup label="Recent Imports">
-            {importOptions.map((s) => (
-              <option key={s.id} value={`source:${s.id}`}>
-                {s.source_group} · {s.source_name}
-              </option>
-            ))}
-          </optgroup>
-        )}
-      </select>
+          {/* Recent Imports - If Available */}
+          {importOptions.length > 0 && (
+            <>
+              <div className="px-2 py-1.5 text-xs font-bold text-zinc-400 uppercase tracking-wide border-t border-zinc-700/50 mt-1">
+                Recent Imports
+              </div>
+              {importOptions.map((s) => (
+                <SelectItem 
+                  key={s.id} 
+                  value={`source:${s.id}`}
+                  className="text-white hover:bg-zinc-700 cursor-pointer pl-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <Upload className="h-3 w-3 text-blue-400" />
+                    <span className="text-zinc-400">{s.source_group}</span>
+                    <span>·</span>
+                    <span>{s.source_name}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </>
+          )}
+        </SelectContent>
+      </Select>
     </div>
   );
 };

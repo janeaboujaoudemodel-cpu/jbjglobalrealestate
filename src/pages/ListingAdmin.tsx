@@ -47,6 +47,7 @@ import { PendingUpdatesQueue } from "@/components/listing-admin/PendingUpdatesQu
 import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPanel";
 import SyncDashboard from "@/components/listing-admin/SyncDashboard";
 import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel";
+import { SourceCountsPanel } from "@/components/listing-admin/SourceCountsPanel";
 // OffPlanInquiryCTA removed from admin per user request
 import { RefreshCw, Globe, Check } from "lucide-react";
 
@@ -613,7 +614,10 @@ const ListingAdmin = () => {
 
         {/* UNIFIED Data Ops View - All sync/extraction in one tabbed interface */}
         {activeView === 'data-ops' && (
-          <div className="container mx-auto px-4 py-6">
+          <div className="container mx-auto px-4 py-6 space-y-6">
+            {/* SOURCE COUNTS PANEL - Separated Reelly vs Provident */}
+            <SourceCountsPanel />
+            
             <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
               <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1">
                 <TabsTrigger 

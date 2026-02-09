@@ -50,8 +50,8 @@ const QUICK_FILTERS: QuickFilter[] = [
     id: "followup", 
     label: "Follow-up", 
     icon: Clock, 
-    color: "text-amber-600",
-    bgColor: "bg-amber-50 hover:bg-amber-100 border-amber-200",
+    color: "text-blue-600",
+    bgColor: "bg-blue-50 hover:bg-blue-100 border-blue-200",
     statuses: ["no_answer", "callback", "followup"] 
   },
   { 
@@ -72,10 +72,10 @@ const QUICK_FILTERS: QuickFilter[] = [
   },
   { 
     id: "junk", 
-    label: "Junk", 
+    label: "Invalid", 
     icon: Trash2, 
-    color: "text-zinc-500",
-    bgColor: "bg-zinc-50 hover:bg-zinc-100 border-zinc-200",
+    color: "text-red-500",
+    bgColor: "bg-red-50 hover:bg-red-100 border-red-200",
     statuses: ["junk"] 
   },
 ];
