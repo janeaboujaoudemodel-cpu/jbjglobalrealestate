@@ -87,7 +87,7 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
                 <img
                   src={developer.logo_url}
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-fill"
                   loading="lazy"
                 />
               ) : (
