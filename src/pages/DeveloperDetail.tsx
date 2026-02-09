@@ -146,7 +146,7 @@ const DeveloperDetail = () => {
         <div className="flex flex-col md:flex-row md:items-start gap-6">
           {/* Logo plate - Larger card with full-fit object-contain */}
           <div 
-            className="w-40 h-24 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
+            className="w-32 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
             style={{
               background: '#FFFFFF',
               border: '3px solid hsl(42 45% 59%)',
@@ -157,7 +157,7 @@ const DeveloperDetail = () => {
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain p-2"
                 loading="eager"
               />
             ) : (
