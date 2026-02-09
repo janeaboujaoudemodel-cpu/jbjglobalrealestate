@@ -209,7 +209,13 @@ const DigitalCard = () => {
   }, [isFounderVisible]);
 
   // Redirect to homepage if founder visibility is OFF
-  if (isLoading) return null;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="w-10 h-10 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
   if (!isFounderVisible) return <Navigate to="/" replace />;
 
   // Handle video end - freeze on first frame (logo visible)
