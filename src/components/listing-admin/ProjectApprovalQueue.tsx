@@ -512,12 +512,72 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     setConfirmDialogOpen(true);
   };
 
+  // Show confirmation dialog for approving ALL pending (entire queue via edge function)
+  const showApproveAllConfirmation = () => {
+    if (isBulkProcessing) return;
+    const count = totalCount ?? imports.length;
+    if (count === 0) return;
+    setConfirmDialogMode("all");
+    setConfirmDialogCount(count);
+    setConfirmDialogOpen(true);
+  };
+
   // Handle confirmed approval (called from dialog)
   const handleConfirmedApproval = async () => {
     setConfirmDialogOpen(false);
-    
+
+    // "all" mode: call edge function in batches until queue is empty
+    if (confirmDialogMode === "all") {
+      setIsBulkProcessing(true);
+      setBulkAction("approve");
+      setBulkDone(0);
+      const estimatedTotal = totalCount ?? 0;
+      setBulkTotal(estimatedTotal);
+
+      let totalApproved = 0;
+      let consecutiveErrors = 0;
+
+      try {
+        while (true) {
+          const { data, error } = await supabase.functions.invoke("bulk-approve-imports", {
+            body: { limit: 500 },
+          });
+
+          if (error) {
+            consecutiveErrors++;
+            console.error("Bulk approve batch error:", error);
+            if (consecutiveErrors >= 3) {
+              toast({ title: "Error", description: "Too many consecutive errors. Stopping.", variant: "destructive" });
+              break;
+            }
+            continue;
+          }
+
+          consecutiveErrors = 0;
+          const approved = data?.stats?.approved ?? 0;
+          totalApproved += approved;
+          setBulkDone(totalApproved);
+
+          if (approved === 0) break;
+        }
+
+        toast({
+          title: "Bulk approve finished",
+          description: `${totalApproved.toLocaleString()} projects approved`,
+        });
+      } finally {
+        setIsBulkProcessing(false);
+        setBulkAction(null);
+        setSelectedIds(new Set());
+        await fetchPendingImports();
+        await fetchInventoryStats();
+        onRefresh?.();
+      }
+      return;
+    }
+
+    // "selected" mode: approve selected items one by one
     const itemsToApprove = imports.filter(i => selectedIds.has(i.id));
-    
     if (itemsToApprove.length === 0) return;
 
     setIsBulkProcessing(true);
@@ -927,8 +987,20 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     <CheckSquare className="h-4 w-4 mr-2" />
                     Approve Selected ({selectedIds.size})
                   </Button>
-                )}
-                {(totalNeedsWorkCount ?? needsWorkCount) > 0 && (
+                 )}
+                 {/* Approve ALL Pending button - calls edge function in batches */}
+                 {(totalCount ?? 0) > 0 && (
+                   <Button
+                     size="sm"
+                     onClick={showApproveAllConfirmation}
+                     disabled={isBulkProcessing || isLoading}
+                     className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                   >
+                     <Check className="h-4 w-4 mr-2" />
+                     Approve ALL ({(totalCount ?? 0).toLocaleString()})
+                   </Button>
+                 )}
+                 {(totalNeedsWorkCount ?? needsWorkCount) > 0 && (
                   <Button
                     size="sm"
                     variant="outline"
