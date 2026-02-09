@@ -1,112 +1,74 @@
 
-# Fix Backfill Data Pipeline, Persist Results, and Enrich Sunset Bay Grand
+# Fix Developer Logos, Clean Duplicates, and Fix All Maps
 
-## Critical Bugs Found
+## Issues Confirmed
 
-### 1. Column Name Mismatches -- Why Images and Documents Are Not Being Saved
+### 1. Logo White Borders
+All three logo containers use `object-contain` which preserves aspect ratio but leaves white gaps on the sides for rectangular logos. The user wants logos to FILL the container completely with NO white borders visible.
 
-Both backfill functions have **wrong column names** that cause silent insert failures:
+**Solution**: Change `object-contain` to `object-cover` on all logo images. This stretches/crops to fill the container completely, eliminating white gaps. Since logos are already roughly the right proportion, minimal cropping will occur, but the white borders will be gone.
 
-**`project_images` table actual columns**: `image_url`, `alt_text`, `display_order`, `data_source`
+### 2. Duplicate/Merged Developers Still in Database
+The audit found these problematic entries that need deletion (0 projects, safe to remove):
 
-| Function | Uses (WRONG) | Should Be |
-|----------|-------------|-----------|
-| `reelly-backfill-details` | `url`, `alt` | `image_url`, `alt_text` |
-| `reelly-backfill-projects` | `image_url`, `alt_text` | Correct |
+| Developer to DELETE | Reason | Projects |
+|---|---|---|
+| Ellington and RAK Properties | Fake merged entry -- both exist separately | 0 |
+| Imtiaz Development | Duplicate of "Imtiaz Developments" (36 projects) | 0 |
+| Al Hamra Construction and Development | Duplicate of "Al Hamra" (8 projects) | 0 |
+| East and West International Group | Subset of "Adventz and East and West" (3 projects) | 0 |
+| Meraki Developers | Duplicate of "Meraki" (4 projects) | 0 |
+| Nshama Group | Duplicate of "Nshama" (33 projects) | 0 |
+| Kappa Acca Real Estate Development | Subset of merged Khamas+Kappa entry (2 projects) | 0 |
 
-**`project_documents` table actual columns**: `file_url`, `file_name`, `document_type`, `data_source`
+### 3. Map Scroll Zoom -- Still Broken in 2 of 3 Maps
+`ProjectLocationMap.tsx` was fixed (`scrollWheelZoom={false}`), but TWO other maps still have scroll zoom enabled:
+- `DeveloperProjectsMap.tsx` line 127: `scrollWheelZoom: true`
+- `PropertyMap.tsx` line 449-454: No `scrollWheelZoom` prop (defaults to `true`)
 
-| Function | Uses (WRONG) | Should Be |
-|----------|-------------|-----------|
-| `reelly-backfill-details` | `url`, `name`, `type` | `file_url`, `file_name`, `document_type` |
-| `reelly-backfill-projects` | `url`, `name`, `type` | `file_url`, `file_name`, `document_type` |
-
-This is the root cause of zero images and zero documents being saved for all 1,500+ backfilled projects.
-
-### 2. Backfill Results Not Persisting Across Refreshes
-
-The backfill stats and results are stored in React `useState` only -- they reset on page refresh. The `sync_jobs` table exists but the UI never reads from it on mount.
-
-### 3. Backfill Results Not Clickable
-
-The processed/updated/failed counts are plain text divs -- not clickable to see which projects were affected.
-
-### 4. Sunset Bay Grand Missing All Data
-
-The project has `detail_fetched_at` set but zero images and zero documents due to the column mismatch bug above. It also needs the previously uploaded brochure data restored.
+All maps need `scrollWheelZoom: false` and visible zoom/navigation controls.
 
 ## Plan
 
-### Step 1: Fix Column Names in Both Backfill Functions
+### Step 1: Fix Logo Styling -- `object-cover` to Fill Container (3 files)
 
-**File: `supabase/functions/reelly-backfill-details/index.ts`**
+| File | Line | Change |
+|---|---|---|
+| `src/components/DeveloperCard.tsx` | 97 | `object-contain` to `object-cover` |
+| `src/pages/DeveloperDetail.tsx` | 160 | `object-contain` to `object-cover` |
+| `src/components/project-detail/DeveloperInfoCard.tsx` | 68 | `object-contain` to `object-cover` |
 
-Fix image insert (lines 143-148):
-```
-// FROM: { project_id, url: img.url, alt: img.alt, display_order }
-// TO:   { project_id, image_url: img.url, alt_text: img.alt, display_order }
-```
-
-Fix document insert (lines 162-167):
-```
-// FROM: { project_id, type: doc.type, url: doc.url, name: doc.name }
-// TO:   { project_id, document_type: doc.type, file_url: doc.url, file_name: doc.name }
-```
-
-**File: `supabase/functions/reelly-backfill-projects/index.ts`**
-
-Fix document upsert (lines 478-491):
-```
-// FROM: { project_id, url: doc.url, name: doc.name, type: doc.type, data_source }
-// TO:   { project_id, file_url: doc.url, file_name: doc.name, document_type: doc.type, data_source }
-```
-
-Also fix the `onConflict` from `"project_id,url"` to `"project_id,file_url"`.
-
-### Step 2: Re-Run Backfill for Already-Fetched Projects
-
-Since 1,501 projects were "backfilled" but their images/documents silently failed, we need to:
-- Reset `detail_fetched_at` to NULL for projects that have 0 images so the backfill can re-process them
-- OR add a "Force Re-Backfill" button that passes `force_refresh: true`
-
-Database fix:
-```sql
-UPDATE projects SET detail_fetched_at = NULL 
-WHERE reelly_id IS NOT NULL 
-AND detail_fetched_at IS NOT NULL
-AND id NOT IN (SELECT DISTINCT project_id FROM project_images);
-```
-
-### Step 3: Persist Backfill Results in `sync_jobs` Table
-
-**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
-
-- On component mount, query `sync_jobs` for the latest `reelly_backfill` job to restore previous results
-- After each backfill batch, save cumulative results to `sync_jobs`
-- Show persisted results when returning to the page
-- Add a "Clear Results" button to reset
-
-### Step 4: Make Backfill Results Clickable
-
-**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
-
-- Store the list of processed project names/IDs in the backfill result
-- Make the "Processed", "Updated", "Failed" count cards clickable
-- On click, show a scrollable list/modal of the project names with links to their detail pages
-
-### Step 5: Restore Sunset Bay Grand Data
-
-Query the database for any previously uploaded brochure/document data. If not found in the database, the project needs manual re-enrichment. Reset its `detail_fetched_at` to NULL so the fixed backfill can re-fetch from Reelly with correct column names.
+### Step 2: Delete 7 Duplicate/Fake Developer Entries (Database)
 
 ```sql
-UPDATE projects SET detail_fetched_at = NULL WHERE id = 'f0483cf4-716d-4d96-9bd9-15b04c61e1fd';
+DELETE FROM developers WHERE id IN (
+  '6bf5f4aa-46e6-41bd-8870-163e5b428e43',  -- Ellington and RAK Properties
+  'a9e195b7-7e10-48ff-af92-427b05879647',  -- Imtiaz Development
+  '297d620d-7944-4890-a26f-8644f9f579c6',  -- Al Hamra Construction and Development
+  '447f3a4e-858b-468b-8a52-2f3d165b1630',  -- East and West International Group
+  'fbdcdb92-3671-4a8b-a048-f25d4019a314',  -- Meraki Developers
+  '874bac24-85a9-490b-b525-3e29edc3e31c',  -- Nshama Group
+  '8635effb-1671-4e0e-afd7-000039569601'   -- Kappa Acca Real Estate Development
+);
 ```
+
+All 7 have 0 projects so no data will be lost.
+
+### Step 3: Fix Map Scroll in DeveloperProjectsMap.tsx
+
+Change line 127 from `scrollWheelZoom: true` to `scrollWheelZoom: false`. The map already has zoom controls via buttons.
+
+### Step 4: Fix Map Scroll in PropertyMap.tsx
+
+Add `scrollWheelZoom={false}` and `zoomControl={true}` to the MapContainer props (lines 449-454). The PropertyMap is the full-page map view and currently has no explicit scroll zoom setting (defaults to true).
 
 ## Files to Modify
 
 | File | Change |
-|------|--------|
-| `supabase/functions/reelly-backfill-details/index.ts` | Fix `url`->`image_url`, `alt`->`alt_text`, `type`->`document_type`, `name`->`file_name` |
-| `supabase/functions/reelly-backfill-projects/index.ts` | Fix document columns: `url`->`file_url`, `name`->`file_name`, `type`->`document_type` |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Persist backfill results in sync_jobs; load on mount; make counts clickable with project list |
-| Database | Reset `detail_fetched_at` for projects with 0 images; reset Sunset Bay Grand specifically |
+|---|---|
+| `src/components/DeveloperCard.tsx` | Logo: `object-cover` |
+| `src/pages/DeveloperDetail.tsx` | Logo: `object-cover` |
+| `src/components/project-detail/DeveloperInfoCard.tsx` | Logo: `object-cover` |
+| `src/components/developer/DeveloperProjectsMap.tsx` | `scrollWheelZoom: false` |
+| `src/pages/PropertyMap.tsx` | `scrollWheelZoom={false}` |
+| Database | Delete 7 duplicate developer entries |
