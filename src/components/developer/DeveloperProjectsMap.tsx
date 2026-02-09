@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { DivIcon, LatLngBounds } from "leaflet";
 import { Link } from "react-router-dom";
@@ -63,7 +63,7 @@ const formatPrice = (price: number | null) => {
 const MapBoundsFitter = ({ projects }: { projects: DeveloperProject[] }) => {
   const map = useMap();
 
-  useMemo(() => {
+  useEffect(() => {
     const validProjects = projects.filter(p => p.latitude && p.longitude);
     if (validProjects.length === 0) return;
 

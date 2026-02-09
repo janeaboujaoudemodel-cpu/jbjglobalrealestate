@@ -210,10 +210,19 @@ Deno.serve(async (req) => {
         updated_at: new Date().toISOString(),
       };
       
-      // If done, mark as completed
+      // If done, mark as completed and trigger feature image backfill
       if (!page.next) {
         updateData.status = "completed";
         updateData.completed_at = new Date().toISOString();
+        
+        // Auto-trigger developer feature image backfill
+        try {
+          await supabase.functions.invoke("sync-developer-feature-images", {
+            body: { dryRun: false }
+          });
+        } catch (backfillErr) {
+          console.error("Feature image backfill failed:", backfillErr);
+        }
       }
       
       // Append errors to error_log

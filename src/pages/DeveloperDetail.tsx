@@ -109,34 +109,29 @@ const DeveloperDetail = () => {
       <div className="jj-layer-2 mt-6 md:mt-8 mb-12">
         {/* Developer header */}
         <div className="flex flex-col md:flex-row md:items-start gap-6">
-          {/* Logo plate with 3D gold border */}
-          <div className="w-full md:w-[280px]">
-            <div 
-              className="h-28 rounded-xl flex items-center justify-center overflow-hidden p-4"
-              style={{
-                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
-                border: '3px solid hsl(42 45% 59%)',
-                boxShadow: `
-                  0 6px 20px rgba(200,167,102,0.35),
-                  0 3px 10px rgba(0,0,0,0.15),
-                  inset 0 2px 4px rgba(255,255,255,0.9),
-                  inset 0 -2px 4px rgba(200,167,102,0.1)
-                `,
-              }}
-            >
-              {developer.logo_url ? (
-                <img
-                  src={developer.logo_url}
-                  alt={`${developer.name} logo`}
-                  className="max-h-20 w-full object-contain"
-                  loading="eager"
-                />
-              ) : (
-                <div className="text-center">
-                  <p className="text-foreground font-semibold">{developer.name}</p>
-                </div>
-              )}
-            </div>
+          {/* Logo plate - Standardized small box with grayscale treatment */}
+          <div 
+            className="w-24 h-16 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0"
+            style={{
+              background: '#FFFFFF',
+              border: '3px solid hsl(42 45% 59%)',
+              boxShadow: '0 4px 12px rgba(200,167,102,0.25)'
+            }}
+          >
+            {developer.logo_url ? (
+              <img
+                src={developer.logo_url}
+                alt={`${developer.name} logo`}
+                className="max-h-12 max-w-[90%] object-contain"
+                style={{ 
+                  mixBlendMode: 'multiply',
+                  filter: 'grayscale(100%) contrast(1.2)'
+                }}
+                loading="eager"
+              />
+            ) : (
+              <Building2 className="w-8 h-8 text-zinc-400" />
+            )}
           </div>
 
           {/* Text */}
