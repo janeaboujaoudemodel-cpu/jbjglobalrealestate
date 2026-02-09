@@ -133,10 +133,11 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
     e.stopPropagation();
     setIsApproving(true);
     try {
-      // Create the project
+      const slug = item.slug || item.name.toLowerCase().replace(/\s+/g, '-');
+
       const projectData = {
         name: item.name,
-        slug: item.slug || item.name.toLowerCase().replace(/\s+/g, '-'),
+        slug,
         developer_id: item.developer_id,
         location: item.location,
         emirate: item.emirate || 'Dubai',
@@ -151,18 +152,42 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
         status: 'active'
       };
 
-      const { data: newProject, error: projectError } = await supabase
+      // Check if project with same slug already exists
+      const { data: existing } = await supabase
         .from("projects")
-        .insert(projectData)
-        .select()
-        .single();
+        .select("id")
+        .eq("slug", slug)
+        .maybeSingle();
 
-      if (projectError) throw projectError;
+      let projectId: string;
+
+      if (existing) {
+        // UPDATE existing project
+        const { error: updateError } = await supabase
+          .from("projects")
+          .update({ ...projectData, updated_at: new Date().toISOString() })
+          .eq("id", existing.id);
+        if (updateError) throw updateError;
+        projectId = existing.id;
+
+        // Delete old images/documents before re-inserting
+        await supabase.from("project_images").delete().eq("project_id", projectId);
+        await supabase.from("project_documents").delete().eq("project_id", projectId);
+      } else {
+        // INSERT new project
+        const { data: newProject, error: insertError } = await supabase
+          .from("projects")
+          .insert(projectData)
+          .select("id")
+          .single();
+        if (insertError) throw insertError;
+        projectId = newProject.id;
+      }
 
       // Insert images
-      if (images.length > 0 && newProject) {
+      if (images.length > 0) {
         const imageInserts = images.map((img, index) => ({
-          project_id: newProject.id,
+          project_id: projectId,
           image_url: img.url,
           alt_text: img.alt || item.name,
           display_order: index
@@ -171,9 +196,9 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
       }
 
       // Insert documents
-      if (documents.length > 0 && newProject) {
+      if (documents.length > 0) {
         const docInserts = documents.map((doc, idx) => ({
-          project_id: newProject.id,
+          project_id: projectId,
           file_url: doc.url,
           document_type: doc.type,
           file_name: doc.name || `${doc.type}-${idx + 1}`,
@@ -187,11 +212,12 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
         .from("pending_project_imports")
         .update({
           status: "approved",
+          matched_project_id: projectId,
           reviewed_at: new Date().toISOString()
         })
         .eq("id", item.id);
 
-      toast.success(`"${item.name}" approved and added to listings!`);
+      toast.success(`"${item.name}" ${existing ? 'updated' : 'approved and added to listings'}!`);
       onApproved?.();
     } catch (err) {
       toast.error(`Approve failed: ${err instanceof Error ? err.message : "Unknown error"}`);
