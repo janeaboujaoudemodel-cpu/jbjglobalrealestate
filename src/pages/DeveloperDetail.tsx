@@ -107,15 +107,38 @@ const DeveloperDetail = () => {
 
   return (
     <section className="relative w-full min-h-screen bg-premium-bg">
-      {/* Top spacing + back action */}
-      <div className="container mx-auto px-4 pt-8 md:pt-12">
-        <Link to="/developers">
-          <Button variant="primary" size="sm" className="group">
-            <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
-            <span>Back to Developers</span>
-          </Button>
-        </Link>
-      </div>
+      {/* Hero feature image */}
+      {developer.feature_image_url && (
+        <div className="relative w-full h-[280px] md:h-[380px] overflow-hidden">
+          <img
+            src={developer.feature_image_url}
+            alt={`${developer.name} featured project`}
+            className="w-full h-full object-cover"
+            loading="eager"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-premium-bg via-premium-bg/40 to-transparent" />
+          <div className="absolute bottom-4 left-4 md:left-8">
+            <Link to="/developers">
+              <Button variant="primary" size="sm" className="group">
+                <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+                <span>Back to Developers</span>
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Fallback back button when no hero image */}
+      {!developer.feature_image_url && (
+        <div className="container mx-auto px-4 pt-8 md:pt-12">
+          <Link to="/developers">
+            <Button variant="primary" size="sm" className="group">
+              <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+              <span>Back to Developers</span>
+            </Button>
+          </Link>
+        </div>
+      )}
 
       {/* Content (Layer 2) */}
       <div className="jj-layer-2 mt-6 md:mt-8 mb-12">
