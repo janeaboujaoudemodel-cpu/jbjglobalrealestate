@@ -44,8 +44,11 @@ export function renderMarkdownToHtml(markdown: string | null): string {
   // First clean the raw text
   let cleaned = cleanRawText(markdown);
   
-  // Additional pass: strip any remaining # symbols at line start (malformed markdown)
-  cleaned = cleaned.replace(/^#{1,6}\s*/gm, '');
+  // Convert markdown headers to styled HTML headings
+  cleaned = cleaned
+    .replace(/^#{5,6}\s*(.+)$/gm, '<h4 class="text-lg font-semibold text-foreground mt-6 mb-2">$1</h4>')
+    .replace(/^#{3,4}\s*(.+)$/gm, '<h3 class="text-xl font-bold text-foreground mt-8 mb-3">$1</h3>')
+    .replace(/^#{1,2}\s*(.+)$/gm, '<h2 class="text-2xl font-bold text-foreground mt-8 mb-4">$1</h2>');
   
   let html = cleaned
     // Bold & italic
