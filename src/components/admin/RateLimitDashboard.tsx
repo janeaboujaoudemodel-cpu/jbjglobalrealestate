@@ -7,9 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
@@ -234,15 +234,15 @@ export const RateLimitDashboard = () => {
             {isLive ? "Live" : "Paused"}
           </Button>
           <Select value={selectedFunction} onValueChange={setSelectedFunction}>
-            <SelectTrigger className="w-48 bg-zinc-950 border-zinc-700 text-white">
+            <SelectTriggerDark className="w-48">
               <SelectValue placeholder="Filter by function" />
-            </SelectTrigger>
-            <SelectContent className="bg-zinc-900 border-zinc-700">
-              <SelectItem value="all">All Functions</SelectItem>
-              <SelectItem value="user-registration">User Registration</SelectItem>
-              <SelectItem value="ai-chat-support">AI Chat Support</SelectItem>
-              <SelectItem value="validate-discount-code">Validate Discount</SelectItem>
-            </SelectContent>
+            </SelectTriggerDark>
+            <SelectContentDark>
+              <SelectItemDark value="all">All Functions</SelectItemDark>
+              <SelectItemDark value="user-registration">User Registration</SelectItemDark>
+              <SelectItemDark value="ai-chat-support">AI Chat Support</SelectItemDark>
+              <SelectItemDark value="validate-discount-code">Validate Discount</SelectItemDark>
+            </SelectContentDark>
           </Select>
           <Button
             variant="outline"

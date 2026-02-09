@@ -8,7 +8,7 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContentDark, SelectItemDark, SelectTriggerDark, SelectValue } from '@/components/ui/select';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -144,30 +144,26 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
           <span className="text-zinc-400 text-sm">Filters:</span>
         </div>
         <Select value={filterStatus} onValueChange={setFilterStatus}>
-          <SelectTrigger className="w-40 bg-zinc-900/50 border-gold/20 text-white">
+          <SelectTriggerDark className="w-40 border-gold/20">
             <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-gold/30">
-            <SelectItem value="all" className="text-white hover:bg-gold/20">All Status</SelectItem>
+          </SelectTriggerDark>
+          <SelectContentDark className="border-gold/30">
+            <SelectItemDark value="all">All Status</SelectItemDark>
             {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-              <SelectItem key={key} value={key} className="text-white hover:bg-gold/20">
-                {config.label}
-              </SelectItem>
+              <SelectItemDark key={key} value={key}>{config.label}</SelectItemDark>
             ))}
-          </SelectContent>
+          </SelectContentDark>
         </Select>
         <Select value={filterType} onValueChange={setFilterType}>
-          <SelectTrigger className="w-48 bg-zinc-900/50 border-gold/20 text-white">
+          <SelectTriggerDark className="w-48 border-gold/20">
             <SelectValue placeholder="Type" />
-          </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-gold/30">
-            <SelectItem value="all" className="text-white hover:bg-gold/20">All Types</SelectItem>
+          </SelectTriggerDark>
+          <SelectContentDark className="border-gold/30">
+            <SelectItemDark value="all">All Types</SelectItemDark>
             {Object.entries(TASK_TYPE_CONFIG).map(([key, config]) => (
-              <SelectItem key={key} value={key} className="text-white hover:bg-gold/20">
-                {config.label}
-              </SelectItem>
+              <SelectItemDark key={key} value={key}>{config.label}</SelectItemDark>
             ))}
-          </SelectContent>
+          </SelectContentDark>
         </Select>
       </div>
 
