@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { useDevelopers } from "@/hooks/useProjects";
@@ -89,112 +89,72 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
 
         {/* Location */}
         <Select value={location || "all"} onValueChange={(value) => setLocation(value === "all" ? null : value)}>
-          <SelectTrigger className="w-[140px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
+          <SelectTriggerDark className="w-[140px] h-12 rounded-lg">
             <MapPin className="w-4 h-4 mr-2 text-zinc-500" />
             <SelectValue placeholder="Location" />
-          </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-zinc-700">
-            <SelectItem value="all" className="text-white hover:bg-zinc-800">
-              All Locations
-            </SelectItem>
-            <SelectItem value="Dubai" className="text-white hover:bg-zinc-800">
-              Dubai
-            </SelectItem>
-            <SelectItem value="Abu Dhabi" className="text-white hover:bg-zinc-800">
-              Abu Dhabi
-            </SelectItem>
-            <SelectItem value="Sharjah" className="text-white hover:bg-zinc-800">
-              Sharjah
-            </SelectItem>
-            <SelectItem value="Ras Al Khaimah" className="text-white hover:bg-zinc-800">
-              Ras Al Khaimah
-            </SelectItem>
-          </SelectContent>
+          </SelectTriggerDark>
+          <SelectContentDark>
+            <SelectItemDark value="all">All Locations</SelectItemDark>
+            <SelectItemDark value="Dubai">Dubai</SelectItemDark>
+            <SelectItemDark value="Abu Dhabi">Abu Dhabi</SelectItemDark>
+            <SelectItemDark value="Sharjah">Sharjah</SelectItemDark>
+            <SelectItemDark value="Ras Al Khaimah">Ras Al Khaimah</SelectItemDark>
+          </SelectContentDark>
         </Select>
 
         {/* Developer - All developers sorted by rank (top to lowest) */}
         <Select value={developerId || "all"} onValueChange={(value) => setDeveloperId(value === "all" ? null : value)}>
-          <SelectTrigger className="w-[140px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
+          <SelectTriggerDark className="w-[140px] h-12 rounded-lg">
             <Building2 className="w-4 h-4 mr-2 text-zinc-500" />
             <SelectValue placeholder="Developer" />
-          </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-zinc-700 max-h-72">
-            <SelectItem value="all" className="text-white hover:bg-zinc-800">
-              All Developers
-            </SelectItem>
+          </SelectTriggerDark>
+          <SelectContentDark className="max-h-72">
+            <SelectItemDark value="all">All Developers</SelectItemDark>
             {allDevelopersSorted.map((dev) => (
-              <SelectItem key={dev.id} value={dev.id} className="text-white hover:bg-zinc-800">
-                {dev.name}
-              </SelectItem>
+              <SelectItemDark key={dev.id} value={dev.id}>{dev.name}</SelectItemDark>
             ))}
-          </SelectContent>
+          </SelectContentDark>
         </Select>
 
         {/* Price Range */}
         <Select value={priceRange || "all"} onValueChange={(value) => setPriceRange(value === "all" ? null : value)}>
-          <SelectTrigger className="w-[140px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
+          <SelectTriggerDark className="w-[140px] h-12 rounded-lg">
             <DollarSign className="w-4 h-4 mr-2 text-zinc-500" />
             <SelectValue placeholder="Price Range" />
-          </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-zinc-700">
-            <SelectItem value="all" className="text-white hover:bg-zinc-800">
-              Any Price
-            </SelectItem>
-            <SelectItem value="0-1000000" className="text-white hover:bg-zinc-800">
-              Under 1M
-            </SelectItem>
-            <SelectItem value="1000000-3000000" className="text-white hover:bg-zinc-800">
-              1M - 3M
-            </SelectItem>
-            <SelectItem value="3000000-5000000" className="text-white hover:bg-zinc-800">
-              3M - 5M
-            </SelectItem>
-            <SelectItem value="5000000-10000000" className="text-white hover:bg-zinc-800">
-              5M - 10M
-            </SelectItem>
-            <SelectItem value="10000000-500000000" className="text-white hover:bg-zinc-800">
-              10M+
-            </SelectItem>
-          </SelectContent>
+          </SelectTriggerDark>
+          <SelectContentDark>
+            <SelectItemDark value="all">Any Price</SelectItemDark>
+            <SelectItemDark value="0-1000000">Under 1M</SelectItemDark>
+            <SelectItemDark value="1000000-3000000">1M - 3M</SelectItemDark>
+            <SelectItemDark value="3000000-5000000">3M - 5M</SelectItemDark>
+            <SelectItemDark value="5000000-10000000">5M - 10M</SelectItemDark>
+            <SelectItemDark value="10000000-500000000">10M+</SelectItemDark>
+          </SelectContentDark>
         </Select>
 
         {/* Size Unit */}
         <Select value={sizeUnit} onValueChange={(value) => setSizeUnit(value as "sqft" | "sqm")}>
-          <SelectTrigger className="w-[90px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
+          <SelectTriggerDark className="w-[90px] h-12 rounded-lg">
             <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-zinc-700">
-            <SelectItem value="sqft" className="text-white hover:bg-zinc-800">
-              sq ft
-            </SelectItem>
-            <SelectItem value="sqm" className="text-white hover:bg-zinc-800">
-              sq m
-            </SelectItem>
-          </SelectContent>
+          </SelectTriggerDark>
+          <SelectContentDark>
+            <SelectItemDark value="sqft">sq ft</SelectItemDark>
+            <SelectItemDark value="sqm">sq m</SelectItemDark>
+          </SelectContentDark>
         </Select>
 
         {/* Currency */}
         <Select value={currency} onValueChange={(value) => setCurrency(value)}>
-          <SelectTrigger className="w-[90px] h-12 bg-zinc-900/80 border-zinc-700/50 text-white rounded-lg">
+          <SelectTriggerDark className="w-[90px] h-12 rounded-lg">
             <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-zinc-700">
-            <SelectItem value="AED" className="text-white hover:bg-zinc-800">
-              AED
-            </SelectItem>
-            <SelectItem value="USD" className="text-white hover:bg-zinc-800">
-              USD
-            </SelectItem>
-            <SelectItem value="EUR" className="text-white hover:bg-zinc-800">
-              EUR
-            </SelectItem>
-            <SelectItem value="GBP" className="text-white hover:bg-zinc-800">
-              GBP
-            </SelectItem>
-            <SelectItem value="INR" className="text-white hover:bg-zinc-800">
-              INR
-            </SelectItem>
-          </SelectContent>
+          </SelectTriggerDark>
+          <SelectContentDark>
+            <SelectItemDark value="AED">AED</SelectItemDark>
+            <SelectItemDark value="USD">USD</SelectItemDark>
+            <SelectItemDark value="EUR">EUR</SelectItemDark>
+            <SelectItemDark value="GBP">GBP</SelectItemDark>
+            <SelectItemDark value="INR">INR</SelectItemDark>
+          </SelectContentDark>
         </Select>
 
         {/* Advanced Filters Link */}

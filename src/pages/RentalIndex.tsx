@@ -9,9 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { 
@@ -217,16 +217,14 @@ const RentalIndex = () => {
                     Community / Area <span className="text-emerald-400">*</span>
                   </Label>
                   <Select value={community} onValueChange={setCommunity}>
-                    <SelectTrigger className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors">
+                    <SelectTriggerDark className="h-12 rounded-xl border-emerald-500/30 hover:border-emerald-500/50">
                       <SelectValue placeholder="Select community" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-emerald-500/30 max-h-64">
+                    </SelectTriggerDark>
+                    <SelectContentDark className="border-emerald-500/30 max-h-64">
                       {dubaiCommunities.map((c) => (
-                        <SelectItem key={c} value={c} className="text-white hover:bg-emerald-500/20 focus:bg-emerald-500/20">
-                          {c}
-                        </SelectItem>
+                        <SelectItemDark key={c} value={c}>{c}</SelectItemDark>
                       ))}
-                    </SelectContent>
+                    </SelectContentDark>
                   </Select>
                 </div>
 
@@ -237,16 +235,14 @@ const RentalIndex = () => {
                     Property Type <span className="text-emerald-400">*</span>
                   </Label>
                   <Select value={propertyType} onValueChange={setPropertyType}>
-                    <SelectTrigger className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors">
+                    <SelectTriggerDark className="h-12 rounded-xl border-emerald-500/30 hover:border-emerald-500/50">
                       <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-emerald-500/30">
+                    </SelectTriggerDark>
+                    <SelectContentDark className="border-emerald-500/30">
                       {propertyTypes.map((t) => (
-                        <SelectItem key={t.value} value={t.value} className="text-white hover:bg-emerald-500/20 focus:bg-emerald-500/20">
-                          {t.label}
-                        </SelectItem>
+                        <SelectItemDark key={t.value} value={t.value}>{t.label}</SelectItemDark>
                       ))}
-                    </SelectContent>
+                    </SelectContentDark>
                   </Select>
                 </div>
 
@@ -271,14 +267,14 @@ const RentalIndex = () => {
                     Furnished Status - Optional
                   </Label>
                   <Select value={furnished} onValueChange={setFurnished}>
-                    <SelectTrigger className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors">
+                    <SelectTriggerDark className="h-12 rounded-xl border-emerald-500/30 hover:border-emerald-500/50">
                       <SelectValue placeholder="Select status" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-emerald-500/30">
-                      <SelectItem value="unfurnished" className="text-white hover:bg-emerald-500/20 focus:bg-emerald-500/20">Unfurnished</SelectItem>
-                      <SelectItem value="furnished" className="text-white hover:bg-emerald-500/20 focus:bg-emerald-500/20">Furnished</SelectItem>
-                      <SelectItem value="semi-furnished" className="text-white hover:bg-emerald-500/20 focus:bg-emerald-500/20">Semi-Furnished</SelectItem>
-                    </SelectContent>
+                    </SelectTriggerDark>
+                    <SelectContentDark className="border-emerald-500/30">
+                      <SelectItemDark value="unfurnished">Unfurnished</SelectItemDark>
+                      <SelectItemDark value="furnished">Furnished</SelectItemDark>
+                      <SelectItemDark value="semi-furnished">Semi-Furnished</SelectItemDark>
+                    </SelectContentDark>
                   </Select>
                 </div>
               </div>

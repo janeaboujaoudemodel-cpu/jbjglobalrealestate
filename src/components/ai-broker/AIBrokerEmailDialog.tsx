@@ -11,9 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
@@ -190,16 +190,16 @@ export function AIBrokerEmailDialog({
           <div>
             <Label className="text-gray-300">Use Template (Optional)</Label>
             <Select value={selectedTemplate} onValueChange={handleTemplateSelect}>
-              <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+              <SelectTriggerDark className="mt-1">
                 <SelectValue placeholder="Select a template..." />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700">
+              </SelectTriggerDark>
+              <SelectContentDark>
                 {templates.map((template) => (
-                  <SelectItem key={template.id} value={template.id}>
+                  <SelectItemDark key={template.id} value={template.id}>
                     {template.name}
-                  </SelectItem>
+                  </SelectItemDark>
                 ))}
-              </SelectContent>
+              </SelectContentDark>
             </Select>
           </div>
 

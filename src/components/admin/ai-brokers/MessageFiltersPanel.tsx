@@ -7,9 +7,9 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import {
@@ -355,16 +355,16 @@ function FilterForm({ filter, onSave, onCancel }: FilterFormProps) {
             setFormData({ ...formData, filter_type: value })
           }
         >
-          <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+          <SelectTriggerDark className="mt-1">
             <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-zinc-700">
+          </SelectTriggerDark>
+          <SelectContentDark>
             {FILTER_TYPES.map((type) => (
-              <SelectItem key={type.value} value={type.value}>
+              <SelectItemDark key={type.value} value={type.value}>
                 {type.label}
-              </SelectItem>
+              </SelectItemDark>
             ))}
-          </SelectContent>
+          </SelectContentDark>
         </Select>
       </div>
 
@@ -408,16 +408,16 @@ function FilterForm({ filter, onSave, onCancel }: FilterFormProps) {
             setFormData({ ...formData, severity: value })
           }
         >
-          <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+          <SelectTriggerDark className="mt-1">
             <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-zinc-700">
+          </SelectTriggerDark>
+          <SelectContentDark>
             {SEVERITIES.map((sev) => (
-              <SelectItem key={sev.value} value={sev.value}>
+              <SelectItemDark key={sev.value} value={sev.value}>
                 {sev.label}
-              </SelectItem>
+              </SelectItemDark>
             ))}
-          </SelectContent>
+          </SelectContentDark>
         </Select>
       </div>
 

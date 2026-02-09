@@ -4,9 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from '@/components/ui/select';
 import { Ruler, FileText, Building2, Home, MapPin } from 'lucide-react';
@@ -153,16 +153,14 @@ const DesignProjectHeader = ({
               Room / Area Name
             </Label>
             <Select value={roomName} onValueChange={onRoomNameChange}>
-              <SelectTrigger className="bg-zinc-800/50 border-zinc-600 text-white hover:border-zinc-500">
+              <SelectTriggerDark>
                 <SelectValue placeholder="Select room type" />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700">
+              </SelectTriggerDark>
+              <SelectContentDark>
                 {roomTypes.map((room) => (
-                  <SelectItem key={room} value={room} className="text-white hover:bg-zinc-800 focus:bg-zinc-800">
-                    {room}
-                  </SelectItem>
+                  <SelectItemDark key={room} value={room}>{room}</SelectItemDark>
                 ))}
-              </SelectContent>
+              </SelectContentDark>
             </Select>
           </div>
 

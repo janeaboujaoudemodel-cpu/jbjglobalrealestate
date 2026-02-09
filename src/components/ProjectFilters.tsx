@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectContentDark,
+  SelectItemDark,
+  SelectTriggerDark,
   SelectValue,
 } from "@/components/ui/select";
 import {
@@ -390,15 +390,15 @@ const ProjectFilters = ({
                         value={filters.currency}
                         onValueChange={(value) => updateFilter("currency", value as FilterState['currency'])}
                       >
-                        <SelectTrigger className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10">
+                        <SelectTriggerDark className="h-10">
                           <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a]">
-                          <SelectItem value="AED" className="text-white hover:bg-[#2a2a2a]">AED</SelectItem>
-                          <SelectItem value="USD" className="text-white hover:bg-[#2a2a2a]">USD</SelectItem>
-                          <SelectItem value="EUR" className="text-white hover:bg-[#2a2a2a]">EUR</SelectItem>
-                          <SelectItem value="GBP" className="text-white hover:bg-[#2a2a2a]">GBP</SelectItem>
-                        </SelectContent>
+                        </SelectTriggerDark>
+                        <SelectContentDark>
+                          <SelectItemDark value="AED">AED</SelectItemDark>
+                          <SelectItemDark value="USD">USD</SelectItemDark>
+                          <SelectItemDark value="EUR">EUR</SelectItemDark>
+                          <SelectItemDark value="GBP">GBP</SelectItemDark>
+                        </SelectContentDark>
                       </Select>
                     </div>
                     <div>
@@ -407,13 +407,13 @@ const ProjectFilters = ({
                         value={filters.sizeUnit}
                         onValueChange={(value) => updateFilter("sizeUnit", value as FilterState['sizeUnit'])}
                       >
-                        <SelectTrigger className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10">
+                        <SelectTriggerDark className="h-10">
                           <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a]">
-                          <SelectItem value="sqft" className="text-white hover:bg-[#2a2a2a]">sq ft</SelectItem>
-                          <SelectItem value="sqm" className="text-white hover:bg-[#2a2a2a]">sq m</SelectItem>
-                        </SelectContent>
+                        </SelectTriggerDark>
+                        <SelectContentDark>
+                          <SelectItemDark value="sqft">sq ft</SelectItemDark>
+                          <SelectItemDark value="sqm">sq m</SelectItemDark>
+                        </SelectContentDark>
                       </Select>
                     </div>
                     <div>
@@ -422,13 +422,13 @@ const ProjectFilters = ({
                         value={filters.language}
                         onValueChange={(value) => updateFilter("language", value as FilterState['language'])}
                       >
-                        <SelectTrigger className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10">
+                        <SelectTriggerDark className="h-10">
                           <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a]">
-                          <SelectItem value="en" className="text-white hover:bg-[#2a2a2a]">English</SelectItem>
-                          <SelectItem value="ar" className="text-white hover:bg-[#2a2a2a]">العربية</SelectItem>
-                        </SelectContent>
+                        </SelectTriggerDark>
+                        <SelectContentDark>
+                          <SelectItemDark value="en">English</SelectItemDark>
+                          <SelectItemDark value="ar">العربية</SelectItemDark>
+                        </SelectContentDark>
                       </Select>
                     </div>
                   </div>
@@ -665,26 +665,17 @@ const ProjectFilters = ({
                         updateFilter("developerId", value === "all" ? null : value)
                       }
                     >
-                      <SelectTrigger className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-12">
+                      <SelectTriggerDark className="h-12">
                         <SelectValue placeholder="All Developers" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a] max-h-60">
-                        <SelectItem
-                          value="all"
-                          className="text-white hover:bg-[#2a2a2a] focus:bg-[#2a2a2a] focus:text-white"
-                        >
-                          All Developers
-                        </SelectItem>
+                      </SelectTriggerDark>
+                      <SelectContentDark className="max-h-60">
+                        <SelectItemDark value="all">All Developers</SelectItemDark>
                         {developers.map((developer) => (
-                          <SelectItem
-                            key={developer.id}
-                            value={developer.id}
-                            className="text-white hover:bg-[#2a2a2a] focus:bg-[#2a2a2a] focus:text-white"
-                          >
+                          <SelectItemDark key={developer.id} value={developer.id}>
                             {developer.name}
-                          </SelectItem>
+                          </SelectItemDark>
                         ))}
-                      </SelectContent>
+                      </SelectContentDark>
                     </Select>
                   </FilterSection>
                 )}
@@ -698,26 +689,17 @@ const ProjectFilters = ({
                         updateFilter("communityId", value === "all" ? null : value)
                       }
                     >
-                      <SelectTrigger className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-12">
+                      <SelectTriggerDark className="h-12">
                         <SelectValue placeholder="All Communities" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#1a1a1a] border-[#2a2a2a] max-h-60">
-                        <SelectItem
-                          value="all"
-                          className="text-white hover:bg-[#2a2a2a] focus:bg-[#2a2a2a] focus:text-white"
-                        >
-                          All Communities
-                        </SelectItem>
+                      </SelectTriggerDark>
+                      <SelectContentDark className="max-h-60">
+                        <SelectItemDark value="all">All Communities</SelectItemDark>
                         {communities.map((community) => (
-                          <SelectItem
-                            key={community.id}
-                            value={community.id}
-                            className="text-white hover:bg-[#2a2a2a] focus:bg-[#2a2a2a] focus:text-white"
-                          >
+                          <SelectItemDark key={community.id} value={community.id}>
                             {community.name}
-                          </SelectItem>
+                          </SelectItemDark>
                         ))}
-                      </SelectContent>
+                      </SelectContentDark>
                     </Select>
                   </FilterSection>
                 )}
