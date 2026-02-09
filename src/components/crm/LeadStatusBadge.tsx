@@ -10,8 +10,8 @@ export interface PipelineStatus {
   category: 'positive' | 'neutral' | 'negative';
 }
 
-// Status groups for organized dropdowns - vivid colors
-// Using YELLOW/AMBER for neutral instead of blue per user request
+// Status groups for organized dropdowns - standardized colors
+// POSITIVE = Green, NEUTRAL = Blue, NEGATIVE = Red
 export const STATUS_GROUPS = {
   positive: {
     label: 'POSITIVE',
@@ -21,9 +21,9 @@ export const STATUS_GROUPS = {
   },
   neutral: {
     label: 'NEUTRAL',
-    color: 'text-amber-400',
-    bgColor: 'bg-amber-500/20',
-    dotColor: '#F59E0B', // Amber/Yellow
+    color: 'text-blue-400',
+    bgColor: 'bg-blue-500/20',
+    dotColor: '#3B82F6', // Blue
   },
   negative: {
     label: 'NEGATIVE',
@@ -33,6 +33,8 @@ export const STATUS_GROUPS = {
   },
 } as const;
 
+// GLOBAL STATUS LIST - These EXACT statuses must be used everywhere
+// No alternative lists, no shortened versions, no duplicates
 export const PIPELINE_STATUSES: PipelineStatus[] = [
   // POSITIVE (green) - Deal progression
   { value: "interested", label: "Interested", color: "bg-emerald-500", bgColor: "bg-emerald-500/20", textColor: "text-emerald-300", dotColor: "#22C55E", category: "positive" },
@@ -42,19 +44,18 @@ export const PIPELINE_STATUSES: PipelineStatus[] = [
   { value: "negotiation", label: "Negotiation", color: "bg-emerald-500", bgColor: "bg-emerald-500/20", textColor: "text-emerald-300", dotColor: "#22C55E", category: "positive" },
   { value: "closed_won", label: "Closed Won", color: "bg-green-600", bgColor: "bg-green-600/20", textColor: "text-green-100", dotColor: "#22C55E", category: "positive" },
   
-  // NEUTRAL (yellow/amber) - New / Follow-up
-  { value: "new", label: "New", color: "bg-amber-500", bgColor: "bg-amber-500/20", textColor: "text-amber-300", dotColor: "#F59E0B", category: "neutral" },
-  { value: "contacted", label: "Contacted", color: "bg-yellow-500", bgColor: "bg-yellow-500/20", textColor: "text-yellow-300", dotColor: "#F59E0B", category: "neutral" },
-  { value: "followup", label: "Follow-up", color: "bg-amber-400", bgColor: "bg-amber-400/20", textColor: "text-amber-300", dotColor: "#F59E0B", category: "neutral" },
-  { value: "callback", label: "Callback Requested", color: "bg-yellow-400", bgColor: "bg-yellow-400/20", textColor: "text-yellow-200", dotColor: "#F59E0B", category: "neutral" },
-  { value: "no_answer", label: "No Answer", color: "bg-amber-600", bgColor: "bg-amber-600/20", textColor: "text-amber-300", dotColor: "#F59E0B", category: "neutral" },
+  // NEUTRAL (blue) - New / Follow-up / Pending
+  { value: "new", label: "New", color: "bg-blue-500", bgColor: "bg-blue-500/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
+  { value: "contacted", label: "Contacted", color: "bg-blue-400", bgColor: "bg-blue-400/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
+  { value: "followup", label: "Follow-up", color: "bg-blue-500", bgColor: "bg-blue-500/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
+  { value: "callback", label: "Call Back", color: "bg-blue-400", bgColor: "bg-blue-400/20", textColor: "text-blue-200", dotColor: "#3B82F6", category: "neutral" },
+  { value: "no_answer", label: "No Response", color: "bg-blue-600", bgColor: "bg-blue-600/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
   
-  // NEGATIVE (red) - Lost / DNC
-  { value: "not_interested", label: "Not Interested", color: "bg-rose-500", bgColor: "bg-rose-500/20", textColor: "text-rose-300", dotColor: "#EF4444", category: "negative" },
+  // NEGATIVE (red) - Lost / DNC / Invalid
+  { value: "not_interested", label: "Not Interested", color: "bg-red-500", bgColor: "bg-red-500/20", textColor: "text-red-300", dotColor: "#EF4444", category: "negative" },
+  { value: "closed_lost", label: "Lost", color: "bg-red-500", bgColor: "bg-red-500/20", textColor: "text-red-300", dotColor: "#EF4444", category: "negative" },
   { value: "do_not_contact", label: "Do Not Contact", color: "bg-red-600", bgColor: "bg-red-600/20", textColor: "text-red-300", dotColor: "#EF4444", category: "negative" },
-  { value: "already_bought", label: "Already Bought", color: "bg-orange-500", bgColor: "bg-orange-500/20", textColor: "text-orange-300", dotColor: "#F59E0B", category: "negative" },
-  { value: "closed_lost", label: "Closed Lost", color: "bg-red-500", bgColor: "bg-red-500/20", textColor: "text-red-300", dotColor: "#EF4444", category: "negative" },
-  { value: "junk", label: "Junk", color: "bg-gray-500", bgColor: "bg-gray-500/20", textColor: "text-gray-300", dotColor: "#6B7280", category: "negative" },
+  { value: "junk", label: "Invalid Lead", color: "bg-red-400", bgColor: "bg-red-400/20", textColor: "text-red-300", dotColor: "#EF4444", category: "negative" },
 ];
 
 export const getStatusInfo = (status: string | undefined): PipelineStatus => {
@@ -84,7 +85,7 @@ const LeadStatusBadge = ({
     lg: "px-5 py-2 text-sm"
   };
 
-  // Special styling for "New" status - gold/white premium look
+  // Special styling for "New" status - blue neutral theme
   const isNew = status === 'new' || !status;
   
   return (
@@ -95,7 +96,7 @@ const LeadStatusBadge = ({
         "inline-flex items-center justify-center gap-2 rounded-full font-bold transition-all shadow-sm",
         sizeClasses[size],
         isNew 
-          ? "bg-gradient-to-r from-amber-400 via-gold to-amber-500 text-zinc-900 border border-gold/50 shadow-gold/20" 
+          ? "bg-blue-500/20 text-blue-300 border border-blue-400/30" 
           : cn(statusInfo.bgColor, statusInfo.textColor, "border border-current/20"),
         onClick && "hover:scale-105 hover:shadow-md cursor-pointer group",
         !onClick && "cursor-default",
@@ -106,9 +107,9 @@ const LeadStatusBadge = ({
         <span 
           className={cn(
             "w-2 h-2 rounded-full ring-2",
-            isNew ? "bg-zinc-900 ring-zinc-900/30" : "ring-current/30"
+            "ring-current/30"
           )}
-          style={!isNew ? { backgroundColor: statusInfo.dotColor } : undefined}
+          style={{ backgroundColor: statusInfo.dotColor }}
         />
       )}
       <span className="font-bold tracking-wide uppercase text-center">

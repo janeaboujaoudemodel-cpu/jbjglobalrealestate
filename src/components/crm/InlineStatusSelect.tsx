@@ -67,41 +67,55 @@ export default function InlineStatusSelect({
         className="bg-zinc-800 border-zinc-700 max-h-80"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="px-2 py-1 text-xs font-semibold text-emerald-400 uppercase">Positive</div>
+        {/* POSITIVE - Green */}
+        <div className="px-2 py-1.5 text-xs font-bold text-emerald-400 uppercase tracking-wide border-b border-zinc-700/50 flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-500" />
+          Positive
+        </div>
         {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-white hover:bg-zinc-700"
+            className="text-white hover:bg-zinc-700 pl-4"
           >
             <div className="flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full ${status.color}`} />
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
               {status.label}
             </div>
           </SelectItem>
         ))}
-        <div className="px-2 py-1 text-xs font-semibold text-blue-400 uppercase mt-1">Neutral</div>
+        
+        {/* NEUTRAL - Blue */}
+        <div className="px-2 py-1.5 text-xs font-bold text-blue-400 uppercase tracking-wide border-b border-zinc-700/50 mt-1 flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-blue-500" />
+          Neutral
+        </div>
         {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-white hover:bg-zinc-700"
+            className="text-white hover:bg-zinc-700 pl-4"
           >
             <div className="flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full ${status.color}`} />
+              <span className="w-2 h-2 rounded-full bg-blue-500" />
               {status.label}
             </div>
           </SelectItem>
         ))}
-        <div className="px-2 py-1 text-xs font-semibold text-red-400 uppercase mt-1">Negative</div>
+        
+        {/* NEGATIVE - Red */}
+        <div className="px-2 py-1.5 text-xs font-bold text-red-400 uppercase tracking-wide border-b border-zinc-700/50 mt-1 flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-red-500" />
+          Negative
+        </div>
         {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-white hover:bg-zinc-700"
+            className="text-white hover:bg-zinc-700 pl-4"
           >
             <div className="flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full ${status.color}`} />
+              <span className="w-2 h-2 rounded-full bg-red-500" />
               {status.label}
             </div>
           </SelectItem>

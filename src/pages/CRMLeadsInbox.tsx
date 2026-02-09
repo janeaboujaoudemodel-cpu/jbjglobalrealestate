@@ -60,19 +60,29 @@ interface Lead {
 
 const PAGE_SIZE = 25;
 
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All Statuses' },
-  ...PIPELINE_STATUSES.map(s => ({ value: s.value, label: s.label }))
+// Build grouped status options for proper dropdown display
+const GROUPED_STATUS_OPTIONS = [
+  { value: 'all', label: 'All Statuses', category: null },
+  // Positive (Green)
+  ...PIPELINE_STATUSES.filter(s => s.category === 'positive').map(s => ({ value: s.value, label: s.label, category: 'positive' })),
+  // Neutral (Blue)
+  ...PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(s => ({ value: s.value, label: s.label, category: 'neutral' })),
+  // Negative (Red)
+  ...PIPELINE_STATUSES.filter(s => s.category === 'negative').map(s => ({ value: s.value, label: s.label, category: 'negative' })),
 ];
 
+// Complete source options - ALL must be clickable
 const SOURCE_OPTIONS = [
   { value: 'all', label: 'All Sources' },
   { value: 'website', label: 'Website' },
-  { value: 'whatsapp', label: 'WhatsApp' },
+  { value: 'import', label: 'Database Import' },
+  { value: 'broker', label: 'Broker' },
   { value: 'referral', label: 'Referral' },
-  { value: 'social', label: 'Social Media' },
-  { value: 'import', label: 'Import' },
+  { value: 'campaign', label: 'Campaign' },
   { value: 'manual', label: 'Manual Entry' },
+  { value: 'third_party', label: 'Third-party Platform' },
+  { value: 'whatsapp', label: 'WhatsApp' },
+  { value: 'social', label: 'Social Media' },
 ];
 
 export default function CRMLeadsInbox() {
@@ -315,15 +325,55 @@ export default function CRMLeadsInbox() {
                   />
                 </div>
 
-                {/* Status Filter */}
+                {/* Status Filter - Grouped by Category */}
                 <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(1); }}>
-                  <SelectTrigger className="w-full md:w-[180px] bg-zinc-800 border-zinc-700 text-white">
+                  <SelectTrigger className="w-full md:w-[200px] bg-zinc-800 border-zinc-700 text-white">
                     <SelectValue placeholder="Status" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-zinc-700">
-                    {STATUS_OPTIONS.map(opt => (
-                      <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-700">
-                        {opt.label}
+                  <SelectContent className="bg-zinc-800 border-zinc-700 max-h-[400px]">
+                    <SelectItem value="all" className="text-white hover:bg-zinc-700 font-medium">
+                      All Statuses
+                    </SelectItem>
+                    
+                    {/* POSITIVE - Green */}
+                    <div className="px-2 py-1.5 text-xs font-bold text-emerald-400 uppercase tracking-wide border-t border-zinc-700/50 mt-1 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                      Positive
+                    </div>
+                    {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(opt => (
+                      <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-700 pl-4">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                          {opt.label}
+                        </div>
+                      </SelectItem>
+                    ))}
+                    
+                    {/* NEUTRAL - Blue */}
+                    <div className="px-2 py-1.5 text-xs font-bold text-blue-400 uppercase tracking-wide border-t border-zinc-700/50 mt-1 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-blue-500" />
+                      Neutral
+                    </div>
+                    {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(opt => (
+                      <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-700 pl-4">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-blue-500" />
+                          {opt.label}
+                        </div>
+                      </SelectItem>
+                    ))}
+                    
+                    {/* NEGATIVE - Red */}
+                    <div className="px-2 py-1.5 text-xs font-bold text-red-400 uppercase tracking-wide border-t border-zinc-700/50 mt-1 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-red-500" />
+                      Negative
+                    </div>
+                    {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(opt => (
+                      <SelectItem key={opt.value} value={opt.value} className="text-white hover:bg-zinc-700 pl-4">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-red-500" />
+                          {opt.label}
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
