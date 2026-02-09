@@ -19,8 +19,9 @@ function stripHashtags(text: string): string {
  */
 function cleanRawText(text: string): string {
   return text
-    // Remove hashtags
-    .replace(/#\w+/gi, '')
+    // Remove inline hashtags (e.g. #DubaiRealEstate) but preserve markdown headers (e.g. ##### Header)
+    .replace(/(?<=\s)#\w+/g, '')
+    .replace(/^#\w+$/gm, '')
     // Remove excessive exclamation marks
     .replace(/!{2,}/g, '!')
     // Remove marketing ALL CAPS phrases (more than 3 words)
