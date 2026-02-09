@@ -55,11 +55,20 @@
 
     <div id="root"></div>
 
-    <!-- Boot diagnostic overlay - catches errors before React mounts -->
+    <!-- Boot diagnostic overlay - catches errors ONLY before React mounts -->
     <script>
       (function() {
+        // Flag to track if app has mounted - once true, we let React handle errors
+        window.__APP_MOUNTED__ = false;
+        
         var overlay = null;
         function showError(msg) {
+          // Only show boot overlay if app hasn't mounted yet
+          // After mount, React error boundaries should handle errors
+          if (window.__APP_MOUNTED__) {
+            console.error('[Post-mount error - handled by React]:', msg);
+            return;
+          }
           if (overlay) return;
           overlay = document.createElement('div');
           overlay.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#000;color:#fff;padding:2rem;font-family:monospace;overflow:auto;';
