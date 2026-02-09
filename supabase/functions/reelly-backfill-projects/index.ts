@@ -398,9 +398,6 @@ async function updateProjectWithDetails(
       updateData.handover_date = detail.completion_datetime?.split('T')[0] || detail.construction_end_date || detail.completion_date;
       updatedFields.push("handover_date");
     }
-    if (detail.completion_date) {
-      updateData.handover_display = detail.completion_date;
-    }
 
     // Floor plans
     if (floorPlans.length > 0) {
