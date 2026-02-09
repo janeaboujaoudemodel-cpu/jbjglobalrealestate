@@ -1,334 +1,208 @@
 
-## Goal (what will change)
-You asked for global, non-regressing fixes across:
-1) Header “Insights” dropdown layout + fit (desktop + iPad)  
-2) Header Search modal: never cropped, mobile/iPad-safe, and it must deep-link to any tool/page (CRM, Graphic Designer, etc.) with role-based visibility  
-3) “Ready to Get Started / Connect With Our Team” duplication + contact-card border color rules (green/blue/gold) globally  
-4) AI Design Studio missing/unclickable CTAs and routes (must open the working tool)  
-5) Tool theme consistency: accent color must control borders consistently inside tools (Property Measurement already looks great, but borders must match the tool color everywhere)  
-6) Owner shortcuts in Account mega menu must never “disappear again” (stability guard against owner-verification timing)
 
-No partial work; everything below is designed as one cohesive pass.
+## Issues Summary (from your feedback + codebase analysis)
 
----
+### 1) Footer Issues
+**a) Broker Tools section styling:** Looking at Footer.tsx lines 821-842, the Broker Tools section in ROW 3 IS styled in gold now (text-gold), NOT blue. However, your concern about consistency is valid.
 
-## A) Header “Insights” dropdown: 2 sections (4 up / 4 down) + fit + no cropping
+**b) Education Hub has emoji/arrow:** Looking at line 759, Education Hub is rendered correctly as a Link with gold styling and no emoji or arrow. However, I need to verify this is exactly what you want.
 
-### Current state (found)
-- `src/components/header/MegaMenuInsights.tsx` renders **7 columns** (`lg:grid-cols-7`), which is dense and prone to cropping.
-- It already has an internal scroll wrapper: `max-h-[calc(100vh-160px)] overflow-y-auto`, but the layout is not your requested “4 + 4” grid.
+**c) Divider alignment:** The Careers divider (lines 716-718) is gold but should be aligned properly with the other three columns above it.
 
-### Implementation approach
-1) Refactor `MegaMenuInsights.tsx` into **8 uniform blocks** laid out as:
-   - Desktop: `lg:grid-cols-4` with 2 rows (4 top / 4 bottom)
-   - Tablet/iPad widths: `md:grid-cols-2` or `md:grid-cols-3` depending on space
-   - Mobile: `grid-cols-1` (stacked), with clean dividers and safe scrolling
+### 2) Real Estate Suite - Still shows cards, should open combined suite immediately
+The current `RealEstateSuite.tsx` (lines 26-137) IS already a combined tabbed suite with 6 tools embedded. It does NOT show cards. This is correctly implemented. If you're still seeing cards, you might be accessing a different route or there's a caching issue.
 
-2) Convert the old 7-column model into 8 consistent sections (proposed mapping that preserves your content, but fits your layout rule):
-   1. News & Updates  
-   2. Market Intelligence  
-   3. Guides  
-   4. Services  
-   5. Business Suites  
-   6. Toolkit & AI (All Tools + key tool hubs)  
-   7. For You (mode-conditional Investor/Broker/Both)  
-   8. Company + Careers + Legal (still separated internally with gold dividers)
+### 3) Tool Back Buttons Still Faded
+The back buttons across toolkit pages use `variant="ghost"` with `className="text-zinc-400 hover:text-white"` which gets stripped by Button sanitization. Found in:
+- `src/pages/toolkit/PhotoSuite.tsx` (line 41)
+- `src/pages/toolkit/VideoSuite.tsx` (line 39)
+- `src/pages/toolkit/PropertySuite.tsx` (line 41)
+- `src/pages/toolkit/VoiceSuite.tsx` (line 594)
+- `src/pages/toolkit/PDFSuite.tsx` (line 40)
 
-3) Each block becomes a “mini card” (same padding, same title height, same divider, same internal link spacing), so the grid looks premium and aligned.
+The `AIToolPremiumLayout.tsx` back button uses `variant="outline"` with inline styling which should work. The issue is in the individual suite pages.
 
-4) Fit/cropping improvements:
-   - Keep the scroll wrapper, but ensure it wraps the entire content and uses:
-     - `max-h-[calc(100dvh-var(--header-height,128px)-24px)]`
-     - `overflow-y-auto`
-   - Ensure the menu never spills off-screen on iPad by keeping consistent horizontal padding and max-width.
-
-### Files touched
-- `src/components/header/MegaMenuInsights.tsx`
-
-### Acceptance checks
-- Hover/click “Insights” shows **8 blocks** in a 4+4 grid (desktop).
-- No cropping on shorter screens: scroll activates smoothly.
-- iPad/Tablet: blocks wrap cleanly; nothing is cut off.
+### 4) Creative Suite (Studio.tsx) Issues
+- Uses `bg-background text-foreground` (line 230) which can render as white
+- Type selection uses a dropdown (lines 354-366) instead of accessible tabs/pills around the work area
+- Lacks easy access to related creative tools
 
 ---
 
-## B) Search modal: keep the UI exactly the same, but make it never-cropped + “type anything → deep link” + role/mode aware
+## Implementation Plan
 
-### Current state (found)
-- The header search icon opens `GlobalSearchModal` directly (`src/components/GlobalHeader.tsx`).
-- `src/components/GlobalSearchModal.tsx` uses a static `SEARCHABLE_ITEMS` list mostly for public pages; it does **not** include:
-  - CRM
-  - Owner routes (/owner, /admin, /listing-admin, /studio)
-  - Tools registry (Graphic Designer → `/jbj-design-studio`, etc.)
-- The modal is positioned `fixed top-20 ... max-w-xl`, which can crop on mobile/iPad.
+### A) Footer Consistency Fixes
 
-### Implementation approach
+**File:** `src/components/Footer.tsx`
 
-#### B1) Make the modal un-croppable on mobile/iPad (no design change)
-In `GlobalSearchModal.tsx`:
-- Keep the exact card look and gradients.
-- Change the modal positioning strategy:
-  - Use `top-4` on small screens (instead of `top-20`)
-  - Use `max-height: calc(100dvh - 2rem)` and ensure the results container scrolls
-  - Ensure the modal container uses safe spacing on iOS (dvh + padding)
+1. **Education Hub** (line 757-763):
+   - Already correctly styled without emoji/arrow
+   - Verify no `📚` or `→` anywhere
 
-Result: same UI, but always fully visible.
+2. **Broker Tools** (lines 821-842):
+   - Already uses gold styling (`text-gold` on header)
+   - Already no emoji
+   - Confirm links use `text-zinc-700 hover:text-gold`
 
-#### B2) Replace static search list with a single global registry-backed index
-Create a central, maintainable search index that can include:
-- Public pages (Home, Properties, Guides, etc.)
-- All tools from `src/config/royalToolsRegistry.ts` (`allTools`)
-- Owner/admin/back-office destinations (Owner Command Center, Listing Admin, Studio, Admin Panel, CRM)
+3. **Careers Divider Alignment** (lines 716-718):
+   - The divider sits inside "About & Careers" column (Row 1, Col 4)
+   - Make divider gold line consistent: `border-gold/30`
+   - Careers label: `text-gold` with proper spacing
 
-New file:
-- `src/config/globalSearchIndex.ts`
+4. **Raise divider to same line as other three cards:**
+   - Ensure padding and min-heights across all columns in ROW 1 and ROW 2 match exactly
+   - Normalize `min-h-[...]` values to be consistent
+   - Check that borders (`border-r`, `border-b`) are applied uniformly
 
-It will export:
-- `type SearchItem = { id; label; route; keywords; description?; access; modeVisibility? }`
-- `buildSearchIndex()` combining:
-  - Existing public shortcuts
-  - `allTools.map(tool => …)` so “Graphic Designer”, “Video Producer”, “CRM”, “Property Measurement” etc. all become searchable
-  - Admin/owner routes as explicit items
-
-#### B3) Role-based + mode-based filtering (Owner sees everything)
-In `GlobalSearchModal.tsx`, when modal is open:
-- Use `useAuth()` to get `user`, `isOwner`, `ownerLoading`
-- If user is logged in, fetch lightweight access flags (reusing patterns already in code):
-  - `hasCRMAccess` via `crm_users_profile` (same as header/account menu)
-  - `hasListingAdminAccess` via `has_role` + `listing_admins` (same as MegaMenuAccount)
-- Filter search items by:
-  - Owner: show all (including /owner, /admin, /studio, /listing-admin, /crm, /jbj-design-studio)
-  - Broker mode: show broker destinations + CRM only if allowed
-  - Investor mode: hide broker-only destinations
-  - Logged-out: show only public + public tools
-
-Important: This only affects *visibility*, not authorization. Actual pages remain protected by route guards.
-
-#### B4) Ranking so “CRM” becomes first when you type CRM
-Implement a scoring function:
-- Exact label match > starts-with > keyword match > substring
-- Add keyword synonyms:
-  - “crm”, “leads”, “pipeline” → CRM
-  - “graphic designer”, “brochure”, “marketing pack” → `/jbj-design-studio`
-  - “design studio”, “ai interior”, “interior design” → `/interior-design-ai`
-- If user isOwner, allow admin results to rank high.
-- Return top N results (e.g., 10), not just 5.
-
-#### B5) “Click anything → go directly”
-- Ensure every result button always calls `navigate(route)` and closes modal.
-- If route equals current route, force a “soft refresh” behavior (scroll-to-top + close modal) so it still feels responsive.
-
-### Files touched/added
-- Edit: `src/components/GlobalSearchModal.tsx`
-- Add: `src/config/globalSearchIndex.ts`
-- (Optional small update): `src/components/GlobalHeader.tsx` only if we need to pass user/mode context explicitly (likely not; modal can read it itself)
-
-### Acceptance checks
-- Mobile/iPad: search modal is never cropped.
-- Typing “CRM” shows CRM as first result (for Owner; for brokers only if they have access).
-- Typing “graphic designer” deep-links to the Graphic Designer tool (`/jbj-design-studio`) instantly (Owner).
-- Suggestions cover both frontend + backend destinations depending on access.
+**Specific edits:**
+- Normalize column `min-h` values in ROW 1 and ROW 2
+- Ensure all column headers use identical styling (no variation)
+- Remove any stray emoji/arrows if found elsewhere
 
 ---
 
-## C) Remove duplicate “Connect With Our Team” sections; keep only the bottom global section
+### B) Real Estate Suite - Verify Combined Suite Opens Immediately
 
-### Current state (found)
-- `MainLayout.tsx` always renders `CombinedContactNewsletter` globally for public pages.
-- Some pages still render `DirectContactCTA` explicitly:
-  - `src/pages/services/Architecture.tsx`
-  - `src/pages/RentGuide.tsx`
-  - `src/pages/services/DesignBuild.tsx`
-This creates the “two sections” effect you described.
+**Current State:** `src/pages/business-suite/RealEstateSuite.tsx` already renders the combined tabbed suite directly (no cards).
 
-### Implementation approach
-1) Remove per-page `<DirectContactCTA />` from those pages, relying solely on the global `CombinedContactNewsletter` at the bottom.
-2) Keep the hero style “Creating Exceptional Spaces” unchanged (your “lock it” request is satisfied by leaving it intact).
+**Action:** Verify the route `/business-suite/real-estate` maps to this file. If you're seeing cards somewhere, check:
+- Which route you're accessing
+- If there's a separate "landing" page before the suite
 
-### Files touched
-- `src/pages/services/Architecture.tsx`
-- `src/pages/RentGuide.tsx`
-- `src/pages/services/DesignBuild.tsx`
-
-### Acceptance checks
-- You see only one contact CTA area (the bottom global one), not two.
+**If issue persists:** Check `src/App.tsx` for the route definition to ensure it points directly to `RealEstateSuite`.
 
 ---
 
-## D) Contact cards: border color rules (WhatsApp green, Call blue, Email gold) globally
+### C) Fix Back Button Readability Globally
 
-### Current state (found)
-- `CombinedContactNewsletter.tsx` has gold borders for cards (`border border-gold/30`).
-- `DirectContactCTA.tsx` also uses gold borders for all three cards.
+**Root Cause:** `variant="ghost"` + `text-white` or `text-zinc-400` gets stripped by Button sanitization.
 
-### Implementation approach
-Apply consistent border rules in both components (even if DirectContactCTA becomes less used, it should still obey the global standard):
-- WhatsApp card: `border-2 border-emerald-500/40 hover:border-emerald-500`
-- Call card: `border-2 border-blue-500/40 hover:border-blue-500`
-- Email card: `border-2 border-gold/40 hover:border-gold`
+**Solution:** Replace with inline styles (like `AIToolPremiumLayout.tsx` does) or use `ToolSuiteHeader` component.
 
-Also update hover shadows to match the card’s border color subtly (emerald glow / blue glow / gold glow) while keeping the same premium palette.
+**Files to fix:**
+1. `src/pages/toolkit/PhotoSuite.tsx` - Replace back button
+2. `src/pages/toolkit/VideoSuite.tsx` - Replace back button
+3. `src/pages/toolkit/PropertySuite.tsx` - Replace back button
+4. `src/pages/toolkit/VoiceSuite.tsx` - Replace back button
+5. `src/pages/toolkit/PDFSuite.tsx` - Replace back button
 
-### Files touched
-- `src/components/CombinedContactNewsletter.tsx`
-- `src/components/DirectContactCTA.tsx`
+**Fix pattern:** Replace:
+```tsx
+<Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white">
+```
+With:
+```tsx
+<Button 
+  variant="ghost" 
+  size="sm" 
+  className="hover:bg-zinc-800 border border-zinc-700"
+  style={{ color: '#a1a1aa' }}
+>
+```
 
-### Acceptance checks
-- In the “Ready to Get Started” section, each card border matches its icon color rule.
-- Same behavior anywhere else these cards appear.
-
----
-
-## E) AI Design Studio CTA + “missing tool” confusion: make it unmistakably clickable and route-correct
-
-### Current state (found)
-- DesignBuild page AI tools array links “AI Interior Designer” to `/interior-design-studio`, which redirects to `/interior-design-ai`. This works, but it’s indirect and can feel broken.
-- In `InteriorDesignAI.tsx`, the “AI Design Studio” path is started by `setShowComparison(false)`; it works but can feel like “not opening a tool” because you remain on the same page.
-
-### Implementation approach
-1) In `src/pages/services/DesignBuild.tsx`
-   - Change the AI Interior tool link to **directly** `/interior-design-ai` (no redirect chain).
-   - Add explicit CTA copy on the card button:
-     - “Start designing with our AI Design Studio”
-     - “Professional designer — connect with our licensed partner”
-   - Ensure both are clearly actionable and consistent.
-
-2) In `src/pages/InteriorDesignAI.tsx`
-   - Make the entire “AI Design Studio” card clickable (not only the button), so it never feels dead.
-   - Keep your current UI, but make the action explicit:
-     - Button remains, but copy becomes your requested CTA language.
-   - When clicked, it should:
-     - Hide the comparison section
-     - Scroll smoothly to the tool form section so it feels like “opening the tool”
-
-### Files touched
-- `src/pages/services/DesignBuild.tsx`
-- `src/pages/InteriorDesignAI.tsx`
-
-### Acceptance checks
-- “AI Design Studio” is always clearly clickable.
-- The tool experience starts immediately and visibly (no confusion).
+Or use the reusable `ToolSuiteHeader` component where appropriate.
 
 ---
 
-## F) Tool theme border consistency (Property Measurement: keep style, fix borders to match accent) + global pattern
+### D) Creative Suite (Studio.tsx) - Premium Styling + Accessible Type Selection
 
-### Current state (found)
-- `PropertyMeasurement.tsx` uses teal accents in many places, but the main step cards are still `border-zinc-800`, and some key panels don’t consistently reflect the teal theme.
-- `AIToolPremiumLayout.tsx` back button uses `variant="ghost"` with `className="text-white ..."`, but `Button` sanitization strips `text-white` and border color classes for non `ai-*` variants. This is a primary cause of “faded/unreadable” back buttons in tools.
+**File:** `src/pages/Studio.tsx`
 
-### Implementation approach
+1. **Fix white background:**
+   - Change line 230 from `bg-background text-foreground` to `bg-black text-white`
 
-#### F1) Fix Property Measurement borders (without changing its look)
-In `src/pages/PropertyMeasurement.tsx`:
-- Keep the color scheme exactly as-is
-- Update the “main card” borders per step to use teal accent borders, e.g.:
-  - Main step card: `border-teal-500/20` (or `border-teal-500/30`) instead of zinc
-  - Inner step panels and selected states keep teal
-- Ensure “Step 1: Property Information” card border matches the teal theme (your explicit request)
+2. **Replace dropdown with accessible type pills/tabs:**
+   - Remove `<Select>` component (lines 354-366)
+   - Add horizontal pill buttons for: All | Video | Image | PDF | Marketing Pack
+   - Position these prominently at top of content area (around the workspace)
+   - Style with gold accents on active state
 
-#### F2) Fix the “faded back button” problem at the root (AIToolPremiumLayout)
-In `src/components/ai-tools/AIToolPremiumLayout.tsx`:
-- Replace the back button styling so it does not rely on sanitized `text-white` / border color overrides.
-- Use `variant="dark"` (which is already a locked, readable style) and only apply safe layout classes.
-- If we still want accent, add a small accent indicator element (not via Button className that gets sanitized).
+3. **Add Creative Toolkit shortcuts section:**
+   - Below the main projects area, add quick links to related tools:
+     - Background Remover
+     - Captions & Translate
+     - Image Resizer
+     - PDF Tools
+     - Voice Studio
+   - Style as a compact row of pill buttons
 
-#### F3) Global audit pass (targeted, not guesswork)
-Search for other places using:
-- `variant="ghost"` + `text-white` on Buttons
-- tool pages using `border-zinc-800` while clearly themed (teal/purple/emerald/etc.)
+**Implementation:**
+```tsx
+// Type pills instead of dropdown
+const typeFilters = [
+  { value: "all", label: "All", icon: Grid },
+  { value: "video", label: "Video", icon: Film },
+  { value: "image", label: "Image", icon: ImageIcon },
+  { value: "pdf", label: "PDF", icon: FileText },
+  { value: "marketing_pack", label: "Marketing", icon: Package },
+];
 
-Then standardize:
-- Back buttons: always readable
-- “Main card” borders: match the tool’s accent color
-
-### Files touched
-- `src/pages/PropertyMeasurement.tsx`
-- `src/components/ai-tools/AIToolPremiumLayout.tsx`
-- Additional tool pages found by audit search (we will keep the changes minimal and consistent)
-
-### Acceptance checks
-- Property Measurement tool: borders match teal theme everywhere you expect.
-- Tool back buttons are readable across all themed tools (no fading).
-
----
-
-## G) Account menu: restore and “lock” Owner shortcuts so they don’t disappear again
-
-### Current state (found)
-- `MegaMenuAccount.tsx` still contains Owner Dashboard (gold), Admin Panel (purple), Ticket Support Hub (emerald).
-- If you’re not seeing them, the most likely cause is timing/state:
-  - `isOwner` is server-verified and initially false until `verify-owner` resolves
-  - While that resolves, the “Owner Shortcuts” column can be hidden
-
-### Implementation approach
-1) In `src/components/header/MegaMenuAccount.tsx`
-   - Add a **stable reserved Owner Shortcuts block** for the owner verification window:
-     - If `ownerLoading === true`, show a premium “Verifying owner access…” placeholder area
-     - Once verified, render the actual shortcut links
-   - Add explicit “LOCK: do not remove owner shortcuts” comments around the three shortcuts.
-2) In `src/components/GlobalHeader.tsx`
-   - When opening account mega menu, trigger `refreshOwnerVerification()` (already available in AuthContext) to reduce the chance of stale owner state when the menu opens.
-
-Security note: This does not grant access; it only stabilizes UI so owner shortcuts don’t flicker/disappear.
-
-### Files touched
-- `src/components/header/MegaMenuAccount.tsx`
-- `src/components/GlobalHeader.tsx`
-- (Only if needed): `src/contexts/AuthContext.tsx` (to ensure refresh function is exposed/used consistently; current API already includes it)
-
-### Acceptance checks
-- Owner shortcuts never “vanish” due to loading; at worst you see “Verifying…” for a moment, then the real shortcuts.
-- Non-owners do not gain access; protected routes remain protected.
+// Render as horizontal pills
+<div className="flex items-center gap-2">
+  {typeFilters.map(type => {
+    const Icon = type.icon;
+    const isActive = filterType === type.value;
+    return (
+      <button
+        key={type.value}
+        onClick={() => setFilterType(type.value)}
+        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+          isActive 
+            ? "bg-gold/20 border-gold text-gold" 
+            : "bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-white"
+        } border`}
+      >
+        <Icon className="w-4 h-4" />
+        <span className="text-sm font-medium">{type.label}</span>
+      </button>
+    );
+  })}
+</div>
+```
 
 ---
 
-## Testing checklist (desktop + phone + iPad)
-1) Desktop:
-   - Hover “Insights”: 4 up / 4 down layout, no cropping, scroll works.
-   - Click Search: modal opens perfectly centered, no cut-off.
-   - Type “CRM”: CRM is first result (Owner), clicking navigates instantly.
+### E) Card Border Consistency Check (Already Addressed)
 
-2) Phone (iPhone/Android):
-   - Search modal fits fully (no cropping), results scroll.
-   - Tap any result: navigates and closes modal.
+**BusinessSuiteToolCard.tsx** already has `h-full` on motion wrapper and flex-col layout. Cards should be symmetric.
 
-3) iPad:
-   - Insights mega menu fits; no right/left clipping.
-   - Search modal fits; no top/bottom cropping.
+If you're still seeing uneven cards, the issue may be:
+- Different description lengths causing uneven heights
+- The page rendering these cards might not have proper grid gap
 
-4) Design Build / Interior Design:
-   - AI Design Studio is clearly clickable and launches the actual workflow.
-   - Only one bottom contact section exists.
-
-5) Property Measurement:
-   - Step 1 main card border matches teal theme; same for other major themed cards.
-   - Back buttons in AI tools are readable (no fading).
+**Action:** Verify `flex-grow` on description and `mt-auto` on CTA is working in `BusinessSuiteToolCard.tsx`.
 
 ---
 
-## Work items summary (files)
-### Header + Search
-- Edit: `src/components/header/MegaMenuInsights.tsx`
-- Edit: `src/components/GlobalSearchModal.tsx`
-- Add: `src/config/globalSearchIndex.ts`
-- Edit (small): `src/components/GlobalHeader.tsx`
+## Files to Modify
 
-### CTA sections
-- Edit: `src/components/CombinedContactNewsletter.tsx`
-- Edit: `src/components/DirectContactCTA.tsx`
-- Edit: `src/pages/services/Architecture.tsx` (remove duplicate DirectContactCTA)
-- Edit: `src/pages/RentGuide.tsx` (remove duplicate DirectContactCTA)
-- Edit: `src/pages/services/DesignBuild.tsx` (remove duplicate DirectContactCTA + CTA copy/link fixes)
+1. **`src/components/Footer.tsx`** - Normalize dividers, verify no emojis/arrows
+2. **`src/pages/Studio.tsx`** - Black background, type pills, creative shortcuts
+3. **`src/pages/toolkit/PhotoSuite.tsx`** - Fix back button
+4. **`src/pages/toolkit/VideoSuite.tsx`** - Fix back button
+5. **`src/pages/toolkit/PropertySuite.tsx`** - Fix back button
+6. **`src/pages/toolkit/VoiceSuite.tsx`** - Fix back button
+7. **`src/pages/toolkit/PDFSuite.tsx`** - Fix back button
 
-### AI Design Studio clarity
-- Edit: `src/pages/InteriorDesignAI.tsx`
+---
 
-### Tool theme consistency
-- Edit: `src/pages/PropertyMeasurement.tsx`
-- Edit: `src/components/ai-tools/AIToolPremiumLayout.tsx`
-- Additional small edits to other tool pages discovered by audit (readability + accent-border consistency)
+## Testing Checklist
 
-### Account shortcuts stability
-- Edit: `src/components/header/MegaMenuAccount.tsx`
+1. **Footer:**
+   - Education Hub: no emoji, no arrow, gold link
+   - Broker Tools (in broker mode): gold header, gold hover on links
+   - Careers: gold label with proper divider aligned with other columns
+   - All four columns in ROW 1 have same height
+
+2. **Real Estate Suite:**
+   - Clicking `/business-suite/real-estate` opens tabs immediately (no cards)
+   - All 6 tabs work and load tools
+
+3. **Back Buttons:**
+   - All toolkit suite pages have readable back buttons (zinc-400 color visible on dark)
+
+4. **Creative Suite (Studio):**
+   - No white background (black/dark theme)
+   - Type selection uses pills/tabs (not dropdown)
+   - Creative tools shortcuts visible and accessible
 
