@@ -1,89 +1,86 @@
 
 
-# Fix Backfill: Fake Progress and Infinite Loop
+## Fix Developer Duplicates and Data Quality
 
-## Problem
+### Problem
 
-The backfill function queries for projects where `floor_plan_types IS NULL OR amenities IS NULL`. The Reelly API returns **zero amenities and zero floor plans** for nearly all projects. So the function:
+The `developers` table has **14 duplicate pairs** -- the same developer appears twice with slightly different names (e.g., "Emaar" + "Emaar Properties", "DAMAC" + "Damac Properties"). One row typically comes from Reelly (short name, has logo/description) and the other from Provident (full name, has the projects linked). This causes:
+- Duplicate cards in the developer directory
+- Different logos/photos shown for the same developer
+- Incorrect project counts (one card shows 0, the other shows the real count)
 
-1. Fetches 50 projects missing amenities/floor_plans
-2. Calls the Reelly API for each one
-3. Successfully updates other fields (prices, descriptions, cover images)
-4. But amenities and floor_plans stay NULL because the API returns empty arrays
-5. Next batch: the SAME projects get selected again (they still have null amenities)
-6. Result: 250 "updated" but remaining stays at 1,795 forever
+### Duplicate Pairs Found (14 total)
 
-## Solution
+| Keep (has projects) | Delete (0 projects) | Projects to Reassign |
+|---------------------|---------------------|----------------------|
+| Emaar Properties (146 projects) | Emaar (0) | 0 |
+| Damac Properties (70 projects) | DAMAC (0) | 0 |
+| Sobha Realty (50 projects) | Sobha (0) | 0 |
+| Ellington Properties (43 projects) | Ellington (6) | 6 |
+| Samana Developers (36 projects) | Samana (0) | 0 |
+| Arada Properties (33 projects) | Arada (0) | 0 |
+| Nshama (33 projects) | Nshama Group (0) | 0 |
+| Aldar Properties (29 projects) | ALDAR (0) | 0 |
+| Danube Properties (21 projects) | Danube (0) | 0 |
+| MAG Group (10 projects) | MAG (2) | 2 |
+| Majid Al Futtaim Properties (7 projects) | Majid Al Futtaim (0) | 0 |
+| Meraki (4 projects) | Meraki Developers (0) | 0 |
+| AB Developers (3 projects) | AB Properties (1) | 1 |
+| ZaZEN Properties/zazen-properties (1 project) | ZaZEN Properties/zzen-properties (0) | 0 |
 
-### 1. Add a `detail_fetched_at` column to `projects` table
+### Solution
 
-This timestamp marks that the Reelly API detail endpoint has been called for this project, regardless of whether it returned amenities/floor plans. This prevents infinite re-selection.
+#### Step 1: Database Cleanup (SQL data operations)
 
-```sql
-ALTER TABLE projects ADD COLUMN IF NOT EXISTS detail_fetched_at timestamptz;
-```
+For each of the 14 pairs:
+1. **Copy best data** from the Reelly row (logo, description, feature image) to the kept row if it has better content
+2. **Reassign projects** from the deleted row to the kept row (for Ellington: 6, MAG: 2, AB: 1)
+3. **Reassign pending_project_imports** (480 records total)
+4. **Delete** the duplicate rows
 
-### 2. Fix the edge function query logic
+The kept row will use the **canonical name** (e.g., "Emaar Properties") with the **short slug** (e.g., "emaar") for clean URLs, and the **best logo** from Reelly since those tend to be higher quality.
 
-**File:** `supabase/functions/reelly-backfill-projects/index.ts`
+#### Step 2: Update slug on kept rows
 
-- Change the batch query from filtering by `floor_plan_types.is.null OR amenities.is.null` to filtering by `detail_fetched_at.is.null`
-- After processing each project (success or not), set `detail_fetched_at = now()`
-- This ensures each project is only processed ONCE
-- The "remaining" count uses the same `detail_fetched_at IS NULL` filter, so it correctly decreases
+Update the slug on the kept rows to use the simpler slug (e.g., "emaar" instead of "emaar-properties") since the menu, routes, and tier-matching all reference the short slugs.
 
-Changes to the query (around line 205-213):
-```
-// OLD: .or("floor_plan_types.is.null,amenities.is.null")
-// NEW: .is("detail_fetched_at", null)
-```
+#### Step 3: Update `uae_developers` table
 
-Changes to `updateProjectWithDetails` (around line 470):
-```
-// Always set detail_fetched_at regardless of what data was found
-updateData.detail_fetched_at = new Date().toISOString();
-```
+The `uae_developers` table also has entries for these developers but with no logos or feature images. Update them with the best available data from the `developers` table to keep both tables in sync.
 
-Changes to remaining count query (around line 236-240):
-```
-// OLD: .or("floor_plan_types.is.null,amenities.is.null")
-// NEW: .is("detail_fetched_at", null)
-```
+#### Step 4: Update the developer detail page
 
-Changes to stats mode (around line 130-134):
-```
-// missing_any should use detail_fetched_at IS NULL
-```
+Add a feature image/hero section to the `DeveloperDetail.tsx` page so when users click into a developer, they see a prominent project photo at the top (using the developer's `feature_image_url`).
 
-### 3. Fix the frontend remaining calculation
-
-**File:** `src/components/listing-admin/ReellyImportPanel.tsx`
-
-The frontend aggregation at line 669-674 correctly takes `remaining` from the edge function response. Once the edge function returns accurate remaining counts, no frontend change is needed. However, update the stats display to show "Not yet fetched" instead of "Missing amenities" since the real issue is unfetched details, not missing amenities.
-
-### 4. Set empty arrays instead of leaving NULL
-
-In `updateProjectWithDetails`, when the API returns no amenities/floor plans, set empty arrays `[]` instead of leaving the fields null. This provides honest data -- "we checked and there are none" vs "we never checked":
-
-```typescript
-// Always set these, even if empty, to indicate we checked
-updateData.floor_plan_types = floorPlans; // could be []
-updateData.amenities = amenities.length > 0 ? amenities : [];
-```
-
-## Files to Modify
+### Files to Modify
 
 | File | Change |
 |------|--------|
-| Database migration | Add `detail_fetched_at` column |
-| `supabase/functions/reelly-backfill-projects/index.ts` | Use `detail_fetched_at` for queries; always set it after processing; set empty arrays for missing data |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Update stats labels to reflect "unfetched" vs "missing" |
+| Database (data operations) | Merge 14 duplicate pairs: copy best logos/descriptions to kept row, reassign projects, delete duplicates, update slugs |
+| `src/pages/DeveloperDetail.tsx` | Add hero/feature image section at top of developer detail page |
 
-## Expected Result
+### Technical Details - Merge Logic
 
-- Backfill processes each project exactly once
-- "Remaining" decreases by batch size after each batch
-- After full backfill: remaining = 0
-- Numbers add up: processed + remaining = total
-- Projects with genuinely no amenities get `amenities = []` (empty array, not null)
+For each pair, the SQL will:
+
+```text
+-- 1. Copy best logo/description/feature_image from Reelly row to kept row (only if kept row is missing it)
+UPDATE developers SET 
+  logo_url = COALESCE(logo_url, [reelly_logo]),
+  description = CASE WHEN LENGTH(description) < LENGTH([reelly_description]) THEN [reelly_description] ELSE description END,
+  feature_image_url = COALESCE(feature_image_url, [reelly_feature])
+WHERE id = [kept_id];
+
+-- 2. Reassign any projects from deleted row
+UPDATE projects SET developer_id = [kept_id] WHERE developer_id = [deleted_id];
+UPDATE pending_project_imports SET developer_id = [kept_id] WHERE developer_id = [deleted_id];
+
+-- 3. Update slug to short form
+UPDATE developers SET slug = 'emaar' WHERE id = [kept_id];
+
+-- 4. Delete duplicate
+DELETE FROM developers WHERE id = [deleted_id];
+```
+
+This is repeated for all 14 pairs. The result: each developer appears exactly once with the best available logo, description, and feature image, plus all their projects correctly linked.
 
