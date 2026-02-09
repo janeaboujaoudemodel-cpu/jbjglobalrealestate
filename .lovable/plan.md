@@ -1,107 +1,75 @@
 
-# Fix Areas Sync, Backfill Loop, and Backfill Results Display
+# Fix Merged Developer, Logo Frames, and Missing Photos
 
-## Problem 1: Areas Sync Shows "0 New, 128 Already Exist"
+## Issue 1: Delete Fake Merged "Ellington and RAK Properties"
 
-**Root cause**: The `extract_from_projects` action in `reelly-areas-sync` only INSERTS new areas. If the slug already exists in the `areas` table, it skips completely. Since all 128+ areas already exist, it inserts 0 and skips 128. It also hardcodes `emirate: "Dubai"` for all areas instead of reading the actual emirate from projects data.
+Another merged developer record exists in the database:
+- **Fake**: "Ellington and RAK Properties" (id: `a13f062f`) -- 3 projects linked
+- **Real**: "RAK Properties" (id: `692ec896`) already exists separately
+- **Real**: "Ellington Properties" (id: `01949ea2`) already exists separately
 
-**Fix**: Change the logic to UPSERT (update existing + insert new):
-- When a slug already exists, UPDATE its `property_count` and `emirate` from the projects data
-- Read the `emirate` column from projects instead of hardcoding "Dubai"
-- Track and report `updated` count alongside `inserted`
-- Return the real emirate per area (e.g., "Ras al-Khaimah" for Al Marjan Island)
+The 3 projects (Marbella Villas, Gateway II Residences, Julphar Residence) all have `developer_name = 'RAK Properties'` already but point to the wrong `developer_id`. Fix: reassign them to the real RAK Properties and delete the fake record.
 
-**File**: `supabase/functions/reelly-areas-sync/index.ts` (lines 388-447)
+**SQL:**
+```sql
+-- Reassign projects to real RAK Properties
+UPDATE projects SET developer_id = '692ec896-fa22-49af-89d8-31866651822e'
+WHERE developer_id = 'a13f062f-6f8f-4a1c-a9e4-1b578eb712ac';
 
----
+-- Clean up any FK references
+UPDATE pending_project_imports SET developer_id = NULL
+WHERE developer_id = 'a13f062f-6f8f-4a1c-a9e4-1b578eb712ac';
+UPDATE deals SET developer_id = NULL
+WHERE developer_id = 'a13f062f-6f8f-4a1c-a9e4-1b578eb712ac';
+DELETE FROM developer_sync_status
+WHERE developer_id = 'a13f062f-6f8f-4a1c-a9e4-1b578eb712ac';
 
-## Problem 2: Backfill Shows "50 Processed, 0 Remaining" and Stops
-
-**Root cause**: I verified the edge function now works correctly (tested it and got `remaining: 1738`). The fix from the last edit IS deployed. However, the UI "Backfill All" button on `handleRunBackfill` only passes `mode: "batch"` even when called with `mode = "all"`. The loop runs with `maxBatches = 1` for "batch" mode vs 100 for "all" mode — BUT the user's single-batch call should still show the correct remaining count.
-
-After deeper investigation: the edge function currently works. The user likely experienced the pre-fix behavior. No further edge function changes needed for this specific bug.
-
-**However**, the backfill loop currently caps at `maxBatches = 100` batches of 50 = 5,000 projects max. For 1,795 projects, this is 36 batches which is fine. The loop logic is correct now.
-
-**Additional improvement**: Include `slug` in the backfill results so the UI can link to project detail pages.
-
-**File**: `supabase/functions/reelly-backfill-projects/index.ts`
-- Add `slug` to the select query (line 209): `"id, reelly_id, name, slug, floor_plan_types, amenities"`
-- Include `slug` in each result object (lines 283, 294, 299)
-
----
-
-## Problem 3: Clicking Backfill Results Should Open Project Detail Card
-
-**Current behavior**: Clicking "50 Processed" or "50 Updated" opens a dialog showing just project name + status badge.
-
-**Fix**: Make each project row in the backfill results dialog clickable, linking to the project detail page (`/projects/{slug}`). This requires:
-1. Edge function returns `slug` with each result (see Problem 2 above)
-2. UI: wrap each row in a link/button that navigates to `/projects/{slug}` in a new tab
-3. Show more detail per row: amenities count, floor plans, price range — the "full details" card feel
-
-**File**: `src/components/listing-admin/ReellyImportPanel.tsx` (lines 1738-1758)
-- Update the result type to include `slug`
-- Make project name a clickable link opening `/projects/{slug}` in new tab
-- Show enrichment details (amenities, floor plans, images, docs)
+-- Delete fake merged developer
+DELETE FROM developers WHERE id = 'a13f062f-6f8f-4a1c-a9e4-1b578eb712ac';
+```
 
 ---
 
-## Files to Modify
+## Issue 2: Add White Background Frame to ALL Logo Containers
 
-| File | Change |
+The DeveloperCard logo overlay (line 85) has no `bg-white` class on its container. When a logo has a transparent background (like Imtiaz Development, Beyond, etc.), the logo appears floating directly on the photo with no frame.
+
+**Fix**: Add `bg-white` to the logo container div in DeveloperCard.tsx so ALL logos sit inside a clean white square frame, matching the style used in the developer detail pages.
+
+**Files to update (add `bg-white` to logo containers):**
+
+| File | Current | Fix |
+|---|---|---|
+| `DeveloperCard.tsx` line 85 | `w-24 h-24 rounded-lg overflow-hidden shadow-lg` | Add `bg-white` |
+| `DeveloperSearchModal.tsx` line 97 | `object-cover` | Change to `object-fill` |
+| `DeveloperList.tsx` line 95 | `object-cover` | Change to `object-fill` |
+
+Also change `object-contain p-2` to `object-fill` (no padding) in the developer detail page logo (DeveloperDetail.tsx line 160) and DeveloperInfoCard.tsx (line 68) to match the fill behavior and eliminate the white border gaps inside.
+
+---
+
+## Issue 3: Al Barari Missing Feature Image
+
+Al Barari (id: `373ab604`) has its `feature_image_url` set to the generic Unsplash Dubai skyline placeholder. We need to set a real photo of Al Barari development.
+
+**Fix**: Update the database record with a real Al Barari image URL. Since we cannot automatically search Google and download images, we will use a known high-quality photo of Al Barari from available web sources and update the record.
+
+**SQL:**
+```sql
+UPDATE developers 
+SET feature_image_url = 'https://reelly-backend.s3.amazonaws.com/projects/.../...'
+WHERE id = '373ab604-308f-441c-8b86-c6a9d4f75bbd';
+```
+
+For Al Barari specifically, we will search for their projects in the database and use the best cover image from one of their projects as the feature image (same fallback logic used for other developers).
+
+---
+
+## Summary of All Changes
+
+| What | Action |
 |---|---|
-| `supabase/functions/reelly-areas-sync/index.ts` | Change `extract_from_projects` to upsert (update existing areas with project counts + correct emirate) |
-| `supabase/functions/reelly-backfill-projects/index.ts` | Add `slug` to query and results |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Make backfill result rows clickable links to project detail pages; update result type to include `slug` |
-
-## Technical Details
-
-### Areas Sync Fix (reelly-areas-sync/index.ts lines 388-447)
-
-```
-// Current: skips if slug exists
-if (existingSlugs.has(slug)) { skipped++; continue; }
-
-// Fixed: update existing area with latest counts + correct emirate
-if (existingSlugs.has(slug)) {
-  // Find existing area and update property_count + emirate
-  await supabase.from("areas")
-    .update({ property_count: area.count, emirate: area.emirate, updated_at: now })
-    .eq("slug", slug);
-  updated++;
-  continue;
-}
-```
-
-Also change the area extraction query to include `emirate`:
-```
-// Current: only extracts area_name
-.select("area_name")
-
-// Fixed: also extract emirate  
-.select("area_name, emirate")
-```
-
-And use the real emirate per area instead of hardcoding "Dubai".
-
-### Backfill Results with Slug (reelly-backfill-projects/index.ts)
-
-```
-// Add slug to select
-.select("id, reelly_id, name, slug, floor_plan_types, amenities")
-
-// Include slug in results
-results.push({ name: project.name, slug: project.slug, status: "success", ... });
-```
-
-### Clickable Results (ReellyImportPanel.tsx)
-
-```
-// Make each row a link
-<a href={`/projects/${p.slug}`} target="_blank" className="...">
-  <div className="font-medium text-zinc-900 truncate text-sm hover:text-blue-600 hover:underline">
-    {p.name}
-  </div>
-</a>
-```
+| "Ellington and RAK Properties" fake developer | Delete record, reassign 3 projects to real RAK Properties |
+| Logo frames everywhere | Add `bg-white` to all logo containers in DeveloperCard, change `object-contain` to `object-fill` in detail pages |
+| Al Barari photo | Query their projects for a real cover image and set as feature_image_url |
+| All logo displays | Ensure `object-fill` is used consistently across DeveloperCard, DeveloperDetail, DeveloperInfoCard, DeveloperSearchModal, DeveloperList |
