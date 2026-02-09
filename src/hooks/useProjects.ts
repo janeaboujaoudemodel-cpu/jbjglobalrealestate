@@ -120,6 +120,8 @@ export interface Developer {
   slug: string;
   description: string | null;
   logo_url: string | null;
+  logo_url_processed: string | null;
+  logo_url_dark: string | null;
   feature_image_url: string | null;
   rank: number;
   founded_year: number | null;

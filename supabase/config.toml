@@ -209,3 +209,9 @@ verify_jwt = false
 
 [functions.send-ticket-reply-email]
 verify_jwt = false
+
+[functions.process-developer-logos]
+verify_jwt = false
+
+[functions.fill-developer-feature-images]
+verify_jwt = false
