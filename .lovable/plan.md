@@ -1,34 +1,73 @@
 
-# Fix Developer Logo Containers -- Square Shape with No Cropping
 
-## Problem
+# Fix All Maps: Touch Controls, Navigation Buttons, and 3D View
 
-The logo containers are wide rectangles (`w-32 h-20` = 128x80px on cards, `w-40 h-24` = 160x96px on detail, `w-48 h-32` = 192x128px on info card). Combined with `object-cover`, logos with different aspect ratios get cropped on sides or top/bottom.
+## Problems Identified
 
-## Solution
+### 1. Touch Interactions Not Working
+On mobile/touch devices, two-finger pinch triggers browser page zoom instead of map zoom because the maps need explicit touch event handling. Leaflet requires `touchZoom: true` and proper touch event capture to prevent browser default behavior.
 
-Change the containers to **square** dimensions and switch back to `object-contain` so logos are never cropped, but remove the white background and instead use a subtle champagne/transparent tint so there are no harsh white borders visible against the card.
+### 2. Missing Navigation Controls
+- **ProjectLocationMap.tsx**: Has `zoomControl={false}` with custom buttons -- but custom buttons may not be prominent enough
+- **DeveloperProjectsMap.tsx**: No `zoomControl` setting, no custom buttons at all -- relies on default which may be hidden
+- **PropertyMap.tsx**: Has `zoomControl={true}` but native Leaflet controls are tiny and hard to see
 
-| Location | Current Size | New Size | Ratio |
-|---|---|---|---|
-| DeveloperCard.tsx (directory cards) | `w-32 h-20` (128x80) | `w-24 h-24` (96x96) | 1:1 square |
-| DeveloperDetail.tsx (detail page header) | `w-40 h-24` (160x96) | `w-32 h-32` (128x128) | 1:1 square |
-| DeveloperInfoCard.tsx (project page) | `w-48 h-32` (192x128) | `w-36 h-36` (144x144) | 1:1 square |
+### 3. No 3D View
+Leaflet is a 2D map library. True 3D (like Google Earth) requires a different library. The practical solution is to add a "3D View" button that opens Google Earth in a new tab with the same coordinates, plus add a tilt/perspective visual effect toggle.
 
-### Styling Changes (all 3 files)
-- Container: change to square dimensions as above
-- Image: `object-cover` back to `object-contain` with `p-1.5` padding so logos breathe
-- Background: keep `#FFFFFF` (white is standard for logo display and ensures readability)
+## Plan
 
-This ensures:
-- No cropping -- every logo is fully visible
-- No awkward white gaps on sides -- square container matches most logo proportions
-- Consistent sizing across all developers
+### Step 1: Fix Touch Interactions on All 3 Maps
+
+Add these Leaflet options to all map instances:
+- `touchZoom: true` -- enable pinch-to-zoom
+- `dragging: true` -- enable touch/mouse drag to pan
+- `tap: true` -- enable touch tap
+- Keep `scrollWheelZoom: false` -- prevent accidental mouse wheel zoom on desktop
+
+Also add a CSS rule to prevent browser zoom on map containers: `touch-action: none` on the map div.
+
+**Files**: All 3 map files
+
+### Step 2: Add Prominent Zoom and Navigation Controls to All Maps
+
+Create a shared `MapNavigationControls` component with:
+- Zoom In (+) button
+- Zoom Out (-) button  
+- Recenter / Fit bounds button
+- 3D View button (opens Google Earth)
+- Styled with gold/champagne theme, large enough for touch
+
+Apply to all 3 maps consistently.
+
+**New file**: `src/components/maps/MapNavigationControls.tsx`
+
+### Step 3: Add 3D View via Google Earth Link
+
+Add a "3D" button to each map's controls. When clicked, it opens Google Earth web at the same coordinates:
+```
+https://earth.google.com/web/@{lat},{lng},{zoom}a,0d,35y,0h,45t,0r
+```
+This gives the user true 3D buildings and terrain without requiring any API key.
+
+### Step 4: Apply CSS Touch Fix
+
+Add a global CSS rule for Leaflet containers to capture touch events properly:
+```css
+.leaflet-container {
+  touch-action: none;
+}
+```
+
+**File**: `src/index.css`
 
 ## Files to Modify
 
 | File | Change |
 |---|---|
-| `src/components/DeveloperCard.tsx` | Line 86: `w-32 h-20` to `w-24 h-24`; Line 97: `object-cover` to `object-contain p-1.5` |
-| `src/pages/DeveloperDetail.tsx` | Line 149: `w-40 h-24` to `w-32 h-32`; Line 160: `object-cover` to `object-contain p-2` |
-| `src/components/project-detail/DeveloperInfoCard.tsx` | Line 59: `w-48 h-32` to `w-36 h-36`; Line 68: `object-cover` to `object-contain p-2` |
+| `src/index.css` | Add `.leaflet-container { touch-action: none; }` |
+| `src/components/maps/MapNavigationControls.tsx` | New shared navigation controls component |
+| `src/components/project-detail/ProjectLocationMap.tsx` | Add touch options, use shared controls with 3D button |
+| `src/components/developer/DeveloperProjectsMap.tsx` | Add touch options, add navigation controls with 3D button |
+| `src/pages/PropertyMap.tsx` | Add touch options, add navigation controls with 3D button |
+
