@@ -1,325 +1,374 @@
 
+# Broker Intelligence Unification & Global UI Fixes
 
-# Full Global Button & UI Contrast Audit
+## Summary of Issues Identified
 
-## Executive Summary
-
-This plan addresses critical UI/UX issues identified across the platform:
-
-1. **Faded/invisible buttons** on dark backgrounds (e.g., Interior Design Studio's "Back to Mode Selection")
-2. **White text on white/light backgrounds** (e.g., Room/Area Name dropdown on light cards)
-3. **Poor dropdown styling** - rectangular, small text, gray colors, bad hover states
-4. **AI tools not matching their accent colors** internally (cards, sections, buttons)
-5. **Interior Design Studio needs integration** into one tabbed screen with per-mode colors
+| Issue | Location | Root Cause |
+|-------|----------|------------|
+| Broker Intelligence tools are separate pages | `BrokerIntelligence.tsx` is standalone; components in `broker-intelligence/` are not unified | No unified hub |
+| Back button not working in AI Follow-up Scheduler | `AIToolPremiumLayout.tsx` uses `navigate(-1)` which may fail if there's no history | Navigation logic |
+| Faded/invisible back button | Uses `variant="outline"` which applies champagne styling on dark backgrounds | Button variant issue |
+| White text on white boxes (dropdowns) | 31+ files override `SelectContent` with `bg-zinc-900` but items still get champagne styling from base component | Style conflict |
+| Gray/gold dropdown colors | Base `select.tsx` uses champagne background, but AI tools override with `bg-zinc-900` creating inconsistencies | Mixed styling |
+| Calendar, Notes, DocuSign not integrated | Exist as separate CRM pages, not integrated into Broker Intelligence hub | Missing integration |
 
 ---
 
-## Part 1: Interior Design Studio Redesign
+## Part 1: Unified Broker Intelligence Hub
 
-### Current Issues
-- 4 separate cards for mode selection, then navigates to separate pages
-- "Back to Mode Selection" button faded/invisible on dark background
-- Dropdowns (Room/Area Name) have white text on light backgrounds
-- Measure button is faded and rectangular
+### Current State
+- `src/pages/market-intelligence/internal/BrokerIntelligence.tsx` - Basic table view
+- `src/components/broker-intelligence/` - Three separate components:
+  - `TodaysMarketSignals.tsx`
+  - `LeadMarketContext.tsx`
+  - `BrokerAIAssistant.tsx`
 
-### Target: Tabbed Suite with Per-Mode Colors
+### Target: Single-Screen Unified Hub
 
-**Layout Architecture:**
 ```text
-┌─────────────────────────────────────────────────────────────────┐
-│  AI Interior Design Studio                                      │
-├─────────────────────────────────────────────────────────────────┤
-│  [ Concept ◈ ] [ Redesign 📷 ] [ Staging 🛋️ ] [ Chat 💬 ]       │
-│     purple        blue          emerald       orange            │
-├─────────────────────────────────────────────────────────────────┤
-│  ┌──────────────────┐  ┌──────────────────────────────────────┐ │
-│  │ Project Details  │  │                                      │ │
-│  │ - Project Name   │  │   Mode-Specific Form Content         │ │
-│  │ - Room Name      │  │   (styled with mode's accent color)  │ │
-│  │ - Property Type  │  │                                      │ │
-│  │ - Size + Measure │  │   [Generate Button in mode color]    │ │
-│  └──────────────────┘  └──────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│  Broker Intelligence Hub                                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│  [Signals] [Market Context] [AI Assistant] [Calendar] [Notes] [DocuSign]│
+├─────────────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────────────────────────────────────────────────────────┐│
+│  │                                                                     ││
+│  │   Active Tab Content (full width, same frame)                       ││
+│  │                                                                     ││
+│  │   Each section loads within the same page frame                     ││
+│  │                                                                     ││
+│  └─────────────────────────────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Color Scheme by Mode
+### Implementation
 
-| Mode | Accent | Button | Border | Badge |
-|------|--------|--------|--------|-------|
-| Concept | Purple/Fuchsia | `variant="ai-purple"` | `border-fuchsia-500/50` | `bg-fuchsia-500/20 text-fuchsia-300` |
-| Redesign | Blue/Cyan | `variant="ai-blue"` | `border-blue-500/50` | `bg-blue-500/20 text-blue-300` |
-| Staging | Emerald/Teal | `variant="ai-emerald"` | `border-emerald-500/50` | `bg-emerald-500/20 text-emerald-300` |
-| Chat | Amber/Orange | `variant="ai-orange"` | `border-amber-500/50` | `bg-amber-500/20 text-amber-300` |
+**File: `src/pages/market-intelligence/internal/BrokerIntelligence.tsx`**
 
-### Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/pages/InteriorDesignAI.tsx` | Convert to single-page tabbed layout with shared project details |
-| `src/components/interior-design/DesignModeSelector.tsx` | Convert to horizontal tab bar, not card grid |
-| `src/components/interior-design/DesignProjectHeader.tsx` | Fix dropdown contrast, use mode-specific borders |
-| `src/components/interior-design/ConceptRenderForm.tsx` | Use `variant="ai-purple"` for all buttons |
-| `src/components/interior-design/PhotoRedesignForm.tsx` | Use `variant="ai-blue"` for all buttons |
-| `src/components/interior-design/VirtualStagingForm.tsx` | Use `variant="ai-emerald"` for all buttons |
-| `src/components/interior-design/DesignChatAssistant.tsx` | Use `variant="ai-orange"` for all buttons |
-
----
-
-## Part 2: Property Measurement Page Fixes
-
-### Current Issues
-- Property type cards use `border-teal-500` when selected but continue button is faded
-- Property Name input has white text on dark background (acceptable)
-- Continue button should be solid `bg-teal-500` not transparent
-
-### Fixes Required
-
-| Element | Current | Fix |
-|---------|---------|-----|
-| Continue button | `bg-teal-500 hover:bg-teal-600 text-white` | Already correct, verify not stripped |
-| Property type cards (selected) | `border-teal-500 bg-teal-500/20 text-teal-300` | Already correct |
-| All borders/cards | Should match teal theme | Add `border-emerald-500/30` consistently |
-| Form inputs | `bg-zinc-800/50 border-zinc-700 text-white` | Correct for dark theme |
-
-### Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/pages/PropertyMeasurement.tsx` | Ensure buttons use `variant="ai-emerald"` or `variant="ai-teal"` |
-
----
-
-## Part 3: Global Dropdown Fix
-
-### Problem
-- `<Select>` and `<SearchableSelect>` components use champagne styling designed for light pages
-- On dark AI tool pages, they show light backgrounds with correct styling
-- The issue is buttons inside these pages NOT the dropdowns themselves
-
-### Current Select Styling (Already Fixed)
-```tsx
-// src/components/ui/select.tsx - Already uses:
-// SelectContent: bg-[#FDFBF7] text-black border-gold/50
-// SelectItem: text-black hover:text-gold
-```
-
-### Dropdown on Dark Pages
-- Create a dark variant for SelectTrigger when used on dark backgrounds
-- Pass `variant="dark"` to SelectTrigger on AI tool pages
-
-### Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/components/ui/select.tsx` | Add dark variant for SelectTrigger |
-| `src/components/interior-design/DesignProjectHeader.tsx` | Use dark SelectTrigger variant |
-| All AI tool form components | Use dark SelectTrigger variant when on dark backgrounds |
-
----
-
-## Part 4: Button System Enhancement
-
-### Problem
-The `sanitizeButtonClassName` function strips custom colors from buttons unless they use `variant="ai-*"`. Many buttons on AI pages use raw className styling that gets stripped.
-
-### Solution
-1. Add more AI variants if needed (already have 15)
-2. Ensure ALL AI tool buttons explicitly use `variant="ai-*"` props
-3. Buttons using `variant="outline"` or `variant="ghost"` on dark backgrounds need dark-specific variants
-
-### New Button Variants to Add
+Transform to tabbed single-page layout:
+1. Import all broker intelligence components
+2. Add tabs for: Signals, Market Context, AI Assistant, Calendar, Notes, DocuSign
+3. Each tab renders its content within the same frame (no navigation)
+4. Add Calendar widget (CRM calendar mini-view)
+5. Add Notes widget (quick notes interface)
+6. Add DocuSign placeholder (contract signing integration)
 
 ```tsx
-// Dark theme ghost/outline variants
-"dark-ghost": "bg-transparent text-white border-2 border-zinc-600 hover:bg-white/10 hover:border-white/40",
-"dark-outline": "bg-transparent text-white border-2 border-white/40 hover:bg-white/10 hover:border-white/60",
+// Tab structure
+<Tabs defaultValue="signals" className="w-full">
+  <TabsList className="bg-zinc-900 border border-gold/30">
+    <TabsTrigger value="signals">Market Signals</TabsTrigger>
+    <TabsTrigger value="context">Lead Context</TabsTrigger>
+    <TabsTrigger value="assistant">AI Assistant</TabsTrigger>
+    <TabsTrigger value="calendar">Calendar</TabsTrigger>
+    <TabsTrigger value="notes">Notes</TabsTrigger>
+    <TabsTrigger value="docusign">DocuSign</TabsTrigger>
+  </TabsList>
+  
+  <TabsContent value="signals">
+    <TodaysMarketSignals />
+  </TabsContent>
+  <TabsContent value="context">
+    <LeadMarketContext leadArea={selectedArea} leadIntent="buy" />
+  </TabsContent>
+  <TabsContent value="assistant">
+    <BrokerAIAssistant />
+  </TabsContent>
+  <TabsContent value="calendar">
+    <BrokerCalendarWidget />
+  </TabsContent>
+  <TabsContent value="notes">
+    <BrokerNotesWidget />
+  </TabsContent>
+  <TabsContent value="docusign">
+    <DocuSignIntegration />
+  </TabsContent>
+</Tabs>
 ```
 
-### Files to Modify
+---
 
-| File | Changes |
-|------|---------|
-| `src/components/ui/button.tsx` | Add `dark-ghost` and `dark-outline` variants |
+## Part 2: DocuSign Integration Components
+
+### New Components to Create
+
+**File: `src/components/broker-intelligence/DocuSignIntegration.tsx`**
+- Contract templates selection
+- Signature request workflow
+- Integration with CRM leads (auto-populate client info)
+- Status tracking for pending signatures
+- For both Investors and Brokers
+
+**File: `src/components/broker-intelligence/BrokerCalendarWidget.tsx`**
+- Mini calendar view
+- Quick event creation
+- Upcoming meetings list
+- Link to full CRM calendar
+
+**File: `src/components/broker-intelligence/BrokerNotesWidget.tsx`**
+- Quick notes input
+- Recent notes list
+- Link to full CRM notes
 
 ---
 
-## Part 5: Full Site Button Audit
+## Part 3: Fix Back Button (Not Working + Faded)
 
-### Audit Checklist for Each AI Tool Page
+### Problem 1: `navigate(-1)` fails when no history
 
-For EVERY AI tool page, verify:
-1. Primary action button uses `variant="ai-{color}"` matching the tool's theme
-2. Secondary buttons use `dark-outline` or `dark-ghost` on dark backgrounds
-3. No buttons use raw `className` colors that get stripped
-4. All text is readable (no white-on-white, no gray-on-gray)
+**File: `src/components/ai-tools/AIToolPremiumLayout.tsx`**
 
-### AI Tool Pages to Audit
+Current (line 200):
+```tsx
+onClick={() => navigate(-1)}
+```
 
-| Tool | Route | Expected Accent |
-|------|-------|-----------------|
-| Interior Design | `/interior-design-ai` | Per-mode (purple/blue/green/orange) |
-| Property Measurement | `/property-measurement` | Teal/Emerald |
-| Property Evaluator | `/property-evaluator` | Blue |
-| Rental Index | `/rental-index` | Emerald |
-| Compare | `/compare` | Purple |
-| AI Lead Qualification | `/ai-lead-qualification` | Purple |
-| AI Follow-up Scheduler | `/ai-followup-scheduler` | Cyan |
-| AI Objection Handler | `/ai-objection-handler` | Orange |
-| AI ROI Calculator | `/ai-roi-calculator` | Emerald |
-| AI Price Predictor | `/ai-price-predictor` | Blue |
-| AI Competitor Analysis | `/ai-competitor-analysis` | Orange |
-| AI Market Report | `/ai-market-report` | Blue |
-| AI Contract Reviewer | `/ai-contract-reviewer` | Red |
-| AI Translation Hub | `/ai-translation-hub` | Purple |
-| AI Video Tour Script | `/ai-video-tour-script` | Amber |
-| AI Call Summarizer | `/ai-call-summarizer` | Violet |
-| AI Neighborhood Insights | `/ai-neighborhood-insights` | Emerald |
-| AI Social Media | `/ai-social-media` | Pink |
+Fix:
+```tsx
+onClick={() => {
+  if (window.history.length > 1) {
+    navigate(-1);
+  } else {
+    navigate('/toolkit'); // Fallback to toolkit hub
+  }
+}}
+```
 
-### Files to Modify (Premium AI Tools)
+### Problem 2: Faded button styling
 
-All files in `src/components/ai-tools/premium/*.tsx`:
-- Ensure primary buttons use correct `variant="ai-*"`
-- Ensure cards have matching border colors
-- Ensure section headers use matching icon colors
+Current (line 198-202):
+```tsx
+<Button
+  variant="outline"
+  size="sm"
+  onClick={() => navigate(-1)}
+  className="bg-white/10 border-white/30 text-white hover:bg-white/20 hover:text-white mb-6"
+>
+```
+
+Fix - use `dark-outline` variant:
+```tsx
+<Button
+  variant="dark-outline"
+  size="sm"
+  onClick={() => { /* fixed navigation */ }}
+  className="mb-6"
+>
+```
 
 ---
 
-## Part 6: Form Input Contrast on Dark Backgrounds
+## Part 4: Global Dropdown Fix (White Text on White)
 
-### Standard for Dark AI Pages
+### Root Cause Analysis
+
+The base `select.tsx` defines:
+- `SelectContent`: `bg-[#FDFBF7] text-black` (champagne, correct)
+- `SelectItem`: `text-black` (correct)
+
+But 31+ files override with:
+- `SelectContent className="bg-zinc-900 border-zinc-700"` (dark background)
+- `SelectItem className="text-white"` (white text)
+
+This creates conflicts where base styles leak through or mix.
+
+### Solution: Dark Select Variant
+
+**File: `src/components/ui/select.tsx`**
+
+Add dark variants for SelectTrigger, SelectContent, and SelectItem:
 
 ```tsx
-// Input on dark background
-<Input className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-400" />
+// Dark trigger variant (for AI tools on dark backgrounds)
+const SelectTriggerDark = React.forwardRef<...>(({ className, children, ...props }, ref) => (
+  <SelectPrimitive.Trigger
+    ref={ref}
+    className={cn(
+      "flex h-10 w-full cursor-pointer items-center justify-between rounded-lg border",
+      "bg-zinc-800/80 border-zinc-600 text-white",
+      "hover:border-zinc-500 focus:ring-2 focus:ring-zinc-500/50",
+      className
+    )}
+    {...props}
+  >
+    {children}
+    <SelectPrimitive.Icon asChild>
+      <ChevronDown className="h-4 w-4 text-zinc-400 opacity-70" />
+    </SelectPrimitive.Icon>
+  </SelectPrimitive.Trigger>
+));
 
-// Select trigger on dark background
-<SelectTrigger className="bg-zinc-800/50 border-zinc-600 text-white" />
+// Dark content variant
+const SelectContentDark = React.forwardRef<...>(({ className, children, ...props }, ref) => (
+  <SelectPrimitive.Portal>
+    <SelectPrimitive.Content
+      ref={ref}
+      className={cn(
+        "relative z-[10200] max-h-96 min-w-[8rem] overflow-hidden rounded-xl",
+        "bg-zinc-900 border-2 border-zinc-700 text-white",
+        "shadow-[0_10px_40px_rgba(0,0,0,0.5)]",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </SelectPrimitive.Content>
+  </SelectPrimitive.Portal>
+));
+
+// Dark item variant  
+const SelectItemDark = React.forwardRef<...>(({ className, children, ...props }, ref) => (
+  <SelectPrimitive.Item
+    ref={ref}
+    className={cn(
+      "relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm",
+      "text-white outline-none",
+      "hover:bg-zinc-700 hover:text-white",
+      "focus:bg-zinc-700 focus:text-white",
+      className
+    )}
+    {...props}
+  >
+    {children}
+  </SelectPrimitive.Item>
+));
 ```
 
-### Standard for Light/Champagne Pages
+### Update All 31 Affected Files
 
-```tsx
-// Already using champagne gradient - correct
-<SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black" />
-```
+Replace inline overrides with proper dark variants. Files to update:
+- `src/components/PropertySearchBar.tsx`
+- `src/components/ai-tools/premium/AIObjectionHandlerPremium.tsx`
+- `src/components/ai-tools/premium/AIFollowupSchedulerPremium.tsx`
+- All other AI tool components using Select on dark backgrounds
+- `src/components/broker-intelligence/BrokerAIAssistant.tsx`
+- `src/components/crm/LeadSourceFilter.tsx`
+- And 25+ more files
 
 ---
 
-## Part 7: AI Tool Card Consistency
+## Part 5: CRM Integration for Calendar, Notes, DocuSign
 
-### Rule: Each AI Tool Must Match Its Accent Color
+### Integration Points
 
-For a tool with accent color X (e.g., emerald), these elements MUST use emerald:
+| Integration | For Brokers | For Investors | In CRM |
+|-------------|-------------|---------------|--------|
+| Calendar | Yes - `/crm/calendar` embedded | Yes - meeting booking | Yes - existing |
+| Notes | Yes - quick notes | Yes - property notes | Yes - existing |
+| DocuSign | Yes - listing agreements | Yes - purchase agreements | New |
 
-1. **Hero badge**: `bg-emerald-500/20 text-emerald-300 border-emerald-500/30`
-2. **Section borders**: `border-emerald-500/30`
-3. **Active/selected cards**: `border-emerald-500/50 bg-emerald-500/20`
-4. **Primary button**: `variant="ai-emerald"`
-5. **Icons**: `text-emerald-400` or `text-emerald-500`
+### DocuSign CRM Integration
+
+**File: `src/components/crm/DocuSignPanel.tsx`**
+
+Create new component for CRM integration:
+- Link to lead record
+- Auto-populate contract fields from lead data
+- Track signature status in CRM
+- Add to lead timeline when signed
+
+---
+
+## Part 6: Global Audit - All Affected Files
+
+### Files with Dropdown Issues (31 files)
+
+1. `src/components/PropertySearchBar.tsx`
+2. `src/components/crm/LeadSourceFilter.tsx`
+3. `src/components/ai-broker/AIBrokerCallDialog.tsx`
+4. `src/components/ai-tools/premium/AIObjectionHandlerPremium.tsx`
+5. `src/components/ai-tools/premium/AIFollowupSchedulerPremium.tsx`
+6. `src/components/ai-tools/premium/AILeadQualificationPremium.tsx`
+7. `src/components/ai-tools/premium/AIROICalculatorPremium.tsx`
+8. `src/components/ai-tools/premium/AIPricePredictorPremium.tsx`
+9. `src/components/ai-tools/premium/AIMarketReportPremium.tsx`
+10. `src/components/ai-tools/premium/AINeighborhoodInsightsPremium.tsx`
+11. `src/components/ai-tools/premium/AIVideoTourScriptPremium.tsx`
+12. `src/components/ai-tools/premium/AICompetitorAnalysisPremium.tsx`
+13. `src/components/ai-tools/premium/AITranslationHubPremium.tsx`
+14. `src/components/ai-tools/premium/AIContractReviewerPremium.tsx`
+15. `src/components/ai-tools/premium/AICallSummarizerPremium.tsx`
+16. `src/components/interior-design/DesignProjectHeader.tsx`
+17. `src/components/interior-design/ConceptRenderForm.tsx`
+18. `src/components/interior-design/PhotoRedesignForm.tsx`
+19. `src/components/interior-design/VirtualStagingForm.tsx`
+20. `src/components/broker-intelligence/BrokerAIAssistant.tsx`
+21. `src/pages/PropertyMeasurement.tsx`
+22. `src/pages/PropertyEvaluator.tsx`
+23. `src/pages/RentalIndex.tsx`
+24. `src/pages/Compare.tsx`
+25. And 6+ more discovered during implementation
+
+### Files with Back Button Issues (11 files using navigate(-1))
+
+1. `src/components/ai-tools/AIToolPremiumLayout.tsx` ← Primary fix
+2. `src/pages/Quiz.tsx`
+3. `src/pages/SupportTicketHub.tsx`
+4. `src/pages/broker/BrokerTraining.tsx`
+5. `src/pages/governance/InstitutionalLock.tsx`
+6. `src/pages/governance/AIGovernance.tsx`
+7. `src/pages/AdminRoleManagement.tsx`
+8. `src/pages/Compare.tsx`
+9. `src/pages/EmployeeChatPage.tsx`
+10. `src/pages/SecurityConsole.tsx`
+11. `src/pages/governance/GovernmentMethodology.tsx`
 
 ---
 
 ## Implementation Order
 
-### Phase 1: Core Components (Highest Impact)
-1. Add `dark-ghost` and `dark-outline` variants to button.tsx
-2. Add dark variant to SelectTrigger
-3. Fix InteriorDesignAI.tsx to tabbed layout with per-mode colors
-4. Fix PropertyMeasurement.tsx buttons to use `variant="ai-teal"`
+### Phase 1: Core Fixes (Highest Priority)
+1. Add dark variants to `src/components/ui/select.tsx`
+2. Fix `AIToolPremiumLayout.tsx` back button (navigation + styling)
+3. Update `AIFollowupSchedulerPremium.tsx` dropdowns to use dark variants
 
-### Phase 2: AI Tools Audit (High Impact)
-5. Audit and fix all premium AI tool components
-6. Ensure each tool uses its accent color consistently for buttons/borders/cards
+### Phase 2: Broker Intelligence Hub
+4. Create `DocuSignIntegration.tsx`
+5. Create `BrokerCalendarWidget.tsx`
+6. Create `BrokerNotesWidget.tsx`
+7. Refactor `BrokerIntelligence.tsx` to unified tabbed hub
 
-### Phase 3: Global Forms & Inputs
-7. Audit all form pages on dark backgrounds
-8. Ensure no white-on-white text anywhere
+### Phase 3: Global Dropdown Fix
+8. Update all 31 files to use dark Select variants
+9. Remove inline `bg-zinc-900` overrides
+10. Ensure consistent `text-white` on dark, `text-black` on light
 
-### Phase 4: Admin/Owner Dashboards
-9. Audit owner and admin pages
-10. Ensure consistent button contrast
+### Phase 4: CRM Integration
+11. Create `DocuSignPanel.tsx` for CRM
+12. Add DocuSign to lead detail view
+13. Add DocuSign to investor portal
 
 ---
 
-## Files to Modify (Complete List)
+## Files to Create
 
-### Core UI Components
+| File | Purpose |
+|------|---------|
+| `src/components/broker-intelligence/DocuSignIntegration.tsx` | Contract signing workflow |
+| `src/components/broker-intelligence/BrokerCalendarWidget.tsx` | Mini calendar for brokers |
+| `src/components/broker-intelligence/BrokerNotesWidget.tsx` | Quick notes widget |
+| `src/components/crm/DocuSignPanel.tsx` | CRM integration for contracts |
+
+## Files to Modify
+
 | File | Changes |
 |------|---------|
-| `src/components/ui/button.tsx` | Add `dark-ghost`, `dark-outline` variants |
-| `src/components/ui/select.tsx` | Add dark SelectTrigger variant |
-
-### Interior Design Studio
-| File | Changes |
-|------|---------|
-| `src/pages/InteriorDesignAI.tsx` | Convert to tabbed single-page layout |
-| `src/components/interior-design/DesignModeSelector.tsx` | Convert to horizontal tab bar |
-| `src/components/interior-design/DesignProjectHeader.tsx` | Use dark inputs, mode-specific borders |
-| `src/components/interior-design/ConceptRenderForm.tsx` | Use `variant="ai-purple"` |
-| `src/components/interior-design/PhotoRedesignForm.tsx` | Use `variant="ai-blue"` |
-| `src/components/interior-design/VirtualStagingForm.tsx` | Use `variant="ai-emerald"` |
-| `src/components/interior-design/DesignChatAssistant.tsx` | Use `variant="ai-orange"` |
-| `src/components/interior-design/DesignResultsGallery.tsx` | Use mode-aware button colors |
-
-### Property Measurement
-| File | Changes |
-|------|---------|
-| `src/pages/PropertyMeasurement.tsx` | Use `variant="ai-teal"` for all buttons |
-
-### Premium AI Tools
-All files in `src/components/ai-tools/premium/`:
-- AICompetitorAnalysisPremium.tsx (orange)
-- AIContractReviewerPremium.tsx (red)
-- AIFollowupSchedulerPremium.tsx (cyan)
-- AILeadQualificationPremium.tsx (purple)
-- AIMarketReportPremium.tsx (blue)
-- AINeighborhoodInsightsPremium.tsx (emerald)
-- AIPricePredictorPremium.tsx (blue)
-- AIROICalculatorPremium.tsx (emerald)
-- AITranslationHubPremium.tsx (purple)
-- AIVideoTourScriptPremium.tsx (amber)
-- AICallSummarizerPremium.tsx (violet)
-
-### Additional AI Tool Pages
-| File | Changes |
-|------|---------|
-| `src/pages/AISocialMediaPage.tsx` | Use `variant="ai-pink"` |
-| `src/pages/Compare.tsx` | Use `variant="ai-purple"` |
-| `src/pages/PropertyEvaluator.tsx` | Use `variant="ai-blue"` |
-| `src/pages/RentalIndex.tsx` | Use `variant="ai-emerald"` |
+| `src/components/ui/select.tsx` | Add `SelectTriggerDark`, `SelectContentDark`, `SelectItemDark` |
+| `src/components/ai-tools/AIToolPremiumLayout.tsx` | Fix back button navigation and use `dark-outline` variant |
+| `src/pages/market-intelligence/internal/BrokerIntelligence.tsx` | Convert to unified tabbed hub |
+| `src/components/broker-intelligence/index.ts` | Export new components |
+| 31+ files with dropdown issues | Use dark Select variants |
 
 ---
 
 ## Acceptance Criteria
 
-1. All buttons on dark backgrounds are clearly visible with proper contrast
-2. No white text on white/light backgrounds anywhere
-3. Interior Design Studio is a single tabbed page with 4 integrated modes
-4. Each mode in Interior Design uses its own accent color (purple/blue/green/orange)
-5. Property Measurement uses teal/emerald consistently
-6. Every AI tool page uses its designated accent color for buttons, borders, and cards
-7. Dropdowns on dark backgrounds are styled appropriately
-8. No faded or invisible buttons anywhere in the application
-9. All forms have readable placeholder text
-10. Ghost/outline buttons on dark backgrounds are visible
-
----
-
-## Technical Notes
-
-### Button Variant Selection Guide
-
-| Background | Primary Action | Secondary Action |
-|------------|----------------|------------------|
-| Dark (black/zinc-900) | `variant="ai-{color}"` | `variant="dark-outline"` or `variant="dark-ghost"` |
-| Light (champagne/white) | `variant="primary"` | `variant="secondary"` or `variant="outline"` |
-| Hero (dark with gradients) | `variant="ai-{color}"` | `variant="dark-outline"` |
-
-### SelectTrigger Variant Selection Guide
-
-| Background | Variant |
-|------------|---------|
-| Dark pages (AI tools) | Dark variant with `bg-zinc-800 border-zinc-600 text-white` |
-| Light/Champagne pages | Default champagne gradient |
-
+1. Broker Intelligence is a single-page hub with tabbed sections
+2. All sections (Signals, Context, AI, Calendar, Notes, DocuSign) accessible from one screen
+3. Back button works on all AI tool pages (fallback to /toolkit if no history)
+4. Back button is clearly visible (high contrast) on dark backgrounds
+5. All dropdowns on dark backgrounds have white text on dark background
+6. All dropdowns on light backgrounds have black text on champagne background
+7. No white text on white boxes anywhere
+8. DocuSign integration available for Investors, Brokers, and CRM
+9. Calendar and Notes integrated into Broker Intelligence hub
