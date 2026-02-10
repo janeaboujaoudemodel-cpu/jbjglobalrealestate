@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle, Building2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle, Building2, ArrowUpRight } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { SafeImage } from "@/components/SafeImage";
 import { VerifiedMedia } from "@/components/ui/verified-media";
@@ -345,8 +345,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Description with ...more link - Shorter */}
           <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-            <span className="text-gold font-bold underline hover:text-gold/80 cursor-pointer ml-1 inline-flex items-center gap-0.5">
-              ...more →
+            <span className="text-gold font-bold hover:text-gold/80 cursor-pointer ml-1 inline-flex items-center gap-1">
+              ...more
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </span>
           </p>
         </div>
