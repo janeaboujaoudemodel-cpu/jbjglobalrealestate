@@ -1,80 +1,95 @@
 
+# Fix Project Enrichment: API URL, Complete Data Extraction, and Clickable Cards
 
-# Homepage Fixes: Trust Bar Centering, Featured Listings Data & Cards
-
-## 1. Trust Bar Section: Equal Spacing Above & Below
-
-**Problem**: The gap between "Trusted By Thousands" divider and the Developer Partners marquee above is smaller than the gap between "Excellence Guaranteed" divider and the "Handpicked For You" section below.
-
-**Root cause**: The trust-bar wrapper has `py-8 md:py-10`, but FeaturedListings has `py-12 md:py-16` which adds extra space below. The developer marquee above has no bottom padding equivalent.
-
-**Fix in `src/pages/Index.tsx`**:
-- Increase the trust-bar section padding to `py-12 md:py-16` to match FeaturedListings, creating equal visual breathing room on both sides
-- Alternatively, add a spacer/padding between the developer marquee and trust bar to balance the gap
-
-This ensures "Trusted By Thousands" and "Excellence Guaranteed" are visually centered between the Developer Partners strip and the Handpicked For You section.
+## Problem Summary
+The enrichment test shows identical "before" and "after" because:
+1. The Reelly API URL is wrong (`/api/v2/projects/` instead of `/api/v2/clients/projects/`)
+2. The function only extracts 5 fields (amenities, USPs, distances, images, docs) but ignores FAQs, floor plans, payment plans, unit types, description, video, and highlights
+3. The before/after cards are not clickable -- they should link to the project detail page
 
 ---
 
-## 2. Remove Fake Binghatti "B" Monogram Badge
+## Changes
 
-**Problem**: The code at lines 181-184 and 194-198 in `FeaturedListings.tsx` adds a fake gold "B" circle next to the Binghatti logo. This is not the real Binghatti monogram.
+### 1. Fix Reelly API URL in Edge Function
 
-**Fix in `src/components/home/FeaturedListings.tsx`**:
-- Remove the `isBinghatti` variable and all the fake "B" badge JSX (lines 140, 181-185, 194-198)
-- The developer logo from the database (`logo_url`) already contains the real Binghatti logo -- just display it as-is like all other developers
-- Ensure the logo container uses `object-fill` in a square container per the project's developer logo styling standard
+**File: `supabase/functions/enrich-project-test/index.ts`**
 
----
-
-## 3. Replace Second DAMAC with a Different Developer
-
-**Problem**: Lines 96-97 explicitly add 2 DAMAC projects. User wants only 1 DAMAC and wants Dubai Holdings added instead.
-
-**Issue**: "Dubai Holding" exists in the developers table but has 0 published projects in the projects table. We need a fallback.
-
-**Fix in `src/components/home/FeaturedListings.tsx`**:
-- Remove `addOne('DAMAC', 'lagoons')` (the second DAMAC slot)
-- Add `addOne('Meraas')` instead (Meraas is an Elite developer with projects in the database and is part of Dubai Holding's portfolio)
-- Update `ELITE_DEVELOPERS` array: remove the duplicate DAMAC intent, add 'Meraas' if not already present
-- Update the comment at the top of the file to reflect "1 per developer" consistently
-
----
-
-## 4. Show "Price TBA" for Projects Without Starting Price
-
-**Problem**: Palm Jebel Ali Villas and Binghatti Vintage have `price_from = NULL` in the database, so no price is shown on their cards.
-
-**Fix in `src/components/home/FeaturedListings.tsx`**:
-- In the price badge overlay (line 203), keep as-is (only show badge when price exists)
-- In the content area (line 242-248), change the invisible placeholder to show "Price TBA" in a visible style:
-```tsx
-) : (
-  <span className="text-zinc-500 font-medium text-xs">Price TBA</span>
-)}
+Change line 19 from:
+```
+https://api-reelly.up.railway.app/api/v2/projects/${reellyId}
+```
+to:
+```
+https://api-reelly.up.railway.app/api/v2/clients/projects/${reellyId}
 ```
 
----
-
-## 5. Enforce Uniform Card Heights
-
-**Problem**: Cards with missing data (no price, no location) end up with different visual heights despite the `min-h-[140px]` content area.
-
-**Fix in `src/components/home/FeaturedListings.tsx`**:
-- The card already uses `flex flex-col h-full` and `min-h-[140px]` on content -- verify the `aspect-[4/3]` on images ensures all image areas are identical
-- Ensure the grid uses `items-stretch` (default for grid) so all cards in a row match the tallest card
-- The `flex-grow` spacer (line 232) already pushes bottom content down -- this should work correctly once all slots show visible text (Price TBA instead of invisible placeholders)
+This matches the working URL used by all other Reelly functions (defined in `_shared/reelly-types.ts` as `REELLY_API_BASE`).
 
 ---
 
-## Technical Details
+### 2. Extract ALL Missing Fields from Reelly API
 
-### Files to modify
+Add extraction for these additional fields in the edge function:
 
-| File | Changes |
-|------|---------|
-| `src/pages/Index.tsx` (line 211) | Change `py-8 md:py-10` to `py-12 md:py-16` on trust-bar wrapper |
-| `src/components/home/FeaturedListings.tsx` | Remove fake "B" badge, change DAMAC x2 to DAMAC + Meraas, show "Price TBA", verify card height consistency |
+| Field | Source in Reelly API | DB Column |
+|-------|---------------------|-----------|
+| FAQs | `project.faqs` | `faqs` (JSONB) |
+| Floor Plans | `project.floor_plans` | `floor_plan_types` (JSONB) |
+| Payment Plan | `project.payment_plan` | `payment_plan` (text) |
+| Payment Breakdown | `payment_plan.milestones` | `payment_breakdown` (JSONB) |
+| Unit Types | `project.units` / `project.unit_types` | `unit_types` (JSONB) |
+| Description | `project.overview` | `description` (text) |
+| Video URL | `project.video_reviews[0].url` | `video_url` (text) |
+| Highlights | `project.highlights` | `highlights` (JSONB) |
+| Service Charge | `project.service_charge` | `service_charge` (numeric) |
+| ROI Estimate | `project.roi_estimate` | `roi_estimate` (numeric) |
 
-### Database note
-No database changes needed. The missing prices for Palm Jebel Ali and Binghatti Vintage are legitimate -- those projects simply don't have pricing data in the source system. "Price TBA" is the correct display.
+Update the "before" snapshot to include counts for all these fields.
+Update the "after" to show what would be added.
+Update the "apply" action to write all fields to the database.
+
+---
+
+### 3. Make Before/After Cards Clickable
+
+**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
+
+Wrap both the BEFORE and AFTER card images/titles with a link to the project detail page:
+```tsx
+<a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer">
+```
+
+This opens the project listing page in a new tab when clicking on either card.
+
+---
+
+### 4. Update Before/After Display to Show All Fields
+
+Add rows to the stats grid for the new fields:
+- FAQs count
+- Floor plans count  
+- Unit types count
+- Has description (yes/no)
+- Has video (yes/no)
+- Has payment plan (yes/no)
+- Highlights count
+
+Each row highlights in green when the "after" value is greater than the "before" value.
+
+---
+
+### 5. Update TypeScript Interface
+
+**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
+
+Expand the `EnrichmentTestResult` interface to include all new fields in `before` and `after` snapshots.
+
+---
+
+## Files to Modify
+
+| File | Change |
+|------|--------|
+| `supabase/functions/enrich-project-test/index.ts` | Fix API URL, add extraction for FAQs/floor plans/payment/units/description/video/highlights, update apply logic |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Make cards clickable, expand interface, show all field counts in before/after |
