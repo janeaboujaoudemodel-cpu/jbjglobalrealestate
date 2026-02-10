@@ -1,64 +1,44 @@
 
 
-# Fix Sold Out Badge and Status Label on Project Cards
+# Fix Mega Menu Titles, Dividers, Project Card Title Color, and "...more" Text
 
-## Problem
+## Changes
 
-The "Sold Out" status badge logic was broken by conflicting conditions in both `ProjectCard.tsx` and `ReellyProjectCard.tsx`:
+### 1. Center "Top Areas in Dubai" title (and all MegaMenuCard titles)
 
-1. The `getSaleStatusBadge()` function catches "sold" statuses (line 85-86) and returns a badge object
-2. The dedicated red "Sold Out" badge (line 282) only renders when `!saleStatusBadge` -- so when getSaleStatusBadge already matched "sold", the red badge is skipped
-3. Instead, a generic sale status badge renders at line 268 with `bg-destructive` styling -- losing the distinct red "Sold Out" design the user specified
+**File: `src/components/header/mega-menu-primitives.tsx`**
 
-The user's requirement (from memory): "Sold Out" badge should be a red badge positioned top-left (top-3 left-3), offset below developer logo if present. "Sold" text (red) should show in the price area for sold-out projects without a price.
+The `MegaMenuSectionTitle` component (line 201) uses `flex items-center justify-between`. Change to `justify-center` so the title text is centered. This applies globally to all mega menu cards (Areas, Developers, Buy, Sell, Rent, Insights, More).
 
-## Fix
+### 2. Add gold divider between area links (all MegaMenuIconLink items)
 
-### File: `src/components/ProjectCard.tsx`
+**File: `src/components/header/mega-menu-primitives.tsx`**
 
-1. **Remove "sold" from `getSaleStatusBadge()`** -- The sold status should NOT be treated as a regular sale status badge. It has its own dedicated rendering path (the red "Sold Out" badge at top-left). Remove lines 85-86 from the function so sold projects fall through to the dedicated badge.
+The `MegaMenuIconLink` already has a thin gold divider at the bottom of each link (line 291: `bg-gradient-to-r from-transparent via-gold/30 to-transparent`). This is present but may not be visible enough. Make the divider slightly more prominent (`via-gold/50` instead of `via-gold/30`) to create a clear, elegant separator between each item. This applies to all mega menu sections consistently.
 
-2. **Fix the "Sold Out" badge condition** -- Remove the `!saleStatusBadge` guard from line 282 so the red "Sold Out" badge renders based only on `is_sold_out` or status containing "sold". This ensures it always appears top-left as designed.
+### 3. Change project title from gold to dark black
 
-3. **Add exclusion on the sale status badge (line 268)** -- Add a check so the generic sale status badge doesn't render for sold-out projects (since they get the dedicated red badge instead).
+**File: `src/components/ProjectCard.tsx`** (line 292)
+- Change `text-gold` to `text-black` and `hover:text-gold/80` to `hover:text-gold`
 
-### File: `src/components/ReellyProjectCard.tsx`
+**File: `src/components/ReellyProjectCard.tsx`** (line 239)
+- Same change: `text-gold` to `text-black`, hover to gold
 
-Apply the same fix: remove "sold" from `getSaleStatusBadge()` and ensure the sold-out rendering path is not blocked.
+### 4. Change "...more" from gold to black
 
-## Result
+**File: `src/components/ProjectCard.tsx`** (line 349)
+- Change `text-gold font-bold hover:text-gold/80` to `text-black font-bold hover:text-black/70`
 
-- "Sold Out" red badge always appears top-left on sold projects (offset below developer logo)
-- Other sale statuses (On Sale, Announced, Presale) continue to show as colored badges top-left
-- Price area shows "Sold" in red for sold projects without price data
-- No duplication of sold badges
+**File: `src/components/ReellyProjectCard.tsx`** (line 294)
+- Change `text-gold font-bold` to `text-black font-bold`
 
-## Technical Details
+---
 
-### Changes to `getSaleStatusBadge()` in both files:
-
-Remove this block:
-```
-if (normalizedStatus.includes('sold') || normalizedStatus.includes('out of stock')) {
-  return { label: 'Sold Out', className: 'bg-destructive text-destructive-foreground' };
-}
-```
-
-### Changes to sold badge condition in ProjectCard.tsx:
-
-Line 282: Remove `&& !saleStatusBadge` so the condition becomes:
-```
-{(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
-```
-
-Line 268: Add sold-out exclusion:
-```
-{saleStatusBadge && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
-```
-
-### Files Modified
+## Summary of Files
 
 | File | Change |
 |------|--------|
-| `src/components/ProjectCard.tsx` | Remove "sold" from getSaleStatusBadge, fix badge conditions |
-| `src/components/ReellyProjectCard.tsx` | Same fix applied consistently |
+| `src/components/header/mega-menu-primitives.tsx` | Center MegaMenuSectionTitle, strengthen link dividers |
+| `src/components/ProjectCard.tsx` | Title to black, "...more" to black |
+| `src/components/ReellyProjectCard.tsx` | Title to black, "...more" to black |
+
