@@ -145,9 +145,9 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4 }}
-      className="group"
+      className="group h-full"
     >
-      <Link to={`/projects/${project.slug}`} className="block">
+      <Link to={`/project/${project.slug}`} className="block h-full">
         <div className="flex flex-col h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl overflow-hidden border-2 border-gold/30 hover:border-gold transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
           {/* Image */}
           <div className="relative aspect-[4/3] overflow-hidden bg-gold/5">
@@ -298,7 +298,7 @@ const FeaturedListings = () => {
         {/* View All CTA */}
         <div className="text-center mt-10">
           <Link
-            to="/projects"
+            to="/properties"
             className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group"
             style={{
               boxShadow: `
