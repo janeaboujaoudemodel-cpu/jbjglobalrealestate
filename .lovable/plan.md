@@ -1,84 +1,63 @@
 
-# Unified Enrichment Engine + Backfill Persistence Fix
+# Fix: Insights Mega Menu FAQ Distribution + New Projects Detection
 
-## Problems Identified
+## Two Issues to Fix
 
-1. **Backfill progress resets on navigation** -- The backfill function marks projects with `detail_fetched_at` timestamp, but the UI loads previous results from `sync_jobs` table and then starts a new batch that resets counters. The `loadPersistedBackfillResults` function loads old data, but `handleRunBackfill` immediately resets `aggregated` to zeros, wiping the display. Additionally, the edge function query uses `detail_fetched_at IS NULL` but `force_refresh=true` was being sent, causing already-processed projects to be re-fetched.
+---
 
-2. **Multiple broken enrichment buttons** -- There are 6+ separate enrichment sections (Backfill Missing Details, Test Project Enrichment, AI Content Generation, Provident Document Extraction, Bulk Enrichment Reelly API, Full Extraction) that each call different edge functions, most of which fail or extract nothing because they depend on Firecrawl credits being available or Provident slug matching.
+## 1. Redistribute FAQs from Guides Card to Investor/Broker Hub Cards
 
-3. **Project detail page link from admin** -- When clicking a project in the backfill results, there's no direct link to the internal project page showing merged Reelly + Provident data.
+**Problem:** The Guides card in MegaMenuInsights currently has 11 links (including General FAQ, Buyer FAQ, Seller FAQ, Landlord FAQ, Tenant FAQ), making it much taller than the other cards in the 4-column grid.
 
-## Solution
+**Fix:** Move role-specific FAQs out of the Guides card and into the mode-conditional sections:
 
-### Part 1: Fix Backfill Persistence (Critical)
+- **Guides card** keeps: Guides Library, Buyer Guide, Seller Guide, Landlord Guide, Tenant Guide, Golden Visa, FAQ (general)
+  - Remove: Buyer FAQ, Seller FAQ, Landlord FAQ, Tenant FAQ (4 items removed, from 11 down to 7)
 
-**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
+- **Investor Tools section** (investorLinks): Add "Landlord FAQ" link alongside the existing "Investor FAQ"
+- **Broker Tools section** (brokerLinks): Add "Tenant FAQ" link alongside the existing "Broker FAQ"
+- **Buyer FAQ and Seller FAQ**: Move into the Services card (since buying/selling is a service) -- or add them to the Guides card renamed items. Actually, the cleanest approach: keep Buyer FAQ and Seller FAQ in Guides since they relate to guides, and move Landlord FAQ and Tenant FAQ to the mode-conditional sections.
 
-- In `handleRunBackfill`, initialize `aggregated` from the persisted `sync_jobs` data when resuming (not from zero)
-- Show cumulative totals: previous run totals + current batch results
-- Remove `force_refresh: true` from the default backfill call -- only use it when explicitly requested. The edge function already uses `detail_fetched_at IS NULL` which correctly skips already-processed projects
-- Add a progress bar showing `(total_projects - remaining) / total_projects`
-- After backfill completes, immediately reload persisted results so navigating away and back shows correct numbers
+Wait -- the user said specifically:
+- Investor Hub: Investor FAQ + Landlord FAQ
+- Broker Hub: Broker FAQ + Tenant FAQ
 
-**File: `supabase/functions/reelly-backfill-projects/index.ts`**
+So the investorLinks already has Investor FAQ. Add Landlord FAQ there.
+The brokerLinks already has Broker FAQ. Add Tenant FAQ there.
+Remove Buyer FAQ, Seller FAQ, Landlord FAQ, Tenant FAQ from the Guides card.
+Buyer FAQ and Seller FAQ should go somewhere -- they can stay in Guides since Buyer Guide and Seller Guide are already there. That keeps it cleaner.
 
-- No changes needed -- the edge function already persists progress via `sync_jobs` and uses `detail_fetched_at` to skip processed projects. The issue is entirely in the frontend.
+Actually re-reading: user said "distribute it next to the investor" and "broker hub you will put broker FAQ and tenant FAQ". He wants Landlord FAQ with investor, Tenant FAQ with broker. Buyer FAQ and Seller FAQ can stay in Guides.
 
-### Part 2: Consolidate to ONE Enrichment Button
+**Final distribution:**
+- **Guides card**: Guides Library, Buyer Guide, Seller Guide, Landlord Guide, Tenant Guide, Golden Visa, FAQ (general), Buyer FAQ, Seller FAQ (9 items -- down from 11)
+- **investorLinks**: Investor Dashboard, Investor Education, Investor FAQ, Landlord FAQ (4 items)
+- **brokerLinks**: Broker Dashboard, Broker Hub, Broker Training, Broker FAQ, Tenant FAQ (5 items)
 
-**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
+**File:** `src/components/header/MegaMenuInsights.tsx`
 
-Remove these sections entirely from the UI:
-- "AI Content Generation" card (calls `ai-bulk-enrich` which requires AI credits)
-- "Fetch Images & Docs (Provident)" card (calls `provident-batch-extract` which needs Firecrawl)
-- "Bulk Enrichment (Reelly API)" card (calls `reelly-bulk-enrich`, redundant with backfill)
-- "FULL EXTRACTION" mega button (orchestrator that calls all the broken functions)
+---
 
-Keep only:
-- **Reelly API Sync** (Step 1/2: Test + Sync projects from API)
-- **Backfill Missing Details** (calls Reelly API directly -- this works)
-- **Test Project Enrichment** (single-project test using `enrich-project-test` -- this works and combines Reelly + Provident)
+## 2. New Project Detector -- Show Only Truly New Projects
 
-Replace the removed sections with ONE new card:
+**Problem:** The `NewProjectDetector` component checks `pending_project_imports` from the last 24 hours against `projects.slug`. But the user wants to see ALL new projects from Reelly that haven't been approved yet (not just last 24 hours), and only the ones that are genuinely missing from the projects table (no duplicates).
 
-**"Enrich All Projects (Reelly + Provident)"** -- A single button that:
-1. Calls `enrich-project-test` with `action: "apply"` in batches of projects
-2. For each project, the existing `enrich-project-test` edge function already:
-   - Fetches from Reelly API (primary source)
-   - Fills gaps from Provident page-data (free, no Firecrawl needed for docs/PDFs)
-   - Merges both sources non-destructively
-3. Persists progress to `sync_jobs` table
-4. Shows real-time progress with processed/enriched/errors counters
+There are currently **7 truly new projects** in the Reelly queue that don't exist in the projects table (identified by matching `reelly_id`).
 
-**File: `supabase/functions/enrich-project-test/index.ts`**
+**Fix:** Update `NewProjectDetector.tsx` to:
+1. Remove the 24-hour time filter -- check ALL pending Reelly imports
+2. Cross-reference by `reelly_id` (extracted from source_url) against the `projects.reelly_id` column instead of slug matching
+3. Show only projects that are NOT in the projects table (truly new)
+4. Remove the "EXISTING" badge -- only show NEW projects since we filter them out
+5. Increase the limit from 50 to 500 to catch all pending items
 
-Add a `mode: "batch"` handler that:
-- Queries projects missing enrichment data (no amenities, no FAQs, few images, etc.)
-- Runs the existing enrichment logic for each project in the batch
-- Returns batch results with progress info
-- This reuses all the existing Reelly + Provident merging code already in this function
+**File:** `src/components/listing-admin/NewProjectDetector.tsx`
 
-### Part 3: Add Project Page Link from Backfill Results
-
-**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
-
-In the backfill results list dialog, make each project name a clickable link to `/project/{slug}` so the admin can immediately view the enriched project on the website.
-
-### Part 4: Developer Sync, Areas Sync, Data Integrity -- Keep As-Is
-
-These sections work correctly and don't need changes.
+---
 
 ## Technical Summary
 
 | File | Change |
 |------|--------|
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Fix backfill persistence; remove 4 broken enrichment sections; add single unified "Enrich All" button; add project links in results |
-| `supabase/functions/enrich-project-test/index.ts` | Add `mode: "batch"` to process multiple projects using existing Reelly + Provident merge logic |
-
-## What Changes for the Admin
-
-- Backfill shows correct cumulative progress that persists across page navigations
-- One "Enrich All" button replaces 4+ broken ones
-- Enrichment actually works because it uses Reelly API (free) + Provident page-data.json (free) -- no Firecrawl credits needed for the core enrichment
-- Each processed project in results links directly to its page on the website
+| `src/components/header/MegaMenuInsights.tsx` | Remove Landlord FAQ and Tenant FAQ from guidesLinks; add Landlord FAQ to investorLinks; add Tenant FAQ to brokerLinks |
+| `src/components/listing-admin/NewProjectDetector.tsx` | Remove 24h filter; match by reelly_id not slug; show only truly new projects (not already in projects table) |
