@@ -3,11 +3,10 @@ import { motion } from "framer-motion";
 import {
   Search,
   Building2,
-  MapPin,
   Crown,
-  Filter,
   X,
 } from "lucide-react";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { useDevelopers, useProjects } from "@/hooks/useProjects";
 import DeveloperCard from "@/components/DeveloperCard";
 import { SEOHead } from "@/components/SEOHead";
@@ -59,6 +58,23 @@ const Developers = () => {
   // Filter states
   const [searchQuery, setSearchQuery] = useState("");
   const [tierFilter, setTierFilter] = useState("all");
+  const [selectedDeveloper, setSelectedDeveloper] = useState("");
+
+  // Developer names list for dropdown
+  const developerNames = useMemo(() => {
+    if (!developers) return [];
+    const sorted = [...developers].sort((a, b) => {
+      const aSlug = a.slug?.toLowerCase() || '';
+      const bSlug = b.slug?.toLowerCase() || '';
+      const aIdx = ELITE_PRIORITY_ORDER.findIndex(d => aSlug.includes(d));
+      const bIdx = ELITE_PRIORITY_ORDER.findIndex(d => bSlug.includes(d));
+      if (aIdx >= 0 && bIdx >= 0) return aIdx - bIdx;
+      if (aIdx >= 0) return -1;
+      if (bIdx >= 0) return 1;
+      return a.name.localeCompare(b.name);
+    });
+    return sorted.map(d => d.name);
+  }, [developers]);
 
   // Count projects per developer
   const projectCounts = useMemo(() => {
@@ -76,6 +92,11 @@ const Developers = () => {
     if (!developers) return [];
     
     let filtered = [...developers];
+    
+    // Developer dropdown filter
+    if (selectedDeveloper) {
+      filtered = filtered.filter(dev => dev.name === selectedDeveloper);
+    }
     
     // Search filter
     if (searchQuery.trim()) {
@@ -120,16 +141,18 @@ const Developers = () => {
     });
     
     return filtered;
-  }, [developers, searchQuery, tierFilter]);
+  }, [developers, searchQuery, tierFilter, selectedDeveloper]);
 
   const activeFilterCount = [
     searchQuery.trim(),
     tierFilter !== "all",
+    selectedDeveloper,
   ].filter(Boolean).length;
 
   const clearFilters = () => {
     setSearchQuery("");
     setTierFilter("all");
+    setSelectedDeveloper("");
   };
 
   return (
@@ -200,7 +223,7 @@ const Developers = () => {
         </section>
 
         {/* Filters Section - Champagne Layer matching Properties page */}
-        <section className="sticky top-16 lg:top-[72px] z-40 bg-black py-4 border-b border-gold/30">
+        <section className="sticky top-24 lg:top-20 z-40 bg-black py-4 border-b border-gold/30">
           <div className="container mx-auto px-3 sm:px-4">
             {/* Active Champagne Layer */}
             <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
@@ -218,6 +241,18 @@ const Developers = () => {
 
               {/* Filter Row */}
               <div className="flex items-center gap-3 flex-wrap">
+                {/* Developer Dropdown */}
+                <div className="w-full sm:w-[240px]">
+                  <SearchableSelect
+                    value={selectedDeveloper}
+                    onChange={(val) => setSelectedDeveloper(val === selectedDeveloper ? "" : val)}
+                    options={developerNames}
+                    placeholder="All Developers"
+                    searchPlaceholder="Search developer..."
+                    triggerClassName="h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm"
+                  />
+                </div>
+
                 {/* Tier Filter */}
                 <Select value={tierFilter} onValueChange={setTierFilter}>
                   <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
@@ -287,11 +322,12 @@ const Developers = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredDevelopers.map((developer) => (
+                {filteredDevelopers.map((developer, idx) => (
                   <DeveloperCard 
                     key={developer.id} 
                     developer={developer} 
                     projectCount={projectCounts[developer.id] || 0}
+                    index={idx}
                   />
                 ))}
               </div>

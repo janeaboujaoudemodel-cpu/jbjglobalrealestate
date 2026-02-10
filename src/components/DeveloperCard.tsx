@@ -7,6 +7,7 @@ import type { Developer } from "@/hooks/useProjects";
 interface DeveloperCardProps {
   developer: Developer;
   projectCount?: number;
+  index?: number;
 }
 
 // Developer tier classification
@@ -33,14 +34,13 @@ function getDeveloperTier(slug: string): { label: string; color: string } | null
   return null;
 }
 
-const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
+const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCardProps) => {
   const tier = getDeveloperTier(developer.slug || "");
+  const isEager = index < 8;
   
   return (
     <Link to={`/developer/${developer.slug}`}>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3 }}
         className="group rounded-xl overflow-hidden cursor-pointer flex flex-col h-full"
@@ -60,7 +60,7 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
               src={developer.feature_image_url}
               alt={developer.name}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
+              loading={isEager ? "eager" : "lazy"}
             />
           ) : (
             <div className="w-full h-full relative">
@@ -82,13 +82,13 @@ const DeveloperCard = ({ developer, projectCount = 0 }: DeveloperCardProps) => {
           
           {/* Logo Overlay - Top Left - Larger box with object-contain, no cropping */}
           <div className="absolute top-3 left-3 z-10">
-            <div className="w-24 h-24 rounded-lg overflow-hidden shadow-lg">
+            <div className="w-24 h-24 rounded-lg overflow-hidden shadow-lg bg-white">
               {developer.logo_url ? (
                 <img
                   src={developer.logo_url}
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-fill"
-                  loading="lazy"
+                  className="w-full h-full object-contain p-1"
+                  loading={isEager ? "eager" : "lazy"}
                 />
               ) : (
                 <div className="w-full h-full bg-white/90 flex items-center justify-center">
