@@ -46,7 +46,7 @@ const FEATURED_DEVELOPERS = [
   },
   { 
     name: "ELLINGTON PROPERTIES", 
-    slug: "ellington-properties",
+    slug: "ellington",
     logo: "/developers/logos/ellington-logo.webp"
   },
   { 
@@ -56,7 +56,7 @@ const FEATURED_DEVELOPERS = [
   },
   { 
     name: "DANUBE PROPERTIES", 
-    slug: "danube-properties",
+    slug: "danube",
     logo: "/developers/logos/danube-logo.webp"
   },
   { 
@@ -130,7 +130,7 @@ const DeveloperPartnersMarquee = () => {
     return (
       <Link
         key={`${listKey}-${developer.slug}-${index}`}
-        to={`/developers/${developer.slug}`}
+        to={`/developer/${developer.slug}`}
         // Tighter spacing on mobile, normal on desktop
         className={`flex-shrink-0 ${frameH} px-4 md:px-8 lg:px-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-70`}
         title={developer.name}
