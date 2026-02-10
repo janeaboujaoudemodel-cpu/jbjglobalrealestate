@@ -48,7 +48,7 @@ import { RedirectWithParams } from "@/components/RedirectWithParams";
 import AppErrorBoundary from "@/components/AppErrorBoundary";
 import GlobalSEO from "@/components/GlobalSEO";
 import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
-import GlobalTranslator from "@/components/GlobalTranslator";
+
 import PageLoader from "@/components/PageLoader";
 // Homepage - loaded synchronously for fastest initial paint
 import Index from "./pages/Index";
@@ -332,7 +332,7 @@ const App = () => (
                     <PopupCoordinatorProvider>
                     <ScrollToTopOnMount />
                   <GlobalVisitorTracking />
-                  <GlobalTranslator />
+                  
             {/* Auth route is always accessible for login */}
             <Suspense fallback={<PageLoader />}>
             <Routes>
