@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { SearchableSelect } from "@/components/ui/searchable-select";
 import { CONTACT_INFO } from "@/constants/stats";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
+import { ytd2026, fullYear2025, topAreas2026, topAreas2025, topNationalities } from "@/constants/dldMarketData";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
 import { motion } from "framer-motion";
@@ -90,7 +91,25 @@ const MarketReport = () => {
     return `${base}?${params.toString()}`;
   };
 
-  const downloadBook = (existingWindow?: Window | null) => {
+  const downloadBook = async (existingWindow?: Window | null) => {
+    // Fetch live data from database
+    const [newsResult, projectsResult] = await Promise.all([
+      supabase
+        .from("market_news")
+        .select("title, excerpt, published_date, source, category")
+        .order("published_date", { ascending: false })
+        .limit(5),
+      supabase
+        .from("projects")
+        .select("name, location, price_from, developer_name, cover_image_url, area_name")
+        .eq("is_published", true)
+        .order("created_at", { ascending: false })
+        .limit(10),
+    ]);
+    const latestNews = newsResult.data || [];
+    const featuredProjects = projectsResult.data || [];
+    const downloadDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
     const websiteUrl = "https://JBJ.AE";
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(websiteUrl + "/quiz")}`;
     
@@ -764,6 +783,9 @@ const MarketReport = () => {
       <div class="toc-item"><span class="title">11. Market Outlook 2026</span><span class="page-num">13</span></div>
       <div class="toc-item"><span class="title">12. Risk Management</span><span class="page-num">14</span></div>
       <div class="toc-item"><span class="title">13. AI Property Matchmaker</span><span class="page-num">15</span></div>
+      <div class="toc-item"><span class="title">14. Latest Market News</span><span class="page-num">16</span></div>
+      <div class="toc-item"><span class="title">15. DLD Transaction Dashboard</span><span class="page-num">17</span></div>
+      <div class="toc-item"><span class="title">16. Featured Properties</span><span class="page-num">18</span></div>
     </div>
     <div class="highlight-box">
       <h4 style="margin-top: 0;">About This Book</h4>
@@ -1571,6 +1593,147 @@ const MarketReport = () => {
     <span class="page-number">15</span>
   </div>
 
+  <!-- ============= DYNAMIC PAGES (Auto-synced at download time) ============= -->
+
+  <!-- LATEST MARKET NEWS -->
+  <div class="page">
+    <h2>Latest Market News</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+      <p style="margin: 0;">The latest headlines from official UAE sources, updated daily.</p>
+      <span style="background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.05)); border: 1px solid rgba(16,185,129,0.3); border-radius: 20px; padding: 6px 16px; font-size: 11px; color: #10b981; font-weight: 600;">Updated ${downloadDate}</span>
+    </div>
+    ${latestNews.length > 0 ? latestNews.map((n: any, i: number) => `
+    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(168,146,90,0.2); border-left: 3px solid #A8925A; border-radius: 12px; padding: 20px; margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; margin-bottom: 8px;">
+        <span style="background: rgba(168,146,90,0.15); color: #A8925A; padding: 3px 10px; border-radius: 6px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">${n.category || 'Market Update'}</span>
+        <span style="color: #888; font-size: 11px; white-space: nowrap;">${n.published_date ? new Date(n.published_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}</span>
+      </div>
+      <h4 style="color: #fff; font-size: 15px; margin: 8px 0; line-height: 1.4;">${n.title}</h4>
+      <p style="color: #999; font-size: 13px; margin: 0; line-height: 1.6;">${(n.excerpt || '').slice(0, 180)}${(n.excerpt || '').length > 180 ? '...' : ''}</p>
+      <div style="margin-top: 10px; font-size: 11px; color: #666;">Source: ${n.source || 'Official UAE Sources'}</div>
+    </div>
+    `).join('') : '<p style="color: #888; text-align: center; padding: 40px;">No recent news available. Visit JBJ.ae/news for the latest updates.</p>'}
+    <div style="text-align: center; margin-top: 30px; padding: 20px; border-top: 1px solid rgba(168,146,90,0.2);">
+      <p style="color: #888; font-size: 12px; margin: 0;">For full articles with detailed analysis, visit <a href="https://JBJ.ae/news" style="color: #A8925A; text-decoration: none; font-weight: 600;">JBJ.ae/news</a></p>
+    </div>
+    <span class="page-number">16</span>
+  </div>
+
+  <!-- DLD TRANSACTION DASHBOARD -->
+  <div class="page">
+    <h2>DLD Transaction Dashboard</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <p style="margin: 0;">Live market statistics from the Dubai Land Department.</p>
+      <span style="background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.05)); border: 1px solid rgba(16,185,129,0.3); border-radius: 20px; padding: 6px 16px; font-size: 11px; color: #10b981; font-weight: 600;">Data as of ${downloadDate}</span>
+    </div>
+
+    <!-- 2026 YTD KPIs -->
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="number">${ytd2026.value}</div>
+        <div class="label">2026 YTD Value</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">${ytd2026.transactions.toLocaleString()}+</div>
+        <div class="label">2026 YTD Transactions</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">${ytd2026.growth}</div>
+        <div class="label">YoY Growth</div>
+      </div>
+    </div>
+
+    <!-- Transaction Type Breakdown -->
+    <h3>Transaction Breakdown — 2026 YTD</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+      <div class="info-card">
+        <h4 style="margin-top: 0; font-size: 13px; color: #A8925A;">Transaction Type</h4>
+        <div style="margin: 12px 0;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="color: #ccc; font-size: 13px;">Off-Plan</span><span style="color: #A8925A; font-weight: 700;">${ytd2026.offPlan.toLocaleString()} <span style="font-size: 11px; color: #10b981;">(${((ytd2026.offPlan / (ytd2026.offPlan + ytd2026.secondary)) * 100).toFixed(0)}%)</span></span></div>
+          <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden;"><div style="height: 100%; width: ${((ytd2026.offPlan / (ytd2026.offPlan + ytd2026.secondary)) * 100).toFixed(0)}%; background: linear-gradient(90deg, #A8925A, #d4c4a0); border-radius: 4px;"></div></div>
+        </div>
+        <div style="margin: 12px 0;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="color: #ccc; font-size: 13px;">Secondary</span><span style="color: #999; font-weight: 700;">${ytd2026.secondary.toLocaleString()} <span style="font-size: 11px; color: #888;">(${((ytd2026.secondary / (ytd2026.offPlan + ytd2026.secondary)) * 100).toFixed(0)}%)</span></span></div>
+          <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden;"><div style="height: 100%; width: ${((ytd2026.secondary / (ytd2026.offPlan + ytd2026.secondary)) * 100).toFixed(0)}%; background: rgba(255,255,255,0.3); border-radius: 4px;"></div></div>
+        </div>
+      </div>
+      <div class="info-card">
+        <h4 style="margin-top: 0; font-size: 13px; color: #A8925A;">Payment Method</h4>
+        <div style="margin: 12px 0;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="color: #ccc; font-size: 13px;">Cash</span><span style="color: #10b981; font-weight: 700;">${ytd2026.cash.toLocaleString()} <span style="font-size: 11px;">(${((ytd2026.cash / (ytd2026.cash + ytd2026.mortgage)) * 100).toFixed(0)}%)</span></span></div>
+          <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden;"><div style="height: 100%; width: ${((ytd2026.cash / (ytd2026.cash + ytd2026.mortgage)) * 100).toFixed(0)}%; background: linear-gradient(90deg, #10b981, #34d399); border-radius: 4px;"></div></div>
+        </div>
+        <div style="margin: 12px 0;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span style="color: #ccc; font-size: 13px;">Mortgage</span><span style="color: #999; font-weight: 700;">${ytd2026.mortgage.toLocaleString()} <span style="font-size: 11px; color: #888;">(${((ytd2026.mortgage / (ytd2026.cash + ytd2026.mortgage)) * 100).toFixed(0)}%)</span></span></div>
+          <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden;"><div style="height: 100%; width: ${((ytd2026.mortgage / (ytd2026.cash + ytd2026.mortgage)) * 100).toFixed(0)}%; background: rgba(255,255,255,0.3); border-radius: 4px;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gift Transactions -->
+    <div class="highlight-box" style="text-align: center;">
+      <p style="font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px;">Gift Transactions</p>
+      <p style="font-family: 'Playfair Display', serif; font-size: 42px; color: #A8925A; margin: 0;">${ytd2026.gifts.toLocaleString()}</p>
+      <p style="font-size: 12px; color: #888; margin-top: 5px;">Gift transfers YTD 2026</p>
+    </div>
+
+    <!-- Top Areas -->
+    <h3>Top 10 Areas by Transaction Volume — 2026 YTD</h3>
+    <div class="table-wrapper">
+      <table>
+        <tr><th>#</th><th>Area</th><th>Transactions</th><th>YoY Change</th></tr>
+        ${topAreas2026.map((a, i) => `<tr><td style="color: #A8925A; font-weight: 600;">${i + 1}</td><td>${a.area}</td><td style="color: #A8925A; font-weight: 700;">${a.transactions.toLocaleString()}</td><td><span style="color: #10b981; font-size: 12px;">${a.change}</span></td></tr>`).join('')}
+      </table>
+    </div>
+
+    <!-- Top Nationalities -->
+    <h3>Top Buyer Nationalities — 2026 YTD</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+      ${topNationalities.map((n, i) => `
+      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+        <span style="color: #666; font-size: 12px; width: 16px;">${i + 1}</span>
+        <span style="font-size: 18px;">${n.flag}</span>
+        <span style="color: #ccc; font-size: 13px; flex: 1;">${n.country}</span>
+        <span style="color: #A8925A; font-weight: 700; font-size: 14px;">${n.percentage}%</span>
+      </div>
+      `).join('')}
+    </div>
+
+    <span class="page-number">17</span>
+  </div>
+
+  <!-- FEATURED PROPERTIES -->
+  <div class="page">
+    <h2>Featured Properties</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+      <p style="margin: 0;">Latest off-plan and ready properties available through JBJ Global Real Estate.</p>
+      <span style="background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.05)); border: 1px solid rgba(16,185,129,0.3); border-radius: 20px; padding: 6px 16px; font-size: 11px; color: #10b981; font-weight: 600;">Updated ${downloadDate}</span>
+    </div>
+
+    ${featuredProjects.length > 0 ? `
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      ${featuredProjects.map((p: any) => `
+      <div class="info-card" style="overflow: hidden; padding: 0;">
+        ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="${p.name}" style="width: 100%; height: 120px; object-fit: cover; border-bottom: 1px solid rgba(255,255,255,0.05);" onerror="this.style.display='none'" />` : '<div style="height: 120px; background: linear-gradient(135deg, rgba(168,146,90,0.1), rgba(168,146,90,0.05)); display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: #A8925A; font-size: 24px;">🏠</span></div>'}
+        <div style="padding: 16px;">
+          <h4 style="margin: 0 0 6px 0; font-size: 14px; color: #fff; line-height: 1.3;">${p.name}</h4>
+          <p style="color: #888; font-size: 12px; margin: 0 0 4px 0;">${p.area_name || p.location || 'Dubai, UAE'}</p>
+          ${p.developer_name ? `<p style="color: #666; font-size: 11px; margin: 0 0 8px 0;">by ${p.developer_name}</p>` : ''}
+          ${p.price_from ? `<p style="color: #A8925A; font-weight: 700; font-size: 14px; margin: 0;">From AED ${Number(p.price_from).toLocaleString()}</p>` : '<p style="color: #A8925A; font-size: 13px; margin: 0;">Price on request</p>'}
+        </div>
+      </div>
+      `).join('')}
+    </div>
+    ` : '<p style="color: #888; text-align: center; padding: 40px;">Visit JBJ.ae to explore our full portfolio of properties.</p>'}
+
+    <div style="text-align: center; margin-top: 30px; padding: 25px; background: linear-gradient(135deg, rgba(168,146,90,0.15), rgba(168,146,90,0.05)); border: 1px solid rgba(168,146,90,0.3); border-radius: 12px;">
+      <p style="color: #A8925A; font-size: 14px; font-weight: 600; margin: 0 0 5px 0;">Explore All Properties</p>
+      <p style="color: #888; font-size: 12px; margin: 0;">Visit <a href="https://JBJ.ae/properties" style="color: #A8925A; text-decoration: none; font-weight: 600;">JBJ.ae/properties</a> for our complete listing catalog with virtual tours, floor plans, and more.</p>
+    </div>
+
+    <span class="page-number">18</span>
+  </div>
+
   <script>
     function downloadPDF() {
       window.print();
@@ -1662,7 +1825,7 @@ const MarketReport = () => {
         })
         .catch(console.error);
 
-      const opened = downloadBook(bookWindow);
+      const opened = await downloadBook(bookWindow);
       if (opened) {
         toast.success("Your book is ready!");
         // Show CTA modal after a short delay
@@ -1687,9 +1850,9 @@ const MarketReport = () => {
   };
 
   // Direct download for returning users
-  const handleDirectDownload = () => {
+  const handleDirectDownload = async () => {
     const bookWindow = window.open("", "_blank");
-    const opened = downloadBook(bookWindow);
+    const opened = await downloadBook(bookWindow);
     if (opened) {
       toast.success("Your book is ready!");
       // Show CTA modal after a short delay
@@ -1703,7 +1866,7 @@ const MarketReport = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      
+
 
       {/* Thank You Modal */}
       {showThankYou && (
