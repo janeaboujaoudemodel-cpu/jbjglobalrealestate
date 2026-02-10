@@ -23,72 +23,37 @@ import { FounderContent } from "@/components/FounderContent";
 import { ModeSwitcher } from "@/components/ModeSwitcher";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 
-// AI Tool accent color mapping (matches inside tool pages)
-const AI_TOOL_COLORS: Record<string, { border: string; text: string; hover: string; bg: string }> = {
-  // Property & Valuation Tools
-  '/property-evaluator': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
-  '/ai-price-predictor': { border: 'border-blue-500/40', text: 'text-blue-600', hover: 'hover:bg-blue-50', bg: 'bg-blue-50/50' },
-  '/rental-index': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
-  '/mortgage-calculator': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/30', bg: 'bg-gold/20' },
-  '/compare': { border: 'border-sky-500/40', text: 'text-sky-600', hover: 'hover:bg-sky-50', bg: 'bg-sky-50/50' },
-  '/quiz': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
-  
-  // AI Design & Staging
-  '/interior-design-ai': { border: 'border-rose-500/40', text: 'text-rose-600', hover: 'hover:bg-rose-50', bg: 'bg-rose-50/50' },
-  '/virtual-staging-ai': { border: 'border-fuchsia-500/40', text: 'text-fuchsia-600', hover: 'hover:bg-fuchsia-50', bg: 'bg-fuchsia-50/50' },
-  
-  // AI Analytics & Insights
-  '/ai-property-analyzer': { border: 'border-orange-500/40', text: 'text-orange-600', hover: 'hover:bg-orange-50', bg: 'bg-orange-50/50' },
-  '/ai-neighborhood-insights': { border: 'border-teal-500/40', text: 'text-teal-600', hover: 'hover:bg-teal-50', bg: 'bg-teal-50/50' },
-  
-  // AI Sales & CRM
-  '/ai-lead-qualification': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
-  '/ai-follow-up-scheduler': { border: 'border-green-500/40', text: 'text-green-600', hover: 'hover:bg-green-50', bg: 'bg-green-50/50' },
-  '/ai-objection-handler': { border: 'border-rose-500/40', text: 'text-rose-600', hover: 'hover:bg-rose-50', bg: 'bg-rose-50/50' },
-  '/ai-client-matcher': { border: 'border-indigo-500/40', text: 'text-indigo-600', hover: 'hover:bg-indigo-50', bg: 'bg-indigo-50/50' },
-  
-  // AI Reports & Investment
-  '/ai-market-report': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
-  '/ai-competitor-analysis': { border: 'border-orange-500/40', text: 'text-orange-600', hover: 'hover:bg-orange-50', bg: 'bg-orange-50/50' },
-  '/ai-roi-calculator': { border: 'border-emerald-500/40', text: 'text-emerald-600', hover: 'hover:bg-emerald-50', bg: 'bg-emerald-50/50' },
-  '/ai-investment-report': { border: 'border-green-500/40', text: 'text-green-600', hover: 'hover:bg-green-50', bg: 'bg-green-50/50' },
-  
-  // AI Communication
-  '/ai-meeting-summarizer': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
-  '/ai-translation-hub': { border: 'border-amber-500/40', text: 'text-amber-600', hover: 'hover:bg-amber-50', bg: 'bg-amber-50/50' },
-  '/ai-video-tour-script': { border: 'border-pink-500/40', text: 'text-pink-600', hover: 'hover:bg-pink-50', bg: 'bg-pink-50/50' },
-  '/ai-email-generator': { border: 'border-teal-500/40', text: 'text-teal-600', hover: 'hover:bg-teal-50', bg: 'bg-teal-50/50' },
-  
-  // AI Content
-  '/ai-social-media': { border: 'border-pink-500/40', text: 'text-pink-600', hover: 'hover:bg-pink-50', bg: 'bg-pink-50/50' },
-  '/ai-description-writer': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
-  '/ai-contract-reviewer': { border: 'border-red-500/40', text: 'text-red-600', hover: 'hover:bg-red-50', bg: 'bg-red-50/50' },
-  '/ai-document-generator': { border: 'border-lime-500/40', text: 'text-lime-600', hover: 'hover:bg-lime-50', bg: 'bg-lime-50/50' },
-  
-  // Productivity Tools
-  '/business-card-scanner': { border: 'border-amber-500/40', text: 'text-amber-600', hover: 'hover:bg-amber-50', bg: 'bg-amber-50/50' },
-  '/documents': { border: 'border-slate-500/40', text: 'text-slate-600', hover: 'hover:bg-slate-50', bg: 'bg-slate-50/50' },
-  '/video-meeting': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
-  '/ai-calendar': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
-  '/sitemap': { border: 'border-zinc-500/40', text: 'text-zinc-600', hover: 'hover:bg-zinc-50', bg: 'bg-zinc-50/50' },
-};
+// Removed: AI_TOOL_COLORS and CREATIVE_TOOL_COLORS maps (no longer needed with card layout)
 
-// Creative Toolkit color mapping (unique vibrant colors for each tool)
-const CREATIVE_TOOL_COLORS: Record<string, { border: string; text: string; hover: string; bg: string }> = {
-  '/toolkit': { border: 'border-gold/40', text: 'text-gold', hover: 'hover:bg-gold/30', bg: 'bg-gold/20' },
-  '/toolkit/ai-video-studio': { border: 'border-fuchsia-500/40', text: 'text-fuchsia-600', hover: 'hover:bg-fuchsia-50', bg: 'bg-fuchsia-50/50' },
-  '/toolkit/video-resize-pack': { border: 'border-cyan-500/40', text: 'text-cyan-600', hover: 'hover:bg-cyan-50', bg: 'bg-cyan-50/50' },
-  '/toolkit/voice-studio': { border: 'border-purple-500/40', text: 'text-purple-600', hover: 'hover:bg-purple-50', bg: 'bg-purple-50/50' },
-  '/toolkit/pdf-from-photos': { border: 'border-orange-500/40', text: 'text-orange-600', hover: 'hover:bg-orange-50', bg: 'bg-orange-50/50' },
-  '/toolkit/image-resize': { border: 'border-teal-500/40', text: 'text-teal-600', hover: 'hover:bg-teal-50', bg: 'bg-teal-50/50' },
-  '/toolkit/captions-translate': { border: 'border-violet-500/40', text: 'text-violet-600', hover: 'hover:bg-violet-50', bg: 'bg-violet-50/50' },
-  '/toolkit/background-ai': { border: 'border-rose-500/40', text: 'text-rose-600', hover: 'hover:bg-rose-50', bg: 'bg-rose-50/50' },
-  '/toolkit/beauty-filters': { border: 'border-pink-500/40', text: 'text-pink-600', hover: 'hover:bg-pink-50', bg: 'bg-pink-50/50' },
-  '/studio': { border: 'border-indigo-500/40', text: 'text-indigo-600', hover: 'hover:bg-indigo-50', bg: 'bg-indigo-50/50' },
-};
-
-// Default color for tools not in the map
-const DEFAULT_TOOL_COLOR = { border: 'border-gold/30', text: 'text-black', hover: 'hover:bg-white', bg: 'bg-white/80' };
+/** Reusable footer navigation card with centered gold title and 2-column link grid */
+const FooterCard = ({ title, links, viewAllHref, viewAllLabel }: {
+  title: string;
+  links: { label: string; href: string }[];
+  viewAllHref?: string;
+  viewAllLabel?: string;
+}) => (
+  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+    <h4 className="text-center font-bold text-sm sm:text-base uppercase tracking-[0.15em] mb-3 pb-2 border-b border-gold/30"
+      style={{
+        background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+      }}
+    >{title}</h4>
+    <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
+      {links.map((link) => (
+        <Link key={link.href} to={link.href} className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1 truncate">
+          {link.label}
+        </Link>
+      ))}
+    </div>
+    {viewAllHref && (
+      <Link to={viewAllHref} className="block text-center mt-3 pt-2 border-t border-gold/30 text-gold text-xs sm:text-sm font-semibold hover:text-gold/80 transition-colors">
+        {viewAllLabel}
+      </Link>
+    )}
+  </div>
+);
 
 const DivisionAccordion = ({
   title,
@@ -663,323 +628,73 @@ const Footer = () => {
           {/* Premium Champagne Inner Layer - Wraps Navigation + Tools + Contact - Fills to gold border */}
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] m-1 overflow-hidden">
             
-            {/* Navigation Grid Section - Premium Card Layout */}
+            {/* Navigation Grid Section - Card-Based 2-Column Layout */}
             <div className="p-4 sm:p-6 md:p-8">
-              {/* ROW 1: 4 Premium Cards - Auto height, no scroll */}
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 auto-rows-auto">
-                
-                {/* Card 1: Properties */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
-                    <span className="text-gold">✦</span>
-                    {t('footer.properties') || 'Properties'}
-                  </h4>
-                  <ul className="space-y-2">
-                    {propertiesLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          to={link.href}
-                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                {/* Card 2: Services */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
-                    <span className="text-gold">✦</span>
-                    {t('footer.servicesSection') || 'Services'}
-                  </h4>
-                  <ul className="space-y-2">
-                    {servicesLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          to={link.href}
-                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                {/* Card 3: Guides */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
-                    <span className="text-gold">✦</span>
-                    {t('footer.guides') || 'Guides'}
-                  </h4>
-                  <ul className="space-y-2">
-                    {guidesLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          to={link.href}
-                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                {/* Card 4: About & Careers */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
-                    <span className="text-gold">✦</span>
-                    About & Careers
-                  </h4>
-                  <ul className="space-y-2">
-                    {aboutLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          to={link.href}
-                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                    {/* Careers Divider */}
-                    <li className="pt-2 border-t border-gold/30 mt-2">
-                      <span className="text-xs text-gold font-medium uppercase tracking-wider">Careers</span>
-                    </li>
-                    {careerLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          to={link.href}
-                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              {/* ROW 1 */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 auto-rows-auto">
+                {/* Properties */}
+                <FooterCard title={t('footer.properties') || 'Properties'} links={propertiesLinks} />
+                {/* Services */}
+                <FooterCard title={t('footer.servicesSection') || 'Services'} links={servicesLinks} />
+                {/* Guides */}
+                <FooterCard title={t('footer.guides') || 'Guides'} links={guidesLinks} />
+                {/* About & Careers */}
+                <FooterCard title="About & Careers" links={[...aboutLinks, ...careerLinks]} />
               </div>
 
-              {/* ROW 2: 4 Premium Cards - Auto height, no scroll */}
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 auto-rows-auto">
-                
-                {/* Card 5: Sell */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
-                    <span className="text-gold">✦</span>
-                    <span className="text-gold">Sell</span>
-                  </h4>
-                  <ul className="space-y-2">
-                    {sellLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          to={link.href}
-                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                {/* Card 6: Education Hub (always visible) */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <Link 
-                    to={educationHubLink.href}
-                    className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-2 pb-2 border-b border-gold/30 text-gold hover:text-gold/80 transition-colors flex items-center gap-2"
-                  >
-                    <span className="text-gold">✦</span>
-                    <span className="text-gold">Education Hub</span>
-                  </Link>
-                  <ul className="space-y-2">
-                    <li>
-                      <Link to="/broker-education" className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
-                        Books
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/guides" className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
-                        Guides
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/market-intelligence/reports" className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
-                        Market Reports
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                
-                {/* Card 7: Legal */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
-                    <span className="text-gold">✦</span>
-                    Legal
-                  </h4>
-                  <ul className="space-y-2">
-                    {legalLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          to={link.href}
-                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                {/* Card 8: Business Suites */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
-                    <span className="text-gold">✦</span>
-                    Business Suites
-                  </h4>
-                  <ul className="space-y-2">
-                    {businessSuitesLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          to={link.href}
-                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              {/* ROW 2 */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 auto-rows-auto">
+                {/* Sell */}
+                <FooterCard title="Sell" links={sellLinks} />
+                {/* Education Hub */}
+                <FooterCard title="Education Hub" links={[
+                  { href: "/broker-education", label: "Books" },
+                  { href: "/guides", label: "Guides" },
+                  { href: "/market-intelligence/reports", label: "Market Reports" },
+                  { href: "/education-hub", label: "Education Hub" },
+                ]} />
+                {/* Legal */}
+                <FooterCard title="Legal" links={legalLinks} />
+                {/* Business Suites */}
+                <FooterCard title="Business Suites" links={businessSuitesLinks} />
               </div>
 
-              {/* ROW 3: Mode-Aware Hubs + Market Intelligence */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mt-4">
-                {/* Broker Hub - visible in broker/combined mode */}
-                {isBrokerMode && (
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                    <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
-                      <span className="text-gold">✦</span>
-                      Broker Hub
-                    </h4>
-                    <ul className="space-y-2">
-                      {brokerToolsLinks.map((link) => (
-                        <li key={link.href}>
-                          <Link
-                            to={link.href}
-                            className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-                          >
-                            {link.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+              {/* ROW 3: AI Tools, Creative Toolkit, Market Intelligence + mode-aware hubs */}
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-auto">
+                {/* AI Tools (Top 10 + View All) */}
+                <FooterCard title="AI Tools" links={[
+                  { href: "/property-evaluator", label: "Property Evaluator" },
+                  { href: "/ai-price-predictor", label: "Price Predictor" },
+                  { href: "/interior-design-ai", label: "Interior Design" },
+                  { href: "/virtual-staging-ai", label: "Virtual Staging" },
+                  { href: "/ai-market-report", label: "Market Report" },
+                  { href: "/ai-roi-calculator", label: "ROI Calculator" },
+                  { href: "/ai-email-generator", label: "Email Generator" },
+                  { href: "/ai-social-media", label: "Social Media" },
+                  { href: "/ai-translation-hub", label: "Translation Hub" },
+                  { href: "/ai-document-generator", label: "Doc Generator" },
+                ]} viewAllHref="/ai-hub" viewAllLabel="View All 40+ Tools →" />
 
-                {/* Investor Hub - visible in investor/combined mode */}
-                {(isInvestorMode || isCombinedMode) && (
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                    <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
-                      <span className="text-gold">✦</span>
-                      Investor Hub
-                    </h4>
-                    <ul className="space-y-2">
-                      {investorHubLinks.map((link) => (
-                        <li key={link.href}>
-                          <Link
-                            to={link.href}
-                            className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-                          >
-                            {link.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                {/* Creative Toolkit (Top 6 + View All) */}
+                <FooterCard title="Creative Toolkit" links={[
+                  { href: "/toolkit/ai-video-studio", label: "AI Video Studio" },
+                  { href: "/toolkit/voice-studio", label: "Voice Studio" },
+                  { href: "/toolkit/video-resize-pack", label: "Video Resize" },
+                  { href: "/toolkit/background-ai", label: "BG Remover" },
+                  { href: "/toolkit/image-resize", label: "Image Resizer" },
+                  { href: "/studio", label: "Creative Suite" },
+                ]} viewAllHref="/toolkit" viewAllLabel="View All Tools →" />
 
-                {/* Market Intelligence - always visible */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
-                    <span className="text-gold">✦</span>
-                    Market Intelligence
-                  </h4>
-                  <ul className="space-y-2">
-                    {marketIntelLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          to={link.href}
-                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {/* Market Intelligence */}
+                <FooterCard title="Market Intelligence" links={marketIntelLinks} />
+
+                {/* Broker Hub - conditional */}
+                {isBrokerMode && <FooterCard title="Broker Hub" links={brokerToolsLinks} />}
+
+                {/* Investor Hub - conditional */}
+                {(isInvestorMode || isCombinedMode) && <FooterCard title="Investor Hub" links={investorHubLinks} />}
               </div>
             </div>
-
-          {/* Internal Divider */}
-          <div className="h-[2px] bg-gradient-to-r from-gold/20 via-gold/80 to-gold/20 mx-6" />
-
-          {/* Creative Toolkit Section - NEW */}
-          <div className="p-4 sm:p-6 md:p-10 text-center">
-            <div className="mb-4 sm:mb-6">
-              <h4 className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.25em] mb-2 text-gold drop-shadow-[0_2px_6px_rgba(200,167,102,0.3)]">
-                ✦ Creative Toolkit ✦
-              </h4>
-              <p className="text-zinc-600 text-xs sm:text-sm md:text-base font-medium tracking-wider">Free Professional Tools</p>
-            </div>
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4">
-              {creativeToolkitLinks.map((link) => {
-                const colors = CREATIVE_TOOL_COLORS[link.href] || DEFAULT_TOOL_COLOR;
-                return (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    className={`transition-all duration-300 text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl group ${colors.bg} border ${colors.border} shadow-sm hover:shadow-md ${colors.hover}`}
-                  >
-                    <span className={`${colors.text} group-hover:brightness-110 transition-colors font-medium`}>
-                      {link.label}
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Internal Divider */}
-          <div className="h-[2px] bg-gradient-to-r from-gold/20 via-gold/80 to-gold/20 mx-6" />
-
-          {/* Professional Tools Section - Premium Enhanced on Champagne */}
-          <div className="p-4 sm:p-6 md:p-10 text-center">
-            <div className="mb-4 sm:mb-6">
-              <h4 className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.12em] sm:tracking-[0.18em] md:tracking-[0.25em] mb-2 text-gold drop-shadow-[0_2px_6px_rgba(200,167,102,0.3)]">
-                ✦ Professional Tools ✦
-              </h4>
-              <p className="text-zinc-600 text-xs sm:text-sm md:text-base font-medium tracking-wider">AI-Powered Assistants</p>
-            </div>
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4">
-              {professionalTools.map((link) => {
-                const colors = AI_TOOL_COLORS[link.href] || DEFAULT_TOOL_COLOR;
-                return (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    className={`transition-all duration-300 text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-lg sm:rounded-xl group ${colors.bg} border ${colors.border} shadow-sm hover:shadow-md ${colors.hover}`}
-                  >
-                    <span className={`${colors.text} group-hover:brightness-110 transition-colors font-medium`}>
-                      {link.label}
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
 
           {/* Internal Divider */}
           <div className="h-[2px] bg-gradient-to-r from-gold/20 via-gold/80 to-gold/20 mx-6" />

@@ -205,6 +205,7 @@ All colors MUST be HSL.
 
   html {
     overflow-x: hidden;
+    max-width: 100vw;
   }
 
   body {
@@ -212,6 +213,7 @@ All colors MUST be HSL.
     overflow-x: hidden;
     position: relative;
     width: 100%;
+    max-width: 100vw;
   }
 }
 
@@ -1743,5 +1745,32 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 
 /* Leaflet touch fix: prevent browser zoom on map containers */
 .leaflet-container {
-  touch-action: none;
+  touch-action: manipulation;
+}
+
+/* ============================================================
+ * FOLDABLE / FLIP PHONE ADAPTATION
+ * Ensures content adapts when a foldable phone opens/closes
+ * ============================================================ */
+@media (spanning: single-fold-vertical) {
+  .jj-hero-fullscreen {
+    /* Avoid placing content on the fold */
+    padding-left: env(viewport-segment-left 0 0, 0px);
+    padding-right: env(viewport-segment-right 1 0, 0px);
+  }
+}
+
+/* Prevent auto-zoom on form inputs (iOS) */
+@media screen and (max-width: 767px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="password"],
+  input[type="search"],
+  input[type="url"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
 }
