@@ -1,175 +1,137 @@
 
 
-# DLD Date Labels, Unified Stats UI, Rich News Content, and Smart Lead Popup System
+# Dynamic Market Report Book: Auto-Sync with Live Data
 
-## Overview
+## What Changes
 
-This plan addresses 5 areas: (1) adding date labels to DLD stats, (2) making the 2025 recap use the same visual UI as 2026, (3) adding top nationalities data, (4) reformatting news article content from text walls into premium visual layouts, and (5) building a smart lead popup strategy based on user behavior.
+The market report book is currently a static HTML template hardcoded in `MarketReport.tsx` with fixed stats from 2025. The plan is to make it dynamically pull the latest data from the database every time a user downloads it, so it is always up-to-date.
 
----
+## Architecture
 
-## Part 1: Add Dates to DLD Transaction Breakdown + Daily View
+Instead of a 1,500-line hardcoded HTML string, the `downloadBook` function will:
 
-**File: `src/pages/News.tsx`**
+1. **Fetch live data** from the database before generating the HTML
+2. **Inject** that data into the book template
+3. The book will always reflect the latest available information
 
-The DLD stats cards currently show "Transaction Type", "Payment Method", "Gift Transactions" but no dates. Users think it's yearly data.
+### Data Sources for the Book
 
-**Changes:**
-- Add a date subtitle to each breakdown card showing "As of 10 Feb 2026" (dynamically computed)
-- Add a toggle/tabs above the breakdown: "YTD 2026" vs "Today's Transactions" so users can see both yearly and daily snapshots
-- The daily view shows a smaller card with today's date and reduced numbers (simulated daily average from YTD: total / days elapsed)
-- Add a "Last Updated" timestamp badge to the header
+| Book Section | Data Source | What Gets Injected |
+|---|---|---|
+| Latest Market News (new page) | `market_news` table (top 5 recent) | Headlines, summaries, dates, source names |
+| DLD Transaction Stats | Hardcoded constants updated via the daily sync memory (manually curated since DLD has no public API) | YTD transactions, off-plan vs secondary, cash vs mortgage, gift counts |
+| Top Areas Performance (new page) | DLD stats constants from News.tsx | Top 10 areas with transaction volumes and YoY changes |
+| Top Buyer Nationalities (new page) | Nationality constants from News.tsx | Country, percentage, transaction count |
+| Project Listings (new page) | `projects` table (top 10 featured) | Name, location, price range, developer, cover image |
+| Developer Showcase (new page) | `projects` table (grouped by developer) | Developer names, project counts, key projects |
 
----
+## Implementation Steps
 
-## Part 2: Unify 2025 Recap to Match 2026 UI (Progress Bars + Colors)
+### Step 1: Extract DLD Data Constants to a Shared File
 
-**File: `src/pages/News.tsx`** (lines 506-568)
+**New file: `src/constants/dldMarketData.ts`**
 
-The 2025 recap currently uses a plain 4-column grid with just numbers and text. It needs to match the 2026 card which has:
-- Icon headers (Building2, Banknote, Gift)
-- Progress bars with gold/zinc colors
-- Percentage badges with emerald/zinc styling
+Move the DLD stats, top areas, and nationalities data currently hardcoded in `News.tsx` into a shared constants file. This way both `News.tsx` and `MarketReport.tsx` use the same single source of truth.
 
-**Changes:**
-- Replace the simple 2x4 grid with the same 3-card breakdown layout: Transaction Type (Off-plan vs Secondary with progress bars), Payment Method (Cash vs Mortgage with progress bars), Gift Transactions (centered big number)
-- Each card gets the same `bg-white/60 rounded-xl p-4 border border-gold/10` styling
-- Add a "Top 10 Areas 2025" table below the 2025 card (same table format as 2026)
-- Add a "Top 10 Buyer Nationalities" card with flag indicators and transaction percentages (Indian, British, Russian, Chinese, Pakistani, Egyptian, etc.)
+### Step 2: Fetch Live Data Before Book Generation
 
----
+**File: `src/pages/MarketReport.tsx`**
 
-## Part 3: Top Buyer Nationalities Section
+Update the `downloadBook` function to:
+- Query `market_news` for the 5 most recent articles (title, summary, published_at, source)
+- Query `projects` for top 10 featured projects (name, location, price_from, developer_name, cover_image_url)
+- Import DLD constants from the shared file
+- Pass all this data into the HTML template
 
-**File: `src/pages/News.tsx`**
+### Step 3: Add New Dynamic Pages to the Book HTML
 
-Add a new card after the Top 10 Areas table:
+Add 3 new pages to the book template:
 
-- Title: "Top Buyer Nationalities"
-- Source: "Dubai Land Department (DLD)"
-- Format: Ranked list with country name, transaction count, percentage, and a progress bar (same UI as transaction breakdown)
-- Data: Indian (25%), British (9%), Russian (7%), Chinese (6%), Pakistani (5%), Egyptian (4%), French (3%), Canadian (3%), Lebanese (3%), American (2%)
+**Page: "Latest Market News"**
+- Gold-themed news cards with date, headline, and 2-line summary
+- Source attribution for each article
+- "Updated daily" badge with the current date
 
----
+**Page: "DLD Market Transactions"**
+- Same visual bar charts already in the book but with live numbers
+- Off-plan vs Secondary breakdown with colored progress bars
+- Cash vs Mortgage ratio with progress bars
+- Gift transactions count
+- Top 10 Areas table with transaction volumes
+- Top 10 Buyer Nationalities with percentage bars
+- Date stamp: "Data as of [current date]"
 
-## Part 4: Rich News Article Content (No More Text Walls)
+**Page: "Featured Properties"**
+- Grid of property cards with cover images
+- Name, location, starting price, developer
+- "Explore at JBJ.ae" link for each
 
-**Files: `src/pages/NewsDetail.tsx`, `src/lib/markdownUtils.ts`, `supabase/functions/ai-news-collector/index.ts`**
+### Step 4: Update Table of Contents
 
-The news content is currently one block of text with only gold separators every 3 paragraphs. This is boring and unreadable. Changes:
+Add the 3 new sections to the Table of Contents page with correct page numbers.
 
-### A. Enhanced AI Enrichment (Edge Function)
-When enriching articles, the AI prompt will be updated to generate structured content with:
-- Key statistics extracted as a JSON array (e.g., "AED 8.8B profit", "+45% growth")
-- A "Key Takeaways" bullet list (3-5 points)
-- Sub-sections with headers
-- Store these as new columns: `key_stats` (JSONB), `key_takeaways` (JSONB)
+### Step 5: Add Visual Enhancements
 
-### B. NewsDetail Visual Formatting
-- **Stats Banner**: If `key_stats` exists, render a gold-themed stats bar at the top of the article (like the DLD KPI grid -- 3-4 numbers in a row)
-- **Key Takeaways Box**: Render a champagne-themed box with bullet points before the main content
-- **Section Headers**: The markdown renderer already handles `##` and `###` -- ensure the AI generates content with proper headers
-- **Pull Quotes**: Extract the first bold sentence from each section and render it as a styled pull-quote block
-- **Inline Stats Cards**: When numbers are mentioned inline (e.g., "AED 761 billion"), render them in a highlighted inline badge
-
-### C. Markdown Renderer Enhancement
-- Allow `<div>`, `<span>`, `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>` in the sanitizer whitelist for richer content rendering
-- Parse markdown tables (`| Col1 | Col2 |`) into HTML tables with premium styling
-
----
-
-## Part 5: Smart Lead Popup Strategy
-
-**Files: `src/components/LeadCapturePopup.tsx`, new `src/hooks/useSmartPopupStrategy.ts`**
-
-Currently the popup shows once after 5 seconds on homepage only, then never again. The user wants intelligent, behavior-based popup timing.
-
-### Strategy Rules:
-
-1. **First Visit**: Show after 8 seconds on homepage (current behavior, slightly delayed)
-2. **Return Visit (no signup)**: Show after viewing 3+ property pages in one session
-3. **High Intent Signals**: Show immediately when user:
-   - Clicks "Download Brochure" but hasn't registered
-   - Uses a calculator tool
-   - Views 5+ pages in one session
-   - Scrolls past 70% on a project detail page
-4. **Frequency Cap**: Maximum 1 popup per session, maximum 3 popup shows total before permanent dismissal
-5. **Cooldown**: If dismissed, wait 3 days before showing again (stored in localStorage with timestamp)
-6. **Context-Aware Content**: The popup headline changes based on what the user was doing:
-   - Browsing properties: "Found Something You Like?"
-   - Using AI tools: "Unlock Full AI Access"
-   - Reading news: "Get Market Updates Delivered"
-   - Default: "Unlock Premium Features"
-
-### Behavior-Based Personalization (Future Phase):
-
-The `user_behavior_tracking` and `visitor_sessions` tables already exist. For the personalization of property suggestions and email campaigns, this requires:
-- A new edge function `smart-recommendations` that queries the user's viewed projects, areas, and price ranges
-- A "Recommended For You" section on the homepage based on session data
-- Email automation requires a third-party email service (SendGrid/Resend) which is a separate integration
-
-For now, the plan implements the smart popup timing + context-aware messaging. The full personalization engine (email campaigns, in-site advertising based on Google search history) is a larger project that would need to be scoped separately, as accessing a user's Google search history is not possible due to browser privacy restrictions. We can only use the referrer URL and UTM parameters to understand how they arrived.
-
----
+- Colored progress bars (gold for primary, emerald for growth indicators, zinc for secondary)
+- Mini bar charts for area transaction volumes
+- Nationality flags using emoji indicators
+- Date stamps on every data section showing "Last Updated: [date]"
+- Gradient dividers between sections
 
 ## Technical Details
 
 ### Files to Modify
 
 | File | Changes |
-|------|---------|
-| `src/pages/News.tsx` | Add date labels to DLD cards, add YTD/Daily toggle, unify 2025 recap UI with progress bars, add Top Nationalities card |
-| `src/pages/NewsDetail.tsx` | Add stats banner, key takeaways box, pull quotes, richer formatting |
-| `src/lib/markdownUtils.ts` | Add table parsing, allow more HTML tags in sanitizer |
-| `src/components/LeadCapturePopup.tsx` | Integrate smart popup strategy hook, context-aware headlines |
-| `supabase/functions/ai-news-collector/index.ts` | Update enrichment prompt to generate key_stats and key_takeaways |
+|---|---|
+| `src/pages/MarketReport.tsx` | Add async data fetching before book generation, inject live news/projects/DLD stats into HTML template, add 3 new book pages |
+| `src/pages/News.tsx` | Import DLD constants from shared file instead of inline |
 
 ### New Files
 
 | File | Purpose |
-|------|---------|
-| `src/hooks/useSmartPopupStrategy.ts` | Smart popup timing logic based on user behavior signals |
+|---|---|
+| `src/constants/dldMarketData.ts` | Shared DLD stats, top areas, nationalities data used by both News page and Market Report book |
 
-### Database Changes
-
-```sql
--- Add structured content columns to market_news
-ALTER TABLE market_news ADD COLUMN IF NOT EXISTS key_stats JSONB DEFAULT '[]';
-ALTER TABLE market_news ADD COLUMN IF NOT EXISTS key_takeaways JSONB DEFAULT '[]';
-```
-
-### Smart Popup State (localStorage)
-
-```text
-lead_popup_show_count: number (max 3)
-lead_popup_last_dismissed: timestamp
-lead_popup_session_pages: number
-lead_popup_context: string (properties|ai|news|default)
-```
-
-### DLD Date Display Format
-
-```tsx
-// Each breakdown card gets a date subtitle
-<span className="text-[10px] text-zinc-400 mt-1">
-  Data as of {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-</span>
-```
-
-### Top Nationalities Data
+### Data Fetching (before book opens)
 
 ```typescript
-const topNationalities = [
-  { country: "India", percentage: 25, transactions: 4625, flag: "IN" },
-  { country: "United Kingdom", percentage: 9, transactions: 1665, flag: "GB" },
-  { country: "Russia", percentage: 7, transactions: 1295, flag: "RU" },
-  { country: "China", percentage: 6, transactions: 1110, flag: "CN" },
-  { country: "Pakistan", percentage: 5, transactions: 925, flag: "PK" },
-  { country: "Egypt", percentage: 4, transactions: 740, flag: "EG" },
-  { country: "France", percentage: 3, transactions: 555, flag: "FR" },
-  { country: "Canada", percentage: 3, transactions: 555, flag: "CA" },
-  { country: "Lebanon", percentage: 3, transactions: 555, flag: "LB" },
-  { country: "United States", percentage: 2, transactions: 370, flag: "US" },
-];
+// Fetch latest 5 news articles
+const { data: latestNews } = await supabase
+  .from("market_news")
+  .select("title, summary, published_at, source, category")
+  .order("published_at", { ascending: false })
+  .limit(5);
+
+// Fetch top 10 featured projects
+const { data: featuredProjects } = await supabase
+  .from("projects")
+  .select("name, location, price_from, developer_name, cover_image_url, area_name")
+  .eq("is_published", true)
+  .order("created_at", { ascending: false })
+  .limit(10);
 ```
 
+### Book HTML New Pages (structure)
+
+**Latest News Page:**
+- Each news item rendered as a gold-bordered card with date, headline, summary
+- Bottom note: "For full articles, visit JBJ.ae/news"
+
+**DLD Stats Page:**
+- Reuses existing `.bar-chart`, `.stat-grid`, `.stat-box` CSS classes already in the book
+- Progress bars with percentage fills for off-plan/secondary and cash/mortgage splits
+- Table for top areas (same `.table-wrapper` styling)
+
+**Featured Properties Page:**
+- 2-column grid of property cards using `.info-card` styling
+- Cover images with `object-fit: cover` at 120px height
+- Price in gold, location in gray, developer name below
+
+### How It Stays Up-to-Date
+
+Since the book HTML is generated client-side at download time:
+- News is always the latest 5 articles from `market_news` (which syncs daily via pg_cron)
+- Projects reflect the current published listings
+- DLD stats update when the shared constants file is updated
+- The date stamp on each page shows the actual download date
