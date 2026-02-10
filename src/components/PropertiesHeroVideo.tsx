@@ -7,7 +7,6 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Import videos - using new generated videos for Burj Khalifa and Burj Al Arab
-import downtownVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
 import palmAtlantisVideo from "@/assets/videos/why-dubai-atlantis-palm.mp4";
 import burjAlArabVideo from "@/assets/videos/burj-al-arab-aerial.mp4";
 import burjKhalifaVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
@@ -100,27 +99,6 @@ const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
       <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Scene indicator dots */}
-      <div className="absolute bottom-24 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
-        {VIDEO_SCENES.map((scene, index) => (
-          <button
-            key={scene.id}
-            onClick={() => {
-              setIsTransitioning(true);
-              setTimeout(() => {
-                setCurrentScene(index);
-                setIsTransitioning(false);
-              }, 300);
-            }}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              index === currentScene
-                ? "w-8 bg-gold"
-                : "bg-white/40 hover:bg-white/60"
-            }`}
-            aria-label={`Go to ${scene.label}`}
-          />
-        ))}
-      </div>
 
       {/* Children (hero content) */}
       {children}

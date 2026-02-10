@@ -339,12 +339,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Description with ...more link - Shorter */}
           <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-            <Link 
-              to={`/project/${project.slug}`}
+            <span 
               className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent hover:opacity-80 cursor-pointer ml-1 font-semibold inline-block"
             >
               ...more
-            </Link>
+            </span>
           </p>
         </div>
       </Link>

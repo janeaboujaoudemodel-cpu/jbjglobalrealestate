@@ -148,13 +148,24 @@
  
        <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
          {/* Image with Carousel */}
-         <div className="aspect-[16/10] overflow-hidden relative">
-           <VerifiedMedia
-             src={images[currentImageIndex]?.image_url || project.thumbnail}
-             alt={images[currentImageIndex]?.alt_text || project.name}
-             className="object-cover group-hover:scale-105 transition-transform duration-500"
-             placeholderLabel="Media pending verification"
-           />
+          <div className="aspect-[16/10] overflow-hidden relative">
+            {/* Developer Logo Overlay - Top Left */}
+            {(project as any).developer?.logo_url && (
+              <div className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg bg-white shadow-lg border border-gold/30 flex items-center justify-center overflow-hidden">
+                <img 
+                  src={(project as any).developer.logo_url} 
+                  alt={project.developer_name || ''}
+                  className="w-10 h-10 object-contain"
+                />
+              </div>
+            )}
+
+            <VerifiedMedia
+              src={images[currentImageIndex]?.image_url || project.thumbnail}
+              alt={images[currentImageIndex]?.alt_text || project.name}
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              placeholderLabel="Media pending verification"
+            />
            
            {/* Navigation Arrows */}
            {images.length > 1 && (
@@ -266,13 +277,12 @@
            
            {/* Description with ...more link */}
            <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2">
-             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-             <Link 
-               to={`/project/${project.slug}`}
-               className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent hover:opacity-80 cursor-pointer ml-1 font-semibold inline-block"
-             >
-               ...more
-             </Link>
+              {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
+              <span 
+                className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent hover:opacity-80 cursor-pointer ml-1 font-semibold inline-block"
+              >
+                ...more
+              </span>
            </p>
          </div>
        </Link>
