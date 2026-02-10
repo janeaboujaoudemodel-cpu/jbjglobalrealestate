@@ -418,10 +418,10 @@ const Properties = () => {
       </PropertiesHeroVideo>
 
       {/* Filters Section - 3-Layer System: Black > Active Champagne > Pearl Filter Boxes */}
-      <section className="sticky top-16 lg:top-[72px] z-40 bg-black py-4 border-b border-gold/30">
+      <section className="sticky top-16 lg:top-[72px] z-40 bg-black py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Champagne Layer with thin black contour visible at edges */}
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
           {/* Transaction Type Tabs - Buy / Rent */}
           <div className="flex items-center gap-2 mb-4 flex-wrap">
             <span className="text-black/70 text-sm mr-2 font-medium">I want to:</span>
