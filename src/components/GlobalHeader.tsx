@@ -1429,21 +1429,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
               } : {}}
             >
-              {/* Search Icon - opens search modal on hover (desktop) and click */}
+              {/* Search Icon - opens mega menu on hover (desktop) and click */}
               <button
-                onMouseEnter={() => {
-                  // Open search modal on hover for desktop - with small delay to avoid accidental triggers
-                  if (!isTouchLayout) {
-                    closeMegaMenu();
-                    setSearchInitialQuery("");
-                    setSearchOpen(true);
-                  }
-                }}
-                onClick={() => {
-                  closeMegaMenu();
-                  setSearchInitialQuery("");
-                  setSearchOpen(true);
-                }}
+                onMouseEnter={() => handleMegaMenuEnter('search')}
+                onClick={() => handleMegaMenuClick('search')}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
                 aria-label="Search"
               >

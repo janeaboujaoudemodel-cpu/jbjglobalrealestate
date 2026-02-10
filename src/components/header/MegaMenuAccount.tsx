@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { MegaMenuShell, MegaMenuSectionDivider } from './mega-menu-primitives';
+import { Skeleton } from '@/components/ui/skeleton';
 import ModeSwitcher from '@/components/ModeSwitcher';
 import { useTierProgress } from '@/hooks/useTierProgress';
 import { useUserModeContext } from '@/contexts/UserModeContext';
@@ -298,11 +299,14 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
 
               {/* Right Column - Owner Links (LOCKED: Always show during loading or when owner has access) */}
               <div>
-              {/* Show loading state while verifying owner status */}
+              {/* Show skeleton while verifying owner status to prevent layout shift */}
               {ownerLoading && (
-                <div className="flex items-center gap-3 p-4 rounded-xl bg-gold/5 border border-gold/20">
-                  <Loader2 className="w-5 h-5 text-gold animate-spin" />
-                  <span className="text-sm text-gold/70">Verifying owner access...</span>
+                <div className="space-y-2">
+                  <Skeleton className="h-14 w-full rounded-xl" />
+                  <Skeleton className="h-11 w-full rounded-xl" />
+                  <Skeleton className="h-11 w-full rounded-xl" />
+                  <Skeleton className="h-10 w-full rounded-xl" />
+                  <Skeleton className="h-10 w-full rounded-xl" />
                 </div>
               )}
               
