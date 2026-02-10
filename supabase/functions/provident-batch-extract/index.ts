@@ -28,23 +28,37 @@ function getSlugVariations(name: string, developerName?: string): string[] {
   const base = toProvidentSlug(name);
   const slugs = [base];
   
-  // Try without developer suffix
   if (developerName) {
     const devSlug = toProvidentSlug(developerName);
-    const withDev = `${base}-by-${devSlug}`;
-    slugs.push(withDev);
-    // Try removing developer name from project name
-    const nameWithoutDev = name.toLowerCase().replace(new RegExp(`\\s*by\\s*${developerName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'i'), '').trim();
-    if (nameWithoutDev !== name.toLowerCase()) {
+    // developer-first: "azizi-riviera-59"
+    slugs.push(`${devSlug}-${base}`);
+    // with-by: "riviera-59-by-azizi"
+    slugs.push(`${base}-by-${devSlug}`);
+    // Name without developer reference
+    const nameWithoutDev = name.toLowerCase()
+      .replace(new RegExp(`\\b${developerName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').toLowerCase()}\\b`, 'gi'), '')
+      .replace(new RegExp(`\\s*by\\s*${developerName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'gi'), '')
+      .trim();
+    if (nameWithoutDev && nameWithoutDev !== name.toLowerCase()) {
       slugs.push(toProvidentSlug(nameWithoutDev));
     }
   }
   
+  // Without trailing numbers
+  const withoutNums = base.replace(/-\d+$/, "");
+  if (withoutNums !== base) slugs.push(withoutNums);
+  
   // Try removing common suffixes
-  for (const suffix of ["-residences", "-tower", "-towers", "-residence"]) {
+  for (const suffix of ["-residences", "-tower", "-towers", "-residence", "-apartments", "-villas"]) {
     if (base.endsWith(suffix)) {
       slugs.push(base.slice(0, -suffix.length));
     }
+  }
+  
+  // First 2 words only
+  const words = name.split(/\s+/).filter(w => w.length > 1);
+  if (words.length >= 2) {
+    slugs.push(toProvidentSlug(words.slice(0, 2).join(" ")));
   }
   
   return [...new Set(slugs)];

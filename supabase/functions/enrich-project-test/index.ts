@@ -17,27 +17,77 @@ async function fetchReellyProject(reellyId: number, apiKey: string) {
     `${REELLY_API_BASE}/${reellyId}`,
     { headers: { "X-API-Key": apiKey, "Accept": "application/json" } }
   );
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data?.data || data;
+  if (!res.ok) {
+    console.log(`[enrich-test] Reelly API ${res.status} for id ${reellyId}`);
+    return null;
+  }
+  const raw = await res.json();
+  const topKeys = Object.keys(raw || {});
+  console.log(`[enrich-test] Reelly API response keys for ${reellyId}: ${topKeys.join(", ")}`);
+  
+  // Handle nested response
+  const data = raw?.data || raw;
+  
+  // Log what data fields are actually populated
+  const fieldReport = {
+    amenities: Array.isArray(data.amenities) ? data.amenities.length : (Array.isArray(data.facilities) ? data.facilities.length : 0),
+    features: Array.isArray(data.features) ? data.features.length : 0,
+    floor_plans: Array.isArray(data.floor_plans) ? data.floor_plans.length : 0,
+    documents: Array.isArray(data.documents) ? data.documents.length : 0,
+    brochures: Array.isArray(data.brochures) ? data.brochures.length : 0,
+    images: Array.isArray(data.images) ? data.images.length : (Array.isArray(data.gallery) ? data.gallery.length : 0),
+    units: Array.isArray(data.units) ? data.units.length : (Array.isArray(data.unit_types) ? data.unit_types.length : 0),
+    faqs: Array.isArray(data.faqs) ? data.faqs.length : 0,
+    overview: !!data.overview,
+    video_reviews: Array.isArray(data.video_reviews) ? data.video_reviews.length : 0,
+  };
+  console.log(`[enrich-test] Reelly data fields for ${reellyId}:`, JSON.stringify(fieldReport));
+  
+  return data;
 }
 
 /** Generate slug variants to try matching on Provident */
-function generateSlugVariants(slug: string, name: string): string[] {
+function generateSlugVariants(slug: string, name: string, developerName?: string): string[] {
   const variants = new Set<string>();
   variants.add(slug);
+  
   // Remove trailing numeric suffixes (e.g., "project-name-3012" -> "project-name")
   const withoutTrailingNum = slug.replace(/-\d+$/, "");
   if (withoutTrailingNum !== slug) variants.add(withoutTrailingNum);
+  
   // Simplify name to slug
   const nameSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   variants.add(nameSlug);
+  
   // Remove developer prefix patterns like "binghatti-titania-binghatti" -> "binghatti-titania"
   const parts = slug.split("-");
   if (parts.length >= 3) {
     variants.add(parts.slice(0, Math.ceil(parts.length / 2)).join("-"));
     variants.add(parts.slice(0, 2).join("-"));
   }
+  
+  // Developer-first pattern: "{developer}-{project}" (e.g., "azizi-riviera-59")
+  if (developerName) {
+    const devSlug = developerName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    variants.add(`${devSlug}-${nameSlug}`);
+    variants.add(`${nameSlug}-by-${devSlug}`);
+    // Name without developer reference
+    const nameWithoutDev = name.toLowerCase()
+      .replace(new RegExp(`\\b${developerName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').toLowerCase()}\\b`, 'g'), '')
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    if (nameWithoutDev && nameWithoutDev !== nameSlug) variants.add(nameWithoutDev);
+  }
+  
+  // Try name without trailing numbers
+  const nameWithoutNums = nameSlug.replace(/-\d+$/, "");
+  if (nameWithoutNums !== nameSlug) variants.add(nameWithoutNums);
+  
+  // Try just first 2 words of the name
+  const nameWords = name.split(/\s+/).filter(w => w.length > 1);
+  if (nameWords.length >= 2) {
+    variants.add(nameWords.slice(0, 2).join("-").toLowerCase().replace(/[^a-z0-9-]+/g, ""));
+  }
+  
   return [...variants];
 }
 
@@ -65,9 +115,9 @@ Deno.serve(async (req: Request): Promise<Response> => {
       // Build query - optionally filter to provident-sourced projects only
       let projectQuery = supabase
         .from("projects")
-        .select("id, name, slug, reelly_id, amenities, faqs, floor_plan_types, description, usp_bullets")
+        .select("id, name, slug, reelly_id, amenities, faqs, floor_plan_types, description, usp_bullets, developer_name")
         .eq("is_published", true)
-        .or("amenities.is.null,faqs.is.null,floor_plan_types.is.null,description.is.null,usp_bullets.is.null");
+        .or("amenities.is.null,amenities.eq.{},faqs.is.null,faqs.eq.[],floor_plan_types.is.null,floor_plan_types.eq.[],description.is.null,usp_bullets.is.null,usp_bullets.eq.{}");
 
       const { data: projects, error: queryErr } = await projectQuery.limit(limit);
 
@@ -78,7 +128,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
         .from("projects")
         .select("id", { count: "exact", head: true })
         .eq("is_published", true)
-        .or("amenities.is.null,faqs.is.null,floor_plan_types.is.null,description.is.null,usp_bullets.is.null");
+        .or("amenities.is.null,amenities.eq.{},faqs.is.null,faqs.eq.[],floor_plan_types.is.null,floor_plan_types.eq.[],description.is.null,usp_bullets.is.null,usp_bullets.eq.{}");
 
       const { count: remaining } = await remainingQuery;
 
@@ -243,7 +293,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
     // ── Source 2: Provident (fill gaps) ──
     let providentData: any = null;
     let providentSlugUsed: string | null = null;
-    const slugVariants = generateSlugVariants(project.slug, project.name);
+    const slugVariants = generateSlugVariants(project.slug, project.name, project.developer_name);
     
     for (const variant of slugVariants) {
       console.log(`[enrich-test] Trying Provident slug: ${variant}`);
