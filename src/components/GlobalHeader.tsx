@@ -1503,7 +1503,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 onPointerLeave={handleMegaMenuLeave}
               >
                 {activeMegaMenu === 'search' && (
-                  <div className="w-[500px] bg-black/95 backdrop-blur-xl border border-gold/30 rounded-2xl shadow-2xl p-4">
+                  <div className="w-[620px] bg-black/95 backdrop-blur-xl border border-gold/30 rounded-2xl shadow-2xl p-4">
                     <GlobalSearchModal
                       isOpen={true}
                       initialQuery=""

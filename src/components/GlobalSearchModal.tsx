@@ -156,22 +156,44 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               )}
             </div>
           ) : (
-            <div>
-              <p className="text-xs font-semibold text-gold/80 mb-2 uppercase tracking-wider">Quick Links</p>
-              <div className="grid grid-cols-3 gap-2">
-                {QUICK_SHORTCUTS.map((s) => (
-                  <button
-                    key={s.route}
-                    onClick={() => handleSelect(s.route)}
-                    className="flex flex-col items-center gap-1.5 p-2 rounded-lg hover:bg-white/10 transition-all"
-                  >
-                    <div className={`w-8 h-8 rounded-lg ${s.color} flex items-center justify-center`}>
-                      <s.icon className="w-4 h-4 text-white" />
-                    </div>
-                    <span className="text-xs text-zinc-300">{s.label}</span>
-                  </button>
-                ))}
+            <div className="space-y-4">
+              <div>
+                <p className="text-xs font-semibold text-gold/80 mb-2 uppercase tracking-wider">Quick Access</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {QUICK_SHORTCUTS.map((s) => (
+                    <button
+                      key={s.route}
+                      onClick={() => handleSelect(s.route)}
+                      className="flex flex-col items-center gap-1.5 p-2.5 rounded-lg hover:bg-white/10 transition-all"
+                    >
+                      <div className={`w-9 h-9 rounded-lg ${s.color} flex items-center justify-center`}>
+                        <s.icon className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="text-xs text-zinc-300 font-medium">{s.label}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
+              <div>
+                <p className="text-xs font-semibold text-gold/80 mb-2 uppercase tracking-wider">Popular Pages</p>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {POPULAR_PAGES.map((page) => (
+                    <button
+                      key={page.route}
+                      onClick={() => handleSelect(page.route)}
+                      className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-white/10 transition-all text-left"
+                    >
+                      <div className="w-7 h-7 rounded-md bg-white/10 border border-gold/20 flex items-center justify-center text-gold">
+                        <page.icon className="w-3.5 h-3.5" />
+                      </div>
+                      <span className="text-xs text-zinc-300 font-medium">{page.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <p className="text-xs text-gold/60 text-center pt-1">
+                Type to search projects, developers, tools & more...
+              </p>
             </div>
           )}
         </div>
