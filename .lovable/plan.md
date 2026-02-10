@@ -1,53 +1,142 @@
 
-# Homepage Improvements - Multiple Fixes
 
-## 1. Handpicked For You - Card & Price Fixes
+# Area Pages Overhaul - Multi-Fix Plan
 
-### Equal card sizes
-- All cards already use `flex flex-col h-full` but the content area `min-h-[140px]` can vary. Will enforce a fixed content height so all cards render identically.
+## 1. Area Detail Page: Add "About This Area" Section Before Projects
 
-### Price badge - move to bottom-right of photo with premium styling
-- Move the price badge from `top-3 right-3` to `bottom-3 right-3` on the photo
-- Upgrade background from `bg-black/70 border-amber-500/50` to a premium dark gradient with gold border: `bg-gradient-to-br from-black/90 via-black/80 to-gold/20 border border-gold/50 backdrop-blur-md`
-- Keep text in gold tones but make it bolder and more refined
+**Problem**: The page jumps straight from the hero to the projects grid with no introduction.
 
-### Handover date in orange
-- Change handover date text color from `text-zinc-500` to `text-orange-500` in the card content area
+**Fix**: Create a new `AreaAboutSection` component that renders between the hero and the projects grid. It will display:
+- Area description (from the database `description` field)
+- Key highlights about the location, lifestyle, and connectivity
+- An "Explore Properties" button that smooth-scrolls down to the projects grid section
 
-### Listing curation changes
-- **Remove Binghatti Village**: There's no "Binghatti Village" in the DB, but the current code picks 2 Binghatti (Bugatti + Mercedes). Will change to pick only 1 Binghatti (Bugatti only).
-- **Add DAMAC Lagoons**: Replace the second Binghatti slot with a specific DAMAC Lagoons pick (slug: `damac-lagoons-damac-56`)
-- **Keep 1 Emaar**: Add `addOne('Emaar')` back to the priority list so one Emaar project appears (e.g., Grove Ridge or Golf Hills)
-- Final order: DAMAC, DAMAC Lagoons, ALDAR, Omniyat, Sobha, Nakheel, Binghatti (Bugatti only), Emaar (1 premium)
+**File**: New `src/components/area-detail/AreaAboutSection.tsx`
+**File**: `src/pages/AreaDetail.tsx` -- insert `AreaAboutSection` between `AreaHeroSection` and `AreaProjectsGrid`, add an `id="projects-section"` to the projects grid wrapper for scroll targeting.
 
-**File:** `src/components/home/FeaturedListings.tsx`
+---
 
-## 2. Trust Bar Section - Add Gold Divider Below 4 Cards
+## 2. Developers Bar: Make All Developer Names Clickable
 
-Add a second gold divider line (matching the existing "Trusted By Thousands" line style) below the TrustBar cards, creating a balanced frame: divider above, 4 cards, divider below.
+**Problem**: Developers without a slug render as plain text, not links.
 
-**File:** `src/pages/Index.tsx` (lines 210-220)
+**Fix**: In `AreaDevelopersBar.tsx`, use the existing `DeveloperLink` component pattern. For developers without a slug, attempt a slug lookup by matching against the `developers` table. All developer chips will link to `/developer/:slug`. Non-linkable developers will still show the gold styling but remain as text.
 
-## 3. Mortgage Calculator - 3x2 Grid Layout
+**File**: `src/components/area-detail/AreaDevelopersBar.tsx` -- already links developers with slugs; ensure all fetched developers include their slug via the join query (already done). The non-slug fallback styling will be improved to make it visually clear they are clickable where possible.
 
-The current `grid-cols-2 sm:grid-cols-3` already does 3 columns on desktop, but the cards are cramped because the numbers are long. Changes:
-- Change grid to `grid-cols-2 lg:grid-cols-3` with slightly larger padding
-- Make the currency values use `text-[11px] lg:text-sm` to fit within card width
-- Remove the percentage row (`100%`, `20%`, etc.) that takes space, and combine it as a suffix to the label instead
-- This gives more vertical space for the actual price numbers to be readable
+---
 
-**File:** `src/components/MortgageCalculator.tsx` (lines 342-393)
+## 3. "Explore Properties" Button Scrolls to Projects Section
+
+**Fix**: In the new `AreaAboutSection`, add a button that calls `document.getElementById('projects-section')?.scrollIntoView({ behavior: 'smooth' })`.
+
+**File**: `src/components/area-detail/AreaAboutSection.tsx`
+
+---
+
+## 4. Map Popups: Show Developer Photo, Price, Handover on Hover
+
+**Problem**: Current popups only show project image, name, and developer name. They require a click to open.
+
+**Fix**: Update `AreaMapSection.tsx`:
+- Fetch additional fields: `price_from`, `handover_date`, `developer:developers(logo_url)`
+- Change markers to open popup on `mouseover` event (using Leaflet's `eventHandlers={{ mouseover: (e) => e.target.openPopup() }}`)
+- Enrich popup content with: project photo, project name, developer logo, developer name, starting price, and handover date
+
+**File**: `src/components/area-detail/AreaMapSection.tsx`
+
+---
+
+## 5. AI Analyzer: Remove Greeting Text and Hashtags, Premium Rewrite
+
+**Problem**: The AI output contains "Jazakallah khair for entrusting me..." and hashtags, and is too text-heavy.
+
+**Fix**: 
+- Update the edge function `ai-property-analyzer` system prompt to remove greetings, hashtags, and personal language. Set the identity to "JBJ Property Analyzer integrated with smart AI intelligence"
+- Restructure the prompt to produce structured sections: Area Overview, Price Per Sqft Analysis, Supply vs Demand, Pros and Cons, Investment Rating
+- In `AreaAIAnalyzer.tsx`, parse the structured response into visual cards/sections instead of a single text block:
+  - Price per sqft card with visual indicator
+  - Supply vs Demand comparison cards
+  - Pros and Cons in two-column layout
+  - Overall investment rating/score
+- Remove `whitespace-pre-wrap` raw text dump; replace with formatted, visual sections
+
+**Files**: 
+- `supabase/functions/ai-property-analyzer/index.ts` -- update system prompt
+- `src/components/area-detail/AreaAIAnalyzer.tsx` -- complete visual redesign with structured cards
+
+---
+
+## 6. Areas Listing Page: Consistent Card Sizes + Full Black Background
+
+**Problem**: Some cards (Weave Al Ghurair, Empire Development) are taller than others. Background is champagne, not premium.
+
+**Fix** in `src/pages/AreaGuides.tsx`:
+- Change the grid section background from `bg-[hsl(var(--premium-bg))]` to `bg-black`
+- Enforce consistent card sizes:
+  - Fixed image height: `h-[180px]` (standardized, smaller photo)
+  - Fixed content area: `min-h-[130px]` with description clamped to 2 lines
+  - This matches the "368 Park Ln" card size reference
+- Ensure all card text colors work against the black background (card interiors remain champagne gradient)
+
+**File**: `src/pages/AreaGuides.tsx` -- lines 247, 295, 341-383
+
+---
+
+## 7. Performance: Reduce Slow Loading
+
+**Problem**: Sections load slowly due to multiple independent queries firing sequentially.
+
+**Fix**:
+- In `AreaDetail.tsx`, the area query already fires first, then projects/developers/map queries fire in parallel. The issue is each component independently waits. Add skeleton loading states instead of spinners for perceived performance improvement
+- Add `Suspense` boundaries around heavy sections (map, AI analyzer)
+- Defer AI analyzer trigger: only fire the AI analysis when the section scrolls into view (IntersectionObserver), not on page load
+- Add skeleton placeholders for the projects grid while loading
+
+**Files**:
+- `src/components/area-detail/AreaProjectsGrid.tsx` -- skeleton loading
+- `src/components/area-detail/AreaAIAnalyzer.tsx` -- IntersectionObserver trigger instead of auto-fire
+
+---
+
+## 8. Global: These Fixes Apply Across All Similar Pages
+
+The card consistency fix (standardized heights), map popup enrichment, and AI analyzer improvements will be applied as reusable patterns. The map popup pattern in `AreaMapSection` will serve as the template for any future map implementations.
+
+---
 
 ## Technical Details
 
-### FeaturedListings.tsx changes:
-- Line 96-106: Replace curation logic -- remove second `addOne('Binghatti')`, add `addOne('DAMAC', 'lagoons')` and `addOne('Emaar')`
-- Line 204-217: Move price badge from `top-3 right-3` to `bottom-3 right-3`, upgrade bg/border classes
-- Line 258-264: Change handover date from `text-zinc-500` to `text-orange-500 font-semibold`
+### New File: `src/components/area-detail/AreaAboutSection.tsx`
+- Props: `area` (name, description, emirate)
+- Champagne gradient background
+- 2-3 paragraph description with area highlights
+- "Explore Properties" CTA button with smooth scroll to `#projects-section`
 
-### Index.tsx changes:
-- After line 219 (`<TrustBar />`), add a matching gold divider line identical to lines 213-217
+### Modified: `src/pages/AreaDetail.tsx`
+- Insert `AreaAboutSection` after `AreaHeroSection`
+- Add `id="projects-section"` to `AreaProjectsGrid` wrapper
 
-### MortgageCalculator.tsx changes:
-- Line 343: Change grid to `grid-cols-2 lg:grid-cols-3` (already correct, but increase gap)
-- Lines 348-392: Remove the standalone percentage `<p>` rows from each card to save vertical space; fold the percentage into the label text. Reduce font sizes on currency values for readability.
+### Modified: `src/components/area-detail/AreaMapSection.tsx`
+- Expand query to include `price_from`, `handover_date`, `developer:developers(logo_url)`
+- Add `eventHandlers={{ mouseover }}` to markers
+- Enrich popup: developer logo, price, handover date
+
+### Modified: `src/components/area-detail/AreaAIAnalyzer.tsx`
+- Replace raw text output with structured visual cards
+- Parse sections: price/sqft, supply vs demand, pros/cons
+- Use IntersectionObserver for lazy triggering
+- Remove greetings/hashtags post-processing
+
+### Modified: `supabase/functions/ai-property-analyzer/index.ts`
+- Update system prompt: no greetings, no hashtags, structured output
+- Identity: "JBJ Property Analyzer integrated with smart AI intelligence"
+
+### Modified: `src/pages/AreaGuides.tsx`
+- Line 247: `bg-[hsl(var(--premium-bg))]` -> `bg-black`
+- Line 295: `h-[200px]` -> `h-[180px]`
+- Standardize content area height with `min-h-[130px]` and strict `line-clamp-2` on descriptions
+
+### Modified: `src/components/area-detail/AreaProjectsGrid.tsx`
+- Add skeleton loading state instead of spinner
+
