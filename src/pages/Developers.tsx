@@ -103,7 +103,8 @@ const Developers = () => {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(dev => 
         dev.name.toLowerCase().includes(query) ||
-        (dev.description?.toLowerCase().includes(query))
+        (dev.description?.toLowerCase().includes(query)) ||
+        (dev.headquarters?.toLowerCase().includes(query))
       );
     }
     

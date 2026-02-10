@@ -35,7 +35,10 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
           right: '24px',
           // Prevent the panel from touching the bottom of the viewport on smaller screens
           // Unless noScroll is true - then no max-height so all content is visible
-          ...(noScroll ? {} : {
+          ...(noScroll ? {
+            maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
+            overflowY: 'auto' as const,
+          } : {
             maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
             overflowY: 'auto' as const,
           }),
