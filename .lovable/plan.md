@@ -1,109 +1,141 @@
 
 
-# Fix News System: Pre-load Real Articles with Images, Full Content, and Updated UI
+# News System Overhaul: Market Stats Split, Dropdown Fix, Full Article Content & AI Analysis
 
-## Current Problems
+## Overview
 
-1. **Empty news page**: The database has 30 articles but ALL have `image_url = NULL` and `content = NULL`. Users see cards with no photos and clicking them shows an unreadable detail page with just a 1-line excerpt.
-2. **Provident blog is not scrapeable**: The site blocks automated scraping. Instead, we will use the existing Firecrawl + AI pipeline to scrape each article's `source_url` individually to get full content and find a relevant image.
-3. **No "Refresh" button needed**: The button should be hidden from regular users. News should load automatically from the database.
-4. **NewsDetail page uses old design**: Still uses gold-on-black theme with a small hero image. Needs the champagne 3-layer design system matching the rest of the site.
+This plan addresses 5 interconnected issues: splitting market statistics into 2025 and 2026 cards, fixing the Insights dropdown cropping, making the NewsDetail hero truly full-screen, ensuring full article content with real photos, and adding AI-generated real estate impact analysis to each article.
 
-## Solution
+---
 
-### Part 1: Enrich Existing 30 Articles (Edge Function Update)
+## 1. Split Key Market Statistics into 2025 and 2026 Cards
 
-Update `ai-news-collector` to add a second pass that enriches articles missing content/images:
+**Current state**: A single "Key Market Statistics -- 2025" card with H1 2025 data.
 
-- For each article with `content IS NULL` or `image_url IS NULL`:
-  - Scrape the `source_url` via Firecrawl to get the full article markdown
-  - Use AI to extract the full article body text (cleaned, readable paragraphs)
-  - Find a relevant image from the scraped page, or assign a high-quality Unsplash Dubai image based on the article category
-  - Update the database row with `content` and `image_url`
+**Changes in `src/pages/News.tsx`**:
 
-Add a new action `enrich` alongside the existing `collect` action so both can be triggered.
+- Create a **2026 card first** (primary, larger) showing YTD 2026 statistics with fresh data
+- Below it, add a premium separator text: "Looking back at last year's performance?" or similar
+- Then a **2025 Full Year Recap card** showing Jan 1, 2025 to Jan 1, 2026 final totals (full-year closed figures)
+- Both cards use the existing `jj-layer-active` / `jj-card-inner` champagne styling
+- 2026 card gets a "LIVE" or "2026 YTD" badge to indicate it's current
 
-On initial page load, if articles exist but have no content, auto-trigger enrichment.
+**2026 YTD stats** (sourced from DLD public data):
+- Transaction count YTD
+- Transaction value YTD  
+- Top performing area
+- YoY growth comparison
 
-### Part 2: Remove "Refresh News" Button from Public View
+**2025 Full Year stats**:
+- Total transactions (full year closed)
+- Total value (full year closed)
+- YoY growth vs 2024
+- Record highlights
 
-- Remove the "Refresh News" button entirely from the public news page
-- News collection/enrichment will only happen via admin or automated triggers
-- The page simply displays whatever is in the database
+---
 
-### Part 3: Redesign NewsDetail Page (Champagne Theme)
+## 2. Fix Insights Dropdown Cropping (No Scrolling Required)
 
-Replace the current gold-on-black NewsDetail with the champagne 3-layer design:
+**Current state**: `MegaMenuInsights.tsx` uses `noScroll` on `MegaMenuShell` but then wraps content in a scrollable `div` with `maxHeight: calc(100dvh - 140px)`. The Guides card has 6 items (up to Golden Visa) which gets cut off.
 
-- Full-width hero image (100vh on mobile, 70vh on desktop) with gradient overlay
-- Title overlaid on hero in white text (large, Poppins font)
-- Article body in a champagne `jj-layer-active` card below the hero
-- Source badge and date in the meta row
-- Full readable paragraphs (not just excerpt)
-- "View Original Source" link at the bottom with the source URL
-- Back to News button in champagne style
-- Fast loading: no spinner delay, instant render from cache
+**Changes in `src/components/header/MegaMenuInsights.tsx`**:
 
-### Part 4: Auto-assign Category Images
+- Remove the inner scrollable `div` wrapper entirely -- let the shell handle sizing
+- Reduce link density: make cards more compact by reducing padding and spacing
+- Use `compact` mode more aggressively with smaller text/icons so all 8 cards (4x2 grid) fit without scrolling
+- If needed, merge related sections (e.g., combine "Legal" items into a single row or reduce link count per card)
+- Ensure the entire dropdown fits within the viewport without any scrolling needed
 
-Create a mapping of categories to high-quality Unsplash Dubai photos as fallbacks:
+**Changes in `src/components/header/mega-menu-primitives.tsx`**:
+- When `noScroll` is true, the shell already avoids `maxHeight`/`overflowY` -- verify this works correctly
+- Add a safety `maxHeight: 100dvh - header` even in noScroll mode to prevent overflow off-screen
 
-| Category | Image Theme |
-|----------|------------|
-| Policy | Dubai government buildings |
-| Economic | Dubai skyline / business |
-| Market Update | Dubai Marina / properties |
-| Government | UAE flag / landmarks |
-| Analysis | Charts / Dubai aerial |
-| Developer News | Construction / new buildings |
+---
 
-These serve as fallbacks when the source article has no extractable image.
+## 3. NewsDetail: Full-Screen Hero (No Content Overlap)
+
+**Current state**: Hero is `h-[60vh] md:h-[70vh]` with article title overlaid at the bottom. The champagne content card overlaps with `-mt-8`.
+
+**Changes in `src/pages/NewsDetail.tsx`**:
+
+- Change hero height to `h-[80vh] md:h-[90vh]` for a truly full-screen feel (like developer pages)
+- Remove the `-mt-8` overlap on the content card so the champagne body sits cleanly below the hero
+- Keep the gradient overlay light (`from-black/60 via-transparent to-transparent`) so the hero photo is clearly visible
+- Move the title/badges overlay to use a thinner bottom gradient strip so the image dominates
+
+---
+
+## 4. Full Article Content with Real Photos and Source Links
+
+**Current state**: Articles have content but it's AI-generated summaries (3-5 paragraphs). User wants full extracted articles with the actual photos from the source.
+
+**Changes in `supabase/functions/ai-news-collector/index.ts`**:
+
+- Update the `enrich` action to request `formats: ["markdown", "links"]` from Firecrawl to get richer content
+- Extract ALL images from the scraped markdown (not just the first one) and store them
+- Update the AI extraction prompt to preserve the full article length (not summarize to 4-6 paragraphs)
+- For the `collect` action, update scraping to also capture images from each source page
+- Ensure `source_url` always contains the direct link to the original article
+
+**Changes in `src/pages/NewsDetail.tsx`**:
+- Render full article content (already using `dangerouslySetInnerHTML` with markdown rendering)
+- Keep the "View Original Source" link prominent at the bottom
+
+---
+
+## 5. Add AI Real Estate Impact Analysis to Each Article
+
+**Database change**: Add an `ai_analysis` column to `market_news` table (type: text, nullable).
+
+**Changes in `supabase/functions/ai-news-collector/index.ts`**:
+
+- During enrichment, after extracting the full content, make a second AI call to generate a "Real Estate Impact Analysis"
+- The AI prompt will ask: "How does this news affect Dubai real estate? Summarize the key takeaways for investors and buyers in 3-4 bullet points."
+- Store the result in the new `ai_analysis` column
+
+**Changes in `src/pages/NewsDetail.tsx`**:
+
+- After the full article content, add a premium "AI Analysis" section:
+  - Champagne card with a sparkle/brain icon
+  - Title: "How This Affects Dubai Real Estate"
+  - Rendered AI analysis with bullet points on positive impacts
+  - Disclaimer: "AI-generated analysis for informational purposes"
+- This gives readers a quick summary if they don't want to read the full article
+
+---
 
 ## Technical Details
 
-### Files to modify
+### Database Migration
+
+```sql
+ALTER TABLE public.market_news 
+ADD COLUMN IF NOT EXISTS ai_analysis text;
+```
+
+### Files to Modify
 
 | File | Changes |
 |------|---------|
-| `supabase/functions/ai-news-collector/index.ts` | Add `enrich` action that scrapes each article's source_url for full content and images, updates DB |
-| `src/pages/News.tsx` | Remove "Refresh News" button, remove the refresh handler, clean up empty state |
-| `src/pages/NewsDetail.tsx` | Complete redesign with champagne 3-layer system, full-bleed hero, readable content, "View Original Source" link |
+| `src/pages/News.tsx` | Split market stats into 2026 (primary) + 2025 (full year recap) cards |
+| `src/pages/NewsDetail.tsx` | Full-screen hero (no overlap), AI analysis section at bottom |
+| `src/components/header/MegaMenuInsights.tsx` | Remove inner scroll wrapper, compact layout to fit all items |
+| `supabase/functions/ai-news-collector/index.ts` | Full article extraction, image extraction, AI analysis generation |
 
-### Enrichment flow
-
-```
-For each article WHERE content IS NULL:
-  1. Scrape source_url via Firecrawl (markdown format)
-  2. AI extracts: full article text + main image URL
-  3. If no image found: assign category-based Unsplash fallback
-  4. UPDATE market_news SET content = ..., image_url = ... WHERE id = ...
-```
-
-### NewsDetail redesign structure
+### AI Analysis Prompt (Edge Function)
 
 ```
-- Full-bleed hero image (h-[60vh] md:h-[70vh])
-- Gradient overlay (from-black via-black/40 to-transparent)
-- Back button (top-left, glass pill)
-- Title + badges overlaid on hero bottom
-- Below hero: jj-layer-2 container
-  - jj-layer-active card with:
-    - Date + Source meta row
-    - Excerpt as highlighted quote
-    - Full content paragraphs (readable, dark text on champagne)
-    - Source attribution card at bottom with "View Original Source" link
-    - Back to News button
+"You are a Dubai real estate market analyst. Based on this news article, explain how it affects the Dubai real estate market. Write 3-4 concise bullet points covering: (1) immediate market impact, (2) opportunity for investors/buyers, (3) long-term outlook. Be factual and positive where appropriate. Do not add disclaimers."
 ```
 
-### Image fallback map (Unsplash)
+### Enrichment Flow Update
 
-```typescript
-const CATEGORY_IMAGES: Record<string, string> = {
-  "Policy": "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1200&q=80",
-  "Economic": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80",
-  "Market Update": "https://images.unsplash.com/photo-1622015663319-e97e697503ee?w=1200&q=80",
-  "Government": "https://images.unsplash.com/photo-1597659840241-37e2b9c2f55f?w=1200&q=80",
-  "Analysis": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
-  "Developer News": "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1200&q=80",
-};
 ```
+For each article:
+  1. Scrape source_url via Firecrawl (markdown + links)
+  2. AI extracts full article text (preserve full length, don't summarize)
+  3. Extract primary image from scraped content
+  4. AI generates real estate impact analysis (3-4 bullet points)
+  5. UPDATE market_news SET content, image_url, ai_analysis WHERE id = ...
+```
+
