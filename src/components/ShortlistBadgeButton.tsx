@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 
+const isUUID = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
 interface ShortlistBadgeButtonProps {
   projectId: string;
   size?: "sm" | "md" | "lg";
@@ -51,11 +53,12 @@ const ShortlistBadgeButton = ({
   showBadgeIndicator = true
 }: ShortlistBadgeButtonProps) => {
   const { user } = useAuth();
+  const useDb = user && isUUID(projectId);
   const { data: userShortlist } = useShortlist();
-  const { isShortlisted: isGuestShortlisted } = useGuestShortlist();
+  const { isShortlisted: isGuestShortlisted, toggleShortlist: toggleGuestShortlist } = useGuestShortlist();
   const { getBadge, setBadge } = useShortlistBadges();
 
-  const isShortlisted = user 
+  const isShortlisted = useDb 
     ? userShortlist?.some((s) => s.project_id === projectId) || false
     : isGuestShortlisted(projectId);
 
@@ -74,6 +77,11 @@ const ShortlistBadgeButton = ({
   };
 
   const handleSetBadge = (badge: ShortlistBadge | null) => {
+    // Auto-add to shortlist if not already shortlisted
+    if (!isShortlisted && badge) {
+      toggleGuestShortlist(projectId);
+      toast.success("Added to shortlist");
+    }
     setBadge(projectId, badge);
     if (badge) {
       toast.success(`Assigned ${badgeConfig[badge].label} badge`);
@@ -81,37 +89,6 @@ const ShortlistBadgeButton = ({
       toast.success("Badge removed");
     }
   };
-
-  const handleNotShortlisted = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toast.info("Add this property to your Shortlist first to assign a badge", {
-      action: {
-        label: "Go to Favorites",
-        onClick: () => window.location.href = "/favorites?tab=shortlist"
-      }
-    });
-  };
-
-  // If not shortlisted, show disabled button with tooltip
-  if (!isShortlisted) {
-    return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <button
-            onClick={handleNotShortlisted}
-            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-white border border-gold/40 text-gold cursor-pointer hover:bg-white/90 transition-all ${className}`}
-          >
-            <Award className={iconSizes[size]} />
-            <span className="hidden sm:inline text-sm font-medium">Add Badge</span>
-          </button>
-        </TooltipTrigger>
-        <TooltipContent className="max-w-[200px] text-center">
-          <p>Add to Shortlist first to assign Top 1, 2, or 3 badges</p>
-        </TooltipContent>
-      </Tooltip>
-    );
-  }
 
   // If shortlisted, show dropdown
   return (
