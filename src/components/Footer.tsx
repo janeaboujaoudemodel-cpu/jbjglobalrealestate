@@ -33,11 +33,10 @@ const FooterCard = ({ title, links, viewAllHref, viewAllLabel }: {
   viewAllLabel?: string;
 }) => (
   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
-    <h4 className="text-center font-bold text-sm sm:text-base uppercase tracking-[0.15em] mb-3 pb-2 border-b border-gold/30"
+    <h4 className="text-center font-bold text-sm sm:text-base uppercase tracking-[0.15em] mb-3 pb-2 border-b border-gold/30 text-zinc-900"
       style={{
-        background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 50%, #D4AF37 100%)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
+        fontFamily: "Poppins, sans-serif",
+        textShadow: '0 1px 2px rgba(200,167,102,0.3)',
       }}
     >{title}</h4>
     <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
@@ -631,7 +630,7 @@ const Footer = () => {
             {/* Navigation Grid Section - Card-Based 2-Column Layout */}
             <div className="p-4 sm:p-6 md:p-8">
               {/* ROW 1 */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 auto-rows-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 auto-rows-auto">
                 {/* Properties */}
                 <FooterCard title={t('footer.properties') || 'Properties'} links={propertiesLinks} />
                 {/* Services */}
@@ -643,7 +642,7 @@ const Footer = () => {
               </div>
 
               {/* ROW 2 */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 auto-rows-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 auto-rows-auto">
                 {/* Sell */}
                 <FooterCard title="Sell" links={sellLinks} />
                 {/* Education Hub */}
@@ -660,7 +659,7 @@ const Footer = () => {
               </div>
 
               {/* ROW 3: AI Tools, Creative Toolkit, Market Intelligence + mode-aware hubs */}
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-auto">
                 {/* AI Tools (Top 10 + View All) */}
                 <FooterCard title="AI Tools" links={[
                   { href: "/property-evaluator", label: "Property Evaluator" },
@@ -674,16 +673,6 @@ const Footer = () => {
                   { href: "/ai-translation-hub", label: "Translation Hub" },
                   { href: "/ai-document-generator", label: "Doc Generator" },
                 ]} viewAllHref="/ai-hub" viewAllLabel="View All 40+ Tools →" />
-
-                {/* Creative Toolkit (Top 6 + View All) */}
-                <FooterCard title="Creative Toolkit" links={[
-                  { href: "/toolkit/ai-video-studio", label: "AI Video Studio" },
-                  { href: "/toolkit/voice-studio", label: "Voice Studio" },
-                  { href: "/toolkit/video-resize-pack", label: "Video Resize" },
-                  { href: "/toolkit/background-ai", label: "BG Remover" },
-                  { href: "/toolkit/image-resize", label: "Image Resizer" },
-                  { href: "/studio", label: "Creative Suite" },
-                ]} viewAllHref="/toolkit" viewAllLabel="View All Tools →" />
 
                 {/* Market Intelligence */}
                 <FooterCard title="Market Intelligence" links={marketIntelLinks} />
@@ -708,7 +697,7 @@ const Footer = () => {
             {/* Location with Gold Circle Background */}
             <div className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 text-xs sm:text-sm md:text-base mb-3 sm:mb-4 md:mb-5 px-1">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
-                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
+                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
               </div>
               <span className="break-words text-center">{CONTACT_INFO.address}</span>
             </div>
