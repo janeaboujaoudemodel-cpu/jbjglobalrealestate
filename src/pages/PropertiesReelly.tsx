@@ -223,19 +223,17 @@ const PropertiesReelly = () => {
       default:
         break;
     }
-    // Always show available projects first, sold out last (skip if user filtered them out)
-    if (!filters.hideSoldOut) {
-      sorted.sort((a, b) => {
-        const aIsSold = (a.sale_status || a.status_label || '').toLowerCase();
-        const bIsSold = (b.sale_status || b.status_label || '').toLowerCase();
-        const aSold = aIsSold.includes('sold') || aIsSold.includes('out of stock');
-        const bSold = bIsSold.includes('sold') || bIsSold.includes('out of stock');
-        if (aSold === bSold) return 0;
-        return aSold ? 1 : -1;
-      });
-    }
+    // Always push sold-out projects to the bottom regardless of sort order
+    sorted.sort((a, b) => {
+      const aIsSold = (a.sale_status || a.status_label || '').toLowerCase();
+      const bIsSold = (b.sale_status || b.status_label || '').toLowerCase();
+      const aSold = aIsSold.includes('sold') || aIsSold.includes('out of stock');
+      const bSold = bIsSold.includes('sold') || bIsSold.includes('out of stock');
+      if (aSold === bSold) return 0;
+      return aSold ? 1 : -1;
+    });
     return sorted;
-  }, [projects, sortBy, filters.hideSoldOut]);
+  }, [projects, sortBy]);
 
   const updateFilter = <K extends keyof FilterState>(key: K, value: FilterState[K]) => {
     setFilters(prev => ({ ...prev, [key]: value }));
