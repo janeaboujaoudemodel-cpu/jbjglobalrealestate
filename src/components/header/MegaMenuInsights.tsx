@@ -46,6 +46,11 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Landlord Guide', href: '/landlord-guide', icon: FileText },
     { label: 'Tenant Guide', href: '/tenant-guide', icon: FileText },
     { label: 'Golden Visa', href: '/guides/golden-visa-uae', icon: Award },
+    { label: 'FAQ', href: '/faq', icon: HelpCircle },
+    { label: 'Buyer FAQ', href: '/buyer-faq', icon: HelpCircle },
+    { label: 'Seller FAQ', href: '/seller-faq', icon: HelpCircle },
+    { label: 'Landlord FAQ', href: '/landlord-faq', icon: HelpCircle },
+    { label: 'Tenant FAQ', href: '/tenant-faq', icon: HelpCircle },
   ];
 
   // Block 4: Services

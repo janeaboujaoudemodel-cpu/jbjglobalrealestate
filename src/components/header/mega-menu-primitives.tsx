@@ -325,9 +325,9 @@ export function MegaMenuCard({
 }: MegaMenuCardProps) {
   return (
     <div className={cn(
-      "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]",
-      "border border-gold/30 rounded-xl",
-      "hover:border-gold/50 transition-all",
+      "bg-gradient-to-br from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8]",
+      "border border-gold/50 rounded-xl",
+      "hover:border-gold/70 transition-all",
       compact ? "p-2.5" : "p-4",
       className
     )}>
