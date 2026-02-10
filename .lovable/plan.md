@@ -1,75 +1,64 @@
 
-# Fix Developer Logos, Marquee, and Sticky Nav -- Global Consistency
 
-## Problem Summary
+# Fix Sold Out Badge and Status Label on Project Cards
 
-1. **Developer logos everywhere lack the gold border style** that exists on the project detail page's DeveloperInfoCard
-2. **Marquee on homepage** -- logos have no container/border, just raw images floating on champagne background
-3. **Sticky sub-nav overlaps the main header** on project detail pages -- "Register Interest" / "Brochure" bar sits directly on top of the global header instead of below it
-4. **DeveloperInfoCard logo uses `object-fill`** which stretches/distorts logos -- should be `object-contain` with padding
+## Problem
 
-## Reference Style (from DeveloperInfoCard)
+The "Sold Out" status badge logic was broken by conflicting conditions in both `ProjectCard.tsx` and `ReellyProjectCard.tsx`:
 
-The gold-bordered logo container the user wants everywhere:
-- White background square container
-- 3px solid gold border (`border: 3px solid hsl(42 45% 59%)`)
-- Gold box shadow
-- `object-contain` with padding so logos are never cropped or stretched
-- Rounded corners
+1. The `getSaleStatusBadge()` function catches "sold" statuses (line 85-86) and returns a badge object
+2. The dedicated red "Sold Out" badge (line 282) only renders when `!saleStatusBadge` -- so when getSaleStatusBadge already matched "sold", the red badge is skipped
+3. Instead, a generic sale status badge renders at line 268 with `bg-destructive` styling -- losing the distinct red "Sold Out" design the user specified
 
----
+The user's requirement (from memory): "Sold Out" badge should be a red badge positioned top-left (top-3 left-3), offset below developer logo if present. "Sold" text (red) should show in the price area for sold-out projects without a price.
 
-## Changes
+## Fix
 
-### 1. Fix DeveloperInfoCard Logo (Project Detail Page)
+### File: `src/components/ProjectCard.tsx`
 
-**File: `src/components/project-detail/DeveloperInfoCard.tsx`**
+1. **Remove "sold" from `getSaleStatusBadge()`** -- The sold status should NOT be treated as a regular sale status badge. It has its own dedicated rendering path (the red "Sold Out" badge at top-left). Remove lines 85-86 from the function so sold projects fall through to the dedicated badge.
 
-Line 68: Change `object-fill` to `object-contain p-2` so logos are not stretched/distorted inside the gold-bordered container.
+2. **Fix the "Sold Out" badge condition** -- Remove the `!saleStatusBadge` guard from line 282 so the red "Sold Out" badge renders based only on `is_sold_out` or status containing "sold". This ensures it always appears top-left as designed.
 
-### 2. Fix Homepage Marquee Logos
+3. **Add exclusion on the sale status badge (line 268)** -- Add a check so the generic sale status badge doesn't render for sold-out projects (since they get the dedicated red badge instead).
 
-**File: `src/components/DeveloperPartnersMarquee.tsx`**
+### File: `src/components/ReellyProjectCard.tsx`
 
-Update `renderPartner` to wrap each logo in a square container with:
-- White background
-- Gold border (3px solid, matching the DeveloperInfoCard style)
-- Rounded corners (rounded-xl)
-- `object-contain` with padding
-- Consistent sizing across all developers (remove special-case sizing for individual developers)
+Apply the same fix: remove "sold" from `getSaleStatusBadge()` and ensure the sold-out rendering path is not blocked.
 
-This replaces the current approach of bare `img` tags with different height/width overrides per developer.
+## Result
 
-### 3. Fix Developer Cards Logo on Developers Page
+- "Sold Out" red badge always appears top-left on sold projects (offset below developer logo)
+- Other sale statuses (On Sale, Announced, Presale) continue to show as colored badges top-left
+- Price area shows "Sold" in red for sold projects without price data
+- No duplication of sold badges
 
-**File: `src/components/DeveloperCard.tsx`**
+## Technical Details
 
-Update the logo overlay container (lines 84-99) to use gold border instead of plain white:
-- Change from `bg-white` with no visible border to `bg-white border-2 border-gold` (matching the gold style)
-- Keep `object-contain p-1` which is already correct
+### Changes to `getSaleStatusBadge()` in both files:
 
-### 4. Fix Sticky Sub-Nav Overlapping Main Header
+Remove this block:
+```
+if (normalizedStatus.includes('sold') || normalizedStatus.includes('out of stock')) {
+  return { label: 'Sold Out', className: 'bg-destructive text-destructive-foreground' };
+}
+```
 
-**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
+### Changes to sold badge condition in ProjectCard.tsx:
 
-The sticky sub-nav (lines 567-618) uses `fixed top-16 lg:top-20` which places it directly touching/overlapping the main header. Fix:
-- Increase offset so it sits clearly below the main header with a visible gap
-- Change background from `bg-black` to a dark champagne/zinc tone to differentiate it visually from the main header
-- Add `top-20 sm:top-24 lg:top-28` to match the content padding in MainLayout (`pt-16 sm:pt-20 md:pt-24 lg:pt-28`)
+Line 282: Remove `&& !saleStatusBadge` so the condition becomes:
+```
+{(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
+```
 
-### 5. Fix Marquee Speed
+Line 268: Add sold-out exclusion:
+```
+{saleStatusBadge && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
+```
 
-**File: `src/components/DeveloperPartnersMarquee.tsx`**
-
-The animation duration formula `Math.max(20, loopWidth / 60)` can produce very long durations when loopWidth is large (4 duplicate loops). Adjust the divider to produce a smoother, faster scroll.
-
----
-
-## Files Modified
+### Files Modified
 
 | File | Change |
 |------|--------|
-| `src/components/project-detail/DeveloperInfoCard.tsx` | `object-fill` to `object-contain p-2` |
-| `src/components/DeveloperPartnersMarquee.tsx` | Gold-bordered square containers for logos, fix animation speed |
-| `src/components/DeveloperCard.tsx` | Add gold border to logo overlay |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Fix sticky nav position below header, different background color |
+| `src/components/ProjectCard.tsx` | Remove "sold" from getSaleStatusBadge, fix badge conditions |
+| `src/components/ReellyProjectCard.tsx` | Same fix applied consistently |
