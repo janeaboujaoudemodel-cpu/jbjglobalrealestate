@@ -97,51 +97,28 @@ const DeveloperPartnersMarquee = () => {
   }, []);
 
   const renderPartner = (developer: typeof FEATURED_DEVELOPERS[number], index: number, listKey: "a" | "b") => {
-    // IMPORTANT: Keep spacing locked (px-* on the Link). Only adjust logo size.
-    // We adjust size by changing responsive HEIGHT classes (layout-safe; no transform scaling).
-    // MOBILE: Smaller logos to fit ~4 in viewport; DESKTOP: Keep original larger sizes
-    // Fixed frame height ensures every logo sits on the same baseline (alignment).
-    // Dubai Properties and Danube get taller frames for extra prominence
-    // REDUCED: Emaar and Damac logos scaled down to match other logos
-    const frameH = developer.slug === "dubai-properties" 
-      ? "h-14 md:h-20 lg:h-24" 
-      : developer.slug === "danube-properties"
-      ? "h-12 md:h-18 lg:h-20"
-      : "h-10 md:h-14 lg:h-16";
-
-    // Keep all logos the same HEIGHT; make specific ones feel bigger via max-width.
-    // Dubai Properties gets significantly more width for visibility
-    // REDUCED: Emaar and Damac max-width reduced to match other standard logos
-    const maxW =
-      developer.slug === "dubai-properties"
-        ? "max-w-[200px] md:max-w-[320px] lg:max-w-[400px]"
-        : developer.slug === "danube-properties"
-        ? "max-w-[160px] md:max-w-[240px] lg:max-w-[300px]"
-        : (developer.slug === "emaar" || developer.slug === "damac")
-        ? "max-w-[100px] md:max-w-[160px] lg:max-w-[200px]"
-        : "max-w-[120px] md:max-w-[200px] lg:max-w-[240px]";
-
-    // Dubai Properties needs a tiny visual lift due to whitespace inside the asset.
-    const nudgeY =
-      developer.slug === "dubai-properties" ? "-translate-y-0.5 md:-translate-y-1" : "";
-
-    const sizeClass = `h-full w-auto ${maxW} object-contain transform-gpu ${nudgeY}`;
-
     return (
       <Link
         key={`${listKey}-${developer.slug}-${index}`}
         to={`/developer/${developer.slug}`}
-        // Tighter spacing on mobile, normal on desktop
-        className={`flex-shrink-0 ${frameH} px-4 md:px-8 lg:px-10 flex items-center justify-center transition-opacity duration-300 hover:opacity-70`}
+        className="flex-shrink-0 px-3 md:px-5 lg:px-6 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
       >
-        <img
-          src={developer.logo}
-          alt={developer.name}
-          className={sizeClass}
-          loading="lazy"
-          decoding="async"
-        />
+        <div
+          className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-xl overflow-hidden bg-white flex items-center justify-center"
+          style={{
+            border: '3px solid hsl(42 45% 59%)',
+            boxShadow: '0 4px 16px rgba(200,167,102,0.3)',
+          }}
+        >
+          <img
+            src={developer.logo}
+            alt={developer.name}
+            className="w-full h-full object-contain p-1.5 md:p-2"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
       </Link>
     );
   };
@@ -170,7 +147,7 @@ const DeveloperPartnersMarquee = () => {
             }
             transition={{
               x: {
-                duration: loopWidth > 0 ? Math.max(20, loopWidth / 60) : 0,
+                duration: loopWidth > 0 ? Math.max(12, loopWidth / 120) : 0,
                 repeat: Infinity,
                 ease: "linear",
               },

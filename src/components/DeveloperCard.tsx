@@ -82,7 +82,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           
           {/* Logo Overlay - Top Left - Larger box with object-contain, no cropping */}
           <div className="absolute top-3 left-3 z-10">
-            <div className="w-14 h-14 rounded-lg overflow-hidden shadow-lg bg-white">
+            <div className="w-14 h-14 rounded-lg overflow-hidden shadow-lg bg-white" style={{ border: '3px solid hsl(42 45% 59%)', boxShadow: '0 4px 16px rgba(200,167,102,0.3)' }}>
               {developer.logo_url ? (
                 <img
                   src={developer.logo_url}
