@@ -77,7 +77,7 @@ function convertMarkdownTables(text: string): string {
  */
 export function formatReellyDescription(text: string): string {
   const SECTION_MAP: Record<string, string | null> = {
-    'project general facts': null, // Remove entirely (redundant with "About" heading)
+    'project general facts': null,
     'location description and benefits': '## Location',
     'location description': '## Location',
     'finishing and materials': '## Finishing & Materials',
@@ -87,12 +87,38 @@ export function formatReellyDescription(text: string): string {
     'amenities and facilities': '## Amenities & Facilities',
     'amenities': '## Amenities',
     'payment plan': '## Payment Plan',
-    'about the project': null, // Remove (redundant)
-    'project overview': null, // Remove (redundant)
+    'about the project': null,
+    'project overview': null,
     'key features': '## Key Features',
     'community': '## Community',
     'connectivity': '## Connectivity',
     'nearby attractions': '## Nearby Attractions',
+    // Expanded patterns
+    'features': '## Features',
+    'facilities': '## Facilities',
+    'unit types': '## Unit Types',
+    'investment highlights': '## Investment Highlights',
+    'developer': '## Developer',
+    'property details': '## Property Details',
+    'property description': null,
+    'building features': '## Building Features',
+    'interior features': '## Interior Features',
+    'outdoor features': '## Outdoor Features',
+    'leisure facilities': '## Leisure Facilities',
+    'security features': '## Security Features',
+    'smart home features': '## Smart Home',
+    'sustainability': '## Sustainability',
+    'design and architecture': '## Design & Architecture',
+    'lifestyle': '## Lifestyle',
+    'master plan': '## Master Plan',
+    'why invest': '## Why Invest',
+    'about the developer': '## About the Developer',
+    'about developer': '## About the Developer',
+    'project specifications': '## Specifications',
+    'specifications': '## Specifications',
+    'highlights': '## Highlights',
+    'overview': null,
+    'description': null,
   };
 
   let result = text;
@@ -112,11 +138,34 @@ export function formatReellyDescription(text: string): string {
     /\n([A-Z][A-Za-z &,\-\/]{3,48})\n\n([A-Z])/g,
     (_, heading, nextChar) => {
       const lower = heading.toLowerCase().trim();
-      // Skip if it's already a heading or looks like a sentence
       if (lower.includes('.') || lower.split(' ').length > 8) return _;
       return `\n\n## ${heading.trim()}\n\n${nextChar}`;
     }
   );
+
+  // Detect inline numbered lists (e.g., "1. Feature one 2. Feature two")
+  result = result.replace(
+    /(\d+)\.\s+([^.]+?)(?=\s+\d+\.\s|$)/g,
+    '\n$1. $2'
+  );
+
+  // Fallback: if no headings detected and text > 500 chars, auto-split into paragraphs
+  if (!result.includes('## ') && result.length > 500) {
+    const sentences = result.split(/(?<=[.!?])\s+/);
+    const chunks: string[] = [];
+    let current: string[] = [];
+    
+    for (const sentence of sentences) {
+      current.push(sentence);
+      if (current.length >= 3) {
+        chunks.push(current.join(' '));
+        current = [];
+      }
+    }
+    if (current.length > 0) chunks.push(current.join(' '));
+    
+    result = chunks.join('\n\n');
+  }
 
   // Clean up excessive blank lines
   result = result.replace(/\n{3,}/g, '\n\n');

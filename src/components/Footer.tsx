@@ -558,7 +558,7 @@ const Footer = () => {
               <div className="mt-4 flex flex-col items-center gap-2">
                 <p className="text-gold/60 text-xs uppercase tracking-[0.15em]">Your Mode</p>
               <div className="p-1 rounded-xl bg-black/40">
-                <ModeSwitcher variant="header" />
+                <ModeSwitcher variant="header" showForUnselected={true} />
               </div>
               </div>
             </div>

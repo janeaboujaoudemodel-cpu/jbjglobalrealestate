@@ -3,6 +3,7 @@ import {
   corsHeaders, REELLY_API_BASE,
   extractGalleryImages, extractVideos, extractDocuments, extractFloorPlans, extractAmenities, extractUnitTypes
 } from "../_shared/reelly-types.ts";
+import { fetchProvidentPageDataDetail } from "../_shared/provident/pagedata-detail.ts";
 
 function json(status: number, body: unknown) {
   return new Response(JSON.stringify(body), {
@@ -19,6 +20,25 @@ async function fetchReellyProject(reellyId: number, apiKey: string) {
   if (!res.ok) return null;
   const data = await res.json();
   return data?.data || data;
+}
+
+/** Generate slug variants to try matching on Provident */
+function generateSlugVariants(slug: string, name: string): string[] {
+  const variants = new Set<string>();
+  variants.add(slug);
+  // Remove trailing numeric suffixes (e.g., "project-name-3012" -> "project-name")
+  const withoutTrailingNum = slug.replace(/-\d+$/, "");
+  if (withoutTrailingNum !== slug) variants.add(withoutTrailingNum);
+  // Simplify name to slug
+  const nameSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  variants.add(nameSlug);
+  // Remove developer prefix patterns like "binghatti-titania-binghatti" -> "binghatti-titania"
+  const parts = slug.split("-");
+  if (parts.length >= 3) {
+    variants.add(parts.slice(0, Math.ceil(parts.length / 2)).join("-"));
+    variants.add(parts.slice(0, 2).join("-"));
+  }
+  return [...variants];
 }
 
 Deno.serve(async (req: Request): Promise<Response> => {
@@ -39,7 +59,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
     if (!slug) return json(400, { error: "Missing project slug" });
 
-    // Fetch current project from DB - include ALL enrichable fields
+    // Fetch current project from DB
     const { data: project, error: projErr } = await supabase
       .from("projects")
       .select("id, name, slug, reelly_id, amenities, usp_bullets, location_distances, description, cover_image_url, developer_name, area_name, price_from, price_to, faqs, floor_plan_types, payment_plan, payment_breakdown, unit_types, video_url, highlights, service_charge, roi_estimate, total_units, building_count, bedrooms_min, bedrooms_max, floors")
@@ -48,7 +68,6 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
     if (projErr || !project) return json(404, { error: "Project not found" });
 
-    // Fetch current images and documents count
     const { count: imageCount } = await supabase
       .from("project_images")
       .select("id", { count: "exact", head: true })
@@ -59,7 +78,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
       .select("id", { count: "exact", head: true })
       .eq("project_id", project.id);
 
-    // Build "before" snapshot with ALL fields
+    // Build "before" snapshot
     const before = {
       amenities_count: (project.amenities as any[])?.length || 0,
       usp_count: (project.usp_bullets as any[])?.length || 0,
@@ -82,8 +101,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
       floors: project.floors,
     };
 
-    // Fetch enrichment data from Reelly
-    let reellyData: any = null;
+    // Enrichment data accumulator
     let enrichment = {
       amenities: [] as string[],
       usp_bullets: [] as string[],
@@ -102,6 +120,8 @@ Deno.serve(async (req: Request): Promise<Response> => {
       roi_estimate: null as number | null,
     };
 
+    // ── Source 1: Reelly API ──
+    let reellyData: any = null;
     if (project.reelly_id && reellyApiKey) {
       reellyData = await fetchReellyProject(project.reelly_id, reellyApiKey);
       if (reellyData) {
@@ -111,7 +131,6 @@ Deno.serve(async (req: Request): Promise<Response> => {
         enrichment.floor_plans = extractFloorPlans(reellyData);
         enrichment.unit_types = extractUnitTypes(reellyData);
 
-        // Extract USP/highlights
         if (reellyData.highlights && Array.isArray(reellyData.highlights)) {
           enrichment.highlights = reellyData.highlights.filter((h: any) => typeof h === 'string' ? h : h?.text).map((h: any) => typeof h === 'string' ? h : h.text);
         }
@@ -120,43 +139,74 @@ Deno.serve(async (req: Request): Promise<Response> => {
         } else if (enrichment.highlights.length > 0) {
           enrichment.usp_bullets = enrichment.highlights;
         }
-
-        // Description
-        if (reellyData.overview) {
-          enrichment.description = reellyData.overview;
-        }
-
-        // Video
+        if (reellyData.overview) enrichment.description = reellyData.overview;
         const videos = reellyData.video_reviews || [];
         if (videos.length > 0) {
           const firstVideo = videos[0];
           enrichment.video_url = typeof firstVideo === 'string' ? firstVideo : firstVideo?.url || null;
         }
-
-        // FAQs
         if (reellyData.faqs && Array.isArray(reellyData.faqs)) {
           enrichment.faqs = reellyData.faqs.filter((f: any) => f?.question && f?.answer);
         }
-
-        // Payment plan
         if (reellyData.payment_plan) {
           enrichment.payment_plan = reellyData.payment_plan.name || reellyData.payment_plan.description || JSON.stringify(reellyData.payment_plan);
           if (reellyData.payment_plan.milestones && Array.isArray(reellyData.payment_plan.milestones)) {
             enrichment.payment_breakdown = reellyData.payment_plan.milestones;
           }
         }
-
-        // Location distances
         if (reellyData.location_distances && Array.isArray(reellyData.location_distances)) {
           enrichment.location_distances = reellyData.location_distances;
         } else if (reellyData.nearby_places && Array.isArray(reellyData.nearby_places)) {
           enrichment.location_distances = reellyData.nearby_places.map((p: any) => ({ label: p.name, time: p.distance })).filter((d: any) => d.label && d.time);
         }
-
-        // Numeric fields
         if (reellyData.service_charge != null) enrichment.service_charge = reellyData.service_charge;
         if (reellyData.roi_estimate != null) enrichment.roi_estimate = reellyData.roi_estimate;
       }
+    }
+
+    // ── Source 2: Provident (fill gaps) ──
+    let providentData: any = null;
+    let providentSlugUsed: string | null = null;
+    const slugVariants = generateSlugVariants(project.slug, project.name);
+    
+    for (const variant of slugVariants) {
+      console.log(`[enrich-test] Trying Provident slug: ${variant}`);
+      const pd = await fetchProvidentPageDataDetail(variant);
+      if (pd && (pd.amenities.length > 0 || pd.images.length > 0 || pd.faqs.length > 0 || pd.uspBullets.length > 0 || pd.description)) {
+        providentData = pd;
+        providentSlugUsed = variant;
+        console.log(`[enrich-test] Provident match found: ${variant}`);
+        break;
+      }
+    }
+
+    // Merge Provident data into enrichment where Reelly returned nothing
+    if (providentData) {
+      if (enrichment.amenities.length === 0 && providentData.amenities.length > 0)
+        enrichment.amenities = providentData.amenities;
+      if (enrichment.usp_bullets.length === 0 && providentData.uspBullets.length > 0)
+        enrichment.usp_bullets = providentData.uspBullets;
+      if (enrichment.location_distances.length === 0 && providentData.locationDistances.length > 0)
+        enrichment.location_distances = providentData.locationDistances;
+      if (enrichment.faqs.length === 0 && providentData.faqs.length > 0)
+        enrichment.faqs = providentData.faqs;
+      if (enrichment.floor_plans.length === 0 && providentData.floorPlanTypes.length > 0)
+        enrichment.floor_plans = providentData.floorPlanTypes.map((fp: any) => ({ type: fp.label, url: fp.pdfUrl || '', label: fp.label }));
+      if (!enrichment.description && providentData.description)
+        enrichment.description = providentData.description;
+      if (!enrichment.payment_plan && providentData.paymentPlan)
+        enrichment.payment_plan = providentData.paymentPlan;
+      if (enrichment.gallery.length <= 1 && providentData.images.length > 0)
+        enrichment.gallery = [...enrichment.gallery, ...providentData.images.map((img: any, i: number) => ({ url: img.url, alt_text: img.alt_text, display_order: (enrichment.gallery.length) + i }))];
+      // Documents from Provident
+      const provDocs: Array<{ url: string; name: string; type: string }> = [];
+      if (providentData.brochureUrl) provDocs.push({ url: providentData.brochureUrl, name: "Brochure", type: "brochure" });
+      if (providentData.paymentPlanPdfUrl) provDocs.push({ url: providentData.paymentPlanPdfUrl, name: "Payment Plan", type: "payment_plan" });
+      for (const fpUrl of (providentData.floorPlanPdfUrls || [])) {
+        provDocs.push({ url: fpUrl, name: "Floor Plan", type: "floor_plan" });
+      }
+      if (enrichment.documents.length === 0 && provDocs.length > 0)
+        enrichment.documents = provDocs;
     }
 
     // Build "after" snapshot
@@ -202,26 +252,24 @@ Deno.serve(async (req: Request): Promise<Response> => {
         await supabase.from("projects").update(updates).eq("id", project.id);
       }
 
-      // Insert new images
       if (enrichment.gallery.length > 0) {
         const newImages = enrichment.gallery.map((img, i) => ({
           project_id: project.id,
           image_url: img.url,
           alt_text: img.alt_text || `${project.name} image ${i + 1}`,
           display_order: (imageCount || 0) + i,
-          data_source: "reelly_enrichment",
+          data_source: providentData ? "provident_enrichment" : "reelly_enrichment",
         }));
         await supabase.from("project_images").insert(newImages);
       }
 
-      // Insert new documents
       if (enrichment.documents.length > 0) {
         const newDocs = enrichment.documents.map((doc) => ({
           project_id: project.id,
           file_url: doc.url,
           document_type: doc.type,
           file_name: doc.name || doc.type,
-          data_source: "reelly_enrichment",
+          data_source: providentData ? "provident_enrichment" : "reelly_enrichment",
         }));
         await supabase.from("project_documents").insert(newDocs);
       }
@@ -271,6 +319,23 @@ Deno.serve(async (req: Request): Promise<Response> => {
               }).reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {}),
             }
           : { available: false, reason: !project.reelly_id ? "No reelly_id" : "API error" },
+        provident: providentData
+          ? {
+              available: true,
+              slug_used: providentSlugUsed,
+              fields_found: {
+                amenities: providentData.amenities?.length || 0,
+                images: providentData.images?.length || 0,
+                faqs: providentData.faqs?.length || 0,
+                usp_bullets: providentData.uspBullets?.length || 0,
+                floor_plans: providentData.floorPlanTypes?.length || 0,
+                distances: providentData.locationDistances?.length || 0,
+                description: providentData.description ? 1 : 0,
+                brochure: providentData.brochureUrl ? 1 : 0,
+                payment_plan_pdf: providentData.paymentPlanPdfUrl ? 1 : 0,
+              },
+            }
+          : { available: false, reason: "No Provident slug match" },
       },
     });
   } catch (e) {
