@@ -57,8 +57,8 @@ export function BookLanguageFilter({ value, onChange, className }: BookLanguageF
             className={cn(
               "flex items-center gap-3 cursor-pointer",
               value === lang.code 
-                ? "bg-gold/15 text-gold" 
-                : "text-black hover:bg-gold/10 hover:text-gold"
+                ? "bg-gold/15 !text-gold" 
+                : "!text-black hover:bg-gold/10 hover:!text-gold focus:!text-black focus:bg-gold/10"
             )}
           >
             <span className="text-lg">{lang.flag}</span>

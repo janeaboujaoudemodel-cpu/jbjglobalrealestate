@@ -62,7 +62,7 @@ export function PhaseCard({
       transition={{ delay: index * 0.1 }}
     >
       <Card className={cn(
-        "h-full border transition-all duration-300",
+        "h-full border transition-all duration-300 overflow-hidden",
         status === 'completed' 
           ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-emerald-500/40" 
           : status === 'in_progress' || status === 'test_pending'
@@ -95,8 +95,8 @@ export function PhaseCard({
               {phase.title}
             </h3>
             <p className={cn(
-              "text-sm",
-              status === 'locked' ? "text-black/40" : "text-black/60"
+              "text-sm line-clamp-3",
+              status === 'locked' ? "text-black/50" : "text-black/60"
             )}>
               {phase.description}
             </p>
@@ -113,7 +113,7 @@ export function PhaseCard({
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="w-full border-gold/50 text-gold hover:bg-gold/10"
+                className="w-full border-gold/50 text-gold hover:bg-gold/10 whitespace-nowrap text-sm"
               >
                 Continue Learning
                 <ArrowRight className="w-4 h-4 ml-2" />

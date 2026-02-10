@@ -43,10 +43,10 @@ export function CertificationSection({ className }: CertificationSectionProps) {
             <Award className="w-3 h-3 mr-1" />
             Professional Certification
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold !text-black mb-4">
             Broker Certification Program
           </h2>
-          <p className="text-black/70 max-w-2xl mx-auto">
+          <p className="!text-black/70 max-w-2xl mx-auto">
             Complete all phases to earn your official JBJ Broker Certification. 
             Each phase must be completed in order.
           </p>

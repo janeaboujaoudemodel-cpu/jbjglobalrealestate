@@ -119,8 +119,8 @@ export function Book3DCard({ book, progress, onOpen, index }: Book3DCardProps) {
           style={{ transformStyle: "preserve-3d", transform: "rotateY(-8deg) rotateX(4deg)" }}
         >
           {/* Book Cover */}
-          <div
-            className={`relative bg-gradient-to-br ${pathStyle.bg} rounded-lg overflow-hidden shadow-2xl ${pathStyle.border} border h-[400px] flex flex-col`}
+           <div
+            className={`relative bg-gradient-to-br ${pathStyle.bg} rounded-lg overflow-hidden shadow-2xl ${pathStyle.border} border min-h-[400px] max-h-[400px] h-[400px] flex flex-col`}
             style={{
               boxShadow: `16px 16px 50px rgba(0,0,0,0.7), -4px -4px 15px ${pathStyle.glow}`,
             }}
@@ -209,13 +209,13 @@ export function Book3DCard({ book, progress, onOpen, index }: Book3DCardProps) {
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="w-full group-hover:bg-gold group-hover:text-black transition-colors"
+                    className="w-full bg-gold/20 hover:bg-gold hover:text-black text-gold border border-gold/40 font-semibold transition-colors"
                     onClick={(e) => {
                       e.stopPropagation();
                       onOpen(book);
                     }}
                   >
-                    Open Book
+                    {progress?.status === 'completed' ? 'Review Book' : progress?.status === 'in_progress' ? 'Continue Reading' : 'Open Book'}
                     <ArrowRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 )}
