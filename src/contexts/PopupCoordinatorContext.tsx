@@ -113,8 +113,13 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
     });
   }, [getPriority]);
 
+  // Track last dismissal time for delay between popups
+  const [lastDismissedAt, setLastDismissedAt] = useState<number>(0);
+  const POPUP_DELAY_MS = 3000; // 3 second delay between popups
+
   // Notify that a popup is dismissed
   const notifyDismissed = useCallback((id: PopupId) => {
+    setLastDismissedAt(Date.now());
     setRequests(prev => {
       const newRequests = new Map(prev);
       newRequests.delete(id);
@@ -148,10 +153,19 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
     }
   }, [requests]);
 
-  // STRICT: Only active popup can show - no exceptions
+  // STRICT: Only active popup can show - no exceptions, with delay between dismissals
   const canShow = useCallback((id: PopupId): boolean => {
     // QA Mode: Block all popups for testing/screenshots
     if (isQAMode) return false;
+    
+    // Enforce delay between popups
+    if (lastDismissedAt > 0 && Date.now() - lastDismissedAt < POPUP_DELAY_MS) {
+      // Schedule a re-check after the delay
+      setTimeout(() => {
+        setRequests(prev => new Map(prev)); // trigger re-evaluation
+      }, POPUP_DELAY_MS - (Date.now() - lastDismissedAt) + 50);
+      return false;
+    }
     
     const request = requests.get(id);
     if (!request?.wantsToShow) return false;
@@ -164,7 +178,7 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
     
     // All other popups: only if they are the active popup
     return activePopup === id;
-  }, [requests, activePopup, isQAMode]);
+  }, [requests, activePopup, isQAMode, lastDismissedAt]);
 
   return (
     <PopupCoordinatorContext.Provider

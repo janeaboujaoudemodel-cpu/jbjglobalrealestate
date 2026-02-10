@@ -3067,6 +3067,33 @@ export type Database = {
           },
         ]
       }
+      cookie_consents: {
+        Row: {
+          consent_status: string
+          created_at: string
+          id: string
+          preferences: Json
+          user_agent: string | null
+          visitor_id: string
+        }
+        Insert: {
+          consent_status: string
+          created_at?: string
+          id?: string
+          preferences?: Json
+          user_agent?: string | null
+          visitor_id: string
+        }
+        Update: {
+          consent_status?: string
+          created_at?: string
+          id?: string
+          preferences?: Json
+          user_agent?: string | null
+          visitor_id?: string
+        }
+        Relationships: []
+      }
       course_sessions: {
         Row: {
           content_accessed: string[] | null

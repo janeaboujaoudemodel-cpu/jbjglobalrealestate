@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Cookie, X } from "lucide-react";
+import { Cookie } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const COOKIES_CONSENT_KEY = "jj_cookies_consent";
 
@@ -38,16 +39,32 @@ const CookiesConsentBanner = () => {
     }
   }, [requestToShow]);
 
-  const saveConsent = (status: ConsentStatus, prefs?: CookiePreferences) => {
+  const saveConsent = async (status: ConsentStatus, prefs?: CookiePreferences) => {
+    const finalPrefs = prefs || preferences;
     const consentData = {
       status,
-      preferences: prefs || preferences,
+      preferences: finalPrefs,
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem(COOKIES_CONSENT_KEY, JSON.stringify(consentData));
     dismiss();
     setShouldShow(false);
     setShowPreferences(false);
+
+    // Persist to backend for audit trail
+    try {
+      const visitorId = localStorage.getItem('jj_visitor_id') || crypto.randomUUID();
+      localStorage.setItem('jj_visitor_id', visitorId);
+      await supabase.from('cookie_consents').insert({
+        visitor_id: visitorId,
+        consent_status: status === 'pending' ? 'essential' : status,
+        preferences: finalPrefs as any,
+        user_agent: navigator.userAgent,
+      });
+    } catch (e) {
+      // Silent fail - localStorage is the primary store
+      console.error('Failed to persist cookie consent:', e);
+    }
   };
 
   const handleAcceptAll = () => {
@@ -78,50 +95,46 @@ const CookiesConsentBanner = () => {
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="fixed bottom-0 left-0 right-0 z-50 p-4"
         >
-          <div className="max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] backdrop-blur-xl border border-gold/40 rounded-2xl shadow-2xl shadow-gold/10 overflow-hidden">
+          <div className="max-w-lg sm:max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] backdrop-blur-xl border border-gold/40 rounded-2xl shadow-2xl shadow-gold/10 overflow-hidden">
             {/* Top gold accent line */}
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
             
             {/* Main Banner */}
             {!showPreferences ? (
-              <div className="p-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/50 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner">
-                    <Cookie className="w-6 h-6 text-gold" />
+              <div className="p-4 sm:p-6">
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/50 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner">
+                    <Cookie className="w-5 h-5 sm:w-6 sm:h-6 text-gold" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-black font-semibold text-lg mb-2">We value your privacy</h3>
-                    <p className="text-black/70 text-sm leading-relaxed mb-4">
-                      We use cookies to enhance your experience and improve performance. You can choose 
-                      your preferences anytime. Essential cookies are required for the website to function.
+                    <h3 className="text-black font-semibold text-base sm:text-lg mb-1.5">We value your privacy</h3>
+                    <p className="text-black/70 text-xs sm:text-sm leading-relaxed mb-3">
+                      We use cookies to enhance your experience. Essential cookies are required for the website to function.
                     </p>
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                       <Button
                         onClick={handleAcceptAll}
-                        className="bg-gold text-black font-semibold hover:brightness-110 transition-all border border-gold/50 shadow-lg px-6"
+                        className="bg-gold text-black font-semibold hover:brightness-110 transition-all border border-gold/50 shadow-lg px-4 sm:px-6 text-sm"
                       >
                         Accept All
                       </Button>
                       <Button
                         onClick={() => setShowPreferences(true)}
                         variant="outline"
-                        className="bg-white/80 border-black/20 text-black font-medium hover:bg-black hover:text-white transition-all px-6"
+                        className="bg-white/80 border-black/20 text-black font-medium hover:bg-black hover:text-white transition-all px-4 sm:px-6 text-sm"
                       >
                         Manage Preferences
                       </Button>
                     </div>
-                    <p className="text-black/50 text-xs mt-4">
-                      Read our{" "}
+                    <p className="text-black/50 text-[10px] sm:text-xs mt-3">
                       <Link to="/cookies" className="text-gold hover:text-gold/80 underline underline-offset-2 font-medium">
                         Cookies Policy
-                      </Link>{" "}
-                      and{" "}
+                      </Link>{" · "}
                       <Link to="/privacy" className="text-gold hover:text-gold/80 underline underline-offset-2 font-medium">
                         Privacy Policy
                       </Link>
                     </p>
                   </div>
-                  {/* Removed X button - users must make explicit choice */}
                 </div>
               </div>
             ) : (
