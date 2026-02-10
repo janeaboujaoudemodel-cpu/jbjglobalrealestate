@@ -111,7 +111,16 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
           <SelectContentDark className="max-h-72">
             <SelectItemDark value="all">All Developers</SelectItemDark>
             {allDevelopersSorted.map((dev) => (
-              <SelectItemDark key={dev.id} value={dev.id}>{dev.name}</SelectItemDark>
+              <SelectItemDark key={dev.id} value={dev.id}>
+                <span className="flex items-center gap-2">
+                  {dev.logo_url ? (
+                    <img src={dev.logo_url} alt="" className="w-5 h-5 object-fill rounded-sm flex-shrink-0" />
+                  ) : (
+                    <Building2 className="w-4 h-4 text-zinc-500 flex-shrink-0" />
+                  )}
+                  {dev.name}
+                </span>
+              </SelectItemDark>
             ))}
           </SelectContentDark>
         </Select>
