@@ -1,61 +1,69 @@
 
 
-# Fix: Awards Cards, Mortgage Full Numbers, Developer Logo, and Awards Page Premium Upgrade
+# Fix: Replace All Fake Area Photos with Real Project Images
 
-## 1. Awards: Swap Duplicate Q2 No.11 Photo
+## Problem
 
-The current `award07` uses `emaar-q2-no11-2021a.png`. The user wants the second photo (`emaar-q2-no11-2021b.png`) which shows the award positioned to the left of the "1st Place Top Performing Partner" award.
+20 areas in the database have Unsplash stock photos instead of real Dubai location images. Every one of these areas already has real project images from Reelly in the `project_images` table that can be used instead. Additionally, the fallback for areas with NO image also uses an Unsplash photo, and some Unsplash URLs may fail to load (showing black).
 
-**File:** `src/pages/Awards.tsx`
-- Change import on line 12 from `emaar-q2-no11-2021a.png` to `emaar-q2-no11-2021b.png`
+## Solution: Two-Part Fix
 
-## 2. Mortgage Calculator: Full Numbers Instead of Abbreviated
+### Part 1: Database Update -- Replace Unsplash URLs with Real Project Images (Edge Function)
 
-The compact mode (6-card grid) currently uses `formatCurrencyAbbreviated()` which shows values like "AED 1.6M" or "AED 400K". The user wants full readable numbers like "AED 1,600,000" so users know exactly how much they pay.
+Create an edge function `repair-area-images` that:
+1. Finds all areas where `image_url` contains "unsplash.com"
+2. For each area, looks up the first project image from `project_images` via matching `area_name`
+3. Updates the area's `image_url` with the real project cover image
+4. For areas with no matching project images, sets `image_url` to NULL (so the frontend fallback handles it gracefully)
 
-**File:** `src/components/MortgageCalculator.tsx`
-- Lines 113, 127, 141, 155, 169, 184: Replace `formatCurrencyAbbreviated(...)` with `formatCurrency(...)` in all 6 compact cards
-- Reduce font size in compact cards to fit full numbers: change `text-xs sm:text-sm` to `text-[10px] sm:text-xs` for the currency values so long numbers like "AED 2,000,000" fit within the card without overflowing
+This will replace all 20 fake Unsplash photos in one pass.
 
-## 3. Awards Page: Hero Video + Premium UI
+### Part 2: Frontend Fix -- Remove Unsplash Fallback
 
-### 3a. Hero Section Video Background
-Add a looping, muted background video (reuse the press-kit hero video or a premium awards-style video) behind the hero section for a premium feel.
+**File: `src/pages/AreaGuides.tsx` (line 306)**
+- Remove the Unsplash fallback image (`unsplash.com/photo-1512453979798...`)
+- Replace with a branded gradient placeholder (MapPin icon on dark gradient) -- no external stock photo
 
-**File:** `src/pages/Awards.tsx`
-- Import the hero video asset
-- Add a `<video>` element as an absolute background in the hero section with autoplay, loop, muted, playsInline
-- Add a dark overlay gradient for text readability
+**File: `src/pages/AreaDetail.tsx` / `AreaHeroSection`**
+- Verify the hero section also does not fall back to Unsplash
 
-### 3b. Fix Stats Cards Overflow
-The "Social Followers" stat shows "1,000,000+" which overflows the card on mobile. 
+### Part 3: Run the Edge Function
 
-**File:** `src/pages/Awards.tsx`
-- Add responsive text sizing to the CounterStat component: `text-2xl md:text-4xl lg:text-5xl` instead of fixed `text-4xl md:text-5xl`
-- Add `break-words` and `min-w-0` to prevent overflow
+After deploying, invoke `repair-area-images` to update all 20 areas in the database with real images from their associated projects.
 
-### 3c. Award Cards: Consistent Sizing and Premium Look
-- Set a fixed height for the image container so all cards are uniform
-- Ensure text content stays within card boundaries with `line-clamp` and proper padding
-- Add a subtle gold glow on hover for premium feel
+## Areas That Will Be Fixed (all 20)
 
-## 4. Developer Logo (Imtiaz): Fix Sizing
-
-The Imtiaz logo appears too large and not readable in the `w-12 h-12` container with `object-fill` which stretches it.
-
-**File:** `src/components/ProjectCard.tsx`
-- Change the logo `<img>` from `object-fill` to `object-contain` with some padding (`p-1`) so the logo sits inside the container without being stretched/distorted
-- This ensures logos like Imtiaz that have non-square aspect ratios remain readable
-
-**File:** `src/components/ReellyProjectCard.tsx`
-- Apply the same fix if the developer logo rendering exists here
+| Area | Current (Fake) | Will Use |
+|------|----------------|----------|
+| Abu Dhabi | Unsplash stock | Reelly project cover |
+| Al Furjan | Unsplash stock | Reelly project cover |
+| Arjan | Unsplash stock | Reelly project cover |
+| Damac Hills | Unsplash stock | Reelly project cover |
+| Damac Lagoons | Unsplash stock | Reelly project cover |
+| Dubai Creek Harbour | Unsplash stock | Reelly project cover |
+| Dubai Expo City | Unsplash stock | Reelly project cover |
+| Dubai Hills | Unsplash stock | Reelly project cover |
+| Dubai Islands | Unsplash stock | Reelly project cover |
+| Dubailand Residence Complex | Unsplash stock | Reelly project cover |
+| Jebel Ali Village | Unsplash stock | Reelly project cover |
+| JVT (Jumeirah Village Triangle) | Unsplash stock | Reelly project cover |
+| Majan | Unsplash stock | Reelly S3 cover |
+| Meydan | Unsplash stock | Reelly project cover |
+| Mina Rashid | Unsplash stock | Reelly project cover |
+| The Valley | Unsplash stock | Reelly project cover |
+| Town Square | Unsplash stock | Reelly project cover |
+| Yas Island | Unsplash stock | Reelly project cover |
+| Al Marjan Island | Unsplash stock | Reelly project cover |
+| Azizi Riviera at Meydan One | Unsplash stock | Reelly project cover |
 
 ## Technical Summary
 
 | File | Change |
 |------|--------|
-| `src/pages/Awards.tsx` | Swap award07 to use `emaar-q2-no11-2021b.png`; add hero video background; fix stats overflow; improve card consistency |
-| `src/components/MortgageCalculator.tsx` | Replace `formatCurrencyAbbreviated` with `formatCurrency` in all 6 compact cards; adjust font sizes for fit |
-| `src/components/ProjectCard.tsx` | Change developer logo from `object-fill` to `object-contain p-1` for readable logos |
-| `src/components/ReellyProjectCard.tsx` | Same logo fix |
+| `supabase/functions/repair-area-images/index.ts` | New edge function to replace Unsplash URLs with real project images |
+| `src/pages/AreaGuides.tsx` | Remove Unsplash fallback, use branded gradient placeholder |
 
+## Result
+- Zero Unsplash/stock photos on area cards
+- All area images sourced from real project photography
+- Branded fallback for any area that genuinely has no project images
