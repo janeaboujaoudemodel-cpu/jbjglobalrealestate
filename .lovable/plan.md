@@ -1,75 +1,57 @@
 
 
-# Fix Plan: Prices, Palm Jumeirah Content, Recommendations UI, and Sold Status
+# Fix "Details on Request" Across All Listings
 
-## Problem 1: Broken Prices (Decimal Garbage)
+## Problem
 
-**Root cause:** The database stores prices with floating-point artifacts (e.g., `4205000.0135` instead of `4,205,000`). The `formatPriceWithCurrency` function in both `ProjectCard.tsx` and `ReellyProjectCard.tsx` uses `.toFixed(2)` for millions, which produces values like `AED 4.21M` -- but worse, for some prices it shows the raw decimal noise.
+The `ReellyProjectCard.tsx` component shows **"Details on Request"** for every project with a null price -- it does NOT distinguish between sold-out projects and active ones. The previous fix only applied to `ProjectCard.tsx` but missed `ReellyProjectCard.tsx`.
 
-**Fix:** Round all prices to the nearest whole number before formatting. Changes in 3 places:
+**Data breakdown:**
+- 1,194 projects have prices (working fine)
+- 603 projects are sold out with no price -- should show **"Sold"**
+- 12 active projects have no price -- these need price backfill from Reelly API
 
-1. **`src/components/ProjectCard.tsx` (line 49-58)** -- Replace `formatPriceWithCurrency`:
-   - Round `converted` to nearest integer with `Math.round()` before any formatting
-   - For millions: use `(Math.round(converted) / 1000000).toFixed(1)` (one decimal max, e.g., "AED 4.2M")
-   - For thousands: same `Math.round` treatment
-   - Remove `.toFixed(2)` which shows ugly two-decimal values
+## Fix
 
-2. **`src/components/ReellyProjectCard.tsx` (line 47-57)** -- Same fix as above (identical function)
+### 1. Fix ReellyProjectCard.tsx price display (line 248-258)
 
-3. **`src/components/PropertyRecommendationPopup.tsx` (line 134-138)** -- Same fix for its `formatPrice` function
+Replace the current logic:
+```
+project.price_from ? "Starting from ..." : "Details on Request"
+```
 
-4. **`src/utils/formatNumber.ts` (line 46)** -- Already uses `maximumFractionDigits: 0` which is correct, but add explicit `Math.round()` before `toLocaleString` as an extra safeguard
+With the same three-way logic already in `ProjectCard.tsx`:
+- Has price --> show formatted price
+- No price + sold out --> show **"Sold"** in red
+- No price + active --> show **"Price on Request"** in gold
 
-## Problem 2: Missing Prices and "Sold Out" Status
+### 2. Backfill prices for 12 active projects via Reelly API
 
-**Database shows:** Villa Amaya, Villa Elaine, Five Palm, Luce, Orla Infinity, Seven Palm, Searenity, Six Senses, The Palm Tower, Royal Bay, SLS Residences all have `is_sold_out: true` or `sale_status: Sold Out` with `price_from: null`.
+Call the existing `reelly-backfill-details` edge function to re-fetch detail data for these 12 projects from the Reelly API. The API may have pricing data that was missed during the initial sync. The 12 projects are:
 
-**Fix in `ProjectCard.tsx`:**
-- When `price_from` is null AND project is sold out (`is_sold_out === true` or `sale_status` contains "Sold"), show "Sold" instead of hiding the price line entirely
-- When `price_from` is null and NOT sold out, show "Price on Request"
+- Radisson Residences (reelly_id: 3169)
+- Arabian Hills Estate (1261)
+- Stamn Mia Tower (3001)
+- Wadi Villas (1124)
+- Masaar 2 Anber (2438)
+- Nad Al Sheba Gardens Phase 9 (2911)
+- Waldorf Astoria Residences (2335)
+- The Ritz Carlton Al Wadi Desert Resort (1013)
+- The Residences at Sheraton Al Marjan Island Resort (2902)
+- Rabdan Square (3041)
+- Marquis Horizon (3143)
+- Fiori Residences (2942)
 
-**Changes:**
-- `src/components/ProjectCard.tsx` (lines 307-314) -- Replace the price display block to handle null prices with sold-out status
-- `src/components/ReellyProjectCard.tsx` -- Same treatment
-
-## Problem 3: Palm Jumeirah Description Too Short
-
-Current description in the database: "Palm Jumeirah is the iconic artificial island offering luxury living with stunning waterfront views." -- one sentence only.
-
-**Fix:** Update the `areas` table to add a rich, detailed description for Palm Jumeirah including:
-- Development history (started 2001, by Nakheel)
-- Key facts (5.72 km long, shaped like a palm tree)
-- Price appreciation data (yearly increases)
-- Lifestyle highlights (beach clubs, luxury hotels, dining)
-- Investment appeal
-
-This will be a database update (UPDATE query on the areas table).
-
-Additionally, update `AreaAboutSection.tsx` to display longer descriptions with proper formatting -- split into paragraphs if the description is long enough (over 300 characters).
-
-## Problem 4: Recommendation Popup UI Colors
-
-The recommendation popup currently uses `bg-gradient-to-br from-zinc-900 via-black to-zinc-900` with `border-gold/30`. The user wants the colors/UI improved.
-
-**Fix in `PropertyRecommendationPopup.tsx`:**
-- Change the popup background to a premium dark gradient with gold accent: `bg-gradient-to-br from-[#1a1a1a] via-[#0d0d0d] to-[#1a1a1a]` with `border border-gold/50`
-- Increase border visibility and add a subtle gold glow: `shadow-[0_0_30px_rgba(212,175,55,0.15)]`
-- Make project cards inside the popup have stronger hover contrast
-
-## Implementation Order
-
-1. Fix `formatPriceWithCurrency` in ProjectCard.tsx and ReellyProjectCard.tsx (price rounding)
-2. Fix null price display -- show "Sold" or "Price on Request"
-3. Fix PropertyRecommendationPopup price formatting and UI colors
-4. Update Palm Jumeirah description in the database
-5. Update AreaAboutSection to handle long descriptions with paragraph breaks
+If the Reelly API still returns no price for some, those will correctly show "Price on Request" which is the standard real estate industry practice for pre-launch or unannounced pricing.
 
 ## Files Changed
 
-- `src/components/ProjectCard.tsx` -- Fix formatPriceWithCurrency, handle null prices
-- `src/components/ReellyProjectCard.tsx` -- Same price fixes
-- `src/components/PropertyRecommendationPopup.tsx` -- Fix formatPrice and UI colors
-- `src/components/area-detail/AreaAboutSection.tsx` -- Support long descriptions with paragraphs
-- `src/utils/formatNumber.ts` -- Add Math.round safeguard
-- Database: UPDATE areas SET description = '...' WHERE slug = 'palm-jumeirah'
+- **`src/components/ReellyProjectCard.tsx`** (lines 248-258) -- Add sold-out check and "Price on Request" fallback, matching `ProjectCard.tsx` logic
+- **Edge function call** -- Trigger `reelly-backfill-details` for the 12 active projects to attempt price backfill
 
+## Result
+
+After this fix:
+- 603 sold-out projects show "Sold" instead of "Details on Request"
+- 12 active projects show actual prices (if Reelly API has them) or "Price on Request"
+- No project will show "Details on Request" anymore
