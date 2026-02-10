@@ -236,7 +236,7 @@
          {/* Content */}
          <div className="p-4 flex-1 flex flex-col">
            {/* Project Name */}
-           <h4 className="text-gold text-lg font-bold mb-1 line-clamp-1 hover:text-gold/80 transition-colors">
+           <h4 className="text-black text-lg font-bold mb-1 line-clamp-1 hover:text-gold transition-colors">
              {project.name}
            </h4>
            
@@ -291,7 +291,7 @@
            {/* Description with ...more link */}
            <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2">
               {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-               <span className="text-gold font-bold underline hover:text-gold/80 cursor-pointer ml-1 inline-flex items-center gap-0.5">
+               <span className="text-black font-bold underline hover:text-black/70 cursor-pointer ml-1 inline-flex items-center gap-0.5">
                  ...more →
                </span>
            </p>
