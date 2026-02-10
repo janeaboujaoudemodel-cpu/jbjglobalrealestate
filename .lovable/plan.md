@@ -1,27 +1,35 @@
 
 
-# Auto-Generate AI Area Intelligence
+# Standardize Area Map to Match Approved Map Card
 
 ## Problem
-The AI Area Intelligence section requires users to click "Generate AI Area Analysis" button, and even when clicked, it shows "Analysis not available" because:
-- The request body sends `{ prompt, area }` but the edge function expects `{ area, propertyType }`
-- The response reads `data?.analysis` but the function returns `data?.fullAnalysis`
+The `AreaMapSection` uses a basic OpenStreetMap tile layer with no view toggle (satellite/street/terrain), no navigation controls (zoom/recenter/3D), and no error boundary. The approved map card pattern (used in `ProjectLocationMap.tsx`) includes all of these features.
 
-## Solution
+## Changes
 
-**File:** `src/components/area-detail/AreaAIAnalyzer.tsx`
+### File: `src/components/area-detail/AreaMapSection.tsx` -- Full Rewrite
 
-### Changes:
-1. **Auto-trigger on load**: Add a `useEffect` that calls the analysis automatically once `stats` data is available (no button click needed)
-2. **Fix request body**: Send `{ area: areaName, propertyType: "all" }` to match the edge function's expected format
-3. **Fix response mapping**: Read `data?.fullAnalysis` instead of `data?.analysis`
-4. **Remove the button**: Replace the button UI with a loading spinner that shows while the analysis generates automatically
-5. **Cache results**: Use the existing `useState` to prevent re-fetching on re-renders
+Replace the current basic map with the approved map card pattern:
 
-### Technical Details
-- Add `useEffect` with dependency on `stats` — when stats load and analysis is null, auto-call `handleAnalyze()`
-- Update the invoke call: `supabase.functions.invoke("ai-property-analyzer", { body: { area: areaName, propertyType: "all" } })`
-- Update response: `setAnalysis(data?.fullAnalysis || "Analysis not available.")`
-- Replace button section with a centered `Loader2` spinner and "Analyzing [area]..." text during loading
-- Add `useRef` flag to prevent duplicate calls
+1. **Satellite default view** with satellite/street/terrain toggle (same `MapViewToggle` + `DynamicTileLayer` pattern from `ProjectLocationMap.tsx`)
+2. **Navigation controls** -- import and add `MapNavigationControls` (zoom in/out, recenter, 3D Google Earth button)
+3. **Error boundary** -- wrap in `MapErrorBoundary`
+4. **External link** -- "Open in Google Maps" button via `Maximize` icon
+5. **Disable default zoom control** (`zoomControl={false}`) since custom controls replace it
+6. **Hide attribution** (`attributionControl={false}`) for cleaner look
+7. **Gold-bordered, rounded card** with `border-gold/30` and `touch-action: none`
+8. **Project popups** -- keep existing project marker popups with images and links
+
+### File: `src/pages/AreaDetail.tsx` -- Wrap map in error boundary
+
+Wrap `AreaMapSection` with `MapErrorBoundary` for resilience.
+
+## Technical Details
+
+The approved map card uses these components internally:
+- `DynamicTileLayer` -- switches tile source (satellite via Esri, street via OSM, terrain via Stamen)
+- `MapViewToggle` -- left-side button group for view switching + external maps button
+- `MapNavigationControls` -- right-side zoom/recenter/3D buttons (from `src/components/maps/MapNavigationControls.tsx`)
+
+These will be added directly inside `AreaMapSection.tsx` (inline components like `ProjectLocationMap` does) so the area map matches the project map exactly. The map height stays at 500px, satellite is the default view, and all project markers with popups are preserved.
 
