@@ -39,8 +39,8 @@
  import { SEOHead } from "@/components/SEOHead";
  import { FeaturedProjectAd, FEATURED_ADS } from "@/components/FeaturedProjectAd";
  import { blueprintPagesSEO } from "@/types/blueprint";
- import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
- 
+import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
+import { CurrencyTooltip } from "@/components/CurrencyTooltip";
 // Currency conversion rates - 10 unified currencies
 const CURRENCY_RATES: Record<string, number> = {
   AED: 1,
@@ -97,14 +97,14 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
    { value: "Ras Al Khaimah", label: "Ras Al Khaimah" },
  ];
  
- const SALE_STATUS = [
-   { value: "all", label: "All Sale Statuses" },
-   { value: "Announced", label: "Announced" },
-   { value: "Presale (EOI)", label: "Presale (EOI)" },
-   { value: "Start of Sales", label: "Start of Sales" },
-   { value: "On Sale", label: "On Sale" },
-   { value: "Sold Out", label: "Sold Out" },
- ];
+  const SALE_STATUS = [
+    { value: "all", label: "All Sale Statuses", dotClass: "" },
+    { value: "Announced", label: "Announced", dotClass: "bg-gold" },
+    { value: "Presale (EOI)", label: "Presale (EOI)", dotClass: "bg-amber-500" },
+    { value: "Start of Sales", label: "Start of Sales", dotClass: "bg-blue-500" },
+    { value: "On Sale", label: "On Sale", dotClass: "bg-emerald-500" },
+    { value: "Sold Out", label: "Sold Out", dotClass: "bg-red-500" },
+  ];
  
  const CONSTRUCTION_STATUS = [
    { value: "all", label: "All Statuses" },
@@ -225,18 +225,18 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
              transition={{ duration: 0.6 }}
              className="text-center max-w-4xl mx-auto"
            >
-             <button 
-               className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
-               style={{
-                 background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-                 backdropFilter: 'blur(20px)',
-                 border: '1.5px solid rgba(200,167,102,0.6)',
-                 boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
-               }}
-             >
-               <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-               <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Live from Reelly API</span>
-             </button>
+            <div 
+                className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
+                  backdropFilter: 'blur(20px)',
+                  border: '1.5px solid rgba(200,167,102,0.6)',
+                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
+                }}
+              >
+                <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+                <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Premium Curated Listings</span>
+              </div>
              
              <h1 
                className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-[-0.02em]"
@@ -253,7 +253,7 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
        </PropertiesHeroVideo>
  
        {/* Filters Section */}
-       <section className="sticky top-16 lg:top-[72px] z-40 bg-black py-4 border-b border-gold/30">
+       <section className="sticky top-24 lg:top-20 z-40 bg-black py-4 border-b border-gold/30">
          <div className="container mx-auto px-3 sm:px-4">
            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
              
@@ -299,13 +299,16 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
                    <CheckCircle className="w-4 h-4 mr-2 text-gold" />
                    <SelectValue placeholder="Sale Status" />
                  </SelectTrigger>
-                 <SelectContent className="bg-white border-gold/30">
-                   {SALE_STATUS.map((s) => (
-                     <SelectItem key={s.value} value={s.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
-                       {s.label}
-                     </SelectItem>
-                   ))}
-                 </SelectContent>
+                  <SelectContent className="bg-white border-gold/30">
+                    {SALE_STATUS.map((s) => (
+                      <SelectItem key={s.value} value={s.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
+                        <span className="flex items-center gap-2">
+                          {s.dotClass && <span className={`w-2.5 h-2.5 rounded-full ${s.dotClass} flex-shrink-0`} />}
+                          {s.label}
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
                </Select>
  
                {/* Advanced Filters Dialog */}
@@ -591,9 +594,10 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
            </div>
          </div>
        </section>
-       </div>
-     </>
-   );
+        <CurrencyTooltip />
+        </div>
+      </>
+    );
  };
  
  export default PropertiesReelly;

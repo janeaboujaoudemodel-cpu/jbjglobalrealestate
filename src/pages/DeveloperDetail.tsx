@@ -8,6 +8,7 @@ import EmiratesTabs from "@/components/EmiratesTabs";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon } from "lucide-react";
+import { getHighResImageUrl } from "@/lib/imageUtils";
 import { Button } from "@/components/ui/button";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
@@ -84,26 +85,26 @@ const DeveloperDetail = () => {
     {
       icon: Calendar,
       label: "Founded",
-      value: developer.founded_year || "N/A",
+      value: developer.founded_year || null,
     },
     {
       icon: Building2,
       label: "Units Delivered",
       value: developer.completed_projects
         ? `${developer.completed_projects.toLocaleString()}+`
-        : "N/A",
+        : null,
     },
     {
       icon: TrendingUp,
       label: "Active Projects",
-      value: developer.offplan_projects || projects?.length || "N/A",
+      value: developer.offplan_projects || projects?.length || null,
     },
     {
       icon: MapPin,
       label: "Headquarters",
-      value: developer.headquarters || "UAE",
+      value: developer.headquarters || null,
     },
-  ];
+  ].filter(s => s.value !== null);
 
   return (
     <section className="relative w-full min-h-screen bg-premium-bg">
@@ -111,13 +112,22 @@ const DeveloperDetail = () => {
       {developer.feature_image_url && (
         <div className="relative w-full h-screen min-h-[500px] overflow-hidden">
           <img
-            src={developer.feature_image_url}
+            src={getHighResImageUrl(developer.feature_image_url)}
             alt={`${developer.name} featured project`}
             className="w-full h-full object-cover"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-premium-bg via-premium-bg/40 to-transparent" />
-          <div className="absolute bottom-4 left-4 md:left-8">
+          <div className="absolute inset-0 bg-gradient-to-t from-premium-bg via-premium-bg/60 to-black/30" />
+          {/* Hero Title Overlay */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white text-center mb-4 drop-shadow-lg" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              {developer.name}
+            </h1>
+            <p className="text-white/80 text-lg md:text-xl text-center max-w-2xl">
+              {(developer as any).tagline || `Discover premium developments by ${developer.name}`}
+            </p>
+          </div>
+          <div className="absolute bottom-4 left-4 md:left-8 z-10">
             <Link to="/developers">
               <Button variant="primary" size="sm" className="group">
                 <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
@@ -239,13 +249,15 @@ const DeveloperDetail = () => {
             {selectedEmirate ? `Projects in ${selectedEmirate}` : "All Projects"}
           </h2>
 
-          <ProjectFilters
-            filters={filters}
-            onFiltersChange={setFilters}
-            communities={communities}
-            trendingAreas={trendingAreas}
-            showDeveloperFilter={false}
-          />
+          <div className="bg-black rounded-2xl p-4 mb-6">
+            <ProjectFilters
+              filters={filters}
+              onFiltersChange={setFilters}
+              communities={communities}
+              trendingAreas={trendingAreas}
+              showDeveloperFilter={false}
+            />
+          </div>
 
           {hasFiltersApplied && (
             <p className="text-foreground/70 mb-6">
@@ -255,13 +267,13 @@ const DeveloperDetail = () => {
           )}
 
           {loadingProjects ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[...Array(8)].map((_, i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
                 <Skeleton key={i} className="aspect-[4/3] rounded-lg bg-champagne/50" />
               ))}
             </div>
           ) : filteredProjects.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProjects.map((project) => (
                 <ProjectCard key={project.id} project={project} />
               ))}
