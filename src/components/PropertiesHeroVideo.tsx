@@ -7,7 +7,6 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Import videos - using new generated videos for Burj Khalifa and Burj Al Arab
-import palmAtlantisVideo from "@/assets/videos/why-dubai-atlantis-palm.mp4";
 import burjAlArabVideo from "@/assets/videos/burj-al-arab-aerial.mp4";
 import burjKhalifaVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
 
@@ -19,7 +18,6 @@ interface VideoScene {
 
 const VIDEO_SCENES: VideoScene[] = [
   { id: "downtown", video: burjKhalifaVideo, label: "Downtown Dubai" },
-  { id: "palm", video: palmAtlantisVideo, label: "Palm Jumeirah" },
   { id: "burj-al-arab", video: burjAlArabVideo, label: "Burj Al Arab" },
 ];
 
