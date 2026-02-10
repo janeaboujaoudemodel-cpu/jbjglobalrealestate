@@ -1,5 +1,11 @@
 // Dutch translations
 export const nl = {
+  // LOCKED FOUNDER IDENTITY (DO NOT MODIFY)
+  'founder.name': 'Jane Bou Jaoude',
+  'founder.title': 'Oprichter & CEO',
+  'founder.titleShort': 'Oprichter & CEO',
+  'founder.company': 'JBJ Global Real Estate',
+
   // Navigation
   'nav.home': 'Home',
   'nav.founder': 'Oprichter & Leiderschap',
@@ -21,7 +27,77 @@ export const nl = {
   'nav.sellerGuide': 'Verkoopgids',
   'nav.join': 'Word Lid van Ons Team',
   'nav.crm': 'CRM Dashboard',
-  
+
+  // Header Navigation
+  'header.buyProperties': 'Vastgoed Kopen',
+  'header.rentProperties': 'Vastgoed Huren',
+  'header.listProperty': 'Uw Vastgoed Aanbieden',
+  'header.buyingAdvisory': 'Koopadvisering',
+  'header.sellingAdvisory': 'Verkoopadvisering',
+  'header.rentalAdvisory': 'Huuradvisering',
+  'header.investmentAdvisory': 'Investeringsadvisering',
+  'header.partnerIntroductions': 'Partnerintroducties',
+  'header.investorEducation': 'Investeerderseducatie',
+  'header.generalFaq': 'Algemene FAQ',
+  'header.investorFaq': 'Investeerders FAQ',
+  'header.brokerFaq': 'Makelaars FAQ',
+  'header.investorDashboard': 'Investeerders Dashboard',
+  'header.investorTools': 'Investeerderstools',
+  'header.portfolioViews': 'Portfolioweergaven',
+  'header.reportsAccess': 'Toegang tot Rapporten',
+  'header.brokerDashboard': 'Makelaars Dashboard',
+  'header.brokerTools': 'Makelaarstools',
+  'header.brokerEducation': 'Makelaarseducatie',
+  'header.brokerResources': 'Makelaarsbronnen',
+  'header.meetTeam': 'Ontmoet het Team',
+  'header.search': 'Zoeken',
+  'header.account': 'Account',
+  'header.home': 'Home',
+  'header.contact': 'Contact',
+  'header.more': 'Meer',
+  'header.signedInAs': 'Ingelogd als',
+
+  // Hero Section
+  'hero.buy': 'Kopen',
+  'hero.sell': 'Verkopen',
+  'hero.rent': 'Huren',
+  'hero.deliveredWith': 'Geleverd met Intelligentie.',
+  'hero.subtitle': 'Gelicenseerde Luxe Vastgoedmakelaardij voor koop, verkoop & huur in de VAE.',
+  'hero.partnerNote': 'Hypotheek-, juridische & visadiensten worden geleverd via gelicenseerde partners.',
+  'hero.explore': 'Ontdekken',
+  'hero.bookConsultation': 'Boek een Consultatie',
+  'hero.discover': 'Ontdek',
+  'hero.aiFinder': 'AI Woningzoeker',
+  'hero.aiFinderDesc': 'Doe uw gratis test en ontdek uw perfecte vastgoedmatch',
+  'hero.findStartingPoint': 'Vind Uw Startpunt',
+  'hero.buyers': 'Kopers',
+  'hero.sellers': 'Verkopers',
+  'hero.rentals': 'Huurders',
+  'hero.investors': 'Investeerders',
+  'hero.visitors': 'Bezoekers',
+  'hero.referral': 'Doorverwijzing',
+  'hero.careers': 'Carrières',
+  'hero.exploreProperties': 'Vastgoed Verkennen',
+  'hero.browseListings': 'Blader door aanbiedingen',
+  'hero.listYourProperty': 'Uw Vastgoed Aanbieden',
+  'hero.sellOrRent': 'Verkopen of verhuren',
+  'hero.marketReport': 'Marktrapport',
+  'hero.latestInsights': 'Laatste inzichten',
+  'hero.investorHub': 'Investeerdersportaal',
+  'hero.aiTools': 'AI-gestuurde tools',
+  'hero.legalPartners': 'Juridische Partners',
+  'hero.legalServices': 'Juridische diensten',
+  'hero.mortgagePartners': 'Hypotheekpartners',
+  'hero.financingOptions': 'Financieringsopties',
+  'hero.designBuild': 'Ontwerp & Bouw',
+  'hero.constructionFitout': 'Bouw & afwerking',
+  'hero.jbjBrokerHub': 'JBJ Makelaarshub',
+  'hero.professionalTools': 'Professionele Tools & Bronnen',
+  'hero.accessBrokerHub': 'Toegang tot Makelaarshub',
+  'hero.jbjInvestorHub': 'JBJ Investeerdershub',
+  'hero.freeAiTools': 'Gratis AI-Tools voor Investeerders',
+  'hero.exploreInvestorHub': 'Investeerdershub Verkennen',
+
   // Homepage
   'home.hero.welcome': 'JBJ Global Real Estate',
   'home.hero.tagline': "Dubai's Premier Vastgoedmakelaar",
@@ -47,16 +123,17 @@ export const nl = {
   'home.welcome.elevate': 'Wij Onderhandelen',
   'home.welcome.lead': 'Wij Leveren',
   'home.discover': 'Ontdekken',
-  
+
   // Stats
   'home.stats.yearsInDubai': 'Jaren Ervaring',
   'home.stats.brokersTrainedBy': 'Makelaars Opgeleid',
-  'home.stats.clientSatisfaction': 'Klanttevredenheid',
+  'home.stats.clientSatisfaction': 'Sociale Volgers',
   'home.stats.teamMembers': 'Teamleden',
   'home.stats.trackRecord': 'Ons Trackrecord',
   'home.stats.trusted': 'Wij Bedienen',
   'home.stats.clients': 'VAE & Internationale Klanten',
-  
+  'founder.experience': 'Ervaring oprichter',
+
   // Founder Section
   'founder.leadership': 'Leiderschap',
   'founder.meetThe': 'Maak Kennis met de',
@@ -65,7 +142,7 @@ export const nl = {
   'founder.years': 'Jaren Ervaring',
   'founder.brokersTrainedBy': 'Makelaars Opgeleid',
   'founder.learnMore': 'Meer Over de Oprichter',
-  'founder.title': 'Oprichter & CEO JBJ Global Real Estate',
+  'founder.pageTitle': 'Oprichter & CEO JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate is een door de oprichter geleide vastgoedmakelaar gebouwd op onwrikbare standaarden, discretie en langetermijnvisie.',
   'founder.description2': 'Jane Bou Jaoude, Oprichter & CEO van JBJ Global Real Estate, leidt met een filosofie geworteld in verantwoordelijkheid en discretie, en bouwt organisaties die ontworpen zijn om te blijven bestaan in plaats van alleen maar uit te breiden.',
   'founder.vision': 'Visie',
@@ -73,7 +150,7 @@ export const nl = {
   'founder.values': 'Waarden',
   'founder.journey': 'De Reis',
   'founder.achievements': 'Belangrijke Prestaties',
-  
+
   // About Page
   'about.title': 'Over JBJ Global Real Estate',
   'about.subtitle': 'Uw vertrouwde partner in VAE vastgoedmakelaardij',
@@ -92,7 +169,7 @@ export const nl = {
   'about.serviceDesc': 'Witte handschoen makelaardij op maat van uw unieke behoeften',
   'about.results': 'Bewezen Resultaten',
   'about.resultsDesc': 'Trackrecord van succesvolle transacties en tevreden klanten',
-  
+
   // Awards Page
   'awards.title': 'Onderscheidingen & Erkenning',
   'awards.subtitle': 'Uitmuntendheid erkend door brancheleiders',
@@ -100,7 +177,7 @@ export const nl = {
   'awards.yearLabel': 'Jaar',
   'awards.categoryLabel': 'Categorie',
   'awards.awardedBy': 'Toegekend Door',
-  
+
   // Concierge Page
   'concierge.title': 'Luxe Conciërgediensten',
   'concierge.subtitle': 'Verhef uw levensstijl met onze premium conciërgediensten',
@@ -123,7 +200,7 @@ export const nl = {
   'concierge.shoppingDesc': 'Samengestelde winkelervaringen met toegang tot exclusieve collecties',
   'concierge.inquire': 'Informeer Nu',
   'concierge.requestService': 'Vraag Deze Service Aan',
-  
+
   // Market Report
   'report.exclusive': 'Exclusieve Gratis Download',
   'report.title': 'JBJ Global Real Estate',
@@ -137,7 +214,7 @@ export const nl = {
   'report.createdBy': 'Gemaakt door Jane Bou Jaoude Oprichter & CEO JBJ Global Real Estate',
   'report.exclusiveFor': 'Exclusief voor JBJ Global Real Estate',
   'report.descriptor': 'Vastgoedmakelaar | Dubai, VAE',
-  
+
   // Mortgage
   'mortgage.title': 'Hypotheekcalculator',
   'mortgage.subtitle': 'Schat uw financieringsmogelijkheden',
@@ -157,7 +234,7 @@ export const nl = {
   'mortgage.years': 'jaar',
   'mortgage.perMonth': 'per maand',
   'mortgage.disclaimer': 'Deze calculator is alleen voor schattingsdoeleinden. JBJ Global Real Estate biedt geen hypotheekadvies. Neem contact op met een hypotheekspecialist voor professionele begeleiding.',
-  
+
   // Properties
   'properties.title': 'Vastgoed',
   'properties.subtitle': 'Geselecteerde Aanbiedingen. Wereldwijde Standaard.',
@@ -193,7 +270,7 @@ export const nl = {
   'properties.downloadAll': 'Download Alle Materialen',
   'properties.viewDetails': 'Bekijk Details',
   'properties.similarProperties': 'Vergelijkbaar Vastgoed',
-  
+
   // Favorites Page
   'favorites.title': 'Favorieten & Shortlist',
   'favorites.subtitle': 'Beheer uw opgeslagen vastgoed en shortlist projecten',
@@ -223,7 +300,7 @@ export const nl = {
   'favorites.deselectAll': 'Deselecteer Alles',
   'favorites.selected': 'geselecteerd',
   'favorites.backToProperties': 'Terug naar Vastgoed',
-  
+
   // Compare Page
   'compare.title': 'AI Vastgoedvergelijking',
   'compare.subtitle': 'Intelligente analyse aangedreven door geavanceerde AI',
@@ -240,7 +317,7 @@ export const nl = {
   'compare.recommendation': 'AI Aanbeveling',
   'compare.pros': 'Voordelen',
   'compare.cons': 'Nadelen',
-  
+
   // Quiz Page
   'quiz.title': 'AI Woningzoeker',
   'quiz.subtitle': 'Vind uw perfecte vastgoed in minuten',
@@ -270,7 +347,7 @@ export const nl = {
   'quiz.bestMatch': 'Beste Match',
   'quiz.downloadReport': 'Download Rapport',
   'quiz.shareWithConsultant': 'Deel met Consultant',
-  
+
   // Contact Section
   'contact.title': 'Neem Contact Op',
   'contact.subtitle': 'Neem contact op met ons team',
@@ -287,7 +364,7 @@ export const nl = {
   'contact.officeAddress': 'Kantooradres',
   'contact.workingHours': 'Werktijden',
   'contact.followUs': 'Volg Ons',
-  
+
   // Inquiry Form
   'inquiry.title': 'Informatie Aanvragen',
   'inquiry.subtitle': 'Vul het onderstaande formulier in en ons team neemt spoedig contact met u op',
@@ -304,7 +381,7 @@ export const nl = {
   'inquiry.budget': 'Budgetbereik',
   'inquiry.timeline': 'Aankooptijdlijn',
   'inquiry.source': 'Hoe heeft u over ons gehoord?',
-  
+
   // Services
   'services.title': 'Onze Diensten',
   'services.subtitle': 'Deskundige makelaardij en vertrouwde partnerintroducties',
@@ -324,7 +401,7 @@ export const nl = {
   'services.portfolio': 'Portfolio',
   'services.testimonials': 'Getuigenissen',
   'services.partnerDisclaimer': 'Diensten van derden worden geleverd door onafhankelijke professionals',
-  
+
   // News Page
   'news.title': 'Nieuws & Inzichten',
   'news.subtitle': 'Laatste updates van de vastgoedmarkt',
@@ -340,7 +417,7 @@ export const nl = {
   'news.investmentTips': 'Investeringstips',
   'news.propertyNews': 'Vastgoednieuws',
   'news.companyNews': 'Bedrijfsnieuws',
-  
+
   // Rental Index
   'rental.title': 'Huurindex',
   'rental.subtitle': 'Uitgebreide analyse van de huurmarkt',
@@ -353,7 +430,7 @@ export const nl = {
   'rental.byArea': 'Per Gebied',
   'rental.byType': 'Per Vastgoedtype',
   'rental.forecast': 'Marktvoorspelling',
-  
+
   // Footer
   'footer.newsletter': 'Abonneer op Nieuwsbrief',
   'footer.stayInLoop': 'Blijf Op de Hoogte',
@@ -372,7 +449,7 @@ export const nl = {
   'footer.quickLinks': 'Snelle Links',
   'footer.resources': 'Bronnen',
   'footer.support': 'Ondersteuning',
-  
+
   // Welcome Modal
   'welcome.title': 'Welkom bij JBJ Global Real Estate',
   'welcome.titleReturning': 'Welkom Terug!',
@@ -380,14 +457,14 @@ export const nl = {
   'welcome.subtitleReturning': 'Fijn dat u terug bent. Ga door met het verkennen van premium vastgoed.',
   'welcome.signIn': 'Inloggen / Account Aanmaken',
   'welcome.guest': 'Doorgaan als Gast',
-  
+
   // AI Comparison
   'ai.title': 'AI Vastgoedvergelijking',
   'ai.subtitle': 'Intelligente analyse aangedreven door geavanceerde AI',
   'ai.analyzing': 'Vastgoed analyseren...',
   'ai.complete': 'Analyse Voltooid',
   'ai.error': 'Analyse mislukt. Probeer het opnieuw.',
-  
+
   // Document Scanner
   'scanner.title': 'Documentscanner & e-Ondertekening',
   'scanner.subtitle': 'Scan, bijsnijden, onderteken en vul documenten professioneel automatisch in',
@@ -401,7 +478,7 @@ export const nl = {
   'scanner.clear': 'Wissen',
   'scanner.undo': 'Ongedaan Maken',
   'scanner.redo': 'Opnieuw Doen',
-  
+
   // Property Evaluator
   'evaluator.title': 'AI Vastgoedtaxateur',
   'evaluator.subtitle': 'Krijg nauwkeurige vastgoedwaarderingen op basis van DLD-gegevens',
@@ -412,7 +489,7 @@ export const nl = {
   'evaluator.marketComparison': 'Marktvergelijking',
   'evaluator.priceHistory': 'Prijsgeschiedenis',
   'evaluator.areaAnalysis': 'Gebiedsanalyse',
-  
+
   // Privacy & Terms
   'privacy.title': 'Privacybeleid',
   'privacy.lastUpdated': 'Laatst Bijgewerkt',
@@ -432,7 +509,7 @@ export const nl = {
   'terms.limitation': 'Beperking van Aansprakelijkheid',
   'terms.termination': 'Beëindiging',
   'terms.governing': 'Toepasselijk Recht',
-  
+
   // Authentication
   'auth.signIn': 'Inloggen',
   'auth.signUp': 'Registreren',
@@ -447,7 +524,7 @@ export const nl = {
   'auth.orContinueWith': 'Of doorgaan met',
   'auth.rememberMe': 'Onthoud mij',
   'auth.termsAgree': 'Ik ga akkoord met de Servicevoorwaarden en het Privacybeleid',
-  
+
   // Common
   'common.loading': 'Laden...',
   'common.error': 'Fout',
@@ -509,11 +586,11 @@ export const nl = {
   'common.showLess': 'Toon Minder',
   'common.seeAll': 'Bekijk Alles',
   'common.hideAll': 'Verberg Alles',
-  
+
   // Language Selector
   'lang.select': 'Selecteer Taal',
   'lang.current': 'Huidig',
-  
+
   // Errors
   'error.notFound': 'Pagina Niet Gevonden',
   'error.notFoundDesc': 'De pagina die u zoekt bestaat niet.',
@@ -525,15 +602,37 @@ export const nl = {
   'error.unauthorizedDesc': 'Log in om toegang te krijgen tot deze pagina.',
   'error.goHome': 'Ga naar Startpagina',
   'error.tryAgain': 'Probeer Opnieuw',
-  
+
   // AI Chat Support
-  'chat.title': 'AI Ondersteuning',
-  'chat.subtitle': '24/7 Online',
-  'chat.welcome': 'Hallo! Ik ben uw JBJ Global Real Estate AI-assistent. Hoe kan ik u vandaag helpen met vastgoed in Dubai?',
+  'chat.title': 'JBJ Ondersteuning',
+  'chat.subtitle': '24/7 Beschikbaar',
+  'chat.available247': '24/7 Beschikbaar',
+  'chat.welcome': 'Hallo! Ik ben uw JBJ Global Real Estate assistent. Hoe kan ik u vandaag helpen met vastgoed in de VAE?',
   'chat.placeholder': 'Typ uw bericht...',
-  'chat.error': 'Sorry, ik heb een fout ondervonden. Probeer het opnieuw of neem rechtstreeks contact op met ons team.',
+  'chat.error': 'Sorry, er is een fout opgetreden. Probeer het opnieuw of neem rechtstreeks contact op met ons team.',
   'chat.askMe': 'Vraag me alles!',
-  
+  'chat.chatWithTeam': 'Chat met ons team',
+  'chat.quickAnswers': 'Snelle antwoorden • 24/7 beschikbaar',
+  'chat.teamAssist': 'Een van onze teamleden helpt u',
+  'chat.talkDirectly': 'Praat Direct met Ons Team',
+  'chat.instantResponse': 'Directe reactie • WhatsApp',
+  'chat.urgentMatters': 'Voor dringende zaken of persoonlijk advies',
+  'chat.tip': 'Tip:',
+  'chat.tipText': 'Ons team kan de meeste vragen direct beantwoorden. Voor complexe zaken verbinden wij u met een specialist!',
+  'chat.welcomeTitle': 'Welkom bij JBJ Global Real Estate',
+  'chat.welcomeSubtitle': 'Uw premium vastgoedpartner in Dubai',
+  'chat.openChat': 'Open chatondersteuning',
+  'chat.minimize': 'Chat minimaliseren',
+  'chat.howCanWeHelp': 'Hoe kunnen wij u helpen?',
+  'chat.justNeedEmail': 'Alleen uw e-mail nodig',
+  'chat.letsGetToKnow': 'Laten we kennis maken',
+  'chat.yourConversations': 'Uw gesprekken',
+  'chat.whatCanWeHelp': 'Waarmee kunnen wij helpen?',
+  'chat.connectingYou': 'Verbinding maken...',
+  'chat.onlineHereToHelp': '🟢 Online • Klaar om te helpen',
+  'chat.howDidWeDo': 'Hoe hebben we het gedaan?',
+  'chat.thankYou': 'Bedankt!',
+
   // AI Tools
   'aiTools.calendar': 'AI Kalender & Notities',
   'aiTools.calendarDesc': 'Beheer vergaderingen, evenementen en notities met AI-assistentie',
@@ -543,4 +642,397 @@ export const nl = {
   'aiTools.shopperDesc': 'Vind uw perfecte vastgoed met AI-gestuurde aanbevelingen',
   'aiTools.hub': 'JBJ Makelaarshub',
   'aiTools.hubDesc': 'Toegang tot makelaar tools, training en ondersteuning op één plek',
+
+  // Pages - About
+  'about.hero.badge': 'Over JBJ Global Real Estate',
+  'about.hero.title': 'Gebouwd op Visie.',
+  'about.hero.titleBr': 'Gedreven door Resultaten.',
+  'about.hero.subtitle': 'Gelicenseerd om TE KOPEN · VERKOPEN · VERHUREN in de VAE.',
+  'about.hero.contactUs': 'Neem Contact Op',
+  'about.hero.browseProperties': 'Blader Door Vastgoed',
+  'about.founder.writtenBy': 'Geschreven door Oprichter & CEO,',
+  'about.founder.knowMore': 'Meer Weten Over de',
+  'about.founder.statement1': 'Ik geloof dat vastgoedbeslissingen nooit gedreven mogen worden door druk, commissies of beloften die niet bestaan in de realiteit.',
+  'about.founder.statement2': 'Er bestaat niet zoiets als gegarandeerde ROI. Vastgoed volgt cycli, marktkrachten en externe factoren die niet gecontroleerd kunnen worden.',
+  'about.founder.statement3': 'Mijn verantwoordelijkheid als oprichter is om mensen te beschermen tegen beslissingen genomen met onvolledige informatie of onrealistische verwachtingen.',
+  'about.howWeOperate': 'Hoe Wij Werken',
+  'about.howWeOperateTitle': 'Klantkapitaal, Behandeld als Ons Eigen',
+  'about.howWeOperateDesc1': 'Bij JBJ GLOBAL REAL ESTATE werken wij met klanten alsof wij ons eigen kapitaal investeren.',
+  'about.howWeOperateDesc2': 'Wij behandelen de portfolio van een klant niet als een transactie. Wij behandelen het alsof het ons eigen portfolio is.',
+  'about.clientFirst': 'Klant-Eerst Advies',
+  'about.capitalProtection': 'Kapitaalbescherming',
+  'about.longTermStrategy': 'Langetermijnstrategie',
+  'about.goalAlignment': 'Doelafstemming',
+  'about.offPlanPolicy': 'Off-Plan Beleid',
+  'about.offPlanTitle': 'Geen Kosten. Geen Druk.',
+  'about.zeroFees': 'Nul Makelaarskosten',
+  'about.zeroFeesDesc': 'Wij brengen kopers nooit kosten in rekening voor off-plan transacties',
+  'about.noSales': 'Geen Verkoopdruk',
+  'about.noSalesDesc': 'Wij adviseren op basis van uw doelen, niet op commissies',
+  'about.transparency': 'Volledige Transparantie',
+  'about.transparencyDesc': 'Alle kosten en tijdlijnen worden vooraf bekendgemaakt',
+  'about.standards': 'Onze Standaarden',
+  'about.standardsTitle': 'Compromisloze Principes',
+  'about.standardsDesc': 'Elke beslissing die wij nemen wordt geleid door deze kernprincipes die onze klanten beschermen en de integriteit van onze praktijk handhaven.',
+  'about.integrity': 'Integriteit',
+  'about.integrityDesc': 'Wij geven eerlijke beoordelingen, zelfs wanneer de waarheid oncomfortabel is. Geen vastgoed wordt oververkocht, geen risico\'s verborgen.',
+  'about.riskFirst': 'Risico-Eerst Benadering',
+  'about.riskFirstDesc': 'Wij identificeren potentiële nadelen voordat we voordelen bespreken. Kapitaalbehoud gaat vóór groei.',
+  'about.discretion': 'Discretie',
+  'about.discretionDesc': 'Klantenzaken blijven vertrouwelijk. Wij bespreken geen portfolio\'s, transacties of strategieën met derden.',
+  'about.longTerm': 'Langetermijnperspectief',
+  'about.longTermDesc': 'Wij bouwen relaties die decennia overspannen. Snelle transacties zijn niet ons bedrijfsmodel.',
+  'about.ctaTitle': 'Klaar om Met Ons te Werken?',
+  'about.ctaDesc': 'Neem contact op met ons team voor een vertrouwelijk gesprek over uw vastgoeddoelen in de VAE.',
+  'about.scheduleCall': 'Plan een Gesprek',
+
+  // Pages - Services
+  'services.hero.badge': 'Institutionele Vastgoedmakelaardij',
+  'services.hero.title': 'Premium Diensten',
+  'services.hero.subtitle': 'Deskundige makelaardij voor vastgoedverkoop, verhuur en vakantiewoningen —',
+  'services.hero.subtitleHighlight': 'plus vertrouwde partnerintroducties',
+  'services.hero.browseProperties': 'Blader Door Vastgoed',
+  'services.hero.speakWithUs': 'Spreek Met Ons',
+  'services.scroll': 'Verkennen',
+  'services.buySell': 'Koop & Verkoop Makelaardij',
+  'services.buySellDesc': 'Deskundige vertegenwoordiging voor vastgoedaankopen en -verkopen in de meest gewilde locaties van de VAE.',
+  'services.rent': 'Verhuurmakelaardij',
+  'services.rentDesc': 'Professionele verhuurdiensten voor verhuurders en huurders die kwaliteitsvastgoed zoeken.',
+  'services.holidayHomes': 'Vakantiewoningen',
+  'services.holidayHomesDesc': 'Kortetermijnverhuurondersteuning en vakantiewoningbeheer voor vastgoedeigenaren in de VAE.',
+  'services.legalPartners': 'Juridische Partners',
+  'services.legalPartnersDesc': 'Introducties bij onafhankelijke advocatenkantoren voor overdracht en juridische zaken.',
+  'services.mortgagePartners': 'Hypotheekpartners',
+  'services.mortgagePartnersDesc': 'Introducties en coördinatie met onafhankelijke, gelicenseerde hypotheekspecialisten.',
+  'services.designBuildPartners': 'Ontwerp & Bouw Partners',
+  'services.designBuildPartnersDesc': 'Introducties bij architectuur, interieurontwerp en afwerkingspartners.',
+  'services.luxuryConcierge': 'Luxe Conciërge',
+  'services.luxuryConciergeDesc': 'Witte handschoen levensstijldiensten inclusief jets, jachten en exclusieve ervaringen.',
+  'services.explore': 'Verkennen',
+  'services.aiToolsSection': 'Innovatie',
+  'services.aiToolsTitle': 'AI-Gestuurde Tools',
+  'services.aiToolsDesc': 'Verken onze tools om uw vastgoedbeslissingen te verbeteren',
+  'services.aiComparison': 'AI Vastgoedvergelijking',
+  'services.aiInterior': 'AI Interieurontwerp',
+  'services.aiMeasurement': 'AI Meting',
+  'services.mortgageCalc': 'Hypotheekcalculator',
+  'services.exploreMoreTools': 'Ontdek Meer AI-Tools',
+
+  // Pages - Properties
+  'properties.hero.badge': 'Vastgoed',
+  'properties.hero.title': 'Geselecteerde Aanbiedingen. Wereldwijde Standaard.',
+  'properties.hero.subtitle': 'Exclusief investeringswaardig vastgoed met vertrouwd advies.',
+  'properties.scroll': 'Verkennen',
+  'properties.wantTo': 'Ik wil:',
+  'properties.buy': 'Kopen',
+  'properties.rent': 'Huren',
+  'properties.all': 'Alles',
+  'properties.readyShort': 'Klaar',
+  'properties.offPlanShort': 'Off-Plan',
+  'properties.searchPlaceholder': 'Zoek op project, ontwikkelaar, gemeenschap...',
+  'properties.moreFilters': 'Meer Filters',
+  'properties.results': 'Resultaten',
+  'properties.sortBy': 'Sorteren op',
+  'properties.newest': 'Nieuwste Eerst',
+  'properties.priceLow': 'Prijs: Laag naar Hoog',
+  'properties.priceHigh': 'Prijs: Hoog naar Laag',
+  'properties.oldest': 'Oudste Eerst',
+  'properties.noMatch': 'Geen vastgoed voldoet aan uw criteria',
+  'properties.tryAdjusting': 'Probeer uw filters of zoektermen aan te passen',
+  'properties.clearAll': 'Alle Filters Wissen',
+  'properties.cantFind': 'Kunt u niet vinden wat u zoekt?',
+  'properties.cantFindDesc': 'Ons team heeft toegang tot off-market vastgoed en aankomende lanceringen. Laat ons uw wensen weten.',
+  'properties.requestCallback': 'Verzoek Terugbellen',
+  'properties.whatsApp': 'WhatsApp',
+
+  // Partners
+  'partners.title': 'Onze Partners',
+  'partners.subtitle': 'Vertrouwde professionals die wij aan u voorstellen',
+  'partners.mortgage': 'Hypotheekpartners',
+  'partners.legal': 'Juridische Partners',
+  'partners.companySetup': 'Bedrijfsoprichting',
+  'partners.visaServices': 'Visumdiensten',
+
+  // Guides
+  'guides.buyer': 'Koopgids',
+  'guides.buyerDesc': 'Alles wat u moet weten over het kopen van vastgoed in de VAE',
+  'guides.seller': 'Verkoopgids',
+  'guides.sellerDesc': 'Een complete gids voor het verkopen van uw vastgoed in de VAE',
+  'guides.tenant': 'Huurdersgids',
+  'guides.tenantDesc': 'Essentiële informatie voor het huren in de VAE',
+  'guides.landlord': 'Verhuurdersgids',
+  'guides.landlordDesc': 'Maximaliseer uw huurinkomsten met onze verhuurdersgids',
+  'guides.investor': 'Investeringsgids',
+  'guides.investorDesc': 'Slimme investeringsstrategieën voor VAE vastgoed',
+
+  // FAQ
+  'faq.title': 'Veelgestelde Vragen',
+  'faq.subtitle': 'Vind antwoorden op veelgestelde vragen',
+  'faq.general': 'Algemene Vragen',
+  'faq.buying': 'Koopvragen',
+  'faq.selling': 'Verkoopvragen',
+  'faq.renting': 'Huurvragen',
+  'faq.investment': 'Investeringsvragen',
+
+  // Communities
+  'communities.title': 'Gemeenschappen',
+  'communities.subtitle': 'Ontdek de beste wijken in de VAE',
+  'communities.explore': 'Alle Gemeenschappen Verkennen',
+  'communities.viewProperties': 'Bekijk Vastgoed',
+
+  // Area Guides
+  'areas.title': 'Wijkgidsen',
+  'areas.subtitle': 'Uitgebreide gidsen voor VAE-wijken',
+  'areas.viewGuide': 'Bekijk Gids',
+  'areas.properties': 'Vastgoed',
+  'areas.avgPrice': 'Gem. Prijs',
+  'areas.label': 'Ontdek Dubai',
+  'areas.viewAll': 'Bekijk Alle Wijken',
+
+  // Client Portal
+  'portal.title': 'Klantenportaal',
+  'portal.subtitle': 'Beheer uw vastgoed en documenten',
+  'portal.myProperties': 'Mijn Vastgoed',
+  'portal.documents': 'Documenten',
+  'portal.transactions': 'Transacties',
+  'portal.favorites': 'Favorieten',
+
+  // Market Intelligence
+  'intelligence.title': 'Marktinformatie',
+  'intelligence.subtitle': 'Datagestuurde inzichten voor weloverwogen beslissingen',
+  'intelligence.overview': 'Marktoverzicht',
+  'intelligence.reports': 'Rapporten',
+  'intelligence.areas': 'Gebiedsanalyse',
+  'intelligence.methodology': 'Methodologie',
+
+  // Listing Admin
+  'listingAdmin.title': 'Aanbiedingenbeheer',
+  'listingAdmin.propertyManager': 'Vastgoedbeheerder',
+  'listingAdmin.chatWithSarah': 'Chat met Sarah',
+  'listingAdmin.team': 'Team',
+  'listingAdmin.signOut': 'Uitloggen',
+  'listingAdmin.projects': 'Projecten',
+  'listingAdmin.premium': 'Premium',
+  'listingAdmin.addNewProject': 'Nieuw Project Toevoegen',
+  'listingAdmin.createNewProject': 'Nieuw Project Aanmaken',
+  'listingAdmin.allListedProjects': 'Alle Geregistreerde Projecten',
+  'listingAdmin.noProjectsFound': 'Geen projecten gevonden',
+  'listingAdmin.selectProjectToEdit': 'Selecteer een Project om te Bewerken',
+  'listingAdmin.chooseFromList': 'Kies een project uit de lijst links, of maak een nieuw project aan',
+  'listingAdmin.askSarah': 'Vraag Sarah',
+  'listingAdmin.createNew': 'Nieuw Project Aanmaken',
+  'listingAdmin.editProject': 'Bewerken',
+  'listingAdmin.details': 'Details',
+  'listingAdmin.documents': 'Documenten',
+  'listingAdmin.images': 'Afbeeldingen',
+  'listingAdmin.projectName': 'Projectnaam',
+  'listingAdmin.developer': 'Ontwikkelaar',
+  'listingAdmin.selectDeveloper': 'Selecteer Ontwikkelaar',
+  'listingAdmin.community': 'Gemeenschap',
+  'listingAdmin.selectCommunity': 'Selecteer Gemeenschap',
+  'listingAdmin.location': 'Locatie',
+  'listingAdmin.emirate': 'Emiraat',
+  'listingAdmin.priceFrom': 'Prijs Vanaf (AED)',
+  'listingAdmin.priceTo': 'Prijs Tot (AED)',
+  'listingAdmin.bedroomsMin': 'Slaapkamers Min',
+  'listingAdmin.bedroomsMax': 'Slaapkamers Max',
+  'listingAdmin.handoverDate': 'Overdrachtsdatum',
+  'listingAdmin.serviceCharge': 'Servicekosten',
+  'listingAdmin.paymentPlan': 'Betalingsplan',
+  'listingAdmin.description': 'Beschrijving',
+  'listingAdmin.premiumListing': 'Premium Aanbieding',
+  'listingAdmin.premiumDesc': 'Premium vastgoed verschijnt met speciale badge in zoekresultaten',
+  'listingAdmin.soldOut': 'Uitverkocht',
+  'listingAdmin.soldOutDesc': 'Markeer dit project als uitverkocht - toont een "Uitverkocht" badge',
+  'listingAdmin.deleteProject': 'Project Verwijderen',
+  'listingAdmin.cancel': 'Annuleren',
+  'listingAdmin.saveChanges': 'Wijzigingen Opslaan',
+  'listingAdmin.saving': 'Opslaan...',
+  'listingAdmin.uploadDocument': 'Document Uploaden',
+  'listingAdmin.uploading': 'Uploaden...',
+  'listingAdmin.noDocuments': 'Nog geen documenten geüpload',
+  'listingAdmin.uploadImages': 'Afbeeldingen Uploaden',
+  'listingAdmin.selectMultiple': 'U kunt meerdere afbeeldingen tegelijk selecteren',
+  'listingAdmin.noImages': 'Nog geen afbeeldingen geüpload',
+  'listingAdmin.primary': 'Primair',
+  'listingAdmin.view': 'Bekijken',
+  'listingAdmin.accessDenied': 'Toegang Geweigerd',
+  'listingAdmin.noPermission': 'U heeft geen toestemming om dit gebied te betreden. Alleen eigenaarstoegang vereist.',
+  'listingAdmin.goHome': 'Ga naar Home',
+  'listingAdmin.brochure': 'Brochure',
+  'listingAdmin.floorPlan': 'Plattegrond',
+  'listingAdmin.factSheet': 'Factsheet',
+  'listingAdmin.other': 'Overig',
+  'listingAdmin.allDevelopers': 'Alle Ontwikkelaars',
+  'listingAdmin.allEmirates': 'Alle Emiraten',
+  'listingAdmin.searchProjects': 'Zoek projecten...',
+  'listingAdmin.searchByArea': 'Zoek op gebied/locatie...',
+  'listingAdmin.clearAll': 'Alles Wissen',
+  'listingAdmin.area': 'Gebied',
+  'listingAdmin.project': 'Project',
+
+  // Listing Admin Chat
+  'listingAdminChat.welcomeMessage': "Hallo! Ik ben {name}, uw Senior Aanbiedingsbeheerder. Ik kan u helpen met:\\n\\n• **Off-Plan Aanbiedingen** - Nieuwe ontwikkelaarsprojecten\\n• **Secundaire Markt** - Doorverkoopvastgoed\\n• **Bulk Uploads** - Deel een Google Drive-link en ik verwerk alle bestanden\\n• **Ontwikkelaarsrelaties** - Documentatie en coördinatie\\n\\nWat wilt u vandaag aanbieden?",
+  'listingAdminChat.online': 'Online',
+  'listingAdminChat.typing': 'Typen...',
+  'listingAdminChat.processing': 'Verwerken...',
+  'listingAdminChat.complete': 'Voltooid',
+  'listingAdminChat.bulkUploadTitle': 'Aanbieding uit URL Extraheren',
+  'listingAdminChat.bulkUploadDesc': 'Plak elke link: Google Drive, Bayut, PropertyFinder, Dubizzle of ontwikkelaarswebsites. Ik extraheer de projectgegevens automatisch.',
+  'listingAdminChat.process': 'Verwerken',
+  'listingAdminChat.extract': 'Extraheren',
+  'listingAdminChat.askAnything': 'Vraag Sarah alles over aanbiedingen...',
+  'listingAdminChat.recording': 'Opnemen... Klik op microfoon om te stoppen',
+  'listingAdminChat.poweredByAI': 'Aangedreven door AI • Sarah kan aanbiedingen maken, bulk uploads verwerken en vragen beantwoorden',
+  'listingAdminChat.voiceMessage': 'Spraakbericht',
+  'listingAdminChat.stopRecording': 'Stop Opname',
+  'listingAdminChat.processingAudio': 'Verwerken...',
+
+  // Command Palette
+  'commandPalette.search': 'Zoek commando\'s, pagina\'s, of typ een zoekopdracht...',
+  'commandPalette.voice': 'Stem',
+  'commandPalette.navigate': 'Navigeren',
+  'commandPalette.select': 'Selecteren',
+  'commandPalette.aiPowered': 'AI-Gestuurd',
+  'commandPalette.noCommands': 'Geen commando\'s gevonden',
+  'commandPalette.tryDifferent': 'Probeer een andere zoekterm',
+  'commandPalette.quickActions': 'Snelle Acties',
+  'commandPalette.navigation': 'Navigatie',
+  'commandPalette.aiTools': 'AI-Tools',
+  'commandPalette.createNewLead': 'Nieuwe Lead Aanmaken',
+  'commandPalette.addNewLead': 'Voeg een nieuwe lead toe aan CRM',
+  'commandPalette.createTask': 'Taak Aanmaken',
+  'commandPalette.addNewTask': 'Voeg een nieuwe taak toe',
+  'commandPalette.scheduleCall': 'Gesprek Plannen',
+  'commandPalette.bookCall': 'Plan een gesprek met een lead',
+  'commandPalette.sendMessage': 'Bericht Sturen',
+  'commandPalette.messageLeadOrTeam': 'Bericht aan lead of teamlid',
+  'commandPalette.crmDashboard': 'CRM Dashboard',
+  'commandPalette.leadsDeals': 'Leads, deals en pipeline',
+  'commandPalette.employeeHub': 'Werknemershub',
+  'commandPalette.teamDirectory': 'Teamlijst en wall of fame',
+  'commandPalette.hrDashboard': 'HR Dashboard',
+  'commandPalette.applicationsPerformance': 'Sollicitaties en prestaties',
+  'commandPalette.adminPanel': 'Beheerderspaneel',
+  'commandPalette.systemSettings': 'Alleen eigenaar systeeminstellingen',
+  'commandPalette.foundersAssistant': 'Assistent van de Oprichter',
+  'commandPalette.executiveDashboard': 'Bestuurlijk dashboard',
+  'commandPalette.analyticsDashboard': 'Analytisch Dashboard',
+  'commandPalette.performanceMetrics': 'Prestatiemetrieken',
+  'commandPalette.listingAdmin': 'Aanbiedingenbeheer',
+  'commandPalette.propertyManagement': 'Vastgoedbeheer',
+  'commandPalette.calendar': 'Kalender',
+  'commandPalette.scheduleEvents': 'Planning en evenementen',
+  'commandPalette.notes': 'Notities',
+  'commandPalette.viewManageNotes': 'Bekijk en beheer notities',
+  'commandPalette.aiHub': 'AI Hub',
+  'commandPalette.allAiTools': 'Alle AI-tools op één plek',
+  'commandPalette.designStudio': 'Ontwerpstudio',
+  'commandPalette.createMarketing': 'Maak marketingmateriaal',
+
+  // Seller Listing Page
+  'sellerListing.title': 'Uw Vastgoed Aanbieden',
+  'sellerListing.subtitle': 'Bereik gekwalificeerde kopers en huurders via ons premium platform',
+  'sellerListing.getStarted': 'Aan de Slag',
+  'sellerListing.propertyType': 'Type Vastgoed',
+  'sellerListing.transactionType': 'Transactietype',
+  'sellerListing.forSale': 'Te Koop',
+  'sellerListing.forRent': 'Te Huur',
+  'sellerListing.propertyDetails': 'Vastgoeddetails',
+  'sellerListing.contactInfo': 'Contactgegevens',
+  'sellerListing.submitListing': 'Aanbieding Indienen',
+  'sellerListing.whyListWithUs': 'Waarom Bij Ons Aanbieden',
+  'sellerListing.benefit1': 'Premium Marketing',
+  'sellerListing.benefit1Desc': 'Professionele fotografie en marketingmateriaal',
+  'sellerListing.benefit2': 'Gekwalificeerde Kopers',
+  'sellerListing.benefit2Desc': 'Toegang tot ons netwerk van serieuze kopers en investeerders',
+  'sellerListing.benefit3': 'Deskundige Begeleiding',
+  'sellerListing.benefit3Desc': 'Professionele ondersteuning gedurende het gehele proces',
+
+  // Contact Page - Additional
+  'contact.brokerage': 'Vastgoedmakelaardij',
+  'contact.heroAlt': 'Boek een consultatie',
+  'contact.heroDescription': 'Makelaarsondersteuning voor koop, verkoop en verhuur van vastgoed in Dubai en de VAE. Wij coördineren ook introducties bij onafhankelijke gelicenseerde partners voor juridische, hypotheek- en conciërgeondersteuning.',
+  'contact.partnerDisclaimer': 'Alleen introducties en coördinatie — partnerdiensten worden geleverd onder de eigen voorwaarden en licentie van de partner.',
+  'contact.locationValue': 'Downtown Dubai, VAE',
+  'contact.availability': 'Beschikbaarheid',
+  'contact.bookOnline': 'Boek Online Vergadering',
+
+  // Footer translations
+  'footer.properties': 'Vastgoed',
+  'footer.buyProperties': 'Vastgoed Kopen',
+  'footer.rentProperties': 'Vastgoed Huren',
+  'footer.listYourProperty': 'Uw Vastgoed Aanbieden',
+  'footer.servicesSection': 'Diensten',
+  'footer.buyerAdvisory': 'Koopadvies',
+  'footer.sellerAdvisory': 'Verkoopadvies',
+  'footer.leasingAdvisory': 'Huuradvies',
+  'footer.investmentAdvisory': 'Investeringsadvies',
+  'footer.investorHub': 'Investeerdersportaal',
+  'footer.investorEducation': 'Investeerderseducatie',
+  'footer.investorFaqs': 'Investeerders FAQ\'s',
+  'footer.investorTools': 'Investeerderstools',
+  'footer.brokerHub': 'Makelaarshub',
+  'footer.brokerTools': 'Makelaarstools',
+  'footer.brokerEducation': 'Makelaarseducatie',
+  'footer.brokerFaqs': 'Makelaars FAQ\'s',
+  'footer.guides': 'Gidsen',
+  'footer.buyerGuide': 'Koopgids',
+  'footer.sellerGuide': 'Verkoopgids',
+  'footer.landlordGuide': 'Verhuurdersgids',
+  'footer.tenantGuide': 'Huurdersgids',
+  'footer.areaGuides': 'Wijkgidsen',
+  'footer.generalFaqs': 'Algemene FAQ\'s',
+  'footer.marketIntel': 'Marktinformatie',
+  'footer.marketOverview': 'Marktoverzicht',
+  'footer.areaIntelligence': 'Gebiedsinformatie',
+  'footer.marketReports': 'Marktrapporten',
+  'footer.methodology': 'Methodologie & Gegevensbronnen',
+  'footer.about': 'Over Ons',
+  'footer.aboutJbj': 'Over JBJ',
+  'footer.founderLeadership': 'Oprichter & Leiderschap',
+  'footer.meetTheTeam': 'Ontmoet het Team',
+  'footer.awardsRecognition': 'Onderscheidingen & Erkenning',
+  'footer.newsInsights': 'Nieuws & Inzichten',
+  'footer.careers': 'Carrières',
+  'footer.applyJoin': 'Solliciteer bij Ons Team',
+  'footer.contactHr': 'Neem Contact Op met HR · Jessica',
+  'footer.trainingPortal': 'Trainingsportaal',
+  'footer.professionalTools': 'Professionele Tools',
+  'footer.aiPoweredAssistants': 'AI-Gestuurde Assistenten',
+  'footer.propertyComparison': 'Vastgoedvergelijking',
+  'footer.propertyEvaluator': 'JBJ Vastgoedtaxateur',
+  'footer.rentalIndex': 'JBJ Huurindex',
+  'footer.mortgageCalculator': 'Hypotheekcalculator',
+  'footer.aiHomeFinder': 'AI Woningzoeker',
+  'footer.aiInteriorDesign': 'AI Interieurontwerp',
+  'footer.businessCardScanner': 'Visitekaartjescanner',
+  'footer.documentsSpreadsheets': 'Documenten & Spreadsheets',
+  'footer.videoMeet': 'Video Vergadering',
+  'footer.calendarNotes': 'Kalender & Notities',
+  'footer.licensed': 'Gelicenseerd',
+  'footer.licensedText': 'KOPEN · VERKOPEN · VERHUREN · VASTGOED in de VAE',
+  'footer.partnerServicesNote': 'Hypotheek, juridische, visum en bedrijfsdiensten worden geleverd via gelicenseerde partners.',
+  'footer.stayInTheLoop': 'Blijf Op de Hoogte',
+  'footer.allRightsReserved': 'Alle Rechten Voorbehouden.',
+
+  // Coming Soon Page
+  'comingSoon.title': 'Binnenkort Beschikbaar',
+  'comingSoon.subtitle': 'We creëren iets buitengewoons voor u.',
+  'comingSoon.tagline': 'VAE Vastgoedmakelaardij',
+  'comingSoon.joinCircle': 'Sluit u Aan bij de Kring',
+  'comingSoon.joinCircleDesc': 'Vul het formulier in om lid te worden van onze kring en als eerste toegang te krijgen tot exclusief vastgoed en marktinzichten.',
+  'comingSoon.joinNow': 'Nu Lid Worden',
+  'comingSoon.teamLogin': 'Team Login',
+
+  // Global Chat Translations
+  'chat.copy': 'Kopiëren',
+  'chat.copied': 'Gekopieerd',
+  'chat.messageCopied': 'Bericht gekopieerd',
+  'chat.typing': 'Typen...',
+  'chat.loading': 'Laden...',
+  'chat.send': 'Verzenden',
+  'chat.typeMessage': 'Typ een bericht...',
+  'chat.online': 'Online',
+  'chat.offline': 'Offline',
 };
