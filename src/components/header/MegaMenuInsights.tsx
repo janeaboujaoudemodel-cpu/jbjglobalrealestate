@@ -49,8 +49,6 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'FAQ', href: '/faq', icon: HelpCircle },
     { label: 'Buyer FAQ', href: '/buyer-faq', icon: HelpCircle },
     { label: 'Seller FAQ', href: '/seller-faq', icon: HelpCircle },
-    { label: 'Landlord FAQ', href: '/landlord-faq', icon: HelpCircle },
-    { label: 'Tenant FAQ', href: '/tenant-faq', icon: HelpCircle },
   ];
 
   // Block 4: Services
@@ -77,6 +75,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Investor Dashboard', href: '/investor-dashboard', icon: LayoutDashboard },
     { label: 'Investor Education', href: '/investor-education', icon: GraduationCap },
     { label: 'Investor FAQ', href: '/investor-faq', icon: HelpCircle },
+    { label: 'Landlord FAQ', href: '/landlord-faq', icon: HelpCircle },
   ];
 
   const brokerLinks = [
@@ -84,6 +83,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'Broker Hub', href: '/broker-toolkit', icon: Briefcase },
     { label: 'Broker Training', href: '/broker-education', icon: GraduationCap },
     { label: 'Broker FAQ', href: '/broker-faq', icon: HelpCircle },
+    { label: 'Tenant FAQ', href: '/tenant-faq', icon: HelpCircle },
   ];
 
   // Block 7: Company
