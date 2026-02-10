@@ -1,63 +1,76 @@
 
-# Fix Listing Admin: Backfill and Enrichment Pipeline
+# Fix Language System and Ticket UI
 
-## Root Cause
+## Problem 1: Language Not Switching
 
-The buttons appear "not working" because:
+**Root cause:** Removing `GlobalTranslator` was correct (it caused mixed languages and loops), BUT many components have hardcoded English strings that were only translated by GlobalTranslator's DOM mutation. The `t()` function works, but dozens of text strings bypass it entirely.
 
-1. **Backfill Missing Details** shows 0 projects to process -- all 1,802 projects already have `detail_fetched_at` set from a previous run. The Reelly API returned empty amenities/floor plans for most projects, but the system marked them as "done." The UI button calls `mode: "batch"` which filters by `detail_fetched_at IS NULL`, finding nothing.
+**Examples found:**
+- `ServicesGrid.tsx`: Card titles "Buy", "Rent", "Sell", "Management" and descriptions are hardcoded in a static array (lines 24-53), rendered directly without `t()`
+- `Index.tsx` line 218: `"Trusted By Thousands"` hardcoded
+- `Index.tsx` line 226: `"Excellence Guaranteed"` hardcoded
+- Many other components define text in static arrays/objects outside the render function, never passing through `t()`
 
-2. **Batch Extract Pending** returns "No imports need extraction" -- there are 0 pending items in the queue (all 1,809 are approved). This is correct behavior since everything was already processed.
+**Fix:** Wrap all user-visible hardcoded strings in `t()` calls across the major public-facing components. This is a systematic sweep of:
 
-3. **Enrich Project Test** works fine but the slug format must match the database exactly (e.g., `binghatti-crescent-binghatti-44`, not `binghatti-crescent`).
+1. **`src/components/home/ServicesGrid.tsx`** -- Move service card titles/descriptions to use `t()` keys
+2. **`src/pages/Index.tsx`** -- Replace all hardcoded section labels ("Trusted By Thousands", "Excellence Guaranteed", card labels like "Investors", "Brokers", "Landlords", "Tenants", "Developers", etc.) with `t()` calls
+3. **`src/components/home/WhyChooseUs.tsx`** -- Value prop titles/descriptions through `t()`
+4. **`src/components/home/TestimonialsSection.tsx`** -- Section headings and testimonial labels through `t()`
+5. **`src/components/home/AreasWeCover.tsx`** -- Section heading through `t()`
+6. **`src/components/home/FeaturedListings.tsx`** -- Tab labels and section text through `t()`
+7. **`src/components/home/TrustBar.tsx`** -- Trust item labels through `t()`
+8. **All 15 translation files** (`en.ts`, `ar.ts`, `es.ts`, `fr.ts`, `ru.ts`, `zh.ts`, `hi.ts`, `fa.ts`, `tr.ts`, `de.ts`, `it.ts`, `nl.ts`, `he.ts`, `pl.ts`, `ja.ts`) -- Add new translation keys for each hardcoded string
 
-4. **Sarah Test Extraction** actually works (tested and confirmed -- it extracted Sobha Seahaven with 50+ images and documents).
+This ensures that when the user switches language, React re-renders with the correct language text already computed, and the layout adapts naturally.
 
-## Fixes
+---
 
-### Fix 1: Backfill button -- add Force Refresh mode
+## Problem 2: Ticket Detail Panel -- Ticket Number Shows Vertical
 
-The "Backfill Missing Details" button currently only processes un-fetched projects. Since all are marked fetched (even with empty data), it does nothing.
+**Root cause:** In `TicketDetailPanel.tsx` line 275-277, the ticket number is displayed in a `div` that wraps vertically when the header is narrow. The ticket number, priority badge, and status badge are in a flex container but without `flex-wrap` control, causing the number to stack vertically.
 
-**Changes in `ReellyImportPanel.tsx`:**
-- Add a "Force Re-fetch" toggle/button next to the existing backfill buttons
-- When enabled, call the backfill function with `force_refresh: true` and current timestamp as `started_at`
-- This re-downloads detail data from Reelly API for ALL projects, overwriting the empty arrays
+**Fix:** In `TicketDetailPanel.tsx`:
+- Make the header layout use `flex-row items-center gap-2 flex-wrap` properly
+- Keep ticket number, priority, and status badges on a single horizontal line with `whitespace-nowrap`
+- Reduce padding to prevent overflow in the 500px panel width
 
-### Fix 2: Backfill stats -- show actual missing data counts
+---
 
-The stats endpoint already returns `missing_amenities: 1802` and `missing_floor_plans: 1802`, but the UI only shows `missing_any: 0` (which checks `detail_fetched_at IS NULL`).
+## Problem 3: Ticket Detail Panel -- Overall UI Too Tall/Spacious
 
-**Changes in `ReellyImportPanel.tsx`:**
-- Display `missing_amenities`, `missing_floor_plans`, and `missing_documents` individually in the stats card
-- Show a warning when `missing_any` is 0 but individual field counts are high, with a message like "All projects were fetched but many have empty data. Use Force Re-fetch to retry."
+**Root cause:** The detail panel sections (Customer Details, Description, Actions, AI Suggestions, Conversation) each have generous padding (`p-4`, `space-y-6`) making the panel feel stretched.
 
-### Fix 3: Fix the "no work to do" messaging
+**Fix:** Compact the TicketDetailPanel:
+- Reduce `space-y-6` to `space-y-4`
+- Reduce section padding from `p-4` to `p-3`
+- Make customer details grid tighter
+- Reduce AI suggestion card padding
+- Make reply composer more compact (reduce textarea rows from 3 to 2, reduce padding)
 
-When buttons return "nothing to process," show clear explanations instead of appearing broken:
-- "Batch Extract": Show "Queue is empty (all 1,809 items approved). Use 'Rebuild Queue' to add new items."  
-- "Backfill": Show "All projects already fetched. Use 'Force Re-fetch' to re-download missing amenities/floor plans."
+---
 
-### Fix 4: Enrich test slug auto-complete
+## Problem 4: AI Suggest Reply Takes Too Long
 
-The enrichment test input currently accepts free text slugs. The "Random" button picks correct slugs, but manual entry often uses partial slugs that don't match.
+**Root cause:** The `ai-ticket-reply-suggest` edge function uses a non-streaming call to the AI gateway. The response time depends on the model used and prompt length.
 
-**Changes:**
-- Show a hint below the input: "Use full slug format (e.g., binghatti-crescent-binghatti-44)"
-- Add a search-as-you-type dropdown that queries `projects` table by partial slug match
+**Fix:** 
+- Check the edge function for the model being used and switch to a faster model if needed (e.g., `google/gemini-2.5-flash-lite` for simple reply suggestions)
+- Add a "Generating..." progress indicator with elapsed time so the user knows it is working
+- Add a timeout (30 seconds) so it doesn't hang indefinitely
 
-## Technical Details
+---
+
+## Technical Summary
 
 ### Files to modify:
-1. **`src/components/listing-admin/ReellyImportPanel.tsx`**
-   - Add `force_refresh` toggle state
-   - Update backfill button handler to pass `force_refresh: true` when toggled
-   - Update stats display to show individual field counts
-   - Add slug hint and partial search for enrich test input
-
-2. **`src/components/listing-admin/SyncDashboard.tsx`**
-   - Update empty-state messaging for batch extract and fix-all buttons
-   - Show clear status when queue is empty vs when extraction is truly broken
-
-### No edge function changes needed
-All backend functions are working correctly. The issue is purely in the UI layer -- the buttons pass parameters that result in "nothing to do" because the data state has moved past what the default parameters target.
+1. **`src/components/home/ServicesGrid.tsx`** -- Use `t()` for card text
+2. **`src/pages/Index.tsx`** -- Use `t()` for all hardcoded section strings
+3. **`src/components/home/WhyChooseUs.tsx`** -- Use `t()` for value props
+4. **`src/components/home/TestimonialsSection.tsx`** -- Use `t()` for section text
+5. **`src/components/home/AreasWeCover.tsx`** -- Use `t()` for section text
+6. **`src/components/home/FeaturedListings.tsx`** -- Use `t()` for tab labels
+7. **`src/components/home/TrustBar.tsx`** -- Use `t()` for trust items
+8. **All 15 translation files** -- Add new keys for every hardcoded string
+9. **`src/components/support/TicketDetailPanel.tsx`** -- Fix header layout (horizontal ticket number), compact all sections
+10. **`supabase/functions/ai-ticket-reply-suggest/index.ts`** -- Optimize model choice for speed
