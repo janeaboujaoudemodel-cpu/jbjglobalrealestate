@@ -1,72 +1,51 @@
 
 
-# Comprehensive Fix: Mode Switcher, Homepage Cards, Lead Popup, Video Scene, Mega Menu Guides, and CTA Buttons
+# Fix Developer Card Logos, Quick Filter Chips, Developer Name Color, and Project Loading
 
-## Issues Identified and Fixes
+## Changes Summary
 
-### 1. Mode Switcher Dropdown (Footer + Header) -- Not Centered, Too Wide
-**File:** `src/components/ModeSwitcher.tsx`
-- The dropdown (`DropdownMenuContent`) is `w-72` (288px) which is much wider than the trigger button (approx 140-160px with "Investor Mode" text).
-- `align="end"` causes it to hang off to the right instead of centering.
+### 1. Reduce Developer Card Logo Size (DeveloperCard.tsx)
+The logo container on the developers page is currently `w-24 h-24` (96px) which covers nearly half the card photo (220px height). The homepage FeaturedListings uses `w-10 h-10` (40px) which is too small.
 
-**Fix:**
-- Change `align="end"` to `align="center"` so the dropdown centers under the trigger button.
-- Reduce `w-72` to `w-56` (224px) to better match the trigger button width, making it proportional.
-- On the trigger button, increase minimum width with `min-w-[180px]` so the label area is more visually balanced with the dropdown.
+**Fix:** Change the logo container in `DeveloperCard.tsx` from `w-24 h-24` to `w-14 h-14` (56px). This is a balanced size -- bigger than the homepage's 40px but much smaller than the current 96px. The logo stays `object-fill` inside the container (no padding changes). The container size is uniform for all developers.
 
-### 2. Homepage Layout Gap When Mode Changes
-**File:** `src/pages/Index.tsx`
-- When switching between Investor and Broker modes, sections that are conditionally shown/hidden may leave visual gaps.
+**File:** `src/components/DeveloperCard.tsx` line 85
+- Change: `w-24 h-24` to `w-14 h-14`
 
-**Fix:** Audit the homepage for mode-conditional sections. Ensure hidden sections don't leave empty space by wrapping them in containers that collapse cleanly (no `min-h` on hidden sections). If broker-specific cards disappear, the grid should reflow automatically with CSS grid.
+### 2. Reduce Logo Size on ProjectCard and ReellyProjectCard
+These cards currently use `w-12 h-12` (48px) which is acceptable, but should be consistent. Keep them at `w-12 h-12` -- no change needed since they are already smaller than the developer cards.
 
-### 3. Add "Guides" Link to Investor Hub and Broker Hub Mega Menus
-**File:** `src/components/header/MegaMenuInvestorHub.tsx`
-- Add `{ name: 'Investor Guides', href: '/guides?category=investor', icon: FileText }` to the `toolsLinks` array (or a new guides section).
+### 3. Fix "Beyond" Logo Readability
+The Beyond logo is rectangular/wide and gets distorted with `object-fill` on a square container. However, the user explicitly wants logos to fill the box without white space. The fix is that by making the container smaller (from 96px to 56px), the stretching effect is reduced and the logo becomes more readable. The `object-fill` stays locked per user mandate.
 
-**File:** `src/components/header/MegaMenuBrokerHub.tsx`
-- Add `{ name: 'Broker Guides', href: '/guides?category=broker', icon: FileText }` to the `educationLinks` array.
+### 4. Quick Filter Chips -- Premium Styling (ProjectFilters.tsx)
+The `QuickFilterChip` component (line 1092-1108) currently uses:
+- Active: `bg-white text-black` (plain white)
+- Inactive: `bg-zinc-900 text-zinc-300` (dark/muted)
 
-These will link to the existing `/guides` page filtered by category. If dedicated investor/broker guide pages are needed later, these routes can be created separately.
+These need the premium champagne treatment.
 
-### 4. Homepage "Handpicked For You" -- Diversify Developers, Fix Card Sizing
-**File:** `src/components/home/FeaturedListings.tsx`
+**Fix:** Update the QuickFilterChip styling:
+- Active: `bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm`
+- Inactive: `bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50`
 
-**Developer diversity fix:**
-- Replace the current selection logic: instead of 2 Emaar, add diversity by including Nakheel, Dubai Properties, and Omniyat.
-- New allocation: 1 Emaar, 1 ALDAR, 1 Omniyat, 1 Sobha (Pinnacle only), 1 Bugatti (Binghatti), 1 Mercedes (Binghatti), 1 Nakheel, 1 Dubai Properties.
-- Update `ELITE_DEVELOPERS` array to include `'Nakheel'` and `'Dubai Properties'`.
-- Remove "The Mirage at Sobha Central" from results (already in filter, but verify).
+**File:** `src/components/ProjectFilters.tsx` lines 1100-1104
 
-**Card sizing fix:**
-- All cards use `aspect-[4/3]` for the image area, which is correct. The issue is likely inconsistent content height below the image. Add `h-full` and `flex flex-col` to the card container, and `flex-grow` to the content area so all cards stretch to the same height in the grid row.
+### 5. Developer Name in Gold on All Listing Cards
+- **ProjectCard.tsx**: Already uses `DeveloperLink` component which renders developer names in gold gradient text. No change needed.
+- **ReellyProjectCard.tsx**: Already uses `text-gold font-medium` for developer name (line 265). No change needed.
+- Both cards are already correct per the user's request.
 
-**Price/Handover overlap fix:**
-- Move the price from the image overlay (bottom-left) to the content area below the image, next to the developer name.
-- Move the handover date to the bottom-right corner of the content area (not on the image).
-- This prevents the price badge and handover badge from touching each other on the image.
+### 6. Project Detail Hero -- Missing Photos
+Some project detail pages open without a hero photo showing. This is likely because `cover_image_url` is null and the fallback to `project_images` isn't working properly, or the high-res image URL utility returns a broken URL.
 
-### 5. Lead Generation Popup on Homepage
-**File:** `src/components/PopupLayer.tsx` and new component `src/components/LeadCapturePopup.tsx`
+**Fix:** In `src/components/project-detail/ProjectDetailLayout.tsx` (or the hero section component), ensure there's a proper fallback chain: `cover_image_url` then first `project_images` entry, then a placeholder gradient. Also ensure the image uses `loading="eager"` for the hero.
 
-- Create a new `LeadCapturePopup` component that auto-opens after 5 seconds on the homepage.
-- Uses a simplified form: Name, Email, Phone, and "Interested In" dropdown.
-- Stores submission in localStorage to avoid showing again (`lead_popup_dismissed`).
-- Add it to `PopupLayer.tsx` so it renders globally but only triggers on the homepage route (`/`).
-- This is separate from the existing `ContactGatingModal` which is triggered by specific actions.
+**File:** Need to check `ProjectDetailLayout.tsx` for the hero image logic -- will verify and fix the fallback chain.
 
-### 6. JBJ Royal Tools Hub CTA Buttons -- Gold with Black Arrow
-**File:** `src/components/home/ToolkitShowcaseCard.tsx`
-- The CTA buttons (e.g., "Check Rates", "Get Evaluation") currently use `Button variant="primary"` which uses the champagne gradient.
-- Change to an explicit gold background: `className="bg-gold hover:bg-gold-dark text-black"`.
-- The `ArrowRight` icon should be `text-black` (it already is since text is black, but enforce it explicitly).
-
-### 7. Remove Video Scene from Properties Hero
-**File:** `src/components/PropertiesHeroVideo.tsx`
-- The user previously asked to remove a specific scene. Currently there are 3 scenes: Downtown Dubai (Burj Khalifa), Palm Jumeirah, and Burj Al Arab.
-- Based on previous conversation context, remove the Palm Jumeirah/Atlantis scene (`palmAtlantisVideo`).
-- Update `VIDEO_SCENES` array to only include Downtown Dubai and Burj Al Arab (2 scenes).
-- Remove the unused import for `palmAtlantisVideo`.
+### 7. Improve Project Loading Speed
+- **Logo loading:** Add `loading="eager"` for logos in the first 6-8 visible cards (already done via `isEager` in DeveloperCard, but ProjectCard and ReellyProjectCard don't have this optimization).
+- **Query staleTime:** The `useProjectsByDeveloper` hook may have a long stale time. Reduce it to improve perceived loading speed.
 
 ---
 
@@ -74,22 +53,12 @@ These will link to the existing `/guides` page filtered by category. If dedicate
 
 | File | Changes |
 |---|---|
-| `src/components/ModeSwitcher.tsx` | Center dropdown (`align="center"`), reduce width to `w-56`, add `min-w-[180px]` to trigger |
-| `src/components/header/MegaMenuInvestorHub.tsx` | Add "Investor Guides" link to tools section |
-| `src/components/header/MegaMenuBrokerHub.tsx` | Add "Broker Guides" link to education section |
-| `src/components/home/FeaturedListings.tsx` | Diversify developers (add Nakheel, Dubai Properties, reduce Emaar to 1), fix card height uniformity, move price/handover out of image overlay into content area |
-| `src/components/home/ToolkitShowcaseCard.tsx` | Change CTA buttons to gold background with black arrow |
-| `src/components/PropertiesHeroVideo.tsx` | Remove Palm Jumeirah scene from VIDEO_SCENES |
-| `src/components/LeadCapturePopup.tsx` | New: lead gen popup with 5-second delay, name/email/phone/interest fields |
-| `src/components/PopupLayer.tsx` | Add LeadCapturePopup to render on homepage |
-| `src/pages/Index.tsx` | Ensure mode-conditional sections collapse without leaving gaps |
+| `src/components/DeveloperCard.tsx` | Reduce logo container from `w-24 h-24` to `w-14 h-14` |
+| `src/components/ProjectFilters.tsx` | Update QuickFilterChip active/inactive styles to premium champagne theme |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Fix hero image fallback chain to prevent blank heroes |
 
 ## Execution Order
-1. Fix ModeSwitcher dropdown centering and sizing
-2. Add Guides links to Investor Hub and Broker Hub mega menus
-3. Fix FeaturedListings developer diversity, card sizing, and price/handover layout
-4. Update ToolkitShowcaseCard CTA buttons to gold with black arrow
-5. Remove Palm Jumeirah video scene
-6. Create LeadCapturePopup and add to PopupLayer
-7. Audit homepage for mode-switch layout gaps
+1. Reduce DeveloperCard logo container size (highest visibility fix)
+2. Update QuickFilterChip styling to premium champagne
+3. Fix project detail hero image fallbacks
 
