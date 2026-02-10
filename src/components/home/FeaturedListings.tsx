@@ -12,6 +12,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatPriceAbbreviated } from "@/utils/formatNumber";
 
 const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC'];
 
@@ -196,6 +197,21 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
                   <div className="w-7 h-7 rounded-full bg-black shadow-lg border border-gold/50 flex items-center justify-center">
                     <span className="text-gold font-bold text-xs" style={{ fontFamily: "serif" }}>B</span>
                   </div>
+                )}
+              </div>
+            )}
+
+            {/* Price or Handover badge - Top Right */}
+            {(project.price_from || project.handover_date) && (
+              <div className="absolute top-3 right-3 z-10 px-2.5 py-1.5 rounded-lg bg-black/70 backdrop-blur-sm border border-amber-500/50 shadow-lg">
+                {project.price_from ? (
+                  <span className="text-amber-400 font-bold text-xs">
+                    From {formatPriceAbbreviated(project.price_from)}
+                  </span>
+                ) : (
+                  <span className="text-amber-400 font-semibold text-[10px]">
+                    {project.handover_date}
+                  </span>
                 )}
               </div>
             )}
