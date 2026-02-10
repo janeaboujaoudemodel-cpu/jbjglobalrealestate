@@ -1,156 +1,100 @@
 
 
-# Comprehensive Area Extraction, Photos, Maps, and Intelligence
+# Fix Enrichment Tester, Backfill Numbers, and Lead Popup Enhancement
 
-## Current State
-- **178 areas** in the database, **0 have images** -- every area card uses the same generic Dubai skyline fallback
-- Areas sourced from Reelly project locations only (district names)
-- Provident has **~40 curated area guides** with real photos, descriptions, and property data at `/area-guides/`
-- Emirate data is fragmented (duplicate entries like "Abu Dhabi" vs "Abu Dhabi Emirate", "Sharjah" vs "Sharjah Emirate")
-- Area detail page has no hero photo, no search bar, no map, no developer/project counts, no AI analysis
+## Issues Found
 
-## What Will Be Built
+### Issue 1: Enrichment Test Shows All Zeros (Root Cause Found)
+The `enrich-project-test` edge function uses the **wrong authentication header** for the Reelly API:
+- **Current (broken):** `Authorization: Bearer ${apiKey}` (line 21)
+- **Correct (used everywhere else):** `X-API-Key: ${apiKey}`
 
-### Phase 1: New Edge Function -- `provident-areas-sync`
+This causes every Reelly API call to fail silently, returning `null`, so before and after are identical (all zeros).
 
-A new backend function that:
+Additionally, the Provident URL is wrong -- it appends the full slug (e.g., `binghatti-titania-binghatti-3012`) but Provident URLs don't include the Reelly ID suffix. The function should strip `-{reellyId}` from the slug.
 
-1. **Scrapes Provident's area-guides index** via Firecrawl to get all ~40 area guide URLs
-2. **Scrapes each area detail page** (e.g., `/area-guides/downtown-dubai/`) to extract:
-   - Hero/banner image URL (the real area photo)
-   - Area description text
-   - Key stats (properties for sale, average price, etc.)
-3. **Matches Provident areas to existing DB areas** by slug similarity (e.g., "downtown-dubai" matches our `downtown-dubai` slug)
-4. **Updates `areas` table** with real `image_url` from Provident -- never overwrites existing images
-5. **For areas without Provident coverage**, uses Google image search via Firecrawl search to find real area photos (searching "Downtown Dubai skyline" etc.)
+### Issue 2: Fetch Missing Details Shows Zeros
+The `reelly-fetch-details` function operates on the `pending_project_imports` table, not the `projects` table. If there are no pending imports (all were already approved), it correctly returns zero. This is a legacy function. The actual detail fetching for approved projects is done by `reelly-backfill-projects`. The UI needs to either call the correct function or be labeled accurately.
 
-### Phase 2: Database Schema Additions
+### Issue 3: Backfill Numbers Inconsistent
+The backfill UI shows "processed 1200, remaining 999" because it accumulates from previous runs stored in `sync_jobs`. The total (1200 + 999 = 2199) exceeds the actual project count (~1805) because it's double-counting previous progress. The remaining count comes from the API response but the processed count sums across sessions.
 
-Add columns to the `areas` table:
+### Issue 4: No Listing Card Preview
+The enrichment test only shows numeric before/after comparisons. The user wants to see an actual rendering of the project card and listing page before and after enrichment.
 
-```
-developer_count    INTEGER DEFAULT 0
-project_count_sale INTEGER DEFAULT 0
-project_count_rent INTEGER DEFAULT 0
-avg_price_sqft     NUMERIC
-provident_url      TEXT
-hero_image_url     TEXT        -- full-screen hero (larger than card image)
-```
+### Issue 5: Lead Popup Needs More Fields
+Current popup has: Name, Email, Phone, Interest (buying/selling/renting/investing/exploring).
+Needs: Nationality, Preferred Language, Preferred Contact Time, and Services category with subcategories.
 
-Also normalize emirates (merge "Abu Dhabi" + "Abu Dhabi Emirate" into "Abu Dhabi", etc.).
+### Issue 6: Lead Popup Insert Broken
+The `crm_leads` table no longer has `email`, `phone`, or `status` columns. The correct columns are `email_lower`, `phone_e164`, and `pipeline_stage`. The popup insert is silently failing.
 
-### Phase 3: Update Area Detail Page (`AreaDetail.tsx`)
-
-Transform into a Provident-style premium area page:
-
-1. **Full-screen hero section** with the real area photo as background (not a gradient), a search bar overlay, and breadcrumb navigation
-2. **Stats bar** below hero showing: Projects count, Developers count, Avg Price/sqft, Properties for Sale
-3. **Projects grid** -- fetch and display projects in this area from the `projects` table
-4. **Developers in this area** -- aggregate and show developer logos active in this area
-5. **Interactive Map** using Leaflet (already installed) showing project pins in this area
-6. **AI Area Analyzer** section -- embedded AI Property Analyzer pre-configured for this area, showing:
-   - Price per sqft analysis
-   - Area performance intelligence
-   - Supply vs demand comparison
-   - Comparison with neighboring areas
-
-### Phase 4: Update Area Guides Page (`AreaGuides.tsx`)
-
-- Area cards now show **real photos** instead of the generic skyline fallback
-- Add developer count and project count stats to each card
-- Cards link to the enhanced area detail pages
-
-### Phase 5: Sync Developer/Project Counts per Area
-
-Create a query (or backend function step) that:
-- Counts distinct developers per area from the `projects` table
-- Counts projects by sale/rent status per area
-- Calculates average price per sqft per area
-- Stores these in the new `areas` columns
+### Issue 7: Select Dropdown Hover Shows Blue
+The native `<select>` and `<option>` elements show default blue highlight on hover/focus. This needs CSS override to match the gold/champagne theme.
 
 ---
 
-## Technical Details
+## Fixes
 
-### New Files
-| File | Purpose |
-|---|---|
-| `supabase/functions/provident-areas-sync/index.ts` | Edge function: scrape Provident area guides, extract photos/descriptions, update DB |
-| `src/components/area-detail/AreaHeroSection.tsx` | Full-screen hero with real photo + search bar |
-| `src/components/area-detail/AreaProjectsGrid.tsx` | Projects in this area grid |
-| `src/components/area-detail/AreaDevelopersBar.tsx` | Developers active in this area |
-| `src/components/area-detail/AreaMapSection.tsx` | Leaflet map with project pins |
-| `src/components/area-detail/AreaAIAnalyzer.tsx` | Embedded AI analysis for this area |
+### Fix 1: Repair `enrich-project-test` Edge Function
+**File:** `supabase/functions/enrich-project-test/index.ts`
 
-### Modified Files
+- Line 21: Change `Authorization: Bearer ${apiKey}` to `X-API-Key: ${apiKey}` (matching all other Reelly functions)
+- Line 29: Fix Provident URL to strip the Reelly ID suffix from slug: extract base slug by removing `-{reellyId}` pattern
+- Add listing card data to the response (cover image, developer name, area, price) so the UI can render a card preview
+
+### Fix 2: Add Listing Card Preview to Enrichment UI
+**File:** `src/components/listing-admin/ReellyImportPanel.tsx` (lines 2606-2710)
+
+Add two visual card previews side-by-side in the enrichment results:
+- **Before card**: Shows the project as it currently appears (cover image, name, developer, area, price, amenity count)
+- **After card**: Shows how it would look after enrichment (same layout but with enriched data highlighted)
+- Include the cover image, not just numbers
+
+### Fix 3: Fix Backfill Progress Math
+**File:** `src/components/listing-admin/ReellyImportPanel.tsx` (lines 740-800)
+
+The aggregation logic double-counts by adding previous job stats to new API response stats. Fix: Use the API's `remaining` count as the single source of truth for what's left. Show `total = updated + failed + remaining` instead of accumulating across sessions.
+
+### Fix 4: Fix "Fetch Missing Details" to Use Correct Function
+**File:** `src/components/listing-admin/ReellyImportPanel.tsx` (line 628)
+
+Change `handleFetchMissingDetails` to invoke `reelly-backfill-projects` with `mode: "batch"` instead of `reelly-fetch-details`, since the latter only works on `pending_project_imports` (legacy). Or alternatively, update `reelly-fetch-details` to also operate on the `projects` table.
+
+### Fix 5: Enhance Lead Capture Popup
+**File:** `src/components/LeadCapturePopup.tsx`
+
+Add new fields while keeping the existing champagne/gold styling locked:
+- **Nationality** dropdown (common nationalities: UAE, India, UK, Pakistan, Russia, China, etc.)
+- **Preferred Language** dropdown (English, Arabic, Hindi, Russian, Chinese, French)
+- **Preferred Contact Time** dropdown (Morning, Afternoon, Evening, Anytime)
+- Change "Interest" label to **"Services"** with subcategories: Buying, Selling, Renting, Investing, Property Management, Mortgage Advisory, Legal Services, Partnerships
+
+Fix the insert to use correct column names:
+- `email` becomes `email_lower` (lowercased)
+- `phone` becomes `phone_e164`
+- `status: "new"` becomes `pipeline_stage: "new"`
+
+### Fix 6: Fix Dropdown Hover Color
+**File:** `src/components/LeadCapturePopup.tsx`
+
+Replace native `<select>` with a styled Radix `Select` component that uses gold/champagne colors for hover states instead of browser-default blue. All option hover states use `bg-gold/20 text-black` instead of the default blue.
+
+---
+
+## Technical Summary
+
 | File | Changes |
 |---|---|
-| `src/pages/AreaDetail.tsx` | Complete redesign with hero photo, search, map, AI analyzer, projects grid |
-| `src/pages/AreaGuides.tsx` | Cards now show real photos, developer/project counts |
-| `src/hooks/useAreas.ts` | Add hooks for area stats (developer count, avg price) |
-| `supabase/functions/reelly-areas-sync/index.ts` | Add Provident photo extraction step, emirate normalization |
-
-### Database Migration
-```sql
--- Add new columns to areas
-ALTER TABLE areas ADD COLUMN IF NOT EXISTS developer_count INTEGER DEFAULT 0;
-ALTER TABLE areas ADD COLUMN IF NOT EXISTS project_count_sale INTEGER DEFAULT 0;
-ALTER TABLE areas ADD COLUMN IF NOT EXISTS avg_price_sqft NUMERIC;
-ALTER TABLE areas ADD COLUMN IF NOT EXISTS provident_url TEXT;
-ALTER TABLE areas ADD COLUMN IF NOT EXISTS hero_image_url TEXT;
-
--- Normalize emirates
-UPDATE areas SET emirate = 'Abu Dhabi' WHERE emirate = 'Abu Dhabi Emirate';
-UPDATE areas SET emirate = 'Sharjah' WHERE emirate = 'Sharjah Emirate';
-UPDATE areas SET emirate = 'Ajman' WHERE emirate = 'Ajman Emirate';
-UPDATE areas SET emirate = 'Ras Al Khaimah' WHERE emirate IN ('Ras al-Khaimah', 'Ras Al Khaimah');
-UPDATE areas SET emirate = 'Umm Al Quwain' WHERE emirate = 'Umm al-Quwain';
-```
-
-### Provident Area Sync Flow
-
-```text
-1. Scrape providentestate.com/area-guides/ --> get all area URLs
-2. For each URL (e.g., /area-guides/downtown-dubai/):
-   a. Scrape with Firecrawl (markdown + screenshot)
-   b. Extract hero image URL from HTML/metadata
-   c. Extract description text
-   d. Match to DB area by slug
-   e. UPDATE areas SET image_url = ?, hero_image_url = ?, description = ? WHERE slug = ?
-3. For remaining areas without images:
-   a. Use Firecrawl search: "{area_name} Dubai real estate skyline"
-   b. Take first image result as fallback
-```
-
-### Area Detail Page Layout (top to bottom)
-
-```text
-+--------------------------------------------------+
-|  FULL-SCREEN HERO (real area photo)               |
-|  [Search bar: "Search properties in Downtown..."] |
-|  Breadcrumb: Home > Areas > Downtown Dubai        |
-|  Stats: 21 Projects | 8 Developers | AED 2,500/sf |
-+--------------------------------------------------+
-|  PROJECTS IN THIS AREA (grid of project cards)    |
-+--------------------------------------------------+
-|  DEVELOPERS IN THIS AREA (logo bar)               |
-+--------------------------------------------------+
-|  INTERACTIVE MAP (Leaflet with project pins)      |
-+--------------------------------------------------+
-|  AI AREA INTELLIGENCE                             |
-|  - Price/sqft analysis                            |
-|  - Supply vs Demand                               |
-|  - Comparison with nearby areas                   |
-+--------------------------------------------------+
-|  RELATED AREAS (existing section, enhanced)       |
-+--------------------------------------------------+
-```
+| `supabase/functions/enrich-project-test/index.ts` | Fix auth header from `Bearer` to `X-API-Key`; fix Provident URL; add card data to response |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Add before/after card previews; fix backfill math; fix fetch details to use correct function |
+| `src/components/LeadCapturePopup.tsx` | Add nationality, language, contact time, services fields; fix DB column names; replace native select with styled Radix Select |
 
 ## Execution Order
-1. Database migration (add columns, normalize emirates)
-2. Create `provident-areas-sync` edge function
-3. Deploy and run it to populate area images
-4. Build area detail sub-components (hero, map, projects grid, AI analyzer)
-5. Redesign AreaDetail.tsx with all new sections
-6. Update AreaGuides.tsx cards to show real photos
-
+1. Fix `enrich-project-test` auth header and Provident URL (root cause of all-zeros)
+2. Deploy and verify enrichment returns real data
+3. Add card preview UI to enrichment results
+4. Fix backfill progress counting
+5. Fix "Fetch Missing Details" function call
+6. Enhance lead popup with new fields and correct DB columns
+7. Replace native selects with themed Radix Select components
