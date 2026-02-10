@@ -52,8 +52,8 @@ const CombinedContactNewsletter = ({
   ];
 
   return (
-    <section className={`py-12 md:py-16 bg-black ${className}`}>
-      <div className="mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-10">
+    <section className={`py-8 sm:py-12 md:py-16 bg-black ${className}`}>
+      <div className="mx-2 sm:mx-3 md:mx-4 lg:mx-6 xl:mx-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-xl sm:rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6 md:p-10">
         {/* Header */}
         <div className="text-center mb-8">
           <h2
@@ -73,7 +73,7 @@ const CombinedContactNewsletter = ({
         </div>
 
         {/* Contact Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 md:gap-4 max-w-3xl mx-auto mb-6 sm:mb-8">
           {contactCards.map((card) => (
             <a
               key={card.label}

@@ -403,7 +403,7 @@ const Properties = () => {
             
             {/* Heading */}
             <h1 
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-[-0.02em]"
+              className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 tracking-[-0.02em]"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Curated Listings. Global Standard.
@@ -418,12 +418,12 @@ const Properties = () => {
       </PropertiesHeroVideo>
 
       {/* Filters Section - 3-Layer System: Black > Active Champagne > Pearl Filter Boxes */}
-      <section className="sticky top-16 md:top-20 lg:top-[72px] z-40 bg-black py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <section className="sticky top-14 sm:top-16 md:top-20 lg:top-[72px] z-40 bg-black py-3 md:py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Champagne Layer with thin black contour visible at edges */}
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
           {/* Transaction Type Tabs - Buy / Rent */}
-          <div className="flex items-center gap-2 mb-4 flex-wrap">
+          <div className="flex items-center gap-1.5 sm:gap-2 mb-3 md:mb-4 flex-wrap">
             <span className="text-black/70 text-sm mr-2 font-medium">I want to:</span>
             {[
               { value: 'buy', label: 'Buy' },
@@ -519,7 +519,7 @@ const Properties = () => {
           </div>
 
           {/* Second Row - All Filters in Two Lines for Readability */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mt-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 mt-3 md:mt-4">
             {/* Location - All 7 Emirates */}
             <Select
               value={filters.emirate || "all"}
@@ -671,7 +671,7 @@ const Properties = () => {
           </div>
 
           {/* Third Row - Display Mode, Sale Status, Premium, Advanced Filters */}
-          <div className="flex items-center gap-3 mt-4 flex-wrap">
+          <div className="flex items-center gap-2 sm:gap-3 mt-3 md:mt-4 flex-wrap">
             {/* Display Mode Toggle */}
             <DisplayModeToggle
               value={displayMode}
@@ -1069,13 +1069,13 @@ const Properties = () => {
 
             {/* Projects Grid - Inside active layer - 2-3 cards per row for wider balanced layout */}
             {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8 p-2 sm:p-4">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl h-[480px] animate-pulse border-2 border-gold/30" />
+                  <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl h-[400px] sm:h-[480px] animate-pulse border-2 border-gold/30" />
                 ))}
               </div>
             ) : sortedProjects.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8 p-2 sm:p-4">
                 {sortedProjects.map((project, index) => {
                   // Insert featured ads after specific positions (after 6, 12, 18 cards)
                   const adAfterIndex = [5, 11, 17]; // 0-indexed: after 6th, 12th, 18th card

@@ -261,7 +261,7 @@ const PropertiesReelly = () => {
              </div>
             
             <h1 
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-[-0.02em]"
+              className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 tracking-[-0.02em]"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Curated Listings. Global Standard.
@@ -275,7 +275,7 @@ const PropertiesReelly = () => {
       </PropertiesHeroVideo>
 
       {/* Filters Section */}
-      <section className="sticky top-20 md:top-24 lg:top-20 z-40 bg-black py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <section className="sticky top-14 sm:top-16 md:top-20 lg:top-[72px] z-40 bg-black py-3 md:py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="container mx-auto px-3 sm:px-4">
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
             
@@ -411,7 +411,7 @@ const PropertiesReelly = () => {
             </div>
 
             {/* Sort Options + Hide Sold Out */}
-            <div className="flex items-center justify-center gap-2 mt-5 flex-wrap">
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2 mt-3 sm:mt-5 flex-wrap">
               {[
                 { value: "newest", label: "Newest" },
                 { value: "price-low", label: "Low → High" },
