@@ -1,72 +1,49 @@
 
-# Backfill Approved Listings and Remove Markdown Headers from Descriptions
+# Fix 4 Homepage and Header Issues
 
-## Problem Summary
+## Issue 1: Featured Projects on Homepage ("Handpicked For You")
 
-1. **"Hashtags" in descriptions**: 1,801 projects have Reelly descriptions containing markdown headers like `##### Project general facts`, `##### Finishing and materials`, `##### Kitchen and appliances`, `##### Furnishing`, `##### Location description and benefits`. These display as styled headings on the page but the user wants them completely removed.
+Currently, `FeaturedListings.tsx` uses an empty `sampleListings` array and shows placeholder cards. It needs to fetch real projects from the database, prioritizing top developers (Emaar, Omniyat, Sobha, Aldar).
 
-2. **Missing data on approved listings**: Many approved projects are missing amenities (1,264), floor plans, documents, payment plans, and other enrichment data that could come from Reelly detail API, Provident, or developer websites.
-
----
-
-## Part 1: Remove All Markdown Headers from Descriptions (Database Fix)
-
-Run a single SQL UPDATE to strip all markdown header markers (`#####`, `####`, `###`, `##`, `#` at line starts) from ALL 1,801 project descriptions. This converts section headers into plain paragraph text.
-
-**SQL to execute:**
-```sql
-UPDATE projects
-SET description = regexp_replace(
-  regexp_replace(description, E'^#{1,6}\\s*', '', 'gm'),
-  E'\\n{3,}', E'\\n\\n', 'g'
-)
-WHERE description LIKE '%#####%';
-```
-
-Also update the `renderMarkdownToHtml` function in `src/lib/markdownUtils.ts` to strip any remaining `#` header markers so future imports are also cleaned.
-
-Also update the `bulk-approve-imports` edge function and `reelly-backfill-projects` edge function to strip markdown headers from descriptions BEFORE saving to the database, so new imports and backfills never re-introduce them.
+**Changes:**
+- **`src/components/home/FeaturedListings.tsx`**: Replace empty static array with a live database query using `useQuery` + Supabase. Query projects from the `projects` table where `developer_name` is in the elite list (`Emaar`, `Omniyat`, `Sobha`, `ALDAR`), with status `available` or `active`. Join with `project_images` for the first image. Display 8 cards (2 per developer) showing name, developer, price, location, cover image, and link to the project detail page (`/projects/{slug}`). Remove the Buy/Rent tabs (these are projects, not listings) and show a clean grid of project cards instead.
 
 ---
 
-## Part 2: Enhanced Backfill System
+## Issue 2: Account Dropdown Loads in Two Stages
 
-The existing backfill infrastructure already has:
-- `reelly-backfill-projects` -- fetches detail data from Reelly API for approved projects
-- `provident-enrich-projects` -- enriches projects with Provident data (amenities, PDFs, images)
-- UI controls in `ReellyImportPanel.tsx`
+The account mega-menu (`MegaMenuAccount.tsx`) shows a smaller dropdown first, then expands when `ownerLoading` resolves and CRM/listing admin queries finish. The `minHeight: 440px` container shifts when content appears.
 
-### What needs to change:
-
-**A. Clean descriptions during backfill** -- Update `reelly-backfill-projects/index.ts` (line 405-408) to strip markdown headers from `detail.overview` before saving:
-
-```typescript
-// Before saving description
-let cleanDesc = detail.overview || detail.short_description || '';
-cleanDesc = cleanDesc.replace(/^#{1,6}\s*/gm, '').replace(/\n{3,}/g, '\n\n').trim();
-if (cleanDesc) {
-  updateData.description = cleanDesc;
-}
-```
-
-**B. Clean descriptions during bulk approve** -- Update `bulk-approve-imports/index.ts` (line 222) to strip headers from the description field before inserting:
-
-```typescript
-description: (item.description || item.short_description || '')
-  .replace(/^#{1,6}\s*/gm, '')
-  .replace(/\n{3,}/g, '\n\n')
-  .trim() || null,
-```
-
-**C. Clean descriptions in client-side approve** -- Update `ProjectApprovalQueue.tsx` `approveImportInDb` function to strip headers when building `projectData.description`.
+**Changes:**
+- **`src/components/header/MegaMenuAccount.tsx`**: 
+  - Remove the `ownerLoading` spinner -- instead, always render the full layout skeleton with both columns immediately.
+  - Show the Owner Shortcuts column with skeleton placeholder links while `ownerLoading` or `crmLoading` is true, so the dropdown never changes size.
+  - Once queries resolve, swap skeletons for real links (or hide column if no access). This way the dropdown opens at full size instantly, no two-stage resize.
 
 ---
 
-## Part 3: Prevent Future Markdown Headers
+## Issue 3: Search Mega Menu Stays Open When Cursor Leaves
 
-Update `src/lib/markdownUtils.ts`:
-- Modify `cleanRawText()` to also strip `#####` style headers (not just inline hashtags)
-- Add a `cleanDescription()` export that strips all markdown headers for use in import pipelines
+The search icon in the header (line 1433 of `GlobalHeader.tsx`) opens the `GlobalSearchModal` directly on hover. However, it does NOT use the mega menu system -- it calls `setSearchOpen(true)` which opens a full-screen modal. This modal doesn't close on mouse leave because it's a separate modal, not a hover-based mega menu.
+
+**Changes:**
+- **`src/components/GlobalHeader.tsx`** (lines 1433-1454): Change the search icon behavior:
+  - On hover, open the `MegaMenuSearch` panel (same as language/account) using `handleMegaMenuEnter('search')` instead of `setSearchOpen(true)`.
+  - On click, also open the `MegaMenuSearch` panel.
+  - The `MegaMenuSearch` panel already closes on mouse leave (line 1496) via `handleMegaMenuLeave`, so this fix aligns search with the same behavior as language and account dropdowns.
+
+---
+
+## Issue 4: Hero Search Bar -- Inconsistent Borders/Shapes
+
+The hero search bar (`HeroSearchBar.tsx`) has visual inconsistency: the location input has `rounded-xl` on mobile but `rounded-l-xl rounded-r-none` on desktop, while the desktop controls section uses `border-y border-r` (no left border, no rounding on left), and the search button has `rounded-r-xl`. This creates a jarring look where parts have different border radii.
+
+**Changes:**
+- **`src/components/home/HeroSearchBar.tsx`** (lines 628-643, 970-982): Unify the search bar into a single cohesive rounded container:
+  - Wrap the entire desktop search bar in one unified `rounded-xl` container with consistent `bg-white/10 backdrop-blur-md border border-white/30`.
+  - Remove individual border classes from the input and controls sections so they share one border.
+  - Ensure the search button blends into the right side with matching rounding.
+  - On mobile, each element keeps full `rounded-xl` since they stack vertically.
 
 ---
 
@@ -74,8 +51,7 @@ Update `src/lib/markdownUtils.ts`:
 
 | File | Change |
 |---|---|
-| Database (SQL) | Strip `#####` headers from all 1,801 descriptions |
-| `supabase/functions/reelly-backfill-projects/index.ts` | Strip headers from description before saving |
-| `supabase/functions/bulk-approve-imports/index.ts` | Strip headers from description before inserting |
-| `src/components/listing-admin/ProjectApprovalQueue.tsx` | Strip headers in client-side approve |
-| `src/lib/markdownUtils.ts` | Add `cleanDescription()` helper; update `cleanRawText()` to strip `#####` headers |
+| `src/components/home/FeaturedListings.tsx` | Fetch real projects from DB for elite developers, display as project cards |
+| `src/components/header/MegaMenuAccount.tsx` | Show skeleton links while loading to prevent two-stage dropdown |
+| `src/components/GlobalHeader.tsx` | Change search icon hover to use mega menu system instead of modal |
+| `src/components/home/HeroSearchBar.tsx` | Unify border radius and borders into one cohesive search bar container |
