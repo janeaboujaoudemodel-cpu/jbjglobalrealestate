@@ -1,14 +1,14 @@
 /**
  * Properties Cinematic Hero - Multi-Scene Video Background
- * Scenes: Downtown Dubai zoom, Palm Jumeirah with Atlantis, Burj Al Arab
+ * Optimized: videos loaded via URL (not bundled), first video plays immediately
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Import videos - using new generated videos for Burj Khalifa and Burj Al Arab
-import burjAlArabVideo from "@/assets/videos/burj-al-arab-aerial.mp4";
-import burjKhalifaVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
+// Use URL references instead of static imports to avoid blocking the bundle
+const burjKhalifaVideo = new URL("@/assets/videos/burj-khalifa-day-to-night.mp4", import.meta.url).href;
+const burjAlArabVideo = new URL("@/assets/videos/burj-al-arab-aerial.mp4", import.meta.url).href;
 
 interface VideoScene {
   id: string;
@@ -21,7 +21,7 @@ const VIDEO_SCENES: VideoScene[] = [
   { id: "burj-al-arab", video: burjAlArabVideo, label: "Burj Al Arab" },
 ];
 
-const SCENE_DURATION = 8000; // 8 seconds per scene
+const SCENE_DURATION = 8000;
 
 interface PropertiesHeroVideoProps {
   children?: React.ReactNode;
@@ -29,23 +29,23 @@ interface PropertiesHeroVideoProps {
 
 const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
   const [currentScene, setCurrentScene] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+
+  // Mark ready as soon as first video can play
+  const handleCanPlay = useCallback((index: number) => {
+    if (index === 0 && !videoReady) setVideoReady(true);
+  }, [videoReady]);
 
   // Auto-advance scenes
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentScene((prev) => (prev + 1) % VIDEO_SCENES.length);
-        setIsTransitioning(false);
-      }, 600); // Crossfade duration
+      setCurrentScene((prev) => (prev + 1) % VIDEO_SCENES.length);
     }, SCENE_DURATION);
-
     return () => clearInterval(interval);
   }, []);
 
-  // Ensure current video plays and others pause
+  // Play/pause videos on scene change
   useEffect(() => {
     videoRefs.current.forEach((video, index) => {
       if (video) {
@@ -61,32 +61,27 @@ const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
 
   return (
     <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-      {/* Multi-scene video background */}
+      {/* Video background */}
       <div className="absolute inset-0 bg-black">
         {VIDEO_SCENES.map((scene, index) => (
-          <AnimatePresence key={scene.id} mode="sync">
-            {index === currentScene && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.6 }}
-                className="absolute inset-0"
-              >
-                <video
-                  ref={(el) => (videoRefs.current[index] = el)}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                  className="absolute inset-0 w-full h-full object-cover"
-                >
-                  <source src={scene.video} type="video/mp4" />
-                </video>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <div
+            key={scene.id}
+            className="absolute inset-0 transition-opacity duration-700"
+            style={{ opacity: index === currentScene ? 1 : 0 }}
+          >
+            <video
+              ref={(el) => { videoRefs.current[index] = el; }}
+              autoPlay={index === 0}
+              muted
+              loop
+              playsInline
+              preload={index === 0 ? "auto" : "none"}
+              onCanPlay={() => handleCanPlay(index)}
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src={scene.video} type="video/mp4" />
+            </video>
+          </div>
         ))}
         
         {/* Gradient overlay */}
@@ -96,7 +91,6 @@ const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
       {/* Floating gold accent orbs */}
       <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
-
 
       {/* Children (hero content) */}
       {children}
