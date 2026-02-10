@@ -1,44 +1,108 @@
 
-# Fix Routing, Card Links, Card Alignment, and 404 Page
+# Fix Slow Routing, Description Formatting, and Missing Project Data
 
-## Issues Found
+## Issues Identified
 
-### Issue 1: Handpicked Cards Link to Wrong Route (CRITICAL)
-`FeaturedListings.tsx` links to `/projects/${project.slug}` but the actual route is `/project/:slug` (no 's'). Every click on a Handpicked property goes to the 404 page. Same bug exists in `FeaturedProjectAd.tsx` and `ReellyImportPanel.tsx`.
+### 1. Slow Page Navigation (Routing)
+The `ProjectDetail` component is lazy-loaded. With 200+ lazy components in `App.tsx`, every route change shows the `PageLoader` spinner while the JS chunk downloads. The fix: **prefetch** the ProjectDetail chunk when the user hovers on a card, so by the time they click, the module is already cached.
 
-The "View All Projects" button also links to `/projects` which doesn't exist -- should be `/properties`.
+### 2. Description Renders as One Block
+All project descriptions from Reelly come as plain text with section labels like "Project general facts", "Location description and benefits", "Finishing and materials", "Kitchen and appliances" — but these are **not** formatted as markdown headings. The `renderMarkdownToHtml` function only converts lines starting with `#` into headings. Since Reelly descriptions use plain-text section titles, they render as a wall of text. Fix: detect known section patterns and auto-format them as styled headings with separators.
 
-### Issue 2: Smart Popup Strategy Checks Wrong Path
-`useSmartPopupStrategy.ts` checks `location.pathname.startsWith("/projects/")` which will never match since the real route is `/project/`.
+### 3. Missing Amenities, Photos, Documents (1,809 projects)
+Database audit reveals:
+- **1,809 projects** have 0 documents (no brochures, floor plans)
+- **1,767 projects** have 0 or 1 images
+- **1,809 projects** have no amenities
 
-### Issue 3: 404 Page Has Double Top Padding
-The NotFound page is rendered inside MainLayout which adds `pt-24 sm:pt-28 lg:pt-32` for non-hero pages. But NotFound also adds its own `pt-32 lg:pt-40`. Result: massive top gap. Fix: add `.jj-hero-fullscreen` class to NotFound so MainLayout treats it as a hero page (no spacing), since NotFound handles its own padding.
-
-### Issue 4: Card Alignment in Handpicked Grid
-Cards have `min-h-[140px]` on the content area and `flex-grow` spacer, but the actual card container needs explicit `h-full` on the wrapping `motion.div` to ensure all cards in the same row are equal height.
+Most projects come from Reelly with only basic metadata. The `sarah-test-extraction` edge function exists and can extract full data from Provident pages (images, PDFs, amenities), but it works one project at a time. Fix: build a **batch extraction** endpoint that processes projects in bulk from Provident.
 
 ---
 
-## Changes
+## Implementation Plan
 
-### File 1: `src/components/home/FeaturedListings.tsx`
-- Line 150: Change `/projects/${project.slug}` to `/project/${project.slug}`
-- Line 301: Change `/projects` to `/properties`
-- Line 143: Add `h-full` to the motion.div wrapper so grid children stretch equally
+### Step 1: Fix Slow Routing (Prefetch on Hover)
 
-### File 2: `src/components/FeaturedProjectAd.tsx`
-- Line 35: Change `/projects/${projectSlug}` to `/project/${projectSlug}`
+**File: `src/components/home/FeaturedListings.tsx`**
+- Add `onMouseEnter` handler on each project card Link that triggers `import("../../pages/ProjectDetail")` to prefetch the chunk
+- This means when the user clicks, the module is already in browser cache -- instant navigation
 
-### File 3: `src/components/listing-admin/ReellyImportPanel.tsx`
-- Line 1809: Change `/projects/${p.slug}` to `/project/${p.slug}`
+**File: `src/components/PropertiesReellyContent.tsx`** (or wherever property grid cards live)
+- Same prefetch pattern on property card hover
 
-### File 4: `src/hooks/useSmartPopupStrategy.ts`
-- Line 152: Change `"/projects/"` to `"/project/"`
+### Step 2: Fix Description Formatting
 
-### File 5: `src/pages/NotFound.tsx`
-- Add `jj-hero-fullscreen` class to the outer div so MainLayout does not add header spacing (NotFound already handles its own padding)
-- Remove the redundant `pt-32 lg:pt-40` since MainLayout won't add spacing, and the existing `py-12` + flexbox centering is sufficient
+**File: `src/lib/markdownUtils.ts`**
+- Add a new function `formatReellyDescription()` that detects known Reelly section patterns and converts them to proper markdown headings before the main render pass
+- Patterns to detect (case-insensitive, at start of line after blank line):
+  - "Project general facts" -> Remove entirely (redundant with "About" heading)
+  - "Location description and benefits" -> `## Location`
+  - "Finishing and materials" -> `## Finishing & Materials`
+  - "Kitchen and appliances" -> `## Kitchen & Appliances`
+  - "Furnishing" -> `## Furnishing`
+  - Any standalone short line (under 40 chars) followed by a blank line and longer paragraph text -> auto-detect as a section heading
+- Add visual separators (gold divider line) between sections
 
-### File 6: `src/App.tsx` (optional safety net)
-- Add a redirect route: `/projects/:slug` redirects to `/project/:slug` as a catch-all for any other broken links or bookmarks
-- Add a redirect: `/projects` redirects to `/properties`
+**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
+- Call the new `formatReellyDescription()` before `renderMarkdownToHtml()` in the description section
+
+### Step 3: Batch Provident Extraction for Missing Data
+
+**File: `supabase/functions/provident-batch-extract/index.ts`** (new)
+- Accepts `{ action: "extract-batch", limit: 25 }` 
+- Queries projects that have 0 documents and 0 images
+- For each project, attempts to find its Provident listing page by slug matching
+- Uses the existing Gatsby page-data.json approach (from `_shared/provident/pagedata.ts`) to find PDF URLs
+- Uses Firecrawl to scrape the full page for images
+- Inserts extracted images into `project_images` and documents into `project_documents`
+- Rate-limited: 1 concurrent request, 3s delay between items
+
+This follows the existing architecture in `sarah-test-extraction` but works in batch mode.
+
+---
+
+## Technical Details
+
+### Prefetch Pattern (Step 1)
+```text
+// On card hover, trigger module prefetch
+const prefetchProjectDetail = () => {
+  import("../../pages/ProjectDetail");
+};
+
+<Link 
+  to={`/project/${slug}`} 
+  onMouseEnter={prefetchProjectDetail}
+>
+```
+This is a standard React pattern. The browser caches the import, so when React Router navigates to the route, the Suspense boundary resolves instantly.
+
+### Description Formatter (Step 2)
+Known Reelly section titles to detect:
+- "Project general facts"
+- "Location description and benefits"  
+- "Finishing and materials"
+- "Kitchen and appliances"
+- "Furnishing"
+- "Location description"
+- "Project highlights"
+
+Each gets converted to a styled `<h3>` with a gold top border for visual separation. "Project general facts" is stripped entirely since the page already has "About [Project Name]" as the heading.
+
+### Batch Extraction (Step 3)
+The flow for each project:
+1. Derive Provident slug from project name (lowercase, hyphenated)
+2. Fetch `page-data.json` from Provident Gatsby endpoint -> extract PDF URLs (brochure, floor plans, payment plan)
+3. If Firecrawl is available, scrape the listing page for CloudFront image URLs
+4. Insert results into `project_images` and `project_documents` tables
+5. Update project record with amenities if found
+6. Log progress to `sync_jobs` table
+
+### Files Summary
+
+| File | Action | Purpose |
+|---|---|---|
+| `src/lib/markdownUtils.ts` | Edit | Add `formatReellyDescription()` to auto-detect section headings |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Edit | Apply description formatter before rendering |
+| `src/components/home/FeaturedListings.tsx` | Edit | Add prefetch on hover for ProjectDetail |
+| `supabase/functions/provident-batch-extract/index.ts` | New | Batch extraction of images/docs from Provident for projects missing data |
