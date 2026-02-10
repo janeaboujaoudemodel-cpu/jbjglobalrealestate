@@ -1,7 +1,7 @@
 /**
  * FeaturedListings Component
  * Displays 8 featured project cards from elite developers
- * Strict 1-per-developer, 2 for DAMAC (general + Lagoons)
+ * Strict 1-per-developer from elite developers
  */
 
 import { useState } from "react";
@@ -14,7 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatPriceAbbreviated } from "@/utils/formatNumber";
 
-const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC'];
+const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC', 'Meraas'];
 
 const formatPrice = (price: number): string => {
   if (price >= 1000000) {
@@ -94,7 +94,7 @@ function useFeaturedProjects() {
 
       // Strict round-robin: 1 per developer
       addOne('DAMAC');
-      addOne('DAMAC', 'lagoons');
+      addOne('Meraas');
       addOne('ALDAR');
       addOne('Omniyat');
       addOne('Sobha', 'pinnacle');
@@ -137,7 +137,6 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
   const imageUrl = project.cover_image_url || project.images?.[0]?.image_url;
   const logoUrl = (project.developer as any)?.logo_url;
   const devName = project.developer_name || '';
-  const isBinghatti = devName.toLowerCase().includes('binghatti');
   const [logoError, setLogoError] = useState(false);
 
   return (
@@ -167,35 +166,24 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
 
             {/* Developer Logo - Top Left */}
             {logoUrl && !logoError ? (
-              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
-                <div className="w-12 h-12 rounded-lg shadow-lg overflow-hidden">
+              <div className="absolute top-3 left-3 z-10">
+                <div className="w-12 h-12 rounded-lg shadow-lg overflow-hidden bg-white">
                   <img
                     src={logoUrl}
                     alt={devName}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-fill"
                     loading="lazy"
                     onError={() => setLogoError(true)}
                   />
                 </div>
-                {/* Binghatti monogram badge */}
-                {isBinghatti && (
-                  <div className="w-7 h-7 rounded-full bg-black shadow-lg border border-gold/50 flex items-center justify-center">
-                    <span className="text-gold font-bold text-xs" style={{ fontFamily: "serif" }}>B</span>
-                  </div>
-                )}
               </div>
             ) : (
-              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
+              <div className="absolute top-3 left-3 z-10">
                 <div className="w-12 h-12 rounded-lg bg-black/80 shadow-lg border border-gold/40 flex items-center justify-center backdrop-blur-sm">
                   <span className="text-gold font-bold text-lg" style={{ fontFamily: "serif" }}>
                     {devName.charAt(0)}
                   </span>
                 </div>
-                {isBinghatti && (
-                  <div className="w-7 h-7 rounded-full bg-black shadow-lg border border-gold/50 flex items-center justify-center">
-                    <span className="text-gold font-bold text-xs" style={{ fontFamily: "serif" }}>B</span>
-                  </div>
-                )}
               </div>
             )}
 
@@ -244,7 +232,7 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
                     From {formatPrice(project.price_from)}
                   </span>
                 ) : (
-                  <span className="text-transparent font-bold text-xs" aria-hidden="true">—</span>
+                  <span className="text-zinc-500 font-medium text-xs">Price TBA</span>
                 )}
               </div>
               {project.handover_date ? (
