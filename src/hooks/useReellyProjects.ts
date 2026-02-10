@@ -1,5 +1,4 @@
- import { useInfiniteQuery } from "@tanstack/react-query";
- import { supabase } from "@/integrations/supabase/client";
+import { useInfiniteQuery } from "@tanstack/react-query";
  
  const PAGE_SIZE = 24;
  
@@ -53,65 +52,38 @@
    constructionStatus?: string;
  }
  
- async function fetchReellyProjects(
-   offset: number,
-   filters?: ReellyFilters
- ): Promise<ReellyProjectsResponse> {
-   const { data, error } = await supabase.functions.invoke('reelly-projects', {
-     body: null,
-     headers: {},
-   });
- 
-   // Since we're using GET, pass params via query string
-   const response = await fetch(
-     `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reelly-projects?limit=${PAGE_SIZE}&offset=${offset}`,
-     {
-       method: 'GET',
-       headers: {
-         'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-         'Content-Type': 'application/json',
-       },
-     }
-   );
- 
-   if (!response.ok) {
-     throw new Error(`Failed to fetch projects: ${response.status}`);
-   }
- 
-   const result = await response.json();
-   
-   // Apply client-side filters if any
-   if (filters && result.success && result.data?.projects) {
-     let filtered = [...result.data.projects];
-     
-     if (filters.search) {
-       const searchLower = filters.search.toLowerCase();
-       filtered = filtered.filter(p => 
-         p.name.toLowerCase().includes(searchLower) ||
-         p.developer_name?.toLowerCase().includes(searchLower) ||
-         p.location?.toLowerCase().includes(searchLower)
-       );
-     }
-     
-     if (filters.emirate) {
-       filtered = filtered.filter(p => 
-         p.emirate?.toLowerCase() === filters.emirate?.toLowerCase()
-       );
-     }
-     
-     if (filters.saleStatus) {
-       filtered = filtered.filter(p => p.sale_status === filters.saleStatus);
-     }
-     
-     if (filters.constructionStatus) {
-       filtered = filtered.filter(p => p.construction_status === filters.constructionStatus);
-     }
-     
-     result.data.projects = filtered;
-   }
-   
-   return result;
- }
+async function fetchReellyProjects(
+  offset: number,
+  filters?: ReellyFilters
+): Promise<ReellyProjectsResponse> {
+  const params = new URLSearchParams({
+    limit: String(PAGE_SIZE),
+    offset: String(offset),
+  });
+
+  if (filters?.search) params.set('search', filters.search);
+  if (filters?.emirate) params.set('emirate', filters.emirate);
+  if (filters?.saleStatus) params.set('sale_status', filters.saleStatus);
+  if (filters?.constructionStatus) params.set('construction_status', filters.constructionStatus);
+  if (filters?.developerId) params.set('developer_id', filters.developerId);
+
+  const response = await fetch(
+    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reelly-projects?${params.toString()}`,
+    {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch projects: ${response.status}`);
+  }
+
+  return response.json();
+}
  
  export function useReellyProjects(filters?: ReellyFilters) {
    return useInfiniteQuery({

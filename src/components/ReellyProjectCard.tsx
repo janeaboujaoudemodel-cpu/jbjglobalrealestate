@@ -244,15 +244,19 @@
            {/* Divider */}
            <div className="h-px bg-gold/20 my-2" />
            
-           {/* Starting Price */}
-           {project.price_from && (
-             <p className="text-sm mb-2">
-               <span className="text-muted-foreground">Starting from </span>
-               <span className="text-handover font-bold text-lg">
-                 {formatPriceWithCurrency(project.price_from, currency)}
-               </span>
-             </p>
-           )}
+        {/* Starting Price */}
+        <p className="text-sm mb-2">
+          {project.price_from ? (
+            <>
+              <span className="text-muted-foreground">Starting from </span>
+              <span className="text-handover font-bold text-lg">
+                {formatPriceWithCurrency(project.price_from, currency)}
+              </span>
+            </>
+          ) : (
+            <span className="text-gold font-medium">Price on Request</span>
+          )}
+        </p>
            
            {/* Developer - Gold styled */}
            {project.developer_name && (

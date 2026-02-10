@@ -5,6 +5,8 @@ import { useGuestFavorites, useGuestShortlist } from "@/hooks/useGuestFavorites"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 
+const isUUID = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
 interface FavoriteButtonProps {
   projectId: string;
   showShortlist?: boolean;
@@ -20,6 +22,9 @@ const FavoriteButton = ({
 }: FavoriteButtonProps) => {
   const { user } = useAuth();
   
+  // For non-UUID project IDs (e.g. Reelly numeric IDs), always use guest/localStorage
+  const useDb = user && isUUID(projectId);
+  
   // Authenticated user hooks
   const { data: userFavorites } = useFavorites();
   const { data: userShortlist } = useShortlist();
@@ -31,15 +36,15 @@ const FavoriteButton = ({
   const { shortlist: guestShortlist, toggleShortlist: toggleGuestShortlist, isShortlisted: isGuestShortlisted, count: guestShortlistCount } = useGuestShortlist();
 
   // Determine favorite/shortlist status based on auth state
-  const isFavorite = user 
+  const isFavorite = useDb 
     ? userFavorites?.some((f) => f.project_id === projectId) || false
     : isGuestFavorite(projectId);
     
-  const isShortlisted = user 
+  const isShortlisted = useDb 
     ? userShortlist?.some((s) => s.project_id === projectId) || false
     : isGuestShortlisted(projectId);
     
-  const shortlistCount = user 
+  const shortlistCount = useDb 
     ? userShortlist?.length || 0
     : guestShortlistCount;
 
@@ -59,7 +64,7 @@ const FavoriteButton = ({
     e.preventDefault();
     e.stopPropagation();
     
-    if (user) {
+    if (useDb) {
       toggleUserFavorite.mutate({ projectId, isFavorite });
     } else {
       toggleGuestFavorite(projectId);
@@ -71,7 +76,7 @@ const FavoriteButton = ({
     e.preventDefault();
     e.stopPropagation();
     
-    if (user) {
+    if (useDb) {
       toggleUserShortlist.mutate({ projectId, isShortlisted, currentCount: shortlistCount });
     } else {
       const success = toggleGuestShortlist(projectId);
