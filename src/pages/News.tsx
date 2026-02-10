@@ -123,20 +123,7 @@ const News = () => {
                 </div>
               </div>
               
-              {/* Refresh Button - Primary Style */}
-              <Button
-                onClick={handleRefreshNews}
-                disabled={isRefreshing}
-                variant="primary"
-                className="rounded-xl px-6 py-3 h-auto"
-              >
-                {isRefreshing ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <RefreshCw className="w-4 h-4" />
-                )}
-                {isRefreshing ? "Updating…" : "Refresh News"}
-              </Button>
+              {/* Refresh button removed - news loads from database */}
             </div>
             <p className="text-zinc-700 text-base max-w-2xl">
               Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities. 
