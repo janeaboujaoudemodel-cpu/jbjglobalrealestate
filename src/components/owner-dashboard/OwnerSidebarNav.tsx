@@ -43,48 +43,48 @@ const NAV_SECTIONS: NavSection[] = [
     label: "CORE",
     items: [
       { label: "Overview", icon: LayoutDashboard, path: "/owner" },
-      { label: "Leads & CRM", icon: Users, path: "/crm" },
-      { label: "Tasks", icon: CheckSquare, path: "/crm/tasks" },
-      { label: "Calendar", icon: Calendar, path: "/crm/calendar" },
+      { label: "Leads & CRM", icon: Users, path: "/owner/crm" },
+      { label: "Tasks", icon: CheckSquare, path: "/owner/crm/tasks" },
+      { label: "Calendar", icon: Calendar, path: "/owner/crm/calendar" },
     ],
   },
   {
     label: "PROPERTIES",
     items: [
       { label: "Properties", icon: Building2, path: "/owner/properties" },
-      { label: "Property Map", icon: Map, path: "/map" },
-      { label: "Listings Admin", icon: ClipboardList, path: "/listing-admin" },
+      { label: "Property Map", icon: Map, path: "/owner/map" },
+      { label: "Listings Admin", icon: ClipboardList, path: "/owner/listing-admin" },
     ],
   },
   {
     label: "COMMUNICATION",
     items: [
       { label: "Messages / Inbox", icon: MessageSquare, path: "/owner/inbox" },
-      { label: "Email Client", icon: Mail, path: "/email-client" },
-      { label: "Team Chat", icon: MessagesSquare, path: "/team-chat" },
+      { label: "Email Client", icon: Mail, path: "/owner/email-client" },
+      { label: "Team Chat", icon: MessagesSquare, path: "/owner/team-chat" },
     ],
   },
   {
     label: "AI & TOOLS",
     items: [
-      { label: "AI Assistant", icon: Bot, path: "/founder-assistant" },
-      { label: "AI Tools Hub", icon: Sparkles, path: "/toolkit" },
-      { label: "Workflow Automation", icon: Zap, path: "/automations" },
+      { label: "AI Assistant", icon: Bot, path: "/owner/founder-assistant" },
+      { label: "AI Tools Hub", icon: Sparkles, path: "/owner/toolkit" },
+      { label: "Workflow Automation", icon: Zap, path: "/owner/automations" },
     ],
   },
   {
     label: "CREATIVE",
     items: [
-      { label: "Studio", icon: Video, path: "/studio" },
-      { label: "Kanban Board", icon: Kanban, path: "/kanban" },
-      { label: "Marketing Hub", icon: Megaphone, path: "/admin/marketing-hub" },
+      { label: "Studio", icon: Video, path: "/owner/studio" },
+      { label: "Kanban Board", icon: Kanban, path: "/owner/kanban" },
+      { label: "Marketing Hub", icon: Megaphone, path: "/owner/marketing-hub" },
     ],
   },
   {
     label: "ADMIN",
     items: [
-      { label: "Admin Panel", icon: Shield, path: "/admin" },
-      { label: "Analytics", icon: BarChart3, path: "/jbj-analytics" },
+      { label: "Admin Panel", icon: Shield, path: "/owner/admin" },
+      { label: "Analytics", icon: BarChart3, path: "/owner/analytics" },
       { label: "Documents", icon: FileText, path: "/owner/documents" },
     ],
   },

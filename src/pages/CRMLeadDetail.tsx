@@ -109,7 +109,7 @@ const CRMLeadDetail = () => {
 
   useEffect(() => {
     if (!user || !id) {
-      navigate("/crm");
+      navigate("/owner");
       return;
     }
     fetchLeadData();
@@ -186,7 +186,7 @@ const CRMLeadDetail = () => {
     } catch (err) {
       console.error("Failed to fetch lead:", err);
       toast.error("Failed to load lead details");
-      navigate("/crm");
+      navigate("/owner");
     } finally {
       setLoading(false);
     }
@@ -448,7 +448,7 @@ const CRMLeadDetail = () => {
       {/* Header - Unified Black/Gold Branding */}
       <header className="border-b border-gold/20 bg-[hsl(222,84%,4.9%)] sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")} className="text-gold hover:text-gold hover:bg-gold/10">
+          <Button variant="ghost" size="icon" onClick={() => navigate("/owner")} className="text-gold hover:text-gold hover:bg-gold/10">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex-1">
@@ -513,14 +513,14 @@ const CRMLeadDetail = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               {lead.phone_e164 && (
-                <div className="flex items-center justify-between gap-3 p-3 bg-muted/50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Phone className="h-5 w-5 text-green-500" />
-                    <a href={`tel:${lead.phone_e164}`} className="text-foreground font-medium hover:text-green-400 hover:underline">
+                <div className="flex flex-wrap items-center gap-3 p-3 bg-muted/50 rounded-lg overflow-hidden">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <Phone className="h-5 w-5 text-green-500 flex-shrink-0" />
+                    <a href={`tel:${lead.phone_e164}`} className="text-foreground font-medium hover:text-green-400 hover:underline truncate">
                       {lead.phone_e164}
                     </a>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <Button
                       size="sm"
                       className="bg-green-600 hover:bg-green-500 text-white font-bold"
@@ -541,10 +541,10 @@ const CRMLeadDetail = () => {
                 </div>
               )}
               {lead.email_lower && (
-                <div className="flex items-center justify-between gap-3 p-3 bg-muted/50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Mail className="h-5 w-5 text-purple-500" />
-                    <a href={`mailto:${lead.email_lower}`} onClick={handleEmailClick} className="text-foreground font-medium hover:text-purple-400 hover:underline">
+                <div className="flex flex-wrap items-center gap-3 p-3 bg-muted/50 rounded-lg overflow-hidden">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <Mail className="h-5 w-5 text-purple-500 flex-shrink-0" />
+                    <a href={`mailto:${lead.email_lower}`} onClick={handleEmailClick} className="text-foreground font-medium hover:text-purple-400 hover:underline truncate break-all">
                       {lead.email_lower}
                     </a>
                   </div>

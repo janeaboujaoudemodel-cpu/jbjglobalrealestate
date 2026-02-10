@@ -116,19 +116,19 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
   if (!prediction) return null;
 
   const getProbabilityColor = (prob: number) => {
-    if (prob >= 70) return "text-emerald-600";
-    if (prob >= 40) return "text-amber-600";
-    return "text-red-500";
+    if (prob >= 70) return "text-emerald-400";
+    if (prob >= 40) return "text-amber-400";
+    return "text-red-400";
   };
 
   const getRiskBadge = (risk: string) => {
     switch (risk) {
       case 'low':
-        return <Badge className="bg-emerald-100 text-emerald-700 border-emerald-300">Low Risk</Badge>;
+        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Low Risk</Badge>;
       case 'medium':
-        return <Badge className="bg-amber-100 text-amber-700 border-amber-300">Medium Risk</Badge>;
+        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Medium Risk</Badge>;
       case 'high':
-        return <Badge className="bg-red-100 text-red-600 border-red-300">High Risk</Badge>;
+        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">High Risk</Badge>;
       default:
         return null;
     }
@@ -138,11 +138,11 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
   const currentStageIndex = stages.indexOf(prediction.stage);
 
   return (
-    <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+    <Card className="border border-zinc-800 bg-zinc-900/80 shadow-lg shadow-black/30">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg flex items-center gap-2 text-black">
-            <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+          <CardTitle className="text-lg flex items-center gap-2 text-white">
+            <div className="p-1.5 rounded-lg bg-gold/20 border border-gold/30">
               <Target className="h-5 w-5 text-gold" />
             </div>
             Deal Prediction
@@ -152,16 +152,16 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Close Probability */}
-        <div className="text-center py-4 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border border-gold/30">
+        <div className="text-center py-4 bg-zinc-800/50 rounded-xl border border-zinc-700">
           <div className={cn("text-4xl font-bold", getProbabilityColor(prediction.closeProbability))}>
             {prediction.closeProbability}%
           </div>
-          <p className="text-sm text-zinc-600 mt-1">Close Probability</p>
+          <p className="text-sm text-zinc-400 mt-1">Close Probability</p>
         </div>
 
         {/* Sales Stage Progress */}
         <div className="space-y-2">
-          <p className="text-sm font-medium text-black">Sales Stage</p>
+          <p className="text-sm font-medium text-zinc-300">Sales Stage</p>
           <div className="flex gap-1">
             {stages.map((stage, i) => (
               <div
@@ -170,7 +170,7 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
                   "flex-1 h-2 rounded-full transition-all",
                   i <= currentStageIndex 
                     ? "bg-gold shadow-[0_2px_8px_rgba(200,167,102,0.4)]" 
-                    : "bg-zinc-200"
+                    : "bg-zinc-700"
                 )}
               />
             ))}
@@ -181,13 +181,13 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
         </div>
 
         {/* Estimated Timeline */}
-        <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30">
+        <div className="flex items-center gap-3 p-3 rounded-lg bg-zinc-800/50 border border-zinc-700">
           <Clock className="h-5 w-5 text-gold" />
           <div>
-            <p className="text-sm font-medium text-black">
+            <p className="text-sm font-medium text-white">
               Est. {prediction.estimatedDays} days to close
             </p>
-            <p className="text-xs text-zinc-600">
+            <p className="text-xs text-zinc-400">
               Based on current engagement
             </p>
           </div>
@@ -197,20 +197,20 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
         <div className="p-3 rounded-lg bg-gold/10 border border-gold/30">
           <div className="flex items-center gap-2 mb-1">
             <TrendingUp className="h-4 w-4 text-gold" />
-            <span className="text-sm font-semibold text-black">Next Best Action</span>
+            <span className="text-sm font-semibold text-gold">Next Best Action</span>
           </div>
-          <p className="text-sm text-zinc-700">{prediction.nextBestAction}</p>
+          <p className="text-sm text-zinc-300">{prediction.nextBestAction}</p>
         </div>
 
         {/* Blockers */}
         {prediction.blockers.length > 0 && (
           <div className="space-y-2">
-            <p className="text-sm font-medium text-black flex items-center gap-2">
+            <p className="text-sm font-medium text-zinc-300 flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-amber-500" />
               Potential Blockers
             </p>
             {prediction.blockers.map((blocker, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm text-zinc-600">
+              <div key={i} className="flex items-center gap-2 text-sm text-zinc-400">
                 <XCircle className="h-3 w-3 text-red-500" />
                 {blocker}
               </div>
