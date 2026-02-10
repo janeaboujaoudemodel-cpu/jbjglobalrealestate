@@ -109,8 +109,8 @@ const MortgageCalculator = ({
             <p className="text-gold font-bold text-lg sm:text-xl" style={{ fontFamily: "Poppins, sans-serif" }}>
               100%
             </p>
-            <p className="text-black font-semibold text-xs sm:text-sm mt-1 break-words">
-              {formatCurrencyAbbreviated(propertyPrice)}
+            <p className="text-black font-semibold text-[10px] sm:text-xs mt-1 break-words">
+              {formatCurrency(propertyPrice)}
             </p>
           </div>
 
@@ -123,8 +123,8 @@ const MortgageCalculator = ({
             <p className="text-gold font-bold text-lg sm:text-xl" style={{ fontFamily: "Poppins, sans-serif" }}>
               {downPaymentPercent}%
             </p>
-            <p className="text-black font-semibold text-xs sm:text-sm mt-1 break-words">
-              {formatCurrencyAbbreviated(calculations.downPayment)}
+            <p className="text-black font-semibold text-[10px] sm:text-xs mt-1 break-words">
+              {formatCurrency(calculations.downPayment)}
             </p>
           </div>
           
@@ -137,8 +137,8 @@ const MortgageCalculator = ({
             <p className="text-gold font-bold text-lg sm:text-xl" style={{ fontFamily: "Poppins, sans-serif" }}>
               {100 - downPaymentPercent}%
             </p>
-            <p className="text-black font-semibold text-xs sm:text-sm mt-1 break-words">
-              {formatCurrencyAbbreviated(calculations.loanAmount)}
+            <p className="text-black font-semibold text-[10px] sm:text-xs mt-1 break-words">
+              {formatCurrency(calculations.loanAmount)}
             </p>
           </div>
           
@@ -151,8 +151,8 @@ const MortgageCalculator = ({
             <p className="text-gold font-bold text-lg sm:text-xl" style={{ fontFamily: "Poppins, sans-serif" }}>
               /month
             </p>
-            <p className="text-black font-semibold text-xs sm:text-sm mt-1 break-words">
-              {formatCurrencyAbbreviated(calculations.monthlyPayment)}
+            <p className="text-black font-semibold text-[10px] sm:text-xs mt-1 break-words">
+              {formatCurrency(calculations.monthlyPayment)}
             </p>
           </div>
 
@@ -165,8 +165,8 @@ const MortgageCalculator = ({
             <p className="text-gold font-bold text-lg sm:text-xl" style={{ fontFamily: "Poppins, sans-serif" }}>
               {interestRate}%
             </p>
-            <p className="text-black font-semibold text-xs sm:text-sm mt-1 break-words">
-              {formatCurrencyAbbreviated(calculations.totalInterest)}
+            <p className="text-black font-semibold text-[10px] sm:text-xs mt-1 break-words">
+              {formatCurrency(calculations.totalInterest)}
             </p>
             <p className="text-black/50 text-[10px] mt-0.5">{loanTermYears} Years</p>
           </div>
@@ -180,8 +180,8 @@ const MortgageCalculator = ({
             <p className="text-gold font-bold text-lg sm:text-xl" style={{ fontFamily: "Poppins, sans-serif" }}>
               100%
             </p>
-            <p className="text-black font-semibold text-xs sm:text-sm mt-1 break-words">
-              {formatCurrencyAbbreviated(calculations.totalPayment)}
+            <p className="text-black font-semibold text-[10px] sm:text-xs mt-1 break-words">
+              {formatCurrency(calculations.totalPayment)}
             </p>
           </div>
         </div>
