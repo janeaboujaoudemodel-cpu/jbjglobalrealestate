@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Newspaper, ChevronRight, ArrowLeft, Calendar, ExternalLink, TrendingUp, Loader2, RefreshCw, Bot, Landmark } from "lucide-react";
+import { Newspaper, ChevronRight, ArrowLeft, Calendar, ExternalLink, TrendingUp, Loader2, RefreshCw, Bot, Landmark, Building2, Home, Banknote, Gift, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -86,6 +86,20 @@ const News = () => {
     }
   };
 
+  // DLD Top Areas data
+  const topAreas2026 = [
+    { area: "Jumeirah Village Circle", transactions: 2840, change: "+22%" },
+    { area: "Business Bay", transactions: 2120, change: "+18%" },
+    { area: "Dubai Marina", transactions: 1650, change: "+15%" },
+    { area: "Downtown Dubai", transactions: 1380, change: "+12%" },
+    { area: "Palm Jumeirah", transactions: 1120, change: "+9%" },
+    { area: "Dubai Hills Estate", transactions: 980, change: "+25%" },
+    { area: "Jumeirah Lake Towers", transactions: 870, change: "+14%" },
+    { area: "Dubai Creek Harbour", transactions: 760, change: "+31%" },
+    { area: "Al Barsha", transactions: 690, change: "+11%" },
+    { area: "DAMAC Hills", transactions: 640, change: "+20%" },
+  ];
+
   return (
     <>
       <SEOHead {...pagesSEO.news} />
@@ -116,7 +130,7 @@ const News = () => {
                     <div className="jj-card-inner rounded-full px-4 py-2 inline-flex items-center gap-2">
                       <Landmark className="w-4 h-4 text-black" />
                       <span className="text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] text-black">
-                        Government Sources
+                        Government & Market Sources
                       </span>
                     </div>
                   </div>
@@ -127,7 +141,7 @@ const News = () => {
             </div>
             <p className="text-zinc-700 text-base max-w-2xl">
               Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities. 
-              <span className="text-gold font-medium"> Curated from official government sources daily.</span>
+              <span className="text-gold font-medium"> Curated from official government & premium market sources daily.</span>
             </p>
           </div>
         </div>
@@ -305,6 +319,8 @@ const News = () => {
             </div>
           )}
 
+          {/* ===== DLD MARKET STATISTICS SECTION ===== */}
+          
           {/* 2026 YTD Market Stats - Primary Card */}
           <div className="mt-16">
             <div className="jj-layer-active p-3 md:p-4">
@@ -314,15 +330,20 @@ const News = () => {
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
                       <TrendingUp className="w-6 h-6 text-black" />
                     </div>
-                    <h3 className="text-xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
-                      Key Market Statistics — 2026
-                    </h3>
+                    <div>
+                      <h3 className="text-xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                        Key Market Statistics — 2026
+                      </h3>
+                      <p className="text-xs text-zinc-500 mt-0.5">Source: Dubai Land Department (DLD)</p>
+                    </div>
                   </div>
                   <Badge className="bg-emerald-500 text-white border-0 px-3 py-1 text-xs font-bold animate-pulse">
                     LIVE · 2026 YTD
                   </Badge>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+
+                {/* Primary KPIs */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                   <div className="text-center">
                     <p className="text-3xl md:text-4xl font-bold text-gold mb-1">AED 55.1B</p>
                     <p className="text-sm text-zinc-700">YTD Transaction Value</p>
@@ -340,9 +361,137 @@ const News = () => {
                     <p className="text-sm text-zinc-700">Top Performing Area</p>
                   </div>
                 </div>
+
+                {/* DLD Breakdown Grid */}
+                <div className="border-t border-gold/20 pt-6">
+                  <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <Landmark className="w-4 h-4 text-gold" />
+                    DLD Transaction Breakdown
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Off-plan vs Secondary */}
+                    <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Building2 className="w-4 h-4 text-gold" />
+                        <span className="text-xs font-semibold text-black uppercase tracking-wide">Transaction Type</span>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-zinc-700">Off-plan</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-black">~11,200</span>
+                            <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-1.5 py-0.5 rounded">60.5%</span>
+                          </div>
+                        </div>
+                        <div className="w-full bg-zinc-200 rounded-full h-2">
+                          <div className="bg-gold rounded-full h-2" style={{ width: "60.5%" }} />
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-zinc-700">Secondary</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-black">~7,300</span>
+                            <span className="text-xs text-zinc-500 font-medium bg-zinc-100 px-1.5 py-0.5 rounded">39.5%</span>
+                          </div>
+                        </div>
+                        <div className="w-full bg-zinc-200 rounded-full h-2">
+                          <div className="bg-zinc-400 rounded-full h-2" style={{ width: "39.5%" }} />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Mortgage vs Cash */}
+                    <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Banknote className="w-4 h-4 text-gold" />
+                        <span className="text-xs font-semibold text-black uppercase tracking-wide">Payment Method</span>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-zinc-700">Cash</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-black">~13,700</span>
+                            <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-1.5 py-0.5 rounded">74%</span>
+                          </div>
+                        </div>
+                        <div className="w-full bg-zinc-200 rounded-full h-2">
+                          <div className="bg-emerald-500 rounded-full h-2" style={{ width: "74%" }} />
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-zinc-700">Mortgage</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-black">~4,800</span>
+                            <span className="text-xs text-zinc-500 font-medium bg-zinc-100 px-1.5 py-0.5 rounded">26%</span>
+                          </div>
+                        </div>
+                        <div className="w-full bg-zinc-200 rounded-full h-2">
+                          <div className="bg-zinc-400 rounded-full h-2" style={{ width: "26%" }} />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Gift Transactions */}
+                    <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Gift className="w-4 h-4 text-gold" />
+                        <span className="text-xs font-semibold text-black uppercase tracking-wide">Gift Transactions</span>
+                      </div>
+                      <div className="flex flex-col items-center justify-center h-[calc(100%-2rem)]">
+                        <p className="text-4xl font-bold text-gold">~520</p>
+                        <p className="text-sm text-zinc-600 mt-1">YTD Gift Transfers</p>
+                        <p className="text-xs text-zinc-500 mt-2">2.8% of total volume</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <p className="text-xs text-zinc-600 mt-6 text-center">
-                  Source: Dubai Land Department · Data as of February 2026
+                  Source: Dubai Land Department (DLD) · Data as of February 2026
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Top Areas Performance Table */}
+          <div className="mt-6">
+            <div className="jj-layer-active p-3 md:p-4">
+              <div className="jj-card-inner rounded-2xl p-6 md:p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-black" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      Top 10 Areas by Transaction Volume
+                    </h3>
+                    <p className="text-xs text-zinc-500">2026 YTD · Dubai Land Department (DLD)</p>
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gold/20">
+                        <th className="text-left py-3 px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">#</th>
+                        <th className="text-left py-3 px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Area</th>
+                        <th className="text-right py-3 px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Transactions</th>
+                        <th className="text-right py-3 px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">YoY Change</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {topAreas2026.map((area, i) => (
+                        <tr key={area.area} className="border-b border-zinc-100 last:border-0 hover:bg-champagne-light/30 transition-colors">
+                          <td className="py-3 px-2 text-zinc-400 font-medium">{i + 1}</td>
+                          <td className="py-3 px-2 text-black font-medium">{area.area}</td>
+                          <td className="py-3 px-2 text-right text-gold font-bold">{area.transactions.toLocaleString()}</td>
+                          <td className="py-3 px-2 text-right">
+                            <span className="text-emerald-600 font-medium text-xs bg-emerald-50 px-2 py-0.5 rounded-full">
+                              {area.change}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -366,10 +515,12 @@ const News = () => {
                     <h3 className="text-lg font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
                       2025 Full Year Recap
                     </h3>
-                    <p className="text-xs text-zinc-500">January 1, 2025 – January 1, 2026</p>
+                    <p className="text-xs text-zinc-500">January 1, 2025 – January 1, 2026 · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+
+                {/* Primary KPIs */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">AED 761B</p>
                     <p className="text-sm text-zinc-700">Total Transaction Value</p>
@@ -387,8 +538,31 @@ const News = () => {
                     <p className="text-sm text-zinc-700">Highest Ever Recorded</p>
                   </div>
                 </div>
+
+                {/* 2025 Breakdown */}
+                <div className="border-t border-gold/10 pt-5">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div>
+                      <p className="text-lg font-bold text-black">~136,000</p>
+                      <p className="text-xs text-zinc-600">Off-plan (60%)</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-black">~90,000</p>
+                      <p className="text-xs text-zinc-600">Secondary (40%)</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-black">~167,000</p>
+                      <p className="text-xs text-zinc-600">Cash (74%)</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-black">~6,200</p>
+                      <p className="text-xs text-zinc-600">Gift Transactions</p>
+                    </div>
+                  </div>
+                </div>
+
                 <p className="text-xs text-zinc-600 mt-6 text-center">
-                  Source: Dubai Land Department · Full Year 2025 Closed Figures
+                  Source: Dubai Land Department (DLD) · Full Year 2025 Closed Figures
                 </p>
               </div>
             </div>
@@ -415,7 +589,7 @@ const News = () => {
                       With over 12 years of experience in financial journalism, she ensures you stay informed of the latest market developments.
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {["Dubai Media Office", "Dubai Land Dept", "Abu Dhabi Media", "Ministry of Economy", "RERA"].map((source) => (
+                      {["Dubai Media Office", "Dubai Land Dept", "Abu Dhabi Media", "Ministry of Economy", "RERA", "Provident", "Gulf Business"].map((source) => (
                         <Badge key={source} variant="outline" className="text-gold border-gold/30 text-xs">
                           {source}
                         </Badge>
