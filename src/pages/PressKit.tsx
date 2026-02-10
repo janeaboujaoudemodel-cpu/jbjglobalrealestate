@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
+import { FounderContent } from "@/components/FounderContent";
 import { motion } from "framer-motion";
 import {
   FileText,
@@ -195,6 +197,7 @@ const PressKit = () => {
         </div>
       </section>
 
+      <FounderContent>
       {/* Quick Bio Section - Premium White/Gold Style */}
       <section className="py-16 border-y border-zinc-800">
         <div className="container mx-auto px-4">
@@ -237,7 +240,9 @@ const PressKit = () => {
           </motion.div>
         </div>
       </section>
+      </FounderContent>
 
+      <FounderContent>
       {/* Founder Headshots - White Cards on Black */}
       <section className="py-20 md:py-28">
         <div className="container mx-auto px-4">
@@ -312,6 +317,7 @@ const PressKit = () => {
           </motion.div>
         </div>
       </section>
+      </FounderContent>
 
 
       {/* Company Fact Sheet - White Cards */}

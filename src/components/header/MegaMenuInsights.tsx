@@ -86,6 +86,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'About JBJ', href: '/about', icon: Building2 },
     ...(isFounderVisible ? [{ label: 'Founder & Leadership', href: '/founder', icon: UserCircle }] : []),
     { label: 'Meet the Team', href: '/team', icon: Users },
+    { label: 'Awards', href: '/awards', icon: Award },
     { label: 'Contact Us', href: '/contact', icon: Phone },
     { label: 'Careers', href: '/join', icon: Briefcase },
   ];
@@ -124,9 +125,9 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
 
   return (
     <MegaMenuShell ref={ref} noScroll>
-        <div className="max-w-[1400px] mx-auto px-3 lg:px-5 py-3 lg:py-4">
+        <div className="max-w-[1400px] mx-auto px-3 lg:px-5 py-2 lg:py-3">
           {/* 4 + 4 Grid Layout using shared MegaMenuCard */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
             {/* Row 1 */}
             <MegaMenuCard icon={Newspaper} title="News & Updates" compact>
               {newsLinks.map((item) => (

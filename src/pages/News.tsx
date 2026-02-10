@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Newspaper, ChevronRight, ArrowLeft, Calendar, ExternalLink, TrendingUp, Loader2, RefreshCw, Bot, Landmark, Building2, Home, Banknote, Gift, MapPin, Globe, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ytd2026 as ytd2026Data, topAreas2026 as topAreas2026Data, topAreas2025 as topAreas2025Data, topNationalities as topNationalitiesData } from "@/constants/dldMarketData";
+import heroVideo from "@/assets/videos/press-kit-hero.mp4";
 
 interface MarketNews {
   id: string;
@@ -25,7 +26,11 @@ interface MarketNews {
 }
 
 const News = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    categoryParam === 'company' ? 'Company News' : categoryParam === 'market' ? 'Market Update' : null
+  );
   const [isRefreshing, setIsRefreshing] = useState(false);
   const navigate = useNavigate();
 
@@ -52,12 +57,12 @@ const News = () => {
     category: n.category,
     date: n.published_date,
     source: n.source,
-    image: n.image_url || "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+    image: n.image_url || null,
     isAI: n.ai_generated,
     sourceUrl: n.source_url,
   }));
 
-  const categories = ["All", "Market Update", "Analysis", "Policy", "Economic", "Monthly Report", "Market Outlook", "Developer News", "Government"];
+  const categories = ["All", "Market Update", "Analysis", "Policy", "Economic", "Monthly Report", "Market Outlook", "Developer News", "Government", "Company News"];
 
   const filteredNews = selectedCategory && selectedCategory !== "All"
     ? newsArticles.filter(n => n.category === selectedCategory)
@@ -243,46 +248,52 @@ const News = () => {
     <>
       <SEOHead {...pagesSEO.news} />
       <section className="min-h-screen bg-black">
-      {/* Hero Section - 3-Layer System with global gutter */}
-      <div className="relative py-16 md:py-24 bg-black">
-        <div className="jj-layer-2 !bg-transparent">
+      {/* Hero Section - Video Background */}
+      <section className="relative py-24 md:py-32 overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0 z-0">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="w-full h-full object-cover opacity-40"
+          >
+            <source src={heroVideo} type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black" />
+        </div>
+        
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl z-[1]" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl z-[1]" />
+        
+        <div className="container mx-auto px-4 relative z-10">
           <Link to="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold mb-8 transition-colors group">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Properties
           </Link>
           
-          {/* Active Champagne Layer */}
-          <div className="py-10 px-4 md:px-8 jj-layer-active rounded-2xl">
-            <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center shadow-sm">
-                  <Newspaper className="w-7 h-7 text-black" />
-                </div>
-                <div>
-                  <h1 
-                    className="text-3xl md:text-4xl font-bold text-black"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
-                  >
-                    News & <span className="text-gold">Insights</span>
-                  </h1>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div className="jj-card-inner rounded-full px-4 py-2 inline-flex items-center gap-2">
-                      <Landmark className="w-4 h-4 text-black" />
-                      <span className="text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] text-black">
-                        Government & Market Sources
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+              <Landmark className="w-4 h-4 text-gold" />
+              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+                Government & Market Sources
+              </span>
             </div>
-            <p className="text-zinc-700 text-base max-w-2xl">
-              Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities. 
-              <span className="text-gold font-medium"> Curated from official government & premium market sources daily.</span>
+            
+            <h1 
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              News & <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Insights</span>
+            </h1>
+            <p className="text-zinc-300 text-lg md:text-xl max-w-2xl leading-relaxed">
+              Stay informed about the latest UAE real estate market updates, economic developments, and investment opportunities.
+              <span className="text-gold font-medium"> Curated from official sources daily.</span>
             </p>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Category Filter */}
       <div className="border-b border-gold/20 sticky top-16 bg-black z-20">
@@ -327,11 +338,17 @@ const News = () => {
                 >
                   <div className="grid md:grid-cols-2 gap-0">
                     <div className="aspect-video md:aspect-auto md:h-full relative overflow-hidden">
-                      <img 
-                        src={filteredNews[0].image} 
-                        alt={filteredNews[0].title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      />
+                      {filteredNews[0].image ? (
+                        <img 
+                          src={filteredNews[0].image} 
+                          alt={filteredNews[0].title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                      ) : (
+                        <div className="w-full h-full min-h-[250px] bg-gradient-to-br from-zinc-900 via-zinc-800 to-black flex items-center justify-center">
+                          <Newspaper className="w-16 h-16 text-gold/30" />
+                        </div>
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/15" />
                     </div>
                     <div className="p-8 md:p-10 flex flex-col justify-center">
@@ -381,11 +398,17 @@ const News = () => {
                 className="group jj-card-inner border-2 border-gold rounded-xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] cursor-pointer"
               >
                 <div className="aspect-video relative overflow-hidden">
-                  <img 
-                    src={article.image} 
-                    alt={article.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
+                  {article.image ? (
+                    <img 
+                      src={article.image} 
+                      alt={article.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-black flex items-center justify-center">
+                      <Newspaper className="w-12 h-12 text-gold/30" />
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                   <div className="absolute top-3 left-3 flex gap-2">
                     <span className="text-xs text-white bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20 font-medium">

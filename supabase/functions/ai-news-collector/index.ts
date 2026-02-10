@@ -34,85 +34,10 @@ const KNOWN_BAD_URLS = [
   "survey.customerpulse.gov.ae",
 ];
 
-// Diversified fallback image pools per category (6 unique photos each)
-const CATEGORY_IMAGE_POOL: Record<string, string[]> = {
-  "Policy": [
-    "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1200&q=80",
-    "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1200&q=80",
-    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80",
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80",
-    "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=80",
-    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=80",
-  ],
-  "Economic": [
-    "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80",
-    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
-    "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1200&q=80",
-    "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&q=80",
-    "https://images.unsplash.com/photo-1459767129954-1b1c1f9b9ace?w=1200&q=80",
-    "https://images.unsplash.com/photo-1464938050520-ef2571e0d6f1?w=1200&q=80",
-  ],
-  "Market Update": [
-    "https://images.unsplash.com/photo-1622015663319-e97e697503ee?w=1200&q=80",
-    "https://images.unsplash.com/photo-1546412414-e1885259563a?w=1200&q=80",
-    "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1200&q=80",
-    "https://images.unsplash.com/photo-1583001809873-a128495da465?w=1200&q=80",
-    "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=1200&q=80",
-    "https://images.unsplash.com/photo-1585468274952-66591eb14165?w=1200&q=80",
-  ],
-  "Government": [
-    "https://images.unsplash.com/photo-1597659840241-37e2b9c2f55f?w=1200&q=80",
-    "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=1200&q=80",
-    "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=1200&q=80",
-    "https://images.unsplash.com/photo-1609599006353-e629aaabfeae?w=1200&q=80",
-    "https://images.unsplash.com/photo-1575517111478-7f6afd0973db?w=1200&q=80",
-    "https://images.unsplash.com/photo-1602524811717-781985c36e9f?w=1200&q=80",
-  ],
-  "Analysis": [
-    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
-    "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1200&q=80",
-    "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=1200&q=80",
-    "https://images.unsplash.com/photo-1495521939206-a217db9df264?w=1200&q=80",
-    "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=1200&q=80",
-    "https://images.unsplash.com/photo-1527219525722-f9767a7f2884?w=1200&q=80",
-  ],
-  "Developer News": [
-    "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1200&q=80",
-    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80",
-    "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1200&q=80",
-    "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&q=80",
-    "https://images.unsplash.com/photo-1429497419816-9ca5cfb4571a?w=1200&q=80",
-    "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1200&q=80",
-  ],
-  "Monthly Report": [
-    "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=1200&q=80",
-    "https://images.unsplash.com/photo-1523294587484-bae6cc870010?w=1200&q=80",
-    "https://images.unsplash.com/photo-1554469384-e58fac16e23a?w=1200&q=80",
-    "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=1200&q=80",
-    "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=1200&q=80",
-    "https://images.unsplash.com/photo-1606046604972-77cc76aee944?w=1200&q=80",
-  ],
-  "Market Outlook": [
-    "https://images.unsplash.com/photo-1546412414-e1885259563a?w=1200&q=80",
-    "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?w=1200&q=80",
-    "https://images.unsplash.com/photo-1577415124269-fc1140354523?w=1200&q=80",
-    "https://images.unsplash.com/photo-1559599238-308793637427?w=1200&q=80",
-    "https://images.unsplash.com/photo-1609599006353-e629aaabfeae?w=1200&q=80",
-    "https://images.unsplash.com/photo-1602524811717-781985c36e9f?w=1200&q=80",
-  ],
-};
-
-const DEFAULT_POOL = [
-  "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80",
-  "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1200&q=80",
-  "https://images.unsplash.com/photo-1546412414-e1885259563a?w=1200&q=80",
-  "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
-  "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1200&q=80",
-  "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1200&q=80",
-];
+// No fake/stock image pools - only real source images or null
 
 function isImageBad(url: string): boolean {
-  return BAD_IMAGE_PATTERNS.some(p => p.test(url)) || KNOWN_BAD_URLS.some(bad => url.includes(bad));
+  return BAD_IMAGE_PATTERNS.some(p => p.test(url)) || KNOWN_BAD_URLS.some(bad => url.includes(bad)) || url.includes('unsplash.com');
 }
 
 function extractOgImage(markdown: string): string | null {
@@ -147,20 +72,9 @@ function extractFirstGoodImage(markdown: string): string | null {
   return null;
 }
 
-async function pickUniqueFallback(
-  category: string,
-  existingUrls: Set<string>,
-): Promise<string> {
-  const pool = CATEGORY_IMAGE_POOL[category] || DEFAULT_POOL;
-  // Find first URL not already in use
-  for (const url of pool) {
-    if (!existingUrls.has(url)) {
-      return url;
-    }
-  }
-  // All used — append random crop param to make unique
-  const base = pool[Math.floor(Math.random() * pool.length)];
-  return `${base}&crop=entropy&fit=crop&seed=${Date.now()}`;
+// No stock photo fallbacks - return null if no real image found
+function pickNullFallback(): null {
+  return null;
 }
 
 // AUTHORIZED NEWS SOURCES
@@ -360,11 +274,10 @@ serve(async (req) => {
             await new Promise(r => setTimeout(r, 1500));
           }
 
-          // Assign unique fallback image if still no good image
+          // Set to null if no real image found — no stock photo fallbacks
           if (!imageUrl || isImageBad(imageUrl)) {
-            imageUrl = await pickUniqueFallback(article.category, usedImageUrls);
-            usedImageUrls.add(imageUrl);
-            console.log(`  Assigned unique fallback for "${article.title}"`);
+            imageUrl = null;
+            console.log(`  No real image found for "${article.title}" — set to null`);
           }
 
           // If we still don't have content, generate a brief article from the excerpt
@@ -606,9 +519,9 @@ Return ONLY valid JSON, no markdown wrapping. Be factual and positive where appr
           await new Promise(r => setTimeout(r, 1000));
         }
         
-        // Last resort: unique fallback
+        // No stock fallback — set to null if no real image found
         if (!newImageUrl) {
-          newImageUrl = await pickUniqueFallback(article.category, usedImageUrls);
+          newImageUrl = null;
         }
         
         if (newImageUrl && newImageUrl !== article.image_url) {
