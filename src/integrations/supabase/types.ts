@@ -2516,6 +2516,45 @@ export type Database = {
           },
         ]
       }
+      broker_verifications: {
+        Row: {
+          admin_notes: string | null
+          company_name: string | null
+          created_at: string
+          id: string
+          id_document_url: string | null
+          rera_card_url: string | null
+          rera_number: string | null
+          status: string | null
+          user_id: string
+          verified_at: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          company_name?: string | null
+          created_at?: string
+          id?: string
+          id_document_url?: string | null
+          rera_card_url?: string | null
+          rera_number?: string | null
+          status?: string | null
+          user_id: string
+          verified_at?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          company_name?: string | null
+          created_at?: string
+          id?: string
+          id_document_url?: string | null
+          rera_card_url?: string | null
+          rera_number?: string | null
+          status?: string | null
+          user_id?: string
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
       broker_whatsapp_templates: {
         Row: {
           approval_status: string | null
@@ -11392,6 +11431,36 @@ export type Database = {
           },
         ]
       }
+      listing_tiers: {
+        Row: {
+          description: string | null
+          duration_days: number
+          id: string
+          is_featured: boolean | null
+          label: string
+          name: string
+          price_aed: number
+        }
+        Insert: {
+          description?: string | null
+          duration_days: number
+          id?: string
+          is_featured?: boolean | null
+          label: string
+          name: string
+          price_aed?: number
+        }
+        Update: {
+          description?: string | null
+          duration_days?: number
+          id?: string
+          is_featured?: boolean | null
+          label?: string
+          name?: string
+          price_aed?: number
+        }
+        Relationships: []
+      }
       listing_uploads: {
         Row: {
           completed_at: string | null
@@ -13978,6 +14047,138 @@ export type Database = {
           reference_id?: string | null
           reference_type?: string | null
           transaction_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      portal_listings: {
+        Row: {
+          admin_notes: string | null
+          area: string | null
+          area_sqft: number | null
+          bathrooms: number | null
+          bedrooms: number | null
+          cheques: number | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string
+          currency: string | null
+          description: string | null
+          emirate: string | null
+          featured_until: string | null
+          furnishing: string | null
+          id: string
+          images: Json | null
+          is_featured: boolean | null
+          listing_type: string
+          location: string | null
+          passport_copy_url: string | null
+          price: number | null
+          property_type: string | null
+          rent_frequency: string | null
+          status: string | null
+          title: string
+          title_deed_url: string | null
+          updated_at: string
+          use_company_contact: boolean | null
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          area?: string | null
+          area_sqft?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          cheques?: number | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          emirate?: string | null
+          featured_until?: string | null
+          furnishing?: string | null
+          id?: string
+          images?: Json | null
+          is_featured?: boolean | null
+          listing_type?: string
+          location?: string | null
+          passport_copy_url?: string | null
+          price?: number | null
+          property_type?: string | null
+          rent_frequency?: string | null
+          status?: string | null
+          title: string
+          title_deed_url?: string | null
+          updated_at?: string
+          use_company_contact?: boolean | null
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          area?: string | null
+          area_sqft?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          cheques?: number | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          emirate?: string | null
+          featured_until?: string | null
+          furnishing?: string | null
+          id?: string
+          images?: Json | null
+          is_featured?: boolean | null
+          listing_type?: string
+          location?: string | null
+          passport_copy_url?: string | null
+          price?: number | null
+          property_type?: string | null
+          rent_frequency?: string | null
+          status?: string | null
+          title?: string
+          title_deed_url?: string | null
+          updated_at?: string
+          use_company_contact?: boolean | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      portal_points: {
+        Row: {
+          created_at: string
+          free_listings_remaining: number | null
+          id: string
+          points: number | null
+          tier: string | null
+          total_listings: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          free_listings_remaining?: number | null
+          id?: string
+          points?: number | null
+          tier?: string | null
+          total_listings?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          free_listings_remaining?: number | null
+          id?: string
+          points?: number | null
+          tier?: string | null
+          total_listings?: number | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: []

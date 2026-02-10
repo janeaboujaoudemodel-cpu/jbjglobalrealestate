@@ -103,6 +103,11 @@ const BrokerDashboard = lazy(() => import("./pages/BrokerDashboard"));
 const BrokerResources = lazy(() => import("./pages/BrokerResources"));
 const AIHub = lazy(() => import("./pages/AIHub"));
 const InteriorDesignAI = lazy(() => import("./pages/InteriorDesignAI"));
+const InvestorHub = lazy(() => import("./pages/InvestorHub"));
+const BrokerHub = lazy(() => import("./pages/BrokerHub"));
+const ListingPortal = lazy(() => import("./pages/ListingPortal"));
+const ListingPortalSubmit = lazy(() => import("./pages/ListingPortalSubmit"));
+const ListingPortalMyListings = lazy(() => import("./pages/ListingPortalMyListings"));
 const PropertyEvaluator = lazy(() => import("./pages/PropertyEvaluator"));
 const ScanSignDocuments = lazy(() => import("./pages/ScanSignDocuments"));
 const PropertyMeasurement = lazy(() => import("./pages/PropertyMeasurement"));
@@ -488,6 +493,11 @@ const App = () => (
                 <Route path="/ai-hub" element={<AIHub />} />
                 <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
                 <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
+                <Route path="/investor-hub" element={<InvestorHub />} />
+                <Route path="/broker-hub" element={<BrokerHub />} />
+                <Route path="/listing-portal" element={<ListingPortal />} />
+                <Route path="/listing-portal/submit" element={<ListingPortalSubmit />} />
+                <Route path="/listing-portal/my-listings" element={<ListingPortalMyListings />} />
                 <Route path="/property-evaluator" element={<PropertyEvaluator />} />
                 <Route path="/ai-property-analyzer" element={<AIPropertyAnalyzerPage />} />
                 <Route path="/ai-lead-qualification" element={<BrokerGuard><AILeadQualificationPage /></BrokerGuard>} />
