@@ -1775,6 +1775,20 @@ export function ReellyImportPanel() {
                   <p className="text-xs text-zinc-600">Not Yet Fetched</p>
                 </div>
               </div>
+              {/* Warning: All fetched but many have empty data */}
+              {backfillStats.missing_any === 0 && (backfillStats.missing_amenities > 0 || backfillStats.missing_floor_plans > 0 || backfillStats.missing_documents > 0) && (
+                <Alert className="mt-3 border-amber-300 bg-amber-50">
+                  <AlertTriangle className="h-4 w-4 text-amber-600" />
+                  <AlertDescription className="text-amber-700">
+                    <strong>All {backfillStats.total_projects.toLocaleString()} projects were fetched</strong> but many have empty data.
+                    {backfillStats.missing_amenities > 0 && ` ${backfillStats.missing_amenities.toLocaleString()} missing amenities.`}
+                    {backfillStats.missing_floor_plans > 0 && ` ${backfillStats.missing_floor_plans.toLocaleString()} missing floor plans.`}
+                    {backfillStats.missing_documents > 0 && ` ${backfillStats.missing_documents.toLocaleString()} missing documents.`}
+                    <br />
+                    <strong>Use "Backfill Batch" or "Backfill All" to force re-fetch from Reelly API</strong> — these buttons already use force refresh mode.
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
           )}
 
@@ -2618,10 +2632,11 @@ export function ReellyImportPanel() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div className="space-y-1">
           <div className="flex gap-2">
             <input
               type="text"
-              placeholder="Enter project slug (e.g. palm-central-private-residences)"
+              placeholder="Enter full project slug (e.g. binghatti-crescent-binghatti-44)"
               value={enrichTestSlug}
               onChange={(e) => setEnrichTestSlug(e.target.value)}
               className="flex-1 px-3 py-2 border border-zinc-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -2677,6 +2692,8 @@ export function ReellyImportPanel() {
               {isEnrichTesting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
               {isEnrichTesting ? "Testing..." : "Test"}
             </Button>
+          </div>
+            <p className="text-xs text-zinc-500">💡 Use full slug format from the database (e.g. <code>binghatti-crescent-binghatti-44</code>). Click "🎲 Random" to pick a valid slug.</p>
           </div>
 
           {/* Enrichment Results with Card Preview */}
