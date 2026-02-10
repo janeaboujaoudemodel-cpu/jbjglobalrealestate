@@ -90,7 +90,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
   try {
     const body = await req.json().catch(() => ({}));
-    const limit = Math.min(body.limit || 10, 25);
+    const limit = Math.min(body.limit || 10, 50);
     const action = body.action || "enrich";
 
     // Stats mode
@@ -274,8 +274,8 @@ Deno.serve(async (req: Request): Promise<Response> => {
           console.log(`[ai-bulk-enrich] ${project.name}: all fields already populated`);
         }
 
-        // Throttle between AI calls (2 seconds to avoid rate limits)
-        await new Promise((r) => setTimeout(r, 2000));
+        // Throttle between AI calls (1 second — rate limiter handles backoff)
+        await new Promise((r) => setTimeout(r, 1000));
 
       } catch (err) {
         errors++;

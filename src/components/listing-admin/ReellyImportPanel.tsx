@@ -241,6 +241,14 @@ export function ReellyImportPanel() {
     error?: string;
   } | null>(null);
   
+  // Full enrichment loop state
+  const [isFullAiRunning, setIsFullAiRunning] = useState(false);
+  const [fullAiProgress, setFullAiProgress] = useState({ processed: 0, enriched: 0, errors: 0 });
+  const [fullAiStopRequested, setFullAiStopRequested] = useState(false);
+  const [isFullProvidentRunning, setIsFullProvidentRunning] = useState(false);
+  const [fullProvidentProgress, setFullProvidentProgress] = useState({ processed: 0, docs: 0, images: 0, errors: 0 });
+  const [fullProvidentStopRequested, setFullProvidentStopRequested] = useState(false);
+  
   // Backfill state - for backfilling approved projects with missing details
   const [isBackfilling, setIsBackfilling] = useState(false);
   const [backfillStats, setBackfillStats] = useState<{
@@ -2889,7 +2897,7 @@ export function ReellyImportPanel() {
             )}
           </div>
 
-          {/* Run AI Enrichment Button */}
+          {/* Run AI Enrichment - Single Batch */}
           <Button
             onClick={async () => {
               setIsAiEnriching(true);
@@ -2897,7 +2905,7 @@ export function ReellyImportPanel() {
               toast.info("Starting AI content generation... This may take 1-2 minutes per batch.");
               try {
                 const { data, error } = await supabase.functions.invoke("ai-bulk-enrich", {
-                  body: { limit: 10 },
+                  body: { limit: 25 },
                 });
                 if (error) throw error;
                 setAiEnrichResult(data);
@@ -2913,15 +2921,123 @@ export function ReellyImportPanel() {
                 setIsAiEnriching(false);
               }
             }}
-            disabled={isAiEnriching}
-            className="bg-purple-600 hover:bg-purple-700 text-white w-full"
+            disabled={isAiEnriching || isFullAiRunning}
+            variant="outline"
+            className="border-purple-300 text-purple-700 hover:bg-purple-50 w-full"
           >
             {isAiEnriching ? (
               <><RefreshCw className="h-4 w-4 animate-spin mr-2" /> Generating AI Content...</>
             ) : (
-              <><Zap className="h-4 w-4 mr-2" /> Generate Content (AI) — 10 projects</>
+              <><Zap className="h-4 w-4 mr-2" /> Generate Content (AI) — 25 projects</>
             )}
           </Button>
+
+          {/* FULL AI Enrichment Button */}
+          {!isFullAiRunning ? (
+            <Button
+              onClick={async () => {
+                setIsFullAiRunning(true);
+                setFullAiStopRequested(false);
+                setFullAiProgress({ processed: 0, enriched: 0, errors: 0 });
+                setAiEnrichResult(null);
+                toast.info("Starting FULL AI enrichment — processing ALL projects...");
+                
+                let totalProcessed = 0;
+                let totalEnriched = 0;
+                let totalErrors = 0;
+                let keepGoing = true;
+                
+                while (keepGoing) {
+                  try {
+                    const { data, error } = await supabase.functions.invoke("ai-bulk-enrich", {
+                      body: { limit: 25 },
+                    });
+                    if (error) throw error;
+                    
+                    const batchProcessed = data?.processed || 0;
+                    const batchEnriched = data?.enriched || 0;
+                    const batchErrors = data?.errors || 0;
+                    
+                    totalProcessed += batchProcessed;
+                    totalEnriched += batchEnriched;
+                    totalErrors += batchErrors;
+                    
+                    setFullAiProgress({ processed: totalProcessed, enriched: totalEnriched, errors: totalErrors });
+                    
+                    // Stop conditions
+                    if (batchProcessed === 0 || batchEnriched === 0) {
+                      toast.success(`Full AI enrichment complete! Enriched ${totalEnriched} projects total.`);
+                      keepGoing = false;
+                    }
+                    
+                    // Check for rate limit / credit exhaustion
+                    if (data?.results?.some((r: any) => r.status === "rate_limited" || r.status === "credits_exhausted")) {
+                      toast.warning("Rate limited or credits exhausted. Stopping.");
+                      keepGoing = false;
+                    }
+                  } catch (err: any) {
+                    totalErrors++;
+                    setFullAiProgress({ processed: totalProcessed, enriched: totalEnriched, errors: totalErrors });
+                    toast.error(`Batch error: ${err.message}`);
+                    // Wait and retry once, then stop
+                    await new Promise(r => setTimeout(r, 5000));
+                    keepGoing = false;
+                  }
+                  
+                  // Check stop flag (use ref-like check via DOM)
+                  if ((document.getElementById("ai-stop-flag") as HTMLInputElement)?.value === "stop") {
+                    toast.info(`AI enrichment stopped by user. Enriched ${totalEnriched} projects.`);
+                    keepGoing = false;
+                  }
+                }
+                
+                setIsFullAiRunning(false);
+                setAiEnrichResult({
+                  success: true,
+                  processed: totalProcessed,
+                  enriched: totalEnriched,
+                  errors: totalErrors,
+                  message: `Full run complete: ${totalEnriched} enriched, ${totalErrors} errors`,
+                });
+              }}
+              disabled={isAiEnriching}
+              className="bg-purple-600 hover:bg-purple-700 text-white w-full font-bold"
+            >
+              <Zap className="h-4 w-4 mr-2" /> 🚀 FULL AI Enrichment — ALL Projects
+            </Button>
+          ) : (
+            <div className="space-y-2">
+              <input type="hidden" id="ai-stop-flag" value={fullAiStopRequested ? "stop" : ""} />
+              <div className="bg-purple-50 border border-purple-300 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-purple-800 text-sm flex items-center gap-2">
+                    <RefreshCw className="h-4 w-4 animate-spin" /> AI Enrichment Running...
+                  </span>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => setFullAiStopRequested(true)}
+                  >
+                    <Pause className="h-3 w-3 mr-1" /> Stop
+                  </Button>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center text-sm">
+                  <div className="bg-white rounded p-2">
+                    <p className="text-xl font-bold text-purple-700">{fullAiProgress.processed}</p>
+                    <p className="text-xs text-zinc-500">Processed</p>
+                  </div>
+                  <div className="bg-white rounded p-2">
+                    <p className="text-xl font-bold text-emerald-600">{fullAiProgress.enriched}</p>
+                    <p className="text-xs text-zinc-500">Enriched</p>
+                  </div>
+                  <div className="bg-white rounded p-2">
+                    <p className="text-xl font-bold text-red-500">{fullAiProgress.errors}</p>
+                    <p className="text-xs text-zinc-500">Errors</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* AI Results */}
           {aiEnrichResult && aiEnrichResult.success && (
@@ -2959,11 +3075,6 @@ export function ReellyImportPanel() {
               {aiEnrichResult.error_details.map((e, i) => <p key={i}>• {e}</p>)}
             </div>
           )}
-
-          <p className="text-xs text-zinc-400">
-            Click multiple times to process all projects. Each batch generates FAQs, highlights, USP bullets, 
-            payment plans, and location distances for 10 projects.
-          </p>
         </CardContent>
       </Card>
 
@@ -2980,6 +3091,7 @@ export function ReellyImportPanel() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Single Batch */}
           <Button
             onClick={async () => {
               setIsProvidentExtracting(true);
@@ -3003,8 +3115,9 @@ export function ReellyImportPanel() {
                 setIsProvidentExtracting(false);
               }
             }}
-            disabled={isProvidentExtracting}
-            className="bg-teal-600 hover:bg-teal-700 text-white w-full"
+            disabled={isProvidentExtracting || isFullProvidentRunning}
+            variant="outline"
+            className="border-teal-300 text-teal-700 hover:bg-teal-50 w-full"
           >
             {isProvidentExtracting ? (
               <><RefreshCw className="h-4 w-4 animate-spin mr-2" /> Extracting from Provident...</>
@@ -3013,14 +3126,120 @@ export function ReellyImportPanel() {
             )}
           </Button>
 
+          {/* FULL Provident Extraction */}
+          {!isFullProvidentRunning ? (
+            <Button
+              onClick={async () => {
+                setIsFullProvidentRunning(true);
+                setFullProvidentStopRequested(false);
+                setFullProvidentProgress({ processed: 0, docs: 0, images: 0, errors: 0 });
+                setProvidentResult(null);
+                toast.info("Starting FULL Provident extraction — processing ALL projects...");
+                
+                let totalProcessed = 0;
+                let totalDocs = 0;
+                let totalImages = 0;
+                let totalErrors = 0;
+                let keepGoing = true;
+                
+                while (keepGoing) {
+                  try {
+                    const { data, error } = await supabase.functions.invoke("provident-batch-extract", {
+                      body: { limit: 25 },
+                    });
+                    if (error) throw error;
+                    
+                    const batchProcessed = data?.processed || 0;
+                    totalProcessed += batchProcessed;
+                    totalDocs += data?.total_docs_inserted || 0;
+                    totalImages += data?.total_images_inserted || 0;
+                    totalErrors += data?.errors || 0;
+                    
+                    setFullProvidentProgress({ processed: totalProcessed, docs: totalDocs, images: totalImages, errors: totalErrors });
+                    
+                    if (batchProcessed === 0) {
+                      toast.success(`Full Provident extraction complete! +${totalDocs} docs, +${totalImages} images from ${totalProcessed} projects.`);
+                      keepGoing = false;
+                    }
+                    
+                    // Check for Firecrawl credit exhaustion
+                    if (data?.results?.some((r: any) => r.errors?.includes("FIRECRAWL_CREDITS_EXHAUSTED"))) {
+                      toast.warning("Firecrawl credits exhausted. Documents still extracted. Stopping image fetch.");
+                      keepGoing = false;
+                    }
+                  } catch (err: any) {
+                    totalErrors++;
+                    setFullProvidentProgress({ processed: totalProcessed, docs: totalDocs, images: totalImages, errors: totalErrors });
+                    toast.error(`Batch error: ${err.message}`);
+                    await new Promise(r => setTimeout(r, 5000));
+                    keepGoing = false;
+                  }
+                  
+                  if ((document.getElementById("provident-stop-flag") as HTMLInputElement)?.value === "stop") {
+                    toast.info(`Provident extraction stopped. +${totalDocs} docs, +${totalImages} images.`);
+                    keepGoing = false;
+                  }
+                }
+                
+                setIsFullProvidentRunning(false);
+                setProvidentResult({
+                  processed: totalProcessed,
+                  total_docs_inserted: totalDocs,
+                  total_images_inserted: totalImages,
+                  errors: totalErrors,
+                });
+              }}
+              disabled={isProvidentExtracting}
+              className="bg-teal-600 hover:bg-teal-700 text-white w-full font-bold"
+            >
+              <CloudDownload className="h-4 w-4 mr-2" /> 🚀 FULL Provident Extraction — ALL Projects
+            </Button>
+          ) : (
+            <div className="space-y-2">
+              <input type="hidden" id="provident-stop-flag" value={fullProvidentStopRequested ? "stop" : ""} />
+              <div className="bg-teal-50 border border-teal-300 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-teal-800 text-sm flex items-center gap-2">
+                    <RefreshCw className="h-4 w-4 animate-spin" /> Provident Extraction Running...
+                  </span>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => setFullProvidentStopRequested(true)}
+                  >
+                    <Pause className="h-3 w-3 mr-1" /> Stop
+                  </Button>
+                </div>
+                <div className="grid grid-cols-4 gap-2 text-center text-sm">
+                  <div className="bg-white rounded p-2">
+                    <p className="text-xl font-bold text-teal-700">{fullProvidentProgress.processed}</p>
+                    <p className="text-xs text-zinc-500">Processed</p>
+                  </div>
+                  <div className="bg-white rounded p-2">
+                    <p className="text-xl font-bold text-emerald-600">{fullProvidentProgress.docs}</p>
+                    <p className="text-xs text-zinc-500">Docs</p>
+                  </div>
+                  <div className="bg-white rounded p-2">
+                    <p className="text-xl font-bold text-blue-600">{fullProvidentProgress.images}</p>
+                    <p className="text-xs text-zinc-500">Images</p>
+                  </div>
+                  <div className="bg-white rounded p-2">
+                    <p className="text-xl font-bold text-red-500">{fullProvidentProgress.errors}</p>
+                    <p className="text-xs text-zinc-500">Errors</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {providentResult && !providentResult.error && (
             <Alert className="bg-teal-50 border-teal-300">
               <CheckCircle className="h-4 w-4 text-teal-600" />
               <AlertTitle className="text-teal-700">Provident Extraction Complete</AlertTitle>
               <AlertDescription className="text-teal-600 space-y-1">
                 <p><strong>{providentResult.processed}</strong> projects checked</p>
-                <p>📄 <strong>+{providentResult.total_docs_inserted || 0}</strong> documents inserted ({providentResult.total_pdfs_found || 0} PDFs found)</p>
-                <p>📷 <strong>+{providentResult.total_images_inserted || 0}</strong> images inserted ({providentResult.total_images_found || 0} found)</p>
+                <p>📄 <strong>+{providentResult.total_docs_inserted || 0}</strong> documents inserted</p>
+                <p>📷 <strong>+{providentResult.total_images_inserted || 0}</strong> images inserted</p>
                 {(providentResult.errors || 0) > 0 && (
                   <p className="text-amber-600">⚠️ {providentResult.errors} errors</p>
                 )}
@@ -3035,11 +3254,6 @@ export function ReellyImportPanel() {
               <AlertDescription className="text-red-600">{providentResult.error}</AlertDescription>
             </Alert>
           )}
-
-          <p className="text-xs text-zinc-400">
-            Documents (brochures, floor plans, payment plans) are fetched for free from Provident's page-data.json. 
-            Images use Firecrawl credits if available.
-          </p>
         </CardContent>
       </Card>
 
