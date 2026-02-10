@@ -12,8 +12,8 @@ import { toast } from "sonner";
 // Import CEO photo - same as used in team/leadership
 import janePhoto from '@/assets/ceo/jane-ceo-private-jet.jpg';
 
-// Import company intro video (self-hosted MP4 for fast loading)
-import jbjIntroVideo from '@/assets/videos/jbj-company-intro.mp4';
+// Lazy-load company intro video path (avoid blocking initial render)
+const jbjIntroVideo = new URL('@/assets/videos/jbj-company-intro.mp4', import.meta.url).href;
 
 // Import logo for video poster
 import jbjMonogramLightTransparent from '@/assets/jbj-monogram-light-transparent.png';
@@ -293,7 +293,7 @@ const DigitalCard = () => {
                   className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full p-[4px]"
                   style={{ background: GOLD.gradient }}
                 >
-                  <div className="w-full h-full rounded-full overflow-hidden bg-black">
+                  <div className="w-full h-full rounded-full overflow-hidden" style={{ background: 'linear-gradient(135deg, #EDE4D3, #D4C4A8)' }}>
                     {/* FIXED: objectPosition top to show full head/hairline without cropping */}
                     <img
                       src={janePhoto}
@@ -301,6 +301,7 @@ const DigitalCard = () => {
                       className="w-full h-full object-cover"
                       style={{ objectPosition: "center top" }}
                       loading="eager"
+                      fetchPriority="high"
                     />
                   </div>
                 </div>
@@ -393,7 +394,7 @@ const DigitalCard = () => {
                   className="w-full h-full object-cover"
                   controls
                   poster={jbjMonogramLightTransparent}
-                  preload="metadata"
+                  preload="none"
                   onEnded={handleVideoEnd}
                   playsInline
                 >
