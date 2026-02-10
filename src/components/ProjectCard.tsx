@@ -289,7 +289,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         {/* Content - Premium Hybrid Style */}
         <div className="p-4 flex-1 flex flex-col">
           {/* Project Name - Gold */}
-          <h4 className="text-gold text-lg font-bold mb-1 line-clamp-1 hover:text-gold/80 transition-colors">
+          <h4 className="text-black text-lg font-bold mb-1 line-clamp-1 hover:text-gold transition-colors">
             {project.name}
           </h4>
           
@@ -346,7 +346,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Description with ...more link - Shorter */}
           <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-            <span className="text-gold font-bold hover:text-gold/80 cursor-pointer ml-1 inline-flex items-center gap-1">
+            <span className="text-black font-bold hover:text-black/70 cursor-pointer ml-1 inline-flex items-center gap-1">
               ...more
               <ArrowUpRight className="w-3.5 h-3.5" />
             </span>
