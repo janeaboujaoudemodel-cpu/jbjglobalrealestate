@@ -1,7 +1,7 @@
 import React from 'react';
 import { Building2, Calendar, Check, Sparkles, Eye } from 'lucide-react';
 import menuOffplanProject from '@/assets/menu-offplan-project.jpg';
-import dubaiLandmarksVideo from '@/assets/videos/dubai-landmarks-hero.mp4';
+import dubaiLandmarksVideo from '@/assets/videos/burj-khalifa-day-to-night.mp4';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuProjectsProps {

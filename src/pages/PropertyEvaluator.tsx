@@ -325,7 +325,7 @@ www.jbj.ae | Contact@JBJ.ae | +971 56 591 1000
           playsInline
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         >
-          <source src="/videos/dubai-landmarks-hero.mp4" type="video/mp4" />
+          <source src="/videos/burj-khalifa-day-to-night.mp4" type="video/mp4" />
         </video>
         
         {/* Overlay */}

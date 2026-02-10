@@ -48,7 +48,12 @@ export const FeaturedProjectAd = ({
               src={imageUrl}
               alt={title}
               className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = 'none';
+              }}
             />
+            {/* Fallback gradient behind image */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gold/20 via-black to-black -z-10" />
             {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
             

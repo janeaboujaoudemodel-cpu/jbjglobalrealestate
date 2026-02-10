@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import developersHeroVideo from "@/assets/videos/dubai-landmarks-hero.mp4";
+import developersHeroVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
 
 // Developer tier classification for filtering
 const TIER_FILTERS = [

@@ -52,7 +52,7 @@ import MegaMenuAreas from "@/components/header/MegaMenuAreas";
 import MegaMenuInsights from "@/components/header/MegaMenuInsights";
 import MegaMenuMore from "@/components/header/MegaMenuMore";
 // Utility Mega Menus
-import MegaMenuSearch from "@/components/header/MegaMenuSearch";
+// MegaMenuSearch removed — search opens GlobalSearchModal directly
 import MegaMenuLanguage from "@/components/header/MegaMenuLanguage";
 import MegaMenuAccount from "@/components/header/MegaMenuAccount";
 
@@ -652,7 +652,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] sm:w-[360px] p-0 flex flex-col h-[100dvh] top-0 inset-y-0"
                 >
                 {/* Menu Header - CHAT SUPPORT LOGO (light bg version), proper spacing */}
-                <div className="relative border-b border-gold/30 flex items-center gap-4 px-5 py-4 shrink-0">
+                <div className="relative border-b border-gold/30 flex items-center gap-4 px-5 h-24 sm:h-28 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
                   {/* Monogram - SAME AS CHAT SUPPORT (light bg version) */}
                   <img 
@@ -1432,12 +1432,19 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               {/* Search Icon - opens GlobalSearchModal directly on hover/click */}
               <button
                 onMouseEnter={() => {
+                  closeMegaMenu();
                   setSearchInitialQuery("");
                   setSearchOpen(true);
                 }}
                 onClick={() => {
-                  setSearchInitialQuery("");
-                  setSearchOpen(true);
+                  closeMegaMenu();
+                  if (searchOpen) {
+                    setSearchOpen(false);
+                    setSearchInitialQuery("");
+                  } else {
+                    setSearchInitialQuery("");
+                    setSearchOpen(true);
+                  }
                 }}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
                 aria-label="Search"
