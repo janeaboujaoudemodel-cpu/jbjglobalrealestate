@@ -815,6 +815,39 @@ const CompanyProfile = () => {
         </motion.div>
       </SectionShell>
 
+      {/* Company Introduction Video */}
+      <SectionShell>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-4xl mx-auto"
+        >
+          <div className="text-center mb-10">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Watch</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Company Introduction
+            </h2>
+            <p className="text-black/60 max-w-xl mx-auto">
+              Discover our vision, values, and commitment to excellence in Dubai real estate.
+            </p>
+          </div>
+
+          <div className="jj-card-inner p-0 overflow-hidden rounded-2xl">
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/lBXXdJ2kAtQ"
+                title="JBJ Global Real Estate - Company Introduction"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </motion.div>
+      </SectionShell>
+
       {/* 3. Brand Story */}
       <SectionShell>
         <motion.div
