@@ -54,19 +54,38 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
   }
 
   const handleDownload = async (imageUrl: string, index: number) => {
+    const filename = `${projectName.replace(/\s+/g, "-").toLowerCase()}-${index + 1}.jpg`;
+    
+    // Route through download proxy for reliable Content-Disposition: attachment
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    if (supabaseUrl) {
+      const proxyUrl = new URL(`${supabaseUrl}/functions/v1/download-file`);
+      proxyUrl.searchParams.set("url", imageUrl);
+      proxyUrl.searchParams.set("filename", filename);
+      
+      // Use hidden <a> tag to trigger browser download
+      const link = document.createElement("a");
+      link.href = proxyUrl.toString();
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      return;
+    }
+
+    // Fallback: try fetch blob
     try {
       const response = await fetch(imageUrl);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `${projectName.replace(/\s+/g, "-").toLowerCase()}-${index + 1}.jpg`;
+      link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-    } catch (error) {
-      // Fallback: open in new tab
+    } catch {
       window.open(imageUrl, "_blank");
     }
   };

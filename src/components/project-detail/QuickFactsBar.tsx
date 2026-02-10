@@ -1,5 +1,6 @@
 import { Building2, Layers, Home, CalendarCheck, CheckCircle, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { formatDisplayDate } from "@/utils/formatDate";
 
 interface QuickFactsBarProps {
   propertyType?: string | null;
@@ -42,7 +43,7 @@ export default function QuickFactsBar({
     { 
       icon: CalendarCheck, 
       label: "Handover", 
-      value: handoverDate,
+      value: formatDisplayDate(handoverDate),
       show: !!handoverDate 
     },
   ].filter(f => f.show);

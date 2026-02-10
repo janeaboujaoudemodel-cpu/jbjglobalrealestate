@@ -6,6 +6,7 @@ import {
   Clock 
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { formatDisplayDate } from "@/utils/formatDate";
 
 interface ConstructionTimelineSectionProps {
   constructionProgress?: number | null;
@@ -26,6 +27,27 @@ export default function ConstructionTimelineSection({
   const hasData = constructionProgress !== null && constructionProgress !== undefined;
   if (!hasData && !constructionStartDate && !expectedCompletion) return null;
 
+  // Validate progress: if start date is in the future, override to 0%
+  let validatedProgress = constructionProgress ?? 0;
+  if (constructionStartDate) {
+    const startDate = new Date(constructionStartDate);
+    const now = new Date();
+    if (startDate > now) {
+      validatedProgress = 0;
+    } else if (expectedCompletion && validatedProgress > 0) {
+      // Sanity check: cap progress based on elapsed time vs total timeline
+      const completionDate = new Date(expectedCompletion);
+      const totalDuration = completionDate.getTime() - startDate.getTime();
+      const elapsed = now.getTime() - startDate.getTime();
+      if (totalDuration > 0) {
+        const maxReasonableProgress = Math.min(100, Math.round((elapsed / totalDuration) * 100) + 10);
+        if (validatedProgress > maxReasonableProgress) {
+          validatedProgress = maxReasonableProgress;
+        }
+      }
+    }
+  }
+
   // Determine stage based on progress
   const getConstructionStage = (progress: number) => {
     if (progress === 0) return { label: "Pre-Construction", color: "bg-zinc-500" };
@@ -36,9 +58,7 @@ export default function ConstructionTimelineSection({
     return { label: "Complete", color: "bg-gold" };
   };
 
-  const stage = constructionProgress !== null && constructionProgress !== undefined 
-    ? getConstructionStage(constructionProgress) 
-    : null;
+  const stage = getConstructionStage(validatedProgress);
 
   return (
     <div className="jj-card-inner">
@@ -48,26 +68,24 @@ export default function ConstructionTimelineSection({
       </h3>
 
       {/* Progress Bar */}
-      {constructionProgress !== null && constructionProgress !== undefined && (
+      {hasData && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              {stage && (
-                <span className={`px-2 py-0.5 rounded-full text-xs font-medium text-white ${stage.color}`}>
-                  {stage.label}
-                </span>
-              )}
+              <span className={`px-2 py-0.5 rounded-full text-xs font-medium text-white ${stage.color}`}>
+                {stage.label}
+              </span>
             </div>
-            <span className="text-2xl font-bold text-gold">{constructionProgress}%</span>
+            <span className="text-2xl font-bold text-gold">{validatedProgress}%</span>
           </div>
           <Progress 
-            value={constructionProgress} 
+            value={validatedProgress} 
             className="h-4 bg-muted"
           />
           <p className="text-xs text-muted-foreground mt-2">
-            {constructionProgress === 100 
+            {validatedProgress === 100 
               ? "Construction completed - ready for handover" 
-              : `${100 - constructionProgress}% remaining to completion`
+              : `${100 - validatedProgress}% remaining to completion`
             }
           </p>
         </div>
@@ -83,7 +101,7 @@ export default function ConstructionTimelineSection({
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Construction Started</p>
-                <p className="text-base font-semibold text-foreground">{constructionStartDate}</p>
+                <p className="text-base font-semibold text-foreground">{formatDisplayDate(constructionStartDate)}</p>
               </div>
             </div>
           </div>
@@ -97,7 +115,7 @@ export default function ConstructionTimelineSection({
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Expected Completion</p>
-                <p className="text-base font-semibold text-foreground">{expectedCompletion}</p>
+                <p className="text-base font-semibold text-foreground">{formatDisplayDate(expectedCompletion)}</p>
               </div>
             </div>
           </div>
@@ -111,7 +129,7 @@ export default function ConstructionTimelineSection({
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Handover Date</p>
-                <p className="text-base font-semibold text-foreground">{handoverDate}</p>
+                <p className="text-base font-semibold text-foreground">{formatDisplayDate(handoverDate)}</p>
               </div>
             </div>
           </div>
@@ -119,20 +137,20 @@ export default function ConstructionTimelineSection({
       </div>
 
       {/* Visual Timeline - Only show if we have dates */}
-      {(constructionStartDate || expectedCompletion || handoverDate) && constructionProgress !== null && constructionProgress !== undefined && (
+      {(constructionStartDate || expectedCompletion || handoverDate) && hasData && (
         <div className="mt-8 relative">
           {/* Timeline Line */}
           <div className="absolute top-4 left-0 right-0 h-0.5 bg-muted" />
           <div 
             className="absolute top-4 left-0 h-0.5 bg-gradient-to-r from-gold to-gold-light transition-all"
-            style={{ width: `${constructionProgress}%` }}
+            style={{ width: `${validatedProgress}%` }}
           />
           
           {/* Timeline Points */}
           <div className="flex justify-between relative">
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                constructionProgress > 0 ? "bg-gold text-black" : "bg-muted text-muted-foreground"
+                validatedProgress > 0 ? "bg-gold text-black" : "bg-muted text-muted-foreground"
               }`}>
                 <Flag className="w-4 h-4" />
               </div>
@@ -141,7 +159,7 @@ export default function ConstructionTimelineSection({
             
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                constructionProgress >= 50 ? "bg-gold text-black" : "bg-muted text-muted-foreground"
+                validatedProgress >= 50 ? "bg-gold text-black" : "bg-muted text-muted-foreground"
               }`}>
                 <HardHat className="w-4 h-4" />
               </div>
@@ -150,7 +168,7 @@ export default function ConstructionTimelineSection({
             
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                constructionProgress >= 100 ? "bg-gold text-black" : "bg-muted text-muted-foreground"
+                validatedProgress >= 100 ? "bg-gold text-black" : "bg-muted text-muted-foreground"
               }`}>
                 <Home className="w-4 h-4" />
               </div>
