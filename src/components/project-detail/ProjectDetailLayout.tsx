@@ -146,6 +146,7 @@ export type ProjectDetailData = {
   // Data freshness
   updated_at?: string | null;
   import_source?: string | null;
+  cover_image_url?: string | null;
   external_id?: string | null;
 };
 
@@ -236,7 +237,12 @@ export default function ProjectDetailLayout({
     const raw = project.images?.filter((i) => i.url) || [];
     return filterValidImages(raw);
   }, [project.images]);
-  const heroImage = images[0] ? { ...images[0], url: getHighResImageUrl(images[0].url!) } : undefined;
+  // Fallback chain: project_images → cover_image_url → placeholder
+  const heroImage = useMemo(() => {
+    if (images[0]?.url) return { ...images[0], url: getHighResImageUrl(images[0].url!), alt: images[0].alt || project.name };
+    if (project.cover_image_url) return { url: getHighResImageUrl(project.cover_image_url), alt: project.name };
+    return undefined;
+  }, [images, project.cover_image_url, project.name]);
 
   const brochureDocs = useMemo(
     () =>
