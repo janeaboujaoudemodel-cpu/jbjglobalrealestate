@@ -1495,11 +1495,18 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   }
                 }}
               />
-              {/* Panel with real boundaries so onMouseLeave fires */}
+              {/* Bridge zone between icons and panel */}
               <div 
-                className="absolute top-full right-6 z-[9998]"
-                onMouseEnter={handleMegaMenuPanelEnter}
-                onMouseLeave={handleMegaMenuLeave}
+                className="absolute right-0 h-4 z-[9998] pointer-events-auto"
+                style={{ top: '100%' }}
+                onPointerEnter={handleMegaMenuPanelEnter}
+              />
+              {/* Panel with real boundaries so pointer leave fires */}
+              <div 
+                className="absolute right-6 z-[9998] pointer-events-auto"
+                style={{ top: 'calc(100% + 12px)' }}
+                onPointerEnter={handleMegaMenuPanelEnter}
+                onPointerLeave={handleMegaMenuLeave}
               >
                 {activeMegaMenu === 'search' && (
                   <MegaMenuSearch
