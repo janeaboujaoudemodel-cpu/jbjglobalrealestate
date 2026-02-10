@@ -147,15 +147,25 @@
        );
      }
  
-     // Parse query params
-     const url = new URL(req.url);
-     const limit = parseInt(url.searchParams.get('limit') || '24');
-     const offset = parseInt(url.searchParams.get('offset') || '0');
- 
-     // Build Reelly API URL with pagination
-     const reellyUrl = `${REELLY_API_URL}?limit=${limit}&offset=${offset}`;
-     
-     console.log(`Fetching from Reelly API: ${reellyUrl}`);
+    // Parse query params
+    const url = new URL(req.url);
+    const limit = parseInt(url.searchParams.get('limit') || '24');
+    const offset = parseInt(url.searchParams.get('offset') || '0');
+    const search = url.searchParams.get('search');
+    const saleStatus = url.searchParams.get('sale_status');
+    const constructionStatus = url.searchParams.get('construction_status');
+    const emirate = url.searchParams.get('emirate');
+    const developerId = url.searchParams.get('developer_id');
+
+    // Build Reelly API URL with pagination and filters
+    let reellyUrl = `${REELLY_API_URL}?limit=${limit}&offset=${offset}`;
+    if (search) reellyUrl += `&search=${encodeURIComponent(search)}`;
+    if (saleStatus) reellyUrl += `&sale_status=${encodeURIComponent(saleStatus)}`;
+    if (constructionStatus) reellyUrl += `&construction_status=${encodeURIComponent(constructionStatus)}`;
+    if (emirate) reellyUrl += `&region=${encodeURIComponent(emirate)}`;
+    if (developerId) reellyUrl += `&developer=${encodeURIComponent(developerId)}`;
+    
+    console.log(`Fetching from Reelly API: ${reellyUrl}`);
  
      const response = await fetch(reellyUrl, {
        method: 'GET',
