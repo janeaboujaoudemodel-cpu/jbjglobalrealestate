@@ -1,112 +1,78 @@
 
 
-# Fix Bulk Enrichment — The Reelly API Has No Detail Data
+# Fix Bulk Enrichment Failures, Routing Bugs, and Add Full Enrichment Mode
 
-## Root Cause
+## Problems Found
 
-After thorough investigation, the Reelly API detail endpoint (`/projects/{id}`) returns the **same limited data** as the list endpoint. It does NOT include:
-- Gallery images (only cover image)
-- Documents / brochures
-- Floor plans
-- FAQs
-- Highlights / USP bullets
-- Unit types
-- Payment plan details
-- Videos
+### 1. Provident Batch Extract is completely broken (wrong column names)
+The `provident-batch-extract` edge function inserts documents using columns `document_url` and `document_name`, but the actual `project_documents` table has columns `file_url` and `file_name`. Every single document insert silently fails. The `onConflict` clause also references the non-existent `document_url` column.
 
-This is why the bulk enrichment processed 50 projects and added **0 images, 0 docs, 0 fields** for every single one. The function code is correct — the API simply has nothing to give.
+### 2. Project routing is broken (`/projects/:slug` redirect)
+The redirect route passes `to="/project/:slug"` to `RedirectWithParams`, which generates the URL by doing `${to}/${slug}` — resulting in `/project/:slug/actual-slug` (literally `:slug` in the path). Should be `to="/project"`.
 
-**Current state of 1,809 published projects:**
-- 1,809 have descriptions
-- 1,802 have amenities
-- 1,809 have 1 cover image each
-- **0** have FAQs, floor plans, highlights, unit types, payment plans, or documents
-
-## Solution: Multi-Source Enrichment
-
-Since the Reelly API cannot provide this data, we need two alternative approaches:
-
-### Step 1: AI-Powered Content Generation
-
-Create a new edge function `ai-bulk-enrich` that uses AI (Lovable AI / Gemini) to generate professional content for each project based on what we already know (name, developer, location, price range, bedrooms, amenities, description).
-
-**Generated fields per project:**
-- **FAQs** (5-8 relevant Q&As about the project)
-- **Highlights / USP bullets** (5-7 key selling points)
-- **Payment breakdown** (typical Dubai payment plans based on construction status)
-- **Location distances** (nearby landmarks based on area/coordinates)
-
-This runs in batches of 10 projects per invocation, using the existing project data as context for the AI.
-
-### Step 2: Provident Image & Document Extraction
-
-Fix and optimize the existing `provident-batch-extract` function to:
-- Match project names to Provident slugs
-- Fetch gallery images from Provident pages via Firecrawl
-- Fetch PDF documents (brochures, floor plans, payment plans) from Provident's page-data.json endpoint (this part works WITHOUT Firecrawl credits)
-
-The page-data.json approach for documents is free and reliable — it just fetches a JSON file from Provident's Gatsby build.
-
-### Step 3: Updated Admin UI
-
-Update the Reelly Import Panel to show two separate enrichment actions:
-- **"Generate Content (AI)"** — Runs AI enrichment for FAQs, highlights, payment info
-- **"Fetch Images & Docs (Provident)"** — Runs Provident extraction for photos and PDFs
-- Progress display for both, showing what was added
+### 3. Enrichment only runs in small batches
+Both AI enrichment (10 at a time) and Provident extraction (25 at a time) require clicking repeatedly. User wants a "Full" button that processes ALL projects continuously until done, even if it takes time.
 
 ---
 
-## Technical Details
+## Fix 1: Provident Batch Extract — Column Name Fix
 
-### New Edge Function: `ai-bulk-enrich/index.ts`
+**File:** `supabase/functions/provident-batch-extract/index.ts`
 
-```text
-POST /ai-bulk-enrich
-Body: { "limit": 10, "action": "enrich" | "stats" }
+Change all document insert objects:
+- `document_url` to `file_url`
+- `document_name` to `file_name`
+- Fix `onConflict` from `"project_id,document_type,document_url"` to `"project_id,file_url"`
 
-For each project missing FAQs/highlights:
-1. Build prompt with: name, developer, location, price range, amenities, description
-2. Call Gemini via Lovable AI to generate:
-   - 5-8 FAQs
-   - 5-7 highlight bullets
-   - Payment breakdown (if construction_status known)
-   - Location distances (if lat/lng available)
-3. Parse structured JSON response
-4. UPDATE projects SET faqs=..., highlights=..., usp_bullets=..., payment_breakdown=...
+3 locations for column names (brochure, payment plan, floor plan inserts) and 1 upsert call.
+
+## Fix 2: Project Route Redirect
+
+**File:** `src/App.tsx`
+
+Change line 794 from:
+```
+<Route path="/projects/:slug" element={<RedirectWithParams to="/project/:slug" />} />
+```
+to:
+```
+<Route path="/projects/:slug" element={<RedirectWithParams to="/project" />} />
 ```
 
-### Fix: `provident-batch-extract/index.ts`
+## Fix 3: Full Enrichment Mode — Process ALL Projects
 
-- Run the free page-data.json fetch for ALL projects (no Firecrawl needed for documents)
-- Only use Firecrawl for images (with credit awareness)
-- Better slug matching: try multiple slug variations (e.g., "amalia-residences", "amalia-residences-by-deyaar")
+**File:** `src/components/listing-admin/ReellyImportPanel.tsx`
 
-### Fix: `reelly-bulk-enrich/index.ts`
+Add a "Full AI Enrichment" button that loops through ALL projects:
+- Calls `ai-bulk-enrich` with limit=25 repeatedly until `processed === 0` (no more candidates)
+- Shows live progress counter (e.g., "Enriched 150 of ~1800 projects...")
+- Has a stop button to cancel mid-run
+- Same pattern for Provident extraction: a "Full Provident Extraction" button that loops `provident-batch-extract` until no projects remain
 
-- Add raw API response logging so we can see exactly what Reelly returns
-- Skip processing if the API has no enrichable data (avoid wasting time)
-- Log a clear message: "Reelly API has no gallery/documents for this project"
+**File:** `supabase/functions/ai-bulk-enrich/index.ts`
 
-### Updated Admin Panel: `ReellyImportPanel.tsx`
+Increase max limit from 25 to 50 for faster throughput. Reduce throttle from 2s to 1s between AI calls since the rate limiter handles backoff automatically.
 
-Add two new action cards:
-- **AI Content Generation**: Button + progress for generating FAQs, highlights, USPs
-- **Provident Document Fetch**: Button + progress for fetching brochures and floor plan PDFs
-- Stats display showing current enrichment gaps
+## Fix 4: Deploy Updated Edge Functions
 
-### Files Summary
+Re-deploy both `ai-bulk-enrich` and `provident-batch-extract` after fixes.
 
-| File | Action | Purpose |
-|------|--------|---------|
-| `supabase/functions/ai-bulk-enrich/index.ts` | New | AI-generated FAQs, highlights, payment info, location distances |
-| `supabase/functions/reelly-bulk-enrich/index.ts` | Edit | Add raw logging, skip empty API responses gracefully |
-| `supabase/functions/provident-batch-extract/index.ts` | Edit | Prioritize free page-data.json for docs, improve slug matching |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Edit | Add AI enrich + Provident extract buttons with progress |
+---
 
-### Expected Results
+## Technical Summary
 
-After running both enrichment passes across all projects:
-- **AI Content**: Every project gets FAQs (5-8), highlights (5-7), USP bullets, and payment breakdown
-- **Provident Docs**: Projects matching Provident listings get brochures, floor plan PDFs, and additional gallery images
-- Projects not on Provident still get AI-generated professional content
+| File | Change |
+|------|--------|
+| `supabase/functions/provident-batch-extract/index.ts` | Fix `document_url` to `file_url`, `document_name` to `file_name`, fix `onConflict` |
+| `supabase/functions/ai-bulk-enrich/index.ts` | Increase max limit to 50, reduce throttle |
+| `src/App.tsx` | Fix `/projects/:slug` redirect from `to="/project/:slug"` to `to="/project"` |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Add "Full" buttons for both AI and Provident enrichment with continuous loop + progress + stop |
+
+## Expected Result
+
+- Provident document extraction actually saves brochures, floor plans, and payment plan PDFs to the database
+- Clicking a project listing from `/projects/...` correctly redirects to `/project/...`
+- "Full AI Enrichment" button processes all 1,800+ projects automatically with live progress
+- "Full Provident Extraction" button processes all projects automatically with live progress
+- Both full modes can be stopped mid-run without data loss
 
