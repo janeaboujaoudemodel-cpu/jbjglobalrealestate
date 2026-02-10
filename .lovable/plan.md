@@ -1,86 +1,96 @@
 
 
-# Redesign Awards Page with All 18 Real Award Photos
+# Bulk Project Enrichment — Fix Missing Photos, Documents, and Details
 
-## Overview
+## The Problem
 
-Complete rewrite of the Awards page to replace the 6 placeholder icon cards with all 18 real award photos (10 previously uploaded + 8 new ones). The page will feature a premium gallery layout with a hero spotlight, chronological sorting, and rich award details.
+The database currently has:
+- **1,809 published projects** but only **1 image per project** (just the cover image)
+- **0 documents total** (no brochures, no floor plans, nothing)
+- **0 enriched records** from either Reelly or Provident — the batch enrichment has never successfully run
 
-## Complete Awards List (18 Awards, Chronologically Sorted)
+The existing `provident-batch-extract` function tries to scrape Provident (an external website), which is unreliable and rate-limited. Meanwhile, **1,802 projects already have Reelly IDs** — and the Reelly API has full galleries, documents, and floor plans ready to fetch. The `enrich-project-test` function already knows how to extract this data, but it only works one project at a time.
 
-| # | Image File | Award Title | Organization | Year |
-|---|-----------|-------------|-------------|------|
-| 1 | Untitled_design_21.PNG | Partnership Recognition | Dubai Holding | 2018 |
-| 2 | Untitled_design_22.PNG | Top Broker Award | Emaar | 2019 |
-| 3 | Untitled_design_23.PNG | 1st Place - Top Performing Q4 | Meraas | 2019 |
-| 4 | Untitled_design_34.PNG | 2nd Place - Top Performing Broker Q3 | Meraas | 2019 |
-| 5 | JBJ_GLOBAL_REAL_ESTATE.PNG | Elite Partners of Q3 | DAMAC | 2020 |
-| 6 | Untitled_design_24.PNG | Top Agency Q1 Broker Awards | DAMAC | 2021 |
-| 7 | Untitled_design_25.PNG | Quarter 2 Broker Awards - No. 11 | Emaar | 2021 |
-| 8 | Untitled_design_33.PNG | Quarter 2 Broker Awards - No. 11 | Emaar | 2021 |
-| 9 | Untitled_design_26.PNG | 1st Place - Top Performing Partner | Tilal Al Ghaf / Majid Al Futtaim | 2021 |
-| 10 | Untitled_design_27.PNG | Top Performer Q3 | DAMAC | 2021 |
-| 11 | Untitled_design_28.PNG | The Diamond Club - No. 1 Performing Partner | Meydan | 2022 |
-| 12 | Untitled_design_29.PNG | The Black Onyx Awards | Dubai Properties / Meraas | 2023 |
-| 13 | Untitled_design_30.PNG | Quarter 2 Broker Awards - No. 12 | Emaar | 2023 |
-| 14 | Untitled_design_19.PNG | JBJ Recognition Trophy | JBJ Global | -- |
-| 15 | Untitled_design_20.PNG | Top Broker Award | Sobha Realty | -- |
-| 16 | Untitled_design_31.PNG | Quarter 3 Broker Awards - No. 2 | Emaar | 2024 |
-| 17 | Untitled_design_32.PNG | Quarter 3 Broker Awards - No. 2 | Emaar | 2024 |
-| 18 | Untitled_design_35.PNG | 3rd Highest Performing Channel Partner | Sobha Realty | 2024 |
+## Solution
 
-Note: Images 7/8 (Emaar Q2 2021) and 16/17 (Emaar Q3 2024) appear to be different angles/presentations of the same award. Both will be included since the user uploaded them as separate items.
+Build a new **bulk Reelly enrichment** function that processes projects in batches, pulling galleries (10-30 photos per project), documents (brochures, PDFs), floor plans, FAQs, payment plans, and all other details directly from the Reelly API. Also add a trigger button in the admin panel so you can run it yourself.
 
-## Implementation
+---
 
-### Step 1: Copy all 18 images to `src/assets/awards/`
+## Step 1: Create `reelly-bulk-enrich` Edge Function
 
-Each image gets a descriptive filename for clean imports.
+**New file:** `supabase/functions/reelly-bulk-enrich/index.ts`
 
-### Step 2: Rewrite `src/pages/Awards.tsx`
+This function will:
+1. Query all published projects that have a `reelly_id` but are missing data (0 documents, only 1 image)
+2. Process them in batches of 20 with a 1-second delay between API calls
+3. For each project, call the Reelly detail API (`/api/v2/clients/projects/{reellyId}`)
+4. Extract using the existing shared helpers: `extractGalleryImages`, `extractDocuments`, `extractFloorPlans`, `extractAmenities`, `extractUnitTypes`
+5. Insert gallery images into `project_images`, documents into `project_documents`
+6. Update the project record with amenities, FAQs, floor plans, payment info, highlights, etc.
+7. Return a progress summary (processed count, images added, docs added, errors)
 
-**Keep unchanged:** Hero section, Stats counter section, CTA section.
+Key design choices:
+- Uses Reelly API (reliable, no rate limits like Firecrawl) instead of Provident scraping
+- Non-destructive: only adds data where fields are empty, never overwrites existing data
+- Processes up to 50 projects per invocation to stay within edge function timeout limits
+- Logs progress so you can call it multiple times to work through all 1,802 projects
 
-**Replace entirely:** The placeholder awards grid section (lines 92-133).
+## Step 2: Add "Bulk Enrich" Button to Admin Panel
 
-**New awards grid features:**
-- Data-driven array of 18 award objects with `image`, `title`, `organization`, `year`
-- Awards sorted chronologically (2018 to 2024), undated awards at the end
-- Each card displays:
-  - Award photo in a square container with `object-contain` on a dark background (black/near-black) so trophies stand out beautifully against their original backgrounds
-  - Gold border with hover glow + lift effect
-  - Award title (bold, black text)
-  - Organization name (gold text)
-  - Year badge in the top-right corner
-- Grid: 1 column mobile, 2 columns tablet, 3 columns desktop
-- Updated section subtitle to reflect that real awards are now shown
+**Edit:** `src/components/listing-admin/ReellyImportPanel.tsx`
 
-### Card Design
+Add a new section in the admin panel with:
+- A "Run Bulk Enrichment" button that calls `reelly-bulk-enrich`
+- Progress display showing: projects processed, images added, documents added, errors
+- A "Run Again" button to process the next batch
+- Status text showing how many projects still need enrichment
+
+## Step 3: Fix the Existing `provident-batch-extract`
+
+**Edit:** `supabase/functions/provident-batch-extract/index.ts`
+
+The current function has a bug: it only looks for projects where `cover_image_url IS NULL`, but 1,802 projects already have cover images from Reelly — they just lack additional gallery photos and documents. Fix the query to find projects with 0 documents regardless of cover image status.
+
+---
+
+## Technical Details
+
+### Reelly Bulk Enrich Function Logic
 
 ```text
-+-------------------------------+
-|  [Year Badge]          top-right
-|                               |
-|     [Award Photo]             |
-|     object-contain            |
-|     dark bg container         |
-|                               |
-+-------------------------------+
-|  Award Title (bold)           |
-|  Organization (gold)          |
-+-------------------------------+
+POST /reelly-bulk-enrich
+Body: { "limit": 50 }
+
+1. SELECT projects WHERE is_published = true 
+   AND reelly_id IS NOT NULL
+   AND id NOT IN (SELECT DISTINCT project_id FROM project_documents)
+   LIMIT 50
+
+2. For each project:
+   a. GET Reelly API /projects/{reelly_id}
+   b. Extract gallery -> INSERT into project_images
+   c. Extract documents -> INSERT into project_documents  
+   d. Extract amenities, FAQs, floor_plans, highlights, payment_plan
+   e. UPDATE projects SET amenities=..., faqs=..., etc WHERE id=...
+   f. Sleep 1 second
+
+3. Return { processed: 50, images_added: 450, docs_added: 75, errors: 2 }
 ```
 
-- Image container: `aspect-square bg-zinc-900 rounded-t-xl` with the photo using `object-contain` so the full trophy/certificate is visible
-- Text area: champagne gradient background (`jj-card-inner`) with gold border
-- Hover: `hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)]`
-- Year badge: small gold pill positioned top-right over the image
+### Files Summary
 
-### Technical Details
+| File | Action | Purpose |
+|------|--------|---------|
+| `supabase/functions/reelly-bulk-enrich/index.ts` | New | Batch enrichment using Reelly API for all projects |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Edit | Add bulk enrich button and progress display |
+| `supabase/functions/provident-batch-extract/index.ts` | Edit | Fix query to find projects missing docs (not just cover images) |
 
-**Files modified:**
-- `src/pages/Awards.tsx` -- rewrite the awards grid section only, keep hero/stats/CTA
-- 18 new image files copied to `src/assets/awards/`
+### Expected Results After Running
 
-**No new dependencies required.** Uses existing design system classes.
+After running the bulk enrichment across all 1,802 projects with Reelly IDs:
+- Each project should have 5-30 gallery images (up from 1)
+- Projects with available brochures/PDFs will have documents attached
+- Amenities, FAQs, floor plans, payment plans, and highlights will be populated
+- You can trigger it from the admin panel as many times as needed until all projects are enriched
 
