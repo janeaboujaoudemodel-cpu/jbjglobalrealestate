@@ -16,6 +16,7 @@ import { AreaDevelopersBar } from "@/components/area-detail/AreaDevelopersBar";
 import { AreaMapSection } from "@/components/area-detail/AreaMapSection";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { AreaAIAnalyzer } from "@/components/area-detail/AreaAIAnalyzer";
+import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 
 const AreaDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -68,6 +69,9 @@ const AreaDetail = () => {
       <MapErrorBoundary>
         <AreaMapSection areaName={area.name} areaLat={area.latitude} areaLng={area.longitude} />
       </MapErrorBoundary>
+
+      {/* DLD Market Intelligence */}
+      <DLDMarketWidget highlightArea={area.name} />
 
       {/* AI Area Intelligence */}
       <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />

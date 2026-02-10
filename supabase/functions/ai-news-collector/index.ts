@@ -232,11 +232,11 @@ serve(async (req) => {
         .select("image_url");
       const usedImageUrls = new Set((allArticles || []).map(a => a.image_url).filter(Boolean));
       
-      // Get articles missing content, images, AI analysis, OR with bad/duplicate images
+      // Get articles missing content, images, AI analysis, key_stats, or key_takeaways
       const { data: articlesToEnrich, error: fetchError } = await supabase
         .from("market_news")
-        .select("id, title, excerpt, category, source_url, image_url, content, ai_analysis")
-        .or("content.is.null,image_url.is.null,ai_analysis.is.null")
+        .select("id, title, excerpt, category, source_url, image_url, content, ai_analysis, key_stats, key_takeaways")
+        .or("content.is.null,image_url.is.null,ai_analysis.is.null,key_stats.is.null,key_takeaways.is.null,key_stats.eq.[],key_takeaways.eq.[]")
         .limit(30);
 
       if (fetchError) throw fetchError;
@@ -405,7 +405,10 @@ serve(async (req) => {
           let keyStats: { label: string; value: string }[] = [];
           let keyTakeaways: string[] = [];
           const contentForAnalysis = fullContent || article.content;
-          if (contentForAnalysis && !article.ai_analysis) {
+          const needsAnalysis = !article.ai_analysis || 
+            !article.key_stats || (Array.isArray(article.key_stats) && article.key_stats.length === 0) ||
+            !article.key_takeaways || (Array.isArray(article.key_takeaways) && article.key_takeaways.length === 0);
+          if (contentForAnalysis && needsAnalysis) {
             try {
               const analysisResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
                 method: "POST",
