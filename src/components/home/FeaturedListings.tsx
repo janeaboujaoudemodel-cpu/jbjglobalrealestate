@@ -170,11 +170,11 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
             {/* Developer Logo - Top Left */}
             {logoUrl && !logoError ? (
               <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
-                <div className="w-12 h-12 rounded-lg bg-white shadow-lg border border-gold/30 overflow-hidden">
+                <div className="w-12 h-12 rounded-lg shadow-lg overflow-hidden">
                   <img
                     src={logoUrl}
                     alt={devName}
-                    className="w-full h-full object-fill"
+                    className="w-full h-full object-cover"
                     loading="lazy"
                     onError={() => setLogoError(true)}
                   />

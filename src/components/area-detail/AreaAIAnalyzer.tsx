@@ -85,35 +85,35 @@ Keep each section to 2-3 sentences. Be data-driven and specific.`;
   if (!stats || stats.totalProjects === 0) return null;
 
   return (
-    <section className="py-16 bg-gradient-to-br from-zinc-950 via-black to-zinc-900">
+    <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
           <Brain className="w-6 h-6 text-gold" />
-          <h2 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
             AI Area Intelligence
           </h2>
         </div>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white/5 border border-gold/20 rounded-xl p-4 text-center">
+          <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
             <div className="text-2xl font-bold text-gold">{stats.totalProjects}</div>
-            <div className="text-zinc-400 text-xs mt-1">Active Projects</div>
+            <div className="text-zinc-600 text-xs mt-1">Active Projects</div>
           </div>
-          <div className="bg-white/5 border border-gold/20 rounded-xl p-4 text-center">
+          <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
             <div className="text-2xl font-bold text-gold">{stats.developers.length}</div>
-            <div className="text-zinc-400 text-xs mt-1">Developers</div>
+            <div className="text-zinc-600 text-xs mt-1">Developers</div>
           </div>
           {stats.avgPrice && (
-            <div className="bg-white/5 border border-gold/20 rounded-xl p-4 text-center">
+            <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <div className="text-2xl font-bold text-gold">AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
-              <div className="text-zinc-400 text-xs mt-1">Avg. Starting Price</div>
+              <div className="text-zinc-600 text-xs mt-1">Avg. Starting Price</div>
             </div>
           )}
           {stats.pricePerSqft && (
-            <div className="bg-white/5 border border-gold/20 rounded-xl p-4 text-center">
+            <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <div className="text-2xl font-bold text-gold">AED {stats.pricePerSqft.toLocaleString()}</div>
-              <div className="text-zinc-400 text-xs mt-1">Est. Price/sqft</div>
+              <div className="text-zinc-600 text-xs mt-1">Est. Price/sqft</div>
             </div>
           )}
         </div>
@@ -147,12 +147,12 @@ Keep each section to 2-3 sentences. Be data-driven and specific.`;
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/5 border border-gold/20 rounded-2xl p-6 md:p-8"
+            className="bg-white border border-gold/20 rounded-2xl p-6 md:p-8 shadow-sm"
           >
-            <div className="prose prose-invert prose-gold max-w-none text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap">
+            <div className="prose prose-gold max-w-none text-zinc-700 text-sm leading-relaxed whitespace-pre-wrap">
               {analysis}
             </div>
-            <div className="mt-6 pt-4 border-t border-white/10 flex items-center gap-2 text-zinc-500 text-xs">
+            <div className="mt-6 pt-4 border-t border-gold/10 flex items-center gap-2 text-zinc-500 text-xs">
               <Brain className="w-4 h-4" />
               AI-generated analysis based on current market data
             </div>
