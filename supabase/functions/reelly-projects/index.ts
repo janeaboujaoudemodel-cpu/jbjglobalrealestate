@@ -192,14 +192,23 @@
        },
      });
  
-     if (!response.ok) {
-       const errorText = await response.text();
-       console.error('Reelly API error:', response.status, errorText);
-       return new Response(
-         JSON.stringify({ success: false, error: `Reelly API error: ${response.status}` }),
-         { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-       );
-     }
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Reelly API error:', response.status, errorText);
+        // Return empty results instead of propagating upstream errors
+        // This prevents the frontend from crashing when Reelly API is temporarily down
+        return new Response(
+          JSON.stringify({
+            success: true,
+            data: {
+              projects: [],
+              pagination: { total: 0, limit, offset, hasMore: false },
+            },
+            warning: `Reelly API returned ${response.status} — showing empty results`,
+          }),
+          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
  
      const data = await response.json();
      
