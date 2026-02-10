@@ -92,7 +92,7 @@ const getSaleStatusBadge = (status?: string | null) => {
   return null;
 };
 
-const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'EUR', sizeUnit = 'sqft' }: ProjectCardProps) => {
+const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft' }: ProjectCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = project.images || [];
 
@@ -198,7 +198,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               <img 
                 src={(project.developer as any).logo_url} 
                 alt={project.developer?.name}
-                className="w-10 h-10 object-contain"
+                className="w-full h-full object-fill"
               />
             </div>
           )}

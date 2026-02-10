@@ -223,7 +223,7 @@ const Developers = () => {
         </section>
 
         {/* Filters Section - Champagne Layer matching Properties page */}
-        <section className="sticky top-24 lg:top-20 z-40 bg-black py-4 border-b border-gold/30">
+        <section className="sticky top-24 lg:top-20 z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-4 border-b border-gold/30">
           <div className="container mx-auto px-3 sm:px-4">
             {/* Active Champagne Layer */}
             <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
