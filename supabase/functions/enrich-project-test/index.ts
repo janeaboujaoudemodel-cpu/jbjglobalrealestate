@@ -17,16 +17,24 @@ function json(status: number, body: unknown) {
 async function fetchReellyProject(reellyId: number, apiKey: string) {
   const res = await fetch(
     `https://api-reelly.up.railway.app/api/v2/projects/${reellyId}`,
-    { headers: { Authorization: `Bearer ${apiKey}` } }
+    { headers: { "X-API-Key": apiKey, "Accept": "application/json" } }
   );
   if (!res.ok) return null;
   const data = await res.json();
   return data?.data || data;
 }
 
-async function fetchProvidentBySlug(slug: string, firecrawlKey: string) {
-  // Try to scrape Provident project page via Firecrawl
-  const providentUrl = `https://www.provident.ae/off-plan/${slug}`;
+async function fetchProvidentBySlug(slug: string, reellyId: number | null, firecrawlKey: string) {
+  // Strip the Reelly ID suffix from slug for Provident URL matching
+  // e.g. "binghatti-titania-binghatti-3012" -> "binghatti-titania-binghatti"
+  let cleanSlug = slug;
+  if (reellyId) {
+    const suffix = `-${reellyId}`;
+    if (cleanSlug.endsWith(suffix)) {
+      cleanSlug = cleanSlug.slice(0, -suffix.length);
+    }
+  }
+  const providentUrl = `https://www.providentestate.com/off-plan/${cleanSlug}/`;
   try {
     const res = await fetch("https://api.firecrawl.dev/v1/scrape", {
       method: "POST",
@@ -204,7 +212,7 @@ serve(async (req: Request): Promise<Response> => {
     // Fetch current project from DB
     const { data: project, error: projErr } = await supabase
       .from("projects")
-      .select("id, name, slug, reelly_id, amenities, usp_bullets, location_distances, description")
+      .select("id, name, slug, reelly_id, amenities, usp_bullets, location_distances, description, cover_image_url, developer_name, area_name, price_from, price_to")
       .eq("slug", slug)
       .single();
 
@@ -261,7 +269,7 @@ serve(async (req: Request): Promise<Response> => {
     };
 
     if (firecrawlKey) {
-      providentData = await fetchProvidentBySlug(slug, firecrawlKey);
+      providentData = await fetchProvidentBySlug(slug, project.reelly_id, firecrawlKey);
       if (providentData?.markdown) {
         providentEnrichment = {
           amenities: extractAmenitiesFromMarkdown(providentData.markdown),
@@ -283,6 +291,7 @@ serve(async (req: Request): Promise<Response> => {
       documents_count: (docCount || 0) + reellyEnrichment.documents.length,
       new_images: reellyEnrichment.gallery.length,
       new_documents: reellyEnrichment.documents.length,
+      gallery_preview: reellyEnrichment.gallery.slice(0, 4).map(g => g.url),
     };
 
     // If action is "apply", write to DB
@@ -343,6 +352,11 @@ serve(async (req: Request): Promise<Response> => {
         name: project.name,
         slug: project.slug,
         reelly_id: project.reelly_id,
+        cover_image_url: project.cover_image_url,
+        developer_name: project.developer_name,
+        area_name: project.area_name,
+        price_from: project.price_from,
+        price_to: project.price_to,
       },
       before,
       after,
