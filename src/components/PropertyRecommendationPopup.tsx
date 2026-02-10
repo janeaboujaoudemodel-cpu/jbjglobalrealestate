@@ -133,8 +133,9 @@ const PropertyRecommendationPopup = () => {
 
   const formatPrice = (price: number | null) => {
     if (!price) return "Price on request";
-    if (price >= 1000000) return `AED ${(price / 1000000).toFixed(1)}M`;
-    return `AED ${(price / 1000).toFixed(0)}K`;
+    const rounded = Math.round(price);
+    if (rounded >= 1000000) return `AED ${(rounded / 1000000).toFixed(1)}M`;
+    return `AED ${Math.round(rounded / 1000)}K`;
   };
 
   return (
@@ -147,7 +148,7 @@ const PropertyRecommendationPopup = () => {
           exit={{ opacity: 0, y: 80, scale: 0.95 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
         >
-          <div className="bg-gradient-to-br from-zinc-900 via-black to-zinc-900 border border-gold/30 rounded-2xl shadow-2xl overflow-hidden">
+          <div className="bg-gradient-to-br from-[#1a1a1a] via-[#0d0d0d] to-[#1a1a1a] border border-gold/50 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.15)] overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
               <div className="flex items-center gap-2">
@@ -173,7 +174,7 @@ const PropertyRecommendationPopup = () => {
                 <button
                   key={project.id}
                   onClick={() => handleExplore(project.slug)}
-                  className="w-full flex items-center gap-3 p-2 rounded-xl bg-zinc-800/50 hover:bg-zinc-800 border border-zinc-700/30 hover:border-gold/30 transition-all group text-left"
+                  className="w-full flex items-center gap-3 p-2 rounded-xl bg-zinc-800/60 hover:bg-zinc-700/80 border border-gold/20 hover:border-gold/50 transition-all group text-left"
                 >
                   {project.cover_image_url ? (
                     <img

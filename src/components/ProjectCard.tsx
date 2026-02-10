@@ -47,15 +47,15 @@ const CURRENCY_SYMBOLS: Record<string, string> = {
 
 // Helper to format price with currency conversion
 const formatPriceWithCurrency = (price: number, currency: string = 'AED'): string => {
-  const converted = price * CURRENCY_RATES[currency];
+  const converted = Math.round(price * CURRENCY_RATES[currency]);
   const symbol = CURRENCY_SYMBOLS[currency];
   if (converted >= 1000000) {
-    return `${symbol} ${(converted / 1000000).toFixed(2)}M`;
+    return `${symbol} ${(converted / 1000000).toFixed(1)}M`;
   }
   if (converted >= 1000) {
     return `${symbol} ${Math.round(converted / 1000)}K`;
   }
-  return `${symbol} ${converted.toLocaleString()}`;
+  return `${symbol} ${converted.toLocaleString('en-US')}`;
 };
 
 // Projects that should show "New" status label (only these specific ones)
@@ -304,14 +304,20 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           <div className="h-px bg-gold/20 my-2" />
           
           {/* Starting Price - Gold */}
-          {project.price_from && (
-            <p className="text-sm mb-2">
-              <span className="text-muted-foreground">Starting from </span>
-              <span className="text-gold font-bold text-lg">
-                {formatPriceWithCurrency(project.price_from, currency)}
-              </span>
-            </p>
-          )}
+          <p className="text-sm mb-2">
+            {project.price_from ? (
+              <>
+                <span className="text-muted-foreground">Starting from </span>
+                <span className="text-gold font-bold text-lg">
+                  {formatPriceWithCurrency(project.price_from, currency)}
+                </span>
+              </>
+            ) : (project.is_sold_out || project.sale_status?.toLowerCase().includes('sold')) ? (
+              <span className="text-destructive font-bold">Sold</span>
+            ) : (
+              <span className="text-gold font-medium">Price on Request</span>
+            )}
+          </p>
           
           {/* Developer - ALWAYS Clickable (Gold line - separate) */}
           {project.developer && (
