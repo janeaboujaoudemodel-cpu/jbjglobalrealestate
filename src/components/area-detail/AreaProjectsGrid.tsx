@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Building2, MapPin, Loader2 } from "lucide-react";
+import { Loader2, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
+import ProjectCard from "@/components/ProjectCard";
+import { Button } from "@/components/ui/button";
+import type { Project } from "@/hooks/useProjects";
 
 interface AreaProjectsGridProps {
   areaName: string;
@@ -11,33 +14,45 @@ interface AreaProjectsGridProps {
 
 export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) => {
   const { data: projects, isLoading } = useQuery({
-    queryKey: ["area-projects", areaName],
+    queryKey: ["area-projects-full", areaName],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("id, name, slug, cover_image_url, developer_name, price_from, area_name, construction_status")
+        .select(`
+          id, name, slug, cover_image_url, developer_name, price_from, area_name,
+          construction_status, handover_date, description, status_label, sale_status,
+          is_sold_out, property_type_label, bedrooms_min, bedrooms_max, size_min, size_max, location,
+          developers(name, slug, logo_url),
+          project_images(image_url, alt_text, sort_order)
+        `)
         .ilike("area_name", `%${areaName}%`)
         .order("created_at", { ascending: false })
         .limit(12);
       if (error) throw error;
-      return data || [];
+
+      // Map to Project shape expected by ProjectCard
+      return (data || []).map((p: any) => ({
+        ...p,
+        developer: p.developers || (p.developer_name ? { name: p.developer_name, slug: null, logo_url: null } : null),
+        images: (p.project_images || []).sort((a: any, b: any) => (a.sort_order ?? 0) - (b.sort_order ?? 0)),
+      })) as (Project & { is_sold_out?: boolean | null })[];
     },
     staleTime: 5 * 60 * 1000,
   });
 
   if (isLoading) {
     return (
-      <section className="py-16 bg-[hsl(var(--premium-bg))]">
+      <section className="py-16 bg-black">
         <div className="container mx-auto px-4">
-          <div className="h-8 w-64 bg-zinc-200 animate-pulse rounded mb-8" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="rounded-xl overflow-hidden border-2 border-gold/20">
-                <div className="aspect-[4/3] bg-zinc-200 animate-pulse" />
-                <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] space-y-2">
-                  <div className="h-4 w-3/4 bg-zinc-200 animate-pulse rounded" />
-                  <div className="h-3 w-1/2 bg-zinc-200 animate-pulse rounded" />
-                  <div className="h-4 w-1/3 bg-zinc-200 animate-pulse rounded mt-4" />
+          <div className="h-8 w-64 bg-zinc-800 animate-pulse rounded mb-8" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="rounded-xl overflow-hidden border border-gold/20">
+                <div className="aspect-[16/10] bg-zinc-800 animate-pulse" />
+                <div className="p-4 bg-zinc-900 space-y-2">
+                  <div className="h-4 w-3/4 bg-zinc-800 animate-pulse rounded" />
+                  <div className="h-3 w-1/2 bg-zinc-800 animate-pulse rounded" />
+                  <div className="h-4 w-1/3 bg-zinc-800 animate-pulse rounded mt-4" />
                 </div>
               </div>
             ))}
@@ -50,13 +65,13 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   if (!projects || projects.length === 0) return null;
 
   return (
-    <section className="py-16 bg-[hsl(var(--premium-bg))]">
+    <section className="py-16 bg-black">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl md:text-3xl font-bold text-black mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
+        <h2 className="text-gold text-2xl md:text-3xl font-bold mb-8" style={{ fontFamily: "Poppins, sans-serif" }}>
           Projects in {areaName}
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, i) => (
             <motion.div
               key={project.id}
@@ -65,55 +80,18 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
             >
-              <Link to={`/project/${project.slug}`} className="h-full">
-                <div className="group rounded-xl overflow-hidden border-2 border-gold/30 hover:border-gold transition-all shadow-md hover:shadow-xl flex flex-col h-full">
-                  <div className="relative aspect-[4/3] flex-shrink-0">
-                    {project.cover_image_url ? (
-                      <img
-                        src={project.cover_image_url}
-                        alt={project.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-zinc-200 flex items-center justify-center">
-                        <Building2 className="w-10 h-10 text-zinc-400" />
-                      </div>
-                    )}
-                    {project.construction_status && (
-                      <span className="absolute top-3 left-3 px-2 py-1 bg-black/70 text-white text-[10px] font-medium rounded">
-                        {project.construction_status}
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex-1 flex flex-col min-h-[120px]">
-                    <h3 className="font-bold text-black text-sm line-clamp-1 group-hover:text-gold transition-colors">
-                      {project.name}
-                    </h3>
-                    {project.developer_name && (
-                      <p className="text-zinc-500 text-xs mt-1">by {project.developer_name}</p>
-                    )}
-                    <div className="mt-auto">
-                      {project.price_from && (
-                        <p className="text-gold font-semibold text-sm mt-2">
-                          From AED {Number(project.price_from).toLocaleString()}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Link>
+              <ProjectCard project={project} />
             </motion.div>
           ))}
         </div>
 
         {projects.length >= 12 && (
-          <div className="text-center mt-8">
-            <Link
-              to={`/properties?area=${areaSlug}`}
-              className="text-gold hover:text-gold-light transition-colors font-medium"
-            >
-              View All Projects in {areaName} →
+          <div className="text-center mt-10">
+            <Link to={`/properties?area=${areaSlug}`}>
+              <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all">
+                View All Projects in {areaName}
+                <ArrowUpRight className="w-5 h-5 ml-2" />
+              </Button>
             </Link>
           </div>
         )}

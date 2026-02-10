@@ -75,7 +75,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   return (
     <section className="py-12 bg-gradient-to-br from-zinc-950 via-black to-zinc-900">
       <div className="container mx-auto px-4">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto border border-gold/20 rounded-2xl p-6 md:p-8 bg-zinc-900/40">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
@@ -92,7 +92,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             {[
               { label: "YTD Volume", value: ytd2026.value, icon: Banknote, color: "text-gold" },
-              { label: "Transactions", value: ytd2026.transactions.toLocaleString(), icon: Building2, color: "text-white" },
+              { label: "Transactions (YTD 2026)", value: ytd2026.transactions.toLocaleString(), icon: Building2, color: "text-white" },
               { label: "Off-Plan", value: ytd2026.offPlan.toLocaleString(), icon: TrendingUp, color: "text-emerald-400" },
               { label: "Cash Deals", value: ytd2026.cash.toLocaleString(), icon: Banknote, color: "text-amber-400" },
             ].map((stat) => (
@@ -184,7 +184,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Disclaimer */}
           <p className="text-[10px] text-zinc-600 text-center mt-6">
-            Source: Dubai Land Department (DLD). Data provided for informational purposes only. Does not constitute financial advice.
+            Source: Dubai Land Department (DLD). Year-to-date (YTD) 2026 data. For informational purposes only. Does not constitute financial advice.
           </p>
         </div>
       </div>
