@@ -1,7 +1,47 @@
-import { Trophy, Star, Award, Medal } from "lucide-react";
 import { useCountUp } from "@/hooks/useCountUp";
 import { COMPANY_STATS, CONTACT_INFO } from "@/constants/stats";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
+
+// Award images
+import award01 from "@/assets/awards/dubai-holding-2018.png";
+import award02 from "@/assets/awards/emaar-top-broker-2019.png";
+import award03 from "@/assets/awards/meraas-1st-q4-2019.png";
+import award04 from "@/assets/awards/meraas-2nd-q3-2019.png";
+import award05 from "@/assets/awards/damac-elite-q3-2020.png";
+import award06 from "@/assets/awards/damac-top-agency-q1-2021.png";
+import award07 from "@/assets/awards/emaar-q2-no11-2021a.png";
+import award08 from "@/assets/awards/emaar-q2-no11-2021b.png";
+import award09 from "@/assets/awards/tilal-al-ghaf-1st-2021.png";
+import award10 from "@/assets/awards/damac-top-performer-q3-2021.png";
+import award11 from "@/assets/awards/meydan-diamond-club-2022.png";
+import award12 from "@/assets/awards/meraas-black-onyx-2023.png";
+import award13 from "@/assets/awards/emaar-q2-no12-2023.png";
+import award14 from "@/assets/awards/jbj-trophy.png";
+import award15 from "@/assets/awards/sobha-top-broker.png";
+import award16 from "@/assets/awards/emaar-q3-no2-2024a.png";
+import award17 from "@/assets/awards/emaar-q3-no2-2024b.png";
+import award18 from "@/assets/awards/sobha-3rd-partner-2024.png";
+
+const AWARDS_DATA = [
+  { image: award01, title: "Partnership Recognition", organization: "Dubai Holding", year: "2018" },
+  { image: award02, title: "Top Broker Award", organization: "Emaar", year: "2019" },
+  { image: award03, title: "1st Place - Top Performing Q4", organization: "Meraas", year: "2019" },
+  { image: award04, title: "2nd Place - Top Performing Broker Q3", organization: "Meraas", year: "2019" },
+  { image: award05, title: "Elite Partners of Q3", organization: "DAMAC", year: "2020" },
+  { image: award06, title: "Top Agency Q1 Broker Awards", organization: "DAMAC", year: "2021" },
+  { image: award07, title: "Quarter 2 Broker Awards - No. 11", organization: "Emaar", year: "2021" },
+  { image: award08, title: "Quarter 2 Broker Awards - No. 11", organization: "Emaar", year: "2021" },
+  { image: award09, title: "1st Place - Top Performing Partner", organization: "Tilal Al Ghaf / Majid Al Futtaim", year: "2021" },
+  { image: award10, title: "Top Performer Q3", organization: "DAMAC", year: "2021" },
+  { image: award11, title: "The Diamond Club - No. 1 Performing Partner", organization: "Meydan", year: "2022" },
+  { image: award12, title: "The Black Onyx Awards", organization: "Dubai Properties / Meraas", year: "2023" },
+  { image: award13, title: "Quarter 2 Broker Awards - No. 12", organization: "Emaar", year: "2023" },
+  { image: award16, title: "Quarter 3 Broker Awards - No. 2", organization: "Emaar", year: "2024" },
+  { image: award17, title: "Quarter 3 Broker Awards - No. 2", organization: "Emaar", year: "2024" },
+  { image: award18, title: "3rd Highest Performing Channel Partner", organization: "Sobha Realty", year: "2024" },
+  { image: award14, title: "JBJ Recognition Trophy", organization: "JBJ Global", year: "" },
+  { image: award15, title: "Top Broker Award", organization: "Sobha Realty", year: "" },
+];
 
 const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: string; prefix: string; label: string }) => {
   const { ref, formattedValue } = useCountUp({ end, suffix, prefix, duration: 2500 });
@@ -20,7 +60,6 @@ const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: stri
 };
 
 const Awards = () => {
-  // Use centralized stats
   const recognitions = [
     COMPANY_STATS.yearsInDubai,
     COMPANY_STATS.brokersTrainedBy,
@@ -28,23 +67,12 @@ const Awards = () => {
     COMPANY_STATS.teamManaged,
   ];
 
-  // Empty placeholder awards - will be populated with real data later
-  const placeholderAwards = [
-    { icon: Trophy },
-    { icon: Star },
-    { icon: Award },
-    { icon: Medal },
-    { icon: Trophy },
-    { icon: Star },
-  ];
-
   return (
     <>
       <SEOHead {...pagesSEO.awards} />
       <div className="min-h-screen bg-black">
-        {/* Hero Section - 3-Layer System */}
+        {/* Hero Section */}
         <section className="relative py-24 md:py-32 bg-black">
-          {/* Layer 2 - Active Champagne with global gutter */}
           <div className="jj-layer-2">
             <div className="jj-layer-active rounded-2xl p-6 md:p-10">
               <p className="text-gold text-sm uppercase tracking-widest mb-4">Awards & Recognition</p>
@@ -62,11 +90,10 @@ const Awards = () => {
           </div>
         </section>
 
-        {/* Stats with Counter Animation - 3-Layer System */}
+        {/* Stats with Counter Animation */}
         <section className="py-16 bg-black relative overflow-hidden">
           <div className="jj-layer-2">
             <div className="jj-layer-active rounded-2xl p-6 md:p-10 relative">
-              {/* Subtle radial glow */}
               <div 
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
                 style={{
@@ -89,7 +116,7 @@ const Awards = () => {
           </div>
         </section>
 
-        {/* Awards Grid - 3-Layer System with Empty Placeholders */}
+        {/* Awards Grid */}
         <section className="py-20 bg-black">
           <div className="jj-layer-2">
             <div className="jj-layer-active rounded-2xl p-6 md:p-10">
@@ -104,27 +131,38 @@ const Awards = () => {
                   Awards & <span className="text-gold">Achievements</span>
                 </h2>
                 <p className="text-zinc-600 text-base mt-4 max-w-xl mx-auto">
-                  Award entries will be added as they are verified and confirmed.
+                  A decade of excellence recognized by Dubai's leading developers and industry bodies.
                 </p>
               </div>
 
-              {/* Empty Placeholder Cards Grid */}
+              {/* Awards Cards Grid */}
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {placeholderAwards.map((award, index) => (
+                {AWARDS_DATA.map((award, index) => (
                   <div 
                     key={index}
-                    className="jj-card-inner border-2 border-gold rounded-xl p-8 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 group"
+                    className="border-2 border-gold rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 group"
                   >
-                    <div className="flex items-start justify-between mb-6">
-                      <div className="w-14 h-14 rounded-xl flex items-center justify-center border-2 border-gold group-hover:shadow-[0_4px_15px_rgba(200,167,102,0.4)] transition-all"
-                        style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
-                      >
-                        <award.icon className="w-7 h-7 text-black" />
-                      </div>
-                      <span className="text-gold text-sm font-semibold">—</span>
+                    {/* Image Container */}
+                    <div className="relative aspect-square bg-zinc-900">
+                      <img 
+                        src={award.image} 
+                        alt={`${award.title} - ${award.organization}`}
+                        className="w-full h-full object-contain p-4"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      {/* Year Badge */}
+                      {award.year && (
+                        <span className="absolute top-3 right-3 px-3 py-1 text-xs font-bold rounded-full bg-gold text-black shadow-lg">
+                          {award.year}
+                        </span>
+                      )}
                     </div>
-                    <h3 className="text-black text-xl font-semibold mb-2">Award Title</h3>
-                    <p className="text-zinc-500 text-sm">Awarding Organization</p>
+                    {/* Text Area */}
+                    <div className="jj-card-inner p-5">
+                      <h3 className="text-black text-lg font-semibold leading-tight mb-1">{award.title}</h3>
+                      <p className="text-gold text-sm font-medium">{award.organization}</p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -132,13 +170,11 @@ const Awards = () => {
           </div>
         </section>
 
-        {/* CTA - 3-Layer System */}
+        {/* CTA */}
         <section className="py-20 bg-black">
           <div className="jj-layer-2">
             <div className="max-w-[1100px] mx-auto">
-              {/* Active Champagne Layer */}
               <div className="jj-layer-active rounded-2xl p-4 sm:p-6">
-                {/* Locked Champagne Inner Card */}
                 <div className="jj-card-inner border-2 border-gold rounded-xl p-8 md:p-12 text-center shadow-[0_0_30px_rgba(200,167,102,0.25)]">
                   <h2 
                     className="text-black text-3xl md:text-4xl font-bold mb-4"
