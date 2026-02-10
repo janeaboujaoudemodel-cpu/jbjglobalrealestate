@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, Navigate } from "react-router-dom";
-import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
+import { Link } from "react-router-dom";
 import { 
   Phone, Mail, Globe, Share2, Download, MessageCircle, Video, 
   PhoneCall, X, MapPin, Building2, 
@@ -150,7 +149,6 @@ const openWhatsApp = (phone: string) => {
 };
 
 const DigitalCard = () => {
-  const { isFounderVisible, isLoading } = useFounderVisibility();
   const [showCallOptions, setShowCallOptions] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -158,8 +156,6 @@ const DigitalCard = () => {
 
   // Set noindex meta tag - only for this page, preserve existing global tags
   useEffect(() => {
-    if (!isFounderVisible) return; // Skip if redirecting
-    
     document.title = `${CONTACT_INFO.name} - Digital Business Card`;
     
     // Track if we created these tags
@@ -206,17 +202,7 @@ const DigitalCard = () => {
         metaGooglebot.setAttribute("content", previousGooglebotContent);
       }
     };
-  }, [isFounderVisible]);
-
-  // Redirect to homepage if founder visibility is OFF
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-10 h-10 border-2 border-gold border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-  if (!isFounderVisible) return <Navigate to="/" replace />;
+  }, []);
 
   // Handle video end - freeze on first frame (logo visible)
   const handleVideoEnd = () => {
