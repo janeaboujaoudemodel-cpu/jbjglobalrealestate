@@ -6,19 +6,158 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Category-based fallback images (high-quality Dubai Unsplash photos)
-const CATEGORY_IMAGES: Record<string, string> = {
-  "Policy": "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1200&q=80",
-  "Economic": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80",
-  "Market Update": "https://images.unsplash.com/photo-1622015663319-e97e697503ee?w=1200&q=80",
-  "Government": "https://images.unsplash.com/photo-1597659840241-37e2b9c2f55f?w=1200&q=80",
-  "Analysis": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
-  "Developer News": "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1200&q=80",
-  "Monthly Report": "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=1200&q=80",
-  "Market Outlook": "https://images.unsplash.com/photo-1546412414-e1885259563a?w=1200&q=80",
+// Bad image patterns - generic logos/UI elements that aren't real article photos
+const BAD_IMAGE_PATTERNS = [
+  /adgmo-logotype/i,
+  /newsbanner\.jpg/i,
+  /twitter\.png/i,
+  /photonpay/i,
+  /favicon/i,
+  /sprite/i,
+  /placeholder/i,
+  /default[-_]?image/i,
+  /no[-_]?image/i,
+  /blank\.png/i,
+  /pixel\.gif/i,
+  /spacer/i,
+  /transparent\.png/i,
+];
+
+// Known duplicate/bad image URLs to force re-scrape
+const KNOWN_BAD_URLS = [
+  "wam.ae/en/images/newsbanner.jpg",
+  "adgmo-logotype",
+  "twitter.png",
+];
+
+// Diversified fallback image pools per category (6 unique photos each)
+const CATEGORY_IMAGE_POOL: Record<string, string[]> = {
+  "Policy": [
+    "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1200&q=80",
+    "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1200&q=80",
+    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80",
+    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80",
+    "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=80",
+    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=80",
+  ],
+  "Economic": [
+    "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80",
+    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
+    "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1200&q=80",
+    "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&q=80",
+    "https://images.unsplash.com/photo-1459767129954-1b1c1f9b9ace?w=1200&q=80",
+    "https://images.unsplash.com/photo-1464938050520-ef2571e0d6f1?w=1200&q=80",
+  ],
+  "Market Update": [
+    "https://images.unsplash.com/photo-1622015663319-e97e697503ee?w=1200&q=80",
+    "https://images.unsplash.com/photo-1546412414-e1885259563a?w=1200&q=80",
+    "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1200&q=80",
+    "https://images.unsplash.com/photo-1583001809873-a128495da465?w=1200&q=80",
+    "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=1200&q=80",
+    "https://images.unsplash.com/photo-1585468274952-66591eb14165?w=1200&q=80",
+  ],
+  "Government": [
+    "https://images.unsplash.com/photo-1597659840241-37e2b9c2f55f?w=1200&q=80",
+    "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=1200&q=80",
+    "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=1200&q=80",
+    "https://images.unsplash.com/photo-1609599006353-e629aaabfeae?w=1200&q=80",
+    "https://images.unsplash.com/photo-1575517111478-7f6afd0973db?w=1200&q=80",
+    "https://images.unsplash.com/photo-1602524811717-781985c36e9f?w=1200&q=80",
+  ],
+  "Analysis": [
+    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
+    "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1200&q=80",
+    "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=1200&q=80",
+    "https://images.unsplash.com/photo-1495521939206-a217db9df264?w=1200&q=80",
+    "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=1200&q=80",
+    "https://images.unsplash.com/photo-1527219525722-f9767a7f2884?w=1200&q=80",
+  ],
+  "Developer News": [
+    "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1200&q=80",
+    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80",
+    "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1200&q=80",
+    "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&q=80",
+    "https://images.unsplash.com/photo-1429497419816-9ca5cfb4571a?w=1200&q=80",
+    "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1200&q=80",
+  ],
+  "Monthly Report": [
+    "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=1200&q=80",
+    "https://images.unsplash.com/photo-1523294587484-bae6cc870010?w=1200&q=80",
+    "https://images.unsplash.com/photo-1554469384-e58fac16e23a?w=1200&q=80",
+    "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=1200&q=80",
+    "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=1200&q=80",
+    "https://images.unsplash.com/photo-1606046604972-77cc76aee944?w=1200&q=80",
+  ],
+  "Market Outlook": [
+    "https://images.unsplash.com/photo-1546412414-e1885259563a?w=1200&q=80",
+    "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?w=1200&q=80",
+    "https://images.unsplash.com/photo-1577415124269-fc1140354523?w=1200&q=80",
+    "https://images.unsplash.com/photo-1559599238-308793637427?w=1200&q=80",
+    "https://images.unsplash.com/photo-1609599006353-e629aaabfeae?w=1200&q=80",
+    "https://images.unsplash.com/photo-1602524811717-781985c36e9f?w=1200&q=80",
+  ],
 };
 
-const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80";
+const DEFAULT_POOL = [
+  "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80",
+  "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1200&q=80",
+  "https://images.unsplash.com/photo-1546412414-e1885259563a?w=1200&q=80",
+  "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
+  "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1200&q=80",
+  "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1200&q=80",
+];
+
+function isImageBad(url: string): boolean {
+  return BAD_IMAGE_PATTERNS.some(p => p.test(url)) || KNOWN_BAD_URLS.some(bad => url.includes(bad));
+}
+
+function extractOgImage(markdown: string): string | null {
+  // Try og:image patterns commonly found in scraped markdown
+  const ogPatterns = [
+    /og:image[^"]*"(https?:\/\/[^"]+)"/i,
+    /twitter:image[^"]*"(https?:\/\/[^"]+)"/i,
+    /property="og:image"\s+content="(https?:\/\/[^"]+)"/i,
+    /meta\s+name="twitter:image"\s+content="(https?:\/\/[^"]+)"/i,
+  ];
+  for (const p of ogPatterns) {
+    const m = p.exec(markdown);
+    if (m && m[1] && !isImageBad(m[1])) return m[1];
+  }
+  return null;
+}
+
+function extractFirstGoodImage(markdown: string): string | null {
+  const imgPatterns = [
+    /!\[.*?\]\((https?:\/\/[^\s)]+\.(jpg|jpeg|png|webp)[^\s)]*)\)/gi,
+    /(?:src|href)=["'](https?:\/\/[^\s"']+\.(jpg|jpeg|png|webp)[^\s"']*)/gi,
+  ];
+  for (const pattern of imgPatterns) {
+    let match;
+    while ((match = pattern.exec(markdown)) !== null) {
+      const url = match[1];
+      if (!isImageBad(url) && !(/logo/i.test(url)) && !(/icon/i.test(url)) && url.length > 30) {
+        return url;
+      }
+    }
+  }
+  return null;
+}
+
+async function pickUniqueFallback(
+  category: string,
+  existingUrls: Set<string>,
+): Promise<string> {
+  const pool = CATEGORY_IMAGE_POOL[category] || DEFAULT_POOL;
+  // Find first URL not already in use
+  for (const url of pool) {
+    if (!existingUrls.has(url)) {
+      return url;
+    }
+  }
+  // All used — append random crop param to make unique
+  const base = pool[Math.floor(Math.random() * pool.length)];
+  return `${base}&crop=entropy&fit=crop&seed=${Date.now()}`;
+}
 
 // AUTHORIZED NEWS SOURCES
 const AUTHORIZED_NEWS_SOURCES = [
@@ -77,7 +216,13 @@ serve(async (req) => {
     if (action === "enrich") {
       console.log("Starting article enrichment...");
       
-      // Get articles missing content, images, or AI analysis
+      // Get all existing image_urls to avoid duplicates in fallback assignment
+      const { data: allArticles } = await supabase
+        .from("market_news")
+        .select("image_url");
+      const usedImageUrls = new Set((allArticles || []).map(a => a.image_url).filter(Boolean));
+      
+      // Get articles missing content, images, AI analysis, OR with bad/duplicate images
       const { data: articlesToEnrich, error: fetchError } = await supabase
         .from("market_news")
         .select("id, title, excerpt, category, source_url, image_url, content, ai_analysis")
@@ -86,23 +231,45 @@ serve(async (req) => {
 
       if (fetchError) throw fetchError;
       
-      if (!articlesToEnrich || articlesToEnrich.length === 0) {
+      // Also find articles with known bad/duplicate images
+      const { data: badImageArticles } = await supabase
+        .from("market_news")
+        .select("id, title, excerpt, category, source_url, image_url, content, ai_analysis")
+        .not("image_url", "is", null)
+        .limit(100);
+      
+      const articlesWithBadImages = (badImageArticles || []).filter(a => 
+        a.image_url && isImageBad(a.image_url)
+      );
+      
+      // Merge both lists, dedup by ID
+      const enrichIds = new Set((articlesToEnrich || []).map(a => a.id));
+      const allToEnrich = [...(articlesToEnrich || [])];
+      for (const a of articlesWithBadImages) {
+        if (!enrichIds.has(a.id)) {
+          allToEnrich.push(a);
+          enrichIds.add(a.id);
+        }
+      }
+
+      if (allToEnrich.length === 0) {
         return new Response(JSON.stringify({ success: true, enriched: 0, message: "All articles already enriched" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
-      console.log(`Found ${articlesToEnrich.length} articles to enrich`);
+      console.log(`Found ${allToEnrich.length} articles to enrich (${articlesWithBadImages.length} with bad images)`);
       let enrichedCount = 0;
       const errors: string[] = [];
 
-      for (const article of articlesToEnrich) {
+      for (const article of allToEnrich) {
         try {
           let fullContent = article.content;
           let imageUrl = article.image_url;
+          const needsImage = !imageUrl || isImageBad(imageUrl);
 
-          // Only scrape if we need content
-          if (!fullContent && article.source_url) {
+          // Scrape if we need content OR a better image
+          if ((!fullContent || needsImage) && article.source_url) {
             console.log(`Scraping ${article.source_url} for "${article.title}"...`);
             
             try {
@@ -126,48 +293,49 @@ serve(async (req) => {
                 const rawMarkdown = scrapeData.data?.markdown || scrapeData.markdown || "";
 
                 if (rawMarkdown.length > 100) {
-                  // Use AI to extract the FULL article (not summarized)
-                  const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-                    method: "POST",
-                    headers: {
-                      "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      model: "google/gemini-2.5-flash",
-                      messages: [
-                        {
-                          role: "system",
-                          content: `You extract the FULL article body text from raw scraped markdown. Return the COMPLETE article content preserving ALL paragraphs — do NOT summarize or shorten. Remove navigation, ads, footers, sidebars, social media links, and any non-article text. Preserve the article's full structure with paragraph breaks. Do not add any commentary.`
-                        },
-                        {
-                          role: "user",
-                          content: `Extract the full article body from this scraped page about "${article.title}":\n\n${rawMarkdown.substring(0, 50000)}`
-                        }
-                      ],
-                    }),
-                  });
+                  // Extract content if needed
+                  if (!fullContent) {
+                    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+                      method: "POST",
+                      headers: {
+                        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        model: "google/gemini-2.5-flash",
+                        messages: [
+                          {
+                            role: "system",
+                            content: `You extract the FULL article body text from raw scraped markdown. Return the COMPLETE article content preserving ALL paragraphs — do NOT summarize or shorten. Remove navigation, ads, footers, sidebars, social media links, and any non-article text. Preserve the article's full structure with paragraph breaks. Do not add any commentary.`
+                          },
+                          {
+                            role: "user",
+                            content: `Extract the full article body from this scraped page about "${article.title}":\n\n${rawMarkdown.substring(0, 50000)}`
+                          }
+                        ],
+                      }),
+                    });
 
-                  if (aiResponse.ok) {
-                    const aiData = await aiResponse.json();
-                    const extractedContent = aiData.choices?.[0]?.message?.content;
-                    if (extractedContent && extractedContent.length > 50) {
-                      fullContent = extractedContent;
+                    if (aiResponse.ok) {
+                      const aiData = await aiResponse.json();
+                      const extractedContent = aiData.choices?.[0]?.message?.content;
+                      if (extractedContent && extractedContent.length > 50) {
+                        fullContent = extractedContent;
+                      }
                     }
                   }
 
-                  // Try to find images from the scraped data
-                  if (!imageUrl) {
-                    // Check multiple image patterns
-                    const imgPatterns = [
-                      /!\[.*?\]\((https?:\/\/[^\s)]+\.(jpg|jpeg|png|webp)[^\s)]*)\)/gi,
-                      /(?:src|href)=["'](https?:\/\/[^\s"']+\.(jpg|jpeg|png|webp)[^\s"']*)/gi,
-                    ];
-                    for (const pattern of imgPatterns) {
-                      const match = pattern.exec(rawMarkdown);
-                      if (match) {
-                        imageUrl = match[1];
-                        break;
+                  // Extract image: OG tags first, then inline images
+                  if (needsImage) {
+                    const ogImage = extractOgImage(rawMarkdown);
+                    if (ogImage) {
+                      imageUrl = ogImage;
+                      console.log(`  Found OG image for "${article.title}": ${ogImage.substring(0, 80)}...`);
+                    } else {
+                      const inlineImage = extractFirstGoodImage(rawMarkdown);
+                      if (inlineImage) {
+                        imageUrl = inlineImage;
+                        console.log(`  Found inline image for "${article.title}": ${inlineImage.substring(0, 80)}...`);
                       }
                     }
                   }
@@ -179,13 +347,14 @@ serve(async (req) => {
               console.warn(`Scrape error for "${article.title}":`, scrapeErr);
             }
 
-            // Small delay to avoid rate limiting
             await new Promise(r => setTimeout(r, 1500));
           }
 
-          // Assign category fallback image if still no image
-          if (!imageUrl) {
-            imageUrl = CATEGORY_IMAGES[article.category] || DEFAULT_IMAGE;
+          // Assign unique fallback image if still no good image
+          if (!imageUrl || isImageBad(imageUrl)) {
+            imageUrl = await pickUniqueFallback(article.category, usedImageUrls);
+            usedImageUrls.add(imageUrl);
+            console.log(`  Assigned unique fallback for "${article.title}"`);
           }
 
           // If we still don't have content, generate a brief article from the excerpt
@@ -259,7 +428,7 @@ serve(async (req) => {
           // Update the article in the database
           const updateData: Record<string, unknown> = {};
           if (fullContent && !article.content) updateData.content = fullContent;
-          if (imageUrl && !article.image_url) updateData.image_url = imageUrl;
+          if (imageUrl && (!article.image_url || isImageBad(article.image_url))) updateData.image_url = imageUrl;
           if (aiAnalysis) updateData.ai_analysis = aiAnalysis;
 
           if (Object.keys(updateData).length > 0) {

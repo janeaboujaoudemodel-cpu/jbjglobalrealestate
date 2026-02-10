@@ -3,7 +3,8 @@ import { Download, Lock, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
-import downtownDubai from "@/assets/menu-downtown-dubai-skyline.jpg";
+
+const BROCHURE_BG_URL = "https://imgengine.khaleejtimes.com/khaleejtimes-english/2026-02-04/lvnx1x0g/Dubai.jpg?width=1200&height=800&format=auto";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 interface PremiumBrochureCardProps {
   projectName: string;
@@ -122,7 +123,7 @@ const PremiumBrochureCard = ({
           {/* Consistent Downtown Dubai Background for All Brochures */}
           <div 
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${downtownDubai})` }}
+            style={{ backgroundImage: `url(${BROCHURE_BG_URL})` }}
           />
           
           {/* Dark overlay for text readability */}
