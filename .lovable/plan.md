@@ -1,147 +1,96 @@
 
-# Comprehensive Fixes: Footer Hubs, Search, Education Page, and FAQ Pages
+# Header Search, Mobile Menu, Properties Page, and Project Card Fixes
 
 ## Overview
 
-This plan addresses 10+ distinct issues across the footer navigation, header search, broker education page, and FAQ content. Changes are organized by priority.
+This plan addresses 7 distinct issues: search dropdown duplication (still happening), mobile hamburger divider alignment, properties hero scene dots removal, replacing the tower-shape video, developer logos on project cards, "...more" linking to project details, and featured ad images.
 
 ---
 
-## Part 1: Footer Restructure -- Add Broker Hub and Investor Hub as Separate Cards
+## Part 1: Fix Search -- Still Two Dropdowns
 
-**Current state:** The footer has an "Education Hub" card (Card 6) that contains both Education Hub links AND Investor Hub links. Broker Tools appear in Row 3 only when broker mode is active. Market Intelligence is also in Row 3.
+**Problem:** The search icon on hover opens `GlobalSearchModal` (correct), BUT the `MegaMenuSearch` component is still imported and potentially being triggered elsewhere. Looking at the code, the search icon at line 1433-1449 does call `setSearchOpen(true)` directly -- this is correct. However, `MegaMenuSearch` is still imported (line 55) and may be rendered through the mega menu system if `activeMegaMenu === 'search'` is somehow set.
 
-**What changes:**
-- Split Card 6 into separate concerns
-- Create 3 new footer cards in Row 2/3 area:
-  1. **Broker Hub** (mode-conditional: visible only in broker/combined mode) -- contains: Broker Toolkit, Broker Education, Broker Resources, Training Portal
-  2. **Investor Hub** (mode-conditional: visible only in investor/combined mode) -- contains: Investor Education, Investor FAQs, Investor Tools, My Dashboard
-  3. **Market Intelligence** (always visible) -- contains the existing market intel links
-- Education Hub card remains but without the Investor Hub section embedded in it
-- Remove the old Row 3 broker tools / market intelligence cards since they are now in the main grid
+**Root cause:** The search button uses `setSearchOpen(true)` which opens `GlobalSearchModal` -- but it does NOT close any active mega menu first. If a user hovers from another mega menu item to search, the mega menu stays open AND the search modal opens on top.
 
-**Mode visibility rules (applied globally):**
-- Investor mode: sees Investor Hub, hides Broker Hub
-- Broker mode: sees Broker Hub, hides Investor Hub (but can still access guides/books)
-- Combined mode: sees both hubs
+Additionally, `MegaMenuSearch` is still imported but the code at line 1485-1486 only renders language/account panels. The issue may be that hovering on the search icon doesn't close the currently-open mega menu panel, creating visual overlap.
 
-**File: `src/components/Footer.tsx`**
+**Fix in `src/components/GlobalHeader.tsx`:**
+- In the search button's `onMouseEnter` and `onClick`, add `closeMegaMenu()` before `setSearchOpen(true)` to ensure any open mega menu is dismissed
+- Remove the `MegaMenuSearch` import entirely (cleanup)
+- Ensure the `GlobalSearchModal` closes on: clicking X, clicking outside, clicking search icon again, or pressing Escape
+- Add toggle behavior: if `searchOpen` is already true and user clicks search icon, close it
 
 ---
 
-## Part 2: Remove MegaMenuSearch Dropdown -- Use GlobalSearchModal Directly
+## Part 2: Mobile Hamburger Menu -- Divider Alignment
 
-**Problem:** When hovering the search icon, a "Search & Shortcuts" mega menu dropdown opens first. The user must then click "Search" inside it, which opens the actual GlobalSearchModal. The user wants ONLY the GlobalSearchModal.
+**Problem:** The mobile menu (Sheet) has a logo header section with a `border-b border-gold/30` divider at line 655. The main header has a bottom divider at lines 545-553. When the hamburger opens, these two dividers don't align visually because the mobile menu's header has different padding/height than the main header.
 
-**Changes in `src/components/GlobalHeader.tsx`:**
-- Change the search icon behavior: On hover, open the GlobalSearchModal directly (set `searchOpen = true`) instead of opening `MegaMenuSearch`
-- On click, also open GlobalSearchModal and keep it open (pinned)
-- On click outside or pressing X or clicking search icon again, close it
-- Remove `MegaMenuSearch` from rendering entirely in the utility mega menu panels
-- The `MegaMenuSearch` component file can remain but will no longer be used
-
-This makes the search a single-step interaction: hover or click the search icon opens the full search modal immediately.
+**Fix in `src/components/GlobalHeader.tsx`:**
+- Match the mobile menu header height to the main header height. The main header is `h-24 sm:h-28` on mobile. The mobile menu header uses `py-4` with a `w-16 h-16` logo
+- Set the mobile menu header div to use a fixed height matching the main header: `h-24 sm:h-28` with `flex items-center`
+- Ensure the bottom border of the mobile menu header aligns with the main header's bottom border by using the same positioning
 
 ---
 
-## Part 3: Fix White Text in Language Dropdown (Force Override)
+## Part 3: Remove Scene Indicator Dots from Properties Hero
 
-**Problem:** The user reports the language dropdown text is still white. The `BookLanguageFilter.tsx` code already has `text-black` and `bg-white`, but the Radix `DropdownMenuItem` base styles may be overriding with focus/hover classes.
+**Problem:** The `PropertiesHeroVideo` component shows clickable scene indicator dots (lines 103-123). The user wants these removed permanently -- scenes should auto-advance silently.
 
-**Fix in `src/components/broker-education/BookLanguageFilter.tsx`:**
-- Add `!text-black` (important) to non-selected items to force override any base Radix styles
-- Add explicit `focus:text-black focus:bg-gold/10` to prevent focus state from reverting to white text
-
----
-
-## Part 4: Standardize Book Card Heights (Already h-[400px], Needs Refinement)
-
-**Current state:** `Book3DCard.tsx` already has `h-[400px]` on the book cover container, but books with different title/description lengths can still appear visually different.
-
-**Fix in `src/components/broker-education/Book3DCard.tsx`:**
-- Change the outer container to have a fixed total height (e.g., `h-[440px]`) to include the shadow area
-- Add `min-h-[400px] max-h-[400px]` to lock the book cover height absolutely
-- Ensure `line-clamp-2` on title and `line-clamp-2` on description are enforced
-- Add `overflow-hidden` to the entire card to prevent content overflow on any screen size
+**Fix in `src/components/PropertiesHeroVideo.tsx`:**
+- Delete the entire scene indicator dots block (lines 103-123)
+- Also remove the `WhyDubaiCapitalSection` dots if they exist (they don't -- that component has no dots)
 
 ---
 
-## Part 5: Fix Certification Section -- Remaining White Text Issues
+## Part 4: Replace `dubai-landmarks-hero.mp4` (Tower Shape Video) Globally
 
-**Current state:** The `CertificationSection.tsx` and `PhaseCard.tsx` were converted to champagne theme in the last edit. But checking the code, the section header says `text-black` which is correct. The user reports "Complete all phases" and progress labels are not readable.
+**Problem:** The video `dubai-landmarks-hero.mp4` shows a stylized tower/landmark shape that the user dislikes. It's used in:
+1. `PropertiesHeroVideo.tsx` (imported as `downtownVideo` but NOT used in the scenes array -- already replaced by `burjKhalifaVideo`)
+2. `MegaMenuProjects.tsx` (line 4 -- used in the featured card video)
+3. `Developers.tsx` (line 24 -- used as hero video)
+4. `PropertyEvaluator.tsx` (line 328 -- path reference)
 
-**Fix in `src/components/certification/CertificationSection.tsx`:**
-- Verify all text uses `text-black` or `text-black/70` -- the current code already does this
-- The `Progress` component may have white text on the progress bar label -- check and fix
-- Ensure the progress percentage text (`{Math.round(overallProgress.percent)}%`) is `text-black/60` (currently is)
-
-**Fix in `src/components/certification/PhaseCard.tsx`:**
-- The "Continue Learning" button text may be too subtle -- make it more visible with stronger gold contrast
-- Ensure locked state text `text-black/40` is readable against champagne background (it should be, but increase to `text-black/50` if needed)
-- Fix card content overflow: add `overflow-hidden` and ensure description uses `line-clamp-3`
-
----
-
-## Part 6: Add More JBJ Employee Benefits
-
-**Current state:** The "What JBJ Brokers Receive" section has 4 cards: 24/7 Support, Continuous Education, Events and Networking, AI Tools Access.
-
-**Add more benefit cards in `src/pages/BrokerEducation.tsx`:**
-- Expand to 8 cards (2 rows of 4):
-  1. 24/7 Support (existing)
-  2. Continuous Education (existing)
-  3. Events and Networking (existing)
-  4. AI Tools Access (existing)
-  5. Admin Support -- Personal assistant for each broker
-  6. Operations Support -- CRM support and listing management
-  7. Marketing Team -- Dedicated marketing support
-  8. Personal Admin -- Manage listings and operations
+**Fix:**
+- Replace all imports/references of `dubai-landmarks-hero.mp4` with `burj-khalifa-day-to-night.mp4` which is the Burj Khalifa daylight drone shot the user wants
+- In `PropertiesHeroVideo.tsx`: Remove the unused `downtownVideo` import
+- In `MegaMenuProjects.tsx`: Change import to `burj-khalifa-day-to-night.mp4`
+- In `Developers.tsx`: Change import to `burj-khalifa-day-to-night.mp4`
+- In `PropertyEvaluator.tsx`: Change the path reference
 
 ---
 
-## Part 7: Reduce Section Spacing on Broker Education Page
+## Part 5: Developer Logo on All Project Cards
 
-**Problem:** Too much vertical space between sections (Progress and Recognition, Benefits, Certification, CTA).
+**Problem:** The `ProjectCard.tsx` already shows developer logos (lines 196-204) when `(project.developer as any)?.logo_url` exists. The `ReellyProjectCard.tsx` may not have this. Need to verify and ensure both card types show the logo.
 
-**Fix in `src/pages/BrokerEducation.tsx`:**
-- Change section padding from `py-12 md:py-16` to `py-8 md:py-10` for internal sections
-- Keep the hero section full height
-- Keep the CTA section with slightly more padding (`py-12 md:py-16`)
+**Fix in `src/components/ReellyProjectCard.tsx`:**
+- Add the same developer logo overlay in the top-left corner of the image area, matching the `ProjectCard` implementation
+- Use `project.developer?.logo_url` with a white rounded container
 
----
-
-## Part 8: CTA Button -- "Continue Reading" for Previously Opened Books
-
-**Fix in `src/components/broker-education/Book3DCard.tsx`:**
-- Check `progress?.status`: if `in_progress`, show "Continue Reading" instead of "Open Book"
-- If `completed`, show "Read Again" or "Review"
-- Make the button more premium: stronger gold background on hover, larger text
+**Fix in `src/components/home/FeaturedListings.tsx`:**
+- The internal `ProjectCard` in FeaturedListings also needs the developer logo overlay added (it's a separate simplified component)
 
 ---
 
-## Part 9: Delete AI-Generated FAQ Content -- Replace with Dummy Placeholders
+## Part 6: "...more" Link Should Open Project Details
 
-**Problem:** The user explicitly stated they create FAQ content themselves. The 4 FAQ pages (BuyerFAQ, SellerFAQ, LandlordFAQ, TenantFAQ) were created with AI-generated Q&A content, which is not allowed.
+**Problem:** In `ProjectCard.tsx` (line 342-347), the "...more" link already links to `/project/${project.slug}` -- this is correct. But the user reports it's not working. The issue may be that the `...more` text is inside a parent `<Link>` (line 192) that already wraps the entire card, so the inner `<Link>` creates a nested anchor tag which is invalid HTML.
 
-**Fix:** Replace the content in all 4 FAQ pages with dummy placeholder content:
-- Keep the page structure (hero, accordion, navigation)
-- Replace all Q&A content with placeholder text like "Question coming soon" / "Answer will be added by the content team"
-- Keep 2-3 placeholder categories with 2-3 placeholder questions each
-
-**Files:** `src/pages/BuyerFAQ.tsx`, `src/pages/SellerFAQ.tsx`, `src/pages/LandlordFAQ.tsx`, `src/pages/TenantFAQ.tsx`
-
-**Global rule to lock:** Never generate actual FAQ content. Always use placeholder/dummy text for FAQ pages. Only the user creates real content.
+**Fix in `src/components/ProjectCard.tsx`:**
+- Change the inner `<Link>` for "...more" to a `<span>` since the parent `<Link>` already navigates to the project page on click
+- The entire card is already clickable and goes to `/project/${project.slug}`
 
 ---
 
-## Part 10: Content Overflow Fix -- Global Card Compatibility
+## Part 7: Featured Ad Cards Need Images (Not Black Background)
 
-**Problem:** Card content overflows when the screen is resized. "Continue Learning" button text can exceed the card boundary.
+**Problem:** The `FeaturedProjectAd` component uses `imageUrl` from `FEATURED_ADS` which point to external CDN URLs. If these images fail to load, the card shows a black background (`#1a1a1a`).
 
-**Fix approach:**
-- In `PhaseCard.tsx`: Add `overflow-hidden` to the card, use `truncate` or `line-clamp` on description text, ensure buttons use `whitespace-nowrap` and `text-sm` sizing
-- In `Book3DCard.tsx`: Already has `line-clamp-2`, add `overflow-hidden` to the outer card
-- These are responsive-safe patterns that work across all devices
+**Fix in `src/components/FeaturedProjectAd.tsx`:**
+- Add an `onError` handler on the `<img>` tag to show a fallback gradient or placeholder image instead of pure black
+- Alternatively, add a champagne/gold gradient as the fallback background behind the image
 
 ---
 
@@ -149,25 +98,22 @@ This makes the search a single-step interaction: hover or click the search icon 
 
 | File | Change |
 |---|---|
-| `src/components/Footer.tsx` | Restructure to separate Broker Hub, Investor Hub, Market Intelligence cards with mode visibility |
-| `src/components/GlobalHeader.tsx` | Change search icon to open GlobalSearchModal directly, remove MegaMenuSearch usage |
-| `src/components/broker-education/BookLanguageFilter.tsx` | Force text-black with important overrides |
-| `src/components/broker-education/Book3DCard.tsx` | Lock card height, fix CTA labels (Continue Reading / Review), overflow protection |
-| `src/pages/BrokerEducation.tsx` | Add more benefit cards, reduce section spacing |
-| `src/components/certification/CertificationSection.tsx` | Ensure all text is black/readable on champagne |
-| `src/components/certification/PhaseCard.tsx` | Fix content overflow, ensure readability |
-| `src/pages/BuyerFAQ.tsx` | Replace AI-generated content with dummy placeholders |
-| `src/pages/SellerFAQ.tsx` | Replace AI-generated content with dummy placeholders |
-| `src/pages/LandlordFAQ.tsx` | Replace AI-generated content with dummy placeholders |
-| `src/pages/TenantFAQ.tsx` | Replace AI-generated content with dummy placeholders |
+| `src/components/GlobalHeader.tsx` | Fix search toggle (close mega menu first), remove MegaMenuSearch import, fix mobile menu header height/divider alignment |
+| `src/components/PropertiesHeroVideo.tsx` | Remove scene indicator dots, remove unused `downtownVideo` import |
+| `src/components/header/MegaMenuProjects.tsx` | Replace `dubai-landmarks-hero.mp4` with `burj-khalifa-day-to-night.mp4` |
+| `src/pages/Developers.tsx` | Replace `dubai-landmarks-hero.mp4` with `burj-khalifa-day-to-night.mp4` |
+| `src/pages/PropertyEvaluator.tsx` | Replace video path reference |
+| `src/components/ReellyProjectCard.tsx` | Add developer logo overlay in top-left of image |
+| `src/components/home/FeaturedListings.tsx` | Add developer logo overlay to the simplified ProjectCard |
+| `src/components/ProjectCard.tsx` | Fix nested Link for "...more" (change to span) |
+| `src/components/FeaturedProjectAd.tsx` | Add image error fallback |
 
 ## Execution Order
 
-1. Fix search (remove MegaMenuSearch, open GlobalSearchModal directly)
-2. Fix BookLanguageFilter text color override
-3. Fix Book3DCard height lock + CTA labels + overflow
-4. Fix PhaseCard and CertificationSection readability + overflow
-5. Reduce section spacing in BrokerEducation
-6. Add more JBJ employee benefits
-7. Restructure Footer with Broker Hub + Investor Hub + Market Intelligence
-8. Replace FAQ page content with dummy placeholders
+1. Fix search behavior (close mega menu, toggle logic)
+2. Fix mobile menu header divider alignment
+3. Remove scene dots from PropertiesHeroVideo
+4. Replace tower-shape video globally
+5. Add developer logos to ReellyProjectCard and FeaturedListings
+6. Fix "...more" nested link in ProjectCard
+7. Fix FeaturedProjectAd image fallback
