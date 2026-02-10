@@ -287,8 +287,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         
         {/* Content - Premium Hybrid Style */}
         <div className="p-4 flex-1 flex flex-col">
-          {/* Project Name */}
-          <h4 className="text-foreground text-lg font-bold mb-1 line-clamp-1 hover:text-gold transition-colors">
+          {/* Project Name - Gold */}
+          <h4 className="text-gold text-lg font-bold mb-1 line-clamp-1 hover:text-gold/80 transition-colors">
             {project.name}
           </h4>
           
@@ -303,11 +303,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Divider */}
           <div className="h-px bg-gold/20 my-2" />
           
-          {/* Starting Price - Orange/Gold */}
+          {/* Starting Price - Gold */}
           {project.price_from && (
             <p className="text-sm mb-2">
               <span className="text-muted-foreground">Starting from </span>
-              <span className="text-handover font-bold text-lg">
+              <span className="text-gold font-bold text-lg">
                 {formatPriceWithCurrency(project.price_from, currency)}
               </span>
             </p>

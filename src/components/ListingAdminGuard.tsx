@@ -27,22 +27,21 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
 
   useEffect(() => {
     let cancelled = false;
+    let retryCount = 0;
+    const MAX_RETRIES = 2;
 
     const verify = async () => {
       // CRITICAL: Wait for BOTH auth AND owner verification to complete
-      // This is the key fix for the race condition
       if (authLoading || ownerLoading) {
-        return; // Don't make any decisions yet
+        return;
       }
 
-      // No user = redirect to login
       if (!user) {
         if (!cancelled) setStatus("unauthenticated");
         return;
       }
 
       // Owner override - if verified as Owner via AuthContext, allow immediately
-      // No need for any DB calls - owner status is already verified server-side
       if (isOwner) {
         if (!cancelled) setStatus("allowed");
         return;
@@ -52,7 +51,6 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
       const userId = user.id;
 
       try {
-        // Check roles in parallel: owner, admin, and listing_admins table
         const [ownerResult, adminResult, listingAdminResult] = await Promise.all([
           supabase.rpc("has_role", { _user_id: userId, _role: "owner" }),
           supabase.rpc("has_role", { _user_id: userId, _role: "admin" }),
@@ -68,7 +66,6 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
         const hasAdminRole = adminResult.data === true;
         const isListingAdmin = !!listingAdminResult.data;
 
-        // Owner role (via has_role) or listing manager access
         if (hasOwnerRole || hasAdminRole || isListingAdmin) {
           if (!cancelled) setStatus("allowed");
         } else {
@@ -76,7 +73,14 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
         }
       } catch (error) {
         console.error("ListingAdminGuard: Error checking access", error);
-        if (!cancelled) setStatus("denied");
+        // Retry on network errors instead of immediately denying
+        if (retryCount < MAX_RETRIES && !cancelled) {
+          retryCount++;
+          console.log(`ListingAdminGuard: Retrying (${retryCount}/${MAX_RETRIES})...`);
+          setTimeout(() => { if (!cancelled) verify(); }, 1500);
+        } else {
+          if (!cancelled) setStatus("denied");
+        }
       }
     };
 

@@ -13,6 +13,7 @@ interface GlobalSearchModalProps {
   isOpen: boolean;
   initialQuery?: string;
   onClose: () => void;
+  embedded?: boolean;
 }
 
 // Quick access shortcuts - always visible
@@ -35,7 +36,7 @@ const POPULAR_PAGES = [
   { label: "FAQ", route: "/faq", icon: HelpCircle },
 ];
 
-const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose }: GlobalSearchModalProps) => {
+const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = false }: GlobalSearchModalProps) => {
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -109,6 +110,74 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose }: GlobalSearchM
       onClose();
     }
   };
+
+  // Embedded mode - render content directly without overlay
+  if (embedded) {
+    return (
+      <div className="flex flex-col" style={{ maxHeight: '500px' }}>
+        {/* Search Input */}
+        <div className="relative border-b border-gold/30 flex-shrink-0">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
+          <Input
+            ref={inputRef}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Search anything..."
+            className="w-full h-12 pl-12 pr-4 bg-transparent border-0 text-white text-base placeholder:text-gold/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          />
+        </div>
+        {/* Content */}
+        <div className="overflow-y-auto p-3 flex-1" style={{ maxHeight: '440px' }}>
+          {query.trim() ? (
+            <div>
+              <p className="text-sm font-semibold text-gold mb-2 px-1">
+                {results.length > 0 ? `${results.length} results` : 'No results'}
+              </p>
+              {results.length > 0 && (
+                <div className="space-y-1">
+                  {results.map((item, idx) => (
+                    <button
+                      key={`${item.id}-${idx}`}
+                      onClick={() => handleSelect(item.route)}
+                      className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 transition-all text-left"
+                    >
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/10 border border-gold/30 text-gold">
+                        {item.icon && <item.icon className="w-4 h-4" />}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-white truncate">{item.label}</p>
+                        {item.category && <p className="text-xs text-zinc-400">{item.category}</p>}
+                      </div>
+                      <ArrowRight className="w-3 h-3 text-zinc-500" />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div>
+              <p className="text-xs font-semibold text-gold/80 mb-2 uppercase tracking-wider">Quick Links</p>
+              <div className="grid grid-cols-3 gap-2">
+                {QUICK_SHORTCUTS.map((s) => (
+                  <button
+                    key={s.route}
+                    onClick={() => handleSelect(s.route)}
+                    className="flex flex-col items-center gap-1.5 p-2 rounded-lg hover:bg-white/10 transition-all"
+                  >
+                    <div className={`w-8 h-8 rounded-lg ${s.color} flex items-center justify-center`}>
+                      <s.icon className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-xs text-zinc-300">{s.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <AnimatePresence>

@@ -215,37 +215,52 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
               )}
             </div>
 
-            {/* Title */}
-            <h3 className="text-black font-semibold text-sm mb-2 line-clamp-2 group-hover:text-gold transition-colors min-h-[40px]" style={{ fontFamily: "Poppins, sans-serif" }}>
+            {/* Title - Gold */}
+            <h3 className="text-gold font-semibold text-sm mb-1 line-clamp-2 group-hover:text-gold/80 transition-colors min-h-[40px]" style={{ fontFamily: "Poppins, sans-serif" }}>
               {project.name}
             </h3>
+
+            {/* Description - 2 lines */}
+            {(project as any).description && (
+              <p className="text-zinc-600 text-xs line-clamp-2 mb-2">
+                {String((project as any).description).replace(/<[^>]*>/g, '').slice(0, 120)}
+              </p>
+            )}
 
             {/* Spacer to push bottom content down */}
             <div className="flex-grow" />
 
-            {/* Developer + Price + Handover row - fixed height */}
+            {/* Developer + Price + Handover row */}
             <div className="flex items-end justify-between mt-2 min-h-[36px]">
               <div>
                 {project.developer_name ? (
-                  <span className="text-gold font-medium text-[10px] block">by {project.developer_name}</span>
+                  <span className="text-black font-semibold text-xs block">by {project.developer_name}</span>
                 ) : (
-                  <span className="text-transparent text-[10px] block" aria-hidden="true">placeholder</span>
+                  <span className="text-transparent text-xs block" aria-hidden="true">placeholder</span>
                 )}
                 {project.price_from ? (
-                  <span className="text-black font-bold text-xs">
+                  <span className="text-gold font-bold text-sm">
                     From {formatPrice(project.price_from)}
                   </span>
                 ) : (
                   <span className="text-zinc-500 font-medium text-xs">Price TBA</span>
                 )}
               </div>
-              {project.handover_date ? (
-                <span className="text-orange-500 text-[10px] font-semibold">
-                  {project.handover_date}
-                </span>
-              ) : (
-                <span className="text-transparent text-[10px]" aria-hidden="true">—</span>
-              )}
+              <div className="flex flex-col items-end gap-1">
+                {project.handover_date ? (
+                  <span className="text-orange-500 text-xs font-bold whitespace-nowrap">
+                    {project.handover_date}
+                  </span>
+                ) : (
+                  <span className="text-transparent text-xs" aria-hidden="true">—</span>
+                )}
+                <Link 
+                  to={`/project/${project.slug}`}
+                  className="text-orange-500 text-[10px] font-bold uppercase hover:text-orange-400 transition-colors"
+                >
+                  More →
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -19,7 +19,7 @@ const ShortlistCard = () => {
       const projectIds = shortlist.slice(0, 3).map(s => s.project_id);
       const { data, error } = await supabase
         .from('projects')
-        .select('id, name, location')
+        .select('id, name, location, slug')
         .in('id', projectIds);
       if (error) throw error;
       return data || [];
@@ -31,7 +31,7 @@ const ShortlistCard = () => {
   const count = shortlist?.length || 0;
 
   return (
-    <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
+    <Card className="border border-gold/40 bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="flex items-center gap-2 text-lg">
           <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
@@ -64,7 +64,7 @@ const ShortlistCard = () => {
               {shortlistProjects?.map(project => (
                 <Link 
                   key={project.id}
-                  to={`/project/${project.id}`}
+                  to={`/project/${project.slug || project.id}`}
                   className="flex items-center gap-3 p-3 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5 transition-all group"
                 >
                   <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
