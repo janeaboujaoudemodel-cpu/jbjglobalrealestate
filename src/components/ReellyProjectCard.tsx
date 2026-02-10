@@ -65,9 +65,7 @@
    if (normalizedStatus.includes('on sale') || normalizedStatus.includes('start')) {
      return { label: 'On Sale', className: 'bg-emerald-500 text-white' };
    }
-   if (normalizedStatus.includes('sold') || normalizedStatus.includes('out of stock')) {
-     return { label: 'Sold Out', className: 'bg-destructive text-destructive-foreground' };
-   }
+    // "sold" / "out of stock" handled by dedicated red Sold Out badge, not here
    if (normalizedStatus.includes('announced')) {
      return { label: 'Announced', className: 'bg-gold text-black' };
    }
@@ -212,11 +210,20 @@
            )}
            
             {/* Top-Left: Sale Status Badge - offset below dev logo if present */}
-             {saleStatusBadge && (
-               <div className={`absolute ${(project as any).developer?.logo_url ? 'top-[60px]' : 'top-3'} left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
-                 {saleStatusBadge.label}
-               </div>
-             )}
+              {saleStatusBadge && !project.sale_status?.toLowerCase().includes('sold') && !project.status_label?.toLowerCase().includes('sold') && (
+                <div className={`absolute ${(project as any).developer?.logo_url ? 'top-[60px]' : 'top-3'} left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
+                  {saleStatusBadge.label}
+                </div>
+              )}
+
+              {/* Sold Out Badge - dedicated red badge top-left */}
+              {(project.sale_status?.toLowerCase().includes('sold') || project.status_label?.toLowerCase().includes('sold')) && (
+                <div className={`absolute ${(project as any).developer?.logo_url ? 'top-[60px]' : 'top-3'} left-3 z-10`}>
+                  <div className="bg-red-600 text-white px-2.5 py-1 rounded-full text-xs font-bold uppercase shadow-lg border border-red-400">
+                    Sold Out
+                  </div>
+                </div>
+              )}
            
            {/* Bottom-Right: Handover Year */}
            {project.handover_date && (
