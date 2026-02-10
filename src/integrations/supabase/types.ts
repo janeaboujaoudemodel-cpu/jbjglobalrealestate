@@ -11628,6 +11628,8 @@ export type Database = {
           image_url: string | null
           is_featured: boolean | null
           is_verified: boolean | null
+          key_stats: Json | null
+          key_takeaways: Json | null
           published_date: string
           source: string
           source_url: string | null
@@ -11646,6 +11648,8 @@ export type Database = {
           image_url?: string | null
           is_featured?: boolean | null
           is_verified?: boolean | null
+          key_stats?: Json | null
+          key_takeaways?: Json | null
           published_date?: string
           source: string
           source_url?: string | null
@@ -11664,6 +11668,8 @@ export type Database = {
           image_url?: string | null
           is_featured?: boolean | null
           is_verified?: boolean | null
+          key_stats?: Json | null
+          key_takeaways?: Json | null
           published_date?: string
           source?: string
           source_url?: string | null

@@ -400,8 +400,10 @@ serve(async (req) => {
             }
           }
 
-          // Generate AI analysis if we have content and no existing analysis
+          // Generate AI analysis + key_stats + key_takeaways if we have content
           let aiAnalysis: string | null = null;
+          let keyStats: { label: string; value: string }[] = [];
+          let keyTakeaways: string[] = [];
           const contentForAnalysis = fullContent || article.content;
           if (contentForAnalysis && !article.ai_analysis) {
             try {
@@ -416,11 +418,16 @@ serve(async (req) => {
                   messages: [
                     {
                       role: "system",
-                      content: `You are a Dubai real estate market analyst. Based on this news article, explain how it affects the Dubai real estate market. Write 3-4 concise bullet points covering: (1) immediate market impact, (2) opportunity for investors/buyers, (3) long-term outlook. Be factual and positive where appropriate. Do not add disclaimers.`
+                      content: `You are a Dubai real estate market analyst. Analyze this article and return a JSON object with these fields:
+1. "analysis": 3-4 bullet points (array of strings) about market impact, investor opportunity, and outlook.
+2. "key_stats": array of objects with "label" and "value" fields — extract 3-4 key numbers/statistics from the article (e.g., {"label": "Transaction Value", "value": "AED 8.8B"}).
+3. "key_takeaways": array of 3-5 concise one-sentence takeaway strings summarizing the most important points.
+
+Return ONLY valid JSON, no markdown wrapping. Be factual and positive where appropriate.`
                     },
                     {
                       role: "user",
-                      content: `Analyze this article's impact on Dubai real estate:\n\nTitle: ${article.title}\n\n${contentForAnalysis.substring(0, 5000)}`
+                      content: `Analyze this article:\n\nTitle: ${article.title}\n\n${contentForAnalysis.substring(0, 5000)}`
                     }
                   ],
                 }),
@@ -428,7 +435,26 @@ serve(async (req) => {
 
               if (analysisResponse.ok) {
                 const analysisData = await analysisResponse.json();
-                aiAnalysis = analysisData.choices?.[0]?.message?.content || null;
+                const rawContent = analysisData.choices?.[0]?.message?.content || "";
+                try {
+                  // Strip markdown code fences if present
+                  const jsonStr = rawContent.replace(/```json\s*|```\s*/g, "").trim();
+                  const parsed = JSON.parse(jsonStr);
+                  if (Array.isArray(parsed.analysis)) {
+                    aiAnalysis = parsed.analysis.map((p: string) => `- ${p}`).join("\n");
+                  } else if (typeof parsed.analysis === "string") {
+                    aiAnalysis = parsed.analysis;
+                  }
+                  if (Array.isArray(parsed.key_stats)) {
+                    keyStats = parsed.key_stats.slice(0, 4);
+                  }
+                  if (Array.isArray(parsed.key_takeaways)) {
+                    keyTakeaways = parsed.key_takeaways.slice(0, 5);
+                  }
+                } catch {
+                  // Fallback: use raw content as analysis text
+                  aiAnalysis = rawContent;
+                }
               }
             } catch (analysisErr) {
               console.warn(`AI analysis failed for "${article.title}":`, analysisErr);
@@ -440,6 +466,8 @@ serve(async (req) => {
           if (fullContent && !article.content) updateData.content = fullContent;
           if (imageUrl && (!article.image_url || isImageBad(article.image_url))) updateData.image_url = imageUrl;
           if (aiAnalysis) updateData.ai_analysis = aiAnalysis;
+          if (keyStats.length > 0) updateData.key_stats = keyStats;
+          if (keyTakeaways.length > 0) updateData.key_takeaways = keyTakeaways;
 
           if (Object.keys(updateData).length > 0) {
             const { error: updateError } = await supabase
@@ -451,7 +479,7 @@ serve(async (req) => {
               errors.push(`${article.title}: DB update failed - ${updateError.message}`);
             } else {
               enrichedCount++;
-              console.log(`✓ Enriched: "${article.title}" (content: ${!!fullContent}, image: ${!!imageUrl}, analysis: ${!!aiAnalysis})`);
+              console.log(`✓ Enriched: "${article.title}" (content: ${!!fullContent}, image: ${!!imageUrl}, analysis: ${!!aiAnalysis}, stats: ${keyStats.length}, takeaways: ${keyTakeaways.length})`);
             }
           }
         } catch (articleErr) {
