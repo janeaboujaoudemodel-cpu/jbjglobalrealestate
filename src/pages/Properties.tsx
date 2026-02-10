@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { Switch } from "@/components/ui/switch";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
@@ -107,6 +108,7 @@ interface ExtendedFilterState extends Omit<FilterState, 'currency'> {
   completionStatus: string | null;
   investmentType: string | null;
   areaId: string | null;
+  hideSoldOut: boolean;
 }
 
 const defaultExtendedFilters: ExtendedFilterState = {
@@ -119,6 +121,7 @@ const defaultExtendedFilters: ExtendedFilterState = {
   investmentType: null,
   saleStatus: null,
   areaId: null,
+  hideSoldOut: false,
 };
 
 const PROPERTY_TYPES = [
@@ -703,6 +706,19 @@ const Properties = () => {
               <Crown className="w-4 h-4" />
               Premium Only
             </Button>
+
+            {/* Hide Sold Out Toggle */}
+            <label className="flex items-center gap-2 h-11 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-lg cursor-pointer hover:border-gold transition-all shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
+              <span className="text-sm text-black font-medium whitespace-nowrap">Hide Sold Out</span>
+              <Switch
+                checked={appliedFilters.hideSoldOut}
+                onCheckedChange={(checked) => {
+                  updateFilter("hideSoldOut", checked);
+                  setAppliedFilters(prev => ({ ...prev, hideSoldOut: checked }));
+                }}
+              />
+            </label>
 
             {/* Advanced Filters Button */}
             <Dialog open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>

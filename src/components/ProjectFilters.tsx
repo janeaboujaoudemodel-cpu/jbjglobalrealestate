@@ -50,6 +50,7 @@ export interface FilterState {
   sizeUnit: 'sqft' | 'sqm';
   language: 'en' | 'ar';
   transactionType: 'all' | 'buy' | 'rent'; // Transaction type filter
+  hideSoldOut?: boolean; // Hide sold out projects
 }
 
 interface ProjectFiltersProps {

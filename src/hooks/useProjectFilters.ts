@@ -238,6 +238,14 @@ export function useFilteredProjects(
         }
       }
 
+      // Hide Sold Out filter
+      if (filters.hideSoldOut) {
+        const statusLabel = project.status_label?.toLowerCase() || '';
+        if (statusLabel.includes('sold') || statusLabel.includes('out of stock') || project.is_sold_out === true) {
+          return false;
+        }
+      }
+
       return true;
     });
 
