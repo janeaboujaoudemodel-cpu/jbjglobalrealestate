@@ -25,43 +25,29 @@ export function PhaseCard({
 }: PhaseCardProps) {
   const canStart = (isFirst || previousCompleted) && status === 'locked';
 
-  const getStatusIcon = () => {
-    switch (status) {
-      case 'completed':
-        return <CheckCircle className="w-5 h-5 text-emerald-400" />;
-      case 'in_progress':
-      case 'test_pending':
-        return <Clock className="w-5 h-5 text-amber-400" />;
-      case 'locked':
-        return <Lock className="w-5 h-5 text-white/40" />;
-      default:
-        return <BookOpen className="w-5 h-5 text-white/60" />;
-    }
-  };
-
   const getStatusBadge = () => {
     switch (status) {
       case 'completed':
         return (
-          <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
+          <Badge className="bg-emerald-500/20 text-emerald-700 border-emerald-500/30">
             Completed
           </Badge>
         );
       case 'in_progress':
         return (
-          <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30">
+          <Badge className="bg-amber-500/20 text-amber-700 border-amber-500/30">
             In Progress
           </Badge>
         );
       case 'test_pending':
         return (
-          <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30">
+          <Badge className="bg-blue-500/20 text-blue-700 border-blue-500/30">
             Test Ready
           </Badge>
         );
       default:
         return (
-          <Badge className="bg-white/10 text-white/50 border-white/20">
+          <Badge className="bg-gold/10 text-black/50 border-gold/20">
             Locked
           </Badge>
         );
@@ -78,11 +64,11 @@ export function PhaseCard({
       <Card className={cn(
         "h-full border transition-all duration-300",
         status === 'completed' 
-          ? "bg-emerald-500/5 border-emerald-500/30" 
+          ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-emerald-500/40" 
           : status === 'in_progress' || status === 'test_pending'
-            ? "bg-gold/5 border-gold/30"
-            : "bg-black/40 border-white/10",
-        canStart && "hover:border-gold/50 hover:bg-gold/5"
+            ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/40"
+            : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/20",
+        canStart && "hover:border-gold/50 hover:shadow-md"
       )}>
         <CardContent className="p-6 flex flex-col h-full">
           {/* Phase Number */}
@@ -90,10 +76,10 @@ export function PhaseCard({
             <div className={cn(
               "w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg",
               status === 'completed' 
-                ? "bg-emerald-500/20 text-emerald-400"
+                ? "bg-emerald-500/20 text-emerald-600"
                 : status === 'in_progress' || status === 'test_pending'
                   ? "bg-gold/20 text-gold"
-                  : "bg-white/10 text-white/50"
+                  : "bg-gold/10 text-black/40"
             )}>
               {phase.phase_number}
             </div>
@@ -104,22 +90,22 @@ export function PhaseCard({
           <div className="flex-1">
             <h3 className={cn(
               "text-lg font-semibold mb-2",
-              status === 'locked' ? "text-white/60" : "text-white"
+              status === 'locked' ? "text-black/50" : "text-black"
             )}>
               {phase.title}
             </h3>
             <p className={cn(
               "text-sm",
-              status === 'locked' ? "text-white/40" : "text-white/60"
+              status === 'locked' ? "text-black/40" : "text-black/60"
             )}>
               {phase.description}
             </p>
           </div>
 
           {/* Action Button */}
-          <div className="mt-4 pt-4 border-t border-white/10">
+          <div className="mt-4 pt-4 border-t border-gold/20">
             {status === 'completed' ? (
-              <div className="flex items-center gap-2 text-emerald-400 text-sm">
+              <div className="flex items-center gap-2 text-emerald-600 text-sm">
                 <CheckCircle className="w-4 h-4" />
                 Phase Completed
               </div>
@@ -150,7 +136,7 @@ export function PhaseCard({
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             ) : (
-              <div className="flex items-center gap-2 text-white/40 text-sm">
+              <div className="flex items-center gap-2 text-black/40 text-sm">
                 <Lock className="w-4 h-4" />
                 Complete previous phase first
               </div>

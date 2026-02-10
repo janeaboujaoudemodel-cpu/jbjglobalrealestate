@@ -196,6 +196,10 @@ const Footer = () => {
     { label: t('footer.tenantGuide') || "Tenant Guide", href: "/tenant-guide" },
     { label: t('footer.areaGuides') || "Area Guides", href: "/areas" },
     { label: "Golden Visa Guide", href: "/guides/golden-visa-uae" },
+    { label: "Buyer FAQs", href: "/buyer-faq" },
+    { label: "Seller FAQs", href: "/seller-faq" },
+    { label: "Landlord FAQs", href: "/landlord-faq" },
+    { label: "Tenant FAQs", href: "/tenant-faq" },
     { label: t('footer.generalFaqs') || "General FAQs", href: "/faq" },
   ];
 
