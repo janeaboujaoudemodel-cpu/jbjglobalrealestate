@@ -182,6 +182,28 @@ export function ReellyImportPanel() {
     remaining?: number;
     error?: string;
   } | null>(null);
+
+  // Bulk Enrichment state
+  const [isBulkEnriching, setIsBulkEnriching] = useState(false);
+  const [bulkEnrichResult, setBulkEnrichResult] = useState<{
+    success: boolean;
+    processed?: number;
+    images_added?: number;
+    docs_added?: number;
+    fields_updated?: number;
+    errors?: number;
+    error_details?: string[];
+    message?: string;
+    error?: string;
+  } | null>(null);
+  const [bulkEnrichStats, setBulkEnrichStats] = useState<{
+    total_projects_with_reelly_id: number;
+    projects_with_documents: number;
+    projects_needing_enrichment: number;
+    total_images: number;
+    total_documents: number;
+  } | null>(null);
+  const [isLoadingBulkStats, setIsLoadingBulkStats] = useState(false);
   
   // Backfill state - for backfilling approved projects with missing details
   const [isBackfilling, setIsBackfilling] = useState(false);
@@ -2774,6 +2796,132 @@ export function ReellyImportPanel() {
               <AlertDescription className="text-red-600">{enrichTestResult.error}</AlertDescription>
             </Alert>
           )}
+        </CardContent>
+      </Card>
+
+      {/* ── Bulk Enrichment Section ── */}
+      <Card className="bg-white border-2 border-amber-400">
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Zap className="h-5 w-5 text-amber-500" />
+            Bulk Enrichment (Reelly API)
+          </CardTitle>
+          <CardDescription>
+            Enrich all projects with galleries, documents, amenities, FAQs, floor plans, and more from the Reelly API. 
+            Processes 50 projects per batch. Non-destructive — only fills empty fields.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Stats */}
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={async () => {
+                setIsLoadingBulkStats(true);
+                try {
+                  const { data, error } = await supabase.functions.invoke("reelly-bulk-enrich", {
+                    body: { action: "stats" },
+                  });
+                  if (error) throw error;
+                  if (data?.success) {
+                    setBulkEnrichStats(data.stats);
+                  } else {
+                    toast.error(data?.error || "Failed to load stats");
+                  }
+                } catch (err: any) {
+                  toast.error(err.message || "Failed to load stats");
+                } finally {
+                  setIsLoadingBulkStats(false);
+                }
+              }}
+              disabled={isLoadingBulkStats}
+            >
+              {isLoadingBulkStats ? <RefreshCw className="h-4 w-4 animate-spin mr-1" /> : <Database className="h-4 w-4 mr-1" />}
+              Check Status
+            </Button>
+            {bulkEnrichStats && (
+              <div className="text-xs text-zinc-600 space-x-3">
+                <span><strong>{bulkEnrichStats.projects_needing_enrichment}</strong> need enrichment</span>
+                <span>•</span>
+                <span>{bulkEnrichStats.total_images} images</span>
+                <span>•</span>
+                <span>{bulkEnrichStats.total_documents} docs</span>
+              </div>
+            )}
+          </div>
+
+          {/* Run Button */}
+          <Button
+            onClick={async () => {
+              setIsBulkEnriching(true);
+              setBulkEnrichResult(null);
+              toast.info("Starting bulk enrichment... This may take a few minutes.");
+              try {
+                const { data, error } = await supabase.functions.invoke("reelly-bulk-enrich", {
+                  body: { limit: 50 },
+                });
+                if (error) throw error;
+                setBulkEnrichResult(data);
+                if (data?.success) {
+                  toast.success(`Enriched ${data.processed} projects: +${data.images_added} images, +${data.docs_added} docs, +${data.fields_updated} fields`);
+                } else {
+                  toast.error(data?.error || "Enrichment failed");
+                }
+              } catch (err: any) {
+                toast.error(err.message || "Bulk enrichment failed");
+                setBulkEnrichResult({ success: false, error: err.message });
+              } finally {
+                setIsBulkEnriching(false);
+              }
+            }}
+            disabled={isBulkEnriching}
+            className="bg-amber-600 hover:bg-amber-700 text-white w-full"
+          >
+            {isBulkEnriching ? (
+              <><RefreshCw className="h-4 w-4 animate-spin mr-2" /> Enriching Projects...</>
+            ) : (
+              <><Zap className="h-4 w-4 mr-2" /> Run Bulk Enrichment (50 projects)</>
+            )}
+          </Button>
+
+          {/* Results */}
+          {bulkEnrichResult && bulkEnrichResult.success && (
+            <Alert className="bg-green-50 border-green-300">
+              <CheckCircle className="h-4 w-4 text-green-600" />
+              <AlertTitle className="text-green-700">Enrichment Complete</AlertTitle>
+              <AlertDescription className="text-green-600 space-y-1">
+                <p><strong>{bulkEnrichResult.processed}</strong> projects processed</p>
+                <p>📷 <strong>+{bulkEnrichResult.images_added}</strong> images added</p>
+                <p>📄 <strong>+{bulkEnrichResult.docs_added}</strong> documents added</p>
+                <p>📝 <strong>+{bulkEnrichResult.fields_updated}</strong> fields updated (amenities, FAQs, etc.)</p>
+                {(bulkEnrichResult.errors || 0) > 0 && (
+                  <p className="text-amber-600">⚠️ {bulkEnrichResult.errors} errors</p>
+                )}
+                {bulkEnrichResult.message && <p className="italic">{bulkEnrichResult.message}</p>}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {bulkEnrichResult && !bulkEnrichResult.success && (
+            <Alert className="bg-red-50 border-red-300">
+              <XCircle className="h-4 w-4 text-red-600" />
+              <AlertTitle className="text-red-700">Enrichment Failed</AlertTitle>
+              <AlertDescription className="text-red-600">{bulkEnrichResult.error}</AlertDescription>
+            </Alert>
+          )}
+
+          {bulkEnrichResult?.error_details && bulkEnrichResult.error_details.length > 0 && (
+            <div className="text-xs text-zinc-500 max-h-32 overflow-y-auto bg-zinc-50 p-2 rounded border">
+              <p className="font-semibold mb-1">Error details:</p>
+              {bulkEnrichResult.error_details.map((e, i) => <p key={i}>• {e}</p>)}
+            </div>
+          )}
+
+          <p className="text-xs text-zinc-400">
+            Click "Run Bulk Enrichment" multiple times to process all projects in batches of 50.
+            Each run picks the next batch of un-enriched projects.
+          </p>
         </CardContent>
       </Card>
 
