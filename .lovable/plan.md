@@ -1,70 +1,55 @@
 
 
-# Standardize Developer Logos -- Gold Border, Full-Fit, No White Border
+# Fix Developer Partners Marquee — Robustness and Reliability
 
 ## Problem
 
-Developer logos across the platform have inconsistent styling. Some use white backgrounds with white/zinc borders, some have padding that makes logos look small, and some use `object-fill` which distorts them. The user wants ALL developer logos to match the gold-bordered style seen in the DeveloperInfoCard on project detail pages.
+The marquee has several fragility issues that can cause broken scrolling:
+1. `loopWidth` is measured via `scrollWidth` before images finish loading, resulting in incorrect width and broken seamless looping
+2. Framer Motion's `animate` prop resets on any re-render (e.g., language context change), causing visible jumps
+3. Four duplicate loops is excessive — two suffice for seamless scrolling
+4. No fallback if an image fails to load (broken logo placeholder)
 
-## Reference Style (DeveloperInfoCard)
+## Changes (Single File Only)
 
-The approved standard from the project detail page:
-- Gold border: `border: 3px solid hsl(42 45% 59%)`
-- Gold shadow: `boxShadow: 0 4px 16px rgba(200,167,102,0.3)`
-- White background
-- `object-contain` (no cropping/distortion)
-- Minimal padding (`p-1` for small logos, `p-2` for large ones)
+**File: `src/components/DeveloperPartnersMarquee.tsx`**
 
-## All Files to Update
+### 1. Add image load tracking
+- Track how many images have loaded using a counter ref
+- Re-measure `loopWidth` after all images in the first loop have loaded
+- This ensures the width is accurate for seamless scrolling
 
-| File | Component | Current Issue | Fix |
-|------|-----------|--------------|-----|
-| `ProjectCard.tsx` (line 198) | Card logo overlay | `border border-gold/30` (thin, faint) | `border-2 border-gold` with gold shadow |
-| `ReellyProjectCard.tsx` (line 152) | Card logo overlay | `border border-gold/30` (thin, faint) | `border-2 border-gold` with gold shadow |
-| `DeveloperCard.tsx` (line 85) | Directory card logo | Already has gold border -- OK | Keep as-is |
-| `DeveloperDetail.tsx` (line 150-162) | Detail page hero logo | Already has gold border -- OK | Keep as-is |
-| `DeveloperInfoCard.tsx` (line 58-69) | Project detail sidebar | Already gold -- this is the reference | Keep as-is |
-| `DeveloperSearchModal.tsx` (line 93-97) | Search modal logo | `bg-white`, thin border, `object-fill` | Gold border, `object-contain p-1` |
-| `AreaDevelopersBar.tsx` (line 70) | Area page dev logos | No border, just `rounded` | Gold border container |
-| `PropertiesReelly.tsx` (line 394) | Filter bar dev icon | `object-fill` | `object-contain` |
-| `PropertySearchBar.tsx` (line 117) | Search bar dev icon | `object-fill` | `object-contain` |
+### 2. Replace framer-motion with CSS animation
+- Use a CSS `@keyframes marquee` animation instead of framer-motion's `animate` prop
+- CSS animations don't reset on React re-renders, making the scroll truly seamless
+- Apply `animation: marquee Xs linear infinite` with duration based on `loopWidth`
+- This eliminates the jump/reset issue entirely
 
-## Specific Changes
+### 3. Reduce to 2 loops
+- Keep only 2 copies of the developer list (original + 1 duplicate) for seamless infinite scroll
+- Remove the 2 extra unnecessary duplicates
 
-### 1. ProjectCard.tsx (line 198)
-Change the logo container from thin faint border to proper gold:
+### 4. Add image error fallback
+- On `<img onError>`, show the developer name initial in a gold circle as fallback
+- Prevents broken image icons from appearing
+
+### Technical Approach
+
 ```
-border border-gold/30
+Container (overflow: hidden)
+  Track div (CSS animation: translateX(0) -> translateX(-loopWidth))
+    Loop A: [DAMAC] [EMAAR] [MERAAS] ... (measured for width)
+    Loop B: [DAMAC] [EMAAR] [MERAAS] ... (seamless continuation)
 ```
-to:
-```
-border-2 border-gold shadow-[0_4px_16px_rgba(200,167,102,0.3)]
-```
 
-### 2. ReellyProjectCard.tsx (line 152)
-Same change as ProjectCard -- upgrade to gold border with shadow.
+CSS animation approach:
+- Define keyframes inline via `style` prop: `transform: translateX(0)` to `translateX(-${loopWidth}px)`
+- Duration = `loopWidth / 80` seconds (adjustable speed)
+- `animation-timing-function: linear`, `animation-iteration-count: infinite`
 
-### 3. DeveloperSearchModal.tsx (lines 93-97)
-- Change `object-fill` to `object-contain p-1` (prevent distortion)
-- Add proper gold border: `border-2 border-gold/50` for top-tier, `border border-gold/30` for others
-
-### 4. AreaDevelopersBar.tsx (line 70)
-Add gold border to the logo images inside the developer chips.
-
-### 5. PropertiesReelly.tsx (line 394)
-Change `object-fill` to `object-contain` (small inline icon, just fix distortion).
-
-### 6. PropertySearchBar.tsx (line 117)
-Change `object-fill` to `object-contain` (small inline icon, just fix distortion).
-
-## Files Modified
+## File Modified
 
 | File | Change |
 |------|--------|
-| `src/components/ProjectCard.tsx` | Upgrade logo border to gold |
-| `src/components/ReellyProjectCard.tsx` | Upgrade logo border to gold |
-| `src/components/DeveloperSearchModal.tsx` | Gold border + object-contain |
-| `src/components/area-detail/AreaDevelopersBar.tsx` | Gold border on logo images |
-| `src/pages/PropertiesReelly.tsx` | Fix object-fill to object-contain |
-| `src/components/PropertySearchBar.tsx` | Fix object-fill to object-contain |
+| `src/components/DeveloperPartnersMarquee.tsx` | CSS animation, image load tracking, error fallback, reduce to 2 loops |
 
