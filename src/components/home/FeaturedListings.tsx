@@ -1,7 +1,7 @@
 /**
  * FeaturedListings Component
  * Displays 8 featured project cards from elite developers
- * Strict 1-per-developer (2 for Binghatti)
+ * Strict 1-per-developer, 2 for DAMAC (general + Lagoons)
  */
 
 import { useState } from "react";
@@ -94,15 +94,13 @@ function useFeaturedProjects() {
 
       // Strict round-robin: 1 per developer
       addOne('DAMAC');
+      addOne('DAMAC', 'lagoons');
       addOne('ALDAR');
       addOne('Omniyat');
       addOne('Sobha', 'pinnacle');
       addOne('Nakheel');
-      addOne('Dubai Properties');
-
-      // Binghatti gets 2: Bugatti + Mercedes
       addOne('Binghatti', 'bugatti');
-      addOne('Binghatti', 'mercedes');
+      addOne('Emaar');
 
       // Fill remaining slots ONLY from developers NOT already represented
       if (result.length < 8) {
@@ -201,18 +199,12 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
               </div>
             )}
 
-            {/* Price or Handover badge - Top Right */}
-            {(project.price_from || project.handover_date) && (
-              <div className="absolute top-3 right-3 z-10 px-2.5 py-1.5 rounded-lg bg-black/70 backdrop-blur-sm border border-amber-500/50 shadow-lg">
-                {project.price_from ? (
-                  <span className="text-amber-400 font-bold text-xs">
-                    From {formatPriceAbbreviated(project.price_from)}
-                  </span>
-                ) : (
-                  <span className="text-amber-400 font-semibold text-[10px]">
-                    {project.handover_date}
-                  </span>
-                )}
+            {/* Price badge - Bottom Right of photo, premium styling */}
+            {project.price_from && (
+              <div className="absolute bottom-3 right-3 z-10 px-3 py-1.5 rounded-lg bg-gradient-to-br from-black/90 via-black/80 to-gold/20 backdrop-blur-md border border-gold/50 shadow-lg">
+                <span className="text-gold font-bold text-xs tracking-wide">
+                  From {formatPriceAbbreviated(project.price_from)}
+                </span>
               </div>
             )}
           </div>
@@ -256,7 +248,7 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
                 )}
               </div>
               {project.handover_date ? (
-                <span className="text-zinc-500 text-[10px] font-medium">
+                <span className="text-orange-500 text-[10px] font-semibold">
                   {project.handover_date}
                 </span>
               ) : (

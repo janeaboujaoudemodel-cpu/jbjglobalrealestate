@@ -339,56 +339,49 @@ const MortgageCalculator = ({
               <p className="text-muted-foreground text-[10px] lg:text-xs mt-1 lg:mt-2">per month for {loanTermYears} years</p>
             </div>
 
-            {/* 6 Champagne Summary Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 lg:gap-4">
-              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-3 lg:p-4 text-center shadow-md">
+            {/* 6 Champagne Summary Cards - 3x2 Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-5">
+              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
                   <Building2 className="w-4 h-4 text-gold" />
                 </div>
-                <p className="text-black/60 text-[10px] lg:text-xs mb-1 uppercase tracking-wider">Property Price</p>
-                <p className="text-gold font-bold text-sm lg:text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>100%</p>
-                <p className="text-black font-semibold text-xs lg:text-base truncate">{formatCurrency(propertyPrice)}</p>
+                <p className="text-black/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Property Price (100%)</p>
+                <p className="text-black font-bold text-sm lg:text-lg truncate" style={{ fontFamily: "Poppins, sans-serif" }}>{formatCurrency(propertyPrice)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-3 lg:p-4 text-center shadow-md">
+              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
                   <Percent className="w-4 h-4 text-gold" />
                 </div>
-                <p className="text-black/60 text-[10px] lg:text-xs mb-1 uppercase tracking-wider">Down Payment</p>
-                <p className="text-gold font-bold text-sm lg:text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>{downPaymentPercent}%</p>
-                <p className="text-black font-semibold text-xs lg:text-base truncate">{formatCurrency(calculations.downPayment)}</p>
+                <p className="text-black/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Down Payment ({downPaymentPercent}%)</p>
+                <p className="text-black font-bold text-sm lg:text-lg truncate" style={{ fontFamily: "Poppins, sans-serif" }}>{formatCurrency(calculations.downPayment)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-3 lg:p-4 text-center shadow-md">
+              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
                   <DollarSign className="w-4 h-4 text-gold" />
                 </div>
-                <p className="text-black/60 text-[10px] lg:text-xs mb-1 uppercase tracking-wider">Loan Amount</p>
-                <p className="text-gold font-bold text-sm lg:text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>{100 - downPaymentPercent}%</p>
-                <p className="text-black font-semibold text-xs lg:text-base truncate">{formatCurrency(calculations.loanAmount)}</p>
+                <p className="text-black/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Loan Amount ({100 - downPaymentPercent}%)</p>
+                <p className="text-black font-bold text-sm lg:text-lg truncate" style={{ fontFamily: "Poppins, sans-serif" }}>{formatCurrency(calculations.loanAmount)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-3 lg:p-4 text-center shadow-md">
+              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
                   <Calculator className="w-4 h-4 text-gold" />
                 </div>
-                <p className="text-black/60 text-[10px] lg:text-xs mb-1 uppercase tracking-wider">Monthly Payment</p>
-                <p className="text-gold font-bold text-sm lg:text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>/month</p>
-                <p className="text-black font-semibold text-xs lg:text-base truncate">{formatCurrency(calculations.monthlyPayment)}</p>
+                <p className="text-black/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Monthly Payment</p>
+                <p className="text-black font-bold text-sm lg:text-lg truncate" style={{ fontFamily: "Poppins, sans-serif" }}>{formatCurrency(calculations.monthlyPayment)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-3 lg:p-4 text-center shadow-md">
+              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
                   <TrendingUp className="w-4 h-4 text-gold" />
                 </div>
-                <p className="text-black/60 text-[10px] lg:text-xs mb-1 uppercase tracking-wider">Interest Rate</p>
-                <p className="text-gold font-bold text-sm lg:text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>{interestRate}%</p>
-                <p className="text-black font-semibold text-xs lg:text-base truncate">{formatCurrency(calculations.totalInterest)}</p>
-                <p className="text-black/50 text-[10px] mt-0.5">{loanTermYears} Years</p>
+                <p className="text-black/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Interest ({interestRate}% · {loanTermYears}yr)</p>
+                <p className="text-black font-bold text-sm lg:text-lg truncate" style={{ fontFamily: "Poppins, sans-serif" }}>{formatCurrency(calculations.totalInterest)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-3 lg:p-4 text-center shadow-md">
+              <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
                   <Wallet className="w-4 h-4 text-gold" />
                 </div>
-                <p className="text-black/60 text-[10px] lg:text-xs mb-1 uppercase tracking-wider">Total Cost</p>
-                <p className="text-gold font-bold text-sm lg:text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>100%</p>
-                <p className="text-black font-semibold text-xs lg:text-base truncate">{formatCurrency(calculations.totalPayment)}</p>
+                <p className="text-black/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Total Cost (All-In)</p>
+                <p className="text-black font-bold text-sm lg:text-lg truncate" style={{ fontFamily: "Poppins, sans-serif" }}>{formatCurrency(calculations.totalPayment)}</p>
               </div>
             </div>
 
