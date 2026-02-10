@@ -107,7 +107,7 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
           <button
             disabled={isLoading}
             className={cn(
-              "flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all duration-300 hover:shadow-md",
+              "flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all duration-300 hover:shadow-md min-w-[180px] justify-center",
               currentConfig.bgColor,
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50",
               className
@@ -130,8 +130,8 @@ export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProp
         </DropdownMenuTrigger>
         
         <DropdownMenuContent 
-          align="end" 
-          className="w-72 bg-white border border-zinc-200 shadow-xl rounded-xl p-2 z-[10001]"
+          align="center" 
+          className="w-56 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 shadow-xl rounded-xl p-2 z-[10001]"
           sideOffset={5}
           onCloseAutoFocus={(e) => e.preventDefault()}
         >

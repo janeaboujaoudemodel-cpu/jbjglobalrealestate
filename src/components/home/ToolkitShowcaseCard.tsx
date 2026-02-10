@@ -149,9 +149,9 @@ export function ToolkitShowcaseCard() {
                         </p>
 
                         {/* CTA */}
-                        <Button variant="primary" size="sm" className="mt-auto w-full justify-center">
+                        <Button size="sm" className="mt-auto w-full justify-center bg-gold hover:bg-gold/90 text-black font-semibold border-0">
                           {tool.cta}
-                          <ArrowRight className="w-4 h-4 ml-2" />
+                          <ArrowRight className="w-4 h-4 ml-2 text-black" />
                         </Button>
                       </div>
                     </Link>

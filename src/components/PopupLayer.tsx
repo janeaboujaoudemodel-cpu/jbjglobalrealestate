@@ -8,6 +8,7 @@
  */
 
 import CookiesConsentBanner from "@/components/CookiesConsentBanner";
+import LeadCapturePopup from "@/components/LeadCapturePopup";
 
 const PopupLayer = () => {
   // NOTE: InstallAppButton removed per user request - caused persistent 
@@ -15,6 +16,7 @@ const PopupLayer = () => {
   return (
     <>
       <CookiesConsentBanner />
+      <LeadCapturePopup />
     </>
   );
 };

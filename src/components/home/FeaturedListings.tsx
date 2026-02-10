@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti'];
+const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties'];
 
 const formatPrice = (price: number): string => {
   if (price >= 1000000) {
@@ -63,25 +63,38 @@ function useFeaturedProjects() {
 
       const result: FeaturedProject[] = [];
 
-      // 2 Emaar
-      result.push(...(byDev['Emaar'] || []).slice(0, 2));
+      // Helper to add first non-Mirage project from a developer
+      const addOne = (devName: string, filter?: (p: FeaturedProject) => boolean) => {
+        const devProjects = byDev[devName] || [];
+        const filtered = filter ? devProjects.filter(filter) : devProjects;
+        const nonMirage = filtered.find(p => !p.name.toLowerCase().includes('mirage'));
+        if (nonMirage) result.push(nonMirage);
+        else if (filtered[0]) result.push(filtered[0]);
+      };
 
-      // 2 ALDAR
-      result.push(...(byDev['ALDAR'] || []).slice(0, 2));
+      // 1 Emaar
+      addOne('Emaar');
+
+      // 1 ALDAR
+      addOne('ALDAR');
 
       // 1 Omniyat
-      if (byDev['Omniyat']?.[0]) result.push(byDev['Omniyat'][0]);
+      addOne('Omniyat');
 
-      // 1 Sobha - only Pinnacle
+      // 1 Sobha - only Pinnacle preferred
       const sobhaProjects = byDev['Sobha'] || [];
       const pinnacle = sobhaProjects.find(p => p.name.toLowerCase().includes('pinnacle'));
       if (pinnacle) {
         result.push(pinnacle);
-      } else if (sobhaProjects[0]) {
-        // Fallback: first Sobha that isn't "Mirage"
-        const nonMirage = sobhaProjects.find(p => !p.name.toLowerCase().includes('mirage'));
-        if (nonMirage) result.push(nonMirage);
+      } else {
+        addOne('Sobha');
       }
+
+      // 1 Nakheel
+      addOne('Nakheel');
+
+      // 1 Dubai Properties
+      addOne('Dubai Properties');
 
       // 1 Bugatti by Binghatti
       const binghattiProjects = byDev['Binghatti'] || [];
@@ -123,7 +136,7 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
       className="group"
     >
       <Link to={`/projects/${project.slug}`} className="block">
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl overflow-hidden border-2 border-gold/30 hover:border-gold transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
+        <div className="flex flex-col h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl overflow-hidden border-2 border-gold/30 hover:border-gold transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
           {/* Image */}
           <div className="relative aspect-[4/3] overflow-hidden bg-gold/5">
             {imageUrl ? (
@@ -156,28 +169,10 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
                 </span>
               </div>
             )}
-
-            {/* Price Badge - Bottom Left */}
-            {project.price_from && (
-              <div className="absolute bottom-3 left-3 z-10">
-                <span className="px-3 py-1.5 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/50 text-black font-bold text-xs rounded-lg shadow-lg">
-                  From {formatPrice(project.price_from)}
-                </span>
-              </div>
-            )}
-
-            {/* Handover - Bottom Right */}
-            {project.handover_date && (
-              <div className="absolute bottom-3 right-3 z-10">
-                <span className="px-2 py-1 bg-black/70 backdrop-blur-sm text-gold text-[10px] font-semibold rounded">
-                  {project.handover_date}
-                </span>
-              </div>
-            )}
           </div>
 
           {/* Content */}
-          <div className="p-4">
+          <div className="p-4 flex flex-col flex-grow">
             {/* Location */}
             {(project.area_name || project.location) && (
               <div className="flex items-center gap-1.5 text-zinc-600 text-xs mb-2">
@@ -191,16 +186,25 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
               {project.name}
             </h3>
 
-            {/* Key Facts */}
-            <div className="flex items-center justify-between text-xs text-zinc-500">
-              {project.bedrooms_min != null && (
-                <span>
-                  {project.bedrooms_min === 0 ? 'Studio' : `${project.bedrooms_min}`}
-                  {project.bedrooms_max && project.bedrooms_max !== project.bedrooms_min ? `–${project.bedrooms_max} Beds` : project.bedrooms_min !== 0 ? ' Bed' : ''}
+            {/* Spacer to push bottom content down */}
+            <div className="flex-grow" />
+
+            {/* Developer + Price + Handover row */}
+            <div className="flex items-end justify-between mt-2">
+              <div>
+                {project.developer_name && (
+                  <span className="text-gold font-medium text-[10px] block">by {project.developer_name}</span>
+                )}
+                {project.price_from && (
+                  <span className="text-black font-bold text-xs">
+                    From {formatPrice(project.price_from)}
+                  </span>
+                )}
+              </div>
+              {project.handover_date && (
+                <span className="text-zinc-500 text-[10px] font-medium">
+                  {project.handover_date}
                 </span>
-              )}
-              {project.developer_name && (
-                <span className="text-gold font-medium text-[10px]">by {project.developer_name}</span>
               )}
             </div>
           </div>
