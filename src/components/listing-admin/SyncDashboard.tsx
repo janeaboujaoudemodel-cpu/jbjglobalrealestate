@@ -36,6 +36,7 @@ import { SarahTestPanel } from "./SarahTestPanel";
 import { ProjectApprovalQueue } from "./ProjectApprovalQueue";
 import { DeveloperApprovalQueue } from "./DeveloperApprovalQueue";
 import { TestOneListingPanel } from "./TestOneListingPanel";
+import { SyncHistoryLog } from "./SyncHistoryLog";
 
 interface SyncStats {
   page: number;
@@ -153,7 +154,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   });
   const syncTabFromUrl = searchParams.get("syncTab");
   const initialTab =
-    syncTabFromUrl && ["sync", "approvals", "developers", "test"].includes(syncTabFromUrl)
+    syncTabFromUrl && ["sync", "approvals", "developers", "test", "history"].includes(syncTabFromUrl)
       ? syncTabFromUrl
       : "sync";
 
@@ -1443,7 +1444,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     <div className="space-y-6">
       {/* Tabs: Test vs Full Sync */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="approvals" className="flex items-center gap-2">
             <FilledCheckCircle size="sm" />
             Projects
@@ -1451,6 +1452,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
           <TabsTrigger value="developers" className="flex items-center gap-2">
             <Database className="w-4 h-4" />
             Developers
+          </TabsTrigger>
+          <TabsTrigger value="history" className="flex items-center gap-2">
+            <Clock className="w-4 h-4" />
+            Sync History
           </TabsTrigger>
           <TabsTrigger value="test" className="flex items-center gap-2">
             <FlaskConical className="w-4 h-4" />
@@ -1460,7 +1465,6 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
             value="sync" 
             className="flex items-center gap-2"
           >
-            {!isTestApproved && !currentJobId && <Lock className="w-4 h-4" />}
             <RefreshCw className="w-4 h-4" />
             Full Sync
           </TabsTrigger>
@@ -1472,6 +1476,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
         <TabsContent value="developers" className="mt-6">
           <DeveloperApprovalQueue />
+        </TabsContent>
+
+        <TabsContent value="history" className="mt-6">
+          <SyncHistoryLog />
         </TabsContent>
         
         <TabsContent value="test" className="mt-6">

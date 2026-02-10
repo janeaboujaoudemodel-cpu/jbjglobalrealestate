@@ -40,68 +40,65 @@ Deno.serve(async (req) => {
     return data;
   };
 
-  // Step 1: Sync projects from Reelly API
+  // Step 1: Discover new Provident projects via Gatsby page-data
   try {
-    console.log("[daily-reelly-auto-sync] Step 1: Syncing projects from Reelly API...");
-    const syncResult = await callFunction("reelly-api-sync", {
-      action: "sync",
-      mode: "quick",
-    });
-    results.reelly_sync = syncResult;
-    console.log("[daily-reelly-auto-sync] Step 1 complete:", JSON.stringify(syncResult).slice(0, 200));
+    console.log("[daily-provident-auto-sync] Step 1: Discovering projects...");
+    const discoverResult = await callFunction("discover-all-projects", {});
+    results.discover_projects = discoverResult;
+    console.log("[daily-provident-auto-sync] Step 1 complete:", JSON.stringify(discoverResult).slice(0, 200));
   } catch (err) {
-    const msg = `Step 1 (reelly-api-sync) failed: ${err.message}`;
-    console.error("[daily-reelly-auto-sync]", msg);
+    const msg = `Step 1 (discover-all-projects) failed: ${err.message}`;
+    console.error("[daily-provident-auto-sync]", msg);
     errors.push(msg);
   }
 
-  // Step 2: Discover new developers and logos
+  // Step 2: Discover new areas
   try {
-    console.log("[daily-reelly-auto-sync] Step 2: Syncing developers...");
-    const devResult = await callFunction("reelly-developers-sync");
-    results.developers_sync = devResult;
-    console.log("[daily-reelly-auto-sync] Step 2 complete:", JSON.stringify(devResult).slice(0, 200));
-  } catch (err) {
-    const msg = `Step 2 (reelly-developers-sync) failed: ${err.message}`;
-    console.error("[daily-reelly-auto-sync]", msg);
-    errors.push(msg);
-  }
-
-  // Step 3: Discover new areas
-  try {
-    console.log("[daily-reelly-auto-sync] Step 3: Syncing areas...");
-    const areaResult = await callFunction("reelly-areas-sync");
+    console.log("[daily-provident-auto-sync] Step 2: Syncing areas...");
+    const areaResult = await callFunction("provident-areas-sync");
     results.areas_sync = areaResult;
-    console.log("[daily-reelly-auto-sync] Step 3 complete:", JSON.stringify(areaResult).slice(0, 200));
+    console.log("[daily-provident-auto-sync] Step 2 complete:", JSON.stringify(areaResult).slice(0, 200));
   } catch (err) {
-    const msg = `Step 3 (reelly-areas-sync) failed: ${err.message}`;
-    console.error("[daily-reelly-auto-sync]", msg);
+    const msg = `Step 2 (provident-areas-sync) failed: ${err.message}`;
+    console.error("[daily-provident-auto-sync]", msg);
     errors.push(msg);
   }
 
-  // Step 4: Auto-approve all pending imports
+  // Step 3: Discover new developers and logos
   try {
-    console.log("[daily-reelly-auto-sync] Step 4: Bulk approving pending imports...");
+    console.log("[daily-provident-auto-sync] Step 3: Extracting developers...");
+    const devResult = await callFunction("extract-developers-provident");
+    results.developers_sync = devResult;
+    console.log("[daily-provident-auto-sync] Step 3 complete:", JSON.stringify(devResult).slice(0, 200));
+  } catch (err) {
+    const msg = `Step 3 (extract-developers-provident) failed: ${err.message}`;
+    console.error("[daily-provident-auto-sync]", msg);
+    errors.push(msg);
+  }
+
+  // Step 4: Auto-approve all pending Provident imports
+  try {
+    console.log("[daily-provident-auto-sync] Step 4: Bulk approving pending imports...");
     const approveResult = await callFunction("bulk-approve-imports", {
       approve_all: true,
     });
     results.bulk_approve = approveResult;
-    console.log("[daily-reelly-auto-sync] Step 4 complete:", JSON.stringify(approveResult).slice(0, 200));
+    console.log("[daily-provident-auto-sync] Step 4 complete:", JSON.stringify(approveResult).slice(0, 200));
   } catch (err) {
     const msg = `Step 4 (bulk-approve-imports) failed: ${err.message}`;
-    console.error("[daily-reelly-auto-sync]", msg);
+    console.error("[daily-provident-auto-sync]", msg);
     errors.push(msg);
   }
 
   // Log summary to database
   try {
     const supabase = createClient(supabaseUrl, supabaseKey);
-    const statsCreated = (results.reelly_sync as any)?.created ?? 0;
-    const statsUpdated = (results.reelly_sync as any)?.updated ?? 0;
+    const statsCreated = (results.discover_projects as any)?.created ?? (results.discover_projects as any)?.total_discovered ?? 0;
+    const statsUpdated = (results.bulk_approve as any)?.approved ?? 0;
     await supabase.from("sync_jobs").insert({
-      job_type: "daily-reelly-auto-sync",
+      job_type: "daily-provident-auto-sync",
       status: errors.length === 0 ? "completed" : "failed",
-      source: "reelly",
+      source: "provident",
       stats_created: statsCreated,
       stats_updated: statsUpdated,
       stats_errors: errors.length,
@@ -110,7 +107,7 @@ Deno.serve(async (req) => {
       completed_at: new Date().toISOString(),
     });
   } catch (logErr) {
-    console.error("[daily-reelly-auto-sync] Failed to log job:", logErr.message);
+    console.error("[daily-provident-auto-sync] Failed to log job:", logErr.message);
   }
 
   return new Response(
