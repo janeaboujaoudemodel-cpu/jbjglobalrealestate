@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback, useMemo } from 'react';
 import { Language, SUPPORTED_LANGUAGES, isRTLLanguage, getLanguageInfo } from '@/translations';
 import { en } from '@/translations/en';
 import { ar } from '@/translations/ar';
@@ -54,6 +54,19 @@ const detectDeviceLanguage = (): Language => {
   }
 };
 
+// Pre-build reverse maps for ALL languages: value -> key
+// This allows translateText() to find the key for ANY language's text
+const allReverseMaps: Record<Language, Map<string, string>> = {} as any;
+for (const [langCode, dict] of Object.entries(translations)) {
+  const map = new Map<string, string>();
+  for (const [key, value] of Object.entries(dict)) {
+    if (value && typeof value === 'string') {
+      map.set(value.trim(), key);
+    }
+  }
+  allReverseMaps[langCode as Language] = map;
+}
+
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>(() => {
     const stored = localStorage.getItem(LANGUAGE_KEY) as Language | null;
@@ -105,24 +118,48 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return fallbackText || key;
   }, [language]);
 
-  // Direct text translation - looks up in current language dictionary by value match
-  // This is used by <T> component and GlobalTranslator for dynamic content
+  // Direct text translation - uses bidirectional reverse maps
+  // Searches ALL languages' reverse maps to find the key, then returns current language value
   const translateText = useCallback((text: string): string => {
-    // If we're in English, just return the text
-    if (language === 'en') return text;
+    if (language === 'en') {
+      // Even in English, resolve text from other languages back to English
+      const trimmed = text.trim();
+      if (!trimmed) return text;
+      
+      // Check if text is already an English value
+      const enKey = allReverseMaps.en.get(trimmed);
+      if (enKey) return text; // Already English
+      
+      // Check ALL other language reverse maps to find the key
+      for (const [, reverseMap] of Object.entries(allReverseMaps)) {
+        const key = reverseMap.get(trimmed);
+        if (key && translations.en[key]) {
+          return translations.en[key];
+        }
+      }
+      return text;
+    }
     
     const trimmedText = text.trim();
     if (!trimmedText) return text;
     
-    // Try to find this text as a VALUE in the English dictionary
-    // and return the corresponding value from the current language dictionary
-    const englishDict = translations.en;
-    const currentDict = translations[language];
+    // First, check if text is already in the current language
+    const currentKey = allReverseMaps[language]?.get(trimmedText);
+    if (currentKey) {
+      // Text is already in current language, return as-is
+      return translations[language][currentKey] || text;
+    }
     
-    // First, check if the exact text exists as an English value
-    for (const [key, englishValue] of Object.entries(englishDict)) {
-      if (englishValue === trimmedText && currentDict[key]) {
-        return currentDict[key];
+    // Search ALL language reverse maps to find the key for this text
+    for (const [, reverseMap] of Object.entries(allReverseMaps)) {
+      const key = reverseMap.get(trimmedText);
+      if (key) {
+        // Found the key - return the current language's value
+        const translated = translations[language][key];
+        if (translated) return translated;
+        // Fallback to English if current language doesn't have this key
+        const englishVal = translations.en[key];
+        if (englishVal) return englishVal;
       }
     }
     
