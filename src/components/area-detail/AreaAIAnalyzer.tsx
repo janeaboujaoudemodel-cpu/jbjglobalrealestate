@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Brain, TrendingUp, BarChart3, Loader2, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Brain, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface AreaAIAnalyzerProps {
@@ -13,8 +12,8 @@ interface AreaAIAnalyzerProps {
 export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const hasTriggered = useRef(false);
 
-  // Fetch area stats for context
   const { data: stats } = useQuery({
     queryKey: ["area-ai-stats", areaName],
     queryFn: async () => {
@@ -52,35 +51,26 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
   const handleAnalyze = async () => {
     setIsAnalyzing(true);
     try {
-      const prompt = `Analyze the real estate market for ${areaName}, ${emirate}, UAE. 
-Based on available data:
-- ${stats?.totalProjects || 0} active projects
-- Average starting price: AED ${stats?.avgPrice?.toLocaleString() || "N/A"}
-- Price range: AED ${stats?.minPrice?.toLocaleString() || "N/A"} - ${stats?.maxPrice?.toLocaleString() || "N/A"}
-- Estimated avg price/sqft: AED ${stats?.pricePerSqft?.toLocaleString() || "N/A"}
-- ${stats?.developers?.length || 0} developers active: ${stats?.developers?.slice(0, 5).join(", ") || "N/A"}
-- Construction status breakdown: ${JSON.stringify(stats?.statuses || {})}
-
-Provide a concise 4-section analysis:
-1. **Price Intelligence**: Price per sqft positioning vs Dubai average
-2. **Supply Analysis**: Current project pipeline and construction status mix
-3. **Developer Landscape**: Key players and their impact
-4. **Area Performance**: Overall market positioning and investment outlook
-
-Keep each section to 2-3 sentences. Be data-driven and specific.`;
-
       const { data, error } = await supabase.functions.invoke("ai-property-analyzer", {
-        body: { prompt, area: areaName },
+        body: { area: areaName, propertyType: "all" },
       });
 
       if (error) throw error;
-      setAnalysis(data?.analysis || data?.response || data?.content || "Analysis not available.");
+      setAnalysis(data?.fullAnalysis || "Analysis not available.");
     } catch (err) {
       setAnalysis("Unable to generate analysis at this time. Please try again later.");
     } finally {
       setIsAnalyzing(false);
     }
   };
+
+  // Auto-trigger analysis once stats are available
+  useEffect(() => {
+    if (stats && stats.totalProjects > 0 && !analysis && !isAnalyzing && !hasTriggered.current) {
+      hasTriggered.current = true;
+      handleAnalyze();
+    }
+  }, [stats]);
 
   if (!stats || stats.totalProjects === 0) return null;
 
@@ -120,29 +110,10 @@ Keep each section to 2-3 sentences. Be data-driven and specific.`;
 
         {/* AI Analysis */}
         {!analysis ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-8"
-          >
-            <Button
-              onClick={handleAnalyze}
-              disabled={isAnalyzing}
-              className="px-8 py-6 bg-gradient-to-r from-gold to-amber-500 text-black font-bold text-base rounded-xl hover:from-amber-500 hover:to-gold transition-all"
-            >
-              {isAnalyzing ? (
-                <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Analyzing {areaName}...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Generate AI Area Analysis
-                </>
-              )}
-            </Button>
-          </motion.div>
+          <div className="text-center py-8">
+            <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-3" />
+            <p className="text-zinc-500 text-sm">Analyzing {areaName}...</p>
+          </div>
         ) : (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
