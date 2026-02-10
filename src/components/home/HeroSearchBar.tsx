@@ -627,7 +627,7 @@ const HeroSearchBar = () => {
       {/* Main Search Bar - Responsive: Stack on mobile, single line on desktop */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 w-full max-w-4xl">
         {/* Location Search Input - Full width on mobile */}
-        <div className="flex items-center bg-white/10 backdrop-blur-md border border-white/30 rounded-xl sm:rounded-l-xl sm:rounded-r-none px-3 py-3 flex-1 min-h-[48px]">
+        <div className="flex items-center bg-white/10 backdrop-blur-md border border-white/30 rounded-xl sm:border-r-0 sm:rounded-r-none px-3 py-3 flex-1 min-h-[48px]">
           <Search className="w-5 h-5 text-gold shrink-0" />
           <input
             type="text"
@@ -640,7 +640,7 @@ const HeroSearchBar = () => {
         </div>
 
         {/* Desktop-only controls */}
-        <div className="hidden sm:flex items-center bg-white/10 backdrop-blur-md border-y border-r border-white/30 overflow-hidden min-h-[48px]">
+        <div className="hidden sm:flex items-center bg-white/10 backdrop-blur-md border border-white/30 border-l-0 border-r-0 overflow-hidden min-h-[48px]">
           {/* Premium Gradient Divider */}
           <div className="h-8 w-px bg-gradient-to-b from-transparent via-white/40 to-transparent" />
 
@@ -971,7 +971,7 @@ const HeroSearchBar = () => {
           <Button
             onClick={handleSearch}
             disabled={isSearching}
-            className="h-full px-6 py-3.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-r-xl transition-all duration-300 shadow-lg hover:shadow-gold/30 disabled:opacity-70"
+            className="h-full px-6 py-3.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-none rounded-r-xl border border-white/30 border-l-0 transition-all duration-300 shadow-lg hover:shadow-gold/30 disabled:opacity-70"
           >
             {isSearching ? (
               <div className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin mr-1.5" />
