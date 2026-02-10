@@ -1,60 +1,52 @@
 
-# Restore Search Dropdown Behavior -- Hover-Out Fix Only
+# Fix Search Dropdown Hover-Out (Structural Alignment with Nav Menus)
 
-## What Went Wrong
+## Problem
 
-The search dropdown content (`MegaMenuSearch`) was NOT changed -- it remains identical. The only change was how the search icon triggers it (now uses the mega-menu hover system). This part is actually correct and should stay.
-
-The real problem is that the search/language/account mega-menu panel (lines 1480-1519) uses a `fixed inset-0` overlay that covers the **entire screen** below the header. Since the mouse cursor is always "inside" this overlay, the `onMouseLeave` event never fires when moving sideways or downward -- it only fires if you move the mouse back up into the header.
-
-The nav mega menus (Buy, Sell, Rent, etc.) work correctly because they use a relatively-positioned panel that the mouse can actually leave.
+The utility mega-menu panel (search/language/account) at line 1499 uses `absolute top-full right-6` but:
+1. Uses `onMouseEnter`/`onMouseLeave` instead of `onPointerEnter`/`onPointerLeave` (nav menus use pointer events which are more reliable)
+2. Has no invisible bridge zone between the icon buttons and the panel (nav menus have a 4px bridge at line 1396-1400)
+3. The panel may not be closing because mouse events behave differently than pointer events with overlapping elements
 
 ## The Fix
 
-**File: `src/components/GlobalHeader.tsx`**
+**File: `src/components/GlobalHeader.tsx`** (lines 1498-1503)
 
-Change the utility mega-menu panel (search/language/account) container from a full-screen `fixed inset-0` overlay to a right-aligned positioned panel (similar to how nav mega menus work). This way:
+Three small changes to match the nav mega menu pattern exactly:
 
-1. The backdrop still captures clicks to close
-2. The panel content area has real boundaries the mouse can leave
-3. When the cursor moves away from the panel, `onMouseLeave` fires and closes it after a short delay
+1. Change `onMouseEnter` to `onPointerEnter` and `onMouseLeave` to `onPointerLeave` (matching lines 1404-1405)
+2. Add an invisible bridge zone between the icon buttons and the dropdown panel (matching lines 1396-1400)
+3. Add `pointer-events-auto` class (matching line 1402)
 
-Specifically:
-- Keep the backdrop as `fixed inset-0` for click-to-close
-- Move the actual panel content into a container with defined dimensions (not full-screen) so `onMouseLeave` works naturally
-- Add `onMouseEnter` on the panel content to cancel the close timeout (same as nav menus)
-- The `MegaMenuSearch` component itself remains completely unchanged
-
-This is a structural fix to the hover container only -- no changes to the search dropdown content, layout, or functionality.
+No changes to MegaMenuSearch content. No changes to how the search icon triggers the menu. Just aligning the panel container events with the working nav pattern.
 
 ## Technical Details
 
-**Lines 1480-1519 of `GlobalHeader.tsx`** -- restructure the utility panel:
-
 ```
-Before:
-  <div className="fixed inset-0" onMouseLeave={handleMegaMenuLeave}>
-    <div className="backdrop" />        -- covers everything
-    <div className="absolute top-0 right-6">  -- panel content
-      <MegaMenuSearch />
-    </div>
-  </div>
+Lines 1498-1503 change from:
+  <div 
+    className="absolute top-full right-6 z-[9998]"
+    onMouseEnter={handleMegaMenuPanelEnter}
+    onMouseLeave={handleMegaMenuLeave}
+  >
 
-After:
-  <div className="fixed inset-0">              -- backdrop only, click-to-close
-    <div className="backdrop" onClick={closeMegaMenu} />
-  </div>
-  <div className="absolute top-full right-6"    -- panel with real boundaries
-       onMouseEnter={handleMegaMenuPanelEnter}
-       onMouseLeave={handleMegaMenuLeave}>
-    <MegaMenuSearch />
-  </div>
+To:
+  {/* Bridge zone */}
+  <div 
+    className="absolute right-0 h-4 z-[9998] pointer-events-auto"
+    style={{ top: '100%' }}
+    onPointerEnter={handleMegaMenuPanelEnter}
+  />
+  <div 
+    className="absolute right-6 z-[9998] pointer-events-auto"
+    style={{ top: 'calc(100% + 12px)' }}
+    onPointerEnter={handleMegaMenuPanelEnter}
+    onPointerLeave={handleMegaMenuLeave}
+  >
 ```
-
-The panel will be positioned relative to the header icon group, with real edges the cursor can cross to trigger closure -- exactly like the nav mega menus already work.
 
 ## Files to Modify
 
 | File | Change |
 |---|---|
-| `src/components/GlobalHeader.tsx` | Restructure utility mega-menu panel container so hover-out works; no changes to MegaMenuSearch content |
+| `src/components/GlobalHeader.tsx` | Switch to pointer events + add bridge zone on utility panel container (lines 1498-1503) |
