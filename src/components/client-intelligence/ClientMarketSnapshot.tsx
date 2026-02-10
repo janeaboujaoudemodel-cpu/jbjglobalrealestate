@@ -1,5 +1,6 @@
 import { TrendingUp, TrendingDown, Minus, BarChart3, Info, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -220,7 +221,8 @@ const ClientMarketSnapshot = ({
         {/* Mandatory Disclaimer */}
         <p className="text-[10px] text-muted-foreground/60 border-t border-border/30 pt-3">
           Insights are based on aggregated official data and are provided for informational purposes only.
-          This does not constitute financial, investment, or legal advice.
+          This does not constitute financial, investment, or legal advice.{" "}
+          <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
         </p>
       </CardContent>
     </Card>

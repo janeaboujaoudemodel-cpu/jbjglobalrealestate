@@ -5,6 +5,7 @@
 
 import { TrendingUp, Building2, Banknote, MapPin, Globe } from "lucide-react";
 import { ytd2026, topAreas2026, topNationalities } from "@/constants/dldMarketData";
+import { Link } from "react-router-dom";
 
 interface DLDMarketWidgetProps {
   /** Highlight a specific area if it exists in top areas */
@@ -62,7 +63,8 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
         )}
 
         <p className="text-[9px] text-zinc-600 leading-relaxed">
-          Source: Dubai Land Department. For informational purposes only.
+          Source: Dubai Land Department. For informational purposes only. Does not constitute financial advice.{" "}
+          <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
         </p>
       </div>
     );
@@ -184,7 +186,8 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Disclaimer */}
           <p className="text-[10px] text-zinc-600 text-center mt-6">
-            Source: Dubai Land Department (DLD). Year-to-date (YTD) 2026 data. For informational purposes only. Does not constitute financial advice.
+            Source: Dubai Land Department (DLD). Year-to-date (YTD) 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
+            <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
           </p>
         </div>
       </div>

@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Brain, Loader2, TrendingUp, TrendingDown, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Brain, Loader2, TrendingUp, TrendingDown, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 interface AreaAIAnalyzerProps {
   areaName: string;
@@ -34,8 +36,11 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [hasTimedOut, setHasTimedOut] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const hasTriggered = useRef(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { data: stats } = useQuery({
     queryKey: ["area-ai-stats", areaName],
@@ -73,6 +78,14 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
 
   const handleAnalyze = useCallback(async () => {
     setIsAnalyzing(true);
+    setHasTimedOut(false);
+    setErrorMsg(null);
+
+    // 30s timeout fallback
+    timeoutRef.current = setTimeout(() => {
+      setHasTimedOut(true);
+    }, 30000);
+
     try {
       const { data, error } = await supabase.functions.invoke("ai-property-analyzer", {
         body: { area: areaName, propertyType: "all" },
@@ -80,11 +93,20 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
       if (error) throw error;
       setAnalysis(data?.fullAnalysis || "Analysis not available.");
     } catch {
-      setAnalysis("Unable to generate analysis at this time. Please try again later.");
+      setErrorMsg("Unable to generate analysis at this time. Please try again.");
     } finally {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
       setIsAnalyzing(false);
+      setHasTimedOut(false);
     }
   }, [areaName]);
+
+  const handleRetry = useCallback(() => {
+    hasTriggered.current = false;
+    setErrorMsg(null);
+    setAnalysis(null);
+    handleAnalyze();
+  }, [handleAnalyze]);
 
   // IntersectionObserver: only trigger when section scrolls into view
   useEffect(() => {
@@ -156,10 +178,30 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
         </div>
 
         {/* AI Analysis */}
-        {!analysis ? (
+        {errorMsg ? (
+          <div className="text-center py-8 space-y-4">
+            <p className="text-red-500 text-sm">{errorMsg}</p>
+            <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Retry Analysis
+            </Button>
+          </div>
+        ) : !analysis ? (
           <div className="text-center py-8">
-            <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-3" />
-            <p className="text-zinc-500 text-sm">Analyzing {areaName}...</p>
+            {hasTimedOut ? (
+              <div className="space-y-4">
+                <p className="text-zinc-500 text-sm">Analysis is taking longer than expected.</p>
+                <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Retry Analysis
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-3" />
+                <p className="text-zinc-500 text-sm">Analyzing {areaName}...</p>
+              </>
+            )}
           </div>
         ) : (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
@@ -267,9 +309,10 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-2 text-zinc-500 text-xs pt-2">
+            <div className="flex items-center gap-2 text-zinc-500 text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
-              JBJ Property Analyzer — AI-generated analysis based on current market data. Not financial advice.
+              JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
+              <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
             </div>
           </motion.div>
         )}
