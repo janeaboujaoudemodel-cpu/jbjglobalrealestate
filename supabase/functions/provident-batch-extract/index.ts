@@ -172,8 +172,8 @@ serve(async (req) => {
               docInserts.push({
                 project_id: project.id,
                 document_type: "brochure",
-                document_url: mirrored.publicUrl,
-                document_name: "Brochure",
+                file_url: mirrored.publicUrl,
+                file_name: "Brochure",
                 data_source: "provident_batch",
               });
             }
@@ -191,8 +191,8 @@ serve(async (req) => {
               docInserts.push({
                 project_id: project.id,
                 document_type: "payment_plan",
-                document_url: mirrored.publicUrl,
-                document_name: "Payment Plan",
+                file_url: mirrored.publicUrl,
+                file_name: "Payment Plan",
                 data_source: "provident_batch",
               });
             }
@@ -211,8 +211,8 @@ serve(async (req) => {
               docInserts.push({
                 project_id: project.id,
                 document_type: "floor_plan",
-                document_url: mirrored.publicUrl,
-                document_name: `Floor Plan ${i + 1}`,
+                file_url: mirrored.publicUrl,
+                file_name: `Floor Plan ${i + 1}`,
                 data_source: "provident_batch",
               });
             }
@@ -221,7 +221,7 @@ serve(async (req) => {
           if (docInserts.length > 0) {
             const { error: insertErr } = await supabase
               .from("project_documents")
-              .upsert(docInserts, { onConflict: "project_id,document_type,document_url" });
+              .upsert(docInserts, { onConflict: "project_id,file_url" });
             if (insertErr) {
               projectResult.errors.push(`doc insert: ${insertErr.message}`);
             } else {
