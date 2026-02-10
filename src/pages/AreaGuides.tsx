@@ -293,9 +293,9 @@ const AreaGuides = () => {
                     >
                       {/* Photo Section */}
                       <div className="relative h-[180px] flex-shrink-0">
-                        {area.image_url ? (
+                        {(area.hero_image_url || area.image_url) ? (
                           <img
-                            src={area.image_url}
+                            src={area.hero_image_url || area.image_url}
                             alt={area.name}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             loading={index < 8 ? "eager" : "lazy"}
@@ -335,7 +335,7 @@ const AreaGuides = () => {
                       </div>
 
                       {/* Content Section - Champagne Background */}
-                      <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col min-h-[130px]">
+                      <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col flex-1">
                         {/* Area Name */}
                         <h3 className="text-black font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
                           {area.name}

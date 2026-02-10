@@ -1423,28 +1423,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
               } : {}}
             >
-              {/* Search Icon - opens GlobalSearchModal directly on hover/click */}
+              {/* Search Icon - triggers mega menu on hover (same as language dropdown) */}
               <button
-                onMouseEnter={() => {
-                  closeMegaMenu();
-                  setSearchInitialQuery("");
-                  setSearchOpen(true);
-                }}
-                onClick={() => {
-                  closeMegaMenu();
-                  if (searchOpen) {
-                    setSearchOpen(false);
-                    setSearchInitialQuery("");
-                  } else {
-                    setSearchInitialQuery("");
-                    setSearchOpen(true);
-                  }
-                }}
+                onMouseEnter={() => handleMegaMenuEnter('search')}
+                onClick={() => handleMegaMenuClick('search')}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
                 aria-label="Search"
               >
                 <Search 
-                  className="w-5 h-5 transition-colors duration-300 text-gold group-hover:text-white"
+                  className={`w-5 h-5 transition-colors duration-300 text-gold group-hover:text-white ${activeMegaMenu === 'search' ? '!text-gold' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
                 />
               </button>
@@ -1483,8 +1470,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             </div>
           )}
 
-          {/* Utility Mega Menu Panels (Language, Account) - Search opens GlobalSearchModal directly */}
-          {!shouldUseMobileHeader && (activeMegaMenu === 'language' || activeMegaMenu === 'account') && (
+          {/* Utility Mega Menu Panels (Language, Account, Search) */}
+          {!shouldUseMobileHeader && (activeMegaMenu === 'language' || activeMegaMenu === 'account' || activeMegaMenu === 'search') && (
             <>
               {/* Backdrop only - click to close */}
               <div 
@@ -1515,6 +1502,16 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 onPointerEnter={handleMegaMenuPanelEnter}
                 onPointerLeave={handleMegaMenuLeave}
               >
+                {activeMegaMenu === 'search' && (
+                  <div className="w-[500px] bg-black/95 backdrop-blur-xl border border-gold/30 rounded-2xl shadow-2xl p-4">
+                    <GlobalSearchModal
+                      isOpen={true}
+                      initialQuery=""
+                      onClose={closeMegaMenu}
+                      embedded
+                    />
+                  </div>
+                )}
                 {activeMegaMenu === 'language' && <MegaMenuLanguage onClose={closeMegaMenu} />}
                 {activeMegaMenu === 'account' && <MegaMenuAccount onClose={closeMegaMenu} />}
               </div>
@@ -1522,15 +1519,17 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           )}
       </div>
 
-      {/* Global Search Modal */}
-      <GlobalSearchModal
-        isOpen={searchOpen}
-        initialQuery={searchInitialQuery}
-        onClose={() => {
-          setSearchOpen(false);
-          setSearchInitialQuery("");
-        }}
-      />
+      {/* Global Search Modal - for mobile only now */}
+      {shouldUseMobileHeader && (
+        <GlobalSearchModal
+          isOpen={searchOpen}
+          initialQuery={searchInitialQuery}
+          onClose={() => {
+            setSearchOpen(false);
+            setSearchInitialQuery("");
+          }}
+        />
+      )}
     </header>
   );
 };
