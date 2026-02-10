@@ -44,6 +44,7 @@ serve(async (req) => {
     const request: AnalyzerRequest = await req.json();
     
     // Build the analysis prompt based on request type
+    const todayDate = new Date().toISOString().split('T')[0];
     const systemPrompt = `You are an expert UAE real estate market analyst. Analyze the property/area data and provide structured market insights.
 
 IMPORTANT COMPLIANCE RULES:
@@ -51,6 +52,12 @@ IMPORTANT COMPLIANCE RULES:
 - Do NOT predict future prices
 - Present data-driven observations only
 - Use phrases like "historically", "based on market data", "typically"
+
+DELIVERY TIMELINE RULES:
+- Today's date is ${todayDate}
+- ONLY flag "extended delivery timeline" as a risk if the handover date is MORE than 4 years from today
+- If handover is within 1-3 years, this is a NORMAL timeline — do NOT mention it as a risk
+- If handover is within 1 year or already handed over, mention it as a POSITIVE factor (near-term or ready)
 
 You must respond using the suggest_market_insights function with structured data.`;
 
