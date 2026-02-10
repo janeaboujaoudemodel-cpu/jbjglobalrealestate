@@ -90,7 +90,7 @@ interface CleanupResult {
 // ── Enrichment Test Types ──
 interface EnrichmentTestResult {
   success: boolean;
-  project?: { id: string; name: string; slug: string; reelly_id: number | null };
+  project?: { id: string; name: string; slug: string; reelly_id: number | null; cover_image_url?: string; developer_name?: string; area_name?: string; price_from?: number; price_to?: number };
   before?: {
     amenities: string[];
     usp_bullets: string[];
@@ -106,6 +106,7 @@ interface EnrichmentTestResult {
     documents_count: number;
     new_images: number;
     new_documents: number;
+    gallery_preview?: string[];
   };
   sources?: {
     reelly: { available: boolean; url?: string; amenities_found?: number; usp_found?: number; distances_found?: number; images_found?: number; documents_found?: number; reason?: string };
@@ -625,7 +626,7 @@ export function ReellyImportPanel() {
     setDetailsFetchResult(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke("reelly-fetch-details", {
+      const { data, error } = await supabase.functions.invoke("reelly-backfill-projects", {
         body: { mode: "batch", batch_size: 50 },
       });
 
@@ -735,16 +736,14 @@ export function ReellyImportPanel() {
         .limit(1)
         .maybeSingle();
 
-      const prevUpdated = prevJob?.stats_updated || 0;
-      const prevFailed = prevJob?.stats_errors || 0;
-      const prevResults = (Array.isArray(prevJob?.error_log) ? prevJob.error_log : []) as Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>;
-
-      let aggregated = { processed: prevUpdated + prevFailed, updated: prevUpdated, failed: prevFailed, remaining: 999 };
-      let allResults = [...prevResults];
+      // Don't accumulate from previous jobs - start fresh each run
+      // Previous job data is only for reference, not for adding to current counts
+      let aggregated = { processed: 0, updated: 0, failed: 0, remaining: 999 };
+      let allResults: Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }> = [];
       setBackfillResult({
         success: true,
         ...aggregated,
-        message: `Resuming from previous progress (${prevUpdated} updated, ${prevFailed} failed)...`,
+        message: `Starting backfill...`,
       });
       setBackfillProjectList(allResults);
 
@@ -765,10 +764,10 @@ export function ReellyImportPanel() {
           .insert({
             job_type: "reelly_backfill",
             status: "running",
-            stats_updated: prevUpdated,
-            stats_errors: prevFailed,
+            stats_updated: 0,
+            stats_errors: 0,
             stats_skipped: 0,
-            error_log: prevResults.slice(-500) as unknown as Json[],
+            error_log: [] as unknown as Json[],
           })
           .select("id")
           .single();
@@ -2603,7 +2602,7 @@ export function ReellyImportPanel() {
             </Button>
           </div>
 
-          {/* Enrichment Results */}
+          {/* Enrichment Results with Card Preview */}
           {enrichTestResult && enrichTestResult.success && (
             <div className="space-y-4 border-t pt-4">
               <h4 className="font-semibold text-sm">
@@ -2629,27 +2628,75 @@ export function ReellyImportPanel() {
                 )}
               </div>
 
-              {/* Before / After Comparison */}
+              {/* Visual Card Preview - Before & After */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                  <h5 className="text-xs font-bold text-red-700 mb-2">BEFORE</h5>
-                  <div className="space-y-1 text-xs">
-                    <p>Amenities: <strong>{enrichTestResult.before?.amenities?.length || 0}</strong></p>
-                    <p>USP Bullets: <strong>{enrichTestResult.before?.usp_bullets?.length || 0}</strong></p>
-                    <p>Location Distances: <strong>{enrichTestResult.before?.location_distances?.length || 0}</strong></p>
-                    <p>Images: <strong>{enrichTestResult.before?.images_count || 0}</strong></p>
-                    <p>Documents: <strong>{enrichTestResult.before?.documents_count || 0}</strong></p>
+                {/* BEFORE Card */}
+                <div className="border border-red-200 rounded-xl overflow-hidden bg-white">
+                  <div className="bg-red-50 px-3 py-1.5 border-b border-red-200">
+                    <h5 className="text-xs font-bold text-red-700">BEFORE</h5>
+                  </div>
+                  {enrichTestResult.project?.cover_image_url && (
+                    <img src={enrichTestResult.project.cover_image_url} alt={enrichTestResult.project.name} className="w-full h-32 object-cover" />
+                  )}
+                  <div className="p-3 space-y-1">
+                    <p className="font-semibold text-sm truncate">{enrichTestResult.project?.name}</p>
+                    <p className="text-xs text-zinc-500">{enrichTestResult.project?.developer_name || "—"} • {enrichTestResult.project?.area_name || "—"}</p>
+                    {enrichTestResult.project?.price_from && (
+                      <p className="text-xs font-medium text-zinc-700">AED {Number(enrichTestResult.project.price_from).toLocaleString()}</p>
+                    )}
+                    <div className="grid grid-cols-2 gap-1 text-[10px] text-zinc-500 pt-1 border-t">
+                      <span>📷 {enrichTestResult.before?.images_count || 0} images</span>
+                      <span>📄 {enrichTestResult.before?.documents_count || 0} docs</span>
+                      <span>🏗️ {enrichTestResult.before?.amenities?.length || 0} amenities</span>
+                      <span>📍 {enrichTestResult.before?.location_distances?.length || 0} distances</span>
+                      <span>⭐ {enrichTestResult.before?.usp_bullets?.length || 0} USPs</span>
+                    </div>
                   </div>
                 </div>
-                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                  <h5 className="text-xs font-bold text-green-700 mb-2">AFTER</h5>
-                  <div className="space-y-1 text-xs">
-                    <p>Amenities: <strong>{enrichTestResult.after?.amenities?.length || 0}</strong> {(enrichTestResult.after?.amenities?.length || 0) > (enrichTestResult.before?.amenities?.length || 0) && <span className="text-green-600">↑</span>}</p>
-                    <p>USP Bullets: <strong>{enrichTestResult.after?.usp_bullets?.length || 0}</strong> {(enrichTestResult.after?.usp_bullets?.length || 0) > (enrichTestResult.before?.usp_bullets?.length || 0) && <span className="text-green-600">↑</span>}</p>
-                    <p>Location Distances: <strong>{enrichTestResult.after?.location_distances?.length || 0}</strong> {(enrichTestResult.after?.location_distances?.length || 0) > (enrichTestResult.before?.location_distances?.length || 0) && <span className="text-green-600">↑</span>}</p>
-                    <p>Images: <strong>{enrichTestResult.after?.images_count || 0}</strong> (+{enrichTestResult.after?.new_images || 0} new)</p>
-                    <p>Documents: <strong>{enrichTestResult.after?.documents_count || 0}</strong> (+{enrichTestResult.after?.new_documents || 0} new)</p>
+
+                {/* AFTER Card */}
+                <div className="border border-green-200 rounded-xl overflow-hidden bg-white">
+                  <div className="bg-green-50 px-3 py-1.5 border-b border-green-200">
+                    <h5 className="text-xs font-bold text-green-700">AFTER ENRICHMENT</h5>
                   </div>
+                  {enrichTestResult.project?.cover_image_url && (
+                    <img src={enrichTestResult.project.cover_image_url} alt={enrichTestResult.project.name} className="w-full h-32 object-cover" />
+                  )}
+                  <div className="p-3 space-y-1">
+                    <p className="font-semibold text-sm truncate">{enrichTestResult.project?.name}</p>
+                    <p className="text-xs text-zinc-500">{enrichTestResult.project?.developer_name || "—"} • {enrichTestResult.project?.area_name || "—"}</p>
+                    {enrichTestResult.project?.price_from && (
+                      <p className="text-xs font-medium text-zinc-700">AED {Number(enrichTestResult.project.price_from).toLocaleString()}</p>
+                    )}
+                    <div className="grid grid-cols-2 gap-1 text-[10px] pt-1 border-t">
+                      <span className={(enrichTestResult.after?.images_count || 0) > (enrichTestResult.before?.images_count || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        📷 {enrichTestResult.after?.images_count || 0} images {(enrichTestResult.after?.new_images || 0) > 0 && `(+${enrichTestResult.after.new_images})`}
+                      </span>
+                      <span className={(enrichTestResult.after?.documents_count || 0) > (enrichTestResult.before?.documents_count || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        📄 {enrichTestResult.after?.documents_count || 0} docs {(enrichTestResult.after?.new_documents || 0) > 0 && `(+${enrichTestResult.after.new_documents})`}
+                      </span>
+                      <span className={(enrichTestResult.after?.amenities?.length || 0) > (enrichTestResult.before?.amenities?.length || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        🏗️ {enrichTestResult.after?.amenities?.length || 0} amenities
+                      </span>
+                      <span className={(enrichTestResult.after?.location_distances?.length || 0) > (enrichTestResult.before?.location_distances?.length || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        📍 {enrichTestResult.after?.location_distances?.length || 0} distances
+                      </span>
+                      <span className={(enrichTestResult.after?.usp_bullets?.length || 0) > (enrichTestResult.before?.usp_bullets?.length || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        ⭐ {enrichTestResult.after?.usp_bullets?.length || 0} USPs
+                      </span>
+                    </div>
+                  </div>
+                  {/* Gallery Preview */}
+                  {enrichTestResult.after?.gallery_preview?.length > 0 && (
+                    <div className="px-3 pb-3">
+                      <p className="text-[10px] text-green-600 font-semibold mb-1">New images found:</p>
+                      <div className="flex gap-1">
+                        {enrichTestResult.after.gallery_preview.map((url: string, i: number) => (
+                          <img key={i} src={url} alt={`New ${i+1}`} className="w-16 h-12 object-cover rounded border border-green-300" />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

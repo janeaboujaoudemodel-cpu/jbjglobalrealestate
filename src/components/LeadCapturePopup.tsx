@@ -1,7 +1,8 @@
 /**
  * LeadCapturePopup - Auto-opens after 5 seconds on homepage
- * Collects name, email, phone, interest for lead generation
+ * Collects name, email, phone, nationality, language, contact time, services for lead generation
  * Dismisses via localStorage so it only shows once per user
+ * UI: Champagne/gold theme - LOCKED
  */
 
 import { useState, useEffect } from "react";
@@ -12,8 +13,36 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const DISMISS_KEY = "lead_popup_dismissed";
+
+const NATIONALITIES = [
+  "UAE", "India", "Pakistan", "United Kingdom", "Russia", "China",
+  "Philippines", "Egypt", "Jordan", "Lebanon", "Saudi Arabia",
+  "Iran", "Germany", "France", "Canada", "United States",
+  "Australia", "South Africa", "Nigeria", "Brazil", "Other",
+];
+
+const LANGUAGES = [
+  "English", "Arabic", "Hindi", "Russian", "Chinese", "French",
+  "Urdu", "Tagalog", "German", "Spanish", "Other",
+];
+
+const CONTACT_TIMES = [
+  "Morning (9AM-12PM)", "Afternoon (12PM-5PM)", "Evening (5PM-9PM)", "Anytime",
+];
+
+const SERVICES = [
+  "Buying", "Selling", "Renting", "Investing",
+  "Property Management", "Mortgage Advisory", "Legal Services", "Partnerships",
+];
 
 const LeadCapturePopup = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,17 +53,16 @@ const LeadCapturePopup = () => {
     name: "",
     email: "",
     phone: "",
-    interest: "buying",
+    nationality: "",
+    language: "",
+    contactTime: "",
+    service: "Buying",
   });
 
   useEffect(() => {
-    // Only show on homepage
     if (location.pathname !== "/") return;
-
-    // Check if already dismissed
     const dismissed = localStorage.getItem(DISMISS_KEY);
     if (dismissed) return;
-
     const timer = setTimeout(() => setIsOpen(true), 5000);
     return () => clearTimeout(timer);
   }, [location.pathname]);
@@ -55,11 +83,13 @@ const LeadCapturePopup = () => {
     try {
       await supabase.from("crm_leads").insert({
         full_name: formData.name,
-        email: formData.email,
-        phone: formData.phone || null,
+        email_lower: formData.email.toLowerCase(),
+        phone_e164: formData.phone || null,
         source: "homepage_popup",
-        status: "new",
-        notes: `Interest: ${formData.interest}`,
+        pipeline_stage: "new",
+        nationality: formData.nationality || null,
+        preferred_language: formData.language || null,
+        notes: `Service: ${formData.service}${formData.contactTime ? ` | Contact: ${formData.contactTime}` : ""}`,
       });
 
       toast.success("Welcome! You now have full access to all features.");
@@ -87,7 +117,7 @@ const LeadCapturePopup = () => {
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl border-2 border-gold/50 shadow-[0_20px_60px_rgba(200,167,102,0.4)] overflow-hidden"
+            className="relative w-full max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl border-2 border-gold/50 shadow-[0_20px_60px_rgba(200,167,102,0.4)] overflow-hidden max-h-[90vh] overflow-y-auto"
           >
             {/* Close button */}
             <button
@@ -112,7 +142,7 @@ const LeadCapturePopup = () => {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="p-6 space-y-3">
               <Input
                 placeholder="Full Name *"
                 value={formData.name}
@@ -132,17 +162,54 @@ const LeadCapturePopup = () => {
                 value={formData.phone}
                 onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
               />
-              <select
-                value={formData.interest}
-                onChange={(e) => setFormData((p) => ({ ...p, interest: e.target.value }))}
-                className="flex h-12 w-full rounded-xl px-4 py-3 text-sm bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all"
-              >
-                <option value="buying">Interested in Buying</option>
-                <option value="selling">Interested in Selling</option>
-                <option value="renting">Interested in Renting</option>
-                <option value="investing">Interested in Investing</option>
-                <option value="exploring">Just Exploring</option>
-              </select>
+
+              {/* Nationality */}
+              <Select value={formData.nationality} onValueChange={(v) => setFormData((p) => ({ ...p, nationality: v }))}>
+                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <SelectValue placeholder="Nationality (optional)" />
+                </SelectTrigger>
+                <SelectContent className="z-[20100]">
+                  {NATIONALITIES.map((n) => (
+                    <SelectItem key={n} value={n}>{n}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Preferred Language */}
+              <Select value={formData.language} onValueChange={(v) => setFormData((p) => ({ ...p, language: v }))}>
+                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <SelectValue placeholder="Preferred Language (optional)" />
+                </SelectTrigger>
+                <SelectContent className="z-[20100]">
+                  {LANGUAGES.map((l) => (
+                    <SelectItem key={l} value={l}>{l}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Preferred Contact Time */}
+              <Select value={formData.contactTime} onValueChange={(v) => setFormData((p) => ({ ...p, contactTime: v }))}>
+                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <SelectValue placeholder="Preferred Contact Time (optional)" />
+                </SelectTrigger>
+                <SelectContent className="z-[20100]">
+                  {CONTACT_TIMES.map((t) => (
+                    <SelectItem key={t} value={t}>{t}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Services */}
+              <Select value={formData.service} onValueChange={(v) => setFormData((p) => ({ ...p, service: v }))}>
+                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <SelectValue placeholder="Service Interest" />
+                </SelectTrigger>
+                <SelectContent className="z-[20100]">
+                  {SERVICES.map((s) => (
+                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
               <Button
                 type="submit"
