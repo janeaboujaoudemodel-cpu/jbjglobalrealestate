@@ -1,75 +1,99 @@
 
-# Fix: Wrong Project Data Mapping (floors, total_units, bedrooms)
+# Fix: News Fake Photos, Press Kit Privacy, Insights Dropdown, and Missing Navigation Links
 
-## Problems Found
+## Issues Found
 
-### 1. `floors` is actually `building_count` (WRONG)
-In `reelly-api-sync/index.ts` line 89 and `reelly-backfill-projects/index.ts` line 400:
-```
-floors: p.building_count > 0 ? p.building_count : null
-```
-The Reelly API field `building_count` is the number of buildings in a development, NOT the number of floors. A 50-story tower with 1 building shows "1 Floor" on the listing, which is incorrect.
+### Issue 1: News articles showing with no images (not "fake" photos)
+The database shows that most news articles have `image_url: NULL`. The `ai-news-collector` enrichment pass is supposed to scrape real images from source URLs using Firecrawl, but many articles remain un-enriched. The "Aldar delivers 36%" article and others simply have no image at all -- the News page likely shows a fallback/placeholder when `image_url` is null.
 
-**Current data:** Almost every project shows `floors: 1` because most developments have 1 building.
+**Fix:** Run the enrichment pass to scrape real images from source URLs. Also add a proper "no image" fallback in the News page that shows a branded JBJ gradient card instead of any stock/placeholder photo. Ensure the `ai-news-collector` "enrich" action is triggered to fill missing images from actual article sources.
 
-### 2. `total_units` mapped from `units_count` shows wrong values
-In `reelly-api-sync/index.ts` line 93 and `reelly-backfill-projects/index.ts` line 394:
-```
-total_units: p.units_count > 0 ? p.units_count : null
-```
-For many projects, `units_count` appears to be "available/remaining units" rather than the total development size. Examples: LIV Residence = 1, 1WOOD = 2. These are obviously not the total unit count for those developments.
+### Issue 2: Press Kit page shows founder content publicly
+The PressKit page (`src/pages/PressKit.tsx`) imports founder photos and displays them without being wrapped in `FounderContent`. When founder visibility is toggled off, the page still shows all founder photos and personal details.
 
-**Fix approach:** The Reelly API does not have a separate "total units" field. `units_count` is what they provide. We should keep the mapping BUT stop displaying it when the value is suspiciously low (e.g., below 5) as it likely represents available units, not total. We should also use `building_count` for the correct column.
+**Fix:** Wrap founder-specific sections (headshots gallery, personal bio) with `<FounderContent>`. Keep company-level content (company overview, brand assets, contact info) always visible. The page stays accessible but only shows company information when the founder toggle is off.
 
-### 3. `bedrooms_min` / `bedrooms_max` are NULL everywhere
-The sync functions never extract bedroom ranges from the `unit_types` data. Even when `unit_types` contains entries with `bedrooms: 0, 1, 2, 3`, the min/max are never calculated and stored.
+### Issue 3: Insights mega-menu cannot scroll / content cropped
+The `MegaMenuShell` in `mega-menu-primitives.tsx` has broken `noScroll` logic. Lines 38-44 show that both the `noScroll: true` and `noScroll: false` branches produce the **exact same CSS** -- both set `maxHeight` and `overflowY: 'auto'`. The intent of `noScroll` was to have NO max-height so content fits naturally, but the implementation is identical in both branches. On smaller screens or when content exceeds viewport, items get cropped.
 
-## Fix Plan
+**Fix:** When `noScroll` is true, remove `maxHeight` entirely and set `overflowY: 'visible'` so the content renders at its natural height. Keep the existing auto-scroll behavior for `noScroll: false`.
 
-### File 1: `supabase/functions/reelly-api-sync/index.ts`
+### Issue 4: "Company News" link opens the same News page
+The link `/news?category=company` does open the News page and sets the category filter to "Company News". However, the filter only works on initial load via `categoryParam`. If the user navigates from an already-loaded News page, the category won't update because the state is initialized once.
 
-**Change A:** Stop mapping `building_count` to `floors` -- map it only to `building_count`
-- Line 89: Change `floors: p.building_count > 0 ? p.building_count : null` to remove `floors` entirely (it should not come from building_count)
-- Keep `building_count: p.building_count > 0 ? p.building_count : null`
+**Fix:** Add a `useEffect` to sync the `selectedCategory` state with URL search params so clicking "Company News" from the dropdown always activates the correct filter.
 
-**Change B:** Calculate `bedrooms_min` and `bedrooms_max` from unit_types
-- After extracting unit types, loop through them to find min/max bedroom values and include them in the mapped data
+### Issue 5: Awards page missing from Company card in Insights dropdown
+Awards IS actually present in the MegaMenuInsights Company card (line 89). This is already correct. The user may not have seen it because the content was cropped (Issue 3).
 
-### File 2: `supabase/functions/reelly-backfill-projects/index.ts`
+### Issue 6: Missing pages from footer and header navigation
+Multiple pages exist in the router but are NOT in the footer:
+- `/e-signature` -- E-Signature Dashboard (in footer as "E-Signature" under Professional Tools but links to wrong path)
+- `/contract-forms` -- Contract Forms (NOT in footer)
+- `/document-scanner` -- Document Scanner (in footer)
+- `/reviews` -- Reviews (in footer under About)
+- `/company-profile` -- Company Profile (in footer under About)
+- `/philanthropy` -- Philanthropy (in footer under About)
 
-**Change A:** Stop writing `building_count` to `floors` column (line 399-402)
-- Remove `updateData.floors = detail.building_count` 
-- Keep `updateData.building_count = detail.building_count`
+Pages that need to be added to footer:
+- `/contract-forms` -- needs to be in Services or Legal card
+- `/investor-dashboard` -- needs to be in Investor Hub
+- `/investor-services` or `/investors` -- needs to be in Investor Hub
+- `/referral-partner` -- needs to be in Services
 
-**Change B:** Calculate and save `bedrooms_min`/`bedrooms_max` from unit_types
+### Issue 7: News hero section needs video
+The News page already imports `heroVideo` from `@/assets/videos/press-kit-hero.mp4` (line 12) but the current hero section does not use a video background.
 
-### File 3: `supabase/functions/enrich-project-test/index.ts`
+**Fix:** Add the video as a background to the News hero section, similar to how PressKit does it.
 
-- Add `total_units`, `building_count`, `bedrooms_min`, `bedrooms_max` to the before/after snapshot so the test card shows these fields
+### Issue 8: News category labels need premium styling
+The category badges on news cards should use premium styling consistent with the UI design system.
 
-### File 4: `src/components/project-detail/QuickFactsBar.tsx`
+---
 
-- Only display "Total Units" if the value is above a reasonable threshold (e.g., > 4), since very low values from Reelly likely represent available units, not total
+## Technical Plan
 
-### File 5: `src/components/project-detail/HouseDetailsSection.tsx`
+### File 1: `src/components/header/mega-menu-primitives.tsx`
+**Fix the noScroll logic (lines 38-44):**
+- When `noScroll` is true: remove `maxHeight` and set `overflowY: 'visible'` so all 8 cards display without cropping
+- When `noScroll` is false: keep existing `maxHeight` + `overflowY: 'auto'`
 
-- Same threshold guard for total units display
+### File 2: `src/pages/PressKit.tsx`
+**Wrap founder sections with FounderContent:**
+- Wrap the founder headshots gallery section with `<FounderContent>`
+- Wrap any personal bio/founder detail sections with `<FounderContent>`
+- Keep company overview, brand guidelines, and media contact sections always visible
+- Add a company-focused fallback section when founder is hidden
 
-### Database Cleanup (one-time fix)
+### File 3: `src/pages/News.tsx`
+**Three changes:**
+1. Add `useEffect` to sync `selectedCategory` with URL `category` param on navigation
+2. Add video background to the hero section using the already-imported `heroVideo`
+3. Improve the fallback for articles with no image -- show a branded gradient card with category icon instead of broken/missing image
+4. Upgrade category badge styling to premium look (semi-transparent dark background with gold accents)
 
-Run a data correction to:
-1. **NULL out `floors`** for all Reelly-sourced projects where `floors` equals `building_count` (since the value is wrong)
-2. **NULL out `total_units`** where the value is suspiciously low (1-3 units) for projects that clearly have more
+### File 4: `src/components/Footer.tsx`
+**Add missing pages to footer cards:**
+- Add `/contract-forms` (RERA Contract Forms) to the Services card
+- Add `/investor-dashboard` to Investor Hub links
+- Add `/referral-partner` (Referral Partner) to Services card
+- Verify E-Signature link points to `/e-signature`
 
-## Technical Summary
+### File 5: `src/components/header/MegaMenuInsights.tsx`
+**Add missing links:**
+- Add "Reviews" to Company card
+- Add "Education Hub" link to Guides card
+- Add "Contract Forms" to Services card
+
+### Deployment
+No edge function changes needed. No database changes needed. All changes are frontend only.
+
+## Summary Table
 
 | File | Change |
 |------|--------|
-| `supabase/functions/reelly-api-sync/index.ts` | Remove `floors: building_count` mapping; add bedroom min/max calculation from unit_types |
-| `supabase/functions/reelly-backfill-projects/index.ts` | Same: stop writing building_count to floors; add bedroom extraction |
-| `supabase/functions/enrich-project-test/index.ts` | Add total_units/bedrooms to before/after snapshot |
-| `src/components/project-detail/QuickFactsBar.tsx` | Hide "Total Units" when value is below 5 |
-| `src/components/project-detail/HouseDetailsSection.tsx` | Same threshold guard |
-| Database migration | NULL out incorrect `floors` values; NULL out `total_units` where value is 1-3 |
-
-All edge functions will be redeployed after changes.
+| `src/components/header/mega-menu-primitives.tsx` | Fix noScroll: remove maxHeight when true, allow natural content height |
+| `src/pages/PressKit.tsx` | Wrap founder photos/bio with FounderContent; keep company sections visible |
+| `src/pages/News.tsx` | Sync category filter with URL; add hero video; fix no-image fallback; premium badges |
+| `src/components/Footer.tsx` | Add contract-forms, referral-partner, investor-dashboard links |
+| `src/components/header/MegaMenuInsights.tsx` | Add Reviews, Education Hub, Contract Forms links |
