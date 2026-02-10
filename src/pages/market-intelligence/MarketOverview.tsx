@@ -264,13 +264,9 @@ const MarketOverview = () => {
           id="rent-benchmarking" 
           icon={Scale} 
           title="Rent Benchmarking & Adjustments"
-          links={[
-            { label: "Official DLD Rental Index", url: "https://dubailand.gov.ae/en/eservices/rental-index/" },
-            { label: "DLD How-Do-I Guide", url: "https://dubailand.gov.ae/en/how-do-i/" }
-          ]}
         >
           <p>
-            Rent changes in Dubai are regulated and assessed through the official DLD Rental Index. This tool defines whether a rent increase is permitted and by how much, based on location, unit type, and current market benchmarks.
+            Rent changes in Dubai are regulated and assessed through RERA's official rent calculator tool. This tool defines whether a rent increase is permitted and by how much, based on location, unit type, and current market benchmarks.
           </p>
           <p>
             Rent discussions, renewals, and disputes are evaluated against this index—not market sentiment or private estimates.
@@ -409,7 +405,7 @@ const MarketOverview = () => {
         </section>
 
         {/* Property Type Performance - 3-layer system */}
-        <section id="property-performance" className="scroll-mt-24 jj-section-champagne py-12 mb-8">
+        <section id="property-performance" className="scroll-mt-32 jj-section-champagne py-12 mb-8">
           <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
             <SectionTitle title="Performance by Property Type" />
 

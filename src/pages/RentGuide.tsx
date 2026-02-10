@@ -255,7 +255,7 @@ const RentGuide = () => {
 
       {/* How Renting Works in Dubai */}
       <section id="how-renting-works" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={Home} title="How Renting Works in Dubai" />
           
           <div className="grid md:grid-cols-3 gap-6">
@@ -290,7 +290,7 @@ const RentGuide = () => {
 
       {/* Rental Process Steps */}
       <section id="rental-process" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={FileText} title="The 6-Step Rental Process" />
 
           <div className="space-y-6">
@@ -331,7 +331,7 @@ const RentGuide = () => {
 
       {/* Payment Structures */}
       <section id="payment-structures" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={CreditCard} title="Payment Structures" />
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -353,7 +353,7 @@ const RentGuide = () => {
 
       {/* Costs & Fees */}
       <section id="costs-fees" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={Banknote} title="Rental Costs & Fees" />
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -379,7 +379,7 @@ const RentGuide = () => {
 
       {/* How JBJ Supports Tenants & Landlords */}
       <section id="jbj-support" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={Users} title="How JBJ Supports You" />
 
           <div className="grid md:grid-cols-2 gap-6">

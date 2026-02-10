@@ -262,7 +262,7 @@ const TenantGuide = () => {
 
       {/* Section 2: Budgeting for Rent */}
       <section id="budgeting" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={Banknote} title="Budgeting for Rent" />
 
           <div className="jj-card-inner p-6 md:p-8">
@@ -284,7 +284,7 @@ const TenantGuide = () => {
 
       {/* Section 3: Property Search & Viewings */}
       <section id="property-search" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={Home} title="Property Search & Viewings" />
 
           <div className="jj-card-inner p-6 md:p-8">
@@ -306,7 +306,7 @@ const TenantGuide = () => {
 
       {/* Section 4: Making an Offer */}
       <section id="making-offer" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={FileText} title="Making an Offer" />
 
           <div className="jj-card-inner p-6 md:p-8">
@@ -328,7 +328,7 @@ const TenantGuide = () => {
 
       {/* Section 5: Documents Required */}
       <section id="documents" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={FileText} title="Documents Required from Tenants" />
 
           <div className="jj-card-inner p-6 md:p-8">
@@ -349,7 +349,7 @@ const TenantGuide = () => {
 
       {/* Section 6: Tenancy Contract & Ejari */}
       <section id="contract-ejari" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={Shield} title="Tenancy Contract & Ejari" />
 
           <div className="jj-card-inner p-6 md:p-8">
@@ -371,7 +371,7 @@ const TenantGuide = () => {
 
       {/* Section 7: Move-In & Handover */}
       <section id="move-in" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={Key} title="Move-In & Handover" />
 
           <div className="jj-card-inner p-6 md:p-8">
@@ -393,7 +393,7 @@ const TenantGuide = () => {
 
       {/* Section 8: Tenant Rights & Responsibilities */}
       <section id="rights-responsibilities" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={Scale} title="Tenant Rights & Responsibilities" />
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -426,8 +426,8 @@ const TenantGuide = () => {
 
       {/* Section 9: Renewals, Rent Increases & Notices */}
       <section id="renewals" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
+        <div className="jj-guide-content">
+          <div>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 9: <span className="text-gold">Renewals</span>, Rent Increases & Notices
@@ -454,7 +454,7 @@ const TenantGuide = () => {
 
       {/* Section 10: Ending a Tenancy */}
       <section id="ending-tenancy" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={Calendar} title="Ending a Tenancy" />
 
           <div className="jj-card-inner p-6 md:p-8">
@@ -476,7 +476,7 @@ const TenantGuide = () => {
 
       {/* How JBJ Global Real Estate Supports Tenants */}
       <section id="jbj-support" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={Users} title="How JBJ Supports Tenants" />
 
           <div className="jj-card-inner p-8">
@@ -498,7 +498,7 @@ const TenantGuide = () => {
 
       {/* FAQ Section */}
       <section id="faq" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <GuideSectionHeader icon={HelpCircle} title="Tenant FAQ" />
 
           <div className="space-y-4">
