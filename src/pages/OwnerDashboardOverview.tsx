@@ -101,48 +101,42 @@ interface LeadRowProps {
 function LeadRow({ lead, onOpen }: LeadRowProps) {
   return (
     <div 
-      className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors cursor-pointer group"
+      className="p-4 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors cursor-pointer group border border-zinc-700/50 hover:border-gold/30"
       onClick={() => onOpen(lead.id)}
     >
-      <div className="flex items-center gap-4 min-w-0 flex-1">
+      <div className="flex items-center gap-3 mb-3">
         <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
           <span className="text-gold font-semibold text-sm">
             {lead.full_name.charAt(0).toUpperCase()}
           </span>
         </div>
-        <div className="min-w-0">
-          <p className="font-medium text-white truncate">{lead.full_name}</p>
-          <div className="flex items-center gap-2 text-xs text-zinc-400">
-            {lead.email_lower && (
-              <span className="flex items-center gap-1 truncate">
-                <Mail className="h-3 w-3" /> {lead.email_lower}
-              </span>
-            )}
-            {lead.phone_e164 && (
-              <span className="flex items-center gap-1">
-                <Phone className="h-3 w-3" /> {lead.phone_e164}
-              </span>
-            )}
-          </div>
+        <div className="min-w-0 flex-1">
+          <p className="font-medium text-white truncate text-sm">{lead.full_name}</p>
+          <span className="text-xs text-zinc-500">
+            {formatDistanceToNow(new Date(lead.created_at), { addSuffix: true })}
+          </span>
         </div>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 flex-wrap">
         {lead.source && (
           <Badge variant="secondary" className="bg-zinc-700 text-zinc-300 text-xs">
             {lead.source}
           </Badge>
         )}
-        <span className="text-xs text-zinc-500">
-          {formatDistanceToNow(new Date(lead.created_at), { addSuffix: true })}
-        </span>
+        {lead.email_lower && (
+          <span className="flex items-center gap-1 text-xs text-zinc-400 truncate">
+            <Mail className="h-3 w-3" /> {lead.email_lower}
+          </span>
+        )}
+      </div>
+      <div className="mt-2 flex justify-end">
         <Button
           variant="ghost"
           size="sm"
-          className="text-gold hover:text-gold hover:bg-gold/10"
+          className="text-gold hover:text-gold hover:bg-gold/10 text-xs h-7"
           onClick={(e) => { e.stopPropagation(); onOpen(lead.id); }}
         >
-          Open
-          <ExternalLink className="h-3 w-3 ml-1" />
+          Open <ExternalLink className="h-3 w-3 ml-1" />
         </Button>
       </div>
     </div>
@@ -236,6 +230,11 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
           <p className={`font-medium text-sm truncate ${item.status === 'completed' ? 'text-zinc-500 line-through' : 'text-white'}`}>
             {displayName}
           </p>
+          {(item as any).lead_context && (
+            <p className="text-xs text-gold/70 truncate">
+              Lead: {(item as any).lead_context}
+            </p>
+          )}
           {item.due_at && (
             <p className={`text-xs flex items-center gap-1 ${isOverdue ? 'text-red-400' : 'text-zinc-400'}`}>
               <Calendar className="h-3 w-3" />
@@ -284,6 +283,8 @@ export default function OwnerDashboardOverview() {
       return count || 0;
     },
     enabled: !!user,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   // Fetch new leads this week
@@ -299,6 +300,8 @@ export default function OwnerDashboardOverview() {
       return count || 0;
     },
     enabled: !!user,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   // Fetch pending tasks count (graceful failure)
@@ -336,6 +339,8 @@ export default function OwnerDashboardOverview() {
       }
     },
     enabled: !!user,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   // Fetch newest leads (last 10)
@@ -346,10 +351,12 @@ export default function OwnerDashboardOverview() {
         .from('crm_leads')
         .select('id, full_name, email_lower, phone_e164, source, created_at, pipeline_stage')
         .order('created_at', { ascending: false })
-        .limit(10);
+        .limit(6);
       return data || [];
     },
     enabled: !!user,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   // Fetch items needing follow-up (tasks first, then leads as fallback)
@@ -358,7 +365,6 @@ export default function OwnerDashboardOverview() {
     queryFn: async () => {
       const now = new Date().toISOString();
       
-      // Try fetching tasks first
       try {
         const { data: tasks, error: tasksError } = await supabase
           .from('crm_tasks')
@@ -369,31 +375,46 @@ export default function OwnerDashboardOverview() {
           .limit(10);
         
         if (!tasksError && tasks && tasks.length > 0) {
-          return tasks.map(t => ({ ...t, type: 'task' as const }));
+          // Fetch lead names for tasks that have lead_id
+          const leadIds = tasks.filter(t => t.lead_id).map(t => t.lead_id);
+          let leadMap: Record<string, string> = {};
+          if (leadIds.length > 0) {
+            const { data: leads } = await supabase
+              .from('crm_leads')
+              .select('id, full_name, source')
+              .in('id', leadIds);
+            if (leads) {
+              leadMap = Object.fromEntries(leads.map(l => [l.id, `${l.full_name}${l.source ? ` · ${l.source}` : ''}`]));
+            }
+          }
+          return tasks.map(t => ({ 
+            ...t, 
+            type: 'task' as const,
+            lead_context: t.lead_id ? leadMap[t.lead_id] || null : null 
+          }));
         }
       } catch {
-        // Tasks table missing or inaccessible
+        // Tasks table missing
       }
       
-      // Fallback: Get leads needing follow-up by pipeline_stage
       try {
         const { data: leads } = await supabase
           .from('crm_leads')
-          .select('id, full_name, pipeline_stage, created_at')
+          .select('id, full_name, pipeline_stage, created_at, source')
           .in('pipeline_stage', ['new', 'contacted', 'needs_follow_up', 'open'])
           .order('created_at', { ascending: false })
           .limit(10);
         
         if (leads && leads.length > 0) {
-          return leads.map(l => ({ ...l, type: 'lead' as const }));
+          return leads.map(l => ({ ...l, type: 'lead' as const, lead_context: l.source || null }));
         }
-      } catch {
-        // Leads query failed
-      }
+      } catch {}
       
       return [];
     },
     enabled: !!user,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   // Fetch recent conversations (last 10)
@@ -413,6 +434,8 @@ export default function OwnerDashboardOverview() {
       }
     },
     enabled: !!user,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const handleCompleteTask = async (taskId: string) => {
@@ -465,7 +488,7 @@ export default function OwnerDashboardOverview() {
           value={pendingTasks ?? '—'}
           icon={<CheckSquare className="h-6 w-6 text-amber-400" />}
           loading={loadingTasks}
-          onClick={() => navigate('/crm/tasks')}
+          onClick={() => navigate('/owner/crm/tasks')}
         />
         <KPICard
           title="Active Chats"
@@ -538,7 +561,7 @@ export default function OwnerDashboardOverview() {
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                   <CardTitle className="text-lg text-white">Newest Leads</CardTitle>
-                  <CardDescription className="text-zinc-400">Most recent 10 contacts</CardDescription>
+                  <CardDescription className="text-zinc-400">Most recent contacts</CardDescription>
                 </div>
                 <Button 
                   variant="ghost" 
@@ -549,19 +572,23 @@ export default function OwnerDashboardOverview() {
                   View All <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent>
                 {loadingNewestLeads ? (
-                  Array.from({ length: 5 }).map((_, i) => (
-                    <Skeleton key={i} className="h-16 bg-zinc-800" />
-                  ))
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <Skeleton key={i} className="h-32 bg-zinc-800 rounded-lg" />
+                    ))}
+                  </div>
                 ) : newestLeads && newestLeads.length > 0 ? (
-                  newestLeads.map((lead) => (
-                    <LeadRow 
-                      key={lead.id} 
-                      lead={lead} 
-                      onOpen={(id) => navigate(`/crm/leads/${id}`)} 
-                    />
-                  ))
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                    {newestLeads.map((lead) => (
+                      <LeadRow 
+                        key={lead.id} 
+                        lead={lead} 
+                        onOpen={(id) => navigate(`/owner/crm/leads/${id}`)} 
+                      />
+                    ))}
+                  </div>
                 ) : (
                   <div className="text-center py-8">
                     <Users className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
@@ -592,7 +619,7 @@ export default function OwnerDashboardOverview() {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  onClick={() => navigate('/crm/tasks')}
+                  onClick={() => navigate('/owner/crm/tasks')}
                   className="text-gold hover:text-gold hover:bg-gold/10"
                 >
                   <ChevronRight className="h-4 w-4" />
@@ -609,7 +636,7 @@ export default function OwnerDashboardOverview() {
                       key={item.id} 
                       item={item}
                       onComplete={item.type === 'task' ? handleCompleteTask : undefined}
-                      onOpen={item.type === 'lead' ? (id) => navigate(`/crm/leads/${id}`) : undefined}
+                      onOpen={item.type === 'lead' ? (id) => navigate(`/owner/crm/leads/${id}`) : undefined}
                     />
                   ))
                 ) : (
@@ -751,7 +778,7 @@ export default function OwnerDashboardOverview() {
                 <p className="text-zinc-400 mb-4">View audit logs for all CRM activity</p>
                 <Button 
                   variant="secondary"
-                  onClick={() => navigate('/admin/crm')}
+                  onClick={() => navigate('/owner/admin')}
                 >
                   Open Admin CRM
                 </Button>

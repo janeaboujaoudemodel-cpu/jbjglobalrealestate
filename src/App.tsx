@@ -372,6 +372,32 @@ const App = () => (
                 <Route path="properties" element={<PropertyManagement />} />
                 <Route path="documents" element={<Documents />} />
                 <Route path="settings" element={<OwnerCommSettings />} />
+                {/* Nested CRM routes */}
+                <Route path="crm" element={<CRM />} />
+                <Route path="crm/leads/:id" element={<CRMLeadDetail />} />
+                <Route path="crm/leads" element={<CRMLeadsInbox />} />
+                <Route path="crm/tasks" element={<CRMTasks />} />
+                <Route path="crm/calendar" element={<CRMCalendar />} />
+                <Route path="crm/notes" element={<CRMNotes />} />
+                <Route path="crm/reminders" element={<CRMReminders />} />
+                <Route path="crm/employees" element={<CRMEmployees />} />
+                {/* Nested admin routes */}
+                <Route path="admin" element={<Admin />} />
+                <Route path="admin/leads" element={<AdminLeads />} />
+                <Route path="marketing-hub" element={<MarketingHub />} />
+                <Route path="analytics" element={<JBJAnalyticsDashboard />} />
+                {/* Nested tools routes */}
+                <Route path="founder-assistant" element={<FoundersAssistant />} />
+                <Route path="toolkit" element={<RoyalToolsHub />} />
+                <Route path="automations" element={<Automations />} />
+                <Route path="studio" element={<Studio />} />
+                <Route path="studio/editor/:projectId" element={<StudioEditor />} />
+                <Route path="studio/settings" element={<StudioSettings />} />
+                <Route path="email-client" element={<EmailClient />} />
+                <Route path="team-chat" element={<TeamChat />} />
+                <Route path="kanban" element={<KanbanBoard />} />
+                <Route path="map" element={<PropertyMap />} />
+                <Route path="listing-admin" element={<ListingAdminGuard><ListingAdmin /></ListingAdminGuard>} />
               </Route>
               
               <Route element={<AdminBypass><MainLayoutWrapper /></AdminBypass>}>
