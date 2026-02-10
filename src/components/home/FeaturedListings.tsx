@@ -1,9 +1,10 @@
 /**
  * FeaturedListings Component
  * Displays 8 featured project cards from elite developers
- * Emaar (2), ALDAR (2), Omniyat (1), Sobha Pinnacle (1), Binghatti Bugatti (1), Binghatti Mercedes (1)
+ * Strict 1-per-developer (2 for Binghatti)
  */
 
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Home, MapPin, ArrowRight, Building2 } from "lucide-react";
@@ -39,7 +40,7 @@ interface FeaturedProject {
 
 function useFeaturedProjects() {
   return useQuery({
-    queryKey: ["featured-projects-elite-v2"],
+    queryKey: ["featured-projects-elite-v3"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
@@ -47,7 +48,7 @@ function useFeaturedProjects() {
         .in("developer_name", ELITE_DEVELOPERS)
         .eq("is_published", true)
         .order("created_at", { ascending: false })
-        .limit(60);
+        .limit(200);
 
       if (error) throw error;
 
@@ -62,52 +63,62 @@ function useFeaturedProjects() {
       }
 
       const result: FeaturedProject[] = [];
+      const usedIds = new Set<string>();
+      const usedDevs = new Set<string>();
 
-      // Helper to add first non-Mirage project from a developer
-      const addOne = (devName: string, filter?: (p: FeaturedProject) => boolean) => {
+      // Helper: add exactly 1 project from a developer, with optional name filter
+      const addOne = (devName: string, nameFilter?: string): boolean => {
         const devProjects = byDev[devName] || [];
-        const filtered = filter ? devProjects.filter(filter) : devProjects;
-        const nonMirage = filtered.find(p => !p.name.toLowerCase().includes('mirage'));
-        if (nonMirage) result.push(nonMirage);
-        else if (filtered[0]) result.push(filtered[0]);
+        let candidate: FeaturedProject | undefined;
+
+        if (nameFilter) {
+          candidate = devProjects.find(p => p.name.toLowerCase().includes(nameFilter) && !usedIds.has(p.id));
+        }
+        // Fallback: any project from this developer not already used
+        if (!candidate) {
+          candidate = devProjects.find(p => !usedIds.has(p.id) && !p.name.toLowerCase().includes('mirage'));
+        }
+        if (!candidate) {
+          candidate = devProjects.find(p => !usedIds.has(p.id));
+        }
+
+        if (candidate) {
+          result.push(candidate);
+          usedIds.add(candidate.id);
+          usedDevs.add(devName);
+          return true;
+        }
+        return false;
       };
 
-      // 1 Emaar
+      // Strict round-robin: 1 per developer
       addOne('Emaar');
-
-      // 1 ALDAR
       addOne('ALDAR');
-
-      // 1 Omniyat
       addOne('Omniyat');
-
-      // 1 Sobha - only Pinnacle preferred
-      const sobhaProjects = byDev['Sobha'] || [];
-      const pinnacle = sobhaProjects.find(p => p.name.toLowerCase().includes('pinnacle'));
-      if (pinnacle) {
-        result.push(pinnacle);
-      } else {
-        addOne('Sobha');
-      }
-
-      // 1 Nakheel
+      addOne('Sobha', 'pinnacle');
       addOne('Nakheel');
-
-      // 1 Dubai Properties
       addOne('Dubai Properties');
 
-      // 1 Bugatti by Binghatti
-      const binghattiProjects = byDev['Binghatti'] || [];
-      const bugatti = binghattiProjects.find(p => p.name.toLowerCase().includes('bugatti'));
-      if (bugatti) result.push(bugatti);
+      // Binghatti gets 2: Bugatti + Mercedes
+      addOne('Binghatti', 'bugatti');
+      addOne('Binghatti', 'mercedes');
 
-      // 1 Mercedes-Benz by Binghatti
-      const mercedes = binghattiProjects.find(p => p.name.toLowerCase().includes('mercedes'));
-      if (mercedes) result.push(mercedes);
-
-      // Fill remaining slots if needed
+      // Fill remaining slots ONLY from developers NOT already represented
       if (result.length < 8) {
-        const usedIds = new Set(result.map(r => r.id));
+        for (const p of all) {
+          if (result.length >= 8) break;
+          if (usedIds.has(p.id)) continue;
+          const dev = p.developer_name || 'Unknown';
+          // Skip developers that already have a card (except Binghatti which already has its 2)
+          if (usedDevs.has(dev)) continue;
+          result.push(p);
+          usedIds.add(p.id);
+          usedDevs.add(dev);
+        }
+      }
+
+      // If still under 8 (unlikely), allow second picks but still no duplicates
+      if (result.length < 8) {
         for (const p of all) {
           if (result.length >= 8) break;
           if (!usedIds.has(p.id)) {
@@ -126,6 +137,9 @@ function useFeaturedProjects() {
 const ProjectCard = ({ project }: { project: FeaturedProject }) => {
   const imageUrl = project.cover_image_url || project.images?.[0]?.image_url;
   const logoUrl = (project.developer as any)?.logo_url;
+  const devName = project.developer_name || '';
+  const isBinghatti = devName.toLowerCase().includes('binghatti');
+  const [logoError, setLogoError] = useState(false);
 
   return (
     <motion.div
@@ -153,58 +167,84 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
             )}
 
             {/* Developer Logo - Top Left */}
-            {logoUrl ? (
-              <div className="absolute top-3 left-3 z-10 w-10 h-10 rounded-lg bg-white shadow-lg border border-gold/30 overflow-hidden">
-                <img
-                  src={logoUrl}
-                  alt={project.developer_name || ''}
-                  className="w-full h-full object-fill"
-                  loading="lazy"
-                />
+            {logoUrl && !logoError ? (
+              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
+                <div className="w-12 h-12 rounded-lg bg-white shadow-lg border border-gold/30 overflow-hidden">
+                  <img
+                    src={logoUrl}
+                    alt={devName}
+                    className="w-full h-full object-fill"
+                    loading="lazy"
+                    onError={() => setLogoError(true)}
+                  />
+                </div>
+                {/* Binghatti monogram badge */}
+                {isBinghatti && (
+                  <div className="w-7 h-7 rounded-full bg-black shadow-lg border border-gold/50 flex items-center justify-center">
+                    <span className="text-gold font-bold text-xs" style={{ fontFamily: "serif" }}>B</span>
+                  </div>
+                )}
               </div>
             ) : (
-              <div className="absolute top-3 left-3">
-                <span className="px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider font-semibold bg-black/80 text-gold backdrop-blur-sm">
-                  {project.developer_name}
-                </span>
+              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
+                <div className="w-12 h-12 rounded-lg bg-black/80 shadow-lg border border-gold/40 flex items-center justify-center backdrop-blur-sm">
+                  <span className="text-gold font-bold text-lg" style={{ fontFamily: "serif" }}>
+                    {devName.charAt(0)}
+                  </span>
+                </div>
+                {isBinghatti && (
+                  <div className="w-7 h-7 rounded-full bg-black shadow-lg border border-gold/50 flex items-center justify-center">
+                    <span className="text-gold font-bold text-xs" style={{ fontFamily: "serif" }}>B</span>
+                  </div>
+                )}
               </div>
             )}
           </div>
 
-          {/* Content */}
-          <div className="p-4 flex flex-col flex-grow">
-            {/* Location */}
-            {(project.area_name || project.location) && (
-              <div className="flex items-center gap-1.5 text-zinc-600 text-xs mb-2">
-                <MapPin className="w-3.5 h-3.5 text-gold" />
-                <span>{project.area_name || project.location}</span>
-              </div>
-            )}
+          {/* Content - fixed height for consistency */}
+          <div className="p-4 flex flex-col flex-grow min-h-[140px]">
+            {/* Location - fixed height row */}
+            <div className="min-h-[20px] mb-2">
+              {(project.area_name || project.location) ? (
+                <div className="flex items-center gap-1.5 text-zinc-600 text-xs">
+                  <MapPin className="w-3.5 h-3.5 text-gold flex-shrink-0" />
+                  <span className="truncate">{project.area_name || project.location}</span>
+                </div>
+              ) : (
+                <div className="h-[20px]" aria-hidden="true" />
+              )}
+            </div>
 
             {/* Title */}
-            <h3 className="text-black font-semibold text-sm mb-2 line-clamp-2 group-hover:text-gold transition-colors" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h3 className="text-black font-semibold text-sm mb-2 line-clamp-2 group-hover:text-gold transition-colors min-h-[40px]" style={{ fontFamily: "Poppins, sans-serif" }}>
               {project.name}
             </h3>
 
             {/* Spacer to push bottom content down */}
             <div className="flex-grow" />
 
-            {/* Developer + Price + Handover row */}
-            <div className="flex items-end justify-between mt-2">
+            {/* Developer + Price + Handover row - fixed height */}
+            <div className="flex items-end justify-between mt-2 min-h-[36px]">
               <div>
-                {project.developer_name && (
+                {project.developer_name ? (
                   <span className="text-gold font-medium text-[10px] block">by {project.developer_name}</span>
+                ) : (
+                  <span className="text-transparent text-[10px] block" aria-hidden="true">placeholder</span>
                 )}
-                {project.price_from && (
+                {project.price_from ? (
                   <span className="text-black font-bold text-xs">
                     From {formatPrice(project.price_from)}
                   </span>
+                ) : (
+                  <span className="text-transparent font-bold text-xs" aria-hidden="true">—</span>
                 )}
               </div>
-              {project.handover_date && (
+              {project.handover_date ? (
                 <span className="text-zinc-500 text-[10px] font-medium">
                   {project.handover_date}
                 </span>
+              ) : (
+                <span className="text-transparent text-[10px]" aria-hidden="true">—</span>
               )}
             </div>
           </div>
