@@ -88,29 +88,33 @@ interface CleanupResult {
 }
 
 // ── Enrichment Test Types ──
+interface EnrichmentSnapshot {
+  amenities_count: number;
+  usp_count: number;
+  distances_count: number;
+  images_count: number;
+  documents_count: number;
+  faqs_count: number;
+  floor_plans_count: number;
+  unit_types_count: number;
+  has_description: boolean;
+  has_video: boolean;
+  has_payment_plan: boolean;
+  highlights_count: number;
+  has_service_charge: boolean;
+  has_roi_estimate: boolean;
+  new_images?: number;
+  new_documents?: number;
+  gallery_preview?: string[];
+}
+
 interface EnrichmentTestResult {
   success: boolean;
   project?: { id: string; name: string; slug: string; reelly_id: number | null; cover_image_url?: string; developer_name?: string; area_name?: string; price_from?: number; price_to?: number };
-  before?: {
-    amenities: string[];
-    usp_bullets: string[];
-    location_distances: Array<{ label: string; time: string }>;
-    images_count: number;
-    documents_count: number;
-  };
-  after?: {
-    amenities: string[];
-    usp_bullets: string[];
-    location_distances: Array<{ label: string; time: string }>;
-    images_count: number;
-    documents_count: number;
-    new_images: number;
-    new_documents: number;
-    gallery_preview?: string[];
-  };
+  before?: EnrichmentSnapshot;
+  after?: EnrichmentSnapshot;
   sources?: {
-    reelly: { available: boolean; url?: string; amenities_found?: number; usp_found?: number; distances_found?: number; images_found?: number; documents_found?: number; reason?: string };
-    provident: { available: boolean; url?: string; amenities_found?: number; markdown_excerpt?: string | null; reason?: string };
+    reelly: { available: boolean; url?: string; fields_found?: Record<string, number>; reason?: string };
   };
   applied?: boolean;
   error?: string;
@@ -2619,21 +2623,14 @@ export function ReellyImportPanel() {
                 ) : (
                   <span className="text-zinc-400">Reelly: {enrichTestResult.sources?.reelly?.reason}</span>
                 )}
-                {enrichTestResult.sources?.provident?.available ? (
-                  <a href={enrichTestResult.sources.provident.url} target="_blank" rel="noopener noreferrer" className="text-green-600 underline flex items-center gap-1">
-                    <ExternalLink className="h-3 w-3" /> Provident Source
-                  </a>
-                ) : (
-                  <span className="text-zinc-400">Provident: {enrichTestResult.sources?.provident?.reason}</span>
-                )}
               </div>
 
               {/* Visual Card Preview - Before & After */}
               <div className="grid grid-cols-2 gap-4">
                 {/* BEFORE Card */}
-                <div className="border border-red-200 rounded-xl overflow-hidden bg-white">
+                <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer" className="block border border-red-200 rounded-xl overflow-hidden bg-white hover:shadow-lg transition-shadow cursor-pointer">
                   <div className="bg-red-50 px-3 py-1.5 border-b border-red-200">
-                    <h5 className="text-xs font-bold text-red-700">BEFORE</h5>
+                    <h5 className="text-xs font-bold text-red-700">BEFORE <ExternalLink className="h-3 w-3 inline ml-1" /></h5>
                   </div>
                   {enrichTestResult.project?.cover_image_url && (
                     <img src={enrichTestResult.project.cover_image_url} alt={enrichTestResult.project.name} className="w-full h-32 object-cover" />
@@ -2641,23 +2638,27 @@ export function ReellyImportPanel() {
                   <div className="p-3 space-y-1">
                     <p className="font-semibold text-sm truncate">{enrichTestResult.project?.name}</p>
                     <p className="text-xs text-zinc-500">{enrichTestResult.project?.developer_name || "—"} • {enrichTestResult.project?.area_name || "—"}</p>
-                    {enrichTestResult.project?.price_from && (
-                      <p className="text-xs font-medium text-zinc-700">AED {Number(enrichTestResult.project.price_from).toLocaleString()}</p>
-                    )}
                     <div className="grid grid-cols-2 gap-1 text-[10px] text-zinc-500 pt-1 border-t">
                       <span>📷 {enrichTestResult.before?.images_count || 0} images</span>
                       <span>📄 {enrichTestResult.before?.documents_count || 0} docs</span>
-                      <span>🏗️ {enrichTestResult.before?.amenities?.length || 0} amenities</span>
-                      <span>📍 {enrichTestResult.before?.location_distances?.length || 0} distances</span>
-                      <span>⭐ {enrichTestResult.before?.usp_bullets?.length || 0} USPs</span>
+                      <span>🏗️ {enrichTestResult.before?.amenities_count || 0} amenities</span>
+                      <span>📍 {enrichTestResult.before?.distances_count || 0} distances</span>
+                      <span>⭐ {enrichTestResult.before?.usp_count || 0} USPs</span>
+                      <span>❓ {enrichTestResult.before?.faqs_count || 0} FAQs</span>
+                      <span>🏠 {enrichTestResult.before?.floor_plans_count || 0} floor plans</span>
+                      <span>🔑 {enrichTestResult.before?.unit_types_count || 0} unit types</span>
+                      <span>📝 {enrichTestResult.before?.has_description ? "✅" : "❌"} description</span>
+                      <span>🎬 {enrichTestResult.before?.has_video ? "✅" : "❌"} video</span>
+                      <span>💰 {enrichTestResult.before?.has_payment_plan ? "✅" : "❌"} payment</span>
+                      <span>✨ {enrichTestResult.before?.highlights_count || 0} highlights</span>
                     </div>
                   </div>
-                </div>
+                </a>
 
                 {/* AFTER Card */}
-                <div className="border border-green-200 rounded-xl overflow-hidden bg-white">
+                <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer" className="block border border-green-200 rounded-xl overflow-hidden bg-white hover:shadow-lg transition-shadow cursor-pointer">
                   <div className="bg-green-50 px-3 py-1.5 border-b border-green-200">
-                    <h5 className="text-xs font-bold text-green-700">AFTER ENRICHMENT</h5>
+                    <h5 className="text-xs font-bold text-green-700">AFTER ENRICHMENT <ExternalLink className="h-3 w-3 inline ml-1" /></h5>
                   </div>
                   {enrichTestResult.project?.cover_image_url && (
                     <img src={enrichTestResult.project.cover_image_url} alt={enrichTestResult.project.name} className="w-full h-32 object-cover" />
@@ -2665,53 +2666,63 @@ export function ReellyImportPanel() {
                   <div className="p-3 space-y-1">
                     <p className="font-semibold text-sm truncate">{enrichTestResult.project?.name}</p>
                     <p className="text-xs text-zinc-500">{enrichTestResult.project?.developer_name || "—"} • {enrichTestResult.project?.area_name || "—"}</p>
-                    {enrichTestResult.project?.price_from && (
-                      <p className="text-xs font-medium text-zinc-700">AED {Number(enrichTestResult.project.price_from).toLocaleString()}</p>
-                    )}
                     <div className="grid grid-cols-2 gap-1 text-[10px] pt-1 border-t">
                       <span className={(enrichTestResult.after?.images_count || 0) > (enrichTestResult.before?.images_count || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
-                        📷 {enrichTestResult.after?.images_count || 0} images {(enrichTestResult.after?.new_images || 0) > 0 && `(+${enrichTestResult.after.new_images})`}
+                        📷 {enrichTestResult.after?.images_count || 0} images {(enrichTestResult.after?.new_images || 0) > 0 && `(+${enrichTestResult.after!.new_images})`}
                       </span>
                       <span className={(enrichTestResult.after?.documents_count || 0) > (enrichTestResult.before?.documents_count || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
-                        📄 {enrichTestResult.after?.documents_count || 0} docs {(enrichTestResult.after?.new_documents || 0) > 0 && `(+${enrichTestResult.after.new_documents})`}
+                        📄 {enrichTestResult.after?.documents_count || 0} docs {(enrichTestResult.after?.new_documents || 0) > 0 && `(+${enrichTestResult.after!.new_documents})`}
                       </span>
-                      <span className={(enrichTestResult.after?.amenities?.length || 0) > (enrichTestResult.before?.amenities?.length || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
-                        🏗️ {enrichTestResult.after?.amenities?.length || 0} amenities
+                      <span className={(enrichTestResult.after?.amenities_count || 0) > (enrichTestResult.before?.amenities_count || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        🏗️ {enrichTestResult.after?.amenities_count || 0} amenities
                       </span>
-                      <span className={(enrichTestResult.after?.location_distances?.length || 0) > (enrichTestResult.before?.location_distances?.length || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
-                        📍 {enrichTestResult.after?.location_distances?.length || 0} distances
+                      <span className={(enrichTestResult.after?.distances_count || 0) > (enrichTestResult.before?.distances_count || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        📍 {enrichTestResult.after?.distances_count || 0} distances
                       </span>
-                      <span className={(enrichTestResult.after?.usp_bullets?.length || 0) > (enrichTestResult.before?.usp_bullets?.length || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
-                        ⭐ {enrichTestResult.after?.usp_bullets?.length || 0} USPs
+                      <span className={(enrichTestResult.after?.usp_count || 0) > (enrichTestResult.before?.usp_count || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        ⭐ {enrichTestResult.after?.usp_count || 0} USPs
+                      </span>
+                      <span className={(enrichTestResult.after?.faqs_count || 0) > (enrichTestResult.before?.faqs_count || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        ❓ {enrichTestResult.after?.faqs_count || 0} FAQs
+                      </span>
+                      <span className={(enrichTestResult.after?.floor_plans_count || 0) > (enrichTestResult.before?.floor_plans_count || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        🏠 {enrichTestResult.after?.floor_plans_count || 0} floor plans
+                      </span>
+                      <span className={(enrichTestResult.after?.unit_types_count || 0) > (enrichTestResult.before?.unit_types_count || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        🔑 {enrichTestResult.after?.unit_types_count || 0} unit types
+                      </span>
+                      <span className={enrichTestResult.after?.has_description && !enrichTestResult.before?.has_description ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        📝 {enrichTestResult.after?.has_description ? "✅" : "❌"} description
+                      </span>
+                      <span className={enrichTestResult.after?.has_video && !enrichTestResult.before?.has_video ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        🎬 {enrichTestResult.after?.has_video ? "✅" : "❌"} video
+                      </span>
+                      <span className={enrichTestResult.after?.has_payment_plan && !enrichTestResult.before?.has_payment_plan ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        💰 {enrichTestResult.after?.has_payment_plan ? "✅" : "❌"} payment
+                      </span>
+                      <span className={(enrichTestResult.after?.highlights_count || 0) > (enrichTestResult.before?.highlights_count || 0) ? "text-green-600 font-bold" : "text-zinc-500"}>
+                        ✨ {enrichTestResult.after?.highlights_count || 0} highlights
                       </span>
                     </div>
                   </div>
                   {/* Gallery Preview */}
-                  {enrichTestResult.after?.gallery_preview?.length > 0 && (
+                  {(enrichTestResult.after?.gallery_preview?.length || 0) > 0 && (
                     <div className="px-3 pb-3">
                       <p className="text-[10px] text-green-600 font-semibold mb-1">New images found:</p>
                       <div className="flex gap-1">
-                        {enrichTestResult.after.gallery_preview.map((url: string, i: number) => (
+                        {enrichTestResult.after!.gallery_preview!.map((url: string, i: number) => (
                           <img key={i} src={url} alt={`New ${i+1}`} className="w-16 h-12 object-cover rounded border border-green-300" />
                         ))}
                       </div>
                     </div>
                   )}
-                </div>
+                </a>
               </div>
 
-              {/* Amenities Preview */}
-              {(enrichTestResult.after?.amenities?.length || 0) > 0 && (
+              {/* Enrichment Summary */}
+              {(enrichTestResult.after?.amenities_count || 0) > 0 && (
                 <div className="text-xs">
-                  <p className="font-semibold mb-1">Amenities found:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {enrichTestResult.after!.amenities.slice(0, 15).map((a, i) => (
-                      <Badge key={i} variant="secondary" className="text-[10px]">{a}</Badge>
-                    ))}
-                    {enrichTestResult.after!.amenities.length > 15 && (
-                      <Badge variant="outline" className="text-[10px]">+{enrichTestResult.after!.amenities.length - 15} more</Badge>
-                    )}
-                  </div>
+                  <p className="font-semibold mb-1">Enrichment summary: {enrichTestResult.after?.amenities_count || 0} amenities, {enrichTestResult.after?.faqs_count || 0} FAQs, {enrichTestResult.after?.floor_plans_count || 0} floor plans, {enrichTestResult.after?.unit_types_count || 0} unit types found</p>
                 </div>
               )}
 
