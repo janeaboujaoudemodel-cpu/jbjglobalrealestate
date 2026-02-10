@@ -53,13 +53,22 @@ serve(async (req) => {
 
     // Find projects missing documents and images
     // Use a raw query to find projects with 0 documents
-    const { data: candidates, error: queryError } = await supabase
+    // First try to find projects missing documents (not just cover images)
+    // Get IDs of projects that already have documents
+    const { data: projectsWithDocs } = await supabase
+      .from("project_documents")
+      .select("project_id");
+    const docProjectIds = new Set((projectsWithDocs || []).map((d: any) => d.project_id));
+
+    const { data: allCandidates, error: queryError } = await supabase
       .from("projects")
       .select("id, name, slug, developer_name, cover_image_url")
       .eq("is_published", true)
-      .is("cover_image_url", null)
       .order("created_at", { ascending: false })
-      .limit(limit);
+      .limit(500);
+
+    // Filter to projects without documents
+    const candidates = (allCandidates || []).filter((p: any) => !docProjectIds.has(p.id)).slice(0, limit);
 
     if (queryError) {
       console.error("[batch] Query error:", queryError.message);
@@ -69,32 +78,7 @@ serve(async (req) => {
       });
     }
 
-    // If no projects without cover images, try projects that have few images
     let projectsToProcess = candidates || [];
-
-    if (projectsToProcess.length === 0) {
-      // Fallback: get projects and check which ones have few documents
-      const { data: allProjects } = await supabase
-        .from("projects")
-        .select("id, name, slug, developer_name, cover_image_url")
-        .eq("is_published", true)
-        .order("created_at", { ascending: false })
-        .limit(200);
-
-      if (allProjects && allProjects.length > 0) {
-        // Check which have 0 documents
-        const projectIds = allProjects.map((p: any) => p.id);
-        const { data: docCounts } = await supabase
-          .from("project_documents")
-          .select("project_id")
-          .in("project_id", projectIds);
-
-        const projectsWithDocs = new Set((docCounts || []).map((d: any) => d.project_id));
-        projectsToProcess = allProjects
-          .filter((p: any) => !projectsWithDocs.has(p.id))
-          .slice(0, limit);
-      }
-    }
 
     if (projectsToProcess.length === 0) {
       return new Response(JSON.stringify({
