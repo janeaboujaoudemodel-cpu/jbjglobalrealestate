@@ -1,35 +1,26 @@
 
+# Add "Hide Sold Out" Toggle to Properties Pages
 
-# Standardize Area Map to Match Approved Map Card
-
-## Problem
-The `AreaMapSection` uses a basic OpenStreetMap tile layer with no view toggle (satellite/street/terrain), no navigation controls (zoom/recenter/3D), and no error boundary. The approved map card pattern (used in `ProjectLocationMap.tsx`) includes all of these features.
+## What It Does
+Adds a simple toggle/switch on both the Properties and Properties Reelly pages that lets you hide all "Sold Out" projects from the listing with one click.
 
 ## Changes
 
-### File: `src/components/area-detail/AreaMapSection.tsx` -- Full Rewrite
+### 1. Properties Page (`src/pages/Properties.tsx`)
+- Add a `hideSoldOut` boolean to the extended filter state (default: `false`)
+- Add a toggle switch (using the existing Switch component) next to the existing filter controls, labeled "Hide Sold Out" with a red dot indicator
+- When enabled, filter out projects where `status_label` contains "Sold Out" or `is_sold_out` is true
 
-Replace the current basic map with the approved map card pattern:
+### 2. Properties Reelly Page (`src/pages/PropertiesReelly.tsx`)
+- Add a `hideSoldOut` boolean to the FilterState (default: `false`)
+- Add the same toggle switch in the filter bar
+- When enabled, filter out projects where `sale_status` contains "Sold Out"
 
-1. **Satellite default view** with satellite/street/terrain toggle (same `MapViewToggle` + `DynamicTileLayer` pattern from `ProjectLocationMap.tsx`)
-2. **Navigation controls** -- import and add `MapNavigationControls` (zoom in/out, recenter, 3D Google Earth button)
-3. **Error boundary** -- wrap in `MapErrorBoundary`
-4. **External link** -- "Open in Google Maps" button via `Maximize` icon
-5. **Disable default zoom control** (`zoomControl={false}`) since custom controls replace it
-6. **Hide attribution** (`attributionControl={false}`) for cleaner look
-7. **Gold-bordered, rounded card** with `border-gold/30` and `touch-action: none`
-8. **Project popups** -- keep existing project marker popups with images and links
-
-### File: `src/pages/AreaDetail.tsx` -- Wrap map in error boundary
-
-Wrap `AreaMapSection` with `MapErrorBoundary` for resilience.
+### 3. Project Filters Hook (`src/hooks/useProjectFilters.ts`)
+- Add `hideSoldOut` support: when true, exclude projects where `status_label` includes "sold" or "out of stock", or where `is_sold_out === true`
 
 ## Technical Details
-
-The approved map card uses these components internally:
-- `DynamicTileLayer` -- switches tile source (satellite via Esri, street via OSM, terrain via Stamen)
-- `MapViewToggle` -- left-side button group for view switching + external maps button
-- `MapNavigationControls` -- right-side zoom/recenter/3D buttons (from `src/components/maps/MapNavigationControls.tsx`)
-
-These will be added directly inside `AreaMapSection.tsx` (inline components like `ProjectLocationMap` does) so the area map matches the project map exactly. The map height stays at 500px, satellite is the default view, and all project markers with popups are preserved.
-
+- The toggle will be a small `Switch` component with a label, placed inline with the existing filter controls
+- The filter is applied client-side on the already-fetched data, so it works instantly with no extra API calls
+- The toggle state is included in the applied filters flow (same pattern as other filters)
+- On the Reelly page, the filter is applied in the `sortedProjects` memo before rendering
