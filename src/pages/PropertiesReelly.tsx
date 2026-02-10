@@ -30,6 +30,7 @@ import ReellyProjectCard from "@/components/ReellyProjectCard";
 import { ProjectGridSkeleton } from "@/components/ProjectCardSkeleton";
 import { useReellyProjects, flattenReellyProjects, getReellyProjectsTotal } from "@/hooks/useReellyProjects";
 import { useDevelopers } from "@/hooks/useProjects";
+import { useLocalProjectSearch } from "@/hooks/useLocalProjectSearch";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { SEOHead } from "@/components/SEOHead";
 import { FeaturedProjectAd, FEATURED_ADS } from "@/components/FeaturedProjectAd";
@@ -153,9 +154,23 @@ const PropertiesReelly = () => {
     developerName: filters.developerName || undefined,
   });
 
-  // Flatten paginated data
-  const projects = flattenReellyProjects(data);
-  const totalCount = getReellyProjectsTotal(data);
+  // Local DB fallback search (for projects not found in Reelly API)
+  const { data: localResults } = useLocalProjectSearch(debouncedSearch);
+
+  // Flatten paginated data and merge with local results
+  const reellyProjects = flattenReellyProjects(data);
+  const reellyTotal = getReellyProjectsTotal(data);
+
+  const projects = useMemo(() => {
+    if (!debouncedSearch || !localResults?.length) return reellyProjects;
+    const reellySlugs = new Set(reellyProjects.map(p => p.slug));
+    const uniqueLocal = localResults.filter(p => !reellySlugs.has(p.slug));
+    return [...reellyProjects, ...uniqueLocal];
+  }, [reellyProjects, localResults, debouncedSearch]);
+
+  const totalCount = debouncedSearch && localResults?.length
+    ? reellyTotal + (localResults.filter(p => !reellyProjects.some(rp => rp.slug === p.slug)).length)
+    : reellyTotal;
 
   // Apply URL params on mount
   useEffect(() => {
