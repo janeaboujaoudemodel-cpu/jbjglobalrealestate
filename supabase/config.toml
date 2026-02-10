@@ -261,3 +261,12 @@ verify_jwt = false
 
 [functions.enrich-project-test]
 verify_jwt = false
+
+[functions.provident-batch-extract]
+verify_jwt = false
+
+[functions.reelly-bulk-enrich]
+verify_jwt = false
+
+[functions.provident-enrich-projects]
+verify_jwt = false

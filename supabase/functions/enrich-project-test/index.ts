@@ -203,7 +203,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
           project_id: project.id,
           image_url: img.url,
           alt_text: img.alt_text || `${project.name} image ${i + 1}`,
-          sort_order: (imageCount || 0) + i,
+          display_order: (imageCount || 0) + i,
           data_source: "reelly_enrichment",
         }));
         await supabase.from("project_images").insert(newImages);
@@ -213,9 +213,9 @@ Deno.serve(async (req: Request): Promise<Response> => {
       if (enrichment.documents.length > 0) {
         const newDocs = enrichment.documents.map((doc) => ({
           project_id: project.id,
-          document_url: doc.url,
+          file_url: doc.url,
           document_type: doc.type,
-          document_name: doc.name || doc.type,
+          file_name: doc.name || doc.type,
           data_source: "reelly_enrichment",
         }));
         await supabase.from("project_documents").insert(newDocs);
