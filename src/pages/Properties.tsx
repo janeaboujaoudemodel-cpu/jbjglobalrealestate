@@ -192,6 +192,7 @@ const Properties = () => {
     const newTransaction = searchParams.get('transaction') as 'buy' | 'rent' | null;
     const newStatus = searchParams.get('status');
     const developerParam = searchParams.get('developer');
+    const areaParam = searchParams.get('area');
     const keywordParam =
       searchParams.get('q') ||
       searchParams.get('keyword') ||
@@ -230,13 +231,14 @@ const Properties = () => {
       newTransaction === 'rent' ? 'rent' : 'buy';
 
     // Apply filters if any URL params exist
-    if (newTransaction || newStatus || developerIdFromUrl || keywordParam) {
+    if (newTransaction || newStatus || developerIdFromUrl || keywordParam || areaParam) {
       const updated: ExtendedFilterState = {
         ...defaultExtendedFilters,
         transactionType: tx,
         completionStatus: newStatus || null,
         developerId: developerIdFromUrl,
         search: keywordParam ?? "",
+        trendingArea: areaParam || null,
       };
       setFilters(updated);
       setAppliedFilters(updated);

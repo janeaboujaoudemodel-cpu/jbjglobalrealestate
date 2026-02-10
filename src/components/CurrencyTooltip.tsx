@@ -1,18 +1,27 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { X, DollarSign } from "lucide-react";
 
 const STORAGE_KEY = "currency_tooltip_dismissed";
 
 export function CurrencyTooltip() {
   const [show, setShow] = useState(false);
+  const location = useLocation();
+
+  // Only show on properties pages where currency selector actually exists
+  const isPropertiesPage = location.pathname === "/properties" || location.pathname === "/properties-reelly";
 
   useEffect(() => {
+    if (!isPropertiesPage) {
+      setShow(false);
+      return;
+    }
     const dismissed = localStorage.getItem(STORAGE_KEY);
     if (!dismissed) {
       const timer = setTimeout(() => setShow(true), 2000);
       return () => clearTimeout(timer);
     }
-  }, []);
+  }, [isPropertiesPage]);
 
   const dismiss = () => {
     setShow(false);

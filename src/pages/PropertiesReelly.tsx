@@ -146,15 +146,21 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
     useEffect(() => {
       const keywordParam = searchParams.get('q') || searchParams.get('keyword') || searchParams.get('search');
       const emirateParam = searchParams.get('emirate') || searchParams.get('location');
+      const areaParam = searchParams.get('area');
       // Support both 'status' and 'saleStatus' from HeroSearchBar
       const statusParam = searchParams.get('saleStatus') || searchParams.get('status');
       // Support 'constructionStatus' from HeroSearchBar
       const constructionParam = searchParams.get('constructionStatus');
       
-      if (keywordParam || emirateParam || statusParam || constructionParam) {
+      // Convert area slug to search term (e.g. "palm-jumeirah" → "Palm Jumeirah")
+      const areaSearch = areaParam
+        ? areaParam.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+        : null;
+      
+      if (keywordParam || emirateParam || statusParam || constructionParam || areaSearch) {
         const updated: FilterState = {
           ...defaultFilters,
-          search: keywordParam ?? '',
+          search: keywordParam ?? areaSearch ?? '',
           emirate: emirateParam,
           saleStatus: statusParam,
           constructionStatus: constructionParam,
