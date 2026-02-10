@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import { T } from "@/components/ui/T";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
-import burjAlArabVideo from "@/assets/videos/why-dubai-burj-al-arab.mp4";
-// Use the day-to-night drone shot for Burj Khalifa (moving/aerial) - replaces Dubai Frame
-import burjKhalifaVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
-import atlantisPalmVideo from "@/assets/videos/why-dubai-atlantis-palm.mp4";
+// Use URL references instead of static imports to avoid blocking the bundle
+const burjAlArabVideo = new URL("@/assets/videos/why-dubai-burj-al-arab.mp4", import.meta.url).href;
+const burjKhalifaVideo = new URL("@/assets/videos/burj-khalifa-day-to-night.mp4", import.meta.url).href;
+const atlantisPalmVideo = new URL("@/assets/videos/why-dubai-atlantis-palm.mp4", import.meta.url).href;
 
 const scenes = [
   { src: burjAlArabVideo },
