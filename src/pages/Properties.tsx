@@ -519,7 +519,7 @@ const Properties = () => {
           </div>
 
           {/* Second Row - All Filters in Two Lines for Readability */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 mt-3 md:mt-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3 mt-3 md:mt-4">
             {/* Location - All 7 Emirates */}
             <Select
               value={filters.emirate || "all"}
@@ -671,7 +671,7 @@ const Properties = () => {
           </div>
 
           {/* Third Row - Display Mode, Sale Status, Premium, Advanced Filters */}
-          <div className="flex items-center gap-2 sm:gap-3 mt-3 md:mt-4 flex-wrap">
+          <div className="flex items-center gap-2 md:gap-2 sm:gap-3 mt-3 md:mt-4 flex-wrap">
             {/* Display Mode Toggle */}
             <DisplayModeToggle
               value={displayMode}
@@ -1000,7 +1000,7 @@ const Properties = () => {
             </button>
           </div>
 
-          <div className="flex items-center justify-center gap-2 mt-5">
+          <div className="flex items-center justify-center gap-2 mt-5 flex-wrap">
             {[
               { value: "newest", label: "Newest" },
               { value: "oldest", label: "Oldest" },
@@ -1069,13 +1069,13 @@ const Properties = () => {
 
             {/* Projects Grid - Inside active layer - 2-3 cards per row for wider balanced layout */}
             {isLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8 p-2 sm:p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-2 sm:p-4">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl h-[400px] sm:h-[480px] animate-pulse border-2 border-gold/30" />
+                  <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl h-[400px] sm:h-[460px] animate-pulse border-2 border-gold/30" />
                 ))}
               </div>
             ) : sortedProjects.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8 p-2 sm:p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-2 sm:p-4">
                 {sortedProjects.map((project, index) => {
                   // Insert featured ads after specific positions (after 6, 12, 18 cards)
                   const adAfterIndex = [5, 11, 17]; // 0-indexed: after 6th, 12th, 18th card
