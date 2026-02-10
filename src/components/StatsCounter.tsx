@@ -87,12 +87,15 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible, language,
     };
   }, [isVisible, end]);
 
-  // Format large numbers with abbreviation (1M+ for millions)
+  // Format numbers - use abbreviated format (M) throughout animation when target is >= 1M
   const formatNumber = (num: number): string => {
-    if (num >= 1000000) {
-      const millions = (num / 1000000).toFixed(0);
+    // If target is >= 1M, always use abbreviated M format to prevent layout shift
+    if (end >= 1000000) {
+      const millions = num / 1000000;
       const abbr = language === 'ar' ? 'م' : 'M';
-      const formatted = language === 'ar' ? toArabicNumerals(millions) : millions;
+      const formatted = millions >= 1 
+        ? (language === 'ar' ? toArabicNumerals(millions.toFixed(0)) : millions.toFixed(0))
+        : (language === 'ar' ? toArabicNumerals(millions.toFixed(1)) : millions.toFixed(1));
       return `${formatted}${abbr}`;
     }
     const formatted = num.toLocaleString('en-US');
@@ -123,7 +126,7 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible, language,
         
         {/* Counter Value */}
         <div 
-          className="text-2xl md:text-3xl lg:text-4xl font-semibold text-black mb-1"
+          className="text-2xl md:text-3xl lg:text-4xl font-semibold text-black mb-1 min-w-[80px]"
           style={{ fontFamily: "Poppins, sans-serif" }}
         >
           {formattedValue}
