@@ -55,28 +55,41 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
   try {
     const body = await req.json();
-    const { slug, action, mode, batch_size } = body;
+    const { slug, action, mode, batch_size, source } = body;
 
     // ── Batch mode: process multiple projects ──
     if (mode === "batch") {
       const limit = Math.min(batch_size || 10, 25);
+      const isProvidentOnly = source === "provident_only";
 
-      // Find projects needing enrichment (missing amenities, few images, no FAQs, etc.)
-      const { data: projects, error: queryErr } = await supabase
+      // Build query - optionally filter to provident-sourced projects only
+      let projectQuery = supabase
         .from("projects")
         .select("id, name, slug, reelly_id, amenities, faqs, floor_plan_types, description, usp_bullets")
         .eq("status", "published")
-        .or("amenities.is.null,faqs.is.null,floor_plan_types.is.null,description.is.null,usp_bullets.is.null")
-        .limit(limit);
+        .or("amenities.is.null,faqs.is.null,floor_plan_types.is.null,description.is.null,usp_bullets.is.null");
+
+      if (isProvidentOnly) {
+        // Only enrich projects that have a provident source URL
+        projectQuery = projectQuery.ilike("source_url", "%provident%");
+      }
+
+      const { data: projects, error: queryErr } = await projectQuery.limit(limit);
 
       if (queryErr) return json(500, { error: queryErr.message });
 
       // Count remaining
-      const { count: remaining } = await supabase
+      let remainingQuery = supabase
         .from("projects")
         .select("id", { count: "exact", head: true })
         .eq("status", "published")
         .or("amenities.is.null,faqs.is.null,floor_plan_types.is.null,description.is.null,usp_bullets.is.null");
+
+      if (isProvidentOnly) {
+        remainingQuery = remainingQuery.ilike("source_url", "%provident%");
+      }
+
+      const { count: remaining } = await remainingQuery;
 
       if (!projects || projects.length === 0) {
         return json(200, { success: true, processed: 0, enriched: 0, errors: 0, remaining: 0, message: "All projects enriched!" });
