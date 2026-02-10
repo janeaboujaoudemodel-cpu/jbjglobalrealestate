@@ -13,7 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties'];
+const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC'];
 
 const formatPrice = (price: number): string => {
   if (price >= 1000000) {
@@ -92,7 +92,7 @@ function useFeaturedProjects() {
       };
 
       // Strict round-robin: 1 per developer
-      addOne('Emaar');
+      addOne('DAMAC');
       addOne('ALDAR');
       addOne('Omniyat');
       addOne('Sobha', 'pinnacle');
