@@ -1,114 +1,111 @@
 
 
-# Add "High Demand" Label + Real Photos/Descriptions for Areas
+# News System Overhaul + Provident/Reelly Source Audit
 
-## Overview
-Add a new `is_high_demand` boolean column to the `areas` table, display it as a badge on area cards and hero sections, and populate real photos and descriptions for areas currently missing them (like Dubai Islands).
+## Part 1: Replace Static Fake News with Real AI-Collected News
+
+### Problem
+The News page (`src/pages/News.tsx`) has 9 hardcoded static news articles with fake Unsplash images and fabricated content. The `market_news` database table is empty, so the page always falls back to these fake articles.
+
+### Solution
+1. **Delete all static fallback articles** from `News.tsx` (lines 12-94, the `staticNewsArticles` array). Replace with an empty-state message prompting the user to click "Refresh News" to collect real articles.
+
+2. **Expand the `ai-news-collector` edge function** to include more sources as requested:
+   - Keep existing: Dubai Land Department, RERA, UAE Ministry of Economy, Dubai Media Office, WAM
+   - Add new: Abu Dhabi Media Office, Dubai Chamber of Commerce, Arabian Business / Economy Middle East, Property Finder Research, Zawya Real Estate, Gulf News Property
+   - Each source gets its category (Policy, Economic, Market Update, etc.)
+
+3. **Add source badge on news cards** -- each card will display the official source name (e.g., "Dubai Land Department", "RERA", "Gulf News") as a small badge. These are real journalism/government sources, which is appropriate.
+
+4. **Internal news detail page** -- currently "Read More" links externally via `source_url`. Instead, create a `/news/:id` route that shows the full article content internally. The source attribution at the bottom will say "Source: Dubai Land Department" etc. The external `source_url` can be a small "Original Source" link at the bottom of the article, not prominent.
+
+### New file: `src/pages/NewsDetail.tsx`
+- Fetches article by ID from `market_news` table
+- Displays full content, hero image, source attribution, date, category
+- Premium champagne card layout matching the site design
+
+### Modified: `src/pages/News.tsx`
+- Remove `staticNewsArticles` array entirely
+- Card clicks navigate to `/news/${article.id}` instead of external links
+- Show source name on each card (RERA, DLD, etc.)
+- Better empty state when no DB articles exist
+
+### Modified: `supabase/functions/ai-news-collector/index.ts`
+- Add 6+ new authorized sources
+- Ensure images are sourced from Unsplash stock photos related to Dubai (not fake)
+- Better error handling for when Perplexity/Firecrawl credits are exhausted
+
+### Modified: `src/App.tsx`
+- Add route: `/news/:id` -> `NewsDetail`
 
 ---
 
-## 1. Database: Add `is_high_demand` Column
+## Part 2: Full Audit -- Remove ALL Provident/Reelly References from Public UI
 
-Add a new boolean column `is_high_demand` (default `false`) to the `areas` table. Then set it to `true` for high-demand areas like Dubai Islands, Business Bay, JVC, Dubai Hills, Downtown Dubai, and Palm Jumeirah.
+### Files with public-facing Provident/Reelly text (code comments are fine, visible text is NOT):
 
-**Migration SQL:**
-```sql
-ALTER TABLE areas ADD COLUMN is_high_demand boolean DEFAULT false;
-UPDATE areas SET is_high_demand = true WHERE slug IN (
-  'dubai-islands', 'business-bay', 'jvc-jumeirah-village-circle',
-  'dubai-hills', 'downtown-dubai', 'palm-jumeirah'
-);
--- Also mark Dubai Islands as trending
-UPDATE areas SET is_trending = true WHERE slug = 'dubai-islands';
+| File | Issue | Fix |
+|------|-------|-----|
+| `src/components/DeveloperPartnersMarquee.tsx` | Comments say "extracted from Provident Homepage" (lines 6-8, 36) | Change comments to neutral wording like "Additional featured partners" |
+| `src/components/ProjectCard.tsx` | Comment "Navigation Arrows - Always Visible (Provident style)" (line 213) | Change to "Navigation Arrows - Always Visible" |
+| `src/components/project-detail/DataFreshnessIndicator.tsx` | Code maps "reelly"/"provident" to "Verified" (lines 50-51) | Already correct -- maps to "Verified", not showing raw source name. No change needed. |
+| `src/components/project-detail/FloorPlanGallery.tsx` | Comment "Matches Provident's floor plan section" (line 32) | Change to "Floor plan section with bedroom type buttons" |
+| `src/components/project-detail/CallToActionSection.tsx` | Comment "matching Provident's..." (line 45) | Change to neutral description |
+| `src/components/project-detail/ProjectBreadcrumb.tsx` | Comment "Matches Provident's structure" (line 18) | Change to neutral |
+| `src/components/project-detail/NewsletterSection.tsx` | Comment "matching Provident's..." (line 20) | Change to neutral |
+| `src/components/project-detail/PaymentPlanVisualization.tsx` | Comment "Reelly-style" (line 218) | Change to "Milestone-style" |
+| `src/components/FeaturedProjectAd.tsx` | Comment "Matches Provident Estate's sidebar" (lines 16-17) | Change to neutral |
+| `src/components/home/HeroSearchBar.tsx` | Comments "Reelly API", "Reelly Parity", "Reelly-style" (lines 90, 404, 764, 806, 829) | Change all to neutral descriptions |
+| `src/components/filters/SaleStatusFilter.tsx` | Comment "Reelly-style" (line 2) | Change to neutral |
+| `src/pages/Properties.tsx` | Comment "Reelly API" (line 144), "like Provident" (line 1080) | Change to neutral |
+| `src/pages/AreaGuides.tsx` | Comment "Reelly-synced" (line 3) | Change to "Database-synced" |
+| `src/lib/imageUtils.ts` | Domain whitelist has "reelly.io", "provident.ae" (lines 43-45) -- internal only, not visible | Keep -- these are backend image domain trusts, never shown to users |
+
+### Summary of Part 2
+- ~15 files with code comments referencing Provident/Reelly -- all will be neutralized
+- No user-visible text currently shows "Provident" or "Reelly" (DataFreshnessIndicator already maps to "Verified")
+- Internal/admin pages (SyncDashboard, ProvidentSyncButton, etc.) are admin-only and won't be changed
+
+---
+
+## Technical Details
+
+### New Route
+```
+/news/:id -> NewsDetail (lazy loaded)
 ```
 
----
+### NewsDetail.tsx structure
+- Fetches single article from `market_news` by UUID
+- Hero image with gradient overlay
+- Article title, category badge, date, source badge
+- Full `content` field rendered as paragraphs
+- "Source: [Official Name]" attribution at bottom
+- Back button to /news
 
-## 2. Database: Populate Missing Photos and Descriptions
-
-Update areas that currently have `NULL` image/description with real data. For Dubai Islands and other key areas missing content, insert real Unsplash/stock hero images and premium 1-2 sentence descriptions.
-
-**Example for Dubai Islands:**
-```sql
-UPDATE areas SET
-  image_url = 'https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800&q=80',
-  hero_image_url = 'https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=80',
-  description = 'Dubai Islands is a premier waterfront destination featuring luxury residences, pristine beaches, and world-class retail along the Arabian Gulf coastline.'
-WHERE slug = 'dubai-islands';
-```
-
-Similar updates for: Dubailand Residence Complex, JVT, Arjan, Abu Dhabi, Meydan, Jebel Ali Village, Al Marjan Island, Dubai Hills, Al Furjan, and others missing images.
-
----
-
-## 3. TypeScript: Update Area Interface
-
-In `src/hooks/useAreas.ts`, add `is_high_demand` to the `Area` interface:
+### ai-news-collector expanded sources
 ```typescript
-is_high_demand: boolean;
+const AUTHORIZED_NEWS_SOURCES = [
+  // Existing
+  { name: "Dubai Land Department", ... },
+  { name: "RERA", ... },
+  { name: "UAE Ministry of Economy", ... },
+  { name: "Dubai Media Office", ... },
+  { name: "Emirates News Agency (WAM)", ... },
+  // New
+  { name: "Abu Dhabi Media Office", url: "https://mediaoffice.abudhabi/en", category: "Government" },
+  { name: "Dubai Chamber of Commerce", url: "https://www.dubaichamber.com/news", category: "Economic" },
+  { name: "Arabian Business", url: "https://www.arabianbusiness.com/industries/real-estate", category: "Market Update" },
+  { name: "Gulf News Property", url: "https://gulfnews.com/living-in-uae/property", category: "Market Update" },
+  { name: "Zawya", url: "https://www.zawya.com/en/business/real-estate", category: "Analysis" },
+  { name: "Khaleej Times", url: "https://www.khaleejtimes.com/business/real-estate", category: "Market Update" },
+];
 ```
 
----
-
-## 4. UI: "High Demand" Badge on Area Cards (AreaGuides.tsx)
-
-Next to the existing "TRENDING" badge on area cards, add a red/orange "HIGH DEMAND" badge when `is_high_demand` is true:
-```tsx
-{area.is_high_demand && (
-  <Badge className="bg-gradient-to-r from-red-600 to-orange-500 text-white px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg">
-    <Flame className="w-3 h-3 mr-1" />
-    HIGH DEMAND
-  </Badge>
-)}
-```
-
-Position it below or beside the trending badge in the top-right corner of the card photo.
-
----
-
-## 5. UI: "High Demand" Badge on Area Detail Hero (AreaHeroSection.tsx)
-
-Add a "High Demand" pill next to the existing "Trending" pill in the hero section:
-```tsx
-{area.is_high_demand && (
-  <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 bg-red-500/20 text-red-400 text-xs rounded-full">
-    <Flame className="w-3 h-3" />
-    High Demand
-  </span>
-)}
-```
-
----
-
-## 6. UI: Stats Row on Cards
-
-Add a "High Demand" indicator in the stats row at the bottom of area cards (alongside Trending):
-```tsx
-{area.is_high_demand && (
-  <div className="flex items-center gap-1">
-    <Flame className="w-3.5 h-3.5 text-red-500" />
-    <span className="text-red-500">High Demand</span>
-  </div>
-)}
-```
-
----
-
-## Files to Modify
-
-| File | Change |
-|------|--------|
-| Database migration | Add `is_high_demand` column, set values, populate missing images/descriptions |
-| `src/hooks/useAreas.ts` | Add `is_high_demand: boolean` to Area interface |
-| `src/pages/AreaGuides.tsx` | Add High Demand badge on cards (photo overlay + stats row) |
-| `src/components/area-detail/AreaHeroSection.tsx` | Add High Demand pill next to Trending |
-| `src/components/home/AreasWeCover.tsx` | No change needed (text-only grid, no badges) |
-
----
-
-## Summary
-- New DB column `is_high_demand` with data for 6+ areas
-- Real photos and descriptions populated for all areas missing them
-- Red/orange "HIGH DEMAND" badge with flame icon shown on cards and hero sections
-- Works alongside existing "TRENDING" badge -- areas can be both trending and high demand
+### Files to modify (total ~18)
+- `src/pages/News.tsx` -- remove static articles, add internal linking
+- `src/pages/NewsDetail.tsx` -- NEW
+- `src/App.tsx` -- add route
+- `supabase/functions/ai-news-collector/index.ts` -- expand sources
+- ~14 component files -- neutralize Provident/Reelly comments
 
