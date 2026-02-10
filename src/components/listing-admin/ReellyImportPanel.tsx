@@ -115,6 +115,7 @@ interface EnrichmentTestResult {
   after?: EnrichmentSnapshot;
   sources?: {
     reelly: { available: boolean; url?: string; fields_found?: Record<string, number>; reason?: string };
+    provident?: { available: boolean; slug_used?: string; fields_found?: Record<string, number>; reason?: string };
   };
   applied?: boolean;
   error?: string;

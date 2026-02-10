@@ -14,6 +14,7 @@ import { toast } from "sonner";
 interface ModeSwitcherProps {
   variant?: 'header' | 'compact' | 'full';
   className?: string;
+  showForUnselected?: boolean;
 }
 
 const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: typeof User; color: string; bgColor: string; borderColor: string; description: string }> = {
@@ -46,13 +47,13 @@ const MODE_CONFIG: Record<UserMode, { label: string; shortLabel: string; icon: t
   }
 };
 
-export const ModeSwitcher = ({ variant = 'header', className }: ModeSwitcherProps) => {
+export const ModeSwitcher = ({ variant = 'header', className, showForUnselected = false }: ModeSwitcherProps) => {
   const { mode, isLoading, setMode } = useUserModeContext();
   const { hasSelectedRole } = useUserRole();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Don't show mode switcher if user hasn't selected a role yet
-  if (!hasSelectedRole) return null;
+  // Don't show mode switcher if user hasn't selected a role yet (unless forced)
+  if (!hasSelectedRole && !showForUnselected) return null;
 
   const handleModeChange = async (newMode: UserMode) => {
     await setMode(newMode);
