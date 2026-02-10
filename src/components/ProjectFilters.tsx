@@ -1099,8 +1099,8 @@ const QuickFilterChip = forwardRef<HTMLButtonElement, {
     onClick={onClick}
     className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
       active
-        ? "bg-white text-black shadow-sm"
-        : "bg-zinc-900 text-zinc-300 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700"
+        ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+        : "bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50 hover:bg-white"
     }`}
   >
     {label}
