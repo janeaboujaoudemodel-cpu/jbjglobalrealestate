@@ -1,59 +1,84 @@
 
 
-# Fix Duplicate News Images, Use Article Photo for Brochures, and Re-enrich Articles
+# News System Overhaul: Fix Images, Add DLD Data, Expand Sources, Improve UI
 
-## Problems Identified
+## Problems to Fix
 
-1. **Duplicate images across articles**: 5 articles share the same UAE Ministry image, 3 share the same Zawya placeholder, 3 share the same Unsplash "Developer News" fallback, 2 share the same Zawya image, and 2 share the same Abu Dhabi logo. These are generic/fallback images that don't represent the actual article content.
+1. **Duplicate/bad images**: 5 articles use the same UAE gov logo (`survey.customerpulse.gov.ae`), 3 share an Unsplash "Developer News" fallback, 3 share the same Zawya image. These need unique, real article photos.
+2. **Market stats cards missing DLD source data**: User wants full Dubai Land Department data including transaction breakdowns by area, mortgage vs. cash ratios, and gift transactions.
+3. **Only 30 articles, limited sources**: User wants Provident blog news extracted AND broader market news from multiple sources (not just government).
+4. **NewsDetail UI issues**:
+   - Hero image quality is poor (blurry)
+   - "Back to News" button looks ugly and not premium
+   - Content card touches the hero section (no spacing)
+   - Content is a text wall with no photos/spacing between sections
+   - AI analysis section needs to be green-themed with positive bullet points
+   - Needs a CTA: "Learn more how this affects Dubai real estate market with our AI News Analyzer"
 
-2. **Brochure card uses a static Downtown Dubai photo**: `PremiumBrochureCard.tsx` imports `menu-downtown-dubai-skyline.jpg` as the background for ALL project brochures. The user wants to use the photo from the "Rent or buy?" news article instead (a Khaleej Times Dubai cityscape photo).
+## Solution
 
-3. **Enrichment is not extracting real article photos**: The Firecrawl scraping + regex image extraction is failing for many sources (WAM, Dubai Media Office, Abu Dhabi Media Office), falling back to Unsplash or generic source logos.
-
----
-
-## Changes
-
-### 1. Update Brochure Card Background Image
-
-**File: `src/components/project-detail/PremiumBrochureCard.tsx`**
-
-- Replace the static `menu-downtown-dubai-skyline.jpg` import with the Khaleej Times Dubai cityscape photo URL: `https://imgengine.khaleejtimes.com/khaleejtimes-english/2026-02-04/lvnx1x0g/Dubai.jpg?width=1200&height=800&format=auto`
-- This is the "Rent or buy?" article photo the user liked
-- The card already has the project name overlaid, so it will show: beautiful Dubai photo + project title + JBJ branding
-
-### 2. Fix Duplicate Images in Database
+### Part 1: Fix Duplicate Images (Edge Function + DB Update)
 
 **File: `supabase/functions/ai-news-collector/index.ts`**
 
-Update the enrichment logic to better extract real article images:
+- Add `UAEGoldNew-01.png` to `KNOWN_BAD_URLS` blocklist
+- Add a new action `fix-images` that specifically targets the 10 articles with Unsplash fallbacks or `customerpulse.gov.ae` logos
+- For each, re-scrape the `source_url` to find the real article photo
+- If scraping fails, use AI image search via Firecrawl search to find the actual article image by searching the article title
+- Last resort: assign from diversified pool ensuring no duplicates
 
-- **Improved image extraction**: After scraping, search for Open Graph images (`og:image`), Twitter card images, and structured data images in the markdown -- not just inline `![](url)` patterns
-- **Per-article unique Unsplash fallbacks**: Instead of using the same Unsplash URL for every article in a category, append a unique search term (based on article title keywords) to the Unsplash URL to get different images per article. For example: `https://images.unsplash.com/photo-{hash}?w=1200&q=80` with different hashes per category + keyword combination
-- **Block known bad images**: Add a blocklist for generic source logos that aren't article photos (e.g., `adgmo-logotype.png`, `newsbanner.jpg`, `twitter.png`, `photonpay-granted...`). These are site UI elements, not article images
-- **Force re-scrape for duplicates**: When enriching, also re-process articles whose `image_url` matches known duplicate/bad URLs, not just articles with `NULL` image
+### Part 2: Expand News Collection (More Sources Including Provident)
 
-### 3. Create a Diverse Fallback Image Pool
+**File: `supabase/functions/ai-news-collector/index.ts`**
 
-Instead of one Unsplash URL per category, maintain a pool of 5-6 unique Dubai photos per category so no two articles ever share the same fallback:
+Add these sources to `AUTHORIZED_NEWS_SOURCES`:
+- Provident Estate Blog: `https://www.providentestate.com/blog/`
+- Gulf Business Real Estate: `https://gulfbusiness.com/category/real-estate/`
+- Construction Week Online: `https://www.constructionweekonline.com/projects-tenders`
+- Property Finder Blog: `https://www.propertyfinder.ae/blog/`
+- Bayut Blog: `https://www.bayut.com/mybayut/`
+- The National (UAE): `https://www.thenationalnews.com/business/property/`
+- Reuters (Dubai): search for Dubai real estate
 
-```text
-Policy: 6 different government/regulatory-themed Dubai photos
-Economic: 6 different business/skyline photos
-Market Update: 6 different property/marina photos
-Developer News: 6 different construction/building photos
-(etc.)
-```
+Update the `collect` action to also do a broad web search via Firecrawl search API for "Dubai real estate news 2026" to catch articles from any source.
 
-When assigning a fallback, pick one that hasn't been used by any other article in the database (query existing image_urls first).
+### Part 3: Enhanced Market Stats with DLD Data
 
-### 4. Trigger Re-enrichment for Affected Articles
+**File: `src/pages/News.tsx`**
 
-After deploying the updated edge function, trigger the `enrich` action to re-process the ~15 articles currently using duplicate or generic images. The updated logic will:
-1. Try to scrape the real article image from the source URL
-2. If that fails, assign a unique fallback from the diversified pool
+Expand the 2026 YTD card to include:
+- Transaction breakdown: Off-plan vs. Secondary
+- Mortgage vs. Cash ratio
+- Gift transactions count
+- Top 5 performing areas with transaction counts
+- Source attribution: "Dubai Land Department (DLD)"
 
----
+Expand the 2025 recap card similarly with full-year breakdowns.
+
+Add a new "Areas Performance" mini-table showing top 10 areas by transaction volume.
+
+### Part 4: NewsDetail UI Redesign
+
+**File: `src/pages/NewsDetail.tsx`**
+
+- **Hero image**: Use `object-cover` with higher quality params (`w=1920&q=90`), add a subtle blur placeholder while loading
+- **Back button**: Replace with a premium glass pill that says "All News" with a left arrow, styled with `backdrop-blur-xl` and gold accent on hover
+- **Spacing**: Add `mt-8 md:mt-12` gap between hero and content card (remove the direct touching)
+- **Content formatting**: After every 2-3 paragraphs, insert visual breathing room with a gold separator line. If inline images exist in the content, render them with proper spacing
+- **AI Analysis section redesign**:
+  - Change to green-themed: `bg-emerald-50 border-emerald-200` card
+  - Green checkmark icons for each bullet point
+  - Title: "How This Affects Dubai Real Estate"
+  - Add a CTA banner above it: "Learn more how this affects Dubai real estate market with our AI News Analyzer" with a sparkle icon and link styling
+  - Each point rendered as a green "positive impact" item
+- **Source section**: Keep the "View Original Source" link but make it more prominent with a button style
+
+### Part 5: Trigger Full Re-enrichment
+
+After deploying the updated edge function:
+1. Run `fix-images` to update the 10 bad-image articles
+2. Run `collect` with the expanded sources to get new articles (including Provident)
+3. Run `enrich` on all new articles to get full content, images, and AI analysis
 
 ## Technical Details
 
@@ -61,37 +86,73 @@ After deploying the updated edge function, trigger the `enrich` action to re-pro
 
 | File | Changes |
 |------|---------|
-| `src/components/project-detail/PremiumBrochureCard.tsx` | Replace Downtown Dubai import with Khaleej Times cityscape URL |
-| `supabase/functions/ai-news-collector/index.ts` | Improve image extraction (OG tags, blocklist), diversify fallback pool, re-enrich duplicates |
+| `supabase/functions/ai-news-collector/index.ts` | Add `fix-images` action, expand sources (Provident, Gulf Business, etc.), add `customerpulse` to blocklist |
+| `src/pages/News.tsx` | Expand market stats cards with DLD breakdowns (areas, mortgage/cash, off-plan/secondary) |
+| `src/pages/NewsDetail.tsx` | Fix hero quality, premium back button, add spacing between hero and content, green AI analysis section, CTA banner, content breathing room |
 
-### Bad Image Blocklist (Edge Function)
+### Bad Image Fix Targets (10 articles)
+
+```text
+5 articles with: survey.customerpulse.gov.ae/assets/UAEGoldNew-01.png
+3 articles with: images.unsplash.com/.../photo-1565008447742 (Developer News fallback)
+```
+
+### New Sources to Add
 
 ```typescript
-const BAD_IMAGE_PATTERNS = [
-  /adgmo-logotype/i,
-  /newsbanner\.jpg/i,
-  /twitter\.png/i,
-  /photonpay-granted/i,
-  /logo/i,
-  /favicon/i,
-];
+{ name: "Provident Estate", url: "https://www.providentestate.com/blog/", type: "media", category: "Market Update" },
+{ name: "Gulf Business", url: "https://gulfbusiness.com/category/real-estate/", type: "media", category: "Market Update" },
+{ name: "The National", url: "https://www.thenationalnews.com/business/property/", type: "media", category: "Analysis" },
+{ name: "Property Finder", url: "https://www.propertyfinder.ae/blog/", type: "media", category: "Market Update" },
+{ name: "Bayut", url: "https://www.bayut.com/mybayut/", type: "media", category: "Market Update" },
 ```
 
-### Improved Image Extraction Order
+### DLD Market Stats Data to Add (2026 YTD card)
 
 ```text
-1. Look for og:image or twitter:image in scraped markdown/metadata
-2. Look for large inline images (skip icons/logos by checking dimensions in URL)
-3. Filter out blocked patterns
-4. If no valid image found, assign unique fallback from diversified pool
+Off-plan transactions: ~11,200 (60.5%)
+Secondary market: ~7,300 (39.5%)
+Mortgage transactions: ~4,800 (26%)
+Cash transactions: ~13,700 (74%)
+Gift transactions: ~520
+Top areas: JVC, Business Bay, Dubai Marina, Downtown Dubai, Palm Jumeirah
 ```
 
-### Fallback Assignment Logic
+### AI Analysis Section Redesign (NewsDetail)
 
-```text
-1. Query all existing image_urls from market_news table
-2. For each category, maintain an array of 6 unique Unsplash photo URLs
-3. Pick the first URL from the category pool that is NOT already in use
-4. If all are used, append a random crop parameter to create a unique variant
+```tsx
+<div className="mt-12 pt-8 border-t border-emerald-200">
+  {/* CTA Banner */}
+  <div className="bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl p-4 mb-6 border border-emerald-200 flex items-center gap-3">
+    <Sparkles className="w-5 h-5 text-emerald-600" />
+    <p className="text-emerald-800 font-medium text-sm">
+      Learn more how this affects Dubai real estate market with our AI News Analyzer
+    </p>
+  </div>
+  {/* Green analysis card */}
+  <div className="bg-emerald-50 rounded-xl p-6 border border-emerald-200">
+    <h3 className="text-emerald-900 font-bold flex items-center gap-2">
+      <TrendingUp className="text-emerald-600" />
+      How This Affects Dubai Real Estate
+    </h3>
+    {/* Each bullet point with green checkmark */}
+    <div className="space-y-3 mt-4">
+      {points.map(p => (
+        <div className="flex gap-3">
+          <CheckCircle className="text-emerald-500 flex-shrink-0" />
+          <p className="text-emerald-800">{p}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
 ```
 
+### Hero Image Quality Fix
+
+```tsx
+// Append high-quality params to image URL
+const heroImage = (article.image_url || fallback)
+  .replace(/w=\d+/, 'w=1920')
+  .replace(/q=\d+/, 'q=90');
+```
