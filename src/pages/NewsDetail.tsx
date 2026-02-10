@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Calendar, Landmark, ExternalLink, Loader2, Newspaper, Sparkles, TrendingUp, CheckCircle } from "lucide-react";
+import { ArrowLeft, Calendar, Landmark, ExternalLink, Loader2, Newspaper, Sparkles, TrendingUp, CheckCircle, BarChart3, Lightbulb } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/SEOHead";
@@ -34,6 +34,8 @@ interface MarketNews {
   ai_generated: boolean;
   is_featured: boolean;
   ai_analysis: string | null;
+  key_stats: { label: string; value: string }[] | null;
+  key_takeaways: string[] | null;
 }
 
 /** Upgrade image URL to high quality */
@@ -50,35 +52,51 @@ function toHighQuality(url: string): string {
 
 /** Parse AI analysis into individual bullet points */
 function parseAnalysisPoints(html: string): string[] {
-  // Try to extract list items from the HTML
   const liMatches = html.match(/<li>(.*?)<\/li>/gs);
   if (liMatches && liMatches.length > 0) {
     return liMatches.map(li => li.replace(/<\/?[^>]+(>|$)/g, "").trim()).filter(Boolean);
   }
-  // Try bullet points from markdown (lines starting with - or * or numbers)
   const lines = html.replace(/<\/?[^>]+(>|$)/g, "\n").split("\n").map(l => l.trim()).filter(Boolean);
   const bullets = lines.filter(l => /^[-*•]\s|^\d+[.)]\s/.test(l)).map(l => l.replace(/^[-*•]\s+|^\d+[.)]\s+/, "").trim());
   if (bullets.length > 0) return bullets;
-  // Fallback: split into sentences
   return lines.filter(l => l.length > 20).slice(0, 4);
 }
 
-/** Insert gold separators between content paragraphs for breathing room */
+/** Extract pull quotes from content — first bold sentence from distinct sections */
+function extractPullQuotes(html: string): string[] {
+  const strongMatches = html.match(/<strong>(.*?)<\/strong>/g);
+  if (!strongMatches) return [];
+  const quotes = strongMatches
+    .map(s => s.replace(/<\/?strong>/g, "").trim())
+    .filter(s => s.length > 30 && s.length < 200)
+    .slice(0, 2);
+  return quotes;
+}
+
+/** Insert gold separators and pull quotes between content paragraphs */
 function addContentBreathing(html: string): string {
-  // Split by </p> and insert separator every 2-3 paragraphs
   const parts = html.split("</p>");
   if (parts.length <= 3) return html;
   
   const separator = `</p><div class="my-8 flex items-center justify-center gap-4"><div class="flex-1 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/20 to-transparent"></div><div class="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))]/30"></div><div class="flex-1 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/20 to-transparent"></div></div>`;
+  
+  // Extract pull quotes for inline insertion
+  const pullQuotes = extractPullQuotes(html);
+  let pullQuoteIndex = 0;
   
   const result: string[] = [];
   for (let i = 0; i < parts.length; i++) {
     result.push(parts[i]);
     if (i < parts.length - 1) {
       result.push("</p>");
-      // Insert separator every 3 paragraphs (after 2nd, 5th, 8th, etc.)
       if ((i + 1) % 3 === 0) {
-        result.push(separator);
+        // Insert pull quote if available, otherwise separator
+        if (pullQuoteIndex < pullQuotes.length) {
+          result.push(`<blockquote class="my-10 py-6 px-8 border-l-4 border-[hsl(var(--gold))] bg-gradient-to-r from-[hsl(var(--gold))]/5 to-transparent rounded-r-xl"><p class="text-lg md:text-xl font-medium text-zinc-800 italic leading-relaxed">"${pullQuotes[pullQuoteIndex]}"</p></blockquote>`);
+          pullQuoteIndex++;
+        } else {
+          result.push(separator);
+        }
       }
     }
   }
@@ -97,7 +115,13 @@ const NewsDetail = () => {
         .eq('id', id!)
         .single();
       if (error) throw error;
-      return data as MarketNews;
+      // Parse key_stats and key_takeaways
+      const raw = data as Record<string, unknown>;
+      return {
+        ...raw,
+        key_stats: Array.isArray(raw.key_stats) ? raw.key_stats : [],
+        key_takeaways: Array.isArray(raw.key_takeaways) ? raw.key_takeaways : [],
+      } as MarketNews;
     },
     enabled: !!id,
   });
@@ -138,6 +162,9 @@ const NewsDetail = () => {
     ? parseAnalysisPoints(article.ai_analysis)
     : [];
 
+  const keyStats = (article.key_stats || []) as { label: string; value: string }[];
+  const keyTakeaways = (article.key_takeaways || []) as string[];
+
   return (
     <>
       <SEOHead
@@ -145,7 +172,7 @@ const NewsDetail = () => {
         description={article.excerpt}
       />
       <article className="min-h-screen bg-black">
-        {/* Full-Screen Hero Image - High Quality */}
+        {/* Full-Screen Hero Image */}
         <div className="relative h-[80vh] md:h-[90vh] overflow-hidden">
           <img
             src={heroImage}
@@ -155,7 +182,6 @@ const NewsDetail = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
 
-          {/* Premium glass back button */}
           <div className="absolute top-6 left-6 z-10">
             <Link
               to="/news"
@@ -166,7 +192,6 @@ const NewsDetail = () => {
             </Link>
           </div>
 
-          {/* Title + badges overlaid on hero bottom */}
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
             <div className="container mx-auto max-w-4xl">
               <div className="flex items-center gap-3 mb-4 flex-wrap">
@@ -188,10 +213,9 @@ const NewsDetail = () => {
           </div>
         </div>
 
-        {/* Spacing gap between hero and content */}
         <div className="h-8 md:h-12 bg-black" />
 
-        {/* Article Body - Champagne 3-layer system */}
+        {/* Article Body */}
         <div className="jj-layer-2 !bg-transparent relative z-10">
           <div className="jj-layer-active rounded-2xl p-6 md:p-10 lg:p-14 max-w-4xl mx-auto">
             {/* Meta row */}
@@ -207,27 +231,69 @@ const NewsDetail = () => {
               </span>
             </div>
 
+            {/* Key Stats Banner */}
+            {keyStats.length > 0 && (
+              <div className="mb-8 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl p-5 border border-gold/30">
+                <div className="flex items-center gap-2 mb-4">
+                  <BarChart3 className="w-4 h-4 text-gold" />
+                  <span className="text-xs font-semibold text-black uppercase tracking-wider">Key Statistics</span>
+                </div>
+                <div className={`grid grid-cols-2 ${keyStats.length >= 3 ? 'md:grid-cols-' + Math.min(keyStats.length, 4) : 'md:grid-cols-2'} gap-4`}>
+                  {keyStats.slice(0, 4).map((stat, i) => (
+                    <div key={i} className="text-center bg-white/50 rounded-lg p-3 border border-gold/10">
+                      <p className="text-xl md:text-2xl font-bold text-gold">{stat.value}</p>
+                      <p className="text-xs text-zinc-600 mt-1">{stat.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Key Takeaways Box */}
+            {keyTakeaways.length > 0 && (
+              <div className="mb-8 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl p-5 border border-gold/20">
+                <div className="flex items-center gap-2 mb-4">
+                  <Lightbulb className="w-4 h-4 text-gold" />
+                  <span className="text-xs font-semibold text-black uppercase tracking-wider">Key Takeaways</span>
+                </div>
+                <div className="space-y-2.5">
+                  {keyTakeaways.map((point, i) => (
+                    <div key={i} className="flex gap-3 items-start">
+                      <div className="w-5 h-5 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-[10px] font-bold text-gold">{i + 1}</span>
+                      </div>
+                      <p className="text-sm text-zinc-700 leading-relaxed">{point}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Excerpt as highlighted quote */}
             <blockquote className="text-lg md:text-xl text-zinc-700 leading-relaxed mb-8 border-l-4 border-gold/50 pl-6 italic">
               {article.excerpt}
             </blockquote>
 
-            {/* Full content - rendered as HTML with breathing separators */}
+            {/* Full content with pull quotes and separators */}
             <div
               className="prose prose-lg max-w-none text-zinc-800 leading-relaxed
                 prose-headings:text-black prose-headings:font-bold
+                prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-gold/20 prose-h2:pb-2
+                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
                 prose-p:text-zinc-700 prose-p:leading-relaxed prose-p:mb-5
                 prose-strong:text-black
                 prose-a:text-gold prose-a:no-underline hover:prose-a:underline
                 prose-li:text-zinc-700
-                prose-img:rounded-xl prose-img:my-8 prose-img:shadow-lg"
+                prose-img:rounded-xl prose-img:my-8 prose-img:shadow-lg
+                prose-table:border-collapse prose-table:w-full
+                prose-th:bg-champagne-light/50 prose-th:text-left prose-th:p-3 prose-th:text-xs prose-th:font-semibold prose-th:uppercase prose-th:tracking-wider prose-th:text-zinc-600 prose-th:border prose-th:border-gold/20
+                prose-td:p-3 prose-td:border prose-td:border-gold/10 prose-td:text-sm"
               dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
 
             {/* AI Analysis Section - Green Theme */}
             {analysisPoints.length > 0 && (
               <div className="mt-12 pt-8 border-t border-emerald-200">
-                {/* CTA Banner */}
                 <div className="bg-gradient-to-r from-emerald-50 to-emerald-100/80 rounded-xl p-4 mb-6 border border-emerald-200 flex items-center gap-3">
                   <Sparkles className="w-5 h-5 text-emerald-600 flex-shrink-0" />
                   <p className="text-emerald-800 font-medium text-sm">
@@ -235,7 +301,6 @@ const NewsDetail = () => {
                   </p>
                 </div>
 
-                {/* Green analysis card */}
                 <div className="bg-emerald-50 rounded-xl p-6 md:p-8 border border-emerald-200">
                   <div className="flex items-center gap-3 mb-5">
                     <div className="w-10 h-10 rounded-lg bg-emerald-100 border border-emerald-200 flex items-center justify-center">
@@ -263,7 +328,7 @@ const NewsDetail = () => {
               </div>
             )}
 
-            {/* Source Attribution - Prominent button style */}
+            {/* Source Attribution */}
             <div className="mt-12 pt-8 border-t border-gold/20">
               <div className="jj-card-inner rounded-xl p-6">
                 <p className="text-sm text-zinc-500 mb-2">Source</p>
@@ -282,7 +347,6 @@ const NewsDetail = () => {
               </div>
             </div>
 
-            {/* Back to News - Clean centered */}
             <div className="mt-10 text-center">
               <Link to="/news">
                 <Button variant="primary" className="px-8">

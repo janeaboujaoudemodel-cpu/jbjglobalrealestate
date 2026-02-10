@@ -1,12 +1,10 @@
 /**
- * LeadCapturePopup - Auto-opens after 5 seconds on homepage
- * Collects name, email, phone, nationality, language, contact time, services for lead generation
- * Dismisses via localStorage so it only shows once per user
- * UI: Champagne/gold theme - LOCKED
+ * LeadCapturePopup - Smart behavior-based lead capture
+ * Uses useSmartPopupStrategy for intelligent timing & context-aware messaging
+ * Frequency caps: max 1/session, max 3 total, 3-day cooldown after dismiss
  */
 
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { X, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -20,8 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const DISMISS_KEY = "lead_popup_dismissed";
+import { useSmartPopupStrategy } from "@/hooks/useSmartPopupStrategy";
 
 const NATIONALITIES = [
   "UAE", "India", "Pakistan", "United Kingdom", "Russia", "China",
@@ -45,9 +42,9 @@ const SERVICES = [
 ];
 
 const LeadCapturePopup = () => {
+  const { shouldShow, headline, subtitle, markShown, markDismissed } = useSmartPopupStrategy();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const location = useLocation();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -59,17 +56,17 @@ const LeadCapturePopup = () => {
     service: "Buying",
   });
 
+  // Open popup when strategy says to show
   useEffect(() => {
-    if (location.pathname !== "/") return;
-    const dismissed = localStorage.getItem(DISMISS_KEY);
-    if (dismissed) return;
-    const timer = setTimeout(() => setIsOpen(true), 5000);
-    return () => clearTimeout(timer);
-  }, [location.pathname]);
+    if (shouldShow && !isOpen) {
+      setIsOpen(true);
+      markShown();
+    }
+  }, [shouldShow, isOpen, markShown]);
 
   const handleDismiss = () => {
     setIsOpen(false);
-    localStorage.setItem(DISMISS_KEY, Date.now().toString());
+    markDismissed();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -85,7 +82,7 @@ const LeadCapturePopup = () => {
         full_name: formData.name,
         email_lower: formData.email.toLowerCase(),
         phone_e164: formData.phone || null,
-        source: "homepage_popup",
+        source: "smart_popup",
         pipeline_stage: "new",
         nationality: formData.nationality || null,
         preferred_language: formData.language || null,
@@ -127,17 +124,17 @@ const LeadCapturePopup = () => {
               <X className="w-4 h-4 text-black/60" />
             </button>
 
-            {/* Header */}
+            {/* Header - Context-aware */}
             <div className="bg-gradient-to-r from-[#E8DCC8] to-[#D4C4A8] p-6 pb-4 border-b border-gold/30">
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="w-5 h-5 text-gold" />
                 <span className="text-xs uppercase tracking-[0.2em] font-semibold text-gold">Exclusive Access</span>
               </div>
               <h3 className="text-xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Unlock Premium Features
+                {headline}
               </h3>
               <p className="text-sm text-zinc-600 mt-1">
-                Get full access to AI tools, market reports, and exclusive listings.
+                {subtitle}
               </p>
             </div>
 
