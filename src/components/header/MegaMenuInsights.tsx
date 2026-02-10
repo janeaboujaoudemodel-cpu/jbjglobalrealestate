@@ -124,16 +124,11 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
 
   return (
     <MegaMenuShell ref={ref} noScroll>
-      {/* Scrollable container with max height to prevent cropping */}
-      <div 
-        className="overflow-y-auto"
-        style={{ maxHeight: 'calc(100dvh - 140px)' }}
-      >
-        <div className="max-w-[1400px] mx-auto px-4 lg:px-6 py-4 lg:py-5">
+        <div className="max-w-[1400px] mx-auto px-3 lg:px-5 py-3 lg:py-4">
           {/* 4 + 4 Grid Layout using shared MegaMenuCard */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Row 1 */}
-            <MegaMenuCard icon={Newspaper} title="News & Updates">
+            <MegaMenuCard icon={Newspaper} title="News & Updates" compact>
               {newsLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
@@ -146,7 +141,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
               ))}
             </MegaMenuCard>
             
-            <MegaMenuCard icon={BarChart3} title="Market Intelligence">
+            <MegaMenuCard icon={BarChart3} title="Market Intelligence" compact>
               {intelligenceLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
@@ -159,7 +154,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
               ))}
             </MegaMenuCard>
             
-            <MegaMenuCard icon={BookOpen} title="Guides">
+            <MegaMenuCard icon={BookOpen} title="Guides" compact>
               {guidesLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
@@ -172,7 +167,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
               ))}
             </MegaMenuCard>
             
-            <MegaMenuCard icon={Briefcase} title="Services">
+            <MegaMenuCard icon={Briefcase} title="Services" compact>
               {servicesLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
@@ -186,7 +181,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
             </MegaMenuCard>
             
             {/* Row 2 */}
-            <MegaMenuCard icon={Sparkles} title="Business Suites">
+            <MegaMenuCard icon={Sparkles} title="Business Suites" compact>
               {businessSuitesLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
@@ -199,7 +194,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
               ))}
             </MegaMenuCard>
             
-            <MegaMenuCard icon={LayoutDashboard} title={getModeTitle()}>
+            <MegaMenuCard icon={LayoutDashboard} title={getModeTitle()} compact>
               {modeLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
@@ -212,7 +207,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
               ))}
             </MegaMenuCard>
             
-            <MegaMenuCard icon={Building2} title="Company">
+            <MegaMenuCard icon={Building2} title="Company" compact>
               {companyLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
@@ -225,7 +220,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
               ))}
             </MegaMenuCard>
             
-            <MegaMenuCard icon={Shield} title="Legal">
+            <MegaMenuCard icon={Shield} title="Legal" compact>
               {legalLinks.map((item) => (
                 <MegaMenuIconLink
                   key={item.href}
@@ -239,7 +234,6 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
             </MegaMenuCard>
           </div>
         </div>
-      </div>
     </MegaMenuShell>
   );
 });

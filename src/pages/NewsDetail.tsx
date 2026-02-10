@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Calendar, Landmark, ExternalLink, Loader2, Newspaper } from "lucide-react";
+import { ArrowLeft, Calendar, Landmark, ExternalLink, Loader2, Newspaper, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/SEOHead";
@@ -33,6 +33,7 @@ interface MarketNews {
   published_date: string;
   ai_generated: boolean;
   is_featured: boolean;
+  ai_analysis: string | null;
 }
 
 const NewsDetail = () => {
@@ -80,6 +81,7 @@ const NewsDetail = () => {
 
   // Render content as HTML
   const contentHtml = renderMarkdownToHtml(article.content || article.excerpt);
+  const analysisHtml = article.ai_analysis ? renderMarkdownToHtml(article.ai_analysis) : null;
 
   return (
     <>
@@ -88,14 +90,14 @@ const NewsDetail = () => {
         description={article.excerpt}
       />
       <article className="min-h-screen bg-black">
-        {/* Full-bleed Hero Image */}
-        <div className="relative h-[60vh] md:h-[70vh] overflow-hidden">
+        {/* Full-Screen Hero Image */}
+        <div className="relative h-[80vh] md:h-[90vh] overflow-hidden">
           <img
             src={heroImage}
             alt={article.title}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
           {/* Back button - glass pill */}
           <div className="absolute top-6 left-6 z-10">
@@ -130,8 +132,8 @@ const NewsDetail = () => {
           </div>
         </div>
 
-        {/* Article Body - Champagne 3-layer system */}
-        <div className="jj-layer-2 !bg-transparent -mt-8 relative z-10">
+        {/* Article Body - Champagne 3-layer system (no overlap) */}
+        <div className="jj-layer-2 !bg-transparent relative z-10">
           <div className="jj-layer-active rounded-t-2xl p-6 md:p-10 lg:p-14 max-w-4xl mx-auto">
             {/* Meta row */}
             <div className="flex items-center gap-4 text-sm text-zinc-600 mb-8 pb-6 border-b border-gold/20 flex-wrap">
@@ -161,6 +163,34 @@ const NewsDetail = () => {
                 prose-li:text-zinc-700"
               dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
+
+            {/* AI Analysis Section */}
+            {analysisHtml && (
+              <div className="mt-12 pt-8 border-t border-gold/20">
+                <div className="jj-card-inner rounded-xl p-6 md:p-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 flex items-center justify-center">
+                      <Sparkles className="w-5 h-5 text-gold" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                        How This Affects Dubai Real Estate
+                      </h3>
+                      <p className="text-xs text-zinc-500">AI-powered market impact analysis</p>
+                    </div>
+                  </div>
+                  <div
+                    className="prose prose-sm max-w-none text-zinc-700
+                      prose-li:text-zinc-700 prose-strong:text-black
+                      prose-p:mb-3"
+                    dangerouslySetInnerHTML={{ __html: analysisHtml }}
+                  />
+                  <p className="text-[10px] text-zinc-400 mt-4 italic">
+                    AI-generated analysis for informational purposes only. Not financial advice.
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Source Attribution */}
             <div className="mt-12 pt-8 border-t border-gold/20">

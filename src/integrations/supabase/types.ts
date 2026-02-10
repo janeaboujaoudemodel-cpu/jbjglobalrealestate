@@ -11618,6 +11618,7 @@ export type Database = {
       }
       market_news: {
         Row: {
+          ai_analysis: string | null
           ai_generated: boolean | null
           category: string
           content: string | null
@@ -11635,6 +11636,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_analysis?: string | null
           ai_generated?: boolean | null
           category?: string
           content?: string | null
@@ -11652,6 +11654,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_analysis?: string | null
           ai_generated?: boolean | null
           category?: string
           content?: string | null
