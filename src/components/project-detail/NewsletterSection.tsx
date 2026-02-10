@@ -121,7 +121,7 @@ export function NewsletterSection() {
                           type="email"
                           placeholder="Enter your email address"
                           {...field}
-                          className="bg-card border-border focus:border-gold h-12"
+                          className="bg-zinc-900 border-2 border-gold/50 hover:border-gold focus:border-gold h-12 text-white placeholder:text-zinc-400"
                         />
                       </FormControl>
                       <FormMessage className="text-left" />

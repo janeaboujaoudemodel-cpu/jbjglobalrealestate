@@ -321,7 +321,7 @@ export function ProjectInquiryForm({
               value={formData.size}
               onChange={(e) => setFormData({ ...formData, size: e.target.value })}
               placeholder="e.g., 1500"
-              className="h-14 text-base px-5"
+              className="h-12 text-base px-4 border-2 border-gold/50 hover:border-gold focus:border-gold"
             />
           </div>
         </div>
@@ -338,12 +338,12 @@ export function ProjectInquiryForm({
                 value={otherDeveloperName}
                 onChange={(e) => setOtherDeveloperName(e.target.value)}
                 placeholder="Enter developer name"
-                className="h-14 text-base px-5 flex-1"
+                className="h-12 text-base px-4 border-2 border-gold/50 hover:border-gold focus:border-gold flex-1"
               />
               <Button 
                 type="button" 
                 variant="outline" 
-                className="h-14"
+                className="h-12"
                 onClick={() => {
                   setIsOtherDeveloper(false);
                   setOtherDeveloperName("");
@@ -359,7 +359,7 @@ export function ProjectInquiryForm({
                   variant="outline"
                   role="combobox"
                   aria-expanded={developerOpen}
-                  className="w-full h-14 justify-between text-base px-5 font-normal"
+                  className="w-full h-12 justify-between text-base px-4 font-normal border-2 border-gold/50 hover:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black"
                 >
                   {formData.preferredDeveloper || "Select developer..."}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -412,7 +412,7 @@ export function ProjectInquiryForm({
             value={formData.selectedEmirate}
             onValueChange={(value) => setFormData({ ...formData, selectedEmirate: value, location: "" })}
           >
-            <SelectTrigger className="h-14 text-base px-5">
+            <SelectTrigger className="h-12 text-base px-4 border-2 border-gold/50 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black">
               <SelectValue placeholder="Select emirate..." />
             </SelectTrigger>
             <SelectContent className="bg-background border-border z-[9999]">
@@ -437,12 +437,12 @@ export function ProjectInquiryForm({
                 value={otherLocationName}
                 onChange={(e) => setOtherLocationName(e.target.value)}
                 placeholder="Enter location name"
-                className="h-14 text-base px-5 flex-1"
+                className="h-12 text-base px-4 border-2 border-gold/50 hover:border-gold focus:border-gold flex-1"
               />
               <Button 
                 type="button" 
                 variant="outline" 
-                className="h-14"
+                className="h-12"
                 onClick={() => {
                   setIsOtherLocation(false);
                   setOtherLocationName("");
@@ -458,7 +458,7 @@ export function ProjectInquiryForm({
                   variant="outline"
                   role="combobox"
                   aria-expanded={locationOpen}
-                  className="w-full h-14 justify-between text-base px-5 font-normal"
+                  className="w-full h-12 justify-between text-base px-4 font-normal border-2 border-gold/50 hover:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black"
                 >
                   {formData.location || "Select location..."}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -509,7 +509,7 @@ export function ProjectInquiryForm({
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             placeholder="Any specific requirements or questions..."
-            className="min-h-[100px] text-base px-5 py-4"
+            className="min-h-[100px] text-base px-4 py-4 border-2 border-gold/50 hover:border-gold focus:border-gold"
             rows={4}
           />
         </div>

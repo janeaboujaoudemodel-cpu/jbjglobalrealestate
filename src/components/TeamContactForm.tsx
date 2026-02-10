@@ -20,6 +20,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 import { TeamMember } from '@/config/team-members';
 
 interface TeamContactFormProps {
@@ -76,22 +77,44 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
 
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const { data: result, error } = await supabase.functions.invoke('capture-lead', {
+        body: {
+          email: formData.email,
+          fullName: formData.name,
+          phone: formData.phone || undefined,
+          source: 'team_contact_form',
+          subSource: member?.name || 'Team Page',
+          pageSource: typeof window !== 'undefined' ? window.location.pathname : null,
+          contactType: 'client',
+          nationality: formData.nationality || undefined,
+          language: formData.preferredLanguage || undefined,
+          currentLocation: formData.currentLocation || undefined,
+        },
+      });
 
-    toast.success("Thank you. Your inquiry has been sent to JBJ Global Real Estate.");
-    setIsSubmitting(false);
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      preferredLanguage: '',
-      nationality: '',
-      currentLocation: '',
-      service: '',
-      inquiry: '',
-    });
-    onClose();
+      if (error || (result as any)?.error) {
+        throw new Error('Failed to submit inquiry');
+      }
+
+      toast.success("Thank you. Your inquiry has been sent to JBJ Global Real Estate.");
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        preferredLanguage: '',
+        nationality: '',
+        currentLocation: '',
+        service: '',
+        inquiry: '',
+      });
+      onClose();
+    } catch (err) {
+      console.error('Team contact form error:', err);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
