@@ -647,7 +647,7 @@ const Footer = () => {
             {/* Navigation Grid Section - Premium Card Layout */}
             <div className="p-4 sm:p-6 md:p-8">
               {/* ROW 1: 4 Premium Cards - Auto height, no scroll */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 auto-rows-auto">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 auto-rows-auto">
                 
                 {/* Card 1: Properties */}
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
@@ -745,7 +745,7 @@ const Footer = () => {
               </div>
 
               {/* ROW 2: 4 Premium Cards - Auto height, no scroll */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-auto">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 auto-rows-auto">
                 
                 {/* Card 5: Sell */}
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
@@ -837,7 +837,7 @@ const Footer = () => {
               </div>
 
               {/* ROW 3: Mode-Aware Hubs + Market Intelligence */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mt-4">
                 {/* Broker Hub - visible in broker/combined mode */}
                 {isBrokerMode && (
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
