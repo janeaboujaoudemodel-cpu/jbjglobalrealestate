@@ -10,7 +10,7 @@ import award04 from "@/assets/awards/meraas-2nd-q3-2019.png";
 import award05 from "@/assets/awards/damac-elite-q3-2020.png";
 import award06 from "@/assets/awards/damac-top-agency-q1-2021.png";
 import award07 from "@/assets/awards/emaar-q2-no11-2021a.png";
-import award08 from "@/assets/awards/emaar-q2-no11-2021b.png";
+
 import award09 from "@/assets/awards/tilal-al-ghaf-1st-2021.png";
 import award10 from "@/assets/awards/damac-top-performer-q3-2021.png";
 import award11 from "@/assets/awards/meydan-diamond-club-2022.png";
@@ -30,7 +30,7 @@ const AWARDS_DATA = [
   { image: award05, title: "Elite Partners of Q3", organization: "DAMAC", year: "2020" },
   { image: award06, title: "Top Agency Q1 Broker Awards", organization: "DAMAC", year: "2021" },
   { image: award07, title: "Quarter 2 Broker Awards - No. 11", organization: "Emaar", year: "2021" },
-  { image: award08, title: "Quarter 2 Broker Awards - No. 11", organization: "Emaar", year: "2021" },
+  
   { image: award09, title: "1st Place - Top Performing Partner", organization: "Tilal Al Ghaf / Majid Al Futtaim", year: "2021" },
   { image: award10, title: "Top Performer Q3", organization: "DAMAC", year: "2021" },
   { image: award11, title: "The Diamond Club - No. 1 Performing Partner", organization: "Meydan", year: "2022" },
