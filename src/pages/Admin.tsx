@@ -791,7 +791,7 @@ const Admin = () => {
                 <SelectTrigger className="bg-white border-gold/30 text-black">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-white border-gold/30">
+                <SelectContent>
                   <SelectItem value="Dubai">Dubai</SelectItem>
                   <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
                   <SelectItem value="Sharjah">Sharjah</SelectItem>
@@ -838,7 +838,7 @@ const Admin = () => {
                 <SelectTrigger className="w-40 bg-white border-gold/30 text-black">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-white border-gold/30">
+                <SelectContent>
                   <SelectItem value="brochure">Brochure</SelectItem>
                   <SelectItem value="floor_plan">Floor Plan</SelectItem>
                   <SelectItem value="payment_plan">Payment Plan</SelectItem>
