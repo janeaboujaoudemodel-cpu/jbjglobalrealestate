@@ -1,95 +1,105 @@
 
+# Fix Dropdown Themes, Footer Links, Areas Page Redesign, and Sort Button Active Colors
 
-# Fix Developer Search Bar UI, Logo White Borders, Homepage Featured Listings, and Currency Default
-
-## Issues to Fix
-
-### 1. Developer Page Search Bar -- Remove Black Background
-The sticky filter section in `src/pages/Developers.tsx` (line 226) has `bg-black` as the outer wrapper. This creates a black bar that doesn't match the approved champagne UI. The inner card already uses the champagne gradient, so the fix is to change the outer section background from `bg-black` to match the premium background.
-
-### 2. Developer Logo White Borders -- STILL Showing
-The `DeveloperCard.tsx` logo container (line 85) has `bg-white` and `object-contain p-1`. The `object-contain` preserves aspect ratio, leaving white gaps around rectangular logos. The `p-1` adds additional white padding. The user has been clear multiple times: NO white space should be visible. The logo must fill the entire container edge-to-edge.
-
-**Fix:** Change `object-contain p-1` to `object-fill` (no padding). This stretches the logo to fill the entire container with zero white borders. Apply this same fix everywhere logos appear:
-- `DeveloperCard.tsx` line 90
-- `DeveloperDetail.tsx` line 170 (already uses `object-fill`, confirmed correct)
-- `ReellyProjectCard.tsx` line 158 (uses `object-contain` -- needs fix)
-- `ProjectCard.tsx` line 201 (uses `object-contain` -- needs fix)
-- `FeaturedListings.tsx` (no logo currently -- add developer logo)
-
-### 3. Homepage "Handpicked For You" -- Expand to 8 Listings with Specific Developers
-Currently fetches from `['Emaar', 'Omniyat', 'Sobha', 'ALDAR']` with 2 per developer. The user wants:
-- Add Omniyat (already included)
-- Add Bugatti Residences by Binghatti
-- Add Mercedes-Benz Places by Binghatti
-- Remove "The Mirage at Sobha Central" (keep only "The Pinnacle at Sobha Central")
-- Total: 8 listings
-
-**Fix:** Update the query to also include Binghatti projects with "Bugatti" or "Mercedes" in the name. Adjust the selection logic to pick specific trending projects and ensure only one Sobha project ("Pinnacle").
-
-### 4. Featured Listings -- Fix Price UI and Add Developer Logo
-The `FeaturedListings.tsx` card shows the price badge at bottom-right of the photo. The user wants this fixed. Also, the card should show the developer logo matching the style used in `ProjectCard.tsx` and `ReellyProjectCard.tsx`.
-
-**Fix:** Add developer logo overlay (top-left of image) and ensure the price badge styling is clean and premium.
-
-### 5. ProjectCard.tsx -- Default Currency is EUR, Should Be AED
-Line 95: `currency = 'EUR'` needs to change to `currency = 'AED'`.
-
-### 6. Developer Detail Page -- Filters Wrapped in Black Container
-Line 252 in `DeveloperDetail.tsx` wraps filters in `bg-black rounded-2xl p-4`. The user said the black wrapper is not the approved UI.
-
-**Fix:** Change to champagne gradient background matching the approved theme.
-
-### 7. Developer Detail -- Slow Listing Load
-The `useProjectsByDeveloper` hook may have a long stale time or no prefetching. We can reduce stale time and ensure eager data loading.
+## Overview
+This plan addresses four major issues: (1) all dropdown menus site-wide must use the champagne gradient instead of white, (2) footer needs "Projects" and "Buy/Sell" links, (3) the Areas page needs a full redesign with hero photo, transparent header, champagne grid background, and developer-style area cards with photos/descriptions, and (4) the active sort button color on the Areas page filter needs to match the approved champagne UI.
 
 ---
 
-## Technical Changes
+## Part 1: Fix All Dropdown Backgrounds from White to Champagne
 
-### File: `src/pages/Developers.tsx`
-- Line 226: Change `bg-black` to `bg-[hsl(var(--premium-bg))]` for the sticky section background
-- This makes the search bar sit on the same premium background as the rest of the page
+**Problem:** The default `SelectContent` component (in `src/components/ui/select.tsx`) already has the correct champagne background (`bg-[#FDFBF7]`). However, many pages override this with `className="bg-white border-gold/30"`, which makes the dropdown appear white instead of champagne.
 
-### File: `src/components/DeveloperCard.tsx`
-- Line 90: Change `object-contain p-1` to `object-fill` -- removes all white borders/padding around logos
-- This is the definitive fix: logos stretch to fill the 24x24 container completely
+**Fix:** Remove the `bg-white` override from every `SelectContent` usage across all affected pages. The default component styling already handles the champagne gradient, gold border, and shadow correctly.
 
-### File: `src/components/ReellyProjectCard.tsx`
-- Line 158: Change `w-10 h-10 object-contain` to `w-full h-full object-fill` -- match the same edge-to-edge logo style
-- Remove the inner sizing constraint so the logo fills the container
+**Files affected:**
+- `src/pages/Developers.tsx` (line 264): `bg-white` on tier filter dropdown
+- `src/pages/PropertiesReelly.tsx` (lines 284, 302, 350, 370, 390): 5 dropdowns with `bg-white`
+- `src/pages/Properties.tsx` (lines 527, 619, 638, 658, 739, 765, 784, 848, 869, 890): ~10 dropdowns with `bg-white`
+- `src/pages/Contact.tsx` (lines 561, 587, 611): 3 dropdowns with `bg-white`
+- `src/pages/ExecutiveAssistant.tsx` (lines 619, 712, 725): 3 dropdowns
+- `src/pages/Admin.tsx` (lines 794, 841): 2 dropdowns
 
-### File: `src/components/ProjectCard.tsx`
-- Line 95: Change `currency = 'EUR'` to `currency = 'AED'`
-- Line 201: Change `w-10 h-10 object-contain` to `w-full h-full object-fill` for logo
-
-### File: `src/components/home/FeaturedListings.tsx`
-- Line 14: Expand `ELITE_DEVELOPERS` to include `'Binghatti'`
-- Update query logic: pick 1 Omniyat, 1 Sobha ("Pinnacle" only), 2 Emaar, 2 ALDAR, 1 Bugatti (Binghatti), 1 Mercedes-Benz (Binghatti) = 8 total
-- Add developer logo overlay to the card (top-left, matching other cards)
-- Fix price badge positioning/styling to be consistent
-
-### File: `src/pages/DeveloperDetail.tsx`
-- Line 252: Change `bg-black rounded-2xl p-4` to champagne gradient container: `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-4`
+**Action for each:** Change `SelectContent className="bg-white border-gold/30"` to just `SelectContent` (no className override), letting the default champagne theme show through.
 
 ---
 
-## Files to Modify
+## Part 2: Add "Projects" Link to Footer + Ensure Buy/Sell Presence
+
+**Problem:** The footer currently has "Buy Properties" and "Rent Properties" under the Properties card, and "Sell" as a separate card. There is no "Projects" link that maps to the `/properties` (Reelly projects) page, matching the header navigation.
+
+**Fix in `src/components/Footer.tsx`:**
+- Add `{ label: "Projects", href: "/properties" }` to the `propertiesLinks` array (after "Rent Properties" and before "Developers")
+- This matches the header's "Projects" navigation item
+
+---
+
+## Part 3: Redesign Areas Page (`/areas`)
+
+**Problem:** The current Areas page (`src/pages/AreaGuides.tsx`) has several issues:
+1. No hero photo -- uses a dark gradient instead of a fullscreen hero image
+2. The header is not transparent on initial load (it should be transparent over the hero, then become fixed/solid on scroll)
+3. The grid section background is black (`bg-black`) instead of champagne
+4. Area cards are small text-only boxes without photos, descriptions, or uniform sizing
+5. The sort buttons (A-Z, Trending, Building icon) use `bg-gold text-black` for active state which the user says doesn't match the approved UI
+
+### 3a. Hero Section -- Add Fullscreen Photo
+- Replace the current dark gradient hero with a fullscreen background image (use an existing Dubai skyline asset or a placeholder image URL)
+- The hero should be full viewport height on initial load (`min-h-screen` or `h-screen`)
+- Overlay the title, stats, and search badge on top of the image with a dark gradient overlay
+- Make the header transparent on initial load by adding a class/prop system (similar to how the Developers page handles it with `jj-hero-fullscreen`)
+
+### 3b. Transparent Header on Initial Load
+- The `GlobalHeader` component likely already supports transparent mode for hero pages. The Areas page needs to use the same hero class (`jj-hero-fullscreen`) that triggers transparent header behavior, matching the Developers page pattern.
+
+### 3c. Grid Background -- Change from Black to Champagne
+- Change `bg-black` (line 218) on the grid section to `bg-[hsl(var(--premium-bg))]` (the standard champagne premium background)
+- Change text colors from white/zinc to black/zinc-700 accordingly
+
+### 3d. Area Cards -- Developer-Style Cards with Photos and Descriptions
+- Replace the current small text-only area links with full cards matching the DeveloperCard style
+- Each card should include:
+  - Area image (`area.image_url`) with fallback gradient
+  - Area name as title
+  - Area description (2-3 lines, truncated)
+  - Emirate label
+  - Property count badge
+  - Trending indicator if applicable
+- Cards should be uniform size (same height) in a responsive grid (1/2/3/4 columns)
+- Link to `/area/{slug}` for the detail page
+
+### 3e. Sort Button Active Color Fix
+- Change the active state from `bg-gold text-black` to `bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black` (champagne gradient with gold border)
+- The inactive state should use `bg-white border border-gold/30 text-zinc-700`
+- This applies to the A-Z, Trending (flame icon), and Building icon sort buttons
+
+---
+
+## Part 4: Area Data Enrichment -- Provident Extraction
+
+The user mentioned extracting area data from Provident and Reelly API projects. This is a data pipeline task that requires a backend edge function to scrape/fetch area information (photos, descriptions) from external sources. This is a separate task from the UI changes and will be noted for future implementation.
+
+For now, the cards will use `area.image_url` (already in the database schema) and `area.description` (also in the schema). Areas without images will show a gradient placeholder.
+
+---
+
+## Technical Summary
 
 | File | Changes |
 |---|---|
-| `src/pages/Developers.tsx` | Remove black background from sticky search bar |
-| `src/components/DeveloperCard.tsx` | Change logo to `object-fill`, remove padding |
-| `src/components/ReellyProjectCard.tsx` | Change logo to `object-fill` |
-| `src/components/ProjectCard.tsx` | Fix default currency to AED, change logo to `object-fill` |
-| `src/components/home/FeaturedListings.tsx` | Add Binghatti (Bugatti/Mercedes), ensure 8 listings, add logo, fix price UI |
-| `src/pages/DeveloperDetail.tsx` | Change filters wrapper from black to champagne |
+| `src/pages/Developers.tsx` | Remove `bg-white` from SelectContent (line 264) |
+| `src/pages/PropertiesReelly.tsx` | Remove `bg-white` from 5 SelectContent instances |
+| `src/pages/Properties.tsx` | Remove `bg-white` from ~10 SelectContent instances |
+| `src/pages/Contact.tsx` | Remove `bg-white` from 3 SelectContent instances |
+| `src/pages/ExecutiveAssistant.tsx` | Remove `bg-white` from 3 SelectContent instances |
+| `src/pages/Admin.tsx` | Remove `bg-white` from 2 SelectContent instances |
+| `src/components/Footer.tsx` | Add "Projects" link to propertiesLinks array |
+| `src/pages/AreaGuides.tsx` | Full redesign: fullscreen hero with photo, transparent header support, champagne grid background, developer-style area cards with photos/descriptions, fix sort button active colors |
 
 ## Execution Order
-1. Fix developer card logo (`object-fill`, no padding) -- highest priority
-2. Fix project card logos to `object-fill`
-3. Remove black background from developers search bar
-4. Fix ProjectCard default currency EUR to AED
-5. Fix DeveloperDetail filters wrapper
-6. Update FeaturedListings with 8 curated listings + logos
-
+1. Fix all dropdown `bg-white` overrides across all pages (global consistency fix)
+2. Add "Projects" link to footer
+3. Redesign Areas page hero section with fullscreen photo
+4. Change Areas grid background from black to champagne
+5. Replace area text links with full developer-style cards
+6. Fix sort button active/inactive styling
