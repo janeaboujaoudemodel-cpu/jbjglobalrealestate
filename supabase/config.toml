@@ -258,3 +258,6 @@ verify_jwt = false
 
 [functions.ai-bulk-enrich]
 verify_jwt = false
+
+[functions.enrich-project-test]
+verify_jwt = false
