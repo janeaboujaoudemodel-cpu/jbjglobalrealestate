@@ -558,10 +558,13 @@ export type Database = {
       }
       areas: {
         Row: {
+          avg_price_sqft: number | null
           country: string | null
           created_at: string
           description: string | null
+          developer_count: number | null
           emirate: string
+          hero_image_url: string | null
           id: string
           image_url: string | null
           is_active: boolean | null
@@ -569,16 +572,21 @@ export type Database = {
           latitude: number | null
           longitude: number | null
           name: string
+          project_count_sale: number | null
           property_count: number | null
+          provident_url: string | null
           reelly_id: number | null
           slug: string
           updated_at: string
         }
         Insert: {
+          avg_price_sqft?: number | null
           country?: string | null
           created_at?: string
           description?: string | null
+          developer_count?: number | null
           emirate?: string
+          hero_image_url?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
@@ -586,16 +594,21 @@ export type Database = {
           latitude?: number | null
           longitude?: number | null
           name: string
+          project_count_sale?: number | null
           property_count?: number | null
+          provident_url?: string | null
           reelly_id?: number | null
           slug: string
           updated_at?: string
         }
         Update: {
+          avg_price_sqft?: number | null
           country?: string | null
           created_at?: string
           description?: string | null
+          developer_count?: number | null
           emirate?: string
+          hero_image_url?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
@@ -603,7 +616,9 @@ export type Database = {
           latitude?: number | null
           longitude?: number | null
           name?: string
+          project_count_sale?: number | null
           property_count?: number | null
+          provident_url?: string | null
           reelly_id?: number | null
           slug?: string
           updated_at?: string

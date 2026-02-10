@@ -10,9 +10,14 @@ export interface Area {
   emirate: string;
   country: string | null;
   image_url: string | null;
+  hero_image_url: string | null;
   latitude: number | null;
   longitude: number | null;
   property_count: number;
+  developer_count: number;
+  project_count_sale: number;
+  avg_price_sqft: number | null;
+  provident_url: string | null;
   is_trending: boolean;
   is_active: boolean;
   created_at: string;
