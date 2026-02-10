@@ -87,6 +87,34 @@ interface CleanupResult {
   error?: string;
 }
 
+// ── Enrichment Test Types ──
+interface EnrichmentTestResult {
+  success: boolean;
+  project?: { id: string; name: string; slug: string; reelly_id: number | null };
+  before?: {
+    amenities: string[];
+    usp_bullets: string[];
+    location_distances: Array<{ label: string; time: string }>;
+    images_count: number;
+    documents_count: number;
+  };
+  after?: {
+    amenities: string[];
+    usp_bullets: string[];
+    location_distances: Array<{ label: string; time: string }>;
+    images_count: number;
+    documents_count: number;
+    new_images: number;
+    new_documents: number;
+  };
+  sources?: {
+    reelly: { available: boolean; url?: string; amenities_found?: number; usp_found?: number; distances_found?: number; images_found?: number; documents_found?: number; reason?: string };
+    provident: { available: boolean; url?: string; amenities_found?: number; markdown_excerpt?: string | null; reason?: string };
+  };
+  applied?: boolean;
+  error?: string;
+}
+
 export function ReellyImportPanel() {
   const navigate = useNavigate();
   
@@ -216,6 +244,12 @@ export function ReellyImportPanel() {
     provident_documents: number;
     pending_provident_suggestions: number;
   } | null>(null);
+  // Enrichment test state
+  const [enrichTestSlug, setEnrichTestSlug] = useState("");
+  const [isEnrichTesting, setIsEnrichTesting] = useState(false);
+  const [enrichTestResult, setEnrichTestResult] = useState<EnrichmentTestResult | null>(null);
+  const [isEnrichApplying, setIsEnrichApplying] = useState(false);
+  
   const [isRestoring, setIsRestoring] = useState(false);
   const [restoreResult, setRestoreResult] = useState<{
     success: boolean;
@@ -2495,6 +2529,168 @@ export function ReellyImportPanel() {
           </span>
         </div>
       </div>
+
+      {/* ── ENRICHMENT TEST SECTION ── */}
+      <Card className="bg-white border-blue-200">
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Zap className="h-5 w-5 text-blue-600" />
+            Test Project Enrichment
+          </CardTitle>
+          <CardDescription>
+            Preview enrichment from Reelly + Provident for a single project before bulk applying
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Enter project slug (e.g. palm-central-private-residences)"
+              value={enrichTestSlug}
+              onChange={(e) => setEnrichTestSlug(e.target.value)}
+              className="flex-1 px-3 py-2 border border-zinc-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <Button
+              onClick={async () => {
+                if (!enrichTestSlug.trim()) { toast.error("Enter a project slug"); return; }
+                setIsEnrichTesting(true);
+                setEnrichTestResult(null);
+                try {
+                  const { data, error } = await supabase.functions.invoke("enrich-project-test", {
+                    body: { slug: enrichTestSlug.trim() },
+                  });
+                  if (error) throw error;
+                  setEnrichTestResult(data);
+                } catch (err: any) {
+                  toast.error(err.message || "Enrichment test failed");
+                  setEnrichTestResult({ success: false, error: err.message });
+                } finally {
+                  setIsEnrichTesting(false);
+                }
+              }}
+              disabled={isEnrichTesting}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              {isEnrichTesting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
+              {isEnrichTesting ? "Testing..." : "Test"}
+            </Button>
+          </div>
+
+          {/* Enrichment Results */}
+          {enrichTestResult && enrichTestResult.success && (
+            <div className="space-y-4 border-t pt-4">
+              <h4 className="font-semibold text-sm">
+                {enrichTestResult.project?.name} 
+                <span className="text-xs text-zinc-500 ml-2">(Reelly ID: {enrichTestResult.project?.reelly_id || "none"})</span>
+              </h4>
+
+              {/* Sources */}
+              <div className="flex gap-3 text-xs">
+                {enrichTestResult.sources?.reelly?.available ? (
+                  <a href={enrichTestResult.sources.reelly.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline flex items-center gap-1">
+                    <ExternalLink className="h-3 w-3" /> Reelly Source
+                  </a>
+                ) : (
+                  <span className="text-zinc-400">Reelly: {enrichTestResult.sources?.reelly?.reason}</span>
+                )}
+                {enrichTestResult.sources?.provident?.available ? (
+                  <a href={enrichTestResult.sources.provident.url} target="_blank" rel="noopener noreferrer" className="text-green-600 underline flex items-center gap-1">
+                    <ExternalLink className="h-3 w-3" /> Provident Source
+                  </a>
+                ) : (
+                  <span className="text-zinc-400">Provident: {enrichTestResult.sources?.provident?.reason}</span>
+                )}
+              </div>
+
+              {/* Before / After Comparison */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                  <h5 className="text-xs font-bold text-red-700 mb-2">BEFORE</h5>
+                  <div className="space-y-1 text-xs">
+                    <p>Amenities: <strong>{enrichTestResult.before?.amenities?.length || 0}</strong></p>
+                    <p>USP Bullets: <strong>{enrichTestResult.before?.usp_bullets?.length || 0}</strong></p>
+                    <p>Location Distances: <strong>{enrichTestResult.before?.location_distances?.length || 0}</strong></p>
+                    <p>Images: <strong>{enrichTestResult.before?.images_count || 0}</strong></p>
+                    <p>Documents: <strong>{enrichTestResult.before?.documents_count || 0}</strong></p>
+                  </div>
+                </div>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                  <h5 className="text-xs font-bold text-green-700 mb-2">AFTER</h5>
+                  <div className="space-y-1 text-xs">
+                    <p>Amenities: <strong>{enrichTestResult.after?.amenities?.length || 0}</strong> {(enrichTestResult.after?.amenities?.length || 0) > (enrichTestResult.before?.amenities?.length || 0) && <span className="text-green-600">↑</span>}</p>
+                    <p>USP Bullets: <strong>{enrichTestResult.after?.usp_bullets?.length || 0}</strong> {(enrichTestResult.after?.usp_bullets?.length || 0) > (enrichTestResult.before?.usp_bullets?.length || 0) && <span className="text-green-600">↑</span>}</p>
+                    <p>Location Distances: <strong>{enrichTestResult.after?.location_distances?.length || 0}</strong> {(enrichTestResult.after?.location_distances?.length || 0) > (enrichTestResult.before?.location_distances?.length || 0) && <span className="text-green-600">↑</span>}</p>
+                    <p>Images: <strong>{enrichTestResult.after?.images_count || 0}</strong> (+{enrichTestResult.after?.new_images || 0} new)</p>
+                    <p>Documents: <strong>{enrichTestResult.after?.documents_count || 0}</strong> (+{enrichTestResult.after?.new_documents || 0} new)</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Amenities Preview */}
+              {(enrichTestResult.after?.amenities?.length || 0) > 0 && (
+                <div className="text-xs">
+                  <p className="font-semibold mb-1">Amenities found:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {enrichTestResult.after!.amenities.slice(0, 15).map((a, i) => (
+                      <Badge key={i} variant="secondary" className="text-[10px]">{a}</Badge>
+                    ))}
+                    {enrichTestResult.after!.amenities.length > 15 && (
+                      <Badge variant="outline" className="text-[10px]">+{enrichTestResult.after!.amenities.length - 15} more</Badge>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Apply Button */}
+              {!enrichTestResult.applied && (
+                <Button
+                  onClick={async () => {
+                    setIsEnrichApplying(true);
+                    try {
+                      const { data, error } = await supabase.functions.invoke("enrich-project-test", {
+                        body: { slug: enrichTestSlug.trim(), action: "apply" },
+                      });
+                      if (error) throw error;
+                      if (data?.success) {
+                        toast.success(`Enrichment applied! Updated: ${data.updates_applied?.join(", ") || "none"}, +${data.new_images} images, +${data.new_documents} docs`);
+                        setEnrichTestResult(prev => prev ? { ...prev, applied: true } : prev);
+                      } else {
+                        toast.error(data?.error || "Apply failed");
+                      }
+                    } catch (err: any) {
+                      toast.error(err.message || "Apply failed");
+                    } finally {
+                      setIsEnrichApplying(false);
+                    }
+                  }}
+                  disabled={isEnrichApplying}
+                  className="bg-green-600 hover:bg-green-700 text-white w-full"
+                >
+                  {isEnrichApplying ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <CheckCircle className="h-4 w-4 mr-2" />}
+                  Approve & Apply Enrichment
+                </Button>
+              )}
+              {enrichTestResult.applied && (
+                <Alert className="bg-green-50 border-green-300">
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <AlertTitle className="text-green-700">Enrichment Applied</AlertTitle>
+                  <AlertDescription className="text-green-600">
+                    Data has been written to the database. View the project to verify.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+
+          {enrichTestResult && !enrichTestResult.success && (
+            <Alert className="bg-red-50 border-red-300">
+              <XCircle className="h-4 w-4 text-red-600" />
+              <AlertTitle className="text-red-700">Test Failed</AlertTitle>
+              <AlertDescription className="text-red-600">{enrichTestResult.error}</AlertDescription>
+            </Alert>
+          )}
+        </CardContent>
+      </Card>
 
       <Alert className="border-zinc-300 bg-zinc-50">
         <Info className="h-4 w-4 text-zinc-500" />

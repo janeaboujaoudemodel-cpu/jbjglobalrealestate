@@ -15,16 +15,38 @@ function json(status: number, body: unknown) {
 
 function sanitizeFilename(value: string) {
   const trimmed = value.trim().slice(0, 140);
-  // Remove path separators and control characters
   return trimmed.replace(/[\u0000-\u001F\u007F]/g, "").replace(/[\\/]/g, "-");
 }
+
+// Trusted image/document CDN domains we allow proxying
+const ALLOWED_DOMAINS = [
+  "reelly.io",
+  "reelly-assets",
+  "cloudfront.net",
+  "provident.ae",
+  "bayut.com",
+  "propertyfinder.ae",
+  "dubizzle.com",
+  "zaapi.ae",
+  "emaar.com",
+  "damacproperties.com",
+  "sobharealty.com",
+  "meraas.com",
+  "nakheel.com",
+  "aldar.com",
+  "ellington.ae",
+  "object.properties",
+  "select.ae",
+  "uploads.mangopulse",
+  "cdn.sanity.io",
+  "images.unsplash.com",
+];
 
 serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   if (req.method !== "GET") return json(405, { error: "Method not allowed" });
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
-  if (!supabaseUrl) return json(500, { error: "Missing backend configuration" });
 
   try {
     const requestUrl = new URL(req.url);
@@ -34,20 +56,21 @@ serve(async (req: Request): Promise<Response> => {
     if (!target) return json(400, { error: "Missing url" });
 
     const targetUrl = new URL(target);
-    const allowedOrigin = new URL(supabaseUrl).origin;
 
-    // Security: only allow files hosted on our own backend origin
-    if (targetUrl.origin !== allowedOrigin) {
+    // Security: allow our own storage origin OR trusted CDN domains
+    const isOwnStorage = supabaseUrl && targetUrl.origin === new URL(supabaseUrl).origin;
+    const isTrustedCdn = ALLOWED_DOMAINS.some(domain => targetUrl.hostname.includes(domain));
+
+    if (!isOwnStorage && !isTrustedCdn) {
       return json(400, { error: "URL not allowed" });
     }
 
-    // Security: only allow storage URLs (avoid open proxy)
-    if (!targetUrl.pathname.includes("/storage/v1/")) {
+    // For own storage, still require storage path
+    if (isOwnStorage && !targetUrl.pathname.includes("/storage/v1/")) {
       return json(400, { error: "Only storage URLs are allowed" });
     }
 
     const upstream = await fetch(targetUrl.toString(), {
-      // Avoid leaking client Authorization headers to upstream
       headers: {
         "User-Agent": "JBJ-Download-Proxy/1.0",
       },
@@ -63,9 +86,7 @@ serve(async (req: Request): Promise<Response> => {
     const headers = new Headers({
       ...corsHeaders,
       "Content-Type": contentType,
-      // Prevent MIME sniffing
       "X-Content-Type-Options": "nosniff",
-      // Cache safely (PDFs/images can be cached)
       "Cache-Control": "public, max-age=3600",
     });
 
@@ -75,7 +96,6 @@ serve(async (req: Request): Promise<Response> => {
     if (filename) {
       headers.set("Content-Disposition", `attachment; filename="${filename}"`);
     } else {
-      // Default to attachment to force a real download (and avoid in-tab PDF blockers)
       headers.set("Content-Disposition", "attachment");
     }
 

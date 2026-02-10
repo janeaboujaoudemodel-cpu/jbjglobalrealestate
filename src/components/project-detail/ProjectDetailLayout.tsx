@@ -61,9 +61,10 @@ import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { SafeImage } from "@/components/SafeImage";
-import { filterValidImages, getFirstValidImageUrl } from "@/lib/imageUtils";
+import { filterValidImages, getFirstValidImageUrl, getHighResImageUrl } from "@/lib/imageUtils";
 import { formatPrice as formatPriceUtil } from "@/utils/formatNumber";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { formatDisplayDate } from "@/utils/formatDate";
 import { renderMarkdownToHtml } from "@/lib/markdownUtils";
 import {
   Accordion,
@@ -235,7 +236,7 @@ export default function ProjectDetailLayout({
     const raw = project.images?.filter((i) => i.url) || [];
     return filterValidImages(raw);
   }, [project.images]);
-  const heroImage = images[0];
+  const heroImage = images[0] ? { ...images[0], url: getHighResImageUrl(images[0].url!) } : undefined;
 
   const brochureDocs = useMemo(
     () =>
@@ -349,7 +350,13 @@ export default function ProjectDetailLayout({
       : undefined;
 
     if (isLeadCaptured && resolvedUrl) {
-      window.open(resolvedUrl, "_blank");
+      // Force download via hidden <a> tag instead of opening in new tab
+      const link = document.createElement("a");
+      link.href = resolvedUrl;
+      link.download = filename || "";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
       return;
     }
 
@@ -516,7 +523,7 @@ export default function ProjectDetailLayout({
             {project.handover_date && (
               <div className="flex items-center gap-2 text-white/90">
                 <Calendar className="w-5 h-5 text-gold" />
-                <span className="text-sm md:text-base">{project.handover_date}</span>
+                <span className="text-sm md:text-base">{formatDisplayDate(project.handover_date)}</span>
               </div>
             )}
           </div>
@@ -619,7 +626,7 @@ export default function ProjectDetailLayout({
             </div>
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Handover</p>
-              <p className="mt-2 text-xl font-bold text-foreground">{project.handover_date || "TBA"}</p>
+              <p className="mt-2 text-xl font-bold text-foreground">{formatDisplayDate(project.handover_date) || "TBA"}</p>
             </div>
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>

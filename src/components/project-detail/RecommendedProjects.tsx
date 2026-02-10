@@ -4,6 +4,7 @@ import { useProjects } from "@/hooks/useProjects";
 import { SafeImage } from "@/components/SafeImage";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { useMemo } from "react";
+import { formatDisplayDate } from "@/utils/formatDate";
 
 interface RecommendedProjectsProps {
   currentProjectId: string;
@@ -104,7 +105,7 @@ export default function RecommendedProjects({
                 {/* Handover Badge */}
                 {project.handover_date && (
                   <div className="absolute top-3 right-3 bg-handover text-handover-foreground px-2 py-1 rounded text-xs font-bold">
-                    {project.handover_date}
+                    {formatDisplayDate(project.handover_date)}
                   </div>
                 )}
               </div>

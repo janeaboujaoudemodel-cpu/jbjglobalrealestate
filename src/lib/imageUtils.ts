@@ -63,6 +63,7 @@ const TRUSTED_IMAGE_DOMAINS = [
 ];
 
 const SAFE_IMAGE_SIZE = "464x312";
+const HIGH_RES_IMAGE_SIZE = "1920x1080";
 
 /**
  * Check if URL is from a trusted image source
@@ -106,12 +107,25 @@ export function isValidImageUrl(url: unknown): url is string {
 /**
  * Normalize Provident CDN image URLs to a safe size that won't 403
  */
-export function normalizeProvidentImageUrl(url: string): string {
+export function normalizeProvidentImageUrl(url: string, size?: string): string {
   if (!url) return url;
   
   // Check for Provident CDN pattern and normalize size
   if (url.includes("/x/") && url.includes("cloudfront.net")) {
-    return url.replace(/\/x\/\d+x\d+\//, `/x/${SAFE_IMAGE_SIZE}/`);
+    return url.replace(/\/x\/\d+x\d+\//, `/x/${size || SAFE_IMAGE_SIZE}/`);
+  }
+  
+  return url;
+}
+
+/**
+ * Get a high-resolution version of an image URL (for hero sections)
+ */
+export function getHighResImageUrl(url: string): string {
+  if (!url) return url;
+  
+  if (url.includes("/x/") && url.includes("cloudfront.net")) {
+    return url.replace(/\/x\/\d+x\d+\//, `/x/${HIGH_RES_IMAGE_SIZE}/`);
   }
   
   return url;
