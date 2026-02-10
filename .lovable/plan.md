@@ -1,84 +1,53 @@
 
 
-# Fix Enrichment Tester, Backfill Numbers, and Lead Popup Enhancement
+# Fix Homepage "Handpicked For You" Section
 
-## Issues Found
+## Problems Identified
 
-### Issue 1: Enrichment Test Shows All Zeros (Root Cause Found)
-The `enrich-project-test` edge function uses the **wrong authentication header** for the Reelly API:
-- **Current (broken):** `Authorization: Bearer ${apiKey}` (line 21)
-- **Correct (used everywhere else):** `X-API-Key: ${apiKey}`
+1. **Developer distribution broken**: The selection logic tries to pick 1 from each of Emaar, ALDAR, Omniyat, Sobha, Nakheel, Dubai Properties + 2 Binghatti specials. But when `addOne()` fails for a developer (e.g., the `find` doesn't match), the "fill remaining" loop at lines 109-118 grabs more projects from the top of the `all` array -- which is sorted by `created_at DESC`, so it fills with extra Emaar (146 projects) and Sobha (50 projects).
 
-This causes every Reelly API call to fail silently, returning `null`, so before and after are identical (all zeros).
+2. **Binghatti logo unreadable**: The logo URL from Reelly (`api.reelly.io/vault/...`) renders as a tiny, hard-to-read image in the 40x40px container.
 
-Additionally, the Provident URL is wrong -- it appends the full slug (e.g., `binghatti-titania-binghatti-3012`) but Provident URLs don't include the Reelly ID suffix. The function should strip `-{reellyId}` from the slug.
-
-### Issue 2: Fetch Missing Details Shows Zeros
-The `reelly-fetch-details` function operates on the `pending_project_imports` table, not the `projects` table. If there are no pending imports (all were already approved), it correctly returns zero. This is a legacy function. The actual detail fetching for approved projects is done by `reelly-backfill-projects`. The UI needs to either call the correct function or be labeled accurately.
-
-### Issue 3: Backfill Numbers Inconsistent
-The backfill UI shows "processed 1200, remaining 999" because it accumulates from previous runs stored in `sync_jobs`. The total (1200 + 999 = 2199) exceeds the actual project count (~1805) because it's double-counting previous progress. The remaining count comes from the API response but the processed count sums across sessions.
-
-### Issue 4: No Listing Card Preview
-The enrichment test only shows numeric before/after comparisons. The user wants to see an actual rendering of the project card and listing page before and after enrichment.
-
-### Issue 5: Lead Popup Needs More Fields
-Current popup has: Name, Email, Phone, Interest (buying/selling/renting/investing/exploring).
-Needs: Nationality, Preferred Language, Preferred Contact Time, and Services category with subcategories.
-
-### Issue 6: Lead Popup Insert Broken
-The `crm_leads` table no longer has `email`, `phone`, or `status` columns. The correct columns are `email_lower`, `phone_e164`, and `pipeline_stage`. The popup insert is silently failing.
-
-### Issue 7: Select Dropdown Hover Shows Blue
-The native `<select>` and `<option>` elements show default blue highlight on hover/focus. This needs CSS override to match the gold/champagne theme.
+3. **Cards not the same size**: Card heights vary because some projects have area names, prices, or handover dates while others don't. The content section grows/shrinks based on available data, making cards uneven.
 
 ---
 
-## Fixes
+## Fix 1: Enforce Strict 1-Per-Developer Distribution
 
-### Fix 1: Repair `enrich-project-test` Edge Function
-**File:** `supabase/functions/enrich-project-test/index.ts`
+**File:** `src/components/home/FeaturedListings.tsx`
 
-- Line 21: Change `Authorization: Bearer ${apiKey}` to `X-API-Key: ${apiKey}` (matching all other Reelly functions)
-- Line 29: Fix Provident URL to strip the Reelly ID suffix from slug: extract base slug by removing `-{reellyId}` pattern
-- Add listing card data to the response (cover image, developer name, area, price) so the UI can render a card preview
+**Changes to selection logic (lines 64-120):**
+- Change to a strict round-robin: 1 Emaar, 1 ALDAR, 1 Omniyat, 1 Sobha (prefer Pinnacle), 1 Nakheel, 1 Dubai Properties, 1 Binghatti Bugatti, 1 Binghatti Mercedes
+- Add deduplication check inside `addOne()` so a project can't be added twice
+- In the "fill remaining" logic, **exclude developers that already have a card** to prevent Emaar/Sobha domination
+- If a specific project (Bugatti, Mercedes, Pinnacle) isn't found, fall back to any project from that developer, but never allow more than 1 card per developer (except Binghatti which gets 2)
 
-### Fix 2: Add Listing Card Preview to Enrichment UI
-**File:** `src/components/listing-admin/ReellyImportPanel.tsx` (lines 2606-2710)
+**Result:** 8 cards, max 1 per developer (2 for Binghatti), no duplicates.
 
-Add two visual card previews side-by-side in the enrichment results:
-- **Before card**: Shows the project as it currently appears (cover image, name, developer, area, price, amenity count)
-- **After card**: Shows how it would look after enrichment (same layout but with enriched data highlighted)
-- Include the cover image, not just numbers
+---
 
-### Fix 3: Fix Backfill Progress Math
-**File:** `src/components/listing-admin/ReellyImportPanel.tsx` (lines 740-800)
+## Fix 2: Binghatti Logo Visibility + Monogram
 
-The aggregation logic double-counts by adding previous job stats to new API response stats. Fix: Use the API's `remaining` count as the single source of truth for what's left. Show `total = updated + failed + remaining` instead of accumulating across sessions.
+**File:** `src/components/home/FeaturedListings.tsx`
 
-### Fix 4: Fix "Fetch Missing Details" to Use Correct Function
-**File:** `src/components/listing-admin/ReellyImportPanel.tsx` (line 628)
+**Changes to `ProjectCard` component (lines 155-171):**
+- Increase the developer logo container from `w-10 h-10` to `w-12 h-12` for better readability
+- For Binghatti specifically, add a small "B" monogram badge overlaid on or next to the logo
+- If the Reelly logo URL fails to load (broken/unreadable), show a styled text fallback with the developer initial in gold
 
-Change `handleFetchMissingDetails` to invoke `reelly-backfill-projects` with `mode: "batch"` instead of `reelly-fetch-details`, since the latter only works on `pending_project_imports` (legacy). Or alternatively, update `reelly-fetch-details` to also operate on the `projects` table.
+---
 
-### Fix 5: Enhance Lead Capture Popup
-**File:** `src/components/LeadCapturePopup.tsx`
+## Fix 3: Consistent Card Heights
 
-Add new fields while keeping the existing champagne/gold styling locked:
-- **Nationality** dropdown (common nationalities: UAE, India, UK, Pakistan, Russia, China, etc.)
-- **Preferred Language** dropdown (English, Arabic, Hindi, Russian, Chinese, French)
-- **Preferred Contact Time** dropdown (Morning, Afternoon, Evening, Anytime)
-- Change "Interest" label to **"Services"** with subcategories: Buying, Selling, Renting, Investing, Property Management, Mortgage Advisory, Legal Services, Partnerships
+**File:** `src/components/home/FeaturedListings.tsx`
 
-Fix the insert to use correct column names:
-- `email` becomes `email_lower` (lowercased)
-- `phone` becomes `phone_e164`
-- `status: "new"` becomes `pipeline_stage: "new"`
+**Changes to `ProjectCard` component (lines 130-214):**
+- Set a fixed minimum height on the content section (`min-h-[140px]`) so all cards have the same visual footprint
+- Ensure the image container uses the same `aspect-[4/3]` consistently (already done)
+- For missing fields (no area name, no price, no handover), render invisible placeholder elements of the same height to maintain layout consistency
+- The `flex-grow` spacer already exists at line 190 which helps, but add explicit `min-h` values on the location row and price row to prevent collapse
 
-### Fix 6: Fix Dropdown Hover Color
-**File:** `src/components/LeadCapturePopup.tsx`
-
-Replace native `<select>` with a styled Radix `Select` component that uses gold/champagne colors for hover states instead of browser-default blue. All option hover states use `bg-gold/20 text-black` instead of the default blue.
+**Result:** All 8 cards render at identical heights regardless of which data fields are present.
 
 ---
 
@@ -86,15 +55,9 @@ Replace native `<select>` with a styled Radix `Select` component that uses gold/
 
 | File | Changes |
 |---|---|
-| `supabase/functions/enrich-project-test/index.ts` | Fix auth header from `Bearer` to `X-API-Key`; fix Provident URL; add card data to response |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Add before/after card previews; fix backfill math; fix fetch details to use correct function |
-| `src/components/LeadCapturePopup.tsx` | Add nationality, language, contact time, services fields; fix DB column names; replace native select with styled Radix Select |
+| `src/components/home/FeaturedListings.tsx` | Fix developer distribution (max 1 per dev, 2 for Binghatti); enlarge and enhance Binghatti logo with monogram; enforce consistent card heights with min-heights and placeholders |
 
 ## Execution Order
-1. Fix `enrich-project-test` auth header and Provident URL (root cause of all-zeros)
-2. Deploy and verify enrichment returns real data
-3. Add card preview UI to enrichment results
-4. Fix backfill progress counting
-5. Fix "Fetch Missing Details" function call
-6. Enhance lead popup with new fields and correct DB columns
-7. Replace native selects with themed Radix Select components
+1. Fix the selection logic to prevent Emaar/Sobha domination
+2. Enhance Binghatti logo with larger container and monogram
+3. Add fixed minimum heights to card content areas for visual consistency
