@@ -565,11 +565,11 @@ export default function ProjectDetailLayout({
 
       {/* STICKY SUB-NAVIGATION - Appears on scroll */}
       <div 
-        className={`fixed top-20 sm:top-24 md:top-28 lg:top-32 left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed top-16 lg:top-20 left-0 right-0 z-[9999] transition-all duration-300 ${
           showStickyNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
         }`}
       >
-        <div className="bg-card/98 backdrop-blur-md border-b border-gold/30 shadow-lg">
+        <div className="bg-black border-b border-gold/30 shadow-lg">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between gap-4">
               {/* Tab Navigation */}
