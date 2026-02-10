@@ -6,74 +6,33 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// AUTHORIZED NEWS SOURCES - Official government & journalism sources
+// Category-based fallback images (high-quality Dubai Unsplash photos)
+const CATEGORY_IMAGES: Record<string, string> = {
+  "Policy": "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1200&q=80",
+  "Economic": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80",
+  "Market Update": "https://images.unsplash.com/photo-1622015663319-e97e697503ee?w=1200&q=80",
+  "Government": "https://images.unsplash.com/photo-1597659840241-37e2b9c2f55f?w=1200&q=80",
+  "Analysis": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
+  "Developer News": "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1200&q=80",
+  "Monthly Report": "https://images.unsplash.com/photo-1460472178825-e5240623afd5?w=1200&q=80",
+  "Market Outlook": "https://images.unsplash.com/photo-1546412414-e1885259563a?w=1200&q=80",
+};
+
+const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80";
+
+// AUTHORIZED NEWS SOURCES
 const AUTHORIZED_NEWS_SOURCES = [
-  {
-    name: "Dubai Land Department",
-    url: "https://www.dubailand.gov.ae/en/news",
-    type: "government",
-    category: "Policy",
-  },
-  {
-    name: "RERA",
-    url: "https://www.rera.gov.ae/en/news",
-    type: "government",
-    category: "Policy",
-  },
-  {
-    name: "UAE Ministry of Economy",
-    url: "https://www.moec.gov.ae/en/media-center",
-    type: "government",
-    category: "Economic",
-  },
-  {
-    name: "Dubai Media Office",
-    url: "https://mediaoffice.ae/en/news",
-    type: "government",
-    category: "Government",
-  },
-  {
-    name: "Emirates News Agency (WAM)",
-    url: "https://wam.ae/en/search?q=real+estate",
-    type: "government",
-    category: "Market Update",
-  },
-  {
-    name: "Abu Dhabi Media Office",
-    url: "https://mediaoffice.abudhabi/en",
-    type: "government",
-    category: "Government",
-  },
-  {
-    name: "Dubai Chamber of Commerce",
-    url: "https://www.dubaichamber.com/news",
-    type: "business",
-    category: "Economic",
-  },
-  {
-    name: "Arabian Business",
-    url: "https://www.arabianbusiness.com/industries/real-estate",
-    type: "media",
-    category: "Market Update",
-  },
-  {
-    name: "Gulf News Property",
-    url: "https://gulfnews.com/living-in-uae/property",
-    type: "media",
-    category: "Market Update",
-  },
-  {
-    name: "Zawya",
-    url: "https://www.zawya.com/en/business/real-estate",
-    type: "media",
-    category: "Analysis",
-  },
-  {
-    name: "Khaleej Times",
-    url: "https://www.khaleejtimes.com/business/real-estate",
-    type: "media",
-    category: "Market Update",
-  },
+  { name: "Dubai Land Department", url: "https://www.dubailand.gov.ae/en/news", type: "government", category: "Policy" },
+  { name: "RERA", url: "https://www.rera.gov.ae/en/news", type: "government", category: "Policy" },
+  { name: "UAE Ministry of Economy", url: "https://www.moec.gov.ae/en/media-center", type: "government", category: "Economic" },
+  { name: "Dubai Media Office", url: "https://mediaoffice.ae/en/news", type: "government", category: "Government" },
+  { name: "Emirates News Agency (WAM)", url: "https://wam.ae/en/search?q=real+estate", type: "government", category: "Market Update" },
+  { name: "Abu Dhabi Media Office", url: "https://mediaoffice.abudhabi/en", type: "government", category: "Government" },
+  { name: "Dubai Chamber of Commerce", url: "https://www.dubaichamber.com/news", type: "business", category: "Economic" },
+  { name: "Arabian Business", url: "https://www.arabianbusiness.com/industries/real-estate", type: "media", category: "Market Update" },
+  { name: "Gulf News Property", url: "https://gulfnews.com/living-in-uae/property", type: "media", category: "Market Update" },
+  { name: "Zawya", url: "https://www.zawya.com/en/business/real-estate", type: "media", category: "Analysis" },
+  { name: "Khaleej Times", url: "https://www.khaleejtimes.com/business/real-estate", type: "media", category: "Market Update" },
 ];
 
 interface NewsArticle {
@@ -101,27 +60,195 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     
     if (!FIRECRAWL_API_KEY) {
-      return new Response(JSON.stringify({ 
-        success: false, 
-        error: "Firecrawl connector not configured" 
-      }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      return new Response(JSON.stringify({ success: false, error: "Firecrawl connector not configured" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     if (!LOVABLE_API_KEY) {
-      return new Response(JSON.stringify({ 
-        success: false, 
-        error: "AI capabilities not configured" 
-      }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      return new Response(JSON.stringify({ success: false, error: "AI capabilities not configured" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // ===================== ENRICH ACTION =====================
+    if (action === "enrich") {
+      console.log("Starting article enrichment...");
+      
+      // Get articles missing content or images
+      const { data: articlesToEnrich, error: fetchError } = await supabase
+        .from("market_news")
+        .select("id, title, excerpt, category, source_url, image_url, content")
+        .or("content.is.null,image_url.is.null")
+        .limit(30);
+
+      if (fetchError) throw fetchError;
+      
+      if (!articlesToEnrich || articlesToEnrich.length === 0) {
+        return new Response(JSON.stringify({ success: true, enriched: 0, message: "All articles already enriched" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      console.log(`Found ${articlesToEnrich.length} articles to enrich`);
+      let enrichedCount = 0;
+      const errors: string[] = [];
+
+      for (const article of articlesToEnrich) {
+        try {
+          let fullContent = article.content;
+          let imageUrl = article.image_url;
+
+          // Only scrape if we need content
+          if (!fullContent && article.source_url) {
+            console.log(`Scraping ${article.source_url} for "${article.title}"...`);
+            
+            try {
+              const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
+                method: "POST",
+                headers: {
+                  "Authorization": `Bearer ${FIRECRAWL_API_KEY}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  url: article.source_url,
+                  formats: ["markdown"],
+                  onlyMainContent: true,
+                  waitFor: 3000,
+                  timeout: 30000,
+                }),
+              });
+
+              if (scrapeResponse.ok) {
+                const scrapeData = await scrapeResponse.json();
+                const rawMarkdown = scrapeData.data?.markdown || scrapeData.markdown || "";
+
+                if (rawMarkdown.length > 100) {
+                  // Use AI to clean and extract the article body
+                  const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                      "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      model: "google/gemini-2.5-flash",
+                      messages: [
+                        {
+                          role: "system",
+                          content: `You extract the full article body text from raw scraped markdown. Return ONLY the article content as clean readable paragraphs. Remove navigation, ads, footers, sidebars, social media links, and any non-article text. Preserve the article's structure with paragraph breaks. Do not add any commentary.`
+                        },
+                        {
+                          role: "user",
+                          content: `Extract the full article body from this scraped page about "${article.title}":\n\n${rawMarkdown.substring(0, 30000)}`
+                        }
+                      ],
+                    }),
+                  });
+
+                  if (aiResponse.ok) {
+                    const aiData = await aiResponse.json();
+                    const extractedContent = aiData.choices?.[0]?.message?.content;
+                    if (extractedContent && extractedContent.length > 50) {
+                      fullContent = extractedContent;
+                    }
+                  }
+
+                  // Try to find an image from the scraped data
+                  if (!imageUrl) {
+                    const imgMatch = rawMarkdown.match(/!\[.*?\]\((https?:\/\/[^\s)]+\.(jpg|jpeg|png|webp)[^\s)]*)\)/i);
+                    if (imgMatch) {
+                      imageUrl = imgMatch[1];
+                    }
+                  }
+                }
+              } else {
+                console.warn(`Scrape failed for ${article.source_url}: ${scrapeResponse.status}`);
+              }
+            } catch (scrapeErr) {
+              console.warn(`Scrape error for "${article.title}":`, scrapeErr);
+            }
+
+            // Small delay to avoid rate limiting
+            await new Promise(r => setTimeout(r, 1500));
+          }
+
+          // Assign category fallback image if still no image
+          if (!imageUrl) {
+            imageUrl = CATEGORY_IMAGES[article.category] || DEFAULT_IMAGE;
+          }
+
+          // If we still don't have content, generate a brief article from the excerpt
+          if (!fullContent) {
+            try {
+              const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                  "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  model: "google/gemini-2.5-flash",
+                  messages: [
+                    {
+                      role: "system",
+                      content: `You are a professional real estate journalist writing for a Dubai property news platform. Write a detailed, factual news article based on the headline and summary provided. Write 4-6 paragraphs. Be professional, factual, and informative. Do NOT add disclaimers or mention that you are AI.`
+                    },
+                    {
+                      role: "user",
+                      content: `Write a full news article based on this:\n\nHeadline: ${article.title}\nSummary: ${article.excerpt}\nSource: ${article.category}\n\nWrite 4-6 detailed paragraphs.`
+                    }
+                  ],
+                }),
+              });
+
+              if (aiResponse.ok) {
+                const aiData = await aiResponse.json();
+                fullContent = aiData.choices?.[0]?.message?.content || null;
+              }
+            } catch (aiErr) {
+              console.warn(`AI content generation failed for "${article.title}":`, aiErr);
+            }
+          }
+
+          // Update the article in the database
+          const updateData: Record<string, unknown> = {};
+          if (fullContent && !article.content) updateData.content = fullContent;
+          if (imageUrl && !article.image_url) updateData.image_url = imageUrl;
+
+          if (Object.keys(updateData).length > 0) {
+            const { error: updateError } = await supabase
+              .from("market_news")
+              .update(updateData)
+              .eq("id", article.id);
+
+            if (updateError) {
+              errors.push(`${article.title}: DB update failed - ${updateError.message}`);
+            } else {
+              enrichedCount++;
+              console.log(`✓ Enriched: "${article.title}" (content: ${!!fullContent}, image: ${!!imageUrl})`);
+            }
+          }
+        } catch (articleErr) {
+          errors.push(`${article.title}: ${articleErr instanceof Error ? articleErr.message : "Unknown error"}`);
+        }
+      }
+
+      console.log(`Enrichment complete: ${enrichedCount}/${articlesToEnrich.length} articles enriched`);
+
+      return new Response(JSON.stringify({
+        success: true,
+        enriched: enrichedCount,
+        total: articlesToEnrich.length,
+        errors: errors.length > 0 ? errors : undefined,
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // ===================== COLLECT ACTION (existing) =====================
     const sourcesToProcess = sources?.length 
       ? AUTHORIZED_NEWS_SOURCES.filter(s => sources.includes(s.name))
       : AUTHORIZED_NEWS_SOURCES;
@@ -135,9 +262,7 @@ serve(async (req) => {
       console.log(`Scraping ${source.name}...`);
       
       try {
-        // Use Perplexity for news search (more reliable for government sites)
         const PERPLEXITY_KEY = Deno.env.get("PERPLEXITY_API_KEY");
-        
         let newsContent = "";
         
         if (PERPLEXITY_KEY) {
@@ -151,14 +276,8 @@ serve(async (req) => {
               body: JSON.stringify({
                 model: "sonar",
                 messages: [
-                  {
-                    role: "system",
-                    content: "You are a news aggregator. Return only factual news headlines and summaries from the specified source. Format as JSON array."
-                  },
-                  {
-                    role: "user",
-                    content: `Find the 5 most recent Dubai/UAE real estate news articles from ${source.name} (${source.url}). Include title, summary, date, and link for each.`
-                  }
+                  { role: "system", content: "You are a news aggregator. Return only factual news headlines and summaries from the specified source. Format as JSON array." },
+                  { role: "user", content: `Find the 5 most recent Dubai/UAE real estate news articles from ${source.name} (${source.url}). Include title, summary, date, and link for each.` }
                 ],
                 search_recency_filter: "week",
                 search_domain_filter: [new URL(source.url).hostname],
@@ -174,7 +293,6 @@ serve(async (req) => {
           }
         }
         
-        // Fallback to Firecrawl
         if (!newsContent) {
           try {
             const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
@@ -195,9 +313,6 @@ serve(async (req) => {
             if (scrapeResponse.ok) {
               const scrapeData = await scrapeResponse.json();
               newsContent = scrapeData.data?.markdown || scrapeData.markdown || "";
-            } else {
-              const errData = await scrapeResponse.json().catch(() => ({}));
-              console.warn(`Firecrawl failed for ${source.name}: ${errData.error || scrapeResponse.status}`);
             }
           } catch (firecrawlError) {
             console.warn(`Firecrawl error for ${source.name}:`, firecrawlError);
@@ -209,7 +324,6 @@ serve(async (req) => {
           continue;
         }
 
-        // Use AI to extract structured news articles
         const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
           method: "POST",
           headers: {
@@ -304,10 +418,8 @@ RULES:
       }
     }
 
-    // Insert collected news into database (upsert to avoid duplicates)
     let insertedCount = 0;
     for (const article of collectedNews) {
-      // Check if article already exists by title
       const { data: existing } = await supabase
         .from("market_news")
         .select("id")
@@ -330,9 +442,7 @@ RULES:
             is_featured: false,
           });
 
-        if (!insertError) {
-          insertedCount++;
-        }
+        if (!insertError) insertedCount++;
       }
     }
 
