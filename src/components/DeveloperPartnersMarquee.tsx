@@ -1,105 +1,78 @@
-import { useEffect, useRef, useState, useContext } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState, useCallback, useContext } from "react";
 import { Link } from "react-router-dom";
 import { LanguageContext } from "@/contexts/LanguageContext";
 
 // LOCKED: Featured developer partners
-// Current developers: DAMAC, EMAAR, MERAAS, SOBHA REALTY, NAKHEEL (original 5)
-// Additional featured partners
 const FEATURED_DEVELOPERS = [
-  // === ORIGINAL 5 (LOCKED) ===
-  { 
-    name: "DAMAC", 
-    slug: "damac",
-    logo: "/developers/logos/damac-logo.webp"
-  },
-  { 
-    name: "EMAAR", 
-    slug: "emaar",
-    logo: "/developers/logos/emaar-logo.webp"
-  },
-  { 
-    name: "MERAAS", 
-    slug: "meraas",
-    logo: "/developers/logos/meraas-logo.webp"
-  },
-  { 
-    name: "SOBHA REALTY", 
-    slug: "sobha",
-    logo: "/developers/logos/sobha-logo.webp"
-  },
-  { 
-    name: "NAKHEEL", 
-    slug: "nakheel",
-    logo: "/developers/logos/nakheel-logo.webp"
-  },
-  // === ADDITIONAL FEATURED PARTNERS ===
-  { 
-    name: "BINGHATTI", 
-    slug: "binghatti",
-    logo: "/developers/logos/binghatti-logo.webp"
-  },
-  { 
-    name: "SELECT GROUP", 
-    slug: "select-group",
-    logo: "/developers/logos/select-group-logo.webp"
-  },
-  { 
-    name: "ELLINGTON PROPERTIES", 
-    slug: "ellington",
-    logo: "/developers/logos/ellington-logo.webp"
-  },
-  { 
-    name: "MAJID AL FUTTAIM", 
-    slug: "majid-al-futtaim",
-    logo: "/developers/logos/majid-al-futtaim-logo.webp"
-  },
-  { 
-    name: "DANUBE PROPERTIES", 
-    slug: "danube",
-    logo: "/developers/logos/danube-logo.webp"
-  },
-  { 
-    name: "DUBAI PROPERTIES", 
-    slug: "dubai-properties",
-    logo: "/developers/logos/dubai-properties-logo.webp"
-  },
+  { name: "DAMAC", slug: "damac", logo: "/developers/logos/damac-logo.webp" },
+  { name: "EMAAR", slug: "emaar", logo: "/developers/logos/emaar-logo.webp" },
+  { name: "MERAAS", slug: "meraas", logo: "/developers/logos/meraas-logo.webp" },
+  { name: "SOBHA REALTY", slug: "sobha", logo: "/developers/logos/sobha-logo.webp" },
+  { name: "NAKHEEL", slug: "nakheel", logo: "/developers/logos/nakheel-logo.webp" },
+  { name: "BINGHATTI", slug: "binghatti", logo: "/developers/logos/binghatti-logo.webp" },
+  { name: "SELECT GROUP", slug: "select-group", logo: "/developers/logos/select-group-logo.webp" },
+  { name: "ELLINGTON PROPERTIES", slug: "ellington", logo: "/developers/logos/ellington-logo.webp" },
+  { name: "MAJID AL FUTTAIM", slug: "majid-al-futtaim", logo: "/developers/logos/majid-al-futtaim-logo.webp" },
+  { name: "DANUBE PROPERTIES", slug: "danube", logo: "/developers/logos/danube-logo.webp" },
+  { name: "DUBAI PROPERTIES", slug: "dubai-properties", logo: "/developers/logos/dubai-properties-logo.webp" },
 ];
+
+const TOTAL_IMAGES = FEATURED_DEVELOPERS.length;
 
 const DeveloperPartnersMarquee = () => {
   const context = useContext(LanguageContext);
   const language = context?.language ?? "en";
 
-  const trackRef = useRef<HTMLDivElement | null>(null);
   const loopRef = useRef<HTMLDivElement | null>(null);
   const [loopWidth, setLoopWidth] = useState(0);
+  const loadedCount = useRef(0);
+  const [allLoaded, setAllLoaded] = useState(false);
 
-  // Measure the width of ONE loop for seamless scrolling
-  useEffect(() => {
+  const measure = useCallback(() => {
     const el = loopRef.current;
     if (!el) return;
-
-    const measure = () => {
-      const w = el.scrollWidth;
-      if (Number.isFinite(w) && w > 0) setLoopWidth(w);
-    };
-
-    measure();
-
-    const ro = new ResizeObserver(() => measure());
-    ro.observe(el);
-    window.addEventListener("resize", measure);
-
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", measure);
-    };
+    const w = el.scrollWidth;
+    if (Number.isFinite(w) && w > 0) setLoopWidth(w);
   }, []);
 
-  const renderPartner = (developer: typeof FEATURED_DEVELOPERS[number], index: number, listKey: "a" | "b") => {
+  const handleImageLoad = useCallback(() => {
+    loadedCount.current += 1;
+    if (loadedCount.current >= TOTAL_IMAGES) {
+      setAllLoaded(true);
+      measure();
+    }
+  }, [measure]);
+
+  const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    // Hide the broken image and show the fallback initial
+    img.style.display = "none";
+    const fallback = img.nextElementSibling as HTMLElement | null;
+    if (fallback) fallback.style.display = "flex";
+    handleImageLoad(); // count it as "loaded" so we don't block measurement
+  }, [handleImageLoad]);
+
+  // Initial measure + resize listener
+  useEffect(() => {
+    measure();
+    const ro = new ResizeObserver(() => measure());
+    if (loopRef.current) ro.observe(loopRef.current);
+    window.addEventListener("resize", measure);
+    return () => { ro.disconnect(); window.removeEventListener("resize", measure); };
+  }, [measure]);
+
+  // Re-measure once all images loaded
+  useEffect(() => {
+    if (allLoaded) measure();
+  }, [allLoaded, measure]);
+
+  const duration = loopWidth > 0 ? Math.max(12, loopWidth / 80) : 0;
+
+  const renderPartner = (developer: typeof FEATURED_DEVELOPERS[number], index: number, isFirst: boolean) => {
+    const initial = developer.name.charAt(0);
     return (
       <Link
-        key={`${listKey}-${developer.slug}-${index}`}
+        key={`${isFirst ? "a" : "b"}-${developer.slug}-${index}`}
         to={`/developer/${developer.slug}`}
         className="flex-shrink-0 px-3 md:px-5 lg:px-6 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
@@ -115,60 +88,61 @@ const DeveloperPartnersMarquee = () => {
             src={developer.logo}
             alt={developer.name}
             className="w-full h-full object-contain p-1.5 md:p-2"
-            loading="lazy"
+            loading="eager"
             decoding="async"
+            onLoad={isFirst ? handleImageLoad : undefined}
+            onError={isFirst ? handleImageError : undefined}
           />
+          {/* Fallback initial – hidden by default, shown on error */}
+          <span
+            className="items-center justify-center text-lg md:text-xl font-bold text-gold"
+            style={{ display: "none" }}
+          >
+            {initial}
+          </span>
         </div>
       </Link>
     );
   };
 
+  // Inline keyframes style for CSS-driven marquee
+  const marqueeStyle: React.CSSProperties = loopWidth > 0
+    ? {
+        display: "flex",
+        animation: `marquee-scroll ${duration}s linear infinite`,
+      }
+    : { display: "flex" };
+
   return (
     <section className="w-full bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden">
-      {/* Edge-to-edge container */}
+      {/* Inject keyframes */}
+      {loopWidth > 0 && (
+        <style>{`
+          @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-${loopWidth}px); }
+          }
+        `}</style>
+      )}
+
       <div className="w-full">
-        {/* Title section - Active champagne background with black text - Extra bottom spacing */}
         <div className="py-5 md:py-6 px-4 mb-2 md:mb-3">
           <p className="text-center text-black text-sm md:text-base font-light tracking-wide">
             {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
           </p>
         </div>
 
-        {/* Marquee Container - Gold champagne background to match Best Idea Award */}
         <div className="relative w-full overflow-hidden bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] py-6 md:py-8 border-t border-b border-gold/30">
-          {/* Scrolling content */}
-          <motion.div
-            ref={trackRef}
-            className="flex items-center"
-            animate={
-              loopWidth > 0
-                ? { x: [0, -loopWidth] }
-                : { x: 0 }
-            }
-            transition={{
-              x: {
-                duration: loopWidth > 0 ? Math.max(12, loopWidth / 120) : 0,
-                repeat: Infinity,
-                ease: "linear",
-              },
-            }}
-          >
-            {/* First loop */}
+          <div style={marqueeStyle} className="items-center">
+            {/* Loop A – measured */}
             <div ref={loopRef} className="flex items-center">
-              {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, "a"))}
+              {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, true))}
             </div>
-
-            {/* Duplicate loops for seamless infinite scroll */}
+            {/* Loop B – seamless duplicate */}
             <div aria-hidden className="flex items-center">
-              {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, "b"))}
+              {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, false))}
             </div>
-            <div aria-hidden className="flex items-center">
-              {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, "a"))}
-            </div>
-            <div aria-hidden className="flex items-center">
-              {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, "b"))}
-            </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
