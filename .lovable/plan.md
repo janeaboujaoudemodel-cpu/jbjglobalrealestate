@@ -1,53 +1,53 @@
 
-# Area Detail Page Fixes -- Multiple UI Issues
 
-## Issues Identified
+# Fix AI Area Intelligence Loading + Disclaimer "Contact Our Team" Links
 
-1. **"Projects in {Area}" heading is black text on dark background** -- invisible/unreadable
-2. **Project cards in AreaProjectsGrid are basic/minimal** -- missing handover date, description, developer logo, sale status, proper price formatting
-3. **Developer name not gold/clickable** in area project cards
-4. **Prices show decimals** (e.g., "2,552,000.015") -- must remove all decimals
-5. **"View All Projects" CTA is a plain text link** -- needs proper button styling
-6. **DLD Market Widget touches container edges** -- needs inner padding/max-width card treatment
-7. **"Explore Properties" CTA section needs premium upgrade**
-8. **DLD transaction numbers missing date context** -- must clarify the time period
-9. **Consultation form** -- already handled globally by `CombinedContactNewsletter` in MainLayout (no change needed)
+## Issue 1: AI Area Intelligence Spinner Never Stops
 
-## Changes
+**Root Cause:** The backend function works correctly (tested and returns full analysis in ~10 seconds). The issue is on the frontend in `AreaAIAnalyzer.tsx`:
 
-### File 1: `src/components/area-detail/AreaProjectsGrid.tsx` (Full Rewrite)
+- The `useEffect` that auto-triggers analysis has a dependency on `handleAnalyze` which is wrapped in `useCallback` with `[areaName]` dependency. However, the trigger condition checks `!analysis && !isAnalyzing` -- if the component re-renders (e.g., from parent state changes or React Query refetches), the `hasTriggered.current` ref may not persist correctly across remounts.
+- Additionally, if the `supabase.functions.invoke` call silently fails (e.g., CORS mismatch from the preview domain, or a network timeout), the catch block sets a generic error message but the `isAnalyzing` state may not reset properly in all edge cases.
 
-This is the biggest change. The current grid fetches minimal fields and renders basic cards. It needs to match the standard `ProjectCard` component.
+**Fix in `src/components/area-detail/AreaAIAnalyzer.tsx`:**
+- Add a timeout fallback: if analysis takes longer than 30 seconds, show a "retry" button instead of infinite spinner
+- Add error state handling with a visible retry button
+- Ensure the `finally` block always resets `isAnalyzing` to false (it does, but add a safety timeout)
+- Replace the infinite spinner with a timeout-aware loading state
 
 **Changes:**
-- Expand the database query to include all fields needed by `ProjectCard`: `handover_date`, `description`, `status_label`, `sale_status`, `is_sold_out`, `property_type_label`, `bedrooms_min`, `bedrooms_max`, `size_min`, `size_max`, `location`, plus join with `developers(name, slug, logo_url)` and `project_images(image_url, alt_text, sort_order)`
-- Replace the custom mini-cards with the actual `ProjectCard` component for consistency
-- Change the section heading "Projects in {Area}" from `text-black` to `text-gold` so it is visible on dark backgrounds
-- Format the "View All Projects" CTA as a proper premium button (gold gradient, border, ArrowUpRight icon)
+- Add `hasTimedOut` state that triggers after 30 seconds
+- In the loading UI (lines 159-163), show a "Retry" button when timed out instead of endless spinner
+- Add `error` state to show meaningful feedback instead of silent failure
 
-### File 2: `src/components/shared/DLDMarketWidget.tsx`
+## Issue 2: Disclaimer Links -- "Contact Our Team" CTA
 
-**Changes:**
-- Wrap the full-version content in a rounded card with `border border-gold/20 rounded-2xl p-6` so it does not touch container edges
-- Add "YTD 2026" label next to the "Transactions" stat so users know the time period
-- Update the disclaimer text to include "Year-to-date (YTD) 2026 data" for clarity
+Every disclaimer that says "does not constitute financial advice" should append a clickable "Contact our team" link.
 
-### File 3: `src/pages/AreaDetail.tsx` -- CTA Section
+**Files to update (7 locations):**
 
-**Changes:**
-- Upgrade the "Explore Properties in {Area}" CTA card with a more premium design: add a gold accent line at top, subtle gold icon, and improved button styling
-- Ensure both buttons have consistent premium look
+1. `src/components/area-detail/AreaAIAnalyzer.tsx` (line 272) -- footer disclaimer
+2. `src/components/shared/DLDMarketWidget.tsx` (line 187) -- full version disclaimer
+3. `src/components/shared/DLDMarketWidget.tsx` (line 64-66) -- compact version disclaimer
+4. `src/components/client-intelligence/ClientMarketSnapshot.tsx` (line 221-224)
+5. `src/components/client-intelligence/ClientMarketContext.tsx` (line 148-151)
+6. `src/components/AIMarketAnalyzer.tsx` (line 408-412)
+7. `src/components/ai-tools/premium/AIROICalculatorPremium.tsx` (line 339-343)
 
-### File 4: `src/components/ProjectCard.tsx` -- Price Formatting
+**Pattern for each:** Append a `Link` to `/contact` styled in gold:
 
-**Changes:**
-- In the `formatPriceWithCurrency` function (line 49-58), ensure `Math.round()` is applied to the converted value before formatting, eliminating any decimal artifacts like ".015"
-- For the full-number display in the area grid (non-abbreviated), use `Math.round(price).toLocaleString()` to strip all decimals
+```
+...does not constitute financial advice. <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+```
 
-## Technical Details
+## Technical Summary
 
-- The `AreaProjectsGrid` will import and use the existing `ProjectCard` component, ensuring cards match the rest of the site (developer logo, handover badge, description, sale status, proper pricing)
-- The Supabase query will be expanded to join `developers` and `project_images` tables, matching the pattern used in the main properties page
-- Price formatting uses `Math.round()` before `toLocaleString()` to guarantee zero decimals everywhere
-- DLD widget card treatment uses inner container with padding so content does not bleed to screen edges
-- The time period label "YTD 2026" will be added to stat cards for transparency
+| File | Change |
+|------|--------|
+| `src/components/area-detail/AreaAIAnalyzer.tsx` | Add 30s timeout + retry button + "Contact our team" link in footer |
+| `src/components/shared/DLDMarketWidget.tsx` | Add "Contact our team" link in both compact and full disclaimers |
+| `src/components/client-intelligence/ClientMarketSnapshot.tsx` | Add "Contact our team" link |
+| `src/components/client-intelligence/ClientMarketContext.tsx` | Add "Contact our team" link |
+| `src/components/AIMarketAnalyzer.tsx` | Add "Contact our team" link |
+| `src/components/ai-tools/premium/AIROICalculatorPremium.tsx` | Add "Contact our team" link |
+
