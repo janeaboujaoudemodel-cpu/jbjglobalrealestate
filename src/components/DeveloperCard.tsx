@@ -87,7 +87,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
                 <img
                   src={developer.logo_url}
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-contain p-1"
+                  className="w-full h-full object-fill"
                   loading={isEager ? "eager" : "lazy"}
                 />
               ) : (

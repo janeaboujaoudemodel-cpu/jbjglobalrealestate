@@ -155,7 +155,7 @@
                 <img 
                   src={(project as any).developer.logo_url} 
                   alt={project.developer_name || ''}
-                  className="w-10 h-10 object-contain"
+                  className="w-full h-full object-fill"
                 />
               </div>
             )}

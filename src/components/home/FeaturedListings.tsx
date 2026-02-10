@@ -1,6 +1,7 @@
 /**
  * FeaturedListings Component
- * Displays 8 featured project cards from elite developers (Emaar, Omniyat, Sobha, Aldar)
+ * Displays 8 featured project cards from elite developers
+ * Emaar (2), ALDAR (2), Omniyat (1), Sobha Pinnacle (1), Binghatti Bugatti (1), Binghatti Mercedes (1)
  */
 
 import { Link } from "react-router-dom";
@@ -11,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR'];
+const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti'];
 
 const formatPrice = (price: number): string => {
   if (price >= 1000000) {
@@ -33,34 +34,74 @@ interface FeaturedProject {
   bedrooms_max: number | null;
   handover_date: string | null;
   images: { image_url: string }[];
+  developer: { id: string; name: string; slug: string; logo_url: string | null } | null;
 }
 
 function useFeaturedProjects() {
   return useQuery({
-    queryKey: ["featured-projects-elite"],
+    queryKey: ["featured-projects-elite-v2"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("id, name, slug, developer_name, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, images:project_images(image_url)")
+        .select("id, name, slug, developer_name, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
         .in("developer_name", ELITE_DEVELOPERS)
         .eq("is_published", true)
         .order("created_at", { ascending: false })
-        .limit(40);
+        .limit(60);
 
       if (error) throw error;
 
-      // Pick 2 per developer, then fill to 8
+      const all = data as FeaturedProject[];
+
+      // Group by developer
       const byDev: Record<string, FeaturedProject[]> = {};
-      for (const p of (data as FeaturedProject[])) {
+      for (const p of all) {
         const dev = p.developer_name || 'Unknown';
         if (!byDev[dev]) byDev[dev] = [];
         byDev[dev].push(p);
       }
 
       const result: FeaturedProject[] = [];
-      for (const dev of ELITE_DEVELOPERS) {
-        const projects = byDev[dev] || [];
-        result.push(...projects.slice(0, 2));
+
+      // 2 Emaar
+      result.push(...(byDev['Emaar'] || []).slice(0, 2));
+
+      // 2 ALDAR
+      result.push(...(byDev['ALDAR'] || []).slice(0, 2));
+
+      // 1 Omniyat
+      if (byDev['Omniyat']?.[0]) result.push(byDev['Omniyat'][0]);
+
+      // 1 Sobha - only Pinnacle
+      const sobhaProjects = byDev['Sobha'] || [];
+      const pinnacle = sobhaProjects.find(p => p.name.toLowerCase().includes('pinnacle'));
+      if (pinnacle) {
+        result.push(pinnacle);
+      } else if (sobhaProjects[0]) {
+        // Fallback: first Sobha that isn't "Mirage"
+        const nonMirage = sobhaProjects.find(p => !p.name.toLowerCase().includes('mirage'));
+        if (nonMirage) result.push(nonMirage);
+      }
+
+      // 1 Bugatti by Binghatti
+      const binghattiProjects = byDev['Binghatti'] || [];
+      const bugatti = binghattiProjects.find(p => p.name.toLowerCase().includes('bugatti'));
+      if (bugatti) result.push(bugatti);
+
+      // 1 Mercedes-Benz by Binghatti
+      const mercedes = binghattiProjects.find(p => p.name.toLowerCase().includes('mercedes'));
+      if (mercedes) result.push(mercedes);
+
+      // Fill remaining slots if needed
+      if (result.length < 8) {
+        const usedIds = new Set(result.map(r => r.id));
+        for (const p of all) {
+          if (result.length >= 8) break;
+          if (!usedIds.has(p.id)) {
+            result.push(p);
+            usedIds.add(p.id);
+          }
+        }
       }
 
       return result.slice(0, 8);
@@ -71,6 +112,7 @@ function useFeaturedProjects() {
 
 const ProjectCard = ({ project }: { project: FeaturedProject }) => {
   const imageUrl = project.cover_image_url || project.images?.[0]?.image_url;
+  const logoUrl = (project.developer as any)?.logo_url;
 
   return (
     <motion.div
@@ -96,17 +138,39 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
                 <Building2 className="w-10 h-10 text-gold/30" />
               </div>
             )}
-            {/* Developer Badge */}
-            <div className="absolute top-3 left-3">
-              <span className="px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider font-semibold bg-black/80 text-gold backdrop-blur-sm">
-                {project.developer_name}
-              </span>
-            </div>
-            {/* Price Badge */}
+
+            {/* Developer Logo - Top Left */}
+            {logoUrl ? (
+              <div className="absolute top-3 left-3 z-10 w-10 h-10 rounded-lg bg-white shadow-lg border border-gold/30 overflow-hidden">
+                <img
+                  src={logoUrl}
+                  alt={project.developer_name || ''}
+                  className="w-full h-full object-fill"
+                  loading="lazy"
+                />
+              </div>
+            ) : (
+              <div className="absolute top-3 left-3">
+                <span className="px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider font-semibold bg-black/80 text-gold backdrop-blur-sm">
+                  {project.developer_name}
+                </span>
+              </div>
+            )}
+
+            {/* Price Badge - Bottom Left */}
             {project.price_from && (
-              <div className="absolute bottom-3 right-3">
-                <span className="px-3 py-1.5 bg-black/80 backdrop-blur-sm text-gold font-bold text-sm rounded-lg">
+              <div className="absolute bottom-3 left-3 z-10">
+                <span className="px-3 py-1.5 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/50 text-black font-bold text-xs rounded-lg shadow-lg">
                   From {formatPrice(project.price_from)}
+                </span>
+              </div>
+            )}
+
+            {/* Handover - Bottom Right */}
+            {project.handover_date && (
+              <div className="absolute bottom-3 right-3 z-10">
+                <span className="px-2 py-1 bg-black/70 backdrop-blur-sm text-gold text-[10px] font-semibold rounded">
+                  {project.handover_date}
                 </span>
               </div>
             )}
@@ -135,8 +199,8 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
                   {project.bedrooms_max && project.bedrooms_max !== project.bedrooms_min ? `–${project.bedrooms_max} Beds` : project.bedrooms_min !== 0 ? ' Bed' : ''}
                 </span>
               )}
-              {project.handover_date && (
-                <span className="text-gold font-medium">{project.handover_date}</span>
+              {project.developer_name && (
+                <span className="text-gold font-medium text-[10px]">by {project.developer_name}</span>
               )}
             </div>
           </div>
@@ -170,7 +234,7 @@ const FeaturedListings = () => {
         {/* Listings Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {isLoading
-            ? [1, 2, 3, 4].map((i) => (
+            ? [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl overflow-hidden border-2 border-gold/40">
                   <Skeleton className="aspect-[4/3] rounded-none" />
                   <div className="p-4 space-y-2">

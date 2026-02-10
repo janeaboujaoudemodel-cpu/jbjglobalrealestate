@@ -249,7 +249,7 @@ const DeveloperDetail = () => {
             {selectedEmirate ? `Projects in ${selectedEmirate}` : "All Projects"}
           </h2>
 
-          <div className="bg-black rounded-2xl p-4 mb-6">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-4 mb-6">
             <ProjectFilters
               filters={filters}
               onFiltersChange={setFilters}
