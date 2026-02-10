@@ -1033,4 +1033,56 @@ export const en = {
   'chat.typeMessage': 'Type a message...',
   'chat.online': 'Online',
   'chat.offline': 'Offline',
+
+  // Homepage additional keys
+  'home.trustBar.trustedByThousands': 'Trusted By Thousands',
+  'home.trustBar.excellenceGuaranteed': 'Excellence Guaranteed',
+  'hero.landlords': 'Landlords',
+  'hero.tenants': 'Tenants',
+  'hero.partners': 'Partners',
+  'hero.goldenVisa': 'Golden Visa',
+  'hero.brokerHubDesc': 'Access AI-powered broker tools, training modules, CRM, and marketing resources.',
+  'hero.investorHubDesc': 'AI-powered property analysis, comparison, mortgage calculator, and productivity tools.',
+  'home.exclusivePublication': 'Exclusive Publication',
+  'home.freeMarket': 'Free Market',
+  'home.intelligenceBook': 'Intelligence Book',
+  'home.mortgageEstimate': 'Mortgage Estimate',
+  'home.mortgageDesc': 'Estimate your monthly payments and explore financing options with licensed mortgage partners.',
+  'home.mortgageDisclaimer': 'Estimates only. Introductions to independent licensed mortgage partners.',
+  'home.tryOurAi': 'Try Our AI',
+  'home.connectMortgagePartners': 'Connect With Mortgage Partners',
+  'home.aiPowered': 'AI-Powered',
+  'home.poweredByJBJ': 'Powered by JBJ Global Real Estate',
+
+  // Services card keys
+  'services.card.buy': 'Buy',
+  'services.card.buyDesc': 'Find the right home with shortlists that match your budget and lifestyle.',
+  'services.card.rent': 'Rent',
+  'services.card.rentDesc': 'Fast viewings, clear requirements, and quick move-ins.',
+  'services.card.sell': 'Sell',
+  'services.card.sellDesc': 'Pricing strategy + premium marketing to maximize your sale.',
+  'services.card.management': 'Management',
+  'services.card.managementDesc': 'Tenant placement, renewals, maintenance coordination, and reporting.',
+  'services.howCanWeHelp': 'How Can We Help?',
+
+  // Why Choose Us keys
+  'whyUs.ourCommitment': 'Our Commitment',
+  'whyUs.marketIntelligence': 'Market Intelligence',
+  'whyUs.premiumPresentation': 'Premium Presentation',
+  'whyUs.clearCommunication': 'Clear Communication',
+  'whyUs.exclusiveNetwork': 'Exclusive Network',
+  'whyUs.prioritySupport': 'Priority Support',
+  'whyUs.prioritySupportDesc': 'Dedicated support team available for all your needs',
+  'whyUs.loyaltyProgram': 'Loyalty Program',
+  'whyUs.loyaltyProgramDesc': 'Exclusive benefits and rewards for returning clients',
+
+  // Trust bar keys
+  'trust.dldRegistered': 'DLD Registered',
+  'trust.whatsappPriority': 'WhatsApp Priority',
+  'trust.qualityAssured': 'Quality Assured',
+  'trust.awardWinning': 'Award Winning',
+  'trust.excellenceInService': 'Excellence in Service',
+
+  // Testimonials keys
+  'testimonials.readAll': 'Read All Testimonials',
 };

@@ -269,21 +269,21 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
   return (
     <div className="flex-1 bg-gradient-to-b from-zinc-900/80 to-zinc-950/80 rounded-xl border border-gold/20 flex flex-col overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.05)]">
       {/* Header */}
-      <div className="p-4 border-b border-gold/20 flex items-start justify-between bg-zinc-900/50">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-gold font-mono font-bold text-lg">
+      <div className="px-3 py-2.5 border-b border-gold/20 flex items-start justify-between bg-zinc-900/50">
+        <div className="min-w-0 flex-1 mr-2">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <span className="text-gold font-mono font-bold text-sm whitespace-nowrap">
               {ticket.ticket_number}
             </span>
-            <Badge className={cn("border", priority.className)}>
+            <Badge className={cn("border text-[10px] px-1.5 py-0", priority.className)}>
               {priority.label}
             </Badge>
-            <Badge className={cn("flex items-center gap-1", status.className)}>
-              <StatusIcon className="w-3 h-3" />
+            <Badge className={cn("flex items-center gap-1 text-[10px] px-1.5 py-0", status.className)}>
+              <StatusIcon className="w-2.5 h-2.5" />
               {status.label}
             </Badge>
           </div>
-          <h2 className="text-lg font-semibold text-white">{ticket.subject}</h2>
+          <h2 className="text-sm font-semibold text-white truncate">{ticket.subject}</h2>
         </div>
         <Button
           variant="ghost"
@@ -296,7 +296,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
       </div>
 
       <ScrollArea className="flex-1">
-        <div className="p-4 space-y-6">
+        <div className="p-3 space-y-4">
           {/* Reopened Ticket Alert */}
           {ticket.is_reopened && (
             <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
@@ -315,8 +315,8 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           )}
 
           {/* Customer Info */}
-          <div className="bg-zinc-800/50 rounded-lg p-4 space-y-3 border border-gold/10">
-            <h3 className="text-sm font-semibold text-gold uppercase tracking-wide mb-3">
+          <div className="bg-zinc-800/50 rounded-lg p-3 space-y-2 border border-gold/10">
+            <h3 className="text-xs font-semibold text-gold uppercase tracking-wide mb-2">
               Customer Details
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -554,14 +554,14 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
       </ScrollArea>
 
       {/* Reply Composer */}
-      <div className="p-4 border-t border-gold/20 bg-zinc-900/80">
-        <div className="flex gap-3">
+      <div className="p-3 border-t border-gold/20 bg-zinc-900/80">
+        <div className="flex gap-2">
           <textarea
             value={replyMessage}
             onChange={(e) => setReplyMessage(e.target.value)}
             placeholder="Type your reply to the customer..."
-            rows={3}
-            className="flex-1 min-h-[80px] px-4 py-3 rounded-lg bg-zinc-800 border border-gold/30 text-white placeholder:text-zinc-500 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+            rows={2}
+            className="flex-1 min-h-[56px] px-3 py-2 rounded-lg bg-zinc-800 border border-gold/30 text-white text-sm placeholder:text-zinc-500 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
           />
           <Button
             onClick={handleSendReply}

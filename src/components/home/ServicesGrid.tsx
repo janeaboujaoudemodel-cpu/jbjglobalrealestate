@@ -18,35 +18,35 @@ interface ServiceCard {
   color: string;
 }
 
-const services: ServiceCard[] = [
+const getServices = (t: (key: string, fallback?: string) => string): ServiceCard[] => [
   {
     id: "buy",
-    title: "Buy",
-    description: "Find the right home with shortlists that match your budget and lifestyle.",
+    title: t('services.card.buy', 'Buy'),
+    description: t('services.card.buyDesc', 'Find the right home with shortlists that match your budget and lifestyle.'),
     icon: Home,
     href: "/buyer-guide",
     color: "from-emerald-500 to-emerald-600",
   },
   {
     id: "rent",
-    title: "Rent",
-    description: "Fast viewings, clear requirements, and quick move-ins.",
+    title: t('services.card.rent', 'Rent'),
+    description: t('services.card.rentDesc', 'Fast viewings, clear requirements, and quick move-ins.'),
     icon: Key,
     href: "/tenant-guide",
     color: "from-blue-500 to-blue-600",
   },
   {
     id: "sell",
-    title: "Sell",
-    description: "Pricing strategy + premium marketing to maximize your sale.",
+    title: t('services.card.sell', 'Sell'),
+    description: t('services.card.sellDesc', 'Pricing strategy + premium marketing to maximize your sale.'),
     icon: Target,
     href: "/seller-guide",
     color: "from-gold to-amber-600",
   },
   {
     id: "management",
-    title: "Management",
-    description: "Tenant placement, renewals, maintenance coordination, and reporting.",
+    title: t('services.card.management', 'Management'),
+    description: t('services.card.managementDesc', 'Tenant placement, renewals, maintenance coordination, and reporting.'),
     icon: Wrench,
     href: "/landlord-guide",
     color: "from-purple-500 to-purple-600",
@@ -55,6 +55,7 @@ const services: ServiceCard[] = [
 
 const ServicesGrid = () => {
   const { t } = useLanguage();
+  const services = getServices(t);
 
   return (
     <section className="py-16 md:py-24 jj-layer-2">

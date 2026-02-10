@@ -146,7 +146,7 @@ const TestimonialsSection = () => {
           <div className="text-center mt-8">
             <Link to="/services/testimonials">
               <Button variant="tertiary" size="lg" className="group">
-                <span>Read All Testimonials</span>
+                <span>{t('testimonials.readAll', 'Read All Testimonials')}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
