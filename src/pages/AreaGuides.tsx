@@ -341,19 +341,25 @@ const AreaGuides = () => {
 
                         {/* Stats Row */}
                         <div className="flex items-center gap-3 text-zinc-700 text-xs mt-3 pt-3 border-t border-gold/20">
-                          {(area.property_count ?? 0) > 0 ? (
+                          {(area.property_count ?? 0) > 0 && (
                             <div className="flex items-center gap-1">
                               <Building2 className="w-3.5 h-3.5 text-gold" />
-                              <span>{area.property_count} Properties</span>
+                              <span>{area.property_count} Projects</span>
                             </div>
-                          ) : (
-                            <span className="text-zinc-500 text-xs">View area details</span>
+                          )}
+                          {(area.developer_count ?? 0) > 0 && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-zinc-500">{area.developer_count} Developers</span>
+                            </div>
                           )}
                           {area.is_trending && (
                             <div className="flex items-center gap-1">
                               <TrendingUp className="w-3.5 h-3.5 text-amber-500" />
                               <span className="text-amber-600">Trending</span>
                             </div>
+                          )}
+                          {(area.property_count ?? 0) === 0 && (area.developer_count ?? 0) === 0 && !area.is_trending && (
+                            <span className="text-zinc-500 text-xs">View area details</span>
                           )}
                         </div>
                       </div>
