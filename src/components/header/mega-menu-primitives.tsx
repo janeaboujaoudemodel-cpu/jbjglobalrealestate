@@ -35,13 +35,8 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
           right: '24px',
           // Prevent the panel from touching the bottom of the viewport on smaller screens
           // Unless noScroll is true - then no max-height so all content is visible
-          ...(noScroll ? {
-            maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
-            overflowY: 'auto' as const,
-          } : {
-            maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
-            overflowY: 'auto' as const,
-          }),
+          maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
+          overflowY: 'auto' as const,
           // Solid gradient background - prevents any transparency issues
           background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
           // Merge any custom styles passed in
@@ -253,7 +248,7 @@ export function MegaMenuIconLink({
           // Normal: transparent; Hover: champagne gradient background
           : "bg-transparent hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]",
         // Emphasis links get extra padding for prominence
-        emphasis ? "py-3 px-4" : compact ? "py-2 px-2.5" : "py-3 px-3"
+        emphasis ? "py-3 px-4" : compact ? "py-1.5 px-2" : "py-3 px-3"
       )}
     >
       {/* Icon container - larger for emphasis links */}
@@ -333,7 +328,7 @@ export function MegaMenuCard({
       "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]",
       "border border-gold/30 rounded-xl",
       "hover:border-gold/50 transition-all",
-      compact ? "p-3" : "p-4",
+      compact ? "p-2.5" : "p-4",
       className
     )}>
       <MegaMenuSectionTitle icon={icon} title={title} />

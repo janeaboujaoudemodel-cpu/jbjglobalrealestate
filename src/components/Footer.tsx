@@ -315,6 +315,25 @@ const Footer = () => {
     { href: "/document-scanner", label: "Document Scanner" },
     { href: "/e-signature", label: "E-Signature" },
     { href: "/sitemap", label: "Sitemap" },
+    // Missing pages now added
+    { href: "/meeting-center", label: "Meeting Center" },
+    { href: "/ai-call-summarizer", label: "Call Summarizer" },
+    { href: "/presentations", label: "Presentations" },
+    { href: "/form-builder", label: "Form Builder" },
+    { href: "/kanban-board", label: "Kanban Board" },
+    { href: "/spreadsheet", label: "Spreadsheet" },
+    { href: "/whiteboard", label: "Whiteboard" },
+    { href: "/mind-map", label: "Mind Map" },
+    { href: "/video-builder", label: "Video Builder" },
+    { href: "/ai-hub", label: "AI Hub" },
+    { href: "/ai-personal-shopper", label: "AI Personal Shopper" },
+    { href: "/ai-financial-advisor", label: "AI Financial Advisor" },
+    { href: "/map", label: "Property Map" },
+    { href: "/calculator/roi", label: "ROI Calculator" },
+    { href: "/communities", label: "Communities" },
+    { href: "/pricing", label: "Pricing" },
+    { href: "/digital-card", label: "Digital Card" },
+    { href: "/request-valuation", label: "Request Valuation" },
   ];
 
   // Education Hub - Link to /guides (contains all books, market reports, guides)
