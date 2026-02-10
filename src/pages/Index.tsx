@@ -217,6 +217,13 @@ const Index = () => {
           </div>
         </div>
         <TrustBar />
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center gap-4 mt-3">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/25 to-gold/40" />
+            <span className="text-gold/60 text-[10px] uppercase tracking-[0.2em] font-medium">Excellence Guaranteed</span>
+            <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gold/25 to-gold/40" />
+          </div>
+        </div>
       </div>
 
       {/* FEATURED LISTINGS - Master Blueprint: Section 3 (8 cards, Buy/Rent tabs) */}
