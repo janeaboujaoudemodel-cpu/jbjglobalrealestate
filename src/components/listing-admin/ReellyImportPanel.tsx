@@ -814,14 +814,16 @@ export function ReellyImportPanel() {
         .limit(1)
         .maybeSingle();
 
-      // Don't accumulate from previous jobs - start fresh each run
-      // Previous job data is only for reference, not for adding to current counts
-      let aggregated = { processed: 0, updated: 0, failed: 0, remaining: 999 };
-      let allResults: Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }> = [];
+      // Initialize from previous job progress so totals accumulate across sessions
+      const prevUpdated = prevJob?.stats_updated || 0;
+      const prevFailed = prevJob?.stats_errors || 0;
+      const prevResults = (prevJob?.error_log as Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>) || [];
+      let aggregated = { processed: prevUpdated + prevFailed, updated: prevUpdated, failed: prevFailed, remaining: 999 };
+      let allResults: Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }> = [...prevResults];
       setBackfillResult({
         success: true,
         ...aggregated,
-        message: `Starting backfill...`,
+        message: `Resuming backfill (${prevUpdated} previously updated)...`,
       });
       setBackfillProjectList(allResults);
 
@@ -854,7 +856,7 @@ export function ReellyImportPanel() {
 
       while (aggregated.remaining > 0 && batches < maxBatches) {
         const { data, error } = await supabase.functions.invoke("reelly-backfill-projects", {
-        body: { mode: "batch", batch_size: 50, force_refresh: true, started_at: backfillStartedAt },
+        body: { mode: "batch", batch_size: 50, started_at: backfillStartedAt },
         });
 
         if (error) throw error;
@@ -923,7 +925,8 @@ export function ReellyImportPanel() {
 
       toast.success(`Backfilled ${aggregated.updated} projects with detailed data`);
       
-      // Refresh stats
+      // Reload persisted results so navigating away and back shows correct numbers
+      await loadPersistedBackfillResults();
       handleLoadBackfillStats();
     } catch (err: any) {
       console.error("Backfill error:", err);
@@ -934,121 +937,6 @@ export function ReellyImportPanel() {
     }
   };
 
-  /**
-   * FULL EXTRACTION - Run all sync steps in sequence
-   */
-  const handleFullExtraction = async () => {
-    if (!confirm("🚀 FULL EXTRACTION\n\nThis will run all sync steps:\n1. Test API Connection\n2. Sync All Projects (1,805)\n3. Sync All Developers (549)\n4. Backfill Missing Details (floor plans, amenities, docs)\n5. Fetch Gallery Details\n6. Extract Areas\n7. Generate AI Interiors\n\nThis may take 15-30 minutes. Continue?")) {
-      return;
-    }
-
-    setIsFullExtracting(true);
-    setFullExtractionStep("testing");
-
-    try {
-      // Step 1: Test API - use direct result, not stale state
-      setFullExtractionStep("Step 1/7: Testing API connection...");
-      const isConnected = await handleTestApiConnection();
-      
-      if (!isConnected) {
-        throw new Error("API connection failed. Please check your API key.");
-      }
-
-      // Step 2: Sync All Projects
-      setFullExtractionStep("Step 2/7: Syncing all projects...");
-      await handleSyncProjects(true);
-
-      // Step 3: Sync All Developers
-      setFullExtractionStep("Step 3/7: Syncing all developers...");
-      await handleSyncDevelopers("full");
-
-      // Step 4: Backfill Missing Details (NEW - runs on approved projects)
-      setFullExtractionStep("Step 4/7: Backfilling missing details to approved projects...");
-      let backfillRemaining = 999;
-      let backfillBatches = 0;
-      const maxBackfillBatches = 50;
-      
-      while (backfillRemaining > 0 && backfillBatches < maxBackfillBatches) {
-        const { data } = await supabase.functions.invoke("reelly-backfill-projects", {
-        body: { mode: "batch", batch_size: 50, force_refresh: true },
-        });
-        
-        if (!data?.success) break;
-        backfillRemaining = data.remaining || 0;
-        backfillBatches++;
-        
-        setFullExtractionStep(`Step 4/7: Backfilling details (batch ${backfillBatches}, ${backfillRemaining} remaining)...`);
-        
-        await new Promise(resolve => setTimeout(resolve, 300));
-      }
-
-      // Step 5: Fetch Missing Details for pending imports
-      setFullExtractionStep("Step 5/7: Fetching missing details for queue...");
-      let remainingDetails = 999;
-      let detailBatches = 0;
-      const maxDetailBatches = 50; // Safety limit
-      
-      while (remainingDetails > 0 && detailBatches < maxDetailBatches) {
-        const { data } = await supabase.functions.invoke("reelly-fetch-details", {
-          body: { mode: "batch", batch_size: 50 },
-        });
-        
-        if (!data?.success) break;
-        remainingDetails = data.remaining || 0;
-        detailBatches++;
-        
-        setFullExtractionStep(`Step 5/7: Fetching details (batch ${detailBatches}, ${remainingDetails} remaining)...`);
-        
-        // Small delay between batches
-        await new Promise(resolve => setTimeout(resolve, 500));
-      }
-
-      // Step 6: Extract Areas
-      setFullExtractionStep("Step 6/7: Extracting areas...");
-      await handleSyncAreas("extract_from_projects");
-
-      // Step 7: Generate AI Interior Images
-      setFullExtractionStep("Step 7/7: Generating AI interior visuals...");
-      let remainingInteriors = 999;
-      let interiorBatches = 0;
-      const maxInteriorBatches = 50; // Safety limit
-      
-      while (remainingInteriors > 0 && interiorBatches < maxInteriorBatches) {
-        const { data } = await supabase.functions.invoke("batch-generate-interiors", {
-          body: { mode: "batch", batch_size: 5 }, // Smaller batches for AI generation
-        });
-        
-        if (!data?.success) break;
-        remainingInteriors = data.remaining || 0;
-        interiorBatches++;
-        
-        setFullExtractionStep(`Step 7/7: Generating interiors (batch ${interiorBatches}, ${remainingInteriors} remaining)...`);
-        
-        // Longer delay between AI batches to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 5000));
-        
-        // Limit to first 100 projects for initial sync to avoid excessive cost
-        if (interiorBatches >= 20) {
-          setFullExtractionStep("Step 7/7: Interior generation paused (limit reached)...");
-          break;
-        }
-      }
-
-      setFullExtractionStep("✅ Full extraction complete!");
-      toast.success("🎉 Full extraction complete! All projects synced with complete data and AI interiors.");
-      
-      // Refresh counts
-      refreshCounts();
-      checkForResumableJob();
-
-    } catch (err: any) {
-      console.error("Full extraction error:", err);
-      setFullExtractionStep(`❌ Failed: ${err.message}`);
-      toast.error(err.message || "Full extraction failed");
-    } finally {
-      setIsFullExtracting(false);
-    }
-  };
 
   // Load cached API results on mount
   useEffect(() => {
@@ -2550,7 +2438,7 @@ export function ReellyImportPanel() {
         </CardContent>
       </Card>
 
-      {/* FULL EXTRACTION - One Click to Rule Them All */}
+      {/* Unified Enrich All Projects (Reelly + Provident) */}
       <Card className="bg-gradient-to-br from-gold/30 to-champagne border-gold shadow-xl">
         <CardHeader>
           <div className="flex items-center gap-3">
@@ -2559,67 +2447,159 @@ export function ReellyImportPanel() {
             </div>
             <div>
               <CardTitle className="text-xl text-black flex items-center gap-2">
-                🚀 FULL EXTRACTION
-                {fullExtractionStep === "✅ Full extraction complete!" && <CheckCircle className="h-5 w-5 text-emerald-500" />}
+                🚀 Enrich All Projects (Reelly + Provident)
               </CardTitle>
               <CardDescription className="text-zinc-700">
-                One-click to sync ALL 1,805 projects with complete data
+                Single unified enrichment — fetches from Reelly API + fills gaps from Provident page-data. No Firecrawl credits needed.
               </CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="bg-white/80 rounded-xl p-4 border border-gold/50">
-            <h4 className="font-semibold text-zinc-900 mb-2">This will run:</h4>
+            <h4 className="font-semibold text-zinc-900 mb-2">For each project, this will:</h4>
             <ol className="list-decimal list-inside text-sm text-zinc-700 space-y-1">
-              <li>Test API Connection</li>
-              <li>Sync All Projects (~1,805)</li>
-              <li>Sync All Developers (~549)</li>
-              <li>Fetch Missing Details (gallery, docs, amenities)</li>
-              <li>Extract Areas from Projects</li>
+              <li>Fetch detailed data from Reelly API (amenities, floor plans, gallery, docs, FAQs)</li>
+              <li>Fill gaps from Provident page-data.json (free, no API credits needed)</li>
+              <li>Merge both sources non-destructively (only fills empty fields)</li>
+              <li>Write enriched data to database</li>
             </ol>
-            <p className="text-xs text-zinc-500 mt-3">Estimated time: 5-10 minutes</p>
           </div>
 
-          {isFullExtracting && fullExtractionStep && (
+          {isBulkEnriching && (
             <div className="bg-white/80 rounded-xl p-4 border border-gold">
-              <div className="flex items-center gap-3">
-                <RefreshCw className="h-5 w-5 text-gold animate-spin" />
-                <span className="font-medium text-zinc-900">{fullExtractionStep}</span>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <RefreshCw className="h-5 w-5 text-gold animate-spin" />
+                  <span className="font-medium text-zinc-900">Enriching projects...</span>
+                </div>
+                <Button size="sm" variant="destructive" onClick={() => setFullAiStopRequested(true)}>
+                  <Pause className="h-3 w-3 mr-1" /> Stop
+                </Button>
               </div>
+              <div className="grid grid-cols-3 gap-2 text-center text-sm mb-3">
+                <div className="bg-white rounded p-2 border">
+                  <p className="text-xl font-bold text-blue-700">{fullAiProgress.processed}</p>
+                  <p className="text-xs text-zinc-500">Processed</p>
+                </div>
+                <div className="bg-white rounded p-2 border">
+                  <p className="text-xl font-bold text-emerald-600">{fullAiProgress.enriched}</p>
+                  <p className="text-xs text-zinc-500">Enriched</p>
+                </div>
+                <div className="bg-white rounded p-2 border">
+                  <p className="text-xl font-bold text-red-500">{fullAiProgress.errors}</p>
+                  <p className="text-xs text-zinc-500">Errors</p>
+                </div>
+              </div>
+              {fullAiProgress.processed > 0 && (
+                <Progress value={Math.min(100, (fullAiProgress.processed / (backfillStats?.total_projects || 1000)) * 100)} className="h-2" />
+              )}
             </div>
           )}
 
-          <Button 
-            onClick={handleFullExtraction} 
-            disabled={isFullExtracting || isSyncing || isSyncingDevs || isFetchingDetails || isSyncingAreas}
+          {bulkEnrichResult && bulkEnrichResult.success && !isBulkEnriching && (
+            <Alert className="bg-emerald-50 border-emerald-300">
+              <CheckCircle className="h-4 w-4 text-emerald-600" />
+              <AlertTitle className="text-emerald-700">Enrichment Complete</AlertTitle>
+              <AlertDescription className="text-emerald-600">
+                <strong>{bulkEnrichResult.processed}</strong> projects processed, <strong>{bulkEnrichResult.images_added || 0}</strong> images added, <strong>{bulkEnrichResult.docs_added || 0}</strong> docs added, <strong>{bulkEnrichResult.fields_updated || 0}</strong> fields updated
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {bulkEnrichResult && !bulkEnrichResult.success && (
+            <Alert className="bg-red-50 border-red-300">
+              <XCircle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-700">{bulkEnrichResult.error || "Enrichment failed"}</AlertDescription>
+            </Alert>
+          )}
+
+          <Button
+            onClick={async () => {
+              if (!confirm("🔄 ENRICH ALL PROJECTS\n\nThis will enrich ALL published projects using Reelly API + Provident page-data.\n\nOnly empty fields will be filled (non-destructive).\n\nThis may take 10-30 minutes. Continue?")) return;
+
+              setIsBulkEnriching(true);
+              setBulkEnrichResult(null);
+              setFullAiStopRequested(false);
+              setFullAiProgress({ processed: 0, enriched: 0, errors: 0 });
+
+              try {
+                const { data, error } = await supabase.functions.invoke("enrich-project-test", {
+                  body: { mode: "batch", batch_size: 10 },
+                });
+
+                if (error) throw error;
+
+                let totalProcessed = data?.processed || 0;
+                let totalEnriched = data?.enriched || 0;
+                let totalErrors = data?.errors || 0;
+                let totalImages = data?.total_images || 0;
+                let totalDocs = data?.total_documents || 0;
+                let totalFields = data?.total_fields || 0;
+                let remaining = data?.remaining || 0;
+
+                setFullAiProgress({ processed: totalProcessed, enriched: totalEnriched, errors: totalErrors });
+
+                // Continue batching until done
+                while (remaining > 0 && !fullAiStopRequested) {
+                  await new Promise(r => setTimeout(r, 1000));
+
+                  const { data: batchData, error: batchErr } = await supabase.functions.invoke("enrich-project-test", {
+                    body: { mode: "batch", batch_size: 10 },
+                  });
+
+                  if (batchErr) throw batchErr;
+                  if (!batchData?.success) break;
+
+                  totalProcessed += batchData.processed || 0;
+                  totalEnriched += batchData.enriched || 0;
+                  totalErrors += batchData.errors || 0;
+                  totalImages += batchData.total_images || 0;
+                  totalDocs += batchData.total_documents || 0;
+                  totalFields += batchData.total_fields || 0;
+                  remaining = batchData.remaining || 0;
+
+                  setFullAiProgress({ processed: totalProcessed, enriched: totalEnriched, errors: totalErrors });
+
+                  if ((document.getElementById("ai-stop-flag") as HTMLInputElement)?.value === "stop") break;
+                }
+
+                setBulkEnrichResult({
+                  success: true,
+                  processed: totalProcessed,
+                  images_added: totalImages,
+                  docs_added: totalDocs,
+                  fields_updated: totalFields,
+                  errors: totalErrors,
+                  message: `Enriched ${totalEnriched} of ${totalProcessed} projects`,
+                });
+                toast.success(`Enrichment complete! ${totalEnriched} projects enriched.`);
+              } catch (err: any) {
+                console.error("Bulk enrich error:", err);
+                setBulkEnrichResult({ success: false, error: err.message });
+                toast.error(err.message || "Enrichment failed");
+              } finally {
+                setIsBulkEnriching(false);
+              }
+            }}
+            disabled={isBulkEnriching || isBackfilling}
             className="w-full bg-gold hover:bg-gold/90 text-black font-bold text-lg py-6"
           >
-            {isFullExtracting ? (
+            {isBulkEnriching ? (
               <>
                 <RefreshCw className="h-5 w-5 mr-2 animate-spin" />
-                Full Extraction in Progress...
+                Enriching Projects...
               </>
             ) : (
               <>
                 <Zap className="h-5 w-5 mr-2" />
-                Start Full Extraction
+                Enrich All Projects (Reelly + Provident)
               </>
             )}
           </Button>
+          <input type="hidden" id="ai-stop-flag" value={fullAiStopRequested ? "stop" : ""} />
         </CardContent>
       </Card>
-
-      <div className="relative py-4">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-zinc-300" />
-        </div>
-        <div className="relative flex justify-center">
-          <span className="bg-zinc-100 px-4 text-sm text-zinc-500">
-            Legacy Methods (Deprecated)
-          </span>
-        </div>
-      </div>
 
       {/* ── ENRICHMENT TEST SECTION ── */}
       <Card className="bg-white border-blue-200">
@@ -2868,594 +2848,6 @@ export function ReellyImportPanel() {
         </CardContent>
       </Card>
 
-      {/* ── AI Content Generation Section ── */}
-      <Card className="bg-white border-2 border-purple-400">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Zap className="h-5 w-5 text-purple-500" />
-            AI Content Generation
-          </CardTitle>
-          <CardDescription>
-            Generate FAQs, highlights, USP bullets, payment breakdowns, and location distances using AI.
-            Non-destructive — only fills empty fields. Processes 10 projects per batch.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* AI Stats */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={async () => {
-                setIsLoadingAiStats(true);
-                try {
-                  const { data, error } = await supabase.functions.invoke("ai-bulk-enrich", {
-                    body: { action: "stats" },
-                  });
-                  if (error) throw error;
-                  if (data?.success) {
-                    setAiEnrichStats(data.stats);
-                  } else {
-                    toast.error(data?.error || "Failed to load AI stats");
-                  }
-                } catch (err: any) {
-                  toast.error(err.message || "Failed to load AI stats");
-                } finally {
-                  setIsLoadingAiStats(false);
-                }
-              }}
-              disabled={isLoadingAiStats}
-            >
-              {isLoadingAiStats ? <RefreshCw className="h-4 w-4 animate-spin mr-1" /> : <Database className="h-4 w-4 mr-1" />}
-              Check Status
-            </Button>
-            {aiEnrichStats && (
-              <div className="text-xs text-zinc-600 space-x-2">
-                <span><strong>{aiEnrichStats.missing_faqs}</strong> missing FAQs</span>
-                <span>•</span>
-                <span><strong>{aiEnrichStats.missing_highlights}</strong> missing highlights</span>
-                <span>•</span>
-                <span>{aiEnrichStats.with_payment} have payment plans</span>
-                <span>•</span>
-                <span>{aiEnrichStats.with_distances} have distances</span>
-              </div>
-            )}
-          </div>
-
-          {/* Run AI Enrichment - Single Batch */}
-          <Button
-            onClick={async () => {
-              setIsAiEnriching(true);
-              setAiEnrichResult(null);
-              toast.info("Starting AI content generation... This may take 1-2 minutes per batch.");
-              try {
-                const { data, error } = await supabase.functions.invoke("ai-bulk-enrich", {
-                  body: { limit: 25 },
-                });
-                if (error) throw error;
-                setAiEnrichResult(data);
-                if (data?.success) {
-                  toast.success(`AI enriched ${data.enriched} of ${data.processed} projects`);
-                } else {
-                  toast.error(data?.error || "AI enrichment failed");
-                }
-              } catch (err: any) {
-                toast.error(err.message || "AI enrichment failed");
-                setAiEnrichResult({ success: false, error: err.message });
-              } finally {
-                setIsAiEnriching(false);
-              }
-            }}
-            disabled={isAiEnriching || isFullAiRunning}
-            variant="outline"
-            className="border-purple-300 text-purple-700 hover:bg-purple-50 w-full"
-          >
-            {isAiEnriching ? (
-              <><RefreshCw className="h-4 w-4 animate-spin mr-2" /> Generating AI Content...</>
-            ) : (
-              <><Zap className="h-4 w-4 mr-2" /> Generate Content (AI) — 25 projects</>
-            )}
-          </Button>
-
-          {/* FULL AI Enrichment Button */}
-          {!isFullAiRunning ? (
-            <Button
-              onClick={async () => {
-                setIsFullAiRunning(true);
-                setFullAiStopRequested(false);
-                setFullAiProgress({ processed: 0, enriched: 0, errors: 0 });
-                setAiEnrichResult(null);
-                toast.info("Starting FULL AI enrichment — processing ALL projects...");
-                
-                let totalProcessed = 0;
-                let totalEnriched = 0;
-                let totalErrors = 0;
-                let keepGoing = true;
-                
-                while (keepGoing) {
-                  try {
-                    const { data, error } = await supabase.functions.invoke("ai-bulk-enrich", {
-                      body: { limit: 25 },
-                    });
-                    if (error) throw error;
-                    
-                    const batchProcessed = data?.processed || 0;
-                    const batchEnriched = data?.enriched || 0;
-                    const batchErrors = data?.errors || 0;
-                    
-                    totalProcessed += batchProcessed;
-                    totalEnriched += batchEnriched;
-                    totalErrors += batchErrors;
-                    
-                    setFullAiProgress({ processed: totalProcessed, enriched: totalEnriched, errors: totalErrors });
-                    
-                    // Stop conditions
-                    if (batchProcessed === 0 || batchEnriched === 0) {
-                      toast.success(`Full AI enrichment complete! Enriched ${totalEnriched} projects total.`);
-                      keepGoing = false;
-                    }
-                    
-                    // Check for rate limit / credit exhaustion
-                    if (data?.results?.some((r: any) => r.status === "rate_limited" || r.status === "credits_exhausted")) {
-                      toast.warning("Rate limited or credits exhausted. Stopping.");
-                      keepGoing = false;
-                    }
-                  } catch (err: any) {
-                    totalErrors++;
-                    setFullAiProgress({ processed: totalProcessed, enriched: totalEnriched, errors: totalErrors });
-                    toast.error(`Batch error: ${err.message}`);
-                    // Wait and retry once, then stop
-                    await new Promise(r => setTimeout(r, 5000));
-                    keepGoing = false;
-                  }
-                  
-                  // Check stop flag (use ref-like check via DOM)
-                  if ((document.getElementById("ai-stop-flag") as HTMLInputElement)?.value === "stop") {
-                    toast.info(`AI enrichment stopped by user. Enriched ${totalEnriched} projects.`);
-                    keepGoing = false;
-                  }
-                }
-                
-                setIsFullAiRunning(false);
-                setAiEnrichResult({
-                  success: true,
-                  processed: totalProcessed,
-                  enriched: totalEnriched,
-                  errors: totalErrors,
-                  message: `Full run complete: ${totalEnriched} enriched, ${totalErrors} errors`,
-                });
-              }}
-              disabled={isAiEnriching}
-              className="bg-purple-600 hover:bg-purple-700 text-white w-full font-bold"
-            >
-              <Zap className="h-4 w-4 mr-2" /> 🚀 FULL AI Enrichment — ALL Projects
-            </Button>
-          ) : (
-            <div className="space-y-2">
-              <input type="hidden" id="ai-stop-flag" value={fullAiStopRequested ? "stop" : ""} />
-              <div className="bg-purple-50 border border-purple-300 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-purple-800 text-sm flex items-center gap-2">
-                    <RefreshCw className="h-4 w-4 animate-spin" /> AI Enrichment Running...
-                  </span>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => setFullAiStopRequested(true)}
-                  >
-                    <Pause className="h-3 w-3 mr-1" /> Stop
-                  </Button>
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-center text-sm">
-                  <div className="bg-white rounded p-2">
-                    <p className="text-xl font-bold text-purple-700">{fullAiProgress.processed}</p>
-                    <p className="text-xs text-zinc-500">Processed</p>
-                  </div>
-                  <div className="bg-white rounded p-2">
-                    <p className="text-xl font-bold text-emerald-600">{fullAiProgress.enriched}</p>
-                    <p className="text-xs text-zinc-500">Enriched</p>
-                  </div>
-                  <div className="bg-white rounded p-2">
-                    <p className="text-xl font-bold text-red-500">{fullAiProgress.errors}</p>
-                    <p className="text-xs text-zinc-500">Errors</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* AI Results */}
-          {aiEnrichResult && aiEnrichResult.success && (
-            <Alert className="bg-purple-50 border-purple-300">
-              <CheckCircle className="h-4 w-4 text-purple-600" />
-              <AlertTitle className="text-purple-700">AI Generation Complete</AlertTitle>
-              <AlertDescription className="text-purple-600 space-y-1">
-                <p><strong>{aiEnrichResult.processed}</strong> projects processed, <strong>{aiEnrichResult.enriched}</strong> enriched</p>
-                {aiEnrichResult.results && aiEnrichResult.results.filter(r => r.status === "success").length > 0 && (
-                  <div className="text-xs mt-1 max-h-32 overflow-y-auto">
-                    {aiEnrichResult.results.filter(r => r.status === "success").map((r, i) => (
-                      <p key={i}>✅ {r.name}: {r.fields.join(", ")}</p>
-                    ))}
-                  </div>
-                )}
-                {(aiEnrichResult.errors || 0) > 0 && (
-                  <p className="text-amber-600">⚠️ {aiEnrichResult.errors} errors</p>
-                )}
-                {aiEnrichResult.message && <p className="italic">{aiEnrichResult.message}</p>}
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {aiEnrichResult && !aiEnrichResult.success && (
-            <Alert className="bg-red-50 border-red-300">
-              <XCircle className="h-4 w-4 text-red-600" />
-              <AlertTitle className="text-red-700">AI Generation Failed</AlertTitle>
-              <AlertDescription className="text-red-600">{aiEnrichResult.error}</AlertDescription>
-            </Alert>
-          )}
-
-          {aiEnrichResult?.error_details && aiEnrichResult.error_details.length > 0 && (
-            <div className="text-xs text-zinc-500 max-h-32 overflow-y-auto bg-zinc-50 p-2 rounded border">
-              <p className="font-semibold mb-1">Error details:</p>
-              {aiEnrichResult.error_details.map((e, i) => <p key={i}>• {e}</p>)}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* ── Provident Document Extraction Section ── */}
-      <Card className="bg-white border-2 border-teal-400">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <CloudDownload className="h-5 w-5 text-teal-500" />
-            Fetch Images & Docs (Provident)
-          </CardTitle>
-          <CardDescription>
-            Fetch brochures, floor plans, payment plan PDFs from Provident's free page-data endpoint. 
-            Images fetched via Firecrawl if available. Processes 25 projects per batch.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Single Batch */}
-          <Button
-            onClick={async () => {
-              setIsProvidentExtracting(true);
-              setProvidentResult(null);
-              setProvidentProjectResults([]);
-              toast.info("Starting Provident document extraction...");
-              try {
-                const { data, error } = await supabase.functions.invoke("provident-batch-extract", {
-                  body: { limit: 25 },
-                });
-                if (error) throw error;
-                setProvidentResult(data);
-                if (data?.results) setProvidentProjectResults(data.results);
-                if (data?.total_docs_inserted > 0 || data?.total_images_inserted > 0) {
-                  toast.success(`Provident: +${data.total_docs_inserted} docs, +${data.total_images_inserted} images from ${data.processed} projects`);
-                } else {
-                  toast.info(`Processed ${data?.processed || 0} projects. No new docs/images matched.`);
-                }
-              } catch (err: any) {
-                toast.error(err.message || "Provident extraction failed");
-                setProvidentResult({ error: err.message });
-              } finally {
-                setIsProvidentExtracting(false);
-              }
-            }}
-            disabled={isProvidentExtracting || isFullProvidentRunning}
-            variant="outline"
-            className="border-teal-300 text-teal-700 hover:bg-teal-50 w-full"
-          >
-            {isProvidentExtracting ? (
-              <><RefreshCw className="h-4 w-4 animate-spin mr-2" /> Extracting from Provident...</>
-            ) : (
-              <><CloudDownload className="h-4 w-4 mr-2" /> Fetch Images & Docs (Provident) — 25 projects</>
-            )}
-          </Button>
-
-          {/* FULL Provident Extraction */}
-          {!isFullProvidentRunning ? (
-            <Button
-              onClick={async () => {
-                setIsFullProvidentRunning(true);
-                setFullProvidentStopRequested(false);
-                setFullProvidentProgress({ processed: 0, docs: 0, images: 0, errors: 0 });
-                setProvidentResult(null);
-                toast.info("Starting FULL Provident extraction — processing ALL projects...");
-                
-                let totalProcessed = 0;
-                let totalDocs = 0;
-                let totalImages = 0;
-                let totalErrors = 0;
-                let keepGoing = true;
-                
-                while (keepGoing) {
-                  try {
-                    const { data, error } = await supabase.functions.invoke("provident-batch-extract", {
-                      body: { limit: 25 },
-                    });
-                    if (error) throw error;
-                    
-                    const batchProcessed = data?.processed || 0;
-                    totalProcessed += batchProcessed;
-                    totalDocs += data?.total_docs_inserted || 0;
-                    totalImages += data?.total_images_inserted || 0;
-                    totalErrors += data?.errors || 0;
-                    
-                    // Accumulate per-project results
-                    if (data?.results) {
-                      setProvidentProjectResults(prev => [...prev, ...data.results]);
-                    }
-                    
-                    setFullProvidentProgress({ processed: totalProcessed, docs: totalDocs, images: totalImages, errors: totalErrors });
-                    
-                    if (batchProcessed === 0) {
-                      toast.success(`Full Provident extraction complete! +${totalDocs} docs, +${totalImages} images from ${totalProcessed} projects.`);
-                      keepGoing = false;
-                    }
-                    
-                    // Check for Firecrawl credit exhaustion
-                    if (data?.results?.some((r: any) => r.errors?.includes("FIRECRAWL_CREDITS_EXHAUSTED"))) {
-                      toast.warning("Firecrawl credits exhausted. Documents still extracted. Stopping image fetch.");
-                      keepGoing = false;
-                    }
-                  } catch (err: any) {
-                    totalErrors++;
-                    setFullProvidentProgress({ processed: totalProcessed, docs: totalDocs, images: totalImages, errors: totalErrors });
-                    toast.error(`Batch error: ${err.message}`);
-                    await new Promise(r => setTimeout(r, 5000));
-                    keepGoing = false;
-                  }
-                  
-                  if ((document.getElementById("provident-stop-flag") as HTMLInputElement)?.value === "stop") {
-                    toast.info(`Provident extraction stopped. +${totalDocs} docs, +${totalImages} images.`);
-                    keepGoing = false;
-                  }
-                }
-                
-                setIsFullProvidentRunning(false);
-                setProvidentResult({
-                  processed: totalProcessed,
-                  total_docs_inserted: totalDocs,
-                  total_images_inserted: totalImages,
-                  errors: totalErrors,
-                });
-              }}
-              disabled={isProvidentExtracting}
-              className="bg-teal-600 hover:bg-teal-700 text-white w-full font-bold"
-            >
-              <CloudDownload className="h-4 w-4 mr-2" /> 🚀 FULL Provident Extraction — ALL Projects
-            </Button>
-          ) : (
-            <div className="space-y-2">
-              <input type="hidden" id="provident-stop-flag" value={fullProvidentStopRequested ? "stop" : ""} />
-              <div className="bg-teal-50 border border-teal-300 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-teal-800 text-sm flex items-center gap-2">
-                    <RefreshCw className="h-4 w-4 animate-spin" /> Provident Extraction Running...
-                  </span>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => setFullProvidentStopRequested(true)}
-                  >
-                    <Pause className="h-3 w-3 mr-1" /> Stop
-                  </Button>
-                </div>
-                <div className="grid grid-cols-4 gap-2 text-center text-sm">
-                  <div className="bg-white rounded p-2">
-                    <p className="text-xl font-bold text-teal-700">{fullProvidentProgress.processed}</p>
-                    <p className="text-xs text-zinc-500">Processed</p>
-                  </div>
-                  <div className="bg-white rounded p-2">
-                    <p className="text-xl font-bold text-emerald-600">{fullProvidentProgress.docs}</p>
-                    <p className="text-xs text-zinc-500">Docs</p>
-                  </div>
-                  <div className="bg-white rounded p-2">
-                    <p className="text-xl font-bold text-blue-600">{fullProvidentProgress.images}</p>
-                    <p className="text-xs text-zinc-500">Images</p>
-                  </div>
-                  <div className="bg-white rounded p-2">
-                    <p className="text-xl font-bold text-red-500">{fullProvidentProgress.errors}</p>
-                    <p className="text-xs text-zinc-500">Errors</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {providentResult && !providentResult.error && (
-            <div className="space-y-3">
-              <Alert className="bg-teal-50 border-teal-300">
-                <CheckCircle className="h-4 w-4 text-teal-600" />
-                <AlertTitle className="text-teal-700">Provident Extraction Complete</AlertTitle>
-                <AlertDescription className="text-teal-600 space-y-1">
-                  <p><strong>{providentResult.processed}</strong> projects checked</p>
-                  <p>📄 <strong>+{providentResult.total_docs_inserted || 0}</strong> documents inserted</p>
-                  <p>📷 <strong>+{providentResult.total_images_inserted || 0}</strong> images inserted</p>
-                  {(providentResult.errors || 0) > 0 && (
-                    <p className="text-amber-600">⚠️ {providentResult.errors} errors</p>
-                  )}
-                </AlertDescription>
-              </Alert>
-              {/* Per-project result cards */}
-              {providentProjectResults.length > 0 && (
-                <div className="max-h-[400px] overflow-y-auto space-y-2">
-                  {providentProjectResults.map((r, i) => (
-                    <div key={i} className={`flex items-center justify-between p-3 rounded-lg border text-sm ${
-                      (r.docs_inserted > 0 || r.images_inserted > 0) ? "border-green-200 bg-green-50" :
-                      r.errors.length > 0 ? "border-red-200 bg-red-50" :
-                      "border-zinc-200 bg-zinc-50"
-                    }`}>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium truncate">{r.name}</p>
-                        <div className="flex gap-3 text-xs text-zinc-600 mt-0.5">
-                          <span className={r.pdfs_found > 0 ? "text-blue-600" : ""}>📄 {r.pdfs_found} PDFs found</span>
-                          <span className={r.docs_inserted > 0 ? "text-green-600 font-bold" : ""}>+{r.docs_inserted} docs</span>
-                          <span className={r.images_found > 0 ? "text-blue-600" : ""}>📷 {r.images_found} imgs found</span>
-                          <span className={r.images_inserted > 0 ? "text-green-600 font-bold" : ""}>+{r.images_inserted} imgs</span>
-                        </div>
-                        {r.errors.length > 0 && (
-                          <p className="text-xs text-red-500 mt-0.5 truncate">{r.errors[0]}</p>
-                        )}
-                      </div>
-                      <Badge variant={(r.docs_inserted > 0 || r.images_inserted > 0) ? "default" : r.errors.length > 0 ? "destructive" : "secondary"} className="flex-shrink-0">
-                        {(r.docs_inserted > 0 || r.images_inserted > 0) ? "✅" : r.errors.length > 0 ? "⚠️" : "—"}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {providentResult?.error && (
-            <Alert className="bg-red-50 border-red-300">
-              <XCircle className="h-4 w-4 text-red-600" />
-              <AlertTitle className="text-red-700">Extraction Failed</AlertTitle>
-              <AlertDescription className="text-red-600">{providentResult.error}</AlertDescription>
-            </Alert>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* ── Bulk Enrichment (Reelly API) - kept as legacy ── */}
-      <Card className="bg-white border-2 border-amber-400">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Zap className="h-5 w-5 text-amber-500" />
-            Bulk Enrichment (Reelly API)
-          </CardTitle>
-          <CardDescription>
-            Enrich from Reelly API detail endpoint. Note: API returns limited data (no gallery/docs). 
-            Use AI Content Generation and Provident Extraction above for better results.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={async () => {
-                setIsLoadingBulkStats(true);
-                try {
-                  const { data, error } = await supabase.functions.invoke("reelly-bulk-enrich", {
-                    body: { action: "stats" },
-                  });
-                  if (error) throw error;
-                  if (data?.success) {
-                    setBulkEnrichStats(data.stats);
-                  } else {
-                    toast.error(data?.error || "Failed to load stats");
-                  }
-                } catch (err: any) {
-                  toast.error(err.message || "Failed to load stats");
-                } finally {
-                  setIsLoadingBulkStats(false);
-                }
-              }}
-              disabled={isLoadingBulkStats}
-            >
-              {isLoadingBulkStats ? <RefreshCw className="h-4 w-4 animate-spin mr-1" /> : <Database className="h-4 w-4 mr-1" />}
-              Check Status
-            </Button>
-            {bulkEnrichStats && (
-              <div className="text-xs text-zinc-600 space-x-3">
-                <span><strong>{bulkEnrichStats.projects_needing_enrichment}</strong> need enrichment</span>
-                <span>•</span>
-                <span>{bulkEnrichStats.total_images} images</span>
-                <span>•</span>
-                <span>{bulkEnrichStats.total_documents} docs</span>
-              </div>
-            )}
-          </div>
-          <Button
-            onClick={async () => {
-              setIsBulkEnriching(true);
-              setBulkEnrichResult(null);
-              toast.info("Starting bulk enrichment...");
-              try {
-                const { data, error } = await supabase.functions.invoke("reelly-bulk-enrich", {
-                  body: { limit: 50 },
-                });
-                if (error) throw error;
-                setBulkEnrichResult(data);
-                if (data?.success) {
-                  toast.success(`Enriched ${data.processed} projects: +${data.images_added} images, +${data.docs_added} docs, +${data.fields_updated} fields`);
-                } else {
-                  toast.error(data?.error || "Enrichment failed");
-                }
-              } catch (err: any) {
-                toast.error(err.message || "Bulk enrichment failed");
-                setBulkEnrichResult({ success: false, error: err.message });
-              } finally {
-                setIsBulkEnriching(false);
-              }
-            }}
-            disabled={isBulkEnriching}
-            className="bg-amber-600 hover:bg-amber-700 text-white w-full"
-          >
-            {isBulkEnriching ? (
-              <><RefreshCw className="h-4 w-4 animate-spin mr-2" /> Enriching...</>
-            ) : (
-              <><Zap className="h-4 w-4 mr-2" /> Run Reelly Bulk Enrichment (50 projects)</>
-            )}
-          </Button>
-          {bulkEnrichResult && bulkEnrichResult.success && (
-            <div className="space-y-3">
-              <Alert className="bg-green-50 border-green-300">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <AlertTitle className="text-green-700">Enrichment Complete</AlertTitle>
-                <AlertDescription className="text-green-600 space-y-1">
-                  <p><strong>{bulkEnrichResult.processed}</strong> projects processed</p>
-                  <p>📷 +{bulkEnrichResult.images_added} images, 📄 +{bulkEnrichResult.docs_added} docs, 📝 +{bulkEnrichResult.fields_updated} fields</p>
-                  {(bulkEnrichResult.errors || 0) > 0 && <p className="text-amber-600">⚠️ {bulkEnrichResult.errors} errors</p>}
-                </AlertDescription>
-              </Alert>
-              {/* Per-project result cards */}
-              {bulkEnrichResult.results && bulkEnrichResult.results.length > 0 && (
-                <div className="max-h-[400px] overflow-y-auto space-y-2">
-                  {bulkEnrichResult.results.map((r, i) => (
-                    <div key={i} className={`flex items-center justify-between p-3 rounded-lg border text-sm ${
-                      r.status === "success" ? "border-green-200 bg-green-50" :
-                      r.status === "api_empty" ? "border-zinc-200 bg-zinc-50" :
-                      "border-red-200 bg-red-50"
-                    }`}>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium truncate">{r.name}</p>
-                        <div className="flex gap-3 text-xs text-zinc-600 mt-0.5">
-                          <span className={r.images > 0 ? "text-green-600 font-bold" : ""}>📷 +{r.images}</span>
-                          <span className={r.docs > 0 ? "text-green-600 font-bold" : ""}>📄 +{r.docs}</span>
-                          <span className={r.fields > 0 ? "text-green-600 font-bold" : ""}>📝 +{r.fields}</span>
-                        </div>
-                      </div>
-                      <Badge variant={r.status === "success" ? "default" : r.status === "api_empty" ? "secondary" : "destructive"} className="flex-shrink-0">
-                        {r.status === "success" ? "✅" : r.status === "api_empty" ? "Empty API" : r.status === "no_data" ? "No Data" : "Error"}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-          {bulkEnrichResult && !bulkEnrichResult.success && (
-            <Alert className="bg-red-50 border-red-300">
-              <XCircle className="h-4 w-4 text-red-600" />
-              <AlertTitle className="text-red-700">Failed</AlertTitle>
-              <AlertDescription className="text-red-600">{bulkEnrichResult.error}</AlertDescription>
-            </Alert>
-          )}
-        </CardContent>
-      </Card>
-
-      <Alert className="border-zinc-300 bg-zinc-50">
-        <Info className="h-4 w-4 text-zinc-500" />
-        <AlertTitle className="text-zinc-600">Web Scraping (Deprecated)</AlertTitle>
-        <AlertDescription className="text-zinc-500">
-          The scraping approach no longer works since Reelly moved to a new platform.
-          Use the official API above for reliable data access.
-        </AlertDescription>
-      </Alert>
 
       <Card className="bg-white border-zinc-200 opacity-60">
         <CardHeader>

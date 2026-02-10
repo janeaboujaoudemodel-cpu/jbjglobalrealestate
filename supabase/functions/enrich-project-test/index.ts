@@ -55,7 +55,79 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
   try {
     const body = await req.json();
-    const { slug, action } = body;
+    const { slug, action, mode, batch_size } = body;
+
+    // ── Batch mode: process multiple projects ──
+    if (mode === "batch") {
+      const limit = Math.min(batch_size || 10, 25);
+
+      // Find projects needing enrichment (missing amenities, few images, no FAQs, etc.)
+      const { data: projects, error: queryErr } = await supabase
+        .from("projects")
+        .select("id, name, slug, reelly_id, amenities, faqs, floor_plan_types, description, usp_bullets")
+        .eq("status", "published")
+        .or("amenities.is.null,faqs.is.null,floor_plan_types.is.null,description.is.null,usp_bullets.is.null")
+        .limit(limit);
+
+      if (queryErr) return json(500, { error: queryErr.message });
+
+      // Count remaining
+      const { count: remaining } = await supabase
+        .from("projects")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "published")
+        .or("amenities.is.null,faqs.is.null,floor_plan_types.is.null,description.is.null,usp_bullets.is.null");
+
+      if (!projects || projects.length === 0) {
+        return json(200, { success: true, processed: 0, enriched: 0, errors: 0, remaining: 0, message: "All projects enriched!" });
+      }
+
+      let enriched = 0;
+      let errors = 0;
+      let totalImages = 0;
+      let totalDocs = 0;
+      let totalFields = 0;
+
+      for (const proj of projects) {
+        try {
+          // Call the same enrichment logic via internal fetch to self
+          const enrichUrl = `${supabaseUrl}/functions/v1/enrich-project-test`;
+          const res = await fetch(enrichUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${supabaseKey}`,
+            },
+            body: JSON.stringify({ slug: proj.slug, action: "apply" }),
+          });
+
+          if (res.ok) {
+            const result = await res.json();
+            if (result.success && result.applied) {
+              enriched++;
+              totalImages += result.new_images || 0;
+              totalDocs += result.new_documents || 0;
+              totalFields += (result.updates_applied?.length || 0);
+            }
+          } else {
+            errors++;
+          }
+        } catch {
+          errors++;
+        }
+      }
+
+      return json(200, {
+        success: true,
+        processed: projects.length,
+        enriched,
+        errors,
+        remaining: Math.max(0, (remaining || 0) - projects.length),
+        total_images: totalImages,
+        total_documents: totalDocs,
+        total_fields: totalFields,
+      });
+    }
 
     if (!slug) return json(400, { error: "Missing project slug" });
 
