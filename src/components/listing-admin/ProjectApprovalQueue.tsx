@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import type { Json } from "@/integrations/supabase/types";
 import { PendingImportCard } from "@/components/listing-admin/PendingImportCard";
 import { ApprovalConfirmDialog } from "@/components/listing-admin/ApprovalConfirmDialog";
+import { NewProjectDetector } from "@/components/listing-admin/NewProjectDetector";
 
 interface ImageData {
   url: string;
@@ -1060,6 +1061,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
             </div>
           )}
           
+          {/* New Project Detector */}
+          <NewProjectDetector />
+
           {/* Source indicator - Reelly Only Mode */}
           <div className="flex items-center gap-2 p-2 bg-emerald-50 border border-emerald-200 rounded-lg mb-4">
             <div className="w-2 h-2 rounded-full bg-emerald-500" />

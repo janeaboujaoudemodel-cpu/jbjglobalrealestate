@@ -28,6 +28,10 @@ const KNOWN_BAD_URLS = [
   "wam.ae/en/images/newsbanner.jpg",
   "adgmo-logotype",
   "twitter.png",
+  "moet.gov.ae/documents/",
+  "thenationalnews.com/resizer",
+  "propertyfinder.ae/blog/wp-content/uploads/2025/09/Header-image.png",
+  "survey.customerpulse.gov.ae",
 ];
 
 // Diversified fallback image pools per category (6 unique photos each)
