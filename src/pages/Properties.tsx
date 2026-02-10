@@ -524,7 +524,7 @@ const Properties = () => {
                 <MapPin className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                 <span className="truncate text-left flex-1">{filters.emirate || "All Emirates"}</span>
               </SelectTrigger>
-              <SelectContent className="bg-white border-gold/30 z-50">
+              <SelectContent>
                 <SelectItem value="all">All Emirates</SelectItem>
                 <SelectItem value="Dubai">Dubai</SelectItem>
                 <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
@@ -549,7 +549,7 @@ const Properties = () => {
                     : "All Areas"}
                 </span>
               </SelectTrigger>
-              <SelectContent className="max-h-60 bg-white border-gold/30 z-50">
+              <SelectContent className="max-h-60">
                 <SelectItem value="all">All Areas</SelectItem>
                 {allAreasSorted?.map((area) => (
                   <SelectItem key={area.id} value={area.id}>
@@ -572,7 +572,7 @@ const Properties = () => {
                     : "All Developers"}
                 </span>
               </SelectTrigger>
-              <SelectContent className="max-h-72 bg-white border-gold/30 z-50">
+              <SelectContent className="max-h-72">
                 <SelectItem value="all">All Developers</SelectItem>
                 {allDevelopersSorted?.map((dev) => (
                   <SelectItem key={dev.id} value={dev.id}>
@@ -616,7 +616,7 @@ const Properties = () => {
                     : "AED 10M+"}
                 </span>
               </SelectTrigger>
-              <SelectContent className="bg-white border-gold/30 z-50">
+              <SelectContent>
                 <SelectItem value="all">Any Price</SelectItem>
                 <SelectItem value="0-1000000">Under AED 1M</SelectItem>
                 <SelectItem value="1000000-3000000">AED 1M - 3M</SelectItem>
@@ -635,7 +635,7 @@ const Properties = () => {
                 <Maximize2 className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                 <span className="truncate text-left flex-1">{filters.sizeUnit === 'sqft' ? 'Square Feet' : 'Square Meters'}</span>
               </SelectTrigger>
-              <SelectContent className="bg-white border-gold/30 z-50">
+              <SelectContent>
                 <SelectItem value="sqft">Square Feet (sq ft)</SelectItem>
                 <SelectItem value="sqm">Square Meters (sq m)</SelectItem>
               </SelectContent>
@@ -655,7 +655,7 @@ const Properties = () => {
                     : 'INR (Rupee)'}
                 </span>
               </SelectTrigger>
-              <SelectContent className="bg-white border-gold/30 z-50">
+              <SelectContent>
                 <SelectItem value="AED">AED (Dirham)</SelectItem>
                 <SelectItem value="USD">USD (Dollar)</SelectItem>
                 <SelectItem value="EUR">EUR (Euro)</SelectItem>
@@ -736,7 +736,7 @@ const Properties = () => {
                         <SelectTrigger className="w-full h-12 bg-[#F5F0E6] border-gold/30 text-black">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-white border-gold/30">
+                        <SelectContent>
                           {PROPERTY_TYPES.map((type) => (
                             <SelectItem key={type.value} value={type.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                               {type.label}
@@ -762,7 +762,7 @@ const Properties = () => {
                             <Bed className="w-4 h-4 mr-2 text-gold" />
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-gold/30">
+                          <SelectContent>
                             {BEDROOM_OPTIONS.map((opt) => (
                               <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                                 {opt.label}
@@ -781,7 +781,7 @@ const Properties = () => {
                             <Bath className="w-4 h-4 mr-2 text-gold" />
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-gold/30">
+                          <SelectContent>
                             {BATHROOM_OPTIONS.map((opt) => (
                               <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                                 {opt.label}
@@ -845,7 +845,7 @@ const Properties = () => {
                           <Calendar className="w-4 h-4 mr-2 text-gold" />
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-white border-gold/30">
+                        <SelectContent>
                           {COMPLETION_STATUS.map((status) => (
                             <SelectItem key={status.value} value={status.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                               {status.label}
@@ -866,7 +866,7 @@ const Properties = () => {
                           <Home className="w-4 h-4 mr-2 text-gold" />
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-white border-gold/30">
+                        <SelectContent>
                           {INVESTMENT_TYPES.map((type) => (
                             <SelectItem key={type.value} value={type.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                               {type.label}
@@ -887,7 +887,7 @@ const Properties = () => {
                           <CheckCircle className="w-4 h-4 mr-2 text-gold" />
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-white border-gold/30">
+                        <SelectContent>
                           {SALE_STATUS.map((status) => (
                             <SelectItem key={status.value} value={status.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                               {status.label}
@@ -908,7 +908,7 @@ const Properties = () => {
                           <MapPin className="w-4 h-4 mr-2 text-gold" />
                           <SelectValue placeholder="All Areas" />
                         </SelectTrigger>
-                        <SelectContent className="bg-white border-gold/30 max-h-60">
+                        <SelectContent className="max-h-60">
                           <SelectItem value="all" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">All Areas</SelectItem>
                           {areas?.map((area) => (
                             <SelectItem key={area.id} value={area.id} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
@@ -930,7 +930,7 @@ const Properties = () => {
                           <MapPin className="w-4 h-4 mr-2 text-gold" />
                           <SelectValue placeholder="All Communities" />
                         </SelectTrigger>
-                        <SelectContent className="bg-white border-gold/30 max-h-60">
+                        <SelectContent className="max-h-60">
                           <SelectItem value="all" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">All Communities</SelectItem>
                           {communities?.map((comm) => (
                             <SelectItem key={comm.id} value={comm.id} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">

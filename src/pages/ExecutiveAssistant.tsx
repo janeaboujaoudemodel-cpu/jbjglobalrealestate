@@ -616,7 +616,7 @@ export default function ExecutiveAssistant() {
                         <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
                           <SelectValue placeholder="Any category" />
                         </SelectTrigger>
-                        <SelectContent className="bg-white border-gold/30">
+                        <SelectContent>
                           <SelectItem value="">Any category</SelectItem>
                           <SelectItem value="important">Important</SelectItem>
                           <SelectItem value="routine">Routine</SelectItem>
@@ -709,7 +709,7 @@ export default function ExecutiveAssistant() {
                         <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-white border-gold/30">
+                        <SelectContent>
                           <SelectItem value="keyword">Keyword</SelectItem>
                           <SelectItem value="sender">Sender Contains</SelectItem>
                           <SelectItem value="subject">Subject Contains</SelectItem>
@@ -722,7 +722,7 @@ export default function ExecutiveAssistant() {
                         <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-white border-gold/30">
+                        <SelectContent>
                           <SelectItem value="archive">Archive</SelectItem>
                           <SelectItem value="delete">Delete</SelectItem>
                           <SelectItem value="move_to_category">Move to HR</SelectItem>

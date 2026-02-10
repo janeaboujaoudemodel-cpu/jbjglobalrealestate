@@ -558,7 +558,7 @@ END:VCARD`;
                                   <SelectValue placeholder="Select a service" />
                                 </SelectTrigger>
                               </FormControl>
-                              <SelectContent className="bg-white border-zinc-200">
+                              <SelectContent>
                                 {SERVICE_OPTIONS.map((option) => (
                                   <SelectItem key={option.value} value={option.value} className="text-black hover:bg-zinc-100">
                                     {option.label}
@@ -584,7 +584,7 @@ END:VCARD`;
                                     <SelectValue placeholder="Select budget" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-white border-zinc-200">
+                                <SelectContent>
                                   {BUDGET_OPTIONS.map((option) => (
                                     <SelectItem key={option.value} value={option.value} className="text-black hover:bg-zinc-100">
                                       {option.label}
@@ -608,7 +608,7 @@ END:VCARD`;
                                     <SelectValue placeholder="Select timeline" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-white border-zinc-200">
+                                <SelectContent>
                                   {TIMELINE_OPTIONS.map((option) => (
                                     <SelectItem key={option.value} value={option.value} className="text-black hover:bg-zinc-100">
                                       {option.label}

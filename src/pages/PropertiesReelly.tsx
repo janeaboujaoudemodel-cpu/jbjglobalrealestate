@@ -281,7 +281,7 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
                    <MapPin className="w-4 h-4 mr-2 text-gold" />
                    <SelectValue placeholder="Emirate" />
                  </SelectTrigger>
-                 <SelectContent className="bg-white border-gold/30">
+                 <SelectContent>
                    {EMIRATES.map((e) => (
                      <SelectItem key={e.value} value={e.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                        {e.label}
@@ -299,7 +299,7 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
                    <CheckCircle className="w-4 h-4 mr-2 text-gold" />
                    <SelectValue placeholder="Sale Status" />
                  </SelectTrigger>
-                  <SelectContent className="bg-white border-gold/30">
+                  <SelectContent>
                     {SALE_STATUS.map((s) => (
                       <SelectItem key={s.value} value={s.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                         <span className="flex items-center gap-2">
@@ -347,7 +347,7 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
                              <Building2 className="w-4 h-4 mr-2 text-gold" />
                              <SelectValue />
                            </SelectTrigger>
-                           <SelectContent className="bg-white border-gold/30">
+                           <SelectContent>
                              {CONSTRUCTION_STATUS.map((status) => (
                                <SelectItem key={status.value} value={status.value} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                                  {status.label}
@@ -367,7 +367,7 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
                            <SelectTrigger className="w-full h-12 bg-[#F5F0E6] border-gold/30 text-black">
                              <SelectValue />
                            </SelectTrigger>
-                           <SelectContent className="bg-white border-gold/30">
+                            <SelectContent>
                              {Object.keys(CURRENCY_SYMBOLS).map((curr) => (
                                <SelectItem key={curr} value={curr} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                                  {CURRENCY_SYMBOLS[curr]} ({curr})
@@ -387,7 +387,7 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
                            <SelectTrigger className="w-full h-12 bg-[#F5F0E6] border-gold/30 text-black">
                              <SelectValue />
                            </SelectTrigger>
-                           <SelectContent className="bg-white border-gold/30">
+                           <SelectContent>
                              <SelectItem value="sqft" className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                                Square Feet (sqft)
                              </SelectItem>

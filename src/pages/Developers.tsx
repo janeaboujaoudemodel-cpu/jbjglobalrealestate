@@ -261,7 +261,7 @@ const Developers = () => {
                       {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
                     </span>
                   </SelectTrigger>
-                  <SelectContent className="bg-white border-gold/30 z-50">
+                  <SelectContent>
                     {TIER_FILTERS.map((tier) => (
                       <SelectItem key={tier.value} value={tier.value}>
                         {tier.label}

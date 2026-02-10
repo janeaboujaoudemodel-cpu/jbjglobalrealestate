@@ -149,6 +149,7 @@ const Footer = () => {
   const propertiesLinks = [
     { label: t('footer.buyProperties') || "Buy Properties", href: "/properties?transaction=buy" },
     { label: t('footer.rentProperties') || "Rent Properties", href: "/properties?transaction=rent" },
+    { label: "Projects", href: "/properties" },
     { label: "Developers", href: "/developers" },
     { label: t('footer.listYourProperty') || "List Your Property", href: "/seller-listing" },
   ];
