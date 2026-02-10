@@ -1,133 +1,59 @@
 
+# Standardize Mortgage Calculator Cards Globally
 
-# Full Project Detail Audit and Data Enrichment Plan
+## What Changes
 
-## Summary of Issues Found
+The homepage compact mortgage calculator shows 4 champagne gold cards (Property Price, Down Payment, Loan Amount, Monthly Payment). The user wants this same card layout to appear **everywhere** the mortgage calculator is shown, plus two additional cards: **Interest Rate** and **Total Cost After Mortgage**.
 
-1. **Download doesn't auto-download** -- clicking Download on photos opens a new tab instead of saving the file (CORS blocks the fetch-blob approach for external URLs like Reelly CDN)
-2. **Missing amenities/USP data** -- 1,809 out of 1,809 projects have NULL amenities and NULL USP bullets
-3. **Missing location distances** -- not populated for most projects
-4. **Date format wrong globally** -- dates display raw ISO format (`2026-01-02`) instead of human format (`02 Jan 2026`)
-5. **Construction progress data incorrect** -- e.g., Palm Central shows 50% with start date Jan 2026 and completion 2029 (bad source data)
-6. **Hero images blurry** -- Provident CDN images normalized to 464x312 (small); hero needs full-resolution
-7. **Brochures/documents not auto-downloading** -- same `window.open` issue
+Currently:
+- **Homepage** (`compact=true`): Shows 4 champagne cards only -- missing interest and total cost
+- **Full calculator** (`compact=false`): Shows sliders on left + a different results layout on right (no champagne cards)
+- **Project detail page**: Uses full calculator (`compact=false`)
+- **Dedicated /mortgage-calculator page**: Uses full calculator
+- **Property Suite tab**: Uses full calculator via page embed
+- **Real Estate Suite tab**: Uses full calculator via page embed
 
----
+## The Fix
 
-## Part 1: Fix Auto-Download for Photos and Documents
+**File: `src/components/MortgageCalculator.tsx`**
 
-**Problem:** `ImageCarousel.tsx` line 56-72 uses `fetch()` to get a blob, but external CDN URLs (Reelly, Provident) block cross-origin requests, so it falls back to `window.open()` which just opens the image in a new tab.
+### 1. Add 2 new cards to the compact view (lines 92-157)
 
-**Fix in `src/components/ImageCarousel.tsx`:**
-- Use a hidden `<a>` tag with the `download` attribute
-- For cross-origin images that can't be fetched as blob, route through the existing `download-file` edge function proxy which adds `Content-Disposition: attachment`
-- Apply the same fix to `handleDocumentDownload` in `ProjectDetailLayout.tsx` (line 351-353) -- use the download proxy with `Content-Disposition: attachment` instead of `window.open`
+Currently the compact view has a `grid-cols-4` with 4 cards. Change to a **6-card grid** (`grid-cols-2 sm:grid-cols-3 lg:grid-cols-6`) adding:
 
-**Fix in `supabase/functions/download-file/index.ts`:**
-- Ensure the proxy sets `Content-Disposition: attachment; filename="..."` header so the browser auto-downloads instead of displaying
+- **Card 5 -- Interest Rate**: Shows `4.5%` (the current rate) as the gold percentage, and the total interest amount (e.g., `AED 1,234,567`) as the value. Label: "Interest Rate". Subtitle shows the loan term (e.g., "25 Years").
+- **Card 6 -- Total Cost**: Shows `100%` as the gold percentage, and the total payment amount (property price + total interest, i.e., `calculations.totalPayment`) as the value. Label: "Total Cost". This tells the buyer exactly how much the property will cost them after the mortgage.
 
----
+Same champagne gradient styling as existing 4 cards.
 
-## Part 2: Fix Date Format Globally
+### 2. Show the 6 champagne summary cards in the full (non-compact) view too
 
-**Problem:** Dates like `2026-01-02` display raw. User wants `02 Jan 2026` format (DD Mon YYYY).
+In the full calculator's results section (lines 298-385), **replace the current 2x2 breakdown grid** (lines 312-334) with the same 6 champagne cards from compact mode. This ensures the user sees the same familiar card layout whether on the homepage, project page, or dedicated calculator page.
 
-**Create a shared date formatter utility:**
+The full view will keep:
+- The "Estimated Monthly Payment" hero block (lines 300-310) -- keep as-is
+- Replace the 2x2 muted grid (lines 312-334) with the 6 champagne cards
+- Keep the payment breakdown bar (lines 336-365)
+- Keep the disclaimer and CTA
 
-**New file: `src/utils/formatDate.ts`**
-- Single function `formatDisplayDate(dateStr)` that:
-  - Parses ISO dates (`2026-01-02`) and quarter strings (`Q1 2026`)
-  - Returns formatted `02 Jan 2026` format
-  - Handles edge cases (null, invalid)
+### 3. Responsive grid
 
-**Apply in these files:**
-- `ConstructionTimelineSection.tsx` -- lines 86, 100, 114 (construction started, expected completion, handover)
-- `QuickFactsBar.tsx` -- line 63 already uses `toLocaleDateString("en-GB")` but needs consistency
-- `ProjectDetailLayout.tsx` -- line 519 (hero handover date), line 622 (key facts handover)
-- `RecommendedProjects.tsx` -- line 107 (handover badge)
+- Mobile: 2 columns (3 rows of 2 cards)
+- Tablet: 3 columns (2 rows)
+- Desktop: 6 columns (1 row) for compact; 3 columns (2 rows) for full view (since it shares space with sliders)
 
----
-
-## Part 3: Fix Construction Progress Data Accuracy
-
-**Problem:** Palm Central shows `construction_start_date: 2026-01-02` with `construction_progress: 50%` -- impossible. The Reelly API returns this data; the construction_progress values from Reelly are unreliable for projects that haven't started yet.
-
-**Fix in `ConstructionTimelineSection.tsx`:**
-- Add a validation check: if `construction_start_date` is in the future, override progress to 0% and show "Pre-Construction" stage
-- If progress is provided but mathematically impossible (e.g., started 1 month ago but shows 50% with 3+ years remaining), cap the displayed progress based on elapsed time vs total timeline
-
----
-
-## Part 4: Fix Hero Image Quality (Blurry Photos)
-
-**Problem:** `src/lib/imageUtils.ts` line 65 normalizes Provident CDN images to `464x312` -- this is fine for thumbnails but the hero section uses the same normalized URL, resulting in a blurry full-screen image.
-
-**Fix in `src/lib/imageUtils.ts`:**
-- Add a `normalizeProvidentImageUrl(url, size?)` parameter for target size
-- Default remains `464x312` for cards/thumbnails
-- Export a `getHighResImageUrl(url)` variant that uses a larger size like `1920x1080` for hero sections
-
-**Fix in `ProjectDetailLayout.tsx`:**
-- Line 238: Apply `getHighResImageUrl()` to `heroImage` instead of the default normalized size
-- The cover_image_url from the database should also prefer the highest resolution available
-
----
-
-## Part 5: Data Enrichment Test (One Project Before/After)
-
-**Build a test enrichment flow in the admin panel:**
-
-**New edge function: `enrich-project-test`**
-- Accepts a project slug
-- Fetches enrichment data from both Reelly API (via reelly_id) and Provident (via slug match)
-- Returns a "before" snapshot and "after" preview showing:
-  - Amenities found
-  - USP bullets found
-  - Location distances found
-  - Documents/brochures found
-  - Gallery images count
-- Does NOT write to DB -- preview only
-
-**New admin UI section in `ReellyImportPanel.tsx`:**
-- "Test Enrichment" card with input for project slug
-- Shows before/after comparison
-- Links to the Reelly source and Provident source
-- "Approve & Apply" button to write the enrichment
-
-Once approved on one project, the same logic runs in bulk for all 1,809 projects.
-
----
-
-## Part 6: Download Proxy Enhancement
-
-**Fix in `supabase/functions/download-file/index.ts`:**
-- Ensure `Content-Disposition: attachment` header is set on all proxied responses
-- This makes brochure PDFs, floor plans, and images auto-download when clicked
-
----
-
-## Files to Create/Modify
+## Files to Modify
 
 | File | Change |
 |---|---|
-| `src/utils/formatDate.ts` | NEW -- shared date formatter (DD Mon YYYY) |
-| `src/components/ImageCarousel.tsx` | Route downloads through proxy for auto-save |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Use proxy for document downloads; apply high-res hero image; use formatDisplayDate |
-| `src/components/project-detail/ConstructionTimelineSection.tsx` | Validate progress vs dates; use formatDisplayDate |
-| `src/components/project-detail/QuickFactsBar.tsx` | Use formatDisplayDate |
-| `src/components/project-detail/RecommendedProjects.tsx` | Use formatDisplayDate for handover badge |
-| `src/lib/imageUtils.ts` | Add getHighResImageUrl for hero sections |
-| `supabase/functions/download-file/index.ts` | Ensure Content-Disposition: attachment |
-| `supabase/functions/enrich-project-test/index.ts` | NEW -- test enrichment from Reelly + Provident |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Add test enrichment UI section |
+| `src/components/MortgageCalculator.tsx` | Add Interest Rate and Total Cost cards to compact view; replace 2x2 breakdown in full view with same 6 champagne cards |
 
-## Execution Order
+No other files need changes -- every location (homepage, project detail, dedicated page, suites) uses the same `MortgageCalculator` component, so fixing it once applies globally.
 
-1. Date formatter + apply globally (quick win, visible immediately)
-2. Construction progress validation (fixes Palm Central issue)
-3. Auto-download fix (proxy + Content-Disposition)
-4. Hero image quality fix
-5. Test enrichment edge function + admin UI
-6. Test on one project, show before/after
-7. Once approved, bulk enrichment for all projects
+## Technical Details
 
+The 2 new cards use data already computed in `calculations`:
+- Interest card: `interestRate` (state) + `calculations.totalInterest`
+- Total Cost card: `calculations.totalPayment`
+
+The champagne card style is already defined on lines 96-149 and will be reused identically for the new cards. The `TrendingUp` icon (already imported) will be used for Interest, and a wallet/receipt icon for Total Cost.
