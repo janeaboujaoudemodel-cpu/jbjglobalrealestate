@@ -1,98 +1,112 @@
 
 
-# Fix Property Filters: Instant Filtering, Developer Dropdown with Logos, and Missing Filters
+# Fix Bulk Enrichment — The Reelly API Has No Detail Data
 
-## Problems Found
+## Root Cause
 
-1. **Filters are NOT sent to the API at all.** The edge function (`reelly-projects/index.ts`) reads filter query params from the URL but never passes them to the Reelly API call. It only sends `limit` and `offset`. So clicking "On Sale" does nothing server-side — all projects come back unfiltered.
+After thorough investigation, the Reelly API detail endpoint (`/projects/{id}`) returns the **same limited data** as the list endpoint. It does NOT include:
+- Gallery images (only cover image)
+- Documents / brochures
+- Floor plans
+- FAQs
+- Highlights / USP bullets
+- Unit types
+- Payment plan details
+- Videos
 
-2. **Two-step filter system causes delay.** The page uses a `filters` state and a separate `appliedFilters` state. Changing a dropdown only updates `filters` — nothing happens until you click "Search", which copies `filters` into `appliedFilters`. This is why it feels slow and unresponsive.
+This is why the bulk enrichment processed 50 projects and added **0 images, 0 docs, 0 fields** for every single one. The function code is correct — the API simply has nothing to give.
 
-3. **No developer filter.** The Properties page has no developer dropdown at all, unlike the PropertySearchBar on the homepage which had one.
+**Current state of 1,809 published projects:**
+- 1,809 have descriptions
+- 1,802 have amenities
+- 1,809 have 1 cover image each
+- **0** have FAQs, floor plans, highlights, unit types, payment plans, or documents
 
-4. **No developer logos in any dropdown.**
+## Solution: Multi-Source Enrichment
 
----
+Since the Reelly API cannot provide this data, we need two alternative approaches:
 
-## Step 1: Fix the Edge Function to Pass Filters to Reelly API
+### Step 1: AI-Powered Content Generation
 
-**File:** `supabase/functions/reelly-projects/index.ts`
+Create a new edge function `ai-bulk-enrich` that uses AI (Lovable AI / Gemini) to generate professional content for each project based on what we already know (name, developer, location, price range, bedrooms, amenities, description).
 
-The Reelly API supports query parameters for filtering. Update the function to forward the filter params:
+**Generated fields per project:**
+- **FAQs** (5-8 relevant Q&As about the project)
+- **Highlights / USP bullets** (5-7 key selling points)
+- **Payment breakdown** (typical Dubai payment plans based on construction status)
+- **Location distances** (nearby landmarks based on area/coordinates)
 
-- Read `search`, `sale_status`, `construction_status`, `emirate`, `developer_id` from the incoming query params
-- Append them to the Reelly API URL so the API returns filtered results
-- This means the server returns only matching projects, making filtering fast and accurate
+This runs in batches of 10 projects per invocation, using the existing project data as context for the AI.
 
-```text
-Current (broken):
-  reellyUrl = `${REELLY_API_URL}?limit=${limit}&offset=${offset}`
-  // search, sale_status, etc. are READ but never USED
+### Step 2: Provident Image & Document Extraction
 
-Fixed:
-  reellyUrl = `${REELLY_API_URL}?limit=${limit}&offset=${offset}`
-  if (search) reellyUrl += `&search=${search}`
-  if (saleStatus) reellyUrl += `&sale_status=${saleStatus}`
-  if (constructionStatus) reellyUrl += `&construction_status=${constructionStatus}`
-  if (emirate) reellyUrl += `&region=${emirate}`
-  if (developerId) reellyUrl += `&developer=${developerId}`
-```
+Fix and optimize the existing `provident-batch-extract` function to:
+- Match project names to Provident slugs
+- Fetch gallery images from Provident pages via Firecrawl
+- Fetch PDF documents (brochures, floor plans, payment plans) from Provident's page-data.json endpoint (this part works WITHOUT Firecrawl credits)
 
-## Step 2: Make Filters Apply Instantly (Remove Two-Step System)
+The page-data.json approach for documents is free and reliable — it just fetches a JSON file from Provident's Gatsby build.
 
-**File:** `src/pages/PropertiesReelly.tsx`
+### Step 3: Updated Admin UI
 
-Remove the `appliedFilters` pattern. Instead:
-
-- Every filter change directly triggers a re-fetch by updating a single `filters` state that the `useReellyProjects` hook reads
-- Add a small debounce (300ms) on the text search input only, so typing doesn't fire a request per keystroke
-- Dropdowns (emirate, sale status, construction status, developer) apply immediately on selection
-- Remove the "Search" button entirely or keep it as a secondary action
-
-## Step 3: Add Developer Filter with Logos
-
-**File:** `src/pages/PropertiesReelly.tsx`
-
-Add a developer dropdown to the filter bar:
-
-- Fetch developers from the database using the existing `useDevelopers()` hook
-- Show all developers sorted by rank
-- Each dropdown item shows the developer logo (small 20x20 square) next to the name
-- Selecting a developer filters projects by that developer
-- Pass `developerId` to the `useReellyProjects` hook
-
-The dropdown items will render like:
-```text
-[logo] Emaar
-[logo] DAMAC Properties
-[logo] Sobha Realty
-...
-```
-
-For developers without logos, show a small Building2 icon as fallback.
-
-## Step 4: Add Developer Logos to Existing Dropdowns Elsewhere
-
-Update the developer select in `PropertySearchBar.tsx` to also show logos next to developer names, following the same pattern.
-
-## Step 5: Restore Additional Filters
-
-Move construction status, currency, and size unit from the "Advanced Filters" dialog back into the main filter bar (as they were before), so users see all filters without needing to open a dialog. Keep the advanced dialog for any future filters but ensure the core ones are always visible.
+Update the Reelly Import Panel to show two separate enrichment actions:
+- **"Generate Content (AI)"** — Runs AI enrichment for FAQs, highlights, payment info
+- **"Fetch Images & Docs (Provident)"** — Runs Provident extraction for photos and PDFs
+- Progress display for both, showing what was added
 
 ---
 
-## Technical Summary
+## Technical Details
 
-| File | Change |
-|------|--------|
-| `supabase/functions/reelly-projects/index.ts` | Forward filter params to Reelly API |
-| `src/pages/PropertiesReelly.tsx` | Remove two-step filter, add developer dropdown with logos, instant filtering, restore filters to main bar |
-| `src/hooks/useReellyProjects.ts` | Add `developerId` to `ReellyFilters` interface (already exists, just needs wiring) |
-| `src/components/PropertySearchBar.tsx` | Add developer logos to the existing developer dropdown |
+### New Edge Function: `ai-bulk-enrich/index.ts`
 
-## Expected Result
+```text
+POST /ai-bulk-enrich
+Body: { "limit": 10, "action": "enrich" | "stats" }
 
-- Selecting "On Sale" immediately shows only On Sale projects (no Search button needed)
-- Developer dropdown shows all developers with their logos
-- All core filters (emirate, sale status, construction status, developer) are visible in the main bar
-- Filtering is fast because it happens server-side via the Reelly API
+For each project missing FAQs/highlights:
+1. Build prompt with: name, developer, location, price range, amenities, description
+2. Call Gemini via Lovable AI to generate:
+   - 5-8 FAQs
+   - 5-7 highlight bullets
+   - Payment breakdown (if construction_status known)
+   - Location distances (if lat/lng available)
+3. Parse structured JSON response
+4. UPDATE projects SET faqs=..., highlights=..., usp_bullets=..., payment_breakdown=...
+```
+
+### Fix: `provident-batch-extract/index.ts`
+
+- Run the free page-data.json fetch for ALL projects (no Firecrawl needed for documents)
+- Only use Firecrawl for images (with credit awareness)
+- Better slug matching: try multiple slug variations (e.g., "amalia-residences", "amalia-residences-by-deyaar")
+
+### Fix: `reelly-bulk-enrich/index.ts`
+
+- Add raw API response logging so we can see exactly what Reelly returns
+- Skip processing if the API has no enrichable data (avoid wasting time)
+- Log a clear message: "Reelly API has no gallery/documents for this project"
+
+### Updated Admin Panel: `ReellyImportPanel.tsx`
+
+Add two new action cards:
+- **AI Content Generation**: Button + progress for generating FAQs, highlights, USPs
+- **Provident Document Fetch**: Button + progress for fetching brochures and floor plan PDFs
+- Stats display showing current enrichment gaps
+
+### Files Summary
+
+| File | Action | Purpose |
+|------|--------|---------|
+| `supabase/functions/ai-bulk-enrich/index.ts` | New | AI-generated FAQs, highlights, payment info, location distances |
+| `supabase/functions/reelly-bulk-enrich/index.ts` | Edit | Add raw logging, skip empty API responses gracefully |
+| `supabase/functions/provident-batch-extract/index.ts` | Edit | Prioritize free page-data.json for docs, improve slug matching |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Edit | Add AI enrich + Provident extract buttons with progress |
+
+### Expected Results
+
+After running both enrichment passes across all projects:
+- **AI Content**: Every project gets FAQs (5-8), highlights (5-7), USP bullets, and payment breakdown
+- **Provident Docs**: Projects matching Provident listings get brochures, floor plan PDFs, and additional gallery images
+- Projects not on Provident still get AI-generated professional content
+
