@@ -301,19 +301,10 @@ const AreaGuides = () => {
                             loading={index < 8 ? "eager" : "lazy"}
                           />
                         ) : (
-                          <div className="w-full h-full relative">
-                            <img
-                              src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80"
-                              alt="Dubai Skyline"
-                              className="w-full h-full object-cover opacity-70"
-                              loading="lazy"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="text-center">
-                                <MapPin className="w-10 h-10 text-gold/70 mx-auto mb-2" />
-                                <span className="text-gold/90 text-xs font-medium tracking-wider uppercase">Area</span>
-                              </div>
+                          <div className="w-full h-full bg-gradient-to-br from-zinc-800 via-zinc-900 to-black flex items-center justify-center">
+                            <div className="text-center">
+                              <MapPin className="w-10 h-10 text-gold/70 mx-auto mb-2" />
+                              <span className="text-gold/90 text-xs font-medium tracking-wider uppercase">Area</span>
                             </div>
                           </div>
                         )}
