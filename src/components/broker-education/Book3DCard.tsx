@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Lock, CheckCircle, Clock, ArrowRight, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 import type { EducationBook, BookProgress } from "@/hooks/useBrokerEducation";
 
 interface Book3DCardProps {
@@ -119,10 +120,9 @@ export function Book3DCard({ book, progress, onOpen, index }: Book3DCardProps) {
         >
           {/* Book Cover */}
           <div
-            className={`relative bg-gradient-to-br ${pathStyle.bg} rounded-lg overflow-hidden shadow-2xl ${pathStyle.border} border`}
+            className={`relative bg-gradient-to-br ${pathStyle.bg} rounded-lg overflow-hidden shadow-2xl ${pathStyle.border} border h-[400px] flex flex-col`}
             style={{
               boxShadow: `16px 16px 50px rgba(0,0,0,0.7), -4px -4px 15px ${pathStyle.glow}`,
-              minHeight: '320px',
             }}
           >
             {/* Status Badge */}
@@ -151,9 +151,9 @@ export function Book3DCard({ book, progress, onOpen, index }: Book3DCardProps) {
             <div className="absolute left-0 top-0 bottom-0 w-5 bg-gradient-to-r from-gold/30 via-gold/15 to-transparent" />
 
             {/* Top Section with Icon */}
-            <div className="relative h-32 flex items-center justify-center bg-black/20">
-              <div className="w-16 h-16 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <span className="text-gold text-2xl font-bold">{book.book_number}</span>
+            <div className="relative h-28 flex items-center justify-center bg-black/20 flex-shrink-0">
+              <div className="w-14 h-14 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+                <span className="text-gold text-xl font-bold">{book.book_number}</span>
               </div>
               
               {/* Restricted Overlay */}
@@ -165,38 +165,46 @@ export function Book3DCard({ book, progress, onOpen, index }: Book3DCardProps) {
             </div>
 
             {/* Cover Content */}
-            <div className="p-5 relative">
+            <div className="p-5 relative flex-1 flex flex-col">
               {/* Learning Path Badge */}
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gold/15 border border-gold/30 text-gold text-[10px] uppercase tracking-[0.15em] mb-3">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gold/15 border border-gold/30 text-gold text-[10px] uppercase tracking-[0.15em] mb-3 self-start">
                 <Sparkles className="w-3 h-3" />
                 {book.learning_path}
               </div>
 
               {/* Title */}
               <h3
-                className="text-white text-lg font-bold leading-tight mb-2 line-clamp-2"
+                className="text-white text-base font-bold leading-tight mb-2 line-clamp-2"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {book.title}
               </h3>
 
               {/* Description */}
-              <p className="text-zinc-400 text-xs line-clamp-2 mb-4">
+              <p className="text-zinc-400 text-xs line-clamp-2 flex-1">
                 {book.description}
               </p>
 
               {/* Footer */}
-              <div className="pt-3 border-t border-zinc-700">
+              <div className="pt-3 border-t border-zinc-700 mt-auto">
                 {book.is_restricted ? (
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    disabled
-                    className="w-full opacity-60"
-                  >
-                    <Lock className="w-3 h-3 mr-2" />
-                    Restricted Access
-                  </Button>
+                  <div className="space-y-2">
+                    <p className="text-red-300/80 text-[10px] leading-tight">
+                      Available after completing all foundational books and manager approval.
+                    </p>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="w-full bg-red-900/30 hover:bg-red-900/50 text-red-200 border border-red-500/30"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toast.success("Access request submitted. Your manager will review it.");
+                      }}
+                    >
+                      <Lock className="w-3 h-3 mr-2" />
+                      Request Access
+                    </Button>
+                  </div>
                 ) : (
                   <Button
                     variant="secondary"

@@ -235,6 +235,10 @@ const MyDashboardProgress = lazy(() => import("./pages/MyDashboardProgress"));
 const MyDashboardActivity = lazy(() => import("./pages/MyDashboardActivity"));
 const BrokerEducation = lazy(() => import("./pages/BrokerEducation"));
 const BrokerFAQ = lazy(() => import("./pages/BrokerFAQ"));
+const BuyerFAQ = lazy(() => import("./pages/BuyerFAQ"));
+const SellerFAQ = lazy(() => import("./pages/SellerFAQ"));
+const LandlordFAQ = lazy(() => import("./pages/LandlordFAQ"));
+const TenantFAQ = lazy(() => import("./pages/TenantFAQ"));
 const JBJAnalyticsDashboard = lazy(() => import("./pages/JBJAnalyticsDashboard"));
 const JBJDesignStudio = lazy(() => import("./pages/JBJDesignStudio"));
 const AIBrokerWorkspace = lazy(() => import("./pages/AIBrokerWorkspace"));
@@ -398,6 +402,10 @@ const App = () => (
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/investor-education" element={<InvestorEducation />} />
                 <Route path="/investor-faq" element={<InvestorFAQ />} />
+                <Route path="/buyer-faq" element={<BuyerFAQ />} />
+                <Route path="/seller-faq" element={<SellerFAQ />} />
+                <Route path="/landlord-faq" element={<LandlordFAQ />} />
+                <Route path="/tenant-faq" element={<TenantFAQ />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/my-dashboard" element={<MyDashboard />} />
                 <Route path="/my-dashboard/progress" element={<MyDashboardProgress />} />

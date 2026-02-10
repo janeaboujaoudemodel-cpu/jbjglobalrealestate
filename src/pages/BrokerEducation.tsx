@@ -158,12 +158,13 @@ const BrokerEducation = () => {
             <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
               <Button 
                 variant="hero"
+                className="border-2 border-white/90 hover:border-gold"
                 onClick={() => document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 <ArrowDown className="w-4 h-4 mr-2" />
                 Explore Library
               </Button>
-              <Button variant="hero" asChild>
+              <Button variant="hero" className="border-2 border-white/90 hover:border-gold" asChild>
                 <Link to="/broker-dashboard">
                   <Briefcase className="w-4 h-4 mr-2" />
                   Back to Dashboard
@@ -379,8 +380,58 @@ const BrokerEducation = () => {
         </div>
       </section>
 
+      {/* JBJ Employee Benefits Section */}
+      <section className="py-12 md:py-16">
+        <div className="jj-layer-2">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            <div className="text-center mb-10">
+              <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
+                <Shield className="w-3 h-3 mr-1" />
+                JBJ Employee Benefits
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                What JBJ Brokers <span className="text-gold">Receive</span>
+              </h2>
+              <p className="text-black/70 max-w-2xl mx-auto">
+                Registered JBJ employees get full access to training, tools, and dedicated support.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { icon: Shield, title: "24/7 Support", desc: "Dedicated support for all registered brokers. Get help anytime via chat, call, or email." },
+                { icon: BookOpen, title: "Continuous Education", desc: "Regular book updates, new learning paths, and advanced content added monthly." },
+                { icon: GraduationCap, title: "Events & Networking", desc: "Exclusive JBJ broker events, workshops, and professional networking opportunities." },
+                { icon: Briefcase, title: "AI Tools Access", desc: "Full access to all AI-powered broker tools — lead scoring, market reports, and more." },
+              ].map((benefit, i) => (
+                <motion.div key={i} variants={fadeInUp}>
+                  <Card className="jj-card-inner h-full">
+                    <CardContent className="p-6">
+                      <div className="jj-icon-box-active w-12 h-12 rounded-xl mb-4">
+                        <benefit.icon className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-black font-semibold text-lg mb-2">{benefit.title}</h3>
+                      <p className="text-black/60 text-sm">{benefit.desc}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Certification Section - After Books */}
-      <CertificationSection className="bg-black" />
+      <section className="py-12 md:py-16">
+        <div className="jj-layer-2">
+          <CertificationSection />
+        </div>
+      </section>
 
       {/* CTA Section - Layer 2 Active Champagne */}
       <section className="py-16 md:py-24">
@@ -393,22 +444,22 @@ const BrokerEducation = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-black mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Ready to <span className="text-gold">Get Started?</span>
+              Join the JBJ <span className="text-gold">Broker Network</span>
             </h2>
             <p className="text-lg text-black/70 mb-10">
-              Begin your professional development journey with the JBJ broker education library.
+              Registered JBJ employees get full access to all books, AI tools, and 24/7 support. Start your journey today.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button variant="primary" size="lg" asChild>
-                <Link to="/broker-dashboard">
-                  <Briefcase className="w-5 h-5 mr-2" />
-                  Back to Dashboard
+                <Link to="/join">
+                  <ArrowRight className="w-5 h-5 mr-2" />
+                  Apply to Join JBJ
                 </Link>
               </Button>
               <Button variant="secondary" size="lg" asChild>
-                <Link to="/broker-toolkit">
-                  <ArrowRight className="w-5 h-5 mr-2" />
-                  Broker Tools
+                <Link to="/broker-dashboard">
+                  <Briefcase className="w-5 h-5 mr-2" />
+                  Back to Dashboard
                 </Link>
               </Button>
             </div>
