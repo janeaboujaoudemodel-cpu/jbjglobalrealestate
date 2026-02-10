@@ -12,6 +12,7 @@ import { MessageCircle, Phone, Mail, Download, Share2 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { toast } from "sonner";
 import { FaLinkedinIn, FaInstagram, FaGlobe, FaTiktok } from "react-icons/fa";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Social links
 const SOCIAL_LINKS = {
@@ -92,11 +93,14 @@ interface DirectContactCTAProps {
 const DirectContactCTA = ({
   className = "",
   showTitle = true,
-  title = "Connect With Our Team",
-  subtitle = "Get in touch for inquiries, consultations, or personalized guidance.",
+  title,
+  subtitle,
   titleSize = 'premium',
   showSaveShare = true,
 }: DirectContactCTAProps) => {
+  const { t } = useLanguage();
+  const resolvedTitle = title || t('cta.connectWithTeam', 'Connect With Our Team');
+  const resolvedSubtitle = subtitle || t('cta.connectSubtitle', 'Get in touch for inquiries, consultations, or personalized guidance.');
   return (
     <section className={`py-12 bg-black ${className}`}>
       <div className="mx-4 sm:mx-6 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6 md:p-8">
@@ -111,11 +115,11 @@ const DirectContactCTA = ({
               }`} 
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              <span className="text-black">{title.split(' ').slice(0, -1).join(' ')}</span>{" "}
-              <span className="text-gold">{title.split(' ').slice(-1)[0]}</span>
+              <span className="text-black">{resolvedTitle.split(' ').slice(0, -1).join(' ')}</span>{" "}
+              <span className="text-gold">{resolvedTitle.split(' ').slice(-1)[0]}</span>
             </h2>
             <p className="text-center text-zinc-600 text-sm md:text-base mb-8 max-w-2xl mx-auto">
-              {subtitle}
+              {resolvedSubtitle}
             </p>
           </>
         )}
@@ -132,7 +136,7 @@ const DirectContactCTA = ({
             </div>
             <div>
               <h3 className="text-black font-semibold text-sm mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
-                WhatsApp
+                {t('cta.whatsapp', 'WhatsApp')}
               </h3>
               <p className="text-emerald-600 text-xs sm:text-sm font-semibold">{CONTACT_INFO.phone}</p>
             </div>
@@ -148,7 +152,7 @@ const DirectContactCTA = ({
             </div>
             <div>
               <h3 className="text-black font-semibold text-sm mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Call Us
+                {t('cta.callUs', 'Call Us')}
               </h3>
               <p className="text-blue-600 text-xs sm:text-sm font-semibold">{CONTACT_INFO.phone}</p>
             </div>
@@ -164,7 +168,7 @@ const DirectContactCTA = ({
             </div>
             <div>
               <h3 className="text-black font-semibold text-sm mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Email Us
+                {t('cta.emailUs', 'Email Us')}
               </h3>
               <p className="text-gold text-xs sm:text-sm font-semibold">{CONTACT_INFO.email}</p>
             </div>
@@ -183,7 +187,7 @@ const DirectContactCTA = ({
             className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[220px] bg-transparent border-2 border-gold/50 hover:border-black hover:bg-black/5 text-black"
           >
             <Download className="w-5 h-5 text-gold" />
-            <span>Save Contact</span>
+            <span>{t('cta.saveContact', 'Save Contact')}</span>
           </motion.button>
 
           <motion.button
@@ -195,14 +199,14 @@ const DirectContactCTA = ({
             className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[180px] bg-transparent border-2 border-gold/50 hover:border-black hover:bg-black/5 text-black"
           >
             <Share2 className="w-5 h-5 text-gold" />
-            <span>Share</span>
+            <span>{t('cta.share', 'Share')}</span>
           </motion.button>
         </div>
         )}
 
         {/* Social Links Display */}
         <div className="flex items-center justify-center gap-4 mt-6 pt-4 border-t border-gold/20">
-          <span className="text-zinc-500 text-xs uppercase tracking-wider">Follow Us:</span>
+          <span className="text-zinc-500 text-xs uppercase tracking-wider">{t('cta.followUs', 'Follow Us:')}</span>
           <a 
             href={SOCIAL_LINKS.linkedin} 
             target="_blank" 

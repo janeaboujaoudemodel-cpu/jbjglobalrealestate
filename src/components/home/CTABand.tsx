@@ -4,12 +4,14 @@
  */
 
 import DirectContactCTA from "@/components/DirectContactCTA";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const CTABand = () => {
+  const { t } = useLanguage();
   return (
     <DirectContactCTA 
-      title="Ready to Get Started?"
-      subtitle="Connect with our expert team for personalized guidance."
+      title={t('cta.readyToStart', 'Ready to Get Started?')}
+      subtitle={t('cta.readySubtitle', 'Connect with our expert team for personalized guidance.')}
       titleSize="premium"
       showSaveShare={true}
     />
