@@ -293,7 +293,7 @@ export default function ProjectDetailLayout({
       if (t.id === "amenities") return hasAmenities;
       if (t.id === "payment") return hasPayment;
       if (t.id === "faq") return hasUsefulInfo;
-      if (t.id === "brochure") return hasBrochure;
+      if (t.id === "brochure") return true; // Always show brochure section
       if (t.id === "units") return hasUnits;
       if (t.id === "construction") return hasConstruction;
       if (t.id === "media") return hasMedia;
@@ -966,8 +966,7 @@ export default function ProjectDetailLayout({
             </div>
           </div>
 
-          {/* BROCHURE - Full width two-column layout */}
-          {brochurePrimary && (
+          {/* BROCHURE - Full width two-column layout - Always visible */}
           <div ref={brochureRef} id="brochure" className="mb-12 scroll-mt-40">
             <div className="jj-card-inner">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -975,8 +974,10 @@ export default function ProjectDetailLayout({
                 <div>
                   <h3 className="text-h3-sm font-medium text-foreground mb-4">Project Brochure</h3>
                   <p className="text-muted-foreground mb-4 leading-relaxed">
-                    Download the complete brochure for {project.name} to explore detailed floor plans, 
-                    pricing, payment options, and lifestyle amenities. Perfect for offline viewing and sharing.
+                    {brochurePrimary 
+                      ? `Download the complete brochure for ${project.name} to explore detailed floor plans, pricing, payment options, and lifestyle amenities. Perfect for offline viewing and sharing.`
+                      : `Request the exclusive brochure for ${project.name} with detailed floor plans, pricing, and lifestyle amenities. Our team will share it with you directly.`
+                    }
                   </p>
                   <ul className="space-y-2 text-sm text-muted-foreground mb-6">
                     <li className="flex items-center gap-2">
@@ -991,10 +992,13 @@ export default function ProjectDetailLayout({
                   </ul>
                   <Button 
                     variant="primary" 
-                    onClick={() => handleDocumentDownload("brochure", brochurePrimary?.url)}
+                    onClick={() => brochurePrimary 
+                      ? handleDocumentDownload("brochure", brochurePrimary?.url)
+                      : setLeadCaptureOpen(true)
+                    }
                   >
                     <Download className="w-4 h-4" />
-                    Download Brochure
+                    {brochurePrimary ? 'Download Brochure' : 'Request Brochure'}
                   </Button>
                 </div>
                 {/* Right: Brochure card */}
@@ -1003,14 +1007,16 @@ export default function ProjectDetailLayout({
                     projectName={project.name}
                     brochureUrl={brochurePrimary?.url}
                     projectImageUrl={project.images?.[0]?.url || undefined}
-                    onDownloadClick={() => handleDocumentDownload("brochure", brochurePrimary?.url)}
-                    isLocked={!isLeadCaptured && !!brochurePrimary}
+                    onDownloadClick={() => brochurePrimary 
+                      ? handleDocumentDownload("brochure", brochurePrimary?.url)
+                      : setLeadCaptureOpen(true)
+                    }
+                    isLocked={!brochurePrimary || (!isLeadCaptured && !!brochurePrimary)}
                   />
                 </div>
               </div>
             </div>
           </div>
-          )}
 
            {/* PAYMENT PLAN VISUALIZATION (Reelly-style enhanced) */}
            {(!!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown) && (
