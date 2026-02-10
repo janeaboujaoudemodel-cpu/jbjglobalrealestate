@@ -25,6 +25,28 @@ interface MarketNews {
   is_featured: boolean;
 }
 
+// Category-specific accent colors for premium badges
+const CATEGORY_COLORS: Record<string, { bg: string; border: string }> = {
+  'Market Update': { bg: 'bg-amber-600/70', border: 'border-amber-400/40' },
+  'Analysis': { bg: 'bg-blue-600/70', border: 'border-blue-400/40' },
+  'Policy': { bg: 'bg-sky-600/70', border: 'border-sky-400/40' },
+  'Economic': { bg: 'bg-emerald-600/70', border: 'border-emerald-400/40' },
+  'Monthly Report': { bg: 'bg-purple-600/70', border: 'border-purple-400/40' },
+  'Market Outlook': { bg: 'bg-indigo-600/70', border: 'border-indigo-400/40' },
+  'Developer News': { bg: 'bg-orange-600/70', border: 'border-orange-400/40' },
+  'Government': { bg: 'bg-red-600/70', border: 'border-red-400/40' },
+  'Company News': { bg: 'bg-gold/80', border: 'border-gold/60' },
+};
+
+const CategoryBadge = ({ category }: { category: string }) => {
+  const colors = CATEGORY_COLORS[category] || { bg: 'bg-black/50', border: 'border-white/20' };
+  return (
+    <span className={`text-xs text-white ${colors.bg} backdrop-blur-sm px-3 py-1 rounded-full border ${colors.border} font-medium`}>
+      {category}
+    </span>
+  );
+};
+
 const News = () => {
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get('category');
@@ -356,9 +378,7 @@ const News = () => {
                         <span className="text-xs text-black bg-gold px-3 py-1 rounded-full font-medium">
                           Featured
                         </span>
-                        <span className="text-xs text-white bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20 font-medium">
-                          {filteredNews[0].category}
-                        </span>
+                    <CategoryBadge category={filteredNews[0].category} />
                         <span className="text-xs text-zinc-600 bg-zinc-100 px-3 py-1 rounded-full flex items-center gap-1 border border-zinc-200">
                           <Landmark className="w-3 h-3" />
                           {filteredNews[0].source}
@@ -411,9 +431,7 @@ const News = () => {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                   <div className="absolute top-3 left-3 flex gap-2">
-                    <span className="text-xs text-white bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20 font-medium">
-                      {article.category}
-                    </span>
+                    <CategoryBadge category={article.category} />
                   </div>
                 </div>
                 <div className="p-5">
