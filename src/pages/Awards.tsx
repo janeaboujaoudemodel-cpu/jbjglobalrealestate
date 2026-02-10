@@ -19,7 +19,7 @@ import award13 from "@/assets/awards/emaar-q2-no12-2023.png";
 import award14 from "@/assets/awards/jbj-trophy.png";
 import award15 from "@/assets/awards/sobha-top-broker.png";
 import award16 from "@/assets/awards/emaar-q3-no2-2024a.png";
-import award17 from "@/assets/awards/emaar-q3-no2-2024b.png";
+
 import award18 from "@/assets/awards/sobha-3rd-partner-2024.png";
 
 const AWARDS_DATA = [
@@ -37,7 +37,7 @@ const AWARDS_DATA = [
   { image: award12, title: "The Black Onyx Awards", organization: "Dubai Properties / Meraas", year: "2023" },
   { image: award13, title: "Quarter 2 Broker Awards - No. 12", organization: "Emaar", year: "2023" },
   { image: award16, title: "Quarter 3 Broker Awards - No. 2", organization: "Emaar", year: "2024" },
-  { image: award17, title: "Quarter 3 Broker Awards - No. 2", organization: "Emaar", year: "2024" },
+  
   { image: award18, title: "3rd Highest Performing Channel Partner", organization: "Sobha Realty", year: "2024" },
   { image: award14, title: "JBJ Recognition Trophy", organization: "JBJ Global", year: "" },
   { image: award15, title: "Top Broker Award", organization: "Sobha Realty", year: "" },
