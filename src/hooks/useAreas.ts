@@ -19,6 +19,7 @@ export interface Area {
   avg_price_sqft: number | null;
   provident_url: string | null;
   is_trending: boolean;
+  is_high_demand: boolean;
   is_active: boolean;
   created_at: string;
   updated_at: string;
