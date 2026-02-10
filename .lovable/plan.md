@@ -1,104 +1,309 @@
 
 
-# Fix Enrichment Pipeline, Footer Mode, Description Rendering, and Progress Persistence
+# Complete Task List and Implementation Plan
 
-## Issues Identified
-
-### Issue 1: Enrichment Test Shows All Zeros
-**Root cause confirmed by live API test:** The `enrich-project-test` function IS working correctly -- but the Reelly API itself returns very sparse data for most projects (only 1 gallery image, 0 amenities, 0 floor plans, 0 documents, 0 FAQs). The zeros are REAL -- Reelly simply does not have rich data for the majority of its 1,802 projects.
-
-**The solution:** The enrichment test must also check Provident as a second source. Currently `enrich-project-test` only queries Reelly. The `provident-enrich-projects` function exists but is not integrated into the enrichment test UI. By combining both sources, projects that are empty from Reelly can be filled from Provident.
-
-### Issue 2: Bulk Enrichment (Reelly API) Not Extracting Data
-**Root cause:** The `reelly-bulk-enrich` function filters for projects without documents -- but many have already been processed (even if the API returned nothing). The backfill function works with `force_refresh: true` but the bulk enrichment button does NOT pass that flag. Also, the Reelly API genuinely returns sparse data for most projects.
-
-### Issue 3: Progress Lost on Page Refresh
-**Root cause:** While backfill progress IS persisted to `sync_jobs`, the enrichment test result, bulk enrichment progress, AI content generation progress, and Provident extraction progress are only stored in React state -- all lost on refresh. The `loadPersistedBackfillResults` function only loads backfill data, not the other operations.
-
-### Issue 4: Footer Mode Switcher Not Selectable
-**Root cause:** The `ModeSwitcher` component returns `null` if `hasSelectedRole` is false. In the footer context, an unauthenticated user or a user who hasn't selected a role won't see any mode options at all. The label "Your Mode" is shown but the switcher is invisible.
-
-### Issue 5: Description Rendering as Block Text
-**Root cause:** The `formatReellyDescription` function converts known section labels to markdown headings, but many Reelly descriptions use different patterns not covered by the map. The `renderMarkdownToHtml` function does convert markdown to HTML with proper headings and lists, but the input often lacks any markdown structure -- it's just a raw text block.
+This plan extracts every task from your message, organized by priority and grouped into implementation phases.
 
 ---
 
-## Fix Plan
+## Task 1: Fix AI Interior Design -- Complete Overhaul
 
-### Fix 1: Add Provident Source to Enrichment Test
+**Current state:** The page shows an empty mode selector (Concept/Redesign/Staging/AI Chat) on first load. All four modes lead to separate forms, but the AI Chat is isolated in its own panel rather than integrated with the photo. The edge function uses `google/gemini-3-pro-image-preview` which works, but the UX flow is fragmented.
 
-**File: `supabase/functions/enrich-project-test/index.ts`**
-- After fetching Reelly data, also attempt to match the project against Provident's page-data endpoint using slug variants
-- Import `fetchProvidentPageDataDetail` from the shared provident module
-- For each enrichment field that Reelly returned empty, check if Provident has data and include it in the "after" snapshot
-- Add a `provident` entry to the `sources` response alongside `reelly`
-- This gives the before/after cards actual non-zero values
+**Fix:**
+- Redesign the landing screen to show a **camera/upload area first** (not tabs). The user either takes a photo, uploads one, or describes what they want
+- Add optional preference selectors: Corporate, Premium, Luxury, Minimalist style presets
+- Add optional color palette chooser (the existing `colorPalettes` array from ConceptRenderForm)
+- Integrate the AI chat assistant **inline with the photo preview** -- not in a separate tab. The chat sits beside or below the generated image so the user can say "edit the sofa to be white" and regenerate
+- Add "Redesign" / "Regenerate" button directly on the result image
+- Move Concept/Redesign/Staging as secondary mode chips, not primary navigation
+- Fix all border colors to use purple (fuchsia) consistently
+- Fix spacing and padding throughout
 
-### Fix 2: Fix Bulk Enrichment to Combine Reelly + Provident
-
-**File: `supabase/functions/reelly-bulk-enrich/index.ts`**
-- After fetching from Reelly API, if key fields (amenities, floor plans, documents) are still empty, attempt Provident slug-match enrichment
-- Import `fetchProvidentPageDataDetail` from the shared provident module
-- Only fill fields where Reelly returned nothing (non-destructive)
-- Tag data_source as "provident_via_bulk_enrich"
-
-### Fix 3: Persist All Operation Progress to sync_jobs
-
-**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
-- On mount, load last results for ALL operation types from `sync_jobs` (not just `reelly_backfill`)
-- Add job_type entries: `bulk_enrich`, `ai_content`, `provident_extract`
-- When each operation runs, create/update a `sync_jobs` row with stats
-- On mount, restore the last result for each operation type into its respective state variable
-- This ensures progress survives page refresh
-
-### Fix 4: Fix Footer Mode Switcher
-
-**File: `src/components/Footer.tsx`**
-- The ModeSwitcher already works when `hasSelectedRole` is true, but the footer shows "Your Mode" label unconditionally
-- Wrap the entire mode section (label + switcher) in a condition that checks authentication status
-- For unauthenticated users, show a "Sign in to select your mode" link instead
-- For authenticated users who haven't selected, show all three mode options directly as clickable buttons (not the dropdown that requires `hasSelectedRole`)
-
-**File: `src/components/ModeSwitcher.tsx`**
-- Add a `showForUnselected` prop that bypasses the `if (!hasSelectedRole) return null` check
-- When `showForUnselected` is true, show all 3 mode buttons inline so the user can select from the footer
-
-### Fix 5: Improve Description Rendering
-
-**File: `src/lib/markdownUtils.ts`**
-- Expand `formatReellyDescription` with more section label patterns from Reelly data (e.g., "Features", "Facilities", "Unit Types", "Investment Highlights", "Developer", "Property Details")
-- Add a fallback: if no section headings are detected in the text and it exceeds 500 chars, auto-split into paragraphs at sentence boundaries (every 3-4 sentences) and add visual breaks
-- Add a function to detect numbered lists in plain text (e.g., "1. Feature one 2. Feature two") and convert to proper markdown lists
-
-**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
-- The description section already uses `prose` classes, so improved markdown output will automatically render with proper typography
-- Add section dividers between auto-detected sections for better visual separation
-- Add subtle gold accent lines between major description sections
-
-### Fix 6: Add Provident News/Areas/Projects Extraction Button
-
-**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
-- Add a "Sync from Provident" card that calls `provident-enrich-projects` in batch mode
-- Show matching stats: how many of our projects match Provident listings
-- Show results per project: images added, documents added, fields updated
-- This gives the user a one-click way to fill all the gaps that Reelly left empty
+**Files:** `src/pages/InteriorDesignAI.tsx`, `src/components/interior-design/DesignModeSelector.tsx`, `src/components/interior-design/DesignChatAssistant.tsx`, `src/components/interior-design/ConceptRenderForm.tsx`
 
 ---
 
-## Technical Details
+## Task 2: Add 3D View / VR Experience for Generated Designs
 
-### Files to modify:
-1. `supabase/functions/enrich-project-test/index.ts` -- Add Provident source lookup
-2. `supabase/functions/reelly-bulk-enrich/index.ts` -- Add Provident fallback for empty fields
-3. `src/components/listing-admin/ReellyImportPanel.tsx` -- Persist all progress types, add Provident sync card
-4. `src/components/Footer.tsx` -- Fix mode switcher visibility for unauthenticated users
-5. `src/components/ModeSwitcher.tsx` -- Add `showForUnselected` prop
-6. `src/lib/markdownUtils.ts` -- Expand description formatting patterns
+**Current state:** Generated designs are shown as flat 2D images.
 
-### Edge functions to deploy:
-- `enrich-project-test`
-- `reelly-bulk-enrich`
+**Fix:**
+- Wrap the generated image in a pannellum-style CSS 3D viewer using CSS transforms (rotate on drag)
+- Add touch/drag support so the user can "hold and rotate" the image to simulate a 3D view
+- Add a "Download 3D" button that downloads the high-res image
+- This is a simulated 3D panoramic viewer -- not true 3D modeling (which would require a separate 3D engine)
 
-### No database migrations needed
-All changes are UI and edge function logic updates.
+**Files:** New component `src/components/interior-design/Design3DViewer.tsx`, `src/pages/InteriorDesignAI.tsx`
+
+---
+
+## Task 3: Fix DirectContactCTA -- Reverse Border/Hover Logic
+
+**Current state:** The WhatsApp button has a green border on load, Call has blue, Email has gold. On hover, they get colored shadows.
+
+**Fix:** Reverse the logic:
+- **Normal load:** Show the colored glow/shadow (the current hover effect) as the default state
+- **Hover:** Show the colored border (the current normal state) on hover instead
+- Email number text must be gold
+- Phone number text must remain blue
+- This is ONLY a CSS swap of normal vs hover states -- no UI/button changes
+
+**Files:** `src/components/DirectContactCTA.tsx`
+
+---
+
+## Task 4: Newsletter "Stay in the Loop" -- Where Do Emails Go + Success Modal
+
+**Current state:** The `NewsletterBrevo` component calls `capture-lead` (saves to leads table) and `newsletter-subscribe` (sends to Brevo). After success, it shows `SubscriptionSuccessModal` which has a welcome message. The toast "You're subscribed!" also shows.
+
+**Fix:**
+- The emails ARE being saved to both the leads database table and Brevo. You can find subscribers in the backend under the leads table (source = "newsletter")
+- The `SubscriptionSuccessModal` IS already implemented and shows on success. Verify it renders correctly (z-index, styling)
+- Add a note to the user about where to find subscribers (Lovable Cloud backend > leads table, or Brevo dashboard if configured)
+- Ensure the welcome email is sent via Brevo (this depends on Brevo automation being configured -- the edge function already sends the subscription request)
+
+**Files:** No code changes needed -- this is already working. Will verify the modal displays properly.
+
+---
+
+## Task 5: Footer -- Mobile Card Layout Fix (One Per Row, Readable Titles)
+
+**Current state:** Footer uses `FooterCard` components in a `grid grid-cols-2 lg:grid-cols-4` layout. On mobile, it's 2 columns. The gold gradient title text is hard to read.
+
+**Fix:**
+- On mobile (`grid-cols-1`), show one card per row in a rectangular format
+- On desktop, keep 2-3 per row
+- Fix the title: Replace the gold gradient CSS with solid readable gold text (`text-gold font-bold`) or add a dark text shadow for contrast
+- Add an arrow icon (ChevronRight or ExternalLink) on the top-right corner of each card on hover
+- Remove one of the duplicate AI Tools sections (keep the "AI Tools" card with "View All 30+ Tools" link, remove the separate "Creative Toolkit" card since it overlaps)
+
+**Files:** `src/components/Footer.tsx`
+
+---
+
+## Task 6: Footer -- Social Media Icons White Glow on Hover
+
+**Current state:** Social media icons in "Connect With Us" section use `SocialLinks` component with `variant="glow"`.
+
+**Fix:**
+- On hover, change icon color to white with a white glow shadow effect
+- Add `hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]` to social link icons
+
+**Files:** `src/components/marketing/SocialLinks.tsx`
+
+---
+
+## Task 7: Footer -- "Get in Touch" Location Icon in Black
+
+**Current state:** The MapPin icon in the footer contact section uses `text-gold` color with a `bg-gold/20` circle.
+
+**Fix:**
+- Change the MapPin icon color to black: `text-black`
+- Make the section more premium: add subtle gold border to contact items, larger font for phone/email
+
+**Files:** `src/components/Footer.tsx` (lines 708-752)
+
+---
+
+## Task 8: AI Hub Page -- Rename from "Investor Hub" to "Tools Hub"
+
+**Current state:** The page title says "JBJ Investor Hub" in the hero section (line 569-570), SEO title (line 507), and throughout.
+
+**Fix:**
+- Rename all instances of "Investor Hub" to "Tools Hub" on this page
+- This page should be visible to all modes (investor, broker, combined) -- it already is, since it doesn't filter by mode
+- The separate Investor Hub page and Broker Hub page will be created as new pages (Task 17 and 18)
+
+**Files:** `src/pages/AIHub.tsx`
+
+---
+
+## Task 9: AI Hub -- "Earn With Us" Section Readability
+
+**Current state:** The "Join the Referral Circle" card shows "Earn 5% or 2.5%" in `text-black font-semibold text-lg` on a dark card background -- nearly invisible.
+
+**Fix:**
+- Change "Earn 5% or 2.5% Commission" text to gold or white for readability on the dark background
+- Make the referral program text more prominent
+- Fix icon containers (GraduationCap, Briefcase, Award): Change from `bg-black` to transparent background with gold borders (`bg-transparent border-2 border-gold/40`)
+
+**Files:** `src/pages/AIHub.tsx` (lines 934-1160)
+
+---
+
+## Task 10: AI Hub -- "Unlock More with JBJ Broker Hub" Green to Gold
+
+**Current state:** The broker section uses emerald/green theme.
+
+**Fix:**
+- Change the green color scheme to gold/champagne to match premium branding
+- Replace `bg-emerald-900/90` with gold-tinted dark background
+- Replace `text-emerald-300` with `text-gold`
+- Replace `border-emerald-500/30` with `border-gold/30`
+
+**Files:** `src/pages/AIHub.tsx` (lines 793-930)
+
+---
+
+## Task 11: AI Hub -- "Make Money" Section Touching Edges
+
+**Current state:** The "Make Money by Joining JBJ Global Real Estate Circle" section uses `container mx-auto px-4` but the full-width champagne background extends edge-to-edge.
+
+**Fix:**
+- Wrap the content in a `max-w-7xl mx-auto` container matching the other sections
+- Add `rounded-2xl` to the background container so it has the same rounded card appearance as the "Unlock More" section above it
+
+**Files:** `src/pages/AIHub.tsx` (lines 934-1160)
+
+---
+
+## Task 12: AI Hub -- Reduce Spacing Between Benefits and Tools Section
+
+**Current state:** The four benefit cards (Intelligent Analysis, Instant Results, Data Security, Save Time) have `py-12` spacing, then a `SectionDivider`, then the tools section with `py-16`.
+
+**Fix:**
+- Reduce padding between the benefits strip and the all-tools section
+- Change benefits section from `py-12` to `py-8`
+- Reduce the all-tools section from `py-16 md:py-20` to `py-10 md:py-14`
+
+**Files:** `src/pages/AIHub.tsx`
+
+---
+
+## Task 13: AI Hub -- Add Search and Category Filter for Tools
+
+**Current state:** All tools are listed in a grid with no search or filter capability.
+
+**Fix:**
+- Add a search bar at the top of the "All Free Tools" section
+- Add category filter chips (Property, Productivity, Design, Marketing) that filter the tool grid
+- Keep a "Creative Suite" shortcut pinned at the top of the tools section
+
+**Files:** `src/pages/AIHub.tsx`
+
+---
+
+## Task 14: AI Hub -- Fix All Tools Section UI
+
+**Current state:** Tool cards have different color schemes per category but overall layout needs polish.
+
+**Fix:**
+- Ensure consistent card heights across all tools
+- Fix any overflowing text
+- Improve the tool descriptions for clarity
+
+**Files:** `src/pages/AIHub.tsx`
+
+---
+
+## Task 15: AI Hub -- Deduplicate AI Tools in Footer
+
+**Current state:** Footer has both "AI Tools" and "Creative Toolkit" sections. These overlap.
+
+**Fix:**
+- Merge into a single "AI Tools" section with "View All Tools" linking to `/ai-hub`
+- Move Creative Suite link into the AI Tools card as one of the links
+- Remove the separate "Creative Toolkit" card
+
+**Files:** `src/components/Footer.tsx`
+
+---
+
+## Task 16: Interior Design -- Fix Purple Theme Consistency
+
+**Current state:** The page uses fuchsia/purple for borders but some sections have inconsistent styling.
+
+**Fix:**
+- Ensure all borders use `border-fuchsia-500/30` or `border-purple-500/30` consistently
+- All icons use `text-fuchsia-400` or `text-purple-400`
+- Progress bar, buttons, and badges all match the purple theme
+
+**Files:** `src/pages/InteriorDesignAI.tsx`, all interior-design components
+
+---
+
+## Task 17: Create Investor Hub Page (New)
+
+**Current state:** No dedicated investor hub page exists.
+
+**Fix:**
+- Create `/investor-hub` page with dashboard shortcuts, profile access, AI tool guides, favorites, and quick navigation
+- Include links to property tools, mortgage calculator, ROI calculator
+- Premium dark theme matching the platform style
+
+**Files:** New `src/pages/InvestorHub.tsx`, route registration
+
+---
+
+## Task 18: Create Broker Hub Page (New)
+
+**Current state:** `/broker-toolkit` exists but is different from what's requested.
+
+**Fix:**
+- Create `/broker-hub` page with dashboard, profile, shortcuts, AI tools, training portal access
+- Include broker-specific tools and CRM access
+- Premium dark theme
+
+**Files:** New `src/pages/BrokerHub.tsx`, route registration
+
+---
+
+## Task 19: Create Public Listing Portal (Dubizzle/Bayut-style)
+
+**Current state:** No public portal for external brokers/sellers to upload properties.
+
+**Fix:**
+- Create `/listing-portal` page with multi-step listing submission form
+- Categories: Sale, Yearly Rent, Short-term Rental/Holiday Home
+- Required fields: Title, description, location, price, bedrooms, bathrooms, area (sqft)
+- Document uploads: Title deed, passport copy, RERA card (for broker verification)
+- Approval workflow: Listings go to "Pending" status, admin approves
+- Broker verification: Upload RERA + ID to get "Verified" badge
+- Points/loyalty system: Track listings per month, free listing tiers
+- Listing tiers: Featured (10 days top), Premium (15 days), with pricing placeholders (Stripe integration later)
+- Company contact option: If broker opts for JBJ contact details on listing, free; if own contact, paid tier
+- Editable anytime by the listing owner
+- Database tables: `portal_listings`, `broker_verifications`, `listing_tiers`
+
+**Files:** New page, new components, new database tables, RLS policies
+
+---
+
+## Implementation Priority
+
+**Phase 1 -- Critical UX Fixes (this session):**
+- Task 1: Interior Design complete overhaul
+- Task 3: DirectContactCTA border reversal
+- Task 5: Footer mobile card layout
+- Task 8: Rename AI Hub to Tools Hub
+- Task 9: Earn With Us readability
+- Task 12: Reduce spacing
+
+**Phase 2 -- AI Hub and Footer Polish:**
+- Task 6: Social icons white glow
+- Task 7: Get in Touch location icon
+- Task 10: Broker Hub green to gold
+- Task 11: Make Money edges fix
+- Task 13: Search and filter for tools
+- Task 14: Tools UI fix
+- Task 15: Deduplicate footer AI tools
+
+**Phase 3 -- New Pages:**
+- Task 2: 3D Viewer
+- Task 16: Purple theme consistency
+- Task 17: Investor Hub page
+- Task 18: Broker Hub page
+
+**Phase 4 -- Public Listing Portal:**
+- Task 19: Full Dubizzle-style listing portal with approval workflow, verification, and tiers
+
+---
+
+## Technical Notes
+
+- The Interior Design edge function at `supabase/functions/interior-design-generate/index.ts` is functional -- it uses `google/gemini-3-pro-image-preview` which supports image generation. The issue is likely that users need to be signed in (401 error) or the image extraction paths don't match the response format.
+- The newsletter system already saves to the leads table AND shows `SubscriptionSuccessModal`. Subscribers can be found in the backend leads table with `source = 'newsletter'`.
+- The listing portal (Task 19) requires new database tables with RLS policies and will need authentication. Stripe integration is deferred.
+- The 3D viewer (Task 2) will be a CSS/JS-based panoramic image viewer, not a true 3D model renderer.
 
