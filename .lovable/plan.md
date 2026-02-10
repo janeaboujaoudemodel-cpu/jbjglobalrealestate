@@ -1,90 +1,63 @@
 
+# Fix Listing Admin: Backfill and Enrichment Pipeline
 
-# Fix Language System and Mobile Content Overflow
+## Root Cause
 
-## Root Cause Analysis
+The buttons appear "not working" because:
 
-The language switching issues (mixed languages, layout breaking, content overflowing cards) all stem from one component: **GlobalTranslator.tsx**.
+1. **Backfill Missing Details** shows 0 projects to process -- all 1,802 projects already have `detail_fetched_at` set from a previous run. The Reelly API returned empty amenities/floor plans for most projects, but the system marked them as "done." The UI button calls `mode: "batch"` which filters by `detail_fetched_at IS NULL`, finding nothing.
 
-This component uses a browser-level MutationObserver to intercept ALL text on the page and replace it after React has already rendered. This causes:
+2. **Batch Extract Pending** returns "No imports need extraction" -- there are 0 pending items in the queue (all 1,809 are approved). This is correct behavior since everything was already processed.
 
-- **Mixed languages**: React renders content, then GlobalTranslator replaces some text nodes but misses others, creating a half-English, half-Arabic page
-- **Layout breaking on switch**: Text replacement happens AFTER layout is calculated, causing reflows and content jumping
-- **Content overflowing cards**: Translated text (especially Arabic, German, Russian) is often longer than English, and since the translation happens after render, CSS containers don't adapt properly
-- **Infinite loops**: The MutationObserver detects its own text changes and re-triggers, causing flickering
+3. **Enrich Project Test** works fine but the slug format must match the database exactly (e.g., `binghatti-crescent-binghatti-44`, not `binghatti-crescent`).
 
-## The Fix
+4. **Sarah Test Extraction** actually works (tested and confirmed -- it extracted Sobha Seahaven with 50+ images and documents).
 
-### Step 1: Remove GlobalTranslator (the broken component)
+## Fixes
 
-Remove `GlobalTranslator` from `App.tsx`. This single change eliminates all the race conditions, mixed-language artifacts, and layout-breaking behavior.
+### Fix 1: Backfill button -- add Force Refresh mode
 
-### Step 2: Ensure all UI text uses `t()` function (React-native translation)
+The "Backfill Missing Details" button currently only processes un-fetched projects. Since all are marked fetched (even with empty data), it does nothing.
 
-The app already has ~24 components using `t('key', 'fallback')` properly through React context. This is the correct approach - translations happen BEFORE render, so the layout engine sees the final text and sizes containers correctly.
+**Changes in `ReellyImportPanel.tsx`:**
+- Add a "Force Re-fetch" toggle/button next to the existing backfill buttons
+- When enabled, call the backfill function with `force_refresh: true` and current timestamp as `started_at`
+- This re-downloads detail data from Reelly API for ALL projects, overwriting the empty arrays
 
-For any remaining hardcoded strings in key user-facing components (headers, buttons, labels), wrap them with `t()` calls using existing translation keys.
+### Fix 2: Backfill stats -- show actual missing data counts
 
-### Step 3: Add global CSS overflow protection
+The stats endpoint already returns `missing_amenities: 1802` and `missing_floor_plans: 1802`, but the UI only shows `missing_any: 0` (which checks `detail_fetched_at IS NULL`).
 
-Add defensive CSS rules to prevent ANY text from breaking out of its container, regardless of language:
+**Changes in `ReellyImportPanel.tsx`:**
+- Display `missing_amenities`, `missing_floor_plans`, and `missing_documents` individually in the stats card
+- Show a warning when `missing_any` is 0 but individual field counts are high, with a message like "All projects were fetched but many have empty data. Use Force Re-fetch to retry."
 
-```text
-- word-break: break-word on all card containers
-- overflow-wrap: anywhere on text elements
-- min-width: 0 on flex children (prevents flex items from overflowing)
-- hyphens: auto for long words in non-English languages
-```
+### Fix 3: Fix the "no work to do" messaging
 
-### Step 4: RTL layout fix
+When buttons return "nothing to process," show clear explanations instead of appearing broken:
+- "Batch Extract": Show "Queue is empty (all 1,809 items approved). Use 'Rebuild Queue' to add new items."  
+- "Backfill": Show "All projects already fetched. Use 'Force Re-fetch' to re-download missing amenities/floor plans."
 
-Ensure the `dir="rtl"` attribute on `<html>` (already set by LanguageContext) works with Tailwind's RTL utilities. Add `rtl:` prefixed classes where needed for padding/margin direction.
+### Fix 4: Enrich test slug auto-complete
 
-## Files to Modify
+The enrichment test input currently accepts free text slugs. The "Random" button picks correct slugs, but manual entry often uses partial slugs that don't match.
 
-1. **`src/App.tsx`** - Remove `GlobalTranslator` import and usage
-2. **`src/components/GlobalTranslator.tsx`** - Delete this file entirely
-3. **`src/App.css`** or **`src/index.css`** - Add global overflow-protection CSS rules
-4. **Key components** (homepage sections, cards, headers) - Verify `t()` usage covers all visible text
+**Changes:**
+- Show a hint below the input: "Use full slug format (e.g., binghatti-crescent-binghatti-44)"
+- Add a search-as-you-type dropdown that queries `projects` table by partial slug match
 
 ## Technical Details
 
-### Why `t()` is correct and GlobalTranslator is not
+### Files to modify:
+1. **`src/components/listing-admin/ReellyImportPanel.tsx`**
+   - Add `force_refresh` toggle state
+   - Update backfill button handler to pass `force_refresh: true` when toggled
+   - Update stats display to show individual field counts
+   - Add slug hint and partial search for enrich test input
 
-```text
-t() approach (correct):
-  React state changes -> component re-renders -> translated text in JSX -> layout calculated -> painted
+2. **`src/components/listing-admin/SyncDashboard.tsx`**
+   - Update empty-state messaging for batch extract and fix-all buttons
+   - Show clear status when queue is empty vs when extraction is truly broken
 
-GlobalTranslator approach (broken):
-  React renders English -> layout calculated -> painted -> MutationObserver fires -> DOM text replaced -> layout recalculated -> repainted -> MutationObserver fires again (loop)
-```
-
-### Overflow protection CSS
-
-```text
-.card, [class*="rounded"] {
-  overflow: hidden;
-  word-break: break-word;
-}
-
-* {
-  overflow-wrap: break-word;
-}
-```
-
-### What stays working
-
-- The `t()` function in LanguageContext (unchanged, already correct)
-- All 15 language translation files (unchanged, already complete)
-- The `<T>` component for inline text translation (unchanged)
-- Language switcher UI (unchanged)
-- RTL support for Arabic, Persian, Hebrew (unchanged)
-
-## Impact
-
-- No more mixed languages when switching
-- No more layout breaking on language change
-- Content stays within card boundaries on all devices
-- Faster rendering (no MutationObserver overhead running every 1.5 seconds)
-- Some hardcoded English strings in components that don't use `t()` will remain in English until individually wrapped - but this is better than the current broken mixed-language state
-
+### No edge function changes needed
+All backend functions are working correctly. The issue is purely in the UI layer -- the buttons pass parameters that result in "nothing to do" because the data state has moved past what the default parameters target.
