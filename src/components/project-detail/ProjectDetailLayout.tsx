@@ -197,6 +197,7 @@ export default function ProjectDetailLayout({
   const [captureDocType, setCaptureDocType] = useState<"brochure" | "floor_plan" | "payment_plan" | "images">("brochure");
   const [captureDocUrl, setCaptureDocUrl] = useState<string | undefined>();
   const [showStickyNav, setShowStickyNav] = useState(false);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   
   const inquiryRef = useRef<HTMLDivElement>(null);
   const mortgageRef = useRef<HTMLDivElement>(null);
@@ -677,12 +678,31 @@ export default function ProjectDetailLayout({
             <div className="jj-card-inner">
               <h2 className="text-h3 font-medium text-foreground">About {project.name}</h2>
               {project.description ? (
-                <div 
-                  className="mt-4 text-body text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ 
-                    __html: renderMarkdownToHtml(formatReellyDescription(project.description || '')) 
-                  }}
-                />
+                <>
+                  <div className={`mt-4 relative ${!isDescriptionExpanded && (project.description?.length ?? 0) > 500 ? 'max-h-48 overflow-hidden' : ''}`}>
+                    <div 
+                      className="text-body text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert max-w-none"
+                      dangerouslySetInnerHTML={{ 
+                        __html: renderMarkdownToHtml(formatReellyDescription(project.description || '')) 
+                      }}
+                    />
+                    {!isDescriptionExpanded && (project.description?.length ?? 0) > 500 && (
+                      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black to-transparent pointer-events-none" />
+                    )}
+                  </div>
+                  {(project.description?.length ?? 0) > 500 && (
+                    <button
+                      onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                      className="flex items-center gap-1 text-gold text-sm font-medium mt-3 hover:underline"
+                    >
+                      {isDescriptionExpanded ? (
+                        <><ChevronUp className="w-4 h-4" /> Show Less</>
+                      ) : (
+                        <><ChevronDown className="w-4 h-4" /> Read More</>
+                      )}
+                    </button>
+                  )}
+                </>
               ) : (
                 <p className="mt-4 text-body text-muted-foreground">
                   Details will be provided by our team.

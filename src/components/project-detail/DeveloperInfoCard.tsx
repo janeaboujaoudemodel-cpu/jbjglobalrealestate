@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Building2, ExternalLink, Award, MapPin, ChevronDown, ChevronUp, Calendar, Briefcase, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 
 interface DeveloperInfoCardProps {
   developer: {
@@ -125,9 +126,12 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                       background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(253,251,247,0.6) 100%)',
                     }}
                   >
-                    <p className="text-zinc-700 text-sm leading-relaxed">
-                      {displayDescription}
-                    </p>
+                    <div 
+                      className="text-zinc-700 text-sm leading-relaxed prose prose-sm max-w-none prose-p:mb-2 prose-ul:my-1 prose-li:my-0"
+                      dangerouslySetInnerHTML={{ 
+                        __html: renderMarkdownToHtml(formatReellyDescription(displayDescription || '')) 
+                      }}
+                    />
                   </div>
                   {hasLongDescription && (
                     <button
