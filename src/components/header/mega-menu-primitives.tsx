@@ -310,6 +310,8 @@ type MegaMenuCardProps = {
   title: string;
   children: React.ReactNode;
   className?: string;
+  /** When true, uses tighter padding and no max-height scroll */
+  compact?: boolean;
 };
 
 /**
@@ -321,16 +323,18 @@ export function MegaMenuCard({
   title,
   children,
   className,
+  compact = false,
 }: MegaMenuCardProps) {
   return (
     <div className={cn(
       "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]",
-      "border border-gold/30 rounded-xl p-4",
+      "border border-gold/30 rounded-xl",
       "hover:border-gold/50 transition-all",
+      compact ? "p-3" : "p-4",
       className
     )}>
       <MegaMenuSectionTitle icon={icon} title={title} />
-      <div className="space-y-0 max-h-[220px] overflow-y-auto">
+      <div className="space-y-0">
         {children}
       </div>
     </div>

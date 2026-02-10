@@ -77,11 +77,11 @@ serve(async (req) => {
     if (action === "enrich") {
       console.log("Starting article enrichment...");
       
-      // Get articles missing content or images
+      // Get articles missing content, images, or AI analysis
       const { data: articlesToEnrich, error: fetchError } = await supabase
         .from("market_news")
-        .select("id, title, excerpt, category, source_url, image_url, content")
-        .or("content.is.null,image_url.is.null")
+        .select("id, title, excerpt, category, source_url, image_url, content, ai_analysis")
+        .or("content.is.null,image_url.is.null,ai_analysis.is.null")
         .limit(30);
 
       if (fetchError) throw fetchError;
@@ -114,7 +114,7 @@ serve(async (req) => {
                 },
                 body: JSON.stringify({
                   url: article.source_url,
-                  formats: ["markdown"],
+                  formats: ["markdown", "links"],
                   onlyMainContent: true,
                   waitFor: 3000,
                   timeout: 30000,
@@ -126,7 +126,7 @@ serve(async (req) => {
                 const rawMarkdown = scrapeData.data?.markdown || scrapeData.markdown || "";
 
                 if (rawMarkdown.length > 100) {
-                  // Use AI to clean and extract the article body
+                  // Use AI to extract the FULL article (not summarized)
                   const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
                     method: "POST",
                     headers: {
@@ -138,11 +138,11 @@ serve(async (req) => {
                       messages: [
                         {
                           role: "system",
-                          content: `You extract the full article body text from raw scraped markdown. Return ONLY the article content as clean readable paragraphs. Remove navigation, ads, footers, sidebars, social media links, and any non-article text. Preserve the article's structure with paragraph breaks. Do not add any commentary.`
+                          content: `You extract the FULL article body text from raw scraped markdown. Return the COMPLETE article content preserving ALL paragraphs — do NOT summarize or shorten. Remove navigation, ads, footers, sidebars, social media links, and any non-article text. Preserve the article's full structure with paragraph breaks. Do not add any commentary.`
                         },
                         {
                           role: "user",
-                          content: `Extract the full article body from this scraped page about "${article.title}":\n\n${rawMarkdown.substring(0, 30000)}`
+                          content: `Extract the full article body from this scraped page about "${article.title}":\n\n${rawMarkdown.substring(0, 50000)}`
                         }
                       ],
                     }),
@@ -156,11 +156,19 @@ serve(async (req) => {
                     }
                   }
 
-                  // Try to find an image from the scraped data
+                  // Try to find images from the scraped data
                   if (!imageUrl) {
-                    const imgMatch = rawMarkdown.match(/!\[.*?\]\((https?:\/\/[^\s)]+\.(jpg|jpeg|png|webp)[^\s)]*)\)/i);
-                    if (imgMatch) {
-                      imageUrl = imgMatch[1];
+                    // Check multiple image patterns
+                    const imgPatterns = [
+                      /!\[.*?\]\((https?:\/\/[^\s)]+\.(jpg|jpeg|png|webp)[^\s)]*)\)/gi,
+                      /(?:src|href)=["'](https?:\/\/[^\s"']+\.(jpg|jpeg|png|webp)[^\s"']*)/gi,
+                    ];
+                    for (const pattern of imgPatterns) {
+                      const match = pattern.exec(rawMarkdown);
+                      if (match) {
+                        imageUrl = match[1];
+                        break;
+                      }
                     }
                   }
                 }
@@ -213,10 +221,46 @@ serve(async (req) => {
             }
           }
 
+          // Generate AI analysis if we have content and no existing analysis
+          let aiAnalysis: string | null = null;
+          const contentForAnalysis = fullContent || article.content;
+          if (contentForAnalysis && !article.ai_analysis) {
+            try {
+              const analysisResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                  "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  model: "google/gemini-2.5-flash",
+                  messages: [
+                    {
+                      role: "system",
+                      content: `You are a Dubai real estate market analyst. Based on this news article, explain how it affects the Dubai real estate market. Write 3-4 concise bullet points covering: (1) immediate market impact, (2) opportunity for investors/buyers, (3) long-term outlook. Be factual and positive where appropriate. Do not add disclaimers.`
+                    },
+                    {
+                      role: "user",
+                      content: `Analyze this article's impact on Dubai real estate:\n\nTitle: ${article.title}\n\n${contentForAnalysis.substring(0, 5000)}`
+                    }
+                  ],
+                }),
+              });
+
+              if (analysisResponse.ok) {
+                const analysisData = await analysisResponse.json();
+                aiAnalysis = analysisData.choices?.[0]?.message?.content || null;
+              }
+            } catch (analysisErr) {
+              console.warn(`AI analysis failed for "${article.title}":`, analysisErr);
+            }
+          }
+
           // Update the article in the database
           const updateData: Record<string, unknown> = {};
           if (fullContent && !article.content) updateData.content = fullContent;
           if (imageUrl && !article.image_url) updateData.image_url = imageUrl;
+          if (aiAnalysis) updateData.ai_analysis = aiAnalysis;
 
           if (Object.keys(updateData).length > 0) {
             const { error: updateError } = await supabase
@@ -228,7 +272,7 @@ serve(async (req) => {
               errors.push(`${article.title}: DB update failed - ${updateError.message}`);
             } else {
               enrichedCount++;
-              console.log(`✓ Enriched: "${article.title}" (content: ${!!fullContent}, image: ${!!imageUrl})`);
+              console.log(`✓ Enriched: "${article.title}" (content: ${!!fullContent}, image: ${!!imageUrl}, analysis: ${!!aiAnalysis})`);
             }
           }
         } catch (articleErr) {

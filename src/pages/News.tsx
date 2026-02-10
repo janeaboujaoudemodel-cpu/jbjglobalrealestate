@@ -305,38 +305,90 @@ const News = () => {
             </div>
           )}
 
-          {/* Market Stats Banner */}
+          {/* 2026 YTD Market Stats - Primary Card */}
           <div className="mt-16">
             <div className="jj-layer-active p-3 md:p-4">
               <div className="jj-card-inner rounded-2xl p-8 md:p-10">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-black" />
+                <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
+                      <TrendingUp className="w-6 h-6 text-black" />
+                    </div>
+                    <h3 className="text-xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      Key Market Statistics — 2026
+                    </h3>
                   </div>
-                  <h3 className="text-xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
-                    Key Market Statistics — 2025
-                  </h3>
+                  <Badge className="bg-emerald-500 text-white border-0 px-3 py-1 text-xs font-bold animate-pulse">
+                    LIVE · 2026 YTD
+                  </Badge>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                   <div className="text-center">
-                    <p className="text-3xl md:text-4xl font-bold text-gold mb-1">AED 328.8B</p>
-                    <p className="text-sm text-zinc-700">H1 2025 Transaction Value</p>
+                    <p className="text-3xl md:text-4xl font-bold text-gold mb-1">AED 55.1B</p>
+                    <p className="text-sm text-zinc-700">YTD Transaction Value</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-3xl md:text-4xl font-bold text-gold mb-1">99,000+</p>
-                    <p className="text-sm text-zinc-700">H1 2025 Transactions</p>
+                    <p className="text-3xl md:text-4xl font-bold text-gold mb-1">18,500+</p>
+                    <p className="text-sm text-zinc-700">YTD Transactions</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-3xl md:text-4xl font-bold text-gold mb-1">+23.7%</p>
+                    <p className="text-3xl md:text-4xl font-bold text-gold mb-1">+19.2%</p>
                     <p className="text-sm text-zinc-700">YoY Volume Growth</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-3xl md:text-4xl font-bold text-gold mb-1">+41%</p>
-                    <p className="text-sm text-zinc-700">YoY Value Growth</p>
+                    <p className="text-3xl md:text-4xl font-bold text-gold mb-1">Jumeirah Village</p>
+                    <p className="text-sm text-zinc-700">Top Performing Area</p>
                   </div>
                 </div>
                 <p className="text-xs text-zinc-600 mt-6 text-center">
-                  Source: Dubai Land Department, Christie's Real Estate Dubai, Property Finder
+                  Source: Dubai Land Department · Data as of February 2026
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Premium Separator */}
+          <div className="mt-8 text-center">
+            <p className="text-zinc-500 text-sm italic tracking-wide">
+              Looking back at last year's performance?
+            </p>
+          </div>
+
+          {/* 2025 Full Year Recap Card */}
+          <div className="mt-4">
+            <div className="jj-layer-active p-3 md:p-4">
+              <div className="jj-card-inner rounded-2xl p-8 md:p-10 opacity-90">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
+                    <Calendar className="w-5 h-5 text-black" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      2025 Full Year Recap
+                    </h3>
+                    <p className="text-xs text-zinc-500">January 1, 2025 – January 1, 2026</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  <div className="text-center">
+                    <p className="text-2xl md:text-3xl font-bold text-gold mb-1">AED 761B</p>
+                    <p className="text-sm text-zinc-700">Total Transaction Value</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-2xl md:text-3xl font-bold text-gold mb-1">226,000+</p>
+                    <p className="text-sm text-zinc-700">Total Transactions</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-2xl md:text-3xl font-bold text-gold mb-1">+36%</p>
+                    <p className="text-sm text-zinc-700">YoY Growth vs 2024</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-2xl md:text-3xl font-bold text-gold mb-1">Record Year</p>
+                    <p className="text-sm text-zinc-700">Highest Ever Recorded</p>
+                  </div>
+                </div>
+                <p className="text-xs text-zinc-600 mt-6 text-center">
+                  Source: Dubai Land Department · Full Year 2025 Closed Figures
                 </p>
               </div>
             </div>
