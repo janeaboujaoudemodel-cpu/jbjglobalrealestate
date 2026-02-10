@@ -1,70 +1,156 @@
 
-# Fix Document Editor Toolbar Visibility, Title Input Color, and Auto-Test Enrichment
 
-## Overview
-Three issues to address: (1) Document editor toolbar buttons and title input are invisible on the dark background, (2) the enrichment test panel requires manual slug entry -- it should auto-select a project and run the test automatically.
+# Comprehensive Area Extraction, Photos, Maps, and Intelligence
 
----
+## Current State
+- **178 areas** in the database, **0 have images** -- every area card uses the same generic Dubai skyline fallback
+- Areas sourced from Reelly project locations only (district names)
+- Provident has **~40 curated area guides** with real photos, descriptions, and property data at `/area-guides/`
+- Emirate data is fragmented (duplicate entries like "Abu Dhabi" vs "Abu Dhabi Emirate", "Sharjah" vs "Sharjah Emirate")
+- Area detail page has no hero photo, no search bar, no map, no developer/project counts, no AI analysis
 
-## Part 1: Fix Document Editor Toolbar Buttons (Not Visible)
+## What Will Be Built
 
-**Problem:** All toolbar buttons in `src/pages/Documents.tsx` use `Button variant="ghost"`, which is aliased to `BRAND_SECONDARY` in the global button system. This renders as a transparent button with champagne/gold borders and dark text -- completely invisible on the dark `zinc-950` background of the document editor.
+### Phase 1: New Edge Function -- `provident-areas-sync`
 
-**Fix:** Change all toolbar `Button variant="ghost"` to `Button variant="dark-ghost"` (lines 240-398). The `dark-ghost` variant is specifically designed for dark backgrounds: `bg-transparent text-white border-2 border-zinc-600 hover:bg-white/10 hover:border-white/40`.
+A new backend function that:
 
-This affects approximately 15 buttons:
-- Undo, Redo (lines 240-244)
-- Bold, Italic, Underline (lines 280-288)
-- Headings dropdown trigger (line 295)
-- Alignment buttons x4 (lines 319-330)
-- Lists x2 (lines 335-339)
-- Link dialog trigger (line 347)
-- Image button (line 366)
-- Print button (line 373)
-- Export dropdown trigger (line 379)
-- Import button (line 394)
+1. **Scrapes Provident's area-guides index** via Firecrawl to get all ~40 area guide URLs
+2. **Scrapes each area detail page** (e.g., `/area-guides/downtown-dubai/`) to extract:
+   - Hero/banner image URL (the real area photo)
+   - Area description text
+   - Key stats (properties for sale, average price, etc.)
+3. **Matches Provident areas to existing DB areas** by slug similarity (e.g., "downtown-dubai" matches our `downtown-dubai` slug)
+4. **Updates `areas` table** with real `image_url` from Provident -- never overwrites existing images
+5. **For areas without Provident coverage**, uses Google image search via Firecrawl search to find real area photos (searching "Downtown Dubai skyline" etc.)
 
-Also update the "Export" and "Import" text labels to include `text-white` explicitly.
+### Phase 2: Database Schema Additions
 
-**File:** `src/pages/Documents.tsx` -- Change all `variant="ghost"` to `variant="dark-ghost"` in the toolbar section.
+Add columns to the `areas` table:
 
----
-
-## Part 2: Fix "Untitled Document" Title Input Text Color
-
-**Problem:** The title input (line 231) has `text-white` which works when not focused. However, on focus the input may show black text due to browser defaults or the component's focus styles overriding. The user reports the text shows white initially then turns black on click.
-
-**Fix:** Add explicit `focus:text-white` and `selection:text-white` classes to the Input on line 231. Also add `caret-white` so the cursor is visible. The full className becomes:
 ```
-text-xl font-medium border-0 bg-transparent focus-visible:ring-0 max-w-md text-white focus:text-white caret-white placeholder:text-zinc-500
+developer_count    INTEGER DEFAULT 0
+project_count_sale INTEGER DEFAULT 0
+project_count_rent INTEGER DEFAULT 0
+avg_price_sqft     NUMERIC
+provident_url      TEXT
+hero_image_url     TEXT        -- full-screen hero (larger than card image)
 ```
 
-**File:** `src/pages/Documents.tsx` line 231
+Also normalize emirates (merge "Abu Dhabi" + "Abu Dhabi Emirate" into "Abu Dhabi", etc.).
+
+### Phase 3: Update Area Detail Page (`AreaDetail.tsx`)
+
+Transform into a Provident-style premium area page:
+
+1. **Full-screen hero section** with the real area photo as background (not a gradient), a search bar overlay, and breadcrumb navigation
+2. **Stats bar** below hero showing: Projects count, Developers count, Avg Price/sqft, Properties for Sale
+3. **Projects grid** -- fetch and display projects in this area from the `projects` table
+4. **Developers in this area** -- aggregate and show developer logos active in this area
+5. **Interactive Map** using Leaflet (already installed) showing project pins in this area
+6. **AI Area Analyzer** section -- embedded AI Property Analyzer pre-configured for this area, showing:
+   - Price per sqft analysis
+   - Area performance intelligence
+   - Supply vs demand comparison
+   - Comparison with neighboring areas
+
+### Phase 4: Update Area Guides Page (`AreaGuides.tsx`)
+
+- Area cards now show **real photos** instead of the generic skyline fallback
+- Add developer count and project count stats to each card
+- Cards link to the enhanced area detail pages
+
+### Phase 5: Sync Developer/Project Counts per Area
+
+Create a query (or backend function step) that:
+- Counts distinct developers per area from the `projects` table
+- Counts projects by sale/rent status per area
+- Calculates average price per sqft per area
+- Stores these in the new `areas` columns
 
 ---
 
-## Part 3: Auto-Test Enrichment with a Real Project
+## Technical Details
 
-**Problem:** The enrichment test panel in `src/components/listing-admin/ReellyImportPanel.tsx` (line 2546) requires the admin to manually type a project slug. The user wants an automatic test -- the system should pick a project automatically and run the enrichment.
+### New Files
+| File | Purpose |
+|---|---|
+| `supabase/functions/provident-areas-sync/index.ts` | Edge function: scrape Provident area guides, extract photos/descriptions, update DB |
+| `src/components/area-detail/AreaHeroSection.tsx` | Full-screen hero with real photo + search bar |
+| `src/components/area-detail/AreaProjectsGrid.tsx` | Projects in this area grid |
+| `src/components/area-detail/AreaDevelopersBar.tsx` | Developers active in this area |
+| `src/components/area-detail/AreaMapSection.tsx` | Leaflet map with project pins |
+| `src/components/area-detail/AreaAIAnalyzer.tsx` | Embedded AI analysis for this area |
 
-**Fix:** Pre-populate the slug input with a known project from the database and add a "Random Project" button that fetches a random project slug. Specifically:
-
-1. Set the default `enrichTestSlug` state to `"binghatti-titania-binghatti-3012"` (a real Binghatti project with a cover image, confirmed in the database).
-2. Add a small "Pick Random" button next to the input that queries the database for a random project with a Reelly external ID and auto-fills the slug.
-3. The admin can still override with their own slug if desired.
-
-**File:** `src/components/listing-admin/ReellyImportPanel.tsx` lines 2544-2577
-
----
-
-## Technical Summary
-
+### Modified Files
 | File | Changes |
 |---|---|
-| `src/pages/Documents.tsx` | Change ~15 toolbar buttons from `variant="ghost"` to `variant="dark-ghost"`; fix title input focus text color |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Pre-populate enrichment test slug with a real project; add "Pick Random" button |
+| `src/pages/AreaDetail.tsx` | Complete redesign with hero photo, search, map, AI analyzer, projects grid |
+| `src/pages/AreaGuides.tsx` | Cards now show real photos, developer/project counts |
+| `src/hooks/useAreas.ts` | Add hooks for area stats (developer count, avg price) |
+| `supabase/functions/reelly-areas-sync/index.ts` | Add Provident photo extraction step, emirate normalization |
+
+### Database Migration
+```sql
+-- Add new columns to areas
+ALTER TABLE areas ADD COLUMN IF NOT EXISTS developer_count INTEGER DEFAULT 0;
+ALTER TABLE areas ADD COLUMN IF NOT EXISTS project_count_sale INTEGER DEFAULT 0;
+ALTER TABLE areas ADD COLUMN IF NOT EXISTS avg_price_sqft NUMERIC;
+ALTER TABLE areas ADD COLUMN IF NOT EXISTS provident_url TEXT;
+ALTER TABLE areas ADD COLUMN IF NOT EXISTS hero_image_url TEXT;
+
+-- Normalize emirates
+UPDATE areas SET emirate = 'Abu Dhabi' WHERE emirate = 'Abu Dhabi Emirate';
+UPDATE areas SET emirate = 'Sharjah' WHERE emirate = 'Sharjah Emirate';
+UPDATE areas SET emirate = 'Ajman' WHERE emirate = 'Ajman Emirate';
+UPDATE areas SET emirate = 'Ras Al Khaimah' WHERE emirate IN ('Ras al-Khaimah', 'Ras Al Khaimah');
+UPDATE areas SET emirate = 'Umm Al Quwain' WHERE emirate = 'Umm al-Quwain';
+```
+
+### Provident Area Sync Flow
+
+```text
+1. Scrape providentestate.com/area-guides/ --> get all area URLs
+2. For each URL (e.g., /area-guides/downtown-dubai/):
+   a. Scrape with Firecrawl (markdown + screenshot)
+   b. Extract hero image URL from HTML/metadata
+   c. Extract description text
+   d. Match to DB area by slug
+   e. UPDATE areas SET image_url = ?, hero_image_url = ?, description = ? WHERE slug = ?
+3. For remaining areas without images:
+   a. Use Firecrawl search: "{area_name} Dubai real estate skyline"
+   b. Take first image result as fallback
+```
+
+### Area Detail Page Layout (top to bottom)
+
+```text
++--------------------------------------------------+
+|  FULL-SCREEN HERO (real area photo)               |
+|  [Search bar: "Search properties in Downtown..."] |
+|  Breadcrumb: Home > Areas > Downtown Dubai        |
+|  Stats: 21 Projects | 8 Developers | AED 2,500/sf |
++--------------------------------------------------+
+|  PROJECTS IN THIS AREA (grid of project cards)    |
++--------------------------------------------------+
+|  DEVELOPERS IN THIS AREA (logo bar)               |
++--------------------------------------------------+
+|  INTERACTIVE MAP (Leaflet with project pins)      |
++--------------------------------------------------+
+|  AI AREA INTELLIGENCE                             |
+|  - Price/sqft analysis                            |
+|  - Supply vs Demand                               |
+|  - Comparison with nearby areas                   |
++--------------------------------------------------+
+|  RELATED AREAS (existing section, enhanced)       |
++--------------------------------------------------+
+```
 
 ## Execution Order
-1. Fix all toolbar button variants in Documents.tsx
-2. Fix title input text color in Documents.tsx
-3. Update enrichment test panel with auto-populated slug and random picker
+1. Database migration (add columns, normalize emirates)
+2. Create `provident-areas-sync` edge function
+3. Deploy and run it to populate area images
+4. Build area detail sub-components (hero, map, projects grid, AI analyzer)
+5. Redesign AreaDetail.tsx with all new sections
+6. Update AreaGuides.tsx cards to show real photos
+
