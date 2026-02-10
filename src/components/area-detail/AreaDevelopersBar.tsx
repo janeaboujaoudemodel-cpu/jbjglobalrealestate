@@ -67,7 +67,7 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
                   className="flex items-center gap-3 px-4 py-3 bg-white border-2 border-gold/30 rounded-xl hover:border-gold hover:shadow-lg transition-all"
                 >
                   {dev.logo_url ? (
-                    <img src={dev.logo_url} alt={dev.name} className="w-8 h-8 object-contain rounded" />
+                    <img src={dev.logo_url} alt={dev.name} className="w-8 h-8 object-contain rounded border-2 border-gold shadow-[0_2px_8px_rgba(200,167,102,0.3)]" />
                   ) : (
                     <div className="w-8 h-8 bg-gold/20 rounded flex items-center justify-center text-gold font-bold text-xs">
                       {dev.name.charAt(0)}

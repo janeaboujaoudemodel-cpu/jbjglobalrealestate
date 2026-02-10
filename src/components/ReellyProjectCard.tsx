@@ -149,7 +149,7 @@
           <div className="aspect-[16/10] overflow-hidden relative">
             {/* Developer Logo Overlay - Top Left */}
             {(project as any).developer?.logo_url && (
-              <div className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg bg-white shadow-lg border border-gold/30 flex items-center justify-center overflow-hidden">
+              <div className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg bg-white border-2 border-gold shadow-[0_4px_16px_rgba(200,167,102,0.3)] flex items-center justify-center overflow-hidden">
                 <img 
                   src={(project as any).developer.logo_url} 
                   alt={project.developer_name || ''}
