@@ -1,49 +1,35 @@
 
-# Fix Plan: Missing FAQ Links, Gold Mega Menu Cards, Services Arrow Animation, Sold Out Sort Logic
 
-## 4 Issues to Address
+# Fix: Stats Counter Layout Shift + Sold Out Sort Logic
 
----
-
-## 1. Missing FAQ Link in Header Mega Menu
-
-The "Insights" mega menu dropdown has links for Investor FAQ and Broker FAQ (in mode-conditional sections), but the **General FAQ** page (`/faq`) is missing entirely. Several other FAQ pages (Buyer FAQ, Seller FAQ, Landlord FAQ, Tenant FAQ) also exist but are not linked in the header.
-
-**Fix:** Add a "FAQ" link to the **Guides** card in `MegaMenuInsights.tsx`, and add role-specific FAQ links (Buyer FAQ, Seller FAQ, Landlord FAQ, Tenant FAQ) to the relevant sections.
-
-**Files:** `src/components/header/MegaMenuInsights.tsx`
+## Two Issues
 
 ---
 
-## 2. Gold/Champagne Styling for Mega Menu Inner Cards
+## 1. Stats Counter Card Layout Shift (Track Record Section)
 
-The `MegaMenuCard` component in `mega-menu-primitives.tsx` currently uses a light champagne gradient (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`), which looks close to white. The user wants the cards inside dropdowns to feel more visibly gold/champagne.
+**Problem:** The "Social Followers" stat counts from 0 to 1,000,000. During the animation, intermediate values like "900,000" (7 characters) are much wider than the final "1M+" (3 characters). This causes the card to expand during counting and then shrink when it reaches 1M, creating an ugly layout jump.
 
-**Fix:** Deepen the card gradient to a richer champagne-gold tone: `from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8]` with a stronger gold border (`border-gold/50`). This makes the cards clearly distinct from white while maintaining the premium aesthetic.
+**Fix:** Always format the number using the abbreviated "M" format once it reaches 1,000,000 target. But the real fix is to **always display the final format** during counting too. Since the end value is 1,000,000, the counter should count in the abbreviated format from the start: "0M" -> "0.1M" -> "0.5M" -> "0.9M" -> "1M+". This keeps the card width stable throughout the animation.
 
-**Files:** `src/components/header/mega-menu-primitives.tsx` (the `MegaMenuCard` component, around line 327-339)
+Additionally, set a `min-width` on the counter value container so the card never changes size during animation.
 
----
-
-## 3. Services Section Arrow Button Animation
-
-The homepage services section (`ServicesGrid.tsx`) is currently a static 4-card grid with no arrow navigation. The user wants left/right arrow buttons that, when clicked, scroll/slide to the next or previous service card with a visible press animation on the arrow button itself.
-
-**Fix:** Convert `ServicesGrid` to a horizontal scrollable carousel on mobile/tablet (keeping 4-column grid on desktop). Add left/right arrow buttons with a `whileTap={{ scale: 0.85 }}` animation using Framer Motion so the arrow "presses in" on click, giving tactile feedback.
-
-**Files:** `src/components/home/ServicesGrid.tsx`
+**Changes in `src/components/StatsCounter.tsx`:**
+- Update `formatNumber` to always use the abbreviated "M" format when the **target** (`end`) is >= 1,000,000, not just when the current count reaches it
+- Pass `end` into the formatting logic so it knows the target scale
+- Add `min-w-[80px]` or similar to the counter value div to stabilize width
 
 ---
 
-## 4. Sold Out Sort Respects Filters
+## 2. Sold Out Sort -- Remove the Condition
 
-The current implementation pushes sold-out projects to the bottom of the list regardless. The user clarified: this should only happen when the user has NOT explicitly filtered to hide sold-out projects. Since `hideSoldOut=true` already removes sold-out projects entirely (they're filtered out before the sort), the sort only applies when sold-out projects are visible -- which is the correct behavior.
+**Problem:** The current code wraps the sold-out sort in `if (!filters.hideSoldOut)`. The user never asked to skip the sort -- they want sold-out projects **always pushed to the bottom**. The `hideSoldOut` filter already removes sold-out projects entirely before sorting, so the condition is redundant. But more importantly, the user explicitly said: do NOT hide sold out projects. Just push them down. The filter toggle should still work independently.
 
-However, to make the logic cleaner and skip the unnecessary sort when projects are already filtered out:
+**Fix:** Remove the `if (!filters.hideSoldOut)` wrapper. The sort should always run unconditionally. When `hideSoldOut` is true, the sold-out projects are already filtered out before the sort runs, so the sort simply has no effect (no sold-out projects in the list to push down). When `hideSoldOut` is false, the sort correctly pushes them to the bottom.
 
-**Fix:** Wrap the sold-out sort in a condition: only run it when `!filters.hideSoldOut`.
-
-**Files:** `src/pages/PropertiesReelly.tsx` (line 226-234)
+**Changes in `src/pages/PropertiesReelly.tsx`:**
+- Remove the `if (!filters.hideSoldOut)` condition on lines 227 and 236
+- Keep the sort logic itself unchanged -- it always runs
 
 ---
 
@@ -51,7 +37,6 @@ However, to make the logic cleaner and skip the unnecessary sort when projects a
 
 | File | Change |
 |------|--------|
-| `src/components/header/MegaMenuInsights.tsx` | Add General FAQ + role-specific FAQ links |
-| `src/components/header/mega-menu-primitives.tsx` | Deepen MegaMenuCard gradient to richer champagne-gold |
-| `src/components/home/ServicesGrid.tsx` | Add arrow buttons with press animation for card navigation |
-| `src/pages/PropertiesReelly.tsx` | Wrap sold-out sort in `!filters.hideSoldOut` condition |
+| `src/components/StatsCounter.tsx` | Format counter using target scale (M format throughout animation); add min-width for stability |
+| `src/pages/PropertiesReelly.tsx` | Remove `if (!filters.hideSoldOut)` wrapper -- sort always runs |
+
