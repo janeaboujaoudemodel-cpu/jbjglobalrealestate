@@ -1,108 +1,73 @@
 
-# Fix Slow Routing, Description Formatting, and Missing Project Data
 
-## Issues Identified
+# Redesign Awards Page with Real Award Photos
 
-### 1. Slow Page Navigation (Routing)
-The `ProjectDetail` component is lazy-loaded. With 200+ lazy components in `App.tsx`, every route change shows the `PageLoader` spinner while the JS chunk downloads. The fix: **prefetch** the ProjectDetail chunk when the user hovers on a card, so by the time they click, the module is already cached.
+## Overview
 
-### 2. Description Renders as One Block
-All project descriptions from Reelly come as plain text with section labels like "Project general facts", "Location description and benefits", "Finishing and materials", "Kitchen and appliances" — but these are **not** formatted as markdown headings. The `renderMarkdownToHtml` function only converts lines starting with `#` into headings. Since Reelly descriptions use plain-text section titles, they render as a wall of text. Fix: detect known section patterns and auto-format them as styled headings with separators.
+Replace the 6 placeholder award cards with 10 real award photos uploaded by the user. Each card will feature the actual trophy/certificate image with proper award details extracted from the photos. The page will use a premium gallery-style layout.
 
-### 3. Missing Amenities, Photos, Documents (1,809 projects)
-Database audit reveals:
-- **1,809 projects** have 0 documents (no brochures, floor plans)
-- **1,767 projects** have 0 or 1 images
-- **1,809 projects** have no amenities
+## Awards Identified from Photos
 
-Most projects come from Reelly with only basic metadata. The `sarah-test-extraction` edge function exists and can extract full data from Provident pages (images, PDFs, amenities), but it works one project at a time. Fix: build a **batch extraction** endpoint that processes projects in bulk from Provident.
+| # | Image File | Award Title | Organization | Year |
+|---|-----------|-------------|-------------|------|
+| 1 | JBJ_GLOBAL_REAL_ESTATE.PNG | Elite Partners of Q3 2020 | DAMAC | 2020 |
+| 2 | Untitled_design_19.PNG | JBJ Recognition Trophy | JBJ Global | - |
+| 3 | Untitled_design_20.PNG | Top Broker Award | Sobha Realty | - |
+| 4 | Untitled_design_21.PNG | Partnership Recognition | Dubai Holding | 2018 |
+| 5 | Untitled_design_22.PNG | Top Broker Award | Emaar | 2019 |
+| 6 | Untitled_design_23.PNG | 1st Place - Top Performing Q4 | Meraas | 2019 |
+| 7 | Untitled_design_24.PNG | Top Agency Q1 Broker Awards | DAMAC | 2021 |
+| 8 | Untitled_design_25.PNG | Quarter 2 Broker Awards - No. 11 | Emaar | 2021 |
+| 9 | Untitled_design_26.PNG | 1st Place - Top Performing Partner | Tilal Al Ghaf / Majid Al Futtaim | 2021 |
+| 10 | Untitled_design_27.PNG | Top Performer Q3 | DAMAC | 2021 |
 
----
+## Implementation
 
-## Implementation Plan
+### Step 1: Copy all 10 images to `src/assets/awards/`
 
-### Step 1: Fix Slow Routing (Prefetch on Hover)
+Copy each uploaded image into the project so they can be imported as ES6 modules in the React component.
 
-**File: `src/components/home/FeaturedListings.tsx`**
-- Add `onMouseEnter` handler on each project card Link that triggers `import("../../pages/ProjectDetail")` to prefetch the chunk
-- This means when the user clicks, the module is already in browser cache -- instant navigation
+### Step 2: Rewrite `src/pages/Awards.tsx`
 
-**File: `src/components/PropertiesReellyContent.tsx`** (or wherever property grid cards live)
-- Same prefetch pattern on property card hover
+**Replace the placeholder cards section** with a data-driven awards grid:
 
-### Step 2: Fix Description Formatting
+- Define an array of award objects, each with: `image` (imported asset), `title`, `organization`, `year`, `description`
+- Awards sorted chronologically (2018 to 2021)
+- Each card shows:
+  - Large photo (aspect-ratio square, object-contain on a dark/champagne background so the trophy is fully visible)
+  - Gold border with hover glow effect
+  - Award title in bold
+  - Organization name in gold
+  - Year badge in top-right corner
+- Grid layout: 2 columns on mobile, 3 columns on desktop (same as current)
+- Hero section: Replace the JBJ trophy image (Untitled_design_19.PNG) as a hero background or featured spotlight at the top
+- Keep the existing Stats counter section and CTA section unchanged
 
-**File: `src/lib/markdownUtils.ts`**
-- Add a new function `formatReellyDescription()` that detects known Reelly section patterns and converts them to proper markdown headings before the main render pass
-- Patterns to detect (case-insensitive, at start of line after blank line):
-  - "Project general facts" -> Remove entirely (redundant with "About" heading)
-  - "Location description and benefits" -> `## Location`
-  - "Finishing and materials" -> `## Finishing & Materials`
-  - "Kitchen and appliances" -> `## Kitchen & Appliances`
-  - "Furnishing" -> `## Furnishing`
-  - Any standalone short line (under 40 chars) followed by a blank line and longer paragraph text -> auto-detect as a section heading
-- Add visual separators (gold divider line) between sections
+### Card Design (Premium Style)
 
-**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
-- Call the new `formatReellyDescription()` before `renderMarkdownToHtml()` in the description section
+Each award card will have:
+- A square image container with `object-contain` and a subtle champagne-to-white gradient background so the trophy stands out
+- Gold border (`border-2 border-gold`)
+- Hover effect: lift + gold shadow glow
+- Below the image: award title (bold, black text), organization (gold text), year (small badge)
+- No generic icons -- real photos only
 
-### Step 3: Batch Provident Extraction for Missing Data
+### Hero Enhancement
 
-**File: `supabase/functions/provident-batch-extract/index.ts`** (new)
-- Accepts `{ action: "extract-batch", limit: 25 }` 
-- Queries projects that have 0 documents and 0 images
-- For each project, attempts to find its Provident listing page by slug matching
-- Uses the existing Gatsby page-data.json approach (from `_shared/provident/pagedata.ts`) to find PDF URLs
-- Uses Firecrawl to scrape the full page for images
-- Inserts extracted images into `project_images` and documents into `project_documents`
-- Rate-limited: 1 concurrent request, 3s delay between items
+Use the JBJ trophy photo (Untitled_design_19.PNG) as a featured "hero award" spotlight above the grid, displayed larger with a premium dark background and gold accents.
 
-This follows the existing architecture in `sarah-test-extraction` but works in batch mode.
+### Technical Details
 
----
+**Files modified:**
+- `src/pages/Awards.tsx` -- complete rewrite of the awards grid section
+- 10 new image files copied to `src/assets/awards/`
 
-## Technical Details
-
-### Prefetch Pattern (Step 1)
+**Imports pattern:**
 ```text
-// On card hover, trigger module prefetch
-const prefetchProjectDetail = () => {
-  import("../../pages/ProjectDetail");
-};
-
-<Link 
-  to={`/project/${slug}`} 
-  onMouseEnter={prefetchProjectDetail}
->
+import award1 from "@/assets/awards/damac-elite-q3-2020.png";
+import award2 from "@/assets/awards/jbj-trophy.png";
+// ... etc
 ```
-This is a standard React pattern. The browser caches the import, so when React Router navigates to the route, the Suspense boundary resolves instantly.
 
-### Description Formatter (Step 2)
-Known Reelly section titles to detect:
-- "Project general facts"
-- "Location description and benefits"  
-- "Finishing and materials"
-- "Kitchen and appliances"
-- "Furnishing"
-- "Location description"
-- "Project highlights"
+**No new dependencies required.** Uses existing design system classes (`jj-layer-2`, `jj-layer-active`, `jj-card-inner`, `border-gold`).
 
-Each gets converted to a styled `<h3>` with a gold top border for visual separation. "Project general facts" is stripped entirely since the page already has "About [Project Name]" as the heading.
-
-### Batch Extraction (Step 3)
-The flow for each project:
-1. Derive Provident slug from project name (lowercase, hyphenated)
-2. Fetch `page-data.json` from Provident Gatsby endpoint -> extract PDF URLs (brochure, floor plans, payment plan)
-3. If Firecrawl is available, scrape the listing page for CloudFront image URLs
-4. Insert results into `project_images` and `project_documents` tables
-5. Update project record with amenities if found
-6. Log progress to `sync_jobs` table
-
-### Files Summary
-
-| File | Action | Purpose |
-|---|---|---|
-| `src/lib/markdownUtils.ts` | Edit | Add `formatReellyDescription()` to auto-detect section headings |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Edit | Apply description formatter before rendering |
-| `src/components/home/FeaturedListings.tsx` | Edit | Add prefetch on hover for ProjectDetail |
-| `supabase/functions/provident-batch-extract/index.ts` | New | Batch extraction of images/docs from Provident for projects missing data |
