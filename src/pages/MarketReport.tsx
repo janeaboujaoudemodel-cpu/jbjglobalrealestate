@@ -101,7 +101,7 @@ const MarketReport = () => {
         .limit(5),
       supabase
         .from("projects")
-        .select("name, location, price_from, developer_name, cover_image_url, area_name")
+        .select("name, location, price_from, developer_name, cover_image_url, area_name, short_description, description")
         .eq("is_published", true)
         .order("created_at", { ascending: false })
         .limit(10),
@@ -1712,17 +1712,20 @@ const MarketReport = () => {
 
     ${featuredProjects.length > 0 ? `
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-      ${featuredProjects.map((p: any) => `
+      ${featuredProjects.map((p: any) => {
+        const desc = p.short_description || (p.description ? p.description.substring(0, 120) + '...' : '');
+        return `
       <div class="info-card" style="overflow: hidden; padding: 0;">
         ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="${p.name}" style="width: 100%; height: 120px; object-fit: cover; border-bottom: 1px solid rgba(255,255,255,0.05);" onerror="this.style.display='none'" />` : '<div style="height: 120px; background: linear-gradient(135deg, rgba(168,146,90,0.1), rgba(168,146,90,0.05)); display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: #A8925A; font-size: 24px;">🏠</span></div>'}
         <div style="padding: 16px;">
           <h4 style="margin: 0 0 6px 0; font-size: 14px; color: #fff; line-height: 1.3;">${p.name}</h4>
-          <p style="color: #888; font-size: 12px; margin: 0 0 4px 0;">${p.area_name || p.location || 'Dubai, UAE'}</p>
-          ${p.developer_name ? `<p style="color: #666; font-size: 11px; margin: 0 0 8px 0;">by ${p.developer_name}</p>` : ''}
+          <p style="color: #888; font-size: 12px; margin: 0 0 4px 0;">📍 ${p.area_name || p.location || 'Dubai, UAE'}</p>
+          ${p.developer_name ? `<p style="color: #666; font-size: 11px; margin: 0 0 6px 0;">🏗️ by <span style="color: #A8925A;">${p.developer_name}</span></p>` : ''}
+          ${desc ? `<p style="color: #999; font-size: 11px; line-height: 1.5; margin: 0 0 8px 0;">${desc}</p>` : ''}
           ${p.price_from ? `<p style="color: #A8925A; font-weight: 700; font-size: 14px; margin: 0;">From AED ${Number(p.price_from).toLocaleString()}</p>` : '<p style="color: #A8925A; font-size: 13px; margin: 0;">Price on request</p>'}
         </div>
       </div>
-      `).join('')}
+      `;}).join('')}
     </div>
     ` : '<p style="color: #888; text-align: center; padding: 40px;">Visit JBJ.ae to explore our full portfolio of properties.</p>'}
 
