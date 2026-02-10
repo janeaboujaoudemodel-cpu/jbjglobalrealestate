@@ -14,7 +14,6 @@ interface FeaturedProjectAdProps {
 
 /**
  * Featured Project Ad Card
- * Matches Provident Estate's sidebar advertising layout
  * Full-width promotional card that appears between listing rows
  */
 export const FeaturedProjectAd = ({
@@ -93,7 +92,7 @@ export const FeaturedProjectAd = ({
   );
 };
 
-// Pre-configured featured ads matching Provident's promotional projects
+// Pre-configured featured ads
 export const FEATURED_ADS = [
   {
     id: 'inaura',

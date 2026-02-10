@@ -97,6 +97,7 @@ const PressKit = lazy(() => import("./pages/PressKit"));
 const CompanyProfile = lazy(() => import("./pages/CompanyProfile"));
 const Philanthropy = lazy(() => import("./pages/Philanthropy"));
 const News = lazy(() => import("./pages/News"));
+const NewsDetail = lazy(() => import("./pages/NewsDetail"));
 const BrokerToolkit = lazy(() => import("./pages/BrokerToolkit"));
 const BrokerDashboard = lazy(() => import("./pages/BrokerDashboard"));
 const BrokerResources = lazy(() => import("./pages/BrokerResources"));
@@ -476,6 +477,7 @@ const App = () => (
                 <Route path="/company-profile" element={<CompanyProfile />} />
                 <Route path="/philanthropy" element={<Philanthropy />} />
                 <Route path="/news" element={<News />} />
+                <Route path="/news/:id" element={<NewsDetail />} />
                 <Route path="/broker-toolkit" element={<BrokerToolkit />} />
                 {/* Alias: historical Broker Toolkit dashboard URL */}
                 <Route path="/broker-toolkit/dashboard" element={<Navigate to="/broker-dashboard" replace />} />

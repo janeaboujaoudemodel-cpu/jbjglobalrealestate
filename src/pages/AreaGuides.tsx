@@ -1,6 +1,6 @@
 /**
  * AreaGuides Component - Database-Driven Areas Index
- * Displays only REAL areas from the database (Reelly-synced)
+ * Displays only REAL areas from the database (database-synced)
  * No static/fake data - all areas come from useAreas() hook
  */
 

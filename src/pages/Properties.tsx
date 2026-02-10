@@ -141,7 +141,7 @@ const COMPLETION_STATUS = [
   { value: "under-construction", label: "Under Construction" },
 ];
 
-// Sale status options from Reelly API - with color dots
+// Sale status options with color dots
 const SALE_STATUS = [
   { value: "all", label: "All Sale Statuses", dotClass: null },
   { value: "Announced", label: "Announced", dotClass: "bg-pink-400" },
@@ -1077,7 +1077,7 @@ const Properties = () => {
             ) : sortedProjects.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 p-4">
                 {sortedProjects.map((project, index) => {
-                  // Insert featured ads after specific positions (like Provident: after 6, 12, 18 cards)
+                  // Insert featured ads after specific positions (after 6, 12, 18 cards)
                   const adAfterIndex = [5, 11, 17]; // 0-indexed: after 6th, 12th, 18th card
                   const adIndex = adAfterIndex.indexOf(index);
                   const featuredAd = adIndex !== -1 && FEATURED_ADS[adIndex] ? FEATURED_ADS[adIndex] : null;

@@ -42,7 +42,7 @@ interface CallToActionSectionProps {
 }
 
 /**
- * CTA section matching Provident's "The best deals are our expertise – register now" section.
+ * CTA section with callback form and WhatsApp button.
  * Includes callback form and WhatsApp button.
  */
 export function CallToActionSection({ projectName, projectId }: CallToActionSectionProps) {

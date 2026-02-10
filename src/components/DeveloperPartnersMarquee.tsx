@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { LanguageContext } from "@/contexts/LanguageContext";
 
-// LOCKED: Featured developer partners - exact logos from Provident Estate homepage
+// LOCKED: Featured developer partners
 // Current developers: DAMAC, EMAAR, MERAAS, SOBHA REALTY, NAKHEEL (original 5)
-// Added: BINGHATTI, SELECT GROUP, ELLINGTON, MAJID AL FUTTAIM, DANUBE (extracted from Provident)
+// Additional featured partners
 const FEATURED_DEVELOPERS = [
   // === ORIGINAL 5 (LOCKED) ===
   { 
@@ -33,7 +33,7 @@ const FEATURED_DEVELOPERS = [
     slug: "nakheel",
     logo: "/developers/logos/nakheel-logo.webp"
   },
-  // === EXTRACTED FROM PROVIDENT HOMEPAGE ===
+  // === ADDITIONAL FEATURED PARTNERS ===
   { 
     name: "BINGHATTI", 
     slug: "binghatti",

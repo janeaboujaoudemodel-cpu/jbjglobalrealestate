@@ -15,7 +15,7 @@ interface ProjectBreadcrumbProps {
 
 /**
  * Breadcrumb navigation for project detail pages.
- * Matches Provident's structure: Home / All Projects in Dubai / [Area] / [Project Name]
+ * Structure: Home / All Projects in Dubai / [Area] / [Project Name]
  */
 export function ProjectBreadcrumb({ projectName, location }: ProjectBreadcrumbProps) {
   // Extract area from location (e.g., "Downtown Dubai" from "Downtown Dubai, Dubai")
