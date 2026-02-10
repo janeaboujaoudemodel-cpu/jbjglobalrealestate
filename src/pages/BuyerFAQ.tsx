@@ -1,7 +1,7 @@
 import { SEOHead } from "@/components/SEOHead";
 import { motion } from "framer-motion";
 import { 
-  HelpCircle, Shield, Home, Banknote, FileText, Users, Phone, Search, LucideIcon
+  HelpCircle, Home, Banknote, Users, Phone, Search, LucideIcon
 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -35,9 +35,8 @@ const BuyerFAQ = () => {
       title: "Buying Basics",
       icon: Home,
       questions: [
-        { question: "Can foreigners buy property in the UAE?", answer: "Yes. Non-residents and foreign nationals can purchase freehold property in designated areas across Dubai and other emirates. Ownership is 100% freehold with full title deed registration." },
-        { question: "What is the difference between freehold and leasehold?", answer: "Freehold ownership gives you full ownership of the property and the land it sits on, with no time limit. Leasehold grants you usage rights for a fixed period (typically 30-99 years) after which ownership reverts to the freeholder." },
-        { question: "Do I need to be in the UAE to buy property?", answer: "No. Power of Attorney (POA) arrangements allow you to complete the purchase remotely. Our team can guide you through the process and coordinate with notarized POA documents." }
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
       ]
     },
     {
@@ -45,18 +44,8 @@ const BuyerFAQ = () => {
       title: "Costs & Fees",
       icon: Banknote,
       questions: [
-        { question: "What are the costs involved in buying property?", answer: "Key costs include: DLD registration fee (4% of property value), agency commission (typically 2%), NOC fee, mortgage registration fee (if applicable), and admin/trustee fees. All costs are disclosed transparently before you commit." },
-        { question: "Are there any hidden charges?", answer: "No. We provide a complete cost breakdown before any commitment. All government fees, agency fees, and service charges are itemized and explained clearly." },
-        { question: "Do I pay brokerage fees when buying off-plan?", answer: "No. For off-plan purchases, the developer pays the brokerage fee. Buyers do not incur commission charges on off-plan transactions." }
-      ]
-    },
-    {
-      id: "mortgage-finance",
-      title: "Mortgage & Finance",
-      icon: FileText,
-      questions: [
-        { question: "Can I get a mortgage in the UAE?", answer: "Yes. UAE residents can finance up to 80% of the property value for properties under AED 5M (75% for above). Non-residents can typically finance up to 50-60%. We can connect you with mortgage advisors for pre-approval." },
-        { question: "What documents do I need for a mortgage?", answer: "Typically: passport copy, visa copy (if resident), salary certificates or income proof, bank statements (6 months), and existing liability statements. Requirements vary by bank." }
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
       ]
     },
     {
@@ -64,19 +53,10 @@ const BuyerFAQ = () => {
       title: "Process & Timeline",
       icon: Users,
       questions: [
-        { question: "How long does the buying process take?", answer: "Ready properties: 2-4 weeks from offer acceptance to transfer. Off-plan: reservation can be completed in 1-2 days, with SPA signing within 30 days. Timelines vary based on mortgage approvals and seller readiness." },
-        { question: "What happens after I make an offer?", answer: "Once accepted: MOU signing → deposit payment → NOC application → DLD transfer. We manage every step, keeping you informed throughout the process." }
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
       ]
     },
-    {
-      id: "after-purchase",
-      title: "After Purchase",
-      icon: Shield,
-      questions: [
-        { question: "Can I rent out my property after buying?", answer: "Yes. As a property owner, you can rent out your property. We offer leasing advisory services to help you find quality tenants and maximize rental returns." },
-        { question: "What ongoing costs should I expect?", answer: "Annual service charges (maintenance fees), DEWA deposits, insurance (optional but recommended), and property management fees if you use a management company." }
-      ]
-    }
   ];
 
   return (

@@ -18,40 +18,24 @@ const LandlordFAQ = () => {
     {
       id: "leasing-basics", title: "Leasing Basics", icon: Home,
       questions: [
-        { question: "How do I find tenants for my property?", answer: "We market your property across major portals, social media, and our qualified buyer database. Professional photography, virtual tours, and targeted ads ensure maximum exposure to quality tenants." },
-        { question: "How long does it take to find a tenant?", answer: "Well-priced, well-maintained properties in popular areas typically lease within 1-4 weeks. We provide market feedback and pricing guidance to minimize vacancy." },
-        { question: "Can I choose my tenants?", answer: "Yes. You have the final say on tenant selection. We pre-screen all applicants, verify employment and references, and present qualified candidates for your approval." }
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
       ]
     },
     {
       id: "rental-contracts", title: "Rental Contracts", icon: FileText,
       questions: [
-        { question: "What should a tenancy contract include?", answer: "A standard Ejari-registered contract includes: property details, rent amount, payment terms, security deposit, maintenance responsibilities, notice periods, and early termination clauses." },
-        { question: "Is Ejari registration mandatory?", answer: "Yes. All rental contracts in Dubai must be registered with Ejari. This protects both landlord and tenant and is required for utility connections and visa purposes." }
-      ]
-    },
-    {
-      id: "rent-payments", title: "Rent & Payments", icon: Banknote,
-      questions: [
-        { question: "How many cheques should I accept?", answer: "Payment terms are negotiable. Common structures are 1, 2, 4, 6, or 12 cheques. Fewer cheques may command higher rent. We advise based on market conditions and your cash flow needs." },
-        { question: "What if my tenant doesn't pay rent?", answer: "Non-payment is handled through RERA's dispute resolution process. We can guide you through the legal steps, including notice periods and filing with the Rental Disputes Centre." },
-        { question: "Can I increase the rent?", answer: "Rent increases are regulated by RERA's rental index calculator. Increases are only permitted at contract renewal and must comply with the prescribed percentage bands based on current market rates." }
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
       ]
     },
     {
       id: "maintenance", title: "Maintenance & Management", icon: Shield,
       questions: [
-        { question: "Who is responsible for maintenance?", answer: "Generally, landlords cover structural repairs, AC systems, and major plumbing. Tenants handle minor maintenance and day-to-day upkeep. Specific responsibilities should be outlined in the tenancy contract." },
-        { question: "Do you offer property management services?", answer: "Yes. Our property management services include tenant communication, rent collection, maintenance coordination, inspection reports, and financial statements — so you can earn rental income without the hassle." }
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
       ]
     },
-    {
-      id: "legal", title: "Legal & Compliance", icon: Users,
-      questions: [
-        { question: "Can I evict a tenant?", answer: "Eviction is regulated by law and requires valid grounds (e.g., personal use, major renovation, sale). A 12-month notarized notice is typically required. We can advise on the correct legal process." },
-        { question: "What happens if my property is damaged?", answer: "The security deposit covers minor damages beyond normal wear and tear. For significant damage, you can file with the Rental Disputes Centre. We document property condition at move-in and move-out." }
-      ]
-    }
   ];
 
   return (

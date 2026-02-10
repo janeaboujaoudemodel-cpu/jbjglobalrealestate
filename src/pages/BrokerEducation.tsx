@@ -176,7 +176,7 @@ const BrokerEducation = () => {
       </section>
 
       {/* Page Intro + Education Library - Connected Flow */}
-      <section className="py-12 md:py-16">
+      <section className="py-8 md:py-10">
         <div className="jj-layer-2">
           {/* About This Program */}
           <motion.div
@@ -309,7 +309,7 @@ const BrokerEducation = () => {
       </section>
 
       {/* Progress & Recognition Section - Layer 2 Active Champagne */}
-      <section className="py-12 md:py-16">
+      <section className="py-8 md:py-10">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -381,7 +381,7 @@ const BrokerEducation = () => {
       </section>
 
       {/* JBJ Employee Benefits Section */}
-      <section className="py-12 md:py-16">
+      <section className="py-8 md:py-10">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -408,6 +408,10 @@ const BrokerEducation = () => {
                 { icon: BookOpen, title: "Continuous Education", desc: "Regular book updates, new learning paths, and advanced content added monthly." },
                 { icon: GraduationCap, title: "Events & Networking", desc: "Exclusive JBJ broker events, workshops, and professional networking opportunities." },
                 { icon: Briefcase, title: "AI Tools Access", desc: "Full access to all AI-powered broker tools — lead scoring, market reports, and more." },
+                { icon: Shield, title: "Admin Support", desc: "Personal assistant for each broker to handle administrative tasks and coordination." },
+                { icon: Briefcase, title: "Operations Support", desc: "CRM support and listing management to keep your pipeline organized and efficient." },
+                { icon: GraduationCap, title: "Marketing Team", desc: "Dedicated marketing support for property listings, social media, and campaigns." },
+                { icon: BookOpen, title: "Personal Admin", desc: "Manage your listings, operations, and client communications with dedicated admin support." },
               ].map((benefit, i) => (
                 <motion.div key={i} variants={fadeInUp}>
                   <Card className="jj-card-inner h-full">
@@ -427,7 +431,7 @@ const BrokerEducation = () => {
       </section>
 
       {/* Certification Section - After Books */}
-      <section className="py-12 md:py-16">
+      <section className="py-8 md:py-10">
         <div className="jj-layer-2">
           <CertificationSection />
         </div>

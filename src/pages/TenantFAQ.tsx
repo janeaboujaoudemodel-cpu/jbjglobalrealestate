@@ -18,41 +18,24 @@ const TenantFAQ = () => {
     {
       id: "renting-basics", title: "Renting Basics", icon: Home,
       questions: [
-        { question: "What documents do I need to rent a property?", answer: "Typically: passport copy, visa copy (or entry stamp for new arrivals), Emirates ID, salary certificate or employment letter, and recent bank statements. Requirements may vary by landlord." },
-        { question: "How much deposit is required?", answer: "Security deposits are typically 5% of annual rent for unfurnished properties and 10% for furnished. This is refundable at the end of the tenancy, minus any deductions for damages beyond normal wear." },
-        { question: "Can I rent without a UAE visa?", answer: "It's possible in some cases, but most landlords require a valid UAE residence visa. Tourist visa holders may be able to rent short-term furnished apartments." }
-      ]
-    },
-    {
-      id: "rent-payments", title: "Rent & Payments", icon: Banknote,
-      questions: [
-        { question: "How is rent typically paid?", answer: "Rent in the UAE is usually paid via post-dated cheques — commonly 1, 2, 4, 6, or 12 cheques per year. Some landlords now accept bank transfers or card payments." },
-        { question: "Can my rent be increased during the contract?", answer: "No. Rent cannot be increased during an active tenancy contract. Increases can only occur at renewal and must comply with RERA's rental index calculator." },
-        { question: "What if I can't afford a rent increase at renewal?", answer: "You can negotiate with the landlord. If the increase exceeds RERA guidelines, you can dispute it through the Rental Disputes Centre. You're not obligated to accept unjustified increases." }
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
       ]
     },
     {
       id: "rights-protections", title: "Rights & Protections", icon: Shield,
       questions: [
-        { question: "What are my rights as a tenant?", answer: "Key tenant rights include: right to a habitable property, right to peaceful enjoyment, protection from unjust eviction (12-month notice required), protection against excessive rent increases, and right to dispute resolution through RERA." },
-        { question: "Can my landlord enter the property without notice?", answer: "No. Landlords must provide reasonable notice and obtain your consent before entering the property, except in genuine emergencies." },
-        { question: "Can I be evicted before my contract ends?", answer: "Eviction during an active contract is only possible for specific legal reasons (e.g., non-payment, illegal use). The landlord must follow the legal process through the Rental Disputes Centre." }
-      ]
-    },
-    {
-      id: "maintenance-issues", title: "Maintenance & Issues", icon: FileText,
-      questions: [
-        { question: "Who pays for maintenance and repairs?", answer: "Landlords are responsible for structural repairs, AC units, plumbing, and major systems. Tenants typically handle minor maintenance, cleaning, and day-to-day upkeep as outlined in the contract." },
-        { question: "What if the landlord won't fix something?", answer: "Document the issue in writing and request repair. If the landlord doesn't respond within a reasonable time, you can file a complaint with RERA or the Rental Disputes Centre." }
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
       ]
     },
     {
       id: "moving-out", title: "Moving Out", icon: Users,
       questions: [
-        { question: "How much notice do I need to give?", answer: "Standard notice is 90 days before contract expiry for non-renewal. Early termination clauses (if any) should be specified in your tenancy contract. Some contracts include a 2-month early exit penalty." },
-        { question: "How do I get my security deposit back?", answer: "Return the property in good condition (normal wear accepted), settle all utility bills, cancel Ejari registration, and return keys. The landlord should refund the deposit within 30 days of handover." }
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
       ]
-    }
+    },
   ];
 
   return (

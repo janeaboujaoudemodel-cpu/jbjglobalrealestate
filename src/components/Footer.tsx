@@ -138,7 +138,7 @@ const DivisionAccordion = ({
 const Footer = () => {
   const { t } = useLanguage();
   const { isFounderVisible } = useFounderVisibility();
-  const { isBrokerMode } = useUserModeContext();
+  const { isBrokerMode, isInvestorMode, isCombinedMode } = useUserModeContext();
   const currentYear = new Date().getFullYear();
   const location = useLocation();
 
@@ -760,7 +760,7 @@ const Footer = () => {
                   </ul>
                 </div>
                 
-                {/* Card 6: Education Hub + Investor Hub */}
+                {/* Card 6: Education Hub (always visible) */}
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
                   <Link 
                     to={educationHubLink.href}
@@ -769,7 +769,7 @@ const Footer = () => {
                     <span className="text-gold">✦</span>
                     <span className="text-gold">Education Hub</span>
                   </Link>
-                  <ul className="space-y-2 mb-3">
+                  <ul className="space-y-2">
                     <li>
                       <Link to="/broker-education" className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
                         Books
@@ -785,23 +785,6 @@ const Footer = () => {
                         Market Reports
                       </Link>
                     </li>
-                  </ul>
-                  
-                  <h4 className="font-bold text-xs uppercase tracking-[0.12em] mb-2 pb-1 border-b border-gold/20 text-black/80 flex items-center gap-2">
-                    <span className="text-gold/60">✦</span>
-                    Investor Hub
-                  </h4>
-                  <ul className="space-y-2">
-                    {investorHubLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          to={link.href}
-                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
                   </ul>
                 </div>
                 
@@ -846,16 +829,16 @@ const Footer = () => {
                 </div>
               </div>
 
-              {/* ROW 3: Mode-Aware - Broker Tools (only visible in broker mode) */}
-              {isBrokerMode && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                  {/* Card: Broker Tools */}
+              {/* ROW 3: Mode-Aware Hubs + Market Intelligence */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+                {/* Broker Hub - visible in broker/combined mode */}
+                {isBrokerMode && (
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
                     <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
                       <span className="text-gold">✦</span>
-                      Broker Tools
+                      Broker Hub
                     </h4>
-                    <ul className="space-y-2 grid grid-cols-2 gap-x-4">
+                    <ul className="space-y-2">
                       {brokerToolsLinks.map((link) => (
                         <li key={link.href}>
                           <Link
@@ -868,15 +851,17 @@ const Footer = () => {
                       ))}
                     </ul>
                   </div>
-                  
-                  {/* Card: Market Intelligence */}
+                )}
+
+                {/* Investor Hub - visible in investor/combined mode */}
+                {(isInvestorMode || isCombinedMode) && (
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
                     <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
                       <span className="text-gold">✦</span>
-                      Market Intelligence
+                      Investor Hub
                     </h4>
-                    <ul className="space-y-2 grid grid-cols-2 gap-x-4">
-                      {marketIntelLinks.map((link) => (
+                    <ul className="space-y-2">
+                      {investorHubLinks.map((link) => (
                         <li key={link.href}>
                           <Link
                             to={link.href}
@@ -888,8 +873,28 @@ const Footer = () => {
                       ))}
                     </ul>
                   </div>
+                )}
+
+                {/* Market Intelligence - always visible */}
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 hover:border-gold/50 transition-all">
+                  <h4 className="font-bold text-xs sm:text-sm uppercase tracking-[0.12em] mb-3 pb-2 border-b border-gold/30 text-gold flex items-center gap-2">
+                    <span className="text-gold">✦</span>
+                    Market Intelligence
+                  </h4>
+                  <ul className="space-y-2">
+                    {marketIntelLinks.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          to={link.href}
+                          className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              )}
+              </div>
             </div>
 
           {/* Internal Divider */}

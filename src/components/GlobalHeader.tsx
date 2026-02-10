@@ -1429,10 +1429,16 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
               } : {}}
             >
-              {/* Search Icon - opens mega menu on hover (desktop) and click */}
+              {/* Search Icon - opens GlobalSearchModal directly on hover/click */}
               <button
-                onMouseEnter={() => handleMegaMenuEnter('search')}
-                onClick={() => handleMegaMenuClick('search')}
+                onMouseEnter={() => {
+                  setSearchInitialQuery("");
+                  setSearchOpen(true);
+                }}
+                onClick={() => {
+                  setSearchInitialQuery("");
+                  setSearchOpen(true);
+                }}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
                 aria-label="Search"
               >
@@ -1476,8 +1482,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             </div>
           )}
 
-          {/* Utility Mega Menu Panels (Search, Language, Account) */}
-          {!shouldUseMobileHeader && (activeMegaMenu === 'search' || activeMegaMenu === 'language' || activeMegaMenu === 'account') && (
+          {/* Utility Mega Menu Panels (Language, Account) - Search opens GlobalSearchModal directly */}
+          {!shouldUseMobileHeader && (activeMegaMenu === 'language' || activeMegaMenu === 'account') && (
             <>
               {/* Backdrop only - click to close */}
               <div 
@@ -1508,15 +1514,6 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 onPointerEnter={handleMegaMenuPanelEnter}
                 onPointerLeave={handleMegaMenuLeave}
               >
-                {activeMegaMenu === 'search' && (
-                  <MegaMenuSearch
-                    onClose={closeMegaMenu}
-                    onOpenSearch={(query) => {
-                      setSearchInitialQuery(query || "");
-                      setSearchOpen(true);
-                    }}
-                  />
-                )}
                 {activeMegaMenu === 'language' && <MegaMenuLanguage onClose={closeMegaMenu} />}
                 {activeMegaMenu === 'account' && <MegaMenuAccount onClose={closeMegaMenu} />}
               </div>

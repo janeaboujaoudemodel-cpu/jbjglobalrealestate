@@ -19,39 +19,24 @@ const SellerFAQ = () => {
     {
       id: "selling-basics", title: "Selling Basics", icon: FileText,
       questions: [
-        { question: "How do I list my property for sale?", answer: "Contact us with your property details. We'll arrange a viewing, provide a market valuation, and create a professional listing with photography, virtual tours, and targeted marketing." },
-        { question: "How long does it take to sell a property?", answer: "Timeline varies by property type, location, and pricing. Well-priced properties in popular areas can sell within 2-8 weeks. We provide regular market feedback to optimize your listing." },
-        { question: "Can I sell if I still have a mortgage?", answer: "Yes. The outstanding mortgage balance is settled from the sale proceeds during the transfer process. We coordinate with your bank to obtain a liability letter and manage the settlement." }
-      ]
-    },
-    {
-      id: "pricing-valuation", title: "Pricing & Valuation", icon: Banknote,
-      questions: [
-        { question: "How do you determine the right asking price?", answer: "We conduct a Comparative Market Analysis (CMA) using recent sales data, current listings, market trends, and property condition. Our AI-powered valuation tools provide additional data points for accuracy." },
-        { question: "Should I renovate before selling?", answer: "Minor repairs and cosmetic updates can improve appeal and speed up the sale. Major renovations may not always provide a return. We advise on cost-effective improvements based on your property's condition." }
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
       ]
     },
     {
       id: "costs-selling", title: "Costs When Selling", icon: Banknote,
       questions: [
-        { question: "What fees do sellers pay?", answer: "Sellers typically pay: agency commission (2%), NOC fee (varies by developer), and their share of the DLD transfer fee (negotiable). All costs are disclosed upfront before listing." },
-        { question: "Are there any tax implications?", answer: "The UAE does not impose capital gains tax on property sales. However, sellers should consult their own tax advisors regarding obligations in their home country." }
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
       ]
     },
     {
       id: "process", title: "Selling Process", icon: Clock,
       questions: [
-        { question: "What is the step-by-step selling process?", answer: "1. Property valuation and listing agreement\n2. Professional marketing and viewings\n3. Offer negotiation and acceptance\n4. MOU signing and deposit collection\n5. NOC application from developer\n6. DLD transfer at the land department" },
-        { question: "Do I need to be present for the transfer?", answer: "Not necessarily. You can appoint a representative via Power of Attorney (POA) to complete the transfer on your behalf." }
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
+        { question: "Question coming soon", answer: "Answer will be added by the content team." },
       ]
     },
-    {
-      id: "support", title: "Seller Support", icon: Shield,
-      questions: [
-        { question: "What marketing do you provide?", answer: "Premium photography, virtual tours, targeted online advertising, social media campaigns, database matching with qualified buyers, and listing on major property portals." },
-        { question: "How do you screen potential buyers?", answer: "We verify buyer identity, proof of funds or mortgage pre-approval, and purchase timeline. This ensures only serious, qualified buyers view your property." }
-      ]
-    }
   ];
 
   return (
