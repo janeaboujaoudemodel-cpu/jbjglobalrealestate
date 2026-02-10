@@ -45,15 +45,15 @@
  
  // Helper to format price with currency conversion
  const formatPriceWithCurrency = (price: number, currency: string = 'AED'): string => {
-   const converted = price * CURRENCY_RATES[currency];
+   const converted = Math.round(price * CURRENCY_RATES[currency]);
    const symbol = CURRENCY_SYMBOLS[currency];
    if (converted >= 1000000) {
-     return `${symbol} ${(converted / 1000000).toFixed(2)}M`;
+     return `${symbol} ${(converted / 1000000).toFixed(1)}M`;
    }
    if (converted >= 1000) {
      return `${symbol} ${Math.round(converted / 1000)}K`;
    }
-   return `${symbol} ${converted.toLocaleString()}`;
+   return `${symbol} ${converted.toLocaleString('en-US')}`;
  };
  
  // Get sale status badge styling

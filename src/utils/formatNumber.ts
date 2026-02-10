@@ -43,7 +43,8 @@ export const formatPrice = (
     return showSymbol ? `${currency} On request` : 'On request';
   }
   
-  const formatted = num.toLocaleString('en-US', {
+  const rounded = Math.round(num);
+  const formatted = rounded.toLocaleString('en-US', {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });

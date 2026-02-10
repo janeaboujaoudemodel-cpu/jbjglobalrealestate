@@ -33,9 +33,14 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
           </div>
 
           {area.description ? (
-            <p className="text-zinc-700 text-base md:text-lg leading-relaxed mb-8">
-              {area.description}
-            </p>
+            <div className="text-zinc-700 text-base md:text-lg leading-relaxed mb-8 space-y-4">
+              {area.description.length > 300
+                ? area.description.split(/\n\n|\n/).filter(Boolean).map((para, i) => (
+                    <p key={i}>{para.trim()}</p>
+                  ))
+                : <p>{area.description}</p>
+              }
+            </div>
           ) : (
             <p className="text-zinc-700 text-base md:text-lg leading-relaxed mb-8">
               {area.name} is a premier residential and commercial district located in {area.emirate}. 
