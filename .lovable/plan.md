@@ -1,92 +1,103 @@
 
-# Full Website Translation -- Complete All 14 Non-English Languages
 
-## Problem Summary
+# Mobile UI and Data Quality Fix Plan
 
-The translation system has a key-based dictionary (`t('key')`) that works instantly. However:
+This plan addresses 7 distinct issues identified from your screenshots and feedback.
 
-1. **Arabic** is nearly complete (~1039 keys matching English's ~1036), but has a critical bug: when switching back to English, some sections remain in Arabic because the `translateText()` reverse-lookup function incorrectly caches/matches Arabic values
-2. **All other 13 languages** (Spanish, French, Russian, Chinese, Hindi, Persian, Turkish, German, Italian, Dutch, Hebrew, Polish, Japanese) are only ~705 lines each -- missing approximately **330 translation keys** (everything from line ~705 onward in English, including footer, seller listing, contact page extras, coming soon, chat globals, and more)
-3. Many components use hardcoded English strings instead of `t()` keys -- these never translate regardless of language
+---
 
-## Root Cause of Mixed Languages
+## Issue 1: Contact Cards Too Large and Stretched (Ready to Get Started Section)
 
-The `translateText()` function in `LanguageContext.tsx` does a reverse lookup: it searches through English dictionary values to find a matching key, then returns the current language's value. When you switch back to English, if any component previously rendered Arabic text and React preserved the DOM node, the stale Arabic text passes through `translateText()` which fails to match it in the English dictionary and returns it as-is (Arabic). This is a design flaw in the `<T>` component approach.
+**Problem:** The WhatsApp, Call, and Email cards in the "Ready to Get Started?" section are too tall and rectangular on mobile. The container stretches edge-to-edge.
 
-## Fix Strategy
+**Fix:** In `CombinedContactNewsletter.tsx`:
+- Reduce card padding from `p-4` to `p-3` on mobile
+- Make the outer container have more horizontal margin on mobile (`mx-4 sm:mx-6` instead of `mx-2`)
+- Reduce icon size from `w-12 h-12` to `w-10 h-10`
+- Make cards horizontal (row layout) on mobile instead of stacked vertically, so they're more compact
+- Apply the same fix to `DirectContactCTA.tsx` for the similar section on service pages
 
-This will be done language by language, starting with Arabic. The approach for each language:
+---
 
-### Phase 1: Fix the Translation Engine (prevents language mixing)
+## Issue 2: Mobile Hamburger Menu - Logo Overlap Issue
 
-**File: `src/contexts/LanguageContext.tsx`**
-- Fix `translateText()` to build a bidirectional cache: for every language, map text values back to their keys, so switching languages always resolves correctly
-- Add a `useMemo` on the current language's reverse map so lookups are O(1) instead of O(n) per call
-- Ensure that when language changes, ALL `translateText` consumers re-render with fresh values (the current `useCallback` dependency on `language` should handle this, but verify no stale closures exist)
+**Problem:** The mobile menu header shows both the background header logo AND the menu's own "JBJ Global Real Estate" text, causing a double/overlapping logo effect (visible in IMG_0637 and IMG_0633).
 
-### Phase 2: Complete Arabic Translation (verify 1:1 parity)
+**Fix:** In `GlobalHeader.tsx` (SheetContent header area, lines 654-669):
+- Remove the monogram image (`jbjMonogramLightBg`) from the mobile menu header entirely
+- Keep only the text "JBJ Global Real Estate" as the menu title
+- This matches the "correct" state the user identified where no logo shows in the dropdown
 
-**File: `src/translations/ar.ts`**
-- Audit every key in `en.ts` against `ar.ts` -- fill any gaps
-- Arabic is already ~99% complete, so this is mostly verification
+---
 
-### Phase 3: Complete All Other 13 Languages
+## Issue 3: Split/Double Button on Property Page
 
-For each of these files, add the ~330 missing translation keys to achieve 1:1 parity with `en.ts`:
+**Problem:** The "List Your Property for Rent" button appears split with two parts (visible in IMG_0635) - the arrow + "List" text and "Your Property for Rent" appear as separate elements.
 
-| File | Language | Current Lines | Missing Keys (approx) |
-|------|----------|--------------|----------------------|
-| `src/translations/es.ts` | Spanish | 705 | ~330 |
-| `src/translations/fr.ts` | French | 705 | ~330 |
-| `src/translations/ru.ts` | Russian | 705 | ~330 |
-| `src/translations/zh.ts` | Chinese | 705 | ~330 |
-| `src/translations/hi.ts` | Hindi | 705 | ~330 |
-| `src/translations/fa.ts` | Persian | 705 | ~330 |
-| `src/translations/tr.ts` | Turkish | 705 | ~330 |
-| `src/translations/de.ts` | German | 705 | ~330 |
-| `src/translations/it.ts` | Italian | 705 | ~330 |
-| `src/translations/nl.ts` | Dutch | 705 | ~330 |
-| `src/translations/he.ts` | Hebrew | 705 | ~330 |
-| `src/translations/pl.ts` | Polish | 705 | ~330 |
-| `src/translations/ja.ts` | Japanese | 705 | ~330 |
+**Fix:** Find the component rendering this CTA on the rental/sell page and ensure the button is a single unified element with proper flex alignment, not split into two halves.
 
-The missing sections include:
-- Header navigation keys (`header.*`)
-- Hero section keys (`hero.*`)
-- Founder section keys (`founder.*`)
-- About page keys (`about.hero.*`, `about.founder.*`, `about.howWeOperate*`, etc.)
-- Services page keys (`services.hero.*`, `services.buySell*`, etc.)
-- Properties page keys (`properties.hero.*`, `properties.wantTo*`, etc.)
-- Partners, Guides, FAQ, Communities, Area Guides keys
-- Client Portal, Market Intelligence keys
-- Listing Admin keys (`listingAdmin.*`)
-- Listing Admin Chat keys (`listingAdminChat.*`)
-- Command Palette keys (`commandPalette.*`)
-- Seller Listing keys (`sellerListing.*`)
-- Contact page additional keys (`contact.brokerage*`, etc.)
-- Footer additional keys (`footer.properties*`, `footer.servicesSection*`, etc.)
-- Coming Soon page keys (`comingSoon.*`)
-- Global Chat keys (`chat.copy*`, `chat.typed*`, etc.)
+---
 
-### Phase 4: Hardcoded String Audit
+## Issue 4: Popups Opening All Together / Crowded
 
-Many components (480+ files use `<T>` component) have hardcoded English strings that bypass the `t()` system. The `<T>` component uses `translateText()` which does a reverse value lookup -- this works for strings that exist as English dictionary values, but fails for strings not in the dictionary. No action needed here since the `<T>` component approach is a fallback mechanism; the primary `t('key')` system is what needs complete dictionaries.
+**Problem:** Chat widget, cookies consent, and lead capture all compete for screen space. Closing one opens another immediately.
 
-## Execution Order
+**Fix:** In `PopupCoordinatorContext.tsx`:
+- Add a delay between popup dismissals - when one popup is dismissed, wait 2-3 seconds before showing the next
+- Reduce cookies banner size on mobile by making it more compact (smaller padding, shorter text)
+- In `CookiesConsentBanner.tsx`: reduce mobile padding from `p-6` to `p-4`, use smaller text, stack buttons vertically on mobile
 
-Due to message size limits, this will be executed across multiple messages:
+---
 
-1. **Message 1**: Fix `LanguageContext.tsx` translation engine + Complete Arabic verification
-2. **Message 2**: Complete Spanish (`es.ts`) + French (`fr.ts`) + German (`de.ts`)
-3. **Message 3**: Complete Russian (`ru.ts`) + Turkish (`tr.ts`) + Italian (`it.ts`)
-4. **Message 4**: Complete Chinese (`zh.ts`) + Japanese (`ja.ts`) + Hindi (`hi.ts`)
-5. **Message 5**: Complete Persian (`fa.ts`) + Hebrew (`he.ts`) + Dutch (`nl.ts`) + Polish (`pl.ts`)
+## Issue 5: Areas Page - "Provident Estate" Text Showing in Descriptions
 
-## What Will NOT Be Touched
+**Problem:** Area descriptions in the database contain raw markdown like `![banner-bg - Provident Estate](https://...)` which renders as visible text on area cards (visible in IMG_0629). This is a compliance violation.
 
-- No layout changes
-- No styling changes
-- No route changes
-- No database changes
-- No performance changes
-- Only translation dictionary files and the translation engine
+**Fix (Database + Code):**
+- Create a database migration to clean all 15 affected area descriptions:
+  - Strip the `![banner-bg - Provident Estate](...)` markdown image tags from descriptions
+  - Remove any `providentestate.com` URLs from description text
+  - Replace any remaining "Provident" or "Provident Estate" references with neutral text
+- In `AreaGuides.tsx`: add a sanitization function that strips markdown image syntax and source brand names before rendering descriptions, as a safety net
+
+---
+
+## Issue 6: Areas Page - Empty Photos
+
+**Problem:** 144 areas have no `image_url`, showing empty/placeholder cards.
+
+**Fix:**
+- For area cards with no image, ensure the gradient placeholder with MapPin icon renders properly (this already exists in code)
+- The real fix is that area images should come from actual community/master plan photos, not individual project photos. This requires uploading proper area images or sourcing them from the sync engine. For now, ensure the placeholder is clean and professional.
+
+---
+
+## Issue 7: Cookie Consent - Backend Persistence
+
+**Problem:** User wants cookie consent to be saved in the backend so there's proof the user agreed.
+
+**Fix:**
+- Currently cookies consent is saved only in `localStorage`
+- Add a database table `cookie_consents` to store: visitor_id (or fingerprint), consent_status, preferences (JSON), timestamp, IP/user-agent
+- When user accepts cookies, save to both localStorage AND the database
+- This creates an auditable record of consent
+
+---
+
+## Technical Summary
+
+### Files to Modify:
+1. `src/components/CombinedContactNewsletter.tsx` - Compact contact cards
+2. `src/components/DirectContactCTA.tsx` - Same compact treatment
+3. `src/components/GlobalHeader.tsx` - Remove logo from mobile menu header
+4. `src/components/CookiesConsentBanner.tsx` - Smaller on mobile, add DB persistence
+5. `src/contexts/PopupCoordinatorContext.tsx` - Add dismissal delay
+6. `src/pages/AreaGuides.tsx` - Add description sanitizer
+
+### Database Changes:
+1. Migration to clean area descriptions (remove Provident/markdown artifacts)
+2. New `cookie_consents` table for audit trail
+
+### Components to Identify and Fix:
+- The rental/sell page CTA button that appears split (need to locate the exact component)
+
