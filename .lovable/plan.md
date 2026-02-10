@@ -1,85 +1,72 @@
 
-# Fix Dropdown Themes, Footer Links, Areas Page Redesign, and Sort Button Active Colors
 
-## Overview
-This plan addresses four major issues: (1) all dropdown menus site-wide must use the champagne gradient instead of white, (2) footer needs "Projects" and "Buy/Sell" links, (3) the Areas page needs a full redesign with hero photo, transparent header, champagne grid background, and developer-style area cards with photos/descriptions, and (4) the active sort button color on the Areas page filter needs to match the approved champagne UI.
+# Comprehensive Fix: Mode Switcher, Homepage Cards, Lead Popup, Video Scene, Mega Menu Guides, and CTA Buttons
 
----
+## Issues Identified and Fixes
 
-## Part 1: Fix All Dropdown Backgrounds from White to Champagne
+### 1. Mode Switcher Dropdown (Footer + Header) -- Not Centered, Too Wide
+**File:** `src/components/ModeSwitcher.tsx`
+- The dropdown (`DropdownMenuContent`) is `w-72` (288px) which is much wider than the trigger button (approx 140-160px with "Investor Mode" text).
+- `align="end"` causes it to hang off to the right instead of centering.
 
-**Problem:** The default `SelectContent` component (in `src/components/ui/select.tsx`) already has the correct champagne background (`bg-[#FDFBF7]`). However, many pages override this with `className="bg-white border-gold/30"`, which makes the dropdown appear white instead of champagne.
+**Fix:**
+- Change `align="end"` to `align="center"` so the dropdown centers under the trigger button.
+- Reduce `w-72` to `w-56` (224px) to better match the trigger button width, making it proportional.
+- On the trigger button, increase minimum width with `min-w-[180px]` so the label area is more visually balanced with the dropdown.
 
-**Fix:** Remove the `bg-white` override from every `SelectContent` usage across all affected pages. The default component styling already handles the champagne gradient, gold border, and shadow correctly.
+### 2. Homepage Layout Gap When Mode Changes
+**File:** `src/pages/Index.tsx`
+- When switching between Investor and Broker modes, sections that are conditionally shown/hidden may leave visual gaps.
 
-**Files affected:**
-- `src/pages/Developers.tsx` (line 264): `bg-white` on tier filter dropdown
-- `src/pages/PropertiesReelly.tsx` (lines 284, 302, 350, 370, 390): 5 dropdowns with `bg-white`
-- `src/pages/Properties.tsx` (lines 527, 619, 638, 658, 739, 765, 784, 848, 869, 890): ~10 dropdowns with `bg-white`
-- `src/pages/Contact.tsx` (lines 561, 587, 611): 3 dropdowns with `bg-white`
-- `src/pages/ExecutiveAssistant.tsx` (lines 619, 712, 725): 3 dropdowns
-- `src/pages/Admin.tsx` (lines 794, 841): 2 dropdowns
+**Fix:** Audit the homepage for mode-conditional sections. Ensure hidden sections don't leave empty space by wrapping them in containers that collapse cleanly (no `min-h` on hidden sections). If broker-specific cards disappear, the grid should reflow automatically with CSS grid.
 
-**Action for each:** Change `SelectContent className="bg-white border-gold/30"` to just `SelectContent` (no className override), letting the default champagne theme show through.
+### 3. Add "Guides" Link to Investor Hub and Broker Hub Mega Menus
+**File:** `src/components/header/MegaMenuInvestorHub.tsx`
+- Add `{ name: 'Investor Guides', href: '/guides?category=investor', icon: FileText }` to the `toolsLinks` array (or a new guides section).
 
----
+**File:** `src/components/header/MegaMenuBrokerHub.tsx`
+- Add `{ name: 'Broker Guides', href: '/guides?category=broker', icon: FileText }` to the `educationLinks` array.
 
-## Part 2: Add "Projects" Link to Footer + Ensure Buy/Sell Presence
+These will link to the existing `/guides` page filtered by category. If dedicated investor/broker guide pages are needed later, these routes can be created separately.
 
-**Problem:** The footer currently has "Buy Properties" and "Rent Properties" under the Properties card, and "Sell" as a separate card. There is no "Projects" link that maps to the `/properties` (Reelly projects) page, matching the header navigation.
+### 4. Homepage "Handpicked For You" -- Diversify Developers, Fix Card Sizing
+**File:** `src/components/home/FeaturedListings.tsx`
 
-**Fix in `src/components/Footer.tsx`:**
-- Add `{ label: "Projects", href: "/properties" }` to the `propertiesLinks` array (after "Rent Properties" and before "Developers")
-- This matches the header's "Projects" navigation item
+**Developer diversity fix:**
+- Replace the current selection logic: instead of 2 Emaar, add diversity by including Nakheel, Dubai Properties, and Omniyat.
+- New allocation: 1 Emaar, 1 ALDAR, 1 Omniyat, 1 Sobha (Pinnacle only), 1 Bugatti (Binghatti), 1 Mercedes (Binghatti), 1 Nakheel, 1 Dubai Properties.
+- Update `ELITE_DEVELOPERS` array to include `'Nakheel'` and `'Dubai Properties'`.
+- Remove "The Mirage at Sobha Central" from results (already in filter, but verify).
 
----
+**Card sizing fix:**
+- All cards use `aspect-[4/3]` for the image area, which is correct. The issue is likely inconsistent content height below the image. Add `h-full` and `flex flex-col` to the card container, and `flex-grow` to the content area so all cards stretch to the same height in the grid row.
 
-## Part 3: Redesign Areas Page (`/areas`)
+**Price/Handover overlap fix:**
+- Move the price from the image overlay (bottom-left) to the content area below the image, next to the developer name.
+- Move the handover date to the bottom-right corner of the content area (not on the image).
+- This prevents the price badge and handover badge from touching each other on the image.
 
-**Problem:** The current Areas page (`src/pages/AreaGuides.tsx`) has several issues:
-1. No hero photo -- uses a dark gradient instead of a fullscreen hero image
-2. The header is not transparent on initial load (it should be transparent over the hero, then become fixed/solid on scroll)
-3. The grid section background is black (`bg-black`) instead of champagne
-4. Area cards are small text-only boxes without photos, descriptions, or uniform sizing
-5. The sort buttons (A-Z, Trending, Building icon) use `bg-gold text-black` for active state which the user says doesn't match the approved UI
+### 5. Lead Generation Popup on Homepage
+**File:** `src/components/PopupLayer.tsx` and new component `src/components/LeadCapturePopup.tsx`
 
-### 3a. Hero Section -- Add Fullscreen Photo
-- Replace the current dark gradient hero with a fullscreen background image (use an existing Dubai skyline asset or a placeholder image URL)
-- The hero should be full viewport height on initial load (`min-h-screen` or `h-screen`)
-- Overlay the title, stats, and search badge on top of the image with a dark gradient overlay
-- Make the header transparent on initial load by adding a class/prop system (similar to how the Developers page handles it with `jj-hero-fullscreen`)
+- Create a new `LeadCapturePopup` component that auto-opens after 5 seconds on the homepage.
+- Uses a simplified form: Name, Email, Phone, and "Interested In" dropdown.
+- Stores submission in localStorage to avoid showing again (`lead_popup_dismissed`).
+- Add it to `PopupLayer.tsx` so it renders globally but only triggers on the homepage route (`/`).
+- This is separate from the existing `ContactGatingModal` which is triggered by specific actions.
 
-### 3b. Transparent Header on Initial Load
-- The `GlobalHeader` component likely already supports transparent mode for hero pages. The Areas page needs to use the same hero class (`jj-hero-fullscreen`) that triggers transparent header behavior, matching the Developers page pattern.
+### 6. JBJ Royal Tools Hub CTA Buttons -- Gold with Black Arrow
+**File:** `src/components/home/ToolkitShowcaseCard.tsx`
+- The CTA buttons (e.g., "Check Rates", "Get Evaluation") currently use `Button variant="primary"` which uses the champagne gradient.
+- Change to an explicit gold background: `className="bg-gold hover:bg-gold-dark text-black"`.
+- The `ArrowRight` icon should be `text-black` (it already is since text is black, but enforce it explicitly).
 
-### 3c. Grid Background -- Change from Black to Champagne
-- Change `bg-black` (line 218) on the grid section to `bg-[hsl(var(--premium-bg))]` (the standard champagne premium background)
-- Change text colors from white/zinc to black/zinc-700 accordingly
-
-### 3d. Area Cards -- Developer-Style Cards with Photos and Descriptions
-- Replace the current small text-only area links with full cards matching the DeveloperCard style
-- Each card should include:
-  - Area image (`area.image_url`) with fallback gradient
-  - Area name as title
-  - Area description (2-3 lines, truncated)
-  - Emirate label
-  - Property count badge
-  - Trending indicator if applicable
-- Cards should be uniform size (same height) in a responsive grid (1/2/3/4 columns)
-- Link to `/area/{slug}` for the detail page
-
-### 3e. Sort Button Active Color Fix
-- Change the active state from `bg-gold text-black` to `bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black` (champagne gradient with gold border)
-- The inactive state should use `bg-white border border-gold/30 text-zinc-700`
-- This applies to the A-Z, Trending (flame icon), and Building icon sort buttons
-
----
-
-## Part 4: Area Data Enrichment -- Provident Extraction
-
-The user mentioned extracting area data from Provident and Reelly API projects. This is a data pipeline task that requires a backend edge function to scrape/fetch area information (photos, descriptions) from external sources. This is a separate task from the UI changes and will be noted for future implementation.
-
-For now, the cards will use `area.image_url` (already in the database schema) and `area.description` (also in the schema). Areas without images will show a gradient placeholder.
+### 7. Remove Video Scene from Properties Hero
+**File:** `src/components/PropertiesHeroVideo.tsx`
+- The user previously asked to remove a specific scene. Currently there are 3 scenes: Downtown Dubai (Burj Khalifa), Palm Jumeirah, and Burj Al Arab.
+- Based on previous conversation context, remove the Palm Jumeirah/Atlantis scene (`palmAtlantisVideo`).
+- Update `VIDEO_SCENES` array to only include Downtown Dubai and Burj Al Arab (2 scenes).
+- Remove the unused import for `palmAtlantisVideo`.
 
 ---
 
@@ -87,19 +74,22 @@ For now, the cards will use `area.image_url` (already in the database schema) an
 
 | File | Changes |
 |---|---|
-| `src/pages/Developers.tsx` | Remove `bg-white` from SelectContent (line 264) |
-| `src/pages/PropertiesReelly.tsx` | Remove `bg-white` from 5 SelectContent instances |
-| `src/pages/Properties.tsx` | Remove `bg-white` from ~10 SelectContent instances |
-| `src/pages/Contact.tsx` | Remove `bg-white` from 3 SelectContent instances |
-| `src/pages/ExecutiveAssistant.tsx` | Remove `bg-white` from 3 SelectContent instances |
-| `src/pages/Admin.tsx` | Remove `bg-white` from 2 SelectContent instances |
-| `src/components/Footer.tsx` | Add "Projects" link to propertiesLinks array |
-| `src/pages/AreaGuides.tsx` | Full redesign: fullscreen hero with photo, transparent header support, champagne grid background, developer-style area cards with photos/descriptions, fix sort button active colors |
+| `src/components/ModeSwitcher.tsx` | Center dropdown (`align="center"`), reduce width to `w-56`, add `min-w-[180px]` to trigger |
+| `src/components/header/MegaMenuInvestorHub.tsx` | Add "Investor Guides" link to tools section |
+| `src/components/header/MegaMenuBrokerHub.tsx` | Add "Broker Guides" link to education section |
+| `src/components/home/FeaturedListings.tsx` | Diversify developers (add Nakheel, Dubai Properties, reduce Emaar to 1), fix card height uniformity, move price/handover out of image overlay into content area |
+| `src/components/home/ToolkitShowcaseCard.tsx` | Change CTA buttons to gold background with black arrow |
+| `src/components/PropertiesHeroVideo.tsx` | Remove Palm Jumeirah scene from VIDEO_SCENES |
+| `src/components/LeadCapturePopup.tsx` | New: lead gen popup with 5-second delay, name/email/phone/interest fields |
+| `src/components/PopupLayer.tsx` | Add LeadCapturePopup to render on homepage |
+| `src/pages/Index.tsx` | Ensure mode-conditional sections collapse without leaving gaps |
 
 ## Execution Order
-1. Fix all dropdown `bg-white` overrides across all pages (global consistency fix)
-2. Add "Projects" link to footer
-3. Redesign Areas page hero section with fullscreen photo
-4. Change Areas grid background from black to champagne
-5. Replace area text links with full developer-style cards
-6. Fix sort button active/inactive styling
+1. Fix ModeSwitcher dropdown centering and sizing
+2. Add Guides links to Investor Hub and Broker Hub mega menus
+3. Fix FeaturedListings developer diversity, card sizing, and price/handover layout
+4. Update ToolkitShowcaseCard CTA buttons to gold with black arrow
+5. Remove Palm Jumeirah video scene
+6. Create LeadCapturePopup and add to PopupLayer
+7. Audit homepage for mode-switch layout gaps
+
