@@ -1,115 +1,54 @@
 
 
-# Fix Plan: Card Photos, "Project Not Found", Developer Hero, Sold Out Badge, UI Colors, and More Button
+# Fix: Search Not Finding Projects (Hybrid Search: Reelly API + Local Database)
 
-This plan addresses the multiple issues reported on the /properties page and related pages.
+## Root Cause
 
----
+The search works correctly -- the keyword "Sunset Bay Grand" IS being sent to the Reelly API. However, the **Reelly API returns 0 results** for this project name. The project does exist in the **local database** (it was synced previously), but the `/properties` page only queries the live Reelly API and never checks the local `projects` table.
 
-## Issue 1: "Project Not Found" When Clicking Cards
+This means any project that the Reelly API search can't find will appear missing, even though the data is already stored locally.
 
-**Root Cause:** The /properties page uses `PropertiesReelly.tsx` which fetches projects from the `reelly-projects` edge function. Each card links to `/project/{slug}`. But `ProjectDetail.tsx` fetches the project from the local `projects` database table using `useProject(slug)`. If a Reelly project's slug doesn't exist in the local `projects` table, it shows "Project not found".
+## Fix: Add Local Database Fallback Search
 
-**Fix:** Update `ProjectDetail.tsx` to add a fallback -- if the project is not found in the local `projects` table, fetch it from the `reelly-projects` edge function by slug, then map the Reelly data to the `ProjectDetailData` format. This ensures every card that appears on the listings page is viewable when clicked.
+When the Reelly API returns few or no results for a search query, also search the local `projects` table and merge the results together. This ensures all synced projects are always findable.
 
-**Files:**
-- `src/pages/ProjectDetail.tsx` -- Add Reelly fallback fetch
-- `src/hooks/useReellyProjects.ts` -- Add a `useReellyProjectBySlug` hook
+### Changes
 
----
+**1. Create a new hook: `useLocalProjectSearch`** (in `src/hooks/useLocalProjectSearch.ts`)
+- Uses Supabase to query the local `projects` table with `ilike` on the project name
+- Only triggers when a search keyword is present
+- Returns projects in the same `ReellyProject` shape so they can be merged seamlessly
 
-## Issue 2: Card Photos Missing (Hotels/Residences)
+**2. Update `src/pages/PropertiesReelly.tsx`**
+- Import and call `useLocalProjectSearch` with the debounced search term
+- Merge local results with Reelly API results, deduplicating by project name (case-insensitive)
+- Local results appear at the end of the list (Reelly results take priority)
+- Update the total count to reflect merged results
 
-**Root Cause:** `ReellyProjectCard.tsx` renders images from `project.images[currentImageIndex]?.image_url || project.thumbnail`. If both `images` array and `thumbnail` are empty/null, the `VerifiedMedia` component shows a placeholder. This is a data issue -- some projects from the Reelly API come without images.
+**3. Update the edge function `reelly-projects/index.ts`** (no changes needed -- it already passes search correctly)
 
-**Fix:** 
-- In `ReellyProjectCard.tsx`, add a fallback to `project.gallery[0]` (the gallery array from Reelly) when images array is empty and thumbnail is null.
-- Also ensure the `reelly-projects` edge function returns gallery images mapped into the `images` array if `project_images` are empty.
+### How Deduplication Works
 
-**Files:**
-- `src/components/ReellyProjectCard.tsx` -- Add gallery fallback for image source
+```text
+User searches "Sunset Bay Grand"
+    |
+    +--> Reelly API: 0 results
+    |
+    +--> Local DB: 1 result (Sunset Bay Grand)
+    |
+    +--> Merged: 1 result shown
+```
 
----
+If both sources return the same project, deduplicate by matching slugs so no duplicates appear.
 
-## Issue 3: "Sold Out" Badge Position -- Move from Right to Left
+### Technical Details
 
-**Current:** In `ProjectCard.tsx` (line 279-285), the "Sold Out" badge is at `top-3 right-3`, overlapping the favorite/shortlist buttons.
+- The local search query: `SELECT * FROM projects WHERE name ILIKE '%search_term%' LIMIT 20`
+- Map local `projects` table columns to the `ReellyProject` interface shape (name, slug, price_from, thumbnail, etc.)
+- The local fallback only activates when a search keyword exists (not for general browsing)
 
-**Fix:** Move the "Sold Out" badge to the LEFT side (`top-3 left-3`), offset below the developer logo if present (same as the sale status badge logic). Remove the duplicate `saleStatusBadge` that also shows "Sold Out" on the left to avoid double badges.
+### Files Changed
 
-**Files:**
-- `src/components/ProjectCard.tsx` -- Move Sold Out badge from right to left, deduplicate with saleStatusBadge
-- `src/components/ReellyProjectCard.tsx` -- Same treatment
-
----
-
-## Issue 4: Developer Detail Page -- Black Screen, No Hero Content
-
-**Root Cause:** The developer hero section (line 112-138 in `DeveloperDetail.tsx`) only renders if `developer.feature_image_url` exists. Many developers don't have a feature image, so the hero is completely skipped, showing only the content section directly (which appears as a "black page" flash during loading).
-
-**Fix:**
-- When no `feature_image_url` exists, show a hero section with a dark gradient background and the developer name/tagline (instead of skipping entirely).
-- The loading skeleton already exists but is minimal -- enhance it to show a full-height skeleton hero during load to prevent the black flash.
-
-**Files:**
-- `src/pages/DeveloperDetail.tsx` -- Add fallback hero when no feature image; improve loading skeleton
-
----
-
-## Issue 5: Gold Color Mixing with Orange -- Developer Name Uses Two Colors
-
-**Current:** In `ProjectCard.tsx`, the developer name uses gold (`text-gold`), but the "...more" button uses a gradient `from-gold via-handover to-gold` which includes the orange handover color. The price also uses `text-handover` (orange) and `text-gold` inconsistently.
-
-**Fix:**
-- Change "...more" link from the gold-to-orange gradient to solid `text-gold font-semibold` for consistency
-- Standardize price color to `text-gold` only (remove `text-handover` from price display)
-- Same treatment in `ReellyProjectCard.tsx`
-
-**Files:**
-- `src/components/ProjectCard.tsx` -- Unify to gold only, remove orange from "...more" and price
-- `src/components/ReellyProjectCard.tsx` -- Same changes
-
----
-
-## Issue 6: "...more" Button Not Readable Enough
-
-**Fix:** Make the "...more" text more prominent:
-- Change from inline gradient text to a visible `text-gold font-bold underline` style
-- Add a small arrow icon to make it clearly clickable
-
-**Files:**
-- `src/components/ProjectCard.tsx` -- Restyle "...more" link
-- `src/components/ReellyProjectCard.tsx` -- Same
-
----
-
-## Issue 7: CTA Buttons (Email, Call, Chat) Redirect
-
-**Current:** The Email, Call, and WhatsApp buttons use `<a href=...>` tags which should work. However, `onClick={(e) => e.stopPropagation()}` might interfere in some cases.
-
-**Fix:** Verify all three buttons use proper `href` attributes with correct protocols (`mailto:`, `tel:`, WhatsApp URL). Remove unnecessary `stopPropagation` if the buttons are inside an `<a>` link (they're outside the Link wrapper, so stopPropagation isn't needed on the CTA section).
-
-**Files:**
-- `src/components/ProjectCard.tsx` -- Verify CTA button hrefs
-- `src/components/ReellyProjectCard.tsx` -- Same
-
----
-
-## Implementation Order
-
-1. Move "Sold Out" badge from right to left (both card components)
-2. Fix gold/orange color mixing -- unify to gold only
-3. Make "...more" button readable
-4. Add image gallery fallback for missing card photos
-5. Fix developer detail hero (fallback for missing feature image)
-6. Fix "Project Not Found" -- add Reelly fallback in ProjectDetail
-7. Verify CTA button redirects
-
-## Files Changed Summary
-
-- `src/components/ProjectCard.tsx` -- Badge position, colors, "...more" styling
-- `src/components/ReellyProjectCard.tsx` -- Same fixes
-- `src/pages/DeveloperDetail.tsx` -- Fallback hero section
-- `src/pages/ProjectDetail.tsx` -- Reelly fallback for project detail
-- `src/hooks/useReellyProjects.ts` -- Add single-project fetch hook
+- **New file:** `src/hooks/useLocalProjectSearch.ts` -- Hook to search local projects table
+- **Modified:** `src/pages/PropertiesReelly.tsx` -- Merge local search results with Reelly API results
 
