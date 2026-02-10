@@ -1,95 +1,109 @@
 
-# Fix Project Enrichment: API URL, Complete Data Extraction, and Clickable Cards
 
-## Problem Summary
-The enrichment test shows identical "before" and "after" because:
-1. The Reelly API URL is wrong (`/api/v2/projects/` instead of `/api/v2/clients/projects/`)
-2. The function only extracts 5 fields (amenities, USPs, distances, images, docs) but ignores FAQs, floor plans, payment plans, unit types, description, video, and highlights
-3. The before/after cards are not clickable -- they should link to the project detail page
+# Fix News System: Pre-load Real Articles with Images, Full Content, and Updated UI
 
----
+## Current Problems
 
-## Changes
+1. **Empty news page**: The database has 30 articles but ALL have `image_url = NULL` and `content = NULL`. Users see cards with no photos and clicking them shows an unreadable detail page with just a 1-line excerpt.
+2. **Provident blog is not scrapeable**: The site blocks automated scraping. Instead, we will use the existing Firecrawl + AI pipeline to scrape each article's `source_url` individually to get full content and find a relevant image.
+3. **No "Refresh" button needed**: The button should be hidden from regular users. News should load automatically from the database.
+4. **NewsDetail page uses old design**: Still uses gold-on-black theme with a small hero image. Needs the champagne 3-layer design system matching the rest of the site.
 
-### 1. Fix Reelly API URL in Edge Function
+## Solution
 
-**File: `supabase/functions/enrich-project-test/index.ts`**
+### Part 1: Enrich Existing 30 Articles (Edge Function Update)
 
-Change line 19 from:
+Update `ai-news-collector` to add a second pass that enriches articles missing content/images:
+
+- For each article with `content IS NULL` or `image_url IS NULL`:
+  - Scrape the `source_url` via Firecrawl to get the full article markdown
+  - Use AI to extract the full article body text (cleaned, readable paragraphs)
+  - Find a relevant image from the scraped page, or assign a high-quality Unsplash Dubai image based on the article category
+  - Update the database row with `content` and `image_url`
+
+Add a new action `enrich` alongside the existing `collect` action so both can be triggered.
+
+On initial page load, if articles exist but have no content, auto-trigger enrichment.
+
+### Part 2: Remove "Refresh News" Button from Public View
+
+- Remove the "Refresh News" button entirely from the public news page
+- News collection/enrichment will only happen via admin or automated triggers
+- The page simply displays whatever is in the database
+
+### Part 3: Redesign NewsDetail Page (Champagne Theme)
+
+Replace the current gold-on-black NewsDetail with the champagne 3-layer design:
+
+- Full-width hero image (100vh on mobile, 70vh on desktop) with gradient overlay
+- Title overlaid on hero in white text (large, Poppins font)
+- Article body in a champagne `jj-layer-active` card below the hero
+- Source badge and date in the meta row
+- Full readable paragraphs (not just excerpt)
+- "View Original Source" link at the bottom with the source URL
+- Back to News button in champagne style
+- Fast loading: no spinner delay, instant render from cache
+
+### Part 4: Auto-assign Category Images
+
+Create a mapping of categories to high-quality Unsplash Dubai photos as fallbacks:
+
+| Category | Image Theme |
+|----------|------------|
+| Policy | Dubai government buildings |
+| Economic | Dubai skyline / business |
+| Market Update | Dubai Marina / properties |
+| Government | UAE flag / landmarks |
+| Analysis | Charts / Dubai aerial |
+| Developer News | Construction / new buildings |
+
+These serve as fallbacks when the source article has no extractable image.
+
+## Technical Details
+
+### Files to modify
+
+| File | Changes |
+|------|---------|
+| `supabase/functions/ai-news-collector/index.ts` | Add `enrich` action that scrapes each article's source_url for full content and images, updates DB |
+| `src/pages/News.tsx` | Remove "Refresh News" button, remove the refresh handler, clean up empty state |
+| `src/pages/NewsDetail.tsx` | Complete redesign with champagne 3-layer system, full-bleed hero, readable content, "View Original Source" link |
+
+### Enrichment flow
+
 ```
-https://api-reelly.up.railway.app/api/v2/projects/${reellyId}
-```
-to:
-```
-https://api-reelly.up.railway.app/api/v2/clients/projects/${reellyId}
-```
-
-This matches the working URL used by all other Reelly functions (defined in `_shared/reelly-types.ts` as `REELLY_API_BASE`).
-
----
-
-### 2. Extract ALL Missing Fields from Reelly API
-
-Add extraction for these additional fields in the edge function:
-
-| Field | Source in Reelly API | DB Column |
-|-------|---------------------|-----------|
-| FAQs | `project.faqs` | `faqs` (JSONB) |
-| Floor Plans | `project.floor_plans` | `floor_plan_types` (JSONB) |
-| Payment Plan | `project.payment_plan` | `payment_plan` (text) |
-| Payment Breakdown | `payment_plan.milestones` | `payment_breakdown` (JSONB) |
-| Unit Types | `project.units` / `project.unit_types` | `unit_types` (JSONB) |
-| Description | `project.overview` | `description` (text) |
-| Video URL | `project.video_reviews[0].url` | `video_url` (text) |
-| Highlights | `project.highlights` | `highlights` (JSONB) |
-| Service Charge | `project.service_charge` | `service_charge` (numeric) |
-| ROI Estimate | `project.roi_estimate` | `roi_estimate` (numeric) |
-
-Update the "before" snapshot to include counts for all these fields.
-Update the "after" to show what would be added.
-Update the "apply" action to write all fields to the database.
-
----
-
-### 3. Make Before/After Cards Clickable
-
-**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
-
-Wrap both the BEFORE and AFTER card images/titles with a link to the project detail page:
-```tsx
-<a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer">
+For each article WHERE content IS NULL:
+  1. Scrape source_url via Firecrawl (markdown format)
+  2. AI extracts: full article text + main image URL
+  3. If no image found: assign category-based Unsplash fallback
+  4. UPDATE market_news SET content = ..., image_url = ... WHERE id = ...
 ```
 
-This opens the project listing page in a new tab when clicking on either card.
+### NewsDetail redesign structure
 
----
+```
+- Full-bleed hero image (h-[60vh] md:h-[70vh])
+- Gradient overlay (from-black via-black/40 to-transparent)
+- Back button (top-left, glass pill)
+- Title + badges overlaid on hero bottom
+- Below hero: jj-layer-2 container
+  - jj-layer-active card with:
+    - Date + Source meta row
+    - Excerpt as highlighted quote
+    - Full content paragraphs (readable, dark text on champagne)
+    - Source attribution card at bottom with "View Original Source" link
+    - Back to News button
+```
 
-### 4. Update Before/After Display to Show All Fields
+### Image fallback map (Unsplash)
 
-Add rows to the stats grid for the new fields:
-- FAQs count
-- Floor plans count  
-- Unit types count
-- Has description (yes/no)
-- Has video (yes/no)
-- Has payment plan (yes/no)
-- Highlights count
-
-Each row highlights in green when the "after" value is greater than the "before" value.
-
----
-
-### 5. Update TypeScript Interface
-
-**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
-
-Expand the `EnrichmentTestResult` interface to include all new fields in `before` and `after` snapshots.
-
----
-
-## Files to Modify
-
-| File | Change |
-|------|--------|
-| `supabase/functions/enrich-project-test/index.ts` | Fix API URL, add extraction for FAQs/floor plans/payment/units/description/video/highlights, update apply logic |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Make cards clickable, expand interface, show all field counts in before/after |
+```typescript
+const CATEGORY_IMAGES: Record<string, string> = {
+  "Policy": "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1200&q=80",
+  "Economic": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80",
+  "Market Update": "https://images.unsplash.com/photo-1622015663319-e97e697503ee?w=1200&q=80",
+  "Government": "https://images.unsplash.com/photo-1597659840241-37e2b9c2f55f?w=1200&q=80",
+  "Analysis": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
+  "Developer News": "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1200&q=80",
+};
+```
