@@ -568,6 +568,7 @@ export type Database = {
           id: string
           image_url: string | null
           is_active: boolean | null
+          is_high_demand: boolean | null
           is_trending: boolean | null
           latitude: number | null
           longitude: number | null
@@ -590,6 +591,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          is_high_demand?: boolean | null
           is_trending?: boolean | null
           latitude?: number | null
           longitude?: number | null
@@ -612,6 +614,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          is_high_demand?: boolean | null
           is_trending?: boolean | null
           latitude?: number | null
           longitude?: number | null

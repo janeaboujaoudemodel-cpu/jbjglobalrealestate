@@ -1,0 +1,1 @@
+ALTER TABLE areas ADD COLUMN is_high_demand boolean DEFAULT false;

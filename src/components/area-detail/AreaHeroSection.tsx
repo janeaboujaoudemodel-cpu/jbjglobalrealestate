@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MapPin, ChevronRight, TrendingUp, Building2, Users, Search, BarChart3 } from "lucide-react";
+import { MapPin, ChevronRight, TrendingUp, Building2, Users, Search, BarChart3, Flame } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import type { Area } from "@/hooks/useAreas";
 
 interface AreaHeroSectionProps {
-  area: Area & { developer_count?: number; project_count_sale?: number; avg_price_sqft?: number; hero_image_url?: string };
+  area: Area & { developer_count?: number; project_count_sale?: number; avg_price_sqft?: number; hero_image_url?: string; is_high_demand?: boolean };
 }
 
 const fadeInUp = {
@@ -75,6 +75,12 @@ export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
             <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs rounded-full">
               <TrendingUp className="w-3 h-3" />
               Trending
+            </span>
+          )}
+          {area.is_high_demand && (
+            <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 bg-red-500/20 text-red-400 text-xs rounded-full">
+              <Flame className="w-3 h-3" />
+              High Demand
             </span>
           )}
         </motion.div>
