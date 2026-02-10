@@ -146,7 +146,7 @@ const NewsDetail = () => {
       />
       <article className="min-h-screen bg-black">
         {/* Full-Screen Hero Image - High Quality */}
-        <div className="relative h-[60vh] md:h-[70vh] overflow-hidden">
+        <div className="relative h-[80vh] md:h-[90vh] overflow-hidden">
           <img
             src={heroImage}
             alt={article.title}

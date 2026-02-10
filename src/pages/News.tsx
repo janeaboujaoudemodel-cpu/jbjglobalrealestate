@@ -205,7 +205,7 @@ const News = () => {
                         <span className="text-xs text-black bg-gold px-3 py-1 rounded-full font-medium">
                           Featured
                         </span>
-                        <span className="text-xs text-gold bg-gold/10 px-3 py-1 rounded-full border border-gold/20">
+                        <span className="text-xs text-white bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20 font-medium">
                           {filteredNews[0].category}
                         </span>
                         <span className="text-xs text-zinc-600 bg-zinc-100 px-3 py-1 rounded-full flex items-center gap-1 border border-zinc-200">
@@ -262,7 +262,7 @@ const News = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                   <div className="absolute top-3 left-3 flex gap-2">
-                    <span className="text-xs text-gold bg-gold/10 backdrop-blur-sm px-3 py-1 rounded-full border border-gold/20">
+                    <span className="text-xs text-white bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20 font-medium">
                       {article.category}
                     </span>
                   </div>
