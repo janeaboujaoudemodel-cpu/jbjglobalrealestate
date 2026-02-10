@@ -135,12 +135,14 @@ export function useFilteredProjects(
         return false;
       }
 
-      // Trending area filter (matches location)
+      // Trending area filter (matches location, community, or area_name)
       if (filters.trendingArea) {
         const areaName = filters.trendingArea.replace(/-/g, " ").toLowerCase();
+        const projectAreaName = (project as unknown as { area_name?: string }).area_name;
         const matchesArea =
           project.location?.toLowerCase().includes(areaName) ||
-          project.community?.name.toLowerCase().includes(areaName);
+          project.community?.name.toLowerCase().includes(areaName) ||
+          projectAreaName?.toLowerCase().includes(areaName);
         if (!matchesArea) return false;
       }
 
