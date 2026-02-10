@@ -395,10 +395,20 @@ async function updateProjectWithDetails(
       updatedFields.push("units_count");
     }
 
-    // Building count
+    // Building count (NOT floors - building_count is number of buildings, not floors)
     if (detail.building_count > 0) {
-      updateData.floors = detail.building_count;
+      updateData.building_count = detail.building_count;
       updatedFields.push("building_count");
+    }
+
+    // Calculate bedrooms min/max from unit types
+    if (unitTypes.length > 0) {
+      const bedroomValues = unitTypes.map((u: any) => u.bedrooms).filter((b: any) => typeof b === 'number' && b >= 0);
+      if (bedroomValues.length > 0) {
+        updateData.bedrooms_min = Math.min(...bedroomValues);
+        updateData.bedrooms_max = Math.max(...bedroomValues);
+        updatedFields.push("bedrooms_min", "bedrooms_max");
+      }
     }
 
     // Description (strip markdown headers)

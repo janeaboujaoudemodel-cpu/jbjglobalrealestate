@@ -42,7 +42,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
     // Fetch current project from DB - include ALL enrichable fields
     const { data: project, error: projErr } = await supabase
       .from("projects")
-      .select("id, name, slug, reelly_id, amenities, usp_bullets, location_distances, description, cover_image_url, developer_name, area_name, price_from, price_to, faqs, floor_plan_types, payment_plan, payment_breakdown, unit_types, video_url, highlights, service_charge, roi_estimate")
+      .select("id, name, slug, reelly_id, amenities, usp_bullets, location_distances, description, cover_image_url, developer_name, area_name, price_from, price_to, faqs, floor_plan_types, payment_plan, payment_breakdown, unit_types, video_url, highlights, service_charge, roi_estimate, total_units, building_count, bedrooms_min, bedrooms_max, floors")
       .eq("slug", slug)
       .single();
 
@@ -75,6 +75,11 @@ Deno.serve(async (req: Request): Promise<Response> => {
       highlights_count: (project.highlights as any[])?.length || 0,
       has_service_charge: project.service_charge != null,
       has_roi_estimate: project.roi_estimate != null,
+      total_units: project.total_units,
+      building_count: project.building_count,
+      bedrooms_min: project.bedrooms_min,
+      bedrooms_max: project.bedrooms_max,
+      floors: project.floors,
     };
 
     // Fetch enrichment data from Reelly

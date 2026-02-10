@@ -63,7 +63,7 @@ export default function HouseDetailsSection({
       value: `${floors} Floors` 
     });
   }
-  if (totalUnits) {
+  if (totalUnits && totalUnits > 4) {
     details.push({ icon: Building2, label: "Total Units", value: `${totalUnits} Units` });
   }
   if (ceilingHeight) {

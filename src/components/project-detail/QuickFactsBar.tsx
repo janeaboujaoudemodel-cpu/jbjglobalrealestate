@@ -32,7 +32,7 @@ export default function QuickFactsBar({
       icon: Building2, 
       label: "Total Units", 
       value: totalUnits ? `${totalUnits} Units` : null,
-      show: !!totalUnits 
+      show: !!totalUnits && totalUnits > 4
     },
     { 
       icon: Layers, 
