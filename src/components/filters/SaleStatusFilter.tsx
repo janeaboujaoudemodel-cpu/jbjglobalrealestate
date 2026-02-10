@@ -65,7 +65,7 @@ export function SaleStatusFilter({
             "justify-between min-w-[160px] h-11",
             isDark 
               ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-white/90 border-gold/30 text-black hover:bg-champagne-light",
+              : "bg-white border-gold/30 text-black hover:bg-champagne-light",
             className
           )}
         >
@@ -94,6 +94,9 @@ export function SaleStatusFilter({
           isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-white border-gold/20"
         )}
         align="start"
+        side="bottom"
+        sideOffset={8}
+        avoidCollisions
       >
         <div className="space-y-1">
           {SALE_STATUS_OPTIONS.filter(opt => opt.value !== 'all').map((option) => {
@@ -184,7 +187,7 @@ export function SaleStatusSelect({
             "justify-between min-w-[140px] h-11",
             isDark 
               ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-white/90 border-gold/30 text-black hover:bg-champagne-light",
+              : "bg-white border-gold/30 text-black hover:bg-champagne-light",
             className
           )}
         >
@@ -203,6 +206,9 @@ export function SaleStatusSelect({
           isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-white border-gold/20"
         )}
         align="start"
+        side="bottom"
+        sideOffset={8}
+        avoidCollisions
       >
         <div className="space-y-1">
           {SALE_STATUS_OPTIONS.map((option) => {

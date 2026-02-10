@@ -93,11 +93,22 @@ const Index = () => {
           />
           {/* Video overlays the image when it loads/plays - deferred for performance */}
           <video 
+            ref={(el) => {
+              if (el && !el.dataset.deferred) {
+                el.dataset.deferred = 'true';
+                // Defer video loading to prioritize initial page render
+                setTimeout(() => {
+                  el.preload = 'auto';
+                  el.src = '/videos/hero-video.mp4';
+                  el.load();
+                }, 2000);
+              }
+            }}
             autoPlay 
             loop 
             muted 
             playsInline
-            preload="none"
+            preload="metadata"
             poster={luxuryVillaHero}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
@@ -107,14 +118,6 @@ const Index = () => {
               backfaceVisibility: 'hidden',
               opacity: 0,
               transition: 'opacity 0.5s ease-in-out',
-            }}
-            onLoadStart={(e) => {
-              // Delay video load to prioritize initial page render
-              const video = e.currentTarget;
-              setTimeout(() => {
-                video.preload = "auto";
-                video.load();
-              }, 2000);
             }}
             onCanPlay={(e) => {
               // Fade in video when ready to play
