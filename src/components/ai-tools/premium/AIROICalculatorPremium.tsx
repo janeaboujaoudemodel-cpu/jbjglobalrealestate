@@ -20,6 +20,7 @@ import {
 import { useAITool } from "../AIToolsProvider";
 import { toast } from "sonner";
 import AIToolPremiumLayout from "../AIToolPremiumLayout";
+import { Link } from "react-router-dom";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -347,7 +348,8 @@ const AIROICalculatorPremium = () => {
                 <div>
                   <h4 className="text-zinc-300 font-semibold mb-2">Important Disclaimer</h4>
                   <p className="text-zinc-400 text-sm leading-relaxed">
-                    This analysis is AI-generated for informational purposes only. Investment decisions should be made with professional advice. 
+                    This analysis is AI-generated for informational purposes only. Does not constitute financial advice.{" "}
+                    <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
                     Past performance does not guarantee future results. Market conditions can change rapidly.
                   </p>
                 </div>

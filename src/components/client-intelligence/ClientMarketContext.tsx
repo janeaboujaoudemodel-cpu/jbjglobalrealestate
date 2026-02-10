@@ -1,4 +1,5 @@
 import { TrendingUp, TrendingDown, Minus, Clock, Info } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -147,7 +148,8 @@ const ClientMarketContext = ({
         {/* Mandatory Disclaimer */}
         <p className="text-[10px] text-zinc-400 border-t border-zinc-200 pt-3">
           Insights are based on aggregated official data and are provided for informational purposes only.
-          This does not constitute financial, investment, or legal advice.
+          This does not constitute financial, investment, or legal advice.{" "}
+          <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
         </p>
       </CardContent>
     </Card>
