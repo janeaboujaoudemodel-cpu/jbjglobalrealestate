@@ -687,32 +687,59 @@ export function ReellyImportPanel() {
     }
 
     setIsBackfilling(true);
-    setBackfillResult(null);
-    setBackfillProjectList([]);
 
     // Capture start time ONCE for the entire run so progress tracking works
     const backfillStartedAt = new Date().toISOString();
 
     try {
-      let aggregated = { processed: 0, updated: 0, failed: 0, remaining: 999 };
-      let allResults: Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }> = [];
+      // Load previous progress from most recent backfill job
+      const { data: prevJob } = await supabase
+        .from("sync_jobs")
+        .select("*")
+        .eq("job_type", "reelly_backfill")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      const prevUpdated = prevJob?.stats_updated || 0;
+      const prevFailed = prevJob?.stats_errors || 0;
+      const prevResults = (Array.isArray(prevJob?.error_log) ? prevJob.error_log : []) as Array<{ name: string; slug?: string; status: string; images?: number; docs?: number }>;
+
+      let aggregated = { processed: prevUpdated + prevFailed, updated: prevUpdated, failed: prevFailed, remaining: 999 };
+      let allResults = [...prevResults];
+      setBackfillResult({
+        success: true,
+        ...aggregated,
+        message: `Resuming from previous progress (${prevUpdated} updated, ${prevFailed} failed)...`,
+      });
+      setBackfillProjectList(allResults);
+
       let batches = 0;
       const maxBatches = mode === "all" ? 100 : 1;
 
-      // Create a sync_jobs entry for persistence
-      const { data: jobRow } = await supabase
-        .from("sync_jobs")
-        .insert({
-          job_type: "reelly_backfill",
-          status: "running",
-          stats_updated: 0,
-          stats_errors: 0,
-          stats_skipped: 0,
-          error_log: [],
-        })
-        .select("id")
-        .single();
-      const jobId = jobRow?.id;
+      // Reuse existing job row or create new one
+      let jobId: string | undefined;
+      if (prevJob?.id && prevJob?.status !== "completed") {
+        jobId = prevJob.id;
+        await supabase
+          .from("sync_jobs")
+          .update({ status: "running", updated_at: new Date().toISOString() })
+          .eq("id", jobId);
+      } else {
+        const { data: jobRow } = await supabase
+          .from("sync_jobs")
+          .insert({
+            job_type: "reelly_backfill",
+            status: "running",
+            stats_updated: prevUpdated,
+            stats_errors: prevFailed,
+            stats_skipped: 0,
+            error_log: prevResults.slice(-500) as unknown as Json[],
+          })
+          .select("id")
+          .single();
+        jobId = jobRow?.id;
+      }
 
       while (aggregated.remaining > 0 && batches < maxBatches) {
         const { data, error } = await supabase.functions.invoke("reelly-backfill-projects", {
