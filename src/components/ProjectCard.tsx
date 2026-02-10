@@ -50,7 +50,10 @@ const formatPriceWithCurrency = (price: number, currency: string = 'AED'): strin
   const converted = Math.round(price * CURRENCY_RATES[currency]);
   const symbol = CURRENCY_SYMBOLS[currency];
   if (converted >= 1000000) {
-    return `${symbol} ${(converted / 1000000).toFixed(1)}M`;
+    const millions = converted / 1000000;
+    // Show 1 decimal only if it's not .0
+    const formatted = millions % 1 === 0 ? `${millions}` : `${millions.toFixed(1)}`;
+    return `${symbol} ${formatted}M`;
   }
   if (converted >= 1000) {
     return `${symbol} ${Math.round(converted / 1000)}K`;

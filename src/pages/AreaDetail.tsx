@@ -80,26 +80,30 @@ const AreaDetail = () => {
       <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4">
           <motion.div 
-            className="max-w-4xl mx-auto text-center bg-white rounded-3xl p-10 md:p-12 border border-gold/30 shadow-lg"
+            className="max-w-4xl mx-auto text-center bg-white rounded-3xl p-10 md:p-12 border border-gold/30 shadow-lg relative overflow-hidden"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
+            {/* Gold accent line at top */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
+            
+            <MapPin className="w-8 h-8 text-gold mx-auto mb-4" />
             <h2 className="text-black text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
               Explore Properties in {area.name}
             </h2>
             <p className="text-zinc-600 text-lg mb-8 max-w-2xl mx-auto">
-              Browse our collection of verified properties in this area.
+              Browse our curated collection of verified properties in this premium neighborhood.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to={`/properties?area=${area.slug}`}>
-                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all">
+                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all shadow-md">
                   View Properties
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
               <Link to="/contact">
-                <Button variant="secondary" className="border-black text-black hover:bg-black hover:text-white px-8 py-6 text-base">
+                <Button variant="secondary" className="border-2 border-black text-black hover:bg-black hover:text-white px-8 py-6 text-base font-bold shadow-md">
                   <Phone className="w-5 h-5 mr-2" />
                   Contact Us
                 </Button>
