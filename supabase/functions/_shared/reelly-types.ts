@@ -99,6 +99,7 @@ export interface ReellyProject {
   is_published: boolean;
   cover_image: ReellyCoverImage | null;
   updated_at: string;
+  // Standard field names
   images?: ReellyImage[];
   gallery?: ReellyImage[];
   documents?: ReellyDocument[];
@@ -119,6 +120,24 @@ export interface ReellyProject {
   roi_estimate?: number;
   rental_yield_estimate?: number;
   service_charge?: number;
+  // Actual Reelly API field names (discovered via diagnostics)
+  project_amenities?: Array<{ id?: number; amenity?: { id?: number; name?: string; icon?: string }; name?: string }>;
+  payment_plans?: Array<{ name?: string; description?: string; milestones?: any[]; installments?: any[] }>;
+  marketing_brochure?: string | { url?: string };
+  general_plan?: Array<{ url?: string; image?: string }> | null;
+  lobby?: Array<{ url?: string; image?: string }> | null;
+  interior?: Array<{ url?: string; image?: string }> | null;
+  architecture?: Array<{ url?: string; image?: string }> | null;
+  typical_units?: Array<any>;
+  buildings?: Array<any>;
+  // Payment fields
+  down_payment?: number;
+  during_construction?: number;
+  on_handover?: number;
+  on_completion?: number;
+  installment_plan?: any;
+  // Additional
+  [key: string]: any;
 }
 
 export interface ReellyResponse {
@@ -187,11 +206,25 @@ export function extractGalleryImages(project: ReellyProject): Array<{ url: strin
     images.push({ url: project.cover_image.url, alt_text: `${project.name} - Cover`, display_order: order++ });
     seen.add(project.cover_image.url);
   }
+  // Try standard fields first
   for (const img of project.images || project.gallery || []) {
     const url = typeof img === 'string' ? img : img.url;
     if (url && !seen.has(url)) {
       images.push({ url, alt_text: `${project.name} - Gallery ${order}`, display_order: order++ });
       seen.add(url);
+    }
+  }
+  // Try Reelly-specific image categories: general_plan, lobby, interior, architecture
+  for (const category of ['general_plan', 'lobby', 'interior', 'architecture'] as const) {
+    const categoryImages = (project as any)[category];
+    if (Array.isArray(categoryImages)) {
+      for (const img of categoryImages) {
+        const url = typeof img === 'string' ? img : (img?.url || img?.image);
+        if (url && !seen.has(url)) {
+          images.push({ url, alt_text: `${project.name} - ${category.replace('_', ' ')}`, display_order: order++ });
+          seen.add(url);
+        }
+      }
     }
   }
   return images;
@@ -209,11 +242,17 @@ export function extractVideos(project: ReellyProject): { video_url: string | nul
 export function extractDocuments(project: ReellyProject): Array<{ url: string; name: string; type: string }> {
   const docs: Array<{ url: string; name: string; type: string }> = [];
   const seen = new Set<string>();
+  // Standard fields
   for (const doc of project.documents || project.brochures || []) {
     const url = typeof doc === 'string' ? doc : doc.url;
     const name = typeof doc === 'object' ? (doc.name || 'Document') : 'Brochure';
     const type = typeof doc === 'object' ? (doc.type || 'brochure') : 'brochure';
     if (url && !seen.has(url)) { docs.push({ url, name, type }); seen.add(url); }
+  }
+  // Reelly-specific: marketing_brochure
+  if (project.marketing_brochure) {
+    const url = typeof project.marketing_brochure === 'string' ? project.marketing_brochure : project.marketing_brochure?.url;
+    if (url && !seen.has(url)) { docs.push({ url, name: 'Marketing Brochure', type: 'brochure' }); seen.add(url); }
   }
   return docs;
 }
@@ -234,9 +273,17 @@ export function extractFloorPlans(project: ReellyProject): Array<{ type: string;
 export function extractAmenities(project: ReellyProject): string[] {
   const amenities: string[] = [];
   const seen = new Set<string>();
+  // Standard fields
   for (const src of [project.amenities, project.facilities, project.features]) {
     for (const item of src || []) {
       const name = typeof item === 'string' ? item : item?.name;
+      if (name && !seen.has(name.toLowerCase())) { amenities.push(name); seen.add(name.toLowerCase()); }
+    }
+  }
+  // Reelly-specific: project_amenities (nested objects with amenity.name)
+  if (Array.isArray(project.project_amenities)) {
+    for (const item of project.project_amenities) {
+      const name = item?.amenity?.name || item?.name;
       if (name && !seen.has(name.toLowerCase())) { amenities.push(name); seen.add(name.toLowerCase()); }
     }
   }
@@ -245,6 +292,7 @@ export function extractAmenities(project: ReellyProject): string[] {
 
 export function extractUnitTypes(project: ReellyProject): Array<{ type: string; bedrooms?: number; bathrooms?: number; size_min?: number; size_max?: number; price_from?: number; price_to?: number; available?: number }> {
   const units: Array<{ type: string; bedrooms?: number; bathrooms?: number; size_min?: number; size_max?: number; price_from?: number; price_to?: number; available?: number }> = [];
+  // Standard fields
   for (const u of project.units || project.unit_types || []) {
     units.push({
       type: u.type || u.name || 'Unit',
@@ -256,6 +304,20 @@ export function extractUnitTypes(project: ReellyProject): Array<{ type: string; 
       price_to: u.price_to || u.price,
       available: u.available || u.count,
     });
+  }
+  // Reelly-specific: typical_units
+  if (units.length === 0 && Array.isArray(project.typical_units)) {
+    for (const u of project.typical_units) {
+      units.push({
+        type: u.type || u.name || u.unit_type || 'Unit',
+        bedrooms: u.bedrooms ?? u.bedroom_count,
+        bathrooms: u.bathrooms ?? u.bathroom_count,
+        size_min: u.size_min || u.area || u.size,
+        size_max: u.size_max || u.area || u.size,
+        price_from: u.price_from || u.price,
+        price_to: u.price_to || u.price,
+      });
+    }
   }
   return units;
 }

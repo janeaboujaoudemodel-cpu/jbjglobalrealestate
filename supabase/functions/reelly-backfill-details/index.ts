@@ -4,15 +4,19 @@ import {
   extractGalleryImages, extractVideos, extractDocuments, extractFloorPlans, extractAmenities, extractUnitTypes
 } from "../_shared/reelly-types.ts";
 
-async function fetchDetail(apiKey: string, id: number): Promise<ReellyProject | null> {
+async function fetchDetail(apiKey: string, id: number): Promise<{ project: ReellyProject | null; rawKeys: string[] }> {
   try {
     const res = await fetch(`${REELLY_API_BASE}/${id}`, {
       headers: { "X-API-Key": apiKey, "Accept": "application/json" },
     });
-    if (!res.ok) return null;
-    return res.json();
+    if (!res.ok) return { project: null, rawKeys: [] };
+    const raw = await res.json();
+    const rawKeys = Object.keys(raw || {});
+    // Handle possible nested response: { data: {...} } or direct object
+    const project = raw?.data || raw;
+    return { project, rawKeys };
   } catch {
-    return null;
+    return { project: null, rawKeys: [] };
   }
 }
 
@@ -34,24 +38,35 @@ Deno.serve(async (req) => {
 
     const body = await req.json().catch(() => ({}));
     const batchSize = Math.min(body.batch_size || 10, 50);
-    const specificProjectId = body.project_id; // optional: single project UUID
+    const specificProjectId = body.project_id;
+    const force = body.force === true;
 
-    // Build query: find projects with reelly_id that have few images or no payment data
-    let query = supabase
-      .from("projects")
-      .select("id, name, reelly_id, detail_fetched_at")
-      .not("reelly_id", "is", null)
-      .is("detail_fetched_at", null)
-      .order("created_at", { ascending: false })
-      .limit(batchSize);
-
+    let query;
     if (specificProjectId) {
       query = supabase
         .from("projects")
-        .select("id, name, reelly_id, detail_fetched_at")
+        .select("id, name, reelly_id, detail_fetched_at, amenities, floor_plan_types")
         .eq("id", specificProjectId)
         .not("reelly_id", "is", null)
         .limit(1);
+    } else if (force) {
+      // Force mode: re-fetch all projects with reelly_id
+      query = supabase
+        .from("projects")
+        .select("id, name, reelly_id, detail_fetched_at, amenities, floor_plan_types")
+        .not("reelly_id", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(batchSize);
+    } else {
+      // Default: find projects with EMPTY data (not just missing timestamp)
+      // amenities is text[] — empty = '{}', floor_plan_types is jsonb — empty = '[]'
+      query = supabase
+        .from("projects")
+        .select("id, name, reelly_id, detail_fetched_at, amenities, floor_plan_types")
+        .not("reelly_id", "is", null)
+        .or("amenities.is.null,amenities.eq.{}")
+        .order("created_at", { ascending: false })
+        .limit(batchSize);
     }
 
     const { data: projects, error: queryError } = await query;
@@ -69,14 +84,57 @@ Deno.serve(async (req) => {
 
     let updated = 0;
     let failed = 0;
-    const results: Array<{ name: string; status: string; images?: number; docs?: number }> = [];
+    let apiDiagnostics: { rawKeys: string[]; sampleFields: Record<string, unknown> } | null = null;
+    const results: Array<{ name: string; status: string; images?: number; docs?: number; amenities?: number; floor_plans?: number }> = [];
 
     for (const p of projects) {
       const reellyId = typeof p.reelly_id === "number" ? p.reelly_id : parseInt(p.reelly_id, 10);
       if (isNaN(reellyId)) { failed++; results.push({ name: p.name, status: "invalid_reelly_id" }); continue; }
 
-      const detail = await fetchDetail(apiKey, reellyId);
+      const { project: detail, rawKeys } = await fetchDetail(apiKey, reellyId);
       if (!detail) { failed++; results.push({ name: p.name, status: "api_fetch_failed" }); continue; }
+
+      // Log diagnostics for the first project to understand API structure
+      if (!apiDiagnostics) {
+        apiDiagnostics = {
+          rawKeys,
+          sampleFields: {
+            has_amenities: Array.isArray(detail.amenities),
+            amenities_count: Array.isArray(detail.amenities) ? detail.amenities.length : 0,
+            has_facilities: Array.isArray(detail.facilities),
+            facilities_count: Array.isArray(detail.facilities) ? detail.facilities.length : 0,
+            has_features: Array.isArray(detail.features),
+            features_count: Array.isArray(detail.features) ? detail.features.length : 0,
+            has_floor_plans: Array.isArray(detail.floor_plans),
+            floor_plans_count: Array.isArray(detail.floor_plans) ? detail.floor_plans.length : 0,
+            has_documents: Array.isArray(detail.documents),
+            documents_count: Array.isArray(detail.documents) ? detail.documents.length : 0,
+            has_brochures: Array.isArray(detail.brochures),
+            brochures_count: Array.isArray(detail.brochures) ? detail.brochures.length : 0,
+            has_units: Array.isArray(detail.units),
+            units_count: Array.isArray(detail.units) ? detail.units.length : 0,
+            has_unit_types: Array.isArray(detail.unit_types),
+            unit_types_count: Array.isArray(detail.unit_types) ? detail.unit_types.length : 0,
+            has_images: Array.isArray(detail.images),
+            images_count: Array.isArray(detail.images) ? detail.images.length : 0,
+            has_gallery: Array.isArray(detail.gallery),
+            gallery_count: Array.isArray(detail.gallery) ? detail.gallery.length : 0,
+            has_video_reviews: Array.isArray(detail.video_reviews),
+            video_reviews_count: Array.isArray(detail.video_reviews) ? detail.video_reviews.length : 0,
+            has_faqs: Array.isArray(detail.faqs),
+            faqs_count: Array.isArray(detail.faqs) ? detail.faqs.length : 0,
+            has_highlights: Array.isArray(detail.highlights),
+            highlights_count: Array.isArray(detail.highlights) ? detail.highlights.length : 0,
+            has_payment_plan: !!detail.payment_plan,
+            has_overview: !!detail.overview,
+            has_short_description: !!detail.short_description,
+            has_service_charge: detail.service_charge != null,
+            has_roi_estimate: detail.roi_estimate != null,
+            has_rental_yield: detail.rental_yield_estimate != null,
+          },
+        };
+        console.log(`[backfill] API diagnostics for ${p.name} (reelly_id=${reellyId}):`, JSON.stringify(apiDiagnostics));
+      }
 
       // Extract all data from detail endpoint
       const galleryImages = extractGalleryImages(detail);
@@ -86,22 +144,23 @@ Deno.serve(async (req) => {
       const amenities = extractAmenities(detail);
       const unitTypes = extractUnitTypes(detail);
 
+      // Track if we actually got data
+      let dataPopulated = false;
+
       // Update project with enriched data
-      const updateData: Record<string, unknown> = {
-        detail_fetched_at: new Date().toISOString(),
-      };
+      const updateData: Record<string, unknown> = {};
 
-      // Only update fields that have data
-      if (amenities.length) updateData.amenities = amenities;
-      if (floorPlans.length) updateData.floor_plan_types = floorPlans;
-      if (unitTypes.length) updateData.unit_types = unitTypes;
-      if (videos.video_url) updateData.video_url = videos.video_url;
+      if (amenities.length > 0) { updateData.amenities = amenities; dataPopulated = true; }
+      if (floorPlans.length > 0) { updateData.floor_plan_types = floorPlans; dataPopulated = true; }
+      if (unitTypes.length > 0) { updateData.unit_types = unitTypes; dataPopulated = true; }
+      if (videos.video_url) { updateData.video_url = videos.video_url; dataPopulated = true; }
 
-      // Extract payment plan info from detail
+      // Extract payment plan info
       if (detail.payment_plan) {
         updateData.payment_plan = typeof detail.payment_plan === "string"
           ? detail.payment_plan
           : JSON.stringify(detail.payment_plan);
+        dataPopulated = true;
       }
 
       // Extract payment breakdown
@@ -114,30 +173,57 @@ Deno.serve(async (req) => {
         }
         if (Object.keys(breakdown).length > 0) {
           updateData.payment_breakdown = breakdown;
+          dataPopulated = true;
         }
       }
 
-      const { error: updateError } = await supabase
-        .from("projects")
-        .update(updateData)
-        .eq("id", p.id);
+      // Extract description/overview if missing
+      if (detail.overview) { updateData.description = detail.overview; dataPopulated = true; }
+      if (detail.short_description && !detail.overview) { updateData.description = detail.short_description; dataPopulated = true; }
 
-      if (updateError) {
-        failed++;
-        results.push({ name: p.name, status: `update_error: ${updateError.message}` });
-        continue;
+      // Extract FAQs
+      if (detail.faqs && Array.isArray(detail.faqs) && detail.faqs.length > 0) {
+        updateData.faqs = detail.faqs.filter((f: any) => f?.question && f?.answer);
+        if ((updateData.faqs as any[]).length > 0) dataPopulated = true;
+      }
+
+      // Extract highlights
+      if (detail.highlights && Array.isArray(detail.highlights) && detail.highlights.length > 0) {
+        updateData.highlights = detail.highlights;
+        dataPopulated = true;
+      }
+
+      // Service charge & ROI
+      if (detail.service_charge != null) { updateData.service_charge = detail.service_charge; dataPopulated = true; }
+      if (detail.roi_estimate != null) { updateData.roi_estimate = detail.roi_estimate; dataPopulated = true; }
+      if (detail.rental_yield_estimate != null) { updateData.roi_estimate = detail.rental_yield_estimate; dataPopulated = true; }
+
+      // Only set detail_fetched_at if we ACTUALLY got data
+      if (dataPopulated) {
+        updateData.detail_fetched_at = new Date().toISOString();
+      }
+
+      if (Object.keys(updateData).length > 0) {
+        const { error: updateError } = await supabase
+          .from("projects")
+          .update(updateData)
+          .eq("id", p.id);
+
+        if (updateError) {
+          failed++;
+          results.push({ name: p.name, status: `update_error: ${updateError.message}` });
+          continue;
+        }
       }
 
       // Insert gallery images into project_images table
       if (galleryImages.length > 0) {
-        // First check existing images count
         const { count } = await supabase
           .from("project_images")
           .select("id", { count: "exact", head: true })
           .eq("project_id", p.id);
 
         if ((count || 0) < 3) {
-          // Delete existing single cover image and re-insert full gallery
           await supabase.from("project_images").delete().eq("project_id", p.id);
 
           const imageRows = galleryImages.map((img: { url: string; alt_text?: string }, idx: number) => ({
@@ -175,12 +261,13 @@ Deno.serve(async (req) => {
       updated++;
       results.push({
         name: p.name,
-        status: "success",
+        status: dataPopulated ? "success_with_data" : "success_no_new_data",
         images: galleryImages.length,
         docs: documents.length,
+        amenities: amenities.length,
+        floor_plans: floorPlans.length,
       });
 
-      // Throttle to avoid rate limits
       await new Promise((r) => setTimeout(r, 300));
     }
 
@@ -189,6 +276,7 @@ Deno.serve(async (req) => {
       processed: projects.length,
       updated,
       failed,
+      api_diagnostics: apiDiagnostics,
       results,
     }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e: unknown) {
