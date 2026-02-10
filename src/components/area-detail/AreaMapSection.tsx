@@ -1,8 +1,10 @@
+import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Link } from "react-router-dom";
-import { Map as MapIcon } from "lucide-react";
+import { Map as MapIcon, Maximize } from "lucide-react";
+import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -16,6 +18,82 @@ const defaultIcon = L.icon({
   popupAnchor: [1, -34],
 });
 
+type MapViewType = "satellite" | "street" | "terrain";
+
+const MAP_TILES: Record<MapViewType, { url: string; attribution: string }> = {
+  satellite: {
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    attribution: "Tiles &copy; Esri",
+  },
+  street: {
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  },
+  terrain: {
+    url: "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png",
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>',
+  },
+};
+
+function DynamicTileLayer({ mapView }: { mapView: MapViewType }) {
+  const map = useMap();
+  const layerRef = useRef<L.TileLayer | null>(null);
+
+  useEffect(() => {
+    if (layerRef.current) {
+      map.removeLayer(layerRef.current);
+    }
+    const { url, attribution } = MAP_TILES[mapView];
+    layerRef.current = L.tileLayer(url, { attribution, maxZoom: 19 });
+    layerRef.current.addTo(map);
+
+    return () => {
+      if (layerRef.current) {
+        map.removeLayer(layerRef.current);
+      }
+    };
+  }, [mapView, map]);
+
+  return null;
+}
+
+function MapViewToggle({
+  mapView,
+  onViewChange,
+  onOpenExternal,
+}: {
+  mapView: MapViewType;
+  onViewChange: (view: MapViewType) => void;
+  onOpenExternal: () => void;
+}) {
+  return (
+    <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
+      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-gold/40 shadow-lg p-1 flex flex-col gap-1">
+        {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
+          <button
+            key={view}
+            onClick={() => onViewChange(view)}
+            className={`px-3 py-2 text-xs font-medium rounded transition-all ${
+              mapView === view
+                ? "bg-gold text-foreground"
+                : "hover:bg-gold/20 text-muted-foreground"
+            }`}
+          >
+            {view.charAt(0).toUpperCase() + view.slice(1)}
+          </button>
+        ))}
+      </div>
+      <button
+        onClick={onOpenExternal}
+        className="w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-gold/40 shadow-lg hover:bg-gold/20 active:bg-gold/30 transition-all"
+        aria-label="Open in Google Maps"
+      >
+        <Maximize className="w-5 h-5 text-foreground" />
+      </button>
+    </div>
+  );
+}
+
 interface AreaMapSectionProps {
   areaName: string;
   areaLat?: number | null;
@@ -23,6 +101,8 @@ interface AreaMapSectionProps {
 }
 
 export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionProps) => {
+  const [mapView, setMapView] = useState<MapViewType>("satellite");
+
   const { data: projects } = useQuery({
     queryKey: ["area-map-projects", areaName],
     queryFn: async () => {
@@ -39,10 +119,9 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
     staleTime: 5 * 60 * 1000,
   });
 
-  // Determine center: use project centroids or area coords or default Dubai
   const projectsWithCoords = projects?.filter(p => p.latitude && p.longitude) || [];
-  
-  let center: [number, number] = [25.2048, 55.2708]; // Dubai default
+
+  let center: [number, number] = [25.2048, 55.2708];
   if (projectsWithCoords.length > 0) {
     const avgLat = projectsWithCoords.reduce((s, p) => s + Number(p.latitude), 0) / projectsWithCoords.length;
     const avgLng = projectsWithCoords.reduce((s, p) => s + Number(p.longitude), 0) / projectsWithCoords.length;
@@ -52,6 +131,11 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
   }
 
   if (projectsWithCoords.length === 0 && !areaLat) return null;
+
+  const externalMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${areaName}, Dubai, UAE`)}`;
+  const handleOpenExternal = () => {
+    window.open(externalMapsUrl, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
@@ -63,19 +147,24 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
           </h2>
         </div>
 
-        <div className="rounded-2xl overflow-hidden border-2 border-gold/30 shadow-2xl" style={{ touchAction: "none" }}>
+        <div className="rounded-xl overflow-hidden border border-gold/30 shadow-2xl" style={{ height: 500, touchAction: "none" }}>
           <MapContainer
             center={center}
             zoom={13}
             scrollWheelZoom={true}
             dragging={true}
             touchZoom={true}
-            style={{ height: "500px", width: "100%" }}
+            style={{ height: "100%", width: "100%" }}
+            zoomControl={false}
+            attributionControl={false}
           >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            <DynamicTileLayer mapView={mapView} />
+            <MapViewToggle
+              mapView={mapView}
+              onViewChange={setMapView}
+              onOpenExternal={handleOpenExternal}
             />
+            <MapNavigationControls latitude={center[0]} longitude={center[1]} />
             {projectsWithCoords.map((project) => (
               <Marker
                 key={project.id}

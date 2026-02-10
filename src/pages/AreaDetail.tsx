@@ -13,6 +13,7 @@ import { AreaHeroSection } from "@/components/area-detail/AreaHeroSection";
 import { AreaProjectsGrid } from "@/components/area-detail/AreaProjectsGrid";
 import { AreaDevelopersBar } from "@/components/area-detail/AreaDevelopersBar";
 import { AreaMapSection } from "@/components/area-detail/AreaMapSection";
+import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { AreaAIAnalyzer } from "@/components/area-detail/AreaAIAnalyzer";
 
 const AreaDetail = () => {
@@ -58,7 +59,9 @@ const AreaDetail = () => {
       <AreaDevelopersBar areaName={area.name} />
 
       {/* Interactive Map */}
-      <AreaMapSection areaName={area.name} areaLat={area.latitude} areaLng={area.longitude} />
+      <MapErrorBoundary>
+        <AreaMapSection areaName={area.name} areaLat={area.latitude} areaLng={area.longitude} />
+      </MapErrorBoundary>
 
       {/* AI Area Intelligence */}
       <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
