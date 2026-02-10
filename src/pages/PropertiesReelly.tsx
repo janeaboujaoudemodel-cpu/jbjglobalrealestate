@@ -391,7 +391,7 @@ const PropertiesReelly = () => {
                     <SelectItem key={dev.id} value={dev.name} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                       <span className="flex items-center gap-2">
                         {dev.logo_url ? (
-                          <img src={dev.logo_url} alt="" className="w-5 h-5 object-fill rounded-sm flex-shrink-0" />
+                          <img src={dev.logo_url} alt="" className="w-5 h-5 object-contain rounded-sm flex-shrink-0" />
                         ) : (
                           <Building2 className="w-4 h-4 text-gold/60 flex-shrink-0" />
                         )}
