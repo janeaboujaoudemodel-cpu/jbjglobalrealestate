@@ -1,5 +1,7 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface AIVideoStudioLayoutProps {
   topBar: ReactNode;
@@ -20,6 +22,57 @@ export function AIVideoStudioLayout({
   timeline,
   exportBar,
 }: AIVideoStudioLayoutProps) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <div className="h-screen flex flex-col bg-slate-950 text-white overflow-hidden">
+        {/* Top Bar */}
+        <div className="flex-shrink-0 border-b border-slate-800">
+          {topBar}
+        </div>
+
+        {/* Tabbed Panels */}
+        <div className="flex-1 min-h-0 flex flex-col">
+          <Tabs defaultValue="preview" className="flex-1 flex flex-col min-h-0">
+            <TabsList className="flex-shrink-0 w-full justify-start bg-slate-900 border-b border-slate-800 rounded-none px-2 h-10">
+              <TabsTrigger value="preview" className="text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-white rounded-md">Preview</TabsTrigger>
+              <TabsTrigger value="media" className="text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-white rounded-md">Media</TabsTrigger>
+              <TabsTrigger value="inspector" className="text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-white rounded-md">Inspector</TabsTrigger>
+              {toolsPanel && (
+                <TabsTrigger value="tools" className="text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-white rounded-md">Tools</TabsTrigger>
+              )}
+            </TabsList>
+            <TabsContent value="preview" className="flex-1 min-h-0 m-0 overflow-auto bg-slate-950">
+              {centerPanel}
+            </TabsContent>
+            <TabsContent value="media" className="flex-1 min-h-0 m-0 overflow-auto bg-slate-900/50">
+              {leftPanel}
+            </TabsContent>
+            <TabsContent value="inspector" className="flex-1 min-h-0 m-0 overflow-auto bg-slate-900/50">
+              {rightPanel}
+            </TabsContent>
+            {toolsPanel && (
+              <TabsContent value="tools" className="flex-1 min-h-0 m-0 overflow-auto bg-slate-900/50">
+                {toolsPanel}
+              </TabsContent>
+            )}
+          </Tabs>
+
+          {/* Timeline - horizontal scroll strip */}
+          <div className="flex-shrink-0 h-32 overflow-x-auto overflow-y-hidden bg-slate-900 border-t border-slate-800">
+            {timeline}
+          </div>
+        </div>
+
+        {/* Export Bar */}
+        <div className="flex-shrink-0 border-t border-slate-800">
+          {exportBar}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen flex flex-col bg-slate-950 text-white overflow-hidden">
       {/* Top Bar */}

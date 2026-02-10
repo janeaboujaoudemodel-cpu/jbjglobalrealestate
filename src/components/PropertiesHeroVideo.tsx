@@ -60,7 +60,7 @@ const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
   }, [currentScene]);
 
   return (
-    <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+    <section className="jj-hero-fullscreen relative flex items-end justify-start overflow-hidden pb-16 md:pb-20 px-4 md:px-8 lg:px-12">
       {/* Video background */}
       <div className="absolute inset-0 bg-black">
         {VIDEO_SCENES.map((scene, index) => (
