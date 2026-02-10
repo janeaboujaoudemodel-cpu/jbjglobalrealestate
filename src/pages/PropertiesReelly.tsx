@@ -1,4 +1,5 @@
  import { useState, useMemo, useEffect, Fragment } from "react";
+ import { Switch } from "@/components/ui/switch";
  import { Link, useSearchParams } from "react-router-dom";
  import { motion } from "framer-motion";
  import { 
@@ -77,6 +78,7 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
    constructionStatus: string | null;
    currency: ExtendedCurrency;
    sizeUnit: 'sqft' | 'sqm';
+   hideSoldOut: boolean;
  }
  
  const defaultFilters: FilterState = {
@@ -86,6 +88,7 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
    constructionStatus: null,
    currency: 'AED',
    sizeUnit: 'sqft',
+   hideSoldOut: false,
  };
  
  const EMIRATES = [
@@ -170,9 +173,18 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
       }
     }, [searchParams]);
  
-   // Sort projects client-side (API doesn't support sorting)
+   // Sort and filter projects client-side
    const sortedProjects = useMemo(() => {
      let sorted = [...projects];
+     
+     // Hide sold out filter
+     if (appliedFilters.hideSoldOut) {
+       sorted = sorted.filter(p => {
+         const status = (p.sale_status || p.status_label || '').toLowerCase();
+         return !status.includes('sold') && !status.includes('out of stock');
+       });
+     }
+     
      switch (sortBy) {
        case "price-low":
          sorted.sort((a, b) => (a.price_from || 0) - (b.price_from || 0));
@@ -185,11 +197,10 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
          break;
        case "newest":
        default:
-         // Default order from API
          break;
      }
      return sorted;
-   }, [projects, sortBy]);
+   }, [projects, sortBy, appliedFilters.hideSoldOut]);
  
    const updateFilter = <K extends keyof FilterState>(key: K, value: FilterState[K]) => {
      setFilters(prev => ({ ...prev, [key]: value }));
@@ -447,8 +458,8 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
                </button>
              </div>
  
-             {/* Sort Options */}
-             <div className="flex items-center justify-center gap-2 mt-5">
+             {/* Sort Options + Hide Sold Out */}
+             <div className="flex items-center justify-center gap-2 mt-5 flex-wrap">
                {[
                  { value: "newest", label: "Newest" },
                  { value: "price-low", label: "Low → High" },
@@ -467,6 +478,22 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
                    {option.label}
                  </button>
                ))}
+
+               <div className="w-px h-6 bg-gold/30 mx-1" />
+
+               {/* Hide Sold Out Toggle */}
+               <label className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-full cursor-pointer hover:border-gold transition-all">
+                 <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
+                 <span className="text-xs text-black font-semibold whitespace-nowrap">Hide Sold Out</span>
+                 <Switch
+                   checked={appliedFilters.hideSoldOut}
+                   onCheckedChange={(checked) => {
+                     updateFilter("hideSoldOut", checked);
+                     setAppliedFilters(prev => ({ ...prev, hideSoldOut: checked }));
+                   }}
+                   className="scale-75"
+                 />
+               </label>
              </div>
            </div>
          </div>
