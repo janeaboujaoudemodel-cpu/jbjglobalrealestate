@@ -1,69 +1,75 @@
 
-# Fix: Enrichment Tools -- Edge Function Errors, Progress Tracking, and Before/After Cards
+# Fix: Wrong Project Data Mapping (floors, total_units, bedrooms)
 
 ## Problems Found
 
-### 1. Missing config.toml entries (Functions fail to invoke)
-- `provident-batch-extract` -- NOT in config.toml, so it cannot be deployed/called
-- `reelly-bulk-enrich` -- NOT in config.toml, so it cannot be deployed/called
-- `provident-enrich-projects` -- NOT in config.toml, so it cannot be deployed/called
+### 1. `floors` is actually `building_count` (WRONG)
+In `reelly-api-sync/index.ts` line 89 and `reelly-backfill-projects/index.ts` line 400:
+```
+floors: p.building_count > 0 ? p.building_count : null
+```
+The Reelly API field `building_count` is the number of buildings in a development, NOT the number of floors. A 50-story tower with 1 building shows "1 Floor" on the listing, which is incorrect.
 
-This is why "Fetch Images & Docs (Provident)" and "Bulk Enrichment (Reelly API)" fail with "Failed to send request to edge function."
+**Current data:** Almost every project shows `floors: 1` because most developments have 1 building.
 
-### 2. Wrong column names in `enrich-project-test` (Data insert fails silently)
-The `project_documents` table has columns: `file_url`, `file_name`
-But `enrich-project-test/index.ts` line 218 uses: `document_url`, `document_name`
-This means document insertion silently fails, so the "After" card shows no improvement.
+### 2. `total_units` mapped from `units_count` shows wrong values
+In `reelly-api-sync/index.ts` line 93 and `reelly-backfill-projects/index.ts` line 394:
+```
+total_units: p.units_count > 0 ? p.units_count : null
+```
+For many projects, `units_count` appears to be "available/remaining units" rather than the total development size. Examples: LIV Residence = 1, 1WOOD = 2. These are obviously not the total unit count for those developments.
 
-Similarly, `project_images` has column `display_order`, but the enrich-project-test uses `sort_order` (line 206). This also fails silently.
+**Fix approach:** The Reelly API does not have a separate "total units" field. `units_count` is what they provide. We should keep the mapping BUT stop displaying it when the value is suspiciously low (e.g., below 5) as it likely represents available units, not total. We should also use `building_count` for the correct column.
 
-### 3. `provident-batch-extract` uses `upsert` with `onConflict` on non-existent unique constraints
-Lines 224 and 280 use `upsert(..., { onConflict: "project_id,file_url" })` and `upsert(..., { onConflict: "project_id,image_url" })` but no unique constraints exist on these columns. This causes inserts to fail.
-
-### 4. No progress tracking or before/after cards for bulk enrichment
-The Reelly and Provident bulk sections only show summary counts after completion. User wants the same before/after card comparison with checklists that the test enrichment has.
+### 3. `bedrooms_min` / `bedrooms_max` are NULL everywhere
+The sync functions never extract bedroom ranges from the `unit_types` data. Even when `unit_types` contains entries with `bedrooms: 0, 1, 2, 3`, the min/max are never calculated and stored.
 
 ## Fix Plan
 
-### Step 1: Add missing config.toml entries
-Add `provident-batch-extract`, `reelly-bulk-enrich`, and `provident-enrich-projects` to `supabase/config.toml` with `verify_jwt = false`.
+### File 1: `supabase/functions/reelly-api-sync/index.ts`
 
-### Step 2: Fix column names in `enrich-project-test/index.ts`
-- Line 206: Change `sort_order` to `display_order`
-- Line 218: Change `document_url` to `file_url`
-- Line 219: Change `document_name` to `file_name`
+**Change A:** Stop mapping `building_count` to `floors` -- map it only to `building_count`
+- Line 89: Change `floors: p.building_count > 0 ? p.building_count : null` to remove `floors` entirely (it should not come from building_count)
+- Keep `building_count: p.building_count > 0 ? p.building_count : null`
 
-### Step 3: Fix `provident-batch-extract/index.ts` -- replace upsert with insert
-- Line 224: Replace `upsert(..., { onConflict: "project_id,file_url" })` with regular `insert()`
-- Line 280: Replace `upsert(..., { onConflict: "project_id,image_url" })` with regular `insert()`
-- Add deduplication check before insert (query existing URLs first)
+**Change B:** Calculate `bedrooms_min` and `bedrooms_max` from unit_types
+- After extracting unit types, loop through them to find min/max bedroom values and include them in the mapped data
 
-### Step 4: Add progress tracking with per-project results to bulk sections
-Update `ReellyImportPanel.tsx` to:
+### File 2: `supabase/functions/reelly-backfill-projects/index.ts`
 
-**For Reelly Bulk Enrichment:**
-- Add a results list state that accumulates per-project results as batches complete
-- Show each project with before/after checklist (images, docs, amenities, FAQs, floor plans, unit types, payment plan, video, description, highlights)
-- Color-code: green for improved fields, gray for unchanged
-- Show running totals: processed / pending / done / failed
+**Change A:** Stop writing `building_count` to `floors` column (line 399-402)
+- Remove `updateData.floors = detail.building_count` 
+- Keep `updateData.building_count = detail.building_count`
 
-**For Provident Extraction:**
-- Same pattern: accumulate per-project results showing PDFs found, images found, docs inserted, images inserted
-- Show matched slug and error details per project
+**Change B:** Calculate and save `bedrooms_min`/`bedrooms_max` from unit_types
 
-**For AI Content Generation:**
-- Already has per-project results but show them in a scrollable card list with field-level detail
+### File 3: `supabase/functions/enrich-project-test/index.ts`
 
-### Step 5: Deploy all fixed edge functions
-Redeploy: `enrich-project-test`, `provident-batch-extract`, `reelly-bulk-enrich`, `provident-enrich-projects`, `ai-bulk-enrich`
+- Add `total_units`, `building_count`, `bedrooms_min`, `bedrooms_max` to the before/after snapshot so the test card shows these fields
+
+### File 4: `src/components/project-detail/QuickFactsBar.tsx`
+
+- Only display "Total Units" if the value is above a reasonable threshold (e.g., > 4), since very low values from Reelly likely represent available units, not total
+
+### File 5: `src/components/project-detail/HouseDetailsSection.tsx`
+
+- Same threshold guard for total units display
+
+### Database Cleanup (one-time fix)
+
+Run a data correction to:
+1. **NULL out `floors`** for all Reelly-sourced projects where `floors` equals `building_count` (since the value is wrong)
+2. **NULL out `total_units`** where the value is suspiciously low (1-3 units) for projects that clearly have more
 
 ## Technical Summary
 
 | File | Change |
 |------|--------|
-| `supabase/config.toml` | Add 3 missing function entries |
-| `supabase/functions/enrich-project-test/index.ts` | Fix column names: sort_order->display_order, document_url->file_url, document_name->file_name |
-| `supabase/functions/provident-batch-extract/index.ts` | Replace broken upsert with insert + dedup check |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Add per-project before/after cards with checklists to bulk enrichment and Provident sections |
+| `supabase/functions/reelly-api-sync/index.ts` | Remove `floors: building_count` mapping; add bedroom min/max calculation from unit_types |
+| `supabase/functions/reelly-backfill-projects/index.ts` | Same: stop writing building_count to floors; add bedroom extraction |
+| `supabase/functions/enrich-project-test/index.ts` | Add total_units/bedrooms to before/after snapshot |
+| `src/components/project-detail/QuickFactsBar.tsx` | Hide "Total Units" when value is below 5 |
+| `src/components/project-detail/HouseDetailsSection.tsx` | Same threshold guard |
+| Database migration | NULL out incorrect `floors` values; NULL out `total_units` where value is 1-3 |
 
-No database schema changes needed.
+All edge functions will be redeployed after changes.
