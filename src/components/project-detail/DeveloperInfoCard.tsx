@@ -41,7 +41,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
     : developer.description;
 
   return (
-    <div className="w-full bg-black py-6 md:py-8 rounded-2xl">
+    <div className="w-full py-6 md:py-8 rounded-2xl">
       <div className="container mx-auto px-4 md:px-8">
         {/* Premium champagne card with rounded corners */}
         <div 
