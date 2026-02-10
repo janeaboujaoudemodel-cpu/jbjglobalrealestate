@@ -175,7 +175,7 @@ export const GuideTableOfContents = ({
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="p-3 space-y-1"
+              className="p-3 space-y-1 overflow-y-auto"
             >
               {items.map((item, index) => (
                 <button

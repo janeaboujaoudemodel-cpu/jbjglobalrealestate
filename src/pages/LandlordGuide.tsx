@@ -259,7 +259,7 @@ const LandlordGuide = () => {
 
       {/* Section 2: Preparing Your Property for Rent */}
       <section id="property-preparation" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="jj-guide-content">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
               <span className="text-gold">Preparing</span> Your Property for Rent
@@ -285,8 +285,8 @@ const LandlordGuide = () => {
 
       {/* Section 3: Rental Pricing & Strategy */}
       <section id="pricing-strategy" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
+        <div className="jj-guide-content">
+          <div>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 3: <span className="text-gold">Rental Pricing</span> & Strategy
@@ -316,8 +316,8 @@ const LandlordGuide = () => {
 
       {/* Section 4: Marketing & Exposure */}
       <section id="marketing" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
+        <div className="jj-guide-content">
+          <div>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 4: <span className="text-gold">Marketing</span> & Exposure
@@ -344,8 +344,8 @@ const LandlordGuide = () => {
 
       {/* Section 5: Tenant Screening */}
       <section id="tenant-screening" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
+        <div className="jj-guide-content">
+          <div>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 5: <span className="text-gold">Tenant Screening</span> (Critical Step)
@@ -375,8 +375,8 @@ const LandlordGuide = () => {
 
       {/* Section 6: Legal Framework & Ejari */}
       <section id="legal-framework" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
+        <div className="jj-guide-content">
+          <div>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 6: <span className="text-gold">Legal Framework</span> & Ejari
@@ -403,8 +403,8 @@ const LandlordGuide = () => {
 
       {/* Section 7: Costs Landlords Should Expect */}
       <section id="costs" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
+        <div className="jj-guide-content">
+          <div>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 7: <span className="text-gold">Costs</span> Landlords Should Expect
@@ -434,8 +434,8 @@ const LandlordGuide = () => {
 
       {/* Section 8: Handover & Move-In */}
       <section id="handover" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
+        <div className="jj-guide-content">
+          <div>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 8: <span className="text-gold">Handover</span> & Move-In
@@ -462,8 +462,8 @@ const LandlordGuide = () => {
 
       {/* Section 9: Renewals, Rent Increases & Notices */}
       <section id="renewals" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
+        <div className="jj-guide-content">
+          <div>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 9: <span className="text-gold">Renewals</span>, Rent Increases & Notices
@@ -490,8 +490,8 @@ const LandlordGuide = () => {
 
       {/* Section 10: How JBJ Global Real Estate Supports Landlords */}
       <section id="jbj-support" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+        <div className="jj-guide-content">
+          <div>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 10: How <span className="text-gold">JBJ Global Real Estate</span> Supports Landlords
@@ -521,8 +521,8 @@ const LandlordGuide = () => {
 
       {/* FAQ Section */}
       <section id="faq" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
+        <div className="jj-guide-content">
+          <div>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 <span className="text-gold">Landlord</span> FAQ

@@ -451,8 +451,8 @@ const SellerGuide = () => {
 
         {/* Selling Costs & Fees */}
         <section id="costs" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-5xl mx-auto">
+          <div className="jj-guide-content">
+            <div>
               <GuideSectionHeader icon={Calculator} title="Selling Costs & Fees" />
 
               {/* Agency Commission */}
@@ -500,7 +500,7 @@ const SellerGuide = () => {
         </section>
 
         <section id="mortgaged-properties" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="max-w-5xl mx-auto px-4">
+          <div className="jj-guide-content">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -530,7 +530,7 @@ const SellerGuide = () => {
         </section>
 
         <section id="off-plan-resale" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="max-w-5xl mx-auto px-4">
+          <div className="jj-guide-content">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -560,7 +560,7 @@ const SellerGuide = () => {
         </section>
 
         <section id="jbj-support" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="max-w-5xl mx-auto px-4">
+          <div className="jj-guide-content">
             <GuideSectionHeader icon={Handshake} title="How JBJ Supports Sellers" />
 
             <div className="grid md:grid-cols-2 gap-4 mb-8">
@@ -584,7 +584,7 @@ const SellerGuide = () => {
         </section>
 
         <section id="faqs" className="py-16 jj-section-champagne scroll-mt-20">
-          <div className="max-w-5xl mx-auto px-4">
+          <div className="jj-guide-content">
             <GuideSectionHeader icon={HelpCircle} title="Seller Guide FAQs" />
               
             <div className="jj-card-inner rounded-2xl p-6 md:p-8">
