@@ -134,17 +134,17 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   };
 
   const accountLinks = [
-    { href: '/my-dashboard', label: 'My Dashboard', icon: LayoutDashboard, description: 'Your personalized dashboard' },
-    { href: '/profile', label: 'My Profile', icon: User, description: 'View and edit your profile' },
-    { href: '/favorites', label: 'Favorites', icon: Heart, description: 'Your saved properties' },
-    { href: '/toolkit', label: 'AI Tools', icon: Sparkles, description: 'Professional AI-powered tools' },
+    { href: '/my-dashboard', label: t('account.myDashboard', 'My Dashboard'), icon: LayoutDashboard, description: t('account.myDashboardDesc', 'Your personalized dashboard') },
+    { href: '/profile', label: t('account.myProfile', 'My Profile'), icon: User, description: t('account.myProfileDesc', 'View and edit your profile') },
+    { href: '/favorites', label: t('nav.favorites', 'Favorites'), icon: Heart, description: t('account.favoritesDesc', 'Your saved properties') },
+    { href: '/toolkit', label: t('account.aiTools', 'AI Tools'), icon: Sparkles, description: t('account.aiToolsDesc', 'Professional AI-powered tools') },
   ];
 
   // Filter admin links based on actual access - consolidated shortcuts
   const adminLinks = useMemo(() => {
     const links = [
-      { href: '/founder-assistant', label: 'My Assistant', icon: Sparkles, requiresAdmin: true },
-      { href: '/listing-admin', label: 'Listing Admin', icon: FolderOpen, requiresListingAdmin: true },
+      { href: '/founder-assistant', label: t('account.myAssistant', 'My Assistant'), icon: Sparkles, requiresAdmin: true },
+      { href: '/listing-admin', label: t('account.listingAdmin', 'Listing Admin'), icon: FolderOpen, requiresListingAdmin: true },
     ];
     
     return links.filter(link => {
@@ -158,11 +158,14 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   // Get mode label for display
   const getModeLabel = () => {
     switch (mode) {
-      case 'broker': return 'Broker';
-      case 'investor_broker': return 'Investor + Broker';
-      default: return 'Investor';
+      case 'broker': return t('account.modeBroker', 'Broker');
+      case 'investor_broker': return t('account.modeInvestorBroker', 'Investor + Broker');
+      default: return t('account.modeInvestor', 'Investor');
     }
   };
+
+  // Unified loading: show skeleton until ALL critical queries resolve
+  const isDataLoading = ownerLoading || crmLoading;
 
   return (
     <MegaMenuShell 
@@ -214,8 +217,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               </div>
               <div className="flex flex-col items-end gap-2 shrink-0">
                 {/* "Select your mode" label */}
-                <p className="text-[10px] text-gold font-semibold uppercase tracking-wider">
-                  Select your mode
+               <p className="text-[10px] text-gold font-semibold uppercase tracking-wider">
+                  {t('account.selectYourMode', 'Select your mode')}
                 </p>
                 <div 
                   onClick={(e) => e.stopPropagation()} 
@@ -230,7 +233,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                   onClick={onClose} 
                   className="flex items-center gap-1.5 text-gold text-sm font-semibold hover:underline transition-colors mt-4"
                 >
-                  Edit Profile
+                  {t('account.editProfile', 'Edit Profile')}
                   <ChevronRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -239,12 +242,12 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
             {/* Section Headers Row - Full Width */}
             <div className="grid grid-cols-2 gap-6 mb-2">
               <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5">
-                Your Account
+                {t('account.yourAccount', 'Your Account')}
               </p>
               {/* LOCK: Owner shortcuts header - Always reserve space for Owner Shortcuts column when verifying or when owner has access */}
               {(ownerLoading || isOwner || hasCRMAccess || hasListingAdminAccess) && (
                 <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold px-2 py-1.5">
-                  Owner Shortcuts
+                  {t('account.ownerShortcuts', 'Owner Shortcuts')}
                 </p>
               )}
             </div>
@@ -300,7 +303,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               {/* Right Column - Owner Links (LOCKED: Always show during loading or when owner has access) */}
               <div>
               {/* Show skeleton while verifying owner status to prevent layout shift */}
-              {ownerLoading && (
+              {isDataLoading && (
                 <div className="space-y-2">
                   <Skeleton className="h-14 w-full rounded-xl" />
                   <Skeleton className="h-11 w-full rounded-xl" />
@@ -311,7 +314,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               )}
               
               {/* LOCK: Do not remove owner shortcuts - Show when owner verified */}
-              {!ownerLoading && (isOwner || hasCRMAccess || hasListingAdminAccess) && adminLinks.length > 0 && (
+              {!isDataLoading && (isOwner || hasCRMAccess || hasListingAdminAccess) && adminLinks.length > 0 && (
                   <>
                     <div className="space-y-1">
                       {/* Owner Dashboard - Primary Link */}
@@ -326,9 +329,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           </div>
                           <div className="flex-1 min-w-0">
                             <span className="text-black font-bold text-sm group-hover:text-gold transition-colors block">
-                              Owner Dashboard
+                              {t('account.ownerDashboard', 'Owner Dashboard')}
                             </span>
-                            <span className="text-black/50 text-[10px]">Command Center</span>
+                            <span className="text-black/50 text-[10px]">{t('account.commandCenter', 'Command Center')}</span>
                           </div>
                           <ChevronRight className="w-4 h-4 text-gold" />
                         </Link>
@@ -345,9 +348,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           </div>
                           <div className="flex-1 min-w-0">
                             <span className="text-black font-semibold text-xs group-hover:text-purple-600 transition-colors block">
-                              Admin Panel
+                              {t('account.adminPanel', 'Admin Panel')}
                             </span>
-                            <span className="text-black/50 text-[10px]">HR, IT, Support, All</span>
+                            <span className="text-black/50 text-[10px]">{t('account.adminPanelDesc', 'HR, IT, Support, All')}</span>
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 text-purple-500" />
                         </Link>
@@ -364,9 +367,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           </div>
                           <div className="flex-1 min-w-0">
                             <span className="text-black font-semibold text-xs group-hover:text-emerald-600 transition-colors block">
-                              Customer Happiness Hub
+                              {t('account.customerHappiness', 'Customer Happiness Hub')}
                             </span>
-                            <span className="text-black/50 text-[10px]">Reviews, Tickets & Ideas</span>
+                            <span className="text-black/50 text-[10px]">{t('account.customerHappinessDesc', 'Reviews, Tickets & Ideas')}</span>
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 text-emerald-500" />
                         </Link>
@@ -415,7 +418,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 {t('nav.myAccount')}
               </p>
               <p className="text-black/60 text-sm mt-2">
-                Sign in to access your account and saved properties
+                {t('account.signInPrompt', 'Sign in to access your account and saved properties')}
               </p>
             </div>
             <Link
@@ -427,8 +430,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 <User className="w-7 h-7 text-gold" />
               </div>
               <div className="flex-1">
-                <span className="text-gold font-bold text-base block">Sign In / Create Account</span>
-                <span className="text-black/60 text-xs">Access exclusive features</span>
+                <span className="text-gold font-bold text-base block">{t('account.signInCreate', 'Sign In / Create Account')}</span>
+                <span className="text-black/60 text-xs">{t('account.accessExclusive', 'Access exclusive features')}</span>
               </div>
               <ChevronRight className="w-5 h-5 text-gold" />
             </Link>
