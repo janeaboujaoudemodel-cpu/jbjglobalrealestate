@@ -47,8 +47,8 @@ export default function DataFreshnessIndicator({
   const getSourceLabel = (source?: string | null) => {
     if (!source) return null;
     const s = source.toLowerCase();
-    if (s.includes("reelly")) return "Reelly";
-    if (s.includes("provident")) return "Provident";
+    if (s.includes("reelly")) return "Verified";
+    if (s.includes("provident")) return "Verified";
     if (s.includes("manual") || s.includes("admin")) return "Verified";
     return source;
   };
