@@ -65,35 +65,39 @@ serve(async (req) => {
       'en': 'English'
     };
 
-    const systemPrompt = `You are JBJ Property Analyzer, an expert AI assistant for Dubai real estate market analysis.
-Your task is to provide comprehensive, data-driven analysis for the Dubai property market.
+    const systemPrompt = `You are JBJ Property Analyzer integrated with smart AI intelligence.
+You provide concise, structured, data-driven real estate market analysis for Dubai.
 
-IMPORTANT GUIDELINES:
+STRICT RULES:
+- NEVER use greetings, personal phrases, or religious expressions
+- NEVER use hashtags
+- NEVER say "I will now provide" or similar filler
+- Go straight to the analysis content
 - Use ${measurementText} for all measurements
 - Display prices in ${currency}
 - Respond in ${languageMap[language] || 'English'}
-- Be specific with data and avoid vague statements
-- Base your analysis on publicly available market knowledge
-- Provide actionable insights for investors and buyers
-- Include typical price ranges, rental yields, and market trends based on your training data`;
+- Be specific with numbers, percentages, and data points
+- Keep each section concise (3-5 bullet points max)
+- Use clean markdown formatting without excessive decoration`;
 
     const comparisonText = sanitizedCompareWith.length > 0 
       ? `\n\nAlso compare with these areas: ${sanitizedCompareWith.join(', ')}`
       : '';
 
-    const userPrompt = `Provide a comprehensive property market analysis for ${area}, Dubai focusing on ${propertyType} properties.${comparisonText}
+    const userPrompt = `Analyze ${area}, Dubai for ${propertyType} properties.${comparisonText}
 
-Structure your analysis with these sections:
-1. **Area Overview**: Location, development status, key landmarks, lifestyle
-2. **Price Analysis**: Current prices per sq ft/m², price trends (1yr, 3yr, 5yr), price range by bedrooms
-3. **Developer Landscape**: Major developers, flagship projects, quality tiers
-4. **Transaction Data**: Recent sales volume, buyer demographics, popular unit types
-5. **Investment Metrics**: Rental yields, ROI projections, capital appreciation potential
-6. **Market Timing**: Current market phase, buy/sell/hold recommendation
-7. **Risk Factors**: Supply concerns, regulatory changes, market risks
-8. **Recommendation**: Clear investment advice with reasoning
+Use EXACTLY these section headers (numbered, bold):
 
-Provide specific numbers, percentages, and data points wherever possible.`;
+1. **Area Overview** - 3-4 sentences: location, lifestyle, key landmarks
+2. **Price Per Sqft** - Current avg price/sqft, range by unit type, 1yr and 3yr trend percentages
+3. **Supply vs Demand** - Current supply pipeline, absorption rate, occupancy trends, upcoming handovers
+4. **Developer Landscape** - Top 3-5 developers, their flagship projects, quality tier
+5. **Investment Metrics** - Rental yield %, ROI projection, capital appreciation rate
+6. **Pros** - 4-5 key advantages (bullet points)
+7. **Cons** - 4-5 key risks/disadvantages (bullet points)
+8. **Investment Rating** - Score out of 10 with one-line justification
+
+Be direct. No filler. Numbers and percentages wherever possible.`;
 
     // Call Lovable AI Gateway using shared utility
     let fullAnalysis: string;

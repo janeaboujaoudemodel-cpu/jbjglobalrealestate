@@ -108,13 +108,16 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("id, name, slug, latitude, longitude, developer_name, cover_image_url")
+        .select("id, name, slug, latitude, longitude, developer_name, cover_image_url, price_from, handover_date, developer:developers(logo_url)")
         .ilike("area_name", `%${areaName}%`)
         .not("latitude", "is", null)
         .not("longitude", "is", null)
         .limit(50);
       if (error) throw error;
-      return data || [];
+      return (data || []).map((p: any) => ({
+        ...p,
+        developer_logo: p.developer?.[0]?.logo_url || p.developer?.logo_url || null,
+      }));
     },
     staleTime: 5 * 60 * 1000,
   });
@@ -165,22 +168,40 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
               onOpenExternal={handleOpenExternal}
             />
             <MapNavigationControls latitude={center[0]} longitude={center[1]} />
-            {projectsWithCoords.map((project) => (
+            {projectsWithCoords.map((project: any) => (
               <Marker
                 key={project.id}
                 position={[Number(project.latitude), Number(project.longitude)]}
                 icon={defaultIcon}
+                eventHandlers={{
+                  mouseover: (e: any) => e.target.openPopup(),
+                }}
               >
                 <Popup>
-                  <div className="text-center min-w-[180px]">
+                  <div className="min-w-[200px] max-w-[240px]">
                     {project.cover_image_url && (
-                      <img src={project.cover_image_url} alt={project.name} className="w-full h-24 object-cover rounded mb-2" />
+                      <img src={project.cover_image_url} alt={project.name} className="w-full h-28 object-cover rounded mb-2" />
                     )}
-                    <Link to={`/project/${project.slug}`} className="font-bold text-sm text-blue-600 hover:underline block">
-                      {project.name}
-                    </Link>
+                    <div className="flex items-center gap-2 mb-1">
+                      {project.developer_logo && (
+                        <img src={project.developer_logo} alt="" className="w-6 h-6 object-contain rounded" />
+                      )}
+                      <Link to={`/project/${project.slug}`} className="font-bold text-sm text-blue-600 hover:underline block leading-tight">
+                        {project.name}
+                      </Link>
+                    </div>
                     {project.developer_name && (
-                      <p className="text-xs text-zinc-500 mt-1">by {project.developer_name}</p>
+                      <p className="text-[11px] text-zinc-500">by {project.developer_name}</p>
+                    )}
+                    {project.price_from && (
+                      <p className="text-xs font-semibold text-amber-700 mt-1">
+                        From AED {Number(project.price_from).toLocaleString()}
+                      </p>
+                    )}
+                    {project.handover_date && (
+                      <p className="text-[11px] text-orange-500 mt-0.5">
+                        Handover: {project.handover_date}
+                      </p>
                     )}
                   </div>
                 </Popup>

@@ -244,12 +244,12 @@ const AreaGuides = () => {
       </section>
 
       {/* Areas Grid */}
-      <section className="py-16 bg-[hsl(var(--premium-bg))]">
+      <section className="py-16 bg-black">
         <div className="container mx-auto px-4">
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 text-gold animate-spin" />
-              <span className="ml-3 text-zinc-600">Loading areas...</span>
+                      <Loader2 className="w-8 h-8 text-gold animate-spin" />
+              <span className="ml-3 text-zinc-400">Loading areas...</span>
             </div>
           ) : error ? (
             <div className="text-center py-20">
@@ -258,7 +258,7 @@ const AreaGuides = () => {
           ) : filteredAreas.length === 0 ? (
             <div className="text-center py-20">
               <MapPin className="w-12 h-12 text-zinc-400 mx-auto mb-4" />
-              <p className="text-zinc-600 text-lg">No areas found matching your criteria.</p>
+              <p className="text-zinc-400 text-lg">No areas found matching your criteria.</p>
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
@@ -292,7 +292,7 @@ const AreaGuides = () => {
                       }}
                     >
                       {/* Photo Section */}
-                      <div className="relative h-[200px] flex-shrink-0">
+                      <div className="relative h-[180px] flex-shrink-0">
                         {area.image_url ? (
                           <img
                             src={area.image_url}
@@ -338,7 +338,7 @@ const AreaGuides = () => {
                       </div>
 
                       {/* Content Section - Champagne Background */}
-                      <div className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col">
+                      <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col min-h-[130px]">
                         {/* Area Name */}
                         <h3 className="text-black font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
                           {area.name}
@@ -389,7 +389,7 @@ const AreaGuides = () => {
           )}
 
           {!isLoading && filteredAreas.length > 0 && (
-            <div className="text-center mt-8 text-zinc-600 text-sm">
+            <div className="text-center mt-8 text-zinc-400 text-sm">
               Showing {filteredAreas.length} of {areas?.length || 0} areas
             </div>
           )}
