@@ -80,7 +80,7 @@ const AreaDetail = () => {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to={`/properties?area=${area.slug}`}>
-                <Button variant="dark" className="px-8 py-6 text-base">
+                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all">
                   View Properties
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
@@ -101,24 +101,25 @@ const AreaDetail = () => {
         <section className="py-16 bg-black">
           <div className="container mx-auto px-4">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-              <h2 className="text-white text-2xl md:text-3xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Other Areas in {area.emirate}
+              <h2 className="text-white text-2xl md:text-3xl font-bold mb-2 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Explore More Trending Areas
               </h2>
+              <p className="text-zinc-400 text-center mb-8">Discover premium neighborhoods across {area.emirate}</p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
                 {relatedAreas.map((relatedArea) => (
                   <Link 
                     key={relatedArea.slug}
                     to={`/area/${relatedArea.slug}`}
-                    className="group overflow-hidden rounded-xl border border-gold/30 hover:border-gold hover:shadow-xl transition-all"
+                    className="group overflow-hidden rounded-xl border border-gold/30 hover:border-gold hover:shadow-xl transition-all flex flex-col h-full"
                   >
                     {relatedArea.image_url ? (
-                      <img src={relatedArea.image_url} alt={relatedArea.name} className="w-full h-28 object-cover" loading="lazy" />
+                      <img src={relatedArea.image_url} alt={relatedArea.name} className="w-full h-36 object-cover flex-shrink-0" loading="lazy" />
                     ) : (
-                      <div className="w-full h-28 bg-zinc-800 flex items-center justify-center">
-                        <MapPin className="w-6 h-6 text-gold/40" />
+                      <div className="w-full h-36 bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center flex-shrink-0">
+                        <MapPin className="w-8 h-8 text-gold/40" />
                       </div>
                     )}
-                    <div className="p-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                    <div className="p-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex-1 flex flex-col justify-center">
                       <h3 className="text-black font-semibold text-sm group-hover:text-gold transition-colors">{relatedArea.name}</h3>
                       <div className="flex items-center gap-1 text-xs text-zinc-500 mt-1">
                         <MapPin className="w-3 h-3" />

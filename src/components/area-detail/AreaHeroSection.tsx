@@ -35,7 +35,7 @@ export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
   };
 
   return (
-    <section className="relative h-[70vh] min-h-[500px] flex items-end overflow-hidden">
+    <section className="relative h-screen flex items-end overflow-hidden">
       {/* Background Image */}
       {heroImage ? (
         <img

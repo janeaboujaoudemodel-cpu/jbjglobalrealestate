@@ -10,9 +10,32 @@ import { motion } from "framer-motion";
 import { MapPin, Building2, TrendingUp, Search, X, Flame, ArrowRight, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 import { SEOHead } from "@/components/SEOHead";
 import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
+
+const ProjectCountStat = () => {
+  const { data: count } = useQuery({
+    queryKey: ["total-published-projects"],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("projects")
+        .select("*", { count: "exact", head: true })
+        .eq("is_published", true);
+      if (error) throw error;
+      return count || 0;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+  return (
+    <div className="text-center">
+      <div className="text-3xl md:text-4xl font-bold text-gold">{(count || 0).toLocaleString()}</div>
+      <div className="text-zinc-400 text-sm">Properties</div>
+    </div>
+  );
+};
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -130,97 +153,92 @@ const AreaGuides = () => {
                 <div className="text-3xl md:text-4xl font-bold text-gold">{emirates?.length || 0}</div>
                 <div className="text-zinc-400 text-sm">Emirates</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-gold">
-                  {areas?.reduce((sum, a) => sum + (a.property_count ?? 0), 0).toLocaleString() || 0}
-                </div>
-                <div className="text-zinc-400 text-sm">Properties</div>
-              </div>
+              <ProjectCountStat />
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Filters & Search */}
       <section className="py-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-b border-gold/20">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div className="relative w-full md:w-96">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
-              <Input
-                placeholder="Search areas..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-10 bg-white border-gold/30 focus:border-gold"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-
-            <div className="flex flex-wrap gap-2 justify-center">
+        <div className="container mx-auto px-4 space-y-4">
+          {/* Row 1: Full-width search bar */}
+          <div className="relative w-full max-w-2xl mx-auto">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+            <Input
+              placeholder="Search areas..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-12 pr-12 py-6 bg-white/95 backdrop-blur-sm border-0 text-black text-base rounded-xl shadow-2xl"
+            />
+            {searchQuery && (
               <button
-                onClick={() => setSelectedEmirate("all")}
+                onClick={() => setSearchQuery("")}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
+          </div>
+
+          {/* Row 2: Emirates pills */}
+          <div className="flex flex-wrap gap-2 justify-center">
+            <button
+              onClick={() => setSelectedEmirate("all")}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                selectedEmirate === "all"
+                  ? "bg-black text-gold border border-gold"
+                  : "bg-white border border-gold/30 text-zinc-700 hover:border-gold"
+              }`}
+            >
+              All Emirates
+            </button>
+            {emirates?.map((emirate) => (
+              <button
+                key={emirate}
+                onClick={() => setSelectedEmirate(emirate)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  selectedEmirate === "all"
+                  selectedEmirate === emirate
                     ? "bg-black text-gold border border-gold"
                     : "bg-white border border-gold/30 text-zinc-700 hover:border-gold"
                 }`}
               >
-                All Emirates
+                {emirate}
               </button>
-              {emirates?.map((emirate) => (
-                <button
-                  key={emirate}
-                  onClick={() => setSelectedEmirate(emirate)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    selectedEmirate === emirate
-                      ? "bg-black text-gold border border-gold"
-                      : "bg-white border border-gold/30 text-zinc-700 hover:border-gold"
-                  }`}
-                >
-                  {emirate}
-                </button>
-              ))}
-            </div>
+            ))}
+          </div>
 
-            <div className="flex gap-2">
-              <button
-                onClick={() => setSortBy("property_count")}
-                className={`px-3 py-2 rounded-lg text-sm transition-all ${
-                  sortBy === "property_count"
-                    ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black"
-                    : "bg-white border border-gold/30 text-zinc-700"
-                }`}
-              >
-                <Building2 className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setSortBy("trending")}
-                className={`px-3 py-2 rounded-lg text-sm transition-all ${
-                  sortBy === "trending"
-                    ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black"
-                    : "bg-white border border-gold/30 text-zinc-700"
-                }`}
-              >
-                <Flame className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setSortBy("alphabetical")}
-                className={`px-3 py-2 rounded-lg text-sm transition-all ${
-                  sortBy === "alphabetical"
-                    ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black"
-                    : "bg-white border border-gold/30 text-zinc-700"
-                }`}
-              >
-                A-Z
-              </button>
-            </div>
+          {/* Row 3: Sort buttons - equal width */}
+          <div className="flex gap-2 justify-center max-w-xs mx-auto">
+            <button
+              onClick={() => setSortBy("property_count")}
+              className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                sortBy === "property_count"
+                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black"
+                  : "bg-white border border-gold/30 text-zinc-700"
+              }`}
+            >
+              <Building2 className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setSortBy("trending")}
+              className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                sortBy === "trending"
+                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black"
+                  : "bg-white border border-gold/30 text-zinc-700"
+              }`}
+            >
+              <Flame className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setSortBy("alphabetical")}
+              className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                sortBy === "alphabetical"
+                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black"
+                  : "bg-white border border-gold/30 text-zinc-700"
+              }`}
+            >
+              A-Z
+            </button>
           </div>
         </div>
       </section>

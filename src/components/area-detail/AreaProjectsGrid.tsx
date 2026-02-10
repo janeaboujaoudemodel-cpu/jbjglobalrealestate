@@ -53,9 +53,9 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
             >
-              <Link to={`/project/${project.slug}`}>
-                <div className="group rounded-xl overflow-hidden border-2 border-gold/30 hover:border-gold transition-all shadow-md hover:shadow-xl">
-                  <div className="relative h-48">
+              <Link to={`/project/${project.slug}`} className="h-full">
+                <div className="group rounded-xl overflow-hidden border-2 border-gold/30 hover:border-gold transition-all shadow-md hover:shadow-xl flex flex-col h-full">
+                  <div className="relative aspect-[4/3] flex-shrink-0">
                     {project.cover_image_url ? (
                       <img
                         src={project.cover_image_url}
@@ -74,18 +74,20 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
                       </span>
                     )}
                   </div>
-                  <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                  <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex-1 flex flex-col min-h-[120px]">
                     <h3 className="font-bold text-black text-sm line-clamp-1 group-hover:text-gold transition-colors">
                       {project.name}
                     </h3>
                     {project.developer_name && (
                       <p className="text-zinc-500 text-xs mt-1">by {project.developer_name}</p>
                     )}
-                    {project.price_from && (
-                      <p className="text-gold font-semibold text-sm mt-2">
-                        From AED {Number(project.price_from).toLocaleString()}
-                      </p>
-                    )}
+                    <div className="mt-auto">
+                      {project.price_from && (
+                        <p className="text-gold font-semibold text-sm mt-2">
+                          From AED {Number(project.price_from).toLocaleString()}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Link>
