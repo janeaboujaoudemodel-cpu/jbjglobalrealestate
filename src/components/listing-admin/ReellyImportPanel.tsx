@@ -204,6 +204,42 @@ export function ReellyImportPanel() {
     total_documents: number;
   } | null>(null);
   const [isLoadingBulkStats, setIsLoadingBulkStats] = useState(false);
+
+  // AI Content Generation state
+  const [isAiEnriching, setIsAiEnriching] = useState(false);
+  const [aiEnrichResult, setAiEnrichResult] = useState<{
+    success: boolean;
+    processed?: number;
+    enriched?: number;
+    errors?: number;
+    error_details?: string[];
+    results?: Array<{ name: string; status: string; fields: string[] }>;
+    message?: string;
+    error?: string;
+  } | null>(null);
+  const [aiEnrichStats, setAiEnrichStats] = useState<{
+    total_published: number;
+    missing_faqs: number;
+    missing_highlights: number;
+    with_faqs: number;
+    with_highlights: number;
+    with_usp: number;
+    with_payment: number;
+    with_distances: number;
+  } | null>(null);
+  const [isLoadingAiStats, setIsLoadingAiStats] = useState(false);
+
+  // Provident Document Extraction state
+  const [isProvidentExtracting, setIsProvidentExtracting] = useState(false);
+  const [providentResult, setProvidentResult] = useState<{
+    processed?: number;
+    total_pdfs_found?: number;
+    total_images_found?: number;
+    total_docs_inserted?: number;
+    total_images_inserted?: number;
+    errors?: number;
+    error?: string;
+  } | null>(null);
   
   // Backfill state - for backfilling approved projects with missing details
   const [isBackfilling, setIsBackfilling] = useState(false);
@@ -2799,7 +2835,215 @@ export function ReellyImportPanel() {
         </CardContent>
       </Card>
 
-      {/* ── Bulk Enrichment Section ── */}
+      {/* ── AI Content Generation Section ── */}
+      <Card className="bg-white border-2 border-purple-400">
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Zap className="h-5 w-5 text-purple-500" />
+            AI Content Generation
+          </CardTitle>
+          <CardDescription>
+            Generate FAQs, highlights, USP bullets, payment breakdowns, and location distances using AI.
+            Non-destructive — only fills empty fields. Processes 10 projects per batch.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* AI Stats */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={async () => {
+                setIsLoadingAiStats(true);
+                try {
+                  const { data, error } = await supabase.functions.invoke("ai-bulk-enrich", {
+                    body: { action: "stats" },
+                  });
+                  if (error) throw error;
+                  if (data?.success) {
+                    setAiEnrichStats(data.stats);
+                  } else {
+                    toast.error(data?.error || "Failed to load AI stats");
+                  }
+                } catch (err: any) {
+                  toast.error(err.message || "Failed to load AI stats");
+                } finally {
+                  setIsLoadingAiStats(false);
+                }
+              }}
+              disabled={isLoadingAiStats}
+            >
+              {isLoadingAiStats ? <RefreshCw className="h-4 w-4 animate-spin mr-1" /> : <Database className="h-4 w-4 mr-1" />}
+              Check Status
+            </Button>
+            {aiEnrichStats && (
+              <div className="text-xs text-zinc-600 space-x-2">
+                <span><strong>{aiEnrichStats.missing_faqs}</strong> missing FAQs</span>
+                <span>•</span>
+                <span><strong>{aiEnrichStats.missing_highlights}</strong> missing highlights</span>
+                <span>•</span>
+                <span>{aiEnrichStats.with_payment} have payment plans</span>
+                <span>•</span>
+                <span>{aiEnrichStats.with_distances} have distances</span>
+              </div>
+            )}
+          </div>
+
+          {/* Run AI Enrichment Button */}
+          <Button
+            onClick={async () => {
+              setIsAiEnriching(true);
+              setAiEnrichResult(null);
+              toast.info("Starting AI content generation... This may take 1-2 minutes per batch.");
+              try {
+                const { data, error } = await supabase.functions.invoke("ai-bulk-enrich", {
+                  body: { limit: 10 },
+                });
+                if (error) throw error;
+                setAiEnrichResult(data);
+                if (data?.success) {
+                  toast.success(`AI enriched ${data.enriched} of ${data.processed} projects`);
+                } else {
+                  toast.error(data?.error || "AI enrichment failed");
+                }
+              } catch (err: any) {
+                toast.error(err.message || "AI enrichment failed");
+                setAiEnrichResult({ success: false, error: err.message });
+              } finally {
+                setIsAiEnriching(false);
+              }
+            }}
+            disabled={isAiEnriching}
+            className="bg-purple-600 hover:bg-purple-700 text-white w-full"
+          >
+            {isAiEnriching ? (
+              <><RefreshCw className="h-4 w-4 animate-spin mr-2" /> Generating AI Content...</>
+            ) : (
+              <><Zap className="h-4 w-4 mr-2" /> Generate Content (AI) — 10 projects</>
+            )}
+          </Button>
+
+          {/* AI Results */}
+          {aiEnrichResult && aiEnrichResult.success && (
+            <Alert className="bg-purple-50 border-purple-300">
+              <CheckCircle className="h-4 w-4 text-purple-600" />
+              <AlertTitle className="text-purple-700">AI Generation Complete</AlertTitle>
+              <AlertDescription className="text-purple-600 space-y-1">
+                <p><strong>{aiEnrichResult.processed}</strong> projects processed, <strong>{aiEnrichResult.enriched}</strong> enriched</p>
+                {aiEnrichResult.results && aiEnrichResult.results.filter(r => r.status === "success").length > 0 && (
+                  <div className="text-xs mt-1 max-h-32 overflow-y-auto">
+                    {aiEnrichResult.results.filter(r => r.status === "success").map((r, i) => (
+                      <p key={i}>✅ {r.name}: {r.fields.join(", ")}</p>
+                    ))}
+                  </div>
+                )}
+                {(aiEnrichResult.errors || 0) > 0 && (
+                  <p className="text-amber-600">⚠️ {aiEnrichResult.errors} errors</p>
+                )}
+                {aiEnrichResult.message && <p className="italic">{aiEnrichResult.message}</p>}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {aiEnrichResult && !aiEnrichResult.success && (
+            <Alert className="bg-red-50 border-red-300">
+              <XCircle className="h-4 w-4 text-red-600" />
+              <AlertTitle className="text-red-700">AI Generation Failed</AlertTitle>
+              <AlertDescription className="text-red-600">{aiEnrichResult.error}</AlertDescription>
+            </Alert>
+          )}
+
+          {aiEnrichResult?.error_details && aiEnrichResult.error_details.length > 0 && (
+            <div className="text-xs text-zinc-500 max-h-32 overflow-y-auto bg-zinc-50 p-2 rounded border">
+              <p className="font-semibold mb-1">Error details:</p>
+              {aiEnrichResult.error_details.map((e, i) => <p key={i}>• {e}</p>)}
+            </div>
+          )}
+
+          <p className="text-xs text-zinc-400">
+            Click multiple times to process all projects. Each batch generates FAQs, highlights, USP bullets, 
+            payment plans, and location distances for 10 projects.
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* ── Provident Document Extraction Section ── */}
+      <Card className="bg-white border-2 border-teal-400">
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <CloudDownload className="h-5 w-5 text-teal-500" />
+            Fetch Images & Docs (Provident)
+          </CardTitle>
+          <CardDescription>
+            Fetch brochures, floor plans, payment plan PDFs from Provident's free page-data endpoint. 
+            Images fetched via Firecrawl if available. Processes 25 projects per batch.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Button
+            onClick={async () => {
+              setIsProvidentExtracting(true);
+              setProvidentResult(null);
+              toast.info("Starting Provident document extraction...");
+              try {
+                const { data, error } = await supabase.functions.invoke("provident-batch-extract", {
+                  body: { limit: 25 },
+                });
+                if (error) throw error;
+                setProvidentResult(data);
+                if (data?.total_docs_inserted > 0 || data?.total_images_inserted > 0) {
+                  toast.success(`Provident: +${data.total_docs_inserted} docs, +${data.total_images_inserted} images from ${data.processed} projects`);
+                } else {
+                  toast.info(`Processed ${data?.processed || 0} projects. No new docs/images matched.`);
+                }
+              } catch (err: any) {
+                toast.error(err.message || "Provident extraction failed");
+                setProvidentResult({ error: err.message });
+              } finally {
+                setIsProvidentExtracting(false);
+              }
+            }}
+            disabled={isProvidentExtracting}
+            className="bg-teal-600 hover:bg-teal-700 text-white w-full"
+          >
+            {isProvidentExtracting ? (
+              <><RefreshCw className="h-4 w-4 animate-spin mr-2" /> Extracting from Provident...</>
+            ) : (
+              <><CloudDownload className="h-4 w-4 mr-2" /> Fetch Images & Docs (Provident) — 25 projects</>
+            )}
+          </Button>
+
+          {providentResult && !providentResult.error && (
+            <Alert className="bg-teal-50 border-teal-300">
+              <CheckCircle className="h-4 w-4 text-teal-600" />
+              <AlertTitle className="text-teal-700">Provident Extraction Complete</AlertTitle>
+              <AlertDescription className="text-teal-600 space-y-1">
+                <p><strong>{providentResult.processed}</strong> projects checked</p>
+                <p>📄 <strong>+{providentResult.total_docs_inserted || 0}</strong> documents inserted ({providentResult.total_pdfs_found || 0} PDFs found)</p>
+                <p>📷 <strong>+{providentResult.total_images_inserted || 0}</strong> images inserted ({providentResult.total_images_found || 0} found)</p>
+                {(providentResult.errors || 0) > 0 && (
+                  <p className="text-amber-600">⚠️ {providentResult.errors} errors</p>
+                )}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {providentResult?.error && (
+            <Alert className="bg-red-50 border-red-300">
+              <XCircle className="h-4 w-4 text-red-600" />
+              <AlertTitle className="text-red-700">Extraction Failed</AlertTitle>
+              <AlertDescription className="text-red-600">{providentResult.error}</AlertDescription>
+            </Alert>
+          )}
+
+          <p className="text-xs text-zinc-400">
+            Documents (brochures, floor plans, payment plans) are fetched for free from Provident's page-data.json. 
+            Images use Firecrawl credits if available.
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* ── Bulk Enrichment (Reelly API) - kept as legacy ── */}
       <Card className="bg-white border-2 border-amber-400">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
@@ -2807,12 +3051,11 @@ export function ReellyImportPanel() {
             Bulk Enrichment (Reelly API)
           </CardTitle>
           <CardDescription>
-            Enrich all projects with galleries, documents, amenities, FAQs, floor plans, and more from the Reelly API. 
-            Processes 50 projects per batch. Non-destructive — only fills empty fields.
+            Enrich from Reelly API detail endpoint. Note: API returns limited data (no gallery/docs). 
+            Use AI Content Generation and Provident Extraction above for better results.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Stats */}
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -2850,13 +3093,11 @@ export function ReellyImportPanel() {
               </div>
             )}
           </div>
-
-          {/* Run Button */}
           <Button
             onClick={async () => {
               setIsBulkEnriching(true);
               setBulkEnrichResult(null);
-              toast.info("Starting bulk enrichment... This may take a few minutes.");
+              toast.info("Starting bulk enrichment...");
               try {
                 const { data, error } = await supabase.functions.invoke("reelly-bulk-enrich", {
                   body: { limit: 50 },
@@ -2879,49 +3120,29 @@ export function ReellyImportPanel() {
             className="bg-amber-600 hover:bg-amber-700 text-white w-full"
           >
             {isBulkEnriching ? (
-              <><RefreshCw className="h-4 w-4 animate-spin mr-2" /> Enriching Projects...</>
+              <><RefreshCw className="h-4 w-4 animate-spin mr-2" /> Enriching...</>
             ) : (
-              <><Zap className="h-4 w-4 mr-2" /> Run Bulk Enrichment (50 projects)</>
+              <><Zap className="h-4 w-4 mr-2" /> Run Reelly Bulk Enrichment (50 projects)</>
             )}
           </Button>
-
-          {/* Results */}
           {bulkEnrichResult && bulkEnrichResult.success && (
             <Alert className="bg-green-50 border-green-300">
               <CheckCircle className="h-4 w-4 text-green-600" />
               <AlertTitle className="text-green-700">Enrichment Complete</AlertTitle>
               <AlertDescription className="text-green-600 space-y-1">
                 <p><strong>{bulkEnrichResult.processed}</strong> projects processed</p>
-                <p>📷 <strong>+{bulkEnrichResult.images_added}</strong> images added</p>
-                <p>📄 <strong>+{bulkEnrichResult.docs_added}</strong> documents added</p>
-                <p>📝 <strong>+{bulkEnrichResult.fields_updated}</strong> fields updated (amenities, FAQs, etc.)</p>
-                {(bulkEnrichResult.errors || 0) > 0 && (
-                  <p className="text-amber-600">⚠️ {bulkEnrichResult.errors} errors</p>
-                )}
-                {bulkEnrichResult.message && <p className="italic">{bulkEnrichResult.message}</p>}
+                <p>📷 +{bulkEnrichResult.images_added} images, 📄 +{bulkEnrichResult.docs_added} docs, 📝 +{bulkEnrichResult.fields_updated} fields</p>
+                {(bulkEnrichResult.errors || 0) > 0 && <p className="text-amber-600">⚠️ {bulkEnrichResult.errors} errors</p>}
               </AlertDescription>
             </Alert>
           )}
-
           {bulkEnrichResult && !bulkEnrichResult.success && (
             <Alert className="bg-red-50 border-red-300">
               <XCircle className="h-4 w-4 text-red-600" />
-              <AlertTitle className="text-red-700">Enrichment Failed</AlertTitle>
+              <AlertTitle className="text-red-700">Failed</AlertTitle>
               <AlertDescription className="text-red-600">{bulkEnrichResult.error}</AlertDescription>
             </Alert>
           )}
-
-          {bulkEnrichResult?.error_details && bulkEnrichResult.error_details.length > 0 && (
-            <div className="text-xs text-zinc-500 max-h-32 overflow-y-auto bg-zinc-50 p-2 rounded border">
-              <p className="font-semibold mb-1">Error details:</p>
-              {bulkEnrichResult.error_details.map((e, i) => <p key={i}>• {e}</p>)}
-            </div>
-          )}
-
-          <p className="text-xs text-zinc-400">
-            Click "Run Bulk Enrichment" multiple times to process all projects in batches of 50.
-            Each run picks the next batch of un-enriched projects.
-          </p>
         </CardContent>
       </Card>
 

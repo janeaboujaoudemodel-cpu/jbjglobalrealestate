@@ -255,3 +255,6 @@ verify_jwt = false
 
 [functions.extract-developers-provident]
 verify_jwt = false
+
+[functions.ai-bulk-enrich]
+verify_jwt = false

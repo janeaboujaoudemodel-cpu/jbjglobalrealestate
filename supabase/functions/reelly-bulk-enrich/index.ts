@@ -136,6 +136,21 @@ Deno.serve(async (req: Request): Promise<Response> => {
           continue;
         }
 
+        // Log raw API response keys for debugging
+        const rawKeys = Object.keys(reellyData);
+        const hasGallery = !!(reellyData.images?.length || reellyData.gallery?.length);
+        const hasDocs = !!(reellyData.documents?.length || reellyData.brochures?.length);
+        const hasFloorPlans = !!reellyData.floor_plans?.length;
+        const hasFaqs = !!reellyData.faqs?.length;
+        console.log(`[bulk-enrich] ${project.name} API response: keys=[${rawKeys.join(",")}], gallery=${hasGallery}, docs=${hasDocs}, floorPlans=${hasFloorPlans}, faqs=${hasFaqs}`);
+
+        // Skip if API has no enrichable data at all
+        if (!hasGallery && !hasDocs && !hasFloorPlans && !hasFaqs && !reellyData.highlights?.length && !reellyData.payment_plan) {
+          console.log(`[bulk-enrich] ${project.name}: Reelly API has no gallery/documents/FAQs for this project - skipping`);
+          results.push({ name: project.name, status: "api_empty", images: 0, docs: 0, fields: 0 });
+          continue;
+        }
+
         // Extract all enrichment data
         const gallery = extractGalleryImages(reellyData);
         const documents = extractDocuments(reellyData);
