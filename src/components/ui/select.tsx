@@ -19,8 +19,10 @@ const SelectTrigger = React.forwardRef<
     ref={ref}
     className={cn(
       "flex h-10 w-full cursor-pointer items-center justify-between rounded-md border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] px-3 py-2 text-sm text-black ring-offset-background placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      "touch-action-manipulation",
       className,
     )}
+    style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
     {...props}
   >
     {children}
@@ -46,6 +48,7 @@ const SelectTriggerDark = React.forwardRef<
       "px-3 py-2 text-sm ring-offset-background",
       className,
     )}
+    style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
     {...props}
   >
     {children}

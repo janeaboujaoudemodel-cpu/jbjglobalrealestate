@@ -275,9 +275,9 @@ const PropertiesReelly = () => {
       </PropertiesHeroVideo>
 
       {/* Filters Section */}
-      <section className="sticky top-24 lg:top-20 z-40 bg-black py-4 border-b border-gold/30">
+      <section className="sticky top-24 lg:top-20 z-40 bg-black py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="container mx-auto px-3 sm:px-4">
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
             
             {/* Search Row */}
             <div className="flex flex-wrap items-center gap-3">
