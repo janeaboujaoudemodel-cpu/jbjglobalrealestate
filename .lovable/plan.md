@@ -1,89 +1,46 @@
 
-# Simplify Listing Admin: Two Clear Sections
 
-## Problem
-The ReellyImportPanel currently has 13+ separate cards/sections for extraction and enrichment, many overlapping or broken. The user wants exactly TWO clear sections.
+# Fix: Enrichment Edge Functions Not Working
 
-## Solution: Restructure into Two Sections
+## Three Bugs Found
 
-### Section 1: Reelly Enrichment (Green theme)
-A single card that consolidates ALL Reelly-related operations:
+### Bug 1: `enrich-project-test` batch mode queries wrong column + empty filter
+**File:** `supabase/functions/enrich-project-test/index.ts`
 
-**Sub-sections within the card:**
-1. **API Connection** -- Test button + status badge (compact, inline)
-2. **Project Sync** -- Quick Sync / Full Sync buttons + progress
-3. **Backfill Details** -- Fetch floor plans, amenities, docs for approved projects (uses `reelly-backfill-projects`)
-4. **Developer Sync** -- Test / Quick / Full buttons
-5. **Areas Sync** -- Extract areas from projects
-6. **Test Single Project** -- The enrichment test tool (Reelly source only)
+The batch query uses `.eq("status", "published")` but the projects table uses `is_published` (boolean), not `status`. This returns 0 results every time.
 
-**What gets REMOVED:**
-- "Fetch Missing Details" card (lines 2336-2438) -- redundant with Backfill
-- "Clean & Sync Fresh" card (lines 1818-1909) -- destructive, rarely used, move to a collapsible "Advanced" section
-- "Data Integrity" card (lines 1978-2132) -- move to collapsible "Advanced"
-- "API Connection Status" standalone card (lines 1109-1155) -- merge into main card header
-- "Need API Key" card (lines 2852-2868) -- remove (key already configured)
+Additionally, the `provident_only` filter looks for `source_url ILIKE '%provident%'` but ALL 1,809 projects have Reelly source URLs (e.g., `https://reelly.io/project/...`). No projects have "provident" in their source_url. The Provident enrichment should instead target projects that are missing data (FAQs, amenities, etc.) regardless of source, since Provident is a supplementary data source.
 
-### Section 2: Provident Enrichment (Blue/Orange theme)
-A single card for ALL Provident extraction:
-
-**Features:**
-1. **Provident Full Extraction** -- Uses Firecrawl to scrape Provident pages for images, PDFs, brochures, floor plans (calls `provident-batch-extract`)
-2. **Provident Page-Data Enrichment** -- Uses free page-data.json to fill FAQs, descriptions, amenities without Firecrawl credits (calls `enrich-project-test` in batch mode, Provident-only)
-3. **Progress tracking** -- Real-time counters showing processed/enriched/errors
-4. **Test Single Project** -- Provident source preview
-
-**What gets REMOVED/CONSOLIDATED:**
-- "Enrich All Projects (Reelly + Provident)" mega card (lines 2441-2602) -- split: Reelly part goes to Section 1, Provident part goes to Section 2
-
-### Advanced Section (Collapsible)
-A collapsible accordion at the bottom for maintenance tools:
-- Clean & Sync Fresh
-- Data Integrity / Restore to Reelly-Only
-- Clear Stuck Jobs
-- Resume Interrupted Sync
+**Fix:**
+- Change `.eq("status", "published")` to `.eq("is_published", true)` (lines 69 and 86)
+- Change the `provident_only` filter to NOT filter by source_url. Instead, just run the enrichment loop but skip the Reelly API call inside each project (only do Provident page-data fetching). This is already handled by the single-project logic -- when `source` is `provident_only`, pass a flag so the self-call skips Reelly.
 
 ---
 
-## Technical Changes
+### Bug 2: `provident-batch-extract` response missing `success` field
+**File:** `supabase/functions/provident-batch-extract/index.ts`
 
-### File: `src/components/listing-admin/ReellyImportPanel.tsx`
+The frontend checks `data?.success` but the response JSON never includes `success: true`. The response just has `{ processed, total_pdfs_found, ... }`.
 
-**Remove these state variables and their related handlers (no longer needed):**
-- `isFullExtracting`, `fullExtractionStep` (full extraction orchestrator removed)
-- `isAiEnriching`, `aiEnrichResult`, `aiEnrichStats`, `isLoadingAiStats` (AI enrichment removed previously)
-- `isProvidentExtracting`, `providentResult` (merged into new Provident section)
-- `isGeneratingInteriors`, `interiorsResult` (AI interior generation removed)
-
-**Restructure the JSX return to render in this order:**
-1. Live Database Counts banner (compact)
-2. Resume Sync banner (conditional)
-3. **Section 1: Reelly Enrichment** -- single `Card` with internal sub-sections using dividers
-4. **Section 2: Provident Enrichment** -- single `Card` with Firecrawl extraction + page-data enrichment
-5. **Advanced Tools** -- collapsible `Accordion` with maintenance cards
-
-**No edge function changes needed** -- all existing functions (`reelly-api-sync`, `reelly-backfill-projects`, `reelly-developers-sync`, `reelly-areas-sync`, `provident-batch-extract`, `enrich-project-test`) already work correctly. The change is purely UI reorganization.
-
-### File: `supabase/functions/enrich-project-test/index.ts`
-
-Add a `source: "provident_only"` option to the batch mode so the Provident section can call enrichment without touching Reelly data. This skips the Reelly API fetch and only runs Provident page-data extraction.
+**Fix:** Add `success: true` to all response objects (lines 111-117 for empty case, line 341+ for normal summary).
 
 ---
 
-## Summary of Cards: Before vs After
+### Bug 3: `provident-batch-extract` times out processing 25 projects
+**File:** `supabase/functions/provident-batch-extract/index.ts`
 
-| Before (13 cards) | After (3 sections) |
-|---|---|
-| API Connection Status | Merged into Reelly header |
-| Reelly API Sync | Reelly Enrichment > Sync |
-| Backfill Missing Details | Reelly Enrichment > Backfill |
-| Clean & Sync Fresh | Advanced (collapsible) |
-| Data Integrity | Advanced (collapsible) |
-| Developer Sync | Reelly Enrichment > Developers |
-| Areas & Emirates Sync | Reelly Enrichment > Areas |
-| Fetch Missing Details | REMOVED (redundant) |
-| Enrich All Projects | Split into both sections |
-| Test Project Enrichment | Reelly Enrichment > Test |
-| Need API Key | REMOVED |
+With `BATCH_LIMIT = 25`, 3-second throttle between items, plus Firecrawl scraping (3s wait + 30s timeout each), the function easily exceeds edge function time limits.
 
-**Result:** 2 main sections + 1 collapsible advanced section. Clean, simple, no confusion.
+**Fix:** Reduce default `BATCH_LIMIT` from 25 to 5 to stay within time limits. The frontend already loops in batches.
+
+---
+
+## Summary
+
+| File | Line(s) | Bug | Fix |
+|------|---------|-----|-----|
+| `enrich-project-test/index.ts` | 69, 86 | `.eq("status", "published")` matches 0 rows | Change to `.eq("is_published", true)` |
+| `enrich-project-test/index.ts` | 72-75, 88-90 | `source_url ILIKE '%provident%'` matches 0 rows | Remove source_url filter; instead pass `skip_reelly: true` flag to single-project call |
+| `provident-batch-extract/index.ts` | 111, 354 | Response missing `success: true` | Add `success: true` to all response objects |
+| `provident-batch-extract/index.ts` | 13 | `BATCH_LIMIT = 25` causes timeout | Reduce to `BATCH_LIMIT = 5` |
+
