@@ -1,103 +1,90 @@
 
 
-# Mobile UI and Data Quality Fix Plan
+# Fix Language System and Mobile Content Overflow
 
-This plan addresses 7 distinct issues identified from your screenshots and feedback.
+## Root Cause Analysis
 
----
+The language switching issues (mixed languages, layout breaking, content overflowing cards) all stem from one component: **GlobalTranslator.tsx**.
 
-## Issue 1: Contact Cards Too Large and Stretched (Ready to Get Started Section)
+This component uses a browser-level MutationObserver to intercept ALL text on the page and replace it after React has already rendered. This causes:
 
-**Problem:** The WhatsApp, Call, and Email cards in the "Ready to Get Started?" section are too tall and rectangular on mobile. The container stretches edge-to-edge.
+- **Mixed languages**: React renders content, then GlobalTranslator replaces some text nodes but misses others, creating a half-English, half-Arabic page
+- **Layout breaking on switch**: Text replacement happens AFTER layout is calculated, causing reflows and content jumping
+- **Content overflowing cards**: Translated text (especially Arabic, German, Russian) is often longer than English, and since the translation happens after render, CSS containers don't adapt properly
+- **Infinite loops**: The MutationObserver detects its own text changes and re-triggers, causing flickering
 
-**Fix:** In `CombinedContactNewsletter.tsx`:
-- Reduce card padding from `p-4` to `p-3` on mobile
-- Make the outer container have more horizontal margin on mobile (`mx-4 sm:mx-6` instead of `mx-2`)
-- Reduce icon size from `w-12 h-12` to `w-10 h-10`
-- Make cards horizontal (row layout) on mobile instead of stacked vertically, so they're more compact
-- Apply the same fix to `DirectContactCTA.tsx` for the similar section on service pages
+## The Fix
 
----
+### Step 1: Remove GlobalTranslator (the broken component)
 
-## Issue 2: Mobile Hamburger Menu - Logo Overlap Issue
+Remove `GlobalTranslator` from `App.tsx`. This single change eliminates all the race conditions, mixed-language artifacts, and layout-breaking behavior.
 
-**Problem:** The mobile menu header shows both the background header logo AND the menu's own "JBJ Global Real Estate" text, causing a double/overlapping logo effect (visible in IMG_0637 and IMG_0633).
+### Step 2: Ensure all UI text uses `t()` function (React-native translation)
 
-**Fix:** In `GlobalHeader.tsx` (SheetContent header area, lines 654-669):
-- Remove the monogram image (`jbjMonogramLightBg`) from the mobile menu header entirely
-- Keep only the text "JBJ Global Real Estate" as the menu title
-- This matches the "correct" state the user identified where no logo shows in the dropdown
+The app already has ~24 components using `t('key', 'fallback')` properly through React context. This is the correct approach - translations happen BEFORE render, so the layout engine sees the final text and sizes containers correctly.
 
----
+For any remaining hardcoded strings in key user-facing components (headers, buttons, labels), wrap them with `t()` calls using existing translation keys.
 
-## Issue 3: Split/Double Button on Property Page
+### Step 3: Add global CSS overflow protection
 
-**Problem:** The "List Your Property for Rent" button appears split with two parts (visible in IMG_0635) - the arrow + "List" text and "Your Property for Rent" appear as separate elements.
+Add defensive CSS rules to prevent ANY text from breaking out of its container, regardless of language:
 
-**Fix:** Find the component rendering this CTA on the rental/sell page and ensure the button is a single unified element with proper flex alignment, not split into two halves.
+```text
+- word-break: break-word on all card containers
+- overflow-wrap: anywhere on text elements
+- min-width: 0 on flex children (prevents flex items from overflowing)
+- hyphens: auto for long words in non-English languages
+```
 
----
+### Step 4: RTL layout fix
 
-## Issue 4: Popups Opening All Together / Crowded
+Ensure the `dir="rtl"` attribute on `<html>` (already set by LanguageContext) works with Tailwind's RTL utilities. Add `rtl:` prefixed classes where needed for padding/margin direction.
 
-**Problem:** Chat widget, cookies consent, and lead capture all compete for screen space. Closing one opens another immediately.
+## Files to Modify
 
-**Fix:** In `PopupCoordinatorContext.tsx`:
-- Add a delay between popup dismissals - when one popup is dismissed, wait 2-3 seconds before showing the next
-- Reduce cookies banner size on mobile by making it more compact (smaller padding, shorter text)
-- In `CookiesConsentBanner.tsx`: reduce mobile padding from `p-6` to `p-4`, use smaller text, stack buttons vertically on mobile
+1. **`src/App.tsx`** - Remove `GlobalTranslator` import and usage
+2. **`src/components/GlobalTranslator.tsx`** - Delete this file entirely
+3. **`src/App.css`** or **`src/index.css`** - Add global overflow-protection CSS rules
+4. **Key components** (homepage sections, cards, headers) - Verify `t()` usage covers all visible text
 
----
+## Technical Details
 
-## Issue 5: Areas Page - "Provident Estate" Text Showing in Descriptions
+### Why `t()` is correct and GlobalTranslator is not
 
-**Problem:** Area descriptions in the database contain raw markdown like `![banner-bg - Provident Estate](https://...)` which renders as visible text on area cards (visible in IMG_0629). This is a compliance violation.
+```text
+t() approach (correct):
+  React state changes -> component re-renders -> translated text in JSX -> layout calculated -> painted
 
-**Fix (Database + Code):**
-- Create a database migration to clean all 15 affected area descriptions:
-  - Strip the `![banner-bg - Provident Estate](...)` markdown image tags from descriptions
-  - Remove any `providentestate.com` URLs from description text
-  - Replace any remaining "Provident" or "Provident Estate" references with neutral text
-- In `AreaGuides.tsx`: add a sanitization function that strips markdown image syntax and source brand names before rendering descriptions, as a safety net
+GlobalTranslator approach (broken):
+  React renders English -> layout calculated -> painted -> MutationObserver fires -> DOM text replaced -> layout recalculated -> repainted -> MutationObserver fires again (loop)
+```
 
----
+### Overflow protection CSS
 
-## Issue 6: Areas Page - Empty Photos
+```text
+.card, [class*="rounded"] {
+  overflow: hidden;
+  word-break: break-word;
+}
 
-**Problem:** 144 areas have no `image_url`, showing empty/placeholder cards.
+* {
+  overflow-wrap: break-word;
+}
+```
 
-**Fix:**
-- For area cards with no image, ensure the gradient placeholder with MapPin icon renders properly (this already exists in code)
-- The real fix is that area images should come from actual community/master plan photos, not individual project photos. This requires uploading proper area images or sourcing them from the sync engine. For now, ensure the placeholder is clean and professional.
+### What stays working
 
----
+- The `t()` function in LanguageContext (unchanged, already correct)
+- All 15 language translation files (unchanged, already complete)
+- The `<T>` component for inline text translation (unchanged)
+- Language switcher UI (unchanged)
+- RTL support for Arabic, Persian, Hebrew (unchanged)
 
-## Issue 7: Cookie Consent - Backend Persistence
+## Impact
 
-**Problem:** User wants cookie consent to be saved in the backend so there's proof the user agreed.
-
-**Fix:**
-- Currently cookies consent is saved only in `localStorage`
-- Add a database table `cookie_consents` to store: visitor_id (or fingerprint), consent_status, preferences (JSON), timestamp, IP/user-agent
-- When user accepts cookies, save to both localStorage AND the database
-- This creates an auditable record of consent
-
----
-
-## Technical Summary
-
-### Files to Modify:
-1. `src/components/CombinedContactNewsletter.tsx` - Compact contact cards
-2. `src/components/DirectContactCTA.tsx` - Same compact treatment
-3. `src/components/GlobalHeader.tsx` - Remove logo from mobile menu header
-4. `src/components/CookiesConsentBanner.tsx` - Smaller on mobile, add DB persistence
-5. `src/contexts/PopupCoordinatorContext.tsx` - Add dismissal delay
-6. `src/pages/AreaGuides.tsx` - Add description sanitizer
-
-### Database Changes:
-1. Migration to clean area descriptions (remove Provident/markdown artifacts)
-2. New `cookie_consents` table for audit trail
-
-### Components to Identify and Fix:
-- The rental/sell page CTA button that appears split (need to locate the exact component)
+- No more mixed languages when switching
+- No more layout breaking on language change
+- Content stays within card boundaries on all devices
+- Faster rendering (no MutationObserver overhead running every 1.5 seconds)
+- Some hardcoded English strings in components that don't use `t()` will remain in English until individually wrapped - but this is better than the current broken mixed-language state
 
