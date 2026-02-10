@@ -2628,7 +2628,7 @@ export function ReellyImportPanel() {
                   const { data, error } = await supabase
                     .from("projects")
                     .select("slug")
-                    .not("external_id", "is", null)
+                    .not("reelly_id", "is", null)
                     .not("cover_image_url", "is", null)
                     .limit(50);
                   if (error) throw error;
