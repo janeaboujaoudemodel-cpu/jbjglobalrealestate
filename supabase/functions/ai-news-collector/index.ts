@@ -172,6 +172,12 @@ const AUTHORIZED_NEWS_SOURCES = [
   { name: "Gulf News Property", url: "https://gulfnews.com/living-in-uae/property", type: "media", category: "Market Update" },
   { name: "Zawya", url: "https://www.zawya.com/en/business/real-estate", type: "media", category: "Analysis" },
   { name: "Khaleej Times", url: "https://www.khaleejtimes.com/business/real-estate", type: "media", category: "Market Update" },
+  // Expanded sources
+  { name: "Provident Estate", url: "https://www.providentestate.com/blog/", type: "media", category: "Market Update" },
+  { name: "Gulf Business", url: "https://gulfbusiness.com/category/real-estate/", type: "media", category: "Market Update" },
+  { name: "The National", url: "https://www.thenationalnews.com/business/property/", type: "media", category: "Analysis" },
+  { name: "Property Finder", url: "https://www.propertyfinder.ae/blog/", type: "media", category: "Market Update" },
+  { name: "Bayut", url: "https://www.bayut.com/mybayut/", type: "media", category: "Market Update" },
 ];
 
 interface NewsArticle {
@@ -456,6 +462,138 @@ serve(async (req) => {
         enriched: enrichedCount,
         total: articlesToEnrich.length,
         errors: errors.length > 0 ? errors : undefined,
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // ===================== FIX-IMAGES ACTION =====================
+    if (action === "fix-images") {
+      console.log("Starting fix-images: targeting articles with bad/duplicate images...");
+      
+      const { data: allArticles } = await supabase
+        .from("market_news")
+        .select("id, title, category, source_url, image_url")
+        .not("image_url", "is", null);
+      
+      const usedImageUrls = new Set((allArticles || []).map(a => a.image_url).filter(Boolean));
+      
+      // Find articles with known bad patterns or duplicates
+      const badArticles = (allArticles || []).filter(a => {
+        if (!a.image_url) return false;
+        if (isImageBad(a.image_url)) return true;
+        if (a.image_url.includes("customerpulse.gov.ae")) return true;
+        if (a.image_url.includes("survey.customerpulse")) return true;
+        if (a.image_url.includes("UAEGoldNew")) return true;
+        return false;
+      });
+      
+      // Also find duplicate images (same URL used by 2+ articles)
+      const urlCounts = new Map<string, number>();
+      for (const a of (allArticles || [])) {
+        if (a.image_url) urlCounts.set(a.image_url, (urlCounts.get(a.image_url) || 0) + 1);
+      }
+      const duplicateArticles = (allArticles || []).filter(a => 
+        a.image_url && (urlCounts.get(a.image_url) || 0) > 1 && !badArticles.find(b => b.id === a.id)
+      );
+      
+      const toFix = [...badArticles, ...duplicateArticles];
+      console.log(`Found ${toFix.length} articles to fix (${badArticles.length} bad, ${duplicateArticles.length} duplicates)`);
+      
+      let fixedCount = 0;
+      for (const article of toFix) {
+        let newImageUrl: string | null = null;
+        
+        // Try to scrape the source for the real image
+        if (article.source_url) {
+          try {
+            const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${FIRECRAWL_API_KEY}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                url: article.source_url,
+                formats: ["markdown"],
+                onlyMainContent: false,
+                waitFor: 3000,
+                timeout: 30000,
+              }),
+            });
+            
+            if (scrapeResponse.ok) {
+              const scrapeData = await scrapeResponse.json();
+              const md = scrapeData.data?.markdown || scrapeData.markdown || "";
+              const ogImg = extractOgImage(md);
+              if (ogImg && !isImageBad(ogImg)) {
+                newImageUrl = ogImg;
+              } else {
+                const inlineImg = extractFirstGoodImage(md);
+                if (inlineImg) newImageUrl = inlineImg;
+              }
+            }
+          } catch (e) {
+            console.warn(`Scrape failed for fix-images: ${article.title}`);
+          }
+          await new Promise(r => setTimeout(r, 1000));
+        }
+        
+        // If scrape didn't work, try Firecrawl search for the article title
+        if (!newImageUrl) {
+          try {
+            const searchResponse = await fetch("https://api.firecrawl.dev/v1/search", {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${FIRECRAWL_API_KEY}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                query: `${article.title} Dubai real estate`,
+                limit: 3,
+              }),
+            });
+            
+            if (searchResponse.ok) {
+              const searchData = await searchResponse.json();
+              for (const result of (searchData.data || [])) {
+                const md = result.markdown || "";
+                const img = extractOgImage(md) || extractFirstGoodImage(md);
+                if (img && !isImageBad(img) && !usedImageUrls.has(img)) {
+                  newImageUrl = img;
+                  break;
+                }
+              }
+            }
+          } catch (e) {
+            console.warn(`Search failed for fix-images: ${article.title}`);
+          }
+          await new Promise(r => setTimeout(r, 1000));
+        }
+        
+        // Last resort: unique fallback
+        if (!newImageUrl) {
+          newImageUrl = await pickUniqueFallback(article.category, usedImageUrls);
+        }
+        
+        if (newImageUrl && newImageUrl !== article.image_url) {
+          usedImageUrls.add(newImageUrl);
+          const { error } = await supabase
+            .from("market_news")
+            .update({ image_url: newImageUrl })
+            .eq("id", article.id);
+          
+          if (!error) {
+            fixedCount++;
+            console.log(`✓ Fixed image for "${article.title}"`);
+          }
+        }
+      }
+      
+      return new Response(JSON.stringify({
+        success: true,
+        fixed: fixedCount,
+        total: toFix.length,
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
