@@ -1806,7 +1806,7 @@ export function ReellyImportPanel() {
                     <div key={i} className="flex items-center justify-between gap-3 border rounded-lg p-2 hover:bg-zinc-50 transition-colors">
                       <div className="min-w-0">
                         {p.slug ? (
-                          <a href={`/projects/${p.slug}`} target="_blank" rel="noopener noreferrer" className="font-medium text-zinc-900 truncate text-sm hover:text-blue-600 hover:underline flex items-center gap-1">
+                          <a href={`/project/${p.slug}`} target="_blank" rel="noopener noreferrer" className="font-medium text-zinc-900 truncate text-sm hover:text-blue-600 hover:underline flex items-center gap-1">
                             {p.name}
                             <ExternalLink className="h-3 w-3 flex-shrink-0 opacity-50" />
                           </a>

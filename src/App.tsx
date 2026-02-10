@@ -790,6 +790,8 @@ const App = () => (
                 <Route path="/hr-dashboard" element={<OwnerGuard><HRDashboard /></OwnerGuard>} />
                 <Route path="/hr-hub" element={<Navigate to="/employee-management" replace />} />
                 <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
+                <Route path="/projects" element={<Navigate to="/properties" replace />} />
+                <Route path="/projects/:slug" element={<RedirectWithParams to="/project/:slug" />} />
                 
                 <Route path="*" element={<NotFound />} />
               </Route>

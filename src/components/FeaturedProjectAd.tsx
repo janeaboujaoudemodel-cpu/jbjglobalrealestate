@@ -32,7 +32,7 @@ export const FeaturedProjectAd = ({
       className="col-span-full"
     >
       <Link 
-        to={`/projects/${projectSlug}`}
+        to={`/project/${projectSlug}`}
         className="block group"
       >
         <div 

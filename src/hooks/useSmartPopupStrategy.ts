@@ -149,7 +149,7 @@ export function useSmartPopupStrategy(): SmartPopupState & {
     }
 
     // Rule 4: Scroll-based trigger on project detail pages
-    if (location.pathname.startsWith("/projects/") || location.pathname.startsWith("/properties/")) {
+    if (location.pathname.startsWith("/project/") || location.pathname.startsWith("/properties/")) {
       const handleScroll = () => {
         const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
         if (scrollPercent >= SCROLL_THRESHOLD && !wasShownThisSession()) {
