@@ -44,28 +44,28 @@ import { useInfiniteQuery } from "@tanstack/react-query";
    error?: string;
  }
  
- export interface ReellyFilters {
-   search?: string;
-   emirate?: string;
-   developerId?: string;
-   saleStatus?: string;
-   constructionStatus?: string;
- }
+export interface ReellyFilters {
+    search?: string;
+    emirate?: string;
+    developerName?: string;
+    saleStatus?: string;
+    constructionStatus?: string;
+  }
+  
+ async function fetchReellyProjects(
+   offset: number,
+   filters?: ReellyFilters
+ ): Promise<ReellyProjectsResponse> {
+   const params = new URLSearchParams({
+     limit: String(PAGE_SIZE),
+     offset: String(offset),
+   });
  
-async function fetchReellyProjects(
-  offset: number,
-  filters?: ReellyFilters
-): Promise<ReellyProjectsResponse> {
-  const params = new URLSearchParams({
-    limit: String(PAGE_SIZE),
-    offset: String(offset),
-  });
-
-  if (filters?.search) params.set('search', filters.search);
-  if (filters?.emirate) params.set('emirate', filters.emirate);
-  if (filters?.saleStatus) params.set('sale_status', filters.saleStatus);
-  if (filters?.constructionStatus) params.set('construction_status', filters.constructionStatus);
-  if (filters?.developerId) params.set('developer_id', filters.developerId);
+   if (filters?.search) params.set('search', filters.search);
+   if (filters?.emirate) params.set('emirate', filters.emirate);
+   if (filters?.saleStatus) params.set('sale_status', filters.saleStatus);
+   if (filters?.constructionStatus) params.set('construction_status', filters.constructionStatus);
+   if (filters?.developerName) params.set('developer_name', filters.developerName);
 
   const response = await fetch(
     `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reelly-projects?${params.toString()}`,

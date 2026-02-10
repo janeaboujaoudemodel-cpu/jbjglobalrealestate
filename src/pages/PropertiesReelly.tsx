@@ -69,7 +69,7 @@ type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 
 interface FilterState {
   search: string;
   emirate: string | null;
-  developerId: string | null;
+  developerName: string | null;
   saleStatus: string | null;
   constructionStatus: string | null;
   currency: ExtendedCurrency;
@@ -80,7 +80,7 @@ interface FilterState {
 const defaultFilters: FilterState = {
   search: '',
   emirate: null,
-  developerId: null,
+  developerName: null,
   saleStatus: null,
   constructionStatus: null,
   currency: 'AED',
@@ -150,7 +150,7 @@ const PropertiesReelly = () => {
     emirate: filters.emirate || undefined,
     saleStatus: filters.saleStatus || undefined,
     constructionStatus: filters.constructionStatus || undefined,
-    developerId: filters.developerId || undefined,
+    developerName: filters.developerName || undefined,
   });
 
   // Flatten paginated data
@@ -177,7 +177,7 @@ const PropertiesReelly = () => {
         emirate: emirateParam,
         saleStatus: statusParam,
         constructionStatus: constructionParam,
-        developerId: developerParam,
+        developerName: developerParam,
       }));
     }
   }, [searchParams]);
@@ -223,7 +223,7 @@ const PropertiesReelly = () => {
   const activeFilterCount = [
     filters.search,
     filters.emirate !== null,
-    filters.developerId !== null,
+    filters.developerName !== null,
     filters.saleStatus !== null,
     filters.constructionStatus !== null,
   ].filter(Boolean).length;
@@ -352,8 +352,8 @@ const PropertiesReelly = () => {
 
               {/* Developer Select with Logos */}
               <Select
-                value={filters.developerId || "all"}
-                onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
+                value={filters.developerName || "all"}
+                onValueChange={(value) => updateFilter("developerName", value === "all" ? null : value)}
               >
                 <SelectTrigger className="w-[170px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
                   <Building2 className="w-4 h-4 mr-2 text-gold" />
@@ -364,7 +364,7 @@ const PropertiesReelly = () => {
                     All Developers
                   </SelectItem>
                   {allDevelopersSorted.map((dev) => (
-                    <SelectItem key={dev.id} value={dev.id} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
+                    <SelectItem key={dev.id} value={dev.name} className="text-black hover:bg-gold/10 focus:bg-gold/10 focus:text-black">
                       <span className="flex items-center gap-2">
                         {dev.logo_url ? (
                           <img src={dev.logo_url} alt="" className="w-5 h-5 object-fill rounded-sm flex-shrink-0" />
