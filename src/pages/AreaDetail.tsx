@@ -10,6 +10,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { useAreaBySlug, useAreas } from "@/hooks/useAreas";
 import { AreaHeroSection } from "@/components/area-detail/AreaHeroSection";
+import { AreaAboutSection } from "@/components/area-detail/AreaAboutSection";
 import { AreaProjectsGrid } from "@/components/area-detail/AreaProjectsGrid";
 import { AreaDevelopersBar } from "@/components/area-detail/AreaDevelopersBar";
 import { AreaMapSection } from "@/components/area-detail/AreaMapSection";
@@ -52,8 +53,13 @@ const AreaDetail = () => {
       {/* Full-Screen Hero with Real Photo */}
       <AreaHeroSection area={area as any} />
 
+      {/* About This Area */}
+      <AreaAboutSection area={area as any} />
+
       {/* Projects Grid */}
-      <AreaProjectsGrid areaName={area.name} areaSlug={area.slug} />
+      <div id="projects-section">
+        <AreaProjectsGrid areaName={area.name} areaSlug={area.slug} />
+      </div>
 
       {/* Developers Bar */}
       <AreaDevelopersBar areaName={area.name} />

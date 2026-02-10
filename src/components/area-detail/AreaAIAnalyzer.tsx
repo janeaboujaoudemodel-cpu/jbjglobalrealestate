@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Brain, Loader2 } from "lucide-react";
+import { Brain, Loader2, TrendingUp, TrendingDown, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface AreaAIAnalyzerProps {
@@ -9,9 +9,32 @@ interface AreaAIAnalyzerProps {
   emirate: string;
 }
 
+function extractSection(text: string, sectionName: string): string {
+  const patterns = [
+    new RegExp(`\\d+\\.\\s*\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\d+\\.\\s*\\*\\*|$)`, 'i'),
+    new RegExp(`##\\s*${sectionName}[:\\s]*([\\s\\S]*?)(?=##|\\d+\\.\\s*\\*\\*|$)`, 'i'),
+    new RegExp(`\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*[A-Z]|\\d+\\.\\s*\\*\\*|$)`, 'i'),
+  ];
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match?.[1]?.trim()) return match[1].trim();
+  }
+  return "";
+}
+
+function cleanMarkdown(text: string): string {
+  return text
+    .replace(/#{1,4}\s*/g, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/^\s*[-*]\s*/gm, '• ')
+    .trim();
+}
+
 export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
   const hasTriggered = useRef(false);
 
   const { data: stats } = useQuery({
@@ -48,34 +71,58 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
     staleTime: 5 * 60 * 1000,
   });
 
-  const handleAnalyze = async () => {
+  const handleAnalyze = useCallback(async () => {
     setIsAnalyzing(true);
     try {
       const { data, error } = await supabase.functions.invoke("ai-property-analyzer", {
         body: { area: areaName, propertyType: "all" },
       });
-
       if (error) throw error;
       setAnalysis(data?.fullAnalysis || "Analysis not available.");
-    } catch (err) {
+    } catch {
       setAnalysis("Unable to generate analysis at this time. Please try again later.");
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  }, [areaName]);
 
-  // Auto-trigger analysis once stats are available
+  // IntersectionObserver: only trigger when section scrolls into view
   useEffect(() => {
-    if (stats && stats.totalProjects > 0 && !analysis && !isAnalyzing && !hasTriggered.current) {
+    if (!sectionRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
+      { threshold: 0.1 }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (isVisible && stats && stats.totalProjects > 0 && !analysis && !isAnalyzing && !hasTriggered.current) {
       hasTriggered.current = true;
       handleAnalyze();
     }
-  }, [stats]);
+  }, [isVisible, stats, analysis, isAnalyzing, handleAnalyze]);
 
   if (!stats || stats.totalProjects === 0) return null;
 
+  const sections = analysis ? {
+    overview: extractSection(analysis, "Area Overview"),
+    pricePerSqft: extractSection(analysis, "Price Per Sqft"),
+    supplyDemand: extractSection(analysis, "Supply vs Demand"),
+    developers: extractSection(analysis, "Developer Landscape"),
+    investment: extractSection(analysis, "Investment Metrics"),
+    pros: extractSection(analysis, "Pros"),
+    cons: extractSection(analysis, "Cons"),
+    rating: extractSection(analysis, "Investment Rating"),
+  } : null;
+
+  // Extract rating score
+  const ratingMatch = sections?.rating?.match(/(\d+(?:\.\d+)?)\s*(?:\/|out of)\s*10/i);
+  const ratingScore = ratingMatch ? parseFloat(ratingMatch[1]) : null;
+
   return (
-    <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
           <Brain className="w-6 h-6 text-gold" />
@@ -115,17 +162,114 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             <p className="text-zinc-500 text-sm">Analyzing {areaName}...</p>
           </div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white border border-gold/20 rounded-2xl p-6 md:p-8 shadow-sm"
-          >
-            <div className="prose prose-gold max-w-none text-zinc-700 text-sm leading-relaxed whitespace-pre-wrap">
-              {analysis}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+            {/* Row 1: Overview + Rating */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {sections?.overview && (
+                <div className="lg:col-span-2 bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Building2 className="w-5 h-5 text-gold" />
+                    <h3 className="font-bold text-black text-lg">Area Overview</h3>
+                  </div>
+                  <p className="text-zinc-700 text-sm leading-relaxed">{cleanMarkdown(sections.overview)}</p>
+                </div>
+              )}
+              {ratingScore !== null && (
+                <div className="bg-black rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center">
+                  <Star className="w-8 h-8 text-gold mb-2" />
+                  <div className="text-5xl font-bold text-gold mb-1">{ratingScore}</div>
+                  <div className="text-gold/70 text-sm font-medium">/10 Investment Rating</div>
+                  {sections?.rating && (
+                    <p className="text-zinc-400 text-xs mt-3 leading-relaxed">
+                      {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[:\s-]+/, '').trim()}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
-            <div className="mt-6 pt-4 border-t border-gold/10 flex items-center gap-2 text-zinc-500 text-xs">
+
+            {/* Row 2: Price Per Sqft + Supply vs Demand */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {sections?.pricePerSqft && (
+                <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-2 mb-3">
+                    <BarChart3 className="w-5 h-5 text-gold" />
+                    <h3 className="font-bold text-black text-lg">Price Per Sqft</h3>
+                  </div>
+                  <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-line">
+                    {cleanMarkdown(sections.pricePerSqft)}
+                  </div>
+                </div>
+              )}
+              {sections?.supplyDemand && (
+                <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-2 mb-3">
+                    <TrendingUp className="w-5 h-5 text-gold" />
+                    <h3 className="font-bold text-black text-lg">Supply vs Demand</h3>
+                  </div>
+                  <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-line">
+                    {cleanMarkdown(sections.supplyDemand)}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Row 3: Investment Metrics + Developers */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {sections?.investment && (
+                <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Shield className="w-5 h-5 text-gold" />
+                    <h3 className="font-bold text-black text-lg">Investment Metrics</h3>
+                  </div>
+                  <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-line">
+                    {cleanMarkdown(sections.investment)}
+                  </div>
+                </div>
+              )}
+              {sections?.developers && (
+                <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Building2 className="w-5 h-5 text-gold" />
+                    <h3 className="font-bold text-black text-lg">Developer Landscape</h3>
+                  </div>
+                  <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-line">
+                    {cleanMarkdown(sections.developers)}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Row 4: Pros & Cons */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {sections?.pros && (
+                <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-2 mb-3">
+                    <ThumbsUp className="w-5 h-5 text-emerald-600" />
+                    <h3 className="font-bold text-emerald-800 text-lg">Pros</h3>
+                  </div>
+                  <div className="text-emerald-900 text-sm leading-relaxed whitespace-pre-line">
+                    {cleanMarkdown(sections.pros)}
+                  </div>
+                </div>
+              )}
+              {sections?.cons && (
+                <div className="bg-red-50 border border-red-200 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-2 mb-3">
+                    <ThumbsDown className="w-5 h-5 text-red-500" />
+                    <h3 className="font-bold text-red-800 text-lg">Cons</h3>
+                  </div>
+                  <div className="text-red-900 text-sm leading-relaxed whitespace-pre-line">
+                    {cleanMarkdown(sections.cons)}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center gap-2 text-zinc-500 text-xs pt-2">
               <Brain className="w-4 h-4" />
-              AI-generated analysis based on current market data
+              JBJ Property Analyzer — AI-generated analysis based on current market data. Not financial advice.
             </div>
           </motion.div>
         )}

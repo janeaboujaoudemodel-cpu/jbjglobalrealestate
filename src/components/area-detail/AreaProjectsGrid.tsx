@@ -28,8 +28,20 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   if (isLoading) {
     return (
       <section className="py-16 bg-[hsl(var(--premium-bg))]">
-        <div className="container mx-auto px-4 text-center">
-          <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto" />
+        <div className="container mx-auto px-4">
+          <div className="h-8 w-64 bg-zinc-200 animate-pulse rounded mb-8" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="rounded-xl overflow-hidden border-2 border-gold/20">
+                <div className="aspect-[4/3] bg-zinc-200 animate-pulse" />
+                <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] space-y-2">
+                  <div className="h-4 w-3/4 bg-zinc-200 animate-pulse rounded" />
+                  <div className="h-3 w-1/2 bg-zinc-200 animate-pulse rounded" />
+                  <div className="h-4 w-1/3 bg-zinc-200 animate-pulse rounded mt-4" />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     );
