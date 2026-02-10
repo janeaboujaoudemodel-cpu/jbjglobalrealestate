@@ -1,141 +1,97 @@
 
 
-# News System Overhaul: Market Stats Split, Dropdown Fix, Full Article Content & AI Analysis
+# Fix Duplicate News Images, Use Article Photo for Brochures, and Re-enrich Articles
 
-## Overview
+## Problems Identified
 
-This plan addresses 5 interconnected issues: splitting market statistics into 2025 and 2026 cards, fixing the Insights dropdown cropping, making the NewsDetail hero truly full-screen, ensuring full article content with real photos, and adding AI-generated real estate impact analysis to each article.
+1. **Duplicate images across articles**: 5 articles share the same UAE Ministry image, 3 share the same Zawya placeholder, 3 share the same Unsplash "Developer News" fallback, 2 share the same Zawya image, and 2 share the same Abu Dhabi logo. These are generic/fallback images that don't represent the actual article content.
 
----
+2. **Brochure card uses a static Downtown Dubai photo**: `PremiumBrochureCard.tsx` imports `menu-downtown-dubai-skyline.jpg` as the background for ALL project brochures. The user wants to use the photo from the "Rent or buy?" news article instead (a Khaleej Times Dubai cityscape photo).
 
-## 1. Split Key Market Statistics into 2025 and 2026 Cards
-
-**Current state**: A single "Key Market Statistics -- 2025" card with H1 2025 data.
-
-**Changes in `src/pages/News.tsx`**:
-
-- Create a **2026 card first** (primary, larger) showing YTD 2026 statistics with fresh data
-- Below it, add a premium separator text: "Looking back at last year's performance?" or similar
-- Then a **2025 Full Year Recap card** showing Jan 1, 2025 to Jan 1, 2026 final totals (full-year closed figures)
-- Both cards use the existing `jj-layer-active` / `jj-card-inner` champagne styling
-- 2026 card gets a "LIVE" or "2026 YTD" badge to indicate it's current
-
-**2026 YTD stats** (sourced from DLD public data):
-- Transaction count YTD
-- Transaction value YTD  
-- Top performing area
-- YoY growth comparison
-
-**2025 Full Year stats**:
-- Total transactions (full year closed)
-- Total value (full year closed)
-- YoY growth vs 2024
-- Record highlights
+3. **Enrichment is not extracting real article photos**: The Firecrawl scraping + regex image extraction is failing for many sources (WAM, Dubai Media Office, Abu Dhabi Media Office), falling back to Unsplash or generic source logos.
 
 ---
 
-## 2. Fix Insights Dropdown Cropping (No Scrolling Required)
+## Changes
 
-**Current state**: `MegaMenuInsights.tsx` uses `noScroll` on `MegaMenuShell` but then wraps content in a scrollable `div` with `maxHeight: calc(100dvh - 140px)`. The Guides card has 6 items (up to Golden Visa) which gets cut off.
+### 1. Update Brochure Card Background Image
 
-**Changes in `src/components/header/MegaMenuInsights.tsx`**:
+**File: `src/components/project-detail/PremiumBrochureCard.tsx`**
 
-- Remove the inner scrollable `div` wrapper entirely -- let the shell handle sizing
-- Reduce link density: make cards more compact by reducing padding and spacing
-- Use `compact` mode more aggressively with smaller text/icons so all 8 cards (4x2 grid) fit without scrolling
-- If needed, merge related sections (e.g., combine "Legal" items into a single row or reduce link count per card)
-- Ensure the entire dropdown fits within the viewport without any scrolling needed
+- Replace the static `menu-downtown-dubai-skyline.jpg` import with the Khaleej Times Dubai cityscape photo URL: `https://imgengine.khaleejtimes.com/khaleejtimes-english/2026-02-04/lvnx1x0g/Dubai.jpg?width=1200&height=800&format=auto`
+- This is the "Rent or buy?" article photo the user liked
+- The card already has the project name overlaid, so it will show: beautiful Dubai photo + project title + JBJ branding
 
-**Changes in `src/components/header/mega-menu-primitives.tsx`**:
-- When `noScroll` is true, the shell already avoids `maxHeight`/`overflowY` -- verify this works correctly
-- Add a safety `maxHeight: 100dvh - header` even in noScroll mode to prevent overflow off-screen
+### 2. Fix Duplicate Images in Database
 
----
+**File: `supabase/functions/ai-news-collector/index.ts`**
 
-## 3. NewsDetail: Full-Screen Hero (No Content Overlap)
+Update the enrichment logic to better extract real article images:
 
-**Current state**: Hero is `h-[60vh] md:h-[70vh]` with article title overlaid at the bottom. The champagne content card overlaps with `-mt-8`.
+- **Improved image extraction**: After scraping, search for Open Graph images (`og:image`), Twitter card images, and structured data images in the markdown -- not just inline `![](url)` patterns
+- **Per-article unique Unsplash fallbacks**: Instead of using the same Unsplash URL for every article in a category, append a unique search term (based on article title keywords) to the Unsplash URL to get different images per article. For example: `https://images.unsplash.com/photo-{hash}?w=1200&q=80` with different hashes per category + keyword combination
+- **Block known bad images**: Add a blocklist for generic source logos that aren't article photos (e.g., `adgmo-logotype.png`, `newsbanner.jpg`, `twitter.png`, `photonpay-granted...`). These are site UI elements, not article images
+- **Force re-scrape for duplicates**: When enriching, also re-process articles whose `image_url` matches known duplicate/bad URLs, not just articles with `NULL` image
 
-**Changes in `src/pages/NewsDetail.tsx`**:
+### 3. Create a Diverse Fallback Image Pool
 
-- Change hero height to `h-[80vh] md:h-[90vh]` for a truly full-screen feel (like developer pages)
-- Remove the `-mt-8` overlap on the content card so the champagne body sits cleanly below the hero
-- Keep the gradient overlay light (`from-black/60 via-transparent to-transparent`) so the hero photo is clearly visible
-- Move the title/badges overlay to use a thinner bottom gradient strip so the image dominates
+Instead of one Unsplash URL per category, maintain a pool of 5-6 unique Dubai photos per category so no two articles ever share the same fallback:
 
----
+```text
+Policy: 6 different government/regulatory-themed Dubai photos
+Economic: 6 different business/skyline photos
+Market Update: 6 different property/marina photos
+Developer News: 6 different construction/building photos
+(etc.)
+```
 
-## 4. Full Article Content with Real Photos and Source Links
+When assigning a fallback, pick one that hasn't been used by any other article in the database (query existing image_urls first).
 
-**Current state**: Articles have content but it's AI-generated summaries (3-5 paragraphs). User wants full extracted articles with the actual photos from the source.
+### 4. Trigger Re-enrichment for Affected Articles
 
-**Changes in `supabase/functions/ai-news-collector/index.ts`**:
-
-- Update the `enrich` action to request `formats: ["markdown", "links"]` from Firecrawl to get richer content
-- Extract ALL images from the scraped markdown (not just the first one) and store them
-- Update the AI extraction prompt to preserve the full article length (not summarize to 4-6 paragraphs)
-- For the `collect` action, update scraping to also capture images from each source page
-- Ensure `source_url` always contains the direct link to the original article
-
-**Changes in `src/pages/NewsDetail.tsx`**:
-- Render full article content (already using `dangerouslySetInnerHTML` with markdown rendering)
-- Keep the "View Original Source" link prominent at the bottom
-
----
-
-## 5. Add AI Real Estate Impact Analysis to Each Article
-
-**Database change**: Add an `ai_analysis` column to `market_news` table (type: text, nullable).
-
-**Changes in `supabase/functions/ai-news-collector/index.ts`**:
-
-- During enrichment, after extracting the full content, make a second AI call to generate a "Real Estate Impact Analysis"
-- The AI prompt will ask: "How does this news affect Dubai real estate? Summarize the key takeaways for investors and buyers in 3-4 bullet points."
-- Store the result in the new `ai_analysis` column
-
-**Changes in `src/pages/NewsDetail.tsx`**:
-
-- After the full article content, add a premium "AI Analysis" section:
-  - Champagne card with a sparkle/brain icon
-  - Title: "How This Affects Dubai Real Estate"
-  - Rendered AI analysis with bullet points on positive impacts
-  - Disclaimer: "AI-generated analysis for informational purposes"
-- This gives readers a quick summary if they don't want to read the full article
+After deploying the updated edge function, trigger the `enrich` action to re-process the ~15 articles currently using duplicate or generic images. The updated logic will:
+1. Try to scrape the real article image from the source URL
+2. If that fails, assign a unique fallback from the diversified pool
 
 ---
 
 ## Technical Details
 
-### Database Migration
-
-```sql
-ALTER TABLE public.market_news 
-ADD COLUMN IF NOT EXISTS ai_analysis text;
-```
-
 ### Files to Modify
 
 | File | Changes |
 |------|---------|
-| `src/pages/News.tsx` | Split market stats into 2026 (primary) + 2025 (full year recap) cards |
-| `src/pages/NewsDetail.tsx` | Full-screen hero (no overlap), AI analysis section at bottom |
-| `src/components/header/MegaMenuInsights.tsx` | Remove inner scroll wrapper, compact layout to fit all items |
-| `supabase/functions/ai-news-collector/index.ts` | Full article extraction, image extraction, AI analysis generation |
+| `src/components/project-detail/PremiumBrochureCard.tsx` | Replace Downtown Dubai import with Khaleej Times cityscape URL |
+| `supabase/functions/ai-news-collector/index.ts` | Improve image extraction (OG tags, blocklist), diversify fallback pool, re-enrich duplicates |
 
-### AI Analysis Prompt (Edge Function)
+### Bad Image Blocklist (Edge Function)
 
+```typescript
+const BAD_IMAGE_PATTERNS = [
+  /adgmo-logotype/i,
+  /newsbanner\.jpg/i,
+  /twitter\.png/i,
+  /photonpay-granted/i,
+  /logo/i,
+  /favicon/i,
+];
 ```
-"You are a Dubai real estate market analyst. Based on this news article, explain how it affects the Dubai real estate market. Write 3-4 concise bullet points covering: (1) immediate market impact, (2) opportunity for investors/buyers, (3) long-term outlook. Be factual and positive where appropriate. Do not add disclaimers."
+
+### Improved Image Extraction Order
+
+```text
+1. Look for og:image or twitter:image in scraped markdown/metadata
+2. Look for large inline images (skip icons/logos by checking dimensions in URL)
+3. Filter out blocked patterns
+4. If no valid image found, assign unique fallback from diversified pool
 ```
 
-### Enrichment Flow Update
+### Fallback Assignment Logic
 
-```
-For each article:
-  1. Scrape source_url via Firecrawl (markdown + links)
-  2. AI extracts full article text (preserve full length, don't summarize)
-  3. Extract primary image from scraped content
-  4. AI generates real estate impact analysis (3-4 bullet points)
-  5. UPDATE market_news SET content, image_url, ai_analysis WHERE id = ...
+```text
+1. Query all existing image_urls from market_news table
+2. For each category, maintain an array of 6 unique Unsplash photo URLs
+3. Pick the first URL from the category pool that is NOT already in use
+4. If all are used, append a random crop parameter to create a unique variant
 ```
 
