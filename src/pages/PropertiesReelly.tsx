@@ -275,14 +275,14 @@ const PropertiesReelly = () => {
       </PropertiesHeroVideo>
 
       {/* Filters Section */}
-      <section className="sticky top-24 lg:top-20 z-40 bg-black py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <section className="sticky top-20 md:top-24 lg:top-20 z-40 bg-black py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="container mx-auto px-3 sm:px-4">
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
             
             {/* Search Row */}
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap items-center gap-3">
               {/* Search Input */}
-              <div className="relative flex-1 min-w-[200px]">
+              <div className="relative col-span-2 sm:col-span-3 md:flex-1 md:min-w-[200px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold/70" />
                 <Input
                   type="text"
@@ -298,7 +298,7 @@ const PropertiesReelly = () => {
                 value={filters.emirate || "all"}
                 onValueChange={(value) => updateFilter("emirate", value === "all" ? null : value)}
               >
-                <SelectTrigger className="w-[140px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
+                <SelectTrigger className="w-full md:w-[140px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
                   <MapPin className="w-4 h-4 mr-2 text-gold" />
                   <SelectValue placeholder="Emirate" />
                 </SelectTrigger>
@@ -316,7 +316,7 @@ const PropertiesReelly = () => {
                 value={filters.saleStatus || "all"}
                 onValueChange={(value) => updateFilter("saleStatus", value === "all" ? null : value)}
               >
-                <SelectTrigger className="w-[160px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
+                <SelectTrigger className="w-full md:w-[160px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
                   <CheckCircle className="w-4 h-4 mr-2 text-gold" />
                   <SelectValue placeholder="Sale Status" />
                 </SelectTrigger>
@@ -337,7 +337,7 @@ const PropertiesReelly = () => {
                 value={filters.constructionStatus || "all"}
                 onValueChange={(value) => updateFilter("constructionStatus", value === "all" ? null : value)}
               >
-                <SelectTrigger className="w-[170px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
+                <SelectTrigger className="w-full md:w-[170px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
                   <Building2 className="w-4 h-4 mr-2 text-gold" />
                   <SelectValue placeholder="Construction" />
                 </SelectTrigger>
@@ -355,7 +355,7 @@ const PropertiesReelly = () => {
                 value={filters.developerName || "all"}
                 onValueChange={(value) => updateFilter("developerName", value === "all" ? null : value)}
               >
-                <SelectTrigger className="w-[170px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
+                <SelectTrigger className="w-full md:w-[170px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
                   <Building2 className="w-4 h-4 mr-2 text-gold" />
                   <SelectValue placeholder="Developer" />
                 </SelectTrigger>
@@ -383,7 +383,7 @@ const PropertiesReelly = () => {
                 value={filters.currency}
                 onValueChange={(value) => updateFilter("currency", value as ExtendedCurrency)}
               >
-                <SelectTrigger className="w-[90px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
+                <SelectTrigger className="w-full md:w-[90px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -400,7 +400,7 @@ const PropertiesReelly = () => {
                 value={filters.sizeUnit}
                 onValueChange={(value) => updateFilter("sizeUnit", value as 'sqft' | 'sqm')}
               >
-                <SelectTrigger className="w-[80px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
+                <SelectTrigger className="w-full md:w-[80px] h-10 bg-[#F5F0E6] border-gold/30 text-black">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -490,7 +490,7 @@ const PropertiesReelly = () => {
               </div>
             ) : sortedProjects.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 p-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 p-4">
                   {sortedProjects.map((project, index) => {
                     const adAfterIndex = [5, 11, 17];
                     const adIndex = adAfterIndex.indexOf(index);

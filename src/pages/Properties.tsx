@@ -418,7 +418,7 @@ const Properties = () => {
       </PropertiesHeroVideo>
 
       {/* Filters Section - 3-Layer System: Black > Active Champagne > Pearl Filter Boxes */}
-      <section className="sticky top-16 lg:top-[72px] z-40 bg-black py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <section className="sticky top-16 md:top-20 lg:top-[72px] z-40 bg-black py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Champagne Layer with thin black contour visible at edges */}
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
