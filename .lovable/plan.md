@@ -1,42 +1,84 @@
 
+# Unified Enrichment Engine + Backfill Persistence Fix
 
-# Fix: Stats Counter Layout Shift + Sold Out Sort Logic
+## Problems Identified
 
-## Two Issues
+1. **Backfill progress resets on navigation** -- The backfill function marks projects with `detail_fetched_at` timestamp, but the UI loads previous results from `sync_jobs` table and then starts a new batch that resets counters. The `loadPersistedBackfillResults` function loads old data, but `handleRunBackfill` immediately resets `aggregated` to zeros, wiping the display. Additionally, the edge function query uses `detail_fetched_at IS NULL` but `force_refresh=true` was being sent, causing already-processed projects to be re-fetched.
 
----
+2. **Multiple broken enrichment buttons** -- There are 6+ separate enrichment sections (Backfill Missing Details, Test Project Enrichment, AI Content Generation, Provident Document Extraction, Bulk Enrichment Reelly API, Full Extraction) that each call different edge functions, most of which fail or extract nothing because they depend on Firecrawl credits being available or Provident slug matching.
 
-## 1. Stats Counter Card Layout Shift (Track Record Section)
+3. **Project detail page link from admin** -- When clicking a project in the backfill results, there's no direct link to the internal project page showing merged Reelly + Provident data.
 
-**Problem:** The "Social Followers" stat counts from 0 to 1,000,000. During the animation, intermediate values like "900,000" (7 characters) are much wider than the final "1M+" (3 characters). This causes the card to expand during counting and then shrink when it reaches 1M, creating an ugly layout jump.
+## Solution
 
-**Fix:** Always format the number using the abbreviated "M" format once it reaches 1,000,000 target. But the real fix is to **always display the final format** during counting too. Since the end value is 1,000,000, the counter should count in the abbreviated format from the start: "0M" -> "0.1M" -> "0.5M" -> "0.9M" -> "1M+". This keeps the card width stable throughout the animation.
+### Part 1: Fix Backfill Persistence (Critical)
 
-Additionally, set a `min-width` on the counter value container so the card never changes size during animation.
+**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
 
-**Changes in `src/components/StatsCounter.tsx`:**
-- Update `formatNumber` to always use the abbreviated "M" format when the **target** (`end`) is >= 1,000,000, not just when the current count reaches it
-- Pass `end` into the formatting logic so it knows the target scale
-- Add `min-w-[80px]` or similar to the counter value div to stabilize width
+- In `handleRunBackfill`, initialize `aggregated` from the persisted `sync_jobs` data when resuming (not from zero)
+- Show cumulative totals: previous run totals + current batch results
+- Remove `force_refresh: true` from the default backfill call -- only use it when explicitly requested. The edge function already uses `detail_fetched_at IS NULL` which correctly skips already-processed projects
+- Add a progress bar showing `(total_projects - remaining) / total_projects`
+- After backfill completes, immediately reload persisted results so navigating away and back shows correct numbers
 
----
+**File: `supabase/functions/reelly-backfill-projects/index.ts`**
 
-## 2. Sold Out Sort -- Remove the Condition
+- No changes needed -- the edge function already persists progress via `sync_jobs` and uses `detail_fetched_at` to skip processed projects. The issue is entirely in the frontend.
 
-**Problem:** The current code wraps the sold-out sort in `if (!filters.hideSoldOut)`. The user never asked to skip the sort -- they want sold-out projects **always pushed to the bottom**. The `hideSoldOut` filter already removes sold-out projects entirely before sorting, so the condition is redundant. But more importantly, the user explicitly said: do NOT hide sold out projects. Just push them down. The filter toggle should still work independently.
+### Part 2: Consolidate to ONE Enrichment Button
 
-**Fix:** Remove the `if (!filters.hideSoldOut)` wrapper. The sort should always run unconditionally. When `hideSoldOut` is true, the sold-out projects are already filtered out before the sort runs, so the sort simply has no effect (no sold-out projects in the list to push down). When `hideSoldOut` is false, the sort correctly pushes them to the bottom.
+**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
 
-**Changes in `src/pages/PropertiesReelly.tsx`:**
-- Remove the `if (!filters.hideSoldOut)` condition on lines 227 and 236
-- Keep the sort logic itself unchanged -- it always runs
+Remove these sections entirely from the UI:
+- "AI Content Generation" card (calls `ai-bulk-enrich` which requires AI credits)
+- "Fetch Images & Docs (Provident)" card (calls `provident-batch-extract` which needs Firecrawl)
+- "Bulk Enrichment (Reelly API)" card (calls `reelly-bulk-enrich`, redundant with backfill)
+- "FULL EXTRACTION" mega button (orchestrator that calls all the broken functions)
 
----
+Keep only:
+- **Reelly API Sync** (Step 1/2: Test + Sync projects from API)
+- **Backfill Missing Details** (calls Reelly API directly -- this works)
+- **Test Project Enrichment** (single-project test using `enrich-project-test` -- this works and combines Reelly + Provident)
+
+Replace the removed sections with ONE new card:
+
+**"Enrich All Projects (Reelly + Provident)"** -- A single button that:
+1. Calls `enrich-project-test` with `action: "apply"` in batches of projects
+2. For each project, the existing `enrich-project-test` edge function already:
+   - Fetches from Reelly API (primary source)
+   - Fills gaps from Provident page-data (free, no Firecrawl needed for docs/PDFs)
+   - Merges both sources non-destructively
+3. Persists progress to `sync_jobs` table
+4. Shows real-time progress with processed/enriched/errors counters
+
+**File: `supabase/functions/enrich-project-test/index.ts`**
+
+Add a `mode: "batch"` handler that:
+- Queries projects missing enrichment data (no amenities, no FAQs, few images, etc.)
+- Runs the existing enrichment logic for each project in the batch
+- Returns batch results with progress info
+- This reuses all the existing Reelly + Provident merging code already in this function
+
+### Part 3: Add Project Page Link from Backfill Results
+
+**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
+
+In the backfill results list dialog, make each project name a clickable link to `/project/{slug}` so the admin can immediately view the enriched project on the website.
+
+### Part 4: Developer Sync, Areas Sync, Data Integrity -- Keep As-Is
+
+These sections work correctly and don't need changes.
 
 ## Technical Summary
 
 | File | Change |
 |------|--------|
-| `src/components/StatsCounter.tsx` | Format counter using target scale (M format throughout animation); add min-width for stability |
-| `src/pages/PropertiesReelly.tsx` | Remove `if (!filters.hideSoldOut)` wrapper -- sort always runs |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Fix backfill persistence; remove 4 broken enrichment sections; add single unified "Enrich All" button; add project links in results |
+| `supabase/functions/enrich-project-test/index.ts` | Add `mode: "batch"` to process multiple projects using existing Reelly + Provident merge logic |
 
+## What Changes for the Admin
+
+- Backfill shows correct cumulative progress that persists across page navigations
+- One "Enrich All" button replaces 4+ broken ones
+- Enrichment actually works because it uses Reelly API (free) + Provident page-data.json (free) -- no Firecrawl credits needed for the core enrichment
+- Each processed project in results links directly to its page on the website
