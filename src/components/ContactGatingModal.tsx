@@ -239,15 +239,15 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bg-white border-gold/20 max-w-md">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-md shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-xl">
+          <DialogTitle className="flex items-center gap-2 text-xl text-black">
             <Shield className="h-5 w-5 text-gold" />
             {step === 'form' && 'Complete Your Profile'}
             {step === 'verification' && 'Verify Your Email'}
             {step === 'complete' && 'Welcome!'}
           </DialogTitle>
-          <DialogDescription className="text-gray-600">
+          <DialogDescription className="text-zinc-600">
             {step === 'form' && 'One-time registration to unlock all features and personalized services.'}
             {step === 'verification' && 'Enter the verification code sent to your email.'}
             {step === 'complete' && 'You now have full access to all our features!'}
@@ -266,13 +266,13 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
                 placeholder="Enter your full name"
                 value={formData.fullName}
                 onChange={(e) => handleInputChange('fullName', e.target.value)}
-                className="border-gray-300"
+                className="border-2 border-gold/40 hover:border-gold focus:border-gold"
               />
             </div>
 
             {/* Email */}
             <div className="space-y-2">
-              <Label className="flex items-center gap-2">
+              <Label className="flex items-center gap-2 text-black">
                 <Mail className="h-4 w-4 text-gold" />
                 Email Address <span className="text-red-500">*</span>
               </Label>
@@ -281,13 +281,13 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
-                className="border-gray-300"
+                className="border-2 border-gold/40 hover:border-gold focus:border-gold"
               />
             </div>
 
             {/* Phone */}
             <div className="space-y-2">
-              <Label className="flex items-center gap-2">
+              <Label className="flex items-center gap-2 text-black">
                 <Phone className="h-4 w-4 text-gold" />
                 Phone Number <span className="text-red-500">*</span>
               </Label>
@@ -296,18 +296,18 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
                 placeholder="+971 50 123 4567"
                 value={formData.phone}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
-                className="border-gray-300"
+                className="border-2 border-gold/40 hover:border-gold focus:border-gold"
               />
             </div>
 
             {/* Nationality */}
             <div className="space-y-2">
-              <Label className="flex items-center gap-2">
+              <Label className="flex items-center gap-2 text-black">
                 <Globe className="h-4 w-4 text-gold" />
                 Nationality
               </Label>
               <Select value={formData.nationality} onValueChange={(v) => handleInputChange('nationality', v)}>
-                <SelectTrigger className="border-gray-300">
+                <SelectTrigger className="border-2 border-gold/40 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black">
                   <SelectValue placeholder="Select nationality" />
                 </SelectTrigger>
                 <SelectContent>
@@ -320,7 +320,7 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
 
             {/* Location */}
             <div className="space-y-2">
-              <Label className="flex items-center gap-2">
+              <Label className="flex items-center gap-2 text-black">
                 <Globe className="h-4 w-4 text-gold" />
                 Current Location
               </Label>
@@ -328,18 +328,18 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
                 placeholder="City, Country"
                 value={formData.location}
                 onChange={(e) => handleInputChange('location', e.target.value)}
-                className="border-gray-300"
+                className="border-2 border-gold/40 hover:border-gold focus:border-gold"
               />
             </div>
 
             {/* Preferred Language */}
             <div className="space-y-2">
-              <Label className="flex items-center gap-2">
+              <Label className="flex items-center gap-2 text-black">
                 <Languages className="h-4 w-4 text-gold" />
                 Preferred Language
               </Label>
               <Select value={formData.preferredLanguage} onValueChange={(v) => handleInputChange('preferredLanguage', v)}>
-                <SelectTrigger className="border-gray-300">
+                <SelectTrigger className="border-2 border-gold/40 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black">
                   <SelectValue placeholder="Select language" />
                 </SelectTrigger>
                 <SelectContent>
@@ -352,12 +352,12 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
 
             {/* Interested Service */}
             <div className="space-y-2">
-              <Label className="flex items-center gap-2">
+              <Label className="flex items-center gap-2 text-black">
                 <Briefcase className="h-4 w-4 text-gold" />
                 Interested In
               </Label>
               <Select value={formData.interestedService} onValueChange={(v) => handleInputChange('interestedService', v)}>
-                <SelectTrigger className="border-gray-300">
+                <SelectTrigger className="border-2 border-gold/40 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black">
                   <SelectValue placeholder="Select a service" />
                 </SelectTrigger>
                 <SelectContent>
@@ -368,12 +368,12 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
               </Select>
             </div>
 
-            <p className="text-xs text-gray-500 mt-4">
+            <p className="text-xs text-zinc-600 mt-4">
               By continuing, you confirm you have reviewed our Terms of Service and Privacy Policy. 
               Your information is handled confidentially and used solely to support your inquiry and experience.
             </p>
 
-            <Button onClick={handleSubmitForm} className="w-full bg-gold hover:bg-gold-dark text-white">
+            <Button onClick={handleSubmitForm} variant="primary" className="w-full">
               Continue
             </Button>
           </div>
@@ -394,7 +394,7 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
                 placeholder="Enter 6-digit code"
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value)}
-                className="text-center text-2xl tracking-widest border-gray-300"
+                className="text-center text-2xl tracking-widest border-2 border-gold/40 hover:border-gold focus:border-gold"
                 maxLength={6}
               />
             </div>
@@ -402,7 +402,7 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
             <Button 
               onClick={handleVerifyCode} 
               disabled={isSubmitting || verificationCode.length !== 6}
-              className="w-full bg-gold hover:bg-gold-dark text-white"
+              variant="primary" className="w-full"
             >
               {isSubmitting ? 'Verifying...' : 'Verify & Complete'}
             </Button>
@@ -427,11 +427,11 @@ const ContactGatingModal = ({ isOpen, onClose, onComplete, triggerSource }: Cont
 
         {step === 'complete' && (
           <div className="text-center py-8">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="h-10 w-10 text-green-500" />
+            <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="h-10 w-10 text-gold" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Welcome, {formData.fullName}!</h3>
-            <p className="text-gray-600">
+            <h3 className="text-xl font-semibold text-black mb-2">Welcome, {formData.fullName}!</h3>
+            <p className="text-zinc-600">
               You now have full access to all our features and personalized services.
             </p>
           </div>

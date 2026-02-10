@@ -356,22 +356,22 @@ END:VCARD`;
           <div className="max-w-3xl mx-auto">
             {isSuccess ? (
               /* Success State */
-              <div className="bg-zinc-900/50 border border-green-800/50 rounded-2xl p-8 md:p-12 text-center">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-8 md:p-12 text-center shadow-[0_8px_30px_rgba(200,167,102,0.35)]">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-green-500/30">
                   <CheckCircle className="w-10 h-10 text-white" />
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
                   Thank You for Your Inquiry
                 </h2>
-                <p className="text-zinc-400 text-lg mb-6">
+                <p className="text-zinc-600 text-lg mb-6">
                   We have received your consultation request and will be in touch soon.
                 </p>
-                <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 text-left max-w-md mx-auto">
+                <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-6 text-left max-w-md mx-auto">
                   <h3 className="text-gold font-semibold mb-3 text-sm uppercase tracking-wider">Contact Information</h3>
                   <div className="space-y-2 text-sm">
-                    <p className="text-zinc-300"><span className="text-zinc-500">Phone:</span> {CONTACT_INFO.phone}</p>
-                    <p className="text-zinc-300"><span className="text-zinc-500">Email:</span> {CONTACT_INFO.email}</p>
-                    <p className="text-zinc-300"><span className="text-zinc-500">WhatsApp:</span> {CONTACT_INFO.phone}</p>
+                    <p className="text-black"><span className="text-zinc-600">Phone:</span> {CONTACT_INFO.phone}</p>
+                    <p className="text-black"><span className="text-zinc-600">Email:</span> {CONTACT_INFO.email}</p>
+                    <p className="text-black"><span className="text-zinc-600">WhatsApp:</span> {CONTACT_INFO.phone}</p>
                   </div>
                 </div>
                 <Button 
@@ -408,9 +408,9 @@ END:VCARD`;
                           <FormItem>
                             <FormLabel className="text-black text-sm font-medium">Full Name *</FormLabel>
                             <FormControl>
-                              <Input 
+                               <Input 
                                 {...field} 
-                                className="h-12 bg-white border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white rounded-lg"
+                                className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg"
                                 placeholder="John Doe"
                               />
                             </FormControl>
@@ -430,7 +430,7 @@ END:VCARD`;
                                 <Input 
                                   {...field} 
                                   type="email"
-                                  className="h-12 bg-white border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white rounded-lg"
+                                className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg"
                                   placeholder="email@example.com"
                                 />
                               </FormControl>
@@ -532,7 +532,7 @@ END:VCARD`;
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 bg-white border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white hover:border-gold rounded-lg"
+                                className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg"
                                 placeholder="e.g., Dubai, UAE or London, UK"
                               />
                             </FormControl>
@@ -554,8 +554,8 @@ END:VCARD`;
                             <FormLabel className="text-zinc-700 text-sm font-medium">Service Needed *</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
-                                <SelectTrigger className="h-12 bg-white border-2 border-gold/40 text-black hover:border-gold focus:border-gold rounded-lg">
-                                  <SelectValue placeholder="Select a service" />
+                                <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black">
+                                   <SelectValue placeholder="Select a service" />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
@@ -580,8 +580,8 @@ END:VCARD`;
                               <FormLabel className="text-zinc-700 text-sm font-medium">Budget Range (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                  <SelectTrigger className="h-12 bg-white border-2 border-gold/40 text-black hover:border-gold focus:border-gold rounded-lg">
-                                    <SelectValue placeholder="Select budget" />
+                                   <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black">
+                                     <SelectValue placeholder="Select budget" />
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -604,8 +604,8 @@ END:VCARD`;
                               <FormLabel className="text-zinc-700 text-sm font-medium">Timeline (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                  <SelectTrigger className="h-12 bg-white border-2 border-gold/40 text-black hover:border-gold focus:border-gold rounded-lg">
-                                    <SelectValue placeholder="Select timeline" />
+                                   <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black">
+                                     <SelectValue placeholder="Select timeline" />
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -631,7 +631,7 @@ END:VCARD`;
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 bg-white border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white rounded-lg uppercase"
+                                className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg uppercase"
                                 placeholder="e.g., JJ-ABC123"
                                 onChange={(e) => field.onChange(e.target.value.toUpperCase())}
                               />
@@ -653,7 +653,7 @@ END:VCARD`;
                             <FormControl>
                               <Textarea 
                                 {...field} 
-                                className="min-h-[100px] bg-white border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold focus:bg-white resize-none rounded-lg"
+                                className="min-h-[100px] border-2 border-gold/40 hover:border-gold focus:border-gold resize-none rounded-lg"
                                 placeholder="Tell us more about your requirements..."
                               />
                             </FormControl>

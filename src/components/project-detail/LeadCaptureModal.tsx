@@ -112,14 +112,14 @@ const LeadCaptureModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md bg-card border-gold/30">
+      <DialogContent className="sm:max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
         {isSuccess ? (
           <div className="flex flex-col items-center justify-center py-8">
             <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mb-4">
               <CheckCircle className="w-8 h-8 text-gold" />
             </div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">Download Ready!</h3>
-            <p className="text-sm text-muted-foreground text-center">
+            <h3 className="text-lg font-semibold text-black mb-2">Download Ready!</h3>
+            <p className="text-sm text-zinc-600 text-center">
               Your download will start automatically.
             </p>
           </div>
