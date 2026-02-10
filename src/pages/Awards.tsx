@@ -9,7 +9,7 @@ import award03 from "@/assets/awards/meraas-1st-q4-2019.png";
 import award04 from "@/assets/awards/meraas-2nd-q3-2019.png";
 import award05 from "@/assets/awards/damac-elite-q3-2020.png";
 import award06 from "@/assets/awards/damac-top-agency-q1-2021.png";
-import award07 from "@/assets/awards/emaar-q2-no11-2021a.png";
+import award07 from "@/assets/awards/emaar-q2-no11-2021b.png";
 
 import award09 from "@/assets/awards/tilal-al-ghaf-1st-2021.png";
 import award10 from "@/assets/awards/damac-top-performer-q3-2021.png";
@@ -47,14 +47,14 @@ const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: stri
   const { ref, formattedValue } = useCountUp({ end, suffix, prefix, duration: 2500 });
 
   return (
-    <div ref={ref} className="text-center">
+    <div ref={ref} className="text-center min-w-0">
       <p 
-        className="text-gold text-4xl md:text-5xl font-bold mb-2" 
+        className="text-gold text-2xl md:text-4xl lg:text-5xl font-bold mb-2 break-words" 
         style={{ fontFamily: "Poppins, sans-serif" }}
       >
         {formattedValue}
       </p>
-      <p className="text-black text-sm uppercase tracking-wider">{label}</p>
+      <p className="text-black text-xs md:text-sm uppercase tracking-wider">{label}</p>
     </div>
   );
 };
@@ -71,9 +71,22 @@ const Awards = () => {
     <>
       <SEOHead {...pagesSEO.awards} />
       <div className="min-h-screen bg-black">
-        {/* Hero Section */}
-        <section className="relative py-24 md:py-32 bg-black">
-          <div className="jj-layer-2">
+        {/* Hero Section with Video */}
+        <section className="relative py-24 md:py-32 bg-black overflow-hidden">
+          {/* Video Background */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover opacity-30"
+            poster=""
+          >
+            <source src="https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_30fps.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
+          
+          <div className="jj-layer-2 relative z-10">
             <div className="jj-layer-active rounded-2xl p-6 md:p-10">
               <p className="text-gold text-sm uppercase tracking-widest mb-4">Awards & Recognition</p>
               <h1 
@@ -140,10 +153,10 @@ const Awards = () => {
                 {AWARDS_DATA.map((award, index) => (
                   <div 
                     key={index}
-                    className="border-2 border-gold rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1 group"
+                    className="border-2 border-gold rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1 group"
                   >
                     {/* Image Container */}
-                    <div className="relative aspect-square bg-zinc-900">
+                  <div className="relative h-[280px] bg-zinc-900">
                       <img 
                         src={award.image} 
                         alt={`${award.title} - ${award.organization}`}
@@ -160,8 +173,8 @@ const Awards = () => {
                     </div>
                     {/* Text Area */}
                     <div className="jj-card-inner p-5">
-                      <h3 className="text-black text-lg font-semibold leading-tight mb-1">{award.title}</h3>
-                      <p className="text-gold text-sm font-medium">{award.organization}</p>
+                      <h3 className="text-black text-base font-semibold leading-tight mb-1 line-clamp-2">{award.title}</h3>
+                      <p className="text-gold text-sm font-medium line-clamp-1">{award.organization}</p>
                     </div>
                   </div>
                 ))}
