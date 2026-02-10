@@ -1,268 +1,104 @@
 
 
-# Complete Task List and Fix Plan
+# Fix Enrichment Pipeline, Footer Mode, Description Rendering, and Progress Persistence
 
-Below is every task extracted from your message, organized by priority.
+## Issues Identified
 
----
+### Issue 1: Enrichment Test Shows All Zeros
+**Root cause confirmed by live API test:** The `enrich-project-test` function IS working correctly -- but the Reelly API itself returns very sparse data for most projects (only 1 gallery image, 0 amenities, 0 floor plans, 0 documents, 0 FAQs). The zeros are REAL -- Reelly simply does not have rich data for the majority of its 1,802 projects.
 
-## Task 1: Marketing Hub -- Complete Overhaul with AI Tools
-**Current state:** The Marketing Hub (`/admin/marketing-hub`) only has campaigns, templates, and subscribers tabs. It lacks AI tools, email suggest reply, AI assistant, and admin shortcuts.
+**The solution:** The enrichment test must also check Provident as a second source. Currently `enrich-project-test` only queries Reelly. The `provident-enrich-projects` function exists but is not integrated into the enrichment test UI. By combining both sources, projects that are empty from Reelly can be filled from Provident.
 
-**Fix:**
-- Add a sidebar navigation on the left with shortcuts to all AI tools and admin sections
-- Add right-side quick action shortcuts
-- Integrate AI Email Generator directly into the hub (already exists as a component but not embedded)
-- Add AI Suggest Reply, AI Assistant, Email Client, Social Media, and all platform tools as accessible tabs/links
-- Make it a full-featured intelligent command center with campaign analytics, AI content generation, subscriber management, and quick-access links to all admin tools
+### Issue 2: Bulk Enrichment (Reelly API) Not Extracting Data
+**Root cause:** The `reelly-bulk-enrich` function filters for projects without documents -- but many have already been processed (even if the API returned nothing). The backfill function works with `force_refresh: true` but the bulk enrichment button does NOT pass that flag. Also, the Reelly API genuinely returns sparse data for most projects.
 
-**Files:** `src/pages/admin/MarketingHub.tsx`, possibly new sidebar component
+### Issue 3: Progress Lost on Page Refresh
+**Root cause:** While backfill progress IS persisted to `sync_jobs`, the enrichment test result, bulk enrichment progress, AI content generation progress, and Provident extraction progress are only stored in React state -- all lost on refresh. The `loadPersistedBackfillResults` function only loads backfill data, not the other operations.
 
----
+### Issue 4: Footer Mode Switcher Not Selectable
+**Root cause:** The `ModeSwitcher` component returns `null` if `hasSelectedRole` is false. In the footer context, an unauthenticated user or a user who hasn't selected a role won't see any mode options at all. The label "Your Mode" is shown but the switcher is invisible.
 
-## Task 2: Search Icon Dropdown Behavior in Header
-**Current state:** The search icon (line ~1426 in GlobalHeader.tsx) opens `GlobalSearchModal` on hover via `onMouseEnter`, which overlays on top of the header. It does NOT close when the cursor moves away.
-
-**Fix:**
-- Change the search icon to open a dropdown panel (same behavior as the language dropdown -- appears below the nav bar, not as a modal overlay)
-- Keep the same search UI/color/buttons -- only change the opening/closing behavior
-- Add `onMouseLeave` to close the dropdown when cursor moves away (matching language dropdown behavior)
-- Remove the `GlobalSearchModal` overlay approach for the desktop header search icon
-
-**Files:** `src/components/GlobalHeader.tsx`
+### Issue 5: Description Rendering as Block Text
+**Root cause:** The `formatReellyDescription` function converts known section labels to markdown headings, but many Reelly descriptions use different patterns not covered by the map. The `renderMarkdownToHtml` function does convert markdown to HTML with proper headings and lists, but the input often lacks any markdown structure -- it's just a raw text block.
 
 ---
 
-## Task 3: My Dashboard -- Fix Cards, Content Overflow, and Layout
-**Current state:** Dashboard cards use `border-border` and content can overflow card boundaries. Favorites and Shortlist link to `/project/{id}` which may show "No project found."
+## Fix Plan
 
-**Fix:**
-- Add `overflow-hidden` and `word-break: break-word` to all dashboard cards
-- Fix card borders to use `border-gold/40` per the premium standard
-- Ensure all text stays within card boundaries on all devices
-- Fix grid alignment for responsive breakpoints
+### Fix 1: Add Provident Source to Enrichment Test
 
-**Files:** `src/pages/MyDashboard.tsx`, `src/components/dashboard/FavoritesCard.tsx`, `src/components/dashboard/ShortlistCard.tsx`, and other dashboard card components
+**File: `supabase/functions/enrich-project-test/index.ts`**
+- After fetching Reelly data, also attempt to match the project against Provident's page-data endpoint using slug variants
+- Import `fetchProvidentPageDataDetail` from the shared provident module
+- For each enrichment field that Reelly returned empty, check if Provident has data and include it in the "after" snapshot
+- Add a `provident` entry to the `sources` response alongside `reelly`
+- This gives the before/after cards actual non-zero values
 
----
+### Fix 2: Fix Bulk Enrichment to Combine Reelly + Provident
 
-## Task 4: Favorites and Shortlist -- Fix Routing to Project Details
-**Current state:** `FavoritesCard.tsx` links to `/project/{project.id}` (UUID). The project detail page likely expects a slug, not an ID.
+**File: `supabase/functions/reelly-bulk-enrich/index.ts`**
+- After fetching from Reelly API, if key fields (amenities, floor plans, documents) are still empty, attempt Provident slug-match enrichment
+- Import `fetchProvidentPageDataDetail` from the shared provident module
+- Only fill fields where Reelly returned nothing (non-destructive)
+- Tag data_source as "provident_via_bulk_enrich"
 
-**Fix:**
-- Fetch the `slug` field alongside `id, name, location` in the favorites query
-- Change link from `/project/${project.id}` to `/project/${project.slug}`
-- Apply the same fix to `ShortlistCard.tsx`
-- This applies to ALL listing links across the platform -- verify all project links use slugs
+### Fix 3: Persist All Operation Progress to sync_jobs
 
-**Files:** `src/components/dashboard/FavoritesCard.tsx`, `src/components/dashboard/ShortlistCard.tsx`
+**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
+- On mount, load last results for ALL operation types from `sync_jobs` (not just `reelly_backfill`)
+- Add job_type entries: `bulk_enrich`, `ai_content`, `provident_extract`
+- When each operation runs, create/update a `sync_jobs` row with stats
+- On mount, restore the last result for each operation type into its respective state variable
+- This ensures progress survives page refresh
 
----
+### Fix 4: Fix Footer Mode Switcher
 
-## Task 5: Area Page -- Auto-Sync Project Counts
-**Current state:** Area cards show `property_count` from the `areas` table, but this number is static and not auto-updated when projects are added.
+**File: `src/components/Footer.tsx`**
+- The ModeSwitcher already works when `hasSelectedRole` is true, but the footer shows "Your Mode" label unconditionally
+- Wrap the entire mode section (label + switcher) in a condition that checks authentication status
+- For unauthenticated users, show a "Sign in to select your mode" link instead
+- For authenticated users who haven't selected, show all three mode options directly as clickable buttons (not the dropdown that requires `hasSelectedRole`)
 
-**Fix:**
-- Create a database function or query that counts actual published projects per area in real-time
-- Update the area cards to show the live count rather than the static `property_count` column
-- Alternatively, create a trigger that updates `areas.property_count` whenever a project is added/removed
+**File: `src/components/ModeSwitcher.tsx`**
+- Add a `showForUnselected` prop that bypasses the `if (!hasSelectedRole) return null` check
+- When `showForUnselected` is true, show all 3 mode buttons inline so the user can select from the footer
 
-**Files:** `src/pages/AreaGuides.tsx`, `src/hooks/useAreas.ts`, database migration
+### Fix 5: Improve Description Rendering
 
----
+**File: `src/lib/markdownUtils.ts`**
+- Expand `formatReellyDescription` with more section label patterns from Reelly data (e.g., "Features", "Facilities", "Unit Types", "Investment Highlights", "Developer", "Property Details")
+- Add a fallback: if no section headings are detected in the text and it exceeds 500 chars, auto-split into paragraphs at sentence boundaries (every 3-4 sentences) and add visual breaks
+- Add a function to detect numbered lists in plain text (e.g., "1. Feature one 2. Feature two") and convert to proper markdown lists
 
-## Task 6: Emirates -- Fix Duplicates, Add Umm Al Quwain, Ensure 7 Only
-**Current state:** Database has duplicate emirates: "Abu Dhabi" + "Abu Dhabi Emirate", "Ajman" + "Ajman Emirate", "Sharjah" + "Sharjah Emirate", and "Ras Al Khaimah" + "Ras al-Khaimah". Total shows 10 instead of 7.
+**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
+- The description section already uses `prose` classes, so improved markdown output will automatically render with proper typography
+- Add section dividers between auto-detected sections for better visual separation
+- Add subtle gold accent lines between major description sections
 
-**Fix:**
-- Database migration to normalize all emirate names to the standard 7: Dubai, Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah, Umm Al Quwain
-- Update all variants ("Abu Dhabi Emirate" to "Abu Dhabi", "Ras al-Khaimah" to "Ras Al Khaimah", etc.)
-- Add Fujairah if missing
-- Add Umm Al Quwain to the filter and search bar (already exists in DB with 2 areas)
+### Fix 6: Add Provident News/Areas/Projects Extraction Button
 
-**Files:** Database migration, `src/pages/AreaGuides.tsx`
-
----
-
-## Task 7: Area Cards -- Full Fit, No Gaps at Bottom
-**Current state:** Area cards have variable height content sections causing gaps at the bottom (especially JVC, Arjan, Abu Dhabi areas).
-
-**Fix:**
-- Make all area cards use `h-full` with `flex flex-col` and `flex-1` on the content section
-- Ensure the content section fills all remaining space so cards are equal height with no empty borders
-- The card already has `flex flex-col h-full` but `min-h-[130px]` on content may not stretch enough
-
-**Files:** `src/pages/AreaGuides.tsx` (lines 284-391)
-
----
-
-## Task 8: Area Cards -- Use Community/Master Plan Photos, Not Project Photos
-**Current state:** Area cards use `area.image_url` which may contain individual project photos instead of master plan/community photos.
-
-**Fix:**
-- Use `area.hero_image_url` as primary (typically master plan), fall back to `area.image_url`
-- For areas with project-level photos, prioritize `hero_image_url` which should contain community-level imagery
-- This follows the existing memory rule about area-level imagery
-
-**Files:** `src/pages/AreaGuides.tsx`
+**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
+- Add a "Sync from Provident" card that calls `provident-enrich-projects` in batch mode
+- Show matching stats: how many of our projects match Provident listings
+- Show results per project: images added, documents added, fields updated
+- This gives the user a one-click way to fill all the gaps that Reelly left empty
 
 ---
 
-## Task 9: Homepage "Handpicked For You" -- Add Description and "More" Button
-**Current state:** Featured listing cards show project name, price, and basic details but no description text.
+## Technical Details
 
-**Fix:**
-- Add 2-3 lines of project description below the project name on each card
-- Add an orange "More" button (same color as handover date) that expands/navigates to full details
-- Style the description in black text
+### Files to modify:
+1. `supabase/functions/enrich-project-test/index.ts` -- Add Provident source lookup
+2. `supabase/functions/reelly-bulk-enrich/index.ts` -- Add Provident fallback for empty fields
+3. `src/components/listing-admin/ReellyImportPanel.tsx` -- Persist all progress types, add Provident sync card
+4. `src/components/Footer.tsx` -- Fix mode switcher visibility for unauthenticated users
+5. `src/components/ModeSwitcher.tsx` -- Add `showForUnselected` prop
+6. `src/lib/markdownUtils.ts` -- Expand description formatting patterns
 
-**Files:** Homepage featured listings component
+### Edge functions to deploy:
+- `enrich-project-test`
+- `reelly-bulk-enrich`
 
----
-
-## Task 10: Listing Cards -- Fix Handover Date, Price, Developer Name Styling
-**Current state:** Handover dates wrap to 2 lines. Price and developer name are small.
-
-**Fix:**
-- Handover date: Force single line with `whitespace-nowrap`, increase font size
-- Price: Style in gold color
-- Developer name ("by Damac"): Make larger/more prominent
-- Project name: Gold color
-- Description: Black color
-- Apply to ALL listing cards platform-wide
-
-**Files:** Project card components
-
----
-
-## Task 11: Missing Prices on Cards (Palm Jebel Ali, Binghatti Vintage)
-**Current state:** Some projects don't show prices on the external card.
-
-**Fix:**
-- Check if `starting_price` is populated for these projects in the database
-- If missing, add the correct prices via database update
-- Ensure the card always shows price when available
-
-**Files:** Database update, card component
-
----
-
-## Task 12: Auto-Enrich Listings from Provident
-**Current state:** The enrichment pipeline exists but requires manual triggering from Listing Admin.
-
-**Fix:**
-- This was addressed in the previous plan with Force Re-fetch. The backend functions work but need manual activation from the Listing Admin panel.
-- No additional automated sync is being proposed here as it would require significant infrastructure changes.
-
----
-
-## Task 13: "Find Your Starting Point" Section -- Premium Mobile Layout
-**Current state:** The section layout on mobile is not visually comfortable.
-
-**Fix:**
-- Redesign the mobile view with premium card layout, proper spacing, and gold accents
-- Ensure proper padding and visual hierarchy on small screens
-
-**Files:** The component rendering "Find Your Starting Point" section on homepage
-
----
-
-## Task 14: Footer -- Add Currency, Language, and Search Shortcuts
-**Current state:** Footer doesn't have quick-access currency/language/search controls.
-
-**Fix:**
-- Add a utility row in the footer with currency switcher, language switcher, and search shortcut
-- Use square/compact styling consistent with the footer design
-
-**Files:** Footer component
-
----
-
-## Task 15: Homepage AI Property Comparison -- Verify ROI and Price Data
-**Current state:** The comparison section shows example ROI and price data that may be inaccurate.
-
-**Fix:**
-- Cross-reference the displayed data (Emaar, Sobha, DAMAC examples) with actual project data from the database
-- Update static comparison values to reflect real or realistic market data
-- If data comes from static arrays, update them with verified numbers
-
-**Files:** AI Property Comparison component on homepage
-
----
-
-## Task 16: Market Intelligence Book -- Dynamic Data and Premium Design
-**Current state:** Per memory, the book should already auto-sync from DLD data and market_news.
-
-**Fix:**
-- Verify the book generation pulls latest DLD stats, top developers, trending areas, supply/demand data
-- Add company branding (logo, email, phone, website) on every page
-- Add a disclaimer modal before download: "I understand and agree not to steal, reproduce, or redistribute this content. All content is internationally registered intellectual property."
-- Premium visuals with area photos, charts, insights
-
-**Files:** `src/pages/MarketReport.tsx`, market report generation logic
-
----
-
-## Task 17: "Access Denied" and "useLanguage must be used within a LanguageProvider" Error
-**Current state:** The `AppErrorBoundary` catches the error but the error itself shouldn't happen. The error message "useLanguage must be used within a LanguageProvider" means a component using `useLanguage()` is rendering outside the `<LanguageProvider>` tree.
-
-**Fix:**
-- Check `AppErrorBoundary` -- it renders outside `LanguageProvider` in the component tree (line 319 of App.tsx: `<AppErrorBoundary>` wraps everything including `<LanguageProvider>`)
-- When the error boundary catches an error, its fallback UI renders OUTSIDE `LanguageProvider`, so if any component in the fallback tries to use `useLanguage()`, it crashes
-- Fix: Ensure the error boundary fallback UI does NOT use any context-dependent hooks
-- Also investigate what triggers the initial crash (likely the Listing Admin access check or a race condition)
-- Improve the error boundary UI to match the premium black/gold standard
-
-**Files:** `src/components/AppErrorBoundary.tsx`, `src/App.tsx`
-
----
-
-## Task 18: Listing Admin -- Access Denied Issue
-**Current state:** The user reports getting kicked out and seeing "Access Denied" on the listing admin screen.
-
-**Fix:**
-- The `ListingAdminGuard` already waits for both `authLoading` and `ownerLoading`
-- Check if session token is expiring or if the owner verification is failing intermittently
-- Add better error recovery -- if the check fails due to a network error, retry instead of denying access
-
-**Files:** `src/components/ListingAdminGuard.tsx`
-
----
-
-## Implementation Priority (grouped into phases)
-
-**Phase 1 -- Critical Fixes (errors and broken functionality):**
-- Task 17: Fix LanguageProvider error boundary crash
-- Task 18: Fix Listing Admin access denied
-- Task 4: Fix favorites/shortlist routing
-- Task 6: Fix emirates duplicates (database migration)
-
-**Phase 2 -- UI/Layout Fixes:**
-- Task 2: Search icon dropdown behavior
-- Task 3: Dashboard cards overflow
-- Task 7: Area cards full fit
-- Task 10: Listing card styling (handover, price, developer)
-- Task 13: Mobile "Find Your Starting Point"
-
-**Phase 3 -- Feature Enhancements:**
-- Task 1: Marketing Hub overhaul with AI tools
-- Task 5: Auto-sync project counts
-- Task 8: Area community photos
-- Task 9: Handpicked description + More button
-- Task 14: Footer utility controls
-- Task 16: Market Report book enhancements
-
-**Phase 4 -- Data Fixes:**
-- Task 11: Missing prices
-- Task 15: Verify comparison data
-- Task 12: Provident enrichment
-
----
-
-## Technical Notes
-
-- **Database migration needed** for Task 6 (emirate normalization): `UPDATE areas SET emirate = 'Abu Dhabi' WHERE emirate = 'Abu Dhabi Emirate'; UPDATE areas SET emirate = 'Sharjah' WHERE emirate = 'Sharjah Emirate'; UPDATE areas SET emirate = 'Ajman' WHERE emirate = 'Ajman Emirate'; UPDATE areas SET emirate = 'Ras Al Khaimah' WHERE emirate = 'Ras al-Khaimah';`
-- **No edge function changes needed** for most tasks -- these are primarily UI fixes
-- **AppErrorBoundary** uses inline styles (no Tailwind) because it renders outside the normal component tree -- this is correct and should stay this way, but the UI can be improved with better inline styles
-- The Marketing Hub overhaul (Task 1) is the largest single task and will require creating a new sidebar navigation component with links to all 52+ AI tools
+### No database migrations needed
+All changes are UI and edge function logic updates.
 
