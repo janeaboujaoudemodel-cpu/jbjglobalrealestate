@@ -275,10 +275,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           )}
           
-          {/* Sold Out Badge - Corner badge style (matching inside-page) */}
-          {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
-            <div className="absolute top-3 right-3 z-20">
-              <div className="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold uppercase shadow-lg border border-red-400 animate-pulse">
+          {/* Sold Out Badge - Top Left (offset below developer logo if present) */}
+          {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && !saleStatusBadge && (
+            <div className={`absolute ${(project.developer as any)?.logo_url ? 'top-16' : 'top-3'} left-3 z-10`}>
+              <div className="bg-red-600 text-white px-2.5 py-1 rounded-full text-xs font-bold uppercase shadow-lg border border-red-400">
                 Sold Out
               </div>
             </div>
@@ -345,10 +345,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Description with ...more link - Shorter */}
           <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-            <span 
-              className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent hover:opacity-80 cursor-pointer ml-1 font-semibold inline-block"
-            >
-              ...more
+            <span className="text-gold font-bold underline hover:text-gold/80 cursor-pointer ml-1 inline-flex items-center gap-0.5">
+              ...more →
             </span>
           </p>
         </div>

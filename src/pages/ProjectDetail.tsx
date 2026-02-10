@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useProject } from "@/hooks/useProjects";
+import { useReellyProjectBySlug } from "@/hooks/useReellyProjects";
+import type { ReellyProject } from "@/hooks/useReellyProjects";
 import PropertyReportModal from "@/components/PropertyReportModal";
 import ProjectDetailLayout, { type ProjectDetailData } from "@/components/project-detail/ProjectDetailLayout";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -98,9 +100,11 @@ const asUnitTypes = (value: unknown): Array<{ type: string; size_from?: number; 
 const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: project, isLoading } = useProject(slug || "");
+  const { data: reellyProject, isLoading: reellyLoading } = useReellyProjectBySlug(slug, !project && !isLoading);
   const [showReportModal, setShowReportModal] = useState(false);
 
-  const mapped = useMemo<ProjectDetailData | null>(() => {
+  // Map from local DB project
+  const mappedFromDb = useMemo<ProjectDetailData | null>(() => {
     if (!project) return null;
 
     const images = (project.images || [])
@@ -122,7 +126,6 @@ const ProjectDetail = () => {
       developer: project.developer ? { 
         name: project.developer.name, 
         slug: project.developer.slug,
-        // Additional developer fields for DeveloperInfoCard
         logo_url: (project.developer as any).logo_url ?? null,
         founded_year: (project.developer as any).founded_year ?? null,
         completed_projects: (project.developer as any).completed_projects ?? null,
@@ -154,7 +157,6 @@ const ProjectDetail = () => {
       floor_plan_types: asFloorPlanTypes(project.floor_plan_types),
       faqs: asFaqs(project.faqs),
       payment_breakdown: asPaymentBreakdown(project.payment_breakdown),
-      // Reelly-compatible fields
       unit_types: asUnitTypes(project.unit_types),
       construction_progress: project.construction_progress ?? null,
       construction_start_date: project.construction_start_date ?? null,
@@ -167,14 +169,11 @@ const ProjectDetail = () => {
       virtual_tour_url: project.virtual_tour_url ?? null,
       roi_estimate: project.roi_estimate ?? null,
       rental_yield_estimate: project.rental_yield_estimate ?? null,
-      // House details
       service_charge: project.service_charge ?? null,
-      finishing_standard: undefined, // Future field
-      ceiling_height: undefined, // Future field
-      // Master plan
-      master_plan_image_url: undefined, // Future field
-      community_highlights: undefined, // Future field
-      // Data freshness
+      finishing_standard: undefined,
+      ceiling_height: undefined,
+      master_plan_image_url: undefined,
+      community_highlights: undefined,
       updated_at: project.updated_at ?? null,
       import_source: project.import_source ?? null,
       external_id: project.external_id ?? null,
@@ -182,24 +181,65 @@ const ProjectDetail = () => {
     };
   }, [project]);
 
-  if (isLoading) {
+  // Map from Reelly API fallback
+  const mappedFromReelly = useMemo<ProjectDetailData | null>(() => {
+    if (!reellyProject || project) return null;
+    const rp = reellyProject as ReellyProject;
+    const images = (rp.images || []).map((img, i) => ({
+      id: `reelly-${i}`,
+      url: img.image_url,
+      alt: img.alt_text || rp.name,
+    }));
+    if (!images.length && rp.thumbnail) {
+      images.push({ id: 'thumb', url: rp.thumbnail, alt: rp.name });
+    }
+    (rp.gallery || []).forEach((url, i) => {
+      if (!images.find(img => img.url === url)) {
+        images.push({ id: `gallery-${i}`, url, alt: rp.name });
+      }
+    });
+    return {
+      id: String(rp.id),
+      name: rp.name,
+      slug: rp.slug,
+      description: rp.description,
+      location: rp.location,
+      developer: rp.developer_name ? { name: rp.developer_name, slug: rp.developer_name.toLowerCase().replace(/[^a-z0-9]+/g, '-') } : null,
+      price_from: rp.price_from,
+      price_to: rp.price_to,
+      size_min: rp.size_min,
+      size_max: rp.size_max,
+      handover_date: rp.handover_date,
+      status_label: rp.status_label,
+      sale_status: rp.sale_status,
+      emirate: rp.emirate,
+      construction_status: rp.construction_status,
+      images,
+      documents: [],
+      cover_image_url: rp.thumbnail,
+    } as ProjectDetailData;
+  }, [reellyProject, project]);
+
+  const mapped = mappedFromDb || mappedFromReelly;
+
+  if (isLoading || reellyLoading) {
     return (
-      <section className="relative w-full min-h-screen py-16 md:py-24 bg-black">
+      <section className="relative w-full min-h-screen py-16 md:py-24 bg-premium-bg">
         <div className="container mx-auto px-4">
-          <Skeleton className="h-8 w-48 bg-zinc-800 mb-8" />
-          <Skeleton className="aspect-[16/9] w-full rounded-lg bg-zinc-800 mb-8" />
-          <Skeleton className="h-12 w-64 bg-zinc-800 mb-4" />
-          <Skeleton className="h-6 w-full max-w-2xl bg-zinc-800" />
+          <Skeleton className="h-8 w-48 bg-champagne/50 mb-8" />
+          <Skeleton className="aspect-[16/9] w-full rounded-lg bg-champagne/50 mb-8" />
+          <Skeleton className="h-12 w-64 bg-champagne/50 mb-4" />
+          <Skeleton className="h-6 w-full max-w-2xl bg-champagne/50" />
         </div>
       </section>
     );
   }
 
-  if (!project || !mapped) {
+  if (!mapped) {
     return (
       <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-premium-bg">
         <div className="text-center">
-          <h1 className="text-primary-foreground text-2xl mb-4">Project not found</h1>
+          <h1 className="text-foreground text-2xl mb-4">Project not found</h1>
           <Link to="/properties">
             <Button variant="secondary">Back to Properties</Button>
           </Link>
@@ -212,11 +252,13 @@ const ProjectDetail = () => {
     <>
       <ProjectDetailLayout project={mapped} onRequestReport={() => setShowReportModal(true)} />
 
-      <PropertyReportModal
-        open={showReportModal}
-        onOpenChange={setShowReportModal}
-        project={project}
-      />
+      {project && (
+        <PropertyReportModal
+          open={showReportModal}
+          onOpenChange={setShowReportModal}
+          project={project}
+        />
+      )}
     </>
   );
 };

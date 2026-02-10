@@ -160,12 +160,12 @@
               </div>
             )}
 
-            <VerifiedMedia
-              src={images[currentImageIndex]?.image_url || project.thumbnail}
-              alt={images[currentImageIndex]?.alt_text || project.name}
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
-              placeholderLabel="Media pending verification"
-            />
+             <VerifiedMedia
+               src={images[currentImageIndex]?.image_url || project.thumbnail || project.gallery?.[0] || null}
+               alt={images[currentImageIndex]?.alt_text || project.name}
+               className="object-cover group-hover:scale-105 transition-transform duration-500"
+               placeholderLabel="Media pending verification"
+             />
            
            {/* Navigation Arrows */}
            {images.length > 1 && (
@@ -229,7 +229,7 @@
          {/* Content */}
          <div className="p-4 flex-1 flex flex-col">
            {/* Project Name */}
-           <h4 className="text-foreground text-lg font-bold mb-1 line-clamp-1 hover:text-gold transition-colors">
+           <h4 className="text-gold text-lg font-bold mb-1 line-clamp-1 hover:text-gold/80 transition-colors">
              {project.name}
            </h4>
            
@@ -249,7 +249,7 @@
            {project.price_from ? (
              <>
                <span className="text-muted-foreground">Starting from </span>
-               <span className="text-handover font-bold text-lg">
+               <span className="text-gold font-bold text-lg">
                  {formatPriceWithCurrency(project.price_from, currency)}
                </span>
              </>
@@ -284,11 +284,9 @@
            {/* Description with ...more link */}
            <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2">
               {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-              <span 
-                className="bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent hover:opacity-80 cursor-pointer ml-1 font-semibold inline-block"
-              >
-                ...more
-              </span>
+               <span className="text-gold font-bold underline hover:text-gold/80 cursor-pointer ml-1 inline-flex items-center gap-0.5">
+                 ...more →
+               </span>
            </p>
          </div>
        </Link>
