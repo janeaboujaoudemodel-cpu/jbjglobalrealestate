@@ -200,7 +200,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <CommandPaletteRoot />
       <GlobalHeader forceSolid={needsHeaderSpacing} />
       {/* Content spacing: dark hero pages sit behind header, bright pages pushed below */}
-      <main className={`w-full max-w-full overflow-x-hidden ${needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-32" : "pt-0"}`}>
+      <main className={`w-full max-w-full overflow-x-hidden ${needsHeaderSpacing ? "pt-20 sm:pt-24 md:pt-28 lg:pt-32" : "pt-0"}`}>
         {children}
       </main>
       {/* Global Contact + Newsletter Section - combined for all public pages */}

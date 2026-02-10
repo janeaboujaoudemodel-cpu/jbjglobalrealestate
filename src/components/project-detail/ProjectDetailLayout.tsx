@@ -565,7 +565,7 @@ export default function ProjectDetailLayout({
 
       {/* STICKY SUB-NAVIGATION - Appears on scroll */}
       <div 
-        className={`fixed top-24 sm:top-28 lg:top-32 left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed top-20 sm:top-24 md:top-28 lg:top-32 left-0 right-0 z-40 transition-all duration-300 ${
           showStickyNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
         }`}
       >
