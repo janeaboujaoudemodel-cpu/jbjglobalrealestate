@@ -1,84 +1,102 @@
 
 
-# News System Overhaul: Fix Images, Add DLD Data, Expand Sources, Improve UI
+# Complete Uncompleted Tasks: Daily Sync, Label Fix, Image Fix, New Project Detector
 
-## Problems to Fix
+## Identified Uncompleted Tasks
 
-1. **Duplicate/bad images**: 5 articles use the same UAE gov logo (`survey.customerpulse.gov.ae`), 3 share an Unsplash "Developer News" fallback, 3 share the same Zawya image. These need unique, real article photos.
-2. **Market stats cards missing DLD source data**: User wants full Dubai Land Department data including transaction breakdowns by area, mortgage vs. cash ratios, and gift transactions.
-3. **Only 30 articles, limited sources**: User wants Provident blog news extracted AND broader market news from multiple sources (not just government).
-4. **NewsDetail UI issues**:
-   - Hero image quality is poor (blurry)
-   - "Back to News" button looks ugly and not premium
-   - Content card touches the hero section (no spacing)
-   - Content is a text wall with no photos/spacing between sections
-   - AI analysis section needs to be green-themed with positive bullet points
-   - Needs a CTA: "Learn more how this affects Dubai real estate market with our AI News Analyzer"
+1. **News card category labels not readable** -- text is `text-gold` on `bg-gold/10` which is hard to read. Need white text.
+2. **Still 16 duplicate images** in the database (5 articles share MOET logo, 5 share The National image, 4 share Property Finder image).
+3. **No daily automated sync** -- news collection and DLD stats are static, not updating automatically.
+4. **No automatic Provident sync** -- new projects from Provident are not detected automatically.
+5. **No "New Project Detector"** in listing admin -- no way to see if a Provident listing is already on the website.
+6. **Hero still at 60vh/70vh** in NewsDetail -- plan said 80vh/90vh but it wasn't applied.
 
-## Solution
+---
 
-### Part 1: Fix Duplicate Images (Edge Function + DB Update)
+## Part 1: Fix News Card Category Label (White Text)
 
-**File: `supabase/functions/ai-news-collector/index.ts`**
+**File: `src/pages/News.tsx`** (line 265)
 
-- Add `UAEGoldNew-01.png` to `KNOWN_BAD_URLS` blocklist
-- Add a new action `fix-images` that specifically targets the 10 articles with Unsplash fallbacks or `customerpulse.gov.ae` logos
-- For each, re-scrape the `source_url` to find the real article photo
-- If scraping fails, use AI image search via Firecrawl search to find the actual article image by searching the article title
-- Last resort: assign from diversified pool ensuring no duplicates
+Change the category badge on news cards from `text-gold bg-gold/10` to `text-white bg-black/50 backdrop-blur-sm` so the label is clearly readable on top of any image.
 
-### Part 2: Expand News Collection (More Sources Including Provident)
+Also fix the featured card category badge (line 209) to use white text.
+
+---
+
+## Part 2: Fix Remaining Duplicate Images
 
 **File: `supabase/functions/ai-news-collector/index.ts`**
 
-Add these sources to `AUTHORIZED_NEWS_SOURCES`:
-- Provident Estate Blog: `https://www.providentestate.com/blog/`
-- Gulf Business Real Estate: `https://gulfbusiness.com/category/real-estate/`
-- Construction Week Online: `https://www.constructionweekonline.com/projects-tenders`
-- Property Finder Blog: `https://www.propertyfinder.ae/blog/`
-- Bayut Blog: `https://www.bayut.com/mybayut/`
-- The National (UAE): `https://www.thenationalnews.com/business/property/`
-- Reuters (Dubai): search for Dubai real estate
+Add the 3 newly identified bad/duplicate URLs to `KNOWN_BAD_URLS`:
+- `moet.gov.ae/documents/` (UAE Ministry logo used by 5 articles)
+- `thenationalnews.com/resizer` pattern shared by 5 articles
+- `propertyfinder.ae/blog/wp-content/uploads/2025/09/Header-image.png` shared by 4 articles
 
-Update the `collect` action to also do a broad web search via Firecrawl search API for "Dubai real estate news 2026" to catch articles from any source.
+Then trigger `fix-images` to re-scrape and assign unique images.
 
-### Part 3: Enhanced Market Stats with DLD Data
+---
 
-**File: `src/pages/News.tsx`**
+## Part 3: Fix NewsDetail Hero Height
 
-Expand the 2026 YTD card to include:
-- Transaction breakdown: Off-plan vs. Secondary
-- Mortgage vs. Cash ratio
-- Gift transactions count
-- Top 5 performing areas with transaction counts
-- Source attribution: "Dubai Land Department (DLD)"
+**File: `src/pages/NewsDetail.tsx`** (line 149)
 
-Expand the 2025 recap card similarly with full-year breakdowns.
+Change `h-[60vh] md:h-[70vh]` to `h-[80vh] md:h-[90vh]` as planned but not implemented.
 
-Add a new "Areas Performance" mini-table showing top 10 areas by transaction volume.
+---
 
-### Part 4: NewsDetail UI Redesign
+## Part 4: Daily Automated News + DLD Sync (pg_cron)
 
-**File: `src/pages/NewsDetail.tsx`**
+Set up a `pg_cron` scheduled job that calls the `ai-news-collector` edge function daily at 6 AM UAE time (2 AM UTC) with `action: "collect"`, followed by `action: "enrich"`.
 
-- **Hero image**: Use `object-cover` with higher quality params (`w=1920&q=90`), add a subtle blur placeholder while loading
-- **Back button**: Replace with a premium glass pill that says "All News" with a left arrow, styled with `backdrop-blur-xl` and gold accent on hover
-- **Spacing**: Add `mt-8 md:mt-12` gap between hero and content card (remove the direct touching)
-- **Content formatting**: After every 2-3 paragraphs, insert visual breathing room with a gold separator line. If inline images exist in the content, render them with proper spacing
-- **AI Analysis section redesign**:
-  - Change to green-themed: `bg-emerald-50 border-emerald-200` card
-  - Green checkmark icons for each bullet point
-  - Title: "How This Affects Dubai Real Estate"
-  - Add a CTA banner above it: "Learn more how this affects Dubai real estate market with our AI News Analyzer" with a sparkle icon and link styling
-  - Each point rendered as a green "positive impact" item
-- **Source section**: Keep the "View Original Source" link but make it more prominent with a button style
+This requires enabling `pg_cron` and `pg_net` extensions and running:
 
-### Part 5: Trigger Full Re-enrichment
+```sql
+SELECT cron.schedule(
+  'daily-news-collect',
+  '0 2 * * *',  -- 2 AM UTC = 6 AM UAE
+  $$ SELECT net.http_post(
+    url := 'https://mdafrewypkkrildjgtey.supabase.co/functions/v1/ai-news-collector',
+    headers := '{"Content-Type":"application/json","Authorization":"Bearer <anon_key>"}'::jsonb,
+    body := '{"action":"collect"}'::jsonb
+  ) $$
+);
+```
 
-After deploying the updated edge function:
-1. Run `fix-images` to update the 10 bad-image articles
-2. Run `collect` with the expanded sources to get new articles (including Provident)
-3. Run `enrich` on all new articles to get full content, images, and AI analysis
+And a second job 30 minutes later for enrichment.
+
+For DLD stats: since DLD doesn't have a public API, the stats will remain manually curated in the code. A note will be added to indicate when to update them.
+
+---
+
+## Part 5: Daily Provident Auto-Sync + New Project Detector
+
+### A. Daily Provident Sync (pg_cron)
+
+Schedule the `discover-all-projects` edge function to run daily at 7 AM UAE time. This already discovers all Provident projects and inserts new ones into `pending_project_imports`.
+
+```sql
+SELECT cron.schedule(
+  'daily-provident-sync',
+  '0 3 * * *',  -- 3 AM UTC = 7 AM UAE
+  $$ SELECT net.http_post(
+    url := 'https://mdafrewypkkrildjgtey.supabase.co/functions/v1/discover-all-projects',
+    headers := '{"Content-Type":"application/json","Authorization":"Bearer <anon_key>"}'::jsonb,
+    body := '{"action":"discover","source":"provident"}'::jsonb
+  ) $$
+);
+```
+
+### B. New Project Detector in Listing Admin
+
+**File: `src/components/listing-admin/ProjectApprovalQueue.tsx`**
+
+Add a "New Projects Detected" badge/section at the top of the approval queue that:
+- Queries `pending_project_imports` for items added in the last 24 hours
+- Shows a count badge: "3 New Projects Detected Today"
+- For each new project, shows whether it already exists in `projects` table (by slug match)
+- Labels each as "NEW" (not on website) or "EXISTING" (already on website) with colored badges
+
+---
 
 ## Technical Details
 
@@ -86,73 +104,44 @@ After deploying the updated edge function:
 
 | File | Changes |
 |------|---------|
-| `supabase/functions/ai-news-collector/index.ts` | Add `fix-images` action, expand sources (Provident, Gulf Business, etc.), add `customerpulse` to blocklist |
-| `src/pages/News.tsx` | Expand market stats cards with DLD breakdowns (areas, mortgage/cash, off-plan/secondary) |
-| `src/pages/NewsDetail.tsx` | Fix hero quality, premium back button, add spacing between hero and content, green AI analysis section, CTA banner, content breathing room |
+| `src/pages/News.tsx` | White text on category labels (lines 265, 209) |
+| `src/pages/NewsDetail.tsx` | Hero height 80vh/90vh (line 149) |
+| `supabase/functions/ai-news-collector/index.ts` | Add 3 new bad URLs to blocklist |
+| `src/components/listing-admin/ProjectApprovalQueue.tsx` | Add "New Projects Detected" section with existing/new indicators |
 
-### Bad Image Fix Targets (10 articles)
+### Database Changes (SQL -- not migration, contains project-specific data)
 
-```text
-5 articles with: survey.customerpulse.gov.ae/assets/UAEGoldNew-01.png
-3 articles with: images.unsplash.com/.../photo-1565008447742 (Developer News fallback)
+```sql
+-- Enable required extensions
+CREATE EXTENSION IF NOT EXISTS pg_cron;
+CREATE EXTENSION IF NOT EXISTS pg_net;
+
+-- Daily news collection at 6 AM UAE (2 AM UTC)
+SELECT cron.schedule('daily-news-collect', '0 2 * * *', ...);
+
+-- Daily news enrichment at 6:30 AM UAE (2:30 AM UTC)
+SELECT cron.schedule('daily-news-enrich', '30 2 * * *', ...);
+
+-- Daily Provident discovery at 7 AM UAE (3 AM UTC)
+SELECT cron.schedule('daily-provident-sync', '0 3 * * *', ...);
 ```
 
-### New Sources to Add
-
-```typescript
-{ name: "Provident Estate", url: "https://www.providentestate.com/blog/", type: "media", category: "Market Update" },
-{ name: "Gulf Business", url: "https://gulfbusiness.com/category/real-estate/", type: "media", category: "Market Update" },
-{ name: "The National", url: "https://www.thenationalnews.com/business/property/", type: "media", category: "Analysis" },
-{ name: "Property Finder", url: "https://www.propertyfinder.ae/blog/", type: "media", category: "Market Update" },
-{ name: "Bayut", url: "https://www.bayut.com/mybayut/", type: "media", category: "Market Update" },
-```
-
-### DLD Market Stats Data to Add (2026 YTD card)
-
-```text
-Off-plan transactions: ~11,200 (60.5%)
-Secondary market: ~7,300 (39.5%)
-Mortgage transactions: ~4,800 (26%)
-Cash transactions: ~13,700 (74%)
-Gift transactions: ~520
-Top areas: JVC, Business Bay, Dubai Marina, Downtown Dubai, Palm Jumeirah
-```
-
-### AI Analysis Section Redesign (NewsDetail)
+### Label Fix (News.tsx)
 
 ```tsx
-<div className="mt-12 pt-8 border-t border-emerald-200">
-  {/* CTA Banner */}
-  <div className="bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl p-4 mb-6 border border-emerald-200 flex items-center gap-3">
-    <Sparkles className="w-5 h-5 text-emerald-600" />
-    <p className="text-emerald-800 font-medium text-sm">
-      Learn more how this affects Dubai real estate market with our AI News Analyzer
-    </p>
-  </div>
-  {/* Green analysis card */}
-  <div className="bg-emerald-50 rounded-xl p-6 border border-emerald-200">
-    <h3 className="text-emerald-900 font-bold flex items-center gap-2">
-      <TrendingUp className="text-emerald-600" />
-      How This Affects Dubai Real Estate
-    </h3>
-    {/* Each bullet point with green checkmark */}
-    <div className="space-y-3 mt-4">
-      {points.map(p => (
-        <div className="flex gap-3">
-          <CheckCircle className="text-emerald-500 flex-shrink-0" />
-          <p className="text-emerald-800">{p}</p>
-        </div>
-      ))}
-    </div>
-  </div>
-</div>
+// Before (hard to read)
+<span className="text-xs text-gold bg-gold/10 backdrop-blur-sm px-3 py-1 rounded-full border border-gold/20">
+
+// After (white, readable)
+<span className="text-xs text-white bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20 font-medium">
 ```
 
-### Hero Image Quality Fix
+### New Project Detector Logic
 
-```tsx
-// Append high-quality params to image URL
-const heroImage = (article.image_url || fallback)
-  .replace(/w=\d+/, 'w=1920')
-  .replace(/q=\d+/, 'q=90');
+```text
+1. Query pending_project_imports WHERE created_at > NOW() - INTERVAL '24 hours'
+2. For each, check projects table for matching slug
+3. Display badge: "NEW - Not on website" (green) or "EXISTING - Already listed" (amber)
+4. Show count in header: "X New Projects Detected Today"
 ```
+
