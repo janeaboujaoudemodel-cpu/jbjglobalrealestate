@@ -152,18 +152,35 @@
     const limit = parseInt(url.searchParams.get('limit') || '24');
     const offset = parseInt(url.searchParams.get('offset') || '0');
     const search = url.searchParams.get('search');
-    const saleStatus = url.searchParams.get('sale_status');
-    const constructionStatus = url.searchParams.get('construction_status');
-    const emirate = url.searchParams.get('emirate');
-    const developerId = url.searchParams.get('developer_id');
+  const saleStatus = url.searchParams.get('sale_status');
+     const constructionStatus = url.searchParams.get('construction_status');
+     const emirate = url.searchParams.get('emirate');
+     const developerName = url.searchParams.get('developer_name');
 
-    // Build Reelly API URL with pagination and filters
-    let reellyUrl = `${REELLY_API_URL}?limit=${limit}&offset=${offset}`;
-    if (search) reellyUrl += `&search=${encodeURIComponent(search)}`;
-    if (saleStatus) reellyUrl += `&sale_status=${encodeURIComponent(saleStatus)}`;
-    if (constructionStatus) reellyUrl += `&construction_status=${encodeURIComponent(constructionStatus)}`;
-    if (emirate) reellyUrl += `&region=${encodeURIComponent(emirate)}`;
-    if (developerId) reellyUrl += `&developer=${encodeURIComponent(developerId)}`;
+     // Reverse-map human-readable status labels back to Reelly API enum values
+     const saleStatusMap: Record<string, string> = {
+       "Announced": "announced",
+       "On Sale": "on_sale",
+       "Sold Out": "out_of_stock",
+       "Presale (EOI)": "presale_eoi",
+       "Start of Sales": "start_of_sales",
+     };
+     const constructionStatusMap: Record<string, string> = {
+       "Under Construction": "under_construction",
+       "Completed": "completed",
+       "Presale": "presale",
+     };
+
+     const mappedSaleStatus = saleStatus ? (saleStatusMap[saleStatus] || saleStatus) : null;
+     const mappedConstructionStatus = constructionStatus ? (constructionStatusMap[constructionStatus] || constructionStatus) : null;
+
+     // Build Reelly API URL with pagination and filters
+     let reellyUrl = `${REELLY_API_URL}?limit=${limit}&offset=${offset}`;
+     if (search) reellyUrl += `&search=${encodeURIComponent(search)}`;
+     if (mappedSaleStatus) reellyUrl += `&sale_status=${encodeURIComponent(mappedSaleStatus)}`;
+     if (mappedConstructionStatus) reellyUrl += `&construction_status=${encodeURIComponent(mappedConstructionStatus)}`;
+     if (emirate) reellyUrl += `&region=${encodeURIComponent(emirate)}`;
+     if (developerName) reellyUrl += `&developer=${encodeURIComponent(developerName)}`;
     
     console.log(`Fetching from Reelly API: ${reellyUrl}`);
  
