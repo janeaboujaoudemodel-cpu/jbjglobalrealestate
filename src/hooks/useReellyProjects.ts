@@ -114,10 +114,42 @@ export interface ReellyFilters {
    return data.pages.flatMap(page => page.projects);
  }
  
- // Get total count from the query
- export function getReellyProjectsTotal(
-   data: ReturnType<typeof useReellyProjects>['data']
- ): number {
-   if (!data?.pages?.length) return 0;
-   return data.pages[0].pagination.total;
- }
+// Get total count from the query
+export function getReellyProjectsTotal(
+  data: ReturnType<typeof useReellyProjects>['data']
+): number {
+  if (!data?.pages?.length) return 0;
+  return data.pages[0].pagination.total;
+}
+
+// Fetch a single Reelly project by slug
+async function fetchReellyProjectBySlug(slug: string): Promise<ReellyProject | null> {
+  // Search using the slug as search term (slug is derived from project name)
+  const searchTerm = slug.replace(/-/g, ' ');
+  const response = await fetch(
+    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reelly-projects?limit=50&offset=0&search=${encodeURIComponent(searchTerm)}`,
+    {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  if (!response.ok) return null;
+  const result: ReellyProjectsResponse = await response.json();
+  if (!result.success || !result.data?.projects?.length) return null;
+  // Find exact slug match
+  return result.data.projects.find(p => p.slug === slug) || result.data.projects[0] || null;
+}
+
+import { useQuery } from "@tanstack/react-query";
+
+export function useReellyProjectBySlug(slug: string | undefined, enabled: boolean = true) {
+  return useQuery({
+    queryKey: ['reelly-project-by-slug', slug],
+    queryFn: () => fetchReellyProjectBySlug(slug!),
+    enabled: enabled && !!slug,
+    staleTime: 5 * 60 * 1000,
+  });
+}
