@@ -1,96 +1,98 @@
 
 
-# Bulk Project Enrichment — Fix Missing Photos, Documents, and Details
+# Fix Property Filters: Instant Filtering, Developer Dropdown with Logos, and Missing Filters
 
-## The Problem
+## Problems Found
 
-The database currently has:
-- **1,809 published projects** but only **1 image per project** (just the cover image)
-- **0 documents total** (no brochures, no floor plans, nothing)
-- **0 enriched records** from either Reelly or Provident — the batch enrichment has never successfully run
+1. **Filters are NOT sent to the API at all.** The edge function (`reelly-projects/index.ts`) reads filter query params from the URL but never passes them to the Reelly API call. It only sends `limit` and `offset`. So clicking "On Sale" does nothing server-side — all projects come back unfiltered.
 
-The existing `provident-batch-extract` function tries to scrape Provident (an external website), which is unreliable and rate-limited. Meanwhile, **1,802 projects already have Reelly IDs** — and the Reelly API has full galleries, documents, and floor plans ready to fetch. The `enrich-project-test` function already knows how to extract this data, but it only works one project at a time.
+2. **Two-step filter system causes delay.** The page uses a `filters` state and a separate `appliedFilters` state. Changing a dropdown only updates `filters` — nothing happens until you click "Search", which copies `filters` into `appliedFilters`. This is why it feels slow and unresponsive.
 
-## Solution
+3. **No developer filter.** The Properties page has no developer dropdown at all, unlike the PropertySearchBar on the homepage which had one.
 
-Build a new **bulk Reelly enrichment** function that processes projects in batches, pulling galleries (10-30 photos per project), documents (brochures, PDFs), floor plans, FAQs, payment plans, and all other details directly from the Reelly API. Also add a trigger button in the admin panel so you can run it yourself.
+4. **No developer logos in any dropdown.**
 
 ---
 
-## Step 1: Create `reelly-bulk-enrich` Edge Function
+## Step 1: Fix the Edge Function to Pass Filters to Reelly API
 
-**New file:** `supabase/functions/reelly-bulk-enrich/index.ts`
+**File:** `supabase/functions/reelly-projects/index.ts`
 
-This function will:
-1. Query all published projects that have a `reelly_id` but are missing data (0 documents, only 1 image)
-2. Process them in batches of 20 with a 1-second delay between API calls
-3. For each project, call the Reelly detail API (`/api/v2/clients/projects/{reellyId}`)
-4. Extract using the existing shared helpers: `extractGalleryImages`, `extractDocuments`, `extractFloorPlans`, `extractAmenities`, `extractUnitTypes`
-5. Insert gallery images into `project_images`, documents into `project_documents`
-6. Update the project record with amenities, FAQs, floor plans, payment info, highlights, etc.
-7. Return a progress summary (processed count, images added, docs added, errors)
+The Reelly API supports query parameters for filtering. Update the function to forward the filter params:
 
-Key design choices:
-- Uses Reelly API (reliable, no rate limits like Firecrawl) instead of Provident scraping
-- Non-destructive: only adds data where fields are empty, never overwrites existing data
-- Processes up to 50 projects per invocation to stay within edge function timeout limits
-- Logs progress so you can call it multiple times to work through all 1,802 projects
-
-## Step 2: Add "Bulk Enrich" Button to Admin Panel
-
-**Edit:** `src/components/listing-admin/ReellyImportPanel.tsx`
-
-Add a new section in the admin panel with:
-- A "Run Bulk Enrichment" button that calls `reelly-bulk-enrich`
-- Progress display showing: projects processed, images added, documents added, errors
-- A "Run Again" button to process the next batch
-- Status text showing how many projects still need enrichment
-
-## Step 3: Fix the Existing `provident-batch-extract`
-
-**Edit:** `supabase/functions/provident-batch-extract/index.ts`
-
-The current function has a bug: it only looks for projects where `cover_image_url IS NULL`, but 1,802 projects already have cover images from Reelly — they just lack additional gallery photos and documents. Fix the query to find projects with 0 documents regardless of cover image status.
-
----
-
-## Technical Details
-
-### Reelly Bulk Enrich Function Logic
+- Read `search`, `sale_status`, `construction_status`, `emirate`, `developer_id` from the incoming query params
+- Append them to the Reelly API URL so the API returns filtered results
+- This means the server returns only matching projects, making filtering fast and accurate
 
 ```text
-POST /reelly-bulk-enrich
-Body: { "limit": 50 }
+Current (broken):
+  reellyUrl = `${REELLY_API_URL}?limit=${limit}&offset=${offset}`
+  // search, sale_status, etc. are READ but never USED
 
-1. SELECT projects WHERE is_published = true 
-   AND reelly_id IS NOT NULL
-   AND id NOT IN (SELECT DISTINCT project_id FROM project_documents)
-   LIMIT 50
-
-2. For each project:
-   a. GET Reelly API /projects/{reelly_id}
-   b. Extract gallery -> INSERT into project_images
-   c. Extract documents -> INSERT into project_documents  
-   d. Extract amenities, FAQs, floor_plans, highlights, payment_plan
-   e. UPDATE projects SET amenities=..., faqs=..., etc WHERE id=...
-   f. Sleep 1 second
-
-3. Return { processed: 50, images_added: 450, docs_added: 75, errors: 2 }
+Fixed:
+  reellyUrl = `${REELLY_API_URL}?limit=${limit}&offset=${offset}`
+  if (search) reellyUrl += `&search=${search}`
+  if (saleStatus) reellyUrl += `&sale_status=${saleStatus}`
+  if (constructionStatus) reellyUrl += `&construction_status=${constructionStatus}`
+  if (emirate) reellyUrl += `&region=${emirate}`
+  if (developerId) reellyUrl += `&developer=${developerId}`
 ```
 
-### Files Summary
+## Step 2: Make Filters Apply Instantly (Remove Two-Step System)
 
-| File | Action | Purpose |
-|------|--------|---------|
-| `supabase/functions/reelly-bulk-enrich/index.ts` | New | Batch enrichment using Reelly API for all projects |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Edit | Add bulk enrich button and progress display |
-| `supabase/functions/provident-batch-extract/index.ts` | Edit | Fix query to find projects missing docs (not just cover images) |
+**File:** `src/pages/PropertiesReelly.tsx`
 
-### Expected Results After Running
+Remove the `appliedFilters` pattern. Instead:
 
-After running the bulk enrichment across all 1,802 projects with Reelly IDs:
-- Each project should have 5-30 gallery images (up from 1)
-- Projects with available brochures/PDFs will have documents attached
-- Amenities, FAQs, floor plans, payment plans, and highlights will be populated
-- You can trigger it from the admin panel as many times as needed until all projects are enriched
+- Every filter change directly triggers a re-fetch by updating a single `filters` state that the `useReellyProjects` hook reads
+- Add a small debounce (300ms) on the text search input only, so typing doesn't fire a request per keystroke
+- Dropdowns (emirate, sale status, construction status, developer) apply immediately on selection
+- Remove the "Search" button entirely or keep it as a secondary action
 
+## Step 3: Add Developer Filter with Logos
+
+**File:** `src/pages/PropertiesReelly.tsx`
+
+Add a developer dropdown to the filter bar:
+
+- Fetch developers from the database using the existing `useDevelopers()` hook
+- Show all developers sorted by rank
+- Each dropdown item shows the developer logo (small 20x20 square) next to the name
+- Selecting a developer filters projects by that developer
+- Pass `developerId` to the `useReellyProjects` hook
+
+The dropdown items will render like:
+```text
+[logo] Emaar
+[logo] DAMAC Properties
+[logo] Sobha Realty
+...
+```
+
+For developers without logos, show a small Building2 icon as fallback.
+
+## Step 4: Add Developer Logos to Existing Dropdowns Elsewhere
+
+Update the developer select in `PropertySearchBar.tsx` to also show logos next to developer names, following the same pattern.
+
+## Step 5: Restore Additional Filters
+
+Move construction status, currency, and size unit from the "Advanced Filters" dialog back into the main filter bar (as they were before), so users see all filters without needing to open a dialog. Keep the advanced dialog for any future filters but ensure the core ones are always visible.
+
+---
+
+## Technical Summary
+
+| File | Change |
+|------|--------|
+| `supabase/functions/reelly-projects/index.ts` | Forward filter params to Reelly API |
+| `src/pages/PropertiesReelly.tsx` | Remove two-step filter, add developer dropdown with logos, instant filtering, restore filters to main bar |
+| `src/hooks/useReellyProjects.ts` | Add `developerId` to `ReellyFilters` interface (already exists, just needs wiring) |
+| `src/components/PropertySearchBar.tsx` | Add developer logos to the existing developer dropdown |
+
+## Expected Result
+
+- Selecting "On Sale" immediately shows only On Sale projects (no Search button needed)
+- Developer dropdown shows all developers with their logos
+- All core filters (emirate, sale status, construction status, developer) are visible in the main bar
+- Filtering is fast because it happens server-side via the Reelly API
