@@ -19,33 +19,33 @@ const WhyChooseUs = () => {
   const valueProps: ValueProp[] = [
     {
       icon: TrendingUp,
-      title: 'Market Intelligence',
+      title: t('whyUs.marketIntelligence', 'Market Intelligence'),
       text: t('whyUs.marketPricing', 'Market pricing guidance backed by recent comparables'),
     },
     {
       icon: Camera,
-      title: 'Premium Presentation',
+      title: t('whyUs.premiumPresentation', 'Premium Presentation'),
       text: t('whyUs.photography', 'High-quality photography and listing presentation'),
     },
     {
       icon: MessageSquare,
-      title: 'Clear Communication',
+      title: t('whyUs.clearCommunication', 'Clear Communication'),
       text: t('whyUs.communication', 'Clear communication at every step'),
     },
     {
       icon: Network,
-      title: 'Exclusive Network',
+      title: t('whyUs.exclusiveNetwork', 'Exclusive Network'),
       text: t('whyUs.network', 'Strong network for off-market opportunities'),
     },
     {
       icon: Headphones,
-      title: 'Priority Support',
-      text: 'Dedicated support team available for all your needs',
+      title: t('whyUs.prioritySupport', 'Priority Support'),
+      text: t('whyUs.prioritySupportDesc', 'Dedicated support team available for all your needs'),
     },
     {
       icon: Award,
-      title: 'Loyalty Program',
-      text: 'Exclusive benefits and rewards for returning clients',
+      title: t('whyUs.loyaltyProgram', 'Loyalty Program'),
+      text: t('whyUs.loyaltyProgramDesc', 'Exclusive benefits and rewards for returning clients'),
     },
   ];
 
@@ -57,7 +57,7 @@ const WhyChooseUs = () => {
           <div className="text-center mb-10">
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
               <Award className="w-3.5 h-3.5 text-gold" />
-              <span className="text-black">Our Commitment</span>
+              <span className="text-black">{t('whyUs.ourCommitment', 'Our Commitment')}</span>
             </span>
             <h2 
               className="text-2xl md:text-3xl font-bold text-black mb-3"

@@ -21,23 +21,23 @@ const TrustBar = () => {
     {
       icon: Shield,
       text: t('trust.reraRegistered', 'RERA Licensed'),
-      subtext: 'DLD Registered',
+      subtext: t('trust.dldRegistered', 'DLD Registered'),
       highlight: true,
     },
     {
       icon: MessageCircle,
       text: t('trust.fastResponse', 'Instant Response'),
-      subtext: 'WhatsApp Priority',
+      subtext: t('trust.whatsappPriority', 'WhatsApp Priority'),
     },
     {
       icon: CheckCircle,
       text: t('trust.verifiedListings', 'Verified Listings'),
-      subtext: 'Quality Assured',
+      subtext: t('trust.qualityAssured', 'Quality Assured'),
     },
     {
       icon: Award,
-      text: 'Award Winning',
-      subtext: 'Excellence in Service',
+      text: t('trust.awardWinning', 'Award Winning'),
+      subtext: t('trust.excellenceInService', 'Excellence in Service'),
     },
   ];
 

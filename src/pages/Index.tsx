@@ -215,7 +215,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-4 mb-3">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/25 to-gold/40" />
-            <span className="text-gold/60 text-[10px] uppercase tracking-[0.2em] font-medium">Trusted By Thousands</span>
+            <span className="text-gold/60 text-[10px] uppercase tracking-[0.2em] font-medium">{t('home.trustBar.trustedByThousands', 'Trusted By Thousands')}</span>
             <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gold/25 to-gold/40" />
           </div>
         </div>
@@ -223,7 +223,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-4 mt-3">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/25 to-gold/40" />
-            <span className="text-gold/60 text-[10px] uppercase tracking-[0.2em] font-medium">Excellence Guaranteed</span>
+            <span className="text-gold/60 text-[10px] uppercase tracking-[0.2em] font-medium">{t('home.trustBar.excellenceGuaranteed', 'Excellence Guaranteed')}</span>
             <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gold/25 to-gold/40" />
           </div>
         </div>
@@ -290,7 +290,7 @@ const Index = () => {
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mb-1 md:mb-2 transition-colors">
                     <Home className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors leading-tight">Landlords</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors leading-tight">{t('hero.landlords', 'Landlords')}</h4>
                 </div>
               </div>
             </Link>
@@ -302,7 +302,7 @@ const Index = () => {
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mb-1 md:mb-2 transition-colors">
                     <User className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors leading-tight">Tenants</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors leading-tight">{t('hero.tenants', 'Tenants')}</h4>
                 </div>
               </div>
             </Link>
@@ -338,7 +338,7 @@ const Index = () => {
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mb-1 md:mb-2 transition-colors">
                     <Briefcase className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors leading-tight">Partners</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors leading-tight">{t('hero.partners', 'Partners')}</h4>
                 </div>
               </div>
             </Link>
@@ -350,7 +350,7 @@ const Index = () => {
                   <div className="w-7 h-7 md:w-8 md:h-8 bg-transparent border border-gold md:border-2 group-hover:border-black rounded-md md:rounded-lg flex items-center justify-center mb-1 md:mb-2 transition-colors">
                     <Globe className="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-gold transition-colors" />
                   </div>
-                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors leading-tight">Golden Visa</h4>
+                  <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-semibold transition-colors leading-tight">{t('hero.goldenVisa', 'Golden Visa')}</h4>
                 </div>
               </div>
             </Link>
@@ -488,7 +488,7 @@ const Index = () => {
                   <div className="flex-1">
                     <h4 className="text-black group-hover:text-gold text-lg md:text-xl font-bold transition-colors leading-tight mb-1">{t('hero.jbjBrokerHub')}</h4>
                     <p className="text-gold font-semibold text-sm mb-2">{t('hero.professionalTools')}</p>
-                    <p className="text-black/70 text-sm leading-relaxed mb-4">Access AI-powered broker tools, training modules, CRM, and marketing resources.</p>
+                    <p className="text-black/70 text-sm leading-relaxed mb-4">{t('hero.brokerHubDesc', 'Access AI-powered broker tools, training modules, CRM, and marketing resources.')}</p>
                     <Button variant="primary" size="sm" className="group-hover:shadow-[0_0_20px_rgba(200,167,102,0.5)] transition-all">
                       {t('hero.accessBrokerHub')}
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -510,7 +510,7 @@ const Index = () => {
                   <div className="flex-1">
                     <h4 className="text-black group-hover:text-gold text-lg md:text-xl font-bold transition-colors leading-tight mb-1">{t('hero.jbjInvestorHub')}</h4>
                     <p className="text-gold font-semibold text-sm mb-2">{t('hero.freeAiTools')}</p>
-                    <p className="text-black/70 text-sm leading-relaxed mb-4">AI-powered property analysis, comparison, mortgage calculator, and productivity tools.</p>
+                    <p className="text-black/70 text-sm leading-relaxed mb-4">{t('hero.investorHubDesc', 'AI-powered property analysis, comparison, mortgage calculator, and productivity tools.')}</p>
                     <Button variant="primary" size="sm" className="group-hover:shadow-[0_0_20px_rgba(200,167,102,0.5)] transition-all">
                       {t('hero.exploreInvestorHub')}
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -562,7 +562,7 @@ const Index = () => {
                 {/* Purple label badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-400 text-xs uppercase tracking-[0.2em] mb-4">
                   <Sparkles className="w-3 h-3" />
-                  AI-Powered
+                  {t('home.aiPowered', 'AI-Powered')}
                 </div>
                 <Link to="/quiz" className="block group">
                   <div className="flex items-center justify-center gap-3 mb-2">
@@ -581,7 +581,7 @@ const Index = () => {
                     {t('hero.aiFinderDesc')}
                   </p>
                   <p className="text-zinc-500 text-xs mt-3">
-                    Powered by JBJ Global Real Estate
+                    {t('home.poweredByJBJ', 'Powered by JBJ Global Real Estate')}
                   </p>
                 </Link>
               </div>
@@ -615,9 +615,9 @@ const Index = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <span className="inline-block text-gold text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em] mb-2 md:mb-3">Exclusive Publication</span>
+              <span className="inline-block text-gold text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em] mb-2 md:mb-3">{t('home.exclusivePublication', 'Exclusive Publication')}</span>
               <h2 className="text-black text-xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Free Market <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Intelligence Book</span>
+                {t('home.freeMarket', 'Free Market')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">{t('home.intelligenceBook', 'Intelligence Book')}</span>
               </h2>
             </motion.div>
             <Suspense fallback={<SectionLoader />}>
@@ -645,13 +645,13 @@ const Index = () => {
             >
               <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full mb-4 shadow-lg shadow-gold/10">
                 <Calculator className="w-4 h-4 text-gold" />
-                <span className="text-black text-xs font-semibold uppercase tracking-wider">Mortgage Estimate</span>
+                <span className="text-black text-xs font-semibold uppercase tracking-wider">{t('home.mortgageEstimate', 'Mortgage Estimate')}</span>
               </span>
               <h3 className="text-zinc-900 text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Mortgage <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">Calculator</span>
+                {t('mortgage.title', 'Mortgage')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">{t('mortgage.calculator', 'Calculator')}</span>
               </h3>
               <p className="text-zinc-600 mt-3 max-w-lg mx-auto">
-                Estimate your monthly payments and explore financing options with licensed mortgage partners.
+                {t('home.mortgageDesc', 'Estimate your monthly payments and explore financing options with licensed mortgage partners.')}
               </p>
             </motion.div>
             <div className="relative z-10">
@@ -659,7 +659,7 @@ const Index = () => {
                 <MortgageCalculator compact />
               </Suspense>
               <p className="text-zinc-500 text-xs text-center mt-4">
-                Estimates only. Introductions to independent licensed mortgage partners.
+                {t('home.mortgageDisclaimer', 'Estimates only. Introductions to independent licensed mortgage partners.')}
               </p>
               
               {/* Dual Buttons with 3D Premium Styling */}
@@ -668,7 +668,7 @@ const Index = () => {
                 <Link to="/mortgage-calculator">
                   <Button variant="primary" size="lg" className="gap-2 px-8 py-5 text-base group">
                     <Sparkles className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                    <span className="whitespace-nowrap"><span className="text-black group-hover:text-gold transition-colors">Try Our AI </span><span className="text-gold group-hover:text-black transition-colors">Mortgage Calculator</span></span>
+                    <span className="whitespace-nowrap"><span className="text-black group-hover:text-gold transition-colors">{t('home.tryOurAi', 'Try Our AI')} </span><span className="text-gold group-hover:text-black transition-colors">{t('mortgage.calculator', 'Mortgage Calculator')}</span></span>
                     <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
                   </Button>
                 </Link>
@@ -677,7 +677,7 @@ const Index = () => {
                 <Link to="/partners/mortgage">
                   <Button variant="secondary" size="lg" className="gap-2 px-8 py-5 text-base group">
                     <Users className="w-5 h-5 text-gold" />
-                    <span>Connect With Mortgage Partners</span>
+                    <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
                     <ArrowUpRight className="w-5 h-5" />
                   </Button>
                 </Link>
