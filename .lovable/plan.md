@@ -1,51 +1,59 @@
 
+# Fix Document Editor Toolbar Visibility, Title Input Color, and Auto-Test Enrichment
 
-# Fix Developer Card Logos, Quick Filter Chips, Developer Name Color, and Project Loading
+## Overview
+Three issues to address: (1) Document editor toolbar buttons and title input are invisible on the dark background, (2) the enrichment test panel requires manual slug entry -- it should auto-select a project and run the test automatically.
 
-## Changes Summary
+---
 
-### 1. Reduce Developer Card Logo Size (DeveloperCard.tsx)
-The logo container on the developers page is currently `w-24 h-24` (96px) which covers nearly half the card photo (220px height). The homepage FeaturedListings uses `w-10 h-10` (40px) which is too small.
+## Part 1: Fix Document Editor Toolbar Buttons (Not Visible)
 
-**Fix:** Change the logo container in `DeveloperCard.tsx` from `w-24 h-24` to `w-14 h-14` (56px). This is a balanced size -- bigger than the homepage's 40px but much smaller than the current 96px. The logo stays `object-fill` inside the container (no padding changes). The container size is uniform for all developers.
+**Problem:** All toolbar buttons in `src/pages/Documents.tsx` use `Button variant="ghost"`, which is aliased to `BRAND_SECONDARY` in the global button system. This renders as a transparent button with champagne/gold borders and dark text -- completely invisible on the dark `zinc-950` background of the document editor.
 
-**File:** `src/components/DeveloperCard.tsx` line 85
-- Change: `w-24 h-24` to `w-14 h-14`
+**Fix:** Change all toolbar `Button variant="ghost"` to `Button variant="dark-ghost"` (lines 240-398). The `dark-ghost` variant is specifically designed for dark backgrounds: `bg-transparent text-white border-2 border-zinc-600 hover:bg-white/10 hover:border-white/40`.
 
-### 2. Reduce Logo Size on ProjectCard and ReellyProjectCard
-These cards currently use `w-12 h-12` (48px) which is acceptable, but should be consistent. Keep them at `w-12 h-12` -- no change needed since they are already smaller than the developer cards.
+This affects approximately 15 buttons:
+- Undo, Redo (lines 240-244)
+- Bold, Italic, Underline (lines 280-288)
+- Headings dropdown trigger (line 295)
+- Alignment buttons x4 (lines 319-330)
+- Lists x2 (lines 335-339)
+- Link dialog trigger (line 347)
+- Image button (line 366)
+- Print button (line 373)
+- Export dropdown trigger (line 379)
+- Import button (line 394)
 
-### 3. Fix "Beyond" Logo Readability
-The Beyond logo is rectangular/wide and gets distorted with `object-fill` on a square container. However, the user explicitly wants logos to fill the box without white space. The fix is that by making the container smaller (from 96px to 56px), the stretching effect is reduced and the logo becomes more readable. The `object-fill` stays locked per user mandate.
+Also update the "Export" and "Import" text labels to include `text-white` explicitly.
 
-### 4. Quick Filter Chips -- Premium Styling (ProjectFilters.tsx)
-The `QuickFilterChip` component (line 1092-1108) currently uses:
-- Active: `bg-white text-black` (plain white)
-- Inactive: `bg-zinc-900 text-zinc-300` (dark/muted)
+**File:** `src/pages/Documents.tsx` -- Change all `variant="ghost"` to `variant="dark-ghost"` in the toolbar section.
 
-These need the premium champagne treatment.
+---
 
-**Fix:** Update the QuickFilterChip styling:
-- Active: `bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm`
-- Inactive: `bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50`
+## Part 2: Fix "Untitled Document" Title Input Text Color
 
-**File:** `src/components/ProjectFilters.tsx` lines 1100-1104
+**Problem:** The title input (line 231) has `text-white` which works when not focused. However, on focus the input may show black text due to browser defaults or the component's focus styles overriding. The user reports the text shows white initially then turns black on click.
 
-### 5. Developer Name in Gold on All Listing Cards
-- **ProjectCard.tsx**: Already uses `DeveloperLink` component which renders developer names in gold gradient text. No change needed.
-- **ReellyProjectCard.tsx**: Already uses `text-gold font-medium` for developer name (line 265). No change needed.
-- Both cards are already correct per the user's request.
+**Fix:** Add explicit `focus:text-white` and `selection:text-white` classes to the Input on line 231. Also add `caret-white` so the cursor is visible. The full className becomes:
+```
+text-xl font-medium border-0 bg-transparent focus-visible:ring-0 max-w-md text-white focus:text-white caret-white placeholder:text-zinc-500
+```
 
-### 6. Project Detail Hero -- Missing Photos
-Some project detail pages open without a hero photo showing. This is likely because `cover_image_url` is null and the fallback to `project_images` isn't working properly, or the high-res image URL utility returns a broken URL.
+**File:** `src/pages/Documents.tsx` line 231
 
-**Fix:** In `src/components/project-detail/ProjectDetailLayout.tsx` (or the hero section component), ensure there's a proper fallback chain: `cover_image_url` then first `project_images` entry, then a placeholder gradient. Also ensure the image uses `loading="eager"` for the hero.
+---
 
-**File:** Need to check `ProjectDetailLayout.tsx` for the hero image logic -- will verify and fix the fallback chain.
+## Part 3: Auto-Test Enrichment with a Real Project
 
-### 7. Improve Project Loading Speed
-- **Logo loading:** Add `loading="eager"` for logos in the first 6-8 visible cards (already done via `isEager` in DeveloperCard, but ProjectCard and ReellyProjectCard don't have this optimization).
-- **Query staleTime:** The `useProjectsByDeveloper` hook may have a long stale time. Reduce it to improve perceived loading speed.
+**Problem:** The enrichment test panel in `src/components/listing-admin/ReellyImportPanel.tsx` (line 2546) requires the admin to manually type a project slug. The user wants an automatic test -- the system should pick a project automatically and run the enrichment.
+
+**Fix:** Pre-populate the slug input with a known project from the database and add a "Random Project" button that fetches a random project slug. Specifically:
+
+1. Set the default `enrichTestSlug` state to `"binghatti-titania-binghatti-3012"` (a real Binghatti project with a cover image, confirmed in the database).
+2. Add a small "Pick Random" button next to the input that queries the database for a random project with a Reelly external ID and auto-fills the slug.
+3. The admin can still override with their own slug if desired.
+
+**File:** `src/components/listing-admin/ReellyImportPanel.tsx` lines 2544-2577
 
 ---
 
@@ -53,12 +61,10 @@ Some project detail pages open without a hero photo showing. This is likely beca
 
 | File | Changes |
 |---|---|
-| `src/components/DeveloperCard.tsx` | Reduce logo container from `w-24 h-24` to `w-14 h-14` |
-| `src/components/ProjectFilters.tsx` | Update QuickFilterChip active/inactive styles to premium champagne theme |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Fix hero image fallback chain to prevent blank heroes |
+| `src/pages/Documents.tsx` | Change ~15 toolbar buttons from `variant="ghost"` to `variant="dark-ghost"`; fix title input focus text color |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Pre-populate enrichment test slug with a real project; add "Pick Random" button |
 
 ## Execution Order
-1. Reduce DeveloperCard logo container size (highest visibility fix)
-2. Update QuickFilterChip styling to premium champagne
-3. Fix project detail hero image fallbacks
-
+1. Fix all toolbar button variants in Documents.tsx
+2. Fix title input text color in Documents.tsx
+3. Update enrichment test panel with auto-populated slug and random picker
