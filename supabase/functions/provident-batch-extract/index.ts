@@ -23,6 +23,33 @@ function toProvidentSlug(name: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
+/** Generate multiple slug variations to improve matching */
+function getSlugVariations(name: string, developerName?: string): string[] {
+  const base = toProvidentSlug(name);
+  const slugs = [base];
+  
+  // Try without developer suffix
+  if (developerName) {
+    const devSlug = toProvidentSlug(developerName);
+    const withDev = `${base}-by-${devSlug}`;
+    slugs.push(withDev);
+    // Try removing developer name from project name
+    const nameWithoutDev = name.toLowerCase().replace(new RegExp(`\\s*by\\s*${developerName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'i'), '').trim();
+    if (nameWithoutDev !== name.toLowerCase()) {
+      slugs.push(toProvidentSlug(nameWithoutDev));
+    }
+  }
+  
+  // Try removing common suffixes
+  for (const suffix of ["-residences", "-tower", "-towers", "-residence"]) {
+    if (base.endsWith(suffix)) {
+      slugs.push(base.slice(0, -suffix.length));
+    }
+  }
+  
+  return [...new Set(slugs)];
+}
+
 function normalizeProvidentImageUrl(url: string): string {
   const noQuery = url.split("?")[0];
   return noQuery.replace(/\/x\/\d+x\d+\//, "/x/1200x800/");
@@ -107,14 +134,25 @@ serve(async (req) => {
       };
 
       try {
-        // 1. Try page-data.json for PDFs
-        const providentSlug = toProvidentSlug(project.name);
-        console.log(`[batch] Processing: ${project.name} -> slug: ${providentSlug}`);
+        // 1. Try page-data.json for PDFs with multiple slug variations
+        const slugVariations = getSlugVariations(project.name, project.developer_name);
+        console.log(`[batch] Processing: ${project.name} -> slugs: ${slugVariations.join(", ")}`);
 
-        const pdfResult = await fetchProvidentPageDataPdfUrls({
-          baseUrl: PROVIDENT_BASE,
-          slug: providentSlug,
-        });
+        let pdfResult: any = { all: [], brochure: null, paymentPlan: null, floorPlans: [] };
+        let matchedSlug = slugVariations[0];
+        
+        for (const slug of slugVariations) {
+          const result = await fetchProvidentPageDataPdfUrls({
+            baseUrl: PROVIDENT_BASE,
+            slug,
+          });
+          if (result.all.length > 0) {
+            pdfResult = result;
+            matchedSlug = slug;
+            console.log(`[batch] Found ${result.all.length} PDFs with slug: ${slug}`);
+            break;
+          }
+        }
 
         projectResult.pdfs_found = pdfResult.all.length;
 
@@ -126,7 +164,7 @@ serve(async (req) => {
             const mirrored = await mirrorRemotePdfToPublicStorage({
               supabase,
               bucket: "project-documents",
-              slug: project.slug || providentSlug,
+              slug: project.slug || matchedSlug,
               type: "brochure",
               sourceUrl: pdfResult.brochure,
             });
@@ -145,7 +183,7 @@ serve(async (req) => {
             const mirrored = await mirrorRemotePdfToPublicStorage({
               supabase,
               bucket: "project-documents",
-              slug: project.slug || providentSlug,
+              slug: project.slug || matchedSlug,
               type: "payment_plan",
               sourceUrl: pdfResult.paymentPlan,
             });
@@ -164,7 +202,7 @@ serve(async (req) => {
             const mirrored = await mirrorRemotePdfToPublicStorage({
               supabase,
               bucket: "project-documents",
-              slug: project.slug || providentSlug,
+              slug: project.slug || matchedSlug,
               type: "floor_plan",
               index: i,
               sourceUrl: pdfResult.floorPlans[i],
@@ -195,7 +233,7 @@ serve(async (req) => {
         // 2. Try Firecrawl for images (if available)
         if (firecrawlKey) {
           try {
-            const scrapeUrl = `${PROVIDENT_BASE}/new-projects/${providentSlug}/`;
+            const scrapeUrl = `${PROVIDENT_BASE}/new-projects/${matchedSlug}/`;
             const fcRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
               method: "POST",
               headers: {
