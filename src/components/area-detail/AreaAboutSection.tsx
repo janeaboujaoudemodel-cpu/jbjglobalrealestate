@@ -1,5 +1,7 @@
-import { MapPin, ArrowDown, Compass, Building2 } from "lucide-react";
+import { MapPin, ArrowDown, Compass, Building2, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 
 interface AreaAboutSectionProps {
   area: {
@@ -12,9 +14,12 @@ interface AreaAboutSectionProps {
 }
 
 export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
   const handleScrollToProjects = () => {
     document.getElementById("projects-section")?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const isLongDescription = (area.description?.length ?? 0) > 400;
 
   return (
     <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
@@ -33,13 +38,30 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
           </div>
 
           {area.description ? (
-            <div className="text-zinc-700 text-base md:text-lg leading-relaxed mb-8 space-y-4">
-              {area.description.length > 300
-                ? area.description.split(/\n\n|\n/).filter(Boolean).map((para, i) => (
-                    <p key={i}>{para.trim()}</p>
-                  ))
-                : <p>{area.description}</p>
-              }
+            <div className="mb-8">
+              <div className={`relative ${!isExpanded && isLongDescription ? 'max-h-40 overflow-hidden' : ''}`}>
+                <div 
+                  className="text-zinc-700 text-base md:text-lg leading-relaxed prose prose-sm max-w-none prose-p:mb-3"
+                  dangerouslySetInnerHTML={{ 
+                    __html: renderMarkdownToHtml(formatReellyDescription(area.description)) 
+                  }}
+                />
+                {!isExpanded && isLongDescription && (
+                  <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#F5F0E6] to-transparent pointer-events-none" />
+                )}
+              </div>
+              {isLongDescription && (
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="flex items-center gap-1 text-gold text-sm font-medium mt-3 hover:underline"
+                >
+                  {isExpanded ? (
+                    <><ChevronUp className="w-4 h-4" /> Show Less</>
+                  ) : (
+                    <><ChevronDown className="w-4 h-4" /> Read More</>
+                  )}
+                </button>
+              )}
             </div>
           ) : (
             <p className="text-zinc-700 text-base md:text-lg leading-relaxed mb-8">

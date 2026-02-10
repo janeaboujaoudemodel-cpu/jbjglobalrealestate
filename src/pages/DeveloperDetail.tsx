@@ -7,9 +7,10 @@ import ProjectCard from "@/components/ProjectCard";
 import EmiratesTabs from "@/components/EmiratesTabs";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon } from "lucide-react";
+import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronDown, ChevronUp } from "lucide-react";
 import { getHighResImageUrl } from "@/lib/imageUtils";
 import { Button } from "@/components/ui/button";
+import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -33,6 +34,7 @@ const DeveloperDetail = () => {
 
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [selectedEmirate, setSelectedEmirate] = useState<string | null>(null);
+  const [isDevDescExpanded, setIsDevDescExpanded] = useState(false);
 
   // Apply emirate filter first, then apply other filters
   const projectsInEmirate = useMemo(() => {
@@ -157,7 +159,7 @@ const DeveloperDetail = () => {
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="w-full h-full object-fill"
+                className="w-full h-full object-contain p-2"
                 loading="eager"
               />
             ) : (
@@ -172,9 +174,31 @@ const DeveloperDetail = () => {
               {developer.name.split(" ").slice(1).join(" ")}
             </h1>
             {developer.description && (
-              <p className="text-foreground/75 text-base md:text-lg max-w-3xl leading-relaxed">
-                {developer.description}
-              </p>
+              <div className="max-w-3xl">
+                <div className={`relative ${!isDevDescExpanded && developer.description.length > 400 ? 'max-h-32 overflow-hidden' : ''}`}>
+                  <div 
+                    className="text-foreground/75 text-base md:text-lg leading-relaxed prose prose-sm dark:prose-invert max-w-none prose-p:mb-2"
+                    dangerouslySetInnerHTML={{ 
+                      __html: renderMarkdownToHtml(formatReellyDescription(developer.description)) 
+                    }}
+                  />
+                  {!isDevDescExpanded && developer.description.length > 400 && (
+                    <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#F5F0E6] to-transparent pointer-events-none" />
+                  )}
+                </div>
+                {developer.description.length > 400 && (
+                  <button
+                    onClick={() => setIsDevDescExpanded(!isDevDescExpanded)}
+                    className="flex items-center gap-1 text-gold text-sm font-medium mt-3 hover:underline"
+                  >
+                    {isDevDescExpanded ? (
+                      <><ChevronUp className="w-4 h-4" /> Show Less</>
+                    ) : (
+                      <><ChevronDown className="w-4 h-4" /> Read More</>
+                    )}
+                  </button>
+                )}
+              </div>
             )}
 
             {/* Stats - Aligned consistent layout */}
