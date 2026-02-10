@@ -1,136 +1,75 @@
 
-# Owner Command Center -- Full Audit and Fix Plan
+# Fix Developer Logos, Marquee, and Sticky Nav -- Global Consistency
 
-This is a comprehensive overhaul of the Owner Command Center covering layout, navigation, performance, and UI consistency across all sections and sub-pages.
+## Problem Summary
 
----
+1. **Developer logos everywhere lack the gold border style** that exists on the project detail page's DeveloperInfoCard
+2. **Marquee on homepage** -- logos have no container/border, just raw images floating on champagne background
+3. **Sticky sub-nav overlaps the main header** on project detail pages -- "Register Interest" / "Brochure" bar sits directly on top of the global header instead of below it
+4. **DeveloperInfoCard logo uses `object-fill`** which stretches/distorts logos -- should be `object-contain` with padding
 
-## Problems Identified
+## Reference Style (from DeveloperInfoCard)
 
-### 1. Navigation Breaks the Shell
-When clicking sidebar links like Marketing Hub (`/admin/marketing-hub`), CRM (`/crm`), Calendar (`/crm/calendar`), Studio (`/studio`), etc., the user is navigated **outside** the Owner Dashboard Shell. The sidebar disappears, and clicking "Back" doesn't return to `/owner`. These routes are defined under `MainLayoutWrapper` in App.tsx, not nested under the `/owner` shell.
-
-### 2. Newest Leads Display -- Vertical Instead of Horizontal Cards
-The "Newest Leads" section in the Overview tab renders leads as full-width stacked rows (vertical list). The user wants them displayed as horizontal/rectangular cards (side-by-side in a grid).
-
-### 3. Follow-Up Items Missing Context
-The "Needs Follow-up" section shows items without indicating what lead they relate to (just task titles or names without source context like "Lead from Website" or "Follow-up for property inquiry").
-
-### 4. Deal Prediction Card -- Light Theme on Dark Background
-`DealPrediction.tsx` uses a champagne/cream gradient (`from-[#FDFBF7]`) which clashes with the dark Owner Command Center theme. Text colors like `text-zinc-600`, `text-zinc-700`, `text-black` look broken on the dark background context.
-
-### 5. Contact Info Card -- Content Overflowing
-In `CRMLeadDetail.tsx`, the Contact Info card's action buttons (WhatsApp, Call, Email) are in a flex row that doesn't wrap on smaller screens, causing overflow. The `flex items-center justify-between` layout breaks when the card is in a narrow column.
-
-### 6. CRM Lead Detail Page Not Inside Shell
-The `/crm/leads/:id` route renders outside the Owner Shell, so the sidebar is gone. The "Back" button navigates to `/crm` (also outside the shell), not back to `/owner`.
-
-### 7. Marketing Hub Cropped at Top
-The Marketing Hub page renders under `MainLayoutWrapper` which has its own header/footer. When accessed from the Owner sidebar, the user expects it inside the shell. The shell header + the page's own header create a double-header / cropped view.
-
-### 8. Slow Loading Between Sections
-Multiple independent queries fire on the Overview page (6+ parallel Supabase queries). Sub-pages also re-render the full layout. No query prefetching or caching optimization is in place beyond default React Query settings.
+The gold-bordered logo container the user wants everywhere:
+- White background square container
+- 3px solid gold border (`border: 3px solid hsl(42 45% 59%)`)
+- Gold box shadow
+- `object-contain` with padding so logos are never cropped or stretched
+- Rounded corners
 
 ---
 
-## Implementation Plan
+## Changes
 
-### Phase 1: Fix Navigation Architecture (Most Critical)
+### 1. Fix DeveloperInfoCard Logo (Project Detail Page)
 
-**File: `src/pages/OwnerDashboardShell.tsx`**
-- Modify the sidebar navigation behavior: instead of using `navigate()` for external routes (those outside `/owner/*`), open them in an **embedded iframe or inline panel** within the shell's `<Outlet />` area
-- Alternative (simpler): For routes that can't be nested, keep the sidebar visible by wrapping those pages in the shell layout via route nesting
+**File: `src/components/project-detail/DeveloperInfoCard.tsx`**
 
-**File: `src/App.tsx`**
-- Move key admin routes under the `/owner` shell as nested routes:
-  - `/owner/crm` renders CRM content
-  - `/owner/marketing-hub` renders Marketing Hub
-  - `/owner/crm/calendar` renders Calendar
-  - `/owner/crm/tasks` renders Tasks
-  - `/owner/analytics` renders Analytics
-  - `/owner/studio` renders Studio
-  - etc.
-- Create wrapper components that render each page's content without their own layout chrome
+Line 68: Change `object-fill` to `object-contain p-2` so logos are not stretched/distorted inside the gold-bordered container.
 
-**File: `src/components/owner-dashboard/OwnerSidebarNav.tsx`**
-- Update all `path` values in `NAV_SECTIONS` to use `/owner/...` prefixed routes
-- This ensures clicking any sidebar item stays within the shell
+### 2. Fix Homepage Marquee Logos
 
-### Phase 2: Fix Newest Leads Layout
+**File: `src/components/DeveloperPartnersMarquee.tsx`**
 
-**File: `src/pages/OwnerDashboardOverview.tsx`**
-- Change the Newest Leads section from a vertical stack to a horizontal grid: `grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4`
-- Redesign `LeadRow` into a compact rectangular card showing: avatar, name, source badge, time ago, and a small action button
-- Each card is a clickable rectangle instead of a full-width row
+Update `renderPartner` to wrap each logo in a square container with:
+- White background
+- Gold border (3px solid, matching the DeveloperInfoCard style)
+- Rounded corners (rounded-xl)
+- `object-contain` with padding
+- Consistent sizing across all developers (remove special-case sizing for individual developers)
 
-### Phase 3: Fix Follow-Up Context
+This replaces the current approach of bare `img` tags with different height/width overrides per developer.
 
-**File: `src/pages/OwnerDashboardOverview.tsx`**
-- In the `followUpItems` query, when fetching tasks, also join/fetch the related lead name via `lead_id`
-- In `FollowUpItem`, display the lead source or related lead name below the task title (e.g., "Follow-up call -- Lead: Ahmed K.")
-- For lead-type follow-ups, show the pipeline stage and source
+### 3. Fix Developer Cards Logo on Developers Page
 
-### Phase 4: Fix Deal Prediction Dark Theme
+**File: `src/components/DeveloperCard.tsx`**
 
-**File: `src/components/crm/DealPrediction.tsx`**
-- Replace all light-theme colors with dark-theme equivalents:
-  - Card: `bg-zinc-900/80 border-zinc-800` (matching owner dashboard cards)
-  - Inner sections: `bg-zinc-800/50 border-zinc-700`
-  - Text: `text-white`, `text-zinc-400`, `text-gold` instead of `text-black`, `text-zinc-600`
-  - Risk badges: dark-themed variants (`bg-emerald-500/20 text-emerald-400`)
-  - Probability color: gold-themed
-  - Stage progress bar: gold on `bg-zinc-700`
+Update the logo overlay container (lines 84-99) to use gold border instead of plain white:
+- Change from `bg-white` with no visible border to `bg-white border-2 border-gold` (matching the gold style)
+- Keep `object-contain p-1` which is already correct
 
-### Phase 5: Fix Contact Info Card Layout
+### 4. Fix Sticky Sub-Nav Overlapping Main Header
 
-**File: `src/pages/CRMLeadDetail.tsx`**
-- Make the contact action buttons wrap on small screens: change the phone/WhatsApp/Call/Email button containers to `flex flex-wrap gap-2`
-- Ensure the contact info section uses `break-all` or `truncate` for long email addresses
-- Add `overflow-hidden` to the card container to prevent content bleeding
+**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
 
-### Phase 6: Performance Improvements
+The sticky sub-nav (lines 567-618) uses `fixed top-16 lg:top-20` which places it directly touching/overlapping the main header. Fix:
+- Increase offset so it sits clearly below the main header with a visible gap
+- Change background from `bg-black` to a dark champagne/zinc tone to differentiate it visually from the main header
+- Add `top-20 sm:top-24 lg:top-28` to match the content padding in MainLayout (`pt-16 sm:pt-20 md:pt-24 lg:pt-28`)
 
-**File: `src/pages/OwnerDashboardOverview.tsx`**
-- Add `staleTime: 5 * 60 * 1000` (5 minutes) to all dashboard queries to prevent refetching on every tab switch
-- Add `refetchOnWindowFocus: false` to prevent unnecessary refetches
-- Wrap tab content in `React.memo` or use conditional rendering to avoid re-mounting heavy components
+### 5. Fix Marquee Speed
 
-### Phase 7: Premium UI Polish
+**File: `src/components/DeveloperPartnersMarquee.tsx`**
 
-**File: `src/pages/CRMLeadDetail.tsx`**
-- When accessed from the Owner context, apply dark theme styling consistently
-- Update the header "Back" button to navigate to `/owner` instead of `/crm`
-
-**File: Multiple components**
-- Ensure all cards within the owner context use `bg-zinc-900/80 border-zinc-800` consistently
-- Ensure text contrast follows WCAG AA on dark backgrounds
+The animation duration formula `Math.max(20, loopWidth / 60)` can produce very long durations when loopWidth is large (4 duplicate loops). Adjust the divider to produce a smoother, faster scroll.
 
 ---
 
-## Technical Details
+## Files Modified
 
-### Route Nesting Strategy
-The safest approach is to create lightweight wrapper pages under `/owner/*` that import and render the existing page components without their standalone layout chrome. For example:
-
-```text
-/owner/marketing-hub --> renders <MarketingHubContent /> (without MainLayout)
-/owner/crm/leads/:id --> renders <CRMLeadDetailContent /> (without standalone header)
-/owner/studio --> renders <StudioContent />
-```
-
-This avoids duplicating page logic while keeping everything inside the shell.
-
-### Files to Modify (Summary)
-
-| File | Changes |
-|------|---------|
-| `src/App.tsx` | Add nested routes under `/owner` for CRM, Marketing Hub, Studio, Analytics, etc. |
-| `src/components/owner-dashboard/OwnerSidebarNav.tsx` | Update all paths to `/owner/...` prefixes |
-| `src/pages/OwnerDashboardOverview.tsx` | Grid layout for leads, query caching, follow-up context |
-| `src/components/crm/DealPrediction.tsx` | Dark theme conversion |
-| `src/pages/CRMLeadDetail.tsx` | Contact card overflow fix, dark theme, back navigation |
-| `src/pages/OwnerDashboardShell.tsx` | Minor adjustments for nested route support |
-| New wrapper files (5-8 files) | Thin wrappers for pages rendered inside the shell |
-
-### Estimated Scope
-This is a large change touching 10-15 files. It is recommended to implement in phases, starting with Phase 1 (navigation fix) as it resolves the most critical UX issues (broken back button, lost sidebar, cropped pages).
+| File | Change |
+|------|--------|
+| `src/components/project-detail/DeveloperInfoCard.tsx` | `object-fill` to `object-contain p-2` |
+| `src/components/DeveloperPartnersMarquee.tsx` | Gold-bordered square containers for logos, fix animation speed |
+| `src/components/DeveloperCard.tsx` | Add gold border to logo overlay |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Fix sticky nav position below header, different background color |
