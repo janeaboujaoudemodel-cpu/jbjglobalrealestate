@@ -29,7 +29,7 @@ interface FloorPlanGalleryProps {
 
 /**
  * Enhanced floor plan gallery with type tabs and image previews.
- * Matches Provident's floor plan section with bedroom type buttons and download capability.
+ * Floor plan section with bedroom type buttons and download capability.
  */
 export function FloorPlanGallery({ 
   floorPlanTypes, 

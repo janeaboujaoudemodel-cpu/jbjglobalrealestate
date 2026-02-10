@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// AUTHORIZED NEWS SOURCES ONLY - Sarah can extract from these
+// AUTHORIZED NEWS SOURCES - Official government & journalism sources
 const AUTHORIZED_NEWS_SOURCES = [
   {
     name: "Dubai Land Department",
@@ -36,6 +36,42 @@ const AUTHORIZED_NEWS_SOURCES = [
     name: "Emirates News Agency (WAM)",
     url: "https://wam.ae/en/search?q=real+estate",
     type: "government",
+    category: "Market Update",
+  },
+  {
+    name: "Abu Dhabi Media Office",
+    url: "https://mediaoffice.abudhabi/en",
+    type: "government",
+    category: "Government",
+  },
+  {
+    name: "Dubai Chamber of Commerce",
+    url: "https://www.dubaichamber.com/news",
+    type: "business",
+    category: "Economic",
+  },
+  {
+    name: "Arabian Business",
+    url: "https://www.arabianbusiness.com/industries/real-estate",
+    type: "media",
+    category: "Market Update",
+  },
+  {
+    name: "Gulf News Property",
+    url: "https://gulfnews.com/living-in-uae/property",
+    type: "media",
+    category: "Market Update",
+  },
+  {
+    name: "Zawya",
+    url: "https://www.zawya.com/en/business/real-estate",
+    type: "media",
+    category: "Analysis",
+  },
+  {
+    name: "Khaleej Times",
+    url: "https://www.khaleejtimes.com/business/real-estate",
+    type: "media",
     category: "Market Update",
   },
 ];
@@ -105,55 +141,66 @@ serve(async (req) => {
         let newsContent = "";
         
         if (PERPLEXITY_KEY) {
-          // Use Perplexity to search for recent news from this source
-          const searchResponse = await fetch("https://api.perplexity.ai/chat/completions", {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${PERPLEXITY_KEY}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              model: "sonar",
-              messages: [
-                {
-                  role: "system",
-                  content: "You are a news aggregator. Return only factual news headlines and summaries from the specified source. Format as JSON array."
-                },
-                {
-                  role: "user",
-                  content: `Find the 5 most recent Dubai/UAE real estate news articles from ${source.name} (${source.url}). Include title, summary, date, and link for each.`
-                }
-              ],
-              search_recency_filter: "week",
-              search_domain_filter: [new URL(source.url).hostname],
-            }),
-          });
+          try {
+            const searchResponse = await fetch("https://api.perplexity.ai/chat/completions", {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${PERPLEXITY_KEY}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                model: "sonar",
+                messages: [
+                  {
+                    role: "system",
+                    content: "You are a news aggregator. Return only factual news headlines and summaries from the specified source. Format as JSON array."
+                  },
+                  {
+                    role: "user",
+                    content: `Find the 5 most recent Dubai/UAE real estate news articles from ${source.name} (${source.url}). Include title, summary, date, and link for each.`
+                  }
+                ],
+                search_recency_filter: "week",
+                search_domain_filter: [new URL(source.url).hostname],
+              }),
+            });
 
-          if (searchResponse.ok) {
-            const searchData = await searchResponse.json();
-            newsContent = searchData.choices?.[0]?.message?.content || "";
+            if (searchResponse.ok) {
+              const searchData = await searchResponse.json();
+              newsContent = searchData.choices?.[0]?.message?.content || "";
+            }
+          } catch (perplexityError) {
+            console.warn(`Perplexity failed for ${source.name}:`, perplexityError);
           }
         }
         
         // Fallback to Firecrawl
         if (!newsContent) {
-          const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${FIRECRAWL_API_KEY}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              url: source.url,
-              formats: ["markdown"],
-              onlyMainContent: true,
-              waitFor: 3000,
-            }),
-          });
+          try {
+            const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${FIRECRAWL_API_KEY}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                url: source.url,
+                formats: ["markdown"],
+                onlyMainContent: true,
+                waitFor: 3000,
+                timeout: 30000,
+              }),
+            });
 
-          if (scrapeResponse.ok) {
-            const scrapeData = await scrapeResponse.json();
-            newsContent = scrapeData.data?.markdown || scrapeData.markdown || "";
+            if (scrapeResponse.ok) {
+              const scrapeData = await scrapeResponse.json();
+              newsContent = scrapeData.data?.markdown || scrapeData.markdown || "";
+            } else {
+              const errData = await scrapeResponse.json().catch(() => ({}));
+              console.warn(`Firecrawl failed for ${source.name}: ${errData.error || scrapeResponse.status}`);
+            }
+          } catch (firecrawlError) {
+            console.warn(`Firecrawl error for ${source.name}:`, firecrawlError);
           }
         }
 

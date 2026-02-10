@@ -210,7 +210,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             placeholderLabel="Media pending verification"
           />
           
-          {/* Navigation Arrows - Always Visible (Provident style) */}
+          {/* Navigation Arrows - Always Visible */}
           {images.length > 1 && (
             <>
               <button

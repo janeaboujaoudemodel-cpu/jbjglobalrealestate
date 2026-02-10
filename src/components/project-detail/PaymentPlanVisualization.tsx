@@ -215,7 +215,7 @@ export default function PaymentPlanVisualization({
         </div>
       )}
 
-      {/* Payment Milestones - Percentage Circles (Reelly-style) */}
+      {/* Payment Milestones - Percentage Circles (Milestone-style) */}
       {milestones.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {milestones.map((milestone, idx) => (

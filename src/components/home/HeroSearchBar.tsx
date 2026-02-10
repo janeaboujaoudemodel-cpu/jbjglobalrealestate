@@ -87,7 +87,7 @@ const PROPERTY_STATUS = [
   { value: "off-plan", label: "Off-Plan" },
 ];
 
-// Sale status options from Reelly API with color-coded dots
+// Sale status options with color-coded dots
 const SALE_STATUS_OPTIONS = [
   { value: "all", label: "All Sale Statuses", color: "" },
   { value: "Announced", label: "Announced", color: "bg-pink-500" },
@@ -401,7 +401,7 @@ const HeroSearchBar = () => {
   const [emirate, setEmirate] = useState('all');
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  // NEW: Reelly parity filters
+  // Advanced filters
   const [paymentPlan, setPaymentPlan] = useState(0);
   const [handoverYear, setHandoverYear] = useState('all');
 
@@ -761,7 +761,7 @@ const HeroSearchBar = () => {
                   </div>
                 </div>
 
-                {/* Row 2: Sale Status with Reelly-style color dots */}
+                {/* Row 2: Sale Status with color dots */}
                 <div>
                   <label className="text-sm font-semibold text-black/80 mb-2 block">Sale Status</label>
                   <Select value={saleStatus} onValueChange={setSaleStatus}>
@@ -803,7 +803,7 @@ const HeroSearchBar = () => {
                   </Select>
                 </div>
 
-                {/* NEW: Payment Plan Slider (Reelly Parity) */}
+                {/* Payment Plan Slider */}
                 <div>
                   <label className="text-sm font-semibold text-black/80 mb-2 block">
                     Down Payment (Min %)
@@ -826,7 +826,7 @@ const HeroSearchBar = () => {
                   </p>
                 </div>
 
-                {/* NEW: Handover Year (Reelly Parity) */}
+                {/* Handover Year */}
                 <div>
                   <label className="text-sm font-semibold text-black/80 mb-2 block flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-gold" />

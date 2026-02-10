@@ -1,5 +1,5 @@
 /**
- * SaleStatusFilter - Multi-select sale status with colored dots (Reelly-style)
+ * SaleStatusFilter - Multi-select sale status with colored dots
  */
 
 import { useState } from "react";

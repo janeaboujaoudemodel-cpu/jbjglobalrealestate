@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Newspaper, ChevronRight, ArrowLeft, Calendar, ExternalLink, TrendingUp, Loader2, RefreshCw, Bot, Landmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
@@ -7,91 +7,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
-
-// Fallback static news for when DB is empty
-const staticNewsArticles = [
-  {
-    id: "1",
-    title: "Dubai Real Estate Market Hits Strongest Growth on Record in H1 2025",
-    excerpt: "The Dubai real estate market enjoyed a historic first half of 2025, with approximately 99,000 sales transactions totalling AED 328.8 billion—a 23.7% rise in volume and 41% rise in value from H1 2024.",
-    category: "Market Update",
-    date: "2025-07-01",
-    source: "Christie's Real Estate Dubai",
-    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
-  },
-  {
-    id: "2", 
-    title: "January 2025: Dubai Property Sales Reach AED 44.4 Billion",
-    excerpt: "The market witnessed a 23.2% YoY increase in recorded sales transactions, reaching 14,238 compared to 11,554 in January 2024. Transaction values surged to AED 44.4 billion, marking a 24.1% YoY increase.",
-    category: "Analysis",
-    date: "2025-02-25",
-    source: "Property Finder",
-    image: "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800",
-  },
-  {
-    id: "3",
-    title: "Will Dubai Real Estate Prices Decline in 2026?",
-    excerpt: "Market analysts examine the sustainability of Dubai's property boom as prices reach new highs. Expert predictions for the 2026 market outlook and investment opportunities.",
-    category: "Market Outlook",
-    date: "2025-12-19",
-    source: "Engel & Völkers",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
-  },
-  {
-    id: "4",
-    title: "Dubai Real Estate November 2025: Market Report",
-    excerpt: "Off-plan sales continue to dominate the market with strong demand from international investors. Premium communities see sustained price appreciation across all property types.",
-    category: "Monthly Report",
-    date: "2025-12-01",
-    source: "NOVVI Properties",
-    image: "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800",
-  },
-  {
-    id: "5",
-    title: "UAE Residential Market Monthly - January 2025",
-    excerpt: "Comprehensive analysis of the UAE residential market performance with key metrics on rentals, sales, and price movements across Dubai and Abu Dhabi.",
-    category: "Economic",
-    date: "2025-02-18",
-    source: "Emirates NBD Research",
-    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
-  },
-  {
-    id: "6",
-    title: "Property Monitor: First Price Decline in Over Two Years",
-    excerpt: "Property prices fell 0.57% MoM, dropping to AED 1,484 per sq ft—the first decline since Summer 2022. Sales transaction volume down 4.6% MoM, yet still the strongest January on record.",
-    category: "Market Update",
-    date: "2025-02-01",
-    source: "Property Monitor",
-    image: "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?w=800",
-  },
-  {
-    id: "7",
-    title: "Golden Visa Program Continues to Drive Property Investment",
-    excerpt: "UAE's Golden Visa program remains a key driver for international property investment, with new reforms making it easier for investors to qualify through real estate purchases.",
-    category: "Policy",
-    date: "2025-11-15",
-    source: "UAE Government",
-    image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=800",
-  },
-  {
-    id: "8",
-    title: "Top 10 Dubai Communities for Investment in 2025",
-    excerpt: "Dubai Hills Estate, Palm Jumeirah, and Dubai Marina lead the list of most sought-after communities. Off-plan projects in emerging areas show strong capital appreciation potential.",
-    category: "Analysis",
-    date: "2025-09-20",
-    source: "JBJ Global Real Estate Research",
-    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
-  },
-  {
-    id: "9",
-    title: "UAE Economic Outlook: Record GDP Growth Forecast for 2026",
-    excerpt: "The UAE economy is projected to maintain strong growth momentum with diversification efforts across tourism, technology, and real estate sectors driving expansion.",
-    category: "Economic",
-    date: "2025-12-10",
-    source: "UAE Ministry of Economy",
-    image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?w=800",
-  },
-];
 
 interface MarketNews {
   id: string;
@@ -110,6 +25,7 @@ interface MarketNews {
 const News = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const navigate = useNavigate();
 
   // Fetch news from database
   const { data: dbNews, isLoading, refetch } = useQuery({
@@ -126,20 +42,18 @@ const News = () => {
     },
   });
 
-  // Transform DB news to display format, fallback to static if empty
-  const newsArticles = dbNews && dbNews.length > 0 
-    ? dbNews.map(n => ({
-        id: n.id,
-        title: n.title,
-        excerpt: n.excerpt,
-        category: n.category,
-        date: n.published_date,
-        source: n.source,
-        image: n.image_url || "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
-        isAI: n.ai_generated,
-        sourceUrl: n.source_url,
-      }))
-    : staticNewsArticles;
+  // Transform DB news to display format
+  const newsArticles = (dbNews || []).map(n => ({
+    id: n.id,
+    title: n.title,
+    excerpt: n.excerpt,
+    category: n.category,
+    date: n.published_date,
+    source: n.source,
+    image: n.image_url || "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+    isAI: n.ai_generated,
+    sourceUrl: n.source_url,
+  }));
 
   const categories = ["All", "Market Update", "Analysis", "Policy", "Economic", "Monthly Report", "Market Outlook", "Developer News", "Government"];
 
@@ -269,7 +183,10 @@ const News = () => {
           {filteredNews.length > 0 && (
             <div className="mb-12">
               <div className="py-6 px-4 md:px-6 jj-layer-active rounded-2xl">
-                <article className="group relative jj-card-inner rounded-2xl overflow-hidden transition-all duration-500">
+                <article 
+                  className="group relative jj-card-inner rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer"
+                  onClick={() => navigate(`/news/${filteredNews[0].id}`)}
+                >
                   <div className="grid md:grid-cols-2 gap-0">
                     {/* Image */}
                     <div className="aspect-video md:aspect-auto md:h-full relative overflow-hidden">
@@ -290,12 +207,10 @@ const News = () => {
                         <span className="text-xs text-gold bg-gold/10 px-3 py-1 rounded-full border border-gold/20">
                           {filteredNews[0].category}
                         </span>
-                        {'isAI' in filteredNews[0] && filteredNews[0].isAI && (
-                          <span className="text-xs text-purple-700 bg-purple-500/10 px-3 py-1 rounded-full flex items-center gap-1 border border-purple-500/20">
-                            <Bot className="w-3 h-3" />
-                            AI Curated
-                          </span>
-                        )}
+                        <span className="text-xs text-zinc-600 bg-zinc-100 px-3 py-1 rounded-full flex items-center gap-1 border border-zinc-200">
+                          <Landmark className="w-3 h-3" />
+                          {filteredNews[0].source}
+                        </span>
                       </div>
 
                       <h2 className="text-2xl md:text-3xl font-bold text-black mb-4 group-hover:text-gold transition-colors line-clamp-2" style={{ fontFamily: "Poppins, sans-serif" }}>
@@ -316,27 +231,11 @@ const News = () => {
                               year: "numeric"
                             })}
                           </span>
-                          <span className="flex items-center gap-1">
-                            <ExternalLink className="w-4 h-4" />
-                            {filteredNews[0].source}
-                          </span>
                         </div>
-                        {'sourceUrl' in filteredNews[0] && filteredNews[0].sourceUrl ? (
-                          <a 
-                            href={filteredNews[0].sourceUrl as string} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="flex items-center text-gold font-semibold hover:underline"
-                          >
-                            <span>Read More</span>
-                            <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                          </a>
-                        ) : (
-                          <div className="flex items-center text-gold font-semibold">
-                            <span>Read More</span>
-                            <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                          </div>
-                        )}
+                        <div className="flex items-center text-gold font-semibold">
+                          <span>Read More</span>
+                          <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -350,7 +249,8 @@ const News = () => {
             {filteredNews.slice(1).map((article) => (
               <article 
                 key={article.id}
-                className="group jj-card-inner border-2 border-gold rounded-xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)]"
+                onClick={() => navigate(`/news/${article.id}`)}
+                className="group jj-card-inner border-2 border-gold rounded-xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] cursor-pointer"
               >
                 {/* Image */}
                 <div className="aspect-video relative overflow-hidden">
@@ -364,11 +264,6 @@ const News = () => {
                     <span className="text-xs text-gold bg-gold/10 backdrop-blur-sm px-3 py-1 rounded-full border border-gold/20">
                       {article.category}
                     </span>
-                    {'isAI' in article && article.isAI && (
-                      <span className="text-xs text-purple-700 bg-purple-500/15 backdrop-blur-sm px-2 py-1 rounded-full border border-purple-500/20 flex items-center gap-1">
-                        <Bot className="w-3 h-3" />
-                      </span>
-                    )}
                   </div>
                 </div>
 
@@ -384,7 +279,10 @@ const News = () => {
                       })}
                     </span>
                     <span className="text-zinc-400">•</span>
-                    <span>{article.source}</span>
+                    <span className="flex items-center gap-1">
+                      <Landmark className="w-3 h-3" />
+                      {article.source}
+                    </span>
                   </div>
 
                   <h3 className="text-lg font-semibold text-black mb-2 group-hover:text-gold transition-colors line-clamp-2" style={{ fontFamily: "Poppins, sans-serif" }}>
@@ -395,33 +293,28 @@ const News = () => {
                     {article.excerpt}
                   </p>
 
-                  {'sourceUrl' in article && article.sourceUrl ? (
-                    <a 
-                      href={article.sourceUrl as string} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center text-gold text-sm font-medium hover:underline"
-                    >
-                      <span>Read More</span>
-                      <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                    </a>
-                  ) : (
-                    <div className="flex items-center text-gold text-sm font-medium">
-                      <span>Read More</span>
-                      <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  )}
+                  <div className="flex items-center text-gold text-sm font-medium">
+                    <span>Read More</span>
+                    <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
               </article>
             ))}
           </div>
 
           {/* Empty State */}
-          {filteredNews.length === 0 && (
+          {filteredNews.length === 0 && !isLoading && (
             <div className="text-center py-16">
               <Newspaper className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-              <h3 className="text-white text-xl font-semibold mb-2">No news in this category</h3>
-              <p className="text-zinc-400">Try selecting a different category or refresh the news.</p>
+              <h3 className="text-white text-xl font-semibold mb-2">
+                {selectedCategory ? "No news in this category" : "No news articles yet"}
+              </h3>
+              <p className="text-zinc-400 mb-4">
+                {selectedCategory 
+                  ? "Try selecting a different category or refresh the news."
+                  : "Click \"Refresh News\" to collect the latest articles from official UAE sources."
+                }
+              </p>
             </div>
           )}
 

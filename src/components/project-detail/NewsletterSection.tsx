@@ -17,7 +17,7 @@ const newsletterSchema = z.object({
 type NewsletterFormData = z.infer<typeof newsletterSchema>;
 
 /**
- * Newsletter subscription section matching Provident's "Stay in the loop" section.
+ * Newsletter subscription section - "Stay in the loop".
  * Appears before the footer on project detail pages.
  * Uses backend edge function for secure lead capture.
  */
