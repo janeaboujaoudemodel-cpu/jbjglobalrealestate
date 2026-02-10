@@ -245,7 +245,7 @@ export function ReellyImportPanel() {
     pending_provident_suggestions: number;
   } | null>(null);
   // Enrichment test state
-  const [enrichTestSlug, setEnrichTestSlug] = useState("");
+  const [enrichTestSlug, setEnrichTestSlug] = useState("binghatti-titania-binghatti-3012");
   const [isEnrichTesting, setIsEnrichTesting] = useState(false);
   const [enrichTestResult, setEnrichTestResult] = useState<EnrichmentTestResult | null>(null);
   const [isEnrichApplying, setIsEnrichApplying] = useState(false);
@@ -2550,6 +2550,33 @@ export function ReellyImportPanel() {
               onChange={(e) => setEnrichTestSlug(e.target.value)}
               className="flex-1 px-3 py-2 border border-zinc-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs whitespace-nowrap"
+              onClick={async () => {
+                try {
+                  const { data, error } = await supabase
+                    .from("projects")
+                    .select("slug")
+                    .not("external_id", "is", null)
+                    .not("cover_image_url", "is", null)
+                    .limit(50);
+                  if (error) throw error;
+                  if (data && data.length > 0) {
+                    const random = data[Math.floor(Math.random() * data.length)];
+                    setEnrichTestSlug(random.slug);
+                    toast.success(`Selected: ${random.slug}`);
+                  } else {
+                    toast.error("No projects with Reelly IDs found");
+                  }
+                } catch (err: any) {
+                  toast.error(err.message || "Failed to pick random project");
+                }
+              }}
+            >
+              🎲 Random
+            </Button>
             <Button
               onClick={async () => {
                 if (!enrichTestSlug.trim()) { toast.error("Enter a project slug"); return; }

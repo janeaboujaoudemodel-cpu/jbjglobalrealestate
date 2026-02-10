@@ -228,7 +228,7 @@ ${content}
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="text-xl font-medium border-0 bg-transparent focus-visible:ring-0 max-w-md text-white placeholder:text-zinc-500"
+              className="text-xl font-medium border-0 bg-transparent focus-visible:ring-0 max-w-md text-white focus:text-white caret-white placeholder:text-zinc-500"
               placeholder="Untitled Document"
             />
           </div>
@@ -237,10 +237,10 @@ ${content}
         {/* Toolbar */}
         <div className="bg-slate-900/30 border-b border-slate-500/20 px-4 py-2 flex flex-wrap items-center gap-1">
           {/* Undo/Redo */}
-          <Button variant="ghost" size="sm" onClick={() => execCommand('undo')}>
+          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('undo')}>
             <Undo className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => execCommand('redo')}>
+          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('redo')}>
             <Redo className="h-4 w-4" />
           </Button>
           
@@ -277,13 +277,13 @@ ${content}
           <div className="w-px h-6 bg-slate-500/30 mx-1" />
           
           {/* Text Formatting */}
-          <Button variant="ghost" size="sm" onClick={() => execCommand('bold')}>
+          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('bold')}>
             <Bold className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => execCommand('italic')}>
+          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('italic')}>
             <Italic className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => execCommand('underline')}>
+          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('underline')}>
             <Underline className="h-4 w-4" />
           </Button>
           
@@ -292,7 +292,7 @@ ${content}
           {/* Headings */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm">
+              <Button variant="dark-ghost" size="sm">
                 <Type className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -316,26 +316,26 @@ ${content}
           <div className="w-px h-6 bg-slate-500/30 mx-1" />
           
           {/* Alignment */}
-          <Button variant="ghost" size="sm" onClick={() => execCommand('justifyLeft')}>
+          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('justifyLeft')}>
             <AlignLeft className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => execCommand('justifyCenter')}>
+          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('justifyCenter')}>
             <AlignCenter className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => execCommand('justifyRight')}>
+          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('justifyRight')}>
             <AlignRight className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => execCommand('justifyFull')}>
+          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('justifyFull')}>
             <AlignJustify className="h-4 w-4" />
           </Button>
           
           <div className="w-px h-6 bg-slate-500/30 mx-1" />
           
           {/* Lists */}
-          <Button variant="ghost" size="sm" onClick={() => execCommand('insertUnorderedList')}>
+          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('insertUnorderedList')}>
             <List className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => execCommand('insertOrderedList')}>
+          <Button variant="dark-ghost" size="sm" onClick={() => execCommand('insertOrderedList')}>
             <ListOrdered className="h-4 w-4" />
           </Button>
           
@@ -344,7 +344,7 @@ ${content}
           {/* Insert */}
           <Dialog open={linkDialogOpen} onOpenChange={setLinkDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="sm">
+              <Button variant="dark-ghost" size="sm">
                 <Link className="h-4 w-4" />
               </Button>
             </DialogTrigger>
@@ -363,21 +363,21 @@ ${content}
             </DialogContent>
           </Dialog>
           
-          <Button variant="ghost" size="sm" onClick={insertImage}>
+          <Button variant="dark-ghost" size="sm" onClick={insertImage}>
             <Image className="h-4 w-4" />
           </Button>
           
           <div className="flex-1" />
           
           {/* Actions */}
-          <Button variant="ghost" size="sm" onClick={handlePrint}>
+          <Button variant="dark-ghost" size="sm" onClick={handlePrint}>
             <Printer className="h-4 w-4" />
           </Button>
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm">
-                <Download className="h-4 w-4 mr-1" /> Export
+              <Button variant="dark-ghost" size="sm">
+                <Download className="h-4 w-4 mr-1" /> <span className="text-white">Export</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -391,9 +391,9 @@ ${content}
           </DropdownMenu>
           
           <label>
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="dark-ghost" size="sm" asChild>
               <span>
-                <Upload className="h-4 w-4 mr-1" /> Import
+                <Upload className="h-4 w-4 mr-1" /> <span className="text-white">Import</span>
               </span>
             </Button>
             <input 
