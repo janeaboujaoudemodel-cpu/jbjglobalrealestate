@@ -55,7 +55,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
   try {
     const body = await req.json();
-    const { slug, action, mode, batch_size, source } = body;
+    const { slug, action, mode, batch_size, source, skip_reelly } = body;
 
     // ── Batch mode: process multiple projects ──
     if (mode === "batch") {
@@ -66,13 +66,8 @@ Deno.serve(async (req: Request): Promise<Response> => {
       let projectQuery = supabase
         .from("projects")
         .select("id, name, slug, reelly_id, amenities, faqs, floor_plan_types, description, usp_bullets")
-        .eq("status", "published")
+        .eq("is_published", true)
         .or("amenities.is.null,faqs.is.null,floor_plan_types.is.null,description.is.null,usp_bullets.is.null");
-
-      if (isProvidentOnly) {
-        // Only enrich projects that have a provident source URL
-        projectQuery = projectQuery.ilike("source_url", "%provident%");
-      }
 
       const { data: projects, error: queryErr } = await projectQuery.limit(limit);
 
@@ -82,12 +77,8 @@ Deno.serve(async (req: Request): Promise<Response> => {
       let remainingQuery = supabase
         .from("projects")
         .select("id", { count: "exact", head: true })
-        .eq("status", "published")
+        .eq("is_published", true)
         .or("amenities.is.null,faqs.is.null,floor_plan_types.is.null,description.is.null,usp_bullets.is.null");
-
-      if (isProvidentOnly) {
-        remainingQuery = remainingQuery.ilike("source_url", "%provident%");
-      }
 
       const { count: remaining } = await remainingQuery;
 
@@ -111,7 +102,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
               "Content-Type": "application/json",
               "Authorization": `Bearer ${supabaseKey}`,
             },
-            body: JSON.stringify({ slug: proj.slug, action: "apply" }),
+            body: JSON.stringify({ slug: proj.slug, action: "apply", skip_reelly: isProvidentOnly }),
           });
 
           if (res.ok) {
@@ -207,7 +198,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
     // ── Source 1: Reelly API ──
     let reellyData: any = null;
-    if (project.reelly_id && reellyApiKey) {
+    if (project.reelly_id && reellyApiKey && !skip_reelly) {
       reellyData = await fetchReellyProject(project.reelly_id, reellyApiKey);
       if (reellyData) {
         enrichment.amenities = extractAmenities(reellyData);

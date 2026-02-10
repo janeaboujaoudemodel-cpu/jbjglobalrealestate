@@ -10,7 +10,7 @@ const corsHeaders = {
 };
 
 const PROVIDENT_BASE = "https://providentestate.com";
-const BATCH_LIMIT = 25;
+const BATCH_LIMIT = 5;
 const THROTTLE_MS = 3000;
 
 function toProvidentSlug(name: string): string {
@@ -109,6 +109,7 @@ serve(async (req) => {
 
     if (projectsToProcess.length === 0) {
       return new Response(JSON.stringify({
+        success: true,
         message: "No projects need enrichment",
         processed: 0,
         results: [],
@@ -339,6 +340,7 @@ serve(async (req) => {
     }
 
     const summary = {
+      success: true,
       processed: results.length,
       total_pdfs_found: results.reduce((s, r) => s + r.pdfs_found, 0),
       total_images_found: results.reduce((s, r) => s + r.images_found, 0),
