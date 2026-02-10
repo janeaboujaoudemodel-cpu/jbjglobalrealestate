@@ -193,6 +193,7 @@ export function ReellyImportPanel() {
     fields_updated?: number;
     errors?: number;
     error_details?: string[];
+    results?: Array<{ name: string; status: string; images: number; docs: number; fields: number }>;
     message?: string;
     error?: string;
   } | null>(null);
@@ -204,6 +205,12 @@ export function ReellyImportPanel() {
     total_documents: number;
   } | null>(null);
   const [isLoadingBulkStats, setIsLoadingBulkStats] = useState(false);
+
+  // Provident per-project results
+  const [providentProjectResults, setProvidentProjectResults] = useState<Array<{
+    id: string; name: string; slug: string; pdfs_found: number; images_found: number;
+    docs_inserted: number; images_inserted: number; errors: string[];
+  }>>([]);
 
   // AI Content Generation state
   const [isAiEnriching, setIsAiEnriching] = useState(false);
@@ -3096,6 +3103,7 @@ export function ReellyImportPanel() {
             onClick={async () => {
               setIsProvidentExtracting(true);
               setProvidentResult(null);
+              setProvidentProjectResults([]);
               toast.info("Starting Provident document extraction...");
               try {
                 const { data, error } = await supabase.functions.invoke("provident-batch-extract", {
@@ -3103,6 +3111,7 @@ export function ReellyImportPanel() {
                 });
                 if (error) throw error;
                 setProvidentResult(data);
+                if (data?.results) setProvidentProjectResults(data.results);
                 if (data?.total_docs_inserted > 0 || data?.total_images_inserted > 0) {
                   toast.success(`Provident: +${data.total_docs_inserted} docs, +${data.total_images_inserted} images from ${data.processed} projects`);
                 } else {
@@ -3154,6 +3163,11 @@ export function ReellyImportPanel() {
                     totalDocs += data?.total_docs_inserted || 0;
                     totalImages += data?.total_images_inserted || 0;
                     totalErrors += data?.errors || 0;
+                    
+                    // Accumulate per-project results
+                    if (data?.results) {
+                      setProvidentProjectResults(prev => [...prev, ...data.results]);
+                    }
                     
                     setFullProvidentProgress({ processed: totalProcessed, docs: totalDocs, images: totalImages, errors: totalErrors });
                     
@@ -3233,18 +3247,48 @@ export function ReellyImportPanel() {
           )}
 
           {providentResult && !providentResult.error && (
-            <Alert className="bg-teal-50 border-teal-300">
-              <CheckCircle className="h-4 w-4 text-teal-600" />
-              <AlertTitle className="text-teal-700">Provident Extraction Complete</AlertTitle>
-              <AlertDescription className="text-teal-600 space-y-1">
-                <p><strong>{providentResult.processed}</strong> projects checked</p>
-                <p>📄 <strong>+{providentResult.total_docs_inserted || 0}</strong> documents inserted</p>
-                <p>📷 <strong>+{providentResult.total_images_inserted || 0}</strong> images inserted</p>
-                {(providentResult.errors || 0) > 0 && (
-                  <p className="text-amber-600">⚠️ {providentResult.errors} errors</p>
-                )}
-              </AlertDescription>
-            </Alert>
+            <div className="space-y-3">
+              <Alert className="bg-teal-50 border-teal-300">
+                <CheckCircle className="h-4 w-4 text-teal-600" />
+                <AlertTitle className="text-teal-700">Provident Extraction Complete</AlertTitle>
+                <AlertDescription className="text-teal-600 space-y-1">
+                  <p><strong>{providentResult.processed}</strong> projects checked</p>
+                  <p>📄 <strong>+{providentResult.total_docs_inserted || 0}</strong> documents inserted</p>
+                  <p>📷 <strong>+{providentResult.total_images_inserted || 0}</strong> images inserted</p>
+                  {(providentResult.errors || 0) > 0 && (
+                    <p className="text-amber-600">⚠️ {providentResult.errors} errors</p>
+                  )}
+                </AlertDescription>
+              </Alert>
+              {/* Per-project result cards */}
+              {providentProjectResults.length > 0 && (
+                <div className="max-h-[400px] overflow-y-auto space-y-2">
+                  {providentProjectResults.map((r, i) => (
+                    <div key={i} className={`flex items-center justify-between p-3 rounded-lg border text-sm ${
+                      (r.docs_inserted > 0 || r.images_inserted > 0) ? "border-green-200 bg-green-50" :
+                      r.errors.length > 0 ? "border-red-200 bg-red-50" :
+                      "border-zinc-200 bg-zinc-50"
+                    }`}>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium truncate">{r.name}</p>
+                        <div className="flex gap-3 text-xs text-zinc-600 mt-0.5">
+                          <span className={r.pdfs_found > 0 ? "text-blue-600" : ""}>📄 {r.pdfs_found} PDFs found</span>
+                          <span className={r.docs_inserted > 0 ? "text-green-600 font-bold" : ""}>+{r.docs_inserted} docs</span>
+                          <span className={r.images_found > 0 ? "text-blue-600" : ""}>📷 {r.images_found} imgs found</span>
+                          <span className={r.images_inserted > 0 ? "text-green-600 font-bold" : ""}>+{r.images_inserted} imgs</span>
+                        </div>
+                        {r.errors.length > 0 && (
+                          <p className="text-xs text-red-500 mt-0.5 truncate">{r.errors[0]}</p>
+                        )}
+                      </div>
+                      <Badge variant={(r.docs_inserted > 0 || r.images_inserted > 0) ? "default" : r.errors.length > 0 ? "destructive" : "secondary"} className="flex-shrink-0">
+                        {(r.docs_inserted > 0 || r.images_inserted > 0) ? "✅" : r.errors.length > 0 ? "⚠️" : "—"}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
 
           {providentResult?.error && (
@@ -3340,15 +3384,41 @@ export function ReellyImportPanel() {
             )}
           </Button>
           {bulkEnrichResult && bulkEnrichResult.success && (
-            <Alert className="bg-green-50 border-green-300">
-              <CheckCircle className="h-4 w-4 text-green-600" />
-              <AlertTitle className="text-green-700">Enrichment Complete</AlertTitle>
-              <AlertDescription className="text-green-600 space-y-1">
-                <p><strong>{bulkEnrichResult.processed}</strong> projects processed</p>
-                <p>📷 +{bulkEnrichResult.images_added} images, 📄 +{bulkEnrichResult.docs_added} docs, 📝 +{bulkEnrichResult.fields_updated} fields</p>
-                {(bulkEnrichResult.errors || 0) > 0 && <p className="text-amber-600">⚠️ {bulkEnrichResult.errors} errors</p>}
-              </AlertDescription>
-            </Alert>
+            <div className="space-y-3">
+              <Alert className="bg-green-50 border-green-300">
+                <CheckCircle className="h-4 w-4 text-green-600" />
+                <AlertTitle className="text-green-700">Enrichment Complete</AlertTitle>
+                <AlertDescription className="text-green-600 space-y-1">
+                  <p><strong>{bulkEnrichResult.processed}</strong> projects processed</p>
+                  <p>📷 +{bulkEnrichResult.images_added} images, 📄 +{bulkEnrichResult.docs_added} docs, 📝 +{bulkEnrichResult.fields_updated} fields</p>
+                  {(bulkEnrichResult.errors || 0) > 0 && <p className="text-amber-600">⚠️ {bulkEnrichResult.errors} errors</p>}
+                </AlertDescription>
+              </Alert>
+              {/* Per-project result cards */}
+              {bulkEnrichResult.results && bulkEnrichResult.results.length > 0 && (
+                <div className="max-h-[400px] overflow-y-auto space-y-2">
+                  {bulkEnrichResult.results.map((r, i) => (
+                    <div key={i} className={`flex items-center justify-between p-3 rounded-lg border text-sm ${
+                      r.status === "success" ? "border-green-200 bg-green-50" :
+                      r.status === "api_empty" ? "border-zinc-200 bg-zinc-50" :
+                      "border-red-200 bg-red-50"
+                    }`}>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium truncate">{r.name}</p>
+                        <div className="flex gap-3 text-xs text-zinc-600 mt-0.5">
+                          <span className={r.images > 0 ? "text-green-600 font-bold" : ""}>📷 +{r.images}</span>
+                          <span className={r.docs > 0 ? "text-green-600 font-bold" : ""}>📄 +{r.docs}</span>
+                          <span className={r.fields > 0 ? "text-green-600 font-bold" : ""}>📝 +{r.fields}</span>
+                        </div>
+                      </div>
+                      <Badge variant={r.status === "success" ? "default" : r.status === "api_empty" ? "secondary" : "destructive"} className="flex-shrink-0">
+                        {r.status === "success" ? "✅" : r.status === "api_empty" ? "Empty API" : r.status === "no_data" ? "No Data" : "Error"}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
           {bulkEnrichResult && !bulkEnrichResult.success && (
             <Alert className="bg-red-50 border-red-300">

@@ -219,13 +219,23 @@ serve(async (req) => {
           }
 
           if (docInserts.length > 0) {
-            const { error: insertErr } = await supabase
+            // Dedup: check existing file_urls for this project
+            const { data: existingDocs } = await supabase
               .from("project_documents")
-              .upsert(docInserts, { onConflict: "project_id,file_url" });
-            if (insertErr) {
-              projectResult.errors.push(`doc insert: ${insertErr.message}`);
-            } else {
-              projectResult.docs_inserted = docInserts.length;
+              .select("file_url")
+              .eq("project_id", project.id);
+            const existingDocUrls = new Set((existingDocs || []).map((d: any) => d.file_url));
+            const newDocs = docInserts.filter((d: any) => !existingDocUrls.has(d.file_url));
+            
+            if (newDocs.length > 0) {
+              const { error: insertErr } = await supabase
+                .from("project_documents")
+                .insert(newDocs);
+              if (insertErr) {
+                projectResult.errors.push(`doc insert: ${insertErr.message}`);
+              } else {
+                projectResult.docs_inserted = newDocs.length;
+              }
             }
           }
         }
@@ -275,14 +285,22 @@ serve(async (req) => {
                   data_source: "provident_batch",
                 }));
 
-                const { error: imgErr } = await supabase
+                // Dedup: check existing image_urls for this project
+                const { data: existingImgs } = await supabase
                   .from("project_images")
-                  .upsert(imageInserts, { onConflict: "project_id,image_url" });
+                  .select("image_url")
+                  .eq("project_id", project.id);
+                const existingImgUrls = new Set((existingImgs || []).map((img: any) => img.image_url));
+                const newImgs = imageInserts.filter((img: any) => !existingImgUrls.has(img.image_url));
+                
+                const { error: imgErr } = newImgs.length > 0
+                  ? await supabase.from("project_images").insert(newImgs)
+                  : { error: null };
                 
                 if (imgErr) {
                   projectResult.errors.push(`img insert: ${imgErr.message}`);
                 } else {
-                  projectResult.images_inserted = uniqueImages.length;
+                  projectResult.images_inserted = newImgs.length;
                   
                   // Update cover image if none exists
                   if (!project.cover_image_url && uniqueImages[0]) {
