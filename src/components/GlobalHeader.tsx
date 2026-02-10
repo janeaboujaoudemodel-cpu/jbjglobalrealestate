@@ -1478,31 +1478,29 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
           {/* Utility Mega Menu Panels (Search, Language, Account) */}
           {!shouldUseMobileHeader && (activeMegaMenu === 'search' || activeMegaMenu === 'language' || activeMegaMenu === 'account') && (
-            <div 
-              className="fixed inset-0 z-[9998]"
-              style={{ top: 'var(--header-height, 128px)' }}
-              onMouseEnter={() => handleMegaMenuEnter(activeMegaMenu!)}
-              onMouseLeave={handleMegaMenuLeave}
-            >
-              {/* Backdrop */}
+            <>
+              {/* Backdrop only - click to close */}
               <div 
-                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                className="fixed inset-0 z-[9997] bg-black/40 backdrop-blur-sm"
+                style={{ top: 'var(--header-height, 128px)' }}
                 onClick={(e) => {
-                  // Don't close if click came from a Radix portal (dropdowns, popovers, etc.)
                   const target = e.target as HTMLElement;
                   if (target.closest('[data-radix-portal]')) return;
                   closeMegaMenu();
                 }}
                 onPointerDown={(e) => {
-                  // Prevent pointer events from closing when interacting with Radix portals
                   const target = e.target as HTMLElement;
                   if (target.closest('[data-radix-portal]')) {
                     e.stopPropagation();
                   }
                 }}
               />
-              {/* Panel container - positioned on the right */}
-              <div className="absolute top-0 right-6">
+              {/* Panel with real boundaries so onMouseLeave fires */}
+              <div 
+                className="absolute top-full right-6 z-[9998]"
+                onMouseEnter={handleMegaMenuPanelEnter}
+                onMouseLeave={handleMegaMenuLeave}
+              >
                 {activeMegaMenu === 'search' && (
                   <MegaMenuSearch
                     onClose={closeMegaMenu}
@@ -1515,7 +1513,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {activeMegaMenu === 'language' && <MegaMenuLanguage onClose={closeMegaMenu} />}
                 {activeMegaMenu === 'account' && <MegaMenuAccount onClose={closeMegaMenu} />}
               </div>
-            </div>
+            </>
           )}
       </div>
 
