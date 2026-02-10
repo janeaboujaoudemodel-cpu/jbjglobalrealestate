@@ -53,7 +53,7 @@ const CombinedContactNewsletter = ({
 
   return (
     <section className={`py-8 sm:py-12 md:py-16 bg-black ${className}`}>
-      <div className="mx-2 sm:mx-3 md:mx-4 lg:mx-6 xl:mx-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-xl sm:rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6 md:p-10">
+      <div className="mx-4 sm:mx-6 md:mx-4 lg:mx-6 xl:mx-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-xl sm:rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6 md:p-10">
         {/* Header */}
         <div className="text-center mb-8">
           <h2
@@ -73,20 +73,20 @@ const CombinedContactNewsletter = ({
         </div>
 
         {/* Contact Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 md:gap-4 max-w-3xl mx-auto mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 md:gap-4 max-w-2xl mx-auto mb-6 sm:mb-8">
           {contactCards.map((card) => (
             <a
               key={card.label}
               href={card.href}
               target={card.label === "WhatsApp" ? "_blank" : undefined}
               rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
-              className={`group flex flex-col items-center gap-3 p-4 rounded-xl border-2 bg-white/50 hover:shadow-lg transition-all duration-300 ${card.borderColor} ${card.shadowColor}`}
+              className={`group flex flex-row sm:flex-col items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl border-2 bg-white/50 hover:shadow-lg transition-all duration-300 ${card.borderColor} ${card.shadowColor}`}
             >
-              <div className={`w-12 h-12 rounded-full ${card.iconBg} flex items-center justify-center`}>
-                <card.icon className={`w-6 h-6 ${card.iconColor}`} />
+              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${card.iconBg} flex items-center justify-center flex-shrink-0`}>
+                <card.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${card.iconColor}`} />
               </div>
-              <div className="text-center">
-                <p className="text-xs uppercase tracking-wider text-zinc-500 font-medium mb-1">{card.label}</p>
+              <div className="text-left sm:text-center">
+                <p className="text-xs uppercase tracking-wider text-zinc-500 font-medium mb-0.5">{card.label}</p>
                 <p className="text-sm text-black font-semibold group-hover:text-gold transition-colors">{card.value}</p>
               </div>
             </a>

@@ -651,15 +651,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   side="right"
                   className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] sm:w-[360px] p-0 flex flex-col h-[100dvh] top-0 inset-y-0"
                 >
-                {/* Menu Header - CHAT SUPPORT LOGO (light bg version), proper spacing */}
-                <div className="relative border-b border-gold/30 flex items-center gap-4 px-5 h-24 sm:h-28 shrink-0">
+                {/* Menu Header - Text only, no logo to avoid overlap with background header */}
+                <div className="relative border-b border-gold/30 flex items-center px-5 h-16 sm:h-20 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  {/* Monogram - SAME AS CHAT SUPPORT (light bg version) */}
-                  <img 
-                    src={jbjMonogramLightBg}
-                    alt="JBJ"
-                    className="w-16 h-16 shrink-0 object-contain"
-                  />
                   <span 
                     className="text-black font-bold text-sm tracking-[0.06em] uppercase leading-tight"
                     style={{ fontFamily: "Poppins, sans-serif" }}

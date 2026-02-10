@@ -394,11 +394,11 @@ const RentalAdvisory = () => {
               <Button 
                 asChild
                 size="lg"
-                className="bg-gold hover:bg-gold-dark text-black font-semibold px-8"
+                className="bg-gold hover:bg-gold-dark text-black font-semibold px-8 whitespace-nowrap"
               >
-                <Link to="/seller-listing">
-                  List Your Property for Rent
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                <Link to="/seller-listing" className="inline-flex items-center gap-2">
+                  <span>List Your Property for Rent</span>
+                  <ArrowRight className="w-5 h-5 flex-shrink-0" />
                 </Link>
               </Button>
               <Button 

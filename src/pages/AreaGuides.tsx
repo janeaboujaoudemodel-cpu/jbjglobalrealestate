@@ -345,7 +345,12 @@ const AreaGuides = () => {
                         <div className="flex-1 min-h-[40px]">
                           {area.description ? (
                             <p className="text-zinc-600 text-xs line-clamp-2">
-                              {area.description}
+                              {area.description
+                                .replace(/!\[.*?\]\(.*?\)/g, '')
+                                .replace(/provident\s*(estate)?/gi, '')
+                                .replace(/reelly/gi, '')
+                                .replace(/\s{2,}/g, ' ')
+                                .trim()}
                             </p>
                           ) : (
                             <p className="text-zinc-400 text-xs italic">
