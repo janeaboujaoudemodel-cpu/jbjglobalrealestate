@@ -133,6 +133,10 @@ function useFeaturedProjects() {
   });
 }
 
+const prefetchProjectDetail = () => {
+  import("../../pages/ProjectDetail");
+};
+
 const ProjectCard = ({ project }: { project: FeaturedProject }) => {
   const imageUrl = project.cover_image_url || project.images?.[0]?.image_url;
   const logoUrl = (project.developer as any)?.logo_url;
@@ -147,7 +151,7 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
       transition={{ duration: 0.4 }}
       className="group h-full"
     >
-      <Link to={`/project/${project.slug}`} className="block h-full">
+      <Link to={`/project/${project.slug}`} className="block h-full" onMouseEnter={prefetchProjectDetail}>
         <div className="flex flex-col h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl overflow-hidden border-2 border-gold/30 hover:border-gold transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
           {/* Image */}
           <div className="relative aspect-[4/3] overflow-hidden bg-gold/5">

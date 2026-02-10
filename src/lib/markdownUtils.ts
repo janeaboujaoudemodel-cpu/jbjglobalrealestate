@@ -72,6 +72,59 @@ function convertMarkdownTables(text: string): string {
 }
 
 /**
+ * Detect Reelly plain-text section labels and convert to markdown headings.
+ * This transforms wall-of-text descriptions into structured, readable sections.
+ */
+export function formatReellyDescription(text: string): string {
+  const SECTION_MAP: Record<string, string | null> = {
+    'project general facts': null, // Remove entirely (redundant with "About" heading)
+    'location description and benefits': '## Location',
+    'location description': '## Location',
+    'finishing and materials': '## Finishing & Materials',
+    'kitchen and appliances': '## Kitchen & Appliances',
+    'furnishing': '## Furnishing',
+    'project highlights': '## Highlights',
+    'amenities and facilities': '## Amenities & Facilities',
+    'amenities': '## Amenities',
+    'payment plan': '## Payment Plan',
+    'about the project': null, // Remove (redundant)
+    'project overview': null, // Remove (redundant)
+    'key features': '## Key Features',
+    'community': '## Community',
+    'connectivity': '## Connectivity',
+    'nearby attractions': '## Nearby Attractions',
+  };
+
+  let result = text;
+
+  // Replace known section labels at start of line (case-insensitive)
+  for (const [pattern, replacement] of Object.entries(SECTION_MAP)) {
+    const regex = new RegExp(`(^|\\n)\\s*${pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*:?\\s*(\\n|$)`, 'gi');
+    if (replacement === null) {
+      result = result.replace(regex, '$1$2');
+    } else {
+      result = result.replace(regex, `$1\n${replacement}\n$2`);
+    }
+  }
+
+  // Auto-detect: standalone short line (≤50 chars, no period, followed by longer text)
+  result = result.replace(
+    /\n([A-Z][A-Za-z &,\-\/]{3,48})\n\n([A-Z])/g,
+    (_, heading, nextChar) => {
+      const lower = heading.toLowerCase().trim();
+      // Skip if it's already a heading or looks like a sentence
+      if (lower.includes('.') || lower.split(' ').length > 8) return _;
+      return `\n\n## ${heading.trim()}\n\n${nextChar}`;
+    }
+  );
+
+  // Clean up excessive blank lines
+  result = result.replace(/\n{3,}/g, '\n\n');
+
+  return result.trim();
+}
+
+/**
  * Convert markdown text to safe HTML
  */
 export function renderMarkdownToHtml(markdown: string | null): string {

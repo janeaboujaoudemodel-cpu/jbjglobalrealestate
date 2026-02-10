@@ -65,7 +65,7 @@ import { filterValidImages, getFirstValidImageUrl, getHighResImageUrl } from "@/
 import { formatPrice as formatPriceUtil } from "@/utils/formatNumber";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { formatDisplayDate } from "@/utils/formatDate";
-import { renderMarkdownToHtml } from "@/lib/markdownUtils";
+import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import {
   Accordion,
   AccordionContent,
@@ -680,7 +680,7 @@ export default function ProjectDetailLayout({
                 <div 
                   className="mt-4 text-body text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert max-w-none"
                   dangerouslySetInnerHTML={{ 
-                    __html: renderMarkdownToHtml(project.description) 
+                    __html: renderMarkdownToHtml(formatReellyDescription(project.description || '')) 
                   }}
                 />
               ) : (
