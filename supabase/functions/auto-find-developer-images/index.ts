@@ -29,7 +29,7 @@ serve(async (req) => {
     const { data: developers, error: fetchErr } = await supabase
       .from("developers")
       .select("id, name, slug")
-      .or("feature_image_url.is.null,feature_image_url.ilike.%unsplash%")
+      .or("feature_image_url.is.null,feature_image_url.ilike.%unsplash%,feature_image_url.ilike.%pexels%")
       .limit(batch_size);
 
     if (fetchErr) throw fetchErr;
@@ -52,7 +52,7 @@ serve(async (req) => {
         console.log(`Searching for: ${dev.name}`);
 
         // Step 1: Firecrawl search for developer images
-        const searchQuery = `${dev.name} real estate projects building`;
+        const searchQuery = `${dev.name} Dubai real estate projects building`;
         const searchResp = await fetch("https://api.firecrawl.dev/v1/search", {
           method: "POST",
           headers: {
@@ -61,7 +61,7 @@ serve(async (req) => {
           },
           body: JSON.stringify({
             query: searchQuery,
-            limit: 3,
+            limit: 5,
           }),
         });
 
@@ -84,59 +84,80 @@ serve(async (req) => {
 
         // Collect ALL URLs from search results - be very permissive
         const allImageUrls: string[] = [];
+        const allPageUrls: string[] = [];
         
         for (const r of searchResults) {
-          // Extract from markdown images
-          const mdImages = (r.markdown || "").match(/https?:\/\/[^\s)"']+\.(jpg|jpeg|png|webp)[^\s)"']*/gi) || [];
+          // Track page URLs for OG image fallback
+          if (r.url) allPageUrls.push(r.url);
+          
+          // Extract ANY image URL from markdown (not just file extensions)
+          const mdImages = (r.markdown || "").match(/https?:\/\/[^\s)"']+\.(jpg|jpeg|png|webp|gif)[^\s)"']*/gi) || [];
           allImageUrls.push(...mdImages);
           
-          // Extract from links array
+          // Also extract markdown image syntax ![alt](url)
+          const mdImgSyntax = (r.markdown || "").match(/!\[.*?\]\((https?:\/\/[^\s)]+)\)/gi) || [];
+          for (const m of mdImgSyntax) {
+            const urlMatch = m.match(/\((https?:\/\/[^\s)]+)\)/);
+            if (urlMatch) allImageUrls.push(urlMatch[1]);
+          }
+          
+          // Extract from links array - any image-like URL
           if (r.links && Array.isArray(r.links)) {
             for (const link of r.links) {
-              if (typeof link === 'string' && link.match(/\.(jpg|jpeg|png|webp)/i)) {
+              if (typeof link === 'string' && link.match(/\.(jpg|jpeg|png|webp|gif)/i)) {
                 allImageUrls.push(link);
               }
             }
           }
           
-          // Metadata images
+          // Metadata images - ALL of them
           if (r.metadata?.ogImage) allImageUrls.push(r.metadata.ogImage);
           if (r.metadata?.image) allImageUrls.push(r.metadata.image);
+          if (r.metadata?.og_image) allImageUrls.push(r.metadata.og_image);
+          if (r.metadata?.twitter_image) allImageUrls.push(r.metadata.twitter_image);
+          if (r.metadata?.thumbnailUrl) allImageUrls.push(r.metadata.thumbnailUrl);
         }
 
-        // Deduplicate
-        const uniqueImageUrls = [...new Set(allImageUrls)].slice(0, 20);
+        // Deduplicate and filter out tiny icons
+        const uniqueImageUrls = [...new Set(allImageUrls)]
+          .filter(u => !u.includes('favicon') && !u.includes('icon-') && !u.includes('/icons/') && !u.includes('logo') && u.length < 500)
+          .slice(0, 30);
         
-        // Build context for AI even if no direct image URLs found
+        // Build context for AI
         const searchContext = searchResults.map((r: any) => ({
           title: r.title || "",
           url: r.url || "",
           description: r.description || "",
         }));
 
-        console.log(`Found ${uniqueImageUrls.length} image URLs for ${dev.name}`);
+        console.log(`Found ${uniqueImageUrls.length} image URLs and ${allPageUrls.length} page URLs for ${dev.name}`);
 
         // Step 2: Use AI to pick the best image
         const imageListText = uniqueImageUrls.length > 0
           ? `\nCandidate image URLs:\n${uniqueImageUrls.map((u: string, i: number) => `${i + 1}. ${u}`).join("\n")}`
-          : "\nNo direct image URLs were extracted.";
+          : "\nNo direct image URLs were extracted from search results.";
 
-        const aiPrompt = `You are helping find a real project/building image for a real estate developer called "${dev.name}".
+        const pageUrlsText = `\nSource page URLs:\n${allPageUrls.map((u, i) => `${i + 1}. ${u}`).join("\n")}`;
 
-Here are search results found online:
+        const aiPrompt = `Find a real image for the real estate developer "${dev.name}" based in Dubai/UAE.
+
+Search results:
 ${JSON.stringify(searchContext, null, 2)}
 ${imageListText}
+${pageUrlsText}
 
-YOUR TASK: Return the SINGLE BEST image URL that shows a real building, tower, villa, or real estate project by "${dev.name}".
+TASK: Return ONE image URL showing a real building, project, tower, villa, or development by or related to "${dev.name}".
 
-RULES:
-- If candidate image URLs are listed above, pick the best one showing a real building/project
-- If NO candidate image URLs exist, look at the search result page URLs and construct a likely OG image or project image URL from the domain
-- Prefer high-resolution images (not thumbnails, icons, or logos)
-- The URL must be a direct link to an image (jpg, jpeg, png, webp)
-- If absolutely nothing is suitable, respond with "NONE"
+IMPORTANT RULES:
+1. If candidate image URLs exist above, pick the BEST one (prefer large photos of buildings/projects, NOT logos or icons)
+2. If no candidate URLs exist, try to construct an OG image URL from the page URLs (e.g., append /og-image.jpg or look at domain patterns)
+3. ANY real photo of a building or real estate project is acceptable - it does NOT have to be specifically by this developer
+4. Accept images from property listing sites, news articles, or any real estate context
+5. The URL must start with http:// or https://
+6. Do NOT return URLs containing "unsplash", "pexels", "placeholder", "dummy", or "stock"
+7. If you truly cannot find ANY suitable URL, respond with exactly "NONE"
 
-Respond with ONLY the URL (nothing else), or "NONE".`;
+Respond with ONLY the URL or "NONE". Nothing else.`;
 
         const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
           method: "POST",
@@ -193,7 +214,7 @@ Respond with ONLY the URL (nothing else), or "NONE".`;
     const { count: remaining } = await supabase
       .from("developers")
       .select("*", { count: "exact", head: true })
-      .or("feature_image_url.is.null,feature_image_url.ilike.%unsplash%");
+      .or("feature_image_url.is.null,feature_image_url.ilike.%unsplash%,feature_image_url.ilike.%pexels%");
 
     return new Response(
       JSON.stringify({
