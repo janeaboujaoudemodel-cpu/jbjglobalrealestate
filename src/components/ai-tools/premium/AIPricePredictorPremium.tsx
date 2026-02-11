@@ -82,6 +82,7 @@ const AIPricePredictorPremium = () => {
       accentColor="blue"
       gradientFrom="blue"
       badge="Valuation Intelligence"
+      showFinancialDisclaimer
     >
       {/* Form Section - FULL WIDTH */}
       <motion.div

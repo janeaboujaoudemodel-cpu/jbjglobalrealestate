@@ -131,6 +131,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
       accentColor="sky"
       gradientFrom="sky"
       badge="Market Intelligence"
+      showFinancialDisclaimer
     >
       <AIToolGuide
         description="Get comprehensive property market analysis for any Dubai area. Includes price trends, developer landscape, transaction data, and investment recommendations."

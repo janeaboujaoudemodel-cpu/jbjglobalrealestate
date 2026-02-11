@@ -90,6 +90,7 @@ ${response.report}
       accentColor="indigo"
       gradientFrom="indigo"
       badge="Market Intelligence"
+      showFinancialDisclaimer
     >
       <AIToolGuide
         description="Generate professional market analysis reports backed by AI. Perfect for client presentations, investment decisions, and staying ahead of market trends."

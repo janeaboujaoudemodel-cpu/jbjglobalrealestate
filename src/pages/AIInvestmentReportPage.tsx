@@ -3,6 +3,8 @@
  * Generate detailed investment analysis reports
  */
 
+import { Link } from "react-router-dom";
+
 import { useState } from "react";
 import { TrendingUp, Send, Sparkles, Download, BarChart3, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -89,6 +91,7 @@ export default function AIInvestmentReportPage() {
       icon={<TrendingUp className="w-8 h-8" />}
       accentColor="emerald"
       gradientFrom="from-emerald-500"
+      showFinancialDisclaimer
     >
       <AIToolGuide
         description="Get comprehensive investment analysis including market trends, hotspots, and ROI projections."

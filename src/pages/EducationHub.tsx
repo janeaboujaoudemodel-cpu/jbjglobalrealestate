@@ -55,7 +55,7 @@ const guidesPreview = [
   },
   {
     title: "Golden Visa Guide",
-    description: "Comprehensive guide to qualifying for and obtaining the UAE Golden Visa through real estate.",
+    description: "Comprehensive guide to becoming eligible to apply for the UAE Golden Visa through real estate investment.",
     icon: TrendingUp,
   },
 ];

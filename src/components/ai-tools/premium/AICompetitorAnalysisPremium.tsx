@@ -62,6 +62,7 @@ const AICompetitorAnalysisPremium = () => {
       accentColor="orange"
       gradientFrom="orange"
       badge="Market Intelligence"
+      showFinancialDisclaimer
     >
       {/* Form Section */}
       <motion.div
