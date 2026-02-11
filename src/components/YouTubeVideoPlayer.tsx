@@ -45,6 +45,16 @@ function onAPIReady(cb: () => void) {
   }
 }
 
+const PLAYER_VARS = {
+  rel: 0,
+  modestbranding: 1,
+  enablejsapi: 1,
+  iv_load_policy: 3,
+  showinfo: 0,
+  controls: 1,
+  disablekb: 0,
+};
+
 export default function YouTubeVideoPlayer({
   videoId,
   title = "Video",
@@ -55,44 +65,61 @@ export default function YouTubeVideoPlayer({
   const [ended, setEnded] = useState(false);
   const iframeId = useRef(`yt-player-${videoId}-${Math.random().toString(36).slice(2, 8)}`);
 
+  const createPlayer = useCallback(() => {
+    if (!containerRef.current) return;
+
+    // Ensure a target div exists
+    let targetEl = document.getElementById(iframeId.current);
+    if (!targetEl) {
+      targetEl = document.createElement("div");
+      targetEl.id = iframeId.current;
+      targetEl.className = "absolute inset-0 w-full h-full";
+      containerRef.current.appendChild(targetEl);
+    }
+
+    playerRef.current = new window.YT.Player(iframeId.current, {
+      videoId,
+      playerVars: PLAYER_VARS,
+      events: {
+        onStateChange: (event: any) => {
+          if (event.data === window.YT.PlayerState.ENDED) {
+            setEnded(true);
+          }
+        },
+      },
+    });
+  }, [videoId]);
+
   useEffect(() => {
     loadYouTubeAPI();
-
-    onAPIReady(() => {
-      if (!containerRef.current) return;
-      playerRef.current = new window.YT.Player(iframeId.current, {
-        videoId,
-        playerVars: {
-          rel: 0,
-          modestbranding: 1,
-          enablejsapi: 1,
-          iv_load_policy: 3,
-          showinfo: 0,
-          controls: 1,
-          disablekb: 0,
-        },
-        events: {
-          onStateChange: (event: any) => {
-            if (event.data === window.YT.PlayerState.ENDED) {
-              setEnded(true);
-            }
-          },
-        },
-      });
-    });
+    onAPIReady(() => createPlayer());
 
     return () => {
       playerRef.current?.destroy?.();
     };
-  }, [videoId]);
+  }, [videoId, createPlayer]);
 
   const handleReplay = useCallback(() => {
-    const player = playerRef.current;
-    if (player?.loadVideoById) {
-      player.loadVideoById({ videoId, startSeconds: 0 });
-    }
+    // Destroy the old player (removes the iframe)
+    playerRef.current?.destroy?.();
+    playerRef.current = null;
+
+    // Remove any leftover element with the old id
+    const old = document.getElementById(iframeId.current);
+    if (old) old.remove();
+
+    // Insert a fresh div target
+    const fresh = document.createElement("div");
+    fresh.id = iframeId.current;
+    fresh.className = "absolute inset-0 w-full h-full";
+    containerRef.current?.appendChild(fresh);
+
+    // Hide overlay first so it doesn't flash
     setEnded(false);
-  }, [videoId]);
+
+    // Create a brand-new player
+    createPlayer();
+  }, [createPlayer]);
 
   return (
     <div className={`relative w-full ${className}`} style={{ paddingBottom: "56.25%" }} ref={containerRef}>
