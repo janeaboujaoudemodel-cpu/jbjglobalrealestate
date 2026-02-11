@@ -97,9 +97,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [incompleteCount, setIncompleteCount] = useState(0);
   // Filter: "all" | "complete" | "needs_work"
   const [statusFilter, setStatusFilter] = useState<"all" | "complete" | "needs_work">("all");
-  // Source filter: "reelly" (Provident removed per user mandate)
-  const sourceFromUrl = searchParams.get("source") as "all" | "reelly" | null;
-  const [sourceFilter, setSourceFilter] = useState<"all" | "reelly">(sourceFromUrl === "reelly" ? "reelly" : "reelly"); // Default to reelly
+  // Source filter: "all" | "reelly" | "provident"
+  const sourceFromUrl = searchParams.get("source") as "all" | "reelly" | "provident" | null;
+  const [sourceFilter, setSourceFilter] = useState<"all" | "reelly" | "provident">(sourceFromUrl || "all");
   // Confirmation dialog state
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [confirmDialogMode, setConfirmDialogMode] = useState<"all" | "selected">("all");
@@ -144,10 +144,14 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
         .eq("status", "pending")
         .or(needsWorkOr);
 
-      // Apply source filter to stats (Reelly-only mode)
-      // Always filter to Reelly source since Provident extraction is disabled
-      totalQuery = totalQuery.ilike("source_url", "%reelly%");
-      needsWorkQuery = needsWorkQuery.ilike("source_url", "%reelly%");
+      // Apply source filter to stats
+      if (sourceFilter === "reelly") {
+        totalQuery = totalQuery.ilike("source_url", "%reelly%");
+        needsWorkQuery = needsWorkQuery.ilike("source_url", "%reelly%");
+      } else if (sourceFilter === "provident") {
+        totalQuery = totalQuery.ilike("source_url", "%provident%");
+        needsWorkQuery = needsWorkQuery.ilike("source_url", "%provident%");
+      }
 
       const [totalRes, needsWorkRes] = await Promise.all([totalQuery, needsWorkQuery]);
 
@@ -187,8 +191,12 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
         query = query.eq("job_id", jobId);
       }
 
-      // Always filter to Reelly source (Provident extraction is disabled)
-      query = query.ilike("source_url", "%reelly%");
+      // Apply source filter
+      if (sourceFilter === "reelly") {
+        query = query.ilike("source_url", "%reelly%");
+      } else if (sourceFilter === "provident") {
+        query = query.ilike("source_url", "%provident%");
+      }
 
       // Apply status filter for complete vs needs_work
       // NOTE: Documents are optional (Reelly API doesn't provide them)
@@ -916,9 +924,6 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           <CardTitle className="flex items-center gap-2 text-foreground">
             <Building2 className="h-5 w-5 text-foreground" />
             Listing Inventory
-            <Badge variant="outline" className="text-xs">
-              Reelly API Source
-            </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -1064,24 +1069,26 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           {/* New Project Detector */}
           <NewProjectDetector />
 
-          {/* Source indicator - Reelly Only Mode */}
-          <div className="flex items-center gap-2 p-2 bg-emerald-50 border border-emerald-200 rounded-lg mb-4">
-            <div className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span className="text-sm font-medium text-emerald-700">Reelly API Source</span>
-            <span className="text-xs text-emerald-600">All projects from Reelly REST API</span>
+          {/* Source filter dropdown */}
+          <div className="flex items-center gap-2 p-2 bg-muted/50 border border-border rounded-lg mb-4">
+            <span className="text-sm font-medium text-foreground">Source:</span>
+            <select
+              value={sourceFilter}
+              onChange={(e) => setSourceFilter(e.target.value as "all" | "reelly" | "provident")}
+              className="text-sm border border-border rounded px-2 py-1 bg-background text-foreground"
+            >
+              <option value="all">All Sources</option>
+              <option value="reelly">Reelly Only</option>
+              <option value="provident">Provident Only</option>
+            </select>
           </div>
 
           {/* Inventory status cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-            {/* Target Card - Reelly API */}
-            <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-3 text-center">
-              <div className="text-2xl font-bold text-emerald-700">1,803</div>
-              <div className="text-xs text-emerald-600">API Total</div>
-              {totalCount !== null && (
-                <div className="mt-1 text-xs text-emerald-500">
-                  {totalCount.toLocaleString()} synced ({Math.round((totalCount / 1803) * 100)}%)
-                </div>
-              )}
+            {/* Total Pending */}
+            <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-center">
+              <div className="text-2xl font-bold text-foreground">{(totalCount ?? 0).toLocaleString()}</div>
+              <div className="text-xs text-muted-foreground">Total Pending</div>
             </div>
             <button
               onClick={() => setStatusFilter("all")}

@@ -235,7 +235,7 @@ export function ReellyImportPanel() {
   const syncPercent = syncProgress && syncProgress.total > 0 ? Math.min(100, Math.round((syncProgress.fetched / syncProgress.total) * 100)) : undefined;
 
   // ── Effects ──
-  useEffect(() => { refreshCounts(); checkForResumableJob(); loadPersistedBackfillResults(); }, [refreshCounts]);
+  useEffect(() => { refreshCounts(); checkForResumableJob(); loadPersistedBackfillResults(); handleLoadBackfillStats(); }, []);
   
   useEffect(() => {
     const cached = localStorage.getItem('reelly-api-cache');
@@ -662,10 +662,10 @@ export function ReellyImportPanel() {
               <Button variant="ghost" size="sm" onClick={refreshCounts} className="h-6 px-2"><RefreshCw className="w-3 h-3" /></Button>
             </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             <div className="bg-white rounded-lg p-3 text-center border border-slate-200">
               <p className="text-2xl font-bold text-emerald-600">{displayTotalProjects?.toLocaleString() || '—'}</p>
-              <p className="text-xs text-slate-500">Reelly API Total</p>
+              <p className="text-xs text-slate-500">API Total (Reelly)</p>
             </div>
             <div className="bg-white rounded-lg p-3 text-center border border-slate-200">
               <p className="text-2xl font-bold text-blue-600">{liveCounts.reelly_pending_queue.toLocaleString()}</p>
@@ -673,11 +673,7 @@ export function ReellyImportPanel() {
             </div>
             <div className="bg-white rounded-lg p-3 text-center border border-slate-200">
               <p className="text-2xl font-bold text-green-600">{liveCounts.reelly_approved.toLocaleString()}</p>
-              <p className="text-xs text-slate-500">Approved</p>
-            </div>
-            <div className="bg-white rounded-lg p-3 text-center border border-slate-200">
-              <p className="text-2xl font-bold text-amber-600">{liveCounts.provident_pending_queue.toLocaleString()}</p>
-              <p className="text-xs text-slate-500">Provident Queue</p>
+              <p className="text-xs text-slate-500">Approved (Live DB)</p>
             </div>
           </div>
         </div>
@@ -836,17 +832,31 @@ export function ReellyImportPanel() {
               {backfillStats?.missing_any === 0 && <CheckCircle className="h-4 w-4 text-emerald-500" />}
             </h3>
             <p className="text-sm text-emerald-700 mb-3">Fetch floor plans, amenities, documents for approved projects from Reelly API detail endpoint.</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              <Button onClick={handleLoadBackfillStats} disabled={isBackfilling} variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-100">
-                <RefreshCw className="h-4 w-4 mr-2" /> Check Missing
-              </Button>
-              <Button onClick={() => handleRunBackfill("batch")} disabled={isBackfilling} className="bg-emerald-600 hover:bg-emerald-700">
-                {isBackfilling ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Backfilling...</> : <><Zap className="h-4 w-4 mr-2" />Backfill Batch (50)</>}
-              </Button>
-              <Button onClick={() => handleRunBackfill("all")} disabled={isBackfilling} variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-100">
-                <Download className="h-4 w-4 mr-2" /> Backfill All
-              </Button>
-            </div>
+            
+            {backfillStats?.missing_any === 0 ? (
+              <div className="flex items-center gap-3 p-4 bg-emerald-100 rounded-xl border border-emerald-300 mb-4">
+                <CheckCircle className="h-6 w-6 text-emerald-600 flex-shrink-0" />
+                <div>
+                  <p className="font-semibold text-emerald-800">All projects are fully backfilled</p>
+                  <p className="text-sm text-emerald-600">{backfillStats.total_projects.toLocaleString()} projects have complete data.</p>
+                </div>
+                <Button onClick={handleLoadBackfillStats} variant="outline" size="sm" className="ml-auto border-emerald-300 text-emerald-700">
+                  <RefreshCw className="h-4 w-4 mr-1" /> Recheck
+                </Button>
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-2 mb-4">
+                <Button onClick={handleLoadBackfillStats} disabled={isBackfilling} variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-100">
+                  <RefreshCw className="h-4 w-4 mr-2" /> Check Missing
+                </Button>
+                <Button onClick={() => handleRunBackfill("batch")} disabled={isBackfilling} className="bg-emerald-600 hover:bg-emerald-700">
+                  {isBackfilling ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Backfilling...</> : <><Zap className="h-4 w-4 mr-2" />Backfill Batch (50)</>}
+                </Button>
+                <Button onClick={() => handleRunBackfill("all")} disabled={isBackfilling} variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-100">
+                  <Download className="h-4 w-4 mr-2" /> Backfill All
+                </Button>
+              </div>
+            )}
 
             {backfillStats && (
               <div className="bg-white/80 rounded-xl p-4 border border-emerald-200 mb-4">
