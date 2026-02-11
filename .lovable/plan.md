@@ -1,42 +1,42 @@
 
 
-## Fix YouTube Replay -- Prevent Recommendations and Ensure Proper Restart
+## Fix YouTube Replay — Destroy and Recreate Player
 
 ### Problem
-When clicking "Replay," YouTube shows music/video recommendations instead of replaying the original video. The `seekTo` + `playVideo` approach fails because once the video ends, YouTube's player transitions to a recommendations state that overrides the seek command.
+Neither `seekTo` nor `loadVideoById` reliably restart the video after it ends. YouTube's player transitions into a recommendations state that persists through both methods, showing music playlists and suggested videos (visible in the screenshot).
 
-### Root Cause
-The YouTube IFrame API does not reliably restart a video with `seekTo(0)` after it has fully ended and entered the "related content" state. Additionally, the current `playerVars` are missing key parameters that suppress all post-video suggestions.
+### Solution
+Instead of trying to manipulate the existing player instance, **destroy it completely and create a fresh one** on replay. This is the only approach that guarantees no YouTube recommendations leak through.
 
-### Fix in `src/components/YouTubeVideoPlayer.tsx`
+### Changes to `src/components/YouTubeVideoPlayer.tsx`
 
-**1. Add restrictive playerVars to block all suggestions (lines 65-68)**
+**1. Extract player creation into a reusable function**
 
-Add these parameters to completely lock down the player:
-- `fs: 0` -- disable fullscreen button (optional, reduces UI clutter)
-- `iv_load_policy: 3` -- hide video annotations
-- `disablekb: 0` -- keep keyboard controls
-- `showinfo: 0` -- hide video title bar
-- `controls: 1` -- keep playback controls
+Move the `new window.YT.Player(...)` logic into a helper function (e.g., `createPlayer`) that can be called both on initial mount and on replay.
 
-**2. Replace `seekTo` with `loadVideoById` in handleReplay (lines 85-92)**
+**2. Rewrite `handleReplay` to destroy and recreate**
 
-Instead of trying to seek within a dead player, use `player.loadVideoById(videoId)` which forces a full reload of the same video. This bypasses YouTube's recommendation state entirely:
-
-```
-const handleReplay = useCallback(() => {
-  const player = playerRef.current;
-  if (player?.loadVideoById) {
-    player.loadVideoById({ videoId, startSeconds: 0 });
-  }
-  setEnded(false);
-}, [videoId]);
+```text
+handleReplay:
+1. Destroy current player instance (player.destroy())
+2. Re-insert a fresh <div> with the same iframe ID into the container
+3. Call createPlayer() to build a new YouTube player on that div
+4. Set ended = false to hide the overlay
 ```
 
-This method tells the player to load a fresh instance of the same video from second 0, which is far more reliable than seeking within a finished video.
+**3. Keep all existing playerVars intact**
+
+The restrictive `rel: 0`, `modestbranding: 1`, `iv_load_policy: 3`, etc. stay in place for the fresh player instance.
+
+### Technical Detail
+
+The key insight: `player.destroy()` removes the iframe entirely, so we need to manually insert a new empty `<div>` element with the same ID before creating a new player. The component structure changes slightly:
+
+- The container `ref` is used to append a fresh div
+- `iframeId` stays consistent so the overlay positioning works
+- The `onStateChange` handler is re-attached to the new player instance
 
 ### Files to edit
 | File | Change |
 |------|--------|
-| `src/components/YouTubeVideoPlayer.tsx` | Add restrictive `playerVars`, replace `seekTo`/`playVideo` with `loadVideoById` in `handleReplay` |
-
+| `src/components/YouTubeVideoPlayer.tsx` | Extract player creation to helper function; rewrite `handleReplay` to destroy old player, insert fresh div, and create new player |
