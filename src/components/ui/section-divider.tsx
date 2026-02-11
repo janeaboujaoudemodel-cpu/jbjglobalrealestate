@@ -14,7 +14,7 @@ type SectionDividerProps = {
  */
 export function SectionDivider({ className, fullWidth = false }: SectionDividerProps) {
   return (
-    <section className={`bg-black py-8 md:py-10 ${className ?? ""}`.trim()}>
+    <section className={`bg-black py-6 md:py-8 ${className ?? ""}`.trim()}>
       {/* Centered inner wrapper ensures perfect alignment at all breakpoints */}
       <div className={fullWidth 
         ? "w-full max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16" 
