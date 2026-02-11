@@ -1,34 +1,41 @@
 
 
-# Unify All Header Dropdowns + Fix Positioning + Improve Search
+# Wrap Company Profile Video with Founder Visibility Toggle
 
-## Three Issues to Fix
+## What Changes
 
-### 1. Match All Header Dropdown Colors
-The main navigation menus (Buy, Sell, Rent, Projects, Areas, Developers, Insights) use `MegaMenuShell` which has a lighter gradient (`#FDFBF7, #F5F0E6, #EDE4D3`). The Search and Language dropdowns now use the deeper champagne gradient (`#F5EBD7, #E8DCC8, #D4C4A8`). All dropdowns need to use the same deeper champagne gradient.
+### 1. CompanyProfile.tsx -- Wrap video section with FounderContent (lines 818-849)
 
-**File: `src/components/header/mega-menu-primitives.tsx` (line 36)**
-- Change the `MegaMenuShell` background from `linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)` to `linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)`
+The "Company Introduction Video" section (YouTube embed of `lBXXdJ2kAtQ`) contains footage of the founder. It needs to be wrapped with `<FounderContent>` so it hides when founder visibility is toggled off and shows when toggled on.
 
-### 2. Fix Search and Language Dropdown Position
-The Search and Language panels are positioned with `top: calc(100% + 12px)` which creates a visible gap below the header border. They should start right at the header border.
+**Before:**
+```
+{/* Company Introduction Video */}
+<SectionShell>
+  <motion.div ...>
+    ...video content...
+  </motion.div>
+</SectionShell>
+```
 
-**File: `src/components/GlobalHeader.tsx` (line 1501)**
-- Change `top: 'calc(100% + 12px)'` to `top: 'calc(100% + 4px)'` for the utility panel container (Search, Language, Account)
-- Adjust the bridge zone height accordingly to maintain hover stability
+**After:**
+```
+<FounderContent>
+  {/* Company Introduction Video */}
+  <SectionShell>
+    <motion.div ...>
+      ...video content...
+    </motion.div>
+  </SectionShell>
+</FounderContent>
+```
 
-### 3. Improve Search to Find Projects by Developer Name
-When searching "Emaar", only the developer record shows up. The project search only checks `projects.name`, not `developer_name`. So Emaar's projects (Selvara, Rivana, Sunrise Bay, etc.) don't appear because "Emaar" isn't in their project name.
+`FounderContent` is already imported in this file -- no new imports needed.
 
-**File: `src/components/GlobalSearchModal.tsx` (lines 139-152)**
-- Expand the projects query to also search by `developer_name` using an OR filter: `.or(`name.ilike.%query%,developer_name.ilike.%query%`)`
-- This means searching "Emaar" will show Emaar the developer AND all Emaar projects
+### 2. Digital Business Card -- No changes needed
 
-## Technical Details
+The Digital Card (`/card`) already has its own Company Introduction video (self-hosted MP4 at `jbj-company-intro.mp4`). Per the project memory, the digital card is permanently accessible and decoupled from the Founder Visibility toggle, so it stays as-is.
 
-| File | Line(s) | Change |
-|------|---------|--------|
-| `src/components/header/mega-menu-primitives.tsx` | 36 | Update gradient to `#F5EBD7, #E8DCC8, #D4C4A8` |
-| `src/components/GlobalHeader.tsx` | 1501 | Change `calc(100% + 12px)` to `calc(100% + 4px)` |
-| `src/components/GlobalSearchModal.tsx` | 145 | Add `.or()` filter to include `developer_name` in project search |
+## Summary
 
+Only one small edit: wrap lines 818-849 in `CompanyProfile.tsx` with `<FounderContent>`.
