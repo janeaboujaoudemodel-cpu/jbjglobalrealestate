@@ -66,7 +66,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 <img 
                   src={developer.logo_url} 
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-contain p-2"
+                  className="w-full h-full object-contain p-1"
                 />
               ) : (
                 <Building2 className="w-12 h-12 text-zinc-400" />

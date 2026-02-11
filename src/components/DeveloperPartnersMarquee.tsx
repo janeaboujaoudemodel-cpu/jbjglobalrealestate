@@ -74,16 +74,16 @@ const DeveloperPartnersMarquee = () => {
       <Link
         key={`${isFirst ? "a" : "b"}-${developer.slug}-${index}`}
         to={`/developer/${developer.slug}`}
-        className="flex-shrink-0 px-4 md:px-6 lg:px-8 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
+        className="flex-shrink-0 px-5 md:px-7 lg:px-9 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
       >
         <div
-          className="h-10 md:h-12 lg:h-14 min-w-[100px] md:min-w-[140px] lg:min-w-[160px] flex items-center justify-center"
+          className="h-10 md:h-12 lg:h-14 w-[120px] md:w-[150px] lg:w-[170px] flex items-center justify-center"
         >
           <img
             src={developer.logo}
             alt={developer.name}
-            className="h-full w-auto object-contain max-h-[32px] md:max-h-[40px] lg:max-h-[44px] max-w-[120px] md:max-w-[140px]"
+            className="h-full w-auto object-contain max-h-[28px] md:max-h-[36px] lg:max-h-[40px] max-w-[110px] md:max-w-[130px]"
             loading="eager"
             decoding="async"
             onLoad={isFirst ? handleImageLoad : undefined}
