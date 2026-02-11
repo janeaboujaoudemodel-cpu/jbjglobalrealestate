@@ -78,7 +78,7 @@ const DeveloperPartnersMarquee = () => {
         title={developer.name}
       >
         <div
-          className="w-[100px] md:w-[120px] lg:w-[140px] h-[28px] md:h-[36px] lg:h-[40px] flex items-center justify-center"
+          className="w-[140px] h-[28px] md:h-[36px] lg:h-[40px] flex items-center justify-center"
         >
           <img
             src={developer.logo}
@@ -110,7 +110,7 @@ const DeveloperPartnersMarquee = () => {
     : { display: "flex" };
 
   return (
-    <section className="w-full overflow-hidden bg-black">
+    <section className="w-full overflow-hidden bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       {/* Inject keyframes */}
       {loopWidth > 0 && (
         <style>{`
@@ -123,19 +123,19 @@ const DeveloperPartnersMarquee = () => {
 
       <div className="w-full">
         <div className="py-5 md:py-6 px-4 mb-2 md:mb-3">
-          <p className="text-center text-white/70 text-sm md:text-base font-light tracking-wide">
+          <p className="text-center text-black text-sm md:text-base font-light tracking-wide">
             {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
           </p>
         </div>
 
-        <div className="relative w-full overflow-hidden py-6 md:py-8">
+        <div className="relative w-full overflow-hidden py-6 md:py-8 bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] border-t border-b border-gold/30">
           <div style={marqueeStyle} className="items-center">
             {/* Loop A – measured */}
-            <div ref={loopRef} className="flex items-center gap-6 md:gap-8 lg:gap-10">
+            <div ref={loopRef} className="flex items-center gap-10">
               {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, true))}
             </div>
             {/* Loop B – seamless duplicate */}
-            <div aria-hidden className="flex items-center gap-6 md:gap-8 lg:gap-10">
+            <div aria-hidden className="flex items-center gap-10">
               {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, false))}
             </div>
           </div>
