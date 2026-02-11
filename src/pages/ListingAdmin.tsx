@@ -159,7 +159,18 @@ const ListingAdmin = () => {
   // Allow access if user is listing admin OR Owner (verified via AuthContext)
   const hasAccess = isListingAdmin || isOwner;
 
-  if (checkingAdmin || ownerLoading) {
+  // Cache owner status in sessionStorage for instant reload
+  useEffect(() => {
+    if (!ownerLoading && isOwner) {
+      sessionStorage.setItem('jj_owner_verified', 'true');
+    }
+  }, [isOwner, ownerLoading]);
+
+  const cachedOwner = sessionStorage.getItem('jj_owner_verified') === 'true';
+  const stillLoading = checkingAdmin || ownerLoading;
+  const effectiveAccess = hasAccess || cachedOwner;
+
+  if (stillLoading && !cachedOwner) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center pt-28 gap-6">
         <div className="flex flex-col items-center gap-4">
@@ -175,7 +186,7 @@ const ListingAdmin = () => {
     );
   }
 
-  if (!hasAccess) {
+  if (!effectiveAccess) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center pt-28">
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 max-w-md mx-4">

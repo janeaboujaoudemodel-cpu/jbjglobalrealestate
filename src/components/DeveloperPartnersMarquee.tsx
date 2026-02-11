@@ -78,16 +78,12 @@ const DeveloperPartnersMarquee = () => {
         title={developer.name}
       >
         <div
-          className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-xl overflow-hidden bg-white flex items-center justify-center"
-          style={{
-            border: '3px solid hsl(42 45% 59%)',
-            boxShadow: '0 4px 16px rgba(200,167,102,0.3)',
-          }}
+          className="h-10 md:h-12 lg:h-14 flex items-center justify-center"
         >
           <img
             src={developer.logo}
             alt={developer.name}
-            className="w-full h-full object-contain p-1.5 md:p-2"
+            className="h-full w-auto object-contain"
             loading="eager"
             decoding="async"
             onLoad={isFirst ? handleImageLoad : undefined}
