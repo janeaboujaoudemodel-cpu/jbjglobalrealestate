@@ -270,3 +270,6 @@ verify_jwt = false
 
 [functions.provident-enrich-projects]
 verify_jwt = false
+
+[functions.auto-find-developer-images]
+verify_jwt = false
