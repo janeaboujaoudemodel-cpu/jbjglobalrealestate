@@ -1,47 +1,42 @@
 
 
-# Fix Plan: Global Search Hover Panel -- UI, Colors, and Close Speed
+# Fix Plan: Visitor Tracking 401 & Video Errors
 
-## Issues Identified
+## Issue 1: Visitor Tracking 401 Unauthorized (Code Fix)
 
-1. **Wrong colors**: The search hover dropdown uses `bg-black/95` dark theme, but the approved design uses the premium champagne-gold gradient (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`) matching the full-screen search modal.
+**Root Cause:** The table privilege hardening (security phase) revoked ALL privileges from the `anon` role on `visitor_sessions`, `visitor_events`, and `visitor_documents`. Since visitor tracking fires for every page view (including anonymous visitors), the Supabase client gets a 401 before RLS policies are even evaluated.
 
-2. **Slow close**: The `handleMegaMenuLeave` timeout is set to 450ms. The user wants near-instant close when the cursor leaves the panel.
+**Fix:** Grant the minimum required privileges to `anon` on the three visitor tracking tables. RLS policies already exist to control what operations are allowed.
 
-3. **Embedded mode uses dark theme**: The `GlobalSearchModal` embedded mode renders dark-themed content (white text on dark bg), but the wrapper and approved style are champagne/gold. The embedded mode needs to match the modal's light champagne styling.
+**Database Migration:**
+```sql
+-- Allow anonymous visitors to be tracked
+GRANT SELECT, INSERT, UPDATE ON public.visitor_sessions TO anon;
+GRANT SELECT, INSERT ON public.visitor_events TO anon;
+GRANT SELECT, INSERT ON public.visitor_documents TO anon;
 
-## Changes
+-- Authenticated users also need access
+GRANT SELECT, INSERT, UPDATE ON public.visitor_sessions TO authenticated;
+GRANT SELECT, INSERT ON public.visitor_events TO authenticated;
+GRANT SELECT, INSERT ON public.visitor_documents TO authenticated;
+```
 
-### File 1: `src/components/GlobalHeader.tsx`
+This restores tracking functionality while RLS policies (which already allow INSERT/UPDATE with `true`) handle the actual access control.
 
-**Close speed** (line 110):
-- Change the mega menu leave timeout from `450ms` to `120ms` for snappier close behavior
+---
 
-**Search panel wrapper** (lines 1505-1513):
-- Replace `bg-black/95 backdrop-blur-xl border border-gold/30` with the approved champagne gradient: `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40`
-- This matches the full-screen modal's visual identity
+## Issue 2: Video Files ERR_CONNECTION_FAILED (Not a Code Bug)
 
-### File 2: `src/components/GlobalSearchModal.tsx`
+The errors for `/videos/hero-video.mp4` and `burj-khalifa-day-to-night.mp4` come from `jbj.ae` -- your custom published domain. The files exist in the project and work on the Lovable preview URL. The `ERR_CONNECTION_FAILED` means the domain DNS is not resolving to the server.
 
-**Embedded mode colors** (lines 152-259):
-- Update the embedded mode to use the same champagne/gold light theme as the full-screen modal:
-  - Search input: `text-black` instead of `text-white`, placeholder `text-gold/60`
-  - Border: `border-gold/30`
-  - Quick Access icons: Keep colorful backgrounds, change labels to `text-black`
-  - Popular Pages: `bg-white/50 border border-gold/10` with `text-black` labels
-  - Recent Searches: `text-black` labels with gold clock icons
-  - Search results: `text-black` for titles, `text-gold` for categories, `bg-white` icon containers
-  - "No results" text: `text-zinc-500` (works on light bg)
-  - Hint text: `text-gold/80`
+**No code change needed.** You need to verify your `jbj.ae` domain DNS records point to the correct Lovable hosting endpoint. You can check this in your domain registrar's DNS settings.
 
-This aligns the embedded (hover) panel with the approved champagne-gold premium aesthetic that the full-screen modal already uses.
+---
 
-## Technical Summary
+## Summary
 
-| Change | File | Lines | Detail |
-|--------|------|-------|--------|
-| Close speed | `GlobalHeader.tsx` | 110 | 450ms to 120ms |
-| Panel wrapper color | `GlobalHeader.tsx` | 1506 | Dark to champagne gradient |
-| Embedded search input | `GlobalSearchModal.tsx` | 154-166 | White text to black text on light bg |
-| Embedded Quick Access | `GlobalSearchModal.tsx` | 196-256 | Dark theme to champagne light theme |
-| Embedded search results | `GlobalSearchModal.tsx` | 169-194 | Dark theme to champagne light theme |
+| # | Issue | Type | Fix |
+|---|-------|------|-----|
+| 1 | `visitor_sessions` 401 | DB privileges | Grant anon/authenticated INSERT/SELECT/UPDATE |
+| 2 | Video ERR_CONNECTION_FAILED | DNS/Hosting | Verify `jbj.ae` domain DNS (not a code fix) |
+
