@@ -213,7 +213,7 @@ const Index = () => {
       {/* TRUST BAR (4 Cards) - Flows directly from Developer Partners */}
       <div id="trust-bar" className="bg-black py-12 md:py-16">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-4 mb-3">
+          <div className="flex items-center justify-center gap-4 mb-8 md:mb-10">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/25 to-gold/40" />
             <span className="text-gold/60 text-[10px] uppercase tracking-[0.2em] font-medium">{t('home.trustBar.trustedByThousands', 'Trusted By Thousands')}</span>
             <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gold/25 to-gold/40" />
@@ -221,7 +221,7 @@ const Index = () => {
         </div>
         <TrustBar />
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-4 mt-3">
+          <div className="flex items-center justify-center gap-4 mt-8 md:mt-10">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/25 to-gold/40" />
             <span className="text-gold/60 text-[10px] uppercase tracking-[0.2em] font-medium">{t('home.trustBar.excellenceGuaranteed', 'Excellence Guaranteed')}</span>
             <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gold/25 to-gold/40" />
