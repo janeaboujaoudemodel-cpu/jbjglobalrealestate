@@ -10,11 +10,11 @@ interface ChatSubmittedProps {
 const ChatSubmitted = ({ userFirstName, onStartNewChat }: ChatSubmittedProps) => {
   return (
     <div className="flex-1 p-6 flex flex-col items-center justify-center">
-      <div className="w-16 h-16 rounded-full bg-gradient-to-r from-emerald-500/20 to-emerald-500/10 flex items-center justify-center mb-4">
-        <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+      <div className="w-16 h-16 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center mb-4">
+        <CheckCircle2 className="w-8 h-8 text-gold" />
       </div>
-      <h4 className="text-white text-lg font-semibold mb-2">Submitted to Our Team!</h4>
-      <p className="text-zinc-400 text-sm text-center mb-6 max-w-[280px]">
+      <h4 className="text-black text-lg font-semibold mb-2">Submitted to Our Team!</h4>
+      <p className="text-zinc-600 text-sm text-center mb-6 max-w-[280px]">
         Our team will review your inquiry and get back to you within 24 hours.
       </p>
       
@@ -32,7 +32,7 @@ const ChatSubmitted = ({ userFirstName, onStartNewChat }: ChatSubmittedProps) =>
         <Button
           variant="outline"
           onClick={onStartNewChat}
-          className="w-full border-zinc-600 text-zinc-300 hover:bg-zinc-800"
+          className="w-full border-gold/40 text-zinc-700 hover:bg-gold/10"
         >
           Start New Chat
         </Button>

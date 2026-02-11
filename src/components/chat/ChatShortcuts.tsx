@@ -17,12 +17,12 @@ const SHORTCUTS = [
   { id: 'general_inquiry' as ShortcutType, icon: MessageCircle, label: 'General Inquiry', description: 'Other questions', color: 'text-zinc-500' },
 ];
 
-const ChatShortcuts = ({ onSelectShortcut, userFirstName }: ChatShortcutsProps) => {
+const ChatShortcuts = ({ onSelectShortcut, userFirstName: userFullName }: ChatShortcutsProps) => {
   return (
     <div className="flex-1 p-4 overflow-y-auto">
       <div className="text-center mb-4">
         <h4 className="text-black text-lg font-semibold mb-1">
-          <T>{`Hi ${userFirstName}! 👋`}</T>
+          <T>{`Hi ${userFullName}! 👋`}</T>
         </h4>
         <p className="text-zinc-600 text-sm">
           <T>What would you like help with today?</T>

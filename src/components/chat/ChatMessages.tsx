@@ -1,10 +1,11 @@
-import { useRef, useEffect, useMemo } from 'react';
+import { useRef, useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { User, Send, MessageCircle, Shield, Copy } from 'lucide-react';
+import { User, Send, MessageCircle, Shield, Copy, X } from 'lucide-react';
 import { toast } from 'sonner';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Message, SERVICES, getRandomAgent } from './types';
 import { CONTACT_INFO } from '@/constants/stats';
 import { T } from '@/components/ui/T';
@@ -16,7 +17,7 @@ interface ChatMessagesProps {
   input: string;
   onInputChange: (value: string) => void;
   onSend: () => void;
-  onSubmitToTeam: () => void;
+  onSubmitToTeam: (inquirySummary?: string) => void;
   userFirstName: string;
   isExistingUser: boolean;
   selectedService: string | null;
@@ -37,6 +38,10 @@ const ChatMessages = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const agent = useMemo(() => getRandomAgent(), []);
   const { t } = useLanguage();
+  const [showSubmitPanel, setShowSubmitPanel] = useState(false);
+  const [inquirySummary, setInquirySummary] = useState('');
+
+  const userMessageCount = messages.filter(m => m.role === 'user').length;
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -53,6 +58,12 @@ const ChatMessages = ({
       e.preventDefault();
       onSend();
     }
+  };
+
+  const handleSubmitConfirm = () => {
+    onSubmitToTeam(inquirySummary.trim() || undefined);
+    setShowSubmitPanel(false);
+    setInquirySummary('');
   };
 
   const serviceName = SERVICES.find(s => s.id === selectedService)?.label || 'property inquiries';
@@ -148,29 +159,78 @@ const ChatMessages = ({
         </div>
       </ScrollArea>
 
-      {/* Action Buttons - Premium styling */}
-      <div className="px-4 py-3 border-t border-gold/30 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex gap-2">
-        {isExistingUser && (
-          <a
-            href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userFirstName}. I was chatting with the AI about ${serviceName}.`)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white text-sm py-2.5 rounded-lg transition-colors font-semibold shadow-lg"
+      {/* Submit to Team Panel */}
+      <AnimatePresence>
+        {showSubmitPanel && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="border-t border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-hidden"
           >
-            <MessageCircle className="w-4 h-4" />
-            <T>WhatsApp</T>
-          </a>
+            <div className="p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold text-black">
+                  <T>Describe your inquiry</T>
+                </p>
+                <button onClick={() => setShowSubmitPanel(false)} className="text-zinc-400 hover:text-black">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <Textarea
+                value={inquirySummary}
+                onChange={(e) => setInquirySummary(e.target.value)}
+                placeholder="Please describe what you need from our team..."
+                className="min-h-[80px] text-sm"
+              />
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleSubmitConfirm}
+                  className="flex-1 bg-gold hover:bg-gold-light text-black text-sm font-bold shadow-lg shadow-gold/20"
+                >
+                  <Shield className="w-4 h-4 mr-2" />
+                  <T>Submit Now</T>
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowSubmitPanel(false)}
+                  className="border-gold/30 text-zinc-600"
+                >
+                  <T>Cancel</T>
+                </Button>
+              </div>
+            </div>
+          </motion.div>
         )}
-        <Button
-          onClick={onSubmitToTeam}
-          className={`${isExistingUser ? 'flex-1' : 'w-full'} bg-gold hover:bg-gold-light text-black text-sm py-2.5 font-bold shadow-lg shadow-gold/20`}
-        >
-          <Shield className="w-4 h-4 mr-2" />
-          <T>Submit to Team</T>
-        </Button>
-      </div>
+      </AnimatePresence>
 
-      {/* Input - Premium dark styling */}
+      {/* Action Buttons - Only show Submit to Team when user has sent messages */}
+      {!showSubmitPanel && (
+        <div className="px-4 py-3 border-t border-gold/30 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex gap-2">
+          {isExistingUser && (
+            <a
+              href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userFirstName}. I was chatting with the AI about ${serviceName}.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white text-sm py-2.5 rounded-lg transition-colors font-semibold shadow-lg"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <T>WhatsApp</T>
+            </a>
+          )}
+          {userMessageCount > 0 && (
+            <Button
+              onClick={() => setShowSubmitPanel(true)}
+              className={`${isExistingUser ? 'flex-1' : 'w-full'} bg-gold hover:bg-gold-light text-black text-sm py-2.5 font-bold shadow-lg shadow-gold/20`}
+            >
+              <Shield className="w-4 h-4 mr-2" />
+              <T>Submit to Team</T>
+            </Button>
+          )}
+        </div>
+      )}
+
+      {/* Input */}
       <div className="p-4 border-t border-gold/30 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         <div className="flex gap-3">
           <Input
