@@ -1,54 +1,111 @@
 
 
-# Fix Plan: Area Page Errors, AI Analyzer, and Missing Project Prices
+# Fix Plan: 6 Issues -- Area Hero, Search Dropdown, Prices, and Marquee
 
-## Issue 1: AreaProjectsGrid 400 Error (Root Cause of Multiple Failures)
+## Issue 1: Area Hero Missing Photo (Dubai Land Residence Complex)
 
-**Root Cause:** The `AreaProjectsGrid.tsx` query references `project_images(image_url, alt_text, sort_order)` but the actual column in the `project_images` table is `display_order`, not `sort_order`. PostgREST returns error code `42703` ("column project_images_1.sort_order does not exist").
+**Root Cause:** The `areas` table has `hero_image_url: NULL` and `image_url: NULL` for "Dubai Land Residence Complex". When both are null, the hero shows a plain gradient instead of a photo.
 
-This same bug exists in multiple files that use `sort_order` instead of `display_order`:
+**Fix:** We need to find an appropriate image for this area. I will search for a suitable image URL or use a placeholder approach. Additionally, other areas may also lack images. We should set a fallback image for areas without photos.
 
-**Files to fix:**
+**Changes:**
+- `src/components/area-detail/AreaHeroSection.tsx`: Add a high-quality fallback image when both `hero_image_url` and `image_url` are null (e.g., a generic Dubai skyline image from the project's existing assets).
 
-| File | Line | Change |
-|------|------|--------|
-| `src/components/area-detail/AreaProjectsGrid.tsx` | 26 | `sort_order` to `display_order` |
+---
 
-Additionally, the `AreaDevelopersBar.tsx` (line 18) uses `developer:developers(...)` which also fails if the query structure is wrong. Need to verify.
+## Issue 2: Clickable Stats in Area Hero (Projects/Developers count)
 
-## Issue 2: AI Area Intelligence Stuck on "Analyzing..."
+**Root Cause:** The "63 Projects" and "33 Developers" stats in the hero are plain `<div>` elements -- they are not clickable.
 
-**Root Cause:** The AI analyzer depends on the `stats` query succeeding first (line 123: `if (isVisible && stats && stats.totalProjects > 0`). The stats query itself works fine (returns 200), so the AI call should trigger. However, testing the edge function directly shows it works and returns a full analysis.
+**Fix:** Make them clickable:
+- "63 Projects" scrolls down to `#projects-section` (which already exists in `AreaDetail.tsx` line 61)
+- "33 Developers" scrolls down to the Developers section (need to add an `id="developers-section"` to `AreaDevelopersBar`)
 
-The actual issue is that the `AreaProjectsGrid` error may be causing React Query to throw unhandled errors that cascade. Additionally, I tested the edge function and it responds successfully -- the issue may be intermittent or related to the frontend not properly handling the response.
+**Changes:**
+- `src/components/area-detail/AreaHeroSection.tsx` (lines 124-141): Wrap the Projects stat in a `<button>` that calls `scrollToId('projects-section')`, and the Developers stat in a `<button>` that calls `scrollToId('developers-section')`. Add cursor-pointer and hover effect.
+- `src/components/area-detail/AreaDevelopersBar.tsx` (line 44): Add `id="developers-section"` to the `<section>` element.
 
-I will also add better error handling to ensure the AI section doesn't get permanently stuck.
+---
 
-## Issue 3: Missing Prices for Palm Jebel Ali and Binghatti Vintage
+## Issue 3: Search Hover Dropdown -- Layout Improvements
 
-The Reelly API is currently returning 500 errors, so I cannot fetch prices from there. However, web research found:
+The user wants three changes to the search dropdown (embedded `GlobalSearchModal`):
 
-- **Palm Jebel Ali Villas (Nakheel):** Starting from AED 18,500,000 (5-bedroom villas, Frond C launch price AED 18M+)
-- **Binghatti Vintage (Majan):** Starting from AED 600,000 (studio apartments)
+### 3a: Popular Pages -- 3 columns instead of 2
+Currently the "Popular Pages" grid is `grid-cols-2`. Change to `grid-cols-3` so items spread evenly with less vertical gap.
 
-**Database update needed:**
-```sql
-UPDATE projects SET price_from = 18500000 WHERE slug = 'palm-jebel-ali-villas-nakheel-656';
-UPDATE projects SET price_from = 600000 WHERE slug = 'binghatti-vintage-binghatti-3046';
-```
+### 3b: Add a vertical divider between columns
+Add subtle gold dividers between the Popular Pages columns for visual separation.
 
-## Issue 4: DLD Market Widget Price Display
+### 3c: Search input area -- premium champagne/gold background
+The search input area at the top should have a distinct champagne-gold background to look more premium.
 
-After inspecting the "Dubai Market Intelligence" section on the area page, the data appears to be rendering correctly (YTD Volume AED 55.1B, 18,500 transactions, etc.). The section uses hardcoded data from `dldMarketData.ts`. If there's a specific price formatting issue, it may be related to the area page's project queries failing (Issue 1), causing the overall page to appear broken.
+### 3d: Placeholder text inside search box
+Move the hint text "Type to search projects, developers, tools & more" inside the input as placeholder text, replacing the current "Search anything..." placeholder.
 
-Once Issue 1 is fixed, the full page should render correctly and any layout shifts near the DLD widget should resolve.
+### 3e: Search connected to full site
+The search already uses `searchItems()` which indexes pages, tools, and routes. It needs to also search actual projects and developers from the database. I will enhance the search to query projects/developers dynamically.
 
-## Summary of Changes
+**Changes:**
+- `src/components/GlobalSearchModal.tsx`:
+  - Line 216: Change `grid-cols-2` to `grid-cols-3` for Popular Pages
+  - Line 156: Add champagne gradient background to the search input container
+  - Line 163: Change placeholder to "Search projects, developers, tools & more..."
+  - Remove the bottom hint text (line 252-254)
+  - Add dynamic project/developer search via Supabase query when user types
 
-| # | Issue | File/Location | Fix |
-|---|-------|---------------|-----|
-| 1 | Projects grid 400 error | `AreaProjectsGrid.tsx` line 26 | Change `sort_order` to `display_order` |
-| 2 | AI analyzer stuck | Cascading from Issue 1; will verify after fix | May need error handling improvement |
-| 3 | Missing prices | Database | Update price_from for 2 projects |
-| 4 | DLD widget | No code change | Resolves with Issue 1 fix |
+---
+
+## Issue 4: Remove Decimal Points from All Prices
+
+**Root Cause:** The database stores prices with decimal precision (e.g., `1100000.017025`). The formatting functions don't always round before displaying.
+
+**Fix:** Apply `Math.round()` to all prices before formatting, globally.
+
+**Changes:**
+- `src/components/home/FeaturedListings.tsx` (line 19-24): Update local `formatPrice` to use `Math.round(price)` before formatting
+- `src/components/ProjectCard.tsx` (line 49-61): Update `formatPriceWithCurrency` to ensure `Math.round` is applied before conversion (it already does `Math.round` on converted value, but the conversion amplifies decimals for some currencies)
+- `src/utils/formatNumber.ts` (line 47): The global `formatPrice` already rounds with `Math.round(num)` -- this is correct. But `formatPriceAbbreviated` (line 67-81) uses raw num for division which can produce decimals -- add rounding.
+
+---
+
+## Issue 5: Developer Marquee Logos Overlapping
+
+**Root Cause:** The CSS marquee animation translates by `-loopWidth` pixels, but if `loopWidth` measurement happens before all images are fully rendered at their natural size, the calculated width is too small, causing Loop B to overlap with Loop A.
+
+**Fix:** Multiple improvements:
+1. Add `min-width` to each logo container to guarantee minimum spacing even if images haven't loaded
+2. Add a third duplicate loop (Loop C) to ensure seamless wrapping even with measurement inaccuracies
+3. Force `flex-shrink-0` and `white-space: nowrap` on the parent container
+4. Add a small gap between loops using CSS gap
+
+**Changes:**
+- `src/components/DeveloperPartnersMarquee.tsx`:
+  - Line 80-81: Add `min-w-[120px] md:min-w-[160px] lg:min-w-[180px]` to each logo container to guarantee minimum width
+  - Line 132: Add `gap-0` and `will-change-transform` to the animation container
+  - Ensure the animation container has `flex-nowrap` behavior
+
+---
+
+## Issue 6: Area Projects Section -- "View All" CTA
+
+The user wants the area page projects grid to show 3-6 featured projects with an "Explore All Projects" CTA button, even when there are fewer than 12 projects.
+
+**Fix:** Show the "View All Projects" CTA always (not just when >= 12), since it serves as a navigation element.
+
+**Changes:**
+- `src/components/area-detail/AreaProjectsGrid.tsx` (line 88): Remove the `projects.length >= 12` condition and always show the CTA.
+
+---
+
+## Summary
+
+| # | Issue | Files | Change Type |
+|---|-------|-------|-------------|
+| 1 | Missing area hero photo | AreaHeroSection.tsx | Fallback image |
+| 2 | Clickable stats | AreaHeroSection.tsx, AreaDevelopersBar.tsx | Add scroll-to buttons |
+| 3 | Search dropdown layout | GlobalSearchModal.tsx | 3-col grid, champagne bg, placeholder, dynamic search |
+| 4 | Price decimals | FeaturedListings.tsx, ProjectCard.tsx, formatNumber.ts | Math.round everywhere |
+| 5 | Marquee overlapping | DeveloperPartnersMarquee.tsx | Min-width on containers |
+| 6 | Area projects CTA | AreaProjectsGrid.tsx | Always show CTA |
 
