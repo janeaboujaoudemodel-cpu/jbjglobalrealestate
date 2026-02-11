@@ -1,117 +1,89 @@
 
 
-# Fix Plan: Areas, Project Routing, Marquee, Cards, and Brochure
+# Fix Plan: Remaining UI Issues
 
-## Issue 1: 95 Areas Still Missing Images
+## 1. Brochure Logo Cropping (PremiumBrochureCard.tsx)
 
-95 areas have no images at all. The current `enrich-area-images` function only pulls from associated projects -- these 95 areas have no projects with images.
+The JBJ monogram in the brochure card uses `object-cover` (line 153), which crops the logo inside the circle. Change to `object-contain` so the full logo fits without cropping.
 
-**Fix:** Update `enrich-area-images` edge function to use AI image generation (Gemini image model) as a fallback when no project images exist. For each area without an image:
-1. Call the Lovable AI image generation endpoint with a prompt like "Aerial panoramic photo of {area name}, Dubai, UAE, community master plan view, real estate photography"
-2. Upload the generated image to Supabase Storage (create an `area-images` bucket)
-3. Store the public URL in `areas.image_url` and `areas.hero_image_url`
-4. Process in batches of 5 (image generation is slower)
-
-Then invoke the function to process all 95 remaining areas.
-
-**Files:** `supabase/functions/enrich-area-images/index.ts`
+**File:** `src/components/project-detail/PremiumBrochureCard.tsx`
+- Line 153: Change `object-cover` to `object-contain`
 
 ---
 
-## Issue 2: Project "Not Found" Black Screen
+## 2. Developer Logo on Handpicked Cards - Remove White Edges
 
-When clicking some project cards, users see a black screen with "Project not found" and an invisible "Back to Properties" button. The issue is poor styling of the not-found state.
+The FeaturedListings cards use `object-cover` (line 180) for developer logos, which can crop some logos. But `object-contain` with padding would show white edges. The fix: use `object-contain` with `p-0.5` instead of no padding, and keep the white background -- this ensures the logo fits fully with minimal white space.
 
-**Fix in `src/pages/ProjectDetail.tsx` (lines 238-248):**
-- Add the JBJ monogram/logo for branding
-- Change text to white/gold for visibility on dark backgrounds
-- Style the "Back to Properties" button with the gold CTA styling
-- Add padding-top to avoid header overlap
+**File:** `src/components/home/FeaturedListings.tsx`
+- Line 180: Change `object-cover` to `object-contain p-1`
 
 ---
 
-## Issue 3: "...more" Link Styling on Project Cards
+## 3. Developer Logo in DeveloperInfoCard - Remove White Edges
 
-In `FeaturedListings.tsx` (line 269-274), the "More" link is orange with an arrow. User wants it in gold with no arrow and no underline.
+The developer info section on project detail pages uses `object-contain p-2` (line 69). Reduce padding to `p-1` so the logo fills more of the container.
 
-**Fix in `src/components/home/FeaturedListings.tsx` (lines 269-274):**
-- Change `text-orange-500` to `text-gold`
-- Remove the arrow icon
-- Add `no-underline` styling
-
-Also fix in `src/components/ProjectCard.tsx` (lines 346-352):
-- Change `text-black` to `text-gold`
-- Remove `ArrowUpRight` icon
-- Remove underline
+**File:** `src/components/project-detail/DeveloperInfoCard.tsx`
+- Line 69: Change `p-2` to `p-1`
 
 ---
 
-## Issue 4: Developer Logo Gold Border on Handpicked Cards
+## 4. "...more" Link Styling
 
-User wants a thin gold border around developer logos on the photo overlay in FeaturedListings cards.
-
-**Fix in `src/components/home/FeaturedListings.tsx` (lines 175-185):**
-- Add `border-2 border-gold` to the logo container
-- Use `object-cover` instead of `object-fill` to eliminate white edges inside the logo container
-
-Also fix globally in `src/components/ProjectCard.tsx` (line 197):
-- Already has `border-2 border-gold` -- verify `object-cover` is used
+The "more" link in FeaturedListings (line 271) is already gold and has no arrow. The ProjectCard "...more" (line 348) is also gold. Both look correct from the last fix. No additional changes needed here.
 
 ---
 
-## Issue 5: Developer Marquee Spacing
+## 5. Developer Marquee Spacing
 
-Some logos still touch each other or have inconsistent sizes.
+Logos currently use `px-4 md:px-6 lg:px-8` with `max-h-[32px] md:max-h-[40px] lg:max-h-[44px]` and `max-w-[120px] md:max-w-[140px]`. Some logos still touch because the container `min-w` values are smaller than the spacing. Fix by:
+- Adding a `gap` via the container div instead of padding on individual items
+- Setting all logos to a strict uniform max dimensions
 
-**Fix in `src/components/DeveloperPartnersMarquee.tsx`:**
-- Reduce `px-6 md:px-10 lg:px-12` to `px-4 md:px-6 lg:px-8` for tighter but uniform spacing
-- Set a fixed max-height for all logos: `max-h-[32px] md:max-h-[40px] lg:max-h-[44px]`
-- Add `max-w-[120px] md:max-w-[140px]` to constrain oversized logos
-
----
-
-## Issue 6: Brochure Section Fixes
-
-Three issues:
-1. JBJ logo in brochure is cropped inside circle -- needs `object-contain` and proper sizing
-2. Brochure image should be more visible (reduce dark overlay)
-3. Remove "Request Brochure" button from the left column, keep only "Unlock Brochure" under the brochure card
-
-**Fix in `src/components/project-detail/PremiumBrochureCard.tsx`:**
-- Line 149: Change logo container to use `object-contain` with proper padding (already has it -- verify `p-1.5` is adequate, increase to `p-1`)
-- Line 130: Reduce dark overlay opacity from `from-black via-black/60` to `from-black/80 via-black/40`
-
-**Fix in `src/components/project-detail/ProjectDetailLayout.tsx` (lines 1013-1022):**
-- Remove the "Request Brochure" / "Download Brochure" button from the left column description area
+**File:** `src/components/DeveloperPartnersMarquee.tsx`
+- Line 77: Increase horizontal padding slightly to `px-5 md:px-7 lg:px-9`
+- Line 81: Standardize container: `h-10 md:h-12 lg:h-14 w-[120px] md:w-[150px] lg:w-[170px]` (fixed width instead of min-width, ensuring uniform sizing)
+- Line 86: Keep max constraints but ensure consistent logo sizing with `max-h-[28px] md:max-h-[36px] lg:max-h-[40px]` (slightly reduced to prevent touching)
 
 ---
 
-## Issue 7: Area Card Routing Verification
+## 6. Project "Not Found" Page Visibility
 
-All area cards already route to `/area/{slug}` via `<Link to={/area/${area.slug}}>`. The `AreaDetail` page exists and renders for any valid slug. Areas with no data show a redirect to `/areas`. This routing is working correctly -- no code change needed, just ensuring all 183 areas have content (images + descriptions) so they render properly.
+The current not-found state (lines 238-252) now uses `bg-premium-bg` which is the light champagne background. The text uses `text-foreground` (dark) and the button uses `variant="dark"`. This should already be visible. However, the user reported a "full black screen" -- this might be the old cached version. Let me verify the current styling is correct and add more visual prominence:
 
----
-
-## Issue 8: Search Bar Fixed on Scroll
-
-The area detail hero search bar scrolls away. User wants it sticky/fixed.
-
-**Fix in `src/components/area-detail/AreaHeroSection.tsx`:**
-- Extract the search bar into its own sticky component that becomes fixed at the top when scrolled past
-- Use `position: sticky` with `top: 80px` (below header) and appropriate z-index
+**File:** `src/pages/ProjectDetail.tsx`
+- Ensure the not-found section has high-contrast styling with a gold-bordered card container
+- Make the "Back to Properties" button use gold styling (`variant="primary"`)
 
 ---
 
-## Summary
+## 7. Search Bars Already Sticky
 
-| # | Issue | Files | Type |
-|---|-------|-------|------|
-| 1 | 95 areas missing images | enrich-area-images edge function | Edge function + invoke |
-| 2 | Project not found black screen | ProjectDetail.tsx | UI fix |
-| 3 | "more" link styling | FeaturedListings.tsx, ProjectCard.tsx | Style fix |
-| 4 | Developer logo gold border | FeaturedListings.tsx, ProjectCard.tsx | Style fix |
-| 5 | Marquee spacing | DeveloperPartnersMarquee.tsx | Style fix |
-| 6 | Brochure fixes | PremiumBrochureCard.tsx, ProjectDetailLayout.tsx | UI fix |
-| 7 | Area routing | No change needed | Verified |
-| 8 | Sticky search bar | AreaHeroSection.tsx | New behavior |
+Verified that:
+- **Properties page:** Already sticky (`sticky top-14 sm:top-16 md:top-20 lg:top-[72px] z-40`)
+- **Developers page:** Already sticky (`sticky top-24 lg:top-20 z-40`)  
+- **Area detail:** Already has `AreaStickySearchBar` component with IntersectionObserver
+
+No changes needed for stickiness.
+
+---
+
+## 8. Project Routing
+
+All project cards link to `/project/${project.slug}`. The `useProject` hook queries the `projects` table by slug. If not found locally, the `useReellyProjectBySlug` fallback is tried. Projects from the Handpicked section come from the local DB so they should always resolve. If a project shows "not found", it means neither the local DB nor Reelly API has it.
+
+The "Keturah Reserve" project exists in the DB with slug `keturah-reserve-mag-16`. It should route correctly. No code change needed -- routing works by design.
+
+---
+
+## Summary of Changes
+
+| File | Change |
+|------|--------|
+| `PremiumBrochureCard.tsx` (line 153) | `object-cover` to `object-contain` for JBJ logo |
+| `FeaturedListings.tsx` (line 180) | `object-cover` to `object-contain p-1` for dev logos |
+| `DeveloperInfoCard.tsx` (line 69) | `p-2` to `p-1` for dev logo padding |
+| `DeveloperPartnersMarquee.tsx` (lines 77, 81, 86) | Uniform spacing and sizing for marquee logos |
+| `ProjectDetail.tsx` (lines 238-252) | Enhanced not-found state with gold button styling |
 
