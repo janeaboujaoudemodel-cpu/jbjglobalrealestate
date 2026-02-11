@@ -65,7 +65,7 @@ const TestimonialsSection = () => {
   const currentTestimonial = testimonials[currentIndex];
 
   return (
-    <section className="py-12 md:py-16 bg-black">
+    <section className="pb-12 md:pb-16 bg-black">
       <div className="jj-layer-2">
         {/* Section Header */}
         <div className="text-center mb-10">
