@@ -472,7 +472,7 @@ export default function ProjectDetailLayout({
         {/* Sold Out Badge - Top Right */}
         {(project.status_label?.toLowerCase().includes('sold') || 
           project.availability_status?.toLowerCase().includes('sold')) && (
-          <div className="absolute top-28 right-4 md:right-8 z-30">
+          <div className="absolute top-36 right-4 md:right-8 z-30">
             <div className="bg-red-600 text-white px-6 py-3 rounded-lg text-lg font-bold uppercase shadow-2xl border-2 border-red-400 animate-pulse">
               SOLD OUT
             </div>
