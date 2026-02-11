@@ -216,15 +216,16 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 )}
               </div>
               <div className="flex flex-col items-end gap-2 shrink-0">
-                {/* "Select your mode" label */}
-               <p className="text-[10px] text-gold font-semibold uppercase tracking-wider">
-                  {t('account.selectYourMode', 'Select your mode')}
-                </p>
+                {/* Mode selector card */}
                 <div 
+                  className="flex flex-col items-center gap-1.5 px-3 py-2 rounded-lg border border-gold/30 bg-gradient-to-br from-[#FDFBF7]/10 via-[#F5F0E6]/5 to-[#EDE4D3]/10"
                   onClick={(e) => e.stopPropagation()} 
                   onPointerDown={(e) => e.stopPropagation()}
                   onMouseDown={(e) => e.stopPropagation()}
                 >
+                  <p className="text-[10px] text-gold font-semibold uppercase tracking-wider">
+                    {t('account.selectYourMode', 'Select your mode')}
+                  </p>
                   <ModeSwitcher variant="header" />
                 </div>
                 {/* Edit Profile with more spacing below mode switcher */}
