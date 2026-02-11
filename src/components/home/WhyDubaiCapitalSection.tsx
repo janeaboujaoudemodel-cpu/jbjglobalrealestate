@@ -4,12 +4,12 @@ import { T } from "@/components/ui/T";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
 // Use URL references instead of static imports to avoid blocking the bundle
-const burjAlArabVideo = new URL("@/assets/videos/why-dubai-burj-al-arab.mp4", import.meta.url).href;
+const downtownDubaiVideo = new URL("@/assets/videos/why-dubai-downtown-burj-khalifa.mp4", import.meta.url).href;
 const burjKhalifaVideo = new URL("@/assets/videos/burj-khalifa-day-to-night.mp4", import.meta.url).href;
 const atlantisPalmVideo = new URL("@/assets/videos/why-dubai-atlantis-palm.mp4", import.meta.url).href;
 
 const scenes = [
-  { src: burjAlArabVideo },
+  { src: downtownDubaiVideo },
   { src: burjKhalifaVideo },
   { src: atlantisPalmVideo },
 ];
@@ -53,80 +53,81 @@ export default function WhyDubaiCapitalSection() {
           >
             <source src={scenes[currentScene].src} type="video/mp4" />
           </video>
-          {/* Subtle gradient overlay - less intrusive */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+          {/* Refined gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         </motion.div>
       </AnimatePresence>
 
       {/* Content overlay - compact and premium */}
       <div className="relative z-10 h-full flex items-center">
-        <div className="px-6 md:px-12 lg:px-16 max-w-2xl">
+        <div className="px-6 md:px-12 lg:px-16 max-w-xl">
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
           >
-            {/* Premium badge without Globe icon */}
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold/40 bg-black/40 backdrop-blur-sm text-[10px] uppercase tracking-[0.2em] font-semibold text-gold">
+            {/* Premium badge */}
+            <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-gold/30 bg-black/50 backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] font-semibold text-gold/90">
               <T>Global Investment Hub</T>
             </span>
 
             <h2
-              className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight"
+              className="mt-3 text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight"
               style={{ 
                 fontFamily: "Poppins, sans-serif",
-                textShadow: '0 2px 8px rgba(0,0,0,0.6)'
+                textShadow: '0 2px 8px rgba(0,0,0,0.5)'
               }}
             >
               <T>Why Dubai Became the Capital of</T>{" "}
               <span className="text-gold"><T>Global Investors</T></span>
             </h2>
 
-            <p className="mt-3 text-sm md:text-base text-white/75 max-w-md leading-relaxed">
+            <p className="mt-2.5 text-xs md:text-sm text-white/70 max-w-sm leading-relaxed">
               <T>Strategic location, world-class infrastructure, and long-term government execution make Dubai the most investable city in the region.</T>
             </p>
 
-            {/* Premium Stats Cards - Glass morphism with gold glow */}
-            <div className="mt-6 grid grid-cols-4 gap-2 max-w-md">
+            {/* Premium Stats Cards - refined glass morphism */}
+            <div className="mt-5 grid grid-cols-4 gap-1.5 max-w-sm">
               {stats.map((s, index) => (
                 <motion.div
                   key={s.label}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 8 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="group relative rounded-xl overflow-hidden"
+                  transition={{ delay: index * 0.08 }}
+                  className="group relative rounded-lg overflow-hidden"
                 >
                   {/* Gradient border */}
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-gold/40 via-gold/20 to-gold/40 p-[1px]">
-                    <div className="h-full w-full rounded-xl bg-black/60 backdrop-blur-md" />
+                  <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-gold/30 via-gold/15 to-gold/30 p-[1px]">
+                    <div className="h-full w-full rounded-lg bg-black/70 backdrop-blur-md" />
                   </div>
                   
                   {/* Content */}
-                  <div className="relative px-3 py-3 text-center">
+                  <div className="relative px-2 py-2.5 text-center">
                     <div 
-                      className="text-xl md:text-2xl lg:text-3xl font-bold text-gold leading-none"
-                      style={{ textShadow: '0 0 20px rgba(200,167,102,0.5)' }}
+                      className="text-lg md:text-xl font-bold text-gold leading-none"
+                      style={{ textShadow: '0 0 16px rgba(200,167,102,0.4)' }}
                     >
                       {s.value}
                     </div>
-                    <div className="mt-1 text-[9px] md:text-[10px] uppercase tracking-wider text-white/70 font-medium">
+                    <div className="mt-0.5 text-[8px] md:text-[9px] uppercase tracking-wider text-white/60 font-medium">
                       <T>{s.label}</T>
                     </div>
                   </div>
                   
                   {/* Hover glow */}
                   <div 
-                    className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                    style={{ boxShadow: '0 0 30px rgba(200,167,102,0.4)' }} 
+                    className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                    style={{ boxShadow: '0 0 24px rgba(200,167,102,0.3)' }} 
                   />
                 </motion.div>
               ))}
             </div>
 
-            {/* CTA Button - Smaller and more premium */}
-            <div className="mt-6">
+            {/* CTA Button */}
+            <div className="mt-5">
               <PremiumHeroButton href="/guides/investment" size="default">
                 <T>Explore Investments</T>
               </PremiumHeroButton>
