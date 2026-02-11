@@ -17,16 +17,16 @@
 export const BRAND_LOCK = Object.freeze({
   COMPANY_NAME: 'JBJ GLOBAL REAL ESTATE',
   // LOCKED FOUNDER NAME - English (use for ALL English UI/pages)
-  FOUNDER_NAME: 'Jane bou Jaoude',
+  FOUNDER_NAME: 'Jane Bou Jaoude',
   // LOCKED FOUNDER NAME - Arabic (use for ALL Arabic UI/pages)
   FOUNDER_NAME_ARABIC: 'جاين بو جودة',
-  FOUNDER_NAME_BILINGUAL: 'Jane bou Jaoude (جاين بو جودة)',
+  FOUNDER_NAME_BILINGUAL: 'Jane Bou Jaoude (جاين بو جودة)',
   // LOCKED FOUNDER TITLE - English
   FOUNDER_TITLE: 'Founder & CEO',
   FOUNDER_TITLE_FULL: 'Founder & CEO JBJ Global Real Estate',
   // LOCKED FOUNDER TITLE - Arabic (FEMININE form with full diacritics)
   FOUNDER_TITLE_ARABIC: 'ٱلْمُؤَسِّسَةُ وَٱلرَّئِيسَةُ ٱلتَّنْفِيذِيَّةُ',
-  FOUNDER_FULL_TITLE: 'Jane bou Jaoude Founder & CEO JBJ Global Real Estate',
+  FOUNDER_FULL_TITLE: 'Jane Bou Jaoude Founder & CEO JBJ Global Real Estate',
   CORE_SERVICES: 'BUY · SELL · RENT',
   DOMAIN: 'JBJ.ae',
   PRIMARY_EMAIL: 'contact@JBJ.ae',

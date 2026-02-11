@@ -1,7 +1,7 @@
 // Russian translations (Русский)
 export const ru: Record<string, string> = {
   // LOCKED FOUNDER IDENTITY
-  'founder.name': 'Jane bou Jaoude',
+  'founder.name': 'Jane Bou Jaoude',
   'founder.title': 'Основатель и CEO',
   'founder.titleShort': 'Основатель и CEO',
   'founder.company': 'JBJ Global Real Estate',

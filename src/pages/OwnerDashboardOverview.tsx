@@ -463,7 +463,7 @@ export default function OwnerDashboardOverview() {
           </h1>
         </div>
         <p className="text-zinc-400 mt-1 ml-4 text-sm md:text-base">
-          Welcome back, Jane bou Jaoude — Your integrated CRM dashboard
+          Welcome back, Jane Bou Jaoude — Your integrated CRM dashboard
         </p>
       </div>
 

@@ -191,7 +191,7 @@ export default function OwnerCommSettings() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-black">Communication Settings</h1>
-                <p className="text-zinc-500 text-sm">Jane bou Jaoude — Manage channels, AI behavior, and integrations</p>
+                <p className="text-zinc-500 text-sm">Jane Bou Jaoude — Manage channels, AI behavior, and integrations</p>
               </div>
             </div>
           </motion.div>

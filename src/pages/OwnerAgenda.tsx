@@ -206,7 +206,7 @@ export default function OwnerAgenda() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-black">Daily Agenda</h1>
-                  <p className="text-zinc-500 text-sm">Jane bou Jaoude — {format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
+                  <p className="text-zinc-500 text-sm">Jane Bou Jaoude — {format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
                 </div>
               </div>
               

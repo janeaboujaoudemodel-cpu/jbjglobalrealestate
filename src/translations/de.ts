@@ -1,7 +1,7 @@
 // German translations (Deutsch)
 export const de: Record<string, string> = {
   // LOCKED FOUNDER IDENTITY
-  'founder.name': 'Jane bou Jaoude',
+  'founder.name': 'Jane Bou Jaoude',
   'founder.title': 'Gründerin & CEO',
   'founder.titleShort': 'Gründerin & CEO',
   'founder.company': 'JBJ Global Real Estate',
@@ -144,7 +144,7 @@ export const de: Record<string, string> = {
   'founder.learnMore': 'Mehr Über Die Gründerin Erfahren',
   'founder.pageTitle': 'Gründerin & CEO JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate ist eine gründergeführte Immobilienmaklerfirma, die auf unnachgiebigen Standards, Diskretion und langfristiger Vision aufgebaut ist.',
-  'founder.description2': 'Jane bou Jaoude Gründerin & CEO JBJ Global Real Estate führt mit einer Philosophie, die auf Verantwortlichkeit und Diskretion basiert und Organisationen aufbaut, die auf Beständigkeit ausgelegt sind.',
+  'founder.description2': 'Jane Bou Jaoude Gründerin & CEO JBJ Global Real Estate führt mit einer Philosophie, die auf Verantwortlichkeit und Diskretion basiert und Organisationen aufbaut, die auf Beständigkeit ausgelegt sind.',
   'founder.vision': 'Vision',
   'founder.mission': 'Mission',
   'founder.values': 'Werte',
@@ -205,13 +205,13 @@ export const de: Record<string, string> = {
   'report.exclusive': 'Exklusiver Kostenloser Download',
   'report.title': 'JBJ Global Real Estate',
   'report.edition': 'Neueste Ausgabe 2026',
-  'report.description': 'Ein exklusives Bildungsbuch von Jane bou Jaoude, das den VAE-Immobilienmarkt mit regierungsgestützten Daten und strukturierten Rahmenwerken abdeckt.',
+  'report.description': 'Ein exklusives Bildungsbuch von Jane Bou Jaoude, das den VAE-Immobilienmarkt mit regierungsgestützten Daten und strukturierten Rahmenwerken abdeckt.',
   'report.download': 'Laden Sie Ihr Kostenloses Buch Jetzt Herunter',
   'report.highlight1': 'Marktindikatoren & Transaktionsanalyse',
   'report.highlight2': 'Entwickler-Vergleichsrahmen',
   'report.highlight3': 'Due-Diligence-Checkliste für Investitionen',
   'report.highlight4': 'Community-ROI-Rankings',
-  'report.createdBy': 'Erstellt von Jane bou Jaoude Gründerin & CEO JBJ Global Real Estate',
+  'report.createdBy': 'Erstellt von Jane Bou Jaoude Gründerin & CEO JBJ Global Real Estate',
   'report.exclusiveFor': 'Exklusiv für JBJ Global Real Estate',
   'report.descriptor': 'Immobilienmaklerei | Dubai, VAE',
 

@@ -37,7 +37,7 @@ export const GlobalSEO = () => {
         "description": "Dubai's premier real estate brokerage offering property sales, rentals, and holiday homes services across the UAE.",
         "founder": {
           "@type": "Person",
-          "name": "Jane bou Jaoude",
+          "name": "Jane Bou Jaoude",
           "jobTitle": "Founder & CEO",
           "nationality": { "@type": "Country", "name": "Lebanon" }
         },
@@ -81,7 +81,7 @@ export const GlobalSEO = () => {
       {
         "@context": "https://schema.org",
         "@type": "Person",
-        "name": "Jane bou Jaoude",
+        "name": "Jane Bou Jaoude",
         "alternateName": ["Jane", "Jane Lebanese", "Jane Dubai"],
         "jobTitle": "Founder & CEO",
         "worksFor": {

@@ -215,7 +215,7 @@ export default function OwnerTemplates() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-black">Message Templates</h1>
-                  <p className="text-zinc-500 text-sm">Jane bou Jaoude — Reusable templates for all channels</p>
+                  <p className="text-zinc-500 text-sm">Jane Bou Jaoude — Reusable templates for all channels</p>
                 </div>
               </div>
               

@@ -61,9 +61,9 @@ export const CONTACT_INFO = {
   inquiryFormUrl: 'https://jbj.ae/property-inquiry-form/',
   companyDescriptor: 'JBJ Global Real Estate',
   companyFull: 'JBJ Global Real Estate L.L.C S.O.C.',
-  founder: 'Jane bou Jaoude',
+  founder: 'Jane Bou Jaoude',
   founderArabic: 'جاين بو جودة',
-  founderBilingual: 'Jane bou Jaoude (جاين بو جودة)',
+  founderBilingual: 'Jane Bou Jaoude (جاين بو جودة)',
   domain: 'JBJ.AE',
 };
 
