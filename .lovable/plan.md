@@ -1,34 +1,20 @@
 
 
-## Enhance Digital Business Card: Mobile Consistency and Premium Description
+## Fix YouTube Video Replay
 
-### Changes to `src/pages/DigitalCard.tsx`
+### Problem
+When clicking "Replay" after the video ends, the overlay disappears but the video doesn't restart -- just a black screen remains. The `seekTo` call is missing its required second parameter, and there may be a timing issue between hiding the overlay and restarting playback.
 
-**1. Upgrade the company description (line 363-365)**
+### Root Cause
+The YouTube IFrame API's `seekTo(seconds, allowSeekAhead)` method requires a second boolean parameter set to `true` to perform the seek. Without it, the seek may silently fail. Additionally, the overlay is removed immediately while the player may not yet be playing, causing a brief black flash.
 
-Replace the current single-line description:
-> "A licensed Dubai brokerage delivering investor-led real estate advisory, market intelligence, and end-to-end property execution across the UAE."
+### Fix in `src/components/YouTubeVideoPlayer.tsx`
 
-With a richer, premium paragraph that highlights:
-- Licensed RERA brokerage status
-- Core services: Buy, Sell, Rent
-- AI-powered tools and market intelligence
-- End-to-end advisory approach
+**1. Fix `seekTo` call (line 89)**
+- Change `player.seekTo(0)` to `player.seekTo(0, true)` to ensure the seek actually executes
 
-New text:
-> "A RERA-licensed Dubai brokerage powering smarter real estate decisions through AI-driven market intelligence, predictive analytics, and a full suite of 50+ professional tools. We deliver end-to-end advisory across Buy, Sell, and Rent -- from property sourcing and valuation to negotiation and closing -- backed by data, not guesswork."
-
-**2. Ensure mobile UI matches desktop styling**
-
-The current layout already shares the same component for all screen sizes, but a few elements need tightening for visual parity on phones:
-- Action buttons (Call, WhatsApp, Send Email, Share Card, Website) currently use `bg-white` with gold borders -- these are consistent and will remain
-- Ensure the 3-column action grid (Send Email / Share Card / Website) does not collapse or shrink icons on small screens by adjusting gap and padding for `grid-cols-3` on mobile
-- Standardize button text sizes to `text-sm` across all breakpoints (already mostly done, just verify no breakpoint overrides)
-
-No major structural changes needed -- the desktop and mobile already use identical markup. The visual consistency request is mainly about ensuring the champagne card, gold borders, and button colors render identically, which they do. Minor padding tweaks will be applied where mobile gets slightly cramped.
-
-### Files to edit
-| File | Change |
-|------|--------|
-| `src/pages/DigitalCard.tsx` | Rewrite the Professional Intro paragraph (lines 358-366) with premium copy. Minor mobile padding adjustments on action buttons. |
+**2. Reverse the order of operations in `handleReplay` (lines 85-92)**
+- Call `player.seekTo(0, true)` and `player.playVideo()` first
+- Then set `setEnded(false)` to remove the overlay only after playback has been triggered
+- This prevents the user from seeing a black frame between overlay removal and video start
 
