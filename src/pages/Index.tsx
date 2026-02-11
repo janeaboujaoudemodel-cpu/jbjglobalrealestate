@@ -524,7 +524,7 @@ const Index = () => {
       </section>
 
       {/* EXPLORE OUR SERVICES SLIDESHOW - Wrapped in container for consistent sizing */}
-      <section className="py-12 md:py-16 bg-black">
+      <section className="pt-12 md:pt-16 bg-black">
         <div className="jj-layer-2">
           <ExploreServicesCard />
         </div>
