@@ -94,7 +94,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                     isTopTier ? "border-2 border-gold shadow-[0_4px_16px_rgba(200,167,102,0.3)]" : "border-2 border-gold/40"
                   }`}>
                     {developer.logo_url ? (
-                      <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-contain p-1" />
+                      <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-contain" />
                     ) : (
                       <Building2 className={`w-7 h-7 ${isTopTier ? "text-gold" : "text-zinc-500"}`} />
                     )}

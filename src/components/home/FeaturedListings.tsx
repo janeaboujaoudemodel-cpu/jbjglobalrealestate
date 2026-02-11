@@ -177,7 +177,7 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
                   <img
                     src={logoUrl}
                     alt={devName}
-                    className="w-full h-full object-contain p-1"
+                    className="w-full h-full object-contain"
                     loading="lazy"
                     onError={() => setLogoError(true)}
                   />
