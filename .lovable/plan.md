@@ -1,57 +1,31 @@
 
+# Fix: Restore Developer Marquee Champagne Gold Background + Uniform Spacing
 
-# Fix Plan: Enhanced Register Interest Form + Contact Card Hover Reversal
+## What Happened
+The last edit removed the champagne gold background entirely and replaced it with black. The user only wanted the individual frames/borders around each logo removed -- NOT the main section background.
 
-## 1. Enhance the "Register Interest" Form (ConsultationRequestForm)
+## Changes (single file: `src/components/DeveloperPartnersMarquee.tsx`)
 
-**Problem:** The Register Interest form on project detail pages is too wide/stretched and lacks the qualification fields that exist in the "Request a Callback" section (preferred language, preferred time to call, preferred contact method). The user wants more lead qualification and consistent source tracking.
+### A. Restore the champagne gold background layers
+- **Line 113 (section):** Change `bg-black` back to `bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]`
+- **Line 126 (title text):** Change `text-white/70` back to `text-black`
+- **Line 131 (logo strip):** Restore the inner background and subtle top/bottom borders: `bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] border-t border-b border-gold/30`
 
-**File:** `src/components/ConsultationRequestForm.tsx`
+No frames or boxes around individual logos -- logos sit directly on the champagne background without any per-logo container styling.
 
-**Changes:**
-- **Narrower layout:** Add `max-w-lg mx-auto` to the form container to pull it in from the edges
-- **Add qualification fields** from CallToActionSection pattern:
-  - Nationality dropdown (same list as LeadCapturePopup)
-  - Preferred Language dropdown (with flag icons, from `getLanguageList()` -- already imported pattern from CallToActionSection)
-  - Preferred Time to Call (Morning/Afternoon/Evening/Anytime)
-  - Preferred Contact Method (Phone Call/WhatsApp/Email/Video Call)
-  - Budget Range (optional text input)
-  - Purchase Timeline (already exists as "Timeline" -- keep it)
-- **Source tracking:** The form already passes `source` as `project-interest-{projectId}` or `properties-consultation`. Ensure these are saved properly in `crm_leads`. The `captureLead` function via the edge function already handles this.
-- **Update form schema** with zod to include the new optional fields
-- **Update `captureLead` call** to pass nationality and language data
+### B. Fix uniform spacing between logos
+- **Line 81:** Change the logo container from variable widths `w-[100px] md:w-[120px] lg:w-[140px]` to a single consistent width `w-[140px]` across all breakpoints so every logo occupies the same space
+- **Lines 134, 138:** Standardize the gap to a single value `gap-10` (remove the responsive `gap-6 md:gap-8 lg:gap-10`) so spacing between all logos is identical
 
-## 2. Reverse WhatsApp and Call Us Card Hover Logic
+### C. Logos already link to developer pages
+Each logo is already wrapped in a `<Link to={/developer/${developer.slug}}>` -- no changes needed here. Each logo correctly redirects to the developer detail page.
 
-**Problem:** In DirectContactCTA (used globally), WhatsApp and Call Us cards are currently elevated with shadow by default (`shadow-[0_8px_25px_...] -translate-y-1`) and flatten on hover (`hover:shadow-none hover:translate-y-0`). User wants the reverse: flat by default, elevated on hover.
+## Summary
 
-### File A: `src/components/DirectContactCTA.tsx` (lines 130-159)
-
-**WhatsApp card (line 132):** 
-- Current: `shadow-[0_8px_25px_rgba(16,185,129,0.4)] -translate-y-1 hover:border-emerald-500 hover:shadow-none hover:translate-y-0`
-- New: `hover:shadow-[0_8px_25px_rgba(16,185,129,0.4)] hover:-translate-y-1 border-emerald-500/40 hover:border-emerald-500`
-
-**Call Us card (line 148):**
-- Current: `shadow-[0_8px_25px_rgba(59,130,246,0.4)] -translate-y-1 hover:border-blue-500 hover:shadow-none hover:translate-y-0`
-- New: `hover:shadow-[0_8px_25px_rgba(59,130,246,0.4)] hover:-translate-y-1 border-blue-500/40 hover:border-blue-500`
-
-### File B: `src/components/CombinedContactNewsletter.tsx` (lines 21-42)
-
-**WhatsApp card:**
-- Current: `border-emerald-500/40 hover:border-emerald-500` and `hover:shadow-emerald-500/20`
-- New: `border-emerald-500 shadow-lg shadow-emerald-500/20 hover:border-emerald-500/40 hover:shadow-none`
-
-**Call Us card:**
-- Current: `border-blue-500/40 hover:border-blue-500` and `hover:shadow-blue-500/20`
-- New: `border-blue-500 shadow-lg shadow-blue-500/20 hover:border-blue-500/40 hover:shadow-none`
-
----
-
-## Summary of Files to Change
-
-| File | Change |
-|------|--------|
-| `src/components/ConsultationRequestForm.tsx` | Narrower layout; add nationality, language, preferred time, contact method fields; ensure source tracking |
-| `src/components/DirectContactCTA.tsx` | Reverse WhatsApp and Call Us card hover states (flat default, elevated on hover) |
-| `src/components/CombinedContactNewsletter.tsx` | Reverse WhatsApp and Call Us card hover states (highlighted default, flat on hover) |
-
+| Line(s) | Change |
+|---------|--------|
+| 113 | Restore champagne gold gradient on section |
+| 126 | Restore `text-black` on title |
+| 131 | Restore inner gradient background + borders on logo strip |
+| 81 | Uniform logo container width (`w-[140px]`) |
+| 134, 138 | Uniform gap (`gap-10`) |
