@@ -66,6 +66,10 @@ export default function YouTubeVideoPlayer({
           rel: 0,
           modestbranding: 1,
           enablejsapi: 1,
+          iv_load_policy: 3,
+          showinfo: 0,
+          controls: 1,
+          disablekb: 0,
         },
         events: {
           onStateChange: (event: any) => {
@@ -84,12 +88,11 @@ export default function YouTubeVideoPlayer({
 
   const handleReplay = useCallback(() => {
     const player = playerRef.current;
-    if (player?.seekTo) {
-      player.seekTo(0, true);
-      player.playVideo();
+    if (player?.loadVideoById) {
+      player.loadVideoById({ videoId, startSeconds: 0 });
     }
     setEnded(false);
-  }, []);
+  }, [videoId]);
 
   return (
     <div className={`relative w-full ${className}`} style={{ paddingBottom: "56.25%" }} ref={containerRef}>
