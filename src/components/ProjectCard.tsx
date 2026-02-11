@@ -169,9 +169,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   return (
     <div
       className={
-        "group relative overflow-hidden rounded-xl border-2 border-gold/40 transition-all duration-300 flex flex-col " +
+        "group relative overflow-hidden rounded-xl border-2 border-gold transition-all duration-300 flex flex-col " +
         "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
-        "shadow-[0_0_18px_hsl(var(--gold)/0.14),0_18px_55px_hsl(0_0%_0%/0.16)] hover:border-gold/70 " +
+        "shadow-[0_0_18px_hsl(var(--gold)/0.14),0_18px_55px_hsl(0_0%_0%/0.16)] hover:border-gold " +
         "hover:shadow-[0_0_26px_hsl(var(--gold)/0.18),0_26px_75px_hsl(0_0%_0%/0.20)]"
       }
     >
@@ -194,7 +194,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         <div className="aspect-[16/10] overflow-hidden relative">
           {/* Developer Logo Overlay - Top Left */}
           {(project.developer as any)?.logo_url && (
-            <div className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg bg-white border-2 border-gold shadow-[0_4px_16px_rgba(200,167,102,0.3)] flex items-center justify-center overflow-hidden">
+            <div className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg bg-white overflow-hidden flex items-center justify-center">
               <img 
                 src={(project.developer as any).logo_url} 
                 alt={project.developer?.name}
@@ -288,7 +288,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         {/* Content - Premium Hybrid Style */}
         <div className="p-4 flex-1 flex flex-col">
           {/* Project Name - Gold */}
-          <h4 className="text-black text-lg font-bold mb-1 line-clamp-1 hover:text-gold transition-colors">
+          <h4 className="text-gold text-lg font-bold mb-1 line-clamp-1 group-hover:text-black transition-colors">
             {project.name}
           </h4>
           
