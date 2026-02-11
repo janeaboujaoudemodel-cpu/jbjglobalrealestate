@@ -79,7 +79,7 @@ export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
         
         {area.description && (
           <motion.p className="text-zinc-200 text-lg max-w-2xl leading-relaxed mb-6" variants={fadeInUp}>
-            {area.description}
+            {area.description.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')}
           </motion.p>
         )}
 
