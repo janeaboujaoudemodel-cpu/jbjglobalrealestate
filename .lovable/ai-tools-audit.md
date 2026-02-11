@@ -1,6 +1,6 @@
 # 🔒 AI TOOLS AUDIT — JBJ Global Real Estate Platform
 
-**Owner:** Jane bou Jaoude (LOCKED — DO NOT CHANGE SPELLING)  
+**Owner:** Jane Bou Jaoude (LOCKED — DO NOT CHANGE SPELLING)  
 **Audit Date:** 2026-02-07  
 **Auditor:** Lovable AI  
 

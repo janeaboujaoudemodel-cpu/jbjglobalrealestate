@@ -1,3 +1,4 @@
+import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface TProps {
@@ -16,16 +17,24 @@ interface TProps {
  * The text will be automatically translated to the current language
  * using the global translation system with AI fallback.
  */
-export const T = ({ children, as: Tag = 'span', className }: TProps) => {
-  const { translateText } = useLanguage();
-  
-  if (!children || typeof children !== 'string') {
-    return null;
+export const T = React.forwardRef<HTMLSpanElement, TProps>(
+  ({ children, as: Tag = 'span', className }, ref) => {
+    const { translateText } = useLanguage();
+
+    if (!children || typeof children !== 'string') {
+      return null;
+    }
+
+    const translated = translateText(children);
+
+    if (Tag === 'span') {
+      return <span ref={ref} className={className}>{translated}</span>;
+    }
+
+    return <Tag className={className}>{translated}</Tag>;
   }
-  
-  const translated = translateText(children);
-  
-  return <Tag className={className}>{translated}</Tag>;
-};
+);
+
+T.displayName = 'T';
 
 export default T;

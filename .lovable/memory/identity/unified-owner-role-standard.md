@@ -6,7 +6,7 @@ The system implements a strict binary identity model:
 
 1. **Owner**: The sole privileged identity, verified exclusively by an authenticated email match (`auth.email === OWNER_EMAIL`).
    - OWNER_EMAIL: `janeaboujaoudenails@gmail.com`
-   - **Owner Legal Name (LOCKED)**: `Jane bou Jaoude` — This spelling is FINAL. No variants allowed anywhere in UI, DB, prompts, voice, email sender, templates, AI memory, or logs.
+   - **Owner Legal Name (LOCKED)**: `Jane Bou Jaoude` — This spelling is FINAL. No variants allowed anywhere in UI, DB, prompts, voice, email sender, templates, AI memory, or logs.
 2. **Visitor**: Any unauthenticated user (anonymous/no auth token).
 
 ## Blocked State
