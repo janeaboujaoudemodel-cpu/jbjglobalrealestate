@@ -1,7 +1,7 @@
 // French translations (Français)
 export const fr = {
   // LOCKED FOUNDER IDENTITY (DO NOT MODIFY)
-  'founder.name': 'Jane Bou Jaoude',
+  'founder.name': 'Jane bou Jaoude',
   'founder.title': 'Fondatrice et PDG',
   'founder.titleShort': 'Fondatrice et PDG',
   'founder.company': 'JBJ Global Real Estate',
@@ -149,7 +149,7 @@ export const fr = {
   'founder.learnMore': 'En Savoir Plus Sur Notre Fondateur',
   'founder.pageTitle': 'Fondatrice et PDG JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate est une agence immobilière dirigée par le fondateur, construite sur des normes inébranlables, la discrétion et une vision à long terme.',
-  'founder.description2': 'Jane Bou Jaoude Fondatrice et PDG JBJ Global Real Estate dirige avec une philosophie ancrée dans la responsabilité et la discrétion, construisant des organisations conçues pour durer plutôt que simplement s\'étendre.',
+  'founder.description2': 'Jane bou Jaoude Fondatrice et PDG JBJ Global Real Estate dirige avec une philosophie ancrée dans la responsabilité et la discrétion, construisant des organisations conçues pour durer plutôt que simplement s\'étendre.',
   'founder.vision': 'Vision',
   'founder.mission': 'Mission',
   'founder.values': 'Valeurs',
@@ -211,13 +211,13 @@ export const fr = {
   'report.exclusive': 'Téléchargement Exclusif Gratuit',
   'report.title': 'JBJ Global Real Estate',
   'report.edition': 'Dernière Édition 2026',
-  'report.description': 'Un livre éducatif exclusif rédigé par Jane Bou Jaoude, couvrant le marché immobilier des EAU avec des données gouvernementales et des cadres structurés.',
+  'report.description': 'Un livre éducatif exclusif rédigé par Jane bou Jaoude, couvrant le marché immobilier des EAU avec des données gouvernementales et des cadres structurés.',
   'report.download': 'Téléchargez Votre Livre Gratuit Maintenant',
   'report.highlight1': 'Indicateurs de marché et analyse des transactions',
   'report.highlight2': 'Cadre de comparaison des promoteurs',
   'report.highlight3': 'Liste de vérification de diligence raisonnable d\'investissement',
   'report.highlight4': 'Classements ROI par communauté',
-  'report.createdBy': 'Créé par Jane Bou Jaoude Fondatrice et PDG JBJ Global Real Estate',
+  'report.createdBy': 'Créé par Jane bou Jaoude Fondatrice et PDG JBJ Global Real Estate',
   'report.exclusiveFor': 'Exclusif à JBJ Global Real Estate',
   'report.poweredBy': 'Agence Immobilière | Dubai, EAU',
   

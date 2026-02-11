@@ -1,7 +1,7 @@
 // Persian/Farsi translations (فارسی) - RTL Language
 export const fa: Record<string, string> = {
   // LOCKED FOUNDER IDENTITY (DO NOT MODIFY)
-  'founder.name': 'Jane Bou Jaoude',
+  'founder.name': 'Jane bou Jaoude',
   'founder.title': 'بنیانگذار و مدیرعامل',
   'founder.titleShort': 'بنیانگذار و مدیرعامل',
   'founder.company': 'JBJ Global Real Estate',
