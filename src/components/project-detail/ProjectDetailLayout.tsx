@@ -1010,16 +1010,7 @@ export default function ProjectDetailLayout({
                       <Star className="w-4 h-4 text-gold" /> Payment plan breakdown
                     </li>
                   </ul>
-                  <Button 
-                    variant="primary" 
-                    onClick={() => brochurePrimary 
-                      ? handleDocumentDownload("brochure", brochurePrimary?.url)
-                      : setLeadCaptureOpen(true)
-                    }
-                  >
-                    <Download className="w-4 h-4" />
-                    {brochurePrimary ? 'Download Brochure' : 'Request Brochure'}
-                  </Button>
+                  {/* Request Brochure button removed - only Unlock Brochure on the card */}
                 </div>
                 {/* Right: Brochure card */}
                 <div className="flex justify-center">

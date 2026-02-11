@@ -345,9 +345,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Description with ...more link - Shorter */}
           <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-            <span className="text-black font-bold hover:text-black/70 cursor-pointer ml-1 inline-flex items-center gap-1">
+            <span className="text-gold font-bold hover:text-gold/70 cursor-pointer ml-1">
               ...more
-              <ArrowUpRight className="w-3.5 h-3.5" />
             </span>
           </p>
         </div>

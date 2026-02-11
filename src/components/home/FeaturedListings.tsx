@@ -173,11 +173,11 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
             {/* Developer Logo - Top Left */}
             {logoUrl && !logoError ? (
               <div className="absolute top-3 left-3 z-10">
-                <div className="w-12 h-12 rounded-lg shadow-lg overflow-hidden bg-white">
+              <div className="w-12 h-12 rounded-lg shadow-lg overflow-hidden bg-white border-2 border-gold">
                   <img
                     src={logoUrl}
                     alt={devName}
-                    className="w-full h-full object-fill"
+                    className="w-full h-full object-cover"
                     loading="lazy"
                     onError={() => setLogoError(true)}
                   />
@@ -238,8 +238,8 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
             {(project as any).description && (
               <p className="text-zinc-600 text-xs line-clamp-2 mb-2">
                 {String((project as any).description).replace(/<[^>]*>/g, '').slice(0, 120)}
-                <span className="text-black font-medium ml-1 inline-flex items-center gap-0.5">
-                  ...more <ArrowUpRight className="w-3 h-3 inline" />
+                <span className="text-gold font-medium ml-1">
+                  ...more
                 </span>
               </p>
             )}
@@ -268,9 +268,9 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
                 )}
                 <Link 
                   to={`/project/${project.slug}`}
-                  className="text-orange-500 text-[10px] font-bold uppercase hover:text-orange-400 transition-colors"
+                  className="text-gold text-[10px] font-bold uppercase hover:text-gold/70 transition-colors no-underline"
                 >
-                  More →
+                  More
                 </Link>
               </div>
             </div>

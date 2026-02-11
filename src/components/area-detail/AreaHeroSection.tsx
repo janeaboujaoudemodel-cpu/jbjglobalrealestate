@@ -1,11 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MapPin, ChevronRight, TrendingUp, Building2, Users, Search, BarChart3, Flame } from "lucide-react";
+import { MapPin, ChevronRight, TrendingUp, Building2, Users, BarChart3, Flame } from "lucide-react";
 import { scrollToId } from "@/lib/scroll";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import type { Area } from "@/hooks/useAreas";
+import { AreaStickySearchBar } from "./AreaStickySearchBar";
 
 interface AreaHeroSectionProps {
   area: Area & { developer_count?: number; project_count_sale?: number; avg_price_sqft?: number; hero_image_url?: string; is_high_demand?: boolean };
@@ -22,18 +20,7 @@ const staggerContainer = {
 };
 
 export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
   const heroImage = area.hero_image_url || area.image_url;
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/properties?area=${area.slug}&q=${encodeURIComponent(searchQuery)}`);
-    } else {
-      navigate(`/properties?area=${area.slug}`);
-    }
-  };
 
   return (
     <section className="relative h-screen flex items-end overflow-hidden">
@@ -96,25 +83,10 @@ export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
           </motion.p>
         )}
 
-        {/* Search Bar */}
-        <motion.form onSubmit={handleSearch} className="max-w-xl mb-8" variants={fadeInUp}>
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={`Search properties in ${area.name}...`}
-              className="pl-12 pr-32 py-6 bg-white/95 backdrop-blur-sm border-0 text-black text-base rounded-xl shadow-2xl"
-            />
-            <Button
-              type="submit"
-              variant="dark"
-              className="absolute right-2 top-1/2 -translate-y-1/2 px-6"
-            >
-              Search
-            </Button>
-          </div>
-        </motion.form>
+        {/* Sticky Search Bar */}
+        <motion.div variants={fadeInUp}>
+          <AreaStickySearchBar areaName={area.name} areaSlug={area.slug} />
+        </motion.div>
 
         {/* Stats Bar */}
         <motion.div className="flex flex-wrap gap-4 md:gap-6" variants={fadeInUp}>
