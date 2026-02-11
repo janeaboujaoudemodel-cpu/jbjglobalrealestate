@@ -24,30 +24,20 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
       <div
         ref={ref}
         className={cn(
-          // Fixed positioning with horizontal margins to show rounded corners
-          "fixed z-[9999] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] rounded-xl overflow-hidden",
+          "fixed z-[9999] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] rounded-xl overflow-hidden border-2 border-gold/40",
           className
         )}
         style={{
-          // Position just below the header with horizontal padding
           top: 'var(--header-height, 128px)',
           left: '24px',
           right: '24px',
-          // Prevent the panel from touching the bottom of the viewport on smaller screens
-          // Unless noScroll is true - then no max-height so all content is visible
           maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
           overflowY: 'auto' as const,
-          // Solid gradient background - prevents any transparency issues
-          background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
-          // Merge any custom styles passed in
+          background: '#1a1815',
           ...style,
         }}
       >
-        {/* Rounded gold border */}
-        <div className="absolute inset-0 rounded-xl border-2 border-gold/40 pointer-events-none" />
         {children}
-        {/* Bottom gold accent (kept) */}
-        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
       </div>
     );
   }
