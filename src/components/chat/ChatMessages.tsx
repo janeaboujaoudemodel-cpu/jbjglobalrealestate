@@ -59,7 +59,7 @@ const ChatMessages = ({
 
   return (
     <>
-      <ScrollArea className="flex-1 p-4 bg-[#0E0E0E]" ref={scrollRef}>
+      <ScrollArea className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]" ref={scrollRef}>
         <div className="space-y-4">
           {messages.map((message) => (
             <motion.div
@@ -149,7 +149,7 @@ const ChatMessages = ({
       </ScrollArea>
 
       {/* Action Buttons - Premium styling */}
-      <div className="px-4 py-3 border-t border-gold/20 bg-[#0A0A0A] flex gap-2">
+      <div className="px-4 py-3 border-t border-gold/30 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex gap-2">
         {isExistingUser && (
           <a
             href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userFirstName}. I was chatting with the AI about ${serviceName}.`)}`}
@@ -171,7 +171,7 @@ const ChatMessages = ({
       </div>
 
       {/* Input - Premium dark styling */}
-      <div className="p-4 border-t border-gold/30 bg-[#0A0A0A]">
+      <div className="p-4 border-t border-gold/30 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         <div className="flex gap-3">
           <Input
             ref={inputRef}
@@ -179,7 +179,7 @@ const ChatMessages = ({
             onChange={(e) => onInputChange(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
-            className="flex-1 bg-zinc-900 border-gold/30 text-white placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30 h-12 rounded-xl text-sm"
+            className="flex-1 bg-white/80 border-gold/30 text-black placeholder:text-black/40 focus:border-gold focus:ring-gold/30 h-12 rounded-xl text-sm"
             disabled={isLoading}
           />
           <Button

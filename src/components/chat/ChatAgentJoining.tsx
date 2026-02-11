@@ -61,7 +61,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-zinc-300 text-sm"
+                className="text-black/70 text-sm"
               >
                 <T>Connecting you to one of our realty members...</T>
               </motion.p>
@@ -101,7 +101,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
           {/* Agent Photo */}
           <div className="relative">
             <div className={`w-24 h-24 rounded-full overflow-hidden border-4 ${
-              stage === 'connecting' ? 'border-zinc-600' : 'border-gold'
+              stage === 'connecting' ? 'border-gold/30' : 'border-gold'
             } transition-colors duration-500 shadow-xl`}>
               <img 
                 src={agent.photo} 
@@ -112,10 +112,10 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
             
             {/* Status Indicator */}
             <div className={`absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center ${
-              stage === 'connecting' ? 'bg-zinc-700' : 'bg-emerald-500'
-            } transition-colors duration-500 border-2 border-zinc-900`}>
+              stage === 'connecting' ? 'bg-gold/20' : 'bg-emerald-500'
+            } transition-colors duration-500 border-2 border-gold/40`}>
               {stage === 'connecting' ? (
-                <Loader2 className="w-4 h-4 text-zinc-300 animate-spin" />
+                <Loader2 className="w-4 h-4 text-black/60 animate-spin" />
               ) : (
                 <Check className="w-4 h-4 text-white" />
               )}
@@ -129,7 +129,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
             transition={{ delay: 0.8 }}
             className="text-center mt-4"
           >
-            <h4 className="text-white font-semibold text-lg">{agent.fullName}</h4>
+            <h4 className="text-black font-semibold text-lg">{agent.fullName}</h4>
             <p className="text-gold text-sm">{agent.title}</p>
           </motion.div>
         </motion.div>
@@ -141,7 +141,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
             animate={{ opacity: 1, y: 0 }}
             className="mt-8 flex items-center gap-2"
           >
-            <span className="text-zinc-400 text-sm"><T>{`${agent.name} is typing`}</T></span>
+            <span className="text-black/60 text-sm"><T>{`${agent.name} is typing`}</T></span>
             <div className="flex gap-1">
               <motion.span
                 animate={{ opacity: [0.4, 1, 0.4] }}
