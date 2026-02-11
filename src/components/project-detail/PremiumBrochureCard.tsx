@@ -150,7 +150,7 @@ const PremiumBrochureCard = ({
                 <img 
                   src={jbjMonogramNobuffer} 
                   alt="JBJ" 
-                  className="w-full h-full object-contain p-1"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <p 

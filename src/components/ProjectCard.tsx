@@ -198,7 +198,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               <img 
                 src={(project.developer as any).logo_url} 
                 alt={project.developer?.name}
-                className="w-full h-full object-contain p-1"
+                className="w-full h-full object-contain"
               />
             </div>
           )}
