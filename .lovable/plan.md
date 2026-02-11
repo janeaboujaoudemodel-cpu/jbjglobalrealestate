@@ -1,27 +1,35 @@
 
 
-# Fix: Last 2 Files with Wrong Founder Name Spelling
+# Remaining Tasks: Final Cleanup
 
-## Current Status
-- The app is **working** -- no crash, no LanguageProvider error
-- The founder name "Jane Bou Jaoude" (capital B) is correct across all `src/` files
-- Only **2 edge function files** still have the old lowercase "bou" spelling
+## Status of Previous Tasks
+- Founder name fix (capital B): DONE -- 0 instances of "Jane bou Jaoude" remain in source code
+- LanguageProvider crash: DONE -- app is running, no errors
 
-## Files to Fix
+## Remaining Task 1: Fix Memory/Audit Files (still have lowercase "bou")
 
-### 1. `supabase/functions/clone-jane-voice/index.ts`
-- Line 26: Comment `Jane bou Jaoude` -> `Jane Bou Jaoude`
-- Line 28: String `Jane bou Jaoude - JBJ Global` -> `Jane Bou Jaoude - JBJ Global`
-- Line 29: String `Jane bou Jaoude - refined...` -> `Jane Bou Jaoude - refined...`
+These internal documentation files were missed and still reference the wrong spelling:
 
-### 2. `supabase/functions/owner-voice-generate/index.ts`
-- Line 56: `"Jane bou Jaoude"` -> `"Jane Bou Jaoude"`
+| File | Line | Current (wrong) | Fix |
+|------|------|-----------------|-----|
+| `.lovable/memory/identity/unified-owner-role-standard.md` | 9 | `Jane bou Jaoude` | `Jane Bou Jaoude` |
+| `.lovable/ai-tools-audit.md` | 3 | `Jane bou Jaoude` | `Jane Bou Jaoude` |
+
+## Remaining Task 2: Fix Console Warning in JBJPodcastSection
+
+The console shows: `Warning: Function components cannot be given refs. Check the render method of JBJPodcastSection.`
+
+The `T` component (auto-translate text wrapper) is a plain function component. Somewhere in `JBJPodcastSection.tsx`, a ref is being passed to `<T>`, which React cannot handle without `React.forwardRef`.
+
+**Fix:** Wrap the `T` component export with `React.forwardRef` so it can accept refs without warnings.
 
 ## Execution
-Single batch: Fix both files and redeploy the edge functions.
+
+Single batch:
+1. Update 2 memory/audit files -- spelling fix
+2. Update `src/components/ui/T.tsx` -- add `forwardRef` support
 
 ## Technical Details
-- Case-sensitive replace: `Jane bou Jaoude` to `Jane Bou Jaoude`
-- Both edge functions will be redeployed automatically after changes
-- No other files remain with the incorrect spelling
+
+For `T.tsx`, the fix wraps the component with `React.forwardRef` to forward refs to the underlying HTML element, eliminating the console warning.
 
