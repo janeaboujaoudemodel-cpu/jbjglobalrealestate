@@ -1,65 +1,55 @@
 
 
-# Fix Developer Cards: Remove Fake Photos, Fix Logo Borders
+# Auto-Find Real Developer Images from the Web
 
-## Problem Summary
-1. **121 developers** are using the same fake Dubai Downtown unsplash photo as their feature image -- this looks unprofessional and misleading
-2. **Logo gold border** on external/directory cards should be removed (gold border only on detail pages)
-3. **Logo white borders/padding** issue -- logos need full-fit rendering without visible white edges
+## Problem
+124 developers have either no feature image or the same fake Unsplash downtown photo. You need real images sourced automatically -- not manual uploads.
 
-## Part 1: Remove Fake Photo Fallback (DeveloperCard.tsx)
+## Solution
+Create a new edge function `auto-find-developer-images` that:
 
-Replace the hardcoded unsplash downtown photo with a clean, premium gradient fallback that uses the developer's logo as the centerpiece. No more fake skyline photos.
+1. Gets all developers with missing/fake feature images (batch of 10 at a time to avoid timeouts)
+2. For each developer, uses **Firecrawl search** to find real photos of their projects/buildings online
+3. Uses **AI (Gemini Flash)** to pick the best, most relevant image URL from search results
+4. Updates the developer's `feature_image_url` in the database with the real image
 
-**Current fallback (lines 66-80):**
-- Shows `unsplash.com/photo-1512453979798-5ea266f8880c` for every developer without a feature image
+## How It Works
 
-**New fallback:**
-- Premium dark gradient background (no photo)
-- Developer logo displayed prominently in the center (if available)
-- Building2 icon as last resort if no logo either
-- Developer name overlaid for context
-
-## Part 2: Remove Gold Border from Logo on External Cards (DeveloperCard.tsx)
-
-**Current (line 85):**
-```
-style={{ border: '3px solid hsl(42 45% 59%)', boxShadow: '0 4px 16px rgba(200,167,102,0.3)' }}
+```text
+For each developer (e.g., "AAF Developments"):
+  1. Firecrawl search: "AAF Developments Dubai real estate projects building"
+  2. Get search results with screenshots/images
+  3. AI picks the best project/building image URL
+  4. Save to developers.feature_image_url
 ```
 
-**New:**
-- Remove the gold border and gold box-shadow from the logo container
-- Keep clean `bg-white rounded-lg shadow-lg` only
-- This applies ONLY to the directory/listing cards, not the detail page
+## Edge Function: `supabase/functions/auto-find-developer-images/index.ts`
 
-## Part 3: Fix Logo Full-Fit (DeveloperCard.tsx)
-
-Remove any visible white padding around logos:
-- Change from `bg-white` to `bg-black` on the logo container (blends edges)
-- Use `object-cover` with slight scale to fill the frame edge-to-edge (per the full-fit standard)
-- Add `p-0` to ensure zero internal padding
-
-## Part 4: Update Developers with Project Cover Images (Edge Function)
-
-Run the existing `sync-developer-feature-images` function to pull real project cover images for developers that currently have the fake unsplash URL. This will fix a few developers that DO have project images.
-
-For the remaining ~115 developers without any project images, the gradient fallback from Part 1 will display cleanly until real feature images are uploaded.
-
-## Files Changed
-
-| File | Change |
-|------|--------|
-| `src/components/DeveloperCard.tsx` | Replace unsplash fallback with gradient, remove gold border from logo, fix logo full-fit |
+- Accepts `{ batch_size: 10 }` parameter (default 10 to stay within timeout)
+- Queries developers where `feature_image_url IS NULL` or `feature_image_url LIKE '%unsplash%'`
+- For each developer:
+  - Calls Firecrawl search API with query: `"{developer.name}" real estate Dubai projects building`
+  - Extracts image URLs from the search results (links, screenshots, metadata)
+  - Sends extracted URLs + context to Gemini Flash to select the single best building/project photo
+  - Updates the developer record with the chosen image URL
+- Returns a summary of how many were updated, failed, or had no results
+- Can be called multiple times to process all 124 developers in batches
 
 ## Technical Details
 
-```text
-DeveloperCard logo container changes:
-  Before: border: 3px gold, bg-white, object-contain
-  After:  no border, bg-black, object-cover, scale-[1.2], p-0
+| Aspect | Detail |
+|--------|--------|
+| APIs used | Firecrawl Search + Lovable AI (Gemini 2.5 Flash) |
+| Secrets required | `FIRECRAWL_API_KEY` (exists), `LOVABLE_API_KEY` (exists) |
+| Batch size | 10 per invocation (avoids edge function timeout) |
+| Total developers | ~124 needing images |
+| Invocations needed | ~13 calls to process all |
 
-DeveloperCard fallback image changes:
-  Before: Unsplash downtown skyline photo
-  After:  Dark gradient + centered logo/icon (no external image)
-```
+## Files
+
+| File | Action |
+|------|--------|
+| `supabase/functions/auto-find-developer-images/index.ts` | **Create** -- new edge function |
+
+After creating and deploying, I will invoke the function multiple times to process all 124 developers.
 
