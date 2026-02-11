@@ -2074,7 +2074,7 @@ const MarketReport = () => {
                 <span className="block text-gold">Investment Edge</span>
               </h1>
               
-              <p className="text-zinc-300 text-lg md:text-xl leading-relaxed mb-8">
+              <p className="text-black text-lg md:text-xl leading-relaxed mb-8">
                 An educational, founder-led overview designed around government-led sources and structured decision frameworks—created exclusively for clients of JBJ Global Real Estate.
               </p>
               
