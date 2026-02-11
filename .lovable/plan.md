@@ -1,42 +1,38 @@
 
 
-## Fix YouTube Replay — Destroy and Recreate Player
+## Fix Suggestion Flash During Replay
 
 ### Problem
-Neither `seekTo` nor `loadVideoById` reliably restart the video after it ends. YouTube's player transitions into a recommendations state that persists through both methods, showing music playlists and suggested videos (visible in the screenshot).
+When clicking "Replay," the branded overlay is removed immediately (`setEnded(false)`) before the new YouTube player has finished loading. During that brief loading gap, YouTube's default state with suggestions/recommendations is visible for about a second before the video starts.
 
 ### Solution
-Instead of trying to manipulate the existing player instance, **destroy it completely and create a fresh one** on replay. This is the only approach that guarantees no YouTube recommendations leak through.
+Keep the branded overlay visible until the new player actually starts playing. Only hide the overlay inside the YouTube player's `onReady` event callback, where we also call `playVideo()`.
 
 ### Changes to `src/components/YouTubeVideoPlayer.tsx`
 
-**1. Extract player creation into a reusable function**
+**1. Add an `onReady` callback parameter to `createPlayer`**
 
-Move the `new window.YT.Player(...)` logic into a helper function (e.g., `createPlayer`) that can be called both on initial mount and on replay.
+Modify `createPlayer` to accept an optional `onReady` callback. When the YouTube player fires its `onReady` event, it calls `playVideo()` and then invokes the callback.
 
-**2. Rewrite `handleReplay` to destroy and recreate**
+**2. Update `handleReplay` to keep overlay until ready**
+
+- Do NOT call `setEnded(false)` immediately
+- Instead, pass a callback to `createPlayer` that calls `setEnded(false)` only after the player is ready and playing
+- This ensures the branded logo overlay stays on screen, hiding YouTube's loading state and any brief suggestion flash
+
+**3. Updated flow**
 
 ```text
-handleReplay:
-1. Destroy current player instance (player.destroy())
-2. Re-insert a fresh <div> with the same iframe ID into the container
-3. Call createPlayer() to build a new YouTube player on that div
-4. Set ended = false to hide the overlay
+User clicks Replay:
+  1. Destroy old player, remove old div
+  2. Insert fresh div (hidden behind the still-visible overlay)
+  3. Create new player with onReady callback
+  4. Player loads behind the overlay (user sees logo, not suggestions)
+  5. onReady fires -> playVideo() + setEnded(false) -> overlay disappears, video is already playing
 ```
-
-**3. Keep all existing playerVars intact**
-
-The restrictive `rel: 0`, `modestbranding: 1`, `iv_load_policy: 3`, etc. stay in place for the fresh player instance.
-
-### Technical Detail
-
-The key insight: `player.destroy()` removes the iframe entirely, so we need to manually insert a new empty `<div>` element with the same ID before creating a new player. The component structure changes slightly:
-
-- The container `ref` is used to append a fresh div
-- `iframeId` stays consistent so the overlay positioning works
-- The `onStateChange` handler is re-attached to the new player instance
 
 ### Files to edit
 | File | Change |
 |------|--------|
-| `src/components/YouTubeVideoPlayer.tsx` | Extract player creation to helper function; rewrite `handleReplay` to destroy old player, insert fresh div, and create new player |
+| `src/components/YouTubeVideoPlayer.tsx` | Add `onReady` parameter to `createPlayer`; delay `setEnded(false)` until player is ready in `handleReplay` |
+
