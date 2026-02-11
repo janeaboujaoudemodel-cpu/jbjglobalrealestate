@@ -1,45 +1,42 @@
 
 
-# Fix Search Dropdown Style, Search Bar UI, and Remove All Black Backgrounds
+# Fix Search Dropdown to Match Language Dropdown Exactly
 
-## Overview
-Three issues to fix: (1) the Search mega menu dropdown doesn't match the Language dropdown style, (2) the search input inside has a double-border/square appearance, and (3) black backgrounds appear in the chat widget and agent joining screen.
+## What's Wrong
+
+The previous fix didn't actually work because of several mismatches:
+
+1. **Wrong gradient colors** -- Search uses a lighter gradient (`#FDFBF7, #F5F0E6, #EDE4D3`) while Language uses a deeper champagne (`#F5EBD7, #E8DCC8, #D4C4A8`). They need to be identical.
+2. **Search bar double-border still visible** -- The override class `!border-2-none` is not a valid Tailwind class, so the Input component's built-in `border-2 border-gold/40` is still rendering, creating the "square inside square" look.
+3. **Missing shadow, border overlay, and bottom gold accent** -- Language uses a deep shadow, an absolute-positioned gold border overlay, and a gold accent bar at the bottom. Search has none of these.
+4. **No hover effects on links** -- Language items turn gold on hover with a subtle background shift. Search links don't have this treatment.
 
 ## Changes
 
-### 1. Match Search Dropdown to Language Dropdown Style
-The Search dropdown currently uses `MegaMenuShell` (full-width fixed panel). The Language dropdown uses a compact, self-contained container with the champagne gradient and gold border. The Search dropdown will be updated to use the same visual treatment -- the champagne gradient background with `border-2 border-gold/40`, rounded corners, and the bottom gold accent bar removed.
+### File: `src/components/header/MegaMenuSearch.tsx`
 
-**File:** `src/components/header/MegaMenuSearch.tsx`
-- Replace `MegaMenuShell` wrapper with a styled `div` matching the Language dropdown pattern (same champagne gradient background via inline style, `border-2 border-gold/40`, `rounded-xl`, `shadow`, `z-[9999]`)
-- Keep the content layout (3-column grid with services, quick links, contact) but wrap it in the new container style
+**Container div (line 98-104):**
+- Change gradient from `#FDFBF7, #F5F0E6, #EDE4D3` to `#F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%` (matching Language exactly)
+- Change shadow from `shadow-xl` to `shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)]`
+- Remove `border-2 border-gold/40` from the container class (will use absolute overlay instead)
+- Add an absolute `border-2 border-gold/40` overlay div inside (same as Language)
+- Add bottom gold accent bar (`h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50`)
 
-### 2. Fix Search Bar Double-Border Issue
-The `Input` component has built-in champagne gradient background and gold borders. When placed inside the already-champagne dropdown, it creates a visible nested border effect (square inside square).
+**Search Input (line 110-119):**
+- Replace the `Input` component with a plain `<input>` element to avoid the built-in gradient and double border entirely
+- Style it with: `bg-white/80 border border-gold/30 rounded-xl h-12 px-4 text-base text-black` -- clean, single border, no gradient clash
 
-**File:** `src/components/header/MegaMenuSearch.tsx`
-- Override the Input's default styling: use a white/lighter background (`bg-white/80`), single clean border (`border border-gold/30`), and remove the double gradient effect so it looks like a clean inset field
-
-### 3. Remove Black Backgrounds from Chat Widget
-Multiple chat components use dark/black backgrounds that conflict with the premium champagne design language.
-
-**File:** `src/components/chat/ChatMessages.tsx`
-- Change `bg-[#0E0E0E]` (messages scroll area) to champagne gradient (`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`)
-- Change `bg-[#0A0A0A]` (action buttons bar) to champagne (`bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]`)
-- Change `bg-[#0A0A0A]` (input bar) to same champagne
-- Update the input field inside from `bg-zinc-900 text-white placeholder:text-zinc-500` to `bg-white/80 text-black placeholder:text-black/40 border-gold/30`
-
-**File:** `src/components/chat/ChatAgentJoining.tsx`
-- Change `text-zinc-400` and `text-zinc-300` text colors to `text-black/60` and `text-black/70`
-- Change `border-zinc-600` to `border-gold/30` and `border-zinc-900` to `border-gold/40`
-- Change `bg-zinc-700` to `bg-gold/20`
-- Change `text-white` (agent name) to `text-black`
+**Link hover effects:**
+- Add `hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]` and `group-hover:text-gold` to service and navigation links so they match Language dropdown hover behavior
 
 ## Technical Details
 
-| File | Changes |
-|------|---------|
-| `src/components/header/MegaMenuSearch.tsx` | Replace `MegaMenuShell` with Language-dropdown-style container; fix Input double-border with clean override styling |
-| `src/components/chat/ChatMessages.tsx` | Replace `bg-[#0E0E0E]` and `bg-[#0A0A0A]` with champagne gradients; fix input styling from dark to light |
-| `src/components/chat/ChatAgentJoining.tsx` | Replace all zinc/dark colors with champagne-compatible light colors (black text, gold borders) |
+| Issue | Root Cause | Fix |
+|-------|-----------|-----|
+| Wrong dropdown color | Different gradient stops | Use exact Language gradient: `#F5EBD7, #E8DCC8, #D4C4A8` |
+| Double-border on search bar | `!border-2-none` is invalid CSS; Input has `border-2` baked in | Use plain `<input>` instead of `Input` component, apply clean single border |
+| Missing visual elements | No border overlay, no bottom accent | Add absolute border overlay div + bottom gold accent bar |
+| No hover effect | Links missing hover background/color | Add matching hover classes from Language dropdown |
+
+Only one file needs editing: `src/components/header/MegaMenuSearch.tsx`
 
