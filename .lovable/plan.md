@@ -1,76 +1,55 @@
 
 
-# Fix Plan: Marquee Spacing, Trust Bar Padding, Premium Search Bar, and Properties Page Issues
+# Footer Navigation Cards Layout Redesign
 
-## 1. Developer Marquee -- Uniform Spacing and Dubai Properties Logo Size
+## Overview
 
-**File:** `src/components/DeveloperPartnersMarquee.tsx`
+Restructure the footer navigation card grid for a more premium, spacious layout on both desktop and mobile.
 
-The logo containers are all `w-[140px]` but some logos (like Dubai Properties) are inherently smaller images. The `gap-10` is already uniform so the actual gap between items is the same -- the perceived difference comes from smaller logos leaving more whitespace inside their container.
+## Changes (single file: `src/components/Footer.tsx`)
 
-**Fix:**
-- Keep `gap-10` (already uniform)
-- Increase the Dubai Properties logo container specifically, or better: increase the image height constraint from `h-[28px] md:h-[36px] lg:h-[40px]` to a slightly taller uniform value like `h-[36px] md:h-[42px] lg:h-[48px]` so smaller logos render larger
-- This ensures all logos fill their containers more consistently
+### A. FooterCard Component -- Add Gold Divider Between Columns (lines 29-55)
 
-## 2. Trust Bar Section -- Equal Vertical Spacing
+The FooterCard already uses a 2-column grid for links. Add a vertical gold divider between the two columns using CSS:
 
-**File:** `src/pages/Index.tsx`
+- Apply `gap-x-0` and instead use padding + a gold border on the right side of the first column items (or use a CSS pseudo-element / `divide-x` approach)
+- Better approach: wrap the 2-column grid with `relative` and add a centered vertical gold line via an absolutely positioned `div` (1px wide, gold gradient, centered horizontally)
+- Make the category title gold (`text-gold`) and centered (already centered)
 
-Currently (lines 214-230):
-- The Trust Bar section has `py-12 md:py-16` 
-- "Trusted By Thousands" has `mb-8 md:mb-10` below it
-- "Excellence Guaranteed" has `mt-8 md:mt-10` above it
+### B. FooterCard on Mobile -- Rectangular Shape
 
-The section after (FeaturedListings) has its own `py-12 md:py-16`. The spacing between "Excellence Guaranteed" and "Handpicked For You" may differ from the spacing between the developer marquee and "Trusted By Thousands."
+Currently on mobile (`grid-cols-1`), each card stacks vertically and takes full width but can be tall. To enforce a rectangular (horizontal) shape:
 
-**Fix:**
-- Ensure the Trust Bar section's top padding matches the bottom spacing before "Handpicked For You" 
-- Adjust the Trust Bar `py` values to create visually equal gaps above and below
+- The 2-column link grid already makes the card wider than tall
+- Ensure padding is balanced (`px-5 py-4` instead of `p-4`) so horizontal emphasis is clear
+- The card will naturally be rectangular with the 2-column layout
 
-## 3. Properties Page Search Bar -- Premium Inline Sticky Design
+### C. Desktop Grid -- 3 Cards Per Row
 
-**File:** `src/pages/Properties.tsx`
+Change all three row grids from `lg:grid-cols-4` to `lg:grid-cols-3`:
 
-The current filter section (line 421+) has filters in a grid layout with champagne cards. The user wants:
-- All filter dropdowns in ONE horizontal line (not a grid)
-- Premium, consistent styling (not mixed square/border styles)
-- Sticky under the header on scroll
-- Consistent rounded styling across all select triggers
+- **Row 1** (line 633): `grid-cols-1 sm:grid-cols-2 lg:grid-cols-4` becomes `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`
+  - 4 cards (Properties, Services, Guides, About) -- 3 on first row, 1 wraps to next
+- **Row 2** (line 645): same change to `lg:grid-cols-3`
+  - 4 cards (Sell, Education Hub, Legal, Business Suites) -- 3 + 1
+- **Row 3** (line 662): already `lg:grid-cols-3` -- no change needed
 
-**Fix:**
-- Change the filter grid from `grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6` to a single-row `flex flex-wrap` layout
-- Ensure all SelectTrigger elements have identical `rounded-xl` styling matching the premium champagne gradient
-- The section is already `sticky top-14 sm:top-16 md:top-20 lg:top-[72px]` -- this is correct
-- Clean up inconsistent border-radius values (some `rounded-lg`, some should be `rounded-xl`)
+This gives a balanced 3-column desktop layout with cards that are wider and more premium-looking.
 
-## 4. "View All Projects" Showing 0 Properties
+### D. Merge Rows 1 and 2 into a Single Grid
 
-**File:** `src/pages/Properties.tsx`
+Since both rows now share the same `lg:grid-cols-3` layout, merge them into one continuous grid to avoid the visual gap between "rows". This creates a natural flow: 3 cards per row on desktop, 2 on tablet, 1 on mobile.
 
-When navigating to `/properties` from "View All Projects" (no URL params), the `defaultExtendedFilters` sets `transactionType: 'buy'`. This should show all buy properties. However, the `useEffect` on line 194 may re-run when `developers` data loads and potentially interfere.
+- Remove the separate `mb-4` dividers between rows
+- One single grid container with all 8+ cards from rows 1 and 2, plus row 3 cards
 
-**Root cause:** The `useEffect` dependency on `[searchParams, developers]` means it re-runs when developers load. When there are no URL params, the condition on line 237 is false, so it does nothing -- this is correct. But if there's a stale `searchParams` from a previous navigation, it could cause issues.
+## Summary
 
-**Fix:**
-- Add a guard: when navigating to `/properties` with NO params at all, explicitly ensure `appliedFilters` are set to defaults that show all projects
-- Make the "Browse All Properties" button use `<Link to="/properties">` instead of just `onClick={clearFilters}` to ensure it navigates AND clears filters
-
-## 5. "Browse All Properties" Button Not Clickable
-
-**File:** `src/pages/Properties.tsx` (line 1134-1136)
-
-The button calls `clearFilters` which resets state but doesn't navigate. If the user is already on `/properties`, this should work. But there might be a rendering issue where the button isn't receiving clicks.
-
-**Fix:**
-- Change `<Button onClick={clearFilters}>` to ensure it works reliably
-- Add explicit `cursor-pointer` and verify the button's variant classes don't block interaction
-
-## Summary of Files to Change
-
-| File | Changes |
-|------|---------|
-| `src/components/DeveloperPartnersMarquee.tsx` | Increase logo height constraints for uniform visual size |
-| `src/pages/Index.tsx` | Equalize Trust Bar section padding top/bottom |
-| `src/pages/Properties.tsx` | Inline flex filter layout; fix "0 results" on fresh navigation; fix "Browse All" button |
+| Area | Current | New |
+|------|---------|-----|
+| Desktop columns | 4 per row | 3 per row |
+| Mobile card shape | Vertical stack | Rectangular (2-col links + gold divider) |
+| Category title | Dark text | Gold (`text-gold`) |
+| Column divider | None | Vertical gold line between the two link columns |
+| Row structure | 3 separate grids | Merged into fewer grids for natural flow |
 
