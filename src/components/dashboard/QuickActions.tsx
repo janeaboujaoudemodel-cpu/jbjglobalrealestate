@@ -236,20 +236,21 @@ export function QuickActions() {
         <CardTitle className="text-base text-foreground">Quick Actions</CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
           {actions.map((action, index) => (
-            <Button
+            <button
               key={index}
-              variant="outline"
-              className="h-auto p-4 flex flex-col items-start gap-2 hover:border-primary/50 transition-colors min-h-[100px] w-full"
               onClick={() => navigate(action.href)}
+              className="flex flex-col items-start gap-1.5 rounded-xl border border-border bg-gradient-to-br from-zinc-900/80 to-zinc-800/60 p-3.5 hover:border-gold/40 hover:bg-zinc-800/80 transition-all text-left w-full"
             >
               <div className="flex items-center gap-2 w-full">
-                <action.icon className={`h-5 w-5 ${action.color} shrink-0`} />
-                <span className="text-sm font-medium text-foreground truncate">{action.label}</span>
+                <div className="w-8 h-8 rounded-lg bg-black/40 border border-gold/20 flex items-center justify-center shrink-0">
+                  <action.icon className={`h-4 w-4 ${action.color}`} />
+                </div>
+                <span className="text-sm font-medium text-foreground leading-tight">{action.label}</span>
               </div>
-              <span className="text-xs text-muted-foreground text-left line-clamp-2">{action.description}</span>
-            </Button>
+              <span className="text-[11px] text-muted-foreground leading-snug">{action.description}</span>
+            </button>
           ))}
         </div>
       </CardContent>
