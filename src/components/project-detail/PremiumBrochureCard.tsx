@@ -146,11 +146,12 @@ const PremiumBrochureCard = ({
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
             {/* Top: Brand mark with real monogram */}
             <div className="absolute top-4 left-10 flex items-center gap-3">
-              <div className="w-14 h-14 rounded-full border-2 border-gold/70 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-hidden p-1.5">
+              <div className="w-14 h-14 rounded-full border-2 border-gold/70 flex items-center justify-center bg-black backdrop-blur-sm overflow-hidden">
                 <img 
                   src={jbjFullLogoDarkBg} 
                   alt="JBJ" 
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
+                  style={{ transform: "scale(1.2)" }}
                 />
               </div>
               <p 
