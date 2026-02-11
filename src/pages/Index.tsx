@@ -606,7 +606,7 @@ const Index = () => {
       <SectionDivider />
 
       {/* MARKET REPORT CTA - Active Champagne Layer */}
-      <section className="py-12 md:py-16 bg-black">
+      <section className="bg-black">
         <div className="jj-layer-2">
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-10 shadow-xl">
             <motion.div
