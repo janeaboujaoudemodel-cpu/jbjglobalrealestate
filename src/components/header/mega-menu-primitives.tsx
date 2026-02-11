@@ -286,10 +286,6 @@ export function MegaMenuIconLink({
           </span>
         ) : null}
       </div>
-      {/* Thin gold divider under each page link - not shown for emphasis links */}
-      {!emphasis && (
-        <div className="absolute bottom-0 left-3 right-3 h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-      )}
     </Link>
   );
 }
