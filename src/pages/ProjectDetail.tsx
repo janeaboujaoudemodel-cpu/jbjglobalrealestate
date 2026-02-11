@@ -245,7 +245,7 @@ const ProjectDetail = () => {
           <h1 className="text-foreground text-2xl font-bold mb-2">Project not found</h1>
           <p className="text-muted-foreground mb-6">This project may have been removed or the link is incorrect.</p>
           <Link to="/properties">
-            <Button variant="dark" className="px-8">Back to Properties</Button>
+            <Button variant="primary" className="px-8">Back to Properties</Button>
           </Link>
         </div>
       </section>
