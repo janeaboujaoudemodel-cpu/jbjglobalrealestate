@@ -63,35 +63,38 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
               loading={isEager ? "eager" : "lazy"}
             />
           ) : (
-            <div className="w-full h-full relative">
-              <img
-                src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80"
-                alt="Dubai Skyline"
-                className="w-full h-full object-cover opacity-70"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-              <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 flex items-center justify-center">
+              {developer.logo_url ? (
                 <div className="text-center">
-                  <Building2 className="w-12 h-12 text-gold/70 mx-auto mb-2" />
-                  <span className="text-gold/90 text-xs font-medium tracking-wider uppercase">Developer</span>
+                  <img
+                    src={developer.logo_url}
+                    alt={developer.name}
+                    className="w-20 h-20 object-contain mx-auto mb-2 opacity-80"
+                    loading="lazy"
+                  />
+                  <span className="text-white/60 text-xs font-medium tracking-wider uppercase">{developer.name}</span>
                 </div>
-              </div>
+              ) : (
+                <div className="text-center">
+                  <Building2 className="w-12 h-12 text-gold/50 mx-auto mb-2" />
+                  <span className="text-white/60 text-xs font-medium tracking-wider uppercase">{developer.name}</span>
+                </div>
+              )}
             </div>
           )}
           
           {/* Logo Overlay - Top Left - Larger box with object-contain, no cropping */}
           <div className="absolute top-3 left-3 z-10">
-            <div className="w-14 h-14 rounded-lg overflow-hidden shadow-lg bg-white" style={{ border: '3px solid hsl(42 45% 59%)', boxShadow: '0 4px 16px rgba(200,167,102,0.3)' }}>
+            <div className="w-14 h-14 rounded-lg overflow-hidden shadow-lg bg-black p-0">
               {developer.logo_url ? (
                 <img
                   src={developer.logo_url}
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover scale-[1.2] p-0"
                   loading={isEager ? "eager" : "lazy"}
                 />
               ) : (
-                <div className="w-full h-full bg-white/90 flex items-center justify-center">
+                <div className="w-full h-full bg-zinc-800 flex items-center justify-center">
                   <Building2 className="w-6 h-6 text-zinc-400" />
                 </div>
               )}
