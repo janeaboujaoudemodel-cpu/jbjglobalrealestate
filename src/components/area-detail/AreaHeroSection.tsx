@@ -72,12 +72,10 @@ export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
           <motion.p className="text-zinc-200 text-lg max-w-2xl leading-relaxed mb-6" variants={fadeInUp}>
             {area.description
               .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-              .replace(/\[[^\]]*\]\([^)]*$/gm, '')
+              .replace(/\[([^\]]+)\]\([^)]*$/gm, '$1')
               .replace(/https?:\/\/[^\s)]+/g, '')
               .replace(/\[([^\]]*)\]/g, '$1')
-              .replace(/\(\s*\)/g, '')
-              .replace(/\(\s*$/gm, '')
-              .replace(/\s*\(\s*(?=[.!?,\s]|$)/g, '')
+              .replace(/[()]/g, '')
               .replace(/\s{2,}/g, ' ')
               .trim()}
           </motion.p>
