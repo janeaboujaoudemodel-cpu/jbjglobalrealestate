@@ -1,109 +1,45 @@
 
 
-# Phase 3-6: Complete Founder Name Fix ("Jane Bou Jaoude" -> "Jane bou Jaoude")
+# Fix Plan: Revert Founder Name + Fix LanguageProvider Crash
 
-65 files still contain the incorrect uppercase "B" spelling. Here is the complete remaining work:
+## Two Critical Issues
 
----
+### Issue 1: Founder Name Was Wrongly Changed
+The previous edits incorrectly changed "Jane Bou Jaoude" (capital B) to "Jane bou Jaoude" (lowercase b). The correct spelling is **"Jane Bou Jaoude"** with a capital B. All changes must be reverted.
 
-## Translation File (1 file missed)
-- `src/translations/it.ts` -- 5 instances (founder.name, founder.description2, report.description, report.createdBy)
+**Files that were wrongly changed (need revert back to capital B):**
 
----
+| File | What to fix |
+|------|-------------|
+| `src/constants/stats.ts` | `founder`, `founderBilingual` |
+| `src/config/master-lock.ts` | `FOUNDER_NAME`, `FOUNDER_NAME_BILINGUAL`, `FOUNDER_FULL_TITLE` |
+| `src/components/GlobalSEO.tsx` | 2 instances in JSON-LD schemas |
+| `src/components/SEOHead.tsx` | `FOUNDER_KEYWORDS` line 20, lines 39, 54, 79 |
+| `src/translations/en.ts` | `founder.name`, `founder.description2`, `report.description`, `report.createdBy` |
+| `src/translations/fr.ts` | Same 4 keys |
+| `src/translations/de.ts` | Same 4 keys |
+| `src/translations/es.ts` | Same 4 keys |
+| `src/translations/ru.ts` | Same 4 keys |
+| `src/translations/ja.ts` | Same 4 keys |
+| `src/translations/zh.ts` | Same 4 keys |
+| `src/translations/nl.ts` | Same 4 keys |
+| `src/translations/he.ts` | Same 4 keys |
+| `src/translations/tr.ts` | Same 4 keys |
+| `src/translations/pl.ts` | Same 4 keys |
+| `src/translations/hi.ts` | Same 4 keys |
+| `src/translations/fa.ts` | Same 4 keys |
 
-## Component Files (15 files)
+All changes: case-sensitive replace `Jane bou Jaoude` back to `Jane Bou Jaoude`.
 
-| File | Instances |
-|------|-----------|
-| `src/components/SEOHead.tsx` | ~15 (all pagesSEO entries) |
-| `src/components/FounderPhilosophySection.tsx` | 2 |
-| `src/components/FounderContent.tsx` | 3 (comments + render output) |
-| `src/components/CEOLeadershipShowcase.tsx` | 4 (alt text, heading, quote attribution) |
-| `src/components/MarketReportHeroBook.tsx` | 1 |
-| `src/components/LegalDisclaimer.tsx` | 1 |
-| `src/components/broker/MarketReportCTAModal.tsx` | 1 |
-| `src/components/crm/CRMCommunicationPanel.tsx` | 2 |
-| `src/components/signature/AISignatureGenerator.tsx` | 1 (placeholder) |
-| `src/components/seo/MarketIntelligenceSchema.tsx` | 1 |
-| `src/components/executive/ExecutiveChatPanel.tsx` | (needs verification) |
-| `src/components/Footer.tsx` | (needs verification) |
+### Issue 2: "useLanguage must be used within a LanguageProvider" Crash
 
----
+The `LanguageProvider` wraps the entire app in `App.tsx` (line 327), so this error only occurs if the provider itself crashes during initialization. The most likely cause is a syntax error introduced in one of the translation files during the previous batch edits. When a translation file fails to import, the `LanguageProvider` component fails to mount, and any child calling `useLanguage()` throws.
 
-## Page Files (25 files)
-
-| File | Instances |
-|------|-----------|
-| `src/pages/Founder.tsx` | ~6 (name, alt text, bio paragraphs) |
-| `src/pages/MarketReport.tsx` | ~6 (PDF HTML, alt text, heading) |
-| `src/pages/AIFinancialAdvisor.tsx` | 1 |
-| `src/pages/Quiz.tsx` | 2 |
-| `src/pages/PropertyMeasurement.tsx` | 1 |
-| `src/pages/PropertyEvaluator.tsx` | 1 |
-| `src/pages/JBJDesignStudio.tsx` | 1 (placeholder) |
-| `src/pages/Terms.tsx` | 1 |
-| `src/pages/CRM.tsx` | 1 |
-| `src/pages/DigitalCard.tsx` | 1 |
-| `src/pages/Compare.tsx` | (needs verification) |
-| `src/pages/PressKit.tsx` | (needs verification) |
-| `src/pages/MeetTheTeam.tsx` | (needs verification) |
-| `src/pages/market-intelligence/QuarterlyMarketReview.tsx` | 2 |
-| `src/pages/market-intelligence/AnnualMarketSummary.tsx` | 2 |
-| `src/pages/executive/ExecutiveOverview.tsx` | 1 |
-| `src/pages/executive/ExecutiveMarketSignals.tsx` | (needs verification) |
-| `src/pages/executive/ExecutivePerformance.tsx` | (needs verification) |
-| `src/pages/services/BrokerCertification.tsx` | (needs verification) |
+**Fix:** Reverting the translation files (Issue 1) will restore valid syntax and fix this crash. I will also verify each translation file's closing syntax to ensure no truncation or bracket mismatch.
 
 ---
 
-## Config Files (8 files)
+## Execution
 
-| File | Instances |
-|------|-----------|
-| `src/config/ai-personalities.ts` | ~10 (founder object, Amanda systemPrompt, signatures) |
-| `src/config/ai-brain-training.ts` | 2 |
-| `src/config/ai-role-specific-training.ts` | 1 |
-| `src/config/department-group-structure.ts` | 3 |
-| `src/config/globalSearchIndex.ts` | 1 |
-| `src/config/company-communication-groups.ts` | 5 |
-| `src/config/listing-approval-workflow.ts` | 1 |
-| `src/config/assistant-brain-updates.ts` | 4 |
-| `src/config/team-members.ts` | 2 |
+**Single batch:** Revert all 18 files simultaneously (constants, SEO, GlobalSEO, and 13 translation files). This is a straightforward find-and-replace: `Jane bou Jaoude` back to `Jane Bou Jaoude` in every file that was changed.
 
----
-
-## Hook Files (2 files)
-
-| File | Instances |
-|------|-----------|
-| `src/hooks/useAIReplyEngine.ts` | 1 |
-| `src/hooks/useOwnerInbox.ts` | 1 |
-
----
-
-## Edge Functions (7 files)
-
-| File | Instances |
-|------|-----------|
-| `supabase/functions/_shared/ai-utils.ts` | 1 |
-| `supabase/functions/ai-email-generator/index.ts` | 1 |
-| `supabase/functions/executive-assistant/index.ts` | ~12 |
-| `supabase/functions/submit-support-ticket/index.ts` | 1 |
-| `supabase/functions/auto-translate/index.ts` | 1 |
-| `supabase/functions/ai-chat-support/index.ts` | 1 |
-| `supabase/functions/vapi-webhook/index.ts` | ~6 |
-
----
-
-## Execution Strategy
-
-All changes are a case-sensitive find-and-replace: `Jane Bou Jaoude` to `Jane bou Jaoude`.
-
-**Batch 1** (this message): Translation file (it.ts) + all component files (15 files)
-**Batch 2** (next message): All page files (15+ files)
-**Batch 3** (next message): All config files (9 files) + hook files (2 files)
-**Batch 4** (final): All edge function files (7 files) + redeploy
-
-Total: ~65 files, ~100+ individual replacements remaining.
-
-No wording, layout, or logic changes -- purely spelling correction per the locked identity standard.
