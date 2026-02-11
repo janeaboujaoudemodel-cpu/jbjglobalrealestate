@@ -37,7 +37,7 @@ const MarketReportCTA = () => {
       <div className="space-y-6">
         <div>
           <h3 className="text-black text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Dubai Real Estate <span className="text-gold">Market Report</span>
+            <span className="text-black">Market Report</span>
           </h3>
           <p className="text-zinc-700 text-base leading-relaxed">
             Get exclusive insights into Dubai's property market with our comprehensive guide.
