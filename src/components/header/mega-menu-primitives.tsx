@@ -33,7 +33,7 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
           right: '24px',
           maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
           overflowY: 'auto' as const,
-          background: '#1a1815',
+          background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)',
           ...style,
         }}
       >
@@ -188,12 +188,15 @@ type MegaMenuSectionTitleProps = {
 export const MegaMenuSectionTitle = React.forwardRef<HTMLDivElement, MegaMenuSectionTitleProps>(
   ({ icon: Icon, title, rightSlot }, ref) => {
     return (
-      <div ref={ref} className="flex items-center justify-center mb-3 pb-1 min-h-[36px]">
-        <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2">
-          <Icon className="w-4 h-4 text-gold" />
-          {title}
-        </h4>
-        {rightSlot}
+      <div ref={ref} className="mb-3 min-h-[36px]">
+        <div className="flex items-center justify-center pb-2">
+          <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2">
+            <Icon className="w-4 h-4 text-gold" />
+            {title}
+          </h4>
+          {rightSlot}
+        </div>
+        <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
       </div>
     );
   }
