@@ -523,8 +523,10 @@ const Index = () => {
         </div>
       </section>
 
+      <SectionDivider />
+
       {/* EXPLORE OUR SERVICES SLIDESHOW - Wrapped in container for consistent sizing */}
-      <section className="pt-12 md:pt-16 bg-black">
+      <section className="bg-black">
         <div className="jj-layer-2">
           <ExploreServicesCard />
         </div>
