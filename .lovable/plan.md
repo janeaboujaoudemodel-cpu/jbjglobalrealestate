@@ -1,69 +1,63 @@
 
 Goal
-- Fix the Dubai Properties logo in the homepage developer marquee so it:
-  1) looks visually centered inside its own “frame” (equal left/right padding),
-  2) has the correct perceived spacing vs Danube (and also the loop boundary vs DAMAC),
-  3) is lifted up slightly so “Properties” is fully readable,
-  4) is a bit bigger without getting cropped.
+- Fix the Dubai Properties logo in the homepage Developer Partners marquee so that:
+  - “PROPERTIES” is fully readable (not cut off),
+  - the logo looks visually centered inside its slot (equal left/right whitespace),
+  - the perceived gap to Danube is reduced (push Dubai Properties left),
+  - it’s lifted up and a bit bigger without looking cropped.
 
-Why it’s still wrong
-- The marquee uses a fixed flex “slot” per logo (width = developer.width, height = 36/42/48px) with the image set to `w-full h-full object-contain`.
-- If the Dubai Properties image file itself has uneven transparent/white padding (common in logos), `object-contain` will faithfully keep that padding, making the logo look off-center and creating a “fake” big gap with the neighboring logo even though the actual flex gap is constant.
-- Simply increasing width (to 180) makes that perceived gap worse.
+What I observed (proof)
+- I opened the raw asset `/developers/logos/dubai-properties-logo.webp` and it contains a lot of empty padding around the actual logo inside a white box. This is why it still looks off-center and why spacing looks “wrong” even when the flex `gap-10` is constant.
 
-Implementation approach (minimal change, config-driven like the rest of this marquee)
-File to change
-- src/components/DeveloperPartnersMarquee.tsx
+Why the current fix isn’t enough
+- Current config uses `fit:"cover"`, `scale: 1.12`, `offsetX: -6`, `offsetY: -3`, `objectPosition:"50% 40%"`.
+- That can help, but it cannot reliably remove “internal padding” inside the image file. When the padding is large, we need an additional trimming mechanism (or replace the asset).
 
-1) Add per-logo “image tuning” options in the FEATURED_DEVELOPERS config
-- Add optional properties (used only when needed):
-  - fit?: "contain" | "cover"        (default: "contain")
-  - offsetX?: number                 (px; default 0)
-  - offsetY?: number                 (px; default 0)
-  - objectPosition?: string          (default "50% 50%")
+Implementation (single-file, config-driven)
+File: `src/components/DeveloperPartnersMarquee.tsx`
 
-2) Update renderPartner() to apply these overrides safely
-- Keep container width logic as-is.
-- Change the <img> class so object-fit can switch per logo:
-  - If fit === "cover" => use `object-cover`
-  - Else => `object-contain`
-  (Both class names will be present as string literals so Tailwind includes them.)
-- Replace the current scale-only transform with a combined transform that can lift/shift:
-  - transform: `translate(${offsetX}px, ${offsetY}px) scale(${scale})`
-  - Apply even when scale is 1 if offsets are non-zero.
-- Apply `style.objectPosition` when provided.
+1) Add a “trim” option to the per-logo config (to remove internal padding)
+- Extend the `FEATURED_DEVELOPERS` type with an optional:
+  - `clipInset?: string` (CSS inset syntax, e.g. `"10% 8% 18% 8%"`)
+- Apply it to the `<img>` via `style.clipPath = developer.clipInset ? \`inset(${developer.clipInset})\` : undefined`
+  - This lets us crop away the empty space inside the file while still keeping the same slot sizing rules.
 
-3) Re-tune Dubai Properties entry (to fix centering + spacing + lift + size)
-- Change Dubai Properties from the current “wider but small” approach to a “slightly narrower but bigger, centered” approach:
-  - Reduce width from 180 down to ~160–170 to reduce perceived gap vs Danube.
-  - Increase scale slightly (example starting point: 1.10–1.15).
-  - Lift it up with offsetY (example starting point: -2 to -4).
-  - Recenter it with offsetX (example starting point: -4 to -8) if the logo padding is heavier on one side.
-  - If padding inside the image is the main issue, set fit:"cover" so the internal whitespace gets trimmed and the logo appears truly centered and “full”.
+2) Add a “slot spacing tweak” option for the real gap (not just visual centering)
+- Extend the config with optional:
+  - `slotMarginLeft?: number`
+  - `slotMarginRight?: number`
+- Apply these to the `<Link>` wrapper style:
+  - `style={{ marginLeft: developer.slotMarginLeft, marginRight: developer.slotMarginRight }}`
+- This is the cleanest way to reduce the Danube → Dubai Properties gap without touching the global `gap-10` or breaking other logos.
 
-  Proposed starting values (to be visually tested/tuned quickly in Preview):
-  - DUBAI PROPERTIES:
-    - width: 165
-    - scale: 1.12
-    - fit: "cover"
-    - offsetX: -6
-    - offsetY: -3
-    - objectPosition: "50% 40%"   (slightly higher anchor)
+3) Re-tune Dubai Properties with stronger lift + size + left push (starting values)
+- Update Dubai Properties entry from the current values to something that targets your exact complaints:
+  - Keep `fit: "cover"`
+  - Increase lift: `offsetY: -7` (from -3)
+  - Slightly bigger: `scale: 1.18` (from 1.12)
+  - Push left more: `offsetX: -12` (from -6)
+  - Reduce actual gap to Danube: `slotMarginLeft: -12` (tighten only on the left side)
+  - Keep width controlled to avoid “fake big gap”: `width: 155–160` (start at 158)
+  - Add trimming to remove internal whitespace (key fix):
+    - `clipInset: "10% 10% 22% 10%"` (starting point; we will visually tune)
+  - Adjust cropping anchor if needed:
+    - keep `objectPosition: "50% 45%"` (slightly lower than 40% to protect the “PROPERTIES” line if it’s still close to the bottom after scaling)
 
-4) Verify end-to-end (homepage marquee)
-- On / (homepage), confirm:
-  - Dubai Properties text “Properties” is readable and not clipped.
-  - The logo looks visually centered (balanced left/right whitespace).
-  - The perceived gap between Danube and Dubai Properties matches the rhythm of other logos.
-  - At the loop seam (Dubai Properties → DAMAC), spacing still feels consistent and there is no awkward “blank” interval.
-- Check at common breakpoints:
-  - Mobile (36px height), md (42px), lg (48px).
+4) Verification (must show it, not claim it)
+- Open homepage `/` and scroll to Developer Partners marquee.
+- Confirm:
+  - “PROPERTIES” is fully visible and readable (not cut off).
+  - Left/right whitespace looks balanced in its slot.
+  - Gap Danube → Dubai Properties looks consistent with the strap rhythm (no “big empty space”).
+  - Check the loop seam Dubai Properties → DAMAC still feels natural.
+- Check at 3 breakpoints:
+  - mobile (36px height)
+  - md (42px)
+  - lg (48px)
+- Capture a screenshot focused on the strap showing Dubai Properties beside Danube (and ideally the seam pass with DAMAC) as proof.
 
-Notes / fallback if the asset itself is the blocker
-- If the Dubai Properties logo file has extreme padding or an uneven bounding box, CSS tuning can only go so far.
-- If after these adjustments it’s still not perfect, the most robust fix is to replace the logo asset with a properly trimmed version (same design, just cleaned bounding box), then we can revert fit to "contain" and reduce offsets.
+Fallback (if the asset is the real blocker)
+- If the logo still can’t look perfect with `clipPath` tuning (because the real logo is too small inside the white box), the most robust fix is to replace `dubai-properties-logo.webp` with a trimmed version (same design, tighter bounding box). Then we can reduce CSS hacks (smaller offsets, potentially go back to `object-contain`).
 
-Acceptance criteria
-- Dubai Properties logo appears centered inside its slot, with even left/right space.
-- “Properties” is clearly visible and aligned (logo lifted slightly).
-- The spacing between Danube ↔ Dubai Properties and Dubai Properties ↔ DAMAC matches the rest of the marquee’s visual rhythm.
+Scope / impact
+- Only affects the Dubai Properties rendering (via config), no global spacing changes, no layout redesign.
