@@ -198,17 +198,19 @@ const MortgageCalculator = ({
   return (
     <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-lg">
       {/* Header - Gold Premium Style - Centered & Bigger */}
-      <div className="bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 border-b border-gold/30 p-6 lg:p-8">
-        <div className="flex flex-col items-center text-center">
-          <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/30 flex items-center justify-center mb-4">
-            <Calculator className="w-7 h-7 lg:w-8 lg:h-8 text-gold" />
+      {!compact && (
+        <div className="bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 border-b border-gold/30 p-6 lg:p-8">
+          <div className="flex flex-col items-center text-center">
+            <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/30 flex items-center justify-center mb-4">
+              <Calculator className="w-7 h-7 lg:w-8 lg:h-8 text-gold" />
+            </div>
+            <h3 className="text-2xl lg:text-3xl font-bold text-foreground" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Mortgage Calculator
+            </h3>
+            <p className="text-muted-foreground text-sm lg:text-base mt-2">Estimate your monthly payments</p>
           </div>
-          <h3 className="text-2xl lg:text-3xl font-bold text-foreground" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Mortgage Calculator
-          </h3>
-          <p className="text-muted-foreground text-sm lg:text-base mt-2">Estimate your monthly payments</p>
         </div>
-      </div>
+      )}
 
       <div className="p-4 lg:p-6">
         <div className="grid lg:grid-cols-[2fr_3fr] gap-6 lg:gap-8">
