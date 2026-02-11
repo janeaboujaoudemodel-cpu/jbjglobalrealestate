@@ -1,31 +1,66 @@
 
-# Fix: Restore Developer Marquee Champagne Gold Background + Uniform Spacing
 
-## What Happened
-The last edit removed the champagne gold background entirely and replaced it with black. The user only wanted the individual frames/borders around each logo removed -- NOT the main section background.
+# Fix Plan: Brochure Logo, Form Enhancements, Contact Card Borders, Sticky Nav Scroll, and CallToAction Removal
 
-## Changes (single file: `src/components/DeveloperPartnersMarquee.tsx`)
+## 1. Use Uploaded JBJ Logo in Brochure Card Circle
 
-### A. Restore the champagne gold background layers
-- **Line 113 (section):** Change `bg-black` back to `bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]`
-- **Line 126 (title text):** Change `text-white/70` back to `text-black`
-- **Line 131 (logo strip):** Restore the inner background and subtle top/bottom borders: `bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] border-t border-b border-gold/30`
+**File:** `src/components/project-detail/PremiumBrochureCard.tsx`
 
-No frames or boxes around individual logos -- logos sit directly on the champagne background without any per-logo container styling.
+- Copy `user-uploads://fulllogo-11.jpg` to `src/assets/jbj-fulllogo-dark-bg.jpg`
+- Import this new image and use it as the `src` in the brochure card monogram circle (line 151), replacing `jbjMonogramNobuffer`
+- The dark background of the uploaded logo will blend well with the dark overlay in the circle container
 
-### B. Fix uniform spacing between logos
-- **Line 81:** Change the logo container from variable widths `w-[100px] md:w-[120px] lg:w-[140px]` to a single consistent width `w-[140px]` across all breakpoints so every logo occupies the same space
-- **Lines 134, 138:** Standardize the gap to a single value `gap-10` (remove the responsive `gap-6 md:gap-8 lg:gap-10`) so spacing between all logos is identical
+## 2. Register Interest Form Enhancements
 
-### C. Logos already link to developer pages
-Each logo is already wrapped in a `<Link to={/developer/${developer.slug}}>` -- no changes needed here. Each logo correctly redirects to the developer detail page.
+**File:** `src/components/ConsultationRequestForm.tsx`
 
-## Summary
+- **Widen form:** Change `max-w-lg` to `max-w-xl` on both the form container (line 208) and success state (line 188) to give more breathing room
+- **Gold project name in title:** When `projectName` is provided, render the title so the project name appears in gold. Split the title to render "Register Interest in" in black and the project name in `text-gold`
+- **Champagne card background:** The form container already has `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]` -- this is confirmed correct
 
-| Line(s) | Change |
-|---------|--------|
-| 113 | Restore champagne gold gradient on section |
-| 126 | Restore `text-black` on title |
-| 131 | Restore inner gradient background + borders on logo strip |
-| 81 | Uniform logo container width (`w-[140px]`) |
-| 134, 138 | Uniform gap (`gap-10`) |
+**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
+
+- The outer wrapper at line 1115 already applies champagne gradient -- confirmed good
+
+## 3. Remove the "Request a Callback Now" Section
+
+**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
+
+- Remove line 1127: `<CallToActionSection projectName={project.name} projectId={project.id} />` since its fields are now consolidated into the ConsultationRequestForm
+- This eliminates the duplicate form on the project detail page
+
+## 4. WhatsApp and Call Us Card Borders to Gold in CombinedContactNewsletter
+
+**File:** `src/components/CombinedContactNewsletter.tsx`
+
+- **WhatsApp card (line 29):** Change `border-emerald-500` to `border-gold` and shadow to `shadow-gold/20`, hover to `hover:border-gold/40`
+- **Call Us card (line 40):** Change `border-blue-500` to `border-gold` and shadow to `shadow-gold/20`, hover to `hover:border-gold/40`
+
+## 5. Fix Sticky Sub-Navigation Horizontal Scroll
+
+**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
+
+The sticky nav at line 577 uses `overflow-x-auto` but touch/swipe gestures conflict with browser back/forward navigation. Fixes:
+
+- Add `touch-action: pan-y` via inline style on the scrollable container to prevent horizontal swipes from triggering browser navigation
+- Add `overscroll-behavior-x: contain` to trap the scroll within the container
+- Optionally add left/right scroll arrow buttons that appear when content overflows, so users can navigate tabs without swiping
+
+## 6. Improve Sticky Nav Styling
+
+**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
+
+- Match the tab styling to the champagne/gold theme of the Register Interest section
+- Active tab: keep `bg-gold/10 text-gold border border-gold/30`
+- Inactive tab: use `text-white/70 hover:text-gold hover:bg-gold/5` for better contrast on the dark background
+
+## Summary of Files to Change
+
+| File | Change |
+|------|--------|
+| `src/assets/jbj-fulllogo-dark-bg.jpg` | Copy uploaded logo image |
+| `src/components/project-detail/PremiumBrochureCard.tsx` | Use new logo in brochure circle |
+| `src/components/ConsultationRequestForm.tsx` | Widen to max-w-xl; gold project name in title |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Remove CallToActionSection; fix sticky nav scroll with touch-action and overscroll-behavior |
+| `src/components/CombinedContactNewsletter.tsx` | Change WhatsApp and Call Us card borders to gold |
+
