@@ -33,7 +33,7 @@ export function DeveloperLink({
   if (!slug) {
     return (
       <span className={cn("text-muted-foreground", className)}>
-        {showPrefix && "by "}
+        {showPrefix && <span className="text-black">by </span>}
         <span className="font-semibold bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent">
           {name}
         </span>
@@ -43,7 +43,7 @@ export function DeveloperLink({
 
   return (
     <span className={cn("text-muted-foreground", className)}>
-      {showPrefix && "by "}
+      {showPrefix && <span className="text-black">by </span>}
       <Link 
         to={`/developer/${slug}`}
         onClick={handleClick}

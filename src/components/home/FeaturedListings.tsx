@@ -223,15 +223,18 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
             </h3>
             {/* Developer name - gold, clickable */}
             {project.developer?.slug ? (
-              <Link
-                to={`/developer/${project.developer.slug}`}
-                onClick={(e) => e.stopPropagation()}
-                className="text-gold text-xs font-medium hover:text-gold/70 transition-colors mb-1 block"
-              >
-                by {project.developer_name}
-              </Link>
+              <span className="text-xs mb-1 block">
+                <span className="text-black font-medium">by </span>
+                <Link
+                  to={`/developer/${project.developer.slug}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-gold font-medium hover:text-gold/70 transition-colors"
+                >
+                  {project.developer_name}
+                </Link>
+              </span>
             ) : project.developer_name ? (
-              <span className="text-gold text-xs font-medium mb-1 block">by {project.developer_name}</span>
+              <span className="text-xs font-medium mb-1 block"><span className="text-black">by </span><span className="text-gold">{project.developer_name}</span></span>
             ) : null}
 
             {/* Description - 2 lines with ...more */}
@@ -266,12 +269,6 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
                 ) : (
                   <span className="text-transparent text-xs" aria-hidden="true">—</span>
                 )}
-                <Link 
-                  to={`/project/${project.slug}`}
-                  className="text-gold text-[10px] font-bold uppercase hover:text-gold/70 transition-colors no-underline"
-                >
-                  More
-                </Link>
               </div>
             </div>
           </div>

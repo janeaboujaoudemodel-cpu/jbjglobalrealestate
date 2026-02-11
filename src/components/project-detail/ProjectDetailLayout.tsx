@@ -570,7 +570,7 @@ export default function ProjectDetailLayout({
           showStickyNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
         }`}
       >
-        <div className="bg-zinc-900 border-b border-gold/30 shadow-lg">
+        <div className="bg-black border-b border-gold/30 shadow-lg">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between gap-4">
               {/* Tab Navigation */}
@@ -580,14 +580,14 @@ export default function ProjectDetailLayout({
                     <button
                       key={tab.id}
                       onClick={() => handleTabClick(tab.id)}
-                      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap min-w-fit transition-all ${
                         activeTab === tab.id
-                          ? "bg-muted text-foreground"
-                          : "text-foreground hover:bg-muted/60"
+                          ? "bg-gold/10 text-gold border border-gold/30"
+                          : "text-gold/60 hover:text-gold hover:bg-gold/5"
                       }`}
                     >
                       <tab.icon className="w-4 h-4" />
-                      <span className="hidden md:inline">{tab.label}</span>
+                      <span>{tab.label}</span>
                     </button>
                   ))}
                 </div>

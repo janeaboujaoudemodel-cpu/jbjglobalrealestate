@@ -82,12 +82,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               </div>
               
               {/* Headquarters */}
-              {developer.headquarters && (
-                <div className="flex items-center gap-2 text-zinc-600 text-sm mb-5">
-                  <MapPin className="w-4 h-4 text-gold" />
-                  <span>Headquarters: {developer.headquarters}</span>
-                </div>
-              )}
+              {/* Headquarters location removed per user request */}
 
               {/* Developer Stats - Premium inline cards */}
               {stats.length > 0 && (
