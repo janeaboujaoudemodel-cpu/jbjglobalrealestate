@@ -217,10 +217,22 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
               )}
             </div>
 
-            {/* Title - Gold */}
-            <h3 className="text-black font-semibold text-sm mb-1 line-clamp-2 group-hover:text-gold transition-colors min-h-[40px]" style={{ fontFamily: "Poppins, sans-serif" }}>
+            {/* Title */}
+            <h3 className="text-black font-semibold text-sm mb-0.5 line-clamp-2 group-hover:text-gold transition-colors min-h-[40px]" style={{ fontFamily: "Poppins, sans-serif" }}>
               {project.name}
             </h3>
+            {/* Developer name - gold, clickable */}
+            {project.developer?.slug ? (
+              <Link
+                to={`/developer/${project.developer.slug}`}
+                onClick={(e) => e.stopPropagation()}
+                className="text-gold text-xs font-medium hover:text-gold/70 transition-colors mb-1 block"
+              >
+                by {project.developer_name}
+              </Link>
+            ) : project.developer_name ? (
+              <span className="text-gold text-xs font-medium mb-1 block">by {project.developer_name}</span>
+            ) : null}
 
             {/* Description - 2 lines with ...more */}
             {(project as any).description && (
@@ -238,11 +250,6 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
             {/* Developer + Price + Handover row */}
             <div className="flex items-end justify-between mt-2 min-h-[36px]">
               <div>
-                {project.developer_name ? (
-                  <span className="text-black font-semibold text-xs block">by {project.developer_name}</span>
-                ) : (
-                  <span className="text-transparent text-xs block" aria-hidden="true">placeholder</span>
-                )}
                 {project.price_from ? (
                   <span className="text-gold font-bold text-sm">
                     From {formatPrice(project.price_from)}
