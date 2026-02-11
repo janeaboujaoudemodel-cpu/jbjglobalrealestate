@@ -269,7 +269,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           
           {/* Top-Left: Sale Status Badge (below developer logo if present) */}
           {saleStatusBadge && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
-            <div className={`absolute ${(project.developer as any)?.logo_url ? 'top-[4.25rem]' : 'top-3'} left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
+            <div className={`absolute bottom-3 left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
               {saleStatusBadge.label}
             </div>
           )}
