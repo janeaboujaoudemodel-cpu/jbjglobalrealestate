@@ -4,17 +4,17 @@ import { LanguageContext } from "@/contexts/LanguageContext";
 
 // LOCKED: Featured developer partners
 const FEATURED_DEVELOPERS = [
-  { name: "DAMAC", slug: "damac", logo: "/developers/logos/damac-logo.webp" },
-  { name: "EMAAR", slug: "emaar", logo: "/developers/logos/emaar-logo.webp" },
-  { name: "MERAAS", slug: "meraas", logo: "/developers/logos/meraas-logo.webp" },
-  { name: "SOBHA REALTY", slug: "sobha", logo: "/developers/logos/sobha-logo.webp" },
-  { name: "NAKHEEL", slug: "nakheel", logo: "/developers/logos/nakheel-logo.webp" },
-  { name: "BINGHATTI", slug: "binghatti", logo: "/developers/logos/binghatti-logo.webp" },
-  { name: "SELECT GROUP", slug: "select-group", logo: "/developers/logos/select-group-logo.webp" },
-  { name: "ELLINGTON PROPERTIES", slug: "ellington", logo: "/developers/logos/ellington-logo.webp" },
-  { name: "MAJID AL FUTTAIM", slug: "majid-al-futtaim", logo: "/developers/logos/majid-al-futtaim-logo.webp" },
-  { name: "DANUBE PROPERTIES", slug: "danube", logo: "/developers/logos/danube-logo.webp" },
-  { name: "DUBAI PROPERTIES", slug: "dubai-properties", logo: "/developers/logos/dubai-properties-logo.webp" },
+  { name: "DAMAC", slug: "damac", logo: "/developers/logos/damac-logo.webp", scale: 1 },
+  { name: "EMAAR", slug: "emaar", logo: "/developers/logos/emaar-logo.webp", scale: 1 },
+  { name: "MERAAS", slug: "meraas", logo: "/developers/logos/meraas-logo.webp", scale: 1 },
+  { name: "SOBHA REALTY", slug: "sobha", logo: "/developers/logos/sobha-logo.webp", scale: 1 },
+  { name: "NAKHEEL", slug: "nakheel", logo: "/developers/logos/nakheel-logo.webp", scale: 1 },
+  { name: "BINGHATTI", slug: "binghatti", logo: "/developers/logos/binghatti-logo.webp", scale: 1 },
+  { name: "SELECT GROUP", slug: "select-group", logo: "/developers/logos/select-group-logo.webp", scale: 1.1 },
+  { name: "ELLINGTON PROPERTIES", slug: "ellington", logo: "/developers/logos/ellington-logo.webp", scale: 1 },
+  { name: "MAJID AL FUTTAIM", slug: "majid-al-futtaim", logo: "/developers/logos/majid-al-futtaim-logo.webp", scale: 1.2 },
+  { name: "DANUBE PROPERTIES", slug: "danube", logo: "/developers/logos/danube-logo.webp", scale: 1.05 },
+  { name: "DUBAI PROPERTIES", slug: "dubai-properties", logo: "/developers/logos/dubai-properties-logo.webp", scale: 1.4 },
 ];
 
 const TOTAL_IMAGES = FEATURED_DEVELOPERS.length;
@@ -78,12 +78,13 @@ const DeveloperPartnersMarquee = () => {
         title={developer.name}
       >
         <div
-          className="w-[140px] h-[36px] md:h-[42px] lg:h-[48px] flex items-center justify-center"
+          className="w-[140px] h-[36px] md:h-[42px] lg:h-[48px] flex items-center justify-center overflow-hidden"
         >
           <img
             src={developer.logo}
             alt={developer.name}
-            className="max-h-full max-w-full object-contain"
+            className="w-full h-full object-contain"
+            style={developer.scale !== 1 ? { transform: `scale(${developer.scale})` } : undefined}
             loading="eager"
             decoding="async"
             onLoad={isFirst ? handleImageLoad : undefined}
