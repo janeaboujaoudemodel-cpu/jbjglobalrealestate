@@ -542,7 +542,7 @@ const Index = () => {
       <SectionDivider />
 
       {/* AI HOME FINDER - Premium CTA Section - CENTERED vertically and horizontally */}
-      <section className="py-12 md:py-16 bg-black flex items-center justify-center min-h-[300px]">
+      <section className="bg-black flex items-center justify-center min-h-[300px]">
         <div className="container mx-auto px-4">
           <div className="flex justify-center">
             <motion.div
