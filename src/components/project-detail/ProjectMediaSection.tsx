@@ -43,7 +43,7 @@ export default function ProjectMediaSection({
   const vimeoId = videoUrl ? getVimeoVideoId(videoUrl) : null;
 
   const getEmbedUrl = () => {
-    if (youtubeId) return `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+    if (youtubeId) return `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
     if (vimeoId) return `https://player.vimeo.com/video/${vimeoId}?autoplay=1`;
     return videoUrl;
   };

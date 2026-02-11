@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react";
+import YouTubeVideoPlayer from "@/components/YouTubeVideoPlayer";
 import { motion } from "framer-motion";
 import { 
   Download, 
@@ -438,16 +439,10 @@ const CompanyProfile = () => {
             </div>
 
             <div className="jj-card-inner p-0 overflow-hidden rounded-2xl">
-              <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                <iframe
-                  className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube.com/embed/lBXXdJ2kAtQ"
-                  title="JBJ Global Real Estate - Company Introduction"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  loading="lazy"
-                />
-              </div>
+              <YouTubeVideoPlayer
+                videoId="lBXXdJ2kAtQ"
+                title="JBJ Global Real Estate - Company Introduction"
+              />
             </div>
           </motion.div>
         </SectionShell>
