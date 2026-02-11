@@ -1,89 +1,72 @@
 
 
-# Fix Plan: Remaining UI Issues
+# Fix: Search Must Show Real Projects, Developers, and Areas
 
-## 1. Brochure Logo Cropping (PremiumBrochureCard.tsx)
+## Problem
 
-The JBJ monogram in the brochure card uses `object-cover` (line 153), which crops the logo inside the circle. Change to `object-contain` so the full logo fits without cropping.
+The search bar only searches a **static index of pages** (globalSearchIndex.ts). When typing "emaar", it only finds the generic "Developers" page -- not the actual Emaar developer record from the database. The search needs to query real data from the `projects`, `developers`, and `areas` tables.
 
-**File:** `src/components/project-detail/PremiumBrochureCard.tsx`
-- Line 153: Change `object-cover` to `object-contain`
+## Changes
 
----
+### 1. Add Live Database Search to GlobalSearchModal
 
-## 2. Developer Logo on Handpicked Cards - Remove White Edges
+**File:** `src/components/GlobalSearchModal.tsx`
 
-The FeaturedListings cards use `object-cover` (line 180) for developer logos, which can crop some logos. But `object-contain` with padding would show white edges. The fix: use `object-contain` with `p-0.5` instead of no padding, and keep the white background -- this ensures the logo fits fully with minimal white space.
+Add three Supabase queries that fire when the user types (debounced ~300ms):
 
-**File:** `src/components/home/FeaturedListings.tsx`
-- Line 180: Change `object-cover` to `object-contain p-1`
+- **Developers:** `select id, name, slug, logo_url from developers where name ilike '%query%' and status = 'active' limit 5`
+- **Projects:** `select id, name, slug, main_image_url from projects where name ilike '%query%' and status = 'active' limit 5`
+- **Areas:** `select id, name, slug, image_url from areas where name ilike '%query%' and status = 'active' limit 5`
 
----
+Display results grouped by category (Developers, Projects, Areas) above the static page results. Each result links to its detail page (`/developer/{slug}`, `/project/{slug}`, `/area/{slug}`).
 
-## 3. Developer Logo in DeveloperInfoCard - Remove White Edges
+Result items will show:
+- Developer logo (or Building2 icon fallback) for developers
+- Project thumbnail (or Building2 fallback) for projects  
+- Area image (or Map fallback) for areas
 
-The developer info section on project detail pages uses `object-contain p-2` (line 69). Reduce padding to `p-1` so the logo fills more of the container.
+### 2. Add More Popular Pages (One Extra Per Column)
 
-**File:** `src/components/project-detail/DeveloperInfoCard.tsx`
-- Line 69: Change `p-2` to `p-1`
+**File:** `src/components/GlobalSearchModal.tsx`
 
----
+The Popular Pages grid has 6 items in a 3-column layout (2 rows). Add 3 more items to make it 9 (3 rows of 3):
 
-## 4. "...more" Link Styling
+Add these to the `POPULAR_PAGES` array:
+- `{ label: "About Us", route: "/about", icon: Building2 }`
+- `{ label: "News", route: "/news", icon: Newspaper }`
+- `{ label: "AI Home Finder", route: "/quiz", icon: Sparkles }`
 
-The "more" link in FeaturedListings (line 271) is already gold and has no arrow. The ProjectCard "...more" (line 348) is also gold. Both look correct from the last fix. No additional changes needed here.
+This adds one more row, effectively one more page per column.
 
----
+### 3. Fix Divider Between Popular Pages Columns
 
-## 5. Developer Marquee Spacing
+**File:** `src/components/GlobalSearchModal.tsx`
 
-Logos currently use `px-4 md:px-6 lg:px-8` with `max-h-[32px] md:max-h-[40px] lg:max-h-[44px]` and `max-w-[120px] md:max-w-[140px]`. Some logos still touch because the container `min-w` values are smaller than the spacing. Fix by:
-- Adding a `gap` via the container div instead of padding on individual items
-- Setting all logos to a strict uniform max dimensions
+Currently, the Popular Pages grid uses `border-r border-gold/20` on items that aren't the last in a row, creating vertical lines between columns. The user says it looks like "two lines" and wants a single clean divider.
 
-**File:** `src/components/DeveloperPartnersMarquee.tsx`
-- Line 77: Increase horizontal padding slightly to `px-5 md:px-7 lg:px-9`
-- Line 81: Standardize container: `h-10 md:h-12 lg:h-14 w-[120px] md:w-[150px] lg:w-[170px]` (fixed width instead of min-width, ensuring uniform sizing)
-- Line 86: Keep max constraints but ensure consistent logo sizing with `max-h-[28px] md:max-h-[36px] lg:max-h-[40px]` (slightly reduced to prevent touching)
+**Embedded mode (line 221):** Remove the `border-r` approach entirely. Instead, use a simpler visual separator -- just remove the dividers between individual items in the grid. The grid gap itself provides visual separation.
 
----
+**Full modal mode (line 373):** Same fix -- remove any double-line dividers and rely on the grid gap for clean separation.
 
-## 6. Project "Not Found" Page Visibility
+### 4. Search Results Display for Database Items
 
-The current not-found state (lines 238-252) now uses `bg-premium-bg` which is the light champagne background. The text uses `text-foreground` (dark) and the button uses `variant="dark"`. This should already be visible. However, the user reported a "full black screen" -- this might be the old cached version. Let me verify the current styling is correct and add more visual prominence:
+In both embedded and full modal modes, when the user types a query:
 
-**File:** `src/pages/ProjectDetail.tsx`
-- Ensure the not-found section has high-contrast styling with a gold-bordered card container
-- Make the "Back to Properties" button use gold styling (`variant="primary"`)
+1. Show **database results first** (grouped: Developers, Projects, Areas) with small thumbnails
+2. Show **static page results** below under "Pages & Tools" heading
+3. If no results at all, show "No results found"
 
----
+Each database result item will be a button that navigates to the detail page with the same styling as existing search results but with a small image/logo thumbnail instead of a generic icon.
 
-## 7. Search Bars Already Sticky
+## Technical Details
 
-Verified that:
-- **Properties page:** Already sticky (`sticky top-14 sm:top-16 md:top-20 lg:top-[72px] z-40`)
-- **Developers page:** Already sticky (`sticky top-24 lg:top-20 z-40`)  
-- **Area detail:** Already has `AreaStickySearchBar` component with IntersectionObserver
+- Use `useQuery` with the search query as key, enabled only when `query.length >= 2`
+- Debounce with a 300ms delay using a `useEffect` + `setTimeout` pattern
+- Combine static index results and database results into a unified display
+- Database queries use `.ilike('name', '%query%')` for fuzzy matching
 
-No changes needed for stickiness.
-
----
-
-## 8. Project Routing
-
-All project cards link to `/project/${project.slug}`. The `useProject` hook queries the `projects` table by slug. If not found locally, the `useReellyProjectBySlug` fallback is tried. Projects from the Handpicked section come from the local DB so they should always resolve. If a project shows "not found", it means neither the local DB nor Reelly API has it.
-
-The "Keturah Reserve" project exists in the DB with slug `keturah-reserve-mag-16`. It should route correctly. No code change needed -- routing works by design.
-
----
-
-## Summary of Changes
+## Files Modified
 
 | File | Change |
 |------|--------|
-| `PremiumBrochureCard.tsx` (line 153) | `object-cover` to `object-contain` for JBJ logo |
-| `FeaturedListings.tsx` (line 180) | `object-cover` to `object-contain p-1` for dev logos |
-| `DeveloperInfoCard.tsx` (line 69) | `p-2` to `p-1` for dev logo padding |
-| `DeveloperPartnersMarquee.tsx` (lines 77, 81, 86) | Uniform spacing and sizing for marquee logos |
-| `ProjectDetail.tsx` (lines 238-252) | Enhanced not-found state with gold button styling |
-
+| `src/components/GlobalSearchModal.tsx` | Add live DB search, more popular pages, fix dividers |
