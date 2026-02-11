@@ -1,32 +1,46 @@
 
 
-## Restyle "Recommended for You" Popup to Champagne Theme
+## Fix Company Profile PDF Download and Add Owner Download Controls
 
-### Current State
-The popup uses a dark theme (`from-[#1a1a1a]`, `bg-zinc-800`, dark borders) which is inconsistent with the platform's champagne gold design language.
+### Problem
+1. The "Download Company Profile" button fails with "Failed to generate PDF, please try again"
+2. The Owner needs the ability to download **two versions** from the Admin Panel: one with founder details, one without
+3. The public website download should always respect the Founder Visibility toggle
 
-### Changes to `src/components/PropertyRecommendationPopup.tsx`
+### Root Cause of PDF Failure
+The `generatePDF` function in `CompanyProfile.tsx` (line 290-698) uses `pdf-lib` to build a 13-page A4 landscape PDF entirely client-side. The most likely failure point is at the font embedding or page drawing stage -- `pdf-lib`'s `StandardFonts.Helvetica` should work, but certain special characters (like the checkmark "✓" on line 593 of the PDF code) are NOT supported by standard PDF fonts and will throw an encoding error. This is the bug: the Client Experience page uses `"✓"` which is outside the WinAnsi encoding range supported by `StandardFonts.Helvetica`.
 
-**Outer container:**
-- Replace dark gradient `from-[#1a1a1a] via-[#0d0d0d] to-[#1a1a1a]` with champagne gradient `from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`
-- Keep `border-gold/50` and gold shadow
+### Plan
 
-**Header bar:**
-- Replace `border-zinc-800` with `border-gold/30`
-- Title text from `text-white` to `text-black`
-- Close button from `text-zinc-500 hover:text-white` to `text-zinc-400 hover:text-black`
+**1. Fix the PDF generation error** (`src/pages/CompanyProfile.tsx`)
+- Replace the `"✓"` character (used in the Client Experience page, PDF page 10) with a supported alternative like `">"` or a bullet `"*"` that is within WinAnsi encoding
+- This is the change that will fix the "Failed to generate PDF" error
 
-**Context line ("Based on your interest in..."):**
-- From `text-zinc-400` to `text-zinc-600`
+**2. Add a `generatePDF` parameter for founder inclusion** (`src/pages/CompanyProfile.tsx`)
+- Refactor `generatePDF` to accept an optional `includeFounder: boolean` parameter
+- When called from the public page, it uses the current `isFounderVisible` value (respects the global toggle)
+- Export the PDF generation logic as a standalone function so it can be reused from the Admin Panel
 
-**Project cards:**
-- Background from `bg-zinc-800/60 hover:bg-zinc-700/80` to `bg-white/70 hover:bg-white`
-- Border stays gold-based (`border-gold/20 hover:border-gold/50`)
-- Project name from `text-white` to `text-black`, hover stays `text-gold`
-- Area text from `text-zinc-400` to `text-zinc-500`
-- Fallback icon container from `bg-zinc-700` to `bg-gold/10`
-- Arrow icon from `text-zinc-600` to `text-zinc-400`
+**3. Create Admin download controls** (`src/components/admin/CompanyProfileDownload.tsx`)
+- New component placed alongside the existing `FounderVisibilityToggle` in the Admin Panel settings tab
+- Two download buttons:
+  - "Download Company Profile (Standard)" -- generates PDF **without** founder pages
+  - "Download Company Profile (With Founder)" -- generates PDF **with** founder pages, regardless of global toggle
+- Both use the same PDF generation logic from step 2
 
-**CTA button:**
-- Keep the gold gradient button with black text (already on-brand)
+**4. Wire into Admin Panel** (`src/pages/Admin.tsx`)
+- Import and place `CompanyProfileDownload` in the settings tab, next to the existing `FounderVisibilityToggle` and `PodcastVisibilityToggle` grid
 
+### Technical Details
+
+| File | Change |
+|------|--------|
+| `src/pages/CompanyProfile.tsx` | Replace `"✓"` with `">"` in PDF generation (line ~593). Refactor `generatePDF` to accept `includeFounder` boolean parameter. Extract as exportable utility. |
+| `src/utils/generateCompanyProfilePDF.ts` | New file: extracted PDF generation function that accepts `{ includeFounder: boolean }` |
+| `src/components/admin/CompanyProfileDownload.tsx` | New component: card with two download buttons (with/without founder) |
+| `src/pages/Admin.tsx` | Import and add `CompanyProfileDownload` to the settings tab grid |
+
+### How It Works
+- **Public website**: The download button calls `generatePDF()` which checks the global `isFounderVisible` toggle -- when the toggle is OFF, the founder page is excluded from the PDF automatically (this already works in the existing code)
+- **Admin Panel**: Two explicit buttons bypass the global toggle -- one always includes founder, one always excludes
+- **Founder Visibility toggle**: When toggled ON, the founder section appears on the website AND in the public PDF. When OFF, both are hidden. The Admin Panel always offers both options regardless of toggle state.
