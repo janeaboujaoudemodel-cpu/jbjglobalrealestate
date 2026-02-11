@@ -182,9 +182,9 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
             <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-gold/40">
               {/* Fixed-size avatar container to prevent layout shift */}
               <div className="w-16 h-16 flex-shrink-0">
-                <Avatar className="h-16 w-16 border-2 border-gold bg-transparent">
+                <Avatar className="h-16 w-16 border border-gold bg-transparent">
                   <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
-                  <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black text-xl font-bold">
+                  <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold text-black text-xl font-bold">
                     {avatarInitials}
                   </AvatarFallback>
                 </Avatar>
