@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { 
   Phone, Mail, Globe, Share2, Download, MessageCircle, Video, 
@@ -12,11 +12,6 @@ import { toast } from "sonner";
 // Import CEO photo - same as used in team/leadership
 import janePhoto from '@/assets/ceo/jane-ceo-private-jet.jpg';
 
-// Lazy-load company intro video path (avoid blocking initial render)
-const jbjIntroVideo = new URL('@/assets/videos/jbj-company-intro.mp4', import.meta.url).href;
-
-// Import logo for video poster
-import jbjMonogramLightTransparent from '@/assets/jbj-monogram-light-transparent.png';
 
 // Contact info constants - LOCKED (from BRAND_LOCK)
 // CASING RULE: JBJ.AE, Contact@JBJ.AE - EXACTLY as specified
@@ -152,7 +147,7 @@ const DigitalCard = () => {
   const [showCallOptions, setShowCallOptions] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [copied, setCopied] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  
 
   // Set noindex meta tag - only for this page, preserve existing global tags
   useEffect(() => {
@@ -204,13 +199,6 @@ const DigitalCard = () => {
     };
   }, []);
 
-  // Handle video end - freeze on first frame (logo visible)
-  const handleVideoEnd = () => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.pause();
-    }
-  };
 
   // Share functions
   const cardUrl = window.location.href;
@@ -389,18 +377,13 @@ const DigitalCard = () => {
                 className="relative rounded-2xl overflow-hidden bg-black aspect-video"
                 style={{ border: `2px solid ${GOLD.primary}40` }}
               >
-                <video
-                  ref={videoRef}
-                  className="w-full h-full object-cover"
-                  controls
-                  poster={jbjMonogramLightTransparent}
-                  preload="none"
-                  onEnded={handleVideoEnd}
-                  playsInline
-                >
-                  <source src={jbjIntroVideo} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src="https://www.youtube.com/embed/lBXXdJ2kAtQ"
+                  title="JBJ Global Real Estate - Company Introduction"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
               </div>
             </div>
 
