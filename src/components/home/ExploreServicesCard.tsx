@@ -275,7 +275,7 @@ const ExploreServicesCard = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={goToPrevious}
-                    className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group overflow-hidden"
+                    className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group overflow-hidden active:scale-90 active:shadow-[0_0_20px_rgba(200,167,102,0.6)]"
                     style={{
                       background: 'linear-gradient(145deg, #FDFBF7, #E8DCC8)',
                       border: '2px solid rgba(200, 167, 102, 0.7)',
@@ -296,7 +296,7 @@ const ExploreServicesCard = () => {
                   </button>
                   <button
                     onClick={goToNext}
-                    className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group overflow-hidden"
+                    className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group overflow-hidden active:scale-90 active:shadow-[0_0_20px_rgba(200,167,102,0.6)]"
                     style={{
                       background: 'linear-gradient(145deg, #FDFBF7, #E8DCC8)',
                       border: '2px solid rgba(200, 167, 102, 0.7)',
