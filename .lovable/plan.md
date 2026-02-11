@@ -1,59 +1,38 @@
 
-# Digital Business Card Layout Improvements
 
-## Changes Overview
+## Personalized Chat Greeting for Logged-In Users
 
-Three fixes in `src/pages/DigitalCard.tsx`:
+### Problem
+When a logged-in user opens the chat widget, it says "Hi there!" and asks for their full name from scratch -- even though we already know who they are. This feels impersonal and redundant.
 
-## 1. Center Save Contact buttons under their sections
+### Solution
+Detect logged-in users when the chat opens, fetch their profile name, and modify the conversational flow to:
+1. Greet them by name: "Hi, [Full Name]!"
+2. Ask them to **confirm** their name is correct (since it might be a fake signup name)
+3. Skip the name input step if confirmed, or let them type a corrected name
 
-Both "Save Company Contact" (line 428) and "Save Personal Contact" (line 479) currently use `inline-flex` with `mx-auto`, but the parent `<div>` is not set to center them as block-level elements. Wrap each button in a `<div className="flex justify-center">` or add `text-center` / `flex flex-col items-center` to the parent section divs (lines 391-439 and 442-490) so the buttons sit centered under their respective contact details.
+### Changes
 
-## 2. Reorganize Send Email, Share This Card, and Website into a row of 3 cards
+**1. `src/components/AIChatWidget.tsx`**
+- Import `useAuth` from AuthContext
+- When the widget opens or goes to `conversational_collect`, check if user is logged in
+- If logged in, fetch the user's display name from `crm_users_profile` or fall back to `user.user_metadata` / `user.email`
+- Pass the detected name as a new prop (`detectedFullName`) to `ChatConversationalCollect`
 
-Currently these are stacked vertically as individual links/buttons. Restructure them into a horizontal row of 3 equally-styled cards:
+**2. `src/components/chat/ChatConversationalCollect.tsx`**
+- Add a new optional prop: `detectedFullName?: string`
+- Add a new step: `'confirm_name'` (before `'name'`)
+- Flow for logged-in users:
+  - Initial greeting: "Hi, [Full Name]! I can see you're already a member. Could you please confirm that your full name is **[Full Name]**? If not, please type your correct full name below."
+  - Show two options: a "Yes, that's correct" button and a text input to type a different name
+  - If confirmed, pre-fill `fullName` and skip to email/phone step
+  - If they type a new name, use that instead
+- Flow for non-logged-in users: unchanged ("Hi there!" + ask for name)
 
-- **Remove** the current standalone "Share Card Button" section (lines 626-636) from the bottom
-- **Replace** the current Email (lines 492-511) and Website (lines 513-534) blocks with a 3-column grid: `grid grid-cols-3 gap-3`
-- Each card: Send Email (left), Share This Card (center), Website (right)
-- All three cards share the same styling: white background, gold border, rounded, icon circle on top or left, consistent padding
+### Technical Details
 
-## 3. Technical Details
+- The `crm_users_profile` table has a `display_name` field -- this is the primary source
+- Fallback chain: `crm_users_profile.display_name` -> `user.user_metadata.full_name` -> `user.email`
+- The confirmation step uses a `confirm_name` collect step with a "Confirm" button and an alternative text input
+- No database schema changes required
 
-**File:** `src/pages/DigitalCard.tsx`
-
-### Save buttons centering (lines 391 and 442):
-Add `flex flex-col items-center` to both Company and Personal section wrapper divs so the `inline-flex` buttons naturally center.
-
-### Three-card row (replace lines 492-534 and remove lines 626-636):
-```text
-<div className="grid grid-cols-3 gap-3 mb-3">
-  {/* Send Email */}
-  <a href="mailto:..." className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-white shadow-md hover:shadow-lg transition-all" style={{ border: '2px solid GOLD/50' }}>
-    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background, border }}>
-      <Mail icon />
-    </div>
-    <span className="text-sm font-semibold text-center">Send Email</span>
-  </a>
-
-  {/* Share This Card */}
-  <button onClick={setShowShareOptions(true)} className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-white shadow-md hover:shadow-lg transition-all" style={{ border: '2px solid GOLD/50' }}>
-    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background, border }}>
-      <Share2 icon />
-    </div>
-    <span className="text-sm font-semibold text-center">Share Card</span>
-  </button>
-
-  {/* Website */}
-  <a href={website} className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-white shadow-md hover:shadow-lg transition-all" style={{ border: '2px solid GOLD/50' }}>
-    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background, border }}>
-      <Globe icon />
-    </div>
-    <span className="text-sm font-semibold text-center">Website</span>
-  </a>
-</div>
-```
-
-- The old full-width black "Share This Card" button at the bottom (lines 626-636) is removed since it is now part of the 3-card row
-- The share modal remains unchanged
-- Each card uses a vertical layout (icon on top, label below) for a clean, premium, balanced appearance
