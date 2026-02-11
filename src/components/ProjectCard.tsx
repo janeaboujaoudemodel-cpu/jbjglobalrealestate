@@ -47,11 +47,10 @@ const CURRENCY_SYMBOLS: Record<string, string> = {
 
 // Helper to format price with currency conversion
 const formatPriceWithCurrency = (price: number, currency: string = 'AED'): string => {
-  const converted = Math.round(price * CURRENCY_RATES[currency]);
+  const converted = Math.round(Math.round(price) * CURRENCY_RATES[currency]);
   const symbol = CURRENCY_SYMBOLS[currency];
   if (converted >= 1000000) {
     const millions = converted / 1000000;
-    // Show 1 decimal only if it's not .0
     const formatted = millions % 1 === 0 ? `${millions}` : `${millions.toFixed(1)}`;
     return `${symbol} ${formatted}M`;
   }

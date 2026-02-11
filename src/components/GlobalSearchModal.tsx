@@ -153,14 +153,14 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     return (
       <div className="flex flex-col" style={{ maxHeight: '500px' }}>
         {/* Search Input */}
-        <div className="relative border-b border-gold/30 flex-shrink-0">
+        <div className="relative border-b border-gold/30 flex-shrink-0 bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8]">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
           <Input
             ref={inputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Search anything..."
+            placeholder="Search projects, developers, tools & more..."
             className="w-full h-12 pl-12 pr-4 bg-transparent border-0 text-black text-base placeholder:text-gold/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           />
         </div>
@@ -213,12 +213,12 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               </div>
               <div>
                 <p className="text-xs font-semibold text-gold/80 mb-2 uppercase tracking-wider">Popular Pages</p>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {POPULAR_PAGES.map((page) => (
+                <div className="grid grid-cols-3 gap-1.5">
+                  {POPULAR_PAGES.map((page, idx) => (
                     <button
                       key={page.route}
                       onClick={() => handleSelect(page.route)}
-                      className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-black/5 transition-all text-left"
+                      className={`flex items-center gap-2.5 p-2 rounded-lg hover:bg-black/5 transition-all text-left ${idx % 3 !== 2 ? 'border-r border-gold/20' : ''}`}
                     >
                       <div className="w-7 h-7 rounded-md bg-white/50 border border-gold/10 flex items-center justify-center text-gold">
                         <page.icon className="w-3.5 h-3.5" />
@@ -249,9 +249,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                   </div>
                 </div>
               )}
-              <p className="text-xs text-gold/80 text-center pt-1">
-                Type to search projects, developers, tools & more...
-              </p>
+              {/* Hint removed - moved to placeholder */}
             </div>
           )}
         </div>
