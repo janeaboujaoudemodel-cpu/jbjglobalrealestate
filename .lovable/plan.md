@@ -1,77 +1,69 @@
 
 
-## Fix Chat Support: 7 Issues
+## Fix Sunset Bay Grand: Data Enrichment, Duplicate Images, Brochure Location, and Form Improvements
 
 ### Issues Identified
 
-1. **"Submitted to Our Team" screen has white text on bright background** -- `ChatSubmitted.tsx` uses `text-white` classes on a champagne background
-2. **"Submit to Team" triggers automatically without user writing anything** -- The button is always visible and clickable even with 0 user messages; no guard or confirmation
-3. **Name detection only shows first name** -- `detectedFullName` already fetches full name, but the greeting splits and only uses first name in places; the confirm button correctly shows full name but the welcome message in `handleAgentReady` only uses `userInfo.firstName`
-4. **Selecting a shortcut (e.g., "Buy Property") opens generic chat** -- `handleAgentReady` sends a generic welcome message instead of contextualizing based on the selected service/shortcut
-5. **Chat is slow** -- The streaming endpoint uses `gemini-2.5-flash-lite`; the fallback uses the non-streaming `ai-chat-support` which has heavy rate-limit/blocklist DB queries before every request
-6. **Where do chat inquiries/forms go?** -- All data is stored in the `chat_conversations` table and `crm_leads` table, viewable in the Admin Leads dashboard (`/admin/leads`)
-7. **Submit to Team should collect inquiry first** -- Instead of instantly submitting, it should prompt the user to write a summary/inquiry message, then generate a structured form on the backend
+1. **Duplicate images** -- Both images in `project_images` have the exact same URL (`f339a09c345c47ada758ccb8f6c00944.webp`). The second was added as "Cover" but is identical. Need to remove the duplicate.
+
+2. **Missing enriched data** -- The project has minimal data from Reelly only:
+   - `amenities: []` (empty)
+   - `unit_types: null`
+   - `payment_plan: null`
+   - `payment_breakdown: null`
+   - `floor_plan_types: []`
+   - `highlights: null`
+   - `short_description: null`
+   - `usp_headline: null`, `usp_bullets: []`
+   - `total_units: 27` (likely inventory, not project scale)
+   - No brochure uploaded (0 documents)
+   - Only 1 unique image
+
+3. **Brochure location text** -- `PremiumBrochureCard.tsx` line 183-185 hardcodes "Dubai - UAE" instead of showing the project's area name. Should show "Dubai Islands, Dubai" (area_name then city).
+
+4. **Register Interest form too narrow** -- Currently `max-w-xl` (~576px). Needs to be wider for a more premium feel.
+
+5. **Nationalities and languages completeness** -- Need to verify `getCountryList()` and `getLanguageList()` cover all countries/languages comprehensively. Current implementation uses `Intl.supportedValuesOf("region")` which provides 200+ countries -- this is already comprehensive. Languages list has 100+ entries -- also comprehensive.
 
 ---
 
 ### Changes
 
-#### 1. Fix ChatSubmitted.tsx colors (white text to black)
-- Change `text-white` to `text-black` on the title
-- Change `text-zinc-400` to `text-zinc-600` on the description
-- Update the icon background to use gold tones instead of emerald on dark
-- Update the "Continue on WhatsApp" button and "Start New Chat" button borders for champagne theme
+#### 1. Remove duplicate image (Database)
+- Delete the duplicate `project_images` row where `id = 'cf989546-2b91-45aa-aaab-15cc62b7d82e'` (the "Cover" copy with same URL)
 
-#### 2. Prevent auto-submit -- Add guard + confirmation to "Submit to Team"
-In `ChatMessages.tsx`:
-- Only show the "Submit to Team" button when the user has sent at least 1 message
-- When clicked, show a confirmation prompt (inline) asking "Would you like to add a final message before submitting?" with a text area and "Submit Now" / "Cancel" buttons
-- Only call `onSubmitToTeam` after the user confirms
+#### 2. Enrich Sunset Bay Grand project data (Database)
+Update the project record with enriched content extracted from the brochure and description the user previously provided:
+- **amenities**: Populate with the full amenities list from the brochure (rooftop sky pool, family cabanas, open-air cinema, clubhouse, children's play zones, smart home technology, etc.)
+- **short_description**: A concise 1-2 sentence summary
+- **usp_headline** and **usp_bullets**: Key selling points
+- **highlights**: Key project highlights array
+- **property_type_label**: "Apartments"
 
-#### 3. Use full name (first + last) throughout
-In `AIChatWidget.tsx`:
-- `handleAgentReady` welcome message: use `${userInfo.firstName} ${userInfo.lastName}`.trim() or just `userInfo.firstName` if lastName is empty
-- The `ChatShortcuts` greeting should also use full name when available
-- Pass full name to `ChatSubmitted` instead of just firstName
+#### 3. Fix brochure location text -- `PremiumBrochureCard.tsx`
+- Accept a new `location` prop (optional string)
+- Replace hardcoded "Dubai - UAE" with dynamic display: `{area_name} - Dubai` or fallback to "Dubai - UAE"
+- In `ProjectDetailLayout.tsx`, pass `project.area_name` or `project.location` to the brochure card
 
-#### 4. Context-aware welcome message based on selected shortcut
-In `AIChatWidget.tsx` `handleAgentReady`:
-- Replace the generic welcome with service-specific messages. For example:
-  - `buy_property`: "I see you're interested in buying property in Dubai! Let me help you find the perfect investment..."
-  - `rent_property`: "Looking to rent? I'll help you find your ideal home..."
-  - `property_management`: "Let's discuss managing your property portfolio..."
-  - `general_inquiry`: Keep the generic welcome
-- Each message should immediately start qualifying based on the service type
+#### 4. Widen the Register Interest form -- `ConsultationRequestForm.tsx`
+- Change `max-w-xl` to `max-w-2xl` (~672px) on both the form container (line 198) and success state (line 178)
+- This gives a slight stretch from the edges without making it too wide
 
-#### 5. Optimize chat speed
-In `ai-chat-stream/index.ts`:
-- Switch model from `gemini-2.5-flash-lite` to `gemini-2.5-flash` for better quality with still-fast speed
-- Reduce `max_tokens` from 400 to 300 for faster responses
-In `AIChatWidget.tsx`:
-- For the streaming path, skip the fallback to non-streaming endpoint unless streaming actually fails (currently falls through if `streamedContent` is empty even on success)
-
-#### 6. Submit to Team flow: Collect inquiry message first
-In `ChatMessages.tsx`:
-- Replace the instant "Submit to Team" button with a flow:
-  1. User clicks "Submit to Team"
-  2. A panel appears asking "Please describe your inquiry or what you need from our team"
-  3. User types their summary
-  4. On submit, pass the summary along with the conversation to `onSubmitToTeam`
-- In `AIChatWidget.tsx` `handleSubmitToTeam`: include the inquiry summary in the email notification and conversation record
-
-#### 7. Inform user where data goes
-- No code change needed. All chat data goes to `chat_conversations` table and leads to `crm_leads` table, both visible in the Admin Leads dashboard at `/admin/leads` under the "AI Chat Sessions" tab.
+#### 5. Verify nationality/language completeness
+- `getCountryList()` already uses `Intl.supportedValuesOf("region")` which returns all 200+ UN-recognized countries with flags -- already comprehensive
+- `getLanguageList()` already has 100+ languages -- already comprehensive
+- No code changes needed for this item
 
 ---
 
 ### Technical Details
 
 **Files to modify:**
-- `src/components/chat/ChatSubmitted.tsx` -- Fix text colors for champagne background
-- `src/components/chat/ChatMessages.tsx` -- Add submit guard, confirmation flow, message count check
-- `src/components/AIChatWidget.tsx` -- Full name usage, context-aware welcome messages, pass inquiry summary
-- `src/components/chat/ChatShortcuts.tsx` -- Use full name in greeting
-- `supabase/functions/ai-chat-stream/index.ts` -- Upgrade model for speed/quality
+- `src/components/project-detail/PremiumBrochureCard.tsx` -- Add `location` prop, replace hardcoded "Dubai - UAE"
+- `src/components/project-detail/ProjectDetailLayout.tsx` -- Pass location to PremiumBrochureCard
+- `src/components/ConsultationRequestForm.tsx` -- Change `max-w-xl` to `max-w-2xl` on lines 178 and 198
 
-**No new files or dependencies needed.**
+**Database operations (using insert/update tool):**
+- DELETE duplicate image from `project_images`
+- UPDATE `projects` row for Sunset Bay Grand with enriched amenities, short_description, usp_headline, usp_bullets, highlights, property_type_label
 
