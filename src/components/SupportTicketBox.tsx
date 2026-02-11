@@ -396,7 +396,7 @@ const SupportTicketBox = () => {
   };
 
   return (
-    <section className="py-12 md:py-16 bg-black">
+    <section className="pb-12 md:pb-16 bg-black">
       {/* Two-layer system only: Active Champagne (jj-layer-2) + Pearl card */}
       <div className="jj-layer-2">
         <motion.div
