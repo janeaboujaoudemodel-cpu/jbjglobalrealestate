@@ -33,7 +33,7 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
           right: '24px',
           maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
           overflowY: 'auto' as const,
-          background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)',
+          background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
           ...style,
         }}
       >

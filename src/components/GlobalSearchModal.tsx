@@ -141,8 +141,8 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     queryFn: async (): Promise<DbResult[]> => {
       const { data } = await supabase
         .from('projects')
-        .select('id, name, slug, cover_image_url')
-        .ilike('name', `%${debouncedQuery}%`)
+        .select('id, name, slug, cover_image_url, developer_name')
+        .or(`name.ilike.%${debouncedQuery}%,developer_name.ilike.%${debouncedQuery}%`)
         .eq('status', 'active')
         .limit(5);
       return (data || []).map(p => ({ id: p.id, name: p.name, slug: p.slug, image: p.cover_image_url }));
