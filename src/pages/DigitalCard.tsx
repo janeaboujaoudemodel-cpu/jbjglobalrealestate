@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import YouTubeVideoPlayer from "@/components/YouTubeVideoPlayer";
 import { Link } from "react-router-dom";
 import { 
   Phone, Mail, Globe, Share2, Download, MessageCircle, Video, 
@@ -377,12 +378,9 @@ const DigitalCard = () => {
                 className="relative rounded-2xl overflow-hidden bg-black aspect-video"
                 style={{ border: `2px solid ${GOLD.primary}40` }}
               >
-                <iframe
-                  className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube.com/embed/lBXXdJ2kAtQ"
+                <YouTubeVideoPlayer
+                  videoId="lBXXdJ2kAtQ"
                   title="JBJ Global Real Estate - Company Introduction"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
                 />
               </div>
             </div>
