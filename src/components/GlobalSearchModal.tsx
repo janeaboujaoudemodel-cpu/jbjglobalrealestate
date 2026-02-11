@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { searchItems } from "@/config/globalSearchIndex";
 import type { SearchItem } from "@/config/globalSearchIndex";
+import { SafeImage } from "@/components/SafeImage";
 
 interface GlobalSearchModalProps {
   isOpen: boolean;
@@ -26,7 +27,7 @@ const QUICK_SHORTCUTS = [
   { label: "AI Tools", route: "/toolkit", icon: Sparkles, color: "bg-indigo-500" },
 ];
 
-// Popular pages
+// Popular pages - 9 items (3 columns × 3 rows)
 const POPULAR_PAGES = [
   { label: "Home", route: "/", icon: Home },
   { label: "Favorites", route: "/favorites", icon: Heart },
@@ -34,6 +35,9 @@ const POPULAR_PAGES = [
   { label: "Golden Visa", route: "/guides/golden-visa-uae", icon: Award },
   { label: "Contact", route: "/contact", icon: Phone },
   { label: "FAQ", route: "/faq", icon: HelpCircle },
+  { label: "About Us", route: "/about", icon: Building2 },
+  { label: "News", route: "/news", icon: Newspaper },
+  { label: "AI Home Finder", route: "/quiz", icon: Sparkles },
 ];
 
 const RECENT_SEARCHES_KEY = "jbj_recent_searches";
@@ -58,12 +62,31 @@ const clearRecentSearches = () => {
   localStorage.removeItem(RECENT_SEARCHES_KEY);
 };
 
+// Debounce hook
+function useDebouncedValue(value: string, delay: number) {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return debounced;
+}
+
+interface DbResult {
+  id: string;
+  name: string;
+  slug: string;
+  image?: string | null;
+}
+
 const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = false }: GlobalSearchModalProps) => {
   const [query, setQuery] = useState("");
   const [recentSearches, setRecentSearches] = useState<string[]>(getRecentSearches());
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { user, isOwner } = useAuth();
+
+  const debouncedQuery = useDebouncedValue(query.trim(), 300);
 
   // Check CRM access
   const { data: crmProfile } = useQuery({
@@ -97,6 +120,52 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     staleTime: 60000,
   });
 
+  // --- Live DB search queries ---
+  const { data: dbDevelopers = [] } = useQuery({
+    queryKey: ['search-developers', debouncedQuery],
+    queryFn: async (): Promise<DbResult[]> => {
+      const { data } = await supabase
+        .from('developers' as any)
+        .select('id, name, slug, logo_url')
+        .ilike('name', `%${debouncedQuery}%`)
+        .eq('status', 'active')
+        .limit(5);
+      return ((data as unknown as Array<{ id: string; name: string; slug: string; logo_url: string | null }>) || []).map(d => ({ id: d.id, name: d.name, slug: d.slug, image: d.logo_url }));
+    },
+    enabled: debouncedQuery.length >= 2 && isOpen,
+    staleTime: 30000,
+  });
+
+  const { data: dbProjects = [] } = useQuery({
+    queryKey: ['search-projects', debouncedQuery],
+    queryFn: async (): Promise<DbResult[]> => {
+      const { data } = await supabase
+        .from('projects')
+        .select('id, name, slug, cover_image_url')
+        .ilike('name', `%${debouncedQuery}%`)
+        .eq('status', 'active')
+        .limit(5);
+      return (data || []).map(p => ({ id: p.id, name: p.name, slug: p.slug, image: p.cover_image_url }));
+    },
+    enabled: debouncedQuery.length >= 2 && isOpen,
+    staleTime: 30000,
+  });
+
+  const { data: dbAreas = [] } = useQuery({
+    queryKey: ['search-areas', debouncedQuery],
+    queryFn: async (): Promise<DbResult[]> => {
+      const { data } = await supabase
+        .from('areas')
+        .select('id, name, slug, image_url')
+        .ilike('name', `%${debouncedQuery}%`)
+        .eq('is_active', true)
+        .limit(5);
+      return (data || []).map(a => ({ id: a.id, name: a.name, slug: a.slug, image: a.image_url }));
+    },
+    enabled: debouncedQuery.length >= 2 && isOpen,
+    staleTime: 30000,
+  });
+
   const hasCRMAccess = crmProfile?.is_active && 
     ['owner_admin', 'broker_member', 'sales_director', 'admin', 'founder'].includes(crmProfile?.crm_role || '');
 
@@ -111,6 +180,9 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     isAuthenticated: !!user,
     limit: 12,
   }).filter(item => item.icon && typeof item.icon === 'function');
+
+  const hasDbResults = dbDevelopers.length > 0 || dbProjects.length > 0 || dbAreas.length > 0;
+  const totalResults = results.length + dbDevelopers.length + dbProjects.length + dbAreas.length;
 
   useEffect(() => {
     if (isOpen) {
@@ -141,11 +213,79 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && results.length > 0 && query.trim()) {
-      handleSelect(results[0].route);
+    if (e.key === "Enter" && query.trim()) {
+      // Prioritize DB results, then static
+      if (dbDevelopers.length > 0) {
+        handleSelect(`/developer/${dbDevelopers[0].slug}`);
+      } else if (dbProjects.length > 0) {
+        handleSelect(`/project/${dbProjects[0].slug}`);
+      } else if (dbAreas.length > 0) {
+        handleSelect(`/area/${dbAreas[0].slug}`);
+      } else if (results.length > 0) {
+        handleSelect(results[0].route);
+      }
     } else if (e.key === "Escape") {
       onClose();
     }
+  };
+
+  // Reusable DB result row
+  const DbResultItem = ({ item, route, fallbackIcon: FallbackIcon, isFirst = false }: { item: DbResult; route: string; fallbackIcon: React.ElementType; isFirst?: boolean }) => (
+    <button
+      onClick={() => handleSelect(route)}
+      className={`w-full flex items-center gap-3 p-2 rounded-lg transition-all text-left ${isFirst ? 'bg-black/10 border border-gold/40' : 'hover:bg-black/5'}`}
+    >
+      <div className="w-8 h-8 rounded-lg overflow-hidden border border-gold/30 bg-white flex items-center justify-center flex-shrink-0">
+        {item.image ? (
+          <SafeImage src={item.image} alt={item.name} className="w-full h-full object-contain" />
+        ) : (
+          <FallbackIcon className="w-4 h-4 text-gold" />
+        )}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-black truncate">{item.name}</p>
+      </div>
+      <ArrowRight className="w-3 h-3 text-gold/60 flex-shrink-0" />
+    </button>
+  );
+
+  // DB results section
+  const DbResultsSection = ({ compact = false }: { compact?: boolean }) => {
+    if (!hasDbResults) return null;
+    return (
+      <div className="space-y-3">
+        {dbDevelopers.length > 0 && (
+          <div>
+            <p className={`${compact ? 'text-xs' : 'text-xs'} font-semibold text-gold/80 mb-1 px-1 uppercase tracking-wider`}>Developers</p>
+            <div className="space-y-0.5">
+              {dbDevelopers.map((d, i) => (
+                <DbResultItem key={d.id} item={d} route={`/developer/${d.slug}`} fallbackIcon={Building2} isFirst={!compact && i === 0 && dbProjects.length === 0 && dbAreas.length === 0} />
+              ))}
+            </div>
+          </div>
+        )}
+        {dbProjects.length > 0 && (
+          <div>
+            <p className="text-xs font-semibold text-gold/80 mb-1 px-1 uppercase tracking-wider">Projects</p>
+            <div className="space-y-0.5">
+              {dbProjects.map(p => (
+                <DbResultItem key={p.id} item={p} route={`/project/${p.slug}`} fallbackIcon={Building2} />
+              ))}
+            </div>
+          </div>
+        )}
+        {dbAreas.length > 0 && (
+          <div>
+            <p className="text-xs font-semibold text-gold/80 mb-1 px-1 uppercase tracking-wider">Areas</p>
+            <div className="space-y-0.5">
+              {dbAreas.map(a => (
+                <DbResultItem key={a.id} item={a} route={`/area/${a.slug}`} fallbackIcon={Map} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
   };
 
   // Embedded mode - render content directly without overlay
@@ -167,29 +307,35 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
         {/* Content */}
         <div className="overflow-y-auto p-3 flex-1" style={{ maxHeight: '440px' }}>
           {query.trim() ? (
-            <div>
-              <p className="text-sm font-semibold text-gold mb-2 px-1">
-                {results.length > 0 ? `${results.length} results` : 'No results'}
-              </p>
+            <div className="space-y-3">
+              {/* DB results first */}
+              <DbResultsSection compact />
+              {/* Static page results */}
               {results.length > 0 && (
-                <div className="space-y-1">
-                  {results.map((item, idx) => (
-                    <button
-                      key={`${item.id}-${idx}`}
-                      onClick={() => handleSelect(item.route)}
-                      className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-black/5 transition-all text-left"
-                    >
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/50 border border-gold/30 text-gold">
-                        {item.icon && <item.icon className="w-4 h-4" />}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-black truncate">{item.label}</p>
-                        {item.category && <p className="text-xs text-gold">{item.category}</p>}
-                      </div>
-                      <ArrowRight className="w-3 h-3 text-gold/60" />
-                    </button>
-                  ))}
+                <div>
+                  {hasDbResults && <p className="text-xs font-semibold text-gold/80 mb-1 px-1 uppercase tracking-wider">Pages & Tools</p>}
+                  <div className="space-y-0.5">
+                    {results.map((item, idx) => (
+                      <button
+                        key={`${item.id}-${idx}`}
+                        onClick={() => handleSelect(item.route)}
+                        className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-black/5 transition-all text-left"
+                      >
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/50 border border-gold/30 text-gold">
+                          {item.icon && <item.icon className="w-4 h-4" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-black truncate">{item.label}</p>
+                          {item.category && <p className="text-xs text-gold">{item.category}</p>}
+                        </div>
+                        <ArrowRight className="w-3 h-3 text-gold/60" />
+                      </button>
+                    ))}
+                  </div>
                 </div>
+              )}
+              {totalResults === 0 && (
+                <p className="text-sm text-zinc-500 text-center py-4">No results found for "{query}"</p>
               )}
             </div>
           ) : (
@@ -214,11 +360,11 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               <div>
                 <p className="text-xs font-semibold text-gold/80 mb-2 uppercase tracking-wider">Popular Pages</p>
                 <div className="grid grid-cols-3 gap-1.5">
-                  {POPULAR_PAGES.map((page, idx) => (
+                  {POPULAR_PAGES.map((page) => (
                     <button
                       key={page.route}
                       onClick={() => handleSelect(page.route)}
-                      className={`flex items-center gap-2.5 p-2 rounded-lg hover:bg-black/5 transition-all text-left ${idx % 3 !== 2 ? 'border-r border-gold/20' : ''}`}
+                      className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-black/5 transition-all text-left"
                     >
                       <div className="w-7 h-7 rounded-md bg-white/50 border border-gold/10 flex items-center justify-center text-gold">
                         <page.icon className="w-3.5 h-3.5" />
@@ -249,7 +395,6 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                   </div>
                 </div>
               )}
-              {/* Hint removed - moved to placeholder */}
             </div>
           )}
         </div>
@@ -303,38 +448,46 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               <div className="overflow-y-auto p-4 flex-1" style={{ maxHeight: 'calc(100dvh - 12rem)' }}>
                 {/* Show search results when typing */}
                 {query.trim() ? (
-                  <div>
-                    <p className="text-sm font-semibold text-gold mb-3 px-1">
-                      {results.length > 0 ? `${results.length} results found` : 'No results found'}
-                    </p>
-                    {results.length > 0 ? (
-                      <div className="space-y-1">
-                        {results.map((item, idx) => (
-                          <button
-                            key={`${item.id}-${idx}`}
-                            onClick={() => handleSelect(item.route)}
-                            className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all ${
-                              idx === 0
-                                ? "bg-black/10 border border-gold/40" 
-                                : "hover:bg-gold/10"
-                            }`}
-                          >
-                            <div className={`w-11 h-11 rounded-lg flex items-center justify-center border ${
-                              idx === 0
-                                ? "bg-black text-gold border-gold/50" 
-                                : "bg-white border-gold/30 text-gold"
-                            }`}>
-                              {item.icon && <item.icon className="w-5 h-5" />}
-                            </div>
-                            <div className="flex-1 text-left">
-                              <p className="font-semibold text-black">{item.label}</p>
-                              <p className="text-gold text-sm truncate">{item.description}</p>
-                            </div>
-                            <ArrowRight className="w-5 h-5 flex-shrink-0 text-gold" />
-                          </button>
-                        ))}
+                  <div className="space-y-4">
+                    {/* DB results first */}
+                    <DbResultsSection />
+
+                    {/* Static page results */}
+                    {results.length > 0 && (
+                      <div>
+                        {hasDbResults && (
+                          <p className="text-xs font-semibold text-gold/80 mb-2 px-1 uppercase tracking-wider">Pages & Tools</p>
+                        )}
+                        <div className="space-y-1">
+                          {results.map((item, idx) => (
+                            <button
+                              key={`${item.id}-${idx}`}
+                              onClick={() => handleSelect(item.route)}
+                              className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all ${
+                                !hasDbResults && idx === 0
+                                  ? "bg-black/10 border border-gold/40" 
+                                  : "hover:bg-gold/10"
+                              }`}
+                            >
+                              <div className={`w-11 h-11 rounded-lg flex items-center justify-center border ${
+                                !hasDbResults && idx === 0
+                                  ? "bg-black text-gold border-gold/50" 
+                                  : "bg-white border-gold/30 text-gold"
+                              }`}>
+                                {item.icon && <item.icon className="w-5 h-5" />}
+                              </div>
+                              <div className="flex-1 text-left">
+                                <p className="font-semibold text-black">{item.label}</p>
+                                <p className="text-gold text-sm truncate">{item.description}</p>
+                              </div>
+                              <ArrowRight className="w-5 h-5 flex-shrink-0 text-gold" />
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                    ) : (
+                    )}
+
+                    {totalResults === 0 && (
                       <div className="p-8 text-center">
                         <p className="text-zinc-500">No results found for "{query}"</p>
                         <p className="text-sm text-zinc-400 mt-1">Try a different search term</p>
