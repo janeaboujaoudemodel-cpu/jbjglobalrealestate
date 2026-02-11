@@ -7,6 +7,7 @@ const FEATURED_DEVELOPERS: {
   name: string; slug: string; logo: string; scale: number;
   width?: number; fit?: "contain" | "cover";
   offsetX?: number; offsetY?: number; objectPosition?: string;
+  clipInset?: string; slotMarginLeft?: number; slotMarginRight?: number;
 }[] = [
   { name: "DAMAC", slug: "damac", logo: "/developers/logos/damac-logo.webp", scale: 1 },
   { name: "EMAAR", slug: "emaar", logo: "/developers/logos/emaar-logo.webp", scale: 1 },
@@ -18,7 +19,7 @@ const FEATURED_DEVELOPERS: {
   { name: "ELLINGTON PROPERTIES", slug: "ellington", logo: "/developers/logos/ellington-logo.webp", scale: 1 },
   { name: "MAJID AL FUTTAIM", slug: "majid-al-futtaim", logo: "/developers/logos/majid-al-futtaim-logo.webp", scale: 1, width: 170 },
   { name: "DANUBE PROPERTIES", slug: "danube", logo: "/developers/logos/danube-logo.webp", scale: 1.05 },
-  { name: "DUBAI PROPERTIES", slug: "dubai-properties", logo: "/developers/logos/dubai-properties-logo.webp", scale: 1.12, width: 165, fit: "cover", offsetX: -6, offsetY: -3, objectPosition: "50% 40%" },
+  { name: "DUBAI PROPERTIES", slug: "dubai-properties", logo: "/developers/logos/dubai-properties-logo.webp", scale: 1.18, width: 158, fit: "cover", offsetX: -12, offsetY: -7, objectPosition: "50% 45%", clipInset: "10% 10% 22% 10%", slotMarginLeft: -12 },
 ];
 
 const TOTAL_IMAGES = FEATURED_DEVELOPERS.length;
@@ -80,6 +81,10 @@ const DeveloperPartnersMarquee = () => {
         to={`/developer/${developer.slug}`}
         className="flex-shrink-0 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
+        style={{
+          ...(developer.slotMarginLeft ? { marginLeft: developer.slotMarginLeft } : undefined),
+          ...(developer.slotMarginRight ? { marginRight: developer.slotMarginRight } : undefined),
+        }}
       >
         <div
           className="h-[36px] md:h-[42px] lg:h-[48px] flex items-center justify-center overflow-hidden"
@@ -94,6 +99,7 @@ const DeveloperPartnersMarquee = () => {
                 ? { transform: `translate(${developer.offsetX ?? 0}px, ${developer.offsetY ?? 0}px) scale(${developer.scale})` }
                 : undefined),
               ...(developer.objectPosition ? { objectPosition: developer.objectPosition } : undefined),
+              ...(developer.clipInset ? { clipPath: `inset(${developer.clipInset})` } : undefined),
             }}
             loading="eager"
             decoding="async"
