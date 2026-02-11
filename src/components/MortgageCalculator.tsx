@@ -436,7 +436,7 @@ const MortgageCalculator = ({
                 className="w-full"
                 asChild
               >
-                <a href={INQUIRY_FORM_URL}>
+                <a href="/contact">
                   Request Mortgage Introduction
                 </a>
               </Button>
