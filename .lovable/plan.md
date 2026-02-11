@@ -1,60 +1,49 @@
 
 
-# Premium Mega Menu Cards + Footer Navigation Overhaul
+# Footer Cards: 2-Per-Row Layout + No Text Cropping
 
-## Overview
-Two areas need premium refinement: (1) the Insights mega menu cards need proper borders, spacing, and visual separation, and (2) the footer navigation card grid needs a premium upgrade.
+## Problem
+- Footer navigation cards display 3 per row on desktop, causing link labels to be cropped with "..." (the `truncate` class)
+- On mobile, cards are already 1 per row (correct), but the truncation still affects readability
 
-## Part 1: Insights Mega Menu Card Fixes
+## Changes
 
-### Problem
-- Cards have NO borders (removed in a previous fix) making them look flat and blended
-- Row 1 and Row 2 cards touch each other (gap-y-0) with no visual separation
-- The "Legal" card appears to merge with the "Services" card above it
+### File: `src/components/Footer.tsx`
 
-### Fix (mega-menu-primitives.tsx)
+**1. Change grid from 3 columns to 2 columns on desktop**
 
-**Restore card borders with proper styling:**
-- Add back `border border-gold/30` to MegaMenuCard (not the thick `border-gold/50` that caused the "cutting line" issue -- using a softer opacity)
-- Add subtle inner shadow for depth: `shadow-sm`
+Both grid containers (lines 637 and 654) will change from `lg:grid-cols-3` to `lg:grid-cols-2`. This gives each card more horizontal space, making link names fully readable.
 
-**Fix row spacing (MegaMenuInsights.tsx):**
-- Change `gap-x-1.5 gap-y-0` to `gap-1.5` (restore small uniform gap)
-- The "cutting line" issue was caused by the old thick `border-gold/50` borders touching each other, NOT the gap itself. With softer `border-gold/30` borders, a small gap looks clean
+```
+// Line 637 - From:
+grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 auto-rows-auto
 
-### Files Changed
-- `src/components/header/mega-menu-primitives.tsx` -- MegaMenuCard: add `border border-gold/30 shadow-sm`
-- `src/components/header/MegaMenuInsights.tsx` -- grid: change to `gap-1.5`
+// To:
+grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 auto-rows-auto
+```
 
----
+```
+// Line 654 - From:
+grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-auto
 
-## Part 2: Footer Navigation Cards Premium Upgrade
+// To:
+grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 auto-rows-auto
+```
 
-### Problem
-- Footer navigation cards (FooterCard component) look basic with thin borders and minimal styling
-- Need more premium presence with better padding, shadows, and visual hierarchy
+**2. Remove `truncate` from link text (line 47)**
 
-### Fix (Footer.tsx - FooterCard component)
+Remove the `truncate` class from the link elements inside FooterCard so names are never cropped with three dots.
 
-**Upgrade FooterCard styling:**
-- Increase border to `border-2 border-gold/40` for more visible premium framing
-- Add subtle shadow: `shadow-[0_4px_15px_rgba(200,167,102,0.1)]`
-- Increase padding: `px-6 py-5` (from `px-5 py-4`)
-- Add hover shadow enhancement: `hover:shadow-[0_6px_20px_rgba(200,167,102,0.2)]`
-- Make title font slightly larger and add gold shimmer effect
-- Increase link text size slightly for readability
-- Add rounded-xl consistency with hover:border-gold/60 transition
+```
+// From:
+"text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1 truncate"
 
-### Files Changed
-- `src/components/Footer.tsx` -- FooterCard component styling upgrade (lines 35-58)
+// To:
+"text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
+```
 
----
-
-## Summary of Changes
-
-| File | Change |
-|------|--------|
-| `mega-menu-primitives.tsx` | Restore `border border-gold/30 shadow-sm` on MegaMenuCard |
-| `MegaMenuInsights.tsx` | Change grid gap back to `gap-1.5` |
-| `Footer.tsx` | Upgrade FooterCard with thicker borders, shadows, better padding and typography |
-
+## Result
+- Desktop: 2 cards per row (wider cards, no text cropping)
+- Tablet (sm): 2 cards per row (unchanged)
+- Mobile: 1 card per row (unchanged)
+- All link labels display in full without "..." truncation
