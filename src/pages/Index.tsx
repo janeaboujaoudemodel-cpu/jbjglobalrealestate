@@ -236,7 +236,7 @@ const Index = () => {
       <SectionDivider />
 
       {/* FIND YOUR STARTING POINT - Clear Entry Points with Champagne Layer - ALL 11 CARDS RESTORED */}
-      <section className="py-12 md:py-16 bg-black">
+      <section className="pb-12 md:pb-16 bg-black">
         <div className="jj-layer-2">
           <div className="text-center mb-6 md:mb-10">
             <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold shadow-md">
