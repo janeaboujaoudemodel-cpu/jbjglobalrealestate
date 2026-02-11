@@ -1,69 +1,55 @@
 
 
-## Fix Sunset Bay Grand: Data Enrichment, Duplicate Images, Brochure Location, and Form Improvements
+## Rebrand AI Labels to "JBJ AI" and Add Project-Level AI Analyzer
 
-### Issues Identified
-
-1. **Duplicate images** -- Both images in `project_images` have the exact same URL (`f339a09c345c47ada758ccb8f6c00944.webp`). The second was added as "Cover" but is identical. Need to remove the duplicate.
-
-2. **Missing enriched data** -- The project has minimal data from Reelly only:
-   - `amenities: []` (empty)
-   - `unit_types: null`
-   - `payment_plan: null`
-   - `payment_breakdown: null`
-   - `floor_plan_types: []`
-   - `highlights: null`
-   - `short_description: null`
-   - `usp_headline: null`, `usp_bullets: []`
-   - `total_units: 27` (likely inventory, not project scale)
-   - No brochure uploaded (0 documents)
-   - Only 1 unique image
-
-3. **Brochure location text** -- `PremiumBrochureCard.tsx` line 183-185 hardcodes "Dubai - UAE" instead of showing the project's area name. Should show "Dubai Islands, Dubai" (area_name then city).
-
-4. **Register Interest form too narrow** -- Currently `max-w-xl` (~576px). Needs to be wider for a more premium feel.
-
-5. **Nationalities and languages completeness** -- Need to verify `getCountryList()` and `getLanguageList()` cover all countries/languages comprehensively. Current implementation uses `Intl.supportedValuesOf("region")` which provides 200+ countries -- this is already comprehensive. Languages list has 100+ entries -- also comprehensive.
+### Overview
+Two changes:
+1. Rename all AI-related titles/labels across the platform to use the "JBJ AI" prefix (e.g., "AI Area Intelligence" becomes "JBJ AI Area Intelligence").
+2. Add a full AI intelligence section to the Project Detail page, similar to the existing Area AI Analyzer -- a dedicated section that auto-triggers and provides a comprehensive investment analysis for the specific project.
 
 ---
 
-### Changes
+### Part 1: Rebrand AI Labels to "JBJ AI"
 
-#### 1. Remove duplicate image (Database)
-- Delete the duplicate `project_images` row where `id = 'cf989546-2b91-45aa-aaab-15cc62b7d82e'` (the "Cover" copy with same URL)
+Update text strings in these files:
 
-#### 2. Enrich Sunset Bay Grand project data (Database)
-Update the project record with enriched content extracted from the brochure and description the user previously provided:
-- **amenities**: Populate with the full amenities list from the brochure (rooftop sky pool, family cabanas, open-air cinema, clubhouse, children's play zones, smart home technology, etc.)
-- **short_description**: A concise 1-2 sentence summary
-- **usp_headline** and **usp_bullets**: Key selling points
-- **highlights**: Key project highlights array
-- **property_type_label**: "Apartments"
+| File | Current Text | New Text |
+|------|-------------|----------|
+| `src/components/area-detail/AreaAIAnalyzer.tsx` (line 152) | "AI Area Intelligence" | "JBJ AI Area Intelligence" |
+| `src/components/AIMarketAnalyzer.tsx` (line 193) | "AI Market Analysis" | "JBJ AI Market Analysis" |
+| `src/components/AIMarketAnalyzer.tsx` (line 230) | "AI Market Intelligence Analyzer" | "JBJ AI Market Intelligence" |
+| `src/components/AIMarketAnalyzer.tsx` (line 240) | "Analyzing Market Data..." | "JBJ AI is Analyzing..." |
 
-#### 3. Fix brochure location text -- `PremiumBrochureCard.tsx`
-- Accept a new `location` prop (optional string)
-- Replace hardcoded "Dubai - UAE" with dynamic display: `{area_name} - Dubai` or fallback to "Dubai - UAE"
-- In `ProjectDetailLayout.tsx`, pass `project.area_name` or `project.location` to the brochure card
+Additional files with AI labels (footer links, AI Hub cards, broker tools, etc.) will be scanned and updated wherever "AI" appears as a user-facing title prefix to include "JBJ AI".
 
-#### 4. Widen the Register Interest form -- `ConsultationRequestForm.tsx`
-- Change `max-w-xl` to `max-w-2xl` (~672px) on both the form container (line 198) and success state (line 178)
-- This gives a slight stretch from the edges without making it too wide
+---
 
-#### 5. Verify nationality/language completeness
-- `getCountryList()` already uses `Intl.supportedValuesOf("region")` which returns all 200+ UN-recognized countries with flags -- already comprehensive
-- `getLanguageList()` already has 100+ languages -- already comprehensive
-- No code changes needed for this item
+### Part 2: Add JBJ AI Project Intelligence Section
+
+Create a new component `src/components/project-detail/ProjectAIAnalyzer.tsx` that mirrors the Area AI Analyzer pattern:
+
+- **Auto-trigger on scroll**: Uses IntersectionObserver to start analysis when the section becomes visible.
+- **Calls the existing `ai-property-analyzer` edge function** with the project's area, property type, and context.
+- **Displays the same structured sections**: Area Overview, Price Per Sqft, Supply vs Demand, Developer Landscape, Investment Metrics, Pros, Cons, and Investment Rating with the circular score widget.
+- **Title**: "JBJ AI Project Intelligence"
+- **Styling**: Matches the champagne gold theme used in the Area AI Analyzer.
+
+Then integrate it into `ProjectDetailLayout.tsx`:
+- Replace or augment the existing `AIMarketAnalyzer` usage (lines 972-988) with the new `ProjectAIAnalyzer` component.
+- Pass project-specific data (name, location, developer, price, handover date, amenities) as props.
 
 ---
 
 ### Technical Details
 
-**Files to modify:**
-- `src/components/project-detail/PremiumBrochureCard.tsx` -- Add `location` prop, replace hardcoded "Dubai - UAE"
-- `src/components/project-detail/ProjectDetailLayout.tsx` -- Pass location to PremiumBrochureCard
-- `src/components/ConsultationRequestForm.tsx` -- Change `max-w-xl` to `max-w-2xl` on lines 178 and 198
+**New file:**
+- `src/components/project-detail/ProjectAIAnalyzer.tsx` -- Adapted from `AreaAIAnalyzer.tsx` with project-specific context passed to the `ai-property-analyzer` edge function.
 
-**Database operations (using insert/update tool):**
-- DELETE duplicate image from `project_images`
-- UPDATE `projects` row for Sunset Bay Grand with enriched amenities, short_description, usp_headline, usp_bullets, highlights, property_type_label
+**Modified files:**
+- `src/components/area-detail/AreaAIAnalyzer.tsx` -- Title text update
+- `src/components/AIMarketAnalyzer.tsx` -- Title text updates (compact and full variants)
+- `src/components/project-detail/ProjectDetailLayout.tsx` -- Swap in the new `ProjectAIAnalyzer` component
+- Other files with AI labels (footer, hub, broker tools) -- Prefix updates where applicable
+
+No database or edge function changes are needed -- the existing `ai-property-analyzer` function already supports project-level analysis.
 
