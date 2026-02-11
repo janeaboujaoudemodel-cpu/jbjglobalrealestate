@@ -19,7 +19,7 @@ const FEATURED_DEVELOPERS: {
   { name: "ELLINGTON PROPERTIES", slug: "ellington", logo: "/developers/logos/ellington-logo.webp", scale: 1 },
   { name: "MAJID AL FUTTAIM", slug: "majid-al-futtaim", logo: "/developers/logos/majid-al-futtaim-logo.webp", scale: 1, width: 170 },
   { name: "DANUBE PROPERTIES", slug: "danube", logo: "/developers/logos/danube-logo.webp", scale: 1.05 },
-  { name: "DUBAI PROPERTIES", slug: "dubai-properties", logo: "/developers/logos/dubai-properties-logo.webp", scale: 1.18, width: 158, fit: "cover", offsetX: -12, offsetY: -7, objectPosition: "50% 45%", clipInset: "10% 10% 22% 10%", slotMarginLeft: -12 },
+  { name: "DUBAI PROPERTIES", slug: "dubai-properties", logo: "/developers/logos/dubai-properties-logo.webp", scale: 1, width: 175, fit: "contain", offsetX: -10, offsetY: -10, objectPosition: "50% 50%", slotMarginLeft: -16 },
 ];
 
 const TOTAL_IMAGES = FEATURED_DEVELOPERS.length;
