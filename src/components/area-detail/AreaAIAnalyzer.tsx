@@ -120,13 +120,13 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
   }, []);
 
   useEffect(() => {
-    if (isVisible && stats && stats.totalProjects > 0 && !analysis && !isAnalyzing && !hasTriggered.current) {
+    if (isVisible && !analysis && !isAnalyzing && !hasTriggered.current && !errorMsg) {
       hasTriggered.current = true;
       handleAnalyze();
     }
-  }, [isVisible, stats, analysis, isAnalyzing, handleAnalyze]);
+  }, [isVisible, analysis, isAnalyzing, handleAnalyze, errorMsg]);
 
-  if (!stats || stats.totalProjects === 0) return null;
+  const hasStats = stats && stats.totalProjects > 0;
 
   const sections = analysis ? {
     overview: extractSection(analysis, "Area Overview"),
@@ -154,28 +154,30 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
-            <div className="text-2xl font-bold text-gold">{stats.totalProjects}</div>
-            <div className="text-zinc-600 text-xs mt-1">Active Projects</div>
-          </div>
-          <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
-            <div className="text-2xl font-bold text-gold">{stats.developers.length}</div>
-            <div className="text-zinc-600 text-xs mt-1">Developers</div>
-          </div>
-          {stats.avgPrice && (
+        {hasStats && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
-              <div className="text-2xl font-bold text-gold">AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
-              <div className="text-zinc-600 text-xs mt-1">Avg. Starting Price</div>
+              <div className="text-2xl font-bold text-gold">{stats.totalProjects}</div>
+              <div className="text-zinc-600 text-xs mt-1">Active Projects</div>
             </div>
-          )}
-          {stats.pricePerSqft && (
             <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
-              <div className="text-2xl font-bold text-gold">AED {stats.pricePerSqft.toLocaleString()}</div>
-              <div className="text-zinc-600 text-xs mt-1">Est. Price/sqft</div>
+              <div className="text-2xl font-bold text-gold">{stats.developers.length}</div>
+              <div className="text-zinc-600 text-xs mt-1">Developers</div>
             </div>
-          )}
-        </div>
+            {stats.avgPrice && (
+              <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+                <div className="text-2xl font-bold text-gold">AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
+                <div className="text-zinc-600 text-xs mt-1">Avg. Starting Price</div>
+              </div>
+            )}
+            {stats.pricePerSqft && (
+              <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+                <div className="text-2xl font-bold text-gold">AED {stats.pricePerSqft.toLocaleString()}</div>
+                <div className="text-zinc-600 text-xs mt-1">Est. Price/sqft</div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* AI Analysis */}
         {errorMsg ? (
