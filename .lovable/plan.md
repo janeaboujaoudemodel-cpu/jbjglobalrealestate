@@ -1,37 +1,31 @@
 
 
-# Fix Remaining 57 Developers with Generic Pexels Fallback
+# Restore Dropdown Color, Add Dividers, Remove "What You Can Sell"
 
-## Problem
-57 developers still have the generic Pexels building photo (`pexels-photo-323780.jpeg`) instead of real images. The current edge function only searches for developers with `NULL` or `%unsplash%` images -- it does not target the Pexels fallback.
+## Changes
 
-## Solution
+### 1. Restore Dropdown Background Color
+The mega menu shell (`MegaMenuShell`) was changed to a dark background (`#1a1815`). This will be reverted to the champagne-gold gradient to match the cards inside it.
 
-Two changes needed:
+- **File:** `src/components/header/mega-menu-primitives.tsx`
+- **Change:** Replace `background: '#1a1815'` with the champagne gradient (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`) using Tailwind classes instead of inline style.
 
-### 1. Update the edge function to also target Pexels fallbacks
+### 2. Add Dividers Under Category Titles
+Add a horizontal gold divider line beneath each card title (e.g., "Properties by Type", "Buyer Resources", "Seller Resources") inside the `MegaMenuSectionTitle` component.
 
-Modify the query filter in `auto-find-developer-images/index.ts` to include `%pexels%` URLs:
+- **File:** `src/components/header/mega-menu-primitives.tsx`
+- **Change:** Add a `border-b border-gold/30` or a thin gold gradient line after the title text in `MegaMenuSectionTitle`.
 
-```
-.or("feature_image_url.is.null,feature_image_url.ilike.%unsplash%,feature_image_url.ilike.%pexels%")
-```
+### 3. Remove "What You Can Sell" Card from Sell Menu
+Remove the entire first card that lists property types (Apartments, Villas, Townhouses, etc.) from the Sell mega menu. Sellers can sell anything, so this categorization is unnecessary.
 
-Also improve the search queries to be more targeted:
-- Add "Dubai" to search context for UAE-based developers
-- Increase search limit from 3 to 5 results for better coverage
-- Also try the developer's website directly if found in results
+- **File:** `src/components/header/MegaMenuSell.tsx`
+- **Change:** Remove the `propertyTypes` array and the `MegaMenuCard` that renders "What You Can Sell". The "Seller Resources" card will remain and can expand to use the full width.
 
-### 2. Run the function repeatedly until all 57 are processed
-
-After deploying the updated function, invoke it multiple times (6 batches of 10) to process all 57 developers. For any that still fail, use alternative search strategies (e.g., searching for the developer name + "projects" or "portfolio").
-
-## Files Changed
+## Technical Details
 
 | File | Change |
 |------|--------|
-| `supabase/functions/auto-find-developer-images/index.ts` | Update query to include `%pexels%`, improve search queries, increase search limit |
+| `src/components/header/mega-menu-primitives.tsx` | Revert `MegaMenuShell` background from dark `#1a1815` to champagne gradient; add divider line in `MegaMenuSectionTitle` |
+| `src/components/header/MegaMenuSell.tsx` | Remove `propertyTypes` array and "What You Can Sell" `MegaMenuCard`; adjust layout for single card |
 
-## Execution
-
-After deploying, I will run the function 6+ times in sequence to process all 57 developers, and verify the count drops to 0.
