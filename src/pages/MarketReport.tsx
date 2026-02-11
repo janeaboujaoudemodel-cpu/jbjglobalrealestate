@@ -2090,7 +2090,7 @@ const MarketReport = () => {
                     <div className="w-8 h-8 rounded-lg bg-gold/20 border border-gold/30 flex items-center justify-center">
                       <item.icon className="w-4 h-4 text-gold" />
                     </div>
-                    <span className="text-zinc-200">{item.text}</span>
+                    <span className="text-black">{item.text}</span>
                   </div>
                 ))}
               </div>
