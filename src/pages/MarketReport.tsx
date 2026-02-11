@@ -2069,7 +2069,7 @@ const MarketReport = () => {
                 Exclusive Market Report
               </div>
               
-              <h1 className="text-white text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h1 className="text-black text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Unlock Your
                 <span className="block text-gold">Investment Edge</span>
               </h1>
