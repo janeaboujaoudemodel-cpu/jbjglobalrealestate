@@ -79,8 +79,12 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
+              className="h-full rounded-2xl p-2"
+              style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}
             >
-              <ProjectCard project={project} />
+              <div className="h-full [&>div]:h-full [&>div]:flex [&>div]:flex-col">
+                <ProjectCard project={project} />
+              </div>
             </motion.div>
           ))}
         </div>
