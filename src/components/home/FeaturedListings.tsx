@@ -218,7 +218,7 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
             </div>
 
             {/* Title */}
-            <h3 className="text-black font-semibold text-sm mb-0.5 line-clamp-2 group-hover:text-gold transition-colors min-h-[40px]" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h3 className="text-black font-semibold text-sm mb-2 line-clamp-2 group-hover:text-gold transition-colors min-h-[40px]" style={{ fontFamily: "Poppins, sans-serif" }}>
               {project.name}
             </h3>
             {/* Developer name - gold, clickable */}
@@ -228,7 +228,7 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
                 <Link
                   to={`/developer/${project.developer.slug}`}
                   onClick={(e) => e.stopPropagation()}
-                  className="text-gold font-medium hover:text-gold/70 transition-colors"
+                  className="text-gold font-medium hover:text-gold/70 hover:underline transition-colors"
                 >
                   {project.developer_name}
                 </Link>
@@ -248,17 +248,8 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
             {/* Spacer to push bottom content down */}
             <div className="flex-grow" />
 
-            {/* Developer + Price + Handover row */}
-            <div className="flex items-end justify-between mt-2 min-h-[36px]">
-              <div>
-                {project.price_from ? (
-                  <span className="text-gold font-bold text-sm">
-                    From {formatPrice(project.price_from)}
-                  </span>
-                ) : (
-                  <span className="text-zinc-500 font-medium text-xs">Price TBA</span>
-                )}
-              </div>
+            {/* Handover row */}
+            <div className="flex items-end justify-end mt-2 min-h-[36px]">
               <div className="flex flex-col items-end gap-1">
                 {project.handover_date ? (
                   <span className="text-orange-500 text-xs font-bold whitespace-nowrap">
