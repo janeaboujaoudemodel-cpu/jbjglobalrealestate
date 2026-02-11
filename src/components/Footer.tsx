@@ -32,17 +32,17 @@ const FooterCard = ({ title, links, viewAllHref, viewAllLabel }: {
   viewAllHref?: string;
   viewAllLabel?: string;
 }) => (
-  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl px-5 py-4 hover:border-gold/50 transition-all">
-    <h4 className="text-center font-bold text-sm sm:text-base uppercase tracking-[0.15em] mb-3 pb-2 border-b border-gold/30 text-gold"
+  <div className="group relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl px-6 py-5 hover:border-gold/60 transition-all duration-300 shadow-[0_4px_15px_rgba(200,167,102,0.1)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.2)]">
+    <h4 className="text-center font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] mb-3 pb-2.5 border-b-2 border-gold/40 text-gold"
       style={{
         fontFamily: "Poppins, sans-serif",
-        textShadow: '0 1px 2px rgba(200,167,102,0.3)',
+        textShadow: '0 1px 3px rgba(200,167,102,0.4)',
       }}
     >{title}</h4>
     <div className="relative">
       {/* Gold vertical divider between columns */}
       <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-gold/10 via-gold/50 to-gold/10 -translate-x-1/2" />
-      <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+      <div className="grid grid-cols-2 gap-x-5 gap-y-2">
         {links.map((link) => (
           <Link key={link.href} to={link.href} className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1 truncate">
             {link.label}
@@ -51,7 +51,7 @@ const FooterCard = ({ title, links, viewAllHref, viewAllLabel }: {
       </div>
     </div>
     {viewAllHref && (
-      <Link to={viewAllHref} className="block text-center mt-3 pt-2 border-t border-gold/30 text-gold text-xs sm:text-sm font-semibold hover:text-gold/80 transition-colors">
+      <Link to={viewAllHref} className="block text-center mt-3.5 pt-2.5 border-t-2 border-gold/40 text-gold text-xs sm:text-sm font-semibold hover:text-gold/80 transition-colors">
         {viewAllLabel}
       </Link>
     )}
