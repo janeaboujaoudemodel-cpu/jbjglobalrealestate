@@ -120,7 +120,7 @@ const BestIdeaAward = () => {
   };
 
   return (
-    <section className="py-12 md:py-16 bg-black">
+    <section className="pb-12 md:pb-16 bg-black">
       {/* Active Champagne Section Layer - using global jj-layer-2 */}
       <div className="jj-layer-2">
         <motion.div
