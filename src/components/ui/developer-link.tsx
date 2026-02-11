@@ -34,7 +34,7 @@ export function DeveloperLink({
     return (
       <span className={cn("text-muted-foreground", className)}>
         {showPrefix && <span className="text-black">by </span>}
-        <span className="font-semibold bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent">
+        <span className="font-semibold text-gold">
           {name}
         </span>
       </span>
@@ -47,7 +47,7 @@ export function DeveloperLink({
       <Link 
         to={`/developer/${slug}`}
         onClick={handleClick}
-        className="font-semibold transition-all hover:underline bg-gradient-to-r from-gold via-handover to-gold bg-clip-text text-transparent"
+        className="font-semibold transition-all hover:underline text-gold"
       >
         {name}
       </Link>

@@ -104,7 +104,12 @@ const DeveloperDetail = () => {
     {
       icon: MapPin,
       label: "Headquarters",
-      value: developer.headquarters || null,
+      value: developer.headquarters 
+        ? (() => {
+            const parts = developer.headquarters.split(',').map((s: string) => s.trim());
+            return parts.length >= 2 ? `${parts[parts.length - 2]}, ${parts[parts.length - 1]}` : parts[parts.length - 1];
+          })()
+        : null,
     },
   ].filter(s => s.value !== null);
 
@@ -118,6 +123,13 @@ const DeveloperDetail = () => {
             alt={`${developer.name} featured project`}
             className="w-full h-full object-cover"
             loading="eager"
+            onError={(e) => {
+              // Fallback to original URL if high-res fails
+              const img = e.currentTarget;
+              if (img.src !== developer.feature_image_url) {
+                img.src = developer.feature_image_url!;
+              }
+            }}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]" />
@@ -146,11 +158,11 @@ const DeveloperDetail = () => {
       <div className="jj-layer-2 mt-6 md:mt-8 mb-12">
         {/* Developer header */}
         <div className="flex flex-col md:flex-row md:items-start gap-6">
-          {/* Logo plate - Larger card with full-fit object-contain */}
+          {/* Logo plate - Full-fit, no white corners */}
           <div 
             className="w-32 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
             style={{
-              background: '#FFFFFF',
+              background: '#000000',
               border: '3px solid hsl(42 45% 59%)',
               boxShadow: '0 4px 16px rgba(200,167,102,0.3)'
             }}
@@ -159,7 +171,8 @@ const DeveloperDetail = () => {
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="w-full h-full object-contain p-2"
+                className="w-full h-full object-cover p-0"
+                style={{ transform: 'scale(1.2)' }}
                 loading="eager"
               />
             ) : (

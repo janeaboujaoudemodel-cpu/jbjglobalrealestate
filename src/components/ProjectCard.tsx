@@ -145,9 +145,15 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   // Truncate description for card preview - shorter for landscape card
   const getTruncatedDescription = () => {
     if (!project.description) return null;
-    const maxLength = 80; // Shorter for landscape layout
-    if (project.description.length <= maxLength) return project.description;
-    return project.description.substring(0, maxLength).trim();
+    // Strip "Project general facts" and markdown headers
+    let clean = project.description
+      .replace(/#{1,6}\s*/g, '')
+      .replace(/\*{1,3}/g, '')
+      .replace(/project\s*general\s*facts/gi, '')
+      .trim();
+    const maxLength = 80;
+    if (clean.length <= maxLength) return clean;
+    return clean.substring(0, maxLength).trim();
   };
 
   // Determine if we should show status label (from source data)
@@ -288,7 +294,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         {/* Content - Premium Hybrid Style */}
         <div className="p-4 flex-1 flex flex-col">
           {/* Project Name - Gold */}
-          <h4 className="text-gold text-lg font-bold mb-1 line-clamp-1 group-hover:text-black transition-colors">
+          <h4 className="text-gold text-lg font-bold mb-1 whitespace-normal break-words leading-tight group-hover:text-black transition-colors">
             {project.name}
           </h4>
           
@@ -312,8 +318,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   {formatPriceWithCurrency(project.price_from, currency)}
                 </span>
               </>
-            ) : (project.is_sold_out || project.sale_status?.toLowerCase().includes('sold')) ? (
-              <span className="text-destructive font-bold">Sold</span>
             ) : (
               <span className="text-gold font-medium">Price on Request</span>
             )}
@@ -343,7 +347,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           </div>
           
           {/* Description with ...more link - Shorter */}
-          <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2">
+          <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
             <span className="text-gold font-bold hover:text-gold/70 cursor-pointer ml-1">
               ...more

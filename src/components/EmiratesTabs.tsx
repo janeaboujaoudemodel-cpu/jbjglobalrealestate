@@ -51,7 +51,7 @@ const EmiratesTabs = ({ projects, selectedEmirate, onEmirateSelect }: EmiratesTa
           onClick={() => onEmirateSelect(null)}
           className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 border-2 ${
             selectedEmirate === null
-              ? "bg-gold text-black border-gold shadow-[0_4px_12px_rgba(200,167,102,0.3)]"
+              ? "bg-gold/10 text-gold border-gold shadow-[0_4px_12px_rgba(200,167,102,0.15)]"
               : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-foreground border-gold/40 hover:border-gold hover:shadow-[0_4px_12px_rgba(200,167,102,0.25)]"
           }`}
         >
@@ -65,14 +65,14 @@ const EmiratesTabs = ({ projects, selectedEmirate, onEmirateSelect }: EmiratesTa
               onClick={() => onEmirateSelect(emirate)}
               className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 border-2 ${
                 selectedEmirate === emirate
-                  ? "bg-gold text-black border-gold shadow-[0_4px_12px_rgba(200,167,102,0.3)]"
+                  ? "bg-gold/10 text-gold border-gold shadow-[0_4px_12px_rgba(200,167,102,0.15)]"
                   : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-foreground border-gold/40 hover:border-gold hover:shadow-[0_4px_12px_rgba(200,167,102,0.25)]"
               }`}
             >
               {emirate}
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${
                 selectedEmirate === emirate
-                  ? "bg-black/20 text-black"
+                  ? "bg-gold/20 text-gold"
                   : "bg-gold/20 text-foreground/80"
               }`}>
                 {projectCount}

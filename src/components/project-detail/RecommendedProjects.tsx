@@ -112,7 +112,7 @@ export default function RecommendedProjects({
 
               {/* Content */}
               <div className="p-4">
-                <h3 className="text-lg font-semibold text-white group-hover:text-gold transition-colors line-clamp-1 mb-1">
+                <h3 className="text-lg font-semibold text-white group-hover:text-gold transition-colors whitespace-normal break-words leading-tight mb-1">
                   {project.name}
                 </h3>
                 
