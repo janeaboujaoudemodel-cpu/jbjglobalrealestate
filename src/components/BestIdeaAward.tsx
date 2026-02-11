@@ -416,7 +416,11 @@ const BestIdeaAward = () => {
                   </Dialog>
 
                   <p className="text-sm text-zinc-500 mt-4">
-                    Next draw: <span className="text-gold font-semibold">February 1, 2026</span>
+                    Next draw: <span className="text-gold font-semibold">{(() => {
+                      const now = new Date();
+                      const nextDraw = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+                      return nextDraw.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                    })()}</span>
                   </p>
                 </div>
               </div>
