@@ -74,16 +74,16 @@ const DeveloperPartnersMarquee = () => {
       <Link
         key={`${isFirst ? "a" : "b"}-${developer.slug}-${index}`}
         to={`/developer/${developer.slug}`}
-        className="flex-shrink-0 px-5 md:px-7 lg:px-9 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
+        className="flex-shrink-0 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
       >
         <div
-          className="h-10 md:h-12 lg:h-14 w-[120px] md:w-[150px] lg:w-[170px] flex items-center justify-center"
+          className="w-[100px] md:w-[120px] lg:w-[140px] h-[28px] md:h-[36px] lg:h-[40px] flex items-center justify-center"
         >
           <img
             src={developer.logo}
             alt={developer.name}
-            className="h-full w-auto object-contain max-h-[28px] md:max-h-[36px] lg:max-h-[40px] max-w-[110px] md:max-w-[130px]"
+            className="max-h-full max-w-full object-contain"
             loading="eager"
             decoding="async"
             onLoad={isFirst ? handleImageLoad : undefined}
@@ -131,11 +131,11 @@ const DeveloperPartnersMarquee = () => {
         <div className="relative w-full overflow-hidden bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] py-6 md:py-8 border-t border-b border-gold/30">
           <div style={marqueeStyle} className="items-center">
             {/* Loop A – measured */}
-            <div ref={loopRef} className="flex items-center">
+            <div ref={loopRef} className="flex items-center gap-6 md:gap-8 lg:gap-10">
               {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, true))}
             </div>
             {/* Loop B – seamless duplicate */}
-            <div aria-hidden className="flex items-center">
+            <div aria-hidden className="flex items-center gap-6 md:gap-8 lg:gap-10">
               {FEATURED_DEVELOPERS.map((d, idx) => renderPartner(d, idx, false))}
             </div>
           </div>
