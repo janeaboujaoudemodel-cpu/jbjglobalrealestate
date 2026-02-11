@@ -1,38 +1,32 @@
 
 
-## Personalized Chat Greeting for Logged-In Users
+## Restyle "Recommended for You" Popup to Champagne Theme
 
-### Problem
-When a logged-in user opens the chat widget, it says "Hi there!" and asks for their full name from scratch -- even though we already know who they are. This feels impersonal and redundant.
+### Current State
+The popup uses a dark theme (`from-[#1a1a1a]`, `bg-zinc-800`, dark borders) which is inconsistent with the platform's champagne gold design language.
 
-### Solution
-Detect logged-in users when the chat opens, fetch their profile name, and modify the conversational flow to:
-1. Greet them by name: "Hi, [Full Name]!"
-2. Ask them to **confirm** their name is correct (since it might be a fake signup name)
-3. Skip the name input step if confirmed, or let them type a corrected name
+### Changes to `src/components/PropertyRecommendationPopup.tsx`
 
-### Changes
+**Outer container:**
+- Replace dark gradient `from-[#1a1a1a] via-[#0d0d0d] to-[#1a1a1a]` with champagne gradient `from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`
+- Keep `border-gold/50` and gold shadow
 
-**1. `src/components/AIChatWidget.tsx`**
-- Import `useAuth` from AuthContext
-- When the widget opens or goes to `conversational_collect`, check if user is logged in
-- If logged in, fetch the user's display name from `crm_users_profile` or fall back to `user.user_metadata` / `user.email`
-- Pass the detected name as a new prop (`detectedFullName`) to `ChatConversationalCollect`
+**Header bar:**
+- Replace `border-zinc-800` with `border-gold/30`
+- Title text from `text-white` to `text-black`
+- Close button from `text-zinc-500 hover:text-white` to `text-zinc-400 hover:text-black`
 
-**2. `src/components/chat/ChatConversationalCollect.tsx`**
-- Add a new optional prop: `detectedFullName?: string`
-- Add a new step: `'confirm_name'` (before `'name'`)
-- Flow for logged-in users:
-  - Initial greeting: "Hi, [Full Name]! I can see you're already a member. Could you please confirm that your full name is **[Full Name]**? If not, please type your correct full name below."
-  - Show two options: a "Yes, that's correct" button and a text input to type a different name
-  - If confirmed, pre-fill `fullName` and skip to email/phone step
-  - If they type a new name, use that instead
-- Flow for non-logged-in users: unchanged ("Hi there!" + ask for name)
+**Context line ("Based on your interest in..."):**
+- From `text-zinc-400` to `text-zinc-600`
 
-### Technical Details
+**Project cards:**
+- Background from `bg-zinc-800/60 hover:bg-zinc-700/80` to `bg-white/70 hover:bg-white`
+- Border stays gold-based (`border-gold/20 hover:border-gold/50`)
+- Project name from `text-white` to `text-black`, hover stays `text-gold`
+- Area text from `text-zinc-400` to `text-zinc-500`
+- Fallback icon container from `bg-zinc-700` to `bg-gold/10`
+- Arrow icon from `text-zinc-600` to `text-zinc-400`
 
-- The `crm_users_profile` table has a `display_name` field -- this is the primary source
-- Fallback chain: `crm_users_profile.display_name` -> `user.user_metadata.full_name` -> `user.email`
-- The confirmation step uses a `confirm_name` collect step with a "Confirm" button and an alternative text input
-- No database schema changes required
+**CTA button:**
+- Keep the gold gradient button with black text (already on-brand)
 
