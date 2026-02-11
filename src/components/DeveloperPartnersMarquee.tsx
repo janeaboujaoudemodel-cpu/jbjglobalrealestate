@@ -12,9 +12,9 @@ const FEATURED_DEVELOPERS = [
   { name: "BINGHATTI", slug: "binghatti", logo: "/developers/logos/binghatti-logo.webp", scale: 1 },
   { name: "SELECT GROUP", slug: "select-group", logo: "/developers/logos/select-group-logo.webp", scale: 1.1 },
   { name: "ELLINGTON PROPERTIES", slug: "ellington", logo: "/developers/logos/ellington-logo.webp", scale: 1 },
-  { name: "MAJID AL FUTTAIM", slug: "majid-al-futtaim", logo: "/developers/logos/majid-al-futtaim-logo.webp", scale: 1.2 },
+  { name: "MAJID AL FUTTAIM", slug: "majid-al-futtaim", logo: "/developers/logos/majid-al-futtaim-logo.webp", scale: 1, width: 170 },
   { name: "DANUBE PROPERTIES", slug: "danube", logo: "/developers/logos/danube-logo.webp", scale: 1.05 },
-  { name: "DUBAI PROPERTIES", slug: "dubai-properties", logo: "/developers/logos/dubai-properties-logo.webp", scale: 1.4 },
+  { name: "DUBAI PROPERTIES", slug: "dubai-properties", logo: "/developers/logos/dubai-properties-logo.webp", scale: 1, width: 160 },
 ];
 
 const TOTAL_IMAGES = FEATURED_DEVELOPERS.length;
@@ -78,7 +78,8 @@ const DeveloperPartnersMarquee = () => {
         title={developer.name}
       >
         <div
-          className="w-[140px] h-[36px] md:h-[42px] lg:h-[48px] flex items-center justify-center overflow-hidden"
+          className="h-[36px] md:h-[42px] lg:h-[48px] flex items-center justify-center overflow-hidden"
+          style={{ width: `${(developer as any).width ?? 140}px` }}
         >
           <img
             src={developer.logo}
