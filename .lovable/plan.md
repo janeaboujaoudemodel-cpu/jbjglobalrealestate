@@ -1,37 +1,34 @@
 
 
-# Fix Search Dropdown -- Correct Files This Time
+# Unify All Header Dropdowns + Fix Positioning + Improve Search
 
-## Root Cause
-The previous fixes edited `MegaMenuSearch.tsx`, but that component is **not used**. The actual search dropdown is `GlobalSearchModal` rendered in **embedded mode** inside a wrapper div in `GlobalHeader.tsx` (line 1506). That's why nothing changed visually.
+## Three Issues to Fix
 
-## Changes
+### 1. Match All Header Dropdown Colors
+The main navigation menus (Buy, Sell, Rent, Projects, Areas, Developers, Insights) use `MegaMenuShell` which has a lighter gradient (`#FDFBF7, #F5F0E6, #EDE4D3`). The Search and Language dropdowns now use the deeper champagne gradient (`#F5EBD7, #E8DCC8, #D4C4A8`). All dropdowns need to use the same deeper champagne gradient.
 
-### 1. Fix Wrapper Container in GlobalHeader.tsx (line 1506)
-**Current:** `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-2xl`
-**New:** Match Language dropdown exactly:
-- Use inline style: `background: linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)`
-- Shadow: `shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)]`
-- Add absolute gold border overlay div (same as Language dropdown)
-- Add bottom gold accent bar
+**File: `src/components/header/mega-menu-primitives.tsx` (line 36)**
+- Change the `MegaMenuShell` background from `linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)` to `linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)`
 
-### 2. Fix Search Input Double-Border in GlobalSearchModal.tsx (line 296-306)
-The embedded search bar uses the `Input` component which has built-in `border-2 border-gold/40` and a champagne gradient background. This creates a visible nested border.
-**Fix:** Replace `Input` with a plain `<input>` element styled with `bg-transparent border-0` so only the parent's border shows.
+### 2. Fix Search and Language Dropdown Position
+The Search and Language panels are positioned with `top: calc(100% + 12px)` which creates a visible gap below the header border. They should start right at the header border.
 
-### 3. Fix "Square Inside Square" on Quick Access Section (line 342)
-The Quick Access/Popular Pages area has its own `border border-gold/30 rounded-xl shadow-inner` creating another visible nested box.
-**Fix:** Remove the border, shadow-inner, and separate background from this wrapper since the parent container already provides the champagne background.
+**File: `src/components/GlobalHeader.tsx` (line 1501)**
+- Change `top: 'calc(100% + 12px)'` to `top: 'calc(100% + 4px)'` for the utility panel container (Search, Language, Account)
+- Adjust the bridge zone height accordingly to maintain hover stability
 
-### 4. Add Hover Effects on Items
-Quick Access and Popular Pages items currently use `hover:bg-black/5`. Update to `hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]` to match Language dropdown hover style.
+### 3. Improve Search to Find Projects by Developer Name
+When searching "Emaar", only the developer record shows up. The project search only checks `projects.name`, not `developer_name`. So Emaar's projects (Selvara, Rivana, Sunrise Bay, etc.) don't appear because "Emaar" isn't in their project name.
 
-## Files to Edit
+**File: `src/components/GlobalSearchModal.tsx` (lines 139-152)**
+- Expand the projects query to also search by `developer_name` using an OR filter: `.or(`name.ilike.%query%,developer_name.ilike.%query%`)`
+- This means searching "Emaar" will show Emaar the developer AND all Emaar projects
+
+## Technical Details
 
 | File | Line(s) | Change |
 |------|---------|--------|
-| `src/components/GlobalHeader.tsx` | 1506 | Replace wrapper gradient/border with Language dropdown style |
-| `src/components/GlobalSearchModal.tsx` | 296-306 | Replace `Input` with plain `<input>`, remove double border |
-| `src/components/GlobalSearchModal.tsx` | 342 | Remove nested border/shadow from Quick Access wrapper |
-| `src/components/GlobalSearchModal.tsx` | 350, 367 | Update hover effects to match Language dropdown |
+| `src/components/header/mega-menu-primitives.tsx` | 36 | Update gradient to `#F5EBD7, #E8DCC8, #D4C4A8` |
+| `src/components/GlobalHeader.tsx` | 1501 | Change `calc(100% + 12px)` to `calc(100% + 4px)` |
+| `src/components/GlobalSearchModal.tsx` | 145 | Add `.or()` filter to include `developer_name` in project search |
 
