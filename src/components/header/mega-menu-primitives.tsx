@@ -322,7 +322,7 @@ export function MegaMenuCard({
   return (
     <div className={cn(
       "bg-gradient-to-br from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8]",
-      "rounded-xl",
+      "rounded-xl border border-gold/30 shadow-sm",
       "transition-all",
       compact ? "p-2.5" : "p-4",
       className
