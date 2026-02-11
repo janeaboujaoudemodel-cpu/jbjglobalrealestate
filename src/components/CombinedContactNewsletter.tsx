@@ -26,8 +26,8 @@ const CombinedContactNewsletter = ({
       href: getWhatsAppUrl(),
       iconBg: "bg-emerald-500/20",
       iconColor: "text-emerald-500",
-      borderColor: "border-emerald-500/40 hover:border-emerald-500",
-      shadowColor: "hover:shadow-emerald-500/20",
+      borderColor: "border-emerald-500 shadow-lg shadow-emerald-500/20 hover:border-emerald-500/40 hover:shadow-none",
+      shadowColor: "",
       valueColor: "text-gold group-hover:text-black",
     },
     {
@@ -37,8 +37,8 @@ const CombinedContactNewsletter = ({
       href: getCallUrl(),
       iconBg: "bg-blue-500/20",
       iconColor: "text-blue-500",
-      borderColor: "border-blue-500/40 hover:border-blue-500",
-      shadowColor: "hover:shadow-blue-500/20",
+      borderColor: "border-blue-500 shadow-lg shadow-blue-500/20 hover:border-blue-500/40 hover:shadow-none",
+      shadowColor: "",
       valueColor: "text-gold group-hover:text-black",
     },
     {
