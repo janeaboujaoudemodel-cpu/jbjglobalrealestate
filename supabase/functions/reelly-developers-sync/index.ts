@@ -153,6 +153,40 @@ function mapReellyDeveloperToDb(dev: ReellyDeveloper): {
   };
 }
 
+async function fetchWithRetry(url: string, headers: Record<string, string>, maxRetries = 3): Promise<Response> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 25000); // 25s timeout
+      
+      const response = await fetch(url, { headers, signal: controller.signal });
+      clearTimeout(timeout);
+      
+      if (response.ok) return response;
+      
+      // Retry on 5xx errors
+      if (response.status >= 500 && attempt < maxRetries) {
+        const delay = Math.min(5000 * Math.pow(2, attempt - 1), 30000);
+        console.log(`[ReellyDevSync] Attempt ${attempt} got ${response.status}, retrying in ${delay}ms...`);
+        await response.text(); // consume body
+        await new Promise(r => setTimeout(r, delay));
+        continue;
+      }
+      
+      return response; // Return non-retryable errors as-is
+    } catch (err: any) {
+      if (attempt < maxRetries) {
+        const delay = Math.min(5000 * Math.pow(2, attempt - 1), 30000);
+        console.log(`[ReellyDevSync] Attempt ${attempt} failed (${err.name}), retrying in ${delay}ms...`);
+        await new Promise(r => setTimeout(r, delay));
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw new Error("Max retries exceeded");
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -176,15 +210,15 @@ Deno.serve(async (req) => {
 
     console.log(`[ReellyDevSync] Mode: ${mode}`);
 
+    const apiHeaders = {
+      "X-API-Key": apiKey,
+      "Content-Type": "application/json",
+    };
+
     // For test mode, just fetch one page to get the count
     if (mode === "test") {
       const apiUrl = `https://api-reelly.up.railway.app/api/v2/clients/developers?limit=5&offset=0`;
-      const response = await fetch(apiUrl, {
-        headers: {
-          "X-API-Key": apiKey,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetchWithRetry(apiUrl, apiHeaders);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -195,7 +229,7 @@ Deno.serve(async (req) => {
             error: `Reelly API error: ${response.status}`,
             details: errorText.substring(0, 500)
           }),
-          { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
 
@@ -225,7 +259,7 @@ Deno.serve(async (req) => {
 
     // For quick/full sync: paginate through ALL developers
     const pageSize = mode === "quick" ? 50 : 100;
-    const maxPages = mode === "quick" ? 1 : 100; // Quick = 1 page (50), Full = up to 100 pages (10,000 max)
+    const maxPages = mode === "quick" ? 1 : 100;
     
     let allDevelopers: ReellyDeveloper[] = [];
     let offset = 0;
@@ -236,17 +270,28 @@ Deno.serve(async (req) => {
       const apiUrl = `https://api-reelly.up.railway.app/api/v2/clients/developers?limit=${pageSize}&offset=${offset}`;
       console.log(`[ReellyDevSync] Fetching page ${pagesFetched + 1}: ${apiUrl}`);
       
-      const response = await fetch(apiUrl, {
-        headers: {
-          "X-API-Key": apiKey,
-          "Content-Type": "application/json",
-        },
-      });
+      let response: Response;
+      try {
+        response = await fetchWithRetry(apiUrl, apiHeaders);
+      } catch (err: any) {
+        console.error(`[ReellyDevSync] All retries failed on page ${pagesFetched + 1}: ${err.message}`);
+        if (allDevelopers.length > 0) {
+          console.log(`[ReellyDevSync] Continuing with ${allDevelopers.length} developers already fetched`);
+          break;
+        }
+        return new Response(
+          JSON.stringify({ 
+            success: false, 
+            error: `Reelly API unreachable after retries`,
+            details: err.message
+          }),
+          { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
 
       if (!response.ok) {
         const errorText = await response.text();
         console.error(`[ReellyDevSync] API Error on page ${pagesFetched + 1}: ${response.status} - ${errorText}`);
-        // If we already have some data, continue with what we have
         if (allDevelopers.length > 0) {
           console.log(`[ReellyDevSync] Continuing with ${allDevelopers.length} developers already fetched`);
           break;
@@ -257,7 +302,7 @@ Deno.serve(async (req) => {
             error: `Reelly API error: ${response.status}`,
             details: errorText.substring(0, 500)
           }),
-          { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
 
@@ -270,7 +315,6 @@ Deno.serve(async (req) => {
       
       console.log(`[ReellyDevSync] Page ${pagesFetched}: fetched ${developers.length} developers (total so far: ${allDevelopers.length}/${totalCount})`);
 
-      // Check if we've fetched all developers
       if (developers.length < pageSize || !rawData.next) {
         console.log(`[ReellyDevSync] No more pages - reached end of results`);
         break;
@@ -289,7 +333,6 @@ Deno.serve(async (req) => {
     let errors = 0;
     const errorDetails: string[] = [];
 
-    // Get existing developers for matching
     const { data: existingDevs } = await supabase
       .from("developers")
       .select("id, name, slug");
@@ -305,25 +348,21 @@ Deno.serve(async (req) => {
       try {
         const mapped = mapReellyDeveloperToDb(dev);
         
-        // Skip developers with invalid data (null/empty name)
         if (!mapped) {
           skipped++;
           console.log(`[ReellyDevSync] Skipped developer with invalid/null name (ID: ${dev.id})`);
           continue;
         }
         
-        // Check if developer already exists by slug or name
         const existingBySlugMatch = existingBySlug.get(mapped.slug);
         const existingByNameMatch = existingByName.get(mapped.name.toLowerCase().trim());
         const existing = existingBySlugMatch || existingByNameMatch;
 
         if (existing) {
-          // Update existing developer with enhanced data
           const updateData: Record<string, any> = {
             updated_at: new Date().toISOString(),
           };
 
-          // Only update fields that have values (don't overwrite with null)
           if (mapped.logo_url) updateData.logo_url = mapped.logo_url;
           if (mapped.description) updateData.description = mapped.description;
           if (mapped.headquarters) updateData.headquarters = mapped.headquarters;
@@ -344,7 +383,6 @@ Deno.serve(async (req) => {
             updated++;
           }
         } else {
-          // Insert new developer with only valid columns
           const insertData = {
             name: mapped.name,
             slug: mapped.slug,
@@ -364,7 +402,6 @@ Deno.serve(async (req) => {
 
           if (insertError) {
             if (insertError.code === "23505") {
-              // Duplicate key - skip
               skipped++;
             } else {
               console.error(`[ReellyDevSync] Insert error for ${dev.name}:`, insertError);
