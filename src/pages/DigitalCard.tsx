@@ -361,7 +361,7 @@ const DigitalCard = () => {
               style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
             >
               <p className="text-sm sm:text-base text-black/80 leading-relaxed">
-                A licensed Dubai brokerage delivering <span className="font-semibold text-black">investor-led real estate advisory</span>, market intelligence, and end-to-end property execution across the UAE.
+                A <span className="font-semibold text-black">RERA-licensed Dubai brokerage</span> powering smarter real estate decisions through <span className="font-semibold text-black">AI-driven market intelligence</span>, predictive analytics, and a full suite of <span className="font-semibold text-black">50+ professional tools</span>. We deliver end-to-end advisory across Buy, Sell, and Rent — from property sourcing and valuation to negotiation and closing — backed by data, not guesswork.
               </p>
             </div>
 
@@ -488,7 +488,7 @@ const DigitalCard = () => {
             </div>
 
             {/* Action Cards Row: Send Email | Share Card | Website */}
-            <div className="grid grid-cols-3 gap-3 mb-3">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-3">
               {/* Send Email */}
               <a
                 href={`mailto:${CONTACT_INFO.email}?subject=${encodeURIComponent("Inquiry via Digital Business Card")}`}
