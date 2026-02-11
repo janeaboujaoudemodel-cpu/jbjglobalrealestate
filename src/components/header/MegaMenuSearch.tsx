@@ -22,7 +22,6 @@ import {
   MegaMenuSectionDivider,
   MegaMenuSectionTitle,
 } from '@/components/header/mega-menu-primitives';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from '@/constants/stats';
 
@@ -98,24 +97,28 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
     <div
       ref={ref}
       className={cn(
-        "absolute right-0 top-full mt-2 w-[min(95vw,900px)] rounded-xl border-2 border-gold/40 shadow-xl z-[9999] overflow-hidden"
+        "absolute right-0 top-full mt-2 w-[min(95vw,900px)] rounded-xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] z-[9999] overflow-hidden"
       )}
-      style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}
+      style={{
+        background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+      }}
     >
+      {/* Gold border overlay (matches Language dropdown) */}
+      <div className="absolute inset-0 rounded-xl border-2 border-gold/40 pointer-events-none" />
+
       <div className="px-5 lg:px-8 py-4 lg:py-5">
         <MegaMenuSectionTitle icon={Search} title="Search & Shortcuts" />
 
         {/* Search bar */}
         <div className="mt-3 flex items-center gap-2">
-          <Input
+          <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') openGlobalSearch();
             }}
             placeholder="Search pages, tools & guides"
-            className="h-12 rounded-xl text-lg placeholder:text-lg tracking-wide bg-white/80 border border-gold/30 !border-2-none"
-            style={{ background: 'rgba(255,255,255,0.8)', borderWidth: '1px' }}
+            className="flex-1 h-12 rounded-xl px-4 text-base text-black placeholder:text-black/40 bg-white/80 border border-gold/30 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all duration-200"
             aria-label="Search"
           />
           <button
@@ -212,6 +215,9 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
           </div>
         </div>
       </div>
+
+      {/* Bottom gold accent bar (matches Language dropdown) */}
+      <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
     </div>
   );
 });
