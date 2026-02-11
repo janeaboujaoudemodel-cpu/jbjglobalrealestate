@@ -7,7 +7,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Home, MapPin, ArrowRight, Building2 } from "lucide-react";
+import { Home, MapPin, ArrowRight, Building2, ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -45,7 +45,7 @@ function useFeaturedProjects() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("id, name, slug, developer_name, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
+        .select("id, name, slug, developer_name, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, description, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
         .in("developer_name", ELITE_DEVELOPERS)
         .eq("is_published", true)
         .order("created_at", { ascending: false })
@@ -216,14 +216,17 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
             </div>
 
             {/* Title - Gold */}
-            <h3 className="text-gold font-semibold text-sm mb-1 line-clamp-2 group-hover:text-gold/80 transition-colors min-h-[40px]" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h3 className="text-black font-semibold text-sm mb-1 line-clamp-2 group-hover:text-gold transition-colors min-h-[40px]" style={{ fontFamily: "Poppins, sans-serif" }}>
               {project.name}
             </h3>
 
-            {/* Description - 2 lines */}
+            {/* Description - 2 lines with ...more */}
             {(project as any).description && (
               <p className="text-zinc-600 text-xs line-clamp-2 mb-2">
                 {String((project as any).description).replace(/<[^>]*>/g, '').slice(0, 120)}
+                <span className="text-black font-medium ml-1 inline-flex items-center gap-0.5">
+                  ...more <ArrowUpRight className="w-3 h-3 inline" />
+                </span>
               </p>
             )}
 

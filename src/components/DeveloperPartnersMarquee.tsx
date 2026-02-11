@@ -74,7 +74,7 @@ const DeveloperPartnersMarquee = () => {
       <Link
         key={`${isFirst ? "a" : "b"}-${developer.slug}-${index}`}
         to={`/developer/${developer.slug}`}
-        className="flex-shrink-0 px-3 md:px-5 lg:px-6 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
+        className="flex-shrink-0 px-6 md:px-10 lg:px-12 flex items-center justify-center transition-opacity duration-300 hover:opacity-70"
         title={developer.name}
       >
         <div
