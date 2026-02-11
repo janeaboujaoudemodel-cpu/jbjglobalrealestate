@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, Home, Castle, Building, Briefcase, ArrowRight, FileText, DollarSign, TrendingUp, ClipboardCheck } from 'lucide-react';
+import { ArrowRight, FileText, DollarSign, TrendingUp, ClipboardCheck } from 'lucide-react';
 import sellPropertyBg from '@/assets/services/sell-property-bg.jpg';
 import dubaiSellingVideo from '@/assets/videos/dubai-selling-hero.mp4';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
@@ -9,14 +9,6 @@ interface MegaMenuSellProps {
 }
 
 const MegaMenuSell = React.forwardRef<HTMLDivElement, MegaMenuSellProps>(({ onClose }, ref) => {
-  const propertyTypes = [
-    { label: 'Apartments', icon: Building2, href: '/seller-listing?type=apartment' },
-    { label: 'Villas', icon: Home, href: '/seller-listing?type=villa' },
-    { label: 'Townhouses', icon: Castle, href: '/seller-listing?type=townhouse' },
-    { label: 'Penthouses', icon: Building, href: '/seller-listing?type=penthouse' },
-    { label: 'Commercial', icon: Briefcase, href: '/seller-listing?type=commercial' },
-  ];
-
   const sellerResources = [
     { label: "Seller's Guide", href: '/seller-guide', icon: FileText },
     { label: 'Property Valuation', href: '/sell/valuation', icon: DollarSign },
@@ -44,22 +36,8 @@ const MegaMenuSell = React.forwardRef<HTMLDivElement, MegaMenuSellProps>(({ onCl
 
           {/* Right: Links in Premium Cards */}
           <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Card 1: What You Can Sell */}
-              <MegaMenuCard icon={Building2} title="What You Can Sell">
-                {propertyTypes.map((item) => (
-                  <MegaMenuIconLink
-                    key={item.label}
-                    to={item.href}
-                    onClick={onClose}
-                    icon={item.icon}
-                    title={item.label}
-                    compact
-                  />
-                ))}
-              </MegaMenuCard>
-
-              {/* Card 2: Seller Resources */}
+            <div className="grid grid-cols-1 gap-4">
+              {/* Seller Resources */}
               <MegaMenuCard icon={FileText} title="Seller Resources">
                 {sellerResources.map((item) => (
                   <MegaMenuIconLink
