@@ -99,7 +99,7 @@ const MortgageCalculator = ({
   if (compact) {
     return (
       <div className="max-w-5xl mx-auto">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4">
           {/* Property Price */}
           <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl p-4 sm:p-5 text-center shadow-md min-w-0">
             <div className="w-9 h-9 sm:w-10 sm:h-10 mx-auto mb-2 sm:mb-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">

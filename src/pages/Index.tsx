@@ -645,13 +645,13 @@ const Index = () => {
             >
               <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full mb-4 shadow-lg shadow-gold/10">
                 <Calculator className="w-4 h-4 text-gold" />
-                <span className="text-black text-xs font-semibold uppercase tracking-wider">{t('home.mortgageEstimate', 'Mortgage Estimate')}</span>
+                <span className="text-black text-xs font-semibold uppercase tracking-wider">Financial Tools</span>
               </span>
               <h3 className="text-zinc-900 text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                 {t('mortgage.title', 'Mortgage')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#C4A962] to-gold">{t('mortgage.calculator', 'Calculator')}</span>
               </h3>
               <p className="text-zinc-600 mt-3 max-w-lg mx-auto">
-                {t('home.mortgageDesc', 'Estimate your monthly payments and explore financing options with licensed mortgage partners.')}
+                Estimate your monthly payments and explore financing options.
               </p>
             </motion.div>
             <div className="relative z-10">
@@ -659,7 +659,7 @@ const Index = () => {
                 <MortgageCalculator compact />
               </Suspense>
               <p className="text-zinc-500 text-xs text-center mt-4">
-                {t('home.mortgageDisclaimer', 'Estimates only. Introductions to independent licensed mortgage partners.')}
+                Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
               </p>
               
               {/* Dual Buttons with 3D Premium Styling */}

@@ -239,11 +239,9 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
 
             {/* Description - 2 lines with ...more */}
             {(project as any).description && (
-              <p className="text-zinc-600 text-xs line-clamp-2 mb-2">
-                {String((project as any).description).replace(/<[^>]*>/g, '').slice(0, 120)}
-                <span className="text-gold font-medium ml-1">
-                  ...more
-                </span>
+              <p className="text-zinc-600 text-xs mb-2">
+                {String((project as any).description).replace(/<[^>]*>/g, '').slice(0, 100)}
+                <span className="text-gold font-medium cursor-pointer">...more</span>
               </p>
             )}
 
