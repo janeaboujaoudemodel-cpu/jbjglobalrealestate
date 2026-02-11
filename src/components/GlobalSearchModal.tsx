@@ -161,7 +161,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search anything..."
-            className="w-full h-12 pl-12 pr-4 bg-transparent border-0 text-white text-base placeholder:text-gold/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="w-full h-12 pl-12 pr-4 bg-transparent border-0 text-black text-base placeholder:text-gold/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           />
         </div>
         {/* Content */}
@@ -177,16 +177,16 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     <button
                       key={`${item.id}-${idx}`}
                       onClick={() => handleSelect(item.route)}
-                      className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 transition-all text-left"
+                      className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-black/5 transition-all text-left"
                     >
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/10 border border-gold/30 text-gold">
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/50 border border-gold/30 text-gold">
                         {item.icon && <item.icon className="w-4 h-4" />}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-white truncate">{item.label}</p>
-                        {item.category && <p className="text-xs text-zinc-400">{item.category}</p>}
+                        <p className="text-sm font-medium text-black truncate">{item.label}</p>
+                        {item.category && <p className="text-xs text-gold">{item.category}</p>}
                       </div>
-                      <ArrowRight className="w-3 h-3 text-zinc-500" />
+                      <ArrowRight className="w-3 h-3 text-gold/60" />
                     </button>
                   ))}
                 </div>
@@ -201,12 +201,12 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     <button
                       key={s.route}
                       onClick={() => handleSelect(s.route)}
-                      className="flex flex-col items-center gap-1.5 p-2.5 rounded-lg hover:bg-white/10 transition-all"
+                      className="flex flex-col items-center gap-1.5 p-2.5 rounded-lg hover:bg-black/5 transition-all"
                     >
                       <div className={`w-9 h-9 rounded-lg ${s.color} flex items-center justify-center`}>
                         <s.icon className="w-4 h-4 text-white" />
                       </div>
-                      <span className="text-xs text-zinc-300 font-medium">{s.label}</span>
+                      <span className="text-xs text-black font-medium">{s.label}</span>
                     </button>
                   ))}
                 </div>
@@ -218,12 +218,12 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     <button
                       key={page.route}
                       onClick={() => handleSelect(page.route)}
-                      className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-white/10 transition-all text-left"
+                      className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-black/5 transition-all text-left"
                     >
-                      <div className="w-7 h-7 rounded-md bg-white/10 border border-gold/20 flex items-center justify-center text-gold">
+                      <div className="w-7 h-7 rounded-md bg-white/50 border border-gold/10 flex items-center justify-center text-gold">
                         <page.icon className="w-3.5 h-3.5" />
                       </div>
-                      <span className="text-xs text-zinc-300 font-medium">{page.label}</span>
+                      <span className="text-xs text-black font-medium">{page.label}</span>
                     </button>
                   ))}
                 </div>
@@ -233,23 +233,23 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-xs font-semibold text-gold/80 uppercase tracking-wider">Recent Searches</p>
-                    <button onClick={handleClearRecent} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">Clear</button>
+                    <button onClick={handleClearRecent} className="text-xs text-zinc-500 hover:text-zinc-700 transition-colors">Clear</button>
                   </div>
                   <div className="space-y-1">
                     {recentSearches.map((search, i) => (
                       <button
                         key={i}
                         onClick={() => handleRecentSearchClick(search)}
-                        className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-white/10 transition-all text-left"
+                        className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-black/5 transition-all text-left"
                       >
-                        <Clock className="w-3.5 h-3.5 text-zinc-500" />
-                        <span className="text-xs text-zinc-300 font-medium">{search}</span>
+                        <Clock className="w-3.5 h-3.5 text-gold/60" />
+                        <span className="text-xs text-black font-medium">{search}</span>
                       </button>
                     ))}
                   </div>
                 </div>
               )}
-              <p className="text-xs text-gold/60 text-center pt-1">
+              <p className="text-xs text-gold/80 text-center pt-1">
                 Type to search projects, developers, tools & more...
               </p>
             </div>

@@ -107,7 +107,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       const portalStillOpen = document.querySelector('[data-radix-portal]');
       if (portalStillOpen) return;
       setActiveMegaMenu(null);
-    }, 450); // Increased timeout for more forgiving hover transitions
+    }, 120); // Fast close for snappy UX
   };
 
   // Clear any pending close timeout when entering mega menu panels
@@ -1503,7 +1503,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 onPointerLeave={handleMegaMenuLeave}
               >
                 {activeMegaMenu === 'search' && (
-                  <div className="w-[620px] bg-black/95 backdrop-blur-xl border border-gold/30 rounded-2xl shadow-2xl p-4">
+                  <div className="w-[620px] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-2xl p-4">
                     <GlobalSearchModal
                       isOpen={true}
                       initialQuery=""
