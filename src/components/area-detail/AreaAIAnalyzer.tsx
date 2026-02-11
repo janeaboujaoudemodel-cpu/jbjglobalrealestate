@@ -225,7 +225,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   <div className="text-gold/70 text-sm font-medium">/10 Investment Rating</div>
                   {sections?.rating && (
                     <p className="text-zinc-400 text-xs mt-3 leading-relaxed">
-                      {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[:\s-]+/, '').trim()}
+                      {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim()}
                     </p>
                   )}
                 </div>
