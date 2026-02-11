@@ -190,7 +190,7 @@ export const AIMarketAnalyzer = ({
               <Brain className="w-4 h-4 text-white" />
             </div>
             <div className="text-left">
-              <p className="text-xs font-semibold text-black">AI Market Analysis</p>
+              <p className="text-xs font-semibold text-black">JBJ AI Market Analysis</p>
               <p className="text-[10px] text-zinc-500">
                 {insights ? 'View insights' : 'Click to analyze'}
               </p>
@@ -227,7 +227,7 @@ export const AIMarketAnalyzer = ({
             <Brain className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-black">AI Market Intelligence Analyzer</h3>
+            <h3 className="text-lg font-bold text-black">JBJ AI Market Intelligence</h3>
             <p className="text-sm text-zinc-500">Powered by advanced market analysis</p>
           </div>
         </div>
@@ -237,7 +237,7 @@ export const AIMarketAnalyzer = ({
       {isLoading && !insights && (
         <div className="p-8 text-center">
           <Loader2 className="w-12 h-12 mx-auto mb-4 text-purple-500 animate-spin" />
-          <h4 className="text-lg font-semibold text-black mb-2">Analyzing Market Data...</h4>
+          <h4 className="text-lg font-semibold text-black mb-2">JBJ AI is Analyzing...</h4>
           <p className="text-zinc-500 text-sm">Gathering insights for {name}</p>
         </div>
       )}
