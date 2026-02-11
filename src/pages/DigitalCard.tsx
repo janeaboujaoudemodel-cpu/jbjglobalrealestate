@@ -389,7 +389,7 @@ const DigitalCard = () => {
 
             {/* COMPANY CONTACT SECTION */}
             <div 
-              className="mb-6 pb-6"
+              className="mb-6 pb-6 flex flex-col items-center"
               style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
             >
               <h3 className="text-xs font-semibold text-black/50 mb-3 uppercase tracking-wider text-center">
@@ -440,7 +440,7 @@ const DigitalCard = () => {
 
             {/* PERSONAL CONTACT SECTION */}
             <div 
-              className="mb-6 pb-6"
+              className="mb-6 pb-6 flex flex-col items-center"
               style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
             >
               <h3 className="text-xs font-semibold text-black/50 mb-3 uppercase tracking-wider text-center">
@@ -489,49 +489,64 @@ const DigitalCard = () => {
               </button>
             </div>
 
-            {/* Email - Clickable with mailto: */}
-            <a
-              href={`mailto:${CONTACT_INFO.email}?subject=${encodeURIComponent("Inquiry via Digital Business Card")}`}
-              className="inline-flex items-center gap-3 py-3 px-5 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98] group mb-3 mx-auto"
-              style={{ border: `2px solid ${GOLD.primary}50` }}
-            >
-              <div 
-                className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-                style={{ 
-                  background: GOLD.activeBackground,
-                  border: `1px solid ${GOLD.primary}50`
-                }}
+            {/* Action Cards Row: Send Email | Share Card | Website */}
+            <div className="grid grid-cols-3 gap-3 mb-3">
+              {/* Send Email */}
+              <a
+                href={`mailto:${CONTACT_INFO.email}?subject=${encodeURIComponent("Inquiry via Digital Business Card")}`}
+                className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-white shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                style={{ border: `2px solid ${GOLD.primary}50` }}
               >
-                <Mail className="w-5 h-5" style={{ color: GOLD.primary }} />
-              </div>
-              <div className="text-left">
-                <span className="block font-semibold">Send Email</span>
-                <span className="text-xs text-black/50">{CONTACT_INFO.emailDisplay}</span>
-              </div>
-            </a>
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ 
+                    background: GOLD.activeBackground,
+                    border: `1px solid ${GOLD.primary}50`
+                  }}
+                >
+                  <Mail className="w-5 h-5" style={{ color: GOLD.primary }} />
+                </div>
+                <span className="text-sm font-semibold text-center text-black">Send Email</span>
+              </a>
 
-            {/* Website */}
-            <a
-              href={CONTACT_INFO.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 py-3 px-5 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98] group mb-3 mx-auto"
-              style={{ border: `2px solid ${GOLD.primary}50` }}
-            >
-              <div 
-                className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-                style={{ 
-                  background: GOLD.activeBackground,
-                  border: `1px solid ${GOLD.primary}50`
-                }}
+              {/* Share This Card */}
+              <button
+                onClick={() => setShowShareOptions(true)}
+                className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-white shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                style={{ border: `2px solid ${GOLD.primary}50` }}
               >
-                <Globe className="w-5 h-5" style={{ color: GOLD.primary }} />
-              </div>
-              <div className="text-left">
-                <span className="block font-semibold">Website</span>
-                <span className="text-xs text-black/50">{CONTACT_INFO.websiteDisplay}</span>
-              </div>
-            </a>
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ 
+                    background: GOLD.activeBackground,
+                    border: `1px solid ${GOLD.primary}50`
+                  }}
+                >
+                  <Share2 className="w-5 h-5" style={{ color: GOLD.primary }} />
+                </div>
+                <span className="text-sm font-semibold text-center text-black">Share Card</span>
+              </button>
+
+              {/* Website */}
+              <a
+                href={CONTACT_INFO.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-white shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                style={{ border: `2px solid ${GOLD.primary}50` }}
+              >
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ 
+                    background: GOLD.activeBackground,
+                    border: `1px solid ${GOLD.primary}50`
+                  }}
+                >
+                  <Globe className="w-5 h-5" style={{ color: GOLD.primary }} />
+                </div>
+                <span className="text-sm font-semibold text-center text-black">Website</span>
+              </a>
+            </div>
 
             {/* Social Links Section */}
             <div 
@@ -623,17 +638,6 @@ const DigitalCard = () => {
               </div>
             </div>
 
-            {/* Share Card Button */}
-            <div className="mt-6 pt-4" style={{ borderTop: `1px solid ${GOLD.primary}33` }}>
-              <button
-                onClick={() => setShowShareOptions(true)}
-                className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl bg-black text-white font-semibold shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
-                style={{ border: `2px solid ${GOLD.primary}` }}
-              >
-                <Share2 className="w-5 h-5" style={{ color: GOLD.primary }} />
-                <span>Share This Card</span>
-              </button>
-            </div>
           </div>
         </div>
       </motion.div>
