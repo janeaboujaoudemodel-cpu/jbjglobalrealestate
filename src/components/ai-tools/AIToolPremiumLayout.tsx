@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Sparkles, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 interface AIToolPremiumLayoutProps {
   title: string;
@@ -14,6 +14,7 @@ interface AIToolPremiumLayoutProps {
   children: ReactNode;
   badge?: string;
   description?: string;
+  showFinancialDisclaimer?: boolean;
 }
 
 const colorClasses: Record<string, { bg: string; border: string; text: string; glow: string; gradient: string }> = {
@@ -156,6 +157,7 @@ const AIToolPremiumLayout = ({
   children,
   badge = "AI-Powered",
   description,
+  showFinancialDisclaimer = false,
 }: AIToolPremiumLayoutProps) => {
   const navigate = useNavigate();
   const colors = colorClasses[accentColor] || colorClasses.gold;
@@ -261,6 +263,16 @@ const AIToolPremiumLayout = ({
             className="max-w-6xl mx-auto"
           >
             {children}
+
+            {showFinancialDisclaimer && (
+              <div className="mt-8 p-4 bg-zinc-900/60 border border-gold/20 rounded-xl">
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  <strong className="text-zinc-300">Disclaimer:</strong> This AI-generated analysis is for informational purposes only. Does not constitute financial, investment, or legal advice.{" "}
+                  <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+                  Past performance does not guarantee future results.
+                </p>
+              </div>
+            )}
           </motion.div>
         </div>
       </section>

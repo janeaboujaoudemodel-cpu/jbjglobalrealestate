@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap } from "lucide-react";
+import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
@@ -36,8 +36,31 @@ const POPULAR_PAGES = [
   { label: "FAQ", route: "/faq", icon: HelpCircle },
 ];
 
+const RECENT_SEARCHES_KEY = "jbj_recent_searches";
+const MAX_RECENT_SEARCHES = 5;
+
+const getRecentSearches = (): string[] => {
+  try {
+    const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch { return []; }
+};
+
+const saveRecentSearch = (query: string) => {
+  const trimmed = query.trim();
+  if (!trimmed || trimmed.length < 2) return;
+  const existing = getRecentSearches().filter(s => s.toLowerCase() !== trimmed.toLowerCase());
+  const updated = [trimmed, ...existing].slice(0, MAX_RECENT_SEARCHES);
+  localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+};
+
+const clearRecentSearches = () => {
+  localStorage.removeItem(RECENT_SEARCHES_KEY);
+};
+
 const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = false }: GlobalSearchModalProps) => {
   const [query, setQuery] = useState("");
+  const [recentSearches, setRecentSearches] = useState<string[]>(getRecentSearches());
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { user, isOwner } = useAuth();
@@ -93,14 +116,28 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     if (isOpen) {
       const q = (initialQuery || "").trim();
       setQuery(q);
+      setRecentSearches(getRecentSearches());
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen, initialQuery]);
 
   const handleSelect = (route: string) => {
+    if (query.trim()) {
+      saveRecentSearch(query.trim());
+      setRecentSearches(getRecentSearches());
+    }
     navigate(route);
     onClose();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleRecentSearchClick = (search: string) => {
+    setQuery(search);
+  };
+
+  const handleClearRecent = () => {
+    clearRecentSearches();
+    setRecentSearches([]);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -191,6 +228,27 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                   ))}
                 </div>
               </div>
+              {/* Recent Searches - Embedded */}
+              {recentSearches.length > 0 && (
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-xs font-semibold text-gold/80 uppercase tracking-wider">Recent Searches</p>
+                    <button onClick={handleClearRecent} className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">Clear</button>
+                  </div>
+                  <div className="space-y-1">
+                    {recentSearches.map((search, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleRecentSearchClick(search)}
+                        className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-white/10 transition-all text-left"
+                      >
+                        <Clock className="w-3.5 h-3.5 text-zinc-500" />
+                        <span className="text-xs text-zinc-300 font-medium">{search}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
               <p className="text-xs text-gold/60 text-center pt-1">
                 Type to search projects, developers, tools & more...
               </p>
@@ -329,6 +387,36 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                         ))}
                       </div>
                     </div>
+
+                    {/* Recent Searches */}
+                    {recentSearches.length > 0 && (
+                      <div>
+                        <div className="flex items-center justify-between mb-3 px-1">
+                          <p className="text-sm font-bold text-black/70 uppercase tracking-wider">
+                            Recent Searches
+                          </p>
+                          <button 
+                            onClick={handleClearRecent}
+                            className="flex items-center gap-1 text-xs text-zinc-400 hover:text-black transition-colors"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                            Clear
+                          </button>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {recentSearches.map((search, i) => (
+                            <button
+                              key={i}
+                              onClick={() => handleRecentSearchClick(search)}
+                              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/50 border border-gold/10 hover:bg-white hover:border-gold/30 transition-all"
+                            >
+                              <Clock className="w-3.5 h-3.5 text-gold/60" />
+                              <span className="text-sm font-medium text-black">{search}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Admin Shortcuts - Only for authenticated users with access */}
                     {(isOwner || hasCRMAccess || hasListingAdminAccess) && (

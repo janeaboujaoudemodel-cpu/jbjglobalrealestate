@@ -64,6 +64,7 @@ const AINeighborhoodInsightsPremium = () => {
       accentColor="teal"
       gradientFrom="teal"
       badge="Location Intelligence"
+      showFinancialDisclaimer
     >
       <div className="space-y-8">
         {/* Input Section */}

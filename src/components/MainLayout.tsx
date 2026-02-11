@@ -12,6 +12,7 @@ import NewsletterBand from "@/components/NewsletterBand";
 import Footer from "@/components/Footer";
 import DirectContactCTA from "@/components/DirectContactCTA";
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
+import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useOnboardingTour } from "@/hooks/use-onboarding-tour";
 
@@ -200,9 +201,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <CommandPaletteRoot />
       <GlobalHeader forceSolid={needsHeaderSpacing} />
       {/* Content spacing: dark hero pages sit behind header, bright pages pushed below */}
-      <main className={`w-full max-w-full overflow-x-hidden ${needsHeaderSpacing ? "pt-16 sm:pt-20 md:pt-24 lg:pt-28" : "pt-0"}`}>
-        {children}
-      </main>
+      <GlobalContactGating>
+        <main className={`w-full max-w-full overflow-x-hidden ${needsHeaderSpacing ? "pt-16 sm:pt-20 md:pt-24 lg:pt-28" : "pt-0"}`}>
+          {children}
+        </main>
+      </GlobalContactGating>
       {/* Global Contact + Newsletter Section - combined for all public pages */}
       {!isBackOfficeRoute && (
         <CombinedContactNewsletter />

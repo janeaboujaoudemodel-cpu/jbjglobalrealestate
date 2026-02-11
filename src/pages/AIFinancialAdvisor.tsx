@@ -550,6 +550,15 @@ const AIFinancialAdvisor = () => {
             )}
           </div>
         </div>
+
+        {/* Financial Disclaimer */}
+        <div className="mt-8 p-4 bg-zinc-900/60 border border-gold/20 rounded-xl">
+          <p className="text-zinc-400 text-sm leading-relaxed">
+            <strong className="text-zinc-300">Disclaimer:</strong> This AI-generated analysis is for informational purposes only. Does not constitute financial, investment, or legal advice.{" "}
+            <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+            Past performance does not guarantee future results.
+          </p>
+        </div>
       </div>
     </section>
   );

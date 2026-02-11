@@ -175,6 +175,14 @@ const MortgageCalculatorPage = () => {
             </button>
           </div>
         </div>
+
+        {/* Financial Disclaimer */}
+        <div className="mt-8 p-4 bg-zinc-900/60 border border-gold/20 rounded-xl max-w-4xl mx-auto">
+          <p className="text-zinc-400 text-sm leading-relaxed">
+            <strong className="text-zinc-300">Disclaimer:</strong> This calculator provides estimates for informational purposes only. Does not constitute financial advice.{" "}
+            <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+          </p>
+        </div>
       </div>
 
       {/* Inquiry Form Modal */}
