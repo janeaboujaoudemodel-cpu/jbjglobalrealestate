@@ -88,6 +88,7 @@ const AIROICalculatorPremium = () => {
       accentColor="emerald"
       gradientFrom="emerald"
       badge="Investment Intelligence"
+      showFinancialDisclaimer
     >
       {/* Form Section */}
       <motion.div

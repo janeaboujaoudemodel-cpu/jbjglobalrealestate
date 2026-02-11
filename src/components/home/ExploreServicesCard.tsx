@@ -97,8 +97,8 @@ const services: ServiceSlide[] = [
   },
   {
     id: "golden-visa",
-    title: "Get Your Golden Visa",
-    description: "Secure UAE residency through strategic real estate investment with expert assistance",
+    title: "Golden Visa Advisory",
+    description: "Find out if you're eligible to apply for UAE residency through strategic real estate investment",
     icon: Globe,
     href: "/guides/golden-visa-uae",
     bgImage: goldenVisaBg,
