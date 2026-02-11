@@ -1,7 +1,7 @@
 // Dutch translations
 export const nl = {
   // LOCKED FOUNDER IDENTITY (DO NOT MODIFY)
-  'founder.name': 'Jane bou Jaoude',
+  'founder.name': 'Jane Bou Jaoude',
   'founder.title': 'Oprichter & CEO',
   'founder.titleShort': 'Oprichter & CEO',
   'founder.company': 'JBJ Global Real Estate',
@@ -144,7 +144,7 @@ export const nl = {
   'founder.learnMore': 'Meer Over de Oprichter',
   'founder.pageTitle': 'Oprichter & CEO JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate is een door de oprichter geleide vastgoedmakelaar gebouwd op onwrikbare standaarden, discretie en langetermijnvisie.',
-  'founder.description2': 'Jane bou Jaoude, Oprichter & CEO van JBJ Global Real Estate, leidt met een filosofie geworteld in verantwoordelijkheid en discretie, en bouwt organisaties die ontworpen zijn om te blijven bestaan in plaats van alleen maar uit te breiden.',
+  'founder.description2': 'Jane Bou Jaoude, Oprichter & CEO van JBJ Global Real Estate, leidt met een filosofie geworteld in verantwoordelijkheid en discretie, en bouwt organisaties die ontworpen zijn om te blijven bestaan in plaats van alleen maar uit te breiden.',
   'founder.vision': 'Visie',
   'founder.mission': 'Missie',
   'founder.values': 'Waarden',
@@ -205,13 +205,13 @@ export const nl = {
   'report.exclusive': 'Exclusieve Gratis Download',
   'report.title': 'JBJ Global Real Estate',
   'report.edition': 'Nieuwste Editie 2026',
-  'report.description': 'Een exclusief educatief boek geschreven door Jane bou Jaoude, over de VAE vastgoedmarkt met overheidsgegevens en gestructureerde kaders.',
+  'report.description': 'Een exclusief educatief boek geschreven door Jane Bou Jaoude, over de VAE vastgoedmarkt met overheidsgegevens en gestructureerde kaders.',
   'report.download': 'Download Uw Gratis Boek Nu',
   'report.highlight1': 'Marktindicatoren & transactieanalyse',
   'report.highlight2': 'Ontwikkelaarsvergelijkingskader',
   'report.highlight3': 'Investeringsdue diligence checklist',
   'report.highlight4': 'Gemeenschap ROI-rankings',
-  'report.createdBy': 'Gemaakt door Jane bou Jaoude Oprichter & CEO JBJ Global Real Estate',
+  'report.createdBy': 'Gemaakt door Jane Bou Jaoude Oprichter & CEO JBJ Global Real Estate',
   'report.exclusiveFor': 'Exclusief voor JBJ Global Real Estate',
   'report.descriptor': 'Vastgoedmakelaar | Dubai, VAE',
 

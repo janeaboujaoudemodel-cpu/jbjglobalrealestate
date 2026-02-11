@@ -1,7 +1,7 @@
 // Hebrew translations (עברית) - RTL Language
 export const he: Record<string, string> = {
   // LOCKED FOUNDER IDENTITY (DO NOT MODIFY)
-  'founder.name': 'Jane bou Jaoude',
+  'founder.name': 'Jane Bou Jaoude',
   'founder.title': 'מייסדת ומנכ"לית',
   'founder.titleShort': 'מייסדת ומנכ"לית',
   'founder.company': 'JBJ Global Real Estate',

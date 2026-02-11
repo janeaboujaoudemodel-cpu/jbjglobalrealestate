@@ -125,7 +125,7 @@ export default function OwnerInbox() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-black">Unified Inbox</h1>
-                  <p className="text-zinc-500 text-sm">Jane bou Jaoude — All communications in one place</p>
+                  <p className="text-zinc-500 text-sm">Jane Bou Jaoude — All communications in one place</p>
                 </div>
               </div>
               

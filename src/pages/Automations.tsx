@@ -50,7 +50,7 @@ const defaultRules: AutomationRule[] = [
   {
     id: 'hot-lead-alert',
     name: 'Hot Lead Alert',
-    description: 'Notify Jane bou Jaoude when lead shows high purchase intent',
+    description: 'Notify Jane Bou Jaoude when lead shows high purchase intent',
     trigger: 'High Intent Detected',
     action: 'Send Alert',
     isActive: true,
@@ -247,7 +247,7 @@ const Automations = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-black">Smart Automations</h1>
-                <p className="text-xs text-zinc-600">Owner: Jane bou Jaoude — {activeCount} of {rules.length} active</p>
+                <p className="text-xs text-zinc-600">Owner: Jane Bou Jaoude — {activeCount} of {rules.length} active</p>
               </div>
             </div>
           </div>
@@ -333,7 +333,7 @@ const Automations = () => {
               <div>
                 <h3 className="font-semibold text-black">About Smart Automations</h3>
                 <p className="text-sm text-zinc-600 mt-1">
-                  Automations run in the background to help Jane bou Jaoude work more efficiently. 
+                  Automations run in the background to help Jane Bou Jaoude work more efficiently. 
                   All automation triggers are approval-based by default. 
                   AI may suggest workflows but will NOT auto-activate without explicit Owner approval.
                   All automation activity is logged for auditing purposes.

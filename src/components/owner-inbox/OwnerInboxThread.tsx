@@ -302,7 +302,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-gold" />
-                    <span className="text-sm font-medium text-black">AI Draft — Jane bou Jaoude's style</span>
+                    <span className="text-sm font-medium text-black">AI Draft — Jane Bou Jaoude's style</span>
                   </div>
                   <Button
                     variant="ghost"

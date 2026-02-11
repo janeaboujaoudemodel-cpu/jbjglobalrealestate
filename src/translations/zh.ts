@@ -1,7 +1,7 @@
 // Chinese Simplified translations (中文)
 export const zh: Record<string, string> = {
   // LOCKED FOUNDER IDENTITY (DO NOT MODIFY)
-  'founder.name': 'Jane bou Jaoude',
+  'founder.name': 'Jane Bou Jaoude',
   'founder.title': '创始人兼首席执行官',
   'founder.titleShort': '创始人兼首席执行官',
   'founder.company': 'JBJ Global Real Estate',
@@ -144,7 +144,7 @@ export const zh: Record<string, string> = {
   'founder.learnMore': '了解更多关于创始人',
   'founder.pageTitle': '创始人兼首席执行官 JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate是一家由创始人领导的房地产经纪公司，建立在坚定标准、谨慎和长远愿景之上。',
-  'founder.description2': 'Jane bou Jaoude，JBJ Global Real Estate创始人兼首席执行官，以责任和谨慎为根基，建立旨在持久而非简单扩张的组织。',
+  'founder.description2': 'Jane Bou Jaoude，JBJ Global Real Estate创始人兼首席执行官，以责任和谨慎为根基，建立旨在持久而非简单扩张的组织。',
   'founder.vision': '愿景',
   'founder.mission': '使命',
   'founder.values': '价值观',
@@ -205,13 +205,13 @@ export const zh: Record<string, string> = {
   'report.exclusive': '独家免费下载',
   'report.title': 'JBJ Global Real Estate',
   'report.edition': '2026年最新版',
-  'report.description': '由Jane bou Jaoude撰写的独家教育书籍，涵盖阿联酋房地产市场，提供政府支持的数据和结构化框架。',
+  'report.description': '由Jane Bou Jaoude撰写的独家教育书籍，涵盖阿联酋房地产市场，提供政府支持的数据和结构化框架。',
   'report.download': '立即下载免费书籍',
   'report.highlight1': '市场指标与交易分析',
   'report.highlight2': '开发商比较框架',
   'report.highlight3': '投资尽职调查清单',
   'report.highlight4': '社区投资回报率排名',
-  'report.createdBy': '由 Jane bou Jaoude 创始人兼首席执行官 JBJ Global Real Estate 创作',
+  'report.createdBy': '由 Jane Bou Jaoude 创始人兼首席执行官 JBJ Global Real Estate 创作',
   'report.exclusiveFor': 'JBJ Global Real Estate独家',
   'report.descriptor': '房地产经纪 | 迪拜，阿联酋',
 

@@ -1,7 +1,7 @@
 // English translations
 export const en = {
   // LOCKED FOUNDER IDENTITY (DO NOT MODIFY)
-  'founder.name': 'Jane bou Jaoude',
+  'founder.name': 'Jane Bou Jaoude',
   'founder.title': 'Founder & CEO',
   'founder.titleShort': 'Founder & CEO',
   'founder.company': 'JBJ Global Real Estate',
@@ -144,7 +144,7 @@ export const en = {
   'founder.learnMore': 'Learn More About The Founder',
   'founder.pageTitle': 'Founder & CEO JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate is a founder-led real estate brokerage built on unwavering standards, discretion, and long-term vision.',
-  'founder.description2': 'Jane bou Jaoude Founder & CEO JBJ Global Real Estate leads with a philosophy rooted in accountability and discretion, building organizations designed to endure rather than simply expand.',
+  'founder.description2': 'Jane Bou Jaoude Founder & CEO JBJ Global Real Estate leads with a philosophy rooted in accountability and discretion, building organizations designed to endure rather than simply expand.',
   'founder.vision': 'Vision',
   'founder.mission': 'Mission',
   'founder.values': 'Values',
@@ -205,13 +205,13 @@ export const en = {
   'report.exclusive': 'Exclusive Free Download',
   'report.title': 'JBJ Global Real Estate',
   'report.edition': 'Latest Edition 2026',
-  'report.description': 'An exclusive educational book authored by Jane bou Jaoude, covering the UAE real estate market with government-backed data and structured frameworks.',
+  'report.description': 'An exclusive educational book authored by Jane Bou Jaoude, covering the UAE real estate market with government-backed data and structured frameworks.',
   'report.download': 'Download Your Free Book Now',
   'report.highlight1': 'Market indicators & transaction analysis',
   'report.highlight2': 'Developer comparison framework',
   'report.highlight3': 'Investment due diligence checklist',
   'report.highlight4': 'Community ROI rankings',
-  'report.createdBy': 'Created by Jane bou Jaoude Founder & CEO JBJ Global Real Estate',
+  'report.createdBy': 'Created by Jane Bou Jaoude Founder & CEO JBJ Global Real Estate',
   'report.exclusiveFor': 'Exclusive for JBJ Global Real Estate',
   'report.descriptor': 'Real Estate Brokerage | Dubai, UAE',
   

@@ -59,14 +59,14 @@ interface FeatureItem {
 }
 
 // COMPLETE FEATURE REGISTRY - Every implemented feature listed with exact navigation paths
-// Owner: Jane bou Jaoude — LOCKED NAME
+// Owner: Jane Bou Jaoude — LOCKED NAME
 const FEATURES: FeatureItem[] = [
   // ═══════════════════════════════════════════════════════════════
   // OWNER COMMAND CENTER
   // ═══════════════════════════════════════════════════════════════
   {
     name: "Owner Dashboard",
-    description: "Main command center with KPIs, leads overview, tasks, and conversations — Jane bou Jaoude's hub",
+    description: "Main command center with KPIs, leads overview, tasks, and conversations — Jane Bou Jaoude's hub",
     path: "/owner",
     navigationPath: "Sidebar → Owner Command Center → Dashboard | Direct: /owner",
     category: "Owner Command Center",
@@ -107,7 +107,7 @@ const FEATURES: FeatureItem[] = [
   },
   {
     name: "Communication Settings",
-    description: "Connect channels, configure AI behavior, tone profile, voice settings for Jane bou Jaoude",
+    description: "Connect channels, configure AI behavior, tone profile, voice settings for Jane Bou Jaoude",
     path: "/owner/settings/communication",
     navigationPath: "Sidebar → Owner Command Center → Communication Settings | Dashboard Quick Nav",
     category: "Owner Command Center",
@@ -215,7 +215,7 @@ const FEATURES: FeatureItem[] = [
   // ═══════════════════════════════════════════════════════════════
   {
     name: "AI Text Reply Engine",
-    description: "Generate AI-powered text replies in Jane bou Jaoude's exact style and tone",
+    description: "Generate AI-powered text replies in Jane Bou Jaoude's exact style and tone",
     path: "/owner/inbox",
     navigationPath: "Unified Inbox → Select thread → 'Generate AI Reply' button (Sparkles icon)",
     category: "AI Features",
@@ -226,7 +226,7 @@ const FEATURES: FeatureItem[] = [
   },
   {
     name: "Voice Replies (ElevenLabs)",
-    description: "Generate voice notes using Jane bou Jaoude's cloned voice for WhatsApp/DM",
+    description: "Generate voice notes using Jane Bou Jaoude's cloned voice for WhatsApp/DM",
     path: "/owner/inbox",
     navigationPath: "Unified Inbox → Select thread → AI Draft → 'Voice Reply' button",
     category: "AI Features",
@@ -341,7 +341,7 @@ const FEATURES: FeatureItem[] = [
   },
   {
     name: "ElevenLabs Voice Clone",
-    description: "Jane bou Jaoude's verified voice clone for generating voice notes",
+    description: "Jane Bou Jaoude's verified voice clone for generating voice notes",
     path: "/owner/settings/communication",
     navigationPath: "Communication Settings → Voice tab",
     category: "Channels",
@@ -420,7 +420,7 @@ export default function OwnerFeatureRegistry() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-black">Feature Registry & Audit</h1>
-                  <p className="text-zinc-500 text-sm">Jane bou Jaoude — Complete visibility of all implemented features</p>
+                  <p className="text-zinc-500 text-sm">Jane Bou Jaoude — Complete visibility of all implemented features</p>
                 </div>
               </div>
               

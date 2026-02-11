@@ -17,7 +17,7 @@ const BRAND_NAME = 'JBJ Global Real Estate';
 
 // Core keywords without founder name - founder name added conditionally
 const CORE_KEYWORDS_BASE = 'JBJ, JBJ Global Real Estate, Dubai real estate, buy property Dubai, sell property Dubai, rent Dubai, UAE property, real estate brokerage Dubai';
-const FOUNDER_KEYWORDS = ', Jane bou Jaoude';
+const FOUNDER_KEYWORDS = ', Jane Bou Jaoude';
 
 /**
  * SEO Head Component - Sets document title and meta tags for each page
@@ -36,7 +36,7 @@ export const SEOHead = ({
   
   // Build dynamic description based on founder visibility
   const defaultDescription = isFounderVisible
-    ? 'JBJ Global Real Estate, founded by Jane bou Jaoude, offers premium property brokerage in Dubai. Buy, sell, or rent luxury apartments, villas, and off-plan properties across the UAE.'
+    ? 'JBJ Global Real Estate, founded by Jane Bou Jaoude, offers premium property brokerage in Dubai. Buy, sell, or rent luxury apartments, villas, and off-plan properties across the UAE.'
     : 'JBJ Global Real Estate offers premium property brokerage in Dubai. Buy, sell, or rent luxury apartments, villas, and off-plan properties across the UAE.';
   
   const finalDescription = description || defaultDescription;
@@ -51,7 +51,7 @@ export const SEOHead = ({
   // Build title with or without founder name
   const fullTitle = title === 'Home' 
     ? isFounderVisible
-      ? `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent | Jane bou Jaoude`
+      ? `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent | Jane Bou Jaoude`
       : `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent`
     : `${title} | ${BRAND_NAME} Dubai`;
 
@@ -76,7 +76,7 @@ export const SEOHead = ({
     
     // Author field - conditionally include founder
     const authorField = isFounderVisible 
-      ? `Jane bou Jaoude - ${BRAND_NAME}`
+      ? `Jane Bou Jaoude - ${BRAND_NAME}`
       : BRAND_NAME;
 
     // Basic SEO meta tags

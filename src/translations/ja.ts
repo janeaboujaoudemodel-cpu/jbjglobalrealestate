@@ -1,7 +1,7 @@
 // Japanese translations
 export const ja: Record<string, string> = {
   // LOCKED FOUNDER IDENTITY
-  'founder.name': 'Jane bou Jaoude',
+  'founder.name': 'Jane Bou Jaoude',
   'founder.title': '創設者兼CEO',
   'founder.titleShort': '創設者兼CEO',
   'founder.company': 'JBJ Global Real Estate',
@@ -147,7 +147,7 @@ export const ja: Record<string, string> = {
   'founder.learnMore': '創設者について詳しく',
   'founder.pageTitle': '創設者兼CEO JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estateは、揺るぎない基準、慎重さ、長期的ビジョンに基づいて構築された創設者主導の不動産仲介です。',
-  'founder.description2': 'Jane bou Jaoude 創設者兼CEO JBJ Global Real Estateは、説明責任と慎重さに根ざした哲学でリードし、単なる拡大ではなく、持続するよう設計された組織を構築しています。',
+  'founder.description2': 'Jane Bou Jaoude 創設者兼CEO JBJ Global Real Estateは、説明責任と慎重さに根ざした哲学でリードし、単なる拡大ではなく、持続するよう設計された組織を構築しています。',
   'founder.vision': 'ビジョン',
   'founder.mission': 'ミッション',
   'founder.values': '価値観',
@@ -208,13 +208,13 @@ export const ja: Record<string, string> = {
   'report.exclusive': '無料ダウンロード限定',
   'report.title': 'JBJ Global Real Estate',
   'report.edition': '最新版 2026',
-  'report.description': 'Jane bou Jaoudeによる限定教育書。政府データと構造的フレームワークでUAE不動産市場をカバー。',
+  'report.description': 'Jane Bou Jaoudeによる限定教育書。政府データと構造的フレームワークでUAE不動産市場をカバー。',
   'report.download': '無料書籍をダウンロード',
   'report.highlight1': '市場指標と取引分析',
   'report.highlight2': 'デベロッパー比較フレームワーク',
   'report.highlight3': '投資デューデリジェンスチェックリスト',
   'report.highlight4': 'コミュニティROIランキング',
-  'report.createdBy': 'Jane bou Jaoude 創設者兼CEO JBJ Global Real Estate作成',
+  'report.createdBy': 'Jane Bou Jaoude 創設者兼CEO JBJ Global Real Estate作成',
   'report.exclusiveFor': 'JBJ Global Real Estate限定',
   'report.descriptor': '不動産仲介 | ドバイ、UAE',
 
