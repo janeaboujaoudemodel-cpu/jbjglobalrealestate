@@ -23,7 +23,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
           construction_status, handover_date, description, status_label, sale_status,
           is_sold_out, property_type_label, bedrooms_min, bedrooms_max, size_min, size_max, location,
           developers(name, slug, logo_url),
-          project_images(image_url, alt_text, sort_order)
+          project_images(image_url, alt_text, display_order)
         `)
         .ilike("area_name", `%${areaName}%`)
         .order("created_at", { ascending: false })
@@ -34,7 +34,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
       return (data || []).map((p: any) => ({
         ...p,
         developer: p.developers || (p.developer_name ? { name: p.developer_name, slug: null, logo_url: null } : null),
-        images: (p.project_images || []).sort((a: any, b: any) => (a.sort_order ?? 0) - (b.sort_order ?? 0)),
+        images: (p.project_images || []).sort((a: any, b: any) => (a.display_order ?? 0) - (b.display_order ?? 0)),
       })) as (Project & { is_sold_out?: boolean | null })[];
     },
     staleTime: 5 * 60 * 1000,
