@@ -1,70 +1,54 @@
 
 
-# Fix Plan: Developer Marquee Spacing + Handpicked Cards
+# Fix Plan: Area Page Errors, AI Analyzer, and Missing Project Prices
 
-## Issue 1: Developer Marquee Logos Touching
+## Issue 1: AreaProjectsGrid 400 Error (Root Cause of Multiple Failures)
 
-The logos in the developer partners marquee are too close together. Current padding is `px-3 md:px-5 lg:px-6` per logo container, which creates insufficient gaps between logos.
+**Root Cause:** The `AreaProjectsGrid.tsx` query references `project_images(image_url, alt_text, sort_order)` but the actual column in the `project_images` table is `display_order`, not `sort_order`. PostgREST returns error code `42703` ("column project_images_1.sort_order does not exist").
 
-**File:** `src/components/DeveloperPartnersMarquee.tsx` (line 77)
+This same bug exists in multiple files that use `sort_order` instead of `display_order`:
 
-**Fix:** Increase horizontal padding from `px-3 md:px-5 lg:px-6` to `px-6 md:px-10 lg:px-12` to restore proper spacing between logos.
+**Files to fix:**
 
----
+| File | Line | Change |
+|------|------|--------|
+| `src/components/area-detail/AreaProjectsGrid.tsx` | 26 | `sort_order` to `display_order` |
 
-## Issue 2: Handpicked Cards -- Missing Prices for Palm Jebel Ali & Binghatti Vintage
+Additionally, the `AreaDevelopersBar.tsx` (line 18) uses `developer:developers(...)` which also fails if the query structure is wrong. Need to verify.
 
-Both projects have `price_from: null` in the database. Without prices, "Price TBA" is shown.
+## Issue 2: AI Area Intelligence Stuck on "Analyzing..."
 
-**Database check:** The projects exist but lack pricing data:
-- `palm-jebel-ali-villas-nakheel-656` -- price_from is NULL
-- `binghatti-vintage-binghatti-3046` -- price_from is NULL
+**Root Cause:** The AI analyzer depends on the `stats` query succeeding first (line 123: `if (isVisible && stats && stats.totalProjects > 0`). The stats query itself works fine (returns 200), so the AI call should trigger. However, testing the edge function directly shows it works and returns a full analysis.
 
-These prices need to be set. If you provide the correct prices, I'll update them in the database. Otherwise, the card will continue showing "Price TBA" since there's no data to display.
+The actual issue is that the `AreaProjectsGrid` error may be causing React Query to throw unhandled errors that cascade. Additionally, I tested the edge function and it responds successfully -- the issue may be intermittent or related to the frontend not properly handling the response.
 
----
+I will also add better error handling to ensure the AI section doesn't get permanently stuck.
 
-## Issue 3: Project Title Color -- Black Instead of Gold
+## Issue 3: Missing Prices for Palm Jebel Ali and Binghatti Vintage
 
-**File:** `src/components/home/FeaturedListings.tsx` (line 219)
+The Reelly API is currently returning 500 errors, so I cannot fetch prices from there. However, web research found:
 
-Currently the project title is `text-gold`. The user wants it in **black**.
+- **Palm Jebel Ali Villas (Nakheel):** Starting from AED 18,500,000 (5-bedroom villas, Frond C launch price AED 18M+)
+- **Binghatti Vintage (Majan):** Starting from AED 600,000 (studio apartments)
 
-**Fix:** Change `text-gold` to `text-black` and update hover to `group-hover:text-gold`.
-
----
-
-## Issue 4: Description + "...more" Under Project Name
-
-The `useFeaturedProjects` query does NOT include `description` in its SELECT, so descriptions never appear even though the card template already has description rendering logic.
-
-**File:** `src/components/home/FeaturedListings.tsx`
-
-**Fix 1 (line 48):** Add `description` to the select query:
-```
-.select("id, name, slug, developer_name, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, description, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
+**Database update needed:**
+```sql
+UPDATE projects SET price_from = 18500000 WHERE slug = 'palm-jebel-ali-villas-nakheel-656';
+UPDATE projects SET price_from = 600000 WHERE slug = 'binghatti-vintage-binghatti-3046';
 ```
 
-**Fix 2 (lines 224-228):** Update the description block to always show when description exists, with a "...more" suffix styled in black (not underlined) with an ArrowUpRight icon:
-```tsx
-{(project as any).description && (
-  <p className="text-zinc-600 text-xs line-clamp-2 mb-2">
-    {String((project as any).description).replace(/<[^>]*>/g, '').slice(0, 120)}
-    <span className="text-black font-medium ml-1 inline-flex items-center gap-0.5">
-      ...more <ArrowUpRight className="w-3 h-3 inline" />
-    </span>
-  </p>
-)}
-```
+## Issue 4: DLD Market Widget Price Display
 
----
+After inspecting the "Dubai Market Intelligence" section on the area page, the data appears to be rendering correctly (YTD Volume AED 55.1B, 18,500 transactions, etc.). The section uses hardcoded data from `dldMarketData.ts`. If there's a specific price formatting issue, it may be related to the area page's project queries failing (Issue 1), causing the overall page to appear broken.
 
-## Summary
+Once Issue 1 is fixed, the full page should render correctly and any layout shifts near the DLD widget should resolve.
 
-| # | Issue | File | Change |
-|---|-------|------|--------|
-| 1 | Logos touching | DeveloperPartnersMarquee.tsx | Increase padding to `px-6 md:px-10 lg:px-12` |
-| 2 | Missing prices | Database | Need correct prices from user |
-| 3 | Title color | FeaturedListings.tsx | `text-gold` to `text-black` |
-| 4 | Missing descriptions | FeaturedListings.tsx | Add `description` to query + style "...more" |
+## Summary of Changes
+
+| # | Issue | File/Location | Fix |
+|---|-------|---------------|-----|
+| 1 | Projects grid 400 error | `AreaProjectsGrid.tsx` line 26 | Change `sort_order` to `display_order` |
+| 2 | AI analyzer stuck | Cascading from Issue 1; will verify after fix | May need error handling improvement |
+| 3 | Missing prices | Database | Update price_from for 2 projects |
+| 4 | DLD widget | No code change | Resolves with Issue 1 fix |
 
