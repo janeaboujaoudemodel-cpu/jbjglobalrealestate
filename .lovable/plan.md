@@ -1,20 +1,42 @@
 
 
-## Fix YouTube Video Replay
+## Fix YouTube Replay -- Prevent Recommendations and Ensure Proper Restart
 
 ### Problem
-When clicking "Replay" after the video ends, the overlay disappears but the video doesn't restart -- just a black screen remains. The `seekTo` call is missing its required second parameter, and there may be a timing issue between hiding the overlay and restarting playback.
+When clicking "Replay," YouTube shows music/video recommendations instead of replaying the original video. The `seekTo` + `playVideo` approach fails because once the video ends, YouTube's player transitions to a recommendations state that overrides the seek command.
 
 ### Root Cause
-The YouTube IFrame API's `seekTo(seconds, allowSeekAhead)` method requires a second boolean parameter set to `true` to perform the seek. Without it, the seek may silently fail. Additionally, the overlay is removed immediately while the player may not yet be playing, causing a brief black flash.
+The YouTube IFrame API does not reliably restart a video with `seekTo(0)` after it has fully ended and entered the "related content" state. Additionally, the current `playerVars` are missing key parameters that suppress all post-video suggestions.
 
 ### Fix in `src/components/YouTubeVideoPlayer.tsx`
 
-**1. Fix `seekTo` call (line 89)**
-- Change `player.seekTo(0)` to `player.seekTo(0, true)` to ensure the seek actually executes
+**1. Add restrictive playerVars to block all suggestions (lines 65-68)**
 
-**2. Reverse the order of operations in `handleReplay` (lines 85-92)**
-- Call `player.seekTo(0, true)` and `player.playVideo()` first
-- Then set `setEnded(false)` to remove the overlay only after playback has been triggered
-- This prevents the user from seeing a black frame between overlay removal and video start
+Add these parameters to completely lock down the player:
+- `fs: 0` -- disable fullscreen button (optional, reduces UI clutter)
+- `iv_load_policy: 3` -- hide video annotations
+- `disablekb: 0` -- keep keyboard controls
+- `showinfo: 0` -- hide video title bar
+- `controls: 1` -- keep playback controls
+
+**2. Replace `seekTo` with `loadVideoById` in handleReplay (lines 85-92)**
+
+Instead of trying to seek within a dead player, use `player.loadVideoById(videoId)` which forces a full reload of the same video. This bypasses YouTube's recommendation state entirely:
+
+```
+const handleReplay = useCallback(() => {
+  const player = playerRef.current;
+  if (player?.loadVideoById) {
+    player.loadVideoById({ videoId, startSeconds: 0 });
+  }
+  setEnded(false);
+}, [videoId]);
+```
+
+This method tells the player to load a fresh instance of the same video from second 0, which is far more reliable than seeking within a finished video.
+
+### Files to edit
+| File | Change |
+|------|--------|
+| `src/components/YouTubeVideoPlayer.tsx` | Add restrictive `playerVars`, replace `seekTo`/`playVideo` with `loadVideoById` in `handleReplay` |
 
