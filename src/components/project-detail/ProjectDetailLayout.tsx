@@ -574,7 +574,7 @@ export default function ProjectDetailLayout({
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between gap-4">
               {/* Tab Navigation */}
-              <div className="flex-1 overflow-x-auto scrollbar-hide">
+              <div className="flex-1 overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'contain' }}>
                 <div className="flex items-center gap-1 py-2">
                   {visibleTabs.map((tab) => (
                     <button
@@ -1123,8 +1123,7 @@ export default function ProjectDetailLayout({
           </div>
 
 
-          {/* CTA Section - Request a call back */}
-          <CallToActionSection projectName={project.name} projectId={project.id} />
+          {/* CallToAction removed - consolidated into ConsultationRequestForm above */}
         </div>
       </section>
 
