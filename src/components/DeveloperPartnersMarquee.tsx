@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import { LanguageContext } from "@/contexts/LanguageContext";
 
 // LOCKED: Featured developer partners
-const FEATURED_DEVELOPERS = [
+const FEATURED_DEVELOPERS: {
+  name: string; slug: string; logo: string; scale: number;
+  width?: number; fit?: "contain" | "cover";
+  offsetX?: number; offsetY?: number; objectPosition?: string;
+}[] = [
   { name: "DAMAC", slug: "damac", logo: "/developers/logos/damac-logo.webp", scale: 1 },
   { name: "EMAAR", slug: "emaar", logo: "/developers/logos/emaar-logo.webp", scale: 1 },
   { name: "MERAAS", slug: "meraas", logo: "/developers/logos/meraas-logo.webp", scale: 1 },
@@ -14,7 +18,7 @@ const FEATURED_DEVELOPERS = [
   { name: "ELLINGTON PROPERTIES", slug: "ellington", logo: "/developers/logos/ellington-logo.webp", scale: 1 },
   { name: "MAJID AL FUTTAIM", slug: "majid-al-futtaim", logo: "/developers/logos/majid-al-futtaim-logo.webp", scale: 1, width: 170 },
   { name: "DANUBE PROPERTIES", slug: "danube", logo: "/developers/logos/danube-logo.webp", scale: 1.05 },
-  { name: "DUBAI PROPERTIES", slug: "dubai-properties", logo: "/developers/logos/dubai-properties-logo.webp", scale: 1, width: 180 },
+  { name: "DUBAI PROPERTIES", slug: "dubai-properties", logo: "/developers/logos/dubai-properties-logo.webp", scale: 1.12, width: 165, fit: "cover", offsetX: -6, offsetY: -3, objectPosition: "50% 40%" },
 ];
 
 const TOTAL_IMAGES = FEATURED_DEVELOPERS.length;
@@ -84,8 +88,13 @@ const DeveloperPartnersMarquee = () => {
           <img
             src={developer.logo}
             alt={developer.name}
-            className="w-full h-full object-contain"
-            style={developer.scale !== 1 ? { transform: `scale(${developer.scale})` } : undefined}
+            className={`w-full h-full ${developer.fit === "cover" ? "object-cover" : "object-contain"}`}
+            style={{
+              ...(developer.scale !== 1 || developer.offsetX || developer.offsetY
+                ? { transform: `translate(${developer.offsetX ?? 0}px, ${developer.offsetY ?? 0}px) scale(${developer.scale})` }
+                : undefined),
+              ...(developer.objectPosition ? { objectPosition: developer.objectPosition } : undefined),
+            }}
             loading="eager"
             decoding="async"
             onLoad={isFirst ? handleImageLoad : undefined}
