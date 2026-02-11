@@ -1,66 +1,29 @@
 
 
-# Fix Plan: Brochure Logo, Form Enhancements, Contact Card Borders, Sticky Nav Scroll, and CallToAction Removal
+# ProjectCard External Styling Updates
 
-## 1. Use Uploaded JBJ Logo in Brochure Card Circle
+## Changes (single file: `src/components/ProjectCard.tsx`)
 
-**File:** `src/components/project-detail/PremiumBrochureCard.tsx`
+### A. Remove gold border from developer logo on external cards (line 197)
+- Current: `w-12 h-12 rounded-lg bg-white border-2 border-gold shadow-[0_4px_16px_rgba(200,167,102,0.3)]`
+- New: `w-12 h-12 rounded-lg bg-white overflow-hidden` (no border, no gold shadow -- logo sits cleanly)
 
-- Copy `user-uploads://fulllogo-11.jpg` to `src/assets/jbj-fulllogo-dark-bg.jpg`
-- Import this new image and use it as the `src` in the brochure card monogram circle (line 151), replacing `jbjMonogramNobuffer`
-- The dark background of the uploaded logo will blend well with the dark overlay in the circle container
+### B. Make project name gold by default, black on hover (line 291)
+- Current: `text-black ... hover:text-gold`
+- New: `text-gold ... group-hover:text-black`
 
-## 2. Register Interest Form Enhancements
+### C. Make developer name gold (already gold via DeveloperLink component -- confirmed, no change needed)
 
-**File:** `src/components/ConsultationRequestForm.tsx`
+### D. Add persistent gold border to the full card (line 172-176)
+- Current: `border-2 border-gold/40 ... hover:border-gold/70`
+- New: `border-2 border-gold ... hover:border-gold` (full gold border by default, same on hover)
 
-- **Widen form:** Change `max-w-lg` to `max-w-xl` on both the form container (line 208) and success state (line 188) to give more breathing room
-- **Gold project name in title:** When `projectName` is provided, render the title so the project name appears in gold. Split the title to render "Register Interest in" in black and the project name in `text-gold`
-- **Champagne card background:** The form container already has `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]` -- this is confirmed correct
+## Summary
 
-**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
+| Line | What Changes |
+|------|-------------|
+| 172-176 | Card border from `border-gold/40` to `border-gold` (always gold) |
+| 197 | Developer logo: remove `border-2 border-gold shadow-[...]` |
+| 291 | Project name: `text-gold` default, `group-hover:text-black` on hover |
 
-- The outer wrapper at line 1115 already applies champagne gradient -- confirmed good
-
-## 3. Remove the "Request a Callback Now" Section
-
-**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
-
-- Remove line 1127: `<CallToActionSection projectName={project.name} projectId={project.id} />` since its fields are now consolidated into the ConsultationRequestForm
-- This eliminates the duplicate form on the project detail page
-
-## 4. WhatsApp and Call Us Card Borders to Gold in CombinedContactNewsletter
-
-**File:** `src/components/CombinedContactNewsletter.tsx`
-
-- **WhatsApp card (line 29):** Change `border-emerald-500` to `border-gold` and shadow to `shadow-gold/20`, hover to `hover:border-gold/40`
-- **Call Us card (line 40):** Change `border-blue-500` to `border-gold` and shadow to `shadow-gold/20`, hover to `hover:border-gold/40`
-
-## 5. Fix Sticky Sub-Navigation Horizontal Scroll
-
-**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
-
-The sticky nav at line 577 uses `overflow-x-auto` but touch/swipe gestures conflict with browser back/forward navigation. Fixes:
-
-- Add `touch-action: pan-y` via inline style on the scrollable container to prevent horizontal swipes from triggering browser navigation
-- Add `overscroll-behavior-x: contain` to trap the scroll within the container
-- Optionally add left/right scroll arrow buttons that appear when content overflows, so users can navigate tabs without swiping
-
-## 6. Improve Sticky Nav Styling
-
-**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
-
-- Match the tab styling to the champagne/gold theme of the Register Interest section
-- Active tab: keep `bg-gold/10 text-gold border border-gold/30`
-- Inactive tab: use `text-white/70 hover:text-gold hover:bg-gold/5` for better contrast on the dark background
-
-## Summary of Files to Change
-
-| File | Change |
-|------|--------|
-| `src/assets/jbj-fulllogo-dark-bg.jpg` | Copy uploaded logo image |
-| `src/components/project-detail/PremiumBrochureCard.tsx` | Use new logo in brochure circle |
-| `src/components/ConsultationRequestForm.tsx` | Widen to max-w-xl; gold project name in title |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Remove CallToActionSection; fix sticky nav scroll with touch-action and overscroll-behavior |
-| `src/components/CombinedContactNewsletter.tsx` | Change WhatsApp and Call Us card borders to gold |
-
+Internal pages (project detail, developer detail) remain untouched.
