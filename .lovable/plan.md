@@ -1,55 +1,37 @@
 
 
-# Auto-Find Real Developer Images from the Web
+# Fix Remaining 57 Developers with Generic Pexels Fallback
 
 ## Problem
-124 developers have either no feature image or the same fake Unsplash downtown photo. You need real images sourced automatically -- not manual uploads.
+57 developers still have the generic Pexels building photo (`pexels-photo-323780.jpeg`) instead of real images. The current edge function only searches for developers with `NULL` or `%unsplash%` images -- it does not target the Pexels fallback.
 
 ## Solution
-Create a new edge function `auto-find-developer-images` that:
 
-1. Gets all developers with missing/fake feature images (batch of 10 at a time to avoid timeouts)
-2. For each developer, uses **Firecrawl search** to find real photos of their projects/buildings online
-3. Uses **AI (Gemini Flash)** to pick the best, most relevant image URL from search results
-4. Updates the developer's `feature_image_url` in the database with the real image
+Two changes needed:
 
-## How It Works
+### 1. Update the edge function to also target Pexels fallbacks
 
-```text
-For each developer (e.g., "AAF Developments"):
-  1. Firecrawl search: "AAF Developments Dubai real estate projects building"
-  2. Get search results with screenshots/images
-  3. AI picks the best project/building image URL
-  4. Save to developers.feature_image_url
+Modify the query filter in `auto-find-developer-images/index.ts` to include `%pexels%` URLs:
+
+```
+.or("feature_image_url.is.null,feature_image_url.ilike.%unsplash%,feature_image_url.ilike.%pexels%")
 ```
 
-## Edge Function: `supabase/functions/auto-find-developer-images/index.ts`
+Also improve the search queries to be more targeted:
+- Add "Dubai" to search context for UAE-based developers
+- Increase search limit from 3 to 5 results for better coverage
+- Also try the developer's website directly if found in results
 
-- Accepts `{ batch_size: 10 }` parameter (default 10 to stay within timeout)
-- Queries developers where `feature_image_url IS NULL` or `feature_image_url LIKE '%unsplash%'`
-- For each developer:
-  - Calls Firecrawl search API with query: `"{developer.name}" real estate Dubai projects building`
-  - Extracts image URLs from the search results (links, screenshots, metadata)
-  - Sends extracted URLs + context to Gemini Flash to select the single best building/project photo
-  - Updates the developer record with the chosen image URL
-- Returns a summary of how many were updated, failed, or had no results
-- Can be called multiple times to process all 124 developers in batches
+### 2. Run the function repeatedly until all 57 are processed
 
-## Technical Details
+After deploying the updated function, invoke it multiple times (6 batches of 10) to process all 57 developers. For any that still fail, use alternative search strategies (e.g., searching for the developer name + "projects" or "portfolio").
 
-| Aspect | Detail |
-|--------|--------|
-| APIs used | Firecrawl Search + Lovable AI (Gemini 2.5 Flash) |
-| Secrets required | `FIRECRAWL_API_KEY` (exists), `LOVABLE_API_KEY` (exists) |
-| Batch size | 10 per invocation (avoids edge function timeout) |
-| Total developers | ~124 needing images |
-| Invocations needed | ~13 calls to process all |
+## Files Changed
 
-## Files
-
-| File | Action |
+| File | Change |
 |------|--------|
-| `supabase/functions/auto-find-developer-images/index.ts` | **Create** -- new edge function |
+| `supabase/functions/auto-find-developer-images/index.ts` | Update query to include `%pexels%`, improve search queries, increase search limit |
 
-After creating and deploying, I will invoke the function multiple times to process all 124 developers.
+## Execution
 
+After deploying, I will run the function 6+ times in sequence to process all 57 developers, and verify the count drops to 0.
