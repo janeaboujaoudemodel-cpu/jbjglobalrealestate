@@ -1,41 +1,44 @@
 
 
-# Wrap Company Profile Video with Founder Visibility Toggle
+# Replace Digital Business Card Video with Approved YouTube Video
 
 ## What Changes
 
-### 1. CompanyProfile.tsx -- Wrap video section with FounderContent (lines 818-849)
+### 1. Replace self-hosted MP4 with YouTube embed in DigitalCard.tsx
 
-The "Company Introduction Video" section (YouTube embed of `lBXXdJ2kAtQ`) contains footage of the founder. It needs to be wrapped with `<FounderContent>` so it hides when founder visibility is toggled off and shows when toggled on.
+The Company Introduction section in the digital business card currently uses a self-hosted MP4 file (`jbj-company-intro.mp4`). This will be replaced with the approved YouTube video (`lBXXdJ2kAtQ`) -- the same one used on the Company Profile page.
 
-**Before:**
-```
-{/* Company Introduction Video */}
-<SectionShell>
-  <motion.div ...>
-    ...video content...
-  </motion.div>
-</SectionShell>
-```
+**Changes in `src/pages/DigitalCard.tsx`:**
 
-**After:**
-```
-<FounderContent>
-  {/* Company Introduction Video */}
-  <SectionShell>
-    <motion.div ...>
-      ...video content...
-    </motion.div>
-  </SectionShell>
-</FounderContent>
+- **Remove** the MP4 video import (line 16): `const jbjIntroVideo = new URL(...)` 
+- **Remove** the monogram poster import (line 19) if no longer needed elsewhere
+- **Remove** the `videoRef` (line 155) and `handleVideoEnd` function (lines 207-213) since they are only used for the MP4 player
+- **Replace** the `<video>` element (lines 392-403) with a YouTube `<iframe>` embed pointing to `https://www.youtube.com/embed/lBXXdJ2kAtQ`
+- The iframe will match the existing `aspect-video` container and rounded styling
+
+**Before (MP4 player):**
+```html
+<video ref={videoRef} controls poster={...} onEnded={handleVideoEnd} playsInline>
+  <source src={jbjIntroVideo} type="video/mp4" />
+</video>
 ```
 
-`FounderContent` is already imported in this file -- no new imports needed.
+**After (YouTube embed):**
+```html
+<iframe
+  className="absolute inset-0 w-full h-full"
+  src="https://www.youtube.com/embed/lBXXdJ2kAtQ"
+  title="JBJ Global Real Estate - Company Introduction"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowFullScreen
+/>
+```
 
-### 2. Digital Business Card -- No changes needed
+### 2. Clean up unused references
 
-The Digital Card (`/card`) already has its own Company Introduction video (self-hosted MP4 at `jbj-company-intro.mp4`). Per the project memory, the digital card is permanently accessible and decoupled from the Founder Visibility toggle, so it stays as-is.
+- Remove the `Video` icon import only if it is not used elsewhere (it is used in the section header, so it stays)
+- Remove `useRef` import if `videoRef` was the only ref in the component
 
 ## Summary
 
-Only one small edit: wrap lines 818-849 in `CompanyProfile.tsx` with `<FounderContent>`.
+One file changed: `src/pages/DigitalCard.tsx`. The self-hosted MP4 video is replaced with the approved YouTube company introduction video (`lBXXdJ2kAtQ`), matching what appears on the Company Profile page. The digital card remains independent of the Founder Visibility toggle.
