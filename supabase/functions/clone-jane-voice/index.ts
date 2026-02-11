@@ -23,10 +23,10 @@ serve(async (req) => {
       throw new Error("No audio files provided for voice cloning");
     }
 
-    // Create form data for voice cloning - OWNER NAME LOCKED: Jane bou Jaoude
+    // Create form data for voice cloning - OWNER NAME LOCKED: Jane Bou Jaoude
     const formData = new FormData();
-    formData.append("name", voiceName || "Jane bou Jaoude - JBJ Global");
-    formData.append("description", description || "Professional voice of Jane bou Jaoude - refined British-accented English with natural warmth and authority. Premium real estate industry voice.");
+    formData.append("name", voiceName || "Jane Bou Jaoude - JBJ Global");
+    formData.append("description", description || "Professional voice of Jane Bou Jaoude - refined British-accented English with natural warmth and authority. Premium real estate industry voice.");
     
     // Add labels for voice organization
     formData.append("labels", JSON.stringify({

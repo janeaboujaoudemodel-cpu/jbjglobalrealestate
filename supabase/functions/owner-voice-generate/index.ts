@@ -53,7 +53,7 @@ serve(async (req) => {
     const finalVoiceId = voiceId || ELEVENLABS_VOICE_ID || "21m00Tcm4TlvDq8ikWAM"; // Default to Rachel
 
     const startTime = Date.now();
-    const OWNER_NAME = "Jane bou Jaoude"; // LOCKED - Owner name
+    const OWNER_NAME = "Jane Bou Jaoude"; // LOCKED - Owner name
 
     // Log the voice generation attempt
     const { data: logEntry, error: logError } = await supabase
