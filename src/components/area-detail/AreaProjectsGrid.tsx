@@ -85,7 +85,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
           ))}
         </div>
 
-        {projects.length >= 12 && (
+        {projects.length > 0 && (
           <div className="text-center mt-10">
             <Link to={`/properties?area=${areaSlug}`}>
               <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all">

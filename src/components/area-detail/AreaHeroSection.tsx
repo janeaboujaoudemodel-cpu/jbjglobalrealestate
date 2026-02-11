@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, ChevronRight, TrendingUp, Building2, Users, Search, BarChart3, Flame } from "lucide-react";
+import { scrollToId } from "@/lib/scroll";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -37,17 +38,13 @@ export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
   return (
     <section className="relative h-screen flex items-end overflow-hidden">
       {/* Background Image */}
-      {heroImage ? (
-        <img
-          src={heroImage}
-          alt={`${area.name} - Real Estate Area`}
-          className="absolute inset-0 w-full h-full object-cover"
-          loading="eager"
-          fetchPriority="high"
-        />
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-800 to-black" />
-      )}
+      <img
+        src={heroImage || "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"}
+        alt={`${area.name} - Real Estate Area`}
+        className="absolute inset-0 w-full h-full object-cover"
+        loading="eager"
+        fetchPriority="high"
+      />
       
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
@@ -122,22 +119,28 @@ export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
         {/* Stats Bar */}
         <motion.div className="flex flex-wrap gap-4 md:gap-6" variants={fadeInUp}>
           {(area.project_count_sale ?? area.property_count ?? 0) > 0 && (
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
+            <button
+              onClick={() => scrollToId('projects-section')}
+              className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-white/20 transition-colors"
+            >
               <Building2 className="w-5 h-5 text-gold" />
-              <div>
+              <div className="text-left">
                 <div className="text-xl font-bold text-white">{area.project_count_sale ?? area.property_count}</div>
                 <div className="text-zinc-300 text-xs">Projects</div>
               </div>
-            </div>
+            </button>
           )}
           {(area.developer_count ?? 0) > 0 && (
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
+            <button
+              onClick={() => scrollToId('developers-section')}
+              className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-white/20 transition-colors"
+            >
               <Users className="w-5 h-5 text-gold" />
-              <div>
+              <div className="text-left">
                 <div className="text-xl font-bold text-white">{area.developer_count}</div>
                 <div className="text-zinc-300 text-xs">Developers</div>
               </div>
-            </div>
+            </button>
           )}
           {(area.avg_price_sqft ?? 0) > 0 && (
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">

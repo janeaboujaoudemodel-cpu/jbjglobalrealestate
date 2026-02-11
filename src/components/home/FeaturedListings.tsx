@@ -17,10 +17,12 @@ import { formatPriceAbbreviated } from "@/utils/formatNumber";
 const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC', 'Meraas'];
 
 const formatPrice = (price: number): string => {
-  if (price >= 1000000) {
-    return `AED ${(price / 1000000).toFixed(1)}M`;
+  const rounded = Math.round(price);
+  if (rounded >= 1000000) {
+    const m = rounded / 1000000;
+    return `AED ${m % 1 === 0 ? m.toFixed(0) : m.toFixed(1)}M`;
   }
-  return `AED ${price.toLocaleString()}`;
+  return `AED ${rounded.toLocaleString()}`;
 };
 
 interface FeaturedProject {

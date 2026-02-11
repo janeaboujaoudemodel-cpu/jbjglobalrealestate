@@ -42,7 +42,7 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
   if (!developers || developers.length === 0) return null;
 
   return (
-    <section className="py-12 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+    <section id="developers-section" className="py-12 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-6">
           <Users className="w-6 h-6 text-gold" />
