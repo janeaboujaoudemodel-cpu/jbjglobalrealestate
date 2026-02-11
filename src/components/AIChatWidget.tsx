@@ -307,13 +307,34 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
 
   // When agent is ready, start the chat
   const handleAgentReady = () => {
+    const fullName = `${userInfo.firstName} ${userInfo.lastName}`.trim() || userInfo.firstName;
     const serviceName = SERVICES.find(s => s.id === selectedService)?.label || 'our services';
+    
+    // Context-aware welcome messages based on selected shortcut
+    let welcomeContent = '';
+    switch (selectedShortcut) {
+      case 'buy_property':
+        welcomeContent = `Hi ${fullName}! 👋 I see you're interested in buying property in Dubai!\n\nI'm ${currentAgent.name}, your ${currentAgent.title}. Let me help you find the perfect investment.\n\nTo get started, could you tell me:\n• What type of property are you looking for? (apartment, villa, townhouse)\n• Do you have a preferred area in Dubai?\n• What's your approximate budget range?`;
+        break;
+      case 'rent_property':
+        welcomeContent = `Hi ${fullName}! 👋 Looking to rent in Dubai? Great choice!\n\nI'm ${currentAgent.name}, your ${currentAgent.title}. I'll help you find your ideal home.\n\nTo narrow things down:\n• Are you looking for a short-term or long-term rental?\n• How many bedrooms do you need?\n• Any preferred areas or communities?`;
+        break;
+      case 'property_management':
+        welcomeContent = `Hi ${fullName}! 👋 Let's discuss managing your property portfolio.\n\nI'm ${currentAgent.name}, your ${currentAgent.title}. I can connect you with our trusted property management partners.\n\nCould you share:\n• How many properties do you currently own?\n• Are they residential or commercial?\n• What services are you looking for? (tenant management, maintenance, etc.)`;
+        break;
+      case 'design_services':
+        welcomeContent = `Hi ${fullName}! 👋 Interested in our Design & Build services!\n\nI'm ${currentAgent.name}, your ${currentAgent.title}. We work with top architects and interior designers in Dubai.\n\nWhat are you looking for?\n• Interior design for an existing property?\n• Full fit-out for a new property?\n• Architecture and construction?`;
+        break;
+      default:
+        welcomeContent = `Hi ${fullName}! 👋 Thank you for contacting JBJ GLOBAL REAL ESTATE.\n\nI'm ${currentAgent.name}, your ${currentAgent.title}. I'll be assisting you with ${serviceName} today.\n\nHow can I help you? Feel free to ask me anything about UAE Real Estate, properties, or any questions you have!`;
+        break;
+    }
     
     setMessages([
       {
         id: 'welcome',
         role: 'assistant',
-        content: `Hi ${userInfo.firstName}! 👋 Thank you for contacting JBJ GLOBAL REAL ESTATE.\n\nI'm ${currentAgent.name}, your ${currentAgent.title}. I'll be assisting you with ${serviceName} today.\n\nHow can I help you? Feel free to ask me anything about UAE Real Estate, properties, or any questions you have!`,
+        content: welcomeContent,
         timestamp: new Date(),
       },
     ]);
@@ -481,7 +502,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
   };
 
   // Submit to team
-  const handleSubmitToTeam = async () => {
+  const handleSubmitToTeam = async (inquirySummary?: string) => {
     if (!conversationId) return;
 
     try {
@@ -505,7 +526,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
             phone: userInfo.phone?.replace(/[\s\-\(\)]/g, '') || '+971000000000',
             nationality: userInfo.nationality || 'Not specified',
             language: userInfo.language || 'English',
-            message: `Chat inquiry from ${userInfo.nationality} - ${userInfo.currentLocation}\nService: ${selectedService}\nLanguage: ${userInfo.language}\n\nConversation transcript attached.`,
+            message: `${inquirySummary ? `Inquiry: ${inquirySummary}\n\n` : ''}Chat inquiry from ${userInfo.nationality} - ${userInfo.currentLocation}\nService: ${selectedService}\nLanguage: ${userInfo.language}\n\nConversation transcript attached.`,
             source: 'ai_chat_widget',
           },
         });
@@ -693,7 +714,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
 
         {step === 'shortcuts' && (
           <ChatShortcuts
-            userFirstName={userInfo.firstName}
+            userFirstName={`${userInfo.firstName} ${userInfo.lastName}`.trim() || userInfo.firstName}
             onSelectShortcut={handleSelectShortcut}
           />
         )}
@@ -786,7 +807,7 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
 
         {step === 'submitted' && (
           <ChatSubmitted 
-            userFirstName={userInfo.firstName}
+            userFirstName={`${userInfo.firstName} ${userInfo.lastName}`.trim() || userInfo.firstName}
             onStartNewChat={resetChat}
           />
         )}
