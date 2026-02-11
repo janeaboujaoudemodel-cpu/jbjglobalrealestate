@@ -1,27 +1,46 @@
 
-# Remove Gold Horizontal Divider from Insights Mega Menu Card Titles
+
+# Fix Mega Menu: Restore Title Dividers + Remove Row Gap Line
 
 ## Problem
-Each card in the Insights mega menu has a gold horizontal divider line under its title (e.g., under "NEWS & UPDATES", "MARKET INTELLIGENCE", "BUSINESS SUITES", "COMPANY", "LEGAL", etc.). This line visually cuts across the cards and needs to be removed.
+Two issues in the Insights mega menu dropdown:
+1. The gold divider under each card title (e.g., "NEWS & UPDATES", "BUSINESS SUITES") was incorrectly removed -- user wants these kept
+2. A visible horizontal line cuts across all 4 cards in the second row -- this is caused by the grid gap between rows exposing the darker shell background behind the cards
 
-## What Was Wrong Last Time
-The previous fix removed a divider from the `MegaMenuIconLink` component (the line under each individual link item). The actual divider the user wants removed is in the `MegaMenuSectionTitle` component -- the `border-b border-gold/30` on line 201 of `mega-menu-primitives.tsx`.
+## Changes
 
-## Fix
-**File: `src/components/header/mega-menu-primitives.tsx`** (line 201)
+### File: `src/components/header/mega-menu-primitives.tsx`
 
-Remove `border-b border-gold/30` from the `MegaMenuSectionTitle` component's className. Change:
+**Change 1: Restore the gold divider under card titles in MegaMenuSectionTitle (line 201)**
+
+Bring back the `border-b border-gold/30 pb-2 mb-5` that was previously removed:
 
 ```
+// From:
+"flex items-center justify-center mb-3 min-h-[36px]"
+
+// To:
 "flex items-center justify-center mb-5 pb-2 border-b border-gold/30 min-h-[36px]"
 ```
 
-to:
+**Change 2: Remove the horizontal gap line between card rows in MegaMenuInsights**
+
+### File: `src/components/header/MegaMenuInsights.tsx` (line 135)
+
+Change the grid gap from uniform `gap-1.5` to only horizontal gap, eliminating the visible vertical line between rows:
 
 ```
-"flex items-center justify-center mb-3 min-h-[36px]"
+// From:
+"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1.5"
+
+// To:
+"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-1.5 gap-y-0"
 ```
 
-This removes the gold bottom border and adjusts spacing (removes `pb-2` padding and reduces `mb-5` to `mb-3` since the border no longer needs extra space).
+This removes the vertical space between row 1 and row 2 so no shell background peeks through, while keeping horizontal spacing between cards intact.
 
-This change affects all mega menus that use `MegaMenuSectionTitle` (Insights, More, Areas, Developers, Projects), keeping them all consistent.
+## Result
+- Gold dividers under each card title (NEWS & UPDATES, MARKET INTELLIGENCE, etc.) are restored
+- The big horizontal line cutting across the second row of cards is eliminated
+- All other mega menus (More, Areas, Developers, Projects) also get their title dividers back since they share MegaMenuSectionTitle
+
