@@ -107,6 +107,8 @@ interface EnrichmentSnapshot {
   new_images?: number;
   new_documents?: number;
   gallery_preview?: string[];
+  document_names?: string[];
+  source?: string;
 }
 
 interface EnrichmentTestResult {
@@ -117,6 +119,7 @@ interface EnrichmentTestResult {
   sources?: {
     reelly: { available: boolean; url?: string; fields_found?: Record<string, number>; reason?: string };
     provident?: { available: boolean; slug_used?: string; fields_found?: Record<string, number>; reason?: string };
+    firecrawl?: { available: boolean; fields_found?: Record<string, number>; reason?: string };
   };
   applied?: boolean;
   error?: string;
@@ -998,12 +1001,15 @@ export function ReellyImportPanel() {
                   </a>
                   <span className="text-xs text-zinc-500 ml-2">(Reelly ID: {enrichTestResult.project?.reelly_id || "none"})</span>
                 </h4>
-                <div className="flex gap-3 text-xs">
+                <div className="flex gap-3 text-xs flex-wrap">
                   {enrichTestResult.sources?.reelly?.available ? (
                     <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline flex items-center gap-1"><ExternalLink className="h-3 w-3" /> View Project</a>
                   ) : <span className="text-zinc-400">Reelly: {enrichTestResult.sources?.reelly?.reason}</span>}
                   {enrichTestResult.sources?.provident?.available && (
                     <span className="text-orange-600">Provident: {enrichTestResult.sources.provident.slug_used}</span>
+                  )}
+                  {enrichTestResult.sources?.firecrawl?.available && (
+                    <Badge variant="outline" className="border-purple-300 text-purple-700 text-[10px]">🔥 Source: Firecrawl</Badge>
                   )}
                 </div>
 
@@ -1026,7 +1032,7 @@ export function ReellyImportPanel() {
                         <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer" className="font-semibold text-sm truncate block hover:text-blue-600 hover:underline">
                           {enrichTestResult.project?.name}
                         </a>
-                        <div className="grid grid-cols-2 gap-1 text-[10px] text-zinc-500 pt-1 border-t">
+                         <div className="grid grid-cols-2 gap-1 text-[10px] text-zinc-500 pt-1 border-t">
                           <span>📷 {data?.images_count || 0} imgs{(data?.new_images || 0) > 0 && ` (+${data!.new_images})`}</span>
                           <span>📄 {data?.documents_count || 0} docs{(data?.new_documents || 0) > 0 && ` (+${data!.new_documents})`}</span>
                           <span>🏗️ {data?.amenities_count || 0} amenities</span>
@@ -1042,6 +1048,34 @@ export function ReellyImportPanel() {
                           <span>🏷️ {data?.has_service_charge ? "✅" : "❌"} svc charge</span>
                           <span>📈 {data?.has_roi_estimate ? "✅" : "❌"} ROI</span>
                         </div>
+                        {/* Gallery thumbnails */}
+                        {data?.gallery_preview && data.gallery_preview.length > 0 && (
+                          <div className="pt-1 border-t">
+                            <p className="text-[9px] text-zinc-400 mb-1">Gallery Preview:</p>
+                            <div className="grid grid-cols-4 gap-1">
+                              {data.gallery_preview.map((url, i) => (
+                                <img key={i} src={url} alt={`Preview ${i+1}`} className="w-full h-10 object-cover rounded" />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {/* Document names */}
+                        {data?.document_names && data.document_names.length > 0 && (
+                          <div className="pt-1 border-t">
+                            <p className="text-[9px] text-zinc-400 mb-0.5">Documents:</p>
+                            {data.document_names.map((name, i) => (
+                              <span key={i} className="text-[9px] text-zinc-600 block">📎 {name}</span>
+                            ))}
+                          </div>
+                        )}
+                        {/* Source indicator */}
+                        {data?.source && label === "AFTER ENRICHMENT" && (
+                          <div className="pt-1 border-t">
+                            <Badge variant="outline" className="text-[9px] border-purple-200 text-purple-600">
+                              Source: {data.source}
+                            </Badge>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
