@@ -1,112 +1,80 @@
 
 
-# Batch 2 Verification Report and Remaining Batches Execution Plan
+# Outstanding Tasks Found -- Fixes Required
 
-## Batch 2 Results: Major UI Issues -- VERIFIED
-
-All 6 tasks in Batch 2 have been audited via code review and live browser screenshots on desktop (1920x1080).
-
-### JBJ-007: Developer Logos Gold Border Consistency
-**Status: COMPLETED**
-
-Code proof across all components:
-- `ProjectCard.tsx` line 198: `border-2 border-gold shadow-[0_4px_16px_rgba(200,167,102,0.3)]` with `object-contain p-1` -- CORRECT
-- `ReellyProjectCard.tsx` line 152: identical gold border + shadow -- CORRECT
-- `DeveloperSearchModal.tsx` lines 93-94: gold border for top-tier (`border-2 border-gold shadow-...`) and standard (`border-2 border-gold/40`) -- CORRECT, `object-contain p-1` -- CORRECT
-- `AreaDevelopersBar.tsx` line 70: `border-2 border-gold shadow-[0_2px_8px_rgba(200,167,102,0.3)]` with `object-contain` -- CORRECT
-- `DeveloperDetail.tsx` lines 150-157: `border: 3px solid hsl(42 45% 59%)` inline style with `object-contain p-2` -- CORRECT (this is the reference standard)
-
-Desktop screenshot proof: Developer logos visible with gold borders on `/developers`, `/properties`, `/developer/emaar`, and `/area/dubai-marina`.
-
-No remaining fixes needed.
-
-### JBJ-008: Developer Marquee Strip
-**Status: COMPLETED**
-
-Verified in previous session with before/after screenshots on desktop (1920x1080) and mobile (390x844). CSS animation scrolling smoothly, image load tracking working, error fallbacks in place.
-
-No remaining fixes needed.
-
-### JBJ-009: Long Descriptions Formatting
-**Status: COMPLETED (needs verification on a project with long description)**
-
-Code verified: `ProjectDetailLayout`, `AreaAboutSection`, `DeveloperDetail`, and `DeveloperInfoCard` all have expand/collapse with markdown formatting. The `/developer/emaar` page renders description content correctly.
-
-No code fixes needed. Verification step for you: visit a project page with a long description and confirm the "Read More" expand/collapse works.
-
-### JBJ-010: Premium Black/Gold/Champagne Standard
-**Status: COMPLETED**
-
-Code search confirms no `bg-white text-white` contrast violations. Mega menu cards use champagne-gold gradient (`from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8]`). Header nav pill uses champagne gradient background. Footer uses card-based dark layout. No white-on-white mismatches found.
-
-No remaining fixes needed.
-
-### JBJ-011: Developer Detail Logo object-contain
-**Status: COMPLETED**
-
-Code at `DeveloperDetail.tsx` line 162: `object-contain p-2` -- CORRECT. Screenshot of `/developer/emaar` confirms logo renders properly in gold-bordered container.
-
-No remaining fixes needed.
-
-### JBJ-012: Header Locked to 7 Items
-**Status: COMPLETED**
-
-Code at `GlobalHeader.tsx` lines 1281-1383: Exactly 7 buttons rendered: Buy, Sell, Rent, Projects, Areas, Developers, Insights. Each with proper mega menu hover behavior and consistent styling.
-
-No remaining fixes needed.
+After a thorough audit of the codebase and live browser testing, here are the **real outstanding tasks** that were previously marked as "completed" but are NOT actually done:
 
 ---
 
-## Batch 2 Summary
+## Issue 1: ModeSelectionModal is NEVER Rendered (JBJ-019 -- NOT DONE)
 
-| Task ID | Status | Proof |
-|---------|--------|-------|
-| JBJ-007 | COMPLETED | Code verified in 6 files + desktop screenshots on 4 pages |
-| JBJ-008 | COMPLETED | Before/after screenshots (desktop + mobile) from previous session |
-| JBJ-009 | COMPLETED | Code verified, description renders on /developer/emaar |
-| JBJ-010 | COMPLETED | No white-on-white violations found in codebase search |
-| JBJ-011 | COMPLETED | Code line 162 + /developer/emaar screenshot |
-| JBJ-012 | COMPLETED | Code lines 1281-1383 show exactly 7 nav items |
+**Problem:** The `ModeSelectionModal` component exists at `src/components/ModeSelectionModal.tsx` and is fully implemented, but it is **never imported or rendered anywhere** in the application. It is not in `PopupLayer.tsx`, not in `MainLayout.tsx`, not in `App.tsx` -- nowhere.
 
-**Batch 2: 6/6 tasks COMPLETED. Zero remaining.**
+**Memory spec says:** "First-time users are prompted to select a mode via the ModeSelectionModal (persisted in jj_mode_selected). Upon selection, a guidance toast with a visual pointer indicates that the mode can be changed anytime via the profile menu."
+
+**Fix:** Add `ModeSelectionModal` to `PopupLayer.tsx` so it renders centrally via the PopupCoordinator system (which already has priority 3 registered for `mode-selection-modal`).
+
+**Files to edit:**
+- `src/components/PopupLayer.tsx` -- import and render `<ModeSelectionModal />`
 
 ---
 
-## Next: Batches 3-5 Execution Plan
+## Issue 2: GlobalContactGating is NEVER Used (Missing Feature)
 
-### Batch 3: SEO/Content (4 tasks)
+**Problem:** `GlobalContactGating.tsx` wraps the `ContactGatingModal` and is fully implemented with `useContactGating` hook, but it is **never imported or rendered** in `MainLayout.tsx`, `App.tsx`, or any wrapper. The contact gating flow for requiring user info before accessing certain features is dead code.
 
-| Task ID | Requirement | Expected Action |
-|---------|-------------|-----------------|
-| JBJ-013 | SEO meta tags on every page | Audit SEOHead usage across all page components. If any page missing SEOHead, add it |
-| JBJ-014 | robots.txt + sitemap | Already verified as COMPLETED. Will screenshot robots.txt content |
-| JBJ-015 | /card noindex | Already verified as COMPLETED. Will confirm meta tag in browser |
-| JBJ-016 | CSP headers | Already verified as COMPLETED. Will show _headers file content |
+**Fix:** Add `GlobalContactGating` as a wrapper in `MainLayout.tsx` around the main content area.
 
-### Batch 4: Integrations (2 tasks)
+**Files to edit:**
+- `src/components/MainLayout.tsx` -- import and wrap children with `<GlobalContactGating>`
 
-| Task ID | Requirement | Expected Action |
-|---------|-------------|-----------------|
-| JBJ-017 | Reelly API data rendering | Verify projects table has data, formatReellyDescription works, project cards render correctly |
-| JBJ-018 | Video processing engine | Verify ffmpegService.ts architecture, edge function exists if needed |
+---
 
-### Batch 5: Polish/QA (7 tasks)
+## Issue 3: Financial Disclaimer Links Missing on Some AI Tools
 
-| Task ID | Requirement | Expected Action |
-|---------|-------------|-----------------|
-| JBJ-019 | Mode selection first-time prompt | Test ModeSelectionModal popup behavior |
-| JBJ-020 | Navigation Back/Up/Down clickability | Verify PageNavigation z-index and pointer-events |
-| JBJ-021 | Mobile menu no monogram | Already COMPLETED |
-| JBJ-022 | CombinedContactNewsletter in MainLayout | Already COMPLETED |
-| JBJ-023 | Core Web Vitals | BLOCKED on external Lighthouse -- provide URL for manual test |
-| JBJ-024 | Lazy loading all pages | Audit App.tsx React.lazy usage |
-| JBJ-025 | Asset caching immutable | Already COMPLETED |
+**Problem:** Per the compliance memory: "All financial disclaimers (AI Analyzers, DLD Widgets, ROI Calculators) must append a gold-styled link: 'Contact our team for professional guidance'". While many tools have this, some AI tool pages may be missing it. The search for "Contact our team for professional guidance" found matches in only ~11 files, but there are 30+ AI tool pages.
 
-### Implementation Approach
+**Fix:** Audit all AI tool pages and add the disclaimer link where missing (especially tools that produce financial/investment outputs).
 
-Upon approval, I will execute Batches 3-5 sequentially:
-1. For each task, verify via code and browser screenshots
-2. If fixes are needed, implement them
-3. Provide before/after proof for any code changes
-4. Report completed/remaining/blocked status after each batch
+**Files to audit:**
+- All `src/pages/AI*.tsx` pages that generate financial/investment analysis
+- `src/components/ai-tools/premium/*.tsx` components
+
+---
+
+## Issue 4: Golden Visa Language -- "eligible to apply" Not Used Everywhere
+
+**Problem:** The compliance memory states: 'Golden Visa eligibility is described as "eligible to apply"'. The Golden Visa Guide page correctly uses this phrasing, but the search index, property cards, and other references throughout the site may still use phrases like "qualifies for Golden Visa" or "Golden Visa eligible" without the "to apply" qualifier.
+
+**Fix:** Search for all Golden Visa references and ensure compliance wording ("eligible to apply") is used consistently.
+
+---
+
+## Issue 5: Header Search Dropdown -- Missing "Trending Searches" / "Recent Searches"
+
+**Problem:** The header search panel (JBJ-003) was expanded to 620px and Popular Pages were added, but the original requirement mentioned "shortcut suggestions" and improved UX. The current embedded search panel shows Quick Access shortcuts and Popular Pages but has no "Recent Searches" or "Trending Searches" section -- features users expect from a premium search UX.
+
+**Fix:** Add a "Recent Searches" section that persists via localStorage, showing the user's last 5 searches for quick re-access.
+
+**Files to edit:**
+- `src/components/GlobalSearchModal.tsx` -- add recent searches tracking and display
+
+---
+
+## Technical Summary
+
+| Issue | Component | Status | Fix Effort |
+|-------|-----------|--------|------------|
+| ModeSelectionModal not rendered | PopupLayer.tsx | NOT DONE | Small -- 1 import + 1 JSX line |
+| GlobalContactGating not used | MainLayout.tsx | NOT DONE | Small -- 1 import + wrap |
+| Financial disclaimers incomplete | AI tool pages | PARTIAL | Medium -- audit 30+ pages |
+| Golden Visa wording consistency | Multiple files | PARTIAL | Small -- search and replace |
+| Recent Searches in header | GlobalSearchModal.tsx | NOT DONE | Medium -- localStorage + UI |
+
+### Execution Order
+1. ModeSelectionModal rendering (highest priority -- user-facing onboarding)
+2. GlobalContactGating integration (lead capture flow)
+3. Recent Searches in header search
+4. Financial disclaimer audit
+5. Golden Visa wording audit
 
