@@ -234,7 +234,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       onClick={() => handleSelect(route)}
       className={`w-full flex items-center gap-3 p-2 rounded-lg transition-all text-left ${isFirst ? 'bg-black/10 border border-gold/40' : 'hover:bg-black/5'}`}
     >
-      <div className="w-8 h-8 rounded-lg overflow-hidden border border-gold/30 bg-white flex items-center justify-center flex-shrink-0">
+      <div className="w-8 h-8 rounded-lg overflow-hidden border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex items-center justify-center flex-shrink-0">
         {item.image ? (
           <SafeImage src={item.image} alt={item.name} className="w-full h-full object-cover" />
         ) : (
@@ -320,7 +320,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                         onClick={() => handleSelect(item.route)}
                         className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8] transition-all text-left group"
                       >
-                        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/50 border border-gold/30 text-gold">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-gold">
                           {item.icon && <item.icon className="w-4 h-4" />}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -365,7 +365,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       onClick={() => handleSelect(page.route)}
                       className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8] transition-all text-left group"
                     >
-                      <div className="w-7 h-7 rounded-md bg-white/50 border border-gold/10 flex items-center justify-center text-gold">
+                      <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 flex items-center justify-center text-gold">
                         <page.icon className="w-3.5 h-3.5" />
                       </div>
                       <span className="text-xs text-black font-medium">{page.label}</span>
