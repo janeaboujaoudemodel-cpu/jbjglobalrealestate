@@ -211,7 +211,7 @@ const Index = () => {
       </div>
 
       {/* TRUST BAR (4 Cards) - Flows directly from Developer Partners */}
-      <div id="trust-bar" className="bg-black py-12 md:py-16">
+      <div id="trust-bar" className="bg-black py-16 md:py-20">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-4 mb-8 md:mb-10">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/25 to-gold/40" />

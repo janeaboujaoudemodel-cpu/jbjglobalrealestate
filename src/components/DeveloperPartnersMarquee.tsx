@@ -78,7 +78,7 @@ const DeveloperPartnersMarquee = () => {
         title={developer.name}
       >
         <div
-          className="w-[140px] h-[28px] md:h-[36px] lg:h-[40px] flex items-center justify-center"
+          className="w-[140px] h-[36px] md:h-[42px] lg:h-[48px] flex items-center justify-center"
         >
           <img
             src={developer.logo}

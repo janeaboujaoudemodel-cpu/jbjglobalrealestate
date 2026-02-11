@@ -245,6 +245,10 @@ const Properties = () => {
       };
       setFilters(updated);
       setAppliedFilters(updated);
+    } else if (searchParams.toString() === '') {
+      // No URL params at all — ensure defaults show all projects
+      setFilters(defaultExtendedFilters);
+      setAppliedFilters(defaultExtendedFilters);
     }
   }, [searchParams, developers]);
   
@@ -518,14 +522,14 @@ const Properties = () => {
 
           </div>
 
-          {/* Second Row - All Filters in Two Lines for Readability */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3 mt-3 md:mt-4">
+          {/* Second Row - All Filters Inline */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-3 md:mt-4">
             {/* Location - All 7 Emirates */}
             <Select
               value={filters.emirate || "all"}
               onValueChange={(value) => updateFilter("emirate", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+              <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                 <MapPin className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                 <span className="truncate text-left flex-1">{filters.emirate || "All Emirates"}</span>
               </SelectTrigger>
@@ -546,7 +550,7 @@ const Properties = () => {
               value={filters.communityId || "all"}
               onValueChange={(value) => updateFilter("communityId", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+              <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                 <Home className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                 <span className="truncate text-left flex-1">
                   {filters.communityId 
@@ -569,7 +573,7 @@ const Properties = () => {
               value={filters.developerId || "all"}
               onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
             >
-              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+              <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                 <Building2 className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                 <span className="truncate text-left flex-1">
                   {filters.developerId 
@@ -605,7 +609,7 @@ const Properties = () => {
                 }
               }}
             >
-              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+              <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                 <DollarSign className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                 <span className="truncate text-left flex-1">
                   {filters.priceMin === 0 && filters.priceMax === 500000000
@@ -636,7 +640,7 @@ const Properties = () => {
               value={filters.sizeUnit}
               onValueChange={(value) => updateFilter("sizeUnit", value as 'sqft' | 'sqm')}
             >
-              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+              <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                 <Maximize2 className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                 <span className="truncate text-left flex-1">{filters.sizeUnit === 'sqft' ? 'Square Feet' : 'Square Meters'}</span>
               </SelectTrigger>
@@ -651,7 +655,7 @@ const Properties = () => {
               value={filters.currency}
               onValueChange={(value) => updateFilter("currency", value as ExtendedCurrency)}
             >
-              <SelectTrigger className="w-full h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+              <SelectTrigger className="w-[140px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                 <span className="truncate text-left flex-1">
                   {filters.currency === 'AED' ? 'AED (Dirham)' 
                     : filters.currency === 'USD' ? 'USD (Dollar)' 
@@ -1131,7 +1135,14 @@ const Properties = () => {
                           Register Interest via WhatsApp
                         </a>
                       </Button>
-                      <Button onClick={clearFilters} variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6">
+                      <Button 
+                        onClick={() => {
+                          clearFilters();
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }} 
+                        variant="outline" 
+                        className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6 cursor-pointer"
+                      >
                         Browse All Properties
                       </Button>
                     </div>
