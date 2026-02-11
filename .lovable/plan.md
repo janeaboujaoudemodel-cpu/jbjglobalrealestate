@@ -1,14 +1,34 @@
 
 
-## Adjust YouTube End Screen Overlay
+## Enhance Digital Business Card: Mobile Consistency and Premium Description
 
-### Changes to `src/components/YouTubeVideoPlayer.tsx`
+### Changes to `src/pages/DigitalCard.tsx`
 
-**1. Make background fully opaque black**
-- Change `bg-black/95` to `bg-black` on the overlay button (line 107) so nothing bleeds through from behind
+**1. Upgrade the company description (line 363-365)**
 
-**2. Increase logo size**
-- Change `w-24 h-24 md:w-32 md:h-32` to `w-40 h-40 md:w-52 md:h-52` (line 113) to make the monogram significantly larger
+Replace the current single-line description:
+> "A licensed Dubai brokerage delivering investor-led real estate advisory, market intelligence, and end-to-end property execution across the UAE."
 
-**3. Push Replay button further down**
-- Increase spacing between logo and replay from `mb-6` to `mb-12` (line 113) so the replay text/icon sits well below the logo
+With a richer, premium paragraph that highlights:
+- Licensed RERA brokerage status
+- Core services: Buy, Sell, Rent
+- AI-powered tools and market intelligence
+- End-to-end advisory approach
+
+New text:
+> "A RERA-licensed Dubai brokerage powering smarter real estate decisions through AI-driven market intelligence, predictive analytics, and a full suite of 50+ professional tools. We deliver end-to-end advisory across Buy, Sell, and Rent -- from property sourcing and valuation to negotiation and closing -- backed by data, not guesswork."
+
+**2. Ensure mobile UI matches desktop styling**
+
+The current layout already shares the same component for all screen sizes, but a few elements need tightening for visual parity on phones:
+- Action buttons (Call, WhatsApp, Send Email, Share Card, Website) currently use `bg-white` with gold borders -- these are consistent and will remain
+- Ensure the 3-column action grid (Send Email / Share Card / Website) does not collapse or shrink icons on small screens by adjusting gap and padding for `grid-cols-3` on mobile
+- Standardize button text sizes to `text-sm` across all breakpoints (already mostly done, just verify no breakpoint overrides)
+
+No major structural changes needed -- the desktop and mobile already use identical markup. The visual consistency request is mainly about ensuring the champagne card, gold borders, and button colors render identically, which they do. Minor padding tweaks will be applied where mobile gets slightly cramped.
+
+### Files to edit
+| File | Change |
+|------|--------|
+| `src/pages/DigitalCard.tsx` | Rewrite the Professional Intro paragraph (lines 358-366) with premium copy. Minor mobile padding adjustments on action buttons. |
+
