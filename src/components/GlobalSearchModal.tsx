@@ -128,7 +128,6 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
         .from('developers' as any)
         .select('id, name, slug, logo_url')
         .ilike('name', `%${debouncedQuery}%`)
-        .eq('status', 'active')
         .limit(5);
       return ((data as unknown as Array<{ id: string; name: string; slug: string; logo_url: string | null }>) || []).map(d => ({ id: d.id, name: d.name, slug: d.slug, image: d.logo_url }));
     },
@@ -237,7 +236,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     >
       <div className="w-8 h-8 rounded-lg overflow-hidden border border-gold/30 bg-white flex items-center justify-center flex-shrink-0">
         {item.image ? (
-          <SafeImage src={item.image} alt={item.name} className="w-full h-full object-contain" />
+          <SafeImage src={item.image} alt={item.name} className="w-full h-full object-cover" />
         ) : (
           <FallbackIcon className="w-4 h-4 text-gold" />
         )}
