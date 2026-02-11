@@ -172,26 +172,41 @@ export function ReellyImportPanel() {
     id: string; status: string; current_page: number; total_pages: number; next_cursor: string | null;
   } | null>(null);
 
-  // Enrichment test
-  const [enrichTestSlug, setEnrichTestSlug] = useState("binghatti-titania-binghatti-3012");
+  // Enrichment test - restore from sessionStorage
+  const [enrichTestSlug, setEnrichTestSlug] = useState(() => sessionStorage.getItem('jj_enrichTestSlug') || "binghatti-titania-binghatti-3012");
   const [isEnrichTesting, setIsEnrichTesting] = useState(false);
-  const [enrichTestResult, setEnrichTestResult] = useState<EnrichmentTestResult | null>(null);
+  const [enrichTestResult, setEnrichTestResult] = useState<EnrichmentTestResult | null>(() => {
+    try { const s = sessionStorage.getItem('jj_enrichTestResult'); return s ? JSON.parse(s) : null; } catch { return null; }
+  });
   const [isEnrichApplying, setIsEnrichApplying] = useState(false);
 
-  // Provident extraction state
+  // Provident extraction state - restore from sessionStorage
   const [isProvidentExtracting, setIsProvidentExtracting] = useState(false);
   const [providentResult, setProvidentResult] = useState<{
     processed?: number; total_pdfs_found?: number; total_images_found?: number; total_docs_inserted?: number; total_images_inserted?: number; errors?: number; error?: string;
-  } | null>(null);
+  } | null>(() => {
+    try { const s = sessionStorage.getItem('jj_providentResult'); return s ? JSON.parse(s) : null; } catch { return null; }
+  });
   const [isFullProvidentRunning, setIsFullProvidentRunning] = useState(false);
-  const [fullProvidentProgress, setFullProvidentProgress] = useState({ processed: 0, docs: 0, images: 0, errors: 0 });
+  const [fullProvidentProgress, setFullProvidentProgress] = useState(() => {
+    try { const s = sessionStorage.getItem('jj_fullProvidentProgress'); return s ? JSON.parse(s) : { processed: 0, docs: 0, images: 0, errors: 0 }; } catch { return { processed: 0, docs: 0, images: 0, errors: 0 }; }
+  });
   const [fullProvidentStopRequested, setFullProvidentStopRequested] = useState(false);
 
-  // Provident page-data enrichment (free, no Firecrawl credits)
+  // Provident page-data enrichment (free, no Firecrawl credits) - restore from sessionStorage
   const [isBulkEnriching, setIsBulkEnriching] = useState(false);
   const [bulkEnrichResult, setBulkEnrichResult] = useState<{
     success: boolean; processed?: number; images_added?: number; docs_added?: number; fields_updated?: number; errors?: number; message?: string; error?: string;
-  } | null>(null);
+  } | null>(() => {
+    try { const s = sessionStorage.getItem('jj_bulkEnrichResult'); return s ? JSON.parse(s) : null; } catch { return null; }
+  });
+
+  // Persist enrichment state to sessionStorage on change
+  useEffect(() => { sessionStorage.setItem('jj_enrichTestSlug', enrichTestSlug); }, [enrichTestSlug]);
+  useEffect(() => { if (enrichTestResult) sessionStorage.setItem('jj_enrichTestResult', JSON.stringify(enrichTestResult)); }, [enrichTestResult]);
+  useEffect(() => { if (providentResult) sessionStorage.setItem('jj_providentResult', JSON.stringify(providentResult)); }, [providentResult]);
+  useEffect(() => { sessionStorage.setItem('jj_fullProvidentProgress', JSON.stringify(fullProvidentProgress)); }, [fullProvidentProgress]);
+  useEffect(() => { if (bulkEnrichResult) sessionStorage.setItem('jj_bulkEnrichResult', JSON.stringify(bulkEnrichResult)); }, [bulkEnrichResult]);
   const [fullAiProgress, setFullAiProgress] = useState({ processed: 0, enriched: 0, errors: 0 });
   const [fullAiStopRequested, setFullAiStopRequested] = useState(false);
 
@@ -978,12 +993,14 @@ export function ReellyImportPanel() {
             {enrichTestResult && enrichTestResult.success && (
               <div className="space-y-4 border-t pt-4">
                 <h4 className="font-semibold text-sm">
-                  {enrichTestResult.project?.name}
+                  <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 hover:underline">
+                    {enrichTestResult.project?.name}
+                  </a>
                   <span className="text-xs text-zinc-500 ml-2">(Reelly ID: {enrichTestResult.project?.reelly_id || "none"})</span>
                 </h4>
                 <div className="flex gap-3 text-xs">
                   {enrichTestResult.sources?.reelly?.available ? (
-                    <a href={enrichTestResult.sources.reelly.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline flex items-center gap-1"><ExternalLink className="h-3 w-3" /> Reelly Source</a>
+                    <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline flex items-center gap-1"><ExternalLink className="h-3 w-3" /> View Project</a>
                   ) : <span className="text-zinc-400">Reelly: {enrichTestResult.sources?.reelly?.reason}</span>}
                   {enrichTestResult.sources?.provident?.available && (
                     <span className="text-orange-600">Provident: {enrichTestResult.sources.provident.slug_used}</span>
@@ -1000,9 +1017,15 @@ export function ReellyImportPanel() {
                       <div className={`${bgColor} px-3 py-1.5 border-b ${borderColor}`}>
                         <h5 className={`text-xs font-bold ${textColor}`}>{label}</h5>
                       </div>
-                      {enrichTestResult.project?.cover_image_url && <img src={enrichTestResult.project.cover_image_url} alt="" className="w-full h-32 object-cover" />}
+                      {enrichTestResult.project?.cover_image_url && (
+                        <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer">
+                          <img src={enrichTestResult.project.cover_image_url} alt="" className="w-full h-32 object-cover hover:opacity-80 transition-opacity cursor-pointer" />
+                        </a>
+                      )}
                       <div className="p-3 space-y-1">
-                        <p className="font-semibold text-sm truncate">{enrichTestResult.project?.name}</p>
+                        <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer" className="font-semibold text-sm truncate block hover:text-blue-600 hover:underline">
+                          {enrichTestResult.project?.name}
+                        </a>
                         <div className="grid grid-cols-2 gap-1 text-[10px] text-zinc-500 pt-1 border-t">
                           <span>📷 {data?.images_count || 0} imgs{(data?.new_images || 0) > 0 && ` (+${data!.new_images})`}</span>
                           <span>📄 {data?.documents_count || 0} docs{(data?.new_documents || 0) > 0 && ` (+${data!.new_documents})`}</span>
@@ -1012,27 +1035,38 @@ export function ReellyImportPanel() {
                           <span>🔑 {data?.unit_types_count || 0} unit types</span>
                           <span>📝 {data?.has_description ? "✅" : "❌"} description</span>
                           <span>💰 {data?.has_payment_plan ? "✅" : "❌"} payment</span>
+                          <span>⭐ {data?.usp_count || 0} USPs</span>
+                          <span>📍 {data?.distances_count || 0} distances</span>
+                          <span>🎥 {data?.has_video ? "✅" : "❌"} video</span>
+                          <span>✨ {data?.highlights_count || 0} highlights</span>
+                          <span>🏷️ {data?.has_service_charge ? "✅" : "❌"} svc charge</span>
+                          <span>📈 {data?.has_roi_estimate ? "✅" : "❌"} ROI</span>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                {/* Apply button */}
-                {!enrichTestResult.applied && (
-                  <Button onClick={async () => {
-                    setIsEnrichApplying(true);
-                    try {
-                      const { data, error } = await supabase.functions.invoke("enrich-project-test", { body: { slug: enrichTestSlug.trim(), action: "apply" } });
-                      if (error) throw error;
-                      if (data?.success) { toast.success(`Applied! +${data.new_images} images, +${data.new_documents} docs`); setEnrichTestResult(prev => prev ? { ...prev, applied: true } : prev); }
-                      else toast.error(data?.error || "Apply failed");
-                    } catch (err: any) { toast.error(err.message); }
-                    finally { setIsEnrichApplying(false); }
-                  }} disabled={isEnrichApplying} className="bg-green-600 hover:bg-green-700 text-white w-full">
-                    {isEnrichApplying ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <CheckCircle className="h-4 w-4 mr-2" />} Apply Enrichment
-                  </Button>
-                )}
+                {/* Action buttons */}
+                <div className="flex gap-2">
+                  {!enrichTestResult.applied && (
+                    <Button onClick={async () => {
+                      setIsEnrichApplying(true);
+                      try {
+                        const { data, error } = await supabase.functions.invoke("enrich-project-test", { body: { slug: enrichTestSlug.trim(), action: "apply" } });
+                        if (error) throw error;
+                        if (data?.success) { toast.success(`Applied! +${data.new_images} images, +${data.new_documents} docs`); setEnrichTestResult(prev => prev ? { ...prev, applied: true } : prev); }
+                        else toast.error(data?.error || "Apply failed");
+                      } catch (err: any) { toast.error(err.message); }
+                      finally { setIsEnrichApplying(false); }
+                    }} disabled={isEnrichApplying} className="bg-green-600 hover:bg-green-700 text-white flex-1">
+                      {isEnrichApplying ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <CheckCircle className="h-4 w-4 mr-2" />} Apply Enrichment
+                    </Button>
+                  )}
+                  <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 px-3 py-2 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
+                    <ExternalLink className="h-3 w-3" /> View Live
+                  </a>
+                </div>
                 {enrichTestResult.applied && (
                   <Alert className="bg-green-50 border-green-300">
                     <CheckCircle className="h-4 w-4 text-green-600" />
