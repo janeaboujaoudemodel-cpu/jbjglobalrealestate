@@ -83,12 +83,12 @@ export default function YouTubeVideoPlayer({
   }, [videoId]);
 
   const handleReplay = useCallback(() => {
-    setEnded(false);
     const player = playerRef.current;
     if (player?.seekTo) {
-      player.seekTo(0);
+      player.seekTo(0, true);
       player.playVideo();
     }
+    setEnded(false);
   }, []);
 
   return (
