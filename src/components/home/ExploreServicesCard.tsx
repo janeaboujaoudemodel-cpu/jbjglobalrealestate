@@ -262,7 +262,7 @@ const ExploreServicesCard = () => {
                   <Link to={currentService.href}>
                     <Button variant="primary" size="lg" className="gap-2 px-8 py-4 rounded-lg group">
                       <span className="tracking-wide">{CTA_LABELS[currentService.id] ?? "Explore Now"}</span>
-                      <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-gold group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
                 ) : (
