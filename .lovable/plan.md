@@ -1,42 +1,57 @@
 
 
-# Fix Plan: Featured Listings Card Spacing, Brochure Logo, and Mortgage Calculator Numbers
+# Fix Plan: Enhanced Register Interest Form + Contact Card Hover Reversal
 
-## 1. Featured Listings Card Spacing and Content Fix
+## 1. Enhance the "Register Interest" Form (ConsultationRequestForm)
 
-**Problem:** In some cards (e.g., Palm Jebel Ali), the project title is too close to the "by Developer" and description section. The price is duplicated (on the photo badge AND in the card bottom). The "...more" text needs the word "more" explicitly visible. Developer name needs underline on hover.
+**Problem:** The Register Interest form on project detail pages is too wide/stretched and lacks the qualification fields that exist in the "Request a Callback" section (preferred language, preferred time to call, preferred contact method). The user wants more lead qualification and consistent source tracking.
 
-**File:** `src/components/home/FeaturedListings.tsx`
+**File:** `src/components/ConsultationRequestForm.tsx`
 
-**Fixes:**
-- **Title spacing:** Change `mb-0.5` on the title `<h3>` (line 221) to `mb-2` to add consistent space between title and developer name
-- **Remove bottom price:** Remove the price section from the bottom of the card (lines 253-261) since price is already shown on the photo badge. Keep only the handover date at the bottom-right
-- **"...more" text:** The current code shows `...more` -- ensure it reads `...more` with the word "more" always visible (already has it but confirming the slice + span pattern)
-- **Developer name underline on hover:** Add `hover:underline` to the developer Link className (line 231)
+**Changes:**
+- **Narrower layout:** Add `max-w-lg mx-auto` to the form container to pull it in from the edges
+- **Add qualification fields** from CallToActionSection pattern:
+  - Nationality dropdown (same list as LeadCapturePopup)
+  - Preferred Language dropdown (with flag icons, from `getLanguageList()` -- already imported pattern from CallToActionSection)
+  - Preferred Time to Call (Morning/Afternoon/Evening/Anytime)
+  - Preferred Contact Method (Phone Call/WhatsApp/Email/Video Call)
+  - Budget Range (optional text input)
+  - Purchase Timeline (already exists as "Timeline" -- keep it)
+- **Source tracking:** The form already passes `source` as `project-interest-{projectId}` or `properties-consultation`. Ensure these are saved properly in `crm_leads`. The `captureLead` function via the edge function already handles this.
+- **Update form schema** with zod to include the new optional fields
+- **Update `captureLead` call** to pass nationality and language data
 
-## 2. Brochure Card Logo -- Full Fit
+## 2. Reverse WhatsApp and Call Us Card Hover Logic
 
-**Problem:** The JBJ monogram in PremiumBrochureCard is cropped inside its circular container.
+**Problem:** In DirectContactCTA (used globally), WhatsApp and Call Us cards are currently elevated with shadow by default (`shadow-[0_8px_25px_...] -translate-y-1`) and flatten on hover (`hover:shadow-none hover:translate-y-0`). User wants the reverse: flat by default, elevated on hover.
 
-**File:** `src/components/project-detail/PremiumBrochureCard.tsx` (line 149-154)
+### File A: `src/components/DirectContactCTA.tsx` (lines 130-159)
 
-**Fix:** The container is `w-11 h-11` with `overflow-hidden` and the image uses `object-contain`. The issue is the circular container (`rounded-full`) clips square logos. Change to use `p-1` inside to give breathing room, or increase the container size slightly to `w-14 h-14` so the logo has more space and isn't clipped by the circle boundary.
+**WhatsApp card (line 132):** 
+- Current: `shadow-[0_8px_25px_rgba(16,185,129,0.4)] -translate-y-1 hover:border-emerald-500 hover:shadow-none hover:translate-y-0`
+- New: `hover:shadow-[0_8px_25px_rgba(16,185,129,0.4)] hover:-translate-y-1 border-emerald-500/40 hover:border-emerald-500`
 
-## 3. Mortgage Calculator Cards in Project Detail -- Numbers on One Line
+**Call Us card (line 148):**
+- Current: `shadow-[0_8px_25px_rgba(59,130,246,0.4)] -translate-y-1 hover:border-blue-500 hover:shadow-none hover:translate-y-0`
+- New: `hover:shadow-[0_8px_25px_rgba(59,130,246,0.4)] hover:-translate-y-1 border-blue-500/40 hover:border-blue-500`
 
-**Problem:** In the project detail page, the full mortgage calculator (non-compact, `lg:grid-cols-3`) shows 6 summary cards where AED numbers break to a second line because the left input panel takes too much space.
+### File B: `src/components/CombinedContactNewsletter.tsx` (lines 21-42)
 
-**File:** `src/components/MortgageCalculator.tsx` (lines 214, 350-392)
+**WhatsApp card:**
+- Current: `border-emerald-500/40 hover:border-emerald-500` and `hover:shadow-emerald-500/20`
+- New: `border-emerald-500 shadow-lg shadow-emerald-500/20 hover:border-emerald-500/40 hover:shadow-none`
 
-**Fixes:**
-- Change the main grid from `lg:grid-cols-2` (line 214) to `lg:grid-cols-[2fr_3fr]` so the results section (with the 6 cards) gets more width
-- On the 6 summary cards, add `whitespace-nowrap` to the price `<p>` elements to prevent line breaks, and reduce font size slightly if needed: change `text-xs lg:text-base xl:text-lg` to `text-xs lg:text-sm xl:text-base`
+**Call Us card:**
+- Current: `border-blue-500/40 hover:border-blue-500` and `hover:shadow-blue-500/20`
+- New: `border-blue-500 shadow-lg shadow-blue-500/20 hover:border-blue-500/40 hover:shadow-none`
+
+---
 
 ## Summary of Files to Change
 
 | File | Change |
 |------|--------|
-| `src/components/home/FeaturedListings.tsx` | Add spacing after title; remove duplicate price; add hover:underline to developer link |
-| `src/components/project-detail/PremiumBrochureCard.tsx` | Increase monogram container size for full fit |
-| `src/components/MortgageCalculator.tsx` | Widen results column; prevent number line breaks in 6 cards |
+| `src/components/ConsultationRequestForm.tsx` | Narrower layout; add nationality, language, preferred time, contact method fields; ensure source tracking |
+| `src/components/DirectContactCTA.tsx` | Reverse WhatsApp and Call Us card hover states (flat default, elevated on hover) |
+| `src/components/CombinedContactNewsletter.tsx` | Reverse WhatsApp and Call Us card hover states (highlighted default, flat on hover) |
 
