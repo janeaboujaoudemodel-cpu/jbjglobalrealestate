@@ -1260,12 +1260,12 @@ const CompanyProfile = () => {
             <motion.div
               key={cta.title}
               variants={fadeInUp}
-              className="jj-card-inner group cursor-pointer"
+              className="jj-card-inner group cursor-pointer flex flex-col h-full"
               onClick={handleWhatsApp}
             >
               <h3 className="text-black text-lg font-bold mb-2 group-hover:text-gold transition-colors">{cta.title}</h3>
-              <p className="text-black/70 text-sm mb-4">{cta.description}</p>
-              <div className="flex items-center text-gold text-sm font-semibold">
+              <p className="text-black/70 text-sm mb-4 flex-1">{cta.description}</p>
+              <div className="flex items-center text-gold text-sm font-semibold mt-auto">
                 <span>Get Started</span>
                 <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </div>
