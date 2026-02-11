@@ -75,33 +75,33 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   const cashPct = Math.round((ytd2026.cash / ytd2026.transactions) * 100);
 
   return (
-    <section className="py-12 bg-gradient-to-br from-zinc-950 via-black to-zinc-900">
+    <section className="py-12" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}>
       <div className="container mx-auto px-4">
-        <div className="max-w-5xl mx-auto border border-gold/20 rounded-2xl p-6 md:p-8 bg-zinc-900/40">
+        <div className="max-w-5xl mx-auto border-2 border-gold/40 rounded-2xl p-6 md:p-8 bg-white/60 shadow-[0_8px_30px_rgba(200,167,102,0.15)]">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-white text-xl md:text-2xl font-bold flex items-center gap-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-black text-xl md:text-2xl font-bold flex items-center gap-3" style={{ fontFamily: "Poppins, sans-serif" }}>
                 <Banknote className="w-6 h-6 text-gold" />
                 Dubai Market Intelligence
               </h2>
-              <p className="text-zinc-400 text-sm mt-1">DLD Transaction Data • As of {today}</p>
+              <p className="text-black/50 text-sm mt-1">DLD Transaction Data • As of {today}</p>
             </div>
-            <span className="text-emerald-400 text-xl font-bold">{ytd2026.growth}</span>
+            <span className="text-emerald-600 text-xl font-bold">{ytd2026.growth}</span>
           </div>
 
           {/* Main Stats Row */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             {[
               { label: "YTD Volume", value: ytd2026.value, icon: Banknote, color: "text-gold" },
-              { label: "Transactions (YTD 2026)", value: ytd2026.transactions.toLocaleString(), icon: Building2, color: "text-white" },
-              { label: "Off-Plan", value: ytd2026.offPlan.toLocaleString(), icon: TrendingUp, color: "text-emerald-400" },
-              { label: "Cash Deals", value: ytd2026.cash.toLocaleString(), icon: Banknote, color: "text-amber-400" },
+              { label: "Transactions (YTD 2026)", value: ytd2026.transactions.toLocaleString(), icon: Building2, color: "text-black" },
+              { label: "Off-Plan", value: ytd2026.offPlan.toLocaleString(), icon: TrendingUp, color: "text-emerald-600" },
+              { label: "Cash Deals", value: ytd2026.cash.toLocaleString(), icon: Banknote, color: "text-amber-700" },
             ].map((stat) => (
-              <div key={stat.label} className="bg-zinc-800/60 border border-zinc-700/50 rounded-xl p-4">
+              <div key={stat.label} className="bg-white/70 border border-gold/20 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <stat.icon className={`w-4 h-4 ${stat.color}`} />
-                  <span className="text-zinc-400 text-xs uppercase tracking-wider">{stat.label}</span>
+                  <span className="text-black/50 text-xs uppercase tracking-wider">{stat.label}</span>
                 </div>
                 <p className={`${stat.color} text-xl font-bold`}>{stat.value}</p>
               </div>
@@ -110,24 +110,24 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Transaction Split Bars */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-zinc-800/40 rounded-xl p-5 border border-zinc-700/30">
-              <p className="text-zinc-400 text-xs uppercase tracking-wider mb-3">Off-Plan vs Secondary</p>
-              <div className="h-3 bg-zinc-700 rounded-full overflow-hidden mb-2">
+            <div className="bg-white/70 rounded-xl p-5 border border-gold/20">
+              <p className="text-black/50 text-xs uppercase tracking-wider mb-3">Off-Plan vs Secondary</p>
+              <div className="h-3 bg-black/10 rounded-full overflow-hidden mb-2">
                 <div className="h-full bg-gradient-to-r from-gold to-amber-500 rounded-full" style={{ width: `${offPlanPct}%` }} />
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-gold">{offPlanPct}% Off-Plan ({ytd2026.offPlan.toLocaleString()})</span>
-                <span className="text-zinc-400">{100 - offPlanPct}% Secondary ({ytd2026.secondary.toLocaleString()})</span>
+                <span className="text-gold font-medium">{offPlanPct}% Off-Plan ({ytd2026.offPlan.toLocaleString()})</span>
+                <span className="text-black/50">{100 - offPlanPct}% Secondary ({ytd2026.secondary.toLocaleString()})</span>
               </div>
             </div>
-            <div className="bg-zinc-800/40 rounded-xl p-5 border border-zinc-700/30">
-              <p className="text-zinc-400 text-xs uppercase tracking-wider mb-3">Cash vs Mortgage</p>
-              <div className="h-3 bg-zinc-700 rounded-full overflow-hidden mb-2">
+            <div className="bg-white/70 rounded-xl p-5 border border-gold/20">
+              <p className="text-black/50 text-xs uppercase tracking-wider mb-3">Cash vs Mortgage</p>
+              <div className="h-3 bg-black/10 rounded-full overflow-hidden mb-2">
                 <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full" style={{ width: `${cashPct}%` }} />
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-emerald-400">{cashPct}% Cash ({ytd2026.cash.toLocaleString()})</span>
-                <span className="text-zinc-400">{100 - cashPct}% Mortgage ({ytd2026.mortgage.toLocaleString()})</span>
+                <span className="text-emerald-600 font-medium">{cashPct}% Cash ({ytd2026.cash.toLocaleString()})</span>
+                <span className="text-black/50">{100 - cashPct}% Mortgage ({ytd2026.mortgage.toLocaleString()})</span>
               </div>
             </div>
           </div>
@@ -135,10 +135,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Top Areas + Nationalities */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Top 5 Areas */}
-            <div className="bg-zinc-800/40 rounded-xl p-5 border border-zinc-700/30">
+            <div className="bg-white/70 rounded-xl p-5 border border-gold/20">
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className="w-4 h-4 text-gold" />
-                <h3 className="text-white text-sm font-semibold">Top Areas by Transactions</h3>
+                <h3 className="text-black text-sm font-semibold">Top Areas by Transactions</h3>
               </div>
               <div className="space-y-3">
                 {topAreas2026.slice(0, 5).map((area, i) => {
@@ -146,12 +146,12 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   return (
                     <div key={area.area} className={`flex items-center justify-between ${isHighlighted ? "bg-gold/10 -mx-2 px-2 py-1 rounded-lg border border-gold/30" : ""}`}>
                       <div className="flex items-center gap-2">
-                        <span className="text-zinc-500 text-xs w-4">{i + 1}</span>
-                        <span className={`text-sm ${isHighlighted ? "text-gold font-semibold" : "text-zinc-300"}`}>{area.area}</span>
+                        <span className="text-black/40 text-xs w-4">{i + 1}</span>
+                        <span className={`text-sm ${isHighlighted ? "text-gold font-semibold" : "text-black/80"}`}>{area.area}</span>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-white text-xs font-medium">{area.transactions.toLocaleString()}</span>
-                        <span className="text-emerald-400 text-xs">{area.change}</span>
+                        <span className="text-black text-xs font-medium">{area.transactions.toLocaleString()}</span>
+                        <span className="text-emerald-600 text-xs">{area.change}</span>
                       </div>
                     </div>
                   );
@@ -160,20 +160,20 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </div>
 
             {/* Top 5 Nationalities */}
-            <div className="bg-zinc-800/40 rounded-xl p-5 border border-zinc-700/30">
+            <div className="bg-white/70 rounded-xl p-5 border border-gold/20">
               <div className="flex items-center gap-2 mb-4">
                 <Globe className="w-4 h-4 text-gold" />
-                <h3 className="text-white text-sm font-semibold">Top Buyer Nationalities</h3>
+                <h3 className="text-black text-sm font-semibold">Top Buyer Nationalities</h3>
               </div>
               <div className="space-y-3">
                 {topNationalities.slice(0, 5).map((nat) => (
                   <div key={nat.country} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-base">{nat.flag}</span>
-                      <span className="text-zinc-300 text-sm">{nat.country}</span>
+                      <span className="text-black/80 text-sm">{nat.country}</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-20 h-2 bg-zinc-700 rounded-full overflow-hidden">
+                      <div className="w-20 h-2 bg-black/10 rounded-full overflow-hidden">
                         <div className="h-full bg-gold rounded-full" style={{ width: `${nat.percentage * 4}%` }} />
                       </div>
                       <span className="text-gold text-xs font-medium w-8 text-right">{nat.percentage}%</span>
@@ -185,7 +185,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           </div>
 
           {/* Disclaimer */}
-          <p className="text-[10px] text-zinc-600 text-center mt-6">
+          <p className="text-[10px] text-black/40 text-center mt-6">
             Source: Dubai Land Department (DLD). Year-to-date (YTD) 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
             <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
           </p>
