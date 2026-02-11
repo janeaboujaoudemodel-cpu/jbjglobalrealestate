@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { MapPin, ChevronRight, TrendingUp, Building2, Users, BarChart3, Flame } from "lucide-react";
 import { scrollToId } from "@/lib/scroll";
 import type { Area } from "@/hooks/useAreas";
-import { AreaStickySearchBar } from "./AreaStickySearchBar";
+
 
 interface AreaHeroSectionProps {
   area: Area & { developer_count?: number; project_count_sale?: number; avg_price_sqft?: number; hero_image_url?: string; is_high_demand?: boolean };
@@ -42,15 +42,6 @@ export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
         animate="visible"
         variants={staggerContainer}
       >
-        {/* Breadcrumb */}
-        <motion.nav className="flex items-center gap-2 text-sm mb-6" variants={fadeInUp}>
-          <Link to="/" className="text-zinc-300 hover:text-white transition-colors">Home</Link>
-          <ChevronRight className="w-4 h-4 text-zinc-500" />
-          <Link to="/areas" className="text-zinc-300 hover:text-white transition-colors">Areas</Link>
-          <ChevronRight className="w-4 h-4 text-zinc-500" />
-          <span className="text-gold">{area.name}</span>
-        </motion.nav>
-
         {/* Title + Location */}
         <motion.div className="flex items-center gap-2 mb-3" variants={fadeInUp}>
           <MapPin className="w-5 h-5 text-gold" />
@@ -83,10 +74,14 @@ export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
           </motion.p>
         )}
 
-        {/* Sticky Search Bar */}
-        <motion.div variants={fadeInUp}>
-          <AreaStickySearchBar areaName={area.name} areaSlug={area.slug} />
-        </motion.div>
+        {/* Breadcrumb */}
+        <motion.nav className="flex items-center gap-2 text-sm mb-6" variants={fadeInUp}>
+          <Link to="/" className="text-zinc-300 hover:text-white transition-colors">Home</Link>
+          <ChevronRight className="w-4 h-4 text-zinc-500" />
+          <Link to="/areas" className="text-zinc-300 hover:text-white transition-colors">Areas</Link>
+          <ChevronRight className="w-4 h-4 text-zinc-500" />
+          <span className="text-gold">{area.name}</span>
+        </motion.nav>
 
         {/* Stats Bar */}
         <motion.div className="flex flex-wrap gap-4 md:gap-6" variants={fadeInUp}>
