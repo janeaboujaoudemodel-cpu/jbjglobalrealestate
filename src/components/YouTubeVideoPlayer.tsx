@@ -104,13 +104,13 @@ export default function YouTubeVideoPlayer({
       {ended && (
         <button
           onClick={handleReplay}
-          className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/95 cursor-pointer transition-opacity duration-500 group"
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black cursor-pointer transition-opacity duration-500 group"
           aria-label="Replay video"
         >
           <img
             src={jbjMonogramDarkBg}
             alt="JBJ Global Real Estate"
-            className="w-24 h-24 md:w-32 md:h-32 object-contain mb-6 opacity-90"
+            className="w-40 h-40 md:w-52 md:h-52 object-contain mb-12 opacity-90"
           />
           <div className="flex items-center gap-2 text-gold/80 group-hover:text-gold transition-colors">
             <Play className="w-5 h-5" fill="currentColor" />
