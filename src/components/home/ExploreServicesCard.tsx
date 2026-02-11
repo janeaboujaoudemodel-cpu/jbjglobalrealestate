@@ -275,44 +275,80 @@ const ExploreServicesCard = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={goToPrevious}
-                    className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group overflow-hidden active:scale-90 active:shadow-[0_0_20px_rgba(200,167,102,0.6)]"
+                    className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-200 group overflow-hidden hover:scale-110 active:scale-90"
                     style={{
                       background: 'linear-gradient(145deg, #FDFBF7, #E8DCC8)',
                       border: '2px solid rgba(200, 167, 102, 0.7)',
                       boxShadow: `
-                        0 4px 12px rgba(0,0,0,0.3),
-                        0 2px 4px rgba(0,0,0,0.2),
-                        inset 0 2px 4px rgba(255,255,255,0.9),
-                        inset 0 -2px 4px rgba(200,167,102,0.2),
-                        0 0 15px rgba(200,167,102,0.3)
+                        0 6px 16px rgba(0,0,0,0.35),
+                        0 3px 6px rgba(0,0,0,0.25),
+                        inset 0 3px 6px rgba(255,255,255,0.9),
+                        inset 0 -3px 6px rgba(200,167,102,0.25),
+                        0 0 20px rgba(200,167,102,0.25)
                       `,
+                      transform: 'translateY(0)',
+                    }}
+                    onMouseDown={(e) => {
+                      const btn = e.currentTarget;
+                      btn.style.transform = 'translateY(3px)';
+                      btn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5), inset 0 -1px 3px rgba(200,167,102,0.3), 0 0 30px rgba(200,167,102,0.7)';
+                    }}
+                    onMouseUp={(e) => {
+                      const btn = e.currentTarget;
+                      btn.style.transform = 'translateY(0)';
+                      btn.style.boxShadow = '0 6px 16px rgba(0,0,0,0.35), 0 3px 6px rgba(0,0,0,0.25), inset 0 3px 6px rgba(255,255,255,0.9), inset 0 -3px 6px rgba(200,167,102,0.25), 0 0 20px rgba(200,167,102,0.25)';
+                    }}
+                    onMouseLeave={(e) => {
+                      const btn = e.currentTarget;
+                      btn.style.transform = 'translateY(0)';
+                      btn.style.boxShadow = '0 6px 16px rgba(0,0,0,0.35), 0 3px 6px rgba(0,0,0,0.25), inset 0 3px 6px rgba(255,255,255,0.9), inset 0 -3px 6px rgba(200,167,102,0.25), 0 0 20px rgba(200,167,102,0.25)';
                     }}
                   >
                     {/* 3D Top highlight */}
-                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
-                    {/* Hover glow */}
-                    <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.6)' }} />
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                    {/* Bottom shadow for depth */}
+                    <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-full bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
+                    {/* Hover glow ring */}
+                    <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 30px rgba(200,167,102,0.6), inset 0 0 15px rgba(200,167,102,0.15)' }} />
                     <ChevronLeft className="w-6 h-6 md:w-7 md:h-7 text-gold relative z-10 group-hover:scale-110 transition-transform" />
                   </button>
                   <button
                     onClick={goToNext}
-                    className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group overflow-hidden active:scale-90 active:shadow-[0_0_20px_rgba(200,167,102,0.6)]"
+                    className="relative w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-200 group overflow-hidden hover:scale-110 active:scale-90"
                     style={{
                       background: 'linear-gradient(145deg, #FDFBF7, #E8DCC8)',
                       border: '2px solid rgba(200, 167, 102, 0.7)',
                       boxShadow: `
-                        0 4px 12px rgba(0,0,0,0.3),
-                        0 2px 4px rgba(0,0,0,0.2),
-                        inset 0 2px 4px rgba(255,255,255,0.9),
-                        inset 0 -2px 4px rgba(200,167,102,0.2),
-                        0 0 15px rgba(200,167,102,0.3)
+                        0 6px 16px rgba(0,0,0,0.35),
+                        0 3px 6px rgba(0,0,0,0.25),
+                        inset 0 3px 6px rgba(255,255,255,0.9),
+                        inset 0 -3px 6px rgba(200,167,102,0.25),
+                        0 0 20px rgba(200,167,102,0.25)
                       `,
+                      transform: 'translateY(0)',
+                    }}
+                    onMouseDown={(e) => {
+                      const btn = e.currentTarget;
+                      btn.style.transform = 'translateY(3px)';
+                      btn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5), inset 0 -1px 3px rgba(200,167,102,0.3), 0 0 30px rgba(200,167,102,0.7)';
+                    }}
+                    onMouseUp={(e) => {
+                      const btn = e.currentTarget;
+                      btn.style.transform = 'translateY(0)';
+                      btn.style.boxShadow = '0 6px 16px rgba(0,0,0,0.35), 0 3px 6px rgba(0,0,0,0.25), inset 0 3px 6px rgba(255,255,255,0.9), inset 0 -3px 6px rgba(200,167,102,0.25), 0 0 20px rgba(200,167,102,0.25)';
+                    }}
+                    onMouseLeave={(e) => {
+                      const btn = e.currentTarget;
+                      btn.style.transform = 'translateY(0)';
+                      btn.style.boxShadow = '0 6px 16px rgba(0,0,0,0.35), 0 3px 6px rgba(0,0,0,0.25), inset 0 3px 6px rgba(255,255,255,0.9), inset 0 -3px 6px rgba(200,167,102,0.25), 0 0 20px rgba(200,167,102,0.25)';
                     }}
                   >
                     {/* 3D Top highlight */}
-                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/70 to-transparent pointer-events-none" />
-                    {/* Hover glow */}
-                    <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 25px rgba(200,167,102,0.6)' }} />
+                    <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                    {/* Bottom shadow for depth */}
+                    <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-full bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
+                    {/* Hover glow ring */}
+                    <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 30px rgba(200,167,102,0.6), inset 0 0 15px rgba(200,167,102,0.15)' }} />
                     <ChevronRight className="w-6 h-6 md:w-7 md:h-7 text-gold relative z-10 group-hover:scale-110 transition-transform" />
                   </button>
                 </div>
