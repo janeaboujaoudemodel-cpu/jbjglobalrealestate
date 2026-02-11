@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -41,6 +42,7 @@ interface AIChatWidgetProps {
 
 const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttentionPulse = false }: AIChatWidgetProps) => {
   const { isRTL } = useLanguage();
+  const { user } = useAuth();
   
   // Get a consistent agent for this session
   const currentAgent = useMemo(() => getRandomAgent(), []);
@@ -58,6 +60,47 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
   const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [selectedShortcut, setSelectedShortcut] = useState<ShortcutType | null>(null);
+  const [detectedFullName, setDetectedFullName] = useState<string | null>(null);
+
+  // Fetch logged-in user's display name
+  useEffect(() => {
+    if (!user) {
+      setDetectedFullName(null);
+      return;
+    }
+
+    const fetchUserName = async () => {
+      try {
+        // Try crm_users_profile first
+        const { data: profile } = await supabase
+          .from('crm_users_profile')
+          .select('display_name')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (profile?.display_name) {
+          setDetectedFullName(profile.display_name);
+          return;
+        }
+
+        // Fallback to user metadata
+        const metaName = user.user_metadata?.full_name || user.user_metadata?.name;
+        if (metaName) {
+          setDetectedFullName(metaName);
+          return;
+        }
+
+        // Last fallback: email prefix
+        if (user.email) {
+          setDetectedFullName(user.email.split('@')[0]);
+        }
+      } catch (err) {
+        console.warn('Could not fetch user display name:', err);
+      }
+    };
+
+    fetchUserName();
+  }, [user]);
 
   // Restore session from sessionStorage on mount
   useEffect(() => {
@@ -682,7 +725,8 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
           <ChatConversationalCollect
             onComplete={handleConversationalComplete}
             onPreferForm={handlePreferForm}
-            initialEmail={userInfo.email}
+            initialEmail={userInfo.email || (user?.email ?? '')}
+            detectedFullName={detectedFullName ?? undefined}
           />
         )}
 

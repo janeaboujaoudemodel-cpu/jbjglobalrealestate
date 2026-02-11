@@ -10,20 +10,22 @@ interface ChatConversationalCollectProps {
   onComplete: (info: { firstName: string; lastName: string; email: string; phone: string }) => void;
   onPreferForm: () => void;
   initialEmail?: string;
+  detectedFullName?: string;
 }
 
-type CollectStep = 'name' | 'email' | 'phone' | 'complete';
+type CollectStep = 'confirm_name' | 'name' | 'email' | 'phone' | 'complete';
 
-const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = '' }: ChatConversationalCollectProps) => {
+const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = '', detectedFullName }: ChatConversationalCollectProps) => {
   const { t } = useLanguage();
   const agent = getRandomAgent();
   
-  const [collectStep, setCollectStep] = useState<CollectStep>('name');
-  const [fullName, setFullName] = useState('');
+  const [collectStep, setCollectStep] = useState<CollectStep>(detectedFullName ? 'confirm_name' : 'name');
+  const [fullName, setFullName] = useState(detectedFullName || '');
   const [email, setEmail] = useState(initialEmail);
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [nameConfirmed, setNameConfirmed] = useState(false);
 
   // Simulate agent typing - fast for responsiveness
   const simulateTyping = (callback: () => void, delay = 400) => {
@@ -34,12 +36,25 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
     }, delay);
   };
 
+  const handleConfirmName = () => {
+    setNameConfirmed(true);
+    setError('');
+    simulateTyping(() => {
+      if (initialEmail) {
+        setCollectStep('phone');
+      } else {
+        setCollectStep('email');
+      }
+    }, 800);
+  };
+
   const handleNameSubmit = () => {
     if (!fullName.trim() || fullName.trim().split(' ').length < 1) {
       setError('Please enter your full name');
       return;
     }
     setError('');
+    setNameConfirmed(true);
     simulateTyping(() => {
       if (initialEmail) {
         setCollectStep('phone');
@@ -142,11 +157,26 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* Chat Messages Area */}
       <div className="flex-1 p-4 overflow-y-auto">
-        {/* Initial greeting */}
-        {renderAgentMessage(`Hi there! 👋 I'm ${agent.name}, and I'll be helping you today. To get started, may I know your full name?`, 'greeting')}
+        {/* Initial greeting - personalized for logged-in users */}
+        {detectedFullName ? (
+          renderAgentMessage(
+            `Hi, ${detectedFullName}! 👋 I can see you're already a member. Could you please confirm that your full name is **${detectedFullName}**? If it's not correct, please type your correct full name below.`,
+            'greeting'
+          )
+        ) : (
+          renderAgentMessage(`Hi there! 👋 I'm ${agent.name}, and I'll be helping you today. To get started, may I know your full name?`, 'greeting')
+        )}
         
-        {/* Name step */}
-        {collectStep !== 'name' && fullName && (
+        {/* Confirmed name message */}
+        {detectedFullName && nameConfirmed && collectStep !== 'confirm_name' && (
+          <>
+            {renderUserMessage(fullName === detectedFullName ? `Yes, that's correct ✓` : fullName, 'user-name')}
+            {renderAgentMessage(`Great, ${fullName.split(' ')[0]}! ${initialEmail ? "What is your phone number? (Please include country code, e.g., +971...)" : "What is the best email address to reach you at?"}`, 'ask-email')}
+          </>
+        )}
+
+        {/* Name step (non-logged-in flow) */}
+        {!detectedFullName && collectStep !== 'name' && fullName && (
           <>
             {renderUserMessage(fullName, 'user-name')}
             {renderAgentMessage(`Nice to meet you, ${fullName.split(' ')[0]}! ${initialEmail ? "What is your phone number?" : "What is the best email address to reach you at?"}`, 'ask-email')}
@@ -176,6 +206,36 @@ const ChatConversationalCollect = ({ onComplete, onPreferForm, initialEmail = ''
 
       {/* Input Area */}
       <div className="p-4 border-t border-gold/30 bg-white/50">
+        {collectStep === 'confirm_name' && detectedFullName && (
+          <div className="space-y-3">
+            <Button
+              onClick={handleConfirmName}
+              className="w-full bg-gold hover:bg-gold-light hover:shadow-[0_4px_15px_rgba(200,167,102,0.5)] active:bg-gold-dark text-black font-medium rounded-lg transition-all duration-200"
+            >
+              Yes, my name is {detectedFullName} ✓
+            </Button>
+            <div className="relative">
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
+              <Input
+                type="text"
+                value={fullName !== detectedFullName ? fullName : ''}
+                onChange={(e) => setFullName(e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e, handleNameSubmit)}
+                placeholder="Or type your correct full name..."
+                className="pl-10 pr-12"
+              />
+              <Button
+                size="icon"
+                onClick={handleNameSubmit}
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light hover:shadow-[0_4px_15px_rgba(200,167,102,0.5)] active:bg-gold-dark rounded-lg transition-all duration-200"
+              >
+                <Send className="w-4 h-4 text-black" />
+              </Button>
+            </div>
+            {error && <p className="text-red-500 text-xs">{error}</p>}
+          </div>
+        )}
+
         {collectStep === 'name' && (
           <div className="space-y-3">
             <div className="relative">
