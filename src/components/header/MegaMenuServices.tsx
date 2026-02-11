@@ -41,7 +41,7 @@ const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>
               image={servicesHero}
               kicker="SERVICES"
               title="Representation & Services"
-              description="Mortgages, Golden Visa, conveyancing, management and more"
+              description="Mortgages, Golden Visa advisory, conveyancing, management and more"
               cta="View All Services"
               className="w-full"
             />

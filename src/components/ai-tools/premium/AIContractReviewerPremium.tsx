@@ -78,6 +78,7 @@ const AIContractReviewerPremium = () => {
       accentColor="red"
       gradientFrom="red"
       badge="Legal Analysis"
+      showFinancialDisclaimer
     >
       {/* Legal Disclaimer - Always Visible */}
       <Card className="bg-red-500/10 border-red-500/30 mb-6">
