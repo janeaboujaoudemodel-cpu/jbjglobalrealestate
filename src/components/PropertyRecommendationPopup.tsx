@@ -148,21 +148,21 @@ const PropertyRecommendationPopup = () => {
           exit={{ opacity: 0, y: 80, scale: 0.95 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
         >
-          <div className="bg-gradient-to-br from-[#1a1a1a] via-[#0d0d0d] to-[#1a1a1a] border border-gold/50 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.15)] overflow-hidden">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/50 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.15)] overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gold/30">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-gold" />
-                <span className="text-white text-sm font-semibold">Recommended for You</span>
+                <span className="text-black text-sm font-semibold">Recommended for You</span>
               </div>
-              <button onClick={() => setIsOpen(false)} className="text-zinc-500 hover:text-white transition-colors">
+              <button onClick={() => setIsOpen(false)} className="text-zinc-400 hover:text-black transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {topArea && (
               <div className="px-4 pt-3">
-                <p className="text-zinc-400 text-xs">
+                <p className="text-zinc-600 text-xs">
                   Based on your interest in <span className="text-gold font-medium capitalize">{topArea}</span>
                 </p>
               </div>
@@ -174,7 +174,7 @@ const PropertyRecommendationPopup = () => {
                 <button
                   key={project.id}
                   onClick={() => handleExplore(project.slug)}
-                  className="w-full flex items-center gap-3 p-2 rounded-xl bg-zinc-800/60 hover:bg-zinc-700/80 border border-gold/20 hover:border-gold/50 transition-all group text-left"
+                  className="w-full flex items-center gap-3 p-2 rounded-xl bg-white/70 hover:bg-white border border-gold/20 hover:border-gold/50 transition-all group text-left"
                 >
                   {project.cover_image_url ? (
                     <img
@@ -183,21 +183,21 @@ const PropertyRecommendationPopup = () => {
                       className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
                     />
                   ) : (
-                    <div className="w-14 h-14 rounded-lg bg-zinc-700 flex items-center justify-center flex-shrink-0">
-                      <Building2 className="w-5 h-5 text-zinc-500" />
+                    <div className="w-14 h-14 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
+                      <Building2 className="w-5 h-5 text-gold/60" />
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="text-white text-sm font-medium truncate group-hover:text-gold transition-colors">{project.name}</p>
+                    <p className="text-black text-sm font-medium truncate group-hover:text-gold transition-colors">{project.name}</p>
                     {project.area_name && (
-                      <p className="text-zinc-400 text-xs flex items-center gap-1 mt-0.5">
+                      <p className="text-zinc-500 text-xs flex items-center gap-1 mt-0.5">
                         <MapPin className="w-3 h-3" />
                         {project.area_name}
                       </p>
                     )}
                     <p className="text-gold text-xs font-semibold mt-0.5">{formatPrice(project.price_from)}</p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-gold transition-colors flex-shrink-0" />
+                  <ArrowRight className="w-4 h-4 text-zinc-400 group-hover:text-gold transition-colors flex-shrink-0" />
                 </button>
               ))}
             </div>
