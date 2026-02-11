@@ -339,7 +339,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               )}
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 shadow-inner">
               <div>
                 <p className="text-xs font-semibold text-gold/80 mb-2 uppercase tracking-wider">Quick Access</p>
                 <div className="grid grid-cols-3 gap-2">
