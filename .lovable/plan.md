@@ -1,89 +1,108 @@
 
+# Fix Plan: Complete Provident Enrichment with Full Firecrawl Extraction
 
-# Fix Plan: 6 Critical Tasks from Listing Admin & Homepage
+## Root Cause
 
-## Task 1: Enrichment Checklist Completeness (Titania Test)
+The current "Provident Enrichment" uses `pagedata-detail.ts` which calls Provident's `page-data.json` endpoint. For many projects (including Titania), this endpoint returns `"No record found"` -- meaning zero data is available from the free JSON source. That's why you see 0 images, 0 documents, 0 USPs, 0 FAQs, etc.
 
-The Before/After enrichment cards currently show 8 metrics. The user wants ALL sections visible on Provident listings to be tracked in the checklist. Missing from the current UI:
+The system already has `full-project-extract` which does proper Firecrawl scraping and extracts ALL sections (USPs, amenities, floor plans, payment plans, FAQs, location distances, brochure, description, images) via markdown parsing. But it's only wired to the import queue, not to published project enrichment.
 
-**Current checklist (8 items):**
-- Images, Documents, Amenities, FAQs, Floor Plans, Unit Types, Description, Payment Plan
+## Solution: Wire Full Firecrawl Extraction into the Test Enrichment Flow
 
-**Missing from checklist (need to add):**
-- USPs (usp_bullets)
-- Location Distances (location_distances)
-- Brochure (specific document type check)
-- Highlights
-- Service Charge
-- ROI Estimate
-- Video
+### Step 1: Upgrade `enrich-project-test` Edge Function
 
-**Changes:**
-- `src/components/listing-admin/ReellyImportPanel.tsx` (lines 1004-1015): Expand the Before/After card grid from 8 items to 15 items, adding rows for USPs, Location Distances, Brochure, Video, Highlights, Service Charge, ROI. Show checkmark/cross for each.
+Add a third data source: when both Reelly API and Provident page-data return empty, fall back to Firecrawl scraping of the Provident page (using the same extraction logic from `full-project-extract`).
 
----
+**File:** `supabase/functions/enrich-project-test/index.ts`
 
-## Task 2: Reelly Source Link Not Working
+Changes:
+- Import or inline the `extractFromMarkdown()` function from `full-project-extract`
+- After Reelly + page-data attempts, if key fields are still empty (amenities, USPs, FAQs, description, images, documents), trigger a Firecrawl scrape of `https://providentestate.com/new-projects/{slug}/`
+- Map the Firecrawl-extracted data into the enrichment accumulator (USPs, location distances, amenities, FAQs, floor plans, payment breakdown, images, documents/brochure)
+- Return all extracted data in the Before/After response
 
-The enrichment test results show a "Reelly Source" link (line 986) that points to the raw API URL (`https://api-reelly.up.railway.app/api/v2/clients/projects/{id}`). This is an API endpoint, not a user-facing page -- clicking it fails or shows raw JSON.
+### Step 2: Create Shared Extraction Module
 
-**Fix:**
-- Remove the external link or change it to open the project's own detail page (`/project/{slug}`) in a new tab instead.
+Extract the markdown parsing logic from `full-project-extract` into a shared module to avoid code duplication.
 
----
+**New file:** `supabase/functions/_shared/provident/extract-from-markdown.ts`
 
-## Task 3: Access Denied Flash on Page Reload
+This module will contain:
+- `extractFromMarkdown(markdown, html, links)` -- the deterministic regex parser
+- Extracts: name, description, USPs (headline + bullets + image), location (headline + description + distances + image), amenities, floor plan types, FAQs, payment breakdown, images (CloudFront URLs), documents (PDFs categorized as brochure/payment/floor)
 
-When the ListingAdmin page reloads, the auth check is async (`checkingAdmin || ownerLoading`). The loading spinner appears briefly, but if auth takes longer, the "Access Denied" card flashes before resolving.
+### Step 3: Update Before/After Checklist in UI
 
-**Fix:**
-- Extend the loading state duration: keep showing the spinner for at least 2-3 seconds before deciding to show "Access Denied"
-- Cache the owner verification result in sessionStorage so re-checks resolve instantly on reload
+The checklist already has 14 items (from the previous fix). Ensure the "after" snapshot correctly reflects Firecrawl-extracted data for all fields.
 
----
+**File:** `src/components/listing-admin/ReellyImportPanel.tsx`
 
-## Task 4: Enriched Projects Must Be Clickable
+Changes:
+- Add a "Source: Firecrawl" indicator when Firecrawl was used as fallback
+- Show gallery preview thumbnails (first 4 images) in the After card
+- Show document names (brochure, payment plan, floor plans) in the After card so the user can verify
 
-In the enrichment Before/After cards (lines 994-1018), the project name and cover image are not clickable. The user wants to click to view the live project page and compare.
+### Step 4: Single Test Listing Workflow
 
-**Fix:**
-- Wrap the project name in a Link to `/project/{slug}` (opens in new tab)
-- Add a "View Live" button below the Apply button that opens the project detail page
-- Add a "View on Site" link next to the project name
+The user wants to test ONE project, see the full Before/After, click through to the live page, confirm correctness, then approve bulk.
 
----
+The current test flow already supports this (enter slug, click test, see Before/After, click Apply). The fix is ensuring the data is actually populated by using Firecrawl when page-data returns empty.
 
-## Task 5: Persist Enrichment State Across Reloads (Stop Wasting Firecrawl Credits)
+Flow:
+1. User enters project slug (e.g., "titania-binghatti" or auto-detected)
+2. System tries: Reelly API -> Provident page-data -> Firecrawl scrape (fallback)
+3. Before/After cards show all 14 metrics with checkmarks
+4. User clicks "View Live" to inspect the current page
+5. User clicks "Apply Enrichment" to write data
+6. User clicks "View Live" again to confirm changes
+7. Once satisfied, user runs bulk extraction
 
-All enrichment/extraction state is stored in React useState, so every page reload loses progress and may re-trigger Firecrawl requests.
+### Step 5: Bulk Extraction Uses Same Logic
 
-**Fix:**
-- Persist `enrichTestResult`, `enrichTestSlug`, `providentResult`, `bulkEnrichResult`, `fullProvidentProgress` to `sessionStorage`
-- On component mount, restore persisted state so the user sees previous results without re-scraping
-- Clear persisted state only when user explicitly starts a new operation
-
----
-
-## Task 6: Developer Marquee/Strap Restoration
-
-The user says the developer strap on the homepage was changed to look like "developer cards" instead of a simple logo strip. Looking at the current code, the logos are in `w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-xl` boxes with 3px gold borders and gold box shadows, making them look like cards.
-
-**Fix (restore to simpler strap style):**
-- Remove the rounded-xl box styling, gold border, and box-shadow from individual logos
-- Make logos display as simple flat images in a continuous scrolling strip without card-like containers
-- Keep the bg-white container for logo visibility but make it borderless and shadowless (or just a subtle separator)
-- Keep the marquee animation behavior
+Update the batch mode of `enrich-project-test` to use the same Firecrawl fallback, with rate limiting (1 concurrent, 3s throttle between items).
 
 ---
 
-## Technical Implementation Summary
+## Technical Details
 
-| # | File(s) | Change |
-|---|---------|--------|
-| 1 | `ReellyImportPanel.tsx` lines 1004-1015 | Expand checklist to 15 items |
-| 2 | `ReellyImportPanel.tsx` line 986 | Change Reelly link to project page link |
-| 3 | `ListingAdmin.tsx` + `AuthContext` | Cache owner verification, extend loading grace period |
-| 4 | `ReellyImportPanel.tsx` lines 978-1043 | Add clickable project links in Before/After cards |
-| 5 | `ReellyImportPanel.tsx` multiple state vars | Persist enrichment state to sessionStorage |
-| 6 | `DeveloperPartnersMarquee.tsx` lines 80-103 | Remove card-like styling, restore flat logo strap |
+### Firecrawl Scrape Configuration (for Provident pages)
+```
+url: https://providentestate.com/new-projects/{slug}/
+formats: ["markdown", "links"]
+waitFor: 8000
+timeout: 60000
+onlyMainContent: false
+```
 
+### Extraction Targets (from markdown parsing)
+| Section | Regex Pattern | DB Field |
+|---------|--------------|----------|
+| Description | `/About the project\s*\n+(.+)/i` | `description` |
+| USP Headline | `/Unique Selling Points\s*\n+###?\s*(.+)/i` | `usp_headline` |
+| USP Bullets | Bullet list after USP headline | `usp_bullets` |
+| USP Image | CloudFront URL near USP section | `usp_image_url` |
+| Location Headline | `/Location\s*\n+###?\s*(.+)/i` | `location_headline` |
+| Location Description | Text lines in location section | `location_description` |
+| Location Distances | `/\d+\s*Minutes?\s*[--]\s*(.+)/i` | `location_distances` |
+| Location Image | CloudFront URL near location section | `location_image_url` |
+| Amenities | `/## Amenities\s*\n+(.+)/i` | `amenities` |
+| Floor Plans | `/## Floorplans\s*\n+(.+)/i` | `floor_plan_types` |
+| FAQs | Q&A pairs from "Useful Information" | `faqs` |
+| Payment Plan | `/Payment Plan\s*\n*(\d+\/\d+)/i` | `payment_plan` |
+| Payment Breakdown | Down/Construction/Completion percentages | `payment_breakdown` |
+| Images | CloudFront image URLs (filtered, high-res) | `project_images` table |
+| Brochure PDF | PDF URL containing "brochure" | `project_documents` table |
+| Payment Plan PDF | PDF URL containing "payment" | `project_documents` table |
+| Floor Plan PDFs | PDF URLs containing "floor" | `project_documents` table |
+
+### Rate Limiting for Bulk
+- 1 Firecrawl request per project
+- 3-second delay between projects
+- Stop on 402 (credit exhaustion)
+- Skip projects that already have all fields populated
+
+### Files Modified
+1. **`supabase/functions/_shared/provident/extract-from-markdown.ts`** -- NEW shared module
+2. **`supabase/functions/enrich-project-test/index.ts`** -- Add Firecrawl fallback source
+3. **`supabase/functions/full-project-extract/index.ts`** -- Import shared module (dedup)
+4. **`src/components/listing-admin/ReellyImportPanel.tsx`** -- Show source indicator and document details in After card
