@@ -71,22 +71,23 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
           Projects in {areaName}
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, i) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              className="h-full rounded-2xl p-2"
-              style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}
-            >
-              <div className="h-full [&>div]:h-full [&>div]:flex [&>div]:flex-col">
-                <ProjectCard project={project} />
-              </div>
-            </motion.div>
-          ))}
+        <div className="rounded-2xl p-6" style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map((project, i) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="h-full"
+              >
+                <div className="h-full [&>div]:h-full [&>div]:flex [&>div]:flex-col">
+                  <ProjectCard project={project} />
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         {projects.length > 0 && (
