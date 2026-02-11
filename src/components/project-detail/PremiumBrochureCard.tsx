@@ -2,7 +2,7 @@ import * as React from "react";
 import { Download, Lock, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+import jbjFullLogoDarkBg from "@/assets/jbj-fulllogo-dark-bg.jpg";
 
 const BROCHURE_BG_URL = "https://imgengine.khaleejtimes.com/khaleejtimes-english/2026-02-04/lvnx1x0g/Dubai.jpg?width=1200&height=800&format=auto";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
@@ -148,7 +148,7 @@ const PremiumBrochureCard = ({
             <div className="absolute top-4 left-10 flex items-center gap-3">
               <div className="w-14 h-14 rounded-full border-2 border-gold/70 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-hidden p-1.5">
                 <img 
-                  src={jbjMonogramNobuffer} 
+                  src={jbjFullLogoDarkBg} 
                   alt="JBJ" 
                   className="w-full h-full object-contain"
                 />
