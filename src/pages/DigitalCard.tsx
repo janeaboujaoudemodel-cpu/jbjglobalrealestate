@@ -399,8 +399,8 @@ const DigitalCard = () => {
                 <p className="text-lg font-bold text-black">{CONTACT_INFO.phoneCompany}</p>
               </div>
 
-              {/* Company Action Buttons */}
-              <div className="flex flex-wrap gap-2 justify-center mb-3">
+              {/* Company Action Buttons - All 3 on one line on desktop */}
+              <div className="flex flex-wrap sm:flex-nowrap gap-2 justify-center mb-3">
                 {/* Call Company */}
                 <a
                   href={`tel:${CONTACT_INFO.phoneCompanyClean}`}
@@ -420,20 +420,20 @@ const DigitalCard = () => {
                   <MessageCircle className="w-4 h-4 text-[#25D366]" />
                   <span className="text-sm">WhatsApp</span>
                 </button>
-              </div>
 
-              {/* Save Company Contact */}
-              <button
-                onClick={downloadCompanyVCard}
-                className="inline-flex items-center justify-center mx-auto gap-2 py-3 px-4 rounded-xl text-black font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
-                style={{ 
-                  background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)',
-                  border: `2px solid ${GOLD.primary}50`,
-                }}
-              >
-                <Download className="w-4 h-4" />
-                <span className="text-sm">Save Company Contact</span>
-              </button>
+                {/* Save Company Contact */}
+                <button
+                  onClick={downloadCompanyVCard}
+                  className="flex items-center gap-2 py-3 px-5 rounded-xl text-black font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                  style={{ 
+                    background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)',
+                    border: `2px solid ${GOLD.primary}50`,
+                  }}
+                >
+                  <Download className="w-4 h-4" />
+                  <span className="text-sm">Save Contact</span>
+                </button>
+              </div>
             </div>
 
             {/* PERSONAL CONTACT SECTION */}
@@ -450,8 +450,8 @@ const DigitalCard = () => {
                 <p className="text-lg font-bold text-black">{CONTACT_INFO.phonePersonal}</p>
               </div>
 
-              {/* Personal Action Buttons */}
-              <div className="flex flex-wrap gap-2 justify-center mb-3">
+              {/* Personal Action Buttons - All 3 on one line on desktop */}
+              <div className="flex flex-wrap sm:flex-nowrap gap-2 justify-center mb-3">
                 {/* Call Personal */}
                 <a
                   href={`tel:${CONTACT_INFO.phonePersonalClean}`}
@@ -471,20 +471,20 @@ const DigitalCard = () => {
                   <MessageCircle className="w-4 h-4 text-[#25D366]" />
                   <span className="text-sm">WhatsApp</span>
                 </button>
-              </div>
 
-              {/* Save Personal Contact */}
-              <button
-                onClick={downloadPersonalVCard}
-                className="inline-flex items-center justify-center mx-auto gap-2 py-3 px-4 rounded-xl text-black font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
-                style={{ 
-                  background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)',
-                  border: `2px solid ${GOLD.primary}50`,
-                }}
-              >
-                <Download className="w-4 h-4" />
-                <span className="text-sm">Save Personal Contact</span>
-              </button>
+                {/* Save Personal Contact */}
+                <button
+                  onClick={downloadPersonalVCard}
+                  className="flex items-center gap-2 py-3 px-5 rounded-xl text-black font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                  style={{ 
+                    background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)',
+                    border: `2px solid ${GOLD.primary}50`,
+                  }}
+                >
+                  <Download className="w-4 h-4" />
+                  <span className="text-sm">Save Contact</span>
+                </button>
+              </div>
             </div>
 
             {/* Action Cards Row: Send Email | Share Card | Website */}
@@ -546,93 +546,108 @@ const DigitalCard = () => {
               </a>
             </div>
 
-            {/* Social Links Section */}
+            {/* Social Links Section - Two Column Layout */}
             <div 
-              className="pt-4 mt-4"
+              className="pt-6 mt-4"
               style={{ borderTop: `1px solid ${GOLD.primary}33` }}
             >
-              <p className="text-xs text-black/50 text-center mb-3 uppercase tracking-wider font-medium">Connect With Us</p>
+              <h3 className="text-lg font-bold text-black text-center mb-5 uppercase tracking-wide">
+                Connect With Us
+              </h3>
               
-              {/* Company Socials */}
-              <p className="text-xs text-black/40 text-center mb-2">JBJ Global Real Estate</p>
-              <div className="flex justify-center gap-3 mb-4">
-                <a
-                  href={CONTACT_INFO.linkedinCompany}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
-                  style={{ border: `2px solid ${GOLD.primary}50` }}
-                >
-                  <FaLinkedinIn className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
-                </a>
-                <a
-                  href={CONTACT_INFO.instagramCompany}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
-                  style={{ border: `2px solid ${GOLD.primary}50` }}
-                >
-                  <FaInstagram className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
-                </a>
-                <a
-                  href={CONTACT_INFO.tiktokCompany}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
-                  style={{ border: `2px solid ${GOLD.primary}50` }}
-                >
-                  <FaTiktok className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
-                </a>
-                <a
-                  href={CONTACT_INFO.facebookCompany}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
-                  style={{ border: `2px solid ${GOLD.primary}50` }}
-                >
-                  <FaFacebookF className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
-                </a>
-              </div>
+              {/* Two-column layout: Company | Divider | Founder */}
+              <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] gap-4 sm:gap-0 items-start">
+                {/* Left: Company */}
+                <div className="flex flex-col items-center">
+                  <p className="text-xs font-semibold text-black/60 mb-3 uppercase tracking-wider">JBJ Global Real Estate</p>
+                  <div className="flex justify-center gap-3">
+                    <a
+                      href={CONTACT_INFO.linkedinCompany}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      style={{ border: `2px solid ${GOLD.primary}50` }}
+                    >
+                      <FaLinkedinIn className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
+                    </a>
+                    <a
+                      href={CONTACT_INFO.instagramCompany}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      style={{ border: `2px solid ${GOLD.primary}50` }}
+                    >
+                      <FaInstagram className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
+                    </a>
+                    <a
+                      href={CONTACT_INFO.tiktokCompany}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      style={{ border: `2px solid ${GOLD.primary}50` }}
+                    >
+                      <FaTiktok className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
+                    </a>
+                    <a
+                      href={CONTACT_INFO.facebookCompany}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      style={{ border: `2px solid ${GOLD.primary}50` }}
+                    >
+                      <FaFacebookF className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
+                    </a>
+                  </div>
+                </div>
 
-              {/* Personal Socials - Same icons as company: LinkedIn, Instagram, Facebook, TikTok */}
-              <p className="text-xs text-black/40 text-center mb-2">Jane Bou Jaoude</p>
-              <div className="flex justify-center gap-3">
-                <a
-                  href={CONTACT_INFO.linkedinPersonal}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
-                  style={{ border: `2px solid ${GOLD.primary}50` }}
-                >
-                  <FaLinkedinIn className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
-                </a>
-                <a
-                  href={CONTACT_INFO.instagramPersonal}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
-                  style={{ border: `2px solid ${GOLD.primary}50` }}
-                >
-                  <FaInstagram className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
-                </a>
-                <a
-                  href={CONTACT_INFO.facebookPersonal}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
-                  style={{ border: `2px solid ${GOLD.primary}50` }}
-                >
-                  <FaFacebookF className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
-                </a>
-                <a
-                  href={CONTACT_INFO.tiktokPersonal}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
-                  style={{ border: `2px solid ${GOLD.primary}50` }}
-                >
-                  <FaTiktok className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
-                </a>
+                {/* Vertical Divider (desktop) / Horizontal Divider (mobile) */}
+                <div className="hidden sm:flex justify-center px-4">
+                  <div className="w-px h-full min-h-[60px]" style={{ background: `${GOLD.primary}40` }} />
+                </div>
+                <div className="sm:hidden mx-auto w-24 h-px" style={{ background: `${GOLD.primary}40` }} />
+
+                {/* Right: Founder */}
+                <div className="flex flex-col items-center">
+                  <p className="text-xs font-semibold text-black/60 mb-3 uppercase tracking-wider">Connect with the Founder</p>
+                  <div className="flex justify-center gap-3">
+                    <a
+                      href={CONTACT_INFO.linkedinPersonal}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      style={{ border: `2px solid ${GOLD.primary}50` }}
+                    >
+                      <FaLinkedinIn className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
+                    </a>
+                    <a
+                      href={CONTACT_INFO.instagramPersonal}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      style={{ border: `2px solid ${GOLD.primary}50` }}
+                    >
+                      <FaInstagram className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
+                    </a>
+                    <a
+                      href={CONTACT_INFO.facebookPersonal}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      style={{ border: `2px solid ${GOLD.primary}50` }}
+                    >
+                      <FaFacebookF className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
+                    </a>
+                    <a
+                      href={CONTACT_INFO.tiktokPersonal}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      style={{ border: `2px solid ${GOLD.primary}50` }}
+                    >
+                      <FaTiktok className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
 
