@@ -1,46 +1,60 @@
 
 
-# Fix Mega Menu: Restore Title Dividers + Remove Row Gap Line
+# Premium Mega Menu Cards + Footer Navigation Overhaul
 
-## Problem
-Two issues in the Insights mega menu dropdown:
-1. The gold divider under each card title (e.g., "NEWS & UPDATES", "BUSINESS SUITES") was incorrectly removed -- user wants these kept
-2. A visible horizontal line cuts across all 4 cards in the second row -- this is caused by the grid gap between rows exposing the darker shell background behind the cards
+## Overview
+Two areas need premium refinement: (1) the Insights mega menu cards need proper borders, spacing, and visual separation, and (2) the footer navigation card grid needs a premium upgrade.
 
-## Changes
+## Part 1: Insights Mega Menu Card Fixes
 
-### File: `src/components/header/mega-menu-primitives.tsx`
+### Problem
+- Cards have NO borders (removed in a previous fix) making them look flat and blended
+- Row 1 and Row 2 cards touch each other (gap-y-0) with no visual separation
+- The "Legal" card appears to merge with the "Services" card above it
 
-**Change 1: Restore the gold divider under card titles in MegaMenuSectionTitle (line 201)**
+### Fix (mega-menu-primitives.tsx)
 
-Bring back the `border-b border-gold/30 pb-2 mb-5` that was previously removed:
+**Restore card borders with proper styling:**
+- Add back `border border-gold/30` to MegaMenuCard (not the thick `border-gold/50` that caused the "cutting line" issue -- using a softer opacity)
+- Add subtle inner shadow for depth: `shadow-sm`
 
-```
-// From:
-"flex items-center justify-center mb-3 min-h-[36px]"
+**Fix row spacing (MegaMenuInsights.tsx):**
+- Change `gap-x-1.5 gap-y-0` to `gap-1.5` (restore small uniform gap)
+- The "cutting line" issue was caused by the old thick `border-gold/50` borders touching each other, NOT the gap itself. With softer `border-gold/30` borders, a small gap looks clean
 
-// To:
-"flex items-center justify-center mb-5 pb-2 border-b border-gold/30 min-h-[36px]"
-```
+### Files Changed
+- `src/components/header/mega-menu-primitives.tsx` -- MegaMenuCard: add `border border-gold/30 shadow-sm`
+- `src/components/header/MegaMenuInsights.tsx` -- grid: change to `gap-1.5`
 
-**Change 2: Remove the horizontal gap line between card rows in MegaMenuInsights**
+---
 
-### File: `src/components/header/MegaMenuInsights.tsx` (line 135)
+## Part 2: Footer Navigation Cards Premium Upgrade
 
-Change the grid gap from uniform `gap-1.5` to only horizontal gap, eliminating the visible vertical line between rows:
+### Problem
+- Footer navigation cards (FooterCard component) look basic with thin borders and minimal styling
+- Need more premium presence with better padding, shadows, and visual hierarchy
 
-```
-// From:
-"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1.5"
+### Fix (Footer.tsx - FooterCard component)
 
-// To:
-"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-1.5 gap-y-0"
-```
+**Upgrade FooterCard styling:**
+- Increase border to `border-2 border-gold/40` for more visible premium framing
+- Add subtle shadow: `shadow-[0_4px_15px_rgba(200,167,102,0.1)]`
+- Increase padding: `px-6 py-5` (from `px-5 py-4`)
+- Add hover shadow enhancement: `hover:shadow-[0_6px_20px_rgba(200,167,102,0.2)]`
+- Make title font slightly larger and add gold shimmer effect
+- Increase link text size slightly for readability
+- Add rounded-xl consistency with hover:border-gold/60 transition
 
-This removes the vertical space between row 1 and row 2 so no shell background peeks through, while keeping horizontal spacing between cards intact.
+### Files Changed
+- `src/components/Footer.tsx` -- FooterCard component styling upgrade (lines 35-58)
 
-## Result
-- Gold dividers under each card title (NEWS & UPDATES, MARKET INTELLIGENCE, etc.) are restored
-- The big horizontal line cutting across the second row of cards is eliminated
-- All other mega menus (More, Areas, Developers, Projects) also get their title dividers back since they share MegaMenuSectionTitle
+---
+
+## Summary of Changes
+
+| File | Change |
+|------|--------|
+| `mega-menu-primitives.tsx` | Restore `border border-gold/30 shadow-sm` on MegaMenuCard |
+| `MegaMenuInsights.tsx` | Change grid gap back to `gap-1.5` |
+| `Footer.tsx` | Upgrade FooterCard with thicker borders, shadows, better padding and typography |
 
