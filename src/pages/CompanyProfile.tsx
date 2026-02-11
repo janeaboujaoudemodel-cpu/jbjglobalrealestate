@@ -239,7 +239,7 @@ const BookPreview3D = ({ onClick, isGenerating }: { onClick: () => void; isGener
             <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 text-center w-full px-4">
               <div className="h-px w-3/4 mx-auto bg-gradient-to-r from-transparent via-gold to-transparent mb-4" />
               <p className="text-gold text-lg font-semibold tracking-wider">COMPANY PROFILE</p>
-              <p className="text-white/60 text-xs mt-2">2025 Edition</p>
+              <p className="text-white/60 text-xs mt-2">{new Date().getFullYear()} Edition</p>
             </div>
             
             {/* Gold accent bottom */}
@@ -370,7 +370,7 @@ const CompanyProfile = () => {
         });
       }
       
-      page1.drawText("2025 Edition", {
+      page1.drawText(`${new Date().getFullYear()} Edition`, {
         x: pageWidth / 2 - 40,
         y: 60,
         size: 12,

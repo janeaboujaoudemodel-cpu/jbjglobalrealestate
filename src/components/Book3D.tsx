@@ -220,7 +220,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             {/* Edition badge */}
             <div className="px-3 md:px-4 py-1.5 border border-gold/40 rounded bg-black/60 backdrop-blur-sm">
               <span className="text-gold text-[7px] md:text-[9px] font-medium tracking-[0.15em] uppercase">
-                2025–2026 Edition
+                {new Date().getFullYear()}–{new Date().getFullYear() + 1} Edition
               </span>
             </div>
 
