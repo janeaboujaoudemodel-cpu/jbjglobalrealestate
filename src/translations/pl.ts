@@ -1,7 +1,7 @@
 // Polish translations
 export const pl: Record<string, string> = {
   // LOCKED FOUNDER IDENTITY
-  'founder.name': 'Jane Bou Jaoude',
+  'founder.name': 'Jane bou Jaoude',
   'founder.title': 'Założycielka i CEO',
   'founder.titleShort': 'Założycielka i CEO',
   'founder.company': 'JBJ Global Real Estate',
@@ -147,7 +147,7 @@ export const pl: Record<string, string> = {
   'founder.learnMore': 'Więcej o założycielce',
   'founder.pageTitle': 'Założycielka i CEO JBJ Global Real Estate',
   'founder.description1': 'JBJ Global Real Estate to biuro nieruchomości kierowane przez założycielkę, zbudowane na niezłomnych standardach, dyskrecji i długoterminowej wizji.',
-  'founder.description2': 'Jane Bou Jaoude, Założycielka i CEO JBJ Global Real Estate, kieruje się filozofią opartą na odpowiedzialności i dyskrecji, budując organizacje zaprojektowane na trwałość, a nie jedynie na ekspansję.',
+  'founder.description2': 'Jane bou Jaoude, Założycielka i CEO JBJ Global Real Estate, kieruje się filozofią opartą na odpowiedzialności i dyskrecji, budując organizacje zaprojektowane na trwałość, a nie jedynie na ekspansję.',
   'founder.vision': 'Wizja',
   'founder.mission': 'Misja',
   'founder.values': 'Wartości',
@@ -208,13 +208,13 @@ export const pl: Record<string, string> = {
   'report.exclusive': 'Ekskluzywne bezpłatne pobieranie',
   'report.title': 'JBJ Global Real Estate',
   'report.edition': 'Najnowsze wydanie 2026',
-  'report.description': 'Ekskluzywna książka edukacyjna autorstwa Jane Bou Jaoude, obejmująca rynek nieruchomości w ZEA z danymi rządowymi i ramami strukturalnymi.',
+  'report.description': 'Ekskluzywna książka edukacyjna autorstwa Jane bou Jaoude, obejmująca rynek nieruchomości w ZEA z danymi rządowymi i ramami strukturalnymi.',
   'report.download': 'Pobierz darmową książkę',
   'report.highlight1': 'Wskaźniki rynkowe i analiza transakcji',
   'report.highlight2': 'Ramy porównawcze deweloperów',
   'report.highlight3': 'Lista kontrolna due diligence inwestycji',
   'report.highlight4': 'Rankingi ROI według dzielnic',
-  'report.createdBy': 'Stworzone przez Jane Bou Jaoude, Założycielkę i CEO JBJ Global Real Estate',
+  'report.createdBy': 'Stworzone przez Jane bou Jaoude, Założycielkę i CEO JBJ Global Real Estate',
   'report.exclusiveFor': 'Ekskluzywnie dla JBJ Global Real Estate',
   'report.descriptor': 'Biuro nieruchomości | Dubaj, ZEA',
 

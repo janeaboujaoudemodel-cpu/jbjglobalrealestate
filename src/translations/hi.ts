@@ -1,7 +1,7 @@
 // Hindi translations (हिन्दी)
 export const hi = {
   // LOCKED FOUNDER IDENTITY (DO NOT MODIFY)
-  'founder.name': 'Jane Bou Jaoude',
+  'founder.name': 'Jane bou Jaoude',
   'founder.title': 'संस्थापक और सीईओ',
   'founder.titleShort': 'संस्थापक और सीईओ',
   'founder.company': 'JBJ Global Real Estate',
