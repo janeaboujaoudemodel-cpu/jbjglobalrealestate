@@ -132,7 +132,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     <MegaMenuShell ref={ref} noScroll>
         <div className="max-w-[1400px] mx-auto px-3 lg:px-5 py-1.5 lg:py-2">
           {/* 4 + 4 Grid Layout using shared MegaMenuCard */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-1.5 gap-y-0">
             {/* Row 1 */}
             <MegaMenuCard icon={Newspaper} title="News & Updates" compact>
               {newsLinks.map((item) => (
