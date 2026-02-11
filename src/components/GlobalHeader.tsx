@@ -1503,13 +1503,22 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 onPointerLeave={handleMegaMenuLeave}
               >
                 {activeMegaMenu === 'search' && (
-                  <div className="w-[620px] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-2xl p-4">
-                    <GlobalSearchModal
-                      isOpen={true}
-                      initialQuery=""
-                      onClose={closeMegaMenu}
-                      embedded
-                    />
+                  <div
+                    className="w-[620px] rounded-xl overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] relative"
+                    style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
+                  >
+                    {/* Gold border overlay */}
+                    <div className="absolute inset-0 rounded-xl border-2 border-gold/40 pointer-events-none z-10" />
+                    <div className="p-4">
+                      <GlobalSearchModal
+                        isOpen={true}
+                        initialQuery=""
+                        onClose={closeMegaMenu}
+                        embedded
+                      />
+                    </div>
+                    {/* Bottom gold accent bar */}
+                    <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
                   </div>
                 )}
                 {activeMegaMenu === 'language' && <MegaMenuLanguage onClose={closeMegaMenu} />}
