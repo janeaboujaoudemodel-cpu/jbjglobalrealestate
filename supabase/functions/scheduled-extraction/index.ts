@@ -99,16 +99,205 @@ function calculateSimilarity(str1: string, str2: string): number {
   return matches / Math.max(shorterWords.length, longerWords.length);
 }
 
-// Extract projects from scraped content using Lovable AI
-async function extractProjectsWithAI(markdown: string, sourceName: string): Promise<ExternalProject[]> {
-  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+// ── Direct API extraction for known REST API sources ──
+async function extractFromDubaiRestApi(baseUrl: string): Promise<ExternalProject[]> {
+  const projects: ExternalProject[] = [];
   
-  if (!LOVABLE_API_KEY) {
-    console.log("No Lovable API key - using regex extraction");
-    return extractProjectsWithRegex(markdown);
-  }
-
   try {
+    // Dubai REST / DLD API - fetch off-plan projects
+    const endpoints = [
+      `${baseUrl}/api/transactions/offplan`,
+      `${baseUrl}/api/projects`,
+    ];
+    
+    for (const endpoint of endpoints) {
+      try {
+        console.log(`Trying Dubai REST endpoint: ${endpoint}`);
+        const res = await fetch(endpoint, {
+          headers: { "Accept": "application/json" },
+          signal: AbortSignal.timeout(15000),
+        });
+        
+        if (!res.ok) {
+          console.log(`Endpoint ${endpoint} returned ${res.status}, trying next...`);
+          continue;
+        }
+        
+        const data = await res.json();
+        const items = Array.isArray(data) ? data : (data.data || data.results || data.projects || []);
+        
+        if (!Array.isArray(items) || items.length === 0) {
+          console.log(`Endpoint ${endpoint} returned no array data`);
+          continue;
+        }
+        
+        console.log(`Got ${items.length} items from ${endpoint}`);
+        
+        for (const item of items) {
+          const name = item.project_name || item.projectName || item.name || item.title;
+          if (!name) continue;
+          
+          projects.push({
+            project_name: name,
+            developer: item.developer || item.developer_name || item.developerName,
+            location: item.area || item.location || item.community || item.area_name,
+            emirate: item.emirate || "Dubai",
+            status: item.status || item.project_status || "Off-Plan",
+            price_from: item.price_from || item.priceFrom || item.min_price,
+            price_to: item.price_to || item.priceTo || item.max_price,
+            handover_date: item.handover_date || item.handoverDate || item.completion_date,
+            description: item.description,
+            amenities: item.amenities,
+            image_url: item.image_url || item.imageUrl || item.thumbnail,
+          });
+        }
+        
+        if (projects.length > 0) break; // Got data, no need to try more endpoints
+      } catch (endpointErr) {
+        console.log(`Endpoint ${endpoint} failed:`, endpointErr instanceof Error ? endpointErr.message : "unknown");
+      }
+    }
+  } catch (err) {
+    console.error("Dubai REST API extraction failed:", err);
+  }
+  
+  console.log(`Dubai REST API extracted ${projects.length} projects`);
+  return projects;
+}
+
+// Extract from Provident website using Firecrawl
+async function extractFromProvident(baseUrl: string, firecrawlKey: string): Promise<ExternalProject[]> {
+  const projects: ExternalProject[] = [];
+  
+  try {
+    console.log(`Scraping Provident: ${baseUrl}`);
+    
+    const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${firecrawlKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: baseUrl,
+        formats: ["markdown", "links"],
+        onlyMainContent: true,
+        waitFor: 5000,
+        timeout: 30000,
+      }),
+    });
+    
+    if (!scrapeResponse.ok) {
+      console.error("Firecrawl error for Provident:", await scrapeResponse.text());
+      return projects;
+    }
+    
+    const scraped = await scrapeResponse.json();
+    const markdown = scraped.data?.markdown || "";
+    const links = scraped.data?.links || [];
+    
+    console.log(`Provident scraped: ${markdown.length} chars, ${links.length} links`);
+    
+    if (markdown.length < 100) return projects;
+    
+    // Use AI to extract project listings from the Provident page
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (!LOVABLE_API_KEY) {
+      console.log("No Lovable API key for AI extraction");
+      return projects;
+    }
+    
+    const response = await fetch("https://api.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          {
+            role: "system",
+            content: `You are extracting real estate project listings from a Provident Estate webpage.
+For each REAL project, extract:
+- project_name: The actual project name (e.g., "Damac Hills 2", "The Oasis by Emaar")
+- developer: Developer company name
+- location: Area/community in Dubai
+- emirate: "Dubai"
+- status: "Off-Plan", "Ready", etc.
+- price_from: Starting price in AED (number only)
+- handover_date: Expected date/quarter
+- description: Brief description
+- amenities: Array of amenities if listed
+
+IMPORTANT: Only extract REAL project names. Ignore headers, navigation items, promotional text.
+Return ONLY a valid JSON array. No markdown, no explanation.`
+          },
+          {
+            role: "user",
+            content: `Extract all real estate project listings:\n\n${markdown.substring(0, 25000)}`
+          }
+        ],
+        temperature: 0.1,
+        max_tokens: 4000,
+      }),
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.content || "[]";
+      const cleanJson = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+      
+      try {
+        const extracted = JSON.parse(cleanJson);
+        if (Array.isArray(extracted)) {
+          projects.push(...extracted);
+        }
+      } catch (parseErr) {
+        console.error("Failed to parse AI extraction result:", parseErr);
+      }
+    }
+  } catch (err) {
+    console.error("Provident extraction failed:", err);
+  }
+  
+  console.log(`Provident extracted ${projects.length} projects`);
+  return projects;
+}
+
+// Generic Firecrawl + AI extraction (fallback)
+async function extractWithFirecrawl(baseUrl: string, sourceName: string, firecrawlKey: string): Promise<ExternalProject[]> {
+  try {
+    const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${firecrawlKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: baseUrl,
+        formats: ["markdown"],
+        onlyMainContent: true,
+        waitFor: 3000,
+      }),
+    });
+
+    if (!scrapeResponse.ok) {
+      console.error("Firecrawl error:", await scrapeResponse.text());
+      return [];
+    }
+
+    const scraped = await scrapeResponse.json();
+    const markdown = scraped.data?.markdown || "";
+    
+    if (markdown.length < 100) {
+      console.log(`Too little content scraped from ${sourceName} (${markdown.length} chars)`);
+      return [];
+    }
+
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (!LOVABLE_API_KEY) return [];
+
     const response = await fetch("https://api.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -121,20 +310,8 @@ async function extractProjectsWithAI(markdown: string, sourceName: string): Prom
           {
             role: "system",
             content: `You are a real estate data extractor. Extract all property/project listings from the content.
-For each REAL project listing (not generic headers or promotional text), extract:
-- project_name: The actual name of the property/project (e.g., "The Grand at Downtown", "Marina Heights")
-- developer: The developer company name (e.g., "Emaar", "DAMAC", "Sobha")
-- location: The specific area/community (e.g., "Downtown Dubai", "Dubai Marina")
-- emirate: Dubai, Abu Dhabi, etc.
-- status: Off-Plan, Ready, Under Construction, etc.
-- price_from: Starting price in AED (number only)
-- price_to: Maximum price in AED (number only)
-- handover_date: Expected handover date/quarter (e.g., "Q4 2025", "2026")
-- description: Brief description of the project
-- amenities: Array of amenities if mentioned
-
-IMPORTANT: Only extract REAL project names. Ignore generic text like "Premium Quality", "Strong Investment Returns", or section headers. A real project name is specific like "Damac Hills 2" or "Emaar Beachfront".
-
+For each REAL project listing, extract: project_name, developer, location, emirate, status, price_from, price_to, handover_date, description, amenities.
+IMPORTANT: Only extract REAL project names. Ignore generic text.
 Return ONLY valid JSON array. No markdown, no explanation.`
           },
           {
@@ -147,68 +324,18 @@ Return ONLY valid JSON array. No markdown, no explanation.`
       }),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Lovable AI extraction failed:", errorText);
-      return extractProjectsWithRegex(markdown);
-    }
+    if (!response.ok) return [];
 
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content || "[]";
-    
-    // Clean and parse JSON
-    let cleanJson = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-    
+    const cleanJson = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
     const projects = JSON.parse(cleanJson);
-    console.log(`Lovable AI extracted ${projects.length} real projects`);
-    return projects;
+    console.log(`AI extracted ${projects.length} projects from ${sourceName}`);
+    return Array.isArray(projects) ? projects : [];
   } catch (e) {
-    console.error("AI extraction error:", e);
-    return extractProjectsWithRegex(markdown);
+    console.error("Firecrawl+AI extraction error:", e);
+    return [];
   }
-}
-
-// Fallback regex extraction
-function extractProjectsWithRegex(markdown: string): ExternalProject[] {
-  const projects: ExternalProject[] = [];
-  
-  // Look for patterns like "Project Name - Developer" or headers with project info
-  const projectPatterns = [
-    /##\s*([A-Z][^#\n]+)/g,  // Markdown headers
-    /\*\*([A-Z][^*]+)\*\*/g, // Bold text
-    /Project:\s*([^\n]+)/gi,
-    /Property:\s*([^\n]+)/gi,
-  ];
-
-  const seen = new Set<string>();
-  
-  for (const pattern of projectPatterns) {
-    let match;
-    while ((match = pattern.exec(markdown)) !== null) {
-      const name = match[1].trim();
-      if (name.length > 3 && name.length < 100 && !seen.has(name.toLowerCase())) {
-        seen.add(name.toLowerCase());
-        
-        // Try to extract more context around this match
-        const context = markdown.substring(Math.max(0, match.index - 200), match.index + 500);
-        
-        const priceMatch = context.match(/AED\s*([\d,]+)/i);
-        const locationMatch = context.match(/(?:in|at|location:?)\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i);
-        const developerMatch = context.match(/(?:by|developer:?)\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i);
-        
-        projects.push({
-          project_name: name,
-          developer: developerMatch?.[1] || undefined,
-          location: locationMatch?.[1] || undefined,
-          emirate: "Dubai",
-          price_from: priceMatch ? parseInt(priceMatch[1].replace(/,/g, "")) : undefined,
-        });
-      }
-    }
-  }
-
-  console.log(`Regex extracted ${projects.length} projects`);
-  return projects;
 }
 
 serve(async (req) => {
@@ -256,7 +383,7 @@ serve(async (req) => {
     const FIRECRAWL_KEY = Deno.env.get("FIRECRAWL_API_KEY");
 
     for (const source of sources) {
-      console.log(`Processing source: ${source.name} (${source.base_url})`);
+      console.log(`Processing source: ${source.name} (${source.base_url}) [type: ${source.source_type}]`);
 
       // Create job log entry
       const { data: jobLog, error: jobError } = await supabase
@@ -277,50 +404,38 @@ serve(async (req) => {
 
       try {
         let externalProjects: ExternalProject[] = [];
-        let scrapedContent = "";
 
-        // Use Firecrawl to scrape the source
-        if (FIRECRAWL_KEY && source.base_url) {
-          console.log(`Scraping ${source.base_url} with Firecrawl...`);
-          
-          try {
-            const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
-              method: "POST",
-              headers: {
-                "Authorization": `Bearer ${FIRECRAWL_KEY}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                url: source.base_url,
-                formats: ["markdown"],
-                onlyMainContent: true,
-                waitFor: 3000,
-              }),
-            });
-
-            if (scrapeResponse.ok) {
-              const scraped = await scrapeResponse.json();
-              scrapedContent = scraped.data?.markdown || "";
-              console.log(`Scraped ${scrapedContent.length} characters from ${source.name}`);
-
-              if (scrapedContent.length > 100) {
-                externalProjects = await extractProjectsWithAI(scrapedContent, source.name);
-              }
-            } else {
-              const errorText = await scrapeResponse.text();
-              console.error("Firecrawl error:", errorText);
-            }
-          } catch (scrapeErr) {
-            console.error("Scraping failed:", scrapeErr);
+        // ── Route extraction by source type ──
+        const url = (source.base_url || "").toLowerCase();
+        
+        if (source.source_type === "rest_api" || url.includes("dubailand") || url.includes("alnair") || url.includes("gateway")) {
+          // Direct API call for known REST endpoints
+          console.log(`Using direct API extraction for ${source.name}`);
+          externalProjects = await extractFromDubaiRestApi(source.base_url);
+        } else if (url.includes("provident")) {
+          // Provident-specific extraction with Firecrawl + targeted AI
+          if (FIRECRAWL_KEY) {
+            console.log(`Using Provident-specific extraction for ${source.name}`);
+            externalProjects = await extractFromProvident(source.base_url, FIRECRAWL_KEY);
+          } else {
+            console.log("No Firecrawl API key - cannot scrape Provident");
           }
+        } else if (FIRECRAWL_KEY) {
+          // Generic Firecrawl + AI fallback
+          console.log(`Using generic Firecrawl+AI extraction for ${source.name}`);
+          externalProjects = await extractWithFirecrawl(source.base_url, source.name, FIRECRAWL_KEY);
         } else {
-          console.log("No Firecrawl API key configured - skipping web scraping");
+          console.log(`No extraction method available for ${source.name} (no Firecrawl key)`);
         }
 
         // Process extracted projects
         let recordsFound = externalProjects.length;
         let recordsMatched = 0;
         let recordsPending = 0;
+
+        if (recordsFound === 0) {
+          console.log(`⚠️ No projects extracted from ${source.name}. Source URL: ${source.base_url}`);
+        }
 
         for (const extProject of externalProjects) {
           const match = findBestMatch(extProject, allListings);
@@ -331,7 +446,6 @@ serve(async (req) => {
             const existingListing = allListings.find(l => l.id === match.listing_id);
             if (!existingListing) continue;
 
-            // Check for fields that can be added (not replaced)
             const fieldsToAdd: { field: string; current: string | null; proposed: string }[] = [];
             
             if (extProject.developer && !existingListing.developer) {
@@ -368,7 +482,6 @@ serve(async (req) => {
               });
             }
           } else {
-            // No match - this could be a new project to add
             recordsPending++;
             
             await supabase.from("listing_pending_updates").insert({
@@ -388,17 +501,20 @@ serve(async (req) => {
         }
 
         // Update job log with results
+        const jobStatus = recordsFound === 0 ? "completed_empty" : "completed";
         await supabase
           .from("extraction_job_logs")
           .update({
-            status: "completed",
+            status: jobStatus,
             completed_at: new Date().toISOString(),
             records_found: recordsFound,
             records_matched: recordsMatched,
             records_pending: recordsPending,
+            error_message: recordsFound === 0 ? `No projects found from ${source.name}. The source may require a different extraction method or the URL may not contain listing data.` : null,
             metadata: { 
               manual, 
-              content_length: scrapedContent.length,
+              source_type: source.source_type,
+              extraction_method: source.source_type === "rest_api" ? "direct_api" : "firecrawl_ai",
               projects_extracted: externalProjects.length,
             },
           })
@@ -412,10 +528,11 @@ serve(async (req) => {
 
         results.push({
           source: source.name,
-          status: "completed",
+          status: jobStatus,
           found: recordsFound,
           matched: recordsMatched,
           pending: recordsPending,
+          method: source.source_type === "rest_api" ? "direct_api" : "firecrawl_ai",
         });
 
         console.log(`Source ${source.name} completed: found=${recordsFound}, matched=${recordsMatched}, pending=${recordsPending}`);
@@ -449,7 +566,9 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: "Extraction job completed",
+        message: totalFound === 0 
+          ? "Extraction completed but no projects were found. Check source URLs and extraction methods."
+          : "Extraction job completed",
         results,
         summary: { totalFound, totalMatched, totalPending },
       }),
