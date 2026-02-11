@@ -21,7 +21,6 @@ import {
   MegaMenuIconLink,
   MegaMenuSectionDivider,
   MegaMenuSectionTitle,
-  MegaMenuShell,
 } from '@/components/header/mega-menu-primitives';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -96,11 +95,17 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
   ];
 
   return (
-    <MegaMenuShell ref={ref} className={cn("overflow-hidden")} noScroll>
-      <div className="max-w-[1400px] mx-auto px-5 lg:px-8 py-4 lg:py-5">
+    <div
+      ref={ref}
+      className={cn(
+        "absolute right-0 top-full mt-2 w-[min(95vw,900px)] rounded-xl border-2 border-gold/40 shadow-xl z-[9999] overflow-hidden"
+      )}
+      style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}
+    >
+      <div className="px-5 lg:px-8 py-4 lg:py-5">
         <MegaMenuSectionTitle icon={Search} title="Search & Shortcuts" />
 
-        {/* Search bar (opens the global search modal) */}
+        {/* Search bar */}
         <div className="mt-3 flex items-center gap-2">
           <Input
             value={query}
@@ -109,7 +114,8 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
               if (e.key === 'Enter') openGlobalSearch();
             }}
             placeholder="Search pages, tools & guides"
-            className="h-12 rounded-xl text-lg placeholder:text-lg tracking-wide"
+            className="h-12 rounded-xl text-lg placeholder:text-lg tracking-wide bg-white/80 border border-gold/30 !border-2-none"
+            style={{ background: 'rgba(255,255,255,0.8)', borderWidth: '1px' }}
             aria-label="Search"
           />
           <button
@@ -146,7 +152,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
             <div className="w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
           </div>
 
-          {/* Quick Links - Takes col span on mobile, normal on desktop */}
+          {/* Quick Links */}
           <div className="md:col-start-2 md:col-end-3">
             <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-2">Quick Links</p>
             <div className="space-y-0">
@@ -163,7 +169,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
             </div>
           </div>
 
-          {/* Contact - Larger cards to fill space */}
+          {/* Contact */}
           <div className="flex flex-col md:col-start-3">
             <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Contact</p>
             <div className="grid grid-cols-2 gap-3 flex-1">
@@ -175,7 +181,6 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                     onClick={(e) => {
                       e.preventDefault();
                       onClose();
-                      // Use window.open for external links to prevent iframe blocking
                       setTimeout(() => {
                         window.open(link.href, '_blank', 'noopener,noreferrer');
                       }, 100);
@@ -207,7 +212,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
           </div>
         </div>
       </div>
-    </MegaMenuShell>
+    </div>
   );
 });
 
