@@ -28,6 +28,7 @@ const CombinedContactNewsletter = ({
       iconColor: "text-emerald-500",
       borderColor: "border-emerald-500/40 hover:border-emerald-500",
       shadowColor: "hover:shadow-emerald-500/20",
+      valueColor: "text-gold group-hover:text-black",
     },
     {
       icon: Phone,
@@ -38,6 +39,7 @@ const CombinedContactNewsletter = ({
       iconColor: "text-blue-500",
       borderColor: "border-blue-500/40 hover:border-blue-500",
       shadowColor: "hover:shadow-blue-500/20",
+      valueColor: "text-gold group-hover:text-black",
     },
     {
       icon: Mail,
@@ -46,8 +48,9 @@ const CombinedContactNewsletter = ({
       href: `mailto:${CONTACT_INFO.email}`,
       iconBg: "bg-gold/20",
       iconColor: "text-gold",
-      borderColor: "border-gold/40 hover:border-gold",
-      shadowColor: "hover:shadow-gold/20",
+      borderColor: "border-gold hover:border-gold/40",
+      shadowColor: "shadow-lg shadow-gold/20 hover:shadow-none",
+      valueColor: "text-gold group-hover:text-black",
     },
   ];
 
@@ -87,7 +90,7 @@ const CombinedContactNewsletter = ({
               </div>
               <div className="text-left sm:text-center">
                 <p className="text-xs uppercase tracking-wider text-zinc-500 font-medium mb-0.5">{card.label}</p>
-                <p className="text-sm text-black font-semibold group-hover:text-gold transition-colors">{card.value}</p>
+                <p className={`text-sm font-semibold transition-colors ${card.valueColor}`}>{card.value}</p>
               </div>
             </a>
           ))}
