@@ -1,44 +1,59 @@
 
+# Fix Digital Business Card UI Issues
 
-# Replace Digital Business Card Video with Approved YouTube Video
+## 1. Save Contact Buttons - Fix Color and Width
 
-## What Changes
+**Problem:** "Save Company Contact" and "Save Personal Contact" buttons use a bright gold gradient (`GOLD.gradient`) and are stretched full-width (`w-full`).
 
-### 1. Replace self-hosted MP4 with YouTube embed in DigitalCard.tsx
+**Fix:**
+- Replace `background: GOLD.gradient` with the approved champagne gradient: `background: linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)`
+- Change border from solid gold to `border-gold/50` (champagne tone)
+- Remove `w-full` so buttons auto-size to their content (inline-flex, centered)
 
-The Company Introduction section in the digital business card currently uses a self-hosted MP4 file (`jbj-company-intro.mp4`). This will be replaced with the approved YouTube video (`lBXXdJ2kAtQ`) -- the same one used on the Company Profile page.
+Applies to both buttons at lines 428-438 and 479-489.
 
-**Changes in `src/pages/DigitalCard.tsx`:**
+## 2. Email and Website Cards - Reduce Stretching
 
-- **Remove** the MP4 video import (line 16): `const jbjIntroVideo = new URL(...)` 
-- **Remove** the monogram poster import (line 19) if no longer needed elsewhere
-- **Remove** the `videoRef` (line 155) and `handleVideoEnd` function (lines 207-213) since they are only used for the MP4 player
-- **Replace** the `<video>` element (lines 392-403) with a YouTube `<iframe>` embed pointing to `https://www.youtube.com/embed/lBXXdJ2kAtQ`
-- The iframe will match the existing `aspect-video` container and rounded styling
+**Problem:** The "Send Email" and "Website" cards are full-width (`w-full`) with heavy padding, making them look oversized.
 
-**Before (MP4 player):**
-```html
-<video ref={videoRef} controls poster={...} onEnded={handleVideoEnd} playsInline>
-  <source src={jbjIntroVideo} type="video/mp4" />
-</video>
+**Fix:**
+- Remove `w-full` from both cards (lines 493-511 and 514-534)
+- Use `inline-flex` with `mx-auto` centering so they size to content
+- Reduce padding from `py-4 px-6` to `py-3 px-5` for a tighter fit
+
+## 3. Social Media Icons - Hover Effect
+
+**Problem:** Social icons have no distinct hover state.
+
+**Fix:** On hover, the circle background becomes black and the icon becomes gold/white.
+
+For all social icon links (lines 546-620+):
+- Add `hover:bg-black` class and use CSS group hover to change icon color to white on hover
+- Add `group` class to each `<a>` tag
+- Add `group-hover:text-white` transition to each icon
+
+## Technical Details
+
+**File:** `src/pages/DigitalCard.tsx`
+
+### Save buttons (lines 428-438 and 479-489):
+```
+- style={{ background: GOLD.gradient, border: `2px solid ${GOLD.primary}` }}
++ style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)', border: `2px solid ${GOLD.primary}50` }}
+- className="w-full flex items-center justify-center ..."
++ className="inline-flex items-center justify-center mx-auto ..."
 ```
 
-**After (YouTube embed):**
-```html
-<iframe
-  className="absolute inset-0 w-full h-full"
-  src="https://www.youtube.com/embed/lBXXdJ2kAtQ"
-  title="JBJ Global Real Estate - Company Introduction"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  allowFullScreen
-/>
+### Email card (line 495) and Website card (line 518):
+```
+- className="w-full flex items-center gap-3 py-4 px-6 ..."
++ className="inline-flex items-center gap-3 py-3 px-5 ... mx-auto"
 ```
 
-### 2. Clean up unused references
-
-- Remove the `Video` icon import only if it is not used elsewhere (it is used in the section header, so it stays)
-- Remove `useRef` import if `videoRef` was the only ref in the component
-
-## Summary
-
-One file changed: `src/pages/DigitalCard.tsx`. The self-hosted MP4 video is replaced with the approved YouTube company introduction video (`lBXXdJ2kAtQ`), matching what appears on the Company Profile page. The digital card remains independent of the Founder Visibility toggle.
+### Social icons (all ~8 social links):
+```
+- className="w-11 h-11 rounded-full ... bg-white"
++ className="w-11 h-11 rounded-full ... bg-white group hover:bg-black"
+- <FaLinkedinIn className="w-5 h-5" style={{ color: GOLD.primary }} />
++ <FaLinkedinIn className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
+```
