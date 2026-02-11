@@ -1,49 +1,53 @@
 
 
-# Footer Cards: 2-Per-Row Layout + No Text Cropping
+# Add Flags + Complete Lists to Register Interest Form
 
 ## Problem
-- Footer navigation cards display 3 per row on desktop, causing link labels to be cropped with "..." (the `truncate` class)
-- On mobile, cards are already 1 per row (correct), but the truncation still affects readability
+The ConsultationRequestForm has:
+- Only ~20 hardcoded nationalities without flags
+- Only ~11 hardcoded languages without flags
+- Missing the comprehensive lists and flag mappings already available in `localeOptions.ts`
 
 ## Changes
 
-### File: `src/components/Footer.tsx`
+### File: `src/constants/localeOptions.ts`
 
-**1. Change grid from 3 columns to 2 columns on desktop**
+**Add a nationality/country flags mapping** (similar to `LANGUAGE_FLAGS`):
 
-Both grid containers (lines 637 and 654) will change from `lg:grid-cols-3` to `lg:grid-cols-2`. This gives each card more horizontal space, making link names fully readable.
-
+Add a new `COUNTRY_FLAGS` record mapping country names to emoji flags. This will cover all countries returned by `getCountryList()`. Example entries:
 ```
-// Line 637 - From:
-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 auto-rows-auto
-
-// To:
-grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 auto-rows-auto
-```
-
-```
-// Line 654 - From:
-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-auto
-
-// To:
-grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 auto-rows-auto
+"United Arab Emirates": "🇦🇪",
+"India": "🇮🇳",
+"United Kingdom": "🇬🇧",
+"United States": "🇺🇸",
+...
 ```
 
-**2. Remove `truncate` from link text (line 47)**
+Add two helper functions:
+- `getCountryWithFlag(country: string): string` -- returns "flag country"
+- `getCountryOptionsWithFlags()` -- returns array of `{ value, label, flag }` objects
 
-Remove the `truncate` class from the link elements inside FooterCard so names are never cropped with three dots.
+### File: `src/components/ConsultationRequestForm.tsx`
 
-```
-// From:
-"text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1 truncate"
+**1. Replace hardcoded lists with centralized ones:**
+- Remove the local `NATIONALITIES` array (lines 62-67)
+- Remove the local `LANGUAGES` array (lines 69-72)
+- Import `getCountryList`, `getLanguageList`, `LANGUAGE_FLAGS`, `COUNTRY_FLAGS` from `@/constants/localeOptions`
 
-// To:
-"text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1"
-```
+**2. Add flags to nationality dropdown:**
+- Replace `{NATIONALITIES.map(...)}` with `{getCountryList().map(country => ...)}` 
+- Each `SelectItem` displays: `COUNTRY_FLAGS[country] + " " + country`
+
+**3. Add flags to language dropdown:**
+- Replace `{LANGUAGES.map(...)}` with `{getLanguageList().map(lang => ...)}`
+- Each `SelectItem` displays: `LANGUAGE_FLAGS[lang] + " " + lang`
+
+**4. Add search/scroll for long lists:**
+- Wrap `SelectContent` with `max-h-[300px] overflow-y-auto` so the full lists are scrollable
 
 ## Result
-- Desktop: 2 cards per row (wider cards, no text cropping)
-- Tablet (sm): 2 cards per row (unchanged)
-- Mobile: 1 card per row (unchanged)
-- All link labels display in full without "..." truncation
+- Nationality dropdown shows all world countries with their flag emojis
+- Language dropdown shows all 100+ languages with their flag emojis
+- Both lists are scrollable and sourced from the centralized `localeOptions.ts`
+- No more hardcoded short lists
+
