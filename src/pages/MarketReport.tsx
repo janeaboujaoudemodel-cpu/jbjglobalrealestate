@@ -2051,7 +2051,7 @@ const MarketReport = () => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="absolute -bottom-2 -right-4 md:right-8 bg-gradient-to-br from-gold to-gold-dark text-black px-4 py-2 rounded-full shadow-lg"
+                className="absolute -bottom-2 -right-4 md:right-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black px-4 py-2 rounded-full shadow-lg border border-gold/50"
               >
                 <span className="text-xs font-bold uppercase tracking-wider">Free Download</span>
               </motion.div>
