@@ -28,7 +28,7 @@ const CombinedContactNewsletter = ({
       iconColor: "text-emerald-500",
       borderColor: "border-gold shadow-lg shadow-gold/20 hover:border-gold/40 hover:shadow-none",
       shadowColor: "",
-      valueColor: "text-gold group-hover:text-black",
+      valueColor: "text-black group-hover:text-gold",
     },
     {
       icon: Phone,
@@ -39,7 +39,7 @@ const CombinedContactNewsletter = ({
       iconColor: "text-blue-500",
       borderColor: "border-gold shadow-lg shadow-gold/20 hover:border-gold/40 hover:shadow-none",
       shadowColor: "",
-      valueColor: "text-gold group-hover:text-black",
+      valueColor: "text-black group-hover:text-gold",
     },
     {
       icon: Mail,
@@ -50,7 +50,7 @@ const CombinedContactNewsletter = ({
       iconColor: "text-gold",
       borderColor: "border-gold hover:border-gold/40",
       shadowColor: "shadow-lg shadow-gold/20 hover:shadow-none",
-      valueColor: "text-gold group-hover:text-black",
+      valueColor: "text-black group-hover:text-gold",
     },
   ];
 
