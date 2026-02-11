@@ -631,7 +631,7 @@ const Index = () => {
       <SectionDivider />
 
       {/* MORTGAGE CALCULATOR SECTION - Compact on mobile */}
-      <section className="py-12 md:py-16 bg-black">
+      <section className="pt-12 md:pt-16 bg-black">
         <div className="jj-layer-2">
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-12 shadow-xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 md:w-64 h-32 md:h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
