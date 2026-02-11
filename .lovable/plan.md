@@ -1,59 +1,59 @@
 
-# Fix Digital Business Card UI Issues
+# Digital Business Card Layout Improvements
 
-## 1. Save Contact Buttons - Fix Color and Width
+## Changes Overview
 
-**Problem:** "Save Company Contact" and "Save Personal Contact" buttons use a bright gold gradient (`GOLD.gradient`) and are stretched full-width (`w-full`).
+Three fixes in `src/pages/DigitalCard.tsx`:
 
-**Fix:**
-- Replace `background: GOLD.gradient` with the approved champagne gradient: `background: linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)`
-- Change border from solid gold to `border-gold/50` (champagne tone)
-- Remove `w-full` so buttons auto-size to their content (inline-flex, centered)
+## 1. Center Save Contact buttons under their sections
 
-Applies to both buttons at lines 428-438 and 479-489.
+Both "Save Company Contact" (line 428) and "Save Personal Contact" (line 479) currently use `inline-flex` with `mx-auto`, but the parent `<div>` is not set to center them as block-level elements. Wrap each button in a `<div className="flex justify-center">` or add `text-center` / `flex flex-col items-center` to the parent section divs (lines 391-439 and 442-490) so the buttons sit centered under their respective contact details.
 
-## 2. Email and Website Cards - Reduce Stretching
+## 2. Reorganize Send Email, Share This Card, and Website into a row of 3 cards
 
-**Problem:** The "Send Email" and "Website" cards are full-width (`w-full`) with heavy padding, making them look oversized.
+Currently these are stacked vertically as individual links/buttons. Restructure them into a horizontal row of 3 equally-styled cards:
 
-**Fix:**
-- Remove `w-full` from both cards (lines 493-511 and 514-534)
-- Use `inline-flex` with `mx-auto` centering so they size to content
-- Reduce padding from `py-4 px-6` to `py-3 px-5` for a tighter fit
+- **Remove** the current standalone "Share Card Button" section (lines 626-636) from the bottom
+- **Replace** the current Email (lines 492-511) and Website (lines 513-534) blocks with a 3-column grid: `grid grid-cols-3 gap-3`
+- Each card: Send Email (left), Share This Card (center), Website (right)
+- All three cards share the same styling: white background, gold border, rounded, icon circle on top or left, consistent padding
 
-## 3. Social Media Icons - Hover Effect
-
-**Problem:** Social icons have no distinct hover state.
-
-**Fix:** On hover, the circle background becomes black and the icon becomes gold/white.
-
-For all social icon links (lines 546-620+):
-- Add `hover:bg-black` class and use CSS group hover to change icon color to white on hover
-- Add `group` class to each `<a>` tag
-- Add `group-hover:text-white` transition to each icon
-
-## Technical Details
+## 3. Technical Details
 
 **File:** `src/pages/DigitalCard.tsx`
 
-### Save buttons (lines 428-438 and 479-489):
-```
-- style={{ background: GOLD.gradient, border: `2px solid ${GOLD.primary}` }}
-+ style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)', border: `2px solid ${GOLD.primary}50` }}
-- className="w-full flex items-center justify-center ..."
-+ className="inline-flex items-center justify-center mx-auto ..."
+### Save buttons centering (lines 391 and 442):
+Add `flex flex-col items-center` to both Company and Personal section wrapper divs so the `inline-flex` buttons naturally center.
+
+### Three-card row (replace lines 492-534 and remove lines 626-636):
+```text
+<div className="grid grid-cols-3 gap-3 mb-3">
+  {/* Send Email */}
+  <a href="mailto:..." className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-white shadow-md hover:shadow-lg transition-all" style={{ border: '2px solid GOLD/50' }}>
+    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background, border }}>
+      <Mail icon />
+    </div>
+    <span className="text-sm font-semibold text-center">Send Email</span>
+  </a>
+
+  {/* Share This Card */}
+  <button onClick={setShowShareOptions(true)} className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-white shadow-md hover:shadow-lg transition-all" style={{ border: '2px solid GOLD/50' }}>
+    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background, border }}>
+      <Share2 icon />
+    </div>
+    <span className="text-sm font-semibold text-center">Share Card</span>
+  </button>
+
+  {/* Website */}
+  <a href={website} className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-white shadow-md hover:shadow-lg transition-all" style={{ border: '2px solid GOLD/50' }}>
+    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background, border }}>
+      <Globe icon />
+    </div>
+    <span className="text-sm font-semibold text-center">Website</span>
+  </a>
+</div>
 ```
 
-### Email card (line 495) and Website card (line 518):
-```
-- className="w-full flex items-center gap-3 py-4 px-6 ..."
-+ className="inline-flex items-center gap-3 py-3 px-5 ... mx-auto"
-```
-
-### Social icons (all ~8 social links):
-```
-- className="w-11 h-11 rounded-full ... bg-white"
-+ className="w-11 h-11 rounded-full ... bg-white group hover:bg-black"
-- <FaLinkedinIn className="w-5 h-5" style={{ color: GOLD.primary }} />
-+ <FaLinkedinIn className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
-```
+- The old full-width black "Share This Card" button at the bottom (lines 626-636) is removed since it is now part of the 3-card row
+- The share modal remains unchanged
+- Each card uses a vertical layout (icon on top, label below) for a clean, premium, balanced appearance
