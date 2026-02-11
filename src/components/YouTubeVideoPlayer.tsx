@@ -65,10 +65,9 @@ export default function YouTubeVideoPlayer({
   const [ended, setEnded] = useState(false);
   const iframeId = useRef(`yt-player-${videoId}-${Math.random().toString(36).slice(2, 8)}`);
 
-  const createPlayer = useCallback(() => {
+  const createPlayer = useCallback((onReady?: () => void) => {
     if (!containerRef.current) return;
 
-    // Ensure a target div exists
     let targetEl = document.getElementById(iframeId.current);
     if (!targetEl) {
       targetEl = document.createElement("div");
@@ -81,6 +80,12 @@ export default function YouTubeVideoPlayer({
       videoId,
       playerVars: PLAYER_VARS,
       events: {
+        onReady: (event: any) => {
+          if (onReady) {
+            event.target.playVideo();
+            onReady();
+          }
+        },
         onStateChange: (event: any) => {
           if (event.data === window.YT.PlayerState.ENDED) {
             setEnded(true);
@@ -100,25 +105,21 @@ export default function YouTubeVideoPlayer({
   }, [videoId, createPlayer]);
 
   const handleReplay = useCallback(() => {
-    // Destroy the old player (removes the iframe)
     playerRef.current?.destroy?.();
     playerRef.current = null;
 
-    // Remove any leftover element with the old id
     const old = document.getElementById(iframeId.current);
     if (old) old.remove();
 
-    // Insert a fresh div target
     const fresh = document.createElement("div");
     fresh.id = iframeId.current;
     fresh.className = "absolute inset-0 w-full h-full";
     containerRef.current?.appendChild(fresh);
 
-    // Hide overlay first so it doesn't flash
-    setEnded(false);
-
-    // Create a brand-new player
-    createPlayer();
+    // Keep overlay visible until player is ready and playing
+    createPlayer(() => {
+      setEnded(false);
+    });
   }, [createPlayer]);
 
   return (
