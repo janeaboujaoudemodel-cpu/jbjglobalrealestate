@@ -1,42 +1,70 @@
 
 
-# Fix Plan: Visitor Tracking 401 & Video Errors
+# Fix Plan: Developer Marquee Spacing + Handpicked Cards
 
-## Issue 1: Visitor Tracking 401 Unauthorized (Code Fix)
+## Issue 1: Developer Marquee Logos Touching
 
-**Root Cause:** The table privilege hardening (security phase) revoked ALL privileges from the `anon` role on `visitor_sessions`, `visitor_events`, and `visitor_documents`. Since visitor tracking fires for every page view (including anonymous visitors), the Supabase client gets a 401 before RLS policies are even evaluated.
+The logos in the developer partners marquee are too close together. Current padding is `px-3 md:px-5 lg:px-6` per logo container, which creates insufficient gaps between logos.
 
-**Fix:** Grant the minimum required privileges to `anon` on the three visitor tracking tables. RLS policies already exist to control what operations are allowed.
+**File:** `src/components/DeveloperPartnersMarquee.tsx` (line 77)
 
-**Database Migration:**
-```sql
--- Allow anonymous visitors to be tracked
-GRANT SELECT, INSERT, UPDATE ON public.visitor_sessions TO anon;
-GRANT SELECT, INSERT ON public.visitor_events TO anon;
-GRANT SELECT, INSERT ON public.visitor_documents TO anon;
-
--- Authenticated users also need access
-GRANT SELECT, INSERT, UPDATE ON public.visitor_sessions TO authenticated;
-GRANT SELECT, INSERT ON public.visitor_events TO authenticated;
-GRANT SELECT, INSERT ON public.visitor_documents TO authenticated;
-```
-
-This restores tracking functionality while RLS policies (which already allow INSERT/UPDATE with `true`) handle the actual access control.
+**Fix:** Increase horizontal padding from `px-3 md:px-5 lg:px-6` to `px-6 md:px-10 lg:px-12` to restore proper spacing between logos.
 
 ---
 
-## Issue 2: Video Files ERR_CONNECTION_FAILED (Not a Code Bug)
+## Issue 2: Handpicked Cards -- Missing Prices for Palm Jebel Ali & Binghatti Vintage
 
-The errors for `/videos/hero-video.mp4` and `burj-khalifa-day-to-night.mp4` come from `jbj.ae` -- your custom published domain. The files exist in the project and work on the Lovable preview URL. The `ERR_CONNECTION_FAILED` means the domain DNS is not resolving to the server.
+Both projects have `price_from: null` in the database. Without prices, "Price TBA" is shown.
 
-**No code change needed.** You need to verify your `jbj.ae` domain DNS records point to the correct Lovable hosting endpoint. You can check this in your domain registrar's DNS settings.
+**Database check:** The projects exist but lack pricing data:
+- `palm-jebel-ali-villas-nakheel-656` -- price_from is NULL
+- `binghatti-vintage-binghatti-3046` -- price_from is NULL
+
+These prices need to be set. If you provide the correct prices, I'll update them in the database. Otherwise, the card will continue showing "Price TBA" since there's no data to display.
+
+---
+
+## Issue 3: Project Title Color -- Black Instead of Gold
+
+**File:** `src/components/home/FeaturedListings.tsx` (line 219)
+
+Currently the project title is `text-gold`. The user wants it in **black**.
+
+**Fix:** Change `text-gold` to `text-black` and update hover to `group-hover:text-gold`.
+
+---
+
+## Issue 4: Description + "...more" Under Project Name
+
+The `useFeaturedProjects` query does NOT include `description` in its SELECT, so descriptions never appear even though the card template already has description rendering logic.
+
+**File:** `src/components/home/FeaturedListings.tsx`
+
+**Fix 1 (line 48):** Add `description` to the select query:
+```
+.select("id, name, slug, developer_name, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, description, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
+```
+
+**Fix 2 (lines 224-228):** Update the description block to always show when description exists, with a "...more" suffix styled in black (not underlined) with an ArrowUpRight icon:
+```tsx
+{(project as any).description && (
+  <p className="text-zinc-600 text-xs line-clamp-2 mb-2">
+    {String((project as any).description).replace(/<[^>]*>/g, '').slice(0, 120)}
+    <span className="text-black font-medium ml-1 inline-flex items-center gap-0.5">
+      ...more <ArrowUpRight className="w-3 h-3 inline" />
+    </span>
+  </p>
+)}
+```
 
 ---
 
 ## Summary
 
-| # | Issue | Type | Fix |
-|---|-------|------|-----|
-| 1 | `visitor_sessions` 401 | DB privileges | Grant anon/authenticated INSERT/SELECT/UPDATE |
-| 2 | Video ERR_CONNECTION_FAILED | DNS/Hosting | Verify `jbj.ae` domain DNS (not a code fix) |
+| # | Issue | File | Change |
+|---|-------|------|--------|
+| 1 | Logos touching | DeveloperPartnersMarquee.tsx | Increase padding to `px-6 md:px-10 lg:px-12` |
+| 2 | Missing prices | Database | Need correct prices from user |
+| 3 | Title color | FeaturedListings.tsx | `text-gold` to `text-black` |
+| 4 | Missing descriptions | FeaturedListings.tsx | Add `description` to query + style "...more" |
 
