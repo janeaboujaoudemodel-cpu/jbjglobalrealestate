@@ -28,7 +28,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
           <div className="flex items-center gap-3 mb-6">
             <Compass className="w-6 h-6 text-gold" />
             <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
-              About {area.name}
+              About {area.name.replace(/\s*\(.*?\)/g, '')}
             </h2>
           </div>
 
