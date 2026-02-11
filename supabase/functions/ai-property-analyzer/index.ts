@@ -78,8 +78,9 @@ STRICT RULES:
 - Display prices in ${currency}
 - Respond in ${languageMap[language] || 'English'}
 - Be specific with numbers, percentages, and data points
-- Keep each section concise (3-5 bullet points max)
+- Keep each section VERY SHORT: 2-3 bullet points max, one line each
 - Use clean markdown formatting without excessive decoration
+- Prioritize the single most impactful data point per section
 
 DELIVERY TIMELINE RULES:
 - Today's date is ${todayDate}
@@ -95,16 +96,16 @@ DELIVERY TIMELINE RULES:
 
 Use EXACTLY these section headers (numbered, bold):
 
-1. **Area Overview** - 3-4 sentences: location, lifestyle, key landmarks
-2. **Price Per Sqft** - Current avg price/sqft, range by unit type, 1yr and 3yr trend percentages
-3. **Supply vs Demand** - Current supply pipeline, absorption rate, occupancy trends, upcoming handovers
-4. **Developer Landscape** - Top 3-5 developers, their flagship projects, quality tier
-5. **Investment Metrics** - Rental yield %, ROI projection, capital appreciation rate
-6. **Pros** - 4-5 key advantages (bullet points)
-7. **Cons** - 4-5 key risks/disadvantages (bullet points)
+1. **Area Overview** - 2 sentences max: location positioning and lifestyle in a nutshell
+2. **Price Per Sqft** - Avg price/sqft, YoY trend % (2 bullet points max)
+3. **Supply vs Demand** - Pipeline units count, absorption rate (2 bullet points max)
+4. **Developer Landscape** - Top 3 developers with one flagship each (3 bullet points max)
+5. **Investment Metrics** - Rental yield % and capital appreciation % (2 bullet points max)
+6. **Pros** - 3 key advantages (one line each)
+7. **Cons** - 3 key risks (one line each)
 8. **Investment Rating** - Score out of 10 with one-line justification
 
-Be direct. No filler. Numbers and percentages wherever possible.`;
+CRITICAL: Keep every section SHORT. Max 2-3 bullet points. One line per bullet. No paragraphs. Numbers over words.`;
 
     // Call Lovable AI Gateway using shared utility
     let fullAnalysis: string;
