@@ -44,7 +44,7 @@ const FooterCard = ({ title, links, viewAllHref, viewAllLabel }: {
       <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-gold/10 via-gold/50 to-gold/10 -translate-x-1/2" />
       <div className="grid grid-cols-2 gap-x-5 gap-y-2">
         {links.map((link) => (
-          <Link key={link.href} to={link.href} className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1 truncate">
+          <Link key={link.href} to={link.href} className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
             {link.label}
           </Link>
         ))}
@@ -634,7 +634,7 @@ const Footer = () => {
             {/* Navigation Grid Section - Card-Based 2-Column Layout */}
             <div className="p-4 sm:p-6 md:p-8">
               {/* Merged Navigation Grid: 3 per row desktop, 2 tablet, 1 mobile */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 auto-rows-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 auto-rows-auto">
                 <FooterCard title={t('footer.properties') || 'Properties'} links={propertiesLinks} />
                 <FooterCard title={t('footer.servicesSection') || 'Services'} links={servicesLinks} />
                 <FooterCard title={t('footer.guides') || 'Guides'} links={guidesLinks} />
@@ -651,7 +651,7 @@ const Footer = () => {
               </div>
 
               {/* ROW 3: AI Tools, Creative Toolkit, Market Intelligence + mode-aware hubs */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 auto-rows-auto">
                 {/* AI Tools (Top 10 + View All) */}
                 <FooterCard title="AI Tools" links={[
                   { href: "/property-evaluator", label: "Property Evaluator" },
