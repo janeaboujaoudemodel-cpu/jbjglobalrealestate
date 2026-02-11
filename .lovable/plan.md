@@ -1,118 +1,117 @@
 
 
-# Fix Plan: Handpicked Cards, Area Images, Descriptions, and Prices
+# Fix Plan: Areas, Project Routing, Marquee, Cards, and Brochure
 
-## Issue 1: "by Developer" Under Project Title (Handpicked Section)
+## Issue 1: 95 Areas Still Missing Images
 
-Currently the developer name appears at the bottom of the card. The user wants it directly under the project title, styled in gold and clickable to the developer page.
+95 areas have no images at all. The current `enrich-area-images` function only pulls from associated projects -- these 95 areas have no projects with images.
 
-**File:** `src/components/home/FeaturedListings.tsx`
+**Fix:** Update `enrich-area-images` edge function to use AI image generation (Gemini image model) as a fallback when no project images exist. For each area without an image:
+1. Call the Lovable AI image generation endpoint with a prompt like "Aerial panoramic photo of {area name}, Dubai, UAE, community master plan view, real estate photography"
+2. Upload the generated image to Supabase Storage (create an `area-images` bucket)
+3. Store the public URL in `areas.image_url` and `areas.hero_image_url`
+4. Process in batches of 5 (image generation is slower)
 
-**Changes (lines 220-223):**
-- After the project title `<h3>`, add a "by Developer Name" line in gold
-- Make it a `<Link>` to `/developer/{developer.slug}`
-- Stop event propagation so it doesn't trigger the parent card link
-- Keep the existing "by developer_name" at the bottom but remove it to avoid duplication
+Then invoke the function to process all 95 remaining areas.
 
-```tsx
-{/* Title */}
-<h3 className="text-black font-semibold text-sm mb-0.5 line-clamp-2 group-hover:text-gold transition-colors min-h-[40px]">
-  {project.name}
-</h3>
-{/* Developer name - gold, clickable */}
-{project.developer?.slug ? (
-  <Link
-    to={`/developer/${project.developer.slug}`}
-    onClick={(e) => e.stopPropagation()}
-    className="text-gold text-xs font-medium hover:text-gold-light transition-colors mb-1 block"
-  >
-    by {project.developer_name}
-  </Link>
-) : project.developer_name ? (
-  <span className="text-gold text-xs font-medium mb-1 block">by {project.developer_name}</span>
-) : null}
-```
-
-Then remove the duplicate "by developer_name" from lines 241-245.
+**Files:** `supabase/functions/enrich-area-images/index.ts`
 
 ---
 
-## Issue 2: Missing Price for Palm Central Private Residences
+## Issue 2: Project "Not Found" Black Screen
 
-Web research confirms: **Palm Central Private Residences by Nakheel** has a launch price of **AED 2,500,000**.
+When clicking some project cards, users see a black screen with "Project not found" and an invisible "Back to Properties" button. The issue is poor styling of the not-found state.
 
-**Database update:**
-```sql
-UPDATE projects SET price_from = 2500000 WHERE slug = 'palm-central-private-residences-nakheel-3031';
-```
-
-Note: Binghatti Vintage and Palm Jebel Ali already have prices set (AED 600,000 and AED 18,500,000 respectively) from the previous fix.
-
----
-
-## Issue 3: Area Property Count Discrepancy
-
-The areas page hero says "2,010 properties" but the database shows:
-- **Total projects in `projects` table:** 614
-- **Sum of `property_count` in `areas` table:** 1,675
-- **Total active areas:** 183
-
-The `property_count` values in the `areas` table appear to be sourced from Reelly/Provident and may include properties not yet synced to the platform. The actual synced project count is 614. This is informational -- the area counts reflect the source data's numbers, not locally synced projects.
-
-No code change needed here unless you want the counts adjusted. The numbers shown come directly from the `areas.property_count` column which is populated during sync.
+**Fix in `src/pages/ProjectDetail.tsx` (lines 238-248):**
+- Add the JBJ monogram/logo for branding
+- Change text to white/gold for visibility on dark backgrounds
+- Style the "Back to Properties" button with the gold CTA styling
+- Add padding-top to avoid header overlap
 
 ---
 
-## Issue 4: Area Images -- 144 Areas Missing Photos
+## Issue 3: "...more" Link Styling on Project Cards
 
-**Scale:** 144 out of 183 active areas have NO image (both `image_url` and `hero_image_url` are NULL). 85 areas also lack descriptions.
+In `FeaturedListings.tsx` (line 269-274), the "More" link is orange with an arrow. User wants it in gold with no arrow and no underline.
 
-This is a large-scale data enrichment task. The approach:
+**Fix in `src/components/home/FeaturedListings.tsx` (lines 269-274):**
+- Change `text-orange-500` to `text-gold`
+- Remove the arrow icon
+- Add `no-underline` styling
 
-### Step 1: Create an edge function `enrich-area-images`
-This function will:
-1. Query all areas missing images
-2. For each area, use Firecrawl (already configured) to scrape the Provident area guide page (e.g., `https://www.provident.ae/areas/{area-slug}`) to find a community-level hero image
-3. If Provident doesn't have an image, fall back to a Google search for `"{area name} Dubai aerial view community`
-4. Store the found image URL in `areas.image_url` and `areas.hero_image_url`
-5. Process in batches of 10 to avoid timeouts
-
-### Step 2: Create an edge function `enrich-area-descriptions`
-This function will:
-1. Query all areas missing descriptions
-2. For each area, scrape the Provident area guide page for description text
-3. If not found, use AI (Gemini Flash) to generate a 2-3 sentence description based on the area name and emirate
-4. Clean the description of any brand references (Provident, Reelly)
-5. Store in `areas.description`
-
-### Step 3: Add an "Enrich Areas" button in the admin/sync tools
-Allow the owner to trigger the enrichment batch from the admin panel with progress tracking via `sync_jobs`.
-
-**Key files:**
-- New: `supabase/functions/enrich-area-images/index.ts`
-- New: `supabase/functions/enrich-area-descriptions/index.ts`
-- Existing admin panel component for triggering
+Also fix in `src/components/ProjectCard.tsx` (lines 346-352):
+- Change `text-black` to `text-gold`
+- Remove `ArrowUpRight` icon
+- Remove underline
 
 ---
 
-## Issue 5: JVT (Jumeirah Village Triangle) Image
+## Issue 4: Developer Logo Gold Border on Handpicked Cards
 
-JVT actually already has both images set in the database:
-- `image_url`: Reelly S3 image
-- `hero_image_url`: Unsplash image
+User wants a thin gold border around developer logos on the photo overlay in FeaturedListings cards.
 
-If it appears missing in the UI, it may be a caching issue or the Unsplash image URL being filtered out by the `repair-area-images` function. Will verify and ensure these images display correctly.
+**Fix in `src/components/home/FeaturedListings.tsx` (lines 175-185):**
+- Add `border-2 border-gold` to the logo container
+- Use `object-cover` instead of `object-fill` to eliminate white edges inside the logo container
+
+Also fix globally in `src/components/ProjectCard.tsx` (line 197):
+- Already has `border-2 border-gold` -- verify `object-cover` is used
+
+---
+
+## Issue 5: Developer Marquee Spacing
+
+Some logos still touch each other or have inconsistent sizes.
+
+**Fix in `src/components/DeveloperPartnersMarquee.tsx`:**
+- Reduce `px-6 md:px-10 lg:px-12` to `px-4 md:px-6 lg:px-8` for tighter but uniform spacing
+- Set a fixed max-height for all logos: `max-h-[32px] md:max-h-[40px] lg:max-h-[44px]`
+- Add `max-w-[120px] md:max-w-[140px]` to constrain oversized logos
+
+---
+
+## Issue 6: Brochure Section Fixes
+
+Three issues:
+1. JBJ logo in brochure is cropped inside circle -- needs `object-contain` and proper sizing
+2. Brochure image should be more visible (reduce dark overlay)
+3. Remove "Request Brochure" button from the left column, keep only "Unlock Brochure" under the brochure card
+
+**Fix in `src/components/project-detail/PremiumBrochureCard.tsx`:**
+- Line 149: Change logo container to use `object-contain` with proper padding (already has it -- verify `p-1.5` is adequate, increase to `p-1`)
+- Line 130: Reduce dark overlay opacity from `from-black via-black/60` to `from-black/80 via-black/40`
+
+**Fix in `src/components/project-detail/ProjectDetailLayout.tsx` (lines 1013-1022):**
+- Remove the "Request Brochure" / "Download Brochure" button from the left column description area
+
+---
+
+## Issue 7: Area Card Routing Verification
+
+All area cards already route to `/area/{slug}` via `<Link to={/area/${area.slug}}>`. The `AreaDetail` page exists and renders for any valid slug. Areas with no data show a redirect to `/areas`. This routing is working correctly -- no code change needed, just ensuring all 183 areas have content (images + descriptions) so they render properly.
+
+---
+
+## Issue 8: Search Bar Fixed on Scroll
+
+The area detail hero search bar scrolls away. User wants it sticky/fixed.
+
+**Fix in `src/components/area-detail/AreaHeroSection.tsx`:**
+- Extract the search bar into its own sticky component that becomes fixed at the top when scrolled past
+- Use `position: sticky` with `top: 80px` (below header) and appropriate z-index
 
 ---
 
 ## Summary
 
-| # | Issue | Action | Type |
-|---|-------|--------|------|
-| 1 | Developer name under title | Move "by Developer" below title, gold, clickable | Code change |
-| 2 | Palm Central price | Set price_from = 2,500,000 | DB update |
-| 3 | Property count discrepancy | Informational -- counts from source data | No change |
-| 4 | 144 areas missing images | New edge functions for batch Firecrawl + AI enrichment | New edge functions |
-| 5 | 85 areas missing descriptions | New edge function for batch description enrichment | New edge function |
-| 6 | JVT image | Already has images -- verify display | Verification |
+| # | Issue | Files | Type |
+|---|-------|-------|------|
+| 1 | 95 areas missing images | enrich-area-images edge function | Edge function + invoke |
+| 2 | Project not found black screen | ProjectDetail.tsx | UI fix |
+| 3 | "more" link styling | FeaturedListings.tsx, ProjectCard.tsx | Style fix |
+| 4 | Developer logo gold border | FeaturedListings.tsx, ProjectCard.tsx | Style fix |
+| 5 | Marquee spacing | DeveloperPartnersMarquee.tsx | Style fix |
+| 6 | Brochure fixes | PremiumBrochureCard.tsx, ProjectDetailLayout.tsx | UI fix |
+| 7 | Area routing | No change needed | Verified |
+| 8 | Sticky search bar | AreaHeroSection.tsx | New behavior |
 
