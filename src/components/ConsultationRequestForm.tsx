@@ -175,7 +175,7 @@ export const ConsultationRequestForm = ({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-8 text-center max-w-xl mx-auto ${className}`}
+        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-8 text-center max-w-2xl mx-auto ${className}`}
       >
         <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-gold" />
@@ -195,7 +195,7 @@ export const ConsultationRequestForm = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-6 md:p-8 shadow-[0_8px_30px_rgba(200,167,102,0.35)] max-w-xl mx-auto ${className}`}
+      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-6 md:p-8 shadow-[0_8px_30px_rgba(200,167,102,0.35)] max-w-2xl mx-auto ${className}`}
     >
       {/* Header */}
       <div className="text-center mb-6">

@@ -12,6 +12,7 @@ interface PremiumBrochureCardProps {
   projectImageUrl?: string;
   onDownloadClick: () => void;
   isLocked?: boolean;
+  location?: string;
 }
 
 /**
@@ -25,6 +26,7 @@ const PremiumBrochureCard = ({
   projectImageUrl,
   onDownloadClick,
   isLocked = false,
+  location,
 }: PremiumBrochureCardProps) => {
   const [isDownloading, setIsDownloading] = React.useState(false);
 
@@ -181,7 +183,7 @@ const PremiumBrochureCard = ({
               <div className="w-20 h-[2px] bg-gradient-to-r from-gold to-gold/30 mb-3" />
               
               <p className="text-white/70 text-[11px] uppercase tracking-[0.2em] drop-shadow">
-                Dubai • UAE
+                {location || 'Dubai • UAE'}
               </p>
             </div>
 

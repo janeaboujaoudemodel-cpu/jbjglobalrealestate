@@ -178,6 +178,7 @@ const ProjectDetail = () => {
       import_source: project.import_source ?? null,
       external_id: project.external_id ?? null,
       cover_image_url: project.cover_image_url ?? null,
+      area_name: project.area_name ?? null,
     };
   }, [project]);
 
