@@ -1,125 +1,109 @@
 
 
-# Critical Finding: Founder Name Spelling Violation Across Entire Codebase
+# Phase 3-6: Complete Founder Name Fix ("Jane Bou Jaoude" -> "Jane bou Jaoude")
 
-## The Problem
-
-The project memory `identity/owner-name-spelling-lock-v2-lowercase-b` explicitly mandates:
-
-> The Owner's name locked to **"Jane bou Jaoude"** (lowercase 'b').
-
-However, the name is incorrectly spelled as **"Jane Bou Jaoude"** (uppercase "B") in approximately **100+ files** across the codebase. Only ~10 files use the correct "Jane bou Jaoude" form.
+65 files still contain the incorrect uppercase "B" spelling. Here is the complete remaining work:
 
 ---
 
-## Scope of the Fix
-
-### 1. Central Constants (Root Cause)
-The central source of truth propagates the wrong spelling:
-
-- `src/constants/stats.ts` -- lines 64-66: `founder: 'Jane Bou Jaoude'`, `founderBilingual: 'Jane Bou Jaoude (...)'`
-- `src/config/master-lock.ts` -- lines 20-29: `FOUNDER_NAME`, `FOUNDER_NAME_BILINGUAL`, `FOUNDER_FULL_TITLE`
-
-### 2. Translation Files (14 files)
-All translation files have `'founder.name': 'Jane Bou Jaoude'`:
-- `src/translations/de.ts`
-- `src/translations/fr.ts`
-- `src/translations/ru.ts`
-- `src/translations/ja.ts`
-- `src/translations/zh.ts`
-- `src/translations/nl.ts`
-- `src/translations/he.ts`
-- `src/translations/tr.ts`
-- `src/translations/pl.ts`
-- `src/translations/ar.ts`
-- `src/translations/hi.ts`
-- `src/translations/pt.ts`
-- `src/translations/es.ts`
-- `src/translations/en.ts`
-
-Each translation file contains multiple instances (founder.name, founder.description2, report.description, report.createdBy, etc.)
-
-### 3. Component Files (16+ files)
-Hardcoded instances in UI components:
-- `src/components/SEOHead.tsx` -- pagesSEO entries (home, properties, founder, about, contact, awards, team)
-- `src/components/Footer.tsx` -- copyright and ownership text
-- `src/components/GlobalSEO.tsx` -- structured data/schema.org
-- `src/components/Book3D.tsx`
-- `src/components/FounderPhilosophySection.tsx`
-- `src/components/broker/MarketReportCTAModal.tsx`
-- `src/components/executive/ExecutiveChatPanel.tsx`
-- `src/components/BrandMonogram.tsx` (if applicable)
-- And others
-
-### 4. Page Files (25+ files)
-Hardcoded instances in pages:
-- `src/pages/Founder.tsx`
-- `src/pages/PressKit.tsx`
-- `src/pages/MeetTheTeam.tsx`
-- `src/pages/CRM.tsx`
-- `src/pages/DigitalCard.tsx`
-- `src/pages/AIFinancialAdvisor.tsx`
-- `src/pages/Compare.tsx`
-- `src/pages/services/BrokerCertification.tsx`
-- `src/pages/market-intelligence/QuarterlyMarketReview.tsx`
-- `src/pages/market-intelligence/AnnualMarketSummary.tsx`
-- `src/pages/executive/ExecutiveOverview.tsx`
-- `src/pages/executive/ExecutiveMarketSignals.tsx`
-- `src/pages/executive/ExecutivePerformance.tsx`
-- And others
-
-### 5. Config Files (12 files)
-- `src/config/master-lock.ts`
-- `src/config/team-members.ts`
-- `src/config/globalSearchIndex.ts`
-- `src/config/company-communication-groups.ts`
-- `src/config/ai-comprehensive-training.ts`
-- `src/config/listing-approval-workflow.ts`
-- `src/config/assistant-brain-updates.ts`
-- And others
-
-### 6. Edge Functions (9 files)
-- `supabase/functions/_shared/ai-utils.ts`
-- `supabase/functions/submit-support-ticket/index.ts`
-- `supabase/functions/send-welcome-email/index.ts`
-- `supabase/functions/vapi-webhook/index.ts`
-- `supabase/functions/owner-ai-reply/index.ts`
-- `supabase/functions/auto-translate/index.ts`
-- `supabase/functions/ai-chat-support/index.ts`
-- `supabase/functions/ai-email-generator/index.ts`
-- `supabase/functions/executive-assistant/index.ts`
+## Translation File (1 file missed)
+- `src/translations/it.ts` -- 5 instances (founder.name, founder.description2, report.description, report.createdBy)
 
 ---
 
-## Execution Plan
+## Component Files (15 files)
 
-### Phase 1: Fix Central Constants (highest priority)
-1. Fix `src/constants/stats.ts` -- change `founder`, `founderBilingual`
-2. Fix `src/config/master-lock.ts` -- change `FOUNDER_NAME`, `FOUNDER_NAME_BILINGUAL`, `FOUNDER_FULL_TITLE`
-
-### Phase 2: Fix All Translation Files (14 files)
-Change every `'Jane Bou Jaoude'` to `'Jane bou Jaoude'` across all translation files. Each file has ~4-6 instances.
-
-### Phase 3: Fix Component Files (16+ files)
-Update all hardcoded instances in component files.
-
-### Phase 4: Fix Page Files (25+ files)
-Update all hardcoded instances in page files.
-
-### Phase 5: Fix Config Files (12 files)
-Update all hardcoded instances in config files.
-
-### Phase 6: Fix Edge Functions (9 files)
-Update all hardcoded instances in edge function files and redeploy.
+| File | Instances |
+|------|-----------|
+| `src/components/SEOHead.tsx` | ~15 (all pagesSEO entries) |
+| `src/components/FounderPhilosophySection.tsx` | 2 |
+| `src/components/FounderContent.tsx` | 3 (comments + render output) |
+| `src/components/CEOLeadershipShowcase.tsx` | 4 (alt text, heading, quote attribution) |
+| `src/components/MarketReportHeroBook.tsx` | 1 |
+| `src/components/LegalDisclaimer.tsx` | 1 |
+| `src/components/broker/MarketReportCTAModal.tsx` | 1 |
+| `src/components/crm/CRMCommunicationPanel.tsx` | 2 |
+| `src/components/signature/AISignatureGenerator.tsx` | 1 (placeholder) |
+| `src/components/seo/MarketIntelligenceSchema.tsx` | 1 |
+| `src/components/executive/ExecutiveChatPanel.tsx` | (needs verification) |
+| `src/components/Footer.tsx` | (needs verification) |
 
 ---
 
-## Technical Notes
+## Page Files (25 files)
 
-- The fix is a straightforward find-and-replace: `Jane Bou Jaoude` to `Jane bou Jaoude`
-- Case-sensitive replacement only -- must NOT change `JANE BOU JAOUDE` (all-caps is a different format)
-- The Arabic name "جاين بو جودة" remains unchanged
-- Files that already use "Jane bou Jaoude" (lowercase b) are correct and should not be touched
-- Edge functions will need redeployment after changes
-- Estimated total: ~100 files, ~300+ individual replacements
+| File | Instances |
+|------|-----------|
+| `src/pages/Founder.tsx` | ~6 (name, alt text, bio paragraphs) |
+| `src/pages/MarketReport.tsx` | ~6 (PDF HTML, alt text, heading) |
+| `src/pages/AIFinancialAdvisor.tsx` | 1 |
+| `src/pages/Quiz.tsx` | 2 |
+| `src/pages/PropertyMeasurement.tsx` | 1 |
+| `src/pages/PropertyEvaluator.tsx` | 1 |
+| `src/pages/JBJDesignStudio.tsx` | 1 (placeholder) |
+| `src/pages/Terms.tsx` | 1 |
+| `src/pages/CRM.tsx` | 1 |
+| `src/pages/DigitalCard.tsx` | 1 |
+| `src/pages/Compare.tsx` | (needs verification) |
+| `src/pages/PressKit.tsx` | (needs verification) |
+| `src/pages/MeetTheTeam.tsx` | (needs verification) |
+| `src/pages/market-intelligence/QuarterlyMarketReview.tsx` | 2 |
+| `src/pages/market-intelligence/AnnualMarketSummary.tsx` | 2 |
+| `src/pages/executive/ExecutiveOverview.tsx` | 1 |
+| `src/pages/executive/ExecutiveMarketSignals.tsx` | (needs verification) |
+| `src/pages/executive/ExecutivePerformance.tsx` | (needs verification) |
+| `src/pages/services/BrokerCertification.tsx` | (needs verification) |
 
+---
+
+## Config Files (8 files)
+
+| File | Instances |
+|------|-----------|
+| `src/config/ai-personalities.ts` | ~10 (founder object, Amanda systemPrompt, signatures) |
+| `src/config/ai-brain-training.ts` | 2 |
+| `src/config/ai-role-specific-training.ts` | 1 |
+| `src/config/department-group-structure.ts` | 3 |
+| `src/config/globalSearchIndex.ts` | 1 |
+| `src/config/company-communication-groups.ts` | 5 |
+| `src/config/listing-approval-workflow.ts` | 1 |
+| `src/config/assistant-brain-updates.ts` | 4 |
+| `src/config/team-members.ts` | 2 |
+
+---
+
+## Hook Files (2 files)
+
+| File | Instances |
+|------|-----------|
+| `src/hooks/useAIReplyEngine.ts` | 1 |
+| `src/hooks/useOwnerInbox.ts` | 1 |
+
+---
+
+## Edge Functions (7 files)
+
+| File | Instances |
+|------|-----------|
+| `supabase/functions/_shared/ai-utils.ts` | 1 |
+| `supabase/functions/ai-email-generator/index.ts` | 1 |
+| `supabase/functions/executive-assistant/index.ts` | ~12 |
+| `supabase/functions/submit-support-ticket/index.ts` | 1 |
+| `supabase/functions/auto-translate/index.ts` | 1 |
+| `supabase/functions/ai-chat-support/index.ts` | 1 |
+| `supabase/functions/vapi-webhook/index.ts` | ~6 |
+
+---
+
+## Execution Strategy
+
+All changes are a case-sensitive find-and-replace: `Jane Bou Jaoude` to `Jane bou Jaoude`.
+
+**Batch 1** (this message): Translation file (it.ts) + all component files (15 files)
+**Batch 2** (next message): All page files (15+ files)
+**Batch 3** (next message): All config files (9 files) + hook files (2 files)
+**Batch 4** (final): All edge function files (7 files) + redeploy
+
+Total: ~65 files, ~100+ individual replacements remaining.
+
+No wording, layout, or logic changes -- purely spelling correction per the locked identity standard.
