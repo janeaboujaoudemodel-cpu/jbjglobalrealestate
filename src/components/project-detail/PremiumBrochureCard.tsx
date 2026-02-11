@@ -127,7 +127,7 @@ const PremiumBrochureCard = ({
           />
           
           {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
           
           {/* Premium Gold Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-tr from-gold/15 via-transparent to-gold/5" />
@@ -146,11 +146,11 @@ const PremiumBrochureCard = ({
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
             {/* Top: Brand mark with real monogram */}
             <div className="absolute top-4 left-10 flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full border-2 border-gold/70 flex items-center justify-center bg-black/50 backdrop-blur-sm p-1.5">
+              <div className="w-11 h-11 rounded-full border-2 border-gold/70 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-hidden">
                 <img 
                   src={jbjMonogramNobuffer} 
                   alt="JBJ" 
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <p 

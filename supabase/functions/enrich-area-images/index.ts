@@ -6,8 +6,10 @@ const corsHeaders = {
 };
 
 /**
- * Enrich area images by finding the best project image from projects in that area.
- * This is fast because it uses only database queries — no external API calls.
+ * Enrich area images:
+ * 1. Try to find a project image from projects in that area
+ * 2. If no project image exists, generate one using Gemini AI
+ * 3. Upload to Supabase Storage and update the area record
  */
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -17,10 +19,12 @@ Deno.serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
     const supabase = createClient(supabaseUrl, serviceKey);
 
     const body = await req.json().catch(() => ({}));
-    const batchSize = body.batch_size || 50;
+    const batchSize = body.batch_size || 5;
+    const useAiFallback = body.use_ai_fallback !== false; // default true
 
     // Get areas missing images
     const { data: areas, error: fetchErr } = await supabase
@@ -46,10 +50,13 @@ Deno.serve(async (req) => {
       .is("hero_image_url", null)
       .eq("is_active", true);
 
-    const results: { area: string; image_url: string | null; status: string }[] = [];
+    const results: { area: string; image_url: string | null; status: string; source: string }[] = [];
 
     for (const area of areas) {
-      // Find project images for this area
+      // Step 1: Try project images
+      let imageUrl: string | null = null;
+      let source = "none";
+
       const { data: projects } = await supabase
         .from("projects")
         .select("id, main_image_url")
@@ -57,10 +64,9 @@ Deno.serve(async (req) => {
         .not("main_image_url", "is", null)
         .limit(1);
 
-      let imageUrl: string | null = null;
-
       if (projects && projects.length > 0 && projects[0].main_image_url) {
         imageUrl = projects[0].main_image_url;
+        source = "project";
       } else {
         // Try project_images table
         const { data: projectsInArea } = await supabase
@@ -80,7 +86,62 @@ Deno.serve(async (req) => {
 
           if (images && images.length > 0) {
             imageUrl = images[0].image_url;
+            source = "project_images";
           }
+        }
+      }
+
+      // Step 2: AI fallback - generate image with Gemini
+      if (!imageUrl && useAiFallback && lovableApiKey) {
+        try {
+          const prompt = `Professional aerial panoramic photograph of ${area.name}, Dubai, UAE. Modern architecture, community master plan view, luxury real estate photography, golden hour lighting, ultra high resolution, 16:9 aspect ratio.`;
+          
+          const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${lovableApiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: "google/gemini-2.5-flash-image",
+              messages: [{ role: "user", content: prompt }],
+              modalities: ["image", "text"],
+            }),
+          });
+
+          if (aiResponse.ok) {
+            const aiData = await aiResponse.json();
+            const base64Url = aiData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+
+            if (base64Url) {
+              // Extract base64 data
+              const base64Data = base64Url.replace(/^data:image\/\w+;base64,/, "");
+              const binaryData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+
+              // Upload to storage
+              const fileName = `${area.slug}.webp`;
+              const { error: uploadErr } = await supabase.storage
+                .from("area-images")
+                .upload(fileName, binaryData, {
+                  contentType: "image/png",
+                  upsert: true,
+                });
+
+              if (!uploadErr) {
+                const { data: publicUrl } = supabase.storage
+                  .from("area-images")
+                  .getPublicUrl(fileName);
+                imageUrl = publicUrl.publicUrl;
+                source = "ai_generated";
+              } else {
+                console.error(`Upload error for ${area.name}:`, uploadErr.message);
+              }
+            }
+          } else {
+            console.error(`AI generation failed for ${area.name}: ${aiResponse.status}`);
+          }
+        } catch (aiErr) {
+          console.error(`AI error for ${area.name}:`, aiErr);
         }
       }
 
@@ -98,9 +159,10 @@ Deno.serve(async (req) => {
           area: area.name,
           image_url: imageUrl,
           status: updateErr ? `error: ${updateErr.message}` : "updated",
+          source,
         });
       } else {
-        results.push({ area: area.name, image_url: null, status: "no_projects_with_images" });
+        results.push({ area: area.name, image_url: null, status: "no_image_source", source: "none" });
       }
     }
 
@@ -109,7 +171,7 @@ Deno.serve(async (req) => {
         success: true,
         processed: results.length,
         updated: results.filter(r => r.status === "updated").length,
-        no_image: results.filter(r => r.status === "no_projects_with_images").length,
+        no_image: results.filter(r => r.status === "no_image_source").length,
         remaining: (remaining || 0) - results.filter(r => r.status === "updated").length,
         results,
       }),
