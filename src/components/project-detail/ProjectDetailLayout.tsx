@@ -35,7 +35,7 @@ import { Button } from "@/components/ui/button";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import ImageCarousel from "@/components/ImageCarousel";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
-import AIMarketAnalyzer from "@/components/AIMarketAnalyzer";
+import { ProjectAIAnalyzer } from "@/components/project-detail/ProjectAIAnalyzer";
 import PremiumBrochureCard from "@/components/project-detail/PremiumBrochureCard";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import ProjectBreadcrumb from "@/components/project-detail/ProjectBreadcrumb";
@@ -971,20 +971,14 @@ export default function ProjectDetailLayout({
 
           {/* AI ANALYZER SECTION */}
           <div ref={aiRef} id="ai" className="mb-12 scroll-mt-40">
-            <div className="jj-card-inner">
-              <AIMarketAnalyzer
-                type="property"
-                name={project.name}
-                location={project.location}
-                totalPrice={project.price_from ?? undefined}
-                size={project.size_min ?? undefined}
-                bedrooms={project.bedrooms_min ?? undefined}
-                developer={project.developer?.name}
-                amenities={project.amenities ?? undefined}
-                handoverDate={project.handover_date ?? undefined}
-                variant="full"
-              />
-            </div>
+            <ProjectAIAnalyzer
+              projectName={project.name}
+              areaName={project.area_name || project.location || "Dubai"}
+              developer={project.developer?.name}
+              priceFrom={project.price_from ?? undefined}
+              handoverDate={project.handover_date ?? undefined}
+              amenities={project.amenities ?? undefined}
+            />
           </div>
 
           {/* BROCHURE - Full width two-column layout - Always visible */}
