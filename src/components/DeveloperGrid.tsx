@@ -151,7 +151,10 @@ const DeveloperGrid = () => {
                 {developer.headquarters && (
                   <div className="flex items-center gap-2 text-gray-500">
                     <span className="text-gold">📍</span>
-                    <span>{developer.headquarters}</span>
+                    <span>{(() => {
+                      const parts = developer.headquarters.split(',').map((s: string) => s.trim());
+                      return parts.length >= 2 ? `${parts[parts.length - 2]}, ${parts[parts.length - 1]}` : parts[parts.length - 1];
+                    })()}</span>
                   </div>
                 )}
               </div>
@@ -202,7 +205,7 @@ const DeveloperGrid = () => {
                   </div>
                   <div className="p-5">
                     <h4
-                      className="text-black text-lg font-semibold mb-2 line-clamp-1 group-hover:text-gold transition-colors"
+                      className="text-black text-lg font-semibold mb-2 whitespace-normal break-words leading-tight group-hover:text-gold transition-colors"
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {project.name}

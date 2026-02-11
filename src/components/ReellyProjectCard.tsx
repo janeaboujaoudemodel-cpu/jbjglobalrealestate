@@ -111,13 +111,18 @@
      return `${min}-${max} ${sizeUnit}`;
    };
  
-   // Truncate description
-   const getTruncatedDescription = () => {
-     if (!project.description) return null;
-     const maxLength = 80;
-     if (project.description.length <= maxLength) return project.description;
-     return project.description.substring(0, maxLength).trim();
-   };
+    // Truncate description - strip markdown/headers
+    const getTruncatedDescription = () => {
+      if (!project.description) return null;
+      let clean = project.description
+        .replace(/#{1,6}\s*/g, '')
+        .replace(/\*{1,3}/g, '')
+        .replace(/project\s*general\s*facts/gi, '')
+        .trim();
+      const maxLength = 80;
+      if (clean.length <= maxLength) return clean;
+      return clean.substring(0, maxLength).trim();
+    };
  
    const saleStatusBadge = getSaleStatusBadge(project.sale_status);
  
@@ -236,7 +241,7 @@
          {/* Content */}
          <div className="p-4 flex-1 flex flex-col">
            {/* Project Name */}
-           <h4 className="text-black text-lg font-bold mb-1 line-clamp-1 hover:text-gold transition-colors">
+           <h4 className="text-black text-lg font-bold mb-1 whitespace-normal break-words leading-tight hover:text-gold transition-colors">
              {project.name}
            </h4>
            
@@ -251,29 +256,27 @@
            {/* Divider */}
            <div className="h-px bg-gold/20 my-2" />
            
-         {/* Starting Price */}
-         <p className="text-sm mb-2">
-           {project.price_from ? (
-             <>
-               <span className="text-muted-foreground">Starting from </span>
-               <span className="text-gold font-bold text-lg">
-                 {formatPriceWithCurrency(project.price_from, currency)}
-               </span>
-             </>
-           ) : (project.sale_status?.toLowerCase().includes('sold') || project.status_label?.toLowerCase().includes('sold')) ? (
-             <span className="text-red-500 font-bold text-lg">Sold</span>
-           ) : (
-             <span className="text-gold font-medium">Price on Request</span>
-           )}
-         </p>
+          {/* Starting Price */}
+          <p className="text-sm mb-2">
+            {project.price_from ? (
+              <>
+                <span className="text-muted-foreground">Starting from </span>
+                <span className="text-gold font-bold text-lg">
+                  {formatPriceWithCurrency(project.price_from, currency)}
+                </span>
+              </>
+            ) : (
+              <span className="text-gold font-medium">Price on Request</span>
+            )}
+          </p>
            
            {/* Developer - Gold styled */}
-           {project.developer_name && (
-             <p className="text-sm mb-3">
-               <span className="text-muted-foreground">by </span>
-               <span className="text-gold font-medium">{project.developer_name}</span>
-             </p>
-           )}
+            {project.developer_name && (
+              <p className="text-sm mb-3">
+                <span className="text-black">by </span>
+                <span className="text-gold font-semibold">{project.developer_name}</span>
+              </p>
+            )}
            
            {/* Size info */}
            <div className="flex items-center gap-2 text-muted-foreground text-xs mb-3 flex-wrap">
@@ -289,12 +292,12 @@
            </div>
            
            {/* Description with ...more link */}
-           <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2">
-              {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-               <span className="text-black font-bold underline hover:text-black/70 cursor-pointer ml-1 inline-flex items-center gap-0.5">
-                 ...more →
-               </span>
-           </p>
+            <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1">
+               {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
+                <span className="text-gold font-bold hover:text-gold/70 cursor-pointer ml-1">
+                  ...more
+                </span>
+            </p>
          </div>
        </Link>
  
