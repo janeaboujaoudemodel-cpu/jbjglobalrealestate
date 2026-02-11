@@ -4,6 +4,8 @@ import {
   extractGalleryImages, extractVideos, extractDocuments, extractFloorPlans, extractAmenities, extractUnitTypes
 } from "../_shared/reelly-types.ts";
 import { fetchProvidentPageDataDetail } from "../_shared/provident/pagedata-detail.ts";
+import { extractFromMarkdown } from "../_shared/provident/extract-from-markdown.ts";
+import { fetchWithRetry } from "../_shared/provident/http.ts";
 
 function json(status: number, body: unknown) {
   return new Response(JSON.stringify(body), {
@@ -335,6 +337,92 @@ Deno.serve(async (req: Request): Promise<Response> => {
         enrichment.documents = provDocs;
     }
 
+    // ── Source 3: Firecrawl scrape (fallback when page-data returns empty) ──
+    let firecrawlUsed = false;
+    let firecrawlData: any = null;
+    const needsFirecrawl = enrichment.amenities.length === 0 && enrichment.usp_bullets.length === 0 &&
+      enrichment.faqs.length === 0 && !enrichment.description && enrichment.gallery.length <= 1 && enrichment.documents.length === 0;
+
+    if (needsFirecrawl) {
+      const firecrawlKey = Deno.env.get("FIRECRAWL_API_KEY");
+      if (firecrawlKey) {
+        // Try slug variants for Firecrawl too
+        const fcSlugsToTry = [project.slug, ...slugVariants.filter(s => s !== project.slug)].slice(0, 3);
+        
+        for (const fcSlug of fcSlugsToTry) {
+          const fcUrl = `https://providentestate.com/new-projects/${fcSlug}/`;
+          console.log(`[enrich-test] Firecrawl fallback scraping: ${fcUrl}`);
+          
+          try {
+            const scrapeRes = await fetchWithRetry("https://api.firecrawl.dev/v1/scrape", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${firecrawlKey}` },
+              body: JSON.stringify({
+                url: fcUrl,
+                formats: ["markdown", "links"],
+                waitFor: 8000,
+                timeout: 60000,
+                onlyMainContent: false,
+              }),
+            });
+
+            if (scrapeRes.status === 402) {
+              console.error("[enrich-test] Firecrawl 402: Insufficient credits");
+              break;
+            }
+
+            if (!scrapeRes.ok) {
+              const errText = await scrapeRes.text();
+              console.warn(`[enrich-test] Firecrawl ${scrapeRes.status} for ${fcSlug}: ${errText.substring(0, 100)}`);
+              continue;
+            }
+
+            const scrapeData = await scrapeRes.json();
+            const md = scrapeData.data?.markdown || "";
+            const fcLinks = scrapeData.data?.links || [];
+
+            if (md.length < 200) {
+              console.warn(`[enrich-test] Firecrawl returned short markdown (${md.length} chars) for ${fcSlug}`);
+              continue;
+            }
+
+            firecrawlData = extractFromMarkdown(md, "", fcLinks);
+            firecrawlUsed = true;
+
+            console.log(`[enrich-test] Firecrawl extracted: ${firecrawlData.images.length} imgs, ${firecrawlData.documents.length} docs, ${firecrawlData.amenities.length} amenities, ${firecrawlData.uspBullets.length} USPs, ${firecrawlData.faqs.length} FAQs`);
+
+            // Merge Firecrawl data into enrichment where still empty
+            if (enrichment.amenities.length === 0 && firecrawlData.amenities.length > 0)
+              enrichment.amenities = firecrawlData.amenities;
+            if (enrichment.usp_bullets.length === 0 && firecrawlData.uspBullets.length > 0)
+              enrichment.usp_bullets = firecrawlData.uspBullets;
+            if (enrichment.location_distances.length === 0 && firecrawlData.locationDistances.length > 0)
+              enrichment.location_distances = firecrawlData.locationDistances;
+            if (enrichment.faqs.length === 0 && firecrawlData.faqs.length > 0)
+              enrichment.faqs = firecrawlData.faqs;
+            if (enrichment.floor_plans.length === 0 && firecrawlData.floorPlanTypes.length > 0)
+              enrichment.floor_plans = firecrawlData.floorPlanTypes.map((fp: any) => ({ type: fp.label, url: fp.pdfUrl || '', label: fp.label }));
+            if (!enrichment.description && firecrawlData.description)
+              enrichment.description = firecrawlData.description;
+            if (!enrichment.payment_plan && firecrawlData.paymentPlan)
+              enrichment.payment_plan = firecrawlData.paymentPlan;
+            if (enrichment.payment_breakdown.length === 0 && Object.keys(firecrawlData.paymentBreakdown).length > 0)
+              enrichment.payment_breakdown = [firecrawlData.paymentBreakdown];
+            if (enrichment.gallery.length <= 1 && firecrawlData.images.length > 0)
+              enrichment.gallery = [...enrichment.gallery, ...firecrawlData.images.map((img: any, i: number) => ({ url: img.url, alt_text: img.alt_text, display_order: (enrichment.gallery.length) + i }))];
+            if (enrichment.documents.length === 0 && firecrawlData.documents.length > 0)
+              enrichment.documents = firecrawlData.documents;
+
+            break; // Success, stop trying variants
+          } catch (fcErr) {
+            console.error(`[enrich-test] Firecrawl error for ${fcSlug}:`, fcErr);
+          }
+        }
+      } else {
+        console.warn("[enrich-test] FIRECRAWL_API_KEY not configured, skipping fallback");
+      }
+    }
+
     // Build "after" snapshot
     const after = {
       amenities_count: enrichment.amenities.length || before.amenities_count,
@@ -344,6 +432,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
       documents_count: (docCount || 0) + enrichment.documents.length,
       new_images: enrichment.gallery.length,
       new_documents: enrichment.documents.length,
+      document_names: enrichment.documents.map(d => d.name || d.type),
       faqs_count: enrichment.faqs.length || before.faqs_count,
       floor_plans_count: enrichment.floor_plans.length || before.floor_plans_count,
       unit_types_count: enrichment.unit_types.length || before.unit_types_count,
@@ -354,6 +443,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
       has_service_charge: enrichment.service_charge != null || before.has_service_charge,
       has_roi_estimate: enrichment.roi_estimate != null || before.has_roi_estimate,
       gallery_preview: enrichment.gallery.slice(0, 4).map(g => g.url),
+      source: firecrawlUsed ? "firecrawl" : (providentData ? "provident_pagedata" : (reellyData ? "reelly" : "none")),
     };
 
     // If action is "apply", write ALL fields to DB
@@ -384,7 +474,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
           image_url: img.url,
           alt_text: img.alt_text || `${project.name} image ${i + 1}`,
           display_order: (imageCount || 0) + i,
-          data_source: providentData ? "provident_enrichment" : "reelly_enrichment",
+          data_source: firecrawlUsed ? "firecrawl_enrichment" : (providentData ? "provident_enrichment" : "reelly_enrichment"),
         }));
         await supabase.from("project_images").insert(newImages);
       }
@@ -395,7 +485,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
           file_url: doc.url,
           document_type: doc.type,
           file_name: doc.name || doc.type,
-          data_source: providentData ? "provident_enrichment" : "reelly_enrichment",
+          data_source: firecrawlUsed ? "firecrawl_enrichment" : (providentData ? "provident_enrichment" : "reelly_enrichment"),
         }));
         await supabase.from("project_documents").insert(newDocs);
       }
@@ -462,6 +552,22 @@ Deno.serve(async (req: Request): Promise<Response> => {
               },
             }
           : { available: false, reason: "No Provident slug match" },
+        firecrawl: firecrawlUsed
+          ? {
+              available: true,
+              fields_found: {
+                amenities: firecrawlData?.amenities?.length || 0,
+                images: firecrawlData?.images?.length || 0,
+                documents: firecrawlData?.documents?.length || 0,
+                faqs: firecrawlData?.faqs?.length || 0,
+                usp_bullets: firecrawlData?.uspBullets?.length || 0,
+                floor_plans: firecrawlData?.floorPlanTypes?.length || 0,
+                distances: firecrawlData?.locationDistances?.length || 0,
+                description: firecrawlData?.description ? 1 : 0,
+                payment_plan: firecrawlData?.paymentPlan ? 1 : 0,
+              },
+            }
+          : { available: false, reason: needsFirecrawl ? "No API key or scrape failed" : "Not needed" },
       },
     });
   } catch (e) {
