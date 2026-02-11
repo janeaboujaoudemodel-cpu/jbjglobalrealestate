@@ -148,6 +148,7 @@ export type ProjectDetailData = {
   import_source?: string | null;
   cover_image_url?: string | null;
   external_id?: string | null;
+  area_name?: string | null;
 };
 
 interface ProjectDetailLayoutProps {
@@ -1023,6 +1024,7 @@ export default function ProjectDetailLayout({
                       : setLeadCaptureOpen(true)
                     }
                     isLocked={!brochurePrimary || (!isLeadCaptured && !!brochurePrimary)}
+                    location={project.area_name ? `${project.area_name} • Dubai` : undefined}
                   />
                 </div>
               </div>
