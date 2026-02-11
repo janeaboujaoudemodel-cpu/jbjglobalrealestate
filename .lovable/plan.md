@@ -1,80 +1,66 @@
 
 
-# Outstanding Tasks Found -- Fixes Required
+# Remaining Incomplete Tasks -- Final Audit
 
-After a thorough audit of the codebase and live browser testing, here are the **real outstanding tasks** that were previously marked as "completed" but are NOT actually done:
-
----
-
-## Issue 1: ModeSelectionModal is NEVER Rendered (JBJ-019 -- NOT DONE)
-
-**Problem:** The `ModeSelectionModal` component exists at `src/components/ModeSelectionModal.tsx` and is fully implemented, but it is **never imported or rendered anywhere** in the application. It is not in `PopupLayer.tsx`, not in `MainLayout.tsx`, not in `App.tsx` -- nowhere.
-
-**Memory spec says:** "First-time users are prompted to select a mode via the ModeSelectionModal (persisted in jj_mode_selected). Upon selection, a guidance toast with a visual pointer indicates that the mode can be changed anytime via the profile menu."
-
-**Fix:** Add `ModeSelectionModal` to `PopupLayer.tsx` so it renders centrally via the PopupCoordinator system (which already has priority 3 registered for `mode-selection-modal`).
-
-**Files to edit:**
-- `src/components/PopupLayer.tsx` -- import and render `<ModeSelectionModal />`
+After a thorough code audit, here are all the tasks that are still NOT done or only partially done:
 
 ---
 
-## Issue 2: GlobalContactGating is NEVER Used (Missing Feature)
+## Task 1: Financial Disclaimer Missing on AIROICalculatorPremium
 
-**Problem:** `GlobalContactGating.tsx` wraps the `ContactGatingModal` and is fully implemented with `useContactGating` hook, but it is **never imported or rendered** in `MainLayout.tsx`, `App.tsx`, or any wrapper. The contact gating flow for requiring user info before accessing certain features is dead code.
+**Problem:** The compliance rule explicitly names "ROI Calculators" as requiring the gold-styled disclaimer link. `AIROICalculatorPremium.tsx` calls `AIToolPremiumLayout` WITHOUT the `showFinancialDisclaimer` prop (line 84-91). This is a financial/investment tool that calculates returns -- it absolutely needs the disclaimer.
 
-**Fix:** Add `GlobalContactGating` as a wrapper in `MainLayout.tsx` around the main content area.
+**Fix:** Add `showFinancialDisclaimer` prop to the `AIToolPremiumLayout` call in `AIROICalculatorPremium.tsx`.
 
-**Files to edit:**
-- `src/components/MainLayout.tsx` -- import and wrap children with `<GlobalContactGating>`
-
----
-
-## Issue 3: Financial Disclaimer Links Missing on Some AI Tools
-
-**Problem:** Per the compliance memory: "All financial disclaimers (AI Analyzers, DLD Widgets, ROI Calculators) must append a gold-styled link: 'Contact our team for professional guidance'". While many tools have this, some AI tool pages may be missing it. The search for "Contact our team for professional guidance" found matches in only ~11 files, but there are 30+ AI tool pages.
-
-**Fix:** Audit all AI tool pages and add the disclaimer link where missing (especially tools that produce financial/investment outputs).
-
-**Files to audit:**
-- All `src/pages/AI*.tsx` pages that generate financial/investment analysis
-- `src/components/ai-tools/premium/*.tsx` components
+**File:** `src/components/ai-tools/premium/AIROICalculatorPremium.tsx` (line ~90, add `showFinancialDisclaimer`)
 
 ---
 
-## Issue 4: Golden Visa Language -- "eligible to apply" Not Used Everywhere
+## Task 2: Financial Disclaimer Missing on AIContractReviewerPremium
 
-**Problem:** The compliance memory states: 'Golden Visa eligibility is described as "eligible to apply"'. The Golden Visa Guide page correctly uses this phrasing, but the search index, property cards, and other references throughout the site may still use phrases like "qualifies for Golden Visa" or "Golden Visa eligible" without the "to apply" qualifier.
+**Problem:** `AIContractReviewerPremium.tsx` has a red legal disclaimer card but does NOT have the mandatory gold-styled "Contact our team for professional guidance" link that redirects to `/contact`. The existing disclaimer says "consult a qualified legal professional" but doesn't link to the contact page as required.
 
-**Fix:** Search for all Golden Visa references and ensure compliance wording ("eligible to apply") is used consistently.
+**Fix:** Add `showFinancialDisclaimer` prop to its `AIToolPremiumLayout` call (line ~74-81).
 
----
-
-## Issue 5: Header Search Dropdown -- Missing "Trending Searches" / "Recent Searches"
-
-**Problem:** The header search panel (JBJ-003) was expanded to 620px and Popular Pages were added, but the original requirement mentioned "shortcut suggestions" and improved UX. The current embedded search panel shows Quick Access shortcuts and Popular Pages but has no "Recent Searches" or "Trending Searches" section -- features users expect from a premium search UX.
-
-**Fix:** Add a "Recent Searches" section that persists via localStorage, showing the user's last 5 searches for quick re-access.
-
-**Files to edit:**
-- `src/components/GlobalSearchModal.tsx` -- add recent searches tracking and display
+**File:** `src/components/ai-tools/premium/AIContractReviewerPremium.tsx` (line ~80, add `showFinancialDisclaimer`)
 
 ---
 
-## Technical Summary
+## Task 3: Golden Visa Wording -- "Get Your Golden Visa" on Homepage
 
-| Issue | Component | Status | Fix Effort |
-|-------|-----------|--------|------------|
-| ModeSelectionModal not rendered | PopupLayer.tsx | NOT DONE | Small -- 1 import + 1 JSX line |
-| GlobalContactGating not used | MainLayout.tsx | NOT DONE | Small -- 1 import + wrap |
-| Financial disclaimers incomplete | AI tool pages | PARTIAL | Medium -- audit 30+ pages |
-| Golden Visa wording consistency | Multiple files | PARTIAL | Small -- search and replace |
-| Recent Searches in header | GlobalSearchModal.tsx | NOT DONE | Medium -- localStorage + UI |
+**Problem:** The compliance memory states Golden Visa eligibility must be described as "eligible to apply". The `ExploreServicesCard.tsx` homepage card (line 100) says **"Get Your Golden Visa"** -- this implies guaranteed issuance, which violates the compliance standard.
 
-### Execution Order
-1. ModeSelectionModal rendering (highest priority -- user-facing onboarding)
-2. GlobalContactGating integration (lead capture flow)
-3. Recent Searches in header search
-4. Financial disclaimer audit
-5. Golden Visa wording audit
+**Fix:** Change title from "Get Your Golden Visa" to "Golden Visa Advisory" and update description to include "eligible to apply" phrasing.
+
+**File:** `src/components/home/ExploreServicesCard.tsx` (lines 100-101)
+
+---
+
+## Task 4: Golden Visa Wording -- MegaMenuServices Description
+
+**Problem:** `MegaMenuServices.tsx` line 44 says **"Mortgages, Golden Visa, conveyancing, management and more"** -- while this is a navigation label (acceptable), the broader context of the card implies direct service provision. This is borderline but should be consistent.
+
+**Fix:** Update to "Mortgages, Golden Visa advisory, conveyancing, management and more" -- minor wording adjustment.
+
+**File:** `src/components/header/MegaMenuServices.tsx` (line 44)
+
+---
+
+## Task 5: AIInvestmentReportPage Missing `showFinancialDisclaimer` on Layout
+
+**Problem:** While `AIInvestmentReportPage.tsx` was supposedly updated with the disclaimer, let me verify the actual prop is there.
+
+**Verification needed:** Confirm `showFinancialDisclaimer` is present in the layout call.
+
+---
+
+## Execution Order
+
+1. Add `showFinancialDisclaimer` to `AIROICalculatorPremium.tsx`
+2. Add `showFinancialDisclaimer` to `AIContractReviewerPremium.tsx`
+3. Fix "Get Your Golden Visa" wording in `ExploreServicesCard.tsx`
+4. Fix MegaMenuServices Golden Visa description
+5. Verify AIInvestmentReportPage disclaimer
+
+All fixes are small -- single-line or two-line changes per file.
 
