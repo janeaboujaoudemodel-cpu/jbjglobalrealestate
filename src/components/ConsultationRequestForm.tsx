@@ -19,6 +19,7 @@ import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
+import { getCountryList, getLanguageList, COUNTRY_FLAGS, LANGUAGE_FLAGS } from "@/constants/localeOptions";
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required"),
@@ -59,17 +60,6 @@ const TIMELINE_OPTIONS = [
   { value: "just-exploring", label: "Just Exploring" },
 ];
 
-const NATIONALITIES = [
-  "UAE", "India", "Pakistan", "United Kingdom", "Russia", "China",
-  "Philippines", "Egypt", "Jordan", "Lebanon", "Saudi Arabia",
-  "Iran", "Germany", "France", "Canada", "United States",
-  "Australia", "South Africa", "Nigeria", "Brazil", "Other",
-];
-
-const LANGUAGES = [
-  "English", "Arabic", "Hindi", "Russian", "Chinese", "French",
-  "Urdu", "Tagalog", "German", "Spanish", "Other",
-];
 
 const CONTACT_TIMES = [
   "Morning (9AM-12PM)", "Afternoon (12PM-5PM)", "Evening (5PM-9PM)", "Anytime",
@@ -326,9 +316,9 @@ export const ConsultationRequestForm = ({
                         <SelectValue placeholder="Nationality" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className={selectContentClass}>
-                      {NATIONALITIES.map((n) => (
-                        <SelectItem key={n} value={n}>{n}</SelectItem>
+                    <SelectContent className={`${selectContentClass} max-h-[300px] overflow-y-auto`}>
+                      {getCountryList().map((n) => (
+                        <SelectItem key={n} value={n}>{COUNTRY_FLAGS[n] ? `${COUNTRY_FLAGS[n]} ${n}` : n}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -347,9 +337,9 @@ export const ConsultationRequestForm = ({
                         <SelectValue placeholder="Preferred Language" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className={selectContentClass}>
-                      {LANGUAGES.map((l) => (
-                        <SelectItem key={l} value={l}>{l}</SelectItem>
+                    <SelectContent className={`${selectContentClass} max-h-[300px] overflow-y-auto`}>
+                      {getLanguageList().map((l) => (
+                        <SelectItem key={l} value={l}>{LANGUAGE_FLAGS[l] ? `${LANGUAGE_FLAGS[l]} ${l}` : l}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
