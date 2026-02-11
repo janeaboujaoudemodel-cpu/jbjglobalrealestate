@@ -146,22 +146,26 @@ const ServicesGrid = () => {
         <div className="relative">
           {/* Left Arrow */}
           <motion.button
-            whileTap={{ scale: 0.85 }}
+            whileHover={{ scale: 1.1, boxShadow: "0 0 16px rgba(200,167,102,0.6)" }}
+            whileTap={{ scale: 0.8, backgroundColor: "rgba(200,167,102,0.25)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.15)" }}
+            transition={{ type: "spring", stiffness: 400, damping: 15 }}
             onClick={() => scroll("left")}
             className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/95 border-2 border-gold shadow-lg flex items-center justify-center transition-opacity lg:hidden ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             aria-label="Previous service"
           >
-            <ChevronLeft className="w-5 h-5 text-zinc-800" />
+            <ChevronLeft className="w-5 h-5 text-zinc-800 active:text-gold transition-colors" />
           </motion.button>
 
           {/* Right Arrow */}
           <motion.button
-            whileTap={{ scale: 0.85 }}
+            whileHover={{ scale: 1.1, boxShadow: "0 0 16px rgba(200,167,102,0.6)" }}
+            whileTap={{ scale: 0.8, backgroundColor: "rgba(200,167,102,0.25)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.15)" }}
+            transition={{ type: "spring", stiffness: 400, damping: 15 }}
             onClick={() => scroll("right")}
             className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/95 border-2 border-gold shadow-lg flex items-center justify-center transition-opacity lg:hidden ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             aria-label="Next service"
           >
-            <ChevronRight className="w-5 h-5 text-zinc-800" />
+            <ChevronRight className="w-5 h-5 text-zinc-800 active:text-gold transition-colors" />
           </motion.button>
 
           {/* Cards container: horizontal scroll on mobile, grid on desktop */}
