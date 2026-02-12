@@ -1,81 +1,61 @@
 
 
-## Fix Plan: Search Bar in FilterShortcutBar + Sort Pills Layout + News Page Fixes
+## Fix Plan: Search Field Sizing, Saved Heart Color, Scroll Timing, Currency/Size Conversion, and Vertical Nav Updates
 
-### Issue 1: FilterShortcutBar Row 1 Layout Fix
+### 1. Reduce Search Field Width in Row 1 (Normal Load)
 
-**Current Problem:** On the Properties page, the `FilterShortcutBar` Row 1 shows: `Map | Saved | AED | Filter | Mode: Investor` but NO search input and NO sort pills. The search bar is rendered separately above the FilterShortcutBar. The "Mode: Investor" button stretches too wide.
+**File: `src/components/filters/FilterShortcutBar.tsx`**
+- Change the search slot container from `flex-1` to `max-w-[220px]` (or similar) so the search input takes less space and the remaining sort pills + controls appear larger and more prominent
+- Keep `min-w-0` for overflow protection
 
-**Required Layout (Row 1):**
-```
-[ Search (area, project, keyword...) ] | Newest | Low-High | High-Low | A-Z | Map | Saved | AED | Filter | Mode: Investor
-```
+### 2. Make Saved Heart Icon Red
 
-**Required Layout (Row 2 - unchanged):**
-```
-Price | Payments | Handover | Property Type | Bedrooms | Status | Construction | Hide Sold | Reset
-```
+**File: `src/components/filters/FilterShortcutBar.tsx`**
+- In `ConnectedSavedButton` (line 699), change the Heart icon to have `text-red-500 fill-red-500` styling so it appears as a solid red heart
 
-**Changes to `src/components/filters/FilterShortcutBar.tsx`:**
-- Move the 4 sort pills (Newest, Low-High, High-Low, A-Z) from Row 2 into Row 1, positioned BETWEEN the search slot and the Map toggle
-- Sort pills in Row 1 should be compact inline buttons within the connected bar (same height/style as Map, Saved, etc.)
-- Remove sort pills from Row 2 (keep only filter popovers + Hide Sold + Reset)
-- Fix "Mode: Investor" button to use compact sizing (`max-w-fit`, not stretching) -- same as other buttons in the bar
+### 3. Fix Scroll Timing for Fixed/Unfixed Filter Bar
 
-**Changes to `src/pages/Properties.tsx`:**
-- Pass the existing search input as `searchSlot` to FilterShortcutBar instead of rendering it separately
-- Remove the separate search input above FilterShortcutBar
-- Make placeholder text: "Search area, project or keyword..."
+**File: `src/pages/PropertiesReelly.tsx`**
+- The current `IntersectionObserver` uses `rootMargin: "-80px 0px 0px 0px"` which creates a delay
+- Reduce the rootMargin to `"-1px 0px 0px 0px"` so the transition triggers almost immediately when the sentinel leaves the viewport
+- Add CSS `transition-none` or `will-change: transform` to the filter section to eliminate visual lag during the fixed/unfixed state change
 
-**Changes to `src/pages/AreaGuides.tsx`:**
-- Ensure the same searchSlot pattern is passed (already done for sticky version, verify inline version too)
+### 4. Wire Currency and Size Unit Conversions to All Filters
 
----
+**File: `src/components/filters/FilterShortcutBar.tsx`**
+- When currency changes (via `ConnectedCurrencyButton`), convert `priceMin`/`priceMax` values from old currency to new currency using exchange rates
+- When switching between sqft/sqm in the Price popover tabs (`priceMode`), convert `sizeMin`/`sizeMax` values accordingly (1 sqm = 10.764 sqft)
+- Listen for `currencyChange` custom events and update filter values accordingly
+- Add conversion logic: maintain a base AED value and convert display values based on selected currency
 
-### Issue 2: News Page Hero Video
+### 5. Update PropertiesVerticalNav
 
-**Problem:** The hero section still uses the `press-kit-hero.mp4` video which the user finds ugly.
+**File: `src/components/navigation/PropertiesVerticalNav.tsx`**
 
-**Fix in `src/pages/News.tsx`:**
-- Replace the video with a static gradient background with the JBJ monogram as a subtle watermark
-- Use a premium dark gradient (`bg-gradient-to-b from-black via-zinc-900 to-black`) with gold accent blurs
-- Add the JBJ monogram image centered with low opacity as a brand element
+**Logo section:**
+- Make monogram larger: change `w-8 h-8` to `w-12 h-12`
+- Add "Real Estate" text under "JBJ GLOBAL" as a second line
 
----
+**Navigation items - expand the list:**
+Current: Off-plan, Market, Guides, Services, About, Contact
+New list:
+- Off-plan (Properties)
+- Buy
+- Sell
+- Rent
+- List Your Property
+- Developers
+- Projects
+- AI Tools (Toolkit)
+- Market Intelligence
+- Guides
+- Services
+- About
 
-### Issue 3: News Featured Badge Color
-
-**Problem:** The "Featured" badge on line 379 uses `bg-gold` (old yellow gold), not the new champagne gradient style.
-
-**Fix in `src/pages/News.tsx`:**
-- Change Featured badge from `bg-gold` to `bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] text-black border border-gold/50`
-
----
-
-### Issue 4: News Cards Missing Photos
-
-**Problem:** 10+ news articles have `image_url = NULL`. Cards show a dark gradient placeholder with a newspaper icon.
-
-**Fix in `supabase/functions/ai-news-collector/index.ts`:**
-- After scraping each article, if no image is found, use Firecrawl Search to find a relevant image for that article's topic
-- Search query: `"{article_title}" Dubai real estate photo`
-- Extract image URLs from search results, pick the first high-quality one
-- Deduplicate across the batch to prevent same image on multiple cards
-- Also add a one-time backfill: create a small edge function or SQL update to find existing articles without images and populate them
-
-**Fix in `src/pages/News.tsx`:**
-- For cards that STILL have no image, show a better placeholder with the article category icon and a premium gradient instead of the dark void
-
----
-
-### Issue 5: Duplicate Photos on News Cards
-
-**Problem:** Same photo appears on multiple news cards.
-
-**Fix in `supabase/functions/ai-news-collector/index.ts`:**
-- Track all image URLs used in the current batch
-- Before assigning an image, check if it's already been used
-- If duplicate, search for an alternative image or skip
+**Footer section:**
+- Make "Contact Support" bolder/larger with gold styling
+- Add "Support Ticket" link below it
+- Remove the small logo from the bottom
 
 ---
 
@@ -83,32 +63,49 @@ Price | Payments | Handover | Property Type | Bedrooms | Status | Construction |
 
 | File | Change |
 |------|--------|
-| `src/components/filters/FilterShortcutBar.tsx` | Move sort pills from Row 2 to Row 1 (between search and Map); fix Mode button sizing |
-| `src/pages/Properties.tsx` | Pass search input as `searchSlot` to FilterShortcutBar; remove separate search input |
-| `src/pages/News.tsx` | Replace hero video with static gradient + monogram; fix Featured badge to champagne style; improve no-image placeholder |
-| `supabase/functions/ai-news-collector/index.ts` | Add Firecrawl image search fallback for articles without images; deduplicate across batch |
+| `src/components/filters/FilterShortcutBar.tsx` | Reduce search slot width; red heart icon on Saved; wire currency/size conversion to price/size filters |
+| `src/pages/PropertiesReelly.tsx` | Fix IntersectionObserver rootMargin for faster scroll toggle |
+| `src/components/navigation/PropertiesVerticalNav.tsx` | Bigger monogram; add "Real Estate" under company name; expand nav items (Buy, Sell, Rent, List, Developers, Projects, AI Tools, Market Intelligence); replace footer logo with Support Ticket link |
 
 ### Technical Details
 
-**FilterShortcutBar Row 1 new structure:**
+**Currency conversion rates (approximate, stored as constants):**
 ```
-<div connected-bar>
-  {searchSlot}           // flex-1, search input
-  | Newest | Low-High | High-Low | A-Z   // sort buttons, compact, border-r separators
-  | Map | Saved | AED | Filter | Mode    // existing controls
-</div>
+AED: 1, USD: 0.2723, EUR: 0.2512, GBP: 0.2145, INR: 22.73
 ```
+When user switches currency, multiply existing price filter values by `newRate / oldRate`.
 
-Each sort button in Row 1 will be a compact inline button matching the style of Map/Saved/AED (same `px-3 py-2.5 text-xs font-semibold` with `border-r border-gold/20`). Active sort will have `bg-gold/20 text-black font-bold`.
+**Size conversion:**
+```
+1 sqm = 10.764 sqft
+```
+When toggling priceMode between sqft and sqm, convert sizeMin/sizeMax accordingly.
 
-**Mode button fix:** Add `flex-shrink-0` and remove any `flex-1` or stretching. Keep same compact style as other buttons.
+**Scroll fix:**
+```
+rootMargin: "-1px 0px 0px 0px"  // instead of "-80px"
+```
+This triggers the fixed state as soon as the sentinel scrolls past the top edge, eliminating the delay.
 
-**News hero replacement:**
+**Heart icon:**
 ```tsx
-<div className="absolute inset-0 bg-gradient-to-b from-zinc-900 via-black to-black">
-  <img src={jbjMonogram} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 opacity-5" />
-  <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-</div>
+<Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
 ```
 
-**News image backfill approach:** After deploying the collector fix, run a one-time collection to backfill existing articles. Alternatively, update the edge function to accept an `action: 'backfill-images'` parameter that queries articles with null images and searches for images via Firecrawl.
+**Vertical nav expanded items:**
+```ts
+const NAV_ITEMS = [
+  { label: "Off-plan", href: "/properties", icon: Building2 },
+  { label: "Buy", href: "/buy", icon: Home },
+  { label: "Sell", href: "/sell", icon: Tag },
+  { label: "Rent", href: "/rent", icon: Key },
+  { label: "List Property", href: "/list-property", icon: PlusCircle },
+  { label: "Developers", href: "/developers", icon: Building },
+  { label: "Projects", href: "/projects", icon: Layers },
+  { label: "AI Tools", href: "/toolkit", icon: Cpu },
+  { label: "Market Intel", href: "/market-intelligence", icon: BarChart3 },
+  { label: "Guides", href: "/guides", icon: BookOpen },
+  { label: "Services", href: "/services", icon: Briefcase },
+  { label: "About", href: "/about", icon: Users },
+];
+```
