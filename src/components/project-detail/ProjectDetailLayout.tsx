@@ -33,6 +33,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import MortgageCalculator from "@/components/MortgageCalculator";
+import PropertySearchBar from "@/components/PropertySearchBar";
 import ImageCarousel from "@/components/ImageCarousel";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import { ProjectAIAnalyzer } from "@/components/project-detail/ProjectAIAnalyzer";
@@ -575,16 +576,24 @@ export default function ProjectDetailLayout({
 
       {adminBar}
 
-      {/* STICKY SUB-NAVIGATION - Appears on scroll */}
+      {/* STICKY SUB-NAVIGATION - Two rows: Search + Shortcuts */}
       <div 
         className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
           showStickyNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
         }`}
       >
+        {/* Row 1: Search Bar */}
+        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-2 px-4">
+          <div className="container mx-auto">
+            <PropertySearchBar compact />
+          </div>
+        </div>
+
+        {/* Row 2: Curated Shortcuts */}
         <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8] border-b border-gold/30 shadow-md">
           <div className="container mx-auto px-4">
             <div className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'contain' }}>
-              <div className="flex items-center gap-1 py-1.5 justify-center">
+              <div className="flex items-center gap-1 py-1.5">
                 {[
                   { id: "details", label: "Details", icon: FileText },
                   { id: "gallery", label: "Gallery", icon: ImageIcon },
@@ -593,11 +602,10 @@ export default function ProjectDetailLayout({
                   { id: "brochure", label: "Brochure", icon: Download },
                   { id: "ai", label: "AI Analyzer", icon: Sparkles },
                   { id: "mortgage", label: "Mortgage", icon: Calculator },
-                  { id: "inquiry", label: "Register Interest", icon: UserPlus },
                 ].map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => tab.id === "inquiry" ? scrollToInquiry() : handleTabClick(tab.id)}
+                    onClick={() => handleTabClick(tab.id)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap min-w-fit transition-all ${
                       activeTab === tab.id
                         ? "bg-gold/20 text-gold border border-gold/40"
@@ -608,6 +616,15 @@ export default function ProjectDetailLayout({
                     <span>{tab.label}</span>
                   </button>
                 ))}
+                {/* Register Interest - Highlighted Gold CTA */}
+                <button
+                  onClick={scrollToInquiry}
+                  className="flex items-center gap-1.5 ml-auto px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit transition-all bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110"
+                  style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}
+                >
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>Register Interest</span>
+                </button>
               </div>
             </div>
           </div>
