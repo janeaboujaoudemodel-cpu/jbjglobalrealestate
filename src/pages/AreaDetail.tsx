@@ -77,33 +77,54 @@ const AreaDetail = () => {
       <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-        <div className="container mx-auto px-4">
+      <section className="py-20 bg-black relative overflow-hidden">
+        {/* Ambient glow effects */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+        
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div 
-            className="max-w-4xl mx-auto text-center bg-white rounded-3xl p-10 md:p-12 border border-gold/30 shadow-lg relative overflow-hidden"
+            className="max-w-4xl mx-auto text-center rounded-3xl p-10 md:p-14 border-2 border-gold/40 relative overflow-hidden"
+            style={{
+              background: 'linear-gradient(165deg, rgba(12,12,14,0.98) 0%, rgba(8,8,10,1) 50%, rgba(4,4,6,1) 100%)',
+              boxShadow: '0 30px 80px -20px rgba(0,0,0,0.8), 0 0 60px rgba(200,167,102,0.08), inset 0 1px 0 rgba(200,167,102,0.1)',
+            }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
             {/* Gold accent line at top */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+            {/* Corner accents */}
+            <div className="absolute top-0 left-0 w-16 h-16 pointer-events-none">
+              <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-gold to-transparent" />
+              <div className="absolute top-0 left-0 h-full w-[2px] bg-gradient-to-b from-gold to-transparent" />
+            </div>
+            <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none">
+              <div className="absolute top-0 right-0 w-full h-[2px] bg-gradient-to-l from-gold to-transparent" />
+              <div className="absolute top-0 right-0 h-full w-[2px] bg-gradient-to-b from-gold to-transparent" />
+            </div>
             
-            <MapPin className="w-8 h-8 text-gold mx-auto mb-4" />
-            <h2 className="text-black text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <div className="w-14 h-14 rounded-2xl bg-gold/10 border border-gold/30 flex items-center justify-center mx-auto mb-6">
+              <MapPin className="w-7 h-7 text-gold" />
+            </div>
+            <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
               Explore Properties in {area.name}
             </h2>
-            <p className="text-zinc-600 text-lg mb-8 max-w-2xl mx-auto">
+            <p className="text-zinc-400 text-lg mb-10 max-w-2xl mx-auto">
               Browse our curated collection of verified properties in this premium neighborhood.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to={`/properties?area=${area.slug}`}>
-                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all shadow-md">
+                <Button className="px-8 py-6 text-base bg-gradient-to-r from-gold via-gold-light to-gold text-black font-bold border border-gold/60 hover:shadow-[0_0_30px_rgba(200,167,102,0.4)] hover:scale-105 transition-all duration-300 rounded-xl">
                   View Properties
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
               <Link to="/contact">
-                <Button variant="secondary" className="border-2 border-black text-black hover:bg-black hover:text-white px-8 py-6 text-base font-bold shadow-md">
+                <Button variant="secondary" className="border-2 border-gold/40 text-gold hover:bg-gold/10 hover:border-gold px-8 py-6 text-base font-bold transition-all duration-300 rounded-xl bg-transparent">
                   <Phone className="w-5 h-5 mr-2" />
                   Contact Us
                 </Button>
