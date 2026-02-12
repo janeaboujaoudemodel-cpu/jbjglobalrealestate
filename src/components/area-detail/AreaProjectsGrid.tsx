@@ -3,13 +3,12 @@ import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, ArrowUpRight, Search, X, Building2, Filter } from "lucide-react";
+import { Loader2, ArrowUpRight, Search, X } from "lucide-react";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Project } from "@/hooks/useProjects";
 
 interface AreaProjectsGridProps {
@@ -19,10 +18,6 @@ interface AreaProjectsGridProps {
 
 export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [developerFilter, setDeveloperFilter] = useState("all");
-  const [bedroomFilter, setBedroomFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("newest");
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const [isFixed, setIsFixed] = useState(false);
   const [bottomReached, setBottomReached] = useState(false);
@@ -93,43 +88,6 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     return () => document.body.classList.remove('filter-bar-fixed');
   }, [isFixed, bottomReached]);
 
-  const statusOptions = useMemo(() => {
-    if (!projects) return [];
-    const statuses = new Set<string>();
-    projects.forEach(p => {
-      const s = p.status_label || p.construction_status;
-      if (s) statuses.add(s);
-    });
-    return Array.from(statuses);
-  }, [projects]);
-
-  // Build developer options with logo_url from the joined developers data
-  const developerOptionsWithLogos = useMemo(() => {
-    if (!projects) return [];
-    const devMap = new Map<string, { name: string; logo_url: string | null }>();
-    projects.forEach(p => {
-      const dev = p.developer as any;
-      const name = dev?.name || p.developer_name;
-      if (name && !devMap.has(name)) {
-        devMap.set(name, {
-          name,
-          logo_url: dev?.logo_url || null,
-        });
-      }
-    });
-    return Array.from(devMap.values()).sort((a, b) => a.name.localeCompare(b.name));
-  }, [projects]);
-
-  const bedroomOptions = useMemo(() => {
-    if (!projects) return [];
-    const beds = new Set<string>();
-    projects.forEach(p => {
-      if (p.bedrooms_min != null) beds.add(String(p.bedrooms_min));
-      if (p.bedrooms_max != null) beds.add(String(p.bedrooms_max));
-    });
-    return Array.from(beds).sort((a, b) => Number(a) - Number(b));
-  }, [projects]);
-
   const filteredProjects = useMemo(() => {
     if (!projects) return [];
     let result = [...projects];
@@ -143,43 +101,12 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
       );
     }
 
-    if (statusFilter !== "all") {
-      result = result.filter(p => (p.status_label || p.construction_status) === statusFilter);
-    }
-
-    if (developerFilter !== "all") {
-      result = result.filter(p => {
-        const name = p.developer_name || (p.developer as any)?.name;
-        return name === developerFilter;
-      });
-    }
-
-    if (bedroomFilter !== "all") {
-      const bed = Number(bedroomFilter);
-      result = result.filter(p => {
-        const min = p.bedrooms_min ?? 0;
-        const max = p.bedrooms_max ?? 99;
-        return bed >= min && bed <= max;
-      });
-    }
-
-    if (sortBy === "price_low") {
-      result.sort((a, b) => (a.price_from || 0) - (b.price_from || 0));
-    } else if (sortBy === "price_high") {
-      result.sort((a, b) => (b.price_from || 0) - (a.price_from || 0));
-    }
-
     return applyShortcutFilters(result, shortcutFilters);
-  }, [projects, searchQuery, statusFilter, developerFilter, bedroomFilter, sortBy, shortcutFilters]);
-
-  const hasActiveFilters = searchQuery || statusFilter !== "all" || developerFilter !== "all" || bedroomFilter !== "all" || sortBy !== "newest";
+  }, [projects, searchQuery, shortcutFilters]);
 
   const clearFilters = () => {
     setSearchQuery("");
-    setStatusFilter("all");
-    setDeveloperFilter("all");
-    setBedroomFilter("all");
-    setSortBy("newest");
+    setShortcutFilters(defaultShortcutFilters);
   };
 
   const filterBarContent = (
@@ -201,90 +128,6 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
           </button>
         )}
       </div>
-
-      {/* Developer with Building2 icon + logos */}
-      {developerOptionsWithLogos.length > 0 && (
-        <Select value={developerFilter} onValueChange={setDeveloperFilter}>
-          <SelectTrigger className="h-10 w-[160px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
-            <Building2 className="w-4 h-4 mr-2 text-black/40 flex-shrink-0" />
-            <SelectValue placeholder="Developer" />
-          </SelectTrigger>
-          <SelectContent className="max-h-72">
-            <SelectItem value="all">All Developers</SelectItem>
-            {developerOptionsWithLogos.map(dev => (
-              <SelectItem key={dev.name} value={dev.name}>
-                <span className="flex items-center gap-2">
-                  {dev.logo_url ? (
-                    <img src={dev.logo_url} alt="" className="w-5 h-5 object-contain rounded-sm flex-shrink-0" />
-                  ) : (
-                    <Building2 className="w-4 h-4 text-black/30 flex-shrink-0" />
-                  )}
-                  {dev.name}
-                </span>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      )}
-
-      {/* Status */}
-      {statusOptions.length > 0 && (
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="h-10 w-[140px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Status</SelectItem>
-            {statusOptions.map(s => (
-              <SelectItem key={s} value={s}>{s}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      )}
-
-      {/* Bedrooms */}
-      {bedroomOptions.length > 0 && (
-        <Select value={bedroomFilter} onValueChange={setBedroomFilter}>
-          <SelectTrigger className="h-10 w-[140px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
-            <SelectValue placeholder="Bedrooms" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Beds</SelectItem>
-            {bedroomOptions.map(b => (
-              <SelectItem key={b} value={b}>{b} BR</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      )}
-
-      {/* Sort */}
-      <Select value={sortBy} onValueChange={setSortBy}>
-        <SelectTrigger className="h-10 w-[150px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
-          <SelectValue placeholder="Sort by" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="newest">Newest First</SelectItem>
-          <SelectItem value="price_low">Price: Low → High</SelectItem>
-          <SelectItem value="price_high">Price: High → Low</SelectItem>
-        </SelectContent>
-      </Select>
-
-      {/* Filter icon */}
-      <Link to={`/properties?area=${areaSlug}`}>
-        <button className="h-10 w-10 rounded-xl bg-white/70 border-2 border-gold/30 flex items-center justify-center hover:border-gold/60 transition-colors">
-          <Filter className="w-4 h-4 text-black/40" />
-        </button>
-      </Link>
-
-      {/* Clear */}
-      {hasActiveFilters && (
-        <button
-          onClick={clearFilters}
-          className="h-10 px-3 rounded-xl text-xs font-semibold text-black/60 hover:text-black border border-black/10 hover:border-black/30 transition-colors"
-        >
-          Clear
-        </button>
-      )}
     </>
   );
 
