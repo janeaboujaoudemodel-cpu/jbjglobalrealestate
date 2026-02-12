@@ -308,14 +308,8 @@ const AreaGuides = () => {
                 />
               </div>
               <div className="flex gap-1.5">
-                <button onClick={() => setSortBy("property_count")} className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${sortBy === "property_count" ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] border-2 border-gold text-black" : "bg-white border border-gold/30 text-zinc-700"}`}>
-                  <Building2 className="w-3.5 h-3.5" />
-                </button>
                 <button onClick={() => setSortBy("trending")} className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${sortBy === "trending" ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] border-2 border-gold text-black" : "bg-white border border-gold/30 text-zinc-700"}`}>
                   <Flame className="w-3.5 h-3.5" />
-                </button>
-                <button onClick={() => setSortBy("alphabetical")} className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${sortBy === "alphabetical" ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] border-2 border-gold text-black" : "bg-white border border-gold/30 text-zinc-700"}`}>
-                  A-Z
                 </button>
               </div>
             </div>
