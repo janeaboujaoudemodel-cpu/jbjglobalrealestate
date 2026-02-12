@@ -1,58 +1,51 @@
 
 
-## Three Changes: Correct Filter Bar on Project Page, Source Tracking on All Forms, and Visual Highlights
+## Fix Filter Bar Scroll Behavior, Save Filter UX, and Homepage Cleanup
 
-### 1. Replace PropertySearchBar with FilterShortcutBar on Project Page Sticky Header
+### Problem 1: Filter bar reappears after scrolling past "Ready to Get Started"
 
-The project page currently uses `PropertySearchBar` (a simple search input) in Row 1 of the sticky header. The user wants the same filter bar used on the Developer page -- which is `ProjectFilters` + `FilterShortcutBar` (the pill-based filter system with Price, Payments, Handover, Property Type, Bedrooms, Status, Construction, Sorting, Hide Sold, and Save).
+The `IntersectionObserver` currently sets `bottomReached` based on `entry.isIntersecting`. When the "Ready to Get Started" section scrolls into view, `bottomReached = true` and the filter bar hides. But once you scroll further down past it (into the footer), the section is no longer intersecting, so `bottomReached` goes back to `false` -- causing the filter bar to reappear.
 
-**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
+**Fix**: Change the observer logic to check `entry.boundingClientRect.top < 0` (section has scrolled above viewport) in addition to `isIntersecting`. Once the section enters the viewport OR is above it, `bottomReached` stays true. This applies to:
 
-- Remove `PropertySearchBar` import, add imports for `FilterShortcutBar`, `ShortcutFilterState`, `defaultShortcutFilters`, and `ProjectFilters`
-- Add `shortcutFilters` state: `useState<ShortcutFilterState>(defaultShortcutFilters)`
-- Replace Row 1 (the `PropertySearchBar` section) with a `ProjectFilters` + `FilterShortcutBar` combo in the same champagne gradient container, matching the DeveloperDetail layout
-- Keep Row 2 (the curated shortcuts bar with Details, Gallery, Developer, etc.) exactly as-is below it
+| File | Location |
+|------|----------|
+| `src/pages/DeveloperDetail.tsx` | Lines 66-77 |
+| `src/components/area-detail/AreaStickySearchBar.tsx` | Lines 42-54 |
+| `src/components/area-detail/AreaProjectsGrid.tsx` | Lines 73-85 |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Similar observer logic |
 
-### 2. Highlight "Hide Sold" in Red and "Save" Heart in Red
+The fix for each: change the observer callback from `setBottomReached(entry.isIntersecting)` to `setBottomReached(entry.isIntersecting || entry.boundingClientRect.top < 0)`. This ensures that once the "Ready to Get Started" section enters or passes above the viewport, the filter bar stays hidden for the remainder of the page.
 
-**File: `src/components/filters/FilterShortcutBar.tsx`**
+### Problem 2: Save Filter needs delete confirmation
 
-- **Hide Sold Out button** (line ~204-210): When active (`filters.hideSoldOut === true`), apply a red-tinted style: red border (`border-red-500`), red text, and the `EyeOff` icon in red. When inactive, give it a subtle red border hint (`border-red-300/50`) so it stands out from other pills
-- **Save button** (line ~213-219): Change the `Heart` icon to always render in red (`text-red-500`) for a premium look, regardless of state
+Currently, the delete button in the Saved Filters popover deletes immediately without confirmation.
 
-### 3. Add Contextual Source Tracking to All Forms
+**Fix in `src/components/filters/FilterShortcutBar.tsx`**:
+- Add a confirmation state (`confirmDeleteIndex`) to the `UtilityButtons` component
+- When the trash icon is clicked, instead of deleting immediately, show "Are you sure?" inline with Yes/No buttons
+- On "Yes", delete the filter; on "No", cancel
+- The heart icon for the "Saved" button is already red from the previous change
 
-Every form submission should record **which page type** and **which specific entity** (project name, developer name, area name) the form was submitted from. Forms to update:
+### Problem 3: Save button should save current active filters
 
-| Form | File | Current Source | New Source Format |
-|------|------|---------------|-------------------|
-| ConsultationRequestForm | `src/components/ConsultationRequestForm.tsx` | `project-interest-{id}` or `properties-consultation` | Add `source_page` field with current URL path; include `projectName` in `source_details` |
-| ProjectInquiryForm | `src/components/project-detail/ProjectInquiryForm.tsx` | `project_inquiry` with `source_details: projectName` | Already good -- add `source_page` with `window.location.pathname` |
-| OffPlanInquiryCTA | `src/components/OffPlanInquiryCTA.tsx` | `offplan_cta` | Add `source_page: window.location.pathname` and `source_details` with context from URL (developer/area/project name) |
-| DealRegistrationForm | `src/components/deals/DealRegistrationForm.tsx` | None | Add `source_page` metadata in notes or a dedicated field |
-| VisitRequestForm | `src/components/developer-visits/VisitRequestForm.tsx` | None | Add `notes` with source page context |
-| InquiryFormModal | `src/components/InquiryFormModal.tsx` | `source` prop passed in | Enhance to also pass `window.location.pathname` as `source_page` in the insert |
-| LeadCaptureModal | `src/components/project-detail/LeadCaptureModal.tsx` | Brochure context | Add `source_page` to the lead capture insert |
+The save functionality already works correctly -- `handleSaveFilter` in FilterShortcutBar (line 162-166) saves the current `filters` state to localStorage with the user-provided name. This is already correct behavior.
 
-For each form, the approach is:
-- Include `window.location.pathname` as the `source_page` value in the database insert
-- Where possible, also pass the entity name (project name, developer name, area name) as `source_details`
-- This uses existing `crm_leads` columns (`source`, `source_details`) -- if `source_page` column doesn't exist, we store it in `notes` or `tags`
+### Problem 4: Homepage hero FilterShortcutBar should be removed
 
-**Database check**: Verify if `crm_leads` has a `source_page` column. If not, add one via migration.
+The user says the filter shortcuts in the homepage hero section should not be there -- they belong inside the filter panel. 
 
-### Technical Summary
+**Fix in `src/components/home/HeroSearchBar.tsx`**:
+- Remove the `FilterShortcutBar` component and its import from the hero search bar (lines 1022-1029)
+- Remove the `shortcutFilters` state and related imports
 
-| File | Changes |
-|------|---------|
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Replace PropertySearchBar with ProjectFilters + FilterShortcutBar; add shortcutFilters state |
-| `src/components/filters/FilterShortcutBar.tsx` | Red styling for Hide Sold button and red Heart icon for Save |
-| `src/components/ConsultationRequestForm.tsx` | Add source_page tracking |
-| `src/components/project-detail/ProjectInquiryForm.tsx` | Add source_page tracking |
-| `src/components/OffPlanInquiryCTA.tsx` | Add source_page and contextual source_details |
-| `src/components/deals/DealRegistrationForm.tsx` | Add source page context |
-| `src/components/developer-visits/VisitRequestForm.tsx` | Add source page context |
-| `src/components/InquiryFormModal.tsx` | Add source_page to insert |
-| `src/components/project-detail/LeadCaptureModal.tsx` | Add source_page to insert |
-| Database migration (if needed) | Add `source_page` column to `crm_leads` |
+### Summary of files to change
 
+| File | Change |
+|------|--------|
+| `src/pages/DeveloperDetail.tsx` | Fix bottom sentinel to stay hidden past "Ready to Get Started" |
+| `src/components/area-detail/AreaStickySearchBar.tsx` | Same bottom sentinel fix |
+| `src/components/area-detail/AreaProjectsGrid.tsx` | Same bottom sentinel fix |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Same bottom sentinel fix |
+| `src/components/filters/FilterShortcutBar.tsx` | Add delete confirmation dialog for saved filters |
+| `src/components/home/HeroSearchBar.tsx` | Remove FilterShortcutBar from homepage hero |
