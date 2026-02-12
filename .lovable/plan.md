@@ -1,47 +1,47 @@
 
 
-## Three Fixes for Premium Project Detail Experience
+## Fix Filters and Currency Across All Pages
 
-### 1. Replace Gold Spinner with JBJ Logo Fill Animation
+### Problems Identified
 
-**Problem:** When navigating to a project page (e.g., from the map), the loading state shows plain skeleton placeholders. The user wants a branded loading experience with the JBJ logo that "fills up" while waiting.
+1. **Currency selector has no effect on project cards**: The `ProjectFilters` component has a currency dropdown, but no page passes `filters.currency` or `filters.sizeUnit` to `<ProjectCard>`. The cards always display prices in AED regardless of selection.
 
-**Solution:** Create a new `BrandedLoader` component that displays the JBJ monogram logo with a vertical fill animation (the logo starts empty/faded and fills with gold color from bottom to top). Use this in `ProjectDetail.tsx` as the loading state.
+2. **Same issue on every page using ProjectCard**: `DeveloperDetail`, `CommunityDetail`, `Favorites`, and `QuizResults` all render `<ProjectCard project={project} />` without `currency` or `sizeUnit` props.
 
-**File changes:**
-- **New file: `src/components/ui/BrandedLoader.tsx`** -- A reusable loader that shows the JBJ monogram (`jbj-monogram-light-bg.png`) with a CSS clip-path or mask animation that fills the logo from bottom to top, creating a "pouring" effect. Includes a subtle shimmer and "Loading..." text below.
-- **`src/pages/ProjectDetail.tsx`** -- Replace the current Skeleton-based loading state (lines 226-236) with the new `BrandedLoader` component.
+3. **FilterShortcutBar search query not connected on DeveloperDetail**: The `FilterShortcutBar` has a `searchQuery` field in its state but the `applyShortcutFilters` utility applies it generically. Meanwhile `ProjectFilters` also has its own `search` field. Both exist but may not be consistently wired.
 
----
+### Solution
 
-### 2. Auto-Analyze Projects (Remove "Click to Analyze" Button)
+**Pass `currency` and `sizeUnit` from filter state to every `ProjectCard` instance across all affected pages.**
 
-**Problem:** The `ProjectAIAnalyzer` currently shows a "Click below to generate an AI-powered investment analysis" prompt with an "Analyze" button (lines 158-166). The user wants analysis to start automatically when the section scrolls into view.
-
-**Solution:** Re-enable the auto-trigger logic using the existing `IntersectionObserver` that is already set up (lines 100-108). The component already has `isVisible`, `hasTriggered`, and the observer -- it just needs the `useEffect` that connects them (which is currently commented out at line 110).
-
-**File changes:**
-- **`src/components/project-detail/ProjectAIAnalyzer.tsx`** -- Replace line 110 (`// Manual trigger only - no auto-analyze on scroll`) with a `useEffect` that calls `handleAnalyze()` when `isVisible` becomes true and analysis hasn't been triggered yet. Remove the manual "Click to Analyze" button UI (lines 158-166) and replace with the loading spinner state, so the user sees the analysis generating immediately upon scroll.
-
----
-
-### 3. Fix Black Section Divider to Match Champagne Background
-
-**Problem:** The `SectionDivider` between the AI Analyzer and the DLD Market Widget uses the default `variant="default"` which renders with `bg-black` background. This creates a jarring black band between two champagne-themed sections.
-
-**Solution:** Switch to `variant="champagne"` so the divider uses a champagne gradient background that matches the surrounding sections, keeping only the elegant gold line and sparkle icon.
-
-**File changes:**
-- **`src/components/project-detail/ProjectDetailLayout.tsx`** -- Change line 1001 from `<SectionDivider />` to `<SectionDivider variant="champagne" />`.
-
----
-
-### Summary of All File Changes
+### Files to Modify
 
 | File | Change |
 |------|--------|
-| `src/components/ui/BrandedLoader.tsx` | New component: JBJ logo with fill animation |
-| `src/pages/ProjectDetail.tsx` | Use `BrandedLoader` instead of Skeletons for loading |
-| `src/components/project-detail/ProjectAIAnalyzer.tsx` | Auto-trigger analysis on scroll, remove manual button |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Change `SectionDivider` to `variant="champagne"` |
+| `src/pages/DeveloperDetail.tsx` | Pass `currency={filters.currency}` and `sizeUnit={filters.sizeUnit}` to every `<ProjectCard>` |
+| `src/pages/CommunityDetail.tsx` | Add filter state for currency/sizeUnit, pass to `<ProjectCard>` |
+| `src/pages/Favorites.tsx` | Add currency/sizeUnit state, pass to `<ProjectCard>` |
+| `src/pages/QuizResults.tsx` | Add currency/sizeUnit state, pass to `<ProjectCard>` |
+
+### Technical Details
+
+**DeveloperDetail.tsx (line 404)**:
+Change from:
+```tsx
+<ProjectCard key={project.id} project={project} />
+```
+To:
+```tsx
+<ProjectCard key={project.id} project={project} currency={filters.currency} sizeUnit={filters.sizeUnit} />
+```
+
+This ensures that when the user selects USD, EUR, or GBP in the currency dropdown within `ProjectFilters`, every project card on that page immediately re-renders with converted prices.
+
+**CommunityDetail.tsx, Favorites.tsx, QuizResults.tsx**: These pages either need to add a currency selector or inherit a default. For pages without `ProjectFilters` (like Favorites), a simple currency/sizeUnit toggle will be added at the top, and the selected values passed to each `ProjectCard`.
+
+### What This Fixes
+- Selecting "USD" in the currency dropdown on the Developer Detail page will convert all card prices to USD
+- Selecting "sq m" will convert size displays accordingly
+- Search, tier, and developer dropdown filters on the Developers listing page already work correctly (verified in code)
+- The FilterShortcutBar sort/filter pills on DeveloperDetail already apply through `applyShortcutFilters` correctly
 
