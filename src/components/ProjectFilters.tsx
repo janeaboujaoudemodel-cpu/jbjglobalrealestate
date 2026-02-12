@@ -1,5 +1,5 @@
 import React, { useState, forwardRef } from "react";
-import { Search, SlidersHorizontal, X, ChevronDown, MapPin, Building2, Eye, Sofa, Sparkles, Star } from "lucide-react";
+import { Search, SlidersHorizontal, X, ChevronDown, MapPin, Building2, Eye, Sofa, Sparkles, Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -372,26 +372,31 @@ const ProjectFilters = ({
                   {/* Property Status */}
                   <FilterSection title="Property Status" icon={<span className="text-lg">📅</span>}>
                     <div className="flex flex-wrap gap-2">
-                      {HANDOVER_OPTIONS.map((option) => (
-                        <button
-                          key={option.value}
-                          onClick={() =>
-                            updateFilter(
-                              "handoverStatus",
-                              option.value === "all" ? null : 
-                              filters.handoverStatus === option.value ? null : option.value
-                            )
-                          }
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            (option.value === "all" && filters.handoverStatus === null) ||
-                            filters.handoverStatus === option.value
-                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
-                          }`}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
+                      {HANDOVER_OPTIONS.map((option) => {
+                        const isActive = (option.value === "all" && filters.handoverStatus === null) || filters.handoverStatus === option.value;
+                        return (
+                          <button
+                            key={option.value}
+                            onClick={() =>
+                              updateFilter(
+                                "handoverStatus",
+                                option.value === "all" ? null : 
+                                filters.handoverStatus === option.value ? null : option.value
+                              )
+                            }
+                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                              isActive
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                            }`}
+                          >
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                              {isActive && <Check className="w-3 h-3 text-white" />}
+                            </span>
+                            {option.label}
+                          </button>
+                        );
+                      })}
                     </div>
                   </FilterSection>
 
@@ -496,54 +501,65 @@ const ProjectFilters = ({
                   {/* Bedrooms */}
                   <FilterSection title="Bedrooms" icon={<span className="text-lg">🛏️</span>}>
                     <div className="flex flex-wrap gap-2">
-                      {BEDROOM_OPTIONS.map((option) => (
-                        <button
-                          key={option.value}
-                          onClick={() =>
-                            updateFilter(
-                              "bedroomsMin",
-                              option.value === "all" ? null :
-                              option.value === "studio" ? 0 :
-                              parseInt(option.value)
-                            )
-                          }
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            (option.value === "all" && filters.bedroomsMin === null) ||
-                            (option.value === "studio" && filters.bedroomsMin === 0) ||
-                            filters.bedroomsMin === parseInt(option.value)
-                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
-                          }`}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
+                      {BEDROOM_OPTIONS.map((option) => {
+                        const isActive = (option.value === "all" && filters.bedroomsMin === null) ||
+                          (option.value === "studio" && filters.bedroomsMin === 0) ||
+                          filters.bedroomsMin === parseInt(option.value);
+                        return (
+                          <button
+                            key={option.value}
+                            onClick={() =>
+                              updateFilter(
+                                "bedroomsMin",
+                                option.value === "all" ? null :
+                                option.value === "studio" ? 0 :
+                                parseInt(option.value)
+                              )
+                            }
+                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                              isActive
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                            }`}
+                          >
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                              {isActive && <Check className="w-3 h-3 text-white" />}
+                            </span>
+                            {option.label}
+                          </button>
+                        );
+                      })}
                     </div>
                   </FilterSection>
 
                   {/* Emirates / Location */}
                   <FilterSection title="Location / Emirate" icon={<MapPin className="w-5 h-5" />}>
                     <div className="flex flex-wrap gap-2">
-                      {EMIRATES.map((emirate) => (
-                        <button
-                          key={emirate.value}
-                          onClick={() =>
-                            updateFilter(
-                              "emirate",
-                              emirate.value === "all" ? null :
-                              filters.emirate === emirate.value ? null : emirate.value
-                            )
-                          }
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            (emirate.value === "all" && filters.emirate === null) ||
-                            filters.emirate === emirate.value
-                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
-                          }`}
-                        >
-                          {emirate.label}
-                        </button>
-                      ))}
+                      {EMIRATES.map((emirate) => {
+                        const isActive = (emirate.value === "all" && filters.emirate === null) || filters.emirate === emirate.value;
+                        return (
+                          <button
+                            key={emirate.value}
+                            onClick={() =>
+                              updateFilter(
+                                "emirate",
+                                emirate.value === "all" ? null :
+                                filters.emirate === emirate.value ? null : emirate.value
+                              )
+                            }
+                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                              isActive
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                            }`}
+                          >
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                              {isActive && <Check className="w-3 h-3 text-white" />}
+                            </span>
+                            {emirate.label}
+                          </button>
+                        );
+                      })}
                     </div>
                   </FilterSection>
 
@@ -553,32 +569,41 @@ const ProjectFilters = ({
                       <div className="flex flex-wrap gap-2">
                         <button
                           onClick={() => updateFilter("trendingArea", null)}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                          className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                             filters.trendingArea === null
                               ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
                               : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
                           }`}
                         >
+                          <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${filters.trendingArea === null ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                            {filters.trendingArea === null && <Check className="w-3 h-3 text-white" />}
+                          </span>
                           All Areas
                         </button>
-                        {filteredTrendingAreas.map((area) => (
-                          <button
-                            key={area.id}
-                            onClick={() =>
-                              updateFilter(
-                                "trendingArea",
-                                filters.trendingArea === area.slug ? null : area.slug
-                              )
-                            }
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                              filters.trendingArea === area.slug
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
-                            }`}
-                          >
-                            {area.name}
-                          </button>
-                        ))}
+                        {filteredTrendingAreas.map((area) => {
+                          const isActive = filters.trendingArea === area.slug;
+                          return (
+                            <button
+                              key={area.id}
+                              onClick={() =>
+                                updateFilter(
+                                  "trendingArea",
+                                  filters.trendingArea === area.slug ? null : area.slug
+                                )
+                              }
+                              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                                isActive
+                                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                                  : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                              }`}
+                            >
+                              <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                                {isActive && <Check className="w-3 h-3 text-white" />}
+                              </span>
+                              {area.name}
+                            </button>
+                          );
+                        })}
                       </div>
                     </FilterSection>
                   )}
@@ -601,26 +626,31 @@ const ProjectFilters = ({
                   {/* Furnished Status */}
                   <FilterSection title="Furnishing" icon={<Sofa className="w-5 h-5" />}>
                     <div className="flex flex-wrap gap-2">
-                      {FURNISHED_OPTIONS.map((option) => (
-                        <button
-                          key={option.value}
-                          onClick={() =>
-                            updateFilter(
-                              "furnishedStatus",
-                              option.value === "all" ? null :
-                              filters.furnishedStatus === option.value ? null : option.value
-                            )
-                          }
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            (option.value === "all" && filters.furnishedStatus === null) ||
-                            filters.furnishedStatus === option.value
-                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
-                          }`}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
+                      {FURNISHED_OPTIONS.map((option) => {
+                        const isActive = (option.value === "all" && filters.furnishedStatus === null) || filters.furnishedStatus === option.value;
+                        return (
+                          <button
+                            key={option.value}
+                            onClick={() =>
+                              updateFilter(
+                                "furnishedStatus",
+                                option.value === "all" ? null :
+                                filters.furnishedStatus === option.value ? null : option.value
+                              )
+                            }
+                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                              isActive
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                            }`}
+                          >
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                              {isActive && <Check className="w-3 h-3 text-white" />}
+                            </span>
+                            {option.label}
+                          </button>
+                        );
+                      })}
                     </div>
                   </FilterSection>
 
@@ -629,27 +659,36 @@ const ProjectFilters = ({
                     <div className="flex flex-wrap gap-2">
                       <button
                         onClick={() => updateFilter("views", [])}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                           filters.views.length === 0
                             ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
                             : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
                         }`}
                       >
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${filters.views.length === 0 ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                          {filters.views.length === 0 && <Check className="w-3 h-3 text-white" />}
+                        </span>
                         All
                       </button>
-                      {VIEW_OPTIONS.map((view) => (
-                        <button
-                          key={view}
-                          onClick={() => toggleArrayFilter("views", view)}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            filters.views.includes(view)
-                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
-                          }`}
-                        >
-                          {view}
-                        </button>
-                      ))}
+                      {VIEW_OPTIONS.map((view) => {
+                        const isActive = filters.views.includes(view);
+                        return (
+                          <button
+                            key={view}
+                            onClick={() => toggleArrayFilter("views", view)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                              isActive
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                            }`}
+                          >
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                              {isActive && <Check className="w-3 h-3 text-white" />}
+                            </span>
+                            {view}
+                          </button>
+                        );
+                      })}
                     </div>
                   </FilterSection>
 
@@ -658,27 +697,36 @@ const ProjectFilters = ({
                     <div className="flex flex-wrap gap-2">
                       <button
                         onClick={() => updateFilter("amenities", [])}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                           filters.amenities.length === 0
                             ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
                             : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
                         }`}
                       >
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${filters.amenities.length === 0 ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                          {filters.amenities.length === 0 && <Check className="w-3 h-3 text-white" />}
+                        </span>
                         All
                       </button>
-                      {AMENITY_OPTIONS.map((amenity) => (
-                        <button
-                          key={amenity}
-                          onClick={() => toggleArrayFilter("amenities", amenity)}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            filters.amenities.includes(amenity)
-                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
-                          }`}
-                        >
-                          {amenity}
-                        </button>
-                      ))}
+                      {AMENITY_OPTIONS.map((amenity) => {
+                        const isActive = filters.amenities.includes(amenity);
+                        return (
+                          <button
+                            key={amenity}
+                            onClick={() => toggleArrayFilter("amenities", amenity)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                              isActive
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                            }`}
+                          >
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                              {isActive && <Check className="w-3 h-3 text-white" />}
+                            </span>
+                            {amenity}
+                          </button>
+                        );
+                      })}
                     </div>
                   </FilterSection>
 
@@ -687,27 +735,36 @@ const ProjectFilters = ({
                     <div className="flex flex-wrap gap-2">
                       <button
                         onClick={() => updateFilter("facilities", [])}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                           filters.facilities.length === 0
                             ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
                             : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
                         }`}
                       >
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${filters.facilities.length === 0 ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                          {filters.facilities.length === 0 && <Check className="w-3 h-3 text-white" />}
+                        </span>
                         All
                       </button>
-                      {FACILITY_OPTIONS.map((facility) => (
-                        <button
-                          key={facility}
-                          onClick={() => toggleArrayFilter("facilities", facility)}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            filters.facilities.includes(facility)
-                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
-                          }`}
-                        >
-                          {facility}
-                        </button>
-                      ))}
+                      {FACILITY_OPTIONS.map((facility) => {
+                        const isActive = filters.facilities.includes(facility);
+                        return (
+                          <button
+                            key={facility}
+                            onClick={() => toggleArrayFilter("facilities", facility)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                              isActive
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                            }`}
+                          >
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                              {isActive && <Check className="w-3 h-3 text-white" />}
+                            </span>
+                            {facility}
+                          </button>
+                        );
+                      })}
                     </div>
                   </FilterSection>
 
