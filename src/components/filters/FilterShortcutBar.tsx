@@ -67,6 +67,8 @@ interface FilterShortcutBarProps {
   variant: 'light' | 'dark';
   filters: ShortcutFilterState;
   onFilterChange: (filters: ShortcutFilterState) => void;
+  isMapMode?: boolean;
+  onMapToggle?: (active: boolean) => void;
 }
 
 const PRICE_PRESETS = [
@@ -129,7 +131,7 @@ const SORT_OPTIONS: { value: ShortcutFilterState['sortBy']; label: string }[] = 
 const QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4'];
 const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035'];
 
-const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutBarProps) => {
+const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle }: FilterShortcutBarProps) => {
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const navigate = useNavigate();
@@ -202,9 +204,13 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
         <div className="flex items-center w-full gap-2">
           {/* Left group: Map + Utility buttons */}
           <div className="flex items-center gap-1.5 flex-shrink-0">
-            <button onClick={() => navigate('/properties?view=map')} className={cn(pillBase, "px-3 py-1.5", pillInactive)} title="Map View">
+            <button
+              onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
+              className={cn(pillBase, "px-3 py-1.5", isMapMode ? pillActive : pillInactive)}
+              title="Map View"
+            >
               <Map className="w-3.5 h-3.5" />
-              Map
+              {isMapMode ? 'List' : 'Map'}
             </button>
             <UtilityButtons variant={variant} onApplySavedFilter={onFilterChange} />
           </div>
