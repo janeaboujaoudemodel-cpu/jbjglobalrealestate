@@ -143,131 +143,126 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   return (
     <section id="projects-section" className="pt-16 pb-16 bg-black">
       <div className="container mx-auto px-4">
-        <div className="rounded-2xl p-6 pt-8" style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}>
-          <h2 className="text-black text-2xl md:text-3xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+        <div className="rounded-2xl pt-8 overflow-visible" style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}>
+          <h2 className="text-black text-2xl md:text-3xl font-bold mb-6 px-6" style={{ fontFamily: "Poppins, sans-serif" }}>
             Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
           </h2>
 
-          {/* Fixed Search & Filters Bar */}
-          <div className="fixed top-[72px] left-0 right-0 z-30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-            <div className="container mx-auto px-4 py-3">
-              <div className="flex flex-wrap items-center gap-3">
-                {/* Search Input */}
-                <div className="relative flex-1 min-w-[200px]">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
-                  <input
-                    type="text"
-                    placeholder="Search projects or developers..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full h-10 pl-9 pr-8 rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm placeholder:text-black/30 focus:outline-none focus:border-gold/60 transition-colors"
-                    style={{ fontSize: '16px' }}
-                  />
-                  {searchQuery && (
-                    <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2">
-                      <X className="w-4 h-4 text-black/40 hover:text-black" />
-                    </button>
-                  )}
-                </div>
-
-                {/* Status Filter */}
-                {statusOptions.length > 0 && (
-                  <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="h-10 w-[140px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
-                      <SelectValue placeholder="Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Status</SelectItem>
-                      {statusOptions.map(s => (
-                        <SelectItem key={s} value={s}>{s}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-
-                {/* Bedrooms Filter */}
-                {bedroomOptions.length > 0 && (
-                  <Select value={bedroomFilter} onValueChange={setBedroomFilter}>
-                    <SelectTrigger className="h-10 w-[140px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
-                      <SelectValue placeholder="Bedrooms" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Beds</SelectItem>
-                      {bedroomOptions.map(b => (
-                        <SelectItem key={b} value={b}>{b} BR</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-
-                {/* Sort */}
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="h-10 w-[150px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="newest">Newest First</SelectItem>
-                    <SelectItem value="price_low">Price: Low → High</SelectItem>
-                    <SelectItem value="price_high">Price: High → Low</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                {/* Clear Filters */}
-                {hasActiveFilters && (
-                  <button
-                    onClick={clearFilters}
-                    className="h-10 px-3 rounded-xl text-xs font-semibold text-black/60 hover:text-black border border-black/10 hover:border-black/30 transition-colors"
-                  >
-                    Clear
+          {/* Search & Filters - sticky inside the card */}
+          <div className="sticky top-[72px] z-30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 shadow-[0_4px_20px_rgba(200,167,102,0.1)] rounded-t-2xl px-6 py-3">
+            <div className="flex flex-wrap items-center gap-3">
+              {/* Search Input */}
+              <div className="relative flex-1 min-w-[200px]">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+                <input
+                  type="text"
+                  placeholder="Search projects or developers..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full h-10 pl-9 pr-8 rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm placeholder:text-black/30 focus:outline-none focus:border-gold/60 transition-colors"
+                  style={{ fontSize: '16px' }}
+                />
+                {searchQuery && (
+                  <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2">
+                    <X className="w-4 h-4 text-black/40 hover:text-black" />
                   </button>
                 )}
               </div>
 
-              {/* Results count */}
-              <div className="mt-2 text-xs text-black/40">
-                {filteredProjects.length} of {projects.length} projects
-              </div>
+              {/* Status Filter */}
+              {statusOptions.length > 0 && (
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="h-10 w-[140px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    {statusOptions.map(s => (
+                      <SelectItem key={s} value={s}>{s}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+
+              {/* Bedrooms Filter */}
+              {bedroomOptions.length > 0 && (
+                <Select value={bedroomFilter} onValueChange={setBedroomFilter}>
+                  <SelectTrigger className="h-10 w-[140px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
+                    <SelectValue placeholder="Bedrooms" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Beds</SelectItem>
+                    {bedroomOptions.map(b => (
+                      <SelectItem key={b} value={b}>{b} BR</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+
+              {/* Sort */}
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="h-10 w-[150px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newest">Newest First</SelectItem>
+                  <SelectItem value="price_low">Price: Low → High</SelectItem>
+                  <SelectItem value="price_high">Price: High → Low</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Clear Filters */}
+              {hasActiveFilters && (
+                <button
+                  onClick={clearFilters}
+                  className="h-10 px-3 rounded-xl text-xs font-semibold text-black/60 hover:text-black border border-black/10 hover:border-black/30 transition-colors"
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
 
           {/* Grid */}
-          {filteredProjects.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map((project, i) => (
-                <motion.div
-                  key={project.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                  className="h-full"
-                >
-                  <div className="h-full [&>div]:h-full [&>div]:flex [&>div]:flex-col">
-                    <ProjectCard project={project} />
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16">
-              <Search className="w-10 h-10 text-black/20 mx-auto mb-3" />
-              <p className="text-black/50 text-sm font-medium">No projects match your filters</p>
-              <button onClick={clearFilters} className="mt-3 text-gold text-sm font-semibold hover:underline">
-                Clear all filters
-              </button>
-            </div>
-          )}
+          <div className="p-6">
+            {filteredProjects.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProjects.map((project, i) => (
+                  <motion.div
+                    key={project.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.05 }}
+                    className="h-full"
+                  >
+                    <div className="h-full [&>div]:h-full [&>div]:flex [&>div]:flex-col">
+                      <ProjectCard project={project} />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <Search className="w-10 h-10 text-black/20 mx-auto mb-3" />
+                <p className="text-black/50 text-sm font-medium">No projects match your filters</p>
+                <button onClick={clearFilters} className="mt-3 text-gold text-sm font-semibold hover:underline">
+                  Clear all filters
+                </button>
+              </div>
+            )}
 
-          {filteredProjects.length > 0 && (
-            <div className="text-center mt-8">
-              <Link to={`/properties?area=${areaSlug}`}>
-                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all">
-                  View All Projects in {areaName}
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          )}
+            {filteredProjects.length > 0 && (
+              <div className="text-center mt-8">
+                <Link to={`/properties?area=${areaSlug}`}>
+                  <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all">
+                    View All Projects in {areaName}
+                    <ArrowUpRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
