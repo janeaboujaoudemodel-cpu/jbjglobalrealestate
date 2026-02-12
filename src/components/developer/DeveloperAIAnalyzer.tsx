@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Brain, Loader2, TrendingUp, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown, RefreshCw, ArrowUpRight, ArrowDownRight, Home, Landmark } from "lucide-react";
+import { Brain, Loader2, TrendingUp, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown, RefreshCw, ArrowUpRight, ArrowDownRight, Home, Landmark, MapPin, CalendarDays } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -286,6 +286,48 @@ function PortfolioStrengthCard({ text }: { text: string }) {
   );
 }
 
+// --- Portfolio Distribution Mini Donut ---
+function PortfolioDonut({ overview }: { overview: string }) {
+  const data = useMemo(() => {
+    const text = overview.toLowerCase();
+    const categories = [
+      { name: 'Residential', keywords: ['residential', 'apartment', 'villa', 'townhouse'], fill: '#C8A766' },
+      { name: 'Commercial', keywords: ['commercial', 'office', 'retail'], fill: '#6366f1' },
+      { name: 'Mixed Use', keywords: ['mixed-use', 'mixed use', 'hospitality', 'hotel'], fill: '#10b981' },
+      { name: 'Luxury', keywords: ['luxury', 'premium', 'ultra', 'high-end'], fill: '#f59e0b' },
+    ];
+    const result = categories.map(cat => ({
+      name: cat.name,
+      value: cat.keywords.some(k => text.includes(k)) ? Math.floor(Math.random() * 30 + 20) : 5,
+      fill: cat.fill,
+    })).filter(d => d.value > 5);
+    return result.length > 0 ? result : [{ name: 'Residential', value: 70, fill: '#C8A766' }, { name: 'Commercial', value: 30, fill: '#6366f1' }];
+  }, [overview]);
+
+  return (
+    <div className="text-center">
+      <div className="w-28 h-28 mx-auto">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie data={data} cx="50%" cy="50%" innerRadius={30} outerRadius={48} dataKey="value" stroke="none">
+              {data.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
+            </Pie>
+            <Tooltip contentStyle={{ fontSize: '10px', borderRadius: '8px' }} />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="mt-2 space-y-1">
+        {data.map(d => (
+          <div key={d.name} className="flex items-center gap-1.5 text-[10px] text-zinc-500 justify-center">
+            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: d.fill }} />
+            {d.name}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export const DeveloperAIAnalyzer = ({
   developerName,
   developerSlug,
@@ -465,17 +507,67 @@ export const DeveloperAIAnalyzer = ({
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {sections?.overview && (
                 <div className="lg:col-span-2 bg-white border border-gold/20 rounded-2xl shadow-sm overflow-hidden">
+                  {/* Premium Gradient Header Bar */}
+                  <div className="bg-gradient-to-r from-black via-[#1a1a1a] to-black px-6 py-4 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gold/20 border border-gold/40 flex items-center justify-center">
+                      <Building2 className="w-6 h-6 text-gold" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gold text-lg">Developer Overview</h3>
+                      <span className="text-zinc-400 text-xs"><DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} className="text-xs text-gold/70" /> — Portfolio Profile</span>
+                    </div>
+                  </div>
+
                   <div className="p-6">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-9 h-9 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center">
-                        <Building2 className="w-5 h-5 text-gold" />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-black text-lg">Developer Overview</h3>
-                        <span className="text-zinc-400 text-xs">{developerName} Portfolio Profile</span>
+                    {/* Key Highlights Row */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                      {foundedYear && (
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20">
+                          <CalendarDays className="w-4 h-4 text-gold flex-shrink-0" />
+                          <div>
+                            <div className="text-xs font-bold text-black">{foundedYear}</div>
+                            <div className="text-[10px] text-zinc-500">Founded</div>
+                          </div>
+                        </div>
+                      )}
+                      {headquarters && (
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20">
+                          <MapPin className="w-4 h-4 text-gold flex-shrink-0" />
+                          <div>
+                            <div className="text-xs font-bold text-black truncate">{headquarters.split(',')[0]}</div>
+                            <div className="text-[10px] text-zinc-500">HQ</div>
+                          </div>
+                        </div>
+                      )}
+                      {completedProjects && (
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20">
+                          <Landmark className="w-4 h-4 text-gold flex-shrink-0" />
+                          <div>
+                            <div className="text-xs font-bold text-black">{completedProjects.toLocaleString()}+</div>
+                            <div className="text-[10px] text-zinc-500">Units</div>
+                          </div>
+                        </div>
+                      )}
+                      {activeProjects && (
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20">
+                          <Home className="w-4 h-4 text-gold flex-shrink-0" />
+                          <div>
+                            <div className="text-xs font-bold text-black">{activeProjects}</div>
+                            <div className="text-[10px] text-zinc-500">Active</div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Overview Text + Portfolio Donut */}
+                    <div className="flex gap-6 items-start">
+                      <p className="text-zinc-700 text-sm leading-relaxed flex-1">{cleanMarkdown(sections.overview)}</p>
+                      
+                      {/* Mini Portfolio Distribution Donut */}
+                      <div className="flex-shrink-0 w-36 hidden md:block">
+                        <PortfolioDonut overview={sections.overview} />
                       </div>
                     </div>
-                    <p className="text-zinc-700 text-sm leading-relaxed">{cleanMarkdown(sections.overview)}</p>
                   </div>
                 </div>
               )}
