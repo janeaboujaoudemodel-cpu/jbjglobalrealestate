@@ -200,21 +200,26 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
               </button>
             ))}
 
-            {/* Hide Sold Out */}
+            {/* Hide Sold Out - Red highlight */}
             <button
               onClick={() => update({ hideSoldOut: !filters.hideSoldOut })}
-              className={cn(pillBase, "px-3 py-1.5", filters.hideSoldOut ? pillActive : pillInactive)}
+              className={cn(
+                pillBase, "px-3 py-1.5",
+                filters.hideSoldOut
+                  ? "bg-red-50 border-2 border-red-500 text-red-600 font-bold shadow-md"
+                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-red-300/50 text-red-600/80 hover:border-red-400"
+              )}
             >
-              <EyeOff className="w-3.5 h-3.5" />
+              <EyeOff className="w-3.5 h-3.5 text-red-500" />
               Hide Sold
             </button>
 
-            {/* Save Filter */}
+            {/* Save Filter - Red heart */}
             <button
               onClick={() => setSaveModalOpen(true)}
               className={cn(pillBase, "px-3 py-1.5", pillInactive)}
             >
-              <Heart className="w-3.5 h-3.5" />
+              <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
               Save
             </button>
           </div>
