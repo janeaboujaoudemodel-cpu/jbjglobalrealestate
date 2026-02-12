@@ -130,7 +130,7 @@ const AreaDetail = () => {
                     className="group overflow-hidden rounded-xl border border-gold/30 hover:border-gold hover:shadow-xl transition-all flex flex-col h-full"
                   >
                     {relatedArea.image_url ? (
-                      <img src={relatedArea.image_url} alt={relatedArea.name} className="w-full h-36 object-cover flex-shrink-0" loading="lazy" />
+                      <img src={relatedArea.image_url} alt={relatedArea.name} className="w-full h-36 object-cover flex-shrink-0 transition-transform duration-500 group-hover:scale-110" loading="lazy" />
                     ) : (
                       <div className="w-full h-36 bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center flex-shrink-0">
                         <MapPin className="w-8 h-8 text-gold/40" />
