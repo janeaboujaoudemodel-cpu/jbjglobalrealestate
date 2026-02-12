@@ -162,7 +162,7 @@ const DeveloperDetail = () => {
           <div 
             className="w-32 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
             style={{
-              background: '#000000',
+              background: '#FFFFFF',
               border: '3px solid hsl(42 45% 59%)',
               boxShadow: '0 4px 16px rgba(200,167,102,0.3)'
             }}
@@ -171,8 +171,7 @@ const DeveloperDetail = () => {
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="w-full h-full object-cover p-0"
-                style={{ transform: 'scale(1.2)' }}
+                className="w-full h-full object-contain p-2"
                 loading="eager"
               />
             ) : (
