@@ -1,55 +1,34 @@
 
+## Fix DLD Market Intelligence Background Layer
 
-## Fix AI Analyzer, Filter Styling, and Add Reelly Corner Utility Buttons
+### Problem
+The outer background section behind the "Dubai Market Intelligence" widget is a square rectangle with no rounded corners, while the inner card has rounded corners and a gold border. The background layer needs matching rounded corners and a gold border. Additionally, the section is touching adjacent listing cards due to insufficient padding.
 
-### Issue 1: AI Developer Intelligence Not Analyzing
+### Changes
 
-The network logs confirm the `ai-property-analyzer` edge function IS returning a successful 200 response with full analysis data for Binghatti. The issue is likely a UI rendering race condition -- the component auto-triggers on scroll visibility via `IntersectionObserver`, but if the user navigated away and back, the `hasTriggered` ref may already be set to `true`, preventing re-analysis. Additionally, the section parsing uses "Area Overview" as a key name (inherited from the area analyzer template), which may cause empty section extraction when the response uses slightly different formatting.
+**File: `src/components/shared/DLDMarketWidget.tsx`** (line 78)
 
-**Fix in `src/components/developer/DeveloperAIAnalyzer.tsx`:**
-- Reset `hasTriggered.current = false` when `developerName` changes (add to dependency)
-- Add a manual "Analyze" button fallback so users can always trigger it
-- Make section extraction more resilient by adding fallback keys (e.g., "Overview" in addition to "Area Overview")
+Update the outer `<section>` element:
 
-### Issue 2: Handover Year Selects Cropped
+1. **Add rounded corners**: Change from a flat rectangle to `rounded-2xl` (or `rounded-3xl` to be slightly larger than the inner card's `rounded-2xl`)
+2. **Add gold border**: Apply `border-2 border-gold/30` to the outer section to match the platform's card standard
+3. **Increase vertical padding**: Change `py-12` to `py-16` to add more breathing room so the widget does not touch adjacent listing cards
+4. **Add horizontal margin**: Apply the `jj-layer-2` margin class (or `mx-1 sm:mx-2 md:mx-3 lg:mx-4`) so the background layer aligns with other page content and does not go edge-to-edge
+5. **Add overflow-hidden**: Ensure the gradient background respects the rounded corners
 
-The year `select` elements in the Handover popover are too narrow (`flex-1` inside a tight container). The popover width of `w-72` with two columns creates very small selects.
+The updated section wrapper will change from:
+```
+<section className="py-12" style={{ background: '...' }}>
+```
+To:
+```
+<section className="py-16 my-8 rounded-3xl border-2 border-gold/30 overflow-hidden mx-1 sm:mx-2 md:mx-3 lg:mx-4" style={{ background: '...' }}>
+```
 
-**Fix in `src/components/filters/FilterShortcutBar.tsx`:**
-- Widen the Handover popover from `w-72` to `w-80`
-- Add `min-w-[60px]` to year selects so they are never cropped
-- Increase padding on selects for better readability
-
-### Issue 3: Active Pill Color -- Change from Black to Champagne Gold
-
-Currently, active/selected pill buttons turn solid black with white text. The user wants a premium champagne gold active state instead.
-
-**Fix in `src/components/filters/FilterShortcutBar.tsx`:**
-- Change `pillActive` (light variant) from `bg-black text-white border-black` to a champagne gold gradient: `bg-gradient-to-r from-[#C8A766] to-[#B8944A] text-white border-[#C8A766]`
-- Change `togglePillOn` from `border-black bg-black text-white` to `border-[#C8A766] bg-gradient-to-r from-[#C8A766] to-[#B8944A] text-white`
-- Change the `CountBadge` from `bg-gold text-black` to a deeper champagne: `bg-gradient-to-r from-[#D4C4A8] to-[#C8A766] text-white` for a premium look
-
-### Issue 4: Add Reelly-Style Corner Utility Buttons
-
-The Reelly reference images show a row of small utility buttons in the top-right corner of the search area: Map, Saved, AED (currency), sqft (area unit), Client Mode, and Settings. These need to appear across ALL search bars.
-
-**Add to `FilterShortcutBar.tsx`:**
-- Add a right-aligned group of small utility icons/buttons after the filter pills:
-  - **Map** icon button (toggles map view -- links to `/properties?view=map`)
-  - **Saved** (heart icon -- links to saved filters from localStorage)
-  - **AED** (currency selector -- compact dropdown)
-  - **sqft** (area unit toggle -- sqft/sqm)
-  - **Client Mode** (user icon -- toggle investor/broker mode)
-  - **Settings** (gear icon -- opens filter preferences)
-- These render as a compact, right-aligned cluster separated from the main pills by a vertical divider
-- Styled consistently: light variant uses champagne pills, dark variant uses glass pills
-
-Since `FilterShortcutBar` is already used across all pages (Homepage, Properties, Developer, Area), adding these utility buttons there will automatically propagate everywhere.
+This adds vertical margin (`my-8`) between the widget and surrounding sections so listing cards do not touch the widget edges.
 
 ### Files Summary
 
 | File | Action |
 |------|--------|
-| `src/components/developer/DeveloperAIAnalyzer.tsx` | Fix re-trigger logic when developer changes; add manual analyze button; improve section parsing |
-| `src/components/filters/FilterShortcutBar.tsx` | Fix handover select width; change active colors to champagne gold; add Reelly-style corner utility buttons (Map, Saved, AED, sqft, Client Mode, Settings) |
-
+| `src/components/shared/DLDMarketWidget.tsx` | Update outer section: add rounded corners, gold border, increased padding/margin |
