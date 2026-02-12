@@ -43,7 +43,15 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
                 <div 
                   className="text-zinc-700 text-base md:text-lg leading-relaxed prose prose-sm max-w-none prose-p:mb-3"
                   dangerouslySetInnerHTML={{ 
-                    __html: renderMarkdownToHtml(formatReellyDescription(area.description)) 
+                    __html: renderMarkdownToHtml(formatReellyDescription(
+                      area.description
+                        .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+                        .replace(/\[([^\]]+)\]\([^)]*$/gm, '$1')
+                        .replace(/https?:\/\/[^\s)]+/g, '')
+                        .replace(/[()]/g, '')
+                        .replace(/\s{2,}/g, ' ')
+                        .trim()
+                    ))
                   }}
                 />
                 {!isExpanded && isLongDescription && (
