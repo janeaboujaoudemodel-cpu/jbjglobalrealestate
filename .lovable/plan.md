@@ -1,85 +1,36 @@
 
 
-## Apply Two-Phase Scroll-to-Fix Filter Logic to Properties and Developers Pages
+# Fix Binghatti Logo Display Across Pages
 
-### Goal
-Both the Properties page and the Developers page currently show their filter bars using CSS `sticky`, which means they are visible immediately after the hero section ends. The user wants the same behavior as the area detail page: filters are **hidden during the hero**, appear **inline** when the listings section is reached, and become **fixed under the header** when scrolled further.
+**Scope**: Developer detail page and project detail page only. Homepage and developer strap are NOT touched.
 
-### Current State
-- **Properties** (`src/pages/Properties.tsx`, line 425): Filter section uses `sticky top-14 sm:top-16 md:top-20 lg:top-[72px]` -- always visible after hero
-- **Developers** (`src/pages/Developers.tsx`, line 227): Filter section uses `sticky top-24 lg:top-20` -- always visible after hero
-- **Area detail** (`AreaProjectsGrid.tsx`): Already uses IntersectionObserver + `createPortal` two-phase system (working correctly)
+## Problem
+The Binghatti logo (`/developers/logos/binghatti-logo.webp`) is currently in the database but displays poorly on certain pages due to styling choices (black background, `object-cover` with `scale(1.2)`) that work for some logos but not this one.
 
-### Changes
+## What Will Change
 
-#### File 1: `src/pages/Properties.tsx`
+### 1. DeveloperDetail.tsx - Logo Frame Fix
+The developer detail page currently uses a black background with `object-cover` and `scale(1.2)`, which crops/distorts the Binghatti logo. Will update the logo frame to:
+- Use a **white background** instead of black (ensures the logo is readable regardless of its colors)
+- Switch from `object-cover` to `object-contain` with proper padding (`p-2`) so the full logo is visible
+- Remove the forced `scale(1.2)` transform
 
-1. Add imports: `useRef, useEffect` (useRef already may be missing), `createPortal` from `react-dom`
-2. Add state: `const [isFixed, setIsFixed] = useState(false)` and `const sentinelRef = useRef<HTMLDivElement>(null)`
-3. Add IntersectionObserver effect (same pattern as AreaProjectsGrid):
-   - Observe `sentinelRef`
-   - `rootMargin: "-140px 0px 0px 0px"`
-   - Callback: `setIsFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140)`
-4. Remove `sticky top-14 sm:top-16 md:top-20 lg:top-[72px]` from the filter `<section>` (line 425) -- make it a normal flow element
-5. Place `<div ref={sentinelRef} className="h-0" />` just above the filter section
-6. Keep the filter section rendered inline (always visible in its natural position within the page flow)
-7. When `isFixed` is true, render a portal copy of the entire filter section fixed under the header with `fixed top-14 sm:top-16 md:top-20 lg:top-[72px] left-0 right-0 z-[9998]`
+### 2. DeveloperInfoCard.tsx - Already Correct (Minor Check)
+This component on project pages already uses `bg-white` and `object-contain`. No changes needed here -- the logo should display correctly already.
 
-#### File 2: `src/pages/Developers.tsx`
+### 3. AreaDevelopersBar.tsx - No Changes Needed
+This component pulls logos dynamically from the database and uses `object-contain`. It will automatically show the correct logo.
 
-1. Add imports: `useRef, useEffect` from react, `createPortal` from `react-dom`
-2. Add state: `const [isFixed, setIsFixed] = useState(false)` and `const sentinelRef = useRef<HTMLDivElement>(null)`
-3. Add same IntersectionObserver effect
-4. Remove `sticky top-24 lg:top-20` from the filter `<section>` (line 227) -- make it a normal flow element
-5. Place `<div ref={sentinelRef} className="h-0" />` just above the filter section
-6. Keep filter section inline
-7. When `isFixed` is true, render portal copy fixed under header
+### 4. NOT Touched (Locked)
+- `DeveloperPartnersMarquee.tsx` (homepage strap) -- locked, not modified
+- `Index.tsx` (homepage) -- locked, not modified
 
-### Technical Details
+## Technical Details
 
-The pattern is identical for both pages:
+**File: `src/pages/DeveloperDetail.tsx`** (lines 162-181)
+- Change `background: '#000000'` to `background: '#FFFFFF'`
+- Change `className="w-full h-full object-cover p-0"` to `className="w-full h-full object-contain p-2"`
+- Remove `style={{ transform: 'scale(1.2)' }}`
 
-```text
-Structure (same as AreaProjectsGrid):
+This is a universal improvement -- white background with `object-contain` and padding is the standard logo tile pattern used across the site (per the canonical directory standard).
 
-  <Hero Section />
-
-  <div ref={sentinelRef} className="h-0" />   <!-- scroll sentinel -->
-
-  <section className="z-40 bg-... py-3 ...">  <!-- inline filter, NO sticky -->
-    {filterContent}
-  </section>
-
-  {isFixed && createPortal(
-    <div className="fixed top-14 sm:top-16 md:top-20 lg:top-[72px] left-0 right-0 z-[9998] bg-... py-3 ...">
-      {filterContent}                          <!-- duplicate fixed copy -->
-    </div>,
-    document.body
-  )}
-
-  <section>                                    <!-- listings grid -->
-    ...
-  </section>
-```
-
-**Observer callback** (proven working from AreaProjectsGrid):
-```text
-([entry]) => {
-  setIsFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
-}
-```
-
-This ensures:
-- Hero visible (sentinel below viewport): `isFixed = false` (no fixed bar)
-- Scrolled to filters section: sentinel in view, inline filters visible naturally
-- Scrolled past filters: sentinel above header threshold, portal fixed copy appears
-- Scroll back up: sentinel re-enters viewport, portal disappears
-
-**For Properties**: The filter content is large (3 rows: transaction tabs, search, filter dropdowns + sort). The entire `<section>` content will be shared between inline and portal versions. Since the filter state is managed by React state in the parent component, both copies share the same state seamlessly.
-
-**For Developers**: The filter content (search input, developer dropdown, tier filter, results count, clear button) will be similarly shared.
-
-### Summary
-- 2 files modified: `Properties.tsx` and `Developers.tsx`
-- Same proven IntersectionObserver + createPortal pattern from AreaProjectsGrid
-- Filters hidden during hero, inline at section, fixed on scroll past
