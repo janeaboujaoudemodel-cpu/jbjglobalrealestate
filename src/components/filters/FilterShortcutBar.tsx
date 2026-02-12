@@ -146,7 +146,14 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
 
   return (
     <>
-      <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 -mb-1">
+      <div className="flex flex-col gap-2 w-full">
+        {/* Row 1: Utility buttons (right-aligned) */}
+        <div className="flex justify-end w-full">
+          <UtilityButtons variant={variant} />
+        </div>
+
+        {/* Row 2: Filter pills */}
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 -mb-1">
         {/* Price */}
         <Popover>
           <PopoverTrigger asChild>
@@ -420,11 +427,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
           Save
         </button>
 
-        {/* Vertical divider */}
-        <div className={cn("w-px h-6 mx-1 flex-shrink-0", isDark ? "bg-white/20" : "bg-gold/30")} />
-
-        {/* Reelly-style corner utility buttons */}
-        <UtilityButtons variant={variant} />
+        </div>
       </div>
 
       <SaveFilterModal
