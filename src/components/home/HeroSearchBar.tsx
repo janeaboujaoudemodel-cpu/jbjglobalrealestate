@@ -10,6 +10,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Search, ChevronDown, SlidersHorizontal, Sparkles, DollarSign, Ruler, Home, MapPin, Calendar } from "lucide-react";
+import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import {
@@ -404,6 +405,7 @@ const HeroSearchBar = () => {
   // Advanced filters
   const [paymentPlan, setPaymentPlan] = useState(0);
   const [handoverYear, setHandoverYear] = useState('all');
+  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
 
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
@@ -1015,6 +1017,15 @@ const HeroSearchBar = () => {
             )}
             {isSearching ? 'Searching...' : 'Search'}
           </Button>
+        </div>
+
+        {/* Filter Shortcut Bar - Dark variant for hero */}
+        <div className="mt-3 w-full max-w-4xl">
+          <FilterShortcutBar
+            variant="dark"
+            filters={shortcutFilters}
+            onFilterChange={setShortcutFilters}
+          />
         </div>
       </div>
     </div>
