@@ -1,47 +1,31 @@
 
-## Limit Initial Project Display on Developer Pages
+
+## Move Utility Buttons Above the Filter Pills
 
 ### Problem
-When a user opens a developer page (e.g., `/developer/binghatti`), all projects load and display at once, which can be overwhelming for developers with 50+ projects.
-
-### Solution
-Show only the first **9 projects** (3 rows x 3 columns) initially, with a premium "Explore All [Developer] Projects" button at the bottom. Clicking it reveals the full list.
+Currently, the utility buttons (Map, Saved, AED, sqft, Client Mode) sit inline with the filter pills on the same row, separated by a vertical divider. The user wants the Reelly layout: utility buttons on a **first row** above, and filter pills on a **second row** below.
 
 ### Changes
 
-**File: `src/pages/DeveloperDetail.tsx`**
+**File: `src/components/filters/FilterShortcutBar.tsx`**
 
-1. Add a `showAll` state (`useState(false)`) to track whether all projects are displayed
-2. Create a `displayedProjects` variable:
-   - When `showAll` is `false`: slice `filteredProjects` to the first 9
-   - When `showAll` is `true`: show all `filteredProjects`
-3. Reset `showAll` to `false` whenever filters change or the developer slug changes
-4. Replace the grid rendering (line 383-386) to use `displayedProjects` instead of `filteredProjects`
-5. After the grid, add a "View All [Developer] Projects" button when there are more than 9 projects and `showAll` is false:
-   - Button text: `Explore All {filteredProjects.length} {developerName} Projects`
-   - Styled as a champagne gold bordered button (`border-2 border-gold/40`) with gold text, centered below the grid
-   - On click: set `showAll(true)` and smoothly scroll to keep the user's position
+1. **Restructure the layout** from a single `flex` row to a two-row stack:
+   - **Row 1 (top-right)**: `UtilityButtons` -- right-aligned with `justify-end`
+   - **Row 2 (below)**: All filter pills (Price, Payments, Handover, Property Type, Bedrooms, Status, Reset All, Save)
+2. **Remove** the vertical divider (`w-px h-6`) that currently separates pills from utility buttons
+3. **Remove** the `UtilityButtons` call from inside the pills row and place it in its own row above
+4. Wrap both rows in a `flex flex-col gap-2` container
 
-### Technical Details
+### Result
 
-```text
-filteredProjects (e.g. 47 projects)
-        |
-        v
-  showAll = false?
-   /          \
-  Yes          No
-   |            |
- All 47     First 9
-              + "Explore All 47 Binghatti Projects" button
 ```
-
-- The count text (line 370-373) will always show the total count of filtered projects, not just the displayed ones
-- When filters are applied and reduce the list to 9 or fewer, the button naturally disappears
-- The skeleton loading state remains at 6 items (unchanged)
+Row 1:  [right-aligned]  Map | Saved | AED | sqft | Investor
+Row 2:  Price | Payments | Handover | Apartment | Bedrooms | Status | Reset All | Save
+```
 
 ### Files Summary
 
 | File | Action |
 |------|--------|
-| `src/pages/DeveloperDetail.tsx` | Add `showAll` state, slice to 9 initially, add "Explore All" CTA button |
+| `src/components/filters/FilterShortcutBar.tsx` | Restructure from 1-row to 2-row layout; move UtilityButtons to top row |
+
