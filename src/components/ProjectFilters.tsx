@@ -834,6 +834,19 @@ const ProjectFilters = ({
               sq m
             </button>
           </div>
+
+          {/* Reset All */}
+          {activeFilterCount > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearFilters}
+              className="h-11 px-3 text-sm text-zinc-500 hover:text-black hover:bg-gold/10 rounded-xl border border-gold/30"
+            >
+              <X className="w-3.5 h-3.5 mr-1.5" />
+              Reset All
+            </Button>
+          )}
         </div>
       </div>
 
