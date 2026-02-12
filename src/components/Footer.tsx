@@ -323,7 +323,7 @@ const Footer = () => {
       </div>
       
       {/* Full-width footer content */}
-      <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20 px-3 sm:px-4 md:px-6 lg:px-8 bg-black">
+      <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20 px-1 sm:px-2 md:px-3 lg:px-4 bg-black">
         {/* NOW BELOW THE 3D CARD: Logo + Company Name Section - COMES FIRST */}
         <div className="flex flex-col items-center justify-center text-center w-full max-w-7xl mx-auto relative bg-black pt-4 pb-8">
           {/* Pure black background */}
