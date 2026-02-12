@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Sparkles, ChevronRight } from "lucide-react";
+import { Sparkles, ChevronRight, CreditCard } from "lucide-react";
 import { useProjects } from "@/hooks/useProjects";
 import { SafeImage } from "@/components/SafeImage";
 import { DeveloperLink } from "@/components/ui/developer-link";
@@ -135,6 +135,20 @@ export default function RecommendedProjects({
                     {project.location}
                   </p>
                 )}
+
+                {/* Payment Plan Badge */}
+                {(() => {
+                  const breakdown = (project as any).payment_breakdown;
+                  if (!breakdown || !Array.isArray(breakdown) || breakdown.length === 0) return null;
+                  const percentages = breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number');
+                  if (percentages.length === 0) return null;
+                  return (
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-gold bg-gold/10 border border-gold/30 rounded-full px-2 py-0.5 mt-2">
+                      <CreditCard className="w-3 h-3" />
+                      {percentages.join('/')}
+                    </span>
+                  );
+                })()}
               </div>
             </Link>
           ))}

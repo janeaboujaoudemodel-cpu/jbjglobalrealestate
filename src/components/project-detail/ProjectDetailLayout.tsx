@@ -1143,6 +1143,14 @@ export default function ProjectDetailLayout({
         </div>
       </section>
 
+      {/* Recommended Projects */}
+      <RecommendedProjects
+        currentProjectId={project.id}
+        currentDeveloperId={(project.developer as any)?.id || null}
+        currentLocation={project.location}
+        currentEmirate={(project as any).emirate || null}
+      />
+
       {/* DirectContactCTA is now rendered globally in MainLayout - removed duplicate */}
 
       {/* Lead Capture Modal */}

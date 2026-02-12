@@ -7,7 +7,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Home, MapPin, ArrowRight, Building2, ArrowUpRight } from "lucide-react";
+import { Home, MapPin, ArrowRight, Building2, ArrowUpRight, CreditCard } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -37,6 +37,7 @@ interface FeaturedProject {
   bedrooms_min: number | null;
   bedrooms_max: number | null;
   handover_date: string | null;
+  payment_breakdown: any[] | null;
   images: { image_url: string }[];
   developer: { id: string; name: string; slug: string; logo_url: string | null } | null;
 }
@@ -47,7 +48,7 @@ function useFeaturedProjects() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("id, name, slug, developer_name, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, description, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
+        .select("id, name, slug, developer_name, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, payment_breakdown, description, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
         .in("developer_name", ELITE_DEVELOPERS)
         .eq("is_published", true)
         .order("created_at", { ascending: false })
@@ -248,17 +249,29 @@ const ProjectCard = ({ project }: { project: FeaturedProject }) => {
             {/* Spacer to push bottom content down */}
             <div className="flex-grow" />
 
-            {/* Handover row */}
-            <div className="flex items-end justify-end mt-2 min-h-[36px]">
-              <div className="flex flex-col items-end gap-1">
-                {project.handover_date ? (
-                  <span className="text-orange-500 text-xs font-bold whitespace-nowrap">
-                    {project.handover_date}
+            {/* Handover + Payment Plan row */}
+            <div className="flex items-end justify-between mt-2 min-h-[36px]">
+              {/* Payment Plan - Left */}
+              {(() => {
+                const breakdown = project.payment_breakdown;
+                if (!breakdown || !Array.isArray(breakdown) || breakdown.length === 0) return <span />;
+                const percentages = breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number');
+                if (percentages.length === 0) return <span />;
+                return (
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-gold bg-gold/10 border border-gold/30 rounded-full px-2 py-0.5">
+                    <CreditCard className="w-3 h-3" />
+                    {percentages.join('/')}
                   </span>
-                ) : (
-                  <span className="text-transparent text-xs" aria-hidden="true">—</span>
-                )}
-              </div>
+                );
+              })()}
+              {/* Handover - Right */}
+              {project.handover_date ? (
+                <span className="text-orange-500 text-xs font-bold whitespace-nowrap">
+                  {project.handover_date}
+                </span>
+              ) : (
+                <span className="text-transparent text-xs" aria-hidden="true">—</span>
+              )}
             </div>
           </div>
         </div>

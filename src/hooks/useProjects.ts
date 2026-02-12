@@ -207,6 +207,30 @@ export function useProjects() {
   });
 }
 
+/**
+ * Lightweight listing hook - no images/documents joins.
+ * Use this for Properties page and other listing views.
+ */
+export function useProjectsListing() {
+  return useQuery({
+    queryKey: ["projects-listing"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select(`
+          *,
+          developer:developers(id, name, slug, logo_url),
+          community:communities(id, name, slug)
+        `)
+        .order("created_at", { ascending: false })
+        .limit(2500);
+      
+      if (error) throw error;
+      return data as UnifiedProject[];
+    },
+  });
+}
+
 export function useProjectsByCommunity(communitySlug: string) {
   return useQuery({
     queryKey: ["projects", "community", communitySlug],
