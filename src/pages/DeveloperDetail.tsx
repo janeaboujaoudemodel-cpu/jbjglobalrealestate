@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import { DeveloperAIAnalyzer } from "@/components/developer/DeveloperAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
+import { SectionDivider } from "@/components/ui/section-divider";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 
@@ -209,7 +210,7 @@ const DeveloperDetail = () => {
       </div>
 
       {/* Content (Layer 2) */}
-      <div className="jj-layer-2 mt-6 md:mt-8 mb-12">
+      <div className="jj-layer-2 mt-6 md:mt-8 mb-12" style={{ marginLeft: 0, marginRight: 0, borderRadius: 0, border: 'none' }}>
         {/* Developer header */}
         <div className="flex flex-col md:flex-row md:items-start gap-6">
           {/* Logo plate - Full-fit, no white corners */}
@@ -453,6 +454,9 @@ const DeveloperDetail = () => {
             </div>
           )}
         </div>
+
+        {/* Divider before DLD Market Widget */}
+        <SectionDivider fullWidth />
 
         {/* DLD Market Widget - Live transaction data */}
         <DLDMarketWidget />

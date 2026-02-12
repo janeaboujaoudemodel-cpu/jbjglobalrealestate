@@ -58,6 +58,8 @@ import ReportIssueButton from "@/components/project-detail/ReportIssueButton";
 import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos";
 import PointsOfInterest from "@/components/project-detail/PointsOfInterest";
 import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
+import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
+import { SectionDivider } from "@/components/ui/section-divider";
 // Footer is now rendered globally in MainLayout - do not import here
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
@@ -620,8 +622,8 @@ export default function ProjectDetailLayout({
                 {/* Register Interest - Highlighted Gold CTA */}
                 <button
                   onClick={scrollToInquiry}
-                  className="flex items-center gap-1.5 ml-auto px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit transition-all bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110"
-                  style={{ boxShadow: '0 0 15px rgba(200,167,102,0.4)' }}
+                  className="flex items-center gap-1.5 ml-auto px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit transition-all bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#D4C4A8] text-black border-2 border-gold/50 hover:brightness-105"
+                  style={{ boxShadow: '0 0 15px rgba(200,167,102,0.3)' }}
                 >
                   <UserPlus className="w-3.5 h-3.5" />
                   <span>Register Interest</span>
@@ -633,8 +635,8 @@ export default function ProjectDetailLayout({
       </div>
 
       {/* MAIN CONTENT */}
-      <section className="jj-section-champagne">
-        <div className="container mx-auto px-4">
+      <section className="jj-section-champagne" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}>
+        <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
           {/* Quick Stats Grid - Premium gold border visible */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
@@ -988,11 +990,16 @@ export default function ProjectDetailLayout({
               projectName={project.name}
               areaName={project.area_name || project.location || "Dubai"}
               developer={project.developer?.name}
+              developerSlug={project.developer?.slug}
               priceFrom={project.price_from ?? undefined}
               handoverDate={project.handover_date ?? undefined}
               amenities={project.amenities ?? undefined}
             />
           </div>
+
+          {/* DLD MARKET INTELLIGENCE */}
+          <SectionDivider />
+          <DLDMarketWidget />
 
           {/* BROCHURE - Full width two-column layout - Always visible */}
           <div ref={brochureRef} id="brochure" className="mb-12 scroll-mt-40">

@@ -120,6 +120,7 @@ const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030'];
 
 const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutBarProps) => {
   const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const navigate = useNavigate();
   const isDark = variant === 'dark';
 
   const update = useCallback((partial: Partial<ShortcutFilterState>) => {
@@ -185,10 +186,16 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
   return (
     <>
       <div className="flex flex-col gap-2 w-full">
-        {/* Row 1: Utility buttons left, Sort/Toggle shortcuts right */}
+        {/* Row 1: Utility buttons left, Map + Sort pills right */}
         <div className="flex items-center justify-between w-full gap-2">
           <UtilityButtons variant={variant} onApplySavedFilter={onFilterChange} />
           <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
+            {/* Map - moved to right side before sort pills */}
+            <button onClick={() => navigate('/properties?view=map')} className={cn(pillBase, "px-3 py-1.5", pillInactive)} title="Map View">
+              <Map className="w-3.5 h-3.5" />
+              Map
+            </button>
+
             {/* Sort pills (radio-style) */}
             {SORT_OPTIONS.map((opt) => (
               <button
@@ -199,29 +206,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
                 {opt.label}
               </button>
             ))}
-
-            {/* Hide Sold Out - Red highlight */}
-            <button
-              onClick={() => update({ hideSoldOut: !filters.hideSoldOut })}
-              className={cn(
-                pillBase, "px-3 py-1.5",
-                filters.hideSoldOut
-                  ? "bg-red-50 border-2 border-red-500 text-red-600 font-bold shadow-md"
-                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-red-300/50 text-red-600/80 hover:border-red-400"
-              )}
-            >
-              <EyeOff className="w-3.5 h-3.5 text-red-500" />
-              Hide Sold
-            </button>
-
-            {/* Save Filter - Red heart */}
-            <button
-              onClick={() => setSaveModalOpen(true)}
-              className={cn(pillBase, "px-3 py-1.5", pillInactive)}
-            >
-              <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-              Save
-            </button>
           </div>
         </div>
 
@@ -514,6 +498,29 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
           </PopoverContent>
         </Popover>
 
+        {/* Save Filter - Red heart (moved from Row 1) */}
+        <button
+          onClick={() => setSaveModalOpen(true)}
+          className={cn(pillBase, "px-3 py-1.5", pillInactive)}
+        >
+          <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
+          Save
+        </button>
+
+        {/* Hide Sold Out - Red highlight (moved from Row 1) */}
+        <button
+          onClick={() => update({ hideSoldOut: !filters.hideSoldOut })}
+          className={cn(
+            pillBase, "px-3 py-1.5",
+            filters.hideSoldOut
+              ? "bg-red-50 border-2 border-red-500 text-red-600 font-bold shadow-md"
+              : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-red-300/50 text-red-600/80 hover:border-red-400"
+          )}
+        >
+          <EyeOff className="w-3.5 h-3.5 text-red-500" />
+          Hide Sold
+        </button>
+
         {/* Reset All */}
         {hasActiveFilters && (
           <button
@@ -590,11 +597,6 @@ function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'd
 
   return (
     <div className="flex items-center gap-1.5 flex-shrink-0">
-      <button onClick={() => navigate('/properties?view=map')} className={btnBase} title="Map View">
-        <Map className="w-3.5 h-3.5" />
-        <span className="hidden sm:inline">Map</span>
-      </button>
-
       {/* Saved Filters Popover */}
       <Popover open={savedOpen} onOpenChange={setSavedOpen}>
         <PopoverTrigger asChild>

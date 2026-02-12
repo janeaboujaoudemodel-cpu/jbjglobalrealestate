@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Brain, Loader2, TrendingUp, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown, RefreshCw } from "lucide-react";
+import { Brain, Loader2, TrendingUp, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown, RefreshCw, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ interface ProjectAIAnalyzerProps {
   projectName: string;
   areaName: string;
   developer?: string;
+  developerSlug?: string | null;
   priceFrom?: number;
   handoverDate?: string;
   amenities?: string[];
@@ -40,6 +41,7 @@ export const ProjectAIAnalyzer = ({
   projectName,
   areaName,
   developer,
+  developerSlug,
   priceFrom,
   handoverDate,
   amenities,
@@ -61,7 +63,7 @@ export const ProjectAIAnalyzer = ({
 
     timeoutRef.current = setTimeout(() => {
       setHasTimedOut(true);
-    }, 30000);
+    }, 15000);
 
     try {
       // Build context string for the AI
@@ -105,12 +107,7 @@ export const ProjectAIAnalyzer = ({
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (isVisible && !analysis && !isAnalyzing && !hasTriggered.current && !errorMsg) {
-      hasTriggered.current = true;
-      handleAnalyze();
-    }
-  }, [isVisible, analysis, isAnalyzing, handleAnalyze, errorMsg]);
+  // Manual trigger only - no auto-analyze on scroll
 
   const sections = analysis ? {
     overview: extractSection(analysis, "Area Overview"),
@@ -137,8 +134,16 @@ export const ProjectAIAnalyzer = ({
         </div>
 
         <p className="text-zinc-500 text-sm mb-6">
-          Comprehensive AI analysis for <span className="font-semibold text-black">{projectName}</span>
-          {developer && <> by <span className="font-semibold text-black">{developer}</span></>}
+          Comprehensive AI analysis for <span className="font-semibold text-gold">{projectName}</span>
+          {developer && (
+            <> by {developerSlug ? (
+              <Link to={`/developer/${developerSlug}`} className="font-semibold text-gold hover:underline transition-all">
+                {developer}
+              </Link>
+            ) : (
+              <span className="font-semibold text-gold">{developer}</span>
+            )}</>
+          )}
         </p>
 
         {/* AI Analysis */}
@@ -150,7 +155,16 @@ export const ProjectAIAnalyzer = ({
               Retry Analysis
             </Button>
           </div>
-        ) : !analysis ? (
+        ) : !analysis && !isAnalyzing ? (
+          <div className="text-center py-8 space-y-4">
+            <Brain className="w-12 h-12 text-gold/40 mx-auto" />
+            <p className="text-zinc-500 text-sm">Click below to generate an AI-powered investment analysis</p>
+            <Button onClick={handleAnalyze} className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold hover:brightness-110">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Analyze {projectName}
+            </Button>
+          </div>
+        ) : !analysis && isAnalyzing ? (
           <div className="text-center py-8">
             {hasTimedOut ? (
               <div className="space-y-4">
