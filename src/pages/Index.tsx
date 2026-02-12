@@ -98,8 +98,8 @@ const Index = () => {
                 el.dataset.deferred = 'true';
                 // Defer video loading to prioritize initial page render
                 setTimeout(() => {
-                  el.preload = 'auto';
-                  el.src = '/videos/hero-video.mp4';
+                el.preload = 'auto';
+                  el.src = 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4';
                   el.load();
                 }, 2000);
               }
@@ -128,7 +128,7 @@ const Index = () => {
               e.currentTarget.style.display = 'none';
             }}
           >
-            <source src="/videos/hero-video.mp4" type="video/mp4" />
+            <source src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4" type="video/mp4" />
           </video>
           {/* Video overlay gradient - above video (lightened for better video visibility) */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60 z-[2]" />

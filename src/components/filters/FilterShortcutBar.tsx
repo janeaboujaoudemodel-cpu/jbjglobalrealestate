@@ -1,12 +1,13 @@
 /**
- * FilterShortcutBar - Reelly-style pill filter buttons with popovers
- * Supports 'light' (Properties page) and 'dark' (Hero) variants
+ * FilterShortcutBar - Premium connected 2-row filter toolbar
+ * Row 1: Search + Map + Saved + Currency + Filter + Mode Investor (connected bar)
+ * Row 2: Filter popovers + Sort pills + Hide Sold (last)
  */
 import { useState, useCallback, useEffect } from "react";
-import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal } from "lucide-react";
+import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserModeContext } from "@/contexts/UserModeContext";
-import CurrencySwitcher from "@/components/CurrencySwitcher";
+import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
@@ -201,25 +202,42 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   return (
     <>
       <div className="flex flex-col gap-2 w-full">
-        {/* Row 1: Controls - Search + Map + Saved + Currency + Mode + Filter */}
-        <div className="flex items-center w-full gap-1.5 overflow-x-auto scrollbar-hide">
-          {searchSlot && <div className="flex-shrink-0 max-w-[160px]">{searchSlot}</div>}
-          <button
-            onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
-            className={cn(pillBase, "px-3 py-1.5", isMapMode ? pillActive : pillInactive)}
-            title="Map View"
-          >
-            <Map className="w-3.5 h-3.5" />
-            {isMapMode ? 'List' : 'Map'}
-          </button>
-          <UtilityButtons variant={variant} onApplySavedFilter={onFilterChange} />
-          <button
-            onClick={() => setAdvancedOpen(true)}
-            className={cn(pillBase, "px-3 py-1.5", pillInactive)}
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5" />
-            Filter
-          </button>
+        {/* Row 1: Connected toolbar - Search + Map + Saved + Currency + Filter + Mode */}
+        <div className="flex items-center w-full">
+          <div className="flex items-center w-full border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+            {/* Search slot */}
+            {searchSlot && (
+              <div className="flex-1 min-w-0 border-r border-gold/20">
+                {searchSlot}
+              </div>
+            )}
+            {/* Map toggle */}
+            <button
+              onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
+              className={cn(
+                "flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20",
+                isMapMode ? "bg-gold/20 text-black" : "text-black/70 hover:bg-gold/10"
+              )}
+              title="Map View"
+            >
+              <Map className="w-3.5 h-3.5" />
+              {isMapMode ? 'List' : 'Map'}
+            </button>
+            {/* Saved */}
+            <ConnectedSavedButton variant={variant} onApplySavedFilter={onFilterChange} />
+            {/* Currency */}
+            <ConnectedCurrencyButton />
+            {/* Filter */}
+            <button
+              onClick={() => setAdvancedOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10"
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              Filter
+            </button>
+            {/* Mode Investor */}
+            <ConnectedModeButton />
+          </div>
         </div>
 
         {/* Row 2: Filter popovers + Sort pills */}
@@ -511,20 +529,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </PopoverContent>
         </Popover>
 
-        {/* Hide Sold Out */}
-        <button
-          onClick={() => update({ hideSoldOut: !filters.hideSoldOut })}
-          className={cn(
-            pillBase, "px-3 py-1.5",
-            filters.hideSoldOut
-              ? "bg-red-50 border-2 border-red-500 text-red-600 font-bold shadow-md"
-              : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-red-300/50 text-red-600/80 hover:border-red-400"
-          )}
-        >
-          <EyeOff className="w-3.5 h-3.5 text-red-500" />
-          Hide Sold
-        </button>
-
         {/* Divider */}
         <div className="w-px h-6 bg-gold/30 flex-shrink-0" />
 
@@ -538,6 +542,23 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             {opt.label}
           </button>
         ))}
+
+        {/* Divider */}
+        <div className="w-px h-6 bg-gold/30 flex-shrink-0" />
+
+        {/* Hide Sold Out - LAST */}
+        <button
+          onClick={() => update({ hideSoldOut: !filters.hideSoldOut })}
+          className={cn(
+            pillBase, "px-3 py-1.5",
+            filters.hideSoldOut
+              ? "bg-red-50 border-2 border-red-500 text-red-600 font-bold shadow-md"
+              : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-red-300/50 text-red-600/80 hover:border-red-400"
+          )}
+        >
+          <EyeOff className="w-3.5 h-3.5 text-red-500" />
+          Hide Sold
+        </button>
 
         {/* Reset All */}
         {hasActiveFilters && (
@@ -572,30 +593,86 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   );
 };
 
-/* ---- Reelly-style corner utility buttons ---- */
+/* ---- Connected toolbar sub-components ---- */
+
+const CURRENCY_KEY = 'jj_currency';
+
+function ConnectedCurrencyButton() {
+  const [currency, setCurrencyState] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(CURRENCY_KEY) || 'AED';
+    }
+    return 'AED';
+  });
+  const [open, setOpen] = useState(false);
+
+  const setCurrency = (code: string) => {
+    setCurrencyState(code);
+    localStorage.setItem(CURRENCY_KEY, code);
+    window.dispatchEvent(new CustomEvent('currencyChange', { detail: code }));
+    setOpen(false);
+  };
+
+  const currentCurrency = SUPPORTED_CURRENCIES.find(c => c.code === currency) || SUPPORTED_CURRENCIES[0];
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10">
+          <span>{currentCurrency.flag}</span>
+          <span>{currentCurrency.code}</span>
+          <ChevronDown className="w-3 h-3 opacity-60" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        className="z-[10200] min-w-[280px] rounded-xl shadow-2xl p-0 border-2 border-gold/40"
+        style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
+        align="end"
+        sideOffset={12}
+      >
+        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
+        <div className="px-4 py-3 border-b border-gold/20">
+          <p className="text-xs font-semibold text-black/60 uppercase tracking-wider">Select Currency</p>
+        </div>
+        <div className="p-2 max-h-80 overflow-y-auto">
+          {SUPPORTED_CURRENCIES.map((curr) => (
+            <button
+              key={curr.code}
+              onClick={() => setCurrency(curr.code)}
+              className={cn(
+                "w-full flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5 transition-colors",
+                currency === curr.code
+                  ? 'bg-gold/15 border border-gold/30'
+                  : 'hover:bg-[#F5EBD7]'
+              )}
+            >
+              <span className="flex items-center gap-3">
+                <span className="text-lg">{curr.flag}</span>
+                <span className={cn("text-sm font-semibold", currency === curr.code ? 'text-gold' : 'text-black')}>{curr.name}</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-black/50 text-sm">{curr.symbol}</span>
+                {currency === curr.code && <Check className="w-4 h-4 text-gold" />}
+              </span>
+            </button>
+          ))}
+        </div>
+        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 interface SavedFilter {
   name: string;
   filters: ShortcutFilterState;
   createdAt: string;
 }
 
-function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'dark'; onApplySavedFilter: (filters: ShortcutFilterState) => void }) {
-  const navigate = useNavigate();
-  const { mode, setMode } = useUserModeContext();
+function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light' | 'dark'; onApplySavedFilter: (filters: ShortcutFilterState) => void }) {
   const [savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
   const [savedOpen, setSavedOpen] = useState(false);
   const [confirmDeleteIndex, setConfirmDeleteIndex] = useState<number | null>(null);
-  const [modeOpen, setModeOpen] = useState(false);
-
-  const isDark = variant === 'dark';
-  const btnBase = cn(
-    "inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap select-none",
-    isDark
-      ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
-      : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 text-black hover:border-gold/60"
-  );
-
-  const modeLabel = mode === 'broker' ? 'Broker' : mode === 'investor_broker' ? 'Both' : 'Investor';
 
   useEffect(() => {
     const raw = localStorage.getItem('jbj-saved-filters');
@@ -616,6 +693,73 @@ function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'd
     setSavedOpen(false);
   };
 
+  return (
+    <Popover open={savedOpen} onOpenChange={setSavedOpen}>
+      <PopoverTrigger asChild>
+        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10" title="Saved Filters">
+          <Heart className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Saved</span>
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        className="w-72 p-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[10200] shadow-xl"
+        side="bottom"
+        align="end"
+        sideOffset={6}
+      >
+        <h4 className="text-sm font-bold text-black mb-2">Saved Filters</h4>
+        {savedFilters.length === 0 ? (
+          <p className="text-xs text-black/50 py-4 text-center">No saved filters yet</p>
+        ) : (
+          <div className="space-y-1 max-h-60 overflow-y-auto">
+            {savedFilters.map((sf, idx) => (
+              <div
+                key={idx}
+                className="flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg hover:bg-white/60 cursor-pointer transition-colors group"
+                onClick={() => applySavedFilter(sf)}
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold text-black truncate">{sf.name}</p>
+                  <p className="text-[10px] text-black/40">{new Date(sf.createdAt).toLocaleDateString()}</p>
+                </div>
+                {confirmDeleteIndex === idx ? (
+                  <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                    <span className="text-[10px] text-red-600 font-semibold whitespace-nowrap">Delete?</span>
+                    <button
+                      onClick={() => deleteSavedFilter(idx)}
+                      className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-500 text-white hover:bg-red-600 transition-colors"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      onClick={() => setConfirmDeleteIndex(null)}
+                      className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-white border border-gold/40 text-black hover:bg-gold/10 transition-colors"
+                    >
+                      No
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setConfirmDeleteIndex(idx); }}
+                    className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-500/10 text-red-500 transition-all"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+function ConnectedModeButton() {
+  const { mode, setMode } = useUserModeContext();
+  const [modeOpen, setModeOpen] = useState(false);
+  const modeLabel = mode === 'broker' ? 'Broker' : mode === 'investor_broker' ? 'Both' : 'Investor';
+
   const MODE_OPTIONS: { value: typeof mode; label: string }[] = [
     { value: 'investor', label: 'Investor' },
     { value: 'broker', label: 'Broker' },
@@ -623,100 +767,35 @@ function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'd
   ];
 
   return (
-    <div className="flex items-center gap-1.5 flex-shrink-0">
-      {/* Saved Filters Popover */}
-      <Popover open={savedOpen} onOpenChange={setSavedOpen}>
-        <PopoverTrigger asChild>
-          <button className={btnBase} title="Saved Filters">
-            <Heart className="w-4 h-4" />
-            <span className="hidden sm:inline">Saved</span>
+    <Popover open={modeOpen} onOpenChange={setModeOpen}>
+      <PopoverTrigger asChild>
+        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors text-black/70 hover:bg-gold/10" title="Switch Mode">
+          <Users className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Mode: {modeLabel}</span>
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[10200] shadow-xl"
+        side="bottom"
+        align="end"
+        sideOffset={6}
+      >
+        {MODE_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => { setMode(opt.value); setModeOpen(false); }}
+            className={cn(
+              "w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors",
+              mode === opt.value
+                ? "bg-gold/20 text-gold border border-gold/40"
+                : "text-black/80 hover:bg-white/60"
+            )}
+          >
+            {opt.label}
           </button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="w-72 p-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[10200] shadow-xl"
-          side="bottom"
-          align="end"
-          sideOffset={6}
-        >
-          <h4 className="text-sm font-bold text-black mb-2">Saved Filters</h4>
-          {savedFilters.length === 0 ? (
-            <p className="text-xs text-black/50 py-4 text-center">No saved filters yet</p>
-          ) : (
-            <div className="space-y-1 max-h-60 overflow-y-auto">
-              {savedFilters.map((sf, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg hover:bg-white/60 cursor-pointer transition-colors group"
-                  onClick={() => applySavedFilter(sf)}
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold text-black truncate">{sf.name}</p>
-                    <p className="text-[10px] text-black/40">{new Date(sf.createdAt).toLocaleDateString()}</p>
-                  </div>
-                  {confirmDeleteIndex === idx ? (
-                    <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-                      <span className="text-[10px] text-red-600 font-semibold whitespace-nowrap">Delete?</span>
-                      <button
-                        onClick={() => deleteSavedFilter(idx)}
-                        className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-500 text-white hover:bg-red-600 transition-colors"
-                      >
-                        Yes
-                      </button>
-                      <button
-                        onClick={() => setConfirmDeleteIndex(null)}
-                        className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-white border border-gold/40 text-black hover:bg-gold/10 transition-colors"
-                      >
-                        No
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={(e) => { e.stopPropagation(); setConfirmDeleteIndex(idx); }}
-                      className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-500/10 text-red-500 transition-all"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </PopoverContent>
-      </Popover>
-
-      <CurrencySwitcher variant="default" />
-
-      {/* Mode Dropdown */}
-      <Popover open={modeOpen} onOpenChange={setModeOpen}>
-        <PopoverTrigger asChild>
-          <button className={btnBase} title="Switch Mode">
-            <Users className="w-4 h-4" />
-            <span className="hidden sm:inline">Mode: {modeLabel}</span>
-          </button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[10200] shadow-xl"
-          side="bottom"
-          align="start"
-          sideOffset={6}
-        >
-          {MODE_OPTIONS.map((opt) => (
-            <button
-              key={opt.value}
-              onClick={() => { setMode(opt.value); setModeOpen(false); }}
-              className={cn(
-                "w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors",
-                mode === opt.value
-                  ? "bg-gold/20 text-gold border border-gold/40"
-                  : "text-black/80 hover:bg-white/60"
-              )}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </PopoverContent>
-      </Popover>
-    </div>
+        ))}
+      </PopoverContent>
+    </Popover>
   );
 }
 
