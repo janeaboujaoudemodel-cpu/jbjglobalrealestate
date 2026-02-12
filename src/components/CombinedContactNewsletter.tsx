@@ -56,7 +56,7 @@ const CombinedContactNewsletter = ({
 
   return (
     <section className={`py-8 sm:py-12 md:py-16 bg-black ${className}`}>
-      <div className="mx-4 sm:mx-6 md:mx-4 lg:mx-6 xl:mx-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-xl sm:rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6 md:p-10">
+      <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-xl sm:rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6 md:p-10">
         {/* Header */}
         <div className="text-center mb-8">
           <h2
