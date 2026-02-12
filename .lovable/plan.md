@@ -1,35 +1,36 @@
 
 
-## Fix: Broken Filter Bar Layout + Sticky Behavior
+## Fix: Sticky Filter Bar (for real this time)
 
-### What Went Wrong
+### Root Cause
 
-The developer filter dropdown was accidentally placed **inside** the search input's wrapper `<div>`. This means:
-- The search icon, the text input, and the developer dropdown are all crammed into one relative container
-- The layout collapses because the developer `Select` is positioned relative to the search field
+CSS `position: sticky` is broken because `MainLayout.tsx` applies `overflow-x-hidden` on the `<main>` element (line 205). Any `overflow` property on an ancestor element creates a new scrolling context, which prevents `sticky` from working relative to the viewport. This is a known CSS limitation.
 
-### Fix (single file: `AreaProjectsGrid.tsx`)
+### Solution: JavaScript-based fixed positioning
 
-**1. Fix the broken JSX nesting (lines 189-219)**
+Since we cannot remove `overflow-x-hidden` from `<main>` (it prevents horizontal scrollbar issues globally), we will switch to a JavaScript approach that manually toggles between static (in-flow) and fixed positioning.
 
-Close the search input's `<div className="relative flex-1 min-w-[200px]">` right after the clear-search button (after line 203), then place the Developer filter as a **sibling** alongside Status, Bedrooms, and Sort.
+### Technical Details
 
-Corrected structure:
-```text
-<div class="flex flex-wrap items-center gap-3">
-  |-- <div class="relative flex-1"> (search input + X button) </div>   <-- closes here
-  |-- <Select> Developer </Select>      <-- sibling, not nested
-  |-- <Select> Status </Select>
-  |-- <Select> Bedrooms </Select>
-  |-- <Select> Sort </Select>
-  |-- Clear button
-</div>
-```
+**File: `src/components/area-detail/AreaProjectsGrid.tsx`**
 
-**2. Sticky behavior is already correct**
+1. Replace the `hasShadow` IntersectionObserver with a scroll-based approach using `useEffect` + `scroll` event listener
+2. Add a `placeholderRef` div that reserves space when the bar goes fixed (prevents layout jump)
+3. Add a `barRef` on the filter bar itself to measure its height
+4. On scroll:
+   - Get the placeholder element's `getBoundingClientRect().top`
+   - If `top <= 72` (header height) AND the section bottom is still in view, set `isFixed = true`
+   - Otherwise set `isFixed = false`
+5. When `isFixed` is true:
+   - The placeholder div gets the bar's measured height (to prevent content jumping up)
+   - The bar gets `position: fixed; top: 72px; left: 0; right: 0; z-index: 30` plus a shadow
+   - The bar's inner content stays within a `container mx-auto px-4` wrapper for proper alignment
+6. When `isFixed` is false:
+   - The placeholder has `height: 0`
+   - The bar is in its normal flow position inside the card
 
-The `sticky top-[72px] z-30` class is applied and no ancestor has `overflow: hidden`. Once the JSX nesting is fixed, the sticky behavior will work as expected -- the bar stays inside the card in normal flow and pins under the header when scrolled past.
+This is the same pattern used successfully in `AreaStickySearchBar.tsx` (which uses fixed positioning when `isSticky` is true).
 
-**3. No other changes needed**
+### No other changes
 
-All filter logic, developer options derivation, sentinel/shadow, and grid rendering are correct. This is purely a JSX structure fix on lines 189-219.
+The layout (search input, developer filter, status, bedrooms, sort) stays exactly as it is now. Only the positioning mechanism changes from broken CSS sticky to working JS-driven fixed.
