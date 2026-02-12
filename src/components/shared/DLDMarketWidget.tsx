@@ -159,14 +159,14 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               </div>
             </div>
 
-            {/* Top 5 Nationalities */}
+            {/* Top 10 Nationalities */}
             <div className="bg-white/70 rounded-xl p-5 border border-gold/20">
               <div className="flex items-center gap-2 mb-4">
                 <Globe className="w-4 h-4 text-gold" />
-                <h3 className="text-black text-sm font-semibold">Top Buyer Nationalities</h3>
+                <h3 className="text-black text-sm font-semibold">Top 10 Buyer Nationalities</h3>
               </div>
               <div className="space-y-3">
-                {topNationalities.slice(0, 5).map((nat) => (
+                {topNationalities.slice(0, 10).map((nat) => (
                   <div key={nat.country} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-base">{nat.flag}</span>
