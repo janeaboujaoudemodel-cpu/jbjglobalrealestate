@@ -1,77 +1,45 @@
 
 
-## Advanced Filter Panel + "Sold Out" Fix + Handover Extension to Q4 2035
+## Connect FilterShortcutBar to Actually Filter Results on All Pages
 
-### 1. Replace "Out of Stock" with "Sold Out" in All UI Labels
+### Problem
+The FilterShortcutBar appears on multiple pages but is not wired up to filter results everywhere:
 
-The label "Out of Stock" appears as a display label in one key location:
+1. **Properties.tsx** -- Has `shortcutFilters` state but **never calls `applyShortcutFilters()`** on the project list. The bar is purely visual.
+2. **AreaStickySearchBar.tsx** -- Has its own isolated `shortcutFilters` state that is **not shared** with `AreaProjectsGrid`, which maintains a separate copy. Changes in the sticky bar do not affect the grid.
+3. **ProjectDetailLayout.tsx** -- Has `shortcutFilters` in the sticky nav but does not use them to filter the "Similar Projects" or nearby listings.
 
-**File: `src/components/filters/FilterShortcutBar.tsx` (line 102)**
-- Change `label: 'Out of Stock'` to `label: 'Sold Out'`
+### Fix
 
-The internal value `'Sold Out'` is already correct in the database and filter config. The remaining "Out of Stock" references in other files are internal mapping logic (converting API values to "Sold Out") and filter exclusion logic (checking `.includes('out of stock')`) -- these must stay as-is to handle legacy API data.
+#### 1. Properties.tsx -- Apply shortcut filters to the sorted project list
 
-### 2. Extend Handover Years to Q4 2035
+- Import `applyShortcutFilters` from `@/utils/applyShortcutFilters`
+- After `sortedProjects` is computed (line ~320), add a new `useMemo` that runs `applyShortcutFilters(sortedProjects, shortcutFilters)` to produce `finalProjects`
+- Replace all downstream references from `sortedProjects` to `finalProjects` (the grid rendering, count display, pagination)
+- This makes every shortcut filter pill (price, bedrooms, status, construction, handover, property type, sort, hide sold out) instantly affect the Properties listing
 
-**File: `src/components/filters/FilterShortcutBar.tsx` (line 119)**
-- Change `YEARS` from `['2025', '2026', '2027', '2028', '2029', '2030']` to include every year up to 2035: `['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035']`
-- Update `defaultShortcutFilters.handoverTo` to `{ quarter: 'Q4', year: '2035' }`
+#### 2. AreaStickySearchBar.tsx + AreaProjectsGrid.tsx -- Share filter state
 
-### 3. Build the Advanced Filter Panel (Full-Screen Sheet/Dialog)
+Currently these are sibling components that each maintain their own `shortcutFilters`. The fix is to **lift the state up**:
 
-Create a new component `src/components/filters/AdvancedFilterPanel.tsx` that opens as a scrollable `Sheet` (slide-in panel) styled with the gold/champagne theme. Based on the reference screenshots, it includes:
+- **AreaStickySearchBar**: Accept `filters` and `onFilterChange` as props instead of managing its own `shortcutFilters` state. Remove the internal `useState`.
+- **Parent page (AreaDetail.tsx or wherever both are rendered)**: Own the single `shortcutFilters` state, pass it down to both `AreaStickySearchBar` and `AreaProjectsGrid`.
+- **AreaProjectsGrid**: Already applies `applyShortcutFilters` correctly (line 172). It just needs to receive the same state instance that `AreaStickySearchBar` controls.
 
-**Header:**
-- Title: "New Off Plan Projects" with a gold live project count (fetched from the database)
-- Search input: "Type a project, developer or district"
-- Close (X) button
+#### 3. ProjectDetailLayout.tsx -- Wire filters to similar/nearby projects
 
-**Sections (scrollable body):**
+- The shortcut filters in the sticky nav should filter any "Similar Projects" or "Nearby Projects" sections if present
+- Apply `applyShortcutFilters` to those project arrays before rendering
 
-| Section | UI Element | Data Source |
-|---------|-----------|-------------|
-| Location | Searchable multi-select dropdown with all 7 UAE Emirates | `EMIRATES_OPTIONS` from filterConfig |
-| By Company | Searchable multi-select dropdown with developer logos | Fetch from `projects` table distinct developers |
-| Projects Payment Plan | Slider 0-100% with pre-handover/post-handover inputs and toggle | Existing payment plan filter state |
-| Property Price | Per unit / Per sqft / Per sqm tabs + Min/Max inputs with AED | Existing price filter state |
-| Property Size | Min/Max sqft inputs with clear buttons | New filter fields added to `ShortcutFilterState` |
-| Development Status | Toggle pills: Completed, Presale, Under Construction | Existing `constructionStatuses` |
-| Unit Type | Toggle pills: Apartments, Villa, Townhouse, Duplex, Penthouse | Existing `propertyTypes` |
-| Bedrooms | Toggle pills: Studio, 1 BR, 2 BR, 3 BR, 4 BR, 5+ BR | Existing `bedrooms` |
-| Sales Status | Colored dot pills: Announced, Presale (EOI), Start of Sales, On Sale, **Sold Out** | Existing `statuses` |
-| Project Handover By | From/To quarter+year selects (Q1 2025 to Q4 2035) | Existing `handoverFrom`/`handoverTo` |
+### Files to Change
 
-**Footer (sticky at bottom):**
-- "Clear all" button + Heart (save) icon
-- "Show [X] projects" button (gold/champagne gradient) with live count
+| File | Change |
+|------|--------|
+| `src/pages/Properties.tsx` | Import `applyShortcutFilters`; add `finalProjects = applyShortcutFilters(sortedProjects, shortcutFilters)`; replace `sortedProjects` with `finalProjects` in rendering |
+| `src/components/area-detail/AreaStickySearchBar.tsx` | Accept `filters` + `onFilterChange` props instead of internal state; pass them to `FilterShortcutBar` |
+| Parent of AreaStickySearchBar + AreaProjectsGrid (likely `src/pages/AreaDetail.tsx` or similar) | Lift `shortcutFilters` state here; pass to both child components |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Apply `applyShortcutFilters` to any similar/nearby project arrays rendered on the page |
 
-**Styling:** Gold champagne gradient background matching the sticky filter bar (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`), `border-2 border-gold/40`, champagne-styled inputs and dropdowns.
-
-**Live Count:** Query the database with a lightweight `SELECT COUNT(*)` filtered by the current advanced filter state, debounced by 500ms. The count updates as filters change.
-
-### 4. Add "Advanced" Button to FilterShortcutBar Row 2
-
-**File: `src/components/filters/FilterShortcutBar.tsx`**
-- Add an "Advanced" pill button after "Construction" and before "Save"
-- Clicking it opens the `AdvancedFilterPanel` sheet
-- Import and render the new component
-
-### 5. Update ShortcutFilterState Interface
-
-**File: `src/components/filters/FilterShortcutBar.tsx`**
-- Add new fields to `ShortcutFilterState`:
-  - `sizeMin: string` (sqft)
-  - `sizeMax: string` (sqft)
-  - `emirates: string[]`
-  - `developers: string[]`
-  - `searchQuery: string` (for the advanced filter search box)
-- Update `defaultShortcutFilters` with empty defaults
-
-### Technical Summary
-
-| File | Changes |
-|------|---------|
-| `src/components/filters/FilterShortcutBar.tsx` | Fix "Out of Stock" to "Sold Out"; extend YEARS to 2035; add Advanced button; expand `ShortcutFilterState` with new fields |
-| `src/components/filters/AdvancedFilterPanel.tsx` | **NEW** -- Full advanced filter sheet with all sections, live count, champagne styling |
-| `src/utils/applyShortcutFilters.ts` | Add filtering logic for new fields (emirates, developers, size range, search query) |
+### Result
+Every filter change -- clicking a pill, selecting a dropdown option, toggling "Hide Sold Out", changing sort order -- will **instantly** update the visible project results on all pages without requiring any "Search" button click.
 
