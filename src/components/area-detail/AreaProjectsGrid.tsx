@@ -17,21 +17,22 @@ interface AreaProjectsGridProps {
 export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [developerFilter, setDeveloperFilter] = useState("all");
   const [bedroomFilter, setBedroomFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
-  const [isSticky, setIsSticky] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
+  const [hasShadow, setHasShadow] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Only activate sticky when section is scrolled to and filter bar hits header
+  // IntersectionObserver for shadow effect only — sticky is always CSS
   useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
-      const sectionRect = sectionRef.current.getBoundingClientRect();
-      // Section top has passed the header area → activate sticky
-      setIsSticky(sectionRect.top <= 72 && sectionRect.bottom > 150);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setHasShadow(!entry.isIntersecting),
+      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
   }, []);
 
   const { data: projects, isLoading } = useQuery({
@@ -70,6 +71,16 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     return Array.from(statuses);
   }, [projects]);
 
+  const developerOptions = useMemo(() => {
+    if (!projects) return [];
+    const devs = new Set<string>();
+    projects.forEach(p => {
+      const name = p.developer_name || (p.developer as any)?.name;
+      if (name) devs.add(name);
+    });
+    return Array.from(devs).sort();
+  }, [projects]);
+
   const bedroomOptions = useMemo(() => {
     if (!projects) return [];
     const beds = new Set<string>();
@@ -97,6 +108,13 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
       result = result.filter(p => (p.status_label || p.construction_status) === statusFilter);
     }
 
+    if (developerFilter !== "all") {
+      result = result.filter(p => {
+        const name = p.developer_name || (p.developer as any)?.name;
+        return name === developerFilter;
+      });
+    }
+
     if (bedroomFilter !== "all") {
       const bed = Number(bedroomFilter);
       result = result.filter(p => {
@@ -113,13 +131,14 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     }
 
     return result;
-  }, [projects, searchQuery, statusFilter, bedroomFilter, sortBy]);
+  }, [projects, searchQuery, statusFilter, developerFilter, bedroomFilter, sortBy]);
 
-  const hasActiveFilters = searchQuery || statusFilter !== "all" || bedroomFilter !== "all" || sortBy !== "newest";
+  const hasActiveFilters = searchQuery || statusFilter !== "all" || developerFilter !== "all" || bedroomFilter !== "all" || sortBy !== "newest";
 
   const clearFilters = () => {
     setSearchQuery("");
     setStatusFilter("all");
+    setDeveloperFilter("all");
     setBedroomFilter("all");
     setSortBy("newest");
   };
@@ -149,19 +168,20 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   if (!projects || projects.length === 0) return null;
 
   return (
-    <section ref={sectionRef} id="projects-section" className="pt-16 pb-16 bg-black">
+    <section id="projects-section" className="pt-16 pb-16 bg-black">
       <div className="container mx-auto px-4">
         <div className="rounded-2xl pt-8 overflow-visible" style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}>
           <h2 className="text-black text-2xl md:text-3xl font-bold mb-6 px-6" style={{ fontFamily: "Poppins, sans-serif" }}>
             Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
           </h2>
 
-          {/* Search & Filters - inside the card, becomes sticky only when section is scrolled to */}
+          {/* Sentinel for IntersectionObserver — shadow toggle */}
+          <div ref={sentinelRef} className="h-0 w-full" />
+
+          {/* Filter bar — always sticky via CSS, shadow only when pinned */}
           <div
-            className={`z-30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 px-6 py-3 transition-shadow duration-200 ${
-              isSticky
-                ? 'sticky top-[72px] shadow-[0_4px_20px_rgba(200,167,102,0.15)]'
-                : ''
+            className={`sticky top-[72px] z-30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 px-6 py-3 transition-shadow duration-200 ${
+              hasShadow ? 'shadow-[0_4px_20px_rgba(200,167,102,0.15)]' : ''
             }`}
           >
             <div className="flex flex-wrap items-center gap-3">
@@ -180,7 +200,22 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
                   <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2">
                     <X className="w-4 h-4 text-black/40 hover:text-black" />
                   </button>
-                )}
+              )}
+
+              {/* Developer Filter */}
+              {developerOptions.length > 0 && (
+                <Select value={developerFilter} onValueChange={setDeveloperFilter}>
+                  <SelectTrigger className="h-10 w-[160px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
+                    <SelectValue placeholder="Developer" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Developers</SelectItem>
+                    {developerOptions.map(d => (
+                      <SelectItem key={d} value={d}>{d}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
               </div>
 
               {/* Status Filter */}
