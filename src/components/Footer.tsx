@@ -389,9 +389,9 @@ const Footer = () => {
         </div>
 
         {/* ULTRA PREMIUM 3D Card - License + Newsletter + Social - BELOW logo */}
-        <div className="relative bg-black pt-4 sm:pt-6 md:pt-8 pb-0">
+        <div className="relative bg-black pt-4 sm:pt-6 md:pt-8 pb-4">
           <div 
-            className="w-full max-w-7xl mx-auto mb-8 sm:mb-10 md:mb-12 lg:mb-14 rounded-2xl sm:rounded-3xl relative overflow-hidden"
+            className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl relative overflow-hidden"
             style={{
               background: 'linear-gradient(165deg, rgba(12,12,14,0.99) 0%, rgba(8,8,10,1) 40%, rgba(4,4,6,1) 100%)',
               boxShadow: `
@@ -573,8 +573,8 @@ const Footer = () => {
         </div>
 
         {/* Premium Divider with glow - on pure black */}
-        <div className="relative bg-black py-4">
-          <div className="relative h-[2px] max-w-7xl mx-auto">
+        <div className="relative bg-black py-6 flex items-center justify-center">
+          <div className="relative h-[2px] w-full max-w-7xl mx-auto">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-md" />
           </div>
