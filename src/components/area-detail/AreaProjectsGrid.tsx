@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, ArrowUpRight, Search, X } from "lucide-react";
+import { Loader2, ArrowUpRight, Search, X, Building2, Filter } from "lucide-react";
 import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
 import { Button } from "@/components/ui/button";
@@ -22,9 +22,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   const [bedroomFilter, setBedroomFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [isFixed, setIsFixed] = useState(false);
-  const [barHeight, setBarHeight] = useState(0);
   const placeholderRef = useRef<HTMLDivElement>(null);
-  const barRef = useRef<HTMLDivElement>(null);
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ["area-projects-full", areaName],
@@ -52,8 +50,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     staleTime: 5 * 60 * 1000,
   });
 
-  // IntersectionObserver-based fixed positioning (same pattern as AreaStickySearchBar)
-  // Re-runs when projects load so the sentinel ref is available
+  // IntersectionObserver for fixed positioning
   const hasProjects = !!projects;
   useEffect(() => {
     const sentinel = placeholderRef.current;
@@ -67,13 +64,6 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     return () => observer.disconnect();
   }, [hasProjects]);
 
-  // Measure bar height once after projects load
-  useEffect(() => {
-    if (barRef.current) {
-      setBarHeight(barRef.current.offsetHeight);
-    }
-  }, [hasProjects]);
-
   const statusOptions = useMemo(() => {
     if (!projects) return [];
     const statuses = new Set<string>();
@@ -84,14 +74,21 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     return Array.from(statuses);
   }, [projects]);
 
-  const developerOptions = useMemo(() => {
+  // Build developer options with logo_url from the joined developers data
+  const developerOptionsWithLogos = useMemo(() => {
     if (!projects) return [];
-    const devs = new Set<string>();
+    const devMap = new Map<string, { name: string; logo_url: string | null }>();
     projects.forEach(p => {
-      const name = p.developer_name || (p.developer as any)?.name;
-      if (name) devs.add(name);
+      const dev = p.developer as any;
+      const name = dev?.name || p.developer_name;
+      if (name && !devMap.has(name)) {
+        devMap.set(name, {
+          name,
+          logo_url: dev?.logo_url || null,
+        });
+      }
     });
-    return Array.from(devs).sort();
+    return Array.from(devMap.values()).sort((a, b) => a.name.localeCompare(b.name));
   }, [projects]);
 
   const bedroomOptions = useMemo(() => {
@@ -175,19 +172,33 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
           </button>
         )}
       </div>
-      {developerOptions.length > 0 && (
+
+      {/* Developer with Building2 icon + logos */}
+      {developerOptionsWithLogos.length > 0 && (
         <Select value={developerFilter} onValueChange={setDeveloperFilter}>
           <SelectTrigger className="h-10 w-[160px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
+            <Building2 className="w-4 h-4 mr-2 text-black/40 flex-shrink-0" />
             <SelectValue placeholder="Developer" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="max-h-72">
             <SelectItem value="all">All Developers</SelectItem>
-            {developerOptions.map(d => (
-              <SelectItem key={d} value={d}>{d}</SelectItem>
+            {developerOptionsWithLogos.map(dev => (
+              <SelectItem key={dev.name} value={dev.name}>
+                <span className="flex items-center gap-2">
+                  {dev.logo_url ? (
+                    <img src={dev.logo_url} alt="" className="w-5 h-5 object-contain rounded-sm flex-shrink-0" />
+                  ) : (
+                    <Building2 className="w-4 h-4 text-black/30 flex-shrink-0" />
+                  )}
+                  {dev.name}
+                </span>
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
       )}
+
+      {/* Status */}
       {statusOptions.length > 0 && (
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="h-10 w-[140px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
@@ -201,6 +212,8 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
           </SelectContent>
         </Select>
       )}
+
+      {/* Bedrooms */}
       {bedroomOptions.length > 0 && (
         <Select value={bedroomFilter} onValueChange={setBedroomFilter}>
           <SelectTrigger className="h-10 w-[140px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
@@ -214,6 +227,8 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
           </SelectContent>
         </Select>
       )}
+
+      {/* Sort */}
       <Select value={sortBy} onValueChange={setSortBy}>
         <SelectTrigger className="h-10 w-[150px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
           <SelectValue placeholder="Sort by" />
@@ -224,6 +239,15 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
           <SelectItem value="price_high">Price: High → Low</SelectItem>
         </SelectContent>
       </Select>
+
+      {/* Filter icon */}
+      <Link to={`/properties?area=${areaSlug}`}>
+        <button className="h-10 w-10 rounded-xl bg-white/70 border-2 border-gold/30 flex items-center justify-center hover:border-gold/60 transition-colors">
+          <Filter className="w-4 h-4 text-black/40" />
+        </button>
+      </Link>
+
+      {/* Clear */}
       {hasActiveFilters && (
         <button
           onClick={clearFilters}
@@ -267,21 +291,10 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
             Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
           </h2>
 
-          {/* Placeholder/sentinel for IntersectionObserver — reserves space when bar is fixed */}
-          <div ref={placeholderRef} style={{ height: isFixed ? barHeight : 0 }} />
+          {/* Sentinel for IntersectionObserver — height 0, just a scroll marker */}
+          <div ref={placeholderRef} className="h-0" />
 
-          {/* Filter bar — always rendered inline for stable ref measurement */}
-          <div
-            ref={barRef}
-            className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3"
-            style={{ opacity: isFixed ? 0 : 1, pointerEvents: isFixed ? 'none' : 'auto' }}
-          >
-            <div className="flex flex-wrap items-center gap-3 px-6">
-              {filterBarContent}
-            </div>
-          </div>
-
-          {/* Filter bar — portaled to document.body when fixed, to escape overflow-x-hidden on <main> */}
+          {/* Filter bar — ONLY rendered as fixed portal when scrolled past sentinel */}
           {isFixed && createPortal(
             <div
               className="fixed top-24 sm:top-28 lg:top-32 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200"
