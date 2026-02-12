@@ -389,7 +389,7 @@ const Footer = () => {
         </div>
 
         {/* ULTRA PREMIUM 3D Card - License + Newsletter + Social - BELOW logo */}
-        <div className="relative bg-black pt-4 sm:pt-6 md:pt-8 pb-4">
+        <div className="relative bg-black pt-4 sm:pt-6 md:pt-8 pb-0">
           <div 
             className="w-full max-w-7xl mx-auto mb-8 sm:mb-10 md:mb-12 lg:mb-14 rounded-2xl sm:rounded-3xl relative overflow-hidden"
             style={{
