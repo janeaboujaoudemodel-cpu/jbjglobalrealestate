@@ -1,80 +1,91 @@
 
 
-## Fix Plan: Populate Real Photos for All Areas and News Articles
+## Fix Plan: Replace All AI-Generated Photos with Real Source Photos
 
 ### Current State
-- **Areas**: 68 out of 184 active areas are missing real images (have NULL, Unsplash, or Pexels placeholders)
-- **News**: 27 out of 80 articles have no image (NULL)
+- **Areas**: 33 out of 184 areas have AI-generated images (stored in `area-images` bucket). All 33 have zero projects in the database and no Provident URL, so project images are not available.
+- **News**: 9 out of 80 articles need fixing -- 5 have NULL images, 4 have AI-generated images (stored in `news-images` bucket). Sources are mostly moec.gov.ae, gulfnews, zawya, wam.ae.
 
-### Strategy (Priority Order)
-1. **Source from existing project data** (areas only) -- free, instant
-2. **Scrape from Provident/source websites** via Firecrawl -- real photos
-3. **Firecrawl Search** for relevant real photos on the web
-4. **AI-generate** via Gemini image model as last resort (only if steps 1-3 fail)
+### Strategy
+
+**Priority: Real photos only. No AI generation.**
+
+For each area/article, the function will:
+1. Scrape the Provident area page (`providentestate.com/area/{slug}`) for a hero/community photo
+2. Firecrawl Search for `"{Area Name}" Dubai area photo site:bayut.com OR site:propertyfinder.ae OR site:dubizzle.com` to find real listing portal community photos
+3. Firecrawl Search broader: `"{Area Name}" Dubai aerial community` to find real photos from any source
+4. If all 3 fail, set to NULL rather than using a fake/AI image -- the UI already handles NULL gracefully with a gradient fallback
+
+For news articles:
+1. Re-scrape the source URL with longer timeout for OG image extraction
+2. Firecrawl Search for the article title to find the same article on other portals with images
+3. If all fail, set to NULL -- no AI generation
 
 ---
 
-### Part 1: Fix Area Images (68 areas)
+### Part 1: Update `enrich-area-images` Edge Function
 
 **File: `supabase/functions/enrich-area-images/index.ts`**
 
-The existing function already does steps 1-3 but is missing the AI generation fallback. Changes:
+Changes:
+- Remove the AI image generation step entirely (Step 3 / lines 194-241)
+- Add a new Step 2b: Scrape Provident area page `https://www.providentestate.com/area/{slug}` for the hero image
+- Add a new Step 2c: Firecrawl Search targeting real estate portals (bayut.com, propertyfinder.ae) for community photos
+- Modify the query to also match areas with `image_url LIKE '%supabase.co/storage%area-images%'` so it picks up the 33 AI-generated ones
+- If no real photo is found after all attempts, set `image_url = NULL` to clear the fake AI photo
+- Delete the AI-generated file from storage when replacing
 
-- Add Step 4: When no real photo is found via projects or Firecrawl, call the Gemini image generation model (`google/gemini-2.5-flash-image`) to generate a realistic aerial/panoramic view of that area
-- Prompt: "Photorealistic aerial panoramic view of [Area Name], Dubai, UAE. Show the community skyline, buildings, roads, and landscape from above. Professional real estate photography style, golden hour lighting."
-- Upload the generated image to Supabase Storage (`area-images` bucket) and use the public URL
-- Increase batch_size default from 5 to 10 for faster processing
-
-After deploying, run the function multiple times (7 batches of 10) to process all 68 areas.
-
-### Part 2: Fix News Article Images (27 articles)
+### Part 2: Update `ai-news-collector` Enrich Action
 
 **File: `supabase/functions/ai-news-collector/index.ts`**
 
-The existing `enrich` action already scrapes source URLs for images but sets NULL when none is found. Changes to the enrich action:
+Changes to the enrich action (lines 304-351):
+- Remove the AI image generation step entirely
+- Keep the Firecrawl Search step but improve it: search with exact article title, try metadata.ogImage from results
+- For moec.gov.ae articles specifically: try scraping the individual article page (not the media-center listing page)
+- If no real photo found, set `image_url = NULL` to clear any AI-generated photo
+- Delete AI-generated files from `news-images` bucket when replacing
 
-- After scrape fails to find an image, add a Firecrawl Search step: search for `"[article title]" Dubai real estate photo` and extract OG images from top results
-- If Firecrawl Search also fails, generate an image with Gemini: a professional editorial-style image related to the article's category (e.g., "Dubai skyline with real estate buildings" for Market Update, "UAE government building" for Policy)
-- Upload generated images to Supabase Storage (`news-images` bucket) and use public URLs
-- Track used URLs across the batch to prevent duplicates
+### Part 3: Deploy and Run
 
-After deploying, run the enrich action to process all 27 articles.
-
-### Part 3: Trigger Both Functions
-
-After deploying the updated edge functions:
-1. Call `enrich-area-images` with `batch_size: 10` repeatedly until all 68 areas are processed
-2. Call `ai-news-collector` with `action: "enrich"` to process all 27 news articles
+1. Deploy both updated functions
+2. Call `enrich-area-images` with `batch_size: 15` repeatedly until all 33 areas are processed
+3. Call `ai-news-collector` with `action: "enrich"` to process the 9 articles
+4. Verify via screenshots
 
 ---
 
-### Summary of File Changes
+### Summary of Changes
 
 | File | Change |
 |------|--------|
-| `supabase/functions/enrich-area-images/index.ts` | Add AI image generation fallback (Gemini) + Supabase Storage upload when no real photo found; increase default batch size |
-| `supabase/functions/ai-news-collector/index.ts` | Add Firecrawl Search fallback + AI image generation in the enrich action for articles with no image |
+| `supabase/functions/enrich-area-images/index.ts` | Remove AI generation fallback; add Provident scraping + portal-targeted Firecrawl search; target AI-generated images for replacement; set NULL if no real photo found |
+| `supabase/functions/ai-news-collector/index.ts` | Remove AI generation fallback from enrich action; improve source scraping; set NULL if no real photo found |
 
 ### Technical Details
 
-**AI Image Generation (fallback):**
-```
-POST https://ai.gateway.lovable.dev/v1/chat/completions
-model: "google/gemini-2.5-flash-image"
-modalities: ["image", "text"]
-```
-
-The returned base64 image is uploaded to Supabase Storage:
-```
-bucket: "area-images" or "news-images"
-path: "{slug}.webp" or "{article-id}.webp"
+**Area image search strategy (in order):**
+```text
+1. Project images from DB (existing, already works)
+2. Scrape: providentestate.com/area/{slug} -> extract hero image
+3. Search: "{name} Dubai" site:bayut.com OR site:propertyfinder.ae
+4. Search: "{name} Dubai community aerial neighborhood"
+5. No match -> set image_url = NULL (UI shows gradient fallback)
 ```
 
-**Supabase Storage buckets** will be created if they don't exist via the edge function using the service role key.
+**Filter to catch AI-generated images:**
+```sql
+image_url LIKE '%supabase.co/storage%area-images%'
+```
 
-**Execution plan:**
-- Deploy both functions
-- Run `enrich-area-images` in 7 rounds (batch_size=10) to cover all 68 areas
-- Run `ai-news-collector` with `action: "enrich"` once (it already processes up to 30 articles per call)
-- Take screenshots of areas page and news page to verify
+**News image search strategy:**
+```text
+1. Scrape source_url for OG image (existing, improved timeout)
+2. Search: exact article title -> metadata.ogImage from results  
+3. No match -> set image_url = NULL
+```
+
+**What gets deleted from storage:**
+- All `.webp` files in `area-images` bucket that were AI-generated
+- All `.webp` files in `news-images` bucket that were AI-generated
 
