@@ -1,99 +1,62 @@
 
+## Fix Build Error + Incomplete Tasks
 
-## Fix AI Developer Analyzer Accuracy + Gold Clickable Developer Names
+### Critical: Build Error (520MB exceeds 512MB limit)
 
-### Problem 1: Inaccurate Developer Data
+The project bundle is 520MB, exceeding the 512MB build limit. This is caused by unused video files in `src/assets/videos/` and `src/assets/`. Removing them will bring the build under the limit.
 
-The `completed_projects` field in the database has wildly incorrect values for many major developers:
+**Unused video files to delete:**
+- `src/assets/dubai-hero-video.mp4` (no imports found)
+- `src/assets/videos/why-dubai-burj-al-arab.mp4` (no imports found)
+- `src/assets/videos/why-dubai-dubai-frame.mp4` (no imports found)
+- `src/assets/videos/jbj-company-intro.mp4` (no imports found)
 
-| Developer | Current Value | Correct Value (approx.) |
-|-----------|--------------|------------------------|
-| Emaar | NULL | 80,000+ |
-| DAMAC | NULL | 40,000+ |
-| Nakheel | 70 | 80,000+ |
-| Sobha | NULL | 25,000+ |
-| Binghatti | 40 | 7,000+ |
-| Meraas | 25 | 15,000+ |
-| Azizi | NULL | 10,000+ |
-| Danube | NULL | 8,000+ |
-| Ellington | NULL | 3,000+ |
-| Aldar | NULL | 35,000+ |
-| Omniyat | 8,000 | 2,500+ |
-| Select Group | 12,000 | 5,000+ |
-| Dubai Properties | 28,000 | 35,000+ |
-| Al Habtoor | NULL | 5,000+ |
-| Deyaar | NULL | 12,000+ |
-| Samana | NULL | 2,000+ |
-| MAG Group | NULL | 6,000+ |
-
-**Fix**: Run a database migration to update `completed_projects` for all major developers with researched, accurate figures.
-
-### Problem 2: AI Analyzer Using Generic Area Prompt for Developers
-
-The `DeveloperAIAnalyzer` calls `ai-property-analyzer` with `area: developerName`, which uses an area-focused prompt ("Analyze X, Dubai for Y properties"). This produces area-style analysis instead of developer-specific intelligence.
-
-**Fix**: Create a dedicated edge function `ai-developer-analyzer` with a developer-specific system prompt that:
-- Focuses on developer track record, portfolio quality, delivery history
-- Uses the correct `completed_projects` count from the database
-- Asks for developer-specific sections: Company Overview, Portfolio Analysis, Track Record, Financial Strength, Price Positioning, Investment Metrics, Pros, Cons, Rating
-
-### Problem 3: Developer Name Not Gold/Clickable in AI Analyzers
-
-In `DeveloperAIAnalyzer.tsx` line 419, the developer name is rendered as:
-```tsx
-<span className="font-semibold text-black">{developerName}</span>
-```
-It should use `DeveloperLink` with gold color and hover underline.
-
-Same check needed for all places where developer names appear in AI analyzer sections.
+This should free ~30-50MB and bring the build under 512MB.
 
 ---
 
-### Changes
+### Incomplete Tasks Identified
 
-#### 1. Database Migration -- Fix completed_projects for Major Developers
+#### 1. Vertical Sidebar Navigation Not Showing on Properties Page
+The `PropertiesVerticalNav` component exists and is imported, but it only renders inside map mode when the filter bar is fixed (`isFilterFixed`). It should be visible in both list and map modes whenever the user scrolls past the filter sentinel. 
 
-Update the `completed_projects` column for ~20 major developers with accurate, researched unit delivery numbers.
+**Fix**: Show the vertical nav alongside the standard grid view too (not just map mode), when the filter bar becomes fixed.
 
-#### 2. New Edge Function: `ai-developer-analyzer`
+#### 2. Map Button Behavior (Split-Screen Toggle)
+The map toggle exists in `FilterShortcutBar` and switches `isMapMode`. The split-screen code at line 1153 in Properties.tsx already implements the correct behavior (cards left, map right). The issue is that with zero projects loading, it showed nothing. The `useProjectsListing()` fix from the previous plan should resolve this. The button label should toggle between "Map" and "List" -- need to verify this is wired in `FilterShortcutBar`.
 
-Create `supabase/functions/ai-developer-analyzer/index.ts` with a developer-specific prompt:
-- System prompt focused on developer analysis (not area analysis)
-- Accepts: `developerName`, `completedProjects`, `foundedYear`, `headquarters`, `activeProjects`, `projectCount`
-- Sections: Company Overview, Portfolio Strength, Track Record and Delivery, Price Per Sqft Positioning, Supply Pipeline, Investment Metrics, Pros, Cons, Investment Rating
-- Uses the shared `ai-utils.ts` for AI calls
+#### 3. Developer AI Analyzer -- More Informative Overview with Charts
+The current Developer Overview section is a plain text card. Make it more premium and informative:
+- Add a "Key Highlights" row with icon badges (Founded, HQ, Units, Active Projects) inside the overview card
+- Add a small portfolio distribution donut chart showing project type breakdown (parsed from AI text)
+- Improve the overview card with a gradient header bar and developer logo
 
-#### 3. Update `DeveloperAIAnalyzer.tsx`
+**File**: `src/components/developer/DeveloperAIAnalyzer.tsx`
 
-- Change the API call from `ai-property-analyzer` to `ai-developer-analyzer`
-- Pass all developer context fields directly (not crammed into `area` string)
-- Replace `<span className="font-semibold text-black">{developerName}</span>` with `DeveloperLink` component (gold, hover underline, clickable)
-- Import `DeveloperLink` from `@/components/ui/developer-link`
-- Also update the "AI is analyzing..." and "AI analysis ready for..." text to use `DeveloperLink`
-- Add `developerSlug` prop to the component interface
+#### 4. Header Color and Size Issues
+Need to check what specific header the user refers to. The `FilterShortcutBar` header and Properties filter section use champagne gold gradients. Without more specific direction on what color/size changes are needed, I will ensure:
+- The fixed filter bar uses the correct champagne gradient background
+- Proper sizing of filter elements
 
-#### 4. Update `DeveloperDetail.tsx`
+#### 5. Shortcut Buttons Placement
+The `FilterShortcutBar` renders inside the filter section. Need to verify the Row 1 (Map, Saved, Currency, Mode) and Row 2 (Price, Payments, etc.) layout matches the specification from the memory context.
 
-- Pass the new `developerSlug` prop to `DeveloperAIAnalyzer`
+---
 
-### Files to Create
+### Technical Changes
 
-| File | Purpose |
-|------|---------|
-| `supabase/functions/ai-developer-analyzer/index.ts` | Developer-specific AI analysis edge function with accurate prompt |
-
-### Files to Edit
-
-| File | Changes |
-|------|---------|
-| `src/components/developer/DeveloperAIAnalyzer.tsx` | Use new edge function, add `developerSlug` prop, use `DeveloperLink` for all developer name displays |
-| `src/pages/DeveloperDetail.tsx` | Pass `developerSlug` to `DeveloperAIAnalyzer` |
-
-### Database Migration
-
-Update `completed_projects` for ~20 major developers with accurate numbers.
+| File | Change |
+|------|--------|
+| `src/assets/dubai-hero-video.mp4` | DELETE (unused, frees bundle space) |
+| `src/assets/videos/why-dubai-burj-al-arab.mp4` | DELETE (unused) |
+| `src/assets/videos/why-dubai-dubai-frame.mp4` | DELETE (unused) |
+| `src/assets/videos/jbj-company-intro.mp4` | DELETE (unused) |
+| `src/pages/Properties.tsx` | Show `PropertiesVerticalNav` in list mode too (when filter is fixed), not just map mode |
+| `src/components/developer/DeveloperAIAnalyzer.tsx` | Enhance Developer Overview card with gradient header, icon highlights row, and a portfolio distribution mini-chart |
+| `src/components/filters/FilterShortcutBar.tsx` | Verify Map/List label toggle works correctly |
 
 ### Result
-- AI analyzer will produce accurate, developer-focused intelligence (not area-style analysis)
-- Developer names will appear in gold with hover underline, clickable to `/developer/:slug`
-- Quick stats will show correct unit delivery numbers (e.g., Binghatti: 7,000+ instead of 40)
+- Build succeeds (under 512MB limit)
+- Vertical sidebar shows when scrolling on Properties page
+- Map split-screen works with loaded projects
+- Developer AI analyzer has a more premium, chart-enhanced overview section
