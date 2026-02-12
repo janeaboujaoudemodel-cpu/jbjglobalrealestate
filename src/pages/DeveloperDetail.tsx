@@ -315,9 +315,9 @@ const DeveloperDetail = () => {
 
           {/* Fixed portal filter bar — when scrolled past sentinel */}
           {isFilterFixed && createPortal(
-            <div className="fixed top-24 sm:top-28 lg:top-32 left-0 right-0 z-[9998] py-2 transition-shadow duration-200">
-              <div className="container mx-auto px-4">
-                <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+            <div className="fixed top-24 sm:top-28 lg:top-32 left-0 right-0 z-[9998] transition-shadow duration-200">
+              <div className="container mx-auto px-4 pt-0">
+                <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 border-t-0 rounded-b-2xl rounded-t-none p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
             <ProjectFilters
                     filters={filters}
                     onFiltersChange={setFilters}
