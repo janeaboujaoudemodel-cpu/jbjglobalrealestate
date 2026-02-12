@@ -1,71 +1,134 @@
 
 
-## Fix Properties Page: Multiple Issues
+## Comprehensive Fix Plan: Properties, Areas, Listing Admin, and UI Issues
 
-### Issues Identified
-
-1. **Duplicate Search Bars**: The page has TWO search/filter sections -- the old inline filter section (lines 436-607 with Select dropdowns for Emirate, Sale Status, Construction, Developer, Currency, Size, Sort buttons) AND the `FilterShortcutBar` component below it. The old one needs to be removed entirely and replaced by the single `FilterShortcutBar` which already has all these filters built in.
-
-2. **Shows Only ~1,000 Properties**: The hero says "1,000 properties available" because `totalCount` falls back to `reellyTotal` (from the expired API) when it returns a non-zero cached value. The count must always reflect the actual merged dataset count (2,410).
-
-3. **Map Split-Screen Too Small**: The map section uses `lg:w-[55%]` for cards and `flex-1` for the map, BUT the vertical nav takes 200px, squeezing the map. The split should be calculated from the content area only (excluding the sidebar), with a true 50/50 split between cards and map.
-
-4. **Map Toggle Slow/Broken**: The map toggle triggers a URL param change via `setSearchParams` which causes a re-render cycle. Need to ensure the toggle is instant by using local state only and not triggering unnecessary re-fetches.
-
-5. **Vertical Sidebar Not Showing in List Mode**: The `PropertiesVerticalNav` only renders inside the `isMapMode` block. Per spec, it should also show in list mode when the filter bar becomes fixed (header replacement pattern).
-
-6. **Recommended Projects Section**: Uses `bg-black` background which doesn't match the premium champagne UI. Needs to be updated to use champagne gradient background with gold accents matching the rest of the page.
-
-7. **Section Divider Between Listings and Market Intelligence**: Currently uses black background. Should match the page background (champagne) with a premium gold divider line.
+This plan addresses all the issues you've raised, organized by priority.
 
 ---
 
-### Technical Changes
+### Issue 1: Project Count Mismatch (2,410 in DB vs 1,822 in Reelly API)
 
-#### File: `src/pages/PropertiesReelly.tsx`
+**Root Cause**: The database contains 2,410 projects, but only 1,803 have cover images. The Reelly API currently lists 1,822 projects. The extra ~588 records in the DB are likely orphaned or duplicated entries that no longer exist in the API.
 
-**Remove old filter section** (lines 436-607): Delete the entire champagne card with inline Select dropdowns for Emirate, Sale Status, Construction Status, Developer, Currency, Size Unit, Sort buttons, and Hide Sold Out toggle. These are ALL already available in the `FilterShortcutBar` component.
+**Fix**:
+- The Properties page should show the actual Reelly API count (1,822) as the canonical "available" count
+- Projects without images (607 records) still appear but look broken -- these should be filtered or flagged
+- Add a filter in `useProjectsListing` to only return projects that have a cover image AND match active Reelly records
+- Update the hero count text to say "1,800+ properties available" based on projects with images
 
-**Keep only the FilterShortcutBar** (lines 609-620): Move it up to replace the removed section. Change its container background from `bg-black` to the champagne gradient to match the page style.
+**File**: `src/pages/PropertiesReelly.tsx`
+- Change `totalCount` to use `projects with cover_image_url` count instead of raw DB count
+- Filter `dbProjectsMapped` to exclude entries with no `thumbnail`/`cover_image_url`
 
-**Fix total count** (line 298): Change from `reellyTotal > 0 ? reellyTotal : dbProjectsMapped.length` to simply use `projects.length` for "showing" and `dbProjectsMapped.length` for "of total" so it always reflects the real database count (2,410).
-
-**Fix map split-screen layout** (lines 626-693):
-- Change from `lg:w-[55%]` cards / `flex-1` map to a true 50/50 split within the content area
-- The vertical nav (200px) sits outside the split; the remaining space is divided equally
-- Use `flex-1` for both the cards panel and the map panel so they share space equally
-
-**Show vertical nav in list mode** when `isFilterFixed` is true (desktop only), wrapping the list section in a flex container similar to map mode.
-
-**Wire FilterShortcutBar filters to actual data filtering**: Currently `shortcutFilters` state exists but is never used to filter projects. Connect the shortcut filter values (price, bedrooms, status, sort, hideSoldOut, etc.) to the sorting/filtering logic.
-
-#### File: `src/components/project-detail/RecommendedProjects.tsx`
-
-- Change `bg-black` to champagne gradient background: `bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark`
-- Update text colors: headings from `text-white` to `text-black`, description text accordingly
-- Update card borders and styling to match the premium champagne card pattern used elsewhere
-- Update the Sparkles icon color and "View All" link styling for champagne background contrast
-
-#### File: `src/components/ui/section-divider.tsx`
-
-- Add a prop option for champagne background variant (e.g., `variant="champagne"`) that uses the champagne gradient instead of `bg-black`
-- This allows pages to use the divider on light backgrounds
+**File**: `src/hooks/useProjects.ts` (`useProjectsListing`)
+- Add `.not('cover_image_url', 'is', null)` filter to the query so only projects with images are fetched
 
 ---
 
-### Summary of Changes
+### Issue 2: Unified Search/Filter Across All Pages (Areas, Area Detail, Properties, Developers)
+
+**What the user wants**: The same search + filter bar pattern from the Developer page (Binghatti) should be used everywhere -- Areas index, Area detail, Properties. This means `ProjectFilters` component (search input + developer dropdown + status + bedrooms + sort) combined with `FilterShortcutBar` below it, with the same fixed-on-scroll behavior.
+
+**Changes**:
+
+#### File: `src/pages/AreaGuides.tsx`
+- Remove the current custom search bar (lines 162-244: Input + Emirates pills + sort buttons)
+- Replace with `ProjectFilters` + `FilterShortcutBar` in the same champagne card pattern used in DeveloperDetail
+- Add IntersectionObserver for fixed-on-scroll behavior with `createPortal`
+- Add the three sort toggle buttons (Building2 for property count, Flame for trending, A-Z for alphabetical) inside the FilterShortcutBar area
+- Add `filter-bar-fixed` body class for header replacement
+
+#### File: `src/components/area-detail/AreaProjectsGrid.tsx`
+- Remove the current custom inline filter bar (lines 186-289: search input + Select dropdowns)
+- Replace with `ProjectFilters` + `FilterShortcutBar` matching the Developer page pattern
+- Keep the existing IntersectionObserver and createPortal fixed behavior (already works)
+
+#### File: `src/components/area-detail/AreaStickySearchBar.tsx`
+- Remove entirely (replaced by the unified filter in AreaProjectsGrid)
+
+---
+
+### Issue 3: Map Mode Split-Screen Not Working Properly
+
+**Problem**: The map is too small and the split doesn't account for the sidebar correctly.
+
+**Fix in `src/pages/PropertiesReelly.tsx`**:
+- The split layout should NOT include the vertical nav width in the 50/50 calculation
+- Structure: `[VerticalNav 200px] [Cards 50%] [Map 50%]` where 50/50 is of the remaining space after the nav
+- Use `flex-1` wrapper for the content area, then `w-1/2` for each half inside it (this is already the structure, but verify it renders correctly)
+- When in list mode AND filter is fixed, the vertical nav should also appear (full height from top to bottom)
+
+---
+
+### Issue 4: Vertical Navigation Persistence
+
+**What the user wants**: The vertical nav (JBJ logo + links) should be a full-height left sidebar that appears from top to bottom when the filter bar becomes fixed. The fixed search/filter header starts AFTER (to the right of) this sidebar, not covering it.
+
+**Fix in `src/pages/PropertiesReelly.tsx`**:
+- When `isFilterFixed` is true, wrap the entire page in a flex layout: `[VerticalNav full-height fixed left] [Content area with fixed filter bar at top]`
+- The fixed FilterShortcutBar should have `left: 200px` (sidebar width) instead of `left: 0` so it starts after the sidebar
+- The vertical nav should be `position: fixed; top: 0; left: 0; height: 100vh;` when active
+
+---
+
+### Issue 5: Currency Tooltip Position
+
+**Problem**: The currency change popup appears at a random position (bottom-right) instead of near the currency selector.
+
+**Fix in `src/components/CurrencyTooltip.tsx`**:
+- Remove the tooltip entirely OR anchor it to appear near the currency button in the FilterShortcutBar
+- Since there's no standalone currency button visible on the current page (it's inside FilterShortcutBar), the safest fix is to remove this tooltip component from rendering in PropertiesReelly.tsx
+
+**File**: `src/pages/PropertiesReelly.tsx`
+- Remove `<CurrencyTooltip />` from the render
+
+---
+
+### Issue 6: Listing Admin Issues (Enrichment Failures, Card Layout)
+
+**Problem**: Test Project Enrichment fails with edge function errors. Provident enrichment shows zeros. Cards have no photos.
+
+**Files to investigate and fix**:
+- `src/pages/ListingAdmin.tsx` -- Project cards need to display cover images and full details (currently showing minimal text-only cards)
+- Edge function errors need investigation (will check logs during implementation)
+- Card background needs to extend to contain all content
+- Cards should use the same `ProjectCard` component used elsewhere (with photo, developer, price, status)
+
+**Fix in `src/pages/ListingAdmin.tsx`**:
+- Replace minimal text cards with `ProjectCard` component (same as used on Properties/Developer pages)
+- Ensure the query fetches `cover_image_url`, `developer_name`, `price_from`, etc.
+- Fix the card container background to fully contain cards (add `overflow-hidden` or extend background)
+- Remove the 1,000 project limit -- fetch all projects (use batch fetching like PropertiesReelly)
+
+---
+
+### Issue 7: Section Divider Colors
+
+**Problem**: Dividers between sections still use black background.
+
+**Fix**: Already have `variant="champagne"` in `section-divider.tsx`. Need to apply it in all pages where dividers appear on champagne backgrounds.
+
+---
+
+### Issue 8: Recommended Projects Section UI
+
+**Problem**: Background doesn't match premium champagne theme.
+
+**Already fixed** in previous iteration -- `RecommendedProjects.tsx` was updated to champagne gradient. Will verify during implementation.
+
+---
+
+### Summary of All File Changes
 
 | File | Change |
 |------|--------|
-| `src/pages/PropertiesReelly.tsx` | Remove duplicate old filter section; keep only FilterShortcutBar; fix project count to show 2,410; fix 50/50 map split; show vertical nav in list mode when scrolled; wire shortcut filters to data |
-| `src/components/project-detail/RecommendedProjects.tsx` | Change from black to champagne background with matching text and card colors |
-| `src/components/ui/section-divider.tsx` | Add champagne variant for use on light-background pages |
-
-### Result
-- Single unified search/filter bar (no duplication)
-- All 2,410 properties shown in count
-- Map splits page exactly 50/50 (excluding sidebar)
-- Vertical sidebar appears in both list and map modes on scroll
-- Recommended Projects section matches premium champagne UI
-- Section dividers use matching champagne background
+| `src/pages/PropertiesReelly.tsx` | Fix project count (filter projects without images); fix vertical nav full-height layout; fix filter bar left offset when fixed; remove CurrencyTooltip |
+| `src/hooks/useProjects.ts` | Add `cover_image_url IS NOT NULL` filter to `useProjectsListing` |
+| `src/pages/AreaGuides.tsx` | Replace custom search with `ProjectFilters` + `FilterShortcutBar` + sort toggles (Building2/Flame/A-Z); add fixed-on-scroll behavior |
+| `src/components/area-detail/AreaProjectsGrid.tsx` | Replace custom filter bar with `ProjectFilters` + `FilterShortcutBar` matching Developer page |
+| `src/components/area-detail/AreaStickySearchBar.tsx` | Remove file (replaced by unified filter) |
+| `src/pages/AreaDetail.tsx` | Remove AreaStickySearchBar usage if present |
+| `src/components/CurrencyTooltip.tsx` | Remove or reposition to anchor near currency button |
+| `src/pages/ListingAdmin.tsx` | Use ProjectCard with photos; remove 1,000 limit; fix card containers |
+| `src/pages/DeveloperDetail.tsx` | Verify filter bar left offset accounts for sidebar (if applicable) |
 
