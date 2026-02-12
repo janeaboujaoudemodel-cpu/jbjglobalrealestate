@@ -311,26 +311,44 @@ function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDe
     if (pb.on_completion) paymentBreakdown.on_completion = String(pb.on_completion);
   }
   
-  // ========== Images ==========
+  // ========== Images (with filename-based dedup) ==========
   const images: Array<{ url: string; alt_text: string; display_order: number }> = [];
   const imageUrls = new Set<string>();
+  const imageFilenames = new Set<string>(); // Filename-based dedup
+  
+  /** Extract filename from URL for dedup */
+  function getImageFilename(url: string): string {
+    try {
+      const pathname = new URL(url, "https://placeholder.com").pathname;
+      const parts = pathname.split("/");
+      return parts[parts.length - 1]?.toLowerCase() || "";
+    } catch {
+      return url.toLowerCase();
+    }
+  }
   
   // Collect all image URLs from the page data
   const allImageUrls: string[] = [];
   collectAllStrings(pageData, /\.(jpg|jpeg|png|webp)(\?|$)/i, allImageUrls);
   
-  // Filter and normalize
+  // Filter and normalize with filename-based dedup
   for (const imgUrl of allImageUrls) {
     if (!isValidImageUrl(imgUrl)) continue;
+    // Filter out broken URLs (e.g., bare ".jpg")
+    if (imgUrl.length < 10) continue;
     const normalized = normalizeImageUrl(imgUrl);
-    if (normalized && !imageUrls.has(normalized)) {
-      imageUrls.add(normalized);
-      images.push({
-        url: normalized,
-        alt_text: `${name || slug} - Image ${images.length + 1}`,
-        display_order: images.length,
-      });
-    }
+    if (!normalized) continue;
+    const filename = getImageFilename(normalized);
+    // Skip if we already have an image with the same filename
+    if (filename && filename.length > 4 && imageFilenames.has(filename)) continue;
+    if (imageUrls.has(normalized)) continue;
+    imageUrls.add(normalized);
+    if (filename && filename.length > 4) imageFilenames.add(filename);
+    images.push({
+      url: normalized,
+      alt_text: `${name || slug} - Image ${images.length + 1}`,
+      display_order: images.length,
+    });
   }
   
   // Also check specific image fields
@@ -341,10 +359,12 @@ function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDe
   ];
   for (const field of specificImageFields) {
     const imgVal = extractDeepValue(data, field);
-    if (typeof imgVal === "string" && isValidImageUrl(imgVal)) {
+    if (typeof imgVal === "string" && isValidImageUrl(imgVal) && imgVal.length >= 10) {
       const normalized = normalizeImageUrl(imgVal);
-      if (normalized && !imageUrls.has(normalized)) {
+      const filename = getImageFilename(normalized);
+      if (normalized && !imageUrls.has(normalized) && !(filename && filename.length > 4 && imageFilenames.has(filename))) {
         imageUrls.add(normalized);
+        if (filename && filename.length > 4) imageFilenames.add(filename);
         images.unshift({ // Add at start for priority
           url: normalized,
           alt_text: `${name || slug} - Main Image`,
@@ -354,10 +374,12 @@ function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDe
     } else if (Array.isArray(imgVal)) {
       for (const img of imgVal) {
         const url = typeof img === "string" ? img : (img as Record<string, unknown>)?.url || (img as Record<string, unknown>)?.src;
-        if (typeof url === "string" && isValidImageUrl(url)) {
+        if (typeof url === "string" && isValidImageUrl(url) && url.length >= 10) {
           const normalized = normalizeImageUrl(url);
-          if (normalized && !imageUrls.has(normalized)) {
+          const filename = getImageFilename(normalized);
+          if (normalized && !imageUrls.has(normalized) && !(filename && filename.length > 4 && imageFilenames.has(filename))) {
             imageUrls.add(normalized);
+            if (filename && filename.length > 4) imageFilenames.add(filename);
             images.push({
               url: normalized,
               alt_text: `${name || slug} - Image ${images.length + 1}`,
