@@ -201,37 +201,28 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   return (
     <>
       <div className="flex flex-col gap-2 w-full">
-        {/* Row 1: Left = Map + Saved + Currency + Mode | Center = Sort pills */}
-        <div className="flex items-center w-full gap-2">
-          {/* Left group: Search (if provided) + Map + Utility buttons */}
-          <div className="flex items-center gap-1.5 flex-shrink-0">
-            {searchSlot}
-            <button
-              onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
-              className={cn(pillBase, "px-3 py-1.5", isMapMode ? pillActive : pillInactive)}
-              title="Map View"
-            >
-              <Map className="w-3.5 h-3.5" />
-              {isMapMode ? 'List' : 'Map'}
-            </button>
-            <UtilityButtons variant={variant} onApplySavedFilter={onFilterChange} />
-          </div>
-
-          {/* Center: Sort pills */}
-          <div className="flex-1 flex items-center justify-center gap-1.5 overflow-x-auto scrollbar-hide">
-            {SORT_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
-                className={cn(pillBase, "px-3 py-1.5", filters.sortBy === opt.value ? pillActive : pillInactive)}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
+        {/* Row 1: Controls - Search + Map + Saved + Currency + Mode + Filter */}
+        <div className="flex items-center w-full gap-1.5 overflow-x-auto scrollbar-hide">
+          {searchSlot && <div className="flex-shrink-0 max-w-[160px]">{searchSlot}</div>}
+          <button
+            onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
+            className={cn(pillBase, "px-3 py-1.5", isMapMode ? pillActive : pillInactive)}
+            title="Map View"
+          >
+            <Map className="w-3.5 h-3.5" />
+            {isMapMode ? 'List' : 'Map'}
+          </button>
+          <UtilityButtons variant={variant} onApplySavedFilter={onFilterChange} />
+          <button
+            onClick={() => setAdvancedOpen(true)}
+            className={cn(pillBase, "px-3 py-1.5", pillInactive)}
+          >
+            <SlidersHorizontal className="w-3.5 h-3.5" />
+            Filter
+          </button>
         </div>
 
-        {/* Row 2: Core filter popovers */}
+        {/* Row 2: Filter popovers + Sort pills */}
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 -mb-1">
         {/* Price */}
         <Popover>
@@ -520,25 +511,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </PopoverContent>
         </Popover>
 
-        {/* Advanced Filter */}
-        <button
-          onClick={() => setAdvancedOpen(true)}
-          className={cn(pillBase, "px-3 py-1.5", pillInactive)}
-        >
-          <SlidersHorizontal className="w-3.5 h-3.5" />
-          Advanced
-        </button>
-
-        {/* Save Filter - Red heart */}
-        <button
-          onClick={() => setSaveModalOpen(true)}
-          className={cn(pillBase, "px-3 py-1.5", pillInactive)}
-        >
-          <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-          Save
-        </button>
-
-        {/* Hide Sold Out - Red highlight (moved from Row 1) */}
+        {/* Hide Sold Out */}
         <button
           onClick={() => update({ hideSoldOut: !filters.hideSoldOut })}
           className={cn(
@@ -552,6 +525,20 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           Hide Sold
         </button>
 
+        {/* Divider */}
+        <div className="w-px h-6 bg-gold/30 flex-shrink-0" />
+
+        {/* Sort pills inline */}
+        {SORT_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
+            className={cn(pillBase, "px-3 py-1.5", filters.sortBy === opt.value ? pillActive : pillInactive)}
+          >
+            {opt.label}
+          </button>
+        ))}
+
         {/* Reset All */}
         {hasActiveFilters && (
           <button
@@ -562,7 +549,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             )}
           >
             <X className="w-3.5 h-3.5" />
-            Reset All
+            Reset
           </button>
         )}
 
@@ -697,7 +684,7 @@ function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'd
         </PopoverContent>
       </Popover>
 
-      <CurrencySwitcher variant="icon-only" />
+      <CurrencySwitcher variant="default" />
 
       {/* Mode Dropdown */}
       <Popover open={modeOpen} onOpenChange={setModeOpen}>
