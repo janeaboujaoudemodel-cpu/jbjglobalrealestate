@@ -12,6 +12,7 @@ import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronD
 import { getHighResImageUrl } from "@/lib/imageUtils";
 import { Button } from "@/components/ui/button";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
+import { DeveloperAIAnalyzer } from "@/components/developer/DeveloperAIAnalyzer";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -38,6 +39,7 @@ const DeveloperDetail = () => {
   const [selectedEmirate, setSelectedEmirate] = useState<string | null>(null);
   const [isDevDescExpanded, setIsDevDescExpanded] = useState(false);
   const [isFilterFixed, setIsFilterFixed] = useState(false);
+  const [bottomReached, setBottomReached] = useState(false);
   const filterSentinelRef = useRef<HTMLDivElement>(null);
 
   // IntersectionObserver for fixed filter positioning
@@ -55,6 +57,19 @@ const DeveloperDetail = () => {
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, [hasProjects]);
+
+  // Bottom sentinel: hide fixed bar when "Ready to Get Started" enters viewport
+  useEffect(() => {
+    const target = document.getElementById('ready-to-get-started');
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setBottomReached(entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
 
   // Apply emirate filter first, then apply other filters
   const projectsInEmirate = useMemo(() => {
@@ -314,7 +329,7 @@ const DeveloperDetail = () => {
           {isFilterFixed && <div className="h-[100px]" />}
 
           {/* Fixed portal filter bar — when scrolled past sentinel */}
-          {isFilterFixed && createPortal(
+          {isFilterFixed && !bottomReached && createPortal(
             <div className="fixed top-24 sm:top-28 lg:top-32 left-0 right-0 z-[9998] transition-shadow duration-200">
               <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 pt-0">
                 <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 border-t-0 rounded-none p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
@@ -384,6 +399,16 @@ const DeveloperDetail = () => {
             </div>
           )}
         </div>
+
+        {/* AI Analyzer */}
+        <DeveloperAIAnalyzer
+          developerName={developer.name}
+          foundedYear={developer.founded_year}
+          headquarters={developer.headquarters}
+          completedProjects={developer.completed_projects}
+          activeProjects={developer.offplan_projects || projects?.length}
+          projectCount={projects?.length}
+        />
       </div>
     </section>
   );
