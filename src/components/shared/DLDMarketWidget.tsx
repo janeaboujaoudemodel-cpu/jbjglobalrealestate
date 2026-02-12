@@ -75,7 +75,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   const cashPct = Math.round((ytd2026.cash / ytd2026.transactions) * 100);
 
   return (
-    <section className="py-12" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}>
+    <section className="py-16 my-8 rounded-3xl border-2 border-gold/30 overflow-hidden mx-1 sm:mx-2 md:mx-3 lg:mx-4" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}>
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto border-2 border-gold/40 rounded-2xl p-6 md:p-8 bg-white/60 shadow-[0_8px_30px_rgba(200,167,102,0.15)]">
           {/* Header */}
