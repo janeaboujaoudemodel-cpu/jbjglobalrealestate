@@ -43,36 +43,6 @@ function detectUrlType(url: string): "drive" | "portal" | "developer" | "governm
   return "unknown";
 }
 
-// Check if URL is in authorized sources
-async function isAuthorizedSource(supabase: any, url: string): Promise<{ authorized: boolean; sourceName?: string }> {
-  try {
-    const urlDomain = new URL(url).hostname.replace('www.', '');
-    
-    // Google Drive is always authorized
-    if (urlDomain.includes('google.com')) {
-      return { authorized: true, sourceName: 'Google Drive' };
-    }
-
-    const { data: sources } = await supabase
-      .from('listing_admin_authorized_sources')
-      .select('source_name, source_url')
-      .eq('is_active', true);
-
-    if (sources) {
-      for (const source of sources) {
-        const sourceDomain = new URL(source.source_url).hostname.replace('www.', '');
-        if (urlDomain.includes(sourceDomain) || sourceDomain.includes(urlDomain)) {
-          return { authorized: true, sourceName: source.source_name };
-        }
-      }
-    }
-
-    return { authorized: false };
-  } catch {
-    return { authorized: false };
-  }
-}
-
 // Scrape URL using Firecrawl
 async function scrapeUrl(url: string, firecrawlKey: string): Promise<{ success: boolean; content?: string; error?: string }> {
   try {
@@ -132,52 +102,54 @@ serve(async (req) => {
     
     let urlContext = "";
     let scrapedContent = "";
-    let authorizationWarning = "";
 
     if (extractedUrl) {
       // Check if Firecrawl is available
       if (FIRECRAWL_API_KEY) {
-        // Check authorization
-        const authCheck = await isAuthorizedSource(supabase, extractedUrl);
+        // Always scrape ANY URL — no whitelist restriction
+        console.log(`Scraping URL: ${extractedUrl}`);
+        const scrapeResult = await scrapeUrl(extractedUrl, FIRECRAWL_API_KEY);
         
-        if (authCheck.authorized) {
-          console.log(`Scraping authorized source: ${authCheck.sourceName}`);
-          const scrapeResult = await scrapeUrl(extractedUrl, FIRECRAWL_API_KEY);
-          
-          if (scrapeResult.success && scrapeResult.content) {
-            scrapedContent = `
+        if (scrapeResult.success && scrapeResult.content) {
+          // Try to find matching project in DB for merge
+          let mergeContext = "";
+          try {
+            const urlContent = scrapeResult.content.substring(0, 2000);
+            // Extract potential project name from scraped content
+            const titleMatch = urlContent.match(/^#\s+(.+)$/m) || urlContent.match(/^(.+?)[\n\r]/);
+            if (titleMatch) {
+              const potentialName = titleMatch[1].trim().substring(0, 100);
+              const { data: matchingProjects } = await supabase
+                .from('projects')
+                .select('id, name, slug, developer_name')
+                .ilike('name', `%${potentialName.split(' ').slice(0, 3).join('%')}%`)
+                .limit(3);
+              
+              if (matchingProjects && matchingProjects.length > 0) {
+                mergeContext = `\n\n## POTENTIAL MATCHING PROJECTS IN DATABASE\nThe following existing projects may match the scraped content. If there's a match, suggest MERGING the new data into the existing listing:\n${matchingProjects.map(p => `- "${p.name}" (slug: ${p.slug}, developer: ${p.developer_name || 'unknown'})`).join('\n')}`;
+              }
+            }
+          } catch (e) {
+            console.warn("Project matching failed:", e);
+          }
 
-## SCRAPED CONTENT FROM ${authCheck.sourceName?.toUpperCase() || 'AUTHORIZED SOURCE'}
+          scrapedContent = `
+
+## SCRAPED CONTENT FROM URL
 The following is the actual content extracted from the link. Use this to answer accurately:
 
 ${scrapeResult.content.substring(0, 25000)}
-
+${mergeContext}
 ---
 END OF SCRAPED CONTENT
 `;
-          } else {
-            urlContext = `
+        } else {
+          urlContext = `
 
 ## URL DETECTED - SCRAPING FAILED
 URL: ${extractedUrl}
 Error: ${scrapeResult.error}
 Inform the user that you could not extract content from this link.`;
-          }
-        } else {
-          authorizationWarning = `
-
-## UNAUTHORIZED SOURCE DETECTED
-URL: ${extractedUrl}
-This URL is NOT in the authorized sources whitelist.
-
-IMPORTANT: Tell the user that this source is not authorized for scraping. They can add it to the whitelist in the Authorized Sources settings if they want you to extract data from it.
-
-Currently authorized sources:
-- Dubai REST (dubairest.gov.ae)
-- Al Nair (alnair.ae)
-- Dubai Land Department (dubailand.gov.ae)
-- RERA (rera.gov.ae)
-- Google Drive (always allowed)`;
         }
       } else {
         urlContext = `
@@ -197,19 +169,15 @@ Tell the user: "I can see you've shared a link, but web scraping is not yet enab
 Expert at managing property listings for off-plan and secondary market properties. You help by:
 1. Creating new property listings with complete details matching Sunset Bay Grand style
 2. Processing links from Google Drive, property portals, and developer websites
-3. Extracting project data automatically from URLs using Firecrawl
-4. Reading data from authorized government sources (Dubai REST, Al Nair, DLD, RERA)
+3. Extracting project data automatically from ANY URL using Firecrawl
+4. Reading data from any website — government portals, developer sites, property portals, blogs, etc.
 5. Organizing projects by developer - NEVER mix albums/projects together
 6. Matching RERA/DLD numbers with existing listings
 7. Keeping all listing data accurate and properly organized
+8. MERGING extracted data with existing listings when a project name match is found
 
 ## WEB SCRAPING CAPABILITIES
-${FIRECRAWL_API_KEY ? `You CAN read and extract data from authorized websites:
-- Dubai REST (dubairest.gov.ae) - Official DLD portal
-- Al Nair (alnair.ae) - Real estate data platform  
-- Dubai Land Department (dubailand.gov.ae) - Official DLD site
-- RERA (rera.gov.ae) - Real Estate Regulatory Agency
-- Google Drive - Always allowed for media/documents
+${FIRECRAWL_API_KEY ? `You CAN read and extract data from ANY website. There are NO restrictions on which URLs you can scrape.
 
 When you receive scraped content, analyze it thoroughly and extract:
 - Project names and developers
@@ -217,8 +185,14 @@ When you receive scraped content, analyze it thoroughly and extract:
 - Pricing information
 - Location details
 - Handover dates
-- Amenities and features` : `Web scraping is NOT available. Firecrawl connector needs to be connected.`}
-${scrapedContent}${urlContext}${authorizationWarning}
+- Amenities and features
+- Images, documents, brochures
+- Floor plans and unit types
+- Payment plans
+- FAQs and highlights
+
+If a matching project already exists in the database, suggest MERGING the new data to enrich the existing listing.` : `Web scraping is NOT available. Firecrawl connector needs to be connected.`}
+${scrapedContent}${urlContext}
 
 ## Response Format - BE CONCISE
 - Use short, direct sentences
@@ -269,16 +243,14 @@ When creating a listing, format it EXACTLY like this:
 - Keep responses action-oriented
 - NEVER mix data between different albums/projects
 - Each album = One distinct project listing
-- Only scrape from AUTHORIZED sources
 - ${langInstruction}
 
 ## Permissions
-- Can READ and EXTRACT data from authorized websites
+- Can READ and EXTRACT data from ANY website
 - Can GENERATE and CREATE draft listings
-- Can process URLs from Drive, authorized portals
+- Can process URLs from any source
 - Can PUBLISH after founder approval
-- CANNOT delete listings
-- CANNOT scrape unauthorized sources`;
+- CANNOT delete listings`;
 
     const messages = [
       { role: "system", content: systemPrompt },
@@ -338,11 +310,10 @@ When creating a listing, format it EXACTLY like this:
 
     const hasUrl = !!extractedUrl;
     const hasScrapedData = scrapedContent.length > 0;
-    const isUnauthorized = authorizationWarning.length > 0;
 
     return new Response(JSON.stringify({
       response: assistantResponse.trim(),
-      action: suggestsListing ? "suggest_listing" : hasScrapedData ? "scraped_data" : isUnauthorized ? "unauthorized_source" : hasUrl ? "url_detected" : null,
+      action: suggestsListing ? "suggest_listing" : hasScrapedData ? "scraped_data" : hasUrl ? "url_detected" : null,
       detectedUrl: extractedUrl,
       urlType: urlType,
       listingType: "off-plan",

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Newspaper, ChevronRight, ArrowLeft, Calendar, ExternalLink, TrendingUp, Loader2, RefreshCw, Bot, Landmark, Building2, Home, Banknote, Gift, MapPin, Globe, Users } from "lucide-react";
+import { Newspaper, ChevronRight, ArrowLeft, Calendar, ExternalLink, TrendingUp, RefreshCw, Bot, Landmark, Building2, Home, Banknote, Gift, MapPin, Globe, Users } from "lucide-react";
+import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { Button } from "@/components/ui/button";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -328,7 +329,7 @@ const News = () => {
                   onClick={() => setSelectedCategory(category === "All" ? null : category)}
                   className={`px-5 py-2.5 text-sm whitespace-nowrap transition-all duration-300 rounded-full font-medium ${
                     (category === "All" && !selectedCategory) || selectedCategory === category
-                      ? "bg-black text-gold shadow-lg"
+                      ? "bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] text-black border border-gold/50 shadow-lg"
                       : "jj-card-inner text-black hover:border-gold/60"
                   }`}
                 >
@@ -343,7 +344,7 @@ const News = () => {
       {/* Loading State */}
       {isLoading && (
         <div className="jj-layer-2 !bg-transparent py-16 flex justify-center">
-          <Loader2 className="w-8 h-8 text-gold animate-spin" />
+          <BrandedLoader text="Loading news..." className="min-h-[40vh]" />
         </div>
       )}
 

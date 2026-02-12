@@ -11,7 +11,7 @@ interface BrandedLoaderProps {
  */
 export function BrandedLoader({ text = "Loading...", className = "" }: BrandedLoaderProps) {
   return (
-    <div className={`flex flex-col items-center justify-center min-h-[60vh] gap-6 ${className}`}>
+    <div className={`flex flex-col items-center justify-center min-h-screen gap-6 ${className}`}>
       {/* Logo container with fill animation */}
       <div className="relative w-24 h-24 md:w-32 md:h-32">
         {/* Base logo — faded */}
