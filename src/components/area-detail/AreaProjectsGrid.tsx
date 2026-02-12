@@ -200,7 +200,8 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
                   <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2">
                     <X className="w-4 h-4 text-black/40 hover:text-black" />
                   </button>
-              )}
+                )}
+              </div>
 
               {/* Developer Filter */}
               {developerOptions.length > 0 && (
@@ -216,7 +217,6 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
                   </SelectContent>
                 </Select>
               )}
-              </div>
 
               {/* Status Filter */}
               {statusOptions.length > 0 && (
