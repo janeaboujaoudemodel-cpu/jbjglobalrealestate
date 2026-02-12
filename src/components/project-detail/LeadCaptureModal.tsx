@@ -65,7 +65,7 @@ const LeadCaptureModal = ({
           fullName: formData.name,
           phone: formData.phone || undefined,
         },
-        `document_download_${documentType}_${projectId}`
+        `document_download_${documentType}_${projectId}`,
       );
 
       if (!success) {

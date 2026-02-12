@@ -33,7 +33,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import MortgageCalculator from "@/components/MortgageCalculator";
-import PropertySearchBar from "@/components/PropertySearchBar";
+import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import ImageCarousel from "@/components/ImageCarousel";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import { ProjectAIAnalyzer } from "@/components/project-detail/ProjectAIAnalyzer";
@@ -200,6 +200,7 @@ export default function ProjectDetailLayout({
   const [captureDocUrl, setCaptureDocUrl] = useState<string | undefined>();
   const [showStickyNav, setShowStickyNav] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   
   const inquiryRef = useRef<HTMLDivElement>(null);
   const mortgageRef = useRef<HTMLDivElement>(null);
@@ -582,10 +583,10 @@ export default function ProjectDetailLayout({
           showStickyNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
         }`}
       >
-        {/* Row 1: Search Bar */}
+        {/* Row 1: Filter Shortcut Bar */}
         <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-2 px-4">
           <div className="container mx-auto">
-            <PropertySearchBar compact />
+            <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
           </div>
         </div>
 

@@ -194,11 +194,12 @@ export function ProjectInquiryForm({
         phone: formData.phone,
         source: "project_inquiry",
         source_details: projectName,
+        source_page: window.location.pathname,
         preferred_bedrooms: formData.bedrooms || null,
         preferred_size_sqft: formData.size ? parseInt(formData.size) : null,
         preferred_developer: finalDeveloper || null,
         preferred_location: finalLocation || null,
-        notes: formData.message || null,
+        notes: formData.message ? `${formData.message}\n\n[Source: ${window.location.pathname} | Project: ${projectName} | Developer: ${developerName || 'N/A'}]` : `[Source: ${window.location.pathname} | Project: ${projectName} | Developer: ${developerName || 'N/A'}]`,
         status: "new",
         lead_score: 80 // High intent lead from project page
       });

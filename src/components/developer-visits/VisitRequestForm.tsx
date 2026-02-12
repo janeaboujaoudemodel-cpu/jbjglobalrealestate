@@ -55,12 +55,14 @@ export function VisitRequestForm({ developerId, developerName, onSuccess, onCanc
     setIsSubmitting(true);
 
     try {
+      const sourcePage = window.location.pathname;
       const { error } = await supabase.from("developer_visit_requests").insert({
         user_id: user.id,
         developer_id: developerId,
         requested_date: data.requested_date,
         requested_time: data.requested_time || null,
         purpose: data.purpose,
+        notes: data.notes ? `${data.notes}\n\n[Source: ${sourcePage} | Developer: ${developerName}]` : `[Source: ${sourcePage} | Developer: ${developerName}]`,
         status: "submitted",
       });
 

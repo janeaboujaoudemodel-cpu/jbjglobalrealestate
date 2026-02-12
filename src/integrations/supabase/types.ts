@@ -4089,6 +4089,7 @@ export type Database = {
           rental_renter_type: string | null
           source: string | null
           source_id: string | null
+          source_page: string | null
           source_row_index: number | null
           tags: string[] | null
           updated_at: string
@@ -4144,6 +4145,7 @@ export type Database = {
           rental_renter_type?: string | null
           source?: string | null
           source_id?: string | null
+          source_page?: string | null
           source_row_index?: number | null
           tags?: string[] | null
           updated_at?: string
@@ -4199,6 +4201,7 @@ export type Database = {
           rental_renter_type?: string | null
           source?: string | null
           source_id?: string | null
+          source_page?: string | null
           source_row_index?: number | null
           tags?: string[] | null
           updated_at?: string

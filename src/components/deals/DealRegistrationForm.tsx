@@ -46,6 +46,7 @@ export function DealRegistrationForm({ onSuccess, onCancel }: DealRegistrationFo
     setIsSubmitting(true);
 
     try {
+      const sourcePage = window.location.pathname;
       const { error } = await supabase.from("deals").insert({
         broker_user_id: user.id,
         unit_number: data.unit_number,
@@ -54,7 +55,7 @@ export function DealRegistrationForm({ onSuccess, onCancel }: DealRegistrationFo
         client_email: data.client_email || null,
         deal_value_aed: data.deal_value_aed,
         developer_name: data.developer_name,
-        notes: data.notes || null,
+        notes: data.notes ? `${data.notes}\n\n[Submitted from: ${sourcePage}]` : `[Submitted from: ${sourcePage}]`,
         deal_status: "submitted",
       });
 
