@@ -369,7 +369,7 @@ Best regards`);
                     <div className="absolute top-3 right-3 z-10">
                       <FavoriteButton projectId={project.id} size="sm" showShortlist={true} />
                     </div>
-                    <ProjectCard project={project} />
+                    <ProjectCard project={project} currency="AED" sizeUnit="sqft" />
                     {/* Badge Assignment */}
                     <div className="mt-2">
                       <DropdownMenu>

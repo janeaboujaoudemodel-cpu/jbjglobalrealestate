@@ -410,7 +410,7 @@ const Favorites = () => {
                           )}
                         </div>
                       </div>
-                      <ProjectCard project={project} />
+                      <ProjectCard project={project} currency="AED" sizeUnit="sqft" />
                     </div>
                   ))}
                 </div>
@@ -495,7 +495,7 @@ const Favorites = () => {
                           </div>
                         )}
                         
-                        <ProjectCard project={project} />
+                        <ProjectCard project={project} currency="AED" sizeUnit="sqft" />
                         
                         {/* Badge assignment dropdown */}
                         <div className="mt-2">
