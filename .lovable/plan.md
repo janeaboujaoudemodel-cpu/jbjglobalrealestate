@@ -1,89 +1,47 @@
 
 
-## Enrich All 540 Developers with Real, Accurate Information
+## Three Fixes for Premium Project Detail Experience
 
-### Current State
-- **540 developers** in the database
-- Only **16** have `founded_year` filled
-- Only **26** have `completed_projects` filled  
-- Most have descriptions but many are generic or AI-generated without research
-- Missing key fields: website, CEO/chairman, contractor info, total units delivered, upcoming pipeline
+### 1. Replace Gold Spinner with JBJ Logo Fill Animation
 
-### What We Will Do
+**Problem:** When navigating to a project page (e.g., from the map), the loading state shows plain skeleton placeholders. The user wants a branded loading experience with the JBJ logo that "fills up" while waiting.
 
-**Step 1: Add new columns to the developers table**
+**Solution:** Create a new `BrandedLoader` component that displays the JBJ monogram logo with a vertical fill animation (the logo starts empty/faded and fills with gold color from bottom to top). Use this in `ProjectDetail.tsx` as the loading state.
 
-New columns to capture richer developer profiles:
-- `website_url` (text) -- official website
-- `ceo_name` (text) -- CEO or Chairman name
-- `total_units_delivered` (integer) -- lifetime units handed over
-- `upcoming_units` (integer) -- units in pipeline / under construction
-- `expected_completion_year` (integer) -- next major handover year
-- `notable_projects` (text) -- comma-separated list of signature projects
-- `parent_company` (text) -- parent group if applicable (e.g., Dubai Holding for Meraas)
-- `license_number` (text) -- RERA or DED license if known
-- `specialization` (text) -- e.g., "Luxury", "Affordable", "Mixed-use", "Waterfront"
+**File changes:**
+- **New file: `src/components/ui/BrandedLoader.tsx`** -- A reusable loader that shows the JBJ monogram (`jbj-monogram-light-bg.png`) with a CSS clip-path or mask animation that fills the logo from bottom to top, creating a "pouring" effect. Includes a subtle shimmer and "Loading..." text below.
+- **`src/pages/ProjectDetail.tsx`** -- Replace the current Skeleton-based loading state (lines 226-236) with the new `BrandedLoader` component.
 
-**Step 2: Create a new edge function `enrich-developer-data`**
+---
 
-This function will:
-1. Fetch developers with missing data (batch by batch, 5 at a time)
-2. For each developer, use AI (Gemini 2.5 Flash) to research and return structured JSON with all the fields above
-3. The AI prompt will explicitly instruct: "Only return information you are confident is factually accurate. If unsure, leave the field null."
-4. Update the database row with the researched data
-5. Return progress so it can be called repeatedly until all 540 are processed
+### 2. Auto-Analyze Projects (Remove "Click to Analyze" Button)
 
-The function uses the already-configured `LOVABLE_API_KEY` -- no new secrets needed.
+**Problem:** The `ProjectAIAnalyzer` currently shows a "Click below to generate an AI-powered investment analysis" prompt with an "Analyze" button (lines 158-166). The user wants analysis to start automatically when the section scrolls into view.
 
-**Step 3: Update the DeveloperInfoCard UI**
+**Solution:** Re-enable the auto-trigger logic using the existing `IntersectionObserver` that is already set up (lines 100-108). The component already has `isVisible`, `hasTriggered`, and the observer -- it just needs the `useEffect` that connects them (which is currently commented out at line 110).
 
-Show the new data points in the developer profile card:
-- Website link
-- CEO/Chairman name
-- Total units delivered stat
-- Upcoming units / expected completion
-- Notable projects list
-- Specialization badge
+**File changes:**
+- **`src/components/project-detail/ProjectAIAnalyzer.tsx`** -- Replace line 110 (`// Manual trigger only - no auto-analyze on scroll`) with a `useEffect` that calls `handleAnalyze()` when `isVisible` becomes true and analysis hasn't been triggered yet. Remove the manual "Click to Analyze" button UI (lines 158-166) and replace with the loading spinner state, so the user sees the analysis generating immediately upon scroll.
 
-**Step 4: Update the developer detail page**
+---
 
-Ensure the developer profile page also displays the enriched fields.
+### 3. Fix Black Section Divider to Match Champagne Background
 
-### Technical Details
+**Problem:** The `SectionDivider` between the AI Analyzer and the DLD Market Widget uses the default `variant="default"` which renders with `bg-black` background. This creates a jarring black band between two champagne-themed sections.
 
-**Database Migration SQL:**
-```sql
-ALTER TABLE developers
-  ADD COLUMN IF NOT EXISTS website_url text,
-  ADD COLUMN IF NOT EXISTS ceo_name text,
-  ADD COLUMN IF NOT EXISTS total_units_delivered integer,
-  ADD COLUMN IF NOT EXISTS upcoming_units integer,
-  ADD COLUMN IF NOT EXISTS expected_completion_year integer,
-  ADD COLUMN IF NOT EXISTS notable_projects text,
-  ADD COLUMN IF NOT EXISTS parent_company text,
-  ADD COLUMN IF NOT EXISTS license_number text,
-  ADD COLUMN IF NOT EXISTS specialization text;
-```
+**Solution:** Switch to `variant="champagne"` so the divider uses a champagne gradient background that matches the surrounding sections, keeping only the elegant gold line and sparkle icon.
 
-**Edge Function: `enrich-developer-data`**
-- Processes 5 developers per call (to stay within timeout limits)
-- Uses `google/gemini-2.5-flash` for balanced accuracy and speed
-- AI prompt asks for structured JSON response with all fields
-- Only updates fields that are currently null (preserves existing accurate data)
-- Supports `mode=check` to preview which developers need enrichment
-- Returns `next_offset` for sequential batch processing
+**File changes:**
+- **`src/components/project-detail/ProjectDetailLayout.tsx`** -- Change line 1001 from `<SectionDivider />` to `<SectionDivider variant="champagne" />`.
 
-**AI Prompt Strategy:**
-The prompt will include the developer name, their known projects from the `projects` table, and current partial data. It will ask for real, verifiable facts only -- no fabrication. Fields the AI is uncertain about will be left null rather than guessed.
+---
 
-**Files to create/modify:**
-- `supabase/functions/enrich-developer-data/index.ts` (new)
-- `src/components/project-detail/DeveloperInfoCard.tsx` (update UI)
-- Database migration (new columns)
+### Summary of All File Changes
 
-### Important Notes
-- This will need to be called multiple times (540 developers / 5 per batch = ~108 calls) to process all developers
-- Each call takes ~30-60 seconds due to AI processing
-- Existing accurate data (like the 16 developers with founded_year) will NOT be overwritten
-- The AI may not find information for very small/obscure developers -- those fields will remain null, which is better than fake data
+| File | Change |
+|------|--------|
+| `src/components/ui/BrandedLoader.tsx` | New component: JBJ logo with fill animation |
+| `src/pages/ProjectDetail.tsx` | Use `BrandedLoader` instead of Skeletons for loading |
+| `src/components/project-detail/ProjectAIAnalyzer.tsx` | Auto-trigger analysis on scroll, remove manual button |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Change `SectionDivider` to `variant="champagne"` |
 
