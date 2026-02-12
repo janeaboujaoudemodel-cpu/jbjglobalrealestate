@@ -1267,7 +1267,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             >
               <div
                 className={cn(
-                  "min-w-0 flex items-center justify-evenly gap-1 lg:gap-2 xl:gap-3 2xl:gap-4 rounded-full px-2 lg:px-4 xl:px-6 py-1 transition-all duration-300",
+                  "min-w-0 flex items-center justify-evenly gap-1 lg:gap-2 xl:gap-3 2xl:gap-4 rounded-full px-3 lg:px-5 xl:px-7 py-2 lg:py-2.5 transition-all duration-300",
                   isFullyTransparent
                     ? 'bg-transparent border-transparent max-w-full'
                     : 'border-2 border-gold/40 w-full max-w-[900px]'
