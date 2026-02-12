@@ -1,4 +1,5 @@
-import { useState, useMemo, lazy, Suspense } from "react";
+import { useState, useMemo, useEffect, useRef, lazy, Suspense } from "react";
+import { createPortal } from "react-dom";
 import { useParams, Link } from "react-router-dom";
 import { useDeveloper, useProjectsByDeveloper, useCommunities, useTrendingAreas } from "@/hooks/useProjects";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
@@ -35,6 +36,24 @@ const DeveloperDetail = () => {
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [selectedEmirate, setSelectedEmirate] = useState<string | null>(null);
   const [isDevDescExpanded, setIsDevDescExpanded] = useState(false);
+  const [isFilterFixed, setIsFilterFixed] = useState(false);
+  const filterSentinelRef = useRef<HTMLDivElement>(null);
+
+  // IntersectionObserver for fixed filter positioning
+  const hasProjects = !!projects;
+  useEffect(() => {
+    const sentinel = filterSentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsFilterFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
+      },
+      { threshold: 0, rootMargin: "-140px 0px 0px 0px" }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasProjects]);
 
   // Apply emirate filter first, then apply other filters
   const projectsInEmirate = useMemo(() => {
@@ -275,6 +294,10 @@ const DeveloperDetail = () => {
             {selectedEmirate ? `Projects in ${selectedEmirate}` : "All Projects"}
           </h2>
 
+          {/* Sentinel for IntersectionObserver */}
+          <div ref={filterSentinelRef} className="h-0" />
+
+          {/* Inline filter bar */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-4 mb-6">
             <ProjectFilters
               filters={filters}
@@ -284,6 +307,22 @@ const DeveloperDetail = () => {
               showDeveloperFilter={false}
             />
           </div>
+
+          {/* Fixed portal filter bar — when scrolled past sentinel */}
+          {isFilterFixed && createPortal(
+            <div className="fixed top-24 sm:top-28 lg:top-32 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200">
+              <div className="container mx-auto px-4">
+                <ProjectFilters
+                  filters={filters}
+                  onFiltersChange={setFilters}
+                  communities={communities}
+                  trendingAreas={trendingAreas}
+                  showDeveloperFilter={false}
+                />
+              </div>
+            </div>,
+            document.body
+          )}
 
           {hasFiltersApplied && (
             <p className="text-foreground/70 mb-6">
