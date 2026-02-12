@@ -75,25 +75,17 @@ export function MegaMenuFeaturedCard({
 }: MegaMenuFeaturedCardProps) {
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
-  const handleMouseEnter = () => {
-    if (videoRef.current) {
+  // Auto-play video immediately on mount (not on hover)
+  React.useEffect(() => {
+    if (videoRef.current && video) {
       videoRef.current.play().catch(() => {});
     }
-  };
-
-  const handleMouseLeave = () => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  };
+  }, [video]);
 
   return (
     <Link
       to={to}
       onClick={onClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       className={cn(
         // Compact card with 3D effect - proper rounded corners with gold border
         "block group relative overflow-hidden rounded-xl min-h-[260px] lg:min-h-[340px] transition-all duration-500",
@@ -106,7 +98,7 @@ export function MegaMenuFeaturedCard({
       {video && (
         <video
           ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100 z-[1]"
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-100 z-[1]"
           src={video}
           muted
           loop
@@ -119,7 +111,7 @@ export function MegaMenuFeaturedCard({
         <div
           className={cn(
             "absolute inset-0 bg-cover bg-center transition-all duration-700 group-hover:scale-110",
-            video ? "group-hover:opacity-0" : ""
+            video ? "opacity-0" : ""
           )}
           style={{ backgroundImage: `url(${image})` }}
         />
