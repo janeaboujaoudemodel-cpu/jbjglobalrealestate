@@ -117,7 +117,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       const portalStillOpen = document.querySelector('[data-radix-portal]');
       if (portalStillOpen) return;
       setActiveMegaMenu(null);
-    }, 120); // Fast close for snappy UX
+    }, 80); // Fast close for snappy UX
   };
 
   // Clear any pending close timeout when entering mega menu panels
@@ -1399,6 +1399,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               {/* Mega Menu Panels - Enhanced bridge zone for stable hover transitions */}
               {activeMegaMenu && !['search', 'language', 'account'].includes(activeMegaMenu) && (
                 <>
+                  {/* Backdrop blur overlay - matches utility menus */}
+                  <div 
+                    className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+                    style={{ top: 'var(--header-height, 128px)' }}
+                    onClick={closeMegaMenu}
+                  />
                   {/* Invisible bridge zone - catches mouse during transition from nav to panel */}
                   <div 
                     className="absolute left-0 right-0 h-4 z-50 pointer-events-auto"
