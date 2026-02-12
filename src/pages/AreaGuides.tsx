@@ -296,22 +296,15 @@ const AreaGuides = () => {
       {isFixed && !bottomReached && createPortal(
         <div className="fixed top-0 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200">
           <div className="container mx-auto px-4 space-y-2">
-            <div className="flex items-center gap-3">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
-                <input
-                  placeholder="Search areas..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-10 pl-9 pr-8 rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm placeholder:text-black/30 focus:outline-none focus:border-gold/60 transition-colors"
-                  style={{ fontSize: '16px' }}
-                />
-              </div>
-              <div className="flex gap-1.5">
-                <button onClick={() => setSortBy("trending")} className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${sortBy === "trending" ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] border-2 border-gold text-black" : "bg-white border border-gold/30 text-zinc-700"}`}>
-                  <Flame className="w-3.5 h-3.5" />
-                </button>
-              </div>
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+              <input
+                placeholder="Search areas..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-10 pl-9 pr-8 rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm placeholder:text-black/30 focus:outline-none focus:border-gold/60 transition-colors"
+                style={{ fontSize: '16px' }}
+              />
             </div>
             <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
           </div>
