@@ -78,7 +78,9 @@ const BEDROOM_OPTIONS = [
   { value: '2', label: '2 BR' },
   { value: '3', label: '3 BR' },
   { value: '4', label: '4 BR' },
-  { value: '5+', label: '5+ BR' },
+  { value: '5', label: '5 BR' },
+  { value: '6', label: '6 BR' },
+  { value: '7+', label: '7+ BR' },
 ];
 
 const STATUS_OPTIONS: { value: string; label: string; dotClass: string }[] = [
@@ -137,13 +139,13 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
     : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 text-black hover:border-gold/60";
   const pillActive = isDark
     ? "bg-white text-black border border-white shadow-lg"
-    : "bg-gradient-to-r from-[#C8A766] to-[#B8944A] text-white border border-[#C8A766] shadow-lg";
+    : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black font-bold shadow-md";
 
   const popoverClass = "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[10200] shadow-xl";
 
   const togglePillBase = "px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer";
   const togglePillOff = "border-gold/30 text-black/70 bg-white/60 hover:bg-white";
-  const togglePillOn = "border-[#C8A766] bg-gradient-to-r from-[#C8A766] to-[#B8944A] text-white";
+  const togglePillOn = "border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black font-bold";
 
   const handleSaveFilter = (name: string) => {
     const saved = JSON.parse(localStorage.getItem('jbj-saved-filters') || '[]');
@@ -167,12 +169,42 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
   return (
     <>
       <div className="flex flex-col gap-2 w-full">
-        {/* Row 1: Utility buttons (right-aligned) */}
-        <div className="flex justify-end w-full">
+        {/* Row 1: Utility buttons left, Sort/Toggle shortcuts right */}
+        <div className="flex items-center justify-between w-full gap-2">
           <UtilityButtons variant={variant} onApplySavedFilter={onFilterChange} />
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
+            {/* Sort pills (radio-style) */}
+            {SORT_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
+                className={cn(pillBase, "px-3 py-1.5", filters.sortBy === opt.value ? pillActive : pillInactive)}
+              >
+                {opt.label}
+              </button>
+            ))}
+
+            {/* Hide Sold Out */}
+            <button
+              onClick={() => update({ hideSoldOut: !filters.hideSoldOut })}
+              className={cn(pillBase, "px-3 py-1.5", filters.hideSoldOut ? pillActive : pillInactive)}
+            >
+              <EyeOff className="w-3.5 h-3.5" />
+              Hide Sold
+            </button>
+
+            {/* Save Filter */}
+            <button
+              onClick={() => setSaveModalOpen(true)}
+              className={cn(pillBase, "px-3 py-1.5", pillInactive)}
+            >
+              <Heart className="w-3.5 h-3.5" />
+              Save
+            </button>
+          </div>
         </div>
 
-        {/* Row 2: Filter pills */}
+        {/* Row 2: Core filter popovers */}
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 -mb-1">
         {/* Price */}
         <Popover>
@@ -227,7 +259,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
                   className={cn(
                     "px-3 py-1 rounded-full text-xs font-medium border transition-all",
                     filters.priceMax === p.value
-                      ? "bg-gradient-to-r from-[#C8A766] to-[#B8944A] text-white border-[#C8A766]"
+                      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black font-bold"
                       : "bg-white/80 text-black border-gold/30 hover:border-gold"
                   )}
                 >
@@ -315,7 +347,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
                   <select
                     value={filters.handoverFrom.year}
                     onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, year: e.target.value } })}
-                    className="min-w-[68px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
+                    className="min-w-[80px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
                   >
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
                   </select>
@@ -334,7 +366,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
                   <select
                     value={filters.handoverTo.year}
                     onChange={(e) => update({ handoverTo: { ...filters.handoverTo, year: e.target.value } })}
-                    className="min-w-[68px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
+                    className="min-w-[80px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
                   >
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
                   </select>
@@ -449,26 +481,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
           </PopoverContent>
         </Popover>
 
-        {/* Sort pills (radio-style) */}
-        {SORT_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
-            className={cn(pillBase, "px-3 py-1.5", filters.sortBy === opt.value ? pillActive : pillInactive)}
-          >
-            {opt.label}
-          </button>
-        ))}
-
-        {/* Hide Sold Out */}
-        <button
-          onClick={() => update({ hideSoldOut: !filters.hideSoldOut })}
-          className={cn(pillBase, "px-3 py-1.5", filters.hideSoldOut ? pillActive : pillInactive)}
-        >
-          <EyeOff className="w-3.5 h-3.5" />
-          Hide Sold Out
-        </button>
-
         {/* Reset All */}
         {hasActiveFilters && (
           <button
@@ -482,15 +494,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
             Reset All
           </button>
         )}
-
-        {/* Save Filter */}
-        <button
-          onClick={() => setSaveModalOpen(true)}
-          className={cn(pillBase, pillInactive)}
-        >
-          <Heart className="w-3.5 h-3.5" />
-          Save
-        </button>
 
         </div>
       </div>
