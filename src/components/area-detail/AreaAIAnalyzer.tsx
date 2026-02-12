@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Brain, Loader2, TrendingUp, TrendingDown, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown, RefreshCw, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { Brain, Loader2, TrendingUp, TrendingDown, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown, RefreshCw, ArrowUpRight, ArrowDownRight, MapPin, Users, Home, Landmark } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, AreaChart, Area } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, AreaChart, Area, PieChart, Pie } from "recharts";
 interface AreaAIAnalyzerProps {
   areaName: string;
   emirate: string;
@@ -526,27 +526,129 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
           </div>
         ) : (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-            {/* Row 1: Overview + Rating */}
+            {/* Row 1: Enhanced Overview + Rating + Quick Stats */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Overview Card - Enhanced */}
               {sections?.overview && (
-                <div className="lg:col-span-2 bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Building2 className="w-5 h-5 text-gold" />
-                    <h3 className="font-bold text-black text-lg">Area Overview</h3>
+                <div className="lg:col-span-2 bg-white border border-gold/20 rounded-2xl shadow-sm overflow-hidden">
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-9 h-9 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center">
+                        <Building2 className="w-5 h-5 text-gold" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-black text-lg">Area Overview</h3>
+                        <span className="text-zinc-400 text-xs">{areaName} Community Profile</span>
+                      </div>
+                    </div>
+                    <p className="text-zinc-700 text-sm leading-relaxed mb-5">{cleanMarkdown(sections.overview)}</p>
+                    
+                    {/* Quick insight stats row */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {hasStats && stats.totalProjects > 0 && (
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl p-3 border border-gold/15 text-center">
+                          <Home className="w-4 h-4 text-gold mx-auto mb-1" />
+                          <div className="text-lg font-bold text-black">{stats.totalProjects}</div>
+                          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Projects</div>
+                        </div>
+                      )}
+                      {hasStats && stats.developers?.length > 0 && (
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl p-3 border border-gold/15 text-center">
+                          <Landmark className="w-4 h-4 text-gold mx-auto mb-1" />
+                          <div className="text-lg font-bold text-black">{stats.developers.length}</div>
+                          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Developers</div>
+                        </div>
+                      )}
+                      {hasStats && stats.pricePerSqft && (
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl p-3 border border-gold/15 text-center">
+                          <BarChart3 className="w-4 h-4 text-gold mx-auto mb-1" />
+                          <div className="text-lg font-bold text-black">{stats.pricePerSqft.toLocaleString()}</div>
+                          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">AED/sqft</div>
+                        </div>
+                      )}
+                      {hasStats && stats.avgPrice && (
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl p-3 border border-gold/15 text-center">
+                          <TrendingUp className="w-4 h-4 text-gold mx-auto mb-1" />
+                          <div className="text-lg font-bold text-black">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
+                          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Avg Price</div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <p className="text-zinc-700 text-sm leading-relaxed">{cleanMarkdown(sections.overview)}</p>
+                  
+                  {/* Bottom insight bar */}
+                  {hasStats && stats.statuses && Object.keys(stats.statuses).length > 0 && (
+                    <div className="border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white px-6 py-3">
+                      <div className="flex items-center gap-4 flex-wrap">
+                        <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold">Status Mix</span>
+                        {Object.entries(stats.statuses).slice(0, 4).map(([status, count]) => (
+                          <div key={status} className="flex items-center gap-1.5">
+                            <div className={`w-2 h-2 rounded-full ${
+                              status.toLowerCase().includes('off') || status.toLowerCase().includes('launch') ? 'bg-emerald-500' : 
+                              status.toLowerCase().includes('under') || status.toLowerCase().includes('construct') ? 'bg-amber-500' : 
+                              status.toLowerCase().includes('ready') || status.toLowerCase().includes('complet') ? 'bg-blue-500' : 'bg-zinc-400'
+                            }`} />
+                            <span className="text-xs text-zinc-600">{status} <span className="font-semibold text-black">({count as number})</span></span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
+              
+              {/* Rating Card - Enhanced with radial gauge */}
               {ratingScore !== null && (
-                <div className="bg-black rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center">
-                  <Star className="w-8 h-8 text-gold mb-2" />
-                  <div className="text-5xl font-bold text-gold mb-1">{ratingScore}</div>
-                  <div className="text-gold/70 text-sm font-medium">/10 Investment Rating</div>
+                <div className="bg-black rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden">
+                  {/* Ambient glow */}
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-gold/10 rounded-full blur-[60px] pointer-events-none" />
+                  
+                  <Star className="w-7 h-7 text-gold mb-3 relative z-10" />
+                  
+                  {/* Radial gauge */}
+                  <div className="relative w-32 h-32 mb-3">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={[
+                            { value: ratingScore, fill: '#D4AF37' },
+                            { value: 10 - ratingScore, fill: 'rgba(255,255,255,0.08)' },
+                          ]}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={42}
+                          outerRadius={56}
+                          startAngle={90}
+                          endAngle={-270}
+                          dataKey="value"
+                          stroke="none"
+                        >
+                          <Cell fill="#D4AF37" />
+                          <Cell fill="rgba(255,255,255,0.08)" />
+                        </Pie>
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-4xl font-bold text-gold">{ratingScore}</span>
+                      <span className="text-gold/50 text-[10px] font-medium">/10</span>
+                    </div>
+                  </div>
+                  
+                  <div className="text-gold/70 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
                   {sections?.rating && (
-                    <p className="text-zinc-400 text-xs mt-3 leading-relaxed">
-                      {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim()}
+                    <p className="text-zinc-400 text-xs leading-relaxed max-w-[200px] relative z-10">
+                      {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim().slice(0, 120)}
                     </p>
                   )}
+                  
+                  {/* Rating quality label */}
+                  <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 ${
+                    ratingScore >= 8 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                    ratingScore >= 6 ? 'bg-gold/20 text-gold border border-gold/30' :
+                    'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                  }`}>
+                    {ratingScore >= 8 ? 'Excellent' : ratingScore >= 6 ? 'Good' : 'Moderate'}
+                  </div>
                 </div>
               )}
             </div>
