@@ -283,7 +283,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           
           {/* Sold Out Badge - Top Left (offset below developer logo if present) */}
           {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
-            <div className={`absolute ${(project.developer as any)?.logo_url ? 'top-[4.25rem]' : 'top-3'} left-3 z-10`}>
+            <div className="absolute bottom-3 left-3 z-10">
               <div className="bg-red-600 text-white px-2.5 py-1 rounded-full text-xs font-bold uppercase shadow-lg border border-red-400">
                 Sold Out
               </div>
