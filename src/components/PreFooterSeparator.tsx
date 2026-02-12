@@ -31,8 +31,8 @@ export const PreFooterSeparator = ({
     // Simple champagne separator without CTA
     return (
       <section className="bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark py-16">
-        <div className="container mx-auto px-6">
-          <div className="max-w-[1100px] mx-auto text-center">
+        <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4">
+          <div className="text-center">
             <div className="h-px bg-gold/30 w-24 mx-auto" />
           </div>
         </div>
@@ -42,8 +42,8 @@ export const PreFooterSeparator = ({
 
   return (
     <section className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark py-10 sm:py-14 md:py-16 lg:py-20">
-      <div className="container mx-auto px-3 sm:px-4 md:px-6">
-        <div className="max-w-[1200px] mx-auto">
+      <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4">
+        <div>
           {/* Pearl Card - Single inner layer on champagne section */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
             {badgeText && (
