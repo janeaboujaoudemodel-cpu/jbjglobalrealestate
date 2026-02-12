@@ -1,36 +1,27 @@
 
+## Fix: Sticky Filter Bar — Use IntersectionObserver Instead of Scroll Events
 
-## Fix: Sticky Filter Bar (for real this time)
+### Root Cause (verified)
 
-### Root Cause
+The `window.addEventListener('scroll', ...)` approach does not reliably fire because `overflow-x: hidden` on the `<main>` element in MainLayout can cause the browser to implicitly compute `overflow-y: auto`, which interferes with window-level scroll events.
 
-CSS `position: sticky` is broken because `MainLayout.tsx` applies `overflow-x-hidden` on the `<main>` element (line 205). Any `overflow` property on an ancestor element creates a new scrolling context, which prevents `sticky` from working relative to the viewport. This is a known CSS limitation.
+The existing `AreaStickySearchBar.tsx` component already solves this same problem successfully using `IntersectionObserver` instead of scroll events. We need to follow the same pattern.
 
-### Solution: JavaScript-based fixed positioning
+### Fix (single file: `src/components/area-detail/AreaProjectsGrid.tsx`)
 
-Since we cannot remove `overflow-x-hidden` from `<main>` (it prevents horizontal scrollbar issues globally), we will switch to a JavaScript approach that manually toggles between static (in-flow) and fixed positioning.
+Replace the `useEffect` scroll listener (lines 28-50) with an `IntersectionObserver` on the placeholder/sentinel element:
 
-### Technical Details
+1. Remove the scroll event listener entirely
+2. Remove `sectionRef` (no longer needed)
+3. Keep `placeholderRef` and `barRef`
+4. Add an `IntersectionObserver` on `placeholderRef` with `rootMargin: "-80px 0px 0px 0px"` (same as AreaStickySearchBar)
+5. When the sentinel is NOT intersecting (scrolled past), set `isFixed = true`
+6. When the sentinel IS intersecting (visible), set `isFixed = false`
 
-**File: `src/components/area-detail/AreaProjectsGrid.tsx`**
+Everything else (the fixed positioning classes, placeholder height, container wrapping, filter layout) stays exactly as it is now.
 
-1. Replace the `hasShadow` IntersectionObserver with a scroll-based approach using `useEffect` + `scroll` event listener
-2. Add a `placeholderRef` div that reserves space when the bar goes fixed (prevents layout jump)
-3. Add a `barRef` on the filter bar itself to measure its height
-4. On scroll:
-   - Get the placeholder element's `getBoundingClientRect().top`
-   - If `top <= 72` (header height) AND the section bottom is still in view, set `isFixed = true`
-   - Otherwise set `isFixed = false`
-5. When `isFixed` is true:
-   - The placeholder div gets the bar's measured height (to prevent content jumping up)
-   - The bar gets `position: fixed; top: 72px; left: 0; right: 0; z-index: 30` plus a shadow
-   - The bar's inner content stays within a `container mx-auto px-4` wrapper for proper alignment
-6. When `isFixed` is false:
-   - The placeholder has `height: 0`
-   - The bar is in its normal flow position inside the card
+### Why this will work
 
-This is the same pattern used successfully in `AreaStickySearchBar.tsx` (which uses fixed positioning when `isSticky` is true).
-
-### No other changes
-
-The layout (search input, developer filter, status, bedrooms, sort) stays exactly as it is now. Only the positioning mechanism changes from broken CSS sticky to working JS-driven fixed.
+- `IntersectionObserver` uses the viewport as root by default and works correctly regardless of `overflow` settings on ancestor elements
+- This is the exact same pattern that `AreaStickySearchBar.tsx` uses successfully on the same page
+- No scroll event dependency means no scrolling-context issues
