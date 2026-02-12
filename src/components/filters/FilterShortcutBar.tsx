@@ -25,6 +25,7 @@ export interface ShortcutFilterState {
   postHandoverOnly: boolean;
   handoverFrom: { quarter: string; year: string };
   handoverTo: { quarter: string; year: string };
+  propertyCategory: 'residential' | 'commercial' | null;
   propertyTypes: string[];
   bedrooms: string[];
   statuses: string[];
@@ -42,6 +43,7 @@ export const defaultShortcutFilters: ShortcutFilterState = {
   postHandoverOnly: false,
   handoverFrom: { quarter: 'Q1', year: '2025' },
   handoverTo: { quarter: 'Q4', year: '2028' },
+  propertyCategory: null,
   propertyTypes: [],
   bedrooms: [],
   statuses: [],
@@ -64,13 +66,22 @@ const PRICE_PRESETS = [
   { label: '5M', value: '5000000' },
 ];
 
-const PROPERTY_TYPE_OPTIONS = [
+const RESIDENTIAL_TYPES = [
   { value: 'apartments', label: 'Apartments' },
   { value: 'villa', label: 'Villa' },
   { value: 'townhouse', label: 'Townhouse' },
   { value: 'duplex', label: 'Duplex' },
   { value: 'penthouse', label: 'Penthouse' },
 ];
+
+const COMMERCIAL_TYPES = [
+  { value: 'plot', label: 'Plot' },
+  { value: 'retail', label: 'Retail' },
+  { value: 'commercial', label: 'Commercial' },
+  { value: 'offices', label: 'Offices' },
+];
+
+const ALL_PROPERTY_TYPES = [...RESIDENTIAL_TYPES, ...COMMERCIAL_TYPES];
 
 const BEDROOM_OPTIONS = [
   { value: 'studio', label: 'Studio' },
@@ -120,6 +131,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
     filters.priceMax !== '' ||
     filters.paymentPlanMax < 100 ||
     filters.postHandoverOnly ||
+    filters.propertyCategory !== null ||
     filters.propertyTypes.length > 0 ||
     filters.bedrooms.length > 0 ||
     filters.statuses.length > 0 ||
@@ -161,9 +173,13 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
     ) : null;
 
   const getPropertyTypeLabel = () => {
-    if (filters.propertyTypes.length === 0) return 'Property Type';
-    const first = PROPERTY_TYPE_OPTIONS.find(o => o.value === filters.propertyTypes[0])?.label || '';
-    return filters.propertyTypes.length === 1 ? first : first;
+    if (filters.propertyTypes.length === 0) {
+      if (filters.propertyCategory === 'residential') return 'Residential';
+      if (filters.propertyCategory === 'commercial') return 'Commercial';
+      return 'Property Type';
+    }
+    const first = ALL_PROPERTY_TYPES.find(o => o.value === filters.propertyTypes[0])?.label || '';
+    return first;
   };
 
   return (
@@ -379,16 +395,28 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
         {/* Property Type */}
         <Popover>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, filters.propertyTypes.length > 0 ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactive)}>
               <Building2 className="w-3.5 h-3.5" />
               {getPropertyTypeLabel()}
               {filters.propertyTypes.length > 1 && <CountBadge count={filters.propertyTypes.length - 1} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className={cn("w-64 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent className={cn("w-72 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+            <Tabs
+              value={filters.propertyCategory || 'residential'}
+              onValueChange={(val) => {
+                const category = val as 'residential' | 'commercial';
+                update({ propertyCategory: category, propertyTypes: [] });
+              }}
+            >
+              <TabsList className="w-full mb-3 bg-white/60">
+                <TabsTrigger value="residential" className="flex-1 text-xs">Residential</TabsTrigger>
+                <TabsTrigger value="commercial" className="flex-1 text-xs">Commercial</TabsTrigger>
+              </TabsList>
+            </Tabs>
             <div className="flex flex-wrap gap-2">
-              {PROPERTY_TYPE_OPTIONS.map((opt) => (
+              {(filters.propertyCategory === 'commercial' ? COMMERCIAL_TYPES : RESIDENTIAL_TYPES).map((opt) => (
                 <button
                   key={opt.value}
                   onClick={() => update({ propertyTypes: toggleArray(filters.propertyTypes, opt.value) })}
