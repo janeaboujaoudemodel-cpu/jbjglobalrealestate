@@ -58,7 +58,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 
 import ProjectCard from "@/components/ProjectCard";
-import { useProjects, useCommunities, useDevelopers } from "@/hooks/useProjects";
+import { useProjectsListing, useCommunities, useDevelopers } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import type { FilterState } from "@/components/ProjectFilters";
@@ -181,7 +181,7 @@ const BATHROOM_OPTIONS = [
 
 const Properties = () => {
   const [searchParams] = useSearchParams();
-  const { data: projects, isLoading } = useProjects();
+  const { data: projects, isLoading } = useProjectsListing();
   const { data: communities } = useCommunities();
   const { data: developers } = useDevelopers();
   const { data: areas } = useAreas();
