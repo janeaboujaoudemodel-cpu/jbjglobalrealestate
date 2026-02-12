@@ -474,7 +474,7 @@ const ProjectFilters = ({
                 <div className="p-6 space-y-6">
                   {/* Property Status */}
                   <FilterSection title="Property Status" icon={<span className="text-lg">📅</span>}>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="space-y-1">
                       {HANDOVER_OPTIONS.map((option) => {
                         const isActive = (option.value === "all" && filters.handoverStatus === null) || filters.handoverStatus === option.value;
                         return (
@@ -487,13 +487,13 @@ const ProjectFilters = ({
                                 filters.handoverStatus === option.value ? null : option.value
                               )
                             }
-                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                : "text-black hover:bg-champagne-light"
                             }`}
                           >
-                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-gold/40 bg-white'}`}>
                               {isActive && <Check className="w-3 h-3 text-white" />}
                             </span>
                             {option.label}
@@ -603,7 +603,7 @@ const ProjectFilters = ({
 
                   {/* Bedrooms */}
                   <FilterSection title="Bedrooms" icon={<span className="text-lg">🛏️</span>}>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="space-y-1">
                       {BEDROOM_OPTIONS.map((option) => {
                         const isActive = (option.value === "all" && filters.bedroomsMin === null) ||
                           (option.value === "studio" && filters.bedroomsMin === 0) ||
@@ -619,13 +619,13 @@ const ProjectFilters = ({
                                 parseInt(option.value)
                               )
                             }
-                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                : "text-black hover:bg-champagne-light"
                             }`}
                           >
-                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-gold/40 bg-white'}`}>
                               {isActive && <Check className="w-3 h-3 text-white" />}
                             </span>
                             {option.label}
@@ -637,7 +637,7 @@ const ProjectFilters = ({
 
                   {/* Emirates / Location */}
                   <FilterSection title="Location / Emirate" icon={<MapPin className="w-5 h-5" />}>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="space-y-1">
                       {EMIRATES.map((emirate) => {
                         const isActive = (emirate.value === "all" && filters.emirate === null) || filters.emirate === emirate.value;
                         return (
@@ -650,13 +650,13 @@ const ProjectFilters = ({
                                 filters.emirate === emirate.value ? null : emirate.value
                               )
                             }
-                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                : "text-black hover:bg-champagne-light"
                             }`}
                           >
-                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-gold/40 bg-white'}`}>
                               {isActive && <Check className="w-3 h-3 text-white" />}
                             </span>
                             {emirate.label}
@@ -669,16 +669,16 @@ const ProjectFilters = ({
                   {/* Trending Areas */}
                   {filteredTrendingAreas && filteredTrendingAreas.length > 0 && (
                     <FilterSection title="Trending Areas" icon={<Sparkles className="w-5 h-5" />}>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="space-y-1">
                         <button
                           onClick={() => updateFilter("trendingArea", null)}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                          className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                             filters.trendingArea === null
-                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                              : "text-black hover:bg-champagne-light"
                           }`}
                         >
-                          <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${filters.trendingArea === null ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                          <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${filters.trendingArea === null ? 'bg-gold border-gold' : 'border-gold/40 bg-white'}`}>
                             {filters.trendingArea === null && <Check className="w-3 h-3 text-white" />}
                           </span>
                           All Areas
@@ -694,13 +694,13 @@ const ProjectFilters = ({
                                   filters.trendingArea === area.slug ? null : area.slug
                                 )
                               }
-                              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                              className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                                 isActive
-                                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                                  : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                  : "text-black hover:bg-champagne-light"
                               }`}
                             >
-                              <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                              <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-gold/40 bg-white'}`}>
                                 {isActive && <Check className="w-3 h-3 text-white" />}
                               </span>
                               {area.name}
@@ -728,7 +728,7 @@ const ProjectFilters = ({
 
                   {/* Furnished Status */}
                   <FilterSection title="Furnishing" icon={<Sofa className="w-5 h-5" />}>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="space-y-1">
                       {FURNISHED_OPTIONS.map((option) => {
                         const isActive = (option.value === "all" && filters.furnishedStatus === null) || filters.furnishedStatus === option.value;
                         return (
@@ -741,13 +741,13 @@ const ProjectFilters = ({
                                 filters.furnishedStatus === option.value ? null : option.value
                               )
                             }
-                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                : "text-black hover:bg-champagne-light"
                             }`}
                           >
-                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-gold/40 bg-white'}`}>
                               {isActive && <Check className="w-3 h-3 text-white" />}
                             </span>
                             {option.label}
@@ -759,16 +759,16 @@ const ProjectFilters = ({
 
                   {/* Views */}
                   <FilterSection title="Views" icon={<Eye className="w-5 h-5" />}>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="space-y-1">
                       <button
                         onClick={() => updateFilter("views", [])}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                           filters.views.length === 0
-                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                            : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                            : "text-black hover:bg-champagne-light"
                         }`}
                       >
-                        <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${filters.views.length === 0 ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${filters.views.length === 0 ? 'bg-gold border-gold' : 'border-gold/40 bg-white'}`}>
                           {filters.views.length === 0 && <Check className="w-3 h-3 text-white" />}
                         </span>
                         All
@@ -779,13 +779,13 @@ const ProjectFilters = ({
                           <button
                             key={view}
                             onClick={() => toggleArrayFilter("views", view)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                : "text-black hover:bg-champagne-light"
                             }`}
                           >
-                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-gold/40 bg-white'}`}>
                               {isActive && <Check className="w-3 h-3 text-white" />}
                             </span>
                             {view}
@@ -797,16 +797,16 @@ const ProjectFilters = ({
 
                   {/* Amenities */}
                   <FilterSection title="Amenities" icon={<span className="text-lg">🏊</span>}>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="space-y-1">
                       <button
                         onClick={() => updateFilter("amenities", [])}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                           filters.amenities.length === 0
-                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                            : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                            : "text-black hover:bg-champagne-light"
                         }`}
                       >
-                        <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${filters.amenities.length === 0 ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${filters.amenities.length === 0 ? 'bg-gold border-gold' : 'border-gold/40 bg-white'}`}>
                           {filters.amenities.length === 0 && <Check className="w-3 h-3 text-white" />}
                         </span>
                         All
@@ -817,13 +817,13 @@ const ProjectFilters = ({
                           <button
                             key={amenity}
                             onClick={() => toggleArrayFilter("amenities", amenity)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                : "text-black hover:bg-champagne-light"
                             }`}
                           >
-                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-gold/40 bg-white'}`}>
                               {isActive && <Check className="w-3 h-3 text-white" />}
                             </span>
                             {amenity}
@@ -835,16 +835,16 @@ const ProjectFilters = ({
 
                   {/* Facilities */}
                   <FilterSection title="Facilities" icon={<span className="text-lg">🏢</span>}>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="space-y-1">
                       <button
                         onClick={() => updateFilter("facilities", [])}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                           filters.facilities.length === 0
-                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                            : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                            : "text-black hover:bg-champagne-light"
                         }`}
                       >
-                        <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${filters.facilities.length === 0 ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                        <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${filters.facilities.length === 0 ? 'bg-gold border-gold' : 'border-gold/40 bg-white'}`}>
                           {filters.facilities.length === 0 && <Check className="w-3 h-3 text-white" />}
                         </span>
                         All
@@ -855,13 +855,13 @@ const ProjectFilters = ({
                           <button
                             key={facility}
                             onClick={() => toggleArrayFilter("facilities", facility)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                : "text-black hover:bg-champagne-light"
                             }`}
                           >
-                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-zinc-300 bg-white'}`}>
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isActive ? 'bg-gold border-gold' : 'border-gold/40 bg-white'}`}>
                               {isActive && <Check className="w-3 h-3 text-white" />}
                             </span>
                             {facility}
@@ -1047,9 +1047,9 @@ const FilterSection = ({
   children: React.ReactNode;
 }) => (
   <div>
-    <div className="flex items-center gap-2 text-white mb-3">
-      <span className="text-zinc-400">{icon}</span>
-      <h3 className="font-medium">{title}</h3>
+    <div className="flex items-center gap-2 text-black mb-3">
+      <span className="text-gold">{icon}</span>
+      <h3 className="font-medium text-black">{title}</h3>
     </div>
     {children}
   </div>
