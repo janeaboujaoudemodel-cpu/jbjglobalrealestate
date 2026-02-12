@@ -1,51 +1,32 @@
 
 
-## Fix Filter Bar Scroll Behavior, Save Filter UX, and Homepage Cleanup
+## Add Backdrop Blur to All Header Mega Menu Dropdowns
 
-### Problem 1: Filter bar reappears after scrolling past "Ready to Get Started"
+### Problem
+When hovering over the **Search**, **Language**, or **Account** icons, a blurred backdrop overlay appears behind the dropdown -- dimming and blurring the page content (including background videos). However, when hovering over the main navigation items (**Buy**, **Sell**, **Rent**, **Projects**, **Areas**, **Developers**, **Insights**), their mega menu panels open without any backdrop, leaving the background video fully visible and distracting.
 
-The `IntersectionObserver` currently sets `bottomReached` based on `entry.isIntersecting`. When the "Ready to Get Started" section scrolls into view, `bottomReached = true` and the filter bar hides. But once you scroll further down past it (into the footer), the section is no longer intersecting, so `bottomReached` goes back to `false` -- causing the filter bar to reappear.
+### Solution
+Add the same `backdrop-blur-sm` overlay to the main navigation mega menus, matching the utility menus exactly.
 
-**Fix**: Change the observer logic to check `entry.boundingClientRect.top < 0` (section has scrolled above viewport) in addition to `isIntersecting`. Once the section enters the viewport OR is above it, `bottomReached` stays true. This applies to:
+### Technical Details
 
-| File | Location |
-|------|----------|
-| `src/pages/DeveloperDetail.tsx` | Lines 66-77 |
-| `src/components/area-detail/AreaStickySearchBar.tsx` | Lines 42-54 |
-| `src/components/area-detail/AreaProjectsGrid.tsx` | Lines 73-85 |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Similar observer logic |
+**File: `src/components/GlobalHeader.tsx`**
 
-The fix for each: change the observer callback from `setBottomReached(entry.isIntersecting)` to `setBottomReached(entry.isIntersecting || entry.boundingClientRect.top < 0)`. This ensures that once the "Ready to Get Started" section enters or passes above the viewport, the filter bar stays hidden for the remainder of the page.
+**Change 1 -- Add backdrop blur for main nav mega menus (around line 1400-1423)**
 
-### Problem 2: Save Filter needs delete confirmation
+Currently the main mega menu panels render without a backdrop. Add a `fixed inset-0 bg-black/40 backdrop-blur-sm` overlay (identical to the one at line 1491) before the mega menu panel content. This overlay will:
+- Cover the page below the header
+- Apply the same blur + dark tint effect
+- Close the menu when clicked (using `closeMegaMenu`)
 
-Currently, the delete button in the Saved Filters popover deletes immediately without confirmation.
+The existing invisible bridge zone and panel container stay the same -- only a backdrop div is inserted before them.
 
-**Fix in `src/components/filters/FilterShortcutBar.tsx`**:
-- Add a confirmation state (`confirmDeleteIndex`) to the `UtilityButtons` component
-- When the trash icon is clicked, instead of deleting immediately, show "Are you sure?" inline with Yes/No buttons
-- On "Yes", delete the filter; on "No", cancel
-- The heart icon for the "Saved" button is already red from the previous change
+**Change 2 -- Improve switching speed between menus (line 120)**
 
-### Problem 3: Save button should save current active filters
+The current close timeout is `120ms`. To make switching between nav items feel snappier, reduce this to `80ms`. This makes the transition between Buy -> Sell -> Rent feel more responsive while still providing enough buffer to prevent accidental closes.
 
-The save functionality already works correctly -- `handleSaveFilter` in FilterShortcutBar (line 162-166) saves the current `filters` state to localStorage with the user-provided name. This is already correct behavior.
-
-### Problem 4: Homepage hero FilterShortcutBar should be removed
-
-The user says the filter shortcuts in the homepage hero section should not be there -- they belong inside the filter panel. 
-
-**Fix in `src/components/home/HeroSearchBar.tsx`**:
-- Remove the `FilterShortcutBar` component and its import from the hero search bar (lines 1022-1029)
-- Remove the `shortcutFilters` state and related imports
-
-### Summary of files to change
+### Files Summary
 
 | File | Change |
 |------|--------|
-| `src/pages/DeveloperDetail.tsx` | Fix bottom sentinel to stay hidden past "Ready to Get Started" |
-| `src/components/area-detail/AreaStickySearchBar.tsx` | Same bottom sentinel fix |
-| `src/components/area-detail/AreaProjectsGrid.tsx` | Same bottom sentinel fix |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Same bottom sentinel fix |
-| `src/components/filters/FilterShortcutBar.tsx` | Add delete confirmation dialog for saved filters |
-| `src/components/home/HeroSearchBar.tsx` | Remove FilterShortcutBar from homepage hero |
+| `src/components/GlobalHeader.tsx` | Add backdrop blur overlay for main nav mega menus (Buy through Insights); reduce hover close timeout from 120ms to 80ms |
