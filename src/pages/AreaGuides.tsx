@@ -159,9 +159,9 @@ const AreaGuides = () => {
         </div>
       </section>
 
-      <section className="py-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-b border-gold/20">
-        <div className="container mx-auto px-4 space-y-4">
-          {/* Row 1: Full-width search bar */}
+      <section className="py-4 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-b border-gold/20">
+        <div className="container mx-auto px-4 space-y-3">
+          {/* Search input */}
           <div className="relative w-full max-w-2xl mx-auto">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
             <Input
@@ -180,7 +180,7 @@ const AreaGuides = () => {
             )}
           </div>
 
-          {/* Row 2: Emirates pills */}
+          {/* Emirates pills */}
           <div className="flex flex-wrap gap-2 justify-center">
             <button
               onClick={() => setSelectedEmirate("all")}
@@ -207,7 +207,7 @@ const AreaGuides = () => {
             ))}
           </div>
 
-          {/* Row 3: Sort buttons - equal width */}
+          {/* Sort toggles: Building2 (property count), Flame (trending), A-Z */}
           <div className="flex gap-2 justify-center max-w-xs mx-auto">
             <button
               onClick={() => setSortBy("property_count")}
@@ -216,6 +216,7 @@ const AreaGuides = () => {
                   ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black"
                   : "bg-white border border-gold/30 text-zinc-700"
               }`}
+              title="Sort by property count"
             >
               <Building2 className="w-4 h-4" />
             </button>
@@ -226,6 +227,7 @@ const AreaGuides = () => {
                   ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black"
                   : "bg-white border border-gold/30 text-zinc-700"
               }`}
+              title="Sort by trending"
             >
               <Flame className="w-4 h-4" />
             </button>
@@ -236,6 +238,7 @@ const AreaGuides = () => {
                   ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black"
                   : "bg-white border border-gold/30 text-zinc-700"
               }`}
+              title="Sort A-Z"
             >
               A-Z
             </button>

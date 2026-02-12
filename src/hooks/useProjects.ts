@@ -229,6 +229,7 @@ export function useProjectsListing() {
             developer:developers(id, name, slug, logo_url),
             community:communities(id, name, slug)
           `)
+          .not('cover_image_url', 'is', null)
           .order("created_at", { ascending: false })
           .range(offset, offset + PAGE_SIZE - 1);
         
