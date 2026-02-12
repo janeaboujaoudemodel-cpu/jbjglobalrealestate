@@ -1,96 +1,99 @@
 
 
-## Fix RecommendedProjects, Zero Projects, Map Mode, and Payment Plan Display
+## Fix AI Developer Analyzer Accuracy + Gold Clickable Developer Names
 
-### Issues Identified
+### Problem 1: Inaccurate Developer Data
 
-1. **RecommendedProjects imported but never rendered** in `ProjectDetailLayout.tsx` -- the component is imported (line 56) but `<RecommendedProjects>` is never used in the JSX.
+The `completed_projects` field in the database has wildly incorrect values for many major developers:
 
-2. **Zero projects on Properties page** -- The `useProjects()` hook joins `images` and `documents` tables for all 2400+ projects, likely hitting the default 1000-row limit or timing out. The listing page query needs to be lighter (no heavy joins) as noted in the architecture memory.
+| Developer | Current Value | Correct Value (approx.) |
+|-----------|--------------|------------------------|
+| Emaar | NULL | 80,000+ |
+| DAMAC | NULL | 40,000+ |
+| Nakheel | 70 | 80,000+ |
+| Sobha | NULL | 25,000+ |
+| Binghatti | 40 | 7,000+ |
+| Meraas | 25 | 15,000+ |
+| Azizi | NULL | 10,000+ |
+| Danube | NULL | 8,000+ |
+| Ellington | NULL | 3,000+ |
+| Aldar | NULL | 35,000+ |
+| Omniyat | 8,000 | 2,500+ |
+| Select Group | 12,000 | 5,000+ |
+| Dubai Properties | 28,000 | 35,000+ |
+| Al Habtoor | NULL | 5,000+ |
+| Deyaar | NULL | 12,000+ |
+| Samana | NULL | 2,000+ |
+| MAG Group | NULL | 6,000+ |
 
-3. **Map button not working visually** -- The split-screen code exists in `Properties.tsx` (line 1153) but likely fails because zero projects load (see issue 2). Once projects load, the map mode should work.
+**Fix**: Run a database migration to update `completed_projects` for all major developers with researched, accurate figures.
 
-4. **Payment plan format** -- Currently shows "20/40/40" but user wants just the numbers without percent signs (confirmed already correct), displayed on ALL external cards including homepage "Handpicked For You" section.
+### Problem 2: AI Analyzer Using Generic Area Prompt for Developers
 
-5. **Payment plan on FeaturedListings (homepage)** -- The `useFeaturedProjects` query does NOT select `payment_breakdown`, so the data is missing. Need to add it to the query and render it next to the handover date.
+The `DeveloperAIAnalyzer` calls `ai-property-analyzer` with `area: developerName`, which uses an area-focused prompt ("Analyze X, Dubai for Y properties"). This produces area-style analysis instead of developer-specific intelligence.
 
-### Plan
+**Fix**: Create a dedicated edge function `ai-developer-analyzer` with a developer-specific system prompt that:
+- Focuses on developer track record, portfolio quality, delivery history
+- Uses the correct `completed_projects` count from the database
+- Asks for developer-specific sections: Company Overview, Portfolio Analysis, Track Record, Financial Strength, Price Positioning, Investment Metrics, Pros, Cons, Rating
 
-#### 1. Fix useProjects to NOT join heavy tables for listing queries
+### Problem 3: Developer Name Not Gold/Clickable in AI Analyzers
 
-**File: `src/hooks/useProjects.ts`**
-
-Create a new lightweight hook `useProjectsListing()` that selects only the columns needed for cards (no `images`, no `documents` joins). The Properties page will use this instead of `useProjects()`. This fixes the zero projects issue.
-
-Alternatively, add `.limit(2500)` to the existing `useProjects` query and remove the `images`/`documents` joins for the listing query only.
-
-Change the select to:
-```
-*, developer:developers(id, name, slug, logo_url), community:communities(id, name, slug)
-```
-
-Remove `images:project_images(...)` and `documents:project_documents(...)` from the listing query -- these are only needed on detail pages. Add `.limit(2500)` to handle the full dataset.
-
-**File: `src/pages/Properties.tsx`** -- Use the lighter query.
-
-#### 2. Render RecommendedProjects in ProjectDetailLayout
-
-**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
-
-Find the appropriate location (after the main content, before footer/contact section) and add:
+In `DeveloperAIAnalyzer.tsx` line 419, the developer name is rendered as:
 ```tsx
-<RecommendedProjects
-  currentProjectId={project.id}
-  currentDeveloperId={project.developer_id}
-  currentLocation={project.location}
-  currentEmirate={project.emirate}
-/>
+<span className="font-semibold text-black">{developerName}</span>
 ```
+It should use `DeveloperLink` with gold color and hover underline.
 
-#### 3. Add payment_breakdown to FeaturedListings query and display it
+Same check needed for all places where developer names appear in AI analyzer sections.
 
-**File: `src/components/home/FeaturedListings.tsx`**
+---
 
-- Add `payment_breakdown` to the `FeaturedProject` interface
-- Add `payment_breakdown` to the Supabase select query
-- In the ProjectCard component, display the payment plan next to the handover date (left side of the row) as a small gold badge showing just the numbers joined by `/` (e.g., "20/40/40")
+### Changes
 
-The handover row (lines 251-262) will become:
-```tsx
-<div className="flex items-end justify-between mt-2 min-h-[36px]">
-  {/* Payment Plan - Left */}
-  {paymentSummary && (
-    <span className="inline-flex items-center gap-1 text-xs font-semibold text-gold bg-gold/10 border border-gold/30 rounded-full px-2 py-0.5">
-      <CreditCard className="w-3 h-3" />
-      {paymentSummary}
-    </span>
-  )}
-  {/* Handover - Right */}
-  {project.handover_date && (
-    <span className="text-orange-500 text-xs font-bold">{project.handover_date}</span>
-  )}
-</div>
-```
+#### 1. Database Migration -- Fix completed_projects for Major Developers
 
-#### 4. Payment plan on RecommendedProjects cards
+Update the `completed_projects` column for ~20 major developers with accurate, researched unit delivery numbers.
 
-**File: `src/components/project-detail/RecommendedProjects.tsx`**
+#### 2. New Edge Function: `ai-developer-analyzer`
 
-The `useProjects()` hook already includes `payment_breakdown` via `*`. Add payment plan badge to each recommended project card, matching the same format (numbers joined by `/`).
+Create `supabase/functions/ai-developer-analyzer/index.ts` with a developer-specific prompt:
+- System prompt focused on developer analysis (not area analysis)
+- Accepts: `developerName`, `completedProjects`, `foundedYear`, `headquarters`, `activeProjects`, `projectCount`
+- Sections: Company Overview, Portfolio Strength, Track Record and Delivery, Price Per Sqft Positioning, Supply Pipeline, Investment Metrics, Pros, Cons, Investment Rating
+- Uses the shared `ai-utils.ts` for AI calls
 
-### Files to Change
+#### 3. Update `DeveloperAIAnalyzer.tsx`
 
-| File | Change |
-|------|--------|
-| `src/hooks/useProjects.ts` | Create `useProjectsListing()` with lighter query (no images/docs joins, add logo_url to developer, add limit 2500) |
-| `src/pages/Properties.tsx` | Use `useProjectsListing()` instead of `useProjects()` |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Add `<RecommendedProjects>` to the JSX |
-| `src/components/home/FeaturedListings.tsx` | Add `payment_breakdown` to query + interface; display payment plan badge next to handover |
-| `src/components/project-detail/RecommendedProjects.tsx` | Add payment plan badge to recommended project cards |
+- Change the API call from `ai-property-analyzer` to `ai-developer-analyzer`
+- Pass all developer context fields directly (not crammed into `area` string)
+- Replace `<span className="font-semibold text-black">{developerName}</span>` with `DeveloperLink` component (gold, hover underline, clickable)
+- Import `DeveloperLink` from `@/components/ui/developer-link`
+- Also update the "AI is analyzing..." and "AI analysis ready for..." text to use `DeveloperLink`
+- Add `developerSlug` prop to the component interface
+
+#### 4. Update `DeveloperDetail.tsx`
+
+- Pass the new `developerSlug` prop to `DeveloperAIAnalyzer`
+
+### Files to Create
+
+| File | Purpose |
+|------|---------|
+| `supabase/functions/ai-developer-analyzer/index.ts` | Developer-specific AI analysis edge function with accurate prompt |
+
+### Files to Edit
+
+| File | Changes |
+|------|---------|
+| `src/components/developer/DeveloperAIAnalyzer.tsx` | Use new edge function, add `developerSlug` prop, use `DeveloperLink` for all developer name displays |
+| `src/pages/DeveloperDetail.tsx` | Pass `developerSlug` to `DeveloperAIAnalyzer` |
+
+### Database Migration
+
+Update `completed_projects` for ~20 major developers with accurate numbers.
 
 ### Result
-- Properties page will load all 2400+ projects (lighter query, no timeouts)
-- Map mode will work because projects will actually load
-- RecommendedProjects will render on project detail pages
-- Payment plan (real data only, format: "20/40/40") will show on homepage featured cards, properties listing cards, and recommended project cards
-
+- AI analyzer will produce accurate, developer-focused intelligence (not area-style analysis)
+- Developer names will appear in gold with hover underline, clickable to `/developer/:slug`
+- Quick stats will show correct unit delivery numbers (e.g., Binghatti: 7,000+ instead of 40)
