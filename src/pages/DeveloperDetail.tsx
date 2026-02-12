@@ -455,8 +455,8 @@ const DeveloperDetail = () => {
           )}
         </div>
 
-        {/* Divider before DLD Market Widget */}
-        <SectionDivider fullWidth />
+        {/* Divider before DLD Market Widget — champagne bg to match page */}
+        <SectionDivider fullWidth bg="bg-transparent" />
 
         {/* DLD Market Widget - Live transaction data */}
         <DLDMarketWidget />
