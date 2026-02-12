@@ -1,53 +1,37 @@
 
 
-## Fix: Two-Phase Filter Bar — Inline First, Then Fixed on Scroll
+## Fix: Filter Bar Shows on Load Because Sentinel Below Viewport = "Not Intersecting"
 
-### Current Problem
+### Root Cause
 
-The bar is completely hidden on page load and only appears as a fixed bar when scrolled. It skips the inline phase entirely. The user wants:
+The `IntersectionObserver` callback does `setIsFixed(!entry.isIntersecting)`. On page load, the sentinel (`placeholderRef`) sits inside the projects section which is far below the viewport (the hero is full-screen). Since the sentinel is not visible, `isIntersecting` is `false`, so `isFixed` becomes `true` immediately -- showing the fixed bar under the header before the user has scrolled at all.
 
-1. Hero section visible: no bar
-2. Scroll to "Projects in JVC": bar visible **inline** in its natural position within the section
-3. Scroll past the bar: bar becomes **fixed under the header**
+### Fix (single file: `src/components/area-detail/AreaProjectsGrid.tsx`)
 
-### Changes (single file: `src/components/area-detail/AreaProjectsGrid.tsx`)
+Change the observer callback to check the sentinel's vertical position. The bar should only be fixed when the sentinel has scrolled **above** the header (i.e., the user scrolled past it going down), NOT when the sentinel is below the viewport (page just loaded).
 
-**A) Always render the filter bar inline in the projects section**
+**Line 60 change:**
 
-The filter bar content will always be rendered in its natural document flow position, right after the "Projects in [Area]" heading. This means when the user scrolls to the projects section, they see the bar naturally.
-
-**B) Use the sentinel (placeholderRef) at the bar's position to detect when it leaves the viewport**
-
-Move `placeholderRef` to sit right at/above the inline bar. When the sentinel scrolls out of view (past the header), `isFixed` becomes true.
-
-**C) When `isFixed` is true, ALSO render the portal copy**
-
-The inline bar stays in the DOM (it's part of the section). The fixed portal copy appears on top. This gives seamless transition — the bar is always visible once you reach the projects section, and it pins under the header when you scroll past.
-
-### Technical Details
-
-```text
-Layout structure:
-  <h2>Projects in JVC</h2>
-  <div ref={placeholderRef} />     <!-- sentinel for observer -->
-  <div className="py-3 ...">      <!-- inline bar, always rendered -->
-    {filterBarContent}
-  </div>
-  {isFixed && createPortal(        <!-- fixed copy, only when scrolled past -->
-    <div className="fixed top-24 ...">
-      {filterBarContent}
-    </div>,
-    document.body
-  )}
-  <div className="grid ...">      <!-- project cards -->
+Replace:
+```js
+([entry]) => setIsFixed(!entry.isIntersecting)
 ```
 
-**Key behavior:**
-- The `placeholderRef` sentinel sits just above the inline bar
-- IntersectionObserver rootMargin stays at `-140px` (accounts for header height)
-- When sentinel leaves viewport: `isFixed = true`, portal renders fixed bar under header
-- When user scrolls back up: `isFixed = false`, portal disappears, inline bar is naturally visible
-- No height measurement needed since inline bar is always in the DOM
+With:
+```js
+([entry]) => {
+  // Only fix the bar when sentinel has scrolled ABOVE the header area
+  // (boundingClientRect.top < ~140px means it's past the header)
+  // When sentinel is below viewport (initial load), don't fix
+  setIsFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
+}
+```
 
-**No other files need changes.**
+This single condition change ensures:
+- Page load (sentinel far below viewport): `isIntersecting=false` but `top > 140` --> `isFixed = false` (bar hidden)
+- Scrolled to projects section: sentinel enters viewport --> `isIntersecting=true` --> `isFixed = false` (inline bar visible naturally)
+- Scrolled past sentinel (past header): `isIntersecting=false` and `top < 140` --> `isFixed = true` (fixed bar appears)
+- Scroll back up: sentinel re-enters viewport --> `isIntersecting=true` --> `isFixed = false` (back to inline)
+
+No other changes needed. Single line fix.
 
