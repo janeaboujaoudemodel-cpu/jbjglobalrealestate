@@ -1,50 +1,42 @@
 
 
-## Two Changes
+## Developer Detail Page: DLD Market Widget + Premium AI Analyzer
 
-### 1. Hide the fixed filter/search bar when scrolling reaches "Ready to Get Started"
+### What will change
 
-The area page (`AreaProjectsGrid`) and the developer page (`DeveloperDetail`) both render a fixed filter bar via `createPortal` when the user scrolls past the projects section. Currently these bars stay visible all the way to the bottom of the page.
+**1. Add DLD Market Widget to Developer Detail Page**
+- Import and render the existing `DLDMarketWidget` component (same one used on Area Detail pages) inside the developer detail page
+- Place it after the projects grid and before the AI Analyzer
+- The widget already displays live YTD 2026 DLD transaction data (volume, transactions, top areas, buyer nationalities) and updates its "As of" date dynamically on each page load
+- The data comes from `dldMarketData.ts` constants -- when these constants are updated, every page showing the widget reflects the new numbers instantly
 
-**Solution:** Add a second IntersectionObserver (a "bottom sentinel") that watches the `CombinedContactNewsletter` section rendered in `MainLayout`. When the "Ready to Get Started" section enters the viewport, set a flag that hides the fixed bar.
+**2. Move AI Analyzer Before the Projects Grid**
+- Currently the `DeveloperAIAnalyzer` is rendered after the projects section
+- Move it to render before the Emirates Tabs / projects section (after the developer header + map, before the filter bar)
 
-**Files to change:**
+**3. Upgrade AI Analyzer to Premium Visual Charts**
+- Replace the current plain-text card layout in `DeveloperAIAnalyzer.tsx` with the same premium chart components used in `AreaAIAnalyzer.tsx`:
+  - **Price Per Sqft**: BarChart with historical trend + projection + YoY badge
+  - **Supply vs Demand**: AreaChart with gold (supply) and emerald (demand) gradient fills + market status badge
+  - **Investment Metrics**: Horizontal BarChart with Rental Yield, Cap Rate, Appreciation, Occupancy
+  - **Portfolio Strength**: Developer landscape card with styled entries
+  - **Rating**: Radial PieChart gauge (gold arc on black background) with quality label
+  - **Overview**: Enhanced card with icon header and community profile subtitle
+  - **Pros/Cons**: Same emerald/red styled cards
+- All chart components (PricePerSqftChart, SupplyDemandChart, InvestmentMetricsChart, DeveloperLandscapeCard) and their parsing functions will be copied from `AreaAIAnalyzer.tsx` into the developer analyzer, adapted with developer-specific labels (e.g., "Developer Overview" instead of "Area Overview", "Portfolio Profile" subtitle)
 
-- **`src/components/area-detail/AreaProjectsGrid.tsx`** -- Add a second ref targeting an element near the end of the projects section (or the footer area). Use a second IntersectionObserver that sets `isFixed = false` when the bottom sentinel is visible. The portal render condition becomes `isFixed && !bottomReached`.
+### Files to change
 
-- **`src/components/area-detail/AreaStickySearchBar.tsx`** -- Same pattern: add a bottom sentinel observer. When the "Ready to Get Started" section enters the viewport, hide the sticky bar. Since this component does not have direct access to the CTA section, we will observe a DOM query (`document.querySelector('.combined-contact-newsletter')` or similar) by adding a stable class name to the CombinedContactNewsletter wrapper.
-
-- **`src/pages/DeveloperDetail.tsx`** -- Same pattern for the developer page fixed filter portal.
-
-- **`src/components/CombinedContactNewsletter.tsx`** -- Add a stable `id="ready-to-get-started"` to the outer `<section>` element so all sticky bars can observe it.
-
-### 2. Add JBJ AI Analyzer to the Developer Detail page
-
-The developer page currently has no AI analyzer. The area page has `AreaAIAnalyzer` and the project page has `ProjectAIAnalyzer`. We will create a `DeveloperAIAnalyzer` component following the same pattern as `ProjectAIAnalyzer` (simpler card-based layout).
-
-**What it does:** When the section scrolls into view, it auto-triggers the existing `ai-property-analyzer` edge function with a developer-focused context string (developer name, founded year, headquarters, number of projects, etc.). The AI returns structured sections (Overview, Portfolio Strength, Investment Metrics, Pros, Cons, Rating) which are rendered in the same card grid layout.
-
-**Files to create/change:**
-
-- **New: `src/components/developer/DeveloperAIAnalyzer.tsx`** -- A new component modeled after `ProjectAIAnalyzer`. Props: `developerName`, `foundedYear`, `headquarters`, `completedProjects`, `activeProjects`, `projectCount`. Uses the same `ai-property-analyzer` edge function with a developer-focused context string. Same section extraction, rating display, pros/cons cards, and JBJ branding footer.
-
-- **`src/pages/DeveloperDetail.tsx`** -- Import and render `DeveloperAIAnalyzer` after the projects grid section (before the closing `</div>`), passing the developer's metadata as props.
+| File | Action |
+|------|--------|
+| `src/pages/DeveloperDetail.tsx` | Import `DLDMarketWidget`, move `DeveloperAIAnalyzer` above projects section, add DLD widget after projects |
+| `src/components/developer/DeveloperAIAnalyzer.tsx` | Full rewrite with recharts-based premium chart components matching the Area AI Analyzer visual standard |
 
 ### Technical Details
 
-**Bottom sentinel approach for hiding fixed bars:**
+- **DLD Widget placement**: Rendered after the projects grid `</div>` and before the AI analyzer, using `<DLDMarketWidget />` with no `highlightArea` prop (developer pages are not area-specific)
+- **Chart dependencies**: `recharts` is already installed (`BarChart`, `Bar`, `XAxis`, `YAxis`, `CartesianGrid`, `Tooltip`, `ResponsiveContainer`, `Cell`, `AreaChart`, `Area`, `PieChart`, `Pie`)
+- **Parsing functions**: `parsePricePerSqftMetrics`, `parseInvestmentMetrics`, `parseSupplyDemandMetrics` will be included in the developer analyzer file, adapted to work with developer context
+- **Section order on page**: Hero -> Developer Header + Stats -> Map -> AI Analyzer -> Emirates Tabs + Filter + Projects Grid -> DLD Market Widget
+- **No backend changes**: Uses the same `ai-property-analyzer` edge function and `dldMarketData.ts` constants
 
-```text
-  [Projects Grid]
-       |
-  [Fixed filter visible while scrolling here]
-       |
-  [CombinedContactNewsletter #ready-to-get-started]  <-- second observer target
-       |
-  [Footer]
-```
-
-- Each component with a fixed bar will query `document.getElementById('ready-to-get-started')` inside a `useEffect` and attach an IntersectionObserver to it.
-- When the element enters the viewport (even partially), the fixed bar hides with a fade-out transition.
-
-**DeveloperAIAnalyzer** reuses the existing `ai-property-analyzer` edge function -- no new backend function needed. The context string will be formatted as: `"Developer: {name}. Founded: {year}. HQ: {headquarters}. Projects: {count}. Completed: {completed}."` which the AI model will use to generate a developer-focused analysis.
