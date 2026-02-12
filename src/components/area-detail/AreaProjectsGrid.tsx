@@ -22,6 +22,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   const [bedroomFilter, setBedroomFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [isFixed, setIsFixed] = useState(false);
+  const [bottomReached, setBottomReached] = useState(false);
   const placeholderRef = useRef<HTMLDivElement>(null);
 
   const { data: projects, isLoading } = useQuery({
@@ -65,6 +66,19 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, [hasProjects]);
+
+  // Bottom sentinel: hide fixed bar when "Ready to Get Started" enters viewport
+  useEffect(() => {
+    const target = document.getElementById('ready-to-get-started');
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setBottomReached(entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
 
   const statusOptions = useMemo(() => {
     if (!projects) return [];
@@ -304,7 +318,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
           </div>
 
           {/* Phase 2: Fixed portal copy — only when scrolled past sentinel */}
-          {isFixed && createPortal(
+          {isFixed && !bottomReached && createPortal(
             <div
               className="fixed top-24 sm:top-28 lg:top-32 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200"
             >

@@ -12,6 +12,7 @@ interface AreaStickySearchBarProps {
 export const AreaStickySearchBar = ({ areaName, areaSlug }: AreaStickySearchBarProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSticky, setIsSticky] = useState(false);
+  const [bottomReached, setBottomReached] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -36,6 +37,21 @@ export const AreaStickySearchBar = ({ areaName, areaSlug }: AreaStickySearchBarP
     return () => observer.disconnect();
   }, []);
 
+  // Bottom sentinel: hide when "Ready to Get Started" enters viewport
+  useEffect(() => {
+    const target = document.getElementById('ready-to-get-started');
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setBottomReached(entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
+
+  const showSticky = isSticky && !bottomReached;
+
   return (
     <>
       {/* Sentinel element - when this scrolls out of view, the bar becomes sticky */}
@@ -44,12 +60,12 @@ export const AreaStickySearchBar = ({ areaName, areaSlug }: AreaStickySearchBarP
       {/* Sticky search bar */}
       <div
         className={`w-full z-40 transition-all duration-300 ${
-          isSticky
+          showSticky
             ? "fixed top-24 sm:top-28 lg:top-32 left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg border-b border-gold/20 py-3 z-[9998]"
             : ""
         }`}
       >
-        <form onSubmit={handleSearch} className={`${isSticky ? "container mx-auto px-4" : ""} max-w-xl ${isSticky ? "" : "mb-8"}`}>
+        <form onSubmit={handleSearch} className={`${showSticky ? "container mx-auto px-4" : ""} max-w-xl ${showSticky ? "" : "mb-8"}`}>
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
@@ -57,7 +73,7 @@ export const AreaStickySearchBar = ({ areaName, areaSlug }: AreaStickySearchBarP
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={`Search properties in ${areaName}...`}
               className={`pl-12 pr-32 py-6 border-0 text-base rounded-xl shadow-2xl ${
-                isSticky
+                showSticky
                   ? "bg-muted text-foreground"
                   : "bg-white/95 backdrop-blur-sm text-black"
               }`}
