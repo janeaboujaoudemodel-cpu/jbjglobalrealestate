@@ -335,7 +335,7 @@ const ProjectFilters = ({
           <SheetTrigger asChild>
             <Button
               variant="outline"
-              className="h-14 px-6 bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a] hover:text-white rounded-xl"
+              className="h-14 px-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/60 text-black hover:border-gold hover:bg-[#F5F0E6] rounded-xl"
             >
               <SlidersHorizontal className="w-5 h-5 mr-2" />
               Filters
@@ -871,17 +871,17 @@ const ProjectFilters = ({
               <button
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
                   filters.priceMin > 0 || filters.priceMax < PRICE_MAX
-                    ? "bg-white text-black"
-                    : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a] border border-[#2a2a2a]"
+                    ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                    : "bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50 hover:bg-white"
                 }`}
               >
                 Price
                 <ChevronDown className="w-4 h-4" />
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-80 p-4 bg-[#1a1a1a] border-[#2a2a2a]" align="start">
+            <PopoverContent className="w-80 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40" align="start">
               <div className="space-y-4">
-                <p className="text-white font-medium">Price Range</p>
+                <p className="text-black font-medium">Price Range</p>
                 <Slider
                   value={[filters.priceMin, filters.priceMax]}
                   min={PRICE_MIN}
@@ -896,7 +896,7 @@ const ProjectFilters = ({
                   }}
                   className="mb-2"
                 />
-                <div className="flex justify-between text-gray-400 text-sm">
+                <div className="flex justify-between text-zinc-600 text-sm">
                   <span>AED {formatPrice(filters.priceMin)}</span>
                   <span>AED {formatPrice(filters.priceMax)}</span>
                 </div>
@@ -908,15 +908,15 @@ const ProjectFilters = ({
               <button
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
                   filters.bedroomsMin !== null
-                    ? "bg-white text-black"
-                    : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a] border border-[#2a2a2a]"
+                    ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                    : "bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50 hover:bg-white"
                 }`}
               >
                 Beds
                 <ChevronDown className="w-4 h-4" />
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-64 p-4 bg-[#1a1a1a] border-[#2a2a2a]" align="start">
+            <PopoverContent className="w-64 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40" align="start">
               <div className="flex flex-wrap gap-2">
                 {BEDROOM_OPTIONS.map((option) => (
                   <button
@@ -933,8 +933,8 @@ const ProjectFilters = ({
                       (option.value === "all" && filters.bedroomsMin === null) ||
                       (option.value === "studio" && filters.bedroomsMin === 0) ||
                       filters.bedroomsMin === parseInt(option.value)
-                        ? "bg-white text-black"
-                        : "bg-[#0d0d0d] text-gray-300 hover:bg-[#2a2a2a]"
+                        ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold shadow-sm"
+                        : "bg-white/90 text-zinc-700 border border-gold/20 hover:border-gold/40"
                     }`}
                   >
                     {option.label}
