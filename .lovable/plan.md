@@ -1,25 +1,89 @@
 
 
-## Fix: Visual Separation Between Filters and Area Cards
+## Enrich All 540 Developers with Real, Accurate Information
 
-### Problem
-The filter area and the cards grid share the exact same champagne gradient background with no visual break between them. This makes the page look like one flat, undifferentiated layer. The `</section>` closing tag for the filter section was also accidentally removed in the last edit, breaking the HTML structure.
+### Current State
+- **540 developers** in the database
+- Only **16** have `founded_year` filled
+- Only **26** have `completed_projects` filled  
+- Most have descriptions but many are generic or AI-generated without research
+- Missing key fields: website, CEO/chairman, contractor info, total units delivered, upcoming pipeline
 
-### Solution
-Split them into two visually distinct zones:
+### What We Will Do
 
-1. **Filter zone** (search, pills, sort, shortcut bar): Keep the current lighter champagne gradient (`from-champagne-light via-champagne to-champagne-dark`)
-2. **Gold divider line**: Add a thin `border-b border-gold/30` at the bottom of the filter section for a clean visual break
-3. **Cards grid zone**: Use a slightly darker/warmer champagne tone (`from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]`) so the two areas are clearly different layers
+**Step 1: Add new columns to the developers table**
 
-### Technical Changes
+New columns to capture richer developer profiles:
+- `website_url` (text) -- official website
+- `ceo_name` (text) -- CEO or Chairman name
+- `total_units_delivered` (integer) -- lifetime units handed over
+- `upcoming_units` (integer) -- units in pipeline / under construction
+- `expected_completion_year` (integer) -- next major handover year
+- `notable_projects` (text) -- comma-separated list of signature projects
+- `parent_company` (text) -- parent group if applicable (e.g., Dubai Holding for Meraas)
+- `license_number` (text) -- RERA or DED license if known
+- `specialization` (text) -- e.g., "Luxury", "Affordable", "Mixed-use", "Waterfront"
 
-**File: `src/pages/AreaGuides.tsx`**
+**Step 2: Create a new edge function `enrich-developer-data`**
 
-- **Close the filter `<section>` tag** properly after `FilterShortcutBar` (line 293) -- restore the `</section>` that was removed
-- **Add `border-b border-gold/30`** to the filter section for a subtle gold line separator
-- **Wrap the cards grid** in its own `<section>` with a slightly darker champagne gradient (`from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]`) so it reads as a distinct layer
-- Fix indentation of the grid `<div>` which is currently misaligned
+This function will:
+1. Fetch developers with missing data (batch by batch, 5 at a time)
+2. For each developer, use AI (Gemini 2.5 Flash) to research and return structured JSON with all the fields above
+3. The AI prompt will explicitly instruct: "Only return information you are confident is factually accurate. If unsure, leave the field null."
+4. Update the database row with the researched data
+5. Return progress so it can be called repeatedly until all 540 are processed
 
-This gives a clear two-tone layout: lighter champagne for controls, slightly warmer/darker champagne for results, separated by a thin gold line.
+The function uses the already-configured `LOVABLE_API_KEY` -- no new secrets needed.
+
+**Step 3: Update the DeveloperInfoCard UI**
+
+Show the new data points in the developer profile card:
+- Website link
+- CEO/Chairman name
+- Total units delivered stat
+- Upcoming units / expected completion
+- Notable projects list
+- Specialization badge
+
+**Step 4: Update the developer detail page**
+
+Ensure the developer profile page also displays the enriched fields.
+
+### Technical Details
+
+**Database Migration SQL:**
+```sql
+ALTER TABLE developers
+  ADD COLUMN IF NOT EXISTS website_url text,
+  ADD COLUMN IF NOT EXISTS ceo_name text,
+  ADD COLUMN IF NOT EXISTS total_units_delivered integer,
+  ADD COLUMN IF NOT EXISTS upcoming_units integer,
+  ADD COLUMN IF NOT EXISTS expected_completion_year integer,
+  ADD COLUMN IF NOT EXISTS notable_projects text,
+  ADD COLUMN IF NOT EXISTS parent_company text,
+  ADD COLUMN IF NOT EXISTS license_number text,
+  ADD COLUMN IF NOT EXISTS specialization text;
+```
+
+**Edge Function: `enrich-developer-data`**
+- Processes 5 developers per call (to stay within timeout limits)
+- Uses `google/gemini-2.5-flash` for balanced accuracy and speed
+- AI prompt asks for structured JSON response with all fields
+- Only updates fields that are currently null (preserves existing accurate data)
+- Supports `mode=check` to preview which developers need enrichment
+- Returns `next_offset` for sequential batch processing
+
+**AI Prompt Strategy:**
+The prompt will include the developer name, their known projects from the `projects` table, and current partial data. It will ask for real, verifiable facts only -- no fabrication. Fields the AI is uncertain about will be left null rather than guessed.
+
+**Files to create/modify:**
+- `supabase/functions/enrich-developer-data/index.ts` (new)
+- `src/components/project-detail/DeveloperInfoCard.tsx` (update UI)
+- Database migration (new columns)
+
+### Important Notes
+- This will need to be called multiple times (540 developers / 5 per batch = ~108 calls) to process all developers
+- Each call takes ~30-60 seconds due to AI processing
+- Existing accurate data (like the 16 developers with founded_year) will NOT be overwritten
+- The AI may not find information for very small/obscure developers -- those fields will remain null, which is better than fake data
 
