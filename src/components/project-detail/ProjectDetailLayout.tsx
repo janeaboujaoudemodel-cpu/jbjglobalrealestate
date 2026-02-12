@@ -234,6 +234,16 @@ export default function ProjectDetailLayout({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Signal GlobalHeader to hide when sticky sub-nav is active
+  useEffect(() => {
+    if (showStickyNav) {
+      document.body.classList.add('filter-bar-fixed');
+    } else {
+      document.body.classList.remove('filter-bar-fixed');
+    }
+    return () => document.body.classList.remove('filter-bar-fixed');
+  }, [showStickyNav]);
+
   // Filter and normalize images (remove broken/placeholder URLs)
   const images = useMemo(() => {
     const raw = project.images?.filter((i) => i.url) || [];
@@ -567,52 +577,37 @@ export default function ProjectDetailLayout({
 
       {/* STICKY SUB-NAVIGATION - Appears on scroll */}
       <div 
-        className={`fixed top-20 sm:top-24 lg:top-28 left-0 right-0 z-[9999] transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
           showStickyNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
         }`}
       >
-        <div className="bg-black border-b border-gold/30 shadow-lg">
+        <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8] border-b border-gold/30 shadow-md">
           <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between gap-4">
-              {/* Tab Navigation */}
-              <div className="flex-1 overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'contain' }}>
-                <div className="flex items-center gap-1 py-2">
-                  {visibleTabs.map((tab) => (
-                    <button
-                      key={tab.id}
-                      onClick={() => handleTabClick(tab.id)}
-                      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap min-w-fit transition-all ${
-                        activeTab === tab.id
-                          ? "bg-gold/10 text-gold border border-gold/30"
-                          : "text-gold/60 hover:text-gold hover:bg-gold/5"
-                      }`}
-                    >
-                      <tab.icon className="w-4 h-4" />
-                      <span>{tab.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="flex items-center gap-2 shrink-0 py-2">
-                <Button 
-                  variant="primary" 
-                  size="sm"
-                  onClick={scrollToInquiry}
-                >
-                  Register Interest
-                </Button>
-                {brochurePrimary && (
-                  <Button 
-                    variant="primary"
-                    size="sm"
-                    onClick={() => scrollToRef(brochureRef)}
+            <div className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'contain' }}>
+              <div className="flex items-center gap-1 py-1.5 justify-center">
+                {[
+                  { id: "details", label: "Details", icon: FileText },
+                  { id: "gallery", label: "Gallery", icon: ImageIcon },
+                  { id: "developer", label: "Developer", icon: Building2 },
+                  { id: "location", label: "Location", icon: MapPin },
+                  { id: "brochure", label: "Brochure", icon: Download },
+                  { id: "ai", label: "AI Analyzer", icon: Sparkles },
+                  { id: "mortgage", label: "Mortgage", icon: Calculator },
+                  { id: "inquiry", label: "Register Interest", icon: UserPlus },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => tab.id === "inquiry" ? scrollToInquiry() : handleTabClick(tab.id)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap min-w-fit transition-all ${
+                      activeTab === tab.id
+                        ? "bg-gold/20 text-gold border border-gold/40"
+                        : "text-black/70 hover:text-gold hover:bg-gold/10"
+                    }`}
                   >
-                    <Download className="w-4 h-4" />
-                    <span className="hidden sm:inline">Brochure</span>
-                  </Button>
-                )}
+                    <tab.icon className="w-3.5 h-3.5" />
+                    <span>{tab.label}</span>
+                  </button>
+                ))}
               </div>
             </div>
           </div>
