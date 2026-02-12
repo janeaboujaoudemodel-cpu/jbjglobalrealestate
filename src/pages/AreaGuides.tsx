@@ -326,13 +326,13 @@ const AreaGuides = () => {
         document.body
       )}
 
-      {/* Areas Grid */}
-      <section className="py-16 bg-black">
+      {/* Areas Grid - connected to filter section with same background */}
+      <section className="pt-6 pb-16 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         <div className="container mx-auto px-4">
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
                       <Loader2 className="w-8 h-8 text-gold animate-spin" />
-              <span className="ml-3 text-zinc-400">Loading areas...</span>
+              <span className="ml-3 text-black/50">Loading areas...</span>
             </div>
           ) : error ? (
             <div className="text-center py-20">
@@ -340,8 +340,8 @@ const AreaGuides = () => {
             </div>
           ) : filteredAreas.length === 0 ? (
             <div className="text-center py-20">
-              <MapPin className="w-12 h-12 text-zinc-400 mx-auto mb-4" />
-              <p className="text-zinc-400 text-lg">No areas found matching your criteria.</p>
+              <MapPin className="w-12 h-12 text-black/30 mx-auto mb-4" />
+              <p className="text-black/50 text-lg">No areas found matching your criteria.</p>
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
