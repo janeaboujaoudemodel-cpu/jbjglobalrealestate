@@ -22,6 +22,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   const [bedroomFilter, setBedroomFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [isFixed, setIsFixed] = useState(false);
+  const [barHeight, setBarHeight] = useState(0);
   const placeholderRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
 
@@ -60,10 +61,17 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
 
     const observer = new IntersectionObserver(
       ([entry]) => setIsFixed(!entry.isIntersecting),
-      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
+      { threshold: 0, rootMargin: "-140px 0px 0px 0px" }
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
+  }, [hasProjects]);
+
+  // Measure bar height once after projects load
+  useEffect(() => {
+    if (barRef.current) {
+      setBarHeight(barRef.current.offsetHeight);
+    }
   }, [hasProjects]);
 
   const statusOptions = useMemo(() => {
@@ -259,26 +267,24 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
             Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
           </h2>
 
-          {/* Placeholder reserves space when bar is fixed */}
-          <div ref={placeholderRef} style={{ height: isFixed ? barRef.current?.offsetHeight ?? 0 : 0 }} />
+          {/* Placeholder/sentinel for IntersectionObserver — reserves space when bar is fixed */}
+          <div ref={placeholderRef} style={{ height: isFixed ? barHeight : 0 }} />
 
-          {/* Filter bar — inline when not fixed */}
-          {!isFixed && (
-            <div
-              ref={barRef}
-              className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3"
-            >
-              <div className="flex flex-wrap items-center gap-3 px-6">
-                {filterBarContent}
-              </div>
+          {/* Filter bar — always rendered inline for stable ref measurement */}
+          <div
+            ref={barRef}
+            className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3"
+            style={{ opacity: isFixed ? 0 : 1, pointerEvents: isFixed ? 'none' : 'auto' }}
+          >
+            <div className="flex flex-wrap items-center gap-3 px-6">
+              {filterBarContent}
             </div>
-          )}
+          </div>
 
           {/* Filter bar — portaled to document.body when fixed, to escape overflow-x-hidden on <main> */}
           {isFixed && createPortal(
             <div
-              ref={barRef}
-              className="fixed top-[72px] left-0 right-0 z-30 shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200"
+              className="fixed top-24 sm:top-28 lg:top-32 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200"
             >
               <div className="flex flex-wrap items-center gap-3 container mx-auto px-4">
                 {filterBarContent}
