@@ -1,113 +1,91 @@
 
+## Fix Plan: Real Area Photos + Unified Filters + Single-Project Enrichment
 
-## Fix Provident Extraction: Full Data Parity with Source Pages
+### Issue 1: Area Photos Are AI-Generated (Fake)
 
-### Root Cause Analysis
+**Problem:** The `enrich-area-images` edge function falls back to Gemini AI image generation when no project images exist. This creates fake/AI photos of communities. Areas like "Dubai Islands", "Arjan", "JVT" currently show unsplash stock photos as hero images.
 
-The extraction pipeline has **3 cascading failures** that prevent full data extraction:
+**Fix:** Replace the AI image generation fallback with a Firecrawl web search approach (same pattern as `auto-find-developer-images`). The system will:
+1. First try to find a project image from projects in that area (existing behavior, keep)
+2. If no project image, use **Firecrawl Search** to find real community/aerial photos of the area on the web
+3. Use **Gemini AI** to pick the best community-level photo (NOT a building, NOT an apartment -- must be an aerial/panoramic community view)
+4. Also update existing areas that have unsplash/pexels/AI-generated hero images to replace them with real photos
 
-**Problem 1: Page-data.json parser returns empty structured data.**
-The `pagedata-detail.ts` parser finds images in the JSON but gets 0 amenities, 0 USPs, 0 FAQs, 0 distances, 0 floor plans. The Provident API nests these fields under paths the parser doesn't check. Meanwhile, the Firecrawl markdown parser (`extract-from-markdown.ts`) CAN extract all these fields perfectly from the scraped page.
+**File:** `supabase/functions/enrich-area-images/index.ts`
 
-**Problem 2: Firecrawl fallback is never triggered.**
-In `enrich-project-test`, the `needsFirecrawl` check (line 430) requires ALL fields to be empty. But since page-data returns 20 images, the system considers Firecrawl "Not needed" -- even though amenities, USPs, FAQs, distances, and floor plans are all still empty.
-
-**Problem 3: No name verification on slug match.**
-Provident recycles slugs. The slug `99-parkplace` now serves "Kaia by Emaar" -- a completely different project. The system blindly imports this wrong data.
-
----
-
-### Fix 1: Always Run Firecrawl When Structured Fields Are Missing
-
-**File: `supabase/functions/enrich-project-test/index.ts`**
-
-Change the `needsFirecrawl` condition from "ALL fields must be empty" to "ANY critical structured field is empty":
-
-Current (line 430-431):
-```
-const needsFirecrawl = enrichment.amenities.length === 0 && enrichment.usp_bullets.length === 0 &&
-  enrichment.faqs.length === 0 && !enrichment.description && enrichment.gallery.length <= 1 && enrichment.documents.length === 0;
-```
-
-New logic:
-```
-const needsFirecrawl = enrichment.amenities.length === 0 || enrichment.usp_bullets.length === 0 ||
-  enrichment.faqs.length === 0 || enrichment.location_distances.length === 0;
-```
-
-This ensures Firecrawl fires whenever structured fields are missing, even if images were already found.
-
-Also update the Firecrawl merge logic to be additive (fill gaps, not replace):
-- If page-data already provided images, keep them; only add Firecrawl images if none exist
-- If page-data returned nothing for amenities/USPs/FAQs, fill from Firecrawl
+Changes:
+- Remove the Gemini image generation block (lines 94-146)
+- Add Firecrawl Search step: search for `"{area.name} Dubai community aerial view real estate"` 
+- Collect all image URLs from search results (same extraction logic as `auto-find-developer-images`)
+- Use Gemini text model to pick the best community/aerial photo URL from candidates
+- AI prompt will emphasize: "Must be a real photo of the COMMUNITY/NEIGHBORHOOD, showing the overall area view, skyline, or master plan -- NOT a single building or apartment interior"
+- Update the query to also target areas with unsplash/pexels hero images (not just null)
 
 ---
 
-### Fix 2: Add Name Verification Guard
+### Issue 2: Unified Filter Bar Across All Pages
 
-**File: `supabase/functions/enrich-project-test/index.ts`** and **`supabase/functions/provident-enrich-projects/index.ts`**
+**Problem:** The FilterShortcutBar is only on Properties and Areas pages. Other pages (Developers, detail pages) have their own separate filter implementations.
 
-After fetching Provident page-data, compare the returned project name against the local project name using word-token similarity:
+**Fix:** Add the same sort options (Newest, Low-High, High-Low, A-Z) to the Areas page search bar and standardize the filter layout across pages.
 
-```
-function nameSimilarity(a: string, b: string): number {
-  const wordsA = new Set(a.toLowerCase().split(/\W+/).filter(w => w.length > 2));
-  const wordsB = new Set(b.toLowerCase().split(/\W+/).filter(w => w.length > 2));
-  const intersection = [...wordsA].filter(w => wordsB.has(w)).length;
-  const union = new Set([...wordsA, ...wordsB]).size;
-  return union === 0 ? 0 : intersection / union;
-}
-```
+**Changes to `src/pages/AreaGuides.tsx`:**
+- Make the search input wider with better placeholder text: "Search area, project or keyword..."
+- Add sort pills (Newest, Price Low-High, Price High-Low, A-Z) inline next to the search bar in the filter section
+- Replace the current 3-icon sort toggle (Building2, Flame, A-Z) with the standard sort pills
+- Move "Hide Sold" to end of Row 2
 
-If similarity is below 0.2, skip that Provident match entirely. This prevents "99 Parkplace" from importing "Kaia by Emaar" data.
+**Changes to `src/pages/Developers.tsx`:**
+- Add sort pills (Newest, A-Z, Most Projects) to the developer search/filter area
 
 ---
 
-### Fix 3: Fix Empty Array vs Null Guards
+### Issue 3: Single-Project Provident Enrichment (Not Batch)
 
-**File: `supabase/functions/provident-enrich-projects/index.ts`**
+**Problem:** The Provident enrichment section has "Extract Batch (10)" and "Full Extraction (All)" buttons. User wants single-project enrichment first to verify quality before bulk.
 
-Change guards like `!project.amenities` to `(!project.amenities || (Array.isArray(project.amenities) && project.amenities.length === 0))` for all structured fields: amenities, faqs, floor_plan_types, usp_bullets, location_distances.
-
----
-
-### Fix 4: Add Firecrawl Name Verification in Markdown Extraction
-
-**File: `supabase/functions/enrich-project-test/index.ts`** (Firecrawl section)
-
-After extracting from markdown, compare the extracted name against the local project name. If they don't match (similarity below 0.2), discard the extraction and try the next slug variant.
+**Fix in `src/components/listing-admin/ReellyImportPanel.tsx`:**
+- Change "Extract Batch (10)" button to "Extract Single (1)" with `batch_size: 1`
+- The "Test Project Enrichment" section already supports single-slug testing -- make it more prominent
+- Project listing links should open in same tab (change `target="_blank"` to same-tab navigation using `navigate()`)
 
 ---
 
-### Fix 5: Clean 99 Parkplace Bad Data
+### Issue 4: Enrichment Checklist Premium Design + Same-Tab Navigation
 
-Run a one-time cleanup to remove the wrong "Kaia" images that were already imported. Since 99 Parkplace has no Provident listing, its data will remain from the Reelly source. The user can use the "Generate and Improve" feature in Listing Admin to manually extract from the developer's website.
+**Problem:** The enrichment test result checklist uses tiny emoji text. Project links open in new tab instead of same tab.
 
----
-
-### Fix 6: Image Filename-Based Deduplication
-
-**File: `supabase/functions/_shared/provident/pagedata-detail.ts`**
-
-Current deduplication uses exact URL matching. Add filename-based dedup: extract the filename portion from URLs (e.g., `Kaia_by_Emaar_at_The_Valley_8d6ea4c2e0.jpg`) and deduplicate on that. Filter out broken URLs like bare `.jpg`.
+**Fix in `src/components/listing-admin/ReellyImportPanel.tsx`:**
+- Upgrade the checklist (lines 1045-1059) from tiny emoji text to a premium grid with proper icons, green/red status indicators, and larger text
+- Change all `target="_blank"` project links to use `navigate()` for same-tab navigation (lines 1009, 1016-1017, 1037, 1042, 1110)
+- Make the project name/image clickable to navigate to the project detail page in the same tab
 
 ---
 
-### Summary of Changes
+### Summary of File Changes
 
 | File | Change |
 |------|--------|
-| `supabase/functions/enrich-project-test/index.ts` | Fix `needsFirecrawl` to OR condition; add name similarity check for both page-data and Firecrawl matches |
-| `supabase/functions/provident-enrich-projects/index.ts` | Add name similarity guard; fix empty-array guards |
-| `supabase/functions/_shared/provident/pagedata-detail.ts` | Add filename-based image dedup; filter broken URLs |
-| Database cleanup | Delete wrong Kaia images from 99 Parkplace project |
+| `supabase/functions/enrich-area-images/index.ts` | Replace AI image generation with Firecrawl Search + AI selection for real community photos; also target areas with unsplash/pexels hero images |
+| `src/pages/AreaGuides.tsx` | Wider search input with better placeholder; replace icon sort toggles with standard sort pills (Newest, Price Low-High, Price High-Low, A-Z) |
+| `src/pages/Developers.tsx` | Add sort pills to developer filter section |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Change batch to single (batch_size: 1); premium checklist design; same-tab navigation for project links |
 
-### Expected Result After Fix
+### Technical Details
 
-When enriching any project:
-1. Page-data.json is tried first (fast, no API credits)
-2. If structured fields (amenities, USPs, FAQs, distances) are still empty, Firecrawl scrapes the page
-3. Firecrawl markdown parser extracts ALL sections: description, USPs with bullets, amenities list, floor plan types, location with distances, payment breakdown percentages, FAQs, documents (brochure/payment plan PDFs)
-4. Name verification prevents cross-contamination from recycled slugs
-5. Result: full data parity with the Provident source page, displayed in your UI
+**Area image search query pattern:**
+```text
+"{area_name} Dubai community aerial panoramic view neighborhood"
+```
 
+**AI selection prompt (for area images):**
+```text
+Find a REAL photo of the {area_name} community/neighborhood in Dubai, UAE.
+Must show: aerial view, community panorama, neighborhood skyline, or master plan view.
+Must NOT show: single building interior, apartment, or render/CGI.
+Pick the best community-level photo URL from the candidates.
+```
+
+**Firecrawl query filter:** Same image extraction logic from `auto-find-developer-images` -- collect all image URLs from markdown, links, and metadata, deduplicate, then use AI to select the best community photo.
+
+**Enrichment single-project change:** The batch size parameter in the Provident enrichment button changes from 10 to 1. The existing "Test Project Enrichment" slug input remains for targeted testing.
