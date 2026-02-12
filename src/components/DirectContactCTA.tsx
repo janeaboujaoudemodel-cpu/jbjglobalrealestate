@@ -103,7 +103,7 @@ const DirectContactCTA = ({
   const resolvedSubtitle = subtitle || t('cta.connectSubtitle', 'Get in touch for inquiries, consultations, or personalized guidance.');
   return (
     <section className={`py-12 bg-black ${className}`}>
-      <div className="mx-4 sm:mx-6 md:mx-4 lg:mx-6 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6 md:p-8">
+      <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6 md:p-8">
         
         {showTitle && (
           <>

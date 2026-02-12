@@ -142,7 +142,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
 
   return (
     <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-      <div className="container mx-auto px-4">
+      <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4">
         <div className="flex items-center gap-3 mb-8">
           <MapIcon className="w-6 h-6 text-gold" />
           <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
