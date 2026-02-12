@@ -16,14 +16,21 @@ interface DeveloperAIAnalyzerProps {
 }
 
 function extractSection(text: string, sectionName: string): string {
-  const patterns = [
-    new RegExp(`\\d+\\.\\s*\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\d+\\.\\s*\\*\\*|$)`, 'i'),
-    new RegExp(`##\\s*${sectionName}[:\\s]*([\\s\\S]*?)(?=##|\\d+\\.\\s*\\*\\*|$)`, 'i'),
-    new RegExp(`\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*[A-Z]|\\d+\\.\\s*\\*\\*|$)`, 'i'),
-  ];
-  for (const pattern of patterns) {
-    const match = text.match(pattern);
-    if (match?.[1]?.trim()) return match[1].trim();
+  // Try multiple name variations for resilience
+  const names = [sectionName];
+  if (sectionName === "Area Overview") names.push("Overview", "Developer Overview", "Company Overview");
+  if (sectionName === "Developer Landscape") names.push("Portfolio Strength", "Portfolio", "Key Projects");
+  
+  for (const name of names) {
+    const patterns = [
+      new RegExp(`\\d+\\.\\s*\\*\\*${name}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\d+\\.\\s*\\*\\*|$)`, 'i'),
+      new RegExp(`##\\s*${name}[:\\s]*([\\s\\S]*?)(?=##|\\d+\\.\\s*\\*\\*|$)`, 'i'),
+      new RegExp(`\\*\\*${name}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*[A-Z]|\\d+\\.\\s*\\*\\*|$)`, 'i'),
+    ];
+    for (const pattern of patterns) {
+      const match = text.match(pattern);
+      if (match?.[1]?.trim()) return match[1].trim();
+    }
   }
   return "";
 }
@@ -328,6 +335,14 @@ export const DeveloperAIAnalyzer = ({
     handleAnalyze();
   }, [handleAnalyze]);
 
+  // Reset when developer changes
+  useEffect(() => {
+    hasTriggered.current = false;
+    setAnalysis(null);
+    setErrorMsg(null);
+    setIsVisible(false);
+  }, [developerName]);
+
   useEffect(() => {
     if (!sectionRef.current) return;
     const observer = new IntersectionObserver(
@@ -410,6 +425,14 @@ export const DeveloperAIAnalyzer = ({
             <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Analysis
+            </Button>
+          </div>
+        ) : !analysis && !isAnalyzing ? (
+          <div className="text-center py-8 space-y-4">
+            <p className="text-zinc-500 text-sm">AI analysis ready for <span className="font-semibold text-black">{developerName}</span></p>
+            <Button onClick={handleRetry} className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold hover:brightness-110">
+              <Brain className="w-4 h-4 mr-2" />
+              Analyze {developerName}
             </Button>
           </div>
         ) : !analysis ? (
