@@ -696,15 +696,53 @@ RULES:
         }
 
         const extractedData = JSON.parse(toolCall.function.arguments);
+        const usedImagesInBatch = new Set<string>();
         
         for (const article of extractedData.articles || []) {
+          let articleImage = article.image_url || null;
+          
+          // If no image or bad image, try Firecrawl search fallback
+          if (!articleImage || isImageBad(articleImage)) {
+            try {
+              const searchResponse = await fetch("https://api.firecrawl.dev/v1/search", {
+                method: "POST",
+                headers: {
+                  "Authorization": `Bearer ${FIRECRAWL_API_KEY}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  query: `"${article.title}" Dubai real estate`,
+                  limit: 3,
+                }),
+              });
+              
+              if (searchResponse.ok) {
+                const searchData = await searchResponse.json();
+                for (const result of (searchData.data || [])) {
+                  const md = result.markdown || "";
+                  const img = extractOgImage(md) || extractFirstGoodImage(md);
+                  if (img && !isImageBad(img) && !usedImagesInBatch.has(img)) {
+                    articleImage = img;
+                    usedImagesInBatch.add(img);
+                    break;
+                  }
+                }
+              }
+            } catch (e) {
+              console.warn(`Image search failed for "${article.title}"`);
+            }
+            await new Promise(r => setTimeout(r, 500));
+          } else {
+            usedImagesInBatch.add(articleImage);
+          }
+          
           collectedNews.push({
             title: article.title,
             excerpt: article.excerpt,
             category: article.category || source.category,
             source: source.name,
             source_url: article.source_url || source.url,
-            image_url: article.image_url,
+            image_url: articleImage,
             published_date: article.published_date || new Date().toISOString().split('T')[0],
           });
         }

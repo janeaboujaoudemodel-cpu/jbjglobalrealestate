@@ -202,7 +202,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   return (
     <>
       <div className="flex flex-col gap-2 w-full">
-        {/* Row 1: Connected toolbar - Search + Map + Saved + Currency + Filter + Mode */}
+        {/* Row 1: Connected toolbar - Search + Sort Pills + Map + Saved + Currency + Filter + Mode */}
         <div className="flex items-center w-full">
           <div className="flex items-center w-full border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
             {/* Search slot */}
@@ -211,6 +211,19 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 {searchSlot}
               </div>
             )}
+            {/* Sort pills inline in Row 1 */}
+            {SORT_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
+                className={cn(
+                  "flex items-center gap-1 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20",
+                  filters.sortBy === opt.value ? "bg-gold/20 text-black font-bold" : "text-black/70 hover:bg-gold/10"
+                )}
+              >
+                {opt.label}
+              </button>
+            ))}
             {/* Map toggle */}
             <button
               onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
@@ -235,7 +248,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <SlidersHorizontal className="w-3.5 h-3.5" />
               Filter
             </button>
-            {/* Mode Investor */}
+            {/* Mode Investor - compact, no stretch */}
             <ConnectedModeButton />
           </div>
         </div>
@@ -532,20 +545,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Divider */}
         <div className="w-px h-6 bg-gold/30 flex-shrink-0" />
 
-        {/* Sort pills inline */}
-        {SORT_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
-            className={cn(pillBase, "px-3 py-1.5", filters.sortBy === opt.value ? pillActive : pillInactive)}
-          >
-            {opt.label}
-          </button>
-        ))}
-
-        {/* Divider */}
-        <div className="w-px h-6 bg-gold/30 flex-shrink-0" />
-
         {/* Hide Sold Out - LAST */}
         <button
           onClick={() => update({ hideSoldOut: !filters.hideSoldOut })}
@@ -769,7 +768,7 @@ function ConnectedModeButton() {
   return (
     <Popover open={modeOpen} onOpenChange={setModeOpen}>
       <PopoverTrigger asChild>
-        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors text-black/70 hover:bg-gold/10" title="Switch Mode">
+        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors text-black/70 hover:bg-gold/10 flex-shrink-0 max-w-fit" title="Switch Mode">
           <Users className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Mode: {modeLabel}</span>
         </button>
