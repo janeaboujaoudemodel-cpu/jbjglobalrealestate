@@ -291,10 +291,17 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
             Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
           </h2>
 
-          {/* Sentinel for IntersectionObserver — height 0, just a scroll marker */}
+          {/* Sentinel for IntersectionObserver — sits just above inline bar */}
           <div ref={placeholderRef} className="h-0" />
 
-          {/* Filter bar — ONLY rendered as fixed portal when scrolled past sentinel */}
+          {/* Phase 1: Inline filter bar — always rendered in natural flow */}
+          <div className="py-3 px-6">
+            <div className="flex flex-wrap items-center gap-3">
+              {filterBarContent}
+            </div>
+          </div>
+
+          {/* Phase 2: Fixed portal copy — only when scrolled past sentinel */}
           {isFixed && createPortal(
             <div
               className="fixed top-24 sm:top-28 lg:top-32 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200"
