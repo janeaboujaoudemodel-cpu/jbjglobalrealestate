@@ -1,6 +1,7 @@
 import React from 'react';
 import { Building2, Eye } from 'lucide-react';
 import menuDubaiSkyline from '@/assets/menu-dubai-skyline.jpg';
+import burjAlArabVideo from '@/assets/videos/burj-al-arab-aerial.mp4';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuDevelopersProps {
@@ -35,6 +36,7 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
               to="/developer/emaar"
               onClick={onClose}
               image={menuDubaiSkyline}
+              video={burjAlArabVideo}
               kicker="DEVELOPERS"
               title="Emaar Properties"
               description="Dubai's most iconic developer"

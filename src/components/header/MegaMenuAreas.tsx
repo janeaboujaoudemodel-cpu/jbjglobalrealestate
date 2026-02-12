@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, Eye } from 'lucide-react';
 import menuDowntownSkyline from '@/assets/menu-downtown-dubai-skyline.jpg';
+import dubaiLandmarksVideo from '@/assets/videos/dubai-landmarks-hero.mp4';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 import { useAreas } from '@/hooks/useAreas';
 
@@ -26,6 +27,7 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
               to="/areas"
               onClick={onClose}
               image={menuDowntownSkyline}
+              video={dubaiLandmarksVideo}
               kicker="AREAS"
               title="Dubai's Prime Locations"
               description="Discover the best communities"
