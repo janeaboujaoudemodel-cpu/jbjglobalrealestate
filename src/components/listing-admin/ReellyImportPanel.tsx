@@ -498,7 +498,7 @@ export function ReellyImportPanel() {
     setIsProvidentExtracting(true);
     setProvidentResult(null);
     try {
-      const { data, error } = await supabase.functions.invoke("provident-batch-extract", { body: { batch_size: 10 } });
+      const { data, error } = await supabase.functions.invoke("provident-batch-extract", { body: { batch_size: 1 } });
       if (error) throw error;
       if (data?.success) {
         setProvidentResult(data);
@@ -1006,14 +1006,14 @@ export function ReellyImportPanel() {
             {enrichTestResult && enrichTestResult.success && (
               <div className="space-y-4 border-t pt-4">
                 <h4 className="font-semibold text-sm">
-                  <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 hover:underline">
+                  <button onClick={() => navigate(`/project/${enrichTestResult.project?.slug}`)} className="hover:text-blue-600 hover:underline text-left">
                     {enrichTestResult.project?.name}
-                  </a>
+                  </button>
                   <span className="text-xs text-zinc-500 ml-2">(Reelly ID: {enrichTestResult.project?.reelly_id || "none"})</span>
                 </h4>
                 <div className="flex gap-3 text-xs flex-wrap">
                   {enrichTestResult.sources?.reelly?.available ? (
-                    <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline flex items-center gap-1"><ExternalLink className="h-3 w-3" /> View Project</a>
+                    <button onClick={() => navigate(`/project/${enrichTestResult.project?.slug}`)} className="text-blue-600 underline flex items-center gap-1"><ExternalLink className="h-3 w-3" /> View Project</button>
                   ) : <span className="text-zinc-400">Reelly: {enrichTestResult.sources?.reelly?.reason}</span>}
                   {enrichTestResult.sources?.provident?.available && (
                     <span className="text-orange-600">Provident: {enrichTestResult.sources.provident.slug_used}</span>
@@ -1034,29 +1034,40 @@ export function ReellyImportPanel() {
                         <h5 className={`text-xs font-bold ${textColor}`}>{label}</h5>
                       </div>
                       {enrichTestResult.project?.cover_image_url && (
-                        <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer">
+                        <button onClick={() => navigate(`/project/${enrichTestResult.project?.slug}`)} className="w-full">
                           <img src={enrichTestResult.project.cover_image_url} alt="" className="w-full h-32 object-cover hover:opacity-80 transition-opacity cursor-pointer" />
-                        </a>
+                        </button>
                       )}
                       <div className="p-3 space-y-1">
-                        <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer" className="font-semibold text-sm truncate block hover:text-blue-600 hover:underline">
+                        <button onClick={() => navigate(`/project/${enrichTestResult.project?.slug}`)} className="font-semibold text-sm truncate block hover:text-blue-600 hover:underline text-left w-full">
                           {enrichTestResult.project?.name}
-                        </a>
-                         <div className="grid grid-cols-2 gap-1 text-[10px] text-zinc-500 pt-1 border-t">
-                          <span>📷 {data?.images_count || 0} imgs{(data?.new_images || 0) > 0 && ` (+${data!.new_images})`}</span>
-                          <span>📄 {data?.documents_count || 0} docs{(data?.new_documents || 0) > 0 && ` (+${data!.new_documents})`}</span>
-                          <span>🏗️ {data?.amenities_count || 0} amenities</span>
-                          <span>❓ {data?.faqs_count || 0} FAQs</span>
-                          <span>🏠 {data?.floor_plans_count || 0} floor plans</span>
-                          <span>🔑 {data?.unit_types_count || 0} unit types</span>
-                          <span>📝 {data?.has_description ? "✅" : "❌"} description</span>
-                          <span>💰 {data?.has_payment_plan ? "✅" : "❌"} payment</span>
-                          <span>⭐ {data?.usp_count || 0} USPs</span>
-                          <span>📍 {data?.distances_count || 0} distances</span>
-                          <span>🎥 {data?.has_video ? "✅" : "❌"} video</span>
-                          <span>✨ {data?.highlights_count || 0} highlights</span>
-                          <span>🏷️ {data?.has_service_charge ? "✅" : "❌"} svc charge</span>
-                          <span>📈 {data?.has_roi_estimate ? "✅" : "❌"} ROI</span>
+                        </button>
+                        <div className="grid grid-cols-2 gap-2 pt-2 border-t">
+                          {[
+                            { icon: <CheckCircle className="w-3.5 h-3.5" />, label: "Images", value: data?.images_count || 0, extra: (data?.new_images || 0) > 0 ? `+${data!.new_images}` : null },
+                            { icon: <FileText className="w-3.5 h-3.5" />, label: "Documents", value: data?.documents_count || 0, extra: (data?.new_documents || 0) > 0 ? `+${data!.new_documents}` : null },
+                            { icon: <CheckCircle className="w-3.5 h-3.5" />, label: "Amenities", value: data?.amenities_count || 0 },
+                            { icon: <CheckCircle className="w-3.5 h-3.5" />, label: "FAQs", value: data?.faqs_count || 0 },
+                            { icon: <CheckCircle className="w-3.5 h-3.5" />, label: "Floor Plans", value: data?.floor_plans_count || 0 },
+                            { icon: <CheckCircle className="w-3.5 h-3.5" />, label: "Unit Types", value: data?.unit_types_count || 0 },
+                            { icon: data?.has_description ? <CheckCircle className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />, label: "Description", value: data?.has_description ? "Yes" : "No", ok: data?.has_description },
+                            { icon: data?.has_payment_plan ? <CheckCircle className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />, label: "Payment Plan", value: data?.has_payment_plan ? "Yes" : "No", ok: data?.has_payment_plan },
+                            { icon: <CheckCircle className="w-3.5 h-3.5" />, label: "USPs", value: data?.usp_count || 0 },
+                            { icon: <CheckCircle className="w-3.5 h-3.5" />, label: "Distances", value: data?.distances_count || 0 },
+                            { icon: data?.has_video ? <CheckCircle className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />, label: "Video", value: data?.has_video ? "Yes" : "No", ok: data?.has_video },
+                            { icon: <CheckCircle className="w-3.5 h-3.5" />, label: "Highlights", value: data?.highlights_count || 0 },
+                            { icon: data?.has_service_charge ? <CheckCircle className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />, label: "Svc Charge", value: data?.has_service_charge ? "Yes" : "No", ok: data?.has_service_charge },
+                            { icon: data?.has_roi_estimate ? <CheckCircle className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />, label: "ROI", value: data?.has_roi_estimate ? "Yes" : "No", ok: data?.has_roi_estimate },
+                          ].map((item, idx) => {
+                            const isOk = item.ok !== undefined ? item.ok : (typeof item.value === 'number' ? item.value > 0 : item.value === "Yes");
+                            return (
+                              <div key={idx} className={`flex items-center gap-2 p-1.5 rounded-md text-xs ${isOk ? 'text-emerald-700 bg-emerald-50' : 'text-red-500 bg-red-50'}`}>
+                                {item.icon}
+                                <span className="font-medium">{item.label}</span>
+                                <span className="ml-auto font-bold">{item.value}{item.extra && <span className="text-emerald-600 ml-0.5">{item.extra}</span>}</span>
+                              </div>
+                            );
+                          })}
                         </div>
                         {/* Gallery thumbnails */}
                         {data?.gallery_preview && data.gallery_preview.length > 0 && (
@@ -1107,9 +1118,9 @@ export function ReellyImportPanel() {
                       {isEnrichApplying ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <CheckCircle className="h-4 w-4 mr-2" />} Apply Enrichment
                     </Button>
                   )}
-                  <a href={`/project/${enrichTestResult.project?.slug}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 px-3 py-2 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
+                  <button onClick={() => navigate(`/project/${enrichTestResult.project?.slug}`)} className="inline-flex items-center gap-1 px-3 py-2 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
                     <ExternalLink className="h-3 w-3" /> View Live
-                  </a>
+                  </button>
                 </div>
                 {enrichTestResult.applied && (
                   <Alert className="bg-green-50 border-green-300">
@@ -1156,8 +1167,8 @@ export function ReellyImportPanel() {
             </h3>
             <p className="text-sm text-orange-700 mb-3">Scrape Provident project pages for images, PDFs, brochures, floor plans using Firecrawl credits.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-              <Button onClick={handleProvidentExtract} disabled={isProvidentExtracting || isFullProvidentRunning} className="bg-orange-600 hover:bg-orange-700">
-                {isProvidentExtracting ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Extracting...</> : <><Zap className="h-4 w-4 mr-2" />Extract Batch (10)</>}
+              <Button onClick={() => handleProvidentExtract()} disabled={isProvidentExtracting || isFullProvidentRunning} className="bg-orange-600 hover:bg-orange-700">
+                {isProvidentExtracting ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Extracting...</> : <><Zap className="h-4 w-4 mr-2" />Extract Single (1)</>}
               </Button>
               <Button onClick={handleFullProvidentExtract} disabled={isProvidentExtracting || isFullProvidentRunning} variant="outline" className="border-orange-300 text-orange-700 hover:bg-orange-100">
                 {isFullProvidentRunning ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Running Full...</> : <><Download className="h-4 w-4 mr-2" />Full Extraction (All)</>}
