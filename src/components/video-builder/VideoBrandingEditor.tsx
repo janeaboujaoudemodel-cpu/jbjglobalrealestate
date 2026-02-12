@@ -204,7 +204,7 @@ const VideoBrandingEditor = ({ project, onUpdate, onNext }: VideoBrandingEditorP
                   </div>
                   <div className="flex items-center gap-2 mt-1">
                     <Badge className="bg-primary/20 text-primary text-xs">
-                      Starting from AED {project.property.price_from.toLocaleString()}
+                      Starting from AED {Math.round(project.property.price_from).toLocaleString()}
                     </Badge>
                   </div>
                 </div>

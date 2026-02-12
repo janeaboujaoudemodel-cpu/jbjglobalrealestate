@@ -113,7 +113,7 @@ const VideoProjectSelector = ({ project, onUpdate, onNext }: VideoProjectSelecto
                 </p>
                 <p className="text-sm text-muted-foreground">{project.property.developer}</p>
                 <p className="text-sm font-medium mt-1">
-                  AED {project.property.price_from.toLocaleString()}
+                  AED {Math.round(project.property.price_from).toLocaleString()}
                 </p>
               </div>
               <Button variant="outline" size="sm" onClick={onNext}>
@@ -167,7 +167,7 @@ const VideoProjectSelector = ({ project, onUpdate, onNext }: VideoProjectSelecto
                     <span className="text-xs text-muted-foreground">{p.developer?.name}</span>
                     {p.price_from && (
                       <span className="text-xs font-medium text-primary">
-                        AED {p.price_from.toLocaleString()}
+                        AED {Math.round(p.price_from).toLocaleString()}
                       </span>
                     )}
                   </div>

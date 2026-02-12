@@ -1722,7 +1722,7 @@ const MarketReport = () => {
           <p style="color: #888; font-size: 12px; margin: 0 0 4px 0;">📍 ${p.area_name || p.location || 'Dubai, UAE'}</p>
           ${p.developer_name ? `<p style="color: #666; font-size: 11px; margin: 0 0 6px 0;">🏗️ by <span style="color: #A8925A;">${p.developer_name}</span></p>` : ''}
           ${desc ? `<p style="color: #999; font-size: 11px; line-height: 1.5; margin: 0 0 8px 0;">${desc}</p>` : ''}
-          ${p.price_from ? `<p style="color: #A8925A; font-weight: 700; font-size: 14px; margin: 0;">From AED ${Number(p.price_from).toLocaleString()}</p>` : '<p style="color: #A8925A; font-size: 13px; margin: 0;">Price on request</p>'}
+          ${p.price_from ? `<p style="color: #A8925A; font-weight: 700; font-size: 14px; margin: 0;">From AED ${Math.round(Number(p.price_from)).toLocaleString()}</p>` : '<p style="color: #A8925A; font-size: 13px; margin: 0;">Price on request</p>'}
         </div>
       </div>
       `;}).join('')}
