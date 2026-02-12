@@ -161,8 +161,16 @@ function parsePageDataDetail(pageData: unknown, slug: string): PageDataProjectDe
   
   // Navigate to the project data - Gatsby structure varies
   const serverData = extractDeepValue(pageData, "result.serverData", "serverData") as Record<string, unknown> | null;
-  const data = extractDeepValue(pageData, "result.serverData.data", "result.data", "data") as Record<string, unknown> | null;
+  let data = extractDeepValue(pageData, "result.serverData.data", "result.data", "data") as Record<string, unknown> | null;
   const pageContext = extractDeepValue(pageData, "result.pageContext", "pageContext") as Record<string, unknown> | null;
+  
+  // Provident API wraps data in {status, message, data: {actual fields}}
+  if (data && typeof data === "object" && (data as any).status === true && (data as any).data) {
+    // Check for "No record found"
+    if ((data as any).message === "No record found") return null;
+    // Unwrap the inner data object
+    data = (data as any).data;
+  }
   
   // Bitrix data often contains the structured fields
   const bitrix = extractDeepValue(data, "bitrix", "project.bitrix") as Record<string, unknown> | null;

@@ -146,29 +146,116 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
       for (const proj of projects) {
         try {
-          // Call the same enrichment logic via internal fetch to self
-          const enrichUrl = `${supabaseUrl}/functions/v1/enrich-project-test`;
-          const res = await fetch(enrichUrl, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${supabaseKey}`,
-            },
-            body: JSON.stringify({ slug: proj.slug, action: "apply", skip_reelly: isProvidentOnly }),
-          });
+          console.log(`[enrich-test][batch] Processing ${proj.slug}...`);
 
-          if (res.ok) {
-            const result = await res.json();
-            if (result.success && result.applied) {
-              enriched++;
-              totalImages += result.new_images || 0;
-              totalDocs += result.new_documents || 0;
-              totalFields += (result.updates_applied?.length || 0);
+          // Inline enrichment instead of recursive HTTP self-call
+          const enrichment = {
+            amenities: [] as string[],
+            usp_bullets: [] as string[],
+            location_distances: [] as Array<{ label: string; time: string }>,
+            documents: [] as Array<{ url: string; name: string; type: string }>,
+            gallery: [] as Array<{ url: string; alt_text: string; display_order: number }>,
+            faqs: [] as Array<{ question: string; answer: string }>,
+            floor_plans: [] as Array<any>,
+            unit_types: [] as Array<any>,
+            description: null as string | null,
+            video_url: null as string | null,
+            highlights: [] as string[],
+            payment_plan: null as string | null,
+            payment_breakdown: [] as Array<any>,
+            service_charge: null as number | null,
+            roi_estimate: null as number | null,
+          };
+
+          // Source 1: Reelly
+          if (proj.reelly_id && reellyApiKey && !isProvidentOnly) {
+            const reellyData = await fetchReellyProject(proj.reelly_id, reellyApiKey);
+            if (reellyData) {
+              enrichment.amenities = extractAmenities(reellyData);
+              enrichment.gallery = extractGalleryImages(reellyData);
+              enrichment.documents = extractDocuments(reellyData);
+              enrichment.floor_plans = extractFloorPlans(reellyData);
+              enrichment.unit_types = extractUnitTypes(reellyData);
+              if (reellyData.usp_bullets && Array.isArray(reellyData.usp_bullets)) enrichment.usp_bullets = reellyData.usp_bullets;
+              if (reellyData.overview) enrichment.description = reellyData.overview;
+              if (reellyData.faqs && Array.isArray(reellyData.faqs)) enrichment.faqs = reellyData.faqs.filter((f: any) => f?.question && f?.answer);
+              if (reellyData.location_distances && Array.isArray(reellyData.location_distances)) enrichment.location_distances = reellyData.location_distances;
             }
-          } else {
-            errors++;
           }
-        } catch {
+
+          // Source 2: Provident page-data (fill gaps)
+          const slugVariants = generateSlugVariants(proj.slug, proj.name, proj.developer_name);
+          for (const variant of slugVariants) {
+            const pd = await fetchProvidentPageDataDetail(variant);
+            if (pd && (pd.amenities.length > 0 || pd.images.length > 0 || pd.faqs.length > 0 || pd.uspBullets.length > 0 || pd.description)) {
+              if (enrichment.amenities.length === 0 && pd.amenities.length > 0) enrichment.amenities = pd.amenities;
+              if (enrichment.usp_bullets.length === 0 && pd.uspBullets.length > 0) enrichment.usp_bullets = pd.uspBullets;
+              if (enrichment.faqs.length === 0 && pd.faqs.length > 0) enrichment.faqs = pd.faqs;
+              if (!enrichment.description && pd.description) enrichment.description = pd.description;
+              if (enrichment.gallery.length <= 1 && pd.images.length > 0) enrichment.gallery = [...enrichment.gallery, ...pd.images.map((img: any, i: number) => ({ url: img.url, alt_text: img.alt_text, display_order: enrichment.gallery.length + i }))];
+              const provDocs: Array<{ url: string; name: string; type: string }> = [];
+              if (pd.brochureUrl) provDocs.push({ url: pd.brochureUrl, name: "Brochure", type: "brochure" });
+              if (pd.paymentPlanPdfUrl) provDocs.push({ url: pd.paymentPlanPdfUrl, name: "Payment Plan", type: "payment_plan" });
+              if (enrichment.documents.length === 0 && provDocs.length > 0) enrichment.documents = provDocs;
+              break;
+            }
+          }
+
+          // Apply updates
+          const before = {
+            amenities_count: (proj.amenities as any[])?.length || 0,
+            usp_count: (proj.usp_bullets as any[])?.length || 0,
+            faqs_count: (proj.faqs as any[])?.length || 0,
+            floor_plans_count: (proj.floor_plan_types as any[])?.length || 0,
+            has_description: !!proj.description,
+          };
+
+          const updates: Record<string, any> = {};
+          if (enrichment.amenities.length > 0 && before.amenities_count === 0) updates.amenities = enrichment.amenities;
+          if (enrichment.usp_bullets.length > 0 && before.usp_count === 0) updates.usp_bullets = enrichment.usp_bullets;
+          if (enrichment.description && !before.has_description) updates.description = enrichment.description;
+          if (enrichment.faqs.length > 0 && before.faqs_count === 0) updates.faqs = enrichment.faqs;
+          if (enrichment.floor_plans.length > 0 && before.floor_plans_count === 0) updates.floor_plan_types = enrichment.floor_plans;
+          if (enrichment.location_distances.length > 0) updates.location_distances = enrichment.location_distances;
+          if (enrichment.payment_plan) updates.payment_plan = enrichment.payment_plan;
+
+          if (Object.keys(updates).length > 0) {
+            await supabase.from("projects").update(updates).eq("id", proj.id);
+          }
+
+          if (enrichment.gallery.length > 0) {
+            const { count: existingImgs } = await supabase.from("project_images").select("id", { count: "exact", head: true }).eq("project_id", proj.id);
+            const newImages = enrichment.gallery.map((img, i) => ({
+              project_id: proj.id,
+              image_url: img.url,
+              alt_text: img.alt_text || `${proj.name} image ${i + 1}`,
+              display_order: (existingImgs || 0) + i,
+              data_source: "batch_enrichment",
+            }));
+            await supabase.from("project_images").insert(newImages);
+          }
+
+          if (enrichment.documents.length > 0) {
+            const newDocs = enrichment.documents.map((doc) => ({
+              project_id: proj.id,
+              file_url: doc.url,
+              document_type: doc.type,
+              file_name: doc.name || doc.type,
+              data_source: "batch_enrichment",
+            }));
+            await supabase.from("project_documents").insert(newDocs);
+          }
+
+          const hadUpdates = Object.keys(updates).length > 0 || enrichment.gallery.length > 0 || enrichment.documents.length > 0;
+          if (hadUpdates) {
+            enriched++;
+            totalImages += enrichment.gallery.length;
+            totalDocs += enrichment.documents.length;
+            totalFields += Object.keys(updates).length;
+          }
+          console.log(`[enrich-test][batch] ${proj.slug}: ${hadUpdates ? "enriched" : "no new data"} (${Object.keys(updates).length} fields, ${enrichment.gallery.length} imgs, ${enrichment.documents.length} docs)`);
+        } catch (batchErr) {
+          console.error(`[enrich-test][batch] Error processing ${proj.slug}:`, batchErr);
           errors++;
         }
       }
