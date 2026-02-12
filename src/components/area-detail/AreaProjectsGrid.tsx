@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,6 +19,20 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   const [statusFilter, setStatusFilter] = useState("all");
   const [bedroomFilter, setBedroomFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
+  const [isSticky, setIsSticky] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Only activate sticky when section is scrolled to and filter bar hits header
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+      const sectionRect = sectionRef.current.getBoundingClientRect();
+      // Section top has passed the header area → activate sticky
+      setIsSticky(sectionRect.top <= 72 && sectionRect.bottom > 150);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ["area-projects-full", areaName],
@@ -46,7 +60,6 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     staleTime: 5 * 60 * 1000,
   });
 
-  // Derive filter options from data
   const statusOptions = useMemo(() => {
     if (!projects) return [];
     const statuses = new Set<string>();
@@ -67,12 +80,10 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     return Array.from(beds).sort((a, b) => Number(a) - Number(b));
   }, [projects]);
 
-  // Filter & sort
   const filteredProjects = useMemo(() => {
     if (!projects) return [];
     let result = [...projects];
 
-    // Search
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       result = result.filter(p =>
@@ -82,12 +93,10 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
       );
     }
 
-    // Status filter
     if (statusFilter !== "all") {
       result = result.filter(p => (p.status_label || p.construction_status) === statusFilter);
     }
 
-    // Bedroom filter
     if (bedroomFilter !== "all") {
       const bed = Number(bedroomFilter);
       result = result.filter(p => {
@@ -97,7 +106,6 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
       });
     }
 
-    // Sort
     if (sortBy === "price_low") {
       result.sort((a, b) => (a.price_from || 0) - (b.price_from || 0));
     } else if (sortBy === "price_high") {
@@ -141,15 +149,21 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   if (!projects || projects.length === 0) return null;
 
   return (
-    <section id="projects-section" className="pt-16 pb-16 bg-black">
+    <section ref={sectionRef} id="projects-section" className="pt-16 pb-16 bg-black">
       <div className="container mx-auto px-4">
         <div className="rounded-2xl pt-8 overflow-visible" style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}>
           <h2 className="text-black text-2xl md:text-3xl font-bold mb-6 px-6" style={{ fontFamily: "Poppins, sans-serif" }}>
             Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
           </h2>
 
-          {/* Search & Filters - sticky inside the card */}
-          <div className="sticky top-[72px] z-30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 shadow-[0_4px_20px_rgba(200,167,102,0.1)] rounded-t-2xl px-6 py-3">
+          {/* Search & Filters - inside the card, becomes sticky only when section is scrolled to */}
+          <div
+            className={`z-30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 px-6 py-3 transition-shadow duration-200 ${
+              isSticky
+                ? 'sticky top-[72px] shadow-[0_4px_20px_rgba(200,167,102,0.15)]'
+                : ''
+            }`}
+          >
             <div className="flex flex-wrap items-center gap-3">
               {/* Search Input */}
               <div className="relative flex-1 min-w-[200px]">
