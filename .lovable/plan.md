@@ -1,111 +1,81 @@
 
 
-## Fix Plan: Search Field Sizing, Saved Heart Color, Scroll Timing, Currency/Size Conversion, and Vertical Nav Updates
+## Fix Plan: Advanced Filter as Centered Dialog + Developer List with Logos + Location Cleanup
 
-### 1. Reduce Search Field Width in Row 1 (Normal Load)
+### 1. Convert Advanced Filter from Side Sheet to Centered Dialog
 
-**File: `src/components/filters/FilterShortcutBar.tsx`**
-- Change the search slot container from `flex-1` to `max-w-[220px]` (or similar) so the search input takes less space and the remaining sort pills + controls appear larger and more prominent
-- Keep `min-w-0` for overflow protection
+**Problem:** Currently uses `<Sheet>` (slides from right, attached to header edge). User wants a centered pop-up modal like Reelly, not cropped at edges.
 
-### 2. Make Saved Heart Icon Red
+**File: `src/components/filters/AdvancedFilterPanel.tsx`**
+- Replace `<Sheet>` / `<SheetContent>` with `<Dialog>` / `<DialogContent>`
+- Use a custom-sized dialog: `max-w-2xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)]` to ensure no cropping on any edge
+- Keep the champagne gradient background and all internal sections
+- The dialog will be centered on screen with proper padding from all edges
 
-**File: `src/components/filters/FilterShortcutBar.tsx`**
-- In `ConnectedSavedButton` (line 699), change the Heart icon to have `text-red-500 fill-red-500` styling so it appears as a solid red heart
+### 2. Replace "By Company" with "By Developer" -- Full List with Logos + Checkboxes
 
-### 3. Fix Scroll Timing for Fixed/Unfixed Filter Bar
+**Problem:** Current developer section shows tiny pill buttons with just text. User wants it to look like the header's developer dropdown: a scrollable list with checkboxes and developer logos.
 
-**File: `src/pages/PropertiesReelly.tsx`**
-- The current `IntersectionObserver` uses `rootMargin: "-80px 0px 0px 0px"` which creates a delay
-- Reduce the rootMargin to `"-1px 0px 0px 0px"` so the transition triggers almost immediately when the sentinel leaves the viewport
-- Add CSS `transition-none` or `will-change: transform` to the filter section to eliminate visual lag during the fixed/unfixed state change
+**File: `src/components/filters/AdvancedFilterPanel.tsx`**
+- Rename section title from "By Company" to "By Developer"
+- Fetch developers from the `developers` table (which has `name`, `logo_url`) instead of distinct `developer_name` from `projects`
+- Replace the pill-button layout with a vertical scrollable list
+- Each row: `[ Checkbox ] [ Logo (24x24, rounded, object-contain, bg-white) ] [ Developer Name ]`
+- Keep the search input at top to filter the list
+- Multi-select via checkboxes (clicking toggles the developer in/out of `localFilters.developers`)
+- Style matching the header dropdown: champagne background, gold border checkboxes, developer logo in a small white box
 
-### 4. Wire Currency and Size Unit Conversions to All Filters
+### 3. Location Filter -- Remove International, Keep UAE Only
 
-**File: `src/components/filters/FilterShortcutBar.tsx`**
-- When currency changes (via `ConnectedCurrencyButton`), convert `priceMin`/`priceMax` values from old currency to new currency using exchange rates
-- When switching between sqft/sqm in the Price popover tabs (`priceMode`), convert `sizeMin`/`sizeMax` values accordingly (1 sqm = 10.764 sqft)
-- Listen for `currencyChange` custom events and update filter values accordingly
-- Add conversion logic: maintain a base AED value and convert display values based on selected currency
+**Problem:** The Location section in the advanced filter shows Indonesia, Oman, Thailand, Cyprus. User wants only UAE Emirates.
 
-### 5. Update PropertiesVerticalNav
+**File: `src/components/filters/AdvancedFilterPanel.tsx`**
+- Filter `EMIRATES_OPTIONS` to only show entries where `country === 'UAE'`
+- This removes Cyprus, Indonesia, Oman, Thailand
+- Show "All Emirates" label above the UAE emirates list
+- Keep the search input for filtering within UAE emirates
 
-**File: `src/components/navigation/PropertiesVerticalNav.tsx`**
+### 4. Fix Cropping / Overflow
 
-**Logo section:**
-- Make monogram larger: change `w-8 h-8` to `w-12 h-12`
-- Add "Real Estate" text under "JBJ GLOBAL" as a second line
+**Problem:** The top of the panel (search bar, title) gets cropped when opened.
 
-**Navigation items - expand the list:**
-Current: Off-plan, Market, Guides, Services, About, Contact
-New list:
-- Off-plan (Properties)
-- Buy
-- Sell
-- Rent
-- List Your Property
-- Developers
-- Projects
-- AI Tools (Toolkit)
-- Market Intelligence
-- Guides
-- Services
-- About
-
-**Footer section:**
-- Make "Contact Support" bolder/larger with gold styling
-- Add "Support Ticket" link below it
-- Remove the small logo from the bottom
+**Fix:** By switching from Sheet to Dialog, the centered modal naturally has equal spacing from all edges. The `max-h-[calc(100dvh-4rem)]` ensures 2rem padding from top and bottom. Internal `ScrollArea` handles overflow for the filter sections.
 
 ---
 
-### Summary of File Changes
+### Summary of Changes
 
 | File | Change |
 |------|--------|
-| `src/components/filters/FilterShortcutBar.tsx` | Reduce search slot width; red heart icon on Saved; wire currency/size conversion to price/size filters |
-| `src/pages/PropertiesReelly.tsx` | Fix IntersectionObserver rootMargin for faster scroll toggle |
-| `src/components/navigation/PropertiesVerticalNav.tsx` | Bigger monogram; add "Real Estate" under company name; expand nav items (Buy, Sell, Rent, List, Developers, Projects, AI Tools, Market Intelligence); replace footer logo with Support Ticket link |
+| `src/components/filters/AdvancedFilterPanel.tsx` | Replace Sheet with Dialog; rename "By Company" to "By Developer"; fetch from `developers` table with logos; show checkbox + logo + name list; filter EMIRATES_OPTIONS to UAE only; ensure no cropping |
 
 ### Technical Details
 
-**Currency conversion rates (approximate, stored as constants):**
+**Dialog structure:**
 ```
-AED: 1, USD: 0.2723, EUR: 0.2512, GBP: 0.2145, INR: 22.73
+<Dialog open={open} onOpenChange={onOpenChange}>
+  <DialogContent className="max-w-2xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 flex flex-col overflow-hidden">
+    {/* Header - fixed */}
+    {/* ScrollArea - flex-1 */}
+    {/* Footer - fixed */}
+  </DialogContent>
+</Dialog>
 ```
-When user switches currency, multiply existing price filter values by `newRate / oldRate`.
 
-**Size conversion:**
+**Developer list item:**
 ```
-1 sqm = 10.764 sqft
+<button className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-gold/10">
+  <div className="w-4 h-4 rounded border border-gold/40 flex items-center justify-center">
+    {isSelected && <Check className="w-3 h-3 text-black" />}
+  </div>
+  <div className="w-7 h-7 rounded bg-white border border-gold/20 p-0.5 flex items-center justify-center">
+    <img src={dev.logo_url} className="w-full h-full object-contain" />
+  </div>
+  <span className="text-sm text-black">{dev.name}</span>
+</button>
 ```
-When toggling priceMode between sqft and sqm, convert sizeMin/sizeMax accordingly.
 
-**Scroll fix:**
-```
-rootMargin: "-1px 0px 0px 0px"  // instead of "-80px"
-```
-This triggers the fixed state as soon as the sentinel scrolls past the top edge, eliminating the delay.
-
-**Heart icon:**
+**Location filter (UAE only):**
 ```tsx
-<Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-```
-
-**Vertical nav expanded items:**
-```ts
-const NAV_ITEMS = [
-  { label: "Off-plan", href: "/properties", icon: Building2 },
-  { label: "Buy", href: "/buy", icon: Home },
-  { label: "Sell", href: "/sell", icon: Tag },
-  { label: "Rent", href: "/rent", icon: Key },
-  { label: "List Property", href: "/list-property", icon: PlusCircle },
-  { label: "Developers", href: "/developers", icon: Building },
-  { label: "Projects", href: "/projects", icon: Layers },
-  { label: "AI Tools", href: "/toolkit", icon: Cpu },
-  { label: "Market Intel", href: "/market-intelligence", icon: BarChart3 },
-  { label: "Guides", href: "/guides", icon: BookOpen },
-  { label: "Services", href: "/services", icon: Briefcase },
-  { label: "About", href: "/about", icon: Users },
-];
+const uaeEmirates = EMIRATES_OPTIONS.filter(e => e.country === 'UAE');
 ```
