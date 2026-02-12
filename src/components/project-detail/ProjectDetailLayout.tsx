@@ -998,7 +998,7 @@ export default function ProjectDetailLayout({
           </div>
 
           {/* DLD MARKET INTELLIGENCE */}
-          <SectionDivider />
+          <SectionDivider variant="champagne" />
           <DLDMarketWidget />
 
           {/* BROCHURE - Full width two-column layout - Always visible */}
