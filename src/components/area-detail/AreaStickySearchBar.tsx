@@ -45,7 +45,7 @@ export const AreaStickySearchBar = ({ areaName, areaSlug }: AreaStickySearchBarP
     if (!target) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => setBottomReached(entry.isIntersecting),
+      ([entry]) => setBottomReached(entry.isIntersecting || entry.boundingClientRect.top < 0),
       { threshold: 0.1 }
     );
     observer.observe(target);

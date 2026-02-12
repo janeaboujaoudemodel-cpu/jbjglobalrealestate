@@ -552,6 +552,7 @@ function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'd
   const { mode, setMode } = useUserModeContext();
   const [savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
   const [savedOpen, setSavedOpen] = useState(false);
+  const [confirmDeleteIndex, setConfirmDeleteIndex] = useState<number | null>(null);
 
   const isDark = variant === 'dark';
   const btnBase = cn(
@@ -579,6 +580,7 @@ function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'd
     const updated = savedFilters.filter((_, i) => i !== index);
     setSavedFilters(updated);
     localStorage.setItem('jbj-saved-filters', JSON.stringify(updated));
+    setConfirmDeleteIndex(null);
   };
 
   const applySavedFilter = (filter: SavedFilter) => {
@@ -622,12 +624,30 @@ function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'd
                     <p className="text-xs font-semibold text-black truncate">{sf.name}</p>
                     <p className="text-[10px] text-black/40">{new Date(sf.createdAt).toLocaleDateString()}</p>
                   </div>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); deleteSavedFilter(idx); }}
-                    className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-500/10 text-red-500 transition-all"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                  {confirmDeleteIndex === idx ? (
+                    <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                      <span className="text-[10px] text-red-600 font-semibold whitespace-nowrap">Delete?</span>
+                      <button
+                        onClick={() => deleteSavedFilter(idx)}
+                        className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-500 text-white hover:bg-red-600 transition-colors"
+                      >
+                        Yes
+                      </button>
+                      <button
+                        onClick={() => setConfirmDeleteIndex(null)}
+                        className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-white border border-gold/40 text-black hover:bg-gold/10 transition-colors"
+                      >
+                        No
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setConfirmDeleteIndex(idx); }}
+                      className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-500/10 text-red-500 transition-all"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
