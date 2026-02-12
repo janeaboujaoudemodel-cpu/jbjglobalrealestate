@@ -345,12 +345,7 @@ const ProjectFilters = ({
               <SelectValue placeholder="All Developers" />
             </SelectTrigger>
             <SelectContent className="max-h-72 w-[260px]">
-              <SelectItem value="all">
-                <div className="flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-gold shrink-0" />
-                  <span>All Developers</span>
-                </div>
-              </SelectItem>
+              <SelectItem value="all">All Developers</SelectItem>
               {developers && developers.map((developer) => (
                 <SelectItem key={developer.id} value={developer.id}>
                   <div className="flex items-center gap-2">
