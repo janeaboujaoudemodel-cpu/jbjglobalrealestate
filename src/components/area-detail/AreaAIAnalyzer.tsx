@@ -308,7 +308,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
       const devName = colonSplit[0]?.trim() || clean;
       const projects = colonSplit.slice(1).join(':').trim();
       return { name: devName, projects };
-    }).slice(0, 6);
+    }).slice(0, 4);
   }, [text]);
 
   const totalDevs = stats?.developers?.length || devEntries.length;
