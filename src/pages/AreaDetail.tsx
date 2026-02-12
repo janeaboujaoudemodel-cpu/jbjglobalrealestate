@@ -3,6 +3,7 @@
  * Full-screen hero, projects grid, developers, map, AI analyzer
  */
 
+import { useState, useEffect } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, ArrowRight, Loader2, Phone, ArrowUpRight } from "lucide-react";
@@ -17,11 +18,22 @@ import { AreaMapSection } from "@/components/area-detail/AreaMapSection";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { AreaAIAnalyzer } from "@/components/area-detail/AreaAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
+import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
 
 const AreaDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: area, isLoading } = useAreaBySlug(slug);
   const { data: allAreas } = useAreas({ limit: 20 });
+  const [isFilterFixed, setIsFilterFixed] = useState(false);
+
+  // Detect when AreaProjectsGrid sets filter-bar-fixed on body
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsFilterFixed(document.body.classList.contains('filter-bar-fixed'));
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   if (isLoading) {
     return (
@@ -43,7 +55,14 @@ const AreaDetail = () => {
   const relatedAreas = allAreas?.filter(a => a.id !== area.id && a.emirate === area.emirate).slice(0, 4) || [];
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className={`min-h-screen bg-black flex ${isFilterFixed ? '' : ''}`}>
+      {/* Vertical Nav when filter bar replaces header */}
+      {isFilterFixed && (
+        <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
+          <PropertiesVerticalNav />
+        </div>
+      )}
+      <div className={`flex-1 ${isFilterFixed ? 'lg:ml-[200px]' : ''} transition-all duration-200`}>
       <SEOHead 
         title={`${area.name} - Real Estate in ${area.emirate} | JBJ`}
         description={area.description || `Explore properties in ${area.name}, ${area.emirate}.`}
@@ -180,6 +199,7 @@ const AreaDetail = () => {
           </div>
         </section>
       )}
+      </div>
     </div>
   );
 };
