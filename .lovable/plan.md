@@ -1,44 +1,130 @@
 
 
-## Fix "Sold Out" Color + Ensure Daily Status Updates
+## Project Detail Page Overhaul - Reelly-Style Enhancements
 
-### 1. Change "Sold Out" Dot Color from Gray to Red
+This is a large set of improvements to the project detail page. Given the scope, this plan focuses on the highest-impact changes that can be implemented together.
 
-**Problem:** In the status filter dropdowns, the "Sold Out" option shows a gray dot (`bg-zinc-400`) instead of red. This is inconsistent with how "Sold Out" is displayed everywhere else (red badges, red text).
+### 1. Disable Scroll Wheel Zoom on Map (Prevent Accidental Zoom)
 
-**Fix:** Change the `dotClass` for "Sold Out" from `bg-zinc-400` to `bg-red-500` in two files:
+**Problem:** Two-finger scrolling on the map triggers zoom in/out, disrupting page scrolling.
 
-| File | Line | Change |
-|------|------|--------|
-| `src/components/filters/FilterShortcutBar.tsx` | 116 | `dotClass: 'bg-zinc-400'` to `dotClass: 'bg-red-500'` |
-| `src/components/filters/AdvancedFilterPanel.tsx` | 32 | `dotClass: 'bg-zinc-400'` to `dotClass: 'bg-red-500'` |
+**Solution:** Add a "Click to enable map" overlay pattern (as shown in the Reelly reference image). The map loads with `scrollWheelZoom={false}` and shows an overlay. Clicking the overlay enables scroll zoom. This prevents accidental zoom while scrolling the page.
 
-Also update `src/components/home/HeroSearchBar.tsx` line 98 where "Sold Out" already uses `bg-red-500` (this one is correct, no change needed).
-
----
-
-### 2. Daily Automatic Status Updates (Already Happening)
-
-**Good news:** The daily Reelly auto-sync already handles this. Here is what runs every day at 04:00 UAE time:
-
-1. **`reelly-api-sync`** fetches all projects from Reelly API and updates `sale_status` (Announced, On Sale, Sold Out, etc.) for every project
-2. **`bulk-approve-imports`** propagates these status changes to the live `projects` table, including setting `is_sold_out = true` when the status contains "sold"
-
-So if a project changes from "On Sale" to "Sold Out" on Reelly, it will be automatically reflected in your portal within the next daily sync cycle. No additional work is needed for Reelly-sourced status tracking.
+**File:** `src/components/project-detail/ProjectLocationMap.tsx`
+- Set `scrollWheelZoom={false}` on `MapContainer`
+- Add a transparent overlay with "Click to enable map" text
+- On click, remove overlay and enable scroll zoom via `map.scrollWheelZoom.enable()`
 
 ---
 
-### 3. No Additional Google Research Needed
+### 2. "Nearby Points of Interest" Section Below Map
 
-The Reelly API is the authoritative source for project sale statuses in the UAE market. It already tracks status transitions (Announced, Presale EOI, Start of Sales, On Sale, Sold Out) and the daily sync captures these changes. Adding a separate Google search layer would be unreliable and could conflict with the API data.
+**Problem:** The location distances (e.g., "Downtown Dubai 18.8 km") exist but are displayed above the map. The reference shows them styled as a "Nearby" list below the map with place name on the left and distance on the right.
+
+**Solution:** Restructure the Location section to: Location heading with address, then Map, then "Nearby" points of interest list below the map in a clean two-column format (place name left, distance right).
+
+**File:** `src/components/project-detail/ProjectDetailLayout.tsx` (lines 900-974)
+- Move `location_distances` rendering from above the map to below it
+- Restyle as a clean list with place name on left, distance (km) on right
+
+**File:** `src/components/project-detail/PointsOfInterest.tsx`
+- Restyle to show a simple list: place name on left, distance on right (matching reference)
 
 ---
 
-### Summary
+### 3. "Report an Issue" Banner (Reelly-Style Yellow Banner)
+
+**Problem:** Currently a small text link. The reference shows a prominent yellow banner: "Noticed something incorrect? Help us keep this project up to date" with a "Report an issue" button that opens a modal.
+
+**Solution:** Replace the simple text link with a styled banner and add a proper report modal with issue type selection.
+
+**File:** `src/components/project-detail/ReportIssueButton.tsx`
+- Redesign as a full-width yellow/amber banner with warning icon
+- Add a modal (Dialog) with issue type dropdown: Incorrect Price, Incorrect Availability, Incorrect Payment Plan, Updated Project Information, Other
+- Include a text area for details
+- Submit saves to a `project_reports` table (new)
+
+**File:** `src/components/project-detail/ProjectDetailLayout.tsx`
+- Position the banner prominently (above amenities section, matching reference placement)
+
+---
+
+### 4. Recommended Projects Cards - Reelly Style
+
+**Problem:** Current cards show basic info. Reference shows: status badge (On Sale), handover date (Q1 2028), "Advised" badge on top of image; developer logo overlaid at bottom of image; project name, area, developer below; price from and payment plan at bottom.
+
+**Solution:** Redesign the recommended project cards to match the reference layout.
+
+**File:** `src/components/project-detail/RecommendedProjects.tsx`
+- Add top badges row: sale status pill, handover date pill, "Recommended" badge (gold instead of purple)
+- Overlay developer logo at bottom-left of image (small rounded square)
+- Below image: project name, location, developer name
+- Bottom row: "Price from X AED" on left, "Payment plan 60/40%" on right with info icon
+
+---
+
+### 5. Master Plan Section - Maximize/Enlarge Button
+
+**Problem:** The master plan image exists but lacks a maximize button to view it larger, as shown in the reference.
+
+**Solution:** Add a maximize icon button on the master plan image that opens it in a full-screen lightbox or new tab.
+
+**File:** `src/components/project-detail/MasterPlanSection.tsx`
+- Add a `Maximize` icon button (top-right corner of image)
+- On click, open the image in a new tab at full resolution
+
+---
+
+### 6. Description - Remove "Project General Facts" Label
+
+**Problem:** User wants the description to show immediately without a section heading like "Project General Facts".
+
+**Solution:** The current code already renders the description directly under "Details" heading. Verify and ensure no "Project General Facts" label exists. The description content flows naturally after the quick facts bar.
+
+**File:** `src/components/project-detail/ProjectDetailLayout.tsx` - Verify only (likely no change needed)
+
+---
+
+### 7. Payment Plan - Two Options Display (100% and Installment)
+
+**Problem:** Reference shows two payment plan options side by side: "100%" (full payment) and the installment plan (e.g., "60/40"). The current implementation only shows the installment breakdown.
+
+**Solution:** Add a "100% Payment" option alongside the installment plan in a tab or card layout.
+
+**File:** `src/components/project-detail/PaymentPlanVisualization.tsx`
+- Add a two-tab layout: "Full Payment (100%)" and "Payment Plan (60/40)"
+- Full payment tab shows a simple "Pay 100% upfront" card
+- Installment tab shows the existing breakdown with the colored progress bar
+- Add "On Booking / During Construction / On Handover" labels matching the reference style
+
+---
+
+### Summary of All Files
 
 | File | Change |
 |------|--------|
-| `src/components/filters/FilterShortcutBar.tsx` | "Sold Out" dot: gray to red |
-| `src/components/filters/AdvancedFilterPanel.tsx` | "Sold Out" dot: gray to red |
+| `src/components/project-detail/ProjectLocationMap.tsx` | Disable scroll zoom, add "Click to enable" overlay |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Move POI below map, position Report banner, verify description |
+| `src/components/project-detail/PointsOfInterest.tsx` | Restyle as clean distance list |
+| `src/components/project-detail/ReportIssueButton.tsx` | Redesign as yellow banner with report modal |
+| `src/components/project-detail/RecommendedProjects.tsx` | Add status/handover/advised badges, developer logo overlay, payment plan |
+| `src/components/project-detail/MasterPlanSection.tsx` | Add maximize button on image |
+| `src/components/project-detail/PaymentPlanVisualization.tsx` | Add 100% vs installment tab layout |
 
-Two small color changes. The daily status sync infrastructure is already in place and working.
+### Database Migration
+
+A new `project_reports` table to store user-submitted issue reports:
+
+```text
+project_reports (
+  id uuid PK,
+  project_id text NOT NULL,
+  issue_type text NOT NULL,
+  description text,
+  reporter_email text,
+  created_at timestamptz DEFAULT now()
+)
+```
+
+With RLS allowing anonymous inserts (public-facing feature) and admin-only reads.
+
