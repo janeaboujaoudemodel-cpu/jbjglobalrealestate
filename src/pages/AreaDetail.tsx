@@ -115,13 +115,18 @@ const AreaDetail = () => {
 
       {/* Related Areas */}
       {relatedAreas.length > 0 && (
-        <section className="py-16 bg-black">
-          <div className="container mx-auto px-4">
+        <section className="py-16 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] relative overflow-hidden">
+          {/* Subtle decorative elements */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          <div className="absolute top-10 left-10 w-40 h-40 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-10 right-10 w-60 h-60 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="container mx-auto px-4 relative z-10">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-              <h2 className="text-white text-2xl md:text-3xl font-bold mb-2 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-black text-2xl md:text-3xl font-bold mb-2 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Explore More Trending Areas
               </h2>
-              <p className="text-zinc-400 text-center mb-8">Discover premium neighborhoods across {area.emirate}</p>
+              <p className="text-black/50 text-center mb-8">Discover premium neighborhoods across {area.emirate}</p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
                 {relatedAreas.map((relatedArea) => (
                   <Link 
