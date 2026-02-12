@@ -1,59 +1,58 @@
 
 
-## Add Search Bar Header + Shortcut Sub-Nav to Project Page Scroll Header
+## Three Changes: Correct Filter Bar on Project Page, Source Tracking on All Forms, and Visual Highlights
 
-### Current State
-The project page sticky header currently shows only one row: the curated 8-item shortcut bar (Details, Gallery, Developer, etc.) in a champagne gradient. The main GlobalHeader hides on scroll (already working). However, other pages like Area and Developer pages show the **search/filter bar** as the scroll header -- the user wants the same pattern on the project page.
+### 1. Replace PropertySearchBar with FilterShortcutBar on Project Page Sticky Header
 
-### What Needs to Change
-
-The sticky header on the project page should have **two rows**:
-1. **Row 1 (Search bar)**: The `PropertySearchBar` component in compact mode -- same search bar used across the platform, providing keyword search + filters
-2. **Row 2 (Shortcuts)**: The curated 8-item navigation (Details, Gallery, Developer, Location, Brochure, AI Analyzer, Mortgage, Register Interest) in a slightly darker champagne background. "Register Interest" gets a highlighted gold CTA button style to stand out.
-
-### Changes
+The project page currently uses `PropertySearchBar` (a simple search input) in Row 1 of the sticky header. The user wants the same filter bar used on the Developer page -- which is `ProjectFilters` + `FilterShortcutBar` (the pill-based filter system with Price, Payments, Handover, Property Type, Bedrooms, Status, Construction, Sorting, Hide Sold, and Save).
 
 **File: `src/components/project-detail/ProjectDetailLayout.tsx`**
 
-#### 1. Import PropertySearchBar
-Add import for `PropertySearchBar` (compact mode) at the top of the file.
+- Remove `PropertySearchBar` import, add imports for `FilterShortcutBar`, `ShortcutFilterState`, `defaultShortcutFilters`, and `ProjectFilters`
+- Add `shortcutFilters` state: `useState<ShortcutFilterState>(defaultShortcutFilters)`
+- Replace Row 1 (the `PropertySearchBar` section) with a `ProjectFilters` + `FilterShortcutBar` combo in the same champagne gradient container, matching the DeveloperDetail layout
+- Keep Row 2 (the curated shortcuts bar with Details, Gallery, Developer, etc.) exactly as-is below it
 
-#### 2. Restructure the sticky nav into two rows
+### 2. Highlight "Hide Sold" in Red and "Save" Heart in Red
 
-Replace the current single-row champagne bar with:
+**File: `src/components/filters/FilterShortcutBar.tsx`**
 
-**Row 1 -- Search Bar**
-- Background: main champagne gradient (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`)
-- Contains: `PropertySearchBar compact` for quick property search
-- Padding: `py-2 px-4`
+- **Hide Sold Out button** (line ~204-210): When active (`filters.hideSoldOut === true`), apply a red-tinted style: red border (`border-red-500`), red text, and the `EyeOff` icon in red. When inactive, give it a subtle red border hint (`border-red-300/50`) so it stands out from other pills
+- **Save button** (line ~213-219): Change the `Heart` icon to always render in red (`text-red-500`) for a premium look, regardless of state
 
-**Row 2 -- Curated Shortcuts**
-- Background: darker champagne gradient (`from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8]`)
-- Contains: The 8 curated shortcuts (Details through Register Interest)
-- "Register Interest" rendered as a highlighted gold button (gold gradient bg, black text, glow effect) instead of a plain text tab
-- Compact single line, horizontally scrollable on mobile
+### 3. Add Contextual Source Tracking to All Forms
 
-#### 3. Register Interest button highlight
+Every form submission should record **which page type** and **which specific entity** (project name, developer name, area name) the form was submitted from. Forms to update:
 
-"Register Interest" will be separated from the other 7 items and styled as a prominent CTA:
-- Gold gradient background (`from-gold to-gold-dark`)
-- Black bold text
-- Subtle glow shadow (`box-shadow: 0 0 15px rgba(200,167,102,0.4)`)
-- Positioned at the right end of the bar
+| Form | File | Current Source | New Source Format |
+|------|------|---------------|-------------------|
+| ConsultationRequestForm | `src/components/ConsultationRequestForm.tsx` | `project-interest-{id}` or `properties-consultation` | Add `source_page` field with current URL path; include `projectName` in `source_details` |
+| ProjectInquiryForm | `src/components/project-detail/ProjectInquiryForm.tsx` | `project_inquiry` with `source_details: projectName` | Already good -- add `source_page` with `window.location.pathname` |
+| OffPlanInquiryCTA | `src/components/OffPlanInquiryCTA.tsx` | `offplan_cta` | Add `source_page: window.location.pathname` and `source_details` with context from URL (developer/area/project name) |
+| DealRegistrationForm | `src/components/deals/DealRegistrationForm.tsx` | None | Add `source_page` metadata in notes or a dedicated field |
+| VisitRequestForm | `src/components/developer-visits/VisitRequestForm.tsx` | None | Add `notes` with source page context |
+| InquiryFormModal | `src/components/InquiryFormModal.tsx` | `source` prop passed in | Enhance to also pass `window.location.pathname` as `source_page` in the insert |
+| LeadCaptureModal | `src/components/project-detail/LeadCaptureModal.tsx` | Brochure context | Add `source_page` to the lead capture insert |
 
-### Visual Layout
+For each form, the approach is:
+- Include `window.location.pathname` as the `source_page` value in the database insert
+- Where possible, also pass the entity name (project name, developer name, area name) as `source_details`
+- This uses existing `crm_leads` columns (`source`, `source_details`) -- if `source_page` column doesn't exist, we store it in `notes` or `tags`
 
-```text
-+---------------------------------------------------------------------------+
-| [Search icon] Search properties...        [Location v] [Developer v] SEARCH |  <-- Row 1: Search bar (light champagne)
-+---------------------------------------------------------------------------+
-| Details | Gallery | Developer | Location | Brochure | AI | Mortgage | [REGISTER INTEREST] |  <-- Row 2: Shortcuts (darker champagne)
-+---------------------------------------------------------------------------+
-```
+**Database check**: Verify if `crm_leads` has a `source_page` column. If not, add one via migration.
 
-### Files Summary
+### Technical Summary
 
-| File | Action |
-|------|--------|
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Add PropertySearchBar import; restructure sticky nav into 2 rows; highlight Register Interest as gold CTA button |
+| File | Changes |
+|------|---------|
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Replace PropertySearchBar with ProjectFilters + FilterShortcutBar; add shortcutFilters state |
+| `src/components/filters/FilterShortcutBar.tsx` | Red styling for Hide Sold button and red Heart icon for Save |
+| `src/components/ConsultationRequestForm.tsx` | Add source_page tracking |
+| `src/components/project-detail/ProjectInquiryForm.tsx` | Add source_page tracking |
+| `src/components/OffPlanInquiryCTA.tsx` | Add source_page and contextual source_details |
+| `src/components/deals/DealRegistrationForm.tsx` | Add source page context |
+| `src/components/developer-visits/VisitRequestForm.tsx` | Add source page context |
+| `src/components/InquiryFormModal.tsx` | Add source_page to insert |
+| `src/components/project-detail/LeadCaptureModal.tsx` | Add source_page to insert |
+| Database migration (if needed) | Add `source_page` column to `crm_leads` |
 
