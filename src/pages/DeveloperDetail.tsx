@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useRef, lazy, Suspense } from "react";
 import { createPortal } from "react-dom";
 import { useParams, Link } from "react-router-dom";
-import { useDeveloper, useProjectsByDeveloper, useCommunities, useTrendingAreas } from "@/hooks/useProjects";
+import { useDeveloper, useProjectsByDeveloper, useCommunities, useTrendingAreas, useDevelopers } from "@/hooks/useProjects";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import ProjectCard from "@/components/ProjectCard";
@@ -32,6 +32,7 @@ const DeveloperDetail = () => {
   const { data: projects, isLoading: loadingProjects } = useProjectsByDeveloper(slug || "");
   const { data: communities } = useCommunities();
   const { data: trendingAreas } = useTrendingAreas();
+  const { data: allDevelopers } = useDevelopers();
 
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [selectedEmirate, setSelectedEmirate] = useState<string | null>(null);
@@ -304,24 +305,26 @@ const DeveloperDetail = () => {
               onFiltersChange={setFilters}
               communities={communities}
               trendingAreas={trendingAreas}
-              showDeveloperFilter={false}
+              developers={allDevelopers}
+              showDeveloperFilter={true}
             />
           </div>
 
           {/* Spacer when filter is fixed to prevent content hiding under it */}
-          {isFilterFixed && <div className="h-[76px]" />}
+          {isFilterFixed && <div className="h-[100px]" />}
 
           {/* Fixed portal filter bar — when scrolled past sentinel */}
           {isFilterFixed && createPortal(
             <div className="fixed top-[72px] left-0 right-0 z-[9998] py-2 transition-shadow duration-200">
               <div className="container mx-auto px-4">
                 <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
-                  <ProjectFilters
+            <ProjectFilters
                     filters={filters}
                     onFiltersChange={setFilters}
                     communities={communities}
                     trendingAreas={trendingAreas}
-                    showDeveloperFilter={false}
+                    developers={allDevelopers}
+                    showDeveloperFilter={true}
                   />
                 </div>
               </div>
