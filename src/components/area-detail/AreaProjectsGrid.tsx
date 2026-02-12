@@ -20,19 +20,33 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   const [developerFilter, setDeveloperFilter] = useState("all");
   const [bedroomFilter, setBedroomFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
-  const [hasShadow, setHasShadow] = useState(false);
-  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [isFixed, setIsFixed] = useState(false);
+  const placeholderRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
-  // IntersectionObserver for shadow effect only — sticky is always CSS
+  // JS-based fixed positioning — replaces broken CSS sticky (overflow-x-hidden on <main> kills it)
   useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setHasShadow(!entry.isIntersecting),
-      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
+    const placeholder = placeholderRef.current;
+    const bar = barRef.current;
+    const section = sectionRef.current;
+    if (!placeholder || !bar || !section) return;
+
+    const HEADER_HEIGHT = 72;
+
+    const handleScroll = () => {
+      const placeholderRect = placeholder.getBoundingClientRect();
+      const sectionRect = section.getBoundingClientRect();
+      const barHeight = bar.offsetHeight;
+
+      // Fix when placeholder scrolls under header AND section bottom is still below header + bar
+      const shouldFix = placeholderRect.top <= HEADER_HEIGHT && sectionRect.bottom > HEADER_HEIGHT + barHeight + 50;
+      setIsFixed(shouldFix);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // check on mount
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const { data: projects, isLoading } = useQuery({
@@ -168,23 +182,22 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   if (!projects || projects.length === 0) return null;
 
   return (
-    <section id="projects-section" className="pt-16 pb-16 bg-black">
+    <section ref={sectionRef} id="projects-section" className="pt-16 pb-16 bg-black">
       <div className="container mx-auto px-4">
         <div className="rounded-2xl pt-8 overflow-visible" style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}>
           <h2 className="text-black text-2xl md:text-3xl font-bold mb-6 px-6" style={{ fontFamily: "Poppins, sans-serif" }}>
             Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
           </h2>
 
-          {/* Sentinel for IntersectionObserver — shadow toggle */}
-          <div ref={sentinelRef} className="h-0 w-full" />
+          {/* Placeholder reserves space when bar is fixed */}
+          <div ref={placeholderRef} style={{ height: isFixed ? barRef.current?.offsetHeight ?? 0 : 0 }} />
 
-          {/* Filter bar — always sticky via CSS, shadow only when pinned */}
+          {/* Filter bar — JS-driven fixed positioning */}
           <div
-            className={`sticky top-[72px] z-30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 px-6 py-3 transition-shadow duration-200 ${
-              hasShadow ? 'shadow-[0_4px_20px_rgba(200,167,102,0.15)]' : ''
-            }`}
+            ref={barRef}
+            className={`${isFixed ? 'fixed top-[72px] left-0 right-0 z-30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]' : ''} bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200`}
           >
-            <div className="flex flex-wrap items-center gap-3">
+            <div className={`flex flex-wrap items-center gap-3 ${isFixed ? 'container mx-auto px-4' : 'px-6'}`}>
               {/* Search Input */}
               <div className="relative flex-1 min-w-[200px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
