@@ -345,20 +345,10 @@ const ProjectFilters = ({
               <SelectValue placeholder="All Developers" />
             </SelectTrigger>
             <SelectContent className="max-h-72 w-[260px]">
-              <SelectItem value="all">
-                <div className="flex items-center gap-2">
-                  <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${(filters.developerId || "all") === "all" ? "bg-gold border-gold" : "border-gold/40"}`}>
-                    {(filters.developerId || "all") === "all" && <Check className="w-3 h-3 text-white" />}
-                  </div>
-                  <span>All Developers</span>
-                </div>
-              </SelectItem>
+              <SelectItem value="all">All Developers</SelectItem>
               {developers && developers.map((developer) => (
                 <SelectItem key={developer.id} value={developer.id}>
                   <div className="flex items-center gap-2">
-                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${filters.developerId === developer.id ? "bg-gold border-gold" : "border-gold/40"}`}>
-                      {filters.developerId === developer.id && <Check className="w-3 h-3 text-white" />}
-                    </div>
                     {(developer.logo_url || developer.logo_url_processed) ? (
                       <img
                         src={developer.logo_url_processed || developer.logo_url || ''}
@@ -385,16 +375,10 @@ const ProjectFilters = ({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {["AED", "USD", "EUR", "GBP"].map((cur) => (
-                <SelectItem key={cur} value={cur}>
-                  <div className="flex items-center gap-2">
-                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${filters.currency === cur ? "bg-gold border-gold" : "border-gold/40"}`}>
-                      {filters.currency === cur && <Check className="w-3 h-3 text-white" />}
-                    </div>
-                    <span>{cur}</span>
-                  </div>
-                </SelectItem>
-              ))}
+              <SelectItem value="AED">AED</SelectItem>
+              <SelectItem value="USD">USD</SelectItem>
+              <SelectItem value="EUR">EUR</SelectItem>
+              <SelectItem value="GBP">GBP</SelectItem>
             </SelectContent>
           </Select>
 
@@ -410,20 +394,11 @@ const ProjectFilters = ({
               <SelectValue placeholder="Location" />
             </SelectTrigger>
             <SelectContent>
-              {EMIRATES.map((emirate) => {
-                const emVal = emirate.value === "all" ? "all" : emirate.value;
-                const isActive = (emirate.value === "all" && !filters.emirate) || filters.emirate === emirate.value;
-                return (
-                  <SelectItem key={emirate.value} value={emVal}>
-                    <div className="flex items-center gap-2">
-                      <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${isActive ? "bg-gold border-gold" : "border-gold/40"}`}>
-                        {isActive && <Check className="w-3 h-3 text-white" />}
-                      </div>
-                      <span>{emirate.label}</span>
-                    </div>
-                  </SelectItem>
-                );
-              })}
+              {EMIRATES.map((emirate) => (
+                <SelectItem key={emirate.value} value={emirate.value === "all" ? "all" : emirate.value}>
+                  {emirate.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
