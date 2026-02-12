@@ -43,6 +43,7 @@ const DeveloperDetail = () => {
   const [isDevDescExpanded, setIsDevDescExpanded] = useState(false);
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const [bottomReached, setBottomReached] = useState(false);
+  const [showAllProjects, setShowAllProjects] = useState(false);
   const filterSentinelRef = useRef<HTMLDivElement>(null);
 
   // IntersectionObserver for fixed filter positioning
@@ -73,6 +74,9 @@ const DeveloperDetail = () => {
     observer.observe(target);
     return () => observer.disconnect();
   }, []);
+
+  // Reset showAll when filters or developer changes
+  useEffect(() => { setShowAllProjects(false); }, [slug, selectedEmirate, filters]);
 
   // Apply emirate filter first, then apply other filters
   const projectsInEmirate = useMemo(() => {
@@ -380,11 +384,30 @@ const DeveloperDetail = () => {
               ))}
             </div>
           ) : filteredProjects.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {(showAllProjects ? filteredProjects : filteredProjects.slice(0, 9)).map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
+              </div>
+              {!showAllProjects && filteredProjects.length > 9 && (
+                <div className="flex justify-center mt-10">
+                  <button
+                    onClick={() => setShowAllProjects(true)}
+                    className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold tracking-wide rounded-xl transition-all duration-300 border-2 border-gold/40 hover:border-gold/80 hover:-translate-y-0.5"
+                    style={{
+                      background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)',
+                      boxShadow: '0 4px 20px rgba(200,167,102,0.2)',
+                    }}
+                  >
+                    <span className="text-foreground">
+                      Explore All {filteredProjects.length} {developer.name} Projects
+                    </span>
+                    <ChevronDown className="w-5 h-5 text-gold group-hover:translate-y-0.5 transition-transform" />
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
             <div className="text-center py-16 jj-box-active">
               <Building2 className="w-12 h-12 text-gold mx-auto mb-4" />
