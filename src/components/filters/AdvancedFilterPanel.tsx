@@ -1,9 +1,9 @@
 /**
- * AdvancedFilterPanel - Full advanced filter sheet with all sections, live count, champagne styling
+ * AdvancedFilterPanel - Centered dialog with all filter sections, developer logos, UAE-only locations
  */
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { X, Search, Heart, Building2 } from "lucide-react";
-import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import { useState, useEffect, useCallback } from "react";
+import { X, Search, Heart, Check } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -11,6 +11,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { EMIRATES_OPTIONS } from "@/constants/filterConfig";
+import { SafeImage } from "@/components/SafeImage";
 import type { ShortcutFilterState } from "./FilterShortcutBar";
 import { defaultShortcutFilters } from "./FilterShortcutBar";
 
@@ -55,10 +56,18 @@ const BEDROOM_OPTIONS = [
   { value: '5+', label: '5+ BR' },
 ];
 
+// UAE-only emirates
+const UAE_EMIRATES = EMIRATES_OPTIONS.filter(e => e.country === 'UAE');
+
+interface DeveloperEntry {
+  name: string;
+  logo_url: string | null;
+}
+
 export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFilterChange }: AdvancedFilterPanelProps) {
   const [localFilters, setLocalFilters] = useState<ShortcutFilterState>(filters);
   const [projectCount, setProjectCount] = useState<number | null>(null);
-  const [developers, setDevelopers] = useState<string[]>([]);
+  const [developers, setDevelopers] = useState<DeveloperEntry[]>([]);
   const [devSearch, setDevSearch] = useState('');
   const [emirateSearch, setEmirateSearch] = useState('');
 
@@ -67,18 +76,16 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
     if (open) setLocalFilters(filters);
   }, [open, filters]);
 
-  // Fetch distinct developers
+  // Fetch developers with logos from developers table
   useEffect(() => {
     if (!open) return;
     supabase
-      .from('projects')
-      .select('developer_name')
-      .not('developer_name', 'is', null)
+      .from('developers')
+      .select('name, logo_url')
+      .order('name')
       .then(({ data }) => {
         if (data) {
-          const unique = [...new Set(data.map(d => d.developer_name).filter(Boolean))] as string[];
-          unique.sort((a, b) => a.localeCompare(b));
-          setDevelopers(unique);
+          setDevelopers(data.map(d => ({ name: d.name, logo_url: d.logo_url })));
         }
       });
   }, [open]);
@@ -121,37 +128,30 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
   const sectionTitle = "text-sm font-bold text-black mb-3";
   const inputClass = "w-full h-10 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30";
 
-  const filteredEmirates = EMIRATES_OPTIONS.filter(e =>
+  const filteredEmirates = UAE_EMIRATES.filter(e =>
     !emirateSearch || e.label.toLowerCase().includes(emirateSearch.toLowerCase())
   );
 
   const filteredDevs = developers.filter(d =>
-    !devSearch || d.toLowerCase().includes(devSearch.toLowerCase())
+    !devSearch || d.name.toLowerCase().includes(devSearch.toLowerCase())
   );
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        side="right"
-        className="w-full sm:max-w-md p-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-l-2 border-gold/40 flex flex-col"
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        className="max-w-2xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 flex flex-col overflow-hidden"
       >
         {/* Header */}
         <div className="px-5 pt-5 pb-4 border-b border-gold/20 flex-shrink-0">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <SheetTitle className="text-lg font-bold text-black">New Off Plan Projects</SheetTitle>
+              <DialogTitle className="text-lg font-bold text-black">New Off Plan Projects</DialogTitle>
               {projectCount !== null && (
                 <span className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#C8A766] to-[#D4AF37]">
                   {projectCount.toLocaleString()} live projects
                 </span>
               )}
             </div>
-            <button
-              onClick={() => onOpenChange(false)}
-              className="p-2 rounded-full hover:bg-black/5 transition-colors"
-            >
-              <X className="w-5 h-5 text-black/60" />
-            </button>
           </div>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
@@ -168,7 +168,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
         {/* Scrollable body */}
         <ScrollArea className="flex-1 overflow-y-auto">
           <div className="px-5 py-4 space-y-6">
-            {/* Location */}
+            {/* Location - UAE Only */}
             <section>
               <h4 className={sectionTitle}>Location</h4>
               <input
@@ -178,22 +178,31 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                 placeholder="Search emirate..."
                 className={cn(inputClass, "mb-2 h-9 text-xs")}
               />
-              <div className="flex flex-wrap gap-2">
-                {filteredEmirates.map((em) => (
-                  <button
-                    key={em.value}
-                    onClick={() => update({ emirates: toggleArray(localFilters.emirates, em.value) })}
-                    className={cn(togglePillBase, localFilters.emirates.includes(em.value) ? togglePillOn : togglePillOff)}
-                  >
-                    {em.label}
-                  </button>
-                ))}
+              <div className="space-y-1 max-h-48 overflow-y-auto">
+                {filteredEmirates.map((em) => {
+                  const isSelected = localFilters.emirates.includes(em.value);
+                  return (
+                    <button
+                      key={em.value}
+                      onClick={() => update({ emirates: toggleArray(localFilters.emirates, em.value) })}
+                      className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-gold/10 transition-colors"
+                    >
+                      <div className={cn(
+                        "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
+                        isSelected ? "border-gold bg-gold/20" : "border-gold/40"
+                      )}>
+                        {isSelected && <Check className="w-3 h-3 text-black" />}
+                      </div>
+                      <span className="text-sm text-black">{em.label}</span>
+                    </button>
+                  );
+                })}
               </div>
             </section>
 
-            {/* By Company */}
+            {/* By Developer */}
             <section>
-              <h4 className={sectionTitle}>By Company</h4>
+              <h4 className={sectionTitle}>By Developer</h4>
               <input
                 type="text"
                 value={devSearch}
@@ -201,20 +210,36 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                 placeholder="Search developer..."
                 className={cn(inputClass, "mb-2 h-9 text-xs")}
               />
-              <div className="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto">
-                {filteredDevs.slice(0, 50).map((dev) => (
-                  <button
-                    key={dev}
-                    onClick={() => update({ developers: toggleArray(localFilters.developers, dev) })}
-                    className={cn(
-                      togglePillBase, "text-[11px]",
-                      localFilters.developers.includes(dev) ? togglePillOn : togglePillOff
-                    )}
-                  >
-                    <Building2 className="w-3 h-3 inline mr-1 opacity-50" />
-                    {dev}
-                  </button>
-                ))}
+              <div className="space-y-1 max-h-56 overflow-y-auto">
+                {filteredDevs.map((dev) => {
+                  const isSelected = localFilters.developers.includes(dev.name);
+                  return (
+                    <button
+                      key={dev.name}
+                      onClick={() => update({ developers: toggleArray(localFilters.developers, dev.name) })}
+                      className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-gold/10 transition-colors"
+                    >
+                      <div className={cn(
+                        "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
+                        isSelected ? "border-gold bg-gold/20" : "border-gold/40"
+                      )}>
+                        {isSelected && <Check className="w-3 h-3 text-black" />}
+                      </div>
+                      <div className="w-7 h-7 rounded bg-white border border-gold/20 p-0.5 flex items-center justify-center flex-shrink-0">
+                        {dev.logo_url ? (
+                          <SafeImage
+                            src={dev.logo_url}
+                            alt={dev.name}
+                            className="w-full h-full object-contain"
+                          />
+                        ) : (
+                          <span className="text-[8px] font-bold text-black/40">{dev.name.charAt(0)}</span>
+                        )}
+                      </div>
+                      <span className="text-sm text-black text-left truncate">{dev.name}</span>
+                    </button>
+                  );
+                })}
               </div>
             </section>
 
@@ -446,7 +471,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
             Show {projectCount !== null ? projectCount.toLocaleString() : '...'} projects
           </button>
         </div>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 }
