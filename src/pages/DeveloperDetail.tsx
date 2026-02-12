@@ -13,6 +13,7 @@ import { getHighResImageUrl } from "@/lib/imageUtils";
 import { Button } from "@/components/ui/button";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import { DeveloperAIAnalyzer } from "@/components/developer/DeveloperAIAnalyzer";
+import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -294,6 +295,16 @@ const DeveloperDetail = () => {
           </div>
         )}
 
+        {/* AI Analyzer - Before Projects */}
+        <DeveloperAIAnalyzer
+          developerName={developer.name}
+          foundedYear={developer.founded_year}
+          headquarters={developer.headquarters}
+          completedProjects={developer.completed_projects}
+          activeProjects={developer.offplan_projects || projects?.length}
+          projectCount={projects?.length}
+        />
+
         {/* Projects section */}
         <div className="mt-8">
           {/* Emirates Tabs */}
@@ -400,15 +411,8 @@ const DeveloperDetail = () => {
           )}
         </div>
 
-        {/* AI Analyzer */}
-        <DeveloperAIAnalyzer
-          developerName={developer.name}
-          foundedYear={developer.founded_year}
-          headquarters={developer.headquarters}
-          completedProjects={developer.completed_projects}
-          activeProjects={developer.offplan_projects || projects?.length}
-          projectCount={projects?.length}
-        />
+        {/* DLD Market Widget - Live transaction data */}
+        <DLDMarketWidget />
       </div>
     </section>
   );
