@@ -1,34 +1,47 @@
 
-## Fix DLD Market Intelligence Background Layer
+## Limit Initial Project Display on Developer Pages
 
 ### Problem
-The outer background section behind the "Dubai Market Intelligence" widget is a square rectangle with no rounded corners, while the inner card has rounded corners and a gold border. The background layer needs matching rounded corners and a gold border. Additionally, the section is touching adjacent listing cards due to insufficient padding.
+When a user opens a developer page (e.g., `/developer/binghatti`), all projects load and display at once, which can be overwhelming for developers with 50+ projects.
+
+### Solution
+Show only the first **9 projects** (3 rows x 3 columns) initially, with a premium "Explore All [Developer] Projects" button at the bottom. Clicking it reveals the full list.
 
 ### Changes
 
-**File: `src/components/shared/DLDMarketWidget.tsx`** (line 78)
+**File: `src/pages/DeveloperDetail.tsx`**
 
-Update the outer `<section>` element:
+1. Add a `showAll` state (`useState(false)`) to track whether all projects are displayed
+2. Create a `displayedProjects` variable:
+   - When `showAll` is `false`: slice `filteredProjects` to the first 9
+   - When `showAll` is `true`: show all `filteredProjects`
+3. Reset `showAll` to `false` whenever filters change or the developer slug changes
+4. Replace the grid rendering (line 383-386) to use `displayedProjects` instead of `filteredProjects`
+5. After the grid, add a "View All [Developer] Projects" button when there are more than 9 projects and `showAll` is false:
+   - Button text: `Explore All {filteredProjects.length} {developerName} Projects`
+   - Styled as a champagne gold bordered button (`border-2 border-gold/40`) with gold text, centered below the grid
+   - On click: set `showAll(true)` and smoothly scroll to keep the user's position
 
-1. **Add rounded corners**: Change from a flat rectangle to `rounded-2xl` (or `rounded-3xl` to be slightly larger than the inner card's `rounded-2xl`)
-2. **Add gold border**: Apply `border-2 border-gold/30` to the outer section to match the platform's card standard
-3. **Increase vertical padding**: Change `py-12` to `py-16` to add more breathing room so the widget does not touch adjacent listing cards
-4. **Add horizontal margin**: Apply the `jj-layer-2` margin class (or `mx-1 sm:mx-2 md:mx-3 lg:mx-4`) so the background layer aligns with other page content and does not go edge-to-edge
-5. **Add overflow-hidden**: Ensure the gradient background respects the rounded corners
+### Technical Details
 
-The updated section wrapper will change from:
-```
-<section className="py-12" style={{ background: '...' }}>
-```
-To:
-```
-<section className="py-16 my-8 rounded-3xl border-2 border-gold/30 overflow-hidden mx-1 sm:mx-2 md:mx-3 lg:mx-4" style={{ background: '...' }}>
+```text
+filteredProjects (e.g. 47 projects)
+        |
+        v
+  showAll = false?
+   /          \
+  Yes          No
+   |            |
+ All 47     First 9
+              + "Explore All 47 Binghatti Projects" button
 ```
 
-This adds vertical margin (`my-8`) between the widget and surrounding sections so listing cards do not touch the widget edges.
+- The count text (line 370-373) will always show the total count of filtered projects, not just the displayed ones
+- When filters are applied and reduce the list to 9 or fewer, the button naturally disappears
+- The skeleton loading state remains at 6 items (unchanged)
 
 ### Files Summary
 
 | File | Action |
 |------|--------|
-| `src/components/shared/DLDMarketWidget.tsx` | Update outer section: add rounded corners, gold border, increased padding/margin |
+| `src/pages/DeveloperDetail.tsx` | Add `showAll` state, slice to 9 initially, add "Explore All" CTA button |
