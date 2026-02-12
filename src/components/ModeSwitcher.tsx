@@ -136,11 +136,11 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           sideOffset={5}
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          <div className="px-3 py-2.5 border-b border-zinc-100 mb-2">
-            <p className="text-sm font-semibold text-zinc-700">
+          <div className="px-3 py-2.5 mb-2 rounded-lg bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#D4C4A8] border border-gold/40">
+            <p className="text-sm font-bold text-black/80">
               Select your mode
             </p>
-            <p className="text-xs text-zinc-500 mt-0.5">
+            <p className="text-xs text-black/50 mt-0.5">
               Choose how you want to use the platform
             </p>
           </div>
