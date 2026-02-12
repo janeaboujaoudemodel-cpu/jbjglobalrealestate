@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,31 +24,6 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   const [isFixed, setIsFixed] = useState(false);
   const placeholderRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  // JS-based fixed positioning — replaces broken CSS sticky (overflow-x-hidden on <main> kills it)
-  useEffect(() => {
-    const placeholder = placeholderRef.current;
-    const bar = barRef.current;
-    const section = sectionRef.current;
-    if (!placeholder || !bar || !section) return;
-
-    const HEADER_HEIGHT = 72;
-
-    const handleScroll = () => {
-      const placeholderRect = placeholder.getBoundingClientRect();
-      const sectionRect = section.getBoundingClientRect();
-      const barHeight = bar.offsetHeight;
-
-      // Fix when placeholder scrolls under header AND section bottom is still below header + bar
-      const shouldFix = placeholderRect.top <= HEADER_HEIGHT && sectionRect.bottom > HEADER_HEIGHT + barHeight + 50;
-      setIsFixed(shouldFix);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // check on mount
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ["area-projects-full", areaName],
@@ -74,6 +50,21 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     },
     staleTime: 5 * 60 * 1000,
   });
+
+  // IntersectionObserver-based fixed positioning (same pattern as AreaStickySearchBar)
+  // Re-runs when projects load so the sentinel ref is available
+  const hasProjects = !!projects;
+  useEffect(() => {
+    const sentinel = placeholderRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsFixed(!entry.isIntersecting),
+      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasProjects]);
 
   const statusOptions = useMemo(() => {
     if (!projects) return [];
@@ -157,6 +148,85 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     setSortBy("newest");
   };
 
+  const filterBarContent = (
+    <>
+      {/* Search Input */}
+      <div className="relative flex-1 min-w-[200px]">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+        <input
+          type="text"
+          placeholder="Search projects or developers..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full h-10 pl-9 pr-8 rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm placeholder:text-black/30 focus:outline-none focus:border-gold/60 transition-colors"
+          style={{ fontSize: '16px' }}
+        />
+        {searchQuery && (
+          <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2">
+            <X className="w-4 h-4 text-black/40 hover:text-black" />
+          </button>
+        )}
+      </div>
+      {developerOptions.length > 0 && (
+        <Select value={developerFilter} onValueChange={setDeveloperFilter}>
+          <SelectTrigger className="h-10 w-[160px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
+            <SelectValue placeholder="Developer" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Developers</SelectItem>
+            {developerOptions.map(d => (
+              <SelectItem key={d} value={d}>{d}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+      {statusOptions.length > 0 && (
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="h-10 w-[140px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            {statusOptions.map(s => (
+              <SelectItem key={s} value={s}>{s}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+      {bedroomOptions.length > 0 && (
+        <Select value={bedroomFilter} onValueChange={setBedroomFilter}>
+          <SelectTrigger className="h-10 w-[140px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
+            <SelectValue placeholder="Bedrooms" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Beds</SelectItem>
+            {bedroomOptions.map(b => (
+              <SelectItem key={b} value={b}>{b} BR</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+      <Select value={sortBy} onValueChange={setSortBy}>
+        <SelectTrigger className="h-10 w-[150px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
+          <SelectValue placeholder="Sort by" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="newest">Newest First</SelectItem>
+          <SelectItem value="price_low">Price: Low → High</SelectItem>
+          <SelectItem value="price_high">Price: High → Low</SelectItem>
+        </SelectContent>
+      </Select>
+      {hasActiveFilters && (
+        <button
+          onClick={clearFilters}
+          className="h-10 px-3 rounded-xl text-xs font-semibold text-black/60 hover:text-black border border-black/10 hover:border-black/30 transition-colors"
+        >
+          Clear
+        </button>
+      )}
+    </>
+  );
+
   if (isLoading) {
     return (
       <section className="py-16 bg-black">
@@ -182,7 +252,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   if (!projects || projects.length === 0) return null;
 
   return (
-    <section ref={sectionRef} id="projects-section" className="pt-16 pb-16 bg-black">
+    <section id="projects-section" className="pt-16 pb-16 bg-black">
       <div className="container mx-auto px-4">
         <div className="rounded-2xl pt-8 overflow-visible" style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}>
           <h2 className="text-black text-2xl md:text-3xl font-bold mb-6 px-6" style={{ fontFamily: "Poppins, sans-serif" }}>
@@ -192,98 +262,30 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
           {/* Placeholder reserves space when bar is fixed */}
           <div ref={placeholderRef} style={{ height: isFixed ? barRef.current?.offsetHeight ?? 0 : 0 }} />
 
-          {/* Filter bar — JS-driven fixed positioning */}
-          <div
-            ref={barRef}
-            className={`${isFixed ? 'fixed top-[72px] left-0 right-0 z-30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]' : ''} bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200`}
-          >
-            <div className={`flex flex-wrap items-center gap-3 ${isFixed ? 'container mx-auto px-4' : 'px-6'}`}>
-              {/* Search Input */}
-              <div className="relative flex-1 min-w-[200px]">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
-                <input
-                  type="text"
-                  placeholder="Search projects or developers..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-10 pl-9 pr-8 rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm placeholder:text-black/30 focus:outline-none focus:border-gold/60 transition-colors"
-                  style={{ fontSize: '16px' }}
-                />
-                {searchQuery && (
-                  <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2">
-                    <X className="w-4 h-4 text-black/40 hover:text-black" />
-                  </button>
-                )}
+          {/* Filter bar — inline when not fixed */}
+          {!isFixed && (
+            <div
+              ref={barRef}
+              className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3"
+            >
+              <div className="flex flex-wrap items-center gap-3 px-6">
+                {filterBarContent}
               </div>
-
-              {/* Developer Filter */}
-              {developerOptions.length > 0 && (
-                <Select value={developerFilter} onValueChange={setDeveloperFilter}>
-                  <SelectTrigger className="h-10 w-[160px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
-                    <SelectValue placeholder="Developer" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Developers</SelectItem>
-                    {developerOptions.map(d => (
-                      <SelectItem key={d} value={d}>{d}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-
-              {/* Status Filter */}
-              {statusOptions.length > 0 && (
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="h-10 w-[140px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    {statusOptions.map(s => (
-                      <SelectItem key={s} value={s}>{s}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-
-              {/* Bedrooms Filter */}
-              {bedroomOptions.length > 0 && (
-                <Select value={bedroomFilter} onValueChange={setBedroomFilter}>
-                  <SelectTrigger className="h-10 w-[140px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
-                    <SelectValue placeholder="Bedrooms" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Beds</SelectItem>
-                    {bedroomOptions.map(b => (
-                      <SelectItem key={b} value={b}>{b} BR</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-
-              {/* Sort */}
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="h-10 w-[150px] rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm">
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="newest">Newest First</SelectItem>
-                  <SelectItem value="price_low">Price: Low → High</SelectItem>
-                  <SelectItem value="price_high">Price: High → Low</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Clear Filters */}
-              {hasActiveFilters && (
-                <button
-                  onClick={clearFilters}
-                  className="h-10 px-3 rounded-xl text-xs font-semibold text-black/60 hover:text-black border border-black/10 hover:border-black/30 transition-colors"
-                >
-                  Clear
-                </button>
-              )}
             </div>
-          </div>
+          )}
+
+          {/* Filter bar — portaled to document.body when fixed, to escape overflow-x-hidden on <main> */}
+          {isFixed && createPortal(
+            <div
+              ref={barRef}
+              className="fixed top-[72px] left-0 right-0 z-30 shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200"
+            >
+              <div className="flex flex-wrap items-center gap-3 container mx-auto px-4">
+                {filterBarContent}
+              </div>
+            </div>,
+            document.body
+          )}
 
           {/* Grid */}
           <div className="p-6">
