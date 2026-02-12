@@ -274,10 +274,86 @@ serve(async (req) => {
             await new Promise(r => setTimeout(r, 1500));
           }
 
-          // Set to null if no real image found — no stock photo fallbacks
+          // Step 2: Firecrawl Search if still no image
+          if ((!imageUrl || isImageBad(imageUrl)) && FIRECRAWL_API_KEY) {
+            try {
+              console.log(`  Searching for image: "${article.title}" Dubai real estate`);
+              const searchResp = await fetch("https://api.firecrawl.dev/v1/search", {
+                method: "POST",
+                headers: { "Authorization": `Bearer ${FIRECRAWL_API_KEY}`, "Content-Type": "application/json" },
+                body: JSON.stringify({ query: `${article.title} Dubai real estate`, limit: 3 }),
+              });
+              if (searchResp.ok) {
+                const searchData = await searchResp.json();
+                for (const r of (searchData.data || [])) {
+                  const ogImg = r.metadata?.ogImage || r.metadata?.image || r.metadata?.og_image;
+                  if (ogImg && !isImageBad(ogImg) && !usedImageUrls.has(ogImg)) {
+                    imageUrl = ogImg;
+                    usedImageUrls.add(ogImg);
+                    console.log(`  Found search image for "${article.title}": ${ogImg.substring(0, 80)}`);
+                    break;
+                  }
+                }
+              }
+              await new Promise(r => setTimeout(r, 1000));
+            } catch (searchErr) {
+              console.warn(`  Search error for "${article.title}":`, searchErr);
+            }
+          }
+
+          // Step 3: AI-generate image as last resort
+          if ((!imageUrl || isImageBad(imageUrl)) && LOVABLE_API_KEY) {
+            try {
+              const categoryPrompts: Record<string, string> = {
+                "Market Update": "Modern Dubai skyline with luxury skyscrapers reflecting golden sunset light, aerial real estate photography",
+                "Policy": "Professional UAE government building with flag, modern architecture in Abu Dhabi or Dubai",
+                "Economic": "Dubai Financial Centre DIFC skyline with modern office towers, business district aerial view",
+                "Analysis": "Dubai Marina panoramic aerial view with luxury yachts and towers, real estate market photography",
+                "Government": "Dubai government buildings with UAE flag, modern civic architecture golden hour",
+                "Infrastructure": "Dubai metro and highway interchange aerial view with surrounding development",
+              };
+              const prompt = categoryPrompts[article.category] || 
+                `Professional editorial photo related to: ${article.title}. Dubai UAE real estate context. Ultra high resolution.`;
+              
+              console.log(`  Generating AI image for "${article.title}"...`);
+              const genResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+                method: "POST",
+                headers: { "Authorization": `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  model: "google/gemini-2.5-flash-image",
+                  messages: [{ role: "user", content: prompt }],
+                  modalities: ["image", "text"],
+                }),
+              });
+
+              if (genResp.ok) {
+                const genData = await genResp.json();
+                const b64Url = genData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+                if (b64Url && b64Url.startsWith("data:image")) {
+                  const base64Data = b64Url.split(",")[1];
+                  const binaryData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+                  const storagePath = `${article.id}.webp`;
+                  
+                  const { error: uploadErr } = await supabase.storage
+                    .from("news-images")
+                    .upload(storagePath, binaryData, { contentType: "image/webp", upsert: true });
+
+                  if (!uploadErr) {
+                    const { data: urlData } = supabase.storage.from("news-images").getPublicUrl(storagePath);
+                    imageUrl = urlData.publicUrl;
+                    console.log(`  AI generated image for "${article.title}"`);
+                  }
+                }
+              }
+            } catch (genErr) {
+              console.warn(`  AI generation error for "${article.title}":`, genErr);
+            }
+          }
+
+          // Final check
           if (!imageUrl || isImageBad(imageUrl)) {
             imageUrl = null;
-            console.log(`  No real image found for "${article.title}" — set to null`);
+            console.log(`  No image found for "${article.title}" after all attempts`);
           }
 
           // If we still don't have content, generate a brief article from the excerpt

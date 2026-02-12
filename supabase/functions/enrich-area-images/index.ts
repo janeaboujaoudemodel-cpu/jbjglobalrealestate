@@ -25,7 +25,7 @@ Deno.serve(async (req) => {
     const supabase = createClient(supabaseUrl, serviceKey);
 
     const body = await req.json().catch(() => ({}));
-    const batchSize = body.batch_size || 5;
+    const batchSize = body.batch_size || 10;
 
     // Get areas missing images OR with unsplash/pexels/AI-generated images
     const { data: areas, error: fetchErr } = await supabase
@@ -188,6 +188,55 @@ Respond with ONLY the URL or "NONE". Nothing else.`;
           }
         } catch (searchErr) {
           console.error(`Search error for ${area.name}:`, searchErr);
+        }
+      }
+
+      // Step 3: AI-generate image as last resort
+      if (!imageUrl && lovableApiKey) {
+        try {
+          console.log(`Generating AI image for ${area.name}...`);
+          const genPrompt = `Photorealistic aerial panoramic view of ${area.name}, Dubai, UAE. Show the community skyline, buildings, roads, and landscape from above. Professional real estate photography style, golden hour lighting. Ultra high resolution.`;
+          
+          const genResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${lovableApiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: "google/gemini-2.5-flash-image",
+              messages: [{ role: "user", content: genPrompt }],
+              modalities: ["image", "text"],
+            }),
+          });
+
+          if (genResp.ok) {
+            const genData = await genResp.json();
+            const b64Url = genData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+            if (b64Url && b64Url.startsWith("data:image")) {
+              // Extract base64 data and upload to storage
+              const base64Data = b64Url.split(",")[1];
+              const binaryData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+              const storagePath = `${area.slug || area.name.toLowerCase().replace(/\s+/g, "-")}.webp`;
+              
+              const { error: uploadErr } = await supabase.storage
+                .from("area-images")
+                .upload(storagePath, binaryData, { contentType: "image/webp", upsert: true });
+
+              if (!uploadErr) {
+                const { data: urlData } = supabase.storage.from("area-images").getPublicUrl(storagePath);
+                imageUrl = urlData.publicUrl;
+                source = "ai_generated";
+                console.log(`AI generated image for ${area.name}: ${imageUrl}`);
+              } else {
+                console.error(`Upload failed for ${area.name}: ${uploadErr.message}`);
+              }
+            }
+          } else {
+            console.error(`AI generation failed for ${area.name}: ${genResp.status}`);
+          }
+        } catch (genErr) {
+          console.error(`AI generation error for ${area.name}:`, genErr);
         }
       }
 
