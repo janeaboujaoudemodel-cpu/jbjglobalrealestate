@@ -1,54 +1,59 @@
 
 
-## Add Project Page Sub-Navigation Under Scroll Header
+## Add Search Bar Header + Shortcut Sub-Nav to Project Page Scroll Header
 
 ### Current State
-The project detail page (`ProjectDetailLayout.tsx`) has a sticky sub-navigation bar (lines 568-620) that appears on scroll. It uses a `bg-black` background, sits at `top-20`, and shows ALL visible section tabs (up to 17 tabs). The main GlobalHeader remains visible above it, creating two stacked headers.
+The project page sticky header currently shows only one row: the curated 8-item shortcut bar (Details, Gallery, Developer, etc.) in a champagne gradient. The main GlobalHeader hides on scroll (already working). However, other pages like Area and Developer pages show the **search/filter bar** as the scroll header -- the user wants the same pattern on the project page.
 
-### What the User Wants
-When scrolling on a project page, the main GlobalHeader should hide (just like on developer/area pages) and the sticky sub-nav should move to the top. Below it, a compact line in a **darker champagne** color should display a curated set of shortcuts: **Details, Gallery, Developer, Location, Brochure, AI Analyzer, Mortgage, Register Interest**.
+### What Needs to Change
+
+The sticky header on the project page should have **two rows**:
+1. **Row 1 (Search bar)**: The `PropertySearchBar` component in compact mode -- same search bar used across the platform, providing keyword search + filters
+2. **Row 2 (Shortcuts)**: The curated 8-item navigation (Details, Gallery, Developer, Location, Brochure, AI Analyzer, Mortgage, Register Interest) in a slightly darker champagne background. "Register Interest" gets a highlighted gold CTA button style to stand out.
 
 ### Changes
 
 **File: `src/components/project-detail/ProjectDetailLayout.tsx`**
 
-#### 1. Add `filter-bar-fixed` body class when sticky nav is active
-Add a `useEffect` that toggles `filter-bar-fixed` on `document.body` when `showStickyNav` is true, so GlobalHeader hides automatically (using the existing MutationObserver logic in GlobalHeader).
+#### 1. Import PropertySearchBar
+Add import for `PropertySearchBar` (compact mode) at the top of the file.
 
-#### 2. Move sticky nav to `top-0`
-Change the sticky nav from `top-20 sm:top-24 lg:top-28` to `top-0` since the GlobalHeader will be hidden.
+#### 2. Restructure the sticky nav into two rows
 
-#### 3. Restyle with darker champagne background
-Replace `bg-black` with a darker champagne gradient (`bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8]`) and update text colors to dark (`text-black`, active: `text-gold` with champagne highlight).
+Replace the current single-row champagne bar with:
 
-#### 4. Curate the tab list to 8 items
-Replace the dynamic `visibleTabs` rendering with a fixed curated set:
+**Row 1 -- Search Bar**
+- Background: main champagne gradient (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`)
+- Contains: `PropertySearchBar compact` for quick property search
+- Padding: `py-2 px-4`
 
-| Tab | Icon | Scrolls to |
-|-----|------|-----------|
-| Details | FileText | detailsRef |
-| Gallery | ImageIcon | galleryRef |
-| Developer | Building2 | developerRef |
-| Location | MapPin | locationRef |
-| Brochure | Download | brochureRef |
-| AI Analyzer | Sparkles | aiRef |
-| Mortgage | Calculator | mortgageRef |
-| Register Interest | UserPlus | inquiryRef |
+**Row 2 -- Curated Shortcuts**
+- Background: darker champagne gradient (`from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8]`)
+- Contains: The 8 curated shortcuts (Details through Register Interest)
+- "Register Interest" rendered as a highlighted gold button (gold gradient bg, black text, glow effect) instead of a plain text tab
+- Compact single line, horizontally scrollable on mobile
 
-These will always be shown (no conditional filtering needed for this compact bar). The full tab list remains available in the main content area if needed.
+#### 3. Register Interest button highlight
 
-### Visual Result
+"Register Interest" will be separated from the other 7 items and styled as a prominent CTA:
+- Gold gradient background (`from-gold to-gold-dark`)
+- Black bold text
+- Subtle glow shadow (`box-shadow: 0 0 15px rgba(200,167,102,0.4)`)
+- Positioned at the right end of the bar
+
+### Visual Layout
 
 ```text
-+-----------------------------------------------------------------------+
-| Details | Gallery | Developer | Location | Brochure | AI | Mortgage | Register Interest |
-+-----------------------------------------------------------------------+
-  ^-- darker champagne background, gold active state, compact single line
++---------------------------------------------------------------------------+
+| [Search icon] Search properties...        [Location v] [Developer v] SEARCH |  <-- Row 1: Search bar (light champagne)
++---------------------------------------------------------------------------+
+| Details | Gallery | Developer | Location | Brochure | AI | Mortgage | [REGISTER INTEREST] |  <-- Row 2: Shortcuts (darker champagne)
++---------------------------------------------------------------------------+
 ```
 
 ### Files Summary
 
 | File | Action |
 |------|--------|
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Add body class toggle, move to top-0, restyle champagne, curate 8 tabs |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Add PropertySearchBar import; restructure sticky nav into 2 rows; highlight Register Interest as gold CTA button |
 
