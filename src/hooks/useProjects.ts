@@ -215,18 +215,34 @@ export function useProjectsListing() {
   return useQuery({
     queryKey: ["projects-listing"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select(`
-          *,
-          developer:developers(id, name, slug, logo_url),
-          community:communities(id, name, slug)
-        `)
-        .order("created_at", { ascending: false })
-        .limit(2500);
+      // Supabase limits to 1000 rows per query, so we paginate
+      const PAGE_SIZE = 1000;
+      let allData: any[] = [];
+      let offset = 0;
+      let hasMore = true;
       
-      if (error) throw error;
-      return data as UnifiedProject[];
+      while (hasMore) {
+        const { data, error } = await supabase
+          .from("projects")
+          .select(`
+            *,
+            developer:developers(id, name, slug, logo_url),
+            community:communities(id, name, slug)
+          `)
+          .order("created_at", { ascending: false })
+          .range(offset, offset + PAGE_SIZE - 1);
+        
+        if (error) throw error;
+        if (!data || data.length === 0) {
+          hasMore = false;
+        } else {
+          allData = [...allData, ...data];
+          offset += PAGE_SIZE;
+          if (data.length < PAGE_SIZE) hasMore = false;
+        }
+      }
+      
+      return allData as UnifiedProject[];
     },
   });
 }

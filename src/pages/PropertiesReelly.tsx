@@ -29,8 +29,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import ReellyProjectCard from "@/components/ReellyProjectCard";
 import { ProjectGridSkeleton } from "@/components/ProjectCardSkeleton";
 import { useReellyProjects, flattenReellyProjects, getReellyProjectsTotal } from "@/hooks/useReellyProjects";
-import { useDevelopers } from "@/hooks/useProjects";
+import { useDevelopers, useProjectsListing } from "@/hooks/useProjects";
 import { useLocalProjectSearch } from "@/hooks/useLocalProjectSearch";
+import { mapDbProjectToReellyProject } from "@/utils/mapDbToReellyProject";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { SEOHead } from "@/components/SEOHead";
 import { FeaturedProjectAd, FEATURED_ADS } from "@/components/FeaturedProjectAd";
@@ -142,6 +143,9 @@ const PropertiesReelly = () => {
   const { t } = useLanguage();
   const { data: developers } = useDevelopers();
   
+  // Database as PRIMARY source (always available, 2,410+ projects)
+  const { data: dbProjects, isLoading: isDbLoading } = useProjectsListing();
+  
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [sortBy, setSortBy] = useState<string>("newest");
@@ -227,20 +231,71 @@ const PropertiesReelly = () => {
   // Local DB fallback search (for projects not found in Reelly API)
   const { data: localResults } = useLocalProjectSearch(debouncedSearch);
 
-  // Flatten paginated data and merge with local results
+  // Convert DB projects to ReellyProject format
+  const dbProjectsMapped = useMemo(() => {
+    if (!dbProjects?.length) return [];
+    return dbProjects.map(mapDbProjectToReellyProject);
+  }, [dbProjects]);
+
+  // Flatten paginated API data
   const reellyProjects = flattenReellyProjects(data);
   const reellyTotal = getReellyProjectsTotal(data);
 
+  // Merge: DB is primary, API enriches/overrides when available
   const projects = useMemo(() => {
-    if (!debouncedSearch || !localResults?.length) return reellyProjects;
-    const reellySlugs = new Set(reellyProjects.map(p => p.slug));
-    const uniqueLocal = localResults.filter(p => !reellySlugs.has(p.slug));
-    return [...reellyProjects, ...uniqueLocal];
-  }, [reellyProjects, localResults, debouncedSearch]);
+    // If API returned data, merge: API data takes priority by slug
+    if (reellyProjects.length > 0) {
+      const apiBySlug = new Map(reellyProjects.map(p => [p.slug, p]));
+      const merged = new Map<string, ReellyProject>();
+      
+      // Start with DB projects
+      for (const dbP of dbProjectsMapped) {
+        const apiP = apiBySlug.get(dbP.slug);
+        merged.set(dbP.slug, apiP || dbP); // API overrides if available
+      }
+      // Add any API-only projects not in DB
+      for (const apiP of reellyProjects) {
+        if (!merged.has(apiP.slug)) {
+          merged.set(apiP.slug, apiP);
+        }
+      }
+      return Array.from(merged.values());
+    }
+    
+    // API returned nothing (expired/unavailable) — use DB projects only
+    // Apply client-side filtering since API isn't doing server-side filtering
+    let filtered = [...dbProjectsMapped];
+    
+    if (debouncedSearch) {
+      const q = debouncedSearch.toLowerCase();
+      filtered = filtered.filter(p => 
+        p.name.toLowerCase().includes(q) ||
+        p.developer_name?.toLowerCase().includes(q) ||
+        p.location?.toLowerCase().includes(q) ||
+        p.emirate?.toLowerCase().includes(q)
+      );
+    }
+    if (filters.emirate) {
+      filtered = filtered.filter(p => p.emirate === filters.emirate);
+    }
+    if (filters.saleStatus) {
+      filtered = filtered.filter(p => {
+        const status = p.sale_status || p.status_label || '';
+        return status === filters.saleStatus;
+      });
+    }
+    if (filters.constructionStatus) {
+      filtered = filtered.filter(p => p.construction_status === filters.constructionStatus);
+    }
+    if (filters.developerName) {
+      filtered = filtered.filter(p => p.developer_name === filters.developerName);
+    }
+    
+    return filtered;
+  }, [dbProjectsMapped, reellyProjects, debouncedSearch, filters.emirate, filters.saleStatus, filters.constructionStatus, filters.developerName]);
 
-  const totalCount = debouncedSearch && localResults?.length
-    ? reellyTotal + (localResults.filter(p => !reellyProjects.some(rp => rp.slug === p.slug)).length)
-    : reellyTotal;
+  // Total count: use API total if available, otherwise DB count
+  const totalCount = reellyTotal > 0 ? reellyTotal : (dbProjectsMapped.length || 0);
 
   // Apply URL params on mount
   useEffect(() => {
@@ -305,10 +360,10 @@ const PropertiesReelly = () => {
     return sorted;
   }, [projects, sortBy]);
 
-  // Convert for map
+  // Convert for map — use the merged+sorted projects
   const unifiedProjects = useMemo(() => 
-    reellyProjects.map(toUnifiedProject),
-    [reellyProjects]
+    sortedProjects.map(toUnifiedProject),
+    [sortedProjects]
   );
 
   const updateFilter = <K extends keyof FilterState>(key: K, value: FilterState[K]) => {
@@ -367,8 +422,8 @@ const PropertiesReelly = () => {
               Curated Listings. Global Standard.
             </h1>
             
-            <p className="text-zinc-300 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
-              {totalCount > 0 ? `${totalCount.toLocaleString()} properties available` : 'Loading properties...'}
+             <p className="text-zinc-300 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
+               {totalCount > 0 ? `${totalCount.toLocaleString()} properties available` : (isLoading || isDbLoading) ? 'Loading properties...' : 'Browse our collection'}
             </p>
           </motion.div>
         </div>
@@ -592,7 +647,7 @@ const PropertiesReelly = () => {
                   )}
                 </div>
 
-                {isLoading ? (
+                {(isLoading && isDbLoading) ? (
                   <ProjectGridSkeleton count={4} />
                 ) : sortedProjects.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -661,7 +716,7 @@ const PropertiesReelly = () => {
               </div>
 
               {/* Projects Grid */}
-              {isLoading ? (
+              {(isLoading && isDbLoading) ? (
                 <ProjectGridSkeleton count={6} />
               ) : isError ? (
                 <div className="text-center py-20 px-4">
