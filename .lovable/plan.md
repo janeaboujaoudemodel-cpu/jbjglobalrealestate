@@ -1,67 +1,71 @@
 
 
-## Fix: Show Database Projects When API is Unavailable
+## Fix Properties Page: Multiple Issues
 
-### Root Cause
+### Issues Identified
 
-`PropertiesReelly.tsx` fetches projects exclusively from the live Reelly API edge function. When the API key expires (currently returning `401 Token inactive`), it returns zero projects -- even though **2,410 projects are already saved in the database**.
+1. **Duplicate Search Bars**: The page has TWO search/filter sections -- the old inline filter section (lines 436-607 with Select dropdowns for Emirate, Sale Status, Construction, Developer, Currency, Size, Sort buttons) AND the `FilterShortcutBar` component below it. The old one needs to be removed entirely and replaced by the single `FilterShortcutBar` which already has all these filters built in.
 
-The existing `useLocalProjectSearch` hook only queries the database when the user types a search term (2+ characters). There is no fallback to load ALL database projects when the API returns nothing.
+2. **Shows Only ~1,000 Properties**: The hero says "1,000 properties available" because `totalCount` falls back to `reellyTotal` (from the expired API) when it returns a non-zero cached value. The count must always reflect the actual merged dataset count (2,410).
 
-### Solution
+3. **Map Split-Screen Too Small**: The map section uses `lg:w-[55%]` for cards and `flex-1` for the map, BUT the vertical nav takes 200px, squeezing the map. The split should be calculated from the content area only (excluding the sidebar), with a true 50/50 split between cards and map.
 
-Switch the Properties page to use the **database as the primary data source** via the existing `useProjectsListing()` hook (which already loads up to 2,500 projects from the `projects` table). The Reelly API becomes a secondary enrichment layer that runs in the background -- when available, it merges fresh data; when unavailable, the database projects display normally.
+4. **Map Toggle Slow/Broken**: The map toggle triggers a URL param change via `setSearchParams` which causes a re-render cycle. Need to ensure the toggle is instant by using local state only and not triggering unnecessary re-fetches.
+
+5. **Vertical Sidebar Not Showing in List Mode**: The `PropertiesVerticalNav` only renders inside the `isMapMode` block. Per spec, it should also show in list mode when the filter bar becomes fixed (header replacement pattern).
+
+6. **Recommended Projects Section**: Uses `bg-black` background which doesn't match the premium champagne UI. Needs to be updated to use champagne gradient background with gold accents matching the rest of the page.
+
+7. **Section Divider Between Listings and Market Intelligence**: Currently uses black background. Should match the page background (champagne) with a premium gold divider line.
+
+---
 
 ### Technical Changes
 
-#### 1. Update `src/pages/PropertiesReelly.tsx`
+#### File: `src/pages/PropertiesReelly.tsx`
 
-- Import `useProjectsListing` from `@/hooks/useProjects`
-- Add a call to `useProjectsListing()` to fetch all database projects
-- Use the existing `mapDbProjectToReellyProject` helper (from `useLocalProjectSearch.ts`) to convert database projects to the `ReellyProject` format -- but extract it to a shared utility so both files can use it
-- Change the data flow:
-  - **Primary**: Database projects (always available, 2,410 records)
-  - **Merge**: When Reelly API returns data, merge/override with fresher API data (matched by slug)
-  - **Result**: Users always see projects, even when the API key expires
-- Update `totalCount` to reflect database count when API returns zero
-- Client-side filtering (emirate, developer, sale status, construction status, search) applied to the merged dataset
+**Remove old filter section** (lines 436-607): Delete the entire champagne card with inline Select dropdowns for Emirate, Sale Status, Construction Status, Developer, Currency, Size Unit, Sort buttons, and Hide Sold Out toggle. These are ALL already available in the `FilterShortcutBar` component.
 
-#### 2. Create `src/utils/mapDbToReellyProject.ts`
+**Keep only the FilterShortcutBar** (lines 609-620): Move it up to replace the removed section. Change its container background from `bg-black` to the champagne gradient to match the page style.
 
-Extract the `mapDbProjectToReellyProject` function from `useLocalProjectSearch.ts` into a shared utility so both files can use it without duplication.
+**Fix total count** (line 298): Change from `reellyTotal > 0 ? reellyTotal : dbProjectsMapped.length` to simply use `projects.length` for "showing" and `dbProjectsMapped.length` for "of total" so it always reflects the real database count (2,410).
 
-#### 3. Update `src/hooks/useLocalProjectSearch.ts`
+**Fix map split-screen layout** (lines 626-693):
+- Change from `lg:w-[55%]` cards / `flex-1` map to a true 50/50 split within the content area
+- The vertical nav (200px) sits outside the split; the remaining space is divided equally
+- Use `flex-1` for both the cards panel and the map panel so they share space equally
 
-Import the mapping function from the new shared utility instead of defining it inline.
+**Show vertical nav in list mode** when `isFilterFixed` is true (desktop only), wrapping the list section in a flex container similar to map mode.
 
-### Data Flow (After Fix)
+**Wire FilterShortcutBar filters to actual data filtering**: Currently `shortcutFilters` state exists but is never used to filter projects. Connect the shortcut filter values (price, bedrooms, status, sort, hideSoldOut, etc.) to the sorting/filtering logic.
 
-```text
-Database (2,410 projects) ──> Primary data source ──> Always shows
-                                      │
-Reelly API (live) ─────────> Merge if available ────> Enriches/overrides
-                                      │
-                               Client-side filters ──> Final display
-```
+#### File: `src/components/project-detail/RecommendedProjects.tsx`
 
-### What Changes for the User
+- Change `bg-black` to champagne gradient background: `bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark`
+- Update text colors: headings from `text-white` to `text-black`, description text accordingly
+- Update card borders and styling to match the premium champagne card pattern used elsewhere
+- Update the Sparkles icon color and "View All" link styling for champagne background contrast
 
-- Properties page will immediately show 2,410+ projects from the database
-- If the Reelly API key is renewed later, fresh data merges seamlessly
-- Filters (emirate, developer, status) work on database projects via client-side filtering
-- Project count shows the real number instead of zero
-- No dependency on external API availability for basic browsing
+#### File: `src/components/ui/section-divider.tsx`
 
-### Files to Create
+- Add a prop option for champagne background variant (e.g., `variant="champagne"`) that uses the champagne gradient instead of `bg-black`
+- This allows pages to use the divider on light backgrounds
 
-| File | Purpose |
-|------|---------|
-| `src/utils/mapDbToReellyProject.ts` | Shared DB-to-ReellyProject mapping utility |
+---
 
-### Files to Edit
+### Summary of Changes
 
 | File | Change |
-|------|---------|
-| `src/pages/PropertiesReelly.tsx` | Add `useProjectsListing` as primary source, merge with API data, client-side filtering |
-| `src/hooks/useLocalProjectSearch.ts` | Import shared mapping utility |
+|------|--------|
+| `src/pages/PropertiesReelly.tsx` | Remove duplicate old filter section; keep only FilterShortcutBar; fix project count to show 2,410; fix 50/50 map split; show vertical nav in list mode when scrolled; wire shortcut filters to data |
+| `src/components/project-detail/RecommendedProjects.tsx` | Change from black to champagne background with matching text and card colors |
+| `src/components/ui/section-divider.tsx` | Add champagne variant for use on light-background pages |
+
+### Result
+- Single unified search/filter bar (no duplication)
+- All 2,410 properties shown in count
+- Map splits page exactly 50/50 (excluding sidebar)
+- Vertical sidebar appears in both list and map modes on scroll
+- Recommended Projects section matches premium champagne UI
+- Section dividers use matching champagne background
 
