@@ -333,6 +333,109 @@ const ProjectFilters = ({
             )}
           </div>
 
+          {/* Developer */}
+          {showDeveloperFilter && developers && developers.length > 0 && (
+            <Select
+              value={filters.developerId || "all"}
+              onValueChange={(value) =>
+                updateFilter("developerId", value === "all" ? null : value)
+              }
+            >
+              <SelectTrigger className="h-11 w-[180px] rounded-xl">
+                <Building2 className="w-4 h-4 mr-1 text-gold shrink-0" />
+                <SelectValue placeholder="Developer" />
+              </SelectTrigger>
+              <SelectContent className="max-h-72 w-[260px]">
+                <SelectItem value="all">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-gold shrink-0" />
+                    <span>All Developers</span>
+                  </div>
+                </SelectItem>
+                {developers.map((developer) => (
+                  <SelectItem key={developer.id} value={developer.id}>
+                    <div className="flex items-center gap-2">
+                      {(developer.logo_url || developer.logo_url_processed) ? (
+                        <img
+                          src={developer.logo_url_processed || developer.logo_url || ''}
+                          alt={developer.name}
+                          className="w-5 h-5 object-contain rounded shrink-0"
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        />
+                      ) : (
+                        <Building2 className="w-4 h-4 text-zinc-400 shrink-0" />
+                      )}
+                      <span className="truncate">{developer.name}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+
+          {/* Currency */}
+          <Select
+            value={filters.currency}
+            onValueChange={(value) => updateFilter("currency", value as FilterState['currency'])}
+          >
+            <SelectTrigger className="h-11 w-[90px] rounded-xl">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="AED">AED</SelectItem>
+              <SelectItem value="USD">USD</SelectItem>
+              <SelectItem value="EUR">EUR</SelectItem>
+              <SelectItem value="GBP">GBP</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Location / Emirate */}
+          <Select
+            value={filters.emirate || "all"}
+            onValueChange={(value) =>
+              updateFilter("emirate", value === "all" ? null : value)
+            }
+          >
+            <SelectTrigger className="h-11 w-[150px] rounded-xl">
+              <MapPin className="w-4 h-4 mr-1 text-gold shrink-0" />
+              <SelectValue placeholder="Location" />
+            </SelectTrigger>
+            <SelectContent>
+              {EMIRATES.map((emirate) => (
+                <SelectItem key={emirate.value} value={emirate.value === "all" ? "all" : emirate.value}>
+                  {emirate.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Size Unit Toggle */}
+          <div className="flex items-center h-11 bg-white/80 border border-gold/40 rounded-xl overflow-hidden">
+            <button
+              onClick={() => updateFilter("sizeUnit", "sqft")}
+              className={`px-3 h-full text-sm font-medium transition-all ${
+                filters.sizeUnit === "sqft"
+                  ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] text-black border-r border-gold/30"
+                  : "text-zinc-500 hover:text-black"
+              }`}
+            >
+              sq ft
+            </button>
+            <button
+              onClick={() => updateFilter("sizeUnit", "sqm")}
+              className={`px-3 h-full text-sm font-medium transition-all ${
+                filters.sizeUnit === "sqm"
+                  ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] text-black border-l border-gold/30"
+                  : "text-zinc-500 hover:text-black"
+              }`}
+            >
+              sq m
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className="hidden sm:block w-px h-8 bg-gold/30" />
+
           {/* Filters Button */}
           <Sheet open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
             <SheetTrigger asChild>
@@ -805,109 +908,6 @@ const ProjectFilters = ({
               </div>
             </SheetContent>
           </Sheet>
-
-          {/* Divider */}
-          <div className="hidden sm:block w-px h-8 bg-gold/30" />
-
-          {/* Currency */}
-          <Select
-            value={filters.currency}
-            onValueChange={(value) => updateFilter("currency", value as FilterState['currency'])}
-          >
-            <SelectTrigger className="h-11 w-[90px] rounded-xl">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="AED">AED</SelectItem>
-              <SelectItem value="USD">USD</SelectItem>
-              <SelectItem value="EUR">EUR</SelectItem>
-              <SelectItem value="GBP">GBP</SelectItem>
-            </SelectContent>
-          </Select>
-
-          {/* Developer */}
-          {showDeveloperFilter && developers && developers.length > 0 && (
-            <Select
-              value={filters.developerId || "all"}
-              onValueChange={(value) =>
-                updateFilter("developerId", value === "all" ? null : value)
-              }
-            >
-              <SelectTrigger className="h-11 w-[180px] rounded-xl">
-                <Building2 className="w-4 h-4 mr-1 text-gold shrink-0" />
-                <SelectValue placeholder="Developer" />
-              </SelectTrigger>
-              <SelectContent className="max-h-72 w-[260px]">
-                <SelectItem value="all">
-                  <div className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-gold shrink-0" />
-                    <span>All Developers</span>
-                  </div>
-                </SelectItem>
-                {developers.map((developer) => (
-                  <SelectItem key={developer.id} value={developer.id}>
-                    <div className="flex items-center gap-2">
-                      {(developer.logo_url || developer.logo_url_processed) ? (
-                        <img
-                          src={developer.logo_url_processed || developer.logo_url || ''}
-                          alt={developer.name}
-                          className="w-5 h-5 object-contain rounded shrink-0"
-                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                        />
-                      ) : (
-                        <Building2 className="w-4 h-4 text-zinc-400 shrink-0" />
-                      )}
-                      <span className="truncate">{developer.name}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-
-          {/* Location / Emirate */}
-          <Select
-            value={filters.emirate || "all"}
-            onValueChange={(value) =>
-              updateFilter("emirate", value === "all" ? null : value)
-            }
-          >
-            <SelectTrigger className="h-11 w-[150px] rounded-xl">
-              <MapPin className="w-4 h-4 mr-1 text-gold shrink-0" />
-              <SelectValue placeholder="Location" />
-            </SelectTrigger>
-            <SelectContent>
-              {EMIRATES.map((emirate) => (
-                <SelectItem key={emirate.value} value={emirate.value === "all" ? "all" : emirate.value}>
-                  {emirate.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {/* Size Unit Toggle */}
-          <div className="flex items-center h-11 bg-white/80 border border-gold/40 rounded-xl overflow-hidden">
-            <button
-              onClick={() => updateFilter("sizeUnit", "sqft")}
-              className={`px-3 h-full text-sm font-medium transition-all ${
-                filters.sizeUnit === "sqft"
-                  ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] text-black border-r border-gold/30"
-                  : "text-zinc-500 hover:text-black"
-              }`}
-            >
-              sq ft
-            </button>
-            <button
-              onClick={() => updateFilter("sizeUnit", "sqm")}
-              className={`px-3 h-full text-sm font-medium transition-all ${
-                filters.sizeUnit === "sqm"
-                  ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] text-black border-l border-gold/30"
-                  : "text-zinc-500 hover:text-black"
-              }`}
-            >
-              sq m
-            </button>
-          </div>
 
           {/* Reset All */}
           {activeFilterCount > 0 && (
