@@ -3,7 +3,12 @@
  * Supports 'light' (Properties page) and 'dark' (Hero) variants
  */
 import { useState, useCallback } from "react";
-import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity } from "lucide-react";
+import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Ruler, Users, Settings } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useUserModeContext } from "@/contexts/UserModeContext";
+import CurrencySwitcher from "@/components/CurrencySwitcher";
+import { SettingsDropdown } from "@/components/filters/SettingsDropdown";
+import { CURRENCY_OPTIONS, AREA_UNIT_OPTIONS, DISPLAY_MODE_OPTIONS, type CurrencyCode, type AreaUnit, type DisplayMode } from "@/constants/filterConfig";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
@@ -112,13 +117,13 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
     : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 text-black hover:border-gold/60";
   const pillActive = isDark
     ? "bg-white text-black border border-white shadow-lg"
-    : "bg-black text-white border border-black shadow-lg";
+    : "bg-gradient-to-r from-[#C8A766] to-[#B8944A] text-white border border-[#C8A766] shadow-lg";
 
   const popoverClass = "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[10200] shadow-xl";
 
   const togglePillBase = "px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer";
   const togglePillOff = "border-gold/30 text-black/70 bg-white/60 hover:bg-white";
-  const togglePillOn = "border-black bg-black text-white";
+  const togglePillOn = "border-[#C8A766] bg-gradient-to-r from-[#C8A766] to-[#B8944A] text-white";
 
   const handleSaveFilter = (name: string) => {
     const saved = JSON.parse(localStorage.getItem('jbj-saved-filters') || '[]');
@@ -128,7 +133,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
 
   const CountBadge = ({ count }: { count: number }) =>
     count > 0 ? (
-      <span className="ml-1 w-5 h-5 rounded-full bg-gold text-black text-[10px] font-bold flex items-center justify-center">
+      <span className="ml-1 w-5 h-5 rounded-full bg-gradient-to-r from-[#D4C4A8] to-[#C8A766] text-white text-[10px] font-bold flex items-center justify-center">
         +{count}
       </span>
     ) : null;
@@ -195,7 +200,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
                   className={cn(
                     "px-3 py-1 rounded-full text-xs font-medium border transition-all",
                     filters.priceMax === p.value
-                      ? "bg-black text-white border-black"
+                      ? "bg-gradient-to-r from-[#C8A766] to-[#B8944A] text-white border-[#C8A766]"
                       : "bg-white/80 text-black border-gold/30 hover:border-gold"
                   )}
                 >
@@ -267,23 +272,23 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className={cn("w-72 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
             <h4 className="text-sm font-bold text-black mb-3">Project handover by</h4>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">From</label>
-                <div className="flex gap-1.5">
+                <div className="flex gap-2">
                   <select
                     value={filters.handoverFrom.quarter}
                     onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, quarter: e.target.value } })}
-                    className="flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
+                    className="min-w-[52px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
                   >
                     {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
                   </select>
                   <select
                     value={filters.handoverFrom.year}
                     onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, year: e.target.value } })}
-                    className="flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
+                    className="min-w-[68px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
                   >
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
                   </select>
@@ -291,18 +296,18 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
               </div>
               <div>
                 <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">To</label>
-                <div className="flex gap-1.5">
+                <div className="flex gap-2">
                   <select
                     value={filters.handoverTo.quarter}
                     onChange={(e) => update({ handoverTo: { ...filters.handoverTo, quarter: e.target.value } })}
-                    className="flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
+                    className="min-w-[52px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
                   >
                     {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
                   </select>
                   <select
                     value={filters.handoverTo.year}
                     onChange={(e) => update({ handoverTo: { ...filters.handoverTo, year: e.target.value } })}
-                    className="flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
+                    className="min-w-[68px] flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
                   >
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
                   </select>
@@ -414,6 +419,12 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
           <Heart className="w-3.5 h-3.5" />
           Save
         </button>
+
+        {/* Vertical divider */}
+        <div className={cn("w-px h-6 mx-1 flex-shrink-0", isDark ? "bg-white/20" : "bg-gold/30")} />
+
+        {/* Reelly-style corner utility buttons */}
+        <UtilityButtons variant={variant} />
       </div>
 
       <SaveFilterModal
@@ -424,5 +435,59 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
     </>
   );
 };
+
+/* ---- Reelly-style corner utility buttons ---- */
+function UtilityButtons({ variant }: { variant: 'light' | 'dark' }) {
+  const navigate = useNavigate();
+  const { mode, setMode, isInvestorMode, isBrokerMode } = useUserModeContext();
+  const [areaUnit, setAreaUnit] = useState<'sqft' | 'sqm'>(() => {
+    if (typeof window !== 'undefined') return (localStorage.getItem('jj_area_unit') as 'sqft' | 'sqm') || 'sqft';
+    return 'sqft';
+  });
+
+  const isDark = variant === 'dark';
+  const btnBase = cn(
+    "inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] font-semibold transition-all cursor-pointer whitespace-nowrap select-none",
+    isDark
+      ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
+      : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 text-black hover:border-gold/60"
+  );
+
+  const toggleUnit = () => {
+    const next = areaUnit === 'sqft' ? 'sqm' : 'sqft';
+    setAreaUnit(next);
+    localStorage.setItem('jj_area_unit', next);
+    window.dispatchEvent(new CustomEvent('areaUnitChange', { detail: next }));
+  };
+
+  const toggleMode = () => {
+    const next = mode === 'investor' ? 'broker' : 'investor';
+    setMode(next);
+  };
+
+  const modeLabel = mode === 'broker' ? 'Broker' : mode === 'investor_broker' ? 'Both' : 'Investor';
+
+  return (
+    <div className="flex items-center gap-1.5 flex-shrink-0">
+      <button onClick={() => navigate('/properties?view=map')} className={btnBase} title="Map View">
+        <Map className="w-3.5 h-3.5" />
+        <span className="hidden sm:inline">Map</span>
+      </button>
+      <button onClick={() => navigate('/properties?saved=true')} className={btnBase} title="Saved">
+        <Heart className="w-3.5 h-3.5" />
+        <span className="hidden sm:inline">Saved</span>
+      </button>
+      <CurrencySwitcher variant="icon-only" />
+      <button onClick={toggleUnit} className={btnBase} title="Area Unit">
+        <Ruler className="w-3.5 h-3.5" />
+        <span>{areaUnit}</span>
+      </button>
+      <button onClick={toggleMode} className={btnBase} title="Client Mode">
+        <Users className="w-3.5 h-3.5" />
+        <span className="hidden sm:inline">{modeLabel}</span>
+      </button>
+    </div>
+  );
+}
 
 export default FilterShortcutBar;
