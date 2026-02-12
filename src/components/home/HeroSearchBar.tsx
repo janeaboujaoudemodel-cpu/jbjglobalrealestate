@@ -626,21 +626,20 @@ const HeroSearchBar = () => {
 
       {/* Main Search Bar - Responsive: Stack on mobile, single line on desktop */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 w-full max-w-4xl">
-        {/* Location Search Input - Full width on mobile */}
-        <div className="flex items-center bg-white/10 backdrop-blur-md border border-white/30 rounded-xl sm:border-r-0 sm:rounded-r-none px-3 py-3 flex-1 min-h-[48px]">
-          <Search className="w-5 h-5 text-gold shrink-0" />
-          <input
-            type="text"
-            placeholder="Area, project or community"
-            value={locationSearch}
-            onChange={(e) => setLocationSearch(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/60 px-3 text-sm font-medium min-w-0 w-full"
-          />
-        </div>
-
-        {/* Desktop-only controls */}
-        <div className="hidden sm:flex items-center bg-white/10 backdrop-blur-md border border-white/30 border-l-0 border-r-0 overflow-hidden min-h-[48px]">
+        {/* Unified connected bar on desktop */}
+        <div className="hidden sm:flex items-center w-full bg-white/[0.07] backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)] min-h-[52px]">
+          {/* Location Search Input */}
+          <div className="flex items-center flex-1 px-4">
+            <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.5))' }} />
+            <input
+              type="text"
+              placeholder="Area, project or community"
+              value={locationSearch}
+              onChange={(e) => setLocationSearch(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/50 px-3 text-sm font-medium min-w-0 w-full"
+            />
+          </div>
           {/* Premium Gradient Divider */}
           <div className="h-8 w-px bg-gradient-to-b from-transparent via-white/40 to-transparent" />
 
@@ -967,11 +966,11 @@ const HeroSearchBar = () => {
             </DialogContent>
           </Dialog>
 
-          {/* Search Button - Desktop only in this row */}
+          {/* Search Button */}
           <Button
             onClick={handleSearch}
             disabled={isSearching}
-            className="h-full px-6 py-3.5 bg-gold hover:bg-gold-dark text-black font-bold text-sm rounded-none rounded-r-xl border border-white/30 border-l-0 transition-all duration-300 shadow-lg hover:shadow-gold/30 disabled:opacity-70"
+            className="h-[52px] px-7 bg-gradient-to-r from-gold to-gold-dark hover:brightness-110 text-black font-bold text-sm rounded-none rounded-r-2xl transition-all duration-300 shadow-[0_0_20px_rgba(200,167,102,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.5)] disabled:opacity-70 border-0"
           >
             {isSearching ? (
               <div className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin mr-1.5" />
@@ -980,6 +979,19 @@ const HeroSearchBar = () => {
             )}
             {isSearching ? 'Searching...' : 'Search'}
           </Button>
+        </div>
+
+        {/* Mobile-only: Search input */}
+        <div className="flex sm:hidden items-center bg-white/[0.07] backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-3 min-h-[48px]">
+          <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.5))' }} />
+          <input
+            type="text"
+            placeholder="Area, project or community"
+            value={locationSearch}
+            onChange={(e) => setLocationSearch(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/50 px-3 text-sm font-medium min-w-0 w-full"
+          />
         </div>
 
         {/* Mobile-only: Filters + Search buttons side by side */}
