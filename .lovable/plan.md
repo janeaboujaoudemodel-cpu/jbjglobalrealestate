@@ -1,106 +1,81 @@
 
-## Comprehensive Fix Plan: Sarah Whitelist, News Page, Loading, and Enrichment
 
-This plan addresses all issues raised across multiple areas of the application.
+## Fix Plan: Search Bar in FilterShortcutBar + Sort Pills Layout + News Page Fixes
 
----
+### Issue 1: FilterShortcutBar Row 1 Layout Fix
 
-### 1. Remove URL Whitelist Restriction for Sarah (Listing Admin Chat)
+**Current Problem:** On the Properties page, the `FilterShortcutBar` Row 1 shows: `Map | Saved | AED | Filter | Mode: Investor` but NO search input and NO sort pills. The search bar is rendered separately above the FilterShortcutBar. The "Mode: Investor" button stretches too wide.
 
-**Problem:** The `listing-admin-chat` edge function checks URLs against `listing_admin_authorized_sources` table. Only 4 government sources exist (Dubai REST, Al Nair, DLD, RERA). Any other URL is blocked with "not in the authorized source whitelist."
+**Required Layout (Row 1):**
+```
+[ Search (area, project, keyword...) ] | Newest | Low-High | High-Low | A-Z | Map | Saved | AED | Filter | Mode: Investor
+```
 
-**Fix:** Remove the authorization check entirely. Sarah should accept ANY URL, scrape it with Firecrawl, extract project data, and merge with existing listings if a match is found.
+**Required Layout (Row 2 - unchanged):**
+```
+Price | Payments | Handover | Property Type | Bedrooms | Status | Construction | Hide Sold | Reset
+```
 
-**File: `supabase/functions/listing-admin-chat/index.ts`**
-- Remove the `isAuthorizedSource()` function call on line 141
-- Always scrape the URL if Firecrawl key is available
-- Remove the "UNAUTHORIZED SOURCE DETECTED" warning block (lines 167-176)
-- Update system prompt to remove "CANNOT scrape unauthorized sources" restriction (line 272/281)
-- Keep the scraping logic intact, just remove the gate
+**Changes to `src/components/filters/FilterShortcutBar.tsx`:**
+- Move the 4 sort pills (Newest, Low-High, High-Low, A-Z) from Row 2 into Row 1, positioned BETWEEN the search slot and the Map toggle
+- Sort pills in Row 1 should be compact inline buttons within the connected bar (same height/style as Map, Saved, etc.)
+- Remove sort pills from Row 2 (keep only filter popovers + Hide Sold + Reset)
+- Fix "Mode: Investor" button to use compact sizing (`max-w-fit`, not stretching) -- same as other buttons in the bar
 
-**File: `supabase/functions/listing-admin-chat/index.ts` (merge logic)**
-- After extracting project data from a URL, search the `projects` table by name similarity
-- If a matching project is found, merge the new data (images, documents, description, amenities) into the existing record
-- If no match, suggest creating a new listing as currently done
+**Changes to `src/pages/Properties.tsx`:**
+- Pass the existing search input as `searchSlot` to FilterShortcutBar instead of rendering it separately
+- Remove the separate search input above FilterShortcutBar
+- Make placeholder text: "Search area, project or keyword..."
 
----
-
-### 2. News Page Fixes (Multiple Sub-Issues)
-
-#### 2a. Hero Section Cleanup
-**File: `src/pages/News.tsx`**
-- The hero section text rendering is fine structurally; ensure no broken text by reviewing the badge/title markup
-- Add the JBJ monogram alongside the hero for branding (import `jbjMonogramDark` and render it in the hero overlay area as a subtle watermark or centered element)
-
-#### 2b. Search Bar + Sticky Category Filter
-**File: `src/pages/News.tsx`**
-- Add a search input to the category filter bar (search by title/excerpt)
-- Ensure the category filter bar is properly sticky under the main header (`sticky top-16` is already set at line 321 -- verify it works and fix if content overflows)
-- Fix content overflow in the filter bar that causes text to spill outside
-
-#### 2c. Active Category Button Gold Champagne Style
-**File: `src/pages/News.tsx`**
-- Change the active category button style from `bg-black text-gold` to the gold champagne gradient: `bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] text-black border border-gold/50`
-
-#### 2d. News Cards Missing Photos
-**File: `supabase/functions/ai-news-collector/index.ts`**
-- Currently `pickNullFallback()` returns `null` (line 77). When no image is found from the source, news cards show a blank gradient placeholder
-- Fix: After scraping, if no image found, use Firecrawl Search to find a relevant image for the article topic
-- Add a secondary search step: search for `"{article title} Dubai real estate"` and extract the first good image from results
-- Ensure each article gets a unique image (track used URLs to prevent duplicates across articles in same batch)
-- Upgrade all image URLs to high quality (append `w=1920&q=90` for Unsplash-style URLs)
-
-#### 2e. Add DLD Market Intelligence Section Under Each News Article
-**File: `src/pages/NewsDetail.tsx`**
-- After the AI Analysis section and before the Source Attribution, add a "Dubai Market Intelligence" section
-- Reuse the DXB Interact / DLD transaction breakdown components from `News.tsx` (the `TransactionBreakdown` component and market stats)
-- Extract the shared components into a reusable component or import the data constants directly
+**Changes to `src/pages/AreaGuides.tsx`:**
+- Ensure the same searchSlot pattern is passed (already done for sticky version, verify inline version too)
 
 ---
 
-### 3. Fix Global Loading Spinner (BrandedLoader)
+### Issue 2: News Page Hero Video
 
-**Problem:** The BrandedLoader uses the monogram with a clip-path fill animation, but it's not properly centered or visible on all pages. Most pages still use the basic gold spinning circle (`PageLoader.tsx`).
+**Problem:** The hero section still uses the `press-kit-hero.mp4` video which the user finds ugly.
 
-**Fix:**
-**File: `src/components/PageLoader.tsx`**
-- Replace the basic spinning circle with the `BrandedLoader` component
-- Import the BrandedLoader and use it with centered positioning
-
-**File: `src/components/ui/BrandedLoader.tsx`**
-- Verify the monogram is properly centered (it currently uses `min-h-[60vh]` which may not fill the full screen)
-- Change to `min-h-screen` for full-page loading states
-- Ensure the fill animation is smooth and visible
-
-**File: `src/pages/NewsDetail.tsx`** (line 131)
-- Replace the basic `Loader2` spinner with `BrandedLoader`
-
-**File: `src/pages/News.tsx`** (line 345-348)
-- Replace the basic `Loader2` spinner with `BrandedLoader`
+**Fix in `src/pages/News.tsx`:**
+- Replace the video with a static gradient background with the JBJ monogram as a subtle watermark
+- Use a premium dark gradient (`bg-gradient-to-b from-black via-zinc-900 to-black`) with gold accent blurs
+- Add the JBJ monogram image centered with low opacity as a brand element
 
 ---
 
-### 4. Enrichment Flow Consolidation
+### Issue 3: News Featured Badge Color
 
-#### 4a. Merge Provident Enrichment into Test Flow
-**Problem:** There are two separate sections: "Test Project Enrichment" (Section 5 in Reelly card) and "Provident Enrichment" (Section 2, separate card). User wants a single flow: test one project first, then bulk.
+**Problem:** The "Featured" badge on line 379 uses `bg-gold` (old yellow gold), not the new champagne gradient style.
 
-**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
-- Move the Firecrawl extraction controls INTO the "Test Project Enrichment" section
-- The test flow should: (1) Enter slug, (2) Test enrichment (which already includes Provident + Firecrawl), (3) Review checklist, (4) Apply
-- Remove the separate "Provident Enrichment" card (Section 2) or collapse it into an "After testing, run bulk" section within the same card
-- Keep "Page-Data Enrichment (Free)" as a sub-section since it uses no credits
+**Fix in `src/pages/News.tsx`:**
+- Change Featured badge from `bg-gold` to `bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] text-black border border-gold/50`
 
-#### 4b. Remove Reelly API Error References
-**File: `src/components/listing-admin/ReellyImportPanel.tsx`**
-- The enrichment test uses `enrich-project-test` which tries Reelly first then Provident. If Reelly token is expired, it shows "Reelly API error: 401"
-- Update the error display to not show Reelly-specific errors when doing Provident extraction
-- In the edge function, catch Reelly errors gracefully and proceed to Provident without surfacing the Reelly error
+---
 
-#### 4c. Ensure All Checklist Items Are Green
-- The checklist already has proper green/red status indicators (lines 1045-1070)
-- The issue is that the extraction doesn't populate all fields. This was addressed in the previous approved plan (Firecrawl OR fallback logic)
-- Verify after deploying the previous fixes that the enrichment fills: amenities, USPs, FAQs, distances, floor plans, unit types, description, payment plan, video, highlights, service charge, ROI
+### Issue 4: News Cards Missing Photos
+
+**Problem:** 10+ news articles have `image_url = NULL`. Cards show a dark gradient placeholder with a newspaper icon.
+
+**Fix in `supabase/functions/ai-news-collector/index.ts`:**
+- After scraping each article, if no image is found, use Firecrawl Search to find a relevant image for that article's topic
+- Search query: `"{article_title}" Dubai real estate photo`
+- Extract image URLs from search results, pick the first high-quality one
+- Deduplicate across the batch to prevent same image on multiple cards
+- Also add a one-time backfill: create a small edge function or SQL update to find existing articles without images and populate them
+
+**Fix in `src/pages/News.tsx`:**
+- For cards that STILL have no image, show a better placeholder with the article category icon and a premium gradient instead of the dark void
+
+---
+
+### Issue 5: Duplicate Photos on News Cards
+
+**Problem:** Same photo appears on multiple news cards.
+
+**Fix in `supabase/functions/ai-news-collector/index.ts`:**
+- Track all image URLs used in the current batch
+- Before assigning an image, check if it's already been used
+- If duplicate, search for an alternative image or skip
 
 ---
 
@@ -108,38 +83,32 @@ This plan addresses all issues raised across multiple areas of the application.
 
 | File | Change |
 |------|--------|
-| `supabase/functions/listing-admin-chat/index.ts` | Remove URL whitelist check; always scrape any URL; add merge logic for existing projects |
-| `src/pages/News.tsx` | Add search input; fix active button to gold champagne style; add JBJ monogram to hero; replace Loader2 with BrandedLoader |
-| `src/pages/NewsDetail.tsx` | Add DLD Market Intelligence section; replace Loader2 with BrandedLoader |
-| `supabase/functions/ai-news-collector/index.ts` | Add Firecrawl Search fallback for missing article images; deduplicate across batch |
-| `src/components/PageLoader.tsx` | Replace spinning circle with BrandedLoader |
-| `src/components/ui/BrandedLoader.tsx` | Ensure proper full-screen centering |
-| `src/components/listing-admin/ReellyImportPanel.tsx` | Merge Provident section into test flow; suppress Reelly errors during Provident extraction |
+| `src/components/filters/FilterShortcutBar.tsx` | Move sort pills from Row 2 to Row 1 (between search and Map); fix Mode button sizing |
+| `src/pages/Properties.tsx` | Pass search input as `searchSlot` to FilterShortcutBar; remove separate search input |
+| `src/pages/News.tsx` | Replace hero video with static gradient + monogram; fix Featured badge to champagne style; improve no-image placeholder |
+| `supabase/functions/ai-news-collector/index.ts` | Add Firecrawl image search fallback for articles without images; deduplicate across batch |
 
 ### Technical Details
 
-**Whitelist removal (listing-admin-chat):**
-```text
-// BEFORE: Check authorization, block if not whitelisted
-const authCheck = await isAuthorizedSource(supabase, extractedUrl);
-if (authCheck.authorized) { scrape... } else { warn unauthorized }
-
-// AFTER: Always scrape any URL
-console.log(`Scraping URL: ${extractedUrl}`);
-const scrapeResult = await scrapeUrl(extractedUrl, FIRECRAWL_API_KEY);
+**FilterShortcutBar Row 1 new structure:**
+```
+<div connected-bar>
+  {searchSlot}           // flex-1, search input
+  | Newest | Low-High | High-Low | A-Z   // sort buttons, compact, border-r separators
+  | Map | Saved | AED | Filter | Mode    // existing controls
+</div>
 ```
 
-**News image fallback (ai-news-collector):**
-```text
-// After scrape fails to find image:
-// 1. Search Firecrawl for "{title} Dubai" 
-// 2. Extract first good image from search results
-// 3. Filter against already-used URLs in this batch
-// 4. Upgrade to high quality
+Each sort button in Row 1 will be a compact inline button matching the style of Map/Saved/AED (same `px-3 py-2.5 text-xs font-semibold` with `border-r border-gold/20`). Active sort will have `bg-gold/20 text-black font-bold`.
+
+**Mode button fix:** Add `flex-shrink-0` and remove any `flex-1` or stretching. Keep same compact style as other buttons.
+
+**News hero replacement:**
+```tsx
+<div className="absolute inset-0 bg-gradient-to-b from-zinc-900 via-black to-black">
+  <img src={jbjMonogram} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 opacity-5" />
+  <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+</div>
 ```
 
-**Active category button style:**
-```text
-// FROM: "bg-black text-gold shadow-lg"
-// TO: "bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] text-black border border-gold/50 shadow-lg"
-```
+**News image backfill approach:** After deploying the collector fix, run a one-time collection to backfill existing articles. Alternatively, update the edge function to accept an `action: 'backfill-images'` parameter that queries articles with null images and searches for images via Firecrawl.
