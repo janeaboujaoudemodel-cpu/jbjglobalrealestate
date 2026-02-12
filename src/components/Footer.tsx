@@ -799,7 +799,7 @@ const Footer = () => {
 
           <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
             {/* Legal Disclaimer Section */}
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8 text-center mb-6 sm:mb-8">
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8 text-center">
               <h4 
                 className="font-bold text-base sm:text-lg md:text-xl uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-5"
                 style={{
