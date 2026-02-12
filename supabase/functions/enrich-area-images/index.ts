@@ -8,8 +8,9 @@ const corsHeaders = {
 /**
  * Enrich area images:
  * 1. Try to find a project image from projects in that area
- * 2. If no project image exists, generate one using Gemini AI
- * 3. Upload to Supabase Storage and update the area record
+ * 2. If no project image exists, use Firecrawl Search to find real community photos
+ * 3. Use Gemini AI to pick the best community-level photo from candidates
+ * 4. Upload to Supabase Storage and update the area record
  */
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -19,26 +20,25 @@ Deno.serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const firecrawlApiKey = Deno.env.get("FIRECRAWL_API_KEY");
     const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
     const supabase = createClient(supabaseUrl, serviceKey);
 
     const body = await req.json().catch(() => ({}));
     const batchSize = body.batch_size || 5;
-    const useAiFallback = body.use_ai_fallback !== false; // default true
 
-    // Get areas missing images
+    // Get areas missing images OR with unsplash/pexels/AI-generated images
     const { data: areas, error: fetchErr } = await supabase
       .from("areas")
       .select("id, name, slug")
-      .is("image_url", null)
-      .is("hero_image_url", null)
       .eq("is_active", true)
+      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,hero_image_url.is.null,hero_image_url.ilike.%unsplash%,hero_image_url.ilike.%pexels%")
       .limit(batchSize);
 
     if (fetchErr) throw fetchErr;
     if (!areas || areas.length === 0) {
       return new Response(
-        JSON.stringify({ success: true, message: "All areas have images", processed: 0, remaining: 0 }),
+        JSON.stringify({ success: true, message: "All areas have real images", processed: 0, remaining: 0 }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -46,17 +46,16 @@ Deno.serve(async (req) => {
     const { count: remaining } = await supabase
       .from("areas")
       .select("id", { count: "exact", head: true })
-      .is("image_url", null)
-      .is("hero_image_url", null)
-      .eq("is_active", true);
+      .eq("is_active", true)
+      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,hero_image_url.is.null,hero_image_url.ilike.%unsplash%,hero_image_url.ilike.%pexels%");
 
     const results: { area: string; image_url: string | null; status: string; source: string }[] = [];
 
     for (const area of areas) {
-      // Step 1: Try project images
       let imageUrl: string | null = null;
       let source = "none";
 
+      // Step 1: Try project images
       const { data: projects } = await supabase
         .from("projects")
         .select("id, main_image_url")
@@ -91,57 +90,104 @@ Deno.serve(async (req) => {
         }
       }
 
-      // Step 2: AI fallback - generate image with Gemini
-      if (!imageUrl && useAiFallback && lovableApiKey) {
+      // Step 2: Firecrawl Search for real community photos
+      if (!imageUrl && firecrawlApiKey && lovableApiKey) {
         try {
-          const prompt = `Professional aerial panoramic photograph of ${area.name}, Dubai, UAE. Modern architecture, community master plan view, luxury real estate photography, golden hour lighting, ultra high resolution, 16:9 aspect ratio.`;
-          
-          const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          const searchQuery = `${area.name} Dubai community aerial panoramic view neighborhood real estate`;
+          console.log(`Searching for area image: ${searchQuery}`);
+
+          const searchResp = await fetch("https://api.firecrawl.dev/v1/search", {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${lovableApiKey}`,
+              "Authorization": `Bearer ${firecrawlApiKey}`,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              model: "google/gemini-2.5-flash-image",
-              messages: [{ role: "user", content: prompt }],
-              modalities: ["image", "text"],
-            }),
+            body: JSON.stringify({ query: searchQuery, limit: 5 }),
           });
 
-          if (aiResponse.ok) {
-            const aiData = await aiResponse.json();
-            const base64Url = aiData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+          if (!searchResp.ok) {
+            console.error(`Firecrawl search failed for ${area.name}: ${searchResp.status}`);
+          } else {
+            const searchData = await searchResp.json();
+            const searchResults = searchData.data || [];
 
-            if (base64Url) {
-              // Extract base64 data
-              const base64Data = base64Url.replace(/^data:image\/\w+;base64,/, "");
-              const binaryData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+            // Collect all image URLs from search results
+            const allImageUrls: string[] = [];
+            for (const r of searchResults) {
+              const mdImages = (r.markdown || "").match(/https?:\/\/[^\s)"']+\.(jpg|jpeg|png|webp|gif)[^\s)"']*/gi) || [];
+              allImageUrls.push(...mdImages);
+              const mdImgSyntax = (r.markdown || "").match(/!\[.*?\]\((https?:\/\/[^\s)]+)\)/gi) || [];
+              for (const m of mdImgSyntax) {
+                const urlMatch = m.match(/\((https?:\/\/[^\s)]+)\)/);
+                if (urlMatch) allImageUrls.push(urlMatch[1]);
+              }
+              if (r.links && Array.isArray(r.links)) {
+                for (const link of r.links) {
+                  if (typeof link === 'string' && link.match(/\.(jpg|jpeg|png|webp|gif)/i)) {
+                    allImageUrls.push(link);
+                  }
+                }
+              }
+              if (r.metadata?.ogImage) allImageUrls.push(r.metadata.ogImage);
+              if (r.metadata?.image) allImageUrls.push(r.metadata.image);
+              if (r.metadata?.og_image) allImageUrls.push(r.metadata.og_image);
+            }
 
-              // Upload to storage
-              const fileName = `${area.slug}.webp`;
-              const { error: uploadErr } = await supabase.storage
-                .from("area-images")
-                .upload(fileName, binaryData, {
-                  contentType: "image/png",
-                  upsert: true,
-                });
+            // Deduplicate and filter
+            const uniqueImageUrls = [...new Set(allImageUrls)]
+              .filter(u => !u.includes('favicon') && !u.includes('icon-') && !u.includes('/icons/') && !u.includes('logo') && !u.includes('unsplash') && !u.includes('pexels') && u.length < 500)
+              .slice(0, 30);
 
-              if (!uploadErr) {
-                const { data: publicUrl } = supabase.storage
-                  .from("area-images")
-                  .getPublicUrl(fileName);
-                imageUrl = publicUrl.publicUrl;
-                source = "ai_generated";
+            console.log(`Found ${uniqueImageUrls.length} candidate images for ${area.name}`);
+
+            if (uniqueImageUrls.length > 0) {
+              // Use Gemini to pick the best community photo
+              const aiPrompt = `You are selecting a REAL photo for the "${area.name}" community/neighborhood in Dubai, UAE.
+
+Candidate image URLs:
+${uniqueImageUrls.map((u, i) => `${i + 1}. ${u}`).join("\n")}
+
+TASK: Pick the ONE best image URL that shows a REAL photo of the ${area.name} community or neighborhood.
+
+REQUIREMENTS:
+- MUST be a real photograph (NOT a render, CGI, or illustration)
+- MUST show the COMMUNITY or NEIGHBORHOOD level view: aerial view, skyline, panorama, master plan view, community streetscape
+- Must NOT be a single building facade, apartment interior, floor plan, or logo
+- Must NOT contain "unsplash", "pexels", "placeholder", or "stock" in the URL
+- Prefer wide/panoramic shots showing multiple buildings or the overall area
+- If no URL meets these criteria, respond with exactly "NONE"
+
+Respond with ONLY the URL or "NONE". Nothing else.`;
+
+              const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                  "Authorization": `Bearer ${lovableApiKey}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  model: "google/gemini-2.5-flash",
+                  messages: [{ role: "user", content: aiPrompt }],
+                }),
+              });
+
+              if (aiResp.ok) {
+                const aiData = await aiResp.json();
+                const chosenUrl = aiData.choices?.[0]?.message?.content?.trim();
+                if (chosenUrl && chosenUrl !== "NONE" && chosenUrl.startsWith("http")) {
+                  imageUrl = chosenUrl;
+                  source = "firecrawl_search";
+                  console.log(`AI selected community photo for ${area.name}: ${chosenUrl}`);
+                } else {
+                  console.log(`AI found no suitable community photo for ${area.name}`);
+                }
               } else {
-                console.error(`Upload error for ${area.name}:`, uploadErr.message);
+                console.error(`AI selection failed for ${area.name}: ${aiResp.status}`);
               }
             }
-          } else {
-            console.error(`AI generation failed for ${area.name}: ${aiResponse.status}`);
           }
-        } catch (aiErr) {
-          console.error(`AI error for ${area.name}:`, aiErr);
+        } catch (searchErr) {
+          console.error(`Search error for ${area.name}:`, searchErr);
         }
       }
 

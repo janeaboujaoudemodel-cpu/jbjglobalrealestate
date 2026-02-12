@@ -61,6 +61,7 @@ const Developers = () => {
   const [tierFilter, setTierFilter] = useState("all");
   const [selectedDeveloper, setSelectedDeveloper] = useState("");
   const [isFilterFixed, setIsFilterFixed] = useState(false);
+  const [sortBy, setSortBy] = useState<"default" | "alpha" | "most_projects">("default");
   const filterSentinelRef = useRef<HTMLDivElement>(null);
 
   // Two-phase scroll-to-fix filter logic
@@ -132,34 +133,31 @@ const Developers = () => {
       );
     }
     
-    // Sort: Elite priority order first, then by rank, then alphabetically
-    filtered.sort((a, b) => {
-      const aSlug = a.slug?.toLowerCase() || '';
-      const bSlug = b.slug?.toLowerCase() || '';
-      
-      // Check if either is in the elite priority order
-      const aIdx = ELITE_PRIORITY_ORDER.findIndex(d => aSlug.includes(d));
-      const bIdx = ELITE_PRIORITY_ORDER.findIndex(d => bSlug.includes(d));
-      
-      // Both are in priority list - sort by priority order
-      if (aIdx >= 0 && bIdx >= 0) return aIdx - bIdx;
-      // Only a is in priority list - a comes first
-      if (aIdx >= 0) return -1;
-      // Only b is in priority list - b comes first
-      if (bIdx >= 0) return 1;
-      
-      // Neither in priority list - sort by rank (treat 0 as unranked/last)
-      const aRank = a.rank && a.rank > 0 ? a.rank : 999;
-      const bRank = b.rank && b.rank > 0 ? b.rank : 999;
-      const rankDiff = aRank - bRank;
-      if (rankDiff !== 0) return rankDiff;
-      
-      // Same rank - sort alphabetically
-      return a.name.localeCompare(b.name);
-    });
+    // Sort based on selected sort option
+    if (sortBy === "alpha") {
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === "most_projects") {
+      filtered.sort((a, b) => (projectCounts[b.id] || 0) - (projectCounts[a.id] || 0));
+    } else {
+      // Default: Elite priority order first, then by rank, then alphabetically
+      filtered.sort((a, b) => {
+        const aSlug = a.slug?.toLowerCase() || '';
+        const bSlug = b.slug?.toLowerCase() || '';
+        const aIdx = ELITE_PRIORITY_ORDER.findIndex(d => aSlug.includes(d));
+        const bIdx = ELITE_PRIORITY_ORDER.findIndex(d => bSlug.includes(d));
+        if (aIdx >= 0 && bIdx >= 0) return aIdx - bIdx;
+        if (aIdx >= 0) return -1;
+        if (bIdx >= 0) return 1;
+        const aRank = a.rank && a.rank > 0 ? a.rank : 999;
+        const bRank = b.rank && b.rank > 0 ? b.rank : 999;
+        const rankDiff = aRank - bRank;
+        if (rankDiff !== 0) return rankDiff;
+        return a.name.localeCompare(b.name);
+      });
+    }
     
     return filtered;
-  }, [developers, searchQuery, tierFilter, selectedDeveloper]);
+  }, [developers, searchQuery, tierFilter, selectedDeveloper, sortBy, projectCounts]);
 
   const activeFilterCount = [
     searchQuery.trim(),
@@ -249,15 +247,45 @@ const Developers = () => {
             {/* Active Champagne Layer */}
             <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
               
-              {/* Keyword Search - Full Width */}
-              <div className="relative w-full mb-4">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
-                <Input
-                  placeholder="Search by developer name..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
-                />
+              {/* Search + Sort row */}
+              <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
+                  <Input
+                    placeholder="Search developer, project or keyword..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
+                  />
+                </div>
+                <div className="flex gap-1.5 flex-shrink-0 items-center">
+                  {([
+                    { key: "default", label: "Newest" },
+                    { key: "alpha", label: "A-Z" },
+                    { key: "most_projects", label: "Most Projects" },
+                  ] as const).map(opt => (
+                    <button
+                      key={opt.key}
+                      onClick={() => {
+                        // Use existing sort - just set tier to trigger different sort
+                        if (opt.key === "alpha") {
+                          setSortBy("alpha" as any);
+                        } else if (opt.key === "most_projects") {
+                          setSortBy("most_projects" as any);
+                        } else {
+                          setSortBy("default" as any);
+                        }
+                      }}
+                      className={`px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
+                        (sortBy as any) === opt.key || (!sortBy && opt.key === "default")
+                          ? "bg-black text-gold border border-gold shadow-md"
+                          : "bg-white border border-gold/30 text-zinc-600 hover:border-gold"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Filter Row */}

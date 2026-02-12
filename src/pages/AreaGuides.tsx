@@ -206,87 +206,48 @@ const AreaGuides = () => {
       <section className="py-4 pb-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
         <div className="container mx-auto px-4 space-y-3">
           {/* Search input */}
-          <div className="relative w-full max-w-2xl mx-auto">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
-            <Input
-              placeholder="Search areas..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 pr-12 py-6 bg-white/95 backdrop-blur-sm border-0 text-black text-base rounded-xl shadow-2xl"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            )}
+          {/* Search + Sort row */}
+          <div className="flex flex-col sm:flex-row gap-3 items-center justify-center max-w-4xl mx-auto">
+            <div className="relative flex-1 w-full">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+              <Input
+                placeholder="Search area, project or keyword..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-12 pr-12 py-6 bg-white/95 backdrop-blur-sm border-0 text-black text-base rounded-xl shadow-2xl"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+            {/* Sort pills */}
+            <div className="flex gap-1.5 flex-shrink-0">
+              {([
+                { key: "property_count" as SortOption, label: "Most Projects" },
+                { key: "trending" as SortOption, label: "Trending" },
+                { key: "alphabetical" as SortOption, label: "A-Z" },
+              ]).map(opt => (
+                <button
+                  key={opt.key}
+                  onClick={() => setSortBy(opt.key)}
+                  className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
+                    sortBy === opt.key
+                      ? "bg-black text-gold border border-gold shadow-md"
+                      : "bg-white border border-gold/30 text-zinc-600 hover:border-gold"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Emirates pills */}
-          <div className="flex flex-wrap gap-2 justify-center">
-            <button
-              onClick={() => setSelectedEmirate("all")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                selectedEmirate === "all"
-                  ? "bg-black text-gold border border-gold"
-                  : "bg-white border border-gold/30 text-zinc-700 hover:border-gold"
-              }`}
-            >
-              All Emirates
-            </button>
-            {emirates?.map((emirate) => (
-              <button
-                key={emirate}
-                onClick={() => setSelectedEmirate(emirate)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  selectedEmirate === emirate
-                    ? "bg-black text-gold border border-gold"
-                    : "bg-white border border-gold/30 text-zinc-700 hover:border-gold"
-                }`}
-              >
-                {emirate}
-              </button>
-            ))}
-          </div>
-
-          {/* Sort toggles: Building2 (property count), Flame (trending), A-Z */}
-          <div className="flex gap-2 justify-center max-w-xs mx-auto">
-            <button
-              onClick={() => setSortBy("property_count")}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                sortBy === "property_count"
-                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black"
-                  : "bg-white border border-gold/30 text-zinc-700"
-              }`}
-              title="Sort by property count"
-            >
-              <Building2 className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setSortBy("trending")}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                sortBy === "trending"
-                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black"
-                  : "bg-white border border-gold/30 text-zinc-700"
-              }`}
-              title="Sort by trending"
-            >
-              <Flame className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setSortBy("alphabetical")}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                sortBy === "alphabetical"
-                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black"
-                  : "bg-white border border-gold/30 text-zinc-700"
-              }`}
-              title="Sort A-Z"
-            >
-              A-Z
-            </button>
-          </div>
 
           {/* FilterShortcutBar */}
           <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
