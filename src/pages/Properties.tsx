@@ -70,6 +70,7 @@ import { FeaturedProjectAd, FEATURED_ADS } from "@/components/FeaturedProjectAd"
 import { blueprintPagesSEO, trackingEvents } from "@/types/blueprint";
 import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
+import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 
 // Currency conversion rates - 10 unified currencies
@@ -192,6 +193,7 @@ const Properties = () => {
   const [displayMode, setDisplayMode] = useState<DisplayMode>('investor');
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const filterSentinelRef = useRef<HTMLDivElement>(null);
+  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
 
   // Two-phase scroll-to-fix filter logic
   useEffect(() => {
@@ -540,6 +542,15 @@ const Properties = () => {
               className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
             />
 
+          </div>
+
+          {/* Filter Shortcut Bar - Light variant */}
+          <div className="mt-3">
+            <FilterShortcutBar
+              variant="light"
+              filters={shortcutFilters}
+              onFilterChange={setShortcutFilters}
+            />
           </div>
 
           {/* Second Row - All Filters Inline */}
