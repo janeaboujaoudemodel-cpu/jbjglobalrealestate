@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { Switch } from "@/components/ui/switch";
 import { Link, useSearchParams } from "react-router-dom";
@@ -72,7 +72,8 @@ import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
-
+import PropertiesMapView from "@/components/maps/PropertiesMapView";
+import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
 
 // Currency conversion rates - 10 unified currencies
 const CURRENCY_RATES: Record<string, number> = {
@@ -195,6 +196,9 @@ const Properties = () => {
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const filterSentinelRef = useRef<HTMLDivElement>(null);
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+  const [isMapMode, setIsMapMode] = useState(false);
+  const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
+  const cardListRef = useRef<HTMLDivElement>(null);
 
   // Two-phase scroll-to-fix filter logic
   useEffect(() => {
@@ -209,6 +213,13 @@ const Properties = () => {
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, []);
+
+  // Detect ?view=map from URL
+  useEffect(() => {
+    if (searchParams.get('view') === 'map') {
+      setIsMapMode(true);
+    }
+  }, [searchParams]);
 
   // Update filters when URL params change (including developer from homepage marquee)
   useEffect(() => {
@@ -554,6 +565,8 @@ const Properties = () => {
               variant="light"
               filters={shortcutFilters}
               onFilterChange={setShortcutFilters}
+              isMapMode={isMapMode}
+              onMapToggle={setIsMapMode}
             />
           </div>
 
@@ -1136,179 +1149,243 @@ const Properties = () => {
       {/* Divider between Search and Results */}
       <div className="h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-      {/* Results Section - 3-Layer System: Black > Active Champagne > Listings */}
-      <section className="py-12 bg-black">
-        <div className="container mx-auto px-3 sm:px-4">
-          {/* OUTER LAYER - Active Champagne with thin black contour visible at edges */}
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5">
-            
-            {/* Header Section - Off-plan properties message */}
-            {appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus !== 'ready' && (
-              <div className="px-4 pt-4 pb-2">
-                <h2 className="text-2xl md:text-3xl font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  Off-plan properties for sale in Dubai
-                </h2>
-                <p className="text-black/70 text-sm md:text-base flex items-start gap-2">
-                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full border border-gold/50 text-gold text-xs flex-shrink-0 mt-0.5">i</span>
-                  <span>
-                    Looking for off-plan properties for sale in Dubai? Contact <span className="font-semibold text-gold">JBJ Global Real Estate</span> in Dubai to find the right property for you.
-                  </span>
+      {/* Results Section - Split-screen map mode or standard grid */}
+      {isMapMode ? (
+        <section className="bg-black">
+          <div className="flex" style={{ height: 'calc(100vh - 80px)' }}>
+            {/* Vertical Nav Sidebar - visible when filter is fixed */}
+            {isFilterFixed && (
+              <PropertiesVerticalNav />
+            )}
+
+            {/* Left: Scrollable card list */}
+            <div ref={cardListRef} className="w-[55%] flex-shrink-0 overflow-y-auto bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+              {/* Results Count */}
+              <div className="px-4 pt-4 pb-2 flex items-center justify-between">
+                <p className="text-black/70 text-sm">
+                  Showing <span className="text-gold font-medium">{finalProjects.length}</span> properties
                 </p>
               </div>
-            )}
-            
-            {/* Results Count - Inside active layer */}
-            <div className="mb-6 flex items-center justify-between px-4 pt-4">
-              <p className="text-black/70">
-                Showing <span className="text-gold font-medium">{finalProjects.length}</span> properties
-                {appliedFilters.transactionType === 'rent' && ' for rent'}
-                {appliedFilters.transactionType === 'buy' && ' for sale'}
-              </p>
-              {activeFilterCount > 0 && (
-                <Button
-                  variant="ghost"
-                  onClick={clearFilters}
-                  className="text-zinc-600 hover:text-black"
-                >
-                  <X className="w-4 h-4 mr-2" />
-                  Clear all filters
-                </Button>
-              )}
-            </div>
 
-            {/* Projects Grid - Inside active layer - 2-3 cards per row for wider balanced layout */}
-            {isLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-2 sm:p-4">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl h-[400px] sm:h-[460px] animate-pulse border-2 border-gold/30" />
-                ))}
-              </div>
-            ) : finalProjects.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-2 sm:p-4">
-                {finalProjects.map((project, index) => {
-                  // Insert featured ads after specific positions (after 6, 12, 18 cards)
-                  const adAfterIndex = [5, 11, 17]; // 0-indexed: after 6th, 12th, 18th card
-                  const adIndex = adAfterIndex.indexOf(index);
-                  const featuredAd = adIndex !== -1 && FEATURED_ADS[adIndex] ? FEATURED_ADS[adIndex] : null;
-                  
-                  return (
-                    <>
-                      <ProjectCard 
-                        key={project.id} 
-                        project={project} 
+              {/* Cards Grid - 2 columns */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3">
+                {isLoading ? (
+                  [...Array(6)].map((_, i) => (
+                    <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl h-[350px] animate-pulse border-2 border-gold/30" />
+                  ))
+                ) : finalProjects.length > 0 ? (
+                  finalProjects.map((project) => (
+                    <div
+                      key={project.id}
+                      id={`map-card-${project.id}`}
+                      onMouseEnter={() => setHoveredProjectId(project.id)}
+                      onMouseLeave={() => setHoveredProjectId(null)}
+                      className={`transition-all duration-200 rounded-2xl ${hoveredProjectId === project.id ? 'ring-2 ring-gold shadow-lg scale-[1.01]' : ''}`}
+                    >
+                      <ProjectCard
+                        project={project}
                         currency={filters.currency}
                         sizeUnit={filters.sizeUnit}
                       />
-                      {featuredAd && (
-                        <FeaturedProjectAd
-                          key={`ad-${featuredAd.id}`}
-                          title={featuredAd.title}
-                          subtitle={featuredAd.subtitle}
-                          description={featuredAd.description}
-                          imageUrl={featuredAd.imageUrl}
-                          projectSlug={featuredAd.projectSlug}
-                          ctaText={featuredAd.ctaText}
-                        />
-                      )}
-                    </>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="text-center py-20 px-4">
-                {/* Developer Selected but No Listings */}
-                {appliedFilters.developerId && developers?.find(d => d.id === appliedFilters.developerId) ? (
-                  <>
-                    <div className="w-24 h-24 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30">
-                      <Building2 className="w-12 h-12 text-gold" />
                     </div>
-                    <h3 className="text-2xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
-                      No Listings Yet for {developers.find(d => d.id === appliedFilters.developerId)?.name}
-                    </h3>
-                    <p className="text-zinc-600 mb-6 max-w-md mx-auto">
-                      We're currently adding properties from this developer to our portfolio. 
-                      Register your interest to be notified when listings become available.
-                    </p>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                      <Button asChild variant="primary" className="h-12 px-8">
-                        <a 
-                          href={getWhatsAppUrl(`Hi, I'm interested in properties from ${developers.find(d => d.id === appliedFilters.developerId)?.name}. Please let me know when listings become available.`)}
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                        >
-                          <MessageCircle className="w-4 h-4 mr-2" />
-                          Register Interest via WhatsApp
-                        </a>
-                      </Button>
-                      <Button 
-                        onClick={() => {
-                          clearFilters();
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }} 
-                        variant="outline" 
-                        className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6 cursor-pointer"
-                      >
-                        Browse All Properties
-                      </Button>
-                    </div>
-                  </>
+                  ))
                 ) : (
-                  <>
-                    <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
-                      <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
-                    </div>
-                    {appliedFilters.transactionType === 'rent' ? (
-                      <>
-                        <h3 className="text-xl font-semibold text-black mb-2">No Rental Listings Available</h3>
-                        <p className="text-zinc-600 mb-4">We currently do not have rental properties listed. Please check back soon or contact us for assistance.</p>
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-                          <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
-                            <Phone className="w-4 h-4" />
-                            <span className="font-medium">{CONTACT_INFO.phone}</span>
-                          </a>
-                          <span className="hidden sm:inline text-zinc-400">|</span>
-                          <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
-                            <Mail className="w-4 h-4" />
-                            <span className="font-medium">{CONTACT_INFO.email}</span>
-                          </a>
-                        </div>
-                      </>
-                    ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'ready' ? (
-                      <>
-                        <h3 className="text-xl font-semibold text-black mb-2">No Ready Properties Found</h3>
-                        <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria to find available ready properties.</p>
-                      </>
-                    ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'off-plan' ? (
-                      <>
-                        <h3 className="text-xl font-semibold text-black mb-2">No Off-Plan Properties Found</h3>
-                        <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria to find available off-plan properties.</p>
-                      </>
-                    ) : appliedFilters.transactionType === 'buy' ? (
-                      <>
-                        <h3 className="text-xl font-semibold text-black mb-2">No Properties for Sale Found</h3>
-                        <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria to find available properties.</p>
-                      </>
-                    ) : (
-                      <>
-                        <h3 className="text-xl font-semibold text-black mb-2">No properties found</h3>
-                        <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria</p>
-                      </>
-                    )}
-                    <Button
-                      onClick={clearFilters}
-                      variant="outline"
-                      className="border-border text-foreground hover:bg-muted"
-                    >
-                      <X className="w-4 h-4 mr-2" />
-                      Clear Filters
-                    </Button>
-                  </>
+                  <div className="col-span-2 text-center py-20">
+                    <Search className="w-10 h-10 text-gold mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-black mb-2">No properties found</h3>
+                    <p className="text-zinc-600">Try adjusting your filters</p>
+                  </div>
                 )}
               </div>
-            )}
+            </div>
+
+            {/* Right: Map */}
+            <div className="flex-1 min-w-0">
+              <PropertiesMapView
+                projects={finalProjects}
+                hoveredProjectId={hoveredProjectId}
+                onProjectHover={setHoveredProjectId}
+                onProjectClick={(id) => {
+                  const el = document.getElementById(`map-card-${id}`);
+                  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  setHoveredProjectId(id);
+                }}
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : (
+        <section className="py-12 bg-black">
+          <div className="container mx-auto px-3 sm:px-4">
+            {/* OUTER LAYER - Active Champagne with thin black contour visible at edges */}
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5">
+              
+              {/* Header Section - Off-plan properties message */}
+              {appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus !== 'ready' && (
+                <div className="px-4 pt-4 pb-2">
+                  <h2 className="text-2xl md:text-3xl font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    Off-plan properties for sale in Dubai
+                  </h2>
+                  <p className="text-black/70 text-sm md:text-base flex items-start gap-2">
+                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full border border-gold/50 text-gold text-xs flex-shrink-0 mt-0.5">i</span>
+                    <span>
+                      Looking for off-plan properties for sale in Dubai? Contact <span className="font-semibold text-gold">JBJ Global Real Estate</span> in Dubai to find the right property for you.
+                    </span>
+                  </p>
+                </div>
+              )}
+              
+              {/* Results Count - Inside active layer */}
+              <div className="mb-6 flex items-center justify-between px-4 pt-4">
+                <p className="text-black/70">
+                  Showing <span className="text-gold font-medium">{finalProjects.length}</span> properties
+                  {appliedFilters.transactionType === 'rent' && ' for rent'}
+                  {appliedFilters.transactionType === 'buy' && ' for sale'}
+                </p>
+                {activeFilterCount > 0 && (
+                  <Button
+                    variant="ghost"
+                    onClick={clearFilters}
+                    className="text-zinc-600 hover:text-black"
+                  >
+                    <X className="w-4 h-4 mr-2" />
+                    Clear all filters
+                  </Button>
+                )}
+              </div>
+
+              {/* Projects Grid - Inside active layer - 2-3 cards per row for wider balanced layout */}
+              {isLoading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-2 sm:p-4">
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl h-[400px] sm:h-[460px] animate-pulse border-2 border-gold/30" />
+                  ))}
+                </div>
+              ) : finalProjects.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-2 sm:p-4">
+                  {finalProjects.map((project, index) => {
+                    const adAfterIndex = [5, 11, 17];
+                    const adIndex = adAfterIndex.indexOf(index);
+                    const featuredAd = adIndex !== -1 && FEATURED_ADS[adIndex] ? FEATURED_ADS[adIndex] : null;
+                    
+                    return (
+                      <>
+                        <ProjectCard 
+                          key={project.id} 
+                          project={project} 
+                          currency={filters.currency}
+                          sizeUnit={filters.sizeUnit}
+                        />
+                        {featuredAd && (
+                          <FeaturedProjectAd
+                            key={`ad-${featuredAd.id}`}
+                            title={featuredAd.title}
+                            subtitle={featuredAd.subtitle}
+                            description={featuredAd.description}
+                            imageUrl={featuredAd.imageUrl}
+                            projectSlug={featuredAd.projectSlug}
+                            ctaText={featuredAd.ctaText}
+                          />
+                        )}
+                      </>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-20 px-4">
+                  {appliedFilters.developerId && developers?.find(d => d.id === appliedFilters.developerId) ? (
+                    <>
+                      <div className="w-24 h-24 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30">
+                        <Building2 className="w-12 h-12 text-gold" />
+                      </div>
+                      <h3 className="text-2xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                        No Listings Yet for {developers.find(d => d.id === appliedFilters.developerId)?.name}
+                      </h3>
+                      <p className="text-zinc-600 mb-6 max-w-md mx-auto">
+                        We're currently adding properties from this developer to our portfolio. 
+                        Register your interest to be notified when listings become available.
+                      </p>
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                        <Button asChild variant="primary" className="h-12 px-8">
+                          <a 
+                            href={getWhatsAppUrl(`Hi, I'm interested in properties from ${developers.find(d => d.id === appliedFilters.developerId)?.name}. Please let me know when listings become available.`)}
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            <MessageCircle className="w-4 h-4 mr-2" />
+                            Register Interest via WhatsApp
+                          </a>
+                        </Button>
+                        <Button 
+                          onClick={() => {
+                            clearFilters();
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }} 
+                          variant="outline" 
+                          className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6 cursor-pointer"
+                        >
+                          Browse All Properties
+                        </Button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
+                        <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
+                      </div>
+                      {appliedFilters.transactionType === 'rent' ? (
+                        <>
+                          <h3 className="text-xl font-semibold text-black mb-2">No Rental Listings Available</h3>
+                          <p className="text-zinc-600 mb-4">We currently do not have rental properties listed. Please check back soon or contact us for assistance.</p>
+                          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+                            <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
+                              <Phone className="w-4 h-4" />
+                              <span className="font-medium">{CONTACT_INFO.phone}</span>
+                            </a>
+                            <span className="hidden sm:inline text-zinc-400">|</span>
+                            <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 text-gold hover:text-gold-light transition-colors">
+                              <Mail className="w-4 h-4" />
+                              <span className="font-medium">{CONTACT_INFO.email}</span>
+                            </a>
+                          </div>
+                        </>
+                      ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'ready' ? (
+                        <>
+                          <h3 className="text-xl font-semibold text-black mb-2">No Ready Properties Found</h3>
+                          <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria to find available ready properties.</p>
+                        </>
+                      ) : appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus === 'off-plan' ? (
+                        <>
+                          <h3 className="text-xl font-semibold text-black mb-2">No Off-Plan Properties Found</h3>
+                          <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria to find available off-plan properties.</p>
+                        </>
+                      ) : appliedFilters.transactionType === 'buy' ? (
+                        <>
+                          <h3 className="text-xl font-semibold text-black mb-2">No Properties for Sale Found</h3>
+                          <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria to find available properties.</p>
+                        </>
+                      ) : (
+                        <>
+                          <h3 className="text-xl font-semibold text-black mb-2">No properties found</h3>
+                          <p className="text-zinc-600 mb-6">Try adjusting your filters or search criteria</p>
+                        </>
+                      )}
+                      <Button
+                        onClick={clearFilters}
+                        variant="outline"
+                        className="border-border text-foreground hover:bg-muted"
+                      >
+                        <X className="w-4 h-4 mr-2" />
+                        Clear Filters
+                      </Button>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CONSOLIDATED: Unified "Confused About Where to Buy" Section with Consultation Form */}
       <section className="py-16 sm:py-20 bg-black">
