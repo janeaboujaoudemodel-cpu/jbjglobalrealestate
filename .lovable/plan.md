@@ -1,78 +1,74 @@
 
 
-## Remaining Tasks: Area Pages Unification, Admin Fixes, Edge Function Debugging
+## Fix Plan: Database Restoration, Sidebar Branding, and Data Quality
 
-### Status of Previously Approved Plan
+### Issue 1: Projects Page Must Show ALL Database Projects (Including Those Without Images)
 
-**Completed:**
-- Properties page: Single unified FilterShortcutBar, shortcut filters wired to data, 50/50 map split, vertical nav in both modes, CurrencyTooltip removed
-- useProjectsListing: Filters out projects without cover images, batch fetching past 1,000 limit
-- RecommendedProjects: Champagne gradient background
-- SectionDivider: Champagne variant added
-- ListingAdmin cards: Now show cover images, developer name, price
+**Problem**: The previous change added `.not('cover_image_url', 'is', null)` to `useProjectsListing`, filtering out 607 projects. The user wants ALL 2,410 projects visible from the database, with or without images.
 
-**Still Pending (this plan):**
+**Fix in `src/hooks/useProjects.ts`**:
+- Remove the `.not('cover_image_url', 'is', null)` filter from `useProjectsListing()` (line 232)
+- This restores the full 2,410 project count
 
----
-
-### Task 1: Replace AreaGuides.tsx Search with Unified Filter Pattern
-
-The Areas index page (`/areas`) currently has a custom search bar with Input + Emirates pills + Building2/Flame/A-Z sort toggles. This needs to be replaced with the same `ProjectFilters` + `FilterShortcutBar` pattern from the Developer page, with fixed-on-scroll behavior.
-
-**Changes to `src/pages/AreaGuides.tsx`:**
-- Import `ProjectFilters` and `FilterShortcutBar` (same as DeveloperDetail)
-- Replace lines 162-247 (custom search, Emirates pills, sort toggles) with:
-  - A champagne card containing `ProjectFilters` (search input + dropdowns)
-  - `FilterShortcutBar` below it
-  - Three area-specific sort toggles (Building2 for property count, Flame for trending, A-Z) integrated into the bar
-- Add IntersectionObserver + createPortal for fixed-on-scroll behavior
-- Add `filter-bar-fixed` body class to trigger header replacement
-- Since this page filters Areas (not Projects), the ProjectFilters search will filter area names, and the sort toggles will control area ordering
+**Fix in `src/components/ReellyProjectCard.tsx`**:
+- Ensure cards without images show a graceful placeholder instead of breaking
 
 ---
 
-### Task 2: Replace AreaProjectsGrid.tsx Inline Filters with Unified Pattern
+### Issue 2: Vertical Sidebar Branding Fixes
 
-The Area detail page's project grid currently has custom Select dropdowns (Developer, Status, Bedrooms, Sort). This needs to match the Developer page pattern.
+**Problem**: Sidebar says "JBJ GLOBAL" instead of "JBJ GLOBAL REAL ESTATE", monogram is too small (w-8 h-8), "Contact Support" is barely readable, no "Raise a support ticket" option, and there's a useless small monogram at the bottom.
 
-**Changes to `src/components/area-detail/AreaProjectsGrid.tsx`:**
-- Remove the custom `filterBarContent` block (lines 185-289) containing inline Search, Select dropdowns for Developer/Status/Bedrooms/Sort, Filter icon, and Clear button
-- Replace with `ProjectFilters` + `FilterShortcutBar` matching DeveloperDetail pattern
-- Keep the existing IntersectionObserver and createPortal fixed behavior (already works)
-- Wire filter state through the shortcut filters
-
----
-
-### Task 3: Delete AreaStickySearchBar.tsx
-
-This component is already unused (not imported by AreaDetail.tsx). Delete the file to clean up dead code.
-
-**Delete:** `src/components/area-detail/AreaStickySearchBar.tsx`
+**Fix in `src/components/navigation/PropertiesVerticalNav.tsx`**:
+- Change text from "JBJ GLOBAL" to "JBJ GLOBAL REAL ESTATE" (split across two lines for fit)
+- Increase monogram size from `w-8 h-8` to `w-12 h-12`
+- Make "Contact Support" more visible (larger text, bolder, gold color)
+- Add "Raise a Support Ticket" link below it
+- Remove the small monogram image at the bottom
+- Add more navigation shortcuts (e.g., Favorites, Compare, AI Hub, Mortgage Calculator)
 
 ---
 
-### Task 4: Investigate and Fix Edge Function Enrichment Errors
+### Issue 3: Content Overlapping the Left Sidebar
 
-The Listing Admin "Test Project Enrichment" and "Enrich All Provident Projects" features fail. During implementation, I will:
-- Check edge function logs for the enrichment functions
-- Identify the specific error causing "failed to send request"
-- Fix the Provident enrichment showing all zeros
-- Ensure the page-data.json fetching logic works correctly
+**Problem**: The "Ready to Get Started" CTA section and other content extends under/touches the fixed left sidebar.
+
+**Fix in `src/pages/PropertiesReelly.tsx`**:
+- Ensure all sections (including footer-adjacent sections like CTABand) respect the sidebar offset when the sidebar is visible
+- The main content wrapper should have `ml-[200px]` when the sidebar is active (filter fixed state)
 
 ---
 
-### Task 5: ListingAdmin Project Fetch - Remove Cover Image Restriction
+### Issue 4: Sobha Seahaven "by Unknown" -- Fix Bad Data
 
-The ListingAdmin uses `useProjects()` which fetches ALL projects (including those without images). For admin purposes this is correct -- admin needs to see all projects to manage them. However, the cards should gracefully handle missing images with a placeholder. This is already handled (the card checks `project.cover_image_url || project.images?.[0]?.image_url`). No change needed here.
+**Problem**: Sobha Seahaven has `developer_name: "Unknown"` and no `developer_id`. The developer "Sobha Realty" exists in the developers table. This is a data issue in the database, not a code issue.
+
+**Fix via SQL migration**:
+- Update the `developer_name` for Sobha Seahaven to "Sobha Realty"
+- Link the `developer_id` to the Sobha Realty developer record
+- This is the only project with "Unknown" developer (confirmed: count = 1)
+
+---
+
+### Issue 5: Missing Price, Handover, Payment Plan on Many Listings
+
+**Problem**: 612 projects have no `price_from`, 1,710 have no `payment_plan`/`payment_breakdown`, and some have no handover dates. These are data gaps from the Reelly API -- many projects genuinely don't have this data published yet.
+
+**Fix in UI (code)**:
+- Already handled: cards show "Price TBA", detail page shows "TBA" for missing fields
+- No code change needed -- the data simply doesn't exist in the API source
+
+**Fix for Sobha Seahaven specifically** (SQL):
+- This specific project has rich data on Reelly that wasn't synced. A targeted data fix via SQL update will set its price, handover, and payment plan correctly.
 
 ---
 
 ### Summary of Changes
 
-| File | Change |
-|------|--------|
-| `src/pages/AreaGuides.tsx` | Replace custom search/sort with ProjectFilters + FilterShortcutBar + fixed-on-scroll + header replacement |
-| `src/components/area-detail/AreaProjectsGrid.tsx` | Replace custom inline filter dropdowns with ProjectFilters + FilterShortcutBar |
-| `src/components/area-detail/AreaStickySearchBar.tsx` | Delete (unused dead code) |
-| Edge functions | Investigate and fix enrichment errors (Test Project + Provident) |
+| File/Target | Change |
+|-------------|--------|
+| `src/hooks/useProjects.ts` | Remove `cover_image_url IS NOT NULL` filter from `useProjectsListing` |
+| `src/components/navigation/PropertiesVerticalNav.tsx` | Fix branding text to "JBJ GLOBAL REAL ESTATE", bigger monogram, visible Contact Support, add Raise Support Ticket, remove bottom monogram, add more nav shortcuts |
+| `src/pages/PropertiesReelly.tsx` | Ensure content sections don't overlap sidebar |
+| SQL migration | Fix Sobha Seahaven: set correct developer_name and developer_id |
 
