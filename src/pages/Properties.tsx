@@ -1,4 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Switch } from "@/components/ui/switch";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -189,7 +190,23 @@ const Properties = () => {
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isRequestFormOpen, setIsRequestFormOpen] = useState(false);
   const [displayMode, setDisplayMode] = useState<DisplayMode>('investor');
-  
+  const [isFilterFixed, setIsFilterFixed] = useState(false);
+  const filterSentinelRef = useRef<HTMLDivElement>(null);
+
+  // Two-phase scroll-to-fix filter logic
+  useEffect(() => {
+    const sentinel = filterSentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsFilterFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
+      },
+      { threshold: 0, rootMargin: "-140px 0px 0px 0px" }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
+
   // Update filters when URL params change (including developer from homepage marquee)
   useEffect(() => {
     const newTransaction = searchParams.get('transaction') as 'buy' | 'rent' | null;
@@ -421,8 +438,11 @@ const Properties = () => {
         </div>
       </PropertiesHeroVideo>
 
+      {/* Scroll sentinel for two-phase filter fix */}
+      <div ref={filterSentinelRef} className="h-0" />
+
       {/* Filters Section - 3-Layer System: Black > Active Champagne > Pearl Filter Boxes */}
-      <section className="sticky top-14 sm:top-16 md:top-20 lg:top-[72px] z-40 bg-black py-3 md:py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <section className="z-40 bg-black py-3 md:py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Champagne Layer with thin black contour visible at edges */}
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
@@ -1027,6 +1047,76 @@ const Properties = () => {
           </div>
         </div>
       </section>
+
+      {/* Fixed portal copy of filters when scrolled past */}
+      {isFilterFixed && createPortal(
+        <section className="fixed top-14 sm:top-16 md:top-20 lg:top-[72px] left-0 right-0 z-[9998] bg-black py-3 md:py-4 border-b border-gold/30 shadow-lg" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div className="container mx-auto px-3 sm:px-4">
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
+              {/* Transaction Type Tabs - Buy / Rent */}
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 md:mb-4 flex-wrap">
+                <span className="text-black/70 text-sm mr-2 font-medium">I want to:</span>
+                {[
+                  { value: 'buy', label: 'Buy' },
+                  { value: 'rent', label: 'Rent' },
+                ].map((option) => (
+                  <Button
+                    key={option.value}
+                    variant={filters.transactionType === option.value ? "primary" : "secondary"}
+                    size="sm"
+                    onClick={() => {
+                      updateFilter("transactionType", option.value as 'buy' | 'rent');
+                      updateFilter("completionStatus", null);
+                      setAppliedFilters((prev) => ({
+                        ...prev,
+                        transactionType: option.value as 'buy' | 'rent',
+                        completionStatus: null,
+                      }));
+                    }}
+                    className="h-9 px-4 rounded-full"
+                  >
+                    {option.label}
+                  </Button>
+                ))}
+              </div>
+
+              {/* Keyword Search - Full Width */}
+              <div className="relative w-full">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
+                <Input
+                  placeholder="Search by project name, developer, location..."
+                  value={filters.search}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    updateFilter("search", next);
+                    setAppliedFilters((prev) => ({ ...prev, search: next }));
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSearch();
+                  }}
+                  className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
+                />
+              </div>
+
+              {/* SEARCH Button */}
+              <div className="flex items-center justify-end mt-3">
+                <button 
+                  onClick={handleSearch}
+                  className="relative h-10 px-6 rounded-lg text-sm flex-shrink-0 font-bold transition-all duration-300 group overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                    boxShadow: '0 6px 20px rgba(200,167,102,0.4), 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 3px rgba(255,255,255,0.9), inset 0 -2px 3px rgba(200,167,102,0.2), 0 0 15px rgba(200,167,102,0.3)',
+                  }}
+                >
+                  <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
+                  <span className="relative text-gold font-semibold">SEARCH</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>,
+        document.body
+      )}
 
       {/* Divider between Search and Results */}
       <div className="h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
