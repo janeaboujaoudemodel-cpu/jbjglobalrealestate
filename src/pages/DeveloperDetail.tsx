@@ -365,8 +365,8 @@ const DeveloperDetail = () => {
           {/* Fixed portal filter bar — when scrolled past sentinel */}
           {isFilterFixed && !bottomReached && createPortal(
             <div className="fixed top-0 left-0 right-0 z-[9998] transition-shadow duration-200">
-              <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 pt-0">
-                <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 border-t-0 rounded-none p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+              <div className="mx-0 pt-0">
+                <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
             <ProjectFilters
                     filters={filters}
                     onFiltersChange={setFilters}
@@ -398,7 +398,7 @@ const DeveloperDetail = () => {
               ))}
             </div>
           ) : filteredProjects.length > 0 ? (
-            <>
+            <div className="bg-gradient-to-br from-[#F5EBD7]/60 via-[#EDE0C8]/50 to-[#E2D4B8]/40 rounded-2xl border border-gold/30 p-6 md:p-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {(showAllProjects ? filteredProjects : filteredProjects.slice(0, 9)).map((project) => (
                   <ProjectCard key={project.id} project={project} currency={filters.currency} sizeUnit={filters.sizeUnit} />
@@ -421,7 +421,7 @@ const DeveloperDetail = () => {
                   </button>
                 </div>
               )}
-            </>
+            </div>
           ) : (
             <div className="text-center py-16 jj-box-active">
               <Building2 className="w-12 h-12 text-gold mx-auto mb-4" />
@@ -457,7 +457,7 @@ const DeveloperDetail = () => {
         </div>
 
         {/* Divider before DLD Market Widget — champagne bg to match page */}
-        <SectionDivider fullWidth bg="bg-transparent" />
+        <SectionDivider variant="champagne" />
 
         {/* DLD Market Widget - Live transaction data */}
         <DLDMarketWidget />
