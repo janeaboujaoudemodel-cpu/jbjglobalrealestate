@@ -345,7 +345,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
 
       // Build price display
       const priceDisplay = updatedProject.price_from
-        ? `From AED ${Number(updatedProject.price_from).toLocaleString()}`
+        ? `From AED ${Math.round(Number(updatedProject.price_from)).toLocaleString()}`
         : null;
 
       // Build handover display from date

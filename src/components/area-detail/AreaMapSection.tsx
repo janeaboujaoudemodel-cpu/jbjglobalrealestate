@@ -195,7 +195,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
                     )}
                     {project.price_from && (
                       <p className="text-xs font-semibold text-amber-700 mt-1">
-                        From AED {Number(project.price_from).toLocaleString()}
+                        From AED {Math.round(Number(project.price_from)).toLocaleString()}
                       </p>
                     )}
                     {project.handover_date && (

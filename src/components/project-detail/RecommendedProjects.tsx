@@ -126,7 +126,7 @@ export default function RecommendedProjects({
 
                 {project.price_from && (
                   <p className="text-handover font-bold">
-                    From AED {(project.price_from / 1000000).toFixed(2)}M
+                    From AED {Math.round(project.price_from / 1000000 * 10) / 10}M
                   </p>
                 )}
 

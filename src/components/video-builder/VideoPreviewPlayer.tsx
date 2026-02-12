@@ -202,7 +202,7 @@ const VideoPreviewPlayer = ({ project }: VideoPreviewPlayerProps) => {
                 <p className="text-sm font-semibold truncate">{project.property.name}</p>
                 <p className="text-xs text-muted-foreground truncate">{project.property.location}</p>
                 <p className="text-primary font-bold text-sm mt-1">
-                  AED {project.property.price_from?.toLocaleString()}
+                  AED {Math.round(project.property.price_from || 0).toLocaleString()}
                 </p>
               </div>
             </div>

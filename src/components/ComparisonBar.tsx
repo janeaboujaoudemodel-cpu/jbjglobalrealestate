@@ -221,7 +221,7 @@ const ComparisonBar = () => {
                             <div className="bg-zinc-800/50 rounded-lg p-2">
                               <p className="text-zinc-500 text-xs">Price From</p>
                               <p className="text-white font-medium">
-                                AED {((project.price_from || 0) / 1000000).toFixed(1)}M
+                                AED {(Math.round((project.price_from || 0)) / 1000000).toFixed(1)}M
                               </p>
                             </div>
                             <div className="bg-zinc-800/50 rounded-lg p-2">
