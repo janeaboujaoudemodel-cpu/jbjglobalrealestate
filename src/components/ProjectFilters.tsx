@@ -835,146 +835,148 @@ const ProjectFilters = ({
 
       {/* Quick Filter Chips - Only show if not hidden */}
       {!hideQuickFilters && (
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-          {/* Status Category */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-gold uppercase tracking-wider mr-1">Status</span>
-            <QuickFilterChip
-              label="Ready to Move"
-              active={filters.handoverStatus === "ready"}
-              onClick={() =>
-                updateFilter(
-                  "handoverStatus",
-                  filters.handoverStatus === "ready" ? null : "ready"
-                )
-              }
-            />
-            <QuickFilterChip
-              label="Off-Plan"
-              active={filters.handoverStatus === "off-plan"}
-              onClick={() =>
-                updateFilter(
-                  "handoverStatus",
-                  filters.handoverStatus === "off-plan" ? null : "off-plan"
-                )
-              }
-            />
-            <QuickFilterChip
-              label="Close to Handover"
-              active={filters.handoverStatus === "close-to-handover"}
-              onClick={() =>
-                updateFilter(
-                  "handoverStatus",
-                  filters.handoverStatus === "close-to-handover" ? null : "close-to-handover"
-                )
-              }
-            />
-          </div>
-
-          {/* Divider */}
-          <div className="hidden sm:block w-px h-6 bg-gold/30" />
-
-          {/* Budget & Size Category */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-gold uppercase tracking-wider mr-1">Budget</span>
-            <Popover>
-              <PopoverTrigger asChild>
-                <button
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
-                    filters.priceMin > 0 || filters.priceMax < PRICE_MAX
-                      ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                      : "bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50 hover:bg-white"
-                  }`}
-                >
-                  Price
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40" align="start">
-                <div className="space-y-4">
-                  <p className="text-black font-medium">Price Range</p>
-                  <Slider
-                    value={[filters.priceMin, filters.priceMax]}
-                    min={PRICE_MIN}
-                    max={PRICE_MAX}
-                    step={1000000}
-                    onValueChange={([min, max]) => {
-                      onFiltersChange({
-                        ...filters,
-                        priceMin: min,
-                        priceMax: max,
-                      });
-                    }}
-                    className="mb-2"
-                  />
-                  <div className="flex justify-between text-zinc-600 text-sm">
-                    <span>AED {formatPrice(filters.priceMin)}</span>
-                    <span>AED {formatPrice(filters.priceMax)}</span>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-            <Popover>
-              <PopoverTrigger asChild>
-                <button
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
-                    filters.bedroomsMin !== null
-                      ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                      : "bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50 hover:bg-white"
-                  }`}
-                >
-                  Beds
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-64 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40" align="start">
-                <div className="flex flex-wrap gap-2">
-                  {BEDROOM_OPTIONS.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() =>
-                        updateFilter(
-                          "bedroomsMin",
-                          option.value === "all" ? null :
-                          option.value === "studio" ? 0 :
-                          parseInt(option.value)
-                        )
-                      }
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                        (option.value === "all" && filters.bedroomsMin === null) ||
-                        (option.value === "studio" && filters.bedroomsMin === 0) ||
-                        filters.bedroomsMin === parseInt(option.value)
-                          ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold shadow-sm"
-                          : "bg-white/90 text-zinc-700 border border-gold/20 hover:border-gold/40"
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          {/* Divider */}
-          <div className="hidden sm:block w-px h-6 bg-gold/30" />
-
-          {/* Location Category */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-gold uppercase tracking-wider mr-1">Location</span>
-            {EMIRATES.slice(1, 5).map((emirate) => (
+        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-4">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+            {/* Status Category */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-gold uppercase tracking-wider mr-1">Status</span>
               <QuickFilterChip
-                key={emirate.value}
-                label={emirate.label}
-                active={filters.emirate === emirate.value}
+                label="Ready to Move"
+                active={filters.handoverStatus === "ready"}
                 onClick={() =>
                   updateFilter(
-                    "emirate",
-                    filters.emirate === emirate.value ? null : emirate.value
+                    "handoverStatus",
+                    filters.handoverStatus === "ready" ? null : "ready"
                   )
                 }
               />
-            ))}
+              <QuickFilterChip
+                label="Off-Plan"
+                active={filters.handoverStatus === "off-plan"}
+                onClick={() =>
+                  updateFilter(
+                    "handoverStatus",
+                    filters.handoverStatus === "off-plan" ? null : "off-plan"
+                  )
+                }
+              />
+              <QuickFilterChip
+                label="Close to Handover"
+                active={filters.handoverStatus === "close-to-handover"}
+                onClick={() =>
+                  updateFilter(
+                    "handoverStatus",
+                    filters.handoverStatus === "close-to-handover" ? null : "close-to-handover"
+                  )
+                }
+              />
+            </div>
+
+            {/* Divider */}
+            <div className="hidden sm:block w-px h-6 bg-gold/30" />
+
+            {/* Budget & Size Category */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-gold uppercase tracking-wider mr-1">Budget</span>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
+                      filters.priceMin > 0 || filters.priceMax < PRICE_MAX
+                        ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                        : "bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50 hover:bg-white"
+                    }`}
+                  >
+                    Price
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40" align="start">
+                  <div className="space-y-4">
+                    <p className="text-black font-medium">Price Range</p>
+                    <Slider
+                      value={[filters.priceMin, filters.priceMax]}
+                      min={PRICE_MIN}
+                      max={PRICE_MAX}
+                      step={1000000}
+                      onValueChange={([min, max]) => {
+                        onFiltersChange({
+                          ...filters,
+                          priceMin: min,
+                          priceMax: max,
+                        });
+                      }}
+                      className="mb-2"
+                    />
+                    <div className="flex justify-between text-zinc-600 text-sm">
+                      <span>AED {formatPrice(filters.priceMin)}</span>
+                      <span>AED {formatPrice(filters.priceMax)}</span>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
+                      filters.bedroomsMin !== null
+                        ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                        : "bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50 hover:bg-white"
+                    }`}
+                  >
+                    Beds
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-64 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40" align="start">
+                  <div className="flex flex-wrap gap-2">
+                    {BEDROOM_OPTIONS.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() =>
+                          updateFilter(
+                            "bedroomsMin",
+                            option.value === "all" ? null :
+                            option.value === "studio" ? 0 :
+                            parseInt(option.value)
+                          )
+                        }
+                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                          (option.value === "all" && filters.bedroomsMin === null) ||
+                          (option.value === "studio" && filters.bedroomsMin === 0) ||
+                          filters.bedroomsMin === parseInt(option.value)
+                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold shadow-sm"
+                            : "bg-white/90 text-zinc-700 border border-gold/20 hover:border-gold/40"
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* Divider */}
+            <div className="hidden sm:block w-px h-6 bg-gold/30" />
+
+            {/* Location Category - All Emirates */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-semibold text-gold uppercase tracking-wider mr-1">Location</span>
+              {EMIRATES.slice(1).map((emirate) => (
+                <QuickFilterChip
+                  key={emirate.value}
+                  label={emirate.label}
+                  active={filters.emirate === emirate.value}
+                  onClick={() =>
+                    updateFilter(
+                      "emirate",
+                      filters.emirate === emirate.value ? null : emirate.value
+                    )
+                  }
+                />
+              ))}
+            </div>
           </div>
         </div>
       )}
