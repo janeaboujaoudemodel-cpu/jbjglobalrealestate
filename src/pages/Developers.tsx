@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import {
   Search,
@@ -59,6 +60,22 @@ const Developers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [tierFilter, setTierFilter] = useState("all");
   const [selectedDeveloper, setSelectedDeveloper] = useState("");
+  const [isFilterFixed, setIsFilterFixed] = useState(false);
+  const filterSentinelRef = useRef<HTMLDivElement>(null);
+
+  // Two-phase scroll-to-fix filter logic
+  useEffect(() => {
+    const sentinel = filterSentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsFilterFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
+      },
+      { threshold: 0, rootMargin: "-140px 0px 0px 0px" }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
 
   // Developer names list for dropdown
   const developerNames = useMemo(() => {
@@ -223,8 +240,11 @@ const Developers = () => {
           </motion.div>
         </section>
 
+        {/* Scroll sentinel for two-phase filter fix */}
+        <div ref={filterSentinelRef} className="h-0" />
+
         {/* Filters Section - Champagne Layer matching Properties page */}
-        <section className="sticky top-24 lg:top-20 z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-4 border-b border-gold/30">
+        <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-4 border-b border-gold/30">
           <div className="container mx-auto px-3 sm:px-4">
             {/* Active Champagne Layer */}
             <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
@@ -292,6 +312,77 @@ const Developers = () => {
             </div>
           </div>
         </section>
+
+        {/* Fixed portal copy of filters when scrolled past */}
+        {isFilterFixed && createPortal(
+          <section className="fixed top-14 sm:top-16 md:top-20 lg:top-[72px] left-0 right-0 z-[9998] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-4 border-b border-gold/30 shadow-lg">
+            <div className="container mx-auto px-3 sm:px-4">
+              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
+                {/* Keyword Search */}
+                <div className="relative w-full mb-4">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
+                  <Input
+                    placeholder="Search by developer name..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
+                  />
+                </div>
+
+                {/* Filter Row */}
+                <div className="flex items-center gap-3 flex-wrap">
+                  {/* Developer Dropdown */}
+                  <div className="w-full sm:w-[240px]">
+                    <SearchableSelect
+                      value={selectedDeveloper}
+                      onChange={(val) => setSelectedDeveloper(val === selectedDeveloper ? "" : val)}
+                      options={developerNames}
+                      placeholder="All Developers"
+                      searchPlaceholder="Search developer..."
+                      triggerClassName="h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm"
+                    />
+                  </div>
+
+                  {/* Tier Filter */}
+                  <Select value={tierFilter} onValueChange={setTierFilter}>
+                    <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+                      <Crown className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                      <span className="truncate text-left flex-1">
+                        {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
+                      </span>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {TIER_FILTERS.map((tier) => (
+                        <SelectItem key={tier.value} value={tier.value}>
+                          {tier.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  {/* Results Count */}
+                  <div className="flex-1 text-black/70 text-sm">
+                    {filteredDevelopers.length} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
+                  </div>
+
+                  {/* Clear Filters */}
+                  {activeFilterCount > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={clearFilters}
+                      className="h-9 px-3 bg-white/80 border-gold/30 text-black hover:bg-white rounded-lg flex items-center gap-1.5"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                      Clear ({activeFilterCount})
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>,
+          document.body
+        )}
 
         {/* Developer Cards Grid */}
         <section className="py-12 md:py-16">
