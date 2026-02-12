@@ -1,72 +1,66 @@
 
 
-## Fix Listing Admin Enrichment Edge Function Errors
+## Phase 1: Filter Bar Consolidation + Area Detail Gap Fix
 
-### Root Cause Analysis
-
-**Issue 1: "Failed to send request" timeout**
-The `enrich-project-test` batch mode (lines 147-158) calls itself recursively via HTTP fetch. Each inner call runs Reelly API + multiple Provident slug lookups + Firecrawl fallback, potentially taking 30+ seconds each. A batch of 10 self-calls easily exceeds the edge function timeout, causing "context canceled" / "failed to send request" errors.
-
-**Fix:** Replace the self-referential HTTP fetch in batch mode with inline enrichment logic. Instead of calling `fetch(enrichUrl)` to itself, directly call the same enrichment code path for each project within the batch handler.
-
-**Issue 2: Provident enrichment showing zeros**
-The Provident page-data parser (`pagedata-detail.ts`) looks for fields at the wrong nesting level. Real Provident response structure:
-```
-result.serverData.data = { status: true, message: "...", data: { id, about, amenities, ... } }
-```
-The parser resolves `data` to `{status, message, data}` and then looks for `data.amenities` which doesn't exist. The actual amenities are at `data.data.amenities` (the inner `data` object).
-
-The parser also doesn't check for Provident's `"No record found"` response, so it tries to parse empty objects and returns all zeros.
-
-**Fix:** Update `parsePageDataDetail` to unwrap the nested `data.data` layer, and add an early return when `message` is `"No record found"`.
+This plan addresses the identified gaps and restructures the filter bar layout into a more compact, single-purpose design.
 
 ---
 
-### Changes
+### 1. Add FilterShortcutBar to Area Detail Page
 
-#### File 1: `supabase/functions/_shared/provident/pagedata-detail.ts`
+The Area detail page (`src/pages/AreaDetail.tsx`) is the only major page missing the unified filter bar. It will be added with the same sticky/fixed pattern used on Properties and Developer pages.
 
-**Fix the data path resolution (lines 159-169):**
-- After extracting `data` from `result.serverData.data`, check if `data.status === true` and `data.data` exists (the Provident API wrapper pattern)
-- If so, unwrap: use `data.data` as the actual project data
-- Add early return if `data.message === "No record found"`
-- Map Provident field names to parser expectations: `about` -> description, `developer` -> developer_name, `display_address` -> location, `media_images` -> images
-
-Specifically, insert after line 164:
-```typescript
-// Provident API wraps data in {status, message, data: {actual fields}}
-if (data && typeof data === "object" && (data as any).status === true && (data as any).data) {
-  // Check for "No record found"
-  if ((data as any).message === "No record found") return null;
-  // Unwrap the inner data object
-  data = (data as any).data;
-}
-```
-
-#### File 2: `supabase/functions/enrich-project-test/index.ts`
-
-**Fix batch mode self-call (lines 113-186):**
-Replace the self-referential HTTP fetch pattern with inline enrichment. Instead of:
-```typescript
-const res = await fetch(enrichUrl, { ... body: { slug: proj.slug, action: "apply" } });
-```
-Directly execute the enrichment logic for each project within the loop. This eliminates the HTTP round-trip, prevents timeout cascading, and allows the batch to process within a single function execution.
-
-The inline approach will:
-1. Fetch current project data from DB (same as the single-slug path does)
-2. Try Reelly API (unless `skip_reelly`)
-3. Try Provident page-data slug matching
-4. Apply updates directly
-5. Continue to next project
-
-This removes ~30s of HTTP overhead per project in batch mode.
+**File:** `src/pages/AreaDetail.tsx`
+- Import `FilterShortcutBar`, `ShortcutFilterState`, `defaultShortcutFilters`
+- Add filter state management with `useState`
+- Add `IntersectionObserver` sentinel + `isFilterFixed` logic (same pattern as PropertiesReelly)
+- Add `filter-bar-fixed` body class sync for GlobalHeader hide
+- Insert the FilterShortcutBar between the Hero and About sections
+- Apply filters to the projects grid via `applyShortcutFilters`
 
 ---
 
-### Summary
+### 2. Restructure FilterShortcutBar Layout (Compact Two-Row to Single-Row Priority)
 
-| File | Change | Impact |
-|------|--------|--------|
-| `pagedata-detail.ts` | Unwrap nested `data.data`, handle "No record found" | Fixes Provident returning zeros |
-| `enrich-project-test/index.ts` | Inline batch enrichment instead of self-calling HTTP | Fixes "failed to send request" timeouts |
+**Current layout (2 rows):**
+- Row 1: Search + Map + Saved + Currency + Mode | Sort pills (center)
+- Row 2: Price, Payments, Handover, Property Type, Bedrooms, Status, Construction, Advanced, Save, Hide Sold
+
+**New layout (2 rows, consolidated):**
+- Row 1 (Controls): Compact search input (smaller width) | Developer dropdown | All Emirates | Map | Saved | Currency dropdown (replaces AED label) | Mode | Filter (Advanced)
+- Row 2 (Filters + Sort): Price | Payments | Handover | Property Type | Bedrooms | Status | Construction | Hide Sold | Newest | Low-High | High-Low | A-Z
+
+**Specific changes in `src/components/filters/FilterShortcutBar.tsx`:**
+- Make search input slot narrower (w-36 instead of w-48/64)
+- Move Map and Saved buttons into Row 1 (they are already there, just ensure consistent placement)
+- Replace the separate `CurrencySwitcher` icon-only button with a currency pill that shows current code (e.g., "AED") and opens the currency dropdown on click -- this replaces both the old AED label and the dollar icon
+- Move Mode dropdown next to the Advanced/Filter button in Row 1
+- In Row 2, merge sort pills (Newest, Low-High, High-Low, A-Z) inline with the filter popovers instead of centering them separately
+- Remove the separate Save pill from Row 2 (it is already in Row 1 as "Saved")
+
+---
+
+### 3. Vertical Nav Shows Main Navigation When Filter Bar Replaces Header
+
+This is already implemented via `PropertiesVerticalNav` appearing when `isFilterFixed` is true. The same pattern will be applied to the Area Detail page as part of change 1.
+
+**File:** `src/pages/AreaDetail.tsx`
+- Import and render `PropertiesVerticalNav` when `isFilterFixed` is true (desktop only)
+- Offset content by 200px (same as PropertiesReelly)
+
+---
+
+### Summary of File Changes
+
+| File | Change |
+|------|--------|
+| `src/pages/AreaDetail.tsx` | Add FilterShortcutBar with sticky/fixed behavior, vertical nav, filter state |
+| `src/components/filters/FilterShortcutBar.tsx` | Consolidate layout: compact search, merge sort into Row 2, currency pill replaces dollar icon, move Mode next to Filter |
+
+### Technical Details
+
+- The `applyShortcutFilters` utility will be applied to the area's projects grid, filtering `AreaProjectsGrid` results client-side
+- The `AreaProjectsGrid` component will need to accept an optional `filters` prop or the filtering will happen at the page level
+- The IntersectionObserver pattern is identical to PropertiesReelly (lines 100-120) for consistency
+- Currency pill will reuse the existing `CurrencySwitcher` dropdown logic but with a pill-styled trigger showing the currency code instead of a dollar icon
 
