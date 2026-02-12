@@ -1,42 +1,84 @@
 
 
-## Developer Detail Page: DLD Market Widget + Premium AI Analyzer
+## Unified Intelligence, Market Data, and Contact Form Across All Detail Pages
 
-### What will change
+### Current State
 
-**1. Add DLD Market Widget to Developer Detail Page**
-- Import and render the existing `DLDMarketWidget` component (same one used on Area Detail pages) inside the developer detail page
-- Place it after the projects grid and before the AI Analyzer
-- The widget already displays live YTD 2026 DLD transaction data (volume, transactions, top areas, buyer nationalities) and updates its "As of" date dynamically on each page load
-- The data comes from `dldMarketData.ts` constants -- when these constants are updated, every page showing the widget reflects the new numbers instantly
+| Page | AI Analyzer | DLD Market Widget | Consultation Form | Gold Divider |
+|------|-------------|-------------------|-------------------|--------------|
+| Area Detail | Area analyzer | Yes | No | No |
+| Developer Detail | Developer analyzer | Yes (touches listings) | No | No |
+| Project Detail | Project analyzer only | No | Yes | N/A |
 
-**2. Move AI Analyzer Before the Projects Grid**
-- Currently the `DeveloperAIAnalyzer` is rendered after the projects section
-- Move it to render before the Emirates Tabs / projects section (after the developer header + map, before the filter bar)
+### What Will Change
 
-**3. Upgrade AI Analyzer to Premium Visual Charts**
-- Replace the current plain-text card layout in `DeveloperAIAnalyzer.tsx` with the same premium chart components used in `AreaAIAnalyzer.tsx`:
-  - **Price Per Sqft**: BarChart with historical trend + projection + YoY badge
-  - **Supply vs Demand**: AreaChart with gold (supply) and emerald (demand) gradient fills + market status badge
-  - **Investment Metrics**: Horizontal BarChart with Rental Yield, Cap Rate, Appreciation, Occupancy
-  - **Portfolio Strength**: Developer landscape card with styled entries
-  - **Rating**: Radial PieChart gauge (gold arc on black background) with quality label
-  - **Overview**: Enhanced card with icon header and community profile subtitle
-  - **Pros/Cons**: Same emerald/red styled cards
-- All chart components (PricePerSqftChart, SupplyDemandChart, InvestmentMetricsChart, DeveloperLandscapeCard) and their parsing functions will be copied from `AreaAIAnalyzer.tsx` into the developer analyzer, adapted with developer-specific labels (e.g., "Developer Overview" instead of "Area Overview", "Portfolio Profile" subtitle)
+#### 1. Project Detail Page -- Add DLD Widget + Area Analyzer + Developer Analyzer
 
-### Files to change
+Currently the project page only has the `ProjectAIAnalyzer`. We will add:
+- **DLD Market Widget** after the AI section, with a premium gold divider above it
+- **Area AI Analyzer** (reuse `AreaAIAnalyzer` component) analyzing the project's area
+- **Developer AI Analyzer** (reuse `DeveloperAIAnalyzer` component) analyzing the project's developer
 
-| File | Action |
-|------|--------|
-| `src/pages/DeveloperDetail.tsx` | Import `DLDMarketWidget`, move `DeveloperAIAnalyzer` above projects section, add DLD widget after projects |
-| `src/components/developer/DeveloperAIAnalyzer.tsx` | Full rewrite with recharts-based premium chart components matching the Area AI Analyzer visual standard |
+Section order: ... -> Project AI Analyzer -> Area AI Analyzer -> Developer AI Analyzer -> Gold Divider -> DLD Market Widget -> ... -> Consultation Form (already exists)
+
+**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
+- Import `AreaAIAnalyzer`, `DeveloperAIAnalyzer`, `DLDMarketWidget`
+- Render Area and Developer analyzers after the existing Project analyzer
+- Render DLD widget with gold divider before the brochure section
+
+#### 2. Developer Detail Page -- Add Gold Divider + Consultation Form
+
+The DLD widget already exists but sits right against the project listings. We will:
+- Add a **premium gold divider** between the projects grid and the DLD widget
+- Add the **ConsultationRequestForm** after the DLD widget
+
+**File: `src/pages/DeveloperDetail.tsx`**
+- Import `ConsultationRequestForm`
+- Add a gold divider element before `<DLDMarketWidget />`
+- Add consultation form section after the DLD widget
+
+#### 3. Area Detail Page -- Add Consultation Form + Gold Divider
+
+The DLD widget and AI analyzer already exist. We will:
+- Add a **premium gold divider** between the projects grid and the DLD widget
+- Add the **ConsultationRequestForm** after the AI analyzer (before the CTA section)
+
+**File: `src/pages/AreaDetail.tsx`**
+- Import `ConsultationRequestForm`
+- Add gold divider before `<DLDMarketWidget />`
+- Add consultation form section after `<AreaAIAnalyzer />`
+
+#### 4. Global Consultation Form via CombinedContactNewsletter
+
+The `CombinedContactNewsletter` component already renders on every public page via `MainLayout`. We will enhance it by embedding the `ConsultationRequestForm` inside it, so every single page automatically has the detailed contact form (name, email, phone, nationality, language, preferred time, service selection).
+
+**File: `src/components/CombinedContactNewsletter.tsx`**
+- Import `ConsultationRequestForm`
+- Add the form between the contact cards and the newsletter section
+- This ensures ALL pages (not just detail pages) have the comprehensive contact form
+
+#### 5. Premium Gold Divider Component
+
+A reusable elegant gold divider to visually separate the listings from the market intelligence section.
+
+**New file: `src/components/shared/GoldSectionDivider.tsx`**
+- A simple, elegant component: horizontal gold gradient line with a centered diamond ornament
+- Used before the DLD Market Widget on all detail pages
 
 ### Technical Details
 
-- **DLD Widget placement**: Rendered after the projects grid `</div>` and before the AI analyzer, using `<DLDMarketWidget />` with no `highlightArea` prop (developer pages are not area-specific)
-- **Chart dependencies**: `recharts` is already installed (`BarChart`, `Bar`, `XAxis`, `YAxis`, `CartesianGrid`, `Tooltip`, `ResponsiveContainer`, `Cell`, `AreaChart`, `Area`, `PieChart`, `Pie`)
-- **Parsing functions**: `parsePricePerSqftMetrics`, `parseInvestmentMetrics`, `parseSupplyDemandMetrics` will be included in the developer analyzer file, adapted to work with developer context
-- **Section order on page**: Hero -> Developer Header + Stats -> Map -> AI Analyzer -> Emirates Tabs + Filter + Projects Grid -> DLD Market Widget
-- **No backend changes**: Uses the same `ai-property-analyzer` edge function and `dldMarketData.ts` constants
+- **DLD Data Source**: The data comes from `src/constants/dldMarketData.ts` -- these are static constants. Updating them requires a code change. The "As of" date shown is dynamically generated from the current browser date, so it always appears current. To make this truly live, a backend data source would be needed (future enhancement).
+- **No backend changes** required for this update
+- **No new dependencies** -- all components already exist, just need to be composed together
+- **ConsultationRequestForm** accepts `title`, `subtitle`, `projectId`, and `projectName` props for context-aware headers
+
+### Files Summary
+
+| File | Action |
+|------|--------|
+| `src/components/shared/GoldSectionDivider.tsx` | New -- reusable gold divider |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Add AreaAIAnalyzer, DeveloperAIAnalyzer, DLDMarketWidget, gold divider |
+| `src/pages/DeveloperDetail.tsx` | Add gold divider, ConsultationRequestForm |
+| `src/pages/AreaDetail.tsx` | Add gold divider, ConsultationRequestForm |
+| `src/components/CombinedContactNewsletter.tsx` | Embed ConsultationRequestForm for global coverage |
 
