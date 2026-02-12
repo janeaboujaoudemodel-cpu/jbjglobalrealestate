@@ -203,7 +203,7 @@ const AreaGuides = () => {
       <div ref={sentinelRef} className="h-0 w-full" />
 
       {/* Filter bar - inline */}
-      <section className="py-4 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-b border-gold/20">
+      <section className="py-4 pb-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
         <div className="container mx-auto px-4 space-y-3">
           {/* Search input */}
           <div className="relative w-full max-w-2xl mx-auto">
@@ -291,7 +291,6 @@ const AreaGuides = () => {
           {/* FilterShortcutBar */}
           <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
         </div>
-      </section>
 
       {/* Fixed portal copy — only when scrolled past sentinel */}
       {isFixed && !bottomReached && createPortal(
@@ -326,9 +325,8 @@ const AreaGuides = () => {
         document.body
       )}
 
-      {/* Areas Grid - connected to filter section with same background */}
-      <section className="pt-6 pb-16 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-        <div className="container mx-auto px-4">
+      {/* Areas Grid - same section, no break */}
+          <div className="container mx-auto px-4 mt-8">
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
                       <Loader2 className="w-8 h-8 text-gold animate-spin" />
@@ -480,7 +478,7 @@ const AreaGuides = () => {
           )}
 
           {!isLoading && filteredAreas.length > 0 && (
-            <div className="text-center mt-8 text-zinc-400 text-sm">
+            <div className="text-center mt-8 text-black/40 text-sm">
               Showing {filteredAreas.length} of {areas?.length || 0} areas
             </div>
           )}
