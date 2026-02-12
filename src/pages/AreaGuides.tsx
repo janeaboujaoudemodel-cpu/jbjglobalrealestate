@@ -4,14 +4,16 @@
  * No static/fake data - all areas come from useAreas() hook
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { MapPin, Building2, TrendingUp, Search, X, Flame, ArrowRight, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 import { SEOHead } from "@/components/SEOHead";
 import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
@@ -56,6 +58,10 @@ const AreaGuides = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedEmirate, setSelectedEmirate] = useState("all");
   const [sortBy, setSortBy] = useState<SortOption>("property_count");
+  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+  const [isFixed, setIsFixed] = useState(false);
+  const [bottomReached, setBottomReached] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   // Fetch REAL areas from database
   const { data: areas, isLoading, error } = useAreas();
@@ -98,6 +104,40 @@ const AreaGuides = () => {
 
     return filtered;
   }, [areas, searchQuery, selectedEmirate, sortBy]);
+
+  // IntersectionObserver for fixed positioning
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140),
+      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
+
+  // Bottom sentinel: hide fixed bar when CTA section enters viewport
+  useEffect(() => {
+    const target = document.getElementById('ready-to-get-started');
+    if (!target) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setBottomReached(entry.isIntersecting || entry.boundingClientRect.top < 0),
+      { threshold: 0.1 }
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
+
+  // Signal GlobalHeader to hide when filter bar is fixed
+  useEffect(() => {
+    if (isFixed && !bottomReached) {
+      document.body.classList.add('filter-bar-fixed');
+    } else {
+      document.body.classList.remove('filter-bar-fixed');
+    }
+    return () => document.body.classList.remove('filter-bar-fixed');
+  }, [isFixed, bottomReached]);
 
   return (
     <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
@@ -159,6 +199,10 @@ const AreaGuides = () => {
         </div>
       </section>
 
+      {/* Sentinel for IntersectionObserver */}
+      <div ref={sentinelRef} className="h-0 w-full" />
+
+      {/* Filter bar - inline */}
       <section className="py-4 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-b border-gold/20">
         <div className="container mx-auto px-4 space-y-3">
           {/* Search input */}
@@ -243,8 +287,44 @@ const AreaGuides = () => {
               A-Z
             </button>
           </div>
+
+          {/* FilterShortcutBar */}
+          <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
         </div>
       </section>
+
+      {/* Fixed portal copy — only when scrolled past sentinel */}
+      {isFixed && !bottomReached && createPortal(
+        <div className="fixed top-0 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200">
+          <div className="container mx-auto px-4 space-y-2">
+            <div className="flex items-center gap-3">
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                <input
+                  placeholder="Search areas..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full h-10 pl-9 pr-8 rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm placeholder:text-black/30 focus:outline-none focus:border-gold/60 transition-colors"
+                  style={{ fontSize: '16px' }}
+                />
+              </div>
+              <div className="flex gap-1.5">
+                <button onClick={() => setSortBy("property_count")} className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${sortBy === "property_count" ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] border-2 border-gold text-black" : "bg-white border border-gold/30 text-zinc-700"}`}>
+                  <Building2 className="w-3.5 h-3.5" />
+                </button>
+                <button onClick={() => setSortBy("trending")} className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${sortBy === "trending" ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] border-2 border-gold text-black" : "bg-white border border-gold/30 text-zinc-700"}`}>
+                  <Flame className="w-3.5 h-3.5" />
+                </button>
+                <button onClick={() => setSortBy("alphabetical")} className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${sortBy === "alphabetical" ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] border-2 border-gold text-black" : "bg-white border border-gold/30 text-zinc-700"}`}>
+                  A-Z
+                </button>
+              </div>
+            </div>
+            <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
+          </div>
+        </div>,
+        document.body
+      )}
 
       {/* Areas Grid */}
       <section className="py-16 bg-black">
