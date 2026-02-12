@@ -5,6 +5,7 @@ import { useReellyProjectBySlug } from "@/hooks/useReellyProjects";
 import type { ReellyProject } from "@/hooks/useReellyProjects";
 import PropertyReportModal from "@/components/PropertyReportModal";
 import ProjectDetailLayout, { type ProjectDetailData } from "@/components/project-detail/ProjectDetailLayout";
+import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 
@@ -225,13 +226,8 @@ const ProjectDetail = () => {
 
   if (isLoading || reellyLoading) {
     return (
-      <section className="relative w-full min-h-screen py-16 md:py-24 bg-premium-bg">
-        <div className="container mx-auto px-4">
-          <Skeleton className="h-8 w-48 bg-champagne/50 mb-8" />
-          <Skeleton className="aspect-[16/9] w-full rounded-lg bg-champagne/50 mb-8" />
-          <Skeleton className="h-12 w-64 bg-champagne/50 mb-4" />
-          <Skeleton className="h-6 w-full max-w-2xl bg-champagne/50" />
-        </div>
+      <section className="relative w-full min-h-screen bg-premium-bg flex items-center justify-center">
+        <BrandedLoader text="Loading project..." />
       </section>
     );
   }

@@ -231,6 +231,14 @@ export default {
             transform: "translateY(0) scale(1)",
           },
         },
+        "logo-fill": {
+          "0%": {
+            clipPath: "inset(100% 0 0 0)",
+          },
+          "100%": {
+            clipPath: "inset(0 0 0 0)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -238,6 +246,7 @@ export default {
         "shimmer": "shimmer 2s infinite",
         "fade-in-up": "fade-in-up 0.6s ease-out forwards",
         "section-enter": "section-enter 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards",
+        "logo-fill": "logo-fill 1.8s ease-in-out infinite alternate",
       },
     },
   },

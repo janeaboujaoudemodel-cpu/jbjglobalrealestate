@@ -107,7 +107,11 @@ export const ProjectAIAnalyzer = ({
     return () => observer.disconnect();
   }, []);
 
-  // Manual trigger only - no auto-analyze on scroll
+  useEffect(() => {
+    if (isVisible && !hasTriggered && !isAnalyzing && !analysis) {
+      handleAnalyze();
+    }
+  }, [isVisible, hasTriggered, isAnalyzing, analysis, handleAnalyze]);
 
   const sections = analysis ? {
     overview: extractSection(analysis, "Area Overview"),
@@ -155,16 +159,7 @@ export const ProjectAIAnalyzer = ({
               Retry Analysis
             </Button>
           </div>
-        ) : !analysis && !isAnalyzing ? (
-          <div className="text-center py-8 space-y-4">
-            <Brain className="w-12 h-12 text-gold/40 mx-auto" />
-            <p className="text-zinc-500 text-sm">Click below to generate an AI-powered investment analysis</p>
-            <Button onClick={handleAnalyze} className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold hover:brightness-110">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Analyze {projectName}
-            </Button>
-          </div>
-        ) : !analysis && isAnalyzing ? (
+        ) : !analysis ? (
           <div className="text-center py-8">
             {hasTimedOut ? (
               <div className="space-y-4">
