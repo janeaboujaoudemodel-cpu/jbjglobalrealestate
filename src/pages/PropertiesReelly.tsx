@@ -274,6 +274,18 @@ const PropertiesReelly = () => {
             onFilterChange={setShortcutFilters}
             isMapMode={isMapMode}
             onMapToggle={handleMapToggle}
+            searchSlot={
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+                <input
+                  type="text"
+                  placeholder="Search area, project or keyword..."
+                  value={shortcutFilters.searchQuery}
+                  onChange={(e) => setShortcutFilters(prev => ({ ...prev, searchQuery: e.target.value }))}
+                  className="w-full h-full pl-9 pr-3 py-2.5 text-xs text-black bg-transparent border-0 outline-none placeholder:text-black/40 focus:ring-0"
+                />
+              </div>
+            }
           />
         </div>
       </section>

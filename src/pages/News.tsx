@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ytd2026 as ytd2026Data, topAreas2026 as topAreas2026Data, topAreas2025 as topAreas2025Data, topNationalities as topNationalitiesData } from "@/constants/dldMarketData";
-import heroVideo from "@/assets/videos/press-kit-hero.mp4";
+import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 
 interface MarketNews {
   id: string;
@@ -271,20 +271,16 @@ const News = () => {
     <>
       <SEOHead {...pagesSEO.news} />
       <section className="min-h-screen bg-black">
-      {/* Hero Section - Video Background */}
+      {/* Hero Section - Premium Gradient with Monogram */}
       <section className="relative py-24 md:py-32 overflow-hidden">
-        {/* Video Background */}
-        <div className="absolute inset-0 z-0">
-          <video 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
-            className="w-full h-full object-cover opacity-40"
-          >
-            <source src={heroVideo} type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black" />
+        {/* Gradient Background with JBJ Monogram */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-zinc-900 via-black to-black">
+          <img 
+            src={jbjMonogramDarkBg} 
+            alt="" 
+            aria-hidden="true"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 md:w-64 md:h-64 opacity-[0.04] object-contain"
+          />
         </div>
         
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl z-[1]" />
@@ -376,7 +372,7 @@ const News = () => {
                     </div>
                     <div className="p-8 md:p-10 flex flex-col justify-center">
                       <div className="flex items-center gap-3 mb-4 flex-wrap">
-                        <span className="text-xs text-black bg-gold px-3 py-1 rounded-full font-medium">
+                        <span className="text-xs text-black bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] px-3 py-1 rounded-full font-medium border border-gold/50">
                           Featured
                         </span>
                     <CategoryBadge category={filteredNews[0].category} />
