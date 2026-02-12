@@ -1,83 +1,96 @@
 
 
-## Wire Filters Everywhere + Payment Plan on Project Cards
+## Fix RecommendedProjects, Zero Projects, Map Mode, and Payment Plan Display
 
-### Problem Summary
-1. **DeveloperDetail page**: Already correctly applies `applyShortcutFilters` (line 101). Already wired.
-2. **AreaProjectsGrid**: Already correctly applies `applyShortcutFilters` (line 172). Already wired.
-3. **ProjectDetailLayout**: Has `FilterShortcutBar` but the `shortcutFilters` state is never applied to filter any project lists on the page. Need to check if there are similar/recommended project sections that need filtering.
-4. **Payment Plan on ProjectCard**: The user wants the real payment plan summary displayed on the bottom-right corner of each project card, above the CTA buttons. Data source: `payment_breakdown` field (699 of 2410 projects have it). This is real structured data with milestones and percentages.
+### Issues Identified
 
-### Changes
+1. **RecommendedProjects imported but never rendered** in `ProjectDetailLayout.tsx` -- the component is imported (line 56) but `<RecommendedProjects>` is never used in the JSX.
 
-#### 1. Add Payment Plan Summary to ProjectCard
+2. **Zero projects on Properties page** -- The `useProjects()` hook joins `images` and `documents` tables for all 2400+ projects, likely hitting the default 1000-row limit or timing out. The listing page query needs to be lighter (no heavy joins) as noted in the architecture memory.
 
-**File: `src/components/ProjectCard.tsx`**
+3. **Map button not working visually** -- The split-screen code exists in `Properties.tsx` (line 1153) but likely fails because zero projects load (see issue 2). Once projects load, the map mode should work.
 
-The `payment_breakdown` field is a JSON array of objects like:
-```json
-[
-  { "milestone": "Down Payment", "percentage": 20 },
-  { "milestone": "During Construction", "percentage": 40 },
-  { "milestone": "On Handover", "percentage": 40 }
-]
+4. **Payment plan format** -- Currently shows "20/40/40" but user wants just the numbers without percent signs (confirmed already correct), displayed on ALL external cards including homepage "Handpicked For You" section.
+
+5. **Payment plan on FeaturedListings (homepage)** -- The `useFeaturedProjects` query does NOT select `payment_breakdown`, so the data is missing. Need to add it to the query and render it next to the handover date.
+
+### Plan
+
+#### 1. Fix useProjects to NOT join heavy tables for listing queries
+
+**File: `src/hooks/useProjects.ts`**
+
+Create a new lightweight hook `useProjectsListing()` that selects only the columns needed for cards (no `images`, no `documents` joins). The Properties page will use this instead of `useProjects()`. This fixes the zero projects issue.
+
+Alternatively, add `.limit(2500)` to the existing `useProjects` query and remove the `images`/`documents` joins for the listing query only.
+
+Change the select to:
+```
+*, developer:developers(id, name, slug, logo_url), community:communities(id, name, slug)
 ```
 
-Add a compact payment plan display at the bottom-right of the card content area (above the CTA buttons), showing a shorthand like "20/40/40" or "20% | 40% | 40%" derived from the real `payment_breakdown` data. Only show this when `payment_breakdown` exists and has entries.
+Remove `images:project_images(...)` and `documents:project_documents(...)` from the listing query -- these are only needed on detail pages. Add `.limit(2500)` to handle the full dataset.
 
-Implementation:
-- Add a helper function `getPaymentPlanSummary()` that reads `(project as any).payment_breakdown` and extracts the percentages
-- Display it as a small gold-accented badge at the bottom-right of the content section, e.g.: "20/40/40" with a CreditCard icon
-- If no `payment_breakdown` data exists, show nothing (no fake data)
+**File: `src/pages/Properties.tsx`** -- Use the lighter query.
 
-#### 2. Verify Filter Wiring on All Pages
+#### 2. Render RecommendedProjects in ProjectDetailLayout
 
-| Page | FilterShortcutBar present? | applyShortcutFilters applied? | Action needed? |
-|------|---------------------------|-------------------------------|----------------|
-| Properties.tsx | Yes | Yes (line 335) | No |
-| DeveloperDetail.tsx | Yes | Yes (line 101) | No |
-| AreaProjectsGrid.tsx | Yes | Yes (line 172) | No |
-| ProjectDetailLayout.tsx | Yes | No -- but no project list to filter | No action needed |
+**File: `src/components/project-detail/ProjectDetailLayout.tsx`**
 
-All pages with project listings already have filters correctly wired. The ProjectDetailLayout shows a single project detail, not a list, so the FilterShortcutBar there serves as navigation/context rather than filtering.
-
-### Technical Details
-
-#### ProjectCard.tsx Changes
-
-Add after the description section (around line 357), before the Link closing tag:
-
+Find the appropriate location (after the main content, before footer/contact section) and add:
 ```tsx
-{/* Payment Plan Badge - Bottom Right */}
-{(() => {
-  const breakdown = (project as any).payment_breakdown;
-  if (!breakdown || !Array.isArray(breakdown) || breakdown.length === 0) return null;
-  const percentages = breakdown
-    .map((b: any) => b.percentage)
-    .filter((p: any) => typeof p === 'number');
-  if (percentages.length === 0) return null;
-  return (
-    <div className="px-4 pb-2 flex justify-end">
-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-gold bg-gold/10 border border-gold/30 rounded-full px-2.5 py-1">
-        <CreditCard className="w-3 h-3" />
-        {percentages.join('/')}
-      </span>
-    </div>
-  );
-})()}
+<RecommendedProjects
+  currentProjectId={project.id}
+  currentDeveloperId={project.developer_id}
+  currentLocation={project.location}
+  currentEmirate={project.emirate}
+/>
 ```
 
-- Import `CreditCard` from lucide-react
-- Only displays when real `payment_breakdown` data exists
-- Shows compact format like "20/40/40" which represents Down Payment / Construction / Handover percentages
+#### 3. Add payment_breakdown to FeaturedListings query and display it
+
+**File: `src/components/home/FeaturedListings.tsx`**
+
+- Add `payment_breakdown` to the `FeaturedProject` interface
+- Add `payment_breakdown` to the Supabase select query
+- In the ProjectCard component, display the payment plan next to the handover date (left side of the row) as a small gold badge showing just the numbers joined by `/` (e.g., "20/40/40")
+
+The handover row (lines 251-262) will become:
+```tsx
+<div className="flex items-end justify-between mt-2 min-h-[36px]">
+  {/* Payment Plan - Left */}
+  {paymentSummary && (
+    <span className="inline-flex items-center gap-1 text-xs font-semibold text-gold bg-gold/10 border border-gold/30 rounded-full px-2 py-0.5">
+      <CreditCard className="w-3 h-3" />
+      {paymentSummary}
+    </span>
+  )}
+  {/* Handover - Right */}
+  {project.handover_date && (
+    <span className="text-orange-500 text-xs font-bold">{project.handover_date}</span>
+  )}
+</div>
+```
+
+#### 4. Payment plan on RecommendedProjects cards
+
+**File: `src/components/project-detail/RecommendedProjects.tsx`**
+
+The `useProjects()` hook already includes `payment_breakdown` via `*`. Add payment plan badge to each recommended project card, matching the same format (numbers joined by `/`).
 
 ### Files to Change
 
 | File | Change |
 |------|--------|
-| `src/components/ProjectCard.tsx` | Add CreditCard import; add payment plan badge from real `payment_breakdown` data |
+| `src/hooks/useProjects.ts` | Create `useProjectsListing()` with lighter query (no images/docs joins, add logo_url to developer, add limit 2500) |
+| `src/pages/Properties.tsx` | Use `useProjectsListing()` instead of `useProjects()` |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Add `<RecommendedProjects>` to the JSX |
+| `src/components/home/FeaturedListings.tsx` | Add `payment_breakdown` to query + interface; display payment plan badge next to handover |
+| `src/components/project-detail/RecommendedProjects.tsx` | Add payment plan badge to recommended project cards |
 
-### What This Does NOT Do
-- Does not invent or fabricate any payment plan data
-- Does not change filter wiring on pages where it already works (Developer, Area, Properties)
-- The `payment_plan` text field (only 1 project has it) is ignored in favor of the structured `payment_breakdown` array (699 projects have it)
+### Result
+- Properties page will load all 2400+ projects (lighter query, no timeouts)
+- Map mode will work because projects will actually load
+- RecommendedProjects will render on project detail pages
+- Payment plan (real data only, format: "20/40/40") will show on homepage featured cards, properties listing cards, and recommended project cards
+
