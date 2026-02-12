@@ -1,41 +1,79 @@
 
 
-## Fixes: Divider Background, Page Contrast, Mode Dropdown, and Filter Row Layout
+## Fixes: Status Label "Sold Out", Advanced Filter, Hover Effects, Icons, Row 1 Layout, and Developer Page Separation
 
-### 1. Fix SectionDivider Background on Developer Page
+### 1. Replace "Out of Stock" with "Sold Out" Everywhere in UI
 
-**Problem**: The `SectionDivider` component renders with `bg-black`, creating a jarring black stripe between the champagne project grid and the DLD Market Widget.
+The status option in `FilterShortcutBar.tsx` (line 102) shows "Out of Stock" as the display label. This must be changed to "Sold Out".
 
-**Fix in `src/pages/DeveloperDetail.tsx`**: Replace `<SectionDivider fullWidth />` with an inline champagne-background divider that uses the gold sparkle line but inherits the surrounding champagne background color instead of black. Alternatively, pass a background override or render a custom divider inline with the champagne gradient background, keeping only the gold horizontal line and sparkle icon.
+**Files to update:**
+- `src/components/filters/FilterShortcutBar.tsx` line 102: Change `label: 'Out of Stock'` to `label: 'Sold Out'`
+- `src/components/ProjectFilters.tsx` line 43: Update comment from `'Out of Stock'` to `'Sold Out'`
 
-### 2. Darken Project Page Main Background for Card Contrast
+The `filterConfig.ts` and `saleStatus.ts` already correctly map to "Sold Out" internally -- no changes needed there. The `SaleStatusFilter.tsx` uses `SALE_STATUS_OPTIONS` from `filterConfig.ts` which already shows "Sold Out" as the label.
 
-**Problem**: The main content background (`#FDFBF7 -> #F5F0E6 -> #EDE4D3`) is the same champagne as the cards inside, resulting in no contrast -- cards blend into the page.
+### 2. Add Advanced Filters Button to FilterShortcutBar (Row 2)
 
-**Fix in `src/components/project-detail/ProjectDetailLayout.tsx`** (line 638): Change the main section background to match the darker champagne tone used in Row 2 of the sticky nav: `from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8]`. This is the exact gradient from line 596. The cards inside (which use `bg-card` or lighter champagne) will now pop with visible contrast.
+Add an "Advanced" pill button at the end of Row 2 (after Hide Sold, before Reset All) that opens a popover/sheet containing advanced criteria:
+- Views (Sea View, City View, Canal View, Park View, Golf View, Landmark View)
+- Amenities (Pool, Gym, Spa, Kids Play Area, BBQ, Concierge)
+- Premium features (Beachfront, Waterfront, Golf Course, Private Pool)
+- Furnished status (Furnished, Semi-Furnished, Unfurnished)
 
-### 3. Mode Button -- Open Dropdown Instead of Toggle
+### 3. Add Hover Effects on Filter Dropdown Options
 
-**Problem**: The Mode button in `UtilityButtons` (FilterShortcutBar.tsx line 662) calls `toggleMode()` on click, cycling modes without a dropdown. User wants a dropdown to appear showing available modes.
+Currently, the toggle pill options inside popovers (Property Type, Bedrooms, Status, Construction, Handover selects) lack visible hover effects.
 
-**Fix in `src/components/filters/FilterShortcutBar.tsx`** (lines 572-665): Replace the simple `<button onClick={toggleMode}>` with a `<Popover>` containing the three mode options (Investor, Broker, Both). Each option calls `setMode(...)` and closes the popover. The trigger button remains the same styling but opens a dropdown instead of toggling.
+**Fix in `FilterShortcutBar.tsx`:**
+- Update `togglePillOff` class (line 160) to include a stronger hover: `hover:bg-gold/10 hover:border-gold/50 hover:shadow-sm`
+- Add hover transition to all option buttons inside popovers
 
-### 4. Rearrange Row 1 Layout: Left = Saved + Currency + Mode, Center = Sort Pills, Right = Map
+### 4. Residential/Commercial Tab Buttons -- Match Dropdown Color with Gold Active State
 
-**Current Row 1**: Left: `[Saved] [Currency] [Mode]` | Right: `[Map] [Newest] [Low-High] [High-Low] [A-Z]`
+The Residential/Commercial `TabsTrigger` buttons (line 404-406) use default `bg-white/60` styling. 
 
-**Requested Row 1**: Left: `[Map] [Saved] [Currency] [Mode]` | Center: `[Newest] [Low-High] [High-Low] [A-Z]`
+**Fix:**
+- Change the `TabsList` background to match the popover champagne gradient
+- Add a gold champagne active state for the selected tab: `data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#EDE0C8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold`
 
-**Fix in `src/components/filters/FilterShortcutBar.tsx`**:
-- Move the Map button from the right-side sort group into the left `UtilityButtons` group (first position)
-- Change Row 1 layout to: left group has `[Map] [Saved] [Currency] [Mode]`, and the sort pills are centered using `justify-center` with `flex-1`
+### 5. Make Heart Icon Bigger Next to "Save"
 
-### Technical Details
+Line 508: Change `Heart` icon from `w-3.5 h-3.5` to `w-4.5 h-4.5`
+
+### 6. Remove Dot Behind "Construction" and Remove Icons Before Filter Pills
+
+Line 481-485: The `HardHat` icon before "Construction" shows as a dot-like element. Remove the small icons before these pill triggers:
+- Remove icon from Apartments/Property Type pill (Building2)
+- Remove icon from Handover pill (Calendar) 
+- Remove icon from Payments pill (CreditCard)
+- Remove icon from Bedrooms pill (Bed)
+
+Actually, the user says "remove it" for the small icons but then says "if the other icons you want to keep, you have to make them bigger." So the fix is: **make all pill trigger icons bigger** -- change from `w-3.5 h-3.5` to `w-4.5 h-4.5` across all pill triggers. For the Status icon (Activity), make it even more visible at `w-5 h-5`.
+
+### 7. Move Utility Buttons (Map, Saved, Currency, Mode) to the RIGHT Side
+
+The user has repeatedly asked for these 4 buttons to be on the RIGHT side, with sort pills centered. Currently they are on the LEFT (lines 191-198).
+
+**Fix in `FilterShortcutBar.tsx` (lines 189-212):**
+- Restructure Row 1: Sort pills on the left/center (`flex-1 justify-center`), utility buttons (Map, Saved, Currency, Mode) on the RIGHT (`flex-shrink-0`)
+- Swap the order of the two `div` groups
+
+### 8. Filter Bar Header -- Match Background and Edge-to-Edge
+
+The filter bar background should match the page layer color and extend full edge-to-edge. This applies to the inline filter bar in `DeveloperDetail.tsx` (line 347) and the fixed portal bar (line 368).
+
+### 9. Developer Page -- Separate Listings from DLD Market Widget
+
+On `DeveloperDetail.tsx`:
+- Wrap the project cards grid and "Explore All X Projects" button inside a champagne-background container card to visually separate them from the DLD Market Widget below
+- Add padding/margin between the listing container and the DLD widget
+- The DLD widget width should match the card grid width
+
+### Technical Summary
 
 | File | Changes |
-|------|--------|
-| `src/pages/DeveloperDetail.tsx` | Replace `<SectionDivider>` with a champagne-background divider (gold line + sparkle icon on matching champagne bg) |
-| `src/components/project-detail/ProjectDetailLayout.tsx` | Change main content background from light champagne to darker champagne (`from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8]`) for card contrast |
-| `src/components/filters/FilterShortcutBar.tsx` | (a) Replace Mode toggle button with a Popover dropdown showing Investor/Broker/Both options; (b) Move Map button to left utility group; (c) Center sort pills in Row 1 |
-| `src/components/ui/section-divider.tsx` | Add optional `bg` prop to override the default `bg-black` background, allowing champagne-toned dividers |
+|------|---------|
+| `src/components/filters/FilterShortcutBar.tsx` | (1) Fix "Out of Stock" to "Sold Out"; (2) Add Advanced filter popover; (3) Hover effects on toggle pills; (4) Gold active state for Residential/Commercial tabs; (5) Bigger heart icon; (6) Bigger pill icons; (7) Move utility buttons to RIGHT side; (8) Match background color |
+| `src/components/ProjectFilters.tsx` | Fix "Out of Stock" comment to "Sold Out" |
+| `src/pages/DeveloperDetail.tsx` | Wrap listings in champagne container; add spacing before DLD widget; match DLD width to cards |
 
