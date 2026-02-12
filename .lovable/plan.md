@@ -1,41 +1,95 @@
 
-## Fix Build Error + Filter Bar Layout + AI Analyzer
 
-### Critical Issue: Build Size Exceeds 512MB Limit
+## Fix Provident Extraction: Full Data Parity with Source Pages
 
-The project build fails because the total encoded size (520MB) exceeds the 512MB limit. The most likely cause is the 3 video files in `public/videos/`:
-- `hero-video.mp4`
-- `team-hero-dubai-landmarks.mp4`
-- `team-hero-dubai-skyline.mp4`
+### Root Cause Analysis
 
-**Fix:** Move these videos to external hosting (Lovable Cloud file storage) and reference them by URL instead of bundling them in the project. This will reduce the build size by ~100-200MB.
+The extraction pipeline has **3 cascading failures** that prevent full data extraction:
 
-Steps:
-1. Upload the 3 video files to Lovable Cloud storage (create a `videos` bucket)
-2. Update `src/pages/Index.tsx` and `src/pages/MeetTheTeam.tsx` to reference storage URLs instead of local `/videos/` paths
-3. Delete the video files from `public/videos/`
+**Problem 1: Page-data.json parser returns empty structured data.**
+The `pagedata-detail.ts` parser finds images in the JSON but gets 0 amenities, 0 USPs, 0 FAQs, 0 distances, 0 floor plans. The Provident API nests these fields under paths the parser doesn't check. Meanwhile, the Firecrawl markdown parser (`extract-from-markdown.ts`) CAN extract all these fields perfectly from the scraped page.
 
----
+**Problem 2: Firecrawl fallback is never triggered.**
+In `enrich-project-test`, the `needsFirecrawl` check (line 430) requires ALL fields to be empty. But since page-data returns 20 images, the system considers Firecrawl "Not needed" -- even though amenities, USPs, FAQs, distances, and floor plans are all still empty.
 
-### AI Analyzer Status
-
-The AI analyzer edge function is **working correctly** -- it returns a 200 response with full analysis data and the cache is functioning. The issue is that the build failure prevents the latest frontend code from deploying. Once the build error is resolved, the analyzer UI will render properly.
+**Problem 3: No name verification on slug match.**
+Provident recycles slugs. The slug `99-parkplace` now serves "Kaia by Emaar" -- a completely different project. The system blindly imports this wrong data.
 
 ---
 
-### Filter Bar Layout: Compact 2-Row Design
+### Fix 1: Always Run Firecrawl When Structured Fields Are Missing
 
-**Row 1 (single connected bar):** Search input (wider) + Map + Saved + Currency dropdown (shows "AED" as trigger text, opens full currency selector on click) + Filter + Mode Investor -- all connected with shared borders for a premium look, less rounded corners.
+**File: `supabase/functions/enrich-project-test/index.ts`**
 
-**Row 2 (filter pills + sort):** Price | Payments | Handover | Property Type | Bedrooms | Status | Construction | Newest | Low-High | High-Low | A-Z | Hide Sold (last)
+Change the `needsFirecrawl` condition from "ALL fields must be empty" to "ANY critical structured field is empty":
 
-Specific changes to `src/components/filters/FilterShortcutBar.tsx`:
-- Remove the separate `CurrencySwitcher` component from UtilityButtons
-- Create a currency trigger button styled as part of the connected bar that shows current currency code (e.g., "AED") and opens the currency dropdown
-- Reorder Row 1 items: Search (flex-grow) | Map | Saved | AED/Currency | Filter | Mode Investor
-- Use `rounded-none` on inner items and `rounded-l-xl` / `rounded-r-xl` on first/last items to create a connected toolbar appearance
-- Move "Hide Sold" to the end of Row 2
-- Merge sort pills inline in Row 2 after the filter popovers
+Current (line 430-431):
+```
+const needsFirecrawl = enrichment.amenities.length === 0 && enrichment.usp_bullets.length === 0 &&
+  enrichment.faqs.length === 0 && !enrichment.description && enrichment.gallery.length <= 1 && enrichment.documents.length === 0;
+```
+
+New logic:
+```
+const needsFirecrawl = enrichment.amenities.length === 0 || enrichment.usp_bullets.length === 0 ||
+  enrichment.faqs.length === 0 || enrichment.location_distances.length === 0;
+```
+
+This ensures Firecrawl fires whenever structured fields are missing, even if images were already found.
+
+Also update the Firecrawl merge logic to be additive (fill gaps, not replace):
+- If page-data already provided images, keep them; only add Firecrawl images if none exist
+- If page-data returned nothing for amenities/USPs/FAQs, fill from Firecrawl
+
+---
+
+### Fix 2: Add Name Verification Guard
+
+**File: `supabase/functions/enrich-project-test/index.ts`** and **`supabase/functions/provident-enrich-projects/index.ts`**
+
+After fetching Provident page-data, compare the returned project name against the local project name using word-token similarity:
+
+```
+function nameSimilarity(a: string, b: string): number {
+  const wordsA = new Set(a.toLowerCase().split(/\W+/).filter(w => w.length > 2));
+  const wordsB = new Set(b.toLowerCase().split(/\W+/).filter(w => w.length > 2));
+  const intersection = [...wordsA].filter(w => wordsB.has(w)).length;
+  const union = new Set([...wordsA, ...wordsB]).size;
+  return union === 0 ? 0 : intersection / union;
+}
+```
+
+If similarity is below 0.2, skip that Provident match entirely. This prevents "99 Parkplace" from importing "Kaia by Emaar" data.
+
+---
+
+### Fix 3: Fix Empty Array vs Null Guards
+
+**File: `supabase/functions/provident-enrich-projects/index.ts`**
+
+Change guards like `!project.amenities` to `(!project.amenities || (Array.isArray(project.amenities) && project.amenities.length === 0))` for all structured fields: amenities, faqs, floor_plan_types, usp_bullets, location_distances.
+
+---
+
+### Fix 4: Add Firecrawl Name Verification in Markdown Extraction
+
+**File: `supabase/functions/enrich-project-test/index.ts`** (Firecrawl section)
+
+After extracting from markdown, compare the extracted name against the local project name. If they don't match (similarity below 0.2), discard the extraction and try the next slug variant.
+
+---
+
+### Fix 5: Clean 99 Parkplace Bad Data
+
+Run a one-time cleanup to remove the wrong "Kaia" images that were already imported. Since 99 Parkplace has no Provident listing, its data will remain from the Reelly source. The user can use the "Generate and Improve" feature in Listing Admin to manually extract from the developer's website.
+
+---
+
+### Fix 6: Image Filename-Based Deduplication
+
+**File: `supabase/functions/_shared/provident/pagedata-detail.ts`**
+
+Current deduplication uses exact URL matching. Add filename-based dedup: extract the filename portion from URLs (e.g., `Kaia_by_Emaar_at_The_Valley_8d6ea4c2e0.jpg`) and deduplicate on that. Filter out broken URLs like bare `.jpg`.
 
 ---
 
@@ -43,14 +97,17 @@ Specific changes to `src/components/filters/FilterShortcutBar.tsx`:
 
 | File | Change |
 |------|--------|
-| `public/videos/` | Delete 3 MP4 files (move to cloud storage) |
-| `src/pages/Index.tsx` | Update video src to storage URL |
-| `src/pages/MeetTheTeam.tsx` | Update video src to storage URL |
-| `src/components/filters/FilterShortcutBar.tsx` | Restructure Row 1 as connected toolbar; reorder: Search + Map + Saved + Currency + Filter + Mode; Row 2: filters + sort + Hide Sold last |
+| `supabase/functions/enrich-project-test/index.ts` | Fix `needsFirecrawl` to OR condition; add name similarity check for both page-data and Firecrawl matches |
+| `supabase/functions/provident-enrich-projects/index.ts` | Add name similarity guard; fix empty-array guards |
+| `supabase/functions/_shared/provident/pagedata-detail.ts` | Add filename-based image dedup; filter broken URLs |
+| Database cleanup | Delete wrong Kaia images from 99 Parkplace project |
 
-### Technical Notes
+### Expected Result After Fix
 
-- A new storage bucket `videos` will be created with public access policy
-- Video files will be uploaded programmatically via the storage API
-- The currency trigger in the connected bar will reuse the existing `SUPPORTED_CURRENCIES` list and `currencyChange` event pattern from `CurrencySwitcher.tsx`
-- The connected bar uses shared border styling (`border-r border-gold/20`) between items with outer rounding only on first/last elements
+When enriching any project:
+1. Page-data.json is tried first (fast, no API credits)
+2. If structured fields (amenities, USPs, FAQs, distances) are still empty, Firecrawl scrapes the page
+3. Firecrawl markdown parser extracts ALL sections: description, USPs with bullets, amenities list, floor plan types, location with distances, payment breakdown percentages, FAQs, documents (brochure/payment plan PDFs)
+4. Name verification prevents cross-contamination from recycled slugs
+5. Result: full data parity with the Provident source page, displayed in your UI
+
