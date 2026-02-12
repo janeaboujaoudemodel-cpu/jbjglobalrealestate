@@ -20,6 +20,20 @@ function slugify(name: string): string {
     .replace(/^-|-$/g, "");
 }
 
+/** Word-token Jaccard similarity for name verification */
+function nameSimilarity(a: string, b: string): number {
+  const wordsA = new Set(a.toLowerCase().split(/\W+/).filter(w => w.length > 2));
+  const wordsB = new Set(b.toLowerCase().split(/\W+/).filter(w => w.length > 2));
+  if (wordsA.size === 0 && wordsB.size === 0) return 0;
+  const intersection = [...wordsA].filter(w => wordsB.has(w)).length;
+  const union = new Set([...wordsA, ...wordsB]).size;
+  return union === 0 ? 0 : intersection / union;
+}
+
+function isEmptyArray(val: unknown): boolean {
+  return !val || (Array.isArray(val) && val.length === 0);
+}
+
 function generateSlugVariants(name: string, location?: string | null, developer?: string | null): string[] {
   const base = slugify(name);
   const variants = [base];
@@ -90,6 +104,15 @@ async function enrichProject(
   for (const slug of slugs) {
     detail = await fetchProvidentPageDataDetail(slug);
     if (detail && (detail.images.length > 0 || detail.amenities.length > 0 || detail.uspBullets.length > 0)) {
+      // Name verification guard
+      if (detail.name) {
+        const sim = nameSimilarity(project.name, detail.name);
+        if (sim < 0.2) {
+          console.warn(`[Enrich] Name mismatch! Local="${project.name}" vs Provident="${detail.name}" (similarity=${sim.toFixed(2)}). Skipping slug ${slug}.`);
+          detail = null;
+          continue;
+        }
+      }
       result.slug_matched = slug;
       break;
     }
@@ -123,7 +146,7 @@ async function enrichProject(
   // ========== Merge Fields (only if NULL) ==========
   const updates: Record<string, unknown> = {};
 
-  if (!project.amenities && detail.amenities.length > 0) {
+  if (isEmptyArray(project.amenities) && detail.amenities.length > 0) {
     updates.amenities = detail.amenities;
     result.fields_updated.push("amenities");
   }
@@ -133,22 +156,22 @@ async function enrichProject(
     result.fields_updated.push("payment_plan");
   }
 
-  if (!project.payment_breakdown && Object.keys(detail.paymentBreakdown).length > 0) {
+  if (isEmptyArray(project.payment_breakdown) && Object.keys(detail.paymentBreakdown).length > 0) {
     updates.payment_breakdown = detail.paymentBreakdown;
     result.fields_updated.push("payment_breakdown");
   }
 
-  if (!project.floor_plan_types && detail.floorPlanTypes.length > 0) {
+  if (isEmptyArray(project.floor_plan_types) && detail.floorPlanTypes.length > 0) {
     updates.floor_plan_types = detail.floorPlanTypes;
     result.fields_updated.push("floor_plan_types");
   }
 
-  if (!project.faqs && detail.faqs.length > 0) {
+  if (isEmptyArray(project.faqs) && detail.faqs.length > 0) {
     updates.faqs = detail.faqs;
     result.fields_updated.push("faqs");
   }
 
-  if (!project.location_distances && detail.locationDistances.length > 0) {
+  if (isEmptyArray(project.location_distances) && detail.locationDistances.length > 0) {
     updates.location_distances = detail.locationDistances;
     result.fields_updated.push("location_distances");
   }

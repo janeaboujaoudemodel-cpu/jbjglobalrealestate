@@ -14,6 +14,16 @@ function json(status: number, body: unknown) {
   });
 }
 
+/** Word-token Jaccard similarity for name verification */
+function nameSimilarity(a: string, b: string): number {
+  const wordsA = new Set(a.toLowerCase().split(/\W+/).filter(w => w.length > 2));
+  const wordsB = new Set(b.toLowerCase().split(/\W+/).filter(w => w.length > 2));
+  if (wordsA.size === 0 && wordsB.size === 0) return 0;
+  const intersection = [...wordsA].filter(w => wordsB.has(w)).length;
+  const union = new Set([...wordsA, ...wordsB]).size;
+  return union === 0 ? 0 : intersection / union;
+}
+
 async function fetchReellyProject(reellyId: number, apiKey: string) {
   const res = await fetch(
     `${REELLY_API_BASE}/${reellyId}`,
@@ -188,6 +198,14 @@ Deno.serve(async (req: Request): Promise<Response> => {
           for (const variant of slugVariants) {
             const pd = await fetchProvidentPageDataDetail(variant);
             if (pd && (pd.amenities.length > 0 || pd.images.length > 0 || pd.faqs.length > 0 || pd.uspBullets.length > 0 || pd.description)) {
+              // Name verification guard
+              if (pd.name) {
+                const sim = nameSimilarity(proj.name, pd.name);
+                if (sim < 0.2) {
+                  console.warn(`[enrich-test][batch] Name mismatch! Local="${proj.name}" vs Provident="${pd.name}" (similarity=${sim.toFixed(2)}). Skipping slug ${variant}.`);
+                  continue;
+                }
+              }
               if (enrichment.amenities.length === 0 && pd.amenities.length > 0) enrichment.amenities = pd.amenities;
               if (enrichment.usp_bullets.length === 0 && pd.uspBullets.length > 0) enrichment.usp_bullets = pd.uspBullets;
               if (enrichment.faqs.length === 0 && pd.faqs.length > 0) enrichment.faqs = pd.faqs;
@@ -388,9 +406,17 @@ Deno.serve(async (req: Request): Promise<Response> => {
       console.log(`[enrich-test] Trying Provident slug: ${variant}`);
       const pd = await fetchProvidentPageDataDetail(variant);
       if (pd && (pd.amenities.length > 0 || pd.images.length > 0 || pd.faqs.length > 0 || pd.uspBullets.length > 0 || pd.description)) {
+        // Name verification guard: reject if Provident returned a completely different project
+        if (pd.name) {
+          const sim = nameSimilarity(project.name, pd.name);
+          if (sim < 0.2) {
+            console.warn(`[enrich-test] Name mismatch! Local="${project.name}" vs Provident="${pd.name}" (similarity=${sim.toFixed(2)}). Skipping slug ${variant}.`);
+            continue;
+          }
+        }
         providentData = pd;
         providentSlugUsed = variant;
-        console.log(`[enrich-test] Provident match found: ${variant}`);
+        console.log(`[enrich-test] Provident match found: ${variant} (name="${pd.name}")`);
         break;
       }
     }
@@ -427,8 +453,9 @@ Deno.serve(async (req: Request): Promise<Response> => {
     // ── Source 3: Firecrawl scrape (fallback when page-data returns empty) ──
     let firecrawlUsed = false;
     let firecrawlData: any = null;
-    const needsFirecrawl = enrichment.amenities.length === 0 && enrichment.usp_bullets.length === 0 &&
-      enrichment.faqs.length === 0 && !enrichment.description && enrichment.gallery.length <= 1 && enrichment.documents.length === 0;
+    // Trigger Firecrawl if ANY critical structured field is missing (OR, not AND)
+    const needsFirecrawl = enrichment.amenities.length === 0 || enrichment.usp_bullets.length === 0 ||
+      enrichment.faqs.length === 0 || enrichment.location_distances.length === 0;
 
     if (needsFirecrawl) {
       const firecrawlKey = Deno.env.get("FIRECRAWL_API_KEY");
@@ -474,11 +501,22 @@ Deno.serve(async (req: Request): Promise<Response> => {
             }
 
             firecrawlData = extractFromMarkdown(md, "", fcLinks);
-            firecrawlUsed = true;
 
             console.log(`[enrich-test] Firecrawl extracted: ${firecrawlData.images.length} imgs, ${firecrawlData.documents.length} docs, ${firecrawlData.amenities.length} amenities, ${firecrawlData.uspBullets.length} USPs, ${firecrawlData.faqs.length} FAQs`);
 
-            // Merge Firecrawl data into enrichment where still empty
+            // Name verification: reject if extracted name doesn't match
+            if (firecrawlData.name) {
+              const fcSim = nameSimilarity(project.name, firecrawlData.name);
+              if (fcSim < 0.2) {
+                console.warn(`[enrich-test] Firecrawl name mismatch! Local="${project.name}" vs Scraped="${firecrawlData.name}" (similarity=${fcSim.toFixed(2)}). Trying next slug.`);
+                firecrawlData = null;
+                continue;
+              }
+            }
+
+            firecrawlUsed = true;
+
+            // Merge Firecrawl data ADDITIVELY (fill gaps, don't replace)
             if (enrichment.amenities.length === 0 && firecrawlData.amenities.length > 0)
               enrichment.amenities = firecrawlData.amenities;
             if (enrichment.usp_bullets.length === 0 && firecrawlData.uspBullets.length > 0)
@@ -495,6 +533,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
               enrichment.payment_plan = firecrawlData.paymentPlan;
             if (enrichment.payment_breakdown.length === 0 && Object.keys(firecrawlData.paymentBreakdown).length > 0)
               enrichment.payment_breakdown = [firecrawlData.paymentBreakdown];
+            // Only add Firecrawl images if we don't already have gallery from page-data
             if (enrichment.gallery.length <= 1 && firecrawlData.images.length > 0)
               enrichment.gallery = [...enrichment.gallery, ...firecrawlData.images.map((img: any, i: number) => ({ url: img.url, alt_text: img.alt_text, display_order: (enrichment.gallery.length) + i }))];
             if (enrichment.documents.length === 0 && firecrawlData.documents.length > 0)
