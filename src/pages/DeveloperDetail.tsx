@@ -3,12 +3,12 @@ import { createPortal } from "react-dom";
 import { useParams, Link } from "react-router-dom";
 import { useDeveloper, useProjectsByDeveloper, useCommunities, useTrendingAreas, useDevelopers } from "@/hooks/useProjects";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
-import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
+import { type FilterState } from "@/components/ProjectFilters";
 import ProjectCard from "@/components/ProjectCard";
 import EmiratesTabs from "@/components/EmiratesTabs";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronDown, ChevronUp, Search } from "lucide-react";
 import { getHighResImageUrl } from "@/lib/imageUtils";
 import { Button } from "@/components/ui/button";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
@@ -17,6 +17,7 @@ import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { SectionDivider } from "@/components/ui/section-divider";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
+import { Input } from "@/components/ui/input";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -39,7 +40,7 @@ const DeveloperDetail = () => {
   const { data: trendingAreas } = useTrendingAreas();
   const { data: allDevelopers } = useDevelopers();
 
-  const [filters, setFilters] = useState<FilterState>(defaultFilters);
+  const [filters, setFilters] = useState<FilterState>(defaultFilters as unknown as FilterState);
   const [selectedEmirate, setSelectedEmirate] = useState<string | null>(null);
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const [isDevDescExpanded, setIsDevDescExpanded] = useState(false);
@@ -333,7 +334,7 @@ const DeveloperDetail = () => {
             selectedEmirate={selectedEmirate}
             onEmirateSelect={(emirate) => {
               setSelectedEmirate(emirate);
-              setFilters({ ...defaultFilters, emirate: emirate });
+              setFilters({ ...defaultFilters as unknown as FilterState, emirate: emirate });
             }}
           />
 
@@ -344,19 +345,24 @@ const DeveloperDetail = () => {
           {/* Sentinel for IntersectionObserver */}
           <div ref={filterSentinelRef} className="h-0" />
 
-          {/* Inline filter bar */}
+          {/* Inline filter bar — 2 rows only */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-4 mb-6">
-            <ProjectFilters
-              filters={filters}
-              onFiltersChange={setFilters}
-              communities={communities}
-              trendingAreas={trendingAreas}
-              developers={allDevelopers}
-              showDeveloperFilter={true}
+            <FilterShortcutBar
+              variant="light"
+              filters={shortcutFilters}
+              onFilterChange={setShortcutFilters}
+              searchSlot={
+                <div className="relative">
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
+                  <Input
+                    placeholder="Search projects..."
+                    value={filters.search}
+                    onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                    className="h-8 pl-8 pr-2 text-xs w-full bg-white border-gold/30"
+                  />
+                </div>
+              }
             />
-            <div className="mt-3">
-              <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
-            </div>
           </div>
 
           {/* Spacer when filter is fixed to prevent content hiding under it */}
@@ -367,17 +373,22 @@ const DeveloperDetail = () => {
             <div className="fixed top-0 left-0 right-0 z-[9998] transition-shadow duration-200">
               <div className="mx-0 pt-0">
                 <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
-            <ProjectFilters
-                    filters={filters}
-                    onFiltersChange={setFilters}
-                    communities={communities}
-                    trendingAreas={trendingAreas}
-                    developers={allDevelopers}
-                    showDeveloperFilter={true}
+                  <FilterShortcutBar
+                    variant="light"
+                    filters={shortcutFilters}
+                    onFilterChange={setShortcutFilters}
+                    searchSlot={
+                      <div className="relative">
+                        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
+                        <Input
+                          placeholder="Search projects..."
+                          value={filters.search}
+                          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                          className="h-8 pl-8 pr-2 text-xs w-full bg-white border-gold/30"
+                        />
+                      </div>
+                    }
                   />
-                  <div className="mt-3">
-                    <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
-                  </div>
                 </div>
               </div>
             </div>,
@@ -444,7 +455,7 @@ const DeveloperDetail = () => {
                   variant="secondary"
                   size="sm"
                   onClick={() => {
-                    setFilters(defaultFilters);
+                    setFilters(defaultFilters as unknown as FilterState);
                     setSelectedEmirate(null);
                   }}
                   className="mt-2"
@@ -456,7 +467,7 @@ const DeveloperDetail = () => {
           )}
         </div>
 
-        {/* Divider before DLD Market Widget — champagne bg to match page */}
+        {/* Divider between projects and DLD Market Widget — outside project wrapper */}
         <SectionDivider variant="champagne" />
 
         {/* DLD Market Widget - Live transaction data */}

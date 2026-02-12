@@ -49,6 +49,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   
   const [tileLayer, setTileLayer] = useState<'street' | 'satellite'>('satellite');
   const [mapError, setMapError] = useState<string | null>(null);
+  const [mapInteractive, setMapInteractive] = useState(false);
 
   // Filter to projects with coordinates
   const projectsWithCoords = projects.filter(p => p.latitude && p.longitude);
@@ -125,8 +126,8 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
       const map = L.map(mapContainerRef.current, {
         center,
         zoom: 11,
-        scrollWheelZoom: true,
-        touchZoom: true,
+        scrollWheelZoom: false,
+        touchZoom: false,
         dragging: true,
         zoomControl: false,
       });
@@ -280,6 +281,23 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
           className="h-[400px] w-full"
           style={{ background: '#e5e3df' }}
         />
+        {/* Click to enable overlay */}
+        {!mapInteractive && (
+          <div
+            className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-black/5"
+            onClick={() => {
+              setMapInteractive(true);
+              if (mapInstanceRef.current) {
+                mapInstanceRef.current.scrollWheelZoom.enable();
+                mapInstanceRef.current.touchZoom.enable();
+              }
+            }}
+          >
+            <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-gold/30 text-sm font-medium text-black/70">
+              Click to enable map interaction
+            </div>
+          </div>
+        )}
         <MapNavigationControlsStandalone
           mapInstance={mapInstanceRef.current}
           latitude={projectsWithCoords[0]?.latitude || 25.2048}
