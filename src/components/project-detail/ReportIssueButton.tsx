@@ -1,44 +1,147 @@
-import { AlertCircle } from "lucide-react";
+import { useState } from "react";
+import { AlertCircle, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CONTACT_INFO } from "@/constants/stats";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+const ISSUE_TYPES = [
+  "Incorrect Price",
+  "Incorrect Availability",
+  "Incorrect Payment Plan",
+  "Updated Project Information",
+  "Other",
+];
 
 interface ReportIssueButtonProps {
   projectName: string;
+  projectId?: string;
   projectSlug?: string;
   className?: string;
 }
 
 export default function ReportIssueButton({ 
   projectName, 
+  projectId,
   projectSlug,
   className = "" 
 }: ReportIssueButtonProps) {
-  const handleReport = () => {
-    const subject = encodeURIComponent(`Data Issue Report: ${projectName}`);
-    const body = encodeURIComponent(
-      `Hello JBJ Global Real Estate,\n\n` +
-      `I noticed incorrect information on the listing for "${projectName}".\n\n` +
-      `Issue details:\n` +
-      `[Please describe what information is incorrect]\n\n` +
-      `Correct information:\n` +
-      `[Please provide the correct details]\n\n` +
-      `Page URL: ${window.location.href}\n\n` +
-      `Thank you for your attention to this matter.`
-    );
-    
-    window.open(
-      `mailto:${CONTACT_INFO.email}?subject=${subject}&body=${body}`,
-      '_blank'
-    );
+  const [open, setOpen] = useState(false);
+  const [issueType, setIssueType] = useState("");
+  const [description, setDescription] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!issueType) {
+      toast.error("Please select an issue type");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.from("project_reports" as any).insert({
+        project_id: projectId || projectSlug || projectName,
+        issue_type: issueType,
+        description: description || null,
+      });
+      if (error) throw error;
+      toast.success("Thank you! Your report has been submitted.");
+      setOpen(false);
+      setIssueType("");
+      setDescription("");
+    } catch (err) {
+      console.error("Report submission failed:", err);
+      toast.error("Failed to submit report. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <button
-      onClick={handleReport}
-      className={`flex items-center gap-2 text-muted-foreground hover:text-gold transition-colors text-sm ${className}`}
-    >
-      <AlertCircle className="w-4 h-4" />
-      <span>Notice something incorrect? Report an issue</span>
-    </button>
+    <>
+      {/* Yellow Banner */}
+      <div className={`rounded-xl border border-amber-400/50 bg-gradient-to-r from-amber-50 to-amber-100/80 p-4 flex items-center justify-between gap-4 flex-wrap ${className}`}>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-amber-400/20 flex items-center justify-center flex-shrink-0">
+            <AlertTriangle className="w-5 h-5 text-amber-600" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-amber-900">Noticed something incorrect?</p>
+            <p className="text-xs text-amber-700">Help us keep this project up-to-date</p>
+          </div>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setOpen(true)}
+          className="border-amber-400 text-amber-800 hover:bg-amber-200/50 whitespace-nowrap"
+        >
+          <AlertCircle className="w-4 h-4 mr-1" />
+          Report an issue
+        </Button>
+      </div>
+
+      {/* Report Modal */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-500" />
+              Report an Issue
+            </DialogTitle>
+            <DialogDescription>
+              Noticed something incorrect? Help us keep <strong>{projectName}</strong> up-to-date.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 mt-2">
+            <div>
+              <label className="text-sm font-medium text-foreground mb-1.5 block">Issue Type</label>
+              <Select value={issueType} onValueChange={setIssueType}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select issue type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ISSUE_TYPES.map((type) => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-foreground mb-1.5 block">Tell us what seems wrong</label>
+              <Textarea
+                placeholder="Please describe the issue in detail..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4}
+              />
+            </div>
+
+            <Button
+              onClick={handleSubmit}
+              disabled={submitting || !issueType}
+              className="w-full bg-amber-500 hover:bg-amber-600 text-white"
+            >
+              {submitting ? "Submitting..." : "Submit Report"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

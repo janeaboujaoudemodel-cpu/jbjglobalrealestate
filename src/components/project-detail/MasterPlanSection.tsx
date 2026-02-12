@@ -1,4 +1,4 @@
-import { Map, Building2, Trees, Waves, Car, ShoppingBag } from "lucide-react";
+import { Map, Building2, Trees, Waves, Car, ShoppingBag, Maximize } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
 
 interface MasterPlanSectionProps {
@@ -35,10 +35,15 @@ export default function MasterPlanSection({
   projectName,
   communityName,
 }: MasterPlanSectionProps) {
-  // Only render if we have something to show
   if (!masterPlanImageUrl && !communityHighlights?.length && !nearbyDevelopments?.length) {
     return null;
   }
+
+  const handleMaximize = () => {
+    if (masterPlanImageUrl) {
+      window.open(masterPlanImageUrl, "_blank", "noopener,noreferrer");
+    }
+  };
 
   return (
     <div className="jj-card-inner">
@@ -47,20 +52,26 @@ export default function MasterPlanSection({
         Master Plan {communityName && `- ${communityName}`}
       </h3>
 
-      {/* Master Plan Image */}
+      {/* Master Plan Image with Maximize Button */}
       {masterPlanImageUrl && (
-        <div className="mb-6 rounded-xl overflow-hidden border border-gold/30">
+        <div className="mb-6 rounded-xl overflow-hidden border border-gold/30 relative group">
           <SafeImage
             src={masterPlanImageUrl}
             alt={`${projectName} Master Plan`}
             className="w-full h-auto max-h-[500px] object-contain bg-muted"
             fallbackSrc="/placeholder.svg"
           />
+          <button
+            onClick={handleMaximize}
+            className="absolute top-3 right-3 w-10 h-10 rounded-lg bg-black/60 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/80 transition-all opacity-0 group-hover:opacity-100"
+            aria-label="View full size"
+          >
+            <Maximize className="w-5 h-5" />
+          </button>
         </div>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Community Highlights */}
         {communityHighlights && communityHighlights.length > 0 && (
           <div>
             <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
@@ -85,7 +96,6 @@ export default function MasterPlanSection({
           </div>
         )}
 
-        {/* Nearby Developments */}
         {nearbyDevelopments && nearbyDevelopments.length > 0 && (
           <div>
             <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">

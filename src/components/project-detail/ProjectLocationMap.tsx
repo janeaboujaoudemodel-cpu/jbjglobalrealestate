@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Button } from "@/components/ui/button";
-import { Layers, Maximize } from "lucide-react";
+import { Layers, Maximize, MousePointer } from "lucide-react";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -82,12 +82,9 @@ function DynamicTileLayer({ mapView }: { mapView: MapViewType }) {
   const layerRef = useRef<L.TileLayer | null>(null);
 
   useEffect(() => {
-    // Remove existing layer
     if (layerRef.current) {
       map.removeLayer(layerRef.current);
     }
-
-    // Add new layer
     const { url, attribution } = MAP_TILES[mapView];
     layerRef.current = L.tileLayer(url, { attribution, maxZoom: 19 });
     layerRef.current.addTo(map);
@@ -98,6 +95,21 @@ function DynamicTileLayer({ mapView }: { mapView: MapViewType }) {
       }
     };
   }, [mapView, map]);
+
+  return null;
+}
+
+// Scroll zoom enabler on click
+function ScrollZoomEnabler({ enabled, onEnable }: { enabled: boolean; onEnable: () => void }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (enabled) {
+      map.scrollWheelZoom.enable();
+    } else {
+      map.scrollWheelZoom.disable();
+    }
+  }, [enabled, map]);
 
   return null;
 }
@@ -120,12 +132,11 @@ export default function ProjectLocationMap({
   const [mapView, setMapView] = useState<MapViewType>("satellite");
   const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [scrollZoomEnabled, setScrollZoomEnabled] = useState(false);
 
-  // Default to Dubai coordinates if not provided
   const defaultLat = 25.2048;
   const defaultLng = 55.2708;
 
-  // Build external maps URL
   const mapQuery = `${projectName}${location ? `, ${location}` : ""}, Dubai, UAE`;
   const externalMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
 
@@ -133,7 +144,6 @@ export default function ProjectLocationMap({
     window.open(externalMapsUrl, "_blank", "noopener,noreferrer");
   };
 
-  // Geocode location if no coordinates provided
   useEffect(() => {
     if (latitude && longitude) {
       setCoordinates([latitude, longitude]);
@@ -141,7 +151,6 @@ export default function ProjectLocationMap({
       return;
     }
 
-    // Use Nominatim for geocoding (free, no API key needed)
     const geocodeLocation = async () => {
       try {
         const query = encodeURIComponent(mapQuery);
@@ -149,11 +158,9 @@ export default function ProjectLocationMap({
           `https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=1`
         );
         const data = await response.json();
-        
         if (data && data.length > 0) {
           setCoordinates([parseFloat(data[0].lat), parseFloat(data[0].lon)]);
         } else {
-          // Fallback to default Dubai coordinates
           setCoordinates([defaultLat, defaultLng]);
         }
       } catch (error) {
@@ -191,11 +198,11 @@ export default function ProjectLocationMap({
   }
 
   return (
-    <div className={`rounded-xl overflow-hidden border border-gold/30 ${className}`} style={{ height: 450 }}>
+    <div className={`rounded-xl overflow-hidden border border-gold/30 relative ${className}`} style={{ height: 450 }}>
       <MapContainer
         center={coordinates}
         zoom={15}
-        scrollWheelZoom={true}
+        scrollWheelZoom={false}
         touchZoom={true}
         dragging={true}
         style={{ height: "100%", width: "100%" }}
@@ -203,6 +210,7 @@ export default function ProjectLocationMap({
         attributionControl={false}
       >
         <DynamicTileLayer mapView={mapView} />
+        <ScrollZoomEnabler enabled={scrollZoomEnabled} onEnable={() => setScrollZoomEnabled(true)} />
         <MapViewToggle 
           mapView={mapView} 
           onViewChange={setMapView}
@@ -216,6 +224,19 @@ export default function ProjectLocationMap({
           </Popup>
         </Marker>
       </MapContainer>
+
+      {/* Click to enable scroll zoom overlay */}
+      {!scrollZoomEnabled && (
+        <div
+          className="absolute inset-0 z-[999] flex items-center justify-center cursor-pointer"
+          onClick={() => setScrollZoomEnabled(true)}
+        >
+          <div className="bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 pointer-events-none">
+            <MousePointer className="w-4 h-4" />
+            Click to enable map interaction
+          </div>
+        </div>
+      )}
     </div>
   );
 }

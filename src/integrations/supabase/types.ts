@@ -14433,6 +14433,33 @@ export type Database = {
           },
         ]
       }
+      project_reports: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          issue_type: string
+          project_id: string
+          reporter_email: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          issue_type: string
+          project_id: string
+          reporter_email?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          issue_type?: string
+          project_id?: string
+          reporter_email?: string | null
+        }
+        Relationships: []
+      }
       project_sync_status: {
         Row: {
           created_at: string | null
