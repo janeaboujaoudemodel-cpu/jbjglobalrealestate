@@ -1,51 +1,41 @@
 
 
-## Auto-Play Videos in Mega Menu Cards and Add Missing Videos
+## Fixes: Divider Background, Page Contrast, Mode Dropdown, and Filter Row Layout
 
-### Problem
-1. Videos in mega menu featured cards only play on hover -- they should start playing immediately when the dropdown opens
-2. Areas and Developers mega menus have no video at all
-3. The image `menu-dubai-skyline.jpg` is used in both Developers and InvestorHub (duplicate)
+### 1. Fix SectionDivider Background on Developer Page
 
-### Changes
+**Problem**: The `SectionDivider` component renders with `bg-black`, creating a jarring black stripe between the champagne project grid and the DLD Market Widget.
 
-#### 1. Auto-play video immediately on mount (not on hover)
+**Fix in `src/pages/DeveloperDetail.tsx`**: Replace `<SectionDivider fullWidth />` with an inline champagne-background divider that uses the gold sparkle line but inherits the surrounding champagne background color instead of black. Alternatively, pass a background override or render a custom divider inline with the champagne gradient background, keeping only the gold horizontal line and sparkle icon.
 
-**File: `src/components/header/mega-menu-primitives.tsx`**
+### 2. Darken Project Page Main Background for Card Contrast
 
-- Replace the `handleMouseEnter` / `handleMouseLeave` hover-based play/pause with a `useEffect` that calls `videoRef.current.play()` on mount
-- Change the video element from `opacity-0 group-hover:opacity-100` to `opacity-100` so it's visible immediately
-- Keep the static image as a loading fallback underneath (it shows while the video loads)
-- Remove `onMouseEnter` and `onMouseLeave` from the Link wrapper
+**Problem**: The main content background (`#FDFBF7 -> #F5F0E6 -> #EDE4D3`) is the same champagne as the cards inside, resulting in no contrast -- cards blend into the page.
 
-#### 2. Add unique videos to Areas and Developers menus
+**Fix in `src/components/project-detail/ProjectDetailLayout.tsx`** (line 638): Change the main section background to match the darker champagne tone used in Row 2 of the sticky nav: `from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8]`. This is the exact gradient from line 596. The cards inside (which use `bg-card` or lighter champagne) will now pop with visible contrast.
 
-**File: `src/components/header/MegaMenuAreas.tsx`**
-- Import `dubai-landmarks-hero.mp4` and pass it as the `video` prop to MegaMenuFeaturedCard (landmarks video suits the "areas" context)
+### 3. Mode Button -- Open Dropdown Instead of Toggle
 
-**File: `src/components/header/MegaMenuDevelopers.tsx`**
-- Import `burj-al-arab-aerial.mp4` and pass it as the `video` prop to MegaMenuFeaturedCard (aerial shot suits the "developers" context)
+**Problem**: The Mode button in `UtilityButtons` (FilterShortcutBar.tsx line 662) calls `toggleMode()` on click, cycling modes without a dropdown. User wants a dropdown to appear showing available modes.
 
-#### 3. No duplicate videos or images
+**Fix in `src/components/filters/FilterShortcutBar.tsx`** (lines 572-665): Replace the simple `<button onClick={toggleMode}>` with a `<Popover>` containing the three mode options (Investor, Broker, Both). Each option calls `setMode(...)` and closes the popover. The trigger button remains the same styling but opens a dropdown instead of toggling.
 
-All video assignments after the fix:
+### 4. Rearrange Row 1 Layout: Left = Saved + Currency + Mode, Center = Sort Pills, Right = Map
 
-| Menu | Video | Unique |
-|------|-------|--------|
-| Buy | dubai-buying-hero.mp4 | Yes |
-| Sell | dubai-selling-hero.mp4 | Yes |
-| Rent | dubai-rental-hero.mp4 | Yes |
-| Projects | burj-khalifa-day-to-night.mp4 | Yes |
-| Areas | dubai-landmarks-hero.mp4 | Yes (new) |
-| Developers | burj-al-arab-aerial.mp4 | Yes (new) |
-| InvestorHub | dubai-investment-hero.mp4 | Yes |
-| BrokerHub | broker-dashboard-hero.mp4 | Yes |
+**Current Row 1**: Left: `[Saved] [Currency] [Mode]` | Right: `[Map] [Newest] [Low-High] [High-Low] [A-Z]`
 
-### Files to Change
+**Requested Row 1**: Left: `[Map] [Saved] [Currency] [Mode]` | Center: `[Newest] [Low-High] [High-Low] [A-Z]`
 
-| File | Change |
+**Fix in `src/components/filters/FilterShortcutBar.tsx`**:
+- Move the Map button from the right-side sort group into the left `UtilityButtons` group (first position)
+- Change Row 1 layout to: left group has `[Map] [Saved] [Currency] [Mode]`, and the sort pills are centered using `justify-center` with `flex-1`
+
+### Technical Details
+
+| File | Changes |
 |------|--------|
-| `src/components/header/mega-menu-primitives.tsx` | Auto-play video on mount instead of hover; show video immediately (opacity-100) |
-| `src/components/header/MegaMenuAreas.tsx` | Add `dubai-landmarks-hero.mp4` video import and pass to featured card |
-| `src/components/header/MegaMenuDevelopers.tsx` | Add `burj-al-arab-aerial.mp4` video import and pass to featured card |
+| `src/pages/DeveloperDetail.tsx` | Replace `<SectionDivider>` with a champagne-background divider (gold line + sparkle icon on matching champagne bg) |
+| `src/components/project-detail/ProjectDetailLayout.tsx` | Change main content background from light champagne to darker champagne (`from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8]`) for card contrast |
+| `src/components/filters/FilterShortcutBar.tsx` | (a) Replace Mode toggle button with a Popover dropdown showing Investor/Broker/Both options; (b) Move Map button to left utility group; (c) Center sort pills in Row 1 |
+| `src/components/ui/section-divider.tsx` | Add optional `bg` prop to override the default `bg-black` background, allowing champagne-toned dividers |
 
