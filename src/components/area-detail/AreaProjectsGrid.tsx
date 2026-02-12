@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, ArrowUpRight, Search, X, Building2, Filter } from "lucide-react";
+import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   const [developerFilter, setDeveloperFilter] = useState("all");
   const [bedroomFilter, setBedroomFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
+  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const [isFixed, setIsFixed] = useState(false);
   const [bottomReached, setBottomReached] = useState(false);
   const placeholderRef = useRef<HTMLDivElement>(null);
@@ -315,6 +317,9 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
             <div className="flex flex-wrap items-center gap-3">
               {filterBarContent}
             </div>
+            <div className="mt-3">
+              <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
+            </div>
           </div>
 
           {/* Phase 2: Fixed portal copy — only when scrolled past sentinel */}
@@ -322,8 +327,13 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
             <div
               className="fixed top-24 sm:top-28 lg:top-32 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200"
             >
-              <div className="flex flex-wrap items-center gap-3 container mx-auto px-4">
-                {filterBarContent}
+              <div className="container mx-auto px-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  {filterBarContent}
+                </div>
+                <div className="mt-3">
+                  <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
+                </div>
               </div>
             </div>,
             document.body
