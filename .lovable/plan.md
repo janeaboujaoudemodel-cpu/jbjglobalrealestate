@@ -1,79 +1,77 @@
 
 
-## Fixes: Status Label "Sold Out", Advanced Filter, Hover Effects, Icons, Row 1 Layout, and Developer Page Separation
+## Advanced Filter Panel + "Sold Out" Fix + Handover Extension to Q4 2035
 
-### 1. Replace "Out of Stock" with "Sold Out" Everywhere in UI
+### 1. Replace "Out of Stock" with "Sold Out" in All UI Labels
 
-The status option in `FilterShortcutBar.tsx` (line 102) shows "Out of Stock" as the display label. This must be changed to "Sold Out".
+The label "Out of Stock" appears as a display label in one key location:
 
-**Files to update:**
-- `src/components/filters/FilterShortcutBar.tsx` line 102: Change `label: 'Out of Stock'` to `label: 'Sold Out'`
-- `src/components/ProjectFilters.tsx` line 43: Update comment from `'Out of Stock'` to `'Sold Out'`
+**File: `src/components/filters/FilterShortcutBar.tsx` (line 102)**
+- Change `label: 'Out of Stock'` to `label: 'Sold Out'`
 
-The `filterConfig.ts` and `saleStatus.ts` already correctly map to "Sold Out" internally -- no changes needed there. The `SaleStatusFilter.tsx` uses `SALE_STATUS_OPTIONS` from `filterConfig.ts` which already shows "Sold Out" as the label.
+The internal value `'Sold Out'` is already correct in the database and filter config. The remaining "Out of Stock" references in other files are internal mapping logic (converting API values to "Sold Out") and filter exclusion logic (checking `.includes('out of stock')`) -- these must stay as-is to handle legacy API data.
 
-### 2. Add Advanced Filters Button to FilterShortcutBar (Row 2)
+### 2. Extend Handover Years to Q4 2035
 
-Add an "Advanced" pill button at the end of Row 2 (after Hide Sold, before Reset All) that opens a popover/sheet containing advanced criteria:
-- Views (Sea View, City View, Canal View, Park View, Golf View, Landmark View)
-- Amenities (Pool, Gym, Spa, Kids Play Area, BBQ, Concierge)
-- Premium features (Beachfront, Waterfront, Golf Course, Private Pool)
-- Furnished status (Furnished, Semi-Furnished, Unfurnished)
+**File: `src/components/filters/FilterShortcutBar.tsx` (line 119)**
+- Change `YEARS` from `['2025', '2026', '2027', '2028', '2029', '2030']` to include every year up to 2035: `['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035']`
+- Update `defaultShortcutFilters.handoverTo` to `{ quarter: 'Q4', year: '2035' }`
 
-### 3. Add Hover Effects on Filter Dropdown Options
+### 3. Build the Advanced Filter Panel (Full-Screen Sheet/Dialog)
 
-Currently, the toggle pill options inside popovers (Property Type, Bedrooms, Status, Construction, Handover selects) lack visible hover effects.
+Create a new component `src/components/filters/AdvancedFilterPanel.tsx` that opens as a scrollable `Sheet` (slide-in panel) styled with the gold/champagne theme. Based on the reference screenshots, it includes:
 
-**Fix in `FilterShortcutBar.tsx`:**
-- Update `togglePillOff` class (line 160) to include a stronger hover: `hover:bg-gold/10 hover:border-gold/50 hover:shadow-sm`
-- Add hover transition to all option buttons inside popovers
+**Header:**
+- Title: "New Off Plan Projects" with a gold live project count (fetched from the database)
+- Search input: "Type a project, developer or district"
+- Close (X) button
 
-### 4. Residential/Commercial Tab Buttons -- Match Dropdown Color with Gold Active State
+**Sections (scrollable body):**
 
-The Residential/Commercial `TabsTrigger` buttons (line 404-406) use default `bg-white/60` styling. 
+| Section | UI Element | Data Source |
+|---------|-----------|-------------|
+| Location | Searchable multi-select dropdown with all 7 UAE Emirates | `EMIRATES_OPTIONS` from filterConfig |
+| By Company | Searchable multi-select dropdown with developer logos | Fetch from `projects` table distinct developers |
+| Projects Payment Plan | Slider 0-100% with pre-handover/post-handover inputs and toggle | Existing payment plan filter state |
+| Property Price | Per unit / Per sqft / Per sqm tabs + Min/Max inputs with AED | Existing price filter state |
+| Property Size | Min/Max sqft inputs with clear buttons | New filter fields added to `ShortcutFilterState` |
+| Development Status | Toggle pills: Completed, Presale, Under Construction | Existing `constructionStatuses` |
+| Unit Type | Toggle pills: Apartments, Villa, Townhouse, Duplex, Penthouse | Existing `propertyTypes` |
+| Bedrooms | Toggle pills: Studio, 1 BR, 2 BR, 3 BR, 4 BR, 5+ BR | Existing `bedrooms` |
+| Sales Status | Colored dot pills: Announced, Presale (EOI), Start of Sales, On Sale, **Sold Out** | Existing `statuses` |
+| Project Handover By | From/To quarter+year selects (Q1 2025 to Q4 2035) | Existing `handoverFrom`/`handoverTo` |
 
-**Fix:**
-- Change the `TabsList` background to match the popover champagne gradient
-- Add a gold champagne active state for the selected tab: `data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#EDE0C8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold`
+**Footer (sticky at bottom):**
+- "Clear all" button + Heart (save) icon
+- "Show [X] projects" button (gold/champagne gradient) with live count
 
-### 5. Make Heart Icon Bigger Next to "Save"
+**Styling:** Gold champagne gradient background matching the sticky filter bar (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`), `border-2 border-gold/40`, champagne-styled inputs and dropdowns.
 
-Line 508: Change `Heart` icon from `w-3.5 h-3.5` to `w-4.5 h-4.5`
+**Live Count:** Query the database with a lightweight `SELECT COUNT(*)` filtered by the current advanced filter state, debounced by 500ms. The count updates as filters change.
 
-### 6. Remove Dot Behind "Construction" and Remove Icons Before Filter Pills
+### 4. Add "Advanced" Button to FilterShortcutBar Row 2
 
-Line 481-485: The `HardHat` icon before "Construction" shows as a dot-like element. Remove the small icons before these pill triggers:
-- Remove icon from Apartments/Property Type pill (Building2)
-- Remove icon from Handover pill (Calendar) 
-- Remove icon from Payments pill (CreditCard)
-- Remove icon from Bedrooms pill (Bed)
+**File: `src/components/filters/FilterShortcutBar.tsx`**
+- Add an "Advanced" pill button after "Construction" and before "Save"
+- Clicking it opens the `AdvancedFilterPanel` sheet
+- Import and render the new component
 
-Actually, the user says "remove it" for the small icons but then says "if the other icons you want to keep, you have to make them bigger." So the fix is: **make all pill trigger icons bigger** -- change from `w-3.5 h-3.5` to `w-4.5 h-4.5` across all pill triggers. For the Status icon (Activity), make it even more visible at `w-5 h-5`.
+### 5. Update ShortcutFilterState Interface
 
-### 7. Move Utility Buttons (Map, Saved, Currency, Mode) to the RIGHT Side
-
-The user has repeatedly asked for these 4 buttons to be on the RIGHT side, with sort pills centered. Currently they are on the LEFT (lines 191-198).
-
-**Fix in `FilterShortcutBar.tsx` (lines 189-212):**
-- Restructure Row 1: Sort pills on the left/center (`flex-1 justify-center`), utility buttons (Map, Saved, Currency, Mode) on the RIGHT (`flex-shrink-0`)
-- Swap the order of the two `div` groups
-
-### 8. Filter Bar Header -- Match Background and Edge-to-Edge
-
-The filter bar background should match the page layer color and extend full edge-to-edge. This applies to the inline filter bar in `DeveloperDetail.tsx` (line 347) and the fixed portal bar (line 368).
-
-### 9. Developer Page -- Separate Listings from DLD Market Widget
-
-On `DeveloperDetail.tsx`:
-- Wrap the project cards grid and "Explore All X Projects" button inside a champagne-background container card to visually separate them from the DLD Market Widget below
-- Add padding/margin between the listing container and the DLD widget
-- The DLD widget width should match the card grid width
+**File: `src/components/filters/FilterShortcutBar.tsx`**
+- Add new fields to `ShortcutFilterState`:
+  - `sizeMin: string` (sqft)
+  - `sizeMax: string` (sqft)
+  - `emirates: string[]`
+  - `developers: string[]`
+  - `searchQuery: string` (for the advanced filter search box)
+- Update `defaultShortcutFilters` with empty defaults
 
 ### Technical Summary
 
 | File | Changes |
 |------|---------|
-| `src/components/filters/FilterShortcutBar.tsx` | (1) Fix "Out of Stock" to "Sold Out"; (2) Add Advanced filter popover; (3) Hover effects on toggle pills; (4) Gold active state for Residential/Commercial tabs; (5) Bigger heart icon; (6) Bigger pill icons; (7) Move utility buttons to RIGHT side; (8) Match background color |
-| `src/components/ProjectFilters.tsx` | Fix "Out of Stock" comment to "Sold Out" |
-| `src/pages/DeveloperDetail.tsx` | Wrap listings in champagne container; add spacing before DLD widget; match DLD width to cards |
+| `src/components/filters/FilterShortcutBar.tsx` | Fix "Out of Stock" to "Sold Out"; extend YEARS to 2035; add Advanced button; expand `ShortcutFilterState` with new fields |
+| `src/components/filters/AdvancedFilterPanel.tsx` | **NEW** -- Full advanced filter sheet with all sections, live count, champagne styling |
+| `src/utils/applyShortcutFilters.ts` | Add filtering logic for new fields (emirates, developers, size range, search query) |
 
