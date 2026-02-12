@@ -975,11 +975,12 @@ export function ReellyImportPanel() {
           {/* ── Divider ── */}
           <div className="border-t border-emerald-200" />
 
-          {/* ── 5. Test Single Project ── */}
+          {/* ── 5. Test Project Enrichment + Provident Extraction ── */}
           <div>
             <h3 className="font-semibold text-emerald-900 mb-3 flex items-center gap-2">
-              <Zap className="w-4 h-4" /> Test Project Enrichment
+              <Zap className="w-4 h-4" /> Project Enrichment (Test → Bulk)
             </h3>
+            <p className="text-sm text-emerald-700 mb-3">Step 1: Test a single project enrichment. Step 2: Run bulk extraction after confirming quality.</p>
             <div className="flex gap-2 mb-2">
               <input type="text" placeholder="Enter project slug" value={enrichTestSlug} onChange={(e) => setEnrichTestSlug(e.target.value)} className="flex-1 px-3 py-2 border border-zinc-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
               <Button variant="outline" size="sm" className="text-xs whitespace-nowrap" onClick={async () => {
@@ -1134,128 +1135,107 @@ export function ReellyImportPanel() {
             {enrichTestResult && !enrichTestResult.success && (
               <Alert className="bg-red-50 border-red-300 mt-2">
                 <XCircle className="h-4 w-4 text-red-600" />
-                <AlertDescription className="text-red-700">{enrichTestResult.error}</AlertDescription>
+                <AlertDescription className="text-red-700">
+                  {/* Suppress Reelly-specific errors when showing Provident extraction results */}
+                  {(enrichTestResult.error || "").replace(/Reelly API error:?\s*\d*/gi, "Source API unavailable").replace(/reelly/gi, "Source")}
+                </AlertDescription>
               </Alert>
             )}
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* ═══════════════════════════════════════════════════════ */}
-      {/* ██  SECTION 2: PROVIDENT ENRICHMENT                  */}
-      {/* ═══════════════════════════════════════════════════════ */}
-      <Card className="bg-gradient-to-br from-orange-50 to-amber-50 border-orange-300 shadow-lg">
-        <CardHeader>
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-orange-500">
-              <FileText className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <CardTitle className="text-xl text-orange-900">Provident Enrichment</CardTitle>
-              <CardDescription className="text-orange-700">
-                Firecrawl extraction + free page-data enrichment for Provident-sourced projects
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
+            {/* ── Provident Firecrawl Extraction (inside test flow) ── */}
+            <div className="border-t border-emerald-200 pt-4 mt-4">
+              <h4 className="font-semibold text-emerald-800 mb-2 flex items-center gap-2 text-sm">
+                <CloudDownload className="w-4 h-4" /> Provident Firecrawl Extraction
+              </h4>
+              <p className="text-xs text-emerald-600 mb-3">After confirming single-project enrichment works, use these to extract from Provident pages.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                <Button onClick={() => handleProvidentExtract()} disabled={isProvidentExtracting || isFullProvidentRunning} className="bg-emerald-600 hover:bg-emerald-700">
+                  {isProvidentExtracting ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Extracting...</> : <><Zap className="h-4 w-4 mr-2" />Extract Single (1)</>}
+                </Button>
+                <Button onClick={handleFullProvidentExtract} disabled={isProvidentExtracting || isFullProvidentRunning} variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-100">
+                  {isFullProvidentRunning ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Running Full...</> : <><Download className="h-4 w-4 mr-2" />Full Extraction (All)</>}
+                </Button>
+              </div>
 
-          {/* ── Firecrawl Extraction ── */}
-          <div>
-            <h3 className="font-semibold text-orange-900 mb-3 flex items-center gap-2">
-              <CloudDownload className="w-4 h-4" /> Firecrawl Extraction
-            </h3>
-            <p className="text-sm text-orange-700 mb-3">Scrape Provident project pages for images, PDFs, brochures, floor plans using Firecrawl credits.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-              <Button onClick={() => handleProvidentExtract()} disabled={isProvidentExtracting || isFullProvidentRunning} className="bg-orange-600 hover:bg-orange-700">
-                {isProvidentExtracting ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Extracting...</> : <><Zap className="h-4 w-4 mr-2" />Extract Single (1)</>}
-              </Button>
-              <Button onClick={handleFullProvidentExtract} disabled={isProvidentExtracting || isFullProvidentRunning} variant="outline" className="border-orange-300 text-orange-700 hover:bg-orange-100">
-                {isFullProvidentRunning ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Running Full...</> : <><Download className="h-4 w-4 mr-2" />Full Extraction (All)</>}
-              </Button>
-            </div>
-
-            {isFullProvidentRunning && (
-              <div className="bg-white/80 rounded-xl p-4 border border-orange-200 mb-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <RefreshCw className="h-5 w-5 text-orange-600 animate-spin" />
-                    <span className="font-medium">Running full Provident extraction...</span>
+              {isFullProvidentRunning && (
+                <div className="bg-white/80 rounded-xl p-4 border border-emerald-200 mb-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <RefreshCw className="h-5 w-5 text-emerald-600 animate-spin" />
+                      <span className="font-medium text-sm">Running full extraction...</span>
+                    </div>
+                    <Button variant="outline" size="sm" className="border-red-300 text-red-600" onClick={() => setFullProvidentStopRequested(true)}>Stop</Button>
                   </div>
-                  <Button variant="outline" size="sm" className="border-red-300 text-red-600" onClick={() => setFullProvidentStopRequested(true)}>Stop</Button>
-                </div>
-                <div className="grid grid-cols-4 gap-3 mt-3">
-                  <div className="text-center"><p className="text-xl font-bold text-orange-700">{fullProvidentProgress.processed}</p><p className="text-xs text-zinc-500">Processed</p></div>
-                  <div className="text-center"><p className="text-xl font-bold text-blue-600">{fullProvidentProgress.docs}</p><p className="text-xs text-zinc-500">Docs</p></div>
-                  <div className="text-center"><p className="text-xl font-bold text-emerald-600">{fullProvidentProgress.images}</p><p className="text-xs text-zinc-500">Images</p></div>
-                  <div className="text-center"><p className="text-xl font-bold text-red-600">{fullProvidentProgress.errors}</p><p className="text-xs text-zinc-500">Errors</p></div>
-                </div>
-              </div>
-            )}
-
-            {providentResult && !isFullProvidentRunning && (
-              <div className="bg-white/80 rounded-xl p-4 border border-orange-200">
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                  <div className="bg-orange-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-orange-700">{providentResult.processed || 0}</p><p className="text-xs text-zinc-500">Processed</p></div>
-                  <div className="bg-blue-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-blue-700">{providentResult.total_pdfs_found || 0}</p><p className="text-xs text-zinc-500">PDFs Found</p></div>
-                  <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{providentResult.total_images_found || providentResult.total_images_inserted || 0}</p><p className="text-xs text-zinc-500">Images</p></div>
-                  <div className="bg-cyan-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-cyan-700">{providentResult.total_docs_inserted || 0}</p><p className="text-xs text-zinc-500">Docs Inserted</p></div>
-                  <div className={`rounded-lg p-3 text-center ${(providentResult.errors || 0) > 0 ? 'bg-red-50' : 'bg-zinc-50'}`}><p className={`text-xl font-bold ${(providentResult.errors || 0) > 0 ? 'text-red-600' : 'text-zinc-400'}`}>{providentResult.errors || 0}</p><p className="text-xs text-zinc-500">Errors</p></div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* ── Divider ── */}
-          <div className="border-t border-orange-200" />
-
-          {/* ── Page-Data Enrichment (Free) ── */}
-          <div>
-            <h3 className="font-semibold text-orange-900 mb-3 flex items-center gap-2">
-              <FileText className="w-4 h-4" /> Page-Data Enrichment (Free)
-            </h3>
-            <p className="text-sm text-orange-700 mb-3">
-              Uses free Provident page-data.json to fill FAQs, descriptions, amenities, brochure links — no Firecrawl credits required.
-            </p>
-            <Button onClick={handleProvidentPageDataEnrich} disabled={isBulkEnriching} className="w-full bg-orange-600 hover:bg-orange-700 font-bold py-4">
-              {isBulkEnriching ? <><RefreshCw className="h-5 w-5 mr-2 animate-spin" />Enriching Provident Projects...</> : <><Zap className="h-5 w-5 mr-2" />Enrich All Provident Projects (Free)</>}
-            </Button>
-
-            {isBulkEnriching && (
-              <div className="bg-white/80 rounded-xl p-4 border border-orange-200 mt-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <RefreshCw className="h-5 w-5 text-orange-600 animate-spin" />
-                    <span className="font-medium">Running Provident enrichment...</span>
+                  <div className="grid grid-cols-4 gap-3 mt-3">
+                    <div className="text-center"><p className="text-xl font-bold text-emerald-700">{fullProvidentProgress.processed}</p><p className="text-xs text-zinc-500">Processed</p></div>
+                    <div className="text-center"><p className="text-xl font-bold text-blue-600">{fullProvidentProgress.docs}</p><p className="text-xs text-zinc-500">Docs</p></div>
+                    <div className="text-center"><p className="text-xl font-bold text-emerald-600">{fullProvidentProgress.images}</p><p className="text-xs text-zinc-500">Images</p></div>
+                    <div className="text-center"><p className="text-xl font-bold text-red-600">{fullProvidentProgress.errors}</p><p className="text-xs text-zinc-500">Errors</p></div>
                   </div>
-                  <Button variant="outline" size="sm" className="border-red-300 text-red-600" onClick={() => setFullAiStopRequested(true)}>Stop</Button>
                 </div>
-                <div className="grid grid-cols-3 gap-3 mt-3">
-                  <div className="text-center"><p className="text-xl font-bold text-orange-700">{fullAiProgress.processed}</p><p className="text-xs text-zinc-500">Processed</p></div>
-                  <div className="text-center"><p className="text-xl font-bold text-emerald-600">{fullAiProgress.enriched}</p><p className="text-xs text-zinc-500">Enriched</p></div>
-                  <div className="text-center"><p className="text-xl font-bold text-red-600">{fullAiProgress.errors}</p><p className="text-xs text-zinc-500">Errors</p></div>
-                </div>
-              </div>
-            )}
+              )}
 
-            {bulkEnrichResult && !isBulkEnriching && (
-              <div className={`mt-4 ${bulkEnrichResult.success ? '' : ''}`}>
-                {bulkEnrichResult.success ? (
-                  <Alert className="bg-emerald-50 border-emerald-300">
-                    <CheckCircle className="h-4 w-4 text-emerald-600" />
-                    <AlertTitle className="text-emerald-700">Enrichment Complete</AlertTitle>
-                    <AlertDescription className="text-emerald-600">
-                      <strong>{bulkEnrichResult.processed}</strong> processed, <strong>{bulkEnrichResult.images_added || 0}</strong> images, <strong>{bulkEnrichResult.docs_added || 0}</strong> docs, <strong>{bulkEnrichResult.fields_updated || 0}</strong> fields updated
-                    </AlertDescription>
-                  </Alert>
-                ) : (
-                  <Alert className="bg-red-50 border-red-300">
-                    <XCircle className="h-4 w-4 text-red-600" />
-                    <AlertDescription className="text-red-700">{bulkEnrichResult.error || "Failed"}</AlertDescription>
-                  </Alert>
-                )}
-              </div>
-            )}
+              {providentResult && !isFullProvidentRunning && (
+                <div className="bg-white/80 rounded-xl p-4 border border-emerald-200 mb-4">
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{providentResult.processed || 0}</p><p className="text-xs text-zinc-500">Processed</p></div>
+                    <div className="bg-blue-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-blue-700">{providentResult.total_pdfs_found || 0}</p><p className="text-xs text-zinc-500">PDFs Found</p></div>
+                    <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{providentResult.total_images_found || providentResult.total_images_inserted || 0}</p><p className="text-xs text-zinc-500">Images</p></div>
+                    <div className="bg-cyan-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-cyan-700">{providentResult.total_docs_inserted || 0}</p><p className="text-xs text-zinc-500">Docs Inserted</p></div>
+                    <div className={`rounded-lg p-3 text-center ${(providentResult.errors || 0) > 0 ? 'bg-red-50' : 'bg-zinc-50'}`}><p className={`text-xl font-bold ${(providentResult.errors || 0) > 0 ? 'text-red-600' : 'text-zinc-400'}`}>{providentResult.errors || 0}</p><p className="text-xs text-zinc-500">Errors</p></div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ── Page-Data Enrichment (Free) ── */}
+            <div className="border-t border-emerald-200 pt-4 mt-4">
+              <h4 className="font-semibold text-emerald-800 mb-2 flex items-center gap-2 text-sm">
+                <FileText className="w-4 h-4" /> Page-Data Enrichment (Free)
+              </h4>
+              <p className="text-xs text-emerald-600 mb-3">
+                Uses free page-data.json to fill FAQs, descriptions, amenities — no Firecrawl credits.
+              </p>
+              <Button onClick={handleProvidentPageDataEnrich} disabled={isBulkEnriching} className="w-full bg-emerald-600 hover:bg-emerald-700 font-bold py-3">
+                {isBulkEnriching ? <><RefreshCw className="h-5 w-5 mr-2 animate-spin" />Enriching...</> : <><Zap className="h-5 w-5 mr-2" />Enrich All (Free)</>}
+              </Button>
+
+              {isBulkEnriching && (
+                <div className="bg-white/80 rounded-xl p-4 border border-emerald-200 mt-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <RefreshCw className="h-5 w-5 text-emerald-600 animate-spin" />
+                      <span className="font-medium text-sm">Running enrichment...</span>
+                    </div>
+                    <Button variant="outline" size="sm" className="border-red-300 text-red-600" onClick={() => setFullAiStopRequested(true)}>Stop</Button>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3 mt-3">
+                    <div className="text-center"><p className="text-xl font-bold text-emerald-700">{fullAiProgress.processed}</p><p className="text-xs text-zinc-500">Processed</p></div>
+                    <div className="text-center"><p className="text-xl font-bold text-emerald-600">{fullAiProgress.enriched}</p><p className="text-xs text-zinc-500">Enriched</p></div>
+                    <div className="text-center"><p className="text-xl font-bold text-red-600">{fullAiProgress.errors}</p><p className="text-xs text-zinc-500">Errors</p></div>
+                  </div>
+                </div>
+              )}
+
+              {bulkEnrichResult && !isBulkEnriching && (
+                <div className="mt-4">
+                  {bulkEnrichResult.success ? (
+                    <Alert className="bg-emerald-50 border-emerald-300">
+                      <CheckCircle className="h-4 w-4 text-emerald-600" />
+                      <AlertTitle className="text-emerald-700">Enrichment Complete</AlertTitle>
+                      <AlertDescription className="text-emerald-600">
+                        <strong>{bulkEnrichResult.processed}</strong> processed, <strong>{bulkEnrichResult.images_added || 0}</strong> images, <strong>{bulkEnrichResult.docs_added || 0}</strong> docs, <strong>{bulkEnrichResult.fields_updated || 0}</strong> fields updated
+                      </AlertDescription>
+                    </Alert>
+                  ) : (
+                    <Alert className="bg-red-50 border-red-300">
+                      <XCircle className="h-4 w-4 text-red-600" />
+                      <AlertDescription className="text-red-700">{bulkEnrichResult.error || "Failed"}</AlertDescription>
+                    </Alert>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>

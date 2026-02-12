@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Calendar, Landmark, ExternalLink, Loader2, Newspaper, Sparkles, TrendingUp, CheckCircle, BarChart3, Lightbulb } from "lucide-react";
+import { ArrowLeft, Calendar, Landmark, ExternalLink, Newspaper, Sparkles, TrendingUp, CheckCircle, BarChart3, Lightbulb, Building2, Banknote, Gift, MapPin, Globe } from "lucide-react";
+import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/SEOHead";
@@ -7,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { renderMarkdownToHtml } from "@/lib/markdownUtils";
 import { formatDisplayDate } from "@/utils/formatDate";
+import { ytd2026 as ytd2026Data, topAreas2026 as topAreas2026Data, topNationalities as topNationalitiesData } from "@/constants/dldMarketData";
 
 const CATEGORY_IMAGES: Record<string, string> = {
   "Policy": "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=90",
@@ -129,7 +131,7 @@ const NewsDetail = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-gold animate-spin" />
+        <BrandedLoader text="Loading article..." />
       </div>
     );
   }
@@ -327,6 +329,135 @@ const NewsDetail = () => {
                 </div>
               </div>
             )}
+
+            {/* Dubai Market Intelligence Section */}
+            <div className="mt-12 pt-8 border-t border-gold/20">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] border border-gold/30 flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-black" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    Dubai Market Intelligence
+                  </h3>
+                  <p className="text-xs text-zinc-500">Source: Dubai Land Department (DLD) · 2026 YTD</p>
+                </div>
+              </div>
+
+              {/* KPIs */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div className="text-center bg-white/60 rounded-xl p-4 border border-gold/10">
+                  <p className="text-2xl font-bold text-gold">{ytd2026Data.value}</p>
+                  <p className="text-xs text-zinc-600">YTD Value</p>
+                </div>
+                <div className="text-center bg-white/60 rounded-xl p-4 border border-gold/10">
+                  <p className="text-2xl font-bold text-gold">{ytd2026Data.transactions.toLocaleString()}+</p>
+                  <p className="text-xs text-zinc-600">Transactions</p>
+                </div>
+                <div className="text-center bg-white/60 rounded-xl p-4 border border-gold/10">
+                  <p className="text-2xl font-bold text-gold">{ytd2026Data.growth}</p>
+                  <p className="text-xs text-zinc-600">YoY Growth</p>
+                </div>
+                <div className="text-center bg-white/60 rounded-xl p-4 border border-gold/10">
+                  <p className="text-2xl font-bold text-gold">{ytd2026Data.topArea}</p>
+                  <p className="text-xs text-zinc-600">Top Area</p>
+                </div>
+              </div>
+
+              {/* Transaction Breakdown */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Building2 className="w-4 h-4 text-gold" />
+                    <span className="text-xs font-semibold text-black uppercase tracking-wide">Transaction Type</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-zinc-700">Off-plan</span>
+                      <span className="text-sm font-bold text-black">~{ytd2026Data.offPlan.toLocaleString()}</span>
+                    </div>
+                    <div className="w-full bg-zinc-200 rounded-full h-2">
+                      <div className="bg-gold rounded-full h-2" style={{ width: `${(ytd2026Data.offPlan / (ytd2026Data.offPlan + ytd2026Data.secondary) * 100).toFixed(0)}%` }} />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-zinc-700">Secondary</span>
+                      <span className="text-sm font-bold text-black">~{ytd2026Data.secondary.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Banknote className="w-4 h-4 text-gold" />
+                    <span className="text-xs font-semibold text-black uppercase tracking-wide">Payment Method</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-zinc-700">Cash</span>
+                      <span className="text-sm font-bold text-black">~{ytd2026Data.cash.toLocaleString()}</span>
+                    </div>
+                    <div className="w-full bg-zinc-200 rounded-full h-2">
+                      <div className="bg-emerald-500 rounded-full h-2" style={{ width: `${(ytd2026Data.cash / (ytd2026Data.cash + ytd2026Data.mortgage) * 100).toFixed(0)}%` }} />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-zinc-700">Mortgage</span>
+                      <span className="text-sm font-bold text-black">~{ytd2026Data.mortgage.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Gift className="w-4 h-4 text-gold" />
+                    <span className="text-xs font-semibold text-black uppercase tracking-wide">Gift Transactions</span>
+                  </div>
+                  <div className="flex flex-col items-center justify-center h-[calc(100%-2rem)]">
+                    <p className="text-3xl font-bold text-gold">~{ytd2026Data.gifts.toLocaleString()}</p>
+                    <p className="text-xs text-zinc-600 mt-1">Gift Transfers YTD</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Top Areas */}
+              <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+                <div className="flex items-center gap-2 mb-3">
+                  <MapPin className="w-4 h-4 text-gold" />
+                  <span className="text-xs font-semibold text-black uppercase tracking-wide">Top 5 Areas by Transaction Volume</span>
+                </div>
+                <div className="space-y-2">
+                  {topAreas2026Data.slice(0, 5).map((area, i) => (
+                    <div key={area.area} className="flex items-center gap-3">
+                      <span className="text-zinc-400 font-medium text-sm w-4 text-right">{i + 1}</span>
+                      <span className="text-sm font-medium text-black flex-1">{area.area}</span>
+                      <span className="text-sm font-bold text-gold">{area.transactions.toLocaleString()}</span>
+                      <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded-full">{area.change}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Top Nationalities */}
+              <div className="bg-white/60 rounded-xl p-4 border border-gold/10 mt-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Globe className="w-4 h-4 text-gold" />
+                  <span className="text-xs font-semibold text-black uppercase tracking-wide">Top Buyer Nationalities</span>
+                </div>
+                <div className="space-y-2">
+                  {topNationalitiesData.slice(0, 5).map((nat, i) => (
+                    <div key={nat.country} className="flex items-center gap-3">
+                      <span className="text-lg">{nat.flag}</span>
+                      <span className="text-sm font-medium text-black flex-1">{nat.country}</span>
+                      <div className="w-20">
+                        <div className="w-full bg-zinc-200 rounded-full h-1.5">
+                          <div className="bg-gold rounded-full h-1.5" style={{ width: `${nat.percentage * 4}%` }} />
+                        </div>
+                      </div>
+                      <span className="text-sm font-bold text-gold w-10 text-right">{nat.percentage}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
 
             {/* Source Attribution */}
             <div className="mt-12 pt-8 border-t border-gold/20">
