@@ -298,6 +298,59 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
   );
 }
 
+// --- Developer Landscape Card ---
+function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
+  const devEntries = useMemo(() => {
+    const lines = text.split('\n').filter(l => l.trim().startsWith('•'));
+    return lines.map(line => {
+      const clean = line.replace(/^•\s*/, '').trim();
+      const colonSplit = clean.split(':');
+      const devName = colonSplit[0]?.trim() || clean;
+      const projects = colonSplit.slice(1).join(':').trim();
+      return { name: devName, projects };
+    }).slice(0, 6);
+  }, [text]);
+
+  const totalDevs = stats?.developers?.length || devEntries.length;
+
+  return (
+    <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <Building2 className="w-5 h-5 text-gold" />
+          <h3 className="font-bold text-black text-lg">Developer Landscape</h3>
+        </div>
+        <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">
+          {totalDevs} Developers
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        {devEntries.map((dev, i) => (
+          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] border border-gold/10 hover:border-gold/30 transition-colors">
+            <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
+              <span className="text-gold font-bold text-xs">{dev.name.charAt(0)}</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-black font-semibold text-sm truncate">{dev.name}</p>
+              {dev.projects && (
+                <p className="text-zinc-500 text-xs mt-0.5 truncate">{dev.projects}</p>
+              )}
+            </div>
+            <ArrowUpRight className="w-3.5 h-3.5 text-gold/50 flex-shrink-0 mt-1" />
+          </div>
+        ))}
+      </div>
+
+      {devEntries.length === 0 && (
+        <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-line">
+          {text}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -514,15 +567,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                 <InvestmentMetricsChart text={cleanMarkdown(sections.investment)} />
               )}
               {sections?.developers && (
-                <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Building2 className="w-5 h-5 text-gold" />
-                    <h3 className="font-bold text-black text-lg">Developer Landscape</h3>
-                  </div>
-                  <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-line">
-                    {cleanMarkdown(sections.developers)}
-                  </div>
-                </div>
+                <DeveloperLandscapeCard text={cleanMarkdown(sections.developers)} stats={stats} />
               )}
             </div>
 
