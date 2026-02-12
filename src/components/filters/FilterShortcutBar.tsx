@@ -69,6 +69,7 @@ interface FilterShortcutBarProps {
   onFilterChange: (filters: ShortcutFilterState) => void;
   isMapMode?: boolean;
   onMapToggle?: (active: boolean) => void;
+  searchSlot?: React.ReactNode;
 }
 
 const PRICE_PRESETS = [
@@ -131,7 +132,7 @@ const SORT_OPTIONS: { value: ShortcutFilterState['sortBy']; label: string }[] = 
 const QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4'];
 const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035'];
 
-const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle }: FilterShortcutBarProps) => {
+const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle, searchSlot }: FilterShortcutBarProps) => {
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const navigate = useNavigate();
@@ -202,8 +203,9 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
       <div className="flex flex-col gap-2 w-full">
         {/* Row 1: Left = Map + Saved + Currency + Mode | Center = Sort pills */}
         <div className="flex items-center w-full gap-2">
-          {/* Left group: Map + Utility buttons */}
+          {/* Left group: Search (if provided) + Map + Utility buttons */}
           <div className="flex items-center gap-1.5 flex-shrink-0">
+            {searchSlot}
             <button
               onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
               className={cn(pillBase, "px-3 py-1.5", isMapMode ? pillActive : pillInactive)}
