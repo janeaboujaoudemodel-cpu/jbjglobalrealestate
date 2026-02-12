@@ -67,8 +67,18 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchInitialQuery, setSearchInitialQuery] = useState("");
   const [showWalkthrough, setShowWalkthrough] = useState(false);
+  const [filterBarActive, setFilterBarActive] = useState(false);
   const { t } = useLanguage();
   const isTouchLayout = useIsTouchLayout();
+
+  // Listen for filter-bar-fixed class on body to hide header
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setFilterBarActive(document.body.classList.contains('filter-bar-fixed'));
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
   
   // Mega menu hover + click states
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
@@ -521,7 +531,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   return (
     <header
       ref={headerViewportRef}
-      className="fixed top-0 left-0 right-0 z-[9999] h-24 sm:h-28 lg:h-32 overflow-visible"
+      className={cn(
+        "fixed top-0 left-0 right-0 z-[9999] h-24 sm:h-28 lg:h-32 overflow-visible transition-all duration-300",
+        filterBarActive && "-translate-y-full opacity-0 pointer-events-none"
+      )}
       style={{ '--header-height': '128px' } as React.CSSProperties}
       data-tour-target="header"
     >

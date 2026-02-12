@@ -15,6 +15,7 @@ import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUti
 import { DeveloperAIAnalyzer } from "@/components/developer/DeveloperAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -75,6 +76,16 @@ const DeveloperDetail = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Signal GlobalHeader to hide when filter bar is fixed
+  useEffect(() => {
+    if (isFilterFixed && !bottomReached) {
+      document.body.classList.add('filter-bar-fixed');
+    } else {
+      document.body.classList.remove('filter-bar-fixed');
+    }
+    return () => document.body.classList.remove('filter-bar-fixed');
+  }, [isFilterFixed, bottomReached]);
+
   // Reset showAll when filters or developer changes
   useEffect(() => { setShowAllProjects(false); }, [slug, selectedEmirate, filters]);
 
@@ -85,7 +96,8 @@ const DeveloperDetail = () => {
     return projects.filter((p) => p.emirate === selectedEmirate);
   }, [projects, selectedEmirate]);
 
-  const filteredProjects = useFilteredProjects(projectsInEmirate, filters);
+  const filteredProjectsBase = useFilteredProjects(projectsInEmirate, filters);
+  const filteredProjects = useMemo(() => applyShortcutFilters(filteredProjectsBase, shortcutFilters), [filteredProjectsBase, shortcutFilters]);
 
   const hasFiltersApplied =
     filters.search ||
@@ -350,7 +362,7 @@ const DeveloperDetail = () => {
 
           {/* Fixed portal filter bar — when scrolled past sentinel */}
           {isFilterFixed && !bottomReached && createPortal(
-            <div className="fixed top-24 sm:top-28 lg:top-32 left-0 right-0 z-[9998] transition-shadow duration-200">
+            <div className="fixed top-0 left-0 right-0 z-[9998] transition-shadow duration-200">
               <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 pt-0">
                 <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 border-t-0 rounded-none p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
             <ProjectFilters
