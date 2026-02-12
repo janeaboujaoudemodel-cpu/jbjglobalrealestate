@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
-import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle, Building2, ArrowUpRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Bed, Mail, Phone, MessageCircle, Building2, ArrowUpRight, CreditCard } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { SafeImage } from "@/components/SafeImage";
 import { VerifiedMedia } from "@/components/ui/verified-media";
@@ -355,6 +355,24 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               ...more
             </span>
           </p>
+
+          {/* Payment Plan Badge - Bottom Right (real data only) */}
+          {(() => {
+            const breakdown = (project as any).payment_breakdown;
+            if (!breakdown || !Array.isArray(breakdown) || breakdown.length === 0) return null;
+            const percentages = breakdown
+              .map((b: any) => b.percentage)
+              .filter((p: any) => typeof p === 'number');
+            if (percentages.length === 0) return null;
+            return (
+              <div className="flex justify-end mb-1">
+                <span className="inline-flex items-center gap-1 text-xs font-semibold text-gold bg-gold/10 border border-gold/30 rounded-full px-2.5 py-1">
+                  <CreditCard className="w-3 h-3" />
+                  {percentages.join('/')}
+                </span>
+              </div>
+            );
+          })()}
         </div>
       </Link>
 
