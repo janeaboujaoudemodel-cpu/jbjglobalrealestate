@@ -133,14 +133,65 @@ const SORT_OPTIONS: { value: ShortcutFilterState['sortBy']; label: string }[] = 
 const QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4'];
 const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035'];
 
+// Currency conversion rates
+const CURRENCY_RATES: Record<string, number> = {
+  AED: 1, USD: 0.27, EUR: 0.25, GBP: 0.21, INR: 22.5,
+  SAR: 1.02, CNY: 1.98, RUB: 24.5, CAD: 0.37, AUD: 0.42,
+};
+const SQFT_TO_SQM = 1 / 10.764;
+const SQM_TO_SQFT = 10.764;
+
 const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle, searchSlot }: FilterShortcutBarProps) => {
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [prevCurrency, setPrevCurrency] = useState<string>('AED');
   const navigate = useNavigate();
   const isDark = variant === 'dark';
 
   const update = useCallback((partial: Partial<ShortcutFilterState>) => {
     onFilterChange({ ...filters, ...partial });
+  }, [filters, onFilterChange]);
+
+  // Listen for currency changes and convert price filters
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const newCurrency = (e as CustomEvent).detail as string;
+      const oldRate = CURRENCY_RATES[prevCurrency] || 1;
+      const newRate = CURRENCY_RATES[newCurrency] || 1;
+      const ratio = newRate / oldRate;
+      const convertVal = (v: string) => {
+        if (!v) return '';
+        const num = Number(v);
+        return isNaN(num) ? v : String(Math.round(num * ratio));
+      };
+      onFilterChange({
+        ...filters,
+        priceMin: convertVal(filters.priceMin),
+        priceMax: convertVal(filters.priceMax),
+      });
+      setPrevCurrency(newCurrency);
+    };
+    window.addEventListener('currencyChange', handler);
+    return () => window.removeEventListener('currencyChange', handler);
+  }, [filters, onFilterChange, prevCurrency]);
+
+  // Handle priceMode change (sqft/sqm) — convert size filters
+  const handlePriceModeChange = useCallback((newMode: string) => {
+    const oldMode = filters.priceMode;
+    const convertSize = (v: string) => {
+      if (!v) return '';
+      const num = Number(v);
+      if (isNaN(num)) return v;
+      if (oldMode === 'sqft' && newMode === 'sqm') return String(Math.round(num * SQFT_TO_SQM));
+      if (oldMode === 'sqm' && newMode === 'sqft') return String(Math.round(num * SQM_TO_SQFT));
+      return v;
+    };
+    onFilterChange({
+      ...filters,
+      priceMode: newMode as any,
+      sizeMin: convertSize(filters.sizeMin),
+      sizeMax: convertSize(filters.sizeMax),
+    });
   }, [filters, onFilterChange]);
 
   const hasActiveFilters =
@@ -207,7 +258,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           <div className="flex items-center w-full border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
             {/* Search slot */}
             {searchSlot && (
-              <div className="flex-1 min-w-0 border-r border-gold/20">
+              <div className="min-w-0 max-w-[220px] border-r border-gold/20">
                 {searchSlot}
               </div>
             )}
@@ -265,7 +316,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </button>
           </PopoverTrigger>
           <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
-            <Tabs value={filters.priceMode} onValueChange={(v) => update({ priceMode: v as any })}>
+            <Tabs value={filters.priceMode} onValueChange={handlePriceModeChange}>
               <TabsList className="w-full mb-3 bg-white/60">
                 <TabsTrigger value="unit" className="flex-1 text-xs">Per unit</TabsTrigger>
                 <TabsTrigger value="sqft" className="flex-1 text-xs">Per sqft</TabsTrigger>
@@ -696,7 +747,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
     <Popover open={savedOpen} onOpenChange={setSavedOpen}>
       <PopoverTrigger asChild>
         <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10" title="Saved Filters">
-          <Heart className="w-3.5 h-3.5" />
+          <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
           <span className="hidden sm:inline">Saved</span>
         </button>
       </PopoverTrigger>

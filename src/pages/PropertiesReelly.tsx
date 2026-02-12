@@ -103,7 +103,7 @@ const PropertiesReelly = () => {
     if (!sentinel) return;
     const observer = new IntersectionObserver(
       ([entry]) => setIsFilterFixed(!entry.isIntersecting),
-      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
+      { threshold: 0, rootMargin: "-1px 0px 0px 0px" }
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
