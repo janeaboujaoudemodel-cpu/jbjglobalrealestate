@@ -776,15 +776,32 @@ const ProjectFilters = ({
                 updateFilter("developerId", value === "all" ? null : value)
               }
             >
-              <SelectTrigger className="h-11 w-[160px] rounded-xl">
+              <SelectTrigger className="h-11 w-[180px] rounded-xl">
                 <Building2 className="w-4 h-4 mr-1 text-gold shrink-0" />
                 <SelectValue placeholder="Developer" />
               </SelectTrigger>
-              <SelectContent className="max-h-60">
-                <SelectItem value="all">All Developers</SelectItem>
+              <SelectContent className="max-h-72 w-[260px]">
+                <SelectItem value="all">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-gold shrink-0" />
+                    <span>All Developers</span>
+                  </div>
+                </SelectItem>
                 {developers.map((developer) => (
                   <SelectItem key={developer.id} value={developer.id}>
-                    {developer.name}
+                    <div className="flex items-center gap-2">
+                      {(developer.logo_url || developer.logo_url_processed) ? (
+                        <img
+                          src={developer.logo_url_processed || developer.logo_url || ''}
+                          alt={developer.name}
+                          className="w-5 h-5 object-contain rounded shrink-0"
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        />
+                      ) : (
+                        <Building2 className="w-4 h-4 text-zinc-400 shrink-0" />
+                      )}
+                      <span className="truncate">{developer.name}</span>
+                    </div>
                   </SelectItem>
                 ))}
               </SelectContent>
