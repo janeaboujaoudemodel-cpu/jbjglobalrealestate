@@ -1,14 +1,20 @@
 import { Link, useLocation } from "react-router-dom";
-import { Building2, BarChart3, BookOpen, Briefcase, Users, Phone } from "lucide-react";
+import { Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle, Building, Layers, Cpu } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 
 const NAV_ITEMS = [
   { label: "Off-plan", href: "/properties", icon: Building2 },
-  { label: "Market", href: "/market-intelligence", icon: BarChart3 },
+  { label: "Buy", href: "/buy", icon: Home },
+  { label: "Sell", href: "/sell", icon: Tag },
+  { label: "Rent", href: "/rent", icon: Key },
+  { label: "List Property", href: "/list-property", icon: PlusCircle },
+  { label: "Developers", href: "/developers", icon: Building },
+  { label: "Projects", href: "/projects", icon: Layers },
+  { label: "AI Tools", href: "/toolkit", icon: Cpu },
+  { label: "Market Intel", href: "/market-intelligence", icon: BarChart3 },
   { label: "Guides", href: "/guides", icon: BookOpen },
   { label: "Services", href: "/services", icon: Briefcase },
   { label: "About", href: "/about", icon: Users },
-  { label: "Contact", href: "/contact", icon: Phone },
 ];
 
 export default function PropertiesVerticalNav() {
@@ -17,11 +23,12 @@ export default function PropertiesVerticalNav() {
   return (
     <div className="w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex flex-col h-full">
       {/* Logo */}
-      <div className="p-4 border-b border-gold/20 flex items-center gap-2">
-        <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain" />
-        <span className="text-xs font-bold text-black tracking-wide" style={{ fontFamily: "Poppins, sans-serif" }}>
-          JBJ GLOBAL
-        </span>
+      <div className="p-4 border-b border-gold/20 flex items-center gap-3">
+        <img src={jbjMonogramLightBg} alt="JBJ" className="w-12 h-12 object-contain" />
+        <div className="flex flex-col" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <span className="text-xs font-bold text-black tracking-wide">JBJ GLOBAL</span>
+          <span className="text-[10px] font-medium text-black/60 tracking-wider uppercase">Real Estate</span>
+        </div>
       </div>
 
       {/* Nav Items */}
@@ -47,14 +54,19 @@ export default function PropertiesVerticalNav() {
       </nav>
 
       {/* Bottom */}
-      <div className="p-4 border-t border-gold/20 text-center">
+      <div className="p-4 border-t border-gold/20 space-y-2">
         <a
           href="mailto:info@jbjglobal.com"
-          className="text-[10px] text-black/50 hover:text-gold transition-colors block mb-2"
+          className="text-xs font-bold text-gold hover:text-gold-dark transition-colors block"
         >
           Contact Support
         </a>
-        <img src={jbjMonogramLightBg} alt="JBJ" className="w-6 h-6 object-contain mx-auto opacity-40" />
+        <a
+          href="/support"
+          className="text-[10px] text-black/50 hover:text-gold transition-colors block"
+        >
+          Raise a Support Ticket
+        </a>
       </div>
     </div>
   );
