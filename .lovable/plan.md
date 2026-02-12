@@ -1,81 +1,83 @@
 
 
-## Split-Screen Map View for Properties Page
+## Wire Filters Everywhere + Payment Plan on Project Cards
 
-### Overview
-When the user clicks the "Map" button in the FilterShortcutBar, the Properties page will switch to a split-screen layout: project listing cards on the LEFT, interactive map on the RIGHT. The main header navigation will transform into a vertical sidebar on the left side when the filter bar is fixed during scroll, and revert back to horizontal when scrolling to the "Ready to Get Started" section.
+### Problem Summary
+1. **DeveloperDetail page**: Already correctly applies `applyShortcutFilters` (line 101). Already wired.
+2. **AreaProjectsGrid**: Already correctly applies `applyShortcutFilters` (line 172). Already wired.
+3. **ProjectDetailLayout**: Has `FilterShortcutBar` but the `shortcutFilters` state is never applied to filter any project lists on the page. Need to check if there are similar/recommended project sections that need filtering.
+4. **Payment Plan on ProjectCard**: The user wants the real payment plan summary displayed on the bottom-right corner of each project card, above the CTA buttons. Data source: `payment_breakdown` field (699 of 2410 projects have it). This is real structured data with milestones and percentages.
 
-### Layout (Reference: Reelly screenshots)
+### Changes
 
-```text
-+------------------------------------------------------------------+
-| [FilterShortcutBar - horizontal, full width]                     |
-+------------------------------------------------------------------+
-| [Logo]        |                                          |       |
-| Off-plan      |  Project Cards (2-col grid, scrollable)  |  MAP  |
-| Market        |  - Card 1          - Card 2              |       |
-| Events        |  - Card 3          - Card 4              |  All  |
-| My Deals      |  ...                                     | proj  |
-| University    |                                          | pins  |
-| Settings      |                                          |       |
-|               |                                          |       |
-| [Contact]     |                                          |       |
-| [JBJ Logo]    |                                          |       |
-+------------------------------------------------------------------+
+#### 1. Add Payment Plan Summary to ProjectCard
+
+**File: `src/components/ProjectCard.tsx`**
+
+The `payment_breakdown` field is a JSON array of objects like:
+```json
+[
+  { "milestone": "Down Payment", "percentage": 20 },
+  { "milestone": "During Construction", "percentage": 40 },
+  { "milestone": "On Handover", "percentage": 40 }
+]
 ```
 
-### Detailed Changes
+Add a compact payment plan display at the bottom-right of the card content area (above the CTA buttons), showing a shorthand like "20/40/40" or "20% | 40% | 40%" derived from the real `payment_breakdown` data. Only show this when `payment_breakdown` exists and has entries.
 
-#### 1. New Component: `PropertiesMapView.tsx`
-Create `src/components/maps/PropertiesMapView.tsx` -- a Leaflet map that:
-- Displays all `finalProjects` as markers using the existing approved map card pattern (DynamicTileLayer, MapViewToggle, MapNavigationControls)
-- Shows project popups on hover with: cover image, developer logo, project name, developer name, price, handover date (same pattern as AreaMapSection popups)
-- Wrapped in `MapErrorBoundary`
-- Satellite default view with 3-way toggle
-- Auto-fits bounds to visible project markers
-- Highlights the marker when hovering a card on the left panel
+Implementation:
+- Add a helper function `getPaymentPlanSummary()` that reads `(project as any).payment_breakdown` and extracts the percentages
+- Display it as a small gold-accented badge at the bottom-right of the content section, e.g.: "20/40/40" with a CreditCard icon
+- If no `payment_breakdown` data exists, show nothing (no fake data)
 
-#### 2. New Component: `PropertiesVerticalNav.tsx`
-Create `src/components/navigation/PropertiesVerticalNav.tsx` -- a vertical sidebar that:
-- Shows the JBJ logo at top
-- Lists main navigation items vertically: Properties (active), Market Intelligence, Guides, Services, About, Contact
-- Styled with champagne/gold theme matching the filter bar
-- Shows "Contact Support" at the bottom and the JBJ logo/branding
-- Only visible when `isMapMode && isFilterFixed`
+#### 2. Verify Filter Wiring on All Pages
 
-#### 3. Update `Properties.tsx` -- Map Mode State + Split Layout
-- Add `isMapMode` state (boolean), toggled by the Map button in FilterShortcutBar
-- When `isMapMode === true`:
-  - The results section renders as a flex row: LEFT = scrollable card list (50-60% width, 2-col grid), RIGHT = map (40-50% width, sticky/fixed height)
-  - The project cards list becomes independently scrollable
-  - When `isFilterFixed`, show the vertical nav sidebar on the left and the FilterShortcutBar horizontally at the top
-  - When user scrolls to "Ready to Get Started" section (detected via IntersectionObserver on existing sentinel), exit the split layout: hide vertical nav, restore horizontal header
+| Page | FilterShortcutBar present? | applyShortcutFilters applied? | Action needed? |
+|------|---------------------------|-------------------------------|----------------|
+| Properties.tsx | Yes | Yes (line 335) | No |
+| DeveloperDetail.tsx | Yes | Yes (line 101) | No |
+| AreaProjectsGrid.tsx | Yes | Yes (line 172) | No |
+| ProjectDetailLayout.tsx | Yes | No -- but no project list to filter | No action needed |
 
-#### 4. Update `FilterShortcutBar.tsx` -- Map Button Callback
-- Change the Map button from navigating to `/properties?view=map` to calling a callback prop
-- Add optional `onMapToggle?: (active: boolean) => void` and `isMapMode?: boolean` props
-- When `isMapMode` is true, style the Map button as active (gold highlight)
+All pages with project listings already have filters correctly wired. The ProjectDetailLayout shows a single project detail, not a list, so the FilterShortcutBar there serves as navigation/context rather than filtering.
 
-#### 5. Interaction: Card-Map Sync
-- Hovering a project card highlights the corresponding marker on the map
-- Hovering/clicking a marker on the map scrolls the card list to show the corresponding project card
-- Share a `hoveredProjectId` state between the card list and map
+### Technical Details
 
-### Files to Create
-| File | Purpose |
-|------|---------|
-| `src/components/maps/PropertiesMapView.tsx` | Full map component with project markers, popups, and sync |
-| `src/components/navigation/PropertiesVerticalNav.tsx` | Vertical sidebar navigation for map mode |
+#### ProjectCard.tsx Changes
 
-### Files to Edit
-| File | Changes |
-|------|---------|
-| `src/pages/Properties.tsx` | Add `isMapMode` state, split-screen layout logic, vertical nav integration, card-map hover sync |
-| `src/components/filters/FilterShortcutBar.tsx` | Add `onMapToggle` and `isMapMode` props, change Map button to use callback |
+Add after the description section (around line 357), before the Link closing tag:
 
-### Behavior Summary
-1. User clicks "Map" button in filter bar -> page splits into cards (left) + map (right)
-2. User scrolls down -> filter bar becomes fixed at top, GlobalHeader hides (existing behavior), vertical nav appears on left
-3. User scrolls to "Ready to Get Started" -> vertical nav disappears, GlobalHeader returns (existing behavior)
-4. User clicks "Map" again or clicks "List" -> returns to normal full-width card grid
+```tsx
+{/* Payment Plan Badge - Bottom Right */}
+{(() => {
+  const breakdown = (project as any).payment_breakdown;
+  if (!breakdown || !Array.isArray(breakdown) || breakdown.length === 0) return null;
+  const percentages = breakdown
+    .map((b: any) => b.percentage)
+    .filter((p: any) => typeof p === 'number');
+  if (percentages.length === 0) return null;
+  return (
+    <div className="px-4 pb-2 flex justify-end">
+      <span className="inline-flex items-center gap-1 text-xs font-semibold text-gold bg-gold/10 border border-gold/30 rounded-full px-2.5 py-1">
+        <CreditCard className="w-3 h-3" />
+        {percentages.join('/')}
+      </span>
+    </div>
+  );
+})()}
+```
 
+- Import `CreditCard` from lucide-react
+- Only displays when real `payment_breakdown` data exists
+- Shows compact format like "20/40/40" which represents Down Payment / Construction / Handover percentages
+
+### Files to Change
+
+| File | Change |
+|------|--------|
+| `src/components/ProjectCard.tsx` | Add CreditCard import; add payment plan badge from real `payment_breakdown` data |
+
+### What This Does NOT Do
+- Does not invent or fabricate any payment plan data
+- Does not change filter wiring on pages where it already works (Developer, Area, Properties)
+- The `payment_plan` text field (only 1 project has it) is ignored in favor of the structured `payment_breakdown` array (699 projects have it)
