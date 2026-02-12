@@ -1,37 +1,85 @@
 
 
-## Fix: Filter Bar Shows on Load Because Sentinel Below Viewport = "Not Intersecting"
+## Apply Two-Phase Scroll-to-Fix Filter Logic to Properties and Developers Pages
 
-### Root Cause
+### Goal
+Both the Properties page and the Developers page currently show their filter bars using CSS `sticky`, which means they are visible immediately after the hero section ends. The user wants the same behavior as the area detail page: filters are **hidden during the hero**, appear **inline** when the listings section is reached, and become **fixed under the header** when scrolled further.
 
-The `IntersectionObserver` callback does `setIsFixed(!entry.isIntersecting)`. On page load, the sentinel (`placeholderRef`) sits inside the projects section which is far below the viewport (the hero is full-screen). Since the sentinel is not visible, `isIntersecting` is `false`, so `isFixed` becomes `true` immediately -- showing the fixed bar under the header before the user has scrolled at all.
+### Current State
+- **Properties** (`src/pages/Properties.tsx`, line 425): Filter section uses `sticky top-14 sm:top-16 md:top-20 lg:top-[72px]` -- always visible after hero
+- **Developers** (`src/pages/Developers.tsx`, line 227): Filter section uses `sticky top-24 lg:top-20` -- always visible after hero
+- **Area detail** (`AreaProjectsGrid.tsx`): Already uses IntersectionObserver + `createPortal` two-phase system (working correctly)
 
-### Fix (single file: `src/components/area-detail/AreaProjectsGrid.tsx`)
+### Changes
 
-Change the observer callback to check the sentinel's vertical position. The bar should only be fixed when the sentinel has scrolled **above** the header (i.e., the user scrolled past it going down), NOT when the sentinel is below the viewport (page just loaded).
+#### File 1: `src/pages/Properties.tsx`
 
-**Line 60 change:**
+1. Add imports: `useRef, useEffect` (useRef already may be missing), `createPortal` from `react-dom`
+2. Add state: `const [isFixed, setIsFixed] = useState(false)` and `const sentinelRef = useRef<HTMLDivElement>(null)`
+3. Add IntersectionObserver effect (same pattern as AreaProjectsGrid):
+   - Observe `sentinelRef`
+   - `rootMargin: "-140px 0px 0px 0px"`
+   - Callback: `setIsFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140)`
+4. Remove `sticky top-14 sm:top-16 md:top-20 lg:top-[72px]` from the filter `<section>` (line 425) -- make it a normal flow element
+5. Place `<div ref={sentinelRef} className="h-0" />` just above the filter section
+6. Keep the filter section rendered inline (always visible in its natural position within the page flow)
+7. When `isFixed` is true, render a portal copy of the entire filter section fixed under the header with `fixed top-14 sm:top-16 md:top-20 lg:top-[72px] left-0 right-0 z-[9998]`
 
-Replace:
-```js
-([entry]) => setIsFixed(!entry.isIntersecting)
+#### File 2: `src/pages/Developers.tsx`
+
+1. Add imports: `useRef, useEffect` from react, `createPortal` from `react-dom`
+2. Add state: `const [isFixed, setIsFixed] = useState(false)` and `const sentinelRef = useRef<HTMLDivElement>(null)`
+3. Add same IntersectionObserver effect
+4. Remove `sticky top-24 lg:top-20` from the filter `<section>` (line 227) -- make it a normal flow element
+5. Place `<div ref={sentinelRef} className="h-0" />` just above the filter section
+6. Keep filter section inline
+7. When `isFixed` is true, render portal copy fixed under header
+
+### Technical Details
+
+The pattern is identical for both pages:
+
+```text
+Structure (same as AreaProjectsGrid):
+
+  <Hero Section />
+
+  <div ref={sentinelRef} className="h-0" />   <!-- scroll sentinel -->
+
+  <section className="z-40 bg-... py-3 ...">  <!-- inline filter, NO sticky -->
+    {filterContent}
+  </section>
+
+  {isFixed && createPortal(
+    <div className="fixed top-14 sm:top-16 md:top-20 lg:top-[72px] left-0 right-0 z-[9998] bg-... py-3 ...">
+      {filterContent}                          <!-- duplicate fixed copy -->
+    </div>,
+    document.body
+  )}
+
+  <section>                                    <!-- listings grid -->
+    ...
+  </section>
 ```
 
-With:
-```js
+**Observer callback** (proven working from AreaProjectsGrid):
+```text
 ([entry]) => {
-  // Only fix the bar when sentinel has scrolled ABOVE the header area
-  // (boundingClientRect.top < ~140px means it's past the header)
-  // When sentinel is below viewport (initial load), don't fix
   setIsFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
 }
 ```
 
-This single condition change ensures:
-- Page load (sentinel far below viewport): `isIntersecting=false` but `top > 140` --> `isFixed = false` (bar hidden)
-- Scrolled to projects section: sentinel enters viewport --> `isIntersecting=true` --> `isFixed = false` (inline bar visible naturally)
-- Scrolled past sentinel (past header): `isIntersecting=false` and `top < 140` --> `isFixed = true` (fixed bar appears)
-- Scroll back up: sentinel re-enters viewport --> `isIntersecting=true` --> `isFixed = false` (back to inline)
+This ensures:
+- Hero visible (sentinel below viewport): `isFixed = false` (no fixed bar)
+- Scrolled to filters section: sentinel in view, inline filters visible naturally
+- Scrolled past filters: sentinel above header threshold, portal fixed copy appears
+- Scroll back up: sentinel re-enters viewport, portal disappears
 
-No other changes needed. Single line fix.
+**For Properties**: The filter content is large (3 rows: transaction tabs, search, filter dropdowns + sort). The entire `<section>` content will be shared between inline and portal versions. Since the filter state is managed by React state in the parent component, both copies share the same state seamlessly.
 
+**For Developers**: The filter content (search input, developer dropdown, tier filter, results count, clear button) will be similarly shared.
+
+### Summary
+- 2 files modified: `Properties.tsx` and `Developers.tsx`
+- Same proven IntersectionObserver + createPortal pattern from AreaProjectsGrid
+- Filters hidden during hero, inline at section, fixed on scroll past
