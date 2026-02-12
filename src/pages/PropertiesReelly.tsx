@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, Fragment, useCallback } from "react";
+import { useState, useMemo, useEffect, Fragment, useCallback, useRef } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -37,6 +37,11 @@ import { FeaturedProjectAd, FEATURED_ADS } from "@/components/FeaturedProjectAd"
 import { blueprintPagesSEO } from "@/types/blueprint";
 import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
 import { CurrencyTooltip } from "@/components/CurrencyTooltip";
+import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
+import PropertiesMapView from "@/components/maps/PropertiesMapView";
+import type { UnifiedProject } from "@/types/unifiedProject";
+import type { ReellyProject } from "@/hooks/useReellyProjects";
 
 // Currency conversion rates - 10 unified currencies
 const CURRENCY_RATES: Record<string, number> = {
@@ -114,14 +119,79 @@ const CONSTRUCTION_STATUS = [
   { value: "Presale", label: "Presale" },
 ];
 
+/** Convert ReellyProject to UnifiedProject for map component */
+function toUnifiedProject(p: ReellyProject): UnifiedProject {
+  return {
+    id: String(p.id),
+    name: p.name,
+    slug: p.slug,
+    source: 'reelly',
+    developer_name: p.developer_name,
+    latitude: p.latitude,
+    longitude: p.longitude,
+    price_from: p.price_from,
+    handover_date: p.handover_date,
+    cover_image_url: p.thumbnail || (p.images?.[0]?.image_url ?? null),
+    created_at: '',
+    updated_at: '',
+  };
+}
+
 const PropertiesReelly = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useLanguage();
   const { data: developers } = useDevelopers();
   
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [sortBy, setSortBy] = useState<string>("newest");
+
+  // Map mode state
+  const [isMapMode, setIsMapMode] = useState(searchParams.get('view') === 'map');
+
+  // Filter shortcut bar state
+  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+
+  // Fixed filter / header replacement
+  const [isFilterFixed, setIsFilterFixed] = useState(false);
+  const filterSentinelRef = useRef<HTMLDivElement>(null);
+
+  // Map hover state
+  const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
+
+  // Toggle map mode and update URL
+  const handleMapToggle = useCallback((active: boolean) => {
+    setIsMapMode(active);
+    const params = new URLSearchParams(searchParams);
+    if (active) {
+      params.set('view', 'map');
+    } else {
+      params.delete('view');
+    }
+    setSearchParams(params, { replace: true });
+  }, [searchParams, setSearchParams]);
+
+  // IntersectionObserver for filter fixed state
+  useEffect(() => {
+    const sentinel = filterSentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsFilterFixed(!entry.isIntersecting),
+      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
+
+  // Sync body class for GlobalHeader hide
+  useEffect(() => {
+    if (isFilterFixed) {
+      document.body.classList.add('filter-bar-fixed');
+    } else {
+      document.body.classList.remove('filter-bar-fixed');
+    }
+    return () => document.body.classList.remove('filter-bar-fixed');
+  }, [isFilterFixed]);
 
   // Developers sorted by rank
   const allDevelopersSorted = useMemo(() => {
@@ -235,6 +305,12 @@ const PropertiesReelly = () => {
     return sorted;
   }, [projects, sortBy]);
 
+  // Convert for map
+  const unifiedProjects = useMemo(() => 
+    reellyProjects.map(toUnifiedProject),
+    [reellyProjects]
+  );
+
   const updateFilter = <K extends keyof FilterState>(key: K, value: FilterState[K]) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
@@ -298,8 +374,11 @@ const PropertiesReelly = () => {
         </div>
       </PropertiesHeroVideo>
 
+      {/* Sentinel for IntersectionObserver - marks where filter section starts */}
+      <div ref={filterSentinelRef} className="h-0 w-full" />
+
       {/* Filters Section */}
-      <section className="sticky top-14 sm:top-16 md:top-20 lg:top-[72px] z-40 bg-black py-3 md:py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <section className={`${isFilterFixed ? 'fixed top-0 left-0 right-0 z-[9998]' : 'sticky top-14 sm:top-16 md:top-20 lg:top-[72px] z-40'} bg-black py-3 md:py-4 border-b border-gold/30`} style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="container mx-auto px-3 sm:px-4">
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
             
@@ -472,132 +551,216 @@ const PropertiesReelly = () => {
         </div>
       </section>
 
+      {/* FilterShortcutBar */}
+      <section className="bg-black py-2 border-b border-gold/20">
+        <div className="container mx-auto px-3 sm:px-4">
+          <FilterShortcutBar
+            variant="light"
+            filters={shortcutFilters}
+            onFilterChange={setShortcutFilters}
+            isMapMode={isMapMode}
+            onMapToggle={handleMapToggle}
+          />
+        </div>
+      </section>
+
       {/* Divider */}
       <div className="h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-      {/* Results Section */}
-      <section className="py-12 bg-black">
-        <div className="container mx-auto px-3 sm:px-4">
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5">
-            
-            {/* Results Count */}
-            <div className="mb-6 flex items-center justify-between px-4 pt-4">
-              <p className="text-black/70">
-                Showing <span className="text-gold font-medium">{sortedProjects.length}</span> of{' '}
-                <span className="text-gold font-medium">{totalCount.toLocaleString()}</span> properties
-              </p>
-              {activeFilterCount > 0 && (
-                <Button
-                  variant="ghost"
-                  onClick={clearFilters}
-                  className="text-zinc-600 hover:text-black"
-                >
-                  <X className="w-4 h-4 mr-2" />
-                  Clear all filters
-                </Button>
-              )}
+      {/* Results Section - split-screen in map mode */}
+      {isMapMode ? (
+        <section className="bg-black" style={{ height: 'calc(100vh - 80px)' }}>
+          <div className="flex h-full">
+            {/* Vertical Nav (desktop only) */}
+            <div className="hidden lg:block flex-shrink-0">
+              <PropertiesVerticalNav />
             </div>
 
-            {/* Projects Grid */}
-            {isLoading ? (
-              <ProjectGridSkeleton count={6} />
-            ) : isError ? (
-              <div className="text-center py-20 px-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-red-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-200">
-                  <X className="w-10 h-10 text-red-500" />
-                </div>
-                <h3 className="text-xl font-semibold text-black mb-2">Failed to Load Properties</h3>
-                <p className="text-zinc-600 mb-4">{error?.message || 'Something went wrong. Please try again.'}</p>
-                <Button onClick={() => window.location.reload()} variant="primary">
-                  Retry
-                </Button>
-              </div>
-            ) : sortedProjects.length > 0 ? (
-              <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 p-4">
-                  {sortedProjects.map((project, index) => {
-                    const adAfterIndex = [5, 11, 17];
-                    const adIndex = adAfterIndex.indexOf(index);
-                    const featuredAd = adIndex !== -1 && FEATURED_ADS[adIndex] ? FEATURED_ADS[adIndex] : null;
-                    
-                    return (
-                      <Fragment key={project.id}>
-                        <ReellyProjectCard 
-                          project={project} 
-                          currency={filters.currency}
-                          sizeUnit={filters.sizeUnit}
-                        />
-                        {featuredAd && (
-                          <FeaturedProjectAd
-                            key={`ad-${featuredAd.id}`}
-                            title={featuredAd.title}
-                            subtitle={featuredAd.subtitle}
-                            description={featuredAd.description}
-                            imageUrl={featuredAd.imageUrl}
-                            projectSlug={featuredAd.projectSlug}
-                            ctaText={featuredAd.ctaText}
-                          />
-                        )}
-                      </Fragment>
-                    );
-                  })}
+            {/* Left: Scrollable card list */}
+            <div className="w-full lg:w-[55%] h-full overflow-y-auto bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+              <div className="p-4">
+                {/* Results Count */}
+                <div className="mb-4 flex items-center justify-between">
+                  <p className="text-black/70 text-sm">
+                    Showing <span className="text-gold font-medium">{sortedProjects.length}</span> of{' '}
+                    <span className="text-gold font-medium">{totalCount.toLocaleString()}</span> properties
+                  </p>
+                  {activeFilterCount > 0 && (
+                    <Button variant="ghost" onClick={clearFilters} className="text-zinc-600 hover:text-black text-xs h-8">
+                      <X className="w-3 h-3 mr-1" /> Clear
+                    </Button>
+                  )}
                 </div>
 
-                {/* Load More Button */}
-                {hasNextPage && (
-                  <div className="flex justify-center py-8">
-                    <Button
-                      onClick={() => fetchNextPage()}
-                      disabled={isFetchingNextPage}
-                      variant="primary"
-                      className="h-12 px-8 gap-2"
-                    >
-                      {isFetchingNextPage ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          Loading more...
-                        </>
-                      ) : (
-                        <>
-                          Load More Projects
-                          <span className="text-xs opacity-70">
-                            ({totalCount - sortedProjects.length} remaining)
-                          </span>
-                        </>
-                      )}
-                    </Button>
+                {isLoading ? (
+                  <ProjectGridSkeleton count={4} />
+                ) : sortedProjects.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {sortedProjects.map((project) => (
+                      <ReellyProjectCard
+                        key={project.id}
+                        project={project}
+                        currency={filters.currency}
+                        sizeUnit={filters.sizeUnit}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <Search className="w-10 h-10 text-gold mx-auto mb-3" />
+                    <p className="text-black/60">No properties found</p>
                   </div>
                 )}
 
-                {isFetchingNextPage && <ProjectGridSkeleton count={3} />}
-              </>
-            ) : (
-              <div className="text-center py-20 px-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
-                  <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
-                </div>
-                <h3 className="text-xl font-semibold text-black mb-2">No Properties Found</h3>
-                <p className="text-zinc-600 mb-4">Try adjusting your search filters or browse all properties.</p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                  <Button onClick={clearFilters} variant="primary" className="h-12 px-8">
-                    Browse All Properties
-                  </Button>
-                  <Button asChild variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6">
-                    <a 
-                      href={getWhatsAppUrl("Hi, I'm looking for properties but couldn't find what I need. Can you help?")}
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                    >
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Contact Us
-                    </a>
-                  </Button>
-                </div>
+                {hasNextPage && (
+                  <div className="flex justify-center py-6">
+                    <Button onClick={() => fetchNextPage()} disabled={isFetchingNextPage} variant="primary" className="h-10 px-6 gap-2">
+                      {isFetchingNextPage ? <><Loader2 className="w-4 h-4 animate-spin" /> Loading...</> : 'Load More'}
+                    </Button>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
+
+            {/* Right: Map */}
+            <div className="hidden lg:block flex-1 h-full">
+              <PropertiesMapView
+                projects={unifiedProjects}
+                hoveredProjectId={hoveredProjectId}
+                onProjectHover={setHoveredProjectId}
+                onProjectClick={(id) => {
+                  const project = reellyProjects.find(p => String(p.id) === id);
+                  if (project) window.open(`/project/${project.slug}`, '_blank');
+                }}
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : (
+        /* Standard list mode */
+        <section className="py-12 bg-black">
+          <div className="container mx-auto px-3 sm:px-4">
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5">
+              
+              {/* Results Count */}
+              <div className="mb-6 flex items-center justify-between px-4 pt-4">
+                <p className="text-black/70">
+                  Showing <span className="text-gold font-medium">{sortedProjects.length}</span> of{' '}
+                  <span className="text-gold font-medium">{totalCount.toLocaleString()}</span> properties
+                </p>
+                {activeFilterCount > 0 && (
+                  <Button
+                    variant="ghost"
+                    onClick={clearFilters}
+                    className="text-zinc-600 hover:text-black"
+                  >
+                    <X className="w-4 h-4 mr-2" />
+                    Clear all filters
+                  </Button>
+                )}
+              </div>
+
+              {/* Projects Grid */}
+              {isLoading ? (
+                <ProjectGridSkeleton count={6} />
+              ) : isError ? (
+                <div className="text-center py-20 px-4">
+                  <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-red-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-200">
+                    <X className="w-10 h-10 text-red-500" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-black mb-2">Failed to Load Properties</h3>
+                  <p className="text-zinc-600 mb-4">{error?.message || 'Something went wrong. Please try again.'}</p>
+                  <Button onClick={() => window.location.reload()} variant="primary">
+                    Retry
+                  </Button>
+                </div>
+              ) : sortedProjects.length > 0 ? (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 p-4">
+                    {sortedProjects.map((project, index) => {
+                      const adAfterIndex = [5, 11, 17];
+                      const adIndex = adAfterIndex.indexOf(index);
+                      const featuredAd = adIndex !== -1 && FEATURED_ADS[adIndex] ? FEATURED_ADS[adIndex] : null;
+                      
+                      return (
+                        <Fragment key={project.id}>
+                          <ReellyProjectCard 
+                            project={project} 
+                            currency={filters.currency}
+                            sizeUnit={filters.sizeUnit}
+                          />
+                          {featuredAd && (
+                            <FeaturedProjectAd
+                              key={`ad-${featuredAd.id}`}
+                              title={featuredAd.title}
+                              subtitle={featuredAd.subtitle}
+                              description={featuredAd.description}
+                              imageUrl={featuredAd.imageUrl}
+                              projectSlug={featuredAd.projectSlug}
+                              ctaText={featuredAd.ctaText}
+                            />
+                          )}
+                        </Fragment>
+                      );
+                    })}
+                  </div>
+
+                  {/* Load More Button */}
+                  {hasNextPage && (
+                    <div className="flex justify-center py-8">
+                      <Button
+                        onClick={() => fetchNextPage()}
+                        disabled={isFetchingNextPage}
+                        variant="primary"
+                        className="h-12 px-8 gap-2"
+                      >
+                        {isFetchingNextPage ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Loading more...
+                          </>
+                        ) : (
+                          <>
+                            Load More Projects
+                            <span className="text-xs opacity-70">
+                              ({totalCount - sortedProjects.length} remaining)
+                            </span>
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  )}
+
+                  {isFetchingNextPage && <ProjectGridSkeleton count={3} />}
+                </>
+              ) : (
+                <div className="text-center py-20 px-4">
+                  <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
+                    <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-black mb-2">No Properties Found</h3>
+                  <p className="text-zinc-600 mb-4">Try adjusting your search filters or browse all properties.</p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <Button onClick={clearFilters} variant="primary" className="h-12 px-8">
+                      Browse All Properties
+                    </Button>
+                    <Button asChild variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6">
+                      <a 
+                        href={getWhatsAppUrl("Hi, I'm looking for properties but couldn't find what I need. Can you help?")}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                      >
+                        <MessageCircle className="w-4 h-4 mr-2" />
+                        Contact Us
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
        <CurrencyTooltip />
        </div>
      </>
