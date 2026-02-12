@@ -134,14 +134,14 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Top Areas + Nationalities */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Top 5 Areas */}
+            {/* Top 10 Areas */}
             <div className="bg-white/70 rounded-xl p-5 border border-gold/20">
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className="w-4 h-4 text-gold" />
-                <h3 className="text-black text-sm font-semibold">Top Areas by Transactions</h3>
+                <h3 className="text-black text-sm font-semibold">Top 10 Areas by Transactions</h3>
               </div>
               <div className="space-y-3">
-                {topAreas2026.slice(0, 5).map((area, i) => {
+                {topAreas2026.slice(0, 10).map((area, i) => {
                   const isHighlighted = highlightArea && area.area.toLowerCase().includes(highlightArea.toLowerCase());
                   return (
                     <div key={area.area} className={`flex items-center justify-between ${isHighlighted ? "bg-gold/10 -mx-2 px-2 py-1 rounded-lg border border-gold/30" : ""}`}>
