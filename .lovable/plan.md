@@ -1,32 +1,35 @@
 
 
-## Fix: Sticky Filter Bar + Add Developer Filter
+## Fix: Broken Filter Bar Layout + Sticky Behavior
 
-### Problem
-The current approach toggles `sticky` on/off via JavaScript scroll events, which **breaks CSS sticky behavior**. CSS `position: sticky` already handles this natively -- the element stays in normal flow until it reaches the `top` threshold, then pins itself. Toggling the class via JS defeats this mechanism entirely.
+### What Went Wrong
 
-### Solution
+The developer filter dropdown was accidentally placed **inside** the search input's wrapper `<div>`. This means:
+- The search icon, the text input, and the developer dropdown are all crammed into one relative container
+- The layout collapses because the developer `Select` is positioned relative to the search field
 
-**1. Always apply `sticky top-[72px]`** on the filter bar (no JS toggle needed). CSS sticky naturally:
-- Keeps the bar inside the card in normal document flow
-- Pins it under the header (at `top: 72px`) once scrolled past
-- Returns it to its original position when scrolling back up
+### Fix (single file: `AreaProjectsGrid.tsx`)
 
-The `useEffect` scroll listener and `isSticky` state will be removed entirely. Instead, an `IntersectionObserver` on a sentinel element (similar to `AreaStickySearchBar.tsx`) will only be used for the visual shadow effect (so the bar gets a shadow when pinned).
+**1. Fix the broken JSX nesting (lines 189-219)**
 
-**2. Add Developer Filter** as a new `Select` dropdown between Status and Bedrooms, populated dynamically from the project data.
+Close the search input's `<div className="relative flex-1 min-w-[200px]">` right after the clear-search button (after line 203), then place the Developer filter as a **sibling** alongside Status, Bedrooms, and Sort.
 
-### Technical Details
+Corrected structure:
+```text
+<div class="flex flex-wrap items-center gap-3">
+  |-- <div class="relative flex-1"> (search input + X button) </div>   <-- closes here
+  |-- <Select> Developer </Select>      <-- sibling, not nested
+  |-- <Select> Status </Select>
+  |-- <Select> Bedrooms </Select>
+  |-- <Select> Sort </Select>
+  |-- Clear button
+</div>
+```
 
-**File: `src/components/area-detail/AreaProjectsGrid.tsx`**
+**2. Sticky behavior is already correct**
 
-- Remove `isSticky` state and the `useEffect` scroll listener
-- Add a sentinel `div` just above the filter bar
-- Use `IntersectionObserver` on the sentinel to toggle a `hasShadow` state (for visual feedback only)
-- Set the filter bar to always have `sticky top-[72px] z-30`
-- Add `hasShadow` conditional class for shadow when pinned
-- Add `developerFilter` state
-- Derive `developerOptions` from project data (unique developer names)
-- Add developer filter `Select` in the toolbar
-- Include developer filter in the filtering logic and `hasActiveFilters` / `clearFilters`
+The `sticky top-[72px] z-30` class is applied and no ancestor has `overflow: hidden`. Once the JSX nesting is fixed, the sticky behavior will work as expected -- the bar stays inside the card in normal flow and pins under the header when scrolled past.
 
+**3. No other changes needed**
+
+All filter logic, developer options derivation, sentinel/shadow, and grid rendering are correct. This is purely a JSX structure fix on lines 189-219.
