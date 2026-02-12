@@ -75,6 +75,43 @@ export function applyShortcutFilters<T extends Record<string, any>>(
     if (!isNaN(max)) result = result.filter(p => (p.price_from || Infinity) <= max);
   }
 
+  // Size range
+  if (sf.sizeMin) {
+    const min = Number(sf.sizeMin);
+    if (!isNaN(min)) result = result.filter(p => (p.size_sqft || p.area_sqft || 0) >= min);
+  }
+  if (sf.sizeMax) {
+    const max = Number(sf.sizeMax);
+    if (!isNaN(max)) result = result.filter(p => (p.size_sqft || p.area_sqft || Infinity) <= max);
+  }
+
+  // Emirates
+  if (sf.emirates && sf.emirates.length > 0) {
+    result = result.filter(p => {
+      const emirate = (p.emirate || p.location_emirate || '').toLowerCase();
+      return sf.emirates.some(e => emirate.includes(e.toLowerCase()));
+    });
+  }
+
+  // Developers
+  if (sf.developers && sf.developers.length > 0) {
+    result = result.filter(p => {
+      const dev = (p.developer_name || p.developer || '').toLowerCase();
+      return sf.developers.some(d => dev.toLowerCase().includes(d.toLowerCase()));
+    });
+  }
+
+  // Search query
+  if (sf.searchQuery && sf.searchQuery.trim()) {
+    const q = sf.searchQuery.trim().toLowerCase();
+    result = result.filter(p => {
+      const name = (p.name || p.title || '').toLowerCase();
+      const dev = (p.developer_name || p.developer || '').toLowerCase();
+      const area = (p.area_name || p.district || '').toLowerCase();
+      return name.includes(q) || dev.includes(q) || area.includes(q);
+    });
+  }
+
   // Sorting
   if (sf.sortBy === 'newest') {
     result.sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime());

@@ -3,7 +3,7 @@
  * Supports 'light' (Properties page) and 'dark' (Hero) variants
  */
 import { useState, useCallback, useEffect } from "react";
-import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc } from "lucide-react";
+import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SaveFilterModal from "./SaveFilterModal";
 import { CONSTRUCTION_STATUS_OPTIONS } from "@/constants/constructionStatus";
+import AdvancedFilterPanel from "./AdvancedFilterPanel";
 
 export interface ShortcutFilterState {
   priceMode: 'unit' | 'sqft' | 'sqm';
@@ -32,6 +33,11 @@ export interface ShortcutFilterState {
   sortBy: 'newest' | 'price_asc' | 'price_desc' | 'alpha' | null;
   hideSoldOut: boolean;
   constructionStatuses: string[];
+  sizeMin: string;
+  sizeMax: string;
+  emirates: string[];
+  developers: string[];
+  searchQuery: string;
 }
 
 export const defaultShortcutFilters: ShortcutFilterState = {
@@ -42,7 +48,7 @@ export const defaultShortcutFilters: ShortcutFilterState = {
   afterHandover: '',
   postHandoverOnly: false,
   handoverFrom: { quarter: 'Q1', year: '2025' },
-  handoverTo: { quarter: 'Q4', year: '2028' },
+  handoverTo: { quarter: 'Q4', year: '2035' },
   propertyCategory: null,
   propertyTypes: [],
   bedrooms: [],
@@ -50,6 +56,11 @@ export const defaultShortcutFilters: ShortcutFilterState = {
   sortBy: null,
   hideSoldOut: false,
   constructionStatuses: [],
+  sizeMin: '',
+  sizeMax: '',
+  emirates: [],
+  developers: [],
+  searchQuery: '',
 };
 
 interface FilterShortcutBarProps {
@@ -99,7 +110,7 @@ const STATUS_OPTIONS: { value: string; label: string; dotClass: string }[] = [
   { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'bg-green-400' },
   { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-blue-400' },
   { value: 'On Sale', label: 'On Sale', dotClass: 'bg-yellow-400' },
-  { value: 'Sold Out', label: 'Out of Stock', dotClass: 'bg-zinc-400' },
+  { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-zinc-400' },
 ];
 
 const CONSTRUCTION_OPTIONS = [
@@ -116,10 +127,11 @@ const SORT_OPTIONS: { value: ShortcutFilterState['sortBy']; label: string }[] = 
 ];
 
 const QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4'];
-const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030'];
+const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035'];
 
 const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutBarProps) => {
   const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
   const navigate = useNavigate();
   const isDark = variant === 'dark';
 
@@ -500,7 +512,16 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
           </PopoverContent>
         </Popover>
 
-        {/* Save Filter - Red heart (moved from Row 1) */}
+        {/* Advanced Filter */}
+        <button
+          onClick={() => setAdvancedOpen(true)}
+          className={cn(pillBase, "px-3 py-1.5", pillInactive)}
+        >
+          <SlidersHorizontal className="w-3.5 h-3.5" />
+          Advanced
+        </button>
+
+        {/* Save Filter - Red heart */}
         <button
           onClick={() => setSaveModalOpen(true)}
           className={cn(pillBase, "px-3 py-1.5", pillInactive)}
@@ -544,6 +565,13 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
         open={saveModalOpen}
         onOpenChange={setSaveModalOpen}
         onSave={handleSaveFilter}
+      />
+
+      <AdvancedFilterPanel
+        open={advancedOpen}
+        onOpenChange={setAdvancedOpen}
+        filters={filters}
+        onFilterChange={onFilterChange}
       />
     </>
   );
