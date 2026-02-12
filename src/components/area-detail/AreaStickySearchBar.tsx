@@ -54,6 +54,16 @@ export const AreaStickySearchBar = ({ areaName, areaSlug }: AreaStickySearchBarP
 
   const showSticky = isSticky && !bottomReached;
 
+  // Signal GlobalHeader to hide when sticky bar is active
+  useEffect(() => {
+    if (showSticky) {
+      document.body.classList.add('filter-bar-fixed');
+    } else {
+      document.body.classList.remove('filter-bar-fixed');
+    }
+    return () => document.body.classList.remove('filter-bar-fixed');
+  }, [showSticky]);
+
   return (
     <>
       {/* Sentinel element - when this scrolls out of view, the bar becomes sticky */}
@@ -63,7 +73,7 @@ export const AreaStickySearchBar = ({ areaName, areaSlug }: AreaStickySearchBarP
       <div
         className={`w-full z-40 transition-all duration-300 ${
           showSticky
-            ? "fixed top-24 sm:top-28 lg:top-32 left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg border-b border-gold/20 py-3 z-[9998]"
+            ? "fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg border-b border-gold/20 py-3 z-[9998]"
             : ""
         }`}
       >

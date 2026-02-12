@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, ArrowUpRight, Search, X, Building2, Filter } from "lucide-react";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
 import { Button } from "@/components/ui/button";
@@ -82,6 +83,16 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     return () => observer.disconnect();
   }, []);
 
+  // Signal GlobalHeader to hide when filter bar is fixed
+  useEffect(() => {
+    if (isFixed && !bottomReached) {
+      document.body.classList.add('filter-bar-fixed');
+    } else {
+      document.body.classList.remove('filter-bar-fixed');
+    }
+    return () => document.body.classList.remove('filter-bar-fixed');
+  }, [isFixed, bottomReached]);
+
   const statusOptions = useMemo(() => {
     if (!projects) return [];
     const statuses = new Set<string>();
@@ -158,8 +169,8 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
       result.sort((a, b) => (b.price_from || 0) - (a.price_from || 0));
     }
 
-    return result;
-  }, [projects, searchQuery, statusFilter, developerFilter, bedroomFilter, sortBy]);
+    return applyShortcutFilters(result, shortcutFilters);
+  }, [projects, searchQuery, statusFilter, developerFilter, bedroomFilter, sortBy, shortcutFilters]);
 
   const hasActiveFilters = searchQuery || statusFilter !== "all" || developerFilter !== "all" || bedroomFilter !== "all" || sortBy !== "newest";
 
@@ -325,7 +336,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
           {/* Phase 2: Fixed portal copy — only when scrolled past sentinel */}
           {isFixed && !bottomReached && createPortal(
             <div
-              className="fixed top-24 sm:top-28 lg:top-32 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200"
+              className="fixed top-0 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200"
             >
               <div className="container mx-auto px-4">
                 <div className="flex flex-wrap items-center gap-3">
