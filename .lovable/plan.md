@@ -1,81 +1,80 @@
 
 
-## Fix Plan: Advanced Filter as Centered Dialog + Developer List with Logos + Location Cleanup
+## Fix Plan: Populate Real Photos for All Areas and News Articles
 
-### 1. Convert Advanced Filter from Side Sheet to Centered Dialog
+### Current State
+- **Areas**: 68 out of 184 active areas are missing real images (have NULL, Unsplash, or Pexels placeholders)
+- **News**: 27 out of 80 articles have no image (NULL)
 
-**Problem:** Currently uses `<Sheet>` (slides from right, attached to header edge). User wants a centered pop-up modal like Reelly, not cropped at edges.
-
-**File: `src/components/filters/AdvancedFilterPanel.tsx`**
-- Replace `<Sheet>` / `<SheetContent>` with `<Dialog>` / `<DialogContent>`
-- Use a custom-sized dialog: `max-w-2xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)]` to ensure no cropping on any edge
-- Keep the champagne gradient background and all internal sections
-- The dialog will be centered on screen with proper padding from all edges
-
-### 2. Replace "By Company" with "By Developer" -- Full List with Logos + Checkboxes
-
-**Problem:** Current developer section shows tiny pill buttons with just text. User wants it to look like the header's developer dropdown: a scrollable list with checkboxes and developer logos.
-
-**File: `src/components/filters/AdvancedFilterPanel.tsx`**
-- Rename section title from "By Company" to "By Developer"
-- Fetch developers from the `developers` table (which has `name`, `logo_url`) instead of distinct `developer_name` from `projects`
-- Replace the pill-button layout with a vertical scrollable list
-- Each row: `[ Checkbox ] [ Logo (24x24, rounded, object-contain, bg-white) ] [ Developer Name ]`
-- Keep the search input at top to filter the list
-- Multi-select via checkboxes (clicking toggles the developer in/out of `localFilters.developers`)
-- Style matching the header dropdown: champagne background, gold border checkboxes, developer logo in a small white box
-
-### 3. Location Filter -- Remove International, Keep UAE Only
-
-**Problem:** The Location section in the advanced filter shows Indonesia, Oman, Thailand, Cyprus. User wants only UAE Emirates.
-
-**File: `src/components/filters/AdvancedFilterPanel.tsx`**
-- Filter `EMIRATES_OPTIONS` to only show entries where `country === 'UAE'`
-- This removes Cyprus, Indonesia, Oman, Thailand
-- Show "All Emirates" label above the UAE emirates list
-- Keep the search input for filtering within UAE emirates
-
-### 4. Fix Cropping / Overflow
-
-**Problem:** The top of the panel (search bar, title) gets cropped when opened.
-
-**Fix:** By switching from Sheet to Dialog, the centered modal naturally has equal spacing from all edges. The `max-h-[calc(100dvh-4rem)]` ensures 2rem padding from top and bottom. Internal `ScrollArea` handles overflow for the filter sections.
+### Strategy (Priority Order)
+1. **Source from existing project data** (areas only) -- free, instant
+2. **Scrape from Provident/source websites** via Firecrawl -- real photos
+3. **Firecrawl Search** for relevant real photos on the web
+4. **AI-generate** via Gemini image model as last resort (only if steps 1-3 fail)
 
 ---
 
-### Summary of Changes
+### Part 1: Fix Area Images (68 areas)
+
+**File: `supabase/functions/enrich-area-images/index.ts`**
+
+The existing function already does steps 1-3 but is missing the AI generation fallback. Changes:
+
+- Add Step 4: When no real photo is found via projects or Firecrawl, call the Gemini image generation model (`google/gemini-2.5-flash-image`) to generate a realistic aerial/panoramic view of that area
+- Prompt: "Photorealistic aerial panoramic view of [Area Name], Dubai, UAE. Show the community skyline, buildings, roads, and landscape from above. Professional real estate photography style, golden hour lighting."
+- Upload the generated image to Supabase Storage (`area-images` bucket) and use the public URL
+- Increase batch_size default from 5 to 10 for faster processing
+
+After deploying, run the function multiple times (7 batches of 10) to process all 68 areas.
+
+### Part 2: Fix News Article Images (27 articles)
+
+**File: `supabase/functions/ai-news-collector/index.ts`**
+
+The existing `enrich` action already scrapes source URLs for images but sets NULL when none is found. Changes to the enrich action:
+
+- After scrape fails to find an image, add a Firecrawl Search step: search for `"[article title]" Dubai real estate photo` and extract OG images from top results
+- If Firecrawl Search also fails, generate an image with Gemini: a professional editorial-style image related to the article's category (e.g., "Dubai skyline with real estate buildings" for Market Update, "UAE government building" for Policy)
+- Upload generated images to Supabase Storage (`news-images` bucket) and use public URLs
+- Track used URLs across the batch to prevent duplicates
+
+After deploying, run the enrich action to process all 27 articles.
+
+### Part 3: Trigger Both Functions
+
+After deploying the updated edge functions:
+1. Call `enrich-area-images` with `batch_size: 10` repeatedly until all 68 areas are processed
+2. Call `ai-news-collector` with `action: "enrich"` to process all 27 news articles
+
+---
+
+### Summary of File Changes
 
 | File | Change |
 |------|--------|
-| `src/components/filters/AdvancedFilterPanel.tsx` | Replace Sheet with Dialog; rename "By Company" to "By Developer"; fetch from `developers` table with logos; show checkbox + logo + name list; filter EMIRATES_OPTIONS to UAE only; ensure no cropping |
+| `supabase/functions/enrich-area-images/index.ts` | Add AI image generation fallback (Gemini) + Supabase Storage upload when no real photo found; increase default batch size |
+| `supabase/functions/ai-news-collector/index.ts` | Add Firecrawl Search fallback + AI image generation in the enrich action for articles with no image |
 
 ### Technical Details
 
-**Dialog structure:**
+**AI Image Generation (fallback):**
 ```
-<Dialog open={open} onOpenChange={onOpenChange}>
-  <DialogContent className="max-w-2xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 flex flex-col overflow-hidden">
-    {/* Header - fixed */}
-    {/* ScrollArea - flex-1 */}
-    {/* Footer - fixed */}
-  </DialogContent>
-</Dialog>
+POST https://ai.gateway.lovable.dev/v1/chat/completions
+model: "google/gemini-2.5-flash-image"
+modalities: ["image", "text"]
 ```
 
-**Developer list item:**
+The returned base64 image is uploaded to Supabase Storage:
 ```
-<button className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-gold/10">
-  <div className="w-4 h-4 rounded border border-gold/40 flex items-center justify-center">
-    {isSelected && <Check className="w-3 h-3 text-black" />}
-  </div>
-  <div className="w-7 h-7 rounded bg-white border border-gold/20 p-0.5 flex items-center justify-center">
-    <img src={dev.logo_url} className="w-full h-full object-contain" />
-  </div>
-  <span className="text-sm text-black">{dev.name}</span>
-</button>
+bucket: "area-images" or "news-images"
+path: "{slug}.webp" or "{article-id}.webp"
 ```
 
-**Location filter (UAE only):**
-```tsx
-const uaeEmirates = EMIRATES_OPTIONS.filter(e => e.country === 'UAE');
-```
+**Supabase Storage buckets** will be created if they don't exist via the edge function using the service role key.
+
+**Execution plan:**
+- Deploy both functions
+- Run `enrich-area-images` in 7 rounds (batch_size=10) to cover all 68 areas
+- Run `ai-news-collector` with `action: "enrich"` once (it already processes up to 30 articles per call)
+- Take screenshots of areas page and news page to verify
+
