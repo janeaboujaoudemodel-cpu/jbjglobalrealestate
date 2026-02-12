@@ -71,6 +71,7 @@ import { blueprintPagesSEO, trackingEvents } from "@/types/blueprint";
 import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 
 
 // Currency conversion rates - 10 unified currencies
@@ -318,6 +319,9 @@ const Properties = () => {
     }
     return sorted;
   }, [filteredProjects, sortBy]);
+
+  // Apply shortcut filters (price, bedrooms, status, construction, handover, etc.) reactively
+  const finalProjects = useMemo(() => applyShortcutFilters(sortedProjects, shortcutFilters), [sortedProjects, shortcutFilters]);
 
   const updateFilter = <K extends keyof ExtendedFilterState>(key: K, value: ExtendedFilterState[K]) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -1156,7 +1160,7 @@ const Properties = () => {
             {/* Results Count - Inside active layer */}
             <div className="mb-6 flex items-center justify-between px-4 pt-4">
               <p className="text-black/70">
-                Showing <span className="text-gold font-medium">{sortedProjects.length}</span> properties
+                Showing <span className="text-gold font-medium">{finalProjects.length}</span> properties
                 {appliedFilters.transactionType === 'rent' && ' for rent'}
                 {appliedFilters.transactionType === 'buy' && ' for sale'}
               </p>
@@ -1179,9 +1183,9 @@ const Properties = () => {
                   <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl h-[400px] sm:h-[460px] animate-pulse border-2 border-gold/30" />
                 ))}
               </div>
-            ) : sortedProjects.length > 0 ? (
+            ) : finalProjects.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-2 sm:p-4">
-                {sortedProjects.map((project, index) => {
+                {finalProjects.map((project, index) => {
                   // Insert featured ads after specific positions (after 6, 12, 18 cards)
                   const adAfterIndex = [5, 11, 17]; // 0-indexed: after 6th, 12th, 18th card
                   const adIndex = adAfterIndex.indexOf(index);
