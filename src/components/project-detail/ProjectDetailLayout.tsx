@@ -635,7 +635,7 @@ export default function ProjectDetailLayout({
       </div>
 
       {/* MAIN CONTENT */}
-      <section className="jj-section-champagne" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}>
+      <section className="jj-section-champagne" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D4C4A8 100%)' }}>
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
           {/* Quick Stats Grid - Premium gold border visible */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">

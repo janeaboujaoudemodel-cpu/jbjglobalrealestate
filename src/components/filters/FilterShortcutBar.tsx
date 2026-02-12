@@ -186,17 +186,19 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
   return (
     <>
       <div className="flex flex-col gap-2 w-full">
-        {/* Row 1: Utility buttons left, Map + Sort pills right */}
-        <div className="flex items-center justify-between w-full gap-2">
-          <UtilityButtons variant={variant} onApplySavedFilter={onFilterChange} />
-          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
-            {/* Map - moved to right side before sort pills */}
+        {/* Row 1: Left = Map + Saved + Currency + Mode | Center = Sort pills */}
+        <div className="flex items-center w-full gap-2">
+          {/* Left group: Map + Utility buttons */}
+          <div className="flex items-center gap-1.5 flex-shrink-0">
             <button onClick={() => navigate('/properties?view=map')} className={cn(pillBase, "px-3 py-1.5", pillInactive)} title="Map View">
               <Map className="w-3.5 h-3.5" />
               Map
             </button>
+            <UtilityButtons variant={variant} onApplySavedFilter={onFilterChange} />
+          </div>
 
-            {/* Sort pills (radio-style) */}
+          {/* Center: Sort pills */}
+          <div className="flex-1 flex items-center justify-center gap-1.5 overflow-x-auto scrollbar-hide">
             {SORT_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
@@ -560,6 +562,7 @@ function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'd
   const [savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
   const [savedOpen, setSavedOpen] = useState(false);
   const [confirmDeleteIndex, setConfirmDeleteIndex] = useState<number | null>(null);
+  const [modeOpen, setModeOpen] = useState(false);
 
   const isDark = variant === 'dark';
   const btnBase = cn(
@@ -568,11 +571,6 @@ function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'd
       ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
       : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 text-black hover:border-gold/60"
   );
-
-  const toggleMode = () => {
-    const next = mode === 'investor' ? 'broker' : 'investor';
-    setMode(next);
-  };
 
   const modeLabel = mode === 'broker' ? 'Broker' : mode === 'investor_broker' ? 'Both' : 'Investor';
 
@@ -594,6 +592,12 @@ function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'd
     onApplySavedFilter(filter.filters);
     setSavedOpen(false);
   };
+
+  const MODE_OPTIONS: { value: typeof mode; label: string }[] = [
+    { value: 'investor', label: 'Investor' },
+    { value: 'broker', label: 'Broker' },
+    { value: 'investor_broker', label: 'Both' },
+  ];
 
   return (
     <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -659,10 +663,36 @@ function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'd
 
       <CurrencySwitcher variant="icon-only" />
 
-      <button onClick={toggleMode} className={btnBase} title="Client Mode">
-        <Users className="w-3.5 h-3.5" />
-        <span className="hidden sm:inline">Mode: {modeLabel}</span>
-      </button>
+      {/* Mode Dropdown */}
+      <Popover open={modeOpen} onOpenChange={setModeOpen}>
+        <PopoverTrigger asChild>
+          <button className={btnBase} title="Switch Mode">
+            <Users className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Mode: {modeLabel}</span>
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[10200] shadow-xl"
+          side="bottom"
+          align="start"
+          sideOffset={6}
+        >
+          {MODE_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => { setMode(opt.value); setModeOpen(false); }}
+              className={cn(
+                "w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors",
+                mode === opt.value
+                  ? "bg-gold/20 text-gold border border-gold/40"
+                  : "text-black/80 hover:bg-white/60"
+              )}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }
