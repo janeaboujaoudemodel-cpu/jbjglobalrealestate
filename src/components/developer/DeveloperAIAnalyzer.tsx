@@ -4,10 +4,12 @@ import { Brain, Loader2, TrendingUp, BarChart3, Shield, Star, Building2, ThumbsU
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { DeveloperLink } from "@/components/ui/developer-link";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, AreaChart, Area, PieChart, Pie } from "recharts";
 
 interface DeveloperAIAnalyzerProps {
   developerName: string;
+  developerSlug?: string;
   foundedYear?: number | null;
   headquarters?: string | null;
   completedProjects?: number | null;
@@ -18,8 +20,10 @@ interface DeveloperAIAnalyzerProps {
 function extractSection(text: string, sectionName: string): string {
   // Try multiple name variations for resilience
   const names = [sectionName];
-  if (sectionName === "Area Overview") names.push("Overview", "Developer Overview", "Company Overview");
-  if (sectionName === "Developer Landscape") names.push("Portfolio Strength", "Portfolio", "Key Projects");
+  if (sectionName === "Company Overview") names.push("Overview", "Developer Overview", "Area Overview");
+  if (sectionName === "Portfolio Strength") names.push("Developer Landscape", "Portfolio", "Key Projects");
+  if (sectionName === "Track Record") names.push("Track Record & Delivery", "Delivery History", "Track Record and Delivery");
+  if (sectionName === "Supply Pipeline") names.push("Supply vs Demand", "Supply & Demand");
   
   for (const name of names) {
     const patterns = [
@@ -284,6 +288,7 @@ function PortfolioStrengthCard({ text }: { text: string }) {
 
 export const DeveloperAIAnalyzer = ({
   developerName,
+  developerSlug,
   foundedYear,
   headquarters,
   completedProjects,
@@ -307,15 +312,16 @@ export const DeveloperAIAnalyzer = ({
     timeoutRef.current = setTimeout(() => setHasTimedOut(true), 30000);
 
     try {
-      const contextParts = [`Developer: ${developerName}`];
-      if (foundedYear) contextParts.push(`Founded: ${foundedYear}`);
-      if (headquarters) contextParts.push(`HQ: ${headquarters}`);
-      if (projectCount) contextParts.push(`Projects: ${projectCount}`);
-      if (completedProjects) contextParts.push(`Units Delivered: ${completedProjects.toLocaleString()}+`);
-      if (activeProjects) contextParts.push(`Active Projects: ${activeProjects}`);
 
-      const { data, error } = await supabase.functions.invoke("ai-property-analyzer", {
-        body: { area: `${developerName} — ${contextParts.join('. ')}`, propertyType: "all" },
+      const { data, error } = await supabase.functions.invoke("ai-developer-analyzer", {
+        body: {
+          developerName,
+          completedProjects,
+          foundedYear,
+          headquarters,
+          activeProjects,
+          projectCount,
+        },
       });
       if (error) throw error;
       setAnalysis(data?.fullAnalysis || "Analysis not available.");
@@ -361,10 +367,11 @@ export const DeveloperAIAnalyzer = ({
   }, [isVisible, analysis, isAnalyzing, handleAnalyze, errorMsg]);
 
   const sections = analysis ? {
-    overview: extractSection(analysis, "Area Overview"),
+    overview: extractSection(analysis, "Company Overview"),
     pricePerSqft: extractSection(analysis, "Price Per Sqft"),
-    supplyDemand: extractSection(analysis, "Supply vs Demand"),
-    developers: extractSection(analysis, "Developer Landscape"),
+    supplyDemand: extractSection(analysis, "Supply Pipeline"),
+    developers: extractSection(analysis, "Portfolio Strength"),
+    trackRecord: extractSection(analysis, "Track Record"),
     investment: extractSection(analysis, "Investment Metrics"),
     pros: extractSection(analysis, "Pros"),
     cons: extractSection(analysis, "Cons"),
@@ -416,7 +423,7 @@ export const DeveloperAIAnalyzer = ({
         </div>
 
         <p className="text-zinc-500 text-sm mb-6">
-          Comprehensive AI analysis for <span className="font-semibold text-black">{developerName}</span>
+          Comprehensive AI analysis for <DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} className="text-sm" />
         </p>
 
         {errorMsg ? (
@@ -429,7 +436,7 @@ export const DeveloperAIAnalyzer = ({
           </div>
         ) : !analysis && !isAnalyzing ? (
           <div className="text-center py-8 space-y-4">
-            <p className="text-zinc-500 text-sm">AI analysis ready for <span className="font-semibold text-black">{developerName}</span></p>
+            <p className="text-zinc-500 text-sm">AI analysis ready for <DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} /></p>
             <Button onClick={handleRetry} className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold hover:brightness-110">
               <Brain className="w-4 h-4 mr-2" />
               Analyze {developerName}
@@ -448,7 +455,7 @@ export const DeveloperAIAnalyzer = ({
             ) : (
               <>
                 <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-3" />
-                <p className="text-zinc-500 text-sm">JBJ AI is analyzing {developerName}...</p>
+                <p className="text-zinc-500 text-sm">JBJ AI is analyzing <DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} />...</p>
               </>
             )}
           </div>
