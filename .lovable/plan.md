@@ -1,36 +1,44 @@
 
 
-# Fix Binghatti Logo Display Across Pages
+## Global Edge Alignment Plan
 
-**Scope**: Developer detail page and project detail page only. Homepage and developer strap are NOT touched.
+### Goal
+Align all major page sections (CTA band, Newsletter band, Footer, Map, and the fixed filter bar) to match the same left/right edge margins as the `jj-layer-2` content wrapper used on the Developer Detail page.
 
-## Problem
-The Binghatti logo (`/developers/logos/binghatti-logo.webp`) is currently in the database but displays poorly on certain pages due to styling choices (black background, `object-cover` with `scale(1.2)`) that work for some logos but not this one.
+### Reference Standard
+The `jj-layer-2` CSS class defines the correct edge spacing:
+- Mobile: `mx-1` (4px)
+- sm: `mx-2` (8px)  
+- md: `mx-3` (12px)
+- lg: `mx-4` (16px)
 
-## What Will Change
+All sections below will adopt this same margin pattern.
 
-### 1. DeveloperDetail.tsx - Logo Frame Fix
-The developer detail page currently uses a black background with `object-cover` and `scale(1.2)`, which crops/distorts the Binghatti logo. Will update the logo frame to:
-- Use a **white background** instead of black (ensures the logo is readable regardless of its colors)
-- Switch from `object-cover` to `object-contain` with proper padding (`p-2`) so the full logo is visible
-- Remove the forced `scale(1.2)` transform
+### Changes Required
 
-### 2. DeveloperInfoCard.tsx - Already Correct (Minor Check)
-This component on project pages already uses `bg-white` and `object-contain`. No changes needed here -- the logo should display correctly already.
+**1. DirectContactCTA (`src/components/DirectContactCTA.tsx`)**
+- Current inner div: `mx-4 sm:mx-6 md:mx-4 lg:mx-6`
+- Change to: `mx-1 sm:mx-2 md:mx-3 lg:mx-4`
 
-### 3. AreaDevelopersBar.tsx - No Changes Needed
-This component pulls logos dynamically from the database and uses `object-contain`. It will automatically show the correct logo.
+**2. NewsletterBand (`src/components/NewsletterBand.tsx`)**
+- Current inner div: `mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8`
+- Change to: `mx-1 sm:mx-2 md:mx-3 lg:mx-4`
 
-### 4. NOT Touched (Locked)
-- `DeveloperPartnersMarquee.tsx` (homepage strap) -- locked, not modified
-- `Index.tsx` (homepage) -- locked, not modified
+**3. Footer (`src/components/Footer.tsx`)**
+- Current content wrapper: `px-3 sm:px-4 md:px-6 lg:px-8`
+- Change to: `px-1 sm:px-2 md:px-3 lg:px-4` to match the `jj-layer-2` margins
 
-## Technical Details
+**4. Fixed Filter Portal (DeveloperDetail.tsx)**
+- Current: `container mx-auto px-4` wrapper
+- Change to: `mx-1 sm:mx-2 md:mx-3 lg:mx-4` (removing the `container` class) so the fixed bar matches the inline filter width exactly
 
-**File: `src/pages/DeveloperDetail.tsx`** (lines 162-181)
-- Change `background: '#000000'` to `background: '#FFFFFF'`
-- Change `className="w-full h-full object-cover p-0"` to `className="w-full h-full object-contain p-2"`
-- Remove `style={{ transform: 'scale(1.2)' }}`
+**5. AreaMapSection (`src/components/area-detail/AreaMapSection.tsx`)**
+- Current: `container mx-auto px-4`
+- Change to: `mx-1 sm:mx-2 md:mx-3 lg:mx-4` to match global edge alignment
 
-This is a universal improvement -- white background with `object-contain` and padding is the standard logo tile pattern used across the site (per the canonical directory standard).
+### Technical Details
+
+- The `jj-layer-2` class in `src/index.css` is the single source of truth for edge margins
+- Only the margin/padding values on the outermost wrappers are changed; no inner content, styling, or functionality is touched
+- The fixed filter portal will drop the `container` constraint so it spans the same width as the inline card layer beneath it
 
