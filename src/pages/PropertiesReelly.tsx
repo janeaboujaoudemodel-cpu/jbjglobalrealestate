@@ -22,7 +22,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { FeaturedProjectAd, FEATURED_ADS } from "@/components/FeaturedProjectAd";
 import { blueprintPagesSEO } from "@/types/blueprint";
 import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
-import { CurrencyTooltip } from "@/components/CurrencyTooltip";
+// CurrencyTooltip removed - mispositioned
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
 import PropertiesMapView from "@/components/maps/PropertiesMapView";
@@ -266,7 +266,7 @@ const PropertiesReelly = () => {
       <div ref={filterSentinelRef} className="h-0 w-full" />
 
       {/* Single Unified FilterShortcutBar */}
-      <section className={`${isFilterFixed ? 'fixed top-0 left-0 right-0 z-[9998]' : 'sticky top-14 sm:top-16 md:top-20 lg:top-[72px] z-40'} bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark py-2 border-b border-gold/30`} style={{ WebkitOverflowScrolling: 'touch' }}>
+      <section className={`${isFilterFixed ? 'fixed top-0 z-[9998]' : 'sticky top-14 sm:top-16 md:top-20 lg:top-[72px] z-40'} bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark py-2 border-b border-gold/30`} style={{ WebkitOverflowScrolling: 'touch', ...(isFilterFixed ? { left: '200px', right: '0' } : {}) }}>
         <div className="container mx-auto px-3 sm:px-4">
           <FilterShortcutBar
             variant="light"
@@ -285,9 +285,11 @@ const PropertiesReelly = () => {
       {isMapMode ? (
         <section className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark" style={{ height: 'calc(100vh - 80px)' }}>
           <div className="flex h-full">
-            {/* Vertical Nav (desktop only) */}
-            <div className="hidden lg:block flex-shrink-0">
-              <PropertiesVerticalNav />
+            {/* Vertical Nav (desktop only) — full height fixed sidebar */}
+            <div className="hidden lg:block flex-shrink-0 w-[200px]">
+              <div className="fixed top-0 left-0 h-screen z-[9999]">
+                <PropertiesVerticalNav />
+              </div>
             </div>
 
             {/* Content area: 50/50 split between cards and map */}
@@ -349,13 +351,15 @@ const PropertiesReelly = () => {
           </div>
         </section>
       ) : (
-        /* Standard list mode */
+      /* Standard list mode */
         <section className="py-12 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
           <div className="flex">
-            {/* Vertical Nav (desktop, when filter fixed) */}
+            {/* Vertical Nav (desktop, when filter fixed) — full height fixed sidebar */}
             {isFilterFixed && (
-              <div className="hidden lg:block flex-shrink-0">
-                <PropertiesVerticalNav />
+              <div className="hidden lg:block flex-shrink-0 w-[200px]">
+                <div className="fixed top-0 left-0 h-screen z-[9999]">
+                  <PropertiesVerticalNav />
+                </div>
               </div>
             )}
 
@@ -472,7 +476,6 @@ const PropertiesReelly = () => {
           </div>
         </section>
       )}
-       <CurrencyTooltip />
        </div>
      </>
    );

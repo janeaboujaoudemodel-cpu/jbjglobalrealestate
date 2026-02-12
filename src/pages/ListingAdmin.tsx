@@ -709,21 +709,40 @@ const ListingAdmin = () => {
                   {filteredProjects?.map((project) => (
                     <Card
                       key={project.id}
-                      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 cursor-pointer transition-all hover:shadow-lg hover:border-gold ${
+                      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 cursor-pointer transition-all hover:shadow-lg hover:border-gold overflow-hidden ${
                         selectedProject?.id === project.id ? "border-gold ring-2 ring-gold/20" : ""
                       }`}
                       onClick={() => handleEditProjectWithView(project)}
                     >
+                      {/* Cover Image */}
+                      {(project.cover_image_url || (project.images && project.images.length > 0)) && (
+                        <div className="aspect-[16/10] overflow-hidden">
+                          <img
+                            src={project.cover_image_url || project.images?.[0]?.image_url}
+                            alt={project.name}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      )}
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
                             <h3 className="text-black font-medium truncate">{project.name}</h3>
-                            <p className="text-zinc-500 text-sm truncate">{project.developer?.name || "No Developer"}</p>
+                            <p className="text-zinc-500 text-sm truncate">{project.developer?.name || (project as any).developer_name || "No Developer"}</p>
                             {project.emirate && <p className="text-zinc-400 text-xs">{project.emirate}</p>}
+                            {project.price_from && (
+                              <p className="text-gold font-bold text-sm mt-1">
+                                From AED {(project.price_from / 1000000).toFixed(1)}M
+                              </p>
+                            )}
                           </div>
-                          <div className="flex items-center gap-1">
+                          <div className="flex flex-col items-end gap-1">
                             {project.is_premium && <Crown className="w-4 h-4 text-gold flex-shrink-0" />}
                             {project.is_sold_out && <Badge variant="destructive" className="text-[10px]">Sold Out</Badge>}
+                            {(project as any).construction_status && (
+                              <Badge variant="outline" className="text-[10px] border-gold/30">{(project as any).construction_status}</Badge>
+                            )}
                           </div>
                         </div>
                       </CardContent>
