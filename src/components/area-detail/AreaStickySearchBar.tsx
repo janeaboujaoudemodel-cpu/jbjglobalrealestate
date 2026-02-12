@@ -45,7 +45,7 @@ export const AreaStickySearchBar = ({ areaName, areaSlug }: AreaStickySearchBarP
       <div
         className={`w-full z-40 transition-all duration-300 ${
           isSticky
-            ? "fixed top-[72px] left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg border-b border-gold/20 py-3"
+            ? "fixed top-24 sm:top-28 lg:top-32 left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg border-b border-gold/20 py-3 z-[9998]"
             : ""
         }`}
       >
