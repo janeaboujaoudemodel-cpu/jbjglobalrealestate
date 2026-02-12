@@ -38,7 +38,7 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
               kicker="DEVELOPERS"
               title="Emaar Properties"
               description="Dubai's most iconic developer"
-              cta="View All Projects"
+              cta="View All Developers"
               className="flex-1 min-h-[260px] lg:min-h-[300px]"
             />
           </div>
