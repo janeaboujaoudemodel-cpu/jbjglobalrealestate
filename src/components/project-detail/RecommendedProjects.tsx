@@ -70,13 +70,13 @@ export default function RecommendedProjects({
   if (recommendedProjects.length === 0) return null;
 
   return (
-    <section className="py-12 bg-black">
+    <section className="py-12 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
       <div className="container mx-auto px-4 md:px-8">
         {/* Section Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <Sparkles className="w-6 h-6 text-gold" />
-            <h2 className="text-2xl md:text-3xl font-bold text-white">Recommended Projects</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-black">Recommended Projects</h2>
           </div>
           <Link 
             to="/properties" 
@@ -92,7 +92,7 @@ export default function RecommendedProjects({
             <Link
               key={project.id}
               to={`/project/${project.slug}`}
-              className="group relative overflow-hidden rounded-xl border border-gold/30 bg-gradient-to-br from-premium-bg to-black hover:border-gold/60 transition-all"
+              className="group relative overflow-hidden rounded-xl border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold/60 transition-all shadow-sm"
             >
               {/* Image */}
               <div className="aspect-[16/10] overflow-hidden">
@@ -112,7 +112,7 @@ export default function RecommendedProjects({
 
               {/* Content */}
               <div className="p-4">
-                <h3 className="text-lg font-semibold text-white group-hover:text-gold transition-colors whitespace-normal break-words leading-tight mb-1">
+                <h3 className="text-lg font-semibold text-black group-hover:text-gold transition-colors whitespace-normal break-words leading-tight mb-1">
                   {project.name}
                 </h3>
                 

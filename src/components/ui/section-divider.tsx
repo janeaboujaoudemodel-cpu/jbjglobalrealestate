@@ -6,19 +6,22 @@ type SectionDividerProps = {
   fullWidth?: boolean;
   /** Override the default bg-black background (e.g. for champagne-toned pages) */
   bg?: string;
+  /** Use "champagne" for light-background pages */
+  variant?: "default" | "champagne";
 };
 
 /**
  * Global premium divider with locked, consistent vertical spacing.
  * Use this anywhere you need the gold-sparkles separator between major sections.
- * Divider has consistent padding both above and below to ensure centered appearance.
- * Use fullWidth={true} for dividers adjacent to full-bleed sections like WhyDubaiCapitalSection.
- * Use bg="bg-transparent" or a gradient class to match surrounding section backgrounds.
+ * Use variant="champagne" for dividers on champagne/light backgrounds.
  */
-export function SectionDivider({ className, fullWidth = false, bg }: SectionDividerProps) {
+export function SectionDivider({ className, fullWidth = false, bg, variant = "default" }: SectionDividerProps) {
+  const bgClass = bg ?? (variant === "champagne" 
+    ? "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark" 
+    : "bg-black");
+
   return (
-    <section className={`${bg ?? "bg-black"} py-14 md:py-20 ${className ?? ""}`.trim()}>
-      {/* Centered inner wrapper ensures perfect alignment at all breakpoints */}
+    <section className={`${bgClass} py-14 md:py-20 ${className ?? ""}`.trim()}>
       <div className={fullWidth 
         ? "w-full max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16" 
         : "container mx-auto px-4"
