@@ -57,7 +57,9 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     if (!sentinel) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => setIsFixed(!entry.isIntersecting),
+      ([entry]) => {
+        setIsFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
+      },
       { threshold: 0, rootMargin: "-140px 0px 0px 0px" }
     );
     observer.observe(sentinel);
