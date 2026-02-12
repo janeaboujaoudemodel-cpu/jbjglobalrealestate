@@ -2,21 +2,19 @@
  * FilterShortcutBar - Reelly-style pill filter buttons with popovers
  * Supports 'light' (Properties page) and 'dark' (Hero) variants
  */
-import { useState, useCallback } from "react";
-import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Ruler, Users, Settings } from "lucide-react";
+import { useState, useCallback, useEffect } from "react";
+import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
-import { SettingsDropdown } from "@/components/filters/SettingsDropdown";
-import { CURRENCY_OPTIONS, AREA_UNIT_OPTIONS, DISPLAY_MODE_OPTIONS, type CurrencyCode, type AreaUnit, type DisplayMode } from "@/constants/filterConfig";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SaveFilterModal from "./SaveFilterModal";
-import { SALE_STATUS_CONFIG, type SaleStatusKey } from "@/constants/filterConfig";
+import { CONSTRUCTION_STATUS_OPTIONS } from "@/constants/constructionStatus";
 
 export interface ShortcutFilterState {
   priceMode: 'unit' | 'sqft' | 'sqm';
@@ -30,6 +28,9 @@ export interface ShortcutFilterState {
   propertyTypes: string[];
   bedrooms: string[];
   statuses: string[];
+  sortBy: 'newest' | 'price_asc' | 'price_desc' | 'alpha' | null;
+  hideSoldOut: boolean;
+  constructionStatuses: string[];
 }
 
 export const defaultShortcutFilters: ShortcutFilterState = {
@@ -44,6 +45,9 @@ export const defaultShortcutFilters: ShortcutFilterState = {
   propertyTypes: [],
   bedrooms: [],
   statuses: [],
+  sortBy: null,
+  hideSoldOut: false,
+  constructionStatuses: [],
 };
 
 interface FilterShortcutBarProps {
@@ -85,6 +89,19 @@ const STATUS_OPTIONS: { value: string; label: string; dotClass: string }[] = [
   { value: 'Sold Out', label: 'Out of Stock', dotClass: 'bg-zinc-400' },
 ];
 
+const CONSTRUCTION_OPTIONS = [
+  { value: 'Completed', label: 'Completed' },
+  { value: 'Under Construction', label: 'Under Construction' },
+  { value: 'Presale', label: 'Presale' },
+];
+
+const SORT_OPTIONS: { value: ShortcutFilterState['sortBy']; label: string }[] = [
+  { value: 'newest', label: 'Newest' },
+  { value: 'price_asc', label: 'Low-High' },
+  { value: 'price_desc', label: 'High-Low' },
+  { value: 'alpha', label: 'A-Z' },
+];
+
 const QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4'];
 const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030'];
 
@@ -103,7 +120,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
     filters.postHandoverOnly ||
     filters.propertyTypes.length > 0 ||
     filters.bedrooms.length > 0 ||
-    filters.statuses.length > 0;
+    filters.statuses.length > 0 ||
+    filters.sortBy !== null ||
+    filters.hideSoldOut ||
+    filters.constructionStatuses.length > 0;
 
   const resetAll = () => onFilterChange({ ...defaultShortcutFilters });
 
@@ -149,7 +169,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
       <div className="flex flex-col gap-2 w-full">
         {/* Row 1: Utility buttons (right-aligned) */}
         <div className="flex justify-end w-full">
-          <UtilityButtons variant={variant} />
+          <UtilityButtons variant={variant} onApplySavedFilter={onFilterChange} />
         </div>
 
         {/* Row 2: Filter pills */}
@@ -404,6 +424,51 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
           </PopoverContent>
         </Popover>
 
+        {/* Construction Status */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactive)}>
+              <HardHat className="w-3.5 h-3.5" />
+              Construction
+              {filters.constructionStatuses.length > 0 && <CountBadge count={filters.constructionStatuses.length} />}
+              <ChevronDown className="w-3 h-3 opacity-60" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className={cn("w-64 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+            <div className="flex flex-wrap gap-2">
+              {CONSTRUCTION_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => update({ constructionStatuses: toggleArray(filters.constructionStatuses, opt.value) })}
+                  className={cn(togglePillBase, filters.constructionStatuses.includes(opt.value) ? togglePillOn : togglePillOff)}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        {/* Sort pills (radio-style) */}
+        {SORT_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
+            className={cn(pillBase, "px-3 py-1.5", filters.sortBy === opt.value ? pillActive : pillInactive)}
+          >
+            {opt.label}
+          </button>
+        ))}
+
+        {/* Hide Sold Out */}
+        <button
+          onClick={() => update({ hideSoldOut: !filters.hideSoldOut })}
+          className={cn(pillBase, "px-3 py-1.5", filters.hideSoldOut ? pillActive : pillInactive)}
+        >
+          <EyeOff className="w-3.5 h-3.5" />
+          Hide Sold Out
+        </button>
+
         {/* Reset All */}
         {hasActiveFilters && (
           <button
@@ -440,13 +505,17 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
 };
 
 /* ---- Reelly-style corner utility buttons ---- */
-function UtilityButtons({ variant }: { variant: 'light' | 'dark' }) {
+interface SavedFilter {
+  name: string;
+  filters: ShortcutFilterState;
+  createdAt: string;
+}
+
+function UtilityButtons({ variant, onApplySavedFilter }: { variant: 'light' | 'dark'; onApplySavedFilter: (filters: ShortcutFilterState) => void }) {
   const navigate = useNavigate();
-  const { mode, setMode, isInvestorMode, isBrokerMode } = useUserModeContext();
-  const [areaUnit, setAreaUnit] = useState<'sqft' | 'sqm'>(() => {
-    if (typeof window !== 'undefined') return (localStorage.getItem('jj_area_unit') as 'sqft' | 'sqm') || 'sqft';
-    return 'sqft';
-  });
+  const { mode, setMode } = useUserModeContext();
+  const [savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
+  const [savedOpen, setSavedOpen] = useState(false);
 
   const isDark = variant === 'dark';
   const btnBase = cn(
@@ -456,13 +525,6 @@ function UtilityButtons({ variant }: { variant: 'light' | 'dark' }) {
       : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 text-black hover:border-gold/60"
   );
 
-  const toggleUnit = () => {
-    const next = areaUnit === 'sqft' ? 'sqm' : 'sqft';
-    setAreaUnit(next);
-    localStorage.setItem('jj_area_unit', next);
-    window.dispatchEvent(new CustomEvent('areaUnitChange', { detail: next }));
-  };
-
   const toggleMode = () => {
     const next = mode === 'investor' ? 'broker' : 'investor';
     setMode(next);
@@ -470,24 +532,78 @@ function UtilityButtons({ variant }: { variant: 'light' | 'dark' }) {
 
   const modeLabel = mode === 'broker' ? 'Broker' : mode === 'investor_broker' ? 'Both' : 'Investor';
 
+  useEffect(() => {
+    const raw = localStorage.getItem('jbj-saved-filters');
+    if (raw) {
+      try { setSavedFilters(JSON.parse(raw)); } catch { /* ignore */ }
+    }
+  }, [savedOpen]);
+
+  const deleteSavedFilter = (index: number) => {
+    const updated = savedFilters.filter((_, i) => i !== index);
+    setSavedFilters(updated);
+    localStorage.setItem('jbj-saved-filters', JSON.stringify(updated));
+  };
+
+  const applySavedFilter = (filter: SavedFilter) => {
+    onApplySavedFilter(filter.filters);
+    setSavedOpen(false);
+  };
+
   return (
     <div className="flex items-center gap-1.5 flex-shrink-0">
       <button onClick={() => navigate('/properties?view=map')} className={btnBase} title="Map View">
         <Map className="w-3.5 h-3.5" />
         <span className="hidden sm:inline">Map</span>
       </button>
-      <button onClick={() => navigate('/properties?saved=true')} className={btnBase} title="Saved">
-        <Heart className="w-3.5 h-3.5" />
-        <span className="hidden sm:inline">Saved</span>
-      </button>
+
+      {/* Saved Filters Popover */}
+      <Popover open={savedOpen} onOpenChange={setSavedOpen}>
+        <PopoverTrigger asChild>
+          <button className={btnBase} title="Saved Filters">
+            <Heart className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Saved</span>
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="w-72 p-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[10200] shadow-xl"
+          side="bottom"
+          align="end"
+          sideOffset={6}
+        >
+          <h4 className="text-sm font-bold text-black mb-2">Saved Filters</h4>
+          {savedFilters.length === 0 ? (
+            <p className="text-xs text-black/50 py-4 text-center">No saved filters yet</p>
+          ) : (
+            <div className="space-y-1 max-h-60 overflow-y-auto">
+              {savedFilters.map((sf, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg hover:bg-white/60 cursor-pointer transition-colors group"
+                  onClick={() => applySavedFilter(sf)}
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-semibold text-black truncate">{sf.name}</p>
+                    <p className="text-[10px] text-black/40">{new Date(sf.createdAt).toLocaleDateString()}</p>
+                  </div>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); deleteSavedFilter(idx); }}
+                    className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-500/10 text-red-500 transition-all"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </PopoverContent>
+      </Popover>
+
       <CurrencySwitcher variant="icon-only" />
-      <button onClick={toggleUnit} className={btnBase} title="Area Unit">
-        <Ruler className="w-3.5 h-3.5" />
-        <span>{areaUnit}</span>
-      </button>
+
       <button onClick={toggleMode} className={btnBase} title="Client Mode">
         <Users className="w-3.5 h-3.5" />
-        <span className="hidden sm:inline">{modeLabel}</span>
+        <span className="hidden sm:inline">Mode: {modeLabel}</span>
       </button>
     </div>
   );
