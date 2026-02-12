@@ -934,23 +934,6 @@ export default function ProjectDetailLayout({
                 </div>
               )}
 
-              {/* Location Distances */}
-              {project.location_distances && project.location_distances.length > 0 && (
-                <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {project.location_distances.map((dist, idx) => (
-                    <div key={idx} className="flex items-center gap-3 p-3 rounded-xl border border-gold/30 bg-card">
-                      <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
-                        <Clock className="w-5 h-5 text-gold" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-foreground">{dist.time}</p>
-                        <p className="text-xs text-muted-foreground">{dist.label}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
               {/* Location Image */}
               {project.location_image_url && (
                 <div className="mb-6 rounded-xl overflow-hidden border border-gold/30">
@@ -970,6 +953,13 @@ export default function ProjectDetailLayout({
                 latitude={null}
                 longitude={null}
               />
+
+              {/* Nearby Points of Interest - Below Map */}
+              {project.location_distances && project.location_distances.length > 0 && (
+                <div className="mt-6">
+                  <PointsOfInterest points={project.location_distances} />
+                </div>
+              )}
             </div>
           </div>
 
@@ -1074,8 +1064,17 @@ export default function ProjectDetailLayout({
                  ))}
                </div>
              )}
+            </div>
+            )}
+
+           {/* REPORT AN ISSUE BANNER */}
+           <div className="mb-12">
+             <ReportIssueButton
+               projectName={project.name}
+               projectId={project.id}
+               projectSlug={project.slug || undefined}
+             />
            </div>
-           )}
 
            {/* INVESTMENT METRICS SECTION (Reelly-style) */}
            {(project.roi_estimate || project.rental_yield_estimate) && (

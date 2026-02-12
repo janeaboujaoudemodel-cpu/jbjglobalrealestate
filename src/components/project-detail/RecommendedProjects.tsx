@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
-import { Sparkles, ChevronRight, CreditCard } from "lucide-react";
+import { Sparkles, ChevronRight, CreditCard, Info } from "lucide-react";
 import { useProjects } from "@/hooks/useProjects";
 import { SafeImage } from "@/components/SafeImage";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { useMemo } from "react";
 import { formatDisplayDate } from "@/utils/formatDate";
+import { formatPrice } from "@/lib/formatPrice";
 
 interface RecommendedProjectsProps {
   currentProjectId: string;
@@ -21,50 +22,19 @@ export default function RecommendedProjects({
 }: RecommendedProjectsProps) {
   const { data: projects } = useProjects();
 
-  // Get 3 similar projects based on developer, location, or emirate
   const recommendedProjects = useMemo(() => {
     if (!projects || projects.length === 0) return [];
-
-    // Filter out current project
     const otherProjects = projects.filter((p) => p.id !== currentProjectId);
-
-    // Score projects by relevance
     const scored = otherProjects.map((p) => {
       let score = 0;
-      
-      // Same developer = highest priority
-      if (currentDeveloperId && p.developer?.id === currentDeveloperId) {
-        score += 10;
-      }
-      
-      // Same location/area
-      if (currentLocation && p.location?.toLowerCase().includes(currentLocation.toLowerCase())) {
-        score += 5;
-      }
-      
-      // Same emirate
-      if (currentEmirate && p.emirate === currentEmirate) {
-        score += 3;
-      }
-      
-      // Has images (better presentation)
-      if (p.images && p.images.length > 0) {
-        score += 2;
-      }
-      
-      // Has price
-      if (p.price_from) {
-        score += 1;
-      }
-
+      if (currentDeveloperId && p.developer?.id === currentDeveloperId) score += 10;
+      if (currentLocation && p.location?.toLowerCase().includes(currentLocation.toLowerCase())) score += 5;
+      if (currentEmirate && p.emirate === currentEmirate) score += 3;
+      if (p.images && p.images.length > 0) score += 2;
+      if (p.price_from) score += 1;
       return { project: p, score };
     });
-
-    // Sort by score and take top 3
-    return scored
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 3)
-      .map((s) => s.project);
+    return scored.sort((a, b) => b.score - a.score).slice(0, 3).map((s) => s.project);
   }, [projects, currentProjectId, currentDeveloperId, currentLocation, currentEmirate]);
 
   if (recommendedProjects.length === 0) return null;
@@ -88,70 +58,107 @@ export default function RecommendedProjects({
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {recommendedProjects.map((project) => (
-            <Link
-              key={project.id}
-              to={`/project/${project.slug}`}
-              className="group relative overflow-hidden rounded-xl border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold/60 transition-all shadow-sm"
-            >
-              {/* Image */}
-              <div className="aspect-[16/10] overflow-hidden">
-                <SafeImage
-                  src={project.images?.[0]?.image_url}
-                  alt={project.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                
-                {/* Handover Badge */}
-                {project.handover_date && (
-                  <div className="absolute top-3 right-3 bg-handover text-handover-foreground px-2 py-1 rounded text-xs font-bold">
-                    {formatDisplayDate(project.handover_date)}
-                  </div>
-                )}
-              </div>
+          {recommendedProjects.map((project) => {
+            const breakdown = (project as any).payment_breakdown;
+            const percentages = breakdown && Array.isArray(breakdown) 
+              ? breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number')
+              : [];
+            const paymentLabel = percentages.length > 0 ? percentages.join('/') : null;
+            const saleStatus = (project as any).sale_status || "On Sale";
+            const devLogo = (project.developer as any)?.logo_url;
 
-              {/* Content */}
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-black group-hover:text-gold transition-colors whitespace-normal break-words leading-tight mb-1">
-                  {project.name}
-                </h3>
-                
-                {project.developer && (
-                  <DeveloperLink
-                    name={project.developer.name}
-                    slug={project.developer.slug}
-                    className="text-sm mb-2"
+            return (
+              <Link
+                key={project.id}
+                to={`/project/${project.slug}`}
+                className="group relative overflow-hidden rounded-xl border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold/60 transition-all shadow-sm"
+              >
+                {/* Image */}
+                <div className="aspect-[16/10] overflow-hidden relative">
+                  <SafeImage
+                    src={project.images?.[0]?.image_url}
+                    alt={project.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                )}
 
-                {project.price_from && (
-                  <p className="text-handover font-bold">
-                    From AED {Math.round(project.price_from / 1000000 * 10) / 10}M
-                  </p>
-                )}
-
-                {project.location && (
-                  <p className="text-muted-foreground text-sm mt-1 truncate">
-                    {project.location}
-                  </p>
-                )}
-
-                {/* Payment Plan Badge */}
-                {(() => {
-                  const breakdown = (project as any).payment_breakdown;
-                  if (!breakdown || !Array.isArray(breakdown) || breakdown.length === 0) return null;
-                  const percentages = breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number');
-                  if (percentages.length === 0) return null;
-                  return (
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-gold bg-gold/10 border border-gold/30 rounded-full px-2 py-0.5 mt-2">
-                      <CreditCard className="w-3 h-3" />
-                      {percentages.join('/')}
+                  {/* Top Badges Row */}
+                  <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {/* Sale Status Badge */}
+                      <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${
+                        saleStatus.toLowerCase().includes("sold") 
+                          ? "bg-red-500 text-white" 
+                          : "bg-emerald-500 text-white"
+                      }`}>
+                        {saleStatus}
+                      </span>
+                      {/* Handover Date Badge */}
+                      {project.handover_date && (
+                        <span className="bg-handover text-handover-foreground px-2 py-0.5 rounded text-[11px] font-bold">
+                          {formatDisplayDate(project.handover_date)}
+                        </span>
+                      )}
+                    </div>
+                    {/* Recommended Badge */}
+                    <span className="bg-gold/90 text-black px-2 py-0.5 rounded text-[11px] font-bold">
+                      Recommended
                     </span>
-                  );
-                })()}
-              </div>
-            </Link>
-          ))}
+                  </div>
+
+                  {/* Developer Logo Overlay - Bottom Left */}
+                  {devLogo && (
+                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-lg bg-white border border-gold/30 overflow-hidden shadow-md flex items-center justify-center p-1">
+                      <SafeImage
+                        src={devLogo}
+                        alt={project.developer?.name || "Developer"}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-black group-hover:text-gold transition-colors whitespace-normal break-words leading-tight mb-1">
+                    {project.name}
+                  </h3>
+                  
+                  {project.developer && (
+                    <DeveloperLink
+                      name={project.developer.name}
+                      slug={project.developer.slug}
+                      className="text-sm mb-1"
+                    />
+                  )}
+
+                  {project.location && (
+                    <p className="text-muted-foreground text-sm truncate mb-3">
+                      {project.location}
+                    </p>
+                  )}
+
+                  {/* Divider */}
+                  <div className="border-t border-gold/20 pt-3 flex items-center justify-between">
+                    {/* Price */}
+                    <p className="text-handover font-bold text-sm">
+                      {project.price_from 
+                        ? `From AED ${Math.round(project.price_from / 1000000 * 10) / 10}M`
+                        : "Price on request"
+                      }
+                    </p>
+
+                    {/* Payment Plan Badge */}
+                    {paymentLabel && (
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-gold bg-gold/10 border border-gold/30 rounded-full px-2.5 py-1">
+                        <CreditCard className="w-3 h-3" />
+                        {paymentLabel}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>
