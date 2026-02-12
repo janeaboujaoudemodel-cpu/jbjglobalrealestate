@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectContentDark,
-  SelectItemDark,
-  SelectTriggerDark,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import {
@@ -720,17 +720,17 @@ const ProjectFilters = ({
                           updateFilter("communityId", value === "all" ? null : value)
                         }
                       >
-                        <SelectTriggerDark className="h-12">
+                        <SelectTrigger className="h-12">
                           <SelectValue placeholder="All Communities" />
-                        </SelectTriggerDark>
-                        <SelectContentDark className="max-h-60">
-                          <SelectItemDark value="all">All Communities</SelectItemDark>
+                        </SelectTrigger>
+                        <SelectContent className="max-h-60">
+                          <SelectItem value="all">All Communities</SelectItem>
                           {communities.map((community) => (
-                            <SelectItemDark key={community.id} value={community.id}>
+                            <SelectItem key={community.id} value={community.id}>
                               {community.name}
-                            </SelectItemDark>
+                            </SelectItem>
                           ))}
-                        </SelectContentDark>
+                        </SelectContent>
                       </Select>
                     </FilterSection>
                   )}
@@ -757,15 +757,15 @@ const ProjectFilters = ({
             value={filters.currency}
             onValueChange={(value) => updateFilter("currency", value as FilterState['currency'])}
           >
-            <SelectTriggerDark className="h-11 w-[90px] bg-white/80 border-gold/40 text-black rounded-xl">
+            <SelectTrigger className="h-11 w-[90px] rounded-xl">
               <SelectValue />
-            </SelectTriggerDark>
-            <SelectContentDark>
-              <SelectItemDark value="AED">AED</SelectItemDark>
-              <SelectItemDark value="USD">USD</SelectItemDark>
-              <SelectItemDark value="EUR">EUR</SelectItemDark>
-              <SelectItemDark value="GBP">GBP</SelectItemDark>
-            </SelectContentDark>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="AED">AED</SelectItem>
+              <SelectItem value="USD">USD</SelectItem>
+              <SelectItem value="EUR">EUR</SelectItem>
+              <SelectItem value="GBP">GBP</SelectItem>
+            </SelectContent>
           </Select>
 
           {/* Developer */}
@@ -776,18 +776,18 @@ const ProjectFilters = ({
                 updateFilter("developerId", value === "all" ? null : value)
               }
             >
-              <SelectTriggerDark className="h-11 w-[160px] bg-white/80 border-gold/40 text-black rounded-xl">
+              <SelectTrigger className="h-11 w-[160px] rounded-xl">
                 <Building2 className="w-4 h-4 mr-1 text-gold shrink-0" />
                 <SelectValue placeholder="Developer" />
-              </SelectTriggerDark>
-              <SelectContentDark className="max-h-60">
-                <SelectItemDark value="all">All Developers</SelectItemDark>
+              </SelectTrigger>
+              <SelectContent className="max-h-60">
+                <SelectItem value="all">All Developers</SelectItem>
                 {developers.map((developer) => (
-                  <SelectItemDark key={developer.id} value={developer.id}>
+                  <SelectItem key={developer.id} value={developer.id}>
                     {developer.name}
-                  </SelectItemDark>
+                  </SelectItem>
                 ))}
-              </SelectContentDark>
+              </SelectContent>
             </Select>
           )}
 
@@ -798,17 +798,17 @@ const ProjectFilters = ({
               updateFilter("emirate", value === "all" ? null : value)
             }
           >
-            <SelectTriggerDark className="h-11 w-[150px] bg-white/80 border-gold/40 text-black rounded-xl">
+            <SelectTrigger className="h-11 w-[150px] rounded-xl">
               <MapPin className="w-4 h-4 mr-1 text-gold shrink-0" />
               <SelectValue placeholder="Location" />
-            </SelectTriggerDark>
-            <SelectContentDark>
+            </SelectTrigger>
+            <SelectContent>
               {EMIRATES.map((emirate) => (
-                <SelectItemDark key={emirate.value} value={emirate.value === "all" ? "all" : emirate.value}>
+                <SelectItem key={emirate.value} value={emirate.value === "all" ? "all" : emirate.value}>
                   {emirate.label}
-                </SelectItemDark>
+                </SelectItem>
               ))}
-            </SelectContentDark>
+            </SelectContent>
           </Select>
 
           {/* Size Unit Toggle */}
