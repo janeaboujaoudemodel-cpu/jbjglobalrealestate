@@ -311,675 +311,531 @@ const ProjectFilters = ({
 
   return (
     <div className="mb-8 space-y-4">
-      {/* Search Bar */}
-      <div className="flex gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-          <Input
-            placeholder="Search projects, developers, locations..."
-            value={filters.search}
-            onChange={(e) => updateFilter("search", e.target.value)}
-            className="pl-12 h-14 bg-[#1a1a1a] border-[#2a2a2a] text-white placeholder:text-gray-500 focus:border-[#D4A017] text-base rounded-xl"
-          />
-          {filters.search && (
-            <button
-              onClick={() => updateFilter("search", "")}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+      {/* Always-Visible Top Bar */}
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-3">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Search */}
+          <div className="relative flex-1 min-w-[200px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <Input
+              placeholder="Search projects, developers..."
+              value={filters.search}
+              onChange={(e) => updateFilter("search", e.target.value)}
+              className="pl-10 h-11 bg-white/80 border-gold/40 text-black placeholder:text-zinc-400 focus:border-gold text-sm rounded-xl"
+            />
+            {filters.search && (
+              <button
+                onClick={() => updateFilter("search", "")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-black"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
 
-        <Sheet open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
-          <SheetTrigger asChild>
-            <Button
-              variant="outline"
-              className="h-14 px-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/60 text-black hover:border-gold hover:bg-[#F5F0E6] rounded-xl"
-            >
-              <SlidersHorizontal className="w-5 h-5 mr-2" />
-              Filters
-              {activeFilterCount > 0 && (
-                <span className="ml-2 px-2 py-0.5 bg-white text-black text-xs font-bold rounded-full">
-                  {activeFilterCount}
-                </span>
-              )}
-            </Button>
-          </SheetTrigger>
-          <SheetContent className="w-full sm:max-w-lg bg-[#0d0d0d] border-[#2a2a2a] p-0">
-            <SheetHeader className="p-6 border-b border-[#2a2a2a]">
-              <div className="flex items-center justify-between">
-                <SheetTitle className="text-white text-xl" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  Filters
-                </SheetTitle>
+          {/* Filters Button */}
+          <Sheet open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="outline"
+                className="h-11 px-4 bg-white/80 border-gold/40 text-black hover:border-gold hover:bg-white rounded-xl"
+              >
+                <SlidersHorizontal className="w-4 h-4 mr-2" />
+                Filters
                 {activeFilterCount > 0 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="text-zinc-400 hover:text-white hover:bg-zinc-800"
-                  >
-                    Clear All
-                  </Button>
+                  <span className="ml-2 px-2 py-0.5 bg-gold text-white text-xs font-bold rounded-full">
+                    {activeFilterCount}
+                  </span>
                 )}
-              </div>
-            </SheetHeader>
-            <ScrollArea className="h-[calc(100vh-200px)] pb-20">
-              <div className="p-6 space-y-8">
-                {/* Premium Properties */}
-                <FilterSection title="Premium Properties" icon={<Star className="w-5 h-5" />}>
-                  <button
-                    onClick={() => updateFilter("premiumOnly", !filters.premiumOnly)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all w-full ${
-                      filters.premiumOnly
-                        ? "bg-white text-black"
-                        : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a] border border-zinc-800"
-                    }`}
-                  >
-                    <Star className={`w-5 h-5 ${filters.premiumOnly ? "fill-black text-black" : "text-gold"}`} />
-                    <span>Show Exclusive Residences Only</span>
-                    <span className="ml-auto text-xs opacity-70">Penthouses, Villas & Mansions</span>
-                  </button>
-                </FilterSection>
-
-                {/* Currency & Display Options */}
-                <FilterSection title="Display Settings" icon={<span className="text-lg">⚙️</span>}>
-                  <div className="grid grid-cols-3 gap-3">
-                    <div>
-                      <label className="text-gray-500 text-xs mb-1 block">Currency</label>
-                      <Select
-                        value={filters.currency}
-                        onValueChange={(value) => updateFilter("currency", value as FilterState['currency'])}
-                      >
-                        <SelectTriggerDark className="h-10">
-                          <SelectValue />
-                        </SelectTriggerDark>
-                        <SelectContentDark>
-                          <SelectItemDark value="AED">AED</SelectItemDark>
-                          <SelectItemDark value="USD">USD</SelectItemDark>
-                          <SelectItemDark value="EUR">EUR</SelectItemDark>
-                          <SelectItemDark value="GBP">GBP</SelectItemDark>
-                        </SelectContentDark>
-                      </Select>
-                    </div>
-                    <div>
-                      <label className="text-gray-500 text-xs mb-1 block">Size Unit</label>
-                      <Select
-                        value={filters.sizeUnit}
-                        onValueChange={(value) => updateFilter("sizeUnit", value as FilterState['sizeUnit'])}
-                      >
-                        <SelectTriggerDark className="h-10">
-                          <SelectValue />
-                        </SelectTriggerDark>
-                        <SelectContentDark>
-                          <SelectItemDark value="sqft">sq ft</SelectItemDark>
-                          <SelectItemDark value="sqm">sq m</SelectItemDark>
-                        </SelectContentDark>
-                      </Select>
-                    </div>
-                    <div>
-                      <label className="text-gray-500 text-xs mb-1 block">Language</label>
-                      <Select
-                        value={filters.language}
-                        onValueChange={(value) => updateFilter("language", value as FilterState['language'])}
-                      >
-                        <SelectTriggerDark className="h-10">
-                          <SelectValue />
-                        </SelectTriggerDark>
-                        <SelectContentDark>
-                          <SelectItemDark value="en">English</SelectItemDark>
-                          <SelectItemDark value="ar">العربية</SelectItemDark>
-                        </SelectContentDark>
-                      </Select>
-                    </div>
-                  </div>
-                </FilterSection>
-
-                {/* Price Range */}
-                <FilterSection title="Price Range" icon={<span className="text-lg">💰</span>}>
-                  <div className="px-2 pt-2">
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div>
-                        <label className="text-gray-500 text-xs mb-1 block">From</label>
-                        <Input
-                          type="text"
-                          value={Math.round(filters.priceMin * CURRENCY_RATES[filters.currency]).toLocaleString()}
-                          onChange={(e) => {
-                            const value = parseInt(e.target.value.replace(/,/g, '')) || 0;
-                            updateFilter("priceMin", Math.round(value / CURRENCY_RATES[filters.currency]));
-                          }}
-                          className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10"
-                          placeholder="Min"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-gray-500 text-xs mb-1 block">To</label>
-                        <Input
-                          type="text"
-                          value={Math.round(filters.priceMax * CURRENCY_RATES[filters.currency]).toLocaleString()}
-                          onChange={(e) => {
-                            const value = parseInt(e.target.value.replace(/,/g, '')) || PRICE_MAX;
-                            updateFilter("priceMax", Math.round(value / CURRENCY_RATES[filters.currency]));
-                          }}
-                          className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10"
-                          placeholder="Max"
-                        />
-                      </div>
-                    </div>
-                    <Slider
-                      value={[filters.priceMin, filters.priceMax]}
-                      min={PRICE_MIN}
-                      max={PRICE_MAX}
-                      step={1000000}
-                      onValueChange={([min, max]) => {
-                        onFiltersChange({
-                          ...filters,
-                          priceMin: min,
-                          priceMax: max,
-                        });
-                      }}
-                      className="mb-4"
-                    />
-                    <div className="flex justify-between text-gray-400 text-sm">
-                      <span>{formatPriceWithCurrency(filters.priceMin)}</span>
-                      <span>{formatPriceWithCurrency(filters.priceMax)}</span>
-                    </div>
-                  </div>
-                </FilterSection>
-
-                {/* Size Range */}
-                <FilterSection title={`Size Range (${filters.sizeUnit})`} icon={<span className="text-lg">📐</span>}>
-                  <div className="px-2 pt-2">
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div>
-                        <label className="text-gray-500 text-xs mb-1 block">From</label>
-                        <Input
-                          type="number"
-                          value={convertSize(filters.sizeMin, filters.sizeUnit)}
-                          onChange={(e) => {
-                            const value = parseInt(e.target.value) || 0;
-                            const sqft = filters.sizeUnit === 'sqm' ? Math.round(value / 0.0929) : value;
-                            updateFilter("sizeMin", sqft);
-                          }}
-                          className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10"
-                          placeholder="Min"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-gray-500 text-xs mb-1 block">To</label>
-                        <Input
-                          type="number"
-                          value={convertSize(filters.sizeMax, filters.sizeUnit)}
-                          onChange={(e) => {
-                            const value = parseInt(e.target.value) || SIZE_MAX;
-                            const sqft = filters.sizeUnit === 'sqm' ? Math.round(value / 0.0929) : value;
-                            updateFilter("sizeMax", sqft);
-                          }}
-                          className="bg-[#1a1a1a] border-[#2a2a2a] text-white h-10"
-                          placeholder="Max"
-                        />
-                      </div>
-                    </div>
-                    <Slider
-                      value={[filters.sizeMin, filters.sizeMax]}
-                      min={SIZE_MIN}
-                      max={SIZE_MAX}
-                      step={100}
-                      onValueChange={([min, max]) => {
-                        onFiltersChange({
-                          ...filters,
-                          sizeMin: min,
-                          sizeMax: max,
-                        });
-                      }}
-                      className="mb-4"
-                    />
-                    <div className="flex justify-between text-gray-400 text-sm">
-                      <span>{convertSize(filters.sizeMin, filters.sizeUnit).toLocaleString()} {filters.sizeUnit}</span>
-                      <span>{convertSize(filters.sizeMax, filters.sizeUnit).toLocaleString()} {filters.sizeUnit}</span>
-                    </div>
-                  </div>
-                </FilterSection>
-
-                {/* Handover Status - Quick Chips */}
-                <FilterSection title="Handover Status" icon={<span className="text-lg">📅</span>}>
-                  <div className="flex flex-wrap gap-2">
-                    {HANDOVER_OPTIONS.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() =>
-                          updateFilter(
-                            "handoverStatus",
-                            option.value === "all" ? null : 
-                            filters.handoverStatus === option.value ? null : option.value
-                          )
-                        }
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          (option.value === "all" && filters.handoverStatus === null) ||
-                          filters.handoverStatus === option.value
-                            ? "bg-white text-black"
-                            : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                </FilterSection>
-
-                {/* Bedrooms */}
-                <FilterSection title="Bedrooms" icon={<span className="text-lg">🛏️</span>}>
-                  <div className="flex flex-wrap gap-2">
-                    {BEDROOM_OPTIONS.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() =>
-                          updateFilter(
-                            "bedroomsMin",
-                            option.value === "all" ? null :
-                            option.value === "studio" ? 0 :
-                            parseInt(option.value)
-                          )
-                        }
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          (option.value === "all" && filters.bedroomsMin === null) ||
-                          (option.value === "studio" && filters.bedroomsMin === 0) ||
-                          filters.bedroomsMin === parseInt(option.value)
-                            ? "bg-white text-black"
-                            : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                </FilterSection>
-
-                {/* Emirates */}
-                <FilterSection title="Emirate" icon={<MapPin className="w-5 h-5" />}>
-                  <div className="flex flex-wrap gap-2">
-                    {EMIRATES.map((emirate) => (
-                      <button
-                        key={emirate.value}
-                        onClick={() =>
-                          updateFilter(
-                            "emirate",
-                            emirate.value === "all" ? null :
-                            filters.emirate === emirate.value ? null : emirate.value
-                          )
-                        }
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          (emirate.value === "all" && filters.emirate === null) ||
-                          filters.emirate === emirate.value
-                            ? "bg-white text-black"
-                            : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
-                        }`}
-                      >
-                        {emirate.label}
-                      </button>
-                    ))}
-                  </div>
-                </FilterSection>
-
-                {/* Trending Areas */}
-                {filteredTrendingAreas && filteredTrendingAreas.length > 0 && (
-                  <FilterSection title="Trending Areas" icon={<Sparkles className="w-5 h-5" />}>
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="w-full sm:max-w-lg bg-gradient-to-b from-[#FDFBF7] to-[#EDE4D3] border-gold/30 p-0">
+              <SheetHeader className="p-6 border-b border-gold/20">
+                <div className="flex items-center justify-between">
+                  <SheetTitle className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    All Filters
+                  </SheetTitle>
+                  {activeFilterCount > 0 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={clearFilters}
+                      className="text-zinc-500 hover:text-black hover:bg-gold/10"
+                    >
+                      Clear All
+                    </Button>
+                  )}
+                </div>
+              </SheetHeader>
+              <ScrollArea className="h-[calc(100vh-200px)] pb-20">
+                <div className="p-6 space-y-6">
+                  {/* Property Status */}
+                  <FilterSection title="Property Status" icon={<span className="text-lg">📅</span>}>
                     <div className="flex flex-wrap gap-2">
-                      <button
-                        onClick={() => updateFilter("trendingArea", null)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          filters.trendingArea === null
-                            ? "bg-white text-black"
-                            : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
-                        }`}
-                      >
-                        All Areas
-                      </button>
-                      {filteredTrendingAreas.map((area) => (
+                      {HANDOVER_OPTIONS.map((option) => (
                         <button
-                          key={area.id}
+                          key={option.value}
                           onClick={() =>
                             updateFilter(
-                              "trendingArea",
-                              filters.trendingArea === area.slug ? null : area.slug
+                              "handoverStatus",
+                              option.value === "all" ? null : 
+                              filters.handoverStatus === option.value ? null : option.value
                             )
                           }
                           className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            filters.trendingArea === area.slug
-                              ? "bg-white text-black"
-                              : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
+                            (option.value === "all" && filters.handoverStatus === null) ||
+                            filters.handoverStatus === option.value
+                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
                           }`}
                         >
-                          {area.name}
+                          {option.label}
                         </button>
                       ))}
                     </div>
                   </FilterSection>
-                )}
 
-                {/* Developer */}
-                {showDeveloperFilter && developers && developers.length > 0 && (
-                  <FilterSection title="Developer" icon={<Building2 className="w-5 h-5" />}>
-                    <Select
-                      value={filters.developerId || "all"}
-                      onValueChange={(value) =>
-                        updateFilter("developerId", value === "all" ? null : value)
-                      }
-                    >
-                      <SelectTriggerDark className="h-12">
-                        <SelectValue placeholder="All Developers" />
-                      </SelectTriggerDark>
-                      <SelectContentDark className="max-h-60">
-                        <SelectItemDark value="all">All Developers</SelectItemDark>
-                        {developers.map((developer) => (
-                          <SelectItemDark key={developer.id} value={developer.id}>
-                            {developer.name}
-                          </SelectItemDark>
-                        ))}
-                      </SelectContentDark>
-                    </Select>
-                  </FilterSection>
-                )}
-
-                {/* Community */}
-                {showCommunityFilter && communities && communities.length > 0 && (
-                  <FilterSection title="Community" icon={<MapPin className="w-5 h-5" />}>
-                    <Select
-                      value={filters.communityId || "all"}
-                      onValueChange={(value) =>
-                        updateFilter("communityId", value === "all" ? null : value)
-                      }
-                    >
-                      <SelectTriggerDark className="h-12">
-                        <SelectValue placeholder="All Communities" />
-                      </SelectTriggerDark>
-                      <SelectContentDark className="max-h-60">
-                        <SelectItemDark value="all">All Communities</SelectItemDark>
-                        {communities.map((community) => (
-                          <SelectItemDark key={community.id} value={community.id}>
-                            {community.name}
-                          </SelectItemDark>
-                        ))}
-                      </SelectContentDark>
-                    </Select>
-                  </FilterSection>
-                )}
-
-                {/* Furnished Status */}
-                <FilterSection title="Furnishing" icon={<Sofa className="w-5 h-5" />}>
-                  <div className="flex flex-wrap gap-2">
-                    {FURNISHED_OPTIONS.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() =>
-                          updateFilter(
-                            "furnishedStatus",
-                            option.value === "all" ? null :
-                            filters.furnishedStatus === option.value ? null : option.value
-                          )
-                        }
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          (option.value === "all" && filters.furnishedStatus === null) ||
-                          filters.furnishedStatus === option.value
-                            ? "bg-white text-black"
-                            : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                </FilterSection>
-
-                {/* Views */}
-                <FilterSection title="Views" icon={<Eye className="w-5 h-5" />}>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      onClick={() => updateFilter("views", [])}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                        filters.views.length === 0
-                          ? "bg-white text-black"
-                          : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
-                      }`}
-                    >
-                      All
-                    </button>
-                    {VIEW_OPTIONS.map((view) => (
-                      <button
-                        key={view}
-                        onClick={() => toggleArrayFilter("views", view)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          filters.views.includes(view)
-                            ? "bg-white text-black"
-                            : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
-                        }`}
-                      >
-                        {view}
-                      </button>
-                    ))}
-                  </div>
-                </FilterSection>
-
-                {/* Amenities */}
-                <FilterSection title="Amenities" icon={<span className="text-lg">🏊</span>}>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      onClick={() => updateFilter("amenities", [])}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                        filters.amenities.length === 0
-                          ? "bg-white text-black"
-                          : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
-                      }`}
-                    >
-                      All
-                    </button>
-                    {AMENITY_OPTIONS.map((amenity) => (
-                      <button
-                        key={amenity}
-                        onClick={() => toggleArrayFilter("amenities", amenity)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          filters.amenities.includes(amenity)
-                            ? "bg-white text-black"
-                            : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
-                        }`}
-                      >
-                        {amenity}
-                      </button>
-                    ))}
-                  </div>
-                </FilterSection>
-
-                {/* Facilities */}
-                <FilterSection title="Facilities" icon={<span className="text-lg">🏢</span>}>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      onClick={() => updateFilter("facilities", [])}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                        filters.facilities.length === 0
-                          ? "bg-white text-black"
-                          : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
-                      }`}
-                    >
-                      All
-                    </button>
-                    {FACILITY_OPTIONS.map((facility) => (
-                      <button
-                        key={facility}
-                        onClick={() => toggleArrayFilter("facilities", facility)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          filters.facilities.includes(facility)
-                            ? "bg-white text-black"
-                            : "bg-[#1a1a1a] text-gray-300 hover:bg-[#2a2a2a]"
-                        }`}
-                      >
-                        {facility}
-                      </button>
-                    ))}
-                  </div>
-                </FilterSection>
-              </div>
-            </ScrollArea>
-
-            {/* Apply Button */}
-            <div className="absolute bottom-0 left-0 right-0 p-4 bg-zinc-950 border-t border-zinc-800">
-              <Button
-                onClick={() => setIsFiltersOpen(false)}
-                className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark text-gold-foreground hover:from-gold-light hover:to-gold font-semibold text-base shadow-lg shadow-gold/20"
-              >
-                Show Results
-              </Button>
-            </div>
-          </SheetContent>
-        </Sheet>
-      </div>
-
-      {/* Quick Filter Chips - Only show if not hidden */}
-      {!hideQuickFilters && (
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-4">
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-            {/* Status Category */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-gold uppercase tracking-wider mr-1">Status</span>
-              <QuickFilterChip
-                label="Ready to Move"
-                active={filters.handoverStatus === "ready"}
-                onClick={() =>
-                  updateFilter(
-                    "handoverStatus",
-                    filters.handoverStatus === "ready" ? null : "ready"
-                  )
-                }
-              />
-              <QuickFilterChip
-                label="Off-Plan"
-                active={filters.handoverStatus === "off-plan"}
-                onClick={() =>
-                  updateFilter(
-                    "handoverStatus",
-                    filters.handoverStatus === "off-plan" ? null : "off-plan"
-                  )
-                }
-              />
-              <QuickFilterChip
-                label="Close to Handover"
-                active={filters.handoverStatus === "close-to-handover"}
-                onClick={() =>
-                  updateFilter(
-                    "handoverStatus",
-                    filters.handoverStatus === "close-to-handover" ? null : "close-to-handover"
-                  )
-                }
-              />
-            </div>
-
-            {/* Divider */}
-            <div className="hidden sm:block w-px h-6 bg-gold/30" />
-
-            {/* Budget & Size Category */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-gold uppercase tracking-wider mr-1">Budget</span>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
-                      filters.priceMin > 0 || filters.priceMax < PRICE_MAX
-                        ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                        : "bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50 hover:bg-white"
-                    }`}
-                  >
-                    Price
-                    <ChevronDown className="w-4 h-4" />
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40" align="start">
-                  <div className="space-y-4">
-                    <p className="text-black font-medium">Price Range</p>
-                    <Slider
-                      value={[filters.priceMin, filters.priceMax]}
-                      min={PRICE_MIN}
-                      max={PRICE_MAX}
-                      step={1000000}
-                      onValueChange={([min, max]) => {
-                        onFiltersChange({
-                          ...filters,
-                          priceMin: min,
-                          priceMax: max,
-                        });
-                      }}
-                      className="mb-2"
-                    />
-                    <div className="flex justify-between text-zinc-600 text-sm">
-                      <span>AED {formatPrice(filters.priceMin)}</span>
-                      <span>AED {formatPrice(filters.priceMax)}</span>
+                  {/* Price Range */}
+                  <FilterSection title="Price Range" icon={<span className="text-lg">💰</span>}>
+                    <div className="px-2 pt-2">
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <label className="text-zinc-500 text-xs mb-1 block">From</label>
+                          <Input
+                            type="text"
+                            value={Math.round(filters.priceMin * CURRENCY_RATES[filters.currency]).toLocaleString()}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value.replace(/,/g, '')) || 0;
+                              updateFilter("priceMin", Math.round(value / CURRENCY_RATES[filters.currency]));
+                            }}
+                            className="bg-white/80 border-gold/30 text-black h-10"
+                            placeholder="Min"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-zinc-500 text-xs mb-1 block">To</label>
+                          <Input
+                            type="text"
+                            value={Math.round(filters.priceMax * CURRENCY_RATES[filters.currency]).toLocaleString()}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value.replace(/,/g, '')) || PRICE_MAX;
+                              updateFilter("priceMax", Math.round(value / CURRENCY_RATES[filters.currency]));
+                            }}
+                            className="bg-white/80 border-gold/30 text-black h-10"
+                            placeholder="Max"
+                          />
+                        </div>
+                      </div>
+                      <Slider
+                        value={[filters.priceMin, filters.priceMax]}
+                        min={PRICE_MIN}
+                        max={PRICE_MAX}
+                        step={1000000}
+                        onValueChange={([min, max]) => {
+                          onFiltersChange({ ...filters, priceMin: min, priceMax: max });
+                        }}
+                        className="mb-4"
+                      />
+                      <div className="flex justify-between text-zinc-500 text-sm">
+                        <span>{formatPriceWithCurrency(filters.priceMin)}</span>
+                        <span>{formatPriceWithCurrency(filters.priceMax)}</span>
+                      </div>
                     </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
-                      filters.bedroomsMin !== null
-                        ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
-                        : "bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50 hover:bg-white"
-                    }`}
-                  >
-                    Beds
-                    <ChevronDown className="w-4 h-4" />
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-64 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40" align="start">
-                  <div className="flex flex-wrap gap-2">
-                    {BEDROOM_OPTIONS.map((option) => (
+                  </FilterSection>
+
+                  {/* Size Range */}
+                  <FilterSection title={`Size Range (${filters.sizeUnit})`} icon={<span className="text-lg">📐</span>}>
+                    <div className="px-2 pt-2">
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <label className="text-zinc-500 text-xs mb-1 block">From</label>
+                          <Input
+                            type="number"
+                            value={convertSize(filters.sizeMin, filters.sizeUnit)}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value) || 0;
+                              const sqft = filters.sizeUnit === 'sqm' ? Math.round(value / 0.0929) : value;
+                              updateFilter("sizeMin", sqft);
+                            }}
+                            className="bg-white/80 border-gold/30 text-black h-10"
+                            placeholder="Min"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-zinc-500 text-xs mb-1 block">To</label>
+                          <Input
+                            type="number"
+                            value={convertSize(filters.sizeMax, filters.sizeUnit)}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value) || SIZE_MAX;
+                              const sqft = filters.sizeUnit === 'sqm' ? Math.round(value / 0.0929) : value;
+                              updateFilter("sizeMax", sqft);
+                            }}
+                            className="bg-white/80 border-gold/30 text-black h-10"
+                            placeholder="Max"
+                          />
+                        </div>
+                      </div>
+                      <Slider
+                        value={[filters.sizeMin, filters.sizeMax]}
+                        min={SIZE_MIN}
+                        max={SIZE_MAX}
+                        step={100}
+                        onValueChange={([min, max]) => {
+                          onFiltersChange({ ...filters, sizeMin: min, sizeMax: max });
+                        }}
+                        className="mb-4"
+                      />
+                      <div className="flex justify-between text-zinc-500 text-sm">
+                        <span>{convertSize(filters.sizeMin, filters.sizeUnit).toLocaleString()} {filters.sizeUnit}</span>
+                        <span>{convertSize(filters.sizeMax, filters.sizeUnit).toLocaleString()} {filters.sizeUnit}</span>
+                      </div>
+                    </div>
+                  </FilterSection>
+
+                  {/* Bedrooms */}
+                  <FilterSection title="Bedrooms" icon={<span className="text-lg">🛏️</span>}>
+                    <div className="flex flex-wrap gap-2">
+                      {BEDROOM_OPTIONS.map((option) => (
+                        <button
+                          key={option.value}
+                          onClick={() =>
+                            updateFilter(
+                              "bedroomsMin",
+                              option.value === "all" ? null :
+                              option.value === "studio" ? 0 :
+                              parseInt(option.value)
+                            )
+                          }
+                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            (option.value === "all" && filters.bedroomsMin === null) ||
+                            (option.value === "studio" && filters.bedroomsMin === 0) ||
+                            filters.bedroomsMin === parseInt(option.value)
+                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  </FilterSection>
+
+                  {/* Emirates / Location */}
+                  <FilterSection title="Location / Emirate" icon={<MapPin className="w-5 h-5" />}>
+                    <div className="flex flex-wrap gap-2">
+                      {EMIRATES.map((emirate) => (
+                        <button
+                          key={emirate.value}
+                          onClick={() =>
+                            updateFilter(
+                              "emirate",
+                              emirate.value === "all" ? null :
+                              filters.emirate === emirate.value ? null : emirate.value
+                            )
+                          }
+                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            (emirate.value === "all" && filters.emirate === null) ||
+                            filters.emirate === emirate.value
+                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                          }`}
+                        >
+                          {emirate.label}
+                        </button>
+                      ))}
+                    </div>
+                  </FilterSection>
+
+                  {/* Trending Areas */}
+                  {filteredTrendingAreas && filteredTrendingAreas.length > 0 && (
+                    <FilterSection title="Trending Areas" icon={<Sparkles className="w-5 h-5" />}>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={() => updateFilter("trendingArea", null)}
+                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            filters.trendingArea === null
+                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                          }`}
+                        >
+                          All Areas
+                        </button>
+                        {filteredTrendingAreas.map((area) => (
+                          <button
+                            key={area.id}
+                            onClick={() =>
+                              updateFilter(
+                                "trendingArea",
+                                filters.trendingArea === area.slug ? null : area.slug
+                              )
+                            }
+                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                              filters.trendingArea === area.slug
+                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                                : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                            }`}
+                          >
+                            {area.name}
+                          </button>
+                        ))}
+                      </div>
+                    </FilterSection>
+                  )}
+
+                  {/* Premium Properties */}
+                  <FilterSection title="Premium Properties" icon={<Star className="w-5 h-5" />}>
+                    <button
+                      onClick={() => updateFilter("premiumOnly", !filters.premiumOnly)}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all w-full ${
+                        filters.premiumOnly
+                          ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                          : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                      }`}
+                    >
+                      <Star className={`w-5 h-5 ${filters.premiumOnly ? "fill-black text-black" : "text-gold"}`} />
+                      <span>Show Exclusive Residences Only</span>
+                    </button>
+                  </FilterSection>
+
+                  {/* Furnished Status */}
+                  <FilterSection title="Furnishing" icon={<Sofa className="w-5 h-5" />}>
+                    <div className="flex flex-wrap gap-2">
+                      {FURNISHED_OPTIONS.map((option) => (
+                        <button
+                          key={option.value}
+                          onClick={() =>
+                            updateFilter(
+                              "furnishedStatus",
+                              option.value === "all" ? null :
+                              filters.furnishedStatus === option.value ? null : option.value
+                            )
+                          }
+                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            (option.value === "all" && filters.furnishedStatus === null) ||
+                            filters.furnishedStatus === option.value
+                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  </FilterSection>
+
+                  {/* Views */}
+                  <FilterSection title="Views" icon={<Eye className="w-5 h-5" />}>
+                    <div className="flex flex-wrap gap-2">
                       <button
-                        key={option.value}
-                        onClick={() =>
-                          updateFilter(
-                            "bedroomsMin",
-                            option.value === "all" ? null :
-                            option.value === "studio" ? 0 :
-                            parseInt(option.value)
-                          )
-                        }
-                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                          (option.value === "all" && filters.bedroomsMin === null) ||
-                          (option.value === "studio" && filters.bedroomsMin === 0) ||
-                          filters.bedroomsMin === parseInt(option.value)
-                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold shadow-sm"
-                            : "bg-white/90 text-zinc-700 border border-gold/20 hover:border-gold/40"
+                        onClick={() => updateFilter("views", [])}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                          filters.views.length === 0
+                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                            : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
                         }`}
                       >
-                        {option.label}
+                        All
                       </button>
-                    ))}
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
+                      {VIEW_OPTIONS.map((view) => (
+                        <button
+                          key={view}
+                          onClick={() => toggleArrayFilter("views", view)}
+                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            filters.views.includes(view)
+                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                          }`}
+                        >
+                          {view}
+                        </button>
+                      ))}
+                    </div>
+                  </FilterSection>
 
-            {/* Divider */}
-            <div className="hidden sm:block w-px h-6 bg-gold/30" />
+                  {/* Amenities */}
+                  <FilterSection title="Amenities" icon={<span className="text-lg">🏊</span>}>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => updateFilter("amenities", [])}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                          filters.amenities.length === 0
+                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                            : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                        }`}
+                      >
+                        All
+                      </button>
+                      {AMENITY_OPTIONS.map((amenity) => (
+                        <button
+                          key={amenity}
+                          onClick={() => toggleArrayFilter("amenities", amenity)}
+                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            filters.amenities.includes(amenity)
+                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                          }`}
+                        >
+                          {amenity}
+                        </button>
+                      ))}
+                    </div>
+                  </FilterSection>
 
-            {/* Location Category - All Emirates */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-semibold text-gold uppercase tracking-wider mr-1">Location</span>
-              {EMIRATES.slice(1).map((emirate) => (
-                <QuickFilterChip
-                  key={emirate.value}
-                  label={emirate.label}
-                  active={filters.emirate === emirate.value}
-                  onClick={() =>
-                    updateFilter(
-                      "emirate",
-                      filters.emirate === emirate.value ? null : emirate.value
-                    )
-                  }
-                />
+                  {/* Facilities */}
+                  <FilterSection title="Facilities" icon={<span className="text-lg">🏢</span>}>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => updateFilter("facilities", [])}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                          filters.facilities.length === 0
+                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                            : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                        }`}
+                      >
+                        All
+                      </button>
+                      {FACILITY_OPTIONS.map((facility) => (
+                        <button
+                          key={facility}
+                          onClick={() => toggleArrayFilter("facilities", facility)}
+                          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            filters.facilities.includes(facility)
+                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                              : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                          }`}
+                        >
+                          {facility}
+                        </button>
+                      ))}
+                    </div>
+                  </FilterSection>
+
+                  {/* Community */}
+                  {showCommunityFilter && communities && communities.length > 0 && (
+                    <FilterSection title="Community" icon={<MapPin className="w-5 h-5" />}>
+                      <Select
+                        value={filters.communityId || "all"}
+                        onValueChange={(value) =>
+                          updateFilter("communityId", value === "all" ? null : value)
+                        }
+                      >
+                        <SelectTriggerDark className="h-12">
+                          <SelectValue placeholder="All Communities" />
+                        </SelectTriggerDark>
+                        <SelectContentDark className="max-h-60">
+                          <SelectItemDark value="all">All Communities</SelectItemDark>
+                          {communities.map((community) => (
+                            <SelectItemDark key={community.id} value={community.id}>
+                              {community.name}
+                            </SelectItemDark>
+                          ))}
+                        </SelectContentDark>
+                      </Select>
+                    </FilterSection>
+                  )}
+                </div>
+              </ScrollArea>
+
+              {/* Apply Button */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#EDE4D3] to-[#EDE4D3]/90 border-t border-gold/20">
+                <Button
+                  onClick={() => setIsFiltersOpen(false)}
+                  className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark text-gold-foreground hover:from-gold-light hover:to-gold font-semibold text-base shadow-lg shadow-gold/20"
+                >
+                  Show Results
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          {/* Divider */}
+          <div className="hidden sm:block w-px h-8 bg-gold/30" />
+
+          {/* Currency */}
+          <Select
+            value={filters.currency}
+            onValueChange={(value) => updateFilter("currency", value as FilterState['currency'])}
+          >
+            <SelectTriggerDark className="h-11 w-[90px] bg-white/80 border-gold/40 text-black rounded-xl">
+              <SelectValue />
+            </SelectTriggerDark>
+            <SelectContentDark>
+              <SelectItemDark value="AED">AED</SelectItemDark>
+              <SelectItemDark value="USD">USD</SelectItemDark>
+              <SelectItemDark value="EUR">EUR</SelectItemDark>
+              <SelectItemDark value="GBP">GBP</SelectItemDark>
+            </SelectContentDark>
+          </Select>
+
+          {/* Developer */}
+          {showDeveloperFilter && developers && developers.length > 0 && (
+            <Select
+              value={filters.developerId || "all"}
+              onValueChange={(value) =>
+                updateFilter("developerId", value === "all" ? null : value)
+              }
+            >
+              <SelectTriggerDark className="h-11 w-[160px] bg-white/80 border-gold/40 text-black rounded-xl">
+                <Building2 className="w-4 h-4 mr-1 text-gold shrink-0" />
+                <SelectValue placeholder="Developer" />
+              </SelectTriggerDark>
+              <SelectContentDark className="max-h-60">
+                <SelectItemDark value="all">All Developers</SelectItemDark>
+                {developers.map((developer) => (
+                  <SelectItemDark key={developer.id} value={developer.id}>
+                    {developer.name}
+                  </SelectItemDark>
+                ))}
+              </SelectContentDark>
+            </Select>
+          )}
+
+          {/* Location / Emirate */}
+          <Select
+            value={filters.emirate || "all"}
+            onValueChange={(value) =>
+              updateFilter("emirate", value === "all" ? null : value)
+            }
+          >
+            <SelectTriggerDark className="h-11 w-[150px] bg-white/80 border-gold/40 text-black rounded-xl">
+              <MapPin className="w-4 h-4 mr-1 text-gold shrink-0" />
+              <SelectValue placeholder="Location" />
+            </SelectTriggerDark>
+            <SelectContentDark>
+              {EMIRATES.map((emirate) => (
+                <SelectItemDark key={emirate.value} value={emirate.value === "all" ? "all" : emirate.value}>
+                  {emirate.label}
+                </SelectItemDark>
               ))}
-            </div>
+            </SelectContentDark>
+          </Select>
+
+          {/* Size Unit Toggle */}
+          <div className="flex items-center h-11 bg-white/80 border border-gold/40 rounded-xl overflow-hidden">
+            <button
+              onClick={() => updateFilter("sizeUnit", "sqft")}
+              className={`px-3 h-full text-sm font-medium transition-all ${
+                filters.sizeUnit === "sqft"
+                  ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] text-black border-r border-gold/30"
+                  : "text-zinc-500 hover:text-black"
+              }`}
+            >
+              sq ft
+            </button>
+            <button
+              onClick={() => updateFilter("sizeUnit", "sqm")}
+              className={`px-3 h-full text-sm font-medium transition-all ${
+                filters.sizeUnit === "sqm"
+                  ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] text-black border-l border-gold/30"
+                  : "text-zinc-500 hover:text-black"
+              }`}
+            >
+              sq m
+            </button>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Active Filter Pills */}
       {activeFilterCount > 0 && (
