@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 interface AreaStickySearchBarProps {
   areaName: string;
@@ -13,6 +14,7 @@ export const AreaStickySearchBar = ({ areaName, areaSlug }: AreaStickySearchBarP
   const [searchQuery, setSearchQuery] = useState("");
   const [isSticky, setIsSticky] = useState(false);
   const [bottomReached, setBottomReached] = useState(false);
+  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -87,6 +89,9 @@ export const AreaStickySearchBar = ({ areaName, areaSlug }: AreaStickySearchBarP
             </Button>
           </div>
         </form>
+        <div className={`${showSticky ? "container mx-auto px-4" : ""} max-w-xl ${showSticky ? "" : "mb-4"} mt-3`}>
+          <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
+        </div>
       </div>
     </>
   );

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import { DeveloperAIAnalyzer } from "@/components/developer/DeveloperAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
+import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -38,6 +39,7 @@ const DeveloperDetail = () => {
 
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [selectedEmirate, setSelectedEmirate] = useState<string | null>(null);
+  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const [isDevDescExpanded, setIsDevDescExpanded] = useState(false);
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const [bottomReached, setBottomReached] = useState(false);
@@ -334,6 +336,9 @@ const DeveloperDetail = () => {
               developers={allDevelopers}
               showDeveloperFilter={true}
             />
+            <div className="mt-3">
+              <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
+            </div>
           </div>
 
           {/* Spacer when filter is fixed to prevent content hiding under it */}
@@ -352,6 +357,9 @@ const DeveloperDetail = () => {
                     developers={allDevelopers}
                     showDeveloperFilter={true}
                   />
+                  <div className="mt-3">
+                    <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
+                  </div>
                 </div>
               </div>
             </div>,
