@@ -1082,7 +1082,7 @@ const FilterPill = ({
   label: string;
   onRemove: () => void;
 }) => (
-  <span className="inline-flex items-center gap-1 px-3 py-1 bg-zinc-800 border border-zinc-700 rounded-full text-white text-sm">
+  <span className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-full text-black text-sm">
     {label}
     <button
       onClick={onRemove}
