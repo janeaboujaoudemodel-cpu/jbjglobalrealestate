@@ -254,7 +254,7 @@ function PortfolioStrengthCard({ text }: { text: string }) {
       const devName = colonSplit[0]?.trim() || clean;
       const projects = colonSplit.slice(1).join(':').trim();
       return { name: devName, projects };
-    }).slice(0, 4);
+    }).slice(0, 5);
   }, [text]);
 
   return (
@@ -347,6 +347,20 @@ export const DeveloperAIAnalyzer = ({
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleAnalyze = useCallback(async () => {
+    // Check sessionStorage cache first
+    const cacheKey = `dev-ai-${developerSlug || developerName}`;
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        // Use if less than 1 hour old
+        if (Date.now() - parsed.ts < 3600000) {
+          setAnalysis(parsed.text);
+          return;
+        }
+      } catch { /* ignore */ }
+    }
+
     setIsAnalyzing(true);
     setHasTimedOut(false);
     setErrorMsg(null);
@@ -354,10 +368,10 @@ export const DeveloperAIAnalyzer = ({
     timeoutRef.current = setTimeout(() => setHasTimedOut(true), 30000);
 
     try {
-
       const { data, error } = await supabase.functions.invoke("ai-developer-analyzer", {
         body: {
           developerName,
+          developerSlug: developerSlug || developerName.toLowerCase().replace(/\s+/g, '-'),
           completedProjects,
           foundedYear,
           headquarters,
@@ -366,7 +380,10 @@ export const DeveloperAIAnalyzer = ({
         },
       });
       if (error) throw error;
-      setAnalysis(data?.fullAnalysis || "Analysis not available.");
+      const text = data?.fullAnalysis || "Analysis not available.";
+      setAnalysis(text);
+      // Save to sessionStorage
+      sessionStorage.setItem(cacheKey, JSON.stringify({ text, ts: Date.now() }));
     } catch {
       setErrorMsg("Unable to generate analysis at this time. Please try again.");
     } finally {
@@ -374,7 +391,7 @@ export const DeveloperAIAnalyzer = ({
       setIsAnalyzing(false);
       setHasTimedOut(false);
     }
-  }, [developerName, foundedYear, headquarters, completedProjects, activeProjects, projectCount]);
+  }, [developerName, developerSlug, foundedYear, headquarters, completedProjects, activeProjects, projectCount]);
 
   const handleRetry = useCallback(() => {
     hasTriggered.current = false;

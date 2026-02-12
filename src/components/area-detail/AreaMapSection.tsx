@@ -57,6 +57,17 @@ function DynamicTileLayer({ mapView }: { mapView: MapViewType }) {
   return null;
 }
 
+function EnableMapInteraction({ enabled }: { enabled: boolean }) {
+  const map = useMap();
+  useEffect(() => {
+    if (enabled) {
+      map.scrollWheelZoom.enable();
+      map.touchZoom.enable();
+    }
+  }, [enabled, map]);
+  return null;
+}
+
 function MapViewToggle({
   mapView,
   onViewChange,
@@ -102,6 +113,7 @@ interface AreaMapSectionProps {
 
 export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionProps) => {
   const [mapView, setMapView] = useState<MapViewType>("satellite");
+  const [mapInteractive, setMapInteractive] = useState(false);
 
   const { data: projects } = useQuery({
     queryKey: ["area-map-projects", areaName],
@@ -150,18 +162,30 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
           </h2>
         </div>
 
-        <div className="rounded-xl overflow-hidden border border-gold/30 shadow-2xl" style={{ height: 500, touchAction: "none" }}>
+        <div className="rounded-xl overflow-hidden border border-gold/30 shadow-2xl relative" style={{ height: 500, touchAction: "none" }}>
+          {/* Click to enable overlay */}
+          {!mapInteractive && (
+            <div
+              className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-black/5"
+              onClick={() => setMapInteractive(true)}
+            >
+              <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-gold/30 text-sm font-medium text-black/70">
+                Click to enable map interaction
+              </div>
+            </div>
+          )}
           <MapContainer
             center={center}
             zoom={13}
-            scrollWheelZoom={true}
+            scrollWheelZoom={false}
             dragging={true}
-            touchZoom={true}
+            touchZoom={false}
             style={{ height: "100%", width: "100%" }}
             zoomControl={false}
             attributionControl={false}
           >
             <DynamicTileLayer mapView={mapView} />
+            <EnableMapInteraction enabled={mapInteractive} />
             <MapViewToggle
               mapView={mapView}
               onViewChange={setMapView}

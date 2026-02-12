@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { callLovableAI, sanitizeForPrompt } from "../_shared/ai-utils.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -8,6 +9,7 @@ const corsHeaders = {
 
 interface DeveloperAnalysisRequest {
   developerName: string;
+  developerSlug?: string;
   completedProjects?: number | null;
   foundedYear?: number | null;
   headquarters?: string | null;
@@ -24,6 +26,7 @@ serve(async (req) => {
     const body: DeveloperAnalysisRequest = await req.json();
     const {
       developerName: rawName,
+      developerSlug: rawSlug,
       completedProjects,
       foundedYear,
       headquarters,
@@ -37,6 +40,38 @@ serve(async (req) => {
         JSON.stringify({ success: false, error: "Developer name is required" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
+    }
+
+    const slug = sanitizeForPrompt(rawSlug || rawName, 100).toLowerCase().replace(/\s+/g, '-');
+
+    // Check DB cache first (valid for 24 hours)
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
+    const { data: cached } = await supabaseAdmin
+      .from("developer_ai_cache")
+      .select("analysis_text, generated_at")
+      .eq("developer_slug", slug)
+      .maybeSingle();
+
+    if (cached) {
+      const age = Date.now() - new Date(cached.generated_at).getTime();
+      const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+      if (age < maxAge) {
+        console.log(`Cache hit for developer: ${developerName} (age: ${Math.round(age / 60000)}min)`);
+        return new Response(
+          JSON.stringify({
+            success: true,
+            developerName,
+            fullAnalysis: cached.analysis_text,
+            generatedAt: cached.generated_at,
+            cached: true,
+            disclaimer: "This analysis is AI-generated for informational purposes only and should not be considered financial advice.",
+          }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
     }
 
     console.log(`Analyzing developer: ${developerName}`);
@@ -74,7 +109,7 @@ STRICT RULES:
 Use EXACTLY these section headers (numbered, bold):
 
 1. **Company Overview** - 2 sentences max: founding story, market positioning, and signature style
-2. **Portfolio Strength** - Top 3 flagship projects with one key detail each (3 bullet points max)
+2. **Portfolio Strength** - Top 4-5 flagship projects with one key detail each (4-5 bullet points)
 3. **Track Record & Delivery** - On-time delivery rate, build quality reputation, handover track record (2-3 bullet points max)
 4. **Price Per Sqft** - Avg price/sqft across their portfolio, YoY trend % (2 bullet points max)
 5. **Supply Pipeline** - Upcoming units count, key upcoming projects (2 bullet points max)
@@ -87,7 +122,11 @@ CRITICAL: Keep every section SHORT. Max 2-3 bullet points. One line per bullet. 
 
     let fullAnalysis: string;
     try {
-      fullAnalysis = await callLovableAI(systemPrompt, userPrompt);
+      fullAnalysis = await callLovableAI({
+        systemPrompt,
+        userPrompt,
+        model: "google/gemini-2.5-flash-lite",
+      });
     } catch (aiError) {
       console.error("AI error:", aiError);
       return new Response(
@@ -97,6 +136,19 @@ CRITICAL: Keep every section SHORT. Max 2-3 bullet points. One line per bullet. 
     }
 
     console.log(`Developer analysis complete for: ${developerName}`);
+
+    // Save to cache (upsert)
+    await supabaseAdmin
+      .from("developer_ai_cache")
+      .upsert({
+        developer_slug: slug,
+        analysis_text: fullAnalysis,
+        generated_at: new Date().toISOString(),
+      }, { onConflict: "developer_slug" })
+      .then(({ error }) => {
+        if (error) console.error("Cache save error:", error);
+        else console.log(`Cache saved for: ${slug}`);
+      });
 
     return new Response(
       JSON.stringify({

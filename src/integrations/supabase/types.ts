@@ -4996,6 +4996,27 @@ export type Database = {
           },
         ]
       }
+      developer_ai_cache: {
+        Row: {
+          analysis_text: string
+          developer_slug: string
+          generated_at: string
+          id: string
+        }
+        Insert: {
+          analysis_text: string
+          developer_slug: string
+          generated_at?: string
+          id?: string
+        }
+        Update: {
+          analysis_text?: string
+          developer_slug?: string
+          generated_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
       developer_pipeline: {
         Row: {
           ai_score: number | null
