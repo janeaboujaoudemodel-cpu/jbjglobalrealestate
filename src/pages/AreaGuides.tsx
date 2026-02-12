@@ -325,11 +325,17 @@ const AreaGuides = () => {
         document.body
       )}
 
-      {/* Areas Grid - same section, no break */}
-          <div className="container mx-auto px-4 mt-8">
+      </section>
+
+      {/* Gold divider between filters and cards */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+
+      {/* Areas Grid - distinct darker champagne zone */}
+      <section className="pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]">
+        <div className="container mx-auto px-4">
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
-                      <Loader2 className="w-8 h-8 text-gold animate-spin" />
+              <Loader2 className="w-8 h-8 text-gold animate-spin" />
               <span className="ml-3 text-black/50">Loading areas...</span>
             </div>
           ) : error ? (
