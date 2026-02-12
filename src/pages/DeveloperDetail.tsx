@@ -317,6 +317,7 @@ const DeveloperDetail = () => {
         {/* AI Analyzer - Before Projects */}
         <DeveloperAIAnalyzer
           developerName={developer.name}
+          developerSlug={slug}
           foundedYear={developer.founded_year}
           headquarters={developer.headquarters}
           completedProjects={developer.completed_projects}
