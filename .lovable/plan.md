@@ -1,85 +1,53 @@
 
 
-## Fix: Filter Bar — Hidden on Load, Visible on Scroll + Developer Icons + Consistency
+## Fix: Two-Phase Filter Bar — Inline First, Then Fixed on Scroll
 
-### What's Wrong Now
+### Current Problem
 
-1. **Reversed visibility**: The filter bar currently shows inline on page load and becomes invisible (opacity: 0) when fixed. It should be the **opposite** — hidden on initial load, and only appear as a fixed bar when the user scrolls past the hero/section header.
+The bar is completely hidden on page load and only appears as a fixed bar when scrolled. It skips the inline phase entirely. The user wants:
 
-2. **Missing developer icons**: The developer dropdown in AreaProjectsGrid uses plain text. It needs a Building2 icon on the trigger (matching PropertySearchBar) and developer logo icons next to each developer name in the dropdown.
+1. Hero section visible: no bar
+2. Scroll to "Projects in JVC": bar visible **inline** in its natural position within the section
+3. Scroll past the bar: bar becomes **fixed under the header**
 
-3. **Inconsistency**: AreaStickySearchBar (used higher up on the area page) has only a basic search input with no developer filter, no status filter, no bedroom filter. It should be removed and replaced by the AreaProjectsGrid bar which has all filters.
+### Changes (single file: `src/components/area-detail/AreaProjectsGrid.tsx`)
 
----
+**A) Always render the filter bar inline in the projects section**
 
-### Changes
+The filter bar content will always be rendered in its natural document flow position, right after the "Projects in [Area]" heading. This means when the user scrolls to the projects section, they see the bar naturally.
 
-#### File 1: `src/components/area-detail/AreaProjectsGrid.tsx`
+**B) Use the sentinel (placeholderRef) at the bar's position to detect when it leaves the viewport**
 
-**A) Reverse visibility logic:**
-- Remove the inline bar entirely (no more "always rendered for measurement")
-- Remove the `opacity: 0 / pointer-events: none` trick
-- Remove `barHeight` state and its measuring useEffect — not needed anymore
-- The placeholder sentinel remains (height: 0, used only for IntersectionObserver)
-- When `isFixed` is false: render nothing (bar is hidden)
-- When `isFixed` is true: render the portal bar (fixed under header)
-- This means on initial load, no bar is visible. Once the user scrolls past the sentinel, the bar appears fixed under the header.
+Move `placeholderRef` to sit right at/above the inline bar. When the sentinel scrolls out of view (past the header), `isFixed` becomes true.
 
-**B) Add Building2 icon to developer trigger + developer logos in dropdown:**
-- Import `Building2` from lucide-react
-- Add `<Building2 className="w-4 h-4 mr-2 text-black/40" />` inside the developer SelectTrigger
-- Fetch developer data with logos: update the query to join `developers` table data for each unique developer name, then show `dev.logo_url` as a small image next to each developer name in the dropdown items (same pattern as PropertySearchBar)
+**C) When `isFixed` is true, ALSO render the portal copy**
 
-**C) Add Filter icon button:**
-- Import `Filter` from lucide-react
-- Add a filter icon button to the bar (matching PropertySearchBar's advanced filter link)
-
-#### File 2: `src/components/area-detail/AreaStickySearchBar.tsx`
-
-- No changes needed — it serves a different purpose (navigates to /properties page). It will remain as-is.
-
-#### File 3: `src/components/PropertySearchBar.tsx`
-
-- Already has developer dropdown with logos and Building2 icons — this is the reference design. No changes needed unless we want to extract a shared component (out of scope for this fix).
-
----
+The inline bar stays in the DOM (it's part of the section). The fixed portal copy appears on top. This gives seamless transition — the bar is always visible once you reach the projects section, and it pins under the header when you scroll past.
 
 ### Technical Details
 
-**Visibility reversal in AreaProjectsGrid.tsx:**
-
 ```text
-Current:
-  - Inline bar always rendered (opacity 0 when fixed)
-  - Portal bar rendered when isFixed=true
-
-New:
-  - No inline bar at all
-  - Portal bar rendered ONLY when isFixed=true
-  - Placeholder sentinel (height: 0) always present for observer
-  - barRef and barHeight removed (not needed)
+Layout structure:
+  <h2>Projects in JVC</h2>
+  <div ref={placeholderRef} />     <!-- sentinel for observer -->
+  <div className="py-3 ...">      <!-- inline bar, always rendered -->
+    {filterBarContent}
+  </div>
+  {isFixed && createPortal(        <!-- fixed copy, only when scrolled past -->
+    <div className="fixed top-24 ...">
+      {filterBarContent}
+    </div>,
+    document.body
+  )}
+  <div className="grid ...">      <!-- project cards -->
 ```
 
-**Developer icons pattern (from PropertySearchBar):**
-```text
-SelectTrigger:
-  <Building2 icon /> <SelectValue />
+**Key behavior:**
+- The `placeholderRef` sentinel sits just above the inline bar
+- IntersectionObserver rootMargin stays at `-140px` (accounts for header height)
+- When sentinel leaves viewport: `isFixed = true`, portal renders fixed bar under header
+- When user scrolls back up: `isFixed = false`, portal disappears, inline bar is naturally visible
+- No height measurement needed since inline bar is always in the DOM
 
-SelectItem for each developer:
-  <img src={dev.logo_url} /> or <Building2 fallback icon />
-  {dev.name}
-```
+**No other files need changes.**
 
-**Portal fixed bar classes:**
-- `fixed top-24 sm:top-28 lg:top-32` (matches header responsive heights)
-- `left-0 right-0 z-[9998]`
-- Same champagne gradient background and gold border
-- Container-wrapped content for horizontal alignment
-
-### Summary
-
-After this fix:
-- Page loads with NO filter bar visible
-- User scrolls past the "Projects in [Area]" heading
-- Filter bar slides in fixed under the header with search, developer (with icons), status, bedrooms, sort, and clear
-- Consistent with PropertySearchBar's developer dropdown design
