@@ -1,75 +1,52 @@
 
 
-## Revamp Utility Buttons and Add Sorting/Status Shortcuts
+## Fix Filter Bar Styling, Layout, and Add Missing Options
 
-### Problem
-1. The sqft/sqm toggle in the utility row is redundant (already available elsewhere on the page)
-2. The "Saved" button navigates to a saved properties page instead of opening saved filters
-3. No quick sorting shortcuts (Newest, Price sorting, A-Z)
-4. No "Hide Sold Out" toggle
-5. No construction status quick filter (Completed, Under Construction, Presale)
+### Issues to Fix
+
+1. **Active pill color** -- currently uses old gold gradient (`from-[#C8A766] to-[#B8944A] text-white`). Should match the champagne gold style used elsewhere (e.g., the sqft/emirate buttons): champagne background with gold border and dark text
+2. **Bedroom options** -- missing 6 BR and 7+ BR options
+3. **Handover year dropdowns** -- years are cropped/unreadable due to tight `min-w-[68px]` on the select elements
+4. **Two-row layout is overcrowded** -- sort pills, Hide Sold Out, and Save are all crammed into Row 2 with the filter popovers. Move them up to Row 1 alongside Map/Saved/Currency/Mode
 
 ### Changes
 
 **File: `src/components/filters/FilterShortcutBar.tsx`**
 
-#### 1. UtilityButtons -- Remove sqft/sqm, rename mode toggle
-- Remove the `Ruler` / sqft/sqm toggle button (lines 484-487)
-- Keep: Map, Saved, Currency, Mode
-- Rename the mode toggle label from showing the mode name to always show "Mode" as the label prefix for clarity (e.g., "Mode: Investor")
-- The "Saved" button will open a popover listing saved filters from localStorage (`jbj-saved-filters`) instead of navigating to `/properties?saved=true`. Each saved filter will be clickable to apply, with a delete option
-
-#### 2. Add sorting shortcut pills to Row 2
-Add these as toggle pills after the existing Status filter and before Reset All:
-- **Newest** -- sort by newest first
-- **Low to High** -- price ascending
-- **High to Low** -- price descending
-- **A to Z** -- alphabetical sort
-
-Only one sort can be active at a time (radio-style selection).
-
-#### 3. Add "Hide Sold Out" toggle pill
-A toggle pill that, when active, filters out projects with sale status "Sold Out" / "Out of Stock". This will be a simple boolean in the filter state.
-
-#### 4. Add Construction Status filter pill
-A new popover pill labeled "Construction" with toggle options:
-- Completed
-- Under Construction
-- Presale
-
-Multi-select, same pattern as the existing Status (sale status) pill.
-
-#### 5. Update ShortcutFilterState interface
-Add new fields:
-- `sortBy: 'newest' | 'price_asc' | 'price_desc' | 'alpha' | null` (default: `null`)
-- `hideSoldOut: boolean` (default: `false`)
-- `constructionStatuses: string[]` (default: `[]`)
-
-Update `defaultShortcutFilters` and `hasActiveFilters` accordingly.
-
-### Updated Row Layout
-
+#### 1. Fix active pill style (line ~140)
+Change `pillActive` for the light variant from the gold gradient with white text to a champagne-themed active state:
 ```
-Row 1 (right):  Map | Saved (opens filter list) | AED | Mode: Investor
-Row 2 (left):   Price | Payments | Handover | Apartment | Bedrooms | Status | Construction | Newest | Low-High | High-Low | A-Z | Hide Sold Out | Reset All | Save
+// Before (old gold)
+"bg-gradient-to-r from-[#C8A766] to-[#B8944A] text-white border border-[#C8A766] shadow-lg"
+
+// After (champagne active -- matches sqft/emirate style)
+"bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black font-bold shadow-md"
+```
+Also update `togglePillOn` (line ~146) to the same champagne style instead of gold gradient.
+
+#### 2. Add bedroom options (lines 75-82)
+Add `6 BR` and `7+ BR` to `BEDROOM_OPTIONS`:
+```
+{ value: '6', label: '6 BR' },
+{ value: '7+', label: '7+ BR' },
 ```
 
-### Technical Details
+#### 3. Fix handover year dropdowns (lines 315-320, 334-339)
+Increase the year select width from `min-w-[68px]` to `min-w-[80px]` so the full year is visible without cropping.
 
-**Saved Filters Popover** (replaces navigation):
-- The "Saved" button in Row 1 becomes a Popover trigger
-- Content lists all filters from `localStorage('jbj-saved-filters')`
-- Each item shows filter name + date, clickable to apply those filters via `onFilterChange`
-- A trash icon per item to delete
-- Empty state: "No saved filters yet"
+#### 4. Redistribute items across two rows
+Move sorting pills (Newest, Low-High, High-Low, A-Z), Hide Sold Out, and Save button from Row 2 up to Row 1, alongside the existing utility buttons:
 
-**Sort pills** behave as radio buttons -- clicking the active one deselects it (returns to default sort). These are styled as smaller pills in the filter row.
+```
+Row 1 (left): Map | Saved | Currency | Mode    (right): Newest | Low-High | High-Low | A-Z | Hide Sold Out | Save
+Row 2: Price | Payments | Handover | Property Type | Bedrooms | Status | Construction | Reset All
+```
 
-**Construction Status** uses the constants from `src/constants/constructionStatus.ts` (Completed, Under Construction, Presale).
+Row 1 becomes `justify-between` with utility buttons on the left and sort/toggle shortcuts on the right.
 
 ### Files Summary
 
 | File | Action |
 |------|--------|
-| `src/components/filters/FilterShortcutBar.tsx` | Update UtilityButtons (remove sqft, add saved popover, rename mode); add sort pills, hide sold out toggle, construction status filter; extend ShortcutFilterState |
+| `src/components/filters/FilterShortcutBar.tsx` | Fix active pill color, add 6BR/7+BR, widen handover year selects, move sort/hide/save to Row 1 |
 
