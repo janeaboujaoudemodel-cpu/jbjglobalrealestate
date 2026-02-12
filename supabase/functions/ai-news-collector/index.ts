@@ -301,52 +301,18 @@ serve(async (req) => {
             }
           }
 
-          // Step 3: AI-generate image as last resort
-          if ((!imageUrl || isImageBad(imageUrl)) && LOVABLE_API_KEY) {
+          // NO AI image generation - real photos only
+          // Delete any existing AI-generated image from storage
+          if (imageUrl && imageUrl.includes("supabase.co/storage") && imageUrl.includes("news-images")) {
             try {
-              const categoryPrompts: Record<string, string> = {
-                "Market Update": "Modern Dubai skyline with luxury skyscrapers reflecting golden sunset light, aerial real estate photography",
-                "Policy": "Professional UAE government building with flag, modern architecture in Abu Dhabi or Dubai",
-                "Economic": "Dubai Financial Centre DIFC skyline with modern office towers, business district aerial view",
-                "Analysis": "Dubai Marina panoramic aerial view with luxury yachts and towers, real estate market photography",
-                "Government": "Dubai government buildings with UAE flag, modern civic architecture golden hour",
-                "Infrastructure": "Dubai metro and highway interchange aerial view with surrounding development",
-              };
-              const prompt = categoryPrompts[article.category] || 
-                `Professional editorial photo related to: ${article.title}. Dubai UAE real estate context. Ultra high resolution.`;
-              
-              console.log(`  Generating AI image for "${article.title}"...`);
-              const genResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-                method: "POST",
-                headers: { "Authorization": `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  model: "google/gemini-2.5-flash-image",
-                  messages: [{ role: "user", content: prompt }],
-                  modalities: ["image", "text"],
-                }),
-              });
-
-              if (genResp.ok) {
-                const genData = await genResp.json();
-                const b64Url = genData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-                if (b64Url && b64Url.startsWith("data:image")) {
-                  const base64Data = b64Url.split(",")[1];
-                  const binaryData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
-                  const storagePath = `${article.id}.webp`;
-                  
-                  const { error: uploadErr } = await supabase.storage
-                    .from("news-images")
-                    .upload(storagePath, binaryData, { contentType: "image/webp", upsert: true });
-
-                  if (!uploadErr) {
-                    const { data: urlData } = supabase.storage.from("news-images").getPublicUrl(storagePath);
-                    imageUrl = urlData.publicUrl;
-                    console.log(`  AI generated image for "${article.title}"`);
-                  }
-                }
+              const pathMatch = imageUrl.match(/news-images\/(.+)$/);
+              if (pathMatch) {
+                await supabase.storage.from("news-images").remove([pathMatch[1]]);
+                console.log(`  Deleted old AI image for "${article.title}"`);
               }
-            } catch (genErr) {
-              console.warn(`  AI generation error for "${article.title}":`, genErr);
+              imageUrl = null; // Clear it - will be set to null below
+            } catch (delErr) {
+              console.warn(`  Failed to delete AI image for "${article.title}":`, delErr);
             }
           }
 

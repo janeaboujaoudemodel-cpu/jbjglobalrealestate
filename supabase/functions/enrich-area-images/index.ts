@@ -5,12 +5,22 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Helper to check if a URL is a real area photo (not a generic template/icon)
+function isGoodAreaImage(url: string): boolean {
+  if (!url || !url.startsWith("http")) return false;
+  const bad = /logo|favicon|icon|navbar|sprite|avatar|16x16|32x32|48x48|64x64|signature_property|placeholder|default|blank|spacer|transparent|pixel\.gif/i;
+  if (bad.test(url)) return false;
+  if (url.length < 60) return false;
+  if (url.includes("unsplash.com") || url.includes("pexels.com")) return false;
+  return true;
+}
+
 /**
- * Enrich area images:
- * 1. Try to find a project image from projects in that area
- * 2. If no project image exists, use Firecrawl Search to find real community photos
- * 3. Use Gemini AI to pick the best community-level photo from candidates
- * 4. Upload to Supabase Storage and update the area record
+ * Enrich area images - REAL PHOTOS ONLY, NO AI GENERATION:
+ * 1. Try project images from DB
+ * 2. Firecrawl Search on property portals (bayut, propertyfinder)
+ * 3. Broader Firecrawl Search
+ * 4. If all fail -> set NULL (UI shows gradient fallback)
  */
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -27,12 +37,12 @@ Deno.serve(async (req) => {
     const body = await req.json().catch(() => ({}));
     const batchSize = body.batch_size || 10;
 
-    // Get areas missing images OR with unsplash/pexels/AI-generated images
+    // Get areas: missing images OR with placeholder/AI-generated images
     const { data: areas, error: fetchErr } = await supabase
       .from("areas")
-      .select("id, name, slug")
+      .select("id, name, slug, image_url")
       .eq("is_active", true)
-      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,hero_image_url.is.null,hero_image_url.ilike.%unsplash%,hero_image_url.ilike.%pexels%")
+      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,image_url.ilike.%supabase.co/storage%area-images%")
       .limit(batchSize);
 
     if (fetchErr) throw fetchErr;
@@ -47,15 +57,16 @@ Deno.serve(async (req) => {
       .from("areas")
       .select("id", { count: "exact", head: true })
       .eq("is_active", true)
-      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,hero_image_url.is.null,hero_image_url.ilike.%unsplash%,hero_image_url.ilike.%pexels%");
+      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,image_url.ilike.%supabase.co/storage%area-images%");
 
     const results: { area: string; image_url: string | null; status: string; source: string }[] = [];
 
     for (const area of areas) {
       let imageUrl: string | null = null;
       let source = "none";
+      const oldImageUrl = area.image_url;
 
-      // Step 1: Try project images
+      // Step 1: Try project images from DB
       const { data: projects } = await supabase
         .from("projects")
         .select("id, main_image_url")
@@ -67,7 +78,6 @@ Deno.serve(async (req) => {
         imageUrl = projects[0].main_image_url;
         source = "project";
       } else {
-        // Try project_images table
         const { data: projectsInArea } = await supabase
           .from("projects")
           .select("id")
@@ -90,11 +100,11 @@ Deno.serve(async (req) => {
         }
       }
 
-      // Step 2: Firecrawl Search for real community photos
-      if (!imageUrl && firecrawlApiKey && lovableApiKey) {
+      // Step 2: Firecrawl Search on property portals
+      if (!imageUrl && firecrawlApiKey) {
         try {
-          const searchQuery = `${area.name} Dubai community aerial panoramic view neighborhood real estate`;
-          console.log(`Searching for area image: ${searchQuery}`);
+          const searchQuery = `"${area.name}" Dubai area site:bayut.com OR site:propertyfinder.ae`;
+          console.log(`Portal search for ${area.name}`);
 
           const searchResp = await fetch("https://api.firecrawl.dev/v1/search", {
             method: "POST",
@@ -102,62 +112,89 @@ Deno.serve(async (req) => {
               "Authorization": `Bearer ${firecrawlApiKey}`,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ query: searchQuery, limit: 5 }),
+            body: JSON.stringify({ 
+              query: searchQuery, 
+              limit: 5,
+              scrapeOptions: { formats: ["markdown"] }
+            }),
           });
 
-          if (!searchResp.ok) {
-            console.error(`Firecrawl search failed for ${area.name}: ${searchResp.status}`);
-          } else {
+          if (searchResp.ok) {
             const searchData = await searchResp.json();
             const searchResults = searchData.data || [];
-
-            // Collect all image URLs from search results
-            const allImageUrls: string[] = [];
+            console.log(`Portal search returned ${searchResults.length} results for ${area.name}`);
+            
             for (const r of searchResults) {
-              const mdImages = (r.markdown || "").match(/https?:\/\/[^\s)"']+\.(jpg|jpeg|png|webp|gif)[^\s)"']*/gi) || [];
-              allImageUrls.push(...mdImages);
-              const mdImgSyntax = (r.markdown || "").match(/!\[.*?\]\((https?:\/\/[^\s)]+)\)/gi) || [];
-              for (const m of mdImgSyntax) {
-                const urlMatch = m.match(/\((https?:\/\/[^\s)]+)\)/);
-                if (urlMatch) allImageUrls.push(urlMatch[1]);
+              // Check metadata for OG images
+              const ogImg = r.metadata?.ogImage || r.metadata?.image || r.metadata?.og_image;
+              if (ogImg && isGoodAreaImage(ogImg)) {
+                imageUrl = ogImg;
+                source = "portal_og";
+                console.log(`Found portal OG image for ${area.name}: ${ogImg.substring(0, 80)}`);
+                break;
               }
-              if (r.links && Array.isArray(r.links)) {
-                for (const link of r.links) {
-                  if (typeof link === 'string' && link.match(/\.(jpg|jpeg|png|webp|gif)/i)) {
-                    allImageUrls.push(link);
-                  }
+              // Check markdown for inline images
+              const md = r.markdown || "";
+              const imgs = md.match(/https?:\/\/[^\s)"']+\.(jpg|jpeg|png|webp)[^\s)"']*/gi) || [];
+              for (const img of imgs) {
+                if (isGoodAreaImage(img)) {
+                  imageUrl = img;
+                  source = "portal_markdown";
+                  console.log(`Found portal inline image for ${area.name}: ${img.substring(0, 80)}`);
+                  break;
                 }
               }
-              if (r.metadata?.ogImage) allImageUrls.push(r.metadata.ogImage);
-              if (r.metadata?.image) allImageUrls.push(r.metadata.image);
-              if (r.metadata?.og_image) allImageUrls.push(r.metadata.og_image);
+              if (imageUrl) break;
+            }
+          } else {
+            const errBody = await searchResp.text();
+            console.error(`Portal search failed for ${area.name}: ${searchResp.status} - ${errBody.substring(0, 200)}`);
+          }
+          await new Promise(r => setTimeout(r, 1500));
+        } catch (err) {
+          console.warn(`Portal search error for ${area.name}:`, err);
+        }
+      }
+
+      // Step 3: Broader Firecrawl Search
+      if (!imageUrl && firecrawlApiKey) {
+        try {
+          const broadQuery = `${area.name} Dubai community neighborhood photo`;
+          console.log(`Broad search for ${area.name}`);
+
+          const searchResp = await fetch("https://api.firecrawl.dev/v1/search", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${firecrawlApiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ query: broadQuery, limit: 5, scrapeOptions: { formats: ["markdown"] } }),
+          });
+
+          if (searchResp.ok) {
+            const searchData = await searchResp.json();
+            const candidates: string[] = [];
+
+            for (const r of (searchData.data || [])) {
+              const ogImg = r.metadata?.ogImage || r.metadata?.image || r.metadata?.og_image;
+              if (ogImg && isGoodAreaImage(ogImg)) candidates.push(ogImg);
+              
+              // Extract images from markdown
+              const md = r.markdown || "";
+              const imgs = md.match(/https?:\/\/[^\s)"']+\.(jpg|jpeg|png|webp)[^\s)"']*/gi) || [];
+              for (const img of imgs) {
+                if (isGoodAreaImage(img)) candidates.push(img);
+              }
             }
 
-            // Deduplicate and filter
-            const uniqueImageUrls = [...new Set(allImageUrls)]
-              .filter(u => !u.includes('favicon') && !u.includes('icon-') && !u.includes('/icons/') && !u.includes('logo') && !u.includes('unsplash') && !u.includes('pexels') && u.length < 500)
-              .slice(0, 30);
+            const unique = [...new Set(candidates)].slice(0, 15);
+            if (unique.length > 0 && lovableApiKey) {
+              // Use AI to pick the best community photo
+              const aiPrompt = `Pick the ONE best image URL showing a REAL photo of ${area.name} community in Dubai.
+Candidates:
+${unique.map((u, i) => `${i + 1}. ${u}`).join("\n")}
 
-            console.log(`Found ${uniqueImageUrls.length} candidate images for ${area.name}`);
-
-            if (uniqueImageUrls.length > 0) {
-              // Use Gemini to pick the best community photo
-              const aiPrompt = `You are selecting a REAL photo for the "${area.name}" community/neighborhood in Dubai, UAE.
-
-Candidate image URLs:
-${uniqueImageUrls.map((u, i) => `${i + 1}. ${u}`).join("\n")}
-
-TASK: Pick the ONE best image URL that shows a REAL photo of the ${area.name} community or neighborhood.
-
-REQUIREMENTS:
-- MUST be a real photograph (NOT a render, CGI, or illustration)
-- MUST show the COMMUNITY or NEIGHBORHOOD level view: aerial view, skyline, panorama, master plan view, community streetscape
-- Must NOT be a single building facade, apartment interior, floor plan, or logo
-- Must NOT contain "unsplash", "pexels", "placeholder", or "stock" in the URL
-- Prefer wide/panoramic shots showing multiple buildings or the overall area
-- If no URL meets these criteria, respond with exactly "NONE"
-
-Respond with ONLY the URL or "NONE". Nothing else.`;
+MUST be a real photograph (NOT render/CGI). Must show community/neighborhood. Respond with ONLY the URL or "NONE".`;
 
               const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
                 method: "POST",
@@ -173,92 +210,56 @@ Respond with ONLY the URL or "NONE". Nothing else.`;
 
               if (aiResp.ok) {
                 const aiData = await aiResp.json();
-                const chosenUrl = aiData.choices?.[0]?.message?.content?.trim();
-                if (chosenUrl && chosenUrl !== "NONE" && chosenUrl.startsWith("http")) {
-                  imageUrl = chosenUrl;
-                  source = "firecrawl_search";
-                  console.log(`AI selected community photo for ${area.name}: ${chosenUrl}`);
-                } else {
-                  console.log(`AI found no suitable community photo for ${area.name}`);
+                const chosen = aiData.choices?.[0]?.message?.content?.trim();
+                if (chosen && chosen !== "NONE" && chosen.startsWith("http")) {
+                  imageUrl = chosen;
+                  source = "broad_search_ai";
+                  console.log(`AI selected for ${area.name}: ${chosen.substring(0, 80)}`);
                 }
-              } else {
-                console.error(`AI selection failed for ${area.name}: ${aiResp.status}`);
               }
+            } else if (unique.length > 0) {
+              imageUrl = unique[0];
+              source = "broad_search_first";
             }
           }
-        } catch (searchErr) {
-          console.error(`Search error for ${area.name}:`, searchErr);
+          await new Promise(r => setTimeout(r, 1500));
+        } catch (err) {
+          console.warn(`Broad search error for ${area.name}:`, err);
         }
       }
 
-      // Step 3: AI-generate image as last resort
-      if (!imageUrl && lovableApiKey) {
+      // Delete old AI-generated image from storage if present
+      if (oldImageUrl && oldImageUrl.includes("supabase.co/storage") && oldImageUrl.includes("area-images")) {
         try {
-          console.log(`Generating AI image for ${area.name}...`);
-          const genPrompt = `Photorealistic aerial panoramic view of ${area.name}, Dubai, UAE. Show the community skyline, buildings, roads, and landscape from above. Professional real estate photography style, golden hour lighting. Ultra high resolution.`;
-          
-          const genResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${lovableApiKey}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              model: "google/gemini-2.5-flash-image",
-              messages: [{ role: "user", content: genPrompt }],
-              modalities: ["image", "text"],
-            }),
-          });
-
-          if (genResp.ok) {
-            const genData = await genResp.json();
-            const b64Url = genData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-            if (b64Url && b64Url.startsWith("data:image")) {
-              // Extract base64 data and upload to storage
-              const base64Data = b64Url.split(",")[1];
-              const binaryData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
-              const storagePath = `${area.slug || area.name.toLowerCase().replace(/\s+/g, "-")}.webp`;
-              
-              const { error: uploadErr } = await supabase.storage
-                .from("area-images")
-                .upload(storagePath, binaryData, { contentType: "image/webp", upsert: true });
-
-              if (!uploadErr) {
-                const { data: urlData } = supabase.storage.from("area-images").getPublicUrl(storagePath);
-                imageUrl = urlData.publicUrl;
-                source = "ai_generated";
-                console.log(`AI generated image for ${area.name}: ${imageUrl}`);
-              } else {
-                console.error(`Upload failed for ${area.name}: ${uploadErr.message}`);
-              }
-            }
-          } else {
-            console.error(`AI generation failed for ${area.name}: ${genResp.status}`);
+          const pathMatch = oldImageUrl.match(/area-images\/(.+)$/);
+          if (pathMatch) {
+            await supabase.storage.from("area-images").remove([pathMatch[1]]);
+            console.log(`Deleted old AI image: ${pathMatch[1]}`);
           }
-        } catch (genErr) {
-          console.error(`AI generation error for ${area.name}:`, genErr);
+        } catch (delErr) {
+          console.warn(`Failed to delete old image for ${area.name}:`, delErr);
         }
       }
 
-      if (imageUrl) {
-        const { error: updateErr } = await supabase
-          .from("areas")
-          .update({
-            image_url: imageUrl,
-            hero_image_url: imageUrl,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", area.id);
+      // Update: set real image or NULL (no fake photos ever)
+      const finalUrl = imageUrl && isGoodAreaImage(imageUrl) ? imageUrl : null;
+      const { error: updateErr } = await supabase
+        .from("areas")
+        .update({
+          image_url: finalUrl,
+          hero_image_url: finalUrl,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", area.id);
 
-        results.push({
-          area: area.name,
-          image_url: imageUrl,
-          status: updateErr ? `error: ${updateErr.message}` : "updated",
-          source,
-        });
-      } else {
-        results.push({ area: area.name, image_url: null, status: "no_image_source", source: "none" });
-      }
+      results.push({
+        area: area.name,
+        image_url: finalUrl,
+        status: updateErr ? `error: ${updateErr.message}` : (finalUrl ? "updated" : "set_null"),
+        source: finalUrl ? source : "none",
+      });
+
+      console.log(`${area.name}: ${finalUrl ? source : "NULL"}`);
     }
 
     return new Response(
@@ -266,8 +267,8 @@ Respond with ONLY the URL or "NONE". Nothing else.`;
         success: true,
         processed: results.length,
         updated: results.filter(r => r.status === "updated").length,
-        no_image: results.filter(r => r.status === "no_image_source").length,
-        remaining: (remaining || 0) - results.filter(r => r.status === "updated").length,
+        set_null: results.filter(r => r.status === "set_null").length,
+        remaining: (remaining || 0) - results.length,
         results,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
