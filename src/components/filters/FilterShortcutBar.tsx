@@ -276,14 +276,14 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
                   <select
                     value={filters.handoverFrom.quarter}
                     onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, quarter: e.target.value } })}
-                    className="flex-1 h-8 px-2 bg-white border border-gold/30 rounded text-xs text-black"
+                    className="flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
                   >
                     {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
                   </select>
                   <select
                     value={filters.handoverFrom.year}
                     onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, year: e.target.value } })}
-                    className="flex-1 h-8 px-2 bg-white border border-gold/30 rounded text-xs text-black"
+                    className="flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
                   >
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
                   </select>
@@ -295,14 +295,14 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange }: FilterShortcutB
                   <select
                     value={filters.handoverTo.quarter}
                     onChange={(e) => update({ handoverTo: { ...filters.handoverTo, quarter: e.target.value } })}
-                    className="flex-1 h-8 px-2 bg-white border border-gold/30 rounded text-xs text-black"
+                    className="flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
                   >
                     {QUARTERS.map(q => <option key={q} value={q}>{q}</option>)}
                   </select>
                   <select
                     value={filters.handoverTo.year}
                     onChange={(e) => update({ handoverTo: { ...filters.handoverTo, year: e.target.value } })}
-                    className="flex-1 h-8 px-2 bg-white border border-gold/30 rounded text-xs text-black"
+                    className="flex-1 h-9 px-2 bg-white border border-gold/30 rounded text-sm text-black font-medium"
                   >
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
                   </select>
