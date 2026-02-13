@@ -1,0 +1,1 @@
+ALTER TABLE public.areas ADD COLUMN image_approved BOOLEAN NOT NULL DEFAULT false;
