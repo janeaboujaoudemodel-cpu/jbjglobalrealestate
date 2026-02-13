@@ -1,66 +1,94 @@
 
 
-## Fix News Missing Images + Trigger Area Image Processing + Provident Extraction
+## Complete Fix: Remove All Bayut Images, Delete Duplicate Projects, Verify News
 
-### Current State
+### Problem Summary
 
-**News**: 4 articles out of 101 have NULL images:
-1. "New Malls in Dubai (2026-2028)" -- source_url points to PropertyFinder blog listing page (not the article)
-2. "CapitaLand Investment opens office at DIFC" -- WAM article
-3. "Dubai housing market recorded $15.02bn..." -- Arabian Business listing page (not the article)
-4. "Gulf Business Real Estate Summit & Awards" -- Gulf Business events page
+Three critical issues found after thorough investigation:
 
-**Areas**: 5 areas out of 181 still have NULL images:
-- Hessian Second, Ghadeer Al Tayr, Rak Central, Maryam Island, Wadi Al Safa 2
+| Issue | Scope | Detail |
+|-------|-------|--------|
+| Area images from Bayut | **123 of 181** areas | Images hosted on `d3ob0s3rxbjyep.cloudfront.net` (Bayut's CDN) -- competitor branding, NOT allowed |
+| Duplicate projects | **568 new rows** created today | `bulk-approve-imports` inserted new rows instead of merging into existing Reelly records. 100 are exact name duplicates of existing projects |
+| News photos | **0 NULL in database** | All 101 articles have image URLs. If cards appear broken, it is a rendering or image-load issue to investigate |
 
-**Provident Extraction**: 0 of 2,484 projects have `source = 'provident'`. Provident data has NOT been synced into the projects table despite multiple sync functions existing.
+### What Went Wrong
+
+The `bulk-approve-imports` function created **new project rows** from Provident discoveries instead of matching them to existing Reelly projects by name and merging supplementary data (descriptions, amenities, documents). This inflated the count from 2,484 to 3,052.
+
+For areas, the `enrich-area-images` function scraped Bayut area guide pages and saved their CDN images. These are competitor-branded assets and must all be removed.
 
 ---
 
-### Plan
+### Fix Plan
 
-#### Part 1: Fix 4 Missing News Images (Direct SQL + fetch fix)
+#### Part 1: Delete All 568 Duplicate Projects (Immediate)
 
-For articles where the source URLs are listing/events pages (not actual articles), the scraping approach will never work. The fix is:
+Delete every project row created after the bulk-approve run today. These are all duplicates or unmatchable Provident entries that were inserted as new rows instead of merged:
 
-1. **Fetch the actual article OG images** using the `fix-missing-images` edge function (already deployed and has the logic for news)
-2. **For articles where source URLs are wrong** (listing pages), manually find and set correct image URLs by:
-   - Searching for the actual article URLs
-   - Directly updating the `market_news` table with verified image URLs
-3. **Fallback**: For any article where no image can be found, leave NULL -- the UI already renders a gradient fallback with a Newspaper icon
+```text
+DELETE FROM project_images WHERE project_id IN (SELECT id FROM projects WHERE created_at > '2026-02-13 02:00:00');
+DELETE FROM project_documents WHERE project_id IN (SELECT id FROM projects WHERE created_at > '2026-02-13 02:00:00');
+DELETE FROM projects WHERE created_at > '2026-02-13 02:00:00';
+```
 
-#### Part 2: Fix 5 Remaining Area Images
+This restores the project count to ~2,484 (the correct pre-duplicate number).
 
-1. **Maryam Island** and **Rak Central** already have Bayut slug mappings in both `enrich-area-images` and `fix-missing-images`
-2. **Trigger `fix-missing-images`** with `{"target": "areas", "batch_size": 5}` to process remaining areas
-3. **For obscure areas** (Hessian Second, Ghadeer Al Tayr, Wadi Al Safa 2) that have no Bayut pages -- these are extremely small communities. The gradient fallback is appropriate.
+#### Part 2: Replace All 123 Bayut Area Images
 
-#### Part 3: Trigger Provident Data Sync
+**Strategy**: Use the Provident CDN (`d3h330vgpwpjr8.cloudfront.net`) as the primary image source -- these are real editorial community photos already proven to work for top areas (JVC, Business Bay, Downtown, etc.). For areas without Provident coverage, use official developer/master plan sources (Emaar, Nakheel, DAMAC official sites) or Google-sourced community photos via Firecrawl search.
 
-The Provident page-data discovery system (`_shared/provident/pagedata-discovery.ts`) can discover all ~1,336 listings from Provident's Gatsby endpoints. Several sync functions exist:
-- `provident-full-sync` 
-- `provident-batch-sync`
-- `provident-sync-master`
-- `daily-provident-auto-sync`
+**Changes to `supabase/functions/enrich-area-images/index.ts`:**
 
-**Action**: 
-1. Inspect the `provident-full-sync` or `provident-sync-master` function to understand the entry point
-2. Trigger it to begin importing Provident listings into the projects table
-3. This will enrich existing Reelly projects with Provident data (descriptions, amenities, floor plans, documents) and potentially add new listings not in Reelly
+1. Remove ALL Bayut scraping logic (the `extractBayutCoverImage` function, the `BAYUT_SLUGS` map, any fetch to `bayut.com`)
+2. Add a `BLOCKED_DOMAINS` list: `bayut.com`, `d3ob0s3rxbjyep.cloudfront.net`, `static.bayut.com`, `mybayutcdn.bayut.com`
+3. New image sourcing priority:
+   - Step 0: Check if area has projects with good images in `project_images` table (from Reelly API)
+   - Step 1: Search for real community/aerial photos via Firecrawl using query like `"{area name}" Dubai community aerial photo` -- filtering OUT any Bayut domain results
+   - Step 2: For well-known areas, use official developer CDNs (Emaar, Nakheel, DAMAC, Aldar)
+   - Step 3: Accept NULL for obscure areas (gradient fallback)
+4. Reset all 123 Bayut image URLs to NULL via SQL so the function can reprocess them
+
+**SQL to reset Bayut images:**
+```text
+UPDATE areas SET image_url = NULL, hero_image_url = NULL 
+WHERE image_url LIKE '%d3ob0s3rxbjyep%' 
+   OR image_url LIKE '%static.bayut%' 
+   OR image_url LIKE '%mybayutcdn%';
+```
+
+#### Part 3: Build Proper Provident Merge Function
+
+Instead of creating new rows, the Provident sync must find existing projects by name similarity and enrich them in place.
+
+**New logic for `supabase/functions/bulk-approve-imports/index.ts`:**
+
+1. Before inserting a pending import as a new project, search existing projects for a name match (case-insensitive TRIM comparison)
+2. If a match is found: UPDATE the existing project with any missing data from the Provident record (description, amenities, payment_plan, brochure_url) -- never overwrite existing non-null fields
+3. If NO match is found: Insert as new project with `source = 'provident'`
+4. Add a `merge_mode` parameter (default: true) to enable/disable this behavior
+
+#### Part 4: Verify News Rendering
+
+All 101 news articles have non-null image URLs in the database. Check if there is a rendering issue in `News.tsx` where images fail to load (broken URLs, CORS issues) and add proper error handling with fallback gradient.
 
 ---
 
 ### Files to Change
 
 | File | Change |
-|------|--------|
-| `supabase/functions/fix-missing-images/index.ts` | Add Bayut slug for Rak Central and Maryam Island (if not present); improve news image fetching for WAM/Arabian Business articles |
-| Database (SQL) | Directly update the 4 news articles with verified image URLs where possible |
+|-------|--------|
+| `supabase/functions/enrich-area-images/index.ts` | Remove all Bayut scraping; add blocked domains; use project images and Firecrawl (non-Bayut) as sources |
+| `supabase/functions/bulk-approve-imports/index.ts` | Add name-matching merge logic instead of blind insert |
+| `supabase/functions/fix-missing-images/index.ts` | Remove all Bayut references and slug mappings |
+| Database (SQL) | Delete 568 duplicate projects; reset 123 Bayut area image URLs to NULL |
 
 ### Execution Order
 
-1. Trigger `fix-missing-images` for areas (batch_size: 5) to process Maryam Island + Rak Central
-2. Fetch actual article pages for the 4 missing news images and update directly
-3. Trigger Provident sync to begin importing/enriching project data
-4. Verify all changes
+1. Delete all 568 duplicate project rows (restore to 2,484)
+2. Reset all 123 Bayut area image URLs to NULL
+3. Rewrite `enrich-area-images` to use non-Bayut sources only
+4. Deploy and trigger area image enrichment in batches
+5. Update `bulk-approve-imports` with merge-first logic
+6. Verify news page rendering
 
