@@ -59,8 +59,9 @@ serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
-    // ALWAYS OVERWRITE MODE - updateExisting defaults to TRUE now
-    const { limit = 200, dryRun = false, minImages = 0, updateExisting = true } = await req.json().catch(() => ({}));
+    // merge_mode: when true, matches existing projects by name and enriches (never overwrites non-null fields)
+    // updateExisting: when true with slug match, fully overwrites (Reelly parity mode)
+    const { limit = 200, dryRun = false, minImages = 0, updateExisting = true, merge_mode = true } = await req.json().catch(() => ({}));
 
     console.log(`[BulkApprove] Starting (limit=${limit}, dryRun=${dryRun}, minImages=${minImages}, updateExisting=${updateExisting})...`);
 
@@ -127,27 +128,82 @@ serve(async (req) => {
           continue;
         }
 
-        // Check if project already exists
+        // Check if project already exists by slug
         const { data: existingProject } = await supabase
           .from("projects")
-          .select("id")
+          .select("id, name, description, amenities, payment_plan")
           .eq("slug", item.slug)
           .maybeSingle();
 
-        if (existingProject && !updateExisting) {
-          console.log(`[BulkApprove] Skipping ${item.name} - already exists`);
-          stats.skipped++;
-          // Still mark as approved in pending_project_imports
-          await supabase
-            .from("pending_project_imports")
-            .update({ 
-              status: "approved", 
-              matched_project_id: existingProject.id,
-              reviewed_at: new Date().toISOString(),
-              review_notes: "Already exists in projects table"
-            })
-            .eq("id", item.id);
-          continue;
+        // If no slug match but merge_mode is on, try name matching
+        let mergeTarget: { id: string; name: string; description: string | null; amenities: string[] | null; payment_plan: string | null } | null = existingProject;
+        
+        if (!mergeTarget && merge_mode && item.name) {
+          const cleanName = item.name.trim();
+          const { data: nameMatches } = await supabase
+            .from("projects")
+            .select("id, name, description, amenities, payment_plan")
+            .ilike("name", cleanName)
+            .limit(1);
+          
+          if (nameMatches && nameMatches.length > 0) {
+            mergeTarget = nameMatches[0];
+            console.log(`[BulkApprove] Name match: "${item.name}" → existing "${mergeTarget.name}" (id: ${mergeTarget.id})`);
+          }
+        }
+
+        // If we found an existing project and NOT in updateExisting mode, handle merge or skip
+        if (mergeTarget && !updateExisting) {
+          if (merge_mode) {
+            // MERGE MODE: enrich existing project with missing data only (never overwrite non-null)
+            const enrichFields: Record<string, unknown> = {};
+            if (!mergeTarget.description && item.description) enrichFields.description = item.description;
+            if ((!mergeTarget.amenities || mergeTarget.amenities.length === 0) && item.amenities) {
+              const amenitiesList = Array.isArray(item.amenities) ? item.amenities.map(String) : [];
+              if (amenitiesList.length > 0) {
+                enrichFields.amenities = amenitiesList;
+                enrichFields.amenities_list = amenitiesList;
+              }
+            }
+            if (!mergeTarget.payment_plan && item.payment_plan) enrichFields.payment_plan = item.payment_plan;
+            if (item.short_description) enrichFields.short_description = item.short_description;
+            
+            if (Object.keys(enrichFields).length > 0) {
+              enrichFields.updated_at = new Date().toISOString();
+              await supabase.from("projects").update(enrichFields).eq("id", mergeTarget.id);
+              console.log(`[BulkApprove] Merged ${Object.keys(enrichFields).length} fields into "${mergeTarget.name}"`);
+              stats.updated++;
+            } else {
+              stats.skipped++;
+            }
+            
+            // Mark as approved with merge reference
+            await supabase
+              .from("pending_project_imports")
+              .update({ 
+                status: "approved", 
+                matched_project_id: mergeTarget.id,
+                reviewed_at: new Date().toISOString(),
+                review_notes: Object.keys(enrichFields).length > 0 
+                  ? `Merged fields: ${Object.keys(enrichFields).filter(k => k !== 'updated_at').join(', ')}`
+                  : "Already exists, no new data to merge"
+              })
+              .eq("id", item.id);
+            continue;
+          } else {
+            console.log(`[BulkApprove] Skipping ${item.name} - already exists`);
+            stats.skipped++;
+            await supabase
+              .from("pending_project_imports")
+              .update({ 
+                status: "approved", 
+                matched_project_id: mergeTarget.id,
+                reviewed_at: new Date().toISOString(),
+                review_notes: "Already exists in projects table"
+              })
+              .eq("id", item.id);
+            continue;
+          }
         }
 
         if (dryRun) {
@@ -288,12 +344,12 @@ serve(async (req) => {
 
         let projectId: string;
 
-        if (existingProject && updateExisting) {
-          // Update existing project
+        if (mergeTarget && updateExisting) {
+          // Update existing project (full overwrite for Reelly parity)
           const { error: updateError } = await supabase
             .from("projects")
             .update({ ...projectData, updated_at: new Date().toISOString() })
-            .eq("id", existingProject.id);
+            .eq("id", mergeTarget.id);
 
           if (updateError) {
             console.error(`[BulkApprove] Failed to update project ${item.name}:`, updateError);
@@ -301,7 +357,7 @@ serve(async (req) => {
             stats.errors++;
             continue;
           }
-          projectId = existingProject.id;
+          projectId = mergeTarget.id;
           stats.updated++;
         } else {
           // Insert new project
@@ -324,7 +380,7 @@ serve(async (req) => {
         // Insert images
         if (images.length > 0) {
           // First delete existing images if updating
-          if (existingProject && updateExisting) {
+          if (mergeTarget && updateExisting) {
             await supabase.from("project_images").delete().eq("project_id", projectId);
           }
 
@@ -347,7 +403,7 @@ serve(async (req) => {
         // Insert documents (brochures, floor plans, etc.)
         if (documents.length > 0) {
           // First delete existing documents if updating
-          if (existingProject && updateExisting) {
+          if (mergeTarget && updateExisting) {
             await supabase.from("project_documents").delete().eq("project_id", projectId);
           }
 
@@ -379,7 +435,7 @@ serve(async (req) => {
           })
           .eq("id", item.id);
 
-        console.log(`[BulkApprove] ✓ ${existingProject ? 'Updated' : 'Approved'}: ${item.name} (${images.length} images, ${documents.length} docs)`);
+        console.log(`[BulkApprove] ✓ ${mergeTarget ? 'Updated' : 'Approved'}: ${item.name} (${images.length} images, ${documents.length} docs)`);
 
       } catch (err) {
         console.error(`[BulkApprove] Error processing ${item.name}:`, err);

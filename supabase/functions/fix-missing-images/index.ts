@@ -5,9 +5,20 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Domains that are BLOCKED — competitor branding
+const BLOCKED_DOMAINS = [
+  "bayut.com",
+  "d3ob0s3rxbjyep.cloudfront.net",
+  "static.bayut.com",
+  "mybayutcdn.bayut.com",
+];
+
+function isBlockedUrl(url: string): boolean {
+  return BLOCKED_DOMAINS.some(d => url.includes(d));
+}
+
 // Extract OG image from HTML using regex
 function extractOgImage(html: string): string | null {
-  // Try og:image
   const patterns = [
     /property="og:image"\s+content="([^"]+)"/i,
     /content="([^"]+)"\s+property="og:image"/i,
@@ -17,7 +28,7 @@ function extractOgImage(html: string): string | null {
   ];
   for (const p of patterns) {
     const m = html.match(p);
-    if (m?.[1] && m[1].startsWith("http")) return m[1];
+    if (m?.[1] && m[1].startsWith("http") && !isBlockedUrl(m[1])) return m[1];
   }
   return null;
 }
@@ -32,72 +43,8 @@ const BAD_PATTERNS = [
 function isGoodImage(url: string): boolean {
   if (!url?.startsWith("http")) return false;
   if (url.length < 40) return false;
+  if (isBlockedUrl(url)) return false;
   return !BAD_PATTERNS.some(p => p.test(url));
-}
-
-// Bayut slug mapping for areas
-const BAYUT_SLUGS: Record<string, string> = {
-  "Damac Hills": "damac-hills-akoya-damac",
-  "Town Square": "town-square",
-  "Dubai Islands": "dubai-islands",
-  "Al Marjan Island": "al-marjan-island",
-  "JVT (Jumeirah Village Triangle)": "jumeirah-village-triangle",
-  "Arjan": "arjan",
-  "Damac Lagoons": "damac-lagoons",
-  "Dubai Studio City": "dubai-studio-city",
-  "Dubai Silicon Oasis": "dubai-silicon-oasis",
-  "The Valley": "the-valley",
-  "Mina Rashid": "mina-rashid",
-  "Dubai Expo City": "expo-city-dubai",
-  "MJL (Madinat Jumeirah Living)": "madinat-jumeirah-living",
-  "Jumeirah Islands": "jumeirah-islands",
-  "City Walk": "city-walk",
-  "Mudon": "mudon",
-  "Dubai Motor City": "motor-city",
-  "Dubai Harbour": "dubai-harbour",
-  "Dubai Science Park": "dubai-science-park",
-  "Dubai Production City": "dubai-production-city",
-  "Dubai International City": "international-city",
-  "Masdar City": "masdar-city",
-  "Al Barsha": "al-barsha",
-  "Al Sufouh": "al-sufouh",
-  "Yas Island": "yas-island",
-  "Al Reem Island, Abu Dhabi": "al-reem-island",
-  "Al Saadiyat island": "saadiyat-island",
-  "Al Maryah Island": "al-maryah-island",
-  "Dubai Investments Park": "dubai-investments-park",
-  "Dubailand Residence Complex": "dubailand-residence-complex",
-  "Al Jaddaf Waterfront": "al-jaddaf",
-  "Dubai Design District": "dubai-design-district-d3",
-  "Cherrywoods": "cherrywoods",
-  "The Villa": "the-villa",
-  "Maryam Island": "maryam-island",
-  "Al Jazeera Al Hamra": "al-jazeera-al-hamra",
-  "City Of Arabia": "dubailand",
-  "Zabeel 1&2": "zabeel",
-  "Sharjah": "sharjah",
-  "Muwaileh Commercial": "muwailih-commercial",
-  "Al Zorah City": "al-zorah",
-  "Nad Al Sheba Gardens": "nad-al-sheba",
-  "Al Mamzar-1": "al-mamzar",
-  "Wadi Al Safa 2": "wadi-al-safa",
-  "Ramhan Island": "ramhan-island",
-  "Rak Central": "ras-al-khaimah-city",
-};
-
-function extractBayutCoverImage(html: string): string | null {
-  const ogMatch = html.match(/property="og:image"\s+content="(https?:\/\/[^"]+)"/i)
-    || html.match(/content="(https?:\/\/[^"]+)"\s+property="og:image"/i);
-  if (ogMatch?.[1]) return ogMatch[1];
-
-  const imgMatches = html.match(/https:\/\/d3ob0s3rxbjyep\.cloudfront\.net\/content\/[^"'\s)]+\.(jpg|jpeg|png|webp)/gi);
-  if (imgMatches) {
-    for (const url of imgMatches) {
-      if (url.includes("/assets/") || /logo|icon/i.test(url)) continue;
-      return url;
-    }
-  }
-  return null;
 }
 
 const HEADERS = {
@@ -115,7 +62,7 @@ Deno.serve(async (req) => {
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, serviceKey);
     const body = await req.json().catch(() => ({}));
-    const target = body.target || "both"; // "areas", "news", or "both"
+    const target = body.target || "both";
     const batchSize = body.batch_size || 5;
 
     const results: { name: string; type: string; image: string | null; status: string }[] = [];
@@ -133,19 +80,29 @@ Deno.serve(async (req) => {
       for (const area of (areas || [])) {
         let imageUrl: string | null = null;
 
-        // Try Bayut
-        const bayutSlug = BAYUT_SLUGS[area.name];
-        const slugToTry = bayutSlug || area.name.toLowerCase().replace(/[()]/g, "").replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "").replace(/-+/g, "-");
-        
+        // Try to find project images for this area
         try {
-          const resp = await fetch(`https://www.bayut.com/area-guides/${slugToTry}/`, { headers: HEADERS });
-          if (resp.ok) {
-            const html = await resp.text();
-            const img = extractBayutCoverImage(html);
-            if (img && isGoodImage(img)) imageUrl = img;
+          const { data: projectWithImages } = await supabase
+            .from("projects")
+            .select("id, project_images(image_url, display_order)")
+            .eq("area_name", area.name)
+            .eq("is_published", true)
+            .limit(3);
+
+          if (projectWithImages) {
+            for (const proj of projectWithImages) {
+              const imgs = (proj as any).project_images || [];
+              const sorted = [...imgs].sort((a: any, b: any) => (a.display_order ?? 999) - (b.display_order ?? 999));
+              for (const img of sorted) {
+                if (img.image_url && isGoodImage(img.image_url)) {
+                  imageUrl = img.image_url;
+                  break;
+                }
+              }
+              if (imageUrl) break;
+            }
           }
         } catch (_) { /* skip */ }
-        await new Promise(r => setTimeout(r, 300));
 
         if (imageUrl) {
           await supabase.from("areas").update({ image_url: imageUrl, hero_image_url: imageUrl, updated_at: new Date().toISOString() }).eq("id", area.id);
