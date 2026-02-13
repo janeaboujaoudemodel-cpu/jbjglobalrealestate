@@ -322,7 +322,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.priceMin || filters.priceMax) ? pillActive : pillInactive)}>
-              <DollarSign className="w-3.5 h-3.5" />
               Price
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
@@ -392,7 +391,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.paymentPlanMax < 100 || filters.postHandoverOnly) ? pillActive : pillInactive)}>
-              <CreditCard className="w-3.5 h-3.5" />
               Payments
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
@@ -438,7 +436,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, pillInactive)}>
-              <Calendar className="w-3.5 h-3.5" />
               Handover
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
@@ -492,7 +489,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactive)}>
-              <Building2 className="w-3.5 h-3.5" />
               {getPropertyTypeLabel()}
               {filters.propertyTypes.length > 1 && <CountBadge count={filters.propertyTypes.length - 1} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
@@ -529,7 +525,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.bedrooms.length > 0 ? pillActive : pillInactive)}>
-              <Bed className="w-3.5 h-3.5" />
               Bedrooms
               {filters.bedrooms.length > 0 && <CountBadge count={filters.bedrooms.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
@@ -554,7 +549,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.statuses.length > 0 ? pillActive : pillInactive)}>
-              <Activity className="w-3.5 h-3.5" />
               Status
               {filters.statuses.length > 0 && <CountBadge count={filters.statuses.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
@@ -584,7 +578,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactive)}>
-              <HardHat className="w-3.5 h-3.5" />
               Construction
               {filters.constructionStatuses.length > 0 && <CountBadge count={filters.constructionStatuses.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
@@ -618,7 +611,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-red-300/50 text-red-600/80 hover:border-red-400"
           )}
         >
-          <EyeOff className="w-3.5 h-3.5 text-red-500" />
           Hide Sold
         </button>
 
