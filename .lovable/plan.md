@@ -1,78 +1,79 @@
 
-## Complete Fix: Area Images + News Broken Photos
+# Area Image Audit and Approval System
 
-### What's Actually Wrong
+## Problem
+62 area images currently in the database contain numerous violations:
+- **Provident logos**: Al Bateen, Al Jafiliya (providentestate.com/icons/icon-512x512.png)
+- **Shutterstock watermarks**: Al Nanda
+- **Stock photo sites**: Al Hamra Village (Alamy)
+- **Floor plans**: Al Nuaimia 1,2 (gjproperties brochure)
+- **Interior apartment photos**: Al Rifa'ah, Wadi Al Safa, others (propertyfinder listing images)
+- **Standalone buildings**: Al Jaddaf (single project render, not community)
+- **Broken/irrelevant**: Es Sanhaya 2 (World Bank PDF), Fujairah City (propertyfinder blog)
+- **Competitor-branded CDN**: ~20 images from d3h330vgpwpjr8.cloudfront.net (Provident CDN with potential watermarks in filenames like "Provident_Estate" in URL)
+- **Wrong subject**: The World Islands showing Atlantis, Mariam Island not showing aerial view
+- Many propertyfinder listing images are individual apartment/unit photos, not community aerials
 
-**Areas**: 126 of 181 areas have `NULL` image_url. The previous edge functions (`enrich-area-images`, `fix-missing-images`) tried project_images and Firecrawl but failed for most areas because:
-- Most areas have no projects with images in `project_images`
-- Firecrawl searches are unreliable and consume credits
+## Plan
 
-**News**: All 101 articles have image URLs in the database, but several URLs are broken (returning 403/hotlink blocked by source sites like `mediaoffice.ae`, `assets.difc.com`, `static.zawya.com`). The `onError` fallback shows a newspaper icon, which looks unprofessional.
+### Step 1: Add `image_approved` column to areas table
+Add a new boolean column `image_approved` (default `false`) to the `areas` table. This creates a gating mechanism so only manually reviewed images appear on the site.
 
----
+### Step 2: Nuclear cleanup -- NULL all non-compliant images
+Set `image_url = NULL` and `hero_image_url = NULL` for ALL 62 areas that currently have images. This is the safest approach given the scale of violations. Specific blocked sources:
+- providentestate.com (logo/branding)
+- shutterstock.com (watermarked)
+- alamy.com (watermarked)
+- d3h330vgpwpjr8.cloudfront.net (Provident CDN -- many filenames contain "Provident_Estate")
+- static.shared.propertyfinder.ae (individual listing photos, interiors)
+- new-projects-media.propertyfinder.com (project renders, not community photos)
+- gjproperties.ae (floor plans/brochures)
+- documents1.worldbank.org (broken/irrelevant)
+- propertyfinder.ae/blog (blog thumbnails)
+- wikimedia (low quality panoramio uploads)
 
-### The New Approach: Use AI Image Generation via Gemini
+### Step 3: Update the UI to filter by `image_approved`
+Modify `useAreas` hook and `AreaGuides.tsx` so that:
+- Only areas with `image_approved = true` show their photo
+- Areas with `image_approved = false` (or no image) display the branded gradient fallback
+- The filter bar and page only show approved content by default
 
-Instead of endlessly trying to scrape images from external sites (which break due to hotlinking, CORS, and access restrictions), we use **Gemini 3 Pro Image Preview** (available through Lovable AI, no API key needed) to generate professional aerial/masterplan-style images for each area. This is:
-- 100% reliable (no broken URLs, no blocked hotlinks)
-- No Firecrawl credits consumed
-- Produces consistent, professional community visuals
-
-For news, we proxy broken images through the edge function to avoid hotlink blocks.
-
----
-
-### Plan
-
-#### Part 1: New Edge Function `generate-area-images`
-
-Create a new edge function that:
-1. Fetches areas with NULL image_url (batch of 5-10)
-2. For each area, calls Gemini 3 Pro Image Preview via the Lovable AI gateway to generate an aerial/panoramic view of the community
-3. Uploads the generated image to Supabase Storage
-4. Updates the area's `image_url` and `hero_image_url` with the storage URL
-
-Prompt template: `"Professional aerial panoramic photograph of {area_name}, Dubai/UAE. Modern urban landscape, high resolution, real estate marketing quality, daytime, clear sky."`
-
-This guarantees every area gets a high-quality, reliable image that never breaks.
-
-#### Part 2: Fix Broken News Images
-
-Create a new edge function `proxy-news-image` OR update the News.tsx frontend to:
-- Detect broken images via the existing `onError` handler
-- Instead of showing a newspaper icon, use a **topic-relevant stock gradient** with the article category icon and source name
-- For articles from WAM, DIFC, etc. where images are hotlink-blocked, store the images in Supabase Storage by fetching them server-side (edge function with proper User-Agent headers)
-
-Alternative simpler approach: Create an edge function `fix-broken-news-images` that:
-1. Fetches all news articles
-2. For each image_url, does a HEAD request server-side to check if it returns 200
-3. If broken, tries to re-fetch the source_url HTML and extract a working OG image
-4. If still broken, sets image_url to NULL (gradient fallback is cleaner than a broken image)
-
-#### Part 3: Improve News Fallback UI
-
-Update `News.tsx` so that when an image fails to load, instead of showing a generic newspaper icon, it shows a **styled gradient card** with:
-- The category name prominently displayed
-- The source logo/name
-- A relevant icon based on category (Building2 for Developer News, TrendingUp for Market Update, etc.)
-
-This makes even image-less cards look intentional and premium.
+### Step 4: Build an approval-aware image display
+Update the area card rendering in `AreaGuides.tsx` to check `image_approved` before displaying any image, regardless of whether `image_url` is populated.
 
 ---
 
-### Files to Create/Change
+## Technical Details
 
-| File | Change |
-|------|--------|
-| `supabase/functions/generate-area-images/index.ts` | NEW: Gemini-powered area image generation with Supabase Storage upload |
-| `supabase/functions/fix-broken-news-images/index.ts` | NEW: Server-side HEAD check + re-fetch for broken news image URLs |
-| `src/pages/News.tsx` | Improve the onError fallback to show a premium category-themed gradient instead of generic newspaper icon |
+### Database Migration
+```sql
+ALTER TABLE public.areas 
+ADD COLUMN image_approved BOOLEAN NOT NULL DEFAULT false;
+```
 
-### Execution Order
+### Data Cleanup
+```sql
+UPDATE areas 
+SET image_url = NULL, hero_image_url = NULL, image_approved = false, updated_at = now()
+WHERE image_url IS NOT NULL;
+```
+This clears all 62 images. Future images must be individually approved.
 
-1. Create and deploy `generate-area-images` function
-2. Trigger it in batches of 5-10 to generate images for all 126 areas
-3. Create and deploy `fix-broken-news-images` function
-4. Trigger it to validate/fix all 101 news image URLs
-5. Update News.tsx fallback UI for any remaining broken images
-6. Verify everything renders correctly
+### Hook Changes (`src/hooks/useAreas.ts`)
+- Add `image_approved` to the `Area` interface
+- No query filter change needed -- the UI logic handles display
+
+### UI Changes (`src/pages/AreaGuides.tsx`)
+- Update the image rendering condition from:
+  `(area.hero_image_url || area.image_url)` 
+  to: 
+  `area.image_approved && (area.hero_image_url || area.image_url)`
+- Apply the same logic in the fixed/scrolled filter bar if images appear there
+
+### Area Detail Page (`src/pages/AreaDetail.tsx`)
+- Same approval gate on the hero image display
+
+### Community Detail Page (`src/pages/CommunityDetail.tsx`)
+- Same approval gate on the hero image display
+
+This ensures no unapproved photo ever renders anywhere on the site. Areas without approved photos get the branded gradient fallback (MapPin icon + gold styling).
