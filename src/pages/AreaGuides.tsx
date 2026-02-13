@@ -1,14 +1,12 @@
 /**
  * AreaGuides Component - Database-Driven Areas Index
- * Displays only REAL areas from the database (database-synced)
- * No static/fake data - all areas come from useAreas() hook
+ * Instant layout: no hero, filter bar fixed from load, vertical nav always visible
  */
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { MapPin, Building2, TrendingUp, Flame, ArrowRight, Loader2 } from "lucide-react";
+import { MapPin, Building2, TrendingUp, Flame, ArrowRight, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import jbjMonogram from "@/assets/jbj-monogram-light-bg.png";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
@@ -20,26 +18,21 @@ import { SEOHead } from "@/components/SEOHead";
 import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 
-const ProjectCountStat = () => {
-  const { data: count } = useQuery({
-    queryKey: ["total-published-projects"],
-    queryFn: async () => {
-      const { count, error } = await supabase
-        .from("projects")
-        .select("*", { count: "exact", head: true })
-        .eq("is_published", true);
-      if (error) throw error;
-      return count || 0;
-    },
-    staleTime: 60 * 1000,
-  });
-  return (
-    <div className="text-center">
-      <div className="text-3xl md:text-4xl font-bold text-gold">{(count || 0).toLocaleString()}</div>
-      <div className="text-zinc-400 text-sm">Properties</div>
-    </div>
-  );
-};
+const ITEMS_PER_PAGE = 24;
+
+/** Generate page numbers with ellipsis */
+function getPageNumbers(current: number, total: number): (number | 'ellipsis')[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages: (number | 'ellipsis')[] = [];
+  pages.push(1);
+  if (current > 3) pages.push('ellipsis');
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+  for (let i = start; i <= end; i++) pages.push(i);
+  if (current < total - 2) pages.push('ellipsis');
+  pages.push(total);
+  return pages;
+}
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -56,20 +49,23 @@ const staggerContainer = {
 
 const AreaGuides = () => {
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>({...defaultShortcutFilters, sortBy: 'most_projects'});
-  const [isFixed, setIsFixed] = useState(false);
-  const [bottomReached, setBottomReached] = useState(false);
-  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Fetch REAL areas from database
   const { data: areas, isLoading, error } = useAreas();
   const { data: emirates } = useEmiratesWithAreas();
+
+  // Immediately set filter-bar-fixed on mount — no hero, instant layout
+  useEffect(() => {
+    document.body.classList.add('filter-bar-fixed');
+    return () => document.body.classList.remove('filter-bar-fixed');
+  }, []);
 
   // Filter and sort areas from database
   const filteredAreas = useMemo(() => {
     if (!areas) return [];
     let filtered = [...areas];
 
-    // Search filter
     const query = shortcutFilters.searchQuery?.trim().toLowerCase();
     if (query) {
       filtered = filtered.filter(a => 
@@ -100,50 +96,30 @@ const AreaGuides = () => {
     return filtered;
   }, [areas, shortcutFilters.sortBy, shortcutFilters.searchQuery]);
 
-  // IntersectionObserver for fixed positioning
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140),
-      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
+  // Pagination
+  const totalPages = Math.ceil(filteredAreas.length / ITEMS_PER_PAGE);
+  const paginatedAreas = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredAreas.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredAreas, currentPage]);
 
-  // Bottom sentinel: hide fixed bar when CTA section enters viewport
+  // Reset page when filters change
   useEffect(() => {
-    const target = document.getElementById('ready-to-get-started');
-    if (!target) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setBottomReached(entry.isIntersecting || entry.boundingClientRect.top < 0),
-      { threshold: 0.1 }
-    );
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, []);
+    setCurrentPage(1);
+  }, [shortcutFilters]);
 
-  // Signal GlobalHeader to hide when filter bar is fixed
-  useEffect(() => {
-    if (isFixed && !bottomReached) {
-      document.body.classList.add('filter-bar-fixed');
-    } else {
-      document.body.classList.remove('filter-bar-fixed');
-    }
-    return () => document.body.classList.remove('filter-bar-fixed');
-  }, [isFixed, bottomReached]);
-
-  const showVerticalNav = isFixed && !bottomReached;
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
-      {/* Vertical Nav - desktop only, shown when filter bar is fixed */}
-      {showVerticalNav && (
-        <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
-          <PropertiesVerticalNav />
-        </div>
-      )}
+      {/* Vertical Nav — always visible on desktop */}
+      <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
+        <PropertiesVerticalNav />
+      </div>
+
       <SEOHead 
         title="Areas in Dubai & UAE | JBJ Global Real Estate"
         description="Explore real estate areas across Dubai and the UAE. Browse properties by neighborhood with verified data."
@@ -151,89 +127,41 @@ const AreaGuides = () => {
         canonicalPath="/areas"
       />
 
-      {/* Fullscreen Hero with Background Photo */}
-      <section className="jj-hero-fullscreen relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
-        <img
-          src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
-          alt="Dubai Skyline"
-          className="absolute inset-0 w-full h-full object-cover"
-          loading="eager"
-          fetchPriority="high"
-        />
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
-
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gold/20 to-gold/10 border border-gold/40 rounded-full mb-6">
-              <MapPin className="w-4 h-4 text-gold" />
-              <span className="text-gold text-sm font-medium uppercase tracking-wider">Browse by Location</span>
-            </div>
-
-            <h1 
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              Explore <span className="text-gold">Areas</span> in the UAE
-            </h1>
-
-            <p className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-8">
-              Discover properties across {areas?.length || 0}+ verified neighborhoods
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-6 md:gap-10">
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-gold">{areas?.length || 0}</div>
-                <div className="text-zinc-400 text-sm">Areas</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-gold">{emirates?.length || 0}</div>
-                <div className="text-zinc-400 text-sm">Emirates</div>
-              </div>
-              <ProjectCountStat />
-            </div>
-          </motion.div>
+      {/* Filter bar — always fixed top-0 */}
+      <section 
+        className="fixed top-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3"
+        style={{ left: '200px' }}
+      >
+        <div className="container mx-auto px-4 space-y-2">
+          <FilterShortcutBar
+            variant="light"
+            filters={shortcutFilters}
+            onFilterChange={setShortcutFilters}
+          />
         </div>
       </section>
 
-      {/* Sentinel for IntersectionObserver */}
-      <div ref={sentinelRef} className="h-0 w-full" />
-
-      {/* Filter bar - inline */}
-      <section className="py-4 pb-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-        <div className={`container mx-auto px-4 space-y-3 transition-all duration-300 ${showVerticalNav ? 'lg:pl-[200px]' : ''}`}>
-          {/* FilterShortcutBar */}
-          <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
-        </div>
-
-      {/* Fixed portal copy — only when scrolled past sentinel */}
-      {isFixed && !bottomReached && createPortal(
-        <div className={`fixed top-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-all duration-300 ${showVerticalNav ? 'left-0 lg:left-[200px]' : 'left-0'}`}>
-          <div className="container mx-auto px-4 space-y-2">
-            <FilterShortcutBar
-              variant="light"
-              filters={shortcutFilters}
-              onFilterChange={setShortcutFilters}
-            />
-          </div>
-        </div>,
-        document.body
-      )}
-
-      </section>
+      {/* Spacer for fixed filter bar */}
+      <div className="h-[60px]" />
 
       {/* Gold divider between filters and cards */}
       <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-      {/* Areas Grid - distinct darker champagne zone */}
-      <section className="pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]">
-        <div className={`container mx-auto px-4 transition-all duration-300 ${showVerticalNav ? 'lg:pl-[200px]' : ''}`}>
+      {/* Areas Grid — edge-to-edge background */}
+      <section className="pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] min-h-screen">
+        <div className="lg:pl-[200px] px-4 sm:px-6 lg:px-8">
+          
+          {/* Results count */}
+          <div className="mb-6 flex items-center justify-between">
+            <p className="text-black/70">
+              Showing <span className="text-gold font-medium">{paginatedAreas.length}</span> of{' '}
+              <span className="text-gold font-medium">{filteredAreas.length}</span> areas
+              {totalPages > 1 && (
+                <span className="text-black/40 ml-2">· Page {currentPage} of {totalPages}</span>
+              )}
+            </p>
+          </div>
+
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-8 h-8 text-gold animate-spin" />
@@ -243,152 +171,187 @@ const AreaGuides = () => {
             <div className="text-center py-20">
               <p className="text-red-500">Failed to load areas. Please try again.</p>
             </div>
-          ) : filteredAreas.length === 0 ? (
+          ) : paginatedAreas.length === 0 ? (
             <div className="text-center py-20">
               <MapPin className="w-12 h-12 text-black/30 mx-auto mb-4" />
               <p className="text-black/50 text-lg">No areas found.</p>
             </div>
           ) : (
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              animate="visible"
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-            >
-              {filteredAreas.map((area, index) => (
-                <motion.div key={area.id} variants={fadeInUp}>
-                  <Link to={`/area/${area.slug}`}>
-                    <motion.div
-                      whileHover={{ y: -4 }}
-                      transition={{ duration: 0.3 }}
-                      className="group rounded-xl overflow-hidden cursor-pointer flex flex-col h-full"
-                      style={{
-                        border: '3px solid hsl(42 45% 59%)',
-                        boxShadow: `
-                          0 8px 32px rgba(200,167,102,0.25),
-                          0 4px 16px rgba(0,0,0,0.15),
-                          inset 0 1px 0 rgba(255,255,255,0.1)
-                        `,
-                      }}
-                    >
-                      {/* Photo Section */}
-                      <div className="relative h-[180px] flex-shrink-0">
-                        {(area.hero_image_url || area.image_url) ? (
-                          <img
-                            src={area.hero_image_url || area.image_url}
-                            alt={area.name}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            loading={index < 8 ? "eager" : "lazy"}
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
-                            <img src={jbjMonogram} alt="" className="w-16 h-16 object-contain opacity-10" />
-                          </div>
-                        )}
-
-                        {/* Trending + High Demand Badges */}
-                        <div className="absolute top-3 right-3 z-10 flex flex-col gap-1.5 items-end">
-                          {area.is_trending && (
-                            <Badge className="bg-gradient-to-r from-amber-500 to-amber-400 text-black px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg">
-                              <TrendingUp className="w-3 h-3 mr-1" />
-                              TRENDING
-                            </Badge>
-                          )}
-                          {area.is_high_demand && (
-                            <Badge className="bg-gradient-to-r from-red-600 to-orange-500 text-white px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg">
-                              <Flame className="w-3 h-3 mr-1" />
-                              HIGH DEMAND
-                            </Badge>
-                          )}
-                        </div>
-
-                        {/* Emirate Label */}
-                        <div className="absolute top-3 left-3 z-10">
-                          <Badge className="bg-black/70 text-white px-3 py-1 text-[10px] font-medium tracking-wider shadow-lg border border-gold/30">
-                            <MapPin className="w-3 h-3 mr-1" />
-                            {area.emirate}
-                          </Badge>
-                        </div>
-                      </div>
-
-                      {/* Content Section - Champagne Background */}
-                      <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col flex-1">
-                        {/* Area Name */}
-                        <h3 className="text-black font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
-                          {area.name}
-                        </h3>
-
-                        {/* Description - Fixed 2 lines */}
-                        <div className="flex-1 min-h-[40px]">
-                          {area.description ? (
-                            <p className="text-zinc-600 text-xs line-clamp-2">
-                              {area.description
-                                .replace(/!\[.*?\]\(.*?\)/g, '')
-                                .replace(/provident\s*(estate)?/gi, '')
-                                .replace(/reelly/gi, '')
-                                .replace(/\s{2,}/g, ' ')
-                                .trim()}
-                            </p>
+            <>
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                animate="visible"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              >
+                {paginatedAreas.map((area, index) => (
+                  <motion.div key={area.id} variants={fadeInUp}>
+                    <Link to={`/area/${area.slug}`}>
+                      <motion.div
+                        whileHover={{ y: -4 }}
+                        transition={{ duration: 0.3 }}
+                        className="group rounded-xl overflow-hidden cursor-pointer flex flex-col h-full"
+                        style={{
+                          border: '3px solid hsl(42 45% 59%)',
+                          boxShadow: `
+                            0 8px 32px rgba(200,167,102,0.25),
+                            0 4px 16px rgba(0,0,0,0.15),
+                            inset 0 1px 0 rgba(255,255,255,0.1)
+                          `,
+                        }}
+                      >
+                        {/* Photo Section */}
+                        <div className="relative h-[180px] flex-shrink-0">
+                          {(area.hero_image_url || area.image_url) ? (
+                            <img
+                              src={area.hero_image_url || area.image_url}
+                              alt={area.name}
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              loading={index < 8 ? "eager" : "lazy"}
+                            />
                           ) : (
-                            <p className="text-zinc-400 text-xs italic">
-                              Explore properties in {area.name}
-                            </p>
+                            <div className="w-full h-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
+                              <img src={jbjMonogram} alt="" className="w-16 h-16 object-contain opacity-10" />
+                            </div>
                           )}
+
+                          {/* Trending + High Demand Badges */}
+                          <div className="absolute top-3 right-3 z-10 flex flex-col gap-1.5 items-end">
+                            {area.is_trending && (
+                              <Badge className="bg-gradient-to-r from-amber-500 to-amber-400 text-black px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg">
+                                <TrendingUp className="w-3 h-3 mr-1" />
+                                TRENDING
+                              </Badge>
+                            )}
+                            {area.is_high_demand && (
+                              <Badge className="bg-gradient-to-r from-red-600 to-orange-500 text-white px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg">
+                                <Flame className="w-3 h-3 mr-1" />
+                                HIGH DEMAND
+                              </Badge>
+                            )}
+                          </div>
+
+                          {/* Emirate Label */}
+                          <div className="absolute top-3 left-3 z-10">
+                            <Badge className="bg-black/70 text-white px-3 py-1 text-[10px] font-medium tracking-wider shadow-lg border border-gold/30">
+                              <MapPin className="w-3 h-3 mr-1" />
+                              {area.emirate}
+                            </Badge>
+                          </div>
                         </div>
 
-                        {/* Stats Row */}
-                        <div className="flex items-center gap-3 text-zinc-700 text-xs mt-3 pt-3 border-t border-gold/20">
-                          {(area.property_count ?? 0) > 0 && (
-                            <div className="flex items-center gap-1">
-                              <Building2 className="w-3.5 h-3.5 text-gold" />
-                              <span>{area.property_count} Projects</span>
-                            </div>
-                          )}
-                          {(area.developer_count ?? 0) > 0 && (
-                            <div className="flex items-center gap-1">
-                              <span className="text-zinc-500">{area.developer_count} Developers</span>
-                            </div>
-                          )}
-                          {area.is_trending && (
-                            <div className="flex items-center gap-1">
-                              <TrendingUp className="w-3.5 h-3.5 text-amber-500" />
-                              <span className="text-amber-600">Trending</span>
-                            </div>
-                          )}
-                          {area.is_high_demand && (
-                            <div className="flex items-center gap-1">
-                              <Flame className="w-3.5 h-3.5 text-red-500" />
-                              <span className="text-red-500">High Demand</span>
-                            </div>
-                          )}
-                          {(area.property_count ?? 0) === 0 && (area.developer_count ?? 0) === 0 && !area.is_trending && (
-                            <span className="text-zinc-500 text-xs">View area details</span>
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
+                        {/* Content Section */}
+                        <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col flex-1">
+                          <h3 className="text-black font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
+                            {area.name}
+                          </h3>
 
-          {!isLoading && filteredAreas.length > 0 && (
-            <div className="text-center mt-8 text-black/40 text-sm">
-              Showing {filteredAreas.length} of {areas?.length || 0} areas
-            </div>
+                          <div className="flex-1 min-h-[40px]">
+                            {area.description ? (
+                              <p className="text-zinc-600 text-xs line-clamp-2">
+                                {area.description
+                                  .replace(/!\[.*?\]\(.*?\)/g, '')
+                                  .replace(/provident\s*(estate)?/gi, '')
+                                  .replace(/reelly/gi, '')
+                                  .replace(/\s{2,}/g, ' ')
+                                  .trim()}
+                              </p>
+                            ) : (
+                              <p className="text-zinc-400 text-xs italic">
+                                Explore properties in {area.name}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Stats Row */}
+                          <div className="flex items-center gap-3 text-zinc-700 text-xs mt-3 pt-3 border-t border-gold/20">
+                            {(area.property_count ?? 0) > 0 && (
+                              <div className="flex items-center gap-1">
+                                <Building2 className="w-3.5 h-3.5 text-gold" />
+                                <span>{area.property_count} Projects</span>
+                              </div>
+                            )}
+                            {(area.developer_count ?? 0) > 0 && (
+                              <div className="flex items-center gap-1">
+                                <span className="text-zinc-500">{area.developer_count} Developers</span>
+                              </div>
+                            )}
+                            {area.is_trending && (
+                              <div className="flex items-center gap-1">
+                                <TrendingUp className="w-3.5 h-3.5 text-amber-500" />
+                                <span className="text-amber-600">Trending</span>
+                              </div>
+                            )}
+                            {area.is_high_demand && (
+                              <div className="flex items-center gap-1">
+                                <Flame className="w-3.5 h-3.5 text-red-500" />
+                                <span className="text-red-500">High Demand</span>
+                              </div>
+                            )}
+                            {(area.property_count ?? 0) === 0 && (area.developer_count ?? 0) === 0 && !area.is_trending && (
+                              <span className="text-zinc-500 text-xs">View area details</span>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 pt-10 pb-4">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-white/60 text-black/70 hover:bg-gold hover:text-black disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous
+                  </button>
+
+                  {getPageNumbers(currentPage, totalPages).map((page, idx) =>
+                    page === 'ellipsis' ? (
+                      <span key={`e-${idx}`} className="px-2 text-black/40">…</span>
+                    ) : (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`w-10 h-10 rounded-lg text-sm font-medium transition-all ${
+                          page === currentPage
+                            ? 'bg-gold text-black shadow-md'
+                            : 'bg-white/60 border border-gold/30 text-black/70 hover:bg-gold/20'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    )
+                  )}
+
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-white/60 text-black/70 hover:bg-gold hover:text-black disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
 
       {/* DLD Market Intelligence */}
-      <div className={`transition-all duration-300 ${showVerticalNav ? 'lg:pl-[200px]' : ''}`}>
+      <div className="lg:pl-[200px]">
         <DLDMarketWidget />
       </div>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-        <div className={`container mx-auto px-4 text-center transition-all duration-300 ${showVerticalNav ? 'lg:pl-[200px]' : ''}`}>
+      <section id="ready-to-get-started" className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+        <div className="lg:pl-[200px] px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Can't Find What You're Looking For?
           </h2>
