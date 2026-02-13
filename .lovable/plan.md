@@ -1,96 +1,80 @@
 
-## Deep Audit and Deduplication Fix
 
-### Problem Summary
-The database has widespread duplication and shared-image issues:
+## Fix News: Import Provident Blog + Fix Missing Photos
 
-| Entity | Issue | Count |
-|--------|-------|-------|
-| News Articles | Exact duplicate stories (same topic, different title wording) | 8 duplicate pairs to delete |
-| News Articles | Different articles sharing the same image URL | 35 articles across 13 shared image URLs |
-| News Articles | Property Finder articles all using the same Abu Dhabi generic image | 8 articles |
-| News Articles | The National articles all using the same 90x90 thumbnail | 5 articles |
-| Projects | Duplicate project names | 121 duplicates |
-| Areas | Duplicate area names | 3 duplicates |
+### Current State
+- **70 total articles** in database
+- **7 articles with NULL images**: 5 from Property Finder, 1 from The National, 1 from Abu Dhabi Media Office
+- **0 articles from Provident Estate blog** -- the Provident blog at providentestate.com/blog/ has 12 high-quality articles with real CloudFront images, but none have been imported yet
+- **Property Finder articles** all point to the listing page `/blog/` instead of individual article URLs, which is why they have no images
 
-### Root Causes
-1. The news collector's dedup check matches on EXACT title only (line 882), so "New Malls in Dubai (2026-2028)" and "New Malls in Dubai: What's Coming Between 2026 and 2028" are treated as different articles
-2. Property Finder and The National source pages serve a listing page OG image (not individual article images), so every article from that source gets the same generic image
-3. The collect action runs across multiple sources that cover the same story, creating cross-source duplicates
-4. Projects are imported from both Reelly and Provident with slightly different records for the same property
+### What Provident Blog Has (Not Yet in DB)
+From scraping providentestate.com/blog/, these 12 articles are available with real images:
+
+| Article | Image Source |
+|---------|-------------|
+| RTA Confirms Dubai Loop Tunnel Project | d3h330vgpwpjr8.cloudfront.net |
+| AED 100 Billion Zabeel District at DIFC | d3h330vgpwpjr8.cloudfront.net |
+| Sobha Unveils AED 50 Billion Sobha Sanctuary | d3h330vgpwpjr8.cloudfront.net |
+| Provident Estate and Sobha Realty Partnership | d3h330vgpwpjr8.cloudfront.net |
+| Dubai Creek Tower Impact on Dubai Creek Harbour | d3h330vgpwpjr8.cloudfront.net |
+| Meraas Dubai Design District (d3) Expansion | d3h330vgpwpjr8.cloudfront.net |
+| Dubai Real Estate Market Report 2025 | d3h330vgpwpjr8.cloudfront.net |
+| Invest in 2026: What Smart Investors are Doing | d3h330vgpwpjr8.cloudfront.net |
+| Dubai to Get 152 New Parks and 33km Cycling Tracks | d3h330vgpwpjr8.cloudfront.net |
+| 15 Important Updates Before Moving to Dubai 2026 | d3h330vgpwpjr8.cloudfront.net |
+| Wellness Real Estate Market Surges Globally | d3h330vgpwpjr8.cloudfront.net |
+| Emaar AED 180 Billion Dubai Square Mall | d3h330vgpwpjr8.cloudfront.net |
+
+All images are real editorial photos hosted on Provident's CloudFront CDN -- no AI or stock photos.
 
 ---
 
-### Part 1: Delete Duplicate News Articles (keep 1, delete the rest)
+### Plan
 
-**8 duplicate pairs identified** -- delete the newer one in each pair:
+#### Part 1: Add `"import-provident-blog"` action to `ai-news-collector/index.ts`
 
-| Keep | Delete | Topic |
-|------|--------|-------|
-| New Malls in Dubai (2026-2028) | New Malls in Dubai: What's Coming Between 2026 and 2028 | Same article |
-| JVT vs JVC: Comparison | JVT vs JVC: Which One is Right for You? | Same article |
-| Duplex vs Townhouse (if exists as separate) | -- | Merged variant |
-| DLD launches Phase II... (longer title) | DLD launches Phase II... (shorter title) | Same article |
-| Dubai's ultra-luxury property boom... | Dubai's ultra-luxury property boom... (exact dupe) | Same article |
-| Buying an off-plan property... (?) | Buying an off-plan property... (!) | Same article |
-| Sharjah Real Estate Exhibition... | Sharjah Real Estate Exhibition... (shorter) | Same article |
-| Aldar's net profit 8.8B... | Aldar's net profit 8.8B... (shorter) | Same article |
-| Empower Records... | Empower Records... (variant title) | Same article |
+A new action that:
+1. Scrapes `providentestate.com/blog/` via Firecrawl
+2. Parses the markdown to extract article titles, URLs, images, dates, and categories directly from the page structure
+3. For each article, gets the full-resolution image by replacing `/x/340x/` with `/x/1200x/` in the CloudFront URL
+4. Scrapes each individual article page for full content
+5. Inserts into `market_news` with fuzzy dedup check (skips if already exists)
+6. Source: "Provident Estate", source_url: individual article URL
 
-Execute SQL DELETE for the 8 duplicate IDs.
+The Provident blog page has a clear, parseable structure:
+```
+[Category\n![Title](image_url)](article_url)\n[Title](article_url)\nDate
+```
 
-### Part 2: Fix Shared/Wrong Images on Remaining News Articles
+This can be parsed directly from the scraped markdown without AI -- just regex extraction.
 
-After dedup deletion, ~27 articles will still share images with other articles. These need unique, real images from their actual source pages.
+#### Part 2: Fix 5 Property Finder articles with NULL images
 
-**Strategy per source:**
+For each of the 5 Property Finder articles (which all have `source_url: propertyfinder.ae/blog/`):
+1. Use Firecrawl Search with the article title + `site:propertyfinder.ae` to find the actual article page
+2. Extract the OG image from the search result metadata
+3. Update `source_url` to the actual article URL (not the listing page)
+4. If no image found, use Firecrawl Search on broader news portals for the same topic
 
-- **Property Finder** (8 articles, all using Abu Dhabi generic image): Scrape each article's individual blog page URL (currently all point to `/blog/` listing page). Use Firecrawl Search to find each article's actual page and extract its OG image.
-- **The National** (5 articles, all using 90x90 thumbnail): The source URL is `thenationalnews.com/business/property/` (listing page). Search for each article title on The National to find the actual article page with a proper hero image.
-- **Gulf Business** (5 articles sharing 90x90 thumbnails): Same issue -- listing page thumbnails. Search for individual article pages.
-- **Other shared images**: WAM, Dubai Media Office, etc. -- search for unique images per article.
+Articles to fix:
+- "New Malls in Dubai (2026-2028)"
+- "JVT vs JVC: Comparison"
+- "Property Management Fees in Dubai"
+- "Top 10 Upcoming Mega Projects in Dubai [2026 and beyond]"
+- "15 Reasons Why You Should Invest in Dubai Real Estate in 2026"
 
-**Implementation**: Update `ai-news-collector/index.ts`:
-- Add a new `"dedup-and-fix"` action that:
-  1. Deletes known duplicate IDs
-  2. Identifies all shared-image articles
-  3. For each, searches for the article's individual page via Firecrawl Search using the title
-  4. Extracts the OG image from the individual article page (not the listing page)
-  5. Sets to NULL if no unique image is found
+#### Part 3: Fix 2 remaining NULL image articles
 
-Also fix the `collect` action dedup logic (line 882-886):
-- Add fuzzy title matching: normalize titles by removing punctuation and comparing first 6 words
-- Before insert, check if a similar title already exists (not just exact match)
+- "Tech watches and robot dogs" (The National) -- scrape the actual thenationalnews.com article URL which is already a proper individual page URL
+- "MAG Group Holding / Marsa Zayed" (Abu Dhabi Media Office) -- search for this specific story on news portals
 
-### Part 3: Fix Shared Images -- Improve Source URL Quality
+#### Part 4: Deploy and execute
 
-The root problem is that many articles have listing page URLs (e.g., `propertyfinder.ae/blog/`) instead of individual article URLs. 
-
-**Fix**: In the `collect` action, when the AI extracts articles, if the `source_url` is the same as the source listing page URL, use Firecrawl Search to find the actual article page URL before inserting.
-
-### Part 4: Deduplicate Projects (121 duplicates)
-
-For each duplicate project name:
-1. Keep the record with the most complete data (most non-null fields, most images)
-2. Delete the other records
-3. This will be done via SQL, keeping the "richest" record per name
-
-### Part 5: Deduplicate Areas (3 duplicates)
-
-For each duplicate area name:
-1. Keep the record with the image (or the older one)
-2. Delete the duplicate
-
-### Part 6: Prevent Future Duplicates
-
-**News Collector** (`ai-news-collector/index.ts`):
-- Change dedup from exact title match to fuzzy match (normalize: lowercase, remove punctuation, compare first 50 chars)
-- Add a secondary check: if `source` and first 6 words of title match, skip
-
-**Add `KNOWN_BAD_URLS` entries** for listing-page OG images that should never be used:
-- `propertyfinder.ae/blog/wp-content/uploads/2025/06/Abu-Dhabi_img.webp`
-- `thenational-the-national-prod.cdn.arcpublishing.com/resizer/v2/6IL6H574R5EKRPWJCIXKWA4NYE` (90x90 thumbnail)
-- Any `90x90` or `width=90` images
+1. Deploy updated `ai-news-collector`
+2. Trigger `import-provident-blog` action to import all 12 Provident articles
+3. Trigger `enrich` action to fix the 7 NULL-image articles and add content/analysis to new Provident articles
+4. Verify all articles have unique, real images
 
 ---
 
@@ -98,14 +82,12 @@ For each duplicate area name:
 
 | File | Change |
 |------|--------|
-| `supabase/functions/ai-news-collector/index.ts` | Add fuzzy dedup logic; add listing-page OG images to KNOWN_BAD_URLS; add `"dedup-and-fix"` action; reject tiny images (90x90) |
-| Database (SQL) | DELETE 8 duplicate news articles; DELETE duplicate projects (keep richest); DELETE duplicate areas |
+| `supabase/functions/ai-news-collector/index.ts` | Add `"import-provident-blog"` action with direct markdown parsing; improve `enrich` action to fix Property Finder source URLs via search |
 
-### Execution Order
+### Expected Result After Execution
+- ~82 total articles (70 existing + 12 from Provident, minus any fuzzy dupes)
+- All articles with real editorial photos from their source pages
+- Zero NULL images (or gradient fallback only for truly unavailable government source photos)
+- Zero duplicate articles
+- All Provident blog content imported with CloudFront images
 
-1. Delete 8 duplicate news articles via SQL
-2. Delete 121 duplicate projects via SQL (keep richest record per name)  
-3. Delete 3 duplicate areas via SQL
-4. Update `ai-news-collector` with fuzzy dedup and bad URL blocklist
-5. Deploy and trigger `fix-images` action to fix shared images on remaining articles
-6. Verify via screenshots and DB queries
