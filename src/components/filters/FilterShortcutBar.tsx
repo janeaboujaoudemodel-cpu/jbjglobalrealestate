@@ -31,7 +31,7 @@ export interface ShortcutFilterState {
   propertyTypes: string[];
   bedrooms: string[];
   statuses: string[];
-  sortBy: 'newest' | 'price_asc' | 'price_desc' | 'alpha' | null;
+  sortBy: 'newest' | 'price_asc' | 'price_desc' | 'alpha' | 'most_projects' | 'trending' | null;
   hideSoldOut: boolean;
   constructionStatuses: string[];
   sizeMin: string;
@@ -128,6 +128,8 @@ const SORT_OPTIONS: { value: ShortcutFilterState['sortBy']; label: string }[] = 
   { value: 'price_asc', label: 'Low-High' },
   { value: 'price_desc', label: 'High-Low' },
   { value: 'alpha', label: 'A-Z' },
+  { value: 'most_projects', label: 'Most Projects' },
+  { value: 'trending', label: 'Trending' },
 ];
 
 const QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4'];
