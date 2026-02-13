@@ -54,7 +54,7 @@ Deno.serve(async (req) => {
         console.log(`Generating image for: ${area.name}`);
 
         // Generate image via Gemini
-        const prompt = `Professional aerial panoramic photograph of ${area.name}, Dubai, UAE. Modern urban landscape showing buildings, roads, and community layout. High resolution, real estate marketing quality, daytime, clear blue sky, photorealistic. Ultra high resolution.`;
+        const prompt = `Ultra-realistic drone aerial photograph of ${area.name} community in Dubai, UAE. Bird's-eye view showing the full master-planned community layout with residential towers, villas, landscaped parks, swimming pools, roads, and surrounding desert or waterfront. Golden hour lighting, crystal clear sky, cinematic composition, 8K resolution, real estate marketing photography, no text or watermarks, no logos.`;
 
         const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
           method: "POST",
