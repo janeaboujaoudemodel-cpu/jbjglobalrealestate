@@ -1,80 +1,112 @@
 
 
-## Fix News: Import Provident Blog + Fix Missing Photos
+## Comprehensive Fix: Area Images, News Photos, and DLD Market Data Across All Pages
 
-### Current State
-- **70 total articles** in database
-- **7 articles with NULL images**: 5 from Property Finder, 1 from The National, 1 from Abu Dhabi Media Office
-- **0 articles from Provident Estate blog** -- the Provident blog at providentestate.com/blog/ has 12 high-quality articles with real CloudFront images, but none have been imported yet
-- **Property Finder articles** all point to the listing page `/blog/` instead of individual article URLs, which is why they have no images
+### Issues Identified
 
-### What Provident Blog Has (Not Yet in DB)
-From scraping providentestate.com/blog/, these 12 articles are available with real images:
+**A. Area Images -- 14 areas using individual building/project photos instead of aerial community views**
 
-| Article | Image Source |
-|---------|-------------|
-| RTA Confirms Dubai Loop Tunnel Project | d3h330vgpwpjr8.cloudfront.net |
-| AED 100 Billion Zabeel District at DIFC | d3h330vgpwpjr8.cloudfront.net |
-| Sobha Unveils AED 50 Billion Sobha Sanctuary | d3h330vgpwpjr8.cloudfront.net |
-| Provident Estate and Sobha Realty Partnership | d3h330vgpwpjr8.cloudfront.net |
-| Dubai Creek Tower Impact on Dubai Creek Harbour | d3h330vgpwpjr8.cloudfront.net |
-| Meraas Dubai Design District (d3) Expansion | d3h330vgpwpjr8.cloudfront.net |
-| Dubai Real Estate Market Report 2025 | d3h330vgpwpjr8.cloudfront.net |
-| Invest in 2026: What Smart Investors are Doing | d3h330vgpwpjr8.cloudfront.net |
-| Dubai to Get 152 New Parks and 33km Cycling Tracks | d3h330vgpwpjr8.cloudfront.net |
-| 15 Important Updates Before Moving to Dubai 2026 | d3h330vgpwpjr8.cloudfront.net |
-| Wellness Real Estate Market Surges Globally | d3h330vgpwpjr8.cloudfront.net |
-| Emaar AED 180 Billion Dubai Square Mall | d3h330vgpwpjr8.cloudfront.net |
+These 14 areas have `reelly-backend.s3.amazonaws.com/projects/...` URLs -- meaning they show a single building render, not the master community:
 
-All images are real editorial photos hosted on Provident's CloudFront CDN -- no AI or stock photos.
+| Area | Current Image Source |
+|------|---------------------|
+| Abu Dhabi | Single project render |
+| Al Jaddaf | Single project render |
+| Al Yasmeen | Single project render |
+| Bukadra | Single project render |
+| Damac Riverside | Single project render |
+| Dubai Land Residence Complex | Single project render |
+| Dubai Studio City | Reelly API single building |
+| Jebel Ali Freezone Extension | Single project render |
+| Jumeirah Islands | Single project render |
+| JVT (Jumeirah Village Triangle) | Single project render |
+| Majan | Single project render |
+| Ras Al Khor | Single project render |
+| Saih Shuaib | Single project render |
+| The Heights / Wadi Al Safa 3 | Single project render |
+
+Additionally: **Maryam Island** has a broken Pinterest share URL (not a real image URL).
+
+**B. News Articles -- 8 articles with bad/tiny/wrong images**
+
+| Article | Problem |
+|---------|---------|
+| Top 10 Upcoming Mega Projects in Dubai | Property Finder generic 400x209 thumbnail (worker collecting trash) |
+| New Malls in Dubai (2026-2028) | PF 400x209 (approved visa form -- wrong topic) |
+| JVT vs JVC: Comparison | PF 400x209 (approved visa form -- duplicate) |
+| Duplex vs Townhouse | PF 400x209 (gathering of people -- wrong topic) |
+| Property Management Fees in Dubai | PF 400x209 (gas burner -- wrong topic) |
+| 15 Reasons to Invest in Dubai 2026 | PF 2018 generic market image |
+| Tech watches and robot dogs | The National 200x200 tiny thumbnail |
+| Dubai property market to cool (Moody's) | The National 200x200 tiny thumbnail (duplicate of above) |
+
+**C. DLD Market Data missing from key pages**
+
+The News page already has the full DLD section (2026 YTD, 2025 recap, top areas, buyer nationalities). These pages are missing it entirely:
+- Properties (PropertiesReelly.tsx)
+- Areas (AreaGuides.tsx)
+- Developers (Developers.tsx)
+- Buyer Guide (BuyerGuide.tsx)
+
+The DLDMarketWidget exists on detail pages (AreaDetail, DeveloperDetail, ProjectDetail) but NOT on the index/listing pages.
 
 ---
 
 ### Plan
 
-#### Part 1: Add `"import-provident-blog"` action to `ai-news-collector/index.ts`
+#### Part 1: Fix 14 Area Images + Maryam Island (Database)
 
-A new action that:
-1. Scrapes `providentestate.com/blog/` via Firecrawl
-2. Parses the markdown to extract article titles, URLs, images, dates, and categories directly from the page structure
-3. For each article, gets the full-resolution image by replacing `/x/340x/` with `/x/1200x/` in the CloudFront URL
-4. Scrapes each individual article page for full content
-5. Inserts into `market_news` with fuzzy dedup check (skips if already exists)
-6. Source: "Provident Estate", source_url: individual article URL
+**Approach**: Update `enrich-area-images` to reject `reelly-backend.s3.amazonaws.com/projects/` URLs (these are individual project renders, not community photos). Then for each of the 15 areas:
 
-The Provident blog page has a clear, parseable structure:
+1. Use Firecrawl Search for `"{area name}" Dubai aerial view community master plan` targeting image-rich portals (bayut.com, propertyfinder.ae, dubailand.gov.ae)
+2. Extract OG images / large editorial photos from search results
+3. If no community-level photo found, set to NULL (gradient fallback)
+
+**Changes to `supabase/functions/enrich-area-images/index.ts`**:
+- Add `reelly-backend.s3.amazonaws.com/projects/` to the bad image pattern in `isGoodAreaImage()`
+- Add `pinterest.com` to the bad image pattern
+- Add `keyspacerealty.com` to bad patterns
+- Update the area selection query to also match these patterns: `.or("image_url.ilike.%reelly-backend.s3%projects%,image_url.ilike.%pinterest.com%")`
+- Change search queries from generic to specifically request "aerial", "master plan", "community overview"
+
+**SQL**: Update the 15 area image URLs to NULL so the enrichment function picks them up:
+```sql
+UPDATE areas SET image_url = NULL 
+WHERE image_url LIKE '%reelly-backend.s3.amazonaws.com/projects/%'
+   OR image_url LIKE '%pinterest.com%';
 ```
-[Category\n![Title](image_url)](article_url)\n[Title](article_url)\nDate
+
+Then trigger `enrich-area-images` to find real community photos.
+
+#### Part 2: Fix 8 News Article Images (Database + Edge Function)
+
+For each of the 8 bad articles, use the `fix-null-images` action (already exists in `ai-news-collector`):
+
+1. Set all 8 bad image URLs to NULL first (so the fix action picks them up)
+2. The fix action searches for each article title via Firecrawl Search and extracts the proper OG image from the actual article page
+3. Add Property Finder 400x209 thumbnails and The National 200x200 thumbnails to `KNOWN_BAD_URLS` in `ai-news-collector` to prevent future imports
+
+**SQL**:
+```sql
+UPDATE market_news SET image_url = NULL 
+WHERE image_url LIKE '%propertyfinder.ae/blog/wp-content/uploads%'
+   OR (image_url LIKE '%arcpublishing.com%' AND image_url LIKE '%width=200%');
 ```
 
-This can be parsed directly from the scraped markdown without AI -- just regex extraction.
+Then trigger `ai-news-collector` with `action: "fix-null-images"`.
 
-#### Part 2: Fix 5 Property Finder articles with NULL images
+#### Part 3: Add DLD Market Widget to 4 Pages
 
-For each of the 5 Property Finder articles (which all have `source_url: propertyfinder.ae/blog/`):
-1. Use Firecrawl Search with the article title + `site:propertyfinder.ae` to find the actual article page
-2. Extract the OG image from the search result metadata
-3. Update `source_url` to the actual article URL (not the listing page)
-4. If no image found, use Firecrawl Search on broader news portals for the same topic
+Add the `DLDMarketWidget` component (already built) to these pages, placed after the main content grid and before the footer:
 
-Articles to fix:
-- "New Malls in Dubai (2026-2028)"
-- "JVT vs JVC: Comparison"
-- "Property Management Fees in Dubai"
-- "Top 10 Upcoming Mega Projects in Dubai [2026 and beyond]"
-- "15 Reasons Why You Should Invest in Dubai Real Estate in 2026"
+| Page | File | Placement |
+|------|------|-----------|
+| Properties | `PropertiesReelly.tsx` | After the project grid |
+| Areas | `AreaGuides.tsx` | After the area cards grid |
+| Developers | `Developers.tsx` | After the developer cards grid |
+| Buyer Guide | `BuyerGuide.tsx` | After the guide content sections |
 
-#### Part 3: Fix 2 remaining NULL image articles
-
-- "Tech watches and robot dogs" (The National) -- scrape the actual thenationalnews.com article URL which is already a proper individual page URL
-- "MAG Group Holding / Marsa Zayed" (Abu Dhabi Media Office) -- search for this specific story on news portals
-
-#### Part 4: Deploy and execute
-
-1. Deploy updated `ai-news-collector`
-2. Trigger `import-provident-blog` action to import all 12 Provident articles
-3. Trigger `enrich` action to fix the 7 NULL-image articles and add content/analysis to new Provident articles
-4. Verify all articles have unique, real images
+Each will use the existing `DLDMarketWidget` component with a simple import and placement. This gives every key page the 2026 YTD stats, 2025 recap, top 10 areas, and buyer nationalities.
 
 ---
 
@@ -82,12 +114,22 @@ Articles to fix:
 
 | File | Change |
 |------|--------|
-| `supabase/functions/ai-news-collector/index.ts` | Add `"import-provident-blog"` action with direct markdown parsing; improve `enrich` action to fix Property Finder source URLs via search |
+| `supabase/functions/enrich-area-images/index.ts` | Reject project render URLs; add aerial/community-focused search queries |
+| `supabase/functions/ai-news-collector/index.ts` | Add PF 400x209 and National 200x200 to KNOWN_BAD_URLS |
+| `src/pages/PropertiesReelly.tsx` | Import and add DLDMarketWidget after project grid |
+| `src/pages/AreaGuides.tsx` | Import and add DLDMarketWidget after area cards |
+| `src/pages/Developers.tsx` | Import and add DLDMarketWidget after developer cards |
+| `src/pages/BuyerGuide.tsx` | Import and add DLDMarketWidget after guide content |
+| Database (SQL) | NULL out 15 area images with project renders; NULL out 8 news images with bad thumbnails |
 
-### Expected Result After Execution
-- ~82 total articles (70 existing + 12 from Provident, minus any fuzzy dupes)
-- All articles with real editorial photos from their source pages
-- Zero NULL images (or gradient fallback only for truly unavailable government source photos)
-- Zero duplicate articles
-- All Provident blog content imported with CloudFront images
+### Execution Order
+
+1. SQL: Reset 15 bad area images and 8 bad news images to NULL
+2. Update `enrich-area-images` to search for aerial/community photos specifically
+3. Update `ai-news-collector` KNOWN_BAD_URLS blocklist
+4. Deploy both edge functions
+5. Trigger `enrich-area-images` to find community photos for the 15 areas
+6. Trigger `ai-news-collector` with `fix-null-images` to find proper article photos
+7. Add DLDMarketWidget to 4 pages (PropertiesReelly, AreaGuides, Developers, BuyerGuide)
+8. Verify via DB queries and screenshots
 
