@@ -30,6 +30,7 @@ function extractSection(text: string, sectionName: string): string {
       new RegExp(`\\d+\\.\\s*\\*\\*${name}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\d+\\.\\s*\\*\\*|$)`, 'i'),
       new RegExp(`##\\s*${name}[:\\s]*([\\s\\S]*?)(?=##|\\d+\\.\\s*\\*\\*|$)`, 'i'),
       new RegExp(`\\*\\*${name}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*[A-Z]|\\d+\\.\\s*\\*\\*|$)`, 'i'),
+      new RegExp(`\\*\\*\\d+\\.\\s*${name}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*\\d+\\.|$)`, 'i'),
     ];
     for (const pattern of patterns) {
       const match = text.match(pattern);
@@ -454,6 +455,7 @@ export const DeveloperAIAnalyzer = ({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {foundedYear && (
             <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+              <CalendarDays className="w-4 h-4 text-gold mx-auto mb-1" />
               <div className="text-2xl font-bold text-gold">{foundedYear}</div>
               <div className="text-zinc-600 text-xs mt-1">Founded</div>
             </div>
