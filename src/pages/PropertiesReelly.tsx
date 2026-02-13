@@ -370,7 +370,7 @@ const PropertiesReelly = () => {
               </div>
             )}
 
-            <div className="flex-1 container mx-auto px-3 sm:px-4">
+            <div className="flex-1 min-w-0 px-3 sm:px-4 max-w-[1400px] mx-auto">
               <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5">
                 
                 {/* Results Count */}
@@ -485,7 +485,11 @@ const PropertiesReelly = () => {
       )}
 
       {/* DLD Market Intelligence - hidden in map mode */}
-      {!isMapMode && <DLDMarketWidget />}
+      {!isMapMode && (
+        <div className={isFilterFixed ? "lg:ml-[200px]" : ""}>
+          <DLDMarketWidget />
+        </div>
+      )}
        </div>
      </>
    );
