@@ -274,30 +274,110 @@ serve(async (req) => {
             await new Promise(r => setTimeout(r, 1500));
           }
 
-          // Step 2: Firecrawl Search if still no image
+          // Step 2: Multi-query Firecrawl Search if still no image
           if ((!imageUrl || isImageBad(imageUrl)) && FIRECRAWL_API_KEY) {
-            try {
-              console.log(`  Searching for image: "${article.title}" Dubai real estate`);
-              const searchResp = await fetch("https://api.firecrawl.dev/v1/search", {
-                method: "POST",
-                headers: { "Authorization": `Bearer ${FIRECRAWL_API_KEY}`, "Content-Type": "application/json" },
-                body: JSON.stringify({ query: `${article.title} Dubai real estate`, limit: 3 }),
-              });
-              if (searchResp.ok) {
-                const searchData = await searchResp.json();
-                for (const r of (searchData.data || [])) {
-                  const ogImg = r.metadata?.ogImage || r.metadata?.image || r.metadata?.og_image;
-                  if (ogImg && !isImageBad(ogImg) && !usedImageUrls.has(ogImg)) {
-                    imageUrl = ogImg;
-                    usedImageUrls.add(ogImg);
-                    console.log(`  Found search image for "${article.title}": ${ogImg.substring(0, 80)}`);
-                    break;
+            // Build multiple search queries for better coverage
+            const titleWords = article.title.split(/\s+/);
+            const shortTitle = titleWords.slice(0, 8).join(" ");
+            const isWam = article.source_url?.includes("wam.ae");
+            const isMoec = article.source_url?.includes("moec.gov.ae");
+
+            const searchQueries: string[] = [];
+
+            // Query 1: Short title to find same story on news portals
+            searchQueries.push(shortTitle);
+
+            // Query 2: Title + UAE context
+            if (isMoec || isWam) {
+              searchQueries.push(`${shortTitle} UAE Dubai`);
+            } else {
+              searchQueries.push(`${article.title} Dubai real estate`);
+            }
+
+            // Query 3: Target portals with good OG images
+            searchQueries.push(`${shortTitle} site:gulfnews.com OR site:khaleejtimes.com OR site:arabianbusiness.com`);
+
+            for (const query of searchQueries) {
+              if (imageUrl && !isImageBad(imageUrl)) break;
+              try {
+                console.log(`  Search query: "${query}"`);
+                const searchResp = await fetch("https://api.firecrawl.dev/v1/search", {
+                  method: "POST",
+                  headers: { "Authorization": `Bearer ${FIRECRAWL_API_KEY}`, "Content-Type": "application/json" },
+                  body: JSON.stringify({ query, limit: 5, scrapeOptions: { formats: ["markdown"] } }),
+                });
+                if (searchResp.ok) {
+                  const searchData = await searchResp.json();
+                  for (const r of (searchData.data || [])) {
+                    // Check multiple metadata fields for images
+                    const ogImg = r.metadata?.ogImage || r.metadata?.image || r.metadata?.["og:image"] || r.metadata?.og_image || r.metadata?.thumbnail;
+                    if (ogImg && !isImageBad(ogImg) && !usedImageUrls.has(ogImg) && ogImg.length > 30) {
+                      imageUrl = ogImg;
+                      usedImageUrls.add(ogImg);
+                      console.log(`  Found search image for "${article.title}": ${ogImg.substring(0, 80)}`);
+                      break;
+                    }
+                    // Also try extracting from markdown content
+                    if (r.markdown) {
+                      const mdImg = extractFirstGoodImage(r.markdown);
+                      if (mdImg && !usedImageUrls.has(mdImg)) {
+                        imageUrl = mdImg;
+                        usedImageUrls.add(mdImg);
+                        console.log(`  Found markdown image for "${article.title}": ${mdImg.substring(0, 80)}`);
+                        break;
+                      }
+                    }
                   }
                 }
+                await new Promise(r => setTimeout(r, 1500));
+              } catch (searchErr) {
+                console.warn(`  Search error for "${article.title}":`, searchErr);
               }
-              await new Promise(r => setTimeout(r, 1000));
-            } catch (searchErr) {
-              console.warn(`  Search error for "${article.title}":`, searchErr);
+            }
+
+            // WAM-specific: scrape the article page directly for embedded images
+            if ((!imageUrl || isImageBad(imageUrl)) && isWam && article.source_url?.includes("/article/")) {
+              try {
+                console.log(`  WAM direct scrape: ${article.source_url}`);
+                const wamResp = await fetch("https://api.firecrawl.dev/v1/scrape", {
+                  method: "POST",
+                  headers: { "Authorization": `Bearer ${FIRECRAWL_API_KEY}`, "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    url: article.source_url,
+                    formats: ["markdown", "links"],
+                    onlyMainContent: false,
+                    waitFor: 5000,
+                    timeout: 30000,
+                  }),
+                });
+                if (wamResp.ok) {
+                  const wamData = await wamResp.json();
+                  const wamMd = wamData.data?.markdown || wamData.markdown || "";
+                  const wamOg = extractOgImage(wamMd);
+                  if (wamOg) {
+                    imageUrl = wamOg;
+                    console.log(`  WAM OG image: ${wamOg.substring(0, 80)}`);
+                  } else {
+                    const wamInline = extractFirstGoodImage(wamMd);
+                    if (wamInline) {
+                      imageUrl = wamInline;
+                      console.log(`  WAM inline image: ${wamInline.substring(0, 80)}`);
+                    }
+                  }
+                  // Also check metadata
+                  const wamMeta = wamData.data?.metadata;
+                  if (!imageUrl && wamMeta) {
+                    const metaImg = wamMeta.ogImage || wamMeta.image || wamMeta["og:image"];
+                    if (metaImg && !isImageBad(metaImg)) {
+                      imageUrl = metaImg;
+                      console.log(`  WAM metadata image: ${metaImg.substring(0, 80)}`);
+                    }
+                  }
+                }
+                await new Promise(r => setTimeout(r, 1500));
+              } catch (wamErr) {
+                console.warn(`  WAM scrape error:`, wamErr);
+              }
             }
           }
 
