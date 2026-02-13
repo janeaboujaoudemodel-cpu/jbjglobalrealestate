@@ -29,7 +29,7 @@ const KNOWN_BAD_URLS = [
   "adgmo-logotype",
   "twitter.png",
   "moet.gov.ae/documents/",
-  "thenationalnews.com/resizer",
+  // "thenationalnews.com/resizer" -- removed: these are full-size editorial photos, not bad
   "propertyfinder.ae/blog/wp-content/uploads/2025/09/Header-image.png",
   "survey.customerpulse.gov.ae",
   // All PropertyFinder generic listing/blog thumbnails (400x209, wrong topics)
