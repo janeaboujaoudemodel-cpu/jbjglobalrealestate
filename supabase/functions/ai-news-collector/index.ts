@@ -45,9 +45,11 @@ const KNOWN_BAD_URLS = [
   "gulfbusiness.com/wp-content/uploads/2025/10/neesha-salian-90x90",
   // The National 200x200 tiny thumbnails
   "thenationalnews.com/image/policy:1.",
-  // Only block tiny arcpublishing thumbnails, not full-size editorial photos
+  // Only block tiny arcpublishing thumbnails (width<=200), not full-size editorial photos
   "arcpublishing.com/resizer/v2/width=200",
   "arcpublishing.com/resizer/v2/width=90",
+  "arcpublishing.com/resizer/v2/width=100",
+  "arcpublishing.com/resizer/v2/width=150",
 ];
 
 // No fake/stock image pools - only real source images or null
