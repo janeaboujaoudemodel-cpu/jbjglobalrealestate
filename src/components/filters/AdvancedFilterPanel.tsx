@@ -2,7 +2,7 @@
  * AdvancedFilterPanel - Centered dialog with all filter sections, developer logos, UAE-only locations
  */
 import { useState, useEffect, useCallback } from "react";
-import { X, Search, Heart, Check } from "lucide-react";
+import { X, Search, Heart, Check, ChevronDown } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Slider } from "@/components/ui/slider";
@@ -70,6 +70,8 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
   const [developers, setDevelopers] = useState<DeveloperEntry[]>([]);
   const [devSearch, setDevSearch] = useState('');
   const [emirateSearch, setEmirateSearch] = useState('');
+  const [emiratesOpen, setEmiratesOpen] = useState(false);
+  const [devsOpen, setDevsOpen] = useState(false);
 
   // Sync local filters when panel opens
   useEffect(() => {
@@ -97,7 +99,8 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
       try {
         const { count } = await supabase
           .from('projects')
-          .select('*', { count: 'exact', head: true });
+          .select('*', { count: 'exact', head: true })
+          .eq('is_published', true);
         setProjectCount(count ?? 0);
       } catch {
         setProjectCount(null);
@@ -139,7 +142,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-2xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 flex flex-col overflow-hidden"
+        className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 flex flex-col overflow-hidden"
       >
         {/* Header */}
         <div className="px-5 pt-5 pb-4 border-b border-gold/20 flex-shrink-0">
@@ -171,76 +174,102 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
             {/* Location - UAE Only */}
             <section>
               <h4 className={sectionTitle}>Location</h4>
-              <input
-                type="text"
-                value={emirateSearch}
-                onChange={(e) => setEmirateSearch(e.target.value)}
-                placeholder="Search emirate..."
-                className={cn(inputClass, "mb-2 h-9 text-xs")}
-              />
-              <div className="space-y-1 max-h-48 overflow-y-auto">
-                {filteredEmirates.map((em) => {
-                  const isSelected = localFilters.emirates.includes(em.value);
-                  return (
-                    <button
-                      key={em.value}
-                      onClick={() => update({ emirates: toggleArray(localFilters.emirates, em.value) })}
-                      className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-gold/10 transition-colors"
-                    >
-                      <div className={cn(
-                        "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                        isSelected ? "border-gold bg-gold/20" : "border-gold/40"
-                      )}>
-                        {isSelected && <Check className="w-3 h-3 text-black" />}
-                      </div>
-                      <span className="text-sm text-black">{em.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              <button
+                onClick={() => setEmiratesOpen(!emiratesOpen)}
+                className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
+              >
+                <span className={localFilters.emirates.length > 0 ? "text-black" : "text-black/40"}>
+                  {localFilters.emirates.length === 0 ? "All Emirates" : `${localFilters.emirates.length} selected`}
+                </span>
+                <ChevronDown className={cn("w-4 h-4 text-black/40 transition-transform", emiratesOpen && "rotate-180")} />
+              </button>
+              {emiratesOpen && (
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    value={emirateSearch}
+                    onChange={(e) => setEmirateSearch(e.target.value)}
+                    placeholder="Search emirate..."
+                    className={cn(inputClass, "mb-2 h-9 text-xs")}
+                  />
+                  <div className="space-y-1 max-h-48 overflow-y-auto">
+                    {filteredEmirates.map((em) => {
+                      const isSelected = localFilters.emirates.includes(em.value);
+                      return (
+                        <button
+                          key={em.value}
+                          onClick={() => update({ emirates: toggleArray(localFilters.emirates, em.value) })}
+                          className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-gold/10 transition-colors"
+                        >
+                          <div className={cn(
+                            "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
+                            isSelected ? "border-gold bg-gold/20" : "border-gold/40"
+                          )}>
+                            {isSelected && <Check className="w-3 h-3 text-black" />}
+                          </div>
+                          <span className="text-sm text-black">{em.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </section>
 
             {/* By Developer */}
             <section>
               <h4 className={sectionTitle}>By Developer</h4>
-              <input
-                type="text"
-                value={devSearch}
-                onChange={(e) => setDevSearch(e.target.value)}
-                placeholder="Search developer..."
-                className={cn(inputClass, "mb-2 h-9 text-xs")}
-              />
-              <div className="space-y-1 max-h-56 overflow-y-auto">
-                {filteredDevs.map((dev) => {
-                  const isSelected = localFilters.developers.includes(dev.name);
-                  return (
-                    <button
-                      key={dev.name}
-                      onClick={() => update({ developers: toggleArray(localFilters.developers, dev.name) })}
-                      className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-gold/10 transition-colors"
-                    >
-                      <div className={cn(
-                        "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                        isSelected ? "border-gold bg-gold/20" : "border-gold/40"
-                      )}>
-                        {isSelected && <Check className="w-3 h-3 text-black" />}
-                      </div>
-                      <div className="w-7 h-7 rounded bg-white border border-gold/20 p-0.5 flex items-center justify-center flex-shrink-0">
-                        {dev.logo_url ? (
-                          <SafeImage
-                            src={dev.logo_url}
-                            alt={dev.name}
-                            className="w-full h-full object-contain"
-                          />
-                        ) : (
-                          <span className="text-[8px] font-bold text-black/40">{dev.name.charAt(0)}</span>
-                        )}
-                      </div>
-                      <span className="text-sm text-black text-left truncate">{dev.name}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              <button
+                onClick={() => setDevsOpen(!devsOpen)}
+                className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
+              >
+                <span className={localFilters.developers.length > 0 ? "text-black" : "text-black/40"}>
+                  {localFilters.developers.length === 0 ? "All Developers" : `${localFilters.developers.length} selected`}
+                </span>
+                <ChevronDown className={cn("w-4 h-4 text-black/40 transition-transform", devsOpen && "rotate-180")} />
+              </button>
+              {devsOpen && (
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    value={devSearch}
+                    onChange={(e) => setDevSearch(e.target.value)}
+                    placeholder="Search developer..."
+                    className={cn(inputClass, "mb-2 h-9 text-xs")}
+                  />
+                  <div className="space-y-1 max-h-56 overflow-y-auto">
+                    {filteredDevs.map((dev) => {
+                      const isSelected = localFilters.developers.includes(dev.name);
+                      return (
+                        <button
+                          key={dev.name}
+                          onClick={() => update({ developers: toggleArray(localFilters.developers, dev.name) })}
+                          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-gold/10 transition-colors"
+                        >
+                          <div className={cn(
+                            "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
+                            isSelected ? "border-gold bg-gold/20" : "border-gold/40"
+                          )}>
+                            {isSelected && <Check className="w-3 h-3 text-black" />}
+                          </div>
+                          <div className="w-7 h-7 rounded-lg bg-white border border-gold/20 p-0.5 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            {dev.logo_url ? (
+                              <SafeImage
+                                src={dev.logo_url}
+                                alt={dev.name}
+                                className="w-full h-full object-contain"
+                              />
+                            ) : (
+                              <span className="text-[8px] font-bold text-black/40">{dev.name.charAt(0)}</span>
+                            )}
+                          </div>
+                          <span className="text-sm text-black text-left truncate">{dev.name}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </section>
 
             {/* Payment Plan */}
@@ -466,7 +495,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
           </button>
           <button
             onClick={handleApply}
-            className="flex-1 py-2.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#D4AF37] text-black font-bold text-sm shadow-lg hover:brightness-110 transition-all"
+            className="flex-1 py-2.5 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black font-bold text-sm shadow-lg hover:brightness-95 transition-all"
           >
             Show {projectCount !== null ? projectCount.toLocaleString() : '...'} projects
           </button>

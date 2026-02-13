@@ -206,8 +206,8 @@ const AreaGuides = () => {
       <div ref={sentinelRef} className="h-0 w-full" />
 
       {/* Filter bar - inline */}
-      <section className={`py-4 pb-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark transition-all duration-300 ${showVerticalNav ? 'lg:ml-[200px]' : ''}`}>
-        <div className="container mx-auto px-4 space-y-3">
+      <section className="py-4 pb-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+        <div className={`container mx-auto px-4 space-y-3 transition-all duration-300 ${showVerticalNav ? 'lg:pl-[200px]' : ''}`}>
           {/* FilterShortcutBar */}
           <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
         </div>
@@ -229,11 +229,11 @@ const AreaGuides = () => {
       </section>
 
       {/* Gold divider between filters and cards */}
-      <div className={`w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent transition-all duration-300 ${showVerticalNav ? 'lg:ml-[200px]' : ''}`} />
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
       {/* Areas Grid - distinct darker champagne zone */}
-      <section className={`pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] transition-all duration-300 ${showVerticalNav ? 'lg:ml-[200px]' : ''}`}>
-        <div className="container mx-auto px-4">
+      <section className="pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]">
+        <div className={`container mx-auto px-4 transition-all duration-300 ${showVerticalNav ? 'lg:pl-[200px]' : ''}`}>
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-8 h-8 text-gold animate-spin" />
@@ -382,13 +382,13 @@ const AreaGuides = () => {
       </section>
 
       {/* DLD Market Intelligence */}
-      <div className={`transition-all duration-300 ${showVerticalNav ? 'lg:ml-[200px]' : ''}`}>
+      <div className={`transition-all duration-300 ${showVerticalNav ? 'lg:pl-[200px]' : ''}`}>
         <DLDMarketWidget />
       </div>
 
       {/* CTA Section */}
-      <section className={`py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark transition-all duration-300 ${showVerticalNav ? 'lg:ml-[200px]' : ''}`}>
-        <div className="container mx-auto px-4 text-center">
+      <section className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+        <div className={`container mx-auto px-4 text-center transition-all duration-300 ${showVerticalNav ? 'lg:pl-[200px]' : ''}`}>
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Can't Find What You're Looking For?
           </h2>
