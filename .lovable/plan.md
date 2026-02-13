@@ -1,42 +1,70 @@
 
 
-## Fix All Broken/Missing News Article Images
+## Fix Area Guide Images: Optimization and Quality Audit
 
-### Issues Found
+### Problems Identified
 
-| # | Article | Problem |
-|---|---------|---------|
-| 1 | "CapitaLand Investment opens office at DIFC" | `image_url` is NULL |
-| 2 | "The real story told by Dubai's cooling property market" | `image_url` is NULL |
-| 3 | "Private Islands in Dubai" | `image_url` is NULL |
-| 4 | "DLD launches Phase II of Real Estate Tokenisation Project" | `image_url` is the WAM site logo, not an article image |
-| 5 | "The Residences, DIFC Zabeel District..." | `image_url` is a Zawya page URL, not an image file |
-| 6 | "10 Most Common Dubai Real Estate Buzzwords" | `image_url` is the literal string `don't_remove` |
-| 7 | "Daleel co-founder on why Dubai's property market needs AI" | `image_url` is a JSON array string, not a URL |
+1. **Slow Loading**: Area images are massive uncompressed PNGs (1.9-2.2 MB each). Loading 24 per page means downloading ~48 MB of images. Network traces show individual images taking 2-4 seconds each.
 
-**Total: 7 articles with broken or invalid images**
+2. **Image Authenticity**: All 185 area images were batch-generated/downloaded and stored as `.png` files in the `area-images` storage bucket. Some may not accurately represent their areas (e.g., Sobha Hartland shows an MBR City District One Wikipedia photo which is the correct general area but may not look like the actual Sobha Hartland community).
 
-Additionally, 487 articles still use external image URLs (not yet mirrored to storage). These are not broken today, but are at risk of hotlink blocking. Mirroring them is a separate batch operation.
+3. **No Broken Images Found**: All images return HTTP 200. Maryam Island and all Wadi Al Safa areas already have images and they load correctly. The "broken" appearance the user sees is likely caused by the slow loading -- images appear blank for 2-4 seconds before rendering.
+
+---
 
 ### Fix Plan
 
-**Step 1: Direct database updates for the 7 broken articles**
+#### Part 1: Optimize Image Loading Speed (Primary Fix)
 
-Using data gathered from scraping and web search:
+The storage bucket supports Supabase Image Transformations via the `/render/image/` endpoint. This serves resized, compressed WebP versions on-the-fly without re-uploading anything.
 
-- **Article 1 (CapitaLand/DIFC)**: Set to NULL (WAM blocks scraping; the UI gradient fallback will render a themed placeholder)
-- **Article 2 (Dubai cooling market)**: Set to the OG image extracted from The National: `https://www.thenationalnews.com/resizer/v2/2VE63RR4UFCY3NFDQSPJIZVEHI.jpg?smart=true&auth=...&width=1200&height=630`
-- **Article 3 (Private Islands)**: Scrape Property Finder blog page for the featured image and set it
-- **Article 4 (DLD Tokenisation)**: Set to NULL (WAM logo is not an article image; fallback placeholder is better)
-- **Article 5 (Residences DIFC)**: Set to NULL (a page URL was stored instead of an image)
-- **Article 6 (Buzzwords)**: Set to NULL (literal string "don't_remove" is not an image)
-- **Article 7 (Daleel/AI)**: Extract the second URL from the JSON array (the actual article image) and set it as the image_url
+**File: `src/pages/AreaGuides.tsx`**
 
-**Step 2: Run mirror-news-images to permanently host the fixed images**
+Create a utility function that converts storage URLs from:
+```
+/storage/v1/object/public/area-images/business-bay.png
+```
+to:
+```
+/storage/v1/render/image/public/area-images/business-bay.png?width=600&quality=70
+```
 
-After updating the URLs, invoke the `mirror-news-images` edge function to download and re-host any new external images in storage, preventing future hotlink failures.
+This will reduce each image from ~2 MB to ~30-60 KB (a 30-50x reduction), making the page load nearly instantly.
 
-### No Code Changes Required
+Apply this transformation to the `<img>` tag on line 207 where `area.hero_image_url || area.image_url` is used.
 
-All fixes are data-only (UPDATE statements). The existing UI already handles NULL images with a premium gradient fallback card, so setting broken entries to NULL is the correct approach when no real image can be found.
+**File: `src/components/home/AreasWeCover.tsx`**
+
+Apply the same optimization to the areas grid on the homepage (if it uses area images).
+
+**File: `src/lib/imageUtils.ts`**
+
+Add a new `optimizeStorageImageUrl(url, width, quality)` utility function that:
+- Detects if the URL is from our storage bucket (`mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/`)
+- Replaces `/object/public/` with `/render/image/public/`
+- Appends `?width=600&quality=70` for card thumbnails
+- Returns the URL unchanged if it is not from our storage
+
+#### Part 2: Verify Sobha Hartland Image
+
+The current Sobha Hartland image was sourced from a Wikipedia photo of MBR City District One (the broader district where Sobha Hartland is located). While geographically correct, it may not specifically show the Sobha Hartland community.
+
+**Action**: Use the `enrich-area-images` edge function to replace the Sobha Hartland image with a more accurate one. Update the curated map in `supabase/functions/enrich-area-images/index.ts` to use a verified Sobha Hartland aerial photo from an official or editorial source, then re-run enrichment for that specific area.
+
+---
+
+### Files to Change
+
+| File | Change |
+|------|--------|
+| `src/lib/imageUtils.ts` | Add `optimizeStorageImageUrl()` utility function |
+| `src/pages/AreaGuides.tsx` | Apply image optimization to area card images (line 207) |
+| `src/pages/AreaDetail.tsx` | Apply image optimization to area detail hero if applicable |
+| `supabase/functions/enrich-area-images/index.ts` | Update Sobha Hartland curated URL to a more accurate image |
+
+### Expected Impact
+
+- **Image load time**: From 2-4 seconds per image down to ~100-200ms (WebP at 600px width)
+- **Page data transfer**: From ~48 MB to ~1.5 MB for 24 area cards
+- **No re-upload needed**: Transformation happens server-side on existing files
 
