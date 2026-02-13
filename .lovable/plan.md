@@ -1,112 +1,66 @@
 
 
-## Fix All Area Images and News Photos -- Complete Overhaul
+## Fix News Missing Images + Trigger Area Image Processing + Provident Extraction
 
-### Root Cause
+### Current State
 
-The previous "curated image map" used fabricated CloudFront URLs like `d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/damac-hills.jpg` that **do not exist** on Provident's CDN (all return 403 Access Denied). This means:
-- 25 areas currently display broken images (show nothing in the browser)
-- 38 areas have NULL (gradient fallback)
-- Total: **63 areas** without working images
+**News**: 4 articles out of 101 have NULL images:
+1. "New Malls in Dubai (2026-2028)" -- source_url points to PropertyFinder blog listing page (not the article)
+2. "CapitaLand Investment opens office at DIFC" -- WAM article
+3. "Dubai housing market recorded $15.02bn..." -- Arabian Business listing page (not the article)
+4. "Gulf Business Real Estate Summit & Awards" -- Gulf Business events page
 
-### Solution: Scrape Bayut Area Guide Pages (Zero Firecrawl Credits)
+**Areas**: 5 areas out of 181 still have NULL images:
+- Hessian Second, Ghadeer Al Tayr, Rak Central, Maryam Island, Wadi Al Safa 2
 
-Bayut's area guide pages (e.g., `bayut.com/area-guides/damac-hills-akoya-damac/`) each contain a verified high-quality community cover photo hosted on their CDN (`d3ob0s3rxbjyep.cloudfront.net/content/...`). These are real aerial/community photos -- exactly what the user wants.
-
-The approach:
-1. Fetch each Bayut area guide page directly using `fetch()` (free, no API key needed)
-2. Parse the HTML to extract the cover image URL
-3. Update the database directly
-
-No Firecrawl credits consumed.
-
-### Plan
-
-#### Part 1: Rewrite `enrich-area-images` Edge Function
-
-**Complete rewrite of `supabase/functions/enrich-area-images/index.ts`:**
-
-1. **Remove the entire fake curated map** (all `/community/` URLs are broken)
-2. **Add a Bayut slug mapping** -- a lookup table mapping area names to their Bayut area guide URL slugs (e.g., "Damac Hills" maps to "damac-hills-akoya-damac", "JVT" maps to "jumeirah-village-triangle", etc.)
-3. **New Step 0: Direct Bayut fetch** -- For each area:
-   - Construct URL: `https://www.bayut.com/area-guides/{bayut-slug}/`
-   - Fetch the HTML with a standard `fetch()` call
-   - Extract the community cover image from the HTML using regex (looking for `d3ob0s3rxbjyep.cloudfront.net/content/` images in img tags)
-   - These are verified, high-resolution community/aerial photos
-4. **Step 1 (fallback): Firecrawl search** -- Only for areas not found on Bayut (small/obscure areas). Uses minimal credits.
-5. **Step 2: Accept NULL** -- For truly obscure areas (Hessian Second, Al Arqoub, Ghadeer Al Tayr), the gradient fallback is appropriate.
-
-#### Part 2: Reset All Broken Area Images (Database)
-
-Run SQL to NULL out all 25 broken curated URLs so the function can re-process them:
-
-```sql
-UPDATE areas SET image_url = NULL, hero_image_url = NULL 
-WHERE image_url LIKE '%/community/%';
-```
-
-This combined with the existing 38 NULL areas gives the function 63 areas to process.
-
-#### Part 3: Fix 2 Remaining News Article Images
-
-For the 2 news articles still missing images:
-- **"Dubai property market set to cool" (The National)**: Directly fetch the article URL (`thenationalnews.com/business/property/2026/02/10/...`) and extract the OG image
-- **"New Malls in Dubai" (Property Finder)**: Source URL is just the blog listing page, so search for the actual article
-
-This will be done via a one-time update in the `ai-news-collector` function's `fix-null-images` action, with the refined `KNOWN_BAD_URLS` filter that allows full-size `arcpublishing.com` images.
-
-#### Part 4: News Page Video Hero (Already Done)
-
-The video hero was already added in the previous session -- confirmed working with `dubai-landmarks-hero.mp4`.
+**Provident Extraction**: 0 of 2,484 projects have `source = 'provident'`. Provident data has NOT been synced into the projects table despite multiple sync functions existing.
 
 ---
 
-### Bayut Slug Mapping (Key Areas)
+### Plan
 
-| Area Name | Bayut Slug |
-|-----------|-----------|
-| Damac Hills | damac-hills-akoya-damac |
-| Town Square | town-square |
-| Dubai Islands | dubai-islands |
-| Al Marjan Island | al-marjan-island |
-| JVT | jumeirah-village-triangle |
-| Arjan | arjan |
-| Damac Lagoons | damac-lagoons |
-| Dubai Studio City | dubai-studio-city |
-| Dubai Silicon Oasis | dubai-silicon-oasis |
-| The Valley | the-valley |
-| Mina Rashid | mina-rashid |
-| Dubai Expo City | expo-city-dubai |
-| MJL | madinat-jumeirah-living |
-| Jumeirah Islands | jumeirah-islands |
-| City Walk | city-walk |
-| Mudon | mudon |
-| Dubai Motor City | motor-city |
-| Dubai Harbour | dubai-harbour |
-| Dubai Science Park | dubai-science-park |
-| Dubai Production City | dubai-production-city |
-| Dubai International City | international-city |
-| Masdar City | masdar-city |
-| Al Barsha | al-barsha |
-| Al Sufouh | al-sufouh |
-| Blue Waters Island | bluewaters |
-| Yas Island | yas-island |
-| Al Reem Island | al-reem-island |
-| (and ~20 more) | ... |
+#### Part 1: Fix 4 Missing News Images (Direct SQL + fetch fix)
+
+For articles where the source URLs are listing/events pages (not actual articles), the scraping approach will never work. The fix is:
+
+1. **Fetch the actual article OG images** using the `fix-missing-images` edge function (already deployed and has the logic for news)
+2. **For articles where source URLs are wrong** (listing pages), manually find and set correct image URLs by:
+   - Searching for the actual article URLs
+   - Directly updating the `market_news` table with verified image URLs
+3. **Fallback**: For any article where no image can be found, leave NULL -- the UI already renders a gradient fallback with a Newspaper icon
+
+#### Part 2: Fix 5 Remaining Area Images
+
+1. **Maryam Island** and **Rak Central** already have Bayut slug mappings in both `enrich-area-images` and `fix-missing-images`
+2. **Trigger `fix-missing-images`** with `{"target": "areas", "batch_size": 5}` to process remaining areas
+3. **For obscure areas** (Hessian Second, Ghadeer Al Tayr, Wadi Al Safa 2) that have no Bayut pages -- these are extremely small communities. The gradient fallback is appropriate.
+
+#### Part 3: Trigger Provident Data Sync
+
+The Provident page-data discovery system (`_shared/provident/pagedata-discovery.ts`) can discover all ~1,336 listings from Provident's Gatsby endpoints. Several sync functions exist:
+- `provident-full-sync` 
+- `provident-batch-sync`
+- `provident-sync-master`
+- `daily-provident-auto-sync`
+
+**Action**: 
+1. Inspect the `provident-full-sync` or `provident-sync-master` function to understand the entry point
+2. Trigger it to begin importing Provident listings into the projects table
+3. This will enrich existing Reelly projects with Provident data (descriptions, amenities, floor plans, documents) and potentially add new listings not in Reelly
+
+---
 
 ### Files to Change
 
 | File | Change |
 |------|--------|
-| `supabase/functions/enrich-area-images/index.ts` | Complete rewrite: remove fake curated map, add Bayut direct-fetch approach with slug mapping, keep Firecrawl as fallback only |
-| `supabase/functions/ai-news-collector/index.ts` | Improve `fix-null-images` to directly fetch The National article pages for OG images |
-| Database (SQL) | Reset 25 broken curated URLs to NULL |
+| `supabase/functions/fix-missing-images/index.ts` | Add Bayut slug for Rak Central and Maryam Island (if not present); improve news image fetching for WAM/Arabian Business articles |
+| Database (SQL) | Directly update the 4 news articles with verified image URLs where possible |
 
 ### Execution Order
 
-1. Reset 25 broken curated area image URLs to NULL
-2. Rewrite and deploy `enrich-area-images` with Bayut direct-fetch
-3. Trigger the function in batches to process all 63 areas
-4. Trigger `fix-null-images` for the 2 remaining news articles
-5. Verify all images load correctly via DB queries
+1. Trigger `fix-missing-images` for areas (batch_size: 5) to process Maryam Island + Rak Central
+2. Fetch actual article pages for the 4 missing news images and update directly
+3. Trigger Provident sync to begin importing/enriching project data
+4. Verify all changes
 
