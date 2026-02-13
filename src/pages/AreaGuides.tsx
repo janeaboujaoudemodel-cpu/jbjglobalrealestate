@@ -53,11 +53,8 @@ const staggerContainer = {
   }
 };
 
-type SortOption = "property_count" | "trending" | "alphabetical";
-
 const AreaGuides = () => {
-  const [sortBy, setSortBy] = useState<SortOption>("property_count");
-  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>({...defaultShortcutFilters, sortBy: 'most_projects'});
   const [isFixed, setIsFixed] = useState(false);
   const [bottomReached, setBottomReached] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -71,6 +68,7 @@ const AreaGuides = () => {
     if (!areas) return [];
     let filtered = [...areas];
 
+    const sortBy = shortcutFilters.sortBy;
     switch (sortBy) {
       case "trending":
         filtered = [...filtered].sort((a, b) => {
@@ -79,17 +77,17 @@ const AreaGuides = () => {
           return aIsTrending - bIsTrending || (b.property_count ?? 0) - (a.property_count ?? 0);
         });
         break;
-      case "alphabetical":
+      case "alpha":
         filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
         break;
-      case "property_count":
+      case "most_projects":
       default:
         filtered = [...filtered].sort((a, b) => (b.property_count ?? 0) - (a.property_count ?? 0));
         break;
     }
 
     return filtered;
-  }, [areas, sortBy]);
+  }, [areas, shortcutFilters.sortBy]);
 
   // IntersectionObserver for fixed positioning
   useEffect(() => {
@@ -191,26 +189,6 @@ const AreaGuides = () => {
       {/* Filter bar - inline */}
       <section className="py-4 pb-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
         <div className="container mx-auto px-4 space-y-3">
-          {/* Sort pills */}
-          <div className="flex gap-1.5 flex-shrink-0 items-center justify-center max-w-4xl mx-auto">
-            {([
-              { key: "property_count" as SortOption, label: "Most Projects" },
-              { key: "trending" as SortOption, label: "Trending" },
-            ]).map(opt => (
-              <button
-                key={opt.key}
-                onClick={() => setSortBy(opt.key)}
-                className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
-                  sortBy === opt.key
-                    ? "bg-black text-gold border border-gold shadow-md"
-                    : "bg-white border border-gold/30 text-zinc-600 hover:border-gold"
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-
           {/* FilterShortcutBar */}
           <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
         </div>
