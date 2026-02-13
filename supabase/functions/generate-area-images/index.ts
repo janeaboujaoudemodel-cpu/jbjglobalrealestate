@@ -21,7 +21,8 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json().catch(() => ({}));
-    const batchSize = body.batch_size || 5;
+    const processAll = body.process_all || false;
+    const batchSize = processAll ? 200 : (body.batch_size || 5);
 
     // Get areas missing images
     const { data: areas, error: fetchErr } = await supabase

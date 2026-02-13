@@ -282,3 +282,9 @@ verify_jwt = false
 
 [functions.fix-broken-news-images]
 verify_jwt = false
+
+[functions.mirror-news-images]
+verify_jwt = false
+
+[functions.import-provident-blog]
+verify_jwt = false
