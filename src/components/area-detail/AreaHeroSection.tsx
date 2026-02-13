@@ -8,6 +8,7 @@ import { optimizeStorageImageUrl } from "@/lib/imageUtils";
 
 interface AreaHeroSectionProps {
   area: Area & { developer_count?: number; project_count_sale?: number; avg_price_sqft?: number; hero_image_url?: string; is_high_demand?: boolean };
+  liveProjectCount?: number;
 }
 
 const fadeInUp = {
@@ -20,7 +21,7 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
 };
 
-export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
+export const AreaHeroSection = ({ area, liveProjectCount }: AreaHeroSectionProps) => {
   const heroImage = area.hero_image_url || area.image_url;
 
   return (
@@ -81,14 +82,14 @@ export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
 
         {/* Stats Bar */}
         <motion.div className="flex flex-wrap gap-4 md:gap-6" variants={fadeInUp}>
-          {(area.project_count_sale ?? area.property_count ?? 0) > 0 && (
+          {(liveProjectCount ?? area.project_count_sale ?? area.property_count ?? 0) > 0 && (
             <button
               onClick={() => scrollToId('projects-section')}
               className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-white/20 transition-colors"
             >
               <Building2 className="w-5 h-5 text-gold" />
               <div className="text-left">
-                <div className="text-xl font-bold text-white">{area.project_count_sale ?? area.property_count}</div>
+                <div className="text-xl font-bold text-white">{liveProjectCount ?? area.project_count_sale ?? area.property_count}</div>
                 <div className="text-zinc-300 text-xs">Projects</div>
               </div>
             </button>
