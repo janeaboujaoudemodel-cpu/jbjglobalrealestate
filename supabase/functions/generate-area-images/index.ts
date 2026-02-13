@@ -53,41 +53,48 @@ Deno.serve(async (req) => {
       try {
         console.log(`Generating image for: ${area.name}`);
 
-        // Generate image via Gemini
-        const prompt = `Ultra-realistic drone aerial photograph of ${area.name} community in Dubai, UAE. Bird's-eye view showing the full master-planned community layout with residential towers, villas, landscaped parks, swimming pools, roads, and surrounding desert or waterfront. Golden hour lighting, crystal clear sky, cinematic composition, 8K resolution, real estate marketing photography, no text or watermarks, no logos.`;
+        const prompts = [
+          `Ultra-realistic drone aerial photograph of ${area.name} community in Dubai, UAE. Bird's-eye view showing the full master-planned community layout with residential towers, villas, landscaped parks, swimming pools, roads, and surrounding desert or waterfront. Golden hour lighting, crystal clear sky, cinematic composition, 8K resolution, real estate marketing photography, no text or watermarks, no logos.`,
+          `Stunning bird's-eye view photograph of a modern urban residential district in the UAE with towers, parks, and pools under a golden sunset sky. Ultra high resolution, photorealistic, no text or watermarks.`,
+        ];
 
-        const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${lovableApiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "google/gemini-3-pro-image-preview",
-            messages: [{ role: "user", content: prompt }],
-            modalities: ["image", "text"],
-          }),
-        });
+        let imageData: string | undefined;
 
-        if (!aiResponse.ok) {
-          const errText = await aiResponse.text();
-          console.error(`AI error for ${area.name}: ${aiResponse.status} ${errText}`);
-          results.push({ area: area.name, status: `ai_error_${aiResponse.status}` });
-          // Rate limit - wait before next
-          if (aiResponse.status === 429) {
-            await new Promise(r => setTimeout(r, 10000));
+        for (let attempt = 0; attempt < prompts.length; attempt++) {
+          const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${lovableApiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: "google/gemini-3-pro-image-preview",
+              messages: [{ role: "user", content: prompts[attempt] }],
+              modalities: ["image", "text"],
+            }),
+          });
+
+          if (!aiResponse.ok) {
+            const errText = await aiResponse.text();
+            console.error(`AI error for ${area.name} (attempt ${attempt + 1}): ${aiResponse.status} ${errText}`);
+            if (aiResponse.status === 429) await new Promise(r => setTimeout(r, 5000));
+            continue;
           }
-          continue;
+
+          const aiData = await aiResponse.json();
+          const candidate = aiData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+
+          if (candidate && candidate.startsWith("data:image")) {
+            imageData = candidate;
+            break;
+          }
+          console.warn(`No image for ${area.name} attempt ${attempt + 1}`);
+          await new Promise(r => setTimeout(r, 1000));
         }
 
-        const aiData = await aiResponse.json();
-        const imageData = aiData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-
-        if (!imageData || !imageData.startsWith("data:image")) {
-          console.warn(`No image generated for ${area.name}. Response keys: ${JSON.stringify(Object.keys(aiData))}. Choices: ${JSON.stringify(aiData.choices?.[0]?.message?.content?.substring(0, 200))}`);
-          // Mark as skip so we don't keep retrying the same area
-          await supabase.from("areas").update({ image_url: "skip", updated_at: new Date().toISOString() }).eq("id", area.id);
-          results.push({ area: area.name, status: "no_image_generated" });
+        if (!imageData) {
+          console.warn(`All prompts failed for ${area.name}`);
+          results.push({ area: area.name, status: "no_image_all_attempts" });
           continue;
         }
 
