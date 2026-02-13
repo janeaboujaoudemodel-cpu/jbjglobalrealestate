@@ -17,6 +17,7 @@ import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } f
 
 import { SEOHead } from "@/components/SEOHead";
 import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
+import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 
 const ProjectCountStat = () => {
   const { data: count } = useQuery({
@@ -444,6 +445,9 @@ const AreaGuides = () => {
           )}
         </div>
       </section>
+
+      {/* DLD Market Intelligence */}
+      <DLDMarketWidget />
 
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">

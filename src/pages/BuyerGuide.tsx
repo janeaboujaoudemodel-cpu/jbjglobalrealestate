@@ -33,6 +33,7 @@ import {
   Briefcase
 } from "lucide-react";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
+import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { GuideHero } from "@/components/guides/GuideHero";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
@@ -760,6 +761,9 @@ const BuyerGuide = () => {
           </div>
         </div>
       </section>
+
+      {/* DLD Market Intelligence */}
+      <DLDMarketWidget />
 
       {/* Legal Disclaimer - 3-Layer System */}
       <section className="py-8 bg-black">

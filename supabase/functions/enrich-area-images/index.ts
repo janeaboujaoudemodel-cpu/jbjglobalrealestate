@@ -12,6 +12,10 @@ function isGoodAreaImage(url: string): boolean {
   if (bad.test(url)) return false;
   if (url.length < 60) return false;
   if (url.includes("unsplash.com") || url.includes("pexels.com")) return false;
+  // Reject individual project renders - we need community/aerial views
+  if (url.includes("reelly-backend.s3.amazonaws.com/projects/")) return false;
+  if (url.includes("pinterest.com")) return false;
+  if (url.includes("keyspacerealty.com")) return false;
   return true;
 }
 
@@ -42,7 +46,7 @@ Deno.serve(async (req) => {
       .from("areas")
       .select("id, name, slug, image_url")
       .eq("is_active", true)
-      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,image_url.ilike.%supabase.co/storage%area-images%")
+      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,image_url.ilike.%supabase.co/storage%area-images%,image_url.ilike.%reelly-backend.s3%projects%,image_url.ilike.%pinterest.com%,image_url.ilike.%keyspacerealty.com%")
       .limit(batchSize);
 
     if (fetchErr) throw fetchErr;
@@ -57,7 +61,7 @@ Deno.serve(async (req) => {
       .from("areas")
       .select("id", { count: "exact", head: true })
       .eq("is_active", true)
-      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,image_url.ilike.%supabase.co/storage%area-images%");
+      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,image_url.ilike.%supabase.co/storage%area-images%,image_url.ilike.%reelly-backend.s3%projects%,image_url.ilike.%pinterest.com%,image_url.ilike.%keyspacerealty.com%");
 
     const results: { area: string; image_url: string | null; status: string; source: string }[] = [];
 
@@ -103,7 +107,7 @@ Deno.serve(async (req) => {
       // Step 2: Firecrawl Search on property portals
       if (!imageUrl && firecrawlApiKey) {
         try {
-          const searchQuery = `"${area.name}" Dubai area site:bayut.com OR site:propertyfinder.ae`;
+          const searchQuery = `"${area.name}" Dubai aerial view master plan community overview site:bayut.com OR site:propertyfinder.ae`;
           console.log(`Portal search for ${area.name}`);
 
           const searchResp = await fetch("https://api.firecrawl.dev/v1/search", {
@@ -159,7 +163,7 @@ Deno.serve(async (req) => {
       // Step 3: Broader Firecrawl Search
       if (!imageUrl && firecrawlApiKey) {
         try {
-          const broadQuery = `${area.name} Dubai community neighborhood photo`;
+          const broadQuery = `${area.name} Dubai aerial panoramic master community overview photo`;
           console.log(`Broad search for ${area.name}`);
 
           const searchResp = await fetch("https://api.firecrawl.dev/v1/search", {

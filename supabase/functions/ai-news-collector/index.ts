@@ -32,12 +32,20 @@ const KNOWN_BAD_URLS = [
   "thenationalnews.com/resizer",
   "propertyfinder.ae/blog/wp-content/uploads/2025/09/Header-image.png",
   "survey.customerpulse.gov.ae",
-  // All PropertyFinder generic listing images
+  // All PropertyFinder generic listing/blog thumbnails (400x209, wrong topics)
   "propertyfinder.ae/blog/wp-content/uploads/2025/06/",
+  "propertyfinder.ae/blog/wp-content/uploads/2024/",
+  "propertyfinder.ae/blog/wp-content/uploads/2023/",
+  "propertyfinder.ae/blog/wp-content/uploads/2018/",
+  "propertyfinder.ae/blog/wp-content/uploads/2019/",
+  "propertyfinder.ae/blog/wp-content/uploads/2020/",
   // Gulf Business 90x90 thumbnails
   "gulfbusiness.com/wp-content/uploads/2024/04/gulfbusiness-90x90",
   "gulfbusiness.com/wp-content/uploads/2025/07/1Q5A9345-Edit-scaled-e1752853634787-90x90",
   "gulfbusiness.com/wp-content/uploads/2025/10/neesha-salian-90x90",
+  // The National 200x200 tiny thumbnails
+  "thenationalnews.com/image/policy:1.",
+  "arcpublishing.com",
 ];
 
 // No fake/stock image pools - only real source images or null
