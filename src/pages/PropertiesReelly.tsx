@@ -19,6 +19,7 @@ import { mapDbProjectToReellyProject } from "@/utils/mapDbToReellyProject";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { SEOHead } from "@/components/SEOHead";
+import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { FeaturedProjectAd, FEATURED_ADS } from "@/components/FeaturedProjectAd";
 import { blueprintPagesSEO } from "@/types/blueprint";
 import PropertiesHeroVideo from "@/components/PropertiesHeroVideo";
@@ -488,6 +489,9 @@ const PropertiesReelly = () => {
           </div>
         </section>
       )}
+
+      {/* DLD Market Intelligence */}
+      <DLDMarketWidget />
        </div>
      </>
    );

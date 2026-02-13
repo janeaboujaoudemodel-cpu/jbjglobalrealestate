@@ -11,6 +11,7 @@ import { SearchableSelect } from "@/components/ui/searchable-select";
 import { useDevelopers, useProjects } from "@/hooks/useProjects";
 import DeveloperCard from "@/components/DeveloperCard";
 import { SEOHead } from "@/components/SEOHead";
+import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -454,6 +455,9 @@ const Developers = () => {
             )}
           </div>
         </section>
+
+        {/* DLD Market Intelligence */}
+        <DLDMarketWidget />
       </div>
     </>
   );
