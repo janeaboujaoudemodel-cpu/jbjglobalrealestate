@@ -24,6 +24,15 @@ const BLOCKED_DOMAINS = [
   "gjproperties.ae",
   "documents1.worldbank.org",
   "propertyfinder.ae",
+  "dreamstime.com",
+  "ftcdn.net",
+  "istockphoto.com",
+  "goyzer.com",
+  "propjunction.ae",
+  "tanamiproperties.com",
+  "1newhomes.ae",
+  "homevy.com",
+  "cdn.prod.website-files.com",
 ];
 
 function isBlockedUrl(url: string): boolean {
