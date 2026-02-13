@@ -1,47 +1,57 @@
 
 
-## Fix Area Guides Page: Background Edges, Filter UI, Advanced Dialog, and Layout Issues
+## Regenerate All Area Photos with Real Community Masterplan Views
 
-### Issues Identified
+### Problem
+All 185 active areas currently have images, but many are single-building renders pulled from project_images (Reelly API). The user wants each area photo to represent the **full community** -- aerial masterplan views showing the entire neighborhood layout, landmarks, parks, waterfront, roads, etc. For example, Dubai Creek Harbour should show the Creek Tower plus the full waterfront development, not just one tower.
 
-1. **Black edges visible on card listing** -- When vertical nav appears, sections use `lg:ml-[200px]` which reveals the parent's dark `bg-[hsl(var(--premium-bg))]` background on the left/right edges. All section backgrounds must stretch edge-to-edge (full viewport width) while only the inner content shifts right.
+### Solution
 
-2. **Row 2 filter pill icons** -- Remove all icons (DollarSign, CreditCard, Calendar, Building2, Bed, Activity, HardHat, EyeOff) from the filter pills in Row 2. Keep text labels only.
+Update the `generate-area-images` edge function with two key changes:
 
-3. **Advanced Filter dialog shape** -- Make it wider/more rectangular (increase max-width from `max-w-2xl` to `max-w-3xl` or `max-w-4xl`).
-
-4. **Wrong project count** -- Currently queries ALL projects (2,484) without filtering by `is_published = true`. Should show 1,808 (published only). Affects both the dialog header and the "Show X projects" button.
-
-5. **Emirates and Developers as collapsible fields** -- Instead of showing the full list immediately, display them as input-like fields ("All Emirates", "All Developers") that expand the list when clicked.
-
-6. **Developer logo frames** -- Make logos fully fit inside rounded frames (not square, use `rounded-lg` instead of `rounded`).
-
-7. **Payment Plan section** -- Currently hidden behind a popover click. Make it visible inline with proper slider layout, not broken.
-
-8. **Price per sqft/sqm/unit layout** -- Fix broken layout in the Advanced Filter dialog for the price tabs and inputs.
-
-9. **"Show X projects" button color** -- Change from gold/yellow gradient to premium champagne-gold color matching the site's design system.
-
----
+1. **Force regeneration mode** -- Add a `force_regenerate: true` parameter that processes areas even if they already have images (currently it skips them)
+2. **Area-specific community prompts** -- Build a mapping of top areas to tailored prompts that describe their unique community characteristics (creek, palm shape, lagoons, villas, marina, etc.), so the AI generates recognizable masterplan views rather than generic tower photos
 
 ### Technical Changes
 
-**File: `src/pages/AreaGuides.tsx`**
-- Remove `lg:ml-[200px]` from all section backgrounds (filter bar section, divider, areas grid, DLD widget wrapper, CTA section)
-- Instead, keep backgrounds at full width and apply `lg:pl-[200px]` only to inner content containers, OR use padding instead of margin so backgrounds stretch edge-to-edge
-- This ensures the champagne gradients cover the full viewport width while content aligns next to the vertical nav
+**File: `supabase/functions/generate-area-images/index.ts`**
 
-**File: `src/components/filters/FilterShortcutBar.tsx`**
-- Row 2 pills: Remove icon components from all filter trigger buttons (remove `<DollarSign>`, `<CreditCard>`, `<Calendar>`, `<Building2>`, `<Bed>`, `<Activity>`, `<HardHat>`, `<EyeOff>` from the pill triggers)
-- Keep only text labels and chevron arrows on pills
+1. Add `force_regenerate` body parameter support -- when true, query areas regardless of existing `image_url`
+2. Add a `COMMUNITY_DESCRIPTIONS` map for 30+ top areas with specific visual descriptions:
+   - Dubai Creek Harbour: "Creek Tower landmark, waterfront promenade, marina, mixed-use towers along Dubai Creek"
+   - Palm Jumeirah: "iconic palm-shaped island, Atlantis hotel at the crescent, beachfront villas on the fronds"
+   - Downtown Dubai: "Burj Khalifa, Dubai Mall, Dubai Fountain, Boulevard"
+   - Business Bay: "canal-side towers, waterfront promenade, modern skyline"
+   - JVC: "circular road layout, low-rise apartments, community parks"
+   - Dubai Marina: "marina waterway, JBR beach, cluster of supertall towers"
+   - etc. for all major areas
+3. Update the prompt template to incorporate these descriptions:
+   - Primary prompt: "Ultra-realistic 8K drone aerial photograph of [Area Name] community in Dubai, UAE. Bird's-eye view showing [area-specific description]. Full master-planned community layout visible. Golden hour lighting, cinematic composition, no text, no watermarks, no logos."
+   - Fallback prompt (generic): Keep existing generic prompt for areas without specific descriptions
+4. Upload with `upsert: true` (already in place) to overwrite existing images in storage
 
-**File: `src/components/filters/AdvancedFilterPanel.tsx`**
-- Change dialog `max-w-2xl` to `max-w-3xl` for a wider, more rectangular shape
-- Fix project count query: add `.eq('is_published', true)` to the count query (line 100)
-- **Emirates section**: Convert from always-visible list to a collapsible field -- render as an input-like button ("All Emirates" or "X selected") that toggles the list visibility on click
-- **Developers section**: Same pattern -- render as an input-like button ("All Developers" or "X selected") that toggles visibility
-- **Developer logo frames**: Change `rounded` to `rounded-lg` on the logo container div, ensure `object-contain` fills properly
-- **Payment Plan**: Ensure the slider and labels render visibly with proper spacing (fix any broken flex/grid layout)
-- **Price section**: Verify grid layout for min/max inputs renders correctly with proper spacing
-- **"Show X projects" button**: Change gradient from `from-[#C8A766] to-[#D4AF37]` to the champagne standard: `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black`
+**No other files need changes** -- the area cards and hero sections already read `image_url` from the database, so once the function regenerates the images and updates the DB records, the new community photos will appear automatically everywhere.
 
+### Execution Plan
+
+After deploying the updated function:
+1. Call the function with `{ "force_regenerate": true, "batch_size": 10 }` for the top 10 areas first to verify quality
+2. Then run subsequent batches to cover all 185 areas
+3. Each image takes ~3-5 seconds to generate (with rate limit delays), so full regeneration will happen in batches
+
+### Area-Specific Prompt Examples
+
+| Area | Community Description in Prompt |
+|------|-------------------------------|
+| Dubai Creek Harbour | Creek Tower, waterfront marina, mixed-use district along Dubai Creek |
+| Palm Jumeirah | Palm-shaped island, Atlantis at crescent tip, beachfront villas on fronds |
+| Downtown Dubai | Burj Khalifa centerpiece, Dubai Mall, Boulevard, fountains |
+| Dubai Marina | Marina waterway, yacht club, JBR beach, supertall tower cluster |
+| JVC | Circular road layout, low-rise residential blocks, community parks |
+| Dubai Hills | Golf course, Dubai Hills Mall, hillside villas, green parks |
+| Business Bay | Canal-side towers, waterfront promenade, modern commercial skyline |
+| Al Marjan Island | Island cluster in RAK, beachfront resorts, Wynn resort landmark |
+| MBR City (District One) | Crystal Lagoon, luxury villas, landscaped parkland |
+| Dubai South | Expo City, Al Maktoum Airport, residential clusters |
+
+For areas not in the map, the function will use the existing generic prompt describing a master-planned UAE community.
