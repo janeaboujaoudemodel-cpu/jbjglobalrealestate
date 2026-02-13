@@ -1,57 +1,99 @@
 
 
-## Regenerate All Area Photos with Real Community Masterplan Views
+## Properties Page Overhaul: Instant Layout, Edge-to-Edge Background, 2-Column Grid, and Pagination
 
-### Problem
-All 185 active areas currently have images, but many are single-building renders pulled from project_images (Reelly API). The user wants each area photo to represent the **full community** -- aerial masterplan views showing the entire neighborhood layout, landmarks, parks, waterfront, roads, etc. For example, Dubai Creek Harbour should show the Creek Tower plus the full waterfront development, not just one tower.
+### Problem Summary
+
+1. **Hero section causes slow initial load** -- Users must scroll past a full-screen video hero before seeing any listings. The layout feels broken during load.
+2. **Black edges visible** -- The card container uses `border border-gold/30 rounded-2xl` inside a padded wrapper, exposing the dark `bg-[hsl(var(--premium-bg))]` parent background on the left/right edges.
+3. **3 cards per row** -- Currently `xl:grid-cols-3`. User wants 2 per row (like Reelly reference) when the vertical nav + filter bar are active.
+4. **Infinite scroll** -- "Load More" button instead of numbered pagination. User wants page numbers at the bottom.
+5. **Vertical nav + GlobalHeader overlap** -- Both show simultaneously during the transition, looking broken.
 
 ### Solution
 
-Update the `generate-area-images` edge function with two key changes:
+#### 1. Skip Hero on Page Load -- Direct to Listing Mode
 
-1. **Force regeneration mode** -- Add a `force_regenerate: true` parameter that processes areas even if they already have images (currently it skips them)
-2. **Area-specific community prompts** -- Build a mapping of top areas to tailored prompts that describe their unique community characteristics (creek, palm shape, lagoons, villas, marina, etc.), so the AI generates recognizable masterplan views rather than generic tower photos
+Remove the `PropertiesHeroVideo` hero section from `PropertiesReelly.tsx`. The page will open directly with the filter bar at top and vertical nav on the left (desktop). This eliminates the "broken loading" state and makes the page feel instant.
+
+- On load, immediately set `isFilterFixed = true` and add `filter-bar-fixed` to body
+- This means the vertical nav appears instantly and the GlobalHeader is hidden from the start
+- The filter bar renders inline at `top-0` without needing to scroll past a hero
+
+#### 2. Edge-to-Edge Background -- Remove Card Container Border
+
+Remove the inner card container wrapper (`border border-gold/30 rounded-2xl p-4`) that creates visible edges. The champagne gradient background will stretch full width from edge to edge, with only the content grid using padding.
+
+**Before:**
+```text
+[dark bg][  padded container with border  ][dark bg]
+```
+
+**After:**
+```text
+[full-width champagne background, no border]
+[  content grid with padding only  ]
+```
+
+#### 3. Two Cards Per Row
+
+Change grid from `xl:grid-cols-3` to `grid-cols-1 sm:grid-cols-2` maximum. This matches the Reelly reference layout where two cards sit side-by-side with the map (or just two wide cards in list mode).
+
+#### 4. Pagination Instead of Infinite Scroll
+
+Replace the "Load More" button with proper page-based pagination:
+
+- Add `currentPage` state (default: 1)
+- Define `ITEMS_PER_PAGE = 24` (configurable)
+- Slice `sortedProjects` to show only the current page
+- Render page number buttons at the bottom: Previous, 1, 2, 3, ..., Next
+- Show "Page X of Y" indicator
+- Scroll to top on page change
+
+#### 5. View Mode Toggle (Grid vs List)
+
+Add a toggle in the filter bar area for "Grid" (thumbnail cards) vs "List" (compact rows) view, matching the Reelly reference UI. The list view shows more projects per page in a compact table-like format.
 
 ### Technical Changes
 
-**File: `supabase/functions/generate-area-images/index.ts`**
+**File: `src/pages/PropertiesReelly.tsx`**
 
-1. Add `force_regenerate` body parameter support -- when true, query areas regardless of existing `image_url`
-2. Add a `COMMUNITY_DESCRIPTIONS` map for 30+ top areas with specific visual descriptions:
-   - Dubai Creek Harbour: "Creek Tower landmark, waterfront promenade, marina, mixed-use towers along Dubai Creek"
-   - Palm Jumeirah: "iconic palm-shaped island, Atlantis hotel at the crescent, beachfront villas on the fronds"
-   - Downtown Dubai: "Burj Khalifa, Dubai Mall, Dubai Fountain, Boulevard"
-   - Business Bay: "canal-side towers, waterfront promenade, modern skyline"
-   - JVC: "circular road layout, low-rise apartments, community parks"
-   - Dubai Marina: "marina waterway, JBR beach, cluster of supertall towers"
-   - etc. for all major areas
-3. Update the prompt template to incorporate these descriptions:
-   - Primary prompt: "Ultra-realistic 8K drone aerial photograph of [Area Name] community in Dubai, UAE. Bird's-eye view showing [area-specific description]. Full master-planned community layout visible. Golden hour lighting, cinematic composition, no text, no watermarks, no logos."
-   - Fallback prompt (generic): Keep existing generic prompt for areas without specific descriptions
-4. Upload with `upsert: true` (already in place) to overwrite existing images in storage
+1. Remove `PropertiesHeroVideo` import and the entire hero section (lines 231-264)
+2. Remove the `filterSentinelRef` and IntersectionObserver -- the filter bar is always fixed from page load
+3. On mount, immediately set `document.body.classList.add('filter-bar-fixed')` and clean up on unmount
+4. The filter bar section renders as `fixed top-0` always (no conditional)
+5. The vertical nav renders always on desktop (no `isFilterFixed` condition)
+6. Remove the inner card container `div` with `border border-gold/30 rounded-2xl` -- let the section background stretch full width
+7. Change grid to `grid-cols-1 sm:grid-cols-2` (2 cards max per row)
+8. Add pagination state and logic:
+   - `const [currentPage, setCurrentPage] = useState(1)`
+   - `const ITEMS_PER_PAGE = 24`
+   - Paginate `sortedProjects` and render page navigation buttons at bottom
+9. Add `lg:pl-[200px]` to main content area instead of the flex-based sidebar spacer approach for consistent edge-to-edge backgrounds
 
-**No other files need changes** -- the area cards and hero sections already read `image_url` from the database, so once the function regenerates the images and updates the DB records, the new community photos will appear automatically everywhere.
+**File: `src/pages/AreaGuides.tsx`** (same treatment)
 
-### Execution Plan
+1. Remove the fullscreen hero section
+2. Start directly with filter bar fixed and vertical nav visible
+3. Remove the `sentinelRef` IntersectionObserver logic
+4. Make backgrounds edge-to-edge (remove any inner border containers)
+5. Add pagination to the areas grid
 
-After deploying the updated function:
-1. Call the function with `{ "force_regenerate": true, "batch_size": 10 }` for the top 10 areas first to verify quality
-2. Then run subsequent batches to cover all 185 areas
-3. Each image takes ~3-5 seconds to generate (with rate limit delays), so full regeneration will happen in batches
+### Layout Diagram
 
-### Area-Specific Prompt Examples
+```text
+Immediately on page load (no hero):
 
-| Area | Community Description in Prompt |
-|------|-------------------------------|
-| Dubai Creek Harbour | Creek Tower, waterfront marina, mixed-use district along Dubai Creek |
-| Palm Jumeirah | Palm-shaped island, Atlantis at crescent tip, beachfront villas on fronds |
-| Downtown Dubai | Burj Khalifa centerpiece, Dubai Mall, Boulevard, fountains |
-| Dubai Marina | Marina waterway, yacht club, JBR beach, supertall tower cluster |
-| JVC | Circular road layout, low-rise residential blocks, community parks |
-| Dubai Hills | Golf course, Dubai Hills Mall, hillside villas, green parks |
-| Business Bay | Canal-side towers, waterfront promenade, modern commercial skyline |
-| Al Marjan Island | Island cluster in RAK, beachfront resorts, Wynn resort landmark |
-| MBR City (District One) | Crystal Lagoon, luxury villas, landscaped parkland |
-| Dubai South | Expo City, Al Maktoum Airport, residential clusters |
++--------+----------------------------------------+
+| Vert   |  Filter Bar (fixed top-0)              |
+| Nav    +----------------------------------------+
+| 200px  |  [Card]  [Card]                        |
+|        |  [Card]  [Card]                        |
+|        |  [Card]  [Card]                        |
+|        |  ...                                   |
+|        |  < 1  2  3  4  5 ... 100 >             |
++--------+----------------------------------------+
+```
 
-For areas not in the map, the function will use the existing generic prompt describing a master-planned UAE community.
+Background stretches edge-to-edge with no visible black borders. Content is padded with `lg:pl-[200px]` so it clears the vertical nav.
+
