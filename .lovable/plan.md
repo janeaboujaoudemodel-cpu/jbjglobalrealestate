@@ -1,71 +1,112 @@
 
 
-## Continue All Fixes: Area Images, News Photos, and News Hero
+## Fix All Area Images and News Photos -- Complete Overhaul
 
-### Current State
+### Root Cause
 
-**Areas**: 99 out of 181 active areas still have NULL images. The `enrich-area-images` function processes 10 at a time, and the project images in the DB are ALL from Reelly (blocked by `isGoodAreaImage`), so Step 1 never finds anything. Only Firecrawl Steps 2-3 can help.
+The previous "curated image map" used fabricated CloudFront URLs like `d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/damac-hills.jpg` that **do not exist** on Provident's CDN (all return 403 Access Denied). This means:
+- 25 areas currently display broken images (show nothing in the browser)
+- 38 areas have NULL (gradient fallback)
+- Total: **63 areas** without working images
 
-**News**: 3 articles still have NULL images:
-1. "New Malls in Dubai (2026-2028)" -- Property Finder (source URL is just the blog listing page)
-2. "Tech watches and robot dogs" -- The National (has a real article URL)
-3. "Dubai property market set to cool" -- The National (has a real article URL)
+### Solution: Scrape Bayut Area Guide Pages (Zero Firecrawl Credits)
 
-**News Hero**: The hero section uses a static gradient with a JBJ monogram, not a premium video like other pages (Properties, Areas). No video is present.
+Bayut's area guide pages (e.g., `bayut.com/area-guides/damac-hills-akoya-damac/`) each contain a verified high-quality community cover photo hosted on their CDN (`d3ob0s3rxbjyep.cloudfront.net/content/...`). These are real aerial/community photos -- exactly what the user wants.
 
----
+The approach:
+1. Fetch each Bayut area guide page directly using `fetch()` (free, no API key needed)
+2. Parse the HTML to extract the cover image URL
+3. Update the database directly
+
+No Firecrawl credits consumed.
 
 ### Plan
 
-#### Part 1: Batch-Process All 99 Area Images Efficiently
+#### Part 1: Rewrite `enrich-area-images` Edge Function
 
-The current function processes 10 areas per call. To handle 99 areas without wasting Firecrawl credits on searches that return nothing useful, the approach changes:
+**Complete rewrite of `supabase/functions/enrich-area-images/index.ts`:**
 
-**Changes to `supabase/functions/enrich-area-images/index.ts`:**
+1. **Remove the entire fake curated map** (all `/community/` URLs are broken)
+2. **Add a Bayut slug mapping** -- a lookup table mapping area names to their Bayut area guide URL slugs (e.g., "Damac Hills" maps to "damac-hills-akoya-damac", "JVT" maps to "jumeirah-village-triangle", etc.)
+3. **New Step 0: Direct Bayut fetch** -- For each area:
+   - Construct URL: `https://www.bayut.com/area-guides/{bayut-slug}/`
+   - Fetch the HTML with a standard `fetch()` call
+   - Extract the community cover image from the HTML using regex (looking for `d3ob0s3rxbjyep.cloudfront.net/content/` images in img tags)
+   - These are verified, high-resolution community/aerial photos
+4. **Step 1 (fallback): Firecrawl search** -- Only for areas not found on Bayut (small/obscure areas). Uses minimal credits.
+5. **Step 2: Accept NULL** -- For truly obscure areas (Hessian Second, Al Arqoub, Ghadeer Al Tayr), the gradient fallback is appropriate.
 
-1. Increase default batch size from 10 to 20
-2. Add a curated map of known premium image URLs for major areas (Al Marjan Island, Dubai Islands, JVT, Damac Hills, Damac Lagoons, Palm Jebel Ali, Arjan, Town Square, Meydan, etc.) sourced from Provident's CloudFront CDN (`d3h330vgpwpjr8.cloudfront.net` and `d3ob0s3rxbjyep.cloudfront.net`) -- these are the same premium editorial community photos already proven to work for the top 20 areas
-3. Check the curated map FIRST (Step 0) before any DB or Firecrawl queries -- this is instant, free, and reliable
-4. For the ~30 well-known Dubai areas with no curated image, proceed with Firecrawl search (Steps 2-3)
-5. For obscure/small areas (Al Amerah, Es Sanhaya 2, Ghadeer Al Tayr, etc.), accept NULL gracefully -- the UI gradient fallback is appropriate
+#### Part 2: Reset All Broken Area Images (Database)
 
-The curated map will cover approximately 40-50 major areas using URLs from the same CDN sources that already work for JVC, Business Bay, Downtown Dubai, etc. This eliminates ~50% of Firecrawl calls.
+Run SQL to NULL out all 25 broken curated URLs so the function can re-process them:
 
-#### Part 2: Fix 3 Remaining News Article Images
+```sql
+UPDATE areas SET image_url = NULL, hero_image_url = NULL 
+WHERE image_url LIKE '%/community/%';
+```
 
-**Changes to `supabase/functions/ai-news-collector/index.ts`:**
+This combined with the existing 38 NULL areas gives the function 63 areas to process.
 
-For the `fix-null-images` action, improve the handling of The National articles:
-1. For The National articles with real article URLs (not listing pages), scrape the article directly via Firecrawl to extract OG images -- currently blocked by the `arcpublishing.com` pattern in `KNOWN_BAD_URLS`
-2. Refine the bad URL check: only block `arcpublishing.com` URLs with `width=200` (tiny thumbnails), not all `arcpublishing.com` URLs (which include full-size editorial photos)
-3. For the Property Finder "New Malls" article, search for the actual article page URL
+#### Part 3: Fix 2 Remaining News Article Images
 
-#### Part 3: Add Premium Hero Video to News Page
+For the 2 news articles still missing images:
+- **"Dubai property market set to cool" (The National)**: Directly fetch the article URL (`thenationalnews.com/business/property/2026/02/10/...`) and extract the OG image
+- **"New Malls in Dubai" (Property Finder)**: Source URL is just the blog listing page, so search for the actual article
 
-**Changes to `src/pages/News.tsx`:**
+This will be done via a one-time update in the `ai-news-collector` function's `fix-null-images` action, with the refined `KNOWN_BAD_URLS` filter that allows full-size `arcpublishing.com` images.
 
-Replace the static gradient hero with the same `PropertiesHeroVideo` component used on the Properties page, or use a dedicated news-appropriate video/image hero with the Dubai skyline video already available in `src/assets/videos/dubai-landmarks-hero.mp4`.
+#### Part 4: News Page Video Hero (Already Done)
 
-1. Import the existing hero video asset
-2. Replace the static gradient background with a video background element (using the same pattern as `PropertiesHeroVideo`)
-3. Keep the existing text overlay content (title, subtitle, badges)
+The video hero was already added in the previous session -- confirmed working with `dubai-landmarks-hero.mp4`.
 
 ---
+
+### Bayut Slug Mapping (Key Areas)
+
+| Area Name | Bayut Slug |
+|-----------|-----------|
+| Damac Hills | damac-hills-akoya-damac |
+| Town Square | town-square |
+| Dubai Islands | dubai-islands |
+| Al Marjan Island | al-marjan-island |
+| JVT | jumeirah-village-triangle |
+| Arjan | arjan |
+| Damac Lagoons | damac-lagoons |
+| Dubai Studio City | dubai-studio-city |
+| Dubai Silicon Oasis | dubai-silicon-oasis |
+| The Valley | the-valley |
+| Mina Rashid | mina-rashid |
+| Dubai Expo City | expo-city-dubai |
+| MJL | madinat-jumeirah-living |
+| Jumeirah Islands | jumeirah-islands |
+| City Walk | city-walk |
+| Mudon | mudon |
+| Dubai Motor City | motor-city |
+| Dubai Harbour | dubai-harbour |
+| Dubai Science Park | dubai-science-park |
+| Dubai Production City | dubai-production-city |
+| Dubai International City | international-city |
+| Masdar City | masdar-city |
+| Al Barsha | al-barsha |
+| Al Sufouh | al-sufouh |
+| Blue Waters Island | bluewaters |
+| Yas Island | yas-island |
+| Al Reem Island | al-reem-island |
+| (and ~20 more) | ... |
 
 ### Files to Change
 
 | File | Change |
 |------|--------|
-| `supabase/functions/enrich-area-images/index.ts` | Add curated image map for ~40 major areas; increase batch size to 20; check curated map before Firecrawl |
-| `supabase/functions/ai-news-collector/index.ts` | Refine `arcpublishing.com` blocking to only reject tiny thumbnails; improve The National scraping |
-| `src/pages/News.tsx` | Replace static gradient hero with premium video background using existing Dubai landmarks video |
+| `supabase/functions/enrich-area-images/index.ts` | Complete rewrite: remove fake curated map, add Bayut direct-fetch approach with slug mapping, keep Firecrawl as fallback only |
+| `supabase/functions/ai-news-collector/index.ts` | Improve `fix-null-images` to directly fetch The National article pages for OG images |
+| Database (SQL) | Reset 25 broken curated URLs to NULL |
 
 ### Execution Order
 
-1. Update `enrich-area-images` with curated map and deploy
-2. Trigger enrichment in batches until all 99 areas are processed
-3. Update `ai-news-collector` and deploy
-4. Trigger `fix-null-images` for the 3 remaining articles
-5. Add video hero to News page
-6. Verify all changes via DB queries
+1. Reset 25 broken curated area image URLs to NULL
+2. Rewrite and deploy `enrich-area-images` with Bayut direct-fetch
+3. Trigger the function in batches to process all 63 areas
+4. Trigger `fix-null-images` for the 2 remaining news articles
+5. Verify all images load correctly via DB queries
 
