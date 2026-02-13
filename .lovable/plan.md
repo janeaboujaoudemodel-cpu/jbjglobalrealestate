@@ -1,65 +1,54 @@
 
-## Fix Properties Page Layout (Map Mode) + Area Images
 
-### Problem A: Properties Map Mode Layout is Broken
+## Continue All Fixes: Area Images, News Photos, and News Hero
 
-From the screenshots, these critical issues are visible:
+### Current State
 
-1. **Vertical nav shows on hero section** -- `PropertiesVerticalNav` renders on the left even before scrolling, overlapping the hero and header
-2. **Header overlap** -- Both the GlobalHeader AND the vertical nav show simultaneously, with the vertical nav covering the header logo area
-3. **Filter bar positioning** -- When fixed, the filter bar starts at `left: 200px` but the main header still spans full width, creating a visual disconnect
-4. **Cards are too tall in map mode** -- Each card includes full description, size info, AND Email/Call/WhatsApp CTA buttons, making them excessively vertical for a 50/50 split view
-5. **Scroll conflicts** -- The page scrolls the entire document instead of just the card panel, causing sections to hide behind the sidebar
-6. **Footer/DLD widget renders below map mode** -- These shouldn't appear in map mode since it's a full-viewport layout
+**Areas**: 99 out of 181 active areas still have NULL images. The `enrich-area-images` function processes 10 at a time, and the project images in the DB are ALL from Reelly (blocked by `isGoodAreaImage`), so Step 1 never finds anything. Only Firecrawl Steps 2-3 can help.
 
-### Problem B: 14+ Areas Still Have NULL Images
+**News**: 3 articles still have NULL images:
+1. "New Malls in Dubai (2026-2028)" -- Property Finder (source URL is just the blog listing page)
+2. "Tech watches and robot dogs" -- The National (has a real article URL)
+3. "Dubai property market set to cool" -- The National (has a real article URL)
 
-14 areas were reset to NULL but the `enrich-area-images` function hasn't successfully found replacements. Al Marjan Island and Maryam Island still use Reelly API single-building renders. The enrichment function's project-image fallback (`Step 1`) still pulls individual building renders from `projects.main_image_url` which are often the same Reelly single-building photos the user rejected.
+**News Hero**: The hero section uses a static gradient with a JBJ monogram, not a premium video like other pages (Properties, Areas). No video is present.
 
 ---
 
-### Fix Plan
+### Plan
 
-#### Part 1: Fix Map Mode Layout in `PropertiesReelly.tsx`
+#### Part 1: Batch-Process All 99 Area Images Efficiently
 
-**Changes:**
-
-1. **Remove vertical nav from map mode section entirely** -- In map mode (`isMapMode` is true), do NOT render `PropertiesVerticalNav`. The header remains visible and provides navigation. The vertical nav is only useful in list mode when the filter bar replaces the header.
-
-2. **Make map mode truly full-viewport** -- Remove the 200px sidebar offset. The map mode section should use `100vw` width with the filter bar spanning the full width at top.
-
-3. **Compact cards in map mode** -- In the left card panel (50% width), use a simplified card layout:
-   - Remove Email/Call/WhatsApp CTA buttons
-   - Remove description text
-   - Remove size info
-   - Keep only: image, name, location, price, developer, handover date
-   - Use `grid-cols-1` (one card per row) for the narrow panel
-
-4. **Fix scroll containment** -- The map mode section already has `height: calc(100vh - 80px)` and the left panel has `overflow-y-auto`, but the outer page still scrolls. Add `overflow: hidden` to the map mode wrapper to prevent document-level scrolling.
-
-5. **Hide DLD widget and footer in map mode** -- Move the `DLDMarketWidget` inside the non-map-mode section, or conditionally render it only when `!isMapMode`.
-
-6. **Fix filter bar in map mode** -- When `isFilterFixed` and `isMapMode`, the filter bar should span from `left: 0` (no sidebar offset).
-
-#### Part 2: Fix Area Images via Updated `enrich-area-images`
+The current function processes 10 areas per call. To handle 99 areas without wasting Firecrawl credits on searches that return nothing useful, the approach changes:
 
 **Changes to `supabase/functions/enrich-area-images/index.ts`:**
 
-1. **Block project render URLs in Step 1** -- Add `isGoodAreaImage()` check to project images too. If `main_image_url` contains `reelly-backend` or `api.reelly.io`, skip it.
+1. Increase default batch size from 10 to 20
+2. Add a curated map of known premium image URLs for major areas (Al Marjan Island, Dubai Islands, JVT, Damac Hills, Damac Lagoons, Palm Jebel Ali, Arjan, Town Square, Meydan, etc.) sourced from Provident's CloudFront CDN (`d3h330vgpwpjr8.cloudfront.net` and `d3ob0s3rxbjyep.cloudfront.net`) -- these are the same premium editorial community photos already proven to work for the top 20 areas
+3. Check the curated map FIRST (Step 0) before any DB or Firecrawl queries -- this is instant, free, and reliable
+4. For the ~30 well-known Dubai areas with no curated image, proceed with Firecrawl search (Steps 2-3)
+5. For obscure/small areas (Al Amerah, Es Sanhaya 2, Ghadeer Al Tayr, etc.), accept NULL gracefully -- the UI gradient fallback is appropriate
 
-2. **Fix Al Marjan Island and Maryam Island** -- Their current images (`api.reelly.io/vault/...`) are single-building renders. Add `api.reelly.io` to the bad URL patterns in `isGoodAreaImage()`.
+The curated map will cover approximately 40-50 major areas using URLs from the same CDN sources that already work for JVC, Business Bay, Downtown Dubai, etc. This eliminates ~50% of Firecrawl calls.
 
-3. **Improve search queries** -- Change from generic "aerial view" to more specific searches:
-   - For well-known areas (Al Marjan Island, Palm Jumeirah, etc.): search `"{area name}" aerial view drone` 
-   - Include `site:visitdubai.com OR site:bayut.com` for higher quality editorial photos
+#### Part 2: Fix 3 Remaining News Article Images
 
-4. **Run the function** -- After deploying, trigger it to process all 16 areas (14 NULL + Al Marjan Island + Maryam Island).
+**Changes to `supabase/functions/ai-news-collector/index.ts`:**
 
-#### Part 3: Fix Card Component for Map Mode
+For the `fix-null-images` action, improve the handling of The National articles:
+1. For The National articles with real article URLs (not listing pages), scrape the article directly via Firecrawl to extract OG images -- currently blocked by the `arcpublishing.com` pattern in `KNOWN_BAD_URLS`
+2. Refine the bad URL check: only block `arcpublishing.com` URLs with `width=200` (tiny thumbnails), not all `arcpublishing.com` URLs (which include full-size editorial photos)
+3. For the Property Finder "New Malls" article, search for the actual article page URL
 
-**Changes to `ReellyProjectCard.tsx`:**
+#### Part 3: Add Premium Hero Video to News Page
 
-Add an optional `compact` prop that hides the CTA buttons, description, and size info. The map mode in `PropertiesReelly.tsx` will pass `compact={true}`.
+**Changes to `src/pages/News.tsx`:**
+
+Replace the static gradient hero with the same `PropertiesHeroVideo` component used on the Properties page, or use a dedicated news-appropriate video/image hero with the Dubai skyline video already available in `src/assets/videos/dubai-landmarks-hero.mp4`.
+
+1. Import the existing hero video asset
+2. Replace the static gradient background with a video background element (using the same pattern as `PropertiesHeroVideo`)
+3. Keep the existing text overlay content (title, subtitle, badges)
 
 ---
 
@@ -67,14 +56,16 @@ Add an optional `compact` prop that hides the CTA buttons, description, and size
 
 | File | Change |
 |------|--------|
-| `src/pages/PropertiesReelly.tsx` | Remove vertical nav from map mode; fix filter bar positioning; hide DLD widget in map mode; use compact cards; fix scroll containment |
-| `src/components/ReellyProjectCard.tsx` | Add `compact` prop to hide CTA buttons, description, size info |
-| `supabase/functions/enrich-area-images/index.ts` | Add `api.reelly.io` to bad URL patterns; add `isGoodAreaImage` check to project image step; improve search queries |
+| `supabase/functions/enrich-area-images/index.ts` | Add curated image map for ~40 major areas; increase batch size to 20; check curated map before Firecrawl |
+| `supabase/functions/ai-news-collector/index.ts` | Refine `arcpublishing.com` blocking to only reject tiny thumbnails; improve The National scraping |
+| `src/pages/News.tsx` | Replace static gradient hero with premium video background using existing Dubai landmarks video |
 
 ### Execution Order
 
-1. Fix `ReellyProjectCard.tsx` -- add compact mode
-2. Fix `PropertiesReelly.tsx` -- map mode layout overhaul
-3. Update and deploy `enrich-area-images` -- fix bad URL patterns
-4. Trigger `enrich-area-images` to process 16 areas
-5. Verify via screenshots
+1. Update `enrich-area-images` with curated map and deploy
+2. Trigger enrichment in batches until all 99 areas are processed
+3. Update `ai-news-collector` and deploy
+4. Trigger `fix-null-images` for the 3 remaining articles
+5. Add video hero to News page
+6. Verify all changes via DB queries
+
