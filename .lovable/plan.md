@@ -1,94 +1,78 @@
 
+## Complete Fix: Area Images + News Broken Photos
 
-## Complete Fix: Remove All Bayut Images, Delete Duplicate Projects, Verify News
+### What's Actually Wrong
 
-### Problem Summary
+**Areas**: 126 of 181 areas have `NULL` image_url. The previous edge functions (`enrich-area-images`, `fix-missing-images`) tried project_images and Firecrawl but failed for most areas because:
+- Most areas have no projects with images in `project_images`
+- Firecrawl searches are unreliable and consume credits
 
-Three critical issues found after thorough investigation:
-
-| Issue | Scope | Detail |
-|-------|-------|--------|
-| Area images from Bayut | **123 of 181** areas | Images hosted on `d3ob0s3rxbjyep.cloudfront.net` (Bayut's CDN) -- competitor branding, NOT allowed |
-| Duplicate projects | **568 new rows** created today | `bulk-approve-imports` inserted new rows instead of merging into existing Reelly records. 100 are exact name duplicates of existing projects |
-| News photos | **0 NULL in database** | All 101 articles have image URLs. If cards appear broken, it is a rendering or image-load issue to investigate |
-
-### What Went Wrong
-
-The `bulk-approve-imports` function created **new project rows** from Provident discoveries instead of matching them to existing Reelly projects by name and merging supplementary data (descriptions, amenities, documents). This inflated the count from 2,484 to 3,052.
-
-For areas, the `enrich-area-images` function scraped Bayut area guide pages and saved their CDN images. These are competitor-branded assets and must all be removed.
+**News**: All 101 articles have image URLs in the database, but several URLs are broken (returning 403/hotlink blocked by source sites like `mediaoffice.ae`, `assets.difc.com`, `static.zawya.com`). The `onError` fallback shows a newspaper icon, which looks unprofessional.
 
 ---
 
-### Fix Plan
+### The New Approach: Use AI Image Generation via Gemini
 
-#### Part 1: Delete All 568 Duplicate Projects (Immediate)
+Instead of endlessly trying to scrape images from external sites (which break due to hotlinking, CORS, and access restrictions), we use **Gemini 3 Pro Image Preview** (available through Lovable AI, no API key needed) to generate professional aerial/masterplan-style images for each area. This is:
+- 100% reliable (no broken URLs, no blocked hotlinks)
+- No Firecrawl credits consumed
+- Produces consistent, professional community visuals
 
-Delete every project row created after the bulk-approve run today. These are all duplicates or unmatchable Provident entries that were inserted as new rows instead of merged:
-
-```text
-DELETE FROM project_images WHERE project_id IN (SELECT id FROM projects WHERE created_at > '2026-02-13 02:00:00');
-DELETE FROM project_documents WHERE project_id IN (SELECT id FROM projects WHERE created_at > '2026-02-13 02:00:00');
-DELETE FROM projects WHERE created_at > '2026-02-13 02:00:00';
-```
-
-This restores the project count to ~2,484 (the correct pre-duplicate number).
-
-#### Part 2: Replace All 123 Bayut Area Images
-
-**Strategy**: Use the Provident CDN (`d3h330vgpwpjr8.cloudfront.net`) as the primary image source -- these are real editorial community photos already proven to work for top areas (JVC, Business Bay, Downtown, etc.). For areas without Provident coverage, use official developer/master plan sources (Emaar, Nakheel, DAMAC official sites) or Google-sourced community photos via Firecrawl search.
-
-**Changes to `supabase/functions/enrich-area-images/index.ts`:**
-
-1. Remove ALL Bayut scraping logic (the `extractBayutCoverImage` function, the `BAYUT_SLUGS` map, any fetch to `bayut.com`)
-2. Add a `BLOCKED_DOMAINS` list: `bayut.com`, `d3ob0s3rxbjyep.cloudfront.net`, `static.bayut.com`, `mybayutcdn.bayut.com`
-3. New image sourcing priority:
-   - Step 0: Check if area has projects with good images in `project_images` table (from Reelly API)
-   - Step 1: Search for real community/aerial photos via Firecrawl using query like `"{area name}" Dubai community aerial photo` -- filtering OUT any Bayut domain results
-   - Step 2: For well-known areas, use official developer CDNs (Emaar, Nakheel, DAMAC, Aldar)
-   - Step 3: Accept NULL for obscure areas (gradient fallback)
-4. Reset all 123 Bayut image URLs to NULL via SQL so the function can reprocess them
-
-**SQL to reset Bayut images:**
-```text
-UPDATE areas SET image_url = NULL, hero_image_url = NULL 
-WHERE image_url LIKE '%d3ob0s3rxbjyep%' 
-   OR image_url LIKE '%static.bayut%' 
-   OR image_url LIKE '%mybayutcdn%';
-```
-
-#### Part 3: Build Proper Provident Merge Function
-
-Instead of creating new rows, the Provident sync must find existing projects by name similarity and enrich them in place.
-
-**New logic for `supabase/functions/bulk-approve-imports/index.ts`:**
-
-1. Before inserting a pending import as a new project, search existing projects for a name match (case-insensitive TRIM comparison)
-2. If a match is found: UPDATE the existing project with any missing data from the Provident record (description, amenities, payment_plan, brochure_url) -- never overwrite existing non-null fields
-3. If NO match is found: Insert as new project with `source = 'provident'`
-4. Add a `merge_mode` parameter (default: true) to enable/disable this behavior
-
-#### Part 4: Verify News Rendering
-
-All 101 news articles have non-null image URLs in the database. Check if there is a rendering issue in `News.tsx` where images fail to load (broken URLs, CORS issues) and add proper error handling with fallback gradient.
+For news, we proxy broken images through the edge function to avoid hotlink blocks.
 
 ---
 
-### Files to Change
+### Plan
+
+#### Part 1: New Edge Function `generate-area-images`
+
+Create a new edge function that:
+1. Fetches areas with NULL image_url (batch of 5-10)
+2. For each area, calls Gemini 3 Pro Image Preview via the Lovable AI gateway to generate an aerial/panoramic view of the community
+3. Uploads the generated image to Supabase Storage
+4. Updates the area's `image_url` and `hero_image_url` with the storage URL
+
+Prompt template: `"Professional aerial panoramic photograph of {area_name}, Dubai/UAE. Modern urban landscape, high resolution, real estate marketing quality, daytime, clear sky."`
+
+This guarantees every area gets a high-quality, reliable image that never breaks.
+
+#### Part 2: Fix Broken News Images
+
+Create a new edge function `proxy-news-image` OR update the News.tsx frontend to:
+- Detect broken images via the existing `onError` handler
+- Instead of showing a newspaper icon, use a **topic-relevant stock gradient** with the article category icon and source name
+- For articles from WAM, DIFC, etc. where images are hotlink-blocked, store the images in Supabase Storage by fetching them server-side (edge function with proper User-Agent headers)
+
+Alternative simpler approach: Create an edge function `fix-broken-news-images` that:
+1. Fetches all news articles
+2. For each image_url, does a HEAD request server-side to check if it returns 200
+3. If broken, tries to re-fetch the source_url HTML and extract a working OG image
+4. If still broken, sets image_url to NULL (gradient fallback is cleaner than a broken image)
+
+#### Part 3: Improve News Fallback UI
+
+Update `News.tsx` so that when an image fails to load, instead of showing a generic newspaper icon, it shows a **styled gradient card** with:
+- The category name prominently displayed
+- The source logo/name
+- A relevant icon based on category (Building2 for Developer News, TrendingUp for Market Update, etc.)
+
+This makes even image-less cards look intentional and premium.
+
+---
+
+### Files to Create/Change
 
 | File | Change |
-|-------|--------|
-| `supabase/functions/enrich-area-images/index.ts` | Remove all Bayut scraping; add blocked domains; use project images and Firecrawl (non-Bayut) as sources |
-| `supabase/functions/bulk-approve-imports/index.ts` | Add name-matching merge logic instead of blind insert |
-| `supabase/functions/fix-missing-images/index.ts` | Remove all Bayut references and slug mappings |
-| Database (SQL) | Delete 568 duplicate projects; reset 123 Bayut area image URLs to NULL |
+|------|--------|
+| `supabase/functions/generate-area-images/index.ts` | NEW: Gemini-powered area image generation with Supabase Storage upload |
+| `supabase/functions/fix-broken-news-images/index.ts` | NEW: Server-side HEAD check + re-fetch for broken news image URLs |
+| `src/pages/News.tsx` | Improve the onError fallback to show a premium category-themed gradient instead of generic newspaper icon |
 
 ### Execution Order
 
-1. Delete all 568 duplicate project rows (restore to 2,484)
-2. Reset all 123 Bayut area image URLs to NULL
-3. Rewrite `enrich-area-images` to use non-Bayut sources only
-4. Deploy and trigger area image enrichment in batches
-5. Update `bulk-approve-imports` with merge-first logic
-6. Verify news page rendering
-
+1. Create and deploy `generate-area-images` function
+2. Trigger it in batches of 5-10 to generate images for all 126 areas
+3. Create and deploy `fix-broken-news-images` function
+4. Trigger it to validate/fix all 101 news image URLs
+5. Update News.tsx fallback UI for any remaining broken images
+6. Verify everything renders correctly
