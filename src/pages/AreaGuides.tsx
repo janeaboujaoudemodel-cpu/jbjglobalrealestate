@@ -68,6 +68,16 @@ const AreaGuides = () => {
     if (!areas) return [];
     let filtered = [...areas];
 
+    // Search filter
+    const query = shortcutFilters.searchQuery?.trim().toLowerCase();
+    if (query) {
+      filtered = filtered.filter(a => 
+        a.name.toLowerCase().includes(query) || 
+        a.emirate?.toLowerCase().includes(query) ||
+        a.description?.toLowerCase().includes(query)
+      );
+    }
+
     const sortBy = shortcutFilters.sortBy;
     switch (sortBy) {
       case "trending":
@@ -87,7 +97,7 @@ const AreaGuides = () => {
     }
 
     return filtered;
-  }, [areas, shortcutFilters.sortBy]);
+  }, [areas, shortcutFilters.sortBy, shortcutFilters.searchQuery]);
 
   // IntersectionObserver for fixed positioning
   useEffect(() => {
