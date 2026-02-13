@@ -267,7 +267,7 @@ const PropertiesReelly = () => {
       <div ref={filterSentinelRef} className="h-0 w-full" />
 
       {/* Single Unified FilterShortcutBar */}
-      <section className={`${isFilterFixed ? 'fixed top-0 z-[9998]' : 'sticky top-14 sm:top-16 md:top-20 lg:top-[72px] z-40'} bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark py-2 border-b border-gold/30`} style={{ WebkitOverflowScrolling: 'touch', ...(isFilterFixed ? { left: '200px', right: '0' } : {}) }}>
+      <section className={`${isFilterFixed ? 'fixed top-0 z-[9998]' : 'sticky top-14 sm:top-16 md:top-20 lg:top-[72px] z-40'} bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark py-2 border-b border-gold/30`} style={{ WebkitOverflowScrolling: 'touch', ...(isFilterFixed ? { left: isMapMode ? '0' : '200px', right: '0' } : {}) }}>
         <div className="container mx-auto px-3 sm:px-4">
           <FilterShortcutBar
             variant="light"
@@ -296,16 +296,9 @@ const PropertiesReelly = () => {
 
       {/* Results Section - split-screen in map mode */}
       {isMapMode ? (
-        <section className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark" style={{ height: 'calc(100vh - 80px)' }}>
+        <section className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
           <div className="flex h-full">
-            {/* Vertical Nav (desktop only) — full height fixed sidebar */}
-            <div className="hidden lg:block flex-shrink-0 w-[200px]">
-              <div className="fixed top-0 left-0 h-screen z-[9999]">
-                <PropertiesVerticalNav />
-              </div>
-            </div>
-
-            {/* Content area: 50/50 split between cards and map */}
+            {/* Content area: 50/50 split between cards and map — NO vertical nav in map mode */}
             <div className="flex-1 flex h-full">
               {/* Left: Scrollable card list — 50% */}
               <div className="w-1/2 h-full overflow-y-auto bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
@@ -321,13 +314,14 @@ const PropertiesReelly = () => {
                   {(isLoading && isDbLoading) ? (
                     <ProjectGridSkeleton count={4} />
                   ) : sortedProjects.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4">
                       {sortedProjects.map((project) => (
                         <ReellyProjectCard
                           key={project.id}
                           project={project}
                           currency={currency}
                           sizeUnit={sizeUnit}
+                          compact
                         />
                       ))}
                     </div>
@@ -490,8 +484,8 @@ const PropertiesReelly = () => {
         </section>
       )}
 
-      {/* DLD Market Intelligence */}
-      <DLDMarketWidget />
+      {/* DLD Market Intelligence - hidden in map mode */}
+      {!isMapMode && <DLDMarketWidget />}
        </div>
      </>
    );

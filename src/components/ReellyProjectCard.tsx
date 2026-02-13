@@ -8,13 +8,14 @@
  import { VerifiedMedia } from "@/components/ui/verified-media";
  import { Button } from "@/components/ui/button";
  
- interface ReellyProjectCardProps {
-   project: ReellyProject;
-   showFavorite?: boolean;
-   showBadgeButton?: boolean;
-  currency?: 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 'RUB' | 'CAD' | 'AUD';
-   sizeUnit?: 'sqft' | 'sqm';
- }
+interface ReellyProjectCardProps {
+  project: ReellyProject;
+  showFavorite?: boolean;
+  showBadgeButton?: boolean;
+ currency?: 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 'RUB' | 'CAD' | 'AUD';
+  sizeUnit?: 'sqft' | 'sqm';
+  compact?: boolean;
+}
  
 // Currency conversion rates - 10 unified currencies
  const CURRENCY_RATES: Record<string, number> = {
@@ -76,13 +77,14 @@
    return null;
  };
  
- const ReellyProjectCard = ({ 
-   project, 
-   showFavorite = true, 
-   showBadgeButton = true, 
-   currency = 'AED', 
-   sizeUnit = 'sqft' 
- }: ReellyProjectCardProps) => {
+const ReellyProjectCard = ({ 
+  project, 
+  showFavorite = true, 
+  showBadgeButton = true, 
+  currency = 'AED', 
+  sizeUnit = 'sqft',
+  compact = false,
+}: ReellyProjectCardProps) => {
    const [currentImageIndex, setCurrentImageIndex] = useState(0);
    const images = project.images || [];
  
@@ -278,56 +280,62 @@
               </p>
             )}
            
-           {/* Size info */}
-           <div className="flex items-center gap-2 text-muted-foreground text-xs mb-3 flex-wrap">
-             {getSizeText() && (
-               <span>{getSizeText()}</span>
-             )}
-             {project.emirate && (
-               <>
-                 <span className="text-gold/50">|</span>
-                 <span>{project.emirate}</span>
-               </>
-             )}
-           </div>
+           {/* Size info - hidden in compact mode */}
+           {!compact && (
+             <div className="flex items-center gap-2 text-muted-foreground text-xs mb-3 flex-wrap">
+               {getSizeText() && (
+                 <span>{getSizeText()}</span>
+               )}
+               {project.emirate && (
+                 <>
+                   <span className="text-gold/50">|</span>
+                   <span>{project.emirate}</span>
+                 </>
+               )}
+             </div>
+           )}
            
-           {/* Description with ...more link */}
-            <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1">
-               {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-                <span className="text-gold font-bold hover:text-gold/70 cursor-pointer ml-1">
-                  ...more
-                </span>
-            </p>
+           {/* Description - hidden in compact mode */}
+           {!compact && (
+             <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1">
+                {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
+                 <span className="text-gold font-bold hover:text-gold/70 cursor-pointer ml-1">
+                   ...more
+                 </span>
+             </p>
+           )}
          </div>
        </Link>
  
-       {/* CTA Buttons */}
-       <div className="px-4 pb-4 pt-0">
-         <div className="grid grid-cols-3 gap-2 border-t border-gold/20 pt-3">
-           <Button asChild variant="secondary" size="sm" className="w-full">
-             <a
-               href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
-               onClick={(e) => e.stopPropagation()}
-               aria-label={`Email about ${project.name}`}
-             >
-               <Mail className="w-4 h-4" />
-               <span>Email</span>
-             </a>
-           </Button>
-           <Button asChild variant="secondary" size="sm" className="w-full">
-             <a href={callHref} onClick={(e) => e.stopPropagation()} aria-label={`Call about ${project.name}`}>
-               <Phone className="w-4 h-4" />
-               <span>Call</span>
-             </a>
-           </Button>
-           <Button asChild variant="secondary" size="sm" className="w-full">
-             <a href={whatsappHref} onClick={(e) => e.stopPropagation()} aria-label={`WhatsApp about ${project.name}`}>
-               <MessageCircle className="w-4 h-4" />
-               <span>WhatsApp</span>
-             </a>
-           </Button>
+       {/* CTA Buttons - hidden in compact mode */}
+       {!compact && (
+         <div className="px-4 pb-4 pt-0">
+           <div className="grid grid-cols-3 gap-2 border-t border-gold/20 pt-3">
+             <Button asChild variant="secondary" size="sm" className="w-full">
+               <a
+                 href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
+                 onClick={(e) => e.stopPropagation()}
+                 aria-label={`Email about ${project.name}`}
+               >
+                 <Mail className="w-4 h-4" />
+                 <span>Email</span>
+               </a>
+             </Button>
+             <Button asChild variant="secondary" size="sm" className="w-full">
+               <a href={callHref} onClick={(e) => e.stopPropagation()} aria-label={`Call about ${project.name}`}>
+                 <Phone className="w-4 h-4" />
+                 <span>Call</span>
+               </a>
+             </Button>
+             <Button asChild variant="secondary" size="sm" className="w-full">
+               <a href={whatsappHref} onClick={(e) => e.stopPropagation()} aria-label={`WhatsApp about ${project.name}`}>
+                 <MessageCircle className="w-4 h-4" />
+                 <span>WhatsApp</span>
+               </a>
+             </Button>
+           </div>
          </div>
-       </div>
+       )}
      </div>
    );
  };
