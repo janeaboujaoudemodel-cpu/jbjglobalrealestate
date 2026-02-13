@@ -291,3 +291,6 @@ verify_jwt = false
 
 [functions.enrich-developer-data]
 verify_jwt = false
+
+[functions.repair-project-data-gaps]
+verify_jwt = false
