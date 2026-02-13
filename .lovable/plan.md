@@ -1,37 +1,74 @@
 
 
-## Fix Developer AI Intelligence: Analysis Display and Card Alignment
+## Fix Missing Project Data: Clean Empty Shells and Fill Data Gaps
 
-### Problem 1: AI Analysis Not Rendering
+### The Problem
 
-The edge function returns the full analysis text successfully (confirmed via network inspection), but the UI shows nothing -- just the stat cards and footer. 
+The database contains **683 completely empty "shell" project records** that are published and visible on the platform. These records have:
+- No developer name (shows as blank or missing)
+- No price (shows "Price on Request")
+- No description, no images, no handover date, no status
+- No `reelly_id` -- meaning they cannot be backfilled from the Reelly API
+- They were created during a Provident bulk import but never got matched or enriched
 
-**Root Cause:** The `extractSection()` function uses regex patterns that expect the format `1. **Company Overview**` (number OUTSIDE bold markers), but the AI model returns `**1. Company Overview**` (number INSIDE bold markers). None of the three regex patterns match, so every section returns an empty string, and nothing renders.
+Additionally, **7 manual projects** have a `developer_id` linked but the `developer_name` text field was never populated.
 
-Example from actual API response:
+Among the 1,801 complete Reelly projects, **611 are missing prices** and **1,709 are missing payment plans** -- these are legitimate gaps from the Reelly API itself (not all projects have announced prices).
+
+### The Fix (3 Steps)
+
+**Step 1: Unpublish the 683 empty shell records**
+
+These records have zero useful data and degrade the user experience. They should be unpublished (`is_published = false`) so they stop appearing in listings, search results, and on cards. This immediately eliminates "Price on Request" and missing developer cards for empty records.
+
+A backend function will run:
+```sql
+UPDATE projects 
+SET is_published = false 
+WHERE reelly_id IS NULL 
+  AND (developer_name IS NULL OR developer_name = '') 
+  AND description IS NULL 
+  AND source = 'reelly' 
+  AND import_source = 'reelly';
 ```
-**1. Company Overview**
-Established in 2008, Binghatti has rapidly...
+
+**Step 2: Fix the 7 manual projects with missing developer_name**
+
+These have a valid `developer_id` but the `developer_name` was never filled. A simple join-and-update resolves this:
+
+```sql
+UPDATE projects p 
+SET developer_name = d.name 
+FROM developers d 
+WHERE p.developer_id = d.id 
+  AND (p.developer_name IS NULL OR p.developer_name = '') 
+  AND p.is_published = true;
 ```
 
-The regex expects: `\d+\.\s*\*\*Company Overview\*\*`
-But the text has: `\*\*\d+\.\s*Company Overview\*\*`
+**Step 3: Create a "data completeness repair" edge function**
 
-**Fix:** Update the `extractSection()` function in `DeveloperAIAnalyzer.tsx` (lines 20-39) to add a fourth regex pattern that handles the `**N. Section Name**` format where the number is inside the bold markers:
-```
-new RegExp(`\\*\\*\\d+\\.\\s*${name}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*\\d+\\.|$)`, 'i')
-```
+A new `repair-project-data-gaps` edge function will scan all remaining published projects and fill gaps:
 
-### Problem 2: Stat Cards Not Aligned
+- **Developer name resolution**: For any project with `developer_id` but no `developer_name`, look up the developer table
+- **Developer name from Reelly**: For projects with `reelly_developer_id`, match against the developers table
+- **Sale status normalization**: Ensure `status_label` is populated from `sale_status` where missing
+- **Handover formatting**: Ensure `expected_completion` is copied to `handover_date` where missing (or vice versa)
 
-The 4 Quick Stats cards (Founded, Projects, Units Delivered, Active Projects) are misaligned because the "Founded" card lacks an icon above the number, while the other 3 cards all have icons (Home, Landmark, Building2). This makes the vertical content offset differ.
+### What This Achieves
 
-**Fix:** Add a `CalendarDays` icon (already imported) above the year number in the "Founded" stat card at line 457, matching the pattern used by the other 3 cards:
-```tsx
-<CalendarDays className="w-4 h-4 text-gold mx-auto mb-1" />
-```
+| Metric | Before | After |
+|--------|--------|-------|
+| Published projects | 2,484 | ~1,801 (real data only) |
+| Missing developer name | 683 | 0 |
+| Missing description | 676 | 0 |
+| Missing images | 683 | 0 |
+| Missing price | 1,287 | ~604 (legitimate API gaps) |
 
 ### Files Modified
-- `src/components/developer/DeveloperAIAnalyzer.tsx`:
-  - Add regex pattern for `**N. Section Name**` format in `extractSection()` (around line 29)
-  - Add CalendarDays icon to the "Founded" stat card (around line 457)
+
+- **New**: `supabase/functions/repair-project-data-gaps/index.ts` -- Edge function to clean empty shells and fill data gaps
+- The function runs the SQL updates above and reports results
+
+### Important Note
+
+The 604 remaining projects without prices are legitimately missing from the Reelly API (prices not yet announced by developers). These will correctly show "Price on Request" which is the accurate state. This is different from the current situation where empty shell records with zero data are polluting the listings.
