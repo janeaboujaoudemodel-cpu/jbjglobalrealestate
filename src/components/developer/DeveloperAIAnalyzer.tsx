@@ -54,8 +54,10 @@ function parsePricePerSqftMetrics(text: string) {
   const avgPsf = priceMatch ? parseInt(priceMatch[1].replace(/,/g, '')) : 1200;
   const currentYear = new Date().getFullYear();
   const growthMatch = text.match(/([+-]?\d+(?:\.\d+)?)%/);
-  const annualGrowth = growthMatch ? parseFloat(growthMatch[1]) / 100 : 0.08;
-  
+  // Clamp to minimum 0% — developer-level price/sqft aggregations across areas are unreliable
+  const rawGrowth = growthMatch ? parseFloat(growthMatch[1]) / 100 : 0.08;
+  const annualGrowth = Math.max(0, rawGrowth);
+
   const data = [];
   for (let i = 4; i >= 0; i--) {
     const factor = Math.pow(1 + annualGrowth, -i);
@@ -106,6 +108,7 @@ function PricePerSqftChart({ text }: { text: string }) {
           {bullets.map((b, i) => <p key={i} className="text-zinc-600 text-xs leading-relaxed">{b}</p>)}
         </div>
       )}
+      <p className="text-zinc-400 text-[10px] mt-3 italic">* Developer-level price/sqft varies by area and project type. For area-specific trends, visit individual area pages.</p>
     </div>
   );
 }

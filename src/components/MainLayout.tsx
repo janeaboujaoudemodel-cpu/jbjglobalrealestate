@@ -54,12 +54,22 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     location.pathname.startsWith("/listing-admin") ||
     location.pathname.startsWith("/broker-dashboard");
   const isHomePage = location.pathname === "/";
+  const isDetailPage = location.pathname.startsWith("/project/") || location.pathname.startsWith("/area/");
 
   // Onboarding tour for tablets
   const { showTour, setShowTour, completeTour } = useOnboardingTour();
 
   // Chat collapsed state - always start collapsed
   const [isChatCollapsed, setIsChatCollapsed] = useState(true);
+
+  // Auto-collapse chat when navigating to project/area detail pages
+  useEffect(() => {
+    if (isDetailPage) {
+      setIsChatCollapsed(true);
+      markDailyShown();
+      setShowAttentionPulse(false);
+    }
+  }, [location.pathname]);
   // Show attention pulse only after scroll delay on homepage, or immediately on other pages
   const [showAttentionPulse, setShowAttentionPulse] = useState(false);
   // Track if popups should be visible (delayed on homepage until user scrolls past hero)

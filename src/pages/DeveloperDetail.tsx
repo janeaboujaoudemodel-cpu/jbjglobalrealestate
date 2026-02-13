@@ -409,7 +409,7 @@ const DeveloperDetail = () => {
               ))}
             </div>
           ) : filteredProjects.length > 0 ? (
-            <div className="bg-gradient-to-br from-[#F5EBD7]/60 via-[#EDE0C8]/50 to-[#E2D4B8]/40 rounded-2xl border border-gold/30 p-6 md:p-8">
+            <div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {(showAllProjects ? filteredProjects : filteredProjects.slice(0, 9)).map((project) => (
                   <ProjectCard key={project.id} project={project} currency={filters.currency} sizeUnit={filters.sizeUnit} />
@@ -467,8 +467,13 @@ const DeveloperDetail = () => {
           )}
         </div>
 
-        {/* Divider between projects and DLD Market Widget — outside project wrapper */}
-        <SectionDivider variant="champagne" />
+        {/* Divider between projects and DLD Market Widget — gold line only */}
+        <div className="py-10 md:py-14">
+          <div className="flex items-center justify-center gap-6">
+            <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+            <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+          </div>
+        </div>
 
         {/* DLD Market Widget - Live transaction data */}
         <DLDMarketWidget />

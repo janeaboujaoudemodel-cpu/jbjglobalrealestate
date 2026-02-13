@@ -4,6 +4,8 @@
  */
 
 import { useState, useEffect, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
@@ -27,6 +29,21 @@ const AreaDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: area, isLoading } = useAreaBySlug(slug);
   const { data: allAreas } = useAreas({ limit: 20 });
+
+  // Live project count from database
+  const { data: liveProjectCount } = useQuery({
+    queryKey: ['area-live-project-count', area?.name],
+    queryFn: async () => {
+      if (!area?.name) return 0;
+      const { count } = await supabase
+        .from('projects')
+        .select('id', { count: 'exact', head: true })
+        .eq('is_published', true)
+        .ilike('area_name', area.name);
+      return count ?? 0;
+    },
+    enabled: !!area?.name,
+  });
 
   // Page-level filter state
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
@@ -133,7 +150,7 @@ const AreaDetail = () => {
       />
 
       {/* Full-Screen Hero with Real Photo */}
-      <AreaHeroSection area={area as any} />
+      <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} />
 
       {/* About This Area */}
       <AreaAboutSection area={area as any} />
