@@ -681,6 +681,420 @@ Return ONLY valid JSON, no markdown wrapping. Be factual and positive where appr
       });
     }
 
+    // ===================== IMPORT PROVIDENT BLOG =====================
+    if (action === "import-provident-blog") {
+      console.log("Starting Provident blog import...");
+
+      // Scrape the blog listing page
+      const blogResp = await fetch("https://api.firecrawl.dev/v1/scrape", {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${FIRECRAWL_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          url: "https://www.providentestate.com/blog/",
+          formats: ["markdown", "links"],
+          onlyMainContent: true,
+          waitFor: 5000,
+          timeout: 60000,
+        }),
+      });
+
+      if (!blogResp.ok) {
+        const errText = await blogResp.text();
+        return new Response(JSON.stringify({ success: false, error: `Firecrawl scrape failed: ${blogResp.status}`, details: errText.substring(0, 300) }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const blogData = await blogResp.json();
+      const blogMarkdown = blogData.data?.markdown || blogData.markdown || "";
+      const blogLinks: string[] = blogData.data?.links || blogData.links || [];
+      console.log(`Blog page scraped: ${blogMarkdown.length} chars, ${blogLinks.length} links`);
+
+      // Extract article links from the blog page - look for /blog/article-slug/ patterns
+      const articleUrls: string[] = [];
+      for (const link of blogLinks) {
+        if (link.match(/providentestate\.com\/blog\/[a-z0-9-]+\/?$/i) && !link.match(/\/blog\/?$/i) && !link.includes("/page/")) {
+          if (!articleUrls.includes(link)) articleUrls.push(link);
+        }
+      }
+      console.log(`Found ${articleUrls.length} article URLs from links`);
+
+      // Also extract from markdown patterns: [Title](url)
+      const mdLinkPattern = /\[([^\]]+)\]\((https?:\/\/[^\s)]*providentestate\.com\/blog\/[a-z0-9-]+\/?)\)/gi;
+      let mdMatch;
+      while ((mdMatch = mdLinkPattern.exec(blogMarkdown)) !== null) {
+        const url = mdMatch[2];
+        if (!articleUrls.includes(url) && !url.match(/\/blog\/?$/i) && !url.includes("/page/")) {
+          articleUrls.push(url);
+        }
+      }
+      console.log(`Total unique article URLs: ${articleUrls.length}`);
+
+      // Extract images from markdown: ![alt](image_url) patterns tied to articles
+      const imageMap = new Map<string, string>(); // article URL -> image URL
+      // Pattern: [![...](image_url)](article_url) or near-proximity image+link
+      const linkedImagePattern = /\[!\[[^\]]*\]\(([^)]+)\)\]\(([^)]+)\)/g;
+      let imgMatch;
+      while ((imgMatch = linkedImagePattern.exec(blogMarkdown)) !== null) {
+        const imgUrl = imgMatch[1];
+        const linkUrl = imgMatch[2];
+        if (linkUrl.includes("providentestate.com/blog/") && imgUrl.includes("cloudfront.net")) {
+          // Upgrade to high-res
+          const hiRes = imgUrl.replace(/\/x\/\d+x\d*\//, "/x/1200x/");
+          imageMap.set(linkUrl.replace(/\/$/, ""), hiRes);
+        }
+      }
+
+      // Also try: ![title](image) followed by [title](article_url) on nearby lines
+      const lines = blogMarkdown.split("\n");
+      for (let i = 0; i < lines.length - 3; i++) {
+        const imgLine = lines[i].match(/!\[[^\]]*\]\((https?:\/\/[^)]+cloudfront[^)]+)\)/);
+        if (imgLine) {
+          // Look in the next few lines for an article link
+          for (let j = i + 1; j < Math.min(i + 5, lines.length); j++) {
+            const linkLine = lines[j].match(/\[([^\]]+)\]\((https?:\/\/[^)]*providentestate\.com\/blog\/[a-z0-9-]+\/?)\)/);
+            if (linkLine) {
+              const hiRes = imgLine[1].replace(/\/x\/\d+x\d*\//, "/x/1200x/");
+              imageMap.set(linkLine[2].replace(/\/$/, ""), hiRes);
+              break;
+            }
+          }
+        }
+      }
+      console.log(`Extracted ${imageMap.size} article-image mappings from blog page`);
+
+      // Fuzzy dedup setup
+      function normalizeTitle(t: string): string {
+        return t.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+      }
+      function getFirst6Words(t: string): string {
+        return normalizeTitle(t).split(' ').slice(0, 6).join(' ');
+      }
+
+      const { data: existingTitles } = await supabase.from("market_news").select("title");
+      const existingNormSet = new Set((existingTitles || []).map(e => normalizeTitle(e.title).substring(0, 50)));
+      const existingFirst6Set = new Set((existingTitles || []).map(e => getFirst6Words(e.title)));
+
+      let imported = 0;
+      let skipped = 0;
+      const importErrors: string[] = [];
+
+      for (const articleUrl of articleUrls.slice(0, 15)) {
+        try {
+          console.log(`Scraping article: ${articleUrl}`);
+          const artResp = await fetch("https://api.firecrawl.dev/v1/scrape", {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${FIRECRAWL_API_KEY}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+              url: articleUrl,
+              formats: ["markdown"],
+              onlyMainContent: true,
+              waitFor: 3000,
+              timeout: 30000,
+            }),
+          });
+
+          if (!artResp.ok) {
+            importErrors.push(`${articleUrl}: scrape failed ${artResp.status}`);
+            await new Promise(r => setTimeout(r, 2000));
+            continue;
+          }
+
+          const artData = await artResp.json();
+          const artMd = artData.data?.markdown || artData.markdown || "";
+          const artMeta = artData.data?.metadata || artData.metadata || {};
+
+          if (artMd.length < 100) {
+            importErrors.push(`${articleUrl}: too short (${artMd.length} chars)`);
+            await new Promise(r => setTimeout(r, 2000));
+            continue;
+          }
+
+          // Extract title from metadata or first heading
+          let title = artMeta.title || artMeta.ogTitle || "";
+          if (!title) {
+            const h1 = artMd.match(/^#\s+(.+)$/m);
+            if (h1) title = h1[1];
+          }
+          // Clean title - remove site suffix
+          title = title.replace(/\s*[-|–]\s*Provident Estate.*$/i, "").trim();
+          if (!title) {
+            importErrors.push(`${articleUrl}: no title found`);
+            await new Promise(r => setTimeout(r, 2000));
+            continue;
+          }
+
+          // Fuzzy dedup check
+          const normTitle = normalizeTitle(title).substring(0, 50);
+          const first6 = getFirst6Words(title);
+          if (existingNormSet.has(normTitle) || (first6.length > 15 && existingFirst6Set.has(first6))) {
+            console.log(`  Skipping duplicate: "${title}"`);
+            skipped++;
+            await new Promise(r => setTimeout(r, 1000));
+            continue;
+          }
+
+          // Get image: prefer from our blog page mapping, then OG image, then inline
+          const normalizedUrl = articleUrl.replace(/\/$/, "");
+          let imageUrl = imageMap.get(normalizedUrl) || null;
+          if (!imageUrl) {
+            const ogImg = artMeta.ogImage || artMeta.image || artMeta["og:image"] || null;
+            if (ogImg && ogImg.includes("cloudfront.net")) {
+              imageUrl = ogImg.replace(/\/x\/\d+x\d*\//, "/x/1200x/");
+            } else if (ogImg && !isImageBad(ogImg)) {
+              imageUrl = ogImg;
+            }
+          }
+          if (!imageUrl) {
+            const inlineImg = extractFirstGoodImage(artMd);
+            if (inlineImg && inlineImg.includes("cloudfront.net")) {
+              imageUrl = inlineImg.replace(/\/x\/\d+x\d*\//, "/x/1200x/");
+            } else if (inlineImg) {
+              imageUrl = inlineImg;
+            }
+          }
+
+          // Extract excerpt from first paragraph
+          const excerptMatch = artMd.match(/^(?!#)(.{50,300}?)(?:\.\s|\n)/m);
+          const excerpt = excerptMatch ? excerptMatch[1].trim() + "." : artMd.substring(0, 200).trim();
+
+          // Determine category from content
+          let category = "Market Update";
+          const lowerTitle = title.toLowerCase();
+          if (lowerTitle.includes("report") || lowerTitle.includes("market")) category = "Analysis";
+          else if (lowerTitle.includes("invest")) category = "Market Outlook";
+          else if (lowerTitle.includes("park") || lowerTitle.includes("cycling") || lowerTitle.includes("infrastructure") || lowerTitle.includes("rta") || lowerTitle.includes("loop")) category = "Government";
+          else if (lowerTitle.includes("sobha") || lowerTitle.includes("emaar") || lowerTitle.includes("meraas") || lowerTitle.includes("partnership")) category = "Developer News";
+          else if (lowerTitle.includes("wellness") || lowerTitle.includes("moving")) category = "Market Update";
+
+          // Extract date from metadata or use recent
+          let pubDate = artMeta.publishedTime || artMeta.datePublished || artMeta.date || null;
+          if (!pubDate) {
+            const dateMatch = artMd.match(/(\w+ \d{1,2},?\s*\d{4})/);
+            if (dateMatch) {
+              try { pubDate = new Date(dateMatch[1]).toISOString().split('T')[0]; } catch {}
+            }
+          }
+          if (!pubDate) pubDate = new Date().toISOString().split('T')[0];
+          else if (pubDate.includes('T')) pubDate = pubDate.split('T')[0];
+
+          // Use AI to extract clean content
+          let fullContent: string | null = null;
+          try {
+            const contentResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+              method: "POST",
+              headers: { "Authorization": `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+              body: JSON.stringify({
+                model: "google/gemini-2.5-flash",
+                messages: [
+                  { role: "system", content: "Extract the FULL article body text from raw scraped markdown. Return the COMPLETE article content preserving ALL paragraphs. Remove navigation, ads, footers. Do not add commentary." },
+                  { role: "user", content: `Extract the full article from this page about "${title}":\n\n${artMd.substring(0, 30000)}` },
+                ],
+              }),
+            });
+            if (contentResp.ok) {
+              const contentData = await contentResp.json();
+              fullContent = contentData.choices?.[0]?.message?.content || null;
+            }
+          } catch (e) {
+            console.warn(`  AI content extraction failed for "${title}"`);
+          }
+
+          // Insert
+          const { error: insertErr } = await supabase.from("market_news").insert({
+            title,
+            excerpt,
+            content: fullContent || artMd.substring(0, 5000),
+            category,
+            source: "Provident Estate",
+            source_url: articleUrl,
+            image_url: imageUrl,
+            published_date: pubDate,
+            ai_generated: false,
+            is_verified: true,
+            is_featured: false,
+          });
+
+          if (insertErr) {
+            importErrors.push(`${title}: insert failed - ${insertErr.message}`);
+          } else {
+            imported++;
+            existingNormSet.add(normTitle);
+            existingFirst6Set.add(first6);
+            console.log(`  ✓ Imported: "${title}" (image: ${imageUrl ? 'yes' : 'none'})`);
+          }
+
+          await new Promise(r => setTimeout(r, 3000)); // Throttle for Firecrawl
+        } catch (artErr) {
+          importErrors.push(`${articleUrl}: ${artErr instanceof Error ? artErr.message : "error"}`);
+        }
+      }
+
+      return new Response(JSON.stringify({
+        success: true,
+        imported,
+        skipped,
+        total_urls: articleUrls.length,
+        errors: importErrors.length > 0 ? importErrors : undefined,
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // ===================== FIX-NULL-IMAGES ACTION =====================
+    if (action === "fix-null-images") {
+      console.log("Starting fix-null-images: searching for real images for NULL-image articles...");
+
+      const { data: nullImageArticles } = await supabase
+        .from("market_news")
+        .select("id, title, source, source_url, image_url")
+        .is("image_url", null);
+
+      if (!nullImageArticles || nullImageArticles.length === 0) {
+        return new Response(JSON.stringify({ success: true, fixed: 0, message: "No articles with NULL images" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      console.log(`Found ${nullImageArticles.length} articles with NULL images`);
+      let fixedCount = 0;
+      const fixErrors: string[] = [];
+
+      // Get all used image URLs to avoid duplicates
+      const { data: allArticles } = await supabase.from("market_news").select("image_url");
+      const usedUrls = new Set((allArticles || []).map(a => a.image_url).filter(Boolean));
+
+      for (const article of nullImageArticles) {
+        let newImage: string | null = null;
+
+        // Strategy 1: If source_url points to a listing page (not individual article), search for the real page
+        const isListingPage = article.source_url &&
+          (article.source_url.match(/\/(blog|property|news|real-estate)\/?$/i) ||
+           article.source_url.match(/\/category\//i));
+
+        if (isListingPage) {
+          console.log(`  "${article.title}" has listing-page URL, searching for individual article...`);
+          try {
+            const searchResp = await fetch("https://api.firecrawl.dev/v1/search", {
+              method: "POST",
+              headers: { "Authorization": `Bearer ${FIRECRAWL_API_KEY}`, "Content-Type": "application/json" },
+              body: JSON.stringify({
+                query: `"${article.title}" site:${new URL(article.source_url).hostname}`,
+                limit: 3,
+              }),
+            });
+            if (searchResp.ok) {
+              const searchData = await searchResp.json();
+              for (const r of (searchData.data || [])) {
+                // Update source_url to the actual article page
+                if (r.url && r.url !== article.source_url) {
+                  await supabase.from("market_news").update({ source_url: r.url }).eq("id", article.id);
+                  console.log(`    Updated source_url to: ${r.url}`);
+                }
+                // Extract image
+                const ogImg = r.metadata?.ogImage || r.metadata?.image || r.metadata?.["og:image"];
+                if (ogImg && !isImageBad(ogImg) && !usedUrls.has(ogImg)) {
+                  newImage = ogImg;
+                  break;
+                }
+                if (r.markdown) {
+                  const mdImg = extractFirstGoodImage(r.markdown);
+                  if (mdImg && !usedUrls.has(mdImg)) { newImage = mdImg; break; }
+                }
+              }
+            }
+          } catch (e) {
+            console.warn(`  Search failed for "${article.title}"`);
+          }
+          await new Promise(r => setTimeout(r, 2000));
+        }
+
+        // Strategy 2: Scrape the source_url directly (for non-listing pages)
+        if (!newImage && article.source_url && !isListingPage) {
+          try {
+            console.log(`  Scraping ${article.source_url} for "${article.title}"...`);
+            const scrapeResp = await fetch("https://api.firecrawl.dev/v1/scrape", {
+              method: "POST",
+              headers: { "Authorization": `Bearer ${FIRECRAWL_API_KEY}`, "Content-Type": "application/json" },
+              body: JSON.stringify({
+                url: article.source_url,
+                formats: ["markdown"],
+                onlyMainContent: false,
+                waitFor: 3000,
+                timeout: 30000,
+              }),
+            });
+            if (scrapeResp.ok) {
+              const scrapeData = await scrapeResp.json();
+              const md = scrapeData.data?.markdown || scrapeData.markdown || "";
+              const meta = scrapeData.data?.metadata || {};
+              const ogImg = meta.ogImage || meta.image || meta["og:image"];
+              if (ogImg && !isImageBad(ogImg) && !usedUrls.has(ogImg)) {
+                newImage = ogImg;
+              } else {
+                const inlineImg = extractFirstGoodImage(md);
+                if (inlineImg && !usedUrls.has(inlineImg)) newImage = inlineImg;
+              }
+            }
+          } catch (e) {
+            console.warn(`  Scrape failed for "${article.title}"`);
+          }
+          await new Promise(r => setTimeout(r, 2000));
+        }
+
+        // Strategy 3: General web search
+        if (!newImage) {
+          try {
+            const shortTitle = article.title.split(/\s+/).slice(0, 8).join(" ");
+            console.log(`  Web search for "${shortTitle}"...`);
+            const searchResp = await fetch("https://api.firecrawl.dev/v1/search", {
+              method: "POST",
+              headers: { "Authorization": `Bearer ${FIRECRAWL_API_KEY}`, "Content-Type": "application/json" },
+              body: JSON.stringify({
+                query: `${shortTitle} Dubai real estate`,
+                limit: 5,
+              }),
+            });
+            if (searchResp.ok) {
+              const searchData = await searchResp.json();
+              for (const r of (searchData.data || [])) {
+                const ogImg = r.metadata?.ogImage || r.metadata?.image || r.metadata?.["og:image"];
+                if (ogImg && !isImageBad(ogImg) && !usedUrls.has(ogImg) && ogImg.length > 30) {
+                  newImage = ogImg;
+                  break;
+                }
+              }
+            }
+          } catch (e) {
+            console.warn(`  Web search failed for "${article.title}"`);
+          }
+          await new Promise(r => setTimeout(r, 2000));
+        }
+
+        if (newImage) {
+          usedUrls.add(newImage);
+          const { error } = await supabase.from("market_news").update({ image_url: newImage }).eq("id", article.id);
+          if (!error) {
+            fixedCount++;
+            console.log(`  ✓ Fixed: "${article.title}" -> ${newImage.substring(0, 80)}`);
+          } else {
+            fixErrors.push(`${article.title}: update failed`);
+          }
+        } else {
+          console.log(`  ✗ No image found for "${article.title}"`);
+        }
+      }
+
+      return new Response(JSON.stringify({
+        success: true,
+        fixed: fixedCount,
+        total: nullImageArticles.length,
+        errors: fixErrors.length > 0 ? fixErrors : undefined,
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // ===================== COLLECT ACTION (existing) =====================
     const sourcesToProcess = sources?.length 
       ? AUTHORIZED_NEWS_SOURCES.filter(s => sources.includes(s.name))
