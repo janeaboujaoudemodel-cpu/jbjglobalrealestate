@@ -17,6 +17,7 @@ import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav
 import { SEOHead } from "@/components/SEOHead";
 import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
+import { optimizeStorageImageUrl } from "@/lib/imageUtils";
 
 const ITEMS_PER_PAGE = 24;
 
@@ -204,7 +205,7 @@ const AreaGuides = () => {
                         <div className="relative h-[180px] flex-shrink-0">
                           {(area.hero_image_url || area.image_url) ? (
                             <img
-                              src={area.hero_image_url || area.image_url}
+                              src={optimizeStorageImageUrl(area.hero_image_url || area.image_url, 600, 70)}
                               alt={area.name}
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                               loading={index < 8 ? "eager" : "lazy"}
