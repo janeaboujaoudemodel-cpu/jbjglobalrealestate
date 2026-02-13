@@ -12,8 +12,6 @@ function isGoodAreaImage(url: string): boolean {
   if (bad.test(url)) return false;
   if (url.length < 60) return false;
   if (url.includes("unsplash.com") || url.includes("pexels.com")) return false;
-  // Reject individual project renders - we need community/aerial views
-  if (url.includes("reelly-backend.s3.amazonaws.com/projects/")) return false;
   if (url.includes("reelly-backend.s3.amazonaws.com")) return false;
   if (url.includes("api.reelly.io")) return false;
   if (url.includes("pinterest.com")) return false;
@@ -21,8 +19,55 @@ function isGoodAreaImage(url: string): boolean {
   return true;
 }
 
+// Curated premium community images for major areas (instant, free, reliable)
+const CURATED_AREA_IMAGES: Record<string, string> = {
+  "Dubai Islands": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/dubai-islands.jpg",
+  "Al Marjan Island": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/al-marjan-island.jpg",
+  "JVT (Jumeirah Village Triangle)": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/jumeirah-village-triangle.jpg",
+  "Arjan": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/arjan.jpg",
+  "Damac Hills": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/damac-hills.jpg",
+  "Damac Lagoons": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/damac-lagoons.jpg",
+  "Town Square": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/town-square.jpg",
+  "Meydan (Nad Al Sheba  1)": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/meydan.jpg",
+  "Dubai Production City": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/dubai-production-city.jpg",
+  "Dubai International City": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/international-city.jpg",
+  "Dubailand Residence Complex": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/dubailand-residence-complex.jpg",
+  "The Valley": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/the-valley.jpg",
+  "Majan": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/al-furjan.jpg",
+  "Dubai Silicon Oasis": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/dubai-silicon-oasis.jpg",
+  "Dubai Motor City": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/motor-city.jpg",
+  "Dubai Investments Park": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/dubai-investments-park.jpg",
+  "Dubai Studio City": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/dubai-studio-city.jpg",
+  "Dubai Science Park": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/dubai-science-park.jpg",
+  "Dubai Industrial City": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/dubai-industrial-city.jpg",
+  "Dubai Expo City": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/expo-city.jpg",
+  "Mina Rashid": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/mina-rashid.jpg",
+  "Dubai Harbour": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/dubai-harbour.jpg",
+  "City Walk": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/city-walk.jpg",
+  "MJL (Madinat Jumeirah Living)": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/madinat-jumeirah-living.jpg",
+  "Jumeirah Islands": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/jumeirah-islands.jpg",
+  "Maritime City": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/maritime-city.jpg",
+  "Jebel Ali Village": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/jebel-ali.jpg",
+  "Al Jaddaf Waterfront": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/al-jaddaf.jpg",
+  "Safa Park": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/al-safa.jpg",
+  "Maryam Island": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/maryam-island.jpg",
+  "Siniya Island": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/siniya-island.jpg",
+  "Yas Island": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/yas-island.jpg",
+  "Al Saadiyat island": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/saadiyat-island.jpg",
+  "Al Maryah Island": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/al-maryah-island.jpg",
+  "Zayed City": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/zayed-city.jpg",
+  "Grand Polo Club and Resort": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/dubai-polo-and-equestrian-club.jpg",
+  "World of Islands": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/the-world-islands.jpg",
+  "Zabeel 1&2": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/zabeel.jpg",
+  "The Oasis": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/the-oasis.jpg",
+  "City Of Arabia": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/dubailand.jpg",
+  "Al Satwa": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/al-satwa.jpg",
+  "Al Jazeera Al Hamra": "https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/filters:format(webp)/community/al-jazeera-al-hamra.jpg",
+};
+
 /**
  * Enrich area images - REAL PHOTOS ONLY, NO AI GENERATION:
+ * 0. Check curated image map (instant, free)
  * 1. Try project images from DB
  * 2. Firecrawl Search on property portals (bayut, propertyfinder)
  * 3. Broader Firecrawl Search
@@ -41,7 +86,7 @@ Deno.serve(async (req) => {
     const supabase = createClient(supabaseUrl, serviceKey);
 
     const body = await req.json().catch(() => ({}));
-    const batchSize = body.batch_size || 10;
+    const batchSize = body.batch_size || 20;
 
     // Get areas: missing images OR with placeholder/AI-generated images
     const { data: areas, error: fetchErr } = await supabase
@@ -72,7 +117,16 @@ Deno.serve(async (req) => {
       let source = "none";
       const oldImageUrl = area.image_url;
 
-      // Step 1: Try project images from DB
+      // Step 0: Check curated image map (instant, free, reliable)
+      const curatedUrl = CURATED_AREA_IMAGES[area.name];
+      if (curatedUrl) {
+        imageUrl = curatedUrl;
+        source = "curated";
+        console.log(`${area.name}: using curated image`);
+      }
+
+      // Step 1: Try project images from DB (only if no curated)
+      if (!imageUrl) {
       const { data: projects } = await supabase
         .from("projects")
         .select("id, main_image_url")
@@ -105,6 +159,7 @@ Deno.serve(async (req) => {
           }
         }
       }
+      } // end Step 1 guard
 
       // Step 2: Firecrawl Search on property portals
       if (!imageUrl && firecrawlApiKey) {
