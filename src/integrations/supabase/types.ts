@@ -5389,58 +5389,85 @@ export type Database = {
       }
       developers: {
         Row: {
+          ceo_name: string | null
           completed_projects: number | null
           created_at: string
           description: string | null
+          expected_completion_year: number | null
           feature_image_url: string | null
           founded_year: number | null
           headquarters: string | null
           id: string
+          license_number: string | null
           logo_url: string | null
           logo_url_dark: string | null
           logo_url_processed: string | null
           name: string
+          notable_projects: string | null
           offplan_projects: number | null
+          parent_company: string | null
           portfolio_worth: number | null
           rank: number | null
           slug: string
+          specialization: string | null
+          total_units_delivered: number | null
+          upcoming_units: number | null
           updated_at: string
+          website_url: string | null
         }
         Insert: {
+          ceo_name?: string | null
           completed_projects?: number | null
           created_at?: string
           description?: string | null
+          expected_completion_year?: number | null
           feature_image_url?: string | null
           founded_year?: number | null
           headquarters?: string | null
           id?: string
+          license_number?: string | null
           logo_url?: string | null
           logo_url_dark?: string | null
           logo_url_processed?: string | null
           name: string
+          notable_projects?: string | null
           offplan_projects?: number | null
+          parent_company?: string | null
           portfolio_worth?: number | null
           rank?: number | null
           slug: string
+          specialization?: string | null
+          total_units_delivered?: number | null
+          upcoming_units?: number | null
           updated_at?: string
+          website_url?: string | null
         }
         Update: {
+          ceo_name?: string | null
           completed_projects?: number | null
           created_at?: string
           description?: string | null
+          expected_completion_year?: number | null
           feature_image_url?: string | null
           founded_year?: number | null
           headquarters?: string | null
           id?: string
+          license_number?: string | null
           logo_url?: string | null
           logo_url_dark?: string | null
           logo_url_processed?: string | null
           name?: string
+          notable_projects?: string | null
           offplan_projects?: number | null
+          parent_company?: string | null
           portfolio_worth?: number | null
           rank?: number | null
           slug?: string
+          specialization?: string | null
+          total_units_delivered?: number | null
+          upcoming_units?: number | null
           updated_at?: string
+          website_url?: string | null
         }
         Relationships: []
       }

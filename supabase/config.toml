@@ -288,3 +288,6 @@ verify_jwt = false
 
 [functions.import-provident-blog]
 verify_jwt = false
+
+[functions.enrich-developer-data]
+verify_jwt = false
