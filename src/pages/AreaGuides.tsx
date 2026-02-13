@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { MapPin, Building2, TrendingUp, Search, X, Flame, ArrowRight, Loader2 } from "lucide-react";
+import jbjMonogram from "@/assets/jbj-monogram-light-bg.png";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
@@ -343,11 +344,8 @@ const AreaGuides = () => {
                             loading={index < 8 ? "eager" : "lazy"}
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-zinc-800 via-zinc-900 to-black flex items-center justify-center">
-                            <div className="text-center">
-                              <MapPin className="w-10 h-10 text-gold/70 mx-auto mb-2" />
-                              <span className="text-gold/90 text-xs font-medium tracking-wider uppercase">Area</span>
-                            </div>
+                          <div className="w-full h-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
+                            <img src={jbjMonogram} alt="" className="w-16 h-16 object-contain opacity-10" />
                           </div>
                         )}
 
