@@ -124,7 +124,7 @@ export const NewsletterBrevo = ({
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="flex-1 bg-card border border-gold/30 text-foreground placeholder:text-muted-foreground focus:border-gold focus:ring-gold/30"
+          className="flex-1 bg-card border-2 border-gold/50 text-foreground placeholder:text-muted-foreground focus:border-gold focus:ring-gold/30 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] focus:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-shadow"
           required
           disabled={isSubmitting}
         />

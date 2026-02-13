@@ -10,6 +10,7 @@ interface PremiumHeroButtonProps {
   iconPosition?: "left" | "right";
   className?: string;
   size?: "default" | "lg";
+  variant?: "dark-bg" | "light-bg";
 }
 
 /**
@@ -35,7 +36,8 @@ export const PremiumHeroButton = ({
   icon: Icon,
   iconPosition = "right",
   className,
-  size = "default"
+  size = "default",
+  variant = "dark-bg"
 }: PremiumHeroButtonProps) => {
   const DefaultIcon = ArrowUpRight;
   const IconComponent = Icon || DefaultIcon;
@@ -43,6 +45,8 @@ export const PremiumHeroButton = ({
   const sizeClasses = size === "lg" 
     ? "px-8 md:px-10 py-4 md:py-5 text-base md:text-lg"
     : "px-6 md:px-8 py-3 md:py-4 text-sm md:text-base";
+
+  const isLight = variant === "light-bg";
   
   const buttonContent = (
     <button 
@@ -52,31 +56,46 @@ export const PremiumHeroButton = ({
         sizeClasses,
         "font-semibold tracking-wide",
         "rounded-xl transition-all duration-300",
-        "bg-transparent border-2 border-white/70 hover:border-gold/80",
-        "hover:-translate-y-0.5",
+        isLight 
+          ? "bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold/80 hover:-translate-y-1"
+          : "bg-transparent border-2 border-white/70 hover:border-gold/80 hover:-translate-y-0.5",
         className
       )}
       style={{
-        boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.15), 0 4px 20px rgba(0,0,0,0.4)',
+        boxShadow: isLight
+          ? '0 2px 8px rgba(200,167,102,0.2), 0 1px 3px rgba(0,0,0,0.1)'
+          : 'inset 0 1px 2px rgba(255,255,255,0.15), 0 4px 20px rgba(0,0,0,0.4)',
+      }}
+      onMouseEnter={(e) => {
+        if (isLight) {
+          e.currentTarget.style.boxShadow = '0 8px 25px rgba(200,167,102,0.4), 0 4px 12px rgba(0,0,0,0.15)';
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (isLight) {
+          e.currentTarget.style.boxShadow = '0 2px 8px rgba(200,167,102,0.2), 0 1px 3px rgba(0,0,0,0.1)';
+        }
       }}
     >
       {iconPosition === "left" && (
         <IconComponent 
-          className="w-4 h-4 md:w-5 md:h-5 text-gold group-hover:text-black transition-colors" 
+          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors", isLight ? "text-gold" : "text-gold group-hover:text-black")}
           style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} 
         />
       )}
-      <span className="text-white group-hover:text-black transition-colors">{children}</span>
+      <span className={cn("transition-colors", isLight ? "text-black" : "text-white group-hover:text-black")}>{children}</span>
       {iconPosition === "right" && (
         <IconComponent 
-          className="w-4 h-4 md:w-5 md:h-5 text-gold group-hover:text-black transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" 
+          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-gold" : "text-gold group-hover:text-black")}
           style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} 
         />
       )}
-      {/* Hover fill effect - champagne gradient */}
-      <span 
-        className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 border-2 border-gold/60" 
-      />
+      {/* Hover fill effect - champagne gradient (only for dark-bg variant) */}
+      {!isLight && (
+        <span 
+          className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 border-2 border-gold/60" 
+        />
+      )}
     </button>
   );
 
