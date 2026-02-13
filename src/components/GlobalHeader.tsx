@@ -10,7 +10,8 @@ import {
   Home, Heart, User, LogOut, Settings, Menu, 
   Phone, Building2, Newspaper, ClipboardCheck, FileText,
   Sparkles, Search, Users, BookOpen, ChevronDown, Briefcase, UserCircle, FolderOpen, Monitor,
-  GraduationCap, BarChart3, MapPin, Award, UserPlus, Globe, HelpCircle
+  GraduationCap, BarChart3, MapPin, Award, UserPlus, Globe, HelpCircle,
+  Lightbulb, Target, Calendar, Shield, Palette, Cpu, Wrench, Layers, LayoutDashboard, Calculator, Key, Headphones
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -664,15 +665,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   side="right"
                   className="bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-l border-gold/30 w-[320px] sm:w-[360px] p-0 flex flex-col h-[100dvh] top-0 inset-y-0"
                 >
-                {/* Menu Header - Text only, no logo to avoid overlap with background header */}
-                <div className="relative border-b border-gold/30 flex items-center px-5 h-16 sm:h-20 shrink-0">
+                {/* Menu Header - Bigger monogram */}
+                <div className="relative border-b border-gold/30 flex items-center gap-3 px-5 py-3 shrink-0">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-                  <span 
-                    className="text-black font-bold text-sm tracking-[0.06em] uppercase leading-tight"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
-                  >
-                    JBJ Global Real Estate
-                  </span>
+                  <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />
+                  <div className="flex flex-col" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <span className="text-[12px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
+                    <span className="text-[12px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
+                  </div>
                 </div>
 
                 {/* Quick Actions Row - All aligned with fixed widths */}
@@ -858,7 +858,59 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                     <div className="h-px bg-gold/20 my-2" />
 
-                    {/* 6. Services - Collapsible */}
+                    {/* 6. Insights - Collapsible (NEW) */}
+                    <Collapsible>
+                      <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
+                        <span>Insights</span>
+                        <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="pl-2">
+                          {/* News & Updates */}
+                          <p className="px-4 py-1.5 text-[10px] uppercase tracking-wider font-semibold text-black/40">News & Updates</p>
+                          <Link to="/news" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Newspaper className="w-4 h-4 text-gold" />Latest News</Link>
+                          <Link to="/news?category=market" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><BarChart3 className="w-4 h-4 text-gold" />Market Updates</Link>
+                          <Link to="/press-kit" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><FileText className="w-4 h-4 text-gold" />Press Releases</Link>
+                          {/* Market Intelligence */}
+                          <p className="px-4 py-1.5 mt-2 text-[10px] uppercase tracking-wider font-semibold text-black/40">Market Intelligence</p>
+                          <Link to="/market-intelligence/overview" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><BarChart3 className="w-4 h-4 text-gold" />Market Overview</Link>
+                          <Link to="/market-intelligence/areas" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Target className="w-4 h-4 text-gold" />Area Intelligence</Link>
+                          <Link to="/market-intelligence/reports" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><FileText className="w-4 h-4 text-gold" />Market Reports</Link>
+                          {/* Guides */}
+                          <p className="px-4 py-1.5 mt-2 text-[10px] uppercase tracking-wider font-semibold text-black/40">Guides</p>
+                          <Link to="/guides" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><BookOpen className="w-4 h-4 text-gold" />Guides Library</Link>
+                          <Link to="/buyer-guide" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><FileText className="w-4 h-4 text-gold" />Buyer Guide</Link>
+                          <Link to="/seller-guide" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><FileText className="w-4 h-4 text-gold" />Seller Guide</Link>
+                          <Link to="/guides/golden-visa-uae" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Award className="w-4 h-4 text-gold" />Golden Visa</Link>
+                          <Link to="/faq" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><HelpCircle className="w-4 h-4 text-gold" />FAQ</Link>
+                          {/* Services */}
+                          <p className="px-4 py-1.5 mt-2 text-[10px] uppercase tracking-wider font-semibold text-black/40">Services</p>
+                          <Link to="/services" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Briefcase className="w-4 h-4 text-gold" />Our Services</Link>
+                          <Link to="/services/property-management" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Building2 className="w-4 h-4 text-gold" />Property Management</Link>
+                          <Link to="/partners/mortgage" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Calculator className="w-4 h-4 text-gold" />Mortgage Advisory</Link>
+                          {/* Business Suites */}
+                          <p className="px-4 py-1.5 mt-2 text-[10px] uppercase tracking-wider font-semibold text-black/40">Business Suites</p>
+                          <Link to="/business-suite/real-estate" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Building2 className="w-4 h-4 text-gold" />Real Estate Suite</Link>
+                          <Link to="/business-suite/broker" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Cpu className="w-4 h-4 text-gold" />Broker Intelligence</Link>
+                          <Link to="/toolkit" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Sparkles className="w-4 h-4 text-gold" />All Tools</Link>
+                          {/* Company */}
+                          <p className="px-4 py-1.5 mt-2 text-[10px] uppercase tracking-wider font-semibold text-black/40">Company</p>
+                          <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Building2 className="w-4 h-4 text-gold" />About JBJ</Link>
+                          <Link to="/team" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Users className="w-4 h-4 text-gold" />Meet the Team</Link>
+                          <Link to="/awards" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Award className="w-4 h-4 text-gold" />Awards</Link>
+                          <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Phone className="w-4 h-4 text-gold" />Contact Us</Link>
+                          {/* Legal */}
+                          <p className="px-4 py-1.5 mt-2 text-[10px] uppercase tracking-wider font-semibold text-black/40">Legal</p>
+                          <Link to="/terms" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><FileText className="w-4 h-4 text-gold" />Terms of Service</Link>
+                          <Link to="/privacy" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Shield className="w-4 h-4 text-gold" />Privacy Policy</Link>
+                          <Link to="/trust-and-audit-center" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:text-gold hover:bg-gold/5 transition-colors rounded-lg"><Shield className="w-4 h-4 text-gold" />Trust & Audit</Link>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+
+                    <div className="h-px bg-gold/20 my-2" />
+
+                    {/* 7. Services - Collapsible */}
                     <Collapsible>
                       <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-2 text-xs uppercase tracking-wider font-semibold text-gold hover:bg-gold/5 rounded-lg transition-colors">
                         <span>Services</span>
@@ -1193,13 +1245,20 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                       Help & Navigation Guide
                     </button>
                     
-                    {/* Monogram Branding Footer */}
-                    <div className="mt-4 pt-4 border-t border-gold/20 flex justify-center">
+                    {/* Monogram Branding Footer - Bigger */}
+                    <div className="mt-4 pt-4 border-t border-gold/20 flex flex-col items-center gap-2">
                       <img 
                         src={jbjMonogramLightBg}
                         alt="JBJ Global Real Estate"
-                        className="w-12 h-12 object-contain opacity-60"
+                        className="w-16 h-16 sm:w-20 sm:h-20 object-contain opacity-60"
                       />
+                      <a
+                        href="mailto:info@jbjglobal.com"
+                        className="flex items-center gap-2 text-sm font-bold text-gold hover:text-gold-dark transition-colors"
+                      >
+                        <Headphones className="w-4 h-4" />
+                        Contact Support
+                      </a>
                     </div>
                   </nav>
                 </ScrollArea>
