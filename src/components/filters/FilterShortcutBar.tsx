@@ -128,7 +128,7 @@ const SORT_OPTIONS: { value: ShortcutFilterState['sortBy']; label: string }[] = 
   { value: 'price_asc', label: 'Low-High' },
   { value: 'price_desc', label: 'High-Low' },
   { value: 'alpha', label: 'A-Z' },
-  { value: 'most_projects', label: 'Most Projects' },
+  
   { value: 'trending', label: 'Trending' },
 ];
 
