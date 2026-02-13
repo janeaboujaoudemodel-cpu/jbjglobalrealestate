@@ -14,6 +14,8 @@ function isGoodAreaImage(url: string): boolean {
   if (url.includes("unsplash.com") || url.includes("pexels.com")) return false;
   // Reject individual project renders - we need community/aerial views
   if (url.includes("reelly-backend.s3.amazonaws.com/projects/")) return false;
+  if (url.includes("reelly-backend.s3.amazonaws.com")) return false;
+  if (url.includes("api.reelly.io")) return false;
   if (url.includes("pinterest.com")) return false;
   if (url.includes("keyspacerealty.com")) return false;
   return true;
@@ -46,7 +48,7 @@ Deno.serve(async (req) => {
       .from("areas")
       .select("id, name, slug, image_url")
       .eq("is_active", true)
-      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,image_url.ilike.%supabase.co/storage%area-images%,image_url.ilike.%reelly-backend.s3%projects%,image_url.ilike.%pinterest.com%,image_url.ilike.%keyspacerealty.com%")
+      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,image_url.ilike.%supabase.co/storage%area-images%,image_url.ilike.%reelly-backend.s3%,image_url.ilike.%api.reelly.io%,image_url.ilike.%pinterest.com%,image_url.ilike.%keyspacerealty.com%")
       .limit(batchSize);
 
     if (fetchErr) throw fetchErr;
@@ -61,7 +63,7 @@ Deno.serve(async (req) => {
       .from("areas")
       .select("id", { count: "exact", head: true })
       .eq("is_active", true)
-      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,image_url.ilike.%supabase.co/storage%area-images%,image_url.ilike.%reelly-backend.s3%projects%,image_url.ilike.%pinterest.com%,image_url.ilike.%keyspacerealty.com%");
+      .or("image_url.is.null,image_url.ilike.%unsplash%,image_url.ilike.%pexels%,image_url.ilike.%supabase.co/storage%area-images%,image_url.ilike.%reelly-backend.s3%,image_url.ilike.%api.reelly.io%,image_url.ilike.%pinterest.com%,image_url.ilike.%keyspacerealty.com%");
 
     const results: { area: string; image_url: string | null; status: string; source: string }[] = [];
 
@@ -78,7 +80,7 @@ Deno.serve(async (req) => {
         .not("main_image_url", "is", null)
         .limit(1);
 
-      if (projects && projects.length > 0 && projects[0].main_image_url) {
+      if (projects && projects.length > 0 && projects[0].main_image_url && isGoodAreaImage(projects[0].main_image_url)) {
         imageUrl = projects[0].main_image_url;
         source = "project";
       } else {
@@ -97,7 +99,7 @@ Deno.serve(async (req) => {
             .order("display_order", { ascending: true })
             .limit(1);
 
-          if (images && images.length > 0) {
+          if (images && images.length > 0 && isGoodAreaImage(images[0].image_url)) {
             imageUrl = images[0].image_url;
             source = "project_images";
           }
