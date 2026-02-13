@@ -466,8 +466,10 @@ const PropertiesReelly = () => {
 
       {/* DLD Market Intelligence - hidden in map mode */}
       {!isMapMode && (
-        <div className="lg:ml-[200px]">
-          <DLDMarketWidget />
+        <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+          <div className="lg:pl-[200px]">
+            <DLDMarketWidget />
+          </div>
         </div>
       )}
        </div>
