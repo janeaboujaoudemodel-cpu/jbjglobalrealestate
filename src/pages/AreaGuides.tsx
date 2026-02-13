@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
 
 import { SEOHead } from "@/components/SEOHead";
 import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
@@ -133,8 +134,16 @@ const AreaGuides = () => {
     return () => document.body.classList.remove('filter-bar-fixed');
   }, [isFixed, bottomReached]);
 
+  const showVerticalNav = isFixed && !bottomReached;
+
   return (
     <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
+      {/* Vertical Nav - desktop only, shown when filter bar is fixed */}
+      {showVerticalNav && (
+        <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
+          <PropertiesVerticalNav />
+        </div>
+      )}
       <SEOHead 
         title="Areas in Dubai & UAE | JBJ Global Real Estate"
         description="Explore real estate areas across Dubai and the UAE. Browse properties by neighborhood with verified data."
@@ -197,7 +206,7 @@ const AreaGuides = () => {
       <div ref={sentinelRef} className="h-0 w-full" />
 
       {/* Filter bar - inline */}
-      <section className="py-4 pb-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+      <section className={`py-4 pb-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark transition-all duration-300 ${showVerticalNav ? 'lg:ml-[200px]' : ''}`}>
         <div className="container mx-auto px-4 space-y-3">
           {/* FilterShortcutBar */}
           <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
@@ -205,7 +214,7 @@ const AreaGuides = () => {
 
       {/* Fixed portal copy — only when scrolled past sentinel */}
       {isFixed && !bottomReached && createPortal(
-        <div className="fixed top-0 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-shadow duration-200">
+        <div className={`fixed top-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-all duration-300 ${showVerticalNav ? 'left-0 lg:left-[200px]' : 'left-0'}`}>
           <div className="container mx-auto px-4 space-y-2">
             <FilterShortcutBar
               variant="light"
@@ -220,10 +229,10 @@ const AreaGuides = () => {
       </section>
 
       {/* Gold divider between filters and cards */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+      <div className={`w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent transition-all duration-300 ${showVerticalNav ? 'lg:ml-[200px]' : ''}`} />
 
       {/* Areas Grid - distinct darker champagne zone */}
-      <section className="pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]">
+      <section className={`pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] transition-all duration-300 ${showVerticalNav ? 'lg:ml-[200px]' : ''}`}>
         <div className="container mx-auto px-4">
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
@@ -373,10 +382,12 @@ const AreaGuides = () => {
       </section>
 
       {/* DLD Market Intelligence */}
-      <DLDMarketWidget />
+      <div className={`transition-all duration-300 ${showVerticalNav ? 'lg:ml-[200px]' : ''}`}>
+        <DLDMarketWidget />
+      </div>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+      <section className={`py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark transition-all duration-300 ${showVerticalNav ? 'lg:ml-[200px]' : ''}`}>
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Can't Find What You're Looking For?
