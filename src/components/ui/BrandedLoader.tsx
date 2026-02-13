@@ -12,20 +12,13 @@ interface BrandedLoaderProps {
 export function BrandedLoader({ text = "Loading...", className = "" }: BrandedLoaderProps) {
   return (
     <div className={`flex flex-col items-center justify-center min-h-screen gap-6 ${className}`}>
-      {/* Logo container with fill animation */}
+      {/* Logo — full opacity with premium glow */}
       <div className="relative w-24 h-24 md:w-32 md:h-32">
-        {/* Base logo — faded */}
         <img
           src={jbjMonogram}
           alt="Loading"
-          className="absolute inset-0 w-full h-full object-contain opacity-20"
-        />
-        {/* Filled logo — clip-path animates bottom to top */}
-        <img
-          src={jbjMonogram}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 w-full h-full object-contain animate-logo-fill"
+          className="w-full h-full object-contain animate-pulse"
+          style={{ filter: "drop-shadow(0 0 20px rgba(200,167,102,0.4))" }}
         />
       </div>
 

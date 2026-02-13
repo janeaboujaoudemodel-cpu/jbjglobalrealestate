@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, ArrowRight, Loader2, Phone, ArrowUpRight } from "lucide-react";
+import jbjMonogram from "@/assets/jbj-monogram-light-bg.png";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { useAreaBySlug, useAreas } from "@/hooks/useAreas";
@@ -176,8 +177,8 @@ const AreaDetail = () => {
                     {relatedArea.image_url ? (
                       <img src={relatedArea.image_url} alt={relatedArea.name} className="w-full h-36 object-cover flex-shrink-0 transition-transform duration-500 group-hover:scale-110" loading="lazy" />
                     ) : (
-                      <div className="w-full h-36 bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center flex-shrink-0">
-                        <MapPin className="w-8 h-8 text-gold/40" />
+                      <div className="w-full h-36 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center flex-shrink-0">
+                        <img src={jbjMonogram} alt="" className="w-12 h-12 object-contain opacity-10" />
                       </div>
                     )}
                     <div className="p-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex-1 flex flex-col justify-center">

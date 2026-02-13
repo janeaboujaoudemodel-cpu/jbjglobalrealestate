@@ -17,6 +17,13 @@ const BLOCKED_DOMAINS = [
   "reelly-backend.s3.amazonaws.com",
   "api.reelly.io",
   "keyspacerealty.com",
+  "providentestate.com",
+  "d3h330vgpwpjr8.cloudfront.net",
+  "shutterstock.com",
+  "alamy.com",
+  "gjproperties.ae",
+  "documents1.worldbank.org",
+  "propertyfinder.ae",
 ];
 
 function isBlockedUrl(url: string): boolean {
@@ -27,7 +34,7 @@ function isGoodAreaImage(url: string): boolean {
   if (!url || !url.startsWith("http")) return false;
   if (url.length < 60) return false;
   if (isBlockedUrl(url)) return false;
-  const bad = /logo|favicon|icon|navbar|sprite|avatar|16x16|32x32|48x48|64x64|placeholder|default|blank|spacer|transparent|pixel\.gif|thumbnail|90x90|width=200|width=90/i;
+  const bad = /logo|favicon|icon|navbar|sprite|avatar|16x16|32x32|48x48|64x64|placeholder|default|blank|spacer|transparent|pixel\.gif|thumbnail|90x90|width=200|width=90|floor.?plan|interior|apartment|bedroom|bathroom|kitchen|living.?room|provident/i;
   if (bad.test(url)) return false;
   return true;
 }
