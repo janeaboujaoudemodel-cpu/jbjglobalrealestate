@@ -8,9 +8,8 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { MapPin, Building2, TrendingUp, Search, X, Flame, ArrowRight, Loader2 } from "lucide-react";
+import { MapPin, Building2, TrendingUp, Flame, ArrowRight, Loader2 } from "lucide-react";
 import jbjMonogram from "@/assets/jbj-monogram-light-bg.png";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -57,8 +56,6 @@ const staggerContainer = {
 type SortOption = "property_count" | "trending" | "alphabetical";
 
 const AreaGuides = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedEmirate, setSelectedEmirate] = useState("all");
   const [sortBy, setSortBy] = useState<SortOption>("property_count");
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const [isFixed, setIsFixed] = useState(false);
@@ -72,20 +69,7 @@ const AreaGuides = () => {
   // Filter and sort areas from database
   const filteredAreas = useMemo(() => {
     if (!areas) return [];
-    
-    let filtered = areas.filter((area) => {
-      const q = searchQuery.trim().toLowerCase();
-      const matchesSearch =
-        q === "" ||
-        area.name.toLowerCase().includes(q) ||
-        (area.description ?? "").toLowerCase().includes(q);
-      
-      const matchesEmirate = 
-        selectedEmirate === "all" || 
-        area.emirate.toLowerCase() === selectedEmirate.toLowerCase();
-      
-      return matchesSearch && matchesEmirate;
-    });
+    let filtered = [...areas];
 
     switch (sortBy) {
       case "trending":
@@ -105,7 +89,7 @@ const AreaGuides = () => {
     }
 
     return filtered;
-  }, [areas, searchQuery, selectedEmirate, sortBy]);
+  }, [areas, sortBy]);
 
   // IntersectionObserver for fixed positioning
   useEffect(() => {
@@ -207,49 +191,26 @@ const AreaGuides = () => {
       {/* Filter bar - inline */}
       <section className="py-4 pb-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
         <div className="container mx-auto px-4 space-y-3">
-          {/* Search input */}
-          {/* Search + Sort row */}
-          <div className="flex flex-col sm:flex-row gap-3 items-center justify-center max-w-4xl mx-auto">
-            <div className="relative flex-1 w-full">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
-              <Input
-                placeholder="Search area, project or keyword..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 pr-12 py-6 bg-white/95 backdrop-blur-sm border-0 text-black text-base rounded-xl shadow-2xl"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              )}
-            </div>
-            {/* Sort pills */}
-            <div className="flex gap-1.5 flex-shrink-0">
-              {([
-                { key: "property_count" as SortOption, label: "Most Projects" },
-                { key: "trending" as SortOption, label: "Trending" },
-                { key: "alphabetical" as SortOption, label: "A-Z" },
-              ]).map(opt => (
-                <button
-                  key={opt.key}
-                  onClick={() => setSortBy(opt.key)}
-                  className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
-                    sortBy === opt.key
-                      ? "bg-black text-gold border border-gold shadow-md"
-                      : "bg-white border border-gold/30 text-zinc-600 hover:border-gold"
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
+          {/* Sort pills */}
+          <div className="flex gap-1.5 flex-shrink-0 items-center justify-center max-w-4xl mx-auto">
+            {([
+              { key: "property_count" as SortOption, label: "Most Projects" },
+              { key: "trending" as SortOption, label: "Trending" },
+              { key: "alphabetical" as SortOption, label: "A-Z" },
+            ]).map(opt => (
+              <button
+                key={opt.key}
+                onClick={() => setSortBy(opt.key)}
+                className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
+                  sortBy === opt.key
+                    ? "bg-black text-gold border border-gold shadow-md"
+                    : "bg-white border border-gold/30 text-zinc-600 hover:border-gold"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
           </div>
-
-          {/* Emirates pills */}
 
           {/* FilterShortcutBar */}
           <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
@@ -263,18 +224,6 @@ const AreaGuides = () => {
               variant="light"
               filters={shortcutFilters}
               onFilterChange={setShortcutFilters}
-              searchSlot={
-                <div className="relative flex-shrink-0 w-48 md:w-64">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
-                  <input
-                    placeholder="Search areas..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full h-8 pl-9 pr-3 rounded-full bg-white/70 border border-gold/30 text-black text-xs placeholder:text-black/30 focus:outline-none focus:border-gold/60 transition-colors"
-                    style={{ fontSize: '16px' }}
-                  />
-                </div>
-              }
             />
           </div>
         </div>,
@@ -301,15 +250,7 @@ const AreaGuides = () => {
           ) : filteredAreas.length === 0 ? (
             <div className="text-center py-20">
               <MapPin className="w-12 h-12 text-black/30 mx-auto mb-4" />
-              <p className="text-black/50 text-lg">No areas found matching your criteria.</p>
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="mt-4 text-gold hover:underline"
-                >
-                  Clear search
-                </button>
-              )}
+              <p className="text-black/50 text-lg">No areas found.</p>
             </div>
           ) : (
             <motion.div
