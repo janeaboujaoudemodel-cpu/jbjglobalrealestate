@@ -371,20 +371,25 @@ const News = () => {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                           referrerPolicy="no-referrer"
                           onError={(e) => {
-                            // Replace broken image with gradient fallback
                             const parent = e.currentTarget.parentElement;
                             if (parent) {
                               e.currentTarget.style.display = 'none';
                               const fallback = document.createElement('div');
-                              fallback.className = 'w-full h-full min-h-[250px] bg-gradient-to-br from-zinc-900 via-zinc-800 to-black flex items-center justify-center';
-                              fallback.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold/30"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>';
+                              fallback.className = 'w-full h-full min-h-[250px] bg-gradient-to-br from-amber-900/80 via-zinc-900 to-black flex flex-col items-center justify-center gap-3';
+                              const cat = filteredNews[0]?.category || 'News';
+                              const src = filteredNews[0]?.source || '';
+                              fallback.innerHTML = `<div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gold/80 text-sm font-semibold uppercase tracking-wider">${cat}</span><span class="text-zinc-500 text-xs">${src}</span>`;
                               parent.insertBefore(fallback, e.currentTarget);
                             }
                           }}
                         />
                       ) : (
-                        <div className="w-full h-full min-h-[250px] bg-gradient-to-br from-zinc-900 via-zinc-800 to-black flex items-center justify-center">
-                          <Newspaper className="w-16 h-16 text-gold/30" />
+                        <div className="w-full h-full min-h-[250px] bg-gradient-to-br from-amber-900/80 via-zinc-900 to-black flex flex-col items-center justify-center gap-3">
+                          <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center">
+                            <TrendingUp className="w-8 h-8 text-gold" />
+                          </div>
+                          <span className="text-gold/80 text-sm font-semibold uppercase tracking-wider">{filteredNews[0]?.category || 'News'}</span>
+                          <span className="text-zinc-500 text-xs">{filteredNews[0]?.source || ''}</span>
                         </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/15" />
@@ -445,15 +450,21 @@ const News = () => {
                         if (parent) {
                           e.currentTarget.style.display = 'none';
                           const fallback = document.createElement('div');
-                          fallback.className = 'w-full h-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-black flex items-center justify-center';
-                          fallback.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold/30"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>';
+                          fallback.className = 'w-full h-full bg-gradient-to-br from-amber-900/80 via-zinc-900 to-black flex flex-col items-center justify-center gap-2 p-4';
+                          const cat = article.category || 'News';
+                          const src = article.source || '';
+                          fallback.innerHTML = `<div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gold/80 text-xs font-semibold uppercase tracking-wider">${cat}</span><span class="text-zinc-500 text-[10px]">${src}</span>`;
                           parent.insertBefore(fallback, e.currentTarget);
                         }
                       }}
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-black flex items-center justify-center">
-                      <Newspaper className="w-12 h-12 text-gold/30" />
+                    <div className="w-full h-full bg-gradient-to-br from-amber-900/80 via-zinc-900 to-black flex flex-col items-center justify-center gap-2 p-4">
+                      <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
+                        <TrendingUp className="w-6 h-6 text-gold" />
+                      </div>
+                      <span className="text-gold/80 text-xs font-semibold uppercase tracking-wider">{article.category}</span>
+                      <span className="text-zinc-500 text-[10px]">{article.source}</span>
                     </div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
