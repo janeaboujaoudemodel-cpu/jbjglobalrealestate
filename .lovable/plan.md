@@ -1,79 +1,97 @@
 
-# Area Image Audit and Approval System
+# Fix Area Images and Loading Logo
 
-## Problem
-62 area images currently in the database contain numerous violations:
-- **Provident logos**: Al Bateen, Al Jafiliya (providentestate.com/icons/icon-512x512.png)
-- **Shutterstock watermarks**: Al Nanda
-- **Stock photo sites**: Al Hamra Village (Alamy)
-- **Floor plans**: Al Nuaimia 1,2 (gjproperties brochure)
-- **Interior apartment photos**: Al Rifa'ah, Wadi Al Safa, others (propertyfinder listing images)
-- **Standalone buildings**: Al Jaddaf (single project render, not community)
-- **Broken/irrelevant**: Es Sanhaya 2 (World Bank PDF), Fujairah City (propertyfinder blog)
-- **Competitor-branded CDN**: ~20 images from d3h330vgpwpjr8.cloudfront.net (Provident CDN with potential watermarks in filenames like "Provident_Estate" in URL)
-- **Wrong subject**: The World Islands showing Atlantis, Mariam Island not showing aerial view
-- Many propertyfinder listing images are individual apartment/unit photos, not community aerials
+## What Went Wrong
+The previous "nuclear cleanup" incorrectly wiped ALL area images (setting them all to NULL), when only about 15-20 specific areas had problematic images. Now every area card shows a dark placeholder with a MapPin icon and "AREA" text, which is unacceptable.
 
-## Plan
+## What Will Be Done
 
-### Step 1: Add `image_approved` column to areas table
-Add a new boolean column `image_approved` (default `false`) to the `areas` table. This creates a gating mechanism so only manually reviewed images appear on the site.
+### 1. Restore All Area Images Using the Enrichment Engine
+Since all images were wiped, we need to re-populate them by running the existing `enrich-area-images` backend function. This function:
+- Pulls real project photos from the database (primary source)
+- Falls back to web search for community/aerial photos
+- Leaves images NULL only when no valid source is found
 
-### Step 2: Nuclear cleanup -- NULL all non-compliant images
-Set `image_url = NULL` and `hero_image_url = NULL` for ALL 62 areas that currently have images. This is the safest approach given the scale of violations. Specific blocked sources:
-- providentestate.com (logo/branding)
-- shutterstock.com (watermarked)
-- alamy.com (watermarked)
-- d3h330vgpwpjr8.cloudfront.net (Provident CDN -- many filenames contain "Provident_Estate")
-- static.shared.propertyfinder.ae (individual listing photos, interiors)
-- new-projects-media.propertyfinder.com (project renders, not community photos)
-- gjproperties.ae (floor plans/brochures)
-- documents1.worldbank.org (broken/irrelevant)
-- propertyfinder.ae/blog (blog thumbnails)
-- wikimedia (low quality panoramio uploads)
+We will run this in batches to restore images for all ~200 active areas.
 
-### Step 3: Update the UI to filter by `image_approved`
-Modify `useAreas` hook and `AreaGuides.tsx` so that:
-- Only areas with `image_approved = true` show their photo
-- Areas with `image_approved = false` (or no image) display the branded gradient fallback
-- The filter bar and page only show approved content by default
+### 2. Replace the Ugly MapPin Fallback
+The current fallback for areas without images (dark gradient + MapPin icon + "AREA" text) will be replaced with a premium champagne gradient that matches the site's branding -- using the JBJ monogram subtly in the background instead of the generic map pin.
 
-### Step 4: Build an approval-aware image display
-Update the area card rendering in `AreaGuides.tsx` to check `image_approved` before displaying any image, regardless of whether `image_url` is populated.
+Changes in `src/pages/AreaGuides.tsx` (lines 346-351):
+- Remove the dark `bg-gradient-to-br from-zinc-800 via-zinc-900 to-black` with MapPin
+- Replace with a premium champagne gradient (`from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]`) with the JBJ monogram at low opacity
+- This matches the site's premium aesthetic
+
+### 3. Fix the BrandedLoader Logo
+The loading screen currently shows a faded/clipped version of the JBJ monogram. The user wants the full logo visible and premium-looking.
+
+Changes in `src/components/ui/BrandedLoader.tsx`:
+- Remove the faded base logo (opacity-20 layer)
+- Show the full JBJ monogram at full opacity with a smooth, premium pulse/glow animation instead of the clip-path fill effect
+- Add a subtle gold glow/shadow around the logo for premium feel
+- Keep the "Loading..." text with its current styling
+
+### 4. Selectively Fix Known Problem Areas After Restoration
+After the enrichment runs, manually NULL the images for the specific areas the user flagged:
+- Al Bateen (Provident logo)
+- Al Jafiliya (Provident logo)
+- Al Nanda (Shutterstock watermark)
+- Al Nuaimia 1,2 (floor plan)
+- Al Rifa'ah (interior apartment photo)
+- Wadi Al Safa (interior apartment photo)
+- Al Hamra Village (Alamy stock)
+- Es Sanhaya 2 (broken/irrelevant)
+- Fujairah City (fake internet photo)
+- The World Islands (shows Atlantis)
+- Mariam Island (not aerial view)
+- Al Jaddaf (standalone building)
+- Sas Al Nakhel (random villa)
+- Al Barsha (low quality)
+
+These will use the new premium fallback until proper images are sourced.
+
+### 5. Update the Blocked Domains List
+Add these domains to the `enrich-area-images` function's BLOCKED_DOMAINS list so they never get pulled again:
+- providentestate.com
+- shutterstock.com
+- alamy.com
+- d3h330vgpwpjr8.cloudfront.net (Provident CDN)
+- gjproperties.ae
+- documents1.worldbank.org
+- Also add pattern matching to reject interior/apartment photos and floor plans
 
 ---
 
 ## Technical Details
 
-### Database Migration
-```sql
-ALTER TABLE public.areas 
-ADD COLUMN image_approved BOOLEAN NOT NULL DEFAULT false;
+### AreaGuides.tsx Fallback (lines 346-351)
+Replace the MapPin dark fallback with:
+```tsx
+<div className="w-full h-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
+  <img src={jbjMonogram} alt="" className="w-16 h-16 object-contain opacity-10" />
+</div>
 ```
 
-### Data Cleanup
-```sql
-UPDATE areas 
-SET image_url = NULL, hero_image_url = NULL, image_approved = false, updated_at = now()
-WHERE image_url IS NOT NULL;
+### BrandedLoader.tsx
+Replace the dual-image clip-path approach with a single full-opacity logo + premium glow animation:
+```tsx
+<div className="relative w-24 h-24 md:w-32 md:h-32">
+  <img
+    src={jbjMonogram}
+    alt="Loading"
+    className="w-full h-full object-contain animate-pulse"
+    style={{ filter: "drop-shadow(0 0 20px rgba(200,167,102,0.4))" }}
+  />
+</div>
 ```
-This clears all 62 images. Future images must be individually approved.
 
-### Hook Changes (`src/hooks/useAreas.ts`)
-- Add `image_approved` to the `Area` interface
-- No query filter change needed -- the UI logic handles display
+### AreaHeroSection.tsx (line 29)
+Same fix -- when no hero image exists, use the Dubai skyline fallback (already in place, no change needed).
 
-### UI Changes (`src/pages/AreaGuides.tsx`)
-- Update the image rendering condition from:
-  `(area.hero_image_url || area.image_url)` 
-  to: 
-  `area.image_approved && (area.hero_image_url || area.image_url)`
-- Apply the same logic in the fixed/scrolled filter bar if images appear there
+### CommunityDetail.tsx
+Same fallback pattern for community hero images.
 
-### Area Detail Page (`src/pages/AreaDetail.tsx`)
-- Same approval gate on the hero image display
-
-### Community Detail Page (`src/pages/CommunityDetail.tsx`)
-- Same approval gate on the hero image display
-
-This ensures no unapproved photo ever renders anywhere on the site. Areas without approved photos get the branded gradient fallback (MapPin icon + gold styling).
+### Database: Re-enrich then selectively clean
+1. Run `enrich-area-images` in batches to restore all images
+2. Then NULL the ~14 specific problematic areas listed above
+3. Update BLOCKED_DOMAINS to prevent future violations
