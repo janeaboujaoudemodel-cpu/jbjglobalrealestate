@@ -12,6 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ytd2026 as ytd2026Data, topAreas2026 as topAreas2026Data, topAreas2025 as topAreas2025Data, topNationalities as topNationalitiesData } from "@/constants/dldMarketData";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
 
+const dubaiLandmarksVideo = new URL("@/assets/videos/dubai-landmarks-hero.mp4", import.meta.url).href;
+
 interface MarketNews {
   id: string;
   title: string;
@@ -271,16 +273,21 @@ const News = () => {
     <>
       <SEOHead {...pagesSEO.news} />
       <section className="min-h-screen bg-black">
-      {/* Hero Section - Premium Gradient with Monogram */}
+      {/* Hero Section - Premium Video Background */}
       <section className="relative py-24 md:py-32 overflow-hidden">
-        {/* Gradient Background with JBJ Monogram */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-b from-zinc-900 via-black to-black">
-          <img 
-            src={jbjMonogramDarkBg} 
-            alt="" 
-            aria-hidden="true"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 md:w-64 md:h-64 opacity-[0.04] object-contain"
-          />
+        {/* Video Background */}
+        <div className="absolute inset-0 z-0 bg-black">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src={dubaiLandmarksVideo} type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
         </div>
         
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl z-[1]" />
