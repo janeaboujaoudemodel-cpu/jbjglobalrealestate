@@ -32,12 +32,24 @@ const KNOWN_BAD_URLS = [
   "thenationalnews.com/resizer",
   "propertyfinder.ae/blog/wp-content/uploads/2025/09/Header-image.png",
   "survey.customerpulse.gov.ae",
+  // All PropertyFinder generic listing images
+  "propertyfinder.ae/blog/wp-content/uploads/2025/06/",
+  // Gulf Business 90x90 thumbnails
+  "gulfbusiness.com/wp-content/uploads/2024/04/gulfbusiness-90x90",
+  "gulfbusiness.com/wp-content/uploads/2025/07/1Q5A9345-Edit-scaled-e1752853634787-90x90",
+  "gulfbusiness.com/wp-content/uploads/2025/10/neesha-salian-90x90",
 ];
 
 // No fake/stock image pools - only real source images or null
 
 function isImageBad(url: string): boolean {
-  return BAD_IMAGE_PATTERNS.some(p => p.test(url)) || KNOWN_BAD_URLS.some(bad => url.includes(bad)) || url.includes('unsplash.com');
+  if (BAD_IMAGE_PATTERNS.some(p => p.test(url))) return true;
+  if (KNOWN_BAD_URLS.some(bad => url.includes(bad))) return true;
+  if (url.includes('unsplash.com')) return true;
+  // Reject tiny thumbnails (90x90 or similar)
+  if (/width=9\d(&|$)/i.test(url) || /height=9\d(&|$)/i.test(url)) return true;
+  if (/\/90x90\b/i.test(url) || /\bw=90\b/i.test(url)) return true;
+  return false;
 }
 
 function extractOgImage(markdown: string): string | null {
@@ -877,31 +889,51 @@ RULES:
       }
     }
 
+    // Fuzzy dedup: normalize title for comparison
+    function normalizeTitle(t: string): string {
+      return t.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+    }
+    function getFirst6Words(t: string): string {
+      return normalizeTitle(t).split(' ').slice(0, 6).join(' ');
+    }
+
+    // Fetch all existing titles for fuzzy matching
+    const { data: existingTitles } = await supabase
+      .from("market_news")
+      .select("title");
+    const existingNormSet = new Set((existingTitles || []).map(e => normalizeTitle(e.title).substring(0, 50)));
+    const existingFirst6Set = new Set((existingTitles || []).map(e => getFirst6Words(e.title)));
+
     let insertedCount = 0;
     for (const article of collectedNews) {
-      const { data: existing } = await supabase
+      const normTitle = normalizeTitle(article.title).substring(0, 50);
+      const first6 = getFirst6Words(article.title);
+
+      // Skip if exact normalized match OR first 6 words match
+      if (existingNormSet.has(normTitle) || (first6.length > 15 && existingFirst6Set.has(first6))) {
+        console.log(`Skipping duplicate: "${article.title}"`);
+        continue;
+      }
+
+      const { error: insertError } = await supabase
         .from("market_news")
-        .select("id")
-        .eq("title", article.title)
-        .single();
+        .insert({
+          title: article.title,
+          excerpt: article.excerpt,
+          category: article.category,
+          source: article.source,
+          source_url: article.source_url,
+          image_url: article.image_url,
+          published_date: article.published_date,
+          ai_generated: true,
+          is_verified: false,
+          is_featured: false,
+        });
 
-      if (!existing) {
-        const { error: insertError } = await supabase
-          .from("market_news")
-          .insert({
-            title: article.title,
-            excerpt: article.excerpt,
-            category: article.category,
-            source: article.source,
-            source_url: article.source_url,
-            image_url: article.image_url,
-            published_date: article.published_date,
-            ai_generated: true,
-            is_verified: false,
-            is_featured: false,
-          });
-
-        if (!insertError) insertedCount++;
+      if (!insertError) {
+        insertedCount++;
+        existingNormSet.add(normTitle);
+        existingFirst6Set.add(first6);
       }
     }
 
