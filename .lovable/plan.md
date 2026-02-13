@@ -1,46 +1,32 @@
 
 
-# Full Area Image Audit and Generation
+## Continue Developer Enrichment: Process All 540 Developers
 
-## Current State
-- **31 areas** have AI-generated images (stored in project storage -- these are clean)
-- **155 areas** are still missing images and showing the champagne gradient fallback
+### What This Does
+Run the `enrich-developer-data` edge function repeatedly in batches of 5 developers until all 540 developers have been processed.
 
-## Plan
-
-### Step 1: Improve the AI image generation prompt
-The current prompt is generic. Upgrade it to produce higher-quality, more distinctive aerial community views:
-
-**Current prompt:**
-> "Professional aerial panoramic photograph of {name}, Dubai, UAE. Modern urban landscape showing buildings, roads, and community layout..."
-
-**New prompt:**
-> "Ultra-realistic drone aerial photograph of {name} community in Dubai, UAE. Bird's-eye view showing the full master-planned community layout with residential towers, villas, landscaped parks, swimming pools, roads, and surrounding desert or waterfront. Golden hour lighting, crystal clear sky, cinematic composition, 8K resolution, real estate marketing photography, no text or watermarks, no logos."
-
-This produces more unique, community-specific views with better lighting and composition.
-
-### Step 2: Run generation in large batches
-Call `generate-area-images` repeatedly with `batch_size: 10` to cover all 155 missing areas. The function:
-- Uses Gemini 3 Pro Image Preview (highest quality)
-- Uploads each image to the `area-images` storage bucket
-- Updates both `image_url` and `hero_image_url` in the database
-- Includes a 3-second delay between generations to avoid rate limits
-
-We will trigger multiple rounds until all areas are covered.
-
-### Step 3: Verify completion
-Query the database to confirm all 186 active areas have images.
-
----
-
-## Technical Details
-
-### Edge function change (`generate-area-images/index.ts`, line 57)
-Update the prompt string to the improved version above for more distinctive, high-quality aerial views.
+### Approach
+1. Call the edge function with incrementing offsets (0, 5, 10, 15, ...) until it returns `"status": "complete"`
+2. Each batch processes 5 developers using AI research (Gemini 2.5 Flash)
+3. Only fields that are currently null get updated -- existing accurate data is preserved
+4. Estimated ~108 batch calls, each taking 15-30 seconds
 
 ### Execution
-Trigger the function in batches of 10, running multiple rounds. Each batch takes ~30-40 seconds (3s delay per area + generation time). Full coverage of 155 areas will require ~15-16 rounds.
+I will call the function sequentially, advancing the offset after each successful batch. Progress will be reported as we go. If any batch hits a rate limit or error, I will pause briefly and retry.
 
-### No UI changes needed
-The area cards and detail pages already display `image_url` / `hero_image_url` correctly. Once the database is populated, images will appear automatically on both the listing cards and the detail hero sections.
+### Fields Being Enriched
+- Website URL
+- CEO / Chairman name
+- Total units delivered
+- Upcoming units in pipeline
+- Expected completion year
+- Notable projects
+- Parent company
+- License number
+- Specialization (Luxury, Affordable, Mixed-use, etc.)
+
+### Important Notes
+- This is a long-running process -- it will take many sequential calls
+- The AI only fills in facts it is confident about; uncertain fields stay null
+- No existing data will be overwritten
 
