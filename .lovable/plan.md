@@ -1,74 +1,93 @@
 
 
-## Fix Missing Project Data: Clean Empty Shells and Fill Data Gaps
+## Unified Navigation Overhaul: Mobile Hamburger + Desktop Vertical Nav with Mega Menus
 
-### The Problem
+This is a large change that touches the mobile hamburger menu, the desktop vertical sidebar (PropertiesVerticalNav), and adds new navigation categories. Here is the breakdown:
 
-The database contains **683 completely empty "shell" project records** that are published and visible on the platform. These records have:
-- No developer name (shows as blank or missing)
-- No price (shows "Price on Request")
-- No description, no images, no handover date, no status
-- No `reelly_id` -- meaning they cannot be backfilled from the Reelly API
-- They were created during a Provident bulk import but never got matched or enriched
+---
 
-Additionally, **7 manual projects** have a `developer_id` linked but the `developer_name` text field was never populated.
+### Part 1: Redesign Mobile Hamburger Menu (Phone/iPad)
 
-Among the 1,801 complete Reelly projects, **611 are missing prices** and **1,709 are missing payment plans** -- these are legitimate gaps from the Reelly API itself (not all projects have announced prices).
+**What changes:**
+The current `Sheet`-based mobile menu in `GlobalHeader.tsx` (lines 648-1271) will be replaced with a new champagne-gold themed sidebar matching the `PropertiesVerticalNav` style.
 
-### The Fix (3 Steps)
+**New mobile menu features:**
+- Opens from the **right side** (keeps current behavior)
+- Uses the same champagne gradient background (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`) as the vertical nav
+- **Bigger monogram** at the top (w-16 h-16 on mobile, w-20 h-20 on iPad) with "JBJ GLOBAL" / "REAL ESTATE" text
+- Quick action row: Search, Account, Language, Currency (same as now but styled to match)
+- **All pages organized under collapsible categories** with expand/collapse chevrons:
+  1. **Buy** -- Properties for Sale, Apartments, Villas, Buyer's Guide, Mortgage Calculator
+  2. **Sell** -- List Your Property, Seller's Guide, Property Valuation, Selling Advisory
+  3. **Rent** -- Properties for Rent, Tenant's Guide, Property Management
+  4. **Projects** -- All Off-Plan Projects, New Launches
+  5. **Developers** -- All Developers, Emaar, DAMAC, Sobha, Nakheel, Binghatti, Meraas, etc. + "View All Developers"
+  6. **Areas** -- Explore All Areas + top area links from database (same as MegaMenuAreas)
+  7. **Insights** (NEW) -- All 8 sub-sections from MegaMenuInsights: News & Updates, Market Intelligence, Guides, Services, Business Suites, Investor/Broker Tools, Company, Legal
+  8. **Services** -- Our Services, Property Management, Mortgage Advisory, Valuation, etc.
+  9. **Creative Toolkit** -- Toolkit Hub, AI Video Studio, etc.
+  10. **About & Company** -- About Us, Team, Brokers, Careers, Awards, Contact, etc.
+  11. **Resources & Guides** -- Guides Library, Market Intelligence, News, FAQ
+  12. **Partners & Tools** -- Partners Hub, Mortgage Partners, etc.
+  13. **Legal & Trust** -- Terms, Privacy, Cookies, Trust & Audit
+- Each category has a **gold chevron** that rotates on expand/collapse
+- Subpages show as flat link lists (icon + title), matching current mobile link style
+- User section at bottom (dashboard, profile, owner shortcuts, sign out)
+- Footer: bigger monogram + "Contact Support"
 
-**Step 1: Unpublish the 683 empty shell records**
+**File modified:** `src/components/GlobalHeader.tsx`
 
-These records have zero useful data and degrade the user experience. They should be unpublished (`is_published = false`) so they stop appearing in listings, search results, and on cards. This immediately eliminates "Price on Request" and missing developer cards for empty records.
+---
 
-A backend function will run:
-```sql
-UPDATE projects 
-SET is_published = false 
-WHERE reelly_id IS NULL 
-  AND (developer_name IS NULL OR developer_name = '') 
-  AND description IS NULL 
-  AND source = 'reelly' 
-  AND import_source = 'reelly';
-```
+### Part 2: Enhance Desktop Vertical Nav (PropertiesVerticalNav)
 
-**Step 2: Fix the 7 manual projects with missing developer_name**
+**What changes:**
+The `PropertiesVerticalNav` (shown when filter bar replaces header on scroll) gains mega menu hover capability and new utility items.
 
-These have a valid `developer_id` but the `developer_name` was never filled. A simple join-and-update resolves this:
+**New features:**
+- **Bigger monogram**: Increase from w-12 to w-14 or w-16
+- **Add new nav items**: Areas, Insights
+- **Add utility section** at the bottom (above Contact Support):
+  - Search icon (opens GlobalSearchModal)
+  - Language switcher (compact)
+  - Currency switcher (compact)
+  - Profile / Dashboard / Settings links
+- **Mega menu on hover (desktop only)**: When hovering over "Developers", "Areas", "Buy", "Sell", "Rent", "Projects", or "Insights", a floating mega menu card appears to the right of the sidebar. This is the **same mega menu component** used in the main header (MegaMenuDevelopers, MegaMenuAreas, MegaMenuBuy, etc.)
+- Items that have mega menus get a small chevron indicator
 
-```sql
-UPDATE projects p 
-SET developer_name = d.name 
-FROM developers d 
-WHERE p.developer_id = d.id 
-  AND (p.developer_name IS NULL OR p.developer_name = '') 
-  AND p.is_published = true;
-```
+**How hover mega menus work:**
+- Each nav item with a mega menu gets `onMouseEnter` / `onMouseLeave` handlers
+- On hover, the corresponding `MegaMenu*` component renders as an absolutely positioned panel to the right of the sidebar
+- A backdrop overlay appears behind the mega menu
+- On mouse leave, the panel closes after a short delay (same 80ms pattern as main header)
 
-**Step 3: Create a "data completeness repair" edge function**
+**File modified:** `src/components/navigation/PropertiesVerticalNav.tsx`
 
-A new `repair-project-data-gaps` edge function will scan all remaining published projects and fill gaps:
+---
 
-- **Developer name resolution**: For any project with `developer_id` but no `developer_name`, look up the developer table
-- **Developer name from Reelly**: For projects with `reelly_developer_id`, match against the developers table
-- **Sale status normalization**: Ensure `status_label` is populated from `sale_status` where missing
-- **Handover formatting**: Ensure `expected_completion` is copied to `handover_date` where missing (or vice versa)
+### Part 3: Add "Insights" to Vertical Nav
 
-### What This Achieves
+The vertical nav currently has 15 items. "Insights" will be added between "Market Intel" and "Guides", linking to `/insights` or triggering the mega menu on hover.
 
-| Metric | Before | After |
-|--------|--------|-------|
-| Published projects | 2,484 | ~1,801 (real data only) |
-| Missing developer name | 683 | 0 |
-| Missing description | 676 | 0 |
-| Missing images | 683 | 0 |
-| Missing price | 1,287 | ~604 (legitimate API gaps) |
+The Insights mega menu content is already defined in `MegaMenuInsights.tsx` with 8 categories (News, Market Intelligence, Guides, Services, Business Suites, Mode Tools, Company, Legal).
 
-### Files Modified
+---
 
-- **New**: `supabase/functions/repair-project-data-gaps/index.ts` -- Edge function to clean empty shells and fill data gaps
-- The function runs the SQL updates above and reports results
+### Technical Details
 
-### Important Note
+**Files to modify:**
+1. `src/components/GlobalHeader.tsx` -- Redesign mobile menu section (lines 648-1271). Add Insights and Areas with full subpage lists to mobile collapsibles. Increase monogram size.
+2. `src/components/navigation/PropertiesVerticalNav.tsx` -- Add mega menu hover system, utility icons (search, language, currency, profile), Insights nav item, bigger monogram.
 
-The 604 remaining projects without prices are legitimately missing from the Reelly API (prices not yet announced by developers). These will correctly show "Price on Request" which is the accurate state. This is different from the current situation where empty shell records with zero data are polluting the listings.
+**Files to import in PropertiesVerticalNav:**
+- `MegaMenuBuy`, `MegaMenuSell`, `MegaMenuRent`, `MegaMenuProjects`, `MegaMenuAreas`, `MegaMenuDevelopers`, `MegaMenuInsights`
+- `GlobalSearchModal` for the search trigger
+- `LanguageSwitcher`, `CurrencySwitcher` for utility row
+
+**No new files created** -- all changes are within existing components.
+
+**Responsive behavior summary:**
+- **Phone/iPad** (touch or below 1024px): Hamburger opens redesigned champagne sidebar from right. Categories expand to show flat page title lists. No mega menu cards.
+- **Desktop with filter bar active** (vertical nav visible): Hovering nav items shows the same rectangular mega menu cards with video/images that the main header uses. Utility icons for search, language, currency, profile are in the sidebar footer.
+- **Desktop normal** (main header visible): No changes -- existing mega menu pill nav continues as-is.
+
