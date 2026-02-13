@@ -1,11 +1,10 @@
-import { useState, useMemo, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, ArrowUpRight, Search, X } from "lucide-react";
-import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import { Loader2, ArrowUpRight, Search } from "lucide-react";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
+import { type ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
 import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
 import { Button } from "@/components/ui/button";
@@ -14,15 +13,12 @@ import type { Project } from "@/hooks/useProjects";
 interface AreaProjectsGridProps {
   areaName: string;
   areaSlug: string;
+  shortcutFilters: ShortcutFilterState;
+  searchQuery: string;
+  onClearFilters: () => void;
 }
 
-export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
-  const [isFixed, setIsFixed] = useState(false);
-  const [bottomReached, setBottomReached] = useState(false);
-  const placeholderRef = useRef<HTMLDivElement>(null);
-
+export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQuery, onClearFilters }: AreaProjectsGridProps) => {
   const { data: projects, isLoading } = useQuery({
     queryKey: ["area-projects-full", areaName],
     queryFn: async () => {
@@ -49,45 +45,6 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
     staleTime: 5 * 60 * 1000,
   });
 
-  // IntersectionObserver for fixed positioning
-  const hasProjects = !!projects;
-  useEffect(() => {
-    const sentinel = placeholderRef.current;
-    if (!sentinel) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
-      },
-      { threshold: 0, rootMargin: "-140px 0px 0px 0px" }
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, [hasProjects]);
-
-  // Bottom sentinel: hide fixed bar when "Ready to Get Started" enters viewport
-  useEffect(() => {
-    const target = document.getElementById('ready-to-get-started');
-    if (!target) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setBottomReached(entry.isIntersecting || entry.boundingClientRect.top < 0),
-      { threshold: 0.1 }
-    );
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, []);
-
-  // Signal GlobalHeader to hide when filter bar is fixed
-  useEffect(() => {
-    if (isFixed && !bottomReached) {
-      document.body.classList.add('filter-bar-fixed');
-    } else {
-      document.body.classList.remove('filter-bar-fixed');
-    }
-    return () => document.body.classList.remove('filter-bar-fixed');
-  }, [isFixed, bottomReached]);
-
   const filteredProjects = useMemo(() => {
     if (!projects) return [];
     let result = [...projects];
@@ -103,33 +60,6 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
 
     return applyShortcutFilters(result, shortcutFilters);
   }, [projects, searchQuery, shortcutFilters]);
-
-  const clearFilters = () => {
-    setSearchQuery("");
-    setShortcutFilters(defaultShortcutFilters);
-  };
-
-  const filterBarContent = (
-    <>
-      {/* Search Input */}
-      <div className="relative flex-1 min-w-[200px]">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
-        <input
-          type="text"
-          placeholder="Search projects or developers..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full h-10 pl-9 pr-8 rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm placeholder:text-black/30 focus:outline-none focus:border-gold/60 transition-colors"
-          style={{ fontSize: '16px' }}
-        />
-        {searchQuery && (
-          <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2">
-            <X className="w-4 h-4 text-black/40 hover:text-black" />
-          </button>
-        )}
-      </div>
-    </>
-  );
 
   if (isLoading) {
     return (
@@ -156,42 +86,12 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
   if (!projects || projects.length === 0) return null;
 
   return (
-    <section id="projects-section" className="pt-16 pb-16 bg-black">
+    <section className="pt-16 pb-16 bg-black">
       <div className="container mx-auto px-4">
         <div className="rounded-2xl pt-8 overflow-visible" style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}>
           <h2 className="text-black text-2xl md:text-3xl font-bold mb-6 px-6" style={{ fontFamily: "Poppins, sans-serif" }}>
             Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
           </h2>
-
-          {/* Sentinel for IntersectionObserver — sits just above inline bar */}
-          <div ref={placeholderRef} className="h-0" />
-
-          {/* Phase 1: Inline filter bar — always rendered in natural flow */}
-          <div className="py-3 px-6">
-            <div className="flex flex-wrap items-center gap-3">
-              {filterBarContent}
-            </div>
-            <div className="mt-3">
-              <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
-            </div>
-          </div>
-
-          {/* Phase 2: Fixed portal copy — only when scrolled past sentinel */}
-          {isFixed && !bottomReached && createPortal(
-            <div
-              className="fixed top-0 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-all duration-200 lg:left-[200px]"
-            >
-              <div className="container mx-auto px-4">
-                <div className="flex flex-wrap items-center gap-3">
-                  {filterBarContent}
-                </div>
-                <div className="mt-3">
-                  <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
-                </div>
-              </div>
-            </div>,
-            document.body
-          )}
 
           {/* Grid */}
           <div className="p-6">
@@ -216,7 +116,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug }: AreaProjectsGridProps) 
               <div className="text-center py-16">
                 <Search className="w-10 h-10 text-black/20 mx-auto mb-3" />
                 <p className="text-black/50 text-sm font-medium">No projects match your filters</p>
-                <button onClick={clearFilters} className="mt-3 text-gold text-sm font-semibold hover:underline">
+                <button onClick={onClearFilters} className="mt-3 text-gold text-sm font-semibold hover:underline">
                   Clear all filters
                 </button>
               </div>

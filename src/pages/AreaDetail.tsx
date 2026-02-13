@@ -3,10 +3,11 @@
  * Full-screen hero, projects grid, developers, map, AI analyzer
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { MapPin, ArrowRight, Loader2, Phone, ArrowUpRight } from "lucide-react";
+import { MapPin, ArrowRight, Loader2, Phone, ArrowUpRight, Search, X } from "lucide-react";
 import jbjMonogram from "@/assets/jbj-monogram-light-bg.png";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
@@ -20,21 +21,59 @@ import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { AreaAIAnalyzer } from "@/components/area-detail/AreaAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
+import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 const AreaDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: area, isLoading } = useAreaBySlug(slug);
   const { data: allAreas } = useAreas({ limit: 20 });
-  const [isFilterFixed, setIsFilterFixed] = useState(false);
 
-  // Detect when AreaProjectsGrid sets filter-bar-fixed on body
+  // Page-level filter state
+  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Sticky filter bar logic
+  const [isFixed, setIsFixed] = useState(false);
+  const [bottomReached, setBottomReached] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // IntersectionObserver for fixed positioning
   useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsFilterFixed(document.body.classList.contains('filter-bar-fixed'));
-    });
-    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
+      },
+      { threshold: 0, rootMargin: "-140px 0px 0px 0px" }
+    );
+    observer.observe(sentinel);
     return () => observer.disconnect();
-  }, []);
+  }, [area]);
+
+  // Bottom sentinel: hide fixed bar when CTA section enters viewport
+  useEffect(() => {
+    const target = document.getElementById('area-cta-section');
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setBottomReached(entry.isIntersecting || entry.boundingClientRect.top < 0),
+      { threshold: 0.1 }
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [area]);
+
+  // Signal GlobalHeader to hide when filter bar is fixed
+  useEffect(() => {
+    if (isFixed && !bottomReached) {
+      document.body.classList.add('filter-bar-fixed');
+    } else {
+      document.body.classList.remove('filter-bar-fixed');
+    }
+    return () => document.body.classList.remove('filter-bar-fixed');
+  }, [isFixed, bottomReached]);
 
   if (isLoading) {
     return (
@@ -55,15 +94,37 @@ const AreaDetail = () => {
 
   const relatedAreas = allAreas?.filter(a => a.id !== area.id && a.emirate === area.emirate).slice(0, 4) || [];
 
+  const filterBarContent = (
+    <>
+      {/* Search Input */}
+      <div className="relative flex-1 min-w-[200px]">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+        <input
+          type="text"
+          placeholder="Search projects or developers..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full h-10 pl-9 pr-8 rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm placeholder:text-black/30 focus:outline-none focus:border-gold/60 transition-colors"
+          style={{ fontSize: '16px' }}
+        />
+        {searchQuery && (
+          <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2">
+            <X className="w-4 h-4 text-black/40 hover:text-black" />
+          </button>
+        )}
+      </div>
+    </>
+  );
+
   return (
-    <div className={`min-h-screen bg-black flex ${isFilterFixed ? '' : ''}`}>
+    <div className={`min-h-screen bg-black flex ${isFixed && !bottomReached ? '' : ''}`}>
       {/* Vertical Nav when filter bar replaces header */}
-      {isFilterFixed && (
+      {isFixed && !bottomReached && (
         <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
           <PropertiesVerticalNav />
         </div>
       )}
-      <div className={`flex-1 ${isFilterFixed ? 'lg:ml-[200px]' : ''} transition-all duration-200`}>
+      <div className={`flex-1 ${isFixed && !bottomReached ? 'lg:ml-[200px]' : ''} transition-all duration-200`}>
       <SEOHead 
         title={`${area.name} - Real Estate in ${area.emirate} | JBJ`}
         description={area.description || `Explore properties in ${area.name}, ${area.emirate}.`}
@@ -77,9 +138,41 @@ const AreaDetail = () => {
       {/* About This Area */}
       <AreaAboutSection area={area as any} />
 
+      {/* Sentinel for IntersectionObserver — sits just above inline bar */}
+      <div ref={sentinelRef} className="h-0" />
+
+      {/* Phase 1: Inline filter bar — always rendered in natural flow */}
+      <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-3 px-4 md:px-6 border-b border-gold/20">
+        <div className="container mx-auto">
+          <div className="flex flex-wrap items-center gap-3">
+            {filterBarContent}
+          </div>
+          <div className="mt-3">
+            <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
+          </div>
+        </div>
+      </div>
+
+      {/* Phase 2: Fixed portal copy — only when scrolled past sentinel */}
+      {isFixed && !bottomReached && createPortal(
+        <div
+          className="fixed top-0 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-all duration-200 lg:left-[200px]"
+        >
+          <div className="container mx-auto px-4">
+            <div className="flex flex-wrap items-center gap-3">
+              {filterBarContent}
+            </div>
+            <div className="mt-3">
+              <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
       {/* Projects Grid */}
       <div id="projects-section">
-        <AreaProjectsGrid areaName={area.name} areaSlug={area.slug} />
+        <AreaProjectsGrid areaName={area.name} areaSlug={area.slug} shortcutFilters={shortcutFilters} searchQuery={searchQuery} onClearFilters={() => { setSearchQuery(""); setShortcutFilters(defaultShortcutFilters); }} />
       </div>
 
       {/* Developers Bar */}
@@ -97,7 +190,7 @@ const AreaDetail = () => {
       <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] relative overflow-hidden">
+      <section id="area-cta-section" className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] relative overflow-hidden">
         {/* Ambient glow effects */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
