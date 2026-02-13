@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Building2, ExternalLink, Award, MapPin, ChevronDown, ChevronUp, Calendar, Briefcase, Sparkles } from "lucide-react";
+import { Building2, ExternalLink, Award, ChevronDown, ChevronUp, Calendar, Briefcase, Sparkles, Globe, User, Layers, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
@@ -15,6 +15,13 @@ interface DeveloperInfoCardProps {
     offplan_projects?: number | null;
     description?: string | null;
     headquarters?: string | null;
+    website_url?: string | null;
+    ceo_name?: string | null;
+    total_units_delivered?: number | null;
+    upcoming_units?: number | null;
+    notable_projects?: string | null;
+    parent_company?: string | null;
+    specialization?: string | null;
   } | null;
   projectName: string;
   projectCount?: number;
@@ -27,13 +34,14 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
   
   if (!developer) return null;
 
-  // Compute stats with fallbacks - use projectCount if offplan_projects is null
   const computedOffplanProjects = developer.offplan_projects ?? projectCount ?? null;
 
   const stats = [
     { label: "Founded", value: developer.founded_year ? `${developer.founded_year}` : null, icon: Calendar },
     { label: "Completed", value: developer.completed_projects ? `${developer.completed_projects}+` : null, icon: Building2 },
     { label: "Off-plan", value: computedOffplanProjects ? `${computedOffplanProjects}+` : null, icon: Briefcase },
+    { label: "Units Delivered", value: developer.total_units_delivered ? `${developer.total_units_delivered.toLocaleString()}+` : null, icon: Layers },
+    { label: "Upcoming", value: developer.upcoming_units ? `${developer.upcoming_units.toLocaleString()}` : null, icon: Star },
   ].filter(s => s.value);
 
   const hasLongDescription = (developer.description?.length ?? 0) > DESCRIPTION_PREVIEW_LENGTH;
@@ -44,7 +52,6 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
   return (
     <div className="w-full py-6 md:py-8 rounded-2xl">
       <div className="container mx-auto px-4 md:px-8">
-        {/* Premium champagne card with rounded corners */}
         <div 
           className="rounded-2xl border-2 border-gold/40 p-6 md:p-8"
           style={{
@@ -53,7 +60,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
           }}
         >
           <div className="flex flex-col lg:flex-row gap-8 items-start">
-            {/* Developer Logo - Larger Card, Full Fit, White BG */}
+            {/* Developer Logo */}
             <div 
               className="w-36 h-36 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
               style={{
@@ -75,16 +82,42 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
 
             {/* Developer Info */}
             <div className="flex-1">
-              {/* Header with more spacing */}
-              <div className="flex items-center gap-3 mb-5">
+              {/* Header */}
+              <div className="flex items-center gap-3 mb-3">
                 <h3 className="text-2xl md:text-3xl font-bold text-black">{developer.name}</h3>
                 <Award className="w-6 h-6 text-gold" />
               </div>
-              
-              {/* Headquarters */}
-              {/* Headquarters location removed per user request */}
 
-              {/* Developer Stats - Premium inline cards */}
+              {/* Quick meta line */}
+              <div className="flex flex-wrap items-center gap-3 mb-5 text-sm text-zinc-600">
+                {developer.specialization && (
+                  <span className="px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-xs font-semibold text-black">
+                    {developer.specialization}
+                  </span>
+                )}
+                {developer.ceo_name && (
+                  <span className="flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-gold" />
+                    {developer.ceo_name}
+                  </span>
+                )}
+                {developer.parent_company && (
+                  <span className="text-zinc-500">Part of {developer.parent_company}</span>
+                )}
+                {developer.website_url && (
+                  <a
+                    href={developer.website_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-gold hover:underline"
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    Website
+                  </a>
+                )}
+              </div>
+
+              {/* Developer Stats */}
               {stats.length > 0 && (
                 <div className="flex flex-wrap gap-4 mb-6">
                   {stats.map((stat, idx) => (
@@ -108,7 +141,15 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 </div>
               )}
 
-              {/* Premium Description Section with Visual Enhancement */}
+              {/* Notable Projects */}
+              {developer.notable_projects && (
+                <div className="mb-5">
+                  <span className="text-xs font-semibold text-gold uppercase tracking-wider">Notable Projects: </span>
+                  <span className="text-sm text-zinc-700">{developer.notable_projects}</span>
+                </div>
+              )}
+
+              {/* Description */}
               {developer.description && (
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
@@ -149,7 +190,6 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 </div>
               )}
 
-              {/* Fallback description if no API description */}
               {!developer.description && (
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
@@ -162,7 +202,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 </div>
               )}
 
-              {/* View Developer Button - Premium styling */}
+              {/* View Developer Button */}
               {developer.slug && (
                 <Link to={`/developer/${developer.slug}`}>
                   <Button variant="primary" size="default" className="group">
