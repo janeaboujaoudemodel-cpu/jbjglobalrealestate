@@ -196,7 +196,6 @@ const AreaGuides = () => {
             {([
               { key: "property_count" as SortOption, label: "Most Projects" },
               { key: "trending" as SortOption, label: "Trending" },
-              { key: "alphabetical" as SortOption, label: "A-Z" },
             ]).map(opt => (
               <button
                 key={opt.key}
