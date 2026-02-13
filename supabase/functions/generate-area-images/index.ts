@@ -84,7 +84,9 @@ Deno.serve(async (req) => {
         const imageData = aiData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
 
         if (!imageData || !imageData.startsWith("data:image")) {
-          console.warn(`No image generated for ${area.name}`);
+          console.warn(`No image generated for ${area.name}. Response keys: ${JSON.stringify(Object.keys(aiData))}. Choices: ${JSON.stringify(aiData.choices?.[0]?.message?.content?.substring(0, 200))}`);
+          // Mark as skip so we don't keep retrying the same area
+          await supabase.from("areas").update({ image_url: "skip", updated_at: new Date().toISOString() }).eq("id", area.id);
           results.push({ area: area.name, status: "no_image_generated" });
           continue;
         }
