@@ -120,6 +120,11 @@ const learningTopics = [
     icon: BarChart3,
     title: "Market intelligence reading basics",
     description: "Understand data and trends where relevant"
+  },
+  {
+    icon: CheckCircle,
+    title: "Payment plan structures and milestones",
+    description: "How installment schedules work in off-plan purchases"
   }
 ];
 
@@ -209,17 +214,16 @@ const Guides = () => {
       {/* Hero Section */}
       <section className="jj-hero-fullscreen relative flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-black">
-          {/* Video placeholder */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <BookOpen className="w-12 h-12 text-gold/60" />
-              </div>
-              <p className="text-gold/60 text-sm tracking-widest uppercase">How to Use the Guides</p>
-              <p className="text-zinc-500 text-xs mt-2">Video placeholder only</p>
-            </div>
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="https://videos.pexels.com/video-files/3629519/3629519-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
         
@@ -403,7 +407,7 @@ const Guides = () => {
             variants={fadeInUp}
             className="text-center w-full px-4 sm:px-6 lg:px-8"
           >
-            <div className="max-w-3xl mx-auto jj-card-inner border-2 border-gold/30">
+            <div className="max-w-5xl mx-auto jj-card-inner border-2 border-gold/30">
               <HelpCircle className="w-12 h-12 text-gold mx-auto mb-6" />
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Playfair Display, serif" }}>
                 Not sure where to start?
@@ -412,10 +416,10 @@ const Guides = () => {
                 Tell us your goal (buy, sell, rent, invest) and we'll route you to the right guide.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <PremiumHeroButton href="/contact">
+                <PremiumHeroButton href="/contact" variant="light-bg">
                   Ask a Question
                 </PremiumHeroButton>
-                <PremiumHeroButton href="/contact?type=support">
+                <PremiumHeroButton href="/contact?type=support" variant="light-bg">
                   Contact Support
                 </PremiumHeroButton>
               </div>
