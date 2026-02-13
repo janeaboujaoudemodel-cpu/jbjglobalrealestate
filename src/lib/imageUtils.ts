@@ -155,3 +155,21 @@ export function getFirstValidImageUrl(
   const valid = images.find((img) => isValidImageUrl(img?.url));
   return valid ? normalizeProvidentImageUrl(valid.url!) : undefined;
 }
+
+/**
+ * Optimize Supabase Storage image URLs using the render/image transformation endpoint.
+ * Converts /object/public/ to /render/image/public/ and appends width & quality params
+ * to serve compressed WebP versions on-the-fly (~30-60 KB instead of ~2 MB PNGs).
+ */
+const STORAGE_OBJECT_PATH = "/storage/v1/object/public/";
+const STORAGE_RENDER_PATH = "/storage/v1/render/image/public/";
+
+export function optimizeStorageImageUrl(
+  url: string | null | undefined,
+  width: number = 600,
+  quality: number = 70
+): string | undefined {
+  if (!url) return undefined;
+  if (!url.includes(STORAGE_OBJECT_PATH)) return url;
+  return url.replace(STORAGE_OBJECT_PATH, STORAGE_RENDER_PATH) + `?width=${width}&quality=${quality}`;
+}

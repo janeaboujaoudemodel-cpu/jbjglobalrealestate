@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { MapPin, ChevronRight, TrendingUp, Building2, Users, BarChart3, Flame } from "lucide-react";
 import { scrollToId } from "@/lib/scroll";
 import type { Area } from "@/hooks/useAreas";
+import { optimizeStorageImageUrl } from "@/lib/imageUtils";
 
 
 interface AreaHeroSectionProps {
@@ -26,7 +27,7 @@ export const AreaHeroSection = ({ area }: AreaHeroSectionProps) => {
     <section className="relative h-screen flex items-end overflow-hidden">
       {/* Background Image */}
       <img
-        src={heroImage || "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"}
+        src={optimizeStorageImageUrl(heroImage, 1920, 80) || "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"}
         alt={`${area.name} - Real Estate Area`}
         className="absolute inset-0 w-full h-full object-cover"
         loading="eager"
