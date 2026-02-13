@@ -4,7 +4,7 @@
  * Row 2: Filter popovers + Sort pills + Hide Sold (last)
  */
 import { useState, useCallback, useEffect } from "react";
-import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check } from "lucide-react";
+import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
@@ -274,7 +274,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   filters.sortBy === opt.value ? "bg-gold/20 text-black font-bold" : "text-black/70 hover:bg-gold/10"
                 )}
               >
-                {opt.label}
+                {opt.value === 'trending' ? <TrendingUp className="w-3.5 h-3.5" /> : opt.label}
               </button>
             ))}
             {/* Map toggle */}
