@@ -1,93 +1,75 @@
 
 
-## Unified Navigation Overhaul: Mobile Hamburger + Desktop Vertical Nav with Mega Menus
+## Fix Guides Page Issues and Area Property Count
 
-This is a large change that touches the mobile hamburger menu, the desktop vertical sidebar (PropertiesVerticalNav), and adds new navigation categories. Here is the breakdown:
+### Issue 1: White Text on Bright Buttons ("Not Sure Where to Start" Card)
 
----
+**Problem:** The "Ask a Question" and "Contact Support" buttons in the "Not sure where to start?" card use `PremiumHeroButton`, which has hardcoded `text-white` and `border-white/70`. This component was designed for dark hero backgrounds. Inside the `jj-card-inner` (champagne gradient), the white text is nearly invisible.
 
-### Part 1: Redesign Mobile Hamburger Menu (Phone/iPad)
+**Fix:** Replace `PremiumHeroButton` with custom styled buttons that use black text, gold borders, and a 3D hover effect. The normal state will have `border-2 border-gold/40`, black text, and champagne fill. On hover, a 3D effect with elevated shadow and gold glow will activate.
 
-**What changes:**
-The current `Sheet`-based mobile menu in `GlobalHeader.tsx` (lines 648-1271) will be replaced with a new champagne-gold themed sidebar matching the `PropertiesVerticalNav` style.
+Also stretch the "Not sure where to start" card by changing `max-w-3xl` to `max-w-5xl` so it fills more horizontal space.
 
-**New mobile menu features:**
-- Opens from the **right side** (keeps current behavior)
-- Uses the same champagne gradient background (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`) as the vertical nav
-- **Bigger monogram** at the top (w-16 h-16 on mobile, w-20 h-20 on iPad) with "JBJ GLOBAL" / "REAL ESTATE" text
-- Quick action row: Search, Account, Language, Currency (same as now but styled to match)
-- **All pages organized under collapsible categories** with expand/collapse chevrons:
-  1. **Buy** -- Properties for Sale, Apartments, Villas, Buyer's Guide, Mortgage Calculator
-  2. **Sell** -- List Your Property, Seller's Guide, Property Valuation, Selling Advisory
-  3. **Rent** -- Properties for Rent, Tenant's Guide, Property Management
-  4. **Projects** -- All Off-Plan Projects, New Launches
-  5. **Developers** -- All Developers, Emaar, DAMAC, Sobha, Nakheel, Binghatti, Meraas, etc. + "View All Developers"
-  6. **Areas** -- Explore All Areas + top area links from database (same as MegaMenuAreas)
-  7. **Insights** (NEW) -- All 8 sub-sections from MegaMenuInsights: News & Updates, Market Intelligence, Guides, Services, Business Suites, Investor/Broker Tools, Company, Legal
-  8. **Services** -- Our Services, Property Management, Mortgage Advisory, Valuation, etc.
-  9. **Creative Toolkit** -- Toolkit Hub, AI Video Studio, etc.
-  10. **About & Company** -- About Us, Team, Brokers, Careers, Awards, Contact, etc.
-  11. **Resources & Guides** -- Guides Library, Market Intelligence, News, FAQ
-  12. **Partners & Tools** -- Partners Hub, Mortgage Partners, etc.
-  13. **Legal & Trust** -- Terms, Privacy, Cookies, Trust & Audit
-- Each category has a **gold chevron** that rotates on expand/collapse
-- Subpages show as flat link lists (icon + title), matching current mobile link style
-- User section at bottom (dashboard, profile, owner shortcuts, sign out)
-- Footer: bigger monogram + "Contact Support"
-
-**File modified:** `src/components/GlobalHeader.tsx`
+**File:** `src/pages/Guides.tsx` (lines 406-421)
 
 ---
 
-### Part 2: Enhance Desktop Vertical Nav (PropertiesVerticalNav)
+### Issue 2: Newsletter Email Field Needs Bold Border
 
-**What changes:**
-The `PropertiesVerticalNav` (shown when filter bar replaces header on scroll) gains mega menu hover capability and new utility items.
+**Problem:** In the "Ready to Get Started?" section, the compact newsletter email input has a thin `border border-gold/30`. It needs a bolder border matching the gold theme, and a 3D hover effect.
 
-**New features:**
-- **Bigger monogram**: Increase from w-12 to w-14 or w-16
-- **Add new nav items**: Areas, Insights
-- **Add utility section** at the bottom (above Contact Support):
-  - Search icon (opens GlobalSearchModal)
-  - Language switcher (compact)
-  - Currency switcher (compact)
-  - Profile / Dashboard / Settings links
-- **Mega menu on hover (desktop only)**: When hovering over "Developers", "Areas", "Buy", "Sell", "Rent", "Projects", or "Insights", a floating mega menu card appears to the right of the sidebar. This is the **same mega menu component** used in the main header (MegaMenuDevelopers, MegaMenuAreas, MegaMenuBuy, etc.)
-- Items that have mega menus get a small chevron indicator
+**Fix:** Update the compact variant input in `NewsletterBrevo.tsx` to use `border-2 border-gold/50` normally, and on hover/focus add a 3D shadow effect with `shadow-[0_4px_15px_rgba(200,167,102,0.3)]`.
 
-**How hover mega menus work:**
-- Each nav item with a mega menu gets `onMouseEnter` / `onMouseLeave` handlers
-- On hover, the corresponding `MegaMenu*` component renders as an absolutely positioned panel to the right of the sidebar
-- A backdrop overlay appears behind the mega menu
-- On mouse leave, the panel closes after a short delay (same 80ms pattern as main header)
-
-**File modified:** `src/components/navigation/PropertiesVerticalNav.tsx`
+**File:** `src/components/marketing/NewsletterBrevo.tsx` (line 127)
 
 ---
 
-### Part 3: Add "Insights" to Vertical Nav
+### Issue 3: Add 6th "What You'll Learn" Card
 
-The vertical nav currently has 15 items. "Insights" will be added between "Market Intel" and "Guides", linking to `/insights` or triggering the mega menu on hover.
+**Problem:** There are 5 learning topic cards. User wants a 6th card related to the existing "Fee clarity and what is paid when" topic, providing additional value.
 
-The Insights mega menu content is already defined in `MegaMenuInsights.tsx` with 8 categories (News, Market Intelligence, Guides, Services, Business Suites, Mode Tools, Company, Legal).
+**Fix:** Add a new entry to the `learningTopics` array with a relevant topic like "Payment plan structures and milestones" covering how installments work in off-plan purchases.
+
+**File:** `src/pages/Guides.tsx` (lines 98-124)
 
 ---
 
-### Technical Details
+### Issue 4: Guide Hero Section - Remove Book Placeholder, Add Video
 
-**Files to modify:**
-1. `src/components/GlobalHeader.tsx` -- Redesign mobile menu section (lines 648-1271). Add Insights and Areas with full subpage lists to mobile collapsibles. Increase monogram size.
-2. `src/components/navigation/PropertiesVerticalNav.tsx` -- Add mega menu hover system, utility icons (search, language, currency, profile), Insights nav item, bigger monogram.
+**Problem:** The hero currently shows a static book/icon placeholder with "How to Use the Guides" and "Video placeholder only" text (lines 213-221). This looks unprofessional and the content overlaps visually.
 
-**Files to import in PropertiesVerticalNav:**
-- `MegaMenuBuy`, `MegaMenuSell`, `MegaMenuRent`, `MegaMenuProjects`, `MegaMenuAreas`, `MegaMenuDevelopers`, `MegaMenuInsights`
-- `GlobalSearchModal` for the search trigger
-- `LanguageSwitcher`, `CurrencySwitcher` for utility row
+**Fix:** Replace the placeholder with an actual background video element (using the same pattern as other hero sections). Use a Dubai real estate stock video. Remove the "How to Use the Guides" book icon overlay entirely. Clean up the hero content layout to prevent any overlap with proper z-indexing and spacing.
 
-**No new files created** -- all changes are within existing components.
+**File:** `src/pages/Guides.tsx` (lines 210-224)
 
-**Responsive behavior summary:**
-- **Phone/iPad** (touch or below 1024px): Hamburger opens redesigned champagne sidebar from right. Categories expand to show flat page title lists. No mega menu cards.
-- **Desktop with filter bar active** (vertical nav visible): Hovering nav items shows the same rectangular mega menu cards with video/images that the main header uses. Utility icons for search, language, currency, profile are in the sidebar footer.
-- **Desktop normal** (main header visible): No changes -- existing mega menu pill nav continues as-is.
+---
+
+### Issue 5: Area Page Property Count Shows Wrong Number
+
+**Problem:** The user sees "2,409" properties on the area page. The `ProjectCountStat` component already queries the database dynamically (which now returns 1,808 after our cleanup). This is a browser cache issue -- the stale query result is cached by TanStack Query with `staleTime: 5 * 60 * 1000` (5 minutes).
+
+**Fix:** Reduce the `staleTime` to 60 seconds so counts refresh faster. Additionally, invalidate this query key when the page loads to ensure fresh data.
+
+**File:** `src/pages/AreaGuides.tsx` (line 33)
+
+---
+
+### Issue 6: Global Audit - PremiumHeroButton on Bright Backgrounds
+
+**Problem:** `PremiumHeroButton` with white text may be used in other bright-background sections across the platform.
+
+**Fix:** Add a `variant` prop to `PremiumHeroButton` supporting `"dark-bg"` (default, current behavior) and `"light-bg"` (black text, gold border, 3D hover). Update all instances where the button sits on champagne/light backgrounds to use `variant="light-bg"`.
+
+**File:** `src/components/ui/premium-hero-button.tsx`
+
+---
+
+### Summary of Files Modified
+
+| File | Change |
+|------|--------|
+| `src/components/ui/premium-hero-button.tsx` | Add `variant="light-bg"` support with black text, gold borders, 3D hover |
+| `src/pages/Guides.tsx` | Use light-bg buttons in CTA card, stretch card wider, add 6th learning card, replace hero placeholder with video |
+| `src/components/marketing/NewsletterBrevo.tsx` | Bold gold border on compact email input, 3D hover effect |
+| `src/pages/AreaGuides.tsx` | Reduce staleTime for property count query |
 
