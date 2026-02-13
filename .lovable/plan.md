@@ -1,32 +1,61 @@
 
 
-## Continue Developer Enrichment: Process All 540 Developers
+## Add Page-Level FilterShortcutBar to Area Detail Page
 
-### What This Does
-Run the `enrich-developer-data` edge function repeatedly in batches of 5 developers until all 540 developers have been processed.
+### Current State
+The Area Detail page (`/area/:slug`) currently has a `FilterShortcutBar` embedded **inside** the `AreaProjectsGrid` child component. This means:
+- It only appears within the "Projects in [Area]" section, not at the top of the page
+- It does not match the unified pattern used on Properties, Areas index, and Developer detail pages where the bar sits at the **page level**
 
-### Approach
-1. Call the edge function with incrementing offsets (0, 5, 10, 15, ...) until it returns `"status": "complete"`
-2. Each batch processes 5 developers using AI research (Gemini 2.5 Flash)
-3. Only fields that are currently null get updated -- existing accurate data is preserved
-4. Estimated ~108 batch calls, each taking 15-30 seconds
+### What Changes
 
-### Execution
-I will call the function sequentially, advancing the offset after each successful batch. Progress will be reported as we go. If any batch hits a rate limit or error, I will pause briefly and retry.
+**1. Add FilterShortcutBar state and imports to `AreaDetail.tsx`**
+- Import `FilterShortcutBar`, `ShortcutFilterState`, `defaultShortcutFilters`
+- Import `applyShortcutFilters`
+- Add `shortcutFilters` state at the page level
+- Add a sentinel ref for IntersectionObserver-based sticky behavior
 
-### Fields Being Enriched
-- Website URL
-- CEO / Chairman name
-- Total units delivered
-- Upcoming units in pipeline
-- Expected completion year
-- Notable projects
-- Parent company
-- License number
-- Specialization (Luxury, Affordable, Mixed-use, etc.)
+**2. Render the FilterShortcutBar at page level in `AreaDetail.tsx`**
+- Place it between the Hero/About sections and the Projects grid (matching the DeveloperDetail pattern)
+- Include both inline and fixed-portal versions (inline in flow, fixed when scrolled past)
+- Use the same champagne gradient styling as other pages
+- Include a search input slot for searching projects within the area
 
-### Important Notes
-- This is a long-running process -- it will take many sequential calls
-- The AI only fills in facts it is confident about; uncertain fields stay null
-- No existing data will be overwritten
+**3. Pass filters down to `AreaProjectsGrid`**
+- Add `shortcutFilters` and `searchQuery` as props to `AreaProjectsGrid`
+- Remove the duplicate FilterShortcutBar and filter state from inside `AreaProjectsGrid`
+- Keep the grid rendering and project fetching logic within `AreaProjectsGrid`
+
+**4. Clean up `AreaProjectsGrid.tsx`**
+- Remove the local `shortcutFilters` state, search input, and inline/fixed FilterShortcutBar rendering
+- Remove the IntersectionObserver and `filter-bar-fixed` body class logic (moved to parent)
+- Accept `shortcutFilters` and `searchQuery` as props instead
+- Keep only the filtered grid rendering logic
+
+### Technical Details
+
+```text
+Before:
+  AreaDetail.tsx
+    -> AreaHeroSection
+    -> AreaAboutSection
+    -> AreaProjectsGrid (contains FilterShortcutBar + filters + sticky logic)
+    -> AreaDevelopersBar
+    -> ...
+
+After:
+  AreaDetail.tsx
+    -> AreaHeroSection
+    -> AreaAboutSection
+    -> [Sentinel div]
+    -> FilterShortcutBar (inline, page-level)
+    -> FilterShortcutBar (fixed portal, when scrolled)
+    -> AreaProjectsGrid (receives filters as props, renders grid only)
+    -> AreaDevelopersBar
+    -> ...
+```
+
+### Files Modified
+- `src/pages/AreaDetail.tsx` -- Add FilterShortcutBar at page level with sticky behavior
+- `src/components/area-detail/AreaProjectsGrid.tsx` -- Remove embedded FilterShortcutBar, accept filters as props
 
