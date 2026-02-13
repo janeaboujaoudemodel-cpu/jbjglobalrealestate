@@ -566,6 +566,7 @@ export type Database = {
           emirate: string
           hero_image_url: string | null
           id: string
+          image_approved: boolean
           image_url: string | null
           is_active: boolean | null
           is_high_demand: boolean | null
@@ -589,6 +590,7 @@ export type Database = {
           emirate?: string
           hero_image_url?: string | null
           id?: string
+          image_approved?: boolean
           image_url?: string | null
           is_active?: boolean | null
           is_high_demand?: boolean | null
@@ -612,6 +614,7 @@ export type Database = {
           emirate?: string
           hero_image_url?: string | null
           id?: string
+          image_approved?: boolean
           image_url?: string | null
           is_active?: boolean | null
           is_high_demand?: boolean | null
