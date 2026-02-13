@@ -1,52 +1,27 @@
 
 
-## Final Fix: DLD Market Widget Edge-to-Edge Background
+## Delete All Non-UAE Projects (Oman)
 
-### Remaining Issue
+### What Will Be Deleted
 
-In `src/pages/PropertiesReelly.tsx` (line 469), the DLD Market Widget wrapper uses `lg:ml-[200px]` (margin-left) instead of `lg:pl-[200px]` (padding-left). This causes the dark `premium-bg` background to show on the left edge -- the same "black edge" problem that was fixed for all other sections.
+9 projects located outside the seven UAE Emirates:
 
-### Already Completed (from previous implementations)
+- **Muscat Governorate, Oman** -- 8 projects
+- **Dhofar Governorate, Oman** -- 1 project
 
-All other fixes from the approved plans have been implemented:
-- Hero section removed, instant layout on both Properties and Area Guides pages
-- Edge-to-edge backgrounds on main content sections (using `lg:pl-[200px]`)
-- 2-column grid on Properties page
-- Pagination on both Properties and Area Guides pages
-- Filter pill icons removed from Row 2
-- Advanced Filter dialog widened to `max-w-3xl`
-- Project count fixed with `is_published: true` filter
-- Emirates and Developers converted to collapsible fields
-- Developer logo frames use `rounded-lg` with `object-contain`
-- Payment Plan section renders inline with proper layout
-- "Show X projects" button uses champagne-gold styling
+No projects from Thailand or any other non-UAE country were found.
 
-### Fix Required
+### Steps
 
-**File: `src/pages/PropertiesReelly.tsx`** (line 469)
+1. **Delete related records first** (foreign key dependencies):
+   - Delete from `project_images` where `project_id` matches any Oman project
+   - Delete from `project_documents` where `project_id` matches any Oman project
 
-Change the DLD Market Widget wrapper from margin-based to padding-based offset, and add a background so the section stretches edge-to-edge:
+2. **Delete the 9 projects** from the `projects` table where `emirate IN ('Muscat Governorate', 'Dhofar Governorate')`
 
-- Change `lg:ml-[200px]` to a full-width wrapper with `lg:pl-[200px]` inside
-- This ensures the DLD widget's background covers the full viewport width, matching the rest of the page
+3. **Verify** the deletion with a count query to confirm no non-UAE projects remain
 
 ### Technical Detail
 
-Current (broken):
-```
-<div className="lg:ml-[200px]">
-  <DLDMarketWidget />
-</div>
-```
-
-Fixed:
-```
-<div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-  <div className="lg:pl-[200px]">
-    <DLDMarketWidget />
-  </div>
-</div>
-```
-
-This is a one-line change that completes the edge-to-edge background consistency across the entire Properties page.
+A single database migration with three DELETE statements executed in order to respect foreign key constraints. No code file changes are needed -- the UI already reads from the `projects` table dynamically, so the Oman listings will simply disappear.
 
