@@ -91,17 +91,22 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
             </div>
           )}
           
-          {/* Logo Overlay - Top Left - Larger box with object-contain, no cropping */}
+      {/* Logo Overlay - Top Left */}
           <div className="absolute top-3 left-3 z-10">
             {developer.logo_url && !logoError ? (
-              <img
-                src={developer.logo_url}
-                alt={`${developer.name} logo`}
-                className="w-14 h-14 rounded-lg shadow-lg object-contain border border-white/30"
-                loading={isEager ? "eager" : "lazy"}
-                referrerPolicy="no-referrer"
-                onError={() => setLogoError(true)}
-              />
+              <div
+                className="w-14 h-14 rounded-lg overflow-hidden shadow-lg flex items-center justify-center"
+                style={{ backgroundColor: developer.logo_bg_color || '#FFFFFF' }}
+              >
+                <img
+                  src={developer.logo_url}
+                  alt={`${developer.name} logo`}
+                  className="w-full h-full object-contain p-0.5"
+                  loading={isEager ? "eager" : "lazy"}
+                  referrerPolicy="no-referrer"
+                  onError={() => setLogoError(true)}
+                />
+              </div>
             ) : (
               <Building2 className="w-8 h-8 text-white/60 drop-shadow-lg" />
             )}
