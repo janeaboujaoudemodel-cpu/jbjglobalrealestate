@@ -77,8 +77,9 @@ export default function PropertiesVerticalNav() {
           style={{ left: '200px', top: 0, bottom: 0, right: 0 }}
         >
           <div
-            className="pointer-events-auto max-w-[700px] w-full max-h-[85vh] overflow-y-auto mt-8 rounded-2xl shadow-2xl border border-gold/30 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]"
+            className="pointer-events-auto max-w-[500px] w-full max-h-[70vh] overflow-y-auto mt-8 rounded-2xl shadow-2xl border border-gold/30 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]"
             onClick={(e) => e.stopPropagation()}
+            onMouseLeave={closeMegaMenu}
           >
             <div className="p-4">
               {activeMegaMenu === 'buy' && <MegaMenuBuy onClose={closeMegaMenu} />}
