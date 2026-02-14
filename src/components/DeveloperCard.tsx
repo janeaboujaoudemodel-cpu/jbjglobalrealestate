@@ -41,7 +41,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
   const [imageError, setImageError] = useState(false);
   const [logoError, setLogoError] = useState(false);
 
-  const logoBgColor = developer.logo_bg_color || "#FFFFFF";
+  // logo_bg_color no longer used on external cards
   const showFeatureImage = developer.feature_image_url && !imageError;
   
   return (
@@ -93,22 +93,18 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           
           {/* Logo Overlay - Top Left - Larger box with object-contain, no cropping */}
           <div className="absolute top-3 left-3 z-10">
-            <div className="w-14 h-14 rounded-lg overflow-hidden shadow-lg" style={{ backgroundColor: logoBgColor }}>
-              {developer.logo_url && !logoError ? (
-                <img
-                  src={developer.logo_url}
-                  alt={`${developer.name} logo`}
-                  className="w-full h-full object-contain p-0.5"
-                  loading={isEager ? "eager" : "lazy"}
-                  referrerPolicy="no-referrer"
-                  onError={() => setLogoError(true)}
-                />
-              ) : (
-                <div className="w-full h-full bg-zinc-800 flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-zinc-400" />
-                </div>
-              )}
-            </div>
+            {developer.logo_url && !logoError ? (
+              <img
+                src={developer.logo_url}
+                alt={`${developer.name} logo`}
+                className="w-14 h-14 rounded-lg shadow-lg object-contain border border-white/30"
+                loading={isEager ? "eager" : "lazy"}
+                referrerPolicy="no-referrer"
+                onError={() => setLogoError(true)}
+              />
+            ) : (
+              <Building2 className="w-8 h-8 text-white/60 drop-shadow-lg" />
+            )}
           </div>
           
           {/* Tier Badge - Top Right */}
