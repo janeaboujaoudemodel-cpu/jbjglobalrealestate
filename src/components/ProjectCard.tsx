@@ -202,11 +202,16 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         <div className="aspect-[16/10] overflow-hidden relative">
           {/* Developer Logo Overlay - Top Left */}
           {(project.developer as any)?.logo_url && (
-            <img 
-              src={(project.developer as any).logo_url} 
-              alt={project.developer?.name}
-              className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg shadow-lg object-contain border border-white/30"
-            />
+            <div
+              className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden shadow-lg flex items-center justify-center"
+              style={{ backgroundColor: (project.developer as any)?.logo_bg_color || '#FFFFFF' }}
+            >
+              <img 
+                src={(project.developer as any).logo_url} 
+                alt={project.developer?.name}
+                className="w-full h-full object-contain p-0.5"
+              />
+            </div>
           )}
 
           <VerifiedMedia
