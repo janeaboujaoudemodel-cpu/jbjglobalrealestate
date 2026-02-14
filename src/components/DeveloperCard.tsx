@@ -40,6 +40,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
   const tier = getDeveloperTier(developer.slug || "");
   const isEager = index < 8;
   const [imageError, setImageError] = useState(false);
+  const [logoError, setLogoError] = useState(false);
   const logoContainerRef = useRef<HTMLDivElement>(null);
 
   const handleLogoLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -102,14 +103,15 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           {/* Logo Overlay - Top Left - Larger box with object-contain, no cropping */}
           <div className="absolute top-3 left-3 z-10">
             <div ref={logoContainerRef} className="w-14 h-14 rounded-lg overflow-hidden shadow-lg bg-white">
-              {developer.logo_url ? (
+              {developer.logo_url && !logoError ? (
                 <img
                   src={developer.logo_url}
                   alt={`${developer.name} logo`}
                   className="w-full h-full object-contain"
                   loading={isEager ? "eager" : "lazy"}
-                  crossOrigin="anonymous"
+                  referrerPolicy="no-referrer"
                   onLoad={handleLogoLoad}
+                  onError={() => setLogoError(true)}
                 />
               ) : (
                 <div className="w-full h-full bg-zinc-800 flex items-center justify-center">
