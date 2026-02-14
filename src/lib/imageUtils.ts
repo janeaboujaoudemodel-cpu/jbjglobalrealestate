@@ -173,3 +173,52 @@ export function optimizeStorageImageUrl(
   if (!url.includes(STORAGE_OBJECT_PATH)) return url;
   return url.replace(STORAGE_OBJECT_PATH, STORAGE_RENDER_PATH) + `?width=${width}&quality=${quality}`;
 }
+
+/**
+ * Extract the dominant background color from a loaded image by sampling its corner pixels.
+ * Uses a hidden canvas. Falls back to white on cross-origin or other errors.
+ */
+export function extractDominantCornerColor(img: HTMLImageElement): string {
+  try {
+    const canvas = document.createElement("canvas");
+    const size = 1; // sample 1px at each corner
+    canvas.width = img.naturalWidth || img.width;
+    canvas.height = img.naturalHeight || img.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return "rgb(255,255,255)";
+
+    ctx.drawImage(img, 0, 0);
+
+    const w = canvas.width;
+    const h = canvas.height;
+    if (w === 0 || h === 0) return "rgb(255,255,255)";
+
+    // Sample 4 corners
+    const corners = [
+      ctx.getImageData(0, 0, size, size).data,           // top-left
+      ctx.getImageData(w - 1, 0, size, size).data,       // top-right
+      ctx.getImageData(0, h - 1, size, size).data,       // bottom-left
+      ctx.getImageData(w - 1, h - 1, size, size).data,   // bottom-right
+    ];
+
+    // Find most common corner color (simple: stringify & count)
+    const colorMap = new Map<string, number>();
+    let bestColor = `rgb(${corners[0][0]},${corners[0][1]},${corners[0][2]})`;
+    let bestCount = 0;
+
+    for (const c of corners) {
+      const key = `rgb(${c[0]},${c[1]},${c[2]})`;
+      const count = (colorMap.get(key) || 0) + 1;
+      colorMap.set(key, count);
+      if (count > bestCount) {
+        bestCount = count;
+        bestColor = key;
+      }
+    }
+
+    return bestColor;
+  } catch {
+    // Cross-origin or security error
+    return "rgb(255,255,255)";
+  }
+}
