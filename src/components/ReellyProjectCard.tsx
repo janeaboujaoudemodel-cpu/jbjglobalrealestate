@@ -156,14 +156,12 @@ const ReellyProjectCard = ({
           <div className="aspect-[16/10] overflow-hidden relative">
             {/* Developer Logo Overlay - Top Left */}
             {(project as any).developer?.logo_url && (
-              <div className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg bg-white border-2 border-gold shadow-[0_4px_16px_rgba(200,167,102,0.3)] flex items-center justify-center overflow-hidden">
-                <img 
-                  src={(project as any).developer.logo_url} 
-                  alt={project.developer_name || ''}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            )}
+              <img 
+                src={(project as any).developer.logo_url} 
+                alt={project.developer_name || ''}
+                className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg shadow-lg object-contain border border-white/30"
+              />
+             )}
 
              <VerifiedMedia
                src={images[currentImageIndex]?.image_url || project.thumbnail || project.gallery?.[0] || null}
