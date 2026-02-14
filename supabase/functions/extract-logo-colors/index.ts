@@ -22,7 +22,7 @@ async function extractColorViaAI(logoUrl: string, apiKey: string): Promise<strin
             content: [
               {
                 type: "text",
-                text: "Look at this logo image. What is the background color behind/around the logo? I need the EXACT color as an rgb() CSS value. If the background is transparent or white, return rgb(255,255,255). If it's a solid color like navy blue, red, black, brown etc, return that exact color. Return ONLY the rgb() value, nothing else. Example: rgb(0,40,85)"
+                text: "Analyze this logo image carefully. I need the EXACT background/border color that surrounds the logo graphic itself — the color of the rectangular area behind and around the logo symbol/text. This is NOT the color of the logo text or icon, but the BACKGROUND COLOR the logo sits on. Match the EXACT shade precisely — do not approximate. If the background is transparent, white, or near-white, return rgb(255,255,255). For dark backgrounds, distinguish carefully between pure black rgb(0,0,0), dark navy rgb(0,40,85), dark brown rgb(90,60,30), etc. Return ONLY the rgb() value with no spaces, nothing else. Example: rgb(0,40,85)"
               },
               {
                 type: "image_url",
