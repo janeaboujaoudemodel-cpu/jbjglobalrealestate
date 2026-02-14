@@ -1,65 +1,76 @@
 
 
-## Improve Vertical Navigation Mega Menu Behavior
+## Fix Properties Page: Hero Section, Data Quality, Mega Menu, and Mobile Nav
 
-### Changes Overview
+### Issues Identified
 
-The vertical sidebar navigation (`PropertiesVerticalNav.tsx`) needs several UX improvements. These changes apply ONLY to the vertical nav mode -- the horizontal GlobalHeader mega menus remain untouched.
+1. **No Hero Section on /properties** -- The page opens directly with the filter bar and vertical nav. It needs a hero video section first (like project detail pages), and the vertical nav should only appear after scrolling past it.
+2. **Wrong project count (2,480)** -- The database has 2,480 projects but 686 have NO cover image. These incomplete projects inflate the count and show "Media Pending Verification" placeholders.
+3. **Projects without photos** -- 686 projects have no `cover_image_url`. These should be filtered out from the listing until they have images.
+4. **Mega menu panels too large and don't close on hover-out** -- The panel needs to be smaller (max-w-[500px] instead of 700px) and must close instantly when the mouse leaves.
+5. **Mobile hamburger menu** -- Should use the same vertical sidebar style as the desktop vertical nav.
 
-### 1. Click-to-Open Instead of Hover
+---
 
-Currently, hovering over nav items with mega menus (Buy, Sell, Rent, etc.) opens the full mega menu panel immediately. This will be changed to:
-- **Hover**: Only highlights the nav item (visual feedback), does NOT open the mega menu panel
-- **Click**: Opens the mega menu panel
-- Clicking again or clicking outside closes it immediately (no 80-120ms delay)
+### Part 1: Restore Hero Section on /properties with Scroll-Based Transition
 
-### 2. Smaller, Centered Mega Menu Panel
+**File: `src/pages/PropertiesReelly.tsx`**
 
-When a mega menu opens in vertical nav mode, it currently fills the entire right side of the screen. This will be changed to:
-- Panel width: max ~700px instead of filling to the right edge
-- Centered horizontally in the remaining space (right of the sidebar)
-- Slightly rounded corners and shadow for a premium card-like appearance
-- The panel will NOT overlap the left sidebar (stays to the right of the 200px sidebar)
+- Re-add the `PropertiesHeroVideo` component at the top of the page (before the filter bar and listings)
+- Add hero content inside it (headline, subheading, CTA buttons -- similar to how `Properties.tsx` had it)
+- Remove the immediate `filter-bar-fixed` class on mount (lines 103-107)
+- Add scroll-based logic (like `ProjectDetailLayout.tsx` lines 230-249):
+  - Track scroll position with `showStickyNav` state
+  - When `scrollY > window.innerHeight - 150`, set `filter-bar-fixed` class and show vertical nav + filter bar
+  - When scrolling back to hero, remove class, hide vertical nav, show normal transparent GlobalHeader
+- The vertical nav `<div>` (line 246-248) should be conditionally rendered based on `showStickyNav` state
+- The filter bar section (line 251-276) should also be conditionally rendered based on `showStickyNav`
 
-### 3. Background Blur Effect
+### Part 2: Filter Out Projects Without Images
 
-When the mega menu panel is open:
-- The main page content behind it gets a subtle backdrop blur effect
-- The vertical sidebar itself stays clear and fully visible (no blur on the sidebar)
+**File: `src/pages/PropertiesReelly.tsx`**
 
-### 4. Instant Close on Outside Click
+- In the `dbProjectsMapped` memo (line 137-140), add a filter:
+  ```
+  .filter(p => p.thumbnail && p.thumbnail !== '')
+  ```
+- This ensures only projects with actual images appear in the listing
+- The count will automatically reflect only projects with images (approximately 1,794)
+- The `totalCount` variable (line 171) will naturally update since it uses `dbProjectsMapped.length`
 
-- Remove the 80-120ms timeout delays on mouse leave
-- Clicking anywhere outside the mega menu panel closes it instantly
-- Clicking on a different nav item switches the panel instantly
-
-### 5. Logo Links to Homepage
-
-The JBJ monogram/logo at the top of the vertical sidebar currently has no link. It will be wrapped in a `<Link to="/">` so clicking it navigates to the homepage.
-
-### 6. Hero Section Scroll Behavior (Project Detail Pages)
-
-On project detail pages (`/project/...`), the vertical nav appears only after scrolling past the hero section. The existing behavior already handles this:
-- In the hero section: horizontal transparent header is shown
-- After scrolling past hero: vertical nav appears, horizontal header hides
-
-This is already working via the `showStickyNav` state in `ProjectDetailLayout.tsx`. No changes needed here -- the user confirmed this is working correctly.
-
-For the `/properties` page (PropertiesReelly), the vertical nav is always shown since there is no hero section. This stays the same.
-
-### Technical Details
+### Part 3: Smaller Mega Menu Panels + Instant Close on Hover-Out
 
 **File: `src/components/navigation/PropertiesVerticalNav.tsx`**
 
-| Change | Detail |
-|--------|--------|
-| Replace `onMouseEnter` with `onClick` on nav items | Mega menus open only on click |
-| Remove `handleNavLeave`, `handlePanelEnter`, `handlePanelLeave` hover handlers | No hover-based open/close |
-| Wrap logo `<img>` in `<Link to="/">` | Logo navigates to homepage |
-| Update `renderMegaMenu()` panel styles | Smaller panel: `max-w-[700px]`, centered in available space |
-| Add `backdrop-blur-sm` to the backdrop overlay | Blurs main content behind mega menu |
-| Make backdrop click close instantly (already does, but remove timeouts) | Instant close behavior |
-| Keep nav item hover styling for visual feedback only | Gold highlight on hover, but no panel opening |
+- Reduce mega menu panel from `max-w-[700px]` to `max-w-[500px]` (line 80)
+- Reduce `max-h-[85vh]` to `max-h-[70vh]`
+- Add `onMouseLeave` handler to the mega menu panel container that calls `closeMegaMenu()` instantly
+- Add `onMouseLeave` on the backdrop that also calls `closeMegaMenu()`
+- The panel should close immediately when the mouse moves outside it -- no delays
 
-No other files need to be modified. The GlobalHeader mega menus are completely separate and remain unchanged.
+### Part 4: Mobile Hamburger Menu Using Vertical Nav Style
+
+**File: `src/components/GlobalHeader.tsx`**
+
+- Replace the current mobile Sheet/sidebar content with the `PropertiesVerticalNav` component (or a mobile-adapted version of it)
+- The mobile hamburger menu should open a sliding panel from the left (matching the vertical nav design) with the same champagne gradient, same nav items, same mega-menu-on-click behavior
+- This ensures consistency between the desktop vertical nav and mobile navigation
+
+---
+
+### Technical Summary
+
+| # | File | Change |
+|---|------|--------|
+| 1 | `src/pages/PropertiesReelly.tsx` | Add `PropertiesHeroVideo` at top, scroll-based transition for vertical nav |
+| 2 | `src/pages/PropertiesReelly.tsx` | Filter out projects where `cover_image_url` is null/empty |
+| 3 | `src/components/navigation/PropertiesVerticalNav.tsx` | Smaller panel (500px), instant close on mouse leave |
+| 4 | `src/components/GlobalHeader.tsx` | Mobile menu uses vertical nav style |
+
+### Data Impact
+
+- Current total: 2,480 projects in database
+- Projects with images: 1,794
+- Projects without images (hidden): 686
+- The displayed count will accurately reflect ~1,794 available properties with verified media
 
