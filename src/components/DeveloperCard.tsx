@@ -1,7 +1,9 @@
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Building2, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { extractDominantCornerColor } from "@/lib/imageUtils";
 import type { Developer } from "@/hooks/useProjects";
 
 interface DeveloperCardProps {
@@ -37,6 +39,18 @@ function getDeveloperTier(slug: string): { label: string; color: string } | null
 const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCardProps) => {
   const tier = getDeveloperTier(developer.slug || "");
   const isEager = index < 8;
+  const [imageError, setImageError] = useState(false);
+  const logoContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleLogoLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    if (logoContainerRef.current) {
+      const color = extractDominantCornerColor(img);
+      logoContainerRef.current.style.backgroundColor = color;
+    }
+  };
+
+  const showFeatureImage = developer.feature_image_url && !imageError;
   
   return (
     <Link to={`/developer/${developer.slug}`}>
@@ -53,14 +67,16 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           `,
         }}
       >
-        {/* Photo Section - Increased Height */}
+        {/* Photo Section */}
         <div className="relative h-[220px] flex-shrink-0">
-          {developer.feature_image_url ? (
+          {showFeatureImage ? (
             <img
               src={developer.feature_image_url}
               alt={developer.name}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               loading={isEager ? "eager" : "lazy"}
+              referrerPolicy="no-referrer"
+              onError={() => setImageError(true)}
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 flex items-center justify-center">
@@ -85,13 +101,15 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           
           {/* Logo Overlay - Top Left - Larger box with object-contain, no cropping */}
           <div className="absolute top-3 left-3 z-10">
-            <div className="w-14 h-14 rounded-lg overflow-hidden shadow-lg bg-white p-1">
+            <div ref={logoContainerRef} className="w-14 h-14 rounded-lg overflow-hidden shadow-lg bg-white">
               {developer.logo_url ? (
                 <img
                   src={developer.logo_url}
                   alt={`${developer.name} logo`}
                   className="w-full h-full object-contain"
                   loading={isEager ? "eager" : "lazy"}
+                  crossOrigin="anonymous"
+                  onLoad={handleLogoLoad}
                 />
               ) : (
                 <div className="w-full h-full bg-zinc-800 flex items-center justify-center">
