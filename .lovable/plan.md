@@ -1,52 +1,78 @@
 
 
-## Fix Three Issues: Developer Logo Fit, Chat Auto-Minimize on Recommendations, and Filter Sold-Out Projects
-
-### Issue 1: Developer Card Logo -- Full Fit Without White Borders or Cropping
-
-**Problem**: The logo overlay on developer cards currently has `p-1.5` padding inside a white box, creating visible white borders around the logo. The user wants the logo to fill the entire frame with no white space, but still without cropping.
-
-**Fix**: Remove the `p-1.5` padding from the logo container so the logo fills the full 56x56px box. Keep `object-contain` to prevent cropping.
-
-| File | Change |
-|------|--------|
-| `src/components/DeveloperCard.tsx` (line 88) | Change `bg-white p-1.5` to `bg-white p-0` -- remove all padding so the logo fills edge-to-edge inside the rounded box |
+## Fix Three Issues: Duplicate Gallery Images, Slow AI Analyzer, and Developer Logo Cropping
 
 ---
 
-### Issue 2: Auto-Minimize Chat When "Recommended for You" Popup Appears
+### Issue 1: Remove Duplicate Project Gallery Images (Database Cleanup)
 
-**Problem**: The `PropertyRecommendationPopup` (the behavior-based "Recommended for You" popup that appears in the bottom-right corner) overlaps with the JBJ Support chat widget. When the recommendation popup opens, the chat should auto-minimize.
+**Problem**: 45 projects have duplicate images in the `project_images` table. Some are extreme -- Oceano has 3,441 rows for just 24 unique images (172 copies each!), Damac Lagoons Views has the same, and 4B Living has 641 rows for 21 unique images.
 
-**Current architecture**: The popup lives in `PopupLayer.tsx` and has no connection to the chat widget state in `MainLayout.tsx`.
+**Fix**: Run a SQL cleanup that:
+1. For each project, identifies duplicate `image_url` entries
+2. Keeps only the row with the lowest `id` (oldest/first inserted) for each unique URL
+3. Deletes all other duplicate rows
 
-**Fix**: Use a custom event to communicate between the recommendation popup and the chat widget.
+This is a single database operation:
 
-| File | Change |
-|------|--------|
-| `src/components/PropertyRecommendationPopup.tsx` | When `setIsOpen(true)` is called, also dispatch a custom event `window.dispatchEvent(new Event('recommendation-popup-opened'))` |
-| `src/components/MainLayout.tsx` | Add a `useEffect` that listens for the `recommendation-popup-opened` event and calls `setIsChatCollapsed(true)` + `setShowAttentionPulse(false)` |
+```text
+DELETE FROM project_images
+WHERE id NOT IN (
+  SELECT MIN(id)
+  FROM project_images
+  GROUP BY project_id, image_url
+);
+```
 
----
+**Quality note**: Since the duplicates are exact same URLs, there is no "higher quality" vs "lower quality" version to choose from -- they are identical copies. The cleanup simply removes redundant rows.
 
-### Issue 3: Stop Recommending Sold-Out Projects
-
-**Problem**: Both `RecommendedProjects` (on project detail pages) and `PropertyRecommendationPopup` (the behavior popup) can show projects that are sold out. The user does not want sold-out projects recommended.
-
-**Fix**: Filter out sold-out projects in both components.
-
-| File | Change |
-|------|--------|
-| `src/components/project-detail/RecommendedProjects.tsx` (line 27) | Add filter: exclude projects where `sale_status` contains "sold" (case-insensitive) |
-| `src/components/PropertyRecommendationPopup.tsx` (lines 89-93, 107-112) | Add `.not('sale_status', 'ilike', '%sold%')` to both the primary and fallback database queries |
+For cases where the same image exists at different resolutions (e.g., `small_lagoon-views-1.jpg` vs `lagoon-views-1.jpg` vs `medium_lagoon-views-1.jpg`), those are different URLs and will be handled separately by identifying size-variant patterns (small_, medium_ prefixes) and keeping only the original (highest quality) version.
 
 ---
 
-### Summary of All Changes
+### Issue 2: Fix Slow/Stuck AI Project Analyzer
 
-| # | File | What Changes |
+**Problem**: The "JBJ AI is analyzing Vincitore Aqua Flora..." spinner runs indefinitely. The project-level AI analyzer (`AIMarketAnalyzer`) calls the `ai-market-analyzer` edge function, which appears to time out or fail silently.
+
+**Root causes identified**:
+- The `ai-market-analyzer` edge function has no timeout handling -- if the AI gateway is slow, it hangs
+- The frontend `AIMarketAnalyzer` component has no timeout mechanism (unlike the Developer analyzer which has a 30-second timeout)
+- No caching -- every visit triggers a fresh AI call
+
+**Fix**:
+
+| File | Change |
+|------|--------|
+| `src/components/AIMarketAnalyzer.tsx` | Add a 25-second timeout with AbortController on the fetch call. Add a timeout state that shows a "Taking longer than expected" message with a retry button. Add sessionStorage caching (like the developer analyzer already does) to avoid repeated calls. |
+| `supabase/functions/ai-market-analyzer/index.ts` | Add a `signal: AbortSignal.timeout(20000)` to the AI gateway fetch call so the edge function itself doesn't hang indefinitely. Add DB caching similar to the developer analyzer (check `project_ai_cache` table first, cache for 24 hours). |
+
+A new `project_ai_cache` table will be created:
+- `project_slug` (text, primary key)
+- `analysis_json` (jsonb) 
+- `generated_at` (timestamptz)
+
+---
+
+### Issue 3: Developer Logo Cropping Fix
+
+**Problem**: After removing the padding, some developer logos that are wide/landscape-oriented get cropped on the sides because the 56x56 container clips them. The user wants ALL logos fully visible without any cropping.
+
+**Fix**: Add back a small amount of padding (`p-1`) to give the `object-contain` calculation breathing room, preventing edge clipping while keeping the logo as large as possible.
+
+| File | Change |
+|------|--------|
+| `src/components/DeveloperCard.tsx` (line 88) | Change `bg-white` to `bg-white p-1` -- adds just 4px padding on each side, enough to prevent edge cropping while keeping logos visually full |
+
+---
+
+### Technical Summary
+
+| # | Area | What Changes |
 |---|------|-------------|
-| 1 | `src/components/DeveloperCard.tsx` | Remove `p-1.5` padding from logo container |
-| 2 | `src/components/PropertyRecommendationPopup.tsx` | Dispatch event on open + filter out sold-out projects from queries |
-| 3 | `src/components/MainLayout.tsx` | Listen for recommendation popup event, auto-collapse chat |
-| 4 | `src/components/project-detail/RecommendedProjects.tsx` | Filter out sold-out projects from recommendations |
+| 1 | Database | SQL migration to delete duplicate `project_images` rows (keeping one per unique URL per project) |
+| 2 | Database | SQL to remove size-variant duplicates (small_, medium_ prefixes), keeping highest quality |
+| 3 | Database | Create `project_ai_cache` table for project analyzer caching |
+| 4 | `supabase/functions/ai-market-analyzer/index.ts` | Add 20s timeout on AI gateway call + DB caching |
+| 5 | `src/components/AIMarketAnalyzer.tsx` | Add 25s client-side timeout, retry button, sessionStorage cache |
+| 6 | `src/components/DeveloperCard.tsx` | Add `p-1` to logo container to prevent side cropping |
+
