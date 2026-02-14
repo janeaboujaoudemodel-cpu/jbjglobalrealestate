@@ -1,66 +1,48 @@
 
 
-## Fix Developer Logo Boxes: Remove All Backgrounds Except Binghatti and Azizi
+## Restore All Developer Logos
 
-### Problem
-Currently, 441 out of 538 developers have a `logo_bg_color` value set in the database, and the code defaults to white (`#FFFFFF`) for the remaining ones. This means EVERY developer logo shows a colored/white background box. The user only wants Binghatti and Azizi to have background boxes. All other logos should display directly with no visible box or border.
+### What Went Wrong
+The previous "fix broken URLs" action incorrectly set `logo_url` to NULL for ~238 developers. Additionally, some remaining logo URLs (like Binghatti's) now return "Access Denied" from the S3 storage. The logos were NOT supposed to be touched -- only the feature photos (main card images) needed fixing.
 
-Additionally, the `p-0.5` padding on logo images creates a visible gap between the logo and its container edge, making the white/colored background peek through.
+### Current State
+- **537 total developers**
+- **299 have logos** (but some URLs are broken, like Binghatti's returning "Access Denied")
+- **238 are missing logos** (incorrectly nulled)
+- Azizi has a working logo URL in the database but it may fail in-browser due to CORS
 
-### Solution
+### Plan
 
-#### 1. Database: Clear `logo_bg_color` for all developers except Binghatti and Azizi
+#### Step 1: Re-sync All Developer Logos from Reelly API
+Run the existing `reelly-developers-sync` edge function in "full" mode. This function:
+- Fetches ALL developers from the Reelly API (which is the original source of logo data)
+- For existing developers with missing data, it updates `logo_url` (line 366: `if (mapped.logo_url) updateData.logo_url = mapped.logo_url`)
+- This will restore logos for the ~238 developers that were incorrectly nulled
+- It will also fix Binghatti's broken S3 URL if Reelly has a fresh one
 
-```sql
--- Clear all developers' logo_bg_color
-UPDATE developers SET logo_bg_color = NULL WHERE slug NOT IN ('binghatti', 'azizi');
+#### Step 2: Verify and Fix Remaining Broken Logos
+After the sync, check which logos are still broken (Access Denied or 404). For any remaining broken ones:
+- Search for alternative logo URLs from Reelly API or from known good sources
+- For key developers (Binghatti, Azizi, Damac, Emaar, etc.), manually verify each logo loads correctly
 
--- Ensure Binghatti keeps its black background
--- (already set to rgb(0,0,0) - no change needed)
+#### Step 3: Fix Azizi Logo Display
+Azizi's logo URL is a cloudfront URL that works when fetched server-side. If it still doesn't display in the browser after sync, replace it with a fresh URL from Reelly or a known working source.
 
--- Set Azizi's background (currently NULL - needs to be set)
-UPDATE developers SET logo_bg_color = 'rgb(0,0,0)' WHERE slug = 'azizi';
-```
+#### Step 4: Ensure White Frame for Specified Developers
+Verify that `logo_bg_color = '#FFFFFF'` remains set for: Binghatti, Azizi, Imtiaz, H&H, and Beyond -- per your previous instruction.
 
-This leaves only 2 developers with a background color.
+### What Will NOT Be Touched
+- Feature images (main card photos) -- no changes
+- Card layout/design code -- no changes
+- Any developer data other than `logo_url` restoration
 
-#### 2. Code: Change logo container to be transparent by default, remove padding
+### Technical Details
 
-Update three files to:
-- Change fallback from `'#FFFFFF'` to `'transparent'`
-- Remove `p-0.5` padding so logos fill edge-to-edge
-- Only show the rounded-lg shadow box styling when `logo_bg_color` is present
+**Files that may need changes:**
+- No code file changes expected -- the existing `reelly-developers-sync` edge function handles the restoration
+- Database `developers` table: `logo_url` column will be updated for ~238+ developers
 
-**Files to edit:**
+**Edge function to invoke:**
+- `reelly-developers-sync` with `{ "mode": "full" }` to paginate through all Reelly developers and restore missing logos
+- If any logos remain broken after sync, individual database updates with verified working URLs
 
-| File | Change |
-|------|--------|
-| `src/components/DeveloperCard.tsx` (line 99) | Default `transparent`, remove `p-0.5`, only add shadow/rounded when bg color exists |
-| `src/components/ProjectCard.tsx` (line 207) | Same treatment |
-| `src/components/ReellyProjectCard.tsx` (line 161) | Same treatment |
-
-For each file, the logo container changes from:
-```tsx
-<div
-  className="w-14 h-14 rounded-lg overflow-hidden shadow-lg flex items-center justify-center"
-  style={{ backgroundColor: developer.logo_bg_color || '#FFFFFF' }}
->
-  <img className="w-full h-full object-contain p-0.5" />
-</div>
-```
-
-To:
-```tsx
-<div
-  className={`w-14 h-14 overflow-hidden flex items-center justify-center ${
-    developer.logo_bg_color ? 'rounded-lg shadow-lg' : ''
-  }`}
-  style={{ backgroundColor: developer.logo_bg_color || 'transparent' }}
->
-  <img className="w-full h-full object-contain" />
-</div>
-```
-
-This way:
-- Binghatti and Azizi: black background box with rounded corners and shadow
-- All other developers: logo displayed directly, no box, no white borders, no padding
