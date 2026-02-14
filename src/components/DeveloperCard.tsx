@@ -94,9 +94,9 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           {/* Logo Overlay - Top Left - Larger box with object-contain, no cropping */}
           <div className="absolute top-3 left-3 z-10">
             <div className="w-14 h-14 rounded-lg overflow-hidden shadow-lg" style={{ backgroundColor: logoBgColor }}>
-              {(developer.logo_url_processed || developer.logo_url) && !logoError ? (
+              {developer.logo_url && !logoError ? (
                 <img
-                  src={developer.logo_url_processed || developer.logo_url}
+                  src={developer.logo_url}
                   alt={`${developer.name} logo`}
                   className="w-full h-full object-contain p-0.5"
                   loading={isEager ? "eager" : "lazy"}
