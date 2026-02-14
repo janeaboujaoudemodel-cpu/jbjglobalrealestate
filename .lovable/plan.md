@@ -1,16 +1,26 @@
 
 
-## Update Andaman Riviera Logo Background to White
+## Delete AX Capital from the Database
 
-### Problem
-The Andaman Riviera developer card has a logo background color of `rgb(237,235,231)` (off-white/beige), which doesn't look clean. The user wants a proper white background box for this developer.
+### Why
+AX Capital is a real estate brokerage, not a property developer. Per the platform's non-developer exclusion policy, it must be removed from the developers directory entirely.
 
-### Solution
-Update the `logo_bg_color` value for Andaman Riviera in the database to `#FFFFFF` (pure white). No code changes needed -- the existing card logic already reads `logo_bg_color` and applies it as the background.
+### What Was Found
+- **1 database record**: `developers` table, ID `6967923b-...`, slug `ax-capital`
+- **0 linked projects** in the `projects` table
+- **0 hardcoded references** anywhere in the codebase
 
-### Technical Details
-- Run a single database migration:
-  ```sql
-  UPDATE developers SET logo_bg_color = '#FFFFFF' WHERE slug = 'andaman-riviera';
-  ```
-- No component changes required -- DeveloperCard.tsx already wraps logos in a container with `backgroundColor: developer.logo_bg_color || '#FFFFFF'`
+### Action
+Run a single database deletion:
+```sql
+DELETE FROM developers WHERE id = '6967923b-7a7d-4bd6-ad6a-94fd007a0abf';
+```
+
+This removes AX Capital from:
+- The developers directory page
+- The developer search modal
+- The mega menu developer list (dynamically loaded)
+- Any other page that queries the `developers` table
+
+No code changes are needed since AX Capital is not hardcoded anywhere.
+
