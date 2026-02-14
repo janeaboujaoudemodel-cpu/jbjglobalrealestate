@@ -123,6 +123,7 @@ export interface Developer {
   logo_url_processed: string | null;
   logo_url_dark: string | null;
   feature_image_url: string | null;
+  logo_bg_color: string | null;
   rank: number;
   founded_year: number | null;
   completed_projects: number | null;

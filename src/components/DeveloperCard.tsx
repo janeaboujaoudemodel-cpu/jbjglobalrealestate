@@ -1,9 +1,8 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Building2, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { extractDominantCornerColor } from "@/lib/imageUtils";
 import type { Developer } from "@/hooks/useProjects";
 
 interface DeveloperCardProps {
@@ -41,24 +40,8 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
   const isEager = index < 8;
   const [imageError, setImageError] = useState(false);
   const [logoError, setLogoError] = useState(false);
-  const logoContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleLogoLoad = () => {
-    if (!developer.logo_url || !logoContainerRef.current) return;
-    // Dual-load: attempt a hidden CORS image to extract color
-    const corsImg = new Image();
-    corsImg.crossOrigin = "anonymous";
-    corsImg.onload = () => {
-      if (logoContainerRef.current) {
-        const color = extractDominantCornerColor(corsImg);
-        logoContainerRef.current.style.backgroundColor = color;
-      }
-    };
-    // On CORS failure, keep default white — logo still displays fine
-    corsImg.onerror = () => {};
-    corsImg.src = developer.logo_url;
-  };
-
+  const logoBgColor = developer.logo_bg_color || "#FFFFFF";
   const showFeatureImage = developer.feature_image_url && !imageError;
   
   return (
@@ -110,7 +93,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           
           {/* Logo Overlay - Top Left - Larger box with object-contain, no cropping */}
           <div className="absolute top-3 left-3 z-10">
-            <div ref={logoContainerRef} className="w-14 h-14 rounded-lg overflow-hidden shadow-lg bg-white">
+            <div className="w-14 h-14 rounded-lg overflow-hidden shadow-lg" style={{ backgroundColor: logoBgColor }}>
               {developer.logo_url && !logoError ? (
                 <img
                   src={developer.logo_url}
@@ -118,7 +101,6 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
                   className="w-full h-full object-contain p-1"
                   loading={isEager ? "eager" : "lazy"}
                   referrerPolicy="no-referrer"
-                  onLoad={handleLogoLoad}
                   onError={() => setLogoError(true)}
                 />
               ) : (

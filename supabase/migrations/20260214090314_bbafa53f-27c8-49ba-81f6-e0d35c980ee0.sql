@@ -1,0 +1,1 @@
+ALTER TABLE public.developers ADD COLUMN IF NOT EXISTS logo_bg_color TEXT;
