@@ -54,6 +54,7 @@ export const AIMarketAnalyzer = ({
   const [insights, setInsights] = useState<MarketInsight | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isTimedOut, setIsTimedOut] = useState(false);
   
   // Chat state
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -61,9 +62,22 @@ export const AIMarketAnalyzer = ({
   const [isChatLoading, setIsChatLoading] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-fetch analysis on mount
+  // Cache key for sessionStorage
+  const cacheKey = `ai-market-${type}-${name}-${location || ''}`;
+
+  // Auto-fetch analysis on mount (check cache first)
   useEffect(() => {
     if (variant === 'full' && !insights && !isLoading) {
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          if (parsed && parsed.supplyDemandScore) {
+            setInsights(parsed);
+            return;
+          }
+        } catch { /* ignore */ }
+      }
       fetchAnalysis();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,6 +86,13 @@ export const AIMarketAnalyzer = ({
   const fetchAnalysis = async () => {
     setIsLoading(true);
     setError(null);
+    setIsTimedOut(false);
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+      controller.abort();
+      setIsTimedOut(true);
+    }, 25000);
 
     try {
       const { data, error: fnError } = await supabase.functions.invoke('ai-market-analyzer', {
@@ -89,14 +110,23 @@ export const AIMarketAnalyzer = ({
         },
       });
 
+      clearTimeout(timeout);
       if (fnError) throw fnError;
       if (data.error) throw new Error(data.error);
 
       setInsights(data);
+      // Cache in sessionStorage
+      try { sessionStorage.setItem(cacheKey, JSON.stringify(data)); } catch { /* ignore */ }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Analysis failed';
-      setError(message);
-      toast.error(message);
+      clearTimeout(timeout);
+      if (isTimedOut || (err instanceof Error && err.name === 'AbortError')) {
+        setError('Analysis is taking longer than expected. Please try again.');
+        setIsTimedOut(true);
+      } else {
+        const message = err instanceof Error ? err.message : 'Analysis failed';
+        setError(message);
+        toast.error(message);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -239,6 +269,14 @@ export const AIMarketAnalyzer = ({
           <Loader2 className="w-12 h-12 mx-auto mb-4 text-purple-500 animate-spin" />
           <h4 className="text-lg font-semibold text-black mb-2">JBJ AI is Analyzing...</h4>
           <p className="text-zinc-500 text-sm">Gathering insights for {name}</p>
+          {isTimedOut && (
+            <div className="mt-4">
+              <p className="text-zinc-500 text-sm mb-2">Taking longer than expected...</p>
+              <Button variant="secondary" size="sm" onClick={fetchAnalysis}>
+                Retry Analysis
+              </Button>
+            </div>
+          )}
         </div>
       )}
 
