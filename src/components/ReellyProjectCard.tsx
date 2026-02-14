@@ -157,8 +157,8 @@ const ReellyProjectCard = ({
             {/* Developer Logo Overlay - Top Left */}
             {(project as any).developer?.logo_url && (
               <div
-                className={`absolute top-3 left-3 z-15 w-12 h-12 overflow-hidden flex items-center justify-center ${
-                  (project as any).developer?.logo_bg_color ? 'rounded-lg shadow-lg' : ''
+                className={`absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center ${
+                  (project as any).developer?.logo_bg_color ? 'shadow-lg' : ''
                 }`}
                 style={{ backgroundColor: (project as any).developer?.logo_bg_color || 'transparent' }}
               >
