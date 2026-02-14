@@ -1,6 +1,4 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import UPNG from "npm:upng-js@2.1.0";
-import jpegJs from "npm:jpeg-js@0.4.4";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -8,96 +6,53 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-function rgbToString(r: number, g: number, b: number): string {
-  return `rgb(${r},${g},${b})`;
-}
-
-function colorsAreSimilar(
-  c1: [number, number, number],
-  c2: [number, number, number],
-  threshold = 50
-): boolean {
-  return (
-    Math.abs(c1[0] - c2[0]) < threshold &&
-    Math.abs(c1[1] - c2[1]) < threshold &&
-    Math.abs(c1[2] - c2[2]) < threshold
-  );
-}
-
-function getPixelAt(
-  data: Uint8Array,
-  width: number,
-  x: number,
-  y: number
-): [number, number, number, number] {
-  const idx = (y * width + x) * 4;
-  return [data[idx], data[idx + 1], data[idx + 2], data[idx + 3]];
-}
-
-function extractDominantCorner(
-  data: Uint8Array,
-  width: number,
-  height: number
-): string {
-  const margin = Math.max(1, Math.min(3, Math.floor(Math.min(width, height) * 0.05)));
-  const corners = [
-    [margin, margin],
-    [width - 1 - margin, margin],
-    [margin, height - 1 - margin],
-    [width - 1 - margin, height - 1 - margin],
-  ];
-
-  const cornerColors: [number, number, number][] = [];
-  for (const [cx, cy] of corners) {
-    const [r, g, b, a] = getPixelAt(data, width, cx, cy);
-    if (a < 128) {
-      cornerColors.push([255, 255, 255]);
-    } else {
-      cornerColors.push([r, g, b]);
-    }
-  }
-
-  let bestColor = cornerColors[0];
-  let bestCount = 0;
-  for (const c of cornerColors) {
-    const count = cornerColors.filter((o) => colorsAreSimilar(c, o)).length;
-    if (count > bestCount) {
-      bestCount = count;
-      bestColor = c;
-    }
-  }
-
-  return rgbToString(bestColor[0], bestColor[1], bestColor[2]);
-}
-
-async function extractColorFromUrl(logoUrl: string): Promise<string | null> {
+async function extractColorViaAI(logoUrl: string, apiKey: string): Promise<string | null> {
   try {
-    const resp = await fetch(logoUrl, {
-      headers: { "User-Agent": "LogoColorExtractor/1.0" },
+    const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash-lite",
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: "Look at this logo image. What is the background color behind/around the logo? I need the EXACT color as an rgb() CSS value. If the background is transparent or white, return rgb(255,255,255). If it's a solid color like navy blue, red, black, brown etc, return that exact color. Return ONLY the rgb() value, nothing else. Example: rgb(0,40,85)"
+              },
+              {
+                type: "image_url",
+                image_url: { url: logoUrl }
+              }
+            ]
+          }
+        ],
+        max_tokens: 50,
+      }),
     });
-    if (!resp.ok) return null;
 
-    const arrayBuf = await resp.arrayBuffer();
-    const bytes = new Uint8Array(arrayBuf);
-
-    // Detect format by magic bytes
-    const isPNG = bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47;
-    const isJPEG = bytes[0] === 0xff && bytes[1] === 0xd8;
-
-    if (isPNG) {
-      const img = UPNG.decode(arrayBuf);
-      const rgba = new Uint8Array(UPNG.toRGBA8(img)[0]);
-      return extractDominantCorner(rgba, img.width, img.height);
-    } else if (isJPEG) {
-      const img = jpegJs.decode(arrayBuf, { useTArray: true });
-      return extractDominantCorner(img.data, img.width, img.height);
-    } else {
-      // WebP or other - can't decode with pure JS easily, skip
-      console.log(`Unsupported format for ${logoUrl}`);
+    if (!resp.ok) {
+      console.error(`AI error for ${logoUrl}: ${resp.status}`);
       return null;
     }
+
+    const data = await resp.json();
+    const text = data.choices?.[0]?.message?.content?.trim() || "";
+    
+    // Extract rgb() value from response
+    const match = text.match(/rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)/);
+    if (match) {
+      return `rgb(${match[1]},${match[2]},${match[3]})`;
+    }
+    
+    console.log(`Could not parse AI response for ${logoUrl}: "${text}"`);
+    return null;
   } catch (e) {
-    console.error("Error extracting color from", logoUrl, ":", e.message);
+    console.error("AI extraction error:", e.message);
     return null;
   }
 }
@@ -108,24 +63,47 @@ Deno.serve(async (req) => {
   }
 
   try {
+    const { reset = false, batch_size = 10 } = await req.json().catch(() => ({}));
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Get developers that have a logo but no bg color yet
+    const apiKey = Deno.env.get("LOVABLE_API_KEY")!;
+    if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
+
+    // Reset all colors if requested
+    if (reset) {
+      const { error: resetError } = await supabase
+        .from("developers")
+        .update({ logo_bg_color: null })
+        .not("logo_url", "is", null);
+      
+      if (resetError) throw resetError;
+      console.log("Reset all logo_bg_color values");
+    }
+
+    // Get developers that have a logo but no bg color
     const { data: developers, error } = await supabase
       .from("developers")
       .select("id, name, slug, logo_url, logo_bg_color")
       .not("logo_url", "is", null)
       .is("logo_bg_color", null)
-      .limit(5);
+      .limit(batch_size);
 
     if (error) throw error;
 
     if (!developers || developers.length === 0) {
+      // Check total remaining
+      const { count } = await supabase
+        .from("developers")
+        .select("id", { count: "exact", head: true })
+        .not("logo_url", "is", null)
+        .is("logo_bg_color", null);
+
       return new Response(
-        JSON.stringify({ message: "All developers processed", processed: 0 }),
+        JSON.stringify({ message: "All developers processed", processed: 0, remaining: count || 0 }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -135,7 +113,7 @@ Deno.serve(async (req) => {
     const results: { name: string; color: string | null }[] = [];
 
     for (const dev of developers) {
-      const color = await extractColorFromUrl(dev.logo_url);
+      const color = await extractColorViaAI(dev.logo_url, apiKey);
       const finalColor = color || "rgb(255,255,255)";
 
       const { error: updateError } = await supabase
@@ -149,9 +127,13 @@ Deno.serve(async (req) => {
         failed++;
       }
       results.push({ name: dev.name, color: finalColor });
+      console.log(`${dev.name}: ${finalColor}`);
+
+      // Small delay to avoid rate limiting
+      await new Promise(r => setTimeout(r, 500));
     }
 
-    // Check how many remain
+    // Check remaining
     const { count } = await supabase
       .from("developers")
       .select("id", { count: "exact", head: true })
