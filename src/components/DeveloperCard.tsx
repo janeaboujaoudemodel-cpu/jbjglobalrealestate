@@ -95,13 +95,15 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           <div className="absolute top-3 left-3 z-10">
             {developer.logo_url && !logoError ? (
               <div
-                className="w-14 h-14 rounded-lg overflow-hidden shadow-lg flex items-center justify-center"
-                style={{ backgroundColor: developer.logo_bg_color || '#FFFFFF' }}
+                className={`w-14 h-14 overflow-hidden flex items-center justify-center ${
+                  developer.logo_bg_color ? 'rounded-lg shadow-lg' : ''
+                }`}
+                style={{ backgroundColor: developer.logo_bg_color || 'transparent' }}
               >
                 <img
                   src={developer.logo_url}
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-contain p-0.5"
+                  className="w-full h-full object-contain"
                   loading={isEager ? "eager" : "lazy"}
                   referrerPolicy="no-referrer"
                   onError={() => setLogoError(true)}
