@@ -9,6 +9,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 import ReellyProjectCard from "@/components/ReellyProjectCard";
@@ -290,8 +291,10 @@ const PropertiesReelly = () => {
       {/* Single Unified FilterShortcutBar — only fixed after scrolling past hero */}
       {showStickyNav && (
       <section 
-        className="fixed top-0 z-[9998] bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark py-2 border-b border-gold/30"
-        style={{ left: isMapMode ? '0' : '200px', right: '0' }}
+        className={cn(
+          "fixed top-0 z-[9998] bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark py-2 border-b border-gold/30 right-0",
+          isMapMode ? "left-0" : "left-0 lg:left-[200px]"
+        )}
       >
         <div className="container mx-auto px-3 sm:px-4">
           <FilterShortcutBar
@@ -326,10 +329,10 @@ const PropertiesReelly = () => {
       {/* Results Section - split-screen in map mode */}
       {isMapMode ? (
         <section className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
-          <div className="flex h-full">
-            <div className="flex-1 flex h-full">
-              {/* Left: Scrollable card list — 50% */}
-              <div className="w-1/2 h-full overflow-y-auto bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+          <div className="flex flex-col md:flex-row h-full">
+            <div className="flex-1 flex flex-col md:flex-row h-full">
+              {/* Left: Scrollable card list */}
+              <div className="w-full md:w-1/2 h-[50%] md:h-full overflow-y-auto bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
                 <div className="p-4">
                   <div className="mb-4 flex items-center justify-between">
                     <p className="text-black/70 text-sm">
@@ -361,8 +364,8 @@ const PropertiesReelly = () => {
                 </div>
               </div>
 
-              {/* Right: Map — 50% */}
-              <div className="w-1/2 h-full">
+              {/* Right: Map */}
+              <div className="w-full md:w-1/2 h-[50%] md:h-full">
                 <PropertiesMapView
                   projects={unifiedProjects}
                   hoveredProjectId={hoveredProjectId}

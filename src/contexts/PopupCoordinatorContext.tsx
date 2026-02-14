@@ -12,6 +12,7 @@ export type PopupId =
   | 'mode-selection-modal'
   | 'lead-intent-modal'
   | 'app-download-popup'
+  | 'property-recommendation'
   | 'free-tools-banner'
   | 'cookies-consent'
   | 'install-app-button';
@@ -29,7 +30,8 @@ const POPUP_PRIORITIES: PopupPriority[] = [
   { id: 'lead-intent-modal', priority: 4 },
   { id: 'cookies-consent', priority: 5 },
   { id: 'app-download-popup', priority: 6 },
-  { id: 'free-tools-banner', priority: 7 },
+  { id: 'property-recommendation', priority: 7 },
+  { id: 'free-tools-banner', priority: 8 },
   { id: 'install-app-button', priority: 10 }, // Lowest priority - floating button
 ];
 
