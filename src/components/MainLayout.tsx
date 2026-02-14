@@ -70,6 +70,16 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       setShowAttentionPulse(false);
     }
   }, [location.pathname]);
+
+  // Auto-collapse chat when recommendation popup opens
+  useEffect(() => {
+    const handleRecPopup = () => {
+      setIsChatCollapsed(true);
+      setShowAttentionPulse(false);
+    };
+    window.addEventListener('recommendation-popup-opened', handleRecPopup);
+    return () => window.removeEventListener('recommendation-popup-opened', handleRecPopup);
+  }, []);
   // Show attention pulse only after scroll delay on homepage, or immediately on other pages
   const [showAttentionPulse, setShowAttentionPulse] = useState(false);
   // Track if popups should be visible (delayed on homepage until user scrolls past hero)

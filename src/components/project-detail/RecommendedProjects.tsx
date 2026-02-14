@@ -24,7 +24,12 @@ export default function RecommendedProjects({
 
   const recommendedProjects = useMemo(() => {
     if (!projects || projects.length === 0) return [];
-    const otherProjects = projects.filter((p) => p.id !== currentProjectId);
+    const otherProjects = projects.filter((p) => {
+      if (p.id === currentProjectId) return false;
+      const status = ((p as any).sale_status || "").toLowerCase();
+      if (status.includes("sold")) return false;
+      return true;
+    });
     const scored = otherProjects.map((p) => {
       let score = 0;
       if (currentDeveloperId && p.developer?.id === currentDeveloperId) score += 10;
