@@ -294,3 +294,6 @@ verify_jwt = false
 
 [functions.repair-project-data-gaps]
 verify_jwt = false
+
+[functions.extract-logo-colors]
+verify_jwt = false
