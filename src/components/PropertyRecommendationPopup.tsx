@@ -90,6 +90,7 @@ const PropertyRecommendationPopup = () => {
       .from("projects")
       .select("id, name, area_name, developer_name, price_from, cover_image_url, slug")
       .eq("is_published", true)
+      .not("sale_status", "ilike", "%sold%")
       .limit(3);
     
     if (primaryArea) {
@@ -101,6 +102,7 @@ const PropertyRecommendationPopup = () => {
     if (data && data.length > 0) {
       setProjects(data as RecommendedProject[]);
       setIsOpen(true);
+      window.dispatchEvent(new Event('recommendation-popup-opened'));
       localStorage.setItem(POPUP_COOLDOWN_KEY, Date.now().toString());
     } else if (primaryArea) {
       // Fallback: get any recent projects
@@ -108,11 +110,13 @@ const PropertyRecommendationPopup = () => {
         .from("projects")
         .select("id, name, area_name, developer_name, price_from, cover_image_url, slug")
         .eq("is_published", true)
+        .not("sale_status", "ilike", "%sold%")
         .order("created_at", { ascending: false })
         .limit(3);
       if (fallback && fallback.length > 0) {
         setProjects(fallback as RecommendedProject[]);
         setIsOpen(true);
+        window.dispatchEvent(new Event('recommendation-popup-opened'));
         localStorage.setItem(POPUP_COOLDOWN_KEY, Date.now().toString());
       }
     }
