@@ -1,7 +1,7 @@
 /**
  * PropertyRecommendationPopup — Behavior-based property advertising
  * Shows personalized property suggestions based on browsing behavior
- * Tracks areas and property types the user has viewed
+ * Integrated with PopupCoordinator for single-popup-at-a-time enforcement
  */
 
 import { useState, useEffect, useCallback } from "react";
@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, useLocation } from "react-router-dom";
+import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 
 interface RecommendedProject {
   id: string;
@@ -48,7 +49,7 @@ function trackBrowsing(area?: string, type?: string) {
 }
 
 const PropertyRecommendationPopup = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { requestToShow, dismiss, isVisible } = usePopupVisibility('property-recommendation');
   const [projects, setProjects] = useState<RecommendedProject[]>([]);
   const [topArea, setTopArea] = useState<string>("");
   const navigate = useNavigate();
@@ -57,12 +58,10 @@ const PropertyRecommendationPopup = () => {
   // Track current page browsing
   useEffect(() => {
     const path = location.pathname;
-    // Extract area from /area/slug or /properties?area=slug
     const areaMatch = path.match(/\/area\/([^/]+)/);
     if (areaMatch) {
       trackBrowsing(areaMatch[1].replace(/-/g, " "));
     }
-    // Extract from project pages
     const projectMatch = path.match(/\/project\//);
     if (projectMatch) {
       trackBrowsing(undefined, "offplan");
@@ -76,16 +75,12 @@ const PropertyRecommendationPopup = () => {
     const history = getBrowsingHistory();
     const lastShown = localStorage.getItem(POPUP_COOLDOWN_KEY);
     
-    // Check cooldown
     if (lastShown && Date.now() - parseInt(lastShown) < COOLDOWN_MS) return;
-    // Need minimum browsing
     if (history.areas.length + history.types.length < MIN_PAGES_BEFORE_SHOW) return;
 
-    // Find the most browsed area
     const primaryArea = history.areas[history.areas.length - 1] || "";
     setTopArea(primaryArea);
 
-    // Fetch projects matching browsing behavior
     let query = supabase
       .from("projects")
       .select("id, name, area_name, developer_name, price_from, cover_image_url, slug")
@@ -101,11 +96,10 @@ const PropertyRecommendationPopup = () => {
     
     if (data && data.length > 0) {
       setProjects(data as RecommendedProject[]);
-      setIsOpen(true);
+      requestToShow();
       window.dispatchEvent(new Event('recommendation-popup-opened'));
       localStorage.setItem(POPUP_COOLDOWN_KEY, Date.now().toString());
     } else if (primaryArea) {
-      // Fallback: get any recent projects
       const { data: fallback } = await supabase
         .from("projects")
         .select("id, name, area_name, developer_name, price_from, cover_image_url, slug")
@@ -115,23 +109,26 @@ const PropertyRecommendationPopup = () => {
         .limit(3);
       if (fallback && fallback.length > 0) {
         setProjects(fallback as RecommendedProject[]);
-        setIsOpen(true);
+        requestToShow();
         window.dispatchEvent(new Event('recommendation-popup-opened'));
         localStorage.setItem(POPUP_COOLDOWN_KEY, Date.now().toString());
       }
     }
-  }, []);
+  }, [requestToShow]);
 
-  // Trigger after browsing threshold
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchRecommendations();
-    }, 15000); // 15s after component mount
+    }, 15000);
     return () => clearTimeout(timer);
   }, [fetchRecommendations]);
 
+  const handleClose = () => {
+    dismiss();
+  };
+
   const handleExplore = (slug: string | null) => {
-    setIsOpen(false);
+    dismiss();
     if (slug) navigate(`/project/${slug}`);
   };
 
@@ -144,7 +141,7 @@ const PropertyRecommendationPopup = () => {
 
   return (
     <AnimatePresence>
-      {isOpen && projects.length > 0 && (
+      {isVisible && projects.length > 0 && (
         <motion.div
           className="fixed bottom-4 right-4 z-50 max-w-sm w-full"
           initial={{ opacity: 0, y: 80, scale: 0.95 }}
@@ -159,7 +156,7 @@ const PropertyRecommendationPopup = () => {
                 <Sparkles className="w-4 h-4 text-gold" />
                 <span className="text-black text-sm font-semibold">Recommended for You</span>
               </div>
-              <button onClick={() => setIsOpen(false)} className="text-zinc-400 hover:text-black transition-colors">
+              <button onClick={handleClose} className="text-zinc-400 hover:text-black transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -209,7 +206,7 @@ const PropertyRecommendationPopup = () => {
             {/* CTA */}
             <div className="px-3 pb-3">
               <Button
-                onClick={() => { setIsOpen(false); navigate("/properties"); }}
+                onClick={() => { dismiss(); navigate("/properties"); }}
                 className="w-full bg-gradient-to-r from-gold/90 to-amber-600 text-black font-semibold text-sm hover:from-gold hover:to-amber-500"
                 size="sm"
               >

@@ -85,7 +85,7 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
   // The global <Button /> component sanitizes bg/gradient classes by design,
   // which would strip the active champagne fill.
   const buttonBaseClass = cn(
-    "h-12 w-12 rounded-full",
+    "h-10 w-10 sm:h-12 sm:w-12 rounded-full",
     "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark",
     "border-2 border-gold/70",
     "shadow-lg transition-all duration-300",
@@ -101,8 +101,8 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
     <div 
       ref={ref}
       className={cn(
-        // Raised z-index above dialogs (10050) and mega-menu (9999)
-        "fixed bottom-6 z-[11000] flex flex-col gap-3",
+        // Below popups/modals but above regular content
+        "fixed bottom-20 sm:bottom-6 z-[9990] flex flex-col gap-2 sm:gap-3",
         // Explicit pointer-events-auto on container
         "pointer-events-auto",
         isRTL ? "right-6" : "left-6"
