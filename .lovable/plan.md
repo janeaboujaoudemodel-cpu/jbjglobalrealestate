@@ -1,78 +1,60 @@
 
 
-## Fix Three Issues: Duplicate Gallery Images, Slow AI Analyzer, and Developer Logo Cropping
+## Fix Developer Card Logos and Photos
 
----
+### Issue 1: Logo Background Color Matching
 
-### Issue 1: Remove Duplicate Project Gallery Images (Database Cleanup)
+**Problem**: The logo container has a fixed white (`bg-white`) background. When logos have dark or colored backgrounds, the white edges are visible and look bad.
 
-**Problem**: 45 projects have duplicate images in the `project_images` table. Some are extreme -- Oceano has 3,441 rows for just 24 unique images (172 copies each!), Damac Lagoons Views has the same, and 4B Living has 641 rows for 21 unique images.
+**Solution**: Use a client-side canvas-based color extraction approach. When each logo image loads, a small helper function will:
+1. Draw the logo onto a hidden canvas
+2. Sample the corner pixels (top-left, top-right, bottom-left, bottom-right) to detect the logo's background color
+3. Set the logo container's background to that detected color
+4. This runs per-logo independently, so each logo gets its own matching background
 
-**Fix**: Run a SQL cleanup that:
-1. For each project, identifies duplicate `image_url` entries
-2. Keeps only the row with the lowest `id` (oldest/first inserted) for each unique URL
-3. Deletes all other duplicate rows
+**Implementation in `src/components/DeveloperCard.tsx`**:
+- Add a `useRef` for the logo container div
+- Add an `onLoad` handler on the logo `<img>` that:
+  - Creates a temporary canvas
+  - Draws the loaded image
+  - Samples corner pixels to get the dominant background color
+  - Sets the container div's `backgroundColor` to that color via ref
+- Keep `object-contain` and `p-0` so logos fill the space without cropping
+- Default background stays white until the image loads and color is detected
 
-This is a single database operation:
+**New utility function in `src/lib/imageUtils.ts`**:
 
 ```text
-DELETE FROM project_images
-WHERE id NOT IN (
-  SELECT MIN(id)
-  FROM project_images
-  GROUP BY project_id, image_url
-);
+function extractDominantCornerColor(img: HTMLImageElement): string
+  - Creates a 1x1 or small canvas
+  - Draws the image scaled down
+  - Reads corner pixel RGBA values
+  - Returns the most common corner color as an rgb() string
+  - Falls back to white if cross-origin errors occur
 ```
 
-**Quality note**: Since the duplicates are exact same URLs, there is no "higher quality" vs "lower quality" version to choose from -- they are identical copies. The cleanup simply removes redundant rows.
-
-For cases where the same image exists at different resolutions (e.g., `small_lagoon-views-1.jpg` vs `lagoon-views-1.jpg` vs `medium_lagoon-views-1.jpg`), those are different URLs and will be handled separately by identifying size-variant patterns (small_, medium_ prefixes) and keeping only the original (highest quality) version.
-
 ---
 
-### Issue 2: Fix Slow/Stuck AI Project Analyzer
+### Issue 2: Developer Photos Not Showing
 
-**Problem**: The "JBJ AI is analyzing Vincitore Aqua Flora..." spinner runs indefinitely. The project-level AI analyzer (`AIMarketAnalyzer`) calls the `ai-market-analyzer` edge function, which appears to time out or fail silently.
+**Problem**: Some developer cards show a logo fallback instead of the actual feature photo, even though all 540 developers have `feature_image_url` populated in the database.
 
-**Root causes identified**:
-- The `ai-market-analyzer` edge function has no timeout handling -- if the AI gateway is slow, it hangs
-- The frontend `AIMarketAnalyzer` component has no timeout mechanism (unlike the Developer analyzer which has a 30-second timeout)
-- No caching -- every visit triggers a fresh AI call
+**Root cause**: The current code at line 58 checks `developer.feature_image_url` -- if the image URL fails to load (404, CORS error, etc.), the broken image shows rather than gracefully falling back. However, the fallback (lines 65-83) only triggers when `feature_image_url` is falsy, not when the image fails to load.
 
-**Fix**:
-
-| File | Change |
-|------|--------|
-| `src/components/AIMarketAnalyzer.tsx` | Add a 25-second timeout with AbortController on the fetch call. Add a timeout state that shows a "Taking longer than expected" message with a retry button. Add sessionStorage caching (like the developer analyzer already does) to avoid repeated calls. |
-| `supabase/functions/ai-market-analyzer/index.ts` | Add a `signal: AbortSignal.timeout(20000)` to the AI gateway fetch call so the edge function itself doesn't hang indefinitely. Add DB caching similar to the developer analyzer (check `project_ai_cache` table first, cache for 24 hours). |
-
-A new `project_ai_cache` table will be created:
-- `project_slug` (text, primary key)
-- `analysis_json` (jsonb) 
-- `generated_at` (timestamptz)
-
----
-
-### Issue 3: Developer Logo Cropping Fix
-
-**Problem**: After removing the padding, some developer logos that are wide/landscape-oriented get cropped on the sides because the 56x56 container clips them. The user wants ALL logos fully visible without any cropping.
-
-**Fix**: Add back a small amount of padding (`p-1`) to give the `object-contain` calculation breathing room, preventing edge clipping while keeping the logo as large as possible.
-
-| File | Change |
-|------|--------|
-| `src/components/DeveloperCard.tsx` (line 88) | Change `bg-white` to `bg-white p-1` -- adds just 4px padding on each side, enough to prevent edge cropping while keeping logos visually full |
+**Solution in `src/components/DeveloperCard.tsx`**:
+- Add an `onError` handler on the feature image `<img>` (line 59-64) that:
+  - Attempts to load the image from an alternative source or
+  - Hides the broken image and shows the fallback UI
+- Use a state variable `imageError` to toggle between the real photo and the fallback
+- Add `referrerPolicy="no-referrer"` to the feature image to prevent referrer-based blocking (some CDNs like reelly.io block requests with referrers)
 
 ---
 
 ### Technical Summary
 
-| # | Area | What Changes |
-|---|------|-------------|
-| 1 | Database | SQL migration to delete duplicate `project_images` rows (keeping one per unique URL per project) |
-| 2 | Database | SQL to remove size-variant duplicates (small_, medium_ prefixes), keeping highest quality |
-| 3 | Database | Create `project_ai_cache` table for project analyzer caching |
-| 4 | `supabase/functions/ai-market-analyzer/index.ts` | Add 20s timeout on AI gateway call + DB caching |
-| 5 | `src/components/AIMarketAnalyzer.tsx` | Add 25s client-side timeout, retry button, sessionStorage cache |
-| 6 | `src/components/DeveloperCard.tsx` | Add `p-1` to logo container to prevent side cropping |
+| # | File | Change |
+|---|------|--------|
+| 1 | `src/lib/imageUtils.ts` | Add `extractDominantCornerColor()` utility function |
+| 2 | `src/components/DeveloperCard.tsx` | Logo container: remove fixed `bg-white`, add dynamic background color detection via canvas on image load |
+| 3 | `src/components/DeveloperCard.tsx` | Feature photo: add `onError` handler with state fallback + `referrerPolicy="no-referrer"` to fix missing photos |
 
