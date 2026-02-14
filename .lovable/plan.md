@@ -1,42 +1,46 @@
 
 
-## Remove Logo Background Box on External Listing Cards Only
+## Restore Logo Background Box with Smart Color Logic
 
-### Scope
+### Problem
 
-Only the **external listing cards** (the cards you see in grids/lists before clicking into a project) will be changed. The **internal project detail page** with its gold-framed logo will NOT be touched.
+After removing the background box entirely, logos with transparent backgrounds (Azizi, Binghatti, Imtiaz, etc.) now sit directly on top of the feature photo and become hard to see or invisible.
 
-### Cards to Update (3 files)
+### Solution
 
-1. **DeveloperCard.tsx** -- Developer directory grid cards
-2. **ReellyProjectCard.tsx** -- Project listing cards on the Properties page
-3. **ProjectCard.tsx** -- Project listing cards used elsewhere
+Restore the background box behind logos on all 3 external card components, using this logic:
 
-### What Changes
+- If `logo_bg_color` exists in the database, use it (e.g., Nakheel gets navy, Danube gets red, Binghatti gets black)
+- If `logo_bg_color` is missing/null, default to **white** (`#FFFFFF`)
+- This ensures every logo has a clean, visible container
 
-For each card, the logo overlay will go from a **colored/white background box** to a **direct logo image** with rounded corners:
+### Current Data State
 
-- Remove the container `div` with background color (`bg-white`, `logo_bg_color`)
-- Display the `<img>` tag directly with:
-  - `rounded-lg` for rounded corners matching the current box style
-  - `shadow-lg` for a subtle drop shadow so logos pop against any background
-  - `object-contain` to keep logos fully visible without cropping
-  - `border border-white/30` for subtle edge definition against dark photos
-- Same size and position (w-12/w-14, absolute top-3 left-3)
-- Fallback icon (Building2) renders without a background box
+- **442 developers** already have `logo_bg_color` set
+- **93 developers** are missing it (will get white box)
+- Key examples: Nakheel = navy, Danube = red, Binghatti = black, Azizi = white (null), Emaar = white (null)
+
+### Files to Update (3 files)
+
+**1. `src/components/DeveloperCard.tsx` (lines 94-108)**
+
+Restore the container div around the logo:
+- Wrap `<img>` in a `div` with `w-14 h-14 rounded-lg overflow-hidden shadow-lg`
+- Apply `backgroundColor` from `developer.logo_bg_color || "#FFFFFF"`
+- Logo img uses `w-full h-full object-contain p-0.5`
+- Restore `logoBgColor` variable
+
+**2. `src/components/ReellyProjectCard.tsx`**
+
+Wrap the logo `<img>` in a container div with `w-12 h-12 rounded-lg bg-white shadow-lg overflow-hidden flex items-center justify-center` and the img uses `w-full h-full object-contain`.
+
+**3. `src/components/ProjectCard.tsx`**
+
+Same approach as ReellyProjectCard -- wrap in a white background container div.
 
 ### What Does NOT Change
 
-- **Project detail page** (gold-framed logo) -- untouched
-- **RecommendedProjects.tsx** -- untouched (internal card)
-- The `logo_bg_color` database column stays, just no longer used by these 3 card components
-- No logo images are modified or replaced
-
-### Technical Details
-
-| File | Current | After |
-|------|---------|-------|
-| `DeveloperCard.tsx` (line 96) | `div` with `backgroundColor: logoBgColor` wrapping `img` | Direct `img` with `rounded-lg shadow-lg border border-white/30` |
-| `ReellyProjectCard.tsx` (line 159) | `div` with `bg-white border-2 border-gold` wrapping `img` | Direct `img` with `rounded-lg shadow-lg border border-white/30` |
-| `ProjectCard.tsx` (line 205) | `div` with `bg-white` wrapping `img` | Direct `img` with `rounded-lg shadow-lg border border-white/30` |
+- Internal project detail pages (gold-framed logo) remain untouched
+- No logo images are modified
+- No database changes needed
 
