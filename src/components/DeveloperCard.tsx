@@ -95,8 +95,8 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           <div className="absolute top-3 left-3 z-10">
             {developer.logo_url && !logoError ? (
               <div
-                className={`w-14 h-14 overflow-hidden flex items-center justify-center ${
-                  developer.logo_bg_color ? 'rounded-lg shadow-lg' : ''
+              className={`w-14 h-14 rounded-lg overflow-hidden flex items-center justify-center ${
+                  developer.logo_bg_color ? 'shadow-lg' : ''
                 }`}
                 style={{ backgroundColor: developer.logo_bg_color || 'transparent' }}
               >
