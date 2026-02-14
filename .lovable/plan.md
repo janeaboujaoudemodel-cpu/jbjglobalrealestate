@@ -1,70 +1,58 @@
 
 
-## Fix Logo Background Color Matching (Server-Side Approach)
+## Fix All Developer Logo Background Colors
 
-### Why the Current Approach Fails
+### Problem
 
-The client-side canvas color extraction requires CORS headers from the image CDN. Most developer logos are hosted on `reelly-backend.s3.amazonaws.com` which does NOT return `Access-Control-Allow-Origin` headers. This means:
-- The hidden CORS image always fails to load
-- The background always stays white
-- White edges are visible around every logo
+Two issues with the current server-side color extraction:
 
-Client-side canvas extraction will NEVER work for these images. We need a server-side solution.
+1. **365 developers have no color at all** -- their logos are WebP format, which the current function cannot decode, so they default to white
+2. **Many processed developers have wrong colors** -- the algorithm only samples 4 corner pixels, which picks up compression artifacts or edge pixels instead of the true background color (e.g., Nakheel shows black instead of navy blue)
 
-### Solution: Pre-Compute Logo Colors Server-Side
+### Solution
 
-**Step 1: Add `logo_bg_color` column to `developers` table**
+#### 1. Upgrade the Edge Function
 
-A new text column to store the pre-computed background color (e.g., `"rgb(0,0,0)"` for Emaar's black logo, `"rgb(200,30,30)"` for Noob's red logo).
+Replace the current image decoder with a library that supports WebP, PNG, JPEG, and GIF. Use the `imagescript` Deno library which handles all common formats natively.
 
-**Step 2: Create a backend function `extract-logo-colors`**
+Improve the color extraction algorithm:
+- Instead of sampling just 4 corner pixels, sample the **entire border region** (top row, bottom row, left column, right column) of the image
+- Group similar colors together and pick the most frequent one
+- This captures the true background color even if a few edge pixels have compression artifacts
+- Transparent pixels still default to white
 
-This function will:
-- Fetch all developers that have a `logo_url` but no `logo_bg_color`
-- For each logo, fetch the image server-side (no CORS restrictions on the server)
-- Decode the image and sample the 4 corner pixels to find the dominant background color
-- Store the result in the `logo_bg_color` column
-- Uses the `imagescript` Deno library for image decoding
+#### 2. Reset and Re-Process All Developers
 
-**Step 3: Update `DeveloperCard.tsx` to use pre-computed colors**
+- Clear all existing `logo_bg_color` values so every developer gets re-processed with the improved algorithm
+- Run the function in batches of 10 (increased from 5) to process all 535 developers
+- Accept a `reset` parameter to trigger the bulk reset
+- Accept a `batch_size` parameter for flexibility
 
-- Remove the dual-load CORS approach entirely (no more hidden Image objects)
-- If `developer.logo_bg_color` exists, set the logo container background to that color directly
-- No canvas, no CORS, no runtime image processing -- just read the color from the database
-- Keep `p-1` padding on the logo image for clean spacing
-- Keep `object-contain` so logos are never cropped
+#### 3. Manual Corrections for Key Developers
 
-**Step 4: Fix Binghatti logo**
+After the batch run, manually verify and correct colors for the developers the user specifically mentioned:
+- Nakheel: navy blue (not black)
+- Aldar: brown/bronze tone
+- Ellington: black
+- Danube: red
+- Others as needed based on visual inspection
 
-The Binghatti logo is at `/developers/logos/binghatti-logo.webp` (local file). Verify it exists and renders. Since it's same-origin, the canvas approach would work for it, but with the server-side solution it will be handled uniformly with all other logos.
+These manual corrections will override the algorithm if it still gets edge cases wrong.
 
-### Technical Implementation
+### Technical Details
 
-| # | Type | Change |
-|---|------|--------|
-| 1 | Database | Add `logo_bg_color TEXT` column to `developers` table |
-| 2 | Backend Function | Create `extract-logo-colors` function that batch-processes all developer logos server-side, decodes images, extracts corner pixel colors, and stores results |
-| 3 | Frontend | Update `DeveloperCard.tsx`: remove dual-load CORS logic, read `logo_bg_color` from developer data, apply as container background style |
-| 4 | Frontend | Update developer type/query to include `logo_bg_color` field |
-| 5 | Run | Call the backend function once to populate all 539 developers |
+| Step | Action |
+|------|--------|
+| 1 | Update `supabase/functions/extract-logo-colors/index.ts` to use `imagescript` library for WebP/PNG/JPEG/GIF support |
+| 2 | Replace corner-only sampling with full border-region sampling (all pixels along all 4 edges) |
+| 3 | Add `reset=true` query param support to clear all colors and re-process from scratch |
+| 4 | Increase batch size to 10 per invocation |
+| 5 | Deploy the updated function |
+| 6 | Call the function with `reset=true` once to clear old data |
+| 7 | Call the function repeatedly until all 535 developers are processed |
+| 8 | Manually correct any remaining mismatched colors for key developers |
 
-### How It Works
+### No Frontend Changes Needed
 
-```text
-Before (broken):
-  Browser loads logo -> tries CORS copy -> CORS blocked -> white background stays
-
-After (fixed):
-  Database already has color -> DeveloperCard reads it -> applies immediately
-  No CORS, no canvas, no runtime processing
-```
-
-### Result
-
-- Every logo box will have its background matching the logo's own background color
-- Emaar: black box, Noob: red box, Omniyat: dark box, etc.
-- Azizi and Emtiaz will remain unchanged (already look good)
-- Binghatti logo will be visible with proper background color
-- Zero CORS errors in console
-- Zero runtime performance cost (colors are pre-computed)
+The `DeveloperCard.tsx` already reads `developer.logo_bg_color` and applies it as the logo container background (line 44, 96). Once the database has correct colors, the UI will automatically reflect them.
 
