@@ -1,40 +1,66 @@
 
 
-## Fix Filter Bars: Show on Mobile (Project Detail) and Fix Developer Page Fixed Filter
+## Fix Developer Logo Boxes: Remove All Backgrounds Except Binghatti and Azizi
 
-### Problem 1: Project Detail Page - Filter Hidden on Mobile
-In `ProjectDetailLayout.tsx` line 589, the previous fix incorrectly added `hidden sm:block` to the FilterShortcutBar row, which completely removes it on mobile. You want both the filter bar AND the project sub-navigation to show on mobile -- just without overlapping.
+### Problem
+Currently, 441 out of 538 developers have a `logo_bg_color` value set in the database, and the code defaults to white (`#FFFFFF`) for the remaining ones. This means EVERY developer logo shows a colored/white background box. The user only wants Binghatti and Azizi to have background boxes. All other logos should display directly with no visible box or border.
 
-### Problem 2: Developer Page - Fixed Filter Bar Corrupt on Mobile
-In `DeveloperDetail.tsx`, when the filter bar becomes fixed (portal at top-0), it renders the full FilterShortcutBar in a container with padding but no mobile-specific handling. On a phone, Row 1 (search + sort pills + map + saved + currency + filter) overflows and gets clipped because the connected toolbar doesn't wrap or scroll properly within the fixed container.
+Additionally, the `p-0.5` padding on logo images creates a visible gap between the logo and its container edge, making the white/colored background peek through.
 
----
+### Solution
 
-### Fix 1: Restore Filter Bar on Mobile in Project Detail Page
+#### 1. Database: Clear `logo_bg_color` for all developers except Binghatti and Azizi
 
-**File**: `src/components/project-detail/ProjectDetailLayout.tsx` (line 589)
+```sql
+-- Clear all developers' logo_bg_color
+UPDATE developers SET logo_bg_color = NULL WHERE slug NOT IN ('binghatti', 'azizi');
 
-- Remove `hidden sm:block` from the Row 1 wrapper
-- Instead, add compact mobile styling: reduce padding on mobile (`py-1 px-2 sm:py-2 sm:px-4`) and ensure the FilterShortcutBar's scrollable Row 1 works within the sticky header
-- This ensures both Row 1 (filter bar) and Row 2 (project shortcuts) are visible on all screen sizes
+-- Ensure Binghatti keeps its black background
+-- (already set to rgb(0,0,0) - no change needed)
 
-### Fix 2: Fix Developer Page Fixed Filter Bar on Mobile
+-- Set Azizi's background (currently NULL - needs to be set)
+UPDATE developers SET logo_bg_color = 'rgb(0,0,0)' WHERE slug = 'azizi';
+```
 
-**File**: `src/pages/DeveloperDetail.tsx` (lines 372-396)
+This leaves only 2 developers with a background color.
 
-The fixed portal filter bar needs mobile-safe styling:
-- Add `overflow-x-auto` to the inner container so the FilterShortcutBar can scroll horizontally
-- Reduce padding on mobile: `p-2 sm:p-4`
-- Ensure the bar doesn't clip content by removing any implicit width constraints
+#### 2. Code: Change logo container to be transparent by default, remove padding
 
-Also fix the inline (non-fixed) filter bar at line 349 to use responsive padding: `p-2 sm:p-4`
+Update three files to:
+- Change fallback from `'#FFFFFF'` to `'transparent'`
+- Remove `p-0.5` padding so logos fill edge-to-edge
+- Only show the rounded-lg shadow box styling when `logo_bg_color` is present
 
----
+**Files to edit:**
 
-### Technical Summary
+| File | Change |
+|------|--------|
+| `src/components/DeveloperCard.tsx` (line 99) | Default `transparent`, remove `p-0.5`, only add shadow/rounded when bg color exists |
+| `src/components/ProjectCard.tsx` (line 207) | Same treatment |
+| `src/components/ReellyProjectCard.tsx` (line 161) | Same treatment |
 
-| File | Line(s) | Change |
-|------|---------|--------|
-| `src/components/project-detail/ProjectDetailLayout.tsx` | 589 | Remove `hidden sm:block`, add compact responsive padding |
-| `src/pages/DeveloperDetail.tsx` | 349, 372-396 | Add overflow handling and responsive padding to both inline and fixed filter bars |
+For each file, the logo container changes from:
+```tsx
+<div
+  className="w-14 h-14 rounded-lg overflow-hidden shadow-lg flex items-center justify-center"
+  style={{ backgroundColor: developer.logo_bg_color || '#FFFFFF' }}
+>
+  <img className="w-full h-full object-contain p-0.5" />
+</div>
+```
 
+To:
+```tsx
+<div
+  className={`w-14 h-14 overflow-hidden flex items-center justify-center ${
+    developer.logo_bg_color ? 'rounded-lg shadow-lg' : ''
+  }`}
+  style={{ backgroundColor: developer.logo_bg_color || 'transparent' }}
+>
+  <img className="w-full h-full object-contain" />
+</div>
+```
+
+This way:
+- Binghatti and Azizi: black background box with rounded corners and shadow
+- All other developers: logo displayed directly, no box, no white borders, no padding
