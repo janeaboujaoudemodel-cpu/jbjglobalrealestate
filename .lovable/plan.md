@@ -1,63 +1,74 @@
 
 
-## Fix All Developer Logo Background Colors -- Complete Solution
+## Fix Developer Logos -- Stop Using Fake Logos, Match Box Colors
 
-### Current Problems
+### What Went Wrong
 
-1. **442 out of 535 developers still have NO background color** -- they show white boxes
-2. **Colors that were set are often wrong** -- e.g., Aldar Properties shows brown (rgb(139,90,43)) but its logo background is actually black
-3. **p-1 padding on the logo creates visible white gaps** -- the logo image has padding which reveals the container background, making mismatches obvious
-4. **Some logos have white backgrounds baked into the image** (like Danube) -- even with the correct box color, the logo's own white background is visible
-5. **The card doesn't use processed (background-removed) logos** -- `logo_url_processed` exists in the database but the card ignores it
+1. **Fake AI-generated logos are being shown**: The card currently prefers `logo_url_processed` (AI-generated "background-removed" versions) over the real `logo_url`. These AI versions are NOT the real logos -- they are rejected. Emaar, Sobha, Damac, MAG, Danube all have fake processed versions being displayed.
 
-### Solution: Three-Part Fix
+2. **Binghatti was broken**: It was working perfectly before, but the color got reset to white (`rgb(255,255,255)`) during the batch reset. It needs to be restored.
 
-#### Part 1: Fix the Frontend (DeveloperCard.tsx)
+3. **389 out of 535 developers still have NO background color** -- they show white boxes by default.
 
-- **Use processed logos when available**: Change the logo `<img>` to prefer `logo_url_processed` (transparent background version) over `logo_url`. This means logos like Danube will show cleanly on their red background without the baked-in white.
-- **Remove p-1 padding**: The padding creates visible gaps between the logo and the box edge. Change from `p-1` to `p-0.5` (very minimal breathing room) so the logo fills the box more completely and the background color gap is nearly invisible.
+### The Correct Approach (Like Nakheel)
 
-#### Part 2: Reset and Re-Process ALL Colors via AI
+Nakheel is the gold standard:
+- Uses the ORIGINAL logo (not AI-generated)
+- Box background color matches the logo's navy blue background exactly
+- Result: seamless, premium look with no white borders
 
-- **Improve the AI prompt** in `extract-logo-colors` to be more precise: ask for the EXACT hex/rgb value of the background, not an approximation. Emphasize matching the exact shade.
-- **Reset all 535 developers** and re-run the extraction so every developer gets a fresh, accurate color.
-- **Fix specific manual overrides** immediately for the developers the user mentioned:
-  - Aldar Properties: black (not brown) -- `rgb(0,0,0)`
-  - Bayut Aldar: dark brown -- keep `rgb(139,90,43)` 
-  - Nakheel: exact navy from their logo
-  - Danube: red `rgb(200,16,46)` (already correct, but also process the logo to remove its white background)
+This is what ALL developers should look like.
 
-#### Part 3: Process Danube Logo Background Removal
+### Changes
 
-- Call the existing `process-developer-logos` function for Danube specifically to generate a transparent-background version of their logo
-- The DeveloperCard will then use this transparent version on the red background, eliminating the white edges from the logo image itself
+#### 1. Frontend Fix (DeveloperCard.tsx)
 
-### Technical Changes
-
-| # | File | Change |
-|---|------|--------|
-| 1 | `src/components/DeveloperCard.tsx` | Use `developer.logo_url_processed \|\| developer.logo_url` for logo src |
-| 2 | `src/components/DeveloperCard.tsx` | Reduce padding from `p-1` to `p-0.5` |
-| 3 | `supabase/functions/extract-logo-colors/index.ts` | Improve AI prompt for more precise color matching |
-| 4 | Database | Reset all `logo_bg_color` values and re-run for all 535 developers |
-| 5 | Database | Manual override: Aldar Properties to `rgb(0,0,0)` |
-| 6 | Run `process-developer-logos` for Danube | Generate transparent-background logo |
-| 7 | Run `extract-logo-colors` in batches | Process all 535 developers |
-
-### How the Logo Box Will Work After Fix
-
-```text
-Logo box rendering:
-1. Background color = developer.logo_bg_color (from database, AI-extracted)
-2. Logo image = developer.logo_url_processed (transparent) OR developer.logo_url (original)
-3. Padding = p-0.5 (minimal gap)
-4. Result: Logo sits on matching background, no visible border mismatch
+**Revert to using only the original logo**. Change line 99 from:
+```
+src={developer.logo_url_processed || developer.logo_url}
+```
+back to:
+```
+src={developer.logo_url}
 ```
 
-### Why This Will Work
+This ensures only real, original logos are ever displayed. No AI-generated logos.
 
-- Using processed (transparent) logos means the box background color shows through cleanly -- no baked-in white from the original image
-- The AI extracts the EXACT background color from the original logo, so the box matches perfectly
-- For logos without a processed version, the original logo still sits on a matching background with minimal padding
-- Manual overrides ensure key developers look correct immediately
+Also revert line 97 condition to check only `developer.logo_url`.
+
+#### 2. Fix Binghatti Color
+
+Set Binghatti's `logo_bg_color` back to the correct value. The Binghatti logo (`/developers/logos/binghatti-logo.webp`) has a black background, so set it to `rgb(0,0,0)`.
+
+#### 3. Process ALL Remaining 389 Developers
+
+Run the `extract-logo-colors` edge function repeatedly to process all 389 developers that still have no `logo_bg_color`. The function uses AI to analyze each original logo image and extract the exact background color -- it does NOT modify or replace the logo itself.
+
+Process in batches of 10 until all are done.
+
+#### 4. Verify Key Developers
+
+After processing, verify these specific developers have correct colors:
+- Nakheel: `rgb(0,40,85)` (navy blue) -- already correct
+- Aldar Properties: `rgb(0,0,0)` (black) -- already correct
+- Ellington: `rgb(0,0,0)` (black) -- already correct
+- Danube: `rgb(200,16,46)` (red) -- already correct
+- Binghatti: `rgb(0,0,0)` (black) -- needs fix
+- Emaar, Sobha, Damac, MAG: need processing (currently null)
+
+### Summary
+
+| # | Change | Detail |
+|---|--------|--------|
+| 1 | DeveloperCard.tsx | Revert to using only `developer.logo_url` (original logos only) |
+| 2 | Database | Fix Binghatti color to `rgb(0,0,0)` |
+| 3 | Database | Run extract-logo-colors for all 389 remaining developers |
+| 4 | Verify | Confirm key developers show correct colors |
+
+### What This Does NOT Do
+
+- Does NOT create any new logos
+- Does NOT use any AI-generated logo images
+- Does NOT modify any existing logos
+- Only changes the background color of the box the logo sits in
 
