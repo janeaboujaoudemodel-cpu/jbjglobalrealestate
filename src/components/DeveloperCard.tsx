@@ -43,12 +43,20 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
   const [logoError, setLogoError] = useState(false);
   const logoContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleLogoLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    const img = e.currentTarget;
-    if (logoContainerRef.current) {
-      const color = extractDominantCornerColor(img);
-      logoContainerRef.current.style.backgroundColor = color;
-    }
+  const handleLogoLoad = () => {
+    if (!developer.logo_url || !logoContainerRef.current) return;
+    // Dual-load: attempt a hidden CORS image to extract color
+    const corsImg = new Image();
+    corsImg.crossOrigin = "anonymous";
+    corsImg.onload = () => {
+      if (logoContainerRef.current) {
+        const color = extractDominantCornerColor(corsImg);
+        logoContainerRef.current.style.backgroundColor = color;
+      }
+    };
+    // On CORS failure, keep default white — logo still displays fine
+    corsImg.onerror = () => {};
+    corsImg.src = developer.logo_url;
   };
 
   const showFeatureImage = developer.feature_image_url && !imageError;
@@ -107,7 +115,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
                 <img
                   src={developer.logo_url}
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain p-1"
                   loading={isEager ? "eager" : "lazy"}
                   referrerPolicy="no-referrer"
                   onLoad={handleLogoLoad}
