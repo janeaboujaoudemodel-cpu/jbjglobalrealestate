@@ -1,60 +1,28 @@
 
 
-## Fix Developer Card Logos and Photos
+## Fix Broken Developer Logos
 
-### Issue 1: Logo Background Color Matching
+### Root Cause
 
-**Problem**: The logo container has a fixed white (`bg-white`) background. When logos have dark or colored backgrounds, the white edges are visible and look bad.
+The `crossOrigin="anonymous"` attribute added to the logo `<img>` tag (line 111 in `DeveloperCard.tsx`) is breaking logo display. This attribute was added so the canvas-based color extraction could read pixel data. However, when a CDN (like `api.reelly.io`, `reelly-backend.s3.amazonaws.com`, etc.) does not return `Access-Control-Allow-Origin` headers, the browser blocks the image entirely -- it doesn't even display it.
 
-**Solution**: Use a client-side canvas-based color extraction approach. When each logo image loads, a small helper function will:
-1. Draw the logo onto a hidden canvas
-2. Sample the corner pixels (top-left, top-right, bottom-left, bottom-right) to detect the logo's background color
-3. Set the logo container's background to that detected color
-4. This runs per-logo independently, so each logo gets its own matching background
+This affects hundreds of developer logos hosted on external CDNs.
 
-**Implementation in `src/components/DeveloperCard.tsx`**:
-- Add a `useRef` for the logo container div
-- Add an `onLoad` handler on the logo `<img>` that:
-  - Creates a temporary canvas
-  - Draws the loaded image
-  - Samples corner pixels to get the dominant background color
-  - Sets the container div's `backgroundColor` to that color via ref
-- Keep `object-contain` and `p-0` so logos fill the space without cropping
-- Default background stays white until the image loads and color is detected
+### Fix
 
-**New utility function in `src/lib/imageUtils.ts`**:
+**File: `src/components/DeveloperCard.tsx`**
 
-```text
-function extractDominantCornerColor(img: HTMLImageElement): string
-  - Creates a 1x1 or small canvas
-  - Draws the image scaled down
-  - Reads corner pixel RGBA values
-  - Returns the most common corner color as an rgb() string
-  - Falls back to white if cross-origin errors occur
-```
+1. **Remove `crossOrigin="anonymous"`** from the logo image -- this immediately restores all broken logos
+2. **Gracefully handle color extraction failure** -- the `extractDominantCornerColor` function already falls back to white on cross-origin errors, so removing `crossOrigin` means the canvas will throw a security error when trying to read pixels from non-CORS images, which is already handled by the try/catch returning white
+3. **Add `referrerPolicy="no-referrer"`** to the logo image as well (same fix applied to feature images) to prevent referrer-based CDN blocking
+4. **Add an `onError` fallback** for the logo image too, so if a logo fails to load, it shows the Building2 icon instead of a broken image
 
----
+### Technical Details
 
-### Issue 2: Developer Photos Not Showing
+| Line | Current | Change |
+|------|---------|--------|
+| 111 | `crossOrigin="anonymous"` | Remove this attribute entirely |
+| 107 | Logo `<img>` | Add `referrerPolicy="no-referrer"` and `onError` handler |
 
-**Problem**: Some developer cards show a logo fallback instead of the actual feature photo, even though all 540 developers have `feature_image_url` populated in the database.
-
-**Root cause**: The current code at line 58 checks `developer.feature_image_url` -- if the image URL fails to load (404, CORS error, etc.), the broken image shows rather than gracefully falling back. However, the fallback (lines 65-83) only triggers when `feature_image_url` is falsy, not when the image fails to load.
-
-**Solution in `src/components/DeveloperCard.tsx`**:
-- Add an `onError` handler on the feature image `<img>` (line 59-64) that:
-  - Attempts to load the image from an alternative source or
-  - Hides the broken image and shows the fallback UI
-- Use a state variable `imageError` to toggle between the real photo and the fallback
-- Add `referrerPolicy="no-referrer"` to the feature image to prevent referrer-based blocking (some CDNs like reelly.io block requests with referrers)
-
----
-
-### Technical Summary
-
-| # | File | Change |
-|---|------|--------|
-| 1 | `src/lib/imageUtils.ts` | Add `extractDominantCornerColor()` utility function |
-| 2 | `src/components/DeveloperCard.tsx` | Logo container: remove fixed `bg-white`, add dynamic background color detection via canvas on image load |
-| 3 | `src/components/DeveloperCard.tsx` | Feature photo: add `onError` handler with state fallback + `referrerPolicy="no-referrer"` to fix missing photos |
+The color extraction will still work for same-origin and CORS-enabled images. For non-CORS images, it gracefully falls back to white background -- which is the safe default.
 
