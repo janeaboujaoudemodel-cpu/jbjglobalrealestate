@@ -1,74 +1,65 @@
 
 
-## Fix Developer Logos -- Stop Using Fake Logos, Match Box Colors
+## Improve Vertical Navigation Mega Menu Behavior
 
-### What Went Wrong
+### Changes Overview
 
-1. **Fake AI-generated logos are being shown**: The card currently prefers `logo_url_processed` (AI-generated "background-removed" versions) over the real `logo_url`. These AI versions are NOT the real logos -- they are rejected. Emaar, Sobha, Damac, MAG, Danube all have fake processed versions being displayed.
+The vertical sidebar navigation (`PropertiesVerticalNav.tsx`) needs several UX improvements. These changes apply ONLY to the vertical nav mode -- the horizontal GlobalHeader mega menus remain untouched.
 
-2. **Binghatti was broken**: It was working perfectly before, but the color got reset to white (`rgb(255,255,255)`) during the batch reset. It needs to be restored.
+### 1. Click-to-Open Instead of Hover
 
-3. **389 out of 535 developers still have NO background color** -- they show white boxes by default.
+Currently, hovering over nav items with mega menus (Buy, Sell, Rent, etc.) opens the full mega menu panel immediately. This will be changed to:
+- **Hover**: Only highlights the nav item (visual feedback), does NOT open the mega menu panel
+- **Click**: Opens the mega menu panel
+- Clicking again or clicking outside closes it immediately (no 80-120ms delay)
 
-### The Correct Approach (Like Nakheel)
+### 2. Smaller, Centered Mega Menu Panel
 
-Nakheel is the gold standard:
-- Uses the ORIGINAL logo (not AI-generated)
-- Box background color matches the logo's navy blue background exactly
-- Result: seamless, premium look with no white borders
+When a mega menu opens in vertical nav mode, it currently fills the entire right side of the screen. This will be changed to:
+- Panel width: max ~700px instead of filling to the right edge
+- Centered horizontally in the remaining space (right of the sidebar)
+- Slightly rounded corners and shadow for a premium card-like appearance
+- The panel will NOT overlap the left sidebar (stays to the right of the 200px sidebar)
 
-This is what ALL developers should look like.
+### 3. Background Blur Effect
 
-### Changes
+When the mega menu panel is open:
+- The main page content behind it gets a subtle backdrop blur effect
+- The vertical sidebar itself stays clear and fully visible (no blur on the sidebar)
 
-#### 1. Frontend Fix (DeveloperCard.tsx)
+### 4. Instant Close on Outside Click
 
-**Revert to using only the original logo**. Change line 99 from:
-```
-src={developer.logo_url_processed || developer.logo_url}
-```
-back to:
-```
-src={developer.logo_url}
-```
+- Remove the 80-120ms timeout delays on mouse leave
+- Clicking anywhere outside the mega menu panel closes it instantly
+- Clicking on a different nav item switches the panel instantly
 
-This ensures only real, original logos are ever displayed. No AI-generated logos.
+### 5. Logo Links to Homepage
 
-Also revert line 97 condition to check only `developer.logo_url`.
+The JBJ monogram/logo at the top of the vertical sidebar currently has no link. It will be wrapped in a `<Link to="/">` so clicking it navigates to the homepage.
 
-#### 2. Fix Binghatti Color
+### 6. Hero Section Scroll Behavior (Project Detail Pages)
 
-Set Binghatti's `logo_bg_color` back to the correct value. The Binghatti logo (`/developers/logos/binghatti-logo.webp`) has a black background, so set it to `rgb(0,0,0)`.
+On project detail pages (`/project/...`), the vertical nav appears only after scrolling past the hero section. The existing behavior already handles this:
+- In the hero section: horizontal transparent header is shown
+- After scrolling past hero: vertical nav appears, horizontal header hides
 
-#### 3. Process ALL Remaining 389 Developers
+This is already working via the `showStickyNav` state in `ProjectDetailLayout.tsx`. No changes needed here -- the user confirmed this is working correctly.
 
-Run the `extract-logo-colors` edge function repeatedly to process all 389 developers that still have no `logo_bg_color`. The function uses AI to analyze each original logo image and extract the exact background color -- it does NOT modify or replace the logo itself.
+For the `/properties` page (PropertiesReelly), the vertical nav is always shown since there is no hero section. This stays the same.
 
-Process in batches of 10 until all are done.
+### Technical Details
 
-#### 4. Verify Key Developers
+**File: `src/components/navigation/PropertiesVerticalNav.tsx`**
 
-After processing, verify these specific developers have correct colors:
-- Nakheel: `rgb(0,40,85)` (navy blue) -- already correct
-- Aldar Properties: `rgb(0,0,0)` (black) -- already correct
-- Ellington: `rgb(0,0,0)` (black) -- already correct
-- Danube: `rgb(200,16,46)` (red) -- already correct
-- Binghatti: `rgb(0,0,0)` (black) -- needs fix
-- Emaar, Sobha, Damac, MAG: need processing (currently null)
+| Change | Detail |
+|--------|--------|
+| Replace `onMouseEnter` with `onClick` on nav items | Mega menus open only on click |
+| Remove `handleNavLeave`, `handlePanelEnter`, `handlePanelLeave` hover handlers | No hover-based open/close |
+| Wrap logo `<img>` in `<Link to="/">` | Logo navigates to homepage |
+| Update `renderMegaMenu()` panel styles | Smaller panel: `max-w-[700px]`, centered in available space |
+| Add `backdrop-blur-sm` to the backdrop overlay | Blurs main content behind mega menu |
+| Make backdrop click close instantly (already does, but remove timeouts) | Instant close behavior |
+| Keep nav item hover styling for visual feedback only | Gold highlight on hover, but no panel opening |
 
-### Summary
-
-| # | Change | Detail |
-|---|--------|--------|
-| 1 | DeveloperCard.tsx | Revert to using only `developer.logo_url` (original logos only) |
-| 2 | Database | Fix Binghatti color to `rgb(0,0,0)` |
-| 3 | Database | Run extract-logo-colors for all 389 remaining developers |
-| 4 | Verify | Confirm key developers show correct colors |
-
-### What This Does NOT Do
-
-- Does NOT create any new logos
-- Does NOT use any AI-generated logo images
-- Does NOT modify any existing logos
-- Only changes the background color of the box the logo sits in
+No other files need to be modified. The GlobalHeader mega menus are completely separate and remain unchanged.
 
