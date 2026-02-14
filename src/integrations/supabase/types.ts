@@ -14345,6 +14345,24 @@ export type Database = {
         }
         Relationships: []
       }
+      project_ai_cache: {
+        Row: {
+          analysis_json: Json
+          generated_at: string
+          project_slug: string
+        }
+        Insert: {
+          analysis_json: Json
+          generated_at?: string
+          project_slug: string
+        }
+        Update: {
+          analysis_json?: Json
+          generated_at?: string
+          project_slug?: string
+        }
+        Relationships: []
+      }
       project_ai_scores: {
         Row: {
           analysis_details: Json | null

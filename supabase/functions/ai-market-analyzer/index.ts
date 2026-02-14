@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -19,11 +20,11 @@ interface AnalyzerRequest {
 }
 
 interface MarketInsight {
-  supplyDemandScore: number; // 1-10, 10 being high demand
+  supplyDemandScore: number;
   supplyDemandLabel: string;
   priceComparisonLabel: string;
-  priceComparisonPercent: number; // positive means above market, negative below
-  investmentRating: string; // 'Strong Buy' | 'Buy' | 'Hold' | 'Monitor'
+  priceComparisonPercent: number;
+  investmentRating: string;
   keyInsights: string[];
   riskFactors: string[];
   avgAreaPriceSqft: number;
@@ -42,6 +43,29 @@ serve(async (req) => {
     }
 
     const request: AnalyzerRequest = await req.json();
+
+    // Build cache key from request
+    const cacheSlug = `${request.type}-${(request.name || '').toLowerCase().replace(/\s+/g, '-')}-${(request.location || '').toLowerCase().replace(/\s+/g, '-')}`;
+
+    // Check DB cache first (24-hour TTL)
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const { data: cached } = await supabase
+      .from("project_ai_cache")
+      .select("analysis_json, generated_at")
+      .eq("project_slug", cacheSlug)
+      .maybeSingle();
+
+    if (cached) {
+      const age = Date.now() - new Date(cached.generated_at).getTime();
+      if (age < 24 * 60 * 60 * 1000) {
+        return new Response(JSON.stringify(cached.analysis_json), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
     
     // Build the analysis prompt based on request type
     const todayDate = new Date().toISOString().split('T')[0];
@@ -81,6 +105,7 @@ Provide market context including supply/demand dynamics, price comparison to sim
 Provide market context including supply/demand dynamics, typical price per sqft, rental yields, and key considerations for investors.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      signal: AbortSignal.timeout(20000),
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
@@ -180,6 +205,11 @@ Provide market context including supply/demand dynamics, typical price per sqft,
     }
 
     const insights: MarketInsight = JSON.parse(toolCall.function.arguments);
+
+    // Cache result in DB
+    await supabase
+      .from("project_ai_cache")
+      .upsert({ project_slug: cacheSlug, analysis_json: insights, generated_at: new Date().toISOString() });
 
     return new Response(JSON.stringify(insights), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
