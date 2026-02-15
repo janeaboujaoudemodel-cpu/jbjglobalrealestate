@@ -40,6 +40,8 @@ import {
   Users,
   Loader2,
   Database,
+  FlaskConical,
+  ImageIcon,
 } from "lucide-react";
 import ListingSearchFilters from "@/components/listing-admin/ListingSearchFilters";
 import ListingAdminChat from "@/components/listing-admin/ListingAdminChat";
@@ -49,6 +51,8 @@ import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPa
 import SyncDashboard from "@/components/listing-admin/SyncDashboard";
 import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel";
 import { SourceCountsPanel } from "@/components/listing-admin/SourceCountsPanel";
+import { ImageFinderPanel } from "@/components/listing-admin/ImageFinderPanel";
+import { SarahTestPanel } from "@/components/listing-admin/SarahTestPanel";
 // OffPlanInquiryCTA removed from admin per user request
 import { RefreshCw, Globe, Check } from "lucide-react";
 
@@ -116,7 +120,7 @@ const ListingAdmin = () => {
     }
     
     // Handle syncTab URL param for Data Ops sub-tabs (updated tab names)
-    if (syncTab && ['reelly', 'approvals', 'updates', 'external'].includes(syncTab)) {
+    if (syncTab && ['reelly', 'approvals', 'updates', 'external', 'images', 'test', 'provident'].includes(syncTab)) {
       setDataOpsTab(syncTab);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -631,7 +635,7 @@ const ListingAdmin = () => {
             <SourceCountsPanel />
             
             <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
-              <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1">
+              <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1 flex-wrap h-auto">
                 <TabsTrigger 
                   value="reelly" 
                   className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
@@ -660,6 +664,27 @@ const ListingAdmin = () => {
                   <Database className="w-4 h-4 mr-2" />
                   External Sources
                 </TabsTrigger>
+                <TabsTrigger 
+                  value="images"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                >
+                  <Image className="w-4 h-4 mr-2" />
+                  Image Finder
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="test"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                >
+                  <FlaskConical className="w-4 h-4 mr-2" />
+                  Test Extraction
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="provident"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Provident Sync
+                </TabsTrigger>
               </TabsList>
               
               <TabsContent value="reelly" className="mt-0">
@@ -675,6 +700,19 @@ const ListingAdmin = () => {
               </TabsContent>
               <TabsContent value="external" className="mt-0">
                 <ExtractionJobsPanel />
+              </TabsContent>
+              <TabsContent value="images" className="mt-0">
+                <ImageFinderPanel />
+              </TabsContent>
+              <TabsContent value="test" className="mt-0">
+                <SarahTestPanel
+                  onGoToFullSync={() => setDataOpsTab("provident")}
+                  onRunPageOneTest={() => setDataOpsTab("provident")}
+                  onGoToApprovals={() => setDataOpsTab("approvals")}
+                />
+              </TabsContent>
+              <TabsContent value="provident" className="mt-0">
+                <SyncDashboard />
               </TabsContent>
             </Tabs>
           </div>

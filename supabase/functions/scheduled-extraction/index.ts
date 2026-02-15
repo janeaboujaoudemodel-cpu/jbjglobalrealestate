@@ -104,27 +104,39 @@ async function extractFromDubaiRestApi(baseUrl: string): Promise<ExternalProject
   const projects: ExternalProject[] = [];
   
   try {
-    // Dubai REST / DLD API - fetch off-plan projects
+    // Try multiple known endpoint patterns for Dubai land registry / developer portals
     const endpoints = [
       `${baseUrl}/api/transactions/offplan`,
       `${baseUrl}/api/projects`,
+      `${baseUrl}/api/v1/projects`,
+      `${baseUrl}/v1/projects`,
+      `${baseUrl}/projects`,
     ];
     
     for (const endpoint of endpoints) {
       try {
-        console.log(`Trying Dubai REST endpoint: ${endpoint}`);
+        console.log(`Trying REST endpoint: ${endpoint}`);
         const res = await fetch(endpoint, {
-          headers: { "Accept": "application/json" },
-          signal: AbortSignal.timeout(15000),
+          headers: { 
+            "Accept": "application/json",
+            "User-Agent": "Mozilla/5.0",
+          },
+          signal: AbortSignal.timeout(10000),
         });
         
         if (!res.ok) {
-          console.log(`Endpoint ${endpoint} returned ${res.status}, trying next...`);
+          console.log(`Endpoint ${endpoint} returned ${res.status}`);
+          continue;
+        }
+        
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("json")) {
+          console.log(`Endpoint ${endpoint} returned non-JSON: ${contentType}`);
           continue;
         }
         
         const data = await res.json();
-        const items = Array.isArray(data) ? data : (data.data || data.results || data.projects || []);
+        const items = Array.isArray(data) ? data : (data.data || data.results || data.projects || data.items || []);
         
         if (!Array.isArray(items) || items.length === 0) {
           console.log(`Endpoint ${endpoint} returned no array data`);
@@ -152,27 +164,28 @@ async function extractFromDubaiRestApi(baseUrl: string): Promise<ExternalProject
           });
         }
         
-        if (projects.length > 0) break; // Got data, no need to try more endpoints
+        if (projects.length > 0) break;
       } catch (endpointErr) {
         console.log(`Endpoint ${endpoint} failed:`, endpointErr instanceof Error ? endpointErr.message : "unknown");
       }
     }
   } catch (err) {
-    console.error("Dubai REST API extraction failed:", err);
+    console.error("REST API extraction failed:", err);
   }
   
-  console.log(`Dubai REST API extracted ${projects.length} projects`);
+  console.log(`REST API extracted ${projects.length} projects total`);
   return projects;
 }
 
-// Extract from Provident website using Firecrawl
+// Extract from Provident website using Firecrawl - link-based extraction
 async function extractFromProvident(baseUrl: string, firecrawlKey: string): Promise<ExternalProject[]> {
   const projects: ExternalProject[] = [];
   
   try {
     console.log(`Scraping Provident: ${baseUrl}`);
     
-    const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
+    // Step 1: Use Firecrawl MAP to discover all project URLs (fast, no credit-heavy scraping)
+    const mapResponse = await fetch("https://api.firecrawl.dev/v1/map", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${firecrawlKey}`,
@@ -180,88 +193,92 @@ async function extractFromProvident(baseUrl: string, firecrawlKey: string): Prom
       },
       body: JSON.stringify({
         url: baseUrl,
-        formats: ["markdown", "links"],
-        onlyMainContent: true,
-        waitFor: 5000,
-        timeout: 30000,
+        limit: 5000,
+        includeSubdomains: false,
       }),
     });
     
-    if (!scrapeResponse.ok) {
-      console.error("Firecrawl error for Provident:", await scrapeResponse.text());
-      return projects;
-    }
+    let projectLinks: string[] = [];
     
-    const scraped = await scrapeResponse.json();
-    const markdown = scraped.data?.markdown || "";
-    const links = scraped.data?.links || [];
-    
-    console.log(`Provident scraped: ${markdown.length} chars, ${links.length} links`);
-    
-    if (markdown.length < 100) return projects;
-    
-    // Use AI to extract project listings from the Provident page
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      console.log("No Lovable API key for AI extraction");
-      return projects;
-    }
-    
-    const response = await fetch("https://api.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          {
-            role: "system",
-            content: `You are extracting real estate project listings from a Provident Estate webpage.
-For each REAL project, extract:
-- project_name: The actual project name (e.g., "Damac Hills 2", "The Oasis by Emaar")
-- developer: Developer company name
-- location: Area/community in Dubai
-- emirate: "Dubai"
-- status: "Off-Plan", "Ready", etc.
-- price_from: Starting price in AED (number only)
-- handover_date: Expected date/quarter
-- description: Brief description
-- amenities: Array of amenities if listed
-
-IMPORTANT: Only extract REAL project names. Ignore headers, navigation items, promotional text.
-Return ONLY a valid JSON array. No markdown, no explanation.`
-          },
-          {
-            role: "user",
-            content: `Extract all real estate project listings:\n\n${markdown.substring(0, 25000)}`
-          }
-        ],
-        temperature: 0.1,
-        max_tokens: 4000,
-      }),
-    });
-    
-    if (response.ok) {
-      const data = await response.json();
-      const content = data.choices?.[0]?.message?.content || "[]";
-      const cleanJson = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+    if (mapResponse.ok) {
+      const mapData = await mapResponse.json();
+      const allLinks = mapData.links || mapData.data?.links || [];
+      console.log(`Provident MAP found ${allLinks.length} total links`);
       
-      try {
-        const extracted = JSON.parse(cleanJson);
-        if (Array.isArray(extracted)) {
-          projects.push(...extracted);
-        }
-      } catch (parseErr) {
-        console.error("Failed to parse AI extraction result:", parseErr);
+      // Filter for project detail pages: /new-projects/SLUG pattern
+      projectLinks = allLinks.filter((link: string) => {
+        const match = link.match(/\/new-projects\/([^\/\?#]+)\/?$/);
+        if (!match) return false;
+        const slug = match[1];
+        // Exclude non-project pages
+        const excluded = ['page', 'search', 'filter', 'category', 'tag', 'author', 'about', 'contact', 'faq'];
+        return !excluded.some(e => slug.startsWith(e));
+      });
+      
+      console.log(`Provident: ${projectLinks.length} project detail links found`);
+    } else {
+      console.log(`Map failed (${mapResponse.status}), falling back to scrape+links`);
+      
+      // Fallback: scrape the listing page and extract links
+      const scrapeResponse = await fetch("https://api.firecrawl.dev/v1/scrape", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${firecrawlKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: baseUrl,
+          formats: ["links"],
+          onlyMainContent: true,
+          waitFor: 5000,
+          timeout: 30000,
+        }),
+      });
+      
+      if (scrapeResponse.ok) {
+        const scraped = await scrapeResponse.json();
+        const links = scraped.data?.links || [];
+        projectLinks = links.filter((link: string) => 
+          link.includes("/new-projects/") && 
+          link !== baseUrl && 
+          !link.endsWith("/new-projects/") &&
+          !link.includes("?") &&
+          !link.includes("#")
+        );
+        console.log(`Provident scrape fallback: ${projectLinks.length} project links from ${links.length} total`);
       }
     }
+    
+    if (projectLinks.length === 0) {
+      console.log("No Provident project links found");
+      return projects;
+    }
+    
+    // Step 2: Extract project names from URLs (slug-based, no AI needed)
+    for (const link of projectLinks) {
+      const match = link.match(/\/new-projects\/([^\/\?#]+)\/?$/);
+      if (!match) continue;
+      
+      const slug = match[1];
+      // Convert slug to project name: "damac-hills-2" → "Damac Hills 2"
+      const projectName = slug
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (c: string) => c.toUpperCase());
+      
+      projects.push({
+        project_name: projectName,
+        emirate: "Dubai",
+        status: "Off-Plan",
+        image_url: undefined,
+      });
+    }
+    
+    console.log(`Provident: extracted ${projects.length} projects from links`);
+    
   } catch (err) {
     console.error("Provident extraction failed:", err);
   }
   
-  console.log(`Provident extracted ${projects.length} projects`);
   return projects;
 }
 
