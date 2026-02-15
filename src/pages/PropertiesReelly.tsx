@@ -153,10 +153,12 @@ const PropertiesReelly = () => {
   const debouncedSearch = shortcutFilters.searchQuery || '';
   const { data: localResults } = useLocalProjectSearch(debouncedSearch);
 
-  // Convert DB projects to ReellyProject format
+  // Convert DB projects to ReellyProject format — exclude imageless projects
   const dbProjectsMapped = useMemo(() => {
     if (!dbProjects?.length) return [];
-    return dbProjects.map(mapDbProjectToReellyProject);
+    return dbProjects
+      .map(mapDbProjectToReellyProject)
+      .filter(p => !!p.thumbnail);
   }, [dbProjects]);
 
   // Flatten paginated API data
@@ -182,18 +184,9 @@ const PropertiesReelly = () => {
     return dbProjectsMapped;
   }, [dbProjectsMapped, reellyProjects]);
 
-  // Apply shortcut filters to merged projects, prioritize projects with images
+  // Apply shortcut filters to merged projects
   const projects = useMemo(() => {
-    const filtered = applyShortcutFilters(mergedProjects, shortcutFilters);
-    // When no explicit sort is set, push imageless projects to the end
-    if (!shortcutFilters.sortBy || shortcutFilters.sortBy === 'newest') {
-      return filtered.sort((a, b) => {
-        const aHasImg = a.thumbnail || a.images?.length ? 1 : 0;
-        const bHasImg = b.thumbnail || b.images?.length ? 1 : 0;
-        return bHasImg - aHasImg;
-      });
-    }
-    return filtered;
+    return applyShortcutFilters(mergedProjects, shortcutFilters);
   }, [mergedProjects, shortcutFilters]);
 
   // Total count
@@ -277,9 +270,16 @@ const PropertiesReelly = () => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight" style={{ fontFamily: 'Poppins, sans-serif' }}>
             Discover Dubai's Finest <span className="text-gold">Off-Plan</span> Properties
           </h1>
-          <p className="text-white/80 text-sm sm:text-base md:text-lg mb-6 max-w-xl">
-            Browse {totalCount.toLocaleString()} curated developments from Dubai's top developers
-          </p>
+           <p className="text-white/80 text-sm sm:text-base md:text-lg mb-6 max-w-xl">
+             {isDbLoading ? (
+               <span className="inline-flex items-center gap-2">
+                 <Loader2 className="w-4 h-4 animate-spin" />
+                 Loading curated developments...
+               </span>
+             ) : (
+               <>Browse {totalCount.toLocaleString()} curated developments from Dubai's top developers</>
+             )}
+           </p>
           <div className="flex flex-wrap gap-3">
             <HeroButton href="/properties?status=off-plan">New Launches</HeroButton>
             <HeroButton href="/developers">Top Developers</HeroButton>
@@ -392,6 +392,7 @@ const PropertiesReelly = () => {
           <div className={`${showStickyNav ? 'lg:pl-[200px]' : ''} px-4 sm:px-6 lg:px-8`}>
             
             {/* Results Count */}
+            {!isDbLoading && (
             <div className="mb-6 flex items-center justify-between">
               <p className="text-black/70">
                 Showing <span className="text-gold font-medium">{paginatedProjects.length}</span> of{' '}
@@ -401,6 +402,7 @@ const PropertiesReelly = () => {
                 )}
               </p>
             </div>
+            )}
 
             {/* Projects Grid — 2 columns max */}
             {(isLoading && isDbLoading) ? (
@@ -516,13 +518,18 @@ const PropertiesReelly = () => {
         </section>
       )}
 
-      {/* DLD Market Intelligence - hidden in map mode */}
+      {/* Gold Divider + DLD Market Intelligence - hidden in map mode */}
       {!isMapMode && (
-        <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-          <div className={`${showStickyNav ? 'lg:pl-[200px]' : ''}`}>
-            <DLDMarketWidget />
+        <>
+          <div className={`${showStickyNav ? 'lg:pl-[200px]' : ''} bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark px-4 sm:px-6 lg:px-8`}>
+            <div className="h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent my-0" />
           </div>
-        </div>
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark pt-2 pb-8">
+            <div className={`${showStickyNav ? 'lg:pl-[200px]' : ''}`}>
+              <DLDMarketWidget />
+            </div>
+          </div>
+        </>
       )}
        </div>
      </>
