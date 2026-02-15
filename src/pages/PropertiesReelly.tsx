@@ -182,9 +182,18 @@ const PropertiesReelly = () => {
     return dbProjectsMapped;
   }, [dbProjectsMapped, reellyProjects]);
 
-  // Apply shortcut filters to merged projects
+  // Apply shortcut filters to merged projects, prioritize projects with images
   const projects = useMemo(() => {
-    return applyShortcutFilters(mergedProjects, shortcutFilters);
+    const filtered = applyShortcutFilters(mergedProjects, shortcutFilters);
+    // When no explicit sort is set, push imageless projects to the end
+    if (!shortcutFilters.sortBy || shortcutFilters.sortBy === 'newest') {
+      return filtered.sort((a, b) => {
+        const aHasImg = a.thumbnail || a.images?.length ? 1 : 0;
+        const bHasImg = b.thumbnail || b.images?.length ? 1 : 0;
+        return bHasImg - aHasImg;
+      });
+    }
+    return filtered;
   }, [mergedProjects, shortcutFilters]);
 
   // Total count

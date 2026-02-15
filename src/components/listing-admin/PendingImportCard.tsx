@@ -289,8 +289,8 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
             fallbackSrc="/placeholder.svg"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <span className="text-xs text-muted-foreground">Media pending verification</span>
+          <div className="w-full h-full flex items-center justify-center bg-muted">
+            <span className="text-xs text-muted-foreground">No image available</span>
           </div>
         )}
 

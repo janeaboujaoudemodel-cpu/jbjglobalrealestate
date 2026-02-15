@@ -231,6 +231,7 @@ export function useProjectsListing() {
             community:communities(id, name, slug),
             images:project_images(image_url, display_order)
           `)
+          .eq("is_published", true)
           .order("created_at", { ascending: false })
           .range(offset, offset + PAGE_SIZE - 1);
         
