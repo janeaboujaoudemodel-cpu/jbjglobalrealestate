@@ -26,7 +26,7 @@ export function VerifiedMedia({
   className,
   priority,
   decorated = true,
-  placeholderLabel = "Media pending",
+  placeholderLabel = "No image available",
 }: VerifiedMediaProps) {
   if (!src) {
     return (

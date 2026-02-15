@@ -220,7 +220,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             src={images[currentImageIndex]?.image_url || images[0]?.image_url}
             alt={images[currentImageIndex]?.alt_text || project.name}
             className="object-cover group-hover:scale-105 transition-transform duration-500"
-            placeholderLabel="Media pending verification"
+            placeholderLabel="No image available"
           />
           
           {/* Navigation Arrows - Always Visible */}

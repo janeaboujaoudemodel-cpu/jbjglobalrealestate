@@ -174,7 +174,7 @@ const ReellyProjectCard = ({
                src={images[currentImageIndex]?.image_url || project.thumbnail || project.gallery?.[0] || null}
                alt={images[currentImageIndex]?.alt_text || project.name}
                className="object-cover group-hover:scale-105 transition-transform duration-500"
-               placeholderLabel="Media pending verification"
+               placeholderLabel="No image available"
              />
            
            {/* Navigation Arrows */}
