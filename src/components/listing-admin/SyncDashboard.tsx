@@ -37,6 +37,7 @@ import { ProjectApprovalQueue } from "./ProjectApprovalQueue";
 import { DeveloperApprovalQueue } from "./DeveloperApprovalQueue";
 import { TestOneListingPanel } from "./TestOneListingPanel";
 import { SyncHistoryLog } from "./SyncHistoryLog";
+import { ImageFinderPanel } from "./ImageFinderPanel";
 
 interface SyncStats {
   page: number;
@@ -154,7 +155,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
   });
   const syncTabFromUrl = searchParams.get("syncTab");
   const initialTab =
-    syncTabFromUrl && ["sync", "approvals", "developers", "test", "history"].includes(syncTabFromUrl)
+    syncTabFromUrl && ["sync", "approvals", "developers", "test", "history", "images"].includes(syncTabFromUrl)
       ? syncTabFromUrl
       : "sync";
 
@@ -1444,7 +1445,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
     <div className="space-y-6">
       {/* Tabs: Test vs Full Sync */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="approvals" className="flex items-center gap-2">
             <FilledCheckCircle size="sm" />
             Projects
@@ -1452,6 +1453,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
           <TabsTrigger value="developers" className="flex items-center gap-2">
             <Database className="w-4 h-4" />
             Developers
+          </TabsTrigger>
+          <TabsTrigger value="images" className="flex items-center gap-2">
+            <Image className="w-4 h-4" />
+            Image Finder
           </TabsTrigger>
           <TabsTrigger value="history" className="flex items-center gap-2">
             <Clock className="w-4 h-4" />
@@ -1476,6 +1481,10 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
 
         <TabsContent value="developers" className="mt-6">
           <DeveloperApprovalQueue />
+        </TabsContent>
+
+        <TabsContent value="images" className="mt-6">
+          <ImageFinderPanel />
         </TabsContent>
 
         <TabsContent value="history" className="mt-6">
