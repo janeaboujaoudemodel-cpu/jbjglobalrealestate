@@ -18,6 +18,7 @@ import { SectionDivider } from "@/components/ui/section-divider";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { Input } from "@/components/ui/input";
+import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -169,8 +170,16 @@ const DeveloperDetail = () => {
     },
   ].filter(s => s.value !== null);
 
+  const stickyActive = isFilterFixed && !bottomReached;
+
   return (
     <section className="relative w-full min-h-screen bg-premium-bg">
+      {/* Vertical Nav — only visible after scrolling past hero, hidden at bottom */}
+      {stickyActive && (
+        <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
+          <PropertiesVerticalNav />
+        </div>
+      )}
       {/* Hero section - always visible */}
       <div className="relative w-full h-screen min-h-[500px] overflow-hidden">
         {developer.feature_image_url ? (
@@ -211,7 +220,7 @@ const DeveloperDetail = () => {
       </div>
 
       {/* Content (Layer 2) */}
-      <div className="jj-layer-2 mt-6 md:mt-8 mb-12" style={{ marginLeft: 0, marginRight: 0, borderRadius: 0, border: 'none' }}>
+      <div className={`jj-layer-2 mt-6 md:mt-8 mb-12 ${stickyActive ? 'lg:ml-[200px]' : ''} transition-all duration-200`} style={{ marginLeft: stickyActive ? undefined : 0, marginRight: 0, borderRadius: 0, border: 'none' }}>
         {/* Developer header */}
         <div className="flex flex-col md:flex-row md:items-start gap-6">
           {/* Logo plate - Full-fit, no white corners */}
@@ -370,7 +379,7 @@ const DeveloperDetail = () => {
 
           {/* Fixed portal filter bar — when scrolled past sentinel */}
           {isFilterFixed && !bottomReached && createPortal(
-            <div className="fixed top-0 left-0 right-0 z-[9998] transition-shadow duration-200">
+            <div className="fixed top-0 left-0 lg:left-[200px] right-0 z-[9998] transition-shadow duration-200">
               <div className="mx-0 pt-0">
                 <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/30 p-2 sm:p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)] overflow-x-auto scrollbar-hide">
                   <FilterShortcutBar
@@ -477,6 +486,24 @@ const DeveloperDetail = () => {
 
         {/* DLD Market Widget - Live transaction data */}
         <DLDMarketWidget />
+
+        {/* CTA Section - bottom sentinel for reverting to normal header */}
+        <section id="ready-to-get-started" className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+          <div className="px-4 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Ready to Get Started?
+            </h2>
+            <p className="text-zinc-600 mb-6 max-w-xl mx-auto">
+              Connect with our team to explore properties by {developer.name}.
+            </p>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-black text-gold font-semibold rounded-xl border-2 border-gold hover:bg-gold hover:text-black transition-all"
+            >
+              Contact Our Team
+            </Link>
+          </div>
+        </section>
       </div>
     </section>
   );
