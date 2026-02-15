@@ -105,26 +105,17 @@ const PropertiesReelly = () => {
 
   // Scroll-based transition: hero visible = horizontal header, scrolled past = vertical nav + filter bar
   const [showStickyNav, setShowStickyNav] = useState(false);
-  const [bottomReached, setBottomReached] = useState(false);
-
-  // Bottom sentinel: hide fixed bar when "Ready to Get Started" enters viewport
-  useEffect(() => {
-    const target = document.getElementById('ready-to-get-started');
-    if (!target) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setBottomReached(entry.isIntersecting || entry.boundingClientRect.top < 0),
-      { threshold: 0.1 }
-    );
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     const onScroll = () => {
       const threshold = window.innerHeight - 150;
       const shouldShow = window.scrollY > threshold;
       setShowStickyNav(shouldShow);
+      if (shouldShow) {
+        document.body.classList.add('filter-bar-fixed');
+      } else {
+        document.body.classList.remove('filter-bar-fixed');
+      }
     };
     // Initial check
     onScroll();
@@ -134,16 +125,6 @@ const PropertiesReelly = () => {
       document.body.classList.remove('filter-bar-fixed');
     };
   }, []);
-
-  // Signal GlobalHeader: only show filter-bar-fixed when scrolled past hero AND not at bottom
-  useEffect(() => {
-    if (showStickyNav && !bottomReached) {
-      document.body.classList.add('filter-bar-fixed');
-    } else {
-      document.body.classList.remove('filter-bar-fixed');
-    }
-    return () => document.body.classList.remove('filter-bar-fixed');
-  }, [showStickyNav, bottomReached]);
 
   // Toggle map mode
   const handleMapToggle = useCallback((active: boolean) => {
@@ -172,12 +153,12 @@ const PropertiesReelly = () => {
   const debouncedSearch = shortcutFilters.searchQuery || '';
   const { data: localResults } = useLocalProjectSearch(debouncedSearch);
 
-  // Convert DB projects to ReellyProject format — exclude imageless projects
+  // Convert DB projects to ReellyProject format
   const dbProjectsMapped = useMemo(() => {
     if (!dbProjects?.length) return [];
     return dbProjects
-      .map(mapDbProjectToReellyProject)
-      .filter(p => !!p.thumbnail);
+      .filter((p: any) => p.cover_image_url && p.cover_image_url !== '')
+      .map(mapDbProjectToReellyProject);
   }, [dbProjects]);
 
   // Flatten paginated API data
@@ -289,16 +270,9 @@ const PropertiesReelly = () => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight" style={{ fontFamily: 'Poppins, sans-serif' }}>
             Discover Dubai's Finest <span className="text-gold">Off-Plan</span> Properties
           </h1>
-           <p className="text-white/80 text-sm sm:text-base md:text-lg mb-6 max-w-xl">
-             {isDbLoading ? (
-               <span className="inline-flex items-center gap-2">
-                 <Loader2 className="w-4 h-4 animate-spin" />
-                 Loading curated developments...
-               </span>
-             ) : (
-               <>Browse {totalCount.toLocaleString()} curated developments from Dubai's top developers</>
-             )}
-           </p>
+          <p className="text-white/80 text-sm sm:text-base md:text-lg mb-6 max-w-xl">
+            Browse {totalCount.toLocaleString()} curated developments from Dubai's top developers
+          </p>
           <div className="flex flex-wrap gap-3">
             <HeroButton href="/properties?status=off-plan">New Launches</HeroButton>
             <HeroButton href="/developers">Top Developers</HeroButton>
@@ -307,15 +281,15 @@ const PropertiesReelly = () => {
         </div>
       </PropertiesHeroVideo>
 
-      {/* Vertical Nav — only visible after scrolling past hero, hidden at bottom */}
-      {showStickyNav && !bottomReached && (
+      {/* Vertical Nav — only visible after scrolling past hero */}
+      {showStickyNav && (
       <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9999]">
         <PropertiesVerticalNav />
       </div>
       )}
 
-      {/* Single Unified FilterShortcutBar — only fixed after scrolling past hero, hidden at bottom */}
-      {showStickyNav && !bottomReached && (
+      {/* Single Unified FilterShortcutBar — only fixed after scrolling past hero */}
+      {showStickyNav && (
       <section 
         className={cn(
           "fixed top-0 z-[9998] bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark py-2 border-b border-gold/30 right-0",
@@ -347,7 +321,7 @@ const PropertiesReelly = () => {
       )}
 
       {/* Spacer for fixed filter bar — only when sticky nav is shown */}
-      {showStickyNav && !bottomReached && <div className="h-[60px]" />}
+      {showStickyNav && <div className="h-[60px]" />}
 
       {/* Divider */}
       <div className="h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
@@ -408,10 +382,9 @@ const PropertiesReelly = () => {
       ) : (
       /* Standard list mode — edge-to-edge background, 2-col grid, pagination */
         <section className="py-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark min-h-screen">
-          <div className={`${showStickyNav && !bottomReached ? 'lg:pl-[200px]' : ''} px-4 sm:px-6 lg:px-8`}>
+          <div className={`${showStickyNav ? 'lg:pl-[200px]' : ''} px-4 sm:px-6 lg:px-8`}>
             
             {/* Results Count */}
-            {!isDbLoading && (
             <div className="mb-6 flex items-center justify-between">
               <p className="text-black/70">
                 Showing <span className="text-gold font-medium">{paginatedProjects.length}</span> of{' '}
@@ -421,7 +394,6 @@ const PropertiesReelly = () => {
                 )}
               </p>
             </div>
-            )}
 
             {/* Projects Grid — 2 columns max */}
             {(isLoading && isDbLoading) ? (
@@ -537,18 +509,13 @@ const PropertiesReelly = () => {
         </section>
       )}
 
-      {/* Gold Divider + DLD Market Intelligence - hidden in map mode */}
+      {/* DLD Market Intelligence - hidden in map mode */}
       {!isMapMode && (
-        <>
-          <div className={`${showStickyNav && !bottomReached ? 'lg:pl-[200px]' : ''} bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark px-4 sm:px-6 lg:px-8`}>
-            <div className="h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent my-0" />
+        <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+          <div className={`${showStickyNav ? 'lg:pl-[200px]' : ''}`}>
+            <DLDMarketWidget />
           </div>
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark pt-2 pb-8">
-            <div className={`${showStickyNav && !bottomReached ? 'lg:pl-[200px]' : ''}`}>
-              <DLDMarketWidget />
-            </div>
-          </div>
-        </>
+        </div>
       )}
        </div>
      </>

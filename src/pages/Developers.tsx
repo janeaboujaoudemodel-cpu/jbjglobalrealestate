@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Search,
@@ -24,7 +23,6 @@ import {
 } from "@/components/ui/select";
 
 import developersHeroVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
-import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
 
 // Developer tier classification for filtering
 const TIER_FILTERS = [
@@ -65,33 +63,17 @@ const Developers = () => {
   const [selectedDeveloper, setSelectedDeveloper] = useState("");
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const [sortBy, setSortBy] = useState<"default" | "alpha" | "most_projects">("default");
-  const [currentPage, setCurrentPage] = useState(1);
   const filterSentinelRef = useRef<HTMLDivElement>(null);
-  const ITEMS_PER_PAGE = 24;
-
-  const [bottomReached, setBottomReached] = useState(false);
 
   // Toggle header visibility when filter is fixed
   useEffect(() => {
-    if (isFilterFixed && !bottomReached) {
+    if (isFilterFixed) {
       document.body.classList.add('filter-bar-fixed');
     } else {
       document.body.classList.remove('filter-bar-fixed');
     }
     return () => document.body.classList.remove('filter-bar-fixed');
-  }, [isFilterFixed, bottomReached]);
-
-  // Bottom sentinel: detect when reaching bottom CTA
-  useEffect(() => {
-    const target = document.getElementById('developers-cta-section');
-    if (!target) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setBottomReached(entry.isIntersecting || entry.boundingClientRect.top < 0),
-      { threshold: 0.1 }
-    );
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, []);
+  }, [isFilterFixed]);
 
   // Two-phase scroll-to-fix filter logic
   useEffect(() => {
@@ -194,22 +176,10 @@ const Developers = () => {
     selectedDeveloper,
   ].filter(Boolean).length;
 
-  // Reset page when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, tierFilter, selectedDeveloper, sortBy]);
-
-  const totalPages = Math.ceil(filteredDevelopers.length / ITEMS_PER_PAGE);
-  const paginatedDevelopers = filteredDevelopers.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
-
   const clearFilters = () => {
     setSearchQuery("");
     setTierFilter("all");
     setSelectedDeveloper("");
-    setCurrentPage(1);
   };
 
   return (
@@ -221,12 +191,6 @@ const Developers = () => {
       />
       
       <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
-        {/* Vertical Nav — only visible after scrolling past hero, hidden at bottom */}
-        {isFilterFixed && !bottomReached && (
-          <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
-            <PropertiesVerticalNav />
-          </div>
-        )}
         {/* Hero Section - Full-width Video */}
         <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
           {/* Video Background */}
@@ -389,8 +353,8 @@ const Developers = () => {
         </section>
 
         {/* Fixed portal copy of filters when scrolled past */}
-        {isFilterFixed && !bottomReached && createPortal(
-          <section className="fixed top-0 left-0 lg:left-[200px] right-0 z-[9998] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-4 border-b border-gold/30 shadow-lg">
+        {isFilterFixed && createPortal(
+          <section className="fixed top-0 left-0 right-0 z-[9998] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-4 border-b border-gold/30 shadow-lg">
             <div className="container mx-auto px-3 sm:px-4">
               <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
                 {/* Keyword Search */}
@@ -460,7 +424,7 @@ const Developers = () => {
         )}
 
         {/* Developer Cards Grid */}
-        <section className={`py-12 md:py-16 ${isFilterFixed && !bottomReached ? 'lg:pl-[200px]' : ''}`}>
+        <section className="py-12 md:py-16">
           <div className="jj-layer-2">
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -488,68 +452,22 @@ const Developers = () => {
                 )}
               </div>
             ) : (
-              <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {paginatedDevelopers.map((developer, idx) => (
-                    <DeveloperCard 
-                      key={developer.id} 
-                      developer={developer} 
-                      projectCount={projectCounts[developer.id] || 0}
-                      index={idx}
-                    />
-                  ))}
-                </div>
-
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-4 mt-10">
-                    <Button
-                      variant="outline"
-                      onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                      disabled={currentPage === 1}
-                      className="h-10 px-4 border-gold/40 text-black hover:bg-gold/10"
-                    >
-                      Previous
-                    </Button>
-                    <span className="text-sm text-zinc-600 font-medium">
-                      Page {currentPage} of {totalPages}
-                    </span>
-                    <Button
-                      variant="outline"
-                      onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                      disabled={currentPage === totalPages}
-                      className="h-10 px-4 border-gold/40 text-black hover:bg-gold/10"
-                    >
-                      Next
-                    </Button>
-                  </div>
-                )}
-              </>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredDevelopers.map((developer, idx) => (
+                  <DeveloperCard 
+                    key={developer.id} 
+                    developer={developer} 
+                    projectCount={projectCounts[developer.id] || 0}
+                    index={idx}
+                  />
+                ))}
+              </div>
             )}
           </div>
         </section>
 
         {/* DLD Market Intelligence */}
-        <div className={`${isFilterFixed && !bottomReached ? 'lg:pl-[200px]' : ''}`}>
-          <DLDMarketWidget />
-        </div>
-
-        {/* CTA Section - bottom sentinel */}
-        <section id="developers-cta-section" className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-          <div className="px-4 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Ready to Get Started?
-            </h2>
-            <p className="text-zinc-600 mb-6 max-w-xl mx-auto">
-              Connect with our team to explore developer-direct properties across the UAE.
-            </p>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-black text-gold font-semibold rounded-xl border-2 border-gold hover:bg-gold hover:text-black transition-all"
-            >
-              Contact Our Team
-            </Link>
-          </div>
-        </section>
+        <DLDMarketWidget />
       </div>
     </>
   );

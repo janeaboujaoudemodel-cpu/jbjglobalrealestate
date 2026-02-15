@@ -297,3 +297,6 @@ verify_jwt = false
 
 [functions.extract-logo-colors]
 verify_jwt = false
+
+[functions.restore-developer-logos]
+verify_jwt = false

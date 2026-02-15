@@ -24,7 +24,7 @@ export function mapDbProjectToReellyProject(p: any): ReellyProject {
     price_to: p.price_to ? Number(p.price_to) : null,
     size_min: p.size_min ? Number(p.size_min) : null,
     size_max: p.size_max ? Number(p.size_max) : null,
-    thumbnail: p.cover_image_url || (p.images?.[0]?.image_url) || null,
+    thumbnail: p.cover_image_url,
     gallery: [],
     images: [],
   };

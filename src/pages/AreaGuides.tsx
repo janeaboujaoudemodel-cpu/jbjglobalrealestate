@@ -1,9 +1,9 @@
 /**
  * AreaGuides Component - Database-Driven Areas Index
- * Hero section with scroll-based vertical nav toggle
+ * Instant layout: no hero, filter bar fixed from load, vertical nav always visible
  */
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, Building2, TrendingUp, Flame, ArrowRight, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
@@ -18,8 +18,6 @@ import { SEOHead } from "@/components/SEOHead";
 import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { optimizeStorageImageUrl } from "@/lib/imageUtils";
-
-import developersHeroVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
 
 const ITEMS_PER_PAGE = 24;
 
@@ -58,45 +56,11 @@ const AreaGuides = () => {
   const { data: areas, isLoading, error } = useAreas();
   const { data: emirates } = useEmiratesWithAreas();
 
-  // Scroll-based transition: hero visible = horizontal header, scrolled past = vertical nav + filter bar
-  const [showStickyNav, setShowStickyNav] = useState(false);
-  const [bottomReached, setBottomReached] = useState(false);
-
-  // Scroll listener for hero transition
+  // Immediately set filter-bar-fixed on mount — no hero, instant layout
   useEffect(() => {
-    const onScroll = () => {
-      const threshold = window.innerHeight - 150;
-      setShowStickyNav(window.scrollY > threshold);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      document.body.classList.remove('filter-bar-fixed');
-    };
-  }, []);
-
-  // Bottom sentinel: hide fixed bar when CTA section enters viewport
-  useEffect(() => {
-    const target = document.getElementById('areas-cta-section');
-    if (!target) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setBottomReached(entry.isIntersecting || entry.boundingClientRect.top < 0),
-      { threshold: 0.1 }
-    );
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, []);
-
-  // Signal GlobalHeader to hide when vertical nav is active
-  useEffect(() => {
-    if (showStickyNav && !bottomReached) {
-      document.body.classList.add('filter-bar-fixed');
-    } else {
-      document.body.classList.remove('filter-bar-fixed');
-    }
+    document.body.classList.add('filter-bar-fixed');
     return () => document.body.classList.remove('filter-bar-fixed');
-  }, [showStickyNav, bottomReached]);
+  }, []);
 
   // Filter and sort areas from database
   const filteredAreas = useMemo(() => {
@@ -150,10 +114,13 @@ const AreaGuides = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const stickyActive = showStickyNav && !bottomReached;
-
   return (
     <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
+      {/* Vertical Nav — always visible on desktop */}
+      <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
+        <PropertiesVerticalNav />
+      </div>
+
       <SEOHead 
         title="Areas in Dubai & UAE | JBJ Global Real Estate"
         description="Explore real estate areas across Dubai and the UAE. Browse properties by neighborhood with verified data."
@@ -161,87 +128,29 @@ const AreaGuides = () => {
         canonicalPath="/areas"
       />
 
-      {/* Hero Section */}
-      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-black">
-          <video
-            className="absolute inset-0 w-full h-full object-cover"
-            src={developersHeroVideo}
-            muted
-            playsInline
-            autoPlay
-            loop
-            preload="metadata"
+      {/* Filter bar — always fixed top-0 */}
+      <section 
+        className="fixed top-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3"
+        style={{ left: '200px' }}
+      >
+        <div className="container mx-auto px-4 space-y-2">
+          <FilterShortcutBar
+            variant="light"
+            filters={shortcutFilters}
+            onFilterChange={setShortcutFilters}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
         </div>
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
-
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
-              <MapPin className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
-                Explore Neighborhoods
-              </span>
-            </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-[-0.02em]">
-              Dubai & UAE Areas
-            </h1>
-            <p className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-              Discover premium neighborhoods across the UAE. Browse verified properties by area with real-time market data.
-            </p>
-          </motion.div>
-        </div>
-
-        <motion.div 
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.6 }}
-        >
-          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
-        </motion.div>
       </section>
 
-      {/* Vertical Nav — only visible after scrolling past hero, hidden at bottom */}
-      {stickyActive && (
-        <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
-          <PropertiesVerticalNav />
-        </div>
-      )}
-
-      {/* Filter bar — fixed only after scrolling past hero */}
-      {stickyActive && (
-        <section 
-          className="fixed top-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 left-0 lg:left-[200px]"
-        >
-          <div className="container mx-auto px-4 space-y-2">
-            <FilterShortcutBar
-              variant="light"
-              filters={shortcutFilters}
-              onFilterChange={setShortcutFilters}
-            />
-          </div>
-        </section>
-      )}
-
       {/* Spacer for fixed filter bar */}
-      {stickyActive && <div className="h-[60px]" />}
+      <div className="h-[60px]" />
 
       {/* Gold divider between filters and cards */}
       <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
       {/* Areas Grid — edge-to-edge background */}
       <section className="pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] min-h-screen">
-        <div className={`${stickyActive ? 'lg:pl-[200px]' : ''} px-4 sm:px-6 lg:px-8`}>
+        <div className="lg:pl-[200px] px-4 sm:px-6 lg:px-8">
           
           {/* Results count */}
           <div className="mb-6 flex items-center justify-between">
@@ -437,13 +346,13 @@ const AreaGuides = () => {
       </section>
 
       {/* DLD Market Intelligence */}
-      <div className={`${stickyActive ? 'lg:pl-[200px]' : ''}`}>
+      <div className="lg:pl-[200px]">
         <DLDMarketWidget />
       </div>
 
       {/* CTA Section */}
-      <section id="areas-cta-section" className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-        <div className="px-4 text-center">
+      <section id="ready-to-get-started" className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+        <div className="lg:pl-[200px] px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Can't Find What You're Looking For?
           </h2>
