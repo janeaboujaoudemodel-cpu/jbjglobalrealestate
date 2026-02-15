@@ -65,7 +65,9 @@ const Developers = () => {
   const [selectedDeveloper, setSelectedDeveloper] = useState("");
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const [sortBy, setSortBy] = useState<"default" | "alpha" | "most_projects">("default");
+  const [currentPage, setCurrentPage] = useState(1);
   const filterSentinelRef = useRef<HTMLDivElement>(null);
+  const ITEMS_PER_PAGE = 24;
 
   const [bottomReached, setBottomReached] = useState(false);
 
@@ -192,10 +194,22 @@ const Developers = () => {
     selectedDeveloper,
   ].filter(Boolean).length;
 
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, tierFilter, selectedDeveloper, sortBy]);
+
+  const totalPages = Math.ceil(filteredDevelopers.length / ITEMS_PER_PAGE);
+  const paginatedDevelopers = filteredDevelopers.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
   const clearFilters = () => {
     setSearchQuery("");
     setTierFilter("all");
     setSelectedDeveloper("");
+    setCurrentPage(1);
   };
 
   return (
@@ -474,16 +488,42 @@ const Developers = () => {
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredDevelopers.map((developer, idx) => (
-                  <DeveloperCard 
-                    key={developer.id} 
-                    developer={developer} 
-                    projectCount={projectCounts[developer.id] || 0}
-                    index={idx}
-                  />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {paginatedDevelopers.map((developer, idx) => (
+                    <DeveloperCard 
+                      key={developer.id} 
+                      developer={developer} 
+                      projectCount={projectCounts[developer.id] || 0}
+                      index={idx}
+                    />
+                  ))}
+                </div>
+
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-4 mt-10">
+                    <Button
+                      variant="outline"
+                      onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      disabled={currentPage === 1}
+                      className="h-10 px-4 border-gold/40 text-black hover:bg-gold/10"
+                    >
+                      Previous
+                    </Button>
+                    <span className="text-sm text-zinc-600 font-medium">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <Button
+                      variant="outline"
+                      onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      disabled={currentPage === totalPages}
+                      className="h-10 px-4 border-gold/40 text-black hover:bg-gold/10"
+                    >
+                      Next
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </section>
