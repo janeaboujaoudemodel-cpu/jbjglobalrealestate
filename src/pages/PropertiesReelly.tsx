@@ -295,7 +295,7 @@ const PropertiesReelly = () => {
       </PropertiesHeroVideo>
 
       {/* Vertical Nav — only visible after scrolling past hero */}
-      {showStickyNav && (
+      {showStickyNav && !isMapMode && (
       <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9999]">
         <PropertiesVerticalNav />
       </div>
@@ -341,7 +341,7 @@ const PropertiesReelly = () => {
 
       {/* Results Section - split-screen in map mode */}
       {isMapMode ? (
-        <section className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
+        <section className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden" style={{ height: 'calc(100vh - 90px)', marginTop: '90px' }}>
           <div className="flex flex-col md:flex-row h-full">
             <div className="flex-1 flex flex-col md:flex-row h-full">
               {/* Left: Scrollable card list */}

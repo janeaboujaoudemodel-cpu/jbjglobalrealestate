@@ -206,12 +206,6 @@ const AreaDetail = () => {
 
       {/* CTA Section */}
       <section id="area-cta-section" className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] relative overflow-hidden">
-        {/* Ambient glow effects */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-        
         <div className="container mx-auto px-4 relative z-10">
           <motion.div 
             className="max-w-4xl mx-auto text-center rounded-3xl p-10 md:p-14 border-2 border-gold/30 relative overflow-hidden bg-white/70 backdrop-blur-sm"
@@ -222,23 +216,13 @@ const AreaDetail = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            {/* Gold accent line at top */}
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-            {/* Corner accents */}
-            <div className="absolute top-0 left-0 w-16 h-16 pointer-events-none">
-              <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-gold to-transparent" />
-              <div className="absolute top-0 left-0 h-full w-[2px] bg-gradient-to-b from-gold to-transparent" />
-            </div>
-            <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none">
-              <div className="absolute top-0 right-0 w-full h-[2px] bg-gradient-to-l from-gold to-transparent" />
-              <div className="absolute top-0 right-0 h-full w-[2px] bg-gradient-to-b from-gold to-transparent" />
-            </div>
             
             <div className="w-14 h-14 rounded-2xl bg-gold/10 border border-gold/30 flex items-center justify-center mx-auto mb-6">
               <MapPin className="w-7 h-7 text-gold" />
             </div>
             <h2 className="text-black text-2xl md:text-3xl lg:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Explore Properties in {area.name}
+              Properties in {area.name}
             </h2>
             <p className="text-black/50 text-lg mb-10 max-w-2xl mx-auto">
               Browse our curated collection of verified properties in this premium neighborhood.
