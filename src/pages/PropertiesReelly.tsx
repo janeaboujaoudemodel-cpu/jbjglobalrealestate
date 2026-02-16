@@ -341,54 +341,52 @@ const PropertiesReelly = () => {
 
       {/* Results Section - split-screen in map mode */}
       {isMapMode ? (
-        <section className="fixed inset-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden" style={{ top: '50px' }}>
+        <section className="relative bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden" style={{ height: 'calc(100vh - 60px)' }}>
           <div className="flex flex-col md:flex-row h-full">
-            <div className="flex-1 flex flex-col md:flex-row h-full">
-              {/* Left: Scrollable card list */}
-              <div className="w-full md:w-1/2 h-[50%] md:h-full overflow-y-auto jj-scrollbar-gold bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-                <div className="p-4 pt-2">
-                  <div className="mb-4 flex items-center justify-between">
-                    <p className="text-black/70 text-sm">
-                      Showing <span className="text-gold font-medium">{sortedProjects.length}</span> of{' '}
-                      <span className="text-gold font-medium">{totalCount.toLocaleString()}</span> properties
-                    </p>
-                  </div>
-
-                  {(isLoading && isDbLoading) ? (
-                    <ProjectGridSkeleton count={4} />
-                  ) : sortedProjects.length > 0 ? (
-                    <div className="grid grid-cols-1 gap-4">
-                      {sortedProjects.map((project) => (
-                        <ReellyProjectCard
-                          key={project.id}
-                          project={project}
-                          currency={currency}
-                          sizeUnit={sizeUnit}
-                          compact
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-12">
-                      <Search className="w-10 h-10 text-gold mx-auto mb-3" />
-                      <p className="text-black/60">No properties found</p>
-                    </div>
-                  )}
+            {/* Left: Scrollable card list */}
+            <div className="w-full md:w-1/2 h-[50%] md:h-full overflow-y-auto jj-scrollbar-gold bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+              <div className="p-4 pt-3 pb-6">
+                <div className="mb-4 flex items-center justify-between">
+                  <p className="text-black/70 text-sm">
+                    Showing <span className="text-gold font-medium">{sortedProjects.length}</span> of{' '}
+                    <span className="text-gold font-medium">{totalCount.toLocaleString()}</span> properties
+                  </p>
                 </div>
-              </div>
 
-              {/* Right: Map */}
-              <div className="w-full md:w-1/2 h-[50%] md:h-full">
-                <PropertiesMapView
-                  projects={unifiedProjects}
-                  hoveredProjectId={hoveredProjectId}
-                  onProjectHover={setHoveredProjectId}
-                  onProjectClick={(id) => {
-                    const project = sortedProjects.find(p => String(p.id) === id);
-                    if (project) window.open(`/project/${project.slug}`, '_blank');
-                  }}
-                />
+                {(isLoading && isDbLoading) ? (
+                  <ProjectGridSkeleton count={4} />
+                ) : sortedProjects.length > 0 ? (
+                  <div className="grid grid-cols-1 gap-4">
+                    {sortedProjects.map((project) => (
+                      <ReellyProjectCard
+                        key={project.id}
+                        project={project}
+                        currency={currency}
+                        sizeUnit={sizeUnit}
+                        compact
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <Search className="w-10 h-10 text-gold mx-auto mb-3" />
+                    <p className="text-black/60">No properties found</p>
+                  </div>
+                )}
               </div>
+            </div>
+
+            {/* Right: Map */}
+            <div className="w-full md:w-1/2 h-[50%] md:h-full">
+              <PropertiesMapView
+                projects={unifiedProjects}
+                hoveredProjectId={hoveredProjectId}
+                onProjectHover={setHoveredProjectId}
+                onProjectClick={(id) => {
+                  const project = sortedProjects.find(p => String(p.id) === id);
+                  if (project) window.open(`/project/${project.slug}`, '_blank');
+                }}
+              />
             </div>
           </div>
         </section>

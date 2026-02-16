@@ -364,7 +364,14 @@ Deno.serve(async (req) => {
             updated_at: new Date().toISOString(),
           };
 
-          if (mapped.logo_url) updateData.logo_url = mapped.logo_url;
+          // Always overwrite logo from Reelly API (source of truth), EXCEPT Binghatti which has a manually curated logo
+          const isProtectedLogo = mapped.slug === 'binghatti';
+          if (mapped.logo_url && !isProtectedLogo) {
+            updateData.logo_url = mapped.logo_url;
+          } else if (!mapped.logo_url && !isProtectedLogo) {
+            // If Reelly has no logo, clear any fake/AI-generated logos
+            // but preserve original Reelly S3 URLs
+          }
           if (mapped.description) updateData.description = mapped.description;
           if (mapped.headquarters) updateData.headquarters = mapped.headquarters;
           if (mapped.founded_year) updateData.founded_year = mapped.founded_year;
