@@ -7,7 +7,7 @@ import {
 async function fetchDetail(apiKey: string, id: number): Promise<{ project: ReellyProject | null; rawKeys: string[] }> {
   try {
     const res = await fetch(`${REELLY_API_BASE}/${id}`, {
-      headers: { "X-API-Key": apiKey, "Accept": "application/json" },
+      headers: { "X-API-Key": apiKey, "Authorization": `Bearer ${apiKey}`, "Accept": "application/json" },
     });
     if (!res.ok) return { project: null, rawKeys: [] };
     const raw = await res.json();

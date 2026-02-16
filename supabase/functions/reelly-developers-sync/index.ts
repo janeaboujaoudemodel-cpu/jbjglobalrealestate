@@ -212,6 +212,7 @@ Deno.serve(async (req) => {
 
     const apiHeaders = {
       "X-API-Key": apiKey,
+      "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     };
 
