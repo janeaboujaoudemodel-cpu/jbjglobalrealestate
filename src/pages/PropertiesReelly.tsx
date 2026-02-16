@@ -341,12 +341,12 @@ const PropertiesReelly = () => {
 
       {/* Results Section - split-screen in map mode */}
       {isMapMode ? (
-        <section className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden" style={{ height: 'calc(100vh - 90px)', marginTop: '90px' }}>
+        <section className="fixed inset-0 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden" style={{ top: '50px' }}>
           <div className="flex flex-col md:flex-row h-full">
             <div className="flex-1 flex flex-col md:flex-row h-full">
               {/* Left: Scrollable card list */}
-              <div className="w-full md:w-1/2 h-[50%] md:h-full overflow-y-auto bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-                <div className="p-4">
+              <div className="w-full md:w-1/2 h-[50%] md:h-full overflow-y-auto jj-scrollbar-gold bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+                <div className="p-4 pt-2">
                   <div className="mb-4 flex items-center justify-between">
                     <p className="text-black/70 text-sm">
                       Showing <span className="text-gold font-medium">{sortedProjects.length}</span> of{' '}
