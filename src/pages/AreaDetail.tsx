@@ -69,9 +69,9 @@ const AreaDetail = () => {
     return () => observer.disconnect();
   }, [area]);
 
-  // Bottom sentinel: hide fixed bar when CTA section enters viewport
+   // Bottom sentinel: hide fixed bar when "Ready to Get Started" section enters viewport
   useEffect(() => {
-    const target = document.getElementById('area-cta-section');
+    const target = document.getElementById('ready-to-get-started');
     if (!target) return;
 
     const observer = new IntersectionObserver(
