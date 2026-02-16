@@ -114,7 +114,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
             onClick={handleScrollToProjects}
             className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all"
           >
-            Explore Properties
+            Properties
             <ArrowDown className="w-5 h-5 ml-2" />
           </Button>
         </div>

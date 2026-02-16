@@ -82,7 +82,7 @@ export default function RecommendedProjects({
                 {/* Image */}
                 <div className="aspect-[16/10] overflow-hidden relative">
                   <SafeImage
-                    src={project.images?.[0]?.image_url}
+                    src={project.images?.[0]?.image_url || (project as any).cover_image_url}
                     alt={project.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
