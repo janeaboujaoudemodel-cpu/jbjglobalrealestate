@@ -1,16 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle, Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin, Lightbulb, ChevronRight, Search, Globe, User, Settings } from "lucide-react";
+import { Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle, Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin, Lightbulb, ChevronRight, Search, User, Settings, Castle, FileText, DollarSign, TrendingUp, ClipboardCheck, Shield } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import React, { useState, useRef, useCallback, useEffect } from "react";
-
-// Mega Menu Components
-import MegaMenuBuy from "@/components/header/MegaMenuBuy";
-import MegaMenuSell from "@/components/header/MegaMenuSell";
-import MegaMenuRent from "@/components/header/MegaMenuRent";
-import MegaMenuProjects from "@/components/header/MegaMenuProjects";
-import MegaMenuDevelopers from "@/components/header/MegaMenuDevelopers";
-import MegaMenuAreas from "@/components/header/MegaMenuAreas";
-import MegaMenuInsights from "@/components/header/MegaMenuInsights";
 
 // Utility Components
 import GlobalSearchModal from "@/components/GlobalSearchModal";
@@ -29,14 +20,14 @@ const NAV_ITEMS = [
   { label: "Projects", href: "/projects", icon: Layers, megaMenu: 'projects' as MegaMenuKey },
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' as MegaMenuKey },
   { label: "AI Tools", href: "/toolkit", icon: Cpu },
-  { label: "Market Intel", href: "/market-intelligence", icon: BarChart3 },
+  { label: "Market Intelligence", href: "/market-intelligence", icon: BarChart3 },
   { label: "Insights", href: "/insights", icon: Lightbulb, megaMenu: 'insights' as MegaMenuKey },
   { label: "Guides", href: "/guides", icon: BookOpen },
   { label: "Services", href: "/services", icon: Briefcase },
   { label: "About", href: "/about", icon: Users },
   { label: "Favorites", href: "/favorites", icon: Heart },
   { label: "Compare", href: "/compare", icon: GitCompare },
-  { label: "Mortgage Calc", href: "/mortgage-calculator", icon: Calculator },
+  { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
 ];
 
 export default function PropertiesVerticalNav() {
@@ -60,35 +51,80 @@ export default function PropertiesVerticalNav() {
     closeMegaMenu();
   }, [location.pathname, closeMegaMenu]);
 
+  const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; icon: any }>> = {
+    buy: [
+      { label: 'Apartments', icon: Building2, href: '/properties?type=apartment&transaction=buy' },
+      { label: 'Villas', icon: Home, href: '/properties?type=villa&transaction=buy' },
+      { label: 'Townhouses', icon: Castle, href: '/properties?type=townhouse&transaction=buy' },
+      { label: 'Penthouses', icon: Building, href: '/properties?type=penthouse&transaction=buy' },
+      { label: "Buyer's Guide", icon: FileText, href: '/buyer-guide' },
+      { label: 'Mortgage Calculator', icon: Calculator, href: '/mortgage-calculator' },
+    ],
+    sell: [
+      { label: "Seller's Guide", icon: FileText, href: '/seller-guide' },
+      { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
+      { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
+      { label: 'List Your Property', icon: ClipboardCheck, href: '/seller-listing' },
+    ],
+    rent: [
+      { label: 'Apartments', icon: Building2, href: '/properties?type=apartment&transaction=rent' },
+      { label: 'Villas', icon: Home, href: '/properties?type=villa&transaction=rent' },
+      { label: "Tenant's Guide", icon: FileText, href: '/tenant-guide' },
+      { label: 'Property Management', icon: Shield, href: '/services/property-management' },
+    ],
+    projects: [
+      { label: 'All Projects', icon: Layers, href: '/properties' },
+      { label: 'New Launches', icon: Building2, href: '/properties?status=new_launch' },
+    ],
+    developers: [
+      { label: 'All Developers', icon: Building, href: '/developers' },
+    ],
+    areas: [
+      { label: 'All Areas', icon: MapPin, href: '/areas' },
+    ],
+    insights: [
+      { label: 'Market Intelligence', icon: BarChart3, href: '/market-intelligence' },
+      { label: 'Guides', icon: BookOpen, href: '/guides' },
+    ],
+  };
+
   const renderMegaMenu = () => {
     if (!activeMegaMenu) return null;
+    const links = MEGA_MENU_LINKS[activeMegaMenu] || [];
     
     return (
       <>
-        {/* Backdrop with blur - covers everything except sidebar */}
+        {/* Backdrop */}
         <div
           className="fixed inset-0 z-[9999] bg-black/30 backdrop-blur-sm"
           style={{ left: '200px' }}
           onClick={closeMegaMenu}
         />
-        {/* Centered smaller panel - above filter bar */}
+        {/* Compact panel */}
         <div
           className="fixed z-[10000] flex items-start justify-center pointer-events-none"
           style={{ left: '200px', top: 0, bottom: 0, right: 0 }}
         >
           <div
-            className="pointer-events-auto max-w-[500px] w-full max-h-[70vh] overflow-y-auto mt-8 rounded-2xl shadow-2xl border border-gold/30 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]"
+            className="pointer-events-auto max-w-[360px] w-full max-h-[60vh] overflow-y-auto jj-scrollbar-gold mt-8 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]"
             onClick={(e) => e.stopPropagation()}
             onMouseLeave={closeMegaMenu}
           >
-            <div className="p-4">
-              {activeMegaMenu === 'buy' && <MegaMenuBuy onClose={closeMegaMenu} />}
-              {activeMegaMenu === 'sell' && <MegaMenuSell onClose={closeMegaMenu} />}
-              {activeMegaMenu === 'rent' && <MegaMenuRent onClose={closeMegaMenu} />}
-              {activeMegaMenu === 'projects' && <MegaMenuProjects onClose={closeMegaMenu} />}
-              {activeMegaMenu === 'developers' && <MegaMenuDevelopers onClose={closeMegaMenu} />}
-              {activeMegaMenu === 'areas' && <MegaMenuAreas onClose={closeMegaMenu} />}
-              {activeMegaMenu === 'insights' && <MegaMenuInsights onClose={closeMegaMenu} />}
+            <div className="p-4 space-y-1">
+              {links.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <Link
+                    key={link.href + link.label}
+                    to={link.href}
+                    onClick={closeMegaMenu}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-black/80 hover:bg-gold/10 hover:text-black transition-all"
+                  >
+                    <Icon className="w-4 h-4 text-gold flex-shrink-0" />
+                    <span>{link.label}</span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -111,7 +147,7 @@ export default function PropertiesVerticalNav() {
         </Link>
 
         {/* Nav Items */}
-        <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
+        <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto jj-scrollbar-gold">
           {NAV_ITEMS.map((item) => {
             const isActive = location.pathname === item.href || (item.href === "/properties" && location.pathname.startsWith("/properties"));
             const Icon = item.icon;

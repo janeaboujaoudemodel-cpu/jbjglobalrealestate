@@ -47,7 +47,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
   return (
     <Link to={`/developer/${developer.slug}`}>
       <motion.div
-        whileHover={{ y: -4 }}
+        whileHover={{ y: -6, rotateX: 2, rotateY: -1 }}
         transition={{ duration: 0.3 }}
         className="group rounded-xl overflow-hidden cursor-pointer flex flex-col h-full"
         style={{
@@ -57,6 +57,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
             0 4px 16px rgba(0,0,0,0.15),
             inset 0 1px 0 rgba(255,255,255,0.1)
           `,
+          perspective: '1000px',
         }}
       >
         {/* Photo Section */}
