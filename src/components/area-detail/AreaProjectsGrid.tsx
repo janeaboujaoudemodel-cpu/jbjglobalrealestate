@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
 import { Button } from "@/components/ui/button";
 import type { Project } from "@/hooks/useProjects";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface AreaProjectsGridProps {
   areaName: string;
@@ -19,6 +20,7 @@ interface AreaProjectsGridProps {
 }
 
 export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQuery, onClearFilters }: AreaProjectsGridProps) => {
+  const { currency } = useCurrency();
   const { data: projects, isLoading } = useQuery({
     queryKey: ["area-projects-full", areaName],
     queryFn: async () => {
@@ -86,53 +88,51 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
   if (!projects || projects.length === 0) return null;
 
   return (
-    <section className="pt-16 pb-16 bg-black">
-      <div className="container mx-auto px-4">
-        <div className="rounded-2xl pt-8 overflow-visible" style={{ background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)' }}>
-          <h2 className="text-black text-2xl md:text-3xl font-bold mb-6 px-6" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
-          </h2>
+    <section className="py-16 overflow-visible" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}>
+      <div className="jj-layer-2">
+        <h2 className="text-black text-2xl md:text-3xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+          Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
+        </h2>
 
-          {/* Grid */}
-          <div className="p-6">
-            {filteredProjects.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProjects.map((project, i) => (
-                  <motion.div
-                    key={project.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.05 }}
-                    className="h-full"
-                  >
-                    <div className="h-full [&>div]:h-full [&>div]:flex [&>div]:flex-col">
-                      <ProjectCard project={project} />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-16">
-                <Search className="w-10 h-10 text-black/20 mx-auto mb-3" />
-                <p className="text-black/50 text-sm font-medium">No projects match your filters</p>
-                <button onClick={onClearFilters} className="mt-3 text-gold text-sm font-semibold hover:underline">
-                  Clear all filters
-                </button>
-              </div>
-            )}
+        {/* Grid */}
+        <div>
+          {filteredProjects.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProjects.map((project, i) => (
+                <motion.div
+                  key={project.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  className="h-full"
+                >
+                  <div className="h-full [&>div]:h-full [&>div]:flex [&>div]:flex-col">
+                    <ProjectCard project={project} currency={currency as any} />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <Search className="w-10 h-10 text-black/20 mx-auto mb-3" />
+              <p className="text-black/50 text-sm font-medium">No projects match your filters</p>
+              <button onClick={onClearFilters} className="mt-3 text-gold text-sm font-semibold hover:underline">
+                Clear all filters
+              </button>
+            </div>
+          )}
 
-            {filteredProjects.length > 0 && (
-              <div className="text-center mt-8">
-                <Link to={`/properties?area=${areaSlug}`}>
-                  <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all">
-                    View All Projects in {areaName}
-                    <ArrowUpRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-              </div>
-            )}
-          </div>
+          {filteredProjects.length > 0 && (
+            <div className="text-center mt-8">
+              <Link to={`/properties?area=${areaSlug}`}>
+                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all">
+                  View All Projects in {areaName}
+                  <ArrowUpRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </section>

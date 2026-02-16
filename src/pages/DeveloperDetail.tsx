@@ -40,7 +40,20 @@ const DeveloperDetail = () => {
   const { data: trendingAreas } = useTrendingAreas();
   const { data: allDevelopers } = useDevelopers();
 
-  const [filters, setFilters] = useState<FilterState>(defaultFilters as unknown as FilterState);
+  const [filters, setFilters] = useState<FilterState>(() => {
+    const storedCurrency = typeof window !== 'undefined' ? localStorage.getItem('jj_currency') : null;
+    return { ...(defaultFilters as unknown as FilterState), currency: (storedCurrency || 'AED') as any };
+  });
+
+  // Sync currency with global switcher
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const code = (e as CustomEvent).detail;
+      if (code) setFilters(prev => ({ ...prev, currency: code }));
+    };
+    window.addEventListener('currencyChange', handler);
+    return () => window.removeEventListener('currencyChange', handler);
+  }, []);
   const [selectedEmirate, setSelectedEmirate] = useState<string | null>(null);
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const [isDevDescExpanded, setIsDevDescExpanded] = useState(false);

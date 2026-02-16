@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Download, Image as ImageIcon, FileText, MapPin, Layers, Home, CreditCard } from "lucide-react";
 import type { Project } from "@/hooks/useProjects";
 import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface ProjectDetailTabsProps {
   project: Project;
@@ -11,13 +12,7 @@ interface ProjectDetailTabsProps {
 
 export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
   const [activeTab, setActiveTab] = useState("details");
-
-  const formatPrice = (price: number) => {
-    if (price >= 1000000) {
-      return `AED ${(price / 1000000).toFixed(2)}M`;
-    }
-    return `AED ${price.toLocaleString()}`;
-  };
+  const { formatPrice } = useCurrency();
 
   // Filter documents by type
   const brochures = project.documents?.filter(d => d.document_type === 'brochure') || [];

@@ -8,7 +8,7 @@ import {
   AlertCircle 
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { formatPrice as formatPriceUtil } from "@/utils/formatNumber";
+import { useCurrency } from "@/hooks/useCurrency";
 
 export interface UnitType {
   type: string; // e.g., "Studio", "1BR", "2BR", "3BR", "Penthouse"
@@ -34,6 +34,7 @@ export default function UnitInventorySection({
   availableUnits,
   projectName,
 }: UnitInventorySectionProps) {
+  const { formatPrice: formatPriceUtil } = useCurrency();
   // Calculate overall availability
   const overallAvailability = useMemo(() => {
     if (typeof availableUnits === "number" && typeof totalUnits === "number" && totalUnits > 0) {

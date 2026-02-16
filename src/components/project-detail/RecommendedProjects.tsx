@@ -5,7 +5,7 @@ import { SafeImage } from "@/components/SafeImage";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { useMemo } from "react";
 import { formatDisplayDate } from "@/utils/formatDate";
-import { formatPrice } from "@/lib/formatPrice";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface RecommendedProjectsProps {
   currentProjectId: string;
@@ -21,6 +21,7 @@ export default function RecommendedProjects({
   currentEmirate,
 }: RecommendedProjectsProps) {
   const { data: projects } = useProjects();
+  const { formatPrice } = useCurrency();
 
   const recommendedProjects = useMemo(() => {
     if (!projects || projects.length === 0) return [];
@@ -147,7 +148,7 @@ export default function RecommendedProjects({
                     {/* Price */}
                     <p className="text-handover font-bold text-sm">
                       {project.price_from 
-                        ? `From AED ${Math.round(project.price_from / 1000000 * 10) / 10}M`
+                        ? `From ${formatPrice(project.price_from)}`
                         : "Price on request"
                       }
                     </p>

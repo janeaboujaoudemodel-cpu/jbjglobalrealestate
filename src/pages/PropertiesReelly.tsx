@@ -87,9 +87,22 @@ const PropertiesReelly = () => {
   // Database as PRIMARY source (always available, 2,410+ projects)
   const { data: dbProjects, isLoading: isDbLoading } = useProjectsListing();
   
-  // Display currency/size preferences
-  const [currency, setCurrency] = useState<ExtendedCurrency>('AED');
+  // Display currency/size preferences — synced with global currency switcher
+  const [currency, setCurrency] = useState<ExtendedCurrency>(() => {
+    const stored = typeof window !== 'undefined' ? localStorage.getItem('jj_currency') : null;
+    return (stored as ExtendedCurrency) || 'AED';
+  });
   const [sizeUnit, setSizeUnit] = useState<'sqft' | 'sqm'>('sqft');
+
+  // Listen for global currency changes
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const code = (e as CustomEvent).detail;
+      if (code) setCurrency(code as ExtendedCurrency);
+    };
+    window.addEventListener('currencyChange', handler);
+    return () => window.removeEventListener('currencyChange', handler);
+  }, []);
 
   // Map mode state
   const [isMapMode, setIsMapMode] = useState(searchParams.get('view') === 'map');
