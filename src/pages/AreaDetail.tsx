@@ -187,12 +187,10 @@ const AreaDetail = () => {
         document.body
       )}
 
-      {/* Projects Grid */}
-      <div id="projects-section">
-        <AreaProjectsGrid areaName={area.name} areaSlug={area.slug} shortcutFilters={shortcutFilters} searchQuery={searchQuery} onClearFilters={() => { setSearchQuery(""); setShortcutFilters(defaultShortcutFilters); }} />
-      </div>
+      {/* Projects Grid - edge to edge */}
+      <AreaProjectsGrid areaName={area.name} areaSlug={area.slug} shortcutFilters={shortcutFilters} searchQuery={searchQuery} onClearFilters={() => { setSearchQuery(""); setShortcutFilters(defaultShortcutFilters); }} />
 
-      {/* Developers Bar */}
+      {/* Developers Bar - connected, no gap */}
       <AreaDevelopersBar areaName={area.name} />
 
       {/* Interactive Map */}

@@ -67,13 +67,13 @@ export default function PropertiesVerticalNav() {
       <>
         {/* Backdrop with blur - covers everything except sidebar */}
         <div
-          className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
+          className="fixed inset-0 z-[9999] bg-black/30 backdrop-blur-sm"
           style={{ left: '200px' }}
           onClick={closeMegaMenu}
         />
-        {/* Centered smaller panel */}
+        {/* Centered smaller panel - above filter bar */}
         <div
-          className="fixed z-50 flex items-start justify-center pointer-events-none"
+          className="fixed z-[10000] flex items-start justify-center pointer-events-none"
           style={{ left: '200px', top: 0, bottom: 0, right: 0 }}
         >
           <div

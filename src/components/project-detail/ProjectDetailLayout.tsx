@@ -65,7 +65,7 @@ import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constan
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { SafeImage } from "@/components/SafeImage";
 import { filterValidImages, getFirstValidImageUrl, getHighResImageUrl } from "@/lib/imageUtils";
-import { formatPrice as formatPriceUtil } from "@/utils/formatNumber";
+import { useCurrency } from "@/hooks/useCurrency";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
@@ -196,6 +196,7 @@ export default function ProjectDetailLayout({
   onRequestReport,
   showFooter = true,
 }: ProjectDetailLayoutProps) {
+  const { formatPrice: formatPriceUtil } = useCurrency();
   const [activeTab, setActiveTab] = useState("details");
   const [leadCaptureOpen, setLeadCaptureOpen] = useState(false);
   const [captureDocType, setCaptureDocType] = useState<"brochure" | "floor_plan" | "payment_plan" | "images">("brochure");

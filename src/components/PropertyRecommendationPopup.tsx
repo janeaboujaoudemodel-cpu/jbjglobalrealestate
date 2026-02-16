@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, useLocation } from "react-router-dom";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface RecommendedProject {
   id: string;
@@ -50,6 +51,7 @@ function trackBrowsing(area?: string, type?: string) {
 
 const PropertyRecommendationPopup = () => {
   const { requestToShow, dismiss, isVisible } = usePopupVisibility('property-recommendation');
+  const { formatPrice } = useCurrency();
   const [projects, setProjects] = useState<RecommendedProject[]>([]);
   const [topArea, setTopArea] = useState<string>("");
   const navigate = useNavigate();
@@ -132,12 +134,7 @@ const PropertyRecommendationPopup = () => {
     if (slug) navigate(`/project/${slug}`);
   };
 
-  const formatPrice = (price: number | null) => {
-    if (!price) return "Price on request";
-    const rounded = Math.round(price);
-    if (rounded >= 1000000) return `AED ${(rounded / 1000000).toFixed(1)}M`;
-    return `AED ${Math.round(rounded / 1000)}K`;
-  };
+  // formatPrice is now provided by useCurrency hook
 
   return (
     <AnimatePresence>
