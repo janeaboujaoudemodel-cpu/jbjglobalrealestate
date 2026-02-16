@@ -88,8 +88,8 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
   if (!projects || projects.length === 0) return null;
 
   return (
-    <section className="py-16 overflow-visible" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}>
-      <div className="jj-layer-2">
+    <section className="py-16 overflow-visible px-4 sm:px-6 md:px-8" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}>
+      <div>
         <h2 className="text-black text-2xl md:text-3xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
           Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
         </h2>
