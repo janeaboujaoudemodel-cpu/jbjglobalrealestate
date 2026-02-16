@@ -66,7 +66,7 @@ async function fetchAllReellyAreas(apiKey: string): Promise<Map<string, AreaCand
   do {
     const url = `https://api-reelly.up.railway.app/api/v2/clients/projects?limit=${PAGE_SIZE}&offset=${offset}`;
     const res = await fetch(url, {
-      headers: { "X-API-Key": apiKey, "Content-Type": "application/json" },
+      headers: { "X-API-Key": apiKey, "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
     });
 
     if (!res.ok) {
@@ -352,7 +352,7 @@ Deno.serve(async (req) => {
       // Quick test: first page only
       const url = `https://api-reelly.up.railway.app/api/v2/clients/projects?limit=200&offset=0`;
       const res = await fetch(url, {
-        headers: { "X-API-Key": apiKey, "Content-Type": "application/json" },
+        headers: { "X-API-Key": apiKey, "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
       });
 
       if (!res.ok) {

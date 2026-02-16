@@ -57,7 +57,7 @@ interface BackfillResponse {
 async function fetchProjectDetail(apiKey: string, reelyId: number): Promise<ReellyProject | null> {
   try {
     const res = await fetch(`${REELLY_API_BASE}/${reelyId}`, {
-      headers: { "X-API-Key": apiKey, "Accept": "application/json" },
+      headers: { "X-API-Key": apiKey, "Authorization": `Bearer ${apiKey}`, "Accept": "application/json" },
     });
     if (!res.ok) {
       console.error(`Failed to fetch project ${reelyId}: ${res.status}`);

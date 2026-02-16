@@ -27,7 +27,7 @@ function nameSimilarity(a: string, b: string): number {
 async function fetchReellyProject(reellyId: number, apiKey: string) {
   const res = await fetch(
     `${REELLY_API_BASE}/${reellyId}`,
-    { headers: { "X-API-Key": apiKey, "Accept": "application/json" } }
+    { headers: { "X-API-Key": apiKey, "Authorization": `Bearer ${apiKey}`, "Accept": "application/json" } }
   );
   if (!res.ok) {
     console.log(`[enrich-test] Reelly API ${res.status} for id ${reellyId}`);

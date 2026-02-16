@@ -128,7 +128,7 @@ serve(async (req) => {
       try {
         const reellyResponse = await fetch(
           `https://api-reelly.up.railway.app/api/v2/clients/projects?limit=500&offset=0`,
-          { headers: { "X-API-Key": reellyApiKey, "Content-Type": "application/json" } }
+          { headers: { "X-API-Key": reellyApiKey, "Authorization": `Bearer ${reellyApiKey}`, "Content-Type": "application/json" } }
         );
         if (reellyResponse.ok) {
           const reellyData = await reellyResponse.json();

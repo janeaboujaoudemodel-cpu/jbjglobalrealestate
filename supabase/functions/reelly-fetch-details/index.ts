@@ -6,7 +6,7 @@ import {
 
 async function fetchDetail(apiKey: string, id: number): Promise<ReellyProject | null> {
   try {
-    const res = await fetch(`${REELLY_API_BASE}/${id}`, { headers: { "X-API-Key": apiKey, "Accept": "application/json" } });
+    const res = await fetch(`${REELLY_API_BASE}/${id}`, { headers: { "X-API-Key": apiKey, "Authorization": `Bearer ${apiKey}`, "Accept": "application/json" } });
     if (!res.ok) return null;
     return res.json();
   } catch { return null; }

@@ -102,8 +102,13 @@ function mapProject(p: ReellyProject, areaId: string | null, devId: string | nul
 }
 
 async function fetchPage(apiKey: string, url: string): Promise<ReellyResponse> {
-  const res = await fetch(url, { headers: { "X-API-Key": apiKey, "Accept": "application/json" } });
-  if (!res.ok) throw new Error(`API error ${res.status}`);
+  console.log(`[fetchPage] URL: ${url}, key starts: ${apiKey.slice(0,20)}...`);
+  const res = await fetch(url, { headers: { "X-API-Key": apiKey, "Authorization": `Bearer ${apiKey}`, "Accept": "application/json" } });
+  if (!res.ok) {
+    const body = await res.text();
+    console.error(`[fetchPage] Error ${res.status}: ${body}`);
+    throw new Error(`API error ${res.status}`);
+  }
   return res.json();
 }
 
