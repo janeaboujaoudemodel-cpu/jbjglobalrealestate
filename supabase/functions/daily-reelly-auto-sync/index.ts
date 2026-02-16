@@ -55,10 +55,12 @@ Deno.serve(async (req) => {
     errors.push(msg);
   }
 
-  // Step 2: Discover new developers and logos
+  // Step 2: Discover new developers and logos (full mode to update all logos)
   try {
-    console.log("[daily-reelly-auto-sync] Step 2: Syncing developers...");
-    const devResult = await callFunction("reelly-developers-sync");
+    console.log("[daily-reelly-auto-sync] Step 2: Syncing developers (full mode)...");
+    const devResult = await callFunction("reelly-developers-sync", {
+      mode: "quick",
+    });
     results.developers_sync = devResult;
     console.log("[daily-reelly-auto-sync] Step 2 complete:", JSON.stringify(devResult).slice(0, 200));
   } catch (err) {
@@ -89,6 +91,20 @@ Deno.serve(async (req) => {
     console.log("[daily-reelly-auto-sync] Step 4 complete:", JSON.stringify(approveResult).slice(0, 200));
   } catch (err) {
     const msg = `Step 4 (bulk-approve-imports) failed: ${err.message}`;
+    console.error("[daily-reelly-auto-sync]", msg);
+    errors.push(msg);
+  }
+
+  // Step 5: Sync developer feature images from project covers
+  try {
+    console.log("[daily-reelly-auto-sync] Step 5: Syncing developer feature images...");
+    const imageResult = await callFunction("sync-developer-feature-images", {
+      dryRun: false,
+    });
+    results.feature_images = imageResult;
+    console.log("[daily-reelly-auto-sync] Step 5 complete:", JSON.stringify(imageResult).slice(0, 200));
+  } catch (err) {
+    const msg = `Step 5 (sync-developer-feature-images) failed: ${err.message}`;
     console.error("[daily-reelly-auto-sync]", msg);
     errors.push(msg);
   }
