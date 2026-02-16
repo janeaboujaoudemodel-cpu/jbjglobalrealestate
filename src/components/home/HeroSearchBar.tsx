@@ -9,7 +9,7 @@
 
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Search, ChevronDown, SlidersHorizontal, Sparkles, DollarSign, Ruler, Home, MapPin, Calendar } from "lucide-react";
+import { Search, ChevronDown, SlidersHorizontal, Sparkles, DollarSign, Ruler, Home, MapPin, Calendar, Save, FolderOpen, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -402,6 +402,9 @@ const HeroSearchBar = () => {
   const [emirate, setEmirate] = useState('all');
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [saveFilterName, setSaveFilterName] = useState('');
+  const [showSaveInput, setShowSaveInput] = useState(false);
+  const [showSavedList, setShowSavedList] = useState(false);
   // Advanced filters
   const [paymentPlan, setPaymentPlan] = useState(0);
   const [handoverYear, setHandoverYear] = useState('all');
@@ -412,6 +415,53 @@ const HeroSearchBar = () => {
   
   const navigate = useNavigate();
   const { t } = useLanguage();
+
+  const HERO_SAVED_FILTERS_KEY = 'jbj-hero-saved-filters';
+
+  const getCurrentFilterState = () => ({
+    purpose, locationSearch, bedrooms, priceRange, currency, areaUnit, sizeRange,
+    propertyType, propertyStatus, saleStatus, sortBy, developerId, communityId,
+    emirate, paymentPlan, handoverYear,
+  });
+
+  const handleSaveFilter = () => {
+    if (!saveFilterName.trim()) return;
+    const existing = JSON.parse(localStorage.getItem(HERO_SAVED_FILTERS_KEY) || '[]');
+    existing.push({ name: saveFilterName.trim(), filters: getCurrentFilterState(), savedAt: Date.now() });
+    localStorage.setItem(HERO_SAVED_FILTERS_KEY, JSON.stringify(existing));
+    setSaveFilterName('');
+    setShowSaveInput(false);
+  };
+
+  const loadSavedFilter = (saved: any) => {
+    if (saved.purpose) setPurpose(saved.purpose);
+    if (saved.locationSearch !== undefined) setLocationSearch(saved.locationSearch);
+    if (saved.bedrooms) setBedrooms(saved.bedrooms);
+    if (saved.priceRange) setPriceRange(saved.priceRange);
+    if (saved.currency) setCurrency(saved.currency);
+    if (saved.areaUnit) setAreaUnit(saved.areaUnit);
+    if (saved.sizeRange) setSizeRange(saved.sizeRange);
+    if (saved.propertyType) setPropertyType(saved.propertyType);
+    if (saved.propertyStatus) setPropertyStatus(saved.propertyStatus);
+    if (saved.saleStatus) setSaleStatus(saved.saleStatus);
+    if (saved.sortBy) setSortBy(saved.sortBy);
+    if (saved.developerId) setDeveloperId(saved.developerId);
+    if (saved.communityId) setCommunityId(saved.communityId);
+    if (saved.emirate) setEmirate(saved.emirate);
+    if (saved.paymentPlan !== undefined) setPaymentPlan(saved.paymentPlan);
+    if (saved.handoverYear) setHandoverYear(saved.handoverYear);
+    setShowSavedList(false);
+  };
+
+  const deleteSavedFilter = (index: number) => {
+    const existing = JSON.parse(localStorage.getItem(HERO_SAVED_FILTERS_KEY) || '[]');
+    existing.splice(index, 1);
+    localStorage.setItem(HERO_SAVED_FILTERS_KEY, JSON.stringify(existing));
+  };
+
+  const getSavedFilters = (): { name: string; filters: any; savedAt: number }[] => {
+    try { return JSON.parse(localStorage.getItem(HERO_SAVED_FILTERS_KEY) || '[]'); } catch { return []; }
+  };
 
   // Combine DB developers with static list, removing duplicates
   const allDevelopers = (() => {
@@ -721,7 +771,7 @@ const HeroSearchBar = () => {
                 <span className="hidden sm:inline">Filters</span>
               </button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[650px] max-h-[85vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <DialogContent className="sm:max-w-[650px] max-h-[85vh] overflow-y-auto overscroll-contain bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
               <DialogHeader>
                 <DialogTitle className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                   Advanced Filters
@@ -736,7 +786,7 @@ const HeroSearchBar = () => {
                       <SelectTrigger className="h-11 bg-white border-gold/30">
                         <SelectValue placeholder="All Types" />
                       </SelectTrigger>
-                      <SelectContent className="z-[10000]">
+                      <SelectContent>
                         {PROPERTY_TYPES.map((item) => (
                           <SelectItem key={item.value} value={item.value}>
                             {item.label}
@@ -751,7 +801,7 @@ const HeroSearchBar = () => {
                       <SelectTrigger className="h-11 bg-white border-gold/30">
                         <SelectValue placeholder="All Status" />
                       </SelectTrigger>
-                      <SelectContent className="z-[10000]">
+                      <SelectContent>
                         {PROPERTY_STATUS.map((item) => (
                           <SelectItem key={item.value} value={item.value}>
                             {item.label}
@@ -769,7 +819,7 @@ const HeroSearchBar = () => {
                     <SelectTrigger className="h-11 bg-white border-gold/30">
                       <SelectValue placeholder="All Sale Statuses" />
                     </SelectTrigger>
-                    <SelectContent className="z-[10000]">
+                    <SelectContent>
                       {SALE_STATUS_OPTIONS.map((item) => (
                         <SelectItem key={item.value} value={item.value}>
                           <div className="flex items-center gap-2">
@@ -794,7 +844,7 @@ const HeroSearchBar = () => {
                     <SelectTrigger className="h-11 bg-white border-gold/30">
                       <SelectValue placeholder="All Emirates" />
                     </SelectTrigger>
-                    <SelectContent className="z-[10000]">
+                    <SelectContent>
                       {UAE_EMIRATES.map((item) => (
                         <SelectItem key={item.value} value={item.value}>
                           {item.label}
@@ -837,7 +887,7 @@ const HeroSearchBar = () => {
                     <SelectTrigger className="h-11 bg-white border-gold/30">
                       <SelectValue placeholder="Any Year" />
                     </SelectTrigger>
-                    <SelectContent className="z-[10000]">
+                    <SelectContent>
                       <SelectItem value="all">Any Year</SelectItem>
                       <SelectItem value="2024">2024</SelectItem>
                       <SelectItem value="2025">2025</SelectItem>
@@ -859,7 +909,7 @@ const HeroSearchBar = () => {
                         <SelectTrigger className="h-11 bg-white border-gold/30">
                           <SelectValue placeholder="Any Price" />
                         </SelectTrigger>
-                        <SelectContent className="z-[10000]">
+                        <SelectContent>
                           {getCurrentPriceRanges().map((item) => (
                             <SelectItem key={item.value} value={item.value}>
                               {item.label}
@@ -874,7 +924,7 @@ const HeroSearchBar = () => {
                         <SelectTrigger className="h-11 bg-white border-gold/30">
                           <SelectValue placeholder="Any Size" />
                         </SelectTrigger>
-                        <SelectContent className="z-[10000]">
+                        <SelectContent>
                           {areaRanges[areaUnit].map((item) => (
                             <SelectItem key={item.value} value={item.value}>
                               {item.label}
@@ -889,7 +939,7 @@ const HeroSearchBar = () => {
                         <SelectTrigger className="h-11 bg-white border-gold/30">
                           <SelectValue placeholder="Newest First" />
                         </SelectTrigger>
-                        <SelectContent className="z-[10000]">
+                        <SelectContent>
                           {SORT_OPTIONS.map((item) => (
                             <SelectItem key={item.value} value={item.value}>
                               {item.label}
@@ -908,7 +958,7 @@ const HeroSearchBar = () => {
                     <SelectTrigger className="h-11 bg-white border-gold/30">
                       <SelectValue placeholder="All Developers" />
                     </SelectTrigger>
-                    <SelectContent className="max-h-60 z-[10000]">
+                    <SelectContent className="max-h-60">
                       <SelectItem value="all">All Developers</SelectItem>
                       {allDevelopers.map((dev) => (
                         <SelectItem key={dev.id} value={dev.id}>
@@ -926,7 +976,7 @@ const HeroSearchBar = () => {
                     <SelectTrigger className="h-11 bg-white border-gold/30">
                       <SelectValue placeholder="All Areas" />
                     </SelectTrigger>
-                    <SelectContent className="max-h-60 z-[10000]">
+                    <SelectContent className="max-h-60">
                       <SelectItem value="all">All Areas</SelectItem>
                       {communities?.sort((a, b) => a.name.localeCompare(b.name)).map((comm) => (
                         <SelectItem key={comm.id} value={comm.id}>
@@ -952,6 +1002,61 @@ const HeroSearchBar = () => {
                   </div>
                   <ChevronDown className="w-5 h-5 text-purple-400 -rotate-90 group-hover:translate-x-1 transition-transform" />
                 </Link>
+
+                {/* Save & Load Filters */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => { setShowSaveInput(!showSaveInput); setShowSavedList(false); }}
+                    className="flex-1 flex items-center justify-center gap-2 h-10 rounded-xl border border-gold/30 text-black/70 hover:bg-gold/10 hover:text-black transition-colors text-sm font-medium"
+                  >
+                    <Save className="w-4 h-4 text-gold" />
+                    Save Filter
+                  </button>
+                  <button
+                    onClick={() => { setShowSavedList(!showSavedList); setShowSaveInput(false); }}
+                    className="flex-1 flex items-center justify-center gap-2 h-10 rounded-xl border border-gold/30 text-black/70 hover:bg-gold/10 hover:text-black transition-colors text-sm font-medium"
+                  >
+                    <FolderOpen className="w-4 h-4 text-gold" />
+                    Load Saved
+                  </button>
+                </div>
+
+                {showSaveInput && (
+                  <div className="flex items-center gap-2">
+                    <input
+                      value={saveFilterName}
+                      onChange={(e) => setSaveFilterName(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSaveFilter()}
+                      placeholder="Filter name..."
+                      className="flex-1 h-10 px-3 rounded-xl bg-white border-2 border-gold/30 text-black text-sm placeholder:text-zinc-400 focus:outline-none focus:border-gold/60"
+                      style={{ fontSize: '16px' }}
+                    />
+                    <Button onClick={handleSaveFilter} disabled={!saveFilterName.trim()} className="h-10 px-4 bg-gold text-black font-bold rounded-xl">
+                      Save
+                    </Button>
+                  </div>
+                )}
+
+                {showSavedList && (
+                  <div className="bg-white/80 rounded-xl border border-gold/30 p-3 max-h-48 overflow-y-auto overscroll-contain">
+                    {getSavedFilters().length === 0 ? (
+                      <p className="text-xs text-black/50 text-center py-3">No saved filters yet</p>
+                    ) : (
+                      <div className="space-y-1.5">
+                        {getSavedFilters().map((sf: any, idx: number) => (
+                          <div key={idx} className="flex items-center justify-between p-2 rounded-lg hover:bg-gold/10 transition-colors group">
+                            <button onClick={() => loadSavedFilter(sf.filters)} className="flex-1 text-left text-sm font-medium text-black hover:text-gold transition-colors">
+                              {sf.name}
+                            </button>
+                            <button onClick={() => deleteSavedFilter(idx)} className="opacity-0 group-hover:opacity-100 p-1 text-red-400 hover:text-red-600 transition-all">
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Apply Filters Button */}
                 <Button
