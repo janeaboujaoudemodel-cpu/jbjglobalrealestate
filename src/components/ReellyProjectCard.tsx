@@ -129,14 +129,15 @@ const ReellyProjectCard = ({
    const saleStatusBadge = getSaleStatusBadge(project.sale_status);
  
    return (
-     <div
-       className={
-         "group relative overflow-hidden rounded-xl border-2 border-gold/40 transition-all duration-300 flex flex-col " +
-         "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
-         "shadow-[0_0_18px_hsl(var(--gold)/0.14),0_18px_55px_hsl(0_0%_0%/0.16)] hover:border-gold/70 " +
-         "hover:shadow-[0_0_26px_hsl(var(--gold)/0.18),0_26px_75px_hsl(0_0%_0%/0.20)]"
-       }
-     >
+      <div
+        className={
+          "group relative overflow-hidden rounded-xl border-[3px] border-gold transition-all duration-300 flex flex-col " +
+          "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
+          "shadow-[0_8px_32px_rgba(200,167,102,0.25),0_4px_16px_rgba(0,0,0,0.15)] " +
+          "hover:shadow-[0_12px_40px_rgba(200,167,102,0.3),0_8px_24px_rgba(0,0,0,0.2)] " +
+          "hover:-translate-y-1.5 hover:[transform:perspective(1000px)_rotateX(2deg)_rotateY(-1deg)]"
+        }
+      >
        {/* Favorite Button */}
        {showFavorite && (
          <div className="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">

@@ -988,8 +988,14 @@ export default function ProjectDetailLayout({
             />
           </div>
 
-          {/* DLD MARKET INTELLIGENCE */}
-          <SectionDivider variant="champagne" />
+          {/* Gold divider before DLD */}
+          <div className="py-10">
+            <div className="flex items-center justify-center gap-6">
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+              <div className="w-2 h-2 rotate-45 bg-gold/40" />
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+            </div>
+          </div>
           <DLDMarketWidget />
 
           {/* BROCHURE - Full width two-column layout - Always visible */}
