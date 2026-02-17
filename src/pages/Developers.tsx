@@ -63,6 +63,8 @@ const Developers = () => {
   const [selectedDeveloper, setSelectedDeveloper] = useState("");
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const [sortBy, setSortBy] = useState<"default" | "alpha" | "most_projects">("default");
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 24;
   const filterSentinelRef = useRef<HTMLDivElement>(null);
 
   // Toggle header visibility when filter is fixed
@@ -169,6 +171,17 @@ const Developers = () => {
     
     return filtered;
   }, [developers, searchQuery, tierFilter, selectedDeveloper, sortBy, projectCounts]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, tierFilter, selectedDeveloper, sortBy]);
+
+  const totalPages = Math.ceil(filteredDevelopers.length / ITEMS_PER_PAGE);
+  const paginatedDevelopers = filteredDevelopers.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const activeFilterCount = [
     searchQuery.trim(),
@@ -333,6 +346,7 @@ const Developers = () => {
                 {/* Results Count */}
                 <div className="flex-1 text-black/70 text-sm">
                   {filteredDevelopers.length} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
+                  {totalPages > 1 && ` · Page ${currentPage} of ${totalPages}`}
                 </div>
 
                 {/* Clear Filters */}
@@ -452,16 +466,64 @@ const Developers = () => {
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredDevelopers.map((developer, idx) => (
-                  <DeveloperCard 
-                    key={developer.id} 
-                    developer={developer} 
-                    projectCount={projectCounts[developer.id] || 0}
-                    index={idx}
-                  />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {paginatedDevelopers.map((developer, idx) => (
+                    <DeveloperCard 
+                      key={developer.id} 
+                      developer={developer} 
+                      projectCount={projectCounts[developer.id] || 0}
+                      index={(currentPage - 1) * ITEMS_PER_PAGE + idx}
+                    />
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-10">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={currentPage <= 1}
+                      onClick={() => { setCurrentPage(p => p - 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
+                      className="border-gold/30 text-foreground"
+                    >
+                      Previous
+                    </Button>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 2)
+                      .reduce<(number | string)[]>((acc, p, i, arr) => {
+                        if (i > 0 && p - (arr[i - 1] as number) > 1) acc.push('...');
+                        acc.push(p);
+                        return acc;
+                      }, [])
+                      .map((p, i) =>
+                        typeof p === 'string' ? (
+                          <span key={`dot-${i}`} className="px-1 text-foreground/50">…</span>
+                        ) : (
+                          <Button
+                            key={p}
+                            variant={p === currentPage ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => { setCurrentPage(p); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
+                            className={p === currentPage ? "bg-gold text-black hover:bg-gold/90" : "border-gold/30 text-foreground"}
+                          >
+                            {p}
+                          </Button>
+                        )
+                      )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={currentPage >= totalPages}
+                      onClick={() => { setCurrentPage(p => p + 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
+                      className="border-gold/30 text-foreground"
+                    >
+                      Next
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </section>
