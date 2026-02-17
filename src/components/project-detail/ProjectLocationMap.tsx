@@ -42,11 +42,11 @@ const MAP_TILES: Record<MapViewType, { url: string; attribution: string }> = {
 function MapViewToggle({ 
   mapView, 
   onViewChange,
-  onOpenExternal,
+  externalUrl,
 }: { 
   mapView: MapViewType; 
   onViewChange: (view: MapViewType) => void;
-  onOpenExternal: () => void;
+  externalUrl: string;
 }) {
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
@@ -65,13 +65,15 @@ function MapViewToggle({
           </button>
         ))}
       </div>
-      <button
-        onClick={onOpenExternal}
+      <a
+        href={externalUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         className="w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-gold/40 shadow-lg hover:bg-gold/20 active:bg-gold/30 transition-all"
         aria-label="Open in Google Maps"
       >
         <Maximize className="w-5 h-5 text-foreground" />
-      </button>
+      </a>
     </div>
   );
 }
@@ -140,9 +142,7 @@ export default function ProjectLocationMap({
   const mapQuery = `${projectName}${location ? `, ${location}` : ""}, Dubai, UAE`;
   const externalMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
 
-  const handleOpenExternal = () => {
-    window.open(externalMapsUrl, "_blank", "noopener,noreferrer");
-  };
+  // externalMapsUrl used directly in anchor tags
 
   useEffect(() => {
     if (latitude && longitude) {
@@ -189,9 +189,11 @@ export default function ProjectLocationMap({
       <div className={`rounded-xl overflow-hidden border border-gold/30 bg-muted ${className}`} style={{ height: 450 }}>
         <div className="w-full h-full flex flex-col items-center justify-center gap-4">
           <p className="text-muted-foreground">Unable to load map</p>
-          <Button variant="secondary" size="sm" onClick={handleOpenExternal}>
-            Open in Google Maps
-          </Button>
+          <a href={externalMapsUrl} target="_blank" rel="noopener noreferrer">
+            <Button variant="secondary" size="sm">
+              Open in Google Maps
+            </Button>
+          </a>
         </div>
       </div>
     );
@@ -214,7 +216,7 @@ export default function ProjectLocationMap({
         <MapViewToggle 
           mapView={mapView} 
           onViewChange={setMapView}
-          onOpenExternal={handleOpenExternal}
+          externalUrl={externalMapsUrl}
         />
         <MapNavigationControls latitude={coordinates[0]} longitude={coordinates[1]} />
         <Marker position={coordinates}>

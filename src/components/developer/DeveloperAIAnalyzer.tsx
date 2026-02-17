@@ -369,7 +369,7 @@ export const DeveloperAIAnalyzer = ({
     setHasTimedOut(false);
     setErrorMsg(null);
 
-    timeoutRef.current = setTimeout(() => setHasTimedOut(true), 30000);
+    timeoutRef.current = setTimeout(() => setHasTimedOut(true), 15000);
 
     try {
       const { data, error } = await supabase.functions.invoke("ai-developer-analyzer", {
@@ -507,9 +507,9 @@ export const DeveloperAIAnalyzer = ({
             </Button>
           </div>
         ) : !analysis ? (
-          <div className="text-center py-8">
+          <div className="py-8 space-y-6 px-4">
             {hasTimedOut ? (
-              <div className="space-y-4">
+              <div className="text-center space-y-4">
                 <p className="text-zinc-500 text-sm">Analysis is taking longer than expected.</p>
                 <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
                   <RefreshCw className="w-4 h-4 mr-2" />
@@ -517,10 +517,29 @@ export const DeveloperAIAnalyzer = ({
                 </Button>
               </div>
             ) : (
-              <>
-                <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-3" />
-                <p className="text-zinc-500 text-sm">JBJ AI is analyzing <DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} />...</p>
-              </>
+              <div className="space-y-4 animate-pulse">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 rounded-full bg-gold/20" />
+                  <div className="h-4 bg-gold/15 rounded w-56" />
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="lg:col-span-2 bg-white/60 rounded-2xl p-6 space-y-3">
+                    <div className="h-4 bg-gold/10 rounded w-3/4" />
+                    <div className="h-3 bg-gold/10 rounded w-full" />
+                    <div className="h-3 bg-gold/10 rounded w-5/6" />
+                    <div className="h-3 bg-gold/10 rounded w-2/3" />
+                  </div>
+                  <div className="bg-black/80 rounded-2xl p-6 flex flex-col items-center gap-3">
+                    <div className="w-24 h-24 rounded-full bg-gold/10" />
+                    <div className="h-3 bg-gold/10 rounded w-20" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white/60 rounded-2xl p-6 h-56" />
+                  <div className="bg-white/60 rounded-2xl p-6 h-56" />
+                </div>
+                <p className="text-zinc-500 text-sm text-center">Loading intelligence for {developerName}...</p>
+              </div>
             )}
           </div>
         ) : (

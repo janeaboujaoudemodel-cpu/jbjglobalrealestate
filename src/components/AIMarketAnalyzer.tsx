@@ -92,7 +92,7 @@ export const AIMarketAnalyzer = ({
     const timeout = setTimeout(() => {
       controller.abort();
       setIsTimedOut(true);
-    }, 25000);
+    }, 15000);
 
     try {
       const { data, error: fnError } = await supabase.functions.invoke('ai-market-analyzer', {
@@ -263,14 +263,25 @@ export const AIMarketAnalyzer = ({
         </div>
       </div>
 
-      {/* Loading State */}
       {isLoading && !insights && (
-        <div className="p-8 text-center">
-          <Loader2 className="w-12 h-12 mx-auto mb-4 text-purple-500 animate-spin" />
-          <h4 className="text-lg font-semibold text-black mb-2">JBJ AI is Analyzing...</h4>
-          <p className="text-zinc-500 text-sm">Gathering insights for {name}</p>
+        <div className="p-8 space-y-4">
+          <div className="animate-pulse space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-gold/15" />
+              <div className="space-y-2 flex-1">
+                <div className="h-4 bg-gold/10 rounded w-48" />
+                <div className="h-3 bg-gold/10 rounded w-32" />
+              </div>
+            </div>
+            <div className="h-20 bg-gold/10 rounded-xl" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[1,2,3,4].map(i => <div key={i} className="h-24 bg-gold/10 rounded-xl" />)}
+            </div>
+            <div className="h-16 bg-gold/10 rounded-xl" />
+          </div>
+          <p className="text-zinc-500 text-sm text-center">Loading market intelligence for {name}...</p>
           {isTimedOut && (
-            <div className="mt-4">
+            <div className="text-center mt-4">
               <p className="text-zinc-500 text-sm mb-2">Taking longer than expected...</p>
               <Button variant="secondary" size="sm" onClick={fetchAnalysis}>
                 Retry Analysis

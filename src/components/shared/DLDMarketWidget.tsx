@@ -4,7 +4,8 @@
  */
 
 import { TrendingUp, Building2, Banknote, MapPin, Globe } from "lucide-react";
-import { ytd2026, topAreas2026, topNationalities } from "@/constants/dldMarketData";
+import { ytd2026 as fallbackYtd, topAreas2026 as fallbackAreas, topNationalities as fallbackNationalities } from "@/constants/dldMarketData";
+import { useDLDMarketData } from "@/hooks/useDLDMarketData";
 import { Link } from "react-router-dom";
 
 interface DLDMarketWidgetProps {
@@ -15,6 +16,10 @@ interface DLDMarketWidgetProps {
 }
 
 const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProps) => {
+  const { data: marketData } = useDLDMarketData();
+  const ytd2026 = marketData?.ytd2026 ?? fallbackYtd;
+  const topAreas2026 = marketData?.topAreas2026 ?? fallbackAreas;
+  const topNationalities = marketData?.topNationalities ?? fallbackNationalities;
   const today = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
   // Find highlighted area in top areas
@@ -75,7 +80,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   const cashPct = Math.round((ytd2026.cash / ytd2026.transactions) * 100);
 
   return (
-    <section className="py-16 overflow-hidden" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}>
+    <section className="py-16 overflow-hidden rounded-2xl" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}>
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto border-2 border-gold/40 rounded-2xl p-8 md:p-10 bg-white/60 shadow-[0_8px_30px_rgba(200,167,102,0.15)]">
           {/* Header */}
