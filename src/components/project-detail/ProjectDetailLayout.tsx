@@ -587,8 +587,8 @@ export default function ProjectDetailLayout({
         }`}
       >
         {/* Row 1: Filter Shortcut Bar */}
-        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-1 px-2 sm:py-2 sm:px-4 overflow-x-auto scrollbar-hide">
-          <div className="container mx-auto">
+        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-2 px-2 sm:py-2 sm:px-4">
+          <div className="container mx-auto overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
             <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
           </div>
         </div>

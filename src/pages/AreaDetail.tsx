@@ -173,7 +173,7 @@ const AreaDetail = () => {
       {/* Phase 2: Fixed portal copy — only when scrolled past sentinel */}
       {isFixed && !bottomReached && createPortal(
         <div
-          className="fixed top-0 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3 transition-all duration-200 lg:left-[200px]"
+          className="fixed top-0 left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-2 px-2 sm:py-3 sm:px-4 transition-all duration-200 lg:left-[200px]"
         >
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap items-center gap-3">
