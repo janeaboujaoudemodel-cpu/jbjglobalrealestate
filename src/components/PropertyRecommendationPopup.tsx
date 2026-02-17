@@ -96,25 +96,47 @@ const PropertyRecommendationPopup = () => {
 
     const { data } = await query;
     
-    if (data && data.length > 0) {
-      setProjects(data as RecommendedProject[]);
+    let results = data as RecommendedProject[] | null;
+
+    if (!results || results.length === 0) {
+      if (primaryArea) {
+        const { data: fallback } = await supabase
+          .from("projects")
+          .select("id, name, area_name, developer_name, price_from, cover_image_url, slug")
+          .eq("is_published", true)
+          .not("sale_status", "ilike", "%sold%")
+          .order("created_at", { ascending: false })
+          .limit(3);
+        results = fallback as RecommendedProject[] | null;
+      }
+    }
+
+    if (results && results.length > 0) {
+      // For projects missing cover_image_url, fetch first gallery image
+      const missingIds = results.filter(p => !p.cover_image_url).map(p => p.id);
+      if (missingIds.length > 0) {
+        const { data: images } = await supabase
+          .from("project_images")
+          .select("project_id, image_url")
+          .in("project_id", missingIds)
+          .order("sort_order", { ascending: true });
+        if (images) {
+          const imageMap = new Map<string, string>();
+          for (const img of images) {
+            if (!imageMap.has(img.project_id)) {
+              imageMap.set(img.project_id, img.image_url);
+            }
+          }
+          results = results.map(p => ({
+            ...p,
+            cover_image_url: p.cover_image_url || imageMap.get(p.id) || null,
+          }));
+        }
+      }
+      setProjects(results);
       requestToShow();
       window.dispatchEvent(new Event('recommendation-popup-opened'));
       localStorage.setItem(POPUP_COOLDOWN_KEY, Date.now().toString());
-    } else if (primaryArea) {
-      const { data: fallback } = await supabase
-        .from("projects")
-        .select("id, name, area_name, developer_name, price_from, cover_image_url, slug")
-        .eq("is_published", true)
-        .not("sale_status", "ilike", "%sold%")
-        .order("created_at", { ascending: false })
-        .limit(3);
-      if (fallback && fallback.length > 0) {
-        setProjects(fallback as RecommendedProject[]);
-        requestToShow();
-        window.dispatchEvent(new Event('recommendation-popup-opened'));
-        localStorage.setItem(POPUP_COOLDOWN_KEY, Date.now().toString());
-      }
     }
   }, [requestToShow]);
 
