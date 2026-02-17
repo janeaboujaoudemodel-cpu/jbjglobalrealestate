@@ -71,11 +71,11 @@ function EnableMapInteraction({ enabled }: { enabled: boolean }) {
 function MapViewToggle({
   mapView,
   onViewChange,
-  onOpenExternal,
+  externalUrl,
 }: {
   mapView: MapViewType;
   onViewChange: (view: MapViewType) => void;
-  onOpenExternal: () => void;
+  externalUrl: string;
 }) {
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
@@ -94,13 +94,15 @@ function MapViewToggle({
           </button>
         ))}
       </div>
-      <button
-        onClick={onOpenExternal}
+      <a
+        href={externalUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         className="w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-gold/40 shadow-lg hover:bg-gold/20 active:bg-gold/30 transition-all"
         aria-label="Open in Google Maps"
       >
         <Maximize className="w-5 h-5 text-foreground" />
-      </button>
+      </a>
     </div>
   );
 }
@@ -148,9 +150,6 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
   if (projectsWithCoords.length === 0 && !areaLat) return null;
 
   const externalMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${areaName}, Dubai, UAE`)}`;
-  const handleOpenExternal = () => {
-    window.open(externalMapsUrl, "_blank", "noopener,noreferrer");
-  };
 
   return (
     <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
@@ -189,7 +188,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
             <MapViewToggle
               mapView={mapView}
               onViewChange={setMapView}
-              onOpenExternal={handleOpenExternal}
+              externalUrl={externalMapsUrl}
             />
             <MapNavigationControls latitude={center[0]} longitude={center[1]} />
             {projectsWithCoords.map((project: any) => (

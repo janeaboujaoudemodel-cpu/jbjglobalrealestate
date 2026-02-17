@@ -312,13 +312,6 @@ const SecurityShield = () => {
         -moz-user-drag: none;
         -o-user-drag: none;
         user-drag: none;
-        pointer-events: none;
-      }
-      
-      /* Re-enable pointer events for interactive images */
-      a img, button img, [role="button"] img, .interactive-img, 
-      .project-card img, .gallery img, [data-clickable] img {
-        pointer-events: auto;
       }
       
       /* Disable print (basic) */

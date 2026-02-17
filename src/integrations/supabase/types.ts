@@ -5595,6 +5595,27 @@ export type Database = {
         }
         Relationships: []
       }
+      dld_market_data: {
+        Row: {
+          data_json: Json
+          data_key: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          data_json?: Json
+          data_key: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          data_json?: Json
+          data_key?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       docusign_envelopes: {
         Row: {
           completed_at: string | null
