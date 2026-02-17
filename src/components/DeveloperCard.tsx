@@ -41,7 +41,8 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
   const [imageError, setImageError] = useState(false);
   const [logoError, setLogoError] = useState(false);
 
-  // logo_bg_color no longer used on external cards
+  const WHITE_BG_DEVELOPERS = ["azizi", "binghatti", "imtiaz", "h-h-development", "h&h"];
+  const needsWhiteBg = WHITE_BG_DEVELOPERS.some(d => (developer.slug || "").toLowerCase().includes(d) || developer.name.toLowerCase().includes(d));
   const showFeatureImage = developer.feature_image_url && !imageError;
   
   return (
@@ -96,10 +97,10 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           <div className="absolute top-3 left-3 z-10">
             {developer.logo_url && !logoError ? (
               <div
-              className={`w-14 h-14 rounded-lg overflow-hidden flex items-center justify-center ${
-                  developer.logo_bg_color ? 'shadow-lg' : ''
+                className={`w-14 h-14 rounded-lg overflow-hidden flex items-center justify-center ${
+                  needsWhiteBg ? 'bg-white shadow-lg' : (developer.logo_bg_color ? 'shadow-lg' : '')
                 }`}
-                style={{ backgroundColor: developer.logo_bg_color || 'transparent' }}
+                style={{ backgroundColor: needsWhiteBg ? '#FFFFFF' : (developer.logo_bg_color || 'transparent') }}
               >
                 <img
                   src={developer.logo_url}
