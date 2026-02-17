@@ -67,21 +67,37 @@ Deno.serve(async (req) => {
     const body = await req.json().catch(() => ({}));
     const dryRun = body.dryRun ?? false;
     const batchSize = body.batchSize ?? 30;
+    const forceSlugs: string[] = body.forceSlugs ?? [];
 
-    // Find developers with non-S3/non-cloudfront feature images (external URLs that may be broken)
-    const { data: developers, error } = await supabase
-      .from("developers")
-      .select("id, name, slug, feature_image_url, logo_url")
-      .not("feature_image_url", "is", null)
-      .not("feature_image_url", "ilike", "%reelly-backend.s3%")
-      .not("feature_image_url", "ilike", "%d3h330vgpwpjr8.cloudfront%")
-      .limit(batchSize);
+    let developers: any[] = [];
+    let error: any = null;
+
+    if (forceSlugs.length > 0) {
+      // Force-replace mode: update specific developers regardless of current URL
+      const result = await supabase
+        .from("developers")
+        .select("id, name, slug, feature_image_url, logo_url")
+        .in("slug", forceSlugs);
+      developers = result.data || [];
+      error = result.error;
+    } else {
+      // Find developers with non-S3/non-cloudfront feature images
+      const result = await supabase
+        .from("developers")
+        .select("id, name, slug, feature_image_url, logo_url")
+        .not("feature_image_url", "is", null)
+        .not("feature_image_url", "ilike", "%reelly-backend.s3%")
+        .not("feature_image_url", "ilike", "%d3h330vgpwpjr8.cloudfront%")
+        .limit(batchSize);
+      developers = result.data || [];
+      error = result.error;
+    }
 
     if (error) throw error;
 
     if (!developers || developers.length === 0) {
       return new Response(
-        JSON.stringify({ success: true, message: "No developers with broken feature images found", updated: 0 }),
+        JSON.stringify({ success: true, message: "No developers to fix", updated: 0 }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
