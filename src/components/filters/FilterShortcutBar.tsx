@@ -256,8 +256,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     <>
       <div className="flex flex-col gap-2 w-full">
         {/* Row 1: Connected toolbar - Search + Sort Pills + Map + Saved + Currency + Filter + Mode */}
-        <div className="flex items-center w-full overflow-x-auto scrollbar-hide">
-          <div className="flex items-center w-full border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] min-w-0">
+        <div className="flex items-center w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x' }}>
+          <div className="flex items-center min-w-max border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
             {/* Search slot or built-in search */}
             {searchSlot ? (
               <div className="min-w-0 max-w-[220px] border-r border-gold/20">
