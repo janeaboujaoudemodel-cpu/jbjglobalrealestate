@@ -1,91 +1,50 @@
 
 
-## Fix Developer Logos and Feature Photos -- Full Restoration Plan
+# Fix Plan: Developer Logos, Recommendation Photos, Feature Images, and Loading Screen
 
-### Problem Summary
+## Issues Identified
 
-The developer cards on `/developers` have multiple critical issues:
-1. **AI-processed "fake" logos** are being used for 11 developers (Damac, Danube, Sobha, MAG, etc.) instead of the original Reelly logos
-2. **Meraas** has Emaar's logo stored (wrong data from source) and needs its own logo
-3. **234 developers** have no logo at all
-4. **48 developers** have no feature photo (project/building image)
-5. **Sobha Realty** card shows "Z-RO" text -- wrong logo entirely
+1. **Binghatti logo on developer card** uses a Reelly API URL that differs from the locked marquee logo (`/developers/logos/binghatti-logo.webp`). Need to update the database `logo_url` to match the marquee version.
 
-### Root Cause
+2. **Recommendation popup shows Building icon instead of photos** because most projects (414 out of 512) have no `cover_image_url`. The popup query only checks `cover_image_url` and does not fall back to gallery images (`project_images` table).
 
-Previous cleanup operations replaced original Reelly S3 logos with AI-background-removed "processed" versions stored in Supabase storage. The originals still exist in the `uae_developers` table and in the Reelly S3 bucket URLs.
+3. **Emaar and Sobha feature images are low quality** -- both use tiny 260x200 thumbnails from the Reelly CDN. Need to find and set higher-resolution feature images.
 
-### Data Sources Available for Restoration
+4. **Loading screen monogram is invisible** -- `PageLoader` uses a `bg-black` background, but the monogram asset (`jbj-monogram-light-bg.png`) has black letters designed for light backgrounds. The "J" letters are black on black, making them invisible.
 
-| Source | What it has | Count |
-|--------|------------|-------|
-| `uae_developers` table | Original Reelly logos for key developers | 5 restorable (Damac, Danube, MAG, Sobha, Binghatti) |
-| `developers.logo_url` with `reelly-backend.s3` | Already correct original logos | 285 developers |
-| `pending_project_imports` | Developer names matched to projects with S3 images | ~131 matchable |
-| `projects` table | Cover images linked to developers | For feature photos |
+---
 
-### Implementation Plan
+## Changes
 
-#### Step 1: Restore Original Logos from `uae_developers`
-Replace all AI-processed logos with the original Reelly S3 URLs from `uae_developers`:
-- **Damac**: Restore from `uae_developers` (currently using processed PNG)
-- **Danube**: Restore from `uae_developers` (currently using processed PNG)
-- **Sobha**: Restore from `uae_developers` (currently using processed PNG showing wrong content)
-- **MAG Group**: Restore from `uae_developers` (currently using processed PNG)
-- **Binghatti**: Restore from `uae_developers` original Reelly logo
+### 1. Update Binghatti logo in database
+- Run a SQL update to set `logo_url` for Binghatti to the same path used in the homepage marquee: `/developers/logos/binghatti-logo.webp`
+- This ensures the developer card shows the same clean logo visible on the homepage
 
-#### Step 2: Fix Meraas Logo
-Meraas has Emaar's logo URL stored in both `developers` and `uae_developers` (bad data from source). Since there is no correct Meraas logo in the database, the logo will be set to NULL so the card shows a clean placeholder icon instead of a wrong logo.
+### 2. Fix Recommendation Popup to show project photos
+- **File**: `src/components/PropertyRecommendationPopup.tsx`
+- Update the query to also fetch from `project_images` as a fallback
+- Modify the query to join or sub-select the first gallery image when `cover_image_url` is null
+- Alternatively, add a database-side approach: create an RPC or modify the select to include a fallback image from the `project_images` table
+- Simplest approach: after fetching projects, for any that lack `cover_image_url`, fetch their first gallery image and use it
 
-#### Step 3: Remove ALL AI-Processed Logos
-Replace the remaining 6 AI-processed logos (Ade Bali, Ahmadyar, Arada, HSE, Laraix, PREDMET, Topero) with their original Reelly URLs where available, or NULL them to prevent fake logos from showing.
+### 3. Update Emaar and Sobha feature images
+- Query the projects table to find high-quality cover images from Emaar and Sobha projects
+- Update the `developers` table with better quality feature images (full-size, not 260x200 thumbnails)
 
-#### Step 4: Build and Deploy Bulk Logo Restoration Edge Function
-Create a new edge function `restore-developer-logos` that:
-- Cross-references `pending_project_imports` developer names with `developers` table
-- Extracts original Reelly S3 developer logos from the import data where available
-- Uses normalized name matching (same approach as the photo restoration function)
-- Only sets logos from `reelly-backend.s3.amazonaws.com` URLs (guaranteed original)
+### 4. Fix loading screen monogram visibility
+- **File**: `src/components/ui/BrandedLoader.tsx`
+- Change the monogram import from `jbj-monogram-light-bg.png` (black letters) to `jbj-monogram-dark-bg.png` (white letters)
+- The white "J" letters will be clearly visible against the black loading background
+- **File**: `src/components/PageLoader.tsx` -- no changes needed, the black background is correct once the right asset is used
 
-#### Step 5: Restore Remaining Feature Photos
-Run the existing `restore-developer-photos` edge function again to fill any remaining gaps in `feature_image_url` by matching developers to their project cover images.
+---
 
-#### Step 6: Update `logo_bg_color` Rules
-Per existing brand policy:
-- Danube: black (`#000000`)
-- MAG: dark red (`#8B0000`)
-- Binghatti, Azizi: white (`#FFFFFF`)
-- All others: transparent (NULL) -- no background box
+## Technical Details
 
-#### Step 7: Visual Verification
-Take screenshots of the developers page to confirm:
-- Each card shows the correct original logo (not AI-generated)
-- Each card shows a representative project/building photo
-- No "fake" or mismatched logos remain
-
-### Technical Details
-
-**Database updates (via insert tool):**
-```sql
--- Step 1: Restore 5 key logos from uae_developers
-UPDATE developers SET logo_url = (SELECT logo_url FROM uae_developers WHERE slug = 'damac') WHERE slug = 'damac';
-UPDATE developers SET logo_url = (SELECT logo_url FROM uae_developers WHERE slug = 'danube') WHERE slug = 'danube';
-UPDATE developers SET logo_url = (SELECT logo_url FROM uae_developers WHERE slug = 'sobha') WHERE slug = 'sobha';
-UPDATE developers SET logo_url = (SELECT logo_url FROM uae_developers WHERE slug = 'mag') WHERE slug = 'mag';
-UPDATE developers SET logo_url = (SELECT logo_url FROM uae_developers WHERE slug = 'binghatti') WHERE slug = 'binghatti';
-
--- Step 2: Fix Meraas (wrong logo)
-UPDATE developers SET logo_url = NULL WHERE slug = 'meraas';
-
--- Step 3: Remove all remaining AI-processed logos
-UPDATE developers SET logo_url = NULL WHERE logo_url LIKE '%processed%';
-```
-
-**New edge function: `restore-developer-logos/index.ts`**
-- Scans `pending_project_imports` for developer logos stored in raw import data
-- Cross-references with developers missing logos
-- Only uses verified Reelly S3 URLs
-
-**Existing edge function: `restore-developer-photos`**
-- Re-run to fill remaining 48 missing feature photos
+| Task | File(s) | Type |
+|------|---------|------|
+| Binghatti logo | Database UPDATE | SQL |
+| Recommendation photos | `PropertyRecommendationPopup.tsx` | Code |
+| Emaar/Sobha feature images | Database UPDATE | SQL |
+| Loading monogram | `BrandedLoader.tsx` | Code |
 
