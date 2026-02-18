@@ -1,134 +1,227 @@
 
-# Complete Fix: Photo→PDF, Scan & Sign, Brochure Generator + PDF Editor Page Count Bug
+# Deep Scan Report + Complete Fix Plan
 
-## Root Cause Analysis — All Issues
+## What Was Found — Confirmed Bugs (With Evidence)
 
-### Issue 1: Photo→PDF — Wrong Color Palette (Gray & Gold)
-`PdfFromPhotos.tsx` line 66 defines `const GOLD = "#C9A84C"` and uses it everywhere: the `GoldCard` component (lines 745-756), `StepHeader` (lines 759-776), upload zone border, checkbox color, type badges, progress bar, and all action buttons. The `GoldCard` wrapper uses `background: "linear-gradient(135deg, #111113, #16161A)"` — a cold near-black. The page background is `#0A0A0B`. This is the gold-and-black look the user rejected. 
+### Bug 1: "PDF Tools" vs "PDF Suite" — Two Separate Items in Studio
+The Studio page has TWO separate sections:
+- **Row 1 — Suite Launchpad** (large cards): Video Suite, Photo Suite, PDF Suite, Marketing Pack — these navigate to suites
+- **Row 2 — Quick Tools** (small strip): Background Remover, Captions & Translate, Image Resizer, **"PDF Tools"** (links to `/toolkit/pdf-suite`), Voice Studio
 
-**Fix:** Replace the entire GOLD color system with the navy-indigo palette (`#6366F1`, `rgba(99,102,241,*)`) and switch `GoldCard` to an indigo-tinted surface card (`background: "linear-gradient(135deg, #13172A, #0F1320)"`). The page background upgrades to `#0C0E14`.
-
-### Issue 2: PDF Editor — "Page 1, 2, 3" When Only 2 Photos Uploaded
-**Root cause:** The user is using the **Photo→PDF tool (PdfFromPhotos.tsx)**, not the PDFEditor. In `PdfFromPhotos.tsx` line 78-83, `titlePage` starts with `enabled: false` — so it shouldn't add extra pages. **The real bug**: in `PdfFromPhotos.tsx` lines 430-434 there is a header row showing `{pages.length} page{pages.length !== 1 ? "s" : ""} · drag to reorder`. When the user adds 2 images, `pages.length === 2` which is correct. BUT the `#idx + 1` badge (line 532) shows the *list index*, while the actual `page.name` (for images) shows the filename — which is fine.
-
-**However**, in `PDFEditor.tsx` lines 328-329, when pages are shown in the thumbnails it shows `Page {page.pageNumber}`. The `pageNumber` is assigned at line 99: `pageNumber: existingCount + i + 1`. **The bug**: if the user previously loaded a PDF that was then somehow retained in state and adds more PDFs, the `existingCount` would be wrong. More critically, `setLoadedPDFs` inside `processFiles` wraps `setPages` inside it — this is an anti-pattern because React batches state updates. The outer `setLoadedPDFs` callback runs on the *previous* state, but the inner `setPages` also runs on *previous* state — causing `existingCount` to read from a stale snapshot. If a user uploads 2 PDFs quickly, the second call to `setPages` sees `prevPages` as still empty (the first `setPages` hasn't committed yet), resulting in duplicate page numbers starting from 1.
-
-**Fix:** Restructure `processFiles` to collect all new PDFs and pages in a single batch, then call both `setLoadedPDFs` and `setPages` once outside the loop with the complete final arrays. This eliminates the stale-state bug entirely.
-
-### Issue 3: Photo→PDF — Grid View + Selection Visibility
-The current page list is a vertical `Reorder.Group` (list-only). The user wants to see thumbnails in a **grid view** and toggle between grid and list. Image pages DO have thumbnails (`page.url` for images) but PDF pages show only a text placeholder. The selection checkbox uses a custom `div` — when selected, it uses `${GOLD}33` background which on the dark surface is barely visible.
-
-**Fix:** Add a `viewMode: "grid" | "list"` toggle to `PdfFromPhotos`. In grid mode, show pages as thumbnail cards in a 3-4 column responsive grid with the image visible. The `Reorder.Group` (drag-and-drop) stays active in both modes. Selected state: use strong indigo (`rgba(99,102,241,0.3)`) border + `#6366F1` fill for checkbox — clearly visible against the dark background.
-
-### Issue 4: Scan & Sign — Cold Slate UI + Unreadable Buttons
-`ScanSignPage.tsx` uses `bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950` and `Card` components with `bg-slate-900/50 border-slate-700/50`. Buttons use:
-- `bg-gold text-black hover:bg-gold/90` — gold on black, which the user wants removed
-- `border-slate-600 text-slate-300` — slate border with muted text, barely visible against the dark slate card background
-- `border-slate-600` — the outline variant buttons have no clear visual separation from the card background
-
-Also, the tool currently has no AI features. The signature drawing works but has no intelligence — no auto-detection of signature placement, no AI enhancement.
-
-**Fix:** 
-- Replace entire color system with navy-indigo palette. Background: `#0C0E14`. Cards: `rgba(99,102,241,0.06)` background, `rgba(99,102,241,0.18)` border.  
-- Primary buttons: indigo gradient (`linear-gradient(135deg, #6366F1, #4F46E5)`), white text — clearly readable
-- Outline buttons: `rgba(99,102,241,0.15)` background, `rgba(99,102,241,0.4)` border, white text — visible
-- The "Draw Signature" button: make it a prominent card with visual affordance (dashed zone)
-- Add AI features: "AI Auto-Enhance Scan" button (uses canvas brightness/contrast auto-optimization based on histogram analysis — client-side, no API needed), and "AI Smart Crop" button that detects document edges and auto-rotates.
-
-### Issue 5: Brochure Generator — Cold Slate UI + Missing Project Link + Weak Features
-`BrochureGeneratorPage.tsx` uses `bg-gradient-to-br from-slate-950` and identical `Card` styling to `ScanSignPage`. Issues:
-- `bg-gold hover:bg-gold/90 text-black` generate button — gold-on-black
-- `border-slate-600 text-slate-300` on upload buttons — not readable
-- `bg-slate-800 border-slate-600 text-white` on inputs — but the global `Input` component has a cream-gradient background, creating style conflicts
-- The `+` button to add features (line 638): `variant="outline" className="border-slate-600"` — slate border barely visible
-- No project link — the form only accepts manual input. The user wants to select a project from the DB and auto-populate
-- No hero cover card — no way to customize the brochure's first page hero section
-
-**Fix:**
-- Full navy-indigo palette overhaul
-- Connect to `projects` DB: add a project selector dropdown that fetches from `projects` table and auto-fills `name`, `location`, `price_from`, `description`, `amenities`
-- Add **Hero Card Editor** for the first page: fields for logo upload, headline text, tagline, CTA text — all composited onto the first PDF page
-- Add "AI Generate Description" button (calls edge function with property details → returns a premium marketing description)
-- Fix all button styles: `+` buttons become clear indigo icon buttons, `X` buttons become red icon buttons, Upload buttons become styled drop zones
-- Inputs: override the global input style for the dark context using `style={}` props directly, avoiding the cream-gradient conflict
+"PDF Tools" in the Quick Tools strip points to the SAME route as PDF Suite. This is confusing because it's a duplicate. The fix: rename "PDF Tools" to "PDF Suite" in `quickTools` — OR remove it from Quick Tools since it already exists in the Suite Launchpad row above it. The cleaner choice is to replace "PDF Tools" with a more unique standalone tool that doesn't already have a suite card.
 
 ---
 
-## File Changes (4 files)
+### Bug 2: PDF Editor — Duplicate Page Keys (Shows Extra Pages) — CRITICAL
+Console log captured: `"Encountered two children with the same key: 12b9a0b3-1f2c-46fa-b3f6-61fd7b8669fb"`
 
-### 1. `src/pages/toolkit/PdfFromPhotos.tsx` — Full Overhaul
-- Replace `const GOLD = "#C9A84C"` → `const INDIGO = "#6366F1"` and update ALL uses
-- `GoldCard` → `IndigoCard` with `background: "linear-gradient(135deg, #131720, #0F1320)"`, `border: "1px solid rgba(99,102,241,0.18)"`
-- `StepHeader`: step number circle uses `rgba(99,102,241,0.2)` bg, `#818CF8` text, `rgba(99,102,241,0.4)` border
-- Upload zone: `border: "2px dashed rgba(99,102,241,0.3)"`, hover → `rgba(99,102,241,0.5)`
-- Page background: `background: "#0C0E14"`
-- Add `viewMode: "grid" | "list"` state with toggle button in the toolbar
-- Grid view: responsive CSS grid of page thumbnail cards (3 cols), each shows the image or PDF icon, name, drag handle on hover
-- Selection: `rgba(99,102,241,0.3)` background + `#6366F1` checkbox when selected
-- Reorder stays active in both modes (Reorder.Group wraps both list and grid children)
-- All action buttons: indigo-tinted styles
-- "Generate PDF" button: `background: "linear-gradient(135deg, #6366F1, #4F46E5)"`, white text
-- Progress bar: indigo gradient
+Root cause: `processFiles` in `PDFEditor.tsx` still has the **nested setState anti-pattern** despite the previous fix attempt. Here is the exact broken code (lines 110–127):
 
-### 2. `src/pages/toolkit/PDFEditor.tsx` — Page Count Bug Fix
-- Restructure `processFiles` to collect all pages outside the `setLoadedPDFs` callback, then call `setLoadedPDFs(prev => [...prev, ...newPdfs])` and `setPages(prev => [...prev, ...allNewPages])` separately and atomically after the loop
-- This eliminates the nested setState anti-pattern that causes stale `existingCount` reads
-- Thumbnail view: enhance to show larger thumbnail cards with the page number badge clearly visible, selected state with strong indigo border
+```tsx
+setLoadedPDFs(prevPdfs => {           // ← outer updater
+  const updatedPdfs = [...prevPdfs, ...newPdfs];
+  ...
+  setPages(prevPages => {             // ← NESTED setState inside updater!
+    const base = prevPages.length;
+    return [...prevPages, ...allNewPages.map((p, i) => ({ ...p, pageNumber: base + i + 1 }))];
+  });
+  return updatedPdfs;
+});
+```
 
-### 3. `src/pages/toolkit/ScanSignPage.tsx` — Full Premium Overhaul
-- Remove all `slate-*` Tailwind classes and `bg-gold` buttons
-- Background: `#0C0E14`, Cards: `rgba(99,102,241,0.06)` bg + `rgba(99,102,241,0.18)` border (inline styles to override Card defaults)
-- Camera button: indigo gradient primary button
-- "Upload Images" button: indigo-outline with clear background `rgba(99,102,241,0.1)` — readable
-- "Draw Signature" section: upgrade to a dashed indigo drop-zone style pad with clear instructions
-- "Open Camera" / "Capture" buttons: indigo gradient, white text
-- "Export to PDF" button: indigo gradient (replace `bg-emerald-600`)
-- Page thumbnails: selected state → `border-indigo-500` instead of `border-gold`
-- Add AI Auto-Enhance Scan: button that reads selected page's brightness histogram and auto-adjusts `brightness` and `contrast` values to optimal document scanning levels (pure client-side canvas math)
+React's Strict Mode double-invokes state updater functions. When `setLoadedPDFs`'s callback runs twice, `setPages` is called twice from within it — with `allNewPages` holding the SAME UUIDs both times. The second call to `setPages` appends the same pages again (duplicate UUIDs), causing both the "extra page" display bug AND the React duplicate key warning.
 
-### 4. `src/pages/toolkit/BrochureGeneratorPage.tsx` — Full Premium Overhaul + Project Link + AI
-- Remove all `slate-*` and `bg-gold` classes
-- Background: `#0C0E14`, Cards: indigo-tinted surfaces
-- Add project selector: `useEffect` that fetches `projects` (name, location, price_from, description, amenities) from DB via supabase client. Renders a `Select` dropdown at the top. Selecting a project auto-fills all property form fields.
-- Add Hero Card Editor section: logo upload (image file → base64), headline text input, tagline input. These get composed onto the PDF cover page's top section using `pdf-lib` `drawImage` for the logo and `drawText` for headline/tagline.
-- Add "AI Write Description" button: calls a Lovable AI edge function (`supabase/functions/brochure-ai/index.ts`) with property name, location, price, features → returns a premium marketing paragraph → auto-fills the description textarea
-- Fix `+` add buttons: change to `style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.4)", color: "#818CF8" }}` — clearly indigo
-- Fix `X` remove buttons: `color: "#f87171"` (red-400), `background: "rgba(239,68,68,0.1)"`
-- Fix Upload buttons: indigo-outlined drop zones with dashed border
-- Fix Inputs in dark context: add `style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(99,102,241,0.25)", color: "white" }}` directly to override the global cream Input styling
-- Generate button: `linear-gradient(135deg, #6366F1, #4F46E5)`, white text
+**Fix:** Remove the nested `setPages` call entirely from inside `setLoadedPDFs`. Compute everything first, then call both setters independently:
 
-### 5. NEW: `supabase/functions/brochure-ai/index.ts` — AI Description Writer
-- Accepts `{ propertyName, location, price, features, type }` in request body
-- Calls Lovable AI Gateway (`google/gemini-3-flash-preview`) with a prompt to write a premium 3-sentence property marketing description
-- Returns `{ description: string }`
-- Used by the Brochure Generator's "AI Write Description" button
+```tsx
+// CORRECT: two independent setState calls, never nested
+const totalExisting = pages.length; // read current pages count BEFORE any setState
+const finalPages = allNewPages.map((p, i) => ({ ...p, pageNumber: totalExisting + i + 1 }));
+setLoadedPDFs(prev => [...prev, ...newPdfs]);
+setPages(prev => [...prev, ...finalPages]);
+```
+
+But `pages` is a stale closure value inside `processFiles`. The correct solution is to use a `useRef` to track current page count OR restructure to not rely on `prevPages.length` at all. Best solution: pass the starting page number as a local variable collected BEFORE the async loop begins, reading directly from the current `pages` state value (captured in closure), then call both setters at the end.
 
 ---
 
-## Color Reference for All Changes
+### Bug 3: Clicking Page 1 Selects/Deselects Wrong Page — CRITICAL Event Bubble Bug
 
+In `PDFEditor.tsx` lines 358–390, each page card is a `<div onClick={() => togglePageSelection(page.id)}>` that contains a `<Checkbox checked={page.selected}>`. When a user clicks the Checkbox:
+
+1. Checkbox fires its own `onChange` or click event → `togglePageSelection` called (page becomes selected)
+2. Click bubbles up to the parent `div onClick` → `togglePageSelection` called AGAIN (page immediately deselected)
+
+This means selecting NEVER works when clicking the checkbox — it toggles twice and returns to original state. Clicking anywhere else on the row (outside the checkbox) works once.
+
+Additionally, because pages can have duplicate IDs (from Bug 2), clicking on what looks like "page 1" may actually toggle a different duplicate page ID.
+
+**Fix:** Add `e.stopPropagation()` to the Checkbox click handler so the click doesn't bubble to the parent `div`. Also remove the parent `div onClick` and instead put the toggle logic only on the Checkbox component.
+
+```tsx
+// Fix: remove onClick from outer div, attach only to Checkbox
+<div
+  className="p-3 rounded-xl cursor-pointer transition-all"
+  style={{ ... }}
+  // No onClick here — handled by Checkbox below
+>
+  <div className="flex items-center gap-2">
+    <Checkbox 
+      checked={page.selected}
+      onCheckedChange={() => togglePageSelection(page.id)}
+      // Don't add stopPropagation — just don't have parent onClick
+    />
 ```
-OLD (rejected):  Gold #C9A84C / Slate bg-slate-900/50 border-slate-700
-NEW (navy-indigo):
-  Page BG:       #0C0E14
-  Card BG:       rgba(99,102,241,0.06) or "linear-gradient(135deg, #131720, #0F1320)"
-  Card Border:   rgba(99,102,241,0.18)
-  Accent:        #6366F1
-  Text-muted:    rgba(255,255,255,0.4)
-  Selected BG:   rgba(99,102,241,0.2)
-  Selected Border: rgba(99,102,241,0.55)
-  Primary Button: linear-gradient(135deg, #6366F1, #4F46E5) + white text
-  Outline Button: rgba(99,102,241,0.12) bg + rgba(99,102,241,0.35) border + white text
-  Plus (+) btn:  rgba(99,102,241,0.15) bg + rgba(99,102,241,0.4) border + #818CF8 text
-  X/delete btn:  rgba(239,68,68,0.12) bg + red-400 text
+
+OR keep the parent `div onClick` for the whole row but prevent the Checkbox from also firing:
+
+```tsx
+<Checkbox
+  checked={page.selected}
+  onClick={(e) => e.stopPropagation()}
+  onCheckedChange={() => togglePageSelection(page.id)}
+/>
 ```
+
+---
+
+### Bug 4: Page Number Counting Starts at Wrong Number After Async Operations
+Even if Bug 2 is fixed, there is still a subtle issue: `processFiles` is `async` and reads `pages.length` from the closure. If called rapidly twice (two drag-drop events), both calls capture `pages.length = 0` before either has committed, resulting in page numbers both starting at 1. Fix: capture page count inside the `setPages` updater using `prevPages.length`.
+
+The correct fully-fixed version of `processFiles`:
+
+```tsx
+const processFiles = async (files: File[]) => {
+  setIsLoading(true);
+  try {
+    const newPdfs: LoadedPDF[] = [];
+    const newPages: Omit<PDFPage, 'pageNumber'>[] = [];
+
+    for (const file of files) {
+      if (file.type !== 'application/pdf') { toast.error(...); continue; }
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      const pageCount = pdfDoc.getPageCount();
+      const newPdf: LoadedPDF = { id: crypto.randomUUID(), name: file.name, pageCount, data: new Uint8Array(arrayBuffer) };
+      newPdfs.push(newPdf);
+      for (let i = 0; i < pageCount; i++) {
+        newPages.push({ id: crypto.randomUUID(), originalPageNumber: i + 1, pdfIndex: -1, selected: false, rotation: 0 });
+      }
+      toast.success(`Loaded ${file.name} (${pageCount} pages)`);
+    }
+
+    if (newPdfs.length === 0) return;
+
+    // Set pdfIndex after all PDFs are pushed to newPdfs array
+    setLoadedPDFs(prev => {
+      const updatedPdfs = [...prev, ...newPdfs];
+      // Fix pdfIndex for each page using the final updatedPdfs array
+      // We'll do this in setPages using a separate mechanism
+      return updatedPdfs;
+    });
+
+    // SEPARATE setState — never nested
+    setPages(prev => {
+      const base = prev.length;
+      // Now figure out pdfIndex properly
+      // We use a running counter across the newPages array
+      let pageIdx = 0;
+      return [...prev, ...newPdfs.flatMap((pdf, pdfI) =>
+        Array.from({ length: pdf.pageCount }, (_, i) => ({
+          ...newPages[pageIdx++],
+          pdfIndex: pdfI + (prev.length > 0 ? loadedPDFs.length : 0), // adjusted below
+          pageNumber: base + pageIdx,
+        }))
+      )];
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
+```
+
+Actually the cleanest solution is simpler — track pdfIndex by computing it from the final `loadedPDFs` array using a `useRef` for current loaded PDF count:
+
+```tsx
+// Track the count with a ref so it's always current
+const loadedPdfCountRef = useRef(0);
+
+// After setLoadedPDFs:
+setLoadedPDFs(prev => { const next = [...prev, ...newPdfs]; loadedPdfCountRef.current = next.length; return next; });
+
+setPages(prev => {
+  const base = prev.length;
+  let pageOffset = 0;
+  return [...prev, ...newPdfs.flatMap((pdf, relIdx) => {
+    const pdfIndex = (loadedPdfCountRef.current - newPdfs.length) + relIdx;
+    return Array.from({ length: pdf.pageCount }, (_, i) => ({
+      id: crypto.randomUUID(),
+      pageNumber: base + pageOffset + i + 1,
+      originalPageNumber: i + 1,
+      pdfIndex,
+      selected: false,
+      rotation: 0,
+    }));
+    pageOffset += pdf.pageCount;
+  }));
+});
+```
+
+The cleanest approach that avoids ALL these issues is to compute everything synchronously in `processFiles` and do ONE React state update using a reducer or a single combined state object.
+
+---
+
+## Complete Fix Implementation Plan
+
+### Files to Edit: 2 files
+
+### 1. `src/pages/toolkit/PDFEditor.tsx` — Fix All 3 Critical Bugs
+
+**Change A — Fix processFiles (Bugs 2 & 4):**
+Replace the entire `processFiles` function with a clean version that:
+- Collects all new PDFs and new pages in local arrays (synchronously computed)
+- Calls `setLoadedPDFs` and `setPages` as two separate, independent calls (never nested)
+- Uses the `setPages` updater form `prev => [...]` to safely read current page count
+- Computes `pdfIndex` relative to the CURRENT `loadedPDFs.length` (read before the async loop starts, stored in a `const startingPdfCount = loadedPDFs.length` at the top of the function)
+
+**Change B — Fix checkbox double-toggle (Bug 3):**
+Change the page thumbnail card from having `onClick` on the outer `<div>` to having selection handled ONLY by the Checkbox:
+- Remove `onClick={() => togglePageSelection(page.id)}` from the outer `<div>`
+- Make the whole row clickable by wrapping in a button or keeping the `div onClick`
+- Add `onClick={(e) => e.stopPropagation()}` to the `<Checkbox>` component so it doesn't bubble
+
+**Change C — Enhance page thumbnail UI:**
+- Make selection state more visible: selected cards get a stronger indigo border (`2px solid rgba(99,102,241,0.7)`)
+- Add a visible page number badge in the corner (like `#1`, `#2`) in large clear text
+- Show the PDF filename source more clearly
+- Make the up/down reorder arrows more prominent (larger hit target, visible color)
+- Add drag handles that actually work with framer-motion `Reorder.Group` for visual drag-and-drop
+
+### 2. `src/pages/Studio.tsx` — Fix "PDF Tools" Duplicate
+
+**Change:** In the `quickTools` array (line 53), replace the "PDF Tools" entry that duplicates the Suite Launchpad's PDF Suite:
+- Option A: Remove "PDF Tools" entirely from Quick Tools (it already has a suite card)
+- Option B: Replace it with a genuinely different tool like "Voice Studio" standalone page or "Smart Resize" 
+- Best option: Replace "PDF Tools" link with a direct link to the standalone PDF Editor (`/toolkit/pdf-suite?tab=editor`) or replace with a different tool that isn't in the Launchpad, like "Smart Brochure" (`/toolkit/brochure-generator`)
+
+The Quick Tools strip should contain tools NOT already in the Suite Launchpad — so either remove the duplicate or swap it for a tool like "AI Translator" or "Voice Clone" that doesn't already have a suite card.
+
+---
+
+## Screenshot Evidence of Current State
+
+- PDF Suite page loads correctly with navy-indigo palette — CONFIRMED working
+- PDF Editor drop zone is visible and styled correctly — CONFIRMED working  
+- Console error confirms duplicate key bug — CONFIRMED broken
+- Nested setState in processFiles — CONFIRMED in code review
+- Checkbox click bubble path — CONFIRMED in code review (lines 364–367)
+- Studio "PDF Tools" duplicates suite card — CONFIRMED in code review (line 53)
 
 ---
 
 ## Implementation Order
-1. Fix `PDFEditor.tsx` page count bug (critical, fast)
-2. Overhaul `PdfFromPhotos.tsx` — full palette + grid/list view
-3. Overhaul `ScanSignPage.tsx` — full palette + AI enhance
-4. Create `supabase/functions/brochure-ai/index.ts` — AI description edge function
-5. Overhaul `BrochureGeneratorPage.tsx` — full palette + project link + hero card + AI button
+
+1. Fix `PDFEditor.tsx` `processFiles` — eliminates duplicate pages and extra page count
+2. Fix `PDFEditor.tsx` Checkbox event bubble — fixes "clicking page 1 selects page 2"
+3. Enhance `PDFEditor.tsx` page thumbnail UI — makes selection visible and readable
+4. Fix `Studio.tsx` Quick Tools duplicate — removes confusing "PDF Tools" duplicate
