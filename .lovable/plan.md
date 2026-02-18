@@ -1,257 +1,145 @@
 
-# Full Caption Burn-on-Video Feature — Live Preview + Style Controls + Download
+# Voice Dubbing — Full Audio Track Assembly + Video Sync
 
-## Current State
+## What Already Exists
 
-The Export tab already has the skeleton for caption burning:
-- A file picker for the burn video
-- A `burnCaptionsOnVideo()` function that uses Canvas API + MediaRecorder
-- A progress bar during burn
-- A download trigger
+The `handleDubAll()` function in `CaptionTranslator.tsx` already:
+- Calls `voice-studio-tts` for each segment sequentially
+- Stores individual MP3 blob URLs per segment under `sub.dubbedAudioUrl[langCode]`
+- Shows per-segment `<audio>` playback widgets in the Translate tab
 
-**What's missing / needs to be built:**
-1. **No live preview** — the Style tab shows a static dummy placeholder (a grey box with a Play icon). There is zero live playback with real captions overlaid
-2. **Style controls are split** — settings live in the Style tab but the burn happens in the Export tab. Users can't see what the burn will look like *while* adjusting settings
-3. **Font weight, outline/shadow, opacity, and animation** are not configurable — only size, color, bg, position, and speed exist
-4. **Animation speed** setting exists in state but does nothing — the `drawCaptionText()` function doesn't use it at all
-5. **The canvas burn is muted** — the MediaRecorder captures the canvas stream but audio from the original video is dropped (canvas.captureStream() doesn't include audio)
-6. **No preview of captions before committing to burn** — users must burn and then watch the downloaded file to see if it looks right
+What is missing is **assembly**: these segment blobs are isolated clips. There is no mechanism to stitch them into a single audio file that respects the original video's timeline (with silence gaps between segments matching the original timecodes).
 
 ## Architecture of the New Feature
 
-### New "Preview" tab added between Style and Export
+### Step 1 — Stitch Segments into a Gapped Audio Track (Web Audio API)
 
-Instead of cramming live preview into Style tab (where it conflicts with the control panel layout), a dedicated **Preview** tab shows:
-- The actual uploaded video (or the burn-target video) playing in a `<video>` element
-- A `<canvas>` overlay positioned absolutely on top of it — same dimensions, pointer-events-none
-- A `requestAnimationFrame` loop that reads `video.currentTime` and draws the active caption on the canvas each frame
-- Play/Pause/Seek controls below
+After dubbing all segments, the user clicks **"Assemble Dubbed Track"** (or it happens automatically after Dub All). The browser:
 
-This gives users a **100% accurate preview** of exactly what the burned video will look like, because it uses the exact same `drawCaptionText()` function used during actual burning.
+1. Fetches each segment's audio blob and decodes it via `AudioContext.decodeAudioData()`
+2. Creates an `AudioBuffer` long enough to hold the entire video duration
+3. Copies each decoded segment's audio data into the buffer at the correct time offset (using `seg.startTime` as the offset in seconds)
+4. Segments that are longer than their timeslot are trimmed; gaps between segments are silence (zeroed buffer)
+5. Encodes the assembled buffer as WAV (or WebM audio) using `MediaRecorder` on an `AudioBufferSourceNode` connected to a `MediaStreamDestination`
+6. The result is a single `Blob` stored in state as `dubbedTrackUrl[langCode]`
 
-### Audio Preservation in Burned Video
+### Step 2 — Preview: Play Video with Dubbed Audio
 
-The current `burnCaptionsOnVideo()` uses `canvas.captureStream(30)` which captures only video frames — no audio. Fix:
+In the Preview tab, when a dubbed track is available and selected:
+- The `<video>` element is muted (`video.muted = true`) so its original audio is silenced
+- A second `<audio>` element (hidden) plays the assembled `dubbedTrackUrl[langCode]` blob
+- Both are controlled by the same play/pause/seek controls — seeking the video also seeks the audio element to the same `currentTime`
 
+### Step 3 — Export: Burn with Dubbed Audio
+
+In the Export tab's "Burn Captions" flow, when a `dubbedTrackUrl` exists for the selected `burnLang`:
+- Instead of capturing `AudioContext.createMediaElementSource(video)`, use a `MediaElementAudioSourceNode` from the dubbed audio `<audio>` element
+- Route that into the `MediaStreamDestination` that feeds `MediaRecorder`
+- Result: the burned WebM has the dubbed audio instead of the original
+
+## What Changes
+
+### File: `src/components/ai-video-studio/features/CaptionTranslator.tsx` only
+
+All changes are in this one file. No new edge functions needed.
+
+**New state:**
 ```typescript
-// Capture both video+audio streams
-const videoStream = canvas.captureStream(30);
-const audioCtx = new AudioContext();
-const source = audioCtx.createMediaElementSource(video);
-const dest = audioCtx.createMediaStreamDestination();
-source.connect(dest);
-source.connect(audioCtx.destination); // keep local audio audible
-
-// Merge canvas video tracks + audio tracks
-const combinedStream = new MediaStream([
-  ...videoStream.getVideoTracks(),
-  ...dest.stream.getAudioTracks(),
-]);
-const recorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm;codecs=vp9,opus' });
+const [dubbedTrackUrl, setDubbedTrackUrl] = useState<Record<string, string>>({});
+const [isAssembling, setIsAssembling] = useState<string | null>(null);
+const dubbedAudioRef = useRef<HTMLAudioElement>(null);
 ```
 
-### Animation Support (Caption Speed)
+**New `assembleDubbedTrack(langCode)` function:**
 
-The `speed` setting currently exists but `drawCaptionText()` ignores it. We implement **fade-in/fade-out animation** per caption:
+This runs after Dub All (or on demand via a button). Uses Web Audio API:
 
-- Each segment has a natural start/end time
-- Fade-in: first N ms of the segment, alpha goes 0 → 1
-- Fade-out: last N ms of the segment, alpha goes 1 → 0
-- Slow: 600ms fade, Normal: 300ms fade, Fast: 80ms fade (near-instant)
-
-In `drawCaptionText()`, accept an `alpha: number` parameter and apply it via `ctx.globalAlpha`.
-
-### Additional Style Controls
-
-Add to `CaptionStyle`:
-- `fontWeight: 'normal' | 'bold'` — toggles bold text
-- `outlineWidth: number` — 0–4px stroke around each letter (great for readability)
-- `outlineColor: string` — stroke color (default black)
-- `bgOpacity: number` — 0–100% background opacity slider
-- `fontFamily: 'Arial' | 'Georgia' | 'Impact' | 'Courier'` — 4 web-safe font choices that render consistently on canvas
-
-## Files to Change
-
-### Only `src/components/ai-video-studio/features/CaptionTranslator.tsx`
-
-All changes are self-contained in this one file.
-
-**1. Expand `CaptionStyle` interface:**
-```typescript
-interface CaptionStyle {
-  fontSize: number;
-  fontWeight: 'normal' | 'bold';
-  fontFamily: string;
-  color: string;
-  bgColor: string;
-  bgOpacity: number;       // NEW: 0-100
-  outlineWidth: number;    // NEW: 0-4
-  outlineColor: string;    // NEW
-  position: 'top' | 'center' | 'bottom';
-  preset: string;
-  speed: 'slow' | 'normal' | 'fast';
-}
 ```
-
-**2. Update `drawCaptionText()` to use new style fields + alpha:**
-```typescript
-function drawCaptionText(ctx, text, style, w, h, alpha = 1) {
-  ctx.globalAlpha = alpha;
-  ctx.font = `${style.fontWeight} ${style.fontSize}px ${style.fontFamily}, sans-serif`;
+For each segment (with dubbedAudioUrl[langCode]):
+  1. fetch the blob URL → arrayBuffer → AudioContext.decodeAudioData()
+  2. copyToChannel() at seg.startTime seconds into a master AudioBuffer
   
-  // Outline (stroke) text if outlineWidth > 0
-  if (style.outlineWidth > 0) {
-    ctx.strokeStyle = style.outlineColor;
-    ctx.lineWidth = style.outlineWidth * 2;
-    ctx.lineJoin = 'round';
-    lines.forEach((line, i) => ctx.strokeText(line, x, y + i * lineH + fs));
+Then:
+  3. Play master AudioBuffer via AudioBufferSourceNode → MediaStreamDestination
+  4. Record via MediaRecorder → Blob
+  5. Store URL in dubbedTrackUrl[langCode]
+```
+
+The master buffer length = `Math.ceil(lastSegment.endTime * sampleRate)` samples.
+
+**Modified `handleDubAll()`:**
+
+After successfully dubbing all segments, automatically call `assembleDubbedTrack(langCode)`.
+
+**Modified Preview tab:**
+
+When `dubbedTrackUrl[burnLang]` exists:
+- `<video>` gets `muted` prop
+- A hidden `<audio ref={dubbedAudioRef}>` is added with `src={dubbedTrackUrl[burnLang]}`
+- Play/pause/seek controls also sync the dubbed audio element:
+
+```typescript
+const togglePreviewPlay = () => {
+  const v = previewVideoRef.current;
+  const a = dubbedAudioRef.current;
+  if (!v) return;
+  if (v.paused) {
+    v.play();
+    a?.play(); // sync dubbed audio
+    setPreviewPlaying(true);
+  } else {
+    v.pause();
+    a?.pause();
+    setPreviewPlaying(false);
   }
-  
-  // Background with opacity
-  if (style.preset !== 'clean') {
-    const bgAlpha = Math.round(style.bgOpacity / 100 * 255).toString(16).padStart(2, '0');
-    ctx.fillStyle = style.bgColor + bgAlpha;
-    // ...draw bg rect
-  }
-  
-  ctx.fillStyle = style.color;
-  lines.forEach((line, i) => ctx.fillText(line, x, y + i * lineH + fs));
-  ctx.globalAlpha = 1;
-}
+};
+
+const seekPreview = (delta: number) => {
+  const v = previewVideoRef.current;
+  const a = dubbedAudioRef.current;
+  if (!v) return;
+  const t = Math.max(0, Math.min(v.duration || 0, v.currentTime + delta));
+  v.currentTime = t;
+  if (a) a.currentTime = t; // keep audio in sync
+};
 ```
 
-**3. Add new state for live preview:**
-```typescript
-const previewVideoRef = useRef<HTMLVideoElement>(null);
-const previewCanvasRef = useRef<HTMLCanvasElement>(null);
-const previewRafRef = useRef<number>(0);
-const [previewPlaying, setPreviewPlaying] = useState(false);
-const [previewTime, setPreviewTime] = useState(0);
-const [previewDuration, setPreviewDuration] = useState(0);
-const [previewVideoFile, setPreviewVideoFile] = useState<File | null>(null);
-```
+The seek bar `onChange` also syncs `dubbedAudioRef.current.currentTime`.
 
-**4. Add `useEffect` for the canvas overlay draw loop:**
-```typescript
-useEffect(() => {
-  if (activeTab !== 'preview') {
-    cancelAnimationFrame(previewRafRef.current);
-    return;
-  }
-  
-  const video = previewVideoRef.current;
-  const canvas = previewCanvasRef.current;
-  if (!video || !canvas) return;
-  
-  const ctx = canvas.getContext('2d')!;
-  
-  const FADE_MS = { slow: 600, normal: 300, fast: 80 }[captionStyle.speed];
-  
-  const loop = () => {
-    const t = video.currentTime;
-    setPreviewTime(t);
-    
-    // Clear canvas (transparent — video element is behind)
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    const activeSeg = subtitles.find(s => t >= s.startTime && t <= s.endTime);
-    if (activeSeg) {
-      const text = burnLang && activeSeg.translations?.[burnLang]
-        ? activeSeg.translations[burnLang]
-        : activeSeg.text;
-      
-      // Compute fade alpha
-      const elapsed = (t - activeSeg.startTime) * 1000;
-      const remaining = (activeSeg.endTime - t) * 1000;
-      const fadeMs = FADE_MS;
-      const alpha = Math.min(
-        elapsed < fadeMs ? elapsed / fadeMs : 1,
-        remaining < fadeMs ? remaining / fadeMs : 1
-      );
-      
-      drawCaptionText(ctx, text, captionStyle, canvas.width, canvas.height, alpha);
-    }
-    
-    previewRafRef.current = requestAnimationFrame(loop);
-  };
-  
-  previewRafRef.current = requestAnimationFrame(loop);
-  return () => cancelAnimationFrame(previewRafRef.current);
-}, [activeTab, subtitles, captionStyle, burnLang]);
-```
+**Modified `burnCaptionsOnVideo()`:**
 
-**5. Add NEW "Preview" tab in TABS array:**
+Detect if dubbed track exists for the selected `burnLang`:
+- If yes: create a hidden `<audio>` element from `dubbedTrackUrl[burnLang]`, connect its audio to a `MediaStreamDestination`, mute the video element
+- If no: use the original video audio (existing logic)
 
-Insert between Style and Export:
-```typescript
-const TABS = [
-  { id: 'upload', label: 'Upload', icon: Upload },
-  { id: 'transcribe', label: 'Transcribe', icon: Wand2 },
-  { id: 'translate', label: 'Translate', icon: Languages },
-  { id: 'style', label: 'Style', icon: Palette },
-  { id: 'preview', label: 'Preview', icon: Play },    // NEW
-  { id: 'export', label: 'Export', icon: Download },
-] as const;
-```
+**New UI — Dubbed Track section in Translate tab:**
 
-**6. Preview tab JSX:**
+After Dub All completes, show an assembled track status card per language:
 
 ```
-┌──────────────────────────────────────────────────┐
-│  ┌─ video file picker (if no burnVideoFile) ───┐  │
-│  │  Uses uploadedFile as fallback              │  │
-│  └────────────────────────────────────────────-┘  │
-│                                                    │
-│  ┌──── Video 16:9 ─────────────────────────────┐  │
-│  │  <video ref={previewVideoRef} .../>          │  │
-│  │  <canvas ref={previewCanvasRef}              │  │
-│  │    className="absolute inset-0 pointer-      │  │
-│  │    events-none" />                           │  │
-│  └──────────────────────────────────────────────┘  │
-│                                                    │
-│  [◀◀ -5s] [▶ Play / ‖ Pause] [+5s ▶▶]            │
-│  ━━━━━━━━━━━━━━━━━━━━━━●━━━━━━━━━━━━ 01:23/02:45  │
-│                                                    │
-│  Language: [Original] [🇸🇦 Arabic] [🇪🇸 Spanish]    │
-└──────────────────────────────────────────────────┘
+┌─ 🇸🇦 Arabic Dubbed Track ──────────────────┐
+│  ✓ Assembled — 14 segments, 2m 34s         │
+│  [▶ Play full track]  [⬇ Download MP3]     │
+│  [🎬 Use in Preview]                        │
+└─────────────────────────────────────────────┘
 ```
 
-The `<video>` and `<canvas>` are wrapped in a `relative` container. Canvas uses `absolute inset-0` with `pointer-events-none`. Both share the same width/height so canvas pixels map 1:1 to video pixels visually.
+The "Play full track" button plays just the dubbed audio blob to let users verify the full dub before exporting.
 
-**7. Update `burnCaptionsOnVideo()` to include audio + use alpha fade:**
+**Voice selector for dubbing:**
 
-The burn loop now:
-1. Computes the same fade alpha as the preview loop
-2. Calls `drawCaptionText()` with the alpha value
-3. Captures audio via `AudioContext.createMediaElementSource()` + `createMediaStreamDestination()`
-4. Combines canvas video tracks + audio destination tracks into a `MediaStream`
-5. Uses `video/webm;codecs=vp9,opus` for combined A/V output
+Currently `handleDubAll` hardcodes `voiceId: 'JBFqnCBsd6RMkjVDRZzb'` (George). Add a voice picker (dropdown using `VOICE_OPTIONS` from types.ts) before the Dub All button so users can choose from the 14 available voices. This state goes into `const [dubVoiceId, setDubVoiceId] = useState('JBFqnCBsd6RMkjVDRZzb')`.
 
-**8. Add new style controls in the Style tab:**
+## Summary of All Changes
 
-New controls added after the existing ones:
-- **Font Family** — 4 buttons: Arial | Georgia | Impact | Courier
-- **Font Weight** — Bold toggle button
-- **Text Outline** — slider 0–4px + color picker
-- **BG Opacity** — slider 0–100% (replaces hardcoded `CC` hex suffix)
-
-## Tab Layout After Change
-
-```
-Upload → Transcribe → Translate → Style → Preview → Export
-```
-
-The Preview tab is the validation step before committing to export. Style changes made in Style tab are immediately visible in Preview since both use the same `captionStyle` state.
-
-## Summary
-
-| What | Change |
+| Area | What Changes |
 |---|---|
-| New "Preview" tab | Live video + canvas overlay, RAF draw loop, play/pause/seek |
-| `CaptionStyle` interface | +fontWeight, fontFamily, bgOpacity, outlineWidth, outlineColor |
-| `drawCaptionText()` | +alpha fade, outline/stroke, font family, font weight, bg opacity |
-| Burn audio | AudioContext merge fixes silent burned video |
-| Caption speed | Fade-in/fade-out actually implemented in both preview and burn |
-| Style controls | +font family, bold toggle, outline slider, bg opacity |
+| State | +`dubbedTrackUrl`, `isAssembling`, `dubVoiceId`, `dubbedAudioRef` |
+| `handleDubAll()` | After dubbing all segs, auto-calls `assembleDubbedTrack()` |
+| `assembleDubbedTrack()` | NEW — Web Audio API: decodes all segment blobs, copies at correct timestamps into one AudioBuffer, records to Blob, stores in `dubbedTrackUrl[lang]` |
+| Preview tab | If dubbed track exists for selected lang: mutes video, syncs hidden `<audio>` dubbed element with play/pause/seek |
+| `burnCaptionsOnVideo()` | If dubbed track exists for selected `burnLang`: uses dubbed audio element as audio source instead of original video audio |
+| Voice picker UI | Dropdown before Dub All button using `VOICE_OPTIONS` from types.ts |
+| Dubbed track card UI | Shows assembled track status, playback + MP3 download per language |
 
-Only `CaptionTranslator.tsx` is modified. No new edge functions or database changes needed.
+Only `CaptionTranslator.tsx` is modified. No database, no new edge functions, no new dependencies.
