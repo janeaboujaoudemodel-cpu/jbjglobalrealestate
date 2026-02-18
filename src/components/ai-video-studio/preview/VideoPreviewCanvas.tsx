@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Play, Pause, Square, SkipBack, SkipForward, Volume2, VolumeX, Maximize2, Upload, Mic, FileText, Bot, Film } from 'lucide-react';
+import { Clip } from '../types';
 
 interface VideoPreviewCanvasProps {
   clips: Array<{
@@ -11,6 +12,7 @@ interface VideoPreviewCanvasProps {
     startTime: number;
     duration: number;
   }>;
+  textClips?: Clip[];
   currentTime: number;
   isPlaying: boolean;
   duration: number;
@@ -29,6 +31,7 @@ const QUICK_ACTIONS = [
 
 export function VideoPreviewCanvas({
   clips,
+  textClips = [],
   currentTime,
   isPlaying,
   duration,
@@ -211,6 +214,49 @@ export function VideoPreviewCanvas({
                   </div>
                 </div>
               )}
+
+              {/* ── Active Text Overlays ── */}
+              {textClips.map(clip => {
+                if (!clip.text) return null;
+                const t = clip.text;
+                const anim = clip.effects.find(e => e.name === 'animation')?.settings?.animation ?? 'none';
+                const posClass =
+                  t.position === 'top'    ? 'top-4'    :
+                  t.position === 'bottom' ? 'bottom-4' :
+                  'top-1/2 -translate-y-1/2';
+                const animClass =
+                  anim === 'fade-in'    ? 'animate-fade-in'  :
+                  anim === 'slide-up'   ? 'animate-slide-up' :
+                  anim === 'zoom-in'    ? 'animate-zoom-in'  :
+                  '';
+                return (
+                  <div
+                    key={clip.id}
+                    className={`absolute left-0 right-0 flex justify-${t.textAlign === 'left' ? 'start' : t.textAlign === 'right' ? 'end' : 'center'} px-6 ${posClass} ${animClass}`}
+                  >
+                    <span
+                      style={{
+                        fontFamily: t.fontFamily,
+                        fontSize: `clamp(12px, ${t.fontSize * 0.055}vw, ${t.fontSize}px)`,
+                        fontWeight: t.fontWeight,
+                        color: t.color,
+                        background: t.backgroundColor ?? 'transparent',
+                        textAlign: t.textAlign,
+                        padding: t.backgroundColor ? '4px 12px' : '0',
+                        borderRadius: t.backgroundColor ? '6px' : '0',
+                        display: 'inline-block',
+                        maxWidth: '90%',
+                        wordBreak: 'break-word',
+                        lineHeight: 1.2,
+                        textShadow: !t.backgroundColor ? '0 1px 4px rgba(0,0,0,0.8)' : 'none',
+                        whiteSpace: 'pre-wrap',
+                      }}
+                    >
+                      {t.content}
+                    </span>
+                  </div>
+                );
+              })}
 
               {/* Time Overlay */}
               <div className="absolute top-3 right-3 bg-black/80 px-2 py-1 rounded text-xs font-mono text-white border border-white/10">

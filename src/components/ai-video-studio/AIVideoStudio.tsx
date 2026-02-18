@@ -10,6 +10,7 @@ import { VoiceoverRecorder } from './features/VoiceoverRecorder';
 import { BeautyFiltersPanel } from './features/BeautyFiltersPanel';
 import { VideoResizePanel } from './features/VideoResizePanel';
 import { CaptionTranslator } from './features/CaptionTranslator';
+import { TextOverlayPanel } from './features/TextOverlayPanel';
 import { SoundEffectsPanel } from './features/SoundEffectsPanel';
 import { OverlayEffectsPanel } from './features/OverlayEffectsPanel';
 import { AIEditorPanel } from './features/AIEditorPanel';
@@ -153,11 +154,49 @@ export function AIVideoStudio() {
 
   const selectedClips = getSelectedClips();
   const selectedClip = selectedClips.length === 1 ? selectedClips[0] : null;
-  const previewClips = project.tracks.flatMap(track =>
-    track.clips.map(clip => ({ id: clip.id, type: clip.type as 'video' | 'audio' | 'image', url: clip.source.url, startTime: clip.startTime, duration: clip.duration }))
-  );
+
+  // Build preview clips (video/image) — text clips rendered separately
+  const previewClips = project.tracks
+    .filter(t => t.type !== 'text')
+    .flatMap(track =>
+      track.clips.map(clip => ({ id: clip.id, type: clip.type as 'video' | 'audio' | 'image', url: clip.source.url, startTime: clip.startTime, duration: clip.duration }))
+    );
+
+  // Text clips that are active at current time
+  const activeTextClips = project.tracks
+    .filter(t => t.type === 'text')
+    .flatMap(t => t.clips)
+    .filter(c =>
+      timelineState.currentTime >= c.startTime &&
+      timelineState.currentTime < c.startTime + c.duration &&
+      c.text
+    );
 
   const timelineClips = project.tracks.flatMap(t => t.clips.map(c => ({ id: c.id, name: c.name, type: c.type, duration: c.duration, startTime: c.startTime })));
+
+  // Handler: add a text clip from the TextOverlayPanel
+  const handleAddTextClip = useCallback((clipData: {
+    text: import('./types').TextSettings;
+    startTime: number;
+    duration: number;
+    animation: string;
+  }) => {
+    const textTrack = project.tracks.find(t => t.type === 'text');
+    if (!textTrack) { toast.error('No text track found'); return; }
+    addClip(textTrack.id, {
+      trackId: textTrack.id,
+      type: 'text',
+      name: clipData.text.content.slice(0, 30) || 'Text',
+      startTime: clipData.startTime,
+      duration: clipData.duration,
+      source: { url: '', inPoint: 0, outPoint: clipData.duration, originalDuration: clipData.duration },
+      transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+      keyframes: [],
+      effects: [{ id: crypto.randomUUID(), type: 'overlay', name: 'animation', settings: { animation: clipData.animation } }],
+      text: clipData.text,
+    });
+  }, [project.tracks, addClip]);
+
 
   return (
     <AIVideoStudioLayout
@@ -177,6 +216,7 @@ export function AIVideoStudio() {
       centerPanel={
         <VideoPreviewCanvas
           clips={previewClips}
+          textClips={activeTextClips}
           currentTime={timelineState.currentTime}
           isPlaying={timelineState.isPlaying}
           duration={project.duration}
@@ -240,6 +280,12 @@ export function AIVideoStudio() {
           subtitles={subtitles}
           onSubtitlesUpdate={setSubtitles}
           onTranscribe={async () => []}
+        />
+      }
+      textPanel={
+        <TextOverlayPanel
+          onAddTextClip={handleAddTextClip}
+          currentTime={timelineState.currentTime}
         />
       }
       voicePanel={
