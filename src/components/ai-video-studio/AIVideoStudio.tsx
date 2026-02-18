@@ -13,6 +13,7 @@ import { CaptionTranslator } from './features/CaptionTranslator';
 import { TextOverlayPanel } from './features/TextOverlayPanel';
 import { SoundEffectsPanel } from './features/SoundEffectsPanel';
 import { OverlayEffectsPanel } from './features/OverlayEffectsPanel';
+import { TransitionsPanel } from './features/TransitionsPanel';
 import { AIEditorPanel } from './features/AIEditorPanel';
 import { MapEffectPanel } from './features/MapEffectPanel';
 import { ProjectIntegrationPanel } from './features/ProjectIntegrationPanel';
@@ -197,6 +198,25 @@ export function AIVideoStudio() {
     });
   }, [project.tracks, addClip]);
 
+  const handleAddTransition = useCallback((
+    trackId: string,
+    time: number,
+    def: { id: string; name: string; duration: number },
+  ) => {
+    addClip(trackId, {
+      trackId,
+      type: 'transition',
+      name: def.name,
+      startTime: time - def.duration / 2,
+      duration: def.duration,
+      source: { url: '', inPoint: 0, outPoint: def.duration, originalDuration: def.duration },
+      transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+      keyframes: [],
+      effects: [{ id: crypto.randomUUID(), type: 'transition', name: def.id, settings: { transitionId: def.id } }],
+    });
+    toast.success(`✨ "${def.name}" transition added`);
+  }, [addClip]);
+
 
   return (
     <AIVideoStudioLayout
@@ -245,6 +265,7 @@ export function AIVideoStudio() {
           onUpdateTrack={updateTrack}
           onAddTrack={addTrack}
           onDeleteTrack={deleteTrack}
+          onAddTransition={handleAddTransition}
         />
       }
       exportBar={
@@ -320,6 +341,7 @@ export function AIVideoStudio() {
         />
       }
       effectsPanel={<OverlayEffectsPanel />}
+      transitionsPanel={<TransitionsPanel />}
       resizePanel={
         <ScrollArea className="h-full">
           <VideoResizePanel />

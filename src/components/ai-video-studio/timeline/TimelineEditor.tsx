@@ -111,6 +111,7 @@ interface TimelineEditorProps {
   onUpdateTrack: (trackId: string, updates: Partial<Track>) => void;
   onAddTrack: (type: Track['type']) => void;
   onDeleteTrack: (trackId: string) => void;
+  onAddTransition?: (trackId: string, time: number, transition: { id: string; name: string; duration: number }) => void;
 }
 
 const PIXELS_PER_SECOND_BASE = 50;
@@ -135,6 +136,7 @@ export function TimelineEditor({
   onUpdateTrack,
   onAddTrack,
   onDeleteTrack,
+  onAddTransition,
 }: TimelineEditorProps) {
   const timelineRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -142,6 +144,7 @@ export function TimelineEditor({
   const [dragOffset, setDragOffset] = useState(0);
   const [collapsedTracks, setCollapsedTracks] = useState<Set<string>>(new Set());
   const [showCheatSheet, setShowCheatSheet] = useState(false);
+  const [hoveredGap, setHoveredGap] = useState<string | null>(null);
 
   // Open cheat-sheet on "?"
   useEffect(() => {
@@ -222,6 +225,22 @@ export function TimelineEditor({
     setIsDragging(false);
     setDragClipId(null);
   }, []);
+
+  const handleTransitionDrop = useCallback((
+    e: React.DragEvent,
+    trackId: string,
+    insertAtTime: number,
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setHoveredGap(null);
+    const raw = e.dataTransfer.getData('transition');
+    if (!raw || !onAddTransition) return;
+    try {
+      const data = JSON.parse(raw) as { id: string; name: string; duration: number };
+      onAddTransition(trackId, insertAtTime, data);
+    } catch { /* ignore */ }
+  }, [onAddTransition]);
 
   useEffect(() => {
     if (isDragging) {
@@ -441,32 +460,86 @@ export function TimelineEditor({
                   <div className="absolute inset-0 bg-slate-900/30" />
 
                   {/* Clips */}
-                  {!collapsedTracks.has(track.id) && track.clips.map((clip) => (
-                    <div
-                      key={clip.id}
-                      className={`absolute top-1 bottom-1 rounded cursor-pointer border-2 transition-colors ${getTrackColor(track.type)} ${
-                        selectedClipIds.includes(clip.id)
-                          ? 'border-gold ring-2 ring-gold/30'
-                          : 'border-transparent hover:border-white/30'
-                      }`}
-                      style={{
-                        left: clip.startTime * pixelsPerSecond,
-                        width: clip.duration * pixelsPerSecond,
-                      }}
-                      onMouseDown={(e) => !track.locked && handleClipMouseDown(e, clip)}
-                    >
-                      <div className="h-full px-1.5 flex items-center overflow-hidden">
-                        <span className="text-xs text-white/90 truncate">{clip.name}</span>
-                      </div>
+                  {!collapsedTracks.has(track.id) && track.clips.map((clip) => {
+                    const isTransition = clip.type === 'transition';
+                    return (
+                      <div
+                        key={clip.id}
+                        className={`absolute top-1 bottom-1 rounded cursor-pointer border-2 transition-colors ${
+                          isTransition
+                            ? 'bg-purple-600/80 border-purple-400 flex items-center justify-center'
+                            : getTrackColor(track.type)
+                        } ${
+                          selectedClipIds.includes(clip.id)
+                            ? 'border-gold ring-2 ring-gold/30'
+                            : isTransition
+                            ? 'border-purple-400 hover:border-purple-200'
+                            : 'border-transparent hover:border-white/30'
+                        }`}
+                        style={{
+                          left: clip.startTime * pixelsPerSecond,
+                          width: Math.max(clip.duration * pixelsPerSecond, 24),
+                          zIndex: isTransition ? 10 : 1,
+                        }}
+                        onMouseDown={(e) => !track.locked && handleClipMouseDown(e, clip)}
+                        title={isTransition ? `${clip.name} transition` : clip.name}
+                      >
+                        {isTransition ? (
+                          <span className="text-[10px] font-bold text-white text-center leading-tight px-0.5 truncate">
+                            ◇ {clip.name}
+                          </span>
+                        ) : (
+                          <div className="h-full px-1.5 flex items-center overflow-hidden">
+                            <span className="text-xs text-white/90 truncate">{clip.name}</span>
+                          </div>
+                        )}
 
-                      {selectedClipIds.includes(clip.id) && (
-                        <>
-                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/30 cursor-ew-resize hover:bg-gold" />
-                          <div className="absolute right-0 top-0 bottom-0 w-1 bg-white/30 cursor-ew-resize hover:bg-gold" />
-                        </>
-                      )}
-                    </div>
-                  ))}
+                        {selectedClipIds.includes(clip.id) && !isTransition && (
+                          <>
+                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/30 cursor-ew-resize hover:bg-gold" />
+                            <div className="absolute right-0 top-0 bottom-0 w-1 bg-white/30 cursor-ew-resize hover:bg-gold" />
+                          </>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  {/* Gap Drop Zones — shown between consecutive clips */}
+                  {!collapsedTracks.has(track.id) && onAddTransition && (() => {
+                    const sorted = [...track.clips].sort((a, b) => a.startTime - b.startTime);
+                    return sorted.slice(0, -1).map((clip, i) => {
+                      const nextClip = sorted[i + 1];
+                      const gapStart = clip.startTime + clip.duration;
+                      const gapEnd   = nextClip.startTime;
+                      const gapWidth = gapEnd - gapStart;
+                      if (gapEnd <= gapStart) return null;
+                      const gapKey = `${track.id}-gap-${i}`;
+                      const isHovered = hoveredGap === gapKey;
+                      const insertTime = gapStart + gapWidth / 2;
+                      return (
+                        <div
+                          key={gapKey}
+                          className={`absolute top-0 h-full z-20 rounded transition-all ${
+                            isHovered ? 'bg-purple-500/30 border border-purple-400' : 'bg-transparent border border-dashed border-transparent hover:border-purple-500/50'
+                          }`}
+                          style={{
+                            left: gapStart * pixelsPerSecond,
+                            width: Math.max(gapWidth * pixelsPerSecond, 8),
+                            minWidth: 8,
+                          }}
+                          onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; setHoveredGap(gapKey); }}
+                          onDragLeave={() => setHoveredGap(null)}
+                          onDrop={(e) => handleTransitionDrop(e, track.id, insertTime)}
+                        >
+                          {isHovered && (
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                              <span className="text-purple-300 text-[10px] font-bold">+ Drop</span>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    });
+                  })()}
 
                   {/* Playhead line through track */}
                   <div
