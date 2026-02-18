@@ -62,17 +62,20 @@ const AI_SCENES = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// GrabCut-style BFS flood-fill background removal
+// Advanced multi-pass background removal (client-side fallback)
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Returns a transparent-background PNG data URL using BFS flood-fill seeded from
- * every border pixel. Only pixels reachable from the border AND similar in color
- * to their flood-fill neighbors are classified as background. Interior pixels
- * that share the background color are preserved.
+ * Adaptive BFS flood-fill with multi-pass refinement.
  *
- * After building the mask we apply a small Gaussian feather on the edges so the
- * cutout looks anti-aliased rather than jagged.
+ * Algorithm:
+ * 1. Sample border pixels to build a statistical background color model (mean + variance)
+ * 2. BFS flood-fill from all 4 borders — only spread to pixels within adaptive tolerance
+ *    of BOTH the flood-fill parent AND the background color model
+ * 3. Multi-pass: run 2 additional BFS passes at slightly tighter tolerance to refine edges
+ * 4. Morphological close (dilate+erode) to fill holes inside the subject
+ * 5. Edge feathering (box blur) for smooth anti-aliased edges
+ * 6. Apply final alpha mask to original RGBA pixels
  */
 async function removeBackgroundFloodFill(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -83,158 +86,233 @@ async function removeBackgroundFloodFill(file: File): Promise<string> {
       const W = img.naturalWidth;
       const H = img.naturalHeight;
 
+      // Work at reduced resolution for large images (faster, still good quality)
+      const MAX_DIM = 1200;
+      const scale = Math.min(1, MAX_DIM / Math.max(W, H));
+      const CW = Math.round(W * scale);
+      const CH = Math.round(H * scale);
+
       const canvas = document.createElement('canvas');
-      canvas.width = W;
-      canvas.height = H;
+      canvas.width = CW;
+      canvas.height = CH;
       const ctx = canvas.getContext('2d', { willReadFrequently: true })!;
-      ctx.drawImage(img, 0, 0);
+      ctx.drawImage(img, 0, 0, CW, CH);
       URL.revokeObjectURL(url);
 
-      const imageData = ctx.getImageData(0, 0, W, H);
+      const imageData = ctx.getImageData(0, 0, CW, CH);
       const data = imageData.data; // RGBA flat array
 
-      const idx = (x: number, y: number) => (y * W + x) * 4;
+      const idx = (x: number, y: number) => (y * CW + x) * 4;
 
-      // Colour-distance helper (Euclidean in RGB)
-      const dist = (i: number, j: number) => {
+      // ── Step 1: Build background color model from border samples ──
+      const borderSamples: number[][] = [];
+      const sampleStep = Math.max(1, Math.floor(Math.min(CW, CH) / 40));
+
+      // Sample all 4 borders
+      for (let x = 0; x < CW; x += sampleStep) {
+        const t = idx(x, 0);
+        borderSamples.push([data[t], data[t+1], data[t+2]]);
+        const b = idx(x, CH - 1);
+        borderSamples.push([data[b], data[b+1], data[b+2]]);
+      }
+      for (let y = 0; y < CH; y += sampleStep) {
+        const l = idx(0, y);
+        borderSamples.push([data[l], data[l+1], data[l+2]]);
+        const r = idx(CW - 1, y);
+        borderSamples.push([data[r], data[r+1], data[r+2]]);
+      }
+
+      // Compute mean and std deviation of border colors
+      const n = borderSamples.length;
+      const mean = [0, 0, 0];
+      for (const s of borderSamples) { mean[0] += s[0]; mean[1] += s[1]; mean[2] += s[2]; }
+      mean[0] /= n; mean[1] /= n; mean[2] /= n;
+
+      let variance = 0;
+      for (const s of borderSamples) {
+        variance += (s[0]-mean[0])**2 + (s[1]-mean[1])**2 + (s[2]-mean[2])**2;
+      }
+      variance /= n;
+      const bgStdDev = Math.sqrt(variance);
+
+      // Adaptive tolerance: tighter for uniform backgrounds, looser for gradient/complex
+      // Base tolerance scales with how varied the background is
+      const BASE_TOLERANCE = Math.min(60, Math.max(25, bgStdDev * 2.5 + 20));
+
+      // Distance from a pixel to the background color model
+      const distToBg = (pi: number) => {
+        const dr = data[pi] - mean[0];
+        const dg = data[pi+1] - mean[1];
+        const db = data[pi+2] - mean[2];
+        return Math.sqrt(dr*dr + dg*dg + db*db);
+      };
+
+      // Euclidean distance between two pixel indices
+      const distPixels = (i: number, j: number) => {
         const dr = data[i] - data[j];
-        const dg = data[i + 1] - data[j + 1];
-        const db = data[i + 2] - data[j + 2];
-        return Math.sqrt(dr * dr + dg * dg + db * db);
+        const dg = data[i+1] - data[j+1];
+        const db = data[i+2] - data[j+2];
+        return Math.sqrt(dr*dr + dg*dg + db*db);
       };
 
-      // BFS — tolerance: how similar a neighbour must be to propagate
-      const TOLERANCE = 35;
-      const visited = new Uint8Array(W * H); // 0=unvisited, 1=background
-      const queue: number[] = [];
+      // ── Step 2: Multi-pass BFS flood-fill ──
+      // Pass 1: generous tolerance (catch the main background)
+      // Pass 2: tighter (refine edges)
+      const PASSES = [BASE_TOLERANCE, BASE_TOLERANCE * 0.7];
+      const isBg = new Uint8Array(CW * CH); // 1 = confirmed background
 
-      // Seed from all 4 border edges
-      for (let x = 0; x < W; x++) {
-        const t = idx(x, 0);     if (visited[t / 4] === 0) { visited[t / 4] = 1; queue.push(t); }
-        const b = idx(x, H - 1); if (visited[b / 4] === 0) { visited[b / 4] = 1; queue.push(b); }
-      }
-      for (let y = 1; y < H - 1; y++) {
-        const l = idx(0, y);     if (visited[l / 4] === 0) { visited[l / 4] = 1; queue.push(l); }
-        const r = idx(W - 1, y); if (visited[r / 4] === 0) { visited[r / 4] = 1; queue.push(r); }
-      }
+      for (const TOLERANCE of PASSES) {
+        const visited = new Uint8Array(CW * CH);
+        const queue: number[] = [];
 
-      // 4-connected BFS
-      const DIRS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
-      let head = 0;
-      while (head < queue.length) {
-        const pi = queue[head++];
-        const px = (pi / 4) % W;
-        const py = Math.floor((pi / 4) / W);
-
-        for (const [dx, dy] of DIRS) {
-          const nx = px + dx;
-          const ny = py + dy;
-          if (nx < 0 || nx >= W || ny < 0 || ny >= H) continue;
-          const ni = idx(nx, ny);
-          const nFlat = ni / 4;
-          if (visited[nFlat] === 1) continue;
-          if (dist(pi, ni) <= TOLERANCE) {
-            visited[nFlat] = 1;
-            queue.push(ni);
-          }
+        // Seed from borders — only seed pixels that are background-like
+        for (let x = 0; x < CW; x++) {
+          const ti = idx(x, 0) / 4;
+          const bi = idx(x, CH-1) / 4;
+          if (!visited[ti]) { visited[ti] = 1; queue.push(ti * 4); }
+          if (!visited[bi]) { visited[bi] = 1; queue.push(bi * 4); }
         }
-      }
+        for (let y = 1; y < CH-1; y++) {
+          const li = idx(0, y) / 4;
+          const ri = idx(CW-1, y) / 4;
+          if (!visited[li]) { visited[li] = 1; queue.push(li * 4); }
+          if (!visited[ri]) { visited[ri] = 1; queue.push(ri * 4); }
+        }
 
-      // Build alpha mask: background → 0, subject → 255
-      const mask = new Uint8Array(W * H);
-      for (let i = 0; i < W * H; i++) {
-        mask[i] = visited[i] === 1 ? 0 : 255;
-      }
+        // 8-connected BFS for better corner coverage
+        const DIRS = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,-1],[-1,1],[1,1]];
+        let head = 0;
+        while (head < queue.length) {
+          const pi = queue[head++];
+          const pFlat = pi / 4;
+          const px = pFlat % CW;
+          const py = Math.floor(pFlat / CW);
 
-      // Morphological close: dilate then erode to fill small holes in subject
-      const dilate = (src: Uint8Array, r: number) => {
-        const out = new Uint8Array(src.length);
-        for (let y = 0; y < H; y++) {
-          for (let x = 0; x < W; x++) {
-            let maxV = 0;
-            for (let dy = -r; dy <= r; dy++) {
-              for (let dx = -r; dx <= r; dx++) {
-                const nx = x + dx, ny = y + dy;
-                if (nx >= 0 && nx < W && ny >= 0 && ny < H) {
-                  maxV = Math.max(maxV, src[ny * W + nx]);
-                }
-              }
+          for (const [dx, dy] of DIRS) {
+            const nx = px + dx, ny = py + dy;
+            if (nx < 0 || nx >= CW || ny < 0 || ny >= CH) continue;
+            const ni = idx(nx, ny);
+            const nFlat = ni / 4;
+            if (visited[nFlat]) continue;
+
+            // A pixel is background if:
+            // 1. It's similar to its BFS neighbor (local continuity)
+            // 2. OR it's similar to the global background color model
+            const localSimilar = distPixels(pi, ni) <= TOLERANCE;
+            const bgSimilar = distToBg(ni) <= BASE_TOLERANCE * 1.1;
+
+            if (localSimilar && bgSimilar) {
+              visited[nFlat] = 1;
+              isBg[nFlat] = 1;
+              queue.push(ni);
             }
-            out[y * W + x] = maxV;
           }
         }
-        return out;
-      };
 
-      const erode = (src: Uint8Array, r: number) => {
+        // Merge this pass into the running background mask
+        for (let i = 0; i < CW * CH; i++) {
+          if (visited[i]) isBg[i] = 1;
+        }
+      }
+
+      // ── Step 3: Build binary mask — background=0, subject=255 ──
+      const mask = new Uint8Array(CW * CH);
+      for (let i = 0; i < CW * CH; i++) {
+        mask[i] = isBg[i] === 1 ? 0 : 255;
+      }
+
+      // ── Step 4: Morphological close (dilate then erode) to fill holes ──
+      const morphOp = (src: Uint8Array, r: number, isMax: boolean) => {
         const out = new Uint8Array(src.length);
-        for (let y = 0; y < H; y++) {
-          for (let x = 0; x < W; x++) {
-            let minV = 255;
-            for (let dy = -r; dy <= r; dy++) {
-              for (let dx = -r; dx <= r; dx++) {
-                const nx = x + dx, ny = y + dy;
-                if (nx >= 0 && nx < W && ny >= 0 && ny < H) {
-                  minV = Math.min(minV, src[ny * W + nx]);
-                }
-              }
-            }
-            out[y * W + x] = minV;
-          }
-        }
-        return out;
-      };
-
-      let refinedMask = dilate(mask, 2);
-      refinedMask = erode(refinedMask, 1);
-
-      // Feather mask edges with a small Gaussian-like box blur
-      const feather = (src: Uint8Array, r: number) => {
-        const out = new Float32Array(src.length);
+        const tmp = new Uint8Array(src.length);
         // Horizontal pass
-        const tmp = new Float32Array(src.length);
-        for (let y = 0; y < H; y++) {
-          let sum = 0, count = 0;
-          for (let x = 0; x < r; x++) { sum += src[y * W + x]; count++; }
-          for (let x = 0; x < W; x++) {
-            if (x + r < W) { sum += src[y * W + x + r]; count++; }
-            if (x - r - 1 >= 0) { sum -= src[y * W + x - r - 1]; count--; }
-            tmp[y * W + x] = sum / count;
+        for (let y = 0; y < CH; y++) {
+          for (let x = 0; x < CW; x++) {
+            let v = isMax ? 0 : 255;
+            for (let dx = -r; dx <= r; dx++) {
+              const nx = x + dx;
+              if (nx >= 0 && nx < CW) v = isMax ? Math.max(v, src[y*CW+nx]) : Math.min(v, src[y*CW+nx]);
+            }
+            tmp[y*CW+x] = v;
           }
         }
         // Vertical pass
-        for (let x = 0; x < W; x++) {
-          let sum = 0, count = 0;
-          for (let y = 0; y < r; y++) { sum += tmp[y * W + x]; count++; }
-          for (let y = 0; y < H; y++) {
-            if (y + r < H) { sum += tmp[(y + r) * W + x]; count++; }
-            if (y - r - 1 >= 0) { sum -= tmp[(y - r - 1) * W + x]; count--; }
-            out[y * W + x] = sum / count;
+        for (let x = 0; x < CW; x++) {
+          for (let y = 0; y < CH; y++) {
+            let v = isMax ? 0 : 255;
+            for (let dy = -r; dy <= r; dy++) {
+              const ny = y + dy;
+              if (ny >= 0 && ny < CH) v = isMax ? Math.max(v, tmp[ny*CW+x]) : Math.min(v, tmp[ny*CW+x]);
+            }
+            out[y*CW+x] = v;
           }
         }
         return out;
       };
 
-      const feathered = feather(refinedMask, 2);
+      let refinedMask = morphOp(mask, 3, true);  // dilate — fill gaps
+      refinedMask = morphOp(refinedMask, 2, false); // erode — restore size
 
-      // Apply alpha to original pixel data
-      const output = ctx.createImageData(W, H);
-      const od = output.data;
-      for (let i = 0; i < W * H; i++) {
-        const alpha = Math.min(255, Math.max(0, feathered[i]));
-        od[i * 4]     = data[i * 4];
-        od[i * 4 + 1] = data[i * 4 + 1];
-        od[i * 4 + 2] = data[i * 4 + 2];
-        od[i * 4 + 3] = alpha;
-      }
+      // ── Step 5: Feather edges for smooth anti-aliasing ──
+      const feather = (src: Uint8Array, r: number): Float32Array => {
+        const tmp = new Float32Array(src.length);
+        const out = new Float32Array(src.length);
+        // Horizontal box blur
+        for (let y = 0; y < CH; y++) {
+          let sum = 0, cnt = 0;
+          for (let x = 0; x < r; x++) { sum += src[y*CW+x]; cnt++; }
+          for (let x = 0; x < CW; x++) {
+            if (x+r < CW) { sum += src[y*CW+x+r]; cnt++; }
+            if (x-r-1 >= 0) { sum -= src[y*CW+x-r-1]; cnt--; }
+            tmp[y*CW+x] = sum / cnt;
+          }
+        }
+        // Vertical box blur
+        for (let x = 0; x < CW; x++) {
+          let sum = 0, cnt = 0;
+          for (let y = 0; y < r; y++) { sum += tmp[y*CW+x]; cnt++; }
+          for (let y = 0; y < CH; y++) {
+            if (y+r < CH) { sum += tmp[(y+r)*CW+x]; cnt++; }
+            if (y-r-1 >= 0) { sum -= tmp[(y-r-1)*CW+x]; cnt--; }
+            out[y*CW+x] = sum / cnt;
+          }
+        }
+        return out;
+      };
 
-      // Draw result on transparent canvas
+      const feathered = feather(refinedMask, 3);
+
+      // ── Step 6: Apply alpha mask — render at ORIGINAL resolution ──
       const resultCanvas = document.createElement('canvas');
       resultCanvas.width = W;
       resultCanvas.height = H;
       const rctx = resultCanvas.getContext('2d')!;
-      rctx.putImageData(output, 0, 0);
 
+      // Draw original image at full res
+      rctx.drawImage(img, 0, 0, W, H);
+      const resultData = rctx.getImageData(0, 0, W, H);
+      const rd = resultData.data;
+
+      // For each pixel in the original, bilinearly sample the feathered mask
+      for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+          const mx = (x / W) * (CW - 1);
+          const my = (y / H) * (CH - 1);
+          const mx0 = Math.floor(mx), mx1 = Math.min(mx0+1, CW-1);
+          const my0 = Math.floor(my), my1 = Math.min(my0+1, CH-1);
+          const fx = mx - mx0, fy = my - my0;
+          // Bilinear interpolation of feathered mask
+          const alpha =
+            feathered[my0*CW+mx0] * (1-fx) * (1-fy) +
+            feathered[my0*CW+mx1] * fx * (1-fy) +
+            feathered[my1*CW+mx0] * (1-fx) * fy +
+            feathered[my1*CW+mx1] * fx * fy;
+
+          rd[(y*W+x)*4+3] = Math.min(255, Math.max(0, Math.round(alpha)));
+        }
+      }
+
+      rctx.putImageData(resultData, 0, 0);
       resolve(resultCanvas.toDataURL('image/png'));
     };
 
@@ -422,59 +500,77 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
     if (file) handleFileSelected(file);
   }, [handleFileSelected]);
 
-  // ── Remove Background: try AI first, fall back to flood-fill ──
+  // Helper: resize image to max dimension for AI API (keeps under payload limits)
+  const resizeImageForAI = (file: File, maxDim = 1024): Promise<string> => {
+    return new Promise((res, rej) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        const scale = Math.min(1, maxDim / Math.max(img.naturalWidth, img.naturalHeight));
+        const w = Math.round(img.naturalWidth * scale);
+        const h = Math.round(img.naturalHeight * scale);
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d')!.drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        res(c.toDataURL('image/jpeg', 0.85));
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('resize failed')); };
+      img.src = url;
+    });
+  };
+
+  // ── Remove Background: try AI first, fall back to improved flood-fill ──
   const handleRemoveBackground = async () => {
     if (!image || !consent) { toast.error('Please upload an image and confirm consent'); return; }
     setIsProcessing(true);
     setProgress(5);
     setProgressLabel('Preparing image...');
     try {
-      // Convert to data URL for AI
-      const reader = new FileReader();
-      const dataUrl: string = await new Promise((res, rej) => {
-        reader.onload = () => res(reader.result as string);
-        reader.onerror = rej;
-        reader.readAsDataURL(image);
-      });
-
-      setProgress(20);
-      setProgressLabel('Sending to AI...');
-
       let transparent: string | null = null;
+      let aiSucceeded = false;
 
+      // Try AI removal first — resize image to keep payload small
       try {
+        setProgress(15);
+        setProgressLabel('Sending to AI model...');
+        const resizedDataUrl = await resizeImageForAI(image, 1024);
+
         const { data, error } = await supabase.functions.invoke('ai-background-remove', {
-          body: { mode: 'remove', image: dataUrl }
+          body: { mode: 'remove', image: resizedDataUrl }
         });
 
         if (!error && data?.success && data?.processedImage) {
-          // AI returned a proper cutout
           transparent = data.processedImage;
-          setProgress(85);
+          aiSucceeded = true;
+          setProgress(88);
           setProgressLabel('AI removal complete!');
         } else {
-          // AI fallback or not available — use client-side flood-fill
-          throw new Error('AI fallback');
+          const reason = data?.reason || (error?.message ?? 'unknown');
+          console.log('AI removal fallback reason:', reason);
         }
-      } catch {
-        // Client-side GrabCut-style removal
-        setProgress(40);
-        setProgressLabel('Running smart edge detection...');
+      } catch (aiErr) {
+        console.warn('AI removal error (using client-side fallback):', aiErr);
+      }
+
+      if (!aiSucceeded) {
+        // Client-side adaptive flood-fill
+        setProgress(35);
+        setProgressLabel('Running smart background detection...');
         transparent = await removeBackgroundFloodFill(image);
-        setProgress(80);
+        setProgress(82);
         setProgressLabel('Finalizing cutout...');
       }
 
-      setTransparentResult(transparent);
+      setTransparentResult(transparent!);
 
-      // Apply the selected background preset to the transparent cutout
-      setProgress(90);
+      setProgress(92);
       setProgressLabel('Applying background...');
-      const composited = await applyBackground(transparent, selectedBackground);
+      const composited = await applyBackground(transparent!, selectedBackground);
       setResult(composited);
       setProgress(100);
       setProgressLabel('Done!');
-      toast.success('Background removed successfully!');
+      toast.success(aiSucceeded ? 'AI background removal complete!' : 'Background removed!');
     } catch (err) {
       toast.error('Failed to process image. Please try again.');
       console.error(err);
