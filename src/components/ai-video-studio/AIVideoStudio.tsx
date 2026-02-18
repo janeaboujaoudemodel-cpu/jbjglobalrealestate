@@ -125,6 +125,10 @@ export function AIVideoStudio() {
     toast.success(`Added "${asset.name}" to timeline`);
   }, [project.tracks, addClip]);
 
+  const handleUpload = useCallback((files: FileList) => {
+    uploadMultipleFiles(files);
+  }, [uploadMultipleFiles]);
+
   const handleExportSingle = useCallback((preset: ExportPreset) => {
     setIsExporting(true);
     setRenderJob({ id: crypto.randomUUID(), projectId: project.id, status: 'queued', progress: 0, createdAt: new Date() });
@@ -170,19 +174,6 @@ export function AIVideoStudio() {
           onExport={handleExport}
         />
       }
-      leftPanel={
-        <MediaLibraryPanel
-          assets={assets}
-          stockAssets={stockAssets}
-          isUploading={isUploading}
-          uploadProgress={uploadProgress}
-          isLoadingStock={isLoadingStock}
-          onUpload={uploadMultipleFiles}
-          onLoadStock={loadStockLibrary}
-          onAddToTimeline={handleAddToTimeline}
-          onDeleteAsset={deleteAsset}
-        />
-      }
       centerPanel={
         <VideoPreviewCanvas
           clips={previewClips}
@@ -191,12 +182,7 @@ export function AIVideoStudio() {
           duration={project.duration}
           onTimeUpdate={setCurrentTime}
           onTogglePlayback={togglePlayback}
-        />
-      }
-      rightPanel={
-        <InspectorPanel
-          selectedClip={selectedClip}
-          onUpdateClip={(updates) => selectedClip && updateClip(selectedClip.id, updates)}
+          onUpload={handleUpload}
         />
       }
       timeline={
@@ -228,6 +214,25 @@ export function AIVideoStudio() {
           onExportSingle={handleExportSingle}
           onExportAll={handleExportAll}
           isExporting={isExporting}
+        />
+      }
+      mediaPanel={
+        <MediaLibraryPanel
+          assets={assets}
+          stockAssets={stockAssets}
+          isUploading={isUploading}
+          uploadProgress={uploadProgress}
+          isLoadingStock={isLoadingStock}
+          onUpload={uploadMultipleFiles}
+          onLoadStock={loadStockLibrary}
+          onAddToTimeline={handleAddToTimeline}
+          onDeleteAsset={deleteAsset}
+        />
+      }
+      inspectorPanel={
+        <InspectorPanel
+          selectedClip={selectedClip}
+          onUpdateClip={(updates) => selectedClip && updateClip(selectedClip.id, updates)}
         />
       }
       captionsPanel={
