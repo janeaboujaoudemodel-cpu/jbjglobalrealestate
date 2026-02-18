@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { PDFDocument, degrees } from 'pdf-lib';
 import { 
@@ -19,7 +19,8 @@ import {
   ChevronRight,
   ZoomIn,
   ZoomOut,
-  RotateCw
+  RotateCw,
+  Eye,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -54,11 +55,15 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [signatureMode, setSignatureMode] = useState(false);
   const [signatureData, setSignatureData] = useState<string | null>(null);
+  const [previewPage, setPreviewPage] = useState<PDFPage | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const signatureCanvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isDrawingRef = useRef(false);
+  const previewUrlRef = useRef<string | null>(null);
 
   // Handle PDF upload from input
   const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,10 +84,8 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
   const processFiles = async (files: File[]) => {
     setIsLoading(true);
     try {
-      // Snapshot the current counts BEFORE any async work to avoid stale closure issues
       const startingPdfCount = loadedPDFs.length;
       const newPdfs: LoadedPDF[] = [];
-      // Build pages fully outside setState — each page gets final pdfIndex and a stable UUID
       const allNewPages: Omit<PDFPage, 'pageNumber'>[] = [];
 
       for (const file of files) {
@@ -99,7 +102,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
           pageCount,
           data: new Uint8Array(arrayBuffer),
         };
-        const pdfIndex = startingPdfCount + newPdfs.length; // correct relative index
+        const pdfIndex = startingPdfCount + newPdfs.length;
         newPdfs.push(newPdf);
         for (let i = 0; i < pageCount; i++) {
           allNewPages.push({
@@ -115,7 +118,6 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
 
       if (newPdfs.length === 0) return;
 
-      // TWO independent setState calls — never nested — React Strict Mode safe
       setLoadedPDFs(prev => [...prev, ...newPdfs]);
       setPages(prev => {
         const base = prev.length;
@@ -165,6 +167,11 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
     const selectedCount = pages.filter(p => p.selected).length;
     if (selectedCount === 0) { toast.error('No pages selected'); return; }
     setPages(prev => prev.filter(p => !p.selected).map((p, i) => ({ ...p, pageNumber: i + 1 })));
+    // Clear preview if the previewed page was deleted
+    setPreviewPage(prev => {
+      if (prev && !pages.find(p => p.id === prev.id && !p.selected)) return null;
+      return prev;
+    });
     toast.success(`Deleted ${selectedCount} page(s)`);
   };
 
@@ -257,9 +264,54 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
     setSignatureData(null);
   };
 
+  // Auto-set preview to first page when pages first load
+  useEffect(() => {
+    if (pages.length > 0 && !previewPage) {
+      setPreviewPage({ ...pages[0] });
+    }
+  }, [pages.length]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Sync previewPage rotation/order changes in real-time
+  useEffect(() => {
+    if (!previewPage) return;
+    const updated = pages.find(p => p.id === previewPage.id);
+    if (updated && updated.rotation !== previewPage.rotation) {
+      setPreviewPage({ ...updated });
+    }
+  }, [pages]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Generate single-page blob URL for the preview iframe
+  useEffect(() => {
+    if (!previewPage) return;
+    let cancelled = false;
+    setPreviewLoading(true);
+    (async () => {
+      try {
+        const sourcePdf = loadedPDFs[previewPage.pdfIndex];
+        if (!sourcePdf) return;
+        const srcDoc = await PDFDocument.load(sourcePdf.data);
+        const singleDoc = await PDFDocument.create();
+        const [copied] = await singleDoc.copyPages(srcDoc, [previewPage.originalPageNumber - 1]);
+        if (previewPage.rotation !== 0) copied.setRotation(degrees(previewPage.rotation));
+        singleDoc.addPage(copied);
+        const bytes = await singleDoc.save();
+        if (cancelled) return;
+        const blob = new Blob([bytes as unknown as BlobPart], { type: 'application/pdf' });
+        if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
+        const url = URL.createObjectURL(blob);
+        previewUrlRef.current = url;
+        setPreviewUrl(url);
+      } catch (e) {
+        console.error('Preview error', e);
+      } finally {
+        if (!cancelled) setPreviewLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [previewPage]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const selectedCount = pages.filter(p => p.selected).length;
 
-  // Always render the file input so it works in embedded mode too
   const fileInput = (
     <input
       ref={fileInputRef}
@@ -281,10 +333,8 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
 
   return (
     <div style={{ background: "#0C0E14", minHeight: "100vh" }}>
-      {/* Always-rendered file input — works in both embedded and standalone mode */}
       {fileInput}
 
-      {/* Header - hidden when embedded in a suite tab */}
       {!embedded && (
         <header style={{ borderBottom: `1px solid ${indigo.border}`, background: indigo.bg }}>
           <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -340,9 +390,11 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
             <p className="text-xs mt-4" style={{ color: "rgba(255,255,255,0.25)" }}>Supports multiple PDFs · All processing is local in your browser</p>
           </div>
         ) : (
-          <div className="grid lg:grid-cols-4 gap-6">
-            {/* Page Thumbnails */}
-            <div className="lg:col-span-1">
+          /* ── Three-column layout: Pages | Actions | Live Preview ── */
+          <div className="grid lg:grid-cols-[240px_1fr_320px] gap-5">
+
+            {/* ── Column 1: Page Thumbnails ── */}
+            <div>
               <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(99,102,241,0.04)", border: `1px solid ${indigo.border}` }}>
                 <div className="p-3 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(99,102,241,0.12)` }}>
                   <h3 className="text-sm font-semibold text-white">Pages ({pages.length})</h3>
@@ -351,71 +403,89 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                     <Button size="sm" variant="ghost" onClick={deselectAllPages} className="h-7 text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>None</Button>
                   </div>
                 </div>
-                <ScrollArea className="h-[500px]">
+                <ScrollArea className="h-[600px]">
                   <div className="p-2 space-y-2">
-                    {pages.map((page, index) => (
-                      <div key={page.id}
-                        className="rounded-xl cursor-pointer transition-all overflow-hidden"
-                        style={{
-                          background: page.selected ? "rgba(99,102,241,0.18)" : "rgba(255,255,255,0.03)",
-                          border: `${page.selected ? "2px" : "1px"} solid ${page.selected ? "rgba(99,102,241,0.7)" : "rgba(255,255,255,0.07)"}`,
-                          boxShadow: page.selected ? "0 0 16px rgba(99,102,241,0.25)" : "none",
-                        }}
-                        onClick={() => togglePageSelection(page.id)}>
-                        <div className="p-3 flex items-center gap-2">
-                          {/* stopPropagation prevents checkbox click from double-toggling via parent div */}
-                          <Checkbox
-                            checked={page.selected}
-                            onClick={(e) => e.stopPropagation()}
-                            onCheckedChange={() => togglePageSelection(page.id)}
-                            className="data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500 shrink-0"
-                          />
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-1.5">
-                              <span className="text-xs font-bold px-1.5 py-0.5 rounded-md"
-                                style={{ background: page.selected ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.08)", color: page.selected ? "#A5B4FC" : "rgba(255,255,255,0.55)" }}>
-                                #{page.pageNumber}
-                              </span>
-                              <p className="text-sm font-medium text-white">Page {page.pageNumber}</p>
+                    {pages.map((page, index) => {
+                      const isPreviewing = previewPage?.id === page.id;
+                      return (
+                        <div key={page.id}
+                          className="rounded-xl cursor-pointer transition-all overflow-hidden"
+                          style={{
+                            background: isPreviewing
+                              ? "rgba(99,102,241,0.22)"
+                              : page.selected
+                                ? "rgba(99,102,241,0.14)"
+                                : "rgba(255,255,255,0.03)",
+                            border: `${(isPreviewing || page.selected) ? "2px" : "1px"} solid ${
+                              isPreviewing
+                                ? "rgba(99,102,241,0.85)"
+                                : page.selected
+                                  ? "rgba(99,102,241,0.55)"
+                                  : "rgba(255,255,255,0.07)"
+                            }`,
+                            boxShadow: isPreviewing ? "0 0 20px rgba(99,102,241,0.35)" : page.selected ? "0 0 16px rgba(99,102,241,0.2)" : "none",
+                          }}
+                          onClick={() => {
+                            togglePageSelection(page.id);
+                            setPreviewPage({ ...page });
+                          }}>
+                          <div className="p-3 flex items-center gap-2">
+                            <Checkbox
+                              checked={page.selected}
+                              onClick={(e) => e.stopPropagation()}
+                              onCheckedChange={() => togglePageSelection(page.id)}
+                              className="data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500 shrink-0"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-xs font-bold px-1.5 py-0.5 rounded-md"
+                                  style={{ background: (isPreviewing || page.selected) ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.08)", color: (isPreviewing || page.selected) ? "#A5B4FC" : "rgba(255,255,255,0.55)" }}>
+                                  #{page.pageNumber}
+                                </span>
+                                <p className="text-sm font-medium text-white">Page {page.pageNumber}</p>
+                                {isPreviewing && (
+                                  <Eye className="h-3 w-3 shrink-0" style={{ color: indigo.text }} />
+                                )}
+                              </div>
+                              <p className="text-[10px] truncate mt-0.5" style={{ color: "rgba(255,255,255,0.32)" }}>
+                                {loadedPDFs[page.pdfIndex]?.name || 'Unknown'}
+                              </p>
                             </div>
-                            <p className="text-[10px] truncate mt-0.5" style={{ color: "rgba(255,255,255,0.32)" }}>
-                              {loadedPDFs[page.pdfIndex]?.name || 'Unknown'}
-                            </p>
+                            <div className="flex gap-0.5 shrink-0">
+                              <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); movePageUp(index); }} disabled={index === 0}
+                                className="h-7 w-7 p-0 rounded-lg disabled:opacity-30"
+                                style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
+                                <ChevronLeft className="h-3.5 w-3.5 rotate-90" />
+                              </Button>
+                              <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); movePageDown(index); }} disabled={index === pages.length - 1}
+                                className="h-7 w-7 p-0 rounded-lg disabled:opacity-30"
+                                style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
+                                <ChevronRight className="h-3.5 w-3.5 rotate-90" />
+                              </Button>
+                              <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); rotatePage(page.id); }}
+                                className="h-7 w-7 p-0 rounded-lg"
+                                style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
+                                <RotateCw className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
                           </div>
-                          <div className="flex gap-0.5 shrink-0">
-                            <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); movePageUp(index); }} disabled={index === 0}
-                              className="h-7 w-7 p-0 rounded-lg disabled:opacity-30"
-                              style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
-                              <ChevronLeft className="h-3.5 w-3.5 rotate-90" />
-                            </Button>
-                            <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); movePageDown(index); }} disabled={index === pages.length - 1}
-                              className="h-7 w-7 p-0 rounded-lg disabled:opacity-30"
-                              style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
-                              <ChevronRight className="h-3.5 w-3.5 rotate-90" />
-                            </Button>
-                            <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); rotatePage(page.id); }}
-                              className="h-7 w-7 p-0 rounded-lg"
-                              style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
-                              <RotateCw className="h-3.5 w-3.5" />
-                            </Button>
-                          </div>
+                          {page.rotation !== 0 && (
+                            <div className="px-3 pb-2">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: "rgba(99,102,241,0.2)", color: indigo.text }}>
+                                ↻ {page.rotation}°
+                              </span>
+                            </div>
+                          )}
                         </div>
-                        {page.rotation !== 0 && (
-                          <div className="px-3 pb-2">
-                            <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: "rgba(99,102,241,0.2)", color: indigo.text }}>
-                              ↻ {page.rotation}°
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </ScrollArea>
               </div>
             </div>
 
-            {/* Actions Panel */}
-            <div className="lg:col-span-3 space-y-6">
+            {/* ── Column 2: Actions Panel ── */}
+            <div className="space-y-6">
               {/* Add more button */}
               <div className="flex justify-end">
                 <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} disabled={isLoading}
@@ -427,7 +497,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
               {/* Actions */}
               <div className="rounded-2xl p-6" style={{ background: "rgba(99,102,241,0.04)", border: `1px solid ${indigo.border}` }}>
                 <h3 className="text-lg font-semibold text-white mb-4">Actions</h3>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="grid sm:grid-cols-2 gap-3">
                   <Button variant="outline" onClick={exportSelectedPages} disabled={selectedCount === 0 || isSaving}
                     className="transition-all hover:text-white"
                     style={{ borderColor: indigo.border, color: "rgba(255,255,255,0.65)", background: "transparent" }}>
@@ -496,6 +566,81 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                 </p>
               </div>
             </div>
+
+            {/* ── Column 3: Live Page Preview ── */}
+            <div className="hidden lg:block">
+              <div className="sticky top-6 rounded-2xl overflow-hidden" style={{ background: "rgba(99,102,241,0.04)", border: `1px solid ${indigo.border}` }}>
+                {/* Preview header */}
+                <div className="p-3 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(99,102,241,0.12)` }}>
+                  <div className="flex items-center gap-2">
+                    <Eye className="h-4 w-4" style={{ color: indigo.text }} />
+                    <h3 className="text-sm font-semibold text-white">Live Preview</h3>
+                  </div>
+                  {previewPage && (
+                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "rgba(99,102,241,0.2)", color: indigo.text }}>
+                      Page {previewPage.pageNumber}
+                    </span>
+                  )}
+                </div>
+
+                {/* Preview body */}
+                <div className="p-3">
+                  {!previewPage ? (
+                    <div className="flex flex-col items-center justify-center h-80 gap-3"
+                      style={{ color: "rgba(255,255,255,0.25)" }}>
+                      <Eye className="h-10 w-10 opacity-30" />
+                      <p className="text-xs text-center">Click a page to preview it here</p>
+                    </div>
+                  ) : previewLoading ? (
+                    <div className="flex flex-col items-center justify-center h-80 gap-3">
+                      <Loader2 className="h-8 w-8 animate-spin" style={{ color: indigo.text }} />
+                      <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Rendering preview…</p>
+                    </div>
+                  ) : previewUrl ? (
+                    <div className="relative rounded-xl overflow-hidden" style={{ border: `1px solid rgba(99,102,241,0.15)`, background: "#fff" }}>
+                      <iframe
+                        key={previewUrl}
+                        src={`${previewUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+                        className="w-full"
+                        style={{ height: "420px", border: "none", display: "block" }}
+                        title={`Preview page ${previewPage.pageNumber}`}
+                      />
+                      {/* Rotation badge */}
+                      {previewPage.rotation !== 0 && (
+                        <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium"
+                          style={{ background: "rgba(99,102,241,0.85)", color: "#fff", backdropFilter: "blur(4px)" }}>
+                          <RotateCw className="h-3 w-3" />
+                          {previewPage.rotation}°
+                        </div>
+                      )}
+                    </div>
+                  ) : null}
+
+                  {/* Preview meta */}
+                  {previewPage && !previewLoading && (
+                    <div className="mt-3 space-y-1.5">
+                      <div className="flex items-center justify-between text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
+                        <span>Source file</span>
+                        <span className="truncate max-w-[160px] text-right" style={{ color: "rgba(255,255,255,0.65)" }}>
+                          {loadedPDFs[previewPage.pdfIndex]?.name || '—'}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
+                        <span>Original page</span>
+                        <span style={{ color: "rgba(255,255,255,0.65)" }}>#{previewPage.originalPageNumber}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
+                        <span>Rotation</span>
+                        <span style={{ color: previewPage.rotation !== 0 ? indigo.text : "rgba(255,255,255,0.65)" }}>
+                          {previewPage.rotation}°
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
           </div>
         )}
       </main>
