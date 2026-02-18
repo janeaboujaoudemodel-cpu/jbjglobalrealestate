@@ -74,6 +74,13 @@ const fmtTime = (s: number) => {
 
 // ─── Caption burn helper ────────────────────────────────────────────────────
 
+const RTL_LANGUAGES = new Set(['ar', 'he', 'fa', 'ur']);
+
+function isRTLText(text: string): boolean {
+  // Detect Arabic/Hebrew/Farsi/Urdu characters
+  return /[\u0600-\u06FF\u0750-\u077F\u0590-\u05FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(text);
+}
+
 function drawCaptionText(
   ctx: CanvasRenderingContext2D,
   text: string,
@@ -82,6 +89,13 @@ function drawCaptionText(
   h: number
 ) {
   const fs = style.fontSize;
+  const rtl = isRTLText(text);
+
+  // Set RTL direction for proper Arabic/Hebrew rendering
+  if (rtl) {
+    (ctx as any).direction = 'rtl';
+  }
+
   ctx.font = `bold ${fs}px Arial, sans-serif`;
   ctx.textAlign = 'center';
 
@@ -133,6 +147,11 @@ function drawCaptionText(
 
   ctx.shadowColor = 'transparent';
   ctx.shadowBlur = 0;
+
+  // Reset direction
+  if (rtl) {
+    (ctx as any).direction = 'ltr';
+  }
 }
 
 // ─── Main component ─────────────────────────────────────────────────────────
@@ -193,7 +212,27 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
     if (file) handleFileSelect(file);
   }, [handleFileSelect]);
 
-  // ─── Transcription (calls new video-transcribe edge function) ──────────
+  // ─── Transcription (chunked to bypass 6MB body limit) ────────────────
+
+  const CHUNK_BYTES = 3 * 1024 * 1024; // 3 MB binary → ~4 MB base64
+
+  const MIME_TO_EXT: Record<string, string> = {
+    'audio/mpeg': 'mp3', 'audio/mp3': 'mp3',
+    'audio/wav': 'wav', 'audio/x-wav': 'wav',
+    'audio/ogg': 'ogg', 'audio/webm': 'webm',
+    'audio/mp4': 'mp4', 'audio/m4a': 'm4a',
+    'video/mp4': 'mp4', 'video/webm': 'webm',
+    'video/quicktime': 'mov',
+  };
+
+  const toBase64 = (bytes: Uint8Array): string => {
+    let binary = '';
+    const chunkSize = 8192;
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+      binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+    }
+    return btoa(binary);
+  };
 
   const handleTranscribe = useCallback(async () => {
     if (!uploadedFile) { toast.error('Upload a media file first'); return; }
@@ -203,55 +242,58 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
     setTranscribeStage('Reading file…');
 
     try {
-      setTranscribeProgress(15);
       const arrayBuffer = await uploadedFile.arrayBuffer();
-
-      setTranscribeStage('Encoding audio…');
-      setTranscribeProgress(30);
-
-      // Efficient base64 encoding
-      const uint8Array = new Uint8Array(arrayBuffer);
-      let binary = '';
-      const chunkSize = 8192;
-      for (let i = 0; i < uint8Array.length; i += chunkSize) {
-        binary += String.fromCharCode(...uint8Array.subarray(i, i + chunkSize));
-      }
-      const base64Audio = btoa(binary);
-
-      setTranscribeStage('Transcribing with ElevenLabs Scribe…');
-      setTranscribeProgress(50);
-
       const mimeType = uploadedFile.type || 'audio/webm';
+      const totalChunks = Math.ceil(arrayBuffer.byteLength / CHUNK_BYTES);
 
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/video-transcribe`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({ audio: base64Audio, mimeType, language: spokenLanguage }),
+      setTranscribeProgress(15);
+
+      const allRawSegments: { startTime: number; endTime: number; text: string }[] = [];
+      let timeOffset = 0;
+      let lastProvider = '';
+
+      for (let c = 0; c < totalChunks; c++) {
+        const chunkLabel = totalChunks > 1 ? ` (chunk ${c + 1} of ${totalChunks})` : '';
+        setTranscribeStage(`Transcribing with ElevenLabs Scribe…${chunkLabel}`);
+        setTranscribeProgress(20 + Math.round((c / totalChunks) * 65));
+
+        const slice = arrayBuffer.slice(c * CHUNK_BYTES, (c + 1) * CHUNK_BYTES);
+        const base64Audio = toBase64(new Uint8Array(slice));
+
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/video-transcribe`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+              'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            },
+            body: JSON.stringify({ audio: base64Audio, mimeType, language: spokenLanguage, timeOffset }),
+          }
+        );
+
+        if (!response.ok) throw new Error(`Transcription failed (chunk ${c + 1}): ${response.statusText}`);
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+
+        const chunkSegs: { startTime: number; endTime: number; text: string }[] = data.segments || [];
+        if (chunkSegs.length > 0) {
+          allRawSegments.push(...chunkSegs);
+          timeOffset = chunkSegs[chunkSegs.length - 1].endTime;
         }
-      );
+        lastProvider = data.provider || lastProvider;
+      }
 
-      setTranscribeProgress(80);
       setTranscribeStage('Grouping segments…');
+      setTranscribeProgress(90);
 
-      if (!response.ok) throw new Error(`Transcription failed: ${response.statusText}`);
-
-      const data = await response.json();
-      if (data.error) throw new Error(data.error);
-
-      const rawSegments: { startTime: number; endTime: number; text: string }[] = data.segments || [];
-
-      if (rawSegments.length === 0) {
+      if (allRawSegments.length === 0) {
         toast.error('No speech detected. Try a different file or language.');
         return;
       }
 
-      const segments: SubtitleSegment[] = rawSegments.map(s => ({
+      const segments: SubtitleSegment[] = allRawSegments.map(s => ({
         id: crypto.randomUUID(),
         startTime: s.startTime,
         endTime: s.endTime,
@@ -259,12 +301,12 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
         language: spokenLanguage,
       }));
 
-      setTranscribeProvider(data.provider || '');
+      setTranscribeProvider(lastProvider);
       setTranscribeProgress(100);
       setTranscribeStage('Done!');
       onSubtitlesUpdate(segments);
       setActiveTab('translate');
-      toast.success(`✓ ${segments.length} segments transcribed${data.provider === 'elevenlabs' ? ' with real timestamps' : ' (estimated timecodes)'}`);
+      toast.success(`✓ ${segments.length} segments transcribed${lastProvider === 'elevenlabs' ? ' with real timestamps' : ' (estimated timecodes)'}`);
     } catch (error) {
       console.error('Transcription error:', error);
       toast.error(error instanceof Error ? error.message : 'Transcription failed');
