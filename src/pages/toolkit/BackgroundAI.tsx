@@ -161,17 +161,19 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div style={{ background: "#0D0B08", minHeight: "100vh" }}>
       {/* Header - hidden when embedded in a suite tab */}
       {!embedded && (
-        <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm sticky top-0 z-50">
+        <header style={{ borderBottom: "1px solid rgba(201,168,76,0.18)", background: "rgba(201,168,76,0.03)" }}>
           <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link to="/toolkit" className="flex items-center gap-2 hover:bg-zinc-800 transition-colors rounded-lg px-3 py-2 border border-zinc-700" style={{ color: '#a1a1aa' }}>
-              <ArrowLeft className="h-5 w-5" style={{ color: '#a1a1aa' }} />
-              <span style={{ color: '#a1a1aa' }}>Back to Toolkit</span>
+            <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2" style={{ color: "rgba(255,255,255,0.45)", border: "1px solid rgba(201,168,76,0.2)" }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#fff"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)"}>
+              <ArrowLeft className="h-5 w-5" />
+              <span>Back to Toolkit</span>
             </Link>
-            <div className="text-sm text-slate-500">
-              Projects are saved automatically
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", color: "#C9A84C" }}>
+              <Sparkles className="w-3 h-3" /> AI Powered
             </div>
           </div>
         </header>
@@ -180,13 +182,13 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
       <main className="max-w-4xl mx-auto px-4 py-12">
         {/* Title */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gold/20 text-gold mb-6">
-            <Wand2 className="h-8 w-8" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 0 32px rgba(201,168,76,0.15)" }}>
+            <Wand2 className="h-8 w-8 text-gold" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
             AI Background Remover
           </h1>
-          <p className="text-slate-400 max-w-xl mx-auto">
+          <p className="max-w-xl mx-auto text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
             Remove or replace backgrounds from photos instantly using AI. Perfect for property listings and marketing.
           </p>
         </div>
@@ -199,10 +201,10 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             { step: 3, label: 'Download', icon: Download },
           ].map(({ step, label }) => (
             <div key={step} className="text-center">
-              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-slate-800 text-gold font-bold mb-2">
+              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full font-bold mb-2" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", color: "#C9A84C" }}>
                 {step}
               </div>
-              <p className="text-sm text-slate-400">{label}</p>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>{label}</p>
             </div>
           ))}
         </div>
@@ -212,23 +214,16 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
           <div
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleFileDrop}
-            className="border-2 border-dashed border-slate-700 rounded-xl p-12 text-center hover:border-gold/50 transition-colors cursor-pointer"
+            className="rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 group"
+            style={{ border: "2px dashed rgba(201,168,76,0.3)", background: "rgba(201,168,76,0.02)" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.6)"; (e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.05)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.3)"; (e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.02)"; }}
             onClick={() => document.getElementById('file-input')?.click()}
           >
-            <Upload className="h-12 w-12 text-slate-500 mx-auto mb-4" />
-            <p className="text-white font-medium mb-2">
-              Drop your photo here
-            </p>
-            <p className="text-sm text-slate-500">
-              JPG, PNG, WebP (max 10MB)
-            </p>
-            <input
-              id="file-input"
-              type="file"
-              accept="image/*"
-              onChange={handleFileSelect}
-              className="hidden"
-            />
+            <Upload className="h-12 w-12 mx-auto mb-4 transition-colors" style={{ color: "rgba(201,168,76,0.5)" }} />
+            <p className="text-white font-medium mb-2">Drop your photo here</p>
+            <p className="text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>JPG, PNG, WebP (max 10MB)</p>
+            <input id="file-input" type="file" accept="image/*" onChange={handleFileSelect} className="hidden" />
           </div>
         )}
 
@@ -238,43 +233,27 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             {/* Before/After Preview */}
             <div className="grid md:grid-cols-2 gap-6">
               {/* Original */}
-              <div className="rounded-xl bg-slate-900 border border-slate-700 overflow-hidden">
-                <div className="p-3 border-b border-slate-700 flex items-center justify-between">
-                  <span className="text-sm text-slate-400">Original</span>
-                  <Button 
-                    variant="secondary" 
-                    size="sm"
-                    onClick={resetAll}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+              <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.2)" }}>
+                <div className="p-3 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(201,168,76,0.12)" }}>
+                  <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.6)" }}>Original</span>
+                  <Button variant="secondary" size="sm" onClick={resetAll}><Trash2 className="h-4 w-4" /></Button>
                 </div>
                 <div className="aspect-square bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImNoZWNrZXJib2FyZCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cmVjdCB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiMyMDIwMjAiLz48cmVjdCB4PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMzAzMDMwIi8+PHJlY3QgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzMwMzAzMCIvPjxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMjAyMDIwIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2NoZWNrZXJib2FyZCkiLz48L3N2Zz4=')] flex items-center justify-center">
-                  {imagePreview && (
-                    <img 
-                      src={imagePreview} 
-                      alt="Original" 
-                      className="max-w-full max-h-full object-contain"
-                    />
-                  )}
+                  {imagePreview && <img src={imagePreview} alt="Original" className="max-w-full max-h-full object-contain" />}
                 </div>
               </div>
 
               {/* Result */}
-              <div className="rounded-xl bg-slate-900 border border-slate-700 overflow-hidden">
-                <div className="p-3 border-b border-slate-700">
-                  <span className="text-sm text-slate-400">Result</span>
+              <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.2)" }}>
+                <div className="p-3" style={{ borderBottom: "1px solid rgba(201,168,76,0.12)" }}>
+                  <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.6)" }}>Result</span>
                 </div>
                 <div className="aspect-square bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImNoZWNrZXJib2FyZCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cmVjdCB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiMyMDIwMjAiLz48cmVjdCB4PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMzAzMDMwIi8+PHJlY3QgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzMwMzAzMCIvPjxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMjAyMDIwIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2NoZWNrZXJib2FyZCkiLz48L3N2Zz4=')] flex items-center justify-center">
                   {result ? (
-                    <img 
-                      src={result} 
-                      alt="Result" 
-                      className="max-w-full max-h-full object-contain"
-                    />
+                    <img src={result} alt="Result" className="max-w-full max-h-full object-contain" />
                   ) : (
-                    <div className="text-center text-slate-500">
-                      <ImageIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                    <div className="text-center" style={{ color: "rgba(255,255,255,0.3)" }}>
+                      <ImageIcon className="h-12 w-12 mx-auto mb-2 opacity-40" />
                       <p className="text-sm">Click "Remove Background" to process</p>
                     </div>
                   )}
@@ -283,30 +262,31 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             </div>
 
             {/* Background Options */}
-            <div className="rounded-xl bg-slate-900 border border-slate-700 p-4">
-              <h3 className="text-white font-medium mb-4 flex items-center gap-2">
+            <div className="rounded-2xl p-5" style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.18)" }}>
+              <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
                 <Palette className="h-5 w-5 text-gold" />
                 New Background
               </h3>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2">
                 {BACKGROUND_PRESETS.map((preset) => (
                   <button
                     key={preset.id}
                     onClick={() => setSelectedBackground(preset.id)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
-                      selectedBackground === preset.id
-                        ? 'bg-gold/20 text-gold border border-gold/50'
-                        : 'bg-slate-800 text-slate-300 border border-transparent hover:border-slate-600'
-                    }`}
+                    className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all"
+                    style={{
+                      background: selectedBackground === preset.id ? "rgba(201,168,76,0.18)" : "rgba(255,255,255,0.04)",
+                      border: `1px solid ${selectedBackground === preset.id ? "rgba(201,168,76,0.55)" : "rgba(255,255,255,0.08)"}`,
+                      color: selectedBackground === preset.id ? "#C9A84C" : "rgba(255,255,255,0.55)",
+                    }}
                   >
                     {preset.color === 'transparent' ? (
-                      <span className="w-5 h-5 rounded border border-slate-600 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI4IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNjY2MiLz48cmVjdCB4PSI0IiB5PSI0IiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjY2NjIi8+PC9zdmc+')]"></span>
+                      <span className="w-5 h-5 rounded border" style={{ borderColor: "rgba(255,255,255,0.2)", backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI4IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNjY2MiLz48cmVjdCB4PSI0IiB5PSI0IiB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjY2NjIi8+PC9zdmc+')" }}></span>
                     ) : preset.color === 'blur' ? (
                       <Sparkles className="w-5 h-5" />
                     ) : preset.color === 'gradient' ? (
                       <span className="w-5 h-5 rounded bg-gradient-to-br from-gold to-amber-600"></span>
                     ) : (
-                      <span className="w-5 h-5 rounded border border-slate-600" style={{ backgroundColor: preset.color }}></span>
+                      <span className="w-5 h-5 rounded border border-white/10" style={{ backgroundColor: preset.color }}></span>
                     )}
                     {preset.label}
                   </button>
@@ -315,65 +295,36 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             </div>
 
             {/* Consent Checkbox */}
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-900/50 border border-slate-700">
-              <Checkbox
-                id="consent"
-                checked={consent}
-                onCheckedChange={(checked) => setConsent(checked === true)}
-                className="mt-0.5"
-              />
-              <label htmlFor="consent" className="text-sm text-slate-400 cursor-pointer">
+            <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.15)" }}>
+              <Checkbox id="consent" checked={consent} onCheckedChange={(checked) => setConsent(checked === true)} className="mt-0.5" />
+              <label htmlFor="consent" className="text-sm cursor-pointer" style={{ color: "rgba(255,255,255,0.5)" }}>
                 I own this content or have permission to edit it. Projects are saved automatically.
               </label>
             </div>
 
             {/* Process Button */}
             {!result && (
-              <Button
-                variant="primary"
-                size="lg"
-                className="w-full"
-                onClick={handleProcess}
-                disabled={!consent || isProcessing}
-              >
+              <Button variant="primary" size="lg" className="w-full" onClick={handleProcess} disabled={!consent || isProcessing}>
                 {isProcessing ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                    Processing... {Math.round(progress)}%
-                  </>
+                  <><Loader2 className="h-5 w-5 animate-spin mr-2" />Processing... {Math.round(progress)}%</>
                 ) : (
-                  <>
-                    <Wand2 className="h-5 w-5 mr-2" />
-                    Remove Background
-                  </>
+                  <><Wand2 className="h-5 w-5 mr-2" />Remove Background</>
                 )}
               </Button>
             )}
 
-            {/* Progress */}
-            {isProcessing && (
-              <Progress value={progress} className="h-2" />
-            )}
+            {isProcessing && <Progress value={progress} className="h-2" />}
 
             {/* Download Section */}
             {result && (
-              <div className="rounded-xl bg-slate-900 border border-gold/30 p-6">
-                <h3 className="text-white font-medium mb-4 flex items-center gap-2">
+              <div className="rounded-2xl p-6" style={{ background: "rgba(12,10,8,0.9)", border: "1px solid rgba(201,168,76,0.3)" }}>
+                <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
                   <Download className="h-5 w-5 text-gold" />
                   Download Your Image
                 </h3>
                 <div className="flex flex-wrap gap-3">
-                  <Button variant="primary" onClick={handleDownload}>
-                    <Download className="h-4 w-4 mr-2" />
-                    Download PNG
-                  </Button>
-                  <Button variant="secondary" onClick={() => {
-                    setResult(null);
-                    setProgress(0);
-                  }}>
-                    <Wand2 className="h-4 w-4 mr-2" />
-                    Process Again
-                  </Button>
+                  <Button variant="primary" onClick={handleDownload}><Download className="h-4 w-4 mr-2" />Download PNG</Button>
+                  <Button variant="secondary" onClick={() => { setResult(null); setProgress(0); }}><Wand2 className="h-4 w-4 mr-2" />Process Again</Button>
                 </div>
               </div>
             )}
@@ -381,9 +332,9 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
         )}
 
         {/* Fair Usage Note */}
-        <div className="mt-12 p-4 rounded-xl bg-slate-900/50 border border-slate-700 text-center">
-          <p className="text-sm text-slate-500">
-            Free tool with fair-usage limits. Max 10MB per image, 10 images per hour.
+        <div className="mt-12 p-4 rounded-xl text-center" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.12)" }}>
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
+            Free tool with fair-usage limits · Max 10MB per image · 10 images per hour
           </p>
         </div>
       </main>

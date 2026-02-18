@@ -38,10 +38,10 @@ export default function PDFSuite() {
         description="PDF editing, merging, splitting, scanning, signing, and brochure generation tools."
       />
 
-      <div className="min-h-screen" style={{ background: "#0A0A0B" }}>
+      <div className="min-h-screen" style={{ background: "#0D0B08" }}>
 
         {/* ── Suite Header ── */}
-        <div style={{ background: "linear-gradient(180deg, rgba(232,168,74,0.06) 0%, transparent 100%)", borderBottom: "1px solid rgba(201,168,76,0.15)" }}>
+        <div style={{ background: "linear-gradient(180deg, rgba(232,168,74,0.1) 0%, rgba(232,168,74,0.02) 100%)", borderBottom: "1px solid rgba(201,168,76,0.25)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
             {/* Back link */}
             <Link to="/toolkit" className="inline-flex items-center gap-1.5 text-xs mb-4 transition-colors group"
@@ -55,13 +55,18 @@ export default function PDFSuite() {
             {/* Title row */}
             <div className="flex items-center gap-4 mb-5">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0"
-                style={{ background: "rgba(232,168,74,0.1)", border: "1px solid rgba(232,168,74,0.3)", boxShadow: "0 0 28px rgba(232,168,74,0.1)" }}>
+                style={{ background: "rgba(232,168,74,0.12)", border: "1px solid rgba(232,168,74,0.35)", boxShadow: "0 0 40px rgba(232,168,74,0.2)" }}>
                 <FileText className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: "#E8A84A" }} />
               </div>
               <div>
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-tight">
-                  PDF & Documents <span className="text-gold">Suite</span>
-                </h1>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-tight">
+                    PDF & Documents <span className="text-gold">Suite</span>
+                  </h1>
+                  <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold" style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.35)", color: "#C9A84C" }}>
+                    Smart PDF
+                  </span>
+                </div>
                 <p className="text-xs sm:text-sm mt-0.5 hidden sm:block" style={{ color: "rgba(255,255,255,0.4)" }}>
                   Edit · Scan · Sign · Generate professional PDFs
                 </p>
@@ -78,7 +83,10 @@ export default function PDFSuite() {
               <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 border-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
                 {tabs.map(({ value, label, shortLabel, icon: Icon }) => (
                   <TabsTrigger key={value} value={value}
-                    className="relative flex items-center gap-1.5 px-3 sm:px-5 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none"
+                    className="relative flex items-center gap-1.5 px-3 sm:px-5 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none
+                      data-[state=inactive]:text-white/40 data-[state=active]:text-gold
+                      after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:transition-all
+                      data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-gold"
                   >
                     <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                     <span className="sm:hidden">{shortLabel}</span>
@@ -90,7 +98,7 @@ export default function PDFSuite() {
           </div>
 
           {/* Tab Content */}
-          <div style={{ background: "#0A0A0B" }}>
+          <div style={{ background: "#0D0B08" }}>
             <TabsContent value="editor" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}><PDFEditor embedded /></Suspense>
             </TabsContent>
