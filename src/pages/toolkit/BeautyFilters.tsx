@@ -40,7 +40,9 @@ interface Adjustments {
   vignette: number;
 }
 
-export default function BeautyFilters() {
+interface BeautyFiltersProps { embedded?: boolean; }
+
+export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
@@ -158,18 +160,20 @@ export default function BeautyFilters() {
 
   return (
     <div className="min-h-screen bg-black">
-      {/* Header */}
-      <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/toolkit" className="flex items-center gap-2 hover:bg-zinc-800 transition-colors rounded-lg px-3 py-2 border border-zinc-700" style={{ color: '#a1a1aa' }}>
-            <ArrowLeft className="h-5 w-5" style={{ color: '#a1a1aa' }} />
-            <span style={{ color: '#a1a1aa' }}>Back to Toolkit</span>
-          </Link>
-          <div className="text-sm text-slate-500">
-            Projects are saved automatically
+      {/* Header - hidden when embedded in a suite tab */}
+      {!embedded && (
+        <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm sticky top-0 z-50">
+          <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <Link to="/toolkit" className="flex items-center gap-2 hover:bg-zinc-800 transition-colors rounded-lg px-3 py-2 border border-zinc-700" style={{ color: '#a1a1aa' }}>
+              <ArrowLeft className="h-5 w-5" style={{ color: '#a1a1aa' }} />
+              <span style={{ color: '#a1a1aa' }}>Back to Toolkit</span>
+            </Link>
+            <div className="text-sm text-slate-500">
+              Projects are saved automatically
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       <main className="max-w-6xl mx-auto px-4 py-12">
         {/* Title */}

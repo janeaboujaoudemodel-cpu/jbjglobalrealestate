@@ -112,19 +112,19 @@ export default function PhotoSuite() {
           <div className="flex-1 overflow-auto">
             <TabsContent value="background" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}>
-                <BackgroundAI />
+                <BackgroundAI embedded />
               </Suspense>
             </TabsContent>
 
             <TabsContent value="beauty" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}>
-                <BeautyFilters />
+                <BeautyFilters embedded />
               </Suspense>
             </TabsContent>
 
             <TabsContent value="resize" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}>
-                <ImageResize />
+                <ImageResize embedded />
               </Suspense>
             </TabsContent>
 
