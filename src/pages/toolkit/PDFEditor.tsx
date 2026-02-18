@@ -423,9 +423,9 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
               <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(99,102,241,0.04)", border: `1px solid ${indigo.border}` }}>
                 <div className="p-3 flex items-center justify-between" style={{ borderBottom: `1px solid rgba(99,102,241,0.12)` }}>
                   <h3 className="text-sm font-semibold text-white">Pages ({pages.length})</h3>
-                  <div className="flex gap-1">
-                    <Button size="sm" variant="ghost" onClick={selectAllPages} className="h-7 text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>All</Button>
-                    <Button size="sm" variant="ghost" onClick={deselectAllPages} className="h-7 text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>None</Button>
+                <div className="flex gap-1">
+                    <Button size="sm" variant="ghost" onClick={selectAllPages} className="h-7 text-xs text-white" style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)" }}>All</Button>
+                    <Button size="sm" variant="ghost" onClick={deselectAllPages} className="h-7 text-xs text-white" style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)" }}>None</Button>
                   </div>
                 </div>
                 <ScrollArea className="h-[600px]">

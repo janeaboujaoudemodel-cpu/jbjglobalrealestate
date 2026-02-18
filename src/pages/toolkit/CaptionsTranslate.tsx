@@ -366,9 +366,9 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
                     <h3 className="font-semibold text-white flex items-center gap-2">
                       <CheckCircle2 className="h-5 w-5 text-green-400" />Transcription Complete
                     </h3>
-                    <Button variant="secondary" size="sm" onClick={() => downloadSRT(transcription, 'en')}>
-                      <Download className="h-4 w-4 mr-1" />Download SRT
-                    </Button>
+              <button onClick={() => downloadSRT(transcription, 'en')} className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all" style={{ background: "rgba(201,168,76,0.3)", border: "1px solid rgba(201,168,76,0.7)" }}>
+                        <Download className="h-4 w-4 mr-1" />Download SRT
+                      </button>
                   </div>
                   <div className="p-4">
                     <pre className="text-sm whitespace-pre-wrap font-mono" style={{ color: "rgba(255,255,255,0.7)" }}>{transcription}</pre>
@@ -424,9 +424,9 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
                         <div key={lang} className="rounded-2xl overflow-hidden" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.18)" }}>
                           <div className="flex items-center justify-between p-4" style={{ borderBottom: "1px solid rgba(201,168,76,0.12)" }}>
                             <span className="text-white font-semibold">{langInfo?.name}</span>
-                            <Button variant="secondary" size="sm" onClick={() => downloadSRT(content, lang)}>
+                            <button onClick={() => downloadSRT(content, lang)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-all" style={{ background: "rgba(201,168,76,0.3)", border: "1px solid rgba(201,168,76,0.7)" }}>
                               <Download className="h-4 w-4 mr-1" />SRT
-                            </Button>
+                            </button>
                           </div>
                           <div className="p-4" dir={langInfo?.rtl ? 'rtl' : 'ltr'}>
                             <pre className="text-sm whitespace-pre-wrap font-mono" style={{ color: "rgba(255,255,255,0.65)" }}>{content}</pre>

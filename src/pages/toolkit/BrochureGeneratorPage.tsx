@@ -541,7 +541,7 @@ export default function BrochureGeneratorPage() {
                   {heroCard.logoUrl ? (
                     <div className="flex items-center gap-2">
                       <img src={heroCard.logoUrl} alt="Logo" className="h-10 w-10 object-contain rounded" style={{ background: "rgba(255,255,255,0.1)" }} />
-                      <button onClick={() => setHeroCard(p => ({ ...p, logoUrl: '' }))} className="text-xs px-2 py-1 rounded" style={{ color: "#f87171", background: "rgba(239,68,68,0.1)" }}>
+                      <button onClick={() => setHeroCard(p => ({ ...p, logoUrl: '' }))} className="text-xs px-2 py-1 rounded font-semibold" style={{ color: "#fff", background: "rgba(239,68,68,0.55)", border: "1px solid rgba(239,68,68,0.7)" }}>
                         <X className="w-3 h-3" />
                       </button>
                     </div>

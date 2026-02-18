@@ -1052,8 +1052,8 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               {activeTab === 'remove' && transparentResult && (
                 <button
                   onClick={resetResult}
-                  className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-medium transition-all"
-                  style={{ background: "rgba(255,255,255,0.06)", border: `1px solid ${C.border}`, color: "rgba(255,255,255,0.7)" }}
+                  className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-medium transition-all text-white"
+                  style={{ background: "rgba(255,255,255,0.14)", border: `1px solid rgba(255,255,255,0.35)` }}
                 >
                   <RefreshCw className="h-4 w-4" /> Re-process
                 </button>

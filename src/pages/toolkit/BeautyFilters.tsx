@@ -599,9 +599,9 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={look.id} onClick={() => { setSelectedMakeup(look.id); simulateAI(look.name); }}
                             className="flex flex-col items-center gap-1 p-2 rounded-xl text-xs transition-all"
                             style={{
-                              background: selectedMakeup === look.id ? "rgba(99,102,241,0.2)" : "rgba(255,255,255,0.04)",
-                              border: `1px solid ${selectedMakeup === look.id ? "rgba(99,102,241,0.6)" : "rgba(255,255,255,0.08)"}`,
-                              color: selectedMakeup === look.id ? I.text : I.muted,
+                              background: selectedMakeup === look.id ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.12)",
+                              border: `1px solid ${selectedMakeup === look.id ? "rgba(99,102,241,0.75)" : "rgba(255,255,255,0.25)"}`,
+                              color: selectedMakeup === look.id ? I.text : "rgba(255,255,255,0.9)",
                             }}>
                             <span className="text-lg">{look.emoji}</span>
                             <span>{look.name}</span>
@@ -703,9 +703,9 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={style.id} onClick={() => { setSelectedHairStyle(style.id); simulateAI(`${style.name} hair style`); }}
                             className="flex flex-col items-center gap-1 p-2.5 rounded-xl text-xs transition-all"
                             style={{
-                              background: selectedHairStyle === style.id ? "rgba(99,102,241,0.2)" : "rgba(255,255,255,0.04)",
-                              border: `1px solid ${selectedHairStyle === style.id ? "rgba(99,102,241,0.6)" : "rgba(255,255,255,0.08)"}`,
-                              color: selectedHairStyle === style.id ? I.text : I.muted,
+                              background: selectedHairStyle === style.id ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.12)",
+                              border: `1px solid ${selectedHairStyle === style.id ? "rgba(99,102,241,0.75)" : "rgba(255,255,255,0.25)"}`,
+                              color: selectedHairStyle === style.id ? I.text : "rgba(255,255,255,0.9)",
                             }}>
                             <span className="text-xl">{style.emoji}</span>
                             <span>{style.name}</span>
@@ -725,9 +725,9 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={hc.id} onClick={() => { setSelectedHairColor(hc.id); simulateAI(`${hc.name} hair color`); }}
                             className="flex flex-col items-center gap-1.5 p-2 rounded-xl text-xs transition-all"
                             style={{
-                              background: selectedHairColor === hc.id ? "rgba(99,102,241,0.15)" : "rgba(255,255,255,0.04)",
-                              border: `2px solid ${selectedHairColor === hc.id ? I.accent : "rgba(255,255,255,0.08)"}`,
-                              color: selectedHairColor === hc.id ? I.text : I.muted,
+                              background: selectedHairColor === hc.id ? "rgba(99,102,241,0.30)" : "rgba(255,255,255,0.12)",
+                              border: `2px solid ${selectedHairColor === hc.id ? I.accent : "rgba(255,255,255,0.28)"}`,
+                              color: selectedHairColor === hc.id ? I.text : "rgba(255,255,255,0.9)",
                               minWidth: '52px',
                             }}>
                             <div className="w-6 h-6 rounded-full" style={{ background: hc.color, border: "1px solid rgba(255,255,255,0.2)" }} />
@@ -889,14 +889,14 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
 
                     {/* Batch Actions */}
                     <div className="grid sm:grid-cols-3 gap-3">
-                      {[
+                        {[
                         { label: 'Apply Preset to All', icon: Filter, action: () => { toast.success(`Applied "${selectedPreset}" preset to all ${gridPhotos.length} photos`); } },
                         { label: 'Schedule Posts', icon: Star, action: () => { toast.success('Schedule feature — connect Instagram API to enable'); } },
                         { label: 'Export Grid', icon: Download, action: () => { toast.success(`Exporting ${gridPhotos.length} photos…`); } },
                       ].map(({ label, icon: Icon, action }) => (
                         <button key={label} onClick={action}
-                          className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all"
-                          style={{ background: "rgba(99,102,241,0.08)", border: `1px solid ${I.border}`, color: I.text }}>
+                          className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all text-white"
+                          style={{ background: "rgba(99,102,241,0.22)", border: `1px solid rgba(99,102,241,0.5)` }}>
                           <Icon className="h-4 w-4" />{label}
                         </button>
                       ))}
