@@ -104,13 +104,13 @@ export default function PDFSuite() {
           <div className="flex-1 overflow-auto">
             <TabsContent value="editor" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}>
-                <PDFEditor />
+                <PDFEditor embedded />
               </Suspense>
             </TabsContent>
 
             <TabsContent value="photo-pdf" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}>
-                <PdfFromPhotos />
+                <PdfFromPhotos embedded />
               </Suspense>
             </TabsContent>
 

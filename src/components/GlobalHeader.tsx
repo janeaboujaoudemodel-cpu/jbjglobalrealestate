@@ -1575,14 +1575,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               />
               {/* Panel with real boundaries so pointer leave fires */}
               <div 
-                className="absolute right-6 z-[9998] pointer-events-auto"
-                style={{ top: 'calc(100% + 4px)' }}
+                className="absolute right-0 z-[9998] pointer-events-auto"
+                style={{ top: 'calc(100% + 4px)', maxWidth: 'calc(100vw - 32px)' }}
                 onPointerEnter={handleMegaMenuPanelEnter}
                 onPointerLeave={handleMegaMenuLeave}
               >
                 {activeMegaMenu === 'search' && (
                   <div
-                    className="w-[620px] rounded-xl overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] relative"
+                    className="w-[620px] max-w-[calc(100vw-32px)] rounded-xl overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] relative"
                     style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
                   >
                     {/* Gold border overlay */}

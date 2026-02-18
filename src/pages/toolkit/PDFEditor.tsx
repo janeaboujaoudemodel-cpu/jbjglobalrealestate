@@ -43,7 +43,9 @@ interface LoadedPDF {
   data: Uint8Array;
 }
 
-export default function PDFEditor() {
+interface PDFEditorProps { embedded?: boolean; }
+
+export default function PDFEditor({ embedded = false }: PDFEditorProps) {
   const [loadedPDFs, setLoadedPDFs] = useState<LoadedPDF[]>([]);
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -312,35 +314,37 @@ export default function PDFEditor() {
 
   return (
     <div className="min-h-screen bg-black">
-      {/* Header */}
-      <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/toolkit" className="flex items-center gap-2 hover:bg-zinc-800 transition-colors rounded-lg px-3 py-2 border border-zinc-700" style={{ color: '#a1a1aa' }}>
-            <ArrowLeft className="h-5 w-5" style={{ color: '#a1a1aa' }} />
-            <span style={{ color: '#a1a1aa' }}>Back to Toolkit</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isLoading}
-              className="border-slate-700 text-slate-300"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add PDF
-            </Button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".pdf"
-              multiple
-              onChange={handleFileUpload}
-              className="hidden"
-            />
+      {/* Header - hidden when embedded in a suite tab */}
+      {!embedded && (
+        <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <Link to="/toolkit" className="flex items-center gap-2 hover:bg-zinc-800 transition-colors rounded-lg px-3 py-2 border border-zinc-700" style={{ color: '#a1a1aa' }}>
+              <ArrowLeft className="h-5 w-5" style={{ color: '#a1a1aa' }} />
+              <span style={{ color: '#a1a1aa' }}>Back to Toolkit</span>
+            </Link>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isLoading}
+                className="border-slate-700 text-slate-300"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add PDF
+              </Button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf"
+                multiple
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Title */}

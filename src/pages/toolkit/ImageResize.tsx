@@ -55,7 +55,9 @@ interface ProcessedImage {
   dataUrl: string;
 }
 
-export default function ImageResize() {
+interface ImageResizeProps { embedded?: boolean; }
+
+export default function ImageResize({ embedded = false }: ImageResizeProps) {
   const [images, setImages] = useState<UploadedImage[]>([]);
   const [selectedPresets, setSelectedPresets] = useState<string[]>(["instagram_square"]);
   const [fitMode, setFitMode] = useState<FitMode>("crop");
@@ -311,25 +313,27 @@ export default function ImageResize() {
 
   return (
     <div className="min-h-screen bg-black">
-      {/* Header */}
-      <div className="bg-gradient-to-b from-black to-[#0a0a0a] border-b border-gold/20">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-gold/10 rounded-lg border border-gold/30">
-              <ImageIcon className="h-6 w-6 text-gold" />
+      {/* Header - hidden when embedded in a suite tab */}
+      {!embedded && (
+        <div className="bg-gradient-to-b from-black to-[#0a0a0a] border-b border-gold/20">
+          <div className="container mx-auto px-4 py-8">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-gold/10 rounded-lg border border-gold/30">
+                <ImageIcon className="h-6 w-6 text-gold" />
+              </div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white">
+                Image Resizer + Social Sizes Pack
+              </h1>
+              <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                Free
+              </Badge>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white">
-              Image Resizer + Social Sizes Pack
-            </h1>
-            <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-              Free
-            </Badge>
+            <p className="text-champagne/70">
+              Resize images for Instagram, YouTube, LinkedIn and more. All processing happens in your browser.
+            </p>
           </div>
-          <p className="text-champagne/70">
-            Resize images for Instagram, YouTube, LinkedIn and more. All processing happens in your browser.
-          </p>
         </div>
-      </div>
+      )}
 
       <div className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-3 gap-6">
