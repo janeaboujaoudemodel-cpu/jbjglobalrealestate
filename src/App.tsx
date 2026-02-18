@@ -682,6 +682,9 @@ const App = () => (
                 {/* Scan & Sign Toolkit */}
                 <Route path="/toolkit/scan-sign" element={<ScanSignToolkitPage />} />
 
+                {/* E-Sign toolkit alias */}
+                <Route path="/toolkit/e-sign" element={<Navigate to="/e-signature" replace />} />
+
                 {/* AI Stamp Generator */}
                 <Route path="/toolkit/stamp-generator" element={<StampGeneratorLanding />} />
                 <Route path="/toolkit/stamp-generator/projects" element={<StampProjectsDashboard />} />

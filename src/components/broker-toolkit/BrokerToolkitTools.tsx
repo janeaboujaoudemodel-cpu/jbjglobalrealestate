@@ -243,6 +243,14 @@ const TOOLS: ToolItem[] = [
     tier: "free",
     category: "documents",
   },
+  {
+    name: "JBJ E-Sign",
+    description: "DocuSign-style signing with audit trail",
+    icon: Unlock,
+    link: "/e-signature",
+    tier: "free",
+    category: "documents",
+  },
 
   // Design & media
   {

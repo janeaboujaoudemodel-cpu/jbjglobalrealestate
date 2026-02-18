@@ -5,8 +5,8 @@ import {
 import {
   MegaMenuIconLink,
   MegaMenuShell,
-  MegaMenuSectionTitle,
 } from '@/components/header/mega-menu-primitives';
+
 
 interface MegaMenuToolkitProps {
   onClose: () => void;
@@ -54,7 +54,14 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
       icon: Sparkles,
       title: 'AI Stamp Generator',
       href: '/toolkit/stamp-generator',
-      description: 'AI company seals · SVG/PNG/PDF export',
+      description: 'AI company seals · bilingual · SVG/PNG/PDF',
+      isNew: true,
+    },
+    {
+      icon: FileText,
+      title: 'JBJ E-Sign',
+      href: '/e-signature',
+      description: 'Contract signing · multi-signer · audit trail',
       isNew: true,
     },
     {
@@ -99,9 +106,13 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
         </div>
 
         {/* New AI Tools Row */}
-        <div className="mt-3">
-          <MegaMenuSectionTitle icon={Stamp} title="New AI Tools" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="mt-3 border-t border-gold/20 pt-3">
+          <div className="flex items-center gap-2 mb-2">
+            <Stamp className="w-4 h-4 text-gold" />
+            <span className="text-xs font-bold text-gold tracking-[0.18em] uppercase">New AI Tools</span>
+            <span className="text-[10px] bg-gold/20 text-gold border border-gold/30 rounded-full px-2 py-0.5 font-semibold">3 NEW</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {standaloneTools.map((tool) => (
               <MegaMenuIconLink
                 key={tool.href}
@@ -123,7 +134,7 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
                 FREE PROFESSIONAL TOOLS
               </p>
               <p className="text-white text-sm font-semibold mt-1">
-                5 suites + AI Stamp Generator + Scan & Sign — all free
+                5 suites + AI Stamp Generator + E-Sign + Scan & Sign — all free
               </p>
             </div>
             <a 
