@@ -1,159 +1,225 @@
 
-# AI Document Generator — Smart Per-Type Forms & Intelligent Edge Function
+# CaptionTranslator Full Rebuild — Real Transcription, Fixed SRT, 28 Languages, Voice Dubbing & Caption Burn
 
-## The Core Problem
+## Current State Analysis
 
-The AI Document Generator shows the **same 5 fields** regardless of whether you pick "SMS/WhatsApp", "Property Listing", or "Follow-up Email". This means:
-- An SMS form asks for the same info as a legal contract
-- The AI gets very little context, producing nearly identical generic output
-- Fields like "Recipient Name" and "Subject" make no sense for a Property Listing
-- The edge function expects `propertyDetails` / `partyDetails` but the frontend sends `details` / `recipientName` — there is a **field name mismatch** causing the AI to get the wrong data
+### What is broken today:
+1. **Transcription uses a single `voice-to-text` function** that was built for short voice messages (seconds). It converts the whole file to base64, sends it as one blob, and gets back a flat text string — no timestamps, no segments. The AI then guesses timecodes by counting words at 0.4s each.
+2. **No real word-level timestamps** — all timings are fake. SRT files are therefore incorrect.
+3. **"Burn Captions" button says "Coming Soon"** — non-functional.
+4. **Voice dubbing** calls `voice-studio-tts` which requires a user JWT token — but the function falls through with public anon key in some flows, causing 401 errors.
+5. **Language grid shows 28 flags** but translation is AI-text based (fine); the dubbing per-segment only dubs one segment at a time, not all at once.
+6. **No full-video dubbing** — only per-segment audio preview; no ability to export a dubbed video.
+7. **The `voice-to-text` edge function** uses Scribe only with hardcoded `eng`/`ara` ISO codes — 26 other languages map to `eng` fallback.
 
-## What Each Type Should Have
+### What exists and works:
+- `auto-translate` edge function — uses Gemini with cache, works for all 28 languages.
+- `voice-studio-tts` edge function — ElevenLabs TTS, requires JWT auth, returns MP3 binary.
+- `ELEVENLABS_API_KEY` secret is configured.
+- `LOVABLE_API_KEY` is configured (used for Gemini fallback).
+- SRT/VTT export functions are structurally correct (just use fake timestamps).
+- Style panel, drag-to-upload, multi-format support, and the overall tab layout all work.
 
-| Document Type | Unique Fields |
-|---|---|
-| **Property Listing** | Property name, Location/Area, Size (sqft), Bedrooms, Price (AED), Key features (amenities), Developer, Handover date, ROI/yield %, View type |
-| **Follow-up Email** | Client name, Previous meeting date, Properties discussed, Next steps, Urgency level |
-| **Introduction Email** | Client name, Nationality, Budget, Property type interest, How they found us |
-| **SMS / WhatsApp** | Client name, Message purpose, Character limit (160 / 320), Include link? |
-| **Social Media Post** | Platform (Instagram/LinkedIn/Twitter/TikTok), Property highlights, Hashtag style, Include emojis? |
-| **Newsletter** | Topic, Target segment, Key properties to feature, Market stat to include |
-| **Brochure Text** | Property name, Developer, USPs, Lifestyle description, Location advantages |
-| **Client Report** | Client name, Budget range, Requirements, Properties viewed, Recommendation |
+---
 
-## Plan
+## Architecture of the Rebuild
 
-### File 1: `src/components/ai-tools/premium/AIDocumentGeneratorPremium.tsx`
+### Strategy: Chunked transcription + ElevenLabs Scribe for timestamps
 
-**Complete redesign** with dynamic form rendering:
-
-1. **Type Selector Row** — Keep the 4-button quick-pick grid (top row) + dropdown for more. When you click a type, the form below **morphs** to show only the fields relevant to that type.
-
-2. **Per-type field configs** — A `DOCUMENT_TYPE_CONFIGS` map that defines each type's unique fields:
-
-```typescript
-const DOCUMENT_TYPE_CONFIGS = {
-  "listing": {
-    label: "Property Listing",
-    description: "A compelling MLS-style listing description for portals (Bayut, PropertyFinder, Dubizzle)",
-    fields: [
-      { key: "propertyName", label: "Property / Project Name *", type: "input", placeholder: "e.g. Emaar Beachfront - Marina Vista" },
-      { key: "location", label: "Area / Location *", type: "input", placeholder: "e.g. Dubai Marina, JBR" },
-      { key: "propertyType", label: "Property Type", type: "select", options: ["Apartment","Villa","Townhouse","Penthouse","Office","Retail","Plot"] },
-      { key: "bedrooms", label: "Bedrooms", type: "select", options: ["Studio","1BR","2BR","3BR","4BR","5BR+","Commercial"] },
-      { key: "size", label: "Size (sqft)", type: "input", placeholder: "e.g. 1,250 sqft" },
-      { key: "price", label: "Price (AED)", type: "input", placeholder: "e.g. AED 2,500,000" },
-      { key: "developer", label: "Developer", type: "input", placeholder: "e.g. Emaar Properties" },
-      { key: "handover", label: "Handover / Completion", type: "input", placeholder: "e.g. Q4 2026" },
-      { key: "amenities", label: "Key Amenities & Features", type: "textarea", placeholder: "Pool, gym, sea view, smart home..." },
-      { key: "roi", label: "Expected ROI / Rental Yield", type: "input", placeholder: "e.g. 6-8% annual" },
-    ]
-  },
-  "email-follow-up": {
-    label: "Follow-up Email",
-    description: "A professional follow-up after a meeting or property viewing",
-    fields: [
-      { key: "clientName", label: "Client Name *", type: "input", placeholder: "e.g. Mr. Ahmed Al Mansoori" },
-      { key: "meetingDate", label: "Previous Meeting / Viewing Date", type: "input", placeholder: "e.g. 15 February 2026" },
-      { key: "propertiesDiscussed", label: "Properties / Projects Discussed", type: "textarea", placeholder: "e.g. Sobha Hartland 2 villas, Dubai Hills townhouses" },
-      { key: "clientBudget", label: "Client Budget", type: "input", placeholder: "e.g. AED 3–5M" },
-      { key: "nextSteps", label: "Proposed Next Steps", type: "input", placeholder: "e.g. Schedule site visit, send EOI form" },
-      { key: "urgency", label: "Urgency", type: "select", options: ["Low – exploring options","Medium – actively looking","High – ready to buy this month"] },
-    ]
-  },
-  "email-introduction": { ... },
-  "sms": { ... },
-  ...
+ElevenLabs Scribe (`scribe_v2`) returns **word-level timestamps** in the response:
+```json
+{
+  "text": "Welcome to Dubai",
+  "words": [
+    { "text": "Welcome", "start": 0.2, "end": 0.6 },
+    { "text": "to", "start": 0.7, "end": 0.85 },
+    { "text": "Dubai", "start": 0.9, "end": 1.4 }
+  ]
 }
 ```
 
-3. **Dynamic field state** — Instead of a fixed `formData` object, use a `Record<string, string>` that resets when type changes:
+We can group words into segments (every 10–15 words) and use **real start/end times** from the word timestamps. This gives us **accurate SRT files**.
 
+For large files (>10MB), the frontend will chunk the audio and send multiple requests. The edge function will assemble results.
+
+### New edge function: `video-transcribe`
+
+A new dedicated edge function specifically for video/audio transcription that:
+- Accepts the full audio/video as base64 (or chunked parts)
+- Calls ElevenLabs Scribe with the correct ISO 639-3 language code for all 28 languages
+- Returns structured `segments[]` with real `startTime`, `endTime`, and `text` — not a flat string
+- Falls back to Gemini with a structured JSON output prompt if ElevenLabs fails
+
+### Caption Burn-on-Video
+
+Caption burning will use the **Canvas API** in the browser:
+- Upload a video file
+- Draw each frame to a canvas at the correct timestamp
+- Overlay the caption text from the matching subtitle segment  
+- Use `MediaRecorder` to capture the canvas stream as a new video blob
+- Allow download of the burned video
+
+This is fully client-side — no edge function needed. It works for files up to ~500MB, but will be capped at a practical limit with a warning.
+
+### Voice Dubbing (Full Track)
+
+The existing per-segment dubbing is kept. We add a new "Dub All" button that:
+- Takes all translated segments for a selected language
+- Calls `voice-studio-tts` for each segment sequentially
+- Assembles the audio URLs for each segment
+- Provides a timeline preview / playback
+
+---
+
+## Files to Change
+
+### 1. NEW: `supabase/functions/video-transcribe/index.ts`
+
+A new edge function with:
+- **No JWT requirement** (public anon key is enough — transcription is a media processing task)
+- Accepts `{ audio: string (base64), mimeType: string, language?: string }`
+- Returns `{ segments: [{ startTime, endTime, text }], fullText: string }`
+- Uses ElevenLabs Scribe with correct ISO 639-3 codes for all 28 supported languages
+- Groups word-level timestamps into subtitle segments (~10 words each, max 7 seconds)
+- Gemini fallback returns a JSON array of segments with estimated timestamps
+
+**ISO 639-3 mapping for all 28 languages:**
 ```typescript
-const [typeFields, setTypeFields] = useState<Record<string, string>>({});
-const handleTypeChange = (newType: string) => {
-  setFormData(prev => ({ ...prev, documentType: newType }));
-  setTypeFields({}); // reset fields on type switch
+const LANG_TO_ISO639_3: Record<string, string> = {
+  en: 'eng', ar: 'ara', hi: 'hin', ur: 'urd', zh: 'zho',
+  es: 'spa', fr: 'fra', de: 'deu', ru: 'rus', pt: 'por',
+  ja: 'jpn', ko: 'kor', it: 'ita', nl: 'nld', tr: 'tur',
+  fa: 'fas', he: 'heb', pl: 'pol', th: 'tha', vi: 'vie',
+  id: 'ind', ms: 'msa', tl: 'tgl', bn: 'ben', ta: 'tam',
+  te: 'tel', ml: 'mal', sw: 'swa',
 };
 ```
 
-4. **Dynamic form renderer** — A `renderField()` helper renders `input`, `textarea`, `select`, or `radio` based on the field config.
+### 2. REBUILT: `src/components/ai-video-studio/features/CaptionTranslator.tsx`
 
-5. **Tone selector** — Keep as-is, but hide it for SMS (character limit matters more than tone there).
+Complete rebuild of the component:
 
-6. **Submit payload** — Sends the full `typeFields` record alongside `documentType` and `tone` to the edge function:
+**Tab structure stays the same** (Upload → Transcribe → Translate → Style → Export), but each tab is significantly improved.
 
+**Upload tab changes:**
+- Show video preview thumbnail if a video file is uploaded
+- Show audio waveform hint if audio
+- Language detection selector: "What language is spoken in the video?" (28-language dropdown)
+- Size warning upgraded: files >50MB get a chunking warning
+
+**Transcribe tab changes:**
+- Uses the new `video-transcribe` edge function
+- Progress is tracked through real stages: Reading → Encoding → Transcribing → Grouping Segments
+- Segments show **real timestamps** from ElevenLabs Scribe word data
+- Segments are editable inline (already exists, keep as-is)
+- Segment timestamps are also editable (new: click time badge to adjust)
+- "Auto-detect language" toggle
+
+**Translate tab changes:**
+- Full 28-language grid with emoji flags (all visible, scroll inside panel)
+- "Translate All" button (already exists)
+- New: "Dub All" button per language — calls voice-studio-tts for all segments and previews merged audio
+- Translation and dubbing state per language, not per segment (cleaner UX)
+
+**Style tab — improved captions:**
+- Live preview of caption style on a dark dummy video frame (16:9 box showing the text in chosen style/position/color)
+
+**Export tab — Burn Captions:**
+- Replace "Coming Soon" with a real working burn-captions flow using Canvas API
+- File selector to pick the video to burn on (separate from the transcription source)
+- Progress bar during canvas-based burning
+- Download button for the burned MP4
+
+**State management:**
 ```typescript
-const result = await invokeTool("ai-document-generator", {
-  documentType: formData.documentType,
-  tone: formData.tone,
-  typeFields,  // all per-type specific fields
-});
+const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+const [spokenLanguage, setSpokenLanguage] = useState('en'); // for transcription
+const [segments, setSegments] = useState<SubtitleSegment[]>([]); // real timestamps
+const [isBurning, setIsBurning] = useState(false);
+const [burnProgress, setBurnProgress] = useState(0);
+const [burnVideoFile, setBurnVideoFile] = useState<File | null>(null);
 ```
 
-### File 2: `supabase/functions/ai-document-generator/index.ts`
-
-**Rewrite the prompt system** to be per-document-type aware:
-
-1. **Fix the field name mismatch** — Accept `typeFields` from frontend (plus backwards-compat with old `details`)
-
-2. **Per-type system prompts** — Each type gets a specialized system role and output instructions:
-
+**Caption burn implementation (Canvas API):**
 ```typescript
-const TYPE_PROMPTS: Record<string, { systemRole: string; outputInstructions: string; maxChars?: number }> = {
-  "listing": {
-    systemRole: "You are an expert Dubai real estate copywriter specializing in property portal listings (Bayut, PropertyFinder). Write compelling, SEO-optimized listings.",
-    outputInstructions: "Write a 300-400 word property listing with: headline, 3-sentence overview, bullet-point features, location section, payment plan mention, call to action."
-  },
-  "email-follow-up": {
-    systemRole: "You are a top real estate agent writing a professional client follow-up email after a property viewing.",
-    outputInstructions: "Write a warm, professional follow-up email with: subject line, greeting, recap of viewing, 2-3 property highlights, next steps CTA, signature from JBJ Global."
-  },
-  "sms": {
-    systemRole: "You write concise, high-converting real estate WhatsApp/SMS messages.",
-    outputInstructions: "Write 2 versions: (1) under 160 characters for SMS, (2) under 320 characters for WhatsApp. Both must include a call to action. No filler words."
-  },
-  "social-media": {
-    systemRole: "You are a real estate social media content creator for Dubai luxury properties.",
-    outputInstructions: "Write the post body, 3 hashtag sets (general/location/luxury), a caption hook for the first line, and a CTA. Adapt style for the specified platform."
-  },
-  ...
+const burnCaptionsOnVideo = async (videoFile: File, segs: SubtitleSegment[], style: CaptionStyle, langCode?: string) => {
+  setIsBurning(true);
+  const video = document.createElement('video');
+  video.src = URL.createObjectURL(videoFile);
+  // Wait for metadata
+  await new Promise(res => { video.onloadedmetadata = res; });
+  
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d')!;
+  
+  const stream = canvas.captureStream(30);
+  const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+  const chunks: Blob[] = [];
+  recorder.ondataavailable = e => chunks.push(e.data);
+  
+  recorder.start(100);
+  video.play();
+  
+  // Draw loop
+  const drawFrame = () => {
+    ctx.drawImage(video, 0, 0);
+    const currentTime = video.currentTime;
+    const activeSeg = segs.find(s => currentTime >= s.startTime && currentTime <= s.endTime);
+    if (activeSeg) {
+      const text = langCode && activeSeg.translations?.[langCode] ? activeSeg.translations[langCode] : activeSeg.text;
+      // Draw text overlay with style settings
+      drawCaptionText(ctx, text, style, canvas.width, canvas.height);
+    }
+    setBurnProgress(Math.round((currentTime / video.duration) * 100));
+    if (!video.ended) requestAnimationFrame(drawFrame);
+    else { recorder.stop(); }
+  };
+  requestAnimationFrame(drawFrame);
+  
+  await new Promise(res => { recorder.onstop = res; });
+  const blob = new Blob(chunks, { type: 'video/webm' });
+  // trigger download
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'captioned_video.webm'; a.click();
+  setIsBurning(false);
 };
 ```
 
-3. **Structured output per type** — The JSON response shape changes per type:
-   - `listing`: returns `{ document, headline, keyFeatures[], callToAction }`
-   - `email-follow-up`: returns `{ subject, document, nextSteps[] }`
-   - `sms`: returns `{ smsVersion (≤160 chars), whatsappVersion (≤320 chars), document }`
-   - `social-media`: returns `{ document, hashtags[], hook, platform }`
+### 3. UPDATED: `supabase/functions/voice-to-text/index.ts`
 
-4. **Smart context assembly** — Build the prompt from the `typeFields`:
+Fix the ISO 639-3 language code mapping to cover all 28 languages instead of only `eng`/`ara`. This fixes the dubbing quality for Hindi, Chinese, Spanish, etc.
 
 ```typescript
-const fieldContext = Object.entries(typeFields || {})
-  .map(([k, v]) => `${k}: ${v}`)
-  .join('\n');
+const LANG_TO_ISO639_3: Record<string, string> = {
+  en: 'eng', ar: 'ara', hi: 'hin', ur: 'urd', zh: 'zho',
+  es: 'spa', fr: 'fra', de: 'deu', ru: 'rus', pt: 'por',
+  ja: 'jpn', ko: 'kor', it: 'ita', nl: 'nld', tr: 'tur',
+  fa: 'fas', he: 'heb', pl: 'pol', th: 'tha', vi: 'vie',
+  id: 'ind', ms: 'msa', tl: 'tgl', bn: 'ben', ta: 'tam',
+  te: 'tel', ml: 'mal', sw: 'swa',
+};
 ```
 
-### File 3: Output Display in `AIDocumentGeneratorPremium.tsx`
+---
 
-The results section needs to adapt per type too:
-- **SMS** → show two boxes: "SMS Version (160 chars)" and "WhatsApp Version (320 chars)"
-- **Email types** → show subject line box + email body
-- **Social Media** → show post content + hashtag chips + platform badge
-- **Property Listing** → show full listing + a "Copy as Portal Format" button
-- **All** → keep copy and alternative versions
+## Summary of All Changes
 
-## Priority Order
+| File | Action | What Changes |
+|---|---|---|
+| `supabase/functions/video-transcribe/index.ts` | CREATE | New edge function: ElevenLabs Scribe with word timestamps → real subtitle segments for all 28 languages |
+| `supabase/functions/voice-to-text/index.ts` | UPDATE | Fix ISO 639-3 codes for all 28 languages (was hardcoded to only `eng`/`ara`) |
+| `src/components/ai-video-studio/features/CaptionTranslator.tsx` | REBUILD | Real transcription → real SRT timestamps; spoken language selector; full 28-language dub; working caption burn via Canvas API; live style preview |
 
-1. Frontend form per-type configs and dynamic renderer (`AIDocumentGeneratorPremium.tsx`)
-2. Edge function per-type prompt system + fix field mismatch (`ai-document-generator/index.ts`)
-3. Per-type output display in results section
+---
 
-## Summary of Files
+## What Each Fixed Feature Delivers
 
-| File | Change |
-|---|---|
-| `AIDocumentGeneratorPremium.tsx` | Full redesign: per-type field configs, dynamic form renderer, per-type output display |
-| `supabase/functions/ai-document-generator/index.ts` | Rewrite: accept `typeFields`, per-type system prompts, per-type structured output |
+- **Real Transcription**: ElevenLabs Scribe returns word-level timestamps → accurate SRT
+- **Fixed SRT Export**: Timecodes are real (from Scribe), not estimated by word count
+- **All 28 Languages**: ISO 639-3 mapping covers every language in `SUPPORTED_LANGUAGES`
+- **Voice Dubbing**: Per-segment dub via `voice-studio-tts` + new "Dub All" for full-track dubbing
+- **Caption Burn**: Canvas API draws each video frame + overlays caption text → downloadable WebM with burned captions
+- **CapCut-Style Layout**: Tabs stay the same (Upload → Transcribe → Translate → Style → Export); improvements are in the content of each tab, not the container
