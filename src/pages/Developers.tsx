@@ -6,6 +6,7 @@ import {
   Building2,
   Crown,
   X,
+  SlidersHorizontal,
 } from "lucide-react";
 import { SearchableSelect } from "@/components/ui/searchable-select";
 import { useDevelopers, useProjects } from "@/hooks/useProjects";
@@ -21,6 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
+import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 import developersHeroVideo from "@/assets/videos/burj-khalifa-day-to-night.mp4";
 
@@ -64,6 +67,8 @@ const Developers = () => {
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const [sortBy, setSortBy] = useState<"default" | "alpha" | "most_projects">("default");
   const [currentPage, setCurrentPage] = useState(1);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const ITEMS_PER_PAGE = 24;
   const filterSentinelRef = useRef<HTMLDivElement>(null);
 
@@ -124,18 +129,27 @@ const Developers = () => {
     
     let filtered = [...developers];
     
-    // Developer dropdown filter
+    // Developer dropdown filter (local)
     if (selectedDeveloper) {
       filtered = filtered.filter(dev => dev.name === selectedDeveloper);
     }
+
+    // Advanced filter: developer name filter from shared AdvancedFilterPanel
+    if (shortcutFilters.developers && shortcutFilters.developers.length > 0) {
+      filtered = filtered.filter(dev =>
+        shortcutFilters.developers.some(d => dev.name.toLowerCase().includes(d.toLowerCase()))
+      );
+    }
     
-    // Search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
+    // Search filter (local + advanced)
+    const qLocal = searchQuery.trim().toLowerCase();
+    const qAdvanced = (shortcutFilters.searchQuery || '').trim().toLowerCase();
+    const q = qAdvanced || qLocal;
+    if (q) {
       filtered = filtered.filter(dev => 
-        dev.name.toLowerCase().includes(query) ||
-        (dev.description?.toLowerCase().includes(query)) ||
-        (dev.headquarters?.toLowerCase().includes(query))
+        dev.name.toLowerCase().includes(q) ||
+        (dev.description?.toLowerCase().includes(q)) ||
+        (dev.headquarters?.toLowerCase().includes(q))
       );
     }
     
@@ -146,13 +160,12 @@ const Developers = () => {
       );
     }
     
-    // Sort based on selected sort option
+    // Sort
     if (sortBy === "alpha") {
       filtered.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sortBy === "most_projects") {
       filtered.sort((a, b) => (projectCounts[b.id] || 0) - (projectCounts[a.id] || 0));
     } else {
-      // Default: Elite priority order first, then by rank, then alphabetically
       filtered.sort((a, b) => {
         const aSlug = a.slug?.toLowerCase() || '';
         const bSlug = b.slug?.toLowerCase() || '';
@@ -170,12 +183,12 @@ const Developers = () => {
     }
     
     return filtered;
-  }, [developers, searchQuery, tierFilter, selectedDeveloper, sortBy, projectCounts]);
+  }, [developers, searchQuery, tierFilter, selectedDeveloper, sortBy, projectCounts, shortcutFilters.developers, shortcutFilters.searchQuery]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, tierFilter, selectedDeveloper, sortBy]);
+  }, [searchQuery, tierFilter, selectedDeveloper, sortBy, shortcutFilters]);
 
   const totalPages = Math.ceil(filteredDevelopers.length / ITEMS_PER_PAGE);
   const paginatedDevelopers = filteredDevelopers.slice(
@@ -187,12 +200,15 @@ const Developers = () => {
     searchQuery.trim(),
     tierFilter !== "all",
     selectedDeveloper,
+    shortcutFilters.developers.length > 0,
+    (shortcutFilters.searchQuery || '').trim(),
   ].filter(Boolean).length;
 
   const clearFilters = () => {
     setSearchQuery("");
     setTierFilter("all");
     setSelectedDeveloper("");
+    setShortcutFilters(defaultShortcutFilters);
   };
 
   return (
@@ -349,6 +365,22 @@ const Developers = () => {
                   {totalPages > 1 && ` · Page ${currentPage} of ${totalPages}`}
                 </div>
 
+                {/* Advanced Filter button */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setAdvancedOpen(true)}
+                  className="h-9 px-3 bg-white/80 border-gold/40 text-black hover:bg-white rounded-lg flex items-center gap-1.5 font-semibold"
+                >
+                  <SlidersHorizontal className="w-3.5 h-3.5 text-gold" />
+                  Filter
+                  {(shortcutFilters.developers.length > 0) && (
+                    <span className="ml-1 w-5 h-5 rounded-full bg-gold text-black text-[10px] font-bold flex items-center justify-center">
+                      {shortcutFilters.developers.length}
+                    </span>
+                  )}
+                </Button>
+
                 {/* Clear Filters */}
                 {activeFilterCount > 0 && (
                   <Button
@@ -365,6 +397,14 @@ const Developers = () => {
             </div>
           </div>
         </section>
+
+        {/* Advanced Filter Panel */}
+        <AdvancedFilterPanel
+          open={advancedOpen}
+          onOpenChange={setAdvancedOpen}
+          filters={shortcutFilters}
+          onFilterChange={setShortcutFilters}
+        />
 
         {/* Fixed portal copy of filters when scrolled past */}
         {isFilterFixed && createPortal(
@@ -417,6 +457,17 @@ const Developers = () => {
                   <div className="flex-1 text-black/70 text-sm">
                     {filteredDevelopers.length} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
                   </div>
+
+                  {/* Advanced Filter button */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setAdvancedOpen(true)}
+                    className="h-9 px-3 bg-white/80 border-gold/40 text-black hover:bg-white rounded-lg flex items-center gap-1.5 font-semibold"
+                  >
+                    <SlidersHorizontal className="w-3.5 h-3.5 text-gold" />
+                    Filter
+                  </Button>
 
                   {/* Clear Filters */}
                   {activeFilterCount > 0 && (

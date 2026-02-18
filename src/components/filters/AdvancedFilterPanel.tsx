@@ -64,14 +64,22 @@ interface DeveloperEntry {
   logo_url: string | null;
 }
 
+interface AreaEntry {
+  name: string;
+  emirate: string;
+}
+
 export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFilterChange }: AdvancedFilterPanelProps) {
   const [localFilters, setLocalFilters] = useState<ShortcutFilterState>(filters);
   const [projectCount, setProjectCount] = useState<number | null>(null);
   const [developers, setDevelopers] = useState<DeveloperEntry[]>([]);
+  const [allAreas, setAllAreas] = useState<AreaEntry[]>([]);
   const [devSearch, setDevSearch] = useState('');
   const [emirateSearch, setEmirateSearch] = useState('');
+  const [areaSearch, setAreaSearch] = useState('');
   const [emiratesOpen, setEmiratesOpen] = useState(false);
   const [devsOpen, setDevsOpen] = useState(false);
+  const [areasOpen, setAreasOpen] = useState(false);
 
   // Sync local filters when panel opens
   useEffect(() => {
@@ -89,6 +97,19 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
         if (data) {
           setDevelopers(data.map(d => ({ name: d.name, logo_url: d.logo_url })));
         }
+      });
+  }, [open]);
+
+  // Fetch all active areas grouped by emirate
+  useEffect(() => {
+    if (!open) return;
+    supabase
+      .from('areas')
+      .select('name, emirate')
+      .eq('is_active', true)
+      .order('name')
+      .then(({ data }) => {
+        if (data) setAllAreas(data as AreaEntry[]);
       });
   }, [open]);
 
@@ -138,6 +159,17 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
   const filteredDevs = developers.filter(d =>
     !devSearch || d.name.toLowerCase().includes(devSearch.toLowerCase())
   );
+
+  // Filter areas by search, then group by emirate
+  const filteredAreasList = allAreas.filter(a =>
+    !areaSearch || a.name.toLowerCase().includes(areaSearch.toLowerCase()) || a.emirate.toLowerCase().includes(areaSearch.toLowerCase())
+  );
+  const areasGroupedByEmirate = filteredAreasList.reduce<Record<string, string[]>>((acc, a) => {
+    const em = a.emirate || 'Other';
+    if (!acc[em]) acc[em] = [];
+    acc[em].push(a.name);
+    return acc;
+  }, {});
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -216,6 +248,68 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
               )}
             </section>
 
+            {/* By Area */}
+            <section>
+              <h4 className={sectionTitle}>By Area</h4>
+              <button
+                onClick={() => setAreasOpen(!areasOpen)}
+                className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
+              >
+                <span className={localFilters.areas && localFilters.areas.length > 0 ? "text-black" : "text-black/40"}>
+                  {!localFilters.areas || localFilters.areas.length === 0
+                    ? "All Areas"
+                    : `${localFilters.areas.length} area${localFilters.areas.length > 1 ? 's' : ''} selected`}
+                </span>
+                <ChevronDown className={cn("w-4 h-4 text-black/40 transition-transform", areasOpen && "rotate-180")} />
+              </button>
+              {areasOpen && (
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    value={areaSearch}
+                    onChange={(e) => setAreaSearch(e.target.value)}
+                    placeholder="Search area or emirate..."
+                    className={cn(inputClass, "mb-2 h-9 text-xs")}
+                  />
+                  {allAreas.length === 0 ? (
+                    <div className="py-4 text-center text-xs text-black/40">Loading areas...</div>
+                  ) : (
+                    <div className="space-y-3 max-h-72 overflow-y-auto">
+                      {Object.entries(areasGroupedByEmirate).sort(([a], [b]) => a.localeCompare(b)).map(([emirate, areaNames]) => (
+                        <div key={emirate}>
+                          <div className="flex items-center gap-2 mb-1 px-1">
+                            <span className="text-[10px] font-bold text-black/50 uppercase tracking-wider">{emirate}</span>
+                            <div className="flex-1 h-px bg-gold/20" />
+                            <span className="text-[10px] text-black/30">{areaNames.length}</span>
+                          </div>
+                          <div className="space-y-0.5">
+                            {areaNames.map(areaName => {
+                              const isSelected = (localFilters.areas || []).includes(areaName);
+                              return (
+                                <button
+                                  key={areaName}
+                                  onClick={() => update({ areas: toggleArray(localFilters.areas || [], areaName) })}
+                                  className="flex items-center gap-3 w-full px-3 py-1.5 rounded-lg hover:bg-gold/10 transition-colors"
+                                >
+                                  <div className={cn(
+                                    "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
+                                    isSelected ? "border-gold bg-gold/20" : "border-gold/40"
+                                  )}>
+                                    {isSelected && <Check className="w-3 h-3 text-black" />}
+                                  </div>
+                                  <span className="text-sm text-black text-left">{areaName}</span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </section>
+
             {/* By Developer */}
             <section>
               <h4 className={sectionTitle}>By Developer</h4>
@@ -252,18 +346,25 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-black" />}
                           </div>
-                          <div className="w-7 h-7 rounded-lg bg-white border border-gold/20 p-0.5 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                          <div className="w-8 h-8 rounded-lg bg-white border border-gold/20 p-0.5 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-sm">
                             {dev.logo_url ? (
-                              <SafeImage
+                              <img
                                 src={dev.logo_url}
                                 alt={dev.name}
                                 className="w-full h-full object-contain"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                  const parent = e.currentTarget.parentElement;
+                                  if (parent) {
+                                    parent.innerHTML = `<span style="font-size:9px;font-weight:700;color:rgba(0,0,0,0.4)">${dev.name.charAt(0)}</span>`;
+                                  }
+                                }}
                               />
                             ) : (
-                              <span className="text-[8px] font-bold text-black/40">{dev.name.charAt(0)}</span>
+                              <span className="text-[9px] font-bold text-black/40">{dev.name.charAt(0)}</span>
                             )}
                           </div>
-                          <span className="text-sm text-black text-left truncate">{dev.name}</span>
+                          <span className="text-sm text-black text-left truncate flex-1">{dev.name}</span>
                         </button>
                       );
                     })}
