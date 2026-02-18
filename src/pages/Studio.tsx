@@ -19,6 +19,10 @@ import {
   Trash2,
   Share2,
   Pencil,
+  Wand2,
+  Mic,
+  Languages,
+  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +33,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-// Select removed - replaced with type pills
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,6 +66,13 @@ const typeIcons: Record<string, any> = {
   image: ImageIcon,
   pdf: FileText,
   marketing_pack: Package,
+};
+
+const typeColors: Record<string, string> = {
+  video: "#E85C4A",
+  image: "#5B8AF5",
+  pdf: "#E8A84A",
+  marketing_pack: "#7B5BF5",
 };
 
 export default function Studio() {
@@ -220,7 +230,6 @@ export default function Studio() {
     return matchesSearch && matchesType;
   });
 
-  // Type filter pills configuration
   const typeFilters = [
     { value: "all", label: "All", icon: Grid },
     { value: "video", label: "Video", icon: Film },
@@ -229,111 +238,127 @@ export default function Studio() {
     { value: "marketing_pack", label: "Marketing", icon: Package },
   ];
 
-  // Creative toolkit shortcuts
   const creativeShortcuts = [
-    { href: "/toolkit/background-ai", label: "Background Remover", icon: Sparkles },
-    { href: "/toolkit/captions-translate", label: "Captions", icon: FileText },
-    { href: "/toolkit/image-resize", label: "Image Resizer", icon: ImageIcon },
-    { href: "/toolkit/pdf-from-photos", label: "PDF Tools", icon: FileText },
-    { href: "/toolkit/voice-studio", label: "Voice Studio", icon: Film },
+    { href: "/toolkit/background-ai", label: "Background Remover", icon: Wand2, color: "#5B8AF5" },
+    { href: "/toolkit/captions-translate", label: "Captions", icon: Languages, color: "#E85C4A" },
+    { href: "/toolkit/image-resize", label: "Image Resizer", icon: ImageIcon, color: "#7B5BF5" },
+    { href: "/toolkit/pdf-from-photos", label: "PDF Tools", icon: FileText, color: "#E8A84A" },
+    { href: "/toolkit/voice-studio", label: "Voice Studio", icon: Mic, color: "#4AE8A8" },
   ];
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-black/90 backdrop-blur-xl border-b border-gold/20">
-        <div className="flex items-center justify-between px-6 py-4">
+
+      {/* ── Studio Sub-Header ── */}
+      <div className="border-b border-gold/20 bg-gradient-to-r from-black via-zinc-900/40 to-black">
+        <div className="max-w-[1800px] mx-auto px-6 py-4 flex items-center justify-between">
+          {/* Brand */}
           <Link to="/studio" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center shadow-[0_0_20px_rgba(201,168,76,0.15)]">
               <Sparkles className="w-5 h-5 text-gold" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-foreground">Creative Suite™</h1>
-              <p className="text-xs text-muted-foreground">JBJ Global Real Estate</p>
+              <p className="text-sm font-bold text-white leading-none">Creative Suite™</p>
+              <p className="text-[10px] text-gold/60 mt-0.5 leading-none">JBJ Global Real Estate</p>
             </div>
           </Link>
 
-          <nav className="flex items-center gap-2">
+          {/* Nav */}
+          <nav className="flex items-center gap-1">
             <Link
               to="/studio"
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gold/10 text-gold border border-gold/30"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gold/10 text-gold border border-gold/30 text-sm font-medium"
             >
               <Home className="w-4 h-4" />
-              <span className="text-sm font-medium">Projects</span>
+              Projects
             </Link>
             <Link
               to="/studio/settings"
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition-all text-sm font-medium"
             >
               <Settings className="w-4 h-4" />
-              <span className="text-sm font-medium">Settings</span>
+              Settings
             </Link>
-            <button className="p-2 text-muted-foreground hover:text-foreground">
+            <button className="p-2 text-zinc-500 hover:text-white transition-colors">
               <HelpCircle className="w-5 h-5" />
             </button>
           </nav>
         </div>
-      </header>
+      </div>
 
-      {/* Main Content */}
-      <main className="px-6 py-8 max-w-[1800px] mx-auto">
+      {/* ── Main ── */}
+      <main className="px-6 py-10 max-w-[1800px] mx-auto">
         <div className="space-y-8">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+
+          {/* Page title + CTA */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6">
             <div>
-              <h2 className="text-3xl font-bold text-foreground">Your Projects</h2>
-              <p className="text-muted-foreground mt-1">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="h-px w-8 bg-gold/50" />
+                <span className="text-xs text-gold/70 uppercase tracking-widest font-medium">Creative Studio</span>
+              </div>
+              <h1 className="text-4xl font-bold text-white leading-tight">
+                Your <span className="text-gold">Projects</span>
+              </h1>
+              <p className="text-zinc-400 mt-2 text-sm">
                 Create and manage your creative projects
               </p>
             </div>
 
             <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-gold hover:bg-gold/90 text-black">
+                <Button className="bg-gold hover:bg-gold/90 text-black font-semibold px-6 py-3 h-auto rounded-xl shadow-[0_4px_24px_rgba(201,168,76,0.3)] transition-all hover:shadow-[0_6px_32px_rgba(201,168,76,0.45)] hover:-translate-y-0.5">
                   <Plus className="w-4 h-4 mr-2" />
                   New Project
                 </Button>
               </DialogTrigger>
-              <DialogContent className="bg-card border-gold/20">
+              <DialogContent className="bg-[#0d0d0f] border border-gold/20 shadow-[0_20px_60px_rgba(0,0,0,0.8)] max-w-md">
                 <DialogHeader>
-                  <DialogTitle className="text-foreground">
-                    Create New Project
+                  <DialogTitle className="text-white text-xl font-bold">
+                    Create New <span className="text-gold">Project</span>
                   </DialogTitle>
                 </DialogHeader>
-                <div className="space-y-4 pt-4">
-                  <Input
-                    value={newProjectName}
-                    onChange={(e) => setNewProjectName(e.target.value)}
-                    placeholder="Project name"
-                    className="bg-background border-gold/30"
-                  />
-                  <div className="grid grid-cols-2 gap-3">
-                    {projectTypes.map((type) => {
-                      const Icon = type.icon;
-                      return (
-                        <button
-                          key={type.value}
-                          onClick={() => setNewProjectType(type.value)}
-                          className={`p-4 rounded-xl border transition-all ${
-                            newProjectType === type.value
-                              ? "bg-gold/10 border-gold"
-                              : "bg-background/50 border-gold/20 hover:border-gold/40"
-                          }`}
-                        >
-                          <Icon
-                            className={`w-6 h-6 mb-2 ${
-                              newProjectType === type.value
-                                ? "text-gold"
-                                : "text-muted-foreground"
+                <div className="space-y-5 pt-2">
+                  <div>
+                    <label className="text-xs text-zinc-400 uppercase tracking-wider mb-2 block">Project Name</label>
+                    <Input
+                      value={newProjectName}
+                      onChange={(e) => setNewProjectName(e.target.value)}
+                      placeholder="My New Project..."
+                      className="bg-white/5 border-white/10 text-white placeholder:text-zinc-600 focus:border-gold/50 rounded-xl h-11"
+                      onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-zinc-400 uppercase tracking-wider mb-2 block">Project Type</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {projectTypes.map((type) => {
+                        const Icon = type.icon;
+                        const isActive = newProjectType === type.value;
+                        const color = typeColors[type.value] || "#C9A84C";
+                        return (
+                          <button
+                            key={type.value}
+                            onClick={() => setNewProjectType(type.value)}
+                            className={`p-4 rounded-xl border transition-all text-left ${
+                              isActive
+                                ? "border-opacity-100 bg-white/5"
+                                : "border-white/10 bg-white/[0.02] hover:border-white/20"
                             }`}
-                          />
-                          <p className="text-sm text-foreground">{type.label}</p>
-                        </button>
-                      );
-                    })}
+                            style={isActive ? { borderColor: color + "66", boxShadow: `0 0 20px ${color}18` } : {}}
+                          >
+                            <Icon
+                              className="w-5 h-5 mb-2"
+                              style={{ color: isActive ? color : "#71717a" }}
+                            />
+                            <p className="text-sm text-white font-medium leading-tight">{type.label}</p>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                   <Button
-                    className="w-full bg-gold hover:bg-gold/90 text-black"
+                    className="w-full bg-gold hover:bg-gold/90 text-black font-semibold h-11 rounded-xl"
                     onClick={handleCreate}
                     disabled={isCreating}
                   >
@@ -351,118 +376,170 @@ export default function Studio() {
             </Dialog>
           </div>
 
-          {/* Type Filter Pills + Search */}
-          <div className="flex flex-wrap items-center gap-3">
-            {typeFilters.map((type) => {
-              const Icon = type.icon;
-              const isActive = filterType === type.value;
-              return (
-                <button
-                  key={type.value}
-                  onClick={() => setFilterType(type.value)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all border ${
-                    isActive 
-                      ? "bg-gold/20 border-gold text-gold" 
-                      : "bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500"
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span className="text-sm font-medium">{type.label}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Search & View Toggle */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-              <Input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search projects..."
-                className="pl-10 bg-zinc-900 border-gold/30 text-white placeholder:text-zinc-500"
-              />
-            </div>
-
-            <div className="flex items-center gap-1 p-1 rounded-lg bg-zinc-900/50 border border-gold/20">
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`p-2 rounded-md transition-colors ${
-                  viewMode === "grid"
-                    ? "bg-gold/10 text-gold"
-                    : "text-zinc-500 hover:text-white"
-                }`}
-              >
-                <Grid className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setViewMode("list")}
-                className={`p-2 rounded-md transition-colors ${
-                  viewMode === "list"
-                    ? "bg-gold/10 text-gold"
-                    : "text-zinc-500 hover:text-white"
-                }`}
-              >
-                <List className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Creative Toolkit Shortcuts */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gold/10">
-            <span className="text-xs text-zinc-500 uppercase tracking-wider mr-2">Quick Tools:</span>
+          {/* ── Quick Tools Strip ── */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             {creativeShortcuts.map((shortcut) => {
               const Icon = shortcut.icon;
               return (
                 <Link
                   key={shortcut.href}
                   to={shortcut.href}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-gold hover:border-gold/50 transition-all"
+                  className="group flex items-center gap-3 px-4 py-3 rounded-xl border border-white/8 bg-white/[0.03] hover:bg-white/[0.07] hover:border-white/15 transition-all"
                 >
-                  <Icon className="w-3 h-3" />
-                  {shortcut.label}
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ background: shortcut.color + "18", border: `1px solid ${shortcut.color}33` }}
+                  >
+                    <Icon className="w-4 h-4" style={{ color: shortcut.color }} />
+                  </div>
+                  <span className="text-xs text-zinc-400 group-hover:text-white transition-colors leading-tight font-medium">{shortcut.label}</span>
+                  <ChevronRight className="w-3 h-3 text-zinc-600 group-hover:text-zinc-400 transition-colors ml-auto shrink-0" />
                 </Link>
               );
             })}
           </div>
 
-          {/* Projects Grid */}
+          {/* ── Filters + Search Row ── */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            {/* Type Pills */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {typeFilters.map((type) => {
+                const Icon = type.icon;
+                const isActive = filterType === type.value;
+                return (
+                  <button
+                    key={type.value}
+                    onClick={() => setFilterType(type.value)}
+                    className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-medium transition-all border ${
+                      isActive
+                        ? "bg-gold/15 border-gold/50 text-gold"
+                        : "bg-white/[0.03] border-white/10 text-zinc-400 hover:text-white hover:border-white/20"
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    {type.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Search + View Toggle */}
+            <div className="flex items-center gap-3 ml-auto">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
+                <Input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search projects..."
+                  className="pl-9 w-56 bg-white/[0.04] border-white/10 text-white placeholder:text-zinc-600 focus:border-gold/40 rounded-xl h-10"
+                />
+              </div>
+              <div className="flex items-center gap-1 p-1 rounded-lg bg-white/[0.04] border border-white/10">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2 rounded-md transition-colors ${
+                    viewMode === "grid" ? "bg-gold/15 text-gold" : "text-zinc-500 hover:text-white"
+                  }`}
+                >
+                  <Grid className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode("list")}
+                  className={`p-2 rounded-md transition-colors ${
+                    viewMode === "list" ? "bg-gold/15 text-gold" : "text-zinc-500 hover:text-white"
+                  }`}
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Projects Grid ── */}
           {isLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 text-gold animate-spin" />
+            <div className="flex items-center justify-center py-24">
+              <div className="text-center">
+                <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-3" />
+                <p className="text-zinc-500 text-sm">Loading projects...</p>
+              </div>
             </div>
           ) : filteredProjects.length === 0 ? (
-            <div className="text-center py-20">
-              <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                No projects yet
-              </h3>
-              <p className="text-muted-foreground mb-6">
-                Create your first project to get started
-              </p>
-              <Button className="bg-gold hover:bg-gold/90 text-black" onClick={() => setIsCreateOpen(true)}>
+            <div className="text-center py-24">
+              <div className="w-20 h-20 rounded-2xl bg-gold/5 border border-gold/15 flex items-center justify-center mx-auto mb-5">
+                <Package className="w-9 h-9 text-gold/40" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">No projects yet</h3>
+              <p className="text-zinc-500 mb-6 text-sm">Create your first project to get started</p>
+              <Button
+                className="bg-gold hover:bg-gold/90 text-black font-semibold px-6 rounded-xl"
+                onClick={() => setIsCreateOpen(true)}
+              >
                 <Plus className="w-4 h-4 mr-2" />
                 Create Project
               </Button>
             </div>
           ) : (
             <div
-              className={`grid gap-6 ${
+              className={`grid gap-4 ${
                 viewMode === "grid"
-                  ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                  ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
                   : "grid-cols-1"
               }`}
             >
               {filteredProjects.map((project) => {
                 const Icon = typeIcons[project.project_type] || Film;
+                const accentColor = typeColors[project.project_type] || "#C9A84C";
+
+                if (viewMode === "list") {
+                  return (
+                    <div
+                      key={project.id}
+                      className="group flex items-center gap-4 p-4 rounded-xl border border-white/8 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/15 transition-all"
+                    >
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                        style={{ background: accentColor + "15", border: `1px solid ${accentColor}30` }}
+                      >
+                        <Icon className="w-6 h-6" style={{ color: accentColor }} />
+                      </div>
+                      <Link to={`/studio/editor/${project.id}`} className="flex-1 min-w-0">
+                        <p className="text-white font-medium truncate hover:text-gold transition-colors">{project.name}</p>
+                        <p className="text-xs text-zinc-500 mt-0.5">
+                          {project.project_type} · {formatDistanceToNow(new Date(project.updated_at), { addSuffix: true })}
+                        </p>
+                      </Link>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger className="p-2 rounded-lg hover:bg-white/10 text-zinc-500 hover:text-white opacity-0 group-hover:opacity-100 transition-all">
+                          <MoreVertical className="w-4 h-4" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="bg-[#111113] border border-white/10">
+                          <DropdownMenuItem onClick={() => handleRename(project.id)} className="text-zinc-300 focus:text-white focus:bg-white/10">
+                            <Pencil className="w-4 h-4 mr-2" /> Rename
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDuplicate(project.id)} className="text-zinc-300 focus:text-white focus:bg-white/10">
+                            <Copy className="w-4 h-4 mr-2" /> Duplicate
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleShare(project.id)} className="text-zinc-300 focus:text-white focus:bg-white/10">
+                            <Share2 className="w-4 h-4 mr-2" /> Share
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator className="bg-white/10" />
+                          <DropdownMenuItem onClick={() => handleDelete(project.id)} className="text-red-400 focus:text-red-300 focus:bg-red-500/10">
+                            <Trash2 className="w-4 h-4 mr-2" /> Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  );
+                }
+
                 return (
                   <div
                     key={project.id}
-                    className="group relative rounded-2xl bg-card border border-gold/20 overflow-hidden hover:border-gold/40 transition-colors"
+                    className="group relative rounded-2xl border border-white/8 bg-white/[0.02] overflow-hidden hover:border-white/15 hover:bg-white/[0.04] transition-all hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)]"
                   >
                     <Link to={`/studio/editor/${project.id}`}>
-                      <div className="aspect-video bg-background/50 relative overflow-hidden">
+                      {/* Thumbnail */}
+                      <div className="aspect-video relative overflow-hidden bg-black/50">
                         {project.thumbnail_url ? (
                           <img
                             src={project.thumbnail_url}
@@ -471,71 +548,62 @@ export default function Studio() {
                           />
                         ) : (
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <Icon className="w-12 h-12 text-gold/20" />
+                            <div
+                              className="w-16 h-16 rounded-2xl flex items-center justify-center"
+                              style={{ background: accentColor + "15", border: `1px solid ${accentColor}25` }}
+                            >
+                              <Icon className="w-8 h-8" style={{ color: accentColor + "80" }} />
+                            </div>
                           </div>
                         )}
-                        <div className="absolute top-2 left-2 flex gap-2">
-                          <span className="px-2 py-1 rounded-full bg-background/70 text-xs text-gold border border-gold/30">
+                        {/* Type badge */}
+                        <div className="absolute top-2.5 left-2.5">
+                          <span
+                            className="px-2 py-0.5 rounded-full text-xs font-medium capitalize"
+                            style={{ background: accentColor + "25", color: accentColor, border: `1px solid ${accentColor}40` }}
+                          >
                             {project.project_type}
                           </span>
-                          {project.status === "draft" && (
-                            <span className="px-2 py-1 rounded-full bg-background/70 text-xs text-muted-foreground border border-muted">
-                              Draft
-                            </span>
-                          )}
                         </div>
                         {project.is_shared && (
-                          <div className="absolute top-2 right-2">
-                            <Share2 className="w-4 h-4 text-gold" />
+                          <div className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+                            <Share2 className="w-3 h-3 text-gold" />
                           </div>
                         )}
+                        {/* Accent line at bottom */}
+                        <div className="absolute bottom-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: `linear-gradient(90deg, transparent, ${accentColor}60, transparent)` }} />
                       </div>
                     </Link>
 
+                    {/* Card body */}
                     <div className="p-4">
                       <div className="flex items-start justify-between gap-2">
                         <Link to={`/studio/editor/${project.id}`} className="flex-1 min-w-0">
-                          <h3 className="text-foreground font-medium truncate hover:text-gold transition-colors">
+                          <h3 className="text-white font-semibold truncate hover:text-gold transition-colors text-sm">
                             {project.name}
                           </h3>
-                          <p className="text-xs text-muted-foreground mt-1">
+                          <p className="text-xs text-zinc-600 mt-1">
                             {formatDistanceToNow(new Date(project.updated_at), { addSuffix: true })}
                           </p>
                         </Link>
 
                         <DropdownMenu>
-                          <DropdownMenuTrigger className="p-1.5 rounded-lg hover:bg-muted/50 text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                          <DropdownMenuTrigger className="p-1.5 rounded-lg hover:bg-white/10 text-zinc-600 hover:text-white opacity-0 group-hover:opacity-100 transition-all">
                             <MoreVertical className="w-4 h-4" />
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="bg-card border-gold/20">
-                            <DropdownMenuItem
-                              onClick={() => handleRename(project.id)}
-                              className="text-muted-foreground focus:text-foreground focus:bg-gold/10"
-                            >
-                              <Pencil className="w-4 h-4 mr-2" />
-                              Rename
+                          <DropdownMenuContent align="end" className="bg-[#111113] border border-white/10">
+                            <DropdownMenuItem onClick={() => handleRename(project.id)} className="text-zinc-300 focus:text-white focus:bg-white/10">
+                              <Pencil className="w-4 h-4 mr-2" /> Rename
                             </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleDuplicate(project.id)}
-                              className="text-muted-foreground focus:text-foreground focus:bg-gold/10"
-                            >
-                              <Copy className="w-4 h-4 mr-2" />
-                              Duplicate
+                            <DropdownMenuItem onClick={() => handleDuplicate(project.id)} className="text-zinc-300 focus:text-white focus:bg-white/10">
+                              <Copy className="w-4 h-4 mr-2" /> Duplicate
                             </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleShare(project.id)}
-                              className="text-muted-foreground focus:text-foreground focus:bg-gold/10"
-                            >
-                              <Share2 className="w-4 h-4 mr-2" />
-                              Share
+                            <DropdownMenuItem onClick={() => handleShare(project.id)} className="text-zinc-300 focus:text-white focus:bg-white/10">
+                              <Share2 className="w-4 h-4 mr-2" /> Share
                             </DropdownMenuItem>
-                            <DropdownMenuSeparator className="bg-gold/10" />
-                            <DropdownMenuItem
-                              onClick={() => handleDelete(project.id)}
-                              className="text-destructive focus:text-destructive focus:bg-destructive/10"
-                            >
-                              <Trash2 className="w-4 h-4 mr-2" />
-                              Delete
+                            <DropdownMenuSeparator className="bg-white/10" />
+                            <DropdownMenuItem onClick={() => handleDelete(project.id)} className="text-red-400 focus:text-red-300 focus:bg-red-500/10">
+                              <Trash2 className="w-4 h-4 mr-2" /> Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -549,9 +617,15 @@ export default function Studio() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-gold/10 py-4 px-6 text-center text-xs text-muted-foreground">
-        JBJ RealEstate Creative Suite™ — Free for all users
+      {/* ── Footer ── */}
+      <footer className="border-t border-white/5 py-5 px-6">
+        <div className="max-w-[1800px] mx-auto flex items-center justify-between">
+          <p className="text-xs text-zinc-600">JBJ Creative Suite™ — Free for all users</p>
+          <div className="flex items-center gap-4">
+            <Link to="/toolkit" className="text-xs text-zinc-600 hover:text-gold transition-colors">Tool Hub</Link>
+            <Link to="/studio/settings" className="text-xs text-zinc-600 hover:text-gold transition-colors">Settings</Link>
+          </div>
+        </div>
       </footer>
     </div>
   );
