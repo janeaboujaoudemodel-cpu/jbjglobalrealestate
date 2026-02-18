@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import {
-  corsHeaders, REELLY_API_BASE, ReellyProject, ReellyResponse, ReellyLocation,
+  corsHeaders, REELLY_API_BASE, REELLY_API_ENDPOINTS, fetchReellyWithRetry,
+  ReellyProject, ReellyResponse, ReellyLocation,
   generateSlug, generateAreaSlug, generateDeveloperSlug,
   mapConstructionStatus, mapSaleStatus, getEmirateFromRegion,
   extractGalleryImages, extractVideos, extractDocuments, extractFloorPlans, extractAmenities, extractUnitTypes
@@ -102,12 +103,12 @@ function mapProject(p: ReellyProject, areaId: string | null, devId: string | nul
 }
 
 async function fetchPage(apiKey: string, url: string): Promise<ReellyResponse> {
-  console.log(`[fetchPage] URL: ${url}, key starts: ${apiKey.slice(0,20)}...`);
-  const res = await fetch(url, { headers: { "X-API-Key": apiKey, "Authorization": `Bearer ${apiKey}`, "Accept": "application/json" } });
+  console.log(`[fetchPage] URL: ${url}, key starts: ${apiKey.slice(0, 20)}...`);
+  const res = await fetchReellyWithRetry(url, apiKey, 4);
   if (!res.ok) {
     const body = await res.text();
     console.error(`[fetchPage] Error ${res.status}: ${body}`);
-    throw new Error(`API error ${res.status}`);
+    throw new Error(`API error ${res.status}: ${body.slice(0, 200)}`);
   }
   return res.json();
 }

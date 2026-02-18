@@ -1,247 +1,271 @@
- import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
- 
- const corsHeaders = {
-   'Access-Control-Allow-Origin': '*',
-   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
- };
- 
- const REELLY_API_URL = "https://api-reelly.up.railway.app/api/v2/clients/projects";
- 
- interface ReellyProject {
-   id: number;
-   name: string;
-   developer: string;
-   construction_status: string | null;
-   sale_status: string | null;
-   short_description: string | null;
-   completion_date: string | null;
-   building_count: number;
-   units_count: number;
-   location: {
-     id: number;
-     region: string;
-     district: string;
-     latitude: number;
-     longitude: number;
-   } | null;
-   min_price: number;
-   max_price: number;
-   min_size: number;
-   max_size: number;
-   price_currency: string;
-   area_unit: string;
-   cover_image: { url: string } | null;
-   video_reviews: Array<{ thumbnail_url?: string }>;
-   is_published: boolean;
-   updated_at: string;
- }
- 
- interface TransformedProject {
-   id: number;
-   name: string;
-   slug: string;
-   developer_name: string;
-   construction_status: string | null;
-   sale_status: string | null;
-   status_label: string | null;
-   description: string | null;
-   handover_date: string | null;
-   location: string | null;
-   emirate: string | null;
-   latitude: number | null;
-   longitude: number | null;
-   price_from: number | null;
-   price_to: number | null;
-   size_min: number | null;
-   size_max: number | null;
-   thumbnail: string | null;
-   gallery: string[];
-   images: Array<{ image_url: string; alt_text: string }>;
- }
- 
- function generateSlug(name: string): string {
-   return name
-     .toLowerCase()
-     .replace(/[^a-z0-9]+/g, '-')
-     .replace(/^-|-$/g, '');
- }
- 
- function mapSaleStatus(status: string | null): string | null {
-   if (!status) return null;
-   const map: Record<string, string> = {
-     "announced": "Announced",
-     "on_sale": "On Sale",
-     "out_of_stock": "Sold Out",
-     "presale_eoi": "Presale (EOI)",
-     "start_of_sales": "Start of Sales",
-   };
-   return map[status] || status;
- }
- 
- function mapConstructionStatus(status: string | null): string | null {
-   if (!status) return null;
-   const map: Record<string, string> = {
-     "under_construction": "Under Construction",
-     "completed": "Completed",
-     "presale": "Presale",
-   };
-   return map[status] || status;
- }
- 
- function transformProject(project: ReellyProject): TransformedProject {
-   const thumbnail = project.cover_image?.url || null;
-   
-   // Extract gallery images from video thumbnails
-   const gallery: string[] = [];
-   if (project.video_reviews) {
-     project.video_reviews.forEach(v => {
-       if (v.thumbnail_url) gallery.push(v.thumbnail_url);
-     });
-   }
-   
-   // Create images array for frontend compatibility
-   const images: Array<{ image_url: string; alt_text: string }> = [];
-   if (thumbnail) {
-     images.push({ image_url: thumbnail, alt_text: project.name });
-   }
-   gallery.forEach(url => {
-     images.push({ image_url: url, alt_text: project.name });
-   });
-   
-   return {
-     id: project.id,
-     name: project.name,
-     slug: generateSlug(project.name),
-     developer_name: project.developer,
-     construction_status: mapConstructionStatus(project.construction_status),
-     sale_status: mapSaleStatus(project.sale_status),
-     status_label: mapSaleStatus(project.sale_status),
-     description: project.short_description,
-     handover_date: project.completion_date,
-     location: project.location?.district || null,
-     emirate: project.location?.region || null,
-     latitude: project.location?.latitude || null,
-     longitude: project.location?.longitude || null,
-     price_from: project.min_price > 0 ? project.min_price : null,
-     price_to: project.max_price > 0 ? project.max_price : null,
-     size_min: project.min_size > 0 ? project.min_size : null,
-     size_max: project.max_size > 0 ? project.max_size : null,
-     thumbnail,
-     gallery,
-     images,
-   };
- }
- 
- serve(async (req: Request) => {
-   // Handle CORS preflight
-   if (req.method === 'OPTIONS') {
-     return new Response(null, { headers: corsHeaders });
-   }
- 
-   try {
-     const apiKey = Deno.env.get('REELLY_API_KEY');
-     if (!apiKey) {
-       return new Response(
-         JSON.stringify({ success: false, error: 'REELLY_API_KEY not configured' }),
-         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-       );
-     }
- 
-    // Parse query params
+import { createClient } from "npm:@supabase/supabase-js@2";
+import { corsHeaders, REELLY_API_ENDPOINTS, REELLY_FILTERS, fetchReellyWithRetry } from "../_shared/reelly-types.ts";
+
+/**
+ * reelly-projects — Frontend-facing edge function
+ *
+ * DEFAULT: Serves from local `projects` table (fast, 50-100ms, no API burn).
+ * FALLBACK: Add `?source=live` to bypass DB and hit Reelly API directly.
+ *
+ * Filters supported:
+ *   search, sale_status, construction_status, emirate, developer_name
+ *   limit, offset (offset-based pagination)
+ */
+
+const corsH = {
+  ...corsHeaders,
+};
+
+function mapSaleStatus(status: string | null): string | null {
+  if (!status) return null;
+  const map: Record<string, string> = {
+    "announced": "Announced",
+    "on_sale": "On Sale",
+    "out_of_stock": "Sold Out",
+    "presale_eoi": "Presale (EOI)",
+    "start_of_sales": "Start of Sales",
+  };
+  return map[status] || status;
+}
+
+function mapConstructionStatus(status: string | null): string | null {
+  if (!status) return null;
+  const map: Record<string, string> = {
+    "under_construction": "Under Construction",
+    "completed": "Completed",
+    "presale": "Presale",
+  };
+  return map[status] || status;
+}
+
+function generateSlug(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+// ============= DB SOURCE (default) =============
+
+async function serveFromDB(
+  supabase: ReturnType<typeof createClient>,
+  params: {
+    limit: number;
+    offset: number;
+    search: string | null;
+    saleStatus: string | null;
+    constructionStatus: string | null;
+    emirate: string | null;
+    developerName: string | null;
+  }
+) {
+  const { limit, offset, search, saleStatus, constructionStatus, emirate, developerName } = params;
+
+  let query = supabase
+    .from("projects")
+    .select("*", { count: "exact" })
+    .eq("is_published", true)
+    .not("cover_image_url", "is", null)
+    .order("updated_at", { ascending: false })
+    .range(offset, offset + limit - 1);
+
+  if (search) {
+    query = query.or(`name.ilike.%${search}%,developer_name.ilike.%${search}%,location.ilike.%${search}%`);
+  }
+  if (saleStatus) {
+    query = query.ilike("sale_status", saleStatus);
+  }
+  if (constructionStatus) {
+    query = query.ilike("construction_status", constructionStatus);
+  }
+  if (emirate) {
+    query = query.ilike("emirate", emirate);
+  }
+  if (developerName) {
+    query = query.ilike("developer_name", `%${developerName}%`);
+  }
+
+  const { data: projects, count, error } = await query;
+
+  if (error) throw new Error(`DB query failed: ${error.message}`);
+
+  const total = count ?? 0;
+  const hasMore = offset + limit < total;
+
+  const transformed = (projects || []).map((p: any) => ({
+    id: p.reelly_id || p.id,
+    name: p.name,
+    slug: p.slug || generateSlug(p.name),
+    developer_name: p.developer_name,
+    construction_status: p.construction_status,
+    sale_status: p.sale_status,
+    status_label: p.sale_status || p.status_label,
+    description: p.description || p.short_description,
+    handover_date: p.handover_date,
+    location: p.location,
+    emirate: p.emirate,
+    latitude: p.latitude,
+    longitude: p.longitude,
+    price_from: p.price_from,
+    price_to: p.price_to,
+    size_min: p.size_min,
+    size_max: p.size_max,
+    thumbnail: p.cover_image_url,
+    gallery: (p.images || []).map((img: any) => img.image_url || img.url).filter(Boolean),
+    images: (p.images || []).map((img: any) => ({
+      image_url: img.image_url || img.url,
+      alt_text: img.alt_text || p.name,
+    })),
+  }));
+
+  return {
+    projects: transformed,
+    pagination: { total, limit, offset, hasMore },
+    source: "database",
+  };
+}
+
+// ============= LIVE API SOURCE (fallback) =============
+
+async function serveFromLiveAPI(
+  apiKey: string,
+  params: {
+    limit: number;
+    offset: number;
+    search: string | null;
+    saleStatus: string | null;
+    constructionStatus: string | null;
+    emirate: string | null;
+    developerName: string | null;
+  }
+) {
+  const { limit, offset, search, saleStatus, constructionStatus, emirate, developerName } = params;
+
+  const saleStatusApiMap: Record<string, string> = {
+    "Announced": "announced",
+    "On Sale": "on_sale",
+    "Sold Out": "out_of_stock",
+    "Presale (EOI)": "presale_eoi",
+    "Start of Sales": "start_of_sales",
+  };
+  const constructionStatusApiMap: Record<string, string> = {
+    "Under Construction": "under_construction",
+    "Completed": "completed",
+    "Presale": "presale",
+  };
+
+  let url = `${REELLY_API_ENDPOINTS.projects}?${REELLY_FILTERS.limit}=${limit}&${REELLY_FILTERS.offset}=${offset}`;
+  if (search) url += `&${REELLY_FILTERS.search}=${encodeURIComponent(search)}`;
+  if (saleStatus) url += `&${REELLY_FILTERS.saleStatus}=${encodeURIComponent(saleStatusApiMap[saleStatus] || saleStatus)}`;
+  if (constructionStatus) url += `&${REELLY_FILTERS.constructionStatus}=${encodeURIComponent(constructionStatusApiMap[constructionStatus] || constructionStatus)}`;
+  if (emirate) url += `&${REELLY_FILTERS.region}=${encodeURIComponent(emirate)}`;
+  if (developerName) url += `&${REELLY_FILTERS.developer}=${encodeURIComponent(developerName)}`;
+
+  console.log(`[reelly-projects] Live API fetch: ${url}`);
+
+  const res = await fetchReellyWithRetry(url, apiKey);
+
+  if (!res.ok) {
+    const txt = await res.text();
+    console.error(`[reelly-projects] Live API error ${res.status}: ${txt.slice(0, 300)}`);
+    return {
+      projects: [],
+      pagination: { total: 0, limit, offset, hasMore: false },
+      source: "live_api_error",
+      warning: `Reelly API returned ${res.status}`,
+    };
+  }
+
+  const data = await res.json();
+  const total = data.count || 0;
+  const raw: any[] = data.results || [];
+  const hasMore = offset + limit < total;
+
+  const projects = raw.map((p: any) => {
+    const thumbnail = p.cover_image?.url || null;
+    const gallery: string[] = (p.video_reviews || [])
+      .map((v: any) => v.thumbnail_url)
+      .filter(Boolean);
+    const images = [
+      ...(thumbnail ? [{ image_url: thumbnail, alt_text: p.name }] : []),
+      ...gallery.map((url: string) => ({ image_url: url, alt_text: p.name })),
+    ];
+    return {
+      id: p.id,
+      name: p.name,
+      slug: generateSlug(p.name),
+      developer_name: p.developer,
+      construction_status: mapConstructionStatus(p.construction_status),
+      sale_status: mapSaleStatus(p.sale_status),
+      status_label: mapSaleStatus(p.sale_status),
+      description: p.short_description,
+      handover_date: p.completion_date,
+      location: p.location?.district || null,
+      emirate: p.location?.region || null,
+      latitude: p.location?.latitude || null,
+      longitude: p.location?.longitude || null,
+      price_from: p.min_price > 0 ? p.min_price : null,
+      price_to: p.max_price > 0 ? p.max_price : null,
+      size_min: p.min_size > 0 ? p.min_size : null,
+      size_max: p.max_size > 0 ? p.max_size : null,
+      thumbnail,
+      gallery,
+      images,
+    };
+  });
+
+  return {
+    projects,
+    pagination: { total, limit, offset, hasMore },
+    source: "live_api",
+  };
+}
+
+// ============= Main Handler =============
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsH });
+
+  try {
     const url = new URL(req.url);
-    const limit = parseInt(url.searchParams.get('limit') || '24');
-    const offset = parseInt(url.searchParams.get('offset') || '0');
-    const search = url.searchParams.get('search');
-  const saleStatus = url.searchParams.get('sale_status');
-     const constructionStatus = url.searchParams.get('construction_status');
-     const emirate = url.searchParams.get('emirate');
-     const developerName = url.searchParams.get('developer_name');
+    const limit = Math.min(parseInt(url.searchParams.get("limit") || "24"), 200);
+    const offset = parseInt(url.searchParams.get("offset") || "0");
+    const search = url.searchParams.get("search") || null;
+    const saleStatus = url.searchParams.get("sale_status") || null;
+    const constructionStatus = url.searchParams.get("construction_status") || null;
+    const emirate = url.searchParams.get("emirate") || null;
+    const developerName = url.searchParams.get("developer_name") || null;
+    const source = url.searchParams.get("source") || "db"; // "db" | "live"
 
-     // Reverse-map human-readable status labels back to Reelly API enum values
-     const saleStatusMap: Record<string, string> = {
-       "Announced": "announced",
-       "On Sale": "on_sale",
-       "Sold Out": "out_of_stock",
-       "Presale (EOI)": "presale_eoi",
-       "Start of Sales": "start_of_sales",
-     };
-     const constructionStatusMap: Record<string, string> = {
-       "Under Construction": "under_construction",
-       "Completed": "completed",
-       "Presale": "presale",
-     };
+    const params = { limit, offset, search, saleStatus, constructionStatus, emirate, developerName };
 
-     const mappedSaleStatus = saleStatus ? (saleStatusMap[saleStatus] || saleStatus) : null;
-     const mappedConstructionStatus = constructionStatus ? (constructionStatusMap[constructionStatus] || constructionStatus) : null;
+    let result;
 
-     // Build Reelly API URL with pagination and filters
-     let reellyUrl = `${REELLY_API_URL}?limit=${limit}&offset=${offset}`;
-     if (search) reellyUrl += `&search=${encodeURIComponent(search)}`;
-     if (mappedSaleStatus) reellyUrl += `&sale_status=${encodeURIComponent(mappedSaleStatus)}`;
-     if (mappedConstructionStatus) reellyUrl += `&construction_status=${encodeURIComponent(mappedConstructionStatus)}`;
-     if (emirate) reellyUrl += `&region=${encodeURIComponent(emirate)}`;
-     if (developerName) reellyUrl += `&developer=${encodeURIComponent(developerName)}`;
-    
-    console.log(`Fetching from Reelly API: ${reellyUrl}`);
- 
-     const response = await fetch(reellyUrl, {
-       method: 'GET',
-       headers: {
-         'X-API-Key': apiKey,
-         'Accept': 'application/json',
-       },
-     });
- 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Reelly API error:', response.status, errorText);
-        // Return empty results instead of propagating upstream errors
-        // This prevents the frontend from crashing when Reelly API is temporarily down
+    if (source === "live") {
+      // Live API path — requires API key
+      const apiKey = Deno.env.get("REELLY_API_KEY");
+      if (!apiKey) {
         return new Response(
-          JSON.stringify({
-            success: true,
-            data: {
-              projects: [],
-              pagination: { total: 0, limit, offset, hasMore: false },
-            },
-            warning: `Reelly API returned ${response.status} — showing empty results`,
-          }),
-          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          JSON.stringify({ success: false, error: "REELLY_API_KEY not configured" }),
+          { status: 500, headers: { ...corsH, "Content-Type": "application/json" } }
         );
       }
- 
-     const data = await response.json();
-     
-     // Reelly API returns paginated response: { count, next, previous, results }
-     const total = data.count || 0;
-     const projects: ReellyProject[] = data.results || [];
-     
-     // Transform projects to frontend format
-     const transformedProjects = projects.map(transformProject);
-     
-     const hasMore = offset + limit < total;
- 
-     return new Response(
-       JSON.stringify({
-         success: true,
-         data: {
-           projects: transformedProjects,
-           pagination: {
-             total,
-             limit,
-             offset,
-             hasMore,
-           },
-         },
-       }),
-       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-     );
-   } catch (error) {
-     console.error('Error in reelly-projects:', error);
-     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-     return new Response(
-       JSON.stringify({ success: false, error: errorMessage }),
-       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-     );
-   }
- });
+      result = await serveFromLiveAPI(apiKey, params);
+    } else {
+      // DB path — default, fast
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      );
+      result = await serveFromDB(supabase, params);
+    }
+
+    return new Response(
+      JSON.stringify({ success: true, data: result }),
+      { headers: { ...corsH, "Content-Type": "application/json" } }
+    );
+  } catch (e: any) {
+    console.error("[reelly-projects] Error:", e.message);
+    return new Response(
+      JSON.stringify({ success: false, error: e.message }),
+      { status: 500, headers: { ...corsH, "Content-Type": "application/json" } }
+    );
+  }
+});

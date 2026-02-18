@@ -152,7 +152,83 @@ export const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-export const REELLY_API_BASE = "https://api-reelly.up.railway.app/api/v2/clients/projects";
+// ============= API Constants =============
+
+export const REELLY_API_ROOT = "https://api-reelly.up.railway.app/api/v2/clients";
+
+/** @deprecated Use REELLY_API_ENDPOINTS.projects instead */
+export const REELLY_API_BASE = `${REELLY_API_ROOT}/projects`;
+
+export const REELLY_API_DEVELOPERS_BASE = `${REELLY_API_ROOT}/developers`;
+
+export const REELLY_API_ENDPOINTS = {
+  projects:          `${REELLY_API_ROOT}/projects`,
+  projectMarkers:    `${REELLY_API_ROOT}/projects/markers`,
+  projectStatuses:   `${REELLY_API_ROOT}/projects/statuses`,
+  projectSaleStatuses: `${REELLY_API_ROOT}/projects/sale-statuses`,
+  developers:        `${REELLY_API_ROOT}/developers`,
+  developerLogos:    `${REELLY_API_ROOT}/developers/logos`,
+  unitTypes:         `${REELLY_API_ROOT}/units/types`,
+  locations:         `${REELLY_API_ROOT}/locations`,
+  regions:           `${REELLY_API_ROOT}/regions`,
+  countries:         `${REELLY_API_ROOT}/countries`,
+} as const;
+
+export const REELLY_FILTERS = {
+  search:             "search",
+  saleStatus:         "sale_status",
+  constructionStatus: "construction_status",
+  region:             "region",
+  developer:          "developer",
+  limit:              "limit",
+  offset:             "offset",
+} as const;
+
+// ============= Shared Fetch Helper =============
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+/**
+ * Fetch from the Reelly API with automatic retry on 429 / 5xx.
+ * Uses exponential backoff: 5s → 10s → 20s → 40s (max 4 attempts).
+ */
+export async function fetchReellyWithRetry(
+  url: string,
+  apiKey: string,
+  maxAttempts = 4,
+): Promise<Response> {
+  const headers = {
+    "X-API-Key": apiKey,
+    "Authorization": `Bearer ${apiKey}`,
+    "Accept": "application/json",
+  };
+
+  let lastRes: Response | null = null;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const res = await fetch(url, { headers });
+      if (res.status === 429 || res.status === 502 || res.status === 503 || res.status === 504) {
+        const waitMs = 5_000 * Math.pow(2, attempt - 1);
+        console.warn(`[fetchReellyWithRetry] ${res.status} on attempt ${attempt}/${maxAttempts} for ${url} — waiting ${waitMs}ms`);
+        lastRes = res;
+        if (attempt < maxAttempts) {
+          await sleep(waitMs);
+          continue;
+        }
+        return res; // return last rate-limited response on final attempt
+      }
+      return res;
+    } catch (err) {
+      const waitMs = attempt * 5_000;
+      console.warn(`[fetchReellyWithRetry] Network error attempt ${attempt}/${maxAttempts}: ${err} — waiting ${waitMs}ms`);
+      if (attempt === maxAttempts) throw err;
+      await sleep(waitMs);
+    }
+  }
+  return lastRes!;
+}
 
 export function generateSlug(name: string, developer: string): string {
   return `${name}-${developer}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 100);

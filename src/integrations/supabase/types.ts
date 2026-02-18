@@ -15050,6 +15050,33 @@ export type Database = {
         }
         Relationships: []
       }
+      reelly_dictionaries: {
+        Row: {
+          dict_type: string
+          fetched_at: string
+          id: string
+          key: string
+          label: string
+          metadata: Json | null
+        }
+        Insert: {
+          dict_type: string
+          fetched_at?: string
+          id?: string
+          key: string
+          label: string
+          metadata?: Json | null
+        }
+        Update: {
+          dict_type?: string
+          fetched_at?: string
+          id?: string
+          key?: string
+          label?: string
+          metadata?: Json | null
+        }
+        Relationships: []
+      }
       reelly_sync_logs: {
         Row: {
           completed_at: string | null
