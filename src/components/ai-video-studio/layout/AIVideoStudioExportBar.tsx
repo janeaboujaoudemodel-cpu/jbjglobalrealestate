@@ -19,21 +19,21 @@ export function AIVideoStudioExportBar({
   isExporting,
 }: AIVideoStudioExportBarProps) {
   return (
-    <div className="flex items-center justify-between px-4 py-2 bg-slate-900/80 backdrop-blur">
+    <div className="flex items-center justify-between px-4 py-2 bg-slate-900 border-t border-slate-700">
       {/* Export Presets */}
       <div className="flex items-center gap-2">
-        <span className="text-xs text-slate-400 mr-2">Export As:</span>
+        <span className="text-xs text-slate-300 mr-2 font-medium">Export As:</span>
         {EXPORT_PRESETS.map((preset) => (
           <Button
             key={preset.id}
             size="sm"
-            variant={selectedPreset === preset.id ? 'default' : 'outline'}
             onClick={() => onSelectPreset(preset.id)}
             className={
               selectedPreset === preset.id
-                ? 'bg-gold text-black hover:bg-gold/90 border-gold'
-                : 'border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white'
+                ? 'border border-amber-400 bg-amber-400/20 text-amber-300 font-semibold hover:bg-amber-400/30'
+                : 'border border-slate-500 bg-slate-800 text-slate-200 hover:border-amber-400 hover:text-amber-300 hover:bg-slate-700'
             }
+            variant="outline"
           >
             <span className="mr-1.5">{preset.icon}</span>
             <span className="hidden sm:inline">{preset.name}</span>
@@ -54,7 +54,7 @@ export function AIVideoStudioExportBar({
             if (preset) onExportSingle(preset);
           }}
           disabled={isExporting}
-          className="border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+          className="border border-amber-400/60 text-amber-300 hover:bg-amber-400/10 hover:border-amber-400 hover:text-amber-200 disabled:opacity-50"
         >
           <Download className="w-4 h-4 mr-2" />
           Download
@@ -63,7 +63,7 @@ export function AIVideoStudioExportBar({
           size="sm"
           onClick={onExportAll}
           disabled={isExporting}
-          className="bg-gradient-to-r from-gold to-amber-500 text-black font-medium hover:opacity-90"
+          className="bg-amber-500 text-black font-bold hover:bg-amber-400 disabled:opacity-50"
         >
           <Package className="w-4 h-4 mr-2" />
           Download All (ZIP)
