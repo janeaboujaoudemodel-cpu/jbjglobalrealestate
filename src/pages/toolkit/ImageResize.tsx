@@ -569,19 +569,17 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                     <p className="text-champagne/70 text-sm mb-3">Background</p>
                     <div className="flex gap-2">
                       {(["white", "black", "blur"] as PaddingBg[]).map((bg) => (
-                        <Button
+                        <button
                           key={bg}
-                          variant="outline"
-                          size="sm"
-                          className={`flex-1 capitalize text-white ${
-                            paddingBg === bg 
-                              ? "bg-gold/25 border-gold" 
-                              : "border-gold/60 bg-white/10 hover:bg-white/15"
-                          }`}
                           onClick={() => setPaddingBg(bg)}
+                          className="flex-1 capitalize text-xs font-semibold py-1.5 rounded-lg transition-all text-white"
+                          style={{
+                            background: paddingBg === bg ? "rgba(201,168,76,0.35)" : "rgba(255,255,255,0.14)",
+                            border: paddingBg === bg ? "1px solid rgba(201,168,76,0.85)" : "1px solid rgba(255,255,255,0.35)",
+                          }}
                         >
                           {bg}
-                        </Button>
+                        </button>
                       ))}
                     </div>
                   </div>
@@ -599,19 +597,17 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                     <p className="text-champagne/70 text-sm mb-2">Format</p>
                     <div className="flex gap-2">
                       {(["jpg", "png", "webp"] as OutputFormat[]).map((fmt) => (
-                        <Button
+                        <button
                           key={fmt}
-                          variant="outline"
-                          size="sm"
-                          className={`flex-1 uppercase text-white ${
-                            outputFormat === fmt 
-                              ? "bg-gold/25 border-gold" 
-                              : "border-gold/60 bg-white/10 hover:bg-white/15"
-                          }`}
                           onClick={() => setOutputFormat(fmt)}
+                          className="flex-1 uppercase text-xs font-semibold py-1.5 rounded-lg transition-all text-white"
+                          style={{
+                            background: outputFormat === fmt ? "rgba(201,168,76,0.35)" : "rgba(255,255,255,0.14)",
+                            border: outputFormat === fmt ? "1px solid rgba(201,168,76,0.85)" : "1px solid rgba(255,255,255,0.35)",
+                          }}
                         >
                           {fmt}
-                        </Button>
+                        </button>
                       ))}
                     </div>
                   </div>
