@@ -1,145 +1,205 @@
 
-# Voice Dubbing — Full Audio Track Assembly + Video Sync
+# CapCut-Style AI Video Studio Redesign
 
-## What Already Exists
+## What the User Wants
 
-The `handleDubAll()` function in `CaptionTranslator.tsx` already:
-- Calls `voice-studio-tts` for each segment sequentially
-- Stores individual MP3 blob URLs per segment under `sub.dubbedAudioUrl[langCode]`
-- Shows per-segment `<audio>` playback widgets in the Translate tab
+A true CapCut-style layout where:
+- The **video preview is large and dominant** in the center
+- **All tools appear in a horizontal bottom toolbar** (no hidden side panels needed to discover features)
+- Features are **visible upfront** even before any video is uploaded — tools should be browsable immediately
+- The left Media Library panel and right Inspector panel are collapsed/merged into the new design
 
-What is missing is **assembly**: these segment blobs are isolated clips. There is no mechanism to stitch them into a single audio file that respects the original video's timeline (with silence gaps between segments matching the original timecodes).
+## Current Architecture Problems
 
-## Architecture of the New Feature
+The existing layout has these issues:
+1. **3-column layout** (left media library + center preview + right inspector) makes the preview small
+2. **Tools bar** already exists at the bottom but opens into a `h-64` drawer — correct direction but needs polish
+3. **Left panel** takes 18% of screen and is only used for media management — it hides the preview
+4. **Right panel** (Inspector) takes 28% — it's mostly empty when no clip is selected
+5. **No welcome/onboarding state** — the app shows a grey preview area saying "No media at playhead"
 
-### Step 1 — Stitch Segments into a Gapped Audio Track (Web Audio API)
+## New Layout Architecture
 
-After dubbing all segments, the user clicks **"Assemble Dubbed Track"** (or it happens automatically after Dub All). The browser:
+### Desktop (≥768px) — True CapCut Layout
 
-1. Fetches each segment's audio blob and decodes it via `AudioContext.decodeAudioData()`
-2. Creates an `AudioBuffer` long enough to hold the entire video duration
-3. Copies each decoded segment's audio data into the buffer at the correct time offset (using `seg.startTime` as the offset in seconds)
-4. Segments that are longer than their timeslot are trimmed; gaps between segments are silence (zeroed buffer)
-5. Encodes the assembled buffer as WAV (or WebM audio) using `MediaRecorder` on an `AudioBufferSourceNode` connected to a `MediaStreamDestination`
-6. The result is a single `Blob` stored in state as `dubbedTrackUrl[langCode]`
+```text
+┌────────────────────────────────────────────────────────────┐
+│  TopBar: Logo | Project Name | Undo/Redo | Save | Export   │
+├────────────────────────────────────────────────────────────┤
+│                                                            │
+│         ┌──────────────────────────────────────┐          │
+│         │                                      │          │
+│         │        VIDEO PREVIEW (large)         │          │
+│         │        with caption overlay          │          │
+│         │                                      │          │
+│         │   ▶ Play  ⏹ Stop  ⏭ Skip  🔊 Vol   │          │
+│         └──────────────────────────────────────┘          │
+│                                                            │
+│  [Captions] [Voice] [Beauty] [Sound FX] [Resize]          │
+│  [Effects]  [Text]  [AI Edit] [Map]     [Projects]         │
+│  ════════════════════════════════════════════════           │
+│  ┌─ Active Tool Panel (collapsible h-56) ──────────────┐   │
+│  │  CaptionTranslator / VoiceoverRecorder / etc.       │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                            │
+├────────────────────────────────────────────────────────────┤
+│  Timeline (h-40) ─ tracks + clips + playhead              │
+├────────────────────────────────────────────────────────────┤
+│  Export Bar: presets + Download + ZIP                      │
+└────────────────────────────────────────────────────────────┘
+```
 
-### Step 2 — Preview: Play Video with Dubbed Audio
+The key change: **remove the fixed left/right panels from the main viewport**. Instead, **Media Library** and **Inspector** become panel options inside the bottom tools bar (as "Media" and "Inspector" tool tabs). This frees up ~46% of horizontal space for the preview.
 
-In the Preview tab, when a dubbed track is available and selected:
-- The `<video>` element is muted (`video.muted = true`) so its original audio is silenced
-- A second `<audio>` element (hidden) plays the assembled `dubbedTrackUrl[langCode]` blob
-- Both are controlled by the same play/pause/seek controls — seeking the video also seeks the audio element to the same `currentTime`
+### What happens to left/right panels
 
-### Step 3 — Export: Burn with Dubbed Audio
+- **Media Library** → becomes a tool tab "Media" in the bottom toolbar (replaces "Projects")
+- **Inspector** → becomes a tool tab "Inspector" in the bottom toolbar
+- The `ResizablePanelGroup` with 3 columns is replaced by a single full-width preview column
 
-In the Export tab's "Burn Captions" flow, when a `dubbedTrackUrl` exists for the selected `burnLang`:
-- Instead of capturing `AudioContext.createMediaElementSource(video)`, use a `MediaElementAudioSourceNode` from the dubbed audio `<audio>` element
-- Route that into the `MediaStreamDestination` that feeds `MediaRecorder`
-- Result: the burned WebM has the dubbed audio instead of the original
+### Welcome / Empty State (before upload)
 
-## What Changes
+When no media is in the timeline, the preview area shows a rich welcome screen instead of "No media at playhead":
 
-### File: `src/components/ai-video-studio/features/CaptionTranslator.tsx` only
+```text
+┌──────────────────────────────────────────────────────────┐
+│                                                          │
+│           🎬  JBJ AI Video Studio                        │
+│                                                          │
+│     ┌──────────────┐    ┌──────────────┐                 │
+│     │  📁 Upload   │    │  🎵 Audio    │                 │
+│     │   Video      │    │  Only        │                 │
+│     └──────────────┘    └──────────────┘                 │
+│                                                          │
+│     ┌──────────────┐    ┌──────────────┐                 │
+│     │  📝 Start    │    │  🤖 AI       │                 │
+│     │  Captions    │    │  Generate    │                 │
+│     └──────────────┘    └──────────────┘                 │
+│                                                          │
+│     Drop a video here or click to upload                 │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+```
 
-All changes are in this one file. No new edge functions needed.
+This satisfies "show all features upfront before any upload" — clicking "Start Captions" opens the Captions tool panel, clicking "AI Generate" opens the AI Editor, etc.
 
-**New state:**
+## Files Changed
+
+Only **two files** need to change:
+
+### 1. `src/components/ai-video-studio/layout/AIVideoStudioLayout.tsx`
+
+This is the main restructuring file. Changes:
+
+**a) Remove the 3-column ResizablePanelGroup** — replace with a single full-width center column for the preview.
+
+**b) Add "Media" and "Inspector" to TOOL_TABS** so the left/right panel content is accessible:
+
 ```typescript
-const [dubbedTrackUrl, setDubbedTrackUrl] = useState<Record<string, string>>({});
-const [isAssembling, setIsAssembling] = useState<string | null>(null);
-const dubbedAudioRef = useRef<HTMLAudioElement>(null);
+const TOOL_TABS = [
+  { id: 'media',      label: 'Media',      icon: FolderOpen },
+  { id: 'captions',  label: 'Captions',   icon: Languages  },
+  { id: 'voice',     label: 'Voice',      icon: Mic        },
+  { id: 'beauty',    label: 'Beauty',     icon: Sparkles   },
+  { id: 'text',      label: 'Text',       icon: Type       },
+  { id: 'sfx',       label: 'Sound FX',   icon: Music2     },
+  { id: 'effects',   label: 'Effects',    icon: Layers     },
+  { id: 'resize',    label: 'Resize',     icon: Maximize2  },
+  { id: 'map',       label: 'Map',        icon: Map        },
+  { id: 'ai-editor', label: 'AI Editor',  icon: Bot        },
+  { id: 'inspector', label: 'Inspector',  icon: Settings2  },
+  { id: 'projects',  label: 'Projects',   icon: FolderOpen },
+];
 ```
 
-**New `assembleDubbedTrack(langCode)` function:**
+**c) Tool panel expanded to `h-72`** (from `h-64`) to give panels like CaptionTranslator more room.
 
-This runs after Dub All (or on demand via a button). Uses Web Audio API:
+**d) New welcome/empty-state card** rendered inside the center panel area when no props signal an active clip — passed in as a new `hasMedia` boolean prop, or just rendered inside `VideoPreviewCanvas`.
 
+**e) Full-width desktop layout:**
+
+```tsx
+// Before: ResizablePanelGroup with 3 panels
+// After:
+<div className="flex-1 min-h-0 w-full">
+  {centerPanel}
+</div>
 ```
-For each segment (with dubbedAudioUrl[langCode]):
-  1. fetch the blob URL → arrayBuffer → AudioContext.decodeAudioData()
-  2. copyToChannel() at seg.startTime seconds into a master AudioBuffer
-  
-Then:
-  3. Play master AudioBuffer via AudioBufferSourceNode → MediaStreamDestination
-  4. Record via MediaRecorder → Blob
-  5. Store URL in dubbedTrackUrl[langCode]
+
+**f) Mobile layout** — stays similar but also uses the tools bar approach.
+
+### 2. `src/components/ai-video-studio/AIVideoStudio.tsx`
+
+**a) Add `leftPanel` and `rightPanel` as tool tab content** — pass the `MediaLibraryPanel` as `mediaPanel` prop and `InspectorPanel` as `inspectorPanel` prop to the layout.
+
+**b) Remove old `leftPanel` and `rightPanel` props** from the layout call (they no longer exist as side columns).
+
+**c) Add welcome state detection** — pass `hasMedia={project.tracks.some(t => t.clips.length > 0)}` to enable the empty state.
+
+**d) Update layout props** to add `mediaPanel` and `inspectorPanel`:
+
+```tsx
+<AIVideoStudioLayout
+  topBar={...}
+  centerPanel={<VideoPreviewCanvas ... />}
+  timeline={...}
+  exportBar={...}
+  mediaPanel={<MediaLibraryPanel ... />}         // ← was leftPanel
+  inspectorPanel={<InspectorPanel ... />}         // ← was rightPanel
+  captionsPanel={...}
+  voicePanel={...}
+  ...
+/>
 ```
 
-The master buffer length = `Math.ceil(lastSegment.endTime * sampleRate)` samples.
+## Interface Prop Changes
 
-**Modified `handleDubAll()`:**
-
-After successfully dubbing all segments, automatically call `assembleDubbedTrack(langCode)`.
-
-**Modified Preview tab:**
-
-When `dubbedTrackUrl[burnLang]` exists:
-- `<video>` gets `muted` prop
-- A hidden `<audio ref={dubbedAudioRef}>` is added with `src={dubbedTrackUrl[burnLang]}`
-- Play/pause/seek controls also sync the dubbed audio element:
+The `AIVideoStudioLayoutProps` interface will change:
 
 ```typescript
-const togglePreviewPlay = () => {
-  const v = previewVideoRef.current;
-  const a = dubbedAudioRef.current;
-  if (!v) return;
-  if (v.paused) {
-    v.play();
-    a?.play(); // sync dubbed audio
-    setPreviewPlaying(true);
-  } else {
-    v.pause();
-    a?.pause();
-    setPreviewPlaying(false);
-  }
-};
+// Remove:
+leftPanel: ReactNode;
+rightPanel: ReactNode;
 
-const seekPreview = (delta: number) => {
-  const v = previewVideoRef.current;
-  const a = dubbedAudioRef.current;
-  if (!v) return;
-  const t = Math.max(0, Math.min(v.duration || 0, v.currentTime + delta));
-  v.currentTime = t;
-  if (a) a.currentTime = t; // keep audio in sync
-};
+// Add:
+mediaPanel?: ReactNode;       // Media Library (now in tool tabs)
+inspectorPanel?: ReactNode;   // Inspector (now in tool tabs)
+hasMedia?: boolean;           // Controls empty state in preview
 ```
 
-The seek bar `onChange` also syncs `dubbedAudioRef.current.currentTime`.
+## Empty State Design in VideoPreviewCanvas
 
-**Modified `burnCaptionsOnVideo()`:**
+When `clips` is empty (no media in timeline), instead of the grey "No media at playhead" text, show a proper upload/quick-start card with:
+- Drag-and-drop zone (file input)
+- 4 quick-action tiles: Upload Video, Audio Only, Start Captions, AI Editor
+- Subtle animated border
+- "or drop a file here" helper text
 
-Detect if dubbed track exists for the selected `burnLang`:
-- If yes: create a hidden `<audio>` element from `dubbedTrackUrl[burnLang]`, connect its audio to a `MediaStreamDestination`, mute the video element
-- If no: use the original video audio (existing logic)
+Since `VideoPreviewCanvas` doesn't have access to the upload function, this is better handled in `AIVideoStudioLayout` — the welcome card is rendered inside the center slot **only when `hasMedia === false`**, overlapping or replacing the preview. The preview canvas stays mounted so clips added via tool panels appear immediately.
 
-**New UI — Dubbed Track section in Translate tab:**
+Actually, the cleanest approach: the `centerPanel` prop remains `VideoPreviewCanvas` always. The welcome overlay is a `position: absolute` layer inside `VideoPreviewCanvas` itself, triggered when `clips.length === 0`. The `VideoPreviewCanvas` already has a ref to the container div, so it can render an overlay with a file input trigger — and call `onUpload` via a new prop.
 
-After Dub All completes, show an assembled track status card per language:
-
+So `VideoPreviewCanvas` gets one new optional prop:
+```typescript
+onUpload?: (files: FileList) => void;
+onOpenTool?: (toolId: string) => void;  // to open tool panels from welcome screen
 ```
-┌─ 🇸🇦 Arabic Dubbed Track ──────────────────┐
-│  ✓ Assembled — 14 segments, 2m 34s         │
-│  [▶ Play full track]  [⬇ Download MP3]     │
-│  [🎬 Use in Preview]                        │
-└─────────────────────────────────────────────┘
-```
-
-The "Play full track" button plays just the dubbed audio blob to let users verify the full dub before exporting.
-
-**Voice selector for dubbing:**
-
-Currently `handleDubAll` hardcodes `voiceId: 'JBFqnCBsd6RMkjVDRZzb'` (George). Add a voice picker (dropdown using `VOICE_OPTIONS` from types.ts) before the Dub All button so users can choose from the 14 available voices. This state goes into `const [dubVoiceId, setDubVoiceId] = useState('JBFqnCBsd6RMkjVDRZzb')`.
 
 ## Summary of All Changes
 
-| Area | What Changes |
+| File | Change |
 |---|---|
-| State | +`dubbedTrackUrl`, `isAssembling`, `dubVoiceId`, `dubbedAudioRef` |
-| `handleDubAll()` | After dubbing all segs, auto-calls `assembleDubbedTrack()` |
-| `assembleDubbedTrack()` | NEW — Web Audio API: decodes all segment blobs, copies at correct timestamps into one AudioBuffer, records to Blob, stores in `dubbedTrackUrl[lang]` |
-| Preview tab | If dubbed track exists for selected lang: mutes video, syncs hidden `<audio>` dubbed element with play/pause/seek |
-| `burnCaptionsOnVideo()` | If dubbed track exists for selected `burnLang`: uses dubbed audio element as audio source instead of original video audio |
-| Voice picker UI | Dropdown before Dub All button using `VOICE_OPTIONS` from types.ts |
-| Dubbed track card UI | Shows assembled track status, playback + MP3 download per language |
+| `AIVideoStudioLayout.tsx` | Remove 3-column ResizablePanelGroup; full-width preview; add Media + Inspector tool tabs; larger tool panel height |
+| `AIVideoStudio.tsx` | Remove leftPanel/rightPanel as side columns; pass as mediaPanel/inspectorPanel; add hasMedia + onUpload to preview |
+| `VideoPreviewCanvas.tsx` | Add welcome overlay when clips=[] with upload zone + quick-action tiles; add onUpload + onOpenTool props |
 
-Only `CaptionTranslator.tsx` is modified. No database, no new edge functions, no new dependencies.
+No new files, no database changes, no edge functions needed.
+
+## Technical Notes
+
+- The `ResizablePanelGroup` import stays in the file but is no longer used in the main layout — it can be cleaned up
+- `useIsMobile` check remains — mobile layout already works well with the tools bar approach
+- Tool panel height increased from `h-64` to `h-72` (288px) to give the Media panel (which has tabs + search + grid) enough room
+- The Media tab in the tools bar shows the full `MediaLibraryPanel` — upload, stock, AI, templates — all accessible
+- The Inspector tab shows clip properties when a clip is selected, or "Select a clip" empty state
+- `TOOL_TABS` gains "Media" (first) and "Inspector" (second-to-last) entries; "Projects" stays last
