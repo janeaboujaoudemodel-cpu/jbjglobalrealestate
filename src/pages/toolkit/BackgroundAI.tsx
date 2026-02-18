@@ -864,8 +864,9 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                   onClick={() => setActiveTab(tab.id as 'remove' | 'generate')}
                   className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-all"
                   style={{
-                    background: activeTab === tab.id ? C.btnPrimary : 'transparent',
-                    color: activeTab === tab.id ? 'white' : C.mutedText,
+                    background: activeTab === tab.id ? C.btnPrimary : 'rgba(255,255,255,0.07)',
+                    color: 'white',
+                    border: activeTab === tab.id ? 'none' : '1px solid rgba(255,255,255,0.18)',
                     boxShadow: activeTab === tab.id ? C.btnShadow : 'none',
                   }}
                 >
@@ -899,9 +900,9 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                       onClick={() => setSelectedBackground(preset.id)}
                       className="flex items-center gap-3 p-3 rounded-xl text-sm text-left transition-all"
                       style={{
-                        background: selectedBackground === preset.id ? "rgba(99,102,241,0.2)" : "rgba(255,255,255,0.03)",
-                        border: `1px solid ${selectedBackground === preset.id ? "rgba(99,102,241,0.6)" : "rgba(255,255,255,0.07)"}`,
-                        color: selectedBackground === preset.id ? C.accentText : "rgba(255,255,255,0.6)",
+                        background: selectedBackground === preset.id ? "rgba(99,102,241,0.28)" : "rgba(255,255,255,0.10)",
+                        border: `1px solid ${selectedBackground === preset.id ? "rgba(99,102,241,0.7)" : "rgba(255,255,255,0.22)"}`,
+                        color: selectedBackground === preset.id ? C.accentText : "rgba(255,255,255,0.88)",
                       }}
                     >
                       {preset.color ? (
@@ -944,9 +945,9 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                       onClick={() => setSelectedScene(scene)}
                       className="flex flex-col items-center gap-2 p-3 rounded-xl text-sm transition-all"
                       style={{
-                        background: selectedScene.id === scene.id ? "rgba(99,102,241,0.2)" : "rgba(255,255,255,0.03)",
-                        border: `1px solid ${selectedScene.id === scene.id ? "rgba(99,102,241,0.6)" : "rgba(255,255,255,0.07)"}`,
-                        color: selectedScene.id === scene.id ? C.accentText : "rgba(255,255,255,0.6)",
+                        background: selectedScene.id === scene.id ? "rgba(99,102,241,0.28)" : "rgba(255,255,255,0.10)",
+                        border: `1px solid ${selectedScene.id === scene.id ? "rgba(99,102,241,0.7)" : "rgba(255,255,255,0.22)"}`,
+                        color: selectedScene.id === scene.id ? C.accentText : "rgba(255,255,255,0.88)",
                       }}
                     >
                       <span className="text-2xl">{scene.emoji}</span>

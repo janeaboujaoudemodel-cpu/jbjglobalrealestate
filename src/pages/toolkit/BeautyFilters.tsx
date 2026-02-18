@@ -497,9 +497,9 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <button key={p.id} onClick={() => applyPreset(p.id)}
                             className="px-3 py-1.5 rounded-xl text-xs transition-all font-medium"
                             style={{
-                              background: selectedPreset === p.id ? "rgba(99,102,241,0.22)" : "rgba(255,255,255,0.04)",
-                              border: `1px solid ${selectedPreset === p.id ? "rgba(99,102,241,0.65)" : "rgba(255,255,255,0.08)"}`,
-                              color: selectedPreset === p.id ? I.text : I.muted,
+                              background: selectedPreset === p.id ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.10)",
+                              border: `1px solid ${selectedPreset === p.id ? "rgba(99,102,241,0.75)" : "rgba(255,255,255,0.22)"}`,
+                              color: selectedPreset === p.id ? I.text : "rgba(255,255,255,0.88)",
                             }}>{p.name}</button>
                         ))}
                       </div>
@@ -568,8 +568,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                         <Download className="h-4 w-4" /> Download Image
                       </button>
                       <button onClick={() => { setAdjustments({ ...DEFAULT_ADJ }); setSelectedPreset('none'); }}
-                        className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium"
-                        style={{ background: "rgba(255,255,255,0.04)", border: `1px solid rgba(255,255,255,0.1)`, color: I.muted }}>
+                        className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium text-white"
+                        style={{ background: "rgba(255,255,255,0.14)", border: `1px solid rgba(255,255,255,0.25)` }}>
                         <RotateCcw className="h-4 w-4" /> Reset All
                       </button>
                     </div>
@@ -634,8 +634,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
 
                     <button
                       onClick={() => { setFaceAdj({ ...DEFAULT_FACE }); setSelectedMakeup(''); toast.success('Face adjustments reset'); }}
-                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium"
-                      style={{ background: "rgba(255,255,255,0.04)", border: `1px solid rgba(255,255,255,0.1)`, color: I.muted }}>
+                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium text-white"
+                      style={{ background: "rgba(255,255,255,0.14)", border: `1px solid rgba(255,255,255,0.25)` }}>
                       <RotateCcw className="h-4 w-4" /> Reset Face
                     </button>
                     <p className="text-xs text-center" style={{ color: I.dim }}>AI face features are simulated previews · Full AI requires cloud processing</p>
@@ -674,8 +674,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                       </p>
                     </div>
                     <button onClick={() => { setBodyAdj({ ...DEFAULT_BODY }); toast.success('Body reset'); }}
-                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium"
-                      style={{ background: "rgba(255,255,255,0.04)", border: `1px solid rgba(255,255,255,0.1)`, color: I.muted }}>
+                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium text-white"
+                      style={{ background: "rgba(255,255,255,0.14)", border: `1px solid rgba(255,255,255,0.25)` }}>
                       <RotateCcw className="h-4 w-4" /> Reset Body
                     </button>
                   </div>
@@ -766,8 +766,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                       <div className="grid grid-cols-2 gap-2">
                         {['Remove BG','White BG','Office BG','City BG','Beach BG','Studio BG'].map(bg => (
                           <button key={bg} onClick={() => simulateAI(bg)}
-                            className="px-3 py-2 rounded-xl text-xs font-medium transition-all text-left"
-                            style={{ background: "rgba(255,255,255,0.04)", border: `1px solid rgba(255,255,255,0.08)`, color: I.muted }}>
+                            className="px-3 py-2 rounded-xl text-xs font-medium transition-all text-left text-white"
+                            style={{ background: "rgba(255,255,255,0.12)", border: `1px solid rgba(255,255,255,0.22)` }}>
                             {bg}
                           </button>
                         ))}
@@ -783,8 +783,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                       <div className="grid grid-cols-2 gap-2 mb-3">
                         {['Business Suit','Casual Wear','Formal Dress','Sports Outfit','Luxury Look','Traditional'].map(outfit => (
                           <button key={outfit} onClick={() => simulateAI(outfit)}
-                            className="px-3 py-2 rounded-xl text-xs font-medium transition-all"
-                            style={{ background: "rgba(255,255,255,0.04)", border: `1px solid rgba(255,255,255,0.08)`, color: I.muted }}>
+                            className="px-3 py-2 rounded-xl text-xs font-medium transition-all text-white"
+                            style={{ background: "rgba(255,255,255,0.12)", border: `1px solid rgba(255,255,255,0.22)` }}>
                             {outfit}
                           </button>
                         ))}
@@ -806,8 +806,8 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                       <div className="grid grid-cols-2 gap-2">
                         {['Remove People','Remove Objects','Remove Blemish','Remove Watermark'].map(rm => (
                           <button key={rm} onClick={() => simulateAI(rm)}
-                            className="px-3 py-2 rounded-xl text-xs font-medium transition-all"
-                            style={{ background: "rgba(255,255,255,0.04)", border: `1px solid rgba(255,255,255,0.08)`, color: I.muted }}>
+                            className="px-3 py-2 rounded-xl text-xs font-medium transition-all text-white"
+                            style={{ background: "rgba(255,255,255,0.12)", border: `1px solid rgba(255,255,255,0.22)` }}>
                             {rm}
                           </button>
                         ))}

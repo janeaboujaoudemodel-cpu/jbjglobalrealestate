@@ -411,7 +411,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         <Button
                           onClick={downloadResult}
                           variant="outline"
-                          className="border-emerald-500 text-emerald-400 hover:bg-emerald-500/10"
+                          className="text-white border-emerald-500 bg-emerald-500/20 hover:bg-emerald-500/30"
                         >
                           <Download className="w-4 h-4 mr-2" />
                           Download
@@ -420,8 +420,8 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                       
                       <Button
                         onClick={clearImage}
-                        variant="ghost"
-                        className="text-slate-400 hover:text-red-400"
+                        variant="outline"
+                        className="text-red-300 border-red-500/60 bg-red-500/20 hover:bg-red-500/30"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

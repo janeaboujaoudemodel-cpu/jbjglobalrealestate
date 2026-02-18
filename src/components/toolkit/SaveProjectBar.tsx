@@ -66,16 +66,16 @@ export function SaveProjectBar({
         <button
           onClick={onSave}
           disabled={!canSave}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-          style={{ background: `${accentColor}18`, border: `1px solid ${accentBorder}`, color: accentColor }}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed text-white"
+          style={{ background: accentColor, boxShadow: `0 2px 12px ${accentColor}55` }}
         >
           <Save className="w-3.5 h-3.5" /> Save
         </button>
         <button
           onClick={onClear}
           disabled={!canSave}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-          style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "#f87171" }}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed text-white"
+          style={{ background: "rgba(239,68,68,0.75)", border: "1px solid rgba(239,68,68,0.6)" }}
         >
           <X className="w-3.5 h-3.5" /> Clear
         </button>
