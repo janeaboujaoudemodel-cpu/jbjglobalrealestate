@@ -19,6 +19,7 @@ type IconStyle = 'NONE' | 'MONOGRAM' | 'SIMPLE_ICON' | 'UPLOADED_LOGO';
 interface FormState {
   project_name: string;
   company_name: string;
+  arabic_company_name: string;
   trade_name_optional: string;
   registration_number_optional: string;
   address_optional: string;
@@ -27,6 +28,7 @@ interface FormState {
   website_optional: string;
   city_optional: string;
   country_optional: string;
+  arabic_city: string;
   language_mode: LanguageMode;
   stamp_type: StampType;
   style_theme: StyleTheme;
@@ -64,6 +66,7 @@ export default function StampProjectWizard() {
   const [form, setForm] = useState<FormState>({
     project_name: 'My Stamp Project',
     company_name: '',
+    arabic_company_name: '',
     trade_name_optional: '',
     registration_number_optional: '',
     address_optional: '',
@@ -72,6 +75,7 @@ export default function StampProjectWizard() {
     website_optional: '',
     city_optional: '',
     country_optional: 'UAE',
+    arabic_city: '',
     language_mode: 'EN',
     stamp_type: 'ROUND',
     style_theme: 'CLASSIC',
@@ -93,6 +97,7 @@ export default function StampProjectWizard() {
         user_id: user!.id,
         project_name: form.project_name,
         company_name: form.company_name,
+        arabic_company_name: form.arabic_company_name || null,
         trade_name_optional: form.trade_name_optional || null,
         registration_number_optional: form.registration_number_optional || null,
         address_optional: form.address_optional || null,
@@ -101,6 +106,7 @@ export default function StampProjectWizard() {
         website_optional: form.website_optional || null,
         city_optional: form.city_optional || null,
         country_optional: form.country_optional || 'UAE',
+        arabic_city: form.arabic_city || null,
         language_mode: form.language_mode,
         stamp_type: form.stamp_type,
         style_theme: form.style_theme,
@@ -212,6 +218,21 @@ export default function StampProjectWizard() {
                   ))}
                 </div>
               </div>
+
+              {/* Arabic fields — shown when AR or BILINGUAL selected */}
+              {(form.language_mode === 'AR' || form.language_mode === 'BILINGUAL') && (
+                <div className="border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.04)] rounded-xl p-4 space-y-3">
+                  <p className="text-xs font-semibold text-[hsl(var(--gold-dark))]">Arabic Details (for bilingual stamp)</p>
+                  <div>
+                    <Label className="text-xs font-medium mb-1.5 block">Company Name in Arabic</Label>
+                    <Input value={form.arabic_company_name} onChange={e => set('arabic_company_name', e.target.value)} placeholder="اسم الشركة بالعربية" dir="rtl"/>
+                  </div>
+                  <div>
+                    <Label className="text-xs font-medium mb-1.5 block">City in Arabic</Label>
+                    <Input value={form.arabic_city} onChange={e => set('arabic_city', e.target.value)} placeholder="دبي، الإمارات" dir="rtl"/>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
