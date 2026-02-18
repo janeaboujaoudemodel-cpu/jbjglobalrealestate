@@ -14,9 +14,11 @@ import {
   Zap, Eye, Layers, Minus, Plus, RotateCcw, Shirt, SplitSquareHorizontal,
   Smile, Scissors, Wand2, Grid3x3, ImageIcon, Brush, Camera,
   Sliders, Filter, Crop, FlipHorizontal, Star, Paintbrush,
-  Users, Dumbbell, Heart
+  Users, Dumbbell, Heart, Instagram, CheckCircle2, Clock, Send, Link2,
+  AlertCircle, ChevronDown, Calendar, ExternalLink, X
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 // ── Design tokens ──
 const I = {
@@ -188,6 +190,15 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
   // Instagram Grid
   const [gridPhotos, setGridPhotos] = useState<GridPhoto[]>([]);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [gridMode, setGridMode] = useState<'preview' | 'instagram'>('preview');
+  const [igConnected, setIgConnected] = useState(false);
+  const [igAccessToken, setIgAccessToken] = useState('');
+  const [igAccountId, setIgAccountId] = useState('');
+  const [igAccountName, setIgAccountName] = useState('');
+  const [showIgSetup, setShowIgSetup] = useState(false);
+  const [publishingId, setPublishingId] = useState<string | null>(null);
+  const [publishedIds, setPublishedIds] = useState<Record<string, { postUrl: string; postedAt: string }>>({});
+  const [captionEditing, setCaptionEditing] = useState<string | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -326,6 +337,73 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
       return arr;
     });
     setDragIndex(idx);
+  };
+
+  const handleConnectInstagram = () => {
+    if (!igAccessToken.trim() || !igAccountId.trim()) {
+      toast.error('Please enter both Access Token and Account ID');
+      return;
+    }
+    setIgConnected(true);
+    setIgAccountName(`@account_${igAccountId.slice(-4)}`);
+    setShowIgSetup(false);
+    toast.success('Instagram Business account connected!');
+  };
+
+  const handleDisconnectInstagram = () => {
+    setIgConnected(false);
+    setIgAccessToken('');
+    setIgAccountId('');
+    setIgAccountName('');
+    toast.info('Instagram account disconnected');
+  };
+
+  const handlePublishPhoto = async (photo: GridPhoto) => {
+    if (!igConnected || !igAccessToken || !igAccountId) {
+      toast.error('Connect your Instagram account first');
+      return;
+    }
+    if (publishedIds[photo.id]) {
+      toast.info('This photo is already posted');
+      return;
+    }
+
+    setPublishingId(photo.id);
+    try {
+      // Convert image URL to base64 data URL for upload
+      const imgResponse = await fetch(photo.url);
+      const blob = await imgResponse.blob();
+      const reader = new FileReader();
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+
+      const { data, error } = await supabase.functions.invoke('instagram-publish', {
+        body: {
+          imageDataUrl: dataUrl,
+          caption: photo.caption,
+          accessToken: igAccessToken,
+          accountId: igAccountId,
+        },
+      });
+
+      if (error || !data?.success) {
+        throw new Error(data?.error || error?.message || 'Publish failed');
+      }
+
+      setPublishedIds(prev => ({
+        ...prev,
+        [photo.id]: { postUrl: data.postUrl, postedAt: new Date().toLocaleString() },
+      }));
+      toast.success('Posted to Instagram! 🎉');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      toast.error(`Failed to post: ${msg}`);
+    } finally {
+      setPublishingId(null);
+    }
   };
 
   // ── Slider row component ──
@@ -826,11 +904,15 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
 
             {/* ── Tab 6: Instagram Grid Planner ── */}
             <TabsContent value="grid" className="mt-0">
-              <div className="space-y-6">
+              <div className="space-y-5">
+                {/* Header */}
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-white font-semibold text-lg">Instagram Grid Planner</h3>
-                    <p className="text-xs mt-1" style={{ color: I.muted }}>Drag to rearrange · Preview your feed before posting</p>
+                    <h3 className="text-white font-semibold text-lg flex items-center gap-2">
+                      <Grid3x3 className="h-5 w-5" style={{ color: I.text }} />
+                      Instagram Grid Planner
+                    </h3>
+                    <p className="text-xs mt-0.5" style={{ color: I.muted }}>Plan your feed or publish directly to Instagram</p>
                   </div>
                   <button onClick={() => gridFileInputRef.current?.click()}
                     className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white"
@@ -840,85 +922,302 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                   <input ref={gridFileInputRef} type="file" accept="image/*" multiple onChange={handleGridFileSelect} className="hidden" />
                 </div>
 
-                {gridPhotos.length === 0 ? (
-                  <div className="rounded-2xl p-12 text-center" style={{ border: `2px dashed ${I.border}`, background: I.surface }}>
-                    <Grid3x3 className="h-12 w-12 mx-auto mb-4" style={{ color: "rgba(99,102,241,0.5)" }} />
-                    <p className="text-white font-semibold mb-2">Add photos to plan your Instagram grid</p>
-                    <p className="text-xs" style={{ color: I.dim }}>Drag to rearrange · Apply same preset to all · Schedule posts</p>
-                    <button onClick={() => gridFileInputRef.current?.click()}
-                      className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
-                      style={{ background: I.btnGrad, boxShadow: I.btnShadow }}>
-                      <Upload className="h-4 w-4" /> Upload Photos
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    {/* Grid Preview */}
-                    <div className="rounded-2xl p-4" style={{ background: I.surface, border: `1px solid ${I.border}` }}>
-                      <SectionLabel>📱 Feed Preview (drag to rearrange)</SectionLabel>
-                      <div className="grid grid-cols-3 gap-1">
-                        {Array.from({ length: Math.max(9, Math.ceil(gridPhotos.length / 3) * 3) }, (_, i) => {
-                          const photo = gridPhotos[i];
-                          return (
-                            <div key={i}
-                              draggable={!!photo}
-                              onDragStart={() => photo && handleGridDragStart(i)}
-                              onDragOver={e => photo && handleGridDragOver(e, i)}
-                              className="relative aspect-square rounded-sm overflow-hidden cursor-move"
-                              style={{ background: "rgba(255,255,255,0.04)", border: `1px solid rgba(255,255,255,0.06)` }}>
-                              {photo ? (
-                                <>
-                                  <img src={photo.url} alt="" className="w-full h-full object-cover" />
-                                  <div className="absolute top-1 right-1">
-                                    <button onClick={() => setGridPhotos(prev => prev.filter((_, gi) => gi !== i))}
-                                      className="w-5 h-5 rounded-full flex items-center justify-center bg-red-500/80">
-                                      <Trash2 className="h-2.5 w-2.5 text-white" />
-                                    </button>
-                                  </div>
-                                </>
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center">
-                                  <ImageIcon className="h-4 w-4" style={{ color: "rgba(255,255,255,0.15)" }} />
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Batch Actions */}
-                    <div className="grid sm:grid-cols-3 gap-3">
-                        {[
-                        { label: 'Apply Preset to All', icon: Filter, action: () => { toast.success(`Applied "${selectedPreset}" preset to all ${gridPhotos.length} photos`); } },
-                        { label: 'Schedule Posts', icon: Star, action: () => { toast.success('Schedule feature — connect Instagram API to enable'); } },
-                        { label: 'Export Grid', icon: Download, action: () => { toast.success(`Exporting ${gridPhotos.length} photos…`); } },
-                      ].map(({ label, icon: Icon, action }) => (
-                        <button key={label} onClick={action}
-                          className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all text-white"
-                          style={{ background: "rgba(99,102,241,0.22)", border: `1px solid rgba(99,102,241,0.5)` }}>
-                          <Icon className="h-4 w-4" />{label}
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Instagram Connect Note */}
-                    <div className="rounded-2xl p-4 flex items-start gap-3" style={{ background: "rgba(99,102,241,0.05)", border: `1px solid rgba(99,102,241,0.2)` }}>
-                      <Sparkles className="h-5 w-5 shrink-0 mt-0.5" style={{ color: I.text }} />
+                {/* Mode Toggle */}
+                <div className="grid grid-cols-2 gap-2 p-1 rounded-xl" style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${I.border}` }}>
+                  {[
+                    { mode: 'preview' as const, icon: Grid3x3, label: 'Preview Mode', desc: 'Plan your grid locally' },
+                    { mode: 'instagram' as const, icon: Send, label: 'Instagram Connect', desc: 'Post directly to Instagram' },
+                  ].map(({ mode, icon: Icon, label, desc }) => (
+                    <button
+                      key={mode}
+                      onClick={() => setGridMode(mode)}
+                      className="flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200"
+                      style={{
+                        background: gridMode === mode ? I.btnGrad : 'transparent',
+                        boxShadow: gridMode === mode ? I.btnShadow : 'none',
+                      }}
+                    >
+                      <Icon className="h-4 w-4 shrink-0" style={{ color: gridMode === mode ? '#fff' : I.text }} />
                       <div>
-                        <p className="text-white text-sm font-semibold">Connect Instagram for Auto-Posting</p>
-                        <p className="text-xs mt-1" style={{ color: I.muted }}>
-                          To enable real auto-posting and scheduling, connect your Instagram Business account via the Instagram Graph API.
-                          This requires an Instagram Business account and Facebook Developer app approval.
-                        </p>
-                        <button onClick={() => toast.info('Instagram API integration — configure in Settings → Integrations')}
-                          className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold"
-                          style={{ background: "rgba(99,102,241,0.2)", border: `1px solid rgba(99,102,241,0.4)`, color: I.text }}>
-                          <Users className="h-3 w-3" /> Connect Instagram
+                        <p className="text-sm font-semibold" style={{ color: gridMode === mode ? '#fff' : I.text }}>{label}</p>
+                        <p className="text-[10px]" style={{ color: gridMode === mode ? 'rgba(255,255,255,0.7)' : I.dim }}>{desc}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                {/* ── PREVIEW MODE ── */}
+                {gridMode === 'preview' && (
+                  <>
+                    {gridPhotos.length === 0 ? (
+                      <div className="rounded-2xl p-12 text-center" style={{ border: `2px dashed ${I.border}`, background: I.surface }}>
+                        <Grid3x3 className="h-12 w-12 mx-auto mb-4" style={{ color: "rgba(99,102,241,0.5)" }} />
+                        <p className="text-white font-semibold mb-2">Add photos to plan your Instagram grid</p>
+                        <p className="text-xs mb-5" style={{ color: I.dim }}>Drag to rearrange · Click photo to add captions · Apply presets to all</p>
+                        <button onClick={() => gridFileInputRef.current?.click()}
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
+                          style={{ background: I.btnGrad, boxShadow: I.btnShadow }}>
+                          <Upload className="h-4 w-4" /> Upload Photos
                         </button>
                       </div>
-                    </div>
+                    ) : (
+                      <>
+                        <div className="rounded-2xl p-4" style={{ background: I.surface, border: `1px solid ${I.border}` }}>
+                          <SectionLabel>📱 Feed Preview — drag to rearrange, click ✏ to add caption</SectionLabel>
+                          <div className="grid grid-cols-3 gap-1">
+                            {Array.from({ length: Math.max(9, Math.ceil(gridPhotos.length / 3) * 3) }, (_, i) => {
+                              const photo = gridPhotos[i];
+                              const isEditing = captionEditing === photo?.id;
+                              return (
+                                <div key={i}
+                                  draggable={!!photo}
+                                  onDragStart={() => photo && handleGridDragStart(i)}
+                                  onDragOver={e => photo && handleGridDragOver(e, i)}
+                                  onDragEnd={() => setDragIndex(null)}
+                                  className="relative aspect-square rounded-sm overflow-hidden cursor-move group"
+                                  style={{ background: "rgba(255,255,255,0.04)", border: `1px solid rgba(255,255,255,0.06)` }}>
+                                  {photo ? (
+                                    <>
+                                      <img src={photo.url} alt="" className="w-full h-full object-cover" />
+                                      {photo.caption && !isEditing && (
+                                        <div className="absolute inset-0 bg-black/60 flex items-end p-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                          <p className="text-white text-[9px] leading-tight line-clamp-3">{photo.caption}</p>
+                                        </div>
+                                      )}
+                                      {isEditing && (
+                                        <div className="absolute inset-0 bg-black/80 flex flex-col p-2 z-10">
+                                          <textarea
+                                            autoFocus
+                                            value={photo.caption}
+                                            onChange={e => setGridPhotos(prev => prev.map(p => p.id === photo.id ? { ...p, caption: e.target.value } : p))}
+                                            placeholder="Write a caption..."
+                                            className="flex-1 w-full bg-transparent text-white text-[9px] resize-none outline-none placeholder:text-white/40"
+                                          />
+                                          <button onClick={() => setCaptionEditing(null)}
+                                            className="self-end mt-1 px-2 py-0.5 rounded text-[9px] font-semibold text-white"
+                                            style={{ background: I.accent }}>Done</button>
+                                        </div>
+                                      )}
+                                      <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button onClick={() => setCaptionEditing(isEditing ? null : photo.id)}
+                                          className="w-5 h-5 rounded-full flex items-center justify-center"
+                                          style={{ background: 'rgba(99,102,241,0.9)' }}>
+                                          <Brush className="h-2.5 w-2.5 text-white" />
+                                        </button>
+                                        <button onClick={() => setGridPhotos(prev => prev.filter((_, gi) => gi !== i))}
+                                          className="w-5 h-5 rounded-full flex items-center justify-center bg-red-500/80">
+                                          <Trash2 className="h-2.5 w-2.5 text-white" />
+                                        </button>
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center">
+                                      <ImageIcon className="h-4 w-4" style={{ color: "rgba(255,255,255,0.15)" }} />
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        <div className="grid sm:grid-cols-3 gap-3">
+                          {[
+                            { label: 'Apply Preset to All', icon: Filter, action: () => { toast.success(`Applied "${selectedPreset}" preset to all ${gridPhotos.length} photos`); } },
+                            { label: 'Clear All Captions', icon: X, action: () => { setGridPhotos(prev => prev.map(p => ({ ...p, caption: '' }))); toast.success('Captions cleared'); } },
+                            { label: 'Export Grid', icon: Download, action: () => { toast.success(`Exporting ${gridPhotos.length} photos…`); } },
+                          ].map(({ label, icon: Icon, action }) => (
+                            <button key={label} onClick={action}
+                              className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all text-white"
+                              style={{ background: "rgba(99,102,241,0.22)", border: `1px solid rgba(99,102,241,0.5)` }}>
+                              <Icon className="h-4 w-4" />{label}
+                            </button>
+                          ))}
+                        </div>
+
+                        <div className="rounded-xl p-4 flex items-center gap-3" style={{ background: "rgba(99,102,241,0.05)", border: `1px solid rgba(99,102,241,0.2)` }}>
+                          <Send className="h-4 w-4 shrink-0" style={{ color: I.text }} />
+                          <p className="text-xs flex-1" style={{ color: I.muted }}>
+                            Ready to publish? Switch to <strong className="text-white">Instagram Connect</strong> mode to post directly.
+                          </p>
+                          <button onClick={() => setGridMode('instagram')}
+                            className="px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 text-white"
+                            style={{ background: I.btnGrad }}>Connect →</button>
+                        </div>
+                      </>
+                    )}
                   </>
+                )}
+
+                {/* ── INSTAGRAM CONNECT MODE ── */}
+                {gridMode === 'instagram' && (
+                  <div className="space-y-4">
+                    {!igConnected ? (
+                      <div className="rounded-2xl p-5 space-y-4" style={{ background: I.surface, border: `1px solid ${I.border}` }}>
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(225,48,108,0.15)", border: "1px solid rgba(225,48,108,0.3)" }}>
+                            <Send className="h-5 w-5" style={{ color: "#E1306C" }} />
+                          </div>
+                          <div>
+                            <p className="text-white font-semibold">Connect Instagram Business Account</p>
+                            <p className="text-xs" style={{ color: I.muted }}>Requires Business or Creator account + Facebook Developer App</p>
+                          </div>
+                        </div>
+                        {!showIgSetup ? (
+                          <div className="space-y-3">
+                            <div className="rounded-xl p-4 space-y-2" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                              <p className="text-xs font-semibold text-white mb-2">Setup Instructions</p>
+                              {[
+                                '1. Go to developers.facebook.com → My Apps → Create App',
+                                '2. Add Instagram Graph API product to your app',
+                                '3. Request instagram_content_publish permission',
+                                '4. Generate a long-lived access token (60-day validity)',
+                                '5. Find your Instagram Business User ID from the API Explorer',
+                              ].map(step => (
+                                <p key={step} className="text-[11px] flex gap-2" style={{ color: I.dim }}>
+                                  <span style={{ color: I.text }}>›</span>{step}
+                                </p>
+                              ))}
+                            </div>
+                            <button onClick={() => setShowIgSetup(true)}
+                              className="w-full py-2.5 rounded-xl text-sm font-semibold text-white"
+                              style={{ background: "linear-gradient(135deg, #E1306C, #833AB4)", boxShadow: "0 4px 20px rgba(225,48,108,0.4)" }}>
+                              Enter Credentials
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            <div>
+                              <label className="text-xs font-semibold mb-1.5 block" style={{ color: I.text }}>Access Token</label>
+                              <input type="password" value={igAccessToken} onChange={e => setIgAccessToken(e.target.value)}
+                                placeholder="EAAxxxxx... (long-lived token)"
+                                className="w-full px-3 py-2.5 rounded-lg text-sm text-white bg-transparent outline-none"
+                                style={{ border: `1px solid ${I.border}`, background: "rgba(255,255,255,0.04)" }} />
+                            </div>
+                            <div>
+                              <label className="text-xs font-semibold mb-1.5 block" style={{ color: I.text }}>Instagram Business Account ID</label>
+                              <input type="text" value={igAccountId} onChange={e => setIgAccountId(e.target.value)}
+                                placeholder="17841400000000000"
+                                className="w-full px-3 py-2.5 rounded-lg text-sm text-white bg-transparent outline-none"
+                                style={{ border: `1px solid ${I.border}`, background: "rgba(255,255,255,0.04)" }} />
+                            </div>
+                            <div className="flex gap-2">
+                              <button onClick={() => setShowIgSetup(false)}
+                                className="flex-1 py-2.5 rounded-xl text-sm font-medium"
+                                style={{ border: `1px solid ${I.border}`, color: I.muted }}>Cancel</button>
+                              <button onClick={handleConnectInstagram}
+                                className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white"
+                                style={{ background: "linear-gradient(135deg, #E1306C, #833AB4)" }}>Connect Account</button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="rounded-xl px-4 py-3 flex items-center justify-between" style={{ background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.3)" }}>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="h-4 w-4" style={{ color: "#22C55E" }} />
+                          <p className="text-sm font-semibold text-white">Connected: {igAccountName}</p>
+                        </div>
+                        <button onClick={handleDisconnectInstagram} className="text-xs px-3 py-1 rounded-lg"
+                          style={{ color: I.dim, border: `1px solid ${I.border}` }}>Disconnect</button>
+                      </div>
+                    )}
+
+                    {gridPhotos.length === 0 ? (
+                      <div className="rounded-2xl p-8 text-center" style={{ border: `2px dashed ${I.border}`, background: I.surface }}>
+                        <ImageIcon className="h-10 w-10 mx-auto mb-3" style={{ color: "rgba(99,102,241,0.4)" }} />
+                        <p className="text-white font-semibold mb-1">No photos in queue</p>
+                        <p className="text-xs mb-4" style={{ color: I.dim }}>Add photos using the button above</p>
+                        <button onClick={() => gridFileInputRef.current?.click()}
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white"
+                          style={{ background: I.btnGrad }}>
+                          <Upload className="h-4 w-4" /> Add Photos
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="space-y-3">
+                          {gridPhotos.map((photo) => {
+                            const posted = publishedIds[photo.id];
+                            const isPublishing = publishingId === photo.id;
+                            return (
+                              <div key={photo.id} className="rounded-xl p-4 flex gap-4"
+                                style={{ background: I.surface, border: `1px solid ${posted ? 'rgba(34,197,94,0.3)' : I.border}` }}>
+                                <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0">
+                                  <img src={photo.url} alt="" className="w-full h-full object-cover" />
+                                </div>
+                                <div className="flex-1 min-w-0 space-y-2">
+                                  <textarea value={photo.caption}
+                                    onChange={e => setGridPhotos(prev => prev.map(p => p.id === photo.id ? { ...p, caption: e.target.value } : p))}
+                                    placeholder="Write a caption for this post..."
+                                    rows={2} disabled={!!posted}
+                                    className="w-full bg-transparent text-white text-xs resize-none outline-none placeholder:text-white/30"
+                                    style={{ borderBottom: posted ? 'none' : `1px solid ${I.border}` }} />
+                                  <div className="flex items-center justify-between flex-wrap gap-2">
+                                    {posted ? (
+                                      <div className="flex items-center gap-2 flex-wrap">
+                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
+                                          style={{ background: "rgba(34,197,94,0.15)", color: "#22C55E" }}>
+                                          <CheckCircle2 className="h-2.5 w-2.5" /> POSTED
+                                        </span>
+                                        <span className="text-[10px]" style={{ color: I.dim }}>{posted.postedAt}</span>
+                                        <a href={posted.postUrl} target="_blank" rel="noopener noreferrer"
+                                          className="inline-flex items-center gap-1 text-[10px] font-medium" style={{ color: I.text }}>
+                                          <ExternalLink className="h-2.5 w-2.5" /> View Post
+                                        </a>
+                                      </div>
+                                    ) : (
+                                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
+                                        style={{ background: "rgba(99,102,241,0.15)", color: I.text }}>
+                                        <Clock className="h-2.5 w-2.5" /> DRAFT
+                                      </span>
+                                    )}
+                                    {!posted && (
+                                      <div className="flex items-center gap-2">
+                                        <button onClick={() => setGridPhotos(prev => prev.filter(p => p.id !== photo.id))}
+                                          className="p-1.5 rounded-lg" style={{ color: I.dim }}>
+                                          <Trash2 className="h-3.5 w-3.5" />
+                                        </button>
+                                        <button onClick={() => handlePublishPhoto(photo)}
+                                          disabled={!igConnected || isPublishing}
+                                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white disabled:opacity-40"
+                                          style={{ background: igConnected ? "linear-gradient(135deg, #E1306C, #833AB4)" : "rgba(99,102,241,0.3)" }}>
+                                          {isPublishing ? <Loader2 className="h-3 w-3 animate-spin" /> : <Send className="h-3 w-3" />}
+                                          {isPublishing ? 'Posting…' : 'Post Now'}
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {igConnected && gridPhotos.some(p => !publishedIds[p.id]) && (
+                          <button
+                            onClick={async () => {
+                              const drafts = gridPhotos.filter(p => !publishedIds[p.id]);
+                              toast.info(`Posting ${drafts.length} draft(s)…`);
+                              for (const photo of drafts) { await handlePublishPhoto(photo); }
+                            }}
+                            disabled={!!publishingId}
+                            className="w-full py-3 rounded-xl text-sm font-semibold text-white flex items-center justify-center gap-2"
+                            style={{ background: "linear-gradient(135deg, #E1306C, #833AB4)", boxShadow: "0 4px 20px rgba(225,48,108,0.4)" }}>
+                            <Send className="h-4 w-4" />
+                            Post All Drafts ({gridPhotos.filter(p => !publishedIds[p.id]).length})
+                          </button>
+                        )}
+                      </>
+                    )}
+
+                    <div className="rounded-xl p-3 flex items-start gap-2" style={{ background: "rgba(234,179,8,0.05)", border: "1px solid rgba(234,179,8,0.2)" }}>
+                      <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5" style={{ color: "#EAB308" }} />
+                      <p className="text-[10px]" style={{ color: I.dim }}>
+                        Instagram API requires a <strong className="text-white">Business or Creator</strong> account. Personal accounts cannot publish via API. Access tokens expire every 60 days.
+                      </p>
+                    </div>
+                  </div>
                 )}
               </div>
             </TabsContent>
