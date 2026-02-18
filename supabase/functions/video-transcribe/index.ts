@@ -70,7 +70,16 @@ serve(async (req) => {
     const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
-    const { audio, mimeType = "audio/webm", language = "en" } = await req.json();
+    const MIME_TO_EXT: Record<string, string> = {
+      "audio/mpeg": "mp3", "audio/mp3": "mp3",
+      "audio/wav": "wav", "audio/x-wav": "wav",
+      "audio/ogg": "ogg", "audio/webm": "webm",
+      "audio/mp4": "mp4", "audio/m4a": "m4a",
+      "video/mp4": "mp4", "video/webm": "webm",
+      "video/quicktime": "mov",
+    };
+
+    const { audio, mimeType = "audio/webm", language = "en", timeOffset = 0 } = await req.json();
 
     if (!audio) {
       return new Response(JSON.stringify({ error: "No audio data provided" }), {
@@ -91,7 +100,8 @@ serve(async (req) => {
         console.log(`Transcribing with ElevenLabs Scribe, lang=${langCode}, size=${audioBytes.length}`);
 
         const formData = new FormData();
-        formData.append("file", audioBlob, `audio.${mimeType.split("/")[1] || "webm"}`);
+        const ext = MIME_TO_EXT[mimeType] || mimeType.split("/")[1] || "webm";
+        formData.append("file", audioBlob, `audio.${ext}`);
         formData.append("model_id", "scribe_v2");
         formData.append("language_code", langCode);
         formData.append("tag_audio_events", "true");
@@ -112,7 +122,10 @@ serve(async (req) => {
           }));
 
           if (words.length > 0) {
-            const segments = groupWordsIntoSegments(words);
+            let segments = groupWordsIntoSegments(words);
+            if (timeOffset > 0) {
+              segments = segments.map(s => ({ ...s, startTime: s.startTime + timeOffset, endTime: s.endTime + timeOffset }));
+            }
             const fullText = result.text?.trim() || segments.map((s) => s.text).join(" ");
 
             console.log(`ElevenLabs Scribe success: ${segments.length} segments from ${words.length} words`);
@@ -202,6 +215,9 @@ serve(async (req) => {
       }
     }
 
+    if (timeOffset > 0) {
+      segments = segments.map(s => ({ ...s, startTime: s.startTime + timeOffset, endTime: s.endTime + timeOffset }));
+    }
     const fullText = segments.map((s) => s.text).join(" ");
     console.log(`Gemini fallback: ${segments.length} segments`);
 
