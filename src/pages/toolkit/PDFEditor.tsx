@@ -313,34 +313,23 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
   const selectedCount = pages.filter(p => p.selected).length;
 
   return (
-    <div className="min-h-screen bg-black">
+    <div style={{ background: "#0D0B08", minHeight: "100vh" }}>
       {/* Header - hidden when embedded in a suite tab */}
       {!embedded && (
-        <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm sticky top-0 z-50">
+        <header style={{ borderBottom: "1px solid rgba(201,168,76,0.18)", background: "rgba(201,168,76,0.03)" }}>
           <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link to="/toolkit" className="flex items-center gap-2 hover:bg-zinc-800 transition-colors rounded-lg px-3 py-2 border border-zinc-700" style={{ color: '#a1a1aa' }}>
-              <ArrowLeft className="h-5 w-5" style={{ color: '#a1a1aa' }} />
-              <span style={{ color: '#a1a1aa' }}>Back to Toolkit</span>
+            <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2" style={{ color: "rgba(255,255,255,0.45)", border: "1px solid rgba(201,168,76,0.2)" }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#fff"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)"}>
+              <ArrowLeft className="h-5 w-5" />
+              <span>Back to Toolkit</span>
             </Link>
             <div className="flex items-center gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isLoading}
-                className="border-slate-700 text-slate-300"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add PDF
+              <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} disabled={isLoading}
+                style={{ borderColor: "rgba(201,168,76,0.3)", color: "rgba(255,255,255,0.65)" }}>
+                <Plus className="h-4 w-4 mr-2" />Add PDF
               </Button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".pdf"
-                multiple
-                onChange={handleFileUpload}
-                className="hidden"
-              />
+              <input ref={fileInputRef} type="file" accept=".pdf" multiple onChange={handleFileUpload} className="hidden" />
             </div>
           </div>
         </header>
@@ -349,45 +338,40 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Title */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gold/20 text-gold mb-4">
-            <FileText className="h-8 w-8" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 0 32px rgba(201,168,76,0.15)" }}>
+            <FileText className="h-8 w-8 text-gold" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">PDF Editor</h1>
-          <p className="text-slate-400">Extract, reorder, merge PDFs and add signatures</p>
+          <p style={{ color: "rgba(255,255,255,0.4)" }}>Extract, reorder, merge PDFs and add signatures</p>
         </div>
 
         {pages.length === 0 ? (
           /* Upload Area */
           <div
-            className="max-w-2xl mx-auto border-2 border-dashed border-slate-700 rounded-xl p-12 text-center hover:border-gold/50 transition-colors cursor-pointer"
+            className="max-w-2xl mx-auto rounded-2xl p-12 text-center cursor-pointer transition-all duration-300"
+            style={{ border: "2px dashed rgba(201,168,76,0.3)", background: "rgba(201,168,76,0.02)" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.6)"; (e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.05)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.3)"; (e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.02)"; }}
             onClick={() => fileInputRef.current?.click()}
           >
             {isLoading ? (
               <Loader2 className="h-12 w-12 text-gold mx-auto mb-4 animate-spin" />
             ) : (
-              <Upload className="h-12 w-12 text-slate-500 mx-auto mb-4" />
+              <Upload className="h-12 w-12 mx-auto mb-4" style={{ color: "rgba(201,168,76,0.5)" }} />
             )}
-            <p className="text-white font-medium mb-2">
-              {isLoading ? 'Loading PDF...' : 'Drop your PDF files here'}
-            </p>
-            <p className="text-sm text-slate-500">
-              Upload one or more PDFs to get started
-            </p>
+            <p className="text-white font-medium mb-2">{isLoading ? 'Loading PDF...' : 'Drop your PDF files here'}</p>
+            <p className="text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>Upload one or more PDFs to get started</p>
           </div>
         ) : (
           <div className="grid lg:grid-cols-4 gap-6">
             {/* Page Thumbnails */}
             <div className="lg:col-span-1">
-              <div className="rounded-xl bg-slate-900 border border-slate-700 overflow-hidden">
-                <div className="p-3 border-b border-slate-700 flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-white">Pages ({pages.length})</h3>
+              <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.2)" }}>
+                <div className="p-3 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(201,168,76,0.12)" }}>
+                  <h3 className="text-sm font-semibold text-white">Pages ({pages.length})</h3>
                   <div className="flex gap-1">
-                    <Button size="sm" variant="ghost" onClick={selectAllPages} className="text-slate-400 h-7 text-xs">
-                      All
-                    </Button>
-                    <Button size="sm" variant="ghost" onClick={deselectAllPages} className="text-slate-400 h-7 text-xs">
-                      None
-                    </Button>
+                    <Button size="sm" variant="ghost" onClick={selectAllPages} className="h-7 text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>All</Button>
+                    <Button size="sm" variant="ghost" onClick={deselectAllPages} className="h-7 text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>None</Button>
                   </div>
                 </div>
                 <ScrollArea className="h-[500px]">
@@ -395,57 +379,35 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                     {pages.map((page, index) => (
                       <div
                         key={page.id}
-                        className={`p-3 rounded-lg border transition-all cursor-pointer ${
-                          page.selected
-                            ? 'bg-gold/20 border-gold/50'
-                            : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'
-                        }`}
+                        className="p-3 rounded-xl cursor-pointer transition-all"
+                        style={{
+                          background: page.selected ? "rgba(201,168,76,0.15)" : "rgba(255,255,255,0.03)",
+                          border: `1px solid ${page.selected ? "rgba(201,168,76,0.45)" : "rgba(255,255,255,0.08)"}`,
+                        }}
                         onClick={() => togglePageSelection(page.id)}
                       >
                         <div className="flex items-center gap-2">
-                          <Checkbox 
-                            checked={page.selected}
-                            className="data-[state=checked]:bg-gold data-[state=checked]:border-gold"
-                          />
-                          <GripVertical className="h-4 w-4 text-slate-500" />
+                          <Checkbox checked={page.selected} className="data-[state=checked]:bg-gold data-[state=checked]:border-gold" />
+                          <GripVertical className="h-4 w-4" style={{ color: "rgba(255,255,255,0.3)" }} />
                           <div className="flex-1">
                             <p className="text-sm text-white">Page {page.pageNumber}</p>
-                            <p className="text-xs text-slate-500">
+                            <p className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
                               From: {loadedPDFs[page.pdfIndex]?.name || 'Unknown'}
                             </p>
                           </div>
                           <div className="flex gap-1">
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={(e) => { e.stopPropagation(); movePageUp(index); }}
-                              disabled={index === 0}
-                              className="h-6 w-6 p-0 text-slate-400"
-                            >
+                            <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); movePageUp(index); }} disabled={index === 0} className="h-6 w-6 p-0" style={{ color: "rgba(255,255,255,0.4)" }}>
                               <ChevronLeft className="h-3 w-3 rotate-90" />
                             </Button>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={(e) => { e.stopPropagation(); movePageDown(index); }}
-                              disabled={index === pages.length - 1}
-                              className="h-6 w-6 p-0 text-slate-400"
-                            >
+                            <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); movePageDown(index); }} disabled={index === pages.length - 1} className="h-6 w-6 p-0" style={{ color: "rgba(255,255,255,0.4)" }}>
                               <ChevronRight className="h-3 w-3 rotate-90" />
                             </Button>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={(e) => { e.stopPropagation(); rotatePage(page.id); }}
-                              className="h-6 w-6 p-0 text-slate-400"
-                            >
+                            <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); rotatePage(page.id); }} className="h-6 w-6 p-0" style={{ color: "rgba(255,255,255,0.4)" }}>
                               <RotateCw className="h-3 w-3" />
                             </Button>
                           </div>
                         </div>
-                        {page.rotation !== 0 && (
-                          <p className="text-xs text-gold mt-1">Rotated {page.rotation}°</p>
-                        )}
+                        {page.rotation !== 0 && <p className="text-xs text-gold mt-1">Rotated {page.rotation}°</p>}
                       </div>
                     ))}
                   </div>
@@ -457,99 +419,65 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
             <div className="lg:col-span-3">
               <div className="grid gap-6">
                 {/* Actions */}
-                <div className="rounded-xl bg-slate-900 border border-slate-700 p-6">
-                  <h3 className="text-lg font-medium text-white mb-4">Actions</h3>
-                  
+                <div className="rounded-2xl p-6" style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.2)" }}>
+                  <h3 className="text-lg font-semibold text-white mb-4">Actions</h3>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <Button
-                      variant="outline"
-                      onClick={exportSelectedPages}
-                      disabled={selectedCount === 0 || isSaving}
-                      className="border-slate-700 text-slate-300 hover:bg-gold hover:text-black hover:border-gold"
-                    >
-                      <Split className="h-4 w-4 mr-2" />
-                      Extract Selected ({selectedCount})
+                    <Button variant="outline" onClick={exportSelectedPages} disabled={selectedCount === 0 || isSaving}
+                      style={{ borderColor: "rgba(201,168,76,0.3)", color: "rgba(255,255,255,0.65)" }}
+                      className="hover:bg-gold hover:text-black hover:border-gold transition-all">
+                      <Split className="h-4 w-4 mr-2" />Extract Selected ({selectedCount})
                     </Button>
-                    
-                    <Button
-                      variant="outline"
-                      onClick={exportMergedPDF}
-                      disabled={pages.length === 0 || isSaving}
-                      className="border-slate-700 text-slate-300 hover:bg-gold hover:text-black hover:border-gold"
-                    >
-                      <Merge className="h-4 w-4 mr-2" />
-                      Merge All Pages
+                    <Button variant="outline" onClick={exportMergedPDF} disabled={pages.length === 0 || isSaving}
+                      style={{ borderColor: "rgba(201,168,76,0.3)", color: "rgba(255,255,255,0.65)" }}
+                      className="hover:bg-gold hover:text-black hover:border-gold transition-all">
+                      <Merge className="h-4 w-4 mr-2" />Merge All Pages
                     </Button>
-                    
-                    <Button
-                      variant="outline"
-                      onClick={deleteSelectedPages}
-                      disabled={selectedCount === 0}
-                      className="border-slate-700 text-red-400 hover:bg-red-500/20"
-                    >
+                    <Button variant="outline" onClick={deleteSelectedPages} disabled={selectedCount === 0}
+                      className="border-red-500/30 text-red-400 hover:bg-red-500/20 hover:border-red-500">
                       <Trash2 className="h-4 w-4 mr-2" />
                       Delete Selected
                     </Button>
                     
-                    <Button
-                      variant="outline"
-                      onClick={() => setSignatureMode(!signatureMode)}
-                      className={`border-slate-700 ${signatureMode ? 'bg-gold/20 text-gold border-gold/50' : 'text-slate-300'}`}
-                    >
-                      <Pen className="h-4 w-4 mr-2" />
-                      {signatureMode ? 'Close Signature' : 'Add Signature'}
+                    <Button variant="outline" onClick={() => setSignatureMode(!signatureMode)}
+                      style={{
+                        borderColor: signatureMode ? "rgba(201,168,76,0.5)" : "rgba(201,168,76,0.3)",
+                        color: signatureMode ? "#C9A84C" : "rgba(255,255,255,0.65)",
+                        background: signatureMode ? "rgba(201,168,76,0.15)" : "transparent",
+                      }}>
+                      <Pen className="h-4 w-4 mr-2" />{signatureMode ? 'Close Signature' : 'Add Signature'}
                     </Button>
                   </div>
                 </div>
 
                 {/* Signature Panel */}
                 {signatureMode && (
-                  <div className="rounded-xl bg-slate-900 border border-slate-700 p-6">
-                    <h3 className="text-lg font-medium text-white mb-4">Draw Signature</h3>
-                    <div className="bg-white rounded-lg p-2 mb-4">
-                      <canvas
-                        ref={signatureCanvasRef}
-                        width={400}
-                        height={150}
-                        className="border border-slate-200 rounded cursor-crosshair w-full"
-                        onMouseDown={startDrawing}
-                        onMouseMove={draw}
-                        onMouseUp={stopDrawing}
-                        onMouseLeave={stopDrawing}
-                      />
+                  <div className="rounded-2xl p-6" style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.2)" }}>
+                    <h3 className="text-lg font-semibold text-white mb-4">Draw Signature</h3>
+                    <div className="bg-white rounded-xl p-2 mb-4">
+                      <canvas ref={signatureCanvasRef} width={400} height={150}
+                        className="rounded cursor-crosshair w-full border border-gray-200"
+                        onMouseDown={startDrawing} onMouseMove={draw} onMouseUp={stopDrawing} onMouseLeave={stopDrawing} />
                     </div>
                     <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        onClick={clearSignature}
-                        className="border-slate-700 text-slate-300"
-                      >
-                        Clear
-                      </Button>
-                      <Button
-                        disabled={!signatureData}
-                        className="bg-gold text-black hover:bg-gold/90"
-                      >
-                        <Check className="h-4 w-4 mr-2" />
-                        Apply to Selected Pages
+                      <Button variant="outline" onClick={clearSignature} style={{ borderColor: "rgba(201,168,76,0.3)", color: "rgba(255,255,255,0.65)" }}>Clear</Button>
+                      <Button disabled={!signatureData} className="bg-gold text-black hover:bg-gold/90">
+                        <Check className="h-4 w-4 mr-2" />Apply to Selected Pages
                       </Button>
                     </div>
-                    <p className="text-xs text-slate-500 mt-3">
-                      Draw your signature above, then apply it to selected pages.
-                    </p>
+                    <p className="text-xs mt-3" style={{ color: "rgba(255,255,255,0.35)" }}>Draw your signature above, then apply it to selected pages.</p>
                   </div>
                 )}
 
                 {/* Loaded Files */}
-                <div className="rounded-xl bg-slate-900 border border-slate-700 p-6">
-                  <h3 className="text-lg font-medium text-white mb-4">Loaded PDFs ({loadedPDFs.length})</h3>
+                <div className="rounded-2xl p-6" style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.2)" }}>
+                  <h3 className="text-lg font-semibold text-white mb-4">Loaded PDFs ({loadedPDFs.length})</h3>
                   <div className="space-y-2">
                     {loadedPDFs.map((pdf) => (
-                      <div key={pdf.id} className="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50">
+                      <div key={pdf.id} className="flex items-center gap-3 p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
                         <FileText className="h-5 w-5 text-gold" />
                         <div className="flex-1">
                           <p className="text-sm text-white">{pdf.name}</p>
-                          <p className="text-xs text-slate-500">{pdf.pageCount} pages</p>
+                          <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{pdf.pageCount} pages</p>
                         </div>
                       </div>
                     ))}
@@ -557,9 +485,9 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                 </div>
 
                 {/* Info */}
-                <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-700 text-center">
-                  <p className="text-sm text-slate-500">
-                    All processing is done locally in your browser. Projects are saved automatically.
+                <div className="p-4 rounded-xl text-center" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.12)" }}>
+                  <p className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
+                    All processing is done locally in your browser · Projects are saved automatically
                   </p>
                 </div>
               </div>

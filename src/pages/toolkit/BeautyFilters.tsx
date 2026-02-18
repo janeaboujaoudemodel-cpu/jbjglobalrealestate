@@ -159,17 +159,19 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
   ];
 
   return (
-    <div className="min-h-screen bg-black">
+    <div style={{ background: "#0D0B08", minHeight: "100vh" }}>
       {/* Header - hidden when embedded in a suite tab */}
       {!embedded && (
-        <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm sticky top-0 z-50">
+        <header style={{ borderBottom: "1px solid rgba(201,168,76,0.18)", background: "rgba(201,168,76,0.03)" }}>
           <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link to="/toolkit" className="flex items-center gap-2 hover:bg-zinc-800 transition-colors rounded-lg px-3 py-2 border border-zinc-700" style={{ color: '#a1a1aa' }}>
-              <ArrowLeft className="h-5 w-5" style={{ color: '#a1a1aa' }} />
-              <span style={{ color: '#a1a1aa' }}>Back to Toolkit</span>
+            <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2" style={{ color: "rgba(255,255,255,0.45)", border: "1px solid rgba(201,168,76,0.2)" }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#fff"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)"}>
+              <ArrowLeft className="h-5 w-5" />
+              <span>Back to Toolkit</span>
             </Link>
-            <div className="text-sm text-slate-500">
-              Projects are saved automatically
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", color: "#C9A84C" }}>
+              <Sparkles className="w-3 h-3" /> AI Enhancement
             </div>
           </div>
         </header>
@@ -178,13 +180,11 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
       <main className="max-w-6xl mx-auto px-4 py-12">
         {/* Title */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gold/20 text-gold mb-6">
-            <Sparkles className="h-8 w-8" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 0 32px rgba(201,168,76,0.15)" }}>
+            <Sparkles className="h-8 w-8 text-gold" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Beauty Filters
-          </h1>
-          <p className="text-slate-400 max-w-xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Beauty Filters</h1>
+          <p className="max-w-xl mx-auto text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
             Apply professional beauty enhancements and filters to your photos for listings and marketing.
           </p>
         </div>
@@ -195,23 +195,16 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
             <div
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleFileDrop}
-              className="border-2 border-dashed border-slate-700 rounded-xl p-12 text-center hover:border-gold/50 transition-colors cursor-pointer"
+              className="rounded-2xl p-12 text-center cursor-pointer transition-all duration-300"
+              style={{ border: "2px dashed rgba(201,168,76,0.3)", background: "rgba(201,168,76,0.02)" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.6)"; (e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.05)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.3)"; (e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.02)"; }}
               onClick={() => document.getElementById('file-input')?.click()}
             >
-              <Upload className="h-12 w-12 text-slate-500 mx-auto mb-4" />
-              <p className="text-white font-medium mb-2">
-                Drop your photo here
-              </p>
-              <p className="text-sm text-slate-500">
-                JPG, PNG, WebP (max 10MB)
-              </p>
-              <input
-                id="file-input"
-                type="file"
-                accept="image/*"
-                onChange={handleFileSelect}
-                className="hidden"
-              />
+              <Upload className="h-12 w-12 mx-auto mb-4" style={{ color: "rgba(201,168,76,0.5)" }} />
+              <p className="text-white font-medium mb-2">Drop your photo here</p>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>JPG, PNG, WebP (max 10MB)</p>
+              <input id="file-input" type="file" accept="image/*" onChange={handleFileSelect} className="hidden" />
             </div>
           </div>
         )}
@@ -221,41 +214,32 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Preview */}
             <div className="lg:col-span-2">
-              <div className="rounded-xl bg-slate-900 border border-slate-700 overflow-hidden">
-                <div className="p-3 border-b border-slate-700 flex items-center justify-between">
-                  <span className="text-sm text-white font-medium">{image.name}</span>
-                  <Button 
-                    variant="secondary" 
-                    size="sm"
-                    onClick={() => {
-                      setImage(null);
-                      setImagePreview(null);
-                    }}
-                  >
+              <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.2)" }}>
+                <div className="p-3 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(201,168,76,0.12)" }}>
+                  <span className="text-sm font-medium text-white">{image.name}</span>
+                  <Button variant="secondary" size="sm" onClick={() => { setImage(null); setImagePreview(null); }}>
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
-                <div className="p-4 bg-slate-950 flex items-center justify-center min-h-[400px]">
-                  <canvas 
-                    ref={canvasRef}
-                    className="max-w-full max-h-[500px] object-contain"
-                  />
+                <div className="p-4 flex items-center justify-center min-h-[400px]" style={{ background: "rgba(0,0,0,0.4)" }}>
+                  <canvas ref={canvasRef} className="max-w-full max-h-[500px] object-contain" />
                 </div>
               </div>
 
               {/* Presets */}
               <div className="mt-6">
-                <h3 className="text-white font-medium mb-4">Filter Presets</h3>
+                <h3 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider" style={{ color: "rgba(201,168,76,0.7)" }}>Filter Presets</h3>
                 <div className="flex flex-wrap gap-2">
                   {FILTER_PRESETS.map((preset) => (
                     <button
                       key={preset.id}
                       onClick={() => applyPreset(preset.id)}
-                      className={`px-4 py-2 rounded-lg text-sm transition-all ${
-                        selectedPreset === preset.id
-                          ? 'bg-gold text-black font-medium'
-                          : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                      }`}
+                      className="px-4 py-2 rounded-xl text-sm transition-all font-medium"
+                      style={{
+                        background: selectedPreset === preset.id ? "rgba(201,168,76,0.2)" : "rgba(255,255,255,0.04)",
+                        border: `1px solid ${selectedPreset === preset.id ? "rgba(201,168,76,0.55)" : "rgba(255,255,255,0.08)"}`,
+                        color: selectedPreset === preset.id ? "#C9A84C" : "rgba(255,255,255,0.55)",
+                      }}
                     >
                       {preset.name}
                     </button>
@@ -267,74 +251,49 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
             {/* Controls */}
             <div className="space-y-6">
               {/* Adjustments */}
-              <div className="rounded-xl bg-slate-900 border border-slate-700 p-4">
-                <h3 className="text-white font-medium mb-4">Adjustments</h3>
+              <div className="rounded-2xl p-5" style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.18)" }}>
+                <h3 className="text-white font-semibold mb-4">Adjustments</h3>
                 <div className="space-y-5">
                   {adjustmentControls.map(({ key, label, icon: Icon, min, max }) => (
                     <div key={key}>
                       <div className="flex items-center justify-between mb-2">
-                        <label className="text-sm text-slate-400 flex items-center gap-2">
+                        <label className="text-sm flex items-center gap-2" style={{ color: "rgba(255,255,255,0.5)" }}>
                           <Icon className="h-4 w-4 text-gold" />
                           {label}
                         </label>
-                        <span className="text-sm text-gold font-mono">
-                          {adjustments[key as keyof Adjustments]}
-                        </span>
+                        <span className="text-sm text-gold font-mono">{adjustments[key as keyof Adjustments]}</span>
                       </div>
                       <Slider
                         value={[adjustments[key as keyof Adjustments]]}
                         onValueChange={([value]) => updateAdjustment(key as keyof Adjustments, value)}
-                        min={min}
-                        max={max}
-                        step={1}
-                        className="w-full"
+                        min={min} max={max} step={1} className="w-full"
                       />
                     </div>
                   ))}
                 </div>
-                
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="w-full mt-4"
-                  onClick={() => applyPreset('none')}
-                >
-                  Reset All
-                </Button>
+                <Button variant="secondary" size="sm" className="w-full mt-4" onClick={() => applyPreset('none')}>Reset All</Button>
               </div>
 
               {/* Consent */}
-              <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-900/50 border border-slate-700">
-                <Checkbox
-                  id="consent"
-                  checked={consent}
-                  onCheckedChange={(checked) => setConsent(checked === true)}
-                  className="mt-0.5"
-                />
-                <label htmlFor="consent" className="text-sm text-slate-400 cursor-pointer">
+              <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.15)" }}>
+                <Checkbox id="consent" checked={consent} onCheckedChange={(checked) => setConsent(checked === true)} className="mt-0.5" />
+                <label htmlFor="consent" className="text-sm cursor-pointer" style={{ color: "rgba(255,255,255,0.5)" }}>
                   I own this content or have permission to edit it.
                 </label>
               </div>
 
               {/* Download */}
-              <Button
-                variant="primary"
-                size="lg"
-                className="w-full"
-                onClick={handleDownload}
-                disabled={!consent}
-              >
-                <Download className="h-5 w-5 mr-2" />
-                Download Image
+              <Button variant="primary" size="lg" className="w-full" onClick={handleDownload} disabled={!consent}>
+                <Download className="h-5 w-5 mr-2" />Download Image
               </Button>
             </div>
           </div>
         )}
 
         {/* Fair Usage Note */}
-        <div className="mt-12 p-4 rounded-xl bg-slate-900/50 border border-slate-700 text-center">
-          <p className="text-sm text-slate-500">
-            Free tool with fair-usage limits. All processing is done locally in your browser.
+        <div className="mt-12 p-4 rounded-xl text-center" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.12)" }}>
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
+            Free tool with fair-usage limits · All processing is done locally in your browser
           </p>
         </div>
       </main>

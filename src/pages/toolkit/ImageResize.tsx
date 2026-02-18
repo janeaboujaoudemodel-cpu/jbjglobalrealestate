@@ -312,25 +312,19 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div style={{ background: "#0D0B08", minHeight: "100vh" }}>
       {/* Header - hidden when embedded in a suite tab */}
       {!embedded && (
-        <div className="bg-gradient-to-b from-black to-[#0a0a0a] border-b border-gold/20">
+        <div style={{ background: "linear-gradient(180deg, rgba(201,168,76,0.06) 0%, transparent 100%)", borderBottom: "1px solid rgba(201,168,76,0.2)" }}>
           <div className="container mx-auto px-4 py-8">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-gold/10 rounded-lg border border-gold/30">
+              <div className="p-2 rounded-xl" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)" }}>
                 <ImageIcon className="h-6 w-6 text-gold" />
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-white">
-                Image Resizer + Social Sizes Pack
-              </h1>
-              <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                Free
-              </Badge>
+              <h1 className="text-2xl md:text-3xl font-bold text-white">Image Resizer + Social Sizes Pack</h1>
+              <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Free</Badge>
             </div>
-            <p className="text-champagne/70">
-              Resize images for Instagram, YouTube, LinkedIn and more. All processing happens in your browser.
-            </p>
+            <p style={{ color: "rgba(255,255,255,0.4)" }}>Resize images for Instagram, YouTube, LinkedIn and more. All processing happens in your browser.</p>
           </div>
         </div>
       )}
@@ -340,32 +334,21 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
           {/* Left: Upload & Images */}
           <div className="lg:col-span-2 space-y-6">
             {/* Upload Area */}
-            <Card className="bg-[#111]/80 border-gold/20">
+            <Card style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.2)" }}>
               <CardContent className="p-6">
                 <div
-                  className="border-2 border-dashed border-gold/30 rounded-xl p-8 text-center cursor-pointer hover:border-gold/50 hover:bg-gold/5 transition-all"
+                  className="rounded-2xl p-8 text-center cursor-pointer transition-all duration-300"
+                  style={{ border: "2px dashed rgba(201,168,76,0.3)", background: "rgba(201,168,76,0.02)" }}
                   onClick={() => fileInputRef.current?.click()}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    handleFileSelect(e.dataTransfer.files);
-                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.6)"; (e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.05)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.3)"; (e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.02)"; }}
+                  onDrop={(e) => { e.preventDefault(); handleFileSelect(e.dataTransfer.files); }}
                   onDragOver={(e) => e.preventDefault()}
                 >
-                  <Upload className="h-12 w-12 text-gold/60 mx-auto mb-4" />
-                  <p className="text-white font-medium mb-2">
-                    Drop images here or click to upload
-                  </p>
-                  <p className="text-champagne/50 text-sm">
-                    JPG, PNG, WebP, HEIC supported
-                  </p>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    className="hidden"
-                    onChange={(e) => handleFileSelect(e.target.files)}
-                  />
+                  <Upload className="h-12 w-12 mx-auto mb-4" style={{ color: "rgba(201,168,76,0.5)" }} />
+                  <p className="text-white font-medium mb-2">Drop images here or click to upload</p>
+                  <p className="text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>JPG, PNG, WebP, HEIC supported</p>
+                  <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFileSelect(e.target.files)} />
                 </div>
               </CardContent>
             </Card>

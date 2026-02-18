@@ -70,6 +70,13 @@ const typeFilters = [
   { value: "marketing_pack", label: "Marketing", icon: Package },
 ];
 
+const suiteLaunchpad = [
+  { label: "Video Suite", subtitle: "Edit · Captions · Voice", icon: Film, href: "/toolkit/video-suite", hex: "#5B8AF5", desc: "AI video editing, subtitles & voice studio" },
+  { label: "Photo Suite", subtitle: "BG Remove · Filters · Resize", icon: ImageIcon, href: "/toolkit/photo-suite", hex: "#E85C4A", desc: "Background AI, beauty filters, image resizer" },
+  { label: "PDF Suite", subtitle: "Edit · Sign · Brochures", icon: FileText, href: "/toolkit/pdf-suite", hex: "#E8A84A", desc: "PDF editor, scanner, brochure generator" },
+  { label: "Marketing Pack", subtitle: "Brochures · Social · Print", icon: Package, href: "/toolkit/brochure-generator", hex: "#7B5BF5", desc: "Professional marketing collateral" },
+];
+
 export default function Studio() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
@@ -172,10 +179,10 @@ export default function Studio() {
   });
 
   return (
-    <div className="min-h-screen text-white" style={{ background: "linear-gradient(160deg, #0A0A0B 0%, #0d0d10 60%, #0A0A0B 100%)" }}>
+    <div className="min-h-screen text-white" style={{ background: "linear-gradient(160deg, #0D0B08 0%, #120F0A 60%, #0D0B08 100%)" }}>
 
       {/* ─── Sub-Header ─── */}
-      <header style={{ borderBottom: "1px solid rgba(201,168,76,0.18)", background: "linear-gradient(180deg, rgba(201,168,76,0.04) 0%, transparent 100%)" }}>
+      <header style={{ borderBottom: "1px solid rgba(201,168,76,0.22)", background: "linear-gradient(180deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.01) 100%)" }}>
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           {/* Brand */}
           <Link to="/studio" className="flex items-center gap-2.5 shrink-0">
@@ -279,6 +286,43 @@ export default function Studio() {
           </Dialog>
         </div>
 
+        {/* ─── Suite Launchpad ─── */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-gold" />
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgba(201,168,76,0.7)" }}>Creative Suites</span>
+            </div>
+            <Link to="/toolkit" className="flex items-center gap-1 text-xs hover:text-gold transition-colors" style={{ color: "rgba(255,255,255,0.3)" }}>
+              All tools <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {suiteLaunchpad.map((suite) => {
+              const Icon = suite.icon;
+              return (
+                <Link key={suite.href} to={suite.href}
+                  className="group relative flex flex-col gap-3 p-5 rounded-2xl transition-all duration-300 hover:-translate-y-0.5"
+                  style={{ background: `${suite.hex}07`, border: `1px solid ${suite.hex}22`, boxShadow: "0 2px 16px rgba(0,0,0,0.3)" }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = `${suite.hex}12`; (e.currentTarget as HTMLElement).style.borderColor = `${suite.hex}45`; (e.currentTarget as HTMLElement).style.boxShadow = `0 12px 40px rgba(0,0,0,0.4), 0 0 24px ${suite.hex}18`; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = `${suite.hex}07`; (e.currentTarget as HTMLElement).style.borderColor = `${suite.hex}22`; (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 16px rgba(0,0,0,0.3)"; }}
+                >
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${suite.hex}18`, border: `1px solid ${suite.hex}35` }}>
+                    <Icon className="w-5 h-5" style={{ color: suite.hex }} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-white font-semibold text-sm mb-0.5">{suite.label}</p>
+                    <p className="text-[11px] leading-snug" style={{ color: "rgba(255,255,255,0.38)" }}>{suite.desc}</p>
+                  </div>
+                  <div className="flex items-center gap-1 text-[11px] font-semibold transition-colors" style={{ color: suite.hex }}>
+                    Open Suite <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
         {/* ─── Quick Tools Strip ─── */}
         <div>
           <div className="flex items-center justify-between mb-3">
@@ -286,9 +330,6 @@ export default function Studio() {
               <Zap className="w-3.5 h-3.5 text-gold" />
               <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgba(201,168,76,0.7)" }}>Quick Tools</span>
             </div>
-            <Link to="/toolkit" className="flex items-center gap-1 text-xs text-zinc-500 hover:text-gold transition-colors">
-              View all <ArrowRight className="w-3 h-3" />
-            </Link>
           </div>
           <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
             {quickTools.map((tool) => {
@@ -296,15 +337,15 @@ export default function Studio() {
               return (
                 <Link key={tool.href} to={tool.href}
                   className="group flex items-center gap-3 px-3.5 py-3 rounded-xl transition-all"
-                  style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = `${tool.hex}0D`; (e.currentTarget as HTMLElement).style.borderColor = `${tool.hex}33`; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.025)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.06)"; }}
+                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = `${tool.hex}10`; (e.currentTarget as HTMLElement).style.borderColor = `${tool.hex}40`; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)"; }}
                 >
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: `${tool.hex}18`, border: `1px solid ${tool.hex}33` }}>
                     <Icon className="w-4 h-4" style={{ color: tool.hex }} />
                   </div>
-                  <span className="text-xs text-zinc-400 group-hover:text-white transition-colors font-medium leading-snug flex-1">{tool.label}</span>
-                  <ChevronRight className="w-3 h-3 text-zinc-700 group-hover:text-zinc-400 transition-colors shrink-0" />
+                  <span className="text-xs group-hover:text-white transition-colors font-medium leading-snug flex-1" style={{ color: "rgba(255,255,255,0.5)" }}>{tool.label}</span>
+                  <ChevronRight className="w-3 h-3 transition-colors shrink-0" style={{ color: "rgba(255,255,255,0.2)" }} />
                 </Link>
               );
             })}

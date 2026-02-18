@@ -229,17 +229,19 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div style={{ background: "#0D0B08", minHeight: "100vh" }}>
       {/* Header - hidden when embedded in a suite tab */}
       {!embedded && (
-        <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm sticky top-0 z-50">
+        <header style={{ borderBottom: "1px solid rgba(201,168,76,0.18)", background: "rgba(201,168,76,0.03)" }}>
           <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link to="/toolkit" className="flex items-center gap-2 hover:bg-zinc-800 transition-colors rounded-lg px-3 py-2 border border-zinc-700" style={{ color: '#a1a1aa' }}>
-              <ArrowLeft className="h-5 w-5" style={{ color: '#a1a1aa' }} />
-              <span style={{ color: '#a1a1aa' }}>Back to Toolkit</span>
+            <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2" style={{ color: "rgba(255,255,255,0.45)", border: "1px solid rgba(201,168,76,0.2)" }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#fff"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)"}>
+              <ArrowLeft className="h-5 w-5" />
+              <span>Back to Toolkit</span>
             </Link>
-            <div className="text-sm text-slate-500">
-              Projects are saved automatically
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", color: "#C9A84C" }}>
+              <Languages className="w-3 h-3" /> AI Transcription
             </div>
           </div>
         </header>
@@ -248,13 +250,11 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
       <main className="max-w-4xl mx-auto px-4 py-12">
         {/* Title */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gold/20 text-gold mb-6">
-            <Languages className="h-8 w-8" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 0 32px rgba(201,168,76,0.15)" }}>
+            <Languages className="h-8 w-8 text-gold" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Captions & Translation
-          </h1>
-          <p className="text-slate-400 max-w-xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Captions & Translation</h1>
+          <p className="max-w-xl mx-auto text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
             Auto-transcribe your videos and translate captions to 15+ languages with full RTL support.
           </p>
         </div>
@@ -267,10 +267,10 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
             { step: 3, label: 'Translate & Export', icon: Globe },
           ].map(({ step, label }) => (
             <div key={step} className="text-center">
-              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-slate-800 text-gold font-bold mb-2">
+              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full font-bold mb-2" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", color: "#C9A84C" }}>
                 {step}
               </div>
-              <p className="text-sm text-slate-400">{label}</p>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>{label}</p>
             </div>
           ))}
         </div>
@@ -280,23 +280,16 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
           <div
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleFileDrop}
-            className="border-2 border-dashed border-slate-700 rounded-xl p-12 text-center hover:border-gold/50 transition-colors cursor-pointer"
+            className="rounded-2xl p-12 text-center cursor-pointer transition-all duration-300"
+            style={{ border: "2px dashed rgba(201,168,76,0.3)", background: "rgba(201,168,76,0.02)" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.6)"; (e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.05)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.3)"; (e.currentTarget as HTMLElement).style.background = "rgba(201,168,76,0.02)"; }}
             onClick={() => document.getElementById('file-input')?.click()}
           >
-            <Upload className="h-12 w-12 text-slate-500 mx-auto mb-4" />
-            <p className="text-white font-medium mb-2">
-              Drop your video or audio file here
-            </p>
-            <p className="text-sm text-slate-500">
-              MP4, MOV, WebM, MP3, WAV (max 5 min)
-            </p>
-            <input
-              id="file-input"
-              type="file"
-              accept="video/*,audio/*"
-              onChange={handleFileSelect}
-              className="hidden"
-            />
+            <Upload className="h-12 w-12 mx-auto mb-4" style={{ color: "rgba(201,168,76,0.5)" }} />
+            <p className="text-white font-medium mb-2">Drop your video or audio file here</p>
+            <p className="text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>MP4, MOV, WebM, MP3, WAV (max 5 min)</p>
+            <input id="file-input" type="file" accept="video/*,audio/*" onChange={handleFileSelect} className="hidden" />
           </div>
         )}
 
@@ -304,140 +297,90 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
         {file && (
           <div className="space-y-6">
             {/* File Info */}
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-slate-900 border border-slate-700">
-              <div className="w-12 h-12 rounded-lg bg-gold/20 flex items-center justify-center">
+            <div className="flex items-center gap-4 p-4 rounded-2xl" style={{ background: "rgba(201,168,76,0.05)", border: "1px solid rgba(201,168,76,0.2)" }}>
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)" }}>
                 <Play className="h-6 w-6 text-gold" />
               </div>
               <div className="flex-1">
                 <p className="text-white font-medium">{file.name}</p>
-                <p className="text-sm text-slate-500">
-                  {(file.size / 1024 / 1024).toFixed(2)} MB
-                </p>
+                <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>{(file.size / 1024 / 1024).toFixed(2)} MB</p>
               </div>
-              <Button 
-                variant="secondary" 
-                size="sm"
-                onClick={() => {
-                  setFile(null);
-                  setTranscription(null);
-                  setTranslations({});
-                }}
-              >
-                Remove
-              </Button>
+              <Button variant="secondary" size="sm" onClick={() => { setFile(null); setTranscription(null); setTranslations({}); }}>Remove</Button>
             </div>
 
             {/* Consent Checkbox */}
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-900/50 border border-slate-700">
-              <Checkbox
-                id="consent"
-                checked={consent}
-                onCheckedChange={(checked) => setConsent(checked === true)}
-                className="mt-0.5"
-              />
-              <label htmlFor="consent" className="text-sm text-slate-400 cursor-pointer">
+            <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.15)" }}>
+              <Checkbox id="consent" checked={consent} onCheckedChange={(checked) => setConsent(checked === true)} className="mt-0.5" />
+              <label htmlFor="consent" className="text-sm cursor-pointer" style={{ color: "rgba(255,255,255,0.5)" }}>
                 I own this content or have permission to edit it. Projects are saved automatically.
               </label>
             </div>
 
             {/* Transcribe Button */}
             {!transcription && (
-              <Button
-                variant="primary"
-                size="lg"
-                className="w-full"
-                onClick={handleTranscribe}
-                disabled={!consent || isProcessing}
-              >
+              <Button variant="primary" size="lg" className="w-full" onClick={handleTranscribe} disabled={!consent || isProcessing}>
                 {isProcessing ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                    Transcribing... {Math.round(progress)}%
-                  </>
+                  <><Loader2 className="h-5 w-5 animate-spin mr-2" />Transcribing... {Math.round(progress)}%</>
                 ) : (
-                  <>
-                    <Subtitles className="h-5 w-5 mr-2" />
-                    Transcribe Audio
-                  </>
+                  <><Subtitles className="h-5 w-5 mr-2" />Transcribe Audio</>
                 )}
               </Button>
             )}
 
-            {/* Progress */}
-            {isProcessing && (
-              <Progress value={progress} className="h-2" />
-            )}
+            {isProcessing && <Progress value={progress} className="h-2" />}
 
             {/* Transcription Result */}
             {transcription && (
               <div className="space-y-6">
-                <div className="rounded-xl bg-slate-900 border border-slate-700 overflow-hidden">
-                  <div className="flex items-center justify-between p-4 border-b border-slate-700">
-                    <h3 className="font-medium text-white flex items-center gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-green-500" />
-                      Transcription Complete
+                <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.2)" }}>
+                  <div className="flex items-center justify-between p-4" style={{ borderBottom: "1px solid rgba(201,168,76,0.15)" }}>
+                    <h3 className="font-semibold text-white flex items-center gap-2">
+                      <CheckCircle2 className="h-5 w-5 text-green-400" />Transcription Complete
                     </h3>
                     <Button variant="secondary" size="sm" onClick={() => downloadSRT(transcription, 'en')}>
-                      <Download className="h-4 w-4 mr-1" />
-                      Download SRT
+                      <Download className="h-4 w-4 mr-1" />Download SRT
                     </Button>
                   </div>
                   <div className="p-4">
-                    <pre className="text-sm text-slate-300 whitespace-pre-wrap font-mono">
-                      {transcription}
-                    </pre>
+                    <pre className="text-sm whitespace-pre-wrap font-mono" style={{ color: "rgba(255,255,255,0.7)" }}>{transcription}</pre>
                   </div>
                 </div>
 
                 {/* Language Selection */}
-                <div className="rounded-xl bg-slate-900 border border-slate-700 overflow-hidden">
-                  <div className="p-4 border-b border-slate-700">
-                    <h3 className="font-medium text-white mb-4">Select Languages to Translate</h3>
+                <div className="rounded-2xl overflow-hidden" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.18)" }}>
+                  <div className="p-4" style={{ borderBottom: "1px solid rgba(201,168,76,0.12)" }}>
+                    <h3 className="font-semibold text-white mb-4">Select Languages to Translate</h3>
                     <input
                       type="text"
                       placeholder="Search languages..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-gold"
+                      className="w-full px-4 py-2 rounded-xl text-white placeholder-white/30 focus:outline-none"
+                      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(201,168,76,0.25)" }}
                     />
                   </div>
                   <div className="p-4 grid grid-cols-2 md:grid-cols-3 gap-2 max-h-64 overflow-y-auto">
                     {filteredLanguages.map((lang) => (
-                      <button
-                        key={lang.code}
-                        onClick={() => toggleLanguage(lang.code)}
-                        className={`flex items-center gap-2 p-2 rounded-lg text-sm text-left transition-colors ${
-                          selectedLanguages.includes(lang.code)
-                            ? 'bg-gold/20 text-gold border border-gold/50'
-                            : 'bg-slate-800 text-slate-300 border border-transparent hover:border-slate-600'
-                        }`}
-                      >
+                      <button key={lang.code} onClick={() => toggleLanguage(lang.code)}
+                        className="flex items-center gap-2 p-2 rounded-lg text-sm text-left transition-all"
+                        style={{
+                          background: selectedLanguages.includes(lang.code) ? "rgba(201,168,76,0.18)" : "rgba(255,255,255,0.04)",
+                          border: `1px solid ${selectedLanguages.includes(lang.code) ? "rgba(201,168,76,0.5)" : "rgba(255,255,255,0.08)"}`,
+                          color: selectedLanguages.includes(lang.code) ? "#C9A84C" : "rgba(255,255,255,0.55)",
+                        }}>
                         <span>{lang.name}</span>
-                        {lang.rtl && <span className="text-xs text-slate-500">(RTL)</span>}
+                        {lang.rtl && <span className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>(RTL)</span>}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Translate Button */}
                 {selectedLanguages.length > 0 && (
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    className="w-full"
-                    onClick={handleTranslate}
-                    disabled={isProcessing}
-                  >
+                  <Button variant="primary" size="lg" className="w-full" onClick={handleTranslate} disabled={isProcessing}>
                     {isProcessing ? (
-                      <>
-                        <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                        Translating... {Math.round(progress)}%
-                      </>
+                      <><Loader2 className="h-5 w-5 animate-spin mr-2" />Translating... {Math.round(progress)}%</>
                     ) : (
-                      <>
-                        <Languages className="h-5 w-5 mr-2" />
-                        Translate to {selectedLanguages.length} Language(s)
-                      </>
+                      <><Languages className="h-5 w-5 mr-2" />Translate to {selectedLanguages.length} Language(s)</>
                     )}
                   </Button>
                 )}
@@ -445,24 +388,19 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
                 {/* Translation Results */}
                 {Object.keys(translations).length > 0 && (
                   <div className="space-y-4">
-                    <h3 className="font-medium text-white">Translations Ready</h3>
+                    <h3 className="font-semibold text-white">Translations Ready</h3>
                     {Object.entries(translations).map(([lang, content]) => {
                       const langInfo = SUPPORTED_LANGUAGES.find(l => l.code === lang);
                       return (
-                        <div key={lang} className="rounded-xl bg-slate-900 border border-slate-700 overflow-hidden">
-                          <div className="flex items-center justify-between p-4 border-b border-slate-700">
-                            <span className="text-white font-medium">{langInfo?.name}</span>
-                            <div className="flex gap-2">
-                              <Button variant="secondary" size="sm" onClick={() => downloadSRT(content, lang)}>
-                                <Download className="h-4 w-4 mr-1" />
-                                SRT
-                              </Button>
-                            </div>
+                        <div key={lang} className="rounded-2xl overflow-hidden" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.18)" }}>
+                          <div className="flex items-center justify-between p-4" style={{ borderBottom: "1px solid rgba(201,168,76,0.12)" }}>
+                            <span className="text-white font-semibold">{langInfo?.name}</span>
+                            <Button variant="secondary" size="sm" onClick={() => downloadSRT(content, lang)}>
+                              <Download className="h-4 w-4 mr-1" />SRT
+                            </Button>
                           </div>
                           <div className="p-4" dir={langInfo?.rtl ? 'rtl' : 'ltr'}>
-                            <pre className="text-sm text-slate-300 whitespace-pre-wrap font-mono">
-                              {content}
-                            </pre>
+                            <pre className="text-sm whitespace-pre-wrap font-mono" style={{ color: "rgba(255,255,255,0.65)" }}>{content}</pre>
                           </div>
                         </div>
                       );
@@ -475,9 +413,9 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
         )}
 
         {/* Fair Usage Note */}
-        <div className="mt-12 p-4 rounded-xl bg-slate-900/50 border border-slate-700 text-center">
-          <p className="text-sm text-slate-500">
-            Free tool with fair-usage limits. Max 5 minutes per video, 3 jobs per hour.
+        <div className="mt-12 p-4 rounded-xl text-center" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.12)" }}>
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
+            Free tool with fair-usage limits · Max 5 minutes per video · 3 jobs per hour
           </p>
         </div>
       </main>
