@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { SaveProjectBar, ToolContentWrapper } from '@/components/toolkit/SaveProjectBar';
 import {
   Home,
   Upload,
@@ -62,6 +63,7 @@ const DESIGN_STYLES: { id: DesignStyle; name: string; description: string }[] = 
 interface VirtualStagingPageProps { embedded?: boolean; }
 
 export default function VirtualStagingPage({ embedded = false }: VirtualStagingPageProps) {
+  const [projectName, setProjectName] = useState('Virtual Staging Project');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [roomType, setRoomType] = useState<RoomType>('living');
@@ -218,6 +220,28 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
       )}
 
       <div className="container max-w-6xl mx-auto px-4 py-8">
+        {/* Save Project Bar */}
+        <div className="mb-5">
+          <SaveProjectBar
+            projectName={projectName}
+            onNameChange={setProjectName}
+            onSave={() => {
+              if (!uploadedImage) { toast.error('Nothing to save'); return; }
+              localStorage.setItem(`staging-project-${Date.now()}`, JSON.stringify({ name: projectName, savedAt: new Date().toISOString() }));
+              toast.success(`Project "${projectName}" saved!`);
+            }}
+            onClear={() => {
+              if (!confirm('Clear this project?')) return;
+              setUploadedImage(null); setUploadedFile(null); setStagedResult(null); setHistory([]);
+              setProjectName('Virtual Staging Project');
+              toast.success('Project cleared');
+            }}
+            canSave={!!uploadedImage}
+            accentColor="#6366F1"
+            accentBorder="rgba(99,102,241,0.3)"
+          />
+        </div>
+        <ToolContentWrapper accentColor="#6366F1">
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Left Panel - Options */}
           <div className="space-y-4">
@@ -442,6 +466,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
             )}
           </div>
         </div>
+        </ToolContentWrapper>
       </div>
     </div>
   );

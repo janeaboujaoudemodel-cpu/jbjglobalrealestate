@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { PDFDocument, degrees } from 'pdf-lib';
+import { SaveProjectBar, ToolContentWrapper } from '@/components/toolkit/SaveProjectBar';
 import { 
   ArrowLeft,
   Upload, 
@@ -47,6 +48,7 @@ interface LoadedPDF {
 interface PDFEditorProps { embedded?: boolean; }
 
 export default function PDFEditor({ embedded = false }: PDFEditorProps) {
+  const [projectName, setProjectName] = useState('PDF Project');
   const [loadedPDFs, setLoadedPDFs] = useState<LoadedPDF[]>([]);
   const [pages, setPages] = useState<PDFPage[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -364,6 +366,29 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
           <p style={{ color: "rgba(255,255,255,0.4)" }}>Upload, reorder, merge, split PDFs and add signatures</p>
         </div>
 
+        {/* Save Project Bar */}
+        <div className="mb-5">
+          <SaveProjectBar
+            projectName={projectName}
+            onNameChange={setProjectName}
+            onSave={() => {
+              if (!pages.length) { toast.error('Nothing to save'); return; }
+              localStorage.setItem(`pdf-project-${Date.now()}`, JSON.stringify({ name: projectName, savedAt: new Date().toISOString() }));
+              toast.success(`Project "${projectName}" saved!`);
+            }}
+            onClear={() => {
+              if (!confirm('Clear this project?')) return;
+              setPages([]); setLoadedPDFs([]); setSignatureData(null);
+              setPreviewPage(null); setProjectName('PDF Project');
+              toast.success('Project cleared');
+            }}
+            canSave={pages.length > 0}
+            accentColor="#6366F1"
+            accentBorder="rgba(99,102,241,0.3)"
+          />
+        </div>
+
+        <ToolContentWrapper accentColor="#6366F1">
         {pages.length === 0 ? (
           /* Upload Area */
           <div
@@ -643,6 +668,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
 
           </div>
         )}
+        </ToolContentWrapper>
       </main>
     </div>
   );

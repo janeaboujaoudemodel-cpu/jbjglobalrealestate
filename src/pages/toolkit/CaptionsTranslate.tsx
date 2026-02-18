@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { SaveProjectBar, ToolContentWrapper } from '@/components/toolkit/SaveProjectBar';
 import { Link } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -53,6 +54,7 @@ const fileToBase64 = (file: File): Promise<string> => {
 interface CaptionsTranslateProps { embedded?: boolean; }
 
 export default function CaptionsTranslate({ embedded = false }: CaptionsTranslateProps) {
+  const [projectName, setProjectName] = useState('Caption Project');
   const [file, setFile] = useState<File | null>(null);
   const [consent, setConsent] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -249,7 +251,7 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
 
       <main className="max-w-4xl mx-auto px-4 py-12">
         {/* Title */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 0 32px rgba(201,168,76,0.15)" }}>
             <Languages className="h-8 w-8 text-gold" />
           </div>
@@ -259,8 +261,31 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
           </p>
         </div>
 
+        {/* Save Project Bar */}
+        <div className="mb-5">
+          <SaveProjectBar
+            projectName={projectName}
+            onNameChange={setProjectName}
+            onSave={() => {
+              if (!transcription) { toast.error('Nothing to save'); return; }
+              localStorage.setItem(`captions-project-${Date.now()}`, JSON.stringify({ name: projectName, transcription, savedAt: new Date().toISOString() }));
+              toast.success(`Project "${projectName}" saved!`);
+            }}
+            onClear={() => {
+              if (!confirm('Clear this project?')) return;
+              setFile(null); setTranscription(null); setTranslations({});
+              setSelectedLanguages([]); setProjectName('Caption Project');
+              toast.success('Project cleared');
+            }}
+            canSave={!!transcription}
+            accentColor="#C9A84C"
+            accentBorder="rgba(201,168,76,0.3)"
+          />
+        </div>
+
+        <ToolContentWrapper accentColor="#C9A84C">
         {/* Steps */}
-        <div className="grid grid-cols-3 gap-4 mb-12">
+        <div className="grid grid-cols-3 gap-4 mb-8">
           {[
             { step: 1, label: 'Upload Video', icon: Upload },
             { step: 2, label: 'Transcribe', icon: Subtitles },
@@ -413,11 +438,12 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
         )}
 
         {/* Fair Usage Note */}
-        <div className="mt-12 p-4 rounded-xl text-center" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.12)" }}>
+        <div className="mt-8 p-4 rounded-xl text-center" style={{ background: "rgba(201,168,76,0.03)", border: "1px solid rgba(201,168,76,0.12)" }}>
           <p className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
             Free tool with fair-usage limits · Max 5 minutes per video · 3 jobs per hour
           </p>
         </div>
+        </ToolContentWrapper>
       </main>
     </div>
   );
