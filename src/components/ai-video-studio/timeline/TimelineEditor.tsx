@@ -1,6 +1,17 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+  ContextMenuLabel,
+} from '@/components/ui/context-menu';
 import { 
   Scissors, 
   MousePointer2, 
@@ -23,9 +34,21 @@ import {
   Type,
   Sparkles,
   Keyboard,
+  Clapperboard,
 } from 'lucide-react';
 import { Track, Clip, TimelineMode } from '../types';
 import { ShortcutCheatSheet } from '../layout/ShortcutCheatSheet';
+
+// ── Transition definitions for the context menu ─────────────────────────────
+const QUICK_TRANSITIONS = [
+  { id: 'fade-black',   name: 'Fade Black',    duration: 1.0 },
+  { id: 'fade-white',   name: 'Fade White',    duration: 0.75 },
+  { id: 'dissolve',     name: 'Dissolve',      duration: 1.0 },
+  { id: 'slide-left',   name: 'Slide Left',    duration: 0.8 },
+  { id: 'slide-right',  name: 'Slide Right',   duration: 0.8 },
+  { id: 'zoom-in',      name: 'Zoom In',       duration: 0.75 },
+  { id: 'zoom-out',     name: 'Zoom Out',      duration: 0.75 },
+];
 
 // ── Tool button with hover tooltip showing keyboard shortcut badge ─────────────
 function ToolBtn({
@@ -463,44 +486,121 @@ export function TimelineEditor({
                   {!collapsedTracks.has(track.id) && track.clips.map((clip) => {
                     const isTransition = clip.type === 'transition';
                     return (
-                      <div
-                        key={clip.id}
-                        className={`absolute top-1 bottom-1 rounded cursor-pointer border-2 transition-colors ${
-                          isTransition
-                            ? 'bg-purple-600/80 border-purple-400 flex items-center justify-center'
-                            : getTrackColor(track.type)
-                        } ${
-                          selectedClipIds.includes(clip.id)
-                            ? 'border-gold ring-2 ring-gold/30'
-                            : isTransition
-                            ? 'border-purple-400 hover:border-purple-200'
-                            : 'border-transparent hover:border-white/30'
-                        }`}
-                        style={{
-                          left: clip.startTime * pixelsPerSecond,
-                          width: Math.max(clip.duration * pixelsPerSecond, 24),
-                          zIndex: isTransition ? 10 : 1,
-                        }}
-                        onMouseDown={(e) => !track.locked && handleClipMouseDown(e, clip)}
-                        title={isTransition ? `${clip.name} transition` : clip.name}
-                      >
-                        {isTransition ? (
-                          <span className="text-[10px] font-bold text-white text-center leading-tight px-0.5 truncate">
-                            ◇ {clip.name}
-                          </span>
-                        ) : (
-                          <div className="h-full px-1.5 flex items-center overflow-hidden">
-                            <span className="text-xs text-white/90 truncate">{clip.name}</span>
-                          </div>
-                        )}
+                      <ContextMenu key={clip.id}>
+                        <ContextMenuTrigger asChild>
+                          <div
+                            className={`absolute top-1 bottom-1 rounded cursor-pointer border-2 transition-colors ${
+                              isTransition
+                                ? 'bg-purple-600/80 border-purple-400 flex items-center justify-center'
+                                : getTrackColor(track.type)
+                            } ${
+                              selectedClipIds.includes(clip.id)
+                                ? 'border-gold ring-2 ring-gold/30'
+                                : isTransition
+                                ? 'border-purple-400 hover:border-purple-200'
+                                : 'border-transparent hover:border-white/30'
+                            }`}
+                            style={{
+                              left: clip.startTime * pixelsPerSecond,
+                              width: Math.max(clip.duration * pixelsPerSecond, 24),
+                              zIndex: isTransition ? 10 : 1,
+                            }}
+                            onMouseDown={(e) => !track.locked && handleClipMouseDown(e, clip)}
+                            title={isTransition ? `${clip.name} transition` : clip.name}
+                          >
+                            {isTransition ? (
+                              <span className="text-[10px] font-bold text-white text-center leading-tight px-0.5 truncate">
+                                ◇ {clip.name}
+                              </span>
+                            ) : (
+                              <div className="h-full px-1.5 flex items-center overflow-hidden">
+                                <span className="text-xs text-white/90 truncate">{clip.name}</span>
+                              </div>
+                            )}
 
-                        {selectedClipIds.includes(clip.id) && !isTransition && (
-                          <>
-                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/30 cursor-ew-resize hover:bg-gold" />
-                            <div className="absolute right-0 top-0 bottom-0 w-1 bg-white/30 cursor-ew-resize hover:bg-gold" />
-                          </>
-                        )}
-                      </div>
+                            {selectedClipIds.includes(clip.id) && !isTransition && (
+                              <>
+                                <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/30 cursor-ew-resize hover:bg-gold" />
+                                <div className="absolute right-0 top-0 bottom-0 w-1 bg-white/30 cursor-ew-resize hover:bg-gold" />
+                              </>
+                            )}
+                          </div>
+                        </ContextMenuTrigger>
+
+                        <ContextMenuContent className="z-[10200] bg-slate-900 border-slate-700 text-slate-100 min-w-[200px]">
+                          <ContextMenuLabel className="text-slate-400 text-[11px] uppercase tracking-wider">
+                            <Clapperboard className="inline w-3 h-3 mr-1.5 text-purple-400" />
+                            {clip.name}
+                          </ContextMenuLabel>
+                          <ContextMenuSeparator className="bg-slate-700" />
+
+                          {/* Add Transition Before */}
+                          {onAddTransition && !isTransition && (
+                            <ContextMenuSub>
+                              <ContextMenuSubTrigger className="focus:bg-slate-800 data-[state=open]:bg-slate-800 text-slate-200">
+                                <span className="mr-2 text-purple-400">◁</span>
+                                Add Transition Before
+                              </ContextMenuSubTrigger>
+                              <ContextMenuSubContent className="z-[10300] bg-slate-900 border-slate-700 text-slate-100 min-w-[160px]">
+                                {QUICK_TRANSITIONS.map((t) => (
+                                  <ContextMenuItem
+                                    key={t.id}
+                                    className="focus:bg-slate-800 text-slate-200 cursor-pointer"
+                                    onSelect={() => onAddTransition(track.id, clip.startTime, t)}
+                                  >
+                                    <span className="mr-2 text-purple-400 text-[11px]">◇</span>
+                                    <span className="flex-1">{t.name}</span>
+                                    <span className="text-[10px] text-slate-500 ml-2">{t.duration}s</span>
+                                  </ContextMenuItem>
+                                ))}
+                              </ContextMenuSubContent>
+                            </ContextMenuSub>
+                          )}
+
+                          {/* Add Transition After */}
+                          {onAddTransition && !isTransition && (
+                            <ContextMenuSub>
+                              <ContextMenuSubTrigger className="focus:bg-slate-800 data-[state=open]:bg-slate-800 text-slate-200">
+                                <span className="mr-2 text-purple-400">▷</span>
+                                Add Transition After
+                              </ContextMenuSubTrigger>
+                              <ContextMenuSubContent className="z-[10300] bg-slate-900 border-slate-700 text-slate-100 min-w-[160px]">
+                                {QUICK_TRANSITIONS.map((t) => (
+                                  <ContextMenuItem
+                                    key={t.id}
+                                    className="focus:bg-slate-800 text-slate-200 cursor-pointer"
+                                    onSelect={() => onAddTransition(track.id, clip.startTime + clip.duration, t)}
+                                  >
+                                    <span className="mr-2 text-purple-400 text-[11px]">◇</span>
+                                    <span className="flex-1">{t.name}</span>
+                                    <span className="text-[10px] text-slate-500 ml-2">{t.duration}s</span>
+                                  </ContextMenuItem>
+                                ))}
+                              </ContextMenuSubContent>
+                            </ContextMenuSub>
+                          )}
+
+                          <ContextMenuSeparator className="bg-slate-700" />
+
+                          {/* Split */}
+                          <ContextMenuItem
+                            className="focus:bg-slate-800 text-slate-200 cursor-pointer"
+                            onSelect={() => onSplitClip(clip.id, currentTime)}
+                          >
+                            <Scissors className="mr-2 w-3.5 h-3.5 text-slate-400" />
+                            Split at Playhead
+                          </ContextMenuItem>
+
+                          {/* Delete */}
+                          <ContextMenuItem
+                            className="focus:bg-red-900/50 text-red-400 cursor-pointer"
+                            onSelect={() => onDeleteClip(clip.id)}
+                          >
+                            <Trash2 className="mr-2 w-3.5 h-3.5" />
+                            Delete Clip
+                          </ContextMenuItem>
+                        </ContextMenuContent>
+                      </ContextMenu>
                     );
                   })}
 
