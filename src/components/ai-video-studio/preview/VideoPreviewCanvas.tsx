@@ -1,8 +1,116 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Play, Pause, Square, SkipBack, SkipForward, Volume2, VolumeX, Maximize2, Upload, Mic, FileText, Bot, Film } from 'lucide-react';
+import { Play, Pause, Square, SkipBack, SkipForward, Volume2, VolumeX, Maximize2, Upload, Mic, FileText, Bot, Film, CloudUpload, Sparkles } from 'lucide-react';
 import { Clip } from '../types';
+
+// ── Example real-estate "inspiration" thumbnails (Unsplash, no key needed) ──
+const EXAMPLE_VIDEOS = [
+  {
+    id: 1,
+    label: 'Luxury Villa',
+    sublabel: 'Dubai Hills · 5BR',
+    img: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=320&q=75&auto=format&fit=crop',
+    accent: '#F59E0B',
+  },
+  {
+    id: 2,
+    label: 'Waterfront Penthouse',
+    sublabel: 'Palm Jumeirah · 3BR',
+    img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=320&q=75&auto=format&fit=crop',
+    accent: '#818CF8',
+  },
+  {
+    id: 3,
+    label: 'Downtown Tower',
+    sublabel: 'Business Bay · Studio',
+    img: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=320&q=75&auto=format&fit=crop',
+    accent: '#34D399',
+  },
+  {
+    id: 4,
+    label: 'Desert Estate',
+    sublabel: 'Al Barari · 6BR',
+    img: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=320&q=75&auto=format&fit=crop',
+    accent: '#F472B6',
+  },
+];
+
+function InspirationCarousel() {
+  const [active, setActive] = useState(0);
+
+  // Auto-advance
+  useEffect(() => {
+    const id = setInterval(() => setActive(a => (a + 1) % EXAMPLE_VIDEOS.length), 2800);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="w-full max-w-xs mx-auto">
+      {/* Main card */}
+      <div className="relative rounded-xl overflow-hidden aspect-video shadow-xl mb-2" style={{ border: `1.5px solid ${EXAMPLE_VIDEOS[active].accent}55` }}>
+        {EXAMPLE_VIDEOS.map((v, i) => (
+          <div
+            key={v.id}
+            className="absolute inset-0 transition-opacity duration-700"
+            style={{ opacity: i === active ? 1 : 0 }}
+          >
+            <img src={v.img} alt={v.label} className="w-full h-full object-cover" loading="lazy" />
+            {/* Gradient overlay */}
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%)' }} />
+            {/* Play badge */}
+            <div className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ background: `${v.accent}cc` }}>
+              <Play className="w-3 h-3 text-black ml-0.5" />
+            </div>
+            {/* Label */}
+            <div className="absolute bottom-0 left-0 right-0 px-3 py-2">
+              <p className="text-white text-xs font-bold leading-tight">{v.label}</p>
+              <p className="text-white/60 text-[10px] leading-tight">{v.sublabel}</p>
+            </div>
+          </div>
+        ))}
+        {/* AI badge */}
+        <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold" style={{ background: 'rgba(0,0,0,0.65)', color: EXAMPLE_VIDEOS[active].accent, border: `1px solid ${EXAMPLE_VIDEOS[active].accent}55` }}>
+          <Sparkles className="w-2.5 h-2.5" /> AI Ready
+        </div>
+      </div>
+
+      {/* Dot navigation */}
+      <div className="flex items-center justify-center gap-1.5">
+        {EXAMPLE_VIDEOS.map((v, i) => (
+          <button
+            key={v.id}
+            onClick={() => setActive(i)}
+            className="rounded-full transition-all duration-300"
+            style={{
+              width: i === active ? 18 : 6,
+              height: 6,
+              background: i === active ? v.accent : 'rgba(255,255,255,0.2)',
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Thumbnail strip */}
+      <div className="flex gap-1.5 mt-2">
+        {EXAMPLE_VIDEOS.map((v, i) => (
+          <button
+            key={v.id}
+            onClick={() => setActive(i)}
+            className="flex-1 rounded-lg overflow-hidden transition-all duration-200"
+            style={{
+              outline: i === active ? `2px solid ${v.accent}` : '2px solid transparent',
+              outlineOffset: 1,
+              opacity: i === active ? 1 : 0.5,
+            }}
+          >
+            <img src={v.img} alt={v.label} className="w-full aspect-video object-cover" loading="lazy" />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 interface VideoPreviewCanvasProps {
   clips: Array<{
@@ -274,53 +382,102 @@ export function VideoPreviewCanvas({
               )}
             </>
           ) : (
-            /* Welcome / Empty State */
-            <div className="w-full h-full flex flex-col items-center justify-center p-6">
+            /* ── Welcome / Empty State ── */
+            <div
+              className="w-full h-full flex flex-col items-center justify-center overflow-y-auto"
+              style={{ padding: '12px 16px' }}
+            >
               {isDragOver ? (
-                <div className="text-center">
-                  <Upload className="w-14 h-14 text-amber-400 mx-auto mb-3 animate-bounce" />
-                  <p className="text-amber-300 text-lg font-semibold">Drop your file here</p>
+                /* ── Active Drop State ── */
+                <div className="flex flex-col items-center gap-3 animate-fade-in">
+                  <div
+                    className="w-20 h-20 rounded-full flex items-center justify-center"
+                    style={{ background: 'rgba(245,158,11,0.18)', border: '2.5px dashed #F59E0B' }}
+                  >
+                    <CloudUpload className="w-9 h-9 text-amber-400 animate-bounce" />
+                  </div>
+                  <p className="text-amber-300 text-base font-bold">Drop your file here</p>
+                  <p className="text-amber-200/50 text-xs">Video, audio or image</p>
                 </div>
               ) : (
-                <>
-                  <div className="mb-6 text-center">
+                <div className="w-full flex flex-col items-center gap-4 max-w-md">
+                  {/* Header */}
+                  <div className="text-center">
                     <div className="flex items-center gap-2 justify-center mb-1">
-                      <Film className="w-6 h-6 text-amber-400" />
-                      <h2 className="text-white text-xl font-bold tracking-tight">AI Video Studio</h2>
+                      <Film className="w-5 h-5 text-amber-400" />
+                      <h2 className="text-white text-lg font-bold tracking-tight">AI Video Studio</h2>
                     </div>
-                    <p className="text-slate-400 text-sm">Create, edit, and dub videos with AI</p>
+                    <p className="text-slate-400 text-xs">Create, edit and dub real estate videos with AI</p>
                   </div>
 
+                  {/* ── Animated inspiration carousel ── */}
+                  <InspirationCarousel />
+
+                  {/* ── Drop zone ── */}
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full rounded-xl flex flex-col items-center gap-2 py-4 px-4 transition-all duration-200 group"
+                    style={{
+                      background: 'rgba(245,158,11,0.06)',
+                      border: '2px dashed rgba(245,158,11,0.35)',
+                    }}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLElement).style.background = 'rgba(245,158,11,0.13)';
+                      (e.currentTarget as HTMLElement).style.border = '2px dashed rgba(245,158,11,0.75)';
+                      (e.currentTarget as HTMLElement).style.boxShadow = '0 0 24px rgba(245,158,11,0.12)';
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLElement).style.background = 'rgba(245,158,11,0.06)';
+                      (e.currentTarget as HTMLElement).style.border = '2px dashed rgba(245,158,11,0.35)';
+                      (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+                    }}
+                  >
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center transition-transform duration-200 group-hover:scale-110"
+                      style={{ background: 'rgba(245,158,11,0.15)' }}
+                    >
+                      <CloudUpload className="w-5 h-5 text-amber-400" />
+                    </div>
+                    <div className="text-center">
+                      <p className="text-white text-xs font-semibold">Drop a video here or click to browse</p>
+                      <p className="text-slate-500 text-[11px] mt-0.5">MP4, MOV, AVI · up to 2GB</p>
+                    </div>
+                  </button>
+
                   {/* Quick action grid */}
-                  <div className="grid grid-cols-2 gap-3 w-full max-w-sm mb-5">
-                    {QUICK_ACTIONS.map((action) => {
+                  <div className="grid grid-cols-2 gap-2 w-full">
+                    {QUICK_ACTIONS.filter(a => a.id !== 'upload').map((action) => {
                       const Icon = action.icon;
                       return (
                         <button
                           key={action.id}
                           onClick={() => handleQuickAction(action.id)}
-                          className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-800/80 border border-slate-600 hover:border-amber-500/60 hover:bg-slate-700/80 transition-all group text-left"
+                          className="flex items-center gap-2.5 p-3 rounded-xl transition-all group text-left"
+                          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}
+                          onMouseEnter={e => {
+                            (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.09)';
+                            (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,158,11,0.4)';
+                          }}
+                          onMouseLeave={e => {
+                            (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)';
+                            (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)';
+                          }}
                         >
-                          <div className="w-10 h-10 rounded-lg bg-slate-700 group-hover:bg-amber-500/20 flex items-center justify-center transition-colors">
-                            <Icon className="w-5 h-5 text-slate-300 group-hover:text-amber-400 transition-colors" />
+                          <div
+                            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors"
+                            style={{ background: 'rgba(245,158,11,0.12)' }}
+                          >
+                            <Icon className="w-4 h-4 text-amber-400" />
                           </div>
                           <div>
-                            <p className="text-white text-xs font-semibold leading-tight">{action.label}</p>
-                            <p className="text-slate-400 text-xs leading-tight mt-0.5">{action.desc}</p>
+                            <p className="text-white text-[11px] font-semibold leading-tight">{action.label}</p>
+                            <p className="text-slate-500 text-[10px] leading-tight mt-0.5">{action.desc}</p>
                           </div>
                         </button>
                       );
                     })}
                   </div>
-
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center gap-2 text-slate-400 hover:text-amber-400 text-xs transition-colors"
-                  >
-                    <Upload className="w-3.5 h-3.5" />
-                    <span>or drop a video file here</span>
-                  </button>
-                </>
+                </div>
               )}
             </div>
           )}
