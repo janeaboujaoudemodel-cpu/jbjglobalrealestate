@@ -1,225 +1,180 @@
 
-# CaptionTranslator Full Rebuild — Real Transcription, Fixed SRT, 28 Languages, Voice Dubbing & Caption Burn
+# CaptionTranslator End-to-End Test — Issues Found & Fixes
 
-## Current State Analysis
+## Test Results Summary
 
-### What is broken today:
-1. **Transcription uses a single `voice-to-text` function** that was built for short voice messages (seconds). It converts the whole file to base64, sends it as one blob, and gets back a flat text string — no timestamps, no segments. The AI then guesses timecodes by counting words at 0.4s each.
-2. **No real word-level timestamps** — all timings are fake. SRT files are therefore incorrect.
-3. **"Burn Captions" button says "Coming Soon"** — non-functional.
-4. **Voice dubbing** calls `voice-studio-tts` which requires a user JWT token — but the function falls through with public anon key in some flows, causing 401 errors.
-5. **Language grid shows 28 flags** but translation is AI-text based (fine); the dubbing per-segment only dubs one segment at a time, not all at once.
-6. **No full-video dubbing** — only per-segment audio preview; no ability to export a dubbed video.
-7. **The `voice-to-text` edge function** uses Scribe only with hardcoded `eng`/`ara` ISO codes — 26 other languages map to `eng` fallback.
-
-### What exists and works:
-- `auto-translate` edge function — uses Gemini with cache, works for all 28 languages.
-- `voice-studio-tts` edge function — ElevenLabs TTS, requires JWT auth, returns MP3 binary.
-- `ELEVENLABS_API_KEY` secret is configured.
-- `LOVABLE_API_KEY` is configured (used for Gemini fallback).
-- SRT/VTT export functions are structurally correct (just use fake timestamps).
-- Style panel, drag-to-upload, multi-format support, and the overall tab layout all work.
+After reading every relevant file, here is what works and what fails in the upload → transcribe → translate to Arabic → export SRT flow:
 
 ---
 
-## Architecture of the Rebuild
+## What Works Correctly
 
-### Strategy: Chunked transcription + ElevenLabs Scribe for timestamps
+- **SRT timestamp format** — `toSRTTime()` at line 57-61 is correct: produces `HH:MM:SS,mmm` with a comma separator, zero-padded to 3 digits for milliseconds. This is standard-compliant.
+- **VTT timestamp format** — `toVTTTime()` correctly uses a `.` dot separator.
+- **Arabic RTL text display** — In the Translate tab, translated segments render with `dir="rtl"` and `className="text-right"` applied when `lang.rtl === true`. The edit textarea also applies `dir={isRTL ? 'rtl' : 'ltr'}`.
+- **`auto-translate` edge function** — Correctly handles Arabic (`ar`) with the full language name `"Arabic (Modern Standard Arabic - العربية)"`. Caches translations. Response parsing strips markdown.
+- **Export flow** — The export tab correctly passes `langCode` to `exportSRT(lc)` which picks `sub.translations[lc]` over the original text.
+- **ElevenLabs Scribe word grouping** — `groupWordsIntoSegments()` correctly skips `[LAUGHTER]`, `[MUSIC]` tags and groups into ≤12 words / ≤7 second segments.
 
-ElevenLabs Scribe (`scribe_v2`) returns **word-level timestamps** in the response:
-```json
-{
-  "text": "Welcome to Dubai",
-  "words": [
-    { "text": "Welcome", "start": 0.2, "end": 0.6 },
-    { "text": "to", "start": 0.7, "end": 0.85 },
-    { "text": "Dubai", "start": 0.9, "end": 1.4 }
-  ]
+---
+
+## Critical Bug — File Size Exceeds Edge Function Body Limit
+
+**The main blocking issue for the test:**
+
+The frontend converts the entire audio file to base64 in one pass (lines 206-219) and sends it as a JSON body to the edge function. The payload is ~33% larger than the original file due to base64 encoding.
+
+Edge functions enforce a **6MB request body limit** by default. This means:
+- Files larger than ~4.5MB will produce a `413 Payload Too Large` error or silently time out
+- The UI only shows a `>50MB` warning — it still tries to send the full file without chunking
+
+**For real test with a typical audio file (MP3 interview, 3-10 min):**
+- 1 min audio ≈ 1MB → 1.3MB base64 → **OK**
+- 3 min audio ≈ 3MB → 4MB base64 → **borderline**
+- 5 min audio ≈ 5MB → 6.5MB base64 → **FAILS**
+
+---
+
+## Secondary Bug — MIME Type for MP3 Files
+
+When a `.mp3` file is uploaded, `uploadedFile.type` returns `audio/mpeg`. The edge function builds the filename as `audio.mpeg` in the FormData (line 94 of video-transcribe). ElevenLabs Scribe does accept MP3, but using `audio.mpeg` as extension instead of `audio.mp3` may cause unexpected failures on the Scribe API side since it uses file extension for format detection.
+
+**Fix:** Map known MIME types to their proper extensions.
+
+---
+
+## Minor Issue — Burn Captions RTL Word-Wrap
+
+The Canvas-based `drawCaptionText()` function splits text on spaces for word-wrapping. Arabic text renders right-to-left at the character level in Canvas (Unicode bidi is respected), but the word-wrap splits and measures using `ctx.measureText()` which does work for Arabic glyphs. The visual output will be centered correctly. This is not a blocking bug but the text alignment on Canvas could be improved by setting `canvas.direction = 'rtl'` before drawing RTL text.
+
+---
+
+## Fix Plan
+
+### File 1: `src/components/ai-video-studio/features/CaptionTranslator.tsx`
+
+**Fix 1: Chunked transcription to bypass 6MB limit**
+
+Instead of sending the full file as one base64 blob, split the `ArrayBuffer` into chunks of 3MB (≤4MB base64 after encoding) and call the edge function once per chunk. The edge function already handles each chunk independently and returns segments with timestamps — stitch the results together client-side by offsetting timestamps by the cumulative duration of previous chunks.
+
+Since we cannot know exact audio duration per chunk without decoding the audio, use a time-offset approximation: multiply `(chunkIndex * chunkByteSize / totalByteSize) * estimatedTotalDuration`. A better approach is to use the `endTime` of the last segment from the previous chunk as the start offset for the next chunk's timestamps.
+
+The simplest reliable fix: **cap the base64 payload at 3MB by slicing the `ArrayBuffer`** before encoding, send sequential requests, and concatenate `segments[]` arrays. Adjust `startTime`/`endTime` of subsequent chunks by adding the `endTime` of the last segment from the previous chunk.
+
+```typescript
+const CHUNK_BYTES = 3 * 1024 * 1024; // 3MB binary = ~4MB base64
+const totalChunks = Math.ceil(arrayBuffer.byteLength / CHUNK_BYTES);
+let allSegments: SubtitleSegment[] = [];
+let timeOffset = 0;
+
+for (let c = 0; c < totalChunks; c++) {
+  const slice = arrayBuffer.slice(c * CHUNK_BYTES, (c + 1) * CHUNK_BYTES);
+  // encode, send, get segments
+  // adjust timestamps: seg.startTime + timeOffset, seg.endTime + timeOffset
+  // timeOffset += last segment's endTime from previous chunk
 }
 ```
 
-We can group words into segments (every 10–15 words) and use **real start/end times** from the word timestamps. This gives us **accurate SRT files**.
+**Fix 2: MIME type → file extension mapping**
 
-For large files (>10MB), the frontend will chunk the audio and send multiple requests. The edge function will assemble results.
+```typescript
+const MIME_TO_EXT: Record<string, string> = {
+  'audio/mpeg': 'mp3',
+  'audio/mp3': 'mp3',
+  'audio/wav': 'wav',
+  'audio/x-wav': 'wav',
+  'audio/ogg': 'ogg',
+  'audio/webm': 'webm',
+  'audio/mp4': 'mp4',
+  'audio/m4a': 'm4a',
+  'video/mp4': 'mp4',
+  'video/webm': 'webm',
+  'video/quicktime': 'mov',
+};
+```
 
-### New edge function: `video-transcribe`
+Send `mimeType` to the edge function and use this map in the edge function when building the FormData filename.
 
-A new dedicated edge function specifically for video/audio transcription that:
-- Accepts the full audio/video as base64 (or chunked parts)
-- Calls ElevenLabs Scribe with the correct ISO 639-3 language code for all 28 languages
-- Returns structured `segments[]` with real `startTime`, `endTime`, and `text` — not a flat string
-- Falls back to Gemini with a structured JSON output prompt if ElevenLabs fails
+**Fix 3: Canvas RTL direction for Arabic burn**
 
-### Caption Burn-on-Video
+Before drawing Arabic (or any RTL) text on canvas:
+```typescript
+if (isRTLText) {
+  (ctx as any).direction = 'rtl';
+}
+ctx.textAlign = 'center';
+// draw...
+(ctx as any).direction = 'ltr'; // reset
+```
 
-Caption burning will use the **Canvas API** in the browser:
-- Upload a video file
-- Draw each frame to a canvas at the correct timestamp
-- Overlay the caption text from the matching subtitle segment  
-- Use `MediaRecorder` to capture the canvas stream as a new video blob
-- Allow download of the burned video
+**Fix 4: Progress display for multi-chunk transcription**
 
-This is fully client-side — no edge function needed. It works for files up to ~500MB, but will be capped at a practical limit with a warning.
+Show per-chunk progress: "Transcribing chunk 2 of 4…" during multi-chunk uploads.
 
-### Voice Dubbing (Full Track)
+### File 2: `supabase/functions/video-transcribe/index.ts`
 
-The existing per-segment dubbing is kept. We add a new "Dub All" button that:
-- Takes all translated segments for a selected language
-- Calls `voice-studio-tts` for each segment sequentially
-- Assembles the audio URLs for each segment
-- Provides a timeline preview / playback
+**Fix 5: Better MIME type → extension mapping in FormData**
+
+```typescript
+const MIME_TO_EXT: Record<string, string> = {
+  'audio/mpeg': 'mp3',
+  'audio/mp3': 'mp3',
+  'audio/wav': 'wav',
+  'audio/ogg': 'ogg',
+  'audio/webm': 'webm',
+  'audio/mp4': 'mp4',
+  'video/mp4': 'mp4',
+  'video/webm': 'webm',
+  'video/quicktime': 'mov',
+};
+const ext = MIME_TO_EXT[mimeType] || mimeType.split('/')[1] || 'webm';
+formData.append("file", audioBlob, `audio.${ext}`);
+```
+
+**Fix 6: Add `timeOffset` parameter support for chunked transcription**
+
+Accept an optional `timeOffset: number` in the request body. When present, add it to every segment's `startTime` and `endTime` before returning:
+
+```typescript
+const { audio, mimeType = "audio/webm", language = "en", timeOffset = 0 } = await req.json();
+// ...
+segments = segments.map(s => ({
+  ...s,
+  startTime: s.startTime + timeOffset,
+  endTime: s.endTime + timeOffset,
+}));
+```
 
 ---
 
 ## Files to Change
 
-### 1. NEW: `supabase/functions/video-transcribe/index.ts`
-
-A new edge function with:
-- **No JWT requirement** (public anon key is enough — transcription is a media processing task)
-- Accepts `{ audio: string (base64), mimeType: string, language?: string }`
-- Returns `{ segments: [{ startTime, endTime, text }], fullText: string }`
-- Uses ElevenLabs Scribe with correct ISO 639-3 codes for all 28 supported languages
-- Groups word-level timestamps into subtitle segments (~10 words each, max 7 seconds)
-- Gemini fallback returns a JSON array of segments with estimated timestamps
-
-**ISO 639-3 mapping for all 28 languages:**
-```typescript
-const LANG_TO_ISO639_3: Record<string, string> = {
-  en: 'eng', ar: 'ara', hi: 'hin', ur: 'urd', zh: 'zho',
-  es: 'spa', fr: 'fra', de: 'deu', ru: 'rus', pt: 'por',
-  ja: 'jpn', ko: 'kor', it: 'ita', nl: 'nld', tr: 'tur',
-  fa: 'fas', he: 'heb', pl: 'pol', th: 'tha', vi: 'vie',
-  id: 'ind', ms: 'msa', tl: 'tgl', bn: 'ben', ta: 'tam',
-  te: 'tel', ml: 'mal', sw: 'swa',
-};
-```
-
-### 2. REBUILT: `src/components/ai-video-studio/features/CaptionTranslator.tsx`
-
-Complete rebuild of the component:
-
-**Tab structure stays the same** (Upload → Transcribe → Translate → Style → Export), but each tab is significantly improved.
-
-**Upload tab changes:**
-- Show video preview thumbnail if a video file is uploaded
-- Show audio waveform hint if audio
-- Language detection selector: "What language is spoken in the video?" (28-language dropdown)
-- Size warning upgraded: files >50MB get a chunking warning
-
-**Transcribe tab changes:**
-- Uses the new `video-transcribe` edge function
-- Progress is tracked through real stages: Reading → Encoding → Transcribing → Grouping Segments
-- Segments show **real timestamps** from ElevenLabs Scribe word data
-- Segments are editable inline (already exists, keep as-is)
-- Segment timestamps are also editable (new: click time badge to adjust)
-- "Auto-detect language" toggle
-
-**Translate tab changes:**
-- Full 28-language grid with emoji flags (all visible, scroll inside panel)
-- "Translate All" button (already exists)
-- New: "Dub All" button per language — calls voice-studio-tts for all segments and previews merged audio
-- Translation and dubbing state per language, not per segment (cleaner UX)
-
-**Style tab — improved captions:**
-- Live preview of caption style on a dark dummy video frame (16:9 box showing the text in chosen style/position/color)
-
-**Export tab — Burn Captions:**
-- Replace "Coming Soon" with a real working burn-captions flow using Canvas API
-- File selector to pick the video to burn on (separate from the transcription source)
-- Progress bar during canvas-based burning
-- Download button for the burned MP4
-
-**State management:**
-```typescript
-const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-const [spokenLanguage, setSpokenLanguage] = useState('en'); // for transcription
-const [segments, setSegments] = useState<SubtitleSegment[]>([]); // real timestamps
-const [isBurning, setIsBurning] = useState(false);
-const [burnProgress, setBurnProgress] = useState(0);
-const [burnVideoFile, setBurnVideoFile] = useState<File | null>(null);
-```
-
-**Caption burn implementation (Canvas API):**
-```typescript
-const burnCaptionsOnVideo = async (videoFile: File, segs: SubtitleSegment[], style: CaptionStyle, langCode?: string) => {
-  setIsBurning(true);
-  const video = document.createElement('video');
-  video.src = URL.createObjectURL(videoFile);
-  // Wait for metadata
-  await new Promise(res => { video.onloadedmetadata = res; });
-  
-  const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  const ctx = canvas.getContext('2d')!;
-  
-  const stream = canvas.captureStream(30);
-  const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
-  const chunks: Blob[] = [];
-  recorder.ondataavailable = e => chunks.push(e.data);
-  
-  recorder.start(100);
-  video.play();
-  
-  // Draw loop
-  const drawFrame = () => {
-    ctx.drawImage(video, 0, 0);
-    const currentTime = video.currentTime;
-    const activeSeg = segs.find(s => currentTime >= s.startTime && currentTime <= s.endTime);
-    if (activeSeg) {
-      const text = langCode && activeSeg.translations?.[langCode] ? activeSeg.translations[langCode] : activeSeg.text;
-      // Draw text overlay with style settings
-      drawCaptionText(ctx, text, style, canvas.width, canvas.height);
-    }
-    setBurnProgress(Math.round((currentTime / video.duration) * 100));
-    if (!video.ended) requestAnimationFrame(drawFrame);
-    else { recorder.stop(); }
-  };
-  requestAnimationFrame(drawFrame);
-  
-  await new Promise(res => { recorder.onstop = res; });
-  const blob = new Blob(chunks, { type: 'video/webm' });
-  // trigger download
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'captioned_video.webm'; a.click();
-  setIsBurning(false);
-};
-```
-
-### 3. UPDATED: `supabase/functions/voice-to-text/index.ts`
-
-Fix the ISO 639-3 language code mapping to cover all 28 languages instead of only `eng`/`ara`. This fixes the dubbing quality for Hindi, Chinese, Spanish, etc.
-
-```typescript
-const LANG_TO_ISO639_3: Record<string, string> = {
-  en: 'eng', ar: 'ara', hi: 'hin', ur: 'urd', zh: 'zho',
-  es: 'spa', fr: 'fra', de: 'deu', ru: 'rus', pt: 'por',
-  ja: 'jpn', ko: 'kor', it: 'ita', nl: 'nld', tr: 'tur',
-  fa: 'fas', he: 'heb', pl: 'pol', th: 'tha', vi: 'vie',
-  id: 'ind', ms: 'msa', tl: 'tgl', bn: 'ben', ta: 'tam',
-  te: 'tel', ml: 'mal', sw: 'swa',
-};
-```
+| File | What Changes |
+|---|---|
+| `src/components/ai-video-studio/features/CaptionTranslator.tsx` | Chunked transcription (3MB slices), MIME extension fix, RTL canvas direction, multi-chunk progress |
+| `supabase/functions/video-transcribe/index.ts` | MIME→extension map fix, `timeOffset` parameter support |
 
 ---
 
-## Summary of All Changes
+## End-to-End Test Verification Checklist
 
-| File | Action | What Changes |
-|---|---|---|
-| `supabase/functions/video-transcribe/index.ts` | CREATE | New edge function: ElevenLabs Scribe with word timestamps → real subtitle segments for all 28 languages |
-| `supabase/functions/voice-to-text/index.ts` | UPDATE | Fix ISO 639-3 codes for all 28 languages (was hardcoded to only `eng`/`ara`) |
-| `src/components/ai-video-studio/features/CaptionTranslator.tsx` | REBUILD | Real transcription → real SRT timestamps; spoken language selector; full 28-language dub; working caption burn via Canvas API; live style preview |
+After fixes, the flow should pass these checks:
+
+1. Upload a 5-minute MP3 (≈5MB) — transcription completes without 413 error
+2. Segments display with real `MM:SS.ms` timestamps in the Transcribe tab
+3. Translate to Arabic — Arabic text appears right-to-left in the segment list
+4. Edit an Arabic translation — textarea also shows RTL text correctly
+5. Export SRT (Arabic) — file opens in a text editor, timestamps are `00:00:12,345 --> 00:00:15,678` format
+6. Burn Captions with Arabic selected — Arabic renders center-aligned on the video canvas
 
 ---
 
-## What Each Fixed Feature Delivers
+## SRT Format Confirmation
 
-- **Real Transcription**: ElevenLabs Scribe returns word-level timestamps → accurate SRT
-- **Fixed SRT Export**: Timecodes are real (from Scribe), not estimated by word count
-- **All 28 Languages**: ISO 639-3 mapping covers every language in `SUPPORTED_LANGUAGES`
-- **Voice Dubbing**: Per-segment dub via `voice-studio-tts` + new "Dub All" for full-track dubbing
-- **Caption Burn**: Canvas API draws each video frame + overlays caption text → downloadable WebM with burned captions
-- **CapCut-Style Layout**: Tabs stay the same (Upload → Transcribe → Translate → Style → Export); improvements are in the content of each tab, not the container
+The current `toSRTTime` function is already correct. Sample output for a 12.345s start, 15.678s end:
+```
+1
+00:00:12,345 --> 00:00:15,678
+مرحباً بكم في دبي
+```
+No change needed to the SRT formatter itself.
