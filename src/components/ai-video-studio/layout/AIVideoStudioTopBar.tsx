@@ -82,42 +82,39 @@ export function AIVideoStudioTopBar({
   };
 
   return (
-    <div className="flex items-center justify-between px-4 py-2 bg-slate-900/80 backdrop-blur">
+    <div className="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-600">
       {/* Left Section - Logo & Project Name */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
-          <FileVideo className="w-6 h-6 text-gold" />
-          <span className="font-semibold text-gold text-lg hidden sm:inline">JBJ AI Video Studio™</span>
+          <FileVideo className="w-6 h-6 text-amber-400" />
+          <span className="font-bold text-amber-400 text-base hidden sm:inline tracking-wide">JBJ AI Video Studio™</span>
         </div>
 
-        <div className="h-6 w-px bg-slate-700" />
+        <div className="h-6 w-px bg-slate-500" />
 
         {isEditing ? (
           <div className="flex items-center gap-2">
             <Input
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
-              className="h-8 w-48 bg-slate-800 border-slate-700 text-white text-sm"
+              className="h-8 w-48 bg-slate-700 border-slate-500 text-white text-sm"
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') handleSave();
                 if (e.key === 'Escape') setIsEditing(false);
               }}
             />
-            <Button size="sm" variant="ghost" onClick={handleSave}>
+            <Button size="sm" variant="ghost" onClick={handleSave} className="text-white hover:text-amber-400">
               <Check className="w-4 h-4" />
             </Button>
           </div>
         ) : (
           <button
-            onClick={() => {
-              setEditName(projectName);
-              setIsEditing(true);
-            }}
-            className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors"
+            onClick={() => { setEditName(projectName); setIsEditing(true); }}
+            className="flex items-center gap-2 text-slate-200 hover:text-white transition-colors group"
           >
             <span className="text-sm font-medium">{projectName}</span>
-            <Edit2 className="w-3 h-3" />
+            <Edit2 className="w-3 h-3 opacity-60 group-hover:opacity-100" />
           </button>
         )}
       </div>
@@ -125,63 +122,52 @@ export function AIVideoStudioTopBar({
       {/* Center Section - Undo/Redo & Status */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1">
-          <Button
-            size="sm"
-            variant="ghost"
+          <button
             onClick={onUndo}
             disabled={!canUndo}
-            className="text-slate-300 hover:text-white hover:bg-slate-700 disabled:opacity-30"
+            className="p-1.5 rounded text-slate-200 hover:text-white hover:bg-slate-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             <Undo2 className="w-4 h-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
+          </button>
+          <button
             onClick={onRedo}
             disabled={!canRedo}
-            className="text-slate-300 hover:text-white hover:bg-slate-700 disabled:opacity-30"
+            className="p-1.5 rounded text-slate-200 hover:text-white hover:bg-slate-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             <Redo2 className="w-4 h-4" />
-          </Button>
+          </button>
         </div>
-
         {getRenderStatus()}
       </div>
 
       {/* Right Section - Actions */}
       <div className="flex items-center gap-2">
-        <Button
-          size="sm"
-          variant="outline"
+        <button
           onClick={onNewProject}
-          className="border-slate-600 text-slate-200 hover:bg-slate-700 hover:text-white hover:border-slate-500"
+          className="px-3 py-1.5 rounded-md text-xs font-semibold border border-slate-400 text-slate-100 bg-slate-700 hover:bg-slate-600 hover:border-slate-300 transition-all"
         >
           New
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          className="border-slate-600 text-slate-200 hover:bg-slate-700 hover:text-white hover:border-slate-500"
+        </button>
+        <button
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold border border-slate-400 text-slate-100 bg-slate-700 hover:bg-slate-600 hover:border-slate-300 transition-all"
         >
-          <Save className="w-4 h-4 mr-2" />
+          <Save className="w-3.5 h-3.5" />
           Save
-        </Button>
-        <Button
-          size="sm"
+        </button>
+        <button
           onClick={onExport}
-          className="bg-amber-500 hover:bg-amber-400 text-black font-bold"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold bg-amber-500 text-black hover:bg-amber-400 transition-all"
         >
-          <Download className="w-4 h-4 mr-2" />
+          <Download className="w-3.5 h-3.5" />
           Export
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          className="border-slate-600 text-slate-200 hover:bg-slate-700 hover:text-white"
+        </button>
+        <button
+          className="p-1.5 rounded-md text-slate-200 hover:text-white border border-slate-500 bg-slate-700 hover:bg-slate-600 transition-all"
         >
           <Settings className="w-4 h-4" />
-        </Button>
+        </button>
       </div>
     </div>
   );
 }
+

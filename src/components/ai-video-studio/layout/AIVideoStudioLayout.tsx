@@ -3,7 +3,6 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Languages, Mic, Sparkles, Music2, Layers, Maximize2, Map, Bot, FolderOpen, ChevronUp, ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 interface AIVideoStudioLayoutProps {
   topBar: ReactNode;
@@ -79,9 +78,9 @@ export function AIVideoStudioLayout({
   };
 
   const ToolsBar = () => (
-    <div className="flex-shrink-0 bg-slate-900 border-t border-slate-700">
+    <div className="flex-shrink-0 bg-slate-800 border-t border-slate-600">
       {/* Horizontal Tool Tabs */}
-      <div className="flex items-center gap-1 px-2 py-1 overflow-x-auto scrollbar-hide">
+      <div className="flex items-center gap-1 px-2 py-1.5 overflow-x-auto scrollbar-hide">
         {TOOL_TABS.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTool === tab.id;
@@ -89,36 +88,34 @@ export function AIVideoStudioLayout({
             <button
               key={tab.id}
               onClick={() => handleToolClick(tab.id)}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-medium whitespace-nowrap transition-all flex-shrink-0 ${
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-semibold whitespace-nowrap transition-all flex-shrink-0 border ${
                 isActive && toolsExpanded
-                  ? 'bg-amber-500 text-black'
+                  ? 'bg-amber-500 text-black border-amber-500'
                   : isActive
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-700'
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/60'
+                  : 'text-slate-100 border-slate-500 bg-slate-700 hover:text-white hover:bg-slate-600 hover:border-slate-400'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{tab.label}</span>
+              <span>{tab.label}</span>
             </button>
           );
         })}
         <div className="ml-auto flex-shrink-0">
           {activeTool && (
-            <Button
-              size="sm"
-              variant="ghost"
+            <button
               onClick={() => setToolsExpanded(prev => !prev)}
-              className="text-slate-400 hover:text-white h-7 w-7 p-0"
+              className="p-1.5 rounded text-slate-200 hover:text-white hover:bg-slate-600 transition-all"
             >
               {toolsExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
-            </Button>
+            </button>
           )}
         </div>
       </div>
 
       {/* Active Tool Panel */}
       {activeTool && toolsExpanded && toolPanelContent[activeTool] && (
-        <div className="border-t border-slate-700 h-64 overflow-hidden bg-slate-900/80">
+        <div className="border-t border-slate-600 h-64 overflow-hidden bg-slate-900">
           {toolPanelContent[activeTool]}
         </div>
       )}
