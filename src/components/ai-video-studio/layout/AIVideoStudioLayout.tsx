@@ -1,10 +1,14 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useImperativeHandle, forwardRef } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Languages, Mic, Sparkles, Music2, Layers, Maximize2,
   Map, Bot, FolderOpen, ChevronUp, ChevronDown, Settings2, Type, Clapperboard
 } from 'lucide-react';
+
+export interface AIVideoStudioLayoutHandle {
+  toggleTool: (toolId: string) => void;
+}
 
 interface AIVideoStudioLayoutProps {
   topBar: ReactNode;
@@ -43,7 +47,8 @@ const TOOL_TABS = [
   { id: 'projects',   label: 'Projects',    icon: FolderOpen  },
 ];
 
-export function AIVideoStudioLayout({
+export const AIVideoStudioLayout = forwardRef<AIVideoStudioLayoutHandle, AIVideoStudioLayoutProps>(
+function AIVideoStudioLayout({
   topBar,
   centerPanel,
   timeline,
@@ -61,10 +66,24 @@ export function AIVideoStudioLayout({
   mapPanel,
   aiEditorPanel,
   projectsPanel,
-}: AIVideoStudioLayoutProps) {
+}, ref) {
   const isMobile = useIsMobile();
   const [activeTool, setActiveTool] = useState<string | null>(null);
   const [toolsExpanded, setToolsExpanded] = useState(false);
+
+  // Expose imperative toggle for keyboard shortcut wiring in the parent
+  useImperativeHandle(ref, () => ({
+    toggleTool(toolId: string) {
+      setActiveTool(prev => {
+        if (prev === toolId) {
+          setToolsExpanded(exp => !exp);
+          return prev;
+        }
+        setToolsExpanded(true);
+        return toolId;
+      });
+    },
+  }), []);
 
   const toolPanelContent: Record<string, ReactNode> = {
     media:       mediaPanel,
@@ -90,6 +109,7 @@ export function AIVideoStudioLayout({
       setToolsExpanded(true);
     }
   };
+
 
   const ToolsBar = () => (
     <div className="flex-shrink-0 bg-slate-800 border-t border-slate-600">
@@ -204,4 +224,5 @@ export function AIVideoStudioLayout({
       </div>
     </div>
   );
-}
+});
+

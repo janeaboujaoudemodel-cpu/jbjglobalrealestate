@@ -35,6 +35,13 @@ const SECTIONS = [
     ],
   },
   {
+    title: 'Panels',
+    color: '#A78BFA',
+    shortcuts: [
+      { keys: ['T'], desc: 'Toggle Transitions panel' },
+    ],
+  },
+  {
     title: 'General',
     color: '#F472B6',
     shortcuts: [
