@@ -112,6 +112,14 @@ function InspirationCarousel() {
   );
 }
 
+export interface TransitionClipPreview {
+  id: string;
+  startTime: number;
+  duration: number;
+  transitionId: string;
+  easing: string;
+}
+
 interface VideoPreviewCanvasProps {
   clips: Array<{
     id: string;
@@ -120,6 +128,7 @@ interface VideoPreviewCanvasProps {
     startTime: number;
     duration: number;
   }>;
+  transitionClips?: TransitionClipPreview[];
   textClips?: Clip[];
   currentTime: number;
   isPlaying: boolean;
@@ -137,8 +146,97 @@ const QUICK_ACTIONS = [
   { id: 'ai-editor',icon: Bot,      label: 'AI Editor',       desc: 'Smart highlight reel' },
 ];
 
+// ── Easing functions ──────────────────────────────────────────────────────────
+function applyEasing(t: number, easing: string): number {
+  switch (easing) {
+    case 'easeIn':    return t * t;
+    case 'easeOut':   return t * (2 - t);
+    case 'easeInOut': return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    default:          return t; // linear
+  }
+}
+
+// ── CSS overlay for each transition type ─────────────────────────────────────
+function TransitionOverlay({ transitionId, progress, easing }: { transitionId: string; progress: number; easing: string }) {
+  const p = applyEasing(Math.max(0, Math.min(1, progress)), easing);
+
+  // fade-black / fade-white / fade-blur: mid-point = full coverage
+  if (transitionId.startsWith('fade-black')) {
+    // 0→0.5: fade to black; 0.5→1: fade out from black
+    const opacity = p <= 0.5 ? p * 2 : (1 - p) * 2;
+    return <div className="absolute inset-0 pointer-events-none bg-black" style={{ opacity }} />;
+  }
+  if (transitionId.startsWith('fade-white')) {
+    const opacity = p <= 0.5 ? p * 2 : (1 - p) * 2;
+    return <div className="absolute inset-0 pointer-events-none bg-white" style={{ opacity }} />;
+  }
+  if (transitionId.startsWith('fade-blur')) {
+    const blur = p <= 0.5 ? p * 2 * 12 : (1 - p) * 2 * 12;
+    const opacity = p <= 0.5 ? p * 2 : (1 - p) * 2;
+    return <div className="absolute inset-0 pointer-events-none" style={{ backdropFilter: `blur(${blur}px)`, opacity }} />;
+  }
+
+  // dissolve: cross-fade overlay from semi-transparent black
+  if (transitionId.startsWith('dissolve')) {
+    const opacity = p <= 0.5 ? p * 2 * 0.6 : (1 - p) * 2 * 0.6;
+    return <div className="absolute inset-0 pointer-events-none bg-black" style={{ opacity }} />;
+  }
+
+  // slide-left: incoming frame slides in from right
+  if (transitionId === 'slide-left') {
+    const translate = (1 - p) * 100;
+    return (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 bg-slate-900" style={{ transform: `translateX(${translate}%)` }} />
+      </div>
+    );
+  }
+  // slide-right: incoming frame slides in from left
+  if (transitionId === 'slide-right') {
+    const translate = (p - 1) * 100;
+    return (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 bg-slate-900" style={{ transform: `translateX(${translate}%)` }} />
+      </div>
+    );
+  }
+  // slide-up: incoming frame slides in from bottom
+  if (transitionId === 'slide-up') {
+    const translate = (1 - p) * 100;
+    return (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 bg-slate-900" style={{ transform: `translateY(${translate}%)` }} />
+      </div>
+    );
+  }
+
+  // zoom-in: scale up from center
+  if (transitionId === 'zoom-in') {
+    const scale = 1 + p * 0.3;
+    const opacity = p <= 0.5 ? p * 2 * 0.4 : (1 - p) * 2 * 0.4;
+    return <div className="absolute inset-0 pointer-events-none bg-black" style={{ transform: `scale(${scale})`, opacity, transformOrigin: 'center' }} />;
+  }
+  // zoom-out: scale down
+  if (transitionId === 'zoom-out') {
+    const scale = 1.3 - p * 0.3;
+    const opacity = p <= 0.5 ? p * 2 * 0.4 : (1 - p) * 2 * 0.4;
+    return <div className="absolute inset-0 pointer-events-none bg-black" style={{ transform: `scale(${scale})`, opacity, transformOrigin: 'center' }} />;
+  }
+  // zoom-punch: quick punch zoom
+  if (transitionId === 'zoom-punch') {
+    const peak = Math.sin(p * Math.PI);
+    const scale = 1 + peak * 0.25;
+    return <div className="absolute inset-0 pointer-events-none" style={{ transform: `scale(${scale})`, transformOrigin: 'center' }} />;
+  }
+
+  // Fallback: simple fade
+  const opacity = p <= 0.5 ? p * 2 : (1 - p) * 2;
+  return <div className="absolute inset-0 pointer-events-none bg-black" style={{ opacity }} />;
+}
+
 export function VideoPreviewCanvas({
   clips,
+  transitionClips = [],
   textClips = [],
   currentTime,
   isPlaying,
@@ -366,7 +464,25 @@ export function VideoPreviewCanvas({
                 );
               })}
 
+              {/* ── Live Transition Overlays ── */}
+              {transitionClips
+                .filter(tc => currentTime >= tc.startTime && currentTime <= tc.startTime + tc.duration)
+                .map(tc => {
+                  const progress = tc.duration > 0
+                    ? (currentTime - tc.startTime) / tc.duration
+                    : 0;
+                  return (
+                    <TransitionOverlay
+                      key={tc.id}
+                      transitionId={tc.transitionId}
+                      progress={progress}
+                      easing={tc.easing}
+                    />
+                  );
+                })}
+
               {/* Time Overlay */}
+
               <div className="absolute top-3 right-3 bg-black/80 px-2 py-1 rounded text-xs font-mono text-white border border-white/10">
                 {formatTime(currentTime)} / {formatTime(duration)}
               </div>

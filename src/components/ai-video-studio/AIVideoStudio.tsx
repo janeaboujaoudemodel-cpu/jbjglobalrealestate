@@ -163,6 +163,18 @@ export function AIVideoStudio() {
       track.clips.map(clip => ({ id: clip.id, type: clip.type as 'video' | 'audio' | 'image', url: clip.source.url, startTime: clip.startTime, duration: clip.duration }))
     );
 
+  // Build transition clips for live preview overlays
+  const transitionClips = project.tracks
+    .flatMap(track => track.clips)
+    .filter(clip => clip.type === 'transition')
+    .map(clip => ({
+      id: clip.id,
+      startTime: clip.startTime,
+      duration: clip.duration,
+      transitionId: clip.effects.find(e => e.type === 'transition')?.settings?.transitionId as string ?? 'fade-black',
+      easing: (clip.transition?.easing ?? 'easeInOut') as string,
+    }));
+
   // Text clips that are active at current time
   const activeTextClips = project.tracks
     .filter(t => t.type === 'text')
@@ -236,6 +248,7 @@ export function AIVideoStudio() {
       centerPanel={
         <VideoPreviewCanvas
           clips={previewClips}
+          transitionClips={transitionClips}
           textClips={activeTextClips}
           currentTime={timelineState.currentTime}
           isPlaying={timelineState.isPlaying}
