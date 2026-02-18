@@ -1,102 +1,145 @@
 
-# Fix: Button Visibility Across All Toolkit Tools
+# Fix JBJ E-Sign: Full Rebuild of Document Field Placer + Auto-Detect Fields
 
-## Problem Summary
+## Root Cause Analysis — Every Bug Identified
 
-Across every toolkit page, buttons suffer from low-contrast styling — they use semi-transparent backgrounds (3%–18% opacity) with muted text colors that blend into the dark `#0C0E14` background. The user cannot see or interact with them clearly.
+### Bug 1: PDF Never Renders in the Document Preview (Critical)
+In `DocumentFieldPlacer.tsx` lines 181–188, the "document preview" area is just a static placeholder div with a `<PenTool>` icon and text "Document Preview / Drag fields to position them." The `pdfUrl` prop is accepted but **never used** — no `<iframe>`, no `<embed>`, no PDF rendering at all. This is why uploading a PDF shows nothing.
 
-## Root Cause Analysis
+### Bug 2: Clicking "Signature / Initials / Date / Text" Does Nothing Visible (Critical)
+The field type selector buttons at lines 148–161 only set `selectedFieldType` state — they don't add a field. The user must then click "Add Field" as a separate step. Users are clicking the field type buttons expecting a field to appear immediately (like DocuSign), but nothing happens. The UX flow is broken and unintuitive.
 
-Three categories of broken button styling found:
+### Bug 3: "Add Field" Text Box Cannot Be Typed Into (Critical)
+When a field IS added via "Add Field," it renders as an absolutely-positioned `<div>` with a colored background and label. It has no `<input>` inside it, so naturally nothing can be typed. Text fields need an actual input element.
 
-**Category 1 — SaveProjectBar (affects ALL tools)**
-- Save button: `background: accentColor + "18"` = only 9.4% fill opacity
-- Clear button: `background: rgba(239,68,68,0.08)` = 3% red fill, near invisible
+### Bug 4: No Auto-Detect Fields Feature
+There is no AI-assisted field detection at all. When "Auto Detect" is clicked, nothing exists.
 
-**Category 2 — Action buttons inside tool panels**
-- Patterns like `background: rgba(255,255,255,0.04)`, `color: I.muted` (`rgba(255,255,255,0.45)`)
-- Transparent outline buttons with `color: rgba(255,255,255,0.65)` — fades into dark backgrounds
-- "Reset", "Clear", secondary action buttons almost invisible
+---
 
-**Category 3 — Shadcn `Button` variant misuse**
-- `variant="ghost"` and `variant="secondary"` render in theme colors, often near-invisible on dark surfaces
+## Complete Fix Plan
 
-## Fix Strategy
+### Fix 1: Render the PDF in the document area
+Replace the static placeholder in `DocumentFieldPlacer.tsx` with a proper PDF viewer using an `<iframe>` pointing to `pdfUrl`. This renders the actual uploaded PDF so the user can see the document and place fields visually on top of it.
 
-The rule is: **Every interactive button must have either (a) a solid/gradient opaque background OR (b) a solid visible border with high-contrast white/accent text (no rgba muting).**
-
-## Files to Change
-
-### 1. `src/components/toolkit/SaveProjectBar.tsx`
-- **Save button**: Change from `accentColor + "18"` background to a solid gradient/opaque fill of the accent color with white text
-- **Clear button**: Change from `rgba(239,68,68,0.08)` to a solid red (`rgba(239,68,68,0.85)`) with white text and no opacity fading
-
-### 2. `src/pages/toolkit/BeautyFilters.tsx`
-- **"Reset Face" / "Reset Body" / "Reset All"** buttons: Change from `rgba(255,255,255,0.04)` to solid visible background (e.g. `rgba(255,255,255,0.12)` with solid `1px solid rgba(255,255,255,0.2)` border + full white text)
-- **Background preset buttons** (Remove BG, White BG, etc.): Same — increase base background to `rgba(255,255,255,0.1)` and use `color: #fff`
-- **Outfit/Object Removal buttons**: Same treatment — solid visible styling
-
-### 3. `src/pages/toolkit/BackgroundAI.tsx`
-- **Inactive mode tab buttons**: Change `color: C.mutedText` to white `#fff` with a clearly visible border `rgba(99,102,241,0.4)`
-- **Re-process button**: Increase background opacity to `rgba(255,255,255,0.12)` and use `color: #fff`
-
-### 4. `src/pages/toolkit/PDFEditor.tsx`
-- **"Extract", "Merge All", "Add More PDFs" buttons**: Change `background: transparent` + muted color to `background: rgba(99,102,241,0.15)` + solid indigo border + white text
-- **"Apply to Selected Pages" signature button**: Make sure it's not disabled-looking when signature data is present
-
-### 5. `src/pages/toolkit/CaptionsTranslate.tsx`
-- **"Remove" file button**: Replace `Button variant="secondary"` with an explicit styled button using solid red background and white text
-- **Language toggle buttons**: Increase base-state contrast — background `rgba(255,255,255,0.08)`, color `#ddd`
-
-### 6. `src/pages/toolkit/VirtualStagingPage.tsx`
-- **"Remove/Clear" trash button**: Replace `variant="ghost"` with explicit red-tinted styling
-- **"Download" button**: Verify contrast — `border-emerald-500 text-emerald-400` may be low on dark slate; brighten text to white
-- **"Generate Staging" button**: Already uses `bg-gold text-black` — this is fine
-
-### 7. `src/pages/toolkit/ImageResize.tsx`
-- **"Fit with Padding" background buttons**: Format/type selector buttons use `border-gold/30 text-champagne/70` which is semi-transparent; increase to `border-gold/70` + `text-white`
-
-### 8. `src/pages/toolkit/BrochureGeneratorPage.tsx`
-- Audit action buttons for same faded patterns and fix
-
-## Visual Standard for All Buttons Going Forward
-
-```text
-PRIMARY ACTION (Download, Generate, Save, Process):
-  - Solid opaque gradient background (no opacity < 80%)
-  - White text, always full opacity
-  - Visible glow/shadow
-
-SECONDARY ACTION (Reset, Clear, Re-process, Remove):
-  - background: rgba(255,255,255,0.12) OR rgba(color, 0.20)
-  - border: 1.5px solid rgba(color, 0.5) — solid, visible
-  - color: #ffffff — always white, never muted rgba
-
-DANGER ACTION (Delete, Clear project):
-  - background: rgba(239,68,68,0.25)
-  - border: 1px solid rgba(239,68,68,0.6)
-  - color: #fca5a5 (red-300, bright enough to read)
-
-TOGGLE/OPTION (not selected):
-  - background: rgba(255,255,255,0.07)
-  - border: 1px solid rgba(255,255,255,0.18)
-  - color: rgba(255,255,255,0.85) — near-white, readable
+```
+<div className="relative" style={{ height: '700px' }}>
+  <iframe src={pdfUrl} className="w-full h-full border-0" title="Document Preview" />
+  {/* Fields overlay on top of the iframe */}
+  {pageFields.map(field => <FieldOverlay ... />)}
+</div>
 ```
 
-## Confirmation of Previous Features
+### Fix 2: Make field-type buttons immediately place a field on click
+Remove the separate "Add Field" button — or keep it but make clicking any field type button (Signature, Initials, Date, Text) immediately add that field at a smart default position. This matches DocuSign's UX where clicking the field type adds it instantly.
 
-Based on the codebase review:
+Alternate approach (better): Keep the field type buttons as "selected type" and make the document area clickable — clicking anywhere on the PDF adds a field at that position. This is the most intuitive approach.
 
-- **Scan & Sign** (`ScanSignPage.tsx`): Fully restored with emerald palette (`#10B981`), `PrimaryBtn`/`OutlineBtn`/`DangerBtn` helpers — buttons are solid. Status: COMPLETE.
-- **Beauty App mega-upgrade** (`BeautyFilters.tsx`): 6-tab Photo Studio Pro with all FaceApp/Lightroom/BeautyPlus features — Status: COMPLETE, but has the faded secondary button issue that will be fixed.
-- **Save Project feature** (`SaveProjectBar.tsx`): Exists on all tools — Status: COMPLETE, but Save/Clear buttons are too faint — will be fixed.
+**Implementation**: Add an `onClick` handler to the PDF wrapper div that:
+1. Calculates x/y as percentages of the wrapper
+2. Creates a new field at that position with the currently selected type
+3. Immediately shows it on the overlay
+
+### Fix 3: Make text fields interactive with actual input elements
+In the field overlay rendering (lines 196–223), replace the static colored div content with:
+- For `type === "text"`: render a transparent `<input>` inside the field box with a white/light background so it's typeable
+- For `type === "signature"` / `type === "initials"`: keep the colored indicator but make it clearly draggable
+- For `type === "date"`: render a small `<input type="date">` or auto-fill with today's date
+
+### Fix 4: Add Auto-Detect Fields button
+Add a new "Auto Detect Fields" button to the toolbar. When clicked, it uses **Lovable AI (Gemini)** to analyze the PDF and intelligently place common contract fields:
+
+**Backend edge function** (`supabase/functions/esign-auto-detect-fields/index.ts`):
+- Accepts `{ pdfUrl, recipientId }` 
+- Uses `google/gemini-2.5-flash` with vision to analyze the document page screenshot
+- Returns an array of detected fields: `{ type, x, y, width, height, label, suggestedValue }`
+- Field types detected: signature lines, date fields, name fields, initials boxes, checkboxes, address fields, phone fields
+
+**Frontend**: The "Auto Detect" button shows a spinner while analyzing, then places all detected fields on the overlay with proper positioning and auto-fills text fields with available data (recipient name, today's date).
+
+---
+
+## Detailed Implementation
+
+### Files to Create/Modify
+
+**1. `src/components/e-signature/DocumentFieldPlacer.tsx` — Complete rewrite**
+
+Key changes:
+- Render `<iframe src={pdfUrl}>` as the document base
+- Add click-to-place logic on the document overlay
+- Make text fields have actual `<input>` elements
+- Add page navigation (Previous/Next page) since PDFs can be multi-page
+- Add "Auto Detect Fields" button in toolbar
+- Visual improvements: field labels with recipient color indicator, resize handles
+- All buttons fully visible (no faded styling)
+
+**2. `supabase/functions/esign-auto-detect-fields/index.ts` — New edge function**
+
+Uses Gemini vision to analyze a screenshot/page of the PDF and return detected field positions. Falls back to a smart template-based detection (standard contract fields: Signature at bottom, Date next to it, Name at top, etc.) if vision analysis fails.
+
+**3. `src/pages/e-signature/CreateEnvelope.tsx` — Minor fix**
+
+- The Step 3 condition `{currentStep === 3 && pdfUrl && (` is correct, but need to ensure the `DocumentFieldPlacer` container has proper height so the iframe can render
+- Add styling so the field placer card doesn't clip the PDF
+
+---
+
+## UI/UX Design for the Rebuilt Field Placer
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ TOOLBAR                                                     │
+│ [Select Recipient ▾] [✍ Signature] [AB Initials] [📅 Date] │
+│ [T Text] | [🔍 Auto Detect Fields] [🗑 Clear All]          │
+└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────┐ ┌──────────────────────────┐
+│ PDF DOCUMENT AREA            │ │ PLACED FIELDS LIST       │
+│                              │ │                          │
+│  [actual PDF iframe here]    │ │ ✍ Signature - John Smith │
+│                              │ │ 📅 Date - John Smith     │
+│  ← Click anywhere to place  │ │ T Name - John Smith      │
+│    selected field type →     │ │                          │
+│                              │ │ RECIPIENTS LEGEND        │
+│  [draggable field overlays]  │ │ ● John Smith (3 fields)  │
+│                              │ │ ● Jane Doe (2 fields)    │
+└──────────────────────────────┘ └──────────────────────────┘
+│ Page: ← 1 of 3 → │
+```
+
+---
+
+## Auto-Detect Fields Logic
+
+When "Auto Detect" is clicked:
+
+1. **Gemini Vision Analysis**: Send the PDF URL to the edge function with prompt:
+   > "Analyze this contract document and identify all signature fields, date fields, name fields, initial boxes, checkboxes, and text input areas. Return their approximate positions as percentages (0-100) of page width/height."
+
+2. **Smart Field Placement**: Based on the AI response, place fields:
+   - Signature lines → `type: "signature"` field
+   - "Date:" labels → `type: "date"` field with today's date auto-filled
+   - "Name:" / "Print Name:" labels → `type: "text"` with recipient name auto-filled
+   - "Initials:" boxes → `type: "initials"` field
+   - Checkbox areas → `type: "text"` with "☑" suggested value
+
+3. **Auto-fill available data**: 
+   - Recipient name → prefill text fields labeled "name"
+   - Today's date → prefill date fields
+   - Leave signature/initials for manual drawing
+
+4. **Result**: Fields appear positioned on the document, labeled, color-coded by recipient — user just needs to review and drag to fine-tune.
+
+---
 
 ## Implementation Order
 
-1. Fix `SaveProjectBar.tsx` first — it affects every tool simultaneously
-2. Fix `BeautyFilters.tsx` secondary/option buttons
-3. Fix `BackgroundAI.tsx` tab + secondary buttons
-4. Fix `PDFEditor.tsx` action buttons
-5. Fix `CaptionsTranslate.tsx` and `VirtualStagingPage.tsx`
-6. Fix `ImageResize.tsx` format selector buttons
-7. Fix `BrochureGeneratorPage.tsx`
+1. Rewrite `DocumentFieldPlacer.tsx` with PDF iframe + click-to-place + interactive text inputs
+2. Create `esign-auto-detect-fields` edge function 
+3. Wire Auto Detect button to edge function in the field placer
+4. Test end-to-end: upload PDF → see PDF → click to place fields → type in text fields → auto-detect
+
+---
+
+## No Database Changes Required
+All existing tables (`esign_fields`, `esign_recipients`, `esign_envelopes`, `esign_audit_log`) already have the correct schema. This is purely a frontend + new edge function change.
