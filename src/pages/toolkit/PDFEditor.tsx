@@ -79,6 +79,10 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
   const processFiles = async (files: File[]) => {
     setIsLoading(true);
     try {
+      // Collect all new PDFs and pages OUTSIDE setState to avoid stale state
+      const newPdfs: LoadedPDF[] = [];
+      const newPagesByPdf: { pdf: LoadedPDF; pages: PDFPage[] }[] = [];
+
       for (const file of files) {
         if (file.type !== 'application/pdf') {
           toast.error(`${file.name} is not a PDF file`);
@@ -87,23 +91,40 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
         const arrayBuffer = await file.arrayBuffer();
         const pdfDoc = await PDFDocument.load(arrayBuffer);
         const pageCount = pdfDoc.getPageCount();
-        const newPdfId = crypto.randomUUID();
-        const newPdf: LoadedPDF = { id: newPdfId, name: file.name, pageCount, data: new Uint8Array(arrayBuffer) };
-        setLoadedPDFs(prev => {
-          const updated = [...prev, newPdf];
-          // Build new page entries using updated state
-          setPages(prevPages => {
-            const existingCount = prevPages.length;
-            const newPages: PDFPage[] = [];
-            for (let i = 0; i < pageCount; i++) {
-              newPages.push({ id: crypto.randomUUID(), pageNumber: existingCount + i + 1, originalPageNumber: i + 1, pdfIndex: updated.length - 1, selected: false, rotation: 0 });
-            }
-            return [...prevPages, ...newPages];
-          });
-          return updated;
-        });
+        const newPdf: LoadedPDF = { id: crypto.randomUUID(), name: file.name, pageCount, data: new Uint8Array(arrayBuffer) };
+        newPdfs.push(newPdf);
+        newPagesByPdf.push({ pdf: newPdf, pages: Array.from({ length: pageCount }, (_, i) => ({
+          id: crypto.randomUUID(),
+          pageNumber: 0, // will be corrected below
+          originalPageNumber: i + 1,
+          pdfIndex: -1, // will be corrected below
+          selected: false,
+          rotation: 0,
+        }))});
         toast.success(`Loaded ${file.name} (${pageCount} pages)`);
       }
+
+      if (newPdfs.length === 0) return;
+
+      // Single batched state update — no nested setStates
+      setLoadedPDFs(prevPdfs => {
+        const updatedPdfs = [...prevPdfs, ...newPdfs];
+        const allNewPages: PDFPage[] = [];
+        let pageOffset = 0; // will be filled after reading prevPages
+
+        // We compute pdfIndex relative to updatedPdfs
+        for (const { pdf, pages } of newPagesByPdf) {
+          const pdfIndex = updatedPdfs.findIndex(p => p.id === pdf.id);
+          pages.forEach(page => allNewPages.push({ ...page, pdfIndex }));
+        }
+
+        setPages(prevPages => {
+          const base = prevPages.length;
+          return [...prevPages, ...allNewPages.map((p, i) => ({ ...p, pageNumber: base + i + 1 }))];
+        });
+
+        return updatedPdfs;
+      });
     } catch (error) {
       console.error('Error loading PDF:', error);
       toast.error('Failed to load PDF');
