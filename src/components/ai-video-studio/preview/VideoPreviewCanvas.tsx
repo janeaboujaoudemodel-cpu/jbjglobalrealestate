@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Maximize2 } from 'lucide-react';
+import { Play, Pause, Square, SkipBack, SkipForward, Volume2, VolumeX, Maximize2 } from 'lucide-react';
 
 interface VideoPreviewCanvasProps {
   clips: Array<{
@@ -120,6 +120,11 @@ export function VideoPreviewCanvas({
     onTimeUpdate(Math.min(duration, currentTime + 5));
   }, [currentTime, duration, onTimeUpdate]);
 
+  const handleStop = useCallback(() => {
+    if (isPlaying) onTogglePlayback();
+    onTimeUpdate(0);
+  }, [isPlaying, onTogglePlayback, onTimeUpdate]);
+
   return (
     <div ref={containerRef} className="h-full flex flex-col bg-slate-950">
       {/* Preview Area */}
@@ -136,8 +141,8 @@ export function VideoPreviewCanvas({
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <div className="text-center">
-                <p className="text-slate-500 text-lg">No media at playhead</p>
-                <p className="text-slate-600 text-sm mt-2">
+                <p className="text-slate-400 text-lg">No media at playhead</p>
+                <p className="text-slate-500 text-sm mt-2">
                   Add media to the timeline to preview
                 </p>
               </div>
@@ -145,14 +150,14 @@ export function VideoPreviewCanvas({
           )}
 
           {/* Time Overlay */}
-          <div className="absolute top-3 right-3 bg-black/70 px-2 py-1 rounded text-xs font-mono text-white">
+          <div className="absolute top-3 right-3 bg-black/80 px-2 py-1 rounded text-xs font-mono text-white border border-white/10">
             {formatTime(currentTime)} / {formatTime(duration)}
           </div>
         </div>
       </div>
 
       {/* Transport Controls */}
-      <div className="flex-shrink-0 px-4 py-3 border-t border-slate-800 bg-slate-900/50">
+      <div className="flex-shrink-0 px-4 py-3 border-t border-slate-700 bg-slate-900">
         {/* Timeline Scrubber */}
         <div className="mb-3">
           <Slider
@@ -169,7 +174,7 @@ export function VideoPreviewCanvas({
         <div className="flex items-center justify-between">
           {/* Left - Time Display */}
           <div className="flex items-center gap-2 w-32">
-            <span className="text-sm font-mono text-slate-400">
+            <span className="text-sm font-mono text-slate-300">
               {formatTime(currentTime)}
             </span>
           </div>
@@ -180,14 +185,22 @@ export function VideoPreviewCanvas({
               size="sm"
               variant="ghost"
               onClick={skipBackward}
-              className="text-slate-400 hover:text-white"
+              className="text-white hover:text-amber-300 hover:bg-slate-700"
             >
               <SkipBack className="w-4 h-4" />
             </Button>
             <Button
               size="sm"
+              variant="ghost"
+              onClick={handleStop}
+              className="text-white hover:text-amber-300 hover:bg-slate-700"
+            >
+              <Square className="w-4 h-4" />
+            </Button>
+            <Button
+              size="sm"
               onClick={onTogglePlayback}
-              className="bg-gold text-black hover:bg-gold/90 w-10 h-10 rounded-full"
+              className="bg-amber-500 text-black hover:bg-amber-400 w-10 h-10 rounded-full font-bold"
             >
               {isPlaying ? (
                 <Pause className="w-5 h-5" />
@@ -199,7 +212,7 @@ export function VideoPreviewCanvas({
               size="sm"
               variant="ghost"
               onClick={skipForward}
-              className="text-slate-400 hover:text-white"
+              className="text-white hover:text-amber-300 hover:bg-slate-700"
             >
               <SkipForward className="w-4 h-4" />
             </Button>
@@ -211,11 +224,11 @@ export function VideoPreviewCanvas({
               size="sm"
               variant="ghost"
               onClick={toggleMute}
-              className="text-slate-400 hover:text-white"
+              className="text-white hover:text-amber-300 hover:bg-slate-700"
             >
               {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
             </Button>
-            <div className="w-20">
+            <div className="w-16">
               <Slider
                 value={[isMuted ? 0 : volume]}
                 min={0}
@@ -228,7 +241,7 @@ export function VideoPreviewCanvas({
               size="sm"
               variant="ghost"
               onClick={toggleFullscreen}
-              className="text-slate-400 hover:text-white"
+              className="text-white hover:text-amber-300 hover:bg-slate-700"
             >
               <Maximize2 className="w-4 h-4" />
             </Button>

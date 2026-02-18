@@ -130,7 +130,7 @@ export function AIVideoStudioTopBar({
             variant="ghost"
             onClick={onUndo}
             disabled={!canUndo}
-            className="text-slate-400 hover:text-white disabled:opacity-30"
+            className="text-slate-300 hover:text-white hover:bg-slate-700 disabled:opacity-30"
           >
             <Undo2 className="w-4 h-4" />
           </Button>
@@ -139,7 +139,7 @@ export function AIVideoStudioTopBar({
             variant="ghost"
             onClick={onRedo}
             disabled={!canRedo}
-            className="text-slate-400 hover:text-white disabled:opacity-30"
+            className="text-slate-300 hover:text-white hover:bg-slate-700 disabled:opacity-30"
           >
             <Redo2 className="w-4 h-4" />
           </Button>
@@ -152,16 +152,16 @@ export function AIVideoStudioTopBar({
       <div className="flex items-center gap-2">
         <Button
           size="sm"
-          variant="ghost"
+          variant="outline"
           onClick={onNewProject}
-          className="text-slate-400 hover:text-white"
+          className="border-slate-600 text-slate-200 hover:bg-slate-700 hover:text-white hover:border-slate-500"
         >
           New
         </Button>
         <Button
           size="sm"
-          variant="ghost"
-          className="text-slate-400 hover:text-white"
+          variant="outline"
+          className="border-slate-600 text-slate-200 hover:bg-slate-700 hover:text-white hover:border-slate-500"
         >
           <Save className="w-4 h-4 mr-2" />
           Save
@@ -169,15 +169,15 @@ export function AIVideoStudioTopBar({
         <Button
           size="sm"
           onClick={onExport}
-          className="bg-gold hover:bg-gold/90 text-black font-medium"
+          className="bg-amber-500 hover:bg-amber-400 text-black font-bold"
         >
           <Download className="w-4 h-4 mr-2" />
           Export
         </Button>
         <Button
           size="sm"
-          variant="ghost"
-          className="text-slate-400 hover:text-white"
+          variant="outline"
+          className="border-slate-600 text-slate-200 hover:bg-slate-700 hover:text-white"
         >
           <Settings className="w-4 h-4" />
         </Button>

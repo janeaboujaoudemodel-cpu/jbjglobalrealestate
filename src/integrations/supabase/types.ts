@@ -19266,6 +19266,36 @@ export type Database = {
         }
         Relationships: []
       }
+      video_studio_projects: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          project_data: Json
+          thumbnail_url: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          project_data?: Json
+          thumbnail_url?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          project_data?: Json
+          thumbnail_url?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       vip_clients: {
         Row: {
           assigned_relationship_manager: string | null
