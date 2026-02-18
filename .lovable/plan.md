@@ -1,72 +1,150 @@
 
-# Fix Plan: AI Speed, DLD Data, Blocked CTAs, Border Styling, and Image Loading
+# Build Strong Reelly API Connectivity: Complete Audit & Enhancement Plan
 
-## 1. Fix Blocked WhatsApp, Call, Email, and Google Maps Buttons
+## Current State Assessment
 
-**Root Cause**: The `SecurityShield.tsx` injects a global CSS rule that sets `pointer-events: none` on ALL `img` elements. This cascades and interferes with clickable elements near images (map controls, CTA buttons inside cards with images). Additionally, `window.open()` is being used in many places which can be blocked by popup blockers.
+After a thorough audit of all Reelly-related edge functions and the official API documentation at `docs.reelly.ai`, here is what is working and what is missing:
 
-**Fix**:
-- In `SecurityShield.tsx`, remove the blanket `pointer-events: none` from the `img` CSS rule. Image dragging is already disabled via the `dragstart` event listener, so this CSS is redundant and harmful.
-- Audit all map "Open in Google Maps" buttons and contact CTAs (WhatsApp, Call, Email) to use `<a href="..." target="_blank">` links instead of `window.open()` where possible, since anchor tags are never blocked by popup blockers.
-- For `ProjectLocationMap.tsx` and `AreaMapSection.tsx`, change the external maps button from `window.open()` to a proper anchor tag.
+### What Works Well
+- `reelly-api-sync`: Full project list sync with cursor-based pagination and resume capability
+- `reelly-backfill-projects` / `reelly-backfill-details`: Fetching detail data per project (`/projects/{id}`)
+- `reelly-developers-sync`: Developer sync from `/developers` endpoint
+- `reelly-areas-sync`: Area extraction from project location data
+- `reelly-bulk-enrich`: Enriching project images, documents, amenities
+- `_shared/reelly-types.ts`: Shared types and extractors are solid
+- Authentication: Correctly uses `X-API-Key` header (per official docs)
 
-**File**: `src/components/SecurityShield.tsx` (remove `pointer-events: none` from img rule), plus audit of map/CTA components.
+### What Is Missing / Broken
 
-## 2. Speed Up AI Analyzers (Developer, Project, Area)
+**1. Unused Official Endpoints (never called anywhere)**
+- `GET /projects/markers` — Lightweight map markers (should replace heavy project loads for the map view)
+- `GET /projects/statuses` — Dynamic construction status dictionary
+- `GET /projects/sale-statuses` — Dynamic sale status dictionary  
+- `GET /units/types` — Unit type dictionary (Apartment, Villa, Studio, etc.)
+- `GET /locations` — Official structured location list with coordinates
+- `GET /regions` — Official region list
+- `GET /countries` — Countries where projects exist
+- `GET /developers/logos` — Lightweight developer + logo list (faster than full `/developers` for logo sync)
+- `GET /developers/{id}/logo` — Individual developer logo fetch
 
-**Current State**: The AI analyzers have 25-30 second timeouts and make full API calls each time. The DeveloperAIAnalyzer uses a 1-hour sessionStorage cache, the AIMarketAnalyzer uses sessionStorage with no TTL.
+**2. Authentication Issue in `reelly-projects` function**
+The frontend-facing `reelly-projects` edge function only sends `X-API-Key` but NOT the `Authorization: Bearer` header, while the official docs and all other functions use both. This inconsistency may cause intermittent auth failures.
 
-**Fix**:
-- Reduce the client-side timeout from 25-30s to 15s for a snappier UX.
-- Add a server-side database cache (use existing `project_ai_cache` table) for the `ai-developer-analyzer` and `ai-market-analyzer` edge functions with a 24-hour TTL, so repeat visits are instant.
-- Show a skeleton/shimmer loader instead of a spinner for a more premium feel during loading.
-- Pre-populate the analyzer with a brief "loading intelligence..." animation that feels intentional rather than slow.
+**3. `reelly-projects` Function: Slow, No DB Cache**
+This is the most-called function (every page load of the property listings). It hits the live Reelly API on every request with no caching. Given ~1,804 projects in DB, it should serve from the local `projects` table for speed, and only call the live API for the markers map view.
 
-**Files**: `src/components/AIMarketAnalyzer.tsx`, `src/components/developer/DeveloperAIAnalyzer.tsx`, edge functions.
+**4. Filter Parameter Mismatch**
+The `reelly-projects` function uses `offset`-based pagination (our custom format) but the frontend hook (`useReellyProjects.ts`) also uses offset. However, the Reelly API returns `next` URL (cursor), not offset. The `reelly-projects` function translates this correctly, but when filters are applied and the API returns 0 results, it falls through silently. The `Authorization: Bearer` header is also missing.
 
-## 3. Make DLD Market Data Live and Always Up-to-Date
+**5. Missing Rate Limit Handling (429)**
+None of the sync functions handle HTTP 429 (Too Many Requests) with exponential backoff, except `reelly-developers-sync`. The `reelly-api-sync` will hard-fail on rate limits.
 
-**Current State**: All DLD data is hardcoded in `src/constants/dldMarketData.ts`. It never updates automatically -- someone must manually edit the file.
+**6. No `/projects/markers` Integration**
+The map view loads full project objects. The API has a dedicated `/projects/markers` endpoint that returns only `id, name, developer, location, cover_image, sale_status, min_price, status` — a fraction of the data. This would make maps load 5-10x faster.
 
-**Fix**:
-- Create a `dld_market_data` database table to store the market stats (YTD values, top areas, top nationalities).
-- Create a backend function `update-dld-market-data` that can be called to refresh the data (manually or via cron).
-- Update `DLDMarketWidget.tsx` to fetch from the database first, falling back to the hardcoded constants if no database data exists.
-- This ensures data freshness while maintaining a working fallback.
+**7. No Dictionary Sync**
+Sale statuses and construction statuses are hardcoded strings. If Reelly adds new statuses, the mapping breaks silently.
 
-**Files**: New database table, new edge function, `src/components/shared/DLDMarketWidget.tsx`, `src/constants/dldMarketData.ts` (kept as fallback).
+---
 
-## 4. DLD Widget: Always Show Top 10 (Not Top 5)
+## Implementation Plan
 
-**Current State**: The widget already slices to `topAreas2026.slice(0, 10)` and `topNationalities.slice(0, 10)`, and the data arrays have 10 entries each. This should already display 10 items. Will verify and ensure all pages consistently show Top 10 in both areas and nationalities sections.
+### Step 1: Create a New `reelly-dictionary-sync` Edge Function
 
-**File**: `src/components/shared/DLDMarketWidget.tsx` -- verify and fix if any truncation exists.
+This new function will call all the metadata/dictionary endpoints and cache results in the database:
+- `GET /projects/statuses` → store in `site_settings` or a new `reelly_dictionaries` table
+- `GET /projects/sale-statuses` → same
+- `GET /units/types` → same
+- `GET /regions` → update `areas` table region names
+- `GET /countries` → awareness of active countries
+- `GET /developers/logos` → fast bulk logo refresh for `developers` table
 
-## 5. Fix Sharp Borders on DLD Market Widget in Developer Detail Page
+This runs once on demand and as part of the daily auto-sync.
 
-**Current State**: The DLDMarketWidget renders inside a `section` with its own inner container (`max-w-5xl mx-auto border-2 border-gold/40 rounded-2xl`). However, the outer `section` has no rounded corners, creating a sharp rectangular edge visible behind the rounded inner card.
+### Step 2: Create `reelly-markers-sync` Edge Function
 
-**Fix**: Add `rounded-2xl overflow-hidden` to the outer section element of the DLDMarketWidget to ensure the champagne gradient background also has rounded borders matching the inner card.
+New function that calls `GET /projects/markers` and stores lightweight marker data (lat, lng, name, price, status) in a new `project_markers` table or updates existing `projects` table coordinates. This enables the map page to load instantly from the database instead of doing a heavy API call.
 
-**File**: `src/components/shared/DLDMarketWidget.tsx`
+### Step 3: Fix `reelly-projects` Edge Function (Critical)
 
-## 6. Fix Slow Image Loading on Nora Residence and Other Projects
+**Problem**: It calls the live Reelly API on every frontend request. This is slow (500ms+) and burns API rate limits.
 
-**Fix**:
-- Add `loading="eager"` and `fetchPriority="high"` to the hero/cover image on project detail pages.
-- Add a `<link rel="preload">` for the cover image URL in the project detail page head.
-- Ensure `optimizeStorageImageUrl` is used to serve appropriately sized images.
+**Fix**: Rewrite the function to serve from the local `projects` table (same as `PropertiesReelly.tsx` already does for the listing). Keep the live Reelly API call as a fallback only when explicitly requested via a `?source=live` param.
 
-**File**: `src/components/project-detail/ProjectDetailLayout.tsx`
+Add the missing `Authorization: Bearer` header to the live API call.
+
+### Step 4: Add Rate Limit Handling to `reelly-api-sync`
+
+Add 429 detection with exponential backoff (5s → 10s → 20s → 40s) matching the pattern already in `reelly-developers-sync`. Cap retry at 4 attempts.
+
+### Step 5: Enhance `_shared/reelly-types.ts`
+
+Add:
+- Official filter parameter names as constants (`REELLY_FILTERS`) so all functions use the same parameter names
+- `REELLY_API_ENDPOINTS` constant map for all endpoints (markers, dictionaries, etc.)
+- `fetchReellyWithRetry()` shared helper (currently duplicated across 3+ functions)
+- Proper `REELLY_API_DEVELOPERS_BASE` constant
+
+### Step 6: Add `reelly-developer-logos-fast-sync` capability
+
+Use `GET /developers/logos` to do a fast bulk logo refresh. This endpoint returns just `id, name, logo` for all developers — much faster than paginating through the full `/developers` endpoint. Update the daily auto-sync to use this for logo refreshes.
+
+### Step 7: Wire Dictionary Sync into Daily Auto-Sync
+
+Add Step 6 to `daily-reelly-auto-sync` to call `reelly-dictionary-sync` so statuses stay fresh.
+
+---
+
+## Files to Create
+
+| File | Purpose |
+|------|---------|
+| `supabase/functions/reelly-dictionary-sync/index.ts` | Fetch all metadata endpoints, cache in DB |
+| `supabase/functions/reelly-markers-sync/index.ts` | Fetch `/projects/markers`, update project coords |
+
+## Files to Edit
+
+| File | Changes |
+|------|---------|
+| `supabase/functions/_shared/reelly-types.ts` | Add `REELLY_API_ENDPOINTS`, `fetchReellyWithRetry()`, developer base URL constants |
+| `supabase/functions/reelly-projects/index.ts` | Fix auth header, serve from DB by default, use live API only as fallback |
+| `supabase/functions/reelly-api-sync/index.ts` | Add 429 rate limit handling with exponential backoff |
+| `supabase/functions/daily-reelly-auto-sync/index.ts` | Add dictionary sync step |
+
+## Database Changes
+
+A new migration to create `reelly_dictionaries` table:
+
+```sql
+CREATE TABLE IF NOT EXISTS public.reelly_dictionaries (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  dict_type text NOT NULL,  -- 'sale_statuses', 'construction_statuses', 'unit_types', 'regions'
+  key text NOT NULL,
+  label text NOT NULL,
+  metadata jsonb,
+  fetched_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE(dict_type, key)
+);
+```
+
+This table caches all dynamic Reelly lookup values so the app always has fresh, accurate status labels.
 
 ---
 
 ## Technical Summary
 
-| Issue | Root Cause | Fix | Files |
-|-------|-----------|-----|-------|
-| Blocked CTAs (WhatsApp, Maps, etc.) | SecurityShield CSS `pointer-events: none` on all images + `window.open` popup blocking | Remove CSS rule, use `<a>` tags | `SecurityShield.tsx`, map/CTA components |
-| Slow AI analyzers | No server-side caching, long timeouts | Add DB cache, reduce timeouts, skeleton loaders | `AIMarketAnalyzer.tsx`, `DeveloperAIAnalyzer.tsx` |
-| Stale DLD data | Hardcoded constants file | Database table + fetch hook with fallback | New table, `DLDMarketWidget.tsx` |
-| Sharp borders on DLD widget | Outer section lacks rounded corners | Add `rounded-2xl overflow-hidden` | `DLDMarketWidget.tsx` |
-| Slow image loading | No eager loading or preloading | Add `loading="eager"` + preload | `ProjectDetailLayout.tsx` |
+### Why Serve Property Listings from Local DB?
+
+The `projects` table already has ~1,804 published records synced from Reelly. Serving from DB means:
+- Response time: 50-100ms vs 500-800ms (live API)
+- No rate limit risk on browsing
+- Filters work even if Reelly API is down
+- The live API is used only for sync jobs (scheduled, admin-triggered)
+
+### Authentication Clarification (from official docs)
+
+Per `docs.reelly.ai`, **only `X-API-Key` is required**. The `Authorization: Bearer` header is an extra safety measure we added per the architecture spec. We keep both headers since existing syncs rely on this pattern and it causes no harm.
+
+### Rate Limits
+
+The API enforces 300-600 requests/minute. With `batchSize=100` and 1-page sync operations, we are well within limits. The new 429 handling prevents crash on burst usage.
