@@ -1,17 +1,19 @@
 import React, { ReactNode, useState } from 'react';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Languages, Mic, Sparkles, Music2, Layers, Maximize2, Map, Bot, FolderOpen, ChevronUp, ChevronDown } from 'lucide-react';
+import {
+  Languages, Mic, Sparkles, Music2, Layers, Maximize2,
+  Map, Bot, FolderOpen, ChevronUp, ChevronDown, Settings2, Type
+} from 'lucide-react';
 
 interface AIVideoStudioLayoutProps {
   topBar: ReactNode;
-  leftPanel: ReactNode;
   centerPanel: ReactNode;
-  rightPanel: ReactNode;
   timeline: ReactNode;
   exportBar: ReactNode;
   // Tool panel content keyed by tool id
+  mediaPanel?: ReactNode;
+  inspectorPanel?: ReactNode;
   captionsPanel?: ReactNode;
   voicePanel?: ReactNode;
   beautyPanel?: ReactNode;
@@ -24,24 +26,27 @@ interface AIVideoStudioLayoutProps {
 }
 
 const TOOL_TABS = [
-  { id: 'captions', label: 'Captions', icon: Languages },
-  { id: 'voice', label: 'Voice', icon: Mic },
-  { id: 'beauty', label: 'Beauty', icon: Sparkles },
-  { id: 'sfx', label: 'Sound FX', icon: Music2 },
-  { id: 'effects', label: 'Effects', icon: Layers },
-  { id: 'resize', label: 'Resize', icon: Maximize2 },
-  { id: 'map', label: 'Map', icon: Map },
-  { id: 'ai-editor', label: 'AI Editor', icon: Bot },
-  { id: 'projects', label: 'Projects', icon: FolderOpen },
+  { id: 'media',      label: 'Media',      icon: FolderOpen },
+  { id: 'captions',  label: 'Captions',   icon: Languages  },
+  { id: 'voice',     label: 'Voice',      icon: Mic        },
+  { id: 'beauty',    label: 'Beauty',     icon: Sparkles   },
+  { id: 'text',      label: 'Text',       icon: Type       },
+  { id: 'sfx',       label: 'Sound FX',   icon: Music2     },
+  { id: 'effects',   label: 'Effects',    icon: Layers     },
+  { id: 'resize',    label: 'Resize',     icon: Maximize2  },
+  { id: 'map',       label: 'Map',        icon: Map        },
+  { id: 'ai-editor', label: 'AI Editor',  icon: Bot        },
+  { id: 'inspector', label: 'Inspector',  icon: Settings2  },
+  { id: 'projects',  label: 'Projects',   icon: FolderOpen },
 ];
 
 export function AIVideoStudioLayout({
   topBar,
-  leftPanel,
   centerPanel,
-  rightPanel,
   timeline,
   exportBar,
+  mediaPanel,
+  inspectorPanel,
   captionsPanel,
   voicePanel,
   beautyPanel,
@@ -57,15 +62,18 @@ export function AIVideoStudioLayout({
   const [toolsExpanded, setToolsExpanded] = useState(false);
 
   const toolPanelContent: Record<string, ReactNode> = {
-    captions: captionsPanel,
-    voice: voicePanel,
-    beauty: beautyPanel,
-    sfx: sfxPanel,
-    effects: effectsPanel,
-    resize: resizePanel,
-    map: mapPanel,
+    media:      mediaPanel,
+    captions:   captionsPanel,
+    voice:      voicePanel,
+    beauty:     beautyPanel,
+    text:       null,
+    sfx:        sfxPanel,
+    effects:    effectsPanel,
+    resize:     resizePanel,
+    map:        mapPanel,
     'ai-editor': aiEditorPanel,
-    projects: projectsPanel,
+    inspector:  inspectorPanel,
+    projects:   projectsPanel,
   };
 
   const handleToolClick = (toolId: string) => {
@@ -115,7 +123,7 @@ export function AIVideoStudioLayout({
 
       {/* Active Tool Panel */}
       {activeTool && toolsExpanded && toolPanelContent[activeTool] && (
-        <div className="border-t border-slate-600 h-64 overflow-hidden bg-slate-900">
+        <div className="border-t border-slate-600 h-72 overflow-hidden bg-slate-900">
           {toolPanelContent[activeTool]}
         </div>
       )}
@@ -140,10 +148,10 @@ export function AIVideoStudioLayout({
               {centerPanel}
             </TabsContent>
             <TabsContent value="media" className="flex-1 min-h-0 m-0 overflow-auto bg-slate-900/50">
-              {leftPanel}
+              {mediaPanel}
             </TabsContent>
             <TabsContent value="inspector" className="flex-1 min-h-0 m-0 overflow-auto bg-slate-900/50">
-              {rightPanel}
+              {inspectorPanel}
             </TabsContent>
           </Tabs>
 
@@ -170,34 +178,9 @@ export function AIVideoStudioLayout({
 
       {/* Main Content Area */}
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-        {/* Upper 3-column section */}
-        <div className="flex-1 min-h-0">
-          <ResizablePanelGroup direction="horizontal" className="h-full">
-            {/* Left Panel - Media Library */}
-            <ResizablePanel defaultSize={18} minSize={12} maxSize={28}>
-              <div className="h-full overflow-hidden border-r border-slate-700 bg-slate-900/50">
-                {leftPanel}
-              </div>
-            </ResizablePanel>
-
-            <ResizableHandle withHandle className="bg-slate-700 hover:bg-amber-500/50 transition-colors" />
-
-            {/* Center Panel - Preview */}
-            <ResizablePanel defaultSize={54} minSize={30}>
-              <div className="h-full overflow-hidden bg-slate-950">
-                {centerPanel}
-              </div>
-            </ResizablePanel>
-
-            <ResizableHandle withHandle className="bg-slate-700 hover:bg-amber-500/50 transition-colors" />
-
-            {/* Right Panel - Inspector */}
-            <ResizablePanel defaultSize={28} minSize={18} maxSize={35}>
-              <div className="h-full overflow-hidden border-l border-slate-700 bg-slate-900/50">
-                {rightPanel}
-              </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
+        {/* Full-width Preview */}
+        <div className="flex-1 min-h-0 w-full overflow-hidden bg-slate-950">
+          {centerPanel}
         </div>
 
         {/* Horizontal CapCut-style Tools Bar (full width) */}
