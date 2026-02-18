@@ -111,10 +111,10 @@ export default function PhotoSuite() {
               <Suspense fallback={<LoadingSpinner />}><ImageResize embedded /></Suspense>
             </TabsContent>
             <TabsContent value="interior" className="mt-0">
-              <Suspense fallback={<LoadingSpinner />}><InteriorDesignAI /></Suspense>
+              <Suspense fallback={<LoadingSpinner />}><InteriorDesignAI embedded /></Suspense>
             </TabsContent>
             <TabsContent value="staging" className="mt-0">
-              <Suspense fallback={<LoadingSpinner />}><VirtualStagingPage /></Suspense>
+              <Suspense fallback={<LoadingSpinner />}><VirtualStagingPage embedded /></Suspense>
             </TabsContent>
           </div>
         </Tabs>

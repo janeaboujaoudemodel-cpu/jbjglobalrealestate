@@ -59,7 +59,9 @@ const DESIGN_STYLES: { id: DesignStyle; name: string; description: string }[] = 
   { id: 'industrial', name: 'Industrial', description: 'Exposed elements, metal accents, urban feel' },
 ];
 
-export default function VirtualStagingPage() {
+interface VirtualStagingPageProps { embedded?: boolean; }
+
+export default function VirtualStagingPage({ embedded = false }: VirtualStagingPageProps) {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [roomType, setRoomType] = useState<RoomType>('living');
@@ -193,25 +195,27 @@ export default function VirtualStagingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      {/* Header */}
-      <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
-        <div className="container max-w-6xl mx-auto px-4 py-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30">
-              <Home className="h-6 w-6 text-gold" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-                AI Virtual Staging
-                <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
-                  FREE
-                </Badge>
-              </h1>
-              <p className="text-slate-400 text-sm">Transform empty rooms into beautifully staged spaces</p>
+      {/* Header — hidden when embedded inside PhotoSuite */}
+      {!embedded && (
+        <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
+          <div className="container max-w-6xl mx-auto px-4 py-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30">
+                <Home className="h-6 w-6 text-gold" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+                  AI Virtual Staging
+                  <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
+                    FREE
+                  </Badge>
+                </h1>
+                <p className="text-slate-400 text-sm">Transform empty rooms into beautifully staged spaces</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-3 gap-6">
