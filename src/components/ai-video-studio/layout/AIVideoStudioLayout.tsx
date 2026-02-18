@@ -15,6 +15,7 @@ interface AIVideoStudioLayoutProps {
   mediaPanel?: ReactNode;
   inspectorPanel?: ReactNode;
   captionsPanel?: ReactNode;
+  textPanel?: ReactNode;
   voicePanel?: ReactNode;
   beautyPanel?: ReactNode;
   sfxPanel?: ReactNode;
@@ -48,6 +49,7 @@ export function AIVideoStudioLayout({
   mediaPanel,
   inspectorPanel,
   captionsPanel,
+  textPanel,
   voicePanel,
   beautyPanel,
   sfxPanel,
@@ -66,7 +68,7 @@ export function AIVideoStudioLayout({
     captions:   captionsPanel,
     voice:      voicePanel,
     beauty:     beautyPanel,
-    text:       null,
+    text:       textPanel,
     sfx:        sfxPanel,
     effects:    effectsPanel,
     resize:     resizePanel,
