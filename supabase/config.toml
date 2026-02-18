@@ -303,3 +303,6 @@ verify_jwt = false
 
 [functions.restore-developer-logos]
 verify_jwt = false
+
+[functions.ai-stamp-generator]
+verify_jwt = false

@@ -16601,6 +16601,178 @@ export type Database = {
         }
         Relationships: []
       }
+      stamp_designs: {
+        Row: {
+          ai_prompt: string | null
+          created_at: string
+          design_version: number
+          id: string
+          preview_png_url: string | null
+          project_id: string
+          style_snapshot_json: Json | null
+          svg_source: string | null
+          svg_url: string | null
+          template_key: string | null
+          user_id: string
+        }
+        Insert: {
+          ai_prompt?: string | null
+          created_at?: string
+          design_version?: number
+          id?: string
+          preview_png_url?: string | null
+          project_id: string
+          style_snapshot_json?: Json | null
+          svg_source?: string | null
+          svg_url?: string | null
+          template_key?: string | null
+          user_id: string
+        }
+        Update: {
+          ai_prompt?: string | null
+          created_at?: string
+          design_version?: number
+          id?: string
+          preview_png_url?: string | null
+          project_id?: string
+          style_snapshot_json?: Json | null
+          svg_source?: string | null
+          svg_url?: string | null
+          template_key?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stamp_designs_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "stamp_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stamp_exports: {
+        Row: {
+          created_at: string
+          design_id: string
+          export_bundle_zip_url: string | null
+          id: string
+          includes: Json | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          design_id: string
+          export_bundle_zip_url?: string | null
+          id?: string
+          includes?: Json | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          design_id?: string
+          export_bundle_zip_url?: string | null
+          id?: string
+          includes?: Json | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stamp_exports_design_id_fkey"
+            columns: ["design_id"]
+            isOneToOne: false
+            referencedRelation: "stamp_designs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stamp_projects: {
+        Row: {
+          address_optional: string | null
+          approval_status: string
+          border_style: string
+          city_optional: string | null
+          company_name: string
+          country_optional: string | null
+          created_at: string
+          density: number
+          email_optional: string | null
+          icon_style: string
+          id: string
+          language_mode: string
+          monogram_text: string | null
+          phone_optional: string | null
+          project_name: string
+          registration_number_optional: string | null
+          selected_design_id: string | null
+          stamp_type: string
+          style_theme: string
+          trade_name_optional: string | null
+          typography_style: string
+          updated_at: string
+          uploaded_logo_url: string | null
+          user_id: string
+          website_optional: string | null
+        }
+        Insert: {
+          address_optional?: string | null
+          approval_status?: string
+          border_style?: string
+          city_optional?: string | null
+          company_name: string
+          country_optional?: string | null
+          created_at?: string
+          density?: number
+          email_optional?: string | null
+          icon_style?: string
+          id?: string
+          language_mode?: string
+          monogram_text?: string | null
+          phone_optional?: string | null
+          project_name?: string
+          registration_number_optional?: string | null
+          selected_design_id?: string | null
+          stamp_type?: string
+          style_theme?: string
+          trade_name_optional?: string | null
+          typography_style?: string
+          updated_at?: string
+          uploaded_logo_url?: string | null
+          user_id: string
+          website_optional?: string | null
+        }
+        Update: {
+          address_optional?: string | null
+          approval_status?: string
+          border_style?: string
+          city_optional?: string | null
+          company_name?: string
+          country_optional?: string | null
+          created_at?: string
+          density?: number
+          email_optional?: string | null
+          icon_style?: string
+          id?: string
+          language_mode?: string
+          monogram_text?: string | null
+          phone_optional?: string | null
+          project_name?: string
+          registration_number_optional?: string | null
+          selected_design_id?: string | null
+          stamp_type?: string
+          style_theme?: string
+          trade_name_optional?: string | null
+          typography_style?: string
+          updated_at?: string
+          uploaded_logo_url?: string | null
+          user_id?: string
+          website_optional?: string | null
+        }
+        Relationships: []
+      }
       studio_ai_sessions: {
         Row: {
           brand_strictness: string | null
