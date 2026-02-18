@@ -1,145 +1,187 @@
 
-# Fix JBJ E-Sign: Full Rebuild of Document Field Placer + Auto-Detect Fields
+# Instagram Grid Planner — Two-Mode Upgrade + Direct Instagram Publishing
 
-## Root Cause Analysis — Every Bug Identified
+## Current State Analysis
 
-### Bug 1: PDF Never Renders in the Document Preview (Critical)
-In `DocumentFieldPlacer.tsx` lines 181–188, the "document preview" area is just a static placeholder div with a `<PenTool>` icon and text "Document Preview / Drag fields to position them." The `pdfUrl` prop is accepted but **never used** — no `<iframe>`, no `<embed>`, no PDF rendering at all. This is why uploading a PDF shows nothing.
+The Grid Planner currently lives inside `BeautyFilters.tsx` as a single tab (value="grid"). It has:
+- Basic photo upload and a 3-column Instagram-style grid preview
+- Drag-to-reorder between slots
+- Placeholder "Schedule Posts" and "Connect Instagram" buttons that just show toast messages
+- No real Instagram connection, no post captions per photo, no publish flow
 
-### Bug 2: Clicking "Signature / Initials / Date / Text" Does Nothing Visible (Critical)
-The field type selector buttons at lines 148–161 only set `selectedFieldType` state — they don't add a field. The user must then click "Add Field" as a separate step. Users are clicking the field type buttons expecting a field to appear immediately (like DocuSign), but nothing happens. The UX flow is broken and unintuitive.
-
-### Bug 3: "Add Field" Text Box Cannot Be Typed Into (Critical)
-When a field IS added via "Add Field," it renders as an absolutely-positioned `<div>` with a colored background and label. It has no `<input>` inside it, so naturally nothing can be typed. Text fields need an actual input element.
-
-### Bug 4: No Auto-Detect Fields Feature
-There is no AI-assisted field detection at all. When "Auto Detect" is clicked, nothing exists.
+This plan adds **two distinct modes** and a real **Instagram publish flow**.
 
 ---
 
-## Complete Fix Plan
+## Two Modes to Build
 
-### Fix 1: Render the PDF in the document area
-Replace the static placeholder in `DocumentFieldPlacer.tsx` with a proper PDF viewer using an `<iframe>` pointing to `pdfUrl`. This renders the actual uploaded PDF so the user can see the document and place fields visually on top of it.
+### Mode 1 — Visual Grid Preview (No Instagram Required)
+The user uploads their own photos, arranges them in a 3-column Instagram-style grid, adds captions, and can download or copy everything locally. This is a pure front-end planning tool — zero authentication needed.
 
-```
-<div className="relative" style={{ height: '700px' }}>
-  <iframe src={pdfUrl} className="w-full h-full border-0" title="Document Preview" />
-  {/* Fields overlay on top of the iframe */}
-  {pageFields.map(field => <FieldOverlay ... />)}
-</div>
-```
-
-### Fix 2: Make field-type buttons immediately place a field on click
-Remove the separate "Add Field" button — or keep it but make clicking any field type button (Signature, Initials, Date, Text) immediately add that field at a smart default position. This matches DocuSign's UX where clicking the field type adds it instantly.
-
-Alternate approach (better): Keep the field type buttons as "selected type" and make the document area clickable — clicking anywhere on the PDF adds a field at that position. This is the most intuitive approach.
-
-**Implementation**: Add an `onClick` handler to the PDF wrapper div that:
-1. Calculates x/y as percentages of the wrapper
-2. Creates a new field at that position with the currently selected type
-3. Immediately shows it on the overlay
-
-### Fix 3: Make text fields interactive with actual input elements
-In the field overlay rendering (lines 196–223), replace the static colored div content with:
-- For `type === "text"`: render a transparent `<input>` inside the field box with a white/light background so it's typeable
-- For `type === "signature"` / `type === "initials"`: keep the colored indicator but make it clearly draggable
-- For `type === "date"`: render a small `<input type="date">` or auto-fill with today's date
-
-### Fix 4: Add Auto-Detect Fields button
-Add a new "Auto Detect Fields" button to the toolbar. When clicked, it uses **Lovable AI (Gemini)** to analyze the PDF and intelligently place common contract fields:
-
-**Backend edge function** (`supabase/functions/esign-auto-detect-fields/index.ts`):
-- Accepts `{ pdfUrl, recipientId }` 
-- Uses `google/gemini-2.5-flash` with vision to analyze the document page screenshot
-- Returns an array of detected fields: `{ type, x, y, width, height, label, suggestedValue }`
-- Field types detected: signature lines, date fields, name fields, initials boxes, checkboxes, address fields, phone fields
-
-**Frontend**: The "Auto Detect" button shows a spinner while analyzing, then places all detected fields on the overlay with proper positioning and auto-fills text fields with available data (recipient name, today's date).
+### Mode 2 — Live Instagram Publishing
+The user connects their Instagram Business account. Each photo sits in a "Draft" state until they click "Post Now" or "Schedule". Upon publish, the app sends the photo + caption to Instagram via the Instagram Graph API.
 
 ---
 
-## Detailed Implementation
+## Technical Architecture
 
-### Files to Create/Modify
+### Instagram API Requirements
+Instagram publishing requires the **Instagram Graph API**, which requires:
+1. A Facebook Developer App with `instagram_content_publish` and `pages_read_engagement` permissions
+2. An Instagram **Business** or **Creator** account
+3. A **long-lived access token** stored securely
 
-**1. `src/components/e-signature/DocumentFieldPlacer.tsx` — Complete rewrite**
+Since there is no native Instagram connector available in the workspace connectors list (only ElevenLabs and Firecrawl), we will:
+- Store the Instagram Access Token and Instagram Business Account ID as backend secrets (the user provides them from their Facebook Developer App)
+- Create a new backend edge function (`instagram-publish`) that calls the Instagram Graph API
+- Build the UI mode toggle and publish flow in the component
 
-Key changes:
-- Render `<iframe src={pdfUrl}>` as the document base
-- Add click-to-place logic on the document overlay
-- Make text fields have actual `<input>` elements
-- Add page navigation (Previous/Next page) since PDFs can be multi-page
-- Add "Auto Detect Fields" button in toolbar
-- Visual improvements: field labels with recipient color indicator, resize handles
-- All buttons fully visible (no faded styling)
+### Backend Edge Function: `instagram-publish`
+- **Endpoint**: POST `/instagram-publish`
+- **Accepts**: `{ imageUrl, caption, instagramAccountId, scheduledTime? }`
+- **Flow**:
+  1. Upload the image to a Container via `POST /{ig-user-id}/media` (Instagram requires a publicly accessible URL)
+  2. Publish the container via `POST /{ig-user-id}/media_publish`
+  3. Return the new media ID
+- **Secrets needed**: `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID`
 
-**2. `supabase/functions/esign-auto-detect-fields/index.ts` — New edge function**
+Since images uploaded locally (via `URL.createObjectURL`) are not publicly accessible, we also need to **upload the file to backend storage** first to get a public URL, then pass that URL to Instagram.
 
-Uses Gemini vision to analyze a screenshot/page of the PDF and return detected field positions. Falls back to a smart template-based detection (standard contract fields: Signature at bottom, Date next to it, Name at top, etc.) if vision analysis fails.
-
-**3. `src/pages/e-signature/CreateEnvelope.tsx` — Minor fix**
-
-- The Step 3 condition `{currentStep === 3 && pdfUrl && (` is correct, but need to ensure the `DocumentFieldPlacer` container has proper height so the iframe can render
-- Add styling so the field placer card doesn't clip the PDF
+### Storage
+Use the existing Lovable Cloud file storage — create a public bucket `instagram-grid-photos` for temporary image hosting before publishing.
 
 ---
 
-## UI/UX Design for the Rebuilt Field Placer
+## UI Design
 
+### Mode Toggle (Top of Grid Tab)
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│ TOOLBAR                                                     │
-│ [Select Recipient ▾] [✍ Signature] [AB Initials] [📅 Date] │
-│ [T Text] | [🔍 Auto Detect Fields] [🗑 Clear All]          │
+│  [📱 Preview Mode]  [📸 Instagram Connect]                  │
+│   Plan your grid    Post directly to Instagram              │
 └─────────────────────────────────────────────────────────────┘
-┌──────────────────────────────┐ ┌──────────────────────────┐
-│ PDF DOCUMENT AREA            │ │ PLACED FIELDS LIST       │
-│                              │ │                          │
-│  [actual PDF iframe here]    │ │ ✍ Signature - John Smith │
-│                              │ │ 📅 Date - John Smith     │
-│  ← Click anywhere to place  │ │ T Name - John Smith      │
-│    selected field type →     │ │                          │
-│                              │ │ RECIPIENTS LEGEND        │
-│  [draggable field overlays]  │ │ ● John Smith (3 fields)  │
-│                              │ │ ● Jane Doe (2 fields)    │
-└──────────────────────────────┘ └──────────────────────────┘
-│ Page: ← 1 of 3 → │
+```
+
+### Preview Mode Layout
+```text
+┌─────────────────────────────────────────────┐
+│ 📤 Add Photos   [Select All] [Clear]        │
+├─────────────────────────────────────────────┤
+│ 📱 Instagram Feed Preview                   │
+│ ┌──┬──┬──┐  ← 3-column grid               │
+│ │  │  │  │  ← drag to rearrange            │
+│ │  │  │  │  ← hover shows caption          │
+│ ├──┼──┼──┤                                 │
+│ │  │  │  │                                 │
+│ └──┴──┴──┘                                 │
+│ [Click any photo to add caption]            │
+├─────────────────────────────────────────────┤
+│ [Apply Preset to All] [Export Grid]         │
+└─────────────────────────────────────────────┘
+```
+
+### Instagram Connect Mode Layout
+```text
+┌─────────────────────────────────────────────┐
+│ ✅ Connected: @youraccount  [Disconnect]    │
+│ — OR —                                      │
+│ [Connect Instagram Business Account]        │
+│ Instructions + token entry form             │
+├─────────────────────────────────────────────┤
+│ Queue (each photo shows as a card):         │
+│ ┌─────────────────────────────────────────┐ │
+│ │ [thumbnail] Caption: "Type caption..."  │ │
+│ │ Status: DRAFT                           │ │
+│ │ [Post Now] [Schedule ▾] [Remove]        │ │
+│ └─────────────────────────────────────────┘ │
+│ ┌─────────────────────────────────────────┐ │
+│ │ [thumbnail] Caption: "..."              │ │
+│ │ Status: ✅ POSTED — Jun 15, 2:00 PM    │ │
+│ └─────────────────────────────────────────┘ │
+├─────────────────────────────────────────────┤
+│ [Post All Drafts] [Schedule All]            │
+└─────────────────────────────────────────────┘
 ```
 
 ---
 
-## Auto-Detect Fields Logic
+## Implementation Details
 
-When "Auto Detect" is clicked:
+### Files to Change
 
-1. **Gemini Vision Analysis**: Send the PDF URL to the edge function with prompt:
-   > "Analyze this contract document and identify all signature fields, date fields, name fields, initial boxes, checkboxes, and text input areas. Return their approximate positions as percentages (0-100) of page width/height."
+**1. `src/pages/toolkit/BeautyFilters.tsx` — Grid tab section (lines 827–924)**
 
-2. **Smart Field Placement**: Based on the AI response, place fields:
-   - Signature lines → `type: "signature"` field
-   - "Date:" labels → `type: "date"` field with today's date auto-filled
-   - "Name:" / "Print Name:" labels → `type: "text"` with recipient name auto-filled
-   - "Initials:" boxes → `type: "initials"` field
-   - Checkbox areas → `type: "text"` with "☑" suggested value
+Replace the current grid tab content with a new `InstagramGridPlanner` component (extracted inline or as a separate import) that includes:
 
-3. **Auto-fill available data**: 
-   - Recipient name → prefill text fields labeled "name"
-   - Today's date → prefill date fields
-   - Leave signature/initials for manual drawing
+- **Mode toggle**: Two styled buttons at top — "Preview Mode" and "Instagram Mode"
+- **Preview Mode**: Keep existing 3×N grid with drag-to-reorder. Enhance with:
+  - Per-photo caption input (slide-up on click)
+  - Hover overlay showing caption preview
+  - "Apply Preset to All" and "Export Grid" batch actions
+- **Instagram Mode**: 
+  - Connection status section (shows token input form if not connected, or account name if connected)
+  - Photo queue displayed as vertical list of cards instead of grid
+  - Each card: thumbnail + caption textarea + status badge (DRAFT / POSTED / SCHEDULED) + action buttons
+  - "Post Now" button triggers upload + publish
+  - Loading/spinner state per photo during publishing
+  - Success state: shows Instagram post URL
 
-4. **Result**: Fields appear positioned on the document, labeled, color-coded by recipient — user just needs to review and drag to fine-tune.
+**2. `supabase/functions/instagram-publish/index.ts` — New edge function**
+
+```typescript
+// Flow:
+// 1. Receive { imageDataUrl, caption, accountId }
+// 2. Upload image data to storage bucket → get public URL
+// 3. POST to https://graph.facebook.com/v19.0/{accountId}/media
+//    with { image_url: publicUrl, caption }
+// 4. POST to https://graph.facebook.com/v19.0/{accountId}/media_publish
+//    with { creation_id: containerId }
+// 5. Return { success: true, postId, postUrl }
+```
+
+**3. Database storage bucket migration**
+
+Create a public storage bucket `instagram-grid-photos` for temporarily hosting images before they are published to Instagram (Instagram requires a publicly accessible image URL).
+
+**4. `supabase/config.toml`** — Register the new edge function.
+
+---
+
+## Secrets Required
+
+The user will need to provide:
+- `INSTAGRAM_ACCESS_TOKEN` — Long-lived token from Facebook Developer App (valid 60 days, refreshable)
+- `INSTAGRAM_BUSINESS_ACCOUNT_ID` — The Instagram Business User ID (numeric)
+
+We will prompt the user for these via the `add_secret` tool after explaining the setup. We will NOT block the Preview Mode on these secrets — it works with zero configuration.
 
 ---
 
 ## Implementation Order
 
-1. Rewrite `DocumentFieldPlacer.tsx` with PDF iframe + click-to-place + interactive text inputs
-2. Create `esign-auto-detect-fields` edge function 
-3. Wire Auto Detect button to edge function in the field placer
-4. Test end-to-end: upload PDF → see PDF → click to place fields → type in text fields → auto-detect
+1. Create storage bucket `instagram-grid-photos` via SQL migration
+2. Create `supabase/functions/instagram-publish/index.ts` edge function
+3. Request secrets `INSTAGRAM_ACCESS_TOKEN` and `INSTAGRAM_BUSINESS_ACCOUNT_ID` from user
+4. Update the Grid tab in `BeautyFilters.tsx` with mode toggle + full Instagram mode UI
+5. Wire "Post Now" buttons to the edge function
 
 ---
 
-## No Database Changes Required
-All existing tables (`esign_fields`, `esign_recipients`, `esign_envelopes`, `esign_audit_log`) already have the correct schema. This is purely a frontend + new edge function change.
+## What Works Without Instagram Connection (Preview Mode)
+- Upload unlimited photos
+- Drag to reorder in 3-column grid
+- Add captions per photo (stored in component state)
+- Apply preset filters to all
+- Export/download the grid layout
+
+## What Requires Instagram Connection (Instagram Mode)
+- Viewing the publish queue
+- "Post Now" (immediate publishing)
+- "Schedule" (posts at a chosen time)
+- Seeing post status (DRAFT / POSTED / SCHEDULED)
+- Direct link to the published Instagram post
+
+---
+
+## Important Note on Instagram API
+Instagram's Graph API only supports **Business** and **Creator** accounts (not personal accounts). The user must have a Facebook Developer App with the `instagram_content_publish` permission approved. We will include clear step-by-step instructions in the UI for how to get the access token — this is a one-time setup.
