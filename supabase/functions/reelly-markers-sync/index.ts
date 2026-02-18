@@ -95,7 +95,7 @@ Deno.serve(async (req) => {
 
     // ---- Update projects table from markers ----
     let updated = 0;
-    let notFound = 0;
+    let inserted = 0;
     let errors = 0;
     const errorDetails: string[] = [];
 
@@ -134,7 +134,42 @@ Deno.serve(async (req) => {
         } else if (proj) {
           updated++;
         } else {
-          notFound++;
+          // Project not in DB yet — insert a minimal stub so it can be enriched later
+          const developerName = typeof marker.developer === "string"
+            ? marker.developer
+            : (marker.developer as any)?.name || null;
+
+          const slug = (marker.name || `project-${marker.id}`)
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "");
+
+          const { error: insertError } = await supabase
+            .from("projects")
+            .insert({
+              reelly_id: marker.id,
+              name: marker.name || `Project ${marker.id}`,
+              slug: `${slug}-${marker.id}`,
+              developer_name: developerName,
+              sale_status: saleStatus,
+              price_from: marker.min_price && marker.min_price > 0 ? marker.min_price : null,
+              cover_image_url: coverImageUrl,
+              latitude: marker.location?.latitude || null,
+              longitude: marker.location?.longitude || null,
+              emirate: marker.location?.region ? getEmirateFromRegion(marker.location.region) : null,
+              area_name: marker.location?.district || null,
+              is_published: true,
+              source: "reelly",
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            });
+
+          if (insertError) {
+            errorDetails.push(`insert marker ${marker.id}: ${insertError.message}`);
+            errors++;
+          } else {
+            inserted++;
+          }
         }
       } catch (e: any) {
         errorDetails.push(`marker ${marker.id}: ${e.message}`);
@@ -142,7 +177,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    console.log(`[markers-sync] Done: updated=${updated}, notFound=${notFound}, errors=${errors}`);
+    console.log(`[markers-sync] Done: updated=${updated}, inserted=${inserted}, errors=${errors}`);
 
     return new Response(
       JSON.stringify({
@@ -150,7 +185,7 @@ Deno.serve(async (req) => {
         total_markers: allMarkers.length,
         pages_fetched: pageCount,
         updated,
-        not_found: notFound,
+        inserted,
         errors,
         error_details: errorDetails.slice(0, 20),
         timestamp: new Date().toISOString(),
