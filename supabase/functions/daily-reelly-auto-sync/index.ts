@@ -109,6 +109,34 @@ Deno.serve(async (req) => {
     errors.push(msg);
   }
 
+  // Step 6: Sync dictionaries (statuses, unit types, regions) & fast logo refresh
+  try {
+    console.log("[daily-reelly-auto-sync] Step 6: Syncing Reelly dictionaries and developer logos...");
+    const dictResult = await callFunction("reelly-dictionary-sync", {
+      skip_logos: false,
+    });
+    results.dictionary_sync = dictResult;
+    console.log("[daily-reelly-auto-sync] Step 6 complete:", JSON.stringify(dictResult).slice(0, 200));
+  } catch (err) {
+    const msg = `Step 6 (reelly-dictionary-sync) failed: ${err.message}`;
+    console.error("[daily-reelly-auto-sync]", msg);
+    errors.push(msg);
+  }
+
+  // Step 7: Sync project markers (coordinates, price, status updates)
+  try {
+    console.log("[daily-reelly-auto-sync] Step 7: Syncing project markers...");
+    const markersResult = await callFunction("reelly-markers-sync", {
+      dry_run: false,
+    });
+    results.markers_sync = markersResult;
+    console.log("[daily-reelly-auto-sync] Step 7 complete:", JSON.stringify(markersResult).slice(0, 200));
+  } catch (err) {
+    const msg = `Step 7 (reelly-markers-sync) failed: ${err.message}`;
+    console.error("[daily-reelly-auto-sync]", msg);
+    errors.push(msg);
+  }
+
   // Log summary to database
   try {
     const supabase = createClient(supabaseUrl, supabaseKey);
