@@ -10063,6 +10063,48 @@ export type Database = {
         }
         Relationships: []
       }
+      instagram_scheduled_posts: {
+        Row: {
+          caption: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          ig_post_id: string | null
+          ig_post_url: string | null
+          image_url: string
+          scheduled_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          ig_post_id?: string | null
+          ig_post_url?: string | null
+          image_url: string
+          scheduled_at: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          ig_post_id?: string | null
+          ig_post_url?: string | null
+          image_url?: string
+          scheduled_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       internal_chat_messages: {
         Row: {
           attachments: Json | null
