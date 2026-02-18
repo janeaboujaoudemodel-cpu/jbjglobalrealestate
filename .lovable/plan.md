@@ -1,187 +1,247 @@
 
-# Instagram Grid Planner — Two-Mode Upgrade + Direct Instagram Publishing
+# Transitions Panel — Bottom Toolbar Tab + Drag-and-Drop to Timeline
 
-## Current State Analysis
+## What Is Being Built
 
-The Grid Planner currently lives inside `BeautyFilters.tsx` as a single tab (value="grid"). It has:
-- Basic photo upload and a 3-column Instagram-style grid preview
-- Drag-to-reorder between slots
-- Placeholder "Schedule Posts" and "Connect Instagram" buttons that just show toast messages
-- No real Instagram connection, no post captions per photo, no publish flow
-
-This plan adds **two distinct modes** and a real **Instagram publish flow**.
+A new **Transitions** tab added to the bottom tool bar (alongside Media, Captions, Voice, Beauty, etc.) that presents four categories of transition effects — Fade, Dissolve, Slide, and Zoom — as draggable cards. When the user drags a transition card onto the gap between two clips on the timeline (or drops it onto a clip), a `transition` clip is inserted between them at 1-second duration.
 
 ---
 
-## Two Modes to Build
+## Architecture Overview
 
-### Mode 1 — Visual Grid Preview (No Instagram Required)
-The user uploads their own photos, arranges them in a 3-column Instagram-style grid, adds captions, and can download or copy everything locally. This is a pure front-end planning tool — zero authentication needed.
+The work touches 5 existing files and creates 1 new file:
 
-### Mode 2 — Live Instagram Publishing
-The user connects their Instagram Business account. Each photo sits in a "Draft" state until they click "Post Now" or "Schedule". Upon publish, the app sends the photo + caption to Instagram via the Instagram Graph API.
-
----
-
-## Technical Architecture
-
-### Instagram API Requirements
-Instagram publishing requires the **Instagram Graph API**, which requires:
-1. A Facebook Developer App with `instagram_content_publish` and `pages_read_engagement` permissions
-2. An Instagram **Business** or **Creator** account
-3. A **long-lived access token** stored securely
-
-Since there is no native Instagram connector available in the workspace connectors list (only ElevenLabs and Firecrawl), we will:
-- Store the Instagram Access Token and Instagram Business Account ID as backend secrets (the user provides them from their Facebook Developer App)
-- Create a new backend edge function (`instagram-publish`) that calls the Instagram Graph API
-- Build the UI mode toggle and publish flow in the component
-
-### Backend Edge Function: `instagram-publish`
-- **Endpoint**: POST `/instagram-publish`
-- **Accepts**: `{ imageUrl, caption, instagramAccountId, scheduledTime? }`
-- **Flow**:
-  1. Upload the image to a Container via `POST /{ig-user-id}/media` (Instagram requires a publicly accessible URL)
-  2. Publish the container via `POST /{ig-user-id}/media_publish`
-  3. Return the new media ID
-- **Secrets needed**: `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID`
-
-Since images uploaded locally (via `URL.createObjectURL`) are not publicly accessible, we also need to **upload the file to backend storage** first to get a public URL, then pass that URL to Instagram.
-
-### Storage
-Use the existing Lovable Cloud file storage — create a public bucket `instagram-grid-photos` for temporary image hosting before publishing.
-
----
-
-## UI Design
-
-### Mode Toggle (Top of Grid Tab)
 ```text
-┌─────────────────────────────────────────────────────────────┐
-│  [📱 Preview Mode]  [📸 Instagram Connect]                  │
-│   Plan your grid    Post directly to Instagram              │
-└─────────────────────────────────────────────────────────────┘
+src/components/ai-video-studio/
+  features/
+    TransitionsPanel.tsx          ← NEW: panel with draggable transition cards
+  timeline/
+    TimelineEditor.tsx            ← EDIT: accept drop events, render transition clips
+  AIVideoStudio.tsx               ← EDIT: wire transitionsPanel prop + addTransition handler
+  layout/
+    AIVideoStudioLayout.tsx       ← EDIT: add transitionsPanel prop + new TOOL_TABS entry
+  types.ts                        ← EDIT: add TransitionDefinition type (already has 'transition' Clip type)
 ```
 
-### Preview Mode Layout
-```text
-┌─────────────────────────────────────────────┐
-│ 📤 Add Photos   [Select All] [Clear]        │
-├─────────────────────────────────────────────┤
-│ 📱 Instagram Feed Preview                   │
-│ ┌──┬──┬──┐  ← 3-column grid               │
-│ │  │  │  │  ← drag to rearrange            │
-│ │  │  │  │  ← hover shows caption          │
-│ ├──┼──┼──┤                                 │
-│ │  │  │  │                                 │
-│ └──┴──┴──┘                                 │
-│ [Click any photo to add caption]            │
-├─────────────────────────────────────────────┤
-│ [Apply Preset to All] [Export Grid]         │
-└─────────────────────────────────────────────┘
-```
+No database changes, no edge functions, no new dependencies needed — `transition` is already a valid Clip type in `types.ts` line 35.
 
-### Instagram Connect Mode Layout
+---
+
+## File-by-File Changes
+
+### 1. `src/components/ai-video-studio/features/TransitionsPanel.tsx` — New File
+
+A scrollable grid of transition cards. Each card shows:
+- An animated CSS preview (CSS keyframes only, no canvas needed)
+- The transition name and duration badge
+- Drag handle so the card is draggable via HTML5 drag-and-drop
+
+**Transition definitions (4 types, 3 variants each = 12 cards):**
+
+| Category | ID | Duration | Preview |
+|---|---|---|---|
+| Fade | `fade-black` | 1s | Black fade |
+| Fade | `fade-white` | 0.75s | White flash |
+| Fade | `fade-blur` | 1s | Blur fade |
+| Dissolve | `dissolve` | 1s | Cross dissolve |
+| Dissolve | `dissolve-slow` | 1.5s | Slow dissolve |
+| Dissolve | `dissolve-fast` | 0.5s | Fast dissolve |
+| Slide | `slide-left` | 0.8s | Push left |
+| Slide | `slide-right` | 0.8s | Push right |
+| Slide | `slide-up` | 0.8s | Push up |
+| Zoom | `zoom-in` | 0.75s | Zoom into next |
+| Zoom | `zoom-out` | 0.75s | Zoom out |
+| Zoom | `zoom-punch` | 0.5s | Quick punch zoom |
+
+**Key behaviours:**
+- `dragstart` sets `dataTransfer.setData('transition', JSON.stringify({ id, name, duration }))` so the timeline drop zone can receive it
+- Cards are arranged in a 3-column CSS grid with category section headings
+- A duration slider per card lets the user adjust 0.25s–3s before dragging
+
+**Panel layout:**
 ```text
-┌─────────────────────────────────────────────┐
-│ ✅ Connected: @youraccount  [Disconnect]    │
-│ — OR —                                      │
-│ [Connect Instagram Business Account]        │
-│ Instructions + token entry form             │
-├─────────────────────────────────────────────┤
-│ Queue (each photo shows as a card):         │
-│ ┌─────────────────────────────────────────┐ │
-│ │ [thumbnail] Caption: "Type caption..."  │ │
-│ │ Status: DRAFT                           │ │
-│ │ [Post Now] [Schedule ▾] [Remove]        │ │
-│ └─────────────────────────────────────────┘ │
-│ ┌─────────────────────────────────────────┐ │
-│ │ [thumbnail] Caption: "..."              │ │
-│ │ Status: ✅ POSTED — Jun 15, 2:00 PM    │ │
-│ └─────────────────────────────────────────┘ │
-├─────────────────────────────────────────────┤
-│ [Post All Drafts] [Schedule All]            │
-└─────────────────────────────────────────────┘
+┌─────────────────────────────────────────┐
+│ 🎬 Transitions                          │
+│ Drag onto timeline between clips        │
+├──────────────┬──────────────┬───────────┤
+│  FADE                                   │
+│ ┌──────────┐ ┌──────────┐ ┌──────────┐ │
+│ │ ░░░░▓▓▓▓│ │ ▓▓▓░░░░░│ │ ░blur░░░│ │
+│ │ Fade ●  │ │ White ●  │ │ Blur ●  │ │
+│ │ 1.0s    │ │ 0.75s   │ │ 1.0s   │ │
+│ └──────────┘ └──────────┘ └──────────┘ │
+│  DISSOLVE                               │
+│ ... etc ...                             │
+│  SLIDE                                  │
+│ ... etc ...                             │
+│  ZOOM                                   │
+│ ... etc ...                             │
+└─────────────────────────────────────────┘
 ```
 
 ---
 
-## Implementation Details
+### 2. `src/components/ai-video-studio/timeline/TimelineEditor.tsx` — Edit
 
-### Files to Change
+Three additions:
 
-**1. `src/pages/toolkit/BeautyFilters.tsx` — Grid tab section (lines 827–924)**
+**A. Gap drop zones between clips**
 
-Replace the current grid tab content with a new `InstagramGridPlanner` component (extracted inline or as a separate import) that includes:
-
-- **Mode toggle**: Two styled buttons at top — "Preview Mode" and "Instagram Mode"
-- **Preview Mode**: Keep existing 3×N grid with drag-to-reorder. Enhance with:
-  - Per-photo caption input (slide-up on click)
-  - Hover overlay showing caption preview
-  - "Apply Preset to All" and "Export Grid" batch actions
-- **Instagram Mode**: 
-  - Connection status section (shows token input form if not connected, or account name if connected)
-  - Photo queue displayed as vertical list of cards instead of grid
-  - Each card: thumbnail + caption textarea + status badge (DRAFT / POSTED / SCHEDULED) + action buttons
-  - "Post Now" button triggers upload + publish
-  - Loading/spinner state per photo during publishing
-  - Success state: shows Instagram post URL
-
-**2. `supabase/functions/instagram-publish/index.ts` — New edge function**
+After rendering each clip block inside a track row, calculate the gaps between consecutive clips and render an invisible `<div>` drop zone in each gap:
 
 ```typescript
-// Flow:
-// 1. Receive { imageDataUrl, caption, accountId }
-// 2. Upload image data to storage bucket → get public URL
-// 3. POST to https://graph.facebook.com/v19.0/{accountId}/media
-//    with { image_url: publicUrl, caption }
-// 4. POST to https://graph.facebook.com/v19.0/{accountId}/media_publish
-//    with { creation_id: containerId }
-// 5. Return { success: true, postId, postUrl }
+// Between clip[i].endTime and clip[i+1].startTime:
+<div
+  className="absolute top-0 h-full z-30"
+  style={{ left: gapStart * pps, width: gapWidth * pps, minWidth: 8 }}
+  onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; }}
+  onDrop={(e) => handleTransitionDrop(e, track.id, insertTime)}
+/>
 ```
 
-**3. Database storage bucket migration**
+Highlight the drop zone with a purple glow while `dragover` is active.
 
-Create a public storage bucket `instagram-grid-photos` for temporarily hosting images before they are published to Instagram (Instagram requires a publicly accessible image URL).
+**B. `handleTransitionDrop` callback**
 
-**4. `supabase/config.toml`** — Register the new edge function.
+```typescript
+const handleTransitionDrop = (e: DragEvent, trackId: string, insertAtTime: number) => {
+  const data = JSON.parse(e.dataTransfer.getData('transition'));
+  onAddTransition(trackId, insertAtTime, data);
+};
+```
+
+**C. Transition clip rendering**
+
+Transition clips (where `clip.type === 'transition'`) render differently from normal clips — they show as a diamond/chevron shape in **purple** (`bg-purple-500/80`) with the transition name, visually distinct from video/audio clips:
+
+```text
+Timeline track row:
+[VIDEO CLIP A ────────▶] [◇ Fade ◇] [◀──────── VIDEO CLIP B]
+```
+
+**D. Prop extension**
+
+Add `onAddTransition` to `TimelineEditorProps`:
+```typescript
+onAddTransition: (trackId: string, time: number, transition: { id: string; name: string; duration: number }) => void;
+```
 
 ---
 
-## Secrets Required
+### 3. `src/components/ai-video-studio/AIVideoStudio.tsx` — Edit
 
-The user will need to provide:
-- `INSTAGRAM_ACCESS_TOKEN` — Long-lived token from Facebook Developer App (valid 60 days, refreshable)
-- `INSTAGRAM_BUSINESS_ACCOUNT_ID` — The Instagram Business User ID (numeric)
+**A. `handleAddTransition` function** — constructs a full `Clip` object with `type: 'transition'` and calls `addClip`:
 
-We will prompt the user for these via the `add_secret` tool after explaining the setup. We will NOT block the Preview Mode on these secrets — it works with zero configuration.
+```typescript
+const handleAddTransition = useCallback((trackId: string, time: number, def: { id: string; name: string; duration: number }) => {
+  addClip(trackId, {
+    trackId,
+    type: 'transition',
+    name: def.name,
+    startTime: time,
+    duration: def.duration,
+    source: { url: '', inPoint: 0, outPoint: def.duration, originalDuration: def.duration },
+    transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+    keyframes: [],
+    effects: [{ id: crypto.randomUUID(), type: 'transition', name: def.id, settings: { transitionId: def.id } }],
+  });
+  toast.success(`✨ "${def.name}" transition added`);
+}, [addClip]);
+```
+
+**B. Pass `transitionsPanel` prop and `onAddTransition` to layout/timeline.**
+
+---
+
+### 4. `src/components/ai-video-studio/layout/AIVideoStudioLayout.tsx` — Edit
+
+Two small changes:
+
+**A. Add entry to `TOOL_TABS` array** (after `effects`, before `resize`):
+
+```typescript
+{ id: 'transitions', label: 'Transitions', icon: Clapperboard }
+```
+
+Using the `Clapperboard` icon from lucide-react (already available via the installed `lucide-react ^0.462.0`).
+
+**B. Add `transitionsPanel?: ReactNode` to the props interface and map it in `toolPanelContent`.**
+
+---
+
+### 5. `src/components/ai-video-studio/types.ts` — Minor edit
+
+Add a `TransitionDefinition` interface for type safety:
+
+```typescript
+export interface TransitionDefinition {
+  id: string;
+  name: string;
+  category: 'fade' | 'dissolve' | 'slide' | 'zoom';
+  duration: number;
+  description: string;
+}
+```
+
+The `Clip` type already has `type: 'transition'` at line 35 and `ClipEffect` already has `type: 'transition'` at line 75 — no breaking changes.
+
+---
+
+## Visual Design of Transition Cards
+
+Each card uses a CSS animation (via Tailwind's `animate-*` or inline style keyframes) to give a live mini-preview:
+
+- **Fade**: A div that pulses from dark to light repeatedly
+- **Dissolve**: Two half-width divs that crossfade with `opacity` animation
+- **Slide**: A div that slides left/right on hover
+- **Zoom**: A div that scales up on hover
+
+Cards use the existing amber/gold accent palette for the active/hover state and a purple badge for the "transition" category distinction (matching how transition clips will render on the timeline).
+
+---
+
+## Drag-and-Drop Flow (End-to-End)
+
+```text
+User drags transition card
+        │
+        ▼
+dragstart → setData('transition', JSON)
+        │
+        ▼
+User hovers over gap between clips on timeline
+        │
+        ▼
+dragover → e.preventDefault() + gap highlight (purple glow)
+        │
+        ▼
+User drops onto gap
+        │
+        ▼
+drop → handleTransitionDrop → onAddTransition(trackId, time, def)
+        │
+        ▼
+addClip() → new Clip{type:'transition'} inserted at that time
+        │
+        ▼
+Timeline re-renders with purple diamond clip between segments
+        │
+        ▼
+toast.success("✨ Fade transition added")
+```
 
 ---
 
 ## Implementation Order
 
-1. Create storage bucket `instagram-grid-photos` via SQL migration
-2. Create `supabase/functions/instagram-publish/index.ts` edge function
-3. Request secrets `INSTAGRAM_ACCESS_TOKEN` and `INSTAGRAM_BUSINESS_ACCOUNT_ID` from user
-4. Update the Grid tab in `BeautyFilters.tsx` with mode toggle + full Instagram mode UI
-5. Wire "Post Now" buttons to the edge function
+1. Add `TransitionDefinition` type to `types.ts`
+2. Create `TransitionsPanel.tsx` with all 12 draggable cards
+3. Edit `TimelineEditor.tsx` to add gap drop zones + transition clip rendering + `onAddTransition` prop
+4. Edit `AIVideoStudio.tsx` to add `handleAddTransition` handler and wire up props
+5. Edit `AIVideoStudioLayout.tsx` to register the new "Transitions" tab
 
 ---
 
-## What Works Without Instagram Connection (Preview Mode)
-- Upload unlimited photos
-- Drag to reorder in 3-column grid
-- Add captions per photo (stored in component state)
-- Apply preset filters to all
-- Export/download the grid layout
+## No Database or Edge Function Changes Required
 
-## What Requires Instagram Connection (Instagram Mode)
-- Viewing the publish queue
-- "Post Now" (immediate publishing)
-- "Schedule" (posts at a chosen time)
-- Seeing post status (DRAFT / POSTED / SCHEDULED)
-- Direct link to the published Instagram post
-
----
-
-## Important Note on Instagram API
-Instagram's Graph API only supports **Business** and **Creator** accounts (not personal accounts). The user must have a Facebook Developer App with the `instagram_content_publish` permission approved. We will include clear step-by-step instructions in the UI for how to get the access token — this is a one-time setup.
+Transitions are stored as `Clip` objects in the existing in-memory project state (and persisted to `video_studio_projects` table via the existing `useVideoStudioProject` hook). The existing schema supports all needed fields.
