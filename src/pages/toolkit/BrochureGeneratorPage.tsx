@@ -548,8 +548,8 @@ export default function BrochureGeneratorPage() {
                   ) : (
                     <button
                       onClick={() => logoInputRef.current?.click()}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all"
-                      style={{ background: "rgba(99,102,241,0.08)", border: `2px dashed ${IND.border}`, color: IND.text }}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all text-white"
+                      style={{ background: "rgba(99,102,241,0.22)", border: `2px dashed rgba(99,102,241,0.6)` }}
                     >
                       <Upload className="w-4 h-4" /> Upload Logo
                     </button>

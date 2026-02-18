@@ -573,10 +573,10 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                           key={bg}
                           variant="outline"
                           size="sm"
-                          className={`flex-1 capitalize ${
+                          className={`flex-1 capitalize text-white ${
                             paddingBg === bg 
-                              ? "bg-gold/20 border-gold text-gold" 
-                              : "border-gold/30 text-champagne/70"
+                              ? "bg-gold/25 border-gold" 
+                              : "border-gold/60 bg-white/10 hover:bg-white/15"
                           }`}
                           onClick={() => setPaddingBg(bg)}
                         >
@@ -603,10 +603,10 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                           key={fmt}
                           variant="outline"
                           size="sm"
-                          className={`flex-1 uppercase ${
+                          className={`flex-1 uppercase text-white ${
                             outputFormat === fmt 
-                              ? "bg-gold/20 border-gold text-gold" 
-                              : "border-gold/30 text-champagne/70"
+                              ? "bg-gold/25 border-gold" 
+                              : "border-gold/60 bg-white/10 hover:bg-white/15"
                           }`}
                           onClick={() => setOutputFormat(fmt)}
                         >

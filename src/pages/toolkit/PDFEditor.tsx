@@ -514,7 +514,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
               {/* Add more button */}
               <div className="flex justify-end">
                 <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} disabled={isLoading}
-                  style={{ borderColor: indigo.border, color: "rgba(255,255,255,0.65)", background: "transparent" }}>
+                  style={{ borderColor: "rgba(99,102,241,0.6)", color: "#fff", background: "rgba(99,102,241,0.18)" }}>
                   <Plus className="h-4 w-4 mr-2" />Add More PDFs
                 </Button>
               </div>
@@ -524,24 +524,24 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                 <h3 className="text-lg font-semibold text-white mb-4">Actions</h3>
                 <div className="grid sm:grid-cols-2 gap-3">
                   <Button variant="outline" onClick={exportSelectedPages} disabled={selectedCount === 0 || isSaving}
-                    className="transition-all hover:text-white"
-                    style={{ borderColor: indigo.border, color: "rgba(255,255,255,0.65)", background: "transparent" }}>
+                    className="text-white transition-all"
+                    style={{ borderColor: "rgba(99,102,241,0.6)", background: "rgba(99,102,241,0.18)" }}>
                     <Split className="h-4 w-4 mr-2" />Extract ({selectedCount})
                   </Button>
                   <Button variant="outline" onClick={exportMergedPDF} disabled={pages.length === 0 || isSaving}
-                    className="transition-all hover:text-white"
-                    style={{ borderColor: indigo.border, color: "rgba(255,255,255,0.65)", background: "transparent" }}>
+                    className="text-white transition-all"
+                    style={{ borderColor: "rgba(99,102,241,0.6)", background: "rgba(99,102,241,0.18)" }}>
                     <Merge className="h-4 w-4 mr-2" />Merge All
                   </Button>
                   <Button variant="outline" onClick={deleteSelectedPages} disabled={selectedCount === 0}
-                    className="border-red-500/30 text-red-400 hover:bg-red-500/20 hover:border-red-500 bg-transparent">
+                    className="text-red-300 border-red-500/60 bg-red-500/20 hover:bg-red-500/30">
                     <Trash2 className="h-4 w-4 mr-2" />Delete Selected
                   </Button>
                   <Button variant="outline" onClick={() => setSignatureMode(!signatureMode)}
                     style={{
-                      borderColor: signatureMode ? "rgba(99,102,241,0.6)" : indigo.border,
-                      color: signatureMode ? indigo.text : "rgba(255,255,255,0.65)",
-                      background: signatureMode ? "rgba(99,102,241,0.12)" : "transparent",
+                      borderColor: signatureMode ? "rgba(99,102,241,0.6)" : "rgba(99,102,241,0.45)",
+                      color: 'white',
+                      background: signatureMode ? "rgba(99,102,241,0.25)" : "rgba(99,102,241,0.12)",
                     }}>
                     <Pen className="h-4 w-4 mr-2" />{signatureMode ? 'Close Signature' : 'Add Signature'}
                   </Button>
@@ -558,8 +558,8 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                       onMouseDown={startDrawing} onMouseMove={draw} onMouseUp={stopDrawing} onMouseLeave={stopDrawing} />
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={clearSignature} style={{ borderColor: indigo.border, color: "rgba(255,255,255,0.65)", background: "transparent" }}>Clear</Button>
-                    <Button disabled={!signatureData} style={{ background: "linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)", color: "white" }}>
+                    <Button variant="outline" onClick={clearSignature} className="text-white" style={{ borderColor: "rgba(255,255,255,0.35)", background: "rgba(255,255,255,0.12)" }}>Clear</Button>
+                    <Button disabled={!signatureData} style={{ background: "linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)", color: "white", opacity: signatureData ? 1 : 0.4 }}>
                       <Check className="h-4 w-4 mr-2" />Apply to Selected Pages
                     </Button>
                   </div>

@@ -330,7 +330,11 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
                 <p className="text-white font-medium">{file.name}</p>
                 <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>{(file.size / 1024 / 1024).toFixed(2)} MB</p>
               </div>
-              <Button variant="secondary" size="sm" onClick={() => { setFile(null); setTranscription(null); setTranslations({}); }}>Remove</Button>
+              <button onClick={() => { setFile(null); setTranscription(null); setTranslations({}); }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white transition-all"
+                style={{ background: "rgba(239,68,68,0.65)", border: "1px solid rgba(239,68,68,0.7)" }}>
+                Remove
+              </button>
             </div>
 
             {/* Consent Checkbox */}
@@ -387,11 +391,11 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
                   <div className="p-4 grid grid-cols-2 md:grid-cols-3 gap-2 max-h-64 overflow-y-auto">
                     {filteredLanguages.map((lang) => (
                       <button key={lang.code} onClick={() => toggleLanguage(lang.code)}
-                        className="flex items-center gap-2 p-2 rounded-lg text-sm text-left transition-all"
+                      className="flex items-center gap-2 p-2 rounded-lg text-sm text-left transition-all"
                         style={{
-                          background: selectedLanguages.includes(lang.code) ? "rgba(201,168,76,0.18)" : "rgba(255,255,255,0.04)",
-                          border: `1px solid ${selectedLanguages.includes(lang.code) ? "rgba(201,168,76,0.5)" : "rgba(255,255,255,0.08)"}`,
-                          color: selectedLanguages.includes(lang.code) ? "#C9A84C" : "rgba(255,255,255,0.55)",
+                          background: selectedLanguages.includes(lang.code) ? "rgba(201,168,76,0.22)" : "rgba(255,255,255,0.08)",
+                          border: `1px solid ${selectedLanguages.includes(lang.code) ? "rgba(201,168,76,0.65)" : "rgba(255,255,255,0.2)"}`,
+                          color: selectedLanguages.includes(lang.code) ? "#C9A84C" : "rgba(255,255,255,0.88)",
                         }}>
                         <span>{lang.name}</span>
                         {lang.rtl && <span className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>(RTL)</span>}
