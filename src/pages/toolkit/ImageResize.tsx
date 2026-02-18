@@ -1,4 +1,6 @@
 import { useState, useRef, useCallback } from "react";
+import { SaveProjectBar, ToolContentWrapper } from '@/components/toolkit/SaveProjectBar';
+import { toast as sonnerToast } from 'sonner';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -58,6 +60,7 @@ interface ProcessedImage {
 interface ImageResizeProps { embedded?: boolean; }
 
 export default function ImageResize({ embedded = false }: ImageResizeProps) {
+  const [projectName, setProjectName] = useState('Image Resize Project');
   const [images, setImages] = useState<UploadedImage[]>([]);
   const [selectedPresets, setSelectedPresets] = useState<string[]>(["instagram_square"]);
   const [fitMode, setFitMode] = useState<FitMode>("crop");
@@ -329,6 +332,28 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
       )}
 
       <div className="container mx-auto px-4 py-8">
+        {/* Save Project Bar */}
+        <div className="mb-5">
+          <SaveProjectBar
+            projectName={projectName}
+            onNameChange={setProjectName}
+            onSave={() => {
+              if (images.length === 0) { sonnerToast.error('No images to save'); return; }
+              localStorage.setItem(`resize-project-${Date.now()}`, JSON.stringify({ name: projectName, count: images.length, savedAt: new Date().toISOString() }));
+              sonnerToast.success(`Project "${projectName}" saved!`);
+            }}
+            onClear={() => {
+              if (!confirm('Clear all images?')) return;
+              setImages([]); setProcessedImages([]);
+              setProjectName('Image Resize Project');
+              sonnerToast.success('Project cleared');
+            }}
+            canSave={images.length > 0}
+            accentColor="#6366F1"
+            accentBorder="rgba(99,102,241,0.3)"
+          />
+        </div>
+        <ToolContentWrapper accentColor="#6366F1">
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Left: Upload & Images */}
           <div className="lg:col-span-2 space-y-6">
@@ -646,6 +671,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
             </p>
           </div>
         </div>
+        </ToolContentWrapper>
       </div>
     </div>
   );
