@@ -1,117 +1,128 @@
 
-# Background Remover — Complete Fix Plan
+# Photo Suite — Complete Fix & Feature Expansion
 
-## Root Cause (Confirmed by Code Review)
+## Problems Found
 
-The current `removeBackgroundClientSide` function (lines 65–200 of `BackgroundAI.tsx`) uses a primitive **corner-sampling + Euclidean color distance** algorithm:
+### 1. Double Headers (Layout Collision)
+The `MainLayout` wraps all routes via `MainLayoutWrapper`, adding `pt-16 sm:pt-20 md:pt-24 lg:pt-28` to the page. But:
+- `PhotoSuite.tsx` has its own suite header rendered inline — this stacks on top of the GlobalHeader correctly.
+- **`InteriorDesignAI`** (line 197) renders its own full `<div>` header with title "AI Interior Design Assistant" even when embedded inside the Photo Suite tab — no `embedded` prop.
+- **`VirtualStagingPage`** (line 197) renders its own full header with "AI Virtual Staging" title even when embedded — no `embedded` prop.
+- Both need an `embedded?: boolean` prop added to suppress their inner headers.
 
-1. It samples 8 corner pixels and averages their RGB values as the "background color"
-2. It loops through every pixel and makes it transparent if it's within `tolerance=40` of that average
-3. **Critical flaw**: This removes ANY pixel matching the background color — including skin, hair, clothing, teeth — anything that shares similar tones with the background
+### 2. Beauty Filters — Thin Feature Set
+Currently only 6 basic sliders + 8 presets. Missing key features:
+- More sliders: Exposure, Highlights, Shadows, Whites/Blacks, Sharpness, Noise reduction, Fade
+- More presets: Fashion, Matte, Cinematic, B&W, Vintage, Sepia, Film Noir, Golden Hour
+- **Clothing Whitening** mode: a dedicated "Make Clothing White" canvas pixel operation
+- Preset before/after comparison (split-screen toggle)
+- Reset individual sliders
 
-**Why changing the background preset also corrupts the subject:**
-When the user selects "White", "Navy", "Blur" etc., the code first fills a canvas with that color, THEN draws the image over it, THEN runs the color-matching removal. The algorithm now samples from the already-filled background canvas, but still affects the subject. Additionally, the new background color is being composited incorrectly — the algorithm mutates `layerData` (the original image pixels), not a copy, so the new background bleeds into the subject mask.
+### 3. Background AI — Clothing Whitening
+User explicitly asked "make clothing very white." Add a new tab/mode: **"Whiten Clothing"** that applies a selective whitening filter targeting fabric regions in the image (boost brightness on near-white and desaturated areas).
 
-## The Correct Solution
+---
 
-**Two-tier approach:**
+## Implementation Plan
 
-### Tier 1 — AI-Powered Removal (Primary, Via Edge Function)
-Use the `ai-background-remove` edge function to call **Gemini Vision** with a specific prompt to return a **segmentation mask** or a clean cutout. The model is given the image and instructed to describe exactly which pixels to remove. For the actual cutout, we switch the mode to call the AI API with a **"remove background, return PNG with transparency"** instruction using the `google/gemini-3-flash-preview` model which supports image analysis + generation.
+### File 1: `src/pages/toolkit/VirtualStagingPage.tsx`
+Add `embedded?: boolean` prop to the component. When `embedded=true`, skip rendering the header block (lines 196–214).
 
-Actually, since the AI image generation model (`google/gemini-3-pro-image-preview`) can take an image and produce a modified one, we use it for both "remove" and "generate" modes — the difference is just the prompt:
-- **Remove mode**: "Remove the background from this image completely and return ONLY the subject with a transparent background as a PNG"
-- **Generate mode**: "Take the person from this image and place them in: [scene]"
+### File 2: `src/pages/InteriorDesignAI.tsx`
+Add `embedded?: boolean` prop to the component. When `embedded=true`, skip rendering the GlobalHeader-duplicate and navigation elements. (Interior Design already has complex layout; suppress just the top header section.)
 
-### Tier 2 — Smart Client-Side Fallback (GrabCut-style)
-Replace the broken corner-sampling with a proper **flood-fill seeded from edges** (similar to GrabCut):
-1. Use a `visited` bitset and BFS flood-fill from all 4 image borders
-2. Only remove pixels connected to the border that are "background-like" (similar to their border neighbors) — this prevents removing interior subject pixels even if they share a color
-3. Apply a small feather/blur on the mask edges for smooth cutouts
-4. This works reliably for photos with clear subject/background separation
-
-The background preset buttons (White, Navy, Blue Gradient etc.) will:
-- Work on the RESULT image (the already-removed transparent cutout)
-- Simply composite the transparent cutout OVER the chosen background — never re-running removal
-- So choosing "Navy" after removal just changes the backdrop, never touching the subject pixels again
-
-## Files to Change
-
-### 1. `src/pages/toolkit/BackgroundAI.tsx`
-**Replace the broken `removeBackgroundClientSide` function with a proper implementation:**
-
-```
-NEW ALGORITHM — Flood-fill from borders (GrabCut-style):
-1. Load image onto canvas
-2. Get pixel data
-3. BFS flood-fill starting from all edge pixels:
-   - A pixel is "background" if its color is within distance threshold of its flood-fill neighbors
-   - Only pixels connected to the edge can be removed (protects interior pixels with same color)
-4. Build binary mask: background=0, subject=255
-5. Dilate+erode the mask to fill holes (morphological close)
-6. Gaussian-blur the mask edges for anti-aliasing (feathering)
-7. Apply mask as alpha channel to original image pixels
-8. Composite over chosen new background
+### File 3: `src/pages/toolkit/PhotoSuite.tsx`
+Pass `embedded` to `InteriorDesignAI` and `VirtualStagingPage`:
+```tsx
+<InteriorDesignAI embedded />
+<VirtualStagingPage embedded />
 ```
 
-**Separate "apply background" from "remove background":**
-- `removeBackground(file)` → returns RGBA image with subject only (transparent BG)
-- `applyBackground(transparentDataUrl, backgroundId)` → composites transparent image over new BG
-- Preset buttons change `selectedBackground` state which re-runs `applyBackground` on the already-removed result — they NEVER re-run removal
+### File 4: `src/pages/toolkit/BeautyFilters.tsx` — Major Rebuild
+**New Adjustments (14 sliders total):**
 
-**Add proper state flow:**
-```
-uploadedImage → [Remove BG] → transparentResult (cached) → [Select BG preset] → finalResult
-```
-
-So after the first removal, changing the background preset is instant (no re-processing).
-
-**UI changes:**
-- After removal succeeds, show background preset grid below the result (for instant switching)
-- "Remove Background" button only needs to be clicked once — after that, preset switching is instant
-- Add a "Re-process" button to redo removal if needed
-- Progress: 10% → loading, 60% → processing pixels, 90% → applying mask, 100% → done
-
-### 2. `supabase/functions/ai-background-remove/index.ts`
-**Add a proper AI-powered removal mode:**
-
-Add `mode === "remove"` handler that:
-- Takes the base64 image
-- Calls `google/gemini-3-pro-image-preview` with prompt: "Remove the background completely from this image. Return only the subject (person/object) isolated with a pure transparent background. The subject should be perfectly cut out with no background remnants."
-- Returns the generated image (transparent PNG)
-- Falls back gracefully if the model returns text instead of image
-
-**Also fix the `generate` mode** to first remove the background cleanly, then composite:
-- Step 1: Remove BG → get transparent cutout
-- Step 2: Generate new background scene using AI
-- Step 3: Composite (the frontend handles this since it has both images)
-
-## State Architecture Fix
-
-```
-State:
-  image: File | null                    ← original uploaded file
-  transparentResult: string | null      ← cached PNG with BG removed (alpha)
-  finalResult: string | null            ← final composited image (shown to user)
-  selectedBackground: string            ← 'transparent' | 'white' | 'navy' | etc.
-
-Flow:
-  Upload → image set
-  Click "Remove Background" → AI/canvas removes BG → transparentResult set
-  Change preset → applyBackground(transparentResult, preset) → finalResult updated (instant)
-  Click "Download" → downloads finalResult
+```text
+Exposure    -50 to +50
+Brightness  -50 to +50
+Contrast    -50 to +50
+Highlights  -50 to +50
+Shadows     -50 to +50
+Whites      -50 to +50
+Blacks      -50 to +50
+Saturation  -100 to +100
+Vibrance    -50 to +50
+Warmth      -50 to +50
+Tint        -50 to +50
+Sharpness   0 to 50
+Blur        0 to 20
+Vignette    0 to 60
+Fade        0 to 50
 ```
 
-This separation is key — the subject is extracted ONCE, backgrounds are applied/changed instantly without re-running removal.
+**New Presets (16 total):**
+Original, Luxury Dark, Bright & Clean, Warm Glow, Cool Pro, HDR Effect, Soft Portrait, Dramatic, Fashion Editorial, Matte Film, Cinematic, Black & White, Vintage Film, Golden Hour, Sepia, Film Noir
 
-## Summary of Changes
+**Canvas rendering upgrades:**
+- Multi-layer CSS filter string built from all adjustments
+- Sharpness uses an unsharp mask via OffscreenCanvas convolution
+- Whites/Blacks use pixel-level clamping via ImageData
+- Before/After split-view toggle button
+
+**Clothing Whitening Button:**
+A dedicated "Whiten Clothing" action button that:
+1. Gets current canvas ImageData
+2. For each pixel: if the pixel is "near-white" (R+G+B > 500 AND max channel diff < 80) — push all channels toward 255 (clothing white boost)
+3. If pixel is "desaturated neutral" (saturation < 30%) — also whiten it
+4. Re-renders output instantly
+
+### File 5: `src/pages/toolkit/BackgroundAI.tsx`
+Add a **"Whiten Clothing"** preset button in the background presets section. When clicked:
+- Takes the current `imagePreview` and applies the same pixel-level whitening algorithm above
+- Shows the result in the preview
+
+---
+
+## Technical Architecture
+
+```text
+PhotoSuite
+├── GlobalHeader (from MainLayout) — top bar
+├── Suite Header (inline) — title + back link
+├── Tab Bar — 5 tabs
+└── Tab Content
+    ├── BackgroundAI embedded=true        (hides own header) ✓ existing
+    ├── BeautyFilters embedded=true       (hides own header) ✓ existing
+    ├── ImageResize embedded=true         (hides own header) ✓ existing
+    ├── InteriorDesignAI embedded=true    (ADD embedded prop) ← FIX
+    └── VirtualStagingPage embedded=true  (ADD embedded prop) ← FIX
+```
+
+### Clothing Whitening Algorithm
+```text
+For each pixel (R, G, B):
+  brightness = (R + G + B) / 3
+  maxDiff = max(|R-G|, |G-B|, |R-B|)
+  saturation = (max(R,G,B) - min(R,G,B)) / max(R,G,B)
+
+  isNearWhite = brightness > 160 AND saturation < 0.35
+  
+  if isNearWhite:
+    strength = clamp((brightness - 160) / 95, 0, 1) * 0.85
+    R = R + (255 - R) * strength
+    G = G + (255 - G) * strength
+    B = B + (255 - B) * strength
+```
+
+This targets white shirts, lab coats, dress shirts, wedding dresses without blowing out skin tones (which have higher saturation).
+
+---
+
+## Summary of Files Changed
 
 | File | Change |
-|------|--------|
-| `BackgroundAI.tsx` | Replace broken `removeBackgroundClientSide` with GrabCut-style flood-fill; separate removal from background application; add `transparentResult` state; fix preset buttons to instantly swap backgrounds without re-running removal |
-| `ai-background-remove/index.ts` | Add `mode === "remove"` AI handler using `gemini-3-pro-image-preview`; improve fallback handling |
-
-## Implementation Order
-1. Fix `BackgroundAI.tsx` — new flood-fill algorithm + state separation (works offline, no API needed for basic removal)
-2. Update edge function — add AI-powered removal mode as the primary path, flood-fill as fallback
-3. Wire up the AI removal call in `BackgroundAI.tsx` — try AI first, fall back to canvas
+|---|---|
+| `VirtualStagingPage.tsx` | Add `embedded` prop, suppress header when embedded |
+| `InteriorDesignAI.tsx` | Add `embedded` prop, suppress header when embedded |
+| `PhotoSuite.tsx` | Pass `embedded` to InteriorDesignAI and VirtualStagingPage |
+| `BeautyFilters.tsx` | Full rebuild: 14 sliders, 16 presets, whitening button, split view |
+| `BackgroundAI.tsx` | Add "Whiten Clothing" action button to the result panel |
