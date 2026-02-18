@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { SaveProjectBar, ToolContentWrapper } from '@/components/toolkit/SaveProjectBar';
 import {
   ArrowLeft, Upload, Sparkles, Download, Loader2, Trash2,
   Sun, Contrast, Droplets, Thermometer, Focus, Palette,
@@ -116,6 +117,7 @@ const SLIDER_GROUPS = [
 ];
 
 export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) {
+  const [projectName, setProjectName] = useState('Beauty Filter Project');
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
@@ -317,7 +319,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
 
       <main className="max-w-6xl mx-auto px-4 py-8">
         {/* Title */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4"
             style={{ background: "rgba(99,102,241,0.12)", border: `1px solid ${I.border}`, boxShadow: "0 0 32px rgba(99,102,241,0.2)" }}>
             <Sparkles className="h-7 w-7" style={{ color: I.text }} />
@@ -327,6 +329,31 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
             Professional-grade photo editing with 15 adjustments, 16 presets, and AI clothing whitening.
           </p>
         </div>
+
+        {/* Save Project Bar */}
+        <div className="mb-5">
+          <SaveProjectBar
+            projectName={projectName}
+            onNameChange={setProjectName}
+            onSave={() => {
+              if (!image) { toast.error('No image to save'); return; }
+              localStorage.setItem(`beauty-project-${Date.now()}`, JSON.stringify({ name: projectName, savedAt: new Date().toISOString() }));
+              toast.success(`Project "${projectName}" saved!`);
+            }}
+            onClear={() => {
+              if (!confirm('Clear this project?')) return;
+              setImage(null); setImagePreview(null);
+              setAdjustments({ ...DEFAULT_ADJ }); setSelectedPreset('none');
+              setProjectName('Beauty Filter Project');
+              toast.success('Project cleared');
+            }}
+            canSave={!!image}
+            accentColor={I.accent}
+            accentBorder={I.border}
+          />
+        </div>
+
+        <ToolContentWrapper accentColor={I.accent}>
 
         {/* Upload */}
         {!image && (
@@ -501,6 +528,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
             </div>
           </div>
         )}
+        </ToolContentWrapper>
       </main>
     </div>
   );

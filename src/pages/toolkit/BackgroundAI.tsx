@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { SaveProjectBar, ToolContentWrapper } from '@/components/toolkit/SaveProjectBar';
 import {
   ArrowLeft,
   Upload,
@@ -398,6 +399,7 @@ interface AIAnalysis {
 interface BackgroundAIProps { embedded?: boolean; }
 
 export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
+  const [projectName, setProjectName] = useState('Background AI Project');
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageInfo, setImageInfo] = useState<ImageInfo | null>(null);
@@ -696,7 +698,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
 
       <main className="max-w-5xl mx-auto px-4 py-10">
         {/* Hero */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-5"
             style={{ background: "rgba(99,102,241,0.12)", border: `1px solid ${C.border}`, boxShadow: "0 0 32px rgba(99,102,241,0.2)" }}>
             <Wand2 className="h-8 w-8" style={{ color: C.accentText }} />
@@ -706,6 +708,30 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             Remove backgrounds instantly or place yourself in AI-generated scenes. Professional quality in seconds.
           </p>
         </div>
+
+        {/* Save Project Bar */}
+        <div className="mb-6">
+          <SaveProjectBar
+            projectName={projectName}
+            onNameChange={setProjectName}
+            onSave={() => {
+              if (!result && !imagePreview) { toast.error('Nothing to save yet'); return; }
+              localStorage.setItem(`bg-ai-project-${Date.now()}`, JSON.stringify({ name: projectName, result, savedAt: new Date().toISOString() }));
+              toast.success(`Project "${projectName}" saved!`);
+            }}
+            onClear={() => {
+              if (!confirm('Clear this project?')) return;
+              resetAll();
+              setProjectName('Background AI Project');
+              toast.success('Project cleared');
+            }}
+            canSave={!!imagePreview}
+            accentColor={C.accent}
+            accentBorder={C.border}
+          />
+        </div>
+
+        <ToolContentWrapper accentColor={C.accent}>
 
         {/* Upload Zone */}
         {!image && (
@@ -1056,11 +1082,12 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
           </div>
         )}
 
-        <div className="mt-12 p-4 rounded-xl text-center" style={{ background: "rgba(99,102,241,0.03)", border: "1px solid rgba(99,102,241,0.08)" }}>
+        <div className="mt-8 p-4 rounded-xl text-center" style={{ background: "rgba(99,102,241,0.03)", border: "1px solid rgba(99,102,241,0.08)" }}>
           <p className="text-xs" style={{ color: C.dimText }}>
             Smart edge-detection removal · AI scene generation uses cloud processing · Background switching is instant after first removal · Max 10MB per image
           </p>
         </div>
+        </ToolContentWrapper>
       </main>
     </div>
   );
