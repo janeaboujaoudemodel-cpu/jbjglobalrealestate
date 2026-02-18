@@ -229,18 +229,18 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
   };
 
   return (
-    <div style={{ background: "#0D0B08", minHeight: "100vh" }}>
-      {/* Header - hidden when embedded in a suite tab */}
+    <div style={{ background: "#0C0E14", minHeight: "100vh" }}>
       {!embedded && (
-        <header style={{ borderBottom: "1px solid rgba(201,168,76,0.18)", background: "rgba(201,168,76,0.03)" }}>
+        <header style={{ borderBottom: "1px solid rgba(99,102,241,0.2)", background: "rgba(99,102,241,0.06)" }}>
           <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2" style={{ color: "rgba(255,255,255,0.45)", border: "1px solid rgba(201,168,76,0.2)" }}
+            <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2"
+              style={{ color: "rgba(255,255,255,0.45)", border: "1px solid rgba(99,102,241,0.2)" }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#fff"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)"}>
-              <ArrowLeft className="h-5 w-5" />
-              <span>Back to Toolkit</span>
+              <ArrowLeft className="h-5 w-5" /><span>Back to Toolkit</span>
             </Link>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", color: "#C9A84C" }}>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
+              style={{ background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.3)", color: "#818CF8" }}>
               <Languages className="w-3 h-3" /> AI Transcription
             </div>
           </div>
