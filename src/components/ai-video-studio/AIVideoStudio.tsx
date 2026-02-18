@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { AIVideoStudioLayout } from './layout/AIVideoStudioLayout';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { AIVideoStudioLayout, AIVideoStudioLayoutHandle } from './layout/AIVideoStudioLayout';
 import { AIVideoStudioTopBar } from './layout/AIVideoStudioTopBar';
 import { AIVideoStudioExportBar } from './layout/AIVideoStudioExportBar';
 import { MediaLibraryPanel } from './panels/MediaLibraryPanel';
@@ -24,6 +24,7 @@ import { toast } from 'sonner';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 
+
 interface SubtitleSegment {
   id: string;
   startTime: number;
@@ -34,6 +35,8 @@ interface SubtitleSegment {
 }
 
 export function AIVideoStudio() {
+  const layoutRef = useRef<AIVideoStudioLayoutHandle>(null);
+
   const {
     project,
     timelineState,
@@ -101,6 +104,7 @@ export function AIVideoStudio() {
         case 'h': setMode('pan'); break;
         case 's': if (!e.metaKey && !e.ctrlKey) toggleSnap(); break;
         case 'Escape': deselectAll(); break;
+        case 't': layoutRef.current?.toggleTool('transitions'); break;
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -232,7 +236,9 @@ export function AIVideoStudio() {
 
   return (
     <AIVideoStudioLayout
+      ref={layoutRef}
       topBar={
+
         <AIVideoStudioTopBar
           projectName={project.name}
           onRename={renameProject}
