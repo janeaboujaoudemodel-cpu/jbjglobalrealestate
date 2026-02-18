@@ -3,7 +3,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Languages, Mic, Sparkles, Music2, Layers, Maximize2,
-  Map, Bot, FolderOpen, ChevronUp, ChevronDown, Settings2, Type
+  Map, Bot, FolderOpen, ChevronUp, ChevronDown, Settings2, Type, Clapperboard
 } from 'lucide-react';
 
 interface AIVideoStudioLayoutProps {
@@ -20,6 +20,7 @@ interface AIVideoStudioLayoutProps {
   beautyPanel?: ReactNode;
   sfxPanel?: ReactNode;
   effectsPanel?: ReactNode;
+  transitionsPanel?: ReactNode;
   resizePanel?: ReactNode;
   mapPanel?: ReactNode;
   aiEditorPanel?: ReactNode;
@@ -27,18 +28,19 @@ interface AIVideoStudioLayoutProps {
 }
 
 const TOOL_TABS = [
-  { id: 'media',      label: 'Media',      icon: FolderOpen },
-  { id: 'captions',  label: 'Captions',   icon: Languages  },
-  { id: 'voice',     label: 'Voice',      icon: Mic        },
-  { id: 'beauty',    label: 'Beauty',     icon: Sparkles   },
-  { id: 'text',      label: 'Text',       icon: Type       },
-  { id: 'sfx',       label: 'Sound FX',   icon: Music2     },
-  { id: 'effects',   label: 'Effects',    icon: Layers     },
-  { id: 'resize',    label: 'Resize',     icon: Maximize2  },
-  { id: 'map',       label: 'Map',        icon: Map        },
-  { id: 'ai-editor', label: 'AI Editor',  icon: Bot        },
-  { id: 'inspector', label: 'Inspector',  icon: Settings2  },
-  { id: 'projects',  label: 'Projects',   icon: FolderOpen },
+  { id: 'media',       label: 'Media',       icon: FolderOpen  },
+  { id: 'captions',   label: 'Captions',    icon: Languages   },
+  { id: 'voice',      label: 'Voice',       icon: Mic         },
+  { id: 'beauty',     label: 'Beauty',      icon: Sparkles    },
+  { id: 'text',       label: 'Text',        icon: Type        },
+  { id: 'sfx',        label: 'Sound FX',    icon: Music2      },
+  { id: 'effects',    label: 'Effects',     icon: Layers      },
+  { id: 'transitions',label: 'Transitions', icon: Clapperboard},
+  { id: 'resize',     label: 'Resize',      icon: Maximize2   },
+  { id: 'map',        label: 'Map',         icon: Map         },
+  { id: 'ai-editor',  label: 'AI Editor',   icon: Bot         },
+  { id: 'inspector',  label: 'Inspector',   icon: Settings2   },
+  { id: 'projects',   label: 'Projects',    icon: FolderOpen  },
 ];
 
 export function AIVideoStudioLayout({
@@ -54,6 +56,7 @@ export function AIVideoStudioLayout({
   beautyPanel,
   sfxPanel,
   effectsPanel,
+  transitionsPanel,
   resizePanel,
   mapPanel,
   aiEditorPanel,
@@ -64,18 +67,19 @@ export function AIVideoStudioLayout({
   const [toolsExpanded, setToolsExpanded] = useState(false);
 
   const toolPanelContent: Record<string, ReactNode> = {
-    media:      mediaPanel,
-    captions:   captionsPanel,
-    voice:      voicePanel,
-    beauty:     beautyPanel,
-    text:       textPanel,
-    sfx:        sfxPanel,
-    effects:    effectsPanel,
-    resize:     resizePanel,
-    map:        mapPanel,
+    media:       mediaPanel,
+    captions:    captionsPanel,
+    voice:       voicePanel,
+    beauty:      beautyPanel,
+    text:        textPanel,
+    sfx:         sfxPanel,
+    effects:     effectsPanel,
+    transitions: transitionsPanel,
+    resize:      resizePanel,
+    map:         mapPanel,
     'ai-editor': aiEditorPanel,
-    inspector:  inspectorPanel,
-    projects:   projectsPanel,
+    inspector:   inspectorPanel,
+    projects:    projectsPanel,
   };
 
   const handleToolClick = (toolId: string) => {

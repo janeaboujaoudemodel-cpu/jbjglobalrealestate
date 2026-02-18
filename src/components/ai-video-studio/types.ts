@@ -160,6 +160,14 @@ export interface VoiceoverSettings {
   pitch: number;
 }
 
+export interface TransitionDefinition {
+  id: string;
+  name: string;
+  category: 'fade' | 'dissolve' | 'slide' | 'zoom';
+  duration: number;
+  description: string;
+}
+
 export type TimelineMode = 'select' | 'cut' | 'trim' | 'pan';
 
 export interface TimelineState {
