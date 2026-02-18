@@ -480,6 +480,7 @@ export default function CreateEnvelope() {
             {currentStep === 3 && pdfUrl && (
               <DocumentFieldPlacer
                 pdfUrl={pdfUrl}
+                pdfFile={pdfFile}
                 recipients={recipients}
                 fields={signatureFields}
                 onFieldsChange={handleFieldsChange}
