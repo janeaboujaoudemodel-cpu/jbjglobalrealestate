@@ -84,7 +84,7 @@ const AccessDenied = () => {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button
             onClick={() => navigate("/")}
-            className="bg-gold hover:bg-gold/90 text-black font-medium gap-2"
+            variant="primary"
           >
             <Home className="w-4 h-4" />
             Return Home
@@ -93,8 +93,7 @@ const AccessDenied = () => {
           <Button
             onClick={handleRetry}
             disabled={ownerLoading}
-            variant="outline"
-            className="border-zinc-700 text-white hover:bg-zinc-800 gap-2"
+            variant="dark-outline"
           >
             <RefreshCw className={`w-4 h-4 ${ownerLoading ? 'animate-spin' : ''}`} />
             Retry Verification
@@ -103,8 +102,7 @@ const AccessDenied = () => {
           {user && (
             <Button
               onClick={handleSignOut}
-              variant="outline"
-              className="border-zinc-700 text-white hover:bg-zinc-800 gap-2"
+              variant="dark-outline"
             >
               <LogOut className="w-4 h-4" />
               Sign Out
