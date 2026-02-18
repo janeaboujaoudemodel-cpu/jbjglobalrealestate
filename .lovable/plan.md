@@ -1,134 +1,151 @@
 
-# Complete UI Fix: Creative Suite Tools + Studio Settings + Search Icon Overlap
+# Complete Premium UI Overhaul — All Issues Fixed
 
-## Root Cause Analysis
+## Root Cause Analysis of Every Problem
 
-### Problem 1: Double Headers in Suite Pages (BackgroundAI, CaptionsTranslate, BeautyFilters, ImageResize, PDFEditor)
-When these tools are embedded inside `PhotoSuite.tsx` or `PDFSuite.tsx` tabs, they each render their **own full `<header>`** with a sticky `top-0 z-50` bar containing "Back to Toolkit". This creates a **second header** that overlaps and overlays the suite's own tab bar. The global header is at z-9999, the suite tab bar is beneath it, and then the tool's own sticky header at z-50 collides with the tab navigation.
+### Problem 1: "Black and Cold" UI — All Tool Pages and Suite Pages
 
-**Affected files:**
-- `src/pages/toolkit/BackgroundAI.tsx` — has `<header className="...sticky top-0 z-50">`
-- `src/pages/toolkit/CaptionsTranslate.tsx` — same pattern
-- `src/pages/toolkit/BeautyFilters.tsx` — same pattern
-- `src/pages/toolkit/PDFEditor.tsx` — same pattern
-- `src/pages/toolkit/ImageResize.tsx` — has its own header block
+The current tool interiors (BackgroundAI, BeautyFilters, CaptionsTranslate, ImageResize, PDFEditor, PdfFromPhotos) use:
+- `bg-black` / `bg-slate-900` / `bg-slate-950/80` — generic dark
+- `border-slate-700` / `border-slate-800` — cold grey borders
+- `text-slate-400` / `text-slate-500` — cold grey text
+- Flat card styles with no warmth or premium feel
 
-### Problem 2: Search Icon Overlapping
-From the `GlobalHeader.tsx` the search button opens `GlobalSearchModal`. The desktop header search button is in the right utility area. The issue is that when the search mega-menu (`MegaMenuSearch`) is placed as `absolute right-0 top-full` in the header it can overflow/overlap page content. Additionally the `MegaMenuSearch` component is positioned `absolute right-0` in its container which can cause visual collision on some screen widths.
+The fix: Replace every cold `slate-*` colour with warm charcoal (`#0A0A0B`, `#111113`, `#1A1814`) + champagne gold accents (`rgba(201,168,76,*)`) across all tool pages. Add glassmorphism panels, warm gradient backgrounds, luminous upload zones, and gold-tinted borders.
 
-### Problem 3: Studio Settings Page — UI Needs Full Premium Overhaul
-The current `StudioSettings.tsx` uses a basic card layout. The console logs show a React `forwardRef` warning from `SEOHead`. The settings page also has "Coming Soon" labels everywhere with disabled switches — it looks unfinished and lacks the premium dark-gold quality expected.
+### Problem 2: Content Touching the Header (No Padding)
 
-### Problem 4: PdfFromPhotos Hero Section Double-renders Inside PDFSuite Tab
-When `PdfFromPhotos` renders inside the PDFSuite `<TabsContent>`, it includes a full hero section with `py-16 md:py-20` padding that creates a massive unwanted gap. Same for its `min-h-screen` root wrapper.
+The `MainLayout.tsx` adds `pt-16 sm:pt-20 md:pt-24 lg:pt-28` for bright (non-hero) pages. However the `GlobalHeader` is `h-24 sm:h-28 lg:h-32`. The suite pages and Studio page render their **own sub-header directly beneath the global header** with no top padding, so the content visually "touches" the fixed header. The `Studio.tsx` sub-header is at `pt-0` within main content — it renders right at the edge.
 
----
+The fix: Add `pt-24 sm:pt-28 lg:pt-32` (matching the global header height) to the **outer wrapper** of `Studio.tsx`, `PhotoSuite.tsx`, `PDFSuite.tsx`, and `VideoSuite.tsx`. These pages do not use `.jj-hero-fullscreen` so `needsHeaderSpacing` is true, which means `MainLayout` already adds some padding, but it uses `pt-16` not the full `h-32` header height — causing overlap on large screens.
 
-## Fix Strategy
+### Problem 3: Video / Image / PDF / Marketing Clicks Don't Open Anything
 
-### Fix 1: Create a Shared `EmbeddableToolWrapper` Pattern
-Each tool page that gets embedded in a suite tab needs to **hide its own header and hero section** when rendered in "embedded" mode. The cleanest way is to:
+Looking at `Studio.tsx` lines 65–71, there is a `typeFilters` array with `value: "video"`, `value: "image"`, etc. Clicking them sets `filterType` state, which filters `filteredProjects`. **But when there are no projects at all**, the empty state always shows regardless of what filter is active — the filter buttons appear to do nothing because there's no content to show either way.
 
-**Option A (Chosen):** Refactor each tool to accept an optional `embedded` prop. When `embedded={true}`, the tool skips rendering its own header block. The suite pages pass `embedded` to each.
+More importantly: the user is clicking the **type filter chips** expecting them to **navigate to a tool/suite page** (like `/toolkit/video-suite`). Instead they just filter an empty project list — they don't open any screen. The fix is to make the category pills **link-based navigation** to the respective suite pages (`/toolkit/video-suite`, `/toolkit/photo-suite`, `/toolkit/pdf-suite`) AND also retain the local project filter behavior. Alternatively, add a "Suite Launchpad" section above the projects grid with clickable suite cards that navigate properly.
 
-This requires touching:
-- `BackgroundAI.tsx` — add `embedded?: boolean` prop, wrap `<header>` in `{!embedded && ...}`
-- `CaptionsTranslate.tsx` — same
-- `BeautyFilters.tsx` — same
-- `ImageResize.tsx` — same (its header is a `<div>` block)
-- `PDFEditor.tsx` — same
-- `PdfFromPhotos.tsx` — add `embedded` prop; when embedded, hide the full `<section>` hero and reduce `min-h-screen` to auto
-- `PhotoSuite.tsx` — pass `embedded` to `BackgroundAI`, `BeautyFilters`, `ImageResize`
-- `PDFSuite.tsx` — pass `embedded` to `PDFEditor`, `PdfFromPhotos`
+### Problem 4: Tab Active State Not Visible (Gold Border Missing)
 
-### Fix 2: Search Icon Overlay Fix
-Looking at `GlobalHeader.tsx` line 56-57: `// MegaMenuSearch removed — search opens GlobalSearchModal directly`. The search IS going direct to the modal already. The overlap issue the user sees is likely the desktop header's utility icon row (`Search` icon button area). 
+In `PhotoSuite.tsx` the `TabsTrigger` uses `data-active-style` (a custom attribute that doesn't work with Radix UI). The active state styling uses Radix's `data-[state=active]` selector. The existing `tabs.tsx` component applies `data-[state=active]:bg-background data-[state=active]:text-foreground` — which on a dark background makes active tabs look wrong. None of the existing CSS applies the gold border-bottom indicator.
 
-Looking at the desktop header utility icons section (to be inspected at lines 1000+), the search button position needs to be reviewed to ensure it doesn't overlap with adjacent elements or the mega menu panels.
-
-The fix: Ensure the search icon in the desktop utility area has correct spacing and z-index so it doesn't collide with the mega menu panel or page content beneath.
-
-### Fix 3: Studio Settings — Full Premium Redesign
-Replace the basic card layout with a fully premium design:
-- Deep charcoal background (`#0A0A0B`)
-- Fully functional-looking settings with proper active states
-- Add a "Studio Tools" quick access section with links to each tool
-- Fix the `SEOHead` `forwardRef` console warning by removing the ref usage that causes it
-- Add more settings categories: Output Quality, Default Tool, Language, Theme
-- Make the page feel like a real settings dashboard, not a placeholder
+The fix: Use proper Tailwind `data-[state=active]:` utilities directly on the `TabsTrigger` className, and add the gold underline via a pseudo-element or direct `after:` class.
 
 ---
 
-## Files to Edit
+## Files to Edit (8 files total)
 
-### 1. `src/pages/toolkit/BackgroundAI.tsx`
-- Add `interface BackgroundAIProps { embedded?: boolean }`
-- Add `{ embedded = false }` to function signature  
-- Wrap the `<header>` block: `{!embedded && <header>...</header>}`
-- Remove `min-h-screen` when embedded or keep it as-is (header removal is sufficient)
+### 1. `src/pages/Studio.tsx` — Full Premium Overhaul
+**Changes:**
+- Add proper top padding `pt-24 sm:pt-28 lg:pt-32` to prevent header overlap — the sub-header content sits below the global nav
+- Replace the "type filter" chips with a **"Suite Launchpad"** grid: 4 cards (Video Suite, Photo Suite, PDF Suite, Marketing Pack) that navigate to the suite route AND filter local projects. Clicking a suite card navigates to `/toolkit/video-suite` etc. This fixes the "clicking Video does nothing" complaint
+- Premium colour upgrade: warm charcoal gradient `linear-gradient(160deg, #0D0B08 0%, #120F0A 60%, #0D0B08 100%)` — warm not cold black
+- Sub-header gets a richer gradient: `linear-gradient(180deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.02) 100%)`
+- Quick Tools strip: increase contrast, add glow on hover
+- Project cards: add warm `rgba(201,168,76,0.06)` background tint for empty state, improve type-color badge visibility
+- "New Project" dialog: warmer dark background `#0F0D0A` with gold borders
 
-### 2. `src/pages/toolkit/CaptionsTranslate.tsx`
-- Same pattern: add `embedded?: boolean` prop
-- Wrap the `<header className="...sticky top-0 z-50">` in `{!embedded && ...}`
+### 2. `src/pages/toolkit/PhotoSuite.tsx` — Premium Tab Active States + Padding Fix
+**Changes:**
+- Add `pt-24 sm:pt-28 lg:pt-32` to outer wrapper to prevent the suite header from being hidden behind the global header
+- Fix `TabsTrigger` active state: replace `data-active-style` with proper `data-[state=active]:text-gold data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-gold`
+- Suite header: upgrade from plain `rgba(201,168,76,0.05)` to richer `linear-gradient(180deg, rgba(201,168,76,0.1) 0%, rgba(201,168,76,0.02) 100%)`
+- Add warm border: `rgba(201,168,76,0.25)` instead of `0.15`
+- Suite icon container: increase glow `boxShadow: "0 0 40px rgba(201,168,76,0.2)"`
 
-### 3. `src/pages/toolkit/BeautyFilters.tsx`
-- Same pattern
+### 3. `src/pages/toolkit/PDFSuite.tsx` — Same padding + tab fixes as PhotoSuite
+**Changes:**
+- Same `pt-24 sm:pt-28 lg:pt-32` outer padding
+- Same TabsTrigger active state fix
+- Same premium gradient header upgrade
 
-### 4. `src/pages/toolkit/ImageResize.tsx`
-- The header is a `<div className="bg-gradient-to-b from-black...">` block at line 315
-- Add `embedded?: boolean` prop, wrap it in `{!embedded && ...}`
+### 4. `src/pages/toolkit/BackgroundAI.tsx` — Warm Premium UI
+**Changes:**
+- Root div: `bg-black` → `style={{ background: "#0A0A0B" }}`
+- Upload zone: `border-slate-700` → `rgba(201,168,76,0.25)` dashed border; add gold shimmer on hover
+- Step indicators: `bg-slate-800` → `rgba(201,168,76,0.12)` with gold text
+- Background preset buttons: `bg-slate-800` → `rgba(255,255,255,0.04)` dark warm panels
+- Consent box: `bg-slate-900/50 border-slate-700` → `rgba(201,168,76,0.04) border rgba(201,168,76,0.15)`
+- Result area: `bg-slate-900 border-gold/30` → `rgba(12,10,8,0.9) border rgba(201,168,76,0.3)`
+- Fair usage note: warm dark
+- Add an AI-premium sub-title with a "Powered by AI" badge
 
-### 5. `src/pages/toolkit/PDFEditor.tsx`
-- Add `embedded?: boolean` prop  
-- Wrap its `<header className="...sticky top-0 z-50">` in `{!embedded && ...}`
+### 5. `src/pages/toolkit/BeautyFilters.tsx` — Warm Premium UI
+**Changes:**
+- Root: warm charcoal background
+- Upload zone: gold-tinted dashed border
+- Filter preset pills: warm dark backgrounds with gold active state
+- Adjustment sliders section: warm card backgrounds
+- Preview canvas area: warm dark container
+- Add "AI Enhancement" label/badge
 
-### 6. `src/pages/toolkit/PdfFromPhotos.tsx`
-- Add `embedded?: boolean` prop
-- When `embedded`, hide the hero `<section className="relative py-16 md:py-20">` 
-- Change root div from `min-h-screen` to `min-h-0` when embedded
+### 6. `src/pages/toolkit/CaptionsTranslate.tsx` — Warm Premium UI  
+**Changes:**
+- Root: warm charcoal background
+- Upload zone: gold-tinted
+- Language selection grid: warm dark pill buttons
+- Transcription result box: warm styled
+- Add "AI Transcription" premium badge
 
-### 7. `src/pages/toolkit/PhotoSuite.tsx`
-- Update lazy imports types
-- Pass `embedded` to `<BackgroundAI embedded />`, `<BeautyFilters embedded />`, `<ImageResize embedded />`
-- Pass `embedded` to `<VirtualStagingPage embedded />` and `<InteriorDesignAI embedded />` (check if those have headers too)
+### 7. `src/pages/toolkit/ImageResize.tsx` — Warm Premium UI
+**Changes:**
+- Root: warm charcoal (it already has `bg-black` → warm override)
+- `Card` components: upgrade to `bg-[#111]/80 border-gold/20` is already present — enhance to `rgba(201,168,76,0.06)` background, `rgba(201,168,76,0.2)` border
+- Upload zone: already has gold styling, enhance glow
+- Size preset buttons: improve active/inactive contrast
 
-### 8. `src/pages/toolkit/PDFSuite.tsx`
-- Pass `embedded` to `<PDFEditor embedded />`, `<PdfFromPhotos embedded />`, `<ScanSignPage embedded />`, `<BrochureGeneratorPage embedded />`
-
-### 9. `src/pages/StudioSettings.tsx`
-Complete premium redesign:
-- Background: `#0A0A0B`
-- Remove `SEOHead` (it has the forwardRef warning) or keep it — the ref warning is a React internals warning about `SEOHead` not using `forwardRef` but having a ref passed. This is benign but we'll keep the SEOHead component as-is
-- Add a "Quick Tools" grid section linking to the creative suite tools
-- Add functional-looking settings (Quality, Format, Theme, Language)
-- Gold-bordered category cards with proper dark backgrounds
-- Clear, readable typography
-- Premium header matching the dark-gold system
-
-### 10. Search icon fix in `GlobalHeader.tsx`
-- Check the desktop utility bar layout (around line 1000+) to ensure the search icon button has proper positioning
-- Ensure the `MegaMenuSearch` component (in `src/components/header/MegaMenuSearch.tsx`) — note it's positioned `absolute right-0 top-full` inside its parent container — has a proper `z-index` and doesn't overflow viewport
+### 8. `src/pages/toolkit/PDFEditor.tsx` — Warm Premium UI
+**Changes:**
+- Root: warm charcoal
+- Empty upload area: `border-slate-700` → gold dashed border
+- Page thumbnail list: `bg-slate-900 border-slate-700` → warm dark panels
 
 ---
 
-## Visual Result
+## The Suite Launchpad Fix (Most Important for User)
 
-### Before (Broken):
-- Tool embedded in suite tab → Shows: Suite header + Tab bar + **Tool's OWN second header** + tool content
-- Studio Settings → Basic card layout with all "Coming Soon" labels
+In `Studio.tsx`, the type filter row will be redesigned as a **"Suites"** section with 4 large clickable cards that navigate to the suite pages. This directly fixes the user's complaint that clicking "video", "image", "PDF", "marketing" doesn't open anything.
 
-### After (Fixed):
-- Tool embedded in suite tab → Shows: Suite header + Tab bar + **tool content only** (no double header)
-- Studio Settings → Premium dark-gold settings dashboard with real functionality links
+```text
+[ Video Suite → /toolkit/video-suite ]  [ Photo Suite → /toolkit/photo-suite ]
+[ PDF Suite → /toolkit/pdf-suite    ]  [ Marketing → /toolkit/brochure     ]
+```
+
+Each card: icon, name, subtitle, "Open Suite" link with arrow. Below this remains the project list (filtered by type when a filter is active).
 
 ---
 
-## Implementation Sequence
+## Premium Colour System Applied Everywhere
 
-1. Fix BackgroundAI, CaptionsTranslate, BeautyFilters, ImageResize, PDFEditor — add `embedded` prop (removes sticky headers when embedded)
-2. Fix PdfFromPhotos — add `embedded` prop (removes hero section when embedded)
-3. Update PhotoSuite and PDFSuite to pass `embedded` to all lazy-loaded tools
-4. Check VirtualStagingPage and ScanSignPage for similar header patterns
-5. Full redesign of StudioSettings page
-6. Verify search icon z-index and positioning in GlobalHeader
+```text
+Background layers:
+  Page bg:       #0D0B08  (warm charcoal, NOT cold black)
+  Card bg:       rgba(201,168,76,0.04)  (warm tinted)
+  Card border:   rgba(201,168,76,0.18)
+  Hover bg:      rgba(201,168,76,0.08)
+  Active border: rgba(201,168,76,0.45)
 
+Text:
+  Primary:    #FFFFFF
+  Secondary:  rgba(255,255,255,0.55)  (warm, not cold zinc-400)
+  Muted:      rgba(255,255,255,0.32)
+  Gold label: #C9A84C
+
+Upload zones:
+  Border: 2px dashed rgba(201,168,76,0.3)
+  Hover:  border rgba(201,168,76,0.6) + bg rgba(201,168,76,0.06)
+  Icon:   text-gold at 60% opacity → 100% on hover
+```
+
+---
+
+## Implementation Order
+
+1. `Studio.tsx` — Fix padding + Suite Launchpad + warm colours
+2. `PhotoSuite.tsx` — Fix padding + tab active states + premium header
+3. `PDFSuite.tsx` — Same as PhotoSuite
+4. `BackgroundAI.tsx` — Full warm premium UI
+5. `BeautyFilters.tsx` — Full warm premium UI
+6. `CaptionsTranslate.tsx` — Full warm premium UI
+7. `ImageResize.tsx` — Warm enhancements
+8. `PDFEditor.tsx` — Warm enhancements
