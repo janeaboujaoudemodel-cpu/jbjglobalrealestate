@@ -329,7 +329,80 @@ export function AIVideoStudio() {
           }}
         />
       }
-      projectsPanel={<ProjectIntegrationPanel />}
+      projectsPanel={
+        <ProjectIntegrationPanel
+          onCreateVideoAd={(clips, projectName) => {
+            const videoTrack = project.tracks.find(t => t.type === 'video');
+            const audioTrack = project.tracks.find(t => t.type === 'audio');
+            const textTrack  = project.tracks.find(t => t.type === 'text');
+
+            let videoCursor  = videoTrack?.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0) ?? 0;
+            let audioCursor  = audioTrack?.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0) ?? 0;
+            let textCursor   = textTrack?.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0) ?? 0;
+
+            clips.forEach(clip => {
+              // Music → audio track
+              if (clip.url.startsWith('music://')) {
+                if (!audioTrack) return;
+                addClip(audioTrack.id, {
+                  trackId: audioTrack.id,
+                  type: 'audio',
+                  name: clip.name,
+                  startTime: audioCursor,
+                  duration: clip.duration,
+                  source: { url: clip.url, inPoint: 0, outPoint: clip.duration, originalDuration: clip.duration },
+                  transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                  keyframes: [],
+                  effects: [],
+                  audio: { volume: 0.5, fadeIn: 1, fadeOut: 2, muted: false, normalized: true, noiseReduction: false },
+                });
+                audioCursor += clip.duration;
+              // Text overlay → text track
+              } else if (clip.type === 'text' && textTrack) {
+                addClip(textTrack.id, {
+                  trackId: textTrack.id,
+                  type: 'text',
+                  name: clip.name,
+                  startTime: textCursor,
+                  duration: clip.duration,
+                  source: { url: clip.url, inPoint: 0, outPoint: clip.duration, originalDuration: clip.duration },
+                  transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                  keyframes: [],
+                  effects: [],
+                  text: {
+                    content: clip.textOverlay?.content ?? '',
+                    fontFamily: 'Georgia, serif',
+                    fontSize: 28,
+                    fontWeight: 'bold',
+                    color: '#FFFFFF',
+                    backgroundColor: 'rgba(0,0,0,0.6)',
+                    textAlign: 'left',
+                    position: 'bottom',
+                    style: 'lower-third',
+                  },
+                });
+                textCursor += clip.duration;
+              // Photo → video track
+              } else if (videoTrack) {
+                addClip(videoTrack.id, {
+                  trackId: videoTrack.id,
+                  type: 'image',
+                  name: clip.name,
+                  startTime: videoCursor,
+                  duration: clip.duration,
+                  source: { url: clip.url, thumbnailUrl: clip.url, inPoint: 0, outPoint: clip.duration, originalDuration: clip.duration },
+                  transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                  keyframes: [],
+                  effects: [],
+                });
+                videoCursor += clip.duration;
+              }
+            });
+
+            toast.success(`🎬 "${projectName}" video ad ready! Scroll the timeline to see all clips.`);
+          }}
+        />
+      }
     />
   );
 }
