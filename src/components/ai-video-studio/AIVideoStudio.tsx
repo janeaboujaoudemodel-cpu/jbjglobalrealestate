@@ -253,7 +253,26 @@ export function AIVideoStudio() {
           <BeautyFiltersPanel />
         </ScrollArea>
       }
-      sfxPanel={<SoundEffectsPanel />}
+      sfxPanel={
+        <SoundEffectsPanel
+          onAddToTimeline={(sfx) => {
+            const track = project.tracks.find(t => t.type === 'audio');
+            if (!track) { toast.error('No audio track found'); return; }
+            const lastEnd = track.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+            addClip(track.id, {
+              trackId: track.id,
+              type: 'audio',
+              name: sfx.name,
+              startTime: lastEnd,
+              duration: sfx.duration,
+              source: { url: sfx.url, thumbnailUrl: undefined, inPoint: 0, outPoint: sfx.duration, originalDuration: sfx.duration },
+              transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+              keyframes: [],
+              effects: [],
+            });
+          }}
+        />
+      }
       effectsPanel={<OverlayEffectsPanel />}
       resizePanel={
         <ScrollArea className="h-full">
