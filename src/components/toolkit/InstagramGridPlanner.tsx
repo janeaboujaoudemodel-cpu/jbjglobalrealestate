@@ -7,12 +7,15 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   Grid3x3, Upload, Plus, Trash2, Send, CheckCircle2, Clock, Loader2,
-  ExternalLink, AlertCircle, Instagram, Calendar, ImageIcon, Pencil,
-  ChevronRight, X, Hash, RotateCcw, Copy, Bell,
+  ExternalLink, AlertCircle, Instagram, CalendarIcon, ImageIcon, Pencil,
+  ChevronRight, X, Hash, RotateCcw, Copy, Bell, CalendarDays,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { format } from 'date-fns';
+import { format, addMinutes, startOfMinute } from 'date-fns';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 // ── Design tokens (match BeautyFilters.tsx) ──────────────────────────────────
 const I = {
@@ -188,7 +191,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
   const [schedulingId, setSchedulingId] = useState<string | null>(null);
   const [publishedMap, setPublishedMap] = useState<Record<string, PublishedRecord>>({});
   const [scheduledMap, setScheduledMap] = useState<Record<string, ScheduledRecord>>({});
-  const [scheduleDateMap, setScheduleDateMap] = useState<Record<string, string>>({}); // photoId → ISO datetime-local
+  const [scheduleDateMap, setScheduleDateMap] = useState<Record<string, { date?: Date; time: string }>>({}); // photoId → { date, time }
 
   // Scheduled posts list from DB
   const [scheduledPosts, setScheduledPosts] = useState<any[]>([]);
@@ -298,12 +301,22 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
     }
   };
 
+  // ── Compute ISO from date+time picker ─────────────────────────────────────
+  const getScheduledISO = (photoId: string): string | null => {
+    const entry = scheduleDateMap[photoId];
+    if (!entry?.date || !entry?.time) return null;
+    const [hours, minutes] = entry.time.split(':').map(Number);
+    const dt = new Date(entry.date);
+    dt.setHours(hours, minutes, 0, 0);
+    return dt.toISOString();
+  };
+
   // ── Schedule ───────────────────────────────────────────────────────────────
   const handleSchedule = async (photo: GridPhoto) => {
     if (!igConnected) { toast.error('Connect Instagram first'); return; }
-    const scheduledAt = scheduleDateMap[photo.id];
-    if (!scheduledAt) { toast.error('Pick a date & time to schedule'); return; }
-    if (new Date(scheduledAt) <= new Date()) { toast.error('Scheduled time must be in the future'); return; }
+    const scheduledAtISO = getScheduledISO(photo.id);
+    if (!scheduledAtISO) { toast.error('Pick a date & time to schedule'); return; }
+    if (new Date(scheduledAtISO) <= new Date()) { toast.error('Scheduled time must be in the future'); return; }
 
     setSchedulingId(photo.id);
     try {
@@ -327,15 +340,17 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
       const { data: urlData } = supabase.storage.from('instagram-grid-photos').getPublicUrl(fileName);
       const imageUrl = urlData.publicUrl;
 
-      // Insert into DB
+      // Insert into DB — include credentials so cron job can publish
       const { data: inserted, error: dbErr } = await supabase
         .from('instagram_scheduled_posts')
         .insert({
           user_id: session.user.id,
           image_url: imageUrl,
           caption: photo.caption,
-          scheduled_at: new Date(scheduledAt).toISOString(),
+          scheduled_at: scheduledAtISO,
           status: 'scheduled',
+          access_token: igAccessToken,
+          account_id: igAccountId,
         })
         .select('id')
         .single();
@@ -343,9 +358,9 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
 
       setScheduledMap(prev => ({
         ...prev,
-        [photo.id]: { dbId: inserted.id, scheduledAt },
+        [photo.id]: { dbId: inserted.id, scheduledAt: scheduledAtISO },
       }));
-      toast.success(`Scheduled for ${format(new Date(scheduledAt), 'MMM d, HH:mm')} ✅`);
+      toast.success(`Scheduled for ${format(new Date(scheduledAtISO), 'MMM d, HH:mm')} ✅`);
       fetchScheduledPosts();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Schedule failed');
@@ -685,7 +700,9 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                 const scheduled = scheduledMap[photo.id];
                 const isPosting = publishingId === photo.id;
                 const isScheduling = schedulingId === photo.id;
-                const schedDate = scheduleDateMap[photo.id] || '';
+                const schedEntry = scheduleDateMap[photo.id];
+                const hasSchedule = !!(schedEntry?.date && schedEntry?.time);
+                const scheduledISO = getScheduledISO(photo.id);
 
                 return (
                   <div key={photo.id}
@@ -752,17 +769,67 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                           </div>
                         ) : (
                           <>
-                            {/* Schedule datetime picker */}
-                            <div className="flex items-center gap-2">
-                              <Calendar className="h-3 w-3 shrink-0" style={{ color: I.text }} />
-                              <input
-                                type="datetime-local"
-                                value={schedDate}
-                                min={format(new Date(), "yyyy-MM-dd'T'HH:mm")}
-                                onChange={e => setScheduleDateMap(prev => ({ ...prev, [photo.id]: e.target.value }))}
-                                className="flex-1 bg-transparent text-white text-[11px] outline-none"
-                                style={{ border: `1px solid ${I.border}`, borderRadius: 6, padding: '3px 8px', colorScheme: 'dark' }}
-                              />
+                            {/* ── Shadcn Calendar Date + Time Picker ── */}
+                            <div className="flex items-center gap-2 flex-wrap">
+                              {/* Date Picker */}
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <button
+                                    className={cn(
+                                      "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all",
+                                      schedEntry?.date ? "text-white" : "text-white/40"
+                                    )}
+                                    style={{ background: "rgba(255,255,255,0.05)", border: `1px solid ${I.border}` }}>
+                                    <CalendarDays className="h-3 w-3" style={{ color: I.text }} />
+                                    {schedEntry?.date
+                                      ? format(schedEntry.date, 'MMM d, yyyy')
+                                      : 'Pick date'}
+                                  </button>
+                                </PopoverTrigger>
+                                <PopoverContent
+                                  className="w-auto p-0 z-50"
+                                  align="start"
+                                  style={{ background: "#1a1c23", border: `1px solid ${I.border}` }}>
+                                  <Calendar
+                                    mode="single"
+                                    selected={schedEntry?.date}
+                                    onSelect={(date) =>
+                                      setScheduleDateMap(prev => ({
+                                        ...prev,
+                                        [photo.id]: { ...prev[photo.id], date, time: prev[photo.id]?.time || '10:00' },
+                                      }))
+                                    }
+                                    disabled={(d) => d < addMinutes(new Date(), 5)}
+                                    initialFocus
+                                    className={cn("p-3 pointer-events-auto text-white")}
+                                  />
+                                </PopoverContent>
+                              </Popover>
+
+                              {/* Time input */}
+                              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
+                                style={{ background: "rgba(255,255,255,0.05)", border: `1px solid ${I.border}` }}>
+                                <Clock className="h-3 w-3 shrink-0" style={{ color: I.text }} />
+                                <input
+                                  type="time"
+                                  value={schedEntry?.time || ''}
+                                  onChange={e =>
+                                    setScheduleDateMap(prev => ({
+                                      ...prev,
+                                      [photo.id]: { ...prev[photo.id], time: e.target.value },
+                                    }))
+                                  }
+                                  className="bg-transparent text-white text-[11px] outline-none w-[72px]"
+                                  style={{ colorScheme: 'dark' }}
+                                />
+                              </div>
+
+                              {/* Scheduled label */}
+                              {scheduledISO && (
+                                <span className="text-[10px]" style={{ color: I.dim }}>
+                                  → {format(new Date(scheduledISO), 'EEE MMM d, HH:mm')}
+                                </span>
+                              )}
                             </div>
 
                             {/* Action buttons */}
@@ -776,10 +843,13 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                               {/* Schedule button */}
                               <button
                                 onClick={() => handleSchedule(photo)}
-                                disabled={!igConnected || isScheduling || !schedDate}
-                                title={!schedDate ? 'Pick a date to schedule' : ''}
+                                disabled={!igConnected || isScheduling || !hasSchedule}
+                                title={!hasSchedule ? 'Pick a date & time to schedule' : ''}
                                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white disabled:opacity-40 transition-all"
-                                style={{ background: igConnected && schedDate ? "rgba(234,179,8,0.25)" : "rgba(99,102,241,0.2)", border: `1px solid ${igConnected && schedDate ? 'rgba(234,179,8,0.5)' : 'transparent'}` }}>
+                                style={{
+                                  background: igConnected && hasSchedule ? "rgba(234,179,8,0.25)" : "rgba(99,102,241,0.2)",
+                                  border: `1px solid ${igConnected && hasSchedule ? 'rgba(234,179,8,0.5)' : 'transparent'}`,
+                                }}>
                                 {isScheduling ? <Loader2 className="h-3 w-3 animate-spin" /> : <Bell className="h-3 w-3" />}
                                 {isScheduling ? 'Saving…' : 'Schedule'}
                               </button>

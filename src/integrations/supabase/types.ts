@@ -10065,6 +10065,8 @@ export type Database = {
       }
       instagram_scheduled_posts: {
         Row: {
+          access_token: string | null
+          account_id: string | null
           caption: string | null
           created_at: string
           error_message: string | null
@@ -10078,6 +10080,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          access_token?: string | null
+          account_id?: string | null
           caption?: string | null
           created_at?: string
           error_message?: string | null
@@ -10091,6 +10095,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          access_token?: string | null
+          account_id?: string | null
           caption?: string | null
           created_at?: string
           error_message?: string | null
