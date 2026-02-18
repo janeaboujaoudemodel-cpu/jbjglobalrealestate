@@ -14,6 +14,7 @@ const ImageResize = lazy(() => import("./pages/toolkit/ImageResize"));
 const VoiceStudio = lazy(() => import("./pages/toolkit/VoiceStudio"));
 const AIVideoStudioPage = lazy(() => import("./pages/toolkit/AIVideoStudioPage"));
 const StampGeneratorLanding = lazy(() => import("./pages/toolkit/StampGeneratorPage"));
+const ScanSignToolkitPage = lazy(() => import("./pages/toolkit/ScanSignPage"));
 const StampProjectsDashboard = lazy(() => import("./components/stamp-generator/StampProjectsDashboard"));
 const StampProjectWizard = lazy(() => import("./components/stamp-generator/StampProjectWizard"));
 const StampGeneratorMain = lazy(() => import("./components/stamp-generator/StampGeneratorPage"));
@@ -677,6 +678,9 @@ const App = () => (
                 <Route path="/mindmap" element={<OwnerGuard><MindMap /></OwnerGuard>} />
                 <Route path="/presentations" element={<OwnerGuard><Presentations /></OwnerGuard>} />
                 <Route path="/form-builder" element={<OwnerGuard><FormBuilder /></OwnerGuard>} />
+
+                {/* Scan & Sign Toolkit */}
+                <Route path="/toolkit/scan-sign" element={<ScanSignToolkitPage />} />
 
                 {/* AI Stamp Generator */}
                 <Route path="/toolkit/stamp-generator" element={<StampGeneratorLanding />} />

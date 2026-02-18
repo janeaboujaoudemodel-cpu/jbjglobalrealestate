@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Video, Image, FileText, Mic, Home, Sparkles
+  Video, Image, FileText, Mic, Home, Sparkles, Stamp
 } from 'lucide-react';
 import {
   MegaMenuIconLink,
@@ -13,7 +13,7 @@ interface MegaMenuToolkitProps {
 }
 
 const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>(({ onClose }, ref) => {
-  // 5 Master Suites - grouped by output type
+  // Master Suites - grouped by output type
   const suites = [
     {
       icon: Video,
@@ -45,6 +45,23 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
       title: 'Property Intelligence',
       href: '/toolkit/property-suite',
       description: 'Home finder, valuations & analytics',
+    },
+  ];
+
+  // New standalone tools
+  const standaloneTools = [
+    {
+      icon: Sparkles,
+      title: 'AI Stamp Generator',
+      href: '/toolkit/stamp-generator',
+      description: 'AI company seals · SVG/PNG/PDF export',
+      isNew: true,
+    },
+    {
+      icon: FileText,
+      title: 'Scan & Sign',
+      href: '/toolkit/scan-sign',
+      description: 'Camera scan · signature · PDF export',
     },
   ];
 
@@ -81,6 +98,23 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
           ))}
         </div>
 
+        {/* New AI Tools Row */}
+        <div className="mt-3">
+          <MegaMenuSectionTitle icon={Stamp} title="New AI Tools" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {standaloneTools.map((tool) => (
+              <MegaMenuIconLink
+                key={tool.href}
+                to={tool.href}
+                onClick={onClose}
+                icon={tool.icon}
+                title={tool.title}
+                description={tool.description}
+              />
+            ))}
+          </div>
+        </div>
+
         {/* Bottom CTA */}
         <div className="mt-4 p-4 bg-gradient-to-br from-zinc-900 via-black to-zinc-800 rounded-xl border border-gold/40">
           <div className="flex items-center justify-between flex-wrap gap-4">
@@ -89,7 +123,7 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
                 FREE PROFESSIONAL TOOLS
               </p>
               <p className="text-white text-sm font-semibold mt-1">
-                5 complete suites for video, audio, images, PDFs & property intelligence
+                5 suites + AI Stamp Generator + Scan & Sign — all free
               </p>
             </div>
             <a 
@@ -101,6 +135,7 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
             </a>
           </div>
         </div>
+
       </div>
     </MegaMenuShell>
   );
