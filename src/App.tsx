@@ -13,6 +13,11 @@ const PdfFromPhotos = lazy(() => import("./pages/toolkit/PdfFromPhotos"));
 const ImageResize = lazy(() => import("./pages/toolkit/ImageResize"));
 const VoiceStudio = lazy(() => import("./pages/toolkit/VoiceStudio"));
 const AIVideoStudioPage = lazy(() => import("./pages/toolkit/AIVideoStudioPage"));
+const StampGeneratorLanding = lazy(() => import("./pages/toolkit/StampGeneratorPage"));
+const StampProjectsDashboard = lazy(() => import("./components/stamp-generator/StampProjectsDashboard"));
+const StampProjectWizard = lazy(() => import("./components/stamp-generator/StampProjectWizard"));
+const StampGeneratorMain = lazy(() => import("./components/stamp-generator/StampGeneratorPage"));
+const StampExportPage = lazy(() => import("./components/stamp-generator/StampExportPage"));
 const CaptionsTranslate = lazy(() => import("./pages/toolkit/CaptionsTranslate"));
 const BackgroundAI = lazy(() => import("./pages/toolkit/BackgroundAI"));
 const BeautyFilters = lazy(() => import("./pages/toolkit/BeautyFilters"));
@@ -672,7 +677,14 @@ const App = () => (
                 <Route path="/mindmap" element={<OwnerGuard><MindMap /></OwnerGuard>} />
                 <Route path="/presentations" element={<OwnerGuard><Presentations /></OwnerGuard>} />
                 <Route path="/form-builder" element={<OwnerGuard><FormBuilder /></OwnerGuard>} />
-                
+
+                {/* AI Stamp Generator */}
+                <Route path="/toolkit/stamp-generator" element={<StampGeneratorLanding />} />
+                <Route path="/toolkit/stamp-generator/projects" element={<StampProjectsDashboard />} />
+                <Route path="/toolkit/stamp-generator/new" element={<StampProjectWizard />} />
+                <Route path="/toolkit/stamp-generator/:projectId/generate" element={<StampGeneratorMain />} />
+                <Route path="/toolkit/stamp-generator/:projectId/export/:designId" element={<StampExportPage />} />
+
                 {/* Creative Suite - Owner-only */}
                 <Route path="/studio" element={<OwnerGuard><Studio /></OwnerGuard>} />
                 <Route path="/studio/editor/:projectId" element={<OwnerGuard><StudioEditor /></OwnerGuard>} />
