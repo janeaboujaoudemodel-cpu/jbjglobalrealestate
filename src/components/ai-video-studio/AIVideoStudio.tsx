@@ -282,7 +282,30 @@ export function AIVideoStudio() {
       aiEditorPanel={
         <AIEditorPanel
           clips={timelineClips}
-          onApplyTemplate={(template) => toast.info(`Template "${template}" applied`)}
+          onApplyTemplate={(template, editPlan) => {
+            if (editPlan && editPlan.length > 0 && timelineClips.length > 0) {
+              // Reorder clips on the video track using the AI edit plan
+              const videoTrack = project.tracks.find(t => t.type === 'video');
+              if (videoTrack) {
+                let cursor = 0;
+                editPlan.forEach(step => {
+                  const sourceClip = videoTrack.clips[step.clipIndex];
+                  if (sourceClip) {
+                    updateClip(sourceClip.id, {
+                      startTime: cursor,
+                      duration: step.duration,
+                    });
+                    cursor += step.duration;
+                  }
+                });
+                toast.success(`🎬 "${template}" applied — ${editPlan.length} clips assembled!`);
+              } else {
+                toast.info(`Template "${template}" applied`);
+              }
+            } else {
+              toast.info(`Template "${template}" applied`);
+            }
+          }}
         />
       }
       mapPanel={<MapEffectPanel />}
