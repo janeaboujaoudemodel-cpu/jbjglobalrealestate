@@ -8,7 +8,7 @@ import {
   Volume2, FileText, Palette, Zap, ChevronDown, ChevronUp,
   Check, X, Play, Pause, Film, SkipBack, SkipForward,
 } from 'lucide-react';
-import { SUPPORTED_LANGUAGES, SUBTITLE_STYLES } from '../types';
+import { SUPPORTED_LANGUAGES, SUBTITLE_STYLES, VOICE_OPTIONS } from '../types';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -207,6 +207,9 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
   // Dubbing state
   const [isDubbing, setIsDubbing] = useState<string | null>(null);
   const [isDubbingAll, setIsDubbingAll] = useState<string | null>(null);
+  const [dubVoiceId, setDubVoiceId] = useState('JBFqnCBsd6RMkjVDRZzb');
+  const [dubbedTrackUrl, setDubbedTrackUrl] = useState<Record<string, string>>({});
+  const [isAssembling, setIsAssembling] = useState<string | null>(null);
 
   // Editing state
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -246,6 +249,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
   const previewVideoRef = useRef<HTMLVideoElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const previewRafRef = useRef<number>(0);
+  const dubbedAudioRef = useRef<HTMLAudioElement>(null);
 
   // ─── Preview RAF loop ─────────────────────────────────────────────────────
 
@@ -476,7 +480,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ text: textToDub, voiceId: 'JBFqnCBsd6RMkjVDRZzb', format: 'mp3' }),
+          body: JSON.stringify({ text: textToDub, voiceId: dubVoiceId, format: 'mp3' }),
         }
       );
 
@@ -495,7 +499,83 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
     } finally {
       setIsDubbing(null);
     }
-  }, [subtitles, onSubtitlesUpdate]);
+  }, [subtitles, onSubtitlesUpdate, dubVoiceId]);
+
+  // ─── Assemble all dubbed segments into one gapped AudioBuffer ────────────
+
+  const assembleDubbedTrack = useCallback(async (langCode: string, segs: SubtitleSegment[]) => {
+    const dubbed = segs.filter(s => s.dubbedAudioUrl?.[langCode]);
+    if (dubbed.length === 0) return;
+
+    setIsAssembling(langCode);
+    toast.info('Assembling dubbed audio track…');
+
+    try {
+      const audioCtx = new AudioContext();
+      const sampleRate = audioCtx.sampleRate;
+
+      // Decode all segment blobs in parallel
+      const decoded = await Promise.all(
+        dubbed.map(async seg => {
+          const resp = await fetch(seg.dubbedAudioUrl![langCode]);
+          const arrayBuf = await resp.arrayBuffer();
+          const audioBuf = await audioCtx.decodeAudioData(arrayBuf);
+          return { seg, audioBuf };
+        })
+      );
+
+      // Master buffer length = last segment end time
+      const lastEndTime = Math.max(...dubbed.map(s => s.endTime));
+      const totalSamples = Math.ceil(lastEndTime * sampleRate);
+      const numChannels = Math.max(...decoded.map(d => d.audioBuf.numberOfChannels), 1);
+      const master = audioCtx.createBuffer(numChannels, totalSamples, sampleRate);
+
+      for (const { seg, audioBuf } of decoded) {
+        const offsetSamples = Math.floor(seg.startTime * sampleRate);
+        const maxSamples = totalSamples - offsetSamples;
+        for (let ch = 0; ch < Math.min(audioBuf.numberOfChannels, numChannels); ch++) {
+          const src = audioBuf.getChannelData(ch);
+          const dst = master.getChannelData(ch);
+          const count = Math.min(src.length, maxSamples);
+          for (let i = 0; i < count; i++) {
+            dst[offsetSamples + i] += src[i];
+          }
+        }
+      }
+
+      // Record master buffer → Blob
+      const streamDest = audioCtx.createMediaStreamDestination();
+      const sourceNode = audioCtx.createBufferSource();
+      sourceNode.buffer = master;
+      sourceNode.connect(streamDest);
+
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : 'audio/webm';
+      const recorder = new MediaRecorder(streamDest.stream, { mimeType });
+      const chunks: Blob[] = [];
+      recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+
+      await new Promise<void>(resolve => {
+        recorder.onstop = () => resolve();
+        recorder.start(100);
+        sourceNode.start();
+        sourceNode.onended = () => recorder.stop();
+      });
+
+      await audioCtx.close();
+
+      const blob = new Blob(chunks, { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      setDubbedTrackUrl(prev => ({ ...prev, [langCode]: url }));
+      toast.success(`✓ Dubbed track assembled — ${dubbed.length} segments, ${fmtDuration(lastEndTime)}`);
+    } catch (error) {
+      console.error('Assembly error:', error);
+      toast.error('Failed to assemble dubbed track');
+    } finally {
+      setIsAssembling(null);
+    }
+  }, []);
 
   // ─── Dub ALL segments for a language ────────────────────────────────────
 
@@ -524,7 +604,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-            body: JSON.stringify({ text: textToDub, voiceId: 'JBFqnCBsd6RMkjVDRZzb', format: 'mp3' }),
+            body: JSON.stringify({ text: textToDub, voiceId: dubVoiceId, format: 'mp3' }),
           }
         );
 
@@ -545,9 +625,12 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
     }
 
     onSubtitlesUpdate(updatedSubtitles);
-    toast.success(`✓ Dubbed ${done} segments in ${SUPPORTED_LANGUAGES.find(l => l.code === langCode)?.name}!`);
     setIsDubbingAll(null);
-  }, [subtitles, onSubtitlesUpdate]);
+    toast.success(`✓ Dubbed ${done} segments in ${SUPPORTED_LANGUAGES.find(l => l.code === langCode)?.name}!`);
+
+    // Auto-assemble after all segments are dubbed
+    await assembleDubbedTrack(langCode, updatedSubtitles);
+  }, [subtitles, onSubtitlesUpdate, dubVoiceId, assembleDubbedTrack]);
 
   // ─── Segment editing ─────────────────────────────────────────────────────
 
@@ -624,14 +707,33 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
       canvas.height = video.videoHeight || 720;
       const ctx = canvas.getContext('2d')!;
 
-      // ── Audio capture ──
+      // ── Audio capture — use dubbed track if available, else original video audio ──
       let combinedStream: MediaStream;
+      const hasDubbedTrack = burnLang && dubbedTrackUrl[burnLang];
+
       try {
         const audioCtx = new AudioContext();
-        const source = audioCtx.createMediaElementSource(video);
+        let audioSource: MediaElementAudioSourceNode;
+
+        if (hasDubbedTrack) {
+          // Use dubbed audio element — mute original video
+          video.muted = true;
+          const dubbedAudio = document.createElement('audio');
+          dubbedAudio.src = dubbedTrackUrl[burnLang!];
+          dubbedAudio.crossOrigin = 'anonymous';
+          await new Promise<void>(r => { dubbedAudio.oncanplay = () => r(); dubbedAudio.load(); setTimeout(r, 3000); });
+          audioSource = audioCtx.createMediaElementSource(dubbedAudio);
+          // Sync play with video
+          video.onplay = () => dubbedAudio.play();
+          video.onpause = () => dubbedAudio.pause();
+          video.onseeked = () => { dubbedAudio.currentTime = video.currentTime; };
+        } else {
+          audioSource = audioCtx.createMediaElementSource(video);
+        }
+
         const dest = audioCtx.createMediaStreamDestination();
-        source.connect(dest);
-        source.connect(audioCtx.destination); // keep audible locally
+        audioSource.connect(dest);
+        audioSource.connect(audioCtx.destination);
         const videoStream = canvas.captureStream(30);
         combinedStream = new MediaStream([
           ...videoStream.getVideoTracks(),
@@ -686,11 +788,11 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `captioned_video_${burnLang || 'original'}.webm`;
+      a.download = `captioned_video_${burnLang || 'original'}${hasDubbedTrack ? '_dubbed' : ''}.webm`;
       a.click();
       URL.revokeObjectURL(video.src);
 
-      toast.success('✓ Captioned video downloaded!');
+      toast.success(`✓ ${hasDubbedTrack ? 'Dubbed + captioned' : 'Captioned'} video downloaded!`);
     } catch (error) {
       console.error('Burn error:', error);
       toast.error(error instanceof Error ? error.message : 'Burn failed');
@@ -698,21 +800,32 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
       setIsBurning(false);
       setBurnProgress(0);
     }
-  }, [burnVideoFile, subtitles, captionStyle, burnLang]);
+  }, [burnVideoFile, subtitles, captionStyle, burnLang, dubbedTrackUrl]);
 
   // ─── Preview controls ─────────────────────────────────────────────────────
 
   const togglePreviewPlay = () => {
     const v = previewVideoRef.current;
+    const a = dubbedAudioRef.current;
     if (!v) return;
-    if (v.paused) { v.play(); setPreviewPlaying(true); }
-    else { v.pause(); setPreviewPlaying(false); }
+    if (v.paused) {
+      v.play();
+      if (a) { a.currentTime = v.currentTime; a.play(); }
+      setPreviewPlaying(true);
+    } else {
+      v.pause();
+      a?.pause();
+      setPreviewPlaying(false);
+    }
   };
 
   const seekPreview = (delta: number) => {
     const v = previewVideoRef.current;
+    const a = dubbedAudioRef.current;
     if (!v) return;
-    v.currentTime = Math.max(0, Math.min(v.duration || 0, v.currentTime + delta));
+    const t = Math.max(0, Math.min(v.duration || 0, v.currentTime + delta));
+    v.currentTime = t;
+    if (a) a.currentTime = t;
   };
 
   // ─── Derived values ───────────────────────────────────────────────────────
@@ -1021,21 +1134,81 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                     )}
                   </Button>
 
-                  {/* Dub all button */}
+                  {/* Voice picker + Dub all button */}
                   {selectedLang && subtitles.some(s => s.translations?.[selectedLang]) && (
-                    <Button
-                      onClick={() => handleDubAll(selectedLang)}
-                      disabled={!!isDubbingAll}
-                      variant="outline"
-                      className="w-full border-purple-500/40 text-purple-400 hover:bg-purple-500/10 text-xs h-8"
-                    >
-                      {isDubbingAll === selectedLang ? (
-                        <><Loader2 className="w-3 h-3 mr-1.5 animate-spin" />Dubbing all segments…</>
-                      ) : (
-                        <><Volume2 className="w-3 h-3 mr-1.5" />Dub All in {SUPPORTED_LANGUAGES.find(l => l.code === selectedLang)?.name}</>
-                      )}
-                    </Button>
+                    <div className="space-y-2">
+                      {/* Voice selector */}
+                      <div className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700">
+                        <p className="text-[10px] text-slate-400 mb-1.5 font-medium">Dubbing Voice</p>
+                        <select
+                          value={dubVoiceId}
+                          onChange={e => setDubVoiceId(e.target.value)}
+                          className="w-full bg-slate-700 text-white text-xs rounded px-2 py-1.5 border border-slate-600 focus:outline-none focus:border-purple-400"
+                        >
+                          {VOICE_OPTIONS.map(v => (
+                            <option key={v.id} value={v.id}>
+                              {v.name} ({v.gender})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Dub All */}
+                      <Button
+                        onClick={() => handleDubAll(selectedLang)}
+                        disabled={!!isDubbingAll || !!isAssembling}
+                        variant="outline"
+                        className="w-full border-purple-500/40 text-purple-400 hover:bg-purple-500/10 text-xs h-8"
+                      >
+                        {isDubbingAll === selectedLang ? (
+                          <><Loader2 className="w-3 h-3 mr-1.5 animate-spin" />Dubbing all segments…</>
+                        ) : isAssembling === selectedLang ? (
+                          <><Loader2 className="w-3 h-3 mr-1.5 animate-spin" />Assembling track…</>
+                        ) : (
+                          <><Volume2 className="w-3 h-3 mr-1.5" />Dub All in {SUPPORTED_LANGUAGES.find(l => l.code === selectedLang)?.name}</>
+                        )}
+                      </Button>
+                    </div>
                   )}
+
+                  {/* Dubbed track status cards */}
+                  {Object.entries(dubbedTrackUrl).map(([lc, trackUrl]) => {
+                    const li = SUPPORTED_LANGUAGES.find(l => l.code === lc);
+                    const segsForLang = subtitles.filter(s => s.dubbedAudioUrl?.[lc]);
+                    const duration = segsForLang.length > 0 ? Math.max(...segsForLang.map(s => s.endTime)) : 0;
+                    return (
+                      <div key={lc} className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-3 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-base">{FLAG_EMOJIS[lc] || '🌐'}</span>
+                          <div className="flex-1">
+                            <p className="text-xs text-purple-300 font-medium">{li?.name} Dubbed Track</p>
+                            <p className="text-[10px] text-slate-400">✓ Assembled — {segsForLang.length} segments, {fmtDuration(duration)}</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-1.5">
+                          <button
+                            onClick={() => { const a = new Audio(trackUrl); a.play(); }}
+                            className="flex-1 flex items-center justify-center gap-1 py-1 rounded text-[10px] bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 transition-colors"
+                          >
+                            <Play className="w-2.5 h-2.5" />Play
+                          </button>
+                          <a
+                            href={trackUrl}
+                            download={`dubbed_${lc}.webm`}
+                            className="flex-1 flex items-center justify-center gap-1 py-1 rounded text-[10px] bg-slate-700 text-slate-300 hover:bg-slate-600 transition-colors"
+                          >
+                            <Download className="w-2.5 h-2.5" />Download
+                          </a>
+                          <button
+                            onClick={() => { setBurnLang(lc); setActiveTab('preview'); }}
+                            className="flex-1 flex items-center justify-center gap-1 py-1 rounded text-[10px] bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 transition-colors"
+                          >
+                            <Film className="w-2.5 h-2.5" />Preview
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
 
                   {/* Translated segments */}
                   {subtitles.some(s => s.translations && Object.keys(s.translations).length > 0) && (
@@ -1395,7 +1568,15 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                       onPlay={() => setPreviewPlaying(true)}
                       onPause={() => setPreviewPlaying(false)}
                       onEnded={() => setPreviewPlaying(false)}
-                    />
+                     />
+                    {/* Hidden dubbed audio element — synced to video */}
+                    {burnLang && dubbedTrackUrl[burnLang] && (
+                      <audio
+                        ref={dubbedAudioRef}
+                        src={dubbedTrackUrl[burnLang]}
+                        style={{ display: 'none' }}
+                      />
+                    )}
                     <canvas
                       ref={previewCanvasRef}
                       className="absolute inset-0 w-full h-full pointer-events-none"
@@ -1416,7 +1597,10 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                         value={previewTime}
                         onChange={e => {
                           const v = previewVideoRef.current;
-                          if (v) v.currentTime = Number(e.target.value);
+                          const a = dubbedAudioRef.current;
+                          const t = Number(e.target.value);
+                          if (v) v.currentTime = t;
+                          if (a) a.currentTime = t;
                         }}
                         className="flex-1 h-1 accent-amber-400 cursor-pointer"
                       />
