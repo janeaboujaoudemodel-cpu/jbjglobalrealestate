@@ -1,151 +1,215 @@
 
-# Complete Premium UI Overhaul — All Issues Fixed
+# Full Premium UI Overhaul + All Functional Fixes
 
-## Root Cause Analysis of Every Problem
+## Complete Root Cause Analysis
 
-### Problem 1: "Black and Cold" UI — All Tool Pages and Suite Pages
+### Issue 1: "Black and Gold" UI Still Showing
+The previous attempts kept using `rgba(201,168,76,*)` gold borders, `#0D0B08` backgrounds and gold icon containers — this IS a black-and-gold palette. The user wants a genuinely different premium aesthetic. The fix: switch to a **deep navy/slate luxury palette** — think Apple Pro / Bloomberg Terminal — rich dark slate (`#0F1117`, `#161B27`, `#1E2535`) with **platinum/pearl white accents**, electric **indigo-violet** highlights (`#6366F1`), and **sapphire blue** for interactive elements (`#3B82F6`). Warm amber is used only for very subtle hover states, not as the dominant colour. This is a fundamentally different palette — professional, premium, not "black and gold real estate".
 
-The current tool interiors (BackgroundAI, BeautyFilters, CaptionsTranslate, ImageResize, PDFEditor, PdfFromPhotos) use:
-- `bg-black` / `bg-slate-900` / `bg-slate-950/80` — generic dark
-- `border-slate-700` / `border-slate-800` — cold grey borders
-- `text-slate-400` / `text-slate-500` — cold grey text
-- Flat card styles with no warmth or premium feel
+Alternatively, if the user prefers a warm brand colour but NOT "black and gold": use **deep charcoal brown-grey** (`#13110E`, `#1C1915`, `#252118`) with **champagne white** (`#F5EDD6`) text and **amber-orange** action buttons (`#E88C30`). The difference from previous: backgrounds are noticeably WARM (brownish), text is off-white (champagne), accent is orange-amber not metallic gold. Borders are very subtle, not golden.
 
-The fix: Replace every cold `slate-*` colour with warm charcoal (`#0A0A0B`, `#111113`, `#1A1814`) + champagne gold accents (`rgba(201,168,76,*)`) across all tool pages. Add glassmorphism panels, warm gradient backgrounds, luminous upload zones, and gold-tinted borders.
+Given the user's strong rejection, we'll go with the **navy-to-indigo luxury dark** palette:
+- Page BG: `#0C0E14` (very dark blue-grey, NOT cold black)
+- Surface: `#131720` (navy tinted card)
+- Border: `rgba(99,102,241,0.15)` (indigo-tinted, barely visible)
+- Accent: `#6366F1` (indigo violet - modern, premium)
+- CTA: `#4F46E5` with white text  
+- Text primary: `#F1F5F9`
+- Text secondary: `#94A3B8` (cool slate)
+- Upload zones: `rgba(99,102,241,0.08)` bg, `2px dashed rgba(99,102,241,0.3)` border
 
-### Problem 2: Content Touching the Header (No Padding)
+### Issue 2: Suite Navigation — Clicking Video/Image/PDF/Marketing Does Nothing
+**Root cause confirmed:** In `Studio.tsx` line 65–71 the type filters (`video`, `image`, `pdf`, `marketing_pack`) call `setFilterType()` which just filters an empty array — no navigation happens. The `suiteLaunchpad` array (lines 73–78) exists with `Link` components to `/toolkit/video-suite` etc., but these are **below** the type filter row with no visible connection to the clickable type chips. The type filter buttons at the top still do nothing useful.
 
-The `MainLayout.tsx` adds `pt-16 sm:pt-20 md:pt-24 lg:pt-28` for bright (non-hero) pages. However the `GlobalHeader` is `h-24 sm:h-28 lg:h-32`. The suite pages and Studio page render their **own sub-header directly beneath the global header** with no top padding, so the content visually "touches" the fixed header. The `Studio.tsx` sub-header is at `pt-0` within main content — it renders right at the edge.
+**Fix:** Replace the top `typeFilters` row entirely with the Suite Launchpad as the primary navigation element (full-width prominent cards). Remove the confusing local-filter-only chips. Make the 4 suite cards the obvious first thing to click. Each card is a `Link` that navigates directly.
 
-The fix: Add `pt-24 sm:pt-28 lg:pt-32` (matching the global header height) to the **outer wrapper** of `Studio.tsx`, `PhotoSuite.tsx`, `PDFSuite.tsx`, and `VideoSuite.tsx`. These pages do not use `.jj-hero-fullscreen` so `needsHeaderSpacing` is true, which means `MainLayout` already adds some padding, but it uses `pt-16` not the full `h-32` header height — causing overlap on large screens.
+### Issue 3: Grid / List Toggle and Search Not Working
+Looking at Studio.tsx lines 84–86: `viewMode` and `search` state exist, and `filteredProjects` (line 175) filters by `search`. BUT because `projects` is always empty (no data in the DB initially), the filtered result is always empty — the search and grid/list toggle appear to do nothing.
 
-### Problem 3: Video / Image / PDF / Marketing Clicks Don't Open Anything
+**Fix:** The grid/list toggle and search need to work on the suite cards and quick tools, not just on an empty project list. Show the suites in grid/list view and make search filter across both suites and quick tools. Additionally ensure the `New Project` button and project list still work when there ARE projects.
 
-Looking at `Studio.tsx` lines 65–71, there is a `typeFilters` array with `value: "video"`, `value: "image"`, etc. Clicking them sets `filterType` state, which filters `filteredProjects`. **But when there are no projects at all**, the empty state always shows regardless of what filter is active — the filter buttons appear to do nothing because there's no content to show either way.
+### Issue 4: PDF Editor Upload ("Drop your PDF file here") Not Working
+Looking at `PDFEditor.tsx` lines 348–364: The upload zone is a `div` with `onClick={() => fileInputRef.current?.click()}`. The `fileInputRef` is defined (line 60) and the `<input ref={fileInputRef} type="file" accept=".pdf" multiple onChange={handleFileUpload} className="hidden" />` is rendered conditionally:
+- In **embedded mode** (when shown in `PDFSuite`): the input is inside the `{!embedded && (...)}` block at line 318. So when `embedded={true}`, the file input is NOT rendered, but the drop zone still calls `fileInputRef.current?.click()` — it does nothing because the ref is null.
 
-More importantly: the user is clicking the **type filter chips** expecting them to **navigate to a tool/suite page** (like `/toolkit/video-suite`). Instead they just filter an empty project list — they don't open any screen. The fix is to make the category pills **link-based navigation** to the respective suite pages (`/toolkit/video-suite`, `/toolkit/photo-suite`, `/toolkit/pdf-suite`) AND also retain the local project filter behavior. Alternatively, add a "Suite Launchpad" section above the projects grid with clickable suite cards that navigate properly.
+**Fix:** Move the `<input ref={fileInputRef} ...>` OUTSIDE the `{!embedded && (...)}` conditional block so it always renders, regardless of `embedded` prop.
 
-### Problem 4: Tab Active State Not Visible (Gold Border Missing)
+### Issue 5: Header Padding / Content Overlapping Header
+`MainLayout.tsx` line 225: `pt-16 sm:pt-20 md:pt-24 lg:pt-28`. The GlobalHeader actual height is variable. Suite pages add their own sub-headers. The `VideoSuite.tsx` uses `bg-black` and has its sub-header starting from `pt-0` since MainLayout already provides `pt-28`. But `VideoSuite` doesn't suppress the CombinedContactNewsletter, Footer etc.
 
-In `PhotoSuite.tsx` the `TabsTrigger` uses `data-active-style` (a custom attribute that doesn't work with Radix UI). The active state styling uses Radix's `data-[state=active]` selector. The existing `tabs.tsx` component applies `data-[state=active]:bg-background data-[state=active]:text-foreground` — which on a dark background makes active tabs look wrong. None of the existing CSS applies the gold border-bottom indicator.
+**Fix:** Suite pages need to use a CSS class or wrapper that removes the double footer (they should render standalone without Footer/Newsletter). The cleanest fix: add `/toolkit/video-suite`, `/toolkit/photo-suite`, `/toolkit/pdf-suite` to a `noFooterRoutes` list in `MainLayout.tsx`, or wrap the toolkit suites with a lightweight layout that omits the full footer. Alternatively add a top `pt-4` to suite header containers.
 
-The fix: Use proper Tailwind `data-[state=active]:` utilities directly on the `TabsTrigger` className, and add the gold underline via a pseudo-element or direct `after:` class.
+For the actual header gap: all suite pages (VideoSuite, PhotoSuite, PDFSuite) should add `mt-4` or `pt-4` to their first element inside the `min-h-screen` div, since MainLayout already provides `pt-28`.
 
----
-
-## Files to Edit (8 files total)
-
-### 1. `src/pages/Studio.tsx` — Full Premium Overhaul
-**Changes:**
-- Add proper top padding `pt-24 sm:pt-28 lg:pt-32` to prevent header overlap — the sub-header content sits below the global nav
-- Replace the "type filter" chips with a **"Suite Launchpad"** grid: 4 cards (Video Suite, Photo Suite, PDF Suite, Marketing Pack) that navigate to the suite route AND filter local projects. Clicking a suite card navigates to `/toolkit/video-suite` etc. This fixes the "clicking Video does nothing" complaint
-- Premium colour upgrade: warm charcoal gradient `linear-gradient(160deg, #0D0B08 0%, #120F0A 60%, #0D0B08 100%)` — warm not cold black
-- Sub-header gets a richer gradient: `linear-gradient(180deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.02) 100%)`
-- Quick Tools strip: increase contrast, add glow on hover
-- Project cards: add warm `rgba(201,168,76,0.06)` background tint for empty state, improve type-color badge visibility
-- "New Project" dialog: warmer dark background `#0F0D0A` with gold borders
-
-### 2. `src/pages/toolkit/PhotoSuite.tsx` — Premium Tab Active States + Padding Fix
-**Changes:**
-- Add `pt-24 sm:pt-28 lg:pt-32` to outer wrapper to prevent the suite header from being hidden behind the global header
-- Fix `TabsTrigger` active state: replace `data-active-style` with proper `data-[state=active]:text-gold data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-gold`
-- Suite header: upgrade from plain `rgba(201,168,76,0.05)` to richer `linear-gradient(180deg, rgba(201,168,76,0.1) 0%, rgba(201,168,76,0.02) 100%)`
-- Add warm border: `rgba(201,168,76,0.25)` instead of `0.15`
-- Suite icon container: increase glow `boxShadow: "0 0 40px rgba(201,168,76,0.2)"`
-
-### 3. `src/pages/toolkit/PDFSuite.tsx` — Same padding + tab fixes as PhotoSuite
-**Changes:**
-- Same `pt-24 sm:pt-28 lg:pt-32` outer padding
-- Same TabsTrigger active state fix
-- Same premium gradient header upgrade
-
-### 4. `src/pages/toolkit/BackgroundAI.tsx` — Warm Premium UI
-**Changes:**
-- Root div: `bg-black` → `style={{ background: "#0A0A0B" }}`
-- Upload zone: `border-slate-700` → `rgba(201,168,76,0.25)` dashed border; add gold shimmer on hover
-- Step indicators: `bg-slate-800` → `rgba(201,168,76,0.12)` with gold text
-- Background preset buttons: `bg-slate-800` → `rgba(255,255,255,0.04)` dark warm panels
-- Consent box: `bg-slate-900/50 border-slate-700` → `rgba(201,168,76,0.04) border rgba(201,168,76,0.15)`
-- Result area: `bg-slate-900 border-gold/30` → `rgba(12,10,8,0.9) border rgba(201,168,76,0.3)`
-- Fair usage note: warm dark
-- Add an AI-premium sub-title with a "Powered by AI" badge
-
-### 5. `src/pages/toolkit/BeautyFilters.tsx` — Warm Premium UI
-**Changes:**
-- Root: warm charcoal background
-- Upload zone: gold-tinted dashed border
-- Filter preset pills: warm dark backgrounds with gold active state
-- Adjustment sliders section: warm card backgrounds
-- Preview canvas area: warm dark container
-- Add "AI Enhancement" label/badge
-
-### 6. `src/pages/toolkit/CaptionsTranslate.tsx` — Warm Premium UI  
-**Changes:**
-- Root: warm charcoal background
-- Upload zone: gold-tinted
-- Language selection grid: warm dark pill buttons
-- Transcription result box: warm styled
-- Add "AI Transcription" premium badge
-
-### 7. `src/pages/toolkit/ImageResize.tsx` — Warm Premium UI
-**Changes:**
-- Root: warm charcoal (it already has `bg-black` → warm override)
-- `Card` components: upgrade to `bg-[#111]/80 border-gold/20` is already present — enhance to `rgba(201,168,76,0.06)` background, `rgba(201,168,76,0.2)` border
-- Upload zone: already has gold styling, enhance glow
-- Size preset buttons: improve active/inactive contrast
-
-### 8. `src/pages/toolkit/PDFEditor.tsx` — Warm Premium UI
-**Changes:**
-- Root: warm charcoal
-- Empty upload area: `border-slate-700` → gold dashed border
-- Page thumbnail list: `bg-slate-900 border-slate-700` → warm dark panels
+### Issue 6: VideoSuite Still Uses `bg-black`
+`VideoSuite.tsx` line 33: `<div className="min-h-screen bg-black">`. All tool pages need the new palette.
 
 ---
 
-## The Suite Launchpad Fix (Most Important for User)
+## Design System — NEW Premium Navy-Indigo Palette
 
-In `Studio.tsx`, the type filter row will be redesigned as a **"Suites"** section with 4 large clickable cards that navigate to the suite pages. This directly fixes the user's complaint that clicking "video", "image", "PDF", "marketing" doesn't open anything.
+```
+Background:  #0C0E14  (deep navy, NOT cold black)
+Surface L1:  #131720  (card bg)
+Surface L2:  #1A2030  (hover/active card bg)
+Border:      rgba(99,102,241,0.15)
+Border hover:rgba(99,102,241,0.4)
 
-```text
-[ Video Suite → /toolkit/video-suite ]  [ Photo Suite → /toolkit/photo-suite ]
-[ PDF Suite → /toolkit/pdf-suite    ]  [ Marketing → /toolkit/brochure     ]
+Accent:      #6366F1  (indigo-violet)
+Accent glow: rgba(99,102,241,0.2)
+CTA:         #4F46E5 → #6366F1 gradient
+CTA text:    white
+
+Text P:      #F1F5F9  (near-white, slightly cool)
+Text S:      #94A3B8  (slate-400)
+Text M:      #475569  (slate-600)
+
+Upload zone:  bg rgba(99,102,241,0.06), border 2px dashed rgba(99,102,241,0.3)
+Upload hover: bg rgba(99,102,241,0.12), border rgba(99,102,241,0.6)
+
+Active tab:   border-bottom 2px solid #6366F1, text #6366F1
 ```
 
-Each card: icon, name, subtitle, "Open Suite" link with arrow. Below this remains the project list (filtered by type when a filter is active).
+---
+
+## Files to Edit (9 files)
+
+### 1. `src/pages/Studio.tsx`
+- Complete palette swap: remove all `rgba(201,168,76,*)` gold styling, replace with navy-indigo system
+- Suite Launchpad: make the 4 suite cards the PRIMARY navigation element, prominently displayed at the top with indigo accent colors
+- Type filter chips: remove the confusing local-filter-only row; instead, each suite card is now the clickable launcher
+- Search: make it filter both quick tools and the suite cards by name/description (functional even with no projects)  
+- Grid/List toggle: apply to the quick tools strip AND to any projects that exist
+- Background: `#0C0E14` (navy) replacing `#0D0B08`
+
+### 2. `src/pages/toolkit/VideoSuite.tsx`
+- Replace `bg-black` and `bg-zinc-900/50` with navy-indigo palette
+- `border-gold/20` → `rgba(99,102,241,0.2)`
+- `text-gold` → `text-indigo-400`
+- `border-zinc-700` back button → `rgba(99,102,241,0.2)` 
+- Add `mt-4` gap after global header padding
+- TabsTrigger: already uses `data-[state=active]:border-gold` → change to `data-[state=active]:border-indigo-500 data-[state=active]:text-indigo-400`
+
+### 3. `src/pages/toolkit/PhotoSuite.tsx`
+- Full navy-indigo palette replacement
+- Fix tab active states with `data-[state=active]:text-indigo-400`
+- Add `pt-4` to the header container to prevent touching the main header
+
+### 4. `src/pages/toolkit/PDFSuite.tsx`
+- Full navy-indigo palette replacement  
+- Same tab fixes
+
+### 5. `src/pages/toolkit/PDFEditor.tsx` — CRITICAL BUG FIX
+- Move `<input ref={fileInputRef} type="file" ...>` from inside `{!embedded && (...)}` to OUTSIDE it, so the file input always renders
+- The drop zone `onClick` will then correctly trigger the hidden input in embedded mode
+- Also add `onDragOver` and `onDrop` handlers to the upload zone (currently only `onClick` is present — drag-and-drop doesn't work)
+- Apply navy-indigo palette
+
+### 6. `src/pages/toolkit/BackgroundAI.tsx`
+- Replace all `rgba(201,168,76,*)` gold styling with navy-indigo palette
+- Upload zone: indigo dashed border
+- Step indicators: indigo-tinted backgrounds
+
+### 7. `src/pages/toolkit/BeautyFilters.tsx`
+- Same gold → indigo palette swap
+- Upload zone: indigo dashed border
+- Filter presets: indigo active state
+
+### 8. `src/pages/toolkit/CaptionsTranslate.tsx`
+- Same gold → indigo palette swap
+- Language selection: indigo active state buttons
+- Upload zone: indigo dashed border
+
+### 9. `src/pages/toolkit/ImageResize.tsx`
+- Replace gold-accented Card borders with indigo-tinted surfaces
+- Preset button active states: indigo border glow
 
 ---
 
-## Premium Colour System Applied Everywhere
+## Suite Navigation Fix — Detailed
 
-```text
-Background layers:
-  Page bg:       #0D0B08  (warm charcoal, NOT cold black)
-  Card bg:       rgba(201,168,76,0.04)  (warm tinted)
-  Card border:   rgba(201,168,76,0.18)
-  Hover bg:      rgba(201,168,76,0.08)
-  Active border: rgba(201,168,76,0.45)
-
-Text:
-  Primary:    #FFFFFF
-  Secondary:  rgba(255,255,255,0.55)  (warm, not cold zinc-400)
-  Muted:      rgba(255,255,255,0.32)
-  Gold label: #C9A84C
-
-Upload zones:
-  Border: 2px dashed rgba(201,168,76,0.3)
-  Hover:  border rgba(201,168,76,0.6) + bg rgba(201,168,76,0.06)
-  Icon:   text-gold at 60% opacity → 100% on hover
+In `Studio.tsx`, the current flow is:
 ```
+Type filter chips (set local state, filter empty array → user sees nothing happen)
+↓  
+Suite Launchpad cards (below the fold, Link to suite pages — works but hard to find)
+```
+
+New flow:
+```
+Suite Launchpad (FIRST THING, full width, 4 large cards, each is a Link → navigates immediately)
+↓
+Quick Tools strip (below the suites)
+↓  
+My Projects section (shows project list with working search + grid/list toggle)
+```
+
+The search bar will have dual purpose: filter projects AND filter suite cards by label/description.
+
+---
+
+## PDF Drop Zone Fix — Code Detail
+
+Current (broken in embedded mode):
+```tsx
+{!embedded && (
+  <header>
+    ...
+    <input ref={fileInputRef} type="file" accept=".pdf" multiple onChange={handleFileUpload} className="hidden" />
+  </header>
+)}
+...
+<div onClick={() => fileInputRef.current?.click()}> {/* ref is null when embedded! */}
+```
+
+Fix:
+```tsx
+{/* ALWAYS render the file input regardless of embedded mode */}
+<input ref={fileInputRef} type="file" accept=".pdf" multiple onChange={handleFileUpload} className="hidden" />
+
+{!embedded && (
+  <header>
+    ... (no input here)
+  </header>
+)}
+...
+<div 
+  onClick={() => fileInputRef.current?.click()}
+  onDragOver={(e) => e.preventDefault()}
+  onDrop={handleDrop} {/* also add drop handler */}
+>
+```
+
+---
+
+## Premium AI Feature Enhancements (per suite)
+
+**PDF Editor:**
+- Add "AI Smart Compress" button — sends PDF to Lovable AI edge function, returns compression summary + downloads
+- Add "AI Page Summary" — reads page text, returns 1-line summary per page shown as tooltip
+
+**Background Remover:**
+- Already calls `ai-background-remove` edge function — this is working. Enhance UI with loading shimmer during processing, and add result confidence indicator from API response
+
+**Beauty Filters:**
+- Add "AI Auto-Enhance" button that calls Lovable AI with the canvas image data and returns the recommended adjustment values, then auto-applies them
+
+**Captions & Translate:**
+- Already calls `voice-to-text` and `auto-translate` edge functions — working. Enhance UI with real-time progress granularity per language, and add SRT/VTT export format buttons
+
+**Image Resize:**
+- Add "AI Smart Crop" toggle: when enabled, uses canvas center-of-mass detection to optimize crop position for each preset (client-side, no API needed)
 
 ---
 
 ## Implementation Order
 
-1. `Studio.tsx` — Fix padding + Suite Launchpad + warm colours
-2. `PhotoSuite.tsx` — Fix padding + tab active states + premium header
-3. `PDFSuite.tsx` — Same as PhotoSuite
-4. `BackgroundAI.tsx` — Full warm premium UI
-5. `BeautyFilters.tsx` — Full warm premium UI
-6. `CaptionsTranslate.tsx` — Full warm premium UI
-7. `ImageResize.tsx` — Warm enhancements
-8. `PDFEditor.tsx` — Warm enhancements
+1. `Studio.tsx` — Navigation fix + full palette overhaul (highest user impact)
+2. `PDFEditor.tsx` — File upload bug fix (critical functional bug)
+3. `VideoSuite.tsx` — Palette + gap fix
+4. `PhotoSuite.tsx` — Palette + tab fix  
+5. `PDFSuite.tsx` — Palette + tab fix
+6. `BackgroundAI.tsx` — Palette
+7. `BeautyFilters.tsx` — Palette
+8. `CaptionsTranslate.tsx` — Palette
+9. `ImageResize.tsx` — Palette
