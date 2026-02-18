@@ -2,20 +2,18 @@ import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence, Reorder } from "framer-motion";
 import {
   Upload, Download, FileText, Sparkles, Loader2, CheckCircle2,
-  X, Trash2, GripVertical, Square, CheckSquare, FilePlus2,
-  FileImage, AlertCircle, ChevronDown, ChevronUp
+  X, Trash2, GripVertical, FilePlus2, FileImage, AlertCircle,
+  ChevronDown, ChevronUp, LayoutGrid, List
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { PDFDocument, rgb } from "pdf-lib";
 
-// ─── Types ──────────────────────────────────────────────────────────────────
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 interface PageItem {
   id: string;
@@ -23,11 +21,9 @@ interface PageItem {
   name: string;
   sourceFile: string;
   url: string;
-  // image-specific
   file?: File;
   width?: number;
   height?: number;
-  // pdf-page-specific
   pdfBytes?: ArrayBuffer;
   pageIndex?: number;
 }
@@ -42,6 +38,7 @@ interface TitlePageConfig {
 type PageSize = "a4" | "letter" | "fit";
 type Orientation = "auto" | "portrait" | "landscape";
 type Margins = "none" | "small" | "normal";
+type ViewMode = "list" | "grid";
 
 interface ProcessingState {
   status: "idle" | "processing" | "done" | "failed";
@@ -49,7 +46,7 @@ interface ProcessingState {
   message: string;
 }
 
-// ─── Constants ───────────────────────────────────────────────────────────────
+// ─── Constants ────────────────────────────────────────────────────────────────
 
 const PAGE_SIZES = {
   a4: { width: 595.28, height: 841.89, name: "A4" },
@@ -59,11 +56,19 @@ const PAGE_SIZES = {
 
 const MARGIN_VALUES: Record<Margins, number> = {
   none: 0,
-  small: 36,  // 0.5 inch
-  normal: 72, // 1 inch
+  small: 36,
+  normal: 72,
 };
 
-const GOLD = "#C9A84C";
+const INDIGO = "#6366F1";
+const IND = {
+  bg: "rgba(99,102,241,0.06)",
+  bgHover: "rgba(99,102,241,0.12)",
+  border: "rgba(99,102,241,0.2)",
+  borderHover: "rgba(99,102,241,0.5)",
+  text: "#818CF8",
+  accent: "#6366F1",
+};
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
@@ -75,6 +80,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
   const [pageSize, setPageSize] = useState<PageSize>("a4");
   const [orientation, setOrientation] = useState<Orientation>("auto");
   const [margins, setMargins] = useState<Margins>("normal");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [titlePage, setTitlePage] = useState<TitlePageConfig>({
     enabled: false,
     title: "",
@@ -250,7 +256,6 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
       const totalSteps = pages.length + (titlePage.enabled ? 1 : 0) + 1;
       let step = 0;
 
-      // Title page
       if (titlePage.enabled) {
         setProcessing({ status: "processing", progress: (++step / totalSteps) * 100, message: "Creating title page…" });
         const size = pageSize === "fit" ? PAGE_SIZES.a4 : PAGE_SIZES[pageSize];
@@ -260,16 +265,13 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
         if (titlePage.date) tp.drawText(titlePage.date, { x: 60, y: size.height * 0.4, size: 14, color: rgb(0.5, 0.5, 0.5) });
       }
 
-      // Process each page item
       for (const item of pages) {
         setProcessing({ status: "processing", progress: (++step / totalSteps) * 100, message: `Processing ${item.name}…` });
 
         if (item.type === "pdf-page" && item.pdfBytes) {
-          // Re-embed PDF page as-is
           const srcDoc = await PDFDocument.load(item.pdfBytes);
           const [copiedPage] = await outputDoc.copyPages(srcDoc, [0]);
           outputDoc.addPage(copiedPage);
-
         } else if (item.type === "image" && item.file) {
           const imageBytes = await item.file.arrayBuffer();
           let embeddedImage;
@@ -279,9 +281,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
             embeddedImage = await outputDoc.embedJpg(imageBytes);
           }
 
-          // *** Margin fix: force 0 when "fit" ***
           const effectiveMargin = pageSize === "fit" ? 0 : MARGIN_VALUES[margins];
-
           let pageWidth: number;
           let pageHeight: number;
 
@@ -301,17 +301,11 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
           const page = outputDoc.addPage([pageWidth, pageHeight]);
           const availableWidth = pageWidth - effectiveMargin * 2;
           const availableHeight = pageHeight - effectiveMargin * 2;
-
-          const scale = Math.min(
-            availableWidth / embeddedImage.width,
-            availableHeight / embeddedImage.height,
-          );
-
+          const scale = Math.min(availableWidth / embeddedImage.width, availableHeight / embeddedImage.height);
           const scaledWidth = embeddedImage.width * scale;
           const scaledHeight = embeddedImage.height * scale;
           const x = effectiveMargin + (availableWidth - scaledWidth) / 2;
           const y = effectiveMargin + (availableHeight - scaledHeight) / 2;
-
           page.drawImage(embeddedImage, { x, y, width: scaledWidth, height: scaledHeight });
         }
       }
@@ -322,7 +316,6 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
       setGeneratedPdf(blob);
       setProcessing({ status: "done", progress: 100, message: "PDF ready!" });
       toast.success("PDF generated successfully!");
-
     } catch (error) {
       console.error("PDF generation error:", error);
       setProcessing({ status: "failed", progress: 0, message: error instanceof Error ? error.message : "Failed" });
@@ -343,30 +336,28 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
     toast.success("PDF downloaded!");
   };
 
-  // ── Derived ────────────────────────────────────────────────────────────────
-
   const allSelected = pages.length > 0 && selected.size === pages.length;
   const someSelected = selected.size > 0;
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className={embedded ? "" : "min-h-screen"} style={{ background: "#0A0A0B", color: "#fff" }}>
+    <div className={embedded ? "" : "min-h-screen"} style={{ background: "#0C0E14", color: "#fff" }}>
 
-      {/* ── Hero — hidden when embedded in suite tab ── */}
+      {/* Hero — hidden when embedded */}
       {!embedded && (
         <section className="relative py-16 md:py-20 overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-10"
-              style={{ background: `radial-gradient(ellipse, ${GOLD}, transparent 70%)` }} />
+              style={{ background: `radial-gradient(ellipse, ${INDIGO}, transparent 70%)` }} />
           </div>
           <div className="container mx-auto px-4 relative z-10 text-center">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-5 border"
-              style={{ background: `${GOLD}1A`, color: GOLD, borderColor: `${GOLD}44` }}>
+              style={{ background: IND.bg, color: IND.text, borderColor: IND.border }}>
               <Sparkles className="h-3 w-3" /> Free Tool
             </span>
             <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight">
-              Media <span style={{ color: GOLD }}>→ PDF</span> Merger
+              Media <span style={{ color: IND.text }}>→ PDF</span> Merger
             </h1>
             <p className="text-lg md:text-xl max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.6)" }}>
               Combine images &amp; PDFs into a single document. Reorder pages, merge PDFs, and export with zero white borders.
@@ -380,16 +371,16 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
           <div className="max-w-5xl mx-auto space-y-6">
 
             {/* ── Step 1: Upload ── */}
-            <GoldCard>
+            <IndigoCard>
               <StepHeader n={1} title="Upload Media" sub="Images (JPG, PNG, WEBP) and PDFs — drag &amp; drop or click" />
 
               {/* Drop Zone */}
               <div
                 className="relative rounded-xl p-10 text-center cursor-pointer transition-all duration-300 mt-4"
                 style={{
-                  border: `2px dashed ${dragActive ? GOLD : `${GOLD}55`}`,
-                  background: dragActive ? `${GOLD}08` : "rgba(255,255,255,0.02)",
-                  boxShadow: dragActive ? `0 0 30px ${GOLD}22` : "none",
+                  border: `2px dashed ${dragActive ? INDIGO : IND.border}`,
+                  background: dragActive ? IND.bgHover : IND.bg,
+                  boxShadow: dragActive ? `0 0 30px rgba(99,102,241,0.2)` : "none",
                 }}
                 onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
                 onDragLeave={() => setDragActive(false)}
@@ -407,12 +398,12 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
 
                 {isUploading ? (
                   <div className="flex flex-col items-center gap-3">
-                    <Loader2 className="h-12 w-12 animate-spin" style={{ color: GOLD }} />
+                    <Loader2 className="h-12 w-12 animate-spin" style={{ color: IND.text }} />
                     <p style={{ color: "rgba(255,255,255,0.7)" }}>Processing files…</p>
                   </div>
                 ) : (
                   <>
-                    <Upload className="h-12 w-12 mx-auto mb-4" style={{ color: dragActive ? GOLD : `${GOLD}88` }} />
+                    <Upload className="h-12 w-12 mx-auto mb-4" style={{ color: dragActive ? INDIGO : IND.text }} />
                     <p className="text-lg font-semibold text-white mb-1">
                       {dragActive ? "Drop files here" : "Drag & drop images or PDFs"}
                     </p>
@@ -431,15 +422,34 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
                         <span className="text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
-                          {pages.length} page{pages.length !== 1 ? "s" : ""} · drag to reorder
+                          {pages.length} page{pages.length !== 1 ? "s" : ""}
                         </span>
                         <button
                           className="text-xs px-2 py-1 rounded transition-colors"
-                          style={{ color: GOLD, border: `1px solid ${GOLD}44`, background: "transparent" }}
+                          style={{ color: IND.text, border: `1px solid ${IND.border}`, background: "transparent" }}
                           onClick={allSelected ? deselectAll : selectAll}
                         >
                           {allSelected ? "Deselect All" : "Select All"}
                         </button>
+                        {/* View Mode Toggle */}
+                        <div className="flex items-center rounded-lg overflow-hidden" style={{ border: `1px solid ${IND.border}` }}>
+                          <button
+                            className="p-1.5 transition-colors"
+                            style={{ background: viewMode === "list" ? IND.bg : "transparent", color: viewMode === "list" ? IND.text : "rgba(255,255,255,0.4)" }}
+                            onClick={() => setViewMode("list")}
+                            title="List view"
+                          >
+                            <List className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            className="p-1.5 transition-colors"
+                            style={{ background: viewMode === "grid" ? IND.bg : "transparent", color: viewMode === "grid" ? IND.text : "rgba(255,255,255,0.4)" }}
+                            onClick={() => setViewMode("grid")}
+                            title="Grid view"
+                          >
+                            <LayoutGrid className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
                       </div>
                       <div className="flex items-center gap-2">
                         {someSelected && (
@@ -461,7 +471,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                         </button>
                         <button
                           className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded transition-colors"
-                          style={{ background: `${GOLD}18`, color: GOLD, border: `1px solid ${GOLD}44` }}
+                          style={{ background: IND.bg, color: IND.text, border: `1px solid ${IND.border}` }}
                           onClick={() => fileInputRef.current?.click()}
                         >
                           <FilePlus2 className="h-3.5 w-3.5" /> Add More
@@ -469,104 +479,166 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                       </div>
                     </div>
 
-                    {/* Reorderable list */}
-                    <Reorder.Group axis="y" values={pages} onReorder={setPages} className="space-y-2">
-                      {pages.map((page, idx) => (
-                        <Reorder.Item
-                          key={page.id}
-                          value={page}
-                          className="flex items-center gap-3 rounded-lg px-3 py-2.5 cursor-grab active:cursor-grabbing"
-                          style={{
-                            background: selected.has(page.id)
-                              ? `${GOLD}12`
-                              : "rgba(255,255,255,0.03)",
-                            border: selected.has(page.id)
-                              ? `1px solid ${GOLD}44`
-                              : "1px solid rgba(255,255,255,0.07)",
-                          }}
-                        >
-                          {/* Checkbox */}
-                          <div
-                            className="w-4 h-4 rounded border flex items-center justify-center shrink-0 cursor-pointer"
+                    {/* ── List View (drag-to-reorder) ── */}
+                    {viewMode === "list" && (
+                      <Reorder.Group axis="y" values={pages} onReorder={setPages} className="space-y-2">
+                        {pages.map((page, idx) => (
+                          <Reorder.Item
+                            key={page.id}
+                            value={page}
+                            className="flex items-center gap-3 rounded-lg px-3 py-2.5 cursor-grab active:cursor-grabbing"
                             style={{
-                              borderColor: selected.has(page.id) ? GOLD : "rgba(255,255,255,0.2)",
-                              background: selected.has(page.id) ? `${GOLD}33` : "transparent",
+                              background: selected.has(page.id) ? "rgba(99,102,241,0.15)" : "rgba(255,255,255,0.03)",
+                              border: `1px solid ${selected.has(page.id) ? "rgba(99,102,241,0.5)" : "rgba(255,255,255,0.07)"}`,
                             }}
-                            onClick={(e) => { e.stopPropagation(); toggleSelect(page.id); }}
                           >
-                            {selected.has(page.id) && (
-                              <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-                                <path d="M1 4L3.5 6.5L9 1" stroke={GOLD} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg>
-                            )}
-                          </div>
+                            {/* Checkbox */}
+                            <div
+                              className="w-4 h-4 rounded border flex items-center justify-center shrink-0 cursor-pointer"
+                              style={{
+                                borderColor: selected.has(page.id) ? INDIGO : "rgba(255,255,255,0.3)",
+                                background: selected.has(page.id) ? INDIGO : "transparent",
+                              }}
+                              onClick={(e) => { e.stopPropagation(); toggleSelect(page.id); }}
+                            >
+                              {selected.has(page.id) && (
+                                <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                                  <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                              )}
+                            </div>
 
-                          <GripVertical className="h-4 w-4 shrink-0" style={{ color: "rgba(255,255,255,0.2)" }} />
+                            <GripVertical className="h-4 w-4 shrink-0" style={{ color: "rgba(255,255,255,0.25)" }} />
 
-                          {/* Thumbnail */}
-                          <div className="w-14 h-10 rounded overflow-hidden shrink-0 flex items-center justify-center"
-                            style={{ background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                            {page.type === "image" && page.url ? (
-                              <img src={page.url} alt={page.name} className="w-full h-full object-cover" />
-                            ) : (
-                              <div className="flex flex-col items-center gap-0.5">
-                                <FileText className="h-4 w-4" style={{ color: GOLD }} />
-                                <span className="text-[9px] font-bold" style={{ color: GOLD }}>
-                                  {page.pageIndex !== undefined ? `P${(page.pageIndex ?? 0) + 1}` : "PDF"}
-                                </span>
-                              </div>
-                            )}
-                          </div>
+                            {/* Thumbnail */}
+                            <div className="w-14 h-10 rounded overflow-hidden shrink-0 flex items-center justify-center"
+                              style={{ background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                              {page.type === "image" && page.url ? (
+                                <img src={page.url} alt={page.name} className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="flex flex-col items-center gap-0.5">
+                                  <FileText className="h-4 w-4" style={{ color: IND.text }} />
+                                  <span className="text-[9px] font-bold" style={{ color: IND.text }}>
+                                    {page.pageIndex !== undefined ? `P${(page.pageIndex ?? 0) + 1}` : "PDF"}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
 
-                          {/* Info */}
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm text-white truncate">{page.name}</p>
-                            <p className="text-xs truncate" style={{ color: "rgba(255,255,255,0.4)" }}>
-                              {page.width && page.height ? `${Math.round(page.width)} × ${Math.round(page.height)} pt` : page.sourceFile}
-                            </p>
-                          </div>
+                            {/* Info */}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm text-white truncate">{page.name}</p>
+                              <p className="text-xs truncate" style={{ color: "rgba(255,255,255,0.4)" }}>
+                                {page.width && page.height ? `${Math.round(page.width)} × ${Math.round(page.height)} pt` : page.sourceFile}
+                              </p>
+                            </div>
 
-                          {/* Index badge */}
-                          <span className="text-xs font-mono px-2 py-0.5 rounded shrink-0"
-                            style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.3)" }}>
-                            #{idx + 1}
-                          </span>
+                            {/* Index badge */}
+                            <span className="text-xs font-mono px-2 py-0.5 rounded shrink-0"
+                              style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.35)" }}>
+                              #{idx + 1}
+                            </span>
 
-                          {/* Type badge */}
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded shrink-0"
-                            style={page.type === "image"
-                              ? { background: "rgba(99,102,241,0.2)", color: "#a5b4fc", border: "1px solid rgba(99,102,241,0.3)" }
-                              : { background: `${GOLD}22`, color: GOLD, border: `1px solid ${GOLD}44` }}>
-                            {page.type === "image" ? "IMAGE" : "PDF"}
-                          </span>
+                            {/* Type badge */}
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded shrink-0"
+                              style={page.type === "image"
+                                ? { background: "rgba(99,102,241,0.2)", color: "#a5b4fc", border: "1px solid rgba(99,102,241,0.3)" }
+                                : { background: "rgba(99,102,241,0.1)", color: IND.text, border: `1px solid ${IND.border}` }}>
+                              {page.type === "image" ? "IMG" : "PDF"}
+                            </span>
 
-                          {/* Delete */}
-                          <button
-                            className="shrink-0 h-7 w-7 flex items-center justify-center rounded hover:bg-red-500/15 transition-colors"
-                            style={{ color: "rgba(255,255,255,0.3)" }}
-                            onClick={(e) => { e.stopPropagation(); removePage(page.id); }}
+                            {/* Delete */}
+                            <button
+                              className="shrink-0 h-7 w-7 flex items-center justify-center rounded hover:bg-red-500/15 transition-colors"
+                              style={{ color: "rgba(255,255,255,0.3)" }}
+                              onClick={(e) => { e.stopPropagation(); removePage(page.id); }}
+                            >
+                              <X className="h-3.5 w-3.5" />
+                            </button>
+                          </Reorder.Item>
+                        ))}
+                      </Reorder.Group>
+                    )}
+
+                    {/* ── Grid View ── */}
+                    {viewMode === "grid" && (
+                      <Reorder.Group axis="y" values={pages} onReorder={setPages}
+                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        {pages.map((page, idx) => (
+                          <Reorder.Item
+                            key={page.id}
+                            value={page}
+                            className="rounded-xl overflow-hidden cursor-grab active:cursor-grabbing relative group"
+                            style={{
+                              background: "rgba(255,255,255,0.03)",
+                              border: `2px solid ${selected.has(page.id) ? INDIGO : "rgba(255,255,255,0.08)"}`,
+                              boxShadow: selected.has(page.id) ? `0 0 0 2px rgba(99,102,241,0.3)` : "none",
+                            }}
+                            onClick={() => toggleSelect(page.id)}
                           >
-                            <X className="h-3.5 w-3.5" />
-                          </button>
-                        </Reorder.Item>
-                      ))}
-                    </Reorder.Group>
+                            {/* Thumbnail */}
+                            <div className="w-full aspect-[3/4] relative overflow-hidden"
+                              style={{ background: "rgba(0,0,0,0.5)" }}>
+                              {page.type === "image" && page.url ? (
+                                <img src={page.url} alt={page.name} className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                                  <FileText className="h-10 w-10" style={{ color: IND.text }} />
+                                  <span className="text-xs font-bold" style={{ color: IND.text }}>
+                                    PDF P{(page.pageIndex ?? 0) + 1}
+                                  </span>
+                                </div>
+                              )}
+                              {/* Selection overlay */}
+                              {selected.has(page.id) && (
+                                <div className="absolute inset-0 flex items-center justify-center"
+                                  style={{ background: "rgba(99,102,241,0.25)" }}>
+                                  <div className="w-8 h-8 rounded-full flex items-center justify-center"
+                                    style={{ background: INDIGO }}>
+                                    <svg width="14" height="12" viewBox="0 0 10 8" fill="none">
+                                      <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                  </div>
+                                </div>
+                              )}
+                              {/* Index badge */}
+                              <span className="absolute top-1.5 left-1.5 text-xs font-mono px-1.5 py-0.5 rounded"
+                                style={{ background: "rgba(0,0,0,0.7)", color: "rgba(255,255,255,0.7)" }}>
+                                #{idx + 1}
+                              </span>
+                              {/* Delete on hover */}
+                              <button
+                                className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hidden group-hover:flex"
+                                style={{ background: "rgba(239,68,68,0.8)" }}
+                                onClick={(e) => { e.stopPropagation(); removePage(page.id); }}
+                              >
+                                <X className="h-3 w-3 text-white" />
+                              </button>
+                            </div>
+                            {/* Name */}
+                            <div className="px-2 py-1.5">
+                              <p className="text-xs text-white truncate">{page.name}</p>
+                              <p className="text-[10px]" style={{ color: "rgba(255,255,255,0.4)" }}>
+                                {page.type === "image" ? "Image" : "PDF page"}
+                              </p>
+                            </div>
+                          </Reorder.Item>
+                        ))}
+                      </Reorder.Group>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
-            </GoldCard>
+            </IndigoCard>
 
             {/* ── Step 2: Settings ── */}
-            <GoldCard>
-              <button
-                className="w-full text-left"
-                onClick={() => setSettingsOpen(o => !o)}
-              >
+            <IndigoCard>
+              <button className="w-full text-left" onClick={() => setSettingsOpen(o => !o)}>
                 <div className="flex items-center justify-between">
                   <StepHeader n={2} title="PDF Settings" sub="Page size, orientation, margins" noMb />
                   {settingsOpen
-                    ? <ChevronUp className="h-4 w-4" style={{ color: GOLD }} />
-                    : <ChevronDown className="h-4 w-4" style={{ color: GOLD }} />}
+                    ? <ChevronUp className="h-4 w-4" style={{ color: IND.text }} />
+                    : <ChevronDown className="h-4 w-4" style={{ color: IND.text }} />}
                 </div>
               </button>
 
@@ -611,7 +683,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                         <Label className="text-white/80 text-sm font-semibold mb-3 block">
                           Margins
                           {pageSize === "fit" && (
-                            <span className="ml-2 text-xs font-normal" style={{ color: GOLD }}>
+                            <span className="ml-2 text-xs font-normal" style={{ color: IND.text }}>
                               (forced to none for Fit)
                             </span>
                           )}
@@ -634,42 +706,30 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                     {/* Title Page */}
                     <div className="mt-6 pt-6" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
                       <div className="flex items-center gap-3 mb-4">
-                        <Switch
-                          checked={titlePage.enabled}
-                          onCheckedChange={e => setTitlePage(p => ({ ...p, enabled: e }))}
-                        />
+                        <Switch checked={titlePage.enabled} onCheckedChange={e => setTitlePage(p => ({ ...p, enabled: e }))} />
                         <Label className="text-white/80 text-sm font-semibold cursor-pointer">Add Title Page</Label>
                       </div>
                       {titlePage.enabled && (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                          <Input
-                            placeholder="Title"
-                            value={titlePage.title}
+                          <Input placeholder="Title" value={titlePage.title}
                             onChange={e => setTitlePage(p => ({ ...p, title: e.target.value }))}
-                            className="bg-white/5 border-white/10 text-white placeholder:text-white/30"
-                          />
-                          <Input
-                            placeholder="Subtitle"
-                            value={titlePage.subtitle}
+                            className="bg-white/5 border-white/10 text-white placeholder:text-white/30" />
+                          <Input placeholder="Subtitle" value={titlePage.subtitle}
                             onChange={e => setTitlePage(p => ({ ...p, subtitle: e.target.value }))}
-                            className="bg-white/5 border-white/10 text-white placeholder:text-white/30"
-                          />
-                          <Input
-                            placeholder="Date"
-                            value={titlePage.date}
+                            className="bg-white/5 border-white/10 text-white placeholder:text-white/30" />
+                          <Input placeholder="Date" value={titlePage.date}
                             onChange={e => setTitlePage(p => ({ ...p, date: e.target.value }))}
-                            className="bg-white/5 border-white/10 text-white placeholder:text-white/30"
-                          />
+                            className="bg-white/5 border-white/10 text-white placeholder:text-white/30" />
                         </div>
                       )}
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
-            </GoldCard>
+            </IndigoCard>
 
             {/* ── Step 3: Generate ── */}
-            <GoldCard>
+            <IndigoCard>
               <StepHeader n={3} title="Generate PDF" sub="Merge all pages into a single downloadable PDF" />
 
               <div className="mt-5 space-y-5">
@@ -678,12 +738,12 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span style={{ color: "rgba(255,255,255,0.6)" }}>{processing.message}</span>
-                      <span style={{ color: GOLD }}>{Math.round(processing.progress)}%</span>
+                      <span style={{ color: IND.text }}>{Math.round(processing.progress)}%</span>
                     </div>
                     <div className="h-2 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
                       <motion.div
                         className="h-full rounded-full"
-                        style={{ background: `linear-gradient(90deg, ${GOLD}, #e8c56a)` }}
+                        style={{ background: `linear-gradient(90deg, ${INDIGO}, #818CF8)` }}
                         animate={{ width: `${processing.progress}%` }}
                         transition={{ duration: 0.3 }}
                       />
@@ -691,7 +751,6 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                   </div>
                 )}
 
-                {/* Status messages */}
                 {processing.status === "done" && (
                   <div className="flex items-center gap-2 text-sm" style={{ color: "#4ade80" }}>
                     <CheckCircle2 className="h-4 w-4" /> PDF generated successfully!
@@ -707,7 +766,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                 <div className="flex flex-wrap gap-3">
                   <button
                     className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-all disabled:opacity-50"
-                    style={{ background: GOLD, color: "#000" }}
+                    style={{ background: "linear-gradient(135deg, #6366F1, #4F46E5)", color: "#fff", boxShadow: "0 4px 16px rgba(99,102,241,0.4)" }}
                     onClick={generatePdf}
                     disabled={pages.length === 0 || processing.status === "processing"}
                   >
@@ -721,7 +780,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                   {generatedPdf && (
                     <button
                       className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-all"
-                      style={{ background: "transparent", border: `2px solid ${GOLD}`, color: GOLD }}
+                      style={{ background: "transparent", border: `2px solid ${INDIGO}`, color: IND.text }}
                       onClick={downloadPdf}
                     >
                       <Download className="h-4 w-4" /> Download PDF
@@ -729,7 +788,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                   )}
                 </div>
               </div>
-            </GoldCard>
+            </IndigoCard>
 
           </div>
         </div>
@@ -738,19 +797,16 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
   );
 };
 
-// ─── Sub-components ──────────────────────────────────────────────────────────
+export default PdfFromPhotos;
 
-const GOLD_C = "#C9A84C";
+// ─── Sub-components ───────────────────────────────────────────────────────────
 
-function GoldCard({ children }: { children: React.ReactNode }) {
+function IndigoCard({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className="rounded-2xl p-6"
-      style={{
-        background: "linear-gradient(135deg, #111113, #16161A)",
-        border: `1px solid ${GOLD_C}28`,
-      }}
-    >
+    <div className="rounded-2xl p-6" style={{
+      background: "linear-gradient(135deg, #131720, #0F1320)",
+      border: "1px solid rgba(99,102,241,0.18)",
+    }}>
       {children}
     </div>
   );
@@ -759,15 +815,13 @@ function GoldCard({ children }: { children: React.ReactNode }) {
 function StepHeader({ n, title, sub, noMb }: { n: number; title: string; sub: string; noMb?: boolean }) {
   return (
     <div className={`flex items-start gap-3 ${noMb ? "" : "mb-1"}`}>
-      <div
-        className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 mt-0.5"
+      <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 mt-0.5"
         style={{
-          background: `${GOLD_C}22`,
-          color: GOLD_C,
-          border: `1px solid ${GOLD_C}44`,
-          boxShadow: `0 0 16px ${GOLD_C}28`,
-        }}
-      >
+          background: "rgba(99,102,241,0.2)",
+          color: "#818CF8",
+          border: "1px solid rgba(99,102,241,0.4)",
+          boxShadow: "0 0 16px rgba(99,102,241,0.2)",
+        }}>
         {n}
       </div>
       <div>
@@ -777,5 +831,3 @@ function StepHeader({ n, title, sub, noMb }: { n: number; title: string; sub: st
     </div>
   );
 }
-
-export default PdfFromPhotos;
