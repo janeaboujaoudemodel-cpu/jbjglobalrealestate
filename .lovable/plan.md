@@ -1,227 +1,117 @@
 
-# Deep Scan Report + Complete Fix Plan
+# Background Remover — Complete Fix Plan
 
-## What Was Found — Confirmed Bugs (With Evidence)
+## Root Cause (Confirmed by Code Review)
 
-### Bug 1: "PDF Tools" vs "PDF Suite" — Two Separate Items in Studio
-The Studio page has TWO separate sections:
-- **Row 1 — Suite Launchpad** (large cards): Video Suite, Photo Suite, PDF Suite, Marketing Pack — these navigate to suites
-- **Row 2 — Quick Tools** (small strip): Background Remover, Captions & Translate, Image Resizer, **"PDF Tools"** (links to `/toolkit/pdf-suite`), Voice Studio
+The current `removeBackgroundClientSide` function (lines 65–200 of `BackgroundAI.tsx`) uses a primitive **corner-sampling + Euclidean color distance** algorithm:
 
-"PDF Tools" in the Quick Tools strip points to the SAME route as PDF Suite. This is confusing because it's a duplicate. The fix: rename "PDF Tools" to "PDF Suite" in `quickTools` — OR remove it from Quick Tools since it already exists in the Suite Launchpad row above it. The cleaner choice is to replace "PDF Tools" with a more unique standalone tool that doesn't already have a suite card.
+1. It samples 8 corner pixels and averages their RGB values as the "background color"
+2. It loops through every pixel and makes it transparent if it's within `tolerance=40` of that average
+3. **Critical flaw**: This removes ANY pixel matching the background color — including skin, hair, clothing, teeth — anything that shares similar tones with the background
 
----
+**Why changing the background preset also corrupts the subject:**
+When the user selects "White", "Navy", "Blur" etc., the code first fills a canvas with that color, THEN draws the image over it, THEN runs the color-matching removal. The algorithm now samples from the already-filled background canvas, but still affects the subject. Additionally, the new background color is being composited incorrectly — the algorithm mutates `layerData` (the original image pixels), not a copy, so the new background bleeds into the subject mask.
 
-### Bug 2: PDF Editor — Duplicate Page Keys (Shows Extra Pages) — CRITICAL
-Console log captured: `"Encountered two children with the same key: 12b9a0b3-1f2c-46fa-b3f6-61fd7b8669fb"`
+## The Correct Solution
 
-Root cause: `processFiles` in `PDFEditor.tsx` still has the **nested setState anti-pattern** despite the previous fix attempt. Here is the exact broken code (lines 110–127):
+**Two-tier approach:**
 
-```tsx
-setLoadedPDFs(prevPdfs => {           // ← outer updater
-  const updatedPdfs = [...prevPdfs, ...newPdfs];
-  ...
-  setPages(prevPages => {             // ← NESTED setState inside updater!
-    const base = prevPages.length;
-    return [...prevPages, ...allNewPages.map((p, i) => ({ ...p, pageNumber: base + i + 1 }))];
-  });
-  return updatedPdfs;
-});
+### Tier 1 — AI-Powered Removal (Primary, Via Edge Function)
+Use the `ai-background-remove` edge function to call **Gemini Vision** with a specific prompt to return a **segmentation mask** or a clean cutout. The model is given the image and instructed to describe exactly which pixels to remove. For the actual cutout, we switch the mode to call the AI API with a **"remove background, return PNG with transparency"** instruction using the `google/gemini-3-flash-preview` model which supports image analysis + generation.
+
+Actually, since the AI image generation model (`google/gemini-3-pro-image-preview`) can take an image and produce a modified one, we use it for both "remove" and "generate" modes — the difference is just the prompt:
+- **Remove mode**: "Remove the background from this image completely and return ONLY the subject with a transparent background as a PNG"
+- **Generate mode**: "Take the person from this image and place them in: [scene]"
+
+### Tier 2 — Smart Client-Side Fallback (GrabCut-style)
+Replace the broken corner-sampling with a proper **flood-fill seeded from edges** (similar to GrabCut):
+1. Use a `visited` bitset and BFS flood-fill from all 4 image borders
+2. Only remove pixels connected to the border that are "background-like" (similar to their border neighbors) — this prevents removing interior subject pixels even if they share a color
+3. Apply a small feather/blur on the mask edges for smooth cutouts
+4. This works reliably for photos with clear subject/background separation
+
+The background preset buttons (White, Navy, Blue Gradient etc.) will:
+- Work on the RESULT image (the already-removed transparent cutout)
+- Simply composite the transparent cutout OVER the chosen background — never re-running removal
+- So choosing "Navy" after removal just changes the backdrop, never touching the subject pixels again
+
+## Files to Change
+
+### 1. `src/pages/toolkit/BackgroundAI.tsx`
+**Replace the broken `removeBackgroundClientSide` function with a proper implementation:**
+
+```
+NEW ALGORITHM — Flood-fill from borders (GrabCut-style):
+1. Load image onto canvas
+2. Get pixel data
+3. BFS flood-fill starting from all edge pixels:
+   - A pixel is "background" if its color is within distance threshold of its flood-fill neighbors
+   - Only pixels connected to the edge can be removed (protects interior pixels with same color)
+4. Build binary mask: background=0, subject=255
+5. Dilate+erode the mask to fill holes (morphological close)
+6. Gaussian-blur the mask edges for anti-aliasing (feathering)
+7. Apply mask as alpha channel to original image pixels
+8. Composite over chosen new background
 ```
 
-React's Strict Mode double-invokes state updater functions. When `setLoadedPDFs`'s callback runs twice, `setPages` is called twice from within it — with `allNewPages` holding the SAME UUIDs both times. The second call to `setPages` appends the same pages again (duplicate UUIDs), causing both the "extra page" display bug AND the React duplicate key warning.
+**Separate "apply background" from "remove background":**
+- `removeBackground(file)` → returns RGBA image with subject only (transparent BG)
+- `applyBackground(transparentDataUrl, backgroundId)` → composites transparent image over new BG
+- Preset buttons change `selectedBackground` state which re-runs `applyBackground` on the already-removed result — they NEVER re-run removal
 
-**Fix:** Remove the nested `setPages` call entirely from inside `setLoadedPDFs`. Compute everything first, then call both setters independently:
-
-```tsx
-// CORRECT: two independent setState calls, never nested
-const totalExisting = pages.length; // read current pages count BEFORE any setState
-const finalPages = allNewPages.map((p, i) => ({ ...p, pageNumber: totalExisting + i + 1 }));
-setLoadedPDFs(prev => [...prev, ...newPdfs]);
-setPages(prev => [...prev, ...finalPages]);
+**Add proper state flow:**
+```
+uploadedImage → [Remove BG] → transparentResult (cached) → [Select BG preset] → finalResult
 ```
 
-But `pages` is a stale closure value inside `processFiles`. The correct solution is to use a `useRef` to track current page count OR restructure to not rely on `prevPages.length` at all. Best solution: pass the starting page number as a local variable collected BEFORE the async loop begins, reading directly from the current `pages` state value (captured in closure), then call both setters at the end.
+So after the first removal, changing the background preset is instant (no re-processing).
 
----
+**UI changes:**
+- After removal succeeds, show background preset grid below the result (for instant switching)
+- "Remove Background" button only needs to be clicked once — after that, preset switching is instant
+- Add a "Re-process" button to redo removal if needed
+- Progress: 10% → loading, 60% → processing pixels, 90% → applying mask, 100% → done
 
-### Bug 3: Clicking Page 1 Selects/Deselects Wrong Page — CRITICAL Event Bubble Bug
+### 2. `supabase/functions/ai-background-remove/index.ts`
+**Add a proper AI-powered removal mode:**
 
-In `PDFEditor.tsx` lines 358–390, each page card is a `<div onClick={() => togglePageSelection(page.id)}>` that contains a `<Checkbox checked={page.selected}>`. When a user clicks the Checkbox:
+Add `mode === "remove"` handler that:
+- Takes the base64 image
+- Calls `google/gemini-3-pro-image-preview` with prompt: "Remove the background completely from this image. Return only the subject (person/object) isolated with a pure transparent background. The subject should be perfectly cut out with no background remnants."
+- Returns the generated image (transparent PNG)
+- Falls back gracefully if the model returns text instead of image
 
-1. Checkbox fires its own `onChange` or click event → `togglePageSelection` called (page becomes selected)
-2. Click bubbles up to the parent `div onClick` → `togglePageSelection` called AGAIN (page immediately deselected)
+**Also fix the `generate` mode** to first remove the background cleanly, then composite:
+- Step 1: Remove BG → get transparent cutout
+- Step 2: Generate new background scene using AI
+- Step 3: Composite (the frontend handles this since it has both images)
 
-This means selecting NEVER works when clicking the checkbox — it toggles twice and returns to original state. Clicking anywhere else on the row (outside the checkbox) works once.
+## State Architecture Fix
 
-Additionally, because pages can have duplicate IDs (from Bug 2), clicking on what looks like "page 1" may actually toggle a different duplicate page ID.
+```
+State:
+  image: File | null                    ← original uploaded file
+  transparentResult: string | null      ← cached PNG with BG removed (alpha)
+  finalResult: string | null            ← final composited image (shown to user)
+  selectedBackground: string            ← 'transparent' | 'white' | 'navy' | etc.
 
-**Fix:** Add `e.stopPropagation()` to the Checkbox click handler so the click doesn't bubble to the parent `div`. Also remove the parent `div onClick` and instead put the toggle logic only on the Checkbox component.
-
-```tsx
-// Fix: remove onClick from outer div, attach only to Checkbox
-<div
-  className="p-3 rounded-xl cursor-pointer transition-all"
-  style={{ ... }}
-  // No onClick here — handled by Checkbox below
->
-  <div className="flex items-center gap-2">
-    <Checkbox 
-      checked={page.selected}
-      onCheckedChange={() => togglePageSelection(page.id)}
-      // Don't add stopPropagation — just don't have parent onClick
-    />
+Flow:
+  Upload → image set
+  Click "Remove Background" → AI/canvas removes BG → transparentResult set
+  Change preset → applyBackground(transparentResult, preset) → finalResult updated (instant)
+  Click "Download" → downloads finalResult
 ```
 
-OR keep the parent `div onClick` for the whole row but prevent the Checkbox from also firing:
+This separation is key — the subject is extracted ONCE, backgrounds are applied/changed instantly without re-running removal.
 
-```tsx
-<Checkbox
-  checked={page.selected}
-  onClick={(e) => e.stopPropagation()}
-  onCheckedChange={() => togglePageSelection(page.id)}
-/>
-```
+## Summary of Changes
 
----
-
-### Bug 4: Page Number Counting Starts at Wrong Number After Async Operations
-Even if Bug 2 is fixed, there is still a subtle issue: `processFiles` is `async` and reads `pages.length` from the closure. If called rapidly twice (two drag-drop events), both calls capture `pages.length = 0` before either has committed, resulting in page numbers both starting at 1. Fix: capture page count inside the `setPages` updater using `prevPages.length`.
-
-The correct fully-fixed version of `processFiles`:
-
-```tsx
-const processFiles = async (files: File[]) => {
-  setIsLoading(true);
-  try {
-    const newPdfs: LoadedPDF[] = [];
-    const newPages: Omit<PDFPage, 'pageNumber'>[] = [];
-
-    for (const file of files) {
-      if (file.type !== 'application/pdf') { toast.error(...); continue; }
-      const arrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
-      const pageCount = pdfDoc.getPageCount();
-      const newPdf: LoadedPDF = { id: crypto.randomUUID(), name: file.name, pageCount, data: new Uint8Array(arrayBuffer) };
-      newPdfs.push(newPdf);
-      for (let i = 0; i < pageCount; i++) {
-        newPages.push({ id: crypto.randomUUID(), originalPageNumber: i + 1, pdfIndex: -1, selected: false, rotation: 0 });
-      }
-      toast.success(`Loaded ${file.name} (${pageCount} pages)`);
-    }
-
-    if (newPdfs.length === 0) return;
-
-    // Set pdfIndex after all PDFs are pushed to newPdfs array
-    setLoadedPDFs(prev => {
-      const updatedPdfs = [...prev, ...newPdfs];
-      // Fix pdfIndex for each page using the final updatedPdfs array
-      // We'll do this in setPages using a separate mechanism
-      return updatedPdfs;
-    });
-
-    // SEPARATE setState — never nested
-    setPages(prev => {
-      const base = prev.length;
-      // Now figure out pdfIndex properly
-      // We use a running counter across the newPages array
-      let pageIdx = 0;
-      return [...prev, ...newPdfs.flatMap((pdf, pdfI) =>
-        Array.from({ length: pdf.pageCount }, (_, i) => ({
-          ...newPages[pageIdx++],
-          pdfIndex: pdfI + (prev.length > 0 ? loadedPDFs.length : 0), // adjusted below
-          pageNumber: base + pageIdx,
-        }))
-      )];
-    });
-  } finally {
-    setIsLoading(false);
-  }
-};
-```
-
-Actually the cleanest solution is simpler — track pdfIndex by computing it from the final `loadedPDFs` array using a `useRef` for current loaded PDF count:
-
-```tsx
-// Track the count with a ref so it's always current
-const loadedPdfCountRef = useRef(0);
-
-// After setLoadedPDFs:
-setLoadedPDFs(prev => { const next = [...prev, ...newPdfs]; loadedPdfCountRef.current = next.length; return next; });
-
-setPages(prev => {
-  const base = prev.length;
-  let pageOffset = 0;
-  return [...prev, ...newPdfs.flatMap((pdf, relIdx) => {
-    const pdfIndex = (loadedPdfCountRef.current - newPdfs.length) + relIdx;
-    return Array.from({ length: pdf.pageCount }, (_, i) => ({
-      id: crypto.randomUUID(),
-      pageNumber: base + pageOffset + i + 1,
-      originalPageNumber: i + 1,
-      pdfIndex,
-      selected: false,
-      rotation: 0,
-    }));
-    pageOffset += pdf.pageCount;
-  }));
-});
-```
-
-The cleanest approach that avoids ALL these issues is to compute everything synchronously in `processFiles` and do ONE React state update using a reducer or a single combined state object.
-
----
-
-## Complete Fix Implementation Plan
-
-### Files to Edit: 2 files
-
-### 1. `src/pages/toolkit/PDFEditor.tsx` — Fix All 3 Critical Bugs
-
-**Change A — Fix processFiles (Bugs 2 & 4):**
-Replace the entire `processFiles` function with a clean version that:
-- Collects all new PDFs and new pages in local arrays (synchronously computed)
-- Calls `setLoadedPDFs` and `setPages` as two separate, independent calls (never nested)
-- Uses the `setPages` updater form `prev => [...]` to safely read current page count
-- Computes `pdfIndex` relative to the CURRENT `loadedPDFs.length` (read before the async loop starts, stored in a `const startingPdfCount = loadedPDFs.length` at the top of the function)
-
-**Change B — Fix checkbox double-toggle (Bug 3):**
-Change the page thumbnail card from having `onClick` on the outer `<div>` to having selection handled ONLY by the Checkbox:
-- Remove `onClick={() => togglePageSelection(page.id)}` from the outer `<div>`
-- Make the whole row clickable by wrapping in a button or keeping the `div onClick`
-- Add `onClick={(e) => e.stopPropagation()}` to the `<Checkbox>` component so it doesn't bubble
-
-**Change C — Enhance page thumbnail UI:**
-- Make selection state more visible: selected cards get a stronger indigo border (`2px solid rgba(99,102,241,0.7)`)
-- Add a visible page number badge in the corner (like `#1`, `#2`) in large clear text
-- Show the PDF filename source more clearly
-- Make the up/down reorder arrows more prominent (larger hit target, visible color)
-- Add drag handles that actually work with framer-motion `Reorder.Group` for visual drag-and-drop
-
-### 2. `src/pages/Studio.tsx` — Fix "PDF Tools" Duplicate
-
-**Change:** In the `quickTools` array (line 53), replace the "PDF Tools" entry that duplicates the Suite Launchpad's PDF Suite:
-- Option A: Remove "PDF Tools" entirely from Quick Tools (it already has a suite card)
-- Option B: Replace it with a genuinely different tool like "Voice Studio" standalone page or "Smart Resize" 
-- Best option: Replace "PDF Tools" link with a direct link to the standalone PDF Editor (`/toolkit/pdf-suite?tab=editor`) or replace with a different tool that isn't in the Launchpad, like "Smart Brochure" (`/toolkit/brochure-generator`)
-
-The Quick Tools strip should contain tools NOT already in the Suite Launchpad — so either remove the duplicate or swap it for a tool like "AI Translator" or "Voice Clone" that doesn't already have a suite card.
-
----
-
-## Screenshot Evidence of Current State
-
-- PDF Suite page loads correctly with navy-indigo palette — CONFIRMED working
-- PDF Editor drop zone is visible and styled correctly — CONFIRMED working  
-- Console error confirms duplicate key bug — CONFIRMED broken
-- Nested setState in processFiles — CONFIRMED in code review
-- Checkbox click bubble path — CONFIRMED in code review (lines 364–367)
-- Studio "PDF Tools" duplicates suite card — CONFIRMED in code review (line 53)
-
----
+| File | Change |
+|------|--------|
+| `BackgroundAI.tsx` | Replace broken `removeBackgroundClientSide` with GrabCut-style flood-fill; separate removal from background application; add `transparentResult` state; fix preset buttons to instantly swap backgrounds without re-running removal |
+| `ai-background-remove/index.ts` | Add `mode === "remove"` AI handler using `gemini-3-pro-image-preview`; improve fallback handling |
 
 ## Implementation Order
-
-1. Fix `PDFEditor.tsx` `processFiles` — eliminates duplicate pages and extra page count
-2. Fix `PDFEditor.tsx` Checkbox event bubble — fixes "clicking page 1 selects page 2"
-3. Enhance `PDFEditor.tsx` page thumbnail UI — makes selection visible and readable
-4. Fix `Studio.tsx` Quick Tools duplicate — removes confusing "PDF Tools" duplicate
+1. Fix `BackgroundAI.tsx` — new flood-fill algorithm + state separation (works offline, no API needed for basic removal)
+2. Update edge function — add AI-powered removal mode as the primary path, flood-fill as fallback
+3. Wire up the AI removal call in `BackgroundAI.tsx` — try AI first, fall back to canvas
