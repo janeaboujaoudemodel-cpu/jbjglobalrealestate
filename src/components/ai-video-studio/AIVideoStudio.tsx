@@ -13,11 +13,14 @@ import { CaptionTranslator } from './features/CaptionTranslator';
 import { SoundEffectsPanel } from './features/SoundEffectsPanel';
 import { OverlayEffectsPanel } from './features/OverlayEffectsPanel';
 import { AIEditorPanel } from './features/AIEditorPanel';
+import { MapEffectPanel } from './features/MapEffectPanel';
+import { ProjectIntegrationPanel } from './features/ProjectIntegrationPanel';
 import { useVideoStudioProject } from './hooks/useVideoStudioProject';
 import { useMediaLibrary } from './hooks/useMediaLibrary';
 import { MediaAsset, StockAsset, Clip, ExportPreset, RenderJob } from './types';
 import { toast } from 'sonner';
 import { ScrollArea } from '@/components/ui/scroll-area';
+
 
 interface SubtitleSegment {
   id: string;
@@ -258,6 +261,8 @@ export function AIVideoStudio() {
           onApplyTemplate={(template) => toast.info(`Template "${template}" applied`)}
         />
       }
+      mapPanel={<MapEffectPanel />}
+      projectsPanel={<ProjectIntegrationPanel />}
     />
   );
 }
