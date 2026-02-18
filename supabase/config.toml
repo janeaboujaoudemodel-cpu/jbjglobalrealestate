@@ -306,3 +306,6 @@ verify_jwt = false
 
 [functions.ai-stamp-generator]
 verify_jwt = false
+
+[functions.esign-auto-detect-fields]
+verify_jwt = false
