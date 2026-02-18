@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Unauthorized", 401, origin);
     }
 
-    const { envelope_id } = await req.json();
+    const { envelope_id, recipient_id } = await req.json();
 
     if (!envelope_id) {
       return corsErrorResponse("envelope_id is required", 400, origin);
@@ -56,15 +56,19 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Cannot send reminder for this envelope status", 400, origin);
     }
 
-    // Check max reminders
-    if (envelope.reminders_sent >= envelope.max_reminders) {
+    // Check max reminders (only enforce for bulk sends)
+    if (!recipient_id && envelope.reminders_sent >= envelope.max_reminders) {
       return corsErrorResponse("Maximum reminders reached", 400, origin);
     }
 
-    // Get pending recipients only
-    const pendingRecipients = envelope.esign_recipients.filter(
+    // Get pending recipients — either a specific one or all pending
+    const allPending = envelope.esign_recipients.filter(
       (r: any) => ["pending", "sent", "delivered", "viewed"].includes(r.status)
     );
+
+    const pendingRecipients = recipient_id
+      ? allPending.filter((r: any) => r.id === recipient_id)
+      : allPending;
 
     if (pendingRecipients.length === 0) {
       return corsErrorResponse("No pending recipients to remind", 400, origin);

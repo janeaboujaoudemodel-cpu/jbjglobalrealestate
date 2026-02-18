@@ -1,4 +1,5 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,8 @@ import {
   Phone,
   Calendar,
   Globe,
-  Shield
+  Shield,
+  Loader2,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
@@ -66,6 +68,8 @@ const auditActionConfig: Record<AuditAction, { label: string; icon: React.ReactN
 export default function EnvelopeDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  // Track loading state: "all" for the bulk remind button, or recipientId for individual
+  const [remindingId, setRemindingId] = useState<string | null>(null);
 
   const { data: envelope, isLoading, refetch } = useQuery({
     queryKey: ["esign-envelope", id],
@@ -87,27 +91,43 @@ export default function EnvelopeDetail() {
     enabled: !!id,
   });
 
-  const handleSendReminder = async () => {
+  /** Sends a reminder to all pending recipients (or a single one via recipient_id). */
+  const sendReminder = async (recipientId?: string) => {
+    const key = recipientId || "all";
+    setRemindingId(key);
     try {
+      const session = await supabase.auth.getSession();
+      const token = session.data.session?.access_token;
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/esign-send-reminder`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ envelope_id: id }),
+          body: JSON.stringify({ envelope_id: id, recipient_id: recipientId }),
         }
       );
 
-      if (!response.ok) throw new Error("Failed to send reminder");
-      toast.success("Reminder sent to pending recipients");
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(result.error || result.message || "Failed to send reminder");
+      }
+      toast.success(
+        recipientId
+          ? `Reminder sent`
+          : result.message || "Reminder sent to pending recipients"
+      );
       refetch();
-    } catch (error) {
-      toast.error("Failed to send reminder");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to send reminder");
+    } finally {
+      setRemindingId(null);
     }
   };
+
+  const handleSendReminder = () => sendReminder();
 
   const handleDownload = async (url: string, filename: string) => {
     try {
@@ -179,9 +199,17 @@ export default function EnvelopeDetail() {
           
           <div className="flex gap-2">
             {["sent", "viewed", "partially_signed"].includes(envelope.status) && (
-              <Button variant="outline" onClick={handleSendReminder}>
-                <Bell className="w-4 h-4 mr-2" />
-                Send Reminder
+              <Button
+                variant="outline"
+                onClick={handleSendReminder}
+                disabled={remindingId !== null}
+              >
+                {remindingId === "all" ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Bell className="w-4 h-4 mr-2" />
+                )}
+                {remindingId === "all" ? "Sending…" : "Send Reminder"}
               </Button>
             )}
             {signedDoc && (
@@ -211,47 +239,78 @@ export default function EnvelopeDetail() {
             {/* Recipients */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="w-5 h-5" />
-                  Recipients
+                <CardTitle className="flex items-center justify-between">
+                  <span className="flex items-center gap-2">
+                    <User className="w-5 h-5" />
+                    Recipients
+                  </span>
+                  {["sent", "viewed", "partially_signed"].includes(envelope.status) && (
+                    <span className="text-xs font-normal text-muted-foreground">
+                      {envelope.reminders_sent || 0} reminder{(envelope.reminders_sent || 0) !== 1 ? "s" : ""} sent
+                    </span>
+                  )}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {envelope.esign_recipients?.map((recipient: any) => {
                     const rConfig = recipientStatusConfig[recipient.status as RecipientStatus];
+                    const canRemind = ["pending", "sent", "delivered", "viewed"].includes(recipient.status)
+                      && ["sent", "viewed", "partially_signed"].includes(envelope.status);
+                    const isReminding = remindingId === recipient.id;
                     return (
                       <div 
                         key={recipient.id} 
-                        className="flex items-center justify-between p-4 rounded-lg bg-muted/50"
+                        className="flex items-center justify-between p-4 rounded-lg bg-muted/50 gap-3"
                       >
-                        <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
+                        <div className="flex items-center gap-4 min-w-0">
+                          <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center shrink-0">
                             <User className="w-5 h-5 text-gold" />
                           </div>
-                          <div>
+                          <div className="min-w-0">
                             <p className="font-medium">{recipient.name}</p>
-                            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
                               <span className="flex items-center gap-1">
-                                <Mail className="w-3 h-3" />
-                                {recipient.email}
+                                <Mail className="w-3 h-3 shrink-0" />
+                                <span className="truncate max-w-[200px]">{recipient.email}</span>
                               </span>
                               {recipient.phone && (
                                 <span className="flex items-center gap-1">
-                                  <Phone className="w-3 h-3" />
+                                  <Phone className="w-3 h-3 shrink-0" />
                                   {recipient.phone}
                                 </span>
                               )}
                             </div>
+                            {recipient.signed_at && (
+                              <p className="text-xs text-muted-foreground mt-0.5">
+                                Signed {format(new Date(recipient.signed_at), "MMM d, yyyy 'at' h:mm a")}
+                              </p>
+                            )}
+                            {recipient.viewed_at && !recipient.signed_at && (
+                              <p className="text-xs text-muted-foreground mt-0.5">
+                                Viewed {formatDistanceToNow(new Date(recipient.viewed_at), { addSuffix: true })}
+                              </p>
+                            )}
                           </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                          {recipient.signed_at && (
-                            <span className="text-xs text-muted-foreground">
-                              Signed {format(new Date(recipient.signed_at), "MMM d, yyyy")}
-                            </span>
-                          )}
+                        <div className="flex items-center gap-2 shrink-0">
                           <Badge className={rConfig.color}>{rConfig.label}</Badge>
+                          {canRemind && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-8 gap-1.5 text-xs border-amber-300 text-amber-700 hover:bg-amber-50"
+                              disabled={remindingId !== null}
+                              onClick={() => sendReminder(recipient.id)}
+                            >
+                              {isReminding ? (
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                              ) : (
+                                <Bell className="w-3 h-3" />
+                              )}
+                              {isReminding ? "Sending…" : "Remind"}
+                            </Button>
+                          )}
                         </div>
                       </div>
                     );
