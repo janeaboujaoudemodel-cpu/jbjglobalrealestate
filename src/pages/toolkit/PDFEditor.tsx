@@ -79,9 +79,11 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
   const processFiles = async (files: File[]) => {
     setIsLoading(true);
     try {
-      // Collect all new PDFs and pages OUTSIDE setState to avoid stale state
+      // Snapshot the current counts BEFORE any async work to avoid stale closure issues
+      const startingPdfCount = loadedPDFs.length;
       const newPdfs: LoadedPDF[] = [];
-      const newPagesByPdf: { pdf: LoadedPDF; pages: PDFPage[] }[] = [];
+      // Build pages fully outside setState — each page gets final pdfIndex and a stable UUID
+      const allNewPages: Omit<PDFPage, 'pageNumber'>[] = [];
 
       for (const file of files) {
         if (file.type !== 'application/pdf') {
@@ -91,39 +93,36 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
         const arrayBuffer = await file.arrayBuffer();
         const pdfDoc = await PDFDocument.load(arrayBuffer);
         const pageCount = pdfDoc.getPageCount();
-        const newPdf: LoadedPDF = { id: crypto.randomUUID(), name: file.name, pageCount, data: new Uint8Array(arrayBuffer) };
-        newPdfs.push(newPdf);
-        newPagesByPdf.push({ pdf: newPdf, pages: Array.from({ length: pageCount }, (_, i) => ({
+        const newPdf: LoadedPDF = {
           id: crypto.randomUUID(),
-          pageNumber: 0, // will be corrected below
-          originalPageNumber: i + 1,
-          pdfIndex: -1, // will be corrected below
-          selected: false,
-          rotation: 0,
-        }))});
+          name: file.name,
+          pageCount,
+          data: new Uint8Array(arrayBuffer),
+        };
+        const pdfIndex = startingPdfCount + newPdfs.length; // correct relative index
+        newPdfs.push(newPdf);
+        for (let i = 0; i < pageCount; i++) {
+          allNewPages.push({
+            id: crypto.randomUUID(),
+            originalPageNumber: i + 1,
+            pdfIndex,
+            selected: false,
+            rotation: 0,
+          });
+        }
         toast.success(`Loaded ${file.name} (${pageCount} pages)`);
       }
 
       if (newPdfs.length === 0) return;
 
-      // Single batched state update — no nested setStates
-      setLoadedPDFs(prevPdfs => {
-        const updatedPdfs = [...prevPdfs, ...newPdfs];
-        const allNewPages: PDFPage[] = [];
-        let pageOffset = 0; // will be filled after reading prevPages
-
-        // We compute pdfIndex relative to updatedPdfs
-        for (const { pdf, pages } of newPagesByPdf) {
-          const pdfIndex = updatedPdfs.findIndex(p => p.id === pdf.id);
-          pages.forEach(page => allNewPages.push({ ...page, pdfIndex }));
-        }
-
-        setPages(prevPages => {
-          const base = prevPages.length;
-          return [...prevPages, ...allNewPages.map((p, i) => ({ ...p, pageNumber: base + i + 1 }))];
-        });
-
-        return updatedPdfs;
+      // TWO independent setState calls — never nested — React Strict Mode safe
+      setLoadedPDFs(prev => [...prev, ...newPdfs]);
+      setPages(prev => {
+        const base = prev.length;
+        return [
+          ...prev,
+          ...allNewPages.map((p, i) => ({ ...p, pageNumber: base + i + 1 })),
+        ];
       });
     } catch (error) {
       console.error('Error loading PDF:', error);
@@ -356,35 +355,58 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
                   <div className="p-2 space-y-2">
                     {pages.map((page, index) => (
                       <div key={page.id}
-                        className="p-3 rounded-xl cursor-pointer transition-all"
+                        className="rounded-xl cursor-pointer transition-all overflow-hidden"
                         style={{
-                          background: page.selected ? "rgba(99,102,241,0.15)" : "rgba(255,255,255,0.03)",
-                          border: `1px solid ${page.selected ? "rgba(99,102,241,0.5)" : "rgba(255,255,255,0.07)"}`,
+                          background: page.selected ? "rgba(99,102,241,0.18)" : "rgba(255,255,255,0.03)",
+                          border: `${page.selected ? "2px" : "1px"} solid ${page.selected ? "rgba(99,102,241,0.7)" : "rgba(255,255,255,0.07)"}`,
+                          boxShadow: page.selected ? "0 0 16px rgba(99,102,241,0.25)" : "none",
                         }}
                         onClick={() => togglePageSelection(page.id)}>
-                        <div className="flex items-center gap-2">
-                          <Checkbox checked={page.selected}
-                            className="data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500" />
-                          <GripVertical className="h-4 w-4" style={{ color: "rgba(255,255,255,0.3)" }} />
-                          <div className="flex-1">
-                            <p className="text-sm text-white">Page {page.pageNumber}</p>
-                            <p className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+                        <div className="p-3 flex items-center gap-2">
+                          {/* stopPropagation prevents checkbox click from double-toggling via parent div */}
+                          <Checkbox
+                            checked={page.selected}
+                            onClick={(e) => e.stopPropagation()}
+                            onCheckedChange={() => togglePageSelection(page.id)}
+                            className="data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500 shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-xs font-bold px-1.5 py-0.5 rounded-md"
+                                style={{ background: page.selected ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.08)", color: page.selected ? "#A5B4FC" : "rgba(255,255,255,0.55)" }}>
+                                #{page.pageNumber}
+                              </span>
+                              <p className="text-sm font-medium text-white">Page {page.pageNumber}</p>
+                            </div>
+                            <p className="text-[10px] truncate mt-0.5" style={{ color: "rgba(255,255,255,0.32)" }}>
                               {loadedPDFs[page.pdfIndex]?.name || 'Unknown'}
                             </p>
                           </div>
-                          <div className="flex gap-1">
-                            <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); movePageUp(index); }} disabled={index === 0} className="h-6 w-6 p-0" style={{ color: "rgba(255,255,255,0.4)" }}>
-                              <ChevronLeft className="h-3 w-3 rotate-90" />
+                          <div className="flex gap-0.5 shrink-0">
+                            <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); movePageUp(index); }} disabled={index === 0}
+                              className="h-7 w-7 p-0 rounded-lg disabled:opacity-30"
+                              style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
+                              <ChevronLeft className="h-3.5 w-3.5 rotate-90" />
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); movePageDown(index); }} disabled={index === pages.length - 1} className="h-6 w-6 p-0" style={{ color: "rgba(255,255,255,0.4)" }}>
-                              <ChevronRight className="h-3 w-3 rotate-90" />
+                            <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); movePageDown(index); }} disabled={index === pages.length - 1}
+                              className="h-7 w-7 p-0 rounded-lg disabled:opacity-30"
+                              style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
+                              <ChevronRight className="h-3.5 w-3.5 rotate-90" />
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); rotatePage(page.id); }} className="h-6 w-6 p-0" style={{ color: "rgba(255,255,255,0.4)" }}>
-                              <RotateCw className="h-3 w-3" />
+                            <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); rotatePage(page.id); }}
+                              className="h-7 w-7 p-0 rounded-lg"
+                              style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
+                              <RotateCw className="h-3.5 w-3.5" />
                             </Button>
                           </div>
                         </div>
-                        {page.rotation !== 0 && <p className="text-xs mt-1" style={{ color: indigo.text }}>Rotated {page.rotation}°</p>}
+                        {page.rotation !== 0 && (
+                          <div className="px-3 pb-2">
+                            <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ background: "rgba(99,102,241,0.2)", color: indigo.text }}>
+                              ↻ {page.rotation}°
+                            </span>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

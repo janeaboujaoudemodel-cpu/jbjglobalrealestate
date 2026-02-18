@@ -50,7 +50,7 @@ const quickTools = [
   { href: "/toolkit/background-ai", label: "Background Remover", icon: Wand2, hex: "#6366F1" },
   { href: "/toolkit/captions-translate", label: "Captions & Translate", icon: Languages, hex: "#3B82F6" },
   { href: "/toolkit/image-resize", label: "Image Resizer", icon: ImageIcon, hex: "#8B5CF6" },
-  { href: "/toolkit/pdf-suite", label: "PDF Tools", icon: FileText, hex: "#06B6D4" },
+  { href: "/toolkit/brochure-generator", label: "Brochure Generator", icon: FileText, hex: "#06B6D4" },
   { href: "/toolkit/voice-studio", label: "Voice Studio", icon: Mic, hex: "#10B981" },
 ];
 
