@@ -312,10 +312,9 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
   };
 
   return (
-    <div style={{ background: "#0D0B08", minHeight: "100vh" }}>
-      {/* Header - hidden when embedded in a suite tab */}
+    <div style={{ background: "#0C0E14", minHeight: "100vh" }}>
       {!embedded && (
-        <div style={{ background: "linear-gradient(180deg, rgba(201,168,76,0.06) 0%, transparent 100%)", borderBottom: "1px solid rgba(201,168,76,0.2)" }}>
+        <div style={{ background: "linear-gradient(180deg, rgba(99,102,241,0.08) 0%, transparent 100%)", borderBottom: "1px solid rgba(99,102,241,0.2)" }}>
           <div className="container mx-auto px-4 py-8">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 rounded-xl" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)" }}>

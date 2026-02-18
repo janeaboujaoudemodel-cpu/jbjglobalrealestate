@@ -1,114 +1,115 @@
 /**
  * Video Suite - Master page embedding REAL existing tool pages
- * Tabs: Edit (AIVideoStudio) | Resize (VideoResizePack) | Captions (CaptionsTranslate)
- * ONLY real tool pages - no placeholders, no fake panels
  */
 
 import React, { lazy, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
-import { Play, Maximize2, Languages, ArrowLeft } from 'lucide-react';
+import { Play, Maximize2, Languages, ArrowLeft, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 
-// Lazy load REAL existing tool PAGES (not panels)
 const AIVideoStudio = lazy(() => import('@/components/ai-video-studio/AIVideoStudio').then(m => ({ default: m.AIVideoStudio })));
 const VideoResizePack = lazy(() => import('@/pages/toolkit/VideoResizePack'));
 const CaptionsTranslate = lazy(() => import('@/pages/toolkit/CaptionsTranslate'));
 
 const LoadingSpinner = () => (
-  <div className="min-h-[60vh] flex items-center justify-center">
-    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div>
+  <div className="min-h-[50vh] flex items-center justify-center">
+    <div className="flex flex-col items-center gap-3">
+      <Loader2 className="h-7 w-7 animate-spin" style={{ color: "#818CF8" }} />
+      <p className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>Loading tool...</p>
+    </div>
   </div>
 );
+
+const tabs = [
+  { value: "edit", label: "Edit", shortLabel: "Edit", icon: Play },
+  { value: "resize", label: "Resize / Reframe", shortLabel: "Resize", icon: Maximize2 },
+  { value: "captions", label: "Captions", shortLabel: "Captions", icon: Languages },
+];
 
 export default function VideoSuite() {
   return (
     <>
-      <SEOHead 
-        title="Video Suite | JBJ Royal Tools"
+      <SEOHead
+        title="Video Suite | JBJ Creative Tools"
         description="Professional video editing, resizing, captioning tools for real estate content."
       />
-      
-      <div className="min-h-screen bg-black">
-        {/* Header */}
-        <div className="border-b border-gold/20 bg-gradient-to-r from-black via-zinc-900/50 to-black">
-          <div className="max-w-7xl mx-auto px-4 py-6">
-            <div className="flex items-center gap-4 mb-4">
-              <Link to="/toolkit">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="hover:bg-zinc-800 border border-zinc-700 hover:border-zinc-600"
-                  style={{ color: '#a1a1aa', backgroundColor: 'transparent' }}
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" style={{ color: '#a1a1aa' }} />
-                  <span style={{ color: '#a1a1aa' }}>Back to Toolkit</span>
-                </Button>
-              </Link>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/40 flex items-center justify-center">
-                <Play className="w-7 h-7 text-gold" />
+
+      <div className="min-h-screen" style={{ background: "#0C0E14" }}>
+        {/* ── Suite Header ── */}
+        <div style={{ background: "linear-gradient(180deg, rgba(99,102,241,0.1) 0%, rgba(99,102,241,0.02) 100%)", borderBottom: "1px solid rgba(99,102,241,0.2)" }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
+            {/* Back link */}
+            <Link to="/toolkit"
+              className="inline-flex items-center gap-1.5 text-xs mb-4 transition-colors group"
+              style={{ color: "rgba(255,255,255,0.4)" }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.4)"}>
+              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+              Back to Toolkit
+            </Link>
+
+            {/* Title row */}
+            <div className="flex items-center gap-4 mb-5">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0"
+                style={{ background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.35)", boxShadow: "0 0 40px rgba(99,102,241,0.2)" }}>
+                <Play className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: "#818CF8" }} />
               </div>
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-white">
-                  Creative <span className="text-gold">Video Suite</span>
-                </h1>
-                <p className="text-zinc-400 text-sm">Edit, resize, and add captions</p>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-tight">
+                    Creative <span style={{ color: "#818CF8" }}>Video Suite</span>
+                  </h1>
+                  <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                    style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.35)", color: "#818CF8" }}>
+                    AI Powered
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm mt-0.5 hidden sm:block" style={{ color: "rgba(255,255,255,0.4)" }}>
+                  Edit · Resize · Captions & Translation
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Tabs - ONLY 3 tabs with REAL tools */}
-        <Tabs defaultValue="edit" className="flex flex-col h-[calc(100vh-140px)]">
-          <div className="border-b border-gold/20 bg-zinc-900/50">
-            <div className="max-w-7xl mx-auto px-4">
-              <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0">
-                <TabsTrigger
-                  value="edit"
-                  className="relative px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
-                >
-                  <Play className="w-4 h-4" />
-                  <span className="hidden sm:inline">Edit</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="resize"
-                  className="relative px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
-                >
-                  <Maximize2 className="w-4 h-4" />
-                  <span className="hidden sm:inline">Resize / Reframe</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="captions"
-                  className="relative px-6 py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
-                >
-                  <Languages className="w-4 h-4" />
-                  <span className="hidden sm:inline">Captions</span>
-                </TabsTrigger>
+        {/* ── Tabs ── */}
+        <Tabs defaultValue="edit" className="w-full">
+          {/* Tab Bar */}
+          <div style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="max-w-7xl mx-auto px-2 sm:px-6">
+              <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 border-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+                {tabs.map(({ value, label, shortLabel, icon: Icon }) => (
+                  <TabsTrigger key={value} value={value}
+                    className="relative flex items-center gap-1.5 px-3 sm:px-5 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none
+                      data-[state=inactive]:text-white/40 data-[state=active]:text-indigo-400
+                      after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:transition-all
+                      data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-indigo-500"
+                  >
+                    <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                    <span className="sm:hidden">{shortLabel}</span>
+                    <span className="hidden sm:inline">{label}</span>
+                  </TabsTrigger>
+                ))}
               </TabsList>
             </div>
           </div>
 
-          {/* Tab Content - REAL TOOL PAGES embedded */}
-          <div className="flex-1 overflow-hidden">
-            <TabsContent value="edit" className="h-full mt-0">
+          {/* Tab Content */}
+          <div style={{ background: "#0C0E14" }}>
+            <TabsContent value="edit" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}>
                 <AIVideoStudio />
               </Suspense>
             </TabsContent>
-
-            <TabsContent value="resize" className="h-full mt-0 overflow-auto">
+            <TabsContent value="resize" className="mt-0 overflow-auto">
               <Suspense fallback={<LoadingSpinner />}>
                 <VideoResizePack />
               </Suspense>
             </TabsContent>
-
-            <TabsContent value="captions" className="h-full mt-0 overflow-auto">
+            <TabsContent value="captions" className="mt-0 overflow-auto">
               <Suspense fallback={<LoadingSpinner />}>
-                <CaptionsTranslate />
+                <CaptionsTranslate embedded />
               </Suspense>
             </TabsContent>
           </div>
