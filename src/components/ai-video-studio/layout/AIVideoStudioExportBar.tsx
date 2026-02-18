@@ -19,56 +19,50 @@ export function AIVideoStudioExportBar({
   isExporting,
 }: AIVideoStudioExportBarProps) {
   return (
-    <div className="flex items-center justify-between px-4 py-2 bg-slate-900 border-t border-slate-700">
+    <div className="flex items-center justify-between px-4 py-2 bg-slate-800 border-t border-slate-600">
       {/* Export Presets */}
-      <div className="flex items-center gap-2">
-        <span className="text-xs text-slate-300 mr-2 font-medium">Export As:</span>
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="text-xs text-amber-300 mr-1 font-semibold tracking-wide uppercase">Export As:</span>
         {EXPORT_PRESETS.map((preset) => (
-          <Button
+          <button
             key={preset.id}
-            size="sm"
             onClick={() => onSelectPreset(preset.id)}
             className={
               selectedPreset === preset.id
-                ? 'border border-amber-400 bg-amber-400/20 text-amber-300 font-semibold hover:bg-amber-400/30'
-                : 'border border-slate-500 bg-slate-800 text-slate-200 hover:border-amber-400 hover:text-amber-300 hover:bg-slate-700'
+                ? 'flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-bold border border-amber-400 bg-amber-400/25 text-amber-200 transition-all'
+                : 'flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium border border-slate-400 bg-slate-700 text-slate-100 hover:border-amber-400 hover:text-amber-300 hover:bg-slate-600 transition-all'
             }
-            variant="outline"
           >
-            <span className="mr-1.5">{preset.icon}</span>
+            <span>{preset.icon}</span>
             <span className="hidden sm:inline">{preset.name}</span>
-            <span className="text-xs opacity-70 ml-1.5 hidden md:inline">
-              {preset.aspectRatio}
-            </span>
-          </Button>
+            <span className="text-xs opacity-70 ml-1 hidden md:inline">{preset.aspectRatio}</span>
+          </button>
         ))}
       </div>
 
       {/* Export Actions */}
       <div className="flex items-center gap-2">
-        <Button
-          size="sm"
-          variant="outline"
+        <button
           onClick={() => {
             const preset = EXPORT_PRESETS.find(p => p.id === selectedPreset);
             if (preset) onExportSingle(preset);
           }}
           disabled={isExporting}
-          className="border border-amber-400/60 text-amber-300 hover:bg-amber-400/10 hover:border-amber-400 hover:text-amber-200 disabled:opacity-50"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold border border-amber-400 text-amber-200 bg-amber-400/10 hover:bg-amber-400/25 hover:text-white disabled:opacity-40 transition-all"
         >
-          <Download className="w-4 h-4 mr-2" />
+          <Download className="w-3.5 h-3.5" />
           Download
-        </Button>
-        <Button
-          size="sm"
+        </button>
+        <button
           onClick={onExportAll}
           disabled={isExporting}
-          className="bg-amber-500 text-black font-bold hover:bg-amber-400 disabled:opacity-50"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-bold bg-amber-500 text-black hover:bg-amber-400 disabled:opacity-40 transition-all"
         >
-          <Package className="w-4 h-4 mr-2" />
+          <Package className="w-3.5 h-3.5" />
           Download All (ZIP)
-        </Button>
+        </button>
       </div>
     </div>
+
   );
 }
