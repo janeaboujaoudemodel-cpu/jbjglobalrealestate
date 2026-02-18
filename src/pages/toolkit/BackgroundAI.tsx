@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -45,7 +45,7 @@ const BG_PRESETS = [
   { id: 'white', label: 'White', color: '#FFFFFF', desc: 'Clean white background' },
   { id: 'black', label: 'Black', color: '#000000', desc: 'Dramatic black background' },
   { id: 'navy', label: 'Navy', color: '#1E3A5F', desc: 'Professional navy blue' },
-  { id: 'blur', label: 'Blur BG', icon: '🌫', desc: 'Blur the original background' },
+  { id: 'gray', label: 'Gray', color: '#6B7280', desc: 'Neutral gray background' },
   { id: 'gradient-blue', label: 'Blue Grad', icon: '🔵', desc: 'Blue to indigo gradient' },
 ];
 
@@ -61,143 +61,246 @@ const AI_SCENES = [
   { id: 'custom', label: 'Custom Scene', prompt: '', emoji: '✨' },
 ];
 
-// ── Client-side background removal using canvas ──
-async function removeBackgroundClientSide(
-  file: File,
-  backgroundColor: string
-): Promise<string> {
+// ─────────────────────────────────────────────────────────────────────────────
+// GrabCut-style BFS flood-fill background removal
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Returns a transparent-background PNG data URL using BFS flood-fill seeded from
+ * every border pixel. Only pixels reachable from the border AND similar in color
+ * to their flood-fill neighbors are classified as background. Interior pixels
+ * that share the background color are preserved.
+ *
+ * After building the mask we apply a small Gaussian feather on the edges so the
+ * cutout looks anti-aliased rather than jagged.
+ */
+async function removeBackgroundFloodFill(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     const url = URL.createObjectURL(file);
+
     img.onload = () => {
+      const W = img.naturalWidth;
+      const H = img.naturalHeight;
+
       const canvas = document.createElement('canvas');
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext('2d')!;
-
-      if (backgroundColor === 'blur') {
-        // Draw blurred original as background
-        ctx.filter = 'blur(20px)';
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        ctx.filter = 'none';
-      } else if (backgroundColor === 'gradient-blue') {
-        const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-        grad.addColorStop(0, '#3B82F6');
-        grad.addColorStop(1, '#4F46E5');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      } else if (backgroundColor !== 'transparent') {
-        ctx.fillStyle = backgroundColor === 'white' ? '#FFFFFF'
-          : backgroundColor === 'black' ? '#000000'
-          : backgroundColor === 'navy' ? '#1E3A5F'
-          : '#FFFFFF';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
-
-      // Draw image on top
+      canvas.width = W;
+      canvas.height = H;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true })!;
       ctx.drawImage(img, 0, 0);
-
-      // Smart edge-detection background removal using color sampling
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-
-      // Sample corners to estimate background color
-      const corners = [
-        [0, 0], [canvas.width - 1, 0],
-        [0, canvas.height - 1], [canvas.width - 1, canvas.height - 1],
-        [Math.floor(canvas.width / 2), 0], [Math.floor(canvas.width / 2), canvas.height - 1],
-        [0, Math.floor(canvas.height / 2)], [canvas.width - 1, Math.floor(canvas.height / 2)],
-      ];
-
-      let bgR = 0, bgG = 0, bgB = 0;
-      corners.forEach(([x, y]) => {
-        const i = (y * canvas.width + x) * 4;
-        bgR += data[i];
-        bgG += data[i + 1];
-        bgB += data[i + 2];
-      });
-      bgR = Math.round(bgR / corners.length);
-      bgG = Math.round(bgG / corners.length);
-      bgB = Math.round(bgB / corners.length);
-
-      // Create result canvas
-      const resultCanvas = document.createElement('canvas');
-      resultCanvas.width = canvas.width;
-      resultCanvas.height = canvas.height;
-      const rctx = resultCanvas.getContext('2d')!;
-
-      if (backgroundColor === 'gradient-blue') {
-        const grad = rctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-        grad.addColorStop(0, '#3B82F6');
-        grad.addColorStop(1, '#4F46E5');
-        rctx.fillStyle = grad;
-        rctx.fillRect(0, 0, canvas.width, canvas.height);
-      } else if (backgroundColor !== 'transparent') {
-        rctx.fillStyle = backgroundColor === 'white' ? '#FFFFFF'
-          : backgroundColor === 'black' ? '#000000'
-          : backgroundColor === 'navy' ? '#1E3A5F'
-          : backgroundColor === 'blur' ? 'rgba(0,0,0,0)'
-          : '#FFFFFF';
-        rctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
-
-      // Apply edge-aware color masking with tolerance
-      const tolerance = 40;
-      const resultImageData = rctx.getImageData(0, 0, canvas.width, canvas.height);
-      const rdata = resultImageData.data;
-
-      // Draw original over result canvas
-      rctx.drawImage(img, 0, 0);
-      const layerData = rctx.getImageData(0, 0, canvas.width, canvas.height);
-      const ldata = layerData.data;
-
-      for (let i = 0; i < ldata.length; i += 4) {
-        const r = ldata[i], g = ldata[i + 1], b = ldata[i + 2];
-        const diff = Math.sqrt(
-          Math.pow(r - bgR, 2) + Math.pow(g - bgG, 2) + Math.pow(b - bgB, 2)
-        );
-        const alpha = diff < tolerance
-          ? 0
-          : diff < tolerance * 2
-          ? Math.round(255 * ((diff - tolerance) / tolerance))
-          : 255;
-        ldata[i + 3] = alpha;
-      }
-
-      // Put result on result canvas
-      const finalCanvas = document.createElement('canvas');
-      finalCanvas.width = canvas.width;
-      finalCanvas.height = canvas.height;
-      const fctx = finalCanvas.getContext('2d')!;
-
-      if (backgroundColor === 'blur') {
-        fctx.filter = 'blur(20px)';
-        fctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        fctx.filter = 'none';
-      } else if (backgroundColor === 'gradient-blue') {
-        const grad = fctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-        grad.addColorStop(0, '#3B82F6');
-        grad.addColorStop(1, '#4F46E5');
-        fctx.fillStyle = grad;
-        fctx.fillRect(0, 0, canvas.width, canvas.height);
-      } else if (backgroundColor !== 'transparent') {
-        fctx.fillStyle = backgroundColor === 'white' ? '#FFFFFF'
-          : backgroundColor === 'black' ? '#000000'
-          : backgroundColor === 'navy' ? '#1E3A5F'
-          : '#FFFFFF';
-        fctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
-
-      rctx.putImageData(layerData, 0, 0);
-      fctx.drawImage(resultCanvas, 0, 0);
-
       URL.revokeObjectURL(url);
-      resolve(finalCanvas.toDataURL('image/png'));
+
+      const imageData = ctx.getImageData(0, 0, W, H);
+      const data = imageData.data; // RGBA flat array
+
+      const idx = (x: number, y: number) => (y * W + x) * 4;
+
+      // Colour-distance helper (Euclidean in RGB)
+      const dist = (i: number, j: number) => {
+        const dr = data[i] - data[j];
+        const dg = data[i + 1] - data[j + 1];
+        const db = data[i + 2] - data[j + 2];
+        return Math.sqrt(dr * dr + dg * dg + db * db);
+      };
+
+      // BFS — tolerance: how similar a neighbour must be to propagate
+      const TOLERANCE = 35;
+      const visited = new Uint8Array(W * H); // 0=unvisited, 1=background
+      const queue: number[] = [];
+
+      // Seed from all 4 border edges
+      for (let x = 0; x < W; x++) {
+        const t = idx(x, 0);     if (visited[t / 4] === 0) { visited[t / 4] = 1; queue.push(t); }
+        const b = idx(x, H - 1); if (visited[b / 4] === 0) { visited[b / 4] = 1; queue.push(b); }
+      }
+      for (let y = 1; y < H - 1; y++) {
+        const l = idx(0, y);     if (visited[l / 4] === 0) { visited[l / 4] = 1; queue.push(l); }
+        const r = idx(W - 1, y); if (visited[r / 4] === 0) { visited[r / 4] = 1; queue.push(r); }
+      }
+
+      // 4-connected BFS
+      const DIRS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+      let head = 0;
+      while (head < queue.length) {
+        const pi = queue[head++];
+        const px = (pi / 4) % W;
+        const py = Math.floor((pi / 4) / W);
+
+        for (const [dx, dy] of DIRS) {
+          const nx = px + dx;
+          const ny = py + dy;
+          if (nx < 0 || nx >= W || ny < 0 || ny >= H) continue;
+          const ni = idx(nx, ny);
+          const nFlat = ni / 4;
+          if (visited[nFlat] === 1) continue;
+          if (dist(pi, ni) <= TOLERANCE) {
+            visited[nFlat] = 1;
+            queue.push(ni);
+          }
+        }
+      }
+
+      // Build alpha mask: background → 0, subject → 255
+      const mask = new Uint8Array(W * H);
+      for (let i = 0; i < W * H; i++) {
+        mask[i] = visited[i] === 1 ? 0 : 255;
+      }
+
+      // Morphological close: dilate then erode to fill small holes in subject
+      const dilate = (src: Uint8Array, r: number) => {
+        const out = new Uint8Array(src.length);
+        for (let y = 0; y < H; y++) {
+          for (let x = 0; x < W; x++) {
+            let maxV = 0;
+            for (let dy = -r; dy <= r; dy++) {
+              for (let dx = -r; dx <= r; dx++) {
+                const nx = x + dx, ny = y + dy;
+                if (nx >= 0 && nx < W && ny >= 0 && ny < H) {
+                  maxV = Math.max(maxV, src[ny * W + nx]);
+                }
+              }
+            }
+            out[y * W + x] = maxV;
+          }
+        }
+        return out;
+      };
+
+      const erode = (src: Uint8Array, r: number) => {
+        const out = new Uint8Array(src.length);
+        for (let y = 0; y < H; y++) {
+          for (let x = 0; x < W; x++) {
+            let minV = 255;
+            for (let dy = -r; dy <= r; dy++) {
+              for (let dx = -r; dx <= r; dx++) {
+                const nx = x + dx, ny = y + dy;
+                if (nx >= 0 && nx < W && ny >= 0 && ny < H) {
+                  minV = Math.min(minV, src[ny * W + nx]);
+                }
+              }
+            }
+            out[y * W + x] = minV;
+          }
+        }
+        return out;
+      };
+
+      let refinedMask = dilate(mask, 2);
+      refinedMask = erode(refinedMask, 1);
+
+      // Feather mask edges with a small Gaussian-like box blur
+      const feather = (src: Uint8Array, r: number) => {
+        const out = new Float32Array(src.length);
+        // Horizontal pass
+        const tmp = new Float32Array(src.length);
+        for (let y = 0; y < H; y++) {
+          let sum = 0, count = 0;
+          for (let x = 0; x < r; x++) { sum += src[y * W + x]; count++; }
+          for (let x = 0; x < W; x++) {
+            if (x + r < W) { sum += src[y * W + x + r]; count++; }
+            if (x - r - 1 >= 0) { sum -= src[y * W + x - r - 1]; count--; }
+            tmp[y * W + x] = sum / count;
+          }
+        }
+        // Vertical pass
+        for (let x = 0; x < W; x++) {
+          let sum = 0, count = 0;
+          for (let y = 0; y < r; y++) { sum += tmp[y * W + x]; count++; }
+          for (let y = 0; y < H; y++) {
+            if (y + r < H) { sum += tmp[(y + r) * W + x]; count++; }
+            if (y - r - 1 >= 0) { sum -= tmp[(y - r - 1) * W + x]; count--; }
+            out[y * W + x] = sum / count;
+          }
+        }
+        return out;
+      };
+
+      const feathered = feather(refinedMask, 2);
+
+      // Apply alpha to original pixel data
+      const output = ctx.createImageData(W, H);
+      const od = output.data;
+      for (let i = 0; i < W * H; i++) {
+        const alpha = Math.min(255, Math.max(0, feathered[i]));
+        od[i * 4]     = data[i * 4];
+        od[i * 4 + 1] = data[i * 4 + 1];
+        od[i * 4 + 2] = data[i * 4 + 2];
+        od[i * 4 + 3] = alpha;
+      }
+
+      // Draw result on transparent canvas
+      const resultCanvas = document.createElement('canvas');
+      resultCanvas.width = W;
+      resultCanvas.height = H;
+      const rctx = resultCanvas.getContext('2d')!;
+      rctx.putImageData(output, 0, 0);
+
+      resolve(resultCanvas.toDataURL('image/png'));
     };
+
     img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Failed to load image')); };
+    img.crossOrigin = 'anonymous';
     img.src = url;
   });
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Apply a background preset to an already-transparent cutout PNG
+// This NEVER re-runs removal — it just composites the transparent image over a color/gradient
+// ─────────────────────────────────────────────────────────────────────────────
+async function applyBackground(transparentDataUrl: string, backgroundId: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const W = img.naturalWidth;
+      const H = img.naturalHeight;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = W;
+      canvas.height = H;
+      const ctx = canvas.getContext('2d')!;
+
+      if (backgroundId === 'transparent') {
+        // Just return the transparent image as-is
+        ctx.drawImage(img, 0, 0);
+      } else if (backgroundId === 'white') {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, W, H);
+        ctx.drawImage(img, 0, 0);
+      } else if (backgroundId === 'black') {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, W, H);
+        ctx.drawImage(img, 0, 0);
+      } else if (backgroundId === 'navy') {
+        ctx.fillStyle = '#1E3A5F';
+        ctx.fillRect(0, 0, W, H);
+        ctx.drawImage(img, 0, 0);
+      } else if (backgroundId === 'gray') {
+        ctx.fillStyle = '#6B7280';
+        ctx.fillRect(0, 0, W, H);
+        ctx.drawImage(img, 0, 0);
+      } else if (backgroundId === 'gradient-blue') {
+        const grad = ctx.createLinearGradient(0, 0, W, H);
+        grad.addColorStop(0, '#3B82F6');
+        grad.addColorStop(1, '#4F46E5');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
+        ctx.drawImage(img, 0, 0);
+      } else {
+        // Default: transparent
+        ctx.drawImage(img, 0, 0);
+      }
+
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror = () => reject(new Error('Failed to composite image'));
+    img.src = transparentDataUrl;
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Component
+// ─────────────────────────────────────────────────────────────────────────────
 
 interface ImageInfo {
   width: number;
@@ -225,13 +328,24 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [progressLabel, setProgressLabel] = useState('');
+
+  // Separated state: transparent cutout (cached) vs final display (with background applied)
+  const [transparentResult, setTransparentResult] = useState<string | null>(null);
   const [result, setResult] = useState<string | null>(null);
+
   const [selectedBackground, setSelectedBackground] = useState('transparent');
   const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
   const [activeTab, setActiveTab] = useState<'remove' | 'generate'>('remove');
   const [selectedScene, setSelectedScene] = useState(AI_SCENES[0]);
   const [customPrompt, setCustomPrompt] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // When background preset changes and we already have a transparent cutout, instantly composite
+  useEffect(() => {
+    if (!transparentResult) return;
+    applyBackground(transparentResult, selectedBackground).then(setResult).catch(() => {});
+  }, [selectedBackground, transparentResult]);
 
   const extractImageInfo = useCallback((file: File): Promise<ImageInfo> => {
     return new Promise((resolve) => {
@@ -241,14 +355,13 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
         const w = img.naturalWidth, h = img.naturalHeight;
         const gcd = (a: number, b: number): number => b === 0 ? a : gcd(b, a % b);
         const g = gcd(w, h);
-        const ar = `${w / g}:${h / g}`;
         URL.revokeObjectURL(url);
         resolve({
           width: w, height: h,
           fileSize: file.size > 1024 * 1024
             ? `${(file.size / 1024 / 1024).toFixed(1)} MB`
             : `${Math.round(file.size / 1024)} KB`,
-          aspectRatio: ar,
+          aspectRatio: `${w / g}:${h / g}`,
           fileName: file.name,
         });
       };
@@ -286,14 +399,15 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
   const handleFileSelected = useCallback(async (file: File) => {
     if (file.size > 10 * 1024 * 1024) { toast.error('File too large. Maximum size is 10MB.'); return; }
     if (!file.type.startsWith('image/')) { toast.error('Please upload an image file'); return; }
+    setTransparentResult(null);
     setResult(null);
     setAiAnalysis(null);
     setProgress(0);
+    setProgressLabel('');
     setImage(file);
     setImagePreview(URL.createObjectURL(file));
     const info = await extractImageInfo(file);
     setImageInfo(info);
-    // Auto-analyze
     analyzeWithAI(file);
   }, [extractImageInfo, analyzeWithAI]);
 
@@ -308,19 +422,62 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
     if (file) handleFileSelected(file);
   }, [handleFileSelected]);
 
-  // ── Remove Background (client-side canvas) ──
+  // ── Remove Background: try AI first, fall back to flood-fill ──
   const handleRemoveBackground = async () => {
     if (!image || !consent) { toast.error('Please upload an image and confirm consent'); return; }
     setIsProcessing(true);
-    setProgress(10);
+    setProgress(5);
+    setProgressLabel('Preparing image...');
     try {
-      setProgress(30);
-      const processed = await removeBackgroundClientSide(image, selectedBackground);
+      // Convert to data URL for AI
+      const reader = new FileReader();
+      const dataUrl: string = await new Promise((res, rej) => {
+        reader.onload = () => res(reader.result as string);
+        reader.onerror = rej;
+        reader.readAsDataURL(image);
+      });
+
+      setProgress(20);
+      setProgressLabel('Sending to AI...');
+
+      let transparent: string | null = null;
+
+      try {
+        const { data, error } = await supabase.functions.invoke('ai-background-remove', {
+          body: { mode: 'remove', image: dataUrl }
+        });
+
+        if (!error && data?.success && data?.processedImage) {
+          // AI returned a proper cutout
+          transparent = data.processedImage;
+          setProgress(85);
+          setProgressLabel('AI removal complete!');
+        } else {
+          // AI fallback or not available — use client-side flood-fill
+          throw new Error('AI fallback');
+        }
+      } catch {
+        // Client-side GrabCut-style removal
+        setProgress(40);
+        setProgressLabel('Running smart edge detection...');
+        transparent = await removeBackgroundFloodFill(image);
+        setProgress(80);
+        setProgressLabel('Finalizing cutout...');
+      }
+
+      setTransparentResult(transparent);
+
+      // Apply the selected background preset to the transparent cutout
+      setProgress(90);
+      setProgressLabel('Applying background...');
+      const composited = await applyBackground(transparent, selectedBackground);
+      setResult(composited);
       setProgress(100);
-      setResult(processed);
+      setProgressLabel('Done!');
       toast.success('Background removed successfully!');
     } catch (err) {
       toast.error('Failed to process image. Please try again.');
+      console.error(err);
     } finally {
       setIsProcessing(false);
     }
@@ -334,6 +491,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
 
     setIsGenerating(true);
     setProgress(10);
+    setProgressLabel('Sending to AI...');
     try {
       const reader = new FileReader();
       const dataUrl: string = await new Promise((res, rej) => {
@@ -341,24 +499,32 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
         reader.onerror = rej;
         reader.readAsDataURL(image);
       });
-      setProgress(40);
+      setProgress(30);
+      setProgressLabel('AI compositing scene...');
       const { data, error } = await supabase.functions.invoke('ai-background-remove', {
         body: { mode: 'generate', image: dataUrl, generationPrompt: prompt }
       });
-      setProgress(90);
+      setProgress(85);
       if (error) throw new Error(error.message);
       if (data?.error) throw new Error(data.error);
 
       if (data?.success && data?.processedImage) {
+        setTransparentResult(null); // AI generate creates a fully composited result
         setResult(data.processedImage);
         setProgress(100);
+        setProgressLabel('Done!');
         toast.success('AI background generated successfully!');
       } else if (data?.fallbackToRemoval) {
-        // Fallback to client-side removal
-        const processed = await removeBackgroundClientSide(image, 'transparent');
-        setResult(processed);
+        // AI couldn't generate — do client-side removal instead
+        setProgress(50);
+        setProgressLabel('Falling back to background removal...');
+        const transparent = await removeBackgroundFloodFill(image);
+        setTransparentResult(transparent);
+        const composited = await applyBackground(transparent, 'transparent');
+        setResult(composited);
         setProgress(100);
-        toast.info('AI placed you in the scene. Background removal applied as base layer.');
+        setProgressLabel('Done!');
+        toast.info('Background removed. AI scene generation is temporarily unavailable.');
       } else {
         throw new Error(data?.error || 'Generation failed');
       }
@@ -391,18 +557,30 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImage(null);
     setImagePreview(null);
+    setTransparentResult(null);
     setResult(null);
     setProgress(0);
+    setProgressLabel('');
     setAiAnalysis(null);
     setImageInfo(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
+  const resetResult = () => {
+    setTransparentResult(null);
+    setResult(null);
+    setProgress(0);
+    setProgressLabel('');
+  };
+
   const isLoading = isProcessing || isGenerating;
+
+  // Checkerboard background for transparent preview
+  const checkerboard = "url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImNoZWNrZXJib2FyZCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cmVjdCB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiMxNDE2MjAiLz48cmVjdCB4PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMUExRjMwIi8+PHJlY3QgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzFBMUYzMCIvPjxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMTQxNjIwIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2NoZWNrZXJib2FyZCkiLz48L3N2Zz4=')";
 
   return (
     <div style={{ background: C.bg, minHeight: "100vh" }}>
-      {/* Hidden file input — always rendered */}
+      {/* Hidden file input */}
       <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileInput} className="hidden" />
 
       {!embedded && (
@@ -486,7 +664,6 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                   </>
                 )}
                 <div className="ml-auto">
-                  {/* Trash Button — clearly styled */}
                   <button
                     onClick={resetAll}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
@@ -509,7 +686,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                   style={{ borderBottom: "1px solid rgba(99,102,241,0.1)" }}>
                   <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText }}>Original</span>
                 </div>
-                <div className="aspect-square flex items-center justify-center p-2" style={{ background: "url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImNoZWNrZXJib2FyZCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cmVjdCB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiMxNDE2MjAiLz48cmVjdCB4PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMUExRjMwIi8+PHJlY3QgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzFBMUYzMCIvPjxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMTQxNjIwIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2NoZWNrZXJib2FyZCkiLz48L3N2Zz4=')" }}>
+                <div className="aspect-square flex items-center justify-center p-2" style={{ background: checkerboard }}>
                   {imagePreview && <img src={imagePreview} alt="Original" className="max-w-full max-h-full object-contain rounded-lg" />}
                 </div>
               </div>
@@ -526,14 +703,14 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                     </span>
                   )}
                 </div>
-                <div className="aspect-square flex items-center justify-center p-2" style={{ background: "url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImNoZWNrZXJib2FyZCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cmVjdCB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiMxNDE2MjAiLz48cmVjdCB4PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMUExRjMwIi8+PHJlY3QgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzFBMUYzMCIvPjxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjMTQxNjIwIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2NoZWNrZXJib2FyZCkiLz48L3N2Zz4=')" }}>
+                <div className="aspect-square flex items-center justify-center p-2" style={{ background: checkerboard }}>
                   {result ? (
                     <img src={result} alt="Result" className="max-w-full max-h-full object-contain rounded-lg" />
                   ) : isLoading ? (
                     <div className="text-center">
                       <Loader2 className="h-10 w-10 mx-auto mb-3 animate-spin" style={{ color: C.accentText }} />
                       <p className="text-sm" style={{ color: C.mutedText }}>
-                        {isGenerating ? 'AI is compositing your scene...' : 'Removing background...'}
+                        {progressLabel || (isGenerating ? 'AI is compositing your scene...' : 'Removing background...')}
                       </p>
                       <p className="text-xs mt-1" style={{ color: C.dimText }}>{Math.round(progress)}%</p>
                     </div>
@@ -547,7 +724,12 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               </div>
             </div>
 
-            {isLoading && <Progress value={progress} className="h-1.5" />}
+            {isLoading && (
+              <div className="space-y-1.5">
+                <Progress value={progress} className="h-1.5" />
+                {progressLabel && <p className="text-xs text-center" style={{ color: C.accentText }}>{progressLabel}</p>}
+              </div>
+            )}
 
             {/* Mode Tabs */}
             <div className="flex gap-1 p-1 rounded-xl" style={{ background: "rgba(99,102,241,0.06)", border: `1px solid ${C.border}` }}>
@@ -557,7 +739,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               ].map(tab => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
+                  onClick={() => setActiveTab(tab.id as 'remove' | 'generate')}
                   className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-all"
                   style={{
                     background: activeTab === tab.id ? C.btnPrimary : 'transparent',
@@ -576,8 +758,13 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               <div className="rounded-2xl p-5 space-y-4" style={{ background: C.surface, border: `1px solid ${C.border}` }}>
                 <h3 className="text-white font-semibold flex items-center gap-2">
                   <Palette className="h-4 w-4" style={{ color: C.accentText }} />
-                  New Background
-                  {aiAnalysis?.recommendedBackground && (
+                  Background Color
+                  {transparentResult && (
+                    <span className="ml-auto text-xs flex items-center gap-1" style={{ color: "#4ade80" }}>
+                      <CheckCircle2 className="h-3 w-3" /> Switching is instant — subject never re-processed
+                    </span>
+                  )}
+                  {!transparentResult && aiAnalysis?.recommendedBackground && (
                     <span className="ml-auto text-xs flex items-center gap-1" style={{ color: C.accentText }}>
                       <Sparkles className="h-3 w-3" /> AI recommended
                     </span>
@@ -613,6 +800,11 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                     </button>
                   ))}
                 </div>
+                {transparentResult && (
+                  <p className="text-xs rounded-lg px-3 py-2" style={{ background: "rgba(74,222,128,0.08)", border: "1px solid rgba(74,222,128,0.2)", color: "#4ade80" }}>
+                    ✓ Background removed — click any color above to switch instantly without re-processing.
+                  </p>
+                )}
               </div>
             )}
 
@@ -671,7 +863,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3">
-              {activeTab === 'remove' && (
+              {activeTab === 'remove' && !transparentResult && (
                 <button
                   onClick={handleRemoveBackground}
                   disabled={!consent || isLoading}
@@ -679,8 +871,17 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                   style={{ background: C.btnPrimary, boxShadow: C.btnShadow }}
                 >
                   {isProcessing
-                    ? <><Loader2 className="h-5 w-5 animate-spin" /> Processing {Math.round(progress)}%</>
+                    ? <><Loader2 className="h-5 w-5 animate-spin" /> {progressLabel || `Processing ${Math.round(progress)}%`}</>
                     : <><Wand2 className="h-5 w-5" /> Remove Background</>}
+                </button>
+              )}
+              {activeTab === 'remove' && transparentResult && (
+                <button
+                  onClick={resetResult}
+                  className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-medium transition-all"
+                  style={{ background: "rgba(255,255,255,0.06)", border: `1px solid ${C.border}`, color: "rgba(255,255,255,0.7)" }}
+                >
+                  <RefreshCw className="h-4 w-4" /> Re-process
                 </button>
               )}
               {activeTab === 'generate' && (
@@ -691,27 +892,18 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                   style={{ background: "linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)", boxShadow: "0 4px 20px rgba(139,92,246,0.4)" }}
                 >
                   {isGenerating
-                    ? <><Loader2 className="h-5 w-5 animate-spin" /> Generating Scene {Math.round(progress)}%</>
+                    ? <><Loader2 className="h-5 w-5 animate-spin" /> {progressLabel || `Generating Scene ${Math.round(progress)}%`}</>
                     : <><Sparkles className="h-5 w-5" /> Generate AI Scene</>}
                 </button>
               )}
               {result && (
-                <>
-                  <button
-                    onClick={() => { setResult(null); setProgress(0); }}
-                    className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-medium transition-all"
-                    style={{ background: "rgba(255,255,255,0.06)", border: `1px solid ${C.border}`, color: "rgba(255,255,255,0.7)" }}
-                  >
-                    <RefreshCw className="h-4 w-4" /> Try Again
-                  </button>
-                  <button
-                    onClick={handleDownload}
-                    className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-semibold text-white transition-all"
-                    style={{ background: "linear-gradient(135deg, #059669, #10B981)", boxShadow: "0 4px 16px rgba(16,185,129,0.35)" }}
-                  >
-                    <Download className="h-4 w-4" /> Download PNG
-                  </button>
-                </>
+                <button
+                  onClick={handleDownload}
+                  className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-semibold text-white transition-all"
+                  style={{ background: "linear-gradient(135deg, #059669, #10B981)", boxShadow: "0 4px 16px rgba(16,185,129,0.35)" }}
+                >
+                  <Download className="h-4 w-4" /> Download PNG
+                </button>
               )}
             </div>
           </div>
@@ -719,7 +911,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
 
         <div className="mt-12 p-4 rounded-xl text-center" style={{ background: "rgba(99,102,241,0.03)", border: "1px solid rgba(99,102,241,0.08)" }}>
           <p className="text-xs" style={{ color: C.dimText }}>
-            Background removal is instant & client-side · AI scene generation uses cloud processing · Max 10MB per image
+            Smart edge-detection removal · AI scene generation uses cloud processing · Background switching is instant after first removal · Max 10MB per image
           </p>
         </div>
       </main>
