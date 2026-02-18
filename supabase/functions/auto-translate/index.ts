@@ -20,6 +20,22 @@ const LANGUAGE_NAMES: Record<string, string> = {
   de: "German (Deutsch)",
   it: "Italian (Italiano)",
   nl: "Dutch (Nederlands)",
+  pt: "Portuguese (Português)",
+  ja: "Japanese (日本語)",
+  ko: "Korean (한국어)",
+  ur: "Urdu (اردو)",
+  he: "Hebrew (עברית)",
+  pl: "Polish (Polski)",
+  th: "Thai (ภาษาไทย)",
+  vi: "Vietnamese (Tiếng Việt)",
+  id: "Indonesian (Bahasa Indonesia)",
+  ms: "Malay (Bahasa Melayu)",
+  tl: "Tagalog (Filipino)",
+  bn: "Bengali (বাংলা)",
+  ta: "Tamil (தமிழ்)",
+  te: "Telugu (తెలుగు)",
+  ml: "Malayalam (മലയാളം)",
+  sw: "Swahili (Kiswahili)",
 };
 
 serve(async (req) => {
