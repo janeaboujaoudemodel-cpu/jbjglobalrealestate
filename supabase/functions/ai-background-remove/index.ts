@@ -36,22 +36,44 @@ Deno.serve(async (req) => {
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+      console.error("LOVABLE_API_KEY not configured");
+      return new Response(
+        JSON.stringify({ success: false, fallbackToClientSide: true, reason: "API key not configured" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const body = await req.json();
-    const { mode, image, backgroundColor, generationPrompt } = body;
+    const { mode, image, generationPrompt } = body;
+
+    if (!image) {
+      return new Response(
+        JSON.stringify({ error: "No image provided" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Helper to extract image URL from AI response
+    function extractImageFromResponse(result: any): string | null {
+      const choice = result.choices?.[0]?.message;
+      if (!choice) return null;
+
+      // Check images array (some models return this)
+      if (choice.images?.[0]?.image_url?.url) return choice.images[0].image_url.url;
+
+      // Check content array for image_url type
+      if (Array.isArray(choice.content)) {
+        for (const part of choice.content) {
+          if (part.type === "image_url" && part.image_url?.url) return part.image_url.url;
+        }
+      }
+
+      return null;
+    }
 
     // ── MODE: AI Remove Background ──
     if (mode === "remove") {
-      if (!image) {
-        return new Response(
-          JSON.stringify({ error: "No image provided" }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
-      console.log("AI background removal requested");
+      console.log("AI background removal requested — using gemini-3-pro-image-preview");
 
       const removeResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
@@ -60,14 +82,14 @@ Deno.serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "google/gemini-2.5-flash-image",
+          model: "google/gemini-3-pro-image-preview",
           messages: [
             {
               role: "user",
               content: [
                 {
                   type: "text",
-                  text: "Remove the background from this image completely. Return ONLY the subject (person or object) with a perfectly transparent background as a PNG. The cutout must be precise along the edges of the subject — no background remnants, no halo artifacts. Keep all details of the subject intact: hair, skin, clothing, accessories. Do not alter the subject in any way.",
+                  text: "Remove the background from this image completely. Keep ONLY the subject (person, object, or product) with a perfectly transparent background. The cutout must be precise — no background remnants, no halo artifacts. Preserve all details: hair, skin, clothing, accessories. Do not change, alter, or retouch the subject in any way. Return the result as a PNG image with alpha transparency.",
                 },
                 {
                   type: "image_url",
@@ -80,70 +102,61 @@ Deno.serve(async (req) => {
         }),
       });
 
+      console.log("AI remove response status:", removeResponse.status);
+
       if (!removeResponse.ok) {
+        const errText = await removeResponse.text();
+        console.error("AI removal error:", removeResponse.status, errText.substring(0, 500));
+
         if (removeResponse.status === 429) {
           return new Response(
-            JSON.stringify({ error: "Rate limit exceeded. Please wait a moment and try again." }),
-            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            JSON.stringify({ success: false, fallbackToClientSide: true, reason: "rate_limit" }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
         if (removeResponse.status === 402) {
           return new Response(
-            JSON.stringify({ error: "AI credits exhausted. Please try again later." }),
-            { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            JSON.stringify({ success: false, fallbackToClientSide: true, reason: "credits_exhausted" }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
-        const errText = await removeResponse.text();
-        console.error("AI removal error:", removeResponse.status, errText);
-        // Signal fallback to client-side
+        // Any other error — fall back
         return new Response(
-          JSON.stringify({ success: false, fallbackToClientSide: true }),
+          JSON.stringify({ success: false, fallbackToClientSide: true, reason: `api_error_${removeResponse.status}` }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
 
       const removeResult = await removeResponse.json();
-      console.log("AI removal response keys:", Object.keys(removeResult));
+      console.log("AI removal result choices count:", removeResult.choices?.length);
 
-      // Extract generated image from response
-      const choice = removeResult.choices?.[0]?.message;
-      const generatedImage =
-        choice?.images?.[0]?.image_url?.url ||
-        choice?.content?.find?.((c: any) => c.type === "image_url")?.image_url?.url ||
-        (Array.isArray(choice?.content)
-          ? choice.content.find((c: any) => c.type === "image_url")?.image_url?.url
-          : null);
+      const generatedImage = extractImageFromResponse(removeResult);
 
       if (generatedImage) {
+        console.log("AI removal succeeded — image returned");
         return new Response(
           JSON.stringify({ success: true, processedImage: generatedImage, mode: "remove" }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
 
-      // Model returned text instead of image — fall back to client-side
+      // Model returned text instead of image — log and fall back
+      const choice = removeResult.choices?.[0]?.message;
       const textContent = typeof choice?.content === "string"
         ? choice.content
-        : choice?.content?.[0]?.text;
-      console.log("Removal model returned text:", textContent?.substring(0, 200));
+        : Array.isArray(choice?.content) ? choice.content.find((c: any) => c.type === "text")?.text : "";
+      console.log("AI removal returned text (no image):", textContent?.substring(0, 300));
 
       return new Response(
-        JSON.stringify({ success: false, fallbackToClientSide: true }),
+        JSON.stringify({ success: false, fallbackToClientSide: true, reason: "no_image_in_response" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     // ── MODE: AI Generate Background (composite person into AI scene) ──
     if (mode === "generate") {
-      if (!image) {
-        return new Response(
-          JSON.stringify({ error: "No image provided for AI generation" }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
       const prompt = generationPrompt || "A modern luxury real estate office with floor-to-ceiling windows and a city skyline view";
-      console.log(`AI background generation: ${prompt}`);
+      console.log(`AI background generation requested: ${prompt.substring(0, 100)}`);
 
       const genResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
@@ -152,14 +165,14 @@ Deno.serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "google/gemini-2.5-flash-image",
+          model: "google/gemini-3-pro-image-preview",
           messages: [
             {
               role: "user",
               content: [
                 {
                   type: "text",
-                  text: `Take the person from this image, remove their original background completely, and realistically composite them into this new scene: ${prompt}. Keep the person's appearance exactly the same. Match the lighting and perspective naturally. The final image should look photorealistic and professional.`,
+                  text: `Take the person from this image, completely remove their original background, and realistically composite them into this new scene: ${prompt}. Keep the person's appearance exactly the same — same face, clothes, pose. Match the lighting and perspective naturally so it looks like they are actually standing in that scene. The final image must look photorealistic and professional.`,
                 },
                 {
                   type: "image_url",
@@ -172,7 +185,12 @@ Deno.serve(async (req) => {
         }),
       });
 
+      console.log("AI generate response status:", genResponse.status);
+
       if (!genResponse.ok) {
+        const errText = await genResponse.text();
+        console.error("AI generation error:", genResponse.status, errText.substring(0, 500));
+
         if (genResponse.status === 429) {
           return new Response(
             JSON.stringify({ error: "Rate limit exceeded. Please wait a moment and try again." }),
@@ -185,33 +203,25 @@ Deno.serve(async (req) => {
             { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
-        const errText = await genResponse.text();
-        console.error("AI generation error:", genResponse.status, errText);
-        throw new Error("AI generation failed");
+        throw new Error(`AI generation failed with status ${genResponse.status}`);
       }
 
       const genResult = await genResponse.json();
-      const genChoice = genResult.choices?.[0]?.message;
-      const generatedImage =
-        genChoice?.images?.[0]?.image_url?.url ||
-        genChoice?.content?.find?.((c: any) => c.type === "image_url")?.image_url?.url ||
-        (Array.isArray(genChoice?.content)
-          ? genChoice.content.find((c: any) => c.type === "image_url")?.image_url?.url
-          : null);
+      const generatedImage = extractImageFromResponse(genResult);
 
       if (generatedImage) {
+        console.log("AI generation succeeded");
         return new Response(
           JSON.stringify({ success: true, processedImage: generatedImage, mode: "generate" }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
 
-      // Fallback: model returned text instead of image
       console.log("Generation model returned text instead of image");
       return new Response(
         JSON.stringify({
           success: false,
-          error: "AI could not generate the scene image. Background removal (transparent) has been applied instead.",
+          error: "AI could not generate the scene image. Background removal has been applied instead.",
           fallbackToRemoval: true,
         }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -220,13 +230,6 @@ Deno.serve(async (req) => {
 
     // ── MODE: Analyze image for smart removal hints ──
     if (mode === "analyze") {
-      if (!image) {
-        return new Response(
-          JSON.stringify({ error: "No image provided" }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
       const analyzeResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -243,12 +246,9 @@ Deno.serve(async (req) => {
                   type: "text",
                   text: `Analyze this image and respond with ONLY a valid JSON object (no markdown, no explanation):
 {
-  "width": <estimated width in px>,
-  "height": <estimated height in px>,  
-  "aspectRatio": "<e.g. 16:9 or 4:3 or 1:1 or 3:4>",
   "primarySubject": "<person | product | building | vehicle | other>",
   "backgroundComplexity": "<simple | medium | complex>",
-  "recommendedBackground": "<transparent | white | blur | office | nature | city>",
+  "recommendedBackground": "<transparent | white | navy | gray | black | gradient-blue>",
   "subjectDescription": "<1 sentence describing the main subject>"
 }`,
                 },
@@ -259,7 +259,7 @@ Deno.serve(async (req) => {
               ],
             },
           ],
-          max_tokens: 500,
+          max_tokens: 300,
         }),
       });
 
@@ -285,7 +285,7 @@ Deno.serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ success: true, clientSideRemoval: true }),
+      JSON.stringify({ success: false, fallbackToClientSide: true }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
 
@@ -293,7 +293,7 @@ Deno.serve(async (req) => {
     console.error("Background AI error:", error);
     const errorMessage = error instanceof Error ? error.message : "Processing failed";
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ error: errorMessage, fallbackToClientSide: true }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
