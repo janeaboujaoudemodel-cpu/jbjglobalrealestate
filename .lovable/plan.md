@@ -1,129 +1,159 @@
 
-# Advanced Filter — Areas Dropdown, Full Developer List with Logos, and Cross-Page Consistency
+# AI Document Generator — Smart Per-Type Forms & Intelligent Edge Function
 
-## What the User Is Asking For
+## The Core Problem
 
-1. **Add all areas to the area dropdown** in the filter — the AdvancedFilterPanel's Location section only shows UAE Emirates (7 options), not the 188 individual areas from the database.
-2. **All developers with logos** in the developer dropdown — the developer list currently loads but may not show logos reliably; needs the developer logo to appear next to the name in every dropdown.
-3. **Use the same AdvancedFilterPanel across all pages** — Projects (PropertiesReelly), Developers, AreaGuides, AreaDetail, DeveloperDetail pages should all open the same filter dialog.
-4. **Developers page** — its own filtering UI uses `SearchableSelect` and a `selectedDeveloper` state, but does NOT wire into the AdvancedFilterPanel at all. Needs to hook in.
+The AI Document Generator shows the **same 5 fields** regardless of whether you pick "SMS/WhatsApp", "Property Listing", or "Follow-up Email". This means:
+- An SMS form asks for the same info as a legal contract
+- The AI gets very little context, producing nearly identical generic output
+- Fields like "Recipient Name" and "Subject" make no sense for a Property Listing
+- The edge function expects `propertyDetails` / `partyDetails` but the frontend sends `details` / `recipientName` — there is a **field name mismatch** causing the AI to get the wrong data
 
----
+## What Each Type Should Have
 
-## Root Cause Analysis
+| Document Type | Unique Fields |
+|---|---|
+| **Property Listing** | Property name, Location/Area, Size (sqft), Bedrooms, Price (AED), Key features (amenities), Developer, Handover date, ROI/yield %, View type |
+| **Follow-up Email** | Client name, Previous meeting date, Properties discussed, Next steps, Urgency level |
+| **Introduction Email** | Client name, Nationality, Budget, Property type interest, How they found us |
+| **SMS / WhatsApp** | Client name, Message purpose, Character limit (160 / 320), Include link? |
+| **Social Media Post** | Platform (Instagram/LinkedIn/Twitter/TikTok), Property highlights, Hashtag style, Include emojis? |
+| **Newsletter** | Topic, Target segment, Key properties to feature, Market stat to include |
+| **Brochure Text** | Property name, Developer, USPs, Lifestyle description, Location advantages |
+| **Client Report** | Client name, Budget range, Requirements, Properties viewed, Recommendation |
 
-### Problem 1: No Areas in Location Dropdown
-In `AdvancedFilterPanel.tsx`, the Location section renders from `UAE_EMIRATES` — a hardcoded 7-item array from `filterConfig.ts`. There is **no fetch from the `areas` database table** and no `areas` field in `ShortcutFilterState`. The 188 active areas are completely missing from the filter.
+## Plan
 
-### Problem 2: ShortcutFilterState Has No `areas` Field
-`ShortcutFilterState` in `FilterShortcutBar.tsx` only has:
-- `emirates: string[]` — the UAE emirate filter
-- `developers: string[]` — the developer filter
-- No `areas: string[]` field at all
+### File 1: `src/components/ai-tools/premium/AIDocumentGeneratorPremium.tsx`
 
-`applyShortcutFilters.ts` also has no area-based filtering logic.
+**Complete redesign** with dynamic form rendering:
 
-### Problem 3: Developer Logos Not Showing Reliably
-The `AdvancedFilterPanel` already fetches `name, logo_url` from `developers` — but the `SafeImage` fallback may fail silently. The Developers page's own filter UI (uses a `SearchableSelect` component) shows developer names without logos.
+1. **Type Selector Row** — Keep the 4-button quick-pick grid (top row) + dropdown for more. When you click a type, the form below **morphs** to show only the fields relevant to that type.
 
-### Problem 4: Developers Page Has Separate Filter UI Not Connected to AdvancedFilterPanel
-`Developers.tsx` has its own filter bar with `SearchableSelect`, `Input`, and `Select` dropdowns — these are completely independent and do not use `FilterShortcutBar` or `AdvancedFilterPanel`. So clicking "Filter" on the Developers page doesn't open the shared dialog.
-
-### Problem 5: Areas Page Has No Developer Filter
-`AreaGuides.tsx` uses `FilterShortcutBar` but does not filter by areas or developers since those fields don't exist in the state.
-
----
-
-## Files to Change
-
-### 1. `src/components/filters/FilterShortcutBar.tsx` — Add `areas` to ShortcutFilterState
-Add a new `areas: string[]` field to `ShortcutFilterState` and `defaultShortcutFilters`. Add an "Area" pill popover in Row 2 of the filter bar that lets users pick areas (fetched from the database, grouped by emirate).
-
-### 2. `src/components/filters/AdvancedFilterPanel.tsx` — Add Areas Section + Fix Developer Logo Display
-- Add a new "Area" collapsible section that fetches all 188 active areas from the database, grouped by emirate (Dubai areas, Abu Dhabi areas, etc.)
-- Area search input to filter the list
-- Multi-select checkboxes exactly like the Emirates section
-- Ensure developer logos display with proper fallback initials
-- Expand the `localFilters` to include the new `areas` field
-
-### 3. `src/utils/applyShortcutFilters.ts` — Add Area Filtering Logic
-Add area filtering: when `sf.areas.length > 0`, filter projects where `p.area_name` matches any of the selected areas.
-
-### 4. `src/pages/Developers.tsx` — Wire AdvancedFilterPanel
-- Add `shortcutFilters` / `setShortcutFilters` state using `ShortcutFilterState`
-- Import and render `FilterShortcutBar` in the sticky filter bar section (replacing or alongside the current custom filter UI)
-- Remove the isolated `SearchableSelect`/`selectedDeveloper` in favor of the unified filter
-- The developer grid will now filter using `shortcutFilters.developers`
-
-### 5. `src/pages/AreaGuides.tsx` — Connect Areas Filter to Actual Area Filtering
-The area guides page already uses `FilterShortcutBar`, but only uses `sortBy` and `searchQuery`. With the new `areas` field in `ShortcutFilterState`, the area guides page can also filter by selected areas.
-
----
-
-## Detailed Implementation
-
-### `ShortcutFilterState` changes (FilterShortcutBar.tsx)
-```typescript
-// Add to interface:
-areas: string[];   // NEW — individual area names from database
-
-// Add to defaultShortcutFilters:
-areas: [],
-```
-
-### AdvancedFilterPanel — New Areas Section
-The Location section will be split into two collapsibles:
-- **Emirates** (existing, unchanged)
-- **Area** (new) — fetches from `areas` table, grouped by emirate
+2. **Per-type field configs** — A `DOCUMENT_TYPE_CONFIGS` map that defines each type's unique fields:
 
 ```typescript
-// New state inside AdvancedFilterPanel:
-const [areas, setAreas] = useState<{ name: string; emirate: string }[]>([]);
-const [areasOpen, setAreasOpen] = useState(false);
-const [areaSearch, setAreaSearch] = useState('');
-
-// Fetch on open:
-useEffect(() => {
-  if (!open) return;
-  supabase
-    .from('areas')
-    .select('name, emirate')
-    .eq('is_active', true)
-    .order('name')
-    .then(({ data }) => {
-      if (data) setAreas(data);
-    });
-}, [open]);
-
-// Render: grouped by emirate (Dubai, Abu Dhabi, etc.)
-// Filtered by areaSearch
-// Multi-select with checkboxes, same style as Emirates section
-```
-
-### applyShortcutFilters.ts — Areas Logic
-```typescript
-// Add after Emirates block:
-if (sf.areas && sf.areas.length > 0) {
-  result = result.filter(p => {
-    const area = (p.area_name || p.district || '').toLowerCase();
-    return sf.areas.some(a => area.toLowerCase().includes(a.toLowerCase()));
-  });
+const DOCUMENT_TYPE_CONFIGS = {
+  "listing": {
+    label: "Property Listing",
+    description: "A compelling MLS-style listing description for portals (Bayut, PropertyFinder, Dubizzle)",
+    fields: [
+      { key: "propertyName", label: "Property / Project Name *", type: "input", placeholder: "e.g. Emaar Beachfront - Marina Vista" },
+      { key: "location", label: "Area / Location *", type: "input", placeholder: "e.g. Dubai Marina, JBR" },
+      { key: "propertyType", label: "Property Type", type: "select", options: ["Apartment","Villa","Townhouse","Penthouse","Office","Retail","Plot"] },
+      { key: "bedrooms", label: "Bedrooms", type: "select", options: ["Studio","1BR","2BR","3BR","4BR","5BR+","Commercial"] },
+      { key: "size", label: "Size (sqft)", type: "input", placeholder: "e.g. 1,250 sqft" },
+      { key: "price", label: "Price (AED)", type: "input", placeholder: "e.g. AED 2,500,000" },
+      { key: "developer", label: "Developer", type: "input", placeholder: "e.g. Emaar Properties" },
+      { key: "handover", label: "Handover / Completion", type: "input", placeholder: "e.g. Q4 2026" },
+      { key: "amenities", label: "Key Amenities & Features", type: "textarea", placeholder: "Pool, gym, sea view, smart home..." },
+      { key: "roi", label: "Expected ROI / Rental Yield", type: "input", placeholder: "e.g. 6-8% annual" },
+    ]
+  },
+  "email-follow-up": {
+    label: "Follow-up Email",
+    description: "A professional follow-up after a meeting or property viewing",
+    fields: [
+      { key: "clientName", label: "Client Name *", type: "input", placeholder: "e.g. Mr. Ahmed Al Mansoori" },
+      { key: "meetingDate", label: "Previous Meeting / Viewing Date", type: "input", placeholder: "e.g. 15 February 2026" },
+      { key: "propertiesDiscussed", label: "Properties / Projects Discussed", type: "textarea", placeholder: "e.g. Sobha Hartland 2 villas, Dubai Hills townhouses" },
+      { key: "clientBudget", label: "Client Budget", type: "input", placeholder: "e.g. AED 3–5M" },
+      { key: "nextSteps", label: "Proposed Next Steps", type: "input", placeholder: "e.g. Schedule site visit, send EOI form" },
+      { key: "urgency", label: "Urgency", type: "select", options: ["Low – exploring options","Medium – actively looking","High – ready to buy this month"] },
+    ]
+  },
+  "email-introduction": { ... },
+  "sms": { ... },
+  ...
 }
 ```
 
-### Developers Page — Wire FilterShortcutBar
-Replace the custom filter header in `Developers.tsx` with the shared `FilterShortcutBar`. The developer list will be filtered by `shortcutFilters.developers` instead of the local `selectedDeveloper` state.
+3. **Dynamic field state** — Instead of a fixed `formData` object, use a `Record<string, string>` that resets when type changes:
 
-The existing tier filter and sort will stay as local supplementary controls since they are specific to the Developers page.
+```typescript
+const [typeFields, setTypeFields] = useState<Record<string, string>>({});
+const handleTypeChange = (newType: string) => {
+  setFormData(prev => ({ ...prev, documentType: newType }));
+  setTypeFields({}); // reset fields on type switch
+};
+```
 
----
+4. **Dynamic form renderer** — A `renderField()` helper renders `input`, `textarea`, `select`, or `radio` based on the field config.
 
-## Summary of Changes
+5. **Tone selector** — Keep as-is, but hide it for SMS (character limit matters more than tone there).
+
+6. **Submit payload** — Sends the full `typeFields` record alongside `documentType` and `tone` to the edge function:
+
+```typescript
+const result = await invokeTool("ai-document-generator", {
+  documentType: formData.documentType,
+  tone: formData.tone,
+  typeFields,  // all per-type specific fields
+});
+```
+
+### File 2: `supabase/functions/ai-document-generator/index.ts`
+
+**Rewrite the prompt system** to be per-document-type aware:
+
+1. **Fix the field name mismatch** — Accept `typeFields` from frontend (plus backwards-compat with old `details`)
+
+2. **Per-type system prompts** — Each type gets a specialized system role and output instructions:
+
+```typescript
+const TYPE_PROMPTS: Record<string, { systemRole: string; outputInstructions: string; maxChars?: number }> = {
+  "listing": {
+    systemRole: "You are an expert Dubai real estate copywriter specializing in property portal listings (Bayut, PropertyFinder). Write compelling, SEO-optimized listings.",
+    outputInstructions: "Write a 300-400 word property listing with: headline, 3-sentence overview, bullet-point features, location section, payment plan mention, call to action."
+  },
+  "email-follow-up": {
+    systemRole: "You are a top real estate agent writing a professional client follow-up email after a property viewing.",
+    outputInstructions: "Write a warm, professional follow-up email with: subject line, greeting, recap of viewing, 2-3 property highlights, next steps CTA, signature from JBJ Global."
+  },
+  "sms": {
+    systemRole: "You write concise, high-converting real estate WhatsApp/SMS messages.",
+    outputInstructions: "Write 2 versions: (1) under 160 characters for SMS, (2) under 320 characters for WhatsApp. Both must include a call to action. No filler words."
+  },
+  "social-media": {
+    systemRole: "You are a real estate social media content creator for Dubai luxury properties.",
+    outputInstructions: "Write the post body, 3 hashtag sets (general/location/luxury), a caption hook for the first line, and a CTA. Adapt style for the specified platform."
+  },
+  ...
+};
+```
+
+3. **Structured output per type** — The JSON response shape changes per type:
+   - `listing`: returns `{ document, headline, keyFeatures[], callToAction }`
+   - `email-follow-up`: returns `{ subject, document, nextSteps[] }`
+   - `sms`: returns `{ smsVersion (≤160 chars), whatsappVersion (≤320 chars), document }`
+   - `social-media`: returns `{ document, hashtags[], hook, platform }`
+
+4. **Smart context assembly** — Build the prompt from the `typeFields`:
+
+```typescript
+const fieldContext = Object.entries(typeFields || {})
+  .map(([k, v]) => `${k}: ${v}`)
+  .join('\n');
+```
+
+### File 3: Output Display in `AIDocumentGeneratorPremium.tsx`
+
+The results section needs to adapt per type too:
+- **SMS** → show two boxes: "SMS Version (160 chars)" and "WhatsApp Version (320 chars)"
+- **Email types** → show subject line box + email body
+- **Social Media** → show post content + hashtag chips + platform badge
+- **Property Listing** → show full listing + a "Copy as Portal Format" button
+- **All** → keep copy and alternative versions
+
+## Priority Order
+
+1. Frontend form per-type configs and dynamic renderer (`AIDocumentGeneratorPremium.tsx`)
+2. Edge function per-type prompt system + fix field mismatch (`ai-document-generator/index.ts`)
+3. Per-type output display in results section
+
+## Summary of Files
 
 | File | Change |
 |---|---|
-| `FilterShortcutBar.tsx` | Add `areas: string[]` to `ShortcutFilterState` + `defaultShortcutFilters`; add "Area" pill popover in Row 2 |
-| `AdvancedFilterPanel.tsx` | Add full "Area" collapsible section with 188 database areas grouped by emirate; fix `localFilters` to include `areas`; improve logo display |
-| `applyShortcutFilters.ts` | Add area-based filtering when `sf.areas.length > 0` |
-| `Developers.tsx` | Replace custom filter with `FilterShortcutBar`; filter developer grid using `shortcutFilters.developers` |
-| `AreaGuides.tsx` | Connect new `areas` field in filter to the area display logic |
+| `AIDocumentGeneratorPremium.tsx` | Full redesign: per-type field configs, dynamic form renderer, per-type output display |
+| `supabase/functions/ai-document-generator/index.ts` | Rewrite: accept `typeFields`, per-type system prompts, per-type structured output |
