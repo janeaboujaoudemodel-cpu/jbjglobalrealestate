@@ -230,6 +230,7 @@ const Footer = () => {
     { href: "/toolkit/beauty-filters", label: "Beauty Filters" },
     { href: "/toolkit/stamp-generator", label: "AI Stamp Generator" },
     { href: "/toolkit/scan-sign", label: "Scan & Sign" },
+    { href: "/e-signature", label: "JBJ E-Sign" },
     { href: "/studio", label: "Creative Suite" },
   ];
 

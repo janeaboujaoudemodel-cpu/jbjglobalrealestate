@@ -6713,6 +6713,39 @@ export type Database = {
           },
         ]
       }
+      esign_documents: {
+        Row: {
+          created_at: string | null
+          file_name: string | null
+          file_url: string | null
+          id: string
+          status: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          file_name?: string | null
+          file_url?: string | null
+          id?: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          file_name?: string | null
+          file_url?: string | null
+          id?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       esign_envelopes: {
         Row: {
           completed_at: string | null
@@ -16607,6 +16640,7 @@ export type Database = {
           created_at: string
           design_version: number
           id: string
+          is_favorite: boolean | null
           preview_png_url: string | null
           project_id: string
           style_snapshot_json: Json | null
@@ -16620,6 +16654,7 @@ export type Database = {
           created_at?: string
           design_version?: number
           id?: string
+          is_favorite?: boolean | null
           preview_png_url?: string | null
           project_id: string
           style_snapshot_json?: Json | null
@@ -16633,6 +16668,7 @@ export type Database = {
           created_at?: string
           design_version?: number
           id?: string
+          is_favorite?: boolean | null
           preview_png_url?: string | null
           project_id?: string
           style_snapshot_json?: Json | null
@@ -16693,6 +16729,8 @@ export type Database = {
         Row: {
           address_optional: string | null
           approval_status: string
+          arabic_city: string | null
+          arabic_company_name: string | null
           border_style: string
           city_optional: string | null
           company_name: string
@@ -16720,6 +16758,8 @@ export type Database = {
         Insert: {
           address_optional?: string | null
           approval_status?: string
+          arabic_city?: string | null
+          arabic_company_name?: string | null
           border_style?: string
           city_optional?: string | null
           company_name: string
@@ -16747,6 +16787,8 @@ export type Database = {
         Update: {
           address_optional?: string | null
           approval_status?: string
+          arabic_city?: string | null
+          arabic_company_name?: string | null
           border_style?: string
           city_optional?: string | null
           company_name?: string
