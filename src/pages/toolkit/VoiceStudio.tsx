@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -406,19 +407,31 @@ export default function VoiceStudio() {
       {/* Header */}
       <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
         <div className="container max-w-6xl mx-auto px-4 py-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#D4AF37]/20 to-[#B8860B]/20 border border-[#D4AF37]/30">
-              <Mic className="h-6 w-6 text-[#D4AF37]" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#D4AF37]/20 to-[#B8860B]/20 border border-[#D4AF37]/30">
+                <Mic className="h-6 w-6 text-[#D4AF37]" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+                  Voice Studio
+                  <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
+                    FREE
+                  </Badge>
+                </h1>
+                <p className="text-slate-400 text-sm">Record → Multi-Voice Narration</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-                Voice Studio
-                <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
-                  FREE
-                </Badge>
-              </h1>
-              <p className="text-slate-400 text-sm">Record → Multi-Voice Narration</p>
-            </div>
+            <Link
+              to="/toolkit/voice-studio-pro"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600/20 to-fuchsia-600/10 border border-purple-500/40 text-purple-300 hover:border-purple-400 hover:text-purple-200 transition-all text-sm font-medium"
+            >
+              <Wand2 className="h-4 w-4" />
+              Try Voice Studio Pro
+              <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 text-[10px] ml-1">
+                CLONE · 16 LANGS
+              </Badge>
+            </Link>
           </div>
         </div>
       </div>
