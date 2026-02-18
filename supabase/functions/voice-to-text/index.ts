@@ -28,14 +28,24 @@ serve(async (req) => {
     const audioBytes = Uint8Array.from(atob(audio), c => c.charCodeAt(0));
     const audioBlob = new Blob([audioBytes], { type: "audio/webm" });
 
+    // Full ISO 639-3 mapping for all 28 supported languages
+    const LANG_TO_ISO639_3: Record<string, string> = {
+      en: "eng", ar: "ara", hi: "hin", ur: "urd", zh: "zho",
+      es: "spa", fr: "fra", de: "deu", ru: "rus", pt: "por",
+      ja: "jpn", ko: "kor", it: "ita", nl: "nld", tr: "tur",
+      fa: "fas", he: "heb", pl: "pol", th: "tha", vi: "vie",
+      id: "ind", ms: "msa", tl: "tgl", bn: "ben", ta: "tam",
+      te: "tel", ml: "mal", sw: "swa",
+    };
+
     // Try ElevenLabs Scribe first (if API key available)
     if (ELEVENLABS_API_KEY) {
       try {
         const formData = new FormData();
         formData.append("file", audioBlob, "recording.webm");
         formData.append("model_id", "scribe_v2");
-        // Set language code for better accuracy (ISO 639-3)
-        const langCode = targetLang === "ar" ? "ara" : targetLang === "en" ? "eng" : "eng";
+        // Set language code for better accuracy (ISO 639-3) — all 28 languages
+        const langCode = LANG_TO_ISO639_3[targetLang] || "eng";
         formData.append("language_code", langCode);
 
         const elevenLabsResponse = await fetch("https://api.elevenlabs.io/v1/speech-to-text", {

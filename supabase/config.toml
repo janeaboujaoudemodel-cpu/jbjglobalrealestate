@@ -138,6 +138,9 @@ verify_jwt = false
 [functions.video-resize-process]
 verify_jwt = false
 
+[functions.video-transcribe]
+verify_jwt = false
+
 [functions.ai-background-remove]
 verify_jwt = false
 
