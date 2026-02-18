@@ -404,29 +404,48 @@ export default function EnvelopeDetail() {
               </CardContent>
             </Card>
 
-            {/* Signing Certificate */}
+            {/* Signing Certificate / Audit Trail */}
             {signedDoc?.certificate_data && (
-              <Card>
-                <CardHeader>
+              <Card className="border-green-200">
+                <CardHeader className="pb-3">
                   <CardTitle className="text-base flex items-center gap-2">
                     <Shield className="w-4 h-4 text-green-500" />
                     Signing Certificate
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    This document has been electronically signed and verified.
+                <CardContent className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    This document has been electronically signed. The audit certificate contains timestamps, IP addresses, and signature images for every signer.
                   </p>
-                  {signedDoc.certificate_url && (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full"
-                      onClick={() => handleDownload(signedDoc.certificate_url, "certificate.pdf")}
+
+                  {/* Signer summary */}
+                  <div className="space-y-1.5">
+                    {(signedDoc.certificate_data as any)?.signers?.map((s: any, i: number) => (
+                      <div key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <CheckCircle2 className="w-3 h-3 text-green-500 shrink-0" />
+                        <span className="font-medium text-foreground">{s.name}</span>
+                        {s.signed_at && (
+                          <span className="ml-auto shrink-0">
+                            {format(new Date(s.signed_at), "MMM d, HH:mm")}
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {signedDoc.certificate_url ? (
+                    <Button
+                      size="sm"
+                      className="w-full bg-green-600 hover:bg-green-700 text-white"
+                      onClick={() => handleDownload(signedDoc.certificate_url, `audit_certificate_${envelope.id}.pdf`)}
                     >
                       <Download className="w-4 h-4 mr-2" />
-                      Download Certificate
+                      Download Audit Certificate
                     </Button>
+                  ) : (
+                    <p className="text-xs text-muted-foreground italic">
+                      Certificate PDF is being generated…
+                    </p>
                   )}
                 </CardContent>
               </Card>
