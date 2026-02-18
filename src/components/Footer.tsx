@@ -217,7 +217,7 @@ const Footer = () => {
     { label: "Trust & Audit", href: "/trust-and-audit-center" },
   ];
 
-  // Creative Toolkit - All 9 toolkit tools
+  // Creative Toolkit - All toolkit tools
   const creativeToolkitLinks = [
     { href: "/toolkit", label: "Toolkit Hub" },
     { href: "/toolkit/ai-video-studio", label: "AI Video Studio" },
@@ -228,6 +228,8 @@ const Footer = () => {
     { href: "/toolkit/captions-translate", label: "Captions & Translate" },
     { href: "/toolkit/background-ai", label: "Background Remover" },
     { href: "/toolkit/beauty-filters", label: "Beauty Filters" },
+    { href: "/toolkit/stamp-generator", label: "AI Stamp Generator" },
+    { href: "/toolkit/scan-sign", label: "Scan & Sign" },
     { href: "/studio", label: "Creative Suite" },
   ];
 

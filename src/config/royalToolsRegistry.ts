@@ -379,6 +379,27 @@ export const aiContentTools: ToolDefinition[] = [
 // ============ PRODUCTIVITY TOOLS ============
 export const productivityTools: ToolDefinition[] = [
   {
+    id: 'stamp-generator',
+    name: 'AI Company Stamp Generator',
+    description: 'Create professional company seals and office stamps with AI. Export SVG, PNG, JPG & PDF in multiple sizes.',
+    href: '/toolkit/stamp-generator',
+    icon: Shield,
+    category: 'productivity',
+    status: 'active',
+    tags: ['Stamp', 'AI', 'Branding', 'Export'],
+    isNew: true,
+  },
+  {
+    id: 'scan-sign',
+    name: 'Scan & Sign Documents',
+    description: 'Camera-based document scanning with digital signature overlay and AI auto-enhance. Export to PDF.',
+    href: '/toolkit/scan-sign',
+    icon: ScanLine,
+    category: 'productivity',
+    status: 'active',
+    tags: ['Scanner', 'Signature', 'PDF', 'DocuSign'],
+  },
+  {
     id: 'business-card-scanner',
     name: 'Business Card Scanner',
     description: 'Scan and digitize business cards instantly.',
