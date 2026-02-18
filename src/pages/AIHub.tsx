@@ -264,9 +264,25 @@ const productivityTools = [
   {
     id: "scan-sign",
     title: "JBJ Scan & Sign",
-    description: "Digital document signing and scanning.",
+    description: "Camera scan, handwritten signature & PDF export.",
     icon: FileSignature,
-    link: "/documents",
+    link: "/toolkit/scan-sign",
+    category: "productivity" as ToolCategory,
+  },
+  {
+    id: "esign",
+    title: "JBJ E-Sign",
+    description: "DocuSign-style contract signing with multi-signer workflows and audit trails.",
+    icon: Handshake,
+    link: "/e-signature",
+    category: "productivity" as ToolCategory,
+  },
+  {
+    id: "stamp-generator",
+    title: "JBJ AI Stamp Generator",
+    description: "Generate professional company stamps — bilingual, multiple shapes, full export pack.",
+    icon: Award,
+    link: "/toolkit/stamp-generator",
     category: "productivity" as ToolCategory,
   },
 ];
