@@ -93,6 +93,14 @@ export function applyShortcutFilters<T extends Record<string, any>>(
     });
   }
 
+  // Areas
+  if (sf.areas && sf.areas.length > 0) {
+    result = result.filter(p => {
+      const area = (p.area_name || p.district || p.location || '').toLowerCase();
+      return sf.areas.some(a => area.toLowerCase().includes(a.toLowerCase()));
+    });
+  }
+
   // Developers
   if (sf.developers && sf.developers.length > 0) {
     result = result.filter(p => {

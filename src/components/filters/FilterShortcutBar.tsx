@@ -37,6 +37,7 @@ export interface ShortcutFilterState {
   sizeMin: string;
   sizeMax: string;
   emirates: string[];
+  areas: string[];
   developers: string[];
   searchQuery: string;
 }
@@ -60,6 +61,7 @@ export const defaultShortcutFilters: ShortcutFilterState = {
   sizeMin: '',
   sizeMax: '',
   emirates: [],
+  areas: [],
   developers: [],
   searchQuery: '',
 };

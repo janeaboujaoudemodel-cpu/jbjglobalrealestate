@@ -76,6 +76,20 @@ const AreaGuides = () => {
       );
     }
 
+    // Filter by selected emirates
+    if (shortcutFilters.emirates && shortcutFilters.emirates.length > 0) {
+      filtered = filtered.filter(a =>
+        shortcutFilters.emirates.some(e => (a.emirate || '').toLowerCase().includes(e.toLowerCase()))
+      );
+    }
+
+    // Filter by selected areas
+    if (shortcutFilters.areas && shortcutFilters.areas.length > 0) {
+      filtered = filtered.filter(a =>
+        shortcutFilters.areas.some(sel => a.name.toLowerCase() === sel.toLowerCase())
+      );
+    }
+
     const sortBy = shortcutFilters.sortBy;
     switch (sortBy) {
       case "trending":
@@ -95,7 +109,7 @@ const AreaGuides = () => {
     }
 
     return filtered;
-  }, [areas, shortcutFilters.sortBy, shortcutFilters.searchQuery]);
+  }, [areas, shortcutFilters.sortBy, shortcutFilters.searchQuery, shortcutFilters.emirates, shortcutFilters.areas]);
 
   // Pagination
   const totalPages = Math.ceil(filteredAreas.length / ITEMS_PER_PAGE);
