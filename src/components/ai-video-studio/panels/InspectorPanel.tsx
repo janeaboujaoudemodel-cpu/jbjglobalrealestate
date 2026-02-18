@@ -18,9 +18,10 @@ import {
   FlipHorizontal,
   FlipVertical,
   Lock,
-  Unlock
+  Unlock,
+  Zap,
 } from 'lucide-react';
-import { Clip, ClipTransform, AudioSettings, FILTER_PRESETS } from '../types';
+import { Clip, ClipTransform, AudioSettings, FILTER_PRESETS, TransitionEasing, TRANSITION_TYPES } from '../types';
 
 interface InspectorPanelProps {
   selectedClip: Clip | null;
@@ -79,12 +80,191 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
     });
   };
 
+  // ── Transition helpers ────────────────────────────────────────────────────
+  const transitionEffect = selectedClip?.effects.find(e => e.type === 'transition');
+  const currentTransitionId = transitionEffect?.settings?.transitionId ?? '';
+  const currentEasing: TransitionEasing = (selectedClip?.transition?.easing ?? transitionEffect?.settings?.easing) ?? 'easeInOut';
+
+  const updateTransition = (patch: { duration?: number; easing?: TransitionEasing; transitionId?: string }) => {
+    // Update duration on the clip itself
+    const durationUpdate = patch.duration !== undefined ? { duration: patch.duration, source: { ...selectedClip.source, outPoint: patch.duration, originalDuration: patch.duration } } : {};
+    // Update easing both on the effects array and on clip.transition
+    const updatedEffects = selectedClip.effects.map(e =>
+      e.type === 'transition'
+        ? { ...e, settings: { ...e.settings, ...(patch.easing ? { easing: patch.easing } : {}), ...(patch.transitionId ? { transitionId: patch.transitionId } : {}) } }
+        : e
+    );
+    onUpdateClip({
+      ...durationUpdate,
+      effects: updatedEffects,
+      transition: {
+        transitionId: patch.transitionId ?? currentTransitionId,
+        easing: patch.easing ?? currentEasing,
+      },
+    });
+  };
+
+  // ── Transition clip: dedicated inspector ──────────────────────────────────
+  if (selectedClip.type === 'transition') {
+    const easingOptions: { value: TransitionEasing; label: string; description: string; curve: string }[] = [
+      { value: 'linear',     label: 'Linear',      description: 'Constant speed — clean & mechanical',   curve: 'M0,100 L100,0' },
+      { value: 'easeIn',     label: 'Ease In',      description: 'Starts slow, accelerates into cut',      curve: 'M0,100 C60,100 100,40 100,0' },
+      { value: 'easeOut',    label: 'Ease Out',     description: 'Starts fast, decelerates into rest',     curve: 'M0,100 C0,60 40,0 100,0' },
+      { value: 'easeInOut',  label: 'Ease In-Out',  description: 'Smooth S-curve — cinematic feel',        curve: 'M0,100 C30,100 70,0 100,0' },
+    ];
+
+    return (
+      <div className="h-full flex flex-col">
+        {/* Header */}
+        <div className="p-3 border-b border-slate-800 flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-gold/15 border border-gold/30">
+            <Zap className="w-3.5 h-3.5 text-gold" />
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-sm font-medium text-white truncate">{selectedClip.name}</h3>
+            <p className="text-xs text-slate-500">Transition</p>
+          </div>
+        </div>
+
+        <ScrollArea className="flex-1">
+          <div className="p-3 space-y-5 animate-fade-in">
+
+            {/* Duration */}
+            <div className="space-y-3">
+              <Label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Duration</Label>
+              <div className="flex items-center gap-3">
+                <Slider
+                  value={[selectedClip.duration]}
+                  min={0.2}
+                  max={3}
+                  step={0.1}
+                  onValueChange={(v) => updateTransition({ duration: v[0] })}
+                  className="flex-1"
+                />
+                <div className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 min-w-[60px] justify-center">
+                  <Input
+                    type="number"
+                    value={selectedClip.duration.toFixed(1)}
+                    min={0.2}
+                    max={3}
+                    step={0.1}
+                    onChange={(e) => updateTransition({ duration: Math.max(0.2, Math.min(3, parseFloat(e.target.value) || 0.5)) })}
+                    className="h-6 w-12 border-0 bg-transparent text-xs text-white text-center p-0 focus-visible:ring-0"
+                  />
+                  <span className="text-xs text-slate-500">s</span>
+                </div>
+              </div>
+              <div className="flex gap-1 flex-wrap">
+                {[0.3, 0.5, 0.8, 1.0, 1.5].map(d => (
+                  <button
+                    key={d}
+                    onClick={() => updateTransition({ duration: d })}
+                    className={`px-2.5 py-1 rounded text-xs font-medium border transition-all ${
+                      Math.abs(selectedClip.duration - d) < 0.05
+                        ? 'bg-gold/20 border-gold/50 text-gold'
+                        : 'border-slate-700 text-slate-400 hover:border-slate-600 hover:text-white'
+                    }`}
+                  >
+                    {d}s
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Transition type */}
+            <div className="space-y-2">
+              <Label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Type</Label>
+              <div className="grid grid-cols-2 gap-1.5">
+                {TRANSITION_TYPES.map(t => (
+                  <button
+                    key={t.id}
+                    onClick={() => updateTransition({ transitionId: t.id })}
+                    className={`flex items-center gap-2 px-2.5 py-2 rounded-lg border text-xs font-medium transition-all ${
+                      currentTransitionId === t.id
+                        ? 'bg-gold/15 border-gold/40 text-gold'
+                        : 'border-slate-700 text-slate-400 hover:border-slate-600 hover:text-white'
+                    }`}
+                  >
+                    <span className="text-base leading-none">{t.icon}</span>
+                    {t.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Easing curve */}
+            <div className="space-y-3">
+              <Label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Easing Curve</Label>
+              <div className="space-y-1.5">
+                {easingOptions.map(opt => {
+                  const isActive = currentEasing === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      onClick={() => updateTransition({ easing: opt.value })}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border text-left transition-all ${
+                        isActive
+                          ? 'bg-gold/10 border-gold/40'
+                          : 'border-slate-700/60 hover:border-slate-600 hover:bg-slate-800/50'
+                      }`}
+                    >
+                      {/* SVG curve preview */}
+                      <div className={`w-10 h-7 rounded shrink-0 flex items-center justify-center border ${isActive ? 'border-gold/30 bg-gold/5' : 'border-slate-700 bg-slate-800/60'}`}>
+                        <svg viewBox="0 0 100 100" width="32" height="22" fill="none">
+                          <path
+                            d={opt.curve}
+                            stroke={isActive ? '#C8A766' : '#64748b'}
+                            strokeWidth="8"
+                            strokeLinecap="round"
+                            fill="none"
+                          />
+                        </svg>
+                      </div>
+                      <div className="min-w-0">
+                        <p className={`text-xs font-semibold leading-tight ${isActive ? 'text-gold' : 'text-slate-300'}`}>{opt.label}</p>
+                        <p className="text-[10px] text-slate-500 leading-tight mt-0.5 truncate">{opt.description}</p>
+                      </div>
+                      {isActive && (
+                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-gold shrink-0" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Summary */}
+            <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-3 space-y-1.5">
+              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Summary</p>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-slate-400">Duration</span>
+                <span className="text-xs font-medium text-white">{selectedClip.duration.toFixed(1)}s</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-slate-400">Easing</span>
+                <span className="text-xs font-medium text-gold">{easingOptions.find(e => e.value === currentEasing)?.label}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-slate-400">Type</span>
+                <span className="text-xs font-medium text-white">
+                  {(TRANSITION_TYPES.find(t => t.id === currentTransitionId)?.name ?? currentTransitionId) || 'Fade'}
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </ScrollArea>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full flex flex-col">
       <div className="p-3 border-b border-slate-800">
         <h3 className="text-sm font-medium text-white truncate">{selectedClip.name}</h3>
         <p className="text-xs text-slate-500 capitalize">{selectedClip.type} clip</p>
       </div>
+
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
         <TabsList className="w-full justify-start rounded-none border-b border-slate-800 bg-transparent p-0 flex-wrap">
