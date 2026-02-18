@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Slider } from '@/components/ui/slider';
@@ -6,7 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import {
   Wand2, Loader2, Languages, Download, Upload, Trash2,
   Volume2, FileText, Palette, Zap, ChevronDown, ChevronUp,
-  Check, X, Play, Film,
+  Check, X, Play, Pause, Film, SkipBack, SkipForward,
 } from 'lucide-react';
 import { SUPPORTED_LANGUAGES, SUBTITLE_STYLES } from '../types';
 import { supabase } from '@/integrations/supabase/client';
@@ -26,8 +26,13 @@ interface SubtitleSegment {
 
 interface CaptionStyle {
   fontSize: number;
+  fontWeight: 'normal' | 'bold';
+  fontFamily: string;
   color: string;
   bgColor: string;
+  bgOpacity: number;       // 0-100
+  outlineWidth: number;    // 0-4
+  outlineColor: string;
   position: 'top' | 'center' | 'bottom';
   preset: string;
   speed: 'slow' | 'normal' | 'fast';
@@ -52,6 +57,10 @@ const FLAG_EMOJIS: Record<string, string> = {
 
 const QUICK_LANGS = ['ar', 'hi', 'zh', 'es', 'fr', 'de', 'ru', 'tr', 'ja', 'ko'];
 
+const FONT_FAMILIES = ['Arial', 'Georgia', 'Impact', 'Courier'];
+
+const FADE_MS_MAP = { slow: 600, normal: 300, fast: 80 };
+
 // ─── Time Formatters ────────────────────────────────────────────────────────
 
 const toSRTTime = (s: number) => {
@@ -72,13 +81,23 @@ const fmtTime = (s: number) => {
   return `${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}.${ms.toString().padStart(2,'0')}`;
 };
 
+const fmtDuration = (s: number) => {
+  const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+  return `${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+};
+
 // ─── Caption burn helper ────────────────────────────────────────────────────
 
-const RTL_LANGUAGES = new Set(['ar', 'he', 'fa', 'ur']);
-
 function isRTLText(text: string): boolean {
-  // Detect Arabic/Hebrew/Farsi/Urdu characters
   return /[\u0600-\u06FF\u0750-\u077F\u0590-\u05FF\uFB50-\uFDFF\uFE70-\uFEFF]/.test(text);
+}
+
+function computeFadeAlpha(t: number, seg: SubtitleSegment, fadeMs: number): number {
+  const elapsed = (t - seg.startTime) * 1000;
+  const remaining = (seg.endTime - t) * 1000;
+  const fadeIn = elapsed < fadeMs ? elapsed / fadeMs : 1;
+  const fadeOut = remaining < fadeMs ? remaining / fadeMs : 1;
+  return Math.max(0, Math.min(1, Math.min(fadeIn, fadeOut)));
 }
 
 function drawCaptionText(
@@ -86,17 +105,18 @@ function drawCaptionText(
   text: string,
   style: CaptionStyle,
   w: number,
-  h: number
+  h: number,
+  alpha = 1
 ) {
+  if (alpha <= 0) return;
   const fs = style.fontSize;
   const rtl = isRTLText(text);
 
-  // Set RTL direction for proper Arabic/Hebrew rendering
-  if (rtl) {
-    (ctx as any).direction = 'rtl';
-  }
+  ctx.save();
+  ctx.globalAlpha = alpha;
 
-  ctx.font = `bold ${fs}px Arial, sans-serif`;
+  if (rtl) (ctx as any).direction = 'rtl';
+  ctx.font = `${style.fontWeight} ${fs}px ${style.fontFamily}, sans-serif`;
   ctx.textAlign = 'center';
 
   const padding = fs * 0.4;
@@ -128,15 +148,32 @@ function drawCaptionText(
       : h - totalH - fs * 0.5;
 
   // Background box
-  if (style.preset !== 'clean') {
-    ctx.fillStyle = style.bgColor + 'CC';
-    ctx.roundRect(x - maxW / 2 - padding, y - padding, maxW + padding * 2, totalH, 6);
+  if (style.preset !== 'clean' && style.bgOpacity > 0) {
+    const bgAlphaHex = Math.round((style.bgOpacity / 100) * 255).toString(16).padStart(2, '0');
+    ctx.fillStyle = style.bgColor + bgAlphaHex;
+    ctx.beginPath();
+    if (ctx.roundRect) {
+      ctx.roundRect(x - maxW / 2 - padding, y - padding, maxW + padding * 2, totalH, 6);
+    } else {
+      ctx.rect(x - maxW / 2 - padding, y - padding, maxW + padding * 2, totalH);
+    }
     ctx.fill();
   }
 
-  // Text with shadow
+  // Outline / stroke
+  if (style.outlineWidth > 0) {
+    ctx.strokeStyle = style.outlineColor;
+    ctx.lineWidth = style.outlineWidth * 2;
+    ctx.lineJoin = 'round';
+    ctx.shadowColor = 'transparent';
+    lines.forEach((line, i) => {
+      ctx.strokeText(line, x, y + i * lineH + fs);
+    });
+  }
+
+  // Text shadow
   ctx.shadowColor = 'rgba(0,0,0,0.8)';
-  ctx.shadowBlur = 4;
+  ctx.shadowBlur = style.outlineWidth > 0 ? 0 : 4;
   ctx.shadowOffsetX = 1;
   ctx.shadowOffsetY = 1;
   ctx.fillStyle = style.color;
@@ -145,13 +182,7 @@ function drawCaptionText(
     ctx.fillText(line, x, y + i * lineH + fs);
   });
 
-  ctx.shadowColor = 'transparent';
-  ctx.shadowBlur = 0;
-
-  // Reset direction
-  if (rtl) {
-    (ctx as any).direction = 'ltr';
-  }
+  ctx.restore();
 }
 
 // ─── Main component ─────────────────────────────────────────────────────────
@@ -160,7 +191,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
   // Core state
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [spokenLanguage, setSpokenLanguage] = useState('en');
-  const [activeTab, setActiveTab] = useState<'upload' | 'transcribe' | 'translate' | 'style' | 'export'>('upload');
+  const [activeTab, setActiveTab] = useState<'upload' | 'transcribe' | 'translate' | 'style' | 'preview' | 'export'>('upload');
 
   // Transcription state
   const [isTranscribing, setIsTranscribing] = useState(false);
@@ -185,8 +216,17 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
 
   // Style state
   const [captionStyle, setCaptionStyle] = useState<CaptionStyle>({
-    fontSize: 24, color: '#FFFFFF', bgColor: '#000000',
-    position: 'bottom', preset: 'clean', speed: 'normal',
+    fontSize: 24,
+    fontWeight: 'bold',
+    fontFamily: 'Arial',
+    color: '#FFFFFF',
+    bgColor: '#000000',
+    bgOpacity: 70,
+    outlineWidth: 0,
+    outlineColor: '#000000',
+    position: 'bottom',
+    preset: 'clean',
+    speed: 'normal',
   });
 
   // Burn captions state
@@ -195,9 +235,69 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
   const [burnProgress, setBurnProgress] = useState(0);
   const [burnLang, setBurnLang] = useState('');
 
+  // Preview state
+  const [previewPlaying, setPreviewPlaying] = useState(false);
+  const [previewTime, setPreviewTime] = useState(0);
+  const [previewDuration, setPreviewDuration] = useState(0);
+
   // Refs
   const fileInputRef = useRef<HTMLInputElement>(null);
   const burnFileInputRef = useRef<HTMLInputElement>(null);
+  const previewVideoRef = useRef<HTMLVideoElement>(null);
+  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
+  const previewRafRef = useRef<number>(0);
+
+  // ─── Preview RAF loop ─────────────────────────────────────────────────────
+
+  useEffect(() => {
+    if (activeTab !== 'preview') {
+      cancelAnimationFrame(previewRafRef.current);
+      return;
+    }
+
+    const video = previewVideoRef.current;
+    const canvas = previewCanvasRef.current;
+    if (!video || !canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const syncCanvasSize = () => {
+      if (video.videoWidth && video.videoHeight) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+      }
+    };
+
+    video.addEventListener('loadedmetadata', syncCanvasSize);
+    syncCanvasSize();
+
+    const fadeMs = FADE_MS_MAP[captionStyle.speed];
+
+    const loop = () => {
+      const t = video.currentTime;
+      setPreviewTime(t);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const activeSeg = subtitles.find(s => t >= s.startTime && t <= s.endTime);
+      if (activeSeg && canvas.width > 0) {
+        const text = burnLang && activeSeg.translations?.[burnLang]
+          ? activeSeg.translations[burnLang]
+          : activeSeg.text;
+        const alpha = computeFadeAlpha(t, activeSeg, fadeMs);
+        drawCaptionText(ctx, text, captionStyle, canvas.width, canvas.height, alpha);
+      }
+
+      previewRafRef.current = requestAnimationFrame(loop);
+    };
+
+    previewRafRef.current = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(previewRafRef.current);
+      video.removeEventListener('loadedmetadata', syncCanvasSize);
+    };
+  }, [activeTab, subtitles, captionStyle, burnLang]);
 
   // ─── File handling ──────────────────────────────────────────────────────
 
@@ -214,7 +314,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
 
   // ─── Transcription (chunked to bypass 6MB body limit) ────────────────
 
-  const CHUNK_BYTES = 3 * 1024 * 1024; // 3 MB binary → ~4 MB base64
+  const CHUNK_BYTES = 3 * 1024 * 1024;
 
   const MIME_TO_EXT: Record<string, string> = {
     'audio/mpeg': 'mp3', 'audio/mp3': 'mp3',
@@ -499,7 +599,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
     toast.success('VTT exported!');
   }, [subtitles]);
 
-  // ─── Caption Burn (Canvas API) ────────────────────────────────────────────
+  // ─── Caption Burn (Canvas API + Audio) ───────────────────────────────────
 
   const burnCaptionsOnVideo = useCallback(async () => {
     if (!burnVideoFile) { toast.error('Select a video file to burn captions on'); return; }
@@ -511,7 +611,6 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
     try {
       const video = document.createElement('video');
       video.src = URL.createObjectURL(burnVideoFile);
-      video.muted = true;
       video.crossOrigin = 'anonymous';
 
       await new Promise<void>((resolve, reject) => {
@@ -525,16 +624,37 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
       canvas.height = video.videoHeight || 720;
       const ctx = canvas.getContext('2d')!;
 
-      const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9')
-        ? 'video/webm;codecs=vp9'
-        : 'video/webm';
+      // ── Audio capture ──
+      let combinedStream: MediaStream;
+      try {
+        const audioCtx = new AudioContext();
+        const source = audioCtx.createMediaElementSource(video);
+        const dest = audioCtx.createMediaStreamDestination();
+        source.connect(dest);
+        source.connect(audioCtx.destination); // keep audible locally
+        const videoStream = canvas.captureStream(30);
+        combinedStream = new MediaStream([
+          ...videoStream.getVideoTracks(),
+          ...dest.stream.getAudioTracks(),
+        ]);
+      } catch {
+        // Fallback: video-only if AudioContext fails
+        combinedStream = canvas.captureStream(30);
+      }
 
-      const stream = canvas.captureStream(30);
-      const recorder = new MediaRecorder(stream, { mimeType });
+      const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
+        ? 'video/webm;codecs=vp9,opus'
+        : MediaRecorder.isTypeSupported('video/webm;codecs=vp9')
+          ? 'video/webm;codecs=vp9'
+          : 'video/webm';
+
+      const recorder = new MediaRecorder(combinedStream, { mimeType });
       const chunks: Blob[] = [];
       recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
 
       const recordingDone = new Promise<void>(resolve => { recorder.onstop = () => resolve(); });
+
+      const fadeMs = FADE_MS_MAP[captionStyle.speed];
 
       recorder.start(100);
       await video.play();
@@ -548,7 +668,8 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
           const text = burnLang && activeSeg.translations?.[burnLang]
             ? activeSeg.translations[burnLang]
             : activeSeg.text;
-          drawCaptionText(ctx, text, captionStyle, canvas.width, canvas.height);
+          const alpha = computeFadeAlpha(t, activeSeg, fadeMs);
+          drawCaptionText(ctx, text, captionStyle, canvas.width, canvas.height, alpha);
         }
 
         setBurnProgress(Math.round((t / video.duration) * 100));
@@ -579,17 +700,34 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
     }
   }, [burnVideoFile, subtitles, captionStyle, burnLang]);
 
+  // ─── Preview controls ─────────────────────────────────────────────────────
+
+  const togglePreviewPlay = () => {
+    const v = previewVideoRef.current;
+    if (!v) return;
+    if (v.paused) { v.play(); setPreviewPlaying(true); }
+    else { v.pause(); setPreviewPlaying(false); }
+  };
+
+  const seekPreview = (delta: number) => {
+    const v = previewVideoRef.current;
+    if (!v) return;
+    v.currentTime = Math.max(0, Math.min(v.duration || 0, v.currentTime + delta));
+  };
+
   // ─── Derived values ───────────────────────────────────────────────────────
 
   const selectedLangInfo = SUPPORTED_LANGUAGES.find(l => l.code === selectedLang);
   const translatedLangs = [...new Set(subtitles.flatMap(s => Object.keys(s.translations || {})))];
   const isVideoFile = uploadedFile?.type?.startsWith('video/');
+  const previewSource = burnVideoFile || (isVideoFile ? uploadedFile : null);
 
   const TABS = [
     { id: 'upload', label: 'Upload', icon: Upload },
     { id: 'transcribe', label: 'Transcribe', icon: Wand2 },
     { id: 'translate', label: 'Translate', icon: Languages },
     { id: 'style', label: 'Style', icon: Palette },
+    { id: 'preview', label: 'Preview', icon: Play },
     { id: 'export', label: 'Export', icon: Download },
   ] as const;
 
@@ -598,12 +736,12 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
   return (
     <div className="flex flex-col h-full bg-slate-900/30">
       {/* Step tabs */}
-      <div className="flex border-b border-slate-700/50 bg-slate-900/60 px-1 pt-1 gap-0.5 flex-shrink-0">
+      <div className="flex border-b border-slate-700/50 bg-slate-900/60 px-1 pt-1 gap-0.5 flex-shrink-0 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
         {TABS.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as typeof activeTab)}
-            className={`flex-1 flex flex-col items-center gap-0.5 py-1.5 px-1 rounded-t text-[10px] font-medium transition-all ${
+            className={`flex-1 flex flex-col items-center gap-0.5 py-1.5 px-1 rounded-t text-[10px] font-medium transition-all whitespace-nowrap min-w-[48px] ${
               activeTab === tab.id
                 ? 'bg-slate-800 text-amber-400 border-b-2 border-amber-400'
                 : 'text-slate-500 hover:text-slate-300'
@@ -834,14 +972,14 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
 
                     {showLangGrid ? (
                       <div className="grid grid-cols-2 gap-1 max-h-52 overflow-y-auto">
-                        {SUPPORTED_LANGUAGES.filter(l => l.code !== spokenLanguage).map(lang => (
+                        {SUPPORTED_LANGUAGES.map(lang => (
                           <button
                             key={lang.code}
                             onClick={() => { setSelectedLang(lang.code); setShowLangGrid(false); }}
-                            className={`flex items-center gap-1.5 px-2 py-1.5 rounded text-xs text-left transition-colors ${
+                            className={`flex items-center gap-1.5 px-2 py-1.5 rounded text-xs transition-colors ${
                               selectedLang === lang.code
                                 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
-                                : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 border border-transparent'
+                                : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700'
                             }`}
                           >
                             <span>{FLAG_EMOJIS[lang.code] || '🌐'}</span>
@@ -850,55 +988,54 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                         ))}
                       </div>
                     ) : (
-                      !selectedLang && (
-                        <div className="flex flex-wrap gap-1">
-                          {QUICK_LANGS.map(code => {
-                            const lang = SUPPORTED_LANGUAGES.find(l => l.code === code);
-                            if (!lang) return null;
-                            return (
-                              <button
-                                key={code}
-                                onClick={() => setSelectedLang(code)}
-                                className="flex items-center gap-1 px-2 py-1 rounded-full bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white text-xs transition-colors border border-slate-600 hover:border-amber-400/30"
-                              >
-                                <span>{FLAG_EMOJIS[code]}</span>
-                                <span>{lang.name}</span>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      )
+                      <div className="flex flex-wrap gap-1">
+                        {QUICK_LANGS.map(lc => {
+                          const li = SUPPORTED_LANGUAGES.find(l => l.code === lc);
+                          return (
+                            <button
+                              key={lc}
+                              onClick={() => setSelectedLang(lc)}
+                              className={`px-2 py-1 rounded text-xs transition-colors ${
+                                selectedLang === lc
+                                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+                                  : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700'
+                              }`}
+                            >
+                              {FLAG_EMOJIS[lc]} {li?.name}
+                            </button>
+                          );
+                        })}
+                      </div>
                     )}
                   </div>
 
-                  {/* Translate + Dub All buttons */}
-                  <div className="flex gap-2">
+                  <Button
+                    onClick={handleTranslate}
+                    disabled={isTranslating || !selectedLang}
+                    className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold"
+                  >
+                    {isTranslating ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Translating…</>
+                    ) : (
+                      <><Languages className="w-4 h-4 mr-2" />Translate All Segments</>
+                    )}
+                  </Button>
+
+                  {/* Dub all button */}
+                  {selectedLang && subtitles.some(s => s.translations?.[selectedLang]) && (
                     <Button
-                      onClick={handleTranslate}
-                      disabled={isTranslating || !selectedLang}
-                      className="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-semibold"
+                      onClick={() => handleDubAll(selectedLang)}
+                      disabled={!!isDubbingAll}
+                      variant="outline"
+                      className="w-full border-purple-500/40 text-purple-400 hover:bg-purple-500/10 text-xs h-8"
                     >
-                      {isTranslating ? (
-                        <><Loader2 className="w-4 h-4 mr-1.5 animate-spin" />Translating…</>
+                      {isDubbingAll === selectedLang ? (
+                        <><Loader2 className="w-3 h-3 mr-1.5 animate-spin" />Dubbing all segments…</>
                       ) : (
-                        <><Languages className="w-4 h-4 mr-1.5" />Translate{selectedLang ? ` → ${selectedLangInfo?.name}` : ''}</>
+                        <><Volume2 className="w-3 h-3 mr-1.5" />Dub All in {SUPPORTED_LANGUAGES.find(l => l.code === selectedLang)?.name}</>
                       )}
                     </Button>
-
-                    {selectedLang && subtitles.some(s => s.translations?.[selectedLang]) && (
-                      <Button
-                        onClick={() => handleDubAll(selectedLang)}
-                        disabled={isDubbingAll === selectedLang}
-                        className="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-semibold"
-                      >
-                        {isDubbingAll === selectedLang ? (
-                          <><Loader2 className="w-4 h-4 mr-1.5 animate-spin" />Dubbing…</>
-                        ) : (
-                          <><Volume2 className="w-4 h-4 mr-1.5" />Dub All</>
-                        )}
-                      </Button>
-                    )}
-                  </div>
+                  )}
 
                   {/* Translated segments */}
                   {subtitles.some(s => s.translations && Object.keys(s.translations).length > 0) && (
@@ -979,15 +1116,11 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
           {/* ═══ STYLE TAB ═══ */}
           {activeTab === 'style' && (
             <div className="space-y-3">
-              {/* Live preview */}
-              <div
-                className="relative w-full rounded-xl overflow-hidden bg-black"
-                style={{ aspectRatio: '16/9' }}
-              >
+              {/* Static preview */}
+              <div className="relative w-full rounded-xl overflow-hidden bg-black" style={{ aspectRatio: '16/9' }}>
                 <div className="absolute inset-0 bg-gradient-to-b from-slate-800 to-slate-900 flex items-center justify-center">
-                  <Play className="w-8 h-8 text-slate-600" />
+                  <Film className="w-8 h-8 text-slate-700" />
                 </div>
-                {/* Preview caption */}
                 <div
                   className="absolute left-0 right-0 px-4"
                   style={{
@@ -998,13 +1131,17 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 >
                   <span
                     style={{
-                      fontSize: `${Math.max(10, captionStyle.fontSize * 0.5)}px`,
+                      fontSize: `${Math.max(10, captionStyle.fontSize * 0.45)}px`,
                       color: captionStyle.color,
-                      backgroundColor: captionStyle.preset !== 'clean' ? captionStyle.bgColor + 'CC' : 'transparent',
+                      backgroundColor: captionStyle.preset !== 'clean' && captionStyle.bgOpacity > 0
+                        ? captionStyle.bgColor + Math.round(captionStyle.bgOpacity / 100 * 255).toString(16).padStart(2, '0')
+                        : 'transparent',
                       padding: captionStyle.preset !== 'clean' ? '2px 8px' : '0',
                       borderRadius: '4px',
-                      textShadow: '1px 1px 3px rgba(0,0,0,0.8)',
-                      fontWeight: 'bold',
+                      textShadow: captionStyle.outlineWidth > 0 ? 'none' : '1px 1px 3px rgba(0,0,0,0.8)',
+                      WebkitTextStroke: captionStyle.outlineWidth > 0 ? `${captionStyle.outlineWidth}px ${captionStyle.outlineColor}` : 'none',
+                      fontWeight: captionStyle.fontWeight,
+                      fontFamily: captionStyle.fontFamily,
                       display: 'inline-block',
                     }}
                   >
@@ -1034,18 +1171,54 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 </div>
               </div>
 
-              {/* Font size */}
+              {/* Font family */}
               <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
-                <div className="flex justify-between mb-2">
-                  <p className="text-xs text-slate-400">Font Size</p>
-                  <p className="text-xs text-amber-400 font-mono">{captionStyle.fontSize}px</p>
+                <p className="text-xs text-slate-400 font-medium mb-2">Font Family</p>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {FONT_FAMILIES.map(ff => (
+                    <button
+                      key={ff}
+                      onClick={() => setCaptionStyle(p => ({ ...p, fontFamily: ff }))}
+                      className={`py-2 px-2 rounded text-xs transition-colors ${
+                        captionStyle.fontFamily === ff
+                          ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+                          : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 border border-transparent'
+                      }`}
+                      style={{ fontFamily: ff }}
+                    >
+                      {ff}
+                    </button>
+                  ))}
                 </div>
-                <Slider
-                  min={16} max={48} step={2}
-                  value={[captionStyle.fontSize]}
-                  onValueChange={([v]) => setCaptionStyle(p => ({ ...p, fontSize: v }))}
-                  className="py-1"
-                />
+              </div>
+
+              {/* Font size + weight */}
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700 space-y-3">
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <p className="text-xs text-slate-400">Font Size</p>
+                    <p className="text-xs text-amber-400 font-mono">{captionStyle.fontSize}px</p>
+                  </div>
+                  <Slider
+                    min={16} max={48} step={2}
+                    value={[captionStyle.fontSize]}
+                    onValueChange={([v]) => setCaptionStyle(p => ({ ...p, fontSize: v }))}
+                    className="py-1"
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-slate-400">Bold Text</p>
+                  <button
+                    onClick={() => setCaptionStyle(p => ({ ...p, fontWeight: p.fontWeight === 'bold' ? 'normal' : 'bold' }))}
+                    className={`px-3 py-1 rounded text-xs font-bold transition-colors ${
+                      captionStyle.fontWeight === 'bold'
+                        ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+                        : 'bg-slate-700 text-slate-400 border border-transparent'
+                    }`}
+                  >
+                    B
+                  </button>
+                </div>
               </div>
 
               {/* Position */}
@@ -1090,12 +1263,49 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                       className="w-full h-8 rounded cursor-pointer border border-slate-600"
                     />
                   </label>
+                  <label className="flex-1">
+                    <p className="text-[10px] text-slate-500 mb-1">Outline</p>
+                    <input
+                      type="color"
+                      value={captionStyle.outlineColor}
+                      onChange={e => setCaptionStyle(p => ({ ...p, outlineColor: e.target.value }))}
+                      className="w-full h-8 rounded cursor-pointer border border-slate-600"
+                    />
+                  </label>
                 </div>
+              </div>
+
+              {/* BG Opacity */}
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
+                <div className="flex justify-between mb-2">
+                  <p className="text-xs text-slate-400">Background Opacity</p>
+                  <p className="text-xs text-amber-400 font-mono">{captionStyle.bgOpacity}%</p>
+                </div>
+                <Slider
+                  min={0} max={100} step={5}
+                  value={[captionStyle.bgOpacity]}
+                  onValueChange={([v]) => setCaptionStyle(p => ({ ...p, bgOpacity: v }))}
+                  className="py-1"
+                />
+              </div>
+
+              {/* Outline width */}
+              <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
+                <div className="flex justify-between mb-2">
+                  <p className="text-xs text-slate-400">Text Outline Width</p>
+                  <p className="text-xs text-amber-400 font-mono">{captionStyle.outlineWidth}px</p>
+                </div>
+                <Slider
+                  min={0} max={4} step={0.5}
+                  value={[captionStyle.outlineWidth]}
+                  onValueChange={([v]) => setCaptionStyle(p => ({ ...p, outlineWidth: v }))}
+                  className="py-1"
+                />
               </div>
 
               {/* Speed */}
               <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
-                <p className="text-xs text-slate-400 font-medium mb-2">Caption Speed</p>
+                <p className="text-xs text-slate-400 font-medium mb-2">Fade-In/Out Animation</p>
                 <div className="flex gap-1.5">
                   {(['slow', 'normal', 'fast'] as const).map(speed => (
                     <button
@@ -1108,10 +1318,174 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                       }`}
                     >
                       {speed}
+                      <span className="block text-[9px] opacity-60">
+                        {speed === 'slow' ? '600ms' : speed === 'normal' ? '300ms' : '80ms'}
+                      </span>
                     </button>
                   ))}
                 </div>
               </div>
+
+              <Button
+                onClick={() => setActiveTab('preview')}
+                className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold"
+              >
+                <Play className="w-4 h-4 mr-2" />Preview with Live Video →
+              </Button>
+            </div>
+          )}
+
+          {/* ═══ PREVIEW TAB ═══ */}
+          {activeTab === 'preview' && (
+            <div className="space-y-3">
+              {/* Video source picker if no video file */}
+              {!previewSource && (
+                <div
+                  onClick={() => burnFileInputRef.current?.click()}
+                  className="border-2 border-dashed border-slate-600 hover:border-amber-400/50 rounded-xl p-5 text-center cursor-pointer transition-colors bg-slate-800/30"
+                >
+                  <Film className="w-6 h-6 mx-auto mb-2 text-slate-500" />
+                  <p className="text-sm text-slate-300 font-medium">Select video to preview captions on</p>
+                  <p className="text-xs text-slate-500 mt-1">MP4, MOV, WebM</p>
+                </div>
+              )}
+
+              {/* Language selector for preview */}
+              {translatedLangs.length > 0 && (
+                <div className="bg-slate-800/50 rounded-lg p-2 border border-slate-700">
+                  <p className="text-[10px] text-slate-400 mb-1.5">Preview language</p>
+                  <div className="flex flex-wrap gap-1">
+                    <button
+                      onClick={() => setBurnLang('')}
+                      className={`px-2 py-0.5 rounded text-[10px] transition-colors ${!burnLang ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40' : 'bg-slate-700 text-slate-400'}`}
+                    >
+                      Original
+                    </button>
+                    {translatedLangs.map(lc => (
+                      <button
+                        key={lc}
+                        onClick={() => setBurnLang(lc)}
+                        className={`px-2 py-0.5 rounded text-[10px] transition-colors ${burnLang === lc ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40' : 'bg-slate-700 text-slate-400'}`}
+                      >
+                        {FLAG_EMOJIS[lc]} {SUPPORTED_LANGUAGES.find(l => l.code === lc)?.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Video + canvas overlay */}
+              {previewSource && (
+                <div className="space-y-2">
+                  <div className="relative w-full rounded-xl overflow-hidden bg-black" style={{ aspectRatio: '16/9' }}>
+                    <video
+                      ref={previewVideoRef}
+                      src={URL.createObjectURL(previewSource)}
+                      className="w-full h-full object-contain"
+                      onLoadedMetadata={e => {
+                        const v = e.currentTarget;
+                        setPreviewDuration(v.duration);
+                        const canvas = previewCanvasRef.current;
+                        if (canvas) {
+                          canvas.width = v.videoWidth || 1280;
+                          canvas.height = v.videoHeight || 720;
+                        }
+                      }}
+                      onTimeUpdate={e => setPreviewTime(e.currentTarget.currentTime)}
+                      onPlay={() => setPreviewPlaying(true)}
+                      onPause={() => setPreviewPlaying(false)}
+                      onEnded={() => setPreviewPlaying(false)}
+                    />
+                    <canvas
+                      ref={previewCanvasRef}
+                      className="absolute inset-0 w-full h-full pointer-events-none"
+                      style={{ objectFit: 'contain' }}
+                    />
+                  </div>
+
+                  {/* Playback controls */}
+                  <div className="bg-slate-800/60 rounded-lg p-2 border border-slate-700 space-y-2">
+                    {/* Seek bar */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] text-slate-400 font-mono w-10 text-right">{fmtDuration(previewTime)}</span>
+                      <input
+                        type="range"
+                        min={0}
+                        max={previewDuration || 100}
+                        step={0.1}
+                        value={previewTime}
+                        onChange={e => {
+                          const v = previewVideoRef.current;
+                          if (v) v.currentTime = Number(e.target.value);
+                        }}
+                        className="flex-1 h-1 accent-amber-400 cursor-pointer"
+                      />
+                      <span className="text-[10px] text-slate-400 font-mono w-10">{fmtDuration(previewDuration)}</span>
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="flex items-center justify-center gap-2">
+                      <button
+                        onClick={() => seekPreview(-5)}
+                        className="p-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors"
+                        title="-5s"
+                      >
+                        <SkipBack className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={togglePreviewPlay}
+                        className="p-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black transition-colors"
+                      >
+                        {previewPlaying
+                          ? <Pause className="w-4 h-4" />
+                          : <Play className="w-4 h-4" />
+                        }
+                      </button>
+                      <button
+                        onClick={() => seekPreview(5)}
+                        className="p-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors"
+                        title="+5s"
+                      >
+                        <SkipForward className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Active caption indicator */}
+                  {(() => {
+                    const activeSeg = subtitles.find(s => previewTime >= s.startTime && previewTime <= s.endTime);
+                    const activeText = activeSeg
+                      ? (burnLang && activeSeg.translations?.[burnLang]) || activeSeg.text
+                      : null;
+                    return activeText ? (
+                      <div className="bg-slate-800/60 rounded-lg px-3 py-2 border border-amber-500/20 text-center">
+                        <p className="text-[10px] text-amber-400/60 mb-0.5">Now showing</p>
+                        <p className="text-xs text-white" dir={isRTLText(activeText) ? 'rtl' : 'ltr'}>{activeText}</p>
+                      </div>
+                    ) : null;
+                  })()}
+
+                  <p className="text-[10px] text-slate-600 text-center">
+                    Canvas overlay shows exactly how burned video will look
+                  </p>
+                </div>
+              )}
+
+              {subtitles.length === 0 && (
+                <div className="text-center py-4">
+                  <p className="text-slate-400 text-sm mb-2">No subtitles yet</p>
+                  <Button size="sm" onClick={() => setActiveTab('transcribe')} className="bg-slate-700 hover:bg-slate-600 text-white">
+                    Go to Transcribe
+                  </Button>
+                </div>
+              )}
+
+              <Button
+                onClick={() => setActiveTab('export')}
+                className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold"
+              >
+                <Download className="w-4 h-4 mr-2" />Looks good → Export →
+              </Button>
             </div>
           )}
 
@@ -1164,7 +1538,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                       <p className="text-xs text-amber-400 font-medium">Burn Captions on Video</p>
                     </div>
                     <p className="text-xs text-slate-500">
-                      Select the video file to overlay captions on. Uses your Style tab settings.
+                      Bakes captions permanently into the video with your Style settings + audio preserved.
                     </p>
 
                     {/* Video file selector */}
@@ -1243,7 +1617,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                         <><Zap className="w-4 h-4 mr-2" />Burn Captions → Download WebM</>
                       )}
                     </Button>
-                    <p className="text-[10px] text-slate-600 text-center">Client-side rendering — no upload needed</p>
+                    <p className="text-[10px] text-slate-600 text-center">Client-side rendering — audio included — no upload needed</p>
                   </div>
                 </>
               )}
