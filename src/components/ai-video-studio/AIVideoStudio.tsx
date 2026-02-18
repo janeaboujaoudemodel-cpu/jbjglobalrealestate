@@ -308,7 +308,27 @@ export function AIVideoStudio() {
           }}
         />
       }
-      mapPanel={<MapEffectPanel />}
+      mapPanel={
+        <MapEffectPanel
+          onAddToTimeline={(sfx) => {
+            const videoTrack = project.tracks.find(t => t.type === 'video');
+            if (!videoTrack) { toast.error('No video track found'); return; }
+            const lastEnd = videoTrack.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+            addClip(videoTrack.id, {
+              trackId: videoTrack.id,
+              type: 'image',
+              name: sfx.name,
+              startTime: lastEnd,
+              duration: sfx.duration,
+              source: { url: sfx.url, thumbnailUrl: undefined, inPoint: 0, outPoint: sfx.duration, originalDuration: sfx.duration },
+              transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+              keyframes: [],
+              effects: [],
+            });
+            toast.success(`🗺️ Map effect added to timeline!`);
+          }}
+        />
+      }
       projectsPanel={<ProjectIntegrationPanel />}
     />
   );
