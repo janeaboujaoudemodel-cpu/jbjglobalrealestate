@@ -11,9 +11,6 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // ========================================
-    // AUTHENTICATION REQUIRED
-    // ========================================
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
       return new Response(
@@ -24,17 +21,13 @@ Deno.serve(async (req) => {
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
-    
     const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       global: { headers: { Authorization: authHeader } },
     });
 
-    // Verify the JWT and get user
     const token = authHeader.replace("Bearer ", "");
     const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
-    
     if (claimsError || !claimsData?.claims?.sub) {
-      console.error("Auth verification failed:", claimsError);
       return new Response(
         JSON.stringify({ error: "Unauthorized - invalid token" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -42,129 +35,180 @@ Deno.serve(async (req) => {
     }
 
     const userId = claimsData.claims.sub;
-    console.log(`AI Background Remove request from user: ${userId}`);
-    // ========================================
-
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const { image, backgroundColor } = await req.json();
-    
-    if (!image) {
-      return new Response(
-        JSON.stringify({ error: "No image provided" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
+    const body = await req.json();
+    const { mode, image, backgroundColor, generationPrompt } = body;
 
-    // Validate image size (max ~5MB base64)
-    if (image.length > 7000000) {
-      return new Response(
-        JSON.stringify({ error: "Image too large. Please use an image under 5MB." }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
+    // ── MODE: AI Generate Background (composite person into AI scene) ──
+    if (mode === "generate") {
+      if (!image) {
+        return new Response(
+          JSON.stringify({ error: "No image provided for AI generation" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
 
-    // Determine background instruction based on selection
-    let backgroundInstruction = "Make the background completely transparent (alpha channel).";
-    
-    if (backgroundColor === "white") {
-      backgroundInstruction = "Replace the background with pure white (#FFFFFF).";
-    } else if (backgroundColor === "black") {
-      backgroundInstruction = "Replace the background with pure black (#000000).";
-    } else if (backgroundColor === "gold") {
-      backgroundInstruction = "Replace the background with a luxurious gold color (#C8A766).";
-    } else if (backgroundColor === "blur") {
-      backgroundInstruction = "Keep the original background but apply a strong gaussian blur effect to it while keeping the subject sharp.";
-    } else if (backgroundColor === "gradient-gold") {
-      backgroundInstruction = "Replace the background with an elegant gradient from gold (#C8A766) at the top to dark amber (#8B6914) at the bottom.";
-    }
+      const prompt = generationPrompt || "A modern luxury real estate office with floor-to-ceiling windows and a city skyline view";
+      console.log(`AI background generation for user ${userId}: ${prompt}`);
 
-    console.log(`Processing background removal for user ${userId} with background: ${backgroundColor || 'transparent'}`);
-
-    // Use Lovable AI image generation/editing capability
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: `Remove the background from this image. ${backgroundInstruction} Keep the main subject (person, object, or product) perfectly intact with clean, precise edges. This is for professional real estate marketing, so quality is paramount.`
-              },
-              {
-                type: "image_url",
-                image_url: {
-                  url: image
+      // Use image generation model to create a composite
+      const genResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-3-pro-image-preview",
+          messages: [
+            {
+              role: "user",
+              content: [
+                {
+                  type: "text",
+                  text: `Take the person from this image and place them realistically into a new scene: ${prompt}. Keep the person's appearance exactly the same, remove their original background, and composite them naturally into the new environment with proper lighting and perspective. The final image should look photorealistic and professional.`
+                },
+                {
+                  type: "image_url",
+                  image_url: { url: image }
                 }
-              }
-            ]
-          }
-        ],
-        max_tokens: 1000,
-      }),
-    });
+              ]
+            }
+          ],
+          max_tokens: 4096,
+        }),
+      });
 
-    if (!response.ok) {
-      if (response.status === 429) {
+      if (!genResponse.ok) {
+        if (genResponse.status === 429) {
+          return new Response(
+            JSON.stringify({ error: "Rate limit exceeded. Please wait a moment and try again." }),
+            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        if (genResponse.status === 402) {
+          return new Response(
+            JSON.stringify({ error: "AI credits exhausted. Please try again later." }),
+            { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        const errText = await genResponse.text();
+        console.error("AI generation error:", genResponse.status, errText);
+        throw new Error("AI generation failed");
+      }
+
+      const genResult = await genResponse.json();
+      // Check for generated image in response
+      const generatedImage =
+        genResult.choices?.[0]?.message?.content?.find?.((c: any) => c.type === "image_url")?.image_url?.url ||
+        genResult.choices?.[0]?.message?.images?.[0]?.image_url?.url ||
+        genResult.choices?.[0]?.message?.content?.[0]?.image_url?.url;
+
+      if (generatedImage) {
         return new Response(
-          JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          JSON.stringify({ success: true, processedImage: generatedImage, mode: "generate" }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      if (response.status === 402) {
-        return new Response(
-          JSON.stringify({ error: "AI credits exhausted. Please try again later." }),
-          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      
-      const errorText = await response.text();
-      console.error("AI background removal error:", response.status, errorText);
-      throw new Error("Failed to process image");
-    }
 
-    const result = await response.json();
-    
-    // Extract any generated image from response
-    const generatedImage = result.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-    
-    if (!generatedImage) {
-      // If no image was generated, return guidance message
-      console.log(`No image generated by AI model for user ${userId}`);
+      // Fallback: model returned text description instead of image
+      const textContent = typeof genResult.choices?.[0]?.message?.content === "string"
+        ? genResult.choices?.[0]?.message?.content
+        : genResult.choices?.[0]?.message?.content?.[0]?.text;
+
+      console.log("Generation model returned text instead of image:", textContent?.substring(0, 200));
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           success: false,
-          error: "Background removal requires an image generation model. This feature is in development.",
-          originalImage: image
+          error: "The AI generated a description but could not produce an image directly. Background removal (transparent) has been applied instead.",
+          fallbackToRemoval: true,
         }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    console.log(`Successfully processed background removal for user ${userId}`);
+    // ── MODE: Analyze image for smart removal hints ──
+    if (mode === "analyze") {
+      if (!image) {
+        return new Response(
+          JSON.stringify({ error: "No image provided" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
 
+      const analyzeResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash",
+          messages: [
+            {
+              role: "user",
+              content: [
+                {
+                  type: "text",
+                  text: `Analyze this image and respond with ONLY a valid JSON object (no markdown, no explanation):
+{
+  "width": <estimated width in px>,
+  "height": <estimated height in px>,  
+  "aspectRatio": "<e.g. 16:9 or 4:3 or 1:1 or 3:4>",
+  "primarySubject": "<person | product | building | vehicle | other>",
+  "backgroundComplexity": "<simple | medium | complex>",
+  "recommendedBackground": "<transparent | white | blur | office | nature | city>",
+  "subjectDescription": "<1 sentence describing the main subject>"
+}`
+                },
+                {
+                  type: "image_url",
+                  image_url: { url: image }
+                }
+              ]
+            }
+          ],
+          max_tokens: 500,
+        }),
+      });
+
+      if (!analyzeResponse.ok) {
+        throw new Error("Analysis failed");
+      }
+
+      const analyzeResult = await analyzeResponse.json();
+      let content = analyzeResult.choices?.[0]?.message?.content || "{}";
+      // Strip markdown code blocks if present
+      content = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+      
+      let analysis = {};
+      try {
+        analysis = JSON.parse(content);
+      } catch {
+        analysis = { primarySubject: "unknown", backgroundComplexity: "medium" };
+      }
+
+      return new Response(
+        JSON.stringify({ success: true, analysis }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // ── Default: return success for client-side canvas removal ──
+    // The actual background removal is done client-side via canvas API
+    // This endpoint is kept for compatibility but client handles removal now
     return new Response(
-      JSON.stringify({ 
-        success: true,
-        processedImage: generatedImage,
-        backgroundColor: backgroundColor || "transparent"
-      }),
+      JSON.stringify({ success: true, clientSideRemoval: true }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
 
   } catch (error: unknown) {
-    console.error("Background removal error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Failed to process image";
+    console.error("Background AI error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Processing failed";
     return new Response(
       JSON.stringify({ error: errorMessage }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
