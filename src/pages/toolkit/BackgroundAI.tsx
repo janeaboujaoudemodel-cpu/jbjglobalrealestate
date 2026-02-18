@@ -957,6 +957,57 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               </label>
             </div>
 
+            {/* Whiten Clothing button — shown when a result exists */}
+            {result && (
+              <div className="rounded-2xl p-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                <div className="flex items-center justify-between flex-wrap gap-3">
+                  <div>
+                    <p className="text-white text-sm font-semibold flex items-center gap-2">
+                      👕 Whiten Clothing
+                    </p>
+                    <p className="text-xs mt-0.5" style={{ color: C.dimText }}>Make white garments pure white — preserves skin tones</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (!result) return;
+                      const img = new Image();
+                      img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.naturalWidth;
+                        canvas.height = img.naturalHeight;
+                        const ctx = canvas.getContext('2d', { willReadFrequently: true })!;
+                        ctx.drawImage(img, 0, 0);
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const d = imageData.data;
+                        for (let i = 0; i < d.length; i += 4) {
+                          const r = d[i], g = d[i+1], b = d[i+2];
+                          const brightness = (r + g + b) / 3;
+                          const maxC = Math.max(r, g, b);
+                          const minC = Math.min(r, g, b);
+                          const saturation = maxC === 0 ? 0 : (maxC - minC) / maxC;
+                          if (brightness > 160 && saturation < 0.35) {
+                            const strength = Math.min(1, Math.max(0, (brightness - 160) / 95)) * 0.9;
+                            d[i]   = Math.round(r + (255 - r) * strength);
+                            d[i+1] = Math.round(g + (255 - g) * strength);
+                            d[i+2] = Math.round(b + (255 - b) * strength);
+                          }
+                        }
+                        ctx.putImageData(imageData, 0, 0);
+                        const newResult = canvas.toDataURL('image/png');
+                        setResult(newResult);
+                        toast.success('Clothing whitened!');
+                      };
+                      img.src = result;
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+                    style={{ background: "linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 100%)", color: "#1E293B", boxShadow: "0 2px 12px rgba(255,255,255,0.15)" }}
+                  >
+                    👕 Whiten Now
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3">
               {activeTab === 'remove' && !transparentResult && (
