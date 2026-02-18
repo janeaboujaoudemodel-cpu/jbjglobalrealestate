@@ -79,8 +79,26 @@ const AIPropertyAnalyzer = () => {
   
   // New options for measurement, currency, and language
   const [measurementUnit, setMeasurementUnit] = useState<"sqft" | "sqm" | "both">("sqft");
-  const [currency, setCurrency] = useState<"AED" | "USD" | "EUR" | "GBP">("AED");
+  const [currency, setCurrency] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('jj_currency') || 'AED';
+    }
+    return 'AED';
+  });
   const [language, setLanguage] = useState<"en" | "ar" | "ru" | "zh" | "hi">("en");
+
+  const ALL_CURRENCIES = [
+    { code: 'AED', flag: '🇦🇪', name: 'UAE Dirham', symbol: 'AED' },
+    { code: 'USD', flag: '🇺🇸', name: 'US Dollar', symbol: '$' },
+    { code: 'EUR', flag: '🇪🇺', name: 'Euro', symbol: '€' },
+    { code: 'GBP', flag: '🇬🇧', name: 'British Pound', symbol: '£' },
+    { code: 'INR', flag: '🇮🇳', name: 'Indian Rupee', symbol: '₹' },
+    { code: 'SAR', flag: '🇸🇦', name: 'Saudi Riyal', symbol: 'SAR' },
+    { code: 'CNY', flag: '🇨🇳', name: 'Chinese Yuan', symbol: '¥' },
+    { code: 'RUB', flag: '🇷🇺', name: 'Russian Ruble', symbol: '₽' },
+    { code: 'CAD', flag: '🇨🇦', name: 'Canadian Dollar', symbol: 'C$' },
+    { code: 'AUD', flag: '🇦🇺', name: 'Australian Dollar', symbol: 'A$' },
+  ];
 
   const handleAnalyze = async () => {
     const selectedArea = area === "custom" ? customArea : area;
@@ -285,15 +303,25 @@ DISCLAIMER: ${result.disclaimer}
 
             <div>
               <Label className="text-zinc-300">Currency</Label>
-              <Select value={currency} onValueChange={(v: "AED" | "USD" | "EUR" | "GBP") => setCurrency(v)}>
+              <Select value={currency} onValueChange={setCurrency}>
                 <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
-                  <SelectValue />
+                  <SelectValue>
+                    {(() => {
+                      const c = ALL_CURRENCIES.find(x => x.code === currency) || ALL_CURRENCIES[0];
+                      return <span>{c.flag} {c.code} — {c.name}</span>;
+                    })()}
+                  </SelectValue>
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-zinc-700">
-                  <SelectItem value="AED" className="text-white hover:bg-zinc-700">AED (د.إ)</SelectItem>
-                  <SelectItem value="USD" className="text-white hover:bg-zinc-700">USD ($)</SelectItem>
-                  <SelectItem value="EUR" className="text-white hover:bg-zinc-700">EUR (€)</SelectItem>
-                  <SelectItem value="GBP" className="text-white hover:bg-zinc-700">GBP (£)</SelectItem>
+                <SelectContent className="bg-zinc-800 border-zinc-700 max-h-60">
+                  {ALL_CURRENCIES.map((c) => (
+                    <SelectItem key={c.code} value={c.code} className="text-white hover:bg-zinc-700">
+                      <span className="flex items-center gap-2">
+                        <span>{c.flag}</span>
+                        <span className="font-medium">{c.code}</span>
+                        <span className="text-zinc-400 text-xs">— {c.name}</span>
+                      </span>
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

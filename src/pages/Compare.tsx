@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { PaymentModal } from "@/components/PaymentModal";
 import { Badge } from "@/components/ui/badge";
+import { FounderContent } from "@/components/FounderContent";
 
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
@@ -501,11 +502,13 @@ const Compare = () => {
               Thank you for exploring our exclusive AI-powered property comparison tool.
               Get detailed insights, ROI projections, and expert recommendations.
             </p>
-            <div className="text-center mb-12">
-              <p className="text-zinc-300 text-sm font-medium">Jane Bou Jaoude</p>
-              <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
-              <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
-            </div>
+            <FounderContent>
+              <div className="text-center mb-12">
+                <p className="text-zinc-300 text-sm font-medium">Jane Bou Jaoude</p>
+                <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
+                <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
+              </div>
+            </FounderContent>
 
             {/* Steps Guide */}
             <div className="bg-zinc-900/80 backdrop-blur-sm border border-purple-500/20 rounded-3xl p-8 md:p-10 mb-10">
@@ -655,11 +658,13 @@ const Compare = () => {
             <p className="text-zinc-300 text-lg md:text-xl mb-4 max-w-2xl">
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
-            <div className="mt-2">
-              <p className="text-zinc-300 text-sm font-medium">Jane Bou Jaoude</p>
-              <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
-              <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
-            </div>
+            <FounderContent>
+              <div className="mt-2">
+                <p className="text-zinc-300 text-sm font-medium">Jane Bou Jaoude</p>
+                <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
+                <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
+              </div>
+            </FounderContent>
 
             {/* Feature Cards - Purple Theme */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
@@ -744,7 +749,8 @@ const Compare = () => {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 pb-16">
-        <div className="flex flex-col gap-8">
+        {/* Purple border wrapper — separates tool content from page sections */}
+        <div className="rounded-2xl border-2 border-purple-500/40 shadow-[0_0_40px_rgba(168,85,247,0.08)] p-6 bg-zinc-950/60 backdrop-blur-sm flex flex-col gap-8">
           {/* Properties Count */}
           <div className="flex items-center gap-2 text-zinc-400">
             <span className="text-lg font-medium text-white">{projects.length}</span>
@@ -791,35 +797,54 @@ const Compare = () => {
               </thead>
               <tbody>
                 {[
-                  { label: "Location", icon: MapPin, key: "location" },
-                  { label: "Community", key: "community", format: (_: any, p: any) => p.community?.name || "-" },
-                  { label: "Emirate", key: "emirate" },
-                  { label: "Price From", key: "price_from", format: (v: number) => `AED ${(v / 1000000).toFixed(2)}M` },
-                  { label: "Price To", key: "price_to", format: (v: number) => v ? `AED ${(v / 1000000).toFixed(2)}M` : "-" },
-                  { label: "Bedrooms", key: "bedrooms", format: (_: any, p: any) => `${p.bedrooms_min} - ${p.bedrooms_max} BR` },
-                  { label: "Size Range", key: "size", format: (_: any, p: any) => `${p.size_min?.toLocaleString() || "-"} - ${p.size_max?.toLocaleString() || "-"} sqft` },
-                  { label: "Price/sqft", key: "pricesqft", format: (_: any, p: any) => p.size_min && p.price_from ? `AED ${Math.round(p.price_from / p.size_min).toLocaleString()}` : "-" },
-                  { label: "Handover", key: "handover_date", format: (v: string) => v || "Ready/TBD" },
-                  { label: "Payment Plan", key: "payment_plan", format: (v: string) => v || "-" },
-                  { label: "Furnished", key: "furnished_status" },
-                  { label: "Views", key: "views", format: (v: string[]) => v?.join(", ") || "-" },
-                  { label: "Key Amenities", key: "amenities", format: (v: string[]) => v?.slice(0, 5).join(", ") || "-" },
+                  { label: "Location", format: (_: any, p: any) => p.location || p.emirate || "Dubai" },
+                  { label: "Community", format: (_: any, p: any) => p.community?.name || p.location || "N/A" },
+                  { label: "Emirate", format: (_: any, p: any) => p.emirate || "Dubai" },
+                  { label: "Price From", format: (_: any, p: any) => p.price_from ? `AED ${(p.price_from / 1000000).toFixed(2)}M` : "Price on request" },
+                  { label: "Price To", format: (_: any, p: any) => p.price_to ? `AED ${(p.price_to / 1000000).toFixed(2)}M` : "Price on request" },
+                  { label: "Bedrooms", format: (_: any, p: any) => {
+                    const min = p.bedrooms_min;
+                    const max = p.bedrooms_max;
+                    if (min != null && max != null && (min !== max)) return `${min} – ${max} BR`;
+                    if (min != null) return `${min} BR`;
+                    if (max != null) return `${max} BR`;
+                    return "Studio / Various";
+                  }},
+                  { label: "Size Range", format: (_: any, p: any) => {
+                    const min = p.size_min;
+                    const max = p.size_max;
+                    if (min && max) return `${min.toLocaleString()} – ${max.toLocaleString()} sqft`;
+                    if (min) return `From ${min.toLocaleString()} sqft`;
+                    return "Size on request";
+                  }},
+                  { label: "Price/sqft", format: (_: any, p: any) => {
+                    if (p.size_min && p.price_from) return `AED ${Math.round(p.price_from / p.size_min).toLocaleString()}`;
+                    if (p.price_per_sqft) return `AED ${p.price_per_sqft.toLocaleString()}`;
+                    return "N/A";
+                  }},
+                  { label: "Handover", format: (_: any, p: any) => p.handover_date || "Ready / TBD" },
+                  { label: "Payment Plan", format: (_: any, p: any) => p.payment_plan || "Contact for details" },
+                  { label: "Furnished", format: (_: any, p: any) => p.furnished_status || "Unfurnished" },
+                  { label: "Views", format: (_: any, p: any) => {
+                    const views = p.views;
+                    if (Array.isArray(views) && views.length > 0) return views.join(", ");
+                    return "Contact for details";
+                  }},
+                  { label: "Key Amenities", format: (_: any, p: any) => {
+                    const amenities = p.amenities;
+                    if (Array.isArray(amenities) && amenities.length > 0) return amenities.slice(0, 5).join(", ");
+                    return "See project page";
+                  }},
                 ].map((row) => (
                   <tr key={row.label} className="border-b border-zinc-800/50 hover:bg-zinc-800/30">
                     <td className="py-4 px-4 text-zinc-400 sticky left-0 bg-zinc-900 font-medium">
                       {row.label}
                     </td>
-                    {projects.map((project) => {
-                      const value = project[row.key as keyof typeof project];
-                      const displayValue = row.format 
-                        ? row.format(value as any, project)
-                        : (value as string) || "-";
-                      return (
-                        <td key={project.id} className="py-4 px-4 text-white text-sm">
-                          {displayValue}
-                        </td>
-                      );
-                    })}
+                    {projects.map((project) => (
+                      <td key={project.id} className="py-4 px-4 text-white text-sm">
+                        {row.format(null, project)}
+                      </td>
+                    ))}
                   </tr>
                 ))}
               </tbody>
@@ -969,14 +994,14 @@ const Compare = () => {
               </div>
             </div>
           ) : (
-            /* CTA to Generate Analysis */
+            /* Auto-trigger prompt — no gate, just encourage clicking Start Comparing above */
             <div className="bg-gradient-to-br from-purple-950/50 to-zinc-900 rounded-2xl border border-purple-800/30 p-8 text-center">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center mx-auto mb-4">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-white text-2xl font-bold mb-2">Unlock AI Analysis</h3>
+              <h3 className="text-white text-2xl font-bold mb-2">AI Analysis Ready</h3>
               <p className="text-zinc-400 max-w-md mx-auto mb-6">
-                Get detailed property comparisons, ratings, investment recommendations, and personalized advice powered by advanced AI.
+                Click <strong className="text-purple-300">Start Comparing</strong> above to generate a detailed AI comparison with ratings, investment advice, and recommendations for your shortlisted properties.
               </p>
               <Button
                 onClick={generateSmartAnalysis}
@@ -1073,15 +1098,14 @@ const Compare = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Button
                   onClick={() => setShowRequestForm(true)}
-                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-500 hover:to-purple-600"
+                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white font-semibold hover:from-purple-500 hover:to-purple-600 border border-purple-400/30"
                 >
                   <Mail className="w-4 h-4 mr-2" />
-                  Request Callback
+                  Request Consultation
                 </Button>
                 <a href="tel:+971565911000" className="w-full">
                   <Button
-                    variant="outline"
-                    className="w-full border-purple-500/40 text-purple-300 bg-transparent hover:bg-purple-500/20"
+                    className="w-full bg-purple-900/60 border-2 border-purple-400 text-white font-semibold hover:bg-purple-800/80"
                   >
                     <Phone className="w-4 h-4 mr-2" />
                     Call Now
@@ -1089,11 +1113,10 @@ const Compare = () => {
                 </a>
                 <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="w-full">
                   <Button
-                    variant="outline"
-                    className="w-full border-purple-500/40 text-purple-300 bg-transparent hover:bg-purple-500/20"
+                    className="w-full bg-purple-900/60 border-2 border-purple-400 text-white font-semibold hover:bg-purple-800/80"
                   >
                     <BadgeCheck className="w-4 h-4 mr-2" />
-                    Full Inquiry Form
+                    Inquiry Form
                   </Button>
                 </a>
               </div>
@@ -1101,7 +1124,7 @@ const Compare = () => {
           </div>
 
           {/* AI Property Analyzer Integration */}
-          <div className="mt-12 border-t border-purple-500/20 pt-12">
+          <div className="border-t border-purple-500/20 pt-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 rounded-lg bg-purple-500/20 border border-purple-500/30">
                 <Brain className="w-6 h-6 text-purple-400" />
@@ -1115,14 +1138,15 @@ const Compare = () => {
           </div>
 
           {/* AI Tool Disclaimer */}
-          <LegalDisclaimer variant="ai-tools" className="mt-6" />
+          <LegalDisclaimer variant="ai-tools" className="mt-2" />
 
-          {/* Footer Branding */}
-          <div className="text-center text-zinc-600 text-sm py-4">
-            Powered & Made by <span className="text-purple-400">JBJ Global Real Estate</span> — Real Estate Brokerage
-          </div>
-          <LegalDisclaimer variant="compact" className="pb-4" />
+        </div>{/* end purple border wrapper */}
+
+        {/* Footer Branding — outside the tool box, above Ready to Get Started */}
+        <div className="text-center text-zinc-600 text-sm py-6">
+          Powered & Made by <span className="text-purple-400">JBJ Global Real Estate</span> — Real Estate Brokerage
         </div>
+        <LegalDisclaimer variant="compact" className="pb-4" />
       </div>
 
       {/* VIP Modal */}
