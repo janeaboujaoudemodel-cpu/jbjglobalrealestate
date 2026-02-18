@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
@@ -27,32 +27,18 @@ interface IntegratedToolsPanelProps {
 }
 
 export function IntegratedToolsPanel({ onAddVoiceover, onAddAIVoice }: IntegratedToolsPanelProps) {
-  const [activeTab, setActiveTab] = useState('voice');
+  const [activeTab, setActiveTab] = useState('captions');
   const [subtitles, setSubtitles] = useState<SubtitleSegment[]>([]);
 
   const tabs = [
-    { id: 'voice', label: 'Voice', icon: Mic },
     { id: 'captions', label: 'Captions', icon: Languages },
+    { id: 'voice', label: 'Voice', icon: Mic },
     { id: 'beauty', label: 'Beauty', icon: Sparkles },
     { id: 'resize', label: 'Resize', icon: Maximize2 },
   ];
 
-  const handleRecordingComplete = useCallback((blob: Blob, duration: number) => {
-    onAddVoiceover?.(blob, duration);
-  }, [onAddVoiceover]);
-
-  const handleAIVoiceGenerated = useCallback((url: string, duration: number) => {
-    onAddAIVoice?.(url, duration);
-  }, [onAddAIVoice]);
-
-  const handleTranscribe = useCallback(async (): Promise<SubtitleSegment[]> => {
-    // Mock transcription for now
-    const mockSubtitles: SubtitleSegment[] = [
-      { id: '1', startTime: 0, endTime: 2, text: 'Welcome to this video.', language: 'en' },
-      { id: '2', startTime: 2, endTime: 5, text: 'Today we will explore something amazing.', language: 'en' },
-    ];
-    return mockSubtitles;
-  }, []);
+  // No-op stub — CaptionTranslator now handles its own transcription internally
+  const handleTranscribe = async (): Promise<SubtitleSegment[]> => [];
 
   return (
     <div className="h-full flex flex-col bg-slate-900/50">
@@ -62,7 +48,7 @@ export function IntegratedToolsPanel({ onAddVoiceover, onAddAIVoice }: Integrate
             <TabsTrigger
               key={tab.id}
               value={tab.id}
-              className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold py-2 px-1 text-xs gap-1"
+              className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-amber-400 data-[state=active]:text-amber-400 py-2 px-1 text-xs gap-1"
             >
               <tab.icon className="w-3 h-3" />
               <span className="hidden sm:inline">{tab.label}</span>
@@ -70,15 +56,8 @@ export function IntegratedToolsPanel({ onAddVoiceover, onAddAIVoice }: Integrate
           ))}
         </TabsList>
 
-        <ScrollArea className="flex-1">
-          <TabsContent value="voice" className="mt-0 h-full p-3">
-            <VoiceoverRecorder 
-              onRecordingComplete={handleRecordingComplete}
-              onAIVoiceGenerated={handleAIVoiceGenerated}
-            />
-          </TabsContent>
-
-          <TabsContent value="captions" className="mt-0 h-full p-3">
+        <div className="flex-1 overflow-hidden">
+          <TabsContent value="captions" className="mt-0 h-full data-[state=active]:flex data-[state=active]:flex-col">
             <CaptionTranslator 
               subtitles={subtitles}
               onSubtitlesUpdate={setSubtitles}
@@ -86,14 +65,25 @@ export function IntegratedToolsPanel({ onAddVoiceover, onAddAIVoice }: Integrate
             />
           </TabsContent>
 
+          <TabsContent value="voice" className="mt-0 h-full p-3">
+            <VoiceoverRecorder 
+              onRecordingComplete={(blob, duration) => onAddVoiceover?.(blob, duration)}
+              onAIVoiceGenerated={(url, duration) => onAddAIVoice?.(url, duration)}
+            />
+          </TabsContent>
+
           <TabsContent value="beauty" className="mt-0 h-full">
-            <BeautyFiltersPanel />
+            <ScrollArea className="h-full">
+              <BeautyFiltersPanel />
+            </ScrollArea>
           </TabsContent>
 
           <TabsContent value="resize" className="mt-0 h-full">
-            <VideoResizePanel />
+            <ScrollArea className="h-full">
+              <VideoResizePanel />
+            </ScrollArea>
           </TabsContent>
-        </ScrollArea>
+        </div>
       </Tabs>
     </div>
   );
