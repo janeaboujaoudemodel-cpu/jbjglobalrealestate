@@ -9,6 +9,7 @@ import {
   Grid3x3, Upload, Plus, Trash2, Send, CheckCircle2, Clock, Loader2,
   ExternalLink, AlertCircle, Instagram, CalendarIcon, ImageIcon, Pencil,
   ChevronRight, X, Hash, RotateCcw, Copy, Bell, CalendarDays,
+  Heart, MessageCircle, Eye, Bookmark, RefreshCw, BarChart2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -46,6 +47,15 @@ interface PublishedRecord {
   postUrl: string;
   postedAt: string;
   postId?: string;
+}
+
+interface PostAnalytics {
+  like_count: number;
+  comments_count: number;
+  reach: number | null;
+  impressions: number | null;
+  saved: number | null;
+  fetchedAt: string;
 }
 
 interface ScheduledRecord {
@@ -197,6 +207,10 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
   const [scheduledPosts, setScheduledPosts] = useState<any[]>([]);
   const [loadingScheduled, setLoadingScheduled] = useState(false);
 
+  // Analytics per published post (keyed by photo.id)
+  const [analyticsMap, setAnalyticsMap] = useState<Record<string, PostAnalytics>>({});
+  const [fetchingAnalyticsId, setFetchingAnalyticsId] = useState<string | null>(null);
+
   // ── Fetch scheduled posts from DB ──────────────────────────────────────────
   const fetchScheduledPosts = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -301,7 +315,35 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
     }
   };
 
-  // ── Compute ISO from date+time picker ─────────────────────────────────────
+  // ── Fetch Analytics ────────────────────────────────────────────────────────
+  const fetchAnalytics = async (photoId: string) => {
+    const rec = publishedMap[photoId];
+    if (!rec?.postId) { toast.error('No post ID available'); return; }
+    setFetchingAnalyticsId(photoId);
+    try {
+      const { data, error } = await supabase.functions.invoke('instagram-get-analytics', {
+        body: { postId: rec.postId, accessToken: igAccessToken },
+      });
+      if (error || !data?.success) throw new Error(data?.error || error?.message || 'Analytics fetch failed');
+      setAnalyticsMap(prev => ({
+        ...prev,
+        [photoId]: {
+          like_count: data.like_count,
+          comments_count: data.comments_count,
+          reach: data.reach,
+          impressions: data.impressions,
+          saved: data.saved,
+          fetchedAt: format(new Date(), 'HH:mm'),
+        },
+      }));
+    } catch (err) {
+      toast.error(`Analytics: ${err instanceof Error ? err.message : 'Failed'}`);
+    } finally {
+      setFetchingAnalyticsId(null);
+    }
+  };
+
+
   const getScheduledISO = (photoId: string): string | null => {
     const entry = scheduleDateMap[photoId];
     if (!entry?.date || !entry?.time) return null;
@@ -744,15 +786,112 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
 
                         {/* Status badges */}
                         {posted ? (
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
-                              style={{ background: "rgba(34,197,94,0.15)", color: "#22C55E" }}>
-                              <CheckCircle2 className="h-2.5 w-2.5" /> POSTED {posted.postedAt}
-                            </span>
-                            <a href={posted.postUrl} target="_blank" rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 text-[10px] font-medium" style={{ color: I.text }}>
-                              <ExternalLink className="h-2.5 w-2.5" /> View Post
-                            </a>
+                          <div className="space-y-2">
+                            {/* Posted header */}
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
+                                style={{ background: "rgba(34,197,94,0.15)", color: "#22C55E" }}>
+                                <CheckCircle2 className="h-2.5 w-2.5" /> POSTED {posted.postedAt}
+                              </span>
+                              <a href={posted.postUrl} target="_blank" rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-[10px] font-medium" style={{ color: I.text }}>
+                                <ExternalLink className="h-2.5 w-2.5" /> View Post
+                              </a>
+                              <button
+                                onClick={() => fetchAnalytics(photo.id)}
+                                disabled={fetchingAnalyticsId === photo.id}
+                                className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full transition-all disabled:opacity-50"
+                                style={{ background: "rgba(99,102,241,0.15)", color: I.text, border: `1px solid rgba(99,102,241,0.3)` }}>
+                                {fetchingAnalyticsId === photo.id
+                                  ? <Loader2 className="h-2.5 w-2.5 animate-spin" />
+                                  : <RefreshCw className="h-2.5 w-2.5" />}
+                                {analyticsMap[photo.id] ? 'Refresh' : 'Load Analytics'}
+                              </button>
+                            </div>
+
+                            {/* Analytics card */}
+                            {analyticsMap[photo.id] ? (
+                              <div className="rounded-lg p-3 space-y-2"
+                                style={{ background: "rgba(99,102,241,0.08)", border: `1px solid rgba(99,102,241,0.2)` }}>
+                                <div className="flex items-center gap-1 mb-1">
+                                  <BarChart2 className="h-3 w-3" style={{ color: I.text }} />
+                                  <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: I.text }}>
+                                    Analytics
+                                  </span>
+                                  <span className="text-[9px] ml-auto" style={{ color: I.dim }}>
+                                    updated {analyticsMap[photo.id].fetchedAt}
+                                  </span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                  {/* Likes */}
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
+                                      style={{ background: "rgba(239,68,68,0.15)" }}>
+                                      <Heart className="h-3 w-3" style={{ color: "#EF4444" }} />
+                                    </div>
+                                    <div>
+                                      <p className="text-white text-xs font-bold leading-tight">
+                                        {analyticsMap[photo.id].like_count.toLocaleString()}
+                                      </p>
+                                      <p className="text-[9px]" style={{ color: I.dim }}>Likes</p>
+                                    </div>
+                                  </div>
+                                  {/* Comments */}
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
+                                      style={{ background: "rgba(99,102,241,0.15)" }}>
+                                      <MessageCircle className="h-3 w-3" style={{ color: I.text }} />
+                                    </div>
+                                    <div>
+                                      <p className="text-white text-xs font-bold leading-tight">
+                                        {analyticsMap[photo.id].comments_count.toLocaleString()}
+                                      </p>
+                                      <p className="text-[9px]" style={{ color: I.dim }}>Comments</p>
+                                    </div>
+                                  </div>
+                                  {/* Reach */}
+                                  {analyticsMap[photo.id].reach !== null && (
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
+                                        style={{ background: "rgba(34,197,94,0.15)" }}>
+                                        <Eye className="h-3 w-3" style={{ color: "#22C55E" }} />
+                                      </div>
+                                      <div>
+                                        <p className="text-white text-xs font-bold leading-tight">
+                                          {analyticsMap[photo.id].reach!.toLocaleString()}
+                                        </p>
+                                        <p className="text-[9px]" style={{ color: I.dim }}>Reach</p>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {/* Saved */}
+                                  {analyticsMap[photo.id].saved !== null && (
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
+                                        style={{ background: "rgba(234,179,8,0.15)" }}>
+                                        <Bookmark className="h-3 w-3" style={{ color: "#EAB308" }} />
+                                      </div>
+                                      <div>
+                                        <p className="text-white text-xs font-bold leading-tight">
+                                          {analyticsMap[photo.id].saved!.toLocaleString()}
+                                        </p>
+                                        <p className="text-[9px]" style={{ color: I.dim }}>Saved</p>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            ) : fetchingAnalyticsId === photo.id ? (
+                              <div className="rounded-lg p-3 flex items-center justify-center gap-2"
+                                style={{ background: "rgba(99,102,241,0.06)", border: `1px solid ${I.border}` }}>
+                                <Loader2 className="h-4 w-4 animate-spin" style={{ color: I.text }} />
+                                <span className="text-xs" style={{ color: I.dim }}>Fetching analytics…</span>
+                              </div>
+                            ) : (
+                              <p className="text-[10px]" style={{ color: I.dim }}>
+                                Click "Load Analytics" to pull live stats from Instagram.
+                              </p>
+                            )}
                           </div>
                         ) : scheduled ? (
                           <div className="flex items-center gap-2 flex-wrap">
