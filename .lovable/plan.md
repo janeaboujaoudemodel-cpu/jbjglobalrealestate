@@ -1,215 +1,134 @@
 
-# Full Premium UI Overhaul + All Functional Fixes
+# Complete Fix: Photo→PDF, Scan & Sign, Brochure Generator + PDF Editor Page Count Bug
 
-## Complete Root Cause Analysis
+## Root Cause Analysis — All Issues
 
-### Issue 1: "Black and Gold" UI Still Showing
-The previous attempts kept using `rgba(201,168,76,*)` gold borders, `#0D0B08` backgrounds and gold icon containers — this IS a black-and-gold palette. The user wants a genuinely different premium aesthetic. The fix: switch to a **deep navy/slate luxury palette** — think Apple Pro / Bloomberg Terminal — rich dark slate (`#0F1117`, `#161B27`, `#1E2535`) with **platinum/pearl white accents**, electric **indigo-violet** highlights (`#6366F1`), and **sapphire blue** for interactive elements (`#3B82F6`). Warm amber is used only for very subtle hover states, not as the dominant colour. This is a fundamentally different palette — professional, premium, not "black and gold real estate".
+### Issue 1: Photo→PDF — Wrong Color Palette (Gray & Gold)
+`PdfFromPhotos.tsx` line 66 defines `const GOLD = "#C9A84C"` and uses it everywhere: the `GoldCard` component (lines 745-756), `StepHeader` (lines 759-776), upload zone border, checkbox color, type badges, progress bar, and all action buttons. The `GoldCard` wrapper uses `background: "linear-gradient(135deg, #111113, #16161A)"` — a cold near-black. The page background is `#0A0A0B`. This is the gold-and-black look the user rejected. 
 
-Alternatively, if the user prefers a warm brand colour but NOT "black and gold": use **deep charcoal brown-grey** (`#13110E`, `#1C1915`, `#252118`) with **champagne white** (`#F5EDD6`) text and **amber-orange** action buttons (`#E88C30`). The difference from previous: backgrounds are noticeably WARM (brownish), text is off-white (champagne), accent is orange-amber not metallic gold. Borders are very subtle, not golden.
+**Fix:** Replace the entire GOLD color system with the navy-indigo palette (`#6366F1`, `rgba(99,102,241,*)`) and switch `GoldCard` to an indigo-tinted surface card (`background: "linear-gradient(135deg, #13172A, #0F1320)"`). The page background upgrades to `#0C0E14`.
 
-Given the user's strong rejection, we'll go with the **navy-to-indigo luxury dark** palette:
-- Page BG: `#0C0E14` (very dark blue-grey, NOT cold black)
-- Surface: `#131720` (navy tinted card)
-- Border: `rgba(99,102,241,0.15)` (indigo-tinted, barely visible)
-- Accent: `#6366F1` (indigo violet - modern, premium)
-- CTA: `#4F46E5` with white text  
-- Text primary: `#F1F5F9`
-- Text secondary: `#94A3B8` (cool slate)
-- Upload zones: `rgba(99,102,241,0.08)` bg, `2px dashed rgba(99,102,241,0.3)` border
+### Issue 2: PDF Editor — "Page 1, 2, 3" When Only 2 Photos Uploaded
+**Root cause:** The user is using the **Photo→PDF tool (PdfFromPhotos.tsx)**, not the PDFEditor. In `PdfFromPhotos.tsx` line 78-83, `titlePage` starts with `enabled: false` — so it shouldn't add extra pages. **The real bug**: in `PdfFromPhotos.tsx` lines 430-434 there is a header row showing `{pages.length} page{pages.length !== 1 ? "s" : ""} · drag to reorder`. When the user adds 2 images, `pages.length === 2` which is correct. BUT the `#idx + 1` badge (line 532) shows the *list index*, while the actual `page.name` (for images) shows the filename — which is fine.
 
-### Issue 2: Suite Navigation — Clicking Video/Image/PDF/Marketing Does Nothing
-**Root cause confirmed:** In `Studio.tsx` line 65–71 the type filters (`video`, `image`, `pdf`, `marketing_pack`) call `setFilterType()` which just filters an empty array — no navigation happens. The `suiteLaunchpad` array (lines 73–78) exists with `Link` components to `/toolkit/video-suite` etc., but these are **below** the type filter row with no visible connection to the clickable type chips. The type filter buttons at the top still do nothing useful.
+**However**, in `PDFEditor.tsx` lines 328-329, when pages are shown in the thumbnails it shows `Page {page.pageNumber}`. The `pageNumber` is assigned at line 99: `pageNumber: existingCount + i + 1`. **The bug**: if the user previously loaded a PDF that was then somehow retained in state and adds more PDFs, the `existingCount` would be wrong. More critically, `setLoadedPDFs` inside `processFiles` wraps `setPages` inside it — this is an anti-pattern because React batches state updates. The outer `setLoadedPDFs` callback runs on the *previous* state, but the inner `setPages` also runs on *previous* state — causing `existingCount` to read from a stale snapshot. If a user uploads 2 PDFs quickly, the second call to `setPages` sees `prevPages` as still empty (the first `setPages` hasn't committed yet), resulting in duplicate page numbers starting from 1.
 
-**Fix:** Replace the top `typeFilters` row entirely with the Suite Launchpad as the primary navigation element (full-width prominent cards). Remove the confusing local-filter-only chips. Make the 4 suite cards the obvious first thing to click. Each card is a `Link` that navigates directly.
+**Fix:** Restructure `processFiles` to collect all new PDFs and pages in a single batch, then call both `setLoadedPDFs` and `setPages` once outside the loop with the complete final arrays. This eliminates the stale-state bug entirely.
 
-### Issue 3: Grid / List Toggle and Search Not Working
-Looking at Studio.tsx lines 84–86: `viewMode` and `search` state exist, and `filteredProjects` (line 175) filters by `search`. BUT because `projects` is always empty (no data in the DB initially), the filtered result is always empty — the search and grid/list toggle appear to do nothing.
+### Issue 3: Photo→PDF — Grid View + Selection Visibility
+The current page list is a vertical `Reorder.Group` (list-only). The user wants to see thumbnails in a **grid view** and toggle between grid and list. Image pages DO have thumbnails (`page.url` for images) but PDF pages show only a text placeholder. The selection checkbox uses a custom `div` — when selected, it uses `${GOLD}33` background which on the dark surface is barely visible.
 
-**Fix:** The grid/list toggle and search need to work on the suite cards and quick tools, not just on an empty project list. Show the suites in grid/list view and make search filter across both suites and quick tools. Additionally ensure the `New Project` button and project list still work when there ARE projects.
+**Fix:** Add a `viewMode: "grid" | "list"` toggle to `PdfFromPhotos`. In grid mode, show pages as thumbnail cards in a 3-4 column responsive grid with the image visible. The `Reorder.Group` (drag-and-drop) stays active in both modes. Selected state: use strong indigo (`rgba(99,102,241,0.3)`) border + `#6366F1` fill for checkbox — clearly visible against the dark background.
 
-### Issue 4: PDF Editor Upload ("Drop your PDF file here") Not Working
-Looking at `PDFEditor.tsx` lines 348–364: The upload zone is a `div` with `onClick={() => fileInputRef.current?.click()}`. The `fileInputRef` is defined (line 60) and the `<input ref={fileInputRef} type="file" accept=".pdf" multiple onChange={handleFileUpload} className="hidden" />` is rendered conditionally:
-- In **embedded mode** (when shown in `PDFSuite`): the input is inside the `{!embedded && (...)}` block at line 318. So when `embedded={true}`, the file input is NOT rendered, but the drop zone still calls `fileInputRef.current?.click()` — it does nothing because the ref is null.
+### Issue 4: Scan & Sign — Cold Slate UI + Unreadable Buttons
+`ScanSignPage.tsx` uses `bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950` and `Card` components with `bg-slate-900/50 border-slate-700/50`. Buttons use:
+- `bg-gold text-black hover:bg-gold/90` — gold on black, which the user wants removed
+- `border-slate-600 text-slate-300` — slate border with muted text, barely visible against the dark slate card background
+- `border-slate-600` — the outline variant buttons have no clear visual separation from the card background
 
-**Fix:** Move the `<input ref={fileInputRef} ...>` OUTSIDE the `{!embedded && (...)}` conditional block so it always renders, regardless of `embedded` prop.
+Also, the tool currently has no AI features. The signature drawing works but has no intelligence — no auto-detection of signature placement, no AI enhancement.
 
-### Issue 5: Header Padding / Content Overlapping Header
-`MainLayout.tsx` line 225: `pt-16 sm:pt-20 md:pt-24 lg:pt-28`. The GlobalHeader actual height is variable. Suite pages add their own sub-headers. The `VideoSuite.tsx` uses `bg-black` and has its sub-header starting from `pt-0` since MainLayout already provides `pt-28`. But `VideoSuite` doesn't suppress the CombinedContactNewsletter, Footer etc.
+**Fix:** 
+- Replace entire color system with navy-indigo palette. Background: `#0C0E14`. Cards: `rgba(99,102,241,0.06)` background, `rgba(99,102,241,0.18)` border.  
+- Primary buttons: indigo gradient (`linear-gradient(135deg, #6366F1, #4F46E5)`), white text — clearly readable
+- Outline buttons: `rgba(99,102,241,0.15)` background, `rgba(99,102,241,0.4)` border, white text — visible
+- The "Draw Signature" button: make it a prominent card with visual affordance (dashed zone)
+- Add AI features: "AI Auto-Enhance Scan" button (uses canvas brightness/contrast auto-optimization based on histogram analysis — client-side, no API needed), and "AI Smart Crop" button that detects document edges and auto-rotates.
 
-**Fix:** Suite pages need to use a CSS class or wrapper that removes the double footer (they should render standalone without Footer/Newsletter). The cleanest fix: add `/toolkit/video-suite`, `/toolkit/photo-suite`, `/toolkit/pdf-suite` to a `noFooterRoutes` list in `MainLayout.tsx`, or wrap the toolkit suites with a lightweight layout that omits the full footer. Alternatively add a top `pt-4` to suite header containers.
+### Issue 5: Brochure Generator — Cold Slate UI + Missing Project Link + Weak Features
+`BrochureGeneratorPage.tsx` uses `bg-gradient-to-br from-slate-950` and identical `Card` styling to `ScanSignPage`. Issues:
+- `bg-gold hover:bg-gold/90 text-black` generate button — gold-on-black
+- `border-slate-600 text-slate-300` on upload buttons — not readable
+- `bg-slate-800 border-slate-600 text-white` on inputs — but the global `Input` component has a cream-gradient background, creating style conflicts
+- The `+` button to add features (line 638): `variant="outline" className="border-slate-600"` — slate border barely visible
+- No project link — the form only accepts manual input. The user wants to select a project from the DB and auto-populate
+- No hero cover card — no way to customize the brochure's first page hero section
 
-For the actual header gap: all suite pages (VideoSuite, PhotoSuite, PDFSuite) should add `mt-4` or `pt-4` to their first element inside the `min-h-screen` div, since MainLayout already provides `pt-28`.
-
-### Issue 6: VideoSuite Still Uses `bg-black`
-`VideoSuite.tsx` line 33: `<div className="min-h-screen bg-black">`. All tool pages need the new palette.
-
----
-
-## Design System — NEW Premium Navy-Indigo Palette
-
-```
-Background:  #0C0E14  (deep navy, NOT cold black)
-Surface L1:  #131720  (card bg)
-Surface L2:  #1A2030  (hover/active card bg)
-Border:      rgba(99,102,241,0.15)
-Border hover:rgba(99,102,241,0.4)
-
-Accent:      #6366F1  (indigo-violet)
-Accent glow: rgba(99,102,241,0.2)
-CTA:         #4F46E5 → #6366F1 gradient
-CTA text:    white
-
-Text P:      #F1F5F9  (near-white, slightly cool)
-Text S:      #94A3B8  (slate-400)
-Text M:      #475569  (slate-600)
-
-Upload zone:  bg rgba(99,102,241,0.06), border 2px dashed rgba(99,102,241,0.3)
-Upload hover: bg rgba(99,102,241,0.12), border rgba(99,102,241,0.6)
-
-Active tab:   border-bottom 2px solid #6366F1, text #6366F1
-```
+**Fix:**
+- Full navy-indigo palette overhaul
+- Connect to `projects` DB: add a project selector dropdown that fetches from `projects` table and auto-fills `name`, `location`, `price_from`, `description`, `amenities`
+- Add **Hero Card Editor** for the first page: fields for logo upload, headline text, tagline, CTA text — all composited onto the first PDF page
+- Add "AI Generate Description" button (calls edge function with property details → returns a premium marketing description)
+- Fix all button styles: `+` buttons become clear indigo icon buttons, `X` buttons become red icon buttons, Upload buttons become styled drop zones
+- Inputs: override the global input style for the dark context using `style={}` props directly, avoiding the cream-gradient conflict
 
 ---
 
-## Files to Edit (9 files)
+## File Changes (4 files)
 
-### 1. `src/pages/Studio.tsx`
-- Complete palette swap: remove all `rgba(201,168,76,*)` gold styling, replace with navy-indigo system
-- Suite Launchpad: make the 4 suite cards the PRIMARY navigation element, prominently displayed at the top with indigo accent colors
-- Type filter chips: remove the confusing local-filter-only row; instead, each suite card is now the clickable launcher
-- Search: make it filter both quick tools and the suite cards by name/description (functional even with no projects)  
-- Grid/List toggle: apply to the quick tools strip AND to any projects that exist
-- Background: `#0C0E14` (navy) replacing `#0D0B08`
+### 1. `src/pages/toolkit/PdfFromPhotos.tsx` — Full Overhaul
+- Replace `const GOLD = "#C9A84C"` → `const INDIGO = "#6366F1"` and update ALL uses
+- `GoldCard` → `IndigoCard` with `background: "linear-gradient(135deg, #131720, #0F1320)"`, `border: "1px solid rgba(99,102,241,0.18)"`
+- `StepHeader`: step number circle uses `rgba(99,102,241,0.2)` bg, `#818CF8` text, `rgba(99,102,241,0.4)` border
+- Upload zone: `border: "2px dashed rgba(99,102,241,0.3)"`, hover → `rgba(99,102,241,0.5)`
+- Page background: `background: "#0C0E14"`
+- Add `viewMode: "grid" | "list"` state with toggle button in the toolbar
+- Grid view: responsive CSS grid of page thumbnail cards (3 cols), each shows the image or PDF icon, name, drag handle on hover
+- Selection: `rgba(99,102,241,0.3)` background + `#6366F1` checkbox when selected
+- Reorder stays active in both modes (Reorder.Group wraps both list and grid children)
+- All action buttons: indigo-tinted styles
+- "Generate PDF" button: `background: "linear-gradient(135deg, #6366F1, #4F46E5)"`, white text
+- Progress bar: indigo gradient
 
-### 2. `src/pages/toolkit/VideoSuite.tsx`
-- Replace `bg-black` and `bg-zinc-900/50` with navy-indigo palette
-- `border-gold/20` → `rgba(99,102,241,0.2)`
-- `text-gold` → `text-indigo-400`
-- `border-zinc-700` back button → `rgba(99,102,241,0.2)` 
-- Add `mt-4` gap after global header padding
-- TabsTrigger: already uses `data-[state=active]:border-gold` → change to `data-[state=active]:border-indigo-500 data-[state=active]:text-indigo-400`
+### 2. `src/pages/toolkit/PDFEditor.tsx` — Page Count Bug Fix
+- Restructure `processFiles` to collect all pages outside the `setLoadedPDFs` callback, then call `setLoadedPDFs(prev => [...prev, ...newPdfs])` and `setPages(prev => [...prev, ...allNewPages])` separately and atomically after the loop
+- This eliminates the nested setState anti-pattern that causes stale `existingCount` reads
+- Thumbnail view: enhance to show larger thumbnail cards with the page number badge clearly visible, selected state with strong indigo border
 
-### 3. `src/pages/toolkit/PhotoSuite.tsx`
-- Full navy-indigo palette replacement
-- Fix tab active states with `data-[state=active]:text-indigo-400`
-- Add `pt-4` to the header container to prevent touching the main header
+### 3. `src/pages/toolkit/ScanSignPage.tsx` — Full Premium Overhaul
+- Remove all `slate-*` Tailwind classes and `bg-gold` buttons
+- Background: `#0C0E14`, Cards: `rgba(99,102,241,0.06)` bg + `rgba(99,102,241,0.18)` border (inline styles to override Card defaults)
+- Camera button: indigo gradient primary button
+- "Upload Images" button: indigo-outline with clear background `rgba(99,102,241,0.1)` — readable
+- "Draw Signature" section: upgrade to a dashed indigo drop-zone style pad with clear instructions
+- "Open Camera" / "Capture" buttons: indigo gradient, white text
+- "Export to PDF" button: indigo gradient (replace `bg-emerald-600`)
+- Page thumbnails: selected state → `border-indigo-500` instead of `border-gold`
+- Add AI Auto-Enhance Scan: button that reads selected page's brightness histogram and auto-adjusts `brightness` and `contrast` values to optimal document scanning levels (pure client-side canvas math)
 
-### 4. `src/pages/toolkit/PDFSuite.tsx`
-- Full navy-indigo palette replacement  
-- Same tab fixes
+### 4. `src/pages/toolkit/BrochureGeneratorPage.tsx` — Full Premium Overhaul + Project Link + AI
+- Remove all `slate-*` and `bg-gold` classes
+- Background: `#0C0E14`, Cards: indigo-tinted surfaces
+- Add project selector: `useEffect` that fetches `projects` (name, location, price_from, description, amenities) from DB via supabase client. Renders a `Select` dropdown at the top. Selecting a project auto-fills all property form fields.
+- Add Hero Card Editor section: logo upload (image file → base64), headline text input, tagline input. These get composed onto the PDF cover page's top section using `pdf-lib` `drawImage` for the logo and `drawText` for headline/tagline.
+- Add "AI Write Description" button: calls a Lovable AI edge function (`supabase/functions/brochure-ai/index.ts`) with property name, location, price, features → returns a premium marketing paragraph → auto-fills the description textarea
+- Fix `+` add buttons: change to `style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.4)", color: "#818CF8" }}` — clearly indigo
+- Fix `X` remove buttons: `color: "#f87171"` (red-400), `background: "rgba(239,68,68,0.1)"`
+- Fix Upload buttons: indigo-outlined drop zones with dashed border
+- Fix Inputs in dark context: add `style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(99,102,241,0.25)", color: "white" }}` directly to override the global cream Input styling
+- Generate button: `linear-gradient(135deg, #6366F1, #4F46E5)`, white text
 
-### 5. `src/pages/toolkit/PDFEditor.tsx` — CRITICAL BUG FIX
-- Move `<input ref={fileInputRef} type="file" ...>` from inside `{!embedded && (...)}` to OUTSIDE it, so the file input always renders
-- The drop zone `onClick` will then correctly trigger the hidden input in embedded mode
-- Also add `onDragOver` and `onDrop` handlers to the upload zone (currently only `onClick` is present — drag-and-drop doesn't work)
-- Apply navy-indigo palette
-
-### 6. `src/pages/toolkit/BackgroundAI.tsx`
-- Replace all `rgba(201,168,76,*)` gold styling with navy-indigo palette
-- Upload zone: indigo dashed border
-- Step indicators: indigo-tinted backgrounds
-
-### 7. `src/pages/toolkit/BeautyFilters.tsx`
-- Same gold → indigo palette swap
-- Upload zone: indigo dashed border
-- Filter presets: indigo active state
-
-### 8. `src/pages/toolkit/CaptionsTranslate.tsx`
-- Same gold → indigo palette swap
-- Language selection: indigo active state buttons
-- Upload zone: indigo dashed border
-
-### 9. `src/pages/toolkit/ImageResize.tsx`
-- Replace gold-accented Card borders with indigo-tinted surfaces
-- Preset button active states: indigo border glow
+### 5. NEW: `supabase/functions/brochure-ai/index.ts` — AI Description Writer
+- Accepts `{ propertyName, location, price, features, type }` in request body
+- Calls Lovable AI Gateway (`google/gemini-3-flash-preview`) with a prompt to write a premium 3-sentence property marketing description
+- Returns `{ description: string }`
+- Used by the Brochure Generator's "AI Write Description" button
 
 ---
 
-## Suite Navigation Fix — Detailed
+## Color Reference for All Changes
 
-In `Studio.tsx`, the current flow is:
 ```
-Type filter chips (set local state, filter empty array → user sees nothing happen)
-↓  
-Suite Launchpad cards (below the fold, Link to suite pages — works but hard to find)
+OLD (rejected):  Gold #C9A84C / Slate bg-slate-900/50 border-slate-700
+NEW (navy-indigo):
+  Page BG:       #0C0E14
+  Card BG:       rgba(99,102,241,0.06) or "linear-gradient(135deg, #131720, #0F1320)"
+  Card Border:   rgba(99,102,241,0.18)
+  Accent:        #6366F1
+  Text-muted:    rgba(255,255,255,0.4)
+  Selected BG:   rgba(99,102,241,0.2)
+  Selected Border: rgba(99,102,241,0.55)
+  Primary Button: linear-gradient(135deg, #6366F1, #4F46E5) + white text
+  Outline Button: rgba(99,102,241,0.12) bg + rgba(99,102,241,0.35) border + white text
+  Plus (+) btn:  rgba(99,102,241,0.15) bg + rgba(99,102,241,0.4) border + #818CF8 text
+  X/delete btn:  rgba(239,68,68,0.12) bg + red-400 text
 ```
-
-New flow:
-```
-Suite Launchpad (FIRST THING, full width, 4 large cards, each is a Link → navigates immediately)
-↓
-Quick Tools strip (below the suites)
-↓  
-My Projects section (shows project list with working search + grid/list toggle)
-```
-
-The search bar will have dual purpose: filter projects AND filter suite cards by label/description.
-
----
-
-## PDF Drop Zone Fix — Code Detail
-
-Current (broken in embedded mode):
-```tsx
-{!embedded && (
-  <header>
-    ...
-    <input ref={fileInputRef} type="file" accept=".pdf" multiple onChange={handleFileUpload} className="hidden" />
-  </header>
-)}
-...
-<div onClick={() => fileInputRef.current?.click()}> {/* ref is null when embedded! */}
-```
-
-Fix:
-```tsx
-{/* ALWAYS render the file input regardless of embedded mode */}
-<input ref={fileInputRef} type="file" accept=".pdf" multiple onChange={handleFileUpload} className="hidden" />
-
-{!embedded && (
-  <header>
-    ... (no input here)
-  </header>
-)}
-...
-<div 
-  onClick={() => fileInputRef.current?.click()}
-  onDragOver={(e) => e.preventDefault()}
-  onDrop={handleDrop} {/* also add drop handler */}
->
-```
-
----
-
-## Premium AI Feature Enhancements (per suite)
-
-**PDF Editor:**
-- Add "AI Smart Compress" button — sends PDF to Lovable AI edge function, returns compression summary + downloads
-- Add "AI Page Summary" — reads page text, returns 1-line summary per page shown as tooltip
-
-**Background Remover:**
-- Already calls `ai-background-remove` edge function — this is working. Enhance UI with loading shimmer during processing, and add result confidence indicator from API response
-
-**Beauty Filters:**
-- Add "AI Auto-Enhance" button that calls Lovable AI with the canvas image data and returns the recommended adjustment values, then auto-applies them
-
-**Captions & Translate:**
-- Already calls `voice-to-text` and `auto-translate` edge functions — working. Enhance UI with real-time progress granularity per language, and add SRT/VTT export format buttons
-
-**Image Resize:**
-- Add "AI Smart Crop" toggle: when enabled, uses canvas center-of-mass detection to optimize crop position for each preset (client-side, no API needed)
 
 ---
 
 ## Implementation Order
-
-1. `Studio.tsx` — Navigation fix + full palette overhaul (highest user impact)
-2. `PDFEditor.tsx` — File upload bug fix (critical functional bug)
-3. `VideoSuite.tsx` — Palette + gap fix
-4. `PhotoSuite.tsx` — Palette + tab fix  
-5. `PDFSuite.tsx` — Palette + tab fix
-6. `BackgroundAI.tsx` — Palette
-7. `BeautyFilters.tsx` — Palette
-8. `CaptionsTranslate.tsx` — Palette
-9. `ImageResize.tsx` — Palette
+1. Fix `PDFEditor.tsx` page count bug (critical, fast)
+2. Overhaul `PdfFromPhotos.tsx` — full palette + grid/list view
+3. Overhaul `ScanSignPage.tsx` — full palette + AI enhance
+4. Create `supabase/functions/brochure-ai/index.ts` — AI description edge function
+5. Overhaul `BrochureGeneratorPage.tsx` — full palette + project link + hero card + AI button
