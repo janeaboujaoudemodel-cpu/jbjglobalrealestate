@@ -309,3 +309,7 @@ verify_jwt = false
 
 [functions.esign-auto-detect-fields]
 verify_jwt = false
+
+[functions.instagram-publish]
+verify_jwt = false
+
