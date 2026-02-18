@@ -29,6 +29,13 @@ export interface Track {
   clips: Clip[];
 }
 
+export type TransitionEasing = 'linear' | 'easeIn' | 'easeOut' | 'easeInOut';
+
+export interface TransitionSettings {
+  transitionId: string;
+  easing: TransitionEasing;
+}
+
 export interface Clip {
   id: string;
   trackId: string;
@@ -43,6 +50,7 @@ export interface Clip {
   audio?: AudioSettings;
   text?: TextSettings;
   subtitle?: SubtitleSettings;
+  transition?: TransitionSettings;
 }
 
 export interface ClipSource {
