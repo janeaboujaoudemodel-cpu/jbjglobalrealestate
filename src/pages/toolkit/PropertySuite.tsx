@@ -16,7 +16,7 @@ const Quiz = lazy(() => import('@/pages/Quiz'));
 const PropertyEvaluator = lazy(() => import('@/pages/PropertyEvaluator'));
 const Compare = lazy(() => import('@/pages/Compare'));
 const RentalIndex = lazy(() => import('@/pages/RentalIndex'));
-const MortgageCalculator = lazy(() => import('@/pages/MortgageCalculator'));
+const MortgageCalculatorComponent = lazy(() => import('@/components/MortgageCalculator'));
 
 const LoadingSpinner = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -136,7 +136,7 @@ export default function PropertySuite() {
 
             <TabsContent value="mortgage" className="mt-0">
               <Suspense fallback={<LoadingSpinner />}>
-                <MortgageCalculator />
+                <MortgageCalculatorComponent />
               </Suspense>
             </TabsContent>
           </div>
