@@ -23,15 +23,27 @@ interface ChatMessage {
 
 type ColorStop = 'primary' | 'secondary' | 'accent';
 
+// Stamp presets matching the example gallery gold + standard black/white
 const PRESET_PALETTE = [
-  { label: 'Navy',    hex: '#1a2744' },
-  { label: 'Gold',    hex: '#B8860B' },
-  { label: 'Black',   hex: '#0d0d0d' },
+  { label: 'Gold',    hex: '#B8860B' },   // Standard gold (example gallery)
+  { label: 'Gold Dark', hex: '#856404' }, // Deep gold
+  { label: 'Navy',    hex: '#1a2744' },   // Classic navy
+  { label: 'Black',   hex: '#0d0d0d' },   // Standard black
+  { label: 'White',   hex: '#ffffff' },   // Standard white
   { label: 'Red',     hex: '#8B0000' },
   { label: 'Purple',  hex: '#4B0082' },
   { label: 'Forest',  hex: '#1B4332' },
   { label: 'Copper',  hex: '#7C4A00' },
   { label: 'Teal',    hex: '#0D5C63' },
+];
+
+const STAMP_FONTS = [
+  { label: 'Trajan (Elegant)',   value: 'Georgia, "Times New Roman", serif',          preview: 'Aa' },
+  { label: 'Garamond (Classic)', value: '"Garamond", "Palatino", serif',              preview: 'Aa' },
+  { label: 'Modern Sans',        value: '"Arial", "Helvetica Neue", sans-serif',      preview: 'Aa' },
+  { label: 'Futura (Geometric)', value: '"Trebuchet MS", "Century Gothic", sans-serif', preview: 'Aa' },
+  { label: 'Courier (Mono)',     value: '"Courier New", "Courier", monospace',        preview: 'Aa' },
+  { label: 'Cinzel (Imperial)',  value: '"Palatino Linotype", "Palatino", serif',     preview: 'Aa' },
 ];
 
 export default function StampGeneratorPage() {
@@ -53,8 +65,11 @@ export default function StampGeneratorPage() {
   const [accentColor, setAccentColor] = useState<string | undefined>(undefined);
   const [activeStop, setActiveStop] = useState<ColorStop>('primary');
 
+  // Font family
+  const [fontFamily, setFontFamily] = useState<string>(STAMP_FONTS[0].value);
+
   // Left panel tab
-  const [leftTab, setLeftTab] = useState<'color' | 'text'>('color');
+  const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text'>('color');
 
   // Preview modal
   const [previewConcept, setPreviewConcept] = useState<StampDesignConcept | null>(null);
@@ -356,54 +371,79 @@ export default function StampGeneratorPage() {
             {/* Tab switcher */}
             <div className="flex bg-[hsl(var(--muted))] rounded-xl p-1 gap-1">
               <button onClick={() => setLeftTab('color')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${leftTab === 'color' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
-                <Palette size={12}/> Colors
+                className={`flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium transition-all ${leftTab === 'color' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
+                <Palette size={10}/> Colors
+              </button>
+              <button onClick={() => setLeftTab('fonts')}
+                className={`flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium transition-all ${leftTab === 'fonts' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
+                <Layers size={10}/> Fonts
               </button>
               <button onClick={() => setLeftTab('text')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${leftTab === 'text' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
-                <Type size={12}/> Text
+                className={`flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium transition-all ${leftTab === 'text' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
+                <Type size={10}/> Text
               </button>
             </div>
 
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-4">
+
+              {/* ── Colors tab ── */}
               {leftTab === 'color' && (
                 <>
                   {/* 3-stop selector */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-1.5">
                     {stopDefs.map(s => (
                       <button key={s.key} onClick={() => setActiveStop(s.key)}
                         title={s.label}
                         className={`flex-1 flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all ${activeStop === s.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'}`}>
-                        <div className="w-7 h-7 rounded-full border-2 border-white shadow-md" style={{ backgroundColor: s.color }}/>
+                        <div className="w-6 h-6 rounded-full border-2 border-white shadow-md" style={{ backgroundColor: s.color }}/>
                         <span className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] leading-none">{s.label}</span>
                       </button>
                     ))}
                   </div>
 
-                  {/* Color wheel for active stop */}
+                  {/* Color wheel */}
                   <StampColorWheel
                     color={activeColor}
                     onChange={setActiveColor}
                     label={stopDefs.find(s => s.key === activeStop)?.label + ' Color'}
-                    size={156}
+                    size={148}
                   />
 
-                  {/* Preset palette shortcuts */}
+                  {/* Standard quick-picks row */}
                   <div className="pt-2 border-t border-[hsl(var(--border))]">
-                    <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Presets</p>
-                    <div className="flex flex-wrap gap-2">
-                      {PRESET_PALETTE.map(c => (
-                        <button key={c.hex} onClick={() => setActiveColor(c.hex)} title={c.label}
-                          className={`w-7 h-7 rounded-full border-2 transition-all hover:scale-110 ${activeColor === c.hex ? 'border-[hsl(var(--gold))] scale-125 shadow-md' : 'border-white shadow-sm'}`}
-                          style={{ backgroundColor: c.hex }}
-                        />
-                      ))}
+                    <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Standard Colors</p>
+                    {/* Gold versions */}
+                    <div className="space-y-1.5">
+                      <p className="text-[9px] text-[hsl(var(--muted-foreground))] font-medium">Gold</p>
+                      <div className="flex gap-1.5">
+                        {[{ label: 'Gold', hex: '#B8860B' }, { label: 'Deep Gold', hex: '#856404' }, { label: 'Rose Gold', hex: '#b87057' }].map(c => (
+                          <button key={c.hex} onClick={() => setActiveColor(c.hex)} title={c.label}
+                            className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${activeColor === c.hex ? 'border-[hsl(var(--gold))] scale-110 shadow-lg' : 'border-white/60 shadow-sm'}`}
+                            style={{ backgroundColor: c.hex }}/>
+                        ))}
+                      </div>
+                      <p className="text-[9px] text-[hsl(var(--muted-foreground))] font-medium mt-2">Black / White</p>
+                      <div className="flex gap-1.5">
+                        {[{ label: 'Black', hex: '#0d0d0d' }, { label: 'Charcoal', hex: '#333333' }, { label: 'White', hex: '#ffffff' }].map(c => (
+                          <button key={c.hex} onClick={() => setActiveColor(c.hex)} title={c.label}
+                            className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${activeColor === c.hex ? 'border-[hsl(var(--gold))] scale-110 shadow-lg' : c.hex === '#ffffff' ? 'border-[hsl(var(--border))]' : 'border-white/60 shadow-sm'}`}
+                            style={{ backgroundColor: c.hex }}/>
+                        ))}
+                      </div>
+                      <p className="text-[9px] text-[hsl(var(--muted-foreground))] font-medium mt-2">More Presets</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {PRESET_PALETTE.filter(c => !['#B8860B','#856404','#0d0d0d','#ffffff'].includes(c.hex)).map(c => (
+                          <button key={c.hex} onClick={() => setActiveColor(c.hex)} title={c.label}
+                            className={`w-7 h-7 rounded-full border-2 transition-all hover:scale-110 ${activeColor === c.hex ? 'border-[hsl(var(--gold))] scale-110 shadow-md' : 'border-white shadow-sm'}`}
+                            style={{ backgroundColor: c.hex }}/>
+                        ))}
+                      </div>
                     </div>
-                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1.5">Applies to the active stop ({stopDefs.find(s => s.key === activeStop)?.label})</p>
+                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-2">Active: {stopDefs.find(s => s.key === activeStop)?.label}</p>
                   </div>
 
-                  {/* Clear secondary/accent */}
-                  <div className="flex gap-1.5">
+                  {/* Clear buttons */}
+                  <div className="flex gap-1.5 flex-wrap">
                     {secondaryColor && (
                       <button onClick={() => setSecondaryColor(undefined)} className="text-[10px] px-2 py-1 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)] transition-all">
                         Clear Secondary
@@ -418,6 +458,29 @@ export default function StampGeneratorPage() {
                 </>
               )}
 
+              {/* ── Fonts tab ── */}
+              {leftTab === 'fonts' && (
+                <div className="space-y-3">
+                  <p className="text-xs font-semibold text-[hsl(var(--foreground))]">Typography</p>
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Choose the font style applied to your stamp text.</p>
+                  <div className="space-y-2">
+                    {STAMP_FONTS.map(f => (
+                      <button key={f.value} onClick={() => setFontFamily(f.value)}
+                        className={`w-full text-left p-3 rounded-xl border-2 transition-all ${fontFamily === f.value ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'}`}>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-xs font-medium text-[hsl(var(--foreground))]">{f.label.split(' (')[0]}</p>
+                            <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{f.label.match(/\(([^)]+)\)/)?.[1] || ''}</p>
+                          </div>
+                          <span className="text-base font-bold text-[hsl(var(--foreground))] opacity-60" style={{ fontFamily: f.value }}>Aa</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ── Text tab ── */}
               {leftTab === 'text' && (
                 <>
                   {selectedSvg && selectedConcept ? (
@@ -440,7 +503,7 @@ export default function StampGeneratorPage() {
               <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
                 <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Selected Preview</p>
                 <div className="flex items-center justify-center py-2">
-                  <StampSVGRenderer svgSource={selectedSvg} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} size={140}/>
+                  <StampSVGRenderer svgSource={selectedSvg} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} size={140}/>
                 </div>
               </div>
             )}
@@ -494,7 +557,7 @@ export default function StampGeneratorPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
                   {favoriteConcepts.map(c => (
                     <ConceptCard key={c.id} concept={c} svgOverride={svgOverrides[c.id]}
-                      selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor}
+                      selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
                       togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite}/>
                   ))}
                 </div>
@@ -523,7 +586,7 @@ export default function StampGeneratorPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
                   {concepts.map(concept => (
                     <ConceptCard key={concept.id} concept={concept} svgOverride={svgOverrides[concept.id]}
-                      selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor}
+                      selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
                       togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite}/>
                   ))}
                 </div>
@@ -618,7 +681,7 @@ export default function StampGeneratorPage() {
 
 // ─── Concept Card ─────────────────────────────────────────────────────────────
 function ConceptCard({
-  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, togglingFav, onSelect, onToggleFav
+  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, togglingFav, onSelect, onToggleFav
 }: {
   concept: StampDesignConcept;
   svgOverride?: string;
@@ -626,6 +689,7 @@ function ConceptCard({
   tintColor: string;
   secondaryColor?: string;
   accentColor?: string;
+  fontFamily?: string;
   togglingFav: string | null;
   onSelect: (c: StampDesignConcept) => void;
   onToggleFav: (c: StampDesignConcept) => void;
@@ -651,7 +715,7 @@ function ConceptCard({
             <Badge className="text-[9px] px-1.5 py-0 bg-amber-50 text-amber-700 border border-amber-200">edited</Badge>
           </div>
         )}
-        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={160}/>
+        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} size={160}/>
       </div>
       <div className="p-3 space-y-2">
         <p className="font-medium text-sm text-[hsl(var(--foreground))] truncate">{concept.label}</p>

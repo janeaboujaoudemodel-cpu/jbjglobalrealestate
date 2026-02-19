@@ -1,6 +1,6 @@
 /**
  * Renders an SVG stamp concept inline with multi-color tinting support.
- * Supports primary + secondary color for dual-color mode.
+ * Supports primary + secondary + accent color, and font-family override.
  */
 import React from 'react';
 import DOMPurify from 'dompurify';
@@ -13,6 +13,8 @@ interface Props {
   secondaryColor?: string;
   /** Accent color — replaces monogram/center dominant-baseline elements */
   accentColor?: string;
+  /** Font family override — replaces font-family in the SVG */
+  fontFamily?: string;
   className?: string;
   size?: number;
 }
@@ -22,6 +24,7 @@ export function StampSVGRenderer({
   tintColor = '#1a2744',
   secondaryColor,
   accentColor,
+  fontFamily,
   className = '',
   size = 240,
 }: Props) {
@@ -33,6 +36,12 @@ export function StampSVGRenderer({
     tinted = tinted.replace(/(dominant-baseline="central"[^>]*fill=")[^"]+(")/g, `$1${accentColor}$2`);
   } else if (secondaryColor) {
     tinted = tinted.replace(/(dominant-baseline="central"[^>]*fill=")[^"]+(")/g, `$1${secondaryColor}$2`);
+  }
+
+  // Apply font-family override — replaces all font-family attributes in the SVG
+  if (fontFamily) {
+    tinted = tinted.replace(/font-family="[^"]*"/gi, `font-family="${fontFamily}"`);
+    tinted = tinted.replace(/font-family:\s*[^;'"]+/gi, `font-family:${fontFamily}`);
   }
 
   // Sanitize SVG before rendering
