@@ -13,10 +13,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { ScriptLibrary } from "@/components/voice-studio/ScriptLibrary";
 import {
   Mic, Upload, Play, Pause, Square, Download, Trash2,
   Loader2, Volume2, Wand2, AlertTriangle, FileAudio, Check,
-  Globe, Copy, Sparkles, ChevronLeft, X, RefreshCw
+  Globe, Copy, Sparkles, ChevronLeft, X, RefreshCw, BookOpen
 } from "lucide-react";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
@@ -73,8 +74,12 @@ interface GeneratedResult {
 export default function VoiceStudioPro() {
   const { toast } = useToast();
 
-  // Tab
+  // Page-level tab
+  const [pageTab, setPageTab] = useState<"studio" | "library">("studio");
+
+  // Voice Tab (library vs clone)
   const [voiceTab, setVoiceTab] = useState<VoiceTab>("library");
+
 
   // Script
   const [script, setScript] = useState("");
@@ -396,6 +401,46 @@ export default function VoiceStudioPro() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
+
+        {/* ── Page-level tabs: Studio | Script Library ── */}
+        <div className="flex items-center gap-2 mb-6 border-b border-slate-800 pb-4">
+          <button
+            onClick={() => setPageTab("studio")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              pageTab === "studio"
+                ? "bg-purple-600/20 text-purple-300 border border-purple-500/40"
+                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+            }`}
+          >
+            <Mic className="h-4 w-4" />
+            Studio
+          </button>
+          <button
+            onClick={() => setPageTab("library")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              pageTab === "library"
+                ? "bg-purple-600/20 text-purple-300 border border-purple-500/40"
+                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+            }`}
+          >
+            <BookOpen className="h-4 w-4" />
+            Script Library
+          </button>
+        </div>
+
+        {/* ── Script Library Panel ── */}
+        {pageTab === "library" && (
+          <ScriptLibrary
+            onLoadScript={(s) => { setScript(s); setPageTab("studio"); }}
+            currentScript={script}
+            currentLanguage={language}
+            currentTone="professional"
+            currentVoiceName={voiceTab === "library" ? VOICE_LIBRARY.find(v => v.id === selectedVoice)?.name : clonedVoices.find(v => v.id === selectedClonedVoice)?.name}
+          />
+        )}
+
+        {/* ── Studio Panel ── */}
+        {pageTab === "studio" && (
         <div className="grid lg:grid-cols-[1fr_380px] gap-6">
 
           {/* ── Left: Script + Controls ── */}
@@ -404,10 +449,21 @@ export default function VoiceStudioPro() {
             {/* Script */}
             <Card className="bg-slate-900/60 border-slate-700/50">
               <CardHeader className="pb-3">
-                <CardTitle className="text-white text-base flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-purple-400" />
-                  Script
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-white text-base flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-purple-400" />
+                    Script
+                  </CardTitle>
+                  <button
+                    onClick={() => setPageTab("library")}
+                    disabled={!script.trim()}
+                    className="flex items-center gap-1.5 text-xs text-purple-400 hover:text-purple-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    title="Save to Script Library"
+                  >
+                    <BookOpen className="h-3.5 w-3.5" />
+                    Save to Library
+                  </button>
+                </div>
               </CardHeader>
               <CardContent className="space-y-3">
                 <Textarea
@@ -753,6 +809,7 @@ export default function VoiceStudioPro() {
             </div>
           </div>
         </div>
+        )} {/* end studio panel */}
       </div>
     </div>
   );

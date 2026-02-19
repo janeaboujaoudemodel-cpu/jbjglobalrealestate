@@ -20063,6 +20063,51 @@ export type Database = {
         }
         Relationships: []
       }
+      voice_scripts: {
+        Row: {
+          created_at: string
+          id: string
+          language: string
+          project_name: string | null
+          script: string
+          tags: string[] | null
+          title: string
+          tone: string
+          updated_at: string
+          user_id: string
+          voice_name: string | null
+          word_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          language?: string
+          project_name?: string | null
+          script: string
+          tags?: string[] | null
+          title: string
+          tone?: string
+          updated_at?: string
+          user_id: string
+          voice_name?: string | null
+          word_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          language?: string
+          project_name?: string | null
+          script?: string
+          tags?: string[] | null
+          title?: string
+          tone?: string
+          updated_at?: string
+          user_id?: string
+          voice_name?: string | null
+          word_count?: number | null
+        }
+        Relationships: []
+      }
       web_developer_tasks: {
         Row: {
           approved_at: string | null
