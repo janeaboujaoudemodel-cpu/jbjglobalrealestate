@@ -34,10 +34,18 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
 
   if (!selectedClip) {
     return (
-      <div className="h-full flex items-center justify-center p-4">
-        <div className="text-center text-slate-500">
-          <p className="text-sm">Select a clip to edit</p>
-          <p className="text-xs mt-2">Click on any clip in the timeline</p>
+      <div className="h-full flex flex-col items-center justify-center p-6 gap-3 text-center">
+        <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center">
+          <Move className="w-5 h-5 text-slate-500" />
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-slate-300">No clip selected</p>
+          <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+            Click any clip in the timeline below to inspect and edit its transform, speed, color, audio, and effects.
+          </p>
+        </div>
+        <div className="w-full rounded-lg bg-amber-500/10 border border-amber-500/25 p-2.5 text-[10px] text-amber-300 text-left leading-relaxed">
+          💡 <strong>Tip:</strong> Select a transition clip to adjust its easing curve and duration.
         </div>
       </div>
     );

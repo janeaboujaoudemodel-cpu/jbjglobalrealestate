@@ -234,17 +234,21 @@ export function VideoResizePanel() {
 
         {/* Action Buttons */}
         <div className="space-y-2 pb-2">
+          {!uploadedVideo && (
+            <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/25 text-[10px] text-amber-300 flex items-start gap-2">
+              <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+              <span>Upload a source video above, then click Resize to export in all selected formats.</span>
+            </div>
+          )}
           <Button
-            className="w-full bg-amber-500 text-black hover:bg-amber-400 font-bold text-xs h-9"
+            className="w-full bg-amber-500 text-black hover:bg-amber-400 font-bold text-xs h-9 disabled:opacity-40"
             onClick={handleResize}
             disabled={isLoading || selectedFormats.length === 0 || !uploadedVideo}
           >
             {isLoading ? (
-              <><Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />Processing...</>
-            ) : !uploadedVideo ? (
-              'Upload a video above to resize'
+              <><Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />Processing…</>
             ) : (
-              `Resize to ${selectedFormats.length} Format${selectedFormats.length !== 1 ? 's' : ''}`
+              <><Video className="w-3.5 h-3.5 mr-1.5" />Resize to {selectedFormats.length} Format{selectedFormats.length !== 1 ? 's' : ''}</>
             )}
           </Button>
           {hasCompletedJobs && (

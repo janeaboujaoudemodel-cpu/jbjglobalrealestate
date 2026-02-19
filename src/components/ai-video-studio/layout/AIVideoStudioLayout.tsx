@@ -103,8 +103,8 @@ function AIVideoStudioLayout({
 
   const handleToolClick = (toolId: string) => {
     if (activeTool === toolId) {
-      // Already active — always keep open (don't collapse)
-      setToolsExpanded(true);
+      // Toggle collapse/expand when clicking the same tool
+      setToolsExpanded(prev => !prev);
     } else {
       setActiveTool(toolId);
       setToolsExpanded(true);
@@ -150,7 +150,7 @@ function AIVideoStudioLayout({
 
       {/* Active Tool Panel */}
       {activeTool && toolsExpanded && toolPanelContent[activeTool] && (
-        <div className="border-t border-slate-600 h-80 flex-shrink-0 overflow-y-auto bg-slate-900 overscroll-contain">
+        <div className="border-t border-slate-600 h-72 flex-shrink-0 overflow-y-auto bg-slate-900 overscroll-contain">
           {toolPanelContent[activeTool]}
         </div>
       )}
