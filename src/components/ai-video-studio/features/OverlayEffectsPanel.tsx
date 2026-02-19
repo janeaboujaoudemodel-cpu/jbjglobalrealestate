@@ -82,7 +82,7 @@ export function OverlayEffectsPanel({
           {categories.map(cat => (
             <div key={cat}>
               <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mb-2">{cat}</p>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-1.5">
                 {OVERLAY_EFFECTS.filter(e => e.category === cat).map(effect => {
                   const isLocked = lockedEffect === effect.id;
                   return (
@@ -91,36 +91,33 @@ export function OverlayEffectsPanel({
                       onClick={() => handleCardClick(effect)}
                       onMouseEnter={() => handleMouseEnter(effect.id)}
                       onMouseLeave={() => handleMouseLeave(effect.id)}
-                      className={`rounded-lg border cursor-pointer transition-all select-none overflow-hidden ${
+                      className={`rounded-md border cursor-pointer transition-all select-none overflow-hidden ${
                         isLocked
-                          ? 'border-amber-400 shadow-[0_0_14px_rgba(251,191,36,0.3)]'
-                          : 'border-slate-700 hover:border-amber-500/60 hover:shadow-[0_0_8px_rgba(251,191,36,0.15)]'
+                          ? 'border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.3)]'
+                          : 'border-slate-700 hover:border-amber-500/60 hover:shadow-[0_0_6px_rgba(251,191,36,0.15)]'
                       }`}
                     >
-                      {/* Live particle thumbnail — 80 × 52px */}
+                      {/* Live particle thumbnail */}
                       <div className="relative">
                         <MiniParticlePreview
                           effectId={effect.id}
                           className="w-full"
-                          style={{ height: 52 }}
+                          style={{ height: 40 }}
                         />
 
                         {/* Lock badge */}
                         {isLocked && (
-                          <div className="absolute top-1 right-1 flex items-center gap-0.5 text-[8px] font-bold text-amber-400 bg-black/70 px-1.5 py-0.5 rounded-full animate-pulse">
-                            <Lock className="w-2 h-2" />
-                            LOCKED
+                          <div className="absolute top-0.5 right-0.5 flex items-center gap-0.5 text-[7px] font-bold text-amber-400 bg-black/70 px-1 py-0.5 rounded-full animate-pulse">
+                            <Lock className="w-1.5 h-1.5" />
+                            ON
                           </div>
                         )}
                       </div>
 
                       {/* Label row */}
-                      <div className={`px-2 py-1.5 ${isLocked ? 'bg-amber-400/10' : 'bg-slate-800'}`}>
-                        <div className="text-xs font-semibold text-slate-100 leading-tight truncate">
+                      <div className={`px-1.5 py-1 ${isLocked ? 'bg-amber-400/10' : 'bg-slate-800'}`}>
+                        <div className="text-[10px] font-semibold text-slate-100 leading-tight truncate">
                           {effect.label}
-                        </div>
-                        <div className="text-[10px] text-slate-500 leading-tight truncate mt-0.5">
-                          {effect.description}
                         </div>
 
                         {/* Add button */}
@@ -132,9 +129,9 @@ export function OverlayEffectsPanel({
                               toast.success(`${effect.label} added to timeline!`)
                             );
                           }}
-                          className="mt-1.5 flex items-center gap-1 w-full justify-center py-1 rounded text-[10px] font-bold bg-slate-700 hover:bg-amber-500 hover:text-black text-slate-300 border border-slate-600 hover:border-amber-500 transition-all"
+                          className="mt-1 flex items-center gap-0.5 w-full justify-center py-0.5 rounded text-[9px] font-bold bg-slate-700 hover:bg-amber-500 hover:text-black text-slate-300 border border-slate-600 hover:border-amber-500 transition-all"
                         >
-                          <Plus className="w-3 h-3" />
+                          <Plus className="w-2.5 h-2.5" />
                           Add
                         </button>
                       </div>
