@@ -11,7 +11,9 @@ import {
   Palette,
   Upload,
   X,
-  Zap
+  Zap,
+  Film,
+  CheckCircle2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -52,9 +54,11 @@ function isNonePreset(adj: BeautyAdjustments) {
 
 interface BeautyFiltersPanelProps {
   onFilterChange?: (adjustments: BeautyAdjustments | null) => void;
+  onApplyToExport?: (adjustments: BeautyAdjustments | null) => void;
+  exportFilterActive?: boolean;
 }
 
-export function BeautyFiltersPanel({ onFilterChange }: BeautyFiltersPanelProps) {
+export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilterActive }: BeautyFiltersPanelProps) {
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isVideo, setIsVideo] = useState(false);
@@ -272,6 +276,58 @@ export function BeautyFiltersPanel({ onFilterChange }: BeautyFiltersPanelProps) 
             </div>
           ))}
         </div>
+
+        {/* ── Apply to Export ────────────────────────────────────────────── */}
+        {isFilterActive && (
+          <div className="rounded-lg border border-slate-700 overflow-hidden">
+            <div className="px-3 py-2 bg-slate-800/80 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Film className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-xs font-semibold text-slate-200">Bake into Export</span>
+              </div>
+              {exportFilterActive && (
+                <span className="flex items-center gap-1 text-[9px] font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-1.5 py-0.5 rounded-full">
+                  <CheckCircle2 className="w-2.5 h-2.5" />
+                  APPLIED
+                </span>
+              )}
+            </div>
+            <div className="px-3 pb-3 pt-2 bg-slate-900/60 space-y-2">
+              <p className="text-[10px] text-slate-400 leading-relaxed">
+                Bakes the current CSS filter adjustments into the video export pipeline — the downloaded file will have the filter applied, not just the live preview.
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    onApplyToExport?.(isFilterActive ? adjustments : null);
+                    import('sonner').then(({ toast }) =>
+                      exportFilterActive
+                        ? toast.info('Export filter cleared')
+                        : toast.success('Beauty filter will be baked into your export!')
+                    );
+                  }}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-xs font-bold transition-all border ${
+                    exportFilterActive
+                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/40'
+                      : 'bg-amber-500 text-black border-amber-500 hover:bg-amber-400'
+                  }`}
+                >
+                  {exportFilterActive ? (
+                    <>
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      Applied — Click to Remove
+                    </>
+                  ) : (
+                    <>
+                      <Film className="w-3.5 h-3.5" />
+                      Apply to Export
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Divider */}
         <div className="border-t border-slate-800 pt-3">
