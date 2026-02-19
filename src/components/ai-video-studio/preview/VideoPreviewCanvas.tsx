@@ -392,10 +392,10 @@ export function VideoPreviewCanvas({
       />
 
       {/* Preview Area */}
-      <div className="flex-1 flex items-center justify-center p-4 min-h-0">
+      <div className="flex-1 flex items-center justify-center p-2 min-h-0">
         <div
-          className={`relative bg-black rounded-lg overflow-hidden shadow-2xl w-full max-w-4xl aspect-video transition-all ${
-            isDragOver ? 'ring-2 ring-amber-400 ring-offset-2 ring-offset-slate-950' : ''
+          className={`relative bg-black overflow-hidden shadow-2xl w-full max-w-full h-full transition-all ${
+            isDragOver ? 'ring-2 ring-amber-400' : ''
           }`}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
