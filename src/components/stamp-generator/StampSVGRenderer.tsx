@@ -44,9 +44,13 @@ export function StampSVGRenderer({
     tinted = tinted.replace(/font-family:\s*[^;'"]+/gi, `font-family:${fontFamily}`);
   }
 
-  // Sanitize SVG before rendering
+  // Sanitize SVG before rendering — preserve clip-path, direction, unicode-bidi
   const clean = typeof window !== 'undefined'
-    ? DOMPurify.sanitize(tinted, { USE_PROFILES: { svg: true, svgFilters: true } })
+    ? DOMPurify.sanitize(tinted, {
+        USE_PROFILES: { svg: true, svgFilters: true },
+        ADD_ATTR: ['clip-path', 'dominant-baseline', 'unicode-bidi', 'direction', 'bidi-override', 'letter-spacing', 'text-anchor', 'font-weight', 'font-size', 'font-family'],
+        FORCE_BODY: false,
+      })
     : tinted;
 
   return (

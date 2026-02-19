@@ -23,6 +23,17 @@ interface ChatMessage {
 
 type ColorStop = 'primary' | 'secondary' | 'accent';
 
+// Full 3-stop palette presets
+const PALETTE_PRESETS = [
+  { label: 'JBJ Gold',      primary: '#B8860B', secondary: '#2a3a5c', accent: '#856404' },
+  { label: 'Royal Navy',    primary: '#1a2744', secondary: '#2a3a5c', accent: '#B8860B' },
+  { label: 'Obsidian',      primary: '#0d0d0d', secondary: '#333333', accent: '#B8860B' },
+  { label: 'Crimson',       primary: '#8B0000', secondary: '#5a0000', accent: '#B8860B' },
+  { label: 'Forest',        primary: '#1B4332', secondary: '#2d6a4f', accent: '#B8860B' },
+  { label: 'Deep Purple',   primary: '#4B0082', secondary: '#6a0dad', accent: '#C8A87A' },
+  { label: 'Monochrome',    primary: '#0d0d0d', secondary: '#333333', accent: '#ffffff' },
+];
+
 // Stamp presets matching the example gallery gold + standard black/white
 const PRESET_PALETTE = [
   { label: 'Gold',    hex: '#B8860B' },   // Standard gold (example gallery)
@@ -246,7 +257,7 @@ export default function StampGeneratorPage() {
       }
     }
     toast.success('Design selected!');
-    navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || designId}`);
+    navigate(`/toolkit/stamp-generator/${projectId}/export/${designId}`);
   }
 
   async function sendChatMessage(overrideInput?: string) {
@@ -480,6 +491,27 @@ export default function StampGeneratorPage() {
                       </div>
                     </div>
                     <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-2">Active: {stopDefs.find(s => s.key === activeStop)?.label}</p>
+                  </div>
+
+                  {/* Palette Presets — apply all 3 stops at once */}
+                  <div className="pt-2 border-t border-[hsl(var(--border))]">
+                    <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Palette Presets</p>
+                    <div className="space-y-1.5">
+                      {PALETTE_PRESETS.map(p => (
+                        <button
+                          key={p.label}
+                          onClick={() => { setPrimaryColor(p.primary); setSecondaryColor(p.secondary); setAccentColor(p.accent); }}
+                          className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] hover:bg-[hsl(var(--gold)/0.03)] transition-all"
+                        >
+                          <div className="flex gap-0.5 flex-shrink-0">
+                            <div className="w-3.5 h-3.5 rounded-full border border-white/60 shadow-sm" style={{ backgroundColor: p.primary }}/>
+                            <div className="w-3.5 h-3.5 rounded-full border border-white/60 shadow-sm" style={{ backgroundColor: p.secondary }}/>
+                            <div className="w-3.5 h-3.5 rounded-full border border-white/60 shadow-sm" style={{ backgroundColor: p.accent }}/>
+                          </div>
+                          <span className="text-[10px] font-medium text-[hsl(var(--foreground))]">{p.label}</span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Clear buttons */}

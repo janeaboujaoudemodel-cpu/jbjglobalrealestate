@@ -5,7 +5,7 @@
 import React, { useState } from 'react';
 import { StampSVGRenderer } from './StampSVGRenderer';
 import { Button } from '@/components/ui/button';
-import { X, ArrowLeft, Download, CreditCard, FileText, Mail } from 'lucide-react';
+import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2 } from 'lucide-react';
 import { StampDesignConcept } from '@/lib/stampTemplates';
 
 interface Props {
@@ -25,10 +25,53 @@ export function StampPreviewModal({
   concept, project, tintColor, secondaryColor, accentColor, svgOverride, onBack, onSelectAndExport,
 }: Props) {
   const [activeView, setActiveView] = useState<MockupView>('business-card');
+  const [downloadingPng, setDownloadingPng] = useState(false);
   const displaySvg = svgOverride || concept.svgSource;
   const companyName = project?.company_name || 'Company Name';
   const arabicName = project?.arabic_company_name || '';
   const city = [project?.city_optional, project?.country_optional].filter(Boolean).join(', ') || 'UAE';
+
+  async function downloadPreviewPng() {
+    setDownloadingPng(true);
+    try {
+      let svg = displaySvg;
+      // Uniquify IDs
+      const token = Math.random().toString(36).slice(2, 7);
+      svg = svg.replace(/\bid="([^"]+)"/g, (_, id) => `id="${token}_${id}"`);
+      svg = svg.replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${token}_${id})`);
+      svg = svg.replace(/href="#([^"]+)"/g, (_, id) => `href="#${token}_${id}"`);
+      if (!svg.includes('xmlns=')) svg = svg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+      svg = svg.replace(/<svg([^>]*)>/, (_, a) => `<svg${a.replace(/\bwidth="[^"]*"/, '').replace(/\bheight="[^"]*"/, '')} width="512" height="512">`);
+      const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+      const blobUrl = URL.createObjectURL(blob);
+      await new Promise<void>((resolve, reject) => {
+        const img = document.createElement('img');
+        img.onload = async () => {
+          try {
+            await img.decode();
+            const canvas = document.createElement('canvas');
+            canvas.width = 512; canvas.height = 512;
+            const ctx = canvas.getContext('2d')!;
+            ctx.drawImage(img, 0, 0, 512, 512);
+            canvas.toBlob(b => {
+              URL.revokeObjectURL(blobUrl);
+              if (!b) { reject(new Error('toBlob null')); return; }
+              const a = document.createElement('a');
+              a.href = URL.createObjectURL(b);
+              a.download = `${(companyName).toLowerCase().replace(/\s+/g, '_')}_stamp_preview.png`;
+              document.body.appendChild(a); a.click(); document.body.removeChild(a);
+              resolve();
+            }, 'image/png');
+          } catch (e) { URL.revokeObjectURL(blobUrl); reject(e); }
+        };
+        img.onerror = () => { URL.revokeObjectURL(blobUrl); reject(new Error('SVG load failed')); };
+        img.src = blobUrl;
+      });
+    } catch (err) {
+      console.error('Preview PNG download failed:', err);
+    }
+    setDownloadingPng(false);
+  }
 
   const views: { key: MockupView; label: string; icon: React.ElementType }[] = [
     { key: 'business-card', label: 'Business Card', icon: CreditCard },
@@ -77,6 +120,15 @@ export function StampPreviewModal({
             className="w-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-2"
           >
             <Download size={15}/> Select & Export →
+          </Button>
+          <Button
+            variant="outline"
+            onClick={downloadPreviewPng}
+            disabled={downloadingPng}
+            className="w-full gap-2 text-sm"
+          >
+            {downloadingPng ? <Loader2 size={14} className="animate-spin"/> : <Download size={14}/>}
+            {downloadingPng ? 'Downloading…' : 'Download Preview PNG'}
           </Button>
         </div>
 
