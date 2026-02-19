@@ -10,7 +10,7 @@ import { useParams, Link, Navigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { MapPin, ArrowRight, Loader2, Phone, ArrowUpRight, Search, X } from "lucide-react";
-
+import jbjMonogram from "@/assets/jbj-monogram-light-bg.png";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { useAreaBySlug, useAreas } from "@/hooks/useAreas";
@@ -245,91 +245,47 @@ const AreaDetail = () => {
         </div>
       </section>
 
-      {/* Similar Areas — new tall photo card style */}
+      {/* Related Areas */}
       {relatedAreas.length > 0 && (
-        <section id="ready-to-get-started" className="py-16 bg-black">
-          <div className="container mx-auto px-4">
+        <section className="py-16 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] relative overflow-hidden">
+          {/* Subtle decorative elements */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+          <div className="absolute top-10 left-10 w-40 h-40 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-10 right-10 w-60 h-60 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="container mx-auto px-4 relative z-10">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-              {/* Header */}
-              <div className="text-center mb-8">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-                  <MapPin className="w-3.5 h-3.5 text-gold" />
-                  <span className="text-black">Similar Areas</span>
-                </span>
-                <h2 className="text-white text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                  Explore More in {area.emirate}
-                </h2>
-              </div>
-
-              {/* Photo Cards Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-5xl mx-auto">
-                {relatedAreas.map((relatedArea, index) => (
-                  <motion.div
+              <h2 className="text-black text-2xl md:text-3xl font-bold mb-2 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+                Explore More Trending Areas
+              </h2>
+              <p className="text-black/50 text-center mb-8">Discover premium neighborhoods across {area.emirate}</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                {relatedAreas.map((relatedArea) => (
+                  <Link 
                     key={relatedArea.slug}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: index * 0.07 }}
-                    whileHover={{ y: -6 }}
+                    to={`/area/${relatedArea.slug}`}
+                    className="group overflow-hidden rounded-xl border border-gold/30 hover:border-gold hover:shadow-xl transition-all flex flex-col h-full"
                   >
-                    <Link
-                      to={`/area/${relatedArea.slug}`}
-                      className="group relative block h-[200px] md:h-[220px] rounded-xl overflow-hidden border-[3px] border-transparent hover:border-gold transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.45)]"
-                    >
-                      {/* Background photo or champagne fallback */}
-                      {relatedArea.image_url ? (
-                        <div
-                          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                          style={{ backgroundImage: `url(${relatedArea.image_url})` }}
-                        />
-                      ) : (
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
-                          <span className="text-6xl font-black text-black select-none" style={{ opacity: 0.1, fontFamily: "Poppins, sans-serif" }}>JBJ</span>
-                        </div>
-                      )}
-
-                      {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-
-                      {/* Badges */}
-                      <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
-                        {relatedArea.is_trending && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#E8DCC8] text-black text-[9px] font-bold uppercase tracking-wider shadow-lg">
-                            Trending
-                          </span>
-                        )}
-                        {relatedArea.is_high_demand && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-bold uppercase tracking-wider shadow-lg">
-                            High Demand
-                          </span>
-                        )}
+                    {relatedArea.image_url ? (
+                      <img src={relatedArea.image_url} alt={relatedArea.name} className="w-full h-36 object-cover flex-shrink-0 transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                    ) : (
+                      <div className="w-full h-36 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center flex-shrink-0">
+                        <img src={jbjMonogram} alt="" className="w-12 h-12 object-contain opacity-10" />
                       </div>
-
-                      {/* Bottom info */}
-                      <div className="absolute bottom-0 left-0 right-0 p-3">
-                        {relatedArea.property_count != null && relatedArea.property_count > 0 && (
-                          <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-black/60 text-gold text-[9px] font-semibold tracking-wide border border-gold/30">
-                            {relatedArea.property_count} Projects
-                          </span>
-                        )}
-                        <h3 className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-lg group-hover:text-gold transition-colors duration-300">
-                          {relatedArea.name}
-                        </h3>
+                    )}
+                    <div className="p-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex-1 flex flex-col justify-center">
+                      <h3 className="text-black font-semibold text-sm group-hover:text-gold transition-colors">{relatedArea.name}</h3>
+                      <div className="flex items-center gap-1 text-xs text-zinc-500 mt-1">
+                        <MapPin className="w-3 h-3" />
+                        <span>{relatedArea.emirate}</span>
                       </div>
-                    </Link>
-                  </motion.div>
+                    </div>
+                  </Link>
                 ))}
               </div>
-
-              {/* View All CTA */}
               <div className="text-center mt-8">
-                <Link
-                  to="/areas"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
-                  style={{ boxShadow: "0 6px 20px rgba(200,167,102,0.3), inset 0 2px 4px rgba(255,255,255,0.8)" }}
-                >
-                  <span>View All Areas</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <Link to="/areas" className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-full shadow-[0_4px_15px_rgba(200,167,102,0.3)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5)] hover:scale-105 transition-all duration-300 border border-gold/40">
+                  View All Areas <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </div>
             </motion.div>
