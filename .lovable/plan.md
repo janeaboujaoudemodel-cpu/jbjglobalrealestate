@@ -1,71 +1,136 @@
 
-# Verification Results & Remaining Fixes
+# Real-Time Audio Waveform Visualizer for Sound FX Panel
 
-## What Was Verified ✅
+## What We're Building
 
-**1. Preview Stability** — CONFIRMED WORKING. The video preview stays stable and centered when tool panels open. It never collapses.
-
-**2. Beauty Filters — Video Support** — CONFIRMED WORKING. The panel shows "Apply professional filters to images & video frames" and the drop zone says "Drop image or video here" with MP4, MOV, WebM in the accepted formats. The `accept="image/*,video/*"` attribute is correctly set.
-
-**3. Text Presets — Click to Add** — CONFIRMED WORKING. All 5 presets (Clean Title, Lower Third, Social Bold, Luxury Quote, Caption Box) are visible with sub-labels. Clicking "Clean Title" immediately fires the add action.
-
-**4. Stock Tab Category Buttons** — CONFIRMED WORKING. All, Music, SFX, Ambient buttons are visible with correct high-contrast styles (amber for active, slate-700 with border for inactive).
+A CapCut-style waveform visualizer that replaces the current CSS `animate-bounce` fake bars. When a sound is playing, a canvas element renders real frequency data from the Web Audio API's `AnalyserNode` at 60fps — producing a live, responsive bar chart waveform just like CapCut's audio preview.
 
 ---
 
-## Issues Still Needing Fixes ❌
+## Current State
 
-### Fix 1: AI Scene Generator Fails (Root Cause: Wrong Architecture)
-**What's broken:** The `handleGenerateScene` function in `MediaLibraryPanel.tsx` calls `https://ai.gateway.lovable.dev/v1/chat/completions` **directly from the browser** using the anon key as `Authorization`. This fails with `net::ERR_FAILED` because AI gateway calls must be made **server-side** from an Edge Function — not from the browser.
+The panel (`SoundEffectsPanel.tsx`) already has:
+- `audioRefs` holding `HTMLAudioElement` instances per sound
+- A simple 5-bar CSS bounce animation (fake, not real audio data)
+- A thin progress bar below each card
 
-**What to change:** Move the scene generation call into the existing `ai-video-editor` Edge Function by adding a new `action: 'generate-scene'` branch. The Edge Function already has `LOVABLE_API_KEY` wired up. The frontend will call the edge function instead.
+The fake waveform looks like this:
+```text
+[▐▌▐▌▐] <-- 5 fixed bars, CSS bounce, no audio data
+```
 
-**Second bug:** The model used is `google/gemini-2.5-flash-image` which does not exist. The correct model for image generation from the supported list is `google/gemini-3-pro-image-preview`.
-
-**Files changed:**
-- `supabase/functions/ai-video-editor/index.ts` — add `generate-scene` action using `google/gemini-3-pro-image-preview` with `modalities: ['image','text']`
-- `src/components/ai-video-studio/panels/MediaLibraryPanel.tsx` — change `handleGenerateScene` to call the edge function at `/functions/v1/ai-video-editor` with `{ action: 'generate-scene', prompt: aiPrompt }`
-
-### Fix 2: Stock Asset Cards Have Near-Invisible Icon Thumbnails
-**What's broken:** Stock audio cards with no thumbnail render a small icon on `bg-amber-900/40` — this 40% opacity amber-on-dark is too subtle in a narrow 2-col grid. The card face looks like an almost-black box with only a tiny icon. The "Add" and "Preview" buttons on hover use `variant="ghost"` for "Preview" which makes that button invisible when the overlay shows.
-
-**What to change:**
-- Increase the icon background opacity from `/40` to `/60` and make the icon larger (`w-8 h-8` instead of `w-6 h-6`) for better visibility
-- Add a subtle colored border/gradient to the thumbnail area for audio cards to visually distinguish them
-- Fix the "Preview" hover button from `variant="ghost"` to explicit `bg-slate-700 text-white` so it's always visible in the hover overlay
-
-**File changed:** `src/components/ai-video-studio/panels/MediaLibraryPanel.tsx` — update `getIconBg()` opacity values and the "Preview" button variant in the `AssetCard` hover overlay.
+The real waveform will look like this (live FFT bars on a canvas):
+```text
+[▁▃▇▅▂▆▄▁▃▆▇▅▂▁] <-- 14 frequency bars driven by AnalyserNode, 60fps
+```
 
 ---
 
-## Technical Detail: Edge Function Change for Generate Scene
+## Architecture: Web Audio API Chain
 
-```typescript
-// supabase/functions/ai-video-editor/index.ts — new branch added:
-} else if (action === 'generate-scene') {
-  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'google/gemini-3-pro-image-preview',
-      messages: [{ role: 'user', content: `Generate a cinematic real estate scene: ${prompt}` }],
-      modalities: ['image', 'text'],
-    }),
-  });
-  // Extract image from response and return as base64
-}
+When a user clicks Play, the current code just calls `new Audio(url).play()`. We need to route audio through the Web Audio API to tap real frequency data:
+
+```text
+HTMLMediaElementSourceNode
+        ↓
+   AnalyserNode  ←── reads frequencyData[] each animation frame
+        ↓
+AudioContext.destination (speakers)
 ```
 
+The `AnalyserNode` runs `getByteFrequencyData(dataArray)` each `requestAnimationFrame` tick, populating a `Uint8Array` with frequency amplitude values (0–255). We sample ~28 buckets from this array and draw them as bars onto a `<canvas>` element.
+
+---
+
+## Implementation Plan
+
+### 1. New hook: `useAudioAnalyser`
+
+Create `src/components/ai-video-studio/hooks/useAudioAnalyser.ts`
+
+This hook encapsulates all Web Audio API state so `SoundEffectsPanel` stays clean:
+
 ```typescript
-// MediaLibraryPanel.tsx — updated call:
-const { data, error } = await supabase.functions.invoke('ai-video-editor', {
-  body: { action: 'generate-scene', prompt: aiPrompt },
-});
+// Returns per-soundId: { sourceNode, analyser }
+// And draw function: drawWaveform(canvasEl, analyserNode)
 ```
 
-## Summary of Changes
+**Key details:**
+- Uses a single shared `AudioContext` (lazy singleton — created once on first play, reused)
+- `MediaElementAudioSourceNode` is created once per `HTMLAudioElement` (Chrome throws if you wrap the same element twice — tracked via a `WeakMap`)
+- `AnalyserNode` settings: `fftSize: 256` (gives 128 frequency bins), `smoothingTimeConstant: 0.75`
+- `getByteFrequencyData()` reads into a `Uint8Array(analyser.frequencyBinCount)`
+- We use bins 0–56 (lower half = audible frequencies) and sample every 4th bin → **14 bars**
+- `requestAnimationFrame` loop is started on play and cancelled on stop via a `rafId` ref
 
-| File | Change |
-|---|---|
-| `supabase/functions/ai-video-editor/index.ts` | Add `generate-scene` action using correct `google/gemini-3-pro-image-preview` model via `LOVABLE_API_KEY` |
-| `src/components/ai-video-studio/panels/MediaLibraryPanel.tsx` | Route scene generation through edge function; fix stock card icon visibility |
+### 2. New component: `SoundWaveform`
+
+Create a small React component that accepts `{ analyser: AnalyserNode | null, isPlaying: boolean, width?: number, height?: number }`.
+
+It owns a `<canvas>` ref and runs its own `useEffect`-based RAF loop when `isPlaying && analyser`:
+
+```typescript
+useEffect(() => {
+  if (!isPlaying || !analyser || !canvasRef.current) return;
+  const ctx = canvasRef.current.getContext('2d')!;
+  const dataArray = new Uint8Array(analyser.frequencyBinCount);
+  let rafId: number;
+  const draw = () => {
+    rafId = requestAnimationFrame(draw);
+    analyser.getByteFrequencyData(dataArray);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Draw bars from sampled frequency data with amber gradient
+    ...
+  };
+  draw();
+  return () => cancelAnimationFrame(rafId);
+}, [isPlaying, analyser]);
+```
+
+When `!isPlaying`, it renders a flat idle state (14 thin bars at ~25% height, no animation).
+
+**Visual design (CapCut-style):**
+- Canvas size: `112px × 28px` (matches existing 5-bar space, scaled up)
+- Bar width: `5px`, gap: `3px`, 14 bars
+- Colors: amber gradient (`#f59e0b` bottom → `#fcd34d` top) when playing
+- Idle: `#475569` (slate-600) flat bars at height 6px
+- Bars smoothly animate using the `smoothingTimeConstant: 0.75` — no manual lerp needed
+
+### 3. Update `SoundEffectsPanel.tsx`
+
+**`handlePlay` changes:**
+1. Resume `AudioContext` if it's in `suspended` state (Chrome autoplay policy requires user gesture)
+2. Create/reuse `MediaElementAudioSourceNode` via `WeakMap` check
+3. Create/reuse `AnalyserNode` per sound ID (stored in `analyserRefs`)
+4. Chain: `sourceNode → analyser → audioCtx.destination`
+5. Store `analyser` reference keyed by `sound.id` in `analyserRefs`
+
+**Template changes:**
+- Replace the 5-div fake bars with `<SoundWaveform analyser={analyserRefs.current[sound.id]} isPlaying={isPlaying} />`
+- The progress bar below stays as-is (it's still useful for position)
+
+**Cleanup:**
+- On component unmount, cancel all RAF loops (handled by `SoundWaveform` cleanup)
+- `stopAll` already pauses/resets audio elements — analyser nodes don't need cleanup (they stop producing data automatically)
+
+---
+
+## Files to Create/Edit
+
+| File | Action | What Changes |
+|---|---|---|
+| `src/components/ai-video-studio/hooks/useAudioAnalyser.ts` | **Create** | Shared AudioContext singleton + per-element analyser setup |
+| `src/components/ai-video-studio/features/SoundWaveform.tsx` | **Create** | Canvas-based 60fps waveform component |
+| `src/components/ai-video-studio/features/SoundEffectsPanel.tsx` | **Edit** | Wire up hook, replace fake bars with `<SoundWaveform>` |
+
+No backend changes, no new dependencies. Pure Web Audio API + React canvas.
+
+---
+
+## Edge Cases Handled
+
+- **Safari iOS**: `AudioContext` requires `resume()` after user gesture — `handlePlay` calls `audioCtx.resume()` before playing
+- **Chrome duplicate wrapping**: `WeakMap<HTMLAudioElement, MediaElementAudioSourceNode>` prevents the "already connected to AudioContext" error
+- **Panel unmount mid-play**: `SoundWaveform`'s `useEffect` cleanup cancels the RAF loop
+- **Silent / zero data**: When frequency data is all zeros (before audio loads), bars render at idle height
+- **Multiple simultaneous calls**: `stopAll()` is called before starting a new sound, so only one analyser is ever active at a time
