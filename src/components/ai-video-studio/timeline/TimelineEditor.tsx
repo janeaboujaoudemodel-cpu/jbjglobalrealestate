@@ -80,9 +80,14 @@ function ToolBtn({
       {/* Tooltip with shortcut badge */}
       {hovered && (
         <div
-          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-[200] pointer-events-none animate-fade-in"
+          className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-[9999] pointer-events-none animate-fade-in"
           style={{ whiteSpace: 'nowrap' }}
         >
+          {/* Arrow pointing up */}
+          <div
+            className="absolute bottom-full left-1/2 -translate-x-1/2 w-0 h-0"
+            style={{ borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderBottom: '5px solid rgba(245,158,11,0.3)' }}
+          />
           <div
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
             style={{
@@ -104,11 +109,6 @@ function ToolBtn({
               {shortcut}
             </kbd>
           </div>
-          {/* Arrow pointing down */}
-          <div
-            className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0"
-            style={{ borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '5px solid rgba(245,158,11,0.3)' }}
-          />
         </div>
       )}
     </div>
@@ -295,7 +295,7 @@ export function TimelineEditor({
 
       <div className="h-full flex flex-col bg-slate-900">
         {/* Toolbar */}
-        <div className="flex items-center justify-between px-3 py-2 border-b border-slate-800 bg-slate-900/80">
+        <div className="flex items-center justify-between px-3 py-2 border-b border-slate-800 bg-slate-900/80 overflow-visible z-10 relative">
           <div className="flex items-center gap-1">
             <ToolBtn active={mode === 'select'} onClick={() => onModeChange('select')} label="Select" shortcut="V">
               <MousePointer2 className="w-4 h-4" />
