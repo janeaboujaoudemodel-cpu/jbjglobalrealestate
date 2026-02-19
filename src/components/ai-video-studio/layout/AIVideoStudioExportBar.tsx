@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, Package } from 'lucide-react';
+import { Package } from 'lucide-react';
 import { EXPORT_PRESETS, ExportPreset } from '../types';
 
 interface AIVideoStudioExportBarProps {
@@ -42,17 +42,6 @@ export function AIVideoStudioExportBar({
 
       {/* Export Actions */}
       <div className="flex items-center gap-2">
-        <button
-          onClick={() => {
-            const preset = EXPORT_PRESETS.find(p => p.id === selectedPreset);
-            if (preset) onExportSingle(preset);
-          }}
-          disabled={isExporting}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold border border-amber-400 text-amber-200 bg-amber-400/10 hover:bg-amber-400/25 hover:text-white disabled:opacity-40 transition-all"
-        >
-          <Download className="w-3.5 h-3.5" />
-          Download
-        </button>
         <button
           onClick={onExportAll}
           disabled={isExporting}
