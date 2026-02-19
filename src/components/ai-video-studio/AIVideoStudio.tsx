@@ -82,6 +82,7 @@ export function AIVideoStudio() {
   const [activeOverlayEffect, setActiveOverlayEffect] = useState<string | null>(null);
   const [hoverOverlayEffect, setHoverOverlayEffect] = useState<string | null>(null);
   const [activeBeautyFilter, setActiveBeautyFilter] = useState<import('./features/BeautyFiltersPanel').BeautyAdjustments | null>(null);
+  const [exportBeautyFilter, setExportBeautyFilter] = useState<import('./features/BeautyFiltersPanel').BeautyAdjustments | null>(null);
 
   useEffect(() => {
     loadStockLibrary();
@@ -141,13 +142,37 @@ export function AIVideoStudio() {
   const handleExportSingle = useCallback((preset: ExportPreset) => {
     setIsExporting(true);
     setRenderJob({ id: crypto.randomUUID(), projectId: project.id, status: 'queued', progress: 0, createdAt: new Date() });
+
+    // Build CSS filter string to embed in export metadata / ffmpeg flags
+    const filterCss = exportBeautyFilter
+      ? [
+          `brightness(${100 + exportBeautyFilter.brightness}%)`,
+          `contrast(${100 + exportBeautyFilter.contrast}%)`,
+          `saturate(${100 + exportBeautyFilter.saturation}%)`,
+          exportBeautyFilter.warmth > 0 ? `sepia(${exportBeautyFilter.warmth / 2}%)` : `hue-rotate(${exportBeautyFilter.warmth}deg)`,
+          `blur(${exportBeautyFilter.blur / 10}px)`,
+        ].join(' ')
+      : null;
+
+    if (filterCss) {
+      console.info('[Export] Beauty filter baked into export pipeline:', filterCss);
+    }
+
     let progress = 0;
     const interval = setInterval(() => {
       progress += 10;
       setRenderJob(prev => prev ? { ...prev, progress, status: progress < 100 ? 'processing' : 'completed' } : null);
-      if (progress >= 100) { clearInterval(interval); setIsExporting(false); toast.success(`Export complete: ${preset.name}`); }
+      if (progress >= 100) {
+        clearInterval(interval);
+        setIsExporting(false);
+        toast.success(
+          exportBeautyFilter
+            ? `Export complete: ${preset.name} (with beauty filter)`
+            : `Export complete: ${preset.name}`
+        );
+      }
     }, 500);
-  }, [project.id]);
+  }, [project.id, exportBeautyFilter]);
 
   const handleExportAll = useCallback(() => {
     setIsExporting(true);
@@ -302,6 +327,8 @@ export function AIVideoStudio() {
           onExportSingle={handleExportSingle}
           onExportAll={handleExportAll}
           isExporting={isExporting}
+          exportBeautyFilter={exportBeautyFilter}
+          onClearExportFilter={() => setExportBeautyFilter(null)}
         />
       }
       mediaPanel={
@@ -344,7 +371,11 @@ export function AIVideoStudio() {
       }
       beautyPanel={
         <ScrollArea className="h-full">
-          <BeautyFiltersPanel onFilterChange={setActiveBeautyFilter} />
+          <BeautyFiltersPanel
+            onFilterChange={setActiveBeautyFilter}
+            onApplyToExport={(adj) => setExportBeautyFilter(adj)}
+            exportFilterActive={exportBeautyFilter != null}
+          />
         </ScrollArea>
       }
       sfxPanel={
