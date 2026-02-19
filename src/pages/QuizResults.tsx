@@ -243,8 +243,7 @@ Best regards`);
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button
               onClick={handleDownloadReport}
-              variant="outline"
-              className="border-purple-500/50 text-white hover:bg-purple-500/10"
+              className="bg-white/10 border border-white/30 text-white hover:bg-white/20"
             >
               <Download className="w-4 h-4 mr-2" />
               Download Report
@@ -281,7 +280,7 @@ Best regards`);
               <div className="grid md:grid-cols-2">
                 <div className="aspect-[4/3] md:aspect-auto">
                   <img
-                    src={projects[0].images?.[0]?.image_url || "/placeholder.svg"}
+                    src={projects[0].cover_image_url || projects[0].images?.[0]?.image_url || "/placeholder.svg"}
                     alt={projects[0].name}
                     className="w-full h-full object-cover"
                   />
@@ -296,13 +295,17 @@ Best regards`);
                     <div className="bg-zinc-800/50 rounded-xl p-4">
                       <p className="text-zinc-500 text-sm">Price From</p>
                       <p className="text-white text-xl font-semibold">
-                        AED {((projects[0].price_from || 0) / 1000000).toFixed(1)}M
+                        {projects[0].price_from
+                          ? `AED ${(projects[0].price_from / 1000000).toFixed(1)}M`
+                          : "Price on Request"}
                       </p>
                     </div>
                     <div className="bg-zinc-800/50 rounded-xl p-4">
                       <p className="text-zinc-500 text-sm">Bedrooms</p>
                       <p className="text-white text-xl font-semibold">
-                        {projects[0].bedrooms_min} - {projects[0].bedrooms_max} BR
+                        {projects[0].bedrooms_min != null && projects[0].bedrooms_max != null
+                          ? `${projects[0].bedrooms_min} - ${projects[0].bedrooms_max} BR`
+                          : "Type TBC"}
                       </p>
                     </div>
                   </div>
@@ -311,7 +314,7 @@ Best regards`);
                   <div className="flex items-center gap-3 mb-6">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="border-purple-500/40 text-white hover:bg-purple-500/10">
+                        <Button variant="outline" size="sm" className="border-purple-400/60 text-purple-200 hover:bg-purple-800/40">
                           <Award className="w-4 h-4 mr-2" />
                           {badges[projects[0].id] ? 'Change Badge' : 'Add Badge'}
                         </Button>
@@ -351,7 +354,7 @@ Best regards`);
         {projects && projects.length > 1 && (
           <div className="mb-12">
             <h3 className="text-white text-xl font-semibold mb-6">More Great Options</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {projects.slice(1).map((project, index) => {
                 const badge = badges[project.id];
                 return (
@@ -374,10 +377,10 @@ Best regards`);
                     <div className="mt-2">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="w-full border-purple-500/30 text-white hover:bg-purple-500/10 text-xs">
-                            <Award className="w-3 h-3 mr-1" />
-                            {badge ? 'Change Badge' : 'Add Badge'}
-                          </Button>
+                      <Button variant="outline" size="sm" className="w-full border-purple-400/60 text-purple-200 hover:bg-purple-800/40 text-xs">
+                             <Award className="w-3 h-3 mr-1" />
+                             {badge ? 'Change Badge' : 'Add Badge'}
+                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="bg-zinc-900 border-purple-900/30">
                           <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-yellow-400 hover:bg-purple-900/30">
@@ -405,7 +408,8 @@ Best regards`);
         )}
 
         {/* Action Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <div className="border border-purple-500/40 rounded-2xl p-6 bg-purple-950/20 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* AI Comparison Card */}
           <div className="bg-zinc-900/80 rounded-2xl p-6 border border-purple-900/30 backdrop-blur-sm">
             <div className="flex items-center gap-3 mb-4">
@@ -451,11 +455,12 @@ Best regards`);
             </a>
           </div>
         </div>
+        </div>
 
         {/* Actions */}
         <div className="text-center">
           {/* Free Use Banner */}
-          {isFreeUse && !hasActiveMembership && (
+          {false && isFreeUse && !hasActiveMembership && (
             <div className="bg-gradient-to-r from-gold/20 to-gold/10 border border-gold/40 rounded-2xl p-6 mb-8 max-w-2xl mx-auto">
               <div className="flex items-center justify-center gap-3 mb-3">
                 <Crown className="w-6 h-6 text-gold" />
@@ -476,31 +481,12 @@ Best regards`);
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <Button 
-              onClick={() => {
-                if (hasActiveMembership) {
-                  navigate("/quiz");
-                } else {
-                  setShowVipModal(true);
-                }
-              }}
+              onClick={() => navigate("/quiz")}
               variant="outline" 
-              className={`font-semibold px-6 py-3 ${
-                hasActiveMembership
-                  ? "border-purple-400 bg-purple-900/30 text-white hover:bg-purple-500/30 hover:text-white"
-                  : "border-gold/50 bg-gold/10 text-gold hover:bg-gold/20 hover:text-gold"
-              }`}
+              className="font-semibold px-6 py-3 border-purple-400 text-white bg-purple-900/40 hover:bg-purple-800/40 hover:text-white"
             >
-              {hasActiveMembership ? (
-                <>
-                  <RefreshCw className="w-5 h-5 mr-2" />
-                  <span className="text-base">Regenerate with AI</span>
-                </>
-              ) : (
-                <>
-                  <Crown className="w-5 h-5 mr-2" />
-                  <span className="text-base">Regenerate (VIP)</span>
-                </>
-              )}
+              <RefreshCw className="w-5 h-5 mr-2" />
+              <span className="text-base">Regenerate with AI</span>
             </Button>
             <Link to="/">
               <Button className="bg-white text-zinc-900 hover:bg-zinc-100">

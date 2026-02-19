@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Brain, Loader2, TrendingUp, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown, RefreshCw, Sparkles } from "lucide-react";
+import { Brain, TrendingUp, BarChart3, Shield, Star, Building2, ThumbsUp, ThumbsDown, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
 
 interface ProjectAIAnalyzerProps {
   projectName: string;
@@ -57,6 +58,7 @@ export const ProjectAIAnalyzer = ({
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleAnalyze = useCallback(async () => {
+    hasTriggered.current = true;
     setIsAnalyzing(true);
     setHasTimedOut(false);
     setErrorMsg(null);
@@ -108,10 +110,10 @@ export const ProjectAIAnalyzer = ({
   }, []);
 
   useEffect(() => {
-    if (isVisible && !hasTriggered && !isAnalyzing && !analysis) {
+    if (isVisible && !hasTriggered.current && !isAnalyzing && !analysis) {
       handleAnalyze();
     }
-  }, [isVisible, hasTriggered, isAnalyzing, analysis, handleAnalyze]);
+  }, [isVisible, isAnalyzing, analysis, handleAnalyze]);
 
   const sections = analysis ? {
     overview: extractSection(analysis, "Area Overview"),
@@ -170,10 +172,16 @@ export const ProjectAIAnalyzer = ({
                 </Button>
               </div>
             ) : (
-              <>
-                <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-3" />
+              <div className="flex flex-col items-center gap-4 py-8">
+                <img
+                  src={jbjMonogramDark}
+                  alt="Analyzing..."
+                  className="w-16 h-16 object-contain animate-pulse"
+                  style={{ filter: "drop-shadow(0 0 12px rgba(200,167,102,0.5))" }}
+                />
                 <p className="text-zinc-500 text-sm">JBJ AI is analyzing {projectName}...</p>
-              </>
+                <div className="w-32 h-0.5 bg-gradient-to-r from-transparent via-yellow-600 to-transparent animate-pulse" />
+              </div>
             )}
           </div>
         ) : (

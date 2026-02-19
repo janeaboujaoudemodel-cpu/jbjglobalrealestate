@@ -240,6 +240,17 @@ const Quiz = () => {
     if (!allProjects?.length) return [];
 
     const filteredProjects = allProjects.filter((project) => {
+      // ── Hard exclusions ──────────────────────────────────────────────────
+      // Never recommend sold-out projects
+      if (project.is_sold_out) return false;
+      const saleStatusLower = (project.sale_status || "").toLowerCase();
+      if (saleStatusLower.includes("sold") || saleStatusLower.includes("out_of_stock")) return false;
+
+      // Require at least one image
+      const hasImage = project.cover_image_url || project.images?.[0]?.image_url;
+      if (!hasImage) return false;
+
+      // ── Budget filter ────────────────────────────────────────────────────
       const priceFrom = project.price_from || 0;
       const budget = answers.budget;
       
@@ -249,6 +260,7 @@ const Quiz = () => {
       if (budget === "5m-10m" && (priceFrom < 5000000 || priceFrom >= 10000000)) return false;
       if (budget === "10m-plus" && priceFrom < 10000000) return false;
 
+      // ── Bedroom filter ───────────────────────────────────────────────────
       const bedrooms = answers.bedrooms;
       const minBr = project.bedrooms_min || 0;
       const maxBr = project.bedrooms_max || minBr;
@@ -262,9 +274,14 @@ const Quiz = () => {
       return true;
     });
 
-    return filteredProjects
+      return filteredProjects
       .map((project) => {
         let score = 100;
+
+        // Data completeness bonuses
+        if (project.price_from) score += 10;
+        if (project.bedrooms_min != null) score += 5;
+        if (project.cover_image_url || project.images?.[0]?.image_url) score += 5;
 
         const location = answers.location_type;
         const projectViews = project.views || [];
