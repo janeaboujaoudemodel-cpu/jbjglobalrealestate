@@ -184,7 +184,10 @@ export default function StampProjectWizard() {
                   }
                   if (data.registration_number) set('registration_number_optional', data.registration_number);
                   if (data.city) set('city_optional', data.city);
+                  if (data.arabic_city) set('arabic_city', data.arabic_city);
                   if (data.country) set('country_optional', data.country);
+                  if (data.phone) set('phone_optional', data.phone);
+                  if (data.email) set('email_optional', data.email);
                 }}
               />
 

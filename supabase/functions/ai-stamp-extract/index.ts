@@ -24,24 +24,36 @@ serve(async (req) => {
       });
     }
 
-    const prompt = `You are an OCR expert analyzing a business document or trade license.
-Extract the following information from the document image:
-1. Company name in English (exact as printed, including LLC/FZE/CO. etc.)
-2. Company name in Arabic (exact as printed, if present — Arabic characters only)
-3. License/registration number
-4. City
-5. Country
+    const prompt = `You are an expert OCR system analyzing a business document, trade license, or commercial registration certificate.
 
-Return ONLY a JSON object with these keys (omit keys where information is not found):
+Extract ALL of the following information that is visible in the document:
+1. Company name in English (exact as printed, including LLC / FZE / CO. / L.L.C etc.)
+2. Company name in Arabic (exact Arabic characters as printed — if present)
+3. License / registration / commercial number
+4. City (in English)
+5. City in Arabic (if present)
+6. Country (in English)
+7. Phone number (any phone / mobile / tel number found)
+8. Email address (any email found)
+9. Website / URL (if present)
+
+Return ONLY a valid JSON object with these exact keys (omit any key where the information is not found or not legible):
 {
   "company_name": "...",
   "arabic_company_name": "...",
   "registration_number": "...",
   "city": "...",
-  "country": "..."
+  "arabic_city": "...",
+  "country": "...",
+  "phone": "...",
+  "email": "...",
+  "website": "..."
 }
 
-Do not include any explanation or markdown. Return only the JSON object.`;
+Rules:
+- Return ONLY the JSON object. No markdown, no explanation, no code fences.
+- For Arabic text, preserve exact Arabic characters including diacritics.
+- If a field is not clearly visible, omit it entirely — do not guess.`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -59,13 +71,13 @@ Do not include any explanation or markdown. Return only the JSON object.`;
               {
                 type: 'image_url',
                 image_url: {
-                  url: `data:${mimeType || 'image/jpeg'};base64,${imageBase64}`,
+                  url: `data:${mimeType};base64,${imageBase64}`,
                 },
               },
             ],
           },
         ],
-        max_tokens: 512,
+        max_tokens: 1024,
       }),
     });
 
