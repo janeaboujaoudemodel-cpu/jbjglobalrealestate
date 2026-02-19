@@ -302,9 +302,13 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
 
           {/* ── AI Analysis ── */}
           <div>
-            <p className="text-xs text-slate-400 font-semibold mb-2 uppercase tracking-wide">
-              AI Clip Scanner
-            </p>
+            <p className="text-xs text-slate-200 font-bold mb-0.5">AI Clip Scanner</p>
+            <p className="text-[10px] text-slate-500 mb-2">Analyzes your timeline clips and finds the best moments to highlight.</p>
+            {clips.length === 0 && (
+              <div className="mb-2 p-2.5 rounded-lg bg-slate-800 border border-slate-700 text-xs text-slate-400 text-center">
+                Add clips to the timeline first, then scan.
+              </div>
+            )}
             <Button
               size="sm"
               onClick={handleAnalyzeClips}
@@ -411,9 +415,8 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
 
           {/* ── Smart Templates ── */}
           <div>
-            <p className="text-xs text-slate-400 font-semibold mb-2 uppercase tracking-wide">
-              Smart Templates
-            </p>
+            <p className="text-xs text-slate-200 font-bold mb-0.5">Smart Templates</p>
+            <p className="text-[10px] text-slate-500 mb-2">Auto-assembles your clips into a professional edit format — AI reorders and trims to match the style.</p>
             <div className="space-y-2">
               {SMART_TEMPLATES.map(t => (
                 <div

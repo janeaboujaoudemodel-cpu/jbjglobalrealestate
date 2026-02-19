@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Play, Pause, Square, SkipBack, SkipForward, Volume2, VolumeX, Maximize2, Upload, Mic, FileText, Bot, Film, CloudUpload, Sparkles } from 'lucide-react';
 import { Clip } from '../types';
+import { PremiumEffectOverlay } from './PremiumEffectOverlay';
 
 // ── Example real-estate "inspiration" thumbnails (Unsplash, no key needed) ──
 const EXAMPLE_VIDEOS = [
@@ -105,6 +106,7 @@ interface VideoPreviewCanvasProps {
   onTogglePlayback: () => void;
   onUpload?: (files: FileList) => void;
   onOpenTool?: (toolId: string) => void;
+  activeOverlayEffect?: string | null;
 }
 
 const QUICK_ACTIONS = [
@@ -213,6 +215,7 @@ export function VideoPreviewCanvas({
   onTogglePlayback,
   onUpload,
   onOpenTool,
+  activeOverlayEffect = null,
 }: VideoPreviewCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -447,7 +450,10 @@ export function VideoPreviewCanvas({
                       easing={tc.easing}
                     />
                   );
-                })}
+                  })}
+
+              {/* Premium Effect Overlay on canvas */}
+              <PremiumEffectOverlay effectId={activeOverlayEffect} />
 
               {/* Time Overlay */}
 

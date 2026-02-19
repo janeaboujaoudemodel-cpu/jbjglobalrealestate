@@ -79,6 +79,7 @@ export function AIVideoStudio() {
   const [renderJob, setRenderJob] = useState<RenderJob | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [subtitles, setSubtitles] = useState<SubtitleSegment[]>([]);
+  const [activeOverlayEffect, setActiveOverlayEffect] = useState<string | null>(null);
 
   useEffect(() => {
     loadStockLibrary();
@@ -262,6 +263,8 @@ export function AIVideoStudio() {
           onTimeUpdate={setCurrentTime}
           onTogglePlayback={togglePlayback}
           onUpload={handleUpload}
+          onOpenTool={(toolId) => layoutRef.current?.toggleTool(toolId)}
+          activeOverlayEffect={activeOverlayEffect}
         />
       }
       timeline={
@@ -359,7 +362,29 @@ export function AIVideoStudio() {
           }}
         />
       }
-      effectsPanel={<OverlayEffectsPanel />}
+      effectsPanel={
+        <OverlayEffectsPanel
+          activeEffect={activeOverlayEffect}
+          onPreviewEffect={setActiveOverlayEffect}
+          onAddEffect={(effectId) => {
+            // Add effect clip to timeline
+            const videoTrack = project.tracks.find(t => t.type === 'video');
+            if (!videoTrack) return;
+            const lastEnd = videoTrack.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+            addClip(videoTrack.id, {
+              trackId: videoTrack.id,
+              type: 'image',
+              name: `Effect: ${effectId}`,
+              startTime: lastEnd,
+              duration: 4,
+              source: { url: `effect://${effectId}`, inPoint: 0, outPoint: 4, originalDuration: 4 },
+              transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+              keyframes: [],
+              effects: [],
+            });
+          }}
+        />
+      }
       transitionsPanel={<TransitionsPanel />}
       resizePanel={
         <ScrollArea className="h-full">
