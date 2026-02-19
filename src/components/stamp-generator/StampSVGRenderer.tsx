@@ -9,8 +9,10 @@ interface Props {
   svgSource: string;
   /** Primary ink color — replaces #1a2744 */
   tintColor?: string;
-  /** Secondary color — replaces #2a3a5c (inner elements / monogram) */
+  /** Secondary color — replaces #2a3a5c (inner ring accents) */
   secondaryColor?: string;
+  /** Accent color — replaces monogram/center dominant-baseline elements */
+  accentColor?: string;
   className?: string;
   size?: number;
 }
@@ -19,14 +21,17 @@ export function StampSVGRenderer({
   svgSource,
   tintColor = '#1a2744',
   secondaryColor,
+  accentColor,
   className = '',
   size = 240,
 }: Props) {
   let tinted = svgSource.replace(/#1a2744/gi, tintColor);
   if (secondaryColor) {
     tinted = tinted.replace(/#2a3a5c/gi, secondaryColor);
-    // Also recolor monogram/inner elements by targeting the second occurrence of the primary color pattern
-    // For dual color: if secondary defined, replace the center dominant-baseline text color
+  }
+  if (accentColor) {
+    tinted = tinted.replace(/(dominant-baseline="central"[^>]*fill=")[^"]+(")/g, `$1${accentColor}$2`);
+  } else if (secondaryColor) {
     tinted = tinted.replace(/(dominant-baseline="central"[^>]*fill=")[^"]+(")/g, `$1${secondaryColor}$2`);
   }
 

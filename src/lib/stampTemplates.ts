@@ -206,8 +206,15 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   // ────────────────────────────────────────────────────────────────
   {
     const r = R - 8;
-    const pad = r - 18;
-    const nameFontSize = autoFontSize(name, 11.5, 20);
+    // Safe zone: text must stay within r - 14px from center
+    const safeR = r - 14;
+    const pad = Math.min(safeR - 4, r - 18);
+    const nameFontSize = autoFontSize(name, 11, 20);
+    // Tighter layout to prevent text escaping circle
+    const monoY = cy - Math.round(safeR * 0.55);
+    const nameY = hasMono ? cy + 4 : cy - 10;
+    const cityY = nameY + (name.length > 24 ? 28 : 22);
+    const regY = cityY + 14;
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -215,17 +222,20 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
           <stop offset="0%" stop-color="${COLOR}" stop-opacity="0.03"/>
           <stop offset="100%" stop-color="${COLOR}" stop-opacity="0.08"/>
         </radialGradient>
+        <clipPath id="t2clip"><circle cx="${cx}" cy="${cy}" r="${r - 4}"/></clipPath>
       </defs>
       <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#t2bg)" stroke="${COLOR}" stroke-width="2"/>
       <circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="0.5" stroke-dasharray="2,3"/>
-      ${hRule(cx - pad, cx + pad, cy - 30, COLOR, 1.2)}
-      ${hRule(cx - pad + 8, cx + pad - 8, cy - 28, COLOR, 0.4)}
-      ${hRule(cx - pad, cx + pad, cy + 30, COLOR, 1.2)}
-      ${hRule(cx - pad + 8, cx + pad - 8, cy + 28, COLOR, 0.4)}
-      ${hasMono ? monogram(cx, cy - 54, mono, font, 30, COLOR) : ''}
-      ${wrapText(name, cx, cy + (hasMono ? 0 : -8), font, nameFontSize, COLOR, 2)}
-      <text x="${cx}" y="${cy + 14}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="8" fill="${COLOR}" letter-spacing="4">${city}</text>
-      ${regNo && project.density >= 3 ? `<text x="${cx}" y="${cy + 42}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}">${regNo}</text>` : ''}
+      <g clip-path="url(#t2clip)">
+        ${hRule(cx - pad, cx + pad, nameY - 14, COLOR, 1.2)}
+        ${hRule(cx - pad + 8, cx + pad - 8, nameY - 12, COLOR, 0.4)}
+        ${hasMono ? monogram(cx, monoY, mono, font, 28, COLOR) : ''}
+        ${wrapText(name, cx, nameY, font, nameFontSize, COLOR, 2)}
+        <text x="${cx}" y="${cityY}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="3.5">${city}</text>
+        ${hRule(cx - pad, cx + pad, cityY + 12, COLOR, 1.2)}
+        ${hRule(cx - pad + 8, cx + pad - 8, cityY + 14, COLOR, 0.4)}
+        ${regNo && project.density >= 3 ? `<text x="${cx}" y="${regY + 4}" text-anchor="middle" font-family="${font}" font-size="6" fill="${COLOR}">${regNo}</text>` : ''}
+      </g>
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'modern-minimal', label: 'Modern Minimal', tags: ['modern', 'clean', 'minimal'], svgSource: svg });
   }
@@ -369,29 +379,36 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   }
 
   // ────────────────────────────────────────────────────────────────
-  // T7: Geometric Modern — diamond inner frame, bold ring text
+  // T7: Geometric Modern — filled outer ring band, bold ring text inside band, center text safe
   // ────────────────────────────────────────────────────────────────
   {
-    const r = R - 6;
-    const nameFontSize = autoFontSize(name, 10, 20);
+    const outerR = R - 4;
+    const bandR = outerR - 16; // inner edge of filled ring
+    const ringTextR = outerR - 8; // text sits inside the filled band
+    const nameFontSize = autoFontSize(name, 10.5, 20);
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="t7bg" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="${COLOR}" stop-opacity="0.05"/>
-          <stop offset="100%" stop-color="${COLOR}" stop-opacity="0.12"/>
+          <stop offset="0%" stop-color="${COLOR}" stop-opacity="0.04"/>
+          <stop offset="100%" stop-color="${COLOR}" stop-opacity="0.10"/>
         </radialGradient>
       </defs>
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#t7bg)" stroke="${COLOR}" stroke-width="2.4"/>
-      <circle cx="${cx}" cy="${cy}" r="${r - 7}" fill="none" stroke="${COLOR}" stroke-width="0.5"/>
+      <!-- Filled outer ring band -->
+      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
+      <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
+      <!-- Inner accent ring -->
+      <circle cx="${cx}" cy="${cy}" r="${bandR - 5}" fill="url(#t7bg)" stroke="${COLOR}" stroke-width="0.6"/>
+      <!-- Ring text inside filled band (white, readable) -->
+      ${ringText('t7ring', cx, cy, ringTextR, `◆  ${name}  ◆  ${city}  ◆`, font, 7.5, '#ffffff', '50%', 1.4)}
+      <!-- Center: monogram or inner rectangle frame + text -->
       ${hasMono
         ? `<rect x="${cx - 36}" y="${cy - 36}" width="72" height="72" fill="none" stroke="${COLOR}" stroke-width="1.4" transform="rotate(45, ${cx}, ${cy})"/>
-           ${monogram(cx, cy - 2, mono, font, 28, COLOR)}`
-        : `<rect x="${cx - 50}" y="${cy - 24}" width="100" height="48" rx="2" fill="none" stroke="${COLOR}" stroke-width="1.1"/>
-           <rect x="${cx - 45}" y="${cy - 19}" width="90" height="38" rx="1" fill="none" stroke="${COLOR}" stroke-width="0.4"/>`
+           ${monogram(cx, cy - 2, mono, font, 26, COLOR)}`
+        : `<rect x="${cx - 52}" y="${cy - 26}" width="104" height="52" rx="2" fill="none" stroke="${COLOR}" stroke-width="1.2"/>
+           <rect x="${cx - 47}" y="${cy - 21}" width="94" height="42" rx="1" fill="none" stroke="${COLOR}" stroke-width="0.4"/>
+           ${wrapText(name, cx, cy, font, nameFontSize, COLOR, 1.8)}`
       }
-      ${ringText('t7ring', cx, cy, r - 4, `${name}  ◆  ${city}`, font, 7.8, COLOR, '50%', 1.5)}
-      ${!hasMono ? wrapText(name, cx, cy, font, nameFontSize, COLOR, 2) : ''}
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'geometric-modern', label: 'Geometric Modern', tags: ['geometric', 'modern', 'architectural'], svgSource: svg });
   }
@@ -404,6 +421,18 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const x1 = cx - s, y1 = cy - s;
     const nameFontSize = autoFontSize(name, 10.5, 20);
     const hdrH = 28, ftrH = 22;
+
+    // Safe content zone: between header bottom and footer top
+    const contentTop = y1 + 6 + hdrH + 6;
+    const contentBot = y1 + s * 2 - 6 - ftrH - 6;
+    const contentH = contentBot - contentTop;
+    const contentCy = contentTop + contentH / 2;
+    // Clamp name/city within safe zone
+    const monoSize = Math.min(36, Math.floor(contentH * 0.35));
+    const monoY = contentTop + monoSize + 2;
+    const nameY = hasMono ? monoY + monoSize * 0.8 + 4 : contentCy - 8;
+    const cityFontSize = 7.5;
+    const cityY = Math.min(nameY + (name.length > 22 ? 26 : 18), contentBot - cityFontSize - 2);
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <rect x="${x1}" y="${y1}" width="${s * 2}" height="${s * 2}" rx="3" fill="none" stroke="${COLOR}" stroke-width="2.8"/>
@@ -418,11 +447,12 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       <circle cx="${x1 + s * 2 - 6}" cy="${y1 + s * 2 - 6}" r="2" fill="${COLOR}"/>
       <!-- Filled footer -->
       <rect x="${x1 + 6}" y="${y1 + s * 2 - 6 - ftrH}" width="${s * 2 - 12}" height="${ftrH}" rx="1" fill="${COLOR}"/>
-      ${hasMono ? monogram(cx, cy - 14, mono, font, 38, COLOR) : ''}
-      ${wrapText(name, cx, cy + (hasMono ? 18 : 4), font, nameFontSize, COLOR, 1.5)}
-      <text x="${cx}" y="${cy + (hasMono ? 38 : 24)}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="8" fill="${COLOR}" letter-spacing="3">${city}</text>
-      ${regNo && project.density >= 3 ? `<text x="${cx}" y="${cy + (hasMono ? 52 : 38)}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${COLOR}">${regNo}</text>` : ''}
       <text x="${cx}" y="${y1 + s * 2 - 6 - ftrH / 2 + 1}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="7" fill="#ffffff" letter-spacing="2">${city}</text>
+      <!-- Center content (clipped inside safe zone) -->
+      ${hasMono ? monogram(cx, monoY, mono, font, monoSize, COLOR) : ''}
+      ${wrapText(name, cx, nameY, font, nameFontSize, COLOR, 1.5)}
+      <text x="${cx}" y="${cityY}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="${cityFontSize}" fill="${COLOR}" letter-spacing="2.5">${city}</text>
+      ${regNo && project.density >= 3 && cityY + 14 < contentBot ? `<text x="${cx}" y="${cityY + 14}" text-anchor="middle" font-family="${font}" font-size="6" fill="${COLOR}">${regNo}</text>` : ''}
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'square-premium', label: 'Square Premium', tags: ['square', 'corporate', 'premium'], svgSource: svg });
   }
