@@ -1,10 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { Type, Plus, Trash2, AlignLeft, AlignCenter, AlignRight, Bold, Italic } from 'lucide-react';
+import { Plus, AlignLeft, AlignCenter, AlignRight, Bold, Italic } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Clip, TextSettings } from '../types';
+import { TextSettings } from '../types';
 import { toast } from 'sonner';
 
 const FONT_FAMILIES = [
@@ -27,24 +26,107 @@ const TEXT_ANIMATIONS = [
   { id: 'glitch',     label: 'Glitch',     emoji: '⚡' },
 ];
 
-const TEXT_PRESETS = [
-  { label: 'Clean Title',   content: 'Your Title Here', fontFamily: 'Inter, sans-serif',        fontSize: 52, fontWeight: 'bold' as const,   color: '#FFFFFF', backgroundColor: 'transparent',    position: 'center' as const, style: 'clean' as const,       textAlign: 'center' as const },
-  { label: 'Lower Third',   content: 'Name / Title',    fontFamily: 'Inter, sans-serif',        fontSize: 28, fontWeight: 'bold' as const,   color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.7)', position: 'bottom' as const, style: 'lower-third' as const, textAlign: 'left' as const   },
-  { label: 'Social Bold',   content: 'BIG TEXT',        fontFamily: 'Impact, sans-serif',       fontSize: 72, fontWeight: 'bold' as const,   color: '#FFD700', backgroundColor: 'transparent',    position: 'center' as const, style: 'bold' as const,        textAlign: 'center' as const },
-  { label: 'Luxury Quote',  content: '"Your Quote"',    fontFamily: 'Playfair Display, serif',  fontSize: 38, fontWeight: 'normal' as const, color: '#C8A766', backgroundColor: 'transparent',    position: 'center' as const, style: 'clean' as const,       textAlign: 'center' as const },
-  { label: 'Caption Box',   content: 'Caption text',    fontFamily: 'Inter, sans-serif',        fontSize: 24, fontWeight: 'normal' as const, color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.6)', position: 'bottom' as const, style: 'highlight' as const,   textAlign: 'center' as const },
-];
+type PresetItem = {
+  label: string;
+  content: string;
+  fontFamily: string;
+  fontSize: number;
+  fontWeight: 'normal' | 'bold';
+  color: string;
+  backgroundColor: string;
+  position: 'top' | 'center' | 'bottom';
+  style: 'clean' | 'bold' | 'highlight' | 'lower-third';
+  textAlign: 'left' | 'center' | 'right';
+};
 
-const POSITION_OPTIONS = [
-  { id: 'top',    label: 'Top',    grid: 'col-start-2 row-start-1' },
-  { id: 'center', label: 'Center', grid: 'col-start-2 row-start-2' },
-  { id: 'bottom', label: 'Bottom', grid: 'col-start-2 row-start-3' },
+const TEXT_PRESETS: PresetItem[] = [
+  { label: 'Clean Title',  content: 'Your Title Here', fontFamily: 'Inter, sans-serif',       fontSize: 52, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'transparent',    position: 'center', style: 'clean',       textAlign: 'center' },
+  { label: 'Lower Third',  content: 'Name / Title',    fontFamily: 'Inter, sans-serif',       fontSize: 28, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.7)', position: 'bottom', style: 'lower-third', textAlign: 'left'   },
+  { label: 'Social Bold',  content: 'BIG TEXT',        fontFamily: 'Impact, sans-serif',      fontSize: 72, fontWeight: 'bold',   color: '#FFD700', backgroundColor: 'transparent',    position: 'center', style: 'bold',        textAlign: 'center' },
+  { label: 'Luxury Quote', content: '"Your Quote"',    fontFamily: 'Playfair Display, serif', fontSize: 38, fontWeight: 'normal', color: '#C8A766', backgroundColor: 'transparent',    position: 'center', style: 'clean',       textAlign: 'center' },
+  { label: 'Caption Box',  content: 'Caption text',    fontFamily: 'Inter, sans-serif',       fontSize: 24, fontWeight: 'normal', color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.6)', position: 'bottom', style: 'highlight',   textAlign: 'center' },
 ];
 
 const COLOR_SWATCHES = [
   '#FFFFFF', '#000000', '#FFD700', '#C8A766', '#FF3B30',
   '#34C759', '#007AFF', '#AF52DE', '#FF9500', '#5AC8FA',
 ];
+
+// ── TextPreviewThumbnail sub-component ──────────────────────────────────────
+
+function TextPreviewThumbnail({ preset, isActive, onClick }: {
+  preset: PresetItem;
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  const scaledSize = Math.max(6, Math.round(preset.fontSize * 0.19));
+
+  const textStyle: React.CSSProperties = {
+    fontFamily: preset.fontFamily,
+    fontSize: scaledSize,
+    fontWeight: preset.fontWeight,
+    color: preset.color,
+    background: preset.backgroundColor !== 'transparent' ? preset.backgroundColor : 'transparent',
+    padding: preset.backgroundColor !== 'transparent' ? '2px 5px' : 0,
+    borderRadius: preset.backgroundColor !== 'transparent' ? 3 : 0,
+    textAlign: preset.textAlign,
+    whiteSpace: 'nowrap',
+    maxWidth: '90%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    lineHeight: 1.2,
+  };
+
+  return (
+    <button
+      onClick={onClick}
+      className={`group flex flex-col rounded-lg overflow-hidden border transition-all duration-150 text-left w-full ${
+        isActive
+          ? 'ring-2 ring-amber-400 border-amber-400'
+          : 'border-slate-700 bg-slate-800/50 hover:border-amber-500/50 hover:shadow-md hover:shadow-amber-500/10 hover:scale-[1.02]'
+      }`}
+    >
+      {/* Dark video bg area */}
+      <div
+        className="relative w-full overflow-hidden"
+        style={{
+          aspectRatio: '16/9',
+          background: 'radial-gradient(ellipse at center, #111111 0%, #050508 100%)',
+        }}
+      >
+        {preset.position === 'center' && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span style={textStyle}>{preset.content}</span>
+          </div>
+        )}
+        {preset.position === 'top' && (
+          <div className="absolute top-1.5 left-0 right-0 flex justify-center">
+            <span style={textStyle}>{preset.content}</span>
+          </div>
+        )}
+        {preset.position === 'bottom' && (
+          <div
+            className="absolute bottom-1.5 left-0 right-0 flex"
+            style={{
+              justifyContent: preset.textAlign === 'left' ? 'flex-start' : 'center',
+              paddingLeft: preset.textAlign === 'left' ? 4 : 0,
+            }}
+          >
+            <span style={textStyle}>{preset.content}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Label bar */}
+      <div className="flex items-center justify-between px-1.5 py-1 bg-slate-800">
+        <span className="text-[10px] font-semibold text-slate-200 truncate">{preset.label}</span>
+        <Plus className="w-3 h-3 text-slate-500 group-hover:text-amber-400 transition-colors shrink-0" />
+      </div>
+    </button>
+  );
+}
+
+// ── Main component ───────────────────────────────────────────────────────────
 
 interface TextOverlayPanelProps {
   onAddTextClip: (clipData: {
@@ -57,20 +139,21 @@ interface TextOverlayPanelProps {
 }
 
 export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPanelProps) {
-  const [content, setContent]         = useState('Your Text Here');
-  const [fontFamily, setFontFamily]   = useState(FONT_FAMILIES[0].value);
-  const [fontSize, setFontSize]       = useState(48);
-  const [fontWeight, setFontWeight]   = useState<'normal' | 'bold'>('bold');
-  const [italic, setItalic]           = useState(false);
-  const [color, setColor]             = useState('#FFFFFF');
-  const [bgColor, setBgColor]         = useState('transparent');
-  const [textAlign, setTextAlign]     = useState<'left' | 'center' | 'right'>('center');
-  const [position, setPosition]       = useState<'top' | 'center' | 'bottom'>('center');
-  const [animation, setAnimation]     = useState('fade-in');
-  const [duration, setDuration]       = useState(4);
-  const [opacity, setOpacity]         = useState(1);
+  const [content, setContent]       = useState('Your Text Here');
+  const [fontFamily, setFontFamily] = useState(FONT_FAMILIES[0].value);
+  const [fontSize, setFontSize]     = useState(48);
+  const [fontWeight, setFontWeight] = useState<'normal' | 'bold'>('bold');
+  const [italic, setItalic]         = useState(false);
+  const [color, setColor]           = useState('#FFFFFF');
+  const [bgColor, setBgColor]       = useState('transparent');
+  const [textAlign, setTextAlign]   = useState<'left' | 'center' | 'right'>('center');
+  const [position, setPosition]     = useState<'top' | 'center' | 'bottom'>('center');
+  const [animation, setAnimation]   = useState('fade-in');
+  const [duration, setDuration]     = useState(4);
+  const [opacity, setOpacity]       = useState(1);
+  const [lastAppliedPreset, setLastAppliedPreset] = useState<string | null>(null);
 
-  const applyPreset = useCallback((preset: typeof TEXT_PRESETS[0]) => {
+  const applyPreset = useCallback((preset: PresetItem) => {
     setContent(preset.content);
     setFontFamily(preset.fontFamily);
     setFontSize(preset.fontSize);
@@ -125,14 +208,16 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
 
         {/* ── PRESETS ─────────────────────────────── */}
         <section>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Presets — click to add instantly</p>
-          <div className="grid grid-cols-2 gap-1.5">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Presets</p>
+          <div className="grid grid-cols-2 gap-2">
             {TEXT_PRESETS.map(p => (
-              <button
+              <TextPreviewThumbnail
                 key={p.label}
+                preset={p}
+                isActive={lastAppliedPreset === p.label}
                 onClick={() => {
                   applyPreset(p);
-                  // Immediately add the preset clip to the timeline
+                  setLastAppliedPreset(p.label);
                   onAddTextClip({
                     text: {
                       content: p.content,
@@ -151,11 +236,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                   });
                   toast.success(`"${p.label}" added to timeline!`);
                 }}
-                className="flex flex-col items-start gap-0.5 px-2.5 py-2 text-xs rounded-md border border-slate-600 bg-slate-800 hover:border-amber-500/60 hover:bg-slate-700 transition-all text-left"
-              >
-                <span className="font-medium text-white">{p.label}</span>
-                <span className="text-slate-500 text-[10px] truncate w-full">{p.content}</span>
-              </button>
+              />
             ))}
           </div>
         </section>
@@ -327,7 +408,6 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
           <div className="grid grid-cols-3 grid-rows-3 gap-1 w-32 mx-auto h-24 border border-slate-600 rounded-lg p-1 bg-slate-800/50">
             {(['top-left','top','top-right','left','center','right','bottom-left','bottom','bottom-right'] as const).map(pos => {
               const mainPos = pos.replace('-left','').replace('-right','') as 'top'|'center'|'bottom';
-              const isActive = mainPos === position && (pos === mainPos);
               return (
                 <button
                   key={pos}
