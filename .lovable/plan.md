@@ -1,182 +1,185 @@
 
-# Text Preset Visual Thumbnail Cards
+# AI Video Studio — Comprehensive Overhaul Plan
 
-## What's Changing
+## Summary of All Issues Found (from user feedback)
 
-The presets section (lines 126–161 of `TextOverlayPanel.tsx`) currently renders plain `<button>` elements with just a label name and a sample text string. These will be replaced with miniature video-frame thumbnails — small dark canvases that render the text exactly as it will look on screen, using the same CSS properties (`fontFamily`, `fontSize`, `fontWeight`, `color`, `backgroundColor`, `textAlign`, `position`) from each preset definition.
-
-No new files, no new dependencies. The entire change is self-contained inside `TextOverlayPanel.tsx`.
+The user raised 15+ distinct issues across 6 areas. This plan addresses every one of them in priority order.
 
 ---
 
-## Visual Design (CapCut/DaVinci-style)
+## 1. SFX — Remove ALL ElevenLabs Dependency (Zero Credits)
 
-Each card is a `16:9` mini preview at `aspect-video` (roughly 120×67px at 2-col grid width). The dark background simulates the video canvas, and the text is positioned to match the actual clip position (`top`, `center`, `bottom`).
+**Problem:** `supabase/functions/elevenlabs-sfx/index.ts` still calls ElevenLabs TTS using `ELEVENLABS_API_KEY`. When user clicks a preset like "Luxury Door Chime," it generates speech (a voice reading the label), not an actual sound — and it uses ElevenLabs credits.
 
-**Card anatomy:**
+**Fix:** Replace the entire SFX generation pipeline with a **Web Audio API synthesizer** that runs 100% in the browser — zero API calls, zero credits, instant playback.
+
+- Each SFX category gets a unique synthesized sound using the Web Audio API:
+  - **Door chime** → damped sine wave with harmonics
+  - **Keys jingling** → rapid metallic noise bursts
+  - **Whoosh** → filtered noise sweep
+  - **Cash register** → sharp high transient + low ding
+  - **Applause** → filtered white noise pulses
+  - Etc.
+- When user clicks a preset, the sound plays **immediately** in the browser using `AudioContext` — no loading spinner, no API call.
+- The user can then click **Add** to add it to the timeline.
+- The custom text "Generate" prompt box will also synthesize a generic tone.
+- The edge function `elevenlabs-sfx` will be completely replaced with a local synthesis engine.
+
+**Files:**
+- Rewrite `src/components/ai-video-studio/features/SoundEffectsPanel.tsx` — add `WebAudioSFXEngine` class
+- Delete/disable `supabase/functions/elevenlabs-sfx/index.ts` edge function dependency
+
+---
+
+## 2. Text Presets — Visibility Fix
+
+**Problem:** User says presets (Neon Glow, Breaking News, Instagram Story, etc.) are not visible. Looking at the code, the `TextOverlayPanel` renders a `ScrollArea` with the grid inside the tools bar `h-272` container — the scroll is trapped inside the small panel.
+
+**Fix:**
+- Ensure the presets grid is immediately visible without any scrolling required when the Text panel opens.
+- Move the search bar and category filters to stick at the top of the panel.
+- Ensure the grid shows at minimum 2 visible rows (4 thumbnails) before any scroll is needed.
+- The panel's scroll should be the full panel area, not a nested scroll inside a scroll.
+
+**File:** `src/components/ai-video-studio/features/TextOverlayPanel.tsx`
+
+---
+
+## 3. Tools Panel Scroll — "Small Screen Scrolling Inside" Fix
+
+**Problem:** The tools panel (Sound FX, Captions, etc.) is `h-72` (288px) with `overflow-y-auto` inside it. This creates an inner scrollable box — exactly what user is complaining about ("it's scrolling inside like a dropdown").
+
+**Fix in `AIVideoStudioLayout.tsx`:**
+- Change the tool panel from a fixed `h-72` trapped box to a **full-page expansion**:
+  - When a tool tab is clicked, the preview area **contracts** and the tool panel takes the remaining space.
+  - The scroll should be the main page scroll inside the tool panel, not a tiny box.
+  - Use `flex-1` + `min-h-0` for the tool panel area so it fills the available vertical space when expanded.
+  - Make the tool panel expand to at least 60% of viewport height when open.
+
+**File:** `src/components/ai-video-studio/layout/AIVideoStudioLayout.tsx`
+
+---
+
+## 4. Top Bar — Premium UI Upgrade
+
+**Problem:** The top bar has tight padding, looks cramped, and is not premium enough.
+
+**Fix in `AIVideoStudioTopBar.tsx`:**
+- Increase the bar height from `min-h-[52px]` to `min-h-[64px]`
+- Add a gradient background: `bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900`
+- Add gold accent line at the bottom: `border-b-2 border-amber-500/40`
+- More generous padding: `px-6 py-4`
+- Larger branding: logo icon size `w-7 h-7`, name text larger
+- Project name in amber with clean divider
+- Buttons with more breathing room
+
+**File:** `src/components/ai-video-studio/layout/AIVideoStudioTopBar.tsx`
+
+---
+
+## 5. Stars / Text Overlays Showing Uninvited on Preview
+
+**Problem:** "Stars are showing on the preview while I did not add them / did not click Add." Two likely causes:
+1. In `OverlayEffectsPanel`, clicking a card calls `onPreviewEffect` which locks the effect onto the canvas. The stars (`star-shower` effect) is auto-activating.
+2. Text clips from `TextOverlayPanel` may be auto-adding when clicking a preset thumbnail (code at line 445 in TextOverlayPanel calls `onAddTextClip` immediately on click).
+
+**Fix:**
+- In `TextOverlayPanel`: clicking a preset thumbnail should only **preview/select** it (populate the editor fields), NOT auto-add to the timeline. Only the explicit "Add" button should add to timeline.
+- In `OverlayEffectsPanel`: ensure stars/effects don't appear unless the user explicitly locks them.
+
+**Files:**
+- `src/components/ai-video-studio/features/TextOverlayPanel.tsx`
+- `src/components/ai-video-studio/features/OverlayEffectsPanel.tsx`
+
+---
+
+## 6. Video Preview Size — Expand the Canvas
+
+**Problem:** The preview is too small. The ratio change doesn't work. The "Export As" section below the video has a trapped scroll.
+
+**Fix:**
+- Make the video preview canvas taller — increase `min-h-[240px]` to `min-h-[360px]`
+- Make aspect ratio selection actually apply: when user selects 9:16, the preview canvas changes its CSS `aspect-ratio` property
+- The export bar area should expand rather than scroll internally
+
+**Files:**
+- `src/components/ai-video-studio/layout/AIVideoStudioLayout.tsx`
+- `src/components/ai-video-studio/preview/VideoPreviewCanvas.tsx`
+- `src/components/ai-video-studio/layout/AIVideoStudioExportBar.tsx`
+
+---
+
+## 7. Captions / Translate Flow Fix
+
+**Problem:** "When I click Translate, it shows go to Transcribe. I click Transcribe, it shows Upload File." The caption panel requires upload → transcribe → translate, but the tabs are confusing. The flow is circular.
+
+**Fix in `CaptionTranslator.tsx`:**
+- When user lands on the Captions tab, show the main workflow in a **linear vertical flow** (not tabs):
+  1. Upload/Record section (always visible at top)
+  2. Once file uploaded, Transcribe button appears
+  3. Once transcribed, Translate section appears
+  4. Style and Export are always available but clearly disabled until transcription done
+- Remove the confusing tab navigation; replace with a step-by-step flow with visual progress indicators (Step 1 → 2 → 3)
+- Show all languages in the translation section (expand from `QUICK_LANGS` to show all `SUPPORTED_LANGUAGES`)
+
+**File:** `src/components/ai-video-studio/features/CaptionTranslator.tsx`
+
+---
+
+## 8. Inspector — "No Clip Selected" State
+
+**Problem:** Inspector shows "no clip selected" which confuses users.
+
+**Fix in `InspectorPanel.tsx`:**
+- When no clip is selected, show a helpful prompt: "Click any clip in the timeline to inspect and edit its properties"
+- Add a visual placeholder with inspector icon and a list of what the inspector does
+
+**File:** `src/components/panels/InspectorPanel.tsx`
+
+---
+
+## Technical Implementation Order
+
 ```text
-┌─────────────────────────────┐
-│  ░░░░░░░░░░░░░░░░░░░░░░░░  │  ← dark bg (bg-black/slate gradient)
-│                              │
-│   ❮ Your Title Here ❯       │  ← text rendered at exact preset style (scaled down)
-│                              │
-│  Clean Title        [＋]    │  ← label bar + add button
-└─────────────────────────────┘
-```
+Phase 1 (Critical UX — affects all users immediately):
+  1. SFX → Web Audio synthesis (no credits, instant play)
+  2. Tool panel scroll fix (the "small box" problem)
+  3. Text preset auto-add bug fix (stars/text showing uninvited)
 
-On hover: an amber glow border appears (`border-amber-400 shadow-amber-500/30`).
+Phase 2 (Premium UI):
+  4. Top bar premium redesign
+  5. Preview canvas expansion + ratio fix
+  6. Text presets visibility
 
-When a preset is the last-applied one, it shows a golden ring (`ring-2 ring-amber-400`).
-
----
-
-## How the Text is Rendered in Each Thumbnail
-
-The preset data already contains all needed CSS values. A `TextPreviewThumbnail` sub-component (defined inline in the file) will:
-
-1. Render a `relative bg-black rounded-md overflow-hidden aspect-video` container
-2. Render a `<span>` inside it positioned with:
-   - `position: 'absolute'` for `top`/`bottom` presets, `relative` + flex center for `center`
-   - `fontFamily`, `fontWeight`, `color` from preset — unchanged
-   - `fontSize` scaled down to ~18–22% of original (e.g., `fontSize: Math.max(7, preset.fontSize * 0.18)`)
-   - `backgroundColor` from preset (the semi-transparent black box for Lower Third / Caption Box will be visible)
-   - `textAlign`, `padding` as needed
-3. A bottom label bar with the preset name and a `+` icon button
-
-The scaling ratio is chosen so that the largest preset (Social Bold at 72px) renders at ~13px and the smallest (Caption Box at 24px) renders at ~6px — both readable at thumbnail scale.
-
----
-
-## Preset-by-Preset Thumbnail Preview
-
-| Preset | What the thumbnail shows |
-|---|---|
-| Clean Title | White bold Inter text, centered on black bg — looks like a cinema title card |
-| Lower Third | White text left-aligned at bottom with dark `rgba(0,0,0,0.7)` bg bar — TV news style |
-| Social Bold | Gold Impact text, centered, large — punchy social media look |
-| Luxury Quote | Serif gold `#C8A766` text, centered, italic-ready — elegant quote card |
-| Caption Box | Small white text centered at bottom with a dark translucent bar — subtitle style |
-
----
-
-## Implementation: New `TextPreviewThumbnail` Sub-Component
-
-A small inline component (added at the top of `TextOverlayPanel.tsx`, before the main export):
-
-```typescript
-function TextPreviewThumbnail({ preset, isActive, onClick }: {
-  preset: typeof TEXT_PRESETS[0];
-  isActive: boolean;
-  onClick: () => void;
-}) {
-  const scaleFactor = 0.19;
-  const scaledSize = Math.max(6, Math.round(preset.fontSize * scaleFactor));
-
-  const textStyle: React.CSSProperties = {
-    fontFamily: preset.fontFamily,
-    fontSize: scaledSize,
-    fontWeight: preset.fontWeight,
-    color: preset.color,
-    background: preset.backgroundColor !== 'transparent' ? preset.backgroundColor : 'transparent',
-    padding: preset.backgroundColor !== 'transparent' ? '2px 5px' : 0,
-    borderRadius: preset.backgroundColor !== 'transparent' ? 3 : 0,
-    textAlign: preset.textAlign,
-    whiteSpace: 'nowrap',
-    maxWidth: '90%',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    lineHeight: 1.2,
-  };
-
-  return (
-    <button onClick={onClick} className={`group flex flex-col rounded-lg overflow-hidden border transition-all ... `}>
-      {/* Dark video bg area */}
-      <div className="relative bg-[#0a0a0f] aspect-video w-full overflow-hidden">
-        {/* Subtle film grain texture via CSS gradient */}
-        <div className="absolute inset-0 opacity-20" 
-             style={{ backgroundImage: 'url("data:image/svg+xml,...")' }} />
-        
-        {/* Position the text */}
-        {preset.position === 'center' && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span style={textStyle}>{preset.content}</span>
-          </div>
-        )}
-        {preset.position === 'top' && (
-          <div className="absolute top-1.5 left-0 right-0 flex justify-center">
-            <span style={textStyle}>{preset.content}</span>
-          </div>
-        )}
-        {preset.position === 'bottom' && (
-          <div className="absolute bottom-1.5 left-0 right-0 flex" 
-               style={{ justifyContent: preset.textAlign === 'left' ? 'flex-start' : 'center', paddingLeft: preset.textAlign === 'left' ? 4 : 0 }}>
-            <span style={textStyle}>{preset.content}</span>
-          </div>
-        )}
-      </div>
-
-      {/* Label bar */}
-      <div className="flex items-center justify-between px-1.5 py-1 bg-slate-800">
-        <span className="text-[10px] font-semibold text-slate-200 truncate">{preset.label}</span>
-        <Plus className="w-3 h-3 text-amber-400 shrink-0" />
-      </div>
-    </button>
-  );
-}
+Phase 3 (Flow Fixes):
+  7. Caption tab flow linearization
+  8. Inspector empty state improvement
 ```
 
 ---
 
-## Changes to the Presets Section JSX
-
-Replace lines 126–161 in `TextOverlayPanel.tsx`:
-
-**Before (plain text buttons):**
-```tsx
-<div className="grid grid-cols-2 gap-1.5">
-  {TEXT_PRESETS.map(p => (
-    <button key={p.label} onClick={...} className="flex flex-col items-start ...">
-      <span className="font-medium text-white">{p.label}</span>
-      <span className="text-slate-500 text-[10px]">{p.content}</span>
-    </button>
-  ))}
-</div>
-```
-
-**After (visual thumbnail cards):**
-```tsx
-<div className="grid grid-cols-2 gap-2">
-  {TEXT_PRESETS.map(p => (
-    <TextPreviewThumbnail
-      key={p.label}
-      preset={p}
-      isActive={lastAppliedPreset === p.label}
-      onClick={() => { applyPreset(p); onAddTextClip(...); toast.success(...); }}
-    />
-  ))}
-</div>
-```
-
-A `lastAppliedPreset` state (`useState<string | null>(null)`) tracks which preset was last clicked so it shows the golden ring highlight.
-
----
-
-## Additional Visual Polish
-
-- The card border in idle state: `border-slate-700 bg-slate-800/50`
-- On hover: `border-amber-500/50 shadow-md shadow-amber-500/10 scale-[1.02]`
-- Active/last-applied: `ring-2 ring-amber-400 border-amber-400`
-- The `aspect-video` dark bg gets a very subtle `radial-gradient` from `#111` center to `#050508` edges to simulate the cinematic canvas feel
-- The label bar uses `bg-slate-800` to create a clear visual separation from the preview area
-- A "Presets — click to add" subtitle changes to "Presets" to keep it concise (the thumbnails are self-explanatory)
-- The `Plus` icon in the label bar turns amber on hover to reinforce the add action
-
----
-
-## File to Edit
+## Files to Edit
 
 | File | Change |
-|---|---|
-| `src/components/ai-video-studio/features/TextOverlayPanel.tsx` | Add `TextPreviewThumbnail` sub-component; add `lastAppliedPreset` state; replace the plain-button preset grid with thumbnail card grid |
+|------|--------|
+| `src/components/ai-video-studio/features/SoundEffectsPanel.tsx` | Replace API calls with Web Audio synthesis engine |
+| `src/components/ai-video-studio/layout/AIVideoStudioLayout.tsx` | Fix tool panel to not be a tiny inner-scroll box |
+| `src/components/ai-video-studio/layout/AIVideoStudioTopBar.tsx` | Premium redesign, taller, gradient, gold accent |
+| `src/components/ai-video-studio/features/TextOverlayPanel.tsx` | Fix auto-add bug; presets should only populate editor |
+| `src/components/ai-video-studio/features/CaptionTranslator.tsx` | Linear step flow, all languages visible |
+| `src/components/ai-video-studio/preview/VideoPreviewCanvas.tsx` | Larger canvas, working ratio change |
+| `src/components/ai-video-studio/panels/InspectorPanel.tsx` | Better empty state |
+| `supabase/functions/elevenlabs-sfx/index.ts` | Keep as stub/no-op (synthesis moves to browser) |
 
-No other files need changes — the click handler logic (`applyPreset` + `onAddTextClip`) stays identical, just called from within the new component.
+---
+
+## What Will NOT Be in This Change (Scope Management)
+
+The following are **large, separate feature builds** that the user mentioned but should be tackled individually in follow-up messages to avoid breaking existing functionality:
+
+- AI real estate video ad generator (from property photos + location data)
+- AI agent video (talking head, TTS voice selection, language/accent)
+- Instagram video link extraction / mimic feature
+- Full CapCut timeline rewrite with split-on-click, per-clip effects
+
+These require edge functions, AI model integration, and significant new UI — they will be separate planning sessions.
