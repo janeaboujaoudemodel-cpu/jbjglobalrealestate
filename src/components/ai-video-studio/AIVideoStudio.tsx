@@ -84,6 +84,7 @@ export function AIVideoStudio() {
   const [activeBeautyFilter, setActiveBeautyFilter] = useState<import('./features/BeautyFiltersPanel').BeautyAdjustments | null>(null);
   const [exportBeautyFilter, setExportBeautyFilter] = useState<import('./features/BeautyFiltersPanel').BeautyAdjustments | null>(null);
   const [beautyComparisonMode, setBeautyComparisonMode] = useState(false);
+  const [previewAspectRatio, setPreviewAspectRatio] = useState<'16:9' | '9:16' | '1:1' | '4:5'>('16:9');
 
   useEffect(() => {
     loadStockLibrary();
@@ -185,6 +186,24 @@ export function AIVideoStudio() {
     const preset = { id: selectedExportPreset, name: 'YouTube', width: 1920, height: 1080, aspectRatio: '16:9', platform: 'youtube' as const, icon: '▶️' };
     handleExportSingle(preset);
   }, [selectedExportPreset, handleExportSingle]);
+
+  // Sync export preset → preview aspect ratio
+  const PRESET_ASPECT_MAP: Record<string, '16:9' | '9:16' | '1:1' | '4:5'> = {
+    reels: '9:16', youtube: '16:9', instagram: '1:1', portrait: '4:5',
+  };
+  const handleSelectExportPreset = useCallback((presetId: string) => {
+    setSelectedExportPreset(presetId);
+    const ratio = PRESET_ASPECT_MAP[presetId];
+    if (ratio) setPreviewAspectRatio(ratio);
+  }, []);
+
+  // Auto-open Inspector when a single clip is selected from the timeline
+  const handleSelectClip = useCallback((clipId: string, multiSelect?: boolean) => {
+    selectClip(clipId, multiSelect);
+    if (!multiSelect) {
+      layoutRef.current?.openTool('inspector');
+    }
+  }, [selectClip]);
 
   const selectedClips = getSelectedClips();
   const selectedClip = selectedClips.length === 1 ? selectedClips[0] : null;
@@ -297,6 +316,8 @@ export function AIVideoStudio() {
           beautyFilter={activeBeautyFilter}
           onClearBeautyFilter={() => { setActiveBeautyFilter(null); setBeautyComparisonMode(false); }}
           beautyComparisonMode={beautyComparisonMode}
+          aspectRatio={previewAspectRatio}
+          onAspectRatioChange={setPreviewAspectRatio}
         />
       }
       timeline={
@@ -312,7 +333,7 @@ export function AIVideoStudio() {
           onZoomChange={setZoom}
           onModeChange={setMode}
           onToggleSnap={toggleSnap}
-          onSelectClip={selectClip}
+          onSelectClip={handleSelectClip}
           onMoveClip={moveClip}
           onSplitClip={splitClip}
           onDeleteClip={deleteClip}
@@ -325,7 +346,7 @@ export function AIVideoStudio() {
       exportBar={
         <AIVideoStudioExportBar
           selectedPreset={selectedExportPreset}
-          onSelectPreset={setSelectedExportPreset}
+          onSelectPreset={handleSelectExportPreset}
           onExportSingle={handleExportSingle}
           onExportAll={handleExportAll}
           isExporting={isExporting}

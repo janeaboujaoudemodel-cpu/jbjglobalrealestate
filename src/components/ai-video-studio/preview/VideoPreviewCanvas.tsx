@@ -132,6 +132,8 @@ interface VideoPreviewCanvasProps {
   onClearBeautyFilter?: () => void;
   /** When true, renders before/after split overlay instead of the regular filter */
   beautyComparisonMode?: boolean;
+  aspectRatio?: '16:9' | '9:16' | '1:1' | '4:5';
+  onAspectRatioChange?: (ratio: '16:9' | '9:16' | '1:1' | '4:5') => void;
 }
 
 const QUICK_ACTIONS = [
@@ -245,14 +247,39 @@ export function VideoPreviewCanvas({
   beautyFilter = null,
   onClearBeautyFilter,
   beautyComparisonMode = false,
+  aspectRatio: aspectRatioProp,
+  onAspectRatioChange,
 }: VideoPreviewCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const previewAreaRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [internalAspectRatio, setInternalAspectRatio] = useState<'16:9' | '9:16' | '1:1' | '4:5'>('16:9');
+  const [formatBadge, setFormatBadge] = useState<string | null>(null);
+  const formatBadgeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Use controlled or internal aspect ratio
+  const aspectRatio = aspectRatioProp ?? internalAspectRatio;
+
+  const handleAspectRatioChange = useCallback((ratio: '16:9' | '9:16' | '1:1' | '4:5') => {
+    if (onAspectRatioChange) {
+      onAspectRatioChange(ratio);
+    } else {
+      setInternalAspectRatio(ratio);
+    }
+    // Show badge
+    const labels: Record<string, string> = { '16:9': '▶️ YouTube 16:9', '9:16': '📱 Reels 9:16', '1:1': '⬜ Square 1:1', '4:5': '📷 Portrait 4:5' };
+    setFormatBadge(labels[ratio] ?? ratio);
+    if (formatBadgeTimer.current) clearTimeout(formatBadgeTimer.current);
+    formatBadgeTimer.current = setTimeout(() => setFormatBadge(null), 2000);
+  }, [onAspectRatioChange]);
+
+  // CSS aspect ratio string
+  const cssAspectRatio = aspectRatio === '16:9' ? '16/9' : aspectRatio === '9:16' ? '9/16' : aspectRatio === '4:5' ? '4/5' : '1/1';
 
   const hasClips = clips.length > 0;
 
@@ -388,6 +415,12 @@ export function VideoPreviewCanvas({
     }
   }, [onOpenTool]);
 
+  const ASPECT_PILLS = [
+    { ratio: '16:9' as const, label: '16:9', icon: '▶' },
+    { ratio: '9:16' as const, label: '9:16', icon: '📱' },
+    { ratio: '1:1' as const,  label: '1:1',  icon: '⬜' },
+  ];
+
   return (
     <div ref={containerRef} className="h-full flex flex-col bg-slate-950">
       {/* Hidden file input */}
@@ -400,15 +433,50 @@ export function VideoPreviewCanvas({
         onChange={handleFileChange}
       />
 
-      {/* Preview Area */}
-      <div className="flex-1 min-h-0 relative overflow-hidden bg-black">
+      {/* Preview Area — letterbox outer + constrained canvas inner */}
+      <div
+        ref={previewAreaRef}
+        className="flex-1 min-h-0 relative overflow-hidden flex items-center justify-center"
+        style={{
+          background: '#0a0a0f',
+          backgroundImage: 'linear-gradient(45deg, #111118 25%, transparent 25%), linear-gradient(-45deg, #111118 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111118 75%), linear-gradient(-45deg, transparent 75%, #111118 75%)',
+          backgroundSize: '16px 16px',
+          backgroundPosition: '0 0, 0 8px, 8px -8px, -8px 0px',
+        }}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+      >
+        {/* Aspect Ratio Switcher Pills */}
+        <div className="absolute top-2 left-2 flex gap-1 z-30">
+          {ASPECT_PILLS.map(pill => (
+            <button
+              key={pill.ratio}
+              onClick={() => handleAspectRatioChange(pill.ratio)}
+              className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all ${
+                aspectRatio === pill.ratio
+                  ? 'bg-amber-500 text-black border-amber-500'
+                  : 'bg-black/60 text-slate-300 border-slate-600 hover:border-amber-400'
+              }`}
+            >
+              {pill.icon} {pill.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Constrained Canvas Box */}
         <div
-          className={`absolute inset-0 transition-all ${
-            isDragOver ? 'ring-2 ring-inset ring-amber-400' : ''
-          }`}
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
+          className="relative bg-black overflow-hidden shadow-2xl"
+          style={{
+            aspectRatio: cssAspectRatio,
+            maxWidth: '100%',
+            maxHeight: '100%',
+            width: aspectRatio === '9:16' ? 'auto' : '100%',
+            height: aspectRatio === '9:16' ? '100%' : 'auto',
+          }}
+        >
+        <div
+          className={`absolute inset-0 transition-all ${isDragOver ? 'ring-2 ring-inset ring-amber-400' : ''}`}
         >
           {hasClips ? (
             <>
@@ -651,8 +719,16 @@ export function VideoPreviewCanvas({
               )}
             </div>
           )}
-        </div>
-      </div>
+        </div>{/* end absolute inset-0 drop zone */}
+        </div>{/* end constrained canvas box */}
+
+        {/* Format badge — fades after 2s */}
+        {formatBadge && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 px-3 py-1 rounded-full text-xs font-bold bg-black/80 text-white border border-white/20 pointer-events-none animate-fade-in">
+            {formatBadge}
+          </div>
+        )}
+      </div>{/* end letterbox outer */}
 
 
       {/* Transport Controls */}
