@@ -1,109 +1,182 @@
 
-# Beauty Filters: Real-Time CSS Preview on the Active Video Clip
+# Text Preset Visual Thumbnail Cards
 
-## What Needs to Change
+## What's Changing
 
-Currently `BeautyFiltersPanel` is a fully self-contained island — it manages its own file upload, its own canvas, and applies filters there. The video clip playing in `VideoPreviewCanvas` knows nothing about what the Beauty panel is doing.
+The presets section (lines 126–161 of `TextOverlayPanel.tsx`) currently renders plain `<button>` elements with just a label name and a sample text string. These will be replaced with miniature video-frame thumbnails — small dark canvases that render the text exactly as it will look on screen, using the same CSS properties (`fontFamily`, `fontSize`, `fontWeight`, `color`, `backgroundColor`, `textAlign`, `position`) from each preset definition.
 
-The fix uses the **same state-bridge pattern already in place for overlay effects**: lift the filter state up into `AIVideoStudio.tsx`, pass it down into `VideoPreviewCanvas` where the `<video>` element lives, and apply a CSS `filter` string directly to that element in real time.
-
-No canvas capture or frame extraction is needed — CSS `filter` works natively on `<video>` elements in all modern browsers.
+No new files, no new dependencies. The entire change is self-contained inside `TextOverlayPanel.tsx`.
 
 ---
 
-## Architecture
+## Visual Design (CapCut/DaVinci-style)
 
+Each card is a `16:9` mini preview at `aspect-video` (roughly 120×67px at 2-col grid width). The dark background simulates the video canvas, and the text is positioned to match the actual clip position (`top`, `center`, `bottom`).
+
+**Card anatomy:**
 ```text
-BeautyFiltersPanel
-  └── calls onFilterChange(adjustments) on every slider move / preset click
-
-AIVideoStudio.tsx
-  └── activeBeautyFilter state  ← lifted here
-  └── passes to VideoPreviewCanvas as prop
-
-VideoPreviewCanvas
-  └── applies computed CSS filter string to the <video> element's style
-  └── also applies to <img> elements if an image clip is active
+┌─────────────────────────────┐
+│  ░░░░░░░░░░░░░░░░░░░░░░░░  │  ← dark bg (bg-black/slate gradient)
+│                              │
+│   ❮ Your Title Here ❯       │  ← text rendered at exact preset style (scaled down)
+│                              │
+│  Clean Title        [＋]    │  ← label bar + add button
+└─────────────────────────────┘
 ```
 
-The CSS filter string computed from slider values:
+On hover: an amber glow border appears (`border-amber-400 shadow-amber-500/30`).
+
+When a preset is the last-applied one, it shows a golden ring (`ring-2 ring-amber-400`).
+
+---
+
+## How the Text is Rendered in Each Thumbnail
+
+The preset data already contains all needed CSS values. A `TextPreviewThumbnail` sub-component (defined inline in the file) will:
+
+1. Render a `relative bg-black rounded-md overflow-hidden aspect-video` container
+2. Render a `<span>` inside it positioned with:
+   - `position: 'absolute'` for `top`/`bottom` presets, `relative` + flex center for `center`
+   - `fontFamily`, `fontWeight`, `color` from preset — unchanged
+   - `fontSize` scaled down to ~18–22% of original (e.g., `fontSize: Math.max(7, preset.fontSize * 0.18)`)
+   - `backgroundColor` from preset (the semi-transparent black box for Lower Third / Caption Box will be visible)
+   - `textAlign`, `padding` as needed
+3. A bottom label bar with the preset name and a `+` icon button
+
+The scaling ratio is chosen so that the largest preset (Social Bold at 72px) renders at ~13px and the smallest (Caption Box at 24px) renders at ~6px — both readable at thumbnail scale.
+
+---
+
+## Preset-by-Preset Thumbnail Preview
+
+| Preset | What the thumbnail shows |
+|---|---|
+| Clean Title | White bold Inter text, centered on black bg — looks like a cinema title card |
+| Lower Third | White text left-aligned at bottom with dark `rgba(0,0,0,0.7)` bg bar — TV news style |
+| Social Bold | Gold Impact text, centered, large — punchy social media look |
+| Luxury Quote | Serif gold `#C8A766` text, centered, italic-ready — elegant quote card |
+| Caption Box | Small white text centered at bottom with a dark translucent bar — subtitle style |
+
+---
+
+## Implementation: New `TextPreviewThumbnail` Sub-Component
+
+A small inline component (added at the top of `TextOverlayPanel.tsx`, before the main export):
+
+```typescript
+function TextPreviewThumbnail({ preset, isActive, onClick }: {
+  preset: typeof TEXT_PRESETS[0];
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  const scaleFactor = 0.19;
+  const scaledSize = Math.max(6, Math.round(preset.fontSize * scaleFactor));
+
+  const textStyle: React.CSSProperties = {
+    fontFamily: preset.fontFamily,
+    fontSize: scaledSize,
+    fontWeight: preset.fontWeight,
+    color: preset.color,
+    background: preset.backgroundColor !== 'transparent' ? preset.backgroundColor : 'transparent',
+    padding: preset.backgroundColor !== 'transparent' ? '2px 5px' : 0,
+    borderRadius: preset.backgroundColor !== 'transparent' ? 3 : 0,
+    textAlign: preset.textAlign,
+    whiteSpace: 'nowrap',
+    maxWidth: '90%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    lineHeight: 1.2,
+  };
+
+  return (
+    <button onClick={onClick} className={`group flex flex-col rounded-lg overflow-hidden border transition-all ... `}>
+      {/* Dark video bg area */}
+      <div className="relative bg-[#0a0a0f] aspect-video w-full overflow-hidden">
+        {/* Subtle film grain texture via CSS gradient */}
+        <div className="absolute inset-0 opacity-20" 
+             style={{ backgroundImage: 'url("data:image/svg+xml,...")' }} />
+        
+        {/* Position the text */}
+        {preset.position === 'center' && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span style={textStyle}>{preset.content}</span>
+          </div>
+        )}
+        {preset.position === 'top' && (
+          <div className="absolute top-1.5 left-0 right-0 flex justify-center">
+            <span style={textStyle}>{preset.content}</span>
+          </div>
+        )}
+        {preset.position === 'bottom' && (
+          <div className="absolute bottom-1.5 left-0 right-0 flex" 
+               style={{ justifyContent: preset.textAlign === 'left' ? 'flex-start' : 'center', paddingLeft: preset.textAlign === 'left' ? 4 : 0 }}>
+            <span style={textStyle}>{preset.content}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Label bar */}
+      <div className="flex items-center justify-between px-1.5 py-1 bg-slate-800">
+        <span className="text-[10px] font-semibold text-slate-200 truncate">{preset.label}</span>
+        <Plus className="w-3 h-3 text-amber-400 shrink-0" />
+      </div>
+    </button>
+  );
+}
 ```
-brightness(105%) contrast(110%) saturate(90%) sepia(8%) blur(0px)
+
+---
+
+## Changes to the Presets Section JSX
+
+Replace lines 126–161 in `TextOverlayPanel.tsx`:
+
+**Before (plain text buttons):**
+```tsx
+<div className="grid grid-cols-2 gap-1.5">
+  {TEXT_PRESETS.map(p => (
+    <button key={p.label} onClick={...} className="flex flex-col items-start ...">
+      <span className="font-medium text-white">{p.label}</span>
+      <span className="text-slate-500 text-[10px]">{p.content}</span>
+    </button>
+  ))}
+</div>
 ```
-Vignette is a radial gradient `<div>` overlay (CSS filter cannot do vignette), so it is handled as an absolutely-positioned overlay div on top of the video, matching what the canvas version already does.
+
+**After (visual thumbnail cards):**
+```tsx
+<div className="grid grid-cols-2 gap-2">
+  {TEXT_PRESETS.map(p => (
+    <TextPreviewThumbnail
+      key={p.label}
+      preset={p}
+      isActive={lastAppliedPreset === p.label}
+      onClick={() => { applyPreset(p); onAddTextClip(...); toast.success(...); }}
+    />
+  ))}
+</div>
+```
+
+A `lastAppliedPreset` state (`useState<string | null>(null)`) tracks which preset was last clicked so it shows the golden ring highlight.
 
 ---
 
-## Files to Change
+## Additional Visual Polish
 
-### 1. `src/components/ai-video-studio/features/BeautyFiltersPanel.tsx`
-**What changes:**
-- Add an `onFilterChange?: (adjustments: Adjustments | null) => void` prop
-- Keep the existing upload/canvas section intact — it still works for downloading filtered images
-- Every time a slider moves (`updateAdjustment`) or a preset is clicked (`applyPreset`), also call `onFilterChange(adjustments)` with the new values
-- Add a "Clear Filter" button that calls `onFilterChange(null)` and resets local state to the "none" preset — so users can remove the live preview from the canvas
-- The panel still shows the upload/canvas section below (for image download use), but the top of the panel now shows a "Live Preview" status badge when the filter is active on the canvas
-- Remove the self-contained upload gate from the top-of-panel path — the presets and sliders are shown immediately at the top (like the Resize panel fix), with the image download section below as an optional secondary feature
-
-### 2. `src/components/ai-video-studio/AIVideoStudio.tsx`
-**What changes:**
-- Add `activeBeautyFilter` state: `useState<Adjustments | null>(null)` where `Adjustments` is imported or inlined as the same type used by the panel
-- Pass `onFilterChange={setActiveBeautyFilter}` to `<BeautyFiltersPanel>`
-- Pass `beautyFilter={activeBeautyFilter}` to `<VideoPreviewCanvas>`
-
-### 3. `src/components/ai-video-studio/preview/VideoPreviewCanvas.tsx`
-**What changes:**
-- Add `beautyFilter?: { brightness: number; contrast: number; saturation: number; warmth: number; blur: number; vignette: number } | null` to the props interface
-- Add a `computeCssFilter(f)` helper inside the file that converts the adjustment numbers into a valid CSS filter string:
-  ```typescript
-  function computeCssFilter(f: BeautyAdjustments): string {
-    return [
-      `brightness(${100 + f.brightness}%)`,
-      `contrast(${100 + f.contrast}%)`,
-      `saturate(${100 + f.saturation}%)`,
-      f.warmth > 0 ? `sepia(${f.warmth / 2}%)` : `hue-rotate(${f.warmth}deg)`,
-      `blur(${f.blur / 10}px)`,
-    ].join(' ');
-  }
-  ```
-- Apply the computed filter string to the `<video>` element via inline `style={{ filter: cssFilter }}`. When `beautyFilter` is null, `filter` is `'none'`
-- Add a vignette overlay `<div>` (absolute, pointer-events-none) with `background: radial-gradient(...)` whose opacity is driven by `beautyFilter.vignette`. When `beautyFilter` is null or vignette is 0, the div renders with opacity 0 (or is not rendered)
-- Add a small "Beauty Active" pill badge in the top-left of the preview (next to the time counter) when `beautyFilter !== null` so users know the filter is live. Clicking it clears the filter (requires passing a `onClearBeautyFilter` callback)
+- The card border in idle state: `border-slate-700 bg-slate-800/50`
+- On hover: `border-amber-500/50 shadow-md shadow-amber-500/10 scale-[1.02]`
+- Active/last-applied: `ring-2 ring-amber-400 border-amber-400`
+- The `aspect-video` dark bg gets a very subtle `radial-gradient` from `#111` center to `#050508` edges to simulate the cinematic canvas feel
+- The label bar uses `bg-slate-800` to create a clear visual separation from the preview area
+- A "Presets — click to add" subtitle changes to "Presets" to keep it concise (the thumbnails are self-explanatory)
+- The `Plus` icon in the label bar turns amber on hover to reinforce the add action
 
 ---
 
-## Precise CSS Filter Mapping (matches BeautyFiltersPanel canvas logic exactly)
-
-| Slider | Canvas (existing) | CSS filter (new) |
-|---|---|---|
-| brightness | `brightness(${100+v}%)` | `brightness(${100+v}%)` — identical |
-| contrast | `contrast(${100+v}%)` | `contrast(${100+v}%)` — identical |
-| saturation | `saturate(${100+v}%)` | `saturate(${100+v}%)` — identical |
-| warmth > 0 | `sepia(${v/2}%)` | `sepia(${v/2}%)` — identical |
-| warmth < 0 | `hue-rotate(${v}deg)` | `hue-rotate(${v}deg)` — identical |
-| blur | `blur(${v/10}px)` | `blur(${v/10}px)` — identical |
-| vignette | radial gradient on canvas | absolute overlay `<div>` with same radial gradient |
-
-The mapping is 1:1 with the existing canvas implementation, so the preview will match the downloaded image exactly.
-
----
-
-## UX Flow (CapCut-style)
-
-1. User clicks **Beauty** tab in the toolbar
-2. The Beauty panel opens below — presets and sliders are shown **immediately** (no upload needed)
-3. User clicks **"Warm Glow"** preset → sliders update AND the video in the preview canvas instantly shows the warm glow CSS filter
-4. User drags the **Brightness** slider → preview updates in real time (every `onChange` event)
-5. A small **"Beauty: ON"** badge appears in the top-left of the preview canvas
-6. User clicks **"Add to Timeline"** (new button) → a toast confirms the filter is baked in, or clicking **"Clear"** removes it from the canvas
-7. The image download section (upload your own file, download filtered PNG) remains available below the presets/sliders as a secondary "Export frame" feature
-
----
-
-## Summary of File Changes
+## File to Edit
 
 | File | Change |
 |---|---|
-| `BeautyFiltersPanel.tsx` | Add `onFilterChange` prop; call it on every adjustment; show presets/sliders immediately without upload gate; add Clear button |
-| `AIVideoStudio.tsx` | Add `activeBeautyFilter` state; wire `onFilterChange` to panel; pass `beautyFilter` to canvas |
-| `VideoPreviewCanvas.tsx` | Accept `beautyFilter` prop; apply computed CSS filter to `<video>` style; add vignette overlay div; show "Beauty: ON" badge |
+| `src/components/ai-video-studio/features/TextOverlayPanel.tsx` | Add `TextPreviewThumbnail` sub-component; add `lastAppliedPreset` state; replace the plain-button preset grid with thumbnail card grid |
+
+No other files need changes — the click handler logic (`applyPreset` + `onAddTextClip`) stays identical, just called from within the new component.
