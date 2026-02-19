@@ -22,25 +22,55 @@ serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
     if (!ELEVENLABS_API_KEY) throw new Error("ELEVENLABS_API_KEY not configured");
 
-    const { projectId, language, voiceId, tone, scriptDuration } = await req.json();
+    const { projectId, language, voiceId, tone, scriptDuration, externalProperty } = await req.json();
 
-    if (!projectId) throw new Error("projectId is required");
+    if (!projectId && !externalProperty) throw new Error("projectId or externalProperty is required");
 
-    // ── Step 0: Fetch project details from DB ────────────────────────────────
-    const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
+    // ── Step 0: Resolve project data ─────────────────────────────────────────
+    let project: Record<string, any>;
 
-    const { data: project, error: projError } = await supabase
-      .from("projects")
-      .select(`
-        id, name, emirate, location, price_from, price_to,
-        bedrooms_min, bedrooms_max, property_type_label,
-        developer_name, amenities, payment_plan,
-        description, latitude, longitude
-      `)
-      .eq("id", projectId)
-      .single();
+    if (externalProperty) {
+      // External URL import — data comes pre-extracted from the scrape function
+      project = {
+        id: "external",
+        name: externalProperty.name || "Property",
+        emirate: externalProperty.city || externalProperty.country || "UAE",
+        location: externalProperty.location || null,
+        price_from: externalProperty.price_from_aed || null,
+        price_to: externalProperty.price_to_aed || null,
+        bedrooms_min: null,
+        bedrooms_max: null,
+        property_type_label: externalProperty.property_type || "Residential",
+        developer_name: externalProperty.developer || null,
+        amenities: externalProperty.amenities || [],
+        payment_plan: externalProperty.payment_plan || null,
+        description: externalProperty.description || null,
+        latitude: null,
+        longitude: null,
+      };
 
-    if (projError || !project) throw new Error("Project not found");
+      // Parse bedrooms string if provided
+      const bedsStr: string = externalProperty.bedrooms || "";
+      const bedsMatch = bedsStr.match(/(\d+)/g);
+      if (bedsMatch) {
+        project.bedrooms_min = parseInt(bedsMatch[0]);
+        project.bedrooms_max = bedsMatch[1] ? parseInt(bedsMatch[1]) : parseInt(bedsMatch[0]);
+      }
+    } else {
+      const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
+      const { data, error: projError } = await supabase
+        .from("projects")
+        .select(`
+          id, name, emirate, location, price_from, price_to,
+          bedrooms_min, bedrooms_max, property_type_label,
+          developer_name, amenities, payment_plan,
+          description, latitude, longitude
+        `)
+        .eq("id", projectId)
+        .single();
+      if (projError || !data) throw new Error("Project not found");
+      project = data;
+    }
 
     // ── Step A: Generate voiceover script via Lovable AI (Gemini) ────────────
     const languageNames: Record<string, string> = {
