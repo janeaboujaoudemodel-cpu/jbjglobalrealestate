@@ -19,7 +19,8 @@ serve(async (req) => {
       });
     }
 
-    const { clips, action, templateId } = await req.json();
+    const body = await req.json();
+    const { clips, action, templateId, prompt } = body;
 
     // Build the appropriate prompt based on action
     let systemPrompt = '';
@@ -71,6 +72,57 @@ Respond with JSON in this exact format:
   "musicSuggestion": "Upscale piano with subtle strings",
   "summary": "Brief description of the assembled edit"
 }`;
+
+    } else if (action === 'generate-scene') {
+      const scenePrompt = prompt || clips || 'luxury real estate property';
+
+      systemPrompt = '';
+      userPrompt = `Generate a cinematic real estate scene: ${scenePrompt}. High quality, professional photography style, luxury property.`;
+
+      const imgResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-3-pro-image-preview',
+          messages: [{ role: 'user', content: userPrompt }],
+          modalities: ['image', 'text'],
+        }),
+      });
+
+      if (!imgResponse.ok) {
+        if (imgResponse.status === 429) {
+          return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please try again in a moment.' }), {
+            status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+        if (imgResponse.status === 402) {
+          return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits to continue.' }), {
+            status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+        const errText = await imgResponse.text();
+        console.error('Image generation error:', imgResponse.status, errText);
+        return new Response(JSON.stringify({ error: 'Image generation failed' }), {
+          status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      const imgData = await imgResponse.json();
+      const imageUrl = imgData.choices?.[0]?.message?.images?.[0]?.image_url?.url
+        || imgData.choices?.[0]?.message?.content;
+
+      if (!imageUrl) {
+        return new Response(JSON.stringify({ error: 'No image returned from AI' }), {
+          status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      return new Response(JSON.stringify({ success: true, imageUrl }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
 
     } else {
       return new Response(JSON.stringify({ error: 'Invalid action' }), {

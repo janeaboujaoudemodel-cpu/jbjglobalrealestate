@@ -74,30 +74,28 @@ export function MediaLibraryPanel({
     if (!aiPrompt.trim()) { toast.error('Enter a scene description first'); return; }
     setIsGeneratingScene(true);
     try {
-      const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({
-          model: 'google/gemini-2.5-flash-image',
-          messages: [{ role: 'user', content: `Generate a cinematic real estate / property scene: ${aiPrompt}. High quality, professional photography style.` }],
-          modalities: ['image', 'text'],
-        }),
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data, error } = await supabase.functions.invoke('ai-video-editor', {
+        body: { action: 'generate-scene', prompt: aiPrompt },
       });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      const imgUrl = data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-      if (!imgUrl) throw new Error('No image returned');
 
-      // Convert base64 to a blob object URL and add to library
-      const base64 = imgUrl.replace(/^data:image\/\w+;base64,/, '');
-      const byteChars = atob(base64);
-      const bytes = new Uint8Array(byteChars.length);
-      for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
-      const blob = new Blob([bytes], { type: 'image/png' });
-      const objectUrl = URL.createObjectURL(blob);
+      if (error) throw new Error(error.message);
+      if (!data?.imageUrl) throw new Error('No image returned from AI');
+
+      const imageUrl: string = data.imageUrl;
+
+      // If base64 data URL, convert to blob; otherwise use directly
+      let objectUrl: string;
+      if (imageUrl.startsWith('data:')) {
+        const base64 = imageUrl.replace(/^data:image\/\w+;base64,/, '');
+        const byteChars = atob(base64);
+        const bytes = new Uint8Array(byteChars.length);
+        for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
+        const blob = new Blob([bytes], { type: 'image/png' });
+        objectUrl = URL.createObjectURL(blob);
+      } else {
+        objectUrl = imageUrl;
+      }
 
       const generatedAsset: MediaAsset = {
         id: crypto.randomUUID(),
@@ -109,9 +107,16 @@ export function MediaLibraryPanel({
       onAddToTimeline(generatedAsset);
       toast.success('AI scene generated and added to timeline!');
       setAiPrompt('');
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('AI scene generation error:', err);
-      toast.error('Scene generation failed. Please try again.');
+      const msg = err instanceof Error ? err.message : 'Scene generation failed';
+      if (msg.includes('Rate limit') || msg.includes('429')) {
+        toast.error('Rate limit reached. Please wait a moment and try again.');
+      } else if (msg.includes('credits') || msg.includes('402')) {
+        toast.error('AI credits exhausted. Please add credits to continue.');
+      } else {
+        toast.error('Scene generation failed. Please try again.');
+      }
     } finally {
       setIsGeneratingScene(false);
     }
@@ -425,10 +430,10 @@ interface AssetCardProps {
 function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProps) {
   const getIconBg = () => {
     switch (asset.type) {
-      case 'video': return { icon: <Film className="w-6 h-6 text-blue-400" />, bg: 'bg-blue-900/40' };
-      case 'audio': return { icon: <Music className="w-6 h-6 text-amber-400" />, bg: 'bg-amber-900/40' };
-      case 'image': return { icon: <Image className="w-6 h-6 text-green-400" />, bg: 'bg-green-900/40' };
-      default:      return { icon: <Film className="w-6 h-6 text-slate-400" />, bg: 'bg-slate-700' };
+      case 'video': return { icon: <Film className="w-8 h-8 text-blue-300" />, bg: 'bg-blue-900/70 border border-blue-700/50' };
+      case 'audio': return { icon: <Music className="w-8 h-8 text-amber-300" />, bg: 'bg-amber-900/70 border border-amber-700/50' };
+      case 'image': return { icon: <Image className="w-8 h-8 text-emerald-300" />, bg: 'bg-emerald-900/70 border border-emerald-700/50' };
+      default:      return { icon: <Film className="w-8 h-8 text-slate-300" />, bg: 'bg-slate-700 border border-slate-600' };
     }
   };
   const { icon, bg } = getIconBg();
@@ -481,8 +486,7 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
         </Button>
         <Button
           size="sm"
-          variant="ghost"
-          className="text-white h-7 text-xs"
+          className="bg-slate-700 text-white hover:bg-slate-600 h-7 text-xs border border-slate-500"
           onClick={onPreview}
         >
           <Play className="w-3 h-3 mr-1" />
