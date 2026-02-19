@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { Plus, AlignLeft, AlignCenter, AlignRight, Bold, Italic } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -37,15 +37,62 @@ type PresetItem = {
   position: 'top' | 'center' | 'bottom';
   style: 'clean' | 'bold' | 'highlight' | 'lower-third';
   textAlign: 'left' | 'center' | 'right';
+  /** Which entry animation best represents this preset */
+  hoverAnimation: 'fade-in' | 'slide-up' | 'slide-down' | 'zoom-in' | 'typewriter';
 };
 
 const TEXT_PRESETS: PresetItem[] = [
-  { label: 'Clean Title',  content: 'Your Title Here', fontFamily: 'Inter, sans-serif',       fontSize: 52, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'transparent',    position: 'center', style: 'clean',       textAlign: 'center' },
-  { label: 'Lower Third',  content: 'Name / Title',    fontFamily: 'Inter, sans-serif',       fontSize: 28, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.7)', position: 'bottom', style: 'lower-third', textAlign: 'left'   },
-  { label: 'Social Bold',  content: 'BIG TEXT',        fontFamily: 'Impact, sans-serif',      fontSize: 72, fontWeight: 'bold',   color: '#FFD700', backgroundColor: 'transparent',    position: 'center', style: 'bold',        textAlign: 'center' },
-  { label: 'Luxury Quote', content: '"Your Quote"',    fontFamily: 'Playfair Display, serif', fontSize: 38, fontWeight: 'normal', color: '#C8A766', backgroundColor: 'transparent',    position: 'center', style: 'clean',       textAlign: 'center' },
-  { label: 'Caption Box',  content: 'Caption text',    fontFamily: 'Inter, sans-serif',       fontSize: 24, fontWeight: 'normal', color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.6)', position: 'bottom', style: 'highlight',   textAlign: 'center' },
+  { label: 'Clean Title',  content: 'Your Title Here', fontFamily: 'Inter, sans-serif',       fontSize: 52, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'transparent',    position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'   },
+  { label: 'Lower Third',  content: 'Name / Title',    fontFamily: 'Inter, sans-serif',       fontSize: 28, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.7)', position: 'bottom', style: 'lower-third', textAlign: 'left',   hoverAnimation: 'slide-up'  },
+  { label: 'Social Bold',  content: 'BIG TEXT',        fontFamily: 'Impact, sans-serif',      fontSize: 72, fontWeight: 'bold',   color: '#FFD700', backgroundColor: 'transparent',    position: 'center', style: 'bold',        textAlign: 'center', hoverAnimation: 'zoom-in'   },
+  { label: 'Luxury Quote', content: '"Your Quote"',    fontFamily: 'Playfair Display, serif', fontSize: 38, fontWeight: 'normal', color: '#C8A766', backgroundColor: 'transparent',    position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'   },
+  { label: 'Caption Box',  content: 'Caption text',    fontFamily: 'Inter, sans-serif',       fontSize: 24, fontWeight: 'normal', color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.6)', position: 'bottom', style: 'highlight',   textAlign: 'center', hoverAnimation: 'slide-down'},
 ];
+
+// Per-animation keyframe CSS injected once into <head>
+const ANIM_STYLES = `
+@keyframes tp-fade-in {
+  0%   { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes tp-slide-up {
+  0%   { opacity: 0; transform: translateY(100%); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes tp-slide-down {
+  0%   { opacity: 0; transform: translateY(-70%); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes tp-zoom-in {
+  0%   { opacity: 0; transform: scale(0.55); }
+  70%  { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
+}
+`;
+
+// Inject once
+if (typeof document !== 'undefined' && !document.getElementById('tp-anim-styles')) {
+  const el = document.createElement('style');
+  el.id = 'tp-anim-styles';
+  el.textContent = ANIM_STYLES;
+  document.head.appendChild(el);
+}
+
+const ANIM_CSS: Record<string, string> = {
+  'fade-in':    'tp-fade-in 0.45s cubic-bezier(0.22,1,0.36,1) both',
+  'slide-up':   'tp-slide-up 0.42s cubic-bezier(0.22,1,0.36,1) both',
+  'slide-down': 'tp-slide-down 0.42s cubic-bezier(0.22,1,0.36,1) both',
+  'zoom-in':    'tp-zoom-in 0.4s cubic-bezier(0.22,1,0.36,1) both',
+};
+
+const ANIM_LABEL: Record<string, string> = {
+  'fade-in':    'Fade In',
+  'slide-up':   'Slide Up',
+  'slide-down': 'Slide Down',
+  'zoom-in':    'Zoom In',
+};
 
 const COLOR_SWATCHES = [
   '#FFFFFF', '#000000', '#FFD700', '#C8A766', '#FF3B30',
@@ -59,6 +106,10 @@ function TextPreviewThumbnail({ preset, isActive, onClick }: {
   isActive: boolean;
   onClick: () => void;
 }) {
+  const [animKey, setAnimKey] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const scaledSize = Math.max(6, Math.round(preset.fontSize * 0.19));
 
   const textStyle: React.CSSProperties = {
@@ -75,11 +126,44 @@ function TextPreviewThumbnail({ preset, isActive, onClick }: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     lineHeight: 1.2,
+    // Apply animation only on hover; key change reruns it each time
+    animation: isHovered ? ANIM_CSS[preset.hoverAnimation] : 'none',
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    setAnimKey(k => k + 1); // force re-mount of span to restart animation
+    // Loop the animation every 900 ms while hovering
+    timerRef.current = setInterval(() => setAnimKey(k => k + 1), 900);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    if (timerRef.current) clearInterval(timerRef.current);
+  };
+
+  const positionWrap = (children: React.ReactNode) => {
+    if (preset.position === 'center') {
+      return <div className="absolute inset-0 flex items-center justify-center">{children}</div>;
+    }
+    if (preset.position === 'top') {
+      return <div className="absolute top-1.5 left-0 right-0 flex justify-center overflow-hidden">{children}</div>;
+    }
+    return (
+      <div
+        className="absolute bottom-1.5 left-0 right-0 flex overflow-hidden"
+        style={{ justifyContent: preset.textAlign === 'left' ? 'flex-start' : 'center', paddingLeft: preset.textAlign === 'left' ? 4 : 0 }}
+      >
+        {children}
+      </div>
+    );
   };
 
   return (
     <button
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className={`group flex flex-col rounded-lg overflow-hidden border transition-all duration-150 text-left w-full ${
         isActive
           ? 'ring-2 ring-amber-400 border-amber-400'
@@ -94,25 +178,14 @@ function TextPreviewThumbnail({ preset, isActive, onClick }: {
           background: 'radial-gradient(ellipse at center, #111111 0%, #050508 100%)',
         }}
       >
-        {preset.position === 'center' && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span style={textStyle}>{preset.content}</span>
-          </div>
+        {positionWrap(
+          <span key={animKey} style={textStyle}>{preset.content}</span>
         )}
-        {preset.position === 'top' && (
-          <div className="absolute top-1.5 left-0 right-0 flex justify-center">
-            <span style={textStyle}>{preset.content}</span>
-          </div>
-        )}
-        {preset.position === 'bottom' && (
-          <div
-            className="absolute bottom-1.5 left-0 right-0 flex"
-            style={{
-              justifyContent: preset.textAlign === 'left' ? 'flex-start' : 'center',
-              paddingLeft: preset.textAlign === 'left' ? 4 : 0,
-            }}
-          >
-            <span style={textStyle}>{preset.content}</span>
+
+        {/* Animation label pill — shown on hover */}
+        {isHovered && (
+          <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full text-[8px] font-bold tracking-wider bg-amber-500/80 text-black animate-fade-in pointer-events-none select-none">
+            {ANIM_LABEL[preset.hoverAnimation]}
           </div>
         )}
       </div>
