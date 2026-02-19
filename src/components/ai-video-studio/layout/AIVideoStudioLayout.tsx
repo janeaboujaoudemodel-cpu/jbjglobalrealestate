@@ -158,7 +158,7 @@ function AIVideoStudioLayout({
 
   if (isMobile) {
     return (
-      <div className="h-screen flex flex-col bg-slate-950 text-white overflow-hidden">
+      <div className="h-full flex flex-col bg-slate-950 text-white overflow-hidden">
         <div className="flex-shrink-0 border-b border-slate-700">
           {topBar}
         </div>
@@ -196,7 +196,7 @@ function AIVideoStudioLayout({
   }
 
   return (
-    <div className="h-screen flex flex-col bg-slate-950 text-white overflow-hidden">
+    <div className="h-full flex flex-col bg-slate-950 text-white overflow-hidden">
       {/* Top Bar */}
       <div className="flex-shrink-0 border-b border-slate-700">
         {topBar}
