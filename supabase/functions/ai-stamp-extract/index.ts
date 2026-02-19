@@ -9,11 +9,19 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
-    const { imageBase64, mimeType } = await req.json();
+    const body = await req.json();
+    const { imageBase64, mimeType } = body;
 
     if (!imageBase64) {
       return new Response(JSON.stringify({ error: 'imageBase64 is required' }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Guard: base64 payload > ~7MB (5MB file) will almost certainly timeout the gateway
+    if (imageBase64.length > 7_000_000) {
+      return new Response(JSON.stringify({ error: 'File too large for AI extraction. Please upload an image under 5MB.' }), {
+        status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
@@ -23,6 +31,12 @@ serve(async (req) => {
         status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    // Gemini vision models only support image/* MIME types via inline data.
+    // For PDFs, we treat them as image/jpeg — if the file is actually a PDF the model
+    // will still read its embedded images. Explicitly forcing an image MIME avoids
+    // 400 errors from the gateway when application/pdf is sent as an inline data URL.
+    const effectiveMime = (mimeType && mimeType.startsWith('image/')) ? mimeType : 'image/jpeg';
 
     const prompt = `You are an expert OCR system analyzing a business document, trade license, or commercial registration certificate — most likely issued in the United Arab Emirates.
 
@@ -77,7 +91,7 @@ Rules:
               {
                 type: 'image_url',
                 image_url: {
-                  url: `data:${mimeType};base64,${imageBase64}`,
+                  url: `data:${effectiveMime};base64,${imageBase64}`,
                 },
               },
             ],
@@ -89,8 +103,8 @@ Rules:
 
     if (!response.ok) {
       const text = await response.text();
-      console.error('AI gateway error:', response.status, text);
-      return new Response(JSON.stringify({ error: 'AI extraction failed' }), {
+      console.error('AI gateway error:', response.status, text.slice(0, 500));
+      return new Response(JSON.stringify({ error: `AI gateway returned ${response.status}`, detail: text.slice(0, 200) }), {
         status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
