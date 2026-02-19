@@ -8,6 +8,7 @@ import {
 
 export interface AIVideoStudioLayoutHandle {
   toggleTool: (toolId: string) => void;
+  openTool: (toolId: string) => void;
 }
 
 interface AIVideoStudioLayoutProps {
@@ -82,6 +83,10 @@ function AIVideoStudioLayout({
         setToolsExpanded(true);
         return toolId;
       });
+    },
+    openTool(toolId: string) {
+      setActiveTool(toolId);
+      setToolsExpanded(true);
     },
   }), []);
 
@@ -210,7 +215,7 @@ function AIVideoStudioLayout({
         {/* Full-width Preview — contracts when tool panel is expanded */}
         <div
           className="w-full overflow-hidden bg-slate-950"
-          style={{ flex: activeTool && toolsExpanded ? '0 0 auto' : '1 1 auto', minHeight: activeTool && toolsExpanded ? 180 : 280 }}
+          style={{ flex: activeTool && toolsExpanded ? '0 0 auto' : '1 1 auto', minHeight: activeTool && toolsExpanded ? 240 : 320 }}
         >
           {centerPanel}
         </div>
