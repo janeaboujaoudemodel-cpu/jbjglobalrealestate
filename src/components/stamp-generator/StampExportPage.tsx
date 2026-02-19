@@ -15,10 +15,19 @@ import {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+/** Prefix all SVG IDs with a unique token to prevent cross-stamp ID collisions */
+function uniquifyIds(svg: string): string {
+  const token = Math.random().toString(36).slice(2, 7);
+  return svg
+    .replace(/\bid="([^"]+)"/g, (_, id) => `id="${token}_${id}"`)
+    .replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${token}_${id})`)
+    .replace(/href="#([^"]+)"/g, (_, id) => `href="#${token}_${id}"`);
+}
+
 /** Reliable SVG → PNG via Blob URL + decode() to guarantee full render before canvas draw */
 async function svgToPng(svgString: string, size: number, transparent: boolean): Promise<Blob> {
-  // 1. Ensure required XML namespaces are present
-  let svg = svgString;
+  // 0. De-duplicate IDs to prevent cross-instance collisions
+  let svg = uniquifyIds(svgString);
   if (!svg.includes('xmlns=')) {
     svg = svg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
   }
@@ -217,7 +226,7 @@ export default function StampExportPage() {
   const [activeStop, setActiveStop] = useState<ColorStop>('primary');
 
   const [options, setOptions] = useState<ExportOptions>({
-    formats: ['svg', 'png'],
+    formats: ['svg', 'png', 'jpg', 'webp', 'pdf'],
     sizes: [512, 1024],
     dpi: [300],
     transparent: true,

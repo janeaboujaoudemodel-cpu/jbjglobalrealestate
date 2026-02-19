@@ -206,15 +206,15 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   // ────────────────────────────────────────────────────────────────
   {
     const r = R - 8;
-    // Safe zone: text must stay within r - 14px from center
-    const safeR = r - 14;
-    const pad = Math.min(safeR - 4, r - 18);
+    // Safe zone: text must stay within r - 20px from center edge
+    const safeR = r - 20;
+    const pad = safeR - 4;
     const nameFontSize = autoFontSize(name, 11, 20);
-    // Tighter layout to prevent text escaping circle
-    const monoY = cy - Math.round(safeR * 0.55);
+    // Tighter layout — keep all text strictly inside the circle
     const nameY = hasMono ? cy + 4 : cy - 10;
-    const cityY = nameY + (name.length > 24 ? 28 : 22);
-    const regY = cityY + 14;
+    const cityY = Math.min(nameY + (name.length > 24 ? 28 : 22), cy + safeR - 14);
+    const monoY = cy - Math.round(safeR * 0.5);
+    const regY = Math.min(cityY + 14, cy + safeR - 6);
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -234,7 +234,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
         <text x="${cx}" y="${cityY}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="7.5" fill="${COLOR}" letter-spacing="3.5">${city}</text>
         ${hRule(cx - pad, cx + pad, cityY + 12, COLOR, 1.2)}
         ${hRule(cx - pad + 8, cx + pad - 8, cityY + 14, COLOR, 0.4)}
-        ${regNo && project.density >= 3 ? `<text x="${cx}" y="${regY + 4}" text-anchor="middle" font-family="${font}" font-size="6" fill="${COLOR}">${regNo}</text>` : ''}
+        ${regNo && project.density >= 3 && regY < cy + safeR - 2 ? `<text x="${cx}" y="${regY + 4}" text-anchor="middle" font-family="${font}" font-size="6" fill="${COLOR}">${regNo}</text>` : ''}
       </g>
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'modern-minimal', label: 'Modern Minimal', tags: ['modern', 'clean', 'minimal'], svgSource: svg });
@@ -386,6 +386,9 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const bandR = outerR - 16; // inner edge of filled ring
     const ringTextR = outerR - 8; // text sits inside the filled band
     const nameFontSize = autoFontSize(name, 10.5, 20);
+    // Diamond safe zone: rotated rect half-diag must be <= bandR - 10 to stay inside circle
+    const maxDiamondHalf = Math.floor((bandR - 10) / Math.SQRT2);
+    const diamondHalf = Math.min(32, maxDiamondHalf);
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -403,8 +406,8 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       ${ringText('t7ring', cx, cy, ringTextR, `◆  ${name}  ◆  ${city}  ◆`, font, 7.5, '#ffffff', '50%', 1.4)}
       <!-- Center: monogram or inner rectangle frame + text -->
       ${hasMono
-        ? `<rect x="${cx - 36}" y="${cy - 36}" width="72" height="72" fill="none" stroke="${COLOR}" stroke-width="1.4" transform="rotate(45, ${cx}, ${cy})"/>
-           ${monogram(cx, cy - 2, mono, font, 26, COLOR)}`
+        ? `<rect x="${cx - diamondHalf}" y="${cy - diamondHalf}" width="${diamondHalf * 2}" height="${diamondHalf * 2}" fill="none" stroke="${COLOR}" stroke-width="1.4" transform="rotate(45, ${cx}, ${cy})"/>
+           ${monogram(cx, cy - 2, mono, font, Math.min(26, diamondHalf - 6), COLOR)}`
         : `<rect x="${cx - 52}" y="${cy - 26}" width="104" height="52" rx="2" fill="none" stroke="${COLOR}" stroke-width="1.2"/>
            <rect x="${cx - 47}" y="${cy - 21}" width="94" height="42" rx="1" fill="none" stroke="${COLOR}" stroke-width="0.4"/>
            ${wrapText(name, cx, cy, font, nameFontSize, COLOR, 1.8)}`
@@ -422,17 +425,18 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const nameFontSize = autoFontSize(name, 10.5, 20);
     const hdrH = 28, ftrH = 22;
 
-    // Safe content zone: between header bottom and footer top
-    const contentTop = y1 + 6 + hdrH + 6;
-    const contentBot = y1 + s * 2 - 6 - ftrH - 6;
+    // Safe content zone: between header bottom and footer top (with extra padding)
+    const contentTop = y1 + 6 + hdrH + 10;
+    const contentBot = y1 + s * 2 - 6 - ftrH - 10;
     const contentH = contentBot - contentTop;
     const contentCy = contentTop + contentH / 2;
-    // Clamp name/city within safe zone
-    const monoSize = Math.min(36, Math.floor(contentH * 0.35));
-    const monoY = contentTop + monoSize + 2;
-    const nameY = hasMono ? monoY + monoSize * 0.8 + 4 : contentCy - 8;
+    // Strictly clamp all text within safe zone
+    const monoSize = Math.min(30, Math.floor(contentH * 0.3));
+    const monoY = Math.min(contentTop + monoSize + 2, contentCy - 10);
+    const nameLineH = name.length > 22 ? nameFontSize * 1.3 * 2 : nameFontSize;
+    const nameY = hasMono ? Math.min(monoY + monoSize * 0.8 + 6, contentBot - 28) : Math.min(contentCy - nameLineH / 2, contentBot - nameLineH - 14);
     const cityFontSize = 7.5;
-    const cityY = Math.min(nameY + (name.length > 22 ? 26 : 18), contentBot - cityFontSize - 2);
+    const cityY = Math.min(nameY + (name.length > 22 ? nameFontSize * 1.3 * 2 + 4 : nameFontSize + 10), contentBot - cityFontSize - 2);
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <rect x="${x1}" y="${y1}" width="${s * 2}" height="${s * 2}" rx="3" fill="none" stroke="${COLOR}" stroke-width="2.8"/>
