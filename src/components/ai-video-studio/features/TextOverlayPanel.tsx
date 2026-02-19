@@ -440,25 +440,10 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                     preset={p}
                     isActive={lastAppliedPreset === p.label}
                     onClick={() => {
+                      // Only SELECT/PREVIEW the preset — do NOT auto-add to timeline
                       applyPreset(p);
                       setLastAppliedPreset(p.label);
-                      onAddTextClip({
-                        text: {
-                          content: p.content,
-                          fontFamily: p.fontFamily,
-                          fontSize: p.fontSize,
-                          fontWeight: p.fontWeight,
-                          color: p.color,
-                          backgroundColor: p.backgroundColor === 'transparent' ? undefined : p.backgroundColor,
-                          textAlign: p.textAlign,
-                          position: p.position,
-                          style: p.style,
-                        },
-                        startTime: currentTime,
-                        duration: 4,
-                        animation: 'fade-in',
-                      });
-                      toast.success(`"${p.label}" added to timeline!`);
+                      toast.success(`"${p.label}" selected — click Add to place it`);
                     }}
                   />
                 ))}

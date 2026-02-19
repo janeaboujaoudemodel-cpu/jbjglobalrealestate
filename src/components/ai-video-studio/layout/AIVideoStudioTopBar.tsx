@@ -82,15 +82,20 @@ export function AIVideoStudioTopBar({
   };
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 min-h-[52px] bg-slate-800/95 backdrop-blur-sm border-b border-slate-600/80 shadow-lg">
+    <div className="flex items-center justify-between px-6 py-0 min-h-[64px] bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b-2 border-amber-500/30 shadow-xl shadow-black/40">
       {/* Left Section - Logo & Project Name */}
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <FileVideo className="w-6 h-6 text-amber-400" />
-          <span className="font-bold text-amber-400 text-base hidden sm:inline tracking-wide">JBJ AI Video Studio™</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center">
+            <FileVideo className="w-4.5 h-4.5 text-amber-400" />
+          </div>
+          <div className="hidden sm:flex flex-col">
+            <span className="font-bold text-amber-400 text-sm tracking-wide leading-tight">JBJ AI Video Studio™</span>
+            <span className="text-[9px] text-slate-500 tracking-widest uppercase leading-tight">Professional Suite</span>
+          </div>
         </div>
 
-        <div className="h-6 w-px bg-slate-500" />
+        <div className="h-8 w-px bg-gradient-to-b from-transparent via-slate-500 to-transparent" />
 
         {isEditing ? (
           <div className="flex items-center gap-2">
