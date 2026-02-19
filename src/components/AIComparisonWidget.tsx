@@ -85,12 +85,12 @@ const AIComparisonWidget = () => {
           <div className="grid grid-cols-3 gap-2 text-xs text-zinc-500 mb-3">
             <span>Project</span>
             <span className="text-center">Price/sqft</span>
-            <span className="text-right">ROI</span>
+            <span className="text-right">Yield Est.</span>
           </div>
           {[
-            { name: "Emaar Alterra", price: "AED 2,450", roi: "8.2%" },
-            { name: "Sobha Verde", price: "AED 2,180", roi: "7.8%" },
-            { name: "Damac Lagoons", price: "AED 1,850", roi: "9.1%" },
+            { name: "Emaar Alterra", price: "AED 2,450", roi: "7.9%" },
+            { name: "Sobha Verde", price: "AED 2,280", roi: "7.2%" },
+            { name: "Damac Lagoons", price: "AED 1,050", roi: "5.6%" },
           ].map((item, i) => (
             <div key={i} className="grid grid-cols-3 gap-2 py-2 border-t border-zinc-200 text-sm">
               <span className="text-black font-medium">{item.name}</span>
@@ -98,6 +98,7 @@ const AIComparisonWidget = () => {
               <span className="text-right text-green-600 font-medium">{item.roi}</span>
             </div>
           ))}
+          <p className="text-[10px] text-zinc-400 mt-2 text-center">Sample figures for illustration · Use comparison tool for live data</p>
         </div>
 
         {/* CTA - Premium 3D Champagne Button */}
