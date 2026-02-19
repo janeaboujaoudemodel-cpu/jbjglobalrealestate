@@ -1,180 +1,110 @@
 
-# AI Talking Agent for the Voice Panel — Full Build Plan
+# Caption Panel — Linear Step-by-Step Wizard Redesign
 
-## Clarification on "No ElevenLabs Credits"
+## Problem Analysis
 
-The Lovable AI gateway (Gemini/GPT-5) handles text and image tasks, but it does not provide voice/audio synthesis — there is no "Lovable AI TTS." The only truly zero-credit path for real voice output is the browser's built-in **Web Speech API** (`SpeechSynthesisUtterance`), which:
+The current `CaptionTranslator.tsx` has these UX issues:
 
-- Is completely free and runs 100% in the browser
-- Supports 20+ languages and accent/voice selection based on the user's OS voices
-- Produces an audio track that can be recorded via `MediaRecorder` and saved as a `.webm`/`.mp3` blob
-- Requires zero API keys, zero credits, zero edge function calls
+1. **Clickable step chips** — users can jump to any step at any time, breaking the expected linear flow
+2. **Language grid hidden by default** — on Step 3 (Translate), all 28 languages are collapsed behind a "All 28 languages" toggle button. Users must click to see them
+3. **Style and Preview are split into two separate tabs** — Step 4 is "Style" and Step 5 is "Preview", requiring two tab switches to see styled captions on video
+4. **6 internal tabs vs 5 logical steps** — `activeTab` has values: `upload | transcribe | translate | style | preview | export` creating conceptual confusion
+5. **No clear "locked" state** — later steps show empty-state fallbacks but never properly lock the user from clicking ahead
 
-The AI Talking Agent panel is split into two parts:
+## Solution: Strict Linear Wizard
 
-1. **Script Writer** — uses the Lovable AI gateway (Gemini Flash) via a new edge function to generate a professional real estate voiceover script in the chosen language from a property description prompt
-2. **Voice Synthesizer** — uses the browser's Web Speech API to synthesize and record the script as audio, then adds it to the timeline as an MP3-equivalent audio clip
+Replace the current tab-chip navigation with a **numbered step indicator** that:
+- Shows step numbers (1–5), not clickable chips
+- Marks completed steps with a green check
+- Only highlights the current step in amber
+- Allows going **back** to any previous step, but not forward past the current step
+- Merges Style + Preview into a single Step 4
 
-This satisfies the user's requirement: **no ElevenLabs credits consumed**.
+### Step Map
 
----
+| Step | Label | Unlocked when |
+|------|-------|---------------|
+| 1 | Upload | Always |
+| 2 | Transcribe | File uploaded |
+| 3 | Translate | Subtitles exist |
+| 4 | Style & Preview | Subtitles exist |
+| 5 | Export | Subtitles exist |
 
-## What Gets Built
+## Key Changes Per Step
 
-### New Component: `AITalkingAgentPanel.tsx`
+### Step 1 — Upload
+- Same drop zone + file info card
+- Language picker for "spoken language" stays here
+- CTA: "Start Transcription →" button auto-advances to Step 2
 
-A premium three-section panel that replaces the current simple "AI Voice Generator" section inside `VoiceoverRecorder.tsx`. It lives in the Voice tab.
+### Step 2 — Transcribe
+- Same transcription logic (chunked, ElevenLabs Scribe)
+- Progress bar with stage label
+- Editable segment list after transcription
+- CTA: "Translate to Other Languages →" button auto-advances to Step 3
 
-**Section 1 — Agent Identity & Settings:**
-- Agent character selector: "Professional Male", "Warm Female", "Energetic Presenter", "Luxury Narrator" — these map to different voice tones and Web Speech API voice selection hints
-- Language picker (all 28 from `SUPPORTED_LANGUAGES`)
-- Speaking rate slider (0.5× — 2×)
-- Pitch slider (0.5 — 2.0)
-- Tone picker: Luxury / Professional / Energetic
+### Step 3 — Translate (Fixed: All Languages Always Visible)
+- **Remove the `showLangGrid` toggle entirely**
+- Show all 28 languages in a scrollable 3-column grid, always visible
+- Selected language highlighted in amber
+- "Translate" button → after translation complete, show translated segments inline
+- Multiple languages can be translated sequentially (each adds to the list)
+- CTA: "Style & Preview →" button advances to Step 4
 
-**Section 2 — Script Generator (AI-powered):**
-- Prompt textarea: user types the property description or talking points
-- "Generate Script" button → calls new edge function `ai-agent-script-writer`
-- The edge function uses Gemini Flash to write a polished, professional voiceover script in the chosen language
-- The generated script appears in an editable textarea so the user can tweak it
-- Character count indicator
+### Step 4 — Style & Preview (Merged)
+- Two-column-like layout within the same panel:
+  - **Left/top**: Style controls (preset, font, size, position, color, opacity, outline, animation speed)
+  - **Right/bottom**: Live CSS preview box (not canvas — a real-time HTML preview that updates instantly as user changes style settings)
+- If user uploaded a video file, also show the video upload + canvas overlay preview (same as current "Preview" tab)
+- Language selector to pick which translation to preview
+- CTA: "Export Subtitles →" advances to Step 5
 
-**Section 3 — Synthesize & Export:**
-- "Preview Voice" → uses Web Speech API to speak the script out loud in real time
-- "Record & Add to Timeline" → starts a `MediaRecorder` capturing the Web Speech output into a blob, then adds the audio clip to the voiceover track
-- Progress bar during recording
-- Audio player to review before committing
-- "Download MP3" → downloads the recorded blob as a `.mp3` file
+### Step 5 — Export
+- SRT/VTT download for original + all translated languages (same as current Export tab)
+- Burn captions on video section (same logic)
+- No CTA needed — this is the final step
 
----
+## Step Indicator Redesign
 
-## New Edge Function: `ai-agent-script-writer`
+Replace the current button-row with a cleaner progress indicator:
 
-**File:** `supabase/functions/ai-agent-script-writer/index.ts`
+```
+● 1 Upload  →  ✓ 2 Transcribe  →  ● 3 Translate  →  ○ 4 Style  →  ○ 5 Export
+```
 
-Uses `LOVABLE_API_KEY` + Lovable AI gateway to write the script. Zero ElevenLabs calls.
+- Circle with number: not yet started
+- Amber filled circle: current step
+- Green check circle: completed
+- Connecting lines turn green as steps complete
+- **Clicking a step only works if that step is already done or is the current step** (no skipping forward)
 
-**Input:**
+## Internal State Simplification
+
+The `activeTab` union type changes from:
 ```typescript
-{
-  prompt: string;        // user's property description or talking points
-  language: string;      // e.g. 'ar', 'en', 'hi'
-  tone: 'luxury' | 'professional' | 'energetic';
-  character: string;     // e.g. 'luxury-narrator' (affects writing style)
-  duration: 30 | 60 | 90; // target duration in seconds
-}
+'upload' | 'transcribe' | 'translate' | 'style' | 'preview' | 'export'
 ```
-
-**Output:**
+to:
 ```typescript
-{
-  script: string;   // ready-to-speak voiceover text in target language
-  wordCount: number;
-  estimatedDuration: number;
-}
+1 | 2 | 3 | 4 | 5
 ```
 
-The system prompt instructs Gemini to: write only spoken words (no stage directions), match the target language, match the tone, and keep the script to the estimated word count for the target duration (~2.5 words/second).
+This eliminates the conceptual mismatch between 6 tab values and 5 displayed steps.
 
----
+The `previewSource` logic (video for preview canvas) stays: if user uploaded a video file originally OR selects a separate video in Step 4, it's shown in the preview.
 
-## Voice Recording Strategy (Web Speech API → Blob)
+## Files to Edit
 
-The Web Speech API (`window.speechSynthesis`) speaks text through the system's audio output. To capture this as a recordable audio blob, the approach uses:
+| File | Action |
+|------|--------|
+| `src/components/ai-video-studio/features/CaptionTranslator.tsx` | Full rewrite — single file change |
 
-```typescript
-// 1. Create an AudioContext with a destination MediaStream
-const audioCtx = new AudioContext();
-const destination = audioCtx.createMediaStreamDestination();
+No other files need to change. The component interface (`props`) stays identical so `IntegratedToolsPanel.tsx` requires no update.
 
-// 2. Capture system audio output via MediaRecorder
-// Note: Web Speech output goes through the speakers directly.
-// The workaround: use MediaRecorder on the tab's audio.
-// Simpler approach: use SpeechSynthesis to speak, simultaneously
-// record with getUserMedia(audio) loopback, or use the 
-// AudioContext approach.
-```
+## Implementation Details
 
-Since capturing `speechSynthesis` output directly into a `MediaRecorder` requires experimental browser APIs, the implementation uses a **pragmatic hybrid**:
-
-1. When "Preview Voice" is clicked: Web Speech API speaks the text immediately (free, instant, zero credits)
-2. When "Record & Add to Timeline" is clicked: A `MediaRecorder` session on `getUserMedia({audio: true})` records **the user's microphone** while the Web Speech API plays through speakers. This captures whatever the user hears.
-
-For users who don't want to use their mic, an alternative "Download Script" option lets them copy the script to use elsewhere.
-
-**Better approach (no mic needed):** Use `AudioContext.createMediaStreamDestination()` to route `SpeechSynthesis` output. Since browsers restrict this, the cleanest zero-credit approach for downloadable audio is:
-
-- Preview: Web Speech API (instant, free)
-- Download: encode script as SSML text, then synthesize via the existing `sarah-voice` edge function (which already uses ElevenLabs — but with the Sarah voice as a default). This is the existing system voice.
-
-**Final decision for this build:** The panel will use Web Speech API for preview (zero credits) and offer two paths for "Add to Timeline":
-- **Path A (Zero Credits):** Web Speech API preview → user records with microphone → blob added to timeline
-- **Path B (Quality Voice, uses existing ElevenLabs key):** Calls `voice-studio-tts` edge function — this uses the same ElevenLabs key already configured. The user is shown clearly that this uses their existing key.
-
-The default will be **Path A** (zero credits). The user can opt into Path B from a clearly-labeled toggle.
-
----
-
-## Integration with `AIVideoStudio.tsx`
-
-The `voicePanel` prop currently passes `<VoiceoverRecorder>`. This will be updated to include the new `<AITalkingAgentPanel>` as a second tab/section within the Voice panel, keeping the existing recorder intact.
-
-The new panel calls back via `onAIVoiceGenerated(audioUrl, duration)` (same existing interface) so no changes to `AIVideoStudio.tsx` are needed for timeline insertion.
-
----
-
-## Files to Create / Edit
-
-| File | Action | Description |
-|------|--------|-------------|
-| `supabase/functions/ai-agent-script-writer/index.ts` | **CREATE** | Gemini-powered script writer edge function |
-| `supabase/config.toml` | **EDIT** | Add `[functions.ai-agent-script-writer]` entry |
-| `src/components/ai-video-studio/features/AITalkingAgentPanel.tsx` | **CREATE** | The full premium agent panel component |
-| `src/components/ai-video-studio/features/VoiceoverRecorder.tsx` | **EDIT** | Add a tab switcher: "Record" / "AI Agent" to expose the new panel alongside the existing recorder |
-
----
-
-## User Experience Flow
-
-```text
-Voice tab → "AI Agent" sub-tab
-  │
-  ├─ 1. Pick agent character + language + tone
-  │
-  ├─ 2. Type property description in prompt box
-  │       └─ Click "Generate Script" 
-  │              └─ Gemini writes script in chosen language (2–5 seconds)
-  │                     └─ Script appears in editable textarea
-  │
-  ├─ 3. Click "Preview Voice" → browser speaks it immediately (free)
-  │
-  └─ 4. Click "Add to Timeline"
-          ├─ Zero-credits path: speaks while mic records → blob → timeline
-          └─ Quality path: calls voice-studio-tts → MP3 → timeline
-               (labeled: "Uses your existing voice account credits")
-```
-
----
-
-## Premium UI Design
-
-Matching the existing studio dark theme:
-
-- Dark card `bg-slate-800/60` with `border border-amber-500/20`
-- Agent character cards with avatar icons (Bot, Mic, Star, Crown)
-- Language badge chip selector with search
-- Script textarea with line count, character count, estimated duration pill
-- Amber accent buttons matching the rest of the studio
-- Animated waveform during preview (CSS animation)
-- Step indicators (1 → 2 → 3) for the workflow
-
----
-
-## Credit Policy Summary
-
-| Feature | Credits Used |
-|---------|-------------|
-| Generate Script | Lovable AI (Gemini Flash) — minimal |
-| Preview Voice | Zero — Web Speech API, browser-native |
-| Add to Timeline (Zero Credits) | Zero — mic-recorded audio |
-| Add to Timeline (Quality) | Existing ElevenLabs key (user's own account) |
+- Step indicator: fixed at the top, `flex` row, 5 numbered circles with connector lines
+- Steps 3's language grid: `grid grid-cols-3` with `max-h-56 overflow-y-auto` — always expanded
+- Step 4's live preview: the same CSS `<span>` preview box (already in the "style" tab) stays — updates in real-time as style state changes. The canvas-based video preview stays below it, reactivated by the same `activeStep === 4` condition (replaces `activeTab === 'preview'`)
+- Back navigation: each step panel (except Step 1) has a small "← Back" link in the top-left that decrements `activeStep`
+- Auto-advance: after transcription completes → `setActiveStep(3)`, after translation → `setActiveStep(4)` is offered but not forced
