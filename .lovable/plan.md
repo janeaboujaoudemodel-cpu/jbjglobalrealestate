@@ -1,146 +1,125 @@
 
-# AI Real Estate Video Ad Generator — Full Build Plan
+# AI Talking Agent for the Voice Panel — Full Build Plan
 
-## What Exists Today (and Its Gaps)
+## Clarification on "No ElevenLabs Credits"
 
-The `ProjectIntegrationPanel` (Projects tab in the Studio) already fetches projects and assembles photo clips into the timeline. However it is missing:
+The Lovable AI gateway (Gemini/GPT-5) handles text and image tasks, but it does not provide voice/audio synthesis — there is no "Lovable AI TTS." The only truly zero-credit path for real voice output is the browser's built-in **Web Speech API** (`SpeechSynthesisUtterance`), which:
 
-- No AI-generated voiceover script describing the property
-- No actual TTS audio rendered — the voiceover clip is just a placeholder
-- No language/voice/accent selection on the Projects panel
-- No location data enrichment (coordinates, Google Maps static image)
-- No automatic transitions between photo slides
-- No "Generate Video Ad" wizard flow — just a basic "Create Ad" button
-- No URL input to import a project from a link
+- Is completely free and runs 100% in the browser
+- Supports 20+ languages and accent/voice selection based on the user's OS voices
+- Produces an audio track that can be recorded via `MediaRecorder` and saved as a `.webm`/`.mp3` blob
+- Requires zero API keys, zero credits, zero edge function calls
 
-This plan builds a complete, premium **AI Property Video Ad Generator** directly inside `ProjectIntegrationPanel` and a new supporting edge function.
+The AI Talking Agent panel is split into two parts:
 
----
+1. **Script Writer** — uses the Lovable AI gateway (Gemini Flash) via a new edge function to generate a professional real estate voiceover script in the chosen language from a property description prompt
+2. **Voice Synthesizer** — uses the browser's Web Speech API to synthesize and record the script as audio, then adds it to the timeline as an MP3-equivalent audio clip
 
-## Architecture Overview
-
-```text
-User selects project (or pastes URL)
-         │
-         ▼
- ProjectIntegrationPanel (UI)
-         │
-         ├─── 1. Fetch project photos from DB (already done, improving)
-         ├─── 2. Call ai-property-video-ad edge function
-         │         ├── Generate AI voiceover SCRIPT (Lovable AI / Gemini)
-         │         ├── Call ElevenLabs TTS → return audio blob URL
-         │         └── Return: script + audio_url + location_image_url
-         │
-         ├─── 3. Inject photo clips into Video track (with transitions between each)
-         ├─── 4. Inject AI-generated voiceover into Voiceover track
-         ├─── 5. Inject lower-third text clip (name, price, beds, location)
-         └─── 6. Rename project → "Property Name - Video Ad"
-```
+This satisfies the user's requirement: **no ElevenLabs credits consumed**.
 
 ---
 
-## 1. New Edge Function: `ai-property-video-ad`
+## What Gets Built
 
-**File:** `supabase/functions/ai-property-video-ad/index.ts`
+### New Component: `AITalkingAgentPanel.tsx`
 
-This function does two things in one call:
+A premium three-section panel that replaces the current simple "AI Voice Generator" section inside `VoiceoverRecorder.tsx`. It lives in the Voice tab.
 
-### Step A — Generate Voiceover Script (Lovable AI, zero credits for non-TTS)
-Uses `LOVABLE_API_KEY` with `google/gemini-3-flash-preview` to write a professional property voiceover script in the target language. Prompt includes:
-- Property name, developer, location, emirate
-- Price range, bedroom types, amenities (if any)
-- Payment plan (if available)
-- Tone: luxury, professional, or urgent (user-selected)
-- Language: any of the 28 supported languages
-- Duration hint: 30s / 60s / 90s script length
+**Section 1 — Agent Identity & Settings:**
+- Agent character selector: "Professional Male", "Warm Female", "Energetic Presenter", "Luxury Narrator" — these map to different voice tones and Web Speech API voice selection hints
+- Language picker (all 28 from `SUPPORTED_LANGUAGES`)
+- Speaking rate slider (0.5× — 2×)
+- Pitch slider (0.5 — 2.0)
+- Tone picker: Luxury / Professional / Energetic
 
-### Step B — Generate TTS Audio (ElevenLabs, existing key `ELEVENLABS_API_KEY`)
-After script is generated, calls ElevenLabs TTS with the chosen voice ID and `eleven_multilingual_v2` model. Returns audio as base64 so it can be played and added to the timeline as a blob URL.
+**Section 2 — Script Generator (AI-powered):**
+- Prompt textarea: user types the property description or talking points
+- "Generate Script" button → calls new edge function `ai-agent-script-writer`
+- The edge function uses Gemini Flash to write a polished, professional voiceover script in the chosen language
+- The generated script appears in an editable textarea so the user can tweak it
+- Character count indicator
 
-**Key:** ElevenLabs is ALREADY connected with `ELEVENLABS_API_KEY` — the existing `voice-studio-tts` function already uses it. This is an existing credit allocation, not a new one. The TTS is the standard permitted use.
+**Section 3 — Synthesize & Export:**
+- "Preview Voice" → uses Web Speech API to speak the script out loud in real time
+- "Record & Add to Timeline" → starts a `MediaRecorder` capturing the Web Speech output into a blob, then adds the audio clip to the voiceover track
+- Progress bar during recording
+- Audio player to review before committing
+- "Download MP3" → downloads the recorded blob as a `.mp3` file
 
-**Input body:**
+---
+
+## New Edge Function: `ai-agent-script-writer`
+
+**File:** `supabase/functions/ai-agent-script-writer/index.ts`
+
+Uses `LOVABLE_API_KEY` + Lovable AI gateway to write the script. Zero ElevenLabs calls.
+
+**Input:**
 ```typescript
 {
-  projectId: string;           // to fetch full project details from DB
-  language: string;            // 'en', 'ar', 'hi', etc.
-  voiceId: string;             // ElevenLabs voice ID
-  tone: 'luxury' | 'casual' | 'urgent';
-  scriptDuration: 30 | 60 | 90;  // seconds
+  prompt: string;        // user's property description or talking points
+  language: string;      // e.g. 'ar', 'en', 'hi'
+  tone: 'luxury' | 'professional' | 'energetic';
+  character: string;     // e.g. 'luxury-narrator' (affects writing style)
+  duration: 30 | 60 | 90; // target duration in seconds
 }
 ```
 
 **Output:**
 ```typescript
 {
-  script: string;              // the generated voiceover text
-  audioBase64: string;         // ElevenLabs mp3 as base64
-  audioDurationEstimate: number;  // seconds (chars / 15 approximation)
-  locationImageUrl?: string;   // Google Static Map URL for the location
+  script: string;   // ready-to-speak voiceover text in target language
+  wordCount: number;
+  estimatedDuration: number;
 }
 ```
 
----
-
-## 2. Enhanced `ProjectIntegrationPanel.tsx`
-
-### New UI: "Generate Video Ad" Wizard
-
-When user clicks on a project card, instead of immediately generating, it opens an **inline wizard panel** (replacing the card grid) with:
-
-**Step 1 — Project Summary** (auto-filled from DB):
-- Project thumbnail, name, location, price, beds shown as a read-only card
-
-**Step 2 — Voice & Language Settings**:
-- Language selector (all 28 languages, searchable)
-- Voice selector (14 ElevenLabs voices with gender label)
-- Tone selector: Luxury / Professional / Urgent
-- Script length: 30s / 60s / 90s
-
-**Step 3 — Ad Style**:
-- Format: Reels (9:16) / YouTube (16:9) / Square (1:1)
-- Transitions: Fade / Slide / Zoom between photos
-- Text style: Lower-third / Bold overlay / Clean
-
-**Generate Button** → calls edge function → shows a 3-step progress indicator:
-1. "Writing script..." (Gemini generating)
-2. "Generating voiceover..." (ElevenLabs TTS)
-3. "Assembling timeline..." (client-side)
-
-**After generation:**
-- Shows the generated script in a read-only textarea (user can copy it)
-- Shows an inline `<audio>` player to preview the voiceover before adding
-- Shows "Add to Timeline" button
-- Adds to timeline: photos + transitions + text clip + voiceover audio
-
-### URL Import Feature
-At the top of the panel, a text input: **"Paste a property link or project URL"**
-- If the URL matches an internal project path (e.g. `/properties/slug`), it extracts the slug and looks up the project in DB
-- For external URLs, shows a message: "External URL import requires the web scraper — coming soon"
-- This keeps scope manageable without requiring Firecrawl for now
+The system prompt instructs Gemini to: write only spoken words (no stage directions), match the target language, match the tone, and keep the script to the estimated word count for the target duration (~2.5 words/second).
 
 ---
 
-## 3. Timeline Integration (in `AIVideoStudio.tsx`)
+## Voice Recording Strategy (Web Speech API → Blob)
 
-The `onCreateVideoAd` callback is extended to also accept a `voiceover` object:
+The Web Speech API (`window.speechSynthesis`) speaks text through the system's audio output. To capture this as a recordable audio blob, the approach uses:
 
 ```typescript
-interface VideoAdResult {
-  clips: VideoAdClip[];
-  voiceover?: {
-    audioBase64: string;
-    duration: number;
-    script: string;
-  };
-  projectName: string;
-  transitions?: string; // 'fade' | 'slide-left' | 'zoom-in'
-}
+// 1. Create an AudioContext with a destination MediaStream
+const audioCtx = new AudioContext();
+const destination = audioCtx.createMediaStreamDestination();
+
+// 2. Capture system audio output via MediaRecorder
+// Note: Web Speech output goes through the speakers directly.
+// The workaround: use MediaRecorder on the tab's audio.
+// Simpler approach: use SpeechSynthesis to speak, simultaneously
+// record with getUserMedia(audio) loopback, or use the 
+// AudioContext approach.
 ```
 
-When voiceover is present, it is decoded from base64 into a `Blob`, converted to an object URL, and added to the **Voiceover track** (type: `voiceover`). If a voiceover track does not exist yet, one is created automatically.
+Since capturing `speechSynthesis` output directly into a `MediaRecorder` requires experimental browser APIs, the implementation uses a **pragmatic hybrid**:
 
-Transitions are auto-inserted between each photo clip on the Video track.
+1. When "Preview Voice" is clicked: Web Speech API speaks the text immediately (free, instant, zero credits)
+2. When "Record & Add to Timeline" is clicked: A `MediaRecorder` session on `getUserMedia({audio: true})` records **the user's microphone** while the Web Speech API plays through speakers. This captures whatever the user hears.
+
+For users who don't want to use their mic, an alternative "Download Script" option lets them copy the script to use elsewhere.
+
+**Better approach (no mic needed):** Use `AudioContext.createMediaStreamDestination()` to route `SpeechSynthesis` output. Since browsers restrict this, the cleanest zero-credit approach for downloadable audio is:
+
+- Preview: Web Speech API (instant, free)
+- Download: encode script as SSML text, then synthesize via the existing `sarah-voice` edge function (which already uses ElevenLabs — but with the Sarah voice as a default). This is the existing system voice.
+
+**Final decision for this build:** The panel will use Web Speech API for preview (zero credits) and offer two paths for "Add to Timeline":
+- **Path A (Zero Credits):** Web Speech API preview → user records with microphone → blob added to timeline
+- **Path B (Quality Voice, uses existing ElevenLabs key):** Calls `voice-studio-tts` edge function — this uses the same ElevenLabs key already configured. The user is shown clearly that this uses their existing key.
+
+The default will be **Path A** (zero credits). The user can opt into Path B from a clearly-labeled toggle.
+
+---
+
+## Integration with `AIVideoStudio.tsx`
+
+The `voicePanel` prop currently passes `<VoiceoverRecorder>`. This will be updated to include the new `<AITalkingAgentPanel>` as a second tab/section within the Voice panel, keeping the existing recorder intact.
+
+The new panel calls back via `onAIVoiceGenerated(audioUrl, duration)` (same existing interface) so no changes to `AIVideoStudio.tsx` are needed for timeline insertion.
 
 ---
 
@@ -148,38 +127,54 @@ Transitions are auto-inserted between each photo clip on the Video track.
 
 | File | Action | Description |
 |------|--------|-------------|
-| `supabase/functions/ai-property-video-ad/index.ts` | **CREATE** | New edge function: AI script + ElevenLabs TTS |
-| `src/components/ai-video-studio/features/ProjectIntegrationPanel.tsx` | **REWRITE** | Full wizard UI: voice/language/tone/format picker + URL input |
-| `src/components/ai-video-studio/AIVideoStudio.tsx` | **EDIT** | Extend `onCreateVideoAd` to handle voiceover blob + auto-add voiceover track |
+| `supabase/functions/ai-agent-script-writer/index.ts` | **CREATE** | Gemini-powered script writer edge function |
+| `supabase/config.toml` | **EDIT** | Add `[functions.ai-agent-script-writer]` entry |
+| `src/components/ai-video-studio/features/AITalkingAgentPanel.tsx` | **CREATE** | The full premium agent panel component |
+| `src/components/ai-video-studio/features/VoiceoverRecorder.tsx` | **EDIT** | Add a tab switcher: "Record" / "AI Agent" to expose the new panel alongside the existing recorder |
 
 ---
 
-## Credit & Key Policy
+## User Experience Flow
 
-| Service | Key | When Used | Credit Impact |
-|---------|-----|-----------|---------------|
-| Lovable AI (Gemini Flash) | `LOVABLE_API_KEY` | Script writing | Lovable platform credits (minimal) |
-| ElevenLabs TTS | `ELEVENLABS_API_KEY` | Audio generation | ElevenLabs character credits (expected, standard TTS use) |
-
-**No new API keys are required.** All keys are already configured in the project.
+```text
+Voice tab → "AI Agent" sub-tab
+  │
+  ├─ 1. Pick agent character + language + tone
+  │
+  ├─ 2. Type property description in prompt box
+  │       └─ Click "Generate Script" 
+  │              └─ Gemini writes script in chosen language (2–5 seconds)
+  │                     └─ Script appears in editable textarea
+  │
+  ├─ 3. Click "Preview Voice" → browser speaks it immediately (free)
+  │
+  └─ 4. Click "Add to Timeline"
+          ├─ Zero-credits path: speaks while mic records → blob → timeline
+          └─ Quality path: calls voice-studio-tts → MP3 → timeline
+               (labeled: "Uses your existing voice account credits")
+```
 
 ---
 
-## What Will NOT Be Built (Scope Limit)
+## Premium UI Design
 
-- External Instagram link video cloning (separate feature, requires video scraping)
-- Talking head / AI avatar video (separate feature, requires video model)
-- Real Google Maps API static map (requires a Google Maps API key — not configured; will use a placeholder gradient map tile instead)
+Matching the existing studio dark theme:
+
+- Dark card `bg-slate-800/60` with `border border-amber-500/20`
+- Agent character cards with avatar icons (Bot, Mic, Star, Crown)
+- Language badge chip selector with search
+- Script textarea with line count, character count, estimated duration pill
+- Amber accent buttons matching the rest of the studio
+- Animated waveform during preview (CSS animation)
+- Step indicators (1 → 2 → 3) for the workflow
 
 ---
 
-## Summary of User-Visible Result
+## Credit Policy Summary
 
-After this build, the user can:
-1. Open the **Projects** tab in the AI Video Studio
-2. Click any real estate project card
-3. Pick language (Arabic, English, Hindi, etc.), voice, tone, and ad format
-4. Click **Generate Video Ad**
-5. The studio writes a multilingual voiceover script, generates TTS audio, and assembles a complete slideshow with transitions, text overlays, and voiceover into the timeline — all automatically
-6. Preview the voiceover before committing
-7. Export the finished ad to Reels, YouTube, or Square format
+| Feature | Credits Used |
+|---------|-------------|
+| Generate Script | Lovable AI (Gemini Flash) — minimal |
+| Preview Voice | Zero — Web Speech API, browser-native |
+| Add to Timeline (Zero Credits) | Zero — mic-recorded audio |
+| Add to Timeline (Quality) | Existing ElevenLabs key (user's own account) |
