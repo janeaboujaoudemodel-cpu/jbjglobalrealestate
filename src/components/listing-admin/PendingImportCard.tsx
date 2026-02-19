@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SafeImage } from "@/components/SafeImage";
 import { filterValidImages, getFirstValidImageUrl } from "@/lib/imageUtils";
-import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed, AlertTriangle, RefreshCw, Check, X, Loader2, Eye } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed, AlertTriangle, RefreshCw, Check, X, Loader2, Eye, Building2 } from "lucide-react";
 import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from "@/constants/stats";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -289,8 +289,9 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
             fallbackSrc="/placeholder.svg"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <span className="text-xs text-muted-foreground">Media pending verification</span>
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-muted/50">
+            <Building2 className="w-12 h-12 text-muted-foreground/40" />
+            <span className="text-xs text-muted-foreground/60 font-medium">No image available</span>
           </div>
         )}
 

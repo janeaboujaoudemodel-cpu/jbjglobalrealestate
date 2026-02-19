@@ -137,11 +137,11 @@ const QuizResults = () => {
         </div>
         <div class="detail-item">
           <div class="detail-label">Price From</div>
-          <div class="detail-value">AED ${((project.price_from || 0) / 1000000).toFixed(1)}M</div>
+          <div class="detail-value">${project.price_from ? `AED ${(project.price_from / 1000000).toFixed(1)}M` : 'Price on Request'}</div>
         </div>
         <div class="detail-item">
           <div class="detail-label">Bedrooms</div>
-          <div class="detail-value">${project.bedrooms_min || 0} - ${project.bedrooms_max || 0} BR</div>
+          <div class="detail-value">${project.bedrooms_min != null && project.bedrooms_max != null ? `${project.bedrooms_min === 0 ? 'Studio' : project.bedrooms_min} - ${project.bedrooms_max} BR` : 'Type TBC'}</div>
         </div>
         <div class="detail-item">
           <div class="detail-label">Handover</div>
@@ -190,8 +190,8 @@ const QuizResults = () => {
       return `${i + 1}. ${p.name}${badgeStr}
    Developer: ${p.developer?.name || 'N/A'}
    Location: ${p.location}, ${p.emirate}
-   Price: AED ${((p.price_from || 0) / 1000000).toFixed(1)}M - ${((p.price_to || 0) / 1000000).toFixed(1)}M
-   Bedrooms: ${p.bedrooms_min} - ${p.bedrooms_max} BR
+    Price: ${p.price_from ? `AED ${(p.price_from / 1000000).toFixed(1)}M` : 'Price on Request'}
+   Bedrooms: ${p.bedrooms_min != null && p.bedrooms_max != null ? `${p.bedrooms_min === 0 ? 'Studio' : p.bedrooms_min} - ${p.bedrooms_max} BR` : 'Type TBC'}
    Handover: ${p.handover_date || 'TBA'}`;
     }).join('\n\n');
 
