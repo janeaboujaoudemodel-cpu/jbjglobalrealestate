@@ -17,6 +17,7 @@ import { TransitionsPanel } from './features/TransitionsPanel';
 import { AIEditorPanel } from './features/AIEditorPanel';
 import { MapEffectPanel } from './features/MapEffectPanel';
 import { ProjectIntegrationPanel } from './features/ProjectIntegrationPanel';
+import { AITalkingAgentPanel } from './features/AITalkingAgentPanel';
 import { useVideoStudioProject } from './hooks/useVideoStudioProject';
 import { useMediaLibrary } from './hooks/useMediaLibrary';
 import { MediaAsset, StockAsset, Clip, ExportPreset, RenderJob } from './types';
@@ -523,7 +524,6 @@ export function AIVideoStudio() {
             const photoClips = clips.filter(c => c.type === 'image');
             const textClips  = clips.filter(c => c.type === 'text');
 
-            // Add photo clips to video track with transitions between them
             photoClips.forEach((clip, idx) => {
               if (!videoTrack) return;
               addClip(videoTrack.id, {
@@ -537,7 +537,6 @@ export function AIVideoStudio() {
                 keyframes: [],
                 effects: [],
               });
-              // Insert transition between photos (not after the last one)
               if (idx < photoClips.length - 1 && transitionType) {
                 const transitionDuration = 0.8;
                 addClip(videoTrack.id, {
@@ -556,7 +555,6 @@ export function AIVideoStudio() {
               videoCursor += clip.duration;
             });
 
-            // Add text overlay clips
             textClips.forEach(clip => {
               if (!textTrack) return;
               addClip(textTrack.id, {
@@ -584,7 +582,6 @@ export function AIVideoStudio() {
               textCursor += clip.duration;
             });
 
-            // Add voiceover audio clip (decode base64 → blob URL)
             if (voiceover && voiceover.audioBase64) {
               try {
                 const byteString = atob(voiceover.audioBase64);
@@ -592,14 +589,9 @@ export function AIVideoStudio() {
                 for (let i = 0; i < byteString.length; i++) bytes[i] = byteString.charCodeAt(i);
                 const blob = new Blob([bytes], { type: 'audio/mpeg' });
                 const audioUrl = URL.createObjectURL(blob);
-
-                // Add to voiceover track (find fresh after potential creation)
                 const voTrack = project.tracks.find(t => t.type === 'voiceover');
-                const targetTrackId = voTrack?.id;
-                // Fallback to audio track if voiceover track not ready yet
                 const fallbackAudioTrack = project.tracks.find(t => t.type === 'audio');
-                const trackId = targetTrackId || fallbackAudioTrack?.id;
-
+                const trackId = voTrack?.id || fallbackAudioTrack?.id;
                 if (trackId) {
                   const voiceCursor = project.tracks.find(t => t.id === trackId)?.clips
                     .reduce((max, c) => Math.max(max, c.startTime + c.duration), 0) ?? 0;
@@ -622,7 +614,58 @@ export function AIVideoStudio() {
             }
 
             renameProject(`${projectName} — Video Ad`);
-            toast.success(`🎬 "${projectName}" video ad ready! Photos, transitions, voiceover & text overlay added.`);
+            toast.success(`🎬 "${projectName}" video ad ready!`);
+          }}
+        />
+      }
+      talkingAgentPanel={
+        <AITalkingAgentPanel
+          onAddToTimeline={(audioUrl, duration, script, characterName) => {
+            const audioTrack = project.tracks.find(t => t.type === 'audio');
+            const textTrack  = project.tracks.find(t => t.type === 'text');
+            if (!audioTrack) { toast.error('No audio track found'); return; }
+
+            const lastEnd = audioTrack.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+            addClip(audioTrack.id, {
+              trackId: audioTrack.id,
+              type: 'audio',
+              name: `🤖 ${characterName} — AI Narration`,
+              startTime: lastEnd,
+              duration,
+              source: { url: audioUrl, inPoint: 0, outPoint: duration, originalDuration: duration },
+              transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+              keyframes: [],
+              effects: [],
+              audio: { volume: 1, fadeIn: 0.5, fadeOut: 1, muted: false, normalized: true, noiseReduction: false },
+            });
+
+            // Add script as a text overlay on the text track
+            if (textTrack && script) {
+              const textLastEnd = textTrack.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+              const previewText = script.slice(0, 80) + (script.length > 80 ? '…' : '');
+              addClip(textTrack.id, {
+                trackId: textTrack.id,
+                type: 'text',
+                name: `${characterName} Script`,
+                startTime: textLastEnd,
+                duration,
+                source: { url: '', inPoint: 0, outPoint: duration, originalDuration: duration },
+                transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                keyframes: [],
+                effects: [],
+                text: {
+                  content: previewText,
+                  fontFamily: 'Georgia, serif',
+                  fontSize: 24,
+                  fontWeight: 'normal',
+                  color: '#FFFFFF',
+                  backgroundColor: 'rgba(0,0,0,0.55)',
+                  textAlign: 'left',
+                  position: 'bottom',
+                  style: 'lower-third',
+                },
+              });
+            }
           }}
         />
       }

@@ -1,533 +1,442 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
+import React, { useState, useRef, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 import {
-  Bot, Mic, Star, Crown, Languages, Wand2, Play, Square, Download,
-  Loader2, CheckCircle2, Volume2, VolumeX, PlusCircle, RefreshCw, Copy
-} from 'lucide-react';
-import { SUPPORTED_LANGUAGES } from '../types';
-import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+  Loader2,
+  Play,
+  Pause,
+  Download,
+  Plus,
+  Wand2,
+  User,
+  Globe,
+  Mic2,
+  CheckCircle2,
+} from "lucide-react";
 
-interface AITalkingAgentPanelProps {
-  onAIVoiceGenerated: (audioUrl: string, duration: number) => void;
+// ─── Character definitions ──────────────────────────────────────────────────
+
+interface Character {
+  id: string;
+  name: string;
+  title: string;
+  avatar: string;
+  gender: "male" | "female" | "neutral";
+  style: string;
+  color: string;
 }
 
-const AGENT_CHARACTERS = [
-  { id: 'professional-male', label: 'Professional Male', icon: Bot, desc: 'Authoritative & precise' },
-  { id: 'warm-female', label: 'Warm Female', icon: Mic, desc: 'Friendly & welcoming' },
-  { id: 'energetic-presenter', label: 'Energetic', icon: Star, desc: 'Dynamic & exciting' },
-  { id: 'luxury-narrator', label: 'Luxury Narrator', icon: Crown, desc: 'Sophisticated & elite' },
-] as const;
+const CHARACTERS: Character[] = [
+  { id: "sarah",   name: "Sarah",   title: "Luxury Specialist",  avatar: "👩‍💼", gender: "female",  style: "Professional & friendly",   color: "from-rose-500 to-pink-600"     },
+  { id: "george",  name: "George",  title: "Senior Advisor",     avatar: "👨‍💼", gender: "male",    style: "Warm & experienced",         color: "from-blue-500 to-indigo-600"   },
+  { id: "laura",   name: "Laura",   title: "Premium Agent",      avatar: "👩‍🦰", gender: "female",  style: "Luxury & sophisticated",     color: "from-purple-500 to-violet-600" },
+  { id: "alex",    name: "Alex",    title: "Investment Expert",  avatar: "🧑‍💻", gender: "male",    style: "Confident & authoritative",  color: "from-emerald-500 to-teal-600"  },
+  { id: "alice",   name: "Alice",   title: "Modern Broker",      avatar: "👩‍🦱", gender: "female",  style: "Energetic & modern",         color: "from-amber-500 to-orange-600"  },
+  { id: "river",   name: "River",   title: "Prestige Narrator",  avatar: "🧑‍🎤", gender: "neutral", style: "Elegant & premium",          color: "from-slate-400 to-gray-600"    },
+  { id: "brian",   name: "Brian",   title: "Market Analyst",     avatar: "👨‍🦳", gender: "male",    style: "Deep & trustworthy",         color: "from-cyan-500 to-sky-600"      },
+  { id: "matilda", name: "Matilda", title: "Community Expert",   avatar: "👩‍🦳", gender: "female",  style: "Warm & inviting",            color: "from-lime-500 to-green-600"    },
+];
 
-const TONE_OPTIONS = [
-  { id: 'luxury', label: 'Luxury' },
-  { id: 'professional', label: 'Professional' },
-  { id: 'energetic', label: 'Energetic' },
-] as const;
+const LANGUAGES = [
+  { code: "en", label: "English",  flag: "🇺🇸" },
+  { code: "ar", label: "Arabic",   flag: "🇦🇪" },
+  { code: "fr", label: "French",   flag: "🇫🇷" },
+  { code: "de", label: "German",   flag: "🇩🇪" },
+  { code: "es", label: "Spanish",  flag: "🇪🇸" },
+  { code: "ru", label: "Russian",  flag: "🇷🇺" },
+  { code: "zh", label: "Chinese",  flag: "🇨🇳" },
+  { code: "hi", label: "Hindi",    flag: "🇮🇳" },
+  { code: "ur", label: "Urdu",     flag: "🇵🇰" },
+  { code: "tr", label: "Turkish",  flag: "🇹🇷" },
+];
 
-const DURATION_OPTIONS = [
-  { value: 30, label: '30s' },
-  { value: 60, label: '60s' },
-  { value: 90, label: '90s' },
-] as const;
+const TONES = [
+  { id: "professional", label: "Professional", icon: "🎯" },
+  { id: "luxury",       label: "Luxury",       icon: "💎" },
+  { id: "energetic",    label: "Energetic",    icon: "⚡" },
+  { id: "friendly",     label: "Friendly",     icon: "😊" },
+];
 
-type Step = 1 | 2 | 3;
+const DURATIONS = [
+  { value: 30,  label: "30s"   },
+  { value: 45,  label: "45s"   },
+  { value: 60,  label: "1 min" },
+  { value: 90,  label: "90s"   },
+];
 
-export function AITalkingAgentPanel({ onAIVoiceGenerated }: AITalkingAgentPanelProps) {
-  // Step 1 — Settings
-  const [character, setCharacter] = useState<string>('professional-male');
-  const [language, setLanguage] = useState('en');
-  const [tone, setTone] = useState<'luxury' | 'professional' | 'energetic'>('professional');
-  const [duration, setDuration] = useState<30 | 60 | 90>(60);
-  const [rate, setRate] = useState(1.0);
-  const [pitch, setPitch] = useState(1.0);
+// ─── Component ───────────────────────────────────────────────────────────────
 
-  // Step 2 — Script
-  const [prompt, setPrompt] = useState('');
-  const [script, setScript] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [wordCount, setWordCount] = useState(0);
-  const [estimatedDuration, setEstimatedDuration] = useState(0);
+interface GeneratedNarration {
+  script: string;
+  audioBase64: string;
+  audioMimeType: string;
+  duration: number;
+  wordCount: number;
+  character: string;
+  voiceId: string;
+  blobUrl: string;
+}
 
-  // Step 3 — Synthesize
-  const [isPreviewing, setIsPreviewing] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordProgress, setRecordProgress] = useState(0);
-  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
-  const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+interface AITalkingAgentPanelProps {
+  onAddToTimeline?: (audioUrl: string, duration: number, script: string, characterName: string) => void;
+  /** Legacy compat — called when voice is generated (same as onAddToTimeline without script) */
+  onAIVoiceGenerated?: (audioUrl: string, duration: number) => void;
+}
 
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
+export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AITalkingAgentPanelProps) {
+  const [selectedCharacter, setSelectedCharacter] = useState<Character>(CHARACTERS[0]);
+  const [selectedLanguage, setSelectedLanguage]   = useState("en");
+  const [selectedTone, setSelectedTone]           = useState("professional");
+  const [selectedDuration, setSelectedDuration]   = useState(45);
+  const [prompt, setPrompt]                       = useState("");
+  const [isGenerating, setIsGenerating]           = useState(false);
+  const [narration, setNarration]                 = useState<GeneratedNarration | null>(null);
+  const [isPlaying, setIsPlaying]                 = useState(false);
+  const [showScript, setShowScript]               = useState(false);
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const progressIntervalRef = useRef<number>();
 
-  const selectedLang = SUPPORTED_LANGUAGES.find(l => l.code === language);
-  const isRTL = selectedLang?.rtl ?? false;
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      window.speechSynthesis.cancel();
-      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
-      if (recordedUrl) URL.revokeObjectURL(recordedUrl);
-    };
-  }, [recordedUrl]);
-
-  const generateScript = useCallback(async () => {
+  // ── Generate narration ──────────────────────────────────────────────────
+  const handleGenerate = useCallback(async () => {
     if (!prompt.trim()) {
-      toast.error('Please enter a property description first');
+      toast.error("Please describe the property first");
       return;
     }
     setIsGenerating(true);
-    setScript('');
+    setNarration(null);
+    setIsPlaying(false);
+    if (audioRef.current) audioRef.current.pause();
+
     try {
-      const { data, error } = await supabase.functions.invoke('ai-agent-script-writer', {
-        body: { prompt, language, tone, character, duration },
+      const { data, error } = await supabase.functions.invoke("ai-talking-agent", {
+        body: {
+          prompt,
+          character: selectedCharacter.id,
+          language: selectedLanguage,
+          tone: selectedTone,
+          duration: selectedDuration,
+        },
       });
+
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
-      setScript(data.script);
-      setWordCount(data.wordCount);
-      setEstimatedDuration(data.estimatedDuration);
-      toast.success('Script generated!');
+
+      // Decode base64 audio → blob URL
+      const byteString = atob(data.audioBase64);
+      const bytes = new Uint8Array(byteString.length);
+      for (let i = 0; i < byteString.length; i++) bytes[i] = byteString.charCodeAt(i);
+      const blob = new Blob([bytes], { type: data.audioMimeType || "audio/mpeg" });
+      const blobUrl = URL.createObjectURL(blob);
+
+      setNarration({ ...data, blobUrl });
+      toast.success(`🎙️ ${selectedCharacter.name}'s narration is ready!`);
     } catch (err: any) {
-      console.error('Script generation error:', err);
-      if (err?.message?.includes('Rate limit') || err?.status === 429) {
-        toast.error('Rate limit reached. Please wait a moment and try again.');
-      } else if (err?.status === 402) {
-        toast.error('AI credits exhausted. Please add credits to your workspace.');
+      console.error("AI Talking Agent error:", err);
+      if (err.message?.includes("Rate limit") || err.message?.includes("429")) {
+        toast.error("Rate limit reached. Try again in a moment.");
+      } else if (err.message?.includes("credits") || err.message?.includes("402")) {
+        toast.error("AI credits exhausted. Please add credits.");
       } else {
-        toast.error('Failed to generate script. Please try again.');
+        toast.error("Failed to generate narration: " + (err.message || "Unknown error"));
       }
     } finally {
       setIsGenerating(false);
     }
-  }, [prompt, language, tone, character, duration]);
+  }, [prompt, selectedCharacter, selectedLanguage, selectedTone, selectedDuration]);
 
-  const getVoiceForLanguage = useCallback((langCode: string): SpeechSynthesisVoice | null => {
-    const voices = window.speechSynthesis.getVoices();
-    // Try exact match first
-    const exact = voices.find(v => v.lang.startsWith(langCode) || v.lang.toLowerCase().startsWith(langCode));
-    if (exact) return exact;
-    // Fallback: first available
-    return voices[0] || null;
-  }, []);
-
-  const stopPreview = useCallback(() => {
-    window.speechSynthesis.cancel();
-    setIsPreviewing(false);
-  }, []);
-
-  const previewVoice = useCallback(() => {
-    if (!script.trim()) {
-      toast.error('Generate a script first');
-      return;
+  // ── Playback ────────────────────────────────────────────────────────────
+  const handlePlayPause = useCallback(() => {
+    if (!narration?.blobUrl) return;
+    if (!audioRef.current || audioRef.current.src !== narration.blobUrl) {
+      if (audioRef.current) audioRef.current.pause();
+      audioRef.current = new Audio(narration.blobUrl);
+      audioRef.current.onended = () => setIsPlaying(false);
     }
-    if (isPreviewing) {
-      stopPreview();
-      return;
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play();
+      setIsPlaying(true);
     }
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(script);
-    utterance.rate = rate;
-    utterance.pitch = pitch;
-    utterance.lang = language;
-    const voice = getVoiceForLanguage(language);
-    if (voice) utterance.voice = voice;
-    utterance.onstart = () => setIsPreviewing(true);
-    utterance.onend = () => setIsPreviewing(false);
-    utterance.onerror = () => setIsPreviewing(false);
-    utteranceRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
-  }, [script, rate, pitch, language, isPreviewing, stopPreview, getVoiceForLanguage]);
+  }, [narration, isPlaying]);
 
-  const recordAndAddToTimeline = useCallback(async () => {
-    if (!script.trim()) {
-      toast.error('Generate a script first');
-      return;
-    }
-    setRecordedBlob(null);
-    setRecordedUrl(null);
-    setRecordProgress(0);
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
-      mediaRecorderRef.current = mediaRecorder;
-      chunksRef.current = [];
-
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) chunksRef.current.push(e.data);
-      };
-
-      mediaRecorder.onstop = () => {
-        stream.getTracks().forEach(t => t.stop());
-        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
-        const url = URL.createObjectURL(blob);
-        setRecordedBlob(blob);
-        setRecordedUrl(url);
-        setIsRecording(false);
-        setRecordProgress(100);
-        if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
-        toast.success('Recording complete! Preview and add to timeline below.');
-      };
-
-      mediaRecorder.start(100);
-      setIsRecording(true);
-
-      // Speak the script
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(script);
-      utterance.rate = rate;
-      utterance.pitch = pitch;
-      utterance.lang = language;
-      const voice = getVoiceForLanguage(language);
-      if (voice) utterance.voice = voice;
-
-      const estimatedMs = estimatedDuration > 0 ? estimatedDuration * 1000 : duration * 1000;
-      let elapsed = 0;
-      progressIntervalRef.current = window.setInterval(() => {
-        elapsed += 200;
-        setRecordProgress(Math.min((elapsed / estimatedMs) * 90, 90));
-      }, 200);
-
-      utterance.onend = () => {
-        // Small buffer after speech ends
-        setTimeout(() => {
-          if (mediaRecorderRef.current?.state === 'recording') {
-            mediaRecorderRef.current.stop();
-          }
-        }, 500);
-      };
-      utterance.onerror = () => {
-        if (mediaRecorderRef.current?.state === 'recording') {
-          mediaRecorderRef.current.stop();
-        }
-      };
-
-      window.speechSynthesis.speak(utterance);
-    } catch (err) {
-      console.error('Recording error:', err);
-      toast.error('Microphone access required. Please allow microphone permissions.');
-      setIsRecording(false);
-    }
-  }, [script, rate, pitch, language, duration, estimatedDuration, getVoiceForLanguage]);
-
-  const addToTimeline = useCallback(async () => {
-    if (!recordedUrl || !recordedBlob) return;
-    const audio = new Audio(recordedUrl);
-    await new Promise<void>((res) => {
-      audio.onloadedmetadata = () => res();
-      audio.onerror = () => res();
-    });
-    const dur = audio.duration || estimatedDuration || duration;
-    onAIVoiceGenerated(recordedUrl, dur);
-    toast.success('Voiceover added to timeline!');
-  }, [recordedUrl, recordedBlob, estimatedDuration, duration, onAIVoiceGenerated]);
-
-  const downloadAudio = useCallback(() => {
-    if (!recordedBlob) return;
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(recordedBlob);
-    a.download = `voiceover-${language}-${Date.now()}.webm`;
+  // ── Download ────────────────────────────────────────────────────────────
+  const handleDownload = useCallback(() => {
+    if (!narration?.blobUrl) return;
+    const a = document.createElement("a");
+    a.href = narration.blobUrl;
+    a.download = `${selectedCharacter.name.toLowerCase()}-narration.mp3`;
     a.click();
-    toast.success('Downloading voiceover...');
-  }, [recordedBlob, language]);
+  }, [narration, selectedCharacter]);
 
-  const copyScript = useCallback(() => {
-    navigator.clipboard.writeText(script);
-    toast.success('Script copied to clipboard');
-  }, [script]);
+  // ── Add to timeline ─────────────────────────────────────────────────────
+  const handleAddToTimeline = useCallback(() => {
+    if (!narration?.blobUrl) return;
+    onAddToTimeline?.(narration.blobUrl, narration.duration, narration.script, narration.character);
+    onAIVoiceGenerated?.(narration.blobUrl, narration.duration);
+    toast.success(`🎬 ${narration.character}'s narration added to timeline!`);
+  }, [narration, onAddToTimeline, onAIVoiceGenerated]);
 
-  const stepDone = (step: Step) => {
-    if (step === 1) return true;
-    if (step === 2) return script.length > 0;
-    if (step === 3) return recordedBlob !== null;
-    return false;
-  };
+  // ── Voice transcript → prompt ───────────────────────────────────────────
+  const handleVoiceTranscript = useCallback((text: string) => {
+    setPrompt(prev => (prev ? prev + " " + text : text));
+  }, []);
 
+  // ── Render ──────────────────────────────────────────────────────────────
   return (
-    <div className="space-y-4 text-sm">
+    <ScrollArea className="h-full">
+      <div className="p-4 space-y-5">
 
-      {/* ─── Step 1: Agent Identity ─── */}
-      <div className="rounded-lg border border-amber-500/20 bg-slate-800/60 p-3 space-y-3">
+        {/* Header */}
         <div className="flex items-center gap-2">
-          <span className="flex items-center justify-center w-5 h-5 rounded-full bg-amber-500 text-black font-bold text-xs shrink-0">1</span>
-          <h4 className="font-semibold text-amber-400">Agent Character & Settings</h4>
+          <div className="p-2 rounded-lg bg-amber-500/20">
+            <Mic2 className="w-4 h-4 text-amber-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-white">AI Talking Agent</h3>
+            <p className="text-xs text-slate-400">Pick a character, describe the property, generate narration</p>
+          </div>
         </div>
 
-        {/* Character selector */}
-        <div className="grid grid-cols-2 gap-2">
-          {AGENT_CHARACTERS.map(({ id, label, icon: Icon, desc }) => (
-            <button
-              key={id}
-              onClick={() => setCharacter(id)}
-              className={`flex flex-col items-center gap-1 p-2 rounded-lg border text-center transition-all ${
-                character === id
-                  ? 'border-amber-500 bg-amber-500/15 text-amber-300'
-                  : 'border-slate-600 bg-slate-800/40 text-slate-400 hover:border-slate-500'
-              }`}
+        {/* ── CHARACTER SELECTION ─────────────────────────────────────────── */}
+        <section>
+          <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <User className="w-3 h-3" /> Character
+          </p>
+          <div className="grid grid-cols-4 gap-2">
+            {CHARACTERS.map((char) => (
+              <button
+                key={char.id}
+                onClick={() => setSelectedCharacter(char)}
+                className={`relative flex flex-col items-center gap-1 p-2 rounded-xl border transition-all text-center ${
+                  selectedCharacter.id === char.id
+                    ? "border-amber-400 bg-amber-500/10"
+                    : "border-slate-700 bg-slate-800/60 hover:border-slate-500"
+                }`}
+              >
+                {selectedCharacter.id === char.id && (
+                  <CheckCircle2 className="absolute top-1 right-1 w-3 h-3 text-amber-400" />
+                )}
+                <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${char.color} flex items-center justify-center text-xl shadow-lg`}>
+                  {char.avatar}
+                </div>
+                <p className="text-[10px] font-bold text-white leading-tight">{char.name}</p>
+                <p className="text-[9px] text-slate-400 leading-tight">{char.title}</p>
+              </button>
+            ))}
+          </div>
+
+          {/* Selected character detail */}
+          <div className={`mt-2 p-2.5 rounded-lg border border-slate-700 bg-slate-800/60`}>
+            <p className="text-xs text-white font-medium">{selectedCharacter.name} · {selectedCharacter.title}</p>
+            <p className="text-[10px] text-slate-400">{selectedCharacter.style}</p>
+          </div>
+        </section>
+
+        {/* ── LANGUAGE + TONE ROW ─────────────────────────────────────────── */}
+        <div className="grid grid-cols-2 gap-3">
+          <section>
+            <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+              <Globe className="w-3 h-3" /> Language
+            </p>
+            <select
+              value={selectedLanguage}
+              onChange={(e) => setSelectedLanguage(e.target.value)}
+              className="w-full bg-slate-800 border border-slate-600 text-white text-xs rounded-lg px-2 py-2 focus:border-amber-400 focus:outline-none"
             >
-              <Icon className="w-5 h-5" />
-              <span className="text-xs font-medium leading-tight">{label}</span>
-              <span className="text-[10px] opacity-70 leading-tight">{desc}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Language & Tone */}
-        <div className="grid grid-cols-2 gap-2">
-          <div className="space-y-1">
-            <Label className="text-xs text-slate-400 flex items-center gap-1">
-              <Languages className="w-3 h-3" /> Language
-            </Label>
-            <Select value={language} onValueChange={setLanguage}>
-              <SelectTrigger className="h-8 bg-slate-800 border-slate-600 text-white text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="max-h-48">
-                {SUPPORTED_LANGUAGES.map(lang => (
-                  <SelectItem key={lang.code} value={lang.code} className="text-xs">
-                    {lang.name} {lang.rtl ? '(RTL)' : ''}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-1">
-            <Label className="text-xs text-slate-400">Tone</Label>
-            <div className="flex gap-1">
-              {TONE_OPTIONS.map(t => (
-                <button
-                  key={t.id}
-                  onClick={() => setTone(t.id as any)}
-                  className={`flex-1 text-[10px] py-1 px-1 rounded border transition-all ${
-                    tone === t.id
-                      ? 'border-amber-500 bg-amber-500/15 text-amber-300'
-                      : 'border-slate-600 bg-slate-800 text-slate-400 hover:border-slate-500'
-                  }`}
-                >
-                  {t.label}
-                </button>
+              {LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code}>{l.flag} {l.label}</option>
               ))}
-            </div>
-          </div>
+            </select>
+          </section>
+
+          <section>
+            <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Tone</p>
+            <select
+              value={selectedTone}
+              onChange={(e) => setSelectedTone(e.target.value)}
+              className="w-full bg-slate-800 border border-slate-600 text-white text-xs rounded-lg px-2 py-2 focus:border-amber-400 focus:outline-none"
+            >
+              {TONES.map((t) => (
+                <option key={t.id} value={t.id}>{t.icon} {t.label}</option>
+              ))}
+            </select>
+          </section>
         </div>
 
-        {/* Duration */}
-        <div className="space-y-1">
-          <Label className="text-xs text-slate-400">Script Duration</Label>
+        {/* ── DURATION ───────────────────────────────────────────────────── */}
+        <section>
+          <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Duration</p>
           <div className="flex gap-2">
-            {DURATION_OPTIONS.map(d => (
+            {DURATIONS.map((d) => (
               <button
                 key={d.value}
-                onClick={() => setDuration(d.value as any)}
-                className={`flex-1 text-xs py-1 rounded border transition-all ${
-                  duration === d.value
-                    ? 'border-amber-500 bg-amber-500/15 text-amber-300'
-                    : 'border-slate-600 bg-slate-800 text-slate-400 hover:border-slate-500'
+                onClick={() => setSelectedDuration(d.value)}
+                className={`flex-1 py-1.5 rounded-lg text-xs font-bold border transition-all ${
+                  selectedDuration === d.value
+                    ? "bg-amber-500 text-black border-amber-500"
+                    : "bg-slate-800 text-slate-300 border-slate-600 hover:border-slate-400"
                 }`}
               >
                 {d.label}
               </button>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* Rate & Pitch sliders */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-1">
-            <Label className="text-xs text-slate-400">Speed: {rate.toFixed(1)}×</Label>
-            <Slider
-              min={0.5} max={2} step={0.1}
-              value={[rate]}
-              onValueChange={([v]) => setRate(v)}
-              className="h-4"
+        {/* ── PROPERTY PROMPT ─────────────────────────────────────────────── */}
+        <section>
+          <div className="flex items-center justify-between mb-1.5">
+            <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              Property Description
+            </p>
+            <VoiceInputButton
+              onTranscript={handleVoiceTranscript}
+              language={selectedLanguage}
+              size="sm"
+              variant="ghost"
+              className="text-slate-400 hover:text-white h-6 w-6 p-0"
             />
           </div>
-          <div className="space-y-1">
-            <Label className="text-xs text-slate-400">Pitch: {pitch.toFixed(1)}</Label>
-            <Slider
-              min={0.5} max={2} step={0.1}
-              value={[pitch]}
-              onValueChange={([v]) => setPitch(v)}
-              className="h-4"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* ─── Step 2: Script Generator ─── */}
-      <div className="rounded-lg border border-amber-500/20 bg-slate-800/60 p-3 space-y-3">
-        <div className="flex items-center gap-2">
-          <span className="flex items-center justify-center w-5 h-5 rounded-full bg-amber-500 text-black font-bold text-xs shrink-0">2</span>
-          <h4 className="font-semibold text-amber-400">AI Script Generator</h4>
-          {stepDone(2) && <CheckCircle2 className="w-4 h-4 text-green-400 ml-auto" />}
-        </div>
-
-        <div className="space-y-1">
-          <Label className="text-xs text-slate-400">Property Description / Talking Points</Label>
           <Textarea
             value={prompt}
-            onChange={e => setPrompt(e.target.value)}
-            placeholder="e.g. 3-bedroom luxury apartment in Dubai Marina, stunning sea views, private pool, 1.2M AED, 40/60 payment plan, handover Q4 2026..."
-            className="min-h-[80px] bg-slate-900 border-slate-600 text-white text-xs resize-none placeholder:text-slate-500"
-            dir="ltr"
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="e.g. Stunning 3-bedroom villa in Dubai Hills Estate, private pool, panoramic skyline views, modern interiors, AED 4.5M..."
+            rows={4}
+            className="bg-slate-800 border-slate-600 text-white placeholder:text-slate-500 text-xs resize-none focus:border-amber-400"
           />
-        </div>
+          <p className="text-[10px] text-slate-500 mt-1">
+            Tip: Include bedrooms, location, price, key features, and selling points.
+          </p>
+        </section>
 
+        {/* ── GENERATE BUTTON ─────────────────────────────────────────────── */}
         <Button
-          onClick={generateScript}
+          onClick={handleGenerate}
           disabled={isGenerating || !prompt.trim()}
-          className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold disabled:opacity-50 h-8 text-xs"
+          className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold gap-2"
         >
           {isGenerating ? (
-            <><Loader2 className="w-3 h-3 mr-1 animate-spin" /> Writing Script...</>
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Generating {selectedCharacter.name}'s narration…
+            </>
           ) : (
-            <><Wand2 className="w-3 h-3 mr-1" /> Generate Script with AI</>
+            <>
+              <Wand2 className="w-4 h-4" />
+              Generate AI Narration with {selectedCharacter.name}
+            </>
           )}
         </Button>
 
-        {script && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label className="text-xs text-slate-400">Generated Script</Label>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] text-slate-500">{wordCount} words · ~{estimatedDuration}s</span>
-                <button onClick={copyScript} className="text-slate-500 hover:text-amber-400 transition-colors">
-                  <Copy className="w-3 h-3" />
+        {/* ── GENERATING SKELETON ─────────────────────────────────────────── */}
+        {isGenerating && (
+          <div className="rounded-xl border border-slate-700 bg-slate-800/60 p-4 flex flex-col items-center gap-3">
+            <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${selectedCharacter.color} flex items-center justify-center text-2xl animate-pulse`}>
+              {selectedCharacter.avatar}
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-semibold text-white">{selectedCharacter.name} is preparing…</p>
+              <p className="text-xs text-slate-400 mt-0.5">Writing script & generating voice</p>
+            </div>
+            <div className="flex items-center gap-1 h-5">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="w-1 bg-amber-400/70 rounded-full animate-bounce"
+                  style={{ height: `${8 + Math.sin(i) * 8}px`, animationDelay: `${i * 0.1}s` }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── RESULT ──────────────────────────────────────────────────────── */}
+        {narration && !isGenerating && (
+          <div className="rounded-xl border border-amber-500/30 bg-slate-800/80 overflow-hidden">
+            {/* Character result header */}
+            <div className={`p-3 bg-gradient-to-r ${selectedCharacter.color} opacity-90 flex items-center gap-3`}>
+              <div className={`w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-2xl shadow-lg flex-shrink-0`}>
+                {selectedCharacter.avatar}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-white">{narration.character}</p>
+                <p className="text-xs text-white/80">
+                  ~{narration.duration}s · {narration.wordCount} words
+                </p>
+              </div>
+              {/* Playback controls */}
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                <button
+                  onClick={handlePlayPause}
+                  className="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all"
+                >
+                  {isPlaying
+                    ? <Pause className="w-4 h-4 text-white" />
+                    : <Play className="w-4 h-4 text-white ml-0.5" />
+                  }
                 </button>
-                <button onClick={generateScript} disabled={isGenerating} className="text-slate-500 hover:text-amber-400 transition-colors">
-                  <RefreshCw className={`w-3 h-3 ${isGenerating ? 'animate-spin' : ''}`} />
+                <button
+                  onClick={handleDownload}
+                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all"
+                >
+                  <Download className="w-3.5 h-3.5 text-white" />
                 </button>
               </div>
             </div>
-            <Textarea
-              value={script}
-              onChange={e => setScript(e.target.value)}
-              className="min-h-[100px] bg-slate-900 border-slate-600 text-white text-xs resize-none"
-              dir={isRTL ? 'rtl' : 'ltr'}
-            />
-          </div>
-        )}
-      </div>
 
-      {/* ─── Step 3: Synthesize & Export ─── */}
-      <div className="rounded-lg border border-amber-500/20 bg-slate-800/60 p-3 space-y-3">
-        <div className="flex items-center gap-2">
-          <span className="flex items-center justify-center w-5 h-5 rounded-full bg-amber-500 text-black font-bold text-xs shrink-0">3</span>
-          <h4 className="font-semibold text-amber-400">Synthesize & Export</h4>
-          {stepDone(3) && <CheckCircle2 className="w-4 h-4 text-green-400 ml-auto" />}
-        </div>
+            {/* Script + timeline button */}
+            <div className="p-3 border-t border-slate-700/50 space-y-2">
+              <button
+                onClick={() => setShowScript((s) => !s)}
+                className="text-xs text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1"
+              >
+                {showScript ? "Hide script ▲" : "Show script ▼"}
+              </button>
 
-        {/* Waveform animation when previewing */}
-        {isPreviewing && (
-          <div className="flex items-center justify-center gap-1 py-2">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div
-                key={i}
-                className="w-1 rounded-full bg-amber-400"
-                style={{
-                  height: `${8 + Math.random() * 20}px`,
-                  animation: `pulse 0.${4 + (i % 4)}s ease-in-out infinite alternate`,
-                  animationDelay: `${i * 0.05}s`,
-                }}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Preview button */}
-        <Button
-          onClick={previewVoice}
-          disabled={!script.trim() || isRecording}
-          variant="outline"
-          className={`w-full h-8 text-xs border-slate-600 ${isPreviewing ? 'border-amber-500 text-amber-400' : 'text-slate-300 hover:text-white'}`}
-        >
-          {isPreviewing ? (
-            <><VolumeX className="w-3 h-3 mr-1" /> Stop Preview</>
-          ) : (
-            <><Volume2 className="w-3 h-3 mr-1" /> Preview Voice (Browser TTS — Zero Credits)</>
-          )}
-        </Button>
-
-        {/* Record button */}
-        {!recordedBlob && (
-          <div className="space-y-2">
-            <Button
-              onClick={isRecording ? undefined : recordAndAddToTimeline}
-              disabled={!script.trim() || isPreviewing}
-              className={`w-full h-8 text-xs ${
-                isRecording
-                  ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse'
-                  : 'bg-amber-500 hover:bg-amber-400 text-black font-semibold'
-              } disabled:opacity-50`}
-            >
-              {isRecording ? (
-                <><Square className="w-3 h-3 mr-1" /> Recording...</>
-              ) : (
-                <><Mic className="w-3 h-3 mr-1" /> Record & Capture Audio</>
+              {showScript && (
+                <div className="bg-slate-900/60 rounded-lg p-3 text-xs text-slate-300 leading-relaxed max-h-40 overflow-y-auto">
+                  {narration.script}
+                </div>
               )}
-            </Button>
-            {isRecording && (
-              <Progress value={recordProgress} className="h-1" />
-            )}
-            <p className="text-[10px] text-slate-500 text-center">
-              Mic required to capture the browser's voice output
-            </p>
-          </div>
-        )}
 
-        {/* Recorded audio controls */}
-        {recordedUrl && recordedBlob && (
-          <div className="space-y-2">
-            <audio
-              ref={audioRef}
-              src={recordedUrl}
-              onEnded={() => setIsAudioPlaying(false)}
-              className="w-full h-8 rounded"
-              controls
-            />
-            <div className="flex gap-2">
-              <Button
-                onClick={addToTimeline}
-                className="flex-1 h-8 text-xs bg-green-600 hover:bg-green-500 text-white font-semibold"
-              >
-                <PlusCircle className="w-3 h-3 mr-1" /> Add to Timeline
-              </Button>
-              <Button
-                onClick={downloadAudio}
-                variant="outline"
-                className="h-8 text-xs border-slate-600 text-slate-300 hover:text-white"
-              >
-                <Download className="w-3 h-3 mr-1" /> Download
-              </Button>
-              <Button
-                onClick={() => { setRecordedBlob(null); setRecordedUrl(null); setRecordProgress(0); }}
-                variant="ghost"
-                className="h-8 text-xs text-slate-500 hover:text-red-400"
-              >
-                Redo
-              </Button>
+              {/* Waveform animation while playing */}
+              {isPlaying && (
+                <div className="flex items-center gap-0.5 h-6">
+                  {Array.from({ length: 24 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="flex-1 bg-amber-400 rounded-full animate-pulse"
+                      style={{
+                        height: `${14 + Math.sin(i * 0.7) * 10}px`,
+                        animationDelay: `${i * 0.05}s`,
+                        animationDuration: `${0.5 + (i % 3) * 0.2}s`,
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {(onAddToTimeline || onAIVoiceGenerated) && (
+                <Button
+                  onClick={handleAddToTimeline}
+                  size="sm"
+                  className="w-full bg-slate-700 hover:bg-slate-600 text-white gap-1.5 text-xs"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  Add Narration to Timeline
+                </Button>
+              )}
             </div>
           </div>
         )}
 
-        {/* Credit note */}
-        <div className="flex items-start gap-2 p-2 bg-green-500/10 rounded border border-green-500/20">
-          <CheckCircle2 className="w-3 h-3 text-green-400 shrink-0 mt-0.5" />
-          <p className="text-[10px] text-green-300/80">
-            Zero ElevenLabs credits — Script uses Lovable AI, voice uses browser's built-in TTS engine.
-          </p>
-        </div>
       </div>
-    </div>
+    </ScrollArea>
   );
 }
