@@ -3,6 +3,7 @@ import { Slider } from '@/components/ui/slider';
 import { Play, Pause, Square, SkipBack, SkipForward, Volume2, VolumeX, Maximize2, Upload, Mic, FileText, Bot, Film, CloudUpload, Sparkles } from 'lucide-react';
 import { Clip } from '../types';
 import { PremiumEffectOverlay } from './PremiumEffectOverlay';
+import { BeforeAfterSplitOverlay } from './BeforeAfterSplitOverlay';
 
 // ── Example real-estate "inspiration" thumbnails (Unsplash, no key needed) ──
 const EXAMPLE_VIDEOS = [
@@ -129,6 +130,8 @@ interface VideoPreviewCanvasProps {
   hoverOverlayEffect?: string | null;
   beautyFilter?: BeautyAdjustments | null;
   onClearBeautyFilter?: () => void;
+  /** When true, renders before/after split overlay instead of the regular filter */
+  beautyComparisonMode?: boolean;
 }
 
 const QUICK_ACTIONS = [
@@ -241,6 +244,7 @@ export function VideoPreviewCanvas({
   hoverOverlayEffect = null,
   beautyFilter = null,
   onClearBeautyFilter,
+  beautyComparisonMode = false,
 }: VideoPreviewCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -408,47 +412,61 @@ export function VideoPreviewCanvas({
         >
           {hasClips ? (
             <>
-              {/* ── Video clip ── */}
-              {activeVideoClip && (
-                <video
-                  ref={videoRef}
-                  src={activeVideoClip.url}
-                  className="w-full h-full object-contain"
-                  muted={isMuted}
-                  playsInline
-                  style={{ filter: beautyFilter ? computeCssFilter(beautyFilter) : 'none' }}
+              {/* ── Before/After split comparison mode ── */}
+              {beautyComparisonMode && beautyFilter && activeMediaClip ? (
+                <BeforeAfterSplitOverlay
+                  filterCss={computeCssFilter(beautyFilter)}
+                  vignetteOpacity={beautyFilter.vignette / 100}
+                  mediaSrc={activeMediaClip.url}
+                  mediaType={activeMediaClip.type === 'video' ? 'video' : 'image'}
+                  isMuted={isMuted}
+                  currentTime={activeVideoClip ? currentTime - activeVideoClip.startTime : 0}
                 />
-              )}
+              ) : (
+                <>
+                  {/* ── Video clip ── */}
+                  {activeVideoClip && (
+                    <video
+                      ref={videoRef}
+                      src={activeVideoClip.url}
+                      className="w-full h-full object-contain"
+                      muted={isMuted}
+                      playsInline
+                      style={{ filter: beautyFilter ? computeCssFilter(beautyFilter) : 'none' }}
+                    />
+                  )}
 
-              {/* ── Image clip (from "Create Ad" photos) ── */}
-              {activeImageClip && !activeVideoClip && (
-                <img
-                  src={activeImageClip.url}
-                  alt={activeImageClip.id}
-                  className="w-full h-full object-contain"
-                  style={{ filter: beautyFilter ? computeCssFilter(beautyFilter) : 'none' }}
-                />
-              )}
+                  {/* ── Image clip (from "Create Ad" photos) ── */}
+                  {activeImageClip && !activeVideoClip && (
+                    <img
+                      src={activeImageClip.url}
+                      alt={activeImageClip.id}
+                      className="w-full h-full object-contain"
+                      style={{ filter: beautyFilter ? computeCssFilter(beautyFilter) : 'none' }}
+                    />
+                  )}
 
-              {/* ── No media at playhead ── */}
-              {!activeMediaClip && (
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-center">
-                    <Film className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-                    <p className="text-slate-400 text-lg">No media at playhead</p>
-                    <p className="text-slate-500 text-sm mt-1">Move the playhead to a clip</p>
-                  </div>
-                </div>
-              )}
+                  {/* ── No media at playhead ── */}
+                  {!activeMediaClip && (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="text-center">
+                        <Film className="w-12 h-12 text-slate-500 mx-auto mb-3" />
+                        <p className="text-slate-400 text-lg">No media at playhead</p>
+                        <p className="text-slate-500 text-sm mt-1">Move the playhead to a clip</p>
+                      </div>
+                    </div>
+                  )}
 
-              {/* ── Beauty Vignette Overlay ── */}
-              {beautyFilter && beautyFilter.vignette > 0 && (
-                <div
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: `radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,${beautyFilter.vignette / 100}) 100%)`,
-                  }}
-                />
+                  {/* ── Beauty Vignette Overlay ── */}
+                  {beautyFilter && beautyFilter.vignette > 0 && (
+                    <div
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background: `radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,${beautyFilter.vignette / 100}) 100%)`,
+                      }}
+                    />
+                  )}
+                </>
               )}
 
               {/* ── Active Text Overlays ── */}
@@ -516,8 +534,8 @@ export function VideoPreviewCanvas({
               {/* Hover burst preview overlay */}
               <PremiumEffectOverlay effectId={hoverOverlayEffect} isBurst={true} />
 
-              {/* ── Beauty: ON badge ── */}
-              {beautyFilter && (
+              {/* ── Beauty badge ── */}
+              {beautyFilter && !beautyComparisonMode && (
                 <button
                   onClick={onClearBeautyFilter}
                   className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold bg-amber-500/90 text-black hover:bg-amber-400 transition-colors shadow-lg"
@@ -525,6 +543,11 @@ export function VideoPreviewCanvas({
                 >
                   ✨ Beauty: ON
                 </button>
+              )}
+              {beautyFilter && beautyComparisonMode && (
+                <div className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold bg-violet-600/90 text-white shadow-lg select-none pointer-events-none">
+                  ◧ Comparing
+                </div>
               )}
 
               {/* Time Overlay */}

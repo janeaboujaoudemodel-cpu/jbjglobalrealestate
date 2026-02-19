@@ -13,7 +13,8 @@ import {
   X,
   Zap,
   Film,
-  CheckCircle2
+  CheckCircle2,
+  SplitSquareHorizontal
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -56,9 +57,11 @@ interface BeautyFiltersPanelProps {
   onFilterChange?: (adjustments: BeautyAdjustments | null) => void;
   onApplyToExport?: (adjustments: BeautyAdjustments | null) => void;
   exportFilterActive?: boolean;
+  onToggleComparison?: () => void;
+  comparisonMode?: boolean;
 }
 
-export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilterActive }: BeautyFiltersPanelProps) {
+export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilterActive, onToggleComparison, comparisonMode }: BeautyFiltersPanelProps) {
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isVideo, setIsVideo] = useState(false);
@@ -207,26 +210,43 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
             <Sparkles className="h-4 w-4 text-amber-400" />
             <h3 className="text-sm font-medium text-white">Beauty Filters</h3>
           </div>
-          {isFilterActive && (
-            <div className="flex items-center gap-1.5">
-              <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 animate-pulse">
-                <Zap className="w-2.5 h-2.5" />
-                LIVE
-              </span>
-              <button
-                onClick={handleClearFilter}
-                className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white transition-colors"
-              >
-                <X className="w-2.5 h-2.5" />
-                Clear
-              </button>
-            </div>
-          )}
+          <div className="flex items-center gap-1.5">
+            {isFilterActive && (
+              <>
+                <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 animate-pulse">
+                  <Zap className="w-2.5 h-2.5" />
+                  LIVE
+                </span>
+                {/* ── Before / After comparison toggle ── */}
+                <button
+                  onClick={onToggleComparison}
+                  title={comparisonMode ? 'Exit comparison mode' : 'Before / After split view'}
+                  className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all border ${
+                    comparisonMode
+                      ? 'bg-violet-500/25 text-violet-300 border-violet-500/50 shadow-sm'
+                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white border-transparent'
+                  }`}
+                >
+                  <SplitSquareHorizontal className="w-3 h-3" />
+                  {comparisonMode ? 'Comparing' : 'Compare'}
+                </button>
+                <button
+                  onClick={handleClearFilter}
+                  className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white transition-colors border border-transparent"
+                >
+                  <X className="w-2.5 h-2.5" />
+                  Clear
+                </button>
+              </>
+            )}
+          </div>
         </div>
         <p className="text-xs text-slate-500 mt-1">
-          {isFilterActive
-            ? 'Filter is live on the preview canvas'
-            : 'Adjust sliders to preview filters on your video'}
+          {comparisonMode
+            ? 'Drag the divider on the canvas to compare original vs filtered'
+            : isFilterActive
+              ? 'Filter is live on the preview canvas'
+              : 'Adjust sliders to preview filters on your video'}
         </p>
       </div>
 

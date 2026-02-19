@@ -83,6 +83,7 @@ export function AIVideoStudio() {
   const [hoverOverlayEffect, setHoverOverlayEffect] = useState<string | null>(null);
   const [activeBeautyFilter, setActiveBeautyFilter] = useState<import('./features/BeautyFiltersPanel').BeautyAdjustments | null>(null);
   const [exportBeautyFilter, setExportBeautyFilter] = useState<import('./features/BeautyFiltersPanel').BeautyAdjustments | null>(null);
+  const [beautyComparisonMode, setBeautyComparisonMode] = useState(false);
 
   useEffect(() => {
     loadStockLibrary();
@@ -294,7 +295,8 @@ export function AIVideoStudio() {
           activeOverlayEffect={activeOverlayEffect}
           hoverOverlayEffect={hoverOverlayEffect}
           beautyFilter={activeBeautyFilter}
-          onClearBeautyFilter={() => setActiveBeautyFilter(null)}
+          onClearBeautyFilter={() => { setActiveBeautyFilter(null); setBeautyComparisonMode(false); }}
+          beautyComparisonMode={beautyComparisonMode}
         />
       }
       timeline={
@@ -372,9 +374,11 @@ export function AIVideoStudio() {
       beautyPanel={
         <ScrollArea className="h-full">
           <BeautyFiltersPanel
-            onFilterChange={setActiveBeautyFilter}
+            onFilterChange={(adj) => { setActiveBeautyFilter(adj); if (!adj) setBeautyComparisonMode(false); }}
             onApplyToExport={(adj) => setExportBeautyFilter(adj)}
             exportFilterActive={exportBeautyFilter != null}
+            comparisonMode={beautyComparisonMode}
+            onToggleComparison={() => setBeautyComparisonMode(m => !m)}
           />
         </ScrollArea>
       }
