@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Stamp, ChevronRight, ChevronLeft, Building2, Palette, Image, Wand2, Check } from 'lucide-react';
+import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 
 type StampType = 'ROUND' | 'OVAL' | 'RECTANGLE' | 'SQUARE';
 type StyleTheme = 'CLASSIC' | 'MODERN' | 'MINIMAL' | 'LUXURY' | 'BOLD' | 'VINTAGE';
@@ -172,6 +173,20 @@ export default function StampProjectWizard() {
                 <Building2 size={18} className="text-[hsl(var(--gold))]"/>
                 <h2 className="font-semibold text-[hsl(var(--foreground))]">Company Details</h2>
               </div>
+
+              {/* AI Trade License Uploader */}
+              <StampLicenseUploader
+                onExtracted={(data) => {
+                  if (data.company_name) set('company_name', data.company_name);
+                  if (data.arabic_company_name) {
+                    set('arabic_company_name', data.arabic_company_name);
+                    set('language_mode', 'BILINGUAL');
+                  }
+                  if (data.registration_number) set('registration_number_optional', data.registration_number);
+                  if (data.city) set('city_optional', data.city);
+                  if (data.country) set('country_optional', data.country);
+                }}
+              />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">

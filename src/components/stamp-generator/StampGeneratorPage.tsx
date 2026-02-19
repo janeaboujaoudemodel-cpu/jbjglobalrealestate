@@ -7,7 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { StampSVGRenderer } from '@/components/stamp-generator/StampSVGRenderer';
 import { StampColorWheel } from '@/components/stamp-generator/StampColorWheel';
-import { StampTextEditor, mutateTextElement } from '@/components/stamp-generator/StampTextEditor';
+import { StampTextEditor } from '@/components/stamp-generator/StampTextEditor';
+import { StampPreviewModal } from '@/components/stamp-generator/StampPreviewModal';
 import { generateStampConcepts, StampDesignConcept } from '@/lib/stampTemplates';
 import {
   Wand2, Loader2, Check, RefreshCw, Download, Stamp,
@@ -20,12 +21,17 @@ interface ChatMessage {
   content: string;
 }
 
-const SECONDARY_COLORS = [
-  { label: 'Gold', value: '#B8860B' },
-  { label: 'Silver', value: '#708090' },
-  { label: 'Copper', value: '#7C4A00' },
-  { label: 'Rose Gold', value: '#8B5A5A' },
-  { label: 'Off-White', value: '#F5F5DC' },
+type ColorStop = 'primary' | 'secondary' | 'accent';
+
+const PRESET_PALETTE = [
+  { label: 'Navy',    hex: '#1a2744' },
+  { label: 'Gold',    hex: '#B8860B' },
+  { label: 'Black',   hex: '#0d0d0d' },
+  { label: 'Red',     hex: '#8B0000' },
+  { label: 'Purple',  hex: '#4B0082' },
+  { label: 'Forest',  hex: '#1B4332' },
+  { label: 'Copper',  hex: '#7C4A00' },
+  { label: 'Teal',    hex: '#0D5C63' },
 ];
 
 export default function StampGeneratorPage() {
@@ -41,13 +47,17 @@ export default function StampGeneratorPage() {
   const [savedDesignId, setSavedDesignId] = useState<string | null>(null);
   const [blocked, setBlocked] = useState(false);
 
-  // Color state
+  // Three-color system
   const [primaryColor, setPrimaryColor] = useState('#1a2744');
   const [secondaryColor, setSecondaryColor] = useState<string | undefined>(undefined);
-  const [dualColorMode, setDualColorMode] = useState(false);
+  const [accentColor, setAccentColor] = useState<string | undefined>(undefined);
+  const [activeStop, setActiveStop] = useState<ColorStop>('primary');
 
   // Left panel tab
   const [leftTab, setLeftTab] = useState<'color' | 'text'>('color');
+
+  // Preview modal
+  const [previewConcept, setPreviewConcept] = useState<StampDesignConcept | null>(null);
 
   // AI chat
   const [chatOpen, setChatOpen] = useState(false);
@@ -57,8 +67,6 @@ export default function StampGeneratorPage() {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const [togglingFav, setTogglingFav] = useState<string | null>(null);
-
-  // Per-concept SVG overrides (text edits)
   const [svgOverrides, setSvgOverrides] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -186,13 +194,20 @@ export default function StampGeneratorPage() {
     setTogglingFav(null);
   }
 
-  async function selectDesign(concept: StampDesignConcept) {
+  // Opens preview modal instead of immediately saving
+  function handleSelectConcept(concept: StampDesignConcept) {
     setSelectedId(concept.id);
+    setPreviewConcept(concept);
+  }
+
+  async function confirmSelectAndExport(concept: StampDesignConcept) {
+    setPreviewConcept(null);
     const svgToSave = svgOverrides[concept.id] || concept.svgSource;
     const isDbId = concept.id.length === 36;
+    let designId: string = concept.id;
+
     if (isDbId) {
       setSavedDesignId(concept.id);
-      // Save SVG overrides back to DB
       if (svgOverrides[concept.id]) {
         await supabase.from('stamp_designs').update({ svg_source: svgToSave }).eq('id', concept.id);
       }
@@ -203,11 +218,13 @@ export default function StampGeneratorPage() {
         template_key: concept.templateKey, svg_source: svgToSave, style_snapshot_json: project,
       }).select('id').single();
       if (data) {
+        designId = data.id;
         setSavedDesignId(data.id);
         await supabase.from('stamp_projects').update({ selected_design_id: data.id, approval_status: 'FINAL_SELECTED' }).eq('id', projectId);
       }
     }
     toast.success('Design selected!');
+    navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || designId}`);
   }
 
   async function sendChatMessage() {
@@ -224,12 +241,8 @@ export default function StampGeneratorPage() {
       const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token}` },
-        body: JSON.stringify({
-          action: 'refine', project, projectId,
-          instruction: chatInput, currentSvg: svgForRefine,
-        }),
+        body: JSON.stringify({ action: 'refine', project, projectId, instruction: chatInput, currentSvg: svgForRefine }),
       });
-
       if (res.ok) {
         const json = await res.json();
         if (json.svgSource) {
@@ -254,10 +267,14 @@ export default function StampGeneratorPage() {
     setChatLoading(false);
   }
 
-  const tintColor = primaryColor;
-  const secColor = dualColorMode ? secondaryColor : undefined;
+  // Active color for the wheel
+  const activeColor = activeStop === 'primary' ? primaryColor : activeStop === 'secondary' ? (secondaryColor || '#2a3a5c') : (accentColor || '#B8860B');
+  function setActiveColor(hex: string) {
+    if (activeStop === 'primary') setPrimaryColor(hex);
+    else if (activeStop === 'secondary') setSecondaryColor(hex);
+    else setAccentColor(hex);
+  }
 
-  // Get selected concept for text editor
   const allConcepts = [...favoriteConcepts, ...concepts.filter(c => !favoriteConcepts.some(f => f.id === c.id))];
   const selectedConcept = allConcepts.find(c => c.id === selectedId);
   const selectedSvg = selectedConcept ? (svgOverrides[selectedConcept.id] || selectedConcept.svgSource) : null;
@@ -266,9 +283,11 @@ export default function StampGeneratorPage() {
     setSvgOverrides(prev => ({ ...prev, [conceptId]: newSvg }));
   }
 
-  function getConceptSvg(concept: StampDesignConcept) {
-    return svgOverrides[concept.id] || concept.svgSource;
-  }
+  const stopDefs: { key: ColorStop; label: string; color: string }[] = [
+    { key: 'primary',   label: 'Primary',   color: primaryColor },
+    { key: 'secondary', label: 'Secondary', color: secondaryColor || '#2a3a5c' },
+    { key: 'accent',    label: 'Accent',    color: accentColor || '#B8860B' },
+  ];
 
   if (!project) {
     return (
@@ -280,6 +299,21 @@ export default function StampGeneratorPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]">
+
+      {/* Preview Modal */}
+      {previewConcept && (
+        <StampPreviewModal
+          concept={previewConcept}
+          project={project}
+          tintColor={primaryColor}
+          secondaryColor={secondaryColor}
+          accentColor={accentColor}
+          svgOverride={svgOverrides[previewConcept.id]}
+          onBack={() => setPreviewConcept(null)}
+          onSelectAndExport={() => confirmSelectAndExport(previewConcept)}
+        />
+      )}
+
       {/* Header */}
       <div className="border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
@@ -317,21 +351,16 @@ export default function StampGeneratorPage() {
       <div className="max-w-7xl mx-auto px-6 py-6">
         <div className="flex gap-6">
 
-          {/* ── Left Panel: Color Wheel + Text Editor ──────────────── */}
-          <div className="hidden lg:flex flex-col gap-4 w-56 flex-shrink-0">
-
+          {/* ── Left Panel ─────────────────────────────────────────────── */}
+          <div className="hidden lg:flex flex-col gap-4 w-60 flex-shrink-0">
             {/* Tab switcher */}
             <div className="flex bg-[hsl(var(--muted))] rounded-xl p-1 gap-1">
-              <button
-                onClick={() => setLeftTab('color')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${leftTab === 'color' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}
-              >
+              <button onClick={() => setLeftTab('color')}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${leftTab === 'color' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
                 <Palette size={12}/> Colors
               </button>
-              <button
-                onClick={() => setLeftTab('text')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${leftTab === 'text' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}
-              >
+              <button onClick={() => setLeftTab('text')}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${leftTab === 'text' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
                 <Type size={12}/> Text
               </button>
             </div>
@@ -339,38 +368,51 @@ export default function StampGeneratorPage() {
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-4">
               {leftTab === 'color' && (
                 <>
+                  {/* 3-stop selector */}
+                  <div className="flex gap-2">
+                    {stopDefs.map(s => (
+                      <button key={s.key} onClick={() => setActiveStop(s.key)}
+                        title={s.label}
+                        className={`flex-1 flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all ${activeStop === s.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'}`}>
+                        <div className="w-7 h-7 rounded-full border-2 border-white shadow-md" style={{ backgroundColor: s.color }}/>
+                        <span className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] leading-none">{s.label}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Color wheel for active stop */}
                   <StampColorWheel
-                    color={primaryColor}
-                    onChange={setPrimaryColor}
-                    label="Primary Color"
+                    color={activeColor}
+                    onChange={setActiveColor}
+                    label={stopDefs.find(s => s.key === activeStop)?.label + ' Color'}
                     size={156}
                   />
 
-                  {/* Dual color toggle */}
+                  {/* Preset palette shortcuts */}
                   <div className="pt-2 border-t border-[hsl(var(--border))]">
-                    <label className="flex items-center gap-2 cursor-pointer mb-3">
-                      <div
-                        onClick={() => setDualColorMode(v => !v)}
-                        className={`w-9 h-5 rounded-full transition-colors relative flex-shrink-0 ${dualColorMode ? 'bg-[hsl(var(--gold))]' : 'bg-[hsl(var(--muted))]'}`}
-                      >
-                        <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${dualColorMode ? 'left-4' : 'left-0.5'}`}/>
-                      </div>
-                      <span className="text-xs font-medium text-[hsl(var(--foreground))]">Dual Color</span>
-                    </label>
+                    <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Presets</p>
+                    <div className="flex flex-wrap gap-2">
+                      {PRESET_PALETTE.map(c => (
+                        <button key={c.hex} onClick={() => setActiveColor(c.hex)} title={c.label}
+                          className={`w-7 h-7 rounded-full border-2 transition-all hover:scale-110 ${activeColor === c.hex ? 'border-[hsl(var(--gold))] scale-125 shadow-md' : 'border-white shadow-sm'}`}
+                          style={{ backgroundColor: c.hex }}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1.5">Applies to the active stop ({stopDefs.find(s => s.key === activeStop)?.label})</p>
+                  </div>
 
-                    {dualColorMode && (
-                      <div className="space-y-2">
-                        <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Secondary (inner elements)</p>
-                        <div className="flex flex-wrap gap-2">
-                          {SECONDARY_COLORS.map(c => (
-                            <button key={c.value} onClick={() => setSecondaryColor(c.value)} title={c.label}
-                              className={`w-7 h-7 rounded-full border-2 transition-all ${secondaryColor === c.value ? 'border-[hsl(var(--gold))] scale-125 shadow-md' : 'border-white shadow-sm'}`}
-                              style={{ backgroundColor: c.value }}
-                            />
-                          ))}
-                          <button onClick={() => setSecondaryColor(undefined)} className="h-7 px-2 text-[10px] rounded-full border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]">Clear</button>
-                        </div>
-                      </div>
+                  {/* Clear secondary/accent */}
+                  <div className="flex gap-1.5">
+                    {secondaryColor && (
+                      <button onClick={() => setSecondaryColor(undefined)} className="text-[10px] px-2 py-1 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)] transition-all">
+                        Clear Secondary
+                      </button>
+                    )}
+                    {accentColor && (
+                      <button onClick={() => setAccentColor(undefined)} className="text-[10px] px-2 py-1 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)] transition-all">
+                        Clear Accent
+                      </button>
                     )}
                   </div>
                 </>
@@ -398,7 +440,7 @@ export default function StampGeneratorPage() {
               <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
                 <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Selected Preview</p>
                 <div className="flex items-center justify-center py-2">
-                  <StampSVGRenderer svgSource={selectedSvg} tintColor={tintColor} secondaryColor={secColor} size={140}/>
+                  <StampSVGRenderer svgSource={selectedSvg} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} size={140}/>
                 </div>
               </div>
             )}
@@ -407,16 +449,25 @@ export default function StampGeneratorPage() {
           {/* ── Main Content ──────────────────────────────────────── */}
           <div className="flex-1 min-w-0 space-y-5">
 
-            {/* Mobile color picker (collapsed) */}
+            {/* Mobile color picker */}
             <div className="lg:hidden bg-white rounded-2xl border border-[hsl(var(--border))] p-4">
+              <div className="flex items-center gap-3 mb-3">
+                {stopDefs.map(s => (
+                  <button key={s.key} onClick={() => setActiveStop(s.key)}
+                    className={`flex flex-col items-center gap-1 p-2 rounded-xl border-2 flex-1 transition-all ${activeStop === s.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))]'}`}>
+                    <div className="w-6 h-6 rounded-full border border-white shadow" style={{ backgroundColor: s.color }}/>
+                    <span className="text-[9px] text-[hsl(var(--muted-foreground))]">{s.label}</span>
+                  </button>
+                ))}
+              </div>
               <div className="flex items-center gap-4">
-                <StampColorWheel color={primaryColor} onChange={setPrimaryColor} size={100} label="Color"/>
-                <div className="flex-1 space-y-2">
-                  <p className="text-xs font-medium text-[hsl(var(--foreground))]">Selected:</p>
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full border border-[hsl(var(--border))]" style={{ backgroundColor: primaryColor }}/>
-                    <code className="text-xs font-mono text-[hsl(var(--foreground))]">{primaryColor}</code>
-                  </div>
+                <StampColorWheel color={activeColor} onChange={setActiveColor} size={80} label=""/>
+                <div className="flex flex-wrap gap-1.5">
+                  {PRESET_PALETTE.map(c => (
+                    <button key={c.hex} onClick={() => setActiveColor(c.hex)} title={c.label}
+                      className="w-6 h-6 rounded-full border-2 border-white shadow-sm hover:scale-110 transition-all"
+                      style={{ backgroundColor: c.hex }}/>
+                  ))}
                 </div>
               </div>
             </div>
@@ -443,8 +494,8 @@ export default function StampGeneratorPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
                   {favoriteConcepts.map(c => (
                     <ConceptCard key={c.id} concept={c} svgOverride={svgOverrides[c.id]}
-                      selectedId={selectedId} tintColor={tintColor} secondaryColor={secColor}
-                      togglingFav={togglingFav} onSelect={selectDesign} onToggleFav={toggleFavorite}/>
+                      selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor}
+                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite}/>
                   ))}
                 </div>
               </div>
@@ -465,15 +516,15 @@ export default function StampGeneratorPage() {
                 <div className="flex items-center justify-between">
                   <h2 className="font-semibold text-[hsl(var(--foreground))]">
                     {concepts.length} Stamp Concepts
-                    <span className="ml-2 text-xs font-normal text-[hsl(var(--muted-foreground))]">— click to select, hover for options</span>
+                    <span className="ml-2 text-xs font-normal text-[hsl(var(--muted-foreground))]">— click to preview, then export</span>
                   </h2>
                   {selectedId && <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]"><Check size={10} className="mr-1"/>Design Selected</Badge>}
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
                   {concepts.map(concept => (
                     <ConceptCard key={concept.id} concept={concept} svgOverride={svgOverrides[concept.id]}
-                      selectedId={selectedId} tintColor={tintColor} secondaryColor={secColor}
-                      togglingFav={togglingFav} onSelect={selectDesign} onToggleFav={toggleFavorite}/>
+                      selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor}
+                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite}/>
                   ))}
                 </div>
               </>
@@ -520,13 +571,8 @@ export default function StampGeneratorPage() {
 
           {chatMessages.length === 0 && (
             <div className="px-4 py-4 space-y-2">
-              <p className="text-xs text-[hsl(var(--muted-foreground))]">Describe changes to refine your stamp. Examples:</p>
-              {[
-                'Make the borders thicker and add a star divider',
-                'Change to a more minimalist style',
-                'Add a decorative inner ring',
-                'Make the text larger and bolder',
-              ].map(eg => (
+              <p className="text-xs text-[hsl(var(--muted-foreground))]">Describe changes to refine your stamp:</p>
+              {['Make the borders thicker and add a star divider', 'Change to a more minimalist style', 'Add a decorative inner ring', 'Make the text larger and bolder'].map(eg => (
                 <button key={eg} onClick={() => setChatInput(eg)}
                   className="w-full text-left text-xs p-2 bg-[hsl(var(--pearl-1))] rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] text-[hsl(var(--foreground))]">
                   "{eg}"
@@ -538,11 +584,7 @@ export default function StampGeneratorPage() {
           <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
             {chatMessages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] px-3 py-2 rounded-xl text-xs ${
-                  msg.role === 'user'
-                    ? 'bg-[hsl(var(--gold))] text-white'
-                    : 'bg-[hsl(var(--pearl-1))] text-[hsl(var(--foreground))] border border-[hsl(var(--border))]'
-                }`}>
+                <div className={`max-w-[85%] px-3 py-2 rounded-xl text-xs ${msg.role === 'user' ? 'bg-[hsl(var(--gold))] text-white' : 'bg-[hsl(var(--pearl-1))] text-[hsl(var(--foreground))] border border-[hsl(var(--border))]'}`}>
                   {msg.content}
                 </div>
               </div>
@@ -559,15 +601,11 @@ export default function StampGeneratorPage() {
 
           <div className="px-4 py-3 border-t border-[hsl(var(--border))]">
             <div className="flex gap-2">
-              <input
-                value={chatInput}
-                onChange={e => setChatInput(e.target.value)}
+              <input value={chatInput} onChange={e => setChatInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendChatMessage()}
                 placeholder="Describe your changes…"
-                className="flex-1 h-9 px-3 text-xs border-2 border-[hsl(var(--border))] rounded-xl focus:outline-none focus:border-[hsl(var(--gold))] bg-white text-black"
-              />
-              <Button size="sm" className="h-9 px-3 bg-[hsl(var(--gold))] text-white hover:bg-[hsl(var(--gold-dark))]"
-                onClick={sendChatMessage} disabled={chatLoading}>
+                className="flex-1 h-9 px-3 text-xs border-2 border-[hsl(var(--border))] rounded-xl focus:outline-none focus:border-[hsl(var(--gold))] bg-white text-black"/>
+              <Button size="sm" className="h-9 px-3 bg-[hsl(var(--gold))] text-white hover:bg-[hsl(var(--gold-dark))]" onClick={sendChatMessage} disabled={chatLoading}>
                 <Send size={12}/>
               </Button>
             </div>
@@ -580,13 +618,14 @@ export default function StampGeneratorPage() {
 
 // ─── Concept Card ─────────────────────────────────────────────────────────────
 function ConceptCard({
-  concept, svgOverride, selectedId, tintColor, secondaryColor, togglingFav, onSelect, onToggleFav
+  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, togglingFav, onSelect, onToggleFav
 }: {
   concept: StampDesignConcept;
   svgOverride?: string;
   selectedId: string | null;
   tintColor: string;
   secondaryColor?: string;
+  accentColor?: string;
   togglingFav: string | null;
   onSelect: (c: StampDesignConcept) => void;
   onToggleFav: (c: StampDesignConcept) => void;
@@ -596,37 +635,23 @@ function ConceptCard({
   const displaySvg = svgOverride || concept.svgSource;
 
   return (
-    <div className={`group bg-white rounded-2xl border-2 transition-all shadow-sm hover:shadow-md ${
-      isSelected
-        ? 'border-[hsl(var(--gold))] shadow-[0_0_0_3px_hsl(var(--gold)/0.15)]'
-        : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
-    }`}>
+    <div className={`group bg-white rounded-2xl border-2 transition-all shadow-sm hover:shadow-md ${isSelected ? 'border-[hsl(var(--gold))] shadow-[0_0_0_3px_hsl(var(--gold)/0.15)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'}`}>
       <div className="relative p-4 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-2xl min-h-[180px]">
         {isSelected && (
           <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center z-10">
             <Check size={12} className="text-white"/>
           </div>
         )}
-        <button
-          onClick={e => { e.stopPropagation(); onToggleFav(concept); }}
-          disabled={togglingFav === concept.id}
-          className={`absolute top-2 left-2 z-10 w-7 h-7 rounded-full flex items-center justify-center transition-all ${
-            isFav
-              ? 'bg-rose-50 border border-rose-200 text-rose-500'
-              : 'bg-white/80 border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100'
-          }`}
-        >
-          {togglingFav === concept.id
-            ? <Loader2 size={11} className="animate-spin"/>
-            : <Heart size={11} className={isFav ? 'fill-rose-500' : ''}/>
-          }
+        <button onClick={e => { e.stopPropagation(); onToggleFav(concept); }} disabled={togglingFav === concept.id}
+          className={`absolute top-2 left-2 z-10 w-7 h-7 rounded-full flex items-center justify-center transition-all ${isFav ? 'bg-rose-50 border border-rose-200 text-rose-500' : 'bg-white/80 border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100'}`}>
+          {togglingFav === concept.id ? <Loader2 size={11} className="animate-spin"/> : <Heart size={11} className={isFav ? 'fill-rose-500' : ''}/>}
         </button>
         {svgOverride && (
           <div className="absolute bottom-2 left-2 z-10">
             <Badge className="text-[9px] px-1.5 py-0 bg-amber-50 text-amber-700 border border-amber-200">edited</Badge>
           </div>
         )}
-        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} size={160}/>
+        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={160}/>
       </div>
       <div className="p-3 space-y-2">
         <p className="font-medium text-sm text-[hsl(var(--foreground))] truncate">{concept.label}</p>
@@ -639,7 +664,7 @@ function ConceptCard({
         <Button size="sm"
           className={`w-full h-7 text-xs gap-1 ${isSelected ? 'bg-[hsl(var(--gold))] text-white' : 'bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90'}`}
           onClick={() => onSelect(concept)}>
-          {isSelected ? <><Check size={10}/> Selected</> : 'Select This Design'}
+          {isSelected ? <><Check size={10}/> View Preview</> : 'Select This Design'}
         </Button>
       </div>
     </div>
