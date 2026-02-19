@@ -4,29 +4,21 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { StampSVGRenderer } from '@/components/stamp-generator/StampSVGRenderer';
+import { StampColorWheel } from '@/components/stamp-generator/StampColorWheel';
+import { StampTextEditor, mutateTextElement } from '@/components/stamp-generator/StampTextEditor';
 import { generateStampConcepts, StampDesignConcept } from '@/lib/stampTemplates';
 import {
   Wand2, Loader2, Check, RefreshCw, Download, Stamp,
   ArrowLeft, ChevronRight, AlertTriangle, Heart, MessageSquare,
-  Send, X, Sparkles, Palette
+  Send, X, Sparkles, Palette, Layers, Type
 } from 'lucide-react';
 
-// ─── Premium Color Palette ────────────────────────────────────────────────────
-const PRESET_COLORS = [
-  { label: 'Deep Navy', value: '#1a2744' },
-  { label: 'Black', value: '#0d0d0d' },
-  { label: 'Dark Red', value: '#8B0000' },
-  { label: 'Forest Green', value: '#1B4332' },
-  { label: 'Royal Purple', value: '#4B0082' },
-  { label: 'Midnight Blue', value: '#003366' },
-  { label: 'Gold', value: '#856404' },
-  { label: 'Dark Brown', value: '#3d1f00' },
-  { label: 'Teal', value: '#004D4D' },
-  { label: 'Burgundy', value: '#6D0026' },
-];
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
 
 const SECONDARY_COLORS = [
   { label: 'Gold', value: '#B8860B' },
@@ -35,11 +27,6 @@ const SECONDARY_COLORS = [
   { label: 'Rose Gold', value: '#8B5A5A' },
   { label: 'Off-White', value: '#F5F5DC' },
 ];
-
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-}
 
 export default function StampGeneratorPage() {
   const { projectId } = useParams<{ projectId: string }>();
@@ -54,22 +41,25 @@ export default function StampGeneratorPage() {
   const [savedDesignId, setSavedDesignId] = useState<string | null>(null);
   const [blocked, setBlocked] = useState(false);
 
-  // Color picker state
+  // Color state
   const [primaryColor, setPrimaryColor] = useState('#1a2744');
   const [secondaryColor, setSecondaryColor] = useState<string | undefined>(undefined);
   const [dualColorMode, setDualColorMode] = useState(false);
-  const [customHex, setCustomHex] = useState('');
-  const [showColorPanel, setShowColorPanel] = useState(false);
 
-  // AI chat state
+  // Left panel tab
+  const [leftTab, setLeftTab] = useState<'color' | 'text'>('color');
+
+  // AI chat
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Favorite toggling per concept
   const [togglingFav, setTogglingFav] = useState<string | null>(null);
+
+  // Per-concept SVG overrides (text edits)
+  const [svgOverrides, setSvgOverrides] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (!user || !projectId) return;
@@ -90,7 +80,6 @@ export default function StampGeneratorPage() {
     if (error || !data) { toast.error('Project not found'); navigate('/toolkit/stamp-generator'); return; }
     setProject(data);
 
-    // Load existing designs (favorites + regular)
     const { data: existing } = await supabase
       .from('stamp_designs')
       .select('id, svg_source, template_key, is_favorite')
@@ -108,7 +97,7 @@ export default function StampGeneratorPage() {
         isFavorite: d.is_favorite,
       });
       const favs = existing.filter((d: any) => d.is_favorite).map(toDesign);
-      const regular = existing.filter((d: any) => !d.is_favorite).slice(0, 8).map(toDesign);
+      const regular = existing.filter((d: any) => !d.is_favorite).slice(0, 11).map(toDesign);
       setFavoriteConcepts(favs);
       setConcepts(regular);
     } else {
@@ -121,6 +110,7 @@ export default function StampGeneratorPage() {
     if (!p) return;
     setGenerating(true);
     setBlocked(false);
+    setSvgOverrides({});
 
     try {
       if (session?.access_token) {
@@ -133,14 +123,13 @@ export default function StampGeneratorPage() {
           const json = await res.json();
           if (json.blocked) { setBlocked(true); setGenerating(false); return; }
           if (json.concepts?.length) {
-            // Reload from DB (preserves favorites)
             const { data: saved } = await supabase
               .from('stamp_designs')
               .select('id, svg_source, template_key, is_favorite')
               .eq('project_id', projectId)
               .eq('is_favorite', false)
               .order('created_at', { ascending: false })
-              .limit(8);
+              .limit(11);
             if (saved && saved.length > 0) {
               setConcepts(saved.map((d: any) => ({
                 id: d.id,
@@ -158,7 +147,6 @@ export default function StampGeneratorPage() {
       }
     } catch (_) {}
 
-    // Client-side fallback
     const clientConcepts = generateStampConcepts(p);
     if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); return; }
     setConcepts(clientConcepts);
@@ -168,8 +156,6 @@ export default function StampGeneratorPage() {
   async function toggleFavorite(concept: StampDesignConcept) {
     setTogglingFav(concept.id);
     const newFav = !concept.isFavorite;
-
-    // If it's a client-side concept (not in DB yet), save first
     const isDbId = concept.id.length === 36;
     let dbId = isDbId ? concept.id : null;
 
@@ -177,8 +163,8 @@ export default function StampGeneratorPage() {
       const { data } = await supabase.from('stamp_designs').insert({
         project_id: projectId, user_id: user!.id,
         design_version: 1, template_key: concept.templateKey,
-        svg_source: concept.svgSource, style_snapshot_json: project,
-        is_favorite: true,
+        svg_source: svgOverrides[concept.id] || concept.svgSource,
+        style_snapshot_json: project, is_favorite: true,
       }).select('id').single();
       if (data) dbId = data.id;
     } else {
@@ -202,14 +188,19 @@ export default function StampGeneratorPage() {
 
   async function selectDesign(concept: StampDesignConcept) {
     setSelectedId(concept.id);
+    const svgToSave = svgOverrides[concept.id] || concept.svgSource;
     const isDbId = concept.id.length === 36;
     if (isDbId) {
       setSavedDesignId(concept.id);
+      // Save SVG overrides back to DB
+      if (svgOverrides[concept.id]) {
+        await supabase.from('stamp_designs').update({ svg_source: svgToSave }).eq('id', concept.id);
+      }
       await supabase.from('stamp_projects').update({ selected_design_id: concept.id, approval_status: 'FINAL_SELECTED' }).eq('id', projectId);
     } else {
       const { data } = await supabase.from('stamp_designs').insert({
         project_id: projectId, user_id: user!.id, design_version: 1,
-        template_key: concept.templateKey, svg_source: concept.svgSource, style_snapshot_json: project,
+        template_key: concept.templateKey, svg_source: svgToSave, style_snapshot_json: project,
       }).select('id').single();
       if (data) {
         setSavedDesignId(data.id);
@@ -226,19 +217,16 @@ export default function StampGeneratorPage() {
     setChatInput('');
     setChatLoading(true);
 
-    // Find selected/first concept SVG to refine
     const conceptToRefine = concepts.find(c => c.id === selectedId) || concepts[0];
+    const svgForRefine = (conceptToRefine && svgOverrides[conceptToRefine.id]) || conceptToRefine?.svgSource || '';
 
     try {
       const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token}` },
         body: JSON.stringify({
-          action: 'refine',
-          project,
-          projectId,
-          instruction: chatInput,
-          currentSvg: conceptToRefine?.svgSource || '',
+          action: 'refine', project, projectId,
+          instruction: chatInput, currentSvg: svgForRefine,
         }),
       });
 
@@ -253,12 +241,12 @@ export default function StampGeneratorPage() {
             svgSource: json.svgSource,
           };
           setConcepts(prev => [newConcept, ...prev]);
-          setChatMessages(prev => [...prev, { role: 'assistant', content: `✅ Done! I've generated a refined design based on your request: "${chatInput}". You'll see it as the first card in the gallery.` }]);
+          setChatMessages(prev => [...prev, { role: 'assistant', content: `✅ Done! Refined design added as the first card.` }]);
         } else {
-          setChatMessages(prev => [...prev, { role: 'assistant', content: json.message || "I've applied your changes. The updated design is in the gallery." }]);
+          setChatMessages(prev => [...prev, { role: 'assistant', content: json.message || "Applied your changes." }]);
         }
       } else {
-        setChatMessages(prev => [...prev, { role: 'assistant', content: "I had trouble applying that change. Please try regenerating or describe your request differently." }]);
+        setChatMessages(prev => [...prev, { role: 'assistant', content: "Had trouble applying that. Try describing differently." }]);
       }
     } catch {
       setChatMessages(prev => [...prev, { role: 'assistant', content: "Connection error. Please try again." }]);
@@ -266,18 +254,21 @@ export default function StampGeneratorPage() {
     setChatLoading(false);
   }
 
-  function applyCustomHex() {
-    const clean = customHex.replace(/[^0-9a-fA-F]/g, '');
-    if (clean.length === 6) {
-      setPrimaryColor(`#${clean}`);
-      setCustomHex('');
-    } else {
-      toast.error('Enter a valid 6-digit hex color (e.g. 1a2744)');
-    }
-  }
-
   const tintColor = primaryColor;
   const secColor = dualColorMode ? secondaryColor : undefined;
+
+  // Get selected concept for text editor
+  const allConcepts = [...favoriteConcepts, ...concepts.filter(c => !favoriteConcepts.some(f => f.id === c.id))];
+  const selectedConcept = allConcepts.find(c => c.id === selectedId);
+  const selectedSvg = selectedConcept ? (svgOverrides[selectedConcept.id] || selectedConcept.svgSource) : null;
+
+  function handleSvgTextChange(conceptId: string, newSvg: string) {
+    setSvgOverrides(prev => ({ ...prev, [conceptId]: newSvg }));
+  }
+
+  function getConceptSvg(concept: StampDesignConcept) {
+    return svgOverrides[concept.id] || concept.svgSource;
+  }
 
   if (!project) {
     return (
@@ -286,9 +277,6 @@ export default function StampGeneratorPage() {
       </div>
     );
   }
-
-  // Combine favorites + regular for display
-  const allConcepts = [...favoriteConcepts, ...concepts.filter(c => !favoriteConcepts.some(f => f.id === c.id))];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]">
@@ -326,167 +314,200 @@ export default function StampGeneratorPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="flex gap-6">
 
-        {/* ── Color Picker Panel ─────────────────────────────────────────── */}
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-3">
-          <button
-            onClick={() => setShowColorPanel(v => !v)}
-            className="flex items-center gap-2 text-sm font-medium text-[hsl(var(--foreground))]"
-          >
-            <Palette size={15} className="text-[hsl(var(--gold))]"/>
-            Preview Colors
-            <ChevronRight size={13} className={`transition-transform ${showColorPanel ? 'rotate-90' : ''}`}/>
-          </button>
+          {/* ── Left Panel: Color Wheel + Text Editor ──────────────── */}
+          <div className="hidden lg:flex flex-col gap-4 w-56 flex-shrink-0">
 
-          {showColorPanel && (
-            <div className="space-y-4 pt-1">
-              {/* Primary color */}
-              <div>
-                <p className="text-xs text-[hsl(var(--muted-foreground))] mb-2 font-medium">Primary ink color</p>
-                <div className="flex flex-wrap gap-2 items-center">
-                  {PRESET_COLORS.map(c => (
-                    <button key={c.value} onClick={() => setPrimaryColor(c.value)} title={c.label}
-                      className={`w-7 h-7 rounded-full border-2 transition-all ${primaryColor === c.value ? 'border-[hsl(var(--gold))] scale-125 shadow-md' : 'border-white shadow-sm'}`}
-                      style={{ backgroundColor: c.value }}
-                    />
-                  ))}
-                  {/* Custom hex */}
-                  <div className="flex items-center gap-1 ml-2">
-                    <span className="text-[hsl(var(--muted-foreground))] text-xs">#</span>
-                    <input
-                      value={customHex}
-                      onChange={e => setCustomHex(e.target.value.replace(/[^0-9a-fA-F]/g, '').slice(0, 6))}
-                      onKeyDown={e => e.key === 'Enter' && applyCustomHex()}
-                      placeholder="1a2744"
-                      className="w-20 h-7 px-2 text-xs border-2 border-[hsl(var(--border))] rounded-lg focus:outline-none focus:border-[hsl(var(--gold))] bg-white text-black font-mono"
-                    />
-                    <Button size="sm" variant="outline" onClick={applyCustomHex} className="h-7 px-2 text-xs">Apply</Button>
-                  </div>
-                  {/* Live preview swatch */}
-                  <div className="flex items-center gap-1.5 ml-2 text-xs text-[hsl(var(--muted-foreground))]">
-                    <div className="w-5 h-5 rounded-full border border-[hsl(var(--border))]" style={{ backgroundColor: primaryColor }}/>
-                    <code className="text-[10px]">{primaryColor}</code>
-                  </div>
-                </div>
-              </div>
+            {/* Tab switcher */}
+            <div className="flex bg-[hsl(var(--muted))] rounded-xl p-1 gap-1">
+              <button
+                onClick={() => setLeftTab('color')}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${leftTab === 'color' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}
+              >
+                <Palette size={12}/> Colors
+              </button>
+              <button
+                onClick={() => setLeftTab('text')}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${leftTab === 'text' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}
+              >
+                <Type size={12}/> Text
+              </button>
+            </div>
 
-              {/* Dual color toggle */}
-              <div>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <div
-                    onClick={() => setDualColorMode(v => !v)}
-                    className={`w-10 h-5 rounded-full transition-colors relative ${dualColorMode ? 'bg-[hsl(var(--gold))]' : 'bg-[hsl(var(--muted))]'}`}
-                  >
-                    <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${dualColorMode ? 'left-5' : 'left-0.5'}`}/>
-                  </div>
-                  <span className="text-xs font-medium text-[hsl(var(--foreground))]">Dual Color Mode</span>
-                  <span className="text-[10px] text-[hsl(var(--muted-foreground))]">(secondary color for inner elements)</span>
-                </label>
-              </div>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-4">
+              {leftTab === 'color' && (
+                <>
+                  <StampColorWheel
+                    color={primaryColor}
+                    onChange={setPrimaryColor}
+                    label="Primary Color"
+                    size={156}
+                  />
 
-              {dualColorMode && (
-                <div>
-                  <p className="text-xs text-[hsl(var(--muted-foreground))] mb-2 font-medium">Secondary color (monogram & inner elements)</p>
-                  <div className="flex flex-wrap gap-2">
-                    {SECONDARY_COLORS.map(c => (
-                      <button key={c.value} onClick={() => setSecondaryColor(c.value)} title={c.label}
-                        className={`w-7 h-7 rounded-full border-2 transition-all ${secondaryColor === c.value ? 'border-[hsl(var(--gold))] scale-125 shadow-md' : 'border-white shadow-sm'}`}
-                        style={{ backgroundColor: c.value }}
-                      />
-                    ))}
-                    <Button size="sm" variant="ghost" onClick={() => setSecondaryColor(undefined)} className="h-7 px-2 text-xs text-[hsl(var(--muted-foreground))]">Clear</Button>
+                  {/* Dual color toggle */}
+                  <div className="pt-2 border-t border-[hsl(var(--border))]">
+                    <label className="flex items-center gap-2 cursor-pointer mb-3">
+                      <div
+                        onClick={() => setDualColorMode(v => !v)}
+                        className={`w-9 h-5 rounded-full transition-colors relative flex-shrink-0 ${dualColorMode ? 'bg-[hsl(var(--gold))]' : 'bg-[hsl(var(--muted))]'}`}
+                      >
+                        <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${dualColorMode ? 'left-4' : 'left-0.5'}`}/>
+                      </div>
+                      <span className="text-xs font-medium text-[hsl(var(--foreground))]">Dual Color</span>
+                    </label>
+
+                    {dualColorMode && (
+                      <div className="space-y-2">
+                        <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Secondary (inner elements)</p>
+                        <div className="flex flex-wrap gap-2">
+                          {SECONDARY_COLORS.map(c => (
+                            <button key={c.value} onClick={() => setSecondaryColor(c.value)} title={c.label}
+                              className={`w-7 h-7 rounded-full border-2 transition-all ${secondaryColor === c.value ? 'border-[hsl(var(--gold))] scale-125 shadow-md' : 'border-white shadow-sm'}`}
+                              style={{ backgroundColor: c.value }}
+                            />
+                          ))}
+                          <button onClick={() => setSecondaryColor(undefined)} className="h-7 px-2 text-[10px] rounded-full border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]">Clear</button>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
+                </>
               )}
 
-              <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Preview only — final export uses your selected colors</p>
+              {leftTab === 'text' && (
+                <>
+                  {selectedSvg && selectedConcept ? (
+                    <StampTextEditor
+                      svgSource={selectedSvg}
+                      onSvgChange={(newSvg) => handleSvgTextChange(selectedConcept.id, newSvg)}
+                    />
+                  ) : (
+                    <div className="text-center py-6 space-y-2">
+                      <Type size={24} className="text-[hsl(var(--muted-foreground))] mx-auto"/>
+                      <p className="text-xs text-[hsl(var(--muted-foreground))]">Select a stamp design to edit its text elements</p>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
-          )}
+
+            {/* Live preview of selected */}
+            {selectedSvg && (
+              <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
+                <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Selected Preview</p>
+                <div className="flex items-center justify-center py-2">
+                  <StampSVGRenderer svgSource={selectedSvg} tintColor={tintColor} secondaryColor={secColor} size={140}/>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ── Main Content ──────────────────────────────────────── */}
+          <div className="flex-1 min-w-0 space-y-5">
+
+            {/* Mobile color picker (collapsed) */}
+            <div className="lg:hidden bg-white rounded-2xl border border-[hsl(var(--border))] p-4">
+              <div className="flex items-center gap-4">
+                <StampColorWheel color={primaryColor} onChange={setPrimaryColor} size={100} label="Color"/>
+                <div className="flex-1 space-y-2">
+                  <p className="text-xs font-medium text-[hsl(var(--foreground))]">Selected:</p>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full border border-[hsl(var(--border))]" style={{ backgroundColor: primaryColor }}/>
+                    <code className="text-xs font-mono text-[hsl(var(--foreground))]">{primaryColor}</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Blocked warning */}
+            {blocked && (
+              <div className="flex items-center gap-3 p-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive">
+                <AlertTriangle size={18}/>
+                <div>
+                  <p className="font-semibold text-sm">Generation Blocked</p>
+                  <p className="text-xs">Official government or authority seals cannot be generated.</p>
+                </div>
+              </div>
+            )}
+
+            {/* Favorites */}
+            {favoriteConcepts.length > 0 && (
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Heart size={14} className="text-rose-500 fill-rose-500"/>
+                  <h2 className="font-semibold text-[hsl(var(--foreground))] text-sm">Saved Favorites ({favoriteConcepts.length})</h2>
+                  <span className="text-[10px] text-[hsl(var(--muted-foreground))]">— preserved across regenerations</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {favoriteConcepts.map(c => (
+                    <ConceptCard key={c.id} concept={c} svgOverride={svgOverrides[c.id]}
+                      selectedId={selectedId} tintColor={tintColor} secondaryColor={secColor}
+                      togglingFav={togglingFav} onSelect={selectDesign} onToggleFav={toggleFavorite}/>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Loading */}
+            {generating && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+                {[1,2,3,4,5,6,7,8,9,10,11].map(i => (
+                  <div key={i} className="h-72 rounded-2xl bg-[hsl(var(--muted))] animate-pulse"/>
+                ))}
+              </div>
+            )}
+
+            {/* Concepts grid */}
+            {!generating && !blocked && concepts.length > 0 && (
+              <>
+                <div className="flex items-center justify-between">
+                  <h2 className="font-semibold text-[hsl(var(--foreground))]">
+                    {concepts.length} Stamp Concepts
+                    <span className="ml-2 text-xs font-normal text-[hsl(var(--muted-foreground))]">— click to select, hover for options</span>
+                  </h2>
+                  {selectedId && <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]"><Check size={10} className="mr-1"/>Design Selected</Badge>}
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {concepts.map(concept => (
+                    <ConceptCard key={concept.id} concept={concept} svgOverride={svgOverrides[concept.id]}
+                      selectedId={selectedId} tintColor={tintColor} secondaryColor={secColor}
+                      togglingFav={togglingFav} onSelect={selectDesign} onToggleFav={toggleFavorite}/>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* Empty state */}
+            {!generating && !blocked && concepts.length === 0 && favoriteConcepts.length === 0 && (
+              <div className="text-center py-20 space-y-4">
+                <Wand2 size={40} className="text-[hsl(var(--gold))] mx-auto"/>
+                <p className="text-[hsl(var(--muted-foreground))]">Click "Regenerate" to create stamp concepts</p>
+                <Button onClick={() => generateConcepts()} className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white">
+                  <Wand2 size={14} className="mr-2"/> Generate Concepts
+                </Button>
+              </div>
+            )}
+
+            {/* Export CTA */}
+            {selectedId && !generating && (
+              <div className="bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-[hsl(var(--champagne-1))] rounded-2xl border border-[hsl(var(--gold)/0.2)] p-6 flex items-center justify-between flex-wrap gap-4">
+                <div>
+                  <p className="font-semibold text-[hsl(var(--foreground))]">Design selected — ready to export!</p>
+                  <p className="text-sm text-[hsl(var(--muted-foreground))] mt-0.5">Download SVG, PNG, JPG, PDF + full brand pack</p>
+                </div>
+                <Button className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-2"
+                  onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}>
+                  <Download size={15}/> Export Pack
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
-
-        {/* ── Blocked warning ─────────────────────────────────────────────── */}
-        {blocked && (
-          <div className="flex items-center gap-3 p-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive">
-            <AlertTriangle size={18}/>
-            <div>
-              <p className="font-semibold text-sm">Generation Blocked</p>
-              <p className="text-xs">Official government or authority seals cannot be generated.</p>
-            </div>
-          </div>
-        )}
-
-        {/* ── Favorites section ─────────────────────────────────────────── */}
-        {favoriteConcepts.length > 0 && (
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <Heart size={14} className="text-rose-500 fill-rose-500"/>
-              <h2 className="font-semibold text-[hsl(var(--foreground))] text-sm">Saved Favorites ({favoriteConcepts.length})</h2>
-              <span className="text-[10px] text-[hsl(var(--muted-foreground))]">— preserved across regenerations</span>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {favoriteConcepts.map(c => (
-                <ConceptCard key={c.id} concept={c} selectedId={selectedId} tintColor={tintColor} secondaryColor={secColor}
-                  togglingFav={togglingFav} onSelect={selectDesign} onToggleFav={toggleFavorite}/>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* ── Loading ───────────────────────────────────────────────────── */}
-        {generating && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[1,2,3,4,5,6,7,8].map(i => (
-              <div key={i} className="h-72 rounded-2xl bg-[hsl(var(--muted))] animate-pulse"/>
-            ))}
-          </div>
-        )}
-
-        {/* ── Concepts grid ─────────────────────────────────────────────── */}
-        {!generating && !blocked && concepts.length > 0 && (
-          <>
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-[hsl(var(--foreground))]">
-                {concepts.length} Stamp Concepts
-              </h2>
-              {selectedId && <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]"><Check size={10} className="mr-1"/>Design Selected</Badge>}
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {concepts.map(concept => (
-                <ConceptCard key={concept.id} concept={concept} selectedId={selectedId} tintColor={tintColor} secondaryColor={secColor}
-                  togglingFav={togglingFav} onSelect={selectDesign} onToggleFav={toggleFavorite}/>
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* ── Empty state ──────────────────────────────────────────────── */}
-        {!generating && !blocked && concepts.length === 0 && favoriteConcepts.length === 0 && (
-          <div className="text-center py-20 space-y-4">
-            <Wand2 size={40} className="text-[hsl(var(--gold))] mx-auto"/>
-            <p className="text-[hsl(var(--muted-foreground))]">Click "Regenerate" to create stamp concepts</p>
-            <Button onClick={() => generateConcepts()} className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white">
-              <Wand2 size={14} className="mr-2"/> Generate Concepts
-            </Button>
-          </div>
-        )}
-
-        {/* ── Export CTA ────────────────────────────────────────────────── */}
-        {selectedId && !generating && (
-          <div className="bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-[hsl(var(--champagne-1))] rounded-2xl border border-[hsl(var(--gold)/0.2)] p-6 flex items-center justify-between flex-wrap gap-4">
-            <div>
-              <p className="font-semibold text-[hsl(var(--foreground))]">Design selected — ready to export!</p>
-              <p className="text-sm text-[hsl(var(--muted-foreground))] mt-0.5">Download SVG, PNG, JPG, PDF + full brand pack</p>
-            </div>
-            <Button className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-2"
-              onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}>
-              <Download size={15}/> Export Pack
-            </Button>
-          </div>
-        )}
       </div>
 
-      {/* ── AI Designer Chat Panel ──────────────────────────────────────────── */}
+      {/* AI Designer Chat Panel */}
       {chatOpen && (
         <div className="fixed inset-y-0 right-0 w-80 bg-white border-l border-[hsl(var(--border))] shadow-2xl z-50 flex flex-col">
           <div className="flex items-center justify-between px-4 py-3 border-b border-[hsl(var(--border))] bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-white">
@@ -499,7 +520,7 @@ export default function StampGeneratorPage() {
 
           {chatMessages.length === 0 && (
             <div className="px-4 py-4 space-y-2">
-              <p className="text-xs text-[hsl(var(--muted-foreground))]">Describe changes to refine your stamp design. Examples:</p>
+              <p className="text-xs text-[hsl(var(--muted-foreground))]">Describe changes to refine your stamp. Examples:</p>
               {[
                 'Make the borders thicker and add a star divider',
                 'Change to a more minimalist style',
@@ -559,9 +580,10 @@ export default function StampGeneratorPage() {
 
 // ─── Concept Card ─────────────────────────────────────────────────────────────
 function ConceptCard({
-  concept, selectedId, tintColor, secondaryColor, togglingFav, onSelect, onToggleFav
+  concept, svgOverride, selectedId, tintColor, secondaryColor, togglingFav, onSelect, onToggleFav
 }: {
   concept: StampDesignConcept;
+  svgOverride?: string;
   selectedId: string | null;
   tintColor: string;
   secondaryColor?: string;
@@ -571,6 +593,7 @@ function ConceptCard({
 }) {
   const isSelected = selectedId === concept.id;
   const isFav = concept.isFavorite;
+  const displaySvg = svgOverride || concept.svgSource;
 
   return (
     <div className={`group bg-white rounded-2xl border-2 transition-all shadow-sm hover:shadow-md ${
@@ -579,13 +602,11 @@ function ConceptCard({
         : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
     }`}>
       <div className="relative p-4 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-2xl min-h-[180px]">
-        {/* Selected indicator */}
         {isSelected && (
           <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center z-10">
             <Check size={12} className="text-white"/>
           </div>
         )}
-        {/* Favorite button */}
         <button
           onClick={e => { e.stopPropagation(); onToggleFav(concept); }}
           disabled={togglingFav === concept.id}
@@ -600,7 +621,12 @@ function ConceptCard({
             : <Heart size={11} className={isFav ? 'fill-rose-500' : ''}/>
           }
         </button>
-        <StampSVGRenderer svgSource={concept.svgSource} tintColor={tintColor} secondaryColor={secondaryColor} size={160}/>
+        {svgOverride && (
+          <div className="absolute bottom-2 left-2 z-10">
+            <Badge className="text-[9px] px-1.5 py-0 bg-amber-50 text-amber-700 border border-amber-200">edited</Badge>
+          </div>
+        )}
+        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} size={160}/>
       </div>
       <div className="p-3 space-y-2">
         <p className="font-medium text-sm text-[hsl(var(--foreground))] truncate">{concept.label}</p>
