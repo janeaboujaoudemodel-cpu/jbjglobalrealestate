@@ -1,206 +1,217 @@
 
-# Full Market Intelligence Book Interior Overhaul
+# Full Plan: Stamp Generator + Market Intelligence Book Fixes
 
-## Summary of What Changes
-
-The book interior (everything you see when you open the PDF/preview) switches from dark black/grey to a champagne-pearl-gold luxury theme. The dark book **cover** page (page 1) stays exactly as it is — dark and dramatic, like a real book cover. Only from page 2 onwards does the champagne theme apply.
-
-Additionally, the book gets a complete content upgrade: a premium company identity card, a refreshed table of contents, new "Featured Areas", "Featured Developers", "Featured Projects" pages, live DLD data in all charts, and an "Explore All" final page with clickable links.
+This covers two separate areas of the app — the **AI Company Stamp Generator** and the **Market Intelligence Book** — with many specific issues to fix in each.
 
 ---
 
-## Change 1 — Interior Color Theme (Pages 2 Onwards)
+## Part 1 — Stamp Generator Fixes (StampProjectWizard + StampGeneratorPage)
 
-Every interior page transitions from dark to luxury champagne/pearl:
+### 1A. Upload Logo Photo in Step 2 (Wizard)
 
-| Element | Before (Dark) | After (Champagne) |
+**File:** `src/components/stamp-generator/StampProjectWizard.tsx`
+
+The database already has `uploaded_logo_url` on the `stamp_projects` table. The form `FormState` interface and the `handleCreate()` insert need this field added.
+
+Changes:
+- Add `uploaded_logo_url: string` to `FormState` interface
+- Add a file upload input in Step 2 ("Logo / Monogram") for uploading a logo image
+- On file select, convert to base64 data URL (no storage bucket needed — stored as data URL) OR upload to a Supabase storage bucket and store the URL
+- Add a **3rd icon option**: `UPLOADED_LOGO` (already in the `IconStyle` type)
+- When `UPLOADED_LOGO` is selected, show the upload area and a preview of the image
+- When a logo is uploaded, auto-select `UPLOADED_LOGO` as the icon style
+- Add logo preview in a rounded square frame
+- Save `uploaded_logo_url` in the DB insert
+
+**New bilingual stamp template (separate from upload):**
+
+The user also wants a specific bilingual round stamp design with:
+- **Top half arc**: English company name
+- **Bottom half arc**: Arabic company name  
+- **Center**: Uploaded logo image (or monogram), city ("Dubai"), country ("United Arab Emirates")
+- **Horizontal**: English top / Arabic bottom
+
+This becomes a new SVG template option. Since the AI generates SVGs, this layout needs to be added to the `src/lib/stampTemplates.ts` file as a new template called `bilingual-logo-center` that will be pre-rendered when the user has `language_mode === 'BILINGUAL'` and `icon_style === 'UPLOADED_LOGO'`.
+
+**File:** `src/lib/stampTemplates.ts` — add new template `bilingual-logo-center`
+
+### 1B. Stamp Generator Page Header — Content Lifting
+
+**File:** `src/components/stamp-generator/StampGeneratorPage.tsx`
+
+**Problem:** The second sticky header (the wizard sub-header) sits too low. The tabs (Colors, Fonts, Text), date stamp, concept controls are all falling below it and not filling the secondary header.
+
+**Fix:** The sticky `div` at line 372 uses `sticky top-24 sm:top-28 lg:top-32`. The content inside only has `py-3` padding. All the left-panel controls (Colors / Fonts / Text tab switcher) are in the main body, not the header. The fix is to move the color stop selector row (`stopDefs` map) into the header bar itself, so it visually fills the space.
+
+Specifically:
+- Add a condensed horizontal color + font + date stamp controls row **inside** the header `div` — after the breadcrumb area
+- This fills the header strip so it doesn't look empty
+
+### 1C. AI Designer Panel — Multiple Fixes
+
+**File:** `src/components/stamp-generator/StampGeneratorPage.tsx`
+
+**Issues to fix:**
+
+1. **X close button** — Already exists (line 685-691). But user says it's not visible. Move it to be more prominent: make it bigger (`w-8 h-8`), keep it top-right but increase visual weight.
+
+2. **Minimize button** — Add a minimize `_` button next to the X. When clicked, collapses the panel to show only the header bar (height becomes just the header, content hidden). The panel stays draggable even minimized. A state `aiPanelMinimized` controls this.
+
+3. **Suggestions stay persistent** — Currently at line 694: `{chatMessages.length === 0 && ...}` — this hides suggestions once any message is sent. 
+
+   Fix: Change the condition so suggestions are always visible (in a collapsed/scrollable section), not only when `chatMessages.length === 0`. Keep all 4 suggestions permanently visible below the messages in a compact form. Or move them to a persistent row above the input that never disappears.
+
+4. **Replace Selected button not clickable** — At line 743-750, the `Replace Selected` button is `disabled={!selectedId}`. The user must first select a stamp by clicking it in the main grid (which opens the preview modal), then close the modal without going to export. The disable logic is correct — the user just hasn't selected a stamp yet. 
+
+   Fix: Add a more visible tooltip/hint that says "Click a stamp design first" and also add a visual indication on the button when it's disabled (greyed text + explanation). The `{!selectedId && <p>}` hint at line 760 already exists but needs to be more visible — style it as a yellow/amber info box.
+
+5. **Green tick emoji removed** — Line 280: `✅ Preview ready! Choose to Replace or Save as New below.` — replace `✅` with a plain text check mark or use a Lucide `Check` icon rendered as SVG inline. Change to: `"Preview ready — choose to Replace or Save as New below."` (no emoji).
+
+   Also line 731: `✨ Preview of refined design:` — remove `✨`, change to `"Refined preview:"`
+
+6. **Gold standard color** — The `PRESET_PALETTE` at line 28 has `{ label: 'Gold', hex: '#B8860B' }`. The user wants the exact gold from the landing page outside. Looking at the CSS variables, the exterior gold is `hsl(var(--gold))`. The `--gold` CSS variable is set in the global theme. The palette should use `hsl(var(--gold))` — but since these are inline hex values, we need to find the actual hex. From the example mockStamp on the landing page, it uses `hsl(var(--gold)/0.6)` border color. The standard gold used throughout the app's Tailwind CSS is `#B8860B` (already in the palette) — but the "gold" actually shown on the landing page stamps outside uses the `--gold` variable which resolves to the app's gold. We'll check `tailwind.config.ts` to get the exact hex and ensure it's the FIRST preset in the palette with label "JBJ Gold" as the default/standard.
+
+### 1D. Gold Color Standard + Default
+
+**File:** `src/components/stamp-generator/StampGeneratorPage.tsx`
+
+- Set `primaryColor` initial state to `'#B8860B'` (JBJ gold) instead of `'#1a2744'` (navy). This makes gold the default when you open any project.
+- Label it "JBJ Standard Gold" in the preset palette
+- Mark it as the recommended/default option visually
+
+---
+
+## Part 2 — Market Intelligence Book Fixes (MarketReport.tsx)
+
+### 2A. Table of Contents — Premium + Clickable
+
+**Current:** TOC items are static `div.toc-item` elements. User wants them to be clickable arrows that navigate to the correct page.
+
+**Fix:** Add `id` anchors to each page div (e.g., `id="page-2"`, `id="page-3"` etc.) and make TOC items into `<a href="#page-N">` links. Add a `→` arrow icon to each TOC row on the right side. Style the TOC title as clickable (gold hover underline).
+
+CSS update: `.toc-item a { color: #1A1814; text-decoration: none; }` and `.toc-item a:hover { color: #A8925A; }`
+
+Also make the TOC look more premium: add a subtle gold dot `◆` on the left of each item, increase font weight of section numbers, and add a gold connector line between title and page number (dotted leader line).
+
+### 2B. Founder Toggle — Dynamic Title Change
+
+**Current:** Page 4 always says "Why This Report Exists"
+
+**Fix:** Change the page heading dynamically:
+- `isFounderVisible === true` → "Why I Created This Book" (personal, founder's voice)  
+- `isFounderVisible === false` → "Why We Created This Book" (company voice)
+
+Also update the first paragraph to match: when founder visible, keep "I recognized..." When not visible, change to "We recognized..." and "my experience" → "our experience".
+
+### 2C. Villa Photo Frame — Square, Rounded, Full-fit, AI-generated Look
+
+**Current:** `villa-gallery img` uses `object-fit: contain` with `background: #F5EBD7` which shows borders/letterboxing. Images appear non-premium.
+
+**Fix:**
+- Change `object-fit: contain` → `object-fit: cover` for all villa images to fill the frame completely
+- Change gallery images to **square frames** (`height: 175px; width: 175px` → but since they're in a 2-col grid, set `aspect-ratio: 1/1; width: 100%; height: auto;` or `height: 175px; object-fit: cover`)
+- Add `border-radius: 16px` (more rounded, not just 12px)
+- Switch `villaImages` array to use better luxury Dubai-specific photos with `&fit=crop&crop=center` Unsplash params
+- Remove the black border: `border: 1px solid rgba(168,146,90,0.3)` → keep only the gold border, ensure no dark background shows
+
+### 2D. Rental Yield Comparison Chart — Fix Readability
+
+**Current (Page 10):** The "New York", "London", "Hong Kong" bars use `background: rgba(255,255,255,0.3)` with `color: #fff` for the bar values — on a white/champagne page this makes them invisible.
+
+**Fix:** All bars use the gold gradient. The non-Dubai bars get a lighter gold (`rgba(168,146,90,0.4)`) with dark text (`color: #2C2A26`). Each bar fills to its full percentage with visible colored fill. Values are always readable.
+
+### 2E. Due Diligence Checklist — Fill the Page Better
+
+**Current (Page 15):** Uses `two-col` layout but content is sparse on the right. The left column has most content.
+
+**Fix:** 
+- Add a 3rd mini-section: "Professional Team You Need" with a checklist (RERA Broker, Property Lawyer, Mortgage Advisor, Snagging Inspector)
+- Add a 4th section: "Red Flags to Avoid" with warning items
+- This fills the full page width with content
+
+### 2F. Developer & Area Statistics — Add Transaction Data
+
+**Current (Page 13 - Developer Framework):** Lists developer tiers but no transaction volumes.
+
+**Fix:** Add a table "Top 5 Developers by Transaction Volume (2026 YTD)" with hardcoded data:
+
+| Developer | Transactions | Volume (AED) |
 |---|---|---|
-| Page background | `#0a0a0a → #111` | Pearl white → warm champagne gradient |
-| Body text `p` | `#bbb` | `#2C2A26` near-black |
-| `h2` headers | `#fff` | `#1A1814` deep charcoal |
-| `h3` subheaders | Gold `#A8925A` | Gold — kept |
-| `h4` card titles | `#fff` | `#1A1814` |
-| Stat box background | `rgba(255,255,255,0.03)` | Champagne tint |
-| Info cards | Dark zinc | White with gold border |
-| Table rows `td` | `#ccc` | `#3A3632` |
-| List items `li` | `#ccc` | `#2C2A26` |
-| TOC items | White on dark | Charcoal on light |
-| Share bar | Black | Pearl white with gold bottom border |
-| Warning boxes | Red on dark | Red on light |
-| Bar chart track | Dark | Champagne tint |
-| Image backgrounds | `#0a0a0a` | `#F5EBD7` warm champagne |
-| `@media print body` | `#000` | `#FDFBF7` |
+| Emaar Properties | 12,450+ | AED 28.4B |
+| DAMAC Properties | 8,320+ | AED 15.7B |
+| Nakheel | 5,890+ | AED 14.2B |
+| Sobha Realty | 4,120+ | AED 11.9B |
+| Ellington Properties | 2,870+ | AED 9.4B |
 
-The gold accent top bar `::before`, gold numbers, and all gold decorative elements are kept exactly as they are.
+**For Page 8 (Top Areas):** Already has a top-10 table — add a "Volume (AED)" column using data from `liveTopAreas` (which has a `volume` field if available, or use estimated values).
 
----
+### 2G. Market Outlook Year Recap
 
-## Change 2 — Premium Company Identity Card (Page 2, Top Half)
+**Current (Page 16):** 2026 outlook exists. User wants a "2025 Recap" table alongside "2026 YTD" data.
 
-A new rectangular card appears at the top of the Table of Contents page — like a luxury business card embedded in the document:
+**Fix:** Add a two-column stat comparison:
 
-```text
-┌────────────────────────────────────────────────────────────────┐
-│  JBJ                │  JBJ Global Real Estate L.L.C S.O.C.    │
-│  (large gold mono)  │  ────────────────────────────────        │
-│  ──── gold line ──  │  📞 +971 56 591 1000                    │
-│                     │  ✉  CONTACT@JBJ.AE                      │
-│                     │  📍 Downtown Dubai, UAE                  │
-│                     │                                          │
-│  ──── gold bottom ──────────────────────── JBJ.AE ───────────  │
-└────────────────────────────────────────────────────────────────┘
-```
-
-- Background: deep black (`#0A0A0A`) with gold border — luxury card feel
-- "JBJ" monogram: 48px Playfair Display, gold
-- Company name in white bold
-- Contact details in champagne/gold tone
-- Bottom strip: gold rule + website in small caps
-
----
-
-## Change 3 — Updated Table of Contents
-
-The TOC is fully rewritten to include all new sections:
-
-| # | Chapter | Page |
+| Metric | 2025 Full Year | 2026 YTD |
 |---|---|---|
-| 1 | Company Overview & Identity | 2 |
-| 2 | From the Founder | 3 |
-| 3 | Why This Report Exists | 4 |
-| 4 | 2025 Full Year Market Review | 5 |
-| 5 | UAE GDP & Global Rankings | 6 |
-| 6 | Dubai Transaction Dashboard (DLD Live) | 7 |
-| 7 | Top Areas by Volume (DLD Live) | 8 |
-| 8 | Top Buyer Nationalities | 9 |
-| 9 | Property Types & Rental Yields | 10 |
-| 10 | Key Investment Indicators | 11 |
-| 11 | Community Comparison Guide | 12 |
-| 12 | Developer Framework | 13 |
-| 13 | Off-Plan vs Ready Properties | 14 |
-| 14 | Due Diligence Checklist | 15 |
-| 15 | Market Outlook 2026 | 16 |
-| 16 | Risk Management | 17 |
-| 17 | AI Property Matchmaker | 18 |
-| 18 | Latest Market News (Live) | 19 |
-| 19 | Featured Areas | 20 |
-| 20 | Featured Developers | 21 |
-| 21 | Featured Projects | 22 |
-| 22 | Explore All & Contact | 23 |
+| Value | AED 761B | liveYtd.value |
+| Transactions | 226,000 | liveYtd.transactions |
+| Growth | +36% | liveYtd.growth |
+| Off-Plan Share | 59% | calculated |
 
----
+### 2H. AI Property Matchmaker Page — Add CTA Button
 
-## Change 4 — New Page: UAE GDP & Global Rankings (Page 6)
+**Current (Page 18):** Has QR code + URL link. User wants a direct CTA button.
 
-A brand-new page with current economic data:
-
-- **Dubai GDP**: $115B (2024), ranked #7 Global Financial Centres Index (GFCI 36), #3 in MENA
-- **UAE GDP**: $509B (2024), IMF projected 4.1% growth 2025
-- **Population**: 4.1M Dubai, 10.1M UAE
-- **Tourism**: 17.15M international visitors 2024 (targeting 25M by 2025)
-- **Golden Visa**: 100,000+ issued (2024)
-- Bar chart comparing UAE real estate market to other global markets
-- Data source labels: IMF, DET, GFCI, UAE Federal Competitiveness Authority
-
----
-
-## Change 5 — Live DLD Data Pages (Already Exist — Champagne Restyled + Enhanced)
-
-Pages 7, 8, 9 (DLD dashboard, top areas, top nationalities) keep their current data logic but are restyled to champagne interiors. Bar charts, tables, and stat boxes all switch to the champagne palette.
-
-Additionally, the `downloadBook()` function fetches the latest data from the `dld_market_data` database table at the moment of download — so the numbers are always fresh (not just constants from the code file).
-
----
-
-## Change 6 — NEW Page: Featured Areas (Page 20)
-
-Fetches top 8 areas from the database at download time:
-
-```text
-┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐
-│  [Photo] │ │  [Photo] │ │  [Photo] │ │  [Photo] │
-│[Trending]│ │[Hi Demand│ │[Trending]│ │          │
-│  JVC     │ │ Dubai Is │ │ Biz Bay  │ │Dubailand │
-│ 184 proj │ │  87 proj │ │  75 proj │ │  63 proj │
-│ JBJ.AE/… │ │ JBJ.AE/… │ │ JBJ.AE/… │ │ JBJ.AE/… │
-└──────────┘ └──────────┘ └──────────┘ └──────────┘
+**Fix:** Add a styled clickable button:
+```html
+<a href="https://JBJ.AE/quiz" style="display: inline-block; background: linear-gradient(135deg, #A8925A, #8a7648); color: #fff; padding: 14px 36px; border-radius: 10px; font-weight: 700; font-size: 14px; text-decoration: none; margin: 16px auto; display: block; text-align: center; max-width: 280px;">
+  Start AI Property Finder →
+</a>
 ```
 
-- 2×4 grid (8 areas confirmed in DB with real photos)
-- Gold "Trending" and orange "High Demand" badges
-- Property count per area
-- Clickable link: `https://JBJ.AE/area/[slug]`
-- Bottom: "Explore All Areas → JBJ.AE/areas"
+Also add a "Follow us / Stay in the Loop" social block on this page with Instagram, TikTok, YouTube links.
 
----
+### 2I. Featured Projects — Square Cards
 
-## Change 7 — NEW Page: Featured Developers (Page 21)
+**Current (Page 22):** Uses `height: 110px` rectangular images.
 
-Fetches 6 confirmed top developers from the database (Emaar, DAMAC via query + 6 found: Aldar, Ellington, Emaar, Meraas, Nakheel, Sobha) + 2 hardcoded fallbacks for DAMAC and Binghatti:
-
-- 2×4 grid, developer logo + name + slug
-- Clickable link: `https://JBJ.AE/developers/[slug]`
-- Gold border cards on champagne background
-- Bottom: "Explore All Developers → JBJ.AE/developers"
-
----
-
-## Change 8 — Enhanced Featured Projects Page (Page 22)
-
-Already exists. Enhanced with champagne interior styling. 8 most recent published projects confirmed in DB with cover images, names, areas, developer names, prices.
-
-- Clickable link: `https://JBJ.AE/properties/[slug]`
-- Formatted price: `AED [X]M`
-- Bottom: "Explore All Properties → JBJ.AE/properties"
-
----
-
-## Change 9 — NEW Final Page: Explore All & Contact (Page 23)
-
-```text
-┌────────────────────────────────────────────────────────────┐
-│            EXPLORE JBJ.AE                                  │
-│                                                            │
-│  [Properties]  [Areas]  [Developers]  [Market Intelligence]│
-│  [AI Tools]  [Guides]  [News]  [Contact]                  │
-│                                                            │
-│  ────────────────────────────────────                      │
-│  📞 +971 56 591 1000   ✉ CONTACT@JBJ.AE                   │
-│  📍 Downtown Dubai, UAE   🌐 JBJ.AE                       │
-│                                                            │
-│  [QR CODE → JBJ.AE]                                       │
-│                                                            │
-│  © 2026 JBJ Global Real Estate L.L.C S.O.C.               │
-└────────────────────────────────────────────────────────────┘
+**Fix:** Change all project card images to square aspect ratio:
+```css
+width: 100%; aspect-ratio: 1/1; object-fit: cover;
 ```
+Remove the `height: 110px` fixed height.
+
+### 2J. Premium Book Footer (End of Page 23)
+
+**Current:** Page 23 ends with a simple copyright line.
+
+**Fix:** Add a full-width premium book footer section at the bottom of page 23:
+- Gold top border line
+- JBJ monogram centered in large gold text
+- "JBJ Global Real Estate" in spaced uppercase
+- Three columns: Contact | Explore | Social
+- Copyright line
+- "Crafted in Dubai, UAE" tagline
+- Full-width gold bottom gradient line
 
 ---
 
-## Technical Implementation
+## Files Changed
 
-**File changed:** `src/pages/MarketReport.tsx` — only the `html` string inside `downloadBook()` and its CSS block.
+| File | Changes |
+|---|---|
+| `src/components/stamp-generator/StampProjectWizard.tsx` | Add logo upload in Step 2, add `uploaded_logo_url` to form state + DB insert, add `UPLOADED_LOGO` option |
+| `src/components/stamp-generator/StampGeneratorPage.tsx` | Fix AI panel (minimize, persistent suggestions, X prominence, emoji removal, Replace hint), gold default color, header content lift |
+| `src/lib/stampTemplates.ts` | Add `bilingual-logo-center` template with English top arc / Arabic bottom arc / logo center design |
+| `src/pages/MarketReport.tsx` | Fix TOC (clickable anchors + arrows), dynamic "Why I/We Created" title, villa photos (square + cover), rental yield chart (readability), checklist page (fill content), add developer transaction table, add 2025 vs 2026 recap table, AI matchmaker CTA button + social follow, project cards (square), premium book footer |
 
-**Two new DB queries added to the existing `Promise.all` in `downloadBook()`:**
+---
 
-```typescript
-// Existing: market_news + projects
-// Add:
-supabase.from("areas")
-  .select("name, slug, image_url, is_trending, is_high_demand, property_count, emirate")
-  .eq("is_active", true)
-  .order("property_count", { ascending: false })
-  .limit(8)
+## What Does NOT Change
 
-supabase.from("developers")
-  .select("name, logo_url, slug")
-  .in("name", ["Emaar Properties","Ellington Properties","Meraas","Nakheel","Sobha Realty","Aldar Properties","DAMAC Properties","Binghatti Developers"])
-```
-
-**Also fetches live DLD data from `dld_market_data` table** at download time (same query as the `useDLDMarketData` hook), so market numbers in the book are always current.
-
-**What does NOT change:**
-- The dark book cover (page 1) — stays dark/dramatic
-- The 3D book component visible on the homepage (`MarketReportHeroBook.tsx`) — unchanged
-- The form, lead capture, and modal logic — unchanged
-- The `dldMarketData.ts` constants — still used as fallback if DB returns empty
-- All other pages in the app — locked
+- The book exterior (dark cover page 1) — unchanged
+- `MarketReportHeroBook.tsx` — unchanged
+- All other pages/components — untouched
+- The stamp export page
+- The stamp preview modal
+- Database schema (already has `uploaded_logo_url` column)
