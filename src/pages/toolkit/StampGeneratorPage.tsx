@@ -82,7 +82,7 @@ export default function StampGeneratorLanding() {
 
           {/* Mock stamp gallery */}
           <div className="flex flex-wrap gap-6 justify-center items-center mt-10 opacity-70">
-            <MockStamp label="JBJ GLOBAL REAL ESTATE LLC" sub="OFFICIAL STAMP" variant="round"/>
+            <MockStamp label="GOLDEN PALM HOLDING GROUP" sub="OFFICIAL STAMP" variant="round"/>
             <MockStamp label="ALPHA CONSULTING GROUP" sub="DUBAI · UAE" variant="round"/>
             <MockStamp label="SUMMIT PROPERTIES" sub="OFFICIAL STAMP" variant="rect"/>
             <MockStamp label="NEXUS ADVISORY LLC" sub="SINCE 2010" variant="round"/>

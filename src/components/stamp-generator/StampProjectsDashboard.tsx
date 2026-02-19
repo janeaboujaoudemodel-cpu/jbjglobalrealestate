@@ -166,7 +166,7 @@ export default function StampProjectsDashboard() {
                     <Button
                       size="sm"
                       className="flex-1 h-7 text-xs bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90"
-                      onClick={() => navigate(`/toolkit/stamp-generator/${project.id}`)}
+                      onClick={() => navigate(`/toolkit/stamp-generator/${project.id}/generate`)}
                     >
                       <ExternalLink size={11} className="mr-1"/> Open
                     </Button>
