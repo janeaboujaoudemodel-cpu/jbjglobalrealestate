@@ -80,6 +80,7 @@ export function AIVideoStudio() {
   const [isExporting, setIsExporting] = useState(false);
   const [subtitles, setSubtitles] = useState<SubtitleSegment[]>([]);
   const [activeOverlayEffect, setActiveOverlayEffect] = useState<string | null>(null);
+  const [activeBeautyFilter, setActiveBeautyFilter] = useState<import('./features/BeautyFiltersPanel').BeautyAdjustments | null>(null);
 
   useEffect(() => {
     loadStockLibrary();
@@ -265,6 +266,8 @@ export function AIVideoStudio() {
           onUpload={handleUpload}
           onOpenTool={(toolId) => layoutRef.current?.toggleTool(toolId)}
           activeOverlayEffect={activeOverlayEffect}
+          beautyFilter={activeBeautyFilter}
+          onClearBeautyFilter={() => setActiveBeautyFilter(null)}
         />
       }
       timeline={
@@ -339,7 +342,7 @@ export function AIVideoStudio() {
       }
       beautyPanel={
         <ScrollArea className="h-full">
-          <BeautyFiltersPanel />
+          <BeautyFiltersPanel onFilterChange={setActiveBeautyFilter} />
         </ScrollArea>
       }
       sfxPanel={
