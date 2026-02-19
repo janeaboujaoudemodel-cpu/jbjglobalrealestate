@@ -23,16 +23,21 @@ interface StampProject {
 }
 
 export default function StampProjectsDashboard() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [projects, setProjects] = useState<StampProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) return;
+    // Wait for auth to finish loading before deciding what to do
+    if (authLoading) return;
+    if (!user) {
+      navigate('/auth?redirect=/toolkit/stamp-generator/projects', { replace: true });
+      return;
+    }
     fetchProjects();
-  }, [user]);
+  }, [user, authLoading]);
 
   async function fetchProjects() {
     setLoading(true);
@@ -81,6 +86,20 @@ export default function StampProjectsDashboard() {
     status === 'FINAL_SELECTED'
       ? <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)] gap-1"><CheckCircle2 size={11}/>Finalized</Badge>
       : <Badge variant="secondary" className="gap-1"><Clock size={11}/>Draft</Badge>;
+
+  // Show a full-screen loader while auth session is being restored (e.g. page refresh)
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[hsl(var(--gold)/0.2)] to-[hsl(var(--champagne-1))] flex items-center justify-center animate-pulse">
+            <Stamp size={28} className="text-[hsl(var(--gold))]"/>
+          </div>
+          <p className="text-sm text-[hsl(var(--muted-foreground))]">Loading your projects…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]">
