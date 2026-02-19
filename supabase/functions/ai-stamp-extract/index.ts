@@ -24,18 +24,24 @@ serve(async (req) => {
       });
     }
 
-    const prompt = `You are an expert OCR system analyzing a business document, trade license, or commercial registration certificate.
+    const prompt = `You are an expert OCR system analyzing a business document, trade license, or commercial registration certificate — most likely issued in the United Arab Emirates.
 
 Extract ALL of the following information that is visible in the document:
 1. Company name in English (exact as printed, including LLC / FZE / CO. / L.L.C etc.)
 2. Company name in Arabic (exact Arabic characters as printed — if present)
 3. License / registration / commercial number
-4. City (in English)
+4. City (in English) — the city where the COMPANY is registered (e.g. Dubai, Abu Dhabi, Sharjah, Ajman)
 5. City in Arabic (if present)
-6. Country (in English)
-7. Phone number (any phone / mobile / tel number found)
+6. Country (in English) — the country where the COMPANY is registered, NOT the nationality of the owner or director. For UAE documents this is always "United Arab Emirates". Common UAE cities: Dubai, Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah, Umm Al Quwain.
+7. Phone number — format as international: start with + and country code (e.g. +971 for UAE). Convert 04/05 local UAE format to +971 4 / +971 5. Remove all dashes; use spaces as separators: +971 4 123 4567.
 8. Email address (any email found)
 9. Website / URL (if present)
+
+CRITICAL RULES:
+- "country" = where the COMPANY is registered, NEVER the nationality of a person.
+- If the document is a UAE trade license and any city is Dubai / Abu Dhabi / Sharjah etc., set country to "United Arab Emirates".
+- Do NOT put Lebanon, Egypt, India, Pakistan, Jordan, Syria, or any personal nationality in the "country" field.
+- Phone: always use international format starting with +. Remove all dashes.
 
 Return ONLY a valid JSON object with these exact keys (omit any key where the information is not found or not legible):
 {
@@ -111,6 +117,19 @@ Rules:
     for (const [key, val] of Object.entries(extracted)) {
       if (val && typeof val === 'string' && val.trim() && val.trim() !== 'N/A' && val.trim() !== 'n/a') {
         result[key] = val.trim();
+      }
+    }
+
+    // Server-side country correction: if city is UAE but country is a personal nationality, override
+    const uaeCities = ['dubai', 'abu dhabi', 'sharjah', 'ajman', 'ras al khaimah', 'fujairah', 'umm al quwain'];
+    const nonUaeNationalities = ['lebanon', 'egypt', 'india', 'pakistan', 'jordan', 'syria', 'philippines', 'iraq', 'morocco'];
+    if (result.city && result.country) {
+      const cityLower = result.city.toLowerCase();
+      const countryLower = result.country.toLowerCase();
+      const isUaeCity = uaeCities.some(c => cityLower.includes(c));
+      const isPersonalNationality = nonUaeNationalities.some(n => countryLower.includes(n));
+      if (isUaeCity && isPersonalNationality) {
+        result.country = 'United Arab Emirates';
       }
     }
 

@@ -369,10 +369,10 @@ export default function StampGeneratorPage() {
       )}
 
       {/* Header */}
-      <div className="border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm sticky top-24 sm:top-28 lg:top-32 z-10">
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => navigate('/toolkit/stamp-generator')} className="gap-1">
+            <Button variant="ghost" size="sm" onClick={() => navigate('/toolkit/stamp-generator/projects')} className="gap-1">
               <ArrowLeft size={14}/> Projects
             </Button>
             <div className="w-px h-5 bg-[hsl(var(--border))]"/>
