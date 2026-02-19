@@ -1,110 +1,200 @@
 
-# Caption Panel — Linear Step-by-Step Wizard Redesign
+# Preview Canvas Rebuild — Aspect Ratio Switching + Click-to-Inspect
 
-## Problem Analysis
+## Current State Analysis
 
-The current `CaptionTranslator.tsx` has these UX issues:
+### Preview Canvas (`VideoPreviewCanvas.tsx`)
+- The preview area is `<div className="flex-1 min-h-0 relative overflow-hidden bg-black">` — it takes all available vertical space in the layout, but it has **no aspect ratio constraint**. The media inside uses `object-contain` which adds black bars but the outer shell stretches arbitrarily.
+- There is **no aspect ratio switcher UI** of any kind. The preview always fills the container's shape.
+- The layout in `AIVideoStudioLayout.tsx` gives the preview a collapsed height of 180px when a tool panel is open, and `minHeight: 280` when no tool is open — both are too small for meaningful editing.
 
-1. **Clickable step chips** — users can jump to any step at any time, breaking the expected linear flow
-2. **Language grid hidden by default** — on Step 3 (Translate), all 28 languages are collapsed behind a "All 28 languages" toggle button. Users must click to see them
-3. **Style and Preview are split into two separate tabs** — Step 4 is "Style" and Step 5 is "Preview", requiring two tab switches to see styled captions on video
-4. **6 internal tabs vs 5 logical steps** — `activeTab` has values: `upload | transcribe | translate | style | preview | export` creating conceptual confusion
-5. **No clear "locked" state** — later steps show empty-state fallbacks but never properly lock the user from clicking ahead
+### Timeline → Inspector Wiring (`AIVideoStudio.tsx`)
+- `onSelectClip` is called by `TimelineEditor` when a clip is clicked.
+- `selectClip` is from `useVideoStudioProject` and stores `selectedClipIds` in `timelineState`.
+- `selectedClip` is derived in `AIVideoStudio.tsx` as `getSelectedClips()[0]` and passed to `<InspectorPanel>`.
+- **The Inspector is never auto-opened.** It lives inside `AIVideoStudioLayout`'s tool panel behind the "Inspector" tab. Clicking a timeline clip updates `selectedClip` state, but the user still has to manually click the Inspector tab to see it.
+- The fix requires: when `selectClip` is called via a timeline clip click, also call `layoutRef.current?.toggleTool('inspector')` to switch the active panel to Inspector automatically.
 
-## Solution: Strict Linear Wizard
+---
 
-Replace the current tab-chip navigation with a **numbered step indicator** that:
-- Shows step numbers (1–5), not clickable chips
-- Marks completed steps with a green check
-- Only highlights the current step in amber
-- Allows going **back** to any previous step, but not forward past the current step
-- Merges Style + Preview into a single Step 4
+## Changes Required
 
-### Step Map
+### 1. `VideoPreviewCanvas.tsx` — Aspect Ratio Switcher + Constrained Canvas
 
-| Step | Label | Unlocked when |
-|------|-------|---------------|
-| 1 | Upload | Always |
-| 2 | Transcribe | File uploaded |
-| 3 | Translate | Subtitles exist |
-| 4 | Style & Preview | Subtitles exist |
-| 5 | Export | Subtitles exist |
-
-## Key Changes Per Step
-
-### Step 1 — Upload
-- Same drop zone + file info card
-- Language picker for "spoken language" stays here
-- CTA: "Start Transcription →" button auto-advances to Step 2
-
-### Step 2 — Transcribe
-- Same transcription logic (chunked, ElevenLabs Scribe)
-- Progress bar with stage label
-- Editable segment list after transcription
-- CTA: "Translate to Other Languages →" button auto-advances to Step 3
-
-### Step 3 — Translate (Fixed: All Languages Always Visible)
-- **Remove the `showLangGrid` toggle entirely**
-- Show all 28 languages in a scrollable 3-column grid, always visible
-- Selected language highlighted in amber
-- "Translate" button → after translation complete, show translated segments inline
-- Multiple languages can be translated sequentially (each adds to the list)
-- CTA: "Style & Preview →" button advances to Step 4
-
-### Step 4 — Style & Preview (Merged)
-- Two-column-like layout within the same panel:
-  - **Left/top**: Style controls (preset, font, size, position, color, opacity, outline, animation speed)
-  - **Right/bottom**: Live CSS preview box (not canvas — a real-time HTML preview that updates instantly as user changes style settings)
-- If user uploaded a video file, also show the video upload + canvas overlay preview (same as current "Preview" tab)
-- Language selector to pick which translation to preview
-- CTA: "Export Subtitles →" advances to Step 5
-
-### Step 5 — Export
-- SRT/VTT download for original + all translated languages (same as current Export tab)
-- Burn captions on video section (same logic)
-- No CTA needed — this is the final step
-
-## Step Indicator Redesign
-
-Replace the current button-row with a cleaner progress indicator:
-
-```
-● 1 Upload  →  ✓ 2 Transcribe  →  ● 3 Translate  →  ○ 4 Style  →  ○ 5 Export
-```
-
-- Circle with number: not yet started
-- Amber filled circle: current step
-- Green check circle: completed
-- Connecting lines turn green as steps complete
-- **Clicking a step only works if that step is already done or is the current step** (no skipping forward)
-
-## Internal State Simplification
-
-The `activeTab` union type changes from:
+**Add to props:**
 ```typescript
-'upload' | 'transcribe' | 'translate' | 'style' | 'preview' | 'export'
+aspectRatio?: '16:9' | '9:16' | '1:1' | '4:5';
+onAspectRatioChange?: (ratio: '16:9' | '9:16' | '1:1' | '4:5') => void;
 ```
-to:
+
+**What changes inside the component:**
+
+**A. Aspect ratio pill selector** — a small 3-button pill row pinned to the top of the preview area:
+- `16:9` (YouTube)
+- `9:16` (Reels)
+- `1:1` (Instagram)
+
+These are always visible, styled as compact amber-outlined chip buttons. Active one is amber-filled. Clicking changes `aspectRatio` state.
+
+**B. The canvas frame** — instead of `absolute inset-0`, the visible video frame becomes a **centered box with a fixed aspect ratio**:
+- The outer container stays `flex-1 min-h-0 relative overflow-hidden bg-black`.
+- Inside, a flex-centered wrapper renders the canvas box:
+  ```
+  <div className="absolute inset-0 flex items-center justify-center bg-black">
+    <div style={{ aspectRatio: cssRatio, maxHeight: '100%', maxWidth: '100%', position: 'relative', width: X, height: Y }}>
+      ... media, overlays, transitions all go here ...
+    </div>
+  </div>
+  ```
+- The canvas width/height is computed from the container's actual dimensions to always fill as much of the preview area as possible while maintaining the exact aspect ratio.
+- `16:9` → `aspectRatio: '16/9'`, `9:16` → `aspectRatio: '9/16'`, `1:1` → `aspectRatio: '1/1'`
+
+**C. Thin letterbox bars** — the black area outside the canvas gets a subtle checkerboard pattern (CSS `background-image`) to visually indicate it's outside the canvas frame, similar to how DaVinci Resolve and CapCut show the safe area.
+
+**D. Canvas size badge** — a tiny bottom-left badge showing the format name: `📱 Reels 9:16`, `▶️ YouTube 16:9`, `⬜ Square 1:1` — appears for 2 seconds after switching then fades.
+
+### 2. `AIVideoStudioLayout.tsx` — Expose `setActiveTool` Imperatively
+
+The `AIVideoStudioLayoutHandle` already exposes `toggleTool(toolId)`. This is exactly what's needed. No new methods needed.
+
+**However**, `toggleTool` currently toggles: if the tool is already active, it collapses/expands. When auto-opening Inspector, we need to **always open** (not toggle). Add a second method to the handle:
+
 ```typescript
-1 | 2 | 3 | 4 | 5
+export interface AIVideoStudioLayoutHandle {
+  toggleTool: (toolId: string) => void;
+  openTool: (toolId: string) => void;  // NEW — always opens, never collapses
+}
 ```
 
-This eliminates the conceptual mismatch between 6 tab values and 5 displayed steps.
+`openTool` implementation:
+```typescript
+openTool(toolId: string) {
+  setActiveTool(toolId);
+  setToolsExpanded(true);
+}
+```
 
-The `previewSource` logic (video for preview canvas) stays: if user uploaded a video file originally OR selects a separate video in Step 4, it's shown in the preview.
+### 3. `AIVideoStudio.tsx` — Wire Timeline Click → Auto-open Inspector
+
+Current `handleClipMouseDown` in `TimelineEditor` calls `onSelectClip(clip.id)` → goes to `selectClip` in `useVideoStudioProject`.
+
+The fix is to wrap `selectClip` in `AIVideoStudio.tsx` with a callback that also opens Inspector:
+
+```typescript
+const handleSelectClip = useCallback((clipId: string, multiSelect?: boolean) => {
+  selectClip(clipId, multiSelect);
+  // Auto-open inspector whenever a clip is selected from the timeline
+  if (!multiSelect) {
+    layoutRef.current?.openTool('inspector');
+  }
+}, [selectClip]);
+```
+
+Then pass `handleSelectClip` instead of `selectClip` to `<TimelineEditor>`:
+```tsx
+onSelectClip={handleSelectClip}
+```
+
+**And** pass `aspectRatio` state + handler to `VideoPreviewCanvas`:
+```tsx
+aspectRatio={previewAspectRatio}
+onAspectRatioChange={setPreviewAspectRatio}
+```
+
+Add state in `AIVideoStudio.tsx`:
+```typescript
+const [previewAspectRatio, setPreviewAspectRatio] = useState<'16:9' | '9:16' | '1:1' | '4:5'>('16:9');
+```
+
+Also sync aspect ratio with export preset: when user selects "Reels" export preset, the preview should auto-switch to 9:16.
+
+### 4. Preview Canvas Layout — Make It Bigger
+
+Currently in `AIVideoStudioLayout.tsx`:
+```tsx
+style={{ flex: activeTool && toolsExpanded ? '0 0 auto' : '1 1 auto', minHeight: activeTool && toolsExpanded ? 180 : 280 }}
+```
+
+When a tool panel is open, the preview collapses to as little as 180px — too small to see anything properly. Change to:
+- With tool open: `minHeight: 240px` (increase from 180)
+- Without tool: `minHeight: 320px` (increase from 280)
+- The preview div gets `min-h-[240px]` or `min-h-[320px]` depending on tool state
+
+Also make the aspect-ratio-constrained canvas use a `useResizeObserver` (or `ResizeObserver`) on the preview container to always compute correct dimensions.
+
+---
 
 ## Files to Edit
 
-| File | Action |
+| File | Change |
 |------|--------|
-| `src/components/ai-video-studio/features/CaptionTranslator.tsx` | Full rewrite — single file change |
+| `src/components/ai-video-studio/preview/VideoPreviewCanvas.tsx` | Add `aspectRatio` prop, aspect-ratio switcher pills UI, constrained canvas box, letterbox area, format badge |
+| `src/components/ai-video-studio/layout/AIVideoStudioLayout.tsx` | Add `openTool` to `AIVideoStudioLayoutHandle`, increase min-heights |
+| `src/components/ai-video-studio/AIVideoStudio.tsx` | Add `previewAspectRatio` state, `handleSelectClip` wrapper that auto-opens Inspector, pass new props to canvas and timeline |
 
-No other files need to change. The component interface (`props`) stays identical so `IntegratedToolsPanel.tsx` requires no update.
+---
 
-## Implementation Details
+## Detailed UI Design for the Aspect Ratio Switcher
 
-- Step indicator: fixed at the top, `flex` row, 5 numbered circles with connector lines
-- Steps 3's language grid: `grid grid-cols-3` with `max-h-56 overflow-y-auto` — always expanded
-- Step 4's live preview: the same CSS `<span>` preview box (already in the "style" tab) stays — updates in real-time as style state changes. The canvas-based video preview stays below it, reactivated by the same `activeStep === 4` condition (replaces `activeTab === 'preview'`)
-- Back navigation: each step panel (except Step 1) has a small "← Back" link in the top-left that decrements `activeStep`
-- Auto-advance: after transcription completes → `setActiveStep(3)`, after translation → `setActiveStep(4)` is offered but not forced
+Position: **inside the preview area, top-left corner**, overlaid on the black area (not on the video canvas itself).
+
+```
+┌──────────────────────────────────────────────┐
+│ [16:9 ▶] [9:16 📱] [1:1 ⬜]         00:02.4 │ ← top bar inside preview
+│                                               │
+│      ┌────────────────────────┐               │
+│      │                        │               │
+│      │    VIDEO CANVAS        │               │
+│      │    (constrained)       │               │
+│      │                        │               │
+│      └────────────────────────┘               │
+│                                               │
+└──────────────────────────────────────────────┘
+```
+
+The black outer zone (letterbox) uses a subtle `bg-[#0a0a0f]` with a very faint `bg-[size:16px_16px]` checkerboard grid pattern using CSS `background-image` with SVG data URI, so the canvas boundary is clear.
+
+Switcher pill details:
+- Container: `absolute top-2 left-2 flex gap-1 z-30`
+- Each button: `px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all`
+- Active: `bg-amber-500 text-black border-amber-500`
+- Inactive: `bg-black/60 text-slate-300 border-slate-600 hover:border-amber-400`
+
+The format badge (appears on switch):
+- `absolute bottom-3 left-1/2 -translate-x-1/2`
+- Fades out after 2 seconds using CSS animation or a timeout clearing state
+
+---
+
+## Sync with Export Preset
+
+When `selectedExportPreset` changes in `AIVideoStudio.tsx`, also update `previewAspectRatio`:
+
+```typescript
+const PRESET_ASPECT_MAP: Record<string, '16:9' | '9:16' | '1:1'> = {
+  reels: '9:16',
+  youtube: '16:9',
+  instagram: '1:1',
+  portrait: '4:5',
+};
+
+// In handleSelectPreset:
+const handleSelectExportPreset = useCallback((presetId: string) => {
+  setSelectedExportPreset(presetId);
+  const ratio = PRESET_ASPECT_MAP[presetId];
+  if (ratio) setPreviewAspectRatio(ratio);
+}, []);
+```
+
+Pass `handleSelectExportPreset` to `AIVideoStudioExportBar` instead of `setSelectedExportPreset`.
+
+---
+
+## Summary of User-Visible Result
+
+After this build:
+1. The preview canvas shows a **correctly proportioned frame** matching the target format — 9:16 portrait for Reels, 16:9 landscape for YouTube, 1:1 square for Instagram
+2. Switching format via the 3 pill buttons at the top-left instantly resizes the canvas
+3. Selecting a Reels/YouTube/Instagram export preset also auto-switches the preview aspect ratio
+4. Clicking any clip in the timeline **immediately opens the Inspector panel** showing that clip's properties — no more manually hunting for the Inspector tab
+5. Multi-select (shift+click) does **not** auto-open the Inspector (intentional — inspector shows only single-clip properties)
