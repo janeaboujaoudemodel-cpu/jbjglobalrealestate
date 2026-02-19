@@ -104,12 +104,41 @@ Deno.serve(async (req) => {
       const results = { updated: 0, failed: 0, imagesStored: 0 };
 
       for (const reellyId of projectIds.slice(0, batchSize)) {
-        const detail = await fetchDetail(apiKey, reellyId);
-        if (!detail) { results.failed++; continue; }
+        // Fetch the DB project record first to get its UUID
+        const { data: dbProject } = await supabase
+          .from("projects")
+          .select("id")
+          .eq("reelly_id", reellyId)
+          .maybeSingle();
 
-        const updateData = await buildUpdateData(supabase, detail, reellyId, mirrorImages, results);
-        const { error } = await supabase.from("projects").update(updateData).eq("reelly_id", reellyId);
-        error ? results.failed++ : results.updated++;
+        if (!dbProject?.id) {
+          console.warn(`[specific] No DB project found for reelly_id ${reellyId}`);
+          results.failed++;
+          continue;
+        }
+
+        const detail = await fetchDetail(apiKey, reellyId);
+        if (!detail) {
+          console.error(`[specific] No API detail for reelly_id ${reellyId}`);
+          results.failed++;
+          continue;
+        }
+
+        try {
+          const updateData = await buildUpdateData(supabase, detail, reellyId, mirrorImages, results, dbProject.id);
+          console.log(`[specific] Updating project ${dbProject.id} (reelly_id ${reellyId}) with: ${Object.keys(updateData).join(", ")}`);
+          const { error } = await supabase.from("projects").update(updateData).eq("id", dbProject.id);
+          if (error) {
+            console.error(`[specific] Update error for project ${dbProject.id}:`, error.message);
+            results.failed++;
+          } else {
+            console.log(`[specific] Successfully updated project ${dbProject.id}`);
+            results.updated++;
+          }
+        } catch (buildErr: any) {
+          console.error(`[specific] buildUpdateData error for reelly_id ${reellyId}:`, buildErr.message);
+          results.failed++;
+        }
         await new Promise(r => setTimeout(r, 300));
       }
 
@@ -198,9 +227,9 @@ Deno.serve(async (req) => {
       for (const project of allProjects) {
         const detail = await fetchDetail(apiKey, project.reelly_id);
         if (!detail) { results.failed++; continue; }
-        const updateData = await buildUpdateData(supabase, detail, project.reelly_id, mirrorImages, results);
+        const updateData = await buildUpdateData(supabase, detail, project.reelly_id, mirrorImages, results, project.id);
         const { error } = await supabase.from("projects").update(updateData).eq("id", project.id);
-        error ? results.failed++ : results.updated++;
+        if (error) { console.error(`[batch-all] Update error for ${project.id}:`, error.message); results.failed++; } else results.updated++;
         await new Promise(r => setTimeout(r, 300));
       }
       return new Response(JSON.stringify({ success: true, mode: "batch-all", ...results }), {
@@ -212,9 +241,9 @@ Deno.serve(async (req) => {
     for (const project of projects) {
       const detail = await fetchDetail(apiKey, project.reelly_id);
       if (!detail) { results.failed++; continue; }
-      const updateData = await buildUpdateData(supabase, detail, project.reelly_id, mirrorImages, results);
+      const updateData = await buildUpdateData(supabase, detail, project.reelly_id, mirrorImages, results, project.id);
       const { error } = await supabase.from("projects").update(updateData).eq("id", project.id);
-      error ? results.failed++ : results.updated++;
+      if (error) { console.error(`[batch] Update error for ${project.id}:`, error.message); results.failed++; } else results.updated++;
       await new Promise(r => setTimeout(r, 300));
     }
 
@@ -231,7 +260,8 @@ Deno.serve(async (req) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// BUILD UPDATE DATA — core extraction + optional image mirroring
+// BUILD UPDATE DATA — Only updates valid `projects` columns.
+// Images go into project_images table; documents into project_documents table.
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function buildUpdateData(
@@ -240,82 +270,85 @@ async function buildUpdateData(
   reellyId: number,
   mirrorImages: boolean,
   results: { imagesStored: number },
+  projectId?: string,
 ): Promise<Record<string, unknown>> {
   const units     = extractUnitTypes(detail);
   const amenities = extractAmenities(detail);
   const images    = extractGalleryImages(detail);
   const docs      = extractDocuments(detail);
-  const floors    = extractFloorPlans(detail);
   const videos    = extractVideos(detail);
   const bedrooms  = computeBedroomRange(units);
   const prices    = computePriceRange(units, detail.min_price, detail.max_price);
 
+  // ── Only columns that exist in the `projects` table ───────────────────────
   const updateData: Record<string, unknown> = {
     updated_at: new Date().toISOString(),
   };
 
-  // ── Unit types & bedroom range ─────────────────────────────────────────────
-  if (units.length)    updateData.unit_types   = units;
-  if (bedrooms.min != null) updateData.bedrooms_min = bedrooms.min;
-  if (bedrooms.max != null) updateData.bedrooms_max = bedrooms.max;
+  if (units.length)            updateData.unit_types    = units;
+  if (bedrooms.min != null)    updateData.bedrooms_min  = bedrooms.min;
+  if (bedrooms.max != null)    updateData.bedrooms_max  = bedrooms.max;
+  if (detail.min_size > 0)     updateData.size_min      = detail.min_size;
+  if (detail.max_size > 0)     updateData.size_max      = detail.max_size;
+  if (prices.from != null)     updateData.price_from    = prices.from;
+  if (prices.to   != null)     updateData.price_to      = prices.to;
+  if (amenities.length)        updateData.amenities     = amenities;
+  if (videos.video_url)        updateData.video_url     = videos.video_url;
+  if (videos.video_urls.length) updateData.video_urls   = videos.video_urls;
+  if ((detail as any).highlights?.length) updateData.highlights = (detail as any).highlights;
+  if ((detail as any).faqs?.length)       updateData.faqs       = (detail as any).faqs;
 
-  // ── Size range ─────────────────────────────────────────────────────────────
-  if (detail.min_size > 0) updateData.size_min = detail.min_size;
-  if (detail.max_size > 0) updateData.size_max = detail.max_size;
+  // ── Cover image ────────────────────────────────────────────────────────────
+  const coverUrl = detail.cover_image?.url;
+  if (mirrorImages && coverUrl) {
+    const mirrored = await mirrorImage(supabase, coverUrl, reellyId, "cover");
+    updateData.cover_image_url = mirrored || coverUrl;
+    if (mirrored) results.imagesStored++;
+  } else if (coverUrl) {
+    updateData.cover_image_url = coverUrl;
+  } else if (images.length) {
+    updateData.cover_image_url = images[0].url;
+  }
 
-  // ── Price range ────────────────────────────────────────────────────────────
-  if (prices.from != null) updateData.price_from = prices.from;
-  if (prices.to   != null) updateData.price_to   = prices.to;
-
-  // ── Amenities ──────────────────────────────────────────────────────────────
-  if (amenities.length) updateData.amenities = amenities;
-
-  // ── Documents ──────────────────────────────────────────────────────────────
-  if (docs.length) updateData.documents = docs;
-
-  // ── Floor plans ────────────────────────────────────────────────────────────
-  if (floors.length) updateData.floor_plan_types = floors;
-
-  // ── Videos ────────────────────────────────────────────────────────────────
-  if (videos.video_url)         updateData.video_url  = videos.video_url;
-  if (videos.video_urls.length) updateData.video_urls = videos.video_urls;
-
-  // ── Highlights / FAQs ─────────────────────────────────────────────────────
-  if (detail.highlights?.length) updateData.highlights = detail.highlights;
-  if (detail.faqs?.length)       updateData.faqs       = detail.faqs;
-
-  // ── Mirror images to Supabase Storage ─────────────────────────────────────
-  if (mirrorImages && images.length) {
-    const storedImages: Array<{ url: string; alt_text: string; display_order: number }> = [];
+  // ── Sync images into project_images table ──────────────────────────────────
+  if (projectId && images.length) {
+    const imageRows: Array<{ project_id: string; image_url: string; alt_text: string; display_order: number }> = [];
     let i = 0;
-    for (const img of images.slice(0, 20)) { // max 20 images per project
-      const mirrored = await mirrorImage(supabase, img.url, reellyId, `img-${i}`);
-      const finalUrl = mirrored || img.url; // fall back to original URL
-      storedImages.push({ url: finalUrl, alt_text: img.alt_text, display_order: i });
-      if (mirrored) results.imagesStored++;
+    for (const img of images.slice(0, 20)) {
+      let finalUrl = img.url;
+      if (mirrorImages) {
+        const mirrored = await mirrorImage(supabase, img.url, reellyId, `img-${i}`);
+        if (mirrored) { finalUrl = mirrored; results.imagesStored++; }
+      }
+      imageRows.push({ project_id: projectId, image_url: finalUrl, alt_text: img.alt_text || "", display_order: i });
       i++;
-      await new Promise(r => setTimeout(r, 100)); // be gentle on storage
+      await new Promise(r => setTimeout(r, 80));
     }
-    updateData.images = storedImages;
+    // Delete existing and re-insert fresh images
+    await supabase.from("project_images").delete().eq("project_id", projectId);
+    if (imageRows.length) {
+      const { error: imgErr } = await supabase.from("project_images").insert(imageRows);
+      if (imgErr) console.warn(`[buildUpdateData] project_images insert error for project ${projectId}:`, imgErr.message);
+      else console.log(`[buildUpdateData] Inserted ${imageRows.length} images for project ${projectId}`);
+    }
+  }
 
-    // Update cover_image_url if missing or pointing to Reelly CDN
-    const coverUrl = detail.cover_image?.url;
-    if (coverUrl) {
-      const mirrored = await mirrorImage(supabase, coverUrl, reellyId, "cover");
-      updateData.cover_image_url = mirrored || coverUrl;
-      if (mirrored) results.imagesStored++;
-    } else if (storedImages.length) {
-      updateData.cover_image_url = storedImages[0].url;
+  // ── Sync documents into project_documents table ────────────────────────────
+  if (projectId && docs.length) {
+    await supabase.from("project_documents").delete().eq("project_id", projectId);
+    const docRows = docs.slice(0, 20).map((doc: any, idx: number) => ({
+      project_id: projectId,
+      file_url: doc.url || doc.file_url || "",
+      file_name: doc.name || doc.file_name || `Document ${idx + 1}`,
+      document_type: doc.type || doc.document_type || "brochure",
+      display_order: idx,
+    })).filter((d: any) => d.file_url);
+
+    if (docRows.length) {
+      const { error: docErr } = await supabase.from("project_documents").insert(docRows);
+      if (docErr) console.warn(`[buildUpdateData] project_documents insert error for project ${projectId}:`, docErr.message);
+      else console.log(`[buildUpdateData] Inserted ${docRows.length} documents for project ${projectId}`);
     }
-  } else {
-    // No mirroring — just ensure cover_image_url is populated from gallery
-    if (!detail.cover_image?.url && images.length) {
-      updateData.cover_image_url = images[0].url;
-    } else if (detail.cover_image?.url) {
-      updateData.cover_image_url = detail.cover_image.url;
-    }
-    // Store raw image URLs
-    if (images.length) updateData.images = images;
   }
 
   return updateData;

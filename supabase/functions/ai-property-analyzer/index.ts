@@ -107,10 +107,16 @@ Use EXACTLY these section headers (numbered, bold):
 
 CRITICAL: Keep every section SHORT. Max 2-3 bullet points. One line per bullet. No paragraphs. Numbers over words.`;
 
-    // Call Lovable AI Gateway using shared utility
+    // Call Lovable AI Gateway using shared utility — flash model for speed
     let fullAnalysis: string;
     try {
-      fullAnalysis = await callLovableAI(systemPrompt, userPrompt);
+      fullAnalysis = await callLovableAI({
+        systemPrompt,
+        userPrompt,
+        model: "google/gemini-2.5-flash-lite",
+        maxTokens: 800,
+        temperature: 0.4,
+      });
     } catch (aiError) {
       console.error("AI error:", aiError);
       return new Response(
