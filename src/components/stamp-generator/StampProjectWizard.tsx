@@ -34,9 +34,103 @@ function correctCountry(country: string, city: string): string {
 type StampType = 'ROUND' | 'OVAL' | 'RECTANGLE' | 'SQUARE';
 type StyleTheme = 'CLASSIC' | 'MODERN' | 'MINIMAL' | 'LUXURY' | 'BOLD' | 'VINTAGE';
 type BorderStyle = 'SINGLE' | 'DOUBLE' | 'RING' | 'DOTTED' | 'ROPE' | 'CUSTOM';
-type TypographyStyle = 'SERIF' | 'SANS' | 'MONOSPACE' | 'CALLIGRAPHY';
+type TypographyStyle = 'SERIF' | 'SANS' | 'MONOSPACE' | 'CALLIGRAPHY' | 'GOTHIC' | 'ARABIC_MODERN';
 type LanguageMode = 'EN' | 'AR' | 'BILINGUAL';
 type IconStyle = 'NONE' | 'MONOGRAM' | 'SIMPLE_ICON' | 'UPLOADED_LOGO';
+
+// ── Visual preview components ──────────────────────────────────────────────
+
+function ShapePreview({ type, selected }: { type: StampType; selected: boolean }) {
+  const color = selected ? 'hsl(var(--gold-dark))' : 'hsl(var(--muted-foreground))';
+  const common = `flex items-center justify-center border-2 text-[7px] font-bold tracking-widest`;
+  const style = { borderColor: color, color };
+  if (type === 'ROUND')     return <div className={`${common} rounded-full w-12 h-12`} style={style}>JBJ</div>;
+  if (type === 'OVAL')      return <div className={`${common} rounded-full w-16 h-10`} style={style}>JBJ</div>;
+  if (type === 'RECTANGLE') return <div className={`${common} rounded-lg w-16 h-10`}  style={style}>JBJ</div>;
+  if (type === 'SQUARE')    return <div className={`${common} rounded-lg w-12 h-12`}  style={style}>JBJ</div>;
+  return null;
+}
+
+function BorderPreview({ type, selected }: { type: BorderStyle; selected: boolean }) {
+  const gold = selected ? 'hsl(var(--gold))' : 'hsl(var(--muted-foreground))';
+  const size = 'w-10 h-10 flex-shrink-0';
+  if (type === 'SINGLE')
+    return <div className={`${size} rounded-full border-2`} style={{ borderColor: gold }}/>;
+  if (type === 'DOUBLE')
+    return <div className={`${size} rounded-full border-2 flex items-center justify-center`} style={{ borderColor: gold }}>
+      <div className="w-7 h-7 rounded-full border" style={{ borderColor: gold }}/>
+    </div>;
+  if (type === 'RING')
+    return <div className={`${size} rounded-full`} style={{ background: `radial-gradient(circle, transparent 38%, ${gold} 38%, ${gold} 50%, transparent 50%)` }}/>;
+  if (type === 'DOTTED')
+    return <div className={`${size} rounded-full border-2 border-dotted`} style={{ borderColor: gold }}/>;
+  if (type === 'ROPE')
+    return <div className={`${size} rounded-full border-2 border-dashed`} style={{ borderColor: gold }}/>;
+  if (type === 'CUSTOM')
+    return <div className={`${size} rounded-full border-4 flex items-center justify-center`} style={{ borderColor: gold }}>
+      <div className="w-6 h-6 rounded-full border-2" style={{ borderColor: gold }}/>
+    </div>;
+  return null;
+}
+
+function DensityPreview({ d, selected }: { d: number; selected: boolean }) {
+  const gold = selected ? 'hsl(var(--gold))' : 'hsl(var(--border))';
+  const widths = ['w-8', 'w-6', 'w-10', 'w-5', 'w-7'];
+  return (
+    <div className="w-10 h-10 rounded-full border-2 flex flex-col items-center justify-center gap-0.5 flex-shrink-0" style={{ borderColor: gold }}>
+      {Array.from({ length: d }).map((_, i) => (
+        <div key={i} className={`h-px ${widths[i % widths.length]}`} style={{ backgroundColor: gold }}/>
+      ))}
+    </div>
+  );
+}
+
+const FONT_META: Record<TypographyStyle, { family: string; label: string; sample: string }> = {
+  SERIF:         { family: 'Georgia, "Times New Roman", serif',                      label: 'Serif',        sample: 'Abc' },
+  SANS:          { family: '"Helvetica Neue", Arial, sans-serif',                    label: 'Sans-Serif',   sample: 'Abc' },
+  MONOSPACE:     { family: '"Courier New", Courier, monospace',                      label: 'Monospace',    sample: 'Abc' },
+  CALLIGRAPHY:   { family: '"Palatino Linotype", Palatino, serif',                   label: 'Calligraphy',  sample: 'Abc' },
+  GOTHIC:        { family: '"Copperplate Gothic", Copperplate, "Small Caps", serif', label: 'Gothic',       sample: 'Abc' },
+  ARABIC_MODERN: { family: '"Arabic Typesetting", "Noto Naskh Arabic", serif',       label: 'Arabic',       sample: 'أبج' },
+};
+
+const THEME_META: Record<StyleTheme, { desc: string; ring: boolean; thick: boolean }> = {
+  CLASSIC:  { desc: 'Traditional', ring: true,  thick: false },
+  MODERN:   { desc: 'Clean',       ring: false, thick: false },
+  MINIMAL:  { desc: 'Hairline',    ring: false, thick: false },
+  LUXURY:   { desc: 'Gold Ring',   ring: true,  thick: true  },
+  BOLD:     { desc: 'Heavy',       ring: false, thick: true  },
+  VINTAGE:  { desc: 'Ornate',      ring: true,  thick: false },
+};
+
+function ThemePreview({ type, selected }: { type: StyleTheme; selected: boolean }) {
+  const meta = THEME_META[type];
+  const gold = selected ? 'hsl(var(--gold))' : 'hsl(var(--muted-foreground))';
+  const bw = meta.thick ? 3 : 1.5;
+  return (
+    <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ border: `${bw}px solid ${gold}` }}>
+      {meta.ring && <div className="w-6 h-6 rounded-full" style={{ border: `${bw * 0.7}px solid ${gold}` }}/>}
+    </div>
+  );
+}
+
+// ── OptionButton (generic) ─────────────────────────────────────────────────
+const OptionButton = ({ selected, onClick, children, className = '' }: {
+  selected: boolean; onClick: () => void; children: React.ReactNode; className?: string;
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={`relative px-3 py-2 rounded-xl border-2 text-sm font-medium transition-all ${
+      selected
+        ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]'
+        : 'border-[hsl(var(--border))] bg-white text-[hsl(var(--foreground))] hover:border-[hsl(var(--gold)/0.4)]'
+    } ${className}`}
+  >
+    {selected && <Check size={10} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
+    {children}
+  </button>
+);
 
 interface FormState {
   project_name: string;
@@ -62,23 +156,6 @@ interface FormState {
 }
 
 const STEPS = ['Company Details', 'Stamp Style', 'Logo / Monogram'];
-
-const OptionButton = ({ selected, onClick, children, className = '' }: {
-  selected: boolean; onClick: () => void; children: React.ReactNode; className?: string;
-}) => (
-  <button
-    type="button"
-    onClick={onClick}
-    className={`relative px-3 py-2 rounded-xl border-2 text-sm font-medium transition-all ${
-      selected
-        ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]'
-        : 'border-[hsl(var(--border))] bg-white text-[hsl(var(--foreground))] hover:border-[hsl(var(--gold)/0.4)]'
-    } ${className}`}
-  >
-    {selected && <Check size={10} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
-    {children}
-  </button>
-);
 
 export default function StampProjectWizard() {
   const { user } = useAuth();
@@ -163,6 +240,7 @@ export default function StampProjectWizard() {
     // Clear session persistence after successful creation
     try { sessionStorage.removeItem('stamp-wizard-form'); sessionStorage.removeItem('stamp-wizard-step'); } catch { /* ignore */ }
     toast.success('Project created!');
+    window.scrollTo({ top: 0, behavior: 'auto' });
     navigate(`/toolkit/stamp-generator/${data.id}/generate`);
   }
 
@@ -226,7 +304,9 @@ export default function StampProjectWizard() {
                   if (data.registration_number) set('registration_number_optional', data.registration_number);
                   const city = data.city || '';
                   if (city) set('city_optional', city);
-                  if (data.arabic_city) set('arabic_city', data.arabic_city);
+                  // Auto-fill arabic_city in "City, الإمارات العربية المتحدة" format
+                  const arabicCity = data.arabic_city || (city ? `${city}, الإمارات العربية المتحدة` : '');
+                  if (arabicCity) set('arabic_city', arabicCity);
                   // Smart country correction: don't confuse owner nationality with company country
                   const rawCountry = data.country || '';
                   const correctedCountry = correctCountry(rawCountry, city);
@@ -309,7 +389,7 @@ export default function StampProjectWizard() {
                   </div>
                   <div>
                     <Label className="text-xs font-medium mb-1.5 block">City in Arabic</Label>
-                    <Input value={form.arabic_city} onChange={e => set('arabic_city', e.target.value)} placeholder="دبي، الإمارات" dir="rtl"/>
+                    <Input value={form.arabic_city} onChange={e => set('arabic_city', e.target.value)} placeholder="Dubai, الإمارات العربية المتحدة" dir="rtl"/>
                   </div>
                 </div>
               )}
@@ -328,9 +408,20 @@ export default function StampProjectWizard() {
                 <Label className="text-xs font-medium mb-2 block">Shape</Label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {(['ROUND', 'OVAL', 'RECTANGLE', 'SQUARE'] as StampType[]).map(t => (
-                    <OptionButton key={t} selected={form.stamp_type === t} onClick={() => set('stamp_type', t)}>
-                      {t.charAt(0) + t.slice(1).toLowerCase()}
-                    </OptionButton>
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => set('stamp_type', t)}
+                      className={`relative flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${
+                        form.stamp_type === t
+                          ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]'
+                          : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                      }`}
+                    >
+                      {form.stamp_type === t && <Check size={10} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
+                      <ShapePreview type={t} selected={form.stamp_type === t}/>
+                      <span className="text-xs font-medium">{t.charAt(0) + t.slice(1).toLowerCase()}</span>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -339,9 +430,23 @@ export default function StampProjectWizard() {
                 <Label className="text-xs font-medium mb-2 block">Theme</Label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {(['CLASSIC', 'MODERN', 'MINIMAL', 'LUXURY', 'BOLD', 'VINTAGE'] as StyleTheme[]).map(t => (
-                    <OptionButton key={t} selected={form.style_theme === t} onClick={() => set('style_theme', t)}>
-                      {t.charAt(0) + t.slice(1).toLowerCase()}
-                    </OptionButton>
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => set('style_theme', t)}
+                      className={`relative flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-left ${
+                        form.style_theme === t
+                          ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]'
+                          : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                      }`}
+                    >
+                      {form.style_theme === t && <Check size={10} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
+                      <ThemePreview type={t} selected={form.style_theme === t}/>
+                      <div>
+                        <p className="text-xs font-semibold leading-tight">{t.charAt(0) + t.slice(1).toLowerCase()}</p>
+                        <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{THEME_META[t].desc}</p>
+                      </div>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -350,41 +455,77 @@ export default function StampProjectWizard() {
                 <Label className="text-xs font-medium mb-2 block">Border Style</Label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {(['SINGLE', 'DOUBLE', 'RING', 'DOTTED', 'ROPE', 'CUSTOM'] as BorderStyle[]).map(b => (
-                    <OptionButton key={b} selected={form.border_style === b} onClick={() => set('border_style', b)}>
-                      {b.charAt(0) + b.slice(1).toLowerCase()}
-                    </OptionButton>
+                    <button
+                      key={b}
+                      type="button"
+                      onClick={() => set('border_style', b)}
+                      className={`relative flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-left ${
+                        form.border_style === b
+                          ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]'
+                          : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                      }`}
+                    >
+                      {form.border_style === b && <Check size={10} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
+                      <BorderPreview type={b} selected={form.border_style === b}/>
+                      <span className="text-xs font-medium">{b.charAt(0) + b.slice(1).toLowerCase()}</span>
+                    </button>
                   ))}
                 </div>
               </div>
 
               <div>
                 <Label className="text-xs font-medium mb-2 block">Typography</Label>
-                <div className="grid grid-cols-2 gap-2">
-                  {(['SERIF', 'SANS', 'MONOSPACE', 'CALLIGRAPHY'] as TypographyStyle[]).map(t => (
-                    <OptionButton key={t} selected={form.typography_style === t} onClick={() => set('typography_style', t)}>
-                      {t.charAt(0) + t.slice(1).toLowerCase()}
-                    </OptionButton>
-                  ))}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {(Object.keys(FONT_META) as TypographyStyle[]).map(t => {
+                    const meta = FONT_META[t];
+                    return (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => set('typography_style', t)}
+                        className={`relative flex items-center gap-3 p-3 rounded-xl border-2 transition-all text-left ${
+                          form.typography_style === t
+                            ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]'
+                            : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                        }`}
+                      >
+                        {form.typography_style === t && <Check size={10} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
+                        <span
+                          className="text-2xl leading-none flex-shrink-0 w-10 text-center"
+                          style={{ fontFamily: meta.family, color: form.typography_style === t ? 'hsl(var(--gold-dark))' : 'hsl(var(--foreground))' }}
+                        >{meta.sample}</span>
+                        <span className="text-xs font-medium">{meta.label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
               <div>
-                <Label className="text-xs font-medium mb-2 block">Density: {form.density}</Label>
-                <div className="flex gap-2">
-                  {[1, 2, 3, 4, 5].map(d => (
-                    <button
-                      key={d}
-                      type="button"
-                      onClick={() => set('density', d)}
-                      className={`w-10 h-10 rounded-xl border-2 text-sm font-semibold transition-all ${
-                        form.density === d
-                          ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]'
-                          : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
-                      }`}
-                    >{d}</button>
-                  ))}
+                <Label className="text-xs font-medium mb-2 block">Information Density</Label>
+                <div className="grid grid-cols-5 gap-2">
+                  {([1, 2, 3, 4, 5] as const).map(d => {
+                    const densityLabels: Record<number, string> = {
+                      1: 'Name only', 2: 'Name + City', 3: 'Name + Reg + City', 4: '+ Phone', 5: 'All fields'
+                    };
+                    return (
+                      <button
+                        key={d}
+                        type="button"
+                        onClick={() => set('density', d)}
+                        className={`relative flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all ${
+                          form.density === d
+                            ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]'
+                            : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                        }`}
+                      >
+                        {form.density === d && <Check size={10} className="absolute top-1 right-1 text-[hsl(var(--gold))]"/>}
+                        <DensityPreview d={d} selected={form.density === d}/>
+                        <span className="text-[9px] text-center text-[hsl(var(--muted-foreground))] leading-tight">{densityLabels[d]}</span>
+                      </button>
+                    );
+                  })}
                 </div>
-                <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">1 = minimal info · 5 = max detail</p>
               </div>
             </div>
           )}
@@ -458,6 +599,7 @@ export default function StampProjectWizard() {
               onClick={() => {
                 if (step === 0 && !form.company_name.trim()) { toast.error('Company name is required'); return; }
                 setStep(s => s + 1);
+                window.scrollTo({ top: 0, behavior: 'auto' });
               }}
               className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1"
             >

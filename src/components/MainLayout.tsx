@@ -55,6 +55,14 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     location.pathname.startsWith("/broker-dashboard");
   const isHomePage = location.pathname === "/";
   const isDetailPage = location.pathname.startsWith("/project/") || location.pathname.startsWith("/area/");
+  // Toolkit generator routes are full-screen app experiences — suppress Footer & CTA
+  const isToolkitGeneratorRoute =
+    location.pathname.startsWith('/toolkit/stamp-generator/') ||
+    location.pathname.startsWith('/toolkit/') && (
+      location.pathname.includes('/generate') ||
+      location.pathname.includes('/export') ||
+      location.pathname.includes('/new')
+    );
 
   // Onboarding tour for tablets
   const { showTour, setShowTour, completeTour } = useOnboardingTour();
@@ -222,16 +230,16 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <GlobalHeader forceSolid={needsHeaderSpacing} />
       {/* Content spacing: dark hero pages sit behind header, bright pages pushed below */}
       <GlobalContactGating>
-        <main className={`w-full max-w-full overflow-x-hidden ${needsHeaderSpacing ? "pt-16 sm:pt-20 md:pt-24 lg:pt-28" : "pt-0"}`}>
+        <main className={`w-full max-w-full overflow-x-hidden ${needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-32" : "pt-0"}`}>
           {children}
         </main>
       </GlobalContactGating>
       {/* Global Contact + Newsletter Section - combined for all public pages */}
-      {!isBackOfficeRoute && (
+      {!isBackOfficeRoute && !isToolkitGeneratorRoute && (
         <CombinedContactNewsletter />
       )}
       {/* Global Footer - rendered centrally */}
-      {!isBackOfficeRoute && <Footer />}
+      {!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
       {/* All popups rendered centrally - only when ready */}
       {popupsReady && <PopupLayer />}
       {/* Chat widget always visible (collapsed), only attention pulse waits for popupsReady */}

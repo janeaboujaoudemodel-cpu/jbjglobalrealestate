@@ -31,7 +31,7 @@ Extract ALL of the following information that is visible in the document:
 2. Company name in Arabic (exact Arabic characters as printed — if present)
 3. License / registration / commercial number
 4. City (in English) — the city where the COMPANY is registered (e.g. Dubai, Abu Dhabi, Sharjah, Ajman)
-5. City in Arabic (if present)
+5. City in Arabic — use the format: "[English city name], الإمارات العربية المتحدة" — e.g. "Dubai, الإمارات العربية المتحدة" or "Abu Dhabi, الإمارات العربية المتحدة". Always use the English city name followed by a comma and the Arabic country name.
 6. Country (in English) — the country where the COMPANY is registered, NOT the nationality of the owner or director. For UAE documents this is always "United Arab Emirates". Common UAE cities: Dubai, Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah, Umm Al Quwain.
 7. Phone number — format as international: start with + and country code (e.g. +971 for UAE). Convert 04/05 local UAE format to +971 4 / +971 5. Remove all dashes; use spaces as separators: +971 4 123 4567.
 8. Email address (any email found)
