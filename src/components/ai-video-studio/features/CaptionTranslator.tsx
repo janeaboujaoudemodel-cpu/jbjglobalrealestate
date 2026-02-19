@@ -846,24 +846,44 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
 
   // ─── Render ───────────────────────────────────────────────────────────────
 
+  // Step indicator
+  const steps = [
+    { id: 'upload',     label: 'Upload',     icon: Upload,    done: !!uploadedFile },
+    { id: 'transcribe', label: 'Transcribe', icon: Wand2,     done: subtitles.length > 0 },
+    { id: 'translate',  label: 'Translate',  icon: Languages, done: translatedLangs.length > 0 },
+    { id: 'style',      label: 'Style',      icon: Palette,   done: false },
+    { id: 'export',     label: 'Export',     icon: Download,  done: false },
+  ];
+
   return (
     <div className="flex flex-col h-full bg-slate-900/30">
-      {/* Step tabs */}
-      <div className="flex border-b border-slate-700/50 bg-slate-900/60 px-1 pt-1 gap-0.5 flex-shrink-0 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-        {TABS.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id as typeof activeTab)}
-            className={`flex-1 flex flex-col items-center gap-0.5 py-1.5 px-1 rounded-t text-[10px] font-medium transition-all whitespace-nowrap min-w-[48px] ${
-              activeTab === tab.id
-                ? 'bg-slate-800 text-amber-400 border-b-2 border-amber-400'
-                : 'text-slate-500 hover:text-slate-300'
-            }`}
-          >
-            <tab.icon className="w-3 h-3" />
-            {tab.label}
-          </button>
-        ))}
+      {/* Linear step indicator */}
+      <div className="flex-shrink-0 px-3 py-2 border-b border-slate-700/50 bg-slate-900/60 flex items-center gap-1 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+        {steps.map((step, idx) => {
+          const Icon = step.icon;
+          const isActive = activeTab === step.id;
+          const isPast = step.done;
+          return (
+            <React.Fragment key={step.id}>
+              <button
+                onClick={() => setActiveTab(step.id as typeof activeTab)}
+                className={`flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-semibold whitespace-nowrap transition-all flex-shrink-0 ${
+                  isActive
+                    ? 'bg-amber-500 text-black'
+                    : isPast
+                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                }`}
+              >
+                {isPast && !isActive ? <Check className="w-3 h-3" /> : <Icon className="w-3 h-3" />}
+                {step.label}
+              </button>
+              {idx < steps.length - 1 && (
+                <div className={`flex-shrink-0 w-3 h-px ${isPast ? 'bg-emerald-500/60' : 'bg-slate-700'}`} />
+              )}
+            </React.Fragment>
+          );
+        })}
       </div>
 
       <ScrollArea className="flex-1">

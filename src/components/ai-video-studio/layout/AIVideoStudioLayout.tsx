@@ -148,10 +148,12 @@ function AIVideoStudioLayout({
         </div>
       </div>
 
-      {/* Active Tool Panel */}
+      {/* Active Tool Panel — expands to fill available space, no inner scroll trap */}
       {activeTool && toolsExpanded && toolPanelContent[activeTool] && (
-        <div className="border-t border-slate-600 h-72 flex-shrink-0 overflow-y-auto bg-slate-900 overscroll-contain">
-          {toolPanelContent[activeTool]}
+        <div className="border-t border-slate-600 flex-shrink-0 bg-slate-900" style={{ height: 'clamp(260px, 38vh, 480px)' }}>
+          <div className="h-full overflow-y-auto overscroll-contain">
+            {toolPanelContent[activeTool]}
+          </div>
         </div>
       )}
     </div>
@@ -205,8 +207,11 @@ function AIVideoStudioLayout({
 
       {/* Main Content Area */}
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-        {/* Full-width Preview — always stable, never shrinks below 240px */}
-        <div className="flex-1 min-h-[240px] w-full overflow-hidden bg-slate-950">
+        {/* Full-width Preview — contracts when tool panel is expanded */}
+        <div
+          className="w-full overflow-hidden bg-slate-950"
+          style={{ flex: activeTool && toolsExpanded ? '0 0 auto' : '1 1 auto', minHeight: activeTool && toolsExpanded ? 180 : 280 }}
+        >
           {centerPanel}
         </div>
 
