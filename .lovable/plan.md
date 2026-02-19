@@ -1,75 +1,160 @@
 
-# Three SVG Template Bug Fixes — stampTemplates.ts
+# Stamp Generator — 6 Bug Fixes + Font Expansion
 
-## Bug 1: T2 Modern Minimal — Text Overflows the Circle Boundary
+## Issues Identified and Root Causes
 
-### Root Cause (precise)
-The clip-path `t2clip` clips to `r - 4 = 104px` radius. But the horizontal rule lines (`hRule`) are drawn from `cx - pad` to `cx + pad` where `pad = safeR - 4 = 84`. A chord at y-offset from centre can still reach outside the visual circle if `pad` is wider than the chord width at that y-position. More critically: `wrapText` emits two `<tspan>` lines when name > 24 chars, centred on `nameY`. The lower tspan lands at `nameY + lineH/2 = nameY + nameFontSize * 0.65`. For long names this tspan can push past `cy + safeR`, below the circle boundary.
+### Issue 1: AI Designer Panel Overlaps the Header
+**Root cause:** The AI panel has `top: 72` (hardcoded px) in the `style` prop. The global header is `~80px` tall, and the generator's own sticky sub-header sits at `top-24 (96px)` to `top-32 (128px)`. The AI panel spawns directly beneath the global nav but on top of the sub-header.
 
-The clip-path IS present but DOMPurify strips the `clip-path` attribute from the `<g>` tag in `StampSVGRenderer` unless explicitly whitelisted. However, the prior plan already added `clip-path` to `ADD_ATTR`. The remaining real issue is the layout arithmetic:
-
-- **hRule width** is too wide — `pad = safeR - 4 = 84` but at `y = nameY - 14` (which could be far from centre), the chord half-width is `sqrt(r² - (y - cy)²)` which may be less than 84.
-- **nameY** is not clamped tightly enough for two-line names. When `name.length > 24`, the second tspan lands at `nameY + nameFontSize * 1.3 / 2`, and this is not validated against `safeR`.
-
-### Fix
-1. Clamp `nameY` so even the **bottom** of a two-line name stays within `cy + safeR - 12`: `nameY = Math.min(nameY, cy + safeR - (name.length > 24 ? nameFontSize * 1.3 + 10 : 8))`
-2. Replace `pad` (static) with a function that computes the safe chord half-width at a given `y` coordinate: `function chordHalf(r, cy, y) { return Math.sqrt(Math.max(0, r*r - (y - cy)**2)) - 4 }`
-3. Apply `chordHalf` to each `hRule` call so the lines never exceed the circle at their y-position.
-4. Clamp `cityY` so it cannot be closer than `nameFontSize + 6` below the bottom of the last name tspan.
-5. Remove the bottom horizontal rule at `cityY + 12/14` entirely — it is the main overflower — or clamp it strictly.
+**Fix:** Change the panel's initial `top` from `72` to `160` (clearing both the global nav and the sub-header with breathing room). Also add a `paddingTop` safe zone on the page wrapper.
 
 ---
 
-## Bug 2: T7 Geometric Modern — Ring Text Overlaps the Center Rectangle
+### Issue 2: License Uploader Not Visible in Generator
+**Root cause:** `StampLicenseUploader` only lives in the project wizard (Step 0). Once you're on the generator page, there is no way to re-upload or auto-fill company details.
 
-### Root Cause (precise)
-The `ringText` function draws a path: `M cx-r cy A r r 0 1 1 cx+r-0.01 cy` — this is the **top semicircle** (counterclockwise upper half). The text string is `◆ NAME ◆ CITY ◆` with `startOffset="50%"` and `text-anchor="middle"`. For typical company names (25–35 chars + city), the total string can be 50+ characters. At `fontSize = 7.5` with `letterSpacing = 1.4`, this overflows the upper arc and the tail of the string descends down the sides of the circle and intrudes into the space where the center rectangle sits.
-
-The center rectangle (non-monogram path) is `104 × 52` at `cy - 26`. The ring text path descends to `cy` at both left and right ends, so long strings wrap around and their endpoints appear right next to the rectangle frame — visually overlapping.
-
-Additionally, `wrapText` for the center name is centred on `cy` with the second tspan at `cy + nameFontSize * 0.65`. But the rectangle bottom is `cy + 26` — so if `nameFontSize * 0.65 > 20` (which happens at font size ≥ 31, impossible given `autoFontSize` max of 10.5) that's fine. The real issue is purely ring text overlap.
-
-### Fix
-1. **Separate name and city into two separate arcs** — top arc for the name only, bottom arc for city only (using `bottomArcText`). This way each arc carries a shorter string that stays within its half.
-2. For the non-monogram center: replace the double-rect frame with a **single cleaner rect** and shrink it slightly to `94 × 48` to give the ring text more breathing room. Keep `wrapText` centred at `cy`.
-3. Increase `ringTextR` slightly — use `outerR - 7` for name arc and `outerR - 7` for city arc (same as other templates that work). The current `outerR - 8` is fine but needs two separate paths.
+**Fix:** Add a collapsible "AI Auto-Fill" section at the top of the generator page (above the grid), showing the `StampLicenseUploader` in a collapsed accordion that expands on demand. Also add a "Upload License" button hint below the company name in the header.
 
 ---
 
-## Bug 3: T8 Square Premium — Company Name Clips Below the Footer Band
+### Issue 3: Clicking Stamp Card Does Not Open Edit Mode
+**Root cause:** `handleSelectConcept` sets `selectedId` and opens `previewConcept` (the full-screen modal). There's no direct path to immediately editing text from the card. The Text tab in the left panel only activates if the user manually clicks it.
 
-### Root Cause (precise)
-The city label is rendered **twice**:
-1. In the **footer band** (correct, white text on dark fill) — this is intentional.
-2. In the **content zone** at `cityY` (dark text on white) — this is a redundant duplicate.
-
-The duplicate city label at `cityY` is the element that visually "clips below the footer band" when the company name is long (two-line wrap). Here's why: when `name.length > 22`, `nameLineH = nameFontSize * 1.3 * 2 ≈ 27.3` (two lines). Then `nameY ≈ cy - 13.65`. And `cityY = Math.min(nameY + 27.3 + 4, cy + 58.5) = cy + 17.7`. But if `nameFontSize` is reduced for very long names (e.g. to 8.6 via `autoFontSize`), the two-line height is smaller but `cityY` still follows directly. The footer band starts at `y1 + s*2 - 6 - ftrH = cy + 106 - 28 = cy + 78`. So `cityY = cy + 17.7` is ABOVE the footer — that's not the overflow.
-
-**The actual bug is different from what was previously diagnosed.** Re-reading line 439: `cityY = Math.min(nameY + (name.length > 22 ? nameFontSize * 1.3 * 2 + 4 : nameFontSize + 10), contentBot - cityFontSize - 2)`. This formula adds `nameFontSize * 1.3 * 2 + 4` to `nameY` — but `nameY` is already the **centre** of the name block, not the bottom. So the actual bottom of the two-line name is `nameY + nameFontSize * 1.3` (one line height below centre), and the city label should be placed `nameY + nameFontSize * 1.3 + 8`, not `nameY + nameFontSize * 1.3 * 2 + 4` (which double-counts the upper half).
-
-This means `cityY` is pushed **too far down** by roughly `nameFontSize * 0.65 ≈ 6–8px` more than needed. For very long names at small font sizes, combined with low `contentBot`, this pushes `cityY` past `contentBot`, into the footer band zone.
-
-Also — the **duplicate city label** inside the content zone should simply be **removed**. The footer band already shows the city. Removing the duplicate from the content zone entirely fixes the overlap and cleans up the layout.
-
-### Fix
-1. **Remove the redundant city `<text>` from inside the content zone** (line 458). The footer band already shows the city — no need to show it twice.
-2. Adjust `nameY` to be better centred: for the non-monogram, single-line case: `nameY = contentCy`. For the two-line case: `nameY = contentCy - nameFontSize * 0.65` (so lines straddle the centre).
-3. Add a `<clipPath>` around the content zone to enforce the safe area and prevent any text from visually entering the header/footer bands even with extreme inputs.
+**Fix:** Add an "Edit Text" secondary button to each `ConceptCard` alongside "Select This Design". Clicking "Edit Text" calls `setSelectedId(concept.id)` and `setLeftTab('text')` (no modal), immediately activating the Text tab with that stamp's elements loaded.
 
 ---
 
-## Exact Lines Being Changed
+### Issue 4: Bilingual Template Gray/Black Card Bug
+**Root cause — double bug:**
+1. **T12 ring text on dark card**: The business card mockup has a dark navy background. The stamp monogram renders `fill=COLOR` (e.g. gold) on a white background in the SVG — this looks fine in the stamp grid. But in `StampPreviewModal` line 186, the business card back renders `<StampSVGRenderer size={90}/>` with default tintColor. Since T12 has `fill="#ffffff"` for text on the outer band, and the card background is dark, the white SVG fills are invisible against dark.
+2. **T12 city text is hardcoded** as `DUBAI · UAE` regardless of project's `city_optional` / `country_optional` fields. Fix: use `${city} · ${country || 'UAE'}` with fallback.
+3. **Gray overlay on bilingual card**: In `StampPreviewModal` the business card back div (line 184) has `background: radial-gradient(circle at center, ${tintColor}18 0%, transparent 70%)` — when `tintColor` is gold (`#B8860B`), the overlay is extremely faint but the SVG still renders with a white viewbox background. The root issue is the SVG has no `background="transparent"` and defaults to white — producing a white square in the center of the dark card. Fix: ensure `StampSVGRenderer` renders with `overflow: visible` and no background fill, OR simply overlay the stamp SVG in a container that applies `mix-blend-mode: multiply` so white areas are transparent on dark backgrounds.
 
-| Template | File Lines | Change |
-|---|---|---|
-| T2 Modern Minimal | 208–241 | Tighten `nameY` clamp for two-line names; replace static `pad` with `chordHalf()` function; remove bottom hRule that overflows; clamp `cityY` relative to bottom of last tspan not centre |
-| T7 Geometric Modern | 384–417 | Split ring text into separate top-arc (name) and bottom-arc (city); tighten center rect to `94 × 46` |
-| T8 Square Premium | 422–462 | Remove duplicate city label from content zone; fix `nameY` to be truly centred in content area; add `<clipPath>` guard for content zone |
+**Better fix for card mockup**: Add `style={{ background: 'transparent' }}` to the renderer wrapper on dark backgrounds, and ensure the SVG `<svg>` tag does not have a white `<rect>` background fill. Inspection of stampTemplates shows T12 does NOT add a white rect — the white background is coming from the browser rendering SVG inline in a `<div>` with default background. Solution: apply CSS `filter: drop-shadow` and `background: transparent` to the renderer div.
+
+**Actual simple fix:** The SVG divs in `StampSVGRenderer` render `dangerouslySetInnerHTML` which creates inline SVG. Since the SVG has no root `<rect fill="white">`, the background is transparent. The "black card" the user sees is the card mock itself. The stamp appears too small (`size={90}` on the card back). Increase to `size={110}` and ensure `opacity={1}` not `opacity-80`.
+
+**T12 hardcoded city fix:** In `stampTemplates.ts`, replace the hardcoded `DUBAI · UAE` with the project's actual city/country fields.
+
+---
+
+### Issue 5: Export Page Content Hidden Under Header
+**Root cause:** `StampExportPage.tsx` has a sticky header with `top-24 sm:top-28 lg:top-32`. The content wrapper starts at `py-8`. But on the export page the main content div starts at line 473 with `<div className="max-w-6xl mx-auto px-6 py-8">`. This means the content correctly starts below the sticky sub-header. However, the sub-header itself uses `top-24` which means it sits beneath the global nav — BUT on the export page, the entire page is inside a standard scroll container. The issue the user reports ("all screen is hidden under the header and setting") likely refers to the 3-column layout on the export page being too wide and cut off on mobile, with the left color panel pushing content off-screen.
+
+**Fix:** Make the export page layout properly responsive:
+- Convert `grid-cols-1 lg:grid-cols-2` to proper responsive with `gap-6` instead of `gap-8`.
+- Ensure the page padding-top respects the double header: add `pt-6` to the page wrapper minimum.
+
+---
+
+### Issue 6: More Fonts
+**Root cause:** `STAMP_FONTS` array only has 6 entries — all mapped to web-safe system fonts. Users want more variety.
+
+**Fix:** Expand to 14 font options covering serif, sans-serif, monospace, decorative, and Arabic-compatible styles. All mapped to system font stacks available in all browsers:
+
+```
+Trajan / Georgia (Elegant Serif)
+Garamond / Palatino (Classic Serif)
+Baskerville / Times (Literary Serif)  ← NEW
+Caslon / Book Antiqua (Antiquarian)   ← NEW
+Arial / Helvetica (Modern Sans)
+Futura / Century Gothic (Geometric)
+Gill Sans / Optima (Humanist Sans)    ← NEW
+Verdana / Tahoma (Screen Sans)        ← NEW
+Courier New (Monospace)
+Letter Gothic / Monaco (Technical Mono) ← NEW
+Impact / Franklin Gothic (Display)    ← NEW
+Rockwell / Clarendon (Slab Serif)    ← NEW
+Optima / Segoe (Soft Elegant)         ← NEW
+```
+
+Each entry stays as `{ label, value, preview }` where `value` is a CSS font-family stack.
+
+---
+
+## Files to Change
+
+| File | Changes |
+|------|---------|
+| `src/components/stamp-generator/StampGeneratorPage.tsx` | (1) Move AI panel initial top to 160px; (2) Add "Edit Text" button to ConceptCard; (3) Add collapsed license uploader section; (4) Expand STAMP_FONTS to 14 entries |
+| `src/components/stamp-generator/StampPreviewModal.tsx` | (5) Fix business card back stamp size from 90 to 110; fix transparent bg |
+| `src/lib/stampTemplates.ts` | (6) Fix T12 hardcoded DUBAI · UAE city text |
+
+---
+
+## Technical Details
+
+### ConceptCard Edit Text Button
+Add a second small "Edit Text" button in the card footer:
+```tsx
+<Button size="sm" variant="outline"
+  className="w-full h-7 text-xs gap-1 border-[hsl(var(--gold)/0.4)]"
+  onClick={(e) => { e.stopPropagation(); onEditText(concept); }}>
+  <Type size={10}/> Edit Text
+</Button>
+```
+`onEditText` calls:
+```tsx
+function handleEditText(concept: StampDesignConcept) {
+  setSelectedId(concept.id);
+  setPreviewConcept(null);
+  setLeftTab('text');
+}
+```
+
+### License Uploader Section in Generator
+Add a collapsible pill-button just above the concept grid:
+```tsx
+<details className="bg-white rounded-2xl border ...">
+  <summary>AI Auto-Fill from Trade License</summary>
+  <StampLicenseUploader onExtracted={handleExtracted}/>
+</details>
+```
+Where `handleExtracted` updates the project state and optionally triggers a re-generate.
+
+### T12 City Fix
+Change line 685 in `stampTemplates.ts`:
+```
+BEFORE: fill="${COLOR}" letter-spacing="3.5">DUBAI · UAE</text>
+AFTER:  fill="${COLOR}" letter-spacing="3.5">${city ? city.toUpperCase() : 'DUBAI'} · ${(project.country_optional || 'UAE').toUpperCase()}</text>
+```
+
+### AI Panel Position Fix
+Change line 704 in `StampGeneratorPage.tsx`:
+```
+BEFORE: top: 72,
+AFTER:  top: 160,
+```
+
+### Font Expansion
+Replace the 6-entry `STAMP_FONTS` array with 14 entries. All use CSS font stacks available without loading external fonts:
+
+```typescript
+const STAMP_FONTS = [
+  { label: 'Trajan (Elegant)',      value: 'Georgia, "Times New Roman", serif',             preview: 'Aa' },
+  { label: 'Garamond (Classic)',    value: '"Garamond", "Palatino Linotype", serif',         preview: 'Aa' },
+  { label: 'Baskerville (Literary)',value: '"Baskerville", "Book Antiqua", serif',           preview: 'Aa' },
+  { label: 'Caslon (Antiquarian)', value:  '"Book Antiqua", "Palatino", Georgia, serif',    preview: 'Aa' },
+  { label: 'Modern Sans',           value: '"Arial", "Helvetica Neue", sans-serif',          preview: 'Aa' },
+  { label: 'Futura (Geometric)',    value: '"Century Gothic", "Trebuchet MS", sans-serif',   preview: 'Aa' },
+  { label: 'Gill Sans (Humanist)',  value: '"Gill Sans", "Gill Sans MT", "Optima", sans-serif', preview: 'Aa' },
+  { label: 'Verdana (Screen)',      value: '"Verdana", "Tahoma", sans-serif',               preview: 'Aa' },
+  { label: 'Courier (Monospace)',   value: '"Courier New", "Courier", monospace',           preview: 'Aa' },
+  { label: 'Impact (Display)',      value: '"Impact", "Franklin Gothic Bold", sans-serif',  preview: 'Aa' },
+  { label: 'Rockwell (Slab)',       value: '"Rockwell", "Courier New", serif',              preview: 'Aa' },
+  { label: 'Optima (Soft Elegant)', value: '"Optima", "Segoe UI", sans-serif',              preview: 'Aa' },
+  { label: 'Lucida (Calligraphy)', value:  '"Lucida Calligraphy", "Palatino", serif',       preview: 'Aa' },
+  { label: 'Cinzel (Imperial)',     value: '"Palatino Linotype", "Palatino", serif',        preview: 'Aa' },
+];
+```
 
 ---
 
 ## What Does NOT Change
-- All other templates (T1, T3, T4, T5, T6, T9, T10, T11, T12)
-- Export logic, color picker, modal, DOMPurify settings
-- Database schema, edge functions, authentication
-- `StampSVGRenderer.tsx`, `StampExportPage.tsx`, or any other file
+- Database schema or edge functions
+- Export rasterization logic
+- Color wheel or palette presets  
+- Authentication or session handling
+- All other stamp templates (T1–T11)
+- `StampTextEditor` component
+- `StampExportPage.tsx`
