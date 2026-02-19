@@ -58,7 +58,7 @@ export function StampPreviewModal({
       <div className="flex-1 overflow-auto flex flex-col lg:flex-row">
 
         {/* Left: stamp large preview + info */}
-        <div className="lg:w-80 flex-shrink-0 bg-[hsl(var(--pearl-1))] border-r border-[hsl(var(--border))] flex flex-col items-center p-8 gap-6">
+        <div className="lg:w-80 flex-shrink-0 bg-[hsl(var(--pearl-1))] border-r border-[hsl(var(--border))] flex flex-col items-center p-6 gap-4">
           <div className="bg-white rounded-3xl border border-[hsl(var(--border))] shadow-md p-6 flex items-center justify-center">
             <StampSVGRenderer
               svgSource={displaySvg}
