@@ -24,10 +24,22 @@ function uniquifyIds(svg: string): string {
     .replace(/href="#([^"]+)"/g, (_, id) => `href="#${token}_${id}"`);
 }
 
-/** Reliable SVG → PNG via Blob URL + decode() to guarantee full render before canvas draw */
+/** Convert a Blob to a base64 data URL via FileReader */
+function blobToDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+/** SVG → PNG via base64 data URL — avoids canvas CORS taint caused by Blob URLs */
 async function svgToPng(svgString: string, size: number, transparent: boolean): Promise<Blob> {
   // 0. De-duplicate IDs to prevent cross-instance collisions
   let svg = uniquifyIds(svgString);
+
+  // 1. Ensure required XML namespaces are present
   if (!svg.includes('xmlns=')) {
     svg = svg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
   }
@@ -36,16 +48,17 @@ async function svgToPng(svgString: string, size: number, transparent: boolean): 
   }
 
   // 2. Inject explicit width/height so the browser knows the intrinsic size
-  svg = svg.replace(/<svg([^>]*)>/, (match, attrs) => {
+  svg = svg.replace(/<svg([^>]*)>/, (_match, attrs) => {
     let a = attrs;
     if (!/\bwidth=/.test(a)) a += ` width="${size}"`;
     if (!/\bheight=/.test(a)) a += ` height="${size}"`;
     return `<svg${a}>`;
   });
 
-  // 3. Use a Blob URL — avoids btoa encoding issues with Unicode / special chars
-  const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
-  const blobUrl = URL.createObjectURL(blob);
+  // 3. Use base64 data URL — same-origin, never taints the canvas
+  //    btoa(unescape(encodeURIComponent())) safely handles Arabic / Unicode characters
+  const b64 = btoa(unescape(encodeURIComponent(svg)));
+  const dataUrl = `data:image/svg+xml;base64,${b64}`;
 
   return new Promise((resolve, reject) => {
     const img = document.createElement('img') as HTMLImageElement;
@@ -64,29 +77,23 @@ async function svgToPng(svgString: string, size: number, transparent: boolean): 
         }
         ctx.drawImage(img, 0, 0, size, size);
         canvas.toBlob(b => {
-          URL.revokeObjectURL(blobUrl);
           if (b) resolve(b);
           else reject(new Error('Canvas toBlob returned null'));
         }, 'image/png');
       } catch (err) {
-        URL.revokeObjectURL(blobUrl);
         reject(err);
       }
     };
 
-    img.onerror = () => {
-      URL.revokeObjectURL(blobUrl);
-      reject(new Error('SVG image failed to load — check SVG validity'));
-    };
-
-    img.src = blobUrl;
+    img.onerror = () => reject(new Error('SVG image failed to load — check SVG validity'));
+    img.src = dataUrl;
   });
 }
 
 /** PNG → JPEG (no transparency) */
 async function pngToJpeg(pngBlob: Blob): Promise<Blob> {
+  const dataUrl = await blobToDataUrl(pngBlob);
   return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(pngBlob);
     const img = document.createElement('img');
     img.onload = () => {
       const canvas = document.createElement('canvas');
@@ -96,20 +103,19 @@ async function pngToJpeg(pngBlob: Blob): Promise<Blob> {
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0);
-      URL.revokeObjectURL(url);
       canvas.toBlob(b => {
         if (b) resolve(b); else reject(new Error('JPEG toBlob failed'));
       }, 'image/jpeg', 0.92);
     };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('JPEG img load failed')); };
-    img.src = url;
+    img.onerror = () => reject(new Error('JPEG img load failed'));
+    img.src = dataUrl;
   });
 }
 
 /** PNG → WEBP */
 async function pngToWebp(pngBlob: Blob, transparent: boolean): Promise<Blob> {
+  const dataUrl = await blobToDataUrl(pngBlob);
   return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(pngBlob);
     const img = document.createElement('img');
     img.onload = () => {
       const canvas = document.createElement('canvas');
@@ -121,13 +127,12 @@ async function pngToWebp(pngBlob: Blob, transparent: boolean): Promise<Blob> {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
       ctx.drawImage(img, 0, 0);
-      URL.revokeObjectURL(url);
       canvas.toBlob(b => {
         if (b) resolve(b); else reject(new Error('WEBP toBlob failed'));
       }, 'image/webp', 0.92);
     };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('WEBP img load failed')); };
-    img.src = url;
+    img.onerror = () => reject(new Error('WEBP img load failed'));
+    img.src = dataUrl;
   });
 }
 
