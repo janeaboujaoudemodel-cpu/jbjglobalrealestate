@@ -25,6 +25,21 @@ interface Props {
   onExtracted: (data: ExtractedData) => void;
 }
 
+/** Stack-safe base64 encoding via FileReader — handles large PDFs/images without call-stack overflow */
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      // Strip the data URL prefix (e.g. "data:image/png;base64,") to get raw base64
+      const base64 = dataUrl.split(',')[1];
+      resolve(base64);
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsDataURL(file);
+  });
+}
+
 export function StampLicenseUploader({ onExtracted }: Props) {
   const { session } = useAuth();
   const [dragging, setDragging] = useState(false);
@@ -54,21 +69,13 @@ export function StampLicenseUploader({ onExtracted }: Props) {
       let mimeType: string;
 
       if (file.type === 'application/pdf') {
-        // Send PDF as-is — Gemini supports application/pdf natively
         mimeType = 'application/pdf';
-        const arrayBuffer = await file.arrayBuffer();
-        const bytes = new Uint8Array(arrayBuffer);
-        let binary = '';
-        for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
-        base64 = btoa(binary);
       } else {
         mimeType = file.type;
-        const arrayBuffer = await file.arrayBuffer();
-        const bytes = new Uint8Array(arrayBuffer);
-        let binary = '';
-        for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
-        base64 = btoa(binary);
       }
+
+      // Use FileReader for safe, stack-safe base64 encoding of any file size
+      base64 = await fileToBase64(file);
 
       const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-extract`, {
         method: 'POST',
