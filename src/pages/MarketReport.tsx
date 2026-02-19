@@ -1748,110 +1748,6 @@ const MarketReport = () => {
     </div>
     <span class="page-number">23</span>
   </div>
-          <td>2,460 sq ft</td>
-          <td>4-Bedroom (59%)</td>
-        </tr>
-        <tr>
-          <td>Villas</td>
-          <td>AED 8.53M</td>
-          <td>4,626 sq ft</td>
-          <td>4-Bedroom (47%)</td>
-        </tr>
-      </table>
-    </div>
-    <span class="page-number">6</span>
-  </div>
-
-  <!-- DUBAI FUNDAMENTALS -->
-  <div class="page">
-    <h2>Dubai Real Estate Fundamentals</h2>
-    <p>Understanding the structure of Dubai's property market is essential for making informed investment decisions.</p>
-    
-    <h3>Property Types & Expected Returns</h3>
-    <div class="table-wrapper">
-      <table>
-        <tr>
-          <th>Type</th>
-          <th>Entry Price</th>
-          <th>Typical Yield</th>
-          <th>Best For</th>
-        </tr>
-        <tr>
-          <td>Studio Apartment</td>
-          <td>AED 400K+</td>
-          <td>7-9%</td>
-          <td>First-time investors, rental income</td>
-        </tr>
-        <tr>
-          <td>1-2 BR Apartment</td>
-          <td>AED 700K+</td>
-          <td>6-8%</td>
-          <td>Balanced growth & income</td>
-        </tr>
-        <tr>
-          <td>3+ BR Apartment</td>
-          <td>AED 1.5M+</td>
-          <td>5-7%</td>
-          <td>Family residence, luxury segment</td>
-        </tr>
-        <tr>
-          <td>Townhouse</td>
-          <td>AED 1.8M+</td>
-          <td>5-6%</td>
-          <td>Homeowners, capital appreciation</td>
-        </tr>
-        <tr>
-          <td>Villa</td>
-          <td>AED 3M+</td>
-          <td>4-6%</td>
-          <td>Premium lifestyle, long-term hold</td>
-        </tr>
-      </table>
-    </div>
-    
-    <!-- Yield Comparison Chart -->
-    <div class="chart-container">
-      <h4 style="margin-top: 0; margin-bottom: 20px;">Rental Yield Comparison (Global Cities)</h4>
-      <div class="bar-chart">
-        <div class="bar-item">
-          <span class="bar-label">Dubai</span>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: 100%; background: linear-gradient(90deg, #A8925A, #c4aa6a);"><span class="bar-value">6-8%</span></div>
-          </div>
-        </div>
-        <div class="bar-item">
-          <span class="bar-label">New York</span>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: 50%; background: rgba(255,255,255,0.3);"><span class="bar-value" style="color: #fff;">4%</span></div>
-          </div>
-        </div>
-        <div class="bar-item">
-          <span class="bar-label">London</span>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: 38%; background: rgba(255,255,255,0.3);"><span class="bar-value" style="color: #fff;">3%</span></div>
-          </div>
-        </div>
-        <div class="bar-item">
-          <span class="bar-label">Hong Kong</span>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: 31%; background: rgba(255,255,255,0.3);"><span class="bar-value" style="color: #fff;">2.5%</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <h3>Transaction Costs</h3>
-    <div class="info-card">
-      <ul class="checklist">
-        <li>DLD Registration Fee: 4% of property value</li>
-        <li>Agency Commission: 2% (typically paid by buyer)</li>
-        <li>NOC Fee: AED 500-5,000 (varies by developer)</li>
-        <li>Mortgage Registration: 0.25% of loan amount</li>
-        <li>Trustee Fee: AED 4,000-5,000</li>
-      </ul>
-    </div>
-    <span class="page-number">7</span>
-  </div>
 
   <script>
     function downloadPDF() { window.print(); }
@@ -1864,7 +1760,7 @@ const MarketReport = () => {
     }
   </script>
 </body>
-</html>\`;
+</html>`;
 
     const openInApp = () => {
       setBookHtml(html);
