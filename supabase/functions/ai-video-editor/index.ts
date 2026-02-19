@@ -86,9 +86,9 @@ Respond with JSON in this exact format:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: 'google/gemini-3-flash-preview',
         messages: [
-          { role: 'system', content: systemPrompt },
+          { role: 'system', content: systemPrompt + ' IMPORTANT: Your entire response must be valid JSON only, with no markdown formatting, no code blocks, no explanation text outside the JSON object.' },
           { role: 'user', content: userPrompt },
         ],
       }),
@@ -127,9 +127,21 @@ Respond with JSON in this exact format:
 
     let parsed;
     try {
-      parsed = JSON.parse(content);
+      // Strip markdown code blocks if present
+      const cleaned = content.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
+      parsed = JSON.parse(cleaned);
     } catch {
-      parsed = { analysis: content };
+      // Try extracting JSON object from the content
+      const match = content.match(/\{[\s\S]*\}/);
+      if (match) {
+        try {
+          parsed = JSON.parse(match[0]);
+        } catch {
+          parsed = { analysis: content };
+        }
+      } else {
+        parsed = { analysis: content };
+      }
     }
 
     return new Response(JSON.stringify({ success: true, ...parsed }), {
