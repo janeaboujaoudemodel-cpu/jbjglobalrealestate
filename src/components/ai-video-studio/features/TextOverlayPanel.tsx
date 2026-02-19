@@ -125,15 +125,36 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
 
         {/* ── PRESETS ─────────────────────────────── */}
         <section>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Presets</p>
-          <div className="flex flex-wrap gap-1.5">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Presets — click to add instantly</p>
+          <div className="grid grid-cols-2 gap-1.5">
             {TEXT_PRESETS.map(p => (
               <button
                 key={p.label}
-                onClick={() => applyPreset(p)}
-                className="px-2.5 py-1 text-xs rounded-md border border-slate-600 bg-slate-800 hover:border-amber-500/60 hover:bg-slate-700 transition-all"
+                onClick={() => {
+                  applyPreset(p);
+                  // Immediately add the preset clip to the timeline
+                  onAddTextClip({
+                    text: {
+                      content: p.content,
+                      fontFamily: p.fontFamily,
+                      fontSize: p.fontSize,
+                      fontWeight: p.fontWeight,
+                      color: p.color,
+                      backgroundColor: p.backgroundColor === 'transparent' ? undefined : p.backgroundColor,
+                      textAlign: p.textAlign,
+                      position: p.position,
+                      style: p.style,
+                    },
+                    startTime: currentTime,
+                    duration: 4,
+                    animation: 'fade-in',
+                  });
+                  toast.success(`"${p.label}" added to timeline!`);
+                }}
+                className="flex flex-col items-start gap-0.5 px-2.5 py-2 text-xs rounded-md border border-slate-600 bg-slate-800 hover:border-amber-500/60 hover:bg-slate-700 transition-all text-left"
               >
-                {p.label}
+                <span className="font-medium text-white">{p.label}</span>
+                <span className="text-slate-500 text-[10px] truncate w-full">{p.content}</span>
               </button>
             ))}
           </div>
