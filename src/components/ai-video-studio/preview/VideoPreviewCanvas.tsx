@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Play, Pause, Square, SkipBack, SkipForward, Volume2, VolumeX, Maximize2, Upload, Mic, FileText, Bot, Film, CloudUpload, Sparkles } from 'lucide-react';
 import { Clip } from '../types';
@@ -46,71 +45,40 @@ function InspirationCarousel() {
   }, []);
 
   return (
-    <div className="w-full max-w-xs mx-auto">
+    <div className="w-full">
       {/* Main card */}
-      <div className="relative rounded-xl overflow-hidden aspect-video shadow-xl mb-2" style={{ border: `1.5px solid ${EXAMPLE_VIDEOS[active].accent}55` }}>
+      <div className="relative rounded-lg overflow-hidden shadow-xl mb-1.5" style={{ height: 140, border: `1.5px solid ${EXAMPLE_VIDEOS[active].accent}55` }}>
         {EXAMPLE_VIDEOS.map((v, i) => (
-          <div
-            key={v.id}
-            className="absolute inset-0 transition-opacity duration-700"
-            style={{ opacity: i === active ? 1 : 0 }}
-          >
+          <div key={v.id} className="absolute inset-0 transition-opacity duration-700" style={{ opacity: i === active ? 1 : 0 }}>
             <img src={v.img} alt={v.label} className="w-full h-full object-cover" loading="lazy" />
-            {/* Gradient overlay */}
             <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%)' }} />
-            {/* Play badge */}
-            <div className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ background: `${v.accent}cc` }}>
-              <Play className="w-3 h-3 text-black ml-0.5" />
+            <div className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full flex items-center justify-center" style={{ background: `${v.accent}cc` }}>
+              <Play className="w-2.5 h-2.5 text-black ml-0.5" />
             </div>
-            {/* Label */}
-            <div className="absolute bottom-0 left-0 right-0 px-3 py-2">
-              <p className="text-white text-xs font-bold leading-tight">{v.label}</p>
-              <p className="text-white/60 text-[10px] leading-tight">{v.sublabel}</p>
+            <div className="absolute bottom-0 left-0 right-0 px-2.5 py-1.5">
+              <p className="text-white text-[11px] font-bold leading-tight">{v.label}</p>
+              <p className="text-white/60 text-[9px] leading-tight">{v.sublabel}</p>
             </div>
           </div>
         ))}
-        {/* AI badge */}
-        <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold" style={{ background: 'rgba(0,0,0,0.65)', color: EXAMPLE_VIDEOS[active].accent, border: `1px solid ${EXAMPLE_VIDEOS[active].accent}55` }}>
-          <Sparkles className="w-2.5 h-2.5" /> AI Ready
+        <div className="absolute top-1.5 left-1.5 flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-bold" style={{ background: 'rgba(0,0,0,0.65)', color: EXAMPLE_VIDEOS[active].accent, border: `1px solid ${EXAMPLE_VIDEOS[active].accent}55` }}>
+          <Sparkles className="w-2 h-2" /> AI Ready
         </div>
       </div>
 
-      {/* Dot navigation */}
-      <div className="flex items-center justify-center gap-1.5">
+      {/* Dot navigation + thumbnails */}
+      <div className="flex items-center gap-1 mt-1.5">
         {EXAMPLE_VIDEOS.map((v, i) => (
-          <button
-            key={v.id}
-            onClick={() => setActive(i)}
-            className="rounded-full transition-all duration-300"
-            style={{
-              width: i === active ? 18 : 6,
-              height: 6,
-              background: i === active ? v.accent : 'rgba(255,255,255,0.2)',
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Thumbnail strip */}
-      <div className="flex gap-1.5 mt-2">
-        {EXAMPLE_VIDEOS.map((v, i) => (
-          <button
-            key={v.id}
-            onClick={() => setActive(i)}
-            className="flex-1 rounded-lg overflow-hidden transition-all duration-200"
-            style={{
-              outline: i === active ? `2px solid ${v.accent}` : '2px solid transparent',
-              outlineOffset: 1,
-              opacity: i === active ? 1 : 0.5,
-            }}
-          >
-            <img src={v.img} alt={v.label} className="w-full aspect-video object-cover" loading="lazy" />
+          <button key={v.id} onClick={() => setActive(i)} className="flex-1 rounded overflow-hidden transition-all duration-200 relative"
+            style={{ outline: i === active ? `1.5px solid ${v.accent}` : '1.5px solid transparent', outlineOffset: 1, opacity: i === active ? 1 : 0.45 }}>
+            <img src={v.img} alt={v.label} className="w-full object-cover" style={{ aspectRatio: '16/9' }} loading="lazy" />
           </button>
         ))}
       </div>
     </div>
   );
 }
+
 
 export interface TransitionClipPreview {
   id: string;
@@ -392,10 +360,10 @@ export function VideoPreviewCanvas({
       />
 
       {/* Preview Area */}
-      <div className="flex-1 flex items-center justify-center p-2 min-h-0">
+      <div className="flex-1 min-h-0 relative overflow-hidden bg-black">
         <div
-          className={`relative bg-black overflow-hidden shadow-2xl w-full max-w-full h-full transition-all ${
-            isDragOver ? 'ring-2 ring-amber-400' : ''
+          className={`absolute inset-0 transition-all ${
+            isDragOver ? 'ring-2 ring-inset ring-amber-400' : ''
           }`}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
@@ -499,10 +467,7 @@ export function VideoPreviewCanvas({
             </>
           ) : (
             /* ── Welcome / Empty State ── */
-            <div
-              className="w-full h-full flex flex-col items-center justify-center overflow-y-auto"
-              style={{ padding: '12px 16px' }}
-            >
+            <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
               {isDragOver ? (
                 /* ── Active Drop State ── */
                 <div className="flex flex-col items-center gap-3 animate-fade-in">
@@ -516,82 +481,70 @@ export function VideoPreviewCanvas({
                   <p className="text-amber-200/50 text-xs">Video, audio or image</p>
                 </div>
               ) : (
-                <div className="w-full flex flex-col items-center gap-4 max-w-md">
-                  {/* Header */}
-                  <div className="text-center">
-                    <div className="flex items-center gap-2 justify-center mb-1">
-                      <Film className="w-5 h-5 text-amber-400" />
-                      <h2 className="text-white text-lg font-bold tracking-tight">AI Video Studio</h2>
+                /* Two-column layout: carousel left, actions right */
+                <div className="flex items-center gap-4 px-6 w-full max-w-3xl">
+                  {/* Left – Carousel */}
+                  <div className="flex-1 min-w-0 max-w-xs">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Film className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <h2 className="text-white text-xs font-bold tracking-tight">AI Video Studio</h2>
                     </div>
-                    <p className="text-slate-400 text-xs">Create, edit and dub real estate videos with AI</p>
+                    <InspirationCarousel />
                   </div>
 
-                  {/* ── Animated inspiration carousel ── */}
-                  <InspirationCarousel />
-
-                  {/* ── Drop zone ── */}
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="w-full rounded-xl flex flex-col items-center gap-2 py-4 px-4 transition-all duration-200 group"
-                    style={{
-                      background: 'rgba(245,158,11,0.06)',
-                      border: '2px dashed rgba(245,158,11,0.35)',
-                    }}
-                    onMouseEnter={e => {
-                      (e.currentTarget as HTMLElement).style.background = 'rgba(245,158,11,0.13)';
-                      (e.currentTarget as HTMLElement).style.border = '2px dashed rgba(245,158,11,0.75)';
-                      (e.currentTarget as HTMLElement).style.boxShadow = '0 0 24px rgba(245,158,11,0.12)';
-                    }}
-                    onMouseLeave={e => {
-                      (e.currentTarget as HTMLElement).style.background = 'rgba(245,158,11,0.06)';
-                      (e.currentTarget as HTMLElement).style.border = '2px dashed rgba(245,158,11,0.35)';
-                      (e.currentTarget as HTMLElement).style.boxShadow = 'none';
-                    }}
-                  >
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center transition-transform duration-200 group-hover:scale-110"
-                      style={{ background: 'rgba(245,158,11,0.15)' }}
+                  {/* Right – Drop zone + quick actions */}
+                  <div className="flex flex-col gap-2 w-52 shrink-0">
+                    {/* Drop zone */}
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full rounded-xl flex flex-col items-center gap-2 py-4 px-3 transition-all duration-200 group"
+                      style={{ background: 'rgba(245,158,11,0.06)', border: '2px dashed rgba(245,158,11,0.35)' }}
+                      onMouseEnter={e => {
+                        (e.currentTarget as HTMLElement).style.background = 'rgba(245,158,11,0.13)';
+                        (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,158,11,0.75)';
+                      }}
+                      onMouseLeave={e => {
+                        (e.currentTarget as HTMLElement).style.background = 'rgba(245,158,11,0.06)';
+                        (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,158,11,0.35)';
+                      }}
                     >
-                      <CloudUpload className="w-5 h-5 text-amber-400" />
-                    </div>
-                    <div className="text-center">
-                      <p className="text-white text-xs font-semibold">Drop a video here or click to browse</p>
-                      <p className="text-slate-500 text-[11px] mt-0.5">MP4, MOV, AVI · up to 2GB</p>
-                    </div>
-                  </button>
+                      <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: 'rgba(245,158,11,0.15)' }}>
+                        <CloudUpload className="w-4 h-4 text-amber-400" />
+                      </div>
+                      <p className="text-white text-[11px] font-semibold">Drop or click to browse</p>
+                      <p className="text-slate-500 text-[10px]">MP4, MOV, AVI · up to 2GB</p>
+                    </button>
 
-                  {/* Quick action grid */}
-                  <div className="grid grid-cols-2 gap-2 w-full">
-                    {QUICK_ACTIONS.filter(a => a.id !== 'upload').map((action) => {
-                      const Icon = action.icon;
-                      return (
-                        <button
-                          key={action.id}
-                          onClick={() => handleQuickAction(action.id)}
-                          className="flex items-center gap-2.5 p-3 rounded-xl transition-all group text-left"
-                          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}
-                          onMouseEnter={e => {
-                            (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.09)';
-                            (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,158,11,0.4)';
-                          }}
-                          onMouseLeave={e => {
-                            (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)';
-                            (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)';
-                          }}
-                        >
-                          <div
-                            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors"
-                            style={{ background: 'rgba(245,158,11,0.12)' }}
+                    {/* Quick actions */}
+                    <div className="grid grid-cols-1 gap-1.5">
+                      {QUICK_ACTIONS.filter(a => a.id !== 'upload').map((action) => {
+                        const Icon = action.icon;
+                        return (
+                          <button
+                            key={action.id}
+                            onClick={() => handleQuickAction(action.id)}
+                            className="flex items-center gap-2.5 px-3 py-2 rounded-lg transition-all text-left"
+                            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}
+                            onMouseEnter={e => {
+                              (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.09)';
+                              (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,158,11,0.4)';
+                            }}
+                            onMouseLeave={e => {
+                              (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)';
+                              (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)';
+                            }}
                           >
-                            <Icon className="w-4 h-4 text-amber-400" />
-                          </div>
-                          <div>
-                            <p className="text-white text-[11px] font-semibold leading-tight">{action.label}</p>
-                            <p className="text-slate-500 text-[10px] leading-tight mt-0.5">{action.desc}</p>
-                          </div>
-                        </button>
-                      );
-                    })}
+                            <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0" style={{ background: 'rgba(245,158,11,0.12)' }}>
+                              <Icon className="w-3.5 h-3.5 text-amber-400" />
+                            </div>
+                            <div>
+                              <p className="text-white text-[11px] font-semibold leading-tight">{action.label}</p>
+                              <p className="text-slate-500 text-[10px] leading-tight">{action.desc}</p>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               )}
@@ -599,6 +552,7 @@ export function VideoPreviewCanvas({
           )}
         </div>
       </div>
+
 
       {/* Transport Controls */}
       <div className="flex-shrink-0 px-4 py-3 border-t border-slate-700 bg-slate-900">
@@ -625,53 +579,44 @@ export function VideoPreviewCanvas({
 
           {/* Center - Playback Controls */}
           <div className="flex items-center gap-1">
-            <Button
-              size="sm"
-              variant="ghost"
+            <button
               onClick={skipBackward}
-              className="text-white hover:text-amber-300 hover:bg-slate-700"
+              className="p-2 rounded-md text-slate-300 hover:text-amber-300 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-all"
             >
               <SkipBack className="w-4 h-4" />
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
+            </button>
+            <button
               onClick={handleStop}
-              className="text-white hover:text-amber-300 hover:bg-slate-700"
+              className="p-2 rounded-md text-slate-300 hover:text-amber-300 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-all"
             >
               <Square className="w-4 h-4" />
-            </Button>
-            <Button
-              size="sm"
+            </button>
+            <button
               onClick={onTogglePlayback}
-              className="bg-amber-500 text-black hover:bg-amber-400 w-10 h-10 rounded-full font-bold"
+              className="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-bold flex items-center justify-center transition-all shadow-lg"
             >
               {isPlaying ? (
                 <Pause className="w-5 h-5" />
               ) : (
                 <Play className="w-5 h-5 ml-0.5" />
               )}
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
+            </button>
+            <button
               onClick={skipForward}
-              className="text-white hover:text-amber-300 hover:bg-slate-700"
+              className="p-2 rounded-md text-slate-300 hover:text-amber-300 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-all"
             >
               <SkipForward className="w-4 h-4" />
-            </Button>
+            </button>
           </div>
 
           {/* Right - Volume & Fullscreen */}
           <div className="flex items-center gap-2 w-32 justify-end">
-            <Button
-              size="sm"
-              variant="ghost"
+            <button
               onClick={toggleMute}
-              className="text-white hover:text-amber-300 hover:bg-slate-700"
+              className="p-2 rounded-md text-slate-300 hover:text-amber-300 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-all"
             >
               {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            </Button>
+            </button>
             <div className="w-16">
               <Slider
                 value={[isMuted ? 0 : volume]}
@@ -681,14 +626,12 @@ export function VideoPreviewCanvas({
                 onValueChange={handleVolumeChange}
               />
             </div>
-            <Button
-              size="sm"
-              variant="ghost"
+            <button
               onClick={toggleFullscreen}
-              className="text-white hover:text-amber-300 hover:bg-slate-700"
+              className="p-2 rounded-md text-slate-300 hover:text-amber-300 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-all"
             >
               <Maximize2 className="w-4 h-4" />
-            </Button>
+            </button>
           </div>
         </div>
       </div>
