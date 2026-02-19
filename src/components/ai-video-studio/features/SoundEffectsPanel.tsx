@@ -144,7 +144,7 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
         toast.success(`"${sfxPrompt}" generated!`);
       }
     } catch {
-      toast.error('SFX generation failed. Check your ElevenLabs API key.');
+      toast.error('Sound generation failed. The sound service may be temporarily unavailable.');
     } finally {
       setIsGenerating(false);
       setGeneratingPreset(null);
