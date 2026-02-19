@@ -14,7 +14,11 @@ interface ExtractedData {
   arabic_company_name?: string;
   registration_number?: string;
   city?: string;
+  arabic_city?: string;
   country?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
 }
 
 interface Props {
@@ -46,12 +50,25 @@ export function StampLicenseUploader({ onExtracted }: Props) {
     setExtracted(null);
 
     try {
-      // Convert to base64
-      const arrayBuffer = await file.arrayBuffer();
-      const bytes = new Uint8Array(arrayBuffer);
-      let binary = '';
-      bytes.forEach(b => binary += String.fromCharCode(b));
-      const base64 = btoa(binary);
+      let base64: string;
+      let mimeType: string;
+
+      if (file.type === 'application/pdf') {
+        // Send PDF as-is — Gemini supports application/pdf natively
+        mimeType = 'application/pdf';
+        const arrayBuffer = await file.arrayBuffer();
+        const bytes = new Uint8Array(arrayBuffer);
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+        base64 = btoa(binary);
+      } else {
+        mimeType = file.type;
+        const arrayBuffer = await file.arrayBuffer();
+        const bytes = new Uint8Array(arrayBuffer);
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+        base64 = btoa(binary);
+      }
 
       const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-extract`, {
         method: 'POST',
@@ -59,10 +76,7 @@ export function StampLicenseUploader({ onExtracted }: Props) {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({
-          imageBase64: base64,
-          mimeType: file.type === 'application/pdf' ? 'image/jpeg' : file.type, // Gemini vision handles images; PDFs first page
-        }),
+        body: JSON.stringify({ imageBase64: base64, mimeType }),
       });
 
       if (!res.ok) {
@@ -72,7 +86,10 @@ export function StampLicenseUploader({ onExtracted }: Props) {
 
       const data: ExtractedData = await res.json();
       setExtracted(data);
-      toast.success('Details extracted successfully!');
+
+      // Auto-apply immediately — no need to press a button
+      onExtracted(data);
+      toast.success('Details extracted and applied!');
     } catch (err: any) {
       console.error('Extraction error:', err);
       toast.error(err.message || 'Could not extract details. Please fill in manually.');
@@ -155,50 +172,70 @@ export function StampLicenseUploader({ onExtracted }: Props) {
           </div>
         </>
       ) : (
-        /* Extracted results */
+        /* Extracted results — auto-applied, shown as confirmation */
         <div className="space-y-3">
-          <div className="flex items-center gap-2 text-sm font-medium text-green-700">
-            <Check size={15} className="text-green-600"/>
-            Details extracted from {fileName}
+          <div className="flex items-center gap-2 text-sm font-medium text-[hsl(142,71%,30%)]">
+            <Check size={15} className="text-[hsl(142,71%,35%)]"/>
+            Details extracted &amp; applied from {fileName}
           </div>
 
-          <div className="bg-[hsl(var(--pearl-1))] rounded-xl p-4 space-y-2 text-sm">
+          <div className="bg-[hsl(var(--muted)/0.4)] rounded-xl p-4 space-y-2 text-sm">
             {extracted.company_name && (
               <div className="flex items-start gap-2">
-                <span className="text-[hsl(var(--muted-foreground))] text-xs min-w-[90px]">Company (EN)</span>
+                <span className="text-[hsl(var(--muted-foreground))] text-xs min-w-[100px]">Company (EN)</span>
                 <span className="font-medium text-[hsl(var(--foreground))]">{extracted.company_name}</span>
               </div>
             )}
             {extracted.arabic_company_name && (
               <div className="flex items-start gap-2">
-                <span className="text-[hsl(var(--muted-foreground))] text-xs min-w-[90px]">Company (AR)</span>
+                <span className="text-[hsl(var(--muted-foreground))] text-xs min-w-[100px]">Company (AR)</span>
                 <span className="font-medium text-[hsl(var(--foreground))]" dir="rtl">{extracted.arabic_company_name}</span>
               </div>
             )}
             {extracted.registration_number && (
               <div className="flex items-start gap-2">
-                <span className="text-[hsl(var(--muted-foreground))] text-xs min-w-[90px]">Reg. No.</span>
+                <span className="text-[hsl(var(--muted-foreground))] text-xs min-w-[100px]">Reg. No.</span>
                 <span className="font-medium text-[hsl(var(--foreground))]">{extracted.registration_number}</span>
               </div>
             )}
             {(extracted.city || extracted.country) && (
               <div className="flex items-start gap-2">
-                <span className="text-[hsl(var(--muted-foreground))] text-xs min-w-[90px]">Location</span>
+                <span className="text-[hsl(var(--muted-foreground))] text-xs min-w-[100px]">Location</span>
                 <span className="font-medium text-[hsl(var(--foreground))]">{[extracted.city, extracted.country].filter(Boolean).join(', ')}</span>
+              </div>
+            )}
+            {extracted.arabic_city && (
+              <div className="flex items-start gap-2">
+                <span className="text-[hsl(var(--muted-foreground))] text-xs min-w-[100px]">Location (AR)</span>
+                <span className="font-medium text-[hsl(var(--foreground))]" dir="rtl">{extracted.arabic_city}</span>
+              </div>
+            )}
+            {extracted.phone && (
+              <div className="flex items-start gap-2">
+                <span className="text-[hsl(var(--muted-foreground))] text-xs min-w-[100px]">Phone</span>
+                <span className="font-medium text-[hsl(var(--foreground))]">{extracted.phone}</span>
+              </div>
+            )}
+            {extracted.email && (
+              <div className="flex items-start gap-2">
+                <span className="text-[hsl(var(--muted-foreground))] text-xs min-w-[100px]">Email</span>
+                <span className="font-medium text-[hsl(var(--foreground))]">{extracted.email}</span>
+              </div>
+            )}
+            {extracted.website && (
+              <div className="flex items-start gap-2">
+                <span className="text-[hsl(var(--muted-foreground))] text-xs min-w-[100px]">Website</span>
+                <span className="font-medium text-[hsl(var(--foreground))]">{extracted.website}</span>
               </div>
             )}
           </div>
 
-          <div className="flex gap-2">
-            <Button onClick={handleApply} className="flex-1 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1.5 text-sm">
-              <Check size={14}/> Use These Details
-            </Button>
-            <Button variant="outline" onClick={handleClear} className="gap-1.5 text-sm">
-              <X size={14}/> Try Another
-            </Button>
-          </div>
+          <Button variant="outline" onClick={handleClear} className="w-full gap-1.5 text-sm">
+            <X size={14}/> Upload Different Document
+          </Button>
         </div>
       )}
     </div>
   );
 }
+
