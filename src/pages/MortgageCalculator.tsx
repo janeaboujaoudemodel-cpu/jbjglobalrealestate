@@ -68,7 +68,7 @@ const MortgageCalculatorPage = () => {
           </div>
 
           {/* Calculator */}
-          <MortgageCalculator />
+          <MortgageCalculator compact />
 
           {/* CTA Button - Centered at bottom of calculator section */}
           <div className="mt-8 lg:mt-12 flex justify-center">

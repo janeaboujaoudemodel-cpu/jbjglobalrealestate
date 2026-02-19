@@ -98,7 +98,6 @@ const AIComparisonWidget = () => {
               <span className="text-right text-green-600 font-medium">{item.roi}</span>
             </div>
           ))}
-          <p className="text-[10px] text-zinc-400 mt-2 text-center">Sample figures for illustration · Use comparison tool for live data</p>
         </div>
 
         {/* CTA - Premium 3D Champagne Button */}
