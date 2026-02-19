@@ -15,33 +15,62 @@ import {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-/** Reliable SVG → PNG using base64 data URL (avoids canvas CORS taint) */
+/** Reliable SVG → PNG via Blob URL + decode() to guarantee full render before canvas draw */
 async function svgToPng(svgString: string, size: number, transparent: boolean): Promise<Blob> {
+  // 1. Ensure required XML namespaces are present
   let svg = svgString;
-  if (!svg.includes('xmlns=')) svg = svg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
-  // Use base64 data URL — avoids canvas CORS taint on all browsers
-  const b64 = btoa(unescape(encodeURIComponent(svg)));
-  const dataUrl = `data:image/svg+xml;base64,${b64}`;
+  if (!svg.includes('xmlns=')) {
+    svg = svg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+  }
+  if (!svg.includes('xmlns:xlink')) {
+    svg = svg.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+  }
+
+  // 2. Inject explicit width/height so the browser knows the intrinsic size
+  svg = svg.replace(/<svg([^>]*)>/, (match, attrs) => {
+    let a = attrs;
+    if (!/\bwidth=/.test(a)) a += ` width="${size}"`;
+    if (!/\bheight=/.test(a)) a += ` height="${size}"`;
+    return `<svg${a}>`;
+  });
+
+  // 3. Use a Blob URL — avoids btoa encoding issues with Unicode / special chars
+  const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+  const blobUrl = URL.createObjectURL(blob);
 
   return new Promise((resolve, reject) => {
-    const img = document.createElement('img');
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = size;
-      canvas.height = size;
-      const ctx = canvas.getContext('2d')!;
-      if (!transparent) {
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, size, size);
+    const img = new Image();
+
+    img.onload = async () => {
+      try {
+        // decode() ensures the image is fully rasterized before we touch the canvas
+        await img.decode();
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d')!;
+        if (!transparent) {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, size, size);
+        }
+        ctx.drawImage(img, 0, 0, size, size);
+        canvas.toBlob(b => {
+          URL.revokeObjectURL(blobUrl);
+          if (b) resolve(b);
+          else reject(new Error('Canvas toBlob returned null'));
+        }, 'image/png');
+      } catch (err) {
+        URL.revokeObjectURL(blobUrl);
+        reject(err);
       }
-      ctx.drawImage(img, 0, 0, size, size);
-      canvas.toBlob(b => {
-        if (b) resolve(b);
-        else reject(new Error('Canvas toBlob returned null'));
-      }, 'image/png');
     };
-    img.onerror = (e) => reject(new Error(`Image load failed: ${e}`));
-    img.src = dataUrl;
+
+    img.onerror = () => {
+      URL.revokeObjectURL(blobUrl);
+      reject(new Error('SVG image failed to load — check SVG validity'));
+    };
+
+    img.src = blobUrl;
   });
 }
 
