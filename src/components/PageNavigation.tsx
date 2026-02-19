@@ -16,6 +16,7 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
   const isRTL = languageContext?.isRTL ?? false;
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showScrollBottom, setShowScrollBottom] = useState(true);
+  const isStampGenerator = location.pathname.includes('/stamp-generator/');
   const [stack, setStack] = useState<string[]>(() => {
     try {
       const raw = sessionStorage.getItem("nav-stack");
@@ -105,7 +106,7 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
         "fixed bottom-20 sm:bottom-6 z-[9990] flex flex-col gap-2 sm:gap-3",
         // Explicit pointer-events-auto on container
         "pointer-events-auto",
-        isRTL ? "right-6" : "left-6"
+        isRTL ? "right-6" : "left-6 lg:left-auto lg:right-6"
       )}
       style={{ touchAction: "manipulation" }}
     >
@@ -133,19 +134,21 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
         {isRTL ? <ArrowRight className="w-5 h-5 text-black" /> : <ArrowLeft className="w-5 h-5 text-black" />}
       </button>
 
-      {/* Scroll to Bottom */}
-      <button
-        type="button"
-        onClick={scrollToBottom}
-        className={cn(
-          buttonBaseClass,
-          "transition-opacity duration-200",
-          showScrollBottom ? "opacity-100" : "opacity-0 pointer-events-none"
-        )}
-        aria-label="Scroll to bottom"
-      >
-        <ArrowDown className="w-5 h-5 text-black" />
-      </button>
+      {/* Scroll to Bottom — hidden on stamp-generator routes */}
+      {!isStampGenerator && (
+        <button
+          type="button"
+          onClick={scrollToBottom}
+          className={cn(
+            buttonBaseClass,
+            "transition-opacity duration-200",
+            showScrollBottom ? "opacity-100" : "opacity-0 pointer-events-none"
+          )}
+          aria-label="Scroll to bottom"
+        >
+          <ArrowDown className="w-5 h-5 text-black" />
+        </button>
+      )}
     </div>
   );
 });
