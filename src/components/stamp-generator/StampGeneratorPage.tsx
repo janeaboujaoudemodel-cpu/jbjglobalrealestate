@@ -81,6 +81,12 @@ export default function StampGeneratorPage() {
   const [chatLoading, setChatLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // AI Designer panel drag
+  const [aiPanelPos, setAiPanelPos] = useState({ x: 0, y: 0 });
+  const [aiDragging, setAiDragging] = useState(false);
+  const [aiDragStart, setAiDragStart] = useState({ mx: 0, my: 0, px: 0, py: 0 });
+  const [refinedPreview, setRefinedPreview] = useState<StampDesignConcept | null>(null);
+
   const [togglingFav, setTogglingFav] = useState<string | null>(null);
   const [svgOverrides, setSvgOverrides] = useState<Record<string, string>>({});
 
@@ -242,12 +248,14 @@ export default function StampGeneratorPage() {
     navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || designId}`);
   }
 
-  async function sendChatMessage() {
-    if (!chatInput.trim() || chatLoading) return;
-    const userMsg: ChatMessage = { role: 'user', content: chatInput };
+  async function sendChatMessage(overrideInput?: string) {
+    const msg = overrideInput ?? chatInput;
+    if (!msg.trim() || chatLoading) return;
+    const userMsg: ChatMessage = { role: 'user', content: msg };
     setChatMessages(prev => [...prev, userMsg]);
     setChatInput('');
     setChatLoading(true);
+    setRefinedPreview(null);
 
     const conceptToRefine = concepts.find(c => c.id === selectedId) || concepts[0];
     const svgForRefine = (conceptToRefine && svgOverrides[conceptToRefine.id]) || conceptToRefine?.svgSource || '';
@@ -256,7 +264,7 @@ export default function StampGeneratorPage() {
       const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token}` },
-        body: JSON.stringify({ action: 'refine', project, projectId, instruction: chatInput, currentSvg: svgForRefine }),
+        body: JSON.stringify({ action: 'refine', project, projectId, instruction: msg, currentSvg: svgForRefine }),
       });
       if (res.ok) {
         const json = await res.json();
@@ -268,8 +276,8 @@ export default function StampGeneratorPage() {
             tags: ['ai', 'refined', 'custom'],
             svgSource: json.svgSource,
           };
-          setConcepts(prev => [newConcept, ...prev]);
-          setChatMessages(prev => [...prev, { role: 'assistant', content: `✅ Done! Refined design added as the first card.` }]);
+          setRefinedPreview(newConcept);
+          setChatMessages(prev => [...prev, { role: 'assistant', content: `✅ Preview ready! Choose to Replace or Save as New below.` }]);
         } else {
           setChatMessages(prev => [...prev, { role: 'assistant', content: json.message || "Applied your changes." }]);
         }
@@ -281,6 +289,37 @@ export default function StampGeneratorPage() {
     }
     setChatLoading(false);
   }
+
+  function applyRefinement(mode: 'replace' | 'new') {
+    if (!refinedPreview) return;
+    if (mode === 'replace' && selectedId) {
+      setSvgOverrides(prev => ({ ...prev, [selectedId]: refinedPreview.svgSource }));
+      setRefinedPreview(null);
+      toast.success('Design replaced!');
+    } else {
+      setConcepts(prev => [refinedPreview, ...prev]);
+      setRefinedPreview(null);
+      toast.success('New concept added!');
+    }
+  }
+
+  // AI panel drag handlers
+  function onAiPanelDragStart(e: React.MouseEvent) {
+    e.preventDefault();
+    setAiDragging(true);
+    setAiDragStart({ mx: e.clientX, my: e.clientY, px: aiPanelPos.x, py: aiPanelPos.y });
+  }
+
+  useEffect(() => {
+    if (!aiDragging) return;
+    function onMove(e: MouseEvent) {
+      setAiPanelPos({ x: aiDragStart.px + (e.clientX - aiDragStart.mx), y: aiDragStart.py + (e.clientY - aiDragStart.my) });
+    }
+    function onUp() { setAiDragging(false); }
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+  }, [aiDragging, aiDragStart]);
 
   // Active color for the wheel
   const activeColor = activeStop === 'primary' ? primaryColor : activeStop === 'secondary' ? (secondaryColor || '#2a3a5c') : (accentColor || '#B8860B');
@@ -621,30 +660,54 @@ export default function StampGeneratorPage() {
         </div>
       </div>
 
-      {/* AI Designer Chat Panel */}
+      {/* AI Designer Floating Panel */}
       {chatOpen && (
-        <div className="fixed inset-y-0 right-0 w-80 bg-white border-l border-[hsl(var(--border))] shadow-2xl z-50 flex flex-col">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-[hsl(var(--border))] bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-white">
+        <div
+          className="fixed z-[9000] flex flex-col bg-white rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden"
+          style={{
+            width: 340,
+            maxHeight: 'calc(100vh - 80px)',
+            top: 72,
+            right: 16,
+            transform: `translate(${aiPanelPos.x}px, ${aiPanelPos.y}px)`,
+          }}
+        >
+          {/* Header — draggable */}
+          <div
+            className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] cursor-grab active:cursor-grabbing select-none flex-shrink-0"
+            onMouseDown={onAiPanelDragStart}
+          >
             <div className="flex items-center gap-2">
-              <Sparkles size={15} className="text-[hsl(var(--gold))]"/>
-              <span className="font-semibold text-sm text-[hsl(var(--foreground))]">AI Stamp Designer</span>
+              <Sparkles size={15} className="text-white"/>
+              <span className="font-bold text-sm text-white">AI Stamp Designer</span>
+              <span className="text-white/60 text-[10px]">drag to move</span>
             </div>
-            <button onClick={() => setChatOpen(false)}><X size={16} className="text-[hsl(var(--muted-foreground))]"/></button>
+            <button
+              onClick={() => setChatOpen(false)}
+              className="w-7 h-7 rounded-full bg-white flex items-center justify-center hover:bg-white/90 transition-colors flex-shrink-0"
+            >
+              <X size={14} className="text-[hsl(var(--gold-dark))]"/>
+            </button>
           </div>
 
+          {/* Quick suggest — only when no chat messages yet */}
           {chatMessages.length === 0 && (
-            <div className="px-4 py-4 space-y-2">
-              <p className="text-xs text-[hsl(var(--muted-foreground))]">Describe changes to refine your stamp:</p>
+            <div className="px-4 py-3 space-y-2 border-b border-[hsl(var(--border))] flex-shrink-0">
+              <p className="text-xs font-medium text-[hsl(var(--muted-foreground))]">Tap a suggestion to refine instantly:</p>
               {['Make the borders thicker and add a star divider', 'Change to a more minimalist style', 'Add a decorative inner ring', 'Make the text larger and bolder'].map(eg => (
-                <button key={eg} onClick={() => setChatInput(eg)}
-                  className="w-full text-left text-xs p-2 bg-[hsl(var(--pearl-1))] rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] text-[hsl(var(--foreground))]">
+                <button
+                  key={eg}
+                  onClick={() => sendChatMessage(eg)}
+                  className="w-full text-left text-xs p-2.5 bg-[hsl(var(--pearl-1))] rounded-xl border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.05)] text-[hsl(var(--foreground))] transition-colors"
+                >
                   "{eg}"
                 </button>
               ))}
             </div>
           )}
 
-          <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+          {/* Chat messages */}
+          <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 min-h-0">
             {chatMessages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] px-3 py-2 rounded-xl text-xs ${msg.role === 'user' ? 'bg-[hsl(var(--gold))] text-white' : 'bg-[hsl(var(--pearl-1))] text-[hsl(var(--foreground))] border border-[hsl(var(--border))]'}`}>
@@ -662,13 +725,58 @@ export default function StampGeneratorPage() {
             <div ref={chatEndRef}/>
           </div>
 
-          <div className="px-4 py-3 border-t border-[hsl(var(--border))]">
+          {/* Refined preview + actions */}
+          {refinedPreview && (
+            <div className="flex-shrink-0 border-t border-[hsl(var(--border))] px-4 py-3 space-y-3 bg-[hsl(var(--pearl-1))]">
+              <p className="text-xs font-semibold text-[hsl(var(--foreground))]">✨ Preview of refined design:</p>
+              <div className="flex items-center justify-center bg-white rounded-xl border border-[hsl(var(--border))] py-3">
+                <StampSVGRenderer
+                  svgSource={refinedPreview.svgSource}
+                  tintColor={primaryColor}
+                  secondaryColor={secondaryColor}
+                  accentColor={accentColor}
+                  fontFamily={fontFamily}
+                  size={130}
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  className="flex-1 h-8 text-xs bg-[hsl(var(--gold))] text-white hover:bg-[hsl(var(--gold-dark))]"
+                  onClick={() => applyRefinement('replace')}
+                  disabled={!selectedId}
+                >
+                  Replace Selected
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="flex-1 h-8 text-xs border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.05)]"
+                  onClick={() => applyRefinement('new')}
+                >
+                  Save as New
+                </Button>
+              </div>
+              {!selectedId && <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center">Select a stamp first to enable Replace</p>}
+            </div>
+          )}
+
+          {/* Input */}
+          <div className="flex-shrink-0 px-4 py-3 border-t border-[hsl(var(--border))] bg-white">
             <div className="flex gap-2">
-              <input value={chatInput} onChange={e => setChatInput(e.target.value)}
+              <input
+                value={chatInput}
+                onChange={e => setChatInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendChatMessage()}
                 placeholder="Describe your changes…"
-                className="flex-1 h-9 px-3 text-xs border-2 border-[hsl(var(--border))] rounded-xl focus:outline-none focus:border-[hsl(var(--gold))] bg-white text-black"/>
-              <Button size="sm" className="h-9 px-3 bg-[hsl(var(--gold))] text-white hover:bg-[hsl(var(--gold-dark))]" onClick={sendChatMessage} disabled={chatLoading}>
+                className="flex-1 h-9 px-3 text-xs border-2 border-[hsl(var(--border))] rounded-xl focus:outline-none focus:border-[hsl(var(--gold))] bg-white text-[hsl(var(--foreground))]"
+              />
+              <Button
+                size="sm"
+                className="h-9 px-3 bg-[hsl(var(--gold))] text-white hover:bg-[hsl(var(--gold-dark))]"
+                onClick={() => sendChatMessage()}
+                disabled={chatLoading}
+              >
                 <Send size={12}/>
               </Button>
             </div>
