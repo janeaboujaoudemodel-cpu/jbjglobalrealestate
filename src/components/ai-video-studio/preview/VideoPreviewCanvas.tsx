@@ -250,12 +250,21 @@ export function VideoPreviewCanvas({
 
   const hasClips = clips.length > 0;
 
-  // Find the active video clip at current time
+  // Find the active clip (video OR image) at current time
   const activeVideoClip = clips.find(
-    clip => clip.type === 'video' && 
-    currentTime >= clip.startTime && 
+    clip => clip.type === 'video' &&
+    currentTime >= clip.startTime &&
     currentTime < clip.startTime + clip.duration
   );
+
+  const activeImageClip = clips.find(
+    clip => clip.type === 'image' &&
+    currentTime >= clip.startTime &&
+    currentTime < clip.startTime + clip.duration
+  );
+
+  // The clip that is visually active right now
+  const activeMediaClip = activeVideoClip || activeImageClip;
 
   // Update video time when currentTime changes
   useEffect(() => {
@@ -397,7 +406,8 @@ export function VideoPreviewCanvas({
         >
           {hasClips ? (
             <>
-              {activeVideoClip ? (
+              {/* ── Video clip ── */}
+              {activeVideoClip && (
                 <video
                   ref={videoRef}
                   src={activeVideoClip.url}
@@ -406,7 +416,20 @@ export function VideoPreviewCanvas({
                   playsInline
                   style={{ filter: beautyFilter ? computeCssFilter(beautyFilter) : 'none' }}
                 />
-              ) : (
+              )}
+
+              {/* ── Image clip (from "Create Ad" photos) ── */}
+              {activeImageClip && !activeVideoClip && (
+                <img
+                  src={activeImageClip.url}
+                  alt={activeImageClip.id}
+                  className="w-full h-full object-contain"
+                  style={{ filter: beautyFilter ? computeCssFilter(beautyFilter) : 'none' }}
+                />
+              )}
+
+              {/* ── No media at playhead ── */}
+              {!activeMediaClip && (
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-center">
                     <Film className="w-12 h-12 text-slate-500 mx-auto mb-3" />
