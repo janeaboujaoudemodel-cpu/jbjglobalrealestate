@@ -1,12 +1,14 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import {
   FolderOpen, Loader2, Wand2, Search, RefreshCw,
   Building2, MapPin, DollarSign, Bed, ChevronDown, X, Check,
-  Film, Music, Type
+  Film, Music, Type, ArrowLeft, Play, Pause, Globe, Mic,
+  Sparkles, Volume2, Copy, CheckCheck, Link2
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
+import { VOICE_OPTIONS, SUPPORTED_LANGUAGES } from '../types';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -40,18 +42,41 @@ interface VideoAdClip {
   };
 }
 
-interface ProjectIntegrationPanelProps {
-  onCreateVideoAd?: (clips: VideoAdClip[], projectName: string) => void;
+interface VideoAdResult {
+  clips: VideoAdClip[];
+  voiceover?: {
+    audioBase64: string;
+    duration: number;
+    script: string;
+  };
+  projectName: string;
+  transitions?: string;
 }
+
+interface ProjectIntegrationPanelProps {
+  onCreateVideoAd?: (result: VideoAdResult) => void;
+}
+
+type WizardStep = 'grid' | 'wizard' | 'result';
+
+interface WizardSettings {
+  language: string;
+  voiceId: string;
+  tone: 'luxury' | 'casual' | 'urgent';
+  scriptDuration: 30 | 60 | 90;
+  format: 'reels' | 'youtube' | 'square';
+  transition: 'fade' | 'slide-left' | 'zoom-in';
+  textStyle: 'lower-third' | 'bold' | 'clean';
+}
+
+type GenerationPhase = 'script' | 'tts' | 'assembly' | 'done';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const formatPrice = (from: number | null, to: number | null): string => {
   if (!from) return 'Price on request';
   const fmt = (n: number) =>
-    n >= 1_000_000
-      ? `AED ${(n / 1_000_000).toFixed(1)}M`
-      : `AED ${Math.round(n / 1000)}K`;
+    n >= 1_000_000 ? `AED ${(n / 1_000_000).toFixed(1)}M` : `AED ${Math.round(n / 1000)}K`;
   return to ? `${fmt(from)} – ${fmt(to)}` : `From ${fmt(from)}`;
 };
 
@@ -62,25 +87,98 @@ const formatBeds = (min: number | null, max: number | null): string => {
   return min === 0 ? 'Studio' : `${min} BR`;
 };
 
+// ─── Mini Selector ────────────────────────────────────────────────────────────
+
+function MiniSelect({ label, value, options, onChange }: {
+  label: string;
+  value: string;
+  options: { value: string; label: string }[];
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div>
+      <label className="text-[10px] text-slate-400 uppercase tracking-wide mb-1 block">{label}</label>
+      <select
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        className="w-full bg-slate-700 border border-slate-600 rounded-md px-2 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400 appearance-none cursor-pointer"
+      >
+        {options.map(o => (
+          <option key={o.value} value={o.value}>{o.label}</option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+function ToggleGroup({ label, value, options, onChange }: {
+  label: string;
+  value: string;
+  options: { value: string; label: string }[];
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div>
+      <label className="text-[10px] text-slate-400 uppercase tracking-wide mb-1 block">{label}</label>
+      <div className="flex gap-1">
+        {options.map(o => (
+          <button
+            key={o.value}
+            onClick={() => onChange(o.value)}
+            className={`flex-1 py-1.5 text-xs rounded-md border transition-all ${
+              value === o.value
+                ? 'border-amber-400 bg-amber-400/15 text-amber-300 font-semibold'
+                : 'border-slate-600 text-slate-400 bg-slate-700 hover:border-slate-500'
+            }`}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationPanelProps) {
+  // ── Project list state ───────────────────────────────────────────────────────
   const [projects, setProjects] = useState<RealEstateProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [generating, setGenerating] = useState<string | null>(null);
-  const [generatedId, setGeneratedId] = useState<string | null>(null);
   const [selectedEmirate, setSelectedEmirate] = useState<string>('All');
   const [showFilter, setShowFilter] = useState(false);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [urlInput, setUrlInput] = useState('');
+
+  // ── Wizard state ─────────────────────────────────────────────────────────────
+  const [step, setStep] = useState<WizardStep>('grid');
+  const [selectedProject, setSelectedProject] = useState<RealEstateProject | null>(null);
+  const [settings, setSettings] = useState<WizardSettings>({
+    language: 'en',
+    voiceId: 'JBFqnCBsd6RMkjVDRZzb',
+    tone: 'luxury',
+    scriptDuration: 60,
+    format: 'reels',
+    transition: 'fade',
+    textStyle: 'lower-third',
+  });
+
+  // ── Generation state ──────────────────────────────────────────────────────────
+  const [generating, setGenerating] = useState(false);
+  const [genPhase, setGenPhase] = useState<GenerationPhase | null>(null);
+  const [result, setResult] = useState<{ script: string; audioBase64: string; duration: number } | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const emirates = ['All', 'Dubai', 'Abu Dhabi Emirate', 'Sharjah', 'Ras Al Khaimah'];
 
-  // ── Load projects ────────────────────────────────────────────────────────────
+  // ── Load projects ─────────────────────────────────────────────────────────────
   const loadProjects = useCallback(async () => {
     setLoading(true);
     try {
-      let q = supabase
+      const { data, error } = await supabase
         .from('projects')
         .select('id, name, emirate, location, cover_image_url, price_from, price_to, bedrooms_min, bedrooms_max, property_type_label, is_featured')
         .eq('is_published' as never, true)
@@ -88,195 +186,325 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
         .order('is_featured', { ascending: false })
         .order('created_at', { ascending: false })
         .limit(50);
-
-      const { data, error } = await q;
       if (!error && data) setProjects(data as RealEstateProject[]);
-    } catch {
-      // not signed in, show empty state
-    } finally {
+    } catch { /* not signed in */ } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => { loadProjects(); }, [loadProjects]);
 
-  // ── Filtering ────────────────────────────────────────────────────────────────
+  // ── Audio cleanup on unmount ───────────────────────────────────────────────────
+  useEffect(() => {
+    return () => {
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+    };
+  }, [audioUrl]);
+
+  // ── Filter ────────────────────────────────────────────────────────────────────
   const filtered = projects.filter(p => {
     const matchSearch = !search || p.name.toLowerCase().includes(search.toLowerCase()) || (p.emirate || '').toLowerCase().includes(search.toLowerCase());
     const matchEmirate = selectedEmirate === 'All' || p.emirate === selectedEmirate;
     return matchSearch && matchEmirate;
   });
 
-  // ── Create Video Ad ──────────────────────────────────────────────────────────
-  const handleCreateVideoAd = async (proj: RealEstateProject) => {
-    setGenerating(proj.id);
-    setGeneratedId(null);
-
-    try {
-      // 1. Fetch gallery images for this project
-      const { data: imgData } = await supabase
-        .from('project_images')
-        .select('image_url, display_order')
-        .eq('project_id', proj.id)
-        .order('display_order', { ascending: true })
-        .limit(6);
-
-      const galleryImages: ProjectImage[] = imgData || [];
-
-      // 2. Build photo clips (cover + up to 5 gallery shots, 4s each)
-      const allImageUrls: string[] = [];
-      if (proj.cover_image_url) allImageUrls.push(proj.cover_image_url);
-      galleryImages.forEach(g => {
-        if (!allImageUrls.includes(g.image_url)) allImageUrls.push(g.image_url);
-      });
-      const photoClips = allImageUrls.slice(0, 5).map((url, i) => ({
-        name: `${proj.name} — Photo ${i + 1}`,
-        url,
-        type: 'image' as const,
-        duration: 4,
-      }));
-
-      // 3. Build lower-third text overlay clip (3s at the start)
-      const priceText = formatPrice(proj.price_from, proj.price_to);
-      const bedsText  = formatBeds(proj.bedrooms_min, proj.bedrooms_max);
-      const lowerThirdText = [
-        proj.name,
-        [bedsText, proj.property_type_label].filter(Boolean).join(' · '),
-        priceText,
-        proj.emirate,
-      ].filter(Boolean).join('\n');
-
-      const textClip: VideoAdClip = {
-        name: `${proj.name} — Lower Third`,
-        url: `text-overlay://${encodeURIComponent(lowerThirdText)}`,
-        type: 'text',
-        duration: 5,
-        textOverlay: {
-          content: lowerThirdText,
-          style: 'lower-third',
-        },
-      };
-
-      // 4. Music clip placeholder (30s background)
-      const musicClip: VideoAdClip = {
-        name: '🎵 Property Ad Music',
-        url: 'music://luxury-property-ad',
-        type: 'image', // treated as audio in parent
-        duration: 30,
-      };
-
-      const allClips: VideoAdClip[] = [...photoClips, textClip, musicClip];
-
-      if (photoClips.length === 0) {
-        toast.error('No photos found for this project');
+  // ── URL import ────────────────────────────────────────────────────────────────
+  const handleUrlImport = () => {
+    if (!urlInput.trim()) return;
+    // Match internal paths like /properties/slug or /projects/slug
+    const internalMatch = urlInput.match(/\/(?:properties|projects)\/([a-z0-9-]+)/i);
+    if (internalMatch) {
+      const slug = internalMatch[1];
+      const found = projects.find(p => p.name.toLowerCase().replace(/\s+/g, '-').includes(slug) || p.id === slug);
+      if (found) {
+        openWizard(found);
+        setUrlInput('');
         return;
       }
-
-      // 5. Emit to parent
-      onCreateVideoAd?.(allClips, proj.name);
-      setGeneratedId(proj.id);
-      toast.success(`🎬 "${proj.name}" video ad assembled! ${photoClips.length} photos + lower third added.`);
-    } catch (err) {
-      toast.error('Failed to create video ad');
-      console.error(err);
-    } finally {
-      setGenerating(null);
+      toast.info('Project not found in database. Try searching by name.');
+    } else {
+      toast.info('External URL import coming soon — paste a project URL from this platform instead.');
     }
   };
 
+  // ── Open wizard ───────────────────────────────────────────────────────────────
+  const openWizard = (proj: RealEstateProject) => {
+    setSelectedProject(proj);
+    setResult(null);
+    setAudioUrl(null);
+    setStep('wizard');
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const backToGrid = () => {
+    setStep('grid');
+    setSelectedProject(null);
+    setResult(null);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  // ── Generate Video Ad ─────────────────────────────────────────────────────────
+  const handleGenerate = async () => {
+    if (!selectedProject) return;
+    setGenerating(true);
+    setGenPhase('script');
+
+    try {
+      // Phase 1 + 2: Call edge function (script + TTS)
+      setGenPhase('script');
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-property-video-ad`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({
+            projectId: selectedProject.id,
+            language: settings.language,
+            voiceId: settings.voiceId,
+            tone: settings.tone,
+            scriptDuration: settings.scriptDuration,
+          }),
+        }
+      );
+
+      // Simulate phased progress for UX
+      setTimeout(() => setGenPhase('tts'), 2000);
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Generation failed');
+
+      setGenPhase('assembly');
+      await new Promise(r => setTimeout(r, 600));
+
+      // Build audio blob URL from base64
+      const byteString = atob(data.audioBase64);
+      const bytes = new Uint8Array(byteString.length);
+      for (let i = 0; i < byteString.length; i++) bytes[i] = byteString.charCodeAt(i);
+      const blob = new Blob([bytes], { type: 'audio/mpeg' });
+      const url = URL.createObjectURL(blob);
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+      setAudioUrl(url);
+
+      setResult({
+        script: data.script,
+        audioBase64: data.audioBase64,
+        duration: data.audioDurationEstimate,
+      });
+
+      setGenPhase('done');
+      setStep('result');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Generation failed';
+      toast.error(msg);
+    } finally {
+      setGenerating(false);
+      setGenPhase(null);
+    }
+  };
+
+  // ── Add to Timeline ───────────────────────────────────────────────────────────
+  const handleAddToTimeline = async () => {
+    if (!selectedProject || !result) return;
+
+    // Fetch gallery images
+    const { data: imgData } = await supabase
+      .from('project_images')
+      .select('image_url, display_order')
+      .eq('project_id', selectedProject.id)
+      .order('display_order', { ascending: true })
+      .limit(8);
+
+    const galleryImages: ProjectImage[] = imgData || [];
+
+    // Build photo clips
+    const allImageUrls: string[] = [];
+    if (selectedProject.cover_image_url) allImageUrls.push(selectedProject.cover_image_url);
+    galleryImages.forEach(g => { if (!allImageUrls.includes(g.image_url)) allImageUrls.push(g.image_url); });
+
+    const clipDuration = settings.scriptDuration / Math.max(allImageUrls.slice(0, 6).length, 1);
+    const photoClips: VideoAdClip[] = allImageUrls.slice(0, 6).map((url, i) => ({
+      name: `${selectedProject.name} — Photo ${i + 1}`,
+      url,
+      type: 'image',
+      duration: Math.max(clipDuration, 3),
+    }));
+
+    // Lower-third text
+    const priceText = formatPrice(selectedProject.price_from, selectedProject.price_to);
+    const bedsText  = formatBeds(selectedProject.bedrooms_min, selectedProject.bedrooms_max);
+    const lowerThirdText = [
+      selectedProject.name,
+      [bedsText, selectedProject.property_type_label].filter(Boolean).join(' · '),
+      priceText,
+      selectedProject.emirate,
+    ].filter(Boolean).join('\n');
+
+    const textClip: VideoAdClip = {
+      name: `${selectedProject.name} — Lower Third`,
+      url: `text-overlay://${encodeURIComponent(lowerThirdText)}`,
+      type: 'text',
+      duration: 5,
+      textOverlay: { content: lowerThirdText, style: settings.textStyle },
+    };
+
+    if (photoClips.length === 0) {
+      toast.error('No photos found for this project');
+      return;
+    }
+
+    onCreateVideoAd?.({
+      clips: [...photoClips, textClip],
+      voiceover: {
+        audioBase64: result.audioBase64,
+        duration: result.duration,
+        script: result.script,
+      },
+      projectName: selectedProject.name,
+      transitions: settings.transition,
+    });
+
+    toast.success(`🎬 "${selectedProject.name}" video ad added to timeline!`);
+    backToGrid();
+  };
+
+  // ── Audio playback ────────────────────────────────────────────────────────────
+  const toggleAudio = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play();
+      setIsPlaying(true);
+    }
+  };
+
+  const copyScript = () => {
+    if (!result?.script) return;
+    navigator.clipboard.writeText(result.script);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   // ─────────────────────────────────────────────────────────────────────────────
-  return (
-    <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden">
-
-      {/* ── Header ── */}
-      <div className="px-3 py-2.5 border-b border-slate-700 flex items-center gap-2">
-        <Building2 className="w-4 h-4 text-amber-400 shrink-0" />
-        <span className="text-xs font-bold text-amber-400 uppercase tracking-wide flex-1">
-          Real Estate Projects
-        </span>
-        <button onClick={loadProjects} className="text-slate-500 hover:text-slate-300 transition-colors" title="Refresh">
-          <RefreshCw className="w-3.5 h-3.5" />
-        </button>
-      </div>
-
-      {/* ── Search + Filter ── */}
-      <div className="px-3 py-2 border-b border-slate-700 space-y-2">
-        <div className="flex gap-1.5">
-          <div className="flex-1 relative">
-            <Search className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-slate-500" />
-            <input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Search projects…"
-              className="w-full bg-slate-800 border border-slate-700 rounded-md pl-7 pr-2 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
-            />
-            {search && (
-              <button onClick={() => setSearch('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white">
-                <X className="w-3 h-3" />
-              </button>
-            )}
-          </div>
-          <button
-            onClick={() => setShowFilter(v => !v)}
-            className={`flex items-center gap-1 px-2 py-1.5 rounded-md border text-xs transition-colors ${
-              showFilter || selectedEmirate !== 'All'
-                ? 'border-amber-400 text-amber-300 bg-amber-400/10'
-                : 'border-slate-700 text-slate-400 bg-slate-800 hover:border-slate-500'
-            }`}
-          >
-            <MapPin className="w-3 h-3" />
-            <ChevronDown className="w-3 h-3" />
+  // RENDER: Grid
+  // ─────────────────────────────────────────────────────────────────────────────
+  if (step === 'grid') {
+    return (
+      <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden">
+        {/* Header */}
+        <div className="px-3 py-2.5 border-b border-slate-700 flex items-center gap-2">
+          <Building2 className="w-4 h-4 text-amber-400 shrink-0" />
+          <span className="text-xs font-bold text-amber-400 uppercase tracking-wide flex-1">
+            AI Video Ad Generator
+          </span>
+          <button onClick={loadProjects} className="text-slate-500 hover:text-slate-300 transition-colors" title="Refresh">
+            <RefreshCw className="w-3.5 h-3.5" />
           </button>
         </div>
-        {showFilter && (
-          <div className="flex flex-wrap gap-1">
-            {emirates.map(em => (
-              <button
-                key={em}
-                onClick={() => setSelectedEmirate(em)}
-                className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${
-                  selectedEmirate === em
-                    ? 'border-amber-400 bg-amber-400/15 text-amber-300'
-                    : 'border-slate-700 text-slate-400 hover:border-slate-500'
-                }`}
-              >
-                {em === 'Abu Dhabi Emirate' ? 'Abu Dhabi' : em}
-              </button>
-            ))}
+
+        {/* URL Import */}
+        <div className="px-3 py-2 border-b border-slate-700">
+          <div className="flex gap-1.5">
+            <div className="flex-1 relative">
+              <Link2 className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-slate-500" />
+              <input
+                value={urlInput}
+                onChange={e => setUrlInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleUrlImport()}
+                placeholder="Paste a property link…"
+                className="w-full bg-slate-800 border border-slate-700 rounded-md pl-7 pr-2 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+              />
+            </div>
+            <button
+              onClick={handleUrlImport}
+              disabled={!urlInput.trim()}
+              className="px-2.5 py-1.5 rounded-md bg-amber-500 text-black text-xs font-bold hover:bg-amber-400 disabled:opacity-40 transition-all"
+            >
+              Import
+            </button>
           </div>
-        )}
-      </div>
+        </div>
 
-      {/* ── Project Grid ── */}
-      <ScrollArea className="flex-1">
-        <div className="p-3">
-          {loading ? (
-            <div className="flex items-center justify-center h-32">
-              <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
+        {/* Search + Filter */}
+        <div className="px-3 py-2 border-b border-slate-700 space-y-2">
+          <div className="flex gap-1.5">
+            <div className="flex-1 relative">
+              <Search className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-slate-500" />
+              <input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search projects…"
+                className="w-full bg-slate-800 border border-slate-700 rounded-md pl-7 pr-2 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+              />
+              {search && (
+                <button onClick={() => setSearch('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white">
+                  <X className="w-3 h-3" />
+                </button>
+              )}
             </div>
-          ) : filtered.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-32 gap-2 text-center">
-              <FolderOpen className="w-8 h-8 text-slate-600" />
-              <p className="text-xs text-slate-400">No projects found</p>
-              {search && <p className="text-xs text-slate-500">Try a different search</p>}
+            <button
+              onClick={() => setShowFilter(v => !v)}
+              className={`flex items-center gap-1 px-2 py-1.5 rounded-md border text-xs transition-colors ${
+                showFilter || selectedEmirate !== 'All'
+                  ? 'border-amber-400 text-amber-300 bg-amber-400/10'
+                  : 'border-slate-700 text-slate-400 bg-slate-800 hover:border-slate-500'
+              }`}
+            >
+              <MapPin className="w-3 h-3" />
+              <ChevronDown className="w-3 h-3" />
+            </button>
+          </div>
+          {showFilter && (
+            <div className="flex flex-wrap gap-1">
+              {emirates.map(em => (
+                <button
+                  key={em}
+                  onClick={() => setSelectedEmirate(em)}
+                  className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${
+                    selectedEmirate === em
+                      ? 'border-amber-400 bg-amber-400/15 text-amber-300'
+                      : 'border-slate-700 text-slate-400 hover:border-slate-500'
+                  }`}
+                >
+                  {em === 'Abu Dhabi Emirate' ? 'Abu Dhabi' : em}
+                </button>
+              ))}
             </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-2">
-              {filtered.map(proj => {
-                const isGenerating = generating === proj.id;
-                const isDone = generatedId === proj.id;
-                const isExpanded = expandedId === proj.id;
+          )}
+        </div>
 
-                return (
+        {/* Project Grid */}
+        <ScrollArea className="flex-1">
+          <div className="p-3">
+            {loading ? (
+              <div className="flex items-center justify-center h-32">
+                <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
+              </div>
+            ) : filtered.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-32 gap-2 text-center">
+                <FolderOpen className="w-8 h-8 text-slate-600" />
+                <p className="text-xs text-slate-400">No projects found</p>
+                {search && <p className="text-xs text-slate-500">Try a different search</p>}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2">
+                {filtered.map(proj => (
                   <div
                     key={proj.id}
-                    className={`bg-slate-800 border rounded-lg overflow-hidden transition-all group ${
-                      isDone
-                        ? 'border-amber-400/70 shadow-[0_0_12px_rgba(251,191,36,0.15)]'
-                        : 'border-slate-700 hover:border-amber-400/40'
-                    }`}
+                    className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden transition-all group hover:border-amber-400/40 cursor-pointer"
+                    onClick={() => openWizard(proj)}
                   >
-                    {/* Thumbnail */}
                     <div className="aspect-video bg-slate-700 relative overflow-hidden">
                       {proj.cover_image_url ? (
                         <img
@@ -290,42 +518,18 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                           <Building2 className="w-6 h-6 text-slate-500" />
                         </div>
                       )}
-
-                      {/* Featured badge */}
                       {proj.is_featured && (
                         <div className="absolute top-1 left-1 bg-amber-500/90 text-black text-[9px] font-bold px-1.5 py-0.5 rounded-sm">
                           ⭐ Featured
                         </div>
                       )}
-
-                      {/* Done overlay */}
-                      {isDone && (
-                        <div className="absolute inset-0 bg-amber-400/20 flex items-center justify-center">
-                          <div className="bg-black/70 rounded-full p-1.5">
-                            <Check className="w-4 h-4 text-amber-400" />
-                          </div>
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all flex items-center justify-center">
+                        <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-bold bg-amber-500 text-black transition-all">
+                          <Sparkles className="w-3 h-3" />
+                          Generate Ad
                         </div>
-                      )}
-
-                      {/* Hover overlay with CTA */}
-                      {!isDone && (
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all flex items-center justify-center">
-                          <button
-                            onClick={() => handleCreateVideoAd(proj)}
-                            disabled={!!generating}
-                            className="opacity-0 group-hover:opacity-100 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-bold bg-amber-500 text-black hover:bg-amber-400 transition-all disabled:opacity-50 animate-scale-in"
-                          >
-                            {isGenerating
-                              ? <Loader2 className="w-3 h-3 animate-spin" />
-                              : <Wand2 className="w-3 h-3" />
-                            }
-                            {isGenerating ? 'Building…' : 'Create Ad'}
-                          </button>
-                        </div>
-                      )}
+                      </div>
                     </div>
-
-                    {/* Info */}
                     <div className="p-2">
                       <p className="text-xs font-semibold text-white truncate leading-tight">{proj.name}</p>
                       <div className="flex items-center gap-1 mt-0.5">
@@ -348,65 +552,319 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                           )}
                         </div>
                       )}
-
-                      {/* Expand: show what will be added */}
-                      <button
-                        onClick={() => setExpandedId(isExpanded ? null : proj.id)}
-                        className="mt-1.5 text-[10px] text-slate-500 hover:text-slate-300 flex items-center gap-0.5 transition-colors"
-                      >
-                        <ChevronDown className={`w-3 h-3 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
-                        {isExpanded ? 'Hide' : 'What gets added?'}
-                      </button>
-
-                      {isExpanded && (
-                        <div className="mt-1.5 space-y-1 animate-fade-in">
-                          {[
-                            { icon: Film, label: 'Up to 5 project photos (4s each)' },
-                            { icon: Type, label: 'Lower-third: name, price, location' },
-                            { icon: Music, label: 'Property Ad background music' },
-                          ].map(({ icon: Icon, label }) => (
-                            <div key={label} className="flex items-start gap-1.5 text-[10px] text-slate-400">
-                              <Icon className="w-3 h-3 text-amber-400/70 mt-0.5 shrink-0" />
-                              <span>{label}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Re-add if already done */}
-                      {isDone && (
-                        <button
-                          onClick={() => handleCreateVideoAd(proj)}
-                          disabled={!!generating}
-                          className="mt-1.5 w-full flex items-center justify-center gap-1 py-1 rounded text-[10px] font-semibold border border-amber-400/50 text-amber-300 hover:bg-amber-400/10 transition-all"
-                        >
-                          <RefreshCw className="w-2.5 h-2.5" />
-                          Re-add to timeline
-                        </button>
-                      )}
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </ScrollArea>
+                ))}
+              </div>
+            )}
+          </div>
+        </ScrollArea>
 
-      {/* ── Footer: result count ── */}
-      <div className="px-3 py-1.5 border-t border-slate-700 flex items-center justify-between">
-        <span className="text-[10px] text-slate-500">
-          {loading ? 'Loading…' : `${filtered.length} of ${projects.length} projects`}
-        </span>
-        {selectedEmirate !== 'All' && (
-          <button
-            onClick={() => setSelectedEmirate('All')}
-            className="text-[10px] text-amber-400/70 hover:text-amber-400 flex items-center gap-1"
-          >
-            <X className="w-2.5 h-2.5" /> Clear filter
-          </button>
-        )}
+        <div className="px-3 py-1.5 border-t border-slate-700">
+          <span className="text-[10px] text-slate-500">
+            {loading ? 'Loading…' : `${filtered.length} of ${projects.length} projects — click any to generate`}
+          </span>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // RENDER: Wizard
+  // ─────────────────────────────────────────────────────────────────────────────
+  if (step === 'wizard' && selectedProject) {
+    const genPhases = [
+      { id: 'script', label: 'Writing script…', icon: '✍️' },
+      { id: 'tts', label: 'Generating voiceover…', icon: '🎙️' },
+      { id: 'assembly', label: 'Assembling timeline…', icon: '🎬' },
+    ];
+    const currentPhaseIdx = genPhases.findIndex(p => p.id === genPhase);
+
+    return (
+      <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden">
+        {/* Header */}
+        <div className="px-3 py-2.5 border-b border-slate-700 flex items-center gap-2">
+          <button onClick={backToGrid} className="text-slate-500 hover:text-white transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+          </button>
+          <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+          <span className="text-xs font-bold text-amber-400 uppercase tracking-wide flex-1 truncate">
+            Generate Video Ad
+          </span>
+        </div>
+
+        <ScrollArea className="flex-1">
+          <div className="p-3 space-y-4">
+            {/* Project Summary Card */}
+            <div className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden">
+              <div className="aspect-video relative overflow-hidden">
+                {selectedProject.cover_image_url ? (
+                  <img src={selectedProject.cover_image_url} alt={selectedProject.name}
+                    className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-slate-700">
+                    <Building2 className="w-8 h-8 text-slate-500" />
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2">
+                  <div>
+                    <p className="text-xs font-bold text-white leading-tight">{selectedProject.name}</p>
+                    <p className="text-[10px] text-slate-300">{selectedProject.emirate === 'Abu Dhabi Emirate' ? 'Abu Dhabi' : selectedProject.emirate}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="px-3 py-2 flex items-center gap-3">
+                {selectedProject.price_from && (
+                  <span className="text-[10px] text-amber-400 font-semibold">
+                    {formatPrice(selectedProject.price_from, selectedProject.price_to)}
+                  </span>
+                )}
+                {selectedProject.bedrooms_min !== null && (
+                  <span className="text-[10px] text-slate-400">
+                    {formatBeds(selectedProject.bedrooms_min, selectedProject.bedrooms_max)}
+                  </span>
+                )}
+                {selectedProject.property_type_label && (
+                  <span className="text-[10px] text-slate-500">{selectedProject.property_type_label}</span>
+                )}
+              </div>
+            </div>
+
+            {/* Voice & Language Settings */}
+            <div className="space-y-3">
+              <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wide flex items-center gap-1.5">
+                <Mic className="w-3.5 h-3.5 text-amber-400" />
+                Voice & Language
+              </p>
+
+              <MiniSelect
+                label="Language"
+                value={settings.language}
+                onChange={v => setSettings(s => ({ ...s, language: v }))}
+                options={SUPPORTED_LANGUAGES.map(l => ({ value: l.code, label: l.name }))}
+              />
+
+              <MiniSelect
+                label="Voice"
+                value={settings.voiceId}
+                onChange={v => setSettings(s => ({ ...s, voiceId: v }))}
+                options={VOICE_OPTIONS.map(v => ({ value: v.id, label: `${v.name} (${v.gender})` }))}
+              />
+
+              <ToggleGroup
+                label="Tone"
+                value={settings.tone}
+                onChange={v => setSettings(s => ({ ...s, tone: v as WizardSettings['tone'] }))}
+                options={[
+                  { value: 'luxury', label: 'Luxury' },
+                  { value: 'casual', label: 'Professional' },
+                  { value: 'urgent', label: 'Urgent' },
+                ]}
+              />
+
+              <ToggleGroup
+                label="Script Length"
+                value={String(settings.scriptDuration)}
+                onChange={v => setSettings(s => ({ ...s, scriptDuration: Number(v) as 30 | 60 | 90 }))}
+                options={[
+                  { value: '30', label: '30s' },
+                  { value: '60', label: '60s' },
+                  { value: '90', label: '90s' },
+                ]}
+              />
+            </div>
+
+            {/* Ad Style */}
+            <div className="space-y-3">
+              <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wide flex items-center gap-1.5">
+                <Film className="w-3.5 h-3.5 text-amber-400" />
+                Ad Style
+              </p>
+
+              <ToggleGroup
+                label="Format"
+                value={settings.format}
+                onChange={v => setSettings(s => ({ ...s, format: v as WizardSettings['format'] }))}
+                options={[
+                  { value: 'reels', label: '9:16' },
+                  { value: 'youtube', label: '16:9' },
+                  { value: 'square', label: '1:1' },
+                ]}
+              />
+
+              <ToggleGroup
+                label="Transitions"
+                value={settings.transition}
+                onChange={v => setSettings(s => ({ ...s, transition: v as WizardSettings['transition'] }))}
+                options={[
+                  { value: 'fade', label: 'Fade' },
+                  { value: 'slide-left', label: 'Slide' },
+                  { value: 'zoom-in', label: 'Zoom' },
+                ]}
+              />
+
+              <ToggleGroup
+                label="Text Style"
+                value={settings.textStyle}
+                onChange={v => setSettings(s => ({ ...s, textStyle: v as WizardSettings['textStyle'] }))}
+                options={[
+                  { value: 'lower-third', label: 'Lower 3rd' },
+                  { value: 'bold', label: 'Bold' },
+                  { value: 'clean', label: 'Clean' },
+                ]}
+              />
+            </div>
+
+            {/* Generation Progress */}
+            {generating && (
+              <div className="bg-slate-800 border border-amber-400/20 rounded-lg p-3 space-y-2">
+                {genPhases.map((phase, idx) => {
+                  const isDone = idx < currentPhaseIdx;
+                  const isActive = idx === currentPhaseIdx;
+                  return (
+                    <div key={phase.id} className={`flex items-center gap-2 text-xs transition-all ${
+                      isDone ? 'text-emerald-400' : isActive ? 'text-amber-300' : 'text-slate-600'
+                    }`}>
+                      {isDone ? (
+                        <Check className="w-3.5 h-3.5 shrink-0" />
+                      ) : isActive ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
+                      ) : (
+                        <div className="w-3.5 h-3.5 rounded-full border border-slate-700 shrink-0" />
+                      )}
+                      <span>{phase.icon} {phase.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+
+        {/* Generate Button */}
+        <div className="p-3 border-t border-slate-700">
+          <button
+            onClick={handleGenerate}
+            disabled={generating}
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-400 text-black text-sm font-bold hover:from-amber-400 hover:to-amber-300 disabled:opacity-60 transition-all shadow-lg shadow-amber-500/20"
+          >
+            {generating ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Generating…
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4" />
+                Generate Video Ad
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // RENDER: Result
+  // ─────────────────────────────────────────────────────────────────────────────
+  if (step === 'result' && selectedProject && result) {
+    return (
+      <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden">
+        {/* Header */}
+        <div className="px-3 py-2.5 border-b border-slate-700 flex items-center gap-2">
+          <button onClick={() => setStep('wizard')} className="text-slate-500 hover:text-white transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+          </button>
+          <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span className="text-xs font-bold text-emerald-400 uppercase tracking-wide flex-1">
+            Ready to Add
+          </span>
+        </div>
+
+        <ScrollArea className="flex-1">
+          <div className="p-3 space-y-3">
+            {/* Audio Player */}
+            <div className="bg-slate-800 border border-slate-700 rounded-lg p-3">
+              <div className="flex items-center gap-2 mb-2">
+                <Volume2 className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-xs font-semibold text-white">Voiceover Preview</span>
+                <span className="ml-auto text-[10px] text-slate-500">~{result.duration}s</span>
+              </div>
+              {audioUrl && (
+                <>
+                  <audio
+                    ref={audioRef}
+                    src={audioUrl}
+                    onEnded={() => setIsPlaying(false)}
+                    className="hidden"
+                  />
+                  <button
+                    onClick={toggleAudio}
+                    className="w-full flex items-center justify-center gap-2 py-2 rounded-md bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-semibold hover:bg-amber-500/25 transition-all"
+                  >
+                    {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                    {isPlaying ? 'Pause' : 'Play Voiceover'}
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Script */}
+            <div className="bg-slate-800 border border-slate-700 rounded-lg p-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold text-white">Generated Script</span>
+                <button
+                  onClick={copyScript}
+                  className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-amber-300 transition-colors"
+                >
+                  {copied ? <CheckCheck className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  {copied ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
+              <div className="bg-slate-700/50 rounded-md p-2 max-h-48 overflow-y-auto">
+                <p className="text-[11px] text-slate-300 leading-relaxed whitespace-pre-wrap">{result.script}</p>
+              </div>
+            </div>
+
+            {/* What will be added */}
+            <div className="bg-slate-800 border border-slate-700 rounded-lg p-3">
+              <p className="text-xs font-semibold text-white mb-2">Will be added to timeline:</p>
+              <div className="space-y-1.5">
+                {[
+                  { icon: Film, label: 'Up to 6 property photos with transitions', color: 'text-blue-400' },
+                  { icon: Mic, label: `AI voiceover in ${SUPPORTED_LANGUAGES.find(l => l.code === settings.language)?.name || 'English'}`, color: 'text-purple-400' },
+                  { icon: Type, label: `${settings.textStyle === 'lower-third' ? 'Lower-third' : settings.textStyle} text overlay`, color: 'text-emerald-400' },
+                ].map(({ icon: Icon, label, color }) => (
+                  <div key={label} className="flex items-start gap-2 text-[11px] text-slate-400">
+                    <Icon className={`w-3.5 h-3.5 ${color} mt-0.5 shrink-0`} />
+                    <span>{label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </ScrollArea>
+
+        {/* Add to Timeline Button */}
+        <div className="p-3 border-t border-slate-700 space-y-2">
+          <button
+            onClick={handleAddToTimeline}
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-sm font-bold hover:from-emerald-500 hover:to-emerald-400 transition-all shadow-lg shadow-emerald-500/20"
+          >
+            <Film className="w-4 h-4" />
+            Add to Timeline
+          </button>
+          <button
+            onClick={() => setStep('wizard')}
+            className="w-full py-1.5 text-xs text-slate-400 hover:text-white transition-colors"
+          >
+            ← Regenerate with different settings
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
 }
