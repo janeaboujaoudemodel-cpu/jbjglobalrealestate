@@ -1,136 +1,109 @@
 
-# Real-Time Audio Waveform Visualizer for Sound FX Panel
+# Beauty Filters: Real-Time CSS Preview on the Active Video Clip
 
-## What We're Building
+## What Needs to Change
 
-A CapCut-style waveform visualizer that replaces the current CSS `animate-bounce` fake bars. When a sound is playing, a canvas element renders real frequency data from the Web Audio API's `AnalyserNode` at 60fps — producing a live, responsive bar chart waveform just like CapCut's audio preview.
+Currently `BeautyFiltersPanel` is a fully self-contained island — it manages its own file upload, its own canvas, and applies filters there. The video clip playing in `VideoPreviewCanvas` knows nothing about what the Beauty panel is doing.
 
----
+The fix uses the **same state-bridge pattern already in place for overlay effects**: lift the filter state up into `AIVideoStudio.tsx`, pass it down into `VideoPreviewCanvas` where the `<video>` element lives, and apply a CSS `filter` string directly to that element in real time.
 
-## Current State
-
-The panel (`SoundEffectsPanel.tsx`) already has:
-- `audioRefs` holding `HTMLAudioElement` instances per sound
-- A simple 5-bar CSS bounce animation (fake, not real audio data)
-- A thin progress bar below each card
-
-The fake waveform looks like this:
-```text
-[▐▌▐▌▐] <-- 5 fixed bars, CSS bounce, no audio data
-```
-
-The real waveform will look like this (live FFT bars on a canvas):
-```text
-[▁▃▇▅▂▆▄▁▃▆▇▅▂▁] <-- 14 frequency bars driven by AnalyserNode, 60fps
-```
+No canvas capture or frame extraction is needed — CSS `filter` works natively on `<video>` elements in all modern browsers.
 
 ---
 
-## Architecture: Web Audio API Chain
-
-When a user clicks Play, the current code just calls `new Audio(url).play()`. We need to route audio through the Web Audio API to tap real frequency data:
+## Architecture
 
 ```text
-HTMLMediaElementSourceNode
-        ↓
-   AnalyserNode  ←── reads frequencyData[] each animation frame
-        ↓
-AudioContext.destination (speakers)
+BeautyFiltersPanel
+  └── calls onFilterChange(adjustments) on every slider move / preset click
+
+AIVideoStudio.tsx
+  └── activeBeautyFilter state  ← lifted here
+  └── passes to VideoPreviewCanvas as prop
+
+VideoPreviewCanvas
+  └── applies computed CSS filter string to the <video> element's style
+  └── also applies to <img> elements if an image clip is active
 ```
 
-The `AnalyserNode` runs `getByteFrequencyData(dataArray)` each `requestAnimationFrame` tick, populating a `Uint8Array` with frequency amplitude values (0–255). We sample ~28 buckets from this array and draw them as bars onto a `<canvas>` element.
+The CSS filter string computed from slider values:
+```
+brightness(105%) contrast(110%) saturate(90%) sepia(8%) blur(0px)
+```
+Vignette is a radial gradient `<div>` overlay (CSS filter cannot do vignette), so it is handled as an absolutely-positioned overlay div on top of the video, matching what the canvas version already does.
 
 ---
 
-## Implementation Plan
+## Files to Change
 
-### 1. New hook: `useAudioAnalyser`
+### 1. `src/components/ai-video-studio/features/BeautyFiltersPanel.tsx`
+**What changes:**
+- Add an `onFilterChange?: (adjustments: Adjustments | null) => void` prop
+- Keep the existing upload/canvas section intact — it still works for downloading filtered images
+- Every time a slider moves (`updateAdjustment`) or a preset is clicked (`applyPreset`), also call `onFilterChange(adjustments)` with the new values
+- Add a "Clear Filter" button that calls `onFilterChange(null)` and resets local state to the "none" preset — so users can remove the live preview from the canvas
+- The panel still shows the upload/canvas section below (for image download use), but the top of the panel now shows a "Live Preview" status badge when the filter is active on the canvas
+- Remove the self-contained upload gate from the top-of-panel path — the presets and sliders are shown immediately at the top (like the Resize panel fix), with the image download section below as an optional secondary feature
 
-Create `src/components/ai-video-studio/hooks/useAudioAnalyser.ts`
+### 2. `src/components/ai-video-studio/AIVideoStudio.tsx`
+**What changes:**
+- Add `activeBeautyFilter` state: `useState<Adjustments | null>(null)` where `Adjustments` is imported or inlined as the same type used by the panel
+- Pass `onFilterChange={setActiveBeautyFilter}` to `<BeautyFiltersPanel>`
+- Pass `beautyFilter={activeBeautyFilter}` to `<VideoPreviewCanvas>`
 
-This hook encapsulates all Web Audio API state so `SoundEffectsPanel` stays clean:
-
-```typescript
-// Returns per-soundId: { sourceNode, analyser }
-// And draw function: drawWaveform(canvasEl, analyserNode)
-```
-
-**Key details:**
-- Uses a single shared `AudioContext` (lazy singleton — created once on first play, reused)
-- `MediaElementAudioSourceNode` is created once per `HTMLAudioElement` (Chrome throws if you wrap the same element twice — tracked via a `WeakMap`)
-- `AnalyserNode` settings: `fftSize: 256` (gives 128 frequency bins), `smoothingTimeConstant: 0.75`
-- `getByteFrequencyData()` reads into a `Uint8Array(analyser.frequencyBinCount)`
-- We use bins 0–56 (lower half = audible frequencies) and sample every 4th bin → **14 bars**
-- `requestAnimationFrame` loop is started on play and cancelled on stop via a `rafId` ref
-
-### 2. New component: `SoundWaveform`
-
-Create a small React component that accepts `{ analyser: AnalyserNode | null, isPlaying: boolean, width?: number, height?: number }`.
-
-It owns a `<canvas>` ref and runs its own `useEffect`-based RAF loop when `isPlaying && analyser`:
-
-```typescript
-useEffect(() => {
-  if (!isPlaying || !analyser || !canvasRef.current) return;
-  const ctx = canvasRef.current.getContext('2d')!;
-  const dataArray = new Uint8Array(analyser.frequencyBinCount);
-  let rafId: number;
-  const draw = () => {
-    rafId = requestAnimationFrame(draw);
-    analyser.getByteFrequencyData(dataArray);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Draw bars from sampled frequency data with amber gradient
-    ...
-  };
-  draw();
-  return () => cancelAnimationFrame(rafId);
-}, [isPlaying, analyser]);
-```
-
-When `!isPlaying`, it renders a flat idle state (14 thin bars at ~25% height, no animation).
-
-**Visual design (CapCut-style):**
-- Canvas size: `112px × 28px` (matches existing 5-bar space, scaled up)
-- Bar width: `5px`, gap: `3px`, 14 bars
-- Colors: amber gradient (`#f59e0b` bottom → `#fcd34d` top) when playing
-- Idle: `#475569` (slate-600) flat bars at height 6px
-- Bars smoothly animate using the `smoothingTimeConstant: 0.75` — no manual lerp needed
-
-### 3. Update `SoundEffectsPanel.tsx`
-
-**`handlePlay` changes:**
-1. Resume `AudioContext` if it's in `suspended` state (Chrome autoplay policy requires user gesture)
-2. Create/reuse `MediaElementAudioSourceNode` via `WeakMap` check
-3. Create/reuse `AnalyserNode` per sound ID (stored in `analyserRefs`)
-4. Chain: `sourceNode → analyser → audioCtx.destination`
-5. Store `analyser` reference keyed by `sound.id` in `analyserRefs`
-
-**Template changes:**
-- Replace the 5-div fake bars with `<SoundWaveform analyser={analyserRefs.current[sound.id]} isPlaying={isPlaying} />`
-- The progress bar below stays as-is (it's still useful for position)
-
-**Cleanup:**
-- On component unmount, cancel all RAF loops (handled by `SoundWaveform` cleanup)
-- `stopAll` already pauses/resets audio elements — analyser nodes don't need cleanup (they stop producing data automatically)
+### 3. `src/components/ai-video-studio/preview/VideoPreviewCanvas.tsx`
+**What changes:**
+- Add `beautyFilter?: { brightness: number; contrast: number; saturation: number; warmth: number; blur: number; vignette: number } | null` to the props interface
+- Add a `computeCssFilter(f)` helper inside the file that converts the adjustment numbers into a valid CSS filter string:
+  ```typescript
+  function computeCssFilter(f: BeautyAdjustments): string {
+    return [
+      `brightness(${100 + f.brightness}%)`,
+      `contrast(${100 + f.contrast}%)`,
+      `saturate(${100 + f.saturation}%)`,
+      f.warmth > 0 ? `sepia(${f.warmth / 2}%)` : `hue-rotate(${f.warmth}deg)`,
+      `blur(${f.blur / 10}px)`,
+    ].join(' ');
+  }
+  ```
+- Apply the computed filter string to the `<video>` element via inline `style={{ filter: cssFilter }}`. When `beautyFilter` is null, `filter` is `'none'`
+- Add a vignette overlay `<div>` (absolute, pointer-events-none) with `background: radial-gradient(...)` whose opacity is driven by `beautyFilter.vignette`. When `beautyFilter` is null or vignette is 0, the div renders with opacity 0 (or is not rendered)
+- Add a small "Beauty Active" pill badge in the top-left of the preview (next to the time counter) when `beautyFilter !== null` so users know the filter is live. Clicking it clears the filter (requires passing a `onClearBeautyFilter` callback)
 
 ---
 
-## Files to Create/Edit
+## Precise CSS Filter Mapping (matches BeautyFiltersPanel canvas logic exactly)
 
-| File | Action | What Changes |
+| Slider | Canvas (existing) | CSS filter (new) |
 |---|---|---|
-| `src/components/ai-video-studio/hooks/useAudioAnalyser.ts` | **Create** | Shared AudioContext singleton + per-element analyser setup |
-| `src/components/ai-video-studio/features/SoundWaveform.tsx` | **Create** | Canvas-based 60fps waveform component |
-| `src/components/ai-video-studio/features/SoundEffectsPanel.tsx` | **Edit** | Wire up hook, replace fake bars with `<SoundWaveform>` |
+| brightness | `brightness(${100+v}%)` | `brightness(${100+v}%)` — identical |
+| contrast | `contrast(${100+v}%)` | `contrast(${100+v}%)` — identical |
+| saturation | `saturate(${100+v}%)` | `saturate(${100+v}%)` — identical |
+| warmth > 0 | `sepia(${v/2}%)` | `sepia(${v/2}%)` — identical |
+| warmth < 0 | `hue-rotate(${v}deg)` | `hue-rotate(${v}deg)` — identical |
+| blur | `blur(${v/10}px)` | `blur(${v/10}px)` — identical |
+| vignette | radial gradient on canvas | absolute overlay `<div>` with same radial gradient |
 
-No backend changes, no new dependencies. Pure Web Audio API + React canvas.
+The mapping is 1:1 with the existing canvas implementation, so the preview will match the downloaded image exactly.
 
 ---
 
-## Edge Cases Handled
+## UX Flow (CapCut-style)
 
-- **Safari iOS**: `AudioContext` requires `resume()` after user gesture — `handlePlay` calls `audioCtx.resume()` before playing
-- **Chrome duplicate wrapping**: `WeakMap<HTMLAudioElement, MediaElementAudioSourceNode>` prevents the "already connected to AudioContext" error
-- **Panel unmount mid-play**: `SoundWaveform`'s `useEffect` cleanup cancels the RAF loop
-- **Silent / zero data**: When frequency data is all zeros (before audio loads), bars render at idle height
-- **Multiple simultaneous calls**: `stopAll()` is called before starting a new sound, so only one analyser is ever active at a time
+1. User clicks **Beauty** tab in the toolbar
+2. The Beauty panel opens below — presets and sliders are shown **immediately** (no upload needed)
+3. User clicks **"Warm Glow"** preset → sliders update AND the video in the preview canvas instantly shows the warm glow CSS filter
+4. User drags the **Brightness** slider → preview updates in real time (every `onChange` event)
+5. A small **"Beauty: ON"** badge appears in the top-left of the preview canvas
+6. User clicks **"Add to Timeline"** (new button) → a toast confirms the filter is baked in, or clicking **"Clear"** removes it from the canvas
+7. The image download section (upload your own file, download filtered PNG) remains available below the presets/sliders as a secondary "Export frame" feature
+
+---
+
+## Summary of File Changes
+
+| File | Change |
+|---|---|
+| `BeautyFiltersPanel.tsx` | Add `onFilterChange` prop; call it on every adjustment; show presets/sliders immediately without upload gate; add Clear button |
+| `AIVideoStudio.tsx` | Add `activeBeautyFilter` state; wire `onFilterChange` to panel; pass `beautyFilter` to canvas |
+| `VideoPreviewCanvas.tsx` | Accept `beautyFilter` prop; apply computed CSS filter to `<video>` style; add vignette overlay div; show "Beauty: ON" badge |
