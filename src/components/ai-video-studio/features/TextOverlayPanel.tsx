@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { Plus, AlignLeft, AlignCenter, AlignRight, Bold, Italic } from 'lucide-react';
+import { Plus, AlignLeft, AlignCenter, AlignRight, Bold, Italic, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -26,8 +26,11 @@ const TEXT_ANIMATIONS = [
   { id: 'glitch',     label: 'Glitch',     emoji: '⚡' },
 ];
 
+type PresetCategory = 'Title' | 'Lower Third' | 'Caption' | 'Quote' | 'Social';
+
 type PresetItem = {
   label: string;
+  category: PresetCategory;
   content: string;
   fontFamily: string;
   fontSize: number;
@@ -41,12 +44,19 @@ type PresetItem = {
   hoverAnimation: 'fade-in' | 'slide-up' | 'slide-down' | 'zoom-in' | 'typewriter';
 };
 
+const PRESET_CATEGORIES: PresetCategory[] = ['Title', 'Lower Third', 'Caption', 'Quote', 'Social'];
+
 const TEXT_PRESETS: PresetItem[] = [
-  { label: 'Clean Title',  content: 'Your Title Here', fontFamily: 'Inter, sans-serif',       fontSize: 52, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'transparent',    position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'   },
-  { label: 'Lower Third',  content: 'Name / Title',    fontFamily: 'Inter, sans-serif',       fontSize: 28, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.7)', position: 'bottom', style: 'lower-third', textAlign: 'left',   hoverAnimation: 'slide-up'  },
-  { label: 'Social Bold',  content: 'BIG TEXT',        fontFamily: 'Impact, sans-serif',      fontSize: 72, fontWeight: 'bold',   color: '#FFD700', backgroundColor: 'transparent',    position: 'center', style: 'bold',        textAlign: 'center', hoverAnimation: 'zoom-in'   },
-  { label: 'Luxury Quote', content: '"Your Quote"',    fontFamily: 'Playfair Display, serif', fontSize: 38, fontWeight: 'normal', color: '#C8A766', backgroundColor: 'transparent',    position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'   },
-  { label: 'Caption Box',  content: 'Caption text',    fontFamily: 'Inter, sans-serif',       fontSize: 24, fontWeight: 'normal', color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.6)', position: 'bottom', style: 'highlight',   textAlign: 'center', hoverAnimation: 'slide-down'},
+  { label: 'Clean Title',    category: 'Title',       content: 'Your Title Here',   fontFamily: 'Inter, sans-serif',       fontSize: 52, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'transparent',     position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'    },
+  { label: 'Cinematic Title',category: 'Title',       content: 'EPIC SCENE',        fontFamily: 'Impact, sans-serif',      fontSize: 60, fontWeight: 'bold',   color: '#F5E6C8', backgroundColor: 'transparent',     position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'zoom-in'    },
+  { label: 'Lower Third',    category: 'Lower Third', content: 'Name / Title',      fontFamily: 'Inter, sans-serif',       fontSize: 28, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.7)', position: 'bottom', style: 'lower-third', textAlign: 'left',   hoverAnimation: 'slide-up'   },
+  { label: 'Dubai Lower 3rd',category: 'Lower Third', content: 'Luxury Property',   fontFamily: 'Inter, sans-serif',       fontSize: 26, fontWeight: 'bold',   color: '#FFD700', backgroundColor: 'rgba(0,0,0,0.75)',position: 'bottom', style: 'lower-third', textAlign: 'left',   hoverAnimation: 'slide-up'   },
+  { label: 'Caption Box',    category: 'Caption',     content: 'Caption text',      fontFamily: 'Inter, sans-serif',       fontSize: 24, fontWeight: 'normal', color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.6)', position: 'bottom', style: 'highlight',   textAlign: 'center', hoverAnimation: 'slide-down' },
+  { label: 'Subtitle',       category: 'Caption',     content: 'Subtitle goes here',fontFamily: 'Inter, sans-serif',       fontSize: 22, fontWeight: 'normal', color: '#E2E8F0', backgroundColor: 'rgba(0,0,0,0.5)', position: 'bottom', style: 'highlight',   textAlign: 'center', hoverAnimation: 'fade-in'    },
+  { label: 'Luxury Quote',   category: 'Quote',       content: '"Your Quote"',      fontFamily: 'Playfair Display, serif', fontSize: 38, fontWeight: 'normal', color: '#C8A766', backgroundColor: 'transparent',     position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'    },
+  { label: 'Minimal Quote',  category: 'Quote',       content: '— Author Name',     fontFamily: 'Georgia, serif',          fontSize: 30, fontWeight: 'normal', color: '#CBD5E1', backgroundColor: 'transparent',     position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'    },
+  { label: 'Social Bold',    category: 'Social',      content: 'BIG TEXT',          fontFamily: 'Impact, sans-serif',      fontSize: 72, fontWeight: 'bold',   color: '#FFD700', backgroundColor: 'transparent',     position: 'center', style: 'bold',        textAlign: 'center', hoverAnimation: 'zoom-in'    },
+  { label: 'Reel Hook',      category: 'Social',      content: 'Watch till end 👀', fontFamily: 'Inter, sans-serif',       fontSize: 40, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'transparent',     position: 'top',    style: 'bold',        textAlign: 'center', hoverAnimation: 'zoom-in'    },
 ];
 
 // Per-animation keyframe CSS injected once into <head>
@@ -225,6 +235,8 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
   const [duration, setDuration]     = useState(4);
   const [opacity, setOpacity]       = useState(1);
   const [lastAppliedPreset, setLastAppliedPreset] = useState<string | null>(null);
+  const [presetSearch, setPresetSearch]           = useState('');
+  const [activeCategory, setActiveCategory]       = useState<PresetCategory | null>(null);
 
   const applyPreset = useCallback((preset: PresetItem) => {
     setContent(preset.content);
@@ -282,36 +294,110 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
         {/* ── PRESETS ─────────────────────────────── */}
         <section>
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Presets</p>
-          <div className="grid grid-cols-2 gap-2">
-            {TEXT_PRESETS.map(p => (
-              <TextPreviewThumbnail
-                key={p.label}
-                preset={p}
-                isActive={lastAppliedPreset === p.label}
-                onClick={() => {
-                  applyPreset(p);
-                  setLastAppliedPreset(p.label);
-                  onAddTextClip({
-                    text: {
-                      content: p.content,
-                      fontFamily: p.fontFamily,
-                      fontSize: p.fontSize,
-                      fontWeight: p.fontWeight,
-                      color: p.color,
-                      backgroundColor: p.backgroundColor === 'transparent' ? undefined : p.backgroundColor,
-                      textAlign: p.textAlign,
-                      position: p.position,
-                      style: p.style,
-                    },
-                    startTime: currentTime,
-                    duration: 4,
-                    animation: 'fade-in',
-                  });
-                  toast.success(`"${p.label}" added to timeline!`);
-                }}
-              />
+
+          {/* Search bar */}
+          <div className="relative mb-2">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none" />
+            <input
+              type="text"
+              value={presetSearch}
+              onChange={e => setPresetSearch(e.target.value)}
+              placeholder="Search presets…"
+              className="w-full h-10 bg-slate-800 border border-slate-600 rounded-lg pl-8 pr-8 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500/60 transition-colors"
+            />
+            {presetSearch && (
+              <button
+                onClick={() => setPresetSearch('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Category filter chips */}
+          <div className="flex flex-wrap gap-1.5 mb-3">
+            <button
+              onClick={() => setActiveCategory(null)}
+              className={`px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide border transition-all duration-150 ${
+                activeCategory === null
+                  ? 'bg-amber-500/20 border-amber-500/60 text-amber-300'
+                  : 'border-slate-700 bg-slate-800/60 text-slate-400 hover:border-slate-500 hover:text-slate-300'
+              }`}
+            >
+              All
+            </button>
+            {PRESET_CATEGORIES.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(prev => prev === cat ? null : cat)}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide border transition-all duration-150 ${
+                  activeCategory === cat
+                    ? 'bg-amber-500/20 border-amber-500/60 text-amber-300'
+                    : 'border-slate-700 bg-slate-800/60 text-slate-400 hover:border-slate-500 hover:text-slate-300'
+                }`}
+              >
+                {cat}
+              </button>
             ))}
           </div>
+
+          {/* Filtered grid */}
+          {(() => {
+            const filtered = TEXT_PRESETS.filter(p => {
+              const matchesSearch = presetSearch === '' || p.label.toLowerCase().includes(presetSearch.toLowerCase()) || p.content.toLowerCase().includes(presetSearch.toLowerCase());
+              const matchesCategory = activeCategory === null || p.category === activeCategory;
+              return matchesSearch && matchesCategory;
+            });
+
+            if (filtered.length === 0) {
+              return (
+                <div className="flex flex-col items-center justify-center py-8 text-center">
+                  <Search className="w-6 h-6 text-slate-600 mb-2" />
+                  <p className="text-xs text-slate-500">No presets match your search</p>
+                  <button
+                    onClick={() => { setPresetSearch(''); setActiveCategory(null); }}
+                    className="mt-2 text-[10px] text-amber-400 hover:text-amber-300 transition-colors"
+                  >
+                    Clear filters
+                  </button>
+                </div>
+              );
+            }
+
+            return (
+              <div className="grid grid-cols-2 gap-2">
+                {filtered.map(p => (
+                  <TextPreviewThumbnail
+                    key={p.label}
+                    preset={p}
+                    isActive={lastAppliedPreset === p.label}
+                    onClick={() => {
+                      applyPreset(p);
+                      setLastAppliedPreset(p.label);
+                      onAddTextClip({
+                        text: {
+                          content: p.content,
+                          fontFamily: p.fontFamily,
+                          fontSize: p.fontSize,
+                          fontWeight: p.fontWeight,
+                          color: p.color,
+                          backgroundColor: p.backgroundColor === 'transparent' ? undefined : p.backgroundColor,
+                          textAlign: p.textAlign,
+                          position: p.position,
+                          style: p.style,
+                        },
+                        startTime: currentTime,
+                        duration: 4,
+                        animation: 'fade-in',
+                      });
+                      toast.success(`"${p.label}" added to timeline!`);
+                    }}
+                  />
+                ))}
+              </div>
+            );
+          })()}
         </section>
 
         {/* ── LIVE MINI PREVIEW ───────────────────── */}
