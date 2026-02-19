@@ -126,6 +126,7 @@ interface VideoPreviewCanvasProps {
   onUpload?: (files: FileList) => void;
   onOpenTool?: (toolId: string) => void;
   activeOverlayEffect?: string | null;
+  hoverOverlayEffect?: string | null;
   beautyFilter?: BeautyAdjustments | null;
   onClearBeautyFilter?: () => void;
 }
@@ -237,6 +238,7 @@ export function VideoPreviewCanvas({
   onUpload,
   onOpenTool,
   activeOverlayEffect = null,
+  hoverOverlayEffect = null,
   beautyFilter = null,
   onClearBeautyFilter,
 }: VideoPreviewCanvasProps) {
@@ -509,8 +511,10 @@ export function VideoPreviewCanvas({
                   );
                   })}
 
-              {/* Premium Effect Overlay on canvas */}
-              <PremiumEffectOverlay effectId={activeOverlayEffect} />
+              {/* Locked effect overlay */}
+              <PremiumEffectOverlay effectId={activeOverlayEffect} isBurst={false} />
+              {/* Hover burst preview overlay */}
+              <PremiumEffectOverlay effectId={hoverOverlayEffect} isBurst={true} />
 
               {/* ── Beauty: ON badge ── */}
               {beautyFilter && (

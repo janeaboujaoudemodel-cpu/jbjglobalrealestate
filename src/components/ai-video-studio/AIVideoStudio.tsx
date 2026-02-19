@@ -80,6 +80,7 @@ export function AIVideoStudio() {
   const [isExporting, setIsExporting] = useState(false);
   const [subtitles, setSubtitles] = useState<SubtitleSegment[]>([]);
   const [activeOverlayEffect, setActiveOverlayEffect] = useState<string | null>(null);
+  const [hoverOverlayEffect, setHoverOverlayEffect] = useState<string | null>(null);
   const [activeBeautyFilter, setActiveBeautyFilter] = useState<import('./features/BeautyFiltersPanel').BeautyAdjustments | null>(null);
 
   useEffect(() => {
@@ -266,6 +267,7 @@ export function AIVideoStudio() {
           onUpload={handleUpload}
           onOpenTool={(toolId) => layoutRef.current?.toggleTool(toolId)}
           activeOverlayEffect={activeOverlayEffect}
+          hoverOverlayEffect={hoverOverlayEffect}
           beautyFilter={activeBeautyFilter}
           onClearBeautyFilter={() => setActiveBeautyFilter(null)}
         />
@@ -369,6 +371,7 @@ export function AIVideoStudio() {
         <OverlayEffectsPanel
           activeEffect={activeOverlayEffect}
           onPreviewEffect={setActiveOverlayEffect}
+          onHoverEffect={setHoverOverlayEffect}
           onAddEffect={(effectId) => {
             // Add effect clip to timeline
             const videoTrack = project.tracks.find(t => t.type === 'video');

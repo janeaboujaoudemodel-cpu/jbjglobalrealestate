@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 
 interface PremiumEffectOverlayProps {
   effectId: string | null;
+  isBurst?: boolean; // true = hover-triggered 2s burst that fades out
 }
 
 interface Particle {
@@ -392,17 +393,60 @@ const EFFECT_MAP: Record<string, React.FC> = {
   'luxury-rain':     LuxuryRain,
 };
 
-export function PremiumEffectOverlay({ effectId }: PremiumEffectOverlayProps) {
-  if (!effectId) return null;
+export function PremiumEffectOverlay({ effectId, isBurst = false }: PremiumEffectOverlayProps) {
+  const [opacity, setOpacity] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+  // Animate in on mount / effectId change, and animate out for burst mode
+  useEffect(() => {
+    if (!effectId) {
+      setOpacity(0);
+      const t = setTimeout(() => setVisible(false), 300);
+      return () => clearTimeout(t);
+    }
+    setVisible(true);
+    // Fade in
+    const inTimer = requestAnimationFrame(() => setOpacity(1));
+
+    if (isBurst) {
+      // Start fading out at 1.5 s so it's gone by 2 s
+      const outTimer = setTimeout(() => setOpacity(0), 1500);
+      const hideTimer = setTimeout(() => setVisible(false), 2000);
+      return () => {
+        cancelAnimationFrame(inTimer);
+        clearTimeout(outTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+    return () => cancelAnimationFrame(inTimer);
+  }, [effectId, isBurst]);
+
+  if (!effectId || !visible) return null;
   const EffectComponent = EFFECT_MAP[effectId];
   if (!EffectComponent) return null;
 
   return (
-    <div
-      className="absolute inset-0 pointer-events-none overflow-hidden"
-      style={{ zIndex: 20 }}
-    >
-      <EffectComponent />
-    </div>
+    <>
+      {isBurst && (
+        <style>{`
+          @keyframes burstPulse {
+            0%   { opacity: 0; }
+            15%  { opacity: 1; }
+            75%  { opacity: 1; }
+            100% { opacity: 0; }
+          }
+        `}</style>
+      )}
+      <div
+        className="absolute inset-0 pointer-events-none overflow-hidden"
+        style={{
+          zIndex: 20,
+          opacity,
+          transition: isBurst ? 'opacity 0.3s ease-out' : 'opacity 0.2s ease-in',
+        }}
+      >
+        <EffectComponent />
+      </div>
+    </>
   );
 }
