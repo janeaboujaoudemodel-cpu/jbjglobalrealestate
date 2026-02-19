@@ -1,160 +1,132 @@
 
-# Fix: 5 Issues — Scroll-to-Top After Wizard, Header Padding, Typography/Density/Shape Previews, Dubai Arabic Label & "Ready to Get Started" Suppression
+# Two Changes: Featured Area Cards with Photos + Champagne Book Redesign
 
-## Issues Identified
+## Change 1 — AreasWeCover: Featured Photo Cards (8 areas, 2 rows)
 
-### Issue 1 — Clicking "Next" in Wizard Scrolls to "Ready to Get Started"
-**Root Cause:** The stamp generator wizard pages (`/toolkit/stamp-generator/new`, `/projects`, `/generate`) are rendered inside `MainLayout.tsx`. `MainLayout` renders `CombinedContactNewsletter` (the "Ready to Get Started" section) and `Footer` for every non-back-office route. The stamp generator routes are NOT in `isBackOfficeRoute`, so the section renders below the page content. When the wizard creates a project and calls `navigate(...)`, the browser stays at its current scroll position. If the user had scrolled down or if the layout pushed scroll position downward, the "Ready to Get Started" section is visible. Additionally, `window.scrollTo(0,0)` is never called after navigation.
+### Current State
+The component shows 12 plain text links in a 6-column grid with no photos. Just a champagne pill with the area name. No trending badges.
 
-**Fix (two parts):**
+### New Design
+- Limit to **8 areas** (2 rows of 4 on desktop, 2 rows of 2 on mobile)
+- Each card is a **tall photo card** (~200px) with:
+  - Full-bleed `background-image` photo from `image_url` (already in the DB — all 8 top areas have real photos)
+  - Champagne-gold gradient overlay from transparent at top to deep black at bottom
+  - Area name in white bold text at the bottom
+  - If `is_trending = true` → gold "Trending" pill badge top-right
+  - If `is_high_demand = true` → red/amber "High Demand" pill badge top-right (below trending if both)
+  - Gold 3px border on hover with lift animation (`whileHover={{ y: -6 }}`)
+  - Property count shown as a small badge bottom-left: e.g. "184 Projects"
+- Grid: `grid-cols-2 md:grid-cols-4` → 2 rows of 4 cards on desktop, 2 rows of 2 on mobile
+- Fallback: if no `image_url`, show the champagne gradient with JBJ monogram at 10% opacity (same standard as area guides)
 
-**Part A — Suppress "Ready to Get Started" and Footer on all toolkit/stamp-generator routes:**
-In `MainLayout.tsx`, expand the `isBackOfficeRoute` (or add a parallel `isToolkitRoute`) check to also exclude toolkit generator pages from rendering `CombinedContactNewsletter` and `Footer`:
-```tsx
-const isToolkitGeneratorRoute =
-  location.pathname.startsWith('/toolkit/stamp-generator/') &&
-  (location.pathname.includes('/new') ||
-   location.pathname.includes('/generate') ||
-   location.pathname.includes('/export') ||
-   location.pathname.includes('/projects'));
+### Data Available
+From the DB query, all 8 top areas have valid photo URLs in `image_url` pointing to Supabase Storage:
+- JVC: `jvc-jumeirah-village-circle.jpg` (is_high_demand: true)
+- Dubai Islands: `dubai-islands.png` (is_trending: true, is_high_demand: true)
+- Business Bay: `business-bay.png` (is_trending: true, is_high_demand: true)
+- Dubailand: `dubailand-residence-complex.jpg`
+- Al Marjan Island: `al-marjan-island.png` (is_trending: true)
+- Arjan: `arjan.png`
+- JVT: `jvt-jumeirah-village-triangle.png`
+- Abu Dhabi: `abu-dhabi.png`
+
+### Layout Structure
+```text
+┌─────────────────────────────────────────────────────────────┐
+│  [MapPin] EXPLORE DUBAI          Areas We Cover             │
+│                                                             │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
+│  │  PHOTO   │ │  PHOTO   │ │  PHOTO   │ │  PHOTO   │      │
+│  │          │ │[Trending]│ │[Trending]│ │          │      │
+│  │          │ │          │ │          │ │          │      │
+│  │ 184 proj │ │ Dubai    │ │ Business │ │ Dubailand│      │
+│  │ JVC      │ │ Islands  │ │ Bay      │ │          │      │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘      │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
+│  │  PHOTO   │ │  PHOTO   │ │  PHOTO   │ │  PHOTO   │      │
+│  │[Trending]│ │          │ │          │ │          │      │
+│  │ Al Marjan│ │ Arjan    │ │ JVT      │ │ Abu Dhabi│      │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘      │
+│                                                             │
+│              [ View All Areas → ]                           │
+└─────────────────────────────────────────────────────────────┘
 ```
-Then:
-```tsx
-{!isBackOfficeRoute && !isToolkitGeneratorRoute && <CombinedContactNewsletter />}
-{!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
-```
-
-This ensures the "Ready to Get Started" section is completely absent from all stamp generator tool pages.
-
-**Part B — Scroll to top on step advancement and on navigation:**
-In `StampProjectWizard.tsx`, after calling `setStep(s => s + 1)`, immediately `window.scrollTo({ top: 0, behavior: 'auto' })`. Also in `handleCreate`, before `navigate(...)`, scroll to top.
 
 ---
 
-### Issue 2 — Sticky Inner Header Still Touches the Global Header
-**Root Cause:** The global header is `h-24 sm:h-28 lg:h-32`. `MainLayout` applies `pt-16 sm:pt-20 md:pt-24 lg:pt-28` to the `<main>` element for non-hero pages. However, the sticky inner header in `StampProjectWizard.tsx` uses `sticky top-24 sm:top-28 lg:top-32` — but the `<main>` pt already accounts for the global header at the top of the page scroll. When the page is at the top, the inner sticky header is at position `pt-value` from page top, then tries to stick at `top-24+`. The inner sticky bar uses `z-10` which is fine but its `top` offset should match the GlobalHeader exactly.
+## Change 2 — MarketReportHeroBook: Champagne/Pearl/Gold Theme
 
-The real issue is that `MainLayout` adds only `pt-16 sm:pt-20 md:pt-24 lg:pt-28` (max 112px on lg) while the GlobalHeader is `h-32` (128px on lg). The sticky offset of `top-32` (128px) is correct. However, the `<main>` padding-top max is `lg:pt-28` = 112px, which is less than the header (128px). So the page content starts at 112px, but the GlobalHeader is 128px tall — the top 16px of content is hidden behind the header.
+### Current State
+The book cover uses a **dark theme**: `bg-gradient-to-br from-zinc-900 via-black to-zinc-900`, white title text, zinc-grey borders, very dark interior. The spine is dark zinc. The pages edge is zinc.
 
-**Fix:**
-Update `MainLayout.tsx` to use `pt-24 sm:pt-28 lg:pt-32` to perfectly match the GlobalHeader height (currently `h-24 sm:h-28 lg:h-32`). This single change fixes the overlap for ALL non-hero tool pages — not just the stamp generator.
+The **surrounding section** in `Index.tsx` (line 439) already has the correct champagne palette: `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`.
 
-Then the inner sticky headers in wizard/dashboard/generator/export can stay at `sticky top-24 sm:top-28 lg:top-32` (already set in previous fix) and they will correctly appear immediately below the global header.
+### User Requirement
+The book itself should match the champagne/pearl/gold theme of its surrounding section — not be dark. The aesthetic should feel like a luxury coffee-table book: pearl-white cover, champagne interior, gold accents, black text.
 
----
+### New Book Design
+Replace the current dark zinc theme with a champagne-pearl-gold luxury book:
 
-### Issue 3 — Style Options (Typography, Density, Theme, Shape) Have No Visual Examples
-**Root Cause:** All style options in Step 1 of the wizard are plain text `<OptionButton>` labels with no visual preview. Users cannot understand what "Serif" vs "Calligraphy" or "Classic" vs "Luxury" mean without examples.
+**Cover background**: `bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#D4C4A8]` — pearl white fading to warm champagne
 
-**Fix — Add mini stamp SVG previews for each option:**
+**Cover image**: Keep the luxury villa photo but use `opacity-40` (lighter since bg is light now)
 
-For each selector, render a small visual preview stamp SVG alongside the label. These are static CSS-only examples (no real SVG templates needed) that visually communicate the concept:
+**Cover border**: `border-2 border-gold/60` with a gold shadow glow
 
-**Shape previews:** Show the actual geometric outline — a circle for ROUND, a horizontal oval for OVAL, a rectangle for RECTANGLE, a square for SQUARE. Each shape contains "JBJ" text so the user can see the layout:
-```tsx
-// Small shape preview component
-function ShapePreview({ type }: { type: StampType }) {
-  const shapeClass = {
-    ROUND: 'rounded-full w-14 h-14',
-    OVAL: 'rounded-full w-20 h-12',
-    RECTANGLE: 'rounded-md w-20 h-12',
-    SQUARE: 'rounded-md w-14 h-14',
-  }[type];
-  return (
-    <div className={`border-2 border-current flex items-center justify-center text-[9px] font-bold tracking-widest ${shapeClass}`}>
-      JBJ
-    </div>
-  );
-}
+**Book spine** (left edge): `bg-gradient-to-r from-[#C8A766] via-[#E8DCC8] to-transparent` — a rich gold spine visible on the left
+
+**Spine text**: `text-black` (readable on gold background), rotated as before
+
+**Title text**: `text-black` (not white — since background is now light)
+
+**Gold accent line**: Keep the `from-gold to-gold-dark` horizontal rule — this works great
+
+**"Latest Edition 2026" badge**: `bg-gold/20 border border-gold/50 text-black` (was gold text, now black for contrast)
+
+**Publisher line**: `text-zinc-600` (was zinc-400, need darker for light bg)
+
+**Border separator**: `border-t border-gold/30` instead of `border-zinc-800`
+
+**Pages edge effect** (right side): Use `bg-gradient-to-l from-[#F5EBD7]/30 via-[#E8DCC8]/20 to-transparent` — warm champagne page edges instead of cold zinc
+
+**Book shadow**: `20px 20px 60px rgba(0,0,0,0.4), -5px -5px 20px rgba(200,167,102,0.3)` — reduced dark shadow, added gold ambient glow
+
+**Floating "Free Download" badge**: Already uses champagne gradient — keep as-is
+
+**Founder byline**: `text-zinc-500` → `text-zinc-600` (darker for readability on light bg)
+
+### Visual Comparison
+```text
+BEFORE (dark):                   AFTER (champagne):
+┌────────────────┐               ┌────────────────┐
+│ ▓▓▓▓ zinc-900 │               │ ░░░░ pearl     │
+│ [villa photo   │               │ [villa photo   │
+│  opacity 60%]  │               │  opacity 40%]  │
+│                │               │                │
+│ ▬▬▬▬ gold bar │               │ ▬▬▬▬ gold bar  │
+│ [gold badge]   │               │ [black badge]  │
+│ UAE Real Estate│               │ UAE Real Estate│
+│ [white text]   │               │ [black text]   │
+│ Market Intel   │               │ Market Intel   │
+│ [gold text]    │               │ [gold text]    │
+│ ─────zinc─────│               │ ─────gold──────│
+│ JBJ [zinc-400] │               │ JBJ [zinc-600] │
+└────────────────┘               └────────────────┘
 ```
-
-**Theme previews:** Each theme button gets a small descriptive visual tag showing the aesthetic feel (colors + border weight):
-
-| Theme | Visual cue |
-|---|---|
-| Classic | Double border, traditional serif layout |
-| Modern | Clean single line, geometric monogram |
-| Minimal | Single hairline border, sparse text |
-| Luxury | Gold fill ring, ornate center |
-| Bold | Thick border, heavy font weight |
-| Vintage | Scalloped border, distressed look |
-
-These are rendered as a small `24×24px` mini-stamp illustration with tailwind classes — no SVG needed.
-
-**Typography previews:** Show the font name rendered in its own style using inline CSS `fontFamily`:
-
-```tsx
-const FONT_STYLES: Record<TypographyStyle, { fontFamily: string; label: string; sample: string }> = {
-  SERIF: { fontFamily: 'Georgia, serif', label: 'Serif', sample: 'ABC' },
-  SANS: { fontFamily: 'Inter, sans-serif', label: 'Sans-Serif', sample: 'ABC' },
-  MONOSPACE: { fontFamily: 'Courier New, monospace', label: 'Monospace', sample: 'ABC' },
-  CALLIGRAPHY: { fontFamily: 'Dancing Script, cursive', label: 'Calligraphy', sample: 'ABC' },
-  GOTHIC: { fontFamily: 'Cinzel, serif', label: 'Gothic', sample: 'ABC' },
-  ARABIC_MODERN: { fontFamily: 'Noto Naskh Arabic, serif', label: 'Arabic Modern', sample: 'أبج' },
-};
-```
-
-Each button renders a large font sample on top and the label below, giving users an immediate feel for the typeface.
-
-**More typography options to add:**
-Currently only 4 options (SERIF, SANS, MONOSPACE, CALLIGRAPHY). Add:
-- `GOTHIC` — cinzel/engraved style
-- `ARABIC_MODERN` — Noto Naskh Arabic (for bilingual stamps)
-- `CONDENSED` — tight tracking, industrial feel
-- `DISPLAY` — large decorative capitals
-
-**Density previews:** Instead of just 1–5 numbers, show a visual representation of how crowded the stamp looks. Each density button renders a tiny stamp outline with varying numbers of text lines:
-
-```
-Density 1: ○ (just company name)
-Density 2: ○ (name + city)
-Density 3: ○ (name + reg + city)
-Density 4: ○ (name + reg + city + phone)
-Density 5: ○ (all fields packed)
-```
-
-Render each as a tiny `48×48px` circle containing 1–5 horizontal lines of varying widths to represent text density.
-
-**Border Style previews:** For each border type, render a small `40×40px` circle showing the actual border pattern:
-- SINGLE: one thin circle border
-- DOUBLE: two concentric circle borders  
-- RING: thick filled ring
-- DOTTED: dotted circle border
-- ROPE: dashed/alternating border
-- CUSTOM: ornate double line
-
----
-
-### Issue 4 — "Dubai, الإمارات العربية المتحدة" — Arabic City/Country Standard
-**Root Cause:** When the AI extracts a UAE city and the user is in bilingual mode, the `arabic_city` field placeholder says `دبي، الإمارات` but the user wants the standard format to be `Dubai, الإمارات العربية المتحدة` (English city name + Arabic country name).
-
-**Fix:**
-1. Update the placeholder text in the Arabic city field:
-   - Placeholder: `دبي، الإمارات العربية المتحدة`
-2. When the AI extracts city="Dubai" and arabic_city is empty, auto-populate arabic_city with `Dubai, الإمارات العربية المتحدة`
-3. In the `ai-stamp-extract` edge function, update the prompt to specify: "For the arabic_city field, use the format: [English city name], [Arabic country name], e.g. 'Dubai, الإمارات العربية المتحدة'"
-4. Client-side fallback in `StampProjectWizard.tsx`: if `city_optional` is filled but `arabic_city` is empty and language mode is bilingual, auto-fill `arabic_city` as `${city}, الإمارات العربية المتحدة`
-
----
-
-### Issue 5 — "Ready to Get Started" visible on ALL pages (Global scope issue)
-This is addressed in Issue 1 above. The key behavior change is: toolkit generator routes (wizard, projects dashboard, generate, export) should NOT render the global `CombinedContactNewsletter` and `Footer` sections since these are full-screen app-like experiences, not informational pages.
 
 ---
 
 ## Files to Change
 
-| File | Changes |
+| File | What Changes |
 |---|---|
-| `src/components/MainLayout.tsx` | 1) Fix `pt` to `pt-24 sm:pt-28 lg:pt-32` to match GlobalHeader height exactly; 2) Add `isToolkitGeneratorRoute` check to suppress `CombinedContactNewsletter` and `Footer` on stamp generator tool pages |
-| `src/components/stamp-generator/StampProjectWizard.tsx` | 1) Scroll to top on `setStep` and `navigate`; 2) Expand typography options to 6–8 fonts; 3) Replace plain text option buttons with visual preview buttons for Shape, Theme, Border, Typography, Density; 4) Auto-fill `arabic_city` with `Dubai, الإمارات العربية المتحدة` format; 5) Update placeholder text |
-| `supabase/functions/ai-stamp-extract/index.ts` | Update arabic_city prompt to return format `City, الإمارات العربية المتحدة` |
+| `src/components/home/AreasWeCover.tsx` | Full redesign: photo cards with gradient overlay, trending/high-demand badges, property count, limit to 8, 2×4 grid layout |
+| `src/components/MarketReportHeroBook.tsx` | Replace dark zinc theme with champagne/pearl/gold: bg, spine, text colors, border, shadow, page edges |
 
 ## What Does NOT Change
-- GlobalHeader component itself — no changes
-- Auth/database/RLS — no changes  
-- Any non-toolkit pages — Footer and CombinedContactNewsletter remain on all other public pages
-- Stamp SVG templates, color wheel, text editor, export engine — untouched
-- StampGeneratorPage (the generate page) — untouched
-- StampExportPage — untouched
-- StampProjectsDashboard — untouched (projects list page can keep Footer since it's more of a landing page)
+- `useAreas` hook — works correctly, just change `limit: 12` → `limit: 8`
+- The wrapping section in `Index.tsx` — stays exactly as-is (already champagne)
+- `MarketReportCTA.tsx` — the button and benefits list around the book stay unchanged
+- The `/market-report` page — unchanged
+- All other homepage sections — locked per memory constraint
+- Database schema — no changes needed
