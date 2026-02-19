@@ -316,4 +316,7 @@ verify_jwt = false
 [functions.ai-property-video-ad]
 verify_jwt = false
 
+[functions.ai-agent-script-writer]
+verify_jwt = false
+
 
