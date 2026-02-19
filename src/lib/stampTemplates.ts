@@ -599,5 +599,59 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     concepts.push({ id: uid(), templateKey: 'art-deco-square', label: 'Art Deco Square', tags: ['art-deco', 'luxury', 'geometric', 'rectangle'], svgSource: svg });
   }
 
+  // ────────────────────────────────────────────────────────────────
+  // T12: Bilingual Logo Center — English top arc / Arabic bottom arc / Logo in center
+  // Appears for any project with UPLOADED_LOGO (or bilingual mode as bonus option)
+  // ────────────────────────────────────────────────────────────────
+  {
+    const outerR = R;
+    const bandR = R - 14;
+    const innerR = R - 18;
+    const ringR = R - 7;
+    const bottomArcR = R - 7;
+    const displayArabic = arabicName || name;
+    const displayArabicCity = arabicCity || city;
+    const enFontSize = autoFontSize(name, 9, 22);
+    const arFontSize = autoFontSize(displayArabic, 10, 16);
+    const hasLogo = project.icon_style === 'UPLOADED_LOGO' && (project as any).uploaded_logo_url;
+    const logoUrl = hasLogo ? (project as any).uploaded_logo_url : null;
+    const logoSize = 54;
+
+    const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="t12logoClip">
+          <circle cx="${cx}" cy="${cy}" r="${logoSize / 2}"/>
+        </clipPath>
+      </defs>
+      <!-- Filled outer ring band -->
+      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
+      <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
+      <!-- Inner accent ring -->
+      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="1"/>
+      <!-- 4 cardinal dot ornaments on band -->
+      ${[0, 90, 180, 270].map(deg => {
+        const rad = (deg * Math.PI) / 180;
+        const starCx = cx + (outerR - 7) * Math.cos(rad);
+        const starCy = cy + (outerR - 7) * Math.sin(rad);
+        return `<circle cx="${starCx}" cy="${starCy}" r="2" fill="#ffffff"/>`;
+      }).join('')}
+      <!-- English text — TOP arc (upper half) -->
+      ${ringText('t12top', cx, cy, ringR, `◆  ${name}  ◆`, font, enFontSize, '#ffffff', '25%', 1.6)}
+      <!-- Arabic text — BOTTOM arc (lower half) -->
+      ${bottomArcText('t12bot', cx, cy, bottomArcR, `◆  ${displayArabic}  ◆`, arabicFont, arFontSize, '#ffffff', 2)}
+      <!-- Center: logo image or monogram circle -->
+      ${logoUrl
+        ? `<circle cx="${cx}" cy="${cy}" r="${logoSize / 2 + 3}" fill="#ffffff" stroke="${COLOR}" stroke-width="1.2"/>
+           <image href="${logoUrl}" x="${cx - logoSize / 2}" y="${cy - logoSize / 2}" width="${logoSize}" height="${logoSize}" clip-path="url(#t12logoClip)" preserveAspectRatio="xMidYMid meet"/>`
+        : monogram(cx, cy, mono, font, 32, COLOR, COLOR)
+      }
+      <!-- City below logo -->
+      <text x="${cx}" y="${cy + logoSize / 2 + 16}" text-anchor="middle" font-family="${font}" font-size="7" fill="${COLOR}" letter-spacing="3.5">DUBAI · UAE</text>
+      ${divider(cx, cy - logoSize / 2 - 12, COLOR, 22, 0.6)}
+      ${divider(cx, cy + logoSize / 2 + 24, COLOR, 22, 0.6)}
+    </svg>`;
+    concepts.push({ id: uid(), templateKey: 'bilingual-logo-center', label: 'Bilingual Logo Center', tags: ['bilingual', 'logo', 'premium', 'round', 'UAE'], svgSource: svg });
+  }
+
   return concepts;
 }

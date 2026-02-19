@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Stamp, ChevronRight, ChevronLeft, Building2, Palette, Image, Wand2, Check, Type } from 'lucide-react';
+import { Stamp, ChevronRight, ChevronLeft, Building2, Palette, Image, Wand2, Check, Type, Upload, X } from 'lucide-react';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 
 // UAE phone normalization
@@ -153,6 +153,7 @@ interface FormState {
   density: number;
   icon_style: IconStyle;
   monogram_text: string;
+  uploaded_logo_url: string;
 }
 
 const STEPS = ['Company Details', 'Stamp Style', 'Logo / Monogram'];
@@ -161,6 +162,8 @@ export default function StampProjectWizard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [emailUppercase, setEmailUppercase] = useState(true);
+  const logoInputRef = useRef<HTMLInputElement>(null);
+  const [logoPreview, setLogoPreview] = useState<string>('');
 
   const [step, setStep] = useState(() => {
     try { return Number(sessionStorage.getItem('stamp-wizard-step')) || 0; } catch { return 0; }
@@ -192,6 +195,7 @@ export default function StampProjectWizard() {
       density: 3,
       icon_style: 'MONOGRAM' as IconStyle,
       monogram_text: '',
+      uploaded_logo_url: '',
     };
   });
 
@@ -232,6 +236,7 @@ export default function StampProjectWizard() {
         density: form.density,
         icon_style: form.icon_style,
         monogram_text: form.monogram_text || null,
+        uploaded_logo_url: form.uploaded_logo_url || null,
       })
       .select()
       .single();
@@ -540,21 +545,23 @@ export default function StampProjectWizard() {
 
               <div>
                 <Label className="text-xs font-medium mb-2 block">Center Icon Style</Label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {[
                     { key: 'NONE', label: 'No Icon', desc: 'Text only' },
                     { key: 'MONOGRAM', label: 'Monogram', desc: '1–3 initials' },
+                    { key: 'UPLOADED_LOGO', label: 'Upload Logo', desc: 'Your own image' },
                   ].map(opt => (
                     <button
                       key={opt.key}
                       type="button"
                       onClick={() => set('icon_style', opt.key as IconStyle)}
-                      className={`p-4 rounded-xl border-2 text-left transition-all ${
+                      className={`relative p-4 rounded-xl border-2 text-left transition-all ${
                         form.icon_style === opt.key
                           ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]'
                           : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
                       }`}
                     >
+                      {form.icon_style === opt.key && <Check size={10} className="absolute top-2 right-2 text-[hsl(var(--gold))]"/>}
                       <p className="font-medium text-sm">{opt.label}</p>
                       <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">{opt.desc}</p>
                     </button>
@@ -573,6 +580,72 @@ export default function StampProjectWizard() {
                     className="uppercase"
                   />
                   <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">Leave blank to auto-use company initials</p>
+                </div>
+              )}
+
+              {/* Logo Upload Section */}
+              {form.icon_style === 'UPLOADED_LOGO' && (
+                <div className="space-y-3">
+                  <Label className="text-xs font-medium mb-1.5 block">Upload Your Logo / Monogram Image</Label>
+                  <input
+                    ref={logoInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/svg+xml,image/webp"
+                    className="hidden"
+                    onChange={e => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onload = ev => {
+                        const dataUrl = ev.target?.result as string;
+                        setLogoPreview(dataUrl);
+                        set('uploaded_logo_url', dataUrl);
+                      };
+                      reader.readAsDataURL(file);
+                    }}
+                  />
+                  {logoPreview || form.uploaded_logo_url ? (
+                    <div className="relative inline-block">
+                      <div className="w-28 h-28 rounded-2xl border-2 border-[hsl(var(--gold)/0.5)] overflow-hidden bg-[hsl(var(--pearl-1))] flex items-center justify-center">
+                        <img
+                          src={logoPreview || form.uploaded_logo_url}
+                          alt="Logo preview"
+                          className="w-full h-full object-contain p-2"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => { setLogoPreview(''); set('uploaded_logo_url', ''); }}
+                        className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-destructive text-white flex items-center justify-center hover:bg-destructive/80"
+                      >
+                        <X size={10}/>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => logoInputRef.current?.click()}
+                        className="mt-2 text-xs text-[hsl(var(--gold-dark))] underline block text-center"
+                      >
+                        Change image
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => logoInputRef.current?.click()}
+                      className="w-full border-2 border-dashed border-[hsl(var(--gold)/0.4)] rounded-xl p-8 flex flex-col items-center gap-3 hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.04)] transition-all"
+                    >
+                      <Upload size={28} className="text-[hsl(var(--gold))]"/>
+                      <div className="text-center">
+                        <p className="font-medium text-sm text-[hsl(var(--foreground))]">Click to upload logo</p>
+                        <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">PNG, JPG, SVG, WEBP — transparent PNG recommended</p>
+                      </div>
+                    </button>
+                  )}
+                  <div className="bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)] rounded-xl p-3">
+                    <p className="text-xs text-[hsl(var(--muted-foreground))]">
+                      <strong className="text-[hsl(var(--gold-dark))]">Bilingual Stamp Preview:</strong> When Bilingual mode is selected, your logo appears in the center with English text arcing the top half and Arabic text arcing the bottom half of the stamp.
+                    </p>
+                  </div>
                 </div>
               )}
 
