@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  History, Loader2, Play, Trash2, RefreshCw, Film,
-  Mic, Globe, Clock, ArrowRight, FolderOpen, Sparkles,
-  Download, RotateCcw
+  RefreshCw, Trash2, RotateCcw, Film, Loader2,
+  Globe, Mic, Clock, FolderOpen, Play, Pause,
+  Sparkles, CheckCircle2, AlertCircle, Timer, Grid3X3
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
@@ -33,6 +33,7 @@ interface SavedVideoAd {
   thumbnail_url: string | null;
   project_data: {
     script: string;
+    status?: 'completed' | 'draft' | 'processing';
     settings: {
       language: string;
       voiceId: string;
@@ -56,6 +57,7 @@ interface VideoAdHistoryPanelProps {
     projectName: string;
     transitions: string;
   }) => void;
+  onRegenerateAd?: (ad: SavedVideoAd) => void;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -72,6 +74,9 @@ const formatRelativeTime = (iso: string): string => {
   return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 };
 
+const formatDate = (iso: string): string =>
+  new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
 const formatDuration = (sec: number): string =>
   `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`;
 
@@ -81,15 +86,203 @@ const getLangName = (code: string): string =>
 const getVoiceName = (id: string): string =>
   VOICE_OPTIONS.find(v => v.id === id)?.name ?? 'Voice';
 
-// ─── Component ────────────────────────────────────────────────────────────────
+const getFormatLabel = (format: string): string => {
+  if (format === 'reels') return '9:16';
+  if (format === 'youtube') return '16:9';
+  if (format === 'square') return '1:1';
+  return format?.toUpperCase() ?? '—';
+};
 
-export function VideoAdHistoryPanel({ onRestoreToTimeline }: VideoAdHistoryPanelProps) {
+// ─── Status Badge ─────────────────────────────────────────────────────────────
+
+function StatusBadge({ status }: { status?: string }) {
+  if (!status || status === 'completed') {
+    return (
+      <div className="flex items-center gap-0.5 bg-emerald-500/20 text-emerald-400 text-[9px] px-1.5 py-0.5 rounded-full font-semibold">
+        <CheckCircle2 className="w-2.5 h-2.5" />
+        Ready
+      </div>
+    );
+  }
+  if (status === 'processing') {
+    return (
+      <div className="flex items-center gap-0.5 bg-amber-500/20 text-amber-400 text-[9px] px-1.5 py-0.5 rounded-full font-semibold">
+        <Timer className="w-2.5 h-2.5 animate-pulse" />
+        Processing
+      </div>
+    );
+  }
+  return (
+    <div className="flex items-center gap-0.5 bg-slate-600/50 text-slate-400 text-[9px] px-1.5 py-0.5 rounded-full font-semibold">
+      <AlertCircle className="w-2.5 h-2.5" />
+      Draft
+    </div>
+  );
+}
+
+// ─── Grid Card ────────────────────────────────────────────────────────────────
+
+interface GridCardProps {
+  ad: SavedVideoAd;
+  isPlaying: boolean;
+  isDeleting: boolean;
+  isRegenerating: boolean;
+  onPlay: () => void;
+  onRestore: () => void;
+  onRegenerate: () => void;
+  onDelete: () => void;
+}
+
+function GridCard({
+  ad, isPlaying, isDeleting, isRegenerating,
+  onPlay, onRestore, onRegenerate, onDelete,
+}: GridCardProps) {
+  const [hovered, setHovered] = useState(false);
+  const photoCount = (ad.project_data.clips ?? []).filter(c => c.type === 'image').length;
+  const dur = ad.project_data.voiceover?.duration ?? ad.project_data.settings?.scriptDuration ?? 60;
+
+  return (
+    <div
+      className={`relative rounded-lg border overflow-hidden transition-all duration-200 group cursor-pointer
+        ${hovered ? 'border-amber-400/50 shadow-lg shadow-amber-400/10' : 'border-slate-700'}
+        bg-slate-800`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Thumbnail */}
+      <div className="relative aspect-video bg-slate-900 overflow-hidden">
+        {ad.thumbnail_url ? (
+          <img
+            src={ad.thumbnail_url}
+            alt={ad.project_name}
+            className={`w-full h-full object-cover transition-transform duration-300 ${hovered ? 'scale-105' : 'scale-100'}`}
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-slate-800 to-slate-900">
+            <Film className="w-8 h-8 text-slate-600" />
+            <span className="text-[9px] text-slate-600 font-medium">No thumbnail</span>
+          </div>
+        )}
+
+        {/* Overlay controls on hover */}
+        <div className={`absolute inset-0 bg-black/60 flex items-center justify-center gap-2 transition-opacity duration-200 ${hovered ? 'opacity-100' : 'opacity-0'}`}>
+          {/* Play voiceover */}
+          <button
+            onClick={(e) => { e.stopPropagation(); onPlay(); }}
+            className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white hover:bg-amber-500/80 hover:border-amber-400 transition-all"
+            title="Preview voiceover"
+          >
+            {isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3 ml-0.5" />}
+          </button>
+          {/* Restore */}
+          <button
+            onClick={(e) => { e.stopPropagation(); onRestore(); }}
+            className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white hover:bg-amber-500/80 hover:border-amber-400 transition-all"
+            title="Restore to timeline"
+          >
+            <RotateCcw className="w-3 h-3" />
+          </button>
+        </div>
+
+        {/* Duration pill */}
+        <div className="absolute bottom-1 left-1 bg-black/80 text-white text-[9px] px-1.5 py-0.5 rounded font-mono">
+          {formatDuration(dur)}
+        </div>
+
+        {/* Format pill */}
+        {ad.project_data.settings?.format && (
+          <div className="absolute bottom-1 right-1 bg-black/80 text-amber-300 text-[9px] px-1.5 py-0.5 rounded font-bold uppercase">
+            {getFormatLabel(ad.project_data.settings.format)}
+          </div>
+        )}
+      </div>
+
+      {/* Card info */}
+      <div className="p-2 space-y-1.5">
+        {/* Title + status */}
+        <div className="flex items-start gap-1 justify-between">
+          <p className="text-[11px] font-semibold text-white leading-tight line-clamp-1 flex-1">
+            {ad.project_name}
+          </p>
+          <StatusBadge status={ad.project_data.status} />
+        </div>
+
+        {/* Meta badges */}
+        <div className="flex flex-wrap gap-1">
+          <span className="flex items-center gap-0.5 text-[9px] text-slate-400 bg-slate-700/70 px-1 py-0.5 rounded-full">
+            <Globe className="w-2 h-2" />
+            {getLangName(ad.project_data.settings?.language ?? 'en')}
+          </span>
+          <span className="flex items-center gap-0.5 text-[9px] text-slate-400 bg-slate-700/70 px-1 py-0.5 rounded-full">
+            <Mic className="w-2 h-2" />
+            {getVoiceName(ad.project_data.settings?.voiceId ?? '')}
+          </span>
+          {ad.project_data.settings?.tone && (
+            <span className="text-[9px] text-amber-400/80 bg-amber-400/10 px-1 py-0.5 rounded-full capitalize">
+              {ad.project_data.settings.tone}
+            </span>
+          )}
+        </div>
+
+        {/* Date + photo count */}
+        <div className="flex items-center justify-between text-[9px] text-slate-500">
+          <span className="flex items-center gap-0.5">
+            <Clock className="w-2 h-2" />
+            {formatDate(ad.created_at)}
+          </span>
+          <span>{photoCount} photo{photoCount !== 1 ? 's' : ''}</span>
+        </div>
+
+        {/* Script preview */}
+        {ad.project_data.script && (
+          <p className="text-[9px] text-slate-500 line-clamp-2 leading-relaxed italic border-l border-amber-400/20 pl-1.5">
+            "{ad.project_data.script.slice(0, 80)}{ad.project_data.script.length > 80 ? '…' : ''}"
+          </p>
+        )}
+
+        {/* Action buttons */}
+        <div className="flex gap-1 pt-0.5">
+          {/* Regenerate */}
+          <button
+            onClick={(e) => { e.stopPropagation(); onRegenerate(); }}
+            disabled={isRegenerating}
+            className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-md bg-amber-500/90 text-black text-[10px] font-bold hover:bg-amber-400 transition-all disabled:opacity-50"
+            title="Regenerate this ad"
+          >
+            {isRegenerating
+              ? <Loader2 className="w-3 h-3 animate-spin" />
+              : <Sparkles className="w-3 h-3" />
+            }
+            Regenerate
+          </button>
+          {/* Delete */}
+          <button
+            onClick={(e) => { e.stopPropagation(); onDelete(); }}
+            disabled={isDeleting}
+            className="w-7 h-7 flex items-center justify-center rounded-md border border-slate-600 text-slate-500 hover:text-red-400 hover:border-red-400/50 transition-all disabled:opacity-40"
+            title="Delete"
+          >
+            {isDeleting
+              ? <Loader2 className="w-3 h-3 animate-spin" />
+              : <Trash2 className="w-3 h-3" />
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Panel ───────────────────────────────────────────────────────────────
+
+export function VideoAdHistoryPanel({ onRestoreToTimeline, onRegenerateAd }: VideoAdHistoryPanelProps) {
   const [ads, setAds] = useState<SavedVideoAd[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [previewId, setPreviewId] = useState<string | null>(null);
-  const [previewAudio, setPreviewAudio] = useState<HTMLAudioElement | null>(null);
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [regeneratingId, setRegeneratingId] = useState<string | null>(null);
+  const previewAudioRef = useRef<HTMLAudioElement | null>(null);
 
   // ── Fetch ─────────────────────────────────────────────────────────────────
   const fetchHistory = useCallback(async () => {
@@ -104,7 +297,7 @@ export function VideoAdHistoryPanel({ onRestoreToTimeline }: VideoAdHistoryPanel
 
       if (error) throw error;
       setAds((data ?? []) as unknown as SavedVideoAd[]);
-    } catch (err) {
+    } catch {
       toast.error('Could not load video ad history');
     } finally {
       setLoading(false);
@@ -112,11 +305,7 @@ export function VideoAdHistoryPanel({ onRestoreToTimeline }: VideoAdHistoryPanel
   }, []);
 
   useEffect(() => { fetchHistory(); }, [fetchHistory]);
-
-  // Cleanup audio on unmount
-  useEffect(() => {
-    return () => { previewAudio?.pause(); };
-  }, [previewAudio]);
+  useEffect(() => () => { previewAudioRef.current?.pause(); }, []);
 
   // ── Delete ────────────────────────────────────────────────────────────────
   const handleDelete = async (id: string) => {
@@ -140,28 +329,27 @@ export function VideoAdHistoryPanel({ onRestoreToTimeline }: VideoAdHistoryPanel
   // ── Preview audio ─────────────────────────────────────────────────────────
   const togglePreviewAudio = (ad: SavedVideoAd) => {
     if (playingId === ad.id) {
-      previewAudio?.pause();
+      previewAudioRef.current?.pause();
       setPlayingId(null);
       return;
     }
-    previewAudio?.pause();
+    previewAudioRef.current?.pause();
     try {
       const byteStr = atob(ad.project_data.voiceover.audioBase64);
       const bytes = new Uint8Array(byteStr.length);
       for (let i = 0; i < byteStr.length; i++) bytes[i] = byteStr.charCodeAt(i);
       const blob = new Blob([bytes], { type: 'audio/mpeg' });
-      const url  = URL.createObjectURL(blob);
-      const audio = new Audio(url);
+      const audio = new Audio(URL.createObjectURL(blob));
       audio.onended = () => setPlayingId(null);
       audio.play();
-      setPreviewAudio(audio);
+      previewAudioRef.current = audio;
       setPlayingId(ad.id);
     } catch {
       toast.error('Could not play preview');
     }
   };
 
-  // ── Restore to Timeline ───────────────────────────────────────────────────
+  // ── Restore ───────────────────────────────────────────────────────────────
   const handleRestore = (ad: SavedVideoAd) => {
     onRestoreToTimeline({
       clips:       ad.project_data.clips,
@@ -172,15 +360,37 @@ export function VideoAdHistoryPanel({ onRestoreToTimeline }: VideoAdHistoryPanel
     toast.success(`🎬 "${ad.project_name}" restored to timeline!`);
   };
 
+  // ── Regenerate ────────────────────────────────────────────────────────────
+  const handleRegenerate = async (ad: SavedVideoAd) => {
+    setRegeneratingId(ad.id);
+    try {
+      if (onRegenerateAd) {
+        onRegenerateAd(ad);
+        toast.info(`♻️ Regenerating "${ad.project_name}"…`);
+      } else {
+        // Fallback: restore to timeline so user can re-generate from the Projects panel
+        handleRestore(ad);
+        toast.info(`Loaded "${ad.project_name}" — tweak settings and generate again from the Projects panel`);
+      }
+    } finally {
+      setTimeout(() => setRegeneratingId(null), 1500);
+    }
+  };
+
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden">
       {/* Header */}
       <div className="px-3 py-2.5 border-b border-slate-700 flex items-center gap-2">
-        <History className="w-4 h-4 text-amber-400 shrink-0" />
+        <Grid3X3 className="w-4 h-4 text-amber-400 shrink-0" />
         <span className="text-xs font-bold text-amber-400 uppercase tracking-wide flex-1">
-          Video Ad History
+          Recent Video Ads
         </span>
+        {ads.length > 0 && (
+          <span className="text-[9px] text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded-full">
+            {ads.length}
+          </span>
+        )}
         <button
           onClick={fetchHistory}
           className="text-slate-500 hover:text-slate-300 transition-colors"
@@ -192,138 +402,52 @@ export function VideoAdHistoryPanel({ onRestoreToTimeline }: VideoAdHistoryPanel
 
       {/* Body */}
       <ScrollArea className="flex-1">
-        <div className="p-3 space-y-2.5">
+        <div className="p-3">
           {loading ? (
-            <div className="flex flex-col items-center justify-center h-40 gap-2">
-              <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
-              <p className="text-xs text-slate-500">Loading history…</p>
+            <div className="flex flex-col items-center justify-center h-48 gap-3">
+              <Loader2 className="w-6 h-6 animate-spin text-amber-400" />
+              <p className="text-xs text-slate-500">Loading recent ads…</p>
             </div>
           ) : ads.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-40 gap-3 text-center">
-              <FolderOpen className="w-9 h-9 text-slate-600" />
+            <div className="flex flex-col items-center justify-center h-48 gap-3 text-center px-4">
+              <div className="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center">
+                <FolderOpen className="w-6 h-6 text-slate-600" />
+              </div>
               <div>
                 <p className="text-xs font-semibold text-slate-400">No saved video ads yet</p>
-                <p className="text-[10px] text-slate-500 mt-0.5">
-                  Generate a video ad from the Projects panel — it will be saved here automatically
+                <p className="text-[10px] text-slate-500 mt-1 leading-relaxed">
+                  Generate a video ad from the <span className="text-amber-400">Projects</span> panel — it will appear here with a thumbnail preview
                 </p>
               </div>
             </div>
           ) : (
-            ads.map(ad => (
-              <div
-                key={ad.id}
-                className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden hover:border-amber-400/30 transition-all group"
-              >
-                {/* Thumbnail + overlay */}
-                <div className="relative aspect-video bg-slate-700 overflow-hidden">
-                  {ad.thumbnail_url ? (
-                    <img
-                      src={ad.thumbnail_url}
-                      alt={ad.project_name}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center gap-1">
-                      <Film className="w-7 h-7 text-slate-600" />
-                      <span className="text-[10px] text-slate-500">No thumbnail</span>
-                    </div>
-                  )}
-
-                  {/* Play voiceover button */}
-                  <button
-                    onClick={() => togglePreviewAudio(ad)}
-                    className="absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-black/70 flex items-center justify-center text-white hover:bg-amber-500 hover:text-black transition-all"
-                    title="Preview voiceover"
-                  >
-                    {playingId === ad.id
-                      ? <span className="w-3 h-3 border-2 border-current rounded-sm" />
-                      : <Play className="w-3 h-3 ml-0.5" />
-                    }
-                  </button>
-
-                  {/* Duration badge */}
-                  <div className="absolute bottom-1.5 left-1.5 bg-black/70 text-white text-[9px] px-1.5 py-0.5 rounded font-mono">
-                    {formatDuration(ad.project_data.voiceover?.duration ?? ad.project_data.settings?.scriptDuration ?? 60)}
-                  </div>
-                </div>
-
-                {/* Info */}
-                <div className="px-2.5 py-2 space-y-1.5">
-                  <div className="flex items-start justify-between gap-1">
-                    <p className="text-xs font-semibold text-white leading-tight line-clamp-1">{ad.project_name}</p>
-                    <span className="text-[9px] text-slate-500 flex items-center gap-0.5 shrink-0">
-                      <Clock className="w-2.5 h-2.5" />
-                      {formatRelativeTime(ad.created_at)}
-                    </span>
-                  </div>
-
-                  {/* Badges */}
-                  <div className="flex flex-wrap gap-1">
-                    <span className="flex items-center gap-0.5 text-[9px] text-slate-400 bg-slate-700 px-1.5 py-0.5 rounded-full">
-                      <Globe className="w-2.5 h-2.5" />
-                      {getLangName(ad.project_data.settings?.language ?? 'en')}
-                    </span>
-                    <span className="flex items-center gap-0.5 text-[9px] text-slate-400 bg-slate-700 px-1.5 py-0.5 rounded-full">
-                      <Mic className="w-2.5 h-2.5" />
-                      {getVoiceName(ad.project_data.settings?.voiceId ?? '')}
-                    </span>
-                    {ad.project_data.settings?.tone && (
-                      <span className="text-[9px] text-amber-400/80 bg-amber-400/10 px-1.5 py-0.5 rounded-full capitalize">
-                        {ad.project_data.settings.tone}
-                      </span>
-                    )}
-                    {ad.project_data.settings?.format && (
-                      <span className="text-[9px] text-slate-400 bg-slate-700 px-1.5 py-0.5 rounded-full uppercase">
-                        {ad.project_data.settings.format === 'reels' ? '9:16'
-                          : ad.project_data.settings.format === 'youtube' ? '16:9' : '1:1'}
-                      </span>
-                    )}
-                    <span className="text-[9px] text-slate-400 bg-slate-700 px-1.5 py-0.5 rounded-full">
-                      {(ad.project_data.clips ?? []).filter(c => c.type === 'image').length} photos
-                    </span>
-                  </div>
-
-                  {/* Script preview */}
-                  {ad.project_data.script && (
-                    <p className="text-[10px] text-slate-400 line-clamp-2 leading-relaxed italic border-l-2 border-amber-400/30 pl-2">
-                      "{ad.project_data.script.slice(0, 100)}{ad.project_data.script.length > 100 ? '…' : ''}"
-                    </p>
-                  )}
-
-                  {/* Actions */}
-                  <div className="flex gap-1.5 pt-0.5">
-                    <button
-                      onClick={() => handleRestore(ad)}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md bg-amber-500 text-black text-xs font-bold hover:bg-amber-400 transition-all"
-                    >
-                      <RotateCcw className="w-3 h-3" />
-                      Restore to Timeline
-                    </button>
-                    <button
-                      onClick={() => handleDelete(ad.id)}
-                      disabled={deletingId === ad.id}
-                      className="w-8 h-8 flex items-center justify-center rounded-md border border-slate-600 text-slate-400 hover:text-red-400 hover:border-red-400/50 transition-all disabled:opacity-40"
-                      title="Delete"
-                    >
-                      {deletingId === ad.id
-                        ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                        : <Trash2 className="w-3.5 h-3.5" />
-                      }
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
+            <div className="grid grid-cols-2 gap-2.5">
+              {ads.map(ad => (
+                <GridCard
+                  key={ad.id}
+                  ad={ad}
+                  isPlaying={playingId === ad.id}
+                  isDeleting={deletingId === ad.id}
+                  isRegenerating={regeneratingId === ad.id}
+                  onPlay={() => togglePreviewAudio(ad)}
+                  onRestore={() => handleRestore(ad)}
+                  onRegenerate={() => handleRegenerate(ad)}
+                  onDelete={() => handleDelete(ad.id)}
+                />
+              ))}
+            </div>
           )}
         </div>
       </ScrollArea>
 
       {/* Footer */}
       {ads.length > 0 && (
-        <div className="px-3 py-1.5 border-t border-slate-700">
+        <div className="px-3 py-2 border-t border-slate-700 flex items-center justify-between">
           <p className="text-[10px] text-slate-500">
-            {ads.length} saved ad{ads.length !== 1 ? 's' : ''} — click <span className="text-amber-400">Restore</span> to load into timeline
+            {ads.length} ad{ads.length !== 1 ? 's' : ''} saved
+          </p>
+          <p className="text-[10px] text-slate-600">
+            Hover card to restore · <span className="text-amber-400/70">Regenerate</span> to re-create
           </p>
         </div>
       )}
@@ -353,7 +477,7 @@ export async function saveVideoAdToHistory(opts: {
 }): Promise<void> {
   try {
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return; // silently skip if not authenticated
+    if (!user) return;
 
     await supabase.from('ai_tool_projects').insert([{
       user_id: user.id,
@@ -362,6 +486,7 @@ export async function saveVideoAdToHistory(opts: {
       thumbnail_url: opts.thumbnailUrl,
       project_data: JSON.parse(JSON.stringify({
         script:       opts.script,
+        status:       'completed',
         settings:     opts.settings,
         clips:        opts.clips,
         voiceover:    opts.voiceover,

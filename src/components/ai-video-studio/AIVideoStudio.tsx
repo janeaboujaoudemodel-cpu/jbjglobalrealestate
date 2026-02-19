@@ -672,6 +672,11 @@ export function AIVideoStudio() {
       }
       historyPanel={
         <VideoAdHistoryPanel
+          onRegenerateAd={(ad) => {
+            // Switch to Projects panel so user can regenerate with the same property
+            layoutRef.current?.openTool('projects');
+            toast.info(`♻️ Open the Projects panel — select "${ad.project_data.propertyName ?? ad.project_name}" to regenerate`, { duration: 4000 });
+          }}
           onRestoreToTimeline={(ad) => {
             const { clips, voiceover, projectName, transitions: transitionType } = ad;
             const videoTrack = project.tracks.find(t => t.type === 'video');
