@@ -65,7 +65,7 @@ export const ProjectAIAnalyzer = ({
 
     timeoutRef.current = setTimeout(() => {
       setHasTimedOut(true);
-    }, 15000);
+    }, 45000);
 
     try {
       // Build context string for the AI
