@@ -1,9 +1,11 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Music2, Play, Download, Plus, Loader2, Wand2, Volume2, Square, ChevronDown, ChevronUp } from 'lucide-react';
+import { Music2, Play, Download, Plus, Loader2, Wand2, Square, ChevronDown, ChevronUp } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAudioAnalyser } from '../hooks/useAudioAnalyser';
+import { SoundWaveform } from './SoundWaveform';
 
 interface SoundEffect {
   id: string;
@@ -97,6 +99,8 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
   const [playProgress, setPlayProgress] = useState<Record<string, number>>({});
   const [expandedCats, setExpandedCats] = useState<Record<string, boolean>>({ '🏠 Real Estate': true });
   const audioRefs = useRef<Record<string, HTMLAudioElement>>({});
+  const analyserRefs = useRef<Record<string, AnalyserNode>>({});
+  const { connectAnalyser, resumeCtx } = useAudioAnalyser();
 
   const stopAll = useCallback(() => {
     Object.values(audioRefs.current).forEach(a => { a.pause(); a.currentTime = 0; });
@@ -147,14 +151,24 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
     }
   }, [prompt, duration, callSFX]);
 
-  const handlePlay = useCallback((sound: SoundEffect) => {
+  const handlePlay = useCallback(async (sound: SoundEffect) => {
     if (playingId === sound.id) {
       stopAll();
       return;
     }
     stopAll();
+
     const audio = audioRefs.current[sound.id] || new Audio(sound.url);
     audioRefs.current[sound.id] = audio;
+
+    // Resume AudioContext (required by Safari + Chrome autoplay policy)
+    await resumeCtx();
+
+    // Connect through Web Audio API analyser (WeakMap prevents duplicate wrapping)
+    if (!analyserRefs.current[sound.id]) {
+      analyserRefs.current[sound.id] = connectAnalyser(audio);
+    }
+
     audio.onended = () => { setPlayingId(null); setPlayProgress(p => ({ ...p, [sound.id]: 0 })); };
     audio.ontimeupdate = () => {
       if (audio.duration) {
@@ -163,7 +177,7 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
     };
     audio.play().catch(() => toast.error('Playback failed'));
     setPlayingId(sound.id);
-  }, [playingId, stopAll]);
+  }, [playingId, stopAll, resumeCtx, connectAnalyser]);
 
   const handleDownload = useCallback((sound: SoundEffect) => {
     const a = document.createElement('a');
@@ -239,19 +253,14 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
                       className={`bg-slate-800 rounded-lg px-3 py-2.5 border transition-colors ${isPlaying ? 'border-amber-500/60' : 'border-slate-700 hover:border-amber-500/40'}`}
                     >
                       <div className="flex items-center gap-2 mb-1.5">
-                        {/* Waveform animation */}
-                        <div className="flex items-center gap-0.5 flex-shrink-0">
-                          {[1,2,3,4,5].map(i => (
-                            <div
-                              key={i}
-                              className={`w-0.5 bg-amber-400 rounded-full transition-all ${isPlaying ? 'animate-bounce' : ''}`}
-                              style={{
-                                height: isPlaying ? `${8 + (i % 3) * 4}px` : '4px',
-                                animationDelay: `${i * 80}ms`,
-                                animationDuration: '600ms',
-                              }}
-                            />
-                          ))}
+                        {/* Real-time waveform via Web Audio API AnalyserNode */}
+                        <div className="flex-shrink-0">
+                          <SoundWaveform
+                            analyser={analyserRefs.current[sound.id] ?? null}
+                            isPlaying={isPlaying}
+                            width={112}
+                            height={28}
+                          />
                         </div>
                         <span className="text-xs text-slate-200 flex-1 truncate" title={sound.prompt}>
                           {sound.prompt}
