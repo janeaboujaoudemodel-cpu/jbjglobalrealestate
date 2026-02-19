@@ -36,8 +36,9 @@ interface Adjustments {
 }
 
 export function BeautyFiltersPanel() {
-  const [image, setImage] = useState<File | null>(null);
+  const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isVideo, setIsVideo] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState('none');
   const [adjustments, setAdjustments] = useState<Adjustments>({
     brightness: 0,
@@ -51,24 +52,49 @@ export function BeautyFiltersPanel() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
+  const loadFileToCanvas = useCallback((file: File) => {
+    setMediaFile(file);
+    const fileIsVideo = file.type.startsWith('video/');
+    setIsVideo(fileIsVideo);
+
+    if (fileIsVideo) {
+      // Extract first frame from video
+      const video = document.createElement('video');
+      video.src = URL.createObjectURL(file);
+      video.crossOrigin = 'anonymous';
+      video.onloadeddata = () => {
+        video.currentTime = 1;
+      };
+      video.onseeked = () => {
+        const tmpCanvas = document.createElement('canvas');
+        tmpCanvas.width = video.videoWidth;
+        tmpCanvas.height = video.videoHeight;
+        const tmpCtx = tmpCanvas.getContext('2d');
+        tmpCtx?.drawImage(video, 0, 0);
+        setImagePreview(tmpCanvas.toDataURL('image/jpeg', 0.9));
+      };
+      video.onerror = () => toast.error('Could not extract frame from video');
+    } else {
+      setImagePreview(URL.createObjectURL(file));
+    }
+  }, []);
+
   const handleFileDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile && droppedFile.type.startsWith('image/')) {
-      setImage(droppedFile);
-      setImagePreview(URL.createObjectURL(droppedFile));
+    if (droppedFile && (droppedFile.type.startsWith('image/') || droppedFile.type.startsWith('video/'))) {
+      loadFileToCanvas(droppedFile);
     } else {
-      toast.error('Please upload an image file');
+      toast.error('Please upload an image or video file');
     }
-  }, []);
+  }, [loadFileToCanvas]);
 
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      setImage(selectedFile);
-      setImagePreview(URL.createObjectURL(selectedFile));
+      loadFileToCanvas(selectedFile);
     }
-  }, []);
+  }, [loadFileToCanvas]);
 
   const applyPreset = (presetId: string) => {
     const preset = FILTER_PRESETS.find(p => p.id === presetId);
@@ -153,25 +179,25 @@ export function BeautyFiltersPanel() {
           <Sparkles className="h-4 w-4 text-gold" />
           <h3 className="text-sm font-medium text-white">Beauty Filters</h3>
         </div>
-        <p className="text-xs text-slate-500 mt-1">Apply professional filters to images</p>
+        <p className="text-xs text-slate-500 mt-1">Apply professional filters to images & video frames</p>
       </div>
 
       <div className="flex-1 overflow-y-auto p-3 space-y-4">
         {/* Upload Area */}
-        {!image && (
+        {!mediaFile && (
           <div
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleFileDrop}
-            className="border-2 border-dashed border-slate-700 rounded-lg p-6 text-center hover:border-gold/50 transition-colors cursor-pointer"
+            className="border-2 border-dashed border-slate-700 rounded-lg p-6 text-center hover:border-amber-500/50 transition-colors cursor-pointer"
             onClick={() => document.getElementById('beauty-file-input')?.click()}
           >
             <Upload className="h-8 w-8 text-slate-500 mx-auto mb-2" />
-            <p className="text-sm text-white mb-1">Drop image here</p>
-            <p className="text-xs text-slate-500">JPG, PNG, WebP</p>
+            <p className="text-sm text-white mb-1">Drop image or video here</p>
+            <p className="text-xs text-slate-500">JPG, PNG, WebP, MP4, MOV, WebM</p>
             <input
               id="beauty-file-input"
               type="file"
-              accept="image/*"
+              accept="image/*,video/*"
               onChange={handleFileSelect}
               className="hidden"
             />
@@ -179,17 +205,20 @@ export function BeautyFiltersPanel() {
         )}
 
         {/* Preview */}
-        {image && (
+        {mediaFile && (
           <>
             <div className="rounded-lg bg-slate-800 overflow-hidden">
               <div className="p-2 border-b border-slate-700 flex items-center justify-between">
-                <span className="text-xs text-white truncate">{image.name}</span>
+                <span className="text-xs text-white truncate">
+                  {isVideo ? '🎬 ' : '🖼️ '}{mediaFile.name}
+                </span>
                 <Button 
                   variant="ghost" 
                   size="sm"
                   onClick={() => {
-                    setImage(null);
+                    setMediaFile(null);
                     setImagePreview(null);
+                    setIsVideo(false);
                   }}
                   className="h-6 w-6 p-0"
                 >

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -25,6 +25,7 @@ const SFX_CATEGORIES = [
       { label: 'Elevator ding',        text: 'Hotel elevator arrival ding, clear bell tone' },
       { label: 'Champagne pop',        text: 'Champagne bottle cork popping, celebration fizz' },
       { label: 'Applause',            text: 'Polite indoor applause, small crowd clapping' },
+      { label: 'Pen signing',         text: 'Pen signing contract on paper, crisp scratch' },
     ],
   },
   {
@@ -34,15 +35,19 @@ const SFX_CATEGORIES = [
       { label: 'Coins pouring',        text: 'Gold coins pouring into a pile, metallic rattle' },
       { label: 'Money counting',       text: 'Paper money being counted, crisp bills rustling' },
       { label: 'Deal stamp',           text: 'Rubber stamp stamping APPROVED on document' },
+      { label: 'ATM beeps',           text: 'ATM machine processing beeps, card accepted' },
+      { label: 'Safe opening',        text: 'Heavy vault safe door opening, mechanical click' },
     ],
   },
   {
     label: '🌊 Ambient',
     prompts: [
       { label: 'Ocean ambience',       text: 'Relaxing ocean waves lapping on a beach, birds distant' },
+      { label: 'Pool ambience',        text: 'Luxury pool water gentle ripple, outdoor relaxation' },
       { label: 'City traffic',         text: 'City street ambience, distant traffic hum, urban' },
       { label: 'Wind through trees',   text: 'Gentle wind rustling through palm trees, tropical' },
       { label: 'Rain on window',       text: 'Light rain falling on a glass window, calm interior' },
+      { label: 'Desert wind',         text: 'Hot desert wind sweep, ambient arid atmosphere' },
     ],
   },
   {
@@ -52,6 +57,8 @@ const SFX_CATEGORIES = [
       { label: 'Camera shutter',       text: 'Camera shutter click, professional DSLR snapshot' },
       { label: 'Digital glitch',       text: 'Digital glitch transition, electronic distortion' },
       { label: 'Power up',             text: 'Futuristic tech power up activation sound' },
+      { label: 'Page turn',           text: 'Elegant paper page turn, soft whoosh' },
+      { label: 'Bell chime',          text: 'Single soft bell chime, notification tone' },
     ],
   },
   {
@@ -61,6 +68,19 @@ const SFX_CATEGORIES = [
       { label: 'Tension rise',         text: 'Orchestral tension build, strings rising suspense' },
       { label: 'Success fanfare',      text: 'Short triumphant fanfare, achievement success jingle' },
       { label: 'Luxury ambience',      text: 'Sophisticated lounge ambience, piano jazz background' },
+      { label: 'Heartbeat',           text: 'Slow dramatic heartbeat, cinematic pulse' },
+      { label: 'Crowd cheer',         text: 'Stadium crowd cheering, celebration roar' },
+    ],
+  },
+  {
+    label: '🎹 Music Stings',
+    prompts: [
+      { label: 'Luxury logo sting',   text: 'Premium brand logo reveal musical sting, elegant' },
+      { label: 'Jazz lick',           text: 'Short smooth jazz musical phrase, sophisticated' },
+      { label: 'Arabic oud note',     text: 'Arabic oud instrument short melodic phrase' },
+      { label: 'Piano reveal',        text: 'Single elegant piano chord reveal, luxury feel' },
+      { label: 'Strings swell',       text: 'Short orchestral strings swell, emotional build' },
+      { label: 'Corporate sting',     text: 'Modern corporate upbeat musical sting, professional' },
     ],
   },
 ];
@@ -74,12 +94,14 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
   const [generatingPreset, setGeneratingPreset] = useState<string | null>(null);
   const [generatedSounds, setGeneratedSounds] = useState<SoundEffect[]>([]);
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [playProgress, setPlayProgress] = useState<Record<string, number>>({});
   const [expandedCats, setExpandedCats] = useState<Record<string, boolean>>({ '🏠 Real Estate': true });
   const audioRefs = useRef<Record<string, HTMLAudioElement>>({});
 
   const stopAll = useCallback(() => {
     Object.values(audioRefs.current).forEach(a => { a.pause(); a.currentTime = 0; });
     setPlayingId(null);
+    setPlayProgress({});
   }, []);
 
   const callSFX = useCallback(async (sfxPrompt: string, sfxDuration: number): Promise<SoundEffect | null> => {
@@ -133,7 +155,12 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
     stopAll();
     const audio = audioRefs.current[sound.id] || new Audio(sound.url);
     audioRefs.current[sound.id] = audio;
-    audio.onended = () => setPlayingId(null);
+    audio.onended = () => { setPlayingId(null); setPlayProgress(p => ({ ...p, [sound.id]: 0 })); };
+    audio.ontimeupdate = () => {
+      if (audio.duration) {
+        setPlayProgress(p => ({ ...p, [sound.id]: (audio.currentTime / audio.duration) * 100 }));
+      }
+    };
     audio.play().catch(() => toast.error('Playback failed'));
     setPlayingId(sound.id);
   }, [playingId, stopAll]);
@@ -202,48 +229,74 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
                 <Music2 className="w-3.5 h-3.5" />
                 Generated Sounds ({generatedSounds.length})
               </p>
-              <div className="space-y-1.5">
-                {generatedSounds.map(sound => (
-                  <div
-                    key={sound.id}
-                    className="flex items-center gap-2 bg-slate-800 rounded-lg px-3 py-2 border border-slate-700 hover:border-amber-500/40 transition-colors"
-                  >
-                    <Music2 className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
-                    <span className="text-xs text-slate-200 flex-1 truncate" title={sound.prompt}>
-                      {sound.prompt}
-                    </span>
-                    <span className="text-xs text-slate-500 flex-shrink-0">{sound.duration}s</span>
-                    <div className="flex items-center gap-0.5">
-                      <Button
-                        size="sm" variant="ghost"
-                        onClick={() => handlePlay(sound)}
-                        className="h-6 w-6 p-0 text-slate-300 hover:text-amber-400 hover:bg-slate-700"
-                        title={playingId === sound.id ? 'Stop' : 'Play'}
-                      >
-                        {playingId === sound.id
-                          ? <Square className="w-3 h-3 fill-current" />
-                          : <Play className="w-3 h-3 fill-current" />
-                        }
-                      </Button>
-                      <Button
-                        size="sm" variant="ghost"
-                        onClick={() => handleDownload(sound)}
-                        className="h-6 w-6 p-0 text-slate-300 hover:text-amber-400 hover:bg-slate-700"
-                        title="Download"
-                      >
-                        <Download className="w-3 h-3" />
-                      </Button>
-                      <Button
-                        size="sm" variant="ghost"
-                        onClick={() => handleAddToTimeline(sound)}
-                        className="h-6 w-6 p-0 text-slate-300 hover:text-green-400 hover:bg-slate-700"
-                        title="Add to Timeline"
-                      >
-                        <Plus className="w-3 h-3" />
-                      </Button>
+              <div className="space-y-2">
+                {generatedSounds.map(sound => {
+                  const isPlaying = playingId === sound.id;
+                  const progress = playProgress[sound.id] ?? 0;
+                  return (
+                    <div
+                      key={sound.id}
+                      className={`bg-slate-800 rounded-lg px-3 py-2.5 border transition-colors ${isPlaying ? 'border-amber-500/60' : 'border-slate-700 hover:border-amber-500/40'}`}
+                    >
+                      <div className="flex items-center gap-2 mb-1.5">
+                        {/* Waveform animation */}
+                        <div className="flex items-center gap-0.5 flex-shrink-0">
+                          {[1,2,3,4,5].map(i => (
+                            <div
+                              key={i}
+                              className={`w-0.5 bg-amber-400 rounded-full transition-all ${isPlaying ? 'animate-bounce' : ''}`}
+                              style={{
+                                height: isPlaying ? `${8 + (i % 3) * 4}px` : '4px',
+                                animationDelay: `${i * 80}ms`,
+                                animationDuration: '600ms',
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-xs text-slate-200 flex-1 truncate" title={sound.prompt}>
+                          {sound.prompt}
+                        </span>
+                        <span className="text-xs text-slate-500 flex-shrink-0">{sound.duration}s</span>
+                        <div className="flex items-center gap-0.5">
+                          <Button
+                            size="sm" variant="ghost"
+                            onClick={() => handlePlay(sound)}
+                            className={`h-6 w-6 p-0 hover:bg-slate-700 ${isPlaying ? 'text-amber-400' : 'text-slate-300 hover:text-amber-400'}`}
+                            title={isPlaying ? 'Stop' : 'Play'}
+                          >
+                            {isPlaying
+                              ? <Square className="w-3 h-3 fill-current" />
+                              : <Play className="w-3 h-3 fill-current" />
+                            }
+                          </Button>
+                          <Button
+                            size="sm" variant="ghost"
+                            onClick={() => handleDownload(sound)}
+                            className="h-6 w-6 p-0 text-slate-300 hover:text-amber-400 hover:bg-slate-700"
+                            title="Download"
+                          >
+                            <Download className="w-3 h-3" />
+                          </Button>
+                          <Button
+                            size="sm" variant="ghost"
+                            onClick={() => handleAddToTimeline(sound)}
+                            className="h-6 w-6 p-0 text-slate-300 hover:text-green-400 hover:bg-slate-700"
+                            title="Add to Timeline"
+                          >
+                            <Plus className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      </div>
+                      {/* Progress bar */}
+                      <div className="w-full h-1 bg-slate-700 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-amber-400 rounded-full transition-all duration-200"
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               <div className="border-t border-slate-700 my-3" />
             </div>

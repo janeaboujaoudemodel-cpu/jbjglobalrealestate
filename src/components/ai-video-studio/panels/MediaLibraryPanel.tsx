@@ -17,7 +17,8 @@ import {
   Play,
   Plus,
   Loader2,
-  X
+  X,
+  Sparkles
 } from 'lucide-react';
 import { MediaAsset, StockAsset } from '../types';
 
@@ -48,6 +49,8 @@ export function MediaLibraryPanel({
   const [searchQuery, setSearchQuery] = useState('');
   const [stockCategory, setStockCategory] = useState<string>('');
   const [previewAsset, setPreviewAsset] = useState<MediaAsset | StockAsset | null>(null);
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [isGeneratingScene, setIsGeneratingScene] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +69,53 @@ export function MediaLibraryPanel({
   const handleStockSearch = useCallback(() => {
     onLoadStock(stockCategory || undefined, searchQuery || undefined);
   }, [onLoadStock, stockCategory, searchQuery]);
+
+  const handleGenerateScene = useCallback(async () => {
+    if (!aiPrompt.trim()) { toast.error('Enter a scene description first'); return; }
+    setIsGeneratingScene(true);
+    try {
+      const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash-image',
+          messages: [{ role: 'user', content: `Generate a cinematic real estate / property scene: ${aiPrompt}. High quality, professional photography style.` }],
+          modalities: ['image', 'text'],
+        }),
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      const imgUrl = data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+      if (!imgUrl) throw new Error('No image returned');
+
+      // Convert base64 to a blob object URL and add to library
+      const base64 = imgUrl.replace(/^data:image\/\w+;base64,/, '');
+      const byteChars = atob(base64);
+      const bytes = new Uint8Array(byteChars.length);
+      for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
+      const blob = new Blob([bytes], { type: 'image/png' });
+      const objectUrl = URL.createObjectURL(blob);
+
+      const generatedAsset: MediaAsset = {
+        id: crypto.randomUUID(),
+        name: `AI Scene - ${aiPrompt.slice(0, 30)}`,
+        type: 'image',
+        url: objectUrl,
+        thumbnailUrl: objectUrl,
+      };
+      onAddToTimeline(generatedAsset);
+      toast.success('AI scene generated and added to timeline!');
+      setAiPrompt('');
+    } catch (err) {
+      console.error('AI scene generation error:', err);
+      toast.error('Scene generation failed. Please try again.');
+    } finally {
+      setIsGeneratingScene(false);
+    }
+  }, [aiPrompt, onAddToTimeline]);
 
   const filteredAssets = assets.filter(asset =>
     asset.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -190,15 +240,14 @@ export function MediaLibraryPanel({
                 <Button
                   key={cat.id}
                   size="sm"
-                  variant={stockCategory === cat.id ? 'default' : 'ghost'}
                   onClick={() => {
                     setStockCategory(cat.id);
                     onLoadStock(cat.id || undefined, searchQuery || undefined);
                   }}
                   className={
                     stockCategory === cat.id
-                      ? 'bg-gold text-black hover:bg-gold/90 h-7 text-xs'
-                      : 'text-slate-400 hover:text-white h-7 text-xs'
+                      ? 'bg-amber-500 text-black hover:bg-amber-400 h-7 text-xs font-semibold border border-amber-500'
+                      : 'bg-slate-700 text-slate-200 hover:text-white hover:bg-slate-600 h-7 text-xs border border-slate-600'
                   }
                 >
                   {cat.label}
@@ -235,20 +284,30 @@ export function MediaLibraryPanel({
           <TabsContent value="ai" className="mt-0 p-2">
             <div className="space-y-3">
               <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700">
-                <h4 className="text-sm font-medium text-gold mb-2 flex items-center gap-2">
-                  <Film className="w-4 h-4" />
-                  AI B-Roll Generator
+                <h4 className="text-sm font-medium text-amber-400 mb-2 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  AI Scene Generator
                 </h4>
                 <p className="text-xs text-slate-400 mb-3">
-                  Generate cinematic drone-style footage from text prompts
+                  Generate cinematic scenes from text prompts using AI
                 </p>
+                <textarea
+                  value={aiPrompt}
+                  onChange={e => setAiPrompt(e.target.value)}
+                  placeholder="Describe your scene... e.g. Luxury villa pool at sunset, Dubai skyline, aerial view"
+                  className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-xs text-white resize-none focus:outline-none focus:border-amber-500/60 placeholder-slate-500 mb-2"
+                  rows={3}
+                />
                 <Button 
                   size="sm" 
-                  className="w-full bg-gold text-black hover:bg-gold/90 border border-gold"
-                  onClick={() => toast.info('AI Scene Generator coming soon! Use the Photos tab to upload your own images.')}
+                  className="w-full bg-amber-500 text-black hover:bg-amber-400 font-semibold"
+                  onClick={handleGenerateScene}
+                  disabled={isGeneratingScene}
                 >
-                  <Wand2 className="w-4 h-4 mr-2" />
-                  Generate Scene
+                  {isGeneratingScene
+                    ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Generating…</>
+                    : <><Wand2 className="w-4 h-4 mr-2" />Generate Scene</>
+                  }
                 </Button>
               </div>
 
@@ -364,18 +423,15 @@ interface AssetCardProps {
 }
 
 function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProps) {
-  const getIcon = () => {
+  const getIconBg = () => {
     switch (asset.type) {
-      case 'video':
-        return <Film className="w-6 h-6" />;
-      case 'audio':
-        return <Music className="w-6 h-6" />;
-      case 'image':
-        return <Image className="w-6 h-6" />;
-      default:
-        return <Film className="w-6 h-6" />;
+      case 'video': return { icon: <Film className="w-6 h-6 text-blue-400" />, bg: 'bg-blue-900/40' };
+      case 'audio': return { icon: <Music className="w-6 h-6 text-amber-400" />, bg: 'bg-amber-900/40' };
+      case 'image': return { icon: <Image className="w-6 h-6 text-green-400" />, bg: 'bg-green-900/40' };
+      default:      return { icon: <Film className="w-6 h-6 text-slate-400" />, bg: 'bg-slate-700' };
     }
   };
+  const { icon, bg } = getIconBg();
 
   const formatDuration = (seconds?: number) => {
     if (!seconds) return '';
@@ -388,13 +444,16 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
     <div className="group relative bg-slate-800/50 rounded-lg overflow-hidden border border-slate-700 hover:border-gold/50 transition-colors">
       {/* Thumbnail */}
       <div 
-        className="aspect-video bg-slate-800 flex items-center justify-center cursor-pointer"
+        className={`aspect-video flex items-center justify-center cursor-pointer ${asset.thumbnailUrl ? 'bg-slate-800' : bg}`}
         onClick={onPreview}
       >
         {asset.thumbnailUrl ? (
           <img src={asset.thumbnailUrl} alt={asset.name} className="w-full h-full object-cover" />
         ) : (
-          <div className="text-slate-500">{getIcon()}</div>
+          <div className="flex flex-col items-center gap-1">
+            {icon}
+            <span className="text-xs text-slate-400 capitalize">{asset.type}</span>
+          </div>
         )}
         
         {/* Duration Badge */}

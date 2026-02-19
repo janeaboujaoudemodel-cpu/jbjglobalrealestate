@@ -149,7 +149,7 @@ function AIVideoStudioLayout({
 
       {/* Active Tool Panel */}
       {activeTool && toolsExpanded && toolPanelContent[activeTool] && (
-        <div className="border-t border-slate-600 h-72 overflow-hidden bg-slate-900">
+        <div className="border-t border-slate-600 h-64 flex-shrink-0 overflow-hidden bg-slate-900 overscroll-contain">
           {toolPanelContent[activeTool]}
         </div>
       )}
@@ -205,7 +205,7 @@ function AIVideoStudioLayout({
       {/* Main Content Area */}
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
         {/* Full-width Preview */}
-        <div className="flex-1 min-h-0 w-full overflow-hidden bg-slate-950">
+        <div className="flex-1 min-h-[180px] w-full overflow-hidden bg-slate-950">
           {centerPanel}
         </div>
 
