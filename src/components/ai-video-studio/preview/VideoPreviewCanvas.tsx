@@ -89,6 +89,25 @@ export interface TransitionClipPreview {
   easing: string;
 }
 
+interface BeautyAdjustments {
+  brightness: number;
+  contrast: number;
+  saturation: number;
+  warmth: number;
+  blur: number;
+  vignette: number;
+}
+
+function computeCssFilter(f: BeautyAdjustments): string {
+  return [
+    `brightness(${100 + f.brightness}%)`,
+    `contrast(${100 + f.contrast}%)`,
+    `saturate(${100 + f.saturation}%)`,
+    f.warmth > 0 ? `sepia(${f.warmth / 2}%)` : `hue-rotate(${f.warmth}deg)`,
+    `blur(${f.blur / 10}px)`,
+  ].join(' ');
+}
+
 interface VideoPreviewCanvasProps {
   clips: Array<{
     id: string;
@@ -107,6 +126,8 @@ interface VideoPreviewCanvasProps {
   onUpload?: (files: FileList) => void;
   onOpenTool?: (toolId: string) => void;
   activeOverlayEffect?: string | null;
+  beautyFilter?: BeautyAdjustments | null;
+  onClearBeautyFilter?: () => void;
 }
 
 const QUICK_ACTIONS = [
@@ -216,6 +237,8 @@ export function VideoPreviewCanvas({
   onUpload,
   onOpenTool,
   activeOverlayEffect = null,
+  beautyFilter = null,
+  onClearBeautyFilter,
 }: VideoPreviewCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -381,6 +404,7 @@ export function VideoPreviewCanvas({
                   className="w-full h-full object-contain"
                   muted={isMuted}
                   playsInline
+                  style={{ filter: beautyFilter ? computeCssFilter(beautyFilter) : 'none' }}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
@@ -390,6 +414,16 @@ export function VideoPreviewCanvas({
                     <p className="text-slate-500 text-sm mt-1">Move the playhead to a clip</p>
                   </div>
                 </div>
+              )}
+
+              {/* ── Beauty Vignette Overlay ── */}
+              {beautyFilter && beautyFilter.vignette > 0 && (
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,${beautyFilter.vignette / 100}) 100%)`,
+                  }}
+                />
               )}
 
               {/* ── Active Text Overlays ── */}
@@ -455,8 +489,18 @@ export function VideoPreviewCanvas({
               {/* Premium Effect Overlay on canvas */}
               <PremiumEffectOverlay effectId={activeOverlayEffect} />
 
-              {/* Time Overlay */}
+              {/* ── Beauty: ON badge ── */}
+              {beautyFilter && (
+                <button
+                  onClick={onClearBeautyFilter}
+                  className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold bg-amber-500/90 text-black hover:bg-amber-400 transition-colors shadow-lg"
+                  title="Click to clear beauty filter"
+                >
+                  ✨ Beauty: ON
+                </button>
+              )}
 
+              {/* Time Overlay */}
               <div className="absolute top-3 right-3 bg-black/80 px-2 py-1 rounded text-xs font-mono text-white border border-white/10">
                 {formatTime(currentTime)} / {formatTime(duration)}
               </div>
@@ -470,6 +514,7 @@ export function VideoPreviewCanvas({
                   </div>
                 </div>
               )}
+
             </>
           ) : (
             /* ── Welcome / Empty State ── */
