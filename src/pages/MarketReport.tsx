@@ -437,10 +437,33 @@ const MarketReport = () => {
     align-items: center;
     padding: 13px 0;
     border-bottom: 1px solid rgba(168,146,90,0.2);
+    cursor: pointer;
   }
   
-  .toc-item .title { font-size: 15px; color: #1A1814; }
-  .toc-item .page-num { color: #A8925A; font-weight: 600; }
+  .toc-item a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #1A1814;
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+  
+  .toc-item a:hover { color: #A8925A; }
+  
+  .toc-item .toc-num {
+    font-size: 11px;
+    color: #A8925A;
+    font-weight: 700;
+    width: 20px;
+    flex-shrink: 0;
+  }
+  
+  .toc-item .toc-arrow { color: #A8925A; font-size: 13px; margin-left: auto; margin-right: 8px; }
+  .toc-item .page-num { color: #A8925A; font-weight: 700; font-size: 14px; flex-shrink: 0; }
   
   /* Company Identity Card (dark luxe card on champagne page) */
   .identity-card {
@@ -554,12 +577,13 @@ const MarketReport = () => {
   
   .villa-gallery img {
     width: 100%;
-    height: 175px;
-    object-fit: contain;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
     object-position: center center;
-    border-radius: 12px;
+    border-radius: 16px;
     border: 1px solid rgba(168,146,90,0.3);
     background: #F5EBD7;
+    display: block;
   }
   
   /* Founder image */
@@ -894,28 +918,38 @@ const MarketReport = () => {
 
     <h2>Table of Contents</h2>
     <div class="toc">
-      <div class="toc-item"><span class="title">1. Company Overview &amp; Identity</span><span class="page-num">2</span></div>
-      ${isFounderVisible ? '<div class="toc-item"><span class="title">2. From the Founder</span><span class="page-num">3</span></div>' : ''}
-      <div class="toc-item"><span class="title">3. Why This Report Exists</span><span class="page-num">4</span></div>
-      <div class="toc-item"><span class="title">4. 2025 Full Year Market Review</span><span class="page-num">5</span></div>
-      <div class="toc-item"><span class="title">5. UAE GDP &amp; Global Rankings</span><span class="page-num">6</span></div>
-      <div class="toc-item"><span class="title">6. Dubai Transaction Dashboard (DLD Live)</span><span class="page-num">7</span></div>
-      <div class="toc-item"><span class="title">7. Top Areas by Volume (DLD Live)</span><span class="page-num">8</span></div>
-      <div class="toc-item"><span class="title">8. Top Buyer Nationalities</span><span class="page-num">9</span></div>
-      <div class="toc-item"><span class="title">9. Property Types &amp; Rental Yields</span><span class="page-num">10</span></div>
-      <div class="toc-item"><span class="title">10. Key Investment Indicators</span><span class="page-num">11</span></div>
-      <div class="toc-item"><span class="title">11. Community Comparison Guide</span><span class="page-num">12</span></div>
-      <div class="toc-item"><span class="title">12. Developer Framework</span><span class="page-num">13</span></div>
-      <div class="toc-item"><span class="title">13. Off-Plan vs Ready Properties</span><span class="page-num">14</span></div>
-      <div class="toc-item"><span class="title">14. Due Diligence Checklist</span><span class="page-num">15</span></div>
-      <div class="toc-item"><span class="title">15. Market Outlook 2026</span><span class="page-num">16</span></div>
-      <div class="toc-item"><span class="title">16. Risk Management</span><span class="page-num">17</span></div>
-      <div class="toc-item"><span class="title">17. AI Property Matchmaker</span><span class="page-num">18</span></div>
-      <div class="toc-item"><span class="title">18. Latest Market News (Live)</span><span class="page-num">19</span></div>
-      <div class="toc-item"><span class="title">19. Featured Areas</span><span class="page-num">20</span></div>
-      <div class="toc-item"><span class="title">20. Featured Developers</span><span class="page-num">21</span></div>
-      <div class="toc-item"><span class="title">21. Featured Projects</span><span class="page-num">22</span></div>
-      <div class="toc-item"><span class="title">22. Explore All &amp; Contact</span><span class="page-num">23</span></div>
+      ${[
+        [2,'Company Overview &amp; Identity'],
+        ...(isFounderVisible ? [[3,'From the Founder']] : []),
+        [4, isFounderVisible ? 'Why I Created This Book' : 'Why We Created This Book'],
+        [5,'2025 Full Year Market Review'],
+        [6,'UAE GDP &amp; Global Rankings'],
+        [7,'Dubai Transaction Dashboard (DLD Live)'],
+        [8,'Top Areas by Volume (DLD Live)'],
+        [9,'Top Buyer Nationalities'],
+        [10,'Property Types &amp; Rental Yields'],
+        [11,'Key Investment Indicators'],
+        [12,'Community Comparison Guide'],
+        [13,'Developer Framework'],
+        [14,'Off-Plan vs Ready Properties'],
+        [15,'Due Diligence Checklist'],
+        [16,'Market Outlook 2026'],
+        [17,'Risk Management'],
+        [18,'AI Property Matchmaker'],
+        [19,'Latest Market News (Live)'],
+        [20,'Featured Areas'],
+        [21,'Featured Developers'],
+        [22,'Featured Projects'],
+        [23,'Explore All &amp; Contact'],
+      ].map(([pg, title], i) => `
+      <div class="toc-item">
+        <a href="#page-${pg}">
+          <span class="toc-num">${i+1}.</span>
+          <span>${title}</span>
+          <span class="toc-arrow">→</span>
+        </a>
+        <span class="page-num">${pg}</span>
+      </div>`).join('')}
     </div>
     <span class="page-number">2</span>
   </div>
@@ -940,16 +974,16 @@ const MarketReport = () => {
   ` : ''}
 
   <!-- PAGE 4: WHY THIS REPORT EXISTS -->
-  <div class="page">
-    <h2>Why This Report Exists</h2>
+  <div class="page" id="page-4">
+    <h2>${isFounderVisible ? 'Why I Created This Book' : 'Why We Created This Book'}</h2>
     <div class="two-col">
       <div>
-        <p style="font-size: 15px; line-height: 1.8; color: #1A1814;">After years of guiding buyers through UAE real estate transactions, I recognized a critical gap: there was no single, comprehensive resource that combined official market data with practical decision-making frameworks.</p>
-        <p>Too many property buyers were making decisions based on incomplete information, marketing hype, or unreliable sources. I wanted to change that.</p>
-        <p>This book distills my experience into structured frameworks that help you evaluate opportunities objectively — whether you are a first-time buyer or an experienced portfolio investor.</p>
+        <p style="font-size: 15px; line-height: 1.8; color: #1A1814;">${isFounderVisible ? 'After years of guiding buyers through UAE real estate transactions, I recognized a critical gap: there was no single, comprehensive resource that combined official market data with practical decision-making frameworks.' : 'After years of guiding buyers through UAE real estate transactions, we recognized a critical gap: there was no single, comprehensive resource that combined official market data with practical decision-making frameworks.'}</p>
+        <p>${isFounderVisible ? 'Too many property buyers were making decisions based on incomplete information, marketing hype, or unreliable sources. I wanted to change that.' : 'Too many property buyers were making decisions based on incomplete information, marketing hype, or unreliable sources. We wanted to change that.'}</p>
+        <p>${isFounderVisible ? 'This book distills my experience into structured frameworks that help you evaluate opportunities objectively — whether you are a first-time buyer or an experienced portfolio investor.' : 'This book distills our experience into structured frameworks that help you evaluate opportunities objectively — whether you are a first-time buyer or an experienced portfolio investor.'}</p>
       </div>
       <div>
-        <img src="${villaImages[1]}" alt="Luxury Property" style="width: 100%; height: 200px; object-fit: contain; object-position: center center; border-radius: 12px; border: 1px solid rgba(168,146,90,0.3); background: #F5EBD7;" />
+        <img src="${villaImages[1]}" alt="Luxury Property" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; object-position: center center; border-radius: 16px; border: 1px solid rgba(168,146,90,0.3);" />
       </div>
     </div>
     <h3>What You Will Learn</h3>
