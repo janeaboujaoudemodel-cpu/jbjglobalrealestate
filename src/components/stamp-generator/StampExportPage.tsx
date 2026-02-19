@@ -438,7 +438,7 @@ export default function StampExportPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]">
       {/* Header */}
-      <div className="border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm sticky top-24 sm:top-28 lg:top-32 z-10">
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/generate`)} className="gap-1">

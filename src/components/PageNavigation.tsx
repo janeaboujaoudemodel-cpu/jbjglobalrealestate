@@ -98,6 +98,11 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
     "pointer-events-auto select-none touch-manipulation cursor-pointer"
   );
 
+  // On stamp generator pages the layout uses internal scroll containers, not window scroll.
+  // Hide scroll arrows there — only the back button is useful.
+  const effectiveShowScrollTop = isStampGenerator ? false : showScrollTop;
+  const effectiveShowScrollBottom = isStampGenerator ? false : showScrollBottom;
+
   return (
     <div 
       ref={ref}
@@ -117,7 +122,7 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
         className={cn(
           buttonBaseClass,
           "transition-opacity duration-200",
-          showScrollTop ? "opacity-100" : "opacity-0 pointer-events-none"
+          effectiveShowScrollTop ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         aria-label="Scroll to top"
       >
@@ -142,7 +147,7 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
           className={cn(
             buttonBaseClass,
             "transition-opacity duration-200",
-            showScrollBottom ? "opacity-100" : "opacity-0 pointer-events-none"
+            effectiveShowScrollBottom ? "opacity-100" : "opacity-0 pointer-events-none"
           )}
           aria-label="Scroll to bottom"
         >

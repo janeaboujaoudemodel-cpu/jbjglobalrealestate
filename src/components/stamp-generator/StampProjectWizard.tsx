@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -7,8 +7,29 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Stamp, ChevronRight, ChevronLeft, Building2, Palette, Image, Wand2, Check } from 'lucide-react';
+import { Stamp, ChevronRight, ChevronLeft, Building2, Palette, Image, Wand2, Check, Type } from 'lucide-react';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
+
+// UAE phone normalization
+function normalizePhone(raw: string): string {
+  if (!raw) return raw;
+  const digits = raw.replace(/[^\d]/g, '');
+  if (digits.startsWith('00971')) return '+971' + digits.slice(5);
+  if (digits.startsWith('971') && !raw.startsWith('+')) return '+' + digits;
+  if (/^0[45]/.test(digits)) return '+971' + digits.slice(1);
+  return raw.startsWith('+') ? raw : raw;
+}
+
+// UAE country correction
+const UAE_CITIES = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman', 'Ras Al Khaimah', 'Fujairah', 'Umm Al Quwain'];
+const NON_UAE_COUNTRIES = ['Lebanon', 'Egypt', 'India', 'Pakistan', 'Jordan', 'Syria', 'Philippines', 'Iraq', 'Morocco'];
+
+function correctCountry(country: string, city: string): string {
+  const isWrongCountry = NON_UAE_COUNTRIES.some(c => country.toLowerCase().includes(c.toLowerCase()));
+  const isUaeCity = UAE_CITIES.some(c => city.toLowerCase().includes(c.toLowerCase()));
+  if (isWrongCountry && isUaeCity) return 'United Arab Emirates';
+  return country;
+}
 
 type StampType = 'ROUND' | 'OVAL' | 'RECTANGLE' | 'SQUARE';
 type StyleTheme = 'CLASSIC' | 'MODERN' | 'MINIMAL' | 'LUXURY' | 'BOLD' | 'VINTAGE';
@@ -62,30 +83,48 @@ const OptionButton = ({ selected, onClick, children, className = '' }: {
 export default function StampProjectWizard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [step, setStep] = useState(0);
-  const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState<FormState>({
-    project_name: 'My Stamp Project',
-    company_name: '',
-    arabic_company_name: '',
-    trade_name_optional: '',
-    registration_number_optional: '',
-    address_optional: '',
-    phone_optional: '',
-    email_optional: '',
-    website_optional: '',
-    city_optional: '',
-    country_optional: 'UAE',
-    arabic_city: '',
-    language_mode: 'EN',
-    stamp_type: 'ROUND',
-    style_theme: 'CLASSIC',
-    border_style: 'DOUBLE',
-    typography_style: 'SERIF',
-    density: 3,
-    icon_style: 'MONOGRAM',
-    monogram_text: '',
+  const [emailUppercase, setEmailUppercase] = useState(true);
+
+  const [step, setStep] = useState(() => {
+    try { return Number(sessionStorage.getItem('stamp-wizard-step')) || 0; } catch { return 0; }
   });
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState<FormState>(() => {
+    try {
+      const saved = sessionStorage.getItem('stamp-wizard-form');
+      if (saved) return JSON.parse(saved);
+    } catch { /* ignore */ }
+    return {
+      project_name: 'My Stamp Project',
+      company_name: '',
+      arabic_company_name: '',
+      trade_name_optional: '',
+      registration_number_optional: '',
+      address_optional: '',
+      phone_optional: '',
+      email_optional: '',
+      website_optional: '',
+      city_optional: '',
+      country_optional: 'UAE',
+      arabic_city: '',
+      language_mode: 'EN' as LanguageMode,
+      stamp_type: 'ROUND' as StampType,
+      style_theme: 'CLASSIC' as StyleTheme,
+      border_style: 'DOUBLE' as BorderStyle,
+      typography_style: 'SERIF' as TypographyStyle,
+      density: 3,
+      icon_style: 'MONOGRAM' as IconStyle,
+      monogram_text: '',
+    };
+  });
+
+  // Persist form + step to sessionStorage
+  useEffect(() => {
+    try { sessionStorage.setItem('stamp-wizard-form', JSON.stringify(form)); } catch { /* ignore */ }
+  }, [form]);
+  useEffect(() => {
+    try { sessionStorage.setItem('stamp-wizard-step', String(step)); } catch { /* ignore */ }
+  }, [step]);
 
   const set = (key: keyof FormState, val: any) => setForm(f => ({ ...f, [key]: val }));
 
@@ -121,6 +160,8 @@ export default function StampProjectWizard() {
       .single();
     setSaving(false);
     if (error) { toast.error('Failed to create project'); return; }
+    // Clear session persistence after successful creation
+    try { sessionStorage.removeItem('stamp-wizard-form'); sessionStorage.removeItem('stamp-wizard-step'); } catch { /* ignore */ }
     toast.success('Project created!');
     navigate(`/toolkit/stamp-generator/${data.id}/generate`);
   }
@@ -128,7 +169,7 @@ export default function StampProjectWizard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]">
       {/* Header */}
-      <div className="border-b border-[hsl(var(--border))] bg-white/80 backdrop-blur-sm">
+      <div className="border-b border-[hsl(var(--border))] bg-white/80 backdrop-blur-sm sticky top-24 sm:top-28 lg:top-32 z-10">
         <div className="max-w-2xl mx-auto px-6 py-4 flex items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center">
             <Stamp size={16} className="text-white"/>
@@ -183,11 +224,17 @@ export default function StampProjectWizard() {
                     set('language_mode', 'BILINGUAL');
                   }
                   if (data.registration_number) set('registration_number_optional', data.registration_number);
-                  if (data.city) set('city_optional', data.city);
+                  const city = data.city || '';
+                  if (city) set('city_optional', city);
                   if (data.arabic_city) set('arabic_city', data.arabic_city);
-                  if (data.country) set('country_optional', data.country);
-                  if (data.phone) set('phone_optional', data.phone);
-                  if (data.email) set('email_optional', data.email);
+                  // Smart country correction: don't confuse owner nationality with company country
+                  const rawCountry = data.country || '';
+                  const correctedCountry = correctCountry(rawCountry, city);
+                  set('country_optional', correctedCountry || 'UAE');
+                  // Normalize phone to international format with + prefix
+                  if (data.phone) set('phone_optional', normalizePhone(data.phone));
+                  // Default email to uppercase
+                  if (data.email) set('email_optional', data.email.toUpperCase());
                 }}
               />
 
@@ -221,8 +268,23 @@ export default function StampProjectWizard() {
                   <Input value={form.phone_optional} onChange={e => set('phone_optional', e.target.value)} placeholder="+971 XX XXX XXXX"/>
                 </div>
                 <div>
-                  <Label className="text-xs font-medium mb-1.5 block">Email</Label>
-                  <Input value={form.email_optional} onChange={e => set('email_optional', e.target.value)} placeholder="info@company.com"/>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <Label className="text-xs font-medium">Email</Label>
+                    <button
+                      type="button"
+                      onClick={() => setEmailUppercase(v => !v)}
+                      className="text-[10px] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))] border border-[hsl(var(--border))] rounded px-1.5 py-0.5 flex items-center gap-1 transition-colors"
+                      title="Toggle uppercase/lowercase"
+                    >
+                      <Type size={9}/> {emailUppercase ? 'ABC' : 'abc'}
+                    </button>
+                  </div>
+                  <Input
+                    value={form.email_optional}
+                    onChange={e => set('email_optional', emailUppercase ? e.target.value.toUpperCase() : e.target.value)}
+                    placeholder={emailUppercase ? 'INFO@COMPANY.COM' : 'info@company.com'}
+                    className={emailUppercase ? 'uppercase' : ''}
+                  />
                 </div>
               </div>
 
@@ -386,7 +448,7 @@ export default function StampProjectWizard() {
         <div className="flex justify-between">
           <Button
             variant="outline"
-            onClick={() => step === 0 ? navigate('/toolkit/stamp-generator') : setStep(s => s - 1)}
+            onClick={() => step === 0 ? navigate('/toolkit/stamp-generator/projects') : setStep(s => s - 1)}
             className="gap-1"
           >
             <ChevronLeft size={15}/> {step === 0 ? 'Back to Projects' : 'Previous'}
