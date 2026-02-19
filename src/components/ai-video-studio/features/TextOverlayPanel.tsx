@@ -40,8 +40,11 @@ type PresetItem = {
   position: 'top' | 'center' | 'bottom';
   style: 'clean' | 'bold' | 'highlight' | 'lower-third';
   textAlign: 'left' | 'center' | 'right';
-  /** Which entry animation best represents this preset */
   hoverAnimation: 'fade-in' | 'slide-up' | 'slide-down' | 'zoom-in' | 'typewriter';
+  /** Extra inline CSS applied only to the thumbnail text span */
+  extraStyle?: React.CSSProperties;
+  /** Custom thumbnail renderer — overrides default text span layout */
+  thumbnailRenderer?: () => React.ReactNode;
 };
 
 const PRESET_CATEGORIES: PresetCategory[] = ['Title', 'Lower Third', 'Caption', 'Quote', 'Social'];
@@ -49,14 +52,78 @@ const PRESET_CATEGORIES: PresetCategory[] = ['Title', 'Lower Third', 'Caption', 
 const TEXT_PRESETS: PresetItem[] = [
   { label: 'Clean Title',    category: 'Title',       content: 'Your Title Here',   fontFamily: 'Inter, sans-serif',       fontSize: 52, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'transparent',     position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'    },
   { label: 'Cinematic Title',category: 'Title',       content: 'EPIC SCENE',        fontFamily: 'Impact, sans-serif',      fontSize: 60, fontWeight: 'bold',   color: '#F5E6C8', backgroundColor: 'transparent',     position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'zoom-in'    },
+  {
+    label: 'Neon Glow', category: 'Title',
+    content: 'NEON', fontFamily: 'Impact, sans-serif', fontSize: 64, fontWeight: 'bold',
+    color: '#00FFFF', backgroundColor: 'transparent', position: 'center', style: 'bold', textAlign: 'center',
+    hoverAnimation: 'fade-in',
+    extraStyle: {
+      textShadow: '0 0 8px #00FFFF, 0 0 20px #00FFFF, 0 0 40px #00BFFF',
+      letterSpacing: '0.08em',
+    },
+  },
+  {
+    label: 'Kinetic Bold', category: 'Title',
+    content: 'BOLD', fontFamily: 'Impact, sans-serif', fontSize: 72, fontWeight: 'bold',
+    color: 'transparent', backgroundColor: 'transparent', position: 'center', style: 'bold', textAlign: 'center',
+    hoverAnimation: 'zoom-in',
+    extraStyle: {
+      WebkitTextStroke: '1.5px #FFFFFF',
+      color: 'transparent',
+      letterSpacing: '0.06em',
+    },
+  },
   { label: 'Lower Third',    category: 'Lower Third', content: 'Name / Title',      fontFamily: 'Inter, sans-serif',       fontSize: 28, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.7)', position: 'bottom', style: 'lower-third', textAlign: 'left',   hoverAnimation: 'slide-up'   },
   { label: 'Dubai Lower 3rd',category: 'Lower Third', content: 'Luxury Property',   fontFamily: 'Inter, sans-serif',       fontSize: 26, fontWeight: 'bold',   color: '#FFD700', backgroundColor: 'rgba(0,0,0,0.75)',position: 'bottom', style: 'lower-third', textAlign: 'left',   hoverAnimation: 'slide-up'   },
+  {
+    label: 'Breaking News', category: 'Lower Third',
+    content: 'BREAKING NEWS', fontFamily: 'Impact, sans-serif', fontSize: 26, fontWeight: 'bold',
+    color: '#FFFFFF', backgroundColor: 'transparent', position: 'bottom', style: 'highlight', textAlign: 'left',
+    hoverAnimation: 'slide-up',
+    thumbnailRenderer: () => (
+      <div className="absolute bottom-1.5 left-0 right-0 flex items-center overflow-hidden" style={{ paddingLeft: 4 }}>
+        <span style={{ background: '#E00', color: '#FFF', fontFamily: 'Impact, sans-serif', fontSize: 7, fontWeight: 'bold', padding: '1px 4px', borderRadius: 2, marginRight: 4, whiteSpace: 'nowrap', letterSpacing: '0.04em' }}>● LIVE</span>
+        <span style={{ background: 'rgba(20,20,20,0.9)', color: '#FFF', fontFamily: 'Inter, sans-serif', fontSize: 7, fontWeight: 'bold', padding: '1px 5px', flexShrink: 0, whiteSpace: 'nowrap' }}>BREAKING: Major news event</span>
+      </div>
+    ),
+  },
   { label: 'Caption Box',    category: 'Caption',     content: 'Caption text',      fontFamily: 'Inter, sans-serif',       fontSize: 24, fontWeight: 'normal', color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.6)', position: 'bottom', style: 'highlight',   textAlign: 'center', hoverAnimation: 'slide-down' },
   { label: 'Subtitle',       category: 'Caption',     content: 'Subtitle goes here',fontFamily: 'Inter, sans-serif',       fontSize: 22, fontWeight: 'normal', color: '#E2E8F0', backgroundColor: 'rgba(0,0,0,0.5)', position: 'bottom', style: 'highlight',   textAlign: 'center', hoverAnimation: 'fade-in'    },
   { label: 'Luxury Quote',   category: 'Quote',       content: '"Your Quote"',      fontFamily: 'Playfair Display, serif', fontSize: 38, fontWeight: 'normal', color: '#C8A766', backgroundColor: 'transparent',     position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'    },
   { label: 'Minimal Quote',  category: 'Quote',       content: '— Author Name',     fontFamily: 'Georgia, serif',          fontSize: 30, fontWeight: 'normal', color: '#CBD5E1', backgroundColor: 'transparent',     position: 'center', style: 'clean',       textAlign: 'center', hoverAnimation: 'fade-in'    },
+  {
+    label: 'Luxury Watermark', category: 'Quote',
+    content: '© JBJ Realty', fontFamily: 'Playfair Display, serif', fontSize: 20, fontWeight: 'normal',
+    color: 'rgba(255,255,255,0.45)', backgroundColor: 'transparent', position: 'top', style: 'clean', textAlign: 'right',
+    hoverAnimation: 'fade-in',
+    extraStyle: {
+      letterSpacing: '0.12em',
+      textTransform: 'uppercase' as const,
+      fontSize: 6,
+    },
+    thumbnailRenderer: () => (
+      <div className="absolute top-1.5 right-2 flex items-center gap-1">
+        <span style={{ fontFamily: 'Playfair Display, serif', fontSize: 6, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>© JBJ REALTY</span>
+      </div>
+    ),
+  },
   { label: 'Social Bold',    category: 'Social',      content: 'BIG TEXT',          fontFamily: 'Impact, sans-serif',      fontSize: 72, fontWeight: 'bold',   color: '#FFD700', backgroundColor: 'transparent',     position: 'center', style: 'bold',        textAlign: 'center', hoverAnimation: 'zoom-in'    },
   { label: 'Reel Hook',      category: 'Social',      content: 'Watch till end 👀', fontFamily: 'Inter, sans-serif',       fontSize: 40, fontWeight: 'bold',   color: '#FFFFFF', backgroundColor: 'transparent',     position: 'top',    style: 'bold',        textAlign: 'center', hoverAnimation: 'zoom-in'    },
+  {
+    label: 'Instagram Story', category: 'Social',
+    content: '✨ Swipe Up', fontFamily: 'Inter, sans-serif', fontSize: 32, fontWeight: 'bold',
+    color: '#FFFFFF', backgroundColor: 'transparent', position: 'bottom', style: 'highlight', textAlign: 'center',
+    hoverAnimation: 'slide-up',
+    thumbnailRenderer: () => (
+      <div className="absolute bottom-2 left-0 right-0 flex justify-center">
+        <span style={{
+          fontFamily: 'Inter, sans-serif', fontSize: 8, fontWeight: 'bold', color: '#FFF',
+          background: 'linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%)',
+          padding: '3px 10px', borderRadius: 20, whiteSpace: 'nowrap',
+        }}>✨ Swipe Up</span>
+      </div>
+    ),
+  },
 ];
 
 // Per-animation keyframe CSS injected once into <head>
@@ -136,14 +203,13 @@ function TextPreviewThumbnail({ preset, isActive, onClick }: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     lineHeight: 1.2,
-    // Apply animation only on hover; key change reruns it each time
     animation: isHovered ? ANIM_CSS[preset.hoverAnimation] : 'none',
+    ...preset.extraStyle,
   };
 
   const handleMouseEnter = () => {
     setIsHovered(true);
-    setAnimKey(k => k + 1); // force re-mount of span to restart animation
-    // Loop the animation every 900 ms while hovering
+    setAnimKey(k => k + 1);
     timerRef.current = setInterval(() => setAnimKey(k => k + 1), 900);
   };
 
@@ -188,9 +254,10 @@ function TextPreviewThumbnail({ preset, isActive, onClick }: {
           background: 'radial-gradient(ellipse at center, #111111 0%, #050508 100%)',
         }}
       >
-        {positionWrap(
-          <span key={animKey} style={textStyle}>{preset.content}</span>
-        )}
+        {preset.thumbnailRenderer
+          ? preset.thumbnailRenderer()
+          : positionWrap(<span key={animKey} style={textStyle}>{preset.content}</span>)
+        }
 
         {/* Animation label pill — shown on hover */}
         {isHovered && (
