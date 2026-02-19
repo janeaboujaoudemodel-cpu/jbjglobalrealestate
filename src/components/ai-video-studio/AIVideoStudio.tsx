@@ -18,6 +18,7 @@ import { AIEditorPanel } from './features/AIEditorPanel';
 import { MapEffectPanel } from './features/MapEffectPanel';
 import { ProjectIntegrationPanel } from './features/ProjectIntegrationPanel';
 import { AITalkingAgentPanel } from './features/AITalkingAgentPanel';
+import { VideoAdHistoryPanel } from './features/VideoAdHistoryPanel';
 import { useVideoStudioProject } from './hooks/useVideoStudioProject';
 import { useMediaLibrary } from './hooks/useMediaLibrary';
 import { MediaAsset, StockAsset, Clip, ExportPreset, RenderJob } from './types';
@@ -666,6 +667,93 @@ export function AIVideoStudio() {
                 },
               });
             }
+          }}
+        />
+      }
+      historyPanel={
+        <VideoAdHistoryPanel
+          onRestoreToTimeline={(ad) => {
+            const { clips, voiceover, projectName, transitions: transitionType } = ad;
+            const videoTrack = project.tracks.find(t => t.type === 'video');
+            const textTrack  = project.tracks.find(t => t.type === 'text');
+            const voiceoverTrack = project.tracks.find(t => t.type === 'voiceover');
+            if (!voiceoverTrack && voiceover) addTrack('voiceover', 'Voiceover');
+
+            let videoCursor = videoTrack?.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0) ?? 0;
+            let textCursor  = textTrack?.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0) ?? 0;
+
+            const photoClips = clips.filter(c => c.type === 'image');
+            const textClips  = clips.filter(c => c.type === 'text');
+
+            photoClips.forEach((clip, idx) => {
+              if (!videoTrack) return;
+              addClip(videoTrack.id, {
+                trackId: videoTrack.id, type: 'image', name: clip.name,
+                startTime: videoCursor, duration: clip.duration,
+                source: { url: clip.url, thumbnailUrl: clip.url, inPoint: 0, outPoint: clip.duration, originalDuration: clip.duration },
+                transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                keyframes: [], effects: [],
+              });
+              if (idx < photoClips.length - 1 && transitionType) {
+                const td = 0.8;
+                addClip(videoTrack.id, {
+                  trackId: videoTrack.id, type: 'transition', name: transitionType,
+                  startTime: videoCursor + clip.duration - td / 2, duration: td,
+                  source: { url: '', inPoint: 0, outPoint: td, originalDuration: td },
+                  transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                  keyframes: [],
+                  effects: [{ id: crypto.randomUUID(), type: 'transition', name: transitionType, settings: { transitionId: transitionType } }],
+                  transition: { transitionId: transitionType, easing: 'easeInOut' },
+                });
+              }
+              videoCursor += clip.duration;
+            });
+
+            textClips.forEach(clip => {
+              if (!textTrack) return;
+              addClip(textTrack.id, {
+                trackId: textTrack.id, type: 'text', name: clip.name,
+                startTime: textCursor, duration: clip.duration,
+                source: { url: clip.url, inPoint: 0, outPoint: clip.duration, originalDuration: clip.duration },
+                transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                keyframes: [], effects: [],
+                text: {
+                  content: clip.textOverlay?.content ?? '',
+                  fontFamily: 'Georgia, serif', fontSize: 28, fontWeight: 'bold',
+                  color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.6)',
+                  textAlign: 'left', position: 'bottom',
+                  style: (clip.textOverlay?.style ?? 'lower-third') as 'lower-third' | 'clean' | 'bold' | 'highlight',
+                },
+              });
+              textCursor += clip.duration;
+            });
+
+            if (voiceover?.audioBase64) {
+              try {
+                const byteString = atob(voiceover.audioBase64);
+                const bytes = new Uint8Array(byteString.length);
+                for (let i = 0; i < byteString.length; i++) bytes[i] = byteString.charCodeAt(i);
+                const blob = new Blob([bytes], { type: 'audio/mpeg' });
+                const audioUrl = URL.createObjectURL(blob);
+                const voTrack = project.tracks.find(t => t.type === 'voiceover');
+                const fallbackAudioTrack = project.tracks.find(t => t.type === 'audio');
+                const trackId = voTrack?.id || fallbackAudioTrack?.id;
+                if (trackId) {
+                  const voiceCursor = project.tracks.find(t => t.id === trackId)?.clips
+                    .reduce((max, c) => Math.max(max, c.startTime + c.duration), 0) ?? 0;
+                  addClip(trackId, {
+                    trackId, type: 'audio', name: `🎙️ ${projectName} — Restored Voiceover`,
+                    startTime: voiceCursor, duration: voiceover.duration,
+                    source: { url: audioUrl, inPoint: 0, outPoint: voiceover.duration, originalDuration: voiceover.duration },
+                    transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                    keyframes: [], effects: [],
+                    audio: { volume: 1, fadeIn: 0.5, fadeOut: 1, muted: false, normalized: true, noiseReduction: false },
+                  });
+                }
+              } catch (e) { console.error('Failed to decode voiceover audio:', e); }
+            }
+
+            renameProject(`${projectName} — Video Ad`);
           }}
         />
       }
