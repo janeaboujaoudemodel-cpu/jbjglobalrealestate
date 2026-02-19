@@ -39,7 +39,7 @@ async function svgToPng(svgString: string, size: number, transparent: boolean): 
   const blobUrl = URL.createObjectURL(blob);
 
   return new Promise((resolve, reject) => {
-    const img = new Image();
+    const img = document.createElement('img') as HTMLImageElement;
 
     img.onload = async () => {
       try {
