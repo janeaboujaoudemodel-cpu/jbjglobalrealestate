@@ -1,121 +1,176 @@
 
-# Fix: AI Video Studio - 7 Issues
+# Comprehensive AI Video Studio Overhaul — 9 Issues
 
-## Root Cause Analysis (From Code Inspection + Screenshots)
+## Understanding What the User Wants
 
-### Issue 1: Preview Disappears When Tools Open (CRITICAL)
-The layout in `AIVideoStudioLayout.tsx` uses `h-full flex flex-col`. When the tool panel (`h-72`) opens, it takes 288px from the flex column. Combined with the top bar (~48px), tool tabs bar (~44px), and timeline (192px), the total = ~572px. On a viewport of ~580px below the header (720px total - 64px header - 64px studio top bar = ~592px visible), the preview gets squashed to nearly 0px.
+The user is describing a CapCut-like workflow where:
+1. **Preview is always stable and centered** — never moves, never gets squashed by tools
+2. **Effects/tools preview ON the media canvas**, not in a separate panel pane
+3. **Effects are premium CSS-based** (not emoji particles)
+4. **Tool panels appear BELOW** the stable preview, sliding in from the bottom (like CapCut)
+5. **Resize panel** should show aspect-ratio buttons immediately, not an "upload video" prompt
+6. **Map panel** should be a location-picker that inserts a clip, not show the whole map taking half the screen alongside a "3D Vanish" badge
+7. **AI Editor panel** needs clear explanations of what "AI Clip Scanner" and "Smart Templates" actually do
+8. **Scroll should never get stuck**
+9. **UI needs to be more premium** — better colors, better spacing, top bar not touching the global header
 
-**Fix**: Make the tool panel a fixed-height `overflow-hidden` section at the bottom, and give the preview a `flex-1 min-h-0` that NEVER drops below a minimum height. Reduce tool panel height from `h-72` (288px) to `h-56` (224px) and add a `min-h-0` chain throughout.
+---
 
-Additionally, the current setup shows the tool panel BETWEEN the preview and timeline. This is correct for CapCut-style, but the preview must have a `min-h` so it never collapses. Setting `min-h-32` on the preview wrapper will stop it from collapsing.
+## Issue-by-Issue Analysis
 
-### Issue 2: Stock Music Tab - Broken/Invisible Cards
-The `AssetCard` in `MediaLibraryPanel.tsx` renders invisible cards because the `stockAssets` are loaded from the database but they have no `thumbnailUrl`, and the icon rendering falls into the `default` case. But more critically — the `Button` components in the stock categories filter use `variant="ghost"` for inactive state, which makes them invisible text on dark background (no border visible). The card grid is dark on dark.
-
-**Fix**: 
-- Add a visible fallback icon background to `AssetCard` for stock audio items
-- Add `border border-slate-700` to the ghost variant category buttons 
-- Add `text-white` to ensure text is always visible on `AssetCard`
-
-### Issue 3: Generate Scene - Shows "Coming Soon" Toast
-In `MediaLibraryPanel.tsx` line 248, the `Generate Scene` button calls `toast.info('AI Scene Generator coming soon!...')`. The user wants this to actually open an AI scene generation workflow.
-
-**Fix**: Replace the coming-soon toast with a real AI scene generation form — a text prompt input + a generate button that calls a real endpoint. Since we have `google/gemini-3-pro-image-preview` available for image generation, we can generate AI images from prompts and add them to the media library. This removes the "coming soon" label entirely.
-
-### Issue 4: Beauty Filters - Image Only, Not Video
-`BeautyFiltersPanel.tsx` explicitly says "Apply professional filters to images" and only accepts `image/*` files. The canvas-based filter engine only works with `<img>` elements.
-
-**Fix**: 
-- Change the description to "Apply professional filters to images & video frames"
-- Accept `video/*` and `image/*` in the file input
-- For video files, extract a frame using a `<video>` element + canvas, apply the filter preset, and allow download of the filtered frame
-- Keep the canvas-based workflow but add video frame extraction
-
-### Issue 5: Text Preset Buttons Not Clickable
-Looking at the code in `TextOverlayPanel.tsx` lines 130-139, the preset buttons DO call `applyPreset(p)`. The buttons use:
-```tsx
-<button key={p.label} onClick={() => applyPreset(p)} className="px-2.5 py-1 text-xs rounded-md border border-slate-600 bg-slate-800 hover:border-amber-500/60 hover:bg-slate-700 transition-all">
+### Issue 1: Layout & Preview Stability (Root Cause)
+Currently the layout is:
+```text
+[Top Bar]
+[Preview — flex-1 min-h-[180px]] ← shrinks when tool opens
+[Tool Tabs Bar]
+[Tool Panel — h-64]              ← fixed, eats from preview
+[Timeline — h-48]
+[Export Bar]
 ```
-The issue is that this panel is inside a `ScrollArea` inside a `h-72 overflow-hidden` container. The `ScrollArea` may be clipping the events, OR the `h-full` `ScrollArea` is not getting proper height.
+When the tool panel opens, `flex-1` allows the preview to shrink until it hits `min-h-[180px]`. On smaller viewports this is still too small. The fix is to give the preview a solid `min-h-[240px]` and the tool panel a fixed `h-56` with the overall layout using `dvh` units.
 
-**Fix**: The TextOverlayPanel wraps in `<ScrollArea className="h-full">`. When inside `h-72 overflow-hidden` in the layout, this should work. But the real issue is that when you click on these presets, they call `applyPreset` which only updates the form state — they do NOT immediately add a clip. Users expect clicking "Clean Title" to add it to the preview. 
+### Issue 2: Effects Preview Overlays on Canvas (Not in Tool Panel)
+The user wants to click an effect and see it **on the main video preview**, not in a floating overlay within the tool panel div. This means:
+- `OverlayEffectsPanel` should NOT render particle effects inside itself
+- Instead, it should call a callback to the parent (`AIVideoStudio`) which passes `activeEffect` down to `VideoPreviewCanvas`
+- `VideoPreviewCanvas` renders CSS-based effects as a full-screen overlay on the media canvas
+- Effects are CSS-based (no emoji) — real particle systems using CSS animations and `div` boxes
 
-**Fix**: Make each preset button also trigger `onAddTextClip` immediately (like "one-click add") OR add a clear visual indicator + an "Add to Canvas" button. Update the UX to show a preview of each preset and make the "Add to Canvas" button more prominent.
+### Issue 3: Effects Must Be Premium CSS Particles (Not Emoji)
+Replace emoji particles with:
+- **Money Rain**: Green/gold rectangle `div` elements animated downward
+- **Confetti Burst**: Multi-colored square confetti `div` elements
+- **Gold Glow**: Radial gradient pulse with animated shimmer overlays
+- **Star Shower**: White/gold triangle or circle `div` elements
+- **Luxury Sparkle**: Animated diamond `div` shapes
+- **Fire Energy**: Orange/red gradient `div` "flame" shapes rising upward
 
-### Issue 6: Sound Effects Not Playing + Waveform Missing
-The SFX panel code looks correct for generation. The issue is:
-1. Generated sounds show as "selected" (toast shows) but the preset buttons in `SoundEffectsPanel.tsx` call `handleGenerate(p.text)` which GENERATES a new sound — it doesn't immediately play a demo. Users click and expect instant playback, but actually they need to WAIT for ElevenLabs to generate it.
-2. There's no waveform/progress indicator visible while playing.
-3. No visual waveform display for generated sounds.
+### Issue 4: Scroll Getting Stuck
+The `overflow-hidden` on the outer layout containers traps scroll events inside nested `ScrollArea` components. Fix:
+- Add `overscroll-contain` on each `ScrollArea` viewport
+- Ensure tool panels use `overflow-y-auto` with explicit height, not nested `overflow-hidden`
 
-**Fix**: 
-- Add a loading spinner on each preset button while generating
-- Add an audio progress bar showing playback position (using `<audio>` `timeupdate` event)
-- Show clearer "Generating..." state feedback per-button
-- Expand the preset categories with more sound options (more variety in each)
+### Issue 5: Resize Panel — Shows Upload Instead of Format Picker
+`VideoResizePanel.tsx` currently shows an upload prompt when no video is selected. The user wants to see the format picker immediately and resize the video already on the timeline (not a separate upload). Fix:
+- Remove the "upload video" conditional gate — always show format selection
+- Add a note saying it will apply to the active timeline clip
+- Only show the upload button as a secondary option if no clip is on the timeline
 
-### Issue 7: Scroll Gets Stuck
-The scroll-stuck behavior is caused by the `overflow-hidden` on the outer layout containers. When the tool panel opens, the entire studio layout is `overflow-hidden`, which traps scroll events. The `ScrollArea` from Radix UI uses a custom scrollbar, and when a user scrolls to the bottom of a tool panel, the outer container captures further scroll events.
+### Issue 6: Map Panel Layout — Too Complex, Wrong Purpose
+The current panel splits 50/50 between controls and a full Leaflet map. The user wants:
+- A **compact** panel where they pick a location
+- Click "Generate Map Clip" to insert a styled location pin clip
+- Exit animation chooser (compact dropdown, not a separate list)
+- Remove the giant side-by-side map — make map smaller and thumbnail-only in preview mode
+- Show the "REC" badge renamed to something cleaner
 
-**Fix**: Ensure all tool panel content uses `ScrollArea` from Radix correctly, and add `overscroll-contain` to the tool panel div to prevent scroll-chaining.
+### Issue 7: AI Editor Panel — Confusing Labels
+- "AI Clip Scanner" needs a clear one-line explanation: *"Analyzes your clips and recommends which to use"*
+- "Smart Templates" needs an explanation: *"Auto-assembles your clips into a professional edit format"*
+- The panel shows buttons even when no clips are loaded with no explanation
+- Fix: Add empty state guidance, better section headers with explanation text
+
+### Issue 8: Top Bar Touching Header (Spacing)
+`AIVideoStudioTopBar` uses `py-2` padding. The issue is that the page wrapper starts immediately below the global header with no breathing room. The studio top bar feels cramped. Fix:
+- Add more visual separation — increase top bar height slightly
+- Add a subtle gradient or stronger border-bottom to the top bar
+- Consider a 2-pixel top padding on the outer layout container
+
+### Issue 9: Button Visibility (Colors)
+Multiple buttons use `variant="ghost"` or have the same `bg-slate-700`/`bg-slate-800` colors making them invisible against dark backgrounds. Fix all panel buttons to use clearly visible, high-contrast styles.
 
 ---
 
 ## Files to Change
 
 ### 1. `src/components/ai-video-studio/layout/AIVideoStudioLayout.tsx`
-- Add `min-h-24` to the preview wrapper so it never fully collapses
-- Change tool panel from `h-72` to `h-64` (still large enough but less aggressive)
-- Add `overscroll-contain` to the tool panel inner div to stop scroll bleed
-- Move the tool panel inside a `flex-shrink-0` wrapper with explicit height
+- Change preview `min-h-[180px]` → `min-h-[240px]`
+- Tool panel `h-64` → `h-56` with `overscroll-contain`
+- Increase `border-t` spacing on the top bar for breathing room
+- Add `pt-0.5` to the outer container to separate from global header
 
-### 2. `src/components/ai-video-studio/panels/MediaLibraryPanel.tsx`
-- **Stock tab**: Fix category filter buttons — change from `variant="ghost"` to explicit `bg-slate-800 border border-slate-700` styling so they're visible
-- **AssetCard**: Fix the card layout — add `bg-slate-800` and proper text contrast to card content area; make the music icon card show a colored background instead of being invisible
-- **AI tab - Generate Scene**: Replace `toast.info('coming soon...')` with an actual AI image generation flow — show a prompt input + Generate button that uses `google/gemini-3-pro-image-preview` model to create images that get added to the media library
+### 2. `src/components/ai-video-studio/features/OverlayEffectsPanel.tsx`
+Complete rewrite:
+- Remove internal particle rendering entirely
+- Add `onPreviewEffect(effectId | null)` and `onAddEffect(effectId)` callbacks as props
+- Card click → calls `onPreviewEffect(effect.id)` — no button needed
+- "Add to Timeline" button calls `onAddEffect(effect.id)`
+- Clicking the same card again deactivates preview
+- Add premium new effects: **Luxury Rain**, **Aurora Shimmer**, **Snow Fall**, **Lightning Strike**
 
-### 3. `src/components/ai-video-studio/features/BeautyFiltersPanel.tsx`
-- Change header text from "Apply professional filters to images" to "Apply professional filters to images & video"
-- Change file input `accept` from `image/*` to `video/*,image/*`
-- Handle video files: extract first frame using `<video>` + canvas, then apply filters
-- Update the drop zone label from "Drop image here" to "Drop image or video here"
-- Update supported formats to include MP4, MOV, WebM
+### 3. `src/components/ai-video-studio/preview/VideoPreviewCanvas.tsx`
+- Accept new prop `activeOverlayEffect: string | null`
+- Render a `<PremiumEffectOverlay effectId={activeOverlayEffect} />` component on top of the video
+- `PremiumEffectOverlay` uses CSS-only `div` particles (no emoji) with keyframe animations
+- The overlay is absolute-positioned over the entire preview canvas
 
-### 4. `src/components/ai-video-studio/features/TextOverlayPanel.tsx`
-- Make preset buttons call BOTH `applyPreset(p)` AND immediately `handleAdd()` so one click = add to canvas
-- Add visual thumbnails/previews to each preset card (small canvas previews)
-- Make the preset area a grid with visible preview thumbnails instead of just text buttons
-- Show a brief flash/confirmation when a preset is added
+### 4. `src/components/ai-video-studio/AIVideoStudio.tsx`
+- Add `activeOverlayEffect` state
+- Pass `onPreviewEffect={setActiveOverlayEffect}` to `OverlayEffectsPanel`
+- Pass `activeOverlayEffect` to `VideoPreviewCanvas`
+- Add `onOpenTool` handler back to `VideoPreviewCanvas` (currently missing — `onOpenTool` prop exists but isn't wired in the AIVideoStudio render)
 
-### 5. `src/components/ai-video-studio/features/SoundEffectsPanel.tsx`
-- Add per-button `isThisGenerating` spinner (already exists — just ensure it's styled correctly)
-- Add an `<audio>` progress bar for currently playing sounds using `useRef` + `onTimeUpdate`
-- Add more sound categories: "🏡 Outdoor/Pool", "🎹 Music Stings" with more prompts
-- Show a visible waveform-style animation (CSS bars) while a sound is playing
+### 5. `src/components/ai-video-studio/features/VideoResizePanel.tsx`
+- Remove the conditional upload-first gate
+- Show format picker immediately at top of panel
+- Add a compact "Active clip: None / [clip name]" status indicator
+- Upload button becomes a secondary inline option, not a blocking screen
 
-### 6. `src/pages/toolkit/AIVideoStudioPage.tsx`
-- The current height `calc(100vh - 64px)` only accounts for a 64px header. The actual header varies. Verify this works with the actual main layout's padding-top by checking the MainLayout component.
+### 6. `src/components/ai-video-studio/features/MapEffectPanel.tsx`
+- Redesign to be a **compact vertical panel** — no side-by-side map preview taking half the screen
+- Left column (100% width): Location search + preset quick-pick + animation dropdown
+- Map preview becomes a **small thumbnail** (height ~80px) that appears after geocoding
+- Remove confusing "REC — 3D Vanish" overlay badge; replace with a clean "Previewing…" label
+- Add premium location descriptions
 
-## Key Technical Detail: Preview Stability
+### 7. `src/components/ai-video-studio/features/AIEditorPanel.tsx`
+- Add descriptive subtitles to each section:
+  - "AI Clip Scanner" → sub-label: *"Analyze all clips on your timeline. AI will find the best moments and highlight them."*
+  - "Smart Templates" → sub-label: *"Choose a video style. AI will automatically reorder and trim your clips to match it."*
+- Add empty state card when `clips.length === 0` explaining what to do
+- Add a "?" tooltip or info icon next to each section title
 
-The CapCut approach the user wants is:
+### 8. `src/components/ai-video-studio/layout/AIVideoStudioTopBar.tsx`
+- Increase padding from `py-2` to `py-2.5`
+- Add `min-h-[52px]` to ensure enough breathing room
+- Add a subtle `bg-slate-800/95 backdrop-blur-sm` for a premium feel
+- Separate the logo from project name more clearly with a cleaner divider
+
+---
+
+## Premium CSS Effect System (New Component)
+
+Create `src/components/ai-video-studio/preview/PremiumEffectOverlay.tsx`:
+
+```typescript
+// Pure CSS particle effects — no emoji, premium visual quality
+// Each effect renders animated div elements with CSS keyframes:
+
+// Money Rain: 30 dark green/gold rectangles (4px × 8px) falling top to bottom
+// Confetti: 50 multi-color squares (4-8px) rotating as they fall
+// Gold Glow: Radial gradient expanding pulse from center + shimmer bars
+// Star Shower: 25 white circle divs (2-4px) with random trajectories
+// Luxury Sparkle: 20 rotated square divs creating diamond shapes
+// Fire Energy: 20 orange/red oval divs rising upward with opacity fade
+// Aurora Shimmer: Animated gradient bands sweeping across screen
+// Snow Fall: 35 white circles (2-5px) drifting at varying speeds
 ```
-┌──────────────────────────────────┐  ← Top Bar (fixed height)
-│                                  │
-│       VIDEO PREVIEW              │  ← flex-1 min-h-[200px] (never collapses)
-│                                  │
-├──────────────────────────────────┤
-│ Media | Captions | Beauty | ...  │  ← Tool tab bar (fixed height ~44px)
-├──────────────────────────────────┤
-│                                  │
-│       ACTIVE TOOL PANEL          │  ← h-64 (fixed height, flex-shrink-0)
-│                                  │
-├──────────────────────────────────┤
-│          TIMELINE                │  ← h-48 (fixed height)
-├──────────────────────────────────┤
-│          EXPORT BAR              │  ← fixed height
-└──────────────────────────────────┘
-```
 
-Adding `min-h-[180px]` to the preview wrapper guarantees the preview always stays visible regardless of what panels are open.
+The style injection (`<style>`) will be scoped to this component and define the keyframe animations for each effect.
+
+---
+
+## Summary Table
+
+| File | Changes |
+|---|---|
+| `AIVideoStudioLayout.tsx` | Stable preview min-h, overscroll-contain, top bar spacing |
+| `OverlayEffectsPanel.tsx` | Add callbacks, remove internal particle preview, add 4 new effects |
+| `VideoPreviewCanvas.tsx` | Accept `activeOverlayEffect` prop, render `PremiumEffectOverlay` |
+| `AIVideoStudio.tsx` | Wire `activeOverlayEffect` state between panel and canvas |
+| `VideoResizePanel.tsx` | Show format picker immediately, remove upload gate |
+| `MapEffectPanel.tsx` | Compact layout, small thumbnail map, cleaner labels |
+| `AIEditorPanel.tsx` | Better explanations, empty state, section descriptions |
+| `AIVideoStudioTopBar.tsx` | More padding, premium feel |
+| **NEW** `PremiumEffectOverlay.tsx` | Pure CSS particle system for all effects |
