@@ -3,7 +3,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Languages, Mic, Sparkles, Music2, Layers, Maximize2,
-  Map, Bot, FolderOpen, ChevronUp, ChevronDown, Settings2, Type, Clapperboard, UserSquare2
+  Map, Bot, FolderOpen, ChevronUp, ChevronDown, Settings2, Type, Clapperboard, UserSquare2, History
 } from 'lucide-react';
 
 export interface AIVideoStudioLayoutHandle {
@@ -31,6 +31,7 @@ interface AIVideoStudioLayoutProps {
   aiEditorPanel?: ReactNode;
   projectsPanel?: ReactNode;
   talkingAgentPanel?: ReactNode;
+  historyPanel?: ReactNode;
 }
 
 const TOOL_TABS = [
@@ -48,6 +49,7 @@ const TOOL_TABS = [
   { id: 'ai-editor',      label: 'AI Editor',   icon: Bot           },
   { id: 'inspector',      label: 'Inspector',   icon: Settings2     },
   { id: 'projects',       label: 'Projects',    icon: FolderOpen    },
+  { id: 'history',        label: 'Ad History',  icon: History       },
 ];
 
 export const AIVideoStudioLayout = forwardRef<AIVideoStudioLayoutHandle, AIVideoStudioLayoutProps>(
@@ -70,6 +72,7 @@ function AIVideoStudioLayout({
   aiEditorPanel,
   projectsPanel,
   talkingAgentPanel,
+  historyPanel,
 }, ref) {
   const isMobile = useIsMobile();
   const [activeTool, setActiveTool] = useState<string | null>(null);
@@ -108,6 +111,7 @@ function AIVideoStudioLayout({
     inspector:        inspectorPanel,
     projects:         projectsPanel,
     'talking-agent':  talkingAgentPanel,
+    history:          historyPanel,
   };
 
   const handleToolClick = (toolId: string) => {

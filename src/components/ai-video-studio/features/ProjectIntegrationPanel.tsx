@@ -9,6 +9,8 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import { VOICE_OPTIONS, SUPPORTED_LANGUAGES } from '../types';
+import { saveVideoAdToHistory } from './VideoAdHistoryPanel';
+
 
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -419,11 +421,25 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
       textOverlay: { content: lowerThirdText, style: settings.textStyle },
     };
 
+    const allClips = [...photoClips, textClip];
+
     onCreateVideoAd?.({
-      clips: [...photoClips, textClip],
+      clips: allClips,
       voiceover: { audioBase64: result.audioBase64, duration: result.duration, script: result.script },
       projectName: name,
       transitions: settings.transition,
+    });
+
+    // ── Auto-save to history ─────────────────────────────────────────────────
+    saveVideoAdToHistory({
+      projectName: `${name} — Video Ad`,
+      thumbnailUrl: wizardCoverImage,
+      script: result.script,
+      settings,
+      clips: allClips,
+      voiceover: { audioBase64: result.audioBase64, duration: result.duration, script: result.script },
+      transitions: settings.transition,
+      propertyName: name,
     });
 
     toast.success(`🎬 "${name}" video ad added to timeline!`);
