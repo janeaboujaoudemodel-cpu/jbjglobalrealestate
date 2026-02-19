@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AIVideoStudioLayout, AIVideoStudioLayoutHandle } from './layout/AIVideoStudioLayout';
 import { AIVideoStudioTopBar } from './layout/AIVideoStudioTopBar';
 import { AIVideoStudioExportBar } from './layout/AIVideoStudioExportBar';
+import { ShortcutCheatSheet } from './layout/ShortcutCheatSheet';
 import { MediaLibraryPanel } from './panels/MediaLibraryPanel';
 import { InspectorPanel } from './panels/InspectorPanel';
 import { VideoPreviewCanvas } from './preview/VideoPreviewCanvas';
@@ -23,7 +24,6 @@ import { useVideoStudioProject } from './hooks/useVideoStudioProject';
 import { useMediaLibrary } from './hooks/useMediaLibrary';
 import { MediaAsset, StockAsset, Clip, ExportPreset, RenderJob } from './types';
 import { toast } from 'sonner';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 
 
@@ -87,6 +87,7 @@ export function AIVideoStudio() {
   const [exportBeautyFilter, setExportBeautyFilter] = useState<import('./features/BeautyFiltersPanel').BeautyAdjustments | null>(null);
   const [beautyComparisonMode, setBeautyComparisonMode] = useState(false);
   const [previewAspectRatio, setPreviewAspectRatio] = useState<'16:9' | '9:16' | '1:1' | '4:5'>('16:9');
+  const [showCheatSheet, setShowCheatSheet] = useState(false);
 
   useEffect(() => {
     loadStockLibrary();
@@ -113,6 +114,7 @@ export function AIVideoStudio() {
         case 's': if (!e.metaKey && !e.ctrlKey) toggleSnap(); break;
         case 'Escape': deselectAll(); break;
         case 't': layoutRef.current?.toggleTool('transitions'); break;
+        case '?': setShowCheatSheet(true); break;
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -285,8 +287,10 @@ export function AIVideoStudio() {
 
 
   return (
-    <AIVideoStudioLayout
-      ref={layoutRef}
+    <>
+      <ShortcutCheatSheet open={showCheatSheet} onClose={() => setShowCheatSheet(false)} />
+      <AIVideoStudioLayout
+        ref={layoutRef}
       topBar={
 
         <AIVideoStudioTopBar
@@ -395,15 +399,13 @@ export function AIVideoStudio() {
         />
       }
       beautyPanel={
-        <ScrollArea className="h-full">
-          <BeautyFiltersPanel
-            onFilterChange={(adj) => { setActiveBeautyFilter(adj); if (!adj) setBeautyComparisonMode(false); }}
-            onApplyToExport={(adj) => setExportBeautyFilter(adj)}
-            exportFilterActive={exportBeautyFilter != null}
-            comparisonMode={beautyComparisonMode}
-            onToggleComparison={() => setBeautyComparisonMode(m => !m)}
-          />
-        </ScrollArea>
+        <BeautyFiltersPanel
+          onFilterChange={(adj) => { setActiveBeautyFilter(adj); if (!adj) setBeautyComparisonMode(false); }}
+          onApplyToExport={(adj) => setExportBeautyFilter(adj)}
+          exportFilterActive={exportBeautyFilter != null}
+          comparisonMode={beautyComparisonMode}
+          onToggleComparison={() => setBeautyComparisonMode(m => !m)}
+        />
       }
       sfxPanel={
         <SoundEffectsPanel
@@ -451,9 +453,7 @@ export function AIVideoStudio() {
       }
       transitionsPanel={<TransitionsPanel />}
       resizePanel={
-        <ScrollArea className="h-full">
-          <VideoResizePanel />
-        </ScrollArea>
+        <VideoResizePanel />
       }
       aiEditorPanel={
         <AIEditorPanel
@@ -836,6 +836,7 @@ export function AIVideoStudio() {
         />
       }
     />
+    </>
   );
 }
 

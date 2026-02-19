@@ -2,7 +2,6 @@ import React, { useState, useCallback, useRef } from 'react';
 import { Plus, AlignLeft, AlignCenter, AlignRight, Bold, Italic, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { TextSettings } from '../types';
 import { toast } from 'sonner';
 
@@ -355,8 +354,8 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
   };
 
   return (
-    <ScrollArea className="h-full">
-      <div className="p-4 space-y-5 text-slate-100">
+    <div>
+      <div className="p-4 space-y-5" style={{ color: '#F1F0EE' }}>
 
         {/* ── PRESETS ─────────────────────────────── */}
         <section>
@@ -701,6 +700,6 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
           Add to Timeline at {currentTime.toFixed(1)}s
         </Button>
       </div>
-    </ScrollArea>
+    </div>
   );
 }
