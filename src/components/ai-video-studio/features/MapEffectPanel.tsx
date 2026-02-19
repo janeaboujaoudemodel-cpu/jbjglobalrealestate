@@ -323,7 +323,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
             <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mb-1.5">Map Preview</p>
             <div
               className="relative w-full rounded-lg overflow-hidden border border-slate-700"
-              style={{ height: 90, ...animStyle, transformOrigin: 'center center', willChange: 'transform, opacity' }}
+              style={{ height: 80, ...animStyle, transformOrigin: 'center center', willChange: 'transform, opacity' }}
             >
               <MapContainer
                 center={[coords.lat, coords.lng]}
@@ -337,14 +337,14 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
                 <FlyToLocation lat={coords.lat} lng={coords.lng} />
               </MapContainer>
 
-              <div className="absolute top-1 left-1 bg-black/75 text-white text-[9px] px-1.5 py-0.5 rounded flex items-center gap-1 z-10 max-w-[80%] truncate">
-                <Navigation className="w-2.5 h-2.5 text-amber-400 shrink-0" />
+              <div className="absolute top-1 left-1 bg-black/75 text-white text-[9px] px-1.5 py-0.5 rounded flex items-center gap-1 z-10 max-w-[75%] truncate">
+                <Navigation className="w-2 h-2 text-amber-400 shrink-0" />
                 <span className="truncate">{address}</span>
               </div>
 
               {isAnimating && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-20 pointer-events-none">
-                  <div className="flex items-center gap-1.5 bg-black/90 px-2.5 py-1.5 rounded-full border border-amber-400/40">
+                  <div className="flex items-center gap-1.5 bg-black/90 px-2 py-1 rounded-full border border-amber-400/40">
                     <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                     <span className="text-amber-400 text-[9px] font-bold">Previewing…</span>
                   </div>
@@ -353,8 +353,8 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
 
               {animationComplete && !isAnimating && (
                 <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                  <div className="flex items-center gap-1.5 bg-black/90 px-2.5 py-1.5 rounded-full border border-green-500/50">
-                    <Check className="w-3 h-3 text-green-400" />
+                  <div className="flex items-center gap-1.5 bg-black/90 px-2 py-1 rounded-full border border-green-500/50">
+                    <Check className="w-2.5 h-2.5 text-green-400" />
                     <span className="text-green-400 text-[9px] font-bold">Ready to Insert</span>
                   </div>
                 </div>

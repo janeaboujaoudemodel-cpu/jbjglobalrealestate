@@ -150,9 +150,10 @@ export function AIVideoStudioTopBar({
         </button>
         <button
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold border border-slate-400 text-slate-100 bg-slate-700 hover:bg-slate-600 hover:border-slate-300 transition-all"
+          title="Auto-saved to Lovable Cloud"
         >
           <Save className="w-3.5 h-3.5" />
-          Save
+          <span className="hidden sm:inline">Save</span>
         </button>
         <button
           onClick={onExport}

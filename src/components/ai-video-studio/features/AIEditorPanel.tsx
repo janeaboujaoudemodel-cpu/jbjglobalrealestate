@@ -303,10 +303,13 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
           {/* ── AI Analysis ── */}
           <div>
             <p className="text-xs text-slate-200 font-bold mb-0.5">AI Clip Scanner</p>
-            <p className="text-[10px] text-slate-500 mb-2">Analyzes your timeline clips and finds the best moments to highlight.</p>
+            <p className="text-[10px] text-slate-500 mb-2">
+              Gemini AI reads every clip on your timeline, scores each moment for visual quality and pacing, and returns a ranked highlight list with editing tips.
+            </p>
             {clips.length === 0 && (
-              <div className="mb-2 p-2.5 rounded-lg bg-slate-800 border border-slate-700 text-xs text-slate-400 text-center">
-                Add clips to the timeline first, then scan.
+              <div className="mb-2 p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/25 text-[10px] text-amber-300 flex items-start gap-2">
+                <Film className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                <span>Add at least one video or image clip to the timeline, then hit "Scan" — AI will analyze and rank them for you.</span>
               </div>
             )}
             <Button
@@ -416,7 +419,9 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
           {/* ── Smart Templates ── */}
           <div>
             <p className="text-xs text-slate-200 font-bold mb-0.5">Smart Templates</p>
-            <p className="text-[10px] text-slate-500 mb-2">Auto-assembles your clips into a professional edit format — AI reorders and trims to match the style.</p>
+            <p className="text-[10px] text-slate-500 mb-2">
+              Pick a template and AI will reorder your clips, trim durations, and suggest transitions to match the style — no manual editing needed.
+            </p>
             <div className="space-y-2">
               {SMART_TEMPLATES.map(t => (
                 <div
