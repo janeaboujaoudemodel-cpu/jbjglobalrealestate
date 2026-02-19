@@ -82,7 +82,7 @@ export function AIVideoStudioTopBar({
   };
 
   return (
-    <div className="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-600">
+    <div className="flex items-center justify-between px-4 py-3 min-h-[52px] bg-slate-800/95 backdrop-blur-sm border-b border-slate-600/80 shadow-lg">
       {/* Left Section - Logo & Project Name */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">

@@ -1,183 +1,102 @@
 import React, { useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
+import { Plus, Eye, EyeOff } from 'lucide-react';
 
 interface OverlayEffect {
   id: string;
   label: string;
   emoji: string;
   description: string;
-  particles: string[];
-  colors: string[];
+  category: string;
 }
 
 const OVERLAY_EFFECTS: OverlayEffect[] = [
-  {
-    id: 'money-rain',
-    label: 'Money Rain',
-    emoji: '💵',
-    description: 'Golden bills raining down',
-    particles: ['💵', '💴', '💶', '🪙', '💰'],
-    colors: ['#F59E0B', '#FBBF24', '#FCD34D'],
-  },
-  {
-    id: 'confetti',
-    label: 'Confetti Burst',
-    emoji: '🎉',
-    description: 'Celebration confetti explosion',
-    particles: ['🎊', '🎉', '✨', '⭐'],
-    colors: ['#EF4444', '#3B82F6', '#10B981', '#F59E0B'],
-  },
-  {
-    id: 'gold-glow',
-    label: 'Gold Glow',
-    emoji: '✨',
-    description: 'Luxury shimmer overlay',
-    particles: ['✨', '⭐', '💫'],
-    colors: ['#F59E0B', '#FBBF24'],
-  },
-  {
-    id: 'stars',
-    label: 'Star Shower',
-    emoji: '⭐',
-    description: 'Stars falling from sky',
-    particles: ['⭐', '💫', '✨', '🌟'],
-    colors: ['#FBBF24', '#FCD34D', '#FDE68A'],
-  },
-  {
-    id: 'luxury-sparkle',
-    label: 'Luxury Sparkle',
-    emoji: '💎',
-    description: 'Diamond sparkle effect',
-    particles: ['💎', '✨', '💫'],
-    colors: ['#60A5FA', '#A78BFA', '#F0ABFC'],
-  },
-  {
-    id: 'fire',
-    label: 'Fire Energy',
-    emoji: '🔥',
-    description: 'High energy fire effect',
-    particles: ['🔥', '💥', '⚡'],
-    colors: ['#EF4444', '#F97316', '#FBBF24'],
-  },
+  { id: 'money-rain',     label: 'Money Rain',       emoji: '💰', description: 'Golden bills cascade down', category: 'Celebration' },
+  { id: 'confetti',       label: 'Confetti Burst',   emoji: '🎊', description: 'Multi-color celebration', category: 'Celebration' },
+  { id: 'gold-glow',      label: 'Gold Glow',        emoji: '✨', description: 'Luxury shimmer overlay', category: 'Luxury' },
+  { id: 'luxury-rain',    label: 'Luxury Rain',      emoji: '🌟', description: 'Gold droplets falling', category: 'Luxury' },
+  { id: 'stars',          label: 'Star Shower',      emoji: '⭐', description: 'Stars drifting from sky', category: 'Ambient' },
+  { id: 'luxury-sparkle', label: 'Diamond Sparkle',  emoji: '💎', description: 'Diamond crystal float', category: 'Luxury' },
+  { id: 'fire',           label: 'Fire Energy',      emoji: '🔥', description: 'High-energy fire burst', category: 'Energy' },
+  { id: 'aurora',         label: 'Aurora Shimmer',   emoji: '🌌', description: 'Northern lights sweep', category: 'Ambient' },
+  { id: 'snow',           label: 'Snow Fall',        emoji: '❄️', description: 'Soft snowflakes drifting', category: 'Ambient' },
+  { id: 'lightning',      label: 'Lightning Strike', emoji: '⚡', description: 'Electric storm energy', category: 'Energy' },
 ];
 
-interface Particle {
-  id: number;
-  emoji: string;
-  x: number;
-  delay: number;
-  duration: number;
-  size: number;
+interface OverlayEffectsPanelProps {
+  onPreviewEffect?: (effectId: string | null) => void;
+  onAddEffect?: (effectId: string) => void;
+  activeEffect?: string | null;
 }
 
-export function OverlayEffectsPanel() {
-  const [activeEffect, setActiveEffect] = useState<string | null>(null);
-  const [particles, setParticles] = useState<Particle[]>([]);
-  const [isPreviewActive, setIsPreviewActive] = useState(false);
+export function OverlayEffectsPanel({ onPreviewEffect, onAddEffect, activeEffect }: OverlayEffectsPanelProps) {
+  const categories = [...new Set(OVERLAY_EFFECTS.map(e => e.category))];
 
-  const handlePreview = (effect: OverlayEffect) => {
-    if (activeEffect === effect.id && isPreviewActive) {
-      setIsPreviewActive(false);
-      setParticles([]);
-      setActiveEffect(null);
-      return;
+  const handleCardClick = (effect: OverlayEffect) => {
+    if (activeEffect === effect.id) {
+      onPreviewEffect?.(null);
+    } else {
+      onPreviewEffect?.(effect.id);
     }
-    setActiveEffect(effect.id);
-    setIsPreviewActive(true);
-
-    const newParticles: Particle[] = Array.from({ length: 20 }, (_, i) => ({
-      id: i,
-      emoji: effect.particles[Math.floor(Math.random() * effect.particles.length)],
-      x: Math.random() * 100,
-      delay: Math.random() * 2,
-      duration: 1.5 + Math.random() * 2,
-      size: 16 + Math.random() * 16,
-    }));
-    setParticles(newParticles);
-
-    setTimeout(() => {
-      setIsPreviewActive(false);
-      setParticles([]);
-      setActiveEffect(null);
-    }, 3500);
   };
 
   return (
-    <div className="h-full flex flex-col bg-slate-900 text-white relative overflow-hidden">
-      {/* Particle preview overlay */}
-      {isPreviewActive && (
-        <div className="absolute inset-0 pointer-events-none z-10">
-          {particles.map(p => (
-            <div
-              key={p.id}
-              className="absolute animate-bounce"
-              style={{
-                left: `${p.x}%`,
-                top: '-10%',
-                fontSize: `${p.size}px`,
-                animationDelay: `${p.delay}s`,
-                animationDuration: `${p.duration}s`,
-                animation: `fall ${p.duration}s ${p.delay}s ease-in forwards`,
-              }}
-            >
-              {p.emoji}
+    <div className="h-full flex flex-col bg-slate-900 text-white">
+      <ScrollArea className="flex-1">
+        <div className="p-3 space-y-4">
+          {/* Header hint */}
+          <div className="flex items-center gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+            <Eye className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <p className="text-xs text-amber-300">Click an effect to preview it on the canvas. Click again to stop.</p>
+          </div>
+
+          {categories.map(cat => (
+            <div key={cat}>
+              <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mb-2">{cat}</p>
+              <div className="grid grid-cols-2 gap-2">
+                {OVERLAY_EFFECTS.filter(e => e.category === cat).map(effect => {
+                  const isActive = activeEffect === effect.id;
+                  return (
+                    <div
+                      key={effect.id}
+                      onClick={() => handleCardClick(effect)}
+                      className={`rounded-lg border p-2.5 cursor-pointer transition-all select-none ${
+                        isActive
+                          ? 'border-amber-400 bg-amber-400/15 shadow-[0_0_12px_rgba(251,191,36,0.25)]'
+                          : 'border-slate-700 bg-slate-800 hover:border-slate-500 hover:bg-slate-750'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between mb-1.5">
+                        <span className="text-xl leading-none">{effect.emoji}</span>
+                        {isActive && (
+                          <span className="text-[9px] font-bold text-amber-400 bg-amber-400/20 px-1.5 py-0.5 rounded-full animate-pulse">
+                            LIVE
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-xs font-semibold text-slate-200 leading-tight">{effect.label}</div>
+                      <div className="text-[10px] text-slate-500 mt-0.5 leading-tight">{effect.description}</div>
+
+                      {/* Add button */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onAddEffect?.(effect.id);
+                          import('sonner').then(({ toast }) =>
+                            toast.success(`${effect.label} added to timeline!`)
+                          );
+                        }}
+                        className="mt-2 flex items-center gap-1 w-full justify-center py-1 rounded-md text-[10px] font-bold bg-slate-700 hover:bg-amber-500 hover:text-black text-slate-300 border border-slate-600 hover:border-amber-500 transition-all"
+                      >
+                        <Plus className="w-3 h-3" />
+                        Add to Timeline
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           ))}
-          <style>{`
-            @keyframes fall {
-              0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-              100% { transform: translateY(350px) rotate(360deg); opacity: 0; }
-            }
-          `}</style>
-        </div>
-      )}
-
-      <ScrollArea className="flex-1">
-        <div className="p-3">
-          <p className="text-xs text-slate-400 font-medium mb-3 uppercase tracking-wide">Visual Overlay Effects</p>
-          <div className="grid grid-cols-2 gap-2">
-            {OVERLAY_EFFECTS.map(effect => (
-              <div
-                key={effect.id}
-                className={`rounded-lg border p-3 text-left transition-all cursor-pointer ${
-                  activeEffect === effect.id
-                    ? 'border-amber-400 bg-amber-400/10'
-                    : 'border-slate-700 bg-slate-800 hover:border-amber-400/50 hover:bg-slate-700'
-                }`}
-              >
-                <div className="text-2xl mb-1">{effect.emoji}</div>
-                <div className="text-xs font-medium text-slate-200">{effect.label}</div>
-                <div className="text-xs text-slate-400 mb-2">{effect.description}</div>
-                <div className="flex gap-1">
-                  <Button
-                    size="sm"
-                    onClick={() => handlePreview(effect)}
-                    className="h-6 text-xs px-2 bg-amber-500 hover:bg-amber-400 text-black font-medium flex-1"
-                  >
-                    {activeEffect === effect.id && isPreviewActive ? 'Stop' : 'Preview'}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="h-6 text-xs px-2 border-slate-600 text-slate-300 hover:bg-slate-600"
-                    onClick={() => {
-                      import('sonner').then(({ toast }) => toast.success(`${effect.label} added to timeline!`));
-                    }}
-                  >
-                    + Add
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4 p-3 rounded-lg bg-slate-800 border border-slate-700">
-            <p className="text-xs text-slate-400 font-medium mb-2">💡 Tip</p>
-            <p className="text-xs text-slate-300">
-              Preview effects here, then click "+ Add" to insert them as an effects clip at the current playhead position on your timeline.
-            </p>
-          </div>
         </div>
       </ScrollArea>
     </div>
