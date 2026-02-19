@@ -1,170 +1,166 @@
 
-# AI Home Finder + JBJAI Intelligence + ElevenLabs + Data Completeness — Full Fix Plan
+# Complete Task Implementation Plan
 
-This plan addresses every complaint in the message, grouped into 6 distinct workstreams.
+## Task Inventory (All 8 Tasks from This Message)
+
+1. AI Home Finder UI & Logic Bugs (QuizResults.tsx + Quiz.tsx) — verification pass on what's already applied vs. still broken
+2. JBJAI Project Intelligence — infinite loading bug fix + JBJ monogram loading animation
+3. ElevenLabs removal from AI Talking Agent Panel (AITalkingAgentPanel.tsx) — any remaining EL calls
+4. Reelly Full Data Extraction — automated offline-first batch save, bedrooms/price for 1,794 projects
+5. Daily Auto-Sync — add `reelly-complete-offline-save` as Step 8 in `daily-reelly-auto-sync`
+6. New Listings Detection — show Reelly projects not yet in DB as visual "card-first" listing in Listing Admin, not proposed value dumps
+7. Pending Updates Queue — fix "proposed value" display to show real project cards instead
+8. Sunset Bay Grand (reelly_id 3003) — trigger specific extraction immediately
 
 ---
 
-## Issues Identified & Root Causes
+## Current State Analysis
 
-### 1. AI Home Finder (QuizResults.tsx) — Multiple UI & Logic Bugs
+### QuizResults.tsx — Already Partially Fixed
+Reading the current file (lines 280-420), many fixes were applied in the previous session:
+- Price fallback: `"Price on Request"` — **DONE**
+- Bedrooms fallback: `"Type TBC"` — **DONE**
+- Hero image: `cover_image_url || images[0]` — **DONE**
+- Download Report button: `bg-white/10 border border-white/30` — **DONE**
+- Add Badge button: `border-purple-400/60 text-purple-200 hover:bg-purple-800/40` — **DONE**
+- Grid: `sm:grid-cols-2 lg:grid-cols-3` — **DONE**
+- Action card purple border wrapper — **DONE**
+- VIP section hidden — **DONE**
+- Regenerate navigates to `/quiz` — **DONE**
 
-**Problems found:**
-- **Faded buttons** — "Download Report" uses `variant="outline"` with `border-purple-500/50 text-white` on a purple background — the text is white on near-white purple, making it invisible
-- **"Your AI Selected Properties" label** — too generic; user wants it removed/replaced
-- **#1 Best Match hero card** — photo broken because `projects[0].images?.[0]?.image_url` but the query selects `images:project_images(id, image_url, alt_text, display_order)` — projects may have no `project_images` rows, and `cover_image_url` is never checked as fallback
-- **Price shows "0.0M"** — when `price_from` is null, `((null || 0) / 1000000).toFixed(1)` = `"0.0"` — must show "Price on Request" or "Contact for Price" instead
-- **Bedrooms blank** — `bedrooms_min` and `bedrooms_max` are null in many Reelly-sourced projects (Arabian Hills Estate confirmed: `bedrooms_min: null`). Must show "To be announced" fallback
-- **Sold-out projects recommended** — Quiz.tsx `getRecommendations()` does NOT filter out sold-out projects. Arabian Ranches 3 has no `cover_image_url` and shows "Media pending verification"
-- **"More Great Options" grid** — 4 cards in one row on `lg:grid-cols-4` produces uneven cards at different sizes because `ProjectCard` has variable internal heights
-- **"Add Badge" button** — uses `border-purple-500/30 text-white` with zero bg on dark purple background — invisible
-- **"Want More AI Power" VIP section** — shows "$100/year" upgrade prompt which user wants hidden (keep structure, hide it)
-- **AI Comparison, Property Consultant, "Want More AI Power" action cards** — no outer border container grouping them; user wants a single purple border around all cards
-- **Regenerate VIP button** — faded because non-members see gold styling on dark bg — fix to be clearly clickable
-- **Arabian Hills Estate**: `price_from: null`, `bedrooms_min/max: null`, `amenities: []` — quiz recommends it with zero data
+**REMAINING ISSUE:** The quiz recommendation system requires the quiz to load ALL projects including their `images` relation for the `hasImage` check. The `allProjects` query in `Quiz.tsx` may not be joining `project_images`. Let me verify what fields Quiz.tsx actually fetches.
 
-### 2. JBJAI Project Intelligence (ProjectAIAnalyzer.tsx) — Loading Forever Bug
+### Quiz.tsx — Data Fetch Gap
+Looking at lines 239-275, the `getRecommendations()` function references `project.images?.[0]?.image_url` but the `allProjects` query (around line 140-160) needs to be verified — if it doesn't JOIN `project_images`, then `images` is always undefined and the `hasImage` check only works on `cover_image_url`. The fix: the filter should only use `cover_image_url` since `project_images` join is expensive for bulk queries.
 
-**Root cause:** The `useEffect` at line 110 uses `!hasTriggered` (a ref, not state) but reads it as a value — `hasTriggered` is a `useRef(false)` so `!hasTriggered` is always `false` (object is truthy). This means the condition `!hasTriggered` never blocks, and `handleAnalyze()` is called on every render while `isVisible` is true. However, the trigger ref is set `hasTriggered.current = false` but never set to `true` after first run — so it may loop or the 15-second timeout fires and shows "Analysis is taking longer than expected" without ever resolving.
+### ProjectAIAnalyzer.tsx — FIXED
+Lines 112-116 confirm the fix is already applied:
+```
+if (isVisible && !hasTriggered.current && !isAnalyzing && !analysis) {
+  handleAnalyze();
+}
+```
+And line 61: `hasTriggered.current = true;` — **DONE**
+JBJ monogram loading (lines 175-184): **DONE**
 
-**Fix:** Change the effect condition from `!hasTriggered` to `!hasTriggered.current`, and set `hasTriggered.current = true` immediately at the start of `handleAnalyze()` to prevent re-triggering.
+### AITalkingAgentPanel.tsx — Clean
+The file (414 lines) contains only the 8 character presets and Web Speech API. No ElevenLabs references found. — **DONE**
 
-**Loading spinner:** Currently shows `Loader2` spinner. User wants the JBJ monogram (light version for light backgrounds, dark version for dark) with a gold fill animation — use the existing `BrandedLoader` component but adapt it for inline (non-full-screen) use with appropriate monogram variant.
+### reelly-complete-offline-save — Exists But Not Auto-Triggered
+The function exists and is correct. The problem is:
+1. It's never called automatically — only manually via admin
+2. The `daily-reelly-auto-sync` does NOT include it as a step
+3. 1,794 of 1,830 projects still have `bedrooms_min = null`
 
-### 3. ElevenLabs in AI Talking Agent Panel (AITalkingAgentPanel.tsx) — Unauthorized Usage
+### Pending Updates Queue — "Proposed Value" issue
+The user says: "When I click on Pending Updates, it shows Pending Updates queue 50. I don't want to see proposed value." The `PendingImportCard.tsx` is already a visual card format. The current pending count is 0 (from DB query). The "proposed value" display is in the detail/review dialog — needs verification.
 
-The `voice-studio-clone` edge function uses ElevenLabs for: `clone_voice`, `tts_with_clone`, `delete_clone`, `list_voices`. The `AITalkingAgentPanel.tsx` calls this function for the "My Voice" cloning tab.
+### New Listings Detection — "Show me what's NOT in my website"
+Currently `NewProjectDetector.tsx` shows projects from `pending_project_imports` that haven't been approved yet. The user wants: **projects in Reelly API that are NOT in the `projects` table** — shown as visual cards (not pending import cards). This requires a new component that calls `reelly-api-sync` in test mode to find new reelly_ids not in DB, then shows them as browsable project cards with one-click approval.
 
-**Fix:** Remove the "My Voice" cloning tab entirely from `AITalkingAgentPanel.tsx` (the voice cloning feature is unauthorized per the memory constraint `constraints/zero-auto-paid-api-credits`). The Web Speech API preview (already implemented for other characters) is the only permitted voice preview method.
+---
 
-ElevenLabs functions that MUST remain (podcast only): `elevenlabs-podcast-tts`, `elevenlabs-podcast-segment-tts`, `elevenlabs-podcast-music`, `elevenlabs-sfx`, `owner-voice-generate`, `clone-jane-voice`.
+## What Needs to Be Built (Full Task List)
 
-ElevenLabs functions to neutralize in UI: `voice-studio-clone` calls from `AITalkingAgentPanel.tsx`.
+### Task 1: Quiz.tsx — Fix `allProjects` query to not require `images` join for filtering
+The `getRecommendations` filter uses `project.images?.[0]?.image_url` but if allProjects doesn't fetch images, this is always null. Change the filter to only use `cover_image_url` (which IS fetched).
 
-### 4. "Media Pending Verification" Label — Branded Fix
+### Task 2: Daily Auto-Sync — Add offline save as Step 8
+Edit `supabase/functions/daily-reelly-auto-sync/index.ts` to add Step 8: call `reelly-complete-offline-save` in batch mode (batch_size: 30) to continuously backfill missing data every day.
 
-In `src/components/ui/verified-media.tsx` the placeholder label defaults to `"Media pending"` and both `ProjectCard.tsx` and `ReellyProjectCard.tsx` pass `placeholderLabel="Media pending verification"`.
+### Task 3: Trigger Sunset Bay Grand (reelly_id 3003) Extraction
+The `reelly-complete-offline-save` function supports `mode: "specific"` with `project_ids: [3003]`. We'll call this immediately after deploy via the admin UI. We also need to add an "Extract Now" button in the Listing Admin for specific Reelly IDs.
 
-**Fix:** Change the placeholder from showing text to showing the JBJ monogram (small, elegant) as the placeholder — no "Media pending verification" text shown to end users in QuizResults. For quiz results specifically, projects without any image (no `cover_image_url`, no `project_images`) should be filtered from recommendations.
+### Task 4: New Listings Card Display in Listing Admin
+Replace/augment the `NewProjectDetector` component to show a proper card-based grid of projects from Reelly that don't exist in the local DB. Each card shows:
+- Project cover photo (from Reelly image URL)
+- Project name, developer, location
+- Price, status
+- One-click "Import Now" button that triggers approval
 
-### 5. Quiz Recommendation Logic — Accuracy Fixes
+### Task 5: Pending Updates Queue — Remove "Proposed Value" style
+The user sees a "Pending Updates queue 50" (though DB shows 0 pending). The display should be cards only — no diff/proposed value fields shown. The `PendingImportCard` already does this, but the review dialog (`ProjectApprovalQueue.tsx`) might be showing diff fields. We need to ensure the review panel shows only card-style content.
 
-**Problems:**
-- Does not filter sold-out projects (`is_sold_out = true` or `sale_status = 'Sold Out'`)
-- Does not filter projects with no price and no image (Arabian Ranches 3 = no cover, no price)
-- Scoring is weak — does not weight by data completeness
+### Task 6: Fix budget filter being too strict in Quiz.tsx
+Currently `if (budget === "1m-2m" && (priceFrom < 1000000 || priceFrom >= 2000000)) return false;` — this excludes ALL projects where `price_from` is null (since `null || 0` = 0, which fails the `< 1000000` check). Need to relax: if `price_from` is null, don't apply strict budget exclusion (just reduce score).
 
-**Fixes in `Quiz.tsx` `getRecommendations()`:**
-1. Add pre-filter: exclude `is_sold_out === true`
-2. Add pre-filter: exclude projects where `sale_status?.toLowerCase().includes('sold')`
-3. Add pre-filter: exclude projects with no `cover_image_url` AND no images in `project_images`
-4. Add pre-filter: exclude projects where `price_from` is null AND `price_to` is null (no price data at all)
-5. Add scoring bonus for data completeness (has price +10, has bedrooms data +5, has image +5)
-
-### 6. Reelly Full Data Extraction — Offline-First Strategy
-
-User is clear: **the API key will be disconnected soon — this is the last chance to extract everything.**
-
-The database already has the `reelly-api-sync` and `reelly-backfill-details` functions. The key gap is that many fields are not being saved:
-- `bedrooms_min/max` for Arabian Hills Estate = null despite Reelly having unit data
-- `price_from` for Arabian Hills Estate = null
-- `unit_types` for many projects = null
-- `amenities` empty arrays for many projects
-
-**Fix:** Create a new edge function `reelly-complete-offline-save` that:
-1. Calls the Reelly API for every project (by reelly_id) in batches of 20
-2. Extracts: `unit_types`, `bedrooms_min`, `bedrooms_max`, `price_from`, `price_to`, `amenities`, `floor_plan_types`, `highlights`, `faqs`, `payment_breakdown`, `video_url`, `video_urls`
-3. Mirrors all image URLs to Supabase Storage (`project-media` bucket) for permanent offline storage
-4. Updates the `projects` table with all extracted data
-5. Also updates `cover_image_url` from the first gallery image if currently missing
-
-For **Sunset Bay Grand** specifically — the DB shows: `bedrooms_min: null`, `bedrooms_max: null`, `unit_types: null` but `amenities` has 16 items. Need to extract unit types from Reelly ID 3003 to populate `bedrooms_min/max`.
+### Task 7: Market Intelligence Data — Ensure daily DLD refresh
+Add the `reelly-complete-offline-save` to the existing daily sync to keep project data fresh.
 
 ---
 
 ## Files to Change
 
-| File | Change |
-|---|---|
-| `src/pages/QuizResults.tsx` | Fix button visibility, price/bedroom fallbacks, hide VIP section, add purple border around action cards, filter sold-out from display, fix hero image fallback |
-| `src/pages/Quiz.tsx` | Filter sold-out, no-image, no-price projects from recommendations |
-| `src/components/project-detail/ProjectAIAnalyzer.tsx` | Fix `hasTriggered.current` bug, replace spinner with JBJ monogram loader |
-| `src/components/ai-video-studio/features/AITalkingAgentPanel.tsx` | Remove "My Voice" ElevenLabs cloning tab entirely |
-| `supabase/functions/reelly-complete-offline-save/index.ts` | NEW: Full data extraction + image mirroring for all Reelly projects |
+| File | Task | Change |
+|---|---|---|
+| `src/pages/Quiz.tsx` | Task 1, Task 6 | Fix budget filter for null prices; fix `hasImage` check to use only `cover_image_url` |
+| `supabase/functions/daily-reelly-auto-sync/index.ts` | Task 2 | Add Step 8: `reelly-complete-offline-save` batch run |
+| `src/components/listing-admin/NewProjectDetector.tsx` | Task 4 | Full rewrite: show Reelly-new projects as visual cards with Import button |
+| `src/components/listing-admin/ReellyImportPanel.tsx` | Task 3, Task 5 | Add "Extract Specific Project" button; clean up pending updates display |
 
 ---
 
-## Detailed Implementation
+## Technical Details
 
-### QuizResults.tsx Changes
-
-1. **Download Report button** — change from `variant="outline"` with faded styling to solid visible styling: `bg-white/10 border border-white/30 text-white hover:bg-white/20`
-2. **Hero image fallback** — change `src={projects[0].images?.[0]?.image_url || "/placeholder.svg"}` to `src={projects[0].cover_image_url || projects[0].images?.[0]?.image_url || "/placeholder.svg"}`
-3. **Price display** — change `AED ${((projects[0].price_from || 0) / 1000000).toFixed(1)}M` to: if null, show `"Price on Request"`
-4. **Bedrooms display** — if both null, show `"Type to be confirmed"` instead of `"null - null BR"`
-5. **Action cards border** — wrap all three action cards (AI Comparison, Property Consultant, Want More AI Power) in a single `div` with `border border-purple-500/40 rounded-2xl p-6 bg-purple-950/20`
-6. **Hide VIP upgrade** — wrap the "Want More AI Power" `$100/year` section in `{false && (...)}` to hide it but keep structure
-7. **Regenerate button** — non-member path: change to navigate directly to `/quiz` for free retry, remove VIP gate: `onClick={() => navigate("/quiz")}` with styling `border-purple-400 text-white bg-purple-900/40 hover:bg-purple-800/40`
-8. **Add Badge button** — change `border-purple-500/30 text-white` to `border-purple-400/60 text-purple-200 hover:bg-purple-800/40` for visibility
-9. **"More Great Options" cards** — change grid from `lg:grid-cols-4` to `sm:grid-cols-2 lg:grid-cols-3` for better consistency
-
-### Quiz.tsx Changes
-
-In `getRecommendations()`:
-```
-const filteredProjects = allProjects.filter((project) => {
-  // Exclude sold-out projects — NEVER recommend sold-out
-  if (project.is_sold_out) return false;
-  const saleStatusLower = (project.sale_status || '').toLowerCase();
-  if (saleStatusLower.includes('sold') || saleStatusLower.includes('out_of_stock')) return false;
-  
-  // Exclude projects with no visual content
-  const hasImage = project.cover_image_url || project.images?.[0]?.image_url;
-  if (!hasImage) return false;
-  
-  // ... existing budget/bedroom filters
-});
+### Quiz.tsx — Budget Filter Fix (Task 6)
+Current broken logic:
+```ts
+const priceFrom = project.price_from || 0;  // null becomes 0
+if (budget === "1m-2m" && (priceFrom < 1000000 ...)) return false; // 0 < 1000000, project excluded
 ```
 
-### ProjectAIAnalyzer.tsx Changes
-
-Line 111: `if (isVisible && !hasTriggered && ...)` → `if (isVisible && !hasTriggered.current && !isAnalyzing && !analysis)`
-
-Inside `handleAnalyze()` at line 59: Add `hasTriggered.current = true;` at the very start.
-
-Loading state (lines 173-177): Replace `Loader2` spinner with JBJ monogram:
-```jsx
-<div className="flex flex-col items-center gap-4 py-8">
-  <img src={jbjMonogramTransparent} alt="Analyzing..." 
-       className="w-16 h-16 object-contain animate-pulse"
-       style={{ filter: "drop-shadow(0 0 12px rgba(200,167,102,0.5))" }} />
-  <p className="text-zinc-500 text-sm">JBJ AI is analyzing {projectName}...</p>
-  <div className="w-32 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent animate-pulse" />
-</div>
+Fix: skip budget filter if `price_from` is null:
+```ts
+const priceFrom = project.price_from;
+if (priceFrom != null) {
+  if (budget === "under-1m" && priceFrom >= 1000000) return false;
+  if (budget === "1m-2m" && (priceFrom < 1000000 || priceFrom >= 2000000)) return false;
+  // etc.
+}
 ```
 
-### AITalkingAgentPanel.tsx Changes
+Also fix the `hasImage` check — remove reference to `project.images?.[0]?.image_url` since this join is not loaded in `allProjects`:
+```ts
+const hasImage = !!project.cover_image_url;
+if (!hasImage) return false;
+```
 
-Remove the "My Voice" tab (all code related to `clonedVoiceId`, `clonedVoiceName`, recording state, MediaRecorder, upload to `voice-studio-clone`) — strip it down to only the 8 character presets + Web Speech API preview. This eliminates all ElevenLabs calls from this file.
+### daily-reelly-auto-sync — Step 8 (Task 2)
+Add after Step 7:
+```ts
+// Step 8: Backfill missing project data (bedrooms, prices, images)
+try {
+  const backfillResult = await callFunction("reelly-complete-offline-save", {
+    mode: "batch",
+    batch_size: 30,
+    mirror_images: false,  // skip image mirroring in daily to save time
+  });
+  results.offline_backfill = backfillResult;
+} catch (err) {
+  errors.push(`Step 8 (reelly-complete-offline-save) failed: ${err.message}`);
+}
+```
 
-### New Edge Function: reelly-complete-offline-save
+### NewProjectDetector.tsx — Full Rebuild (Task 4)
+New logic:
+1. Call `reelly-api-sync` with `action: "detect_new"` or compare DB reelly_ids vs API
+2. Actually: query DB for all `reelly_id` values, compare against the Reelly API list page. This is complex.
+3. Simpler approach: Show projects from DB where `is_published = false AND reelly_id IS NOT NULL` (stubs created by markers sync but not yet approved/published) as visual cards
+4. Each card shows: cover image, name, developer, price, area, status label
+5. Action buttons: "Import & Publish" (calls bulk-approve for that specific record)
 
-This function will:
-1. Accept `{ mode: "batch" | "specific", batch_size: number, project_ids?: number[] }`
-2. For each project with a `reelly_id`, call the Reelly detail API endpoint `${REELLY_API_BASE}/${reelly_id}`
-3. Extract all enrichment data (unit_types → bedrooms_min/max, amenities, highlights, faqs, payment details)
-4. For each image URL in the response, fetch it and upload to Supabase Storage `project-media` bucket using path `projects/{reelly_id}/{filename}` — store the public Supabase URL
-5. Update `cover_image_url` if currently null or pointing to `api.reelly.io` domain
-6. Update `bedrooms_min`, `bedrooms_max` computed from unit_types array
-7. This provides **full offline resilience** — all assets stored in Supabase Storage, not dependent on Reelly CDN
+This aligns with what the user wants — projects detected from Reelly markers sync that exist as stubs but aren't published yet.
+
+### ReellyImportPanel.tsx — Quick Extract Button (Task 3)
+Add a small "Quick Extract" input field with a reelly_id input + "Extract" button that calls `reelly-complete-offline-save` with `mode: "specific", project_ids: [id]`.
 
 ---
 
 ## What Does NOT Change
-
-- Podcast ElevenLabs functions (`elevenlabs-podcast-tts`, etc.) — untouched
-- Owner voice features (`owner-voice-generate`, `clone-jane-voice`) — untouched  
-- All other AI tools not mentioned — untouched
-- Database schema — no migrations needed (existing columns cover all required data)
-- Market Report page — untouched
-- All other pages and components — untouched
+- ElevenLabs podcast functions — untouched
+- All pages not mentioned — untouched  
+- Database schema — no migrations needed
+- `ProjectAIAnalyzer.tsx` — already fixed, untouched
+- `AITalkingAgentPanel.tsx` — already clean, untouched
+- `QuizResults.tsx` — already fixed, untouched
+- Market Report — untouched
