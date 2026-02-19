@@ -216,18 +216,18 @@ function AIVideoStudioLayout({
 
       {/* Main Content Area */}
       <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-        {/* Full-width Preview — contracts when tool panel is expanded */}
+        {/* Full-width Preview — shrinks when tool panel is expanded */}
         <div
-          className="w-full overflow-hidden bg-slate-950"
-          style={{ flex: activeTool && toolsExpanded ? '0 0 auto' : '1 1 auto', minHeight: activeTool && toolsExpanded ? 240 : 320 }}
+          className="w-full overflow-hidden bg-slate-950 flex-shrink-0"
+          style={{ height: activeTool && toolsExpanded ? 200 : undefined, flex: activeTool && toolsExpanded ? '0 0 200px' : '1 1 auto', minHeight: 160 }}
         >
           {centerPanel}
         </div>
 
-        {/* Horizontal CapCut-style Tools Bar (full width) */}
+        {/* Horizontal CapCut-style Tools Bar + expandable tool panel */}
         <ToolsBar />
 
-        {/* Timeline */}
+        {/* Timeline — always visible, fixed height */}
         <div className="flex-shrink-0 h-44 overflow-auto bg-slate-900 border-t border-slate-700 overscroll-contain">
           {timeline}
         </div>
