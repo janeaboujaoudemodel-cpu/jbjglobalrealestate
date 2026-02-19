@@ -4,11 +4,12 @@ import {
   FolderOpen, Loader2, Wand2, Search, RefreshCw,
   Building2, MapPin, DollarSign, Bed, ChevronDown, X, Check,
   Film, Music, Type, ArrowLeft, Play, Pause, Globe, Mic,
-  Sparkles, Volume2, Copy, CheckCheck, Link2
+  Sparkles, Volume2, Copy, CheckCheck, Link2, ExternalLink, ImageIcon
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import { VOICE_OPTIONS, SUPPORTED_LANGUAGES } from '../types';
+
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -59,6 +60,24 @@ interface ProjectIntegrationPanelProps {
 
 type WizardStep = 'grid' | 'wizard' | 'result';
 
+interface ExternalProperty {
+  name: string;
+  developer?: string;
+  location?: string;
+  city?: string;
+  country?: string;
+  price_text?: string;
+  price_from_aed?: number | null;
+  price_to_aed?: number | null;
+  bedrooms?: string;
+  property_type?: string;
+  description?: string;
+  amenities?: string[];
+  payment_plan?: string;
+  sourceUrl: string;
+  images: string[];
+}
+
 interface WizardSettings {
   language: string;
   voiceId: string;
@@ -70,6 +89,7 @@ interface WizardSettings {
 }
 
 type GenerationPhase = 'script' | 'tts' | 'assembly' | 'done';
+
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -149,6 +169,9 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
   const [selectedEmirate, setSelectedEmirate] = useState<string>('All');
   const [showFilter, setShowFilter] = useState(false);
   const [urlInput, setUrlInput] = useState('');
+  const [scraping, setScraping] = useState(false);
+  const [externalProperty, setExternalProperty] = useState<ExternalProperty | null>(null);
+
 
   // ── Wizard state ─────────────────────────────────────────────────────────────
   const [step, setStep] = useState<WizardStep>('grid');
@@ -208,56 +231,103 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
     return matchSearch && matchEmirate;
   });
 
-  // ── URL import ────────────────────────────────────────────────────────────────
-  const handleUrlImport = () => {
-    if (!urlInput.trim()) return;
-    // Match internal paths like /properties/slug or /projects/slug
-    const internalMatch = urlInput.match(/\/(?:properties|projects)\/([a-z0-9-]+)/i);
+  // ── URL import (real scraping) ────────────────────────────────────────────────
+  const handleUrlImport = async () => {
+    const raw = urlInput.trim();
+    if (!raw) return;
+
+    // Internal: match /properties/slug or /projects/slug
+    const internalMatch = raw.match(/\/(?:properties|projects)\/([a-z0-9-]+)/i);
     if (internalMatch) {
       const slug = internalMatch[1];
       const found = projects.find(p => p.name.toLowerCase().replace(/\s+/g, '-').includes(slug) || p.id === slug);
-      if (found) {
-        openWizard(found);
-        setUrlInput('');
-        return;
-      }
-      toast.info('Project not found in database. Try searching by name.');
-    } else {
-      toast.info('External URL import coming soon — paste a project URL from this platform instead.');
+      if (found) { openWizard(found); setUrlInput(''); return; }
+    }
+
+    // External URL — call scrape-property-url edge function
+    setScraping(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/scrape-property-url`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ url: raw }),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Scraping failed');
+      const ext: ExternalProperty = { ...data.property, sourceUrl: raw, images: data.images || [] };
+      setExternalProperty(ext);
+      setSelectedProject(null);
+      setResult(null);
+      setAudioUrl(null);
+      setStep('wizard');
+      setUrlInput('');
+      toast.success(`✅ Scraped: "${ext.name}"`);
+    } catch (err) {
+      toast.error(`Import failed: ${err instanceof Error ? err.message : 'Could not scrape that URL'}`);
+    } finally {
+      setScraping(false);
     }
   };
 
-  // ── Open wizard ───────────────────────────────────────────────────────────────
+
+  // ── Open wizard (internal project) ───────────────────────────────────────────
   const openWizard = (proj: RealEstateProject) => {
     setSelectedProject(proj);
+    setExternalProperty(null);
     setResult(null);
     setAudioUrl(null);
     setStep('wizard');
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    }
+    if (audioRef.current) { audioRef.current.pause(); setIsPlaying(false); }
   };
 
   const backToGrid = () => {
     setStep('grid');
     setSelectedProject(null);
+    setExternalProperty(null);
     setResult(null);
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    }
+    if (audioRef.current) { audioRef.current.pause(); setIsPlaying(false); }
   };
+
+  // Derived display values for wizard
+  const wizardName = selectedProject?.name ?? externalProperty?.name ?? '';
+  const wizardCoverImage = selectedProject?.cover_image_url ?? externalProperty?.images?.[0] ?? null;
+  const wizardLocation = selectedProject
+    ? (selectedProject.emirate === 'Abu Dhabi Emirate' ? 'Abu Dhabi' : selectedProject.emirate)
+    : (externalProperty?.location ?? externalProperty?.city ?? '');
+  const wizardPriceFrom = selectedProject?.price_from ?? externalProperty?.price_from_aed ?? null;
+  const wizardPriceTo = selectedProject?.price_to ?? externalProperty?.price_to_aed ?? null;
+  const wizardBeds = selectedProject
+    ? formatBeds(selectedProject.bedrooms_min, selectedProject.bedrooms_max)
+    : (externalProperty?.bedrooms ?? '');
+  const wizardType = selectedProject?.property_type_label ?? externalProperty?.property_type ?? '';
 
   // ── Generate Video Ad ─────────────────────────────────────────────────────────
   const handleGenerate = async () => {
-    if (!selectedProject) return;
+    if (!selectedProject && !externalProperty) return;
     setGenerating(true);
     setGenPhase('script');
 
     try {
-      // Phase 1 + 2: Call edge function (script + TTS)
       setGenPhase('script');
+      const body: Record<string, unknown> = {
+        language: settings.language,
+        voiceId: settings.voiceId,
+        tone: settings.tone,
+        scriptDuration: settings.scriptDuration,
+      };
+      if (selectedProject) {
+        body.projectId = selectedProject.id;
+      } else {
+        body.externalProperty = externalProperty;
+      }
+
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-property-video-ad`,
         {
@@ -267,17 +337,10 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
-          body: JSON.stringify({
-            projectId: selectedProject.id,
-            language: settings.language,
-            voiceId: settings.voiceId,
-            tone: settings.tone,
-            scriptDuration: settings.scriptDuration,
-          }),
+          body: JSON.stringify(body),
         }
       );
 
-      // Simulate phased progress for UX
       setTimeout(() => setGenPhase('tts'), 2000);
 
       const data = await response.json();
@@ -286,26 +349,19 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
       setGenPhase('assembly');
       await new Promise(r => setTimeout(r, 600));
 
-      // Build audio blob URL from base64
       const byteString = atob(data.audioBase64);
       const bytes = new Uint8Array(byteString.length);
       for (let i = 0; i < byteString.length; i++) bytes[i] = byteString.charCodeAt(i);
       const blob = new Blob([bytes], { type: 'audio/mpeg' });
-      const url = URL.createObjectURL(blob);
+      const blobUrl = URL.createObjectURL(blob);
       if (audioUrl) URL.revokeObjectURL(audioUrl);
-      setAudioUrl(url);
+      setAudioUrl(blobUrl);
 
-      setResult({
-        script: data.script,
-        audioBase64: data.audioBase64,
-        duration: data.audioDurationEstimate,
-      });
-
+      setResult({ script: data.script, audioBase64: data.audioBase64, duration: data.audioDurationEstimate });
       setGenPhase('done');
       setStep('result');
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Generation failed';
-      toast.error(msg);
+      toast.error(err instanceof Error ? err.message : 'Generation failed');
     } finally {
       setGenerating(false);
       setGenPhase(null);
@@ -314,68 +370,66 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
 
   // ── Add to Timeline ───────────────────────────────────────────────────────────
   const handleAddToTimeline = async () => {
-    if (!selectedProject || !result) return;
+    if (!result) return;
+    const name = wizardName;
 
-    // Fetch gallery images
-    const { data: imgData } = await supabase
-      .from('project_images')
-      .select('image_url, display_order')
-      .eq('project_id', selectedProject.id)
-      .order('display_order', { ascending: true })
-      .limit(8);
+    let allImageUrls: string[] = [];
+    if (selectedProject) {
+      const { data: imgData } = await supabase
+        .from('project_images')
+        .select('image_url, display_order')
+        .eq('project_id', selectedProject.id)
+        .order('display_order', { ascending: true })
+        .limit(8);
+      const galleryImages: ProjectImage[] = imgData || [];
+      if (selectedProject.cover_image_url) allImageUrls.push(selectedProject.cover_image_url);
+      galleryImages.forEach(g => { if (!allImageUrls.includes(g.image_url)) allImageUrls.push(g.image_url); });
+    } else if (externalProperty) {
+      allImageUrls = externalProperty.images.slice(0, 8);
+    }
 
-    const galleryImages: ProjectImage[] = imgData || [];
-
-    // Build photo clips
-    const allImageUrls: string[] = [];
-    if (selectedProject.cover_image_url) allImageUrls.push(selectedProject.cover_image_url);
-    galleryImages.forEach(g => { if (!allImageUrls.includes(g.image_url)) allImageUrls.push(g.image_url); });
+    if (allImageUrls.length === 0) {
+      toast.error('No photos found for this property');
+      return;
+    }
 
     const clipDuration = settings.scriptDuration / Math.max(allImageUrls.slice(0, 6).length, 1);
     const photoClips: VideoAdClip[] = allImageUrls.slice(0, 6).map((url, i) => ({
-      name: `${selectedProject.name} — Photo ${i + 1}`,
+      name: `${name} — Photo ${i + 1}`,
       url,
       type: 'image',
       duration: Math.max(clipDuration, 3),
     }));
 
-    // Lower-third text
-    const priceText = formatPrice(selectedProject.price_from, selectedProject.price_to);
-    const bedsText  = formatBeds(selectedProject.bedrooms_min, selectedProject.bedrooms_max);
+    const priceText = wizardPriceFrom
+      ? formatPrice(wizardPriceFrom, wizardPriceTo)
+      : (externalProperty?.price_text ?? 'Price on request');
     const lowerThirdText = [
-      selectedProject.name,
-      [bedsText, selectedProject.property_type_label].filter(Boolean).join(' · '),
+      name,
+      [wizardBeds, wizardType].filter(Boolean).join(' · '),
       priceText,
-      selectedProject.emirate,
+      wizardLocation,
     ].filter(Boolean).join('\n');
 
     const textClip: VideoAdClip = {
-      name: `${selectedProject.name} — Lower Third`,
+      name: `${name} — Lower Third`,
       url: `text-overlay://${encodeURIComponent(lowerThirdText)}`,
       type: 'text',
       duration: 5,
       textOverlay: { content: lowerThirdText, style: settings.textStyle },
     };
 
-    if (photoClips.length === 0) {
-      toast.error('No photos found for this project');
-      return;
-    }
-
     onCreateVideoAd?.({
       clips: [...photoClips, textClip],
-      voiceover: {
-        audioBase64: result.audioBase64,
-        duration: result.duration,
-        script: result.script,
-      },
-      projectName: selectedProject.name,
+      voiceover: { audioBase64: result.audioBase64, duration: result.duration, script: result.script },
+      projectName: name,
       transitions: settings.transition,
     });
 
-    toast.success(`🎬 "${selectedProject.name}" video ad added to timeline!`);
+    toast.success(`🎬 "${name}" video ad added to timeline!`);
     backToGrid();
   };
+
 
   // ── Audio playback ────────────────────────────────────────────────────────────
   const toggleAudio = () => {
@@ -417,24 +471,33 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
         <div className="px-3 py-2 border-b border-slate-700">
           <div className="flex gap-1.5">
             <div className="flex-1 relative">
-              <Link2 className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-slate-500" />
+              {scraping
+                ? <Loader2 className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-amber-400 animate-spin" />
+                : <Link2 className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-slate-500" />
+              }
               <input
                 value={urlInput}
                 onChange={e => setUrlInput(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleUrlImport()}
-                placeholder="Paste a property link…"
-                className="w-full bg-slate-800 border border-slate-700 rounded-md pl-7 pr-2 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+                onKeyDown={e => e.key === 'Enter' && !scraping && handleUrlImport()}
+                placeholder="Paste any property URL to auto-import…"
+                disabled={scraping}
+                className="w-full bg-slate-800 border border-slate-700 rounded-md pl-7 pr-2 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400 disabled:opacity-60"
               />
             </div>
             <button
               onClick={handleUrlImport}
-              disabled={!urlInput.trim()}
-              className="px-2.5 py-1.5 rounded-md bg-amber-500 text-black text-xs font-bold hover:bg-amber-400 disabled:opacity-40 transition-all"
+              disabled={!urlInput.trim() || scraping}
+              className="px-2.5 py-1.5 rounded-md bg-amber-500 text-black text-xs font-bold hover:bg-amber-400 disabled:opacity-40 transition-all whitespace-nowrap"
             >
-              Import
+              {scraping ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Import'}
             </button>
           </div>
+          <p className="text-[10px] text-slate-500 mt-1 flex items-center gap-1">
+            <ExternalLink className="w-2.5 h-2.5" />
+            Supports Bayut, Property Finder, developer sites & more
+          </p>
         </div>
+
 
         {/* Search + Filter */}
         <div className="px-3 py-2 border-b border-slate-700 space-y-2">
@@ -572,7 +635,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
   // ─────────────────────────────────────────────────────────────────────────────
   // RENDER: Wizard
   // ─────────────────────────────────────────────────────────────────────────────
-  if (step === 'wizard' && selectedProject) {
+  if (step === 'wizard' && (selectedProject || externalProperty)) {
     const genPhases = [
       { id: 'script', label: 'Writing script…', icon: '✍️' },
       { id: 'tts', label: 'Generating voiceover…', icon: '🎙️' },
@@ -595,11 +658,17 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
 
         <ScrollArea className="flex-1">
           <div className="p-3 space-y-4">
-            {/* Project Summary Card */}
+            {/* Property Summary Card */}
             <div className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden">
+              {externalProperty && (
+                <div className="px-3 py-1 bg-amber-500/15 border-b border-amber-400/30 flex items-center gap-1.5">
+                  <ExternalLink className="w-3 h-3 text-amber-400" />
+                  <span className="text-[10px] text-amber-300 font-medium truncate">Imported from external URL</span>
+                </div>
+              )}
               <div className="aspect-video relative overflow-hidden">
-                {selectedProject.cover_image_url ? (
-                  <img src={selectedProject.cover_image_url} alt={selectedProject.name}
+                {wizardCoverImage ? (
+                  <img src={wizardCoverImage} alt={wizardName}
                     className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-slate-700">
@@ -608,27 +677,27 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2">
                   <div>
-                    <p className="text-xs font-bold text-white leading-tight">{selectedProject.name}</p>
-                    <p className="text-[10px] text-slate-300">{selectedProject.emirate === 'Abu Dhabi Emirate' ? 'Abu Dhabi' : selectedProject.emirate}</p>
+                    <p className="text-xs font-bold text-white leading-tight">{wizardName}</p>
+                    {wizardLocation && <p className="text-[10px] text-slate-300">{wizardLocation}</p>}
                   </div>
                 </div>
               </div>
-              <div className="px-3 py-2 flex items-center gap-3">
-                {selectedProject.price_from && (
+              <div className="px-3 py-2 flex items-center gap-3 flex-wrap">
+                {(wizardPriceFrom || externalProperty?.price_text) && (
                   <span className="text-[10px] text-amber-400 font-semibold">
-                    {formatPrice(selectedProject.price_from, selectedProject.price_to)}
+                    {wizardPriceFrom ? formatPrice(wizardPriceFrom, wizardPriceTo) : externalProperty?.price_text}
                   </span>
                 )}
-                {selectedProject.bedrooms_min !== null && (
-                  <span className="text-[10px] text-slate-400">
-                    {formatBeds(selectedProject.bedrooms_min, selectedProject.bedrooms_max)}
+                {wizardBeds && <span className="text-[10px] text-slate-400">{wizardBeds}</span>}
+                {wizardType && <span className="text-[10px] text-slate-500">{wizardType}</span>}
+                {externalProperty && externalProperty.images.length > 0 && (
+                  <span className="text-[10px] text-slate-500 flex items-center gap-0.5 ml-auto">
+                    <ImageIcon className="w-2.5 h-2.5" />{externalProperty.images.length} photos
                   </span>
-                )}
-                {selectedProject.property_type_label && (
-                  <span className="text-[10px] text-slate-500">{selectedProject.property_type_label}</span>
                 )}
               </div>
             </div>
+
 
             {/* Voice & Language Settings */}
             <div className="space-y-3">
@@ -768,7 +837,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
   // ─────────────────────────────────────────────────────────────────────────────
   // RENDER: Result
   // ─────────────────────────────────────────────────────────────────────────────
-  if (step === 'result' && selectedProject && result) {
+  if (step === 'result' && (selectedProject || externalProperty) && result) {
     return (
       <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden">
         {/* Header */}
