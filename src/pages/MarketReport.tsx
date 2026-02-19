@@ -639,15 +639,15 @@ const MarketReport = () => {
   
   .bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #A8925A, #d4c4a0);
+    background: #1a3464;
     border-radius: 4px;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    padding-right: 10px;
+    justify-content: space-between;
+    padding: 0 10px;
   }
   
-  .bar-value { font-size: 11px; font-weight: 600; color: #2C2A26; }
+  .bar-value { font-size: 11px; font-weight: 600; color: #FFFFFF; }
   
   /* Area/dev/project cards */
   .area-grid {
@@ -668,7 +668,7 @@ const MarketReport = () => {
   
   .area-card img {
     width: 100%;
-    height: 100px;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     display: block;
     background: #F5EBD7;
@@ -1085,11 +1085,11 @@ const MarketReport = () => {
     <div class="chart-container">
       <h4 style="margin-top: 0; margin-bottom: 18px; color: #1A1814;">Global Financial Centre Rankings — GFCI 36</h4>
       <div class="bar-chart">
-        <div class="bar-item"><span class="bar-label">New York</span><div class="bar-track"><div class="bar-fill" style="width: 100%;"><span class="bar-value">#1</span></div></div></div>
-        <div class="bar-item"><span class="bar-label">London</span><div class="bar-track"><div class="bar-fill" style="width: 90%;"><span class="bar-value">#2</span></div></div></div>
-        <div class="bar-item"><span class="bar-label">Singapore</span><div class="bar-track"><div class="bar-fill" style="width: 80%;"><span class="bar-value">#3</span></div></div></div>
-        <div class="bar-item"><span class="bar-label">Hong Kong</span><div class="bar-track"><div class="bar-fill" style="width: 72%;"><span class="bar-value">#4</span></div></div></div>
-        <div class="bar-item"><span class="bar-label">Dubai</span><div class="bar-track"><div class="bar-fill" style="width: 55%; background: linear-gradient(90deg, #C4AA6A, #A8925A);"><span class="bar-value">#7 Global · #1 MENA</span></div></div></div>
+        <div class="bar-item"><span class="bar-label">New York</span><div class="bar-track"><div class="bar-fill" style="width: 100%; background: #1a3464;"><span class="bar-value" style="color:#fff;">#1</span></div></div></div>
+        <div class="bar-item"><span class="bar-label">London</span><div class="bar-track"><div class="bar-fill" style="width: 90%; background: #2d4a7a;"><span class="bar-value" style="color:#fff;">#2</span></div></div></div>
+        <div class="bar-item"><span class="bar-label">Singapore</span><div class="bar-track"><div class="bar-fill" style="width: 80%; background: #2d6a7a;"><span class="bar-value" style="color:#fff;">#3</span></div></div></div>
+        <div class="bar-item"><span class="bar-label">Hong Kong</span><div class="bar-track"><div class="bar-fill" style="width: 72%; background: #4a4a5a;"><span class="bar-value" style="color:#fff;">#4</span></div></div></div>
+        <div class="bar-item"><span class="bar-label">Dubai</span><div class="bar-track"><div class="bar-fill" style="width: 55%; background: linear-gradient(90deg, #A8925A, #d4c4a0);"><span class="bar-value" style="color:#1A1814; font-weight:700;">#7 Global · #1 MENA</span></div></div></div>
       </div>
     </div>
     <div class="two-col">
@@ -1386,6 +1386,20 @@ const MarketReport = () => {
         </ul>
       </div>
     </div>
+
+    <!-- Developer Transaction Volume Table -->
+    <h3 style="margin-top: 24px; margin-bottom: 14px;">Top 5 Developers by Transaction Volume (2026 YTD)</h3>
+    <div class="table-wrapper">
+      <table>
+        <tr><th>Developer</th><th>Transactions</th><th>Volume (AED)</th><th>Tier</th></tr>
+        <tr><td><strong>Emaar Properties</strong></td><td>12,450+</td><td>AED 28.4B</td><td><span style="background:rgba(168,146,90,0.15);color:#A8925A;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">Tier 1</span></td></tr>
+        <tr><td><strong>DAMAC Properties</strong></td><td>8,320+</td><td>AED 15.7B</td><td><span style="background:rgba(168,146,90,0.15);color:#A8925A;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">Tier 1</span></td></tr>
+        <tr><td><strong>Nakheel</strong></td><td>5,890+</td><td>AED 14.2B</td><td><span style="background:rgba(168,146,90,0.15);color:#A8925A;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">Tier 1</span></td></tr>
+        <tr><td><strong>Sobha Realty</strong></td><td>4,120+</td><td>AED 11.9B</td><td><span style="background:rgba(45,106,122,0.12);color:#2d6a7a;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">Tier 2</span></td></tr>
+        <tr><td><strong>Ellington Properties</strong></td><td>2,870+</td><td>AED 9.4B</td><td><span style="background:rgba(45,106,122,0.12);color:#2d6a7a;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">Tier 2</span></td></tr>
+      </table>
+    </div>
+
     <div class="warning-box">
       <h4>Due Diligence Essentials</h4>
       <p style="margin-bottom: 0;">Always verify: RERA registration, escrow account details, project approvals, and visit at least 2–3 completed projects before committing to off-plan.</p>
@@ -1474,6 +1488,26 @@ const MarketReport = () => {
           <h4 style="margin-top: 0;">Official RERA Portal</h4>
           <p style="margin-bottom: 0; font-size: 12px;">Verify any developer or project at <strong>rera.gov.ae</strong> — always check before signing any SPA or booking form.</p>
         </div>
+
+        <h3 style="margin-top: 22px; font-size: 15px;">Professional Team You Need</h3>
+        <ul class="checklist">
+          <li>RERA-licensed Broker (verify on RERA portal)</li>
+          <li>Property Lawyer (SPA review &amp; title checks)</li>
+          <li>Mortgage Advisor (if financing)</li>
+          <li>Snagging Inspector (for ready properties)</li>
+          <li>Financial Planner (ROI &amp; tax strategy)</li>
+        </ul>
+
+        <div class="warning-box" style="margin-top: 18px;">
+          <h4 style="margin-top: 0; font-size: 13px;">🚩 Red Flags to Avoid</h4>
+          <ul style="margin: 0;">
+            <li style="color:#5C1A1A; border-bottom-color: rgba(180,20,20,0.15); font-size: 12px;">Seller avoiding DLD verification checks</li>
+            <li style="color:#5C1A1A; border-bottom-color: rgba(180,20,20,0.15); font-size: 12px;">No RERA escrow account on off-plan project</li>
+            <li style="color:#5C1A1A; border-bottom-color: rgba(180,20,20,0.15); font-size: 12px;">Developer with zero completed projects</li>
+            <li style="color:#5C1A1A; border-bottom-color: rgba(180,20,20,0.15); font-size: 12px;">Price significantly below market rate</li>
+            <li style="color:#5C1A1A; border-bottom-color: rgba(180,20,20,0.15); font-size: 12px;">Pressure to sign without legal review</li>
+          </ul>
+        </div>
       </div>
     </div>
     <span class="page-number">15</span>
@@ -1483,6 +1517,19 @@ const MarketReport = () => {
   <div class="page">
     <h2>Market Outlook 2026</h2>
     <p>Based on 2025's exceptional performance and strong macroeconomic fundamentals, 2026 presents compelling selective opportunities.</p>
+
+    <!-- 2025 vs 2026 YTD Comparison -->
+    <h3 style="margin-bottom: 12px;">2025 Full Year vs 2026 YTD</h3>
+    <div class="table-wrapper" style="margin-top: 0;">
+      <table>
+        <tr><th>Metric</th><th style="color:#6B6459;">2025 Full Year</th><th style="color:#A8925A;">2026 YTD</th></tr>
+        <tr><td>Transaction Value</td><td style="color:#6B6459;">${fullYear2025.value}</td><td style="color:#A8925A; font-weight:600;">${liveYtd.value}</td></tr>
+        <tr><td>Total Transactions</td><td style="color:#6B6459;">${fullYear2025.transactions.toLocaleString()}</td><td style="color:#A8925A; font-weight:600;">${liveYtd.transactions.toLocaleString()}</td></tr>
+        <tr><td>YoY Growth</td><td style="color:#6B6459;">${fullYear2025.growth}</td><td style="color:#A8925A; font-weight:600;">${liveYtd.growth}</td></tr>
+        <tr><td>Off-Plan Share</td><td style="color:#6B6459;">${Math.round((fullYear2025.offPlan / fullYear2025.transactions) * 100)}%</td><td style="color:#A8925A; font-weight:600;">${Math.round((liveYtd.offPlan / liveYtd.transactions) * 100)}%</td></tr>
+        <tr><td>Top Area</td><td style="color:#6B6459;">Jumeirah Village Circle</td><td style="color:#A8925A; font-weight:600;">${liveYtd.topArea}</td></tr>
+      </table>
+    </div>
     <div class="stat-grid">
       <div class="stat-box">
         <div class="number">600B+</div>
@@ -1593,8 +1640,19 @@ const MarketReport = () => {
       <div>
         <h3 style="margin-top: 0; margin-bottom: 10px;">Try Our AI Property Matchmaker</h3>
         <p>Scan this QR code or visit our website to access the complimentary AI assessment tool — created by the founder to help you find the perfect property fit.</p>
-        <p style="color: #A8925A; font-weight: 600; margin-bottom: 0;"><a href="${websiteUrl}/quiz" style="color: #A8925A; text-decoration: none;">${websiteUrl}/quiz</a></p>
+        <p style="color: #A8925A; font-weight: 600; margin-bottom: 14px;"><a href="${websiteUrl}/quiz" style="color: #A8925A; text-decoration: none;">${websiteUrl}/quiz</a></p>
+        <a href="${websiteUrl}/quiz" target="_blank" style="display: inline-block; background: linear-gradient(90deg, #A8925A, #C4AA6A); color: #1A1814; font-weight: 700; font-size: 13px; padding: 11px 24px; border-radius: 8px; text-decoration: none; letter-spacing: 0.03em;">Start AI Property Finder →</a>
       </div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid rgba(168,146,90,0.25); border-radius: 14px; padding: 22px 26px; margin: 22px 0;">
+      <h4 style="margin-top: 0; margin-bottom: 14px; text-align: center;">Stay in the Loop</h4>
+      <div class="social-links">
+        <a href="https://www.instagram.com/jbj.ae" target="_blank">📸 Instagram</a>
+        <a href="https://www.tiktok.com/@jbj.ae" target="_blank">🎵 TikTok</a>
+        <a href="https://youtube.com/@jbjglobalrealestate" target="_blank">▶ YouTube</a>
+        <a href="https://www.linkedin.com/company/jbj-global-real-estate/" target="_blank">💼 LinkedIn</a>
+      </div>
+      <p style="text-align: center; font-size: 11px; color: #8A8278; margin: 12px 0 0 0;">Follow us for daily Dubai market updates, property drops &amp; investment insights.</p>
     </div>
     <div class="disclaimer">
       <strong>Disclaimer:</strong> This document is for educational purposes only and does not constitute investment, financial, or legal advice. Data sourced from Dubai Land Department (DLD), RERA, Property Monitor, DXB Interact, Bayut, Property Finder, and Khaleej Times. While we strive for accuracy, readers should verify information independently. Real estate investments involve risks, including potential loss of capital. Past performance is not indicative of future results.
@@ -1636,7 +1694,7 @@ const MarketReport = () => {
     <div class="area-grid">
       ${featuredAreas.map((a: any) => `
       <a href="https://JBJ.AE/area/${a.slug}" class="area-card" target="_blank">
-        ${a.image_url ? `<img src="${a.image_url}" alt="${a.name}" onerror="this.style.background='#F5EBD7'; this.style.height='100px';" />` : `<div style="height: 100px; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 22px; color: rgba(168,146,90,0.3); font-weight: 700;">JBJ</span></div>`}
+        ${a.image_url ? `<img src="${a.image_url}" alt="${a.name}" onerror="this.style.background='#F5EBD7'; this.style.aspectRatio='1/1';" />` : `<div style="aspect-ratio: 1/1; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 22px; color: rgba(168,146,90,0.3); font-weight: 700;">JBJ</span></div>`}
         <div class="area-card-body">
           ${a.is_trending ? '<span class="badge-trending">● Trending</span>' : ''}
           ${a.is_high_demand && !a.is_trending ? '<span class="badge-demand">● High Demand</span>' : ''}
@@ -1660,7 +1718,7 @@ const MarketReport = () => {
     <div class="area-grid" style="gap: 16px;">
       ${featuredDevelopers.map((d: any) => `
       <a href="https://JBJ.AE/developers/${d.slug}" class="area-card" target="_blank" style="text-align: center;">
-        ${d.logo_url ? `<div style="height: 90px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; padding: 12px; border-bottom: 1px solid rgba(168,146,90,0.15);"><img src="${d.logo_url}" alt="${d.name}" style="max-height: 66px; max-width: 90%; object-fit: contain;" onerror="this.parentElement.innerHTML='<span style=&quot;font-family: Playfair Display, serif; font-size: 14px; color: #A8925A; font-weight: 700;&quot;>' + '${d.name.split(' ')[0]}' + '</span>'" /></div>` : `<div style="height: 90px; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 14px; color: #A8925A; font-weight: 700;">${d.name.split(' ')[0]}</span></div>`}
+        ${d.logo_url ? `<div style="aspect-ratio: 1/1; background: #FFFFFF; display: flex; align-items: center; justify-content: center; padding: 12px; border-bottom: 1px solid rgba(168,146,90,0.15);"><img src="${d.logo_url}" alt="${d.name}" style="max-height: 66px; max-width: 90%; object-fit: contain;" onerror="this.parentElement.innerHTML='<span style=&quot;font-family: Playfair Display, serif; font-size: 14px; color: #A8925A; font-weight: 700;&quot;>' + '${d.name.split(' ')[0]}' + '</span>'" /></div>` : `<div style="aspect-ratio: 1/1; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 14px; color: #A8925A; font-weight: 700;">${d.name.split(' ')[0]}</span></div>`}
         <div class="area-card-body" style="text-align: center;">
           <div class="area-name" style="text-align: center;">${d.name}</div>
           <a href="https://JBJ.AE/developers/${d.slug}" class="area-link" target="_blank" style="display: block; text-align: center; margin-top: 4px;">View Projects →</a>
@@ -1670,7 +1728,7 @@ const MarketReport = () => {
     <div class="area-grid">
       ${["Emaar Properties","DAMAC Properties","Sobha Realty","Nakheel","Aldar Properties","Meraas","Ellington Properties","Binghatti Developers"].map((name) => `
       <div class="area-card" style="text-align: center;">
-        <div style="height: 90px; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;">
+        <div style="aspect-ratio: 1/1; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;">
           <span style="font-family: 'Playfair Display', serif; font-size: 14px; color: #A8925A; font-weight: 700;">${name.split(' ')[0]}</span>
         </div>
         <div class="area-card-body" style="text-align: center;">
@@ -1698,7 +1756,7 @@ const MarketReport = () => {
         const priceStr = p.price_from ? `AED ${(Math.round(Number(p.price_from)) >= 1000000 ? (Math.round(Number(p.price_from)) / 1000000).toFixed(1) + 'M' : Math.round(Number(p.price_from)).toLocaleString())}` : 'Price on request';
         return `
       <a href="https://JBJ.AE/properties/${p.slug || ''}" class="area-card" target="_blank" style="display: block; text-decoration: none;">
-        ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="${p.name}" style="width: 100%; height: 110px; object-fit: cover; display: block; background: #F5EBD7;" onerror="this.style.display='none'" />` : `<div style="height: 110px; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 20px; color: rgba(168,146,90,0.4);">🏢</span></div>`}
+        ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="${p.name}" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #F5EBD7;" onerror="this.style.display='none'" />` : `<div style="aspect-ratio: 1/1; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 20px; color: rgba(168,146,90,0.4);">🏢</span></div>`}
         <div class="area-card-body">
           <div class="area-name">${p.name}</div>
           <div class="area-meta">📍 ${p.area_name || p.location || 'Dubai, UAE'}</div>
@@ -1776,9 +1834,47 @@ const MarketReport = () => {
       </div>
     </div>
 
-    <div style="text-align: center; margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(168,146,90,0.2);">
-      <p style="font-size: 10px; color: #8A8278; margin: 0;">© 2026 JBJ Global Real Estate L.L.C S.O.C. · All Rights Reserved · Licensed Real Estate Brokerage · Downtown Dubai, UAE</p>
-      <p style="font-size: 10px; color: #8A8278; margin: 6px 0 0 0;">This document is for educational purposes only. Data sourced from DLD, RERA, DXB Interact, Bayut, Property Finder, and Khaleej Times. Not financial advice.</p>
+    <!-- Premium Book Footer -->
+    <div style="margin-top: 32px;">
+      <div style="width: 100%; height: 4px; background: linear-gradient(90deg, transparent, #A8925A, transparent); margin-bottom: 28px;"></div>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: #A8925A; line-height: 1; margin-bottom: 8px;">JBJ</div>
+        <div style="font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #2C2A26; margin-bottom: 4px;">JBJ Global Real Estate</div>
+        <div style="font-size: 11px; color: #8A8278;">Real Estate Brokerage · Downtown Dubai, UAE</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 24px; padding: 20px 0; border-top: 1px solid rgba(168,146,90,0.2); border-bottom: 1px solid rgba(168,146,90,0.2);">
+        <div>
+          <div style="font-size: 10px; font-weight: 700; color: #A8925A; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;">Contact</div>
+          <div style="font-size: 11px; color: #6B6459; line-height: 1.9;">
+            <div>📞 +971 56 591 1000</div>
+            <div>✉ CONTACT@JBJ.AE</div>
+            <div>📍 Downtown Dubai, UAE</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 10px; font-weight: 700; color: #A8925A; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;">Explore</div>
+          <div style="font-size: 11px; line-height: 1.9;">
+            <div><a href="https://JBJ.AE/properties" style="color:#6B6459; text-decoration:none;">Properties</a></div>
+            <div><a href="https://JBJ.AE/areas" style="color:#6B6459; text-decoration:none;">Areas</a></div>
+            <div><a href="https://JBJ.AE/developers" style="color:#6B6459; text-decoration:none;">Developers</a></div>
+            <div><a href="https://JBJ.AE/market-intelligence" style="color:#6B6459; text-decoration:none;">Market Intel</a></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 10px; font-weight: 700; color: #A8925A; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;">Social</div>
+          <div style="font-size: 11px; line-height: 1.9;">
+            <div><a href="https://www.instagram.com/jbj.ae" style="color:#6B6459; text-decoration:none;">📸 Instagram</a></div>
+            <div><a href="https://www.tiktok.com/@jbj.ae" style="color:#6B6459; text-decoration:none;">🎵 TikTok</a></div>
+            <div><a href="https://youtube.com/@jbjglobalrealestate" style="color:#6B6459; text-decoration:none;">▶ YouTube</a></div>
+            <div><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="color:#6B6459; text-decoration:none;">💼 LinkedIn</a></div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-bottom: 16px;">
+        <p style="font-size: 10px; color: #8A8278; margin: 0 0 4px 0;">© 2026 JBJ Global Real Estate L.L.C S.O.C. · All Rights Reserved</p>
+        <p style="font-size: 10px; color: #8A8278; margin: 0;">Crafted in Dubai, UAE · For educational purposes only · Not financial advice</p>
+      </div>
+      <div style="width: 100%; height: 4px; background: linear-gradient(90deg, transparent, #A8925A, transparent);"></div>
     </div>
     <span class="page-number">23</span>
   </div>
