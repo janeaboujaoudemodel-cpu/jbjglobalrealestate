@@ -191,8 +191,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
   // ── Generation state ──────────────────────────────────────────────────────────
   const [generating, setGenerating] = useState(false);
   const [genPhase, setGenPhase] = useState<GenerationPhase | null>(null);
-  const [result, setResult] = useState<{ script: string; audioBase64: string; duration: number } | null>(null);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [result, setResult] = useState<{ script: string; duration: number } | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [copied, setCopied] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -219,12 +218,12 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
 
   useEffect(() => { loadProjects(); }, [loadProjects]);
 
-  // ── Audio cleanup on unmount ───────────────────────────────────────────────────
+  // ── Speech synthesis cleanup on unmount ───────────────────────────────────────
   useEffect(() => {
     return () => {
-      if (audioUrl) URL.revokeObjectURL(audioUrl);
+      window.speechSynthesis?.cancel();
     };
-  }, [audioUrl]);
+  }, []);
 
   // ── Filter ────────────────────────────────────────────────────────────────────
   const filtered = projects.filter(p => {
@@ -267,7 +266,6 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
       setExternalProperty(ext);
       setSelectedProject(null);
       setResult(null);
-      setAudioUrl(null);
       setStep('wizard');
       setUrlInput('');
       toast.success(`✅ Scraped: "${ext.name}"`);
@@ -284,9 +282,9 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
     setSelectedProject(proj);
     setExternalProperty(null);
     setResult(null);
-    setAudioUrl(null);
     setStep('wizard');
-    if (audioRef.current) { audioRef.current.pause(); setIsPlaying(false); }
+    window.speechSynthesis?.cancel();
+    setIsPlaying(false);
   };
 
   const backToGrid = () => {
@@ -351,15 +349,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
       setGenPhase('assembly');
       await new Promise(r => setTimeout(r, 600));
 
-      const byteString = atob(data.audioBase64);
-      const bytes = new Uint8Array(byteString.length);
-      for (let i = 0; i < byteString.length; i++) bytes[i] = byteString.charCodeAt(i);
-      const blob = new Blob([bytes], { type: 'audio/mpeg' });
-      const blobUrl = URL.createObjectURL(blob);
-      if (audioUrl) URL.revokeObjectURL(audioUrl);
-      setAudioUrl(blobUrl);
-
-      setResult({ script: data.script, audioBase64: data.audioBase64, duration: data.audioDurationEstimate });
+      setResult({ script: data.script, duration: data.audioDurationEstimate });
       setGenPhase('done');
       setStep('result');
     } catch (err) {
@@ -425,7 +415,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
 
     onCreateVideoAd?.({
       clips: allClips,
-      voiceover: { audioBase64: result.audioBase64, duration: result.duration, script: result.script },
+      voiceover: { audioBase64: '', duration: result.duration, script: result.script },
       projectName: name,
       transitions: settings.transition,
     });
@@ -437,7 +427,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
       script: result.script,
       settings,
       clips: allClips,
-      voiceover: { audioBase64: result.audioBase64, duration: result.duration, script: result.script },
+      voiceover: { audioBase64: '', duration: result.duration, script: result.script },
       transitions: settings.transition,
       propertyName: name,
     });
@@ -447,14 +437,25 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
   };
 
 
-  // ── Audio playback ────────────────────────────────────────────────────────────
+  // ── Audio playback via browser SpeechSynthesis ───────────────────────────────
   const toggleAudio = () => {
-    if (!audioRef.current) return;
+    if (!result?.script) return;
     if (isPlaying) {
-      audioRef.current.pause();
+      window.speechSynthesis.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.play();
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        setIsPlaying(true);
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(result.script);
+      utterance.lang = settings.language;
+      utterance.rate = 0.9;
+      utterance.onend = () => setIsPlaying(false);
+      utterance.onerror = () => setIsPlaying(false);
+      window.speechSynthesis.speak(utterance);
       setIsPlaying(true);
     }
   };
@@ -876,23 +877,13 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                 <span className="text-xs font-semibold text-white">Voiceover Preview</span>
                 <span className="ml-auto text-[10px] text-slate-500">~{result.duration}s</span>
               </div>
-              {audioUrl && (
-                <>
-                  <audio
-                    ref={audioRef}
-                    src={audioUrl}
-                    onEnded={() => setIsPlaying(false)}
-                    className="hidden"
-                  />
-                  <button
-                    onClick={toggleAudio}
-                    className="w-full flex items-center justify-center gap-2 py-2 rounded-md bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-semibold hover:bg-amber-500/25 transition-all"
-                  >
-                    {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-                    {isPlaying ? 'Pause' : 'Play Voiceover'}
-                  </button>
-                </>
-              )}
+              <button
+                onClick={toggleAudio}
+                className="w-full flex items-center justify-center gap-2 py-2 rounded-md bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-semibold hover:bg-amber-500/25 transition-all"
+              >
+                {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                {isPlaying ? 'Pause Voiceover' : 'Preview Voiceover'}
+              </button>
             </div>
 
             {/* Script */}

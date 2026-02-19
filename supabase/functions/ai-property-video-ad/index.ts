@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { encode as base64Encode } from "https://deno.land/std@0.168.0/encoding/base64.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,12 +14,10 @@ serve(async (req) => {
 
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
-    if (!ELEVENLABS_API_KEY) throw new Error("ELEVENLABS_API_KEY not configured");
 
     const { projectId, language, voiceId, tone, scriptDuration, externalProperty } = await req.json();
 
@@ -159,47 +156,14 @@ Requirements:
 
     if (!script) throw new Error("AI did not generate a script");
 
-    // ── Step B: Generate TTS audio via ElevenLabs ────────────────────────────
-    const selectedVoiceId = voiceId || "JBFqnCBsd6RMkjVDRZzb"; // George (default)
-
-    const ttsResponse = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoiceId}?output_format=mp3_44100_128`,
-      {
-        method: "POST",
-        headers: {
-          "xi-api-key": ELEVENLABS_API_KEY,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: script,
-          model_id: "eleven_multilingual_v2",
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-            style: tone === "luxury" ? 0.6 : tone === "urgent" ? 0.4 : 0.3,
-            use_speaker_boost: true,
-          },
-        }),
-      }
-    );
-
-    if (!ttsResponse.ok) {
-      const errText = await ttsResponse.text();
-      throw new Error(`ElevenLabs TTS failed (${ttsResponse.status}): ${errText}`);
-    }
-
-    const audioBuffer = await ttsResponse.arrayBuffer();
-    const audioBase64 = base64Encode(new Uint8Array(audioBuffer));
-
     // Estimate duration: ~15 chars per second is a typical speaking pace
     const audioDurationEstimate = Math.ceil(script.length / 15);
 
     return new Response(
       JSON.stringify({
         script,
-        audioBase64,
         audioDurationEstimate,
-        locationImageUrl: null, // Google Maps not configured
+        locationImageUrl: null,
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
