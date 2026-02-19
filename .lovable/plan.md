@@ -1,200 +1,326 @@
 
-# Preview Canvas Rebuild — Aspect Ratio Switching + Click-to-Inspect
+# AI Company Stamp Generator — Full Premium Rebuild
 
-## Current State Analysis
+## Problems Identified
 
-### Preview Canvas (`VideoPreviewCanvas.tsx`)
-- The preview area is `<div className="flex-1 min-h-0 relative overflow-hidden bg-black">` — it takes all available vertical space in the layout, but it has **no aspect ratio constraint**. The media inside uses `object-contain` which adds black bars but the outer shell stretches arbitrarily.
-- There is **no aspect ratio switcher UI** of any kind. The preview always fills the container's shape.
-- The layout in `AIVideoStudioLayout.tsx` gives the preview a collapsed height of 180px when a tool panel is open, and `minHeight: 280` when no tool is open — both are too small for meaningful editing.
+From reading the full codebase:
 
-### Timeline → Inspector Wiring (`AIVideoStudio.tsx`)
-- `onSelectClip` is called by `TimelineEditor` when a clip is clicked.
-- `selectClip` is from `useVideoStudioProject` and stores `selectedClipIds` in `timelineState`.
-- `selectedClip` is derived in `AIVideoStudio.tsx` as `getSelectedClips()[0]` and passed to `<InspectorPanel>`.
-- **The Inspector is never auto-opened.** It lives inside `AIVideoStudioLayout`'s tool panel behind the "Inspector" tab. Clicking a timeline clip updates `selectedClip` state, but the user still has to manually click the Inspector tab to see it.
-- The fix requires: when `selectClip` is called via a timeline clip click, also call `layoutRef.current?.toggleTool('inspector')` to switch the active panel to Inspector automatically.
+1. **Export fails silently** — `generateBundle()` in `StampExportPage.tsx` calls `downloadPNG()` which uses `canvas.toBlob()`, an async callback — but the SVG-to-canvas conversion often fails because SVG content with `<textPath>` and external fonts can't cross-origin render in a `<canvas>`. The catch block just logs to console but shows `toast.error('Export failed')` without telling the user what failed or offering recovery.
+
+2. **No live stamp preview on the export page** — The export page shows the stamp on a plain white card and on a mock document, but there's NO color preview. The `StampExportPage` uses hardcoded `tintColor="#1a2744"` — the color choices made in the generator page are not carried to export.
+
+3. **No way to edit text on the stamp** — "Official Stamp", "Since 2010", registration number, city text etc. are hardcoded in every template. There's no UI to remove or change these text elements on a generated concept before exporting.
+
+4. **Color picker is basic** — The current color panel shows preset dot swatches + a hex input field. There is no color wheel / HSB picker with live preview as you move the mouse. The user explicitly asked for "the circle where I see all the colors, so I move the mouse, it sees the color changing on the live preview."
+
+5. **Multi-color export** — No way to download the stamp in multiple colors in one batch. The user wants to load it in multiple colors.
+
+6. **SVG templates are not premium enough** — The current templates use very basic stroke-only geometry. Premium stamps from BrandCrowd/LogoMaker level would have filled sections, radial gradients, shadow-like effects, decorative ornaments at multiple points, and more complex paths.
 
 ---
 
-## Changes Required
+## What Gets Built
 
-### 1. `VideoPreviewCanvas.tsx` — Aspect Ratio Switcher + Constrained Canvas
+### Part 1 — HSB Color Wheel Picker (new component)
 
-**Add to props:**
-```typescript
-aspectRatio?: '16:9' | '9:16' | '1:1' | '4:5';
-onAspectRatioChange?: (ratio: '16:9' | '9:16' | '1:1' | '4:5') => void;
+**New file:** `src/components/stamp-generator/StampColorWheel.tsx`
+
+A real color wheel using pure CSS + canvas:
+- An `<canvas>` element draws the HSB color wheel (hue around the ring, saturation from center, brightness adjustable via a separate vertical slider)
+- Mouse move over the canvas updates the color in real-time with a draggable circle cursor
+- Below it: a small brightness slider (dark → bright)
+- Hex input that syncs both ways
+- A "Recently used" row showing the last 5 colors picked
+- Live preview: the `StampSVGRenderer` re-renders with every mouse move while hovering the wheel (debounced to 16ms = 60fps)
+
+The wheel is drawn using `ctx.createConicGradient` (or polyfill with arc segments) for hue × `ctx.createRadialGradient` for white-to-transparent saturation overlay × a semi-transparent black overlay for the brightness layer.
+
+**How it integrates:** Replaces the current collapsed "Preview Colors" section in `StampGeneratorPage.tsx` with an always-visible side panel (on desktop) or bottom drawer (on mobile) that shows the color wheel.
+
+---
+
+### Part 2 — Stamp Text Editor (inline SVG text editing)
+
+**New file:** `src/components/stamp-generator/StampTextEditor.tsx`
+
+A panel that appears below/beside the selected stamp card. It parses the selected stamp's SVG and extracts all `<text>` elements along with their content. The user sees a list like:
+
+```
+[✏] "OFFICIAL STAMP"    [🗑 Delete]
+[✏] "Dubai, UAE"        [✏ Edit]
+[✏] "REG: 12345"        [🗑 Delete]
+[✏] "SINCE 2020"        [✏ Edit]
 ```
 
-**What changes inside the component:**
+When the user clicks Edit, the text input appears inline. When the user deletes, the SVG is mutated to remove that `<text>` element. When the user edits, the content of that `<text>` element is replaced.
 
-**A. Aspect ratio pill selector** — a small 3-button pill row pinned to the top of the preview area:
-- `16:9` (YouTube)
-- `9:16` (Reels)
-- `1:1` (Instagram)
+**Implementation:** Uses `DOMParser` to parse the SVG string, find all `<text>` nodes, serialize back with `XMLSerializer`. This is 100% client-side and instant — no edge function calls.
 
-These are always visible, styled as compact amber-outlined chip buttons. Active one is amber-filled. Clicking changes `aspectRatio` state.
+The text editor appears in the right panel when a stamp concept is selected (selected concepts get a detail panel that didn't exist before).
 
-**B. The canvas frame** — instead of `absolute inset-0`, the visible video frame becomes a **centered box with a fixed aspect ratio**:
-- The outer container stays `flex-1 min-h-0 relative overflow-hidden bg-black`.
-- Inside, a flex-centered wrapper renders the canvas box:
-  ```
-  <div className="absolute inset-0 flex items-center justify-center bg-black">
-    <div style={{ aspectRatio: cssRatio, maxHeight: '100%', maxWidth: '100%', position: 'relative', width: X, height: Y }}>
-      ... media, overlays, transitions all go here ...
-    </div>
-  </div>
-  ```
-- The canvas width/height is computed from the container's actual dimensions to always fill as much of the preview area as possible while maintaining the exact aspect ratio.
-- `16:9` → `aspectRatio: '16/9'`, `9:16` → `aspectRatio: '9/16'`, `1:1` → `aspectRatio: '1/1'`
+---
 
-**C. Thin letterbox bars** — the black area outside the canvas gets a subtle checkerboard pattern (CSS `background-image`) to visually indicate it's outside the canvas frame, similar to how DaVinci Resolve and CapCut show the safe area.
+### Part 3 — Multi-Color Export Pack
 
-**D. Canvas size badge** — a tiny bottom-left badge showing the format name: `📱 Reels 9:16`, `▶️ YouTube 16:9`, `⬜ Square 1:1` — appears for 2 seconds after switching then fades.
+**In:** `StampExportPage.tsx`
 
-### 2. `AIVideoStudioLayout.tsx` — Expose `setActiveTool` Imperatively
+A new "Multi-Color Pack" section below the existing single-color export. The user can:
 
-The `AIVideoStudioLayoutHandle` already exposes `toggleTool(toolId)`. This is exactly what's needed. No new methods needed.
+1. Pick up to 5 colors for export (using mini color swatches + the color wheel)
+2. Click "Download Color Pack (ZIP)" → client-side creates a ZIP using `jszip` (already in dependencies!) containing one folder per color: `navy/`, `burgundy/`, `gold/` etc., each with SVG + PNG files.
 
-**However**, `toggleTool` currently toggles: if the tool is already active, it collapses/expands. When auto-opening Inspector, we need to **always open** (not toggle). Add a second method to the handle:
+The ZIP assembly happens entirely client-side:
+- `JSZip` creates the archive in memory
+- Each color variant: SVG blob (simple string replace of `#1a2744`) + PNG via canvas
+- `zip.generateAsync({ type: 'blob' })` → `URL.createObjectURL` → auto-download
+
+**Why this fixes the export failure:** The current export failure comes from using a complex SVG-to-canvas path. The new approach:
+- SVG download: always works (direct string blob)
+- PNG download: add `encodeURIComponent` to the SVG before creating the object URL and set the `<img>` `crossOrigin = "anonymous"` properly, plus add `xmlns` attribute enforcement to the SVG string before rasterizing
+- PDF: use `pdf-lib` (already installed) to embed the SVG as an image in a PDF — this is more reliable than the current approach
+
+---
+
+### Part 4 — Premium Stamp Templates (upgraded SVG quality)
+
+The existing 9 templates will be upgraded in `src/lib/stampTemplates.ts` and `supabase/functions/ai-stamp-generator/index.ts`:
+
+**Specific upgrades:**
+- **Classic Double Ring** → Add a filled dark navy outer ring band (like a real rubber stamp seal), decorative star dividers at 12/3/6/9 o'clock positions, inner filled monogram circle with white letter
+- **Luxury Triple Ring** → Add concentric gradient fills (using `<linearGradient>` or `<radialGradient>` defs), ornate fleur-de-lis style dividers at the top and bottom points
+- **Bold Rectangle** → Add corner ornament diamonds, filled header band, more sophisticated border with inset lines
+- **Vintage Seal** → More authentic vintage texture simulation using many small dots in a ring (SVG `<circle>` array at radius intervals), authentic rope-style border approximation using zigzag path
+- **New T10: Embossed Medallion** — A premium circular stamp with a filled dark outer ring, a thin gold inner ring (second color), an 8-pointed star/sunburst in the center, company name curved, very high-end look like a wax seal imprint
+- **New T11: Art Deco Square** — Rectangle stamp with Art Deco ornamental corners (SVG paths), double border, and geometric interior lines matching the style of luxury brand stamps
+
+These are implemented in `stampTemplates.ts` (client-side fallback) and mirrored in the edge function `buildSVG()`.
+
+---
+
+### Part 5 — Export Page Full Rebuild
+
+`StampExportPage.tsx` gets a 2-column layout upgrade:
+
+**Left column (Preview panel):**
+- Large stamp preview (size 280, not 220) with the currently-selected export color applied — tracks live as user picks colors
+- "Preview on document" mock — a nicer letter/contract mockup with a proper paper texture gradient, typed lines, signature line, and the stamp rendered at 90px in the bottom-right corner
+- **NEW: Preview on business card** — small business card mock showing the stamp in the top-left corner
+
+**Right column (Controls):**
+- Format + size + DPI selectors (same as before)
+- **Color section at top:** mini color wheel (compact version) or color swatches — the export page gets a proper color selector so the user can pick the export color (separate from the preview color in the gallery)
+- **Multi-Color Pack section:** toggle "Export in multiple colors" → shows a color multi-select (up to 5 colors). "Download ZIP with all colors" button
+- **Text overrides section:** shows a summary of key text elements (like "OFFICIAL STAMP" text) with a quick toggle to include/exclude it from export
+- Fixed export error: SVG inline in the page is grabbed directly from the rendered `<div>` via `innerHTML`, not via canvas re-rasterization
+
+---
+
+## Files to Create / Edit
+
+| File | Action | Description |
+|------|--------|-------------|
+| `src/components/stamp-generator/StampColorWheel.tsx` | **CREATE** | Full HSB color wheel canvas component with live preview |
+| `src/components/stamp-generator/StampTextEditor.tsx` | **CREATE** | SVG text element extractor + inline editor/deleter |
+| `src/components/stamp-generator/StampGeneratorPage.tsx` | **EDIT** | Replace color panel with color wheel; add text editor when design selected; upgrade layout |
+| `src/components/stamp-generator/StampExportPage.tsx` | **EDIT** | Fix export failure; add multi-color ZIP export; add proper live color preview; add document/business card mockups |
+| `src/lib/stampTemplates.ts` | **EDIT** | Upgrade all 9 templates to premium quality; add 2 new premium templates |
+| `supabase/functions/ai-stamp-generator/index.ts` | **EDIT** | Sync upgraded `buildSVG()` templates to match client-side; add new template keys |
+
+---
+
+## Technical Details
+
+### Color Wheel Canvas Drawing Algorithm
 
 ```typescript
-export interface AIVideoStudioLayoutHandle {
-  toggleTool: (toolId: string) => void;
-  openTool: (toolId: string) => void;  // NEW — always opens, never collapses
-}
-```
-
-`openTool` implementation:
-```typescript
-openTool(toolId: string) {
-  setActiveTool(toolId);
-  setToolsExpanded(true);
-}
-```
-
-### 3. `AIVideoStudio.tsx` — Wire Timeline Click → Auto-open Inspector
-
-Current `handleClipMouseDown` in `TimelineEditor` calls `onSelectClip(clip.id)` → goes to `selectClip` in `useVideoStudioProject`.
-
-The fix is to wrap `selectClip` in `AIVideoStudio.tsx` with a callback that also opens Inspector:
-
-```typescript
-const handleSelectClip = useCallback((clipId: string, multiSelect?: boolean) => {
-  selectClip(clipId, multiSelect);
-  // Auto-open inspector whenever a clip is selected from the timeline
-  if (!multiSelect) {
-    layoutRef.current?.openTool('inspector');
+function drawColorWheel(canvas: HTMLCanvasElement, brightness: number) {
+  const ctx = canvas.getContext('2d')!;
+  const cx = canvas.width / 2, cy = canvas.height / 2, r = cx - 2;
+  
+  // Draw hue wheel using arc segments
+  for (let angle = 0; angle < 360; angle++) {
+    const start = (angle - 1) * Math.PI / 180;
+    const end = (angle + 1) * Math.PI / 180;
+    const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+    gradient.addColorStop(0, `hsla(${angle}, 0%, ${brightness}%, 1)`);     // white center
+    gradient.addColorStop(1, `hsla(${angle}, 100%, ${brightness/2}%, 1)`); // pure hue edge
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, start, end);
+    ctx.fillStyle = gradient;
+    ctx.fill();
   }
-}, [selectClip]);
+}
+
+function colorAtPosition(canvas, x, y, brightness): string {
+  // Convert x,y to polar → derive hue + saturation → apply brightness → return hex
+}
 ```
 
-Then pass `handleSelectClip` instead of `selectClip` to `<TimelineEditor>`:
-```tsx
-onSelectClip={handleSelectClip}
-```
-
-**And** pass `aspectRatio` state + handler to `VideoPreviewCanvas`:
-```tsx
-aspectRatio={previewAspectRatio}
-onAspectRatioChange={setPreviewAspectRatio}
-```
-
-Add state in `AIVideoStudio.tsx`:
-```typescript
-const [previewAspectRatio, setPreviewAspectRatio] = useState<'16:9' | '9:16' | '1:1' | '4:5'>('16:9');
-```
-
-Also sync aspect ratio with export preset: when user selects "Reels" export preset, the preview should auto-switch to 9:16.
-
-### 4. Preview Canvas Layout — Make It Bigger
-
-Currently in `AIVideoStudioLayout.tsx`:
-```tsx
-style={{ flex: activeTool && toolsExpanded ? '0 0 auto' : '1 1 auto', minHeight: activeTool && toolsExpanded ? 180 : 280 }}
-```
-
-When a tool panel is open, the preview collapses to as little as 180px — too small to see anything properly. Change to:
-- With tool open: `minHeight: 240px` (increase from 180)
-- Without tool: `minHeight: 320px` (increase from 280)
-- The preview div gets `min-h-[240px]` or `min-h-[320px]` depending on tool state
-
-Also make the aspect-ratio-constrained canvas use a `useResizeObserver` (or `ResizeObserver`) on the preview container to always compute correct dimensions.
-
----
-
-## Files to Edit
-
-| File | Change |
-|------|--------|
-| `src/components/ai-video-studio/preview/VideoPreviewCanvas.tsx` | Add `aspectRatio` prop, aspect-ratio switcher pills UI, constrained canvas box, letterbox area, format badge |
-| `src/components/ai-video-studio/layout/AIVideoStudioLayout.tsx` | Add `openTool` to `AIVideoStudioLayoutHandle`, increase min-heights |
-| `src/components/ai-video-studio/AIVideoStudio.tsx` | Add `previewAspectRatio` state, `handleSelectClip` wrapper that auto-opens Inspector, pass new props to canvas and timeline |
-
----
-
-## Detailed UI Design for the Aspect Ratio Switcher
-
-Position: **inside the preview area, top-left corner**, overlaid on the black area (not on the video canvas itself).
-
-```
-┌──────────────────────────────────────────────┐
-│ [16:9 ▶] [9:16 📱] [1:1 ⬜]         00:02.4 │ ← top bar inside preview
-│                                               │
-│      ┌────────────────────────┐               │
-│      │                        │               │
-│      │    VIDEO CANVAS        │               │
-│      │    (constrained)       │               │
-│      │                        │               │
-│      └────────────────────────┘               │
-│                                               │
-└──────────────────────────────────────────────┘
-```
-
-The black outer zone (letterbox) uses a subtle `bg-[#0a0a0f]` with a very faint `bg-[size:16px_16px]` checkerboard grid pattern using CSS `background-image` with SVG data URI, so the canvas boundary is clear.
-
-Switcher pill details:
-- Container: `absolute top-2 left-2 flex gap-1 z-30`
-- Each button: `px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all`
-- Active: `bg-amber-500 text-black border-amber-500`
-- Inactive: `bg-black/60 text-slate-300 border-slate-600 hover:border-amber-400`
-
-The format badge (appears on switch):
-- `absolute bottom-3 left-1/2 -translate-x-1/2`
-- Fades out after 2 seconds using CSS animation or a timeout clearing state
-
----
-
-## Sync with Export Preset
-
-When `selectedExportPreset` changes in `AIVideoStudio.tsx`, also update `previewAspectRatio`:
+### SVG Text Parsing
 
 ```typescript
-const PRESET_ASPECT_MAP: Record<string, '16:9' | '9:16' | '1:1'> = {
-  reels: '9:16',
-  youtube: '16:9',
-  instagram: '1:1',
-  portrait: '4:5',
-};
+function extractTextElements(svgString: string): TextElement[] {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgString, 'image/svg+xml');
+  const texts = Array.from(doc.querySelectorAll('text'));
+  return texts.map((el, i) => ({
+    index: i,
+    content: el.textContent || '',
+    x: el.getAttribute('x') || '',
+    y: el.getAttribute('y') || '',
+  }));
+}
 
-// In handleSelectPreset:
-const handleSelectExportPreset = useCallback((presetId: string) => {
-  setSelectedExportPreset(presetId);
-  const ratio = PRESET_ASPECT_MAP[presetId];
-  if (ratio) setPreviewAspectRatio(ratio);
-}, []);
+function mutateTextElement(svgString: string, index: number, newContent: string | null): string {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgString, 'image/svg+xml');
+  const texts = Array.from(doc.querySelectorAll('text'));
+  if (newContent === null) {
+    texts[index]?.remove(); // delete
+  } else {
+    if (texts[index]) texts[index].textContent = newContent; // edit
+  }
+  return new XMLSerializer().serializeToString(doc);
+}
 ```
 
-Pass `handleSelectExportPreset` to `AIVideoStudioExportBar` instead of `setSelectedExportPreset`.
+### Multi-Color ZIP with JSZip
+
+```typescript
+import JSZip from 'jszip';
+
+async function downloadColorPack(svgSource: string, colors: ColorEntry[], companyName: string) {
+  const zip = new JSZip();
+  
+  for (const { label, hex } of colors) {
+    const folder = zip.folder(label.toLowerCase().replace(/\s+/g, '_'))!;
+    
+    // SVG variant — simple color replace
+    const coloredSvg = svgSource.replace(/#1a2744/gi, hex);
+    folder.file('stamp.svg', coloredSvg);
+    
+    // PNG variants
+    for (const size of [512, 1024]) {
+      const pngBlob = await svgToPng(coloredSvg, size);
+      folder.file(`stamp_${size}px.png`, pngBlob);
+    }
+  }
+  
+  const blob = await zip.generateAsync({ type: 'blob' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${companyName}_stamp_pack.zip`;
+  a.click();
+}
+```
+
+### SVG to PNG Fix
+
+The current export failure is because the SVG string doesn't have proper namespace declarations when injected into `<img>`. Fix:
+
+```typescript
+async function svgToPng(svgString: string, size: number): Promise<Blob> {
+  // Ensure xmlns is present
+  let svg = svgString;
+  if (!svg.includes('xmlns=')) {
+    svg = svg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+  }
+  
+  const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(img, 0, 0, size, size);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(b => b ? resolve(b) : reject('Canvas toBlob failed'), 'image/png');
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject('Image load failed'); };
+    img.src = url;
+  });
+}
+```
 
 ---
 
-## Summary of User-Visible Result
+## UI Flow Summary
 
-After this build:
-1. The preview canvas shows a **correctly proportioned frame** matching the target format — 9:16 portrait for Reels, 16:9 landscape for YouTube, 1:1 square for Instagram
-2. Switching format via the 3 pill buttons at the top-left instantly resizes the canvas
-3. Selecting a Reels/YouTube/Instagram export preset also auto-switches the preview aspect ratio
-4. Clicking any clip in the timeline **immediately opens the Inspector panel** showing that clip's properties — no more manually hunting for the Inspector tab
-5. Multi-select (shift+click) does **not** auto-open the Inspector (intentional — inspector shows only single-clip properties)
+### On the Generator Page (after stamps are generated):
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ Header: [← Projects]  JBJ Global  [AI Designer] [Regenerate] [Export] │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  ┌─────────────────────┐    ┌──────────────────────────────────┐ │
+│  │   COLOR WHEEL       │    │  STAMP GRID (4 cols)             │ │
+│  │   [color canvas]    │    │  ┌──┐ ┌──┐ ┌──┐ ┌──┐            │ │
+│  │   Brightness slider │    │  │▣▣│ │▣▣│ │▣▣│ │▣▣│            │ │
+│  │   Hex: #1a2744      │    │  └──┘ └──┘ └──┘ └──┘            │ │
+│  │   ─────────────     │    │  ┌──┐ ┌──┐ ┌──┐ ┌──┐            │ │
+│  │   Dual Color        │    │  │▣▣│ │▣▣│ │▣▣│ │▣▣│            │ │
+│  │   [2nd color wheel] │    │  └──┘ └──┘ └──┘ └──┘            │ │
+│  │                     │    │                                   │ │
+│  │   ─────────────     │    │  [When one selected:]            │ │
+│  │   TEXT EDITOR       │    │  ┌─────────────────────────────┐ │ │
+│  │   ✏ OFFICIAL STAMP  │    │  │ Text: "OFFICIAL STAMP"   🗑 │ │ │
+│  │   ✏ DUBAI, UAE      │    │  │ Text: "Dubai, UAE"       ✏ │ │ │
+│  │   ✏ REG: 12345      │    │  │ Text: "SINCE 2020"       🗑 │ │ │
+│  └─────────────────────┘    └──────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### On the Export Page:
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│ [← Back to Designs]       Export Pack              [Final Design]│
+├──────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  LEFT: PREVIEWS                    RIGHT: OPTIONS                 │
+│  ┌────────────────────┐            ┌───────────────────────────┐  │
+│  │ Stamp Preview      │            │ Export Color              │  │
+│  │ [large 280px]      │            │ [mini color swatches]     │  │
+│  │                    │            │                           │  │
+│  │ On Document:       │            │ File Formats / Sizes      │  │
+│  │ [letterhead mock   │            │                           │  │
+│  │  with stamp]       │            │ ─────────────────────     │  │
+│  │                    │            │ Multi-Color Pack          │  │
+│  │ On Business Card:  │            │ [Toggle] Export in colors │  │
+│  │ [card mock]        │            │ ● Navy ● Red ● Gold       │  │
+│  │                    │            │ [+ Add Color]             │  │
+│  └────────────────────┘            │ [↓ Download ZIP Pack]     │  │
+│                                    └───────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Premium Template Examples (Key Upgrades)
+
+The templates get upgraded with:
+- **Filled ring bands** — real rubber stamps have a solid dark band at the outer edge. Achieved with `<circle>` fill + white inner `<circle>` cutout  
+- **Gradient fills** — `<radialGradient>` with two stops (darker at edges, slightly lighter center) to simulate ink depth  
+- **Ornamental details** — 4-point stars at cardinal positions, fleur-de-lis separators, rose-like center ornaments for luxury templates  
+- **Star/sun burst for Medallion** — SVG `<polygon>` with 16 alternating long/short points creates the medallion star  
+
+These changes apply both in `stampTemplates.ts` (the 9 client templates) and in the edge function's `buildSVG()` (which needs to stay in sync for regeneration via AI).
+
+---
+
+## Summary of User Requests → Solutions
+
+| User Request | Solution |
+|---|---|
+| "Export failed" | Fix `svgToPng()` with proper xmlns + crossOrigin; robust error handling with per-file status |
+| "Show on screen and document" | Export page already has document mock; adding business card mock; adding live color to export previews |
+| "Delete 'official stamp' or add text" | `StampTextEditor` panel — parse SVG text nodes, edit or delete inline |
+| "Color wheel, move mouse, see live change" | `StampColorWheel` canvas component — full HSB wheel with mousemove → live preview |
+| "Load in multiple colors" | Multi-Color ZIP pack with JSZip — pick up to 5 colors, download all in one ZIP |
+| "More premium stamps" | 9 templates upgraded + 2 new templates (Embossed Medallion, Art Deco Square) |
