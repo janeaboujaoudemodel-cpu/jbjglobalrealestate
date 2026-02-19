@@ -38,45 +38,7 @@ serve(async (req) => {
       te: "tel", ml: "mal", sw: "swa",
     };
 
-    // Try ElevenLabs Scribe first (if API key available)
-    if (ELEVENLABS_API_KEY) {
-      try {
-        const formData = new FormData();
-        formData.append("file", audioBlob, "recording.webm");
-        formData.append("model_id", "scribe_v2");
-        // Set language code for better accuracy (ISO 639-3) — all 28 languages
-        const langCode = LANG_TO_ISO639_3[targetLang] || "eng";
-        formData.append("language_code", langCode);
-
-        const elevenLabsResponse = await fetch("https://api.elevenlabs.io/v1/speech-to-text", {
-          method: "POST",
-          headers: {
-            "xi-api-key": ELEVENLABS_API_KEY,
-          },
-          body: formData,
-        });
-
-        if (elevenLabsResponse.ok) {
-          const result = await elevenLabsResponse.json();
-          const transcribedText = result.text?.trim();
-          
-          if (transcribedText && transcribedText.length > 0) {
-            return new Response(JSON.stringify({ 
-              text: transcribedText,
-              success: true,
-              provider: "elevenlabs"
-            }), {
-              headers: { ...corsHeaders, "Content-Type": "application/json" },
-            });
-          }
-        }
-        console.log("ElevenLabs STT failed or empty, falling back to Gemini");
-      } catch (elevenLabsError) {
-        console.error("ElevenLabs STT error:", elevenLabsError);
-      }
-    }
-
-    // Fallback to Gemini multimodal with explicit language instruction
+    // Use Gemini multimodal for transcription (free, no ElevenLabs credits)
     if (!LOVABLE_API_KEY) {
       throw new Error("No transcription service available");
     }

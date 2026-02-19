@@ -1,24 +1,20 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { encode as base64Encode } from "https://deno.land/std@0.168.0/encoding/base64.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// ElevenLabs premium voices matching character archetypes
-const CHARACTER_VOICES: Record<string, { voiceId: string; name: string; description: string }> = {
-  // Professional male voices
-  "alex": { voiceId: "nPczCjzI2devNBz1zQrb", name: "Alex", description: "Confident & authoritative" },
-  "george": { voiceId: "JBFqnCBsd6RMkjVDRZzb", name: "George", description: "Warm & experienced" },
-  "brian": { voiceId: "nPczCjzI2devNBz1zQrb", name: "Brian", description: "Deep & trustworthy" },
-  // Female voices
-  "sarah": { voiceId: "EXAVITQu4vr4xnSDxMaL", name: "Sarah", description: "Professional & friendly" },
-  "laura": { voiceId: "FGY2WhTYpPnrIDTdsKH5", name: "Laura", description: "Luxury & sophisticated" },
-  "alice": { voiceId: "Xb7hH8MSUJpSbSDYk0k2", name: "Alice", description: "Energetic & modern" },
-  // Neutral / premium
-  "river": { voiceId: "SAz9YHcvj6GT2YYXdXww", name: "River", description: "Elegant & premium" },
-  "matilda": { voiceId: "XrExE9yKIg1WjnnlVkGX", name: "Matilda", description: "Warm & inviting" },
+// Character archetypes (voice is handled browser-side via SpeechSynthesis)
+const CHARACTER_INFO: Record<string, { name: string; description: string }> = {
+  "alex":    { name: "Alex",    description: "Confident & authoritative" },
+  "george":  { name: "George",  description: "Warm & experienced" },
+  "brian":   { name: "Brian",   description: "Deep & trustworthy" },
+  "sarah":   { name: "Sarah",   description: "Professional & friendly" },
+  "laura":   { name: "Laura",   description: "Luxury & sophisticated" },
+  "alice":   { name: "Alice",   description: "Energetic & modern" },
+  "river":   { name: "River",   description: "Elegant & premium" },
+  "matilda": { name: "Matilda", description: "Warm & inviting" },
 };
 
 serve(async (req) => {
@@ -27,16 +23,12 @@ serve(async (req) => {
   }
 
   try {
-    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-
-    if (!ELEVENLABS_API_KEY) throw new Error("ELEVENLABS_API_KEY not configured");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
     const {
       prompt,
       character = "sarah",
-      voiceId: customVoiceId,
       language = "en",
       tone = "professional",
       duration = 45,
@@ -49,8 +41,7 @@ serve(async (req) => {
       );
     }
 
-    // Step 1: Generate the script via AI
-    const charInfo = CHARACTER_VOICES[character] || CHARACTER_VOICES["sarah"];
+    const charInfo = CHARACTER_INFO[character] || CHARACTER_INFO["sarah"];
     const toneMap: Record<string, string> = {
       professional: "clear, confident, and trustworthy",
       luxury: "sophisticated, aspirational, and premium",
@@ -110,52 +101,15 @@ Rules:
     const script = scriptData.choices?.[0]?.message?.content?.trim() || "";
     if (!script) throw new Error("No script generated");
 
-    // Step 2: Convert script to speech via ElevenLabs
-    const selectedVoiceId = customVoiceId || charInfo.voiceId;
-    const ttsResponse = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoiceId}?output_format=mp3_44100_128`,
-      {
-        method: "POST",
-        headers: {
-          "xi-api-key": ELEVENLABS_API_KEY,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: script,
-          model_id: "eleven_multilingual_v2",
-          voice_settings: {
-            stability: 0.55,
-            similarity_boost: 0.75,
-            style: 0.4,
-            use_speaker_boost: true,
-            speed: 0.95,
-          },
-        }),
-      }
-    );
-
-    if (!ttsResponse.ok) {
-      const errText = await ttsResponse.text();
-      console.error("ElevenLabs TTS error:", ttsResponse.status, errText);
-      throw new Error(`TTS generation failed: ${ttsResponse.status}`);
-    }
-
-    const audioBuffer = await ttsResponse.arrayBuffer();
-    const audioBase64 = base64Encode(audioBuffer);
-
-    // Estimate real duration from word count
     const wordCount = script.split(/\s+/).filter(Boolean).length;
     const estimatedDuration = Math.round(wordCount / 2.5);
 
     return new Response(
       JSON.stringify({
         script,
-        audioBase64,
-        audioMimeType: "audio/mpeg",
         duration: estimatedDuration,
         wordCount,
         character: charInfo.name,
-        voiceId: selectedVoiceId,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

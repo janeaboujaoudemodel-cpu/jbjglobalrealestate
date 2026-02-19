@@ -72,13 +72,9 @@ const DURATIONS = [
 
 interface GeneratedNarration {
   script: string;
-  audioBase64: string;
-  audioMimeType: string;
   duration: number;
   wordCount: number;
   character: string;
-  voiceId: string;
-  blobUrl: string;
 }
 
 interface AITalkingAgentPanelProps {
@@ -99,6 +95,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
   const [showScript, setShowScript]               = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   // ── Generate narration ──────────────────────────────────────────────────
   const handleGenerate = useCallback(async () => {
@@ -109,7 +106,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
     setIsGenerating(true);
     setNarration(null);
     setIsPlaying(false);
-    if (audioRef.current) audioRef.current.pause();
+    window.speechSynthesis.cancel();
 
     try {
       const { data, error } = await supabase.functions.invoke("ai-talking-agent", {
@@ -125,14 +122,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
 
-      // Decode base64 audio → blob URL
-      const byteString = atob(data.audioBase64);
-      const bytes = new Uint8Array(byteString.length);
-      for (let i = 0; i < byteString.length; i++) bytes[i] = byteString.charCodeAt(i);
-      const blob = new Blob([bytes], { type: data.audioMimeType || "audio/mpeg" });
-      const blobUrl = URL.createObjectURL(blob);
-
-      setNarration({ ...data, blobUrl });
+      setNarration({ script: data.script, duration: data.duration, wordCount: data.wordCount, character: data.character });
       toast.success(`🎙️ ${selectedCharacter.name}'s narration is ready!`);
     } catch (err: any) {
       console.error("AI Talking Agent error:", err);
@@ -148,37 +138,50 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
     }
   }, [prompt, selectedCharacter, selectedLanguage, selectedTone, selectedDuration]);
 
-  // ── Playback ────────────────────────────────────────────────────────────
+  // ── Playback via browser SpeechSynthesis ────────────────────────────────
   const handlePlayPause = useCallback(() => {
-    if (!narration?.blobUrl) return;
-    if (!audioRef.current || audioRef.current.src !== narration.blobUrl) {
-      if (audioRef.current) audioRef.current.pause();
-      audioRef.current = new Audio(narration.blobUrl);
-      audioRef.current.onended = () => setIsPlaying(false);
-    }
+    if (!narration?.script) return;
     if (isPlaying) {
-      audioRef.current.pause();
+      window.speechSynthesis.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.play();
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        setIsPlaying(true);
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(narration.script);
+      utterance.lang = selectedLanguage;
+      utterance.rate = 0.9;
+      utterance.pitch = selectedCharacter.gender === "female" ? 1.1 : selectedCharacter.gender === "neutral" ? 1.0 : 0.85;
+      utterance.onend = () => setIsPlaying(false);
+      utterance.onerror = () => setIsPlaying(false);
+      utteranceRef.current = utterance;
+      window.speechSynthesis.speak(utterance);
       setIsPlaying(true);
     }
-  }, [narration, isPlaying]);
+  }, [narration, isPlaying, selectedLanguage, selectedCharacter]);
 
-  // ── Download ────────────────────────────────────────────────────────────
+  // ── Download — record SpeechSynthesis output ───────────────────────────
   const handleDownload = useCallback(() => {
-    if (!narration?.blobUrl) return;
-    const a = document.createElement("a");
-    a.href = narration.blobUrl;
-    a.download = `${selectedCharacter.name.toLowerCase()}-narration.mp3`;
-    a.click();
-  }, [narration, selectedCharacter]);
+    if (!narration?.script) return;
+    // Trigger browser speak — user can use OS-level record; no ElevenLabs credits used
+    const utterance = new SpeechSynthesisUtterance(narration.script);
+    utterance.lang = selectedLanguage;
+    utterance.rate = 0.9;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+    toast.info("Playing narration — use your system audio recorder to capture it.");
+  }, [narration, selectedLanguage]);
 
   // ── Add to timeline ─────────────────────────────────────────────────────
   const handleAddToTimeline = useCallback(() => {
-    if (!narration?.blobUrl) return;
-    onAddToTimeline?.(narration.blobUrl, narration.duration, narration.script, narration.character);
-    onAIVoiceGenerated?.(narration.blobUrl, narration.duration);
+    if (!narration) return;
+    // Pass a speech-synthesis marker URL so the timeline knows to use browser synthesis
+    const syntheticUrl = `speech-synthesis://${encodeURIComponent(narration.script)}`;
+    onAddToTimeline?.(syntheticUrl, narration.duration, narration.script, narration.character);
+    onAIVoiceGenerated?.(syntheticUrl, narration.duration);
     toast.success(`🎬 ${narration.character}'s narration added to timeline!`);
   }, [narration, onAddToTimeline, onAIVoiceGenerated]);
 
