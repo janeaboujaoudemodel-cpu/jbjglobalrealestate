@@ -1,176 +1,71 @@
 
-# Comprehensive AI Video Studio Overhaul — 9 Issues
+# Verification Results & Remaining Fixes
 
-## Understanding What the User Wants
+## What Was Verified ✅
 
-The user is describing a CapCut-like workflow where:
-1. **Preview is always stable and centered** — never moves, never gets squashed by tools
-2. **Effects/tools preview ON the media canvas**, not in a separate panel pane
-3. **Effects are premium CSS-based** (not emoji particles)
-4. **Tool panels appear BELOW** the stable preview, sliding in from the bottom (like CapCut)
-5. **Resize panel** should show aspect-ratio buttons immediately, not an "upload video" prompt
-6. **Map panel** should be a location-picker that inserts a clip, not show the whole map taking half the screen alongside a "3D Vanish" badge
-7. **AI Editor panel** needs clear explanations of what "AI Clip Scanner" and "Smart Templates" actually do
-8. **Scroll should never get stuck**
-9. **UI needs to be more premium** — better colors, better spacing, top bar not touching the global header
+**1. Preview Stability** — CONFIRMED WORKING. The video preview stays stable and centered when tool panels open. It never collapses.
+
+**2. Beauty Filters — Video Support** — CONFIRMED WORKING. The panel shows "Apply professional filters to images & video frames" and the drop zone says "Drop image or video here" with MP4, MOV, WebM in the accepted formats. The `accept="image/*,video/*"` attribute is correctly set.
+
+**3. Text Presets — Click to Add** — CONFIRMED WORKING. All 5 presets (Clean Title, Lower Third, Social Bold, Luxury Quote, Caption Box) are visible with sub-labels. Clicking "Clean Title" immediately fires the add action.
+
+**4. Stock Tab Category Buttons** — CONFIRMED WORKING. All, Music, SFX, Ambient buttons are visible with correct high-contrast styles (amber for active, slate-700 with border for inactive).
 
 ---
 
-## Issue-by-Issue Analysis
+## Issues Still Needing Fixes ❌
 
-### Issue 1: Layout & Preview Stability (Root Cause)
-Currently the layout is:
-```text
-[Top Bar]
-[Preview — flex-1 min-h-[180px]] ← shrinks when tool opens
-[Tool Tabs Bar]
-[Tool Panel — h-64]              ← fixed, eats from preview
-[Timeline — h-48]
-[Export Bar]
-```
-When the tool panel opens, `flex-1` allows the preview to shrink until it hits `min-h-[180px]`. On smaller viewports this is still too small. The fix is to give the preview a solid `min-h-[240px]` and the tool panel a fixed `h-56` with the overall layout using `dvh` units.
+### Fix 1: AI Scene Generator Fails (Root Cause: Wrong Architecture)
+**What's broken:** The `handleGenerateScene` function in `MediaLibraryPanel.tsx` calls `https://ai.gateway.lovable.dev/v1/chat/completions` **directly from the browser** using the anon key as `Authorization`. This fails with `net::ERR_FAILED` because AI gateway calls must be made **server-side** from an Edge Function — not from the browser.
 
-### Issue 2: Effects Preview Overlays on Canvas (Not in Tool Panel)
-The user wants to click an effect and see it **on the main video preview**, not in a floating overlay within the tool panel div. This means:
-- `OverlayEffectsPanel` should NOT render particle effects inside itself
-- Instead, it should call a callback to the parent (`AIVideoStudio`) which passes `activeEffect` down to `VideoPreviewCanvas`
-- `VideoPreviewCanvas` renders CSS-based effects as a full-screen overlay on the media canvas
-- Effects are CSS-based (no emoji) — real particle systems using CSS animations and `div` boxes
+**What to change:** Move the scene generation call into the existing `ai-video-editor` Edge Function by adding a new `action: 'generate-scene'` branch. The Edge Function already has `LOVABLE_API_KEY` wired up. The frontend will call the edge function instead.
 
-### Issue 3: Effects Must Be Premium CSS Particles (Not Emoji)
-Replace emoji particles with:
-- **Money Rain**: Green/gold rectangle `div` elements animated downward
-- **Confetti Burst**: Multi-colored square confetti `div` elements
-- **Gold Glow**: Radial gradient pulse with animated shimmer overlays
-- **Star Shower**: White/gold triangle or circle `div` elements
-- **Luxury Sparkle**: Animated diamond `div` shapes
-- **Fire Energy**: Orange/red gradient `div` "flame" shapes rising upward
+**Second bug:** The model used is `google/gemini-2.5-flash-image` which does not exist. The correct model for image generation from the supported list is `google/gemini-3-pro-image-preview`.
 
-### Issue 4: Scroll Getting Stuck
-The `overflow-hidden` on the outer layout containers traps scroll events inside nested `ScrollArea` components. Fix:
-- Add `overscroll-contain` on each `ScrollArea` viewport
-- Ensure tool panels use `overflow-y-auto` with explicit height, not nested `overflow-hidden`
+**Files changed:**
+- `supabase/functions/ai-video-editor/index.ts` — add `generate-scene` action using `google/gemini-3-pro-image-preview` with `modalities: ['image','text']`
+- `src/components/ai-video-studio/panels/MediaLibraryPanel.tsx` — change `handleGenerateScene` to call the edge function at `/functions/v1/ai-video-editor` with `{ action: 'generate-scene', prompt: aiPrompt }`
 
-### Issue 5: Resize Panel — Shows Upload Instead of Format Picker
-`VideoResizePanel.tsx` currently shows an upload prompt when no video is selected. The user wants to see the format picker immediately and resize the video already on the timeline (not a separate upload). Fix:
-- Remove the "upload video" conditional gate — always show format selection
-- Add a note saying it will apply to the active timeline clip
-- Only show the upload button as a secondary option if no clip is on the timeline
+### Fix 2: Stock Asset Cards Have Near-Invisible Icon Thumbnails
+**What's broken:** Stock audio cards with no thumbnail render a small icon on `bg-amber-900/40` — this 40% opacity amber-on-dark is too subtle in a narrow 2-col grid. The card face looks like an almost-black box with only a tiny icon. The "Add" and "Preview" buttons on hover use `variant="ghost"` for "Preview" which makes that button invisible when the overlay shows.
 
-### Issue 6: Map Panel Layout — Too Complex, Wrong Purpose
-The current panel splits 50/50 between controls and a full Leaflet map. The user wants:
-- A **compact** panel where they pick a location
-- Click "Generate Map Clip" to insert a styled location pin clip
-- Exit animation chooser (compact dropdown, not a separate list)
-- Remove the giant side-by-side map — make map smaller and thumbnail-only in preview mode
-- Show the "REC" badge renamed to something cleaner
+**What to change:**
+- Increase the icon background opacity from `/40` to `/60` and make the icon larger (`w-8 h-8` instead of `w-6 h-6`) for better visibility
+- Add a subtle colored border/gradient to the thumbnail area for audio cards to visually distinguish them
+- Fix the "Preview" hover button from `variant="ghost"` to explicit `bg-slate-700 text-white` so it's always visible in the hover overlay
 
-### Issue 7: AI Editor Panel — Confusing Labels
-- "AI Clip Scanner" needs a clear one-line explanation: *"Analyzes your clips and recommends which to use"*
-- "Smart Templates" needs an explanation: *"Auto-assembles your clips into a professional edit format"*
-- The panel shows buttons even when no clips are loaded with no explanation
-- Fix: Add empty state guidance, better section headers with explanation text
-
-### Issue 8: Top Bar Touching Header (Spacing)
-`AIVideoStudioTopBar` uses `py-2` padding. The issue is that the page wrapper starts immediately below the global header with no breathing room. The studio top bar feels cramped. Fix:
-- Add more visual separation — increase top bar height slightly
-- Add a subtle gradient or stronger border-bottom to the top bar
-- Consider a 2-pixel top padding on the outer layout container
-
-### Issue 9: Button Visibility (Colors)
-Multiple buttons use `variant="ghost"` or have the same `bg-slate-700`/`bg-slate-800` colors making them invisible against dark backgrounds. Fix all panel buttons to use clearly visible, high-contrast styles.
+**File changed:** `src/components/ai-video-studio/panels/MediaLibraryPanel.tsx` — update `getIconBg()` opacity values and the "Preview" button variant in the `AssetCard` hover overlay.
 
 ---
 
-## Files to Change
-
-### 1. `src/components/ai-video-studio/layout/AIVideoStudioLayout.tsx`
-- Change preview `min-h-[180px]` → `min-h-[240px]`
-- Tool panel `h-64` → `h-56` with `overscroll-contain`
-- Increase `border-t` spacing on the top bar for breathing room
-- Add `pt-0.5` to the outer container to separate from global header
-
-### 2. `src/components/ai-video-studio/features/OverlayEffectsPanel.tsx`
-Complete rewrite:
-- Remove internal particle rendering entirely
-- Add `onPreviewEffect(effectId | null)` and `onAddEffect(effectId)` callbacks as props
-- Card click → calls `onPreviewEffect(effect.id)` — no button needed
-- "Add to Timeline" button calls `onAddEffect(effect.id)`
-- Clicking the same card again deactivates preview
-- Add premium new effects: **Luxury Rain**, **Aurora Shimmer**, **Snow Fall**, **Lightning Strike**
-
-### 3. `src/components/ai-video-studio/preview/VideoPreviewCanvas.tsx`
-- Accept new prop `activeOverlayEffect: string | null`
-- Render a `<PremiumEffectOverlay effectId={activeOverlayEffect} />` component on top of the video
-- `PremiumEffectOverlay` uses CSS-only `div` particles (no emoji) with keyframe animations
-- The overlay is absolute-positioned over the entire preview canvas
-
-### 4. `src/components/ai-video-studio/AIVideoStudio.tsx`
-- Add `activeOverlayEffect` state
-- Pass `onPreviewEffect={setActiveOverlayEffect}` to `OverlayEffectsPanel`
-- Pass `activeOverlayEffect` to `VideoPreviewCanvas`
-- Add `onOpenTool` handler back to `VideoPreviewCanvas` (currently missing — `onOpenTool` prop exists but isn't wired in the AIVideoStudio render)
-
-### 5. `src/components/ai-video-studio/features/VideoResizePanel.tsx`
-- Remove the conditional upload-first gate
-- Show format picker immediately at top of panel
-- Add a compact "Active clip: None / [clip name]" status indicator
-- Upload button becomes a secondary inline option, not a blocking screen
-
-### 6. `src/components/ai-video-studio/features/MapEffectPanel.tsx`
-- Redesign to be a **compact vertical panel** — no side-by-side map preview taking half the screen
-- Left column (100% width): Location search + preset quick-pick + animation dropdown
-- Map preview becomes a **small thumbnail** (height ~80px) that appears after geocoding
-- Remove confusing "REC — 3D Vanish" overlay badge; replace with a clean "Previewing…" label
-- Add premium location descriptions
-
-### 7. `src/components/ai-video-studio/features/AIEditorPanel.tsx`
-- Add descriptive subtitles to each section:
-  - "AI Clip Scanner" → sub-label: *"Analyze all clips on your timeline. AI will find the best moments and highlight them."*
-  - "Smart Templates" → sub-label: *"Choose a video style. AI will automatically reorder and trim your clips to match it."*
-- Add empty state card when `clips.length === 0` explaining what to do
-- Add a "?" tooltip or info icon next to each section title
-
-### 8. `src/components/ai-video-studio/layout/AIVideoStudioTopBar.tsx`
-- Increase padding from `py-2` to `py-2.5`
-- Add `min-h-[52px]` to ensure enough breathing room
-- Add a subtle `bg-slate-800/95 backdrop-blur-sm` for a premium feel
-- Separate the logo from project name more clearly with a cleaner divider
-
----
-
-## Premium CSS Effect System (New Component)
-
-Create `src/components/ai-video-studio/preview/PremiumEffectOverlay.tsx`:
+## Technical Detail: Edge Function Change for Generate Scene
 
 ```typescript
-// Pure CSS particle effects — no emoji, premium visual quality
-// Each effect renders animated div elements with CSS keyframes:
-
-// Money Rain: 30 dark green/gold rectangles (4px × 8px) falling top to bottom
-// Confetti: 50 multi-color squares (4-8px) rotating as they fall
-// Gold Glow: Radial gradient expanding pulse from center + shimmer bars
-// Star Shower: 25 white circle divs (2-4px) with random trajectories
-// Luxury Sparkle: 20 rotated square divs creating diamond shapes
-// Fire Energy: 20 orange/red oval divs rising upward with opacity fade
-// Aurora Shimmer: Animated gradient bands sweeping across screen
-// Snow Fall: 35 white circles (2-5px) drifting at varying speeds
+// supabase/functions/ai-video-editor/index.ts — new branch added:
+} else if (action === 'generate-scene') {
+  const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'google/gemini-3-pro-image-preview',
+      messages: [{ role: 'user', content: `Generate a cinematic real estate scene: ${prompt}` }],
+      modalities: ['image', 'text'],
+    }),
+  });
+  // Extract image from response and return as base64
+}
 ```
 
-The style injection (`<style>`) will be scoped to this component and define the keyframe animations for each effect.
+```typescript
+// MediaLibraryPanel.tsx — updated call:
+const { data, error } = await supabase.functions.invoke('ai-video-editor', {
+  body: { action: 'generate-scene', prompt: aiPrompt },
+});
+```
 
----
+## Summary of Changes
 
-## Summary Table
-
-| File | Changes |
+| File | Change |
 |---|---|
-| `AIVideoStudioLayout.tsx` | Stable preview min-h, overscroll-contain, top bar spacing |
-| `OverlayEffectsPanel.tsx` | Add callbacks, remove internal particle preview, add 4 new effects |
-| `VideoPreviewCanvas.tsx` | Accept `activeOverlayEffect` prop, render `PremiumEffectOverlay` |
-| `AIVideoStudio.tsx` | Wire `activeOverlayEffect` state between panel and canvas |
-| `VideoResizePanel.tsx` | Show format picker immediately, remove upload gate |
-| `MapEffectPanel.tsx` | Compact layout, small thumbnail map, cleaner labels |
-| `AIEditorPanel.tsx` | Better explanations, empty state, section descriptions |
-| `AIVideoStudioTopBar.tsx` | More padding, premium feel |
-| **NEW** `PremiumEffectOverlay.tsx` | Pure CSS particle system for all effects |
+| `supabase/functions/ai-video-editor/index.ts` | Add `generate-scene` action using correct `google/gemini-3-pro-image-preview` model via `LOVABLE_API_KEY` |
+| `src/components/ai-video-studio/panels/MediaLibraryPanel.tsx` | Route scene generation through edge function; fix stock card icon visibility |
