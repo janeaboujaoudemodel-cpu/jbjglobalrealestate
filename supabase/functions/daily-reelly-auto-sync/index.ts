@@ -137,6 +137,22 @@ Deno.serve(async (req) => {
     errors.push(msg);
   }
 
+  // Step 8: Backfill missing project data (bedrooms, prices, unit types) — offline resilience
+  try {
+    console.log("[daily-reelly-auto-sync] Step 8: Backfilling missing Reelly project data...");
+    const backfillResult = await callFunction("reelly-complete-offline-save", {
+      mode: "batch",
+      batch_size: 30,
+      mirror_images: false, // Skip image mirroring in daily to keep it fast
+    });
+    results.offline_backfill = backfillResult;
+    console.log("[daily-reelly-auto-sync] Step 8 complete:", JSON.stringify(backfillResult).slice(0, 200));
+  } catch (err) {
+    const msg = `Step 8 (reelly-complete-offline-save) failed: ${err.message}`;
+    console.error("[daily-reelly-auto-sync]", msg);
+    errors.push(msg);
+  }
+
   // Log summary to database
   try {
     const supabase = createClient(supabaseUrl, supabaseKey);

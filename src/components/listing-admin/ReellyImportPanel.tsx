@@ -210,6 +210,33 @@ export function ReellyImportPanel() {
   useEffect(() => { if (providentResult) sessionStorage.setItem('jj_providentResult', JSON.stringify(providentResult)); }, [providentResult]);
   useEffect(() => { sessionStorage.setItem('jj_fullProvidentProgress', JSON.stringify(fullProvidentProgress)); }, [fullProvidentProgress]);
   useEffect(() => { if (bulkEnrichResult) sessionStorage.setItem('jj_bulkEnrichResult', JSON.stringify(bulkEnrichResult)); }, [bulkEnrichResult]);
+  // Quick Extract by Reelly ID
+  const [quickExtractId, setQuickExtractId] = useState("");
+  const [isQuickExtracting, setIsQuickExtracting] = useState(false);
+  const [quickExtractResult, setQuickExtractResult] = useState<{ success: boolean; message?: string; error?: string } | null>(null);
+
+  const handleQuickExtract = async () => {
+    const ids = quickExtractId.split(",").map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+    if (ids.length === 0) { toast.error("Enter at least one valid Reelly ID"); return; }
+    setIsQuickExtracting(true);
+    setQuickExtractResult(null);
+    try {
+      const { data, error } = await supabase.functions.invoke("reelly-complete-offline-save", {
+        body: { mode: "specific", project_ids: ids, mirror_images: true },
+      });
+      if (error) throw error;
+      if (data?.success) {
+        setQuickExtractResult({ success: true, message: data.message || `Extracted data for ${ids.length} project(s)` });
+        toast.success(`✅ Extracted Reelly IDs: ${ids.join(", ")}`);
+      } else {
+        throw new Error(data?.error || "Extraction failed");
+      }
+    } catch (err: any) {
+      setQuickExtractResult({ success: false, error: err.message });
+      toast.error(err.message || "Quick extract failed");
+    } finally { setIsQuickExtracting(false); }
+  };
+
   const [fullAiProgress, setFullAiProgress] = useState({ processed: 0, enriched: 0, errors: 0 });
   const [fullAiStopRequested, setFullAiStopRequested] = useState(false);
 
@@ -919,7 +946,46 @@ export function ReellyImportPanel() {
           {/* ── Divider ── */}
           <div className="border-t border-emerald-200" />
 
-          {/* ── 3. Developer Sync ── */}
+          {/* ── Quick Extract by Reelly ID ── */}
+          <div>
+            <h3 className="font-semibold text-emerald-900 mb-1 flex items-center gap-2">
+              <Zap className="w-4 h-4" /> Quick Extract by Reelly ID
+            </h3>
+            <p className="text-xs text-emerald-700 mb-3">
+              Enter one or more Reelly IDs (comma-separated) to extract full project data, images, bedrooms, prices, and amenities immediately.
+              <strong className="ml-1">Example: 3003, 1261</strong>
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={quickExtractId}
+                onChange={e => setQuickExtractId(e.target.value)}
+                placeholder="e.g. 3003, 1261, 2945"
+                className="flex-1 rounded-lg border border-emerald-300 px-3 py-2 text-sm text-zinc-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                onKeyDown={e => { if (e.key === "Enter") handleQuickExtract(); }}
+              />
+              <Button
+                onClick={handleQuickExtract}
+                disabled={isQuickExtracting || !quickExtractId.trim()}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white whitespace-nowrap"
+              >
+                {isQuickExtracting ? (
+                  <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Extracting...</>
+                ) : (
+                  <><Download className="h-4 w-4 mr-2" />Extract Now</>
+                )}
+              </Button>
+            </div>
+            {quickExtractResult && (
+              <div className={`mt-3 p-3 rounded-lg border text-sm ${quickExtractResult.success ? "bg-emerald-50 border-emerald-300 text-emerald-800" : "bg-red-50 border-red-300 text-red-700"}`}>
+                {quickExtractResult.success ? `✅ ${quickExtractResult.message}` : `❌ ${quickExtractResult.error}`}
+              </div>
+            )}
+          </div>
+
+          {/* ── Divider ── */}
+          <div className="border-t border-emerald-200" />
+
           <div>
             <h3 className="font-semibold text-emerald-900 mb-3 flex items-center gap-2">
               <Database className="w-4 h-4" /> Developer Sync

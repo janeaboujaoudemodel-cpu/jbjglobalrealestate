@@ -246,30 +246,37 @@ const Quiz = () => {
       const saleStatusLower = (project.sale_status || "").toLowerCase();
       if (saleStatusLower.includes("sold") || saleStatusLower.includes("out_of_stock")) return false;
 
-      // Require at least one image
-      const hasImage = project.cover_image_url || project.images?.[0]?.image_url;
-      if (!hasImage) return false;
+      // Require cover image (use only cover_image_url — project_images join is not always loaded)
+      if (!project.cover_image_url) return false;
 
       // ── Budget filter ────────────────────────────────────────────────────
-      const priceFrom = project.price_from || 0;
+      // If price_from is null, don't hard-exclude — just score lower
+      const priceFrom = project.price_from;
       const budget = answers.budget;
-      
-      if (budget === "under-1m" && priceFrom >= 1000000) return false;
-      if (budget === "1m-2m" && (priceFrom < 1000000 || priceFrom >= 2000000)) return false;
-      if (budget === "2m-5m" && (priceFrom < 2000000 || priceFrom >= 5000000)) return false;
-      if (budget === "5m-10m" && (priceFrom < 5000000 || priceFrom >= 10000000)) return false;
-      if (budget === "10m-plus" && priceFrom < 10000000) return false;
+
+      if (priceFrom != null) {
+        if (budget === "under-1m" && priceFrom >= 1000000) return false;
+        if (budget === "1m-2m" && (priceFrom < 1000000 || priceFrom >= 2000000)) return false;
+        if (budget === "2m-5m" && (priceFrom < 2000000 || priceFrom >= 5000000)) return false;
+        if (budget === "5m-10m" && (priceFrom < 5000000 || priceFrom >= 10000000)) return false;
+        if (budget === "10m-plus" && priceFrom < 10000000) return false;
+      }
 
       // ── Bedroom filter ───────────────────────────────────────────────────
+      // Only apply bedroom filter if the project has bedroom data
       const bedrooms = answers.bedrooms;
-      const minBr = project.bedrooms_min || 0;
-      const maxBr = project.bedrooms_max || minBr;
-      
-      if (bedrooms === "studio" && minBr > 0) return false;
-      if (bedrooms === "1br" && (minBr > 1 || maxBr < 1)) return false;
-      if (bedrooms === "2br" && (minBr > 2 || maxBr < 2)) return false;
-      if (bedrooms === "3br" && (minBr > 3 || maxBr < 3)) return false;
-      if (bedrooms === "4br-plus" && maxBr < 4) return false;
+      const minBr = project.bedrooms_min;
+      const maxBr = project.bedrooms_max ?? minBr;
+
+      if (minBr != null) {
+        const minBrNum = minBr ?? 0;
+        const maxBrNum = maxBr ?? minBrNum;
+        if (bedrooms === "studio" && minBrNum > 0) return false;
+        if (bedrooms === "1br" && (minBrNum > 1 || maxBrNum < 1)) return false;
+        if (bedrooms === "2br" && (minBrNum > 2 || maxBrNum < 2)) return false;
+        if (bedrooms === "3br" && (minBrNum > 3 || maxBrNum < 3)) return false;
+        if (bedrooms === "4br-plus" && maxBrNum < 4) return false;
+      }
 
       return true;
     });
