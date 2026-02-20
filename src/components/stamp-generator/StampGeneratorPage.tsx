@@ -243,11 +243,14 @@ export default function StampGeneratorPage() {
     setPreviewConcept(concept);
   }
 
-  // Opens text editor directly for a concept
+  // Opens text editor directly for a concept — selects it AND switches to text tab
   function handleEditText(concept: StampDesignConcept) {
     setSelectedId(concept.id);
     setPreviewConcept(null);
     setLeftTab('text');
+    // Scroll to top of page so the left panel (text editor) is visible
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    toast.info('Text editor opened in left panel ← Edit text elements there', { duration: 3000 });
   }
 
   async function confirmSelectAndExport(concept: StampDesignConcept) {

@@ -9,6 +9,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { StampSVGRenderer } from './StampSVGRenderer';
+import { StampTextEditor } from './StampTextEditor';
 import { StampColorWheel } from './StampColorWheel';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -18,7 +19,7 @@ import {
   ArrowLeft, Download, X, ZoomIn, ZoomOut, RotateCcw,
   ChevronLeft, ChevronRight, Palette, Stamp, Loader2,
   Heart, FileImage, FileText, File, Package, Check,
-  CheckSquare, Square
+  CheckSquare, Square, Type, Edit3
 } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -148,6 +149,10 @@ export default function StampGalleryPage() {
   const [batchExporting, setBatchExporting] = useState(false);
   const [batchProgress, setBatchProgress] = useState<{ done: number; total: number } | null>(null);
 
+  // Inline text editor
+  const [editingDesignId, setEditingDesignId] = useState<string | null>(null);
+  const [svgOverrides, setSvgOverrides] = useState<Record<string, string>>({});
+
   // Load
   useEffect(() => {
     if (!user || !projectId) return;
@@ -230,7 +235,8 @@ export default function StampGalleryPage() {
     const key = `png_${design.id}`;
     setExporting(s => ({ ...s, [key]: true }));
     try {
-      const svg = tintSvg(design.svg_source, primaryColor, secondaryColor, accentColor);
+      const svgSrc = svgOverrides[design.id] || design.svg_source;
+      const svg = tintSvg(svgSrc, primaryColor, secondaryColor, accentColor);
       const blob = await svgToPngBlob(svg, size, true);
       const slug = slugify(project?.company_name);
       triggerDownload(blob, `${slug}_stamp_${size}px.png`);
@@ -244,7 +250,8 @@ export default function StampGalleryPage() {
     const key = `svg_${design.id}`;
     setExporting(s => ({ ...s, [key]: true }));
     try {
-      const svg = tintSvg(design.svg_source, primaryColor, secondaryColor, accentColor);
+      const svgSrc = svgOverrides[design.id] || design.svg_source;
+      const svg = tintSvg(svgSrc, primaryColor, secondaryColor, accentColor);
       const blob = new Blob([svg], { type: 'image/svg+xml' });
       const slug = slugify(project?.company_name);
       triggerDownload(blob, `${slug}_stamp.svg`);
@@ -258,7 +265,8 @@ export default function StampGalleryPage() {
     const key = `pdf_${design.id}`;
     setExporting(s => ({ ...s, [key]: true }));
     try {
-      const svg = tintSvg(design.svg_source, primaryColor, secondaryColor, accentColor);
+      const svgSrc = svgOverrides[design.id] || design.svg_source;
+      const svg = tintSvg(svgSrc, primaryColor, secondaryColor, accentColor);
       const blob = await svgToPdfBlob(svg);
       const slug = slugify(project?.company_name);
       triggerDownload(blob, `${slug}_stamp_print.pdf`);
@@ -275,6 +283,14 @@ export default function StampGalleryPage() {
       const updated = prev.map(d => d.id === design.id ? { ...d, is_favorite: newVal } : d);
       return [...updated.filter(d => d.is_favorite), ...updated.filter(d => !d.is_favorite)];
     });
+  }
+
+  // Handle SVG text edits in gallery
+  async function handleSvgEdit(designId: string, newSvg: string) {
+    setSvgOverrides(prev => ({ ...prev, [designId]: newSvg }));
+    // Persist back to DB
+    await supabase.from('stamp_designs').update({ svg_source: newSvg }).eq('id', designId);
+    setDesigns(prev => prev.map(d => d.id === designId ? { ...d, svg_source: newSvg } : d));
   }
 
   // ── Batch selection helpers ────────────────────────────────────────────────
@@ -322,7 +338,8 @@ export default function StampGalleryPage() {
         const folderName = `${String(i + 1).padStart(2, '0')}_${label}`;
         const folder = zip.folder(folderName)!;
 
-        const tinted = tintSvg(design.svg_source, primaryColor, secondaryColor, accentColor);
+        const svgSrc = svgOverrides[design.id] || design.svg_source;
+        const tinted = tintSvg(svgSrc, primaryColor, secondaryColor, accentColor);
 
         // SVG
         folder.file(`${companySlug}_${label}.svg`, tinted);
@@ -372,7 +389,8 @@ export default function StampGalleryPage() {
 
   // Current lightbox design
   const lbDesign = lightboxIdx !== null ? designs[lightboxIdx] : null;
-  const lbSvg = lbDesign ? tintSvg(lbDesign.svg_source, primaryColor, secondaryColor, accentColor) : '';
+  const lbSvgRaw = lbDesign ? (svgOverrides[lbDesign.id] || lbDesign.svg_source) : '';
+  const lbSvg = lbSvgRaw ? tintSvg(lbSvgRaw, primaryColor, secondaryColor, accentColor) : '';
 
   if (loading) {
     return (
@@ -671,37 +689,59 @@ export default function StampGalleryPage() {
                   <div className="px-3 py-2.5 space-y-2">
                     <p className="text-[11px] font-medium text-[hsl(var(--foreground))] leading-tight line-clamp-1">{label}</p>
 
-                    {/* Quick export row (hidden in batch mode) */}
+                    {/* Quick export + edit row (hidden in batch mode) */}
                     {!batchMode && (
-                      <div className="flex items-center gap-1">
-                        <button onClick={() => exportPNG(design, 1024)} disabled={exporting[`png_${design.id}`]}
-                          title="Download PNG 1024px"
-                          className="flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] transition-all text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))]">
-                          {exporting[`png_${design.id}`] ? <Loader2 size={9} className="animate-spin"/> : exported[`png_${design.id}`] ? <Check size={9} className="text-green-600"/> : <FileImage size={9}/>}
-                          PNG
-                        </button>
-                        <button onClick={() => exportSVG(design)} disabled={exporting[`svg_${design.id}`]}
-                          title="Download SVG"
-                          className="flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] transition-all text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))]">
-                          {exporting[`svg_${design.id}`] ? <Loader2 size={9} className="animate-spin"/> : exported[`svg_${design.id}`] ? <Check size={9} className="text-green-600"/> : <File size={9}/>}
-                          SVG
-                        </button>
-                        <button onClick={() => exportPDF(design)} disabled={exporting[`pdf_${design.id}`]}
-                          title="Download PDF"
-                          className="flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] transition-all text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))]">
-                          {exporting[`pdf_${design.id}`] ? <Loader2 size={9} className="animate-spin"/> : exported[`pdf_${design.id}`] ? <Check size={9} className="text-green-600"/> : <FileText size={9}/>}
-                          PDF
-                        </button>
-                        <button onClick={() => toggleFavorite(design)}
-                          title={design.is_favorite ? 'Unfavorite' : 'Favorite'}
-                          className={`h-6 w-6 rounded-md flex items-center justify-center border transition-all ${
-                            design.is_favorite
-                              ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold))]'
-                              : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]'
-                          }`}>
-                          <Heart size={9} className={design.is_favorite ? 'fill-current' : ''}/>
-                        </button>
-                      </div>
+                      <>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => setEditingDesignId(editingDesignId === design.id ? null : design.id)}
+                            title="Edit text elements"
+                            className={`flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border transition-all ${
+                              editingDesignId === design.id
+                                ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]'
+                                : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] hover:text-[hsl(var(--gold-dark))]'
+                            }`}>
+                            <Edit3 size={9}/> Edit
+                          </button>
+                          <button onClick={() => exportPNG(design, 1024)} disabled={exporting[`png_${design.id}`]}
+                            title="Download PNG 1024px"
+                            className="flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] transition-all text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))]">
+                            {exporting[`png_${design.id}`] ? <Loader2 size={9} className="animate-spin"/> : exported[`png_${design.id}`] ? <Check size={9} className="text-green-600"/> : <FileImage size={9}/>}
+                            PNG
+                          </button>
+                          <button onClick={() => exportSVG(design)} disabled={exporting[`svg_${design.id}`]}
+                            title="Download SVG"
+                            className="flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] transition-all text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))]">
+                            {exporting[`svg_${design.id}`] ? <Loader2 size={9} className="animate-spin"/> : exported[`svg_${design.id}`] ? <Check size={9} className="text-green-600"/> : <File size={9}/>}
+                            SVG
+                          </button>
+                          <button onClick={() => exportPDF(design)} disabled={exporting[`pdf_${design.id}`]}
+                            title="Download PDF"
+                            className="flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] transition-all text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))]">
+                            {exporting[`pdf_${design.id}`] ? <Loader2 size={9} className="animate-spin"/> : exported[`pdf_${design.id}`] ? <Check size={9} className="text-green-600"/> : <FileText size={9}/>}
+                            PDF
+                          </button>
+                          <button onClick={() => toggleFavorite(design)}
+                            title={design.is_favorite ? 'Unfavorite' : 'Favorite'}
+                            className={`h-6 w-6 rounded-md flex items-center justify-center border transition-all ${
+                              design.is_favorite
+                                ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold))]'
+                                : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]'
+                            }`}>
+                            <Heart size={9} className={design.is_favorite ? 'fill-current' : ''}/>
+                          </button>
+                        </div>
+
+                        {/* Inline text editor — expands when Edit is clicked */}
+                        {editingDesignId === design.id && (
+                          <div className="border-t border-[hsl(var(--border))] pt-2 mt-1">
+                            <StampTextEditor
+                              svgSource={svgOverrides[design.id] || design.svg_source}
+                              onSvgChange={(newSvg) => handleSvgEdit(design.id, newSvg)}
+                            />
+                          </div>
+                        )}
+                      </>
                     )}
 
                     {/* Batch mode footer: show select CTA */}
@@ -726,6 +766,7 @@ export default function StampGalleryPage() {
           </div>
         )}
       </div>
+
 
       {/* ── Lightbox ─────────────────────────────────────────────────────── */}
       {lightboxIdx !== null && lbDesign && (
@@ -785,16 +826,21 @@ export default function StampGalleryPage() {
               </div>
             </div>
 
-            {designs.length > 1 && (
-              <>
-                <button onClick={goPrev} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors backdrop-blur-sm">
-                  <ChevronLeft size={22}/>
-                </button>
-                <button onClick={goNext} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors backdrop-blur-sm">
-                  <ChevronRight size={22}/>
-                </button>
-              </>
-            )}
+            {/* Nav arrows — always show, disabled when only 1 design */}
+            <button
+              onClick={goPrev}
+              disabled={designs.length <= 1}
+              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors backdrop-blur-sm disabled:opacity-20 disabled:cursor-default"
+            >
+              <ChevronLeft size={22}/>
+            </button>
+            <button
+              onClick={goNext}
+              disabled={designs.length <= 1}
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors backdrop-blur-sm disabled:opacity-20 disabled:cursor-default"
+            >
+              <ChevronRight size={22}/>
+            </button>
 
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/30 text-[10px] pointer-events-none">
               Scroll to zoom · Arrow keys to navigate · Esc to close
