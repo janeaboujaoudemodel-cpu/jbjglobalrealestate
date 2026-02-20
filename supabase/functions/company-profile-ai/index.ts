@@ -12,12 +12,34 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const { action, companyName, tagline, draft, serviceTitle } = await req.json();
+    const body = await req.json();
+    const { action, companyName, tagline, draft, serviceTitle, markdown, url: siteUrl } = body;
 
     let systemPrompt = "";
     let userPrompt = "";
 
-    if (action === "expand_about") {
+    if (action === "extract_from_url") {
+      const md = (typeof markdown === "string" ? markdown : "") || "";
+      const su = (typeof siteUrl === "string" ? siteUrl : "") || "";
+      systemPrompt = `You are a company profile extractor. Extract structured business information from website content. Return ONLY valid JSON with no explanation, no markdown fences, no extra text.`;
+      userPrompt = `Extract company profile information from this website content and return ONLY valid JSON (no markdown, no explanation):
+{
+  "companyName": "company name",
+  "tagline": "company tagline or slogan",
+  "aboutUs": "about us paragraph extracted from the page",
+  "services": [{"title": "service name", "description": "description"}],
+  "team": [{"name": "person name", "role": "title"}],
+  "phone": "phone number",
+  "email": "email address",
+  "website": "${su}",
+  "address": "physical address",
+  "linkedin": "linkedin URL",
+  "instagram": "instagram handle or URL"
+}
+Website content:
+${md.slice(0, 8000)}
+Use empty string "" or [] for fields not found. Return ONLY the JSON object.`;
+    } else if (action === "expand_about") {
       systemPrompt = `You are an expert business writer. Write compelling, professional company profile content. 
 Be specific, results-oriented, and avoid generic filler phrases. Return ONLY the requested text, no labels or titles.`;
       userPrompt = draft
