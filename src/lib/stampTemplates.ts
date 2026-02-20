@@ -682,7 +682,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
         : monogram(cx, cy, mono, font, 32, COLOR, COLOR)
       }
       <!-- City below logo -->
-      <text x="${cx}" y="${cy + logoSize / 2 + 16}" text-anchor="middle" font-family="${font}" font-size="7" fill="${COLOR}" letter-spacing="3.5">DUBAI · UAE</text>
+      <text x="${cx}" y="${cy + logoSize / 2 + 16}" text-anchor="middle" font-family="${font}" font-size="7" fill="${COLOR}" letter-spacing="3.5">${project.city_optional ? project.city_optional.toUpperCase() : 'DUBAI'} · ${(project.country_optional || 'UAE').toUpperCase()}</text>
       ${divider(cx, cy - logoSize / 2 - 12, COLOR, 22, 0.6)}
       ${divider(cx, cy + logoSize / 2 + 24, COLOR, 22, 0.6)}
     </svg>`;

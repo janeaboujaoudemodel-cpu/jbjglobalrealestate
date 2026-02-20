@@ -9,11 +9,12 @@ import { StampSVGRenderer } from '@/components/stamp-generator/StampSVGRenderer'
 import { StampColorWheel } from '@/components/stamp-generator/StampColorWheel';
 import { StampTextEditor } from '@/components/stamp-generator/StampTextEditor';
 import { StampPreviewModal } from '@/components/stamp-generator/StampPreviewModal';
+import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { generateStampConcepts, StampDesignConcept } from '@/lib/stampTemplates';
 import {
   Wand2, Loader2, Check, RefreshCw, Download, Stamp,
   ArrowLeft, ChevronRight, AlertTriangle, Heart, MessageSquare,
-  Send, X, Sparkles, Palette, Layers, Type
+  Send, X, Sparkles, Palette, Layers, Type, Upload, ChevronDown
 } from 'lucide-react';
 
 interface ChatMessage {
@@ -49,12 +50,20 @@ const PRESET_PALETTE = [
 ];
 
 const STAMP_FONTS = [
-  { label: 'Trajan (Elegant)',   value: 'Georgia, "Times New Roman", serif',          preview: 'Aa' },
-  { label: 'Garamond (Classic)', value: '"Garamond", "Palatino", serif',              preview: 'Aa' },
-  { label: 'Modern Sans',        value: '"Arial", "Helvetica Neue", sans-serif',      preview: 'Aa' },
-  { label: 'Futura (Geometric)', value: '"Trebuchet MS", "Century Gothic", sans-serif', preview: 'Aa' },
-  { label: 'Courier (Mono)',     value: '"Courier New", "Courier", monospace',        preview: 'Aa' },
-  { label: 'Cinzel (Imperial)',  value: '"Palatino Linotype", "Palatino", serif',     preview: 'Aa' },
+  { label: 'Trajan (Elegant)',       value: 'Georgia, "Times New Roman", serif',                      preview: 'Aa' },
+  { label: 'Garamond (Classic)',     value: '"Garamond", "Palatino Linotype", serif',                 preview: 'Aa' },
+  { label: 'Baskerville (Literary)', value: '"Baskerville", "Book Antiqua", serif',                   preview: 'Aa' },
+  { label: 'Caslon (Antiquarian)',   value: '"Book Antiqua", "Palatino", Georgia, serif',             preview: 'Aa' },
+  { label: 'Modern Sans',            value: '"Arial", "Helvetica Neue", sans-serif',                  preview: 'Aa' },
+  { label: 'Futura (Geometric)',     value: '"Century Gothic", "Trebuchet MS", sans-serif',           preview: 'Aa' },
+  { label: 'Gill Sans (Humanist)',   value: '"Gill Sans", "Gill Sans MT", "Optima", sans-serif',      preview: 'Aa' },
+  { label: 'Verdana (Screen)',       value: '"Verdana", "Tahoma", sans-serif',                        preview: 'Aa' },
+  { label: 'Courier (Monospace)',    value: '"Courier New", "Courier", monospace',                    preview: 'Aa' },
+  { label: 'Impact (Display)',       value: '"Impact", "Franklin Gothic Bold", sans-serif',           preview: 'Aa' },
+  { label: 'Rockwell (Slab)',        value: '"Rockwell", "Courier New", serif',                       preview: 'Aa' },
+  { label: 'Optima (Soft Elegant)',  value: '"Optima", "Segoe UI", sans-serif',                       preview: 'Aa' },
+  { label: 'Lucida (Calligraphy)',   value: '"Lucida Calligraphy", "Palatino", serif',                preview: 'Aa' },
+  { label: 'Cinzel (Imperial)',      value: '"Palatino Linotype", "Palatino", serif',                 preview: 'Aa' },
 ];
 
 export default function StampGeneratorPage() {
@@ -92,6 +101,7 @@ export default function StampGeneratorPage() {
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const [licenseOpen, setLicenseOpen] = useState(false);
 
   // AI Designer panel drag
   const [aiPanelPos, setAiPanelPos] = useState({ x: 0, y: 0 });
@@ -231,6 +241,13 @@ export default function StampGeneratorPage() {
   function handleSelectConcept(concept: StampDesignConcept) {
     setSelectedId(concept.id);
     setPreviewConcept(concept);
+  }
+
+  // Opens text editor directly for a concept
+  function handleEditText(concept: StampDesignConcept) {
+    setSelectedId(concept.id);
+    setPreviewConcept(null);
+    setLeftTab('text');
   }
 
   async function confirmSelectAndExport(concept: StampDesignConcept) {
@@ -607,7 +624,39 @@ export default function StampGeneratorPage() {
               </div>
             </div>
 
+            {/* AI Trade License Auto-Fill */}
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] overflow-hidden">
+              <button
+                onClick={() => setLicenseOpen(v => !v)}
+                className="w-full flex items-center justify-between px-4 py-3 hover:bg-[hsl(var(--pearl-1))] transition-colors"
+              >
+                <div className="flex items-center gap-2">
+                  <Upload size={14} className="text-[hsl(var(--gold))]"/>
+                  <span className="text-sm font-medium text-[hsl(var(--foreground))]">AI Auto-Fill from Trade License</span>
+                  <Badge className="text-[10px] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">Upload PDF or Image</Badge>
+                </div>
+                <ChevronDown size={14} className={`text-[hsl(var(--muted-foreground))] transition-transform ${licenseOpen ? 'rotate-180' : ''}`}/>
+              </button>
+              {licenseOpen && (
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
+                  <StampLicenseUploader
+                    onExtracted={(data) => {
+                      setProject((prev: any) => ({
+                        ...prev,
+                        ...(data.company_name && { company_name: data.company_name }),
+                        ...(data.arabic_company_name && { arabic_company_name: data.arabic_company_name }),
+                        ...(data.registration_number && { registration_number: data.registration_number }),
+                        ...(data.city && { city_optional: data.city }),
+                      }));
+                      setLicenseOpen(false);
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
             {/* Blocked warning */}
+
             {blocked && (
               <div className="flex items-center gap-3 p-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive">
                 <AlertTriangle size={18}/>
@@ -630,7 +679,7 @@ export default function StampGeneratorPage() {
                   {favoriteConcepts.map(c => (
                     <ConceptCard key={c.id} concept={c} svgOverride={svgOverrides[c.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
-                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite}/>
+                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText}/>
                   ))}
                 </div>
               </div>
@@ -659,7 +708,7 @@ export default function StampGeneratorPage() {
                   {concepts.map(concept => (
                     <ConceptCard key={concept.id} concept={concept} svgOverride={svgOverrides[concept.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
-                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite}/>
+                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText}/>
                   ))}
                 </div>
               </>
@@ -698,9 +747,9 @@ export default function StampGeneratorPage() {
         <div
           className="fixed z-[9000] flex flex-col bg-white rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden"
           style={{
-            width: 360,
-            maxHeight: aiPanelMinimized ? 'auto' : 'calc(100vh - 80px)',
-            top: 72,
+          width: 360,
+            maxHeight: aiPanelMinimized ? 'auto' : 'calc(100vh - 180px)',
+            top: 160,
             right: 16,
             transform: `translate(${aiPanelPos.x}px, ${aiPanelPos.y}px)`,
           }}
@@ -848,7 +897,7 @@ export default function StampGeneratorPage() {
 
 // ─── Concept Card ─────────────────────────────────────────────────────────────
 function ConceptCard({
-  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, togglingFav, onSelect, onToggleFav
+  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, togglingFav, onSelect, onToggleFav, onEditText
 }: {
   concept: StampDesignConcept;
   svgOverride?: string;
@@ -860,6 +909,7 @@ function ConceptCard({
   togglingFav: string | null;
   onSelect: (c: StampDesignConcept) => void;
   onToggleFav: (c: StampDesignConcept) => void;
+  onEditText: (c: StampDesignConcept) => void;
 }) {
   const isSelected = selectedId === concept.id;
   const isFav = concept.isFavorite;
@@ -892,11 +942,19 @@ function ConceptCard({
           ))}
           {isFav && <Badge className="text-[10px] px-1.5 py-0 bg-rose-50 text-rose-600 border border-rose-200">♥ Saved</Badge>}
         </div>
-        <Button size="sm"
-          className={`w-full h-7 text-xs gap-1 ${isSelected ? 'bg-[hsl(var(--gold))] text-white' : 'bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90'}`}
-          onClick={() => onSelect(concept)}>
-          {isSelected ? <><Check size={10}/> View Preview</> : 'Select This Design'}
-        </Button>
+        <div className="flex gap-1.5">
+          <Button size="sm"
+            className={`flex-1 h-7 text-xs gap-1 ${isSelected ? 'bg-[hsl(var(--gold))] text-white' : 'bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90'}`}
+            onClick={() => onSelect(concept)}>
+            {isSelected ? <><Check size={10}/> Preview</> : 'Select'}
+          </Button>
+          <Button size="sm" variant="outline"
+            className="h-7 text-xs gap-1 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.06)] px-2.5"
+            onClick={e => { e.stopPropagation(); onEditText(concept); }}
+            title="Edit text elements">
+            <Type size={10}/> Edit
+          </Button>
+        </div>
       </div>
     </div>
   );
