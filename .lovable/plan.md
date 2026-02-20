@@ -1,184 +1,164 @@
 
-# AI Logo Creator — Route Fix, Dedicated Edge Function & Full Enhancement
+# Verification Report & Fix Plan — Corporate Suite
 
-## Current State Analysis
+## Findings Summary
 
-### What Already Exists
-The `LogoCreator.tsx` component is complete at `src/components/corporate-suite/LogoCreator.tsx` (401 lines) and is already imported in `App.tsx`. It has:
-- Company name + description inputs with VoiceInputButton
-- 9 industry tones (Real Estate, Tech, Fashion, Healthcare, etc.)
-- 6 visual styles (Modern, Minimalist, Bold, Vintage, Luxury, Playful)
-- 8 color presets
-- Download SVG + Download PNG (512px)
-- Regenerate button
-
-### Root Issues Found
-
-**Issue 1 — Missing Route (Critical)**
-The route `/toolkit/corporate-suite/logo-creator` is NOT registered in `App.tsx`. Lines 710–715 show the Corporate Suite routes:
-```
-/toolkit/corporate-suite
-/toolkit/corporate-suite/business-card
-/toolkit/corporate-suite/cv-resume
-/toolkit/corporate-suite/cover-letter
-/toolkit/corporate-suite/landing-page
-```
-Logo Creator is completely missing. Navigating to it returns a blank/404 page.
-
-**Issue 2 — Missing Edge Function (Critical)**
-The component calls `supabase.functions.invoke("gemini-chat", ...)` — but **no `gemini-chat` function exists** in `supabase/functions/`. This means every "Generate Logo" click fails silently, falling back to the placeholder SVG. Multiple other components (`BusinessCardDesigner`, `CompanyProfileBuilder`) have the same broken dependency.
-
-**Issue 3 — No Logo Generator Edge Function**
-The current approach sends raw SVG generation prompts directly through a generic chat function. A dedicated `ai-logo-generator` edge function will produce far better, more reliable results by:
-- Using a specialized system prompt optimized for SVG logo generation
-- Enforcing strict JSON structure for logo elements rather than raw SVG text
-- Handling multi-variation generation (seed-based regeneration)
-- Proper 402/429 error surfacing
+### Issues Found (4 bugs to fix)
 
 ---
 
-## Everything Being Built
+### Bug 1 — Company Profile route is missing (Critical)
 
-### Fix 1 — Add the Missing Route (App.tsx)
-Add one line to the Corporate Suite routes block in `App.tsx`:
+`CompanyProfileBuilder` is imported in `App.tsx` (line 42) but has **no registered route**. The Corporate Suite hub card points to `/toolkit/corporate-suite/company-profile`, but navigating there shows a blank page.
+
+**Fix:** Add one route line in `App.tsx`.
+
+---
+
+### Bug 2 — Logo Creator "Save to Brand Assets" will fail at runtime (Critical)
+
+The `design_assets` table schema (from the live database) has:
+
+```
+file_url: string  ← REQUIRED (not nullable)
+```
+
+There is **no `svg_content` column**. `LogoCreator.tsx` line 204–209 does:
+```typescript
+await supabase.from("design_assets").insert({
+  svg_content: logo.svgContent,   // column doesn't exist
+  // file_url is missing entirely — required field!
+} as ... never);                  // TypeScript cast hack to hide the error
+```
+
+This will throw a Supabase error every time. The SVG content needs to be stored differently — either as a data URL in `file_url`, or uploaded to storage as a `.svg` file.
+
+**Fix:** Store the SVG as a data URI in `file_url` (e.g., `data:image/svg+xml;base64,...`) which is a valid URL string and fits the column. Remove the broken `as never` cast.
+
+---
+
+### Bug 3 — Stamp Bold/Italic/FontSize controls have no effect on the stamp grid (Critical)
+
+The UI for Bold, Italic, and Font Size exists and the state variables (`fontBold`, `fontItalic`, `manualFontSize`) update correctly — but they are **never applied to the SVG renderer**:
+
+- `StampSVGRenderer` only has one typography prop: `fontFamily`. It has no `fontWeight`, `fontStyle`, or `fontSize` props.
+- The concept grid's `ConceptCard` (line 1012) only passes `fontFamily` — never passes bold/italic/size.
+- The "Selected Preview" panel (line 668) does a broken workaround: it concatenates CSS properties into the fontFamily string (`font-weight:bold;Arial`), which won't work because `StampSVGRenderer` replaces `font-family="..."` attribute values, not inline style properties.
+
+**Fix (three-part):**
+1. Add `fontWeight`, `fontStyle`, `fontSize` props to `StampSVGRenderer` — apply them via regex replacements on the SVG source (replacing `font-weight="..."`, `font-style="..."`, and `font-size="..."` attributes).
+2. Pass `fontBold`, `fontItalic`, `manualFontSize` through `ConceptCard` to `StampSVGRenderer`.
+3. Fix the "Selected Preview" rendering call to pass them separately.
+
+---
+
+### Bug 4 — "Company Profile" hub card exists but tool has no dedicated builder route
+
+The Corporate Suite hub shows 12 tools including "Company Profile" pointing to `/toolkit/corporate-suite/company-profile`. The `CompanyProfileBuilder` component exists at `src/components/corporate-suite/CompanyProfileBuilder.tsx` but is unused — no route is registered.
+
+This is the same as Bug 1 (missing route for `CompanyProfileBuilder`).
+
+---
+
+## What is NOT broken
+
+- Logo Creator page itself loads correctly (route is registered at line 716).
+- Logo generation via `ai-logo-generator` edge function is wired up properly.
+- Stamp color system, font family selector, text editor, and favorites all work.
+- Bold/Italic/FontSize **UI controls** render correctly and toggle state — only the SVG rendering doesn't respond.
+- All other Corporate Suite tools have valid routes.
+
+---
+
+## Technical Implementation Plan
+
+### File 1: `src/App.tsx`
+Add missing route:
 ```tsx
-<Route path="/toolkit/corporate-suite/logo-creator" element={<LogoCreator />} />
+<Route path="/toolkit/corporate-suite/company-profile" element={<CompanyProfileBuilder />} />
 ```
 
-### Fix 2 — Create `ai-logo-generator` Edge Function
-Create a new dedicated edge function at `supabase/functions/ai-logo-generator/index.ts` that:
-- Accepts: `{ name, industry, style, colors: { primary, secondary, accent }, description, seed }`
-- Uses `LOVABLE_API_KEY` to call `https://ai.gateway.lovable.dev/v1/chat/completions`
-- Uses `google/gemini-2.5-flash` (best for structured creative output)
-- System prompt specializes in professional SVG logos within a `200×200` viewBox
-- Returns clean SVG string extracted from AI response
-- Surfaces 402/429 errors properly back to the client
-
-**System prompt strategy for better logos:**
-```
-You are a world-class SVG logo designer. Create a complete, self-contained SVG logo.
-Rules:
-- viewBox="0 0 200 200", width="200" height="200"
-- Use ONLY these colors: Primary ${primary}, Secondary ${secondary}, Accent ${accent}
-- No external fonts — only: Georgia/serif, Arial/sans-serif, "Courier New"/monospace
-- Include a creative logomark (abstract shape, icon, geometric) AND the company name
-- Self-contained: no external references, no <image> tags, no xlink:href to external URLs
-- Make it professional, scalable, and distinctive for the ${industry} industry
-- Style: ${style}
-Return ONLY the SVG element — start with <svg and end with </svg>. No explanation.
-```
-
-### Fix 3 — Update `LogoCreator.tsx` to Use New Edge Function
-Update the `generate()` function to call `ai-logo-generator` instead of `gemini-chat`. Also add:
-
-**Enhanced Prompt History Panel**
-Add a "Variations" strip below the main preview that stores the last 3 generated logos as thumbnails. Clicking a thumbnail restores that version. Uses local state `logoHistory: LogoData[]`.
-
-**Custom Color Wheel**
-Add an `<input type="color">` color wheel for each of the 3 colors (Primary, Secondary, Accent) alongside the preset swatches. Allows fully custom color combinations beyond the 8 presets.
-
-**Font Style Selector**
-Add a "Typography" section with 4 font choices:
-- Serif (Georgia) — classic, premium
-- Sans-serif (Arial) — modern, clean
-- Monospace (Courier) — tech, coding
-- Script (Palatino) — creative, fashion
-
-The selected font is passed to the edge function and reflected in the SVG.
-
-**Responsive Layout on Mobile**
-The current layout uses `lg:grid-cols-[420px_1fr]` which breaks on tablet. Add proper `md:grid-cols-1` fallback.
-
-**"Save to Brand Assets" Button**
-After generation, show a "Save to Brand Assets" button. This stores the SVG in the `design_assets` table (already used by BusinessCardDesigner and CompanyProfileBuilder) so the logo appears in the BrandAssetLibrary across all Corporate Suite tools.
-
----
-
-## Technical Architecture
-
-### New Edge Function: `supabase/functions/ai-logo-generator/index.ts`
-
+### File 2: `src/components/corporate-suite/LogoCreator.tsx`
+Fix `handleSaveToAssets` to store SVG as a base64 data URI in `file_url`:
 ```typescript
-// Input shape
-{
-  name: string;          // Company/person name
-  industry: string;      // e.g. "real-estate"
-  style: string;         // e.g. "modern"
-  font: string;          // e.g. "Georgia, serif"
-  colors: {
-    primary: string;     // e.g. "#C8A766"
-    secondary: string;   // e.g. "#1a1a1a"
-    accent: string;      // e.g. "#ffffff"
-  };
-  description?: string;  // Optional additional context
-  seed: number;          // For variation — included in prompt to force AI variation
-}
+const svgBase64 = btoa(unescape(encodeURIComponent(logo.svgContent)));
+const dataUri = `data:image/svg+xml;base64,${svgBase64}`;
 
-// Output shape
-{
-  svgContent: string;    // Complete SVG element
-  error?: string;        // Error message if failed
-}
-```
-
-### Updated State in `LogoCreator.tsx`
-
-```typescript
-// New state additions
-const [logoHistory, setLogoHistory] = useState<LogoData[]>([]);
-const [customColors, setCustomColors] = useState({
-  primary: "",
-  secondary: "",
-  accent: "",
+await supabase.from("design_assets").insert({
+  user_id: session.user.id,
+  asset_type: "logo",
+  name: `${name} Logo`,
+  file_url: dataUri,        // required field — store SVG as data URI
 });
-const [fontChoice, setFontChoice] = useState("Georgia, serif");
-const [saving, setSaving] = useState(false);
 ```
 
-### Logo History Logic
+### File 3: `src/components/stamp-generator/StampSVGRenderer.tsx`
+Add 3 new props and apply them via regex on the SVG source:
 ```typescript
-// After successful generation:
-setLogoHistory(prev => [newLogo, ...prev].slice(0, 3));
-```
+interface Props {
+  // ... existing ...
+  fontWeight?: "normal" | "bold";
+  fontStyle?: "normal" | "italic";
+  fontSize?: number | null;  // pt value, null = no override
+}
 
-### Save to Brand Assets
-```typescript
-const handleSaveToAssets = async () => {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) { toast.error("Please log in to save assets"); return; }
-  
-  await supabase.from("design_assets").insert({
-    user_id: session.user.id,
-    asset_type: "logo",
-    name: `${name} Logo`,
-    svg_content: logo.svgContent,
+// Inside the component, after fontFamily replacement:
+if (fontWeight) {
+  tinted = tinted.replace(/font-weight="[^"]*"/gi, `font-weight="${fontWeight}"`);
+  tinted = tinted.replace(/font-weight:\s*[^;'"]+/gi, `font-weight:${fontWeight}`);
+}
+if (fontStyle) {
+  tinted = tinted.replace(/font-style="[^"]*"/gi, `font-style="${fontStyle}"`);
+  tinted = tinted.replace(/font-style:\s*[^;'"]+/gi, `font-style:${fontStyle}`);
+}
+if (fontSize != null) {
+  // SVG font-size is in px; 10pt ≈ 13.3px but stamps use relative px values
+  // We scale: replace existing font-size values proportionally
+  // Simpler: override all non-tiny font-size attrs (> 4px)
+  tinted = tinted.replace(/font-size="(\d+(?:\.\d+)?)"/gi, (_, px) => {
+    const orig = parseFloat(px);
+    if (orig < 4) return `font-size="${px}"`;
+    return `font-size="${fontSize}"`;
   });
-  toast.success("Saved to Brand Assets!");
-};
+}
+```
+
+### File 4: `src/components/stamp-generator/StampGeneratorPage.tsx`
+Pass bold/italic/size from state through to `ConceptCard` and the Selected Preview renderer:
+```tsx
+// ConceptCard interface — add 3 new props:
+fontBold?: boolean;
+fontItalic?: boolean;
+manualFontSize?: number | null;
+
+// In ConceptCard's StampSVGRenderer call:
+<StampSVGRenderer
+  fontFamily={fontFamily}
+  fontWeight={fontBold ? "bold" : "normal"}
+  fontStyle={fontItalic ? "italic" : "normal"}
+  fontSize={manualFontSize}
+  ...
+/>
+
+// In "Selected Preview" panel (line 668) — fix broken string concatenation:
+<StampSVGRenderer
+  fontFamily={fontFamily}
+  fontWeight={fontBold ? "bold" : "normal"}
+  fontStyle={fontItalic ? "italic" : "normal"}
+  fontSize={manualFontSize}
+  ...
+/>
 ```
 
 ---
 
-## Files to Create/Edit
+## Files Changed
 
-| File | Action | Change |
+| File | Change | Scope |
 |---|---|---|
-| `supabase/functions/ai-logo-generator/index.ts` | **Create** | Dedicated edge function with proper AI gateway integration |
-| `src/components/corporate-suite/LogoCreator.tsx` | **Edit** | Point to new edge function, add history panel, custom color wheel, font selector, save-to-assets button |
-| `src/App.tsx` | **Edit** | Add missing route for `/toolkit/corporate-suite/logo-creator` |
+| `src/App.tsx` | Add `CompanyProfileBuilder` route | 1 line |
+| `src/components/corporate-suite/LogoCreator.tsx` | Fix `handleSaveToAssets` to use `file_url` | ~8 lines |
+| `src/components/stamp-generator/StampSVGRenderer.tsx` | Add `fontWeight`, `fontStyle`, `fontSize` props + regex replacements | ~20 lines |
+| `src/components/stamp-generator/StampGeneratorPage.tsx` | Pass bold/italic/size to `ConceptCard` and both `StampSVGRenderer` calls | ~15 lines |
 
-No database migrations needed — the `design_assets` table already exists with an `asset_type` column.
-
----
-
-## Implementation Order
-
-1. Create `supabase/functions/ai-logo-generator/index.ts` with proper LOVABLE_API_KEY integration
-2. Edit `src/App.tsx` — add the missing route (one line)
-3. Edit `src/components/corporate-suite/LogoCreator.tsx`:
-   a. Change `supabase.functions.invoke("gemini-chat")` → `supabase.functions.invoke("ai-logo-generator")`
-   b. Add `fontChoice` state + Typography selector panel
-   c. Add `customColors` state + color wheel inputs alongside presets
-   d. Add `logoHistory` state + Variations thumbnail strip in preview panel
-   e. Add "Save to Brand Assets" button in export section
-4. Deploy and test all three changes together
+No database migrations needed. No new edge functions needed.
