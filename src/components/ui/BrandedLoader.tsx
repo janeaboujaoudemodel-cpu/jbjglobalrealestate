@@ -1,4 +1,4 @@
-import jbjMonogram from "@/assets/jbj-monogram-dark-bg.png";
+import jbjMonogram from "@/assets/jbj-monogram-nobuffer.png";
 
 interface BrandedLoaderProps {
   text?: string;

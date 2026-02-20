@@ -193,26 +193,26 @@ export default function CorporateSuite() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(135deg, #0a0a0f 0%, #0f0f1a 50%, #0a0a0f 100%)" }}>
+    <div className="min-h-screen" style={{ background: "linear-gradient(135deg, #F5EBD7 0%, #EDE0C8 50%, #F5EBD7 100%)" }}>
       {/* ── Hero Header ──────────────────────────────────────── */}
-      <div className="relative overflow-hidden border-b border-white/5">
+      <div className="relative overflow-hidden border-b border-[#C9A84C]/30">
         {/* Champagne shimmer */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse 80% 60% at 10% 50%, rgba(212,175,55,0.08) 0%, transparent 70%)",
+              "radial-gradient(ellipse 80% 60% at 10% 50%, rgba(201,168,76,0.12) 0%, transparent 70%)",
           }}
         />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/40 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/60 to-transparent" />
 
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-8 pt-28 sm:pt-32">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-1.5 text-[11px] text-white/40 mb-6 select-none">
+          <div className="flex items-center gap-1.5 text-[11px] text-[#6B5B3E]/70 mb-6 select-none">
             <LayoutGrid size={11} />
             <span>Toolkit</span>
             <ChevronRight size={10} />
-            <span className="text-white/70 font-medium">Corporate Suite</span>
+            <span className="text-[#3D2B1F] font-medium">Corporate Suite</span>
           </div>
 
           <div className="flex items-start gap-5">
@@ -229,13 +229,13 @@ export default function CorporateSuite() {
 
             {/* Text */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-1" style={{ color: "#C9A84C" }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-1" style={{ color: "#8B6914" }}>
                 JBJ Toolkit · Document Suite
               </p>
-              <h1 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#1A120B] leading-tight">
                 Corporate Document Suite
               </h1>
-              <p className="text-white/50 mt-2 text-sm max-w-2xl leading-relaxed">
+              <p className="text-[#4A3728]/70 mt-2 text-sm max-w-2xl leading-relaxed">
                 12 professional tools — stamps, business cards, CVs, logos, company profiles, e-signatures,
                 spreadsheets and more. All AI-powered, all in one place.
               </p>
@@ -250,8 +250,8 @@ export default function CorporateSuite() {
               { label: "Export formats", value: "PDF, PNG, SVG, HTML" },
             ].map(s => (
               <div key={s.label} className="flex items-baseline gap-2">
-                <span className="text-xl font-bold text-white">{s.value}</span>
-                <span className="text-xs text-white/40">{s.label}</span>
+                <span className="text-xl font-bold text-[#1A120B]">{s.value}</span>
+                <span className="text-xs text-[#6B5B3E]/70">{s.label}</span>
               </div>
             ))}
           </div>
@@ -270,9 +270,9 @@ export default function CorporateSuite() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05, duration: 0.3, ease: "easeOut" }}
                 onClick={() => navigate(tool.href)}
-                className={`group text-left rounded-2xl border border-white/8 shadow-lg transition-all duration-300 overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A84C] ${tool.glow}`}
+                className={`group text-left rounded-2xl border border-[#C9A84C]/20 shadow-md transition-all duration-300 overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A84C] hover:shadow-[0_4px_20px_rgba(201,168,76,0.2)] hover:-translate-y-0.5`}
                 style={{
-                  background: "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)",
+                  background: "rgba(255,255,255,0.70)",
                   backdropFilter: "blur(10px)",
                 }}
               >
@@ -293,18 +293,18 @@ export default function CorporateSuite() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-bold text-white text-[15px] leading-tight">
+                  <h3 className="font-bold text-[#1A120B] text-[15px] leading-tight">
                     {tool.title}
                   </h3>
-                  <p className="text-xs font-semibold mt-0.5 mb-3" style={{ color: "#C9A84C" }}>
+                  <p className="text-xs font-semibold mt-0.5 mb-3" style={{ color: "#8B6914" }}>
                     {tool.subtitle}
                   </p>
-                  <p className="text-xs text-white/50 leading-relaxed">
+                  <p className="text-xs text-[#4A3728]/70 leading-relaxed">
                     {tool.description}
                   </p>
 
                   {/* CTA */}
-                  <div className="mt-5 flex items-center gap-1.5 text-xs font-semibold text-white/60 group-hover:text-[#C9A84C] transition-colors">
+                  <div className="mt-5 flex items-center gap-1.5 text-xs font-semibold text-[#8B6914]/70 group-hover:text-[#C9A84C] transition-colors">
                     Open Tool
                     <ArrowRight
                       size={13}
@@ -319,8 +319,8 @@ export default function CorporateSuite() {
 
         {/* Footer note */}
         <div className="flex items-center justify-center gap-2 mt-10">
-          <Zap size={12} className="text-white/30" />
-          <p className="text-center text-[11px] text-white/30">
+          <Zap size={12} className="text-[#8B6914]/40" />
+          <p className="text-center text-[11px] text-[#6B5B3E]/50">
             All tools run securely in your browser. Files are exported locally — nothing leaves your device.
           </p>
         </div>

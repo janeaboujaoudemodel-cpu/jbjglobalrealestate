@@ -190,17 +190,17 @@ const AIToolPremiumLayout = ({
       {/* Hero Section - Colored Gradient Theme */}
       <section className={`pt-32 pb-16 bg-gradient-to-b ${gradient}`}>
         <div className="container mx-auto px-4">
-          {/* Back Button - Always readable on dark backgrounds */}
+          {/* Back Button - Always left-aligned */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3 }}
+            className="flex justify-start"
           >
             <Button
               variant="dark-outline"
               size="sm"
               onClick={() => {
-                // Check referrer to determine if there's a real previous page
                 const referrer = document.referrer;
                 const hasRealHistory = referrer && referrer.includes(window.location.hostname);
                 if (hasRealHistory) {
