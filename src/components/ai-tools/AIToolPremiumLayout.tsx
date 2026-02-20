@@ -253,14 +253,14 @@ const AIToolPremiumLayout = ({
         </div>
       </section>
 
-      {/* Content Section */}
+      {/* Content Section - Full border wrapper */}
       <section className="py-12 bg-black">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
-            className="max-w-6xl mx-auto"
+            className={`max-w-6xl mx-auto border ${colors.border} rounded-2xl p-6 md:p-8`}
           >
             {children}
 

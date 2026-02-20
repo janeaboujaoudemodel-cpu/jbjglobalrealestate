@@ -46,6 +46,7 @@ const RealEstateSuite = lazy(() => import("./pages/business-suite/RealEstateSuit
 const BrokerSuite = lazy(() => import("./pages/business-suite/BrokerSuite"));
 const CreativeSuite = lazy(() => import("./pages/business-suite/CreativeSuite"));
 const ProductivitySuite = lazy(() => import("./pages/business-suite/ProductivitySuite"));
+const SuitesHub = lazy(() => import("./pages/business-suite/SuitesHub"));
 const EducationHub = lazy(() => import("./pages/EducationHub"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -787,7 +788,12 @@ const App = () => (
                     <ProductivitySuite />
                   </Suspense>
                 } />
-                
+                <Route path="/suites" element={
+                  <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
+                    <SuitesHub />
+                  </Suspense>
+                } />
+
                 {/* NEW: Master Suite Routes */}
                 <Route path="/toolkit/video-suite" element={
                   <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div></div>}>
