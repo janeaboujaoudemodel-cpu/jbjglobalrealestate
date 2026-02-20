@@ -97,6 +97,7 @@ export default function StampGeneratorPage() {
 
   // Preview modal
   const [previewConcept, setPreviewConcept] = useState<StampDesignConcept | null>(null);
+  const [openWithEditor, setOpenWithEditor] = useState(false);
 
   // AI chat
   const [chatOpen, setChatOpen] = useState(false);
@@ -251,14 +252,11 @@ export default function StampGeneratorPage() {
     setPreviewConcept(concept);
   }
 
-  // Opens text editor directly for a concept — selects it AND switches to text tab
+  // Opens text editor directly for a concept — opens Preview modal with text editor expanded
   function handleEditText(concept: StampDesignConcept) {
     setSelectedId(concept.id);
-    setPreviewConcept(null);
-    setLeftTab('text');
-    // Scroll to top of page so the left panel (text editor) is visible
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    toast.info('Text editor opened in left panel ← Edit text elements there', { duration: 3000 });
+    setOpenWithEditor(true);
+    setPreviewConcept(concept);
   }
 
   async function confirmSelectAndExport(concept: StampDesignConcept) {
@@ -403,8 +401,15 @@ export default function StampGeneratorPage() {
           secondaryColor={secondaryColor}
           accentColor={accentColor}
           svgOverride={svgOverrides[previewConcept.id]}
-          onBack={() => setPreviewConcept(null)}
+          onBack={() => { setPreviewConcept(null); setOpenWithEditor(false); }}
           onSelectAndExport={() => confirmSelectAndExport(previewConcept)}
+          onSvgChange={(newSvg) => handleSvgTextChange(previewConcept.id, newSvg)}
+          initialShowEditor={openWithEditor}
+          fontFamily={fontFamily}
+          fontWeight={fontBold ? 'bold' : 'normal'}
+          fontStyle={fontItalic ? 'italic' : 'normal'}
+          fontSize={manualFontSize}
+          projectId={projectId}
         />
       )}
 
@@ -445,11 +450,11 @@ export default function StampGeneratorPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-6">
+      <div className="max-w-7xl mx-auto px-6 pt-10 pb-6">
         <div className="flex gap-6">
 
           {/* ── Left Panel ─────────────────────────────────────────────── */}
-          <div className="hidden lg:flex flex-col gap-4 w-60 flex-shrink-0">
+          <div className="hidden lg:flex flex-col gap-4 w-60 flex-shrink-0 sticky top-[calc(theme(spacing.32)+56px)] self-start max-h-[calc(100vh-200px)] overflow-y-auto">
             {/* Tab switcher */}
             <div className="flex bg-[hsl(var(--muted))] rounded-xl p-1 gap-1">
               <button onClick={() => setLeftTab('color')}
@@ -466,7 +471,7 @@ export default function StampGeneratorPage() {
               </button>
             </div>
 
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-4">
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-4 overflow-hidden">
 
               {/* ── Colors tab ── */}
               {leftTab === 'color' && (
