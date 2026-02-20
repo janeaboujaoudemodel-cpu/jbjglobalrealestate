@@ -43,7 +43,7 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
             ) : (
               <div className="w-full h-full bg-gradient-to-b from-premium-card to-premium-bg" aria-label={community.name} />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
             
             {/* Premium badge - Champagne with gold accent */}
             {isPremium && (
@@ -55,13 +55,13 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
             
             <div className="absolute bottom-0 left-0 right-0 p-4">
               <h3
-                className="text-white font-semibold text-xl mb-1"
+                className="text-gold font-semibold text-xl mb-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {community.name}
               </h3>
               {community.location && (
-                <p className="text-zinc-300 text-sm flex items-center gap-1">
+                <p className="text-zinc-200 text-sm flex items-center gap-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                   <MapPin className="w-3 h-3 text-gold" />
                   {community.location}
                 </p>
