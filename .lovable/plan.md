@@ -1,131 +1,184 @@
 
-# Business Card Designer — Full Overhaul: Logo on Card, QR on Preview, Draggable Logo, Per-Side Colors, AI Design Templates, Alignment Guides
+# AI Logo Creator — Route Fix, Dedicated Edge Function & Full Enhancement
 
-## Issues Identified (Root Causes)
+## Current State Analysis
 
-### Bug 1 — Logo Not Showing on Card Preview
-In `CardCanvas` (line 382), the logo only renders when `side === "front"`:
-```typescript
-{logoUrl && side === "front" && (
+### What Already Exists
+The `LogoCreator.tsx` component is complete at `src/components/corporate-suite/LogoCreator.tsx` (401 lines) and is already imported in `App.tsx`. It has:
+- Company name + description inputs with VoiceInputButton
+- 9 industry tones (Real Estate, Tech, Fashion, Healthcare, etc.)
+- 6 visual styles (Modern, Minimalist, Bold, Vintage, Luxury, Playful)
+- 8 color presets
+- Download SVG + Download PNG (512px)
+- Regenerate button
+
+### Root Issues Found
+
+**Issue 1 — Missing Route (Critical)**
+The route `/toolkit/corporate-suite/logo-creator` is NOT registered in `App.tsx`. Lines 710–715 show the Corporate Suite routes:
 ```
-This means clicking "Back" hides the logo. Also the logo is a simple fixed-position overlay but is not passed to `CardFace` at all — so it never appears inside the card's own rendering. **Fix:** Show logo on both front and back, and make it independently draggable (separate from the text field drag system).
-
-### Bug 2 — QR Code Not Showing on Card Preview
-Looking at `CardCanvas` line 424:
-```typescript
-{qrEnabled && qrUrl && side === "front" && (
+/toolkit/corporate-suite
+/toolkit/corporate-suite/business-card
+/toolkit/corporate-suite/cv-resume
+/toolkit/corporate-suite/cover-letter
+/toolkit/corporate-suite/landing-page
 ```
-The QR renders on the card canvas — but the `AnimatePresence` key includes the card state (template/color/side/shape), which causes a re-render that can reset or flicker the QR overlay. More critically, the QR image is a cross-origin fetch from `api.qrserver.com` which may fail silently. The QR also only appears on the `"front"` side. **Fix:** Enable QR on both front and back sides, ensure the image loads correctly with proper error handling, and add a visible loading state.
+Logo Creator is completely missing. Navigating to it returns a blank/404 page.
 
-### Bug 3 — No Per-Side Color System
-Currently there is a single color preset (`colorIdx`) applied to both sides. The back side (`side === "back"` in `CardFace`) uses `primary` as background and `secondary` as text — this is the same color as the front.
+**Issue 2 — Missing Edge Function (Critical)**
+The component calls `supabase.functions.invoke("gemini-chat", ...)` — but **no `gemini-chat` function exists** in `supabase/functions/`. This means every "Generate Logo" click fails silently, falling back to the placeholder SVG. Multiple other components (`BusinessCardDesigner`, `CompanyProfileBuilder`) have the same broken dependency.
+
+**Issue 3 — No Logo Generator Edge Function**
+The current approach sends raw SVG generation prompts directly through a generic chat function. A dedicated `ai-logo-generator` edge function will produce far better, more reliable results by:
+- Using a specialized system prompt optimized for SVG logo generation
+- Enforcing strict JSON structure for logo elements rather than raw SVG text
+- Handling multi-variation generation (seed-based regeneration)
+- Proper 402/429 error surfacing
+
+---
 
 ## Everything Being Built
 
-### Fix 1 — Logo On Card (Both Sides) + Draggable Logo
-- Separate logo state from draggable text fields
-- Add `logoPos` state: `{ x: number, y: number }` as percentage (default top-right: `{ x: 80, y: 5 }`)
-- Logo is always shown on BOTH front and back — user can drag it independently
-- In edit layout mode, the logo also gets a dashed border and grab cursor
-- Logo drag uses the same mouse event system as text fields
+### Fix 1 — Add the Missing Route (App.tsx)
+Add one line to the Corporate Suite routes block in `App.tsx`:
+```tsx
+<Route path="/toolkit/corporate-suite/logo-creator" element={<LogoCreator />} />
+```
 
-### Fix 2 — QR Code on Preview (Both Sides, Reliable)
-- Remove the `side === "front"` restriction — QR shows on both front and back
-- Add `onLoad` / `onError` handlers to the QR `<img>` so the user sees a spinner while loading
-- Show a placeholder outline box with "QR Loading..." text until image loads
-- Ensure the AnimatePresence key does NOT force QR to re-mount unnecessarily (separate QR key from card key)
+### Fix 2 — Create `ai-logo-generator` Edge Function
+Create a new dedicated edge function at `supabase/functions/ai-logo-generator/index.ts` that:
+- Accepts: `{ name, industry, style, colors: { primary, secondary, accent }, description, seed }`
+- Uses `LOVABLE_API_KEY` to call `https://ai.gateway.lovable.dev/v1/chat/completions`
+- Uses `google/gemini-2.5-flash` (best for structured creative output)
+- System prompt specializes in professional SVG logos within a `200×200` viewBox
+- Returns clean SVG string extracted from AI response
+- Surfaces 402/429 errors properly back to the client
 
-### Fix 3 — Per-Side Color System with Color Wheel
-- Add `frontColorIdx` and `backColorIdx` as separate state variables (default: both 0)
-- The front/back toggle buttons become color-aware — show a colored dot to indicate the current side's color
-- In the Color section of the left panel, show two pickers: **"Front Color"** and **"Back Color"**, each with the 8 preset swatches AND a `<input type="color">` color wheel for fully custom color
-- The `CardCanvas` receives `backPrimary`, `backSecondary`, `backAccent` props and uses them when `side === "back"`
-- The QR auto-sync color uses the front card's primary color
+**System prompt strategy for better logos:**
+```
+You are a world-class SVG logo designer. Create a complete, self-contained SVG logo.
+Rules:
+- viewBox="0 0 200 200", width="200" height="200"
+- Use ONLY these colors: Primary ${primary}, Secondary ${secondary}, Accent ${accent}
+- No external fonts — only: Georgia/serif, Arial/sans-serif, "Courier New"/monospace
+- Include a creative logomark (abstract shape, icon, geometric) AND the company name
+- Self-contained: no external references, no <image> tags, no xlink:href to external URLs
+- Make it professional, scalable, and distinctive for the ${industry} industry
+- Style: ${style}
+Return ONLY the SVG element — start with <svg and end with </svg>. No explanation.
+```
 
-### Fix 4 — AI-Generated Design Templates
-Add a new `"ai-generated"` template option. When selected:
-- A sidebar panel shows: **Industry** selector (Real Estate, Tech, Fashion, etc.), **Style** selector (Geometric, Lines, Minimalist, Futuristic, Organic), and a **Generate** button
-- Clicking Generate calls `gemini-chat` edge function with a prompt asking for SVG path data and design instructions
-- AI returns JSON with: `{ shapes: [...], colors: {...}, layout: "..." }` — describes geometric/decorative SVG elements
-- The `CardFace` for the `"ai-generated"` template renders these shapes as inline SVG on top of the card background
-- A **Regenerate** button re-calls AI with a different seed for variety
-- AI template is labeled `"AI Design"` in the template grid with a ✨ badge
+### Fix 3 — Update `LogoCreator.tsx` to Use New Edge Function
+Update the `generate()` function to call `ai-logo-generator` instead of `gemini-chat`. Also add:
 
-### Fix 5 — Alignment Guides
-When dragging any element (logo, name, title, company):
-- Show dashed alignment guide lines when the dragged element is within 5% of center (horizontal and vertical)
-- A horizontal center guide: a thin dashed line across the full card width at 50% height
-- A vertical center guide: a thin dashed line down the full card height at 50% width
-- Guides appear with a label "CENTER" and snap the element into place if within 5% distance
-- Color: gold dashed lines with 50% opacity
+**Enhanced Prompt History Panel**
+Add a "Variations" strip below the main preview that stores the last 3 generated logos as thumbnails. Clicking a thumbnail restores that version. Uses local state `logoHistory: LogoData[]`.
 
-### Fix 6 — Save and Adapt Button
-Add a **"Save Card"** button in the preview panel header that:
-- Saves the current card settings (data, template, colors, QR config, logo URL, shape) to the `design_assets` table as a JSON blob with `asset_type = "stamp"` (reusing existing infrastructure)
-- Shows a toast: "Card saved! You can reload it from Brand Assets."
+**Custom Color Wheel**
+Add an `<input type="color">` color wheel for each of the 3 colors (Primary, Secondary, Accent) alongside the preset swatches. Allows fully custom color combinations beyond the 8 presets.
 
-### Fix 7 — QR on Back Side
-- When `side === "back"` and `qrEnabled`, the QR also renders on the back of the card
-- User controls remain the same — position and size apply to both sides
+**Font Style Selector**
+Add a "Typography" section with 4 font choices:
+- Serif (Georgia) — classic, premium
+- Sans-serif (Arial) — modern, clean
+- Monospace (Courier) — tech, coding
+- Script (Palatino) — creative, fashion
+
+The selected font is passed to the edge function and reflected in the SVG.
+
+**Responsive Layout on Mobile**
+The current layout uses `lg:grid-cols-[420px_1fr]` which breaks on tablet. Add proper `md:grid-cols-1` fallback.
+
+**"Save to Brand Assets" Button**
+After generation, show a "Save to Brand Assets" button. This stores the SVG in the `design_assets` table (already used by BusinessCardDesigner and CompanyProfileBuilder) so the logo appears in the BrandAssetLibrary across all Corporate Suite tools.
+
+---
 
 ## Technical Architecture
 
-### New State Variables:
+### New Edge Function: `supabase/functions/ai-logo-generator/index.ts`
+
 ```typescript
-// Per-side colors
-const [frontColorIdx, setFrontColorIdx] = useState(0);
-const [backColorIdx, setBackColorIdx] = useState(0);
-const [frontCustomColor, setFrontCustomColor] = useState(""); // hex override
-const [backCustomColor, setBackCustomColor] = useState("");
+// Input shape
+{
+  name: string;          // Company/person name
+  industry: string;      // e.g. "real-estate"
+  style: string;         // e.g. "modern"
+  font: string;          // e.g. "Georgia, serif"
+  colors: {
+    primary: string;     // e.g. "#C8A766"
+    secondary: string;   // e.g. "#1a1a1a"
+    accent: string;      // e.g. "#ffffff"
+  };
+  description?: string;  // Optional additional context
+  seed: number;          // For variation — included in prompt to force AI variation
+}
 
-// Logo dragging
-const [logoPos, setLogoPos] = useState({ x: 78, y: 4 }); // % offsets
-
-// AI template
-const [aiTemplateStyle, setAiTemplateStyle] = useState("geometric");
-const [aiTemplateIndustry, setAiTemplateIndustry] = useState("real-estate");
-const [aiDesignData, setAiDesignData] = useState<null | { svgPaths: string[]; colors: string[] }>(null);
-const [isGeneratingDesign, setIsGeneratingDesign] = useState(false);
+// Output shape
+{
+  svgContent: string;    // Complete SVG element
+  error?: string;        // Error message if failed
+}
 ```
 
-### CardCanvas Changes:
+### Updated State in `LogoCreator.tsx`
+
 ```typescript
-// Props now include:
-backPrimary: string;
-backSecondary: string;
-backAccent: string;
-logoPos: { x: number; y: number };
-onLogoMove: (pos: { x: number; y: number }) => void;
-showAlignGuides: boolean; // true when dragging and near center
+// New state additions
+const [logoHistory, setLogoHistory] = useState<LogoData[]>([]);
+const [customColors, setCustomColors] = useState({
+  primary: "",
+  secondary: "",
+  accent: "",
+});
+const [fontChoice, setFontChoice] = useState("Georgia, serif");
+const [saving, setSaving] = useState(false);
 ```
 
-### Alignment Snap Logic:
+### Logo History Logic
 ```typescript
-const SNAP_THRESHOLD = 5; // % distance
-const snapX = Math.abs(newX - 50) < SNAP_THRESHOLD ? 50 : newX;
-const snapY = Math.abs(newY - 50) < SNAP_THRESHOLD ? 50 : newY;
-const showHGuide = Math.abs(newY - 50) < SNAP_THRESHOLD;
-const showVGuide = Math.abs(newX - 50) < SNAP_THRESHOLD;
+// After successful generation:
+setLogoHistory(prev => [newLogo, ...prev].slice(0, 3));
 ```
 
-## Files to Edit
-
-Only one file changes:
+### Save to Brand Assets
+```typescript
+const handleSaveToAssets = async () => {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { toast.error("Please log in to save assets"); return; }
+  
+  await supabase.from("design_assets").insert({
+    user_id: session.user.id,
+    asset_type: "logo",
+    name: `${name} Logo`,
+    svg_content: logo.svgContent,
+  });
+  toast.success("Saved to Brand Assets!");
+};
 ```
-src/components/corporate-suite/BusinessCardDesigner.tsx   ← Full upgrade
-```
 
-No new edge functions, no database changes.
+---
 
-## Implementation Order Within The File
+## Files to Create/Edit
 
-1. Add `frontColorIdx`, `backColorIdx`, `frontCustomColor`, `backCustomColor` state variables
-2. Add `logoPos` state and logo drag handler using same mouse event system
-3. Update `CardCanvas` to accept `backPrimary/Secondary/Accent`, use correct colors per side, show logo on BOTH sides, enable QR on BOTH sides, add alignment guide lines during drag
-4. Update `CardFace` `side === "back"` to accept and use `backPrimary`, `backSecondary`, `backAccent` 
-5. Add AI template type to `TEMPLATES` array and add `CardFace` rendering branch for it
-6. Add Color panel update: split into "Front Color" and "Back Color" sections with preset swatches + `<input type="color">` color wheel for each
-7. Add AI Design panel (new collapsible) with industry/style selector and Generate button
-8. Update `CardCanvas` call site to pass all new props
-9. Add "Save Card" button to header
-10. Fix QR preview: add `onError` handler, remove `side === "front"` restriction
+| File | Action | Change |
+|---|---|---|
+| `supabase/functions/ai-logo-generator/index.ts` | **Create** | Dedicated edge function with proper AI gateway integration |
+| `src/components/corporate-suite/LogoCreator.tsx` | **Edit** | Point to new edge function, add history panel, custom color wheel, font selector, save-to-assets button |
+| `src/App.tsx` | **Edit** | Add missing route for `/toolkit/corporate-suite/logo-creator` |
+
+No database migrations needed — the `design_assets` table already exists with an `asset_type` column.
+
+---
+
+## Implementation Order
+
+1. Create `supabase/functions/ai-logo-generator/index.ts` with proper LOVABLE_API_KEY integration
+2. Edit `src/App.tsx` — add the missing route (one line)
+3. Edit `src/components/corporate-suite/LogoCreator.tsx`:
+   a. Change `supabase.functions.invoke("gemini-chat")` → `supabase.functions.invoke("ai-logo-generator")`
+   b. Add `fontChoice` state + Typography selector panel
+   c. Add `customColors` state + color wheel inputs alongside presets
+   d. Add `logoHistory` state + Variations thumbnail strip in preview panel
+   e. Add "Save to Brand Assets" button in export section
+4. Deploy and test all three changes together
