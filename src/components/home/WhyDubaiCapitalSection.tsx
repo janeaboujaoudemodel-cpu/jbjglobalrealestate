@@ -49,7 +49,7 @@ export default function WhyDubaiCapitalSection() {
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
           >
             <source src={scenes[currentScene].src} type="video/mp4" />
           </video>
