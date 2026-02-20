@@ -1,283 +1,184 @@
 
-# Company Profile Builder — Smart URL Extraction, Color Palette System, Completion Score & Placeholder Cleanup
+# Company Profile Builder — Comprehensive Upgrade Plan
 
-## What We're Building
+## What You're Asking For (Summarized)
 
-This is a major enhancement to the Company Profile Builder with 4 distinct feature groups, plus a new shared color palette system that feeds into all corporate suite tools.
+1. **Logo placement control across all pages** — apply logo to all pages or selected pages in the PDF export, control its position (top-left, top-right, center, bottom), with a "Remove from all / selected pages" option.
+2. **Full multi-page website crawl** — instead of scraping just the homepage, crawl multiple pages of the website to get richer content (About, Services, Team, Contact pages).
+3. **Color palette sync** — extracted brand colors from Firecrawl's `branding` response must match what is shown in the palette swatches. Currently the palette swatches show default colors even when the live preview renders correctly.
+4. **More templates** — add Canva-style professional templates (cover letter, copyright page, registration, etc.) — rich visual layouts, not just plain text.
+5. **Full-size live preview** — the live preview should show the full A4 document with all pages rendered at a readable scale, not a tiny cramped single-card view.
 
 ---
 
-## Feature 1: Smart URL / Website Extraction
+## Root Cause Analysis
 
-### How It Works
-The user pastes their website URL → clicks "Generate from Website" → the system:
-1. Calls `firecrawl-scrape` with `formats: ["markdown", "branding"]` to get page content + brand colors
-2. Sends the scraped markdown to `company-profile-ai` (new action: `extract_from_url`) to parse company name, tagline, about us, services, team, contact info
-3. Extracts the brand color palette from Firecrawl's `branding.colors` response
-4. Auto-fills all form fields instantly
-5. Saves the extracted color palette to the `design_color_palettes` table for use across all tools
-
-### New Action in `company-profile-ai/index.ts`
-Add `action === "extract_from_url"`:
+### Bug 1: Color palette not updating after extraction
+Looking at line 392–404 of `CompanyProfileBuilder.tsx`, after Firecrawl scraping, the code correctly calls `setPalette(newPalette)` — but the Firecrawl `branding` field is sometimes nested as `data.data.branding.colors` (the Firecrawl v1 API wraps responses in a `data` envelope). The current code at line 343 tries both paths:
 ```typescript
-// Takes: markdown (scraped content), url
-// Prompt: "Extract company profile data from this website content..."
-// Returns structured JSON: { companyName, tagline, aboutUs, services[], team[], phone, email, website, address, linkedin, instagram }
+const bc = scrapeData?.data?.branding?.colors || scrapeData?.branding?.colors;
 ```
+However Firecrawl's branding endpoint returns `branding.colors` as named fields like `primary`, `secondary`, etc., while the scrape function sometimes returns them under different keys. The fix: log the raw response and use a smarter color-extraction fallback that parses any color-like hex values found in the response.
 
-### UI: URL Input Panel (top of left column, above Document Extractor)
-```
-┌──────────────────────────────────────────────┐
-│ 🌐  GENERATE FROM WEBSITE                    │
-├──────────────────────────────────────────────┤
-│  https://yourcompany.com              [→ Go] │
-│  [Extracting your company details...   ████] │
-└──────────────────────────────────────────────┘
-```
-- Input field + "Extract" button
-- Progress: "Scanning website…" → "Extracting details…" → "Applying colors…" → Done toast
-- On success: fills all fields + shows "Colors saved to your palette" badge
+### Bug 2: Preview is too small and only 1 "card"
+The `ProfilePreview` component (lines 134–219) renders a single scrollable div at `scale=0.55` — it is one continuous block, not paginated A4 pages. For a real "multi-page" look, we need to render multiple `A4Page` boxes, each at fixed 595×842 proportions, stacked vertically.
 
-### Firecrawl Dependency
-The existing `firecrawl-scrape` edge function is already deployed. We call it from the frontend via `supabase.functions.invoke("firecrawl-scrape", { body: { url, options: { formats: ["markdown", "branding"], onlyMainContent: true } } })`. If Firecrawl is not connected, we degrade gracefully — we only use the `company-profile-ai` AI extraction with a simpler fetch.
+### Bug 3: Logo only goes to the PDF, not controlled per-page
+The current PDF export (lines 530–548) places the logo only on the cover page. There is no UI for "apply to all pages" or "select which pages". This needs a `logoPages` state (Set of page indices or `"all"`) and a position picker.
 
 ---
 
-## Feature 2: Smart Color Palette System (Draggable, Full Color Wheel)
+## Plan
 
-### Database
-The `design_color_palettes` table already exists with the correct schema:
-```
-id, user_id, name, description, colors (jsonb), is_default, is_public, created_at, updated_at
-```
-The `colors` field stores an array of `{ hex: string, name: string }` objects, so we add a `role` field: `{ hex: string, name: string, role: "primary" | "secondary" | "accent" | "background" | "text" }`.
+### Part 1: Fix Color Palette Sync
 
-No migration needed — the `colors` JSONB column is flexible.
+The `firecrawl-scrape` function already returns the `branding` object. The issue is the color field mapping. We will:
+- Parse `scrapeData.data.branding` (the correct Firecrawl v1 path)
+- Also extract dominant colors from `scrapeData.data.branding.colors` with fallback to CSS variables scraped from the page
+- Map known field names: `primary`, `secondary`, `accent`, `background`, `textPrimary` → palette roles
+- If Firecrawl branding colors aren't found, run a secondary AI call to infer colors from the markdown text (e.g., "gold, white, dark" → hex values)
 
-### New Component: `WebsitePalettePanel.tsx`
-A self-contained panel embedded in `CompanyProfileBuilder` (also exportable for other tools) with:
-
-**Drag-and-Drop Role Assignment:**
-- 5 role slots displayed horizontally: Primary · Secondary · Accent · Background · Text
-- Color swatches are draggable between slots
-- Dragging a color to a different slot swaps the roles — the role labels stay fixed, only the color moves
-- Uses HTML5 drag-and-drop (no new library needed, we already have framer-motion for smooth animations)
-
-**Full Color Wheel (per swatch):**
-- Clicking any swatch opens an inline popover with:
-  - A native `<input type="color">` (full color wheel)
-  - Hex input field
-  - Opacity/alpha slider (0–100%)
-  - Preview swatch
-- Changes apply live to the preview
-
-**Palette Actions:**
-- "Save Palette" → upserts to `design_color_palettes` with name = "Website Palette — {companyName}"
-- "Apply to Template" → updates the active template's accent/bg colors in the preview
-- "Reset" → re-extracts from website or clears to defaults
-
-**Integration Points:**
-- When website is extracted → palette auto-populates
-- Palette is also accessible from Business Card Designer and Logo Creator (they already use `design_color_palettes` via `ColorPaletteManager`)
-
-```
-┌──────────────────────────────────────────────────────────┐
-│  BRAND COLOR PALETTE                    [Save] [Apply]   │
-├──────────────────────────────────────────────────────────┤
-│  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌───┐  ┌───┐  │
-│  │ #1A1A1A │  │ #C8A766 │  │ #F5F0E6 │  │   │  │   │  │
-│  │ Primary │  │Secondary│  │ Accent  │  │Bg │  │Txt│  │
-│  └─────────┘  └─────────┘  └─────────┘  └───┘  └───┘  │
-│  ↑ Drag to swap roles                                    │
-│                                                          │
-│  [Click any swatch to open color wheel]                  │
-└──────────────────────────────────────────────────────────┘
-```
+**Code change**: `CompanyProfileBuilder.tsx` lines 341–404 — improve color extraction logic + add AI color inference fallback.
 
 ---
 
-## Feature 3: Completion Score Panel
+### Part 2: Multi-Page Website Crawl
 
-### Scoring Logic (100 points total)
-The score is calculated in real time from `data` state:
+Instead of one `firecrawl-scrape` call, we add a **"Deep Scan" toggle** in the URL panel:
+- **Quick Scan** (default): scrapes only the provided URL — fast, good for single-page sites
+- **Full Website Scan**: first calls `firecrawl-map` to discover all internal URLs, then scrapes up to 5 key pages (homepage, /about, /services, /team, /contact) and merges their markdown before sending to the AI
 
-| Field | Points |
-|---|---|
-| Company Name | 10 |
-| Tagline | 8 |
-| About Us (>50 words) | 15 |
-| Logo uploaded | 10 |
-| ≥1 Service with title | 8 |
-| ≥1 Service with description | 7 |
-| ≥3 Services | 5 |
-| ≥1 Team member | 8 |
-| Phone | 5 |
-| Email | 7 |
-| Website | 5 |
-| Address | 5 |
-| LinkedIn | 4 |
-| Instagram | 3 |
+The `company-profile-ai` edge function already accepts `markdown` up to 8000 chars — we will increase the token limit to 800 and pass more comprehensive merged content.
 
-**Strength / Weakness Analysis:**
-Displayed below the score bar as two lists:
+**Code changes**:
+- `CompanyProfileBuilder.tsx`: add `deepScan` boolean state, toggle in URL panel, update `extractFromUrl()` to conditionally call `firecrawl-map` then multiple `firecrawl-scrape` calls
+- `supabase/functions/company-profile-ai/index.ts`: increase `max_tokens` from 400 to 800 for richer extraction
 
-- **Strengths** (green check icons): fields that are complete and above minimum
-- **Weaknesses** (orange warning icons): missing or thin fields with specific suggestions
+---
 
-Example weaknesses:
-- "About Us is too short — click AI Expand for a professional paragraph"
-- "No team members added — profiles build trust with clients"
-- "Missing LinkedIn — add for professional credibility"
+### Part 3: Logo Placement Controls (Per-Page)
 
-### UI Location
-Placed in the **right column** above the Live Preview panel:
+Add a **Logo Placement** section inside the Brand Assets panel:
 
-```
-┌─────────────────────────────────────────────┐
-│ Profile Score                          72%  │
-│ ████████████████████░░░░░░░░░░░░░░░░░░░░░   │
-│                                             │
-│ ✓ Company name & tagline                    │
-│ ✓ About Us section complete                 │
-│ ⚠ Add at least 3 services for a full profile│
-│ ⚠ Missing logo — upload in Brand Assets     │
-└─────────────────────────────────────────────┘
+**New state:**
+```typescript
+type LogoPosition = "top-left" | "top-right" | "top-center" | "bottom-left" | "bottom-right";
+type LogoPageMode = "all" | "cover-only" | "content-only" | "none";
+const [logoPosition, setLogoPosition] = useState<LogoPosition>("top-right");
+const [logoPageMode, setLogoPageMode] = useState<LogoPageMode>("all");
 ```
 
----
+**UI inside the Brand Assets collapsible** (after logo size slider):
+```
+Logo Placement:
+[Top-Left] [Top-Center] [Top-Right] [Bottom-Left] [Bottom-Right]  ← 5 position buttons
 
-## Feature 4: Remove Placeholder Text
+Apply Logo To:
+[All Pages] [Cover Only] [Content Pages] [None]  ← 4 radio-style buttons
+```
 
-### Current Problem
-Inputs show `placeholder="JBJ Global Real Estate"` and `placeholder="Excellence in UAE Real Estate"` — the user's company name is hardcoded as example text.
+**PDF export update**: The `exportPDF` function will use `logoPosition` and `logoPageMode` to:
+- On cover page: draw logo at `logoPosition` only if mode is `"all"` or `"cover-only"`
+- On each content page (`ensureSpace` → new page): draw logo at `logoPosition` only if mode is `"all"` or `"content-only"`, using a smaller size (60% of `logoSize`)
+- A helper `drawLogoOnPage(page, mode)` function handles the position math
 
-### Fix
-Replace all placeholder text across the Company tab with neutral, generic examples:
-- Company Name: `"e.g. Acme Corporation"` → or empty placeholder `"Your company name"`
-- Tagline: `"e.g. Building trust since 2010"` 
-- About Us: `"Describe your company, mission, and values…"`
-- Services: `"e.g. Property Consulting"`
-- Website: `"https://www.yourcompany.com"`
-- Address: `"City, Country"`
-
----
-
-## Auto-Detect from Website on First Load
-
-When the user has previously extracted a website and saved it (via `ai_tool_projects` or localStorage), or if their profile already has a `website` field set, we pre-fill the URL input field automatically so they can re-extract with one click.
-
-For **new sessions**: the URL input field is empty — no auto-population (the user must provide a URL).
+**Live preview update**: `ProfilePreview` receives `logoPosition` and `logoPageMode` props and renders the logo accordingly in each page section.
 
 ---
 
-## Files Changed
+### Part 4: Full Multi-Page Live Preview (A4 Pages)
 
-| File | Action | Details |
+Replace the current single-block `ProfilePreview` with a **paginated A4 preview** that renders each page as a separate white rectangle with correct proportions:
+
+```
+┌─────────────────────────┐
+│   PAGE 1 — COVER        │  ← Dark or white cover
+│   [Logo] [Company Name] │
+│   [Tagline]             │
+└─────────────────────────┘
+┌─────────────────────────┐
+│   PAGE 2 — ABOUT US     │  ← Content page
+│   [Logo top-right]      │
+│   About Us ─────────    │
+│   Content text...       │
+└─────────────────────────┘
+┌─────────────────────────┐
+│   PAGE 3 — SERVICES     │  ← Services grid
+└─────────────────────────┘
+```
+
+Each "page" is a `div` with `aspect-ratio: 595/842`, rendered at a consistent scale. This replaces the current single-div approach.
+
+**New structure for `ProfilePreview`:**
+- `CoverPage` component — renders the cover
+- `ContentPage` component — renders About Us + Services + Team + Contact, auto-splitting into multiple pages if content overflows (using estimated character counts)
+- Both receive `logoUrl`, `logoPosition`, `logoPageMode`
+
+---
+
+### Part 5: More Templates (Canva-Style)
+
+Add **6 new templates** to the `TEMPLATES` array, making it 9 total:
+
+| ID | Name | Style |
 |---|---|---|
-| `supabase/functions/company-profile-ai/index.ts` | **Edit** | Add `extract_from_url` action that takes scraped markdown and returns structured profile JSON |
-| `src/components/corporate-suite/CompanyProfileBuilder.tsx` | **Rewrite** | Add URL input panel, color palette panel, completion score panel, fix placeholders, wire all new state |
+| `premium` | Premium Gold | Dark cover, gold accents, serif (existing) |
+| `executive` | Executive Blue | Navy cover, structured (existing) |
+| `clean` | Clean White | Minimal (existing) |
+| `corporate_red` | Corporate Red | Deep red cover, white content, bold headers |
+| `modern_green` | Modern Green | Forest green, eco/sustainability feel |
+| `luxury_black` | Luxury Black | All-black with silver accents |
+| `cover_letter` | Cover Letter | Letter format, formal tone, signature line |
+| `copyright` | Copyright / Legal | Official look, legal/IP document format |
+| `magazine` | Magazine Style | Full-bleed hero image area, editorial columns |
 
-No new database migrations needed — `design_color_palettes` table already exists with JSONB `colors` column.
+Each template will define: `coverBg`, `contentBg`, `accent`, `headerFont`, `bodyFont`, `coverTextColor`, `sectionStyle` (`"card" | "list" | "underline"`).
+
+The template picker will have a horizontal scroll gallery instead of a fixed 3-column grid.
 
 ---
 
-## Implementation Details
+## Files to Be Changed
 
-### `company-profile-ai` — New Action: `extract_from_url`
+| File | Change |
+|---|---|
+| `src/components/corporate-suite/CompanyProfileBuilder.tsx` | Full upgrade — multi-page preview, logo placement controls, deep scan toggle, color fix, new templates, improved URL crawl |
+| `supabase/functions/company-profile-ai/index.ts` | Increase `max_tokens` to 800; add smarter color inference action |
 
-```typescript
-} else if (action === "extract_from_url") {
-  systemPrompt = `You are a company profile extractor. Extract structured business information from website content. Return ONLY valid JSON, no explanation.`;
-  userPrompt = `Extract company profile information from this website content and return ONLY valid JSON:
-{
-  "companyName": "company name",
-  "tagline": "company tagline or slogan",
-  "aboutUs": "about us paragraph extracted from the page",
-  "services": [{"title": "service name", "description": "description"}],
-  "team": [{"name": "person name", "role": "title"}],
-  "phone": "phone number",
-  "email": "email address",
-  "website": "${url}",
-  "address": "physical address",
-  "linkedin": "linkedin URL",
-  "instagram": "instagram handle"
-}
-Website content:
-${markdown.slice(0, 8000)}
-Use empty string "" or [] for fields not found.`;
-```
+No new edge functions needed — everything uses existing `firecrawl-scrape`, `firecrawl-map`, and `company-profile-ai`.
 
-### Color Extraction from Firecrawl Branding
+---
 
-```typescript
-// From firecrawl branding response:
-const brandColors = scrapedData?.data?.branding?.colors;
-if (brandColors) {
-  const palette = [
-    { hex: brandColors.primary || "#000000",    name: "Primary",    role: "primary" },
-    { hex: brandColors.secondary || "#666666",   name: "Secondary",  role: "secondary" },
-    { hex: brandColors.accent || "#C8A766",      name: "Accent",     role: "accent" },
-    { hex: brandColors.background || "#ffffff",  name: "Background", role: "background" },
-    { hex: brandColors.textPrimary || "#111111", name: "Text",       role: "text" },
-  ];
-  setWebsitePalette(palette);
-}
-```
+## Visual Summary of Changes
 
-### Drag-and-Drop Color Role Swap
+```text
+BEFORE (current):
+┌──────────────────────┐
+│ URL Panel            │  → scrapes 1 page only
+│ Colors: wrong/stale  │  → palette doesn't match preview
+│ Preview: 1 tiny card │  → not paginated
+│ Logo: cover only     │  → no placement control
+│ 3 templates          │  → limited choices
+└──────────────────────┘
 
-```typescript
-// State: array of 5 colors in role order [primary, secondary, accent, bg, text]
-// On dragStart: store dragged index
-// On drop: swap colors[draggedIdx] with colors[droppedIdx]
-// Role labels never move — only the hex values swap
-```
-
-### Completion Score Calculation
-
-```typescript
-function calcScore(data: ProfileData, logoUrl: string): number {
-  let score = 0;
-  if (data.companyName)                     score += 10;
-  if (data.tagline)                         score += 8;
-  const wordCount = data.aboutUs.trim().split(/\s+/).length;
-  if (wordCount > 10)                       score += 8;
-  if (wordCount > 50)                       score += 7;
-  if (logoUrl)                              score += 10;
-  if (data.services.some(s => s.title))     score += 8;
-  if (data.services.some(s => s.description)) score += 7;
-  if (data.services.filter(s => s.title).length >= 3) score += 5;
-  if (data.team.some(m => m.name))          score += 8;
-  if (data.phone)                           score += 5;
-  if (data.email)                           score += 7;
-  if (data.website)                         score += 5;
-  if (data.address)                         score += 5;
-  if (data.linkedin)                        score += 4;
-  if (data.instagram)                       score += 3;
-  return score; // max 100
-}
+AFTER (this plan):
+┌──────────────────────────────────────────┐
+│ URL Panel + Deep Scan toggle             │  → up to 5 pages crawled
+│ Colors: matched from branding + AI       │  → palette = website colors
+│ Preview: full A4 multi-page stack        │  → paginated, real document look
+│ Logo: 5 positions × 4 page modes        │  → per-page control
+│ 9 templates including Cover Letter       │  → Canva-level variety
+└──────────────────────────────────────────┘
 ```
 
 ---
 
-## User Flow After Implementation
+## Implementation Sequence
 
-1. User opens `/toolkit/corporate-suite/company-profile`
-2. **URL panel** appears at top — user pastes `https://jbjglobalrealestate.com` and clicks "Extract"
-3. System scrapes the site, extracts colors and text via AI
-4. All fields auto-fill: company name, tagline, about us, services, contact info
-5. **Color palette panel** appears with 5 brand swatches — user can drag "Gold" from Accent to Primary if preferred
-6. **Completion score** shows instantly, e.g. 74% with specific next-step suggestions
-7. User fixes gaps (adds LinkedIn, more services), score climbs to 91%
-8. Exports PDF — template uses extracted brand colors
-9. Palette is saved and available in Business Card Designer and Logo Creator
-
----
-
-## Graceful Degradation (No Firecrawl)
-
-If Firecrawl is not connected, the URL extraction falls back to:
-1. Using the AI gateway directly with a `fetch` of the URL (basic HTML) — less reliable but functional
-2. Color palette is skipped — user manually picks colors
-3. A banner shows: "For richer extraction including brand colors, connect Firecrawl in Settings"
-
+1. Fix color palette extraction (quick win, isolated to `extractFromUrl`)
+2. Add `logoPosition` + `logoPageMode` state + UI controls in Brand Assets panel
+3. Rebuild `ProfilePreview` into paginated A4 stack with `CoverPage` + `ContentPage`
+4. Update `exportPDF` to use new logo placement logic + pass `logoPosition`/`logoPageMode`
+5. Add deep scan toggle + multi-page crawl in `extractFromUrl`
+6. Add 6 new templates to the `TEMPLATES` array + update template picker to scroll gallery
+7. Increase `max_tokens` in `company-profile-ai` edge function
