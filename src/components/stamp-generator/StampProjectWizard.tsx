@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Stamp, ChevronRight, ChevronLeft, Building2, Palette, Image, Wand2, Check, Type, Upload, X } from 'lucide-react';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
+import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
 
 // UAE phone normalization
 function normalizePhone(raw: string): string {
@@ -253,7 +254,7 @@ export default function StampProjectWizard() {
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]">
       {/* Header */}
       <div className="border-b border-[hsl(var(--border))] bg-white/80 backdrop-blur-sm sticky top-24 sm:top-28 lg:top-32 z-10">
-        <div className="max-w-2xl mx-auto px-6 py-4 flex items-center gap-3">
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center">
             <Stamp size={16} className="text-white"/>
           </div>
@@ -261,7 +262,12 @@ export default function StampProjectWizard() {
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-6 py-8 space-y-6">
+      <div className="max-w-5xl mx-auto px-6 py-8">
+        {/* Two-column layout: form (left) + sticky preview (right) */}
+        <div className="flex gap-8 items-start">
+
+          {/* ── Left: Form column ── */}
+          <div className="flex-1 min-w-0 space-y-6">
         {/* Progress */}
         <div className="flex items-center gap-2">
           {STEPS.map((s, i) => (
@@ -688,7 +694,76 @@ export default function StampProjectWizard() {
             </Button>
           )}
         </div>
-      </div>
+
+        </div>{/* end form column */}
+
+        {/* ── Right: Sticky live preview column (desktop only) ── */}
+        <div className="hidden lg:flex flex-col items-center gap-4 w-[240px] flex-shrink-0">
+          <div className="sticky top-[calc(8rem+4rem)] flex flex-col items-center gap-4">
+            {/* Preview card */}
+            <div className="bg-white rounded-2xl border border-[hsl(var(--gold)/0.3)] shadow-[0_8px_32px_hsl(var(--gold)/0.1)] p-5 flex flex-col items-center gap-3 w-full">
+              <LiveStampPreview
+                companyName={form.company_name}
+                arabicCompanyName={form.arabic_company_name}
+                city={form.city_optional}
+                country={form.country_optional}
+                registrationNumber={form.registration_number_optional}
+                stampType={form.stamp_type}
+                styleTheme={form.style_theme}
+                borderStyle={form.border_style}
+                typographyStyle={form.typography_style}
+                density={form.density}
+                iconStyle={form.icon_style}
+                monogramText={form.monogram_text}
+                uploadedLogoUrl={form.uploaded_logo_url}
+                languageMode={form.language_mode}
+                size={200}
+              />
+              <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center leading-relaxed">
+                Updates live as you fill in details
+              </p>
+            </div>
+
+            {/* Step tip */}
+            <div className="bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)] rounded-xl p-3 w-full">
+              <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                {step === 0 && <>Type your company name to see it appear on the stamp. Upload a trade license for instant AI auto-fill.</>}
+                {step === 1 && <>Try different shapes, themes and borders — the preview updates instantly.</>}
+                {step === 2 && <>Choose a monogram or upload your logo to see it centered on the stamp.</>}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        </div>{/* end two-column flex */}
+
+        {/* Mobile: compact inline preview strip (below form, above nav) */}
+        <div className="lg:hidden mt-6 flex justify-center">
+          <div className="bg-white rounded-2xl border border-[hsl(var(--gold)/0.3)] shadow-sm px-6 py-4 flex items-center gap-5">
+            <LiveStampPreview
+              companyName={form.company_name}
+              arabicCompanyName={form.arabic_company_name}
+              city={form.city_optional}
+              country={form.country_optional}
+              registrationNumber={form.registration_number_optional}
+              stampType={form.stamp_type}
+              styleTheme={form.style_theme}
+              borderStyle={form.border_style}
+              typographyStyle={form.typography_style}
+              density={form.density}
+              iconStyle={form.icon_style}
+              monogramText={form.monogram_text}
+              uploadedLogoUrl={form.uploaded_logo_url}
+              languageMode={form.language_mode}
+              size={130}
+            />
+            <p className="text-xs text-[hsl(var(--muted-foreground))] leading-relaxed max-w-[140px]">
+              Live preview — keep filling in your details
+            </p>
+          </div>
+        </div>
+
+      </div>{/* end page px/py wrapper */}
     </div>
   );
 }
