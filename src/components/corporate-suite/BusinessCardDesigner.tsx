@@ -38,11 +38,30 @@ interface CardData {
 
 interface FieldPos { x: number; y: number; }
 
+interface AiSvgElement {
+  type: "path" | "circle" | "rect" | "polygon" | "line" | "ellipse";
+  // path
+  d?: string;
+  // circle/ellipse
+  cx?: number; cy?: number; rx?: number; ry?: number; r?: number;
+  // rect
+  x?: number; y?: number; width?: number; height?: number; rx_attr?: number;
+  // polygon
+  points?: string;
+  // line
+  x1?: number; y1?: number; x2?: number; y2?: number;
+  // shared
+  fill?: string; stroke?: string; strokeWidth?: number; fillOpacity?: number; strokeOpacity?: number;
+}
+
 interface AiDesignData {
-  svgPaths: string[];
+  elements: AiSvgElement[];
   colors: string[];
   bgColor: string;
   textColor: string;
+  accentColor?: string;
+  style?: string;
+  industry?: string;
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -171,27 +190,41 @@ function CardFace({
   if (template === "ai-design") {
     const bg = aiDesignData?.bgColor || primary;
     const tc = aiDesignData?.textColor || secondary;
+    const ac = aiDesignData?.accentColor || accent;
+    const els = aiDesignData?.elements;
+    const cols = aiDesignData?.colors || [ac];
     return (
       <div style={{ ...baseStyle, background: bg, overflow: "hidden" }}>
         {/* AI-generated SVG shapes */}
-        {aiDesignData?.svgPaths && (
-          <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "visible" }} viewBox="0 0 350 200" preserveAspectRatio="xMidYMid slice">
-            {aiDesignData.svgPaths.map((path, i) => (
-              <path key={i} d={path} fill={aiDesignData.colors?.[i % aiDesignData.colors.length] || accent} fillOpacity="0.3" />
-            ))}
-          </svg>
-        )}
-        {!aiDesignData && (
-          <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "visible" }} viewBox="0 0 350 200" preserveAspectRatio="xMidYMid slice">
-            <circle cx="300" cy="30" r="80" fill={accent} fillOpacity="0.18" />
-            <circle cx="320" cy="180" r="50" fill={secondary} fillOpacity="0.10" />
-            <polygon points="0,0 60,0 0,60" fill={secondary} fillOpacity="0.12" />
-            <line x1="0" y1="130" x2="350" y2="100" stroke={secondary} strokeOpacity="0.08" strokeWidth="2" />
-          </svg>
-        )}
+        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "hidden" }} viewBox="0 0 350 200" preserveAspectRatio="xMidYMid slice">
+          {els && els.length > 0 ? els.map((el, i) => {
+            const fill = el.fill || cols[i % cols.length];
+            const stroke = el.stroke || "none";
+            const sw = el.strokeWidth ?? 1;
+            const fo = el.fillOpacity ?? 0.35;
+            const so = el.strokeOpacity ?? 1;
+            const shared = { fill, stroke, strokeWidth: sw, fillOpacity: fo, strokeOpacity: so };
+            if (el.type === "path" && el.d)       return <path key={i} d={el.d} {...shared} />;
+            if (el.type === "circle")              return <circle key={i} cx={el.cx ?? 0} cy={el.cy ?? 0} r={el.r ?? 20} {...shared} />;
+            if (el.type === "ellipse")             return <ellipse key={i} cx={el.cx ?? 0} cy={el.cy ?? 0} rx={el.rx ?? 20} ry={el.ry ?? 10} {...shared} />;
+            if (el.type === "rect")                return <rect key={i} x={el.x ?? 0} y={el.y ?? 0} width={el.width ?? 40} height={el.height ?? 40} rx={el.rx_attr ?? 0} {...shared} />;
+            if (el.type === "polygon" && el.points) return <polygon key={i} points={el.points} {...shared} />;
+            if (el.type === "line")                return <line key={i} x1={el.x1 ?? 0} y1={el.y1 ?? 0} x2={el.x2 ?? 0} y2={el.y2 ?? 0} stroke={fill} strokeWidth={sw} strokeOpacity={so} fill="none" />;
+            return null;
+          }) : (
+            /* default placeholder shapes */
+            <>
+              <circle cx="300" cy="30" r="80" fill={ac} fillOpacity="0.18" />
+              <circle cx="320" cy="180" r="50" fill={tc} fillOpacity="0.08" />
+              <polygon points="0,0 70,0 0,70" fill={tc} fillOpacity="0.10" />
+              <line x1="0" y1="140" x2="350" y2="90" stroke={tc} strokeOpacity="0.07" strokeWidth="2" />
+              <rect x="250" y="120" width="120" height="120" rx="60" fill={ac} fillOpacity="0.12" />
+            </>
+          )}
+        </svg>
         <div style={{ position: "relative", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: `${20 * scale}px ${24 * scale}px` }}>
           <div>
-            <p style={{ fontSize: 9 * scale, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: tc, opacity: 0.7, margin: 0 }}>{company}</p>
+            <p style={{ fontSize: 9 * scale, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: tc, opacity: 0.65, margin: 0 }}>{company}</p>
             <h2 style={{ fontSize: 18 * scale, fontWeight: 800, color: tc, margin: `${4 * scale}px 0 ${2 * scale}px` }}>{name}</h2>
             <p style={{ fontSize: 10 * scale, color: tc, opacity: 0.8, margin: 0 }}>{title}</p>
           </div>
@@ -824,6 +857,7 @@ export default function BusinessCardDesigner() {
   // AI Design template
   const [aiDesignOpen, setAiDesignOpen] = useState(false);
   const [aiIndustry, setAiIndustry] = useState("real-estate");
+  const [aiTone, setAiTone] = useState("modern");
   const [aiStyle, setAiStyle] = useState("geometric");
   const [aiDesignData, setAiDesignData] = useState<AiDesignData | null>(null);
   const [isGeneratingDesign, setIsGeneratingDesign] = useState(false);
@@ -894,24 +928,70 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
   // AI Design generation
   const handleGenerateDesign = async () => {
     setIsGeneratingDesign(true);
+    const seed = Math.random().toString(36).slice(2, 8);
     try {
+      const toneMap: Record<string, string> = {
+        modern:  "clean lines, bold geometry, high contrast, contemporary feel",
+        luxe:    "gold tones, elegant curves, refined opulence, dark rich backgrounds",
+        tech:    "neon accents, circuit-like lines, futuristic grids, dark backgrounds",
+        minimal: "sparse shapes, subtle transparency, maximum whitespace, muted palette",
+      };
+      const styleMap: Record<string, string> = {
+        geometric:  "triangles, hexagons, rectangles arranged in structured layouts",
+        lines:      "diagonal, horizontal and intersecting line patterns",
+        futuristic: "angular paths, perspective grids, sharp corner cuts",
+        organic:    "fluid curves, ellipses and soft rounded shapes",
+        abstract:   "asymmetric overlapping polygons and irregular forms",
+        waves:      "sine wave-like smooth curves and arcing paths",
+      };
+      const industryMap: Record<string, string> = {
+        "real-estate": "prestige, property, architecture — dark navy or warm gold tones",
+        "technology":  "innovation, digital, data — electric blue, charcoal, neon green",
+        "fashion":     "elegance, luxury, style — black, blush, deep purple",
+        "finance":     "trust, stability, wealth — dark green, navy, gold",
+        "healthcare":  "clean, care, professional — teal, white, soft blue",
+        "creative":    "vibrant, artistic, expressive — bold saturated colors",
+        "law":         "authority, trust, serious — dark charcoal, burgundy, gold",
+        "hospitality": "warmth, welcome, luxury — amber, cream, rich brown",
+      };
+      const toneDesc = toneMap[aiTone] || aiTone;
+      const styleDesc = styleMap[aiStyle] || aiStyle;
+      const industryDesc = industryMap[aiIndustry] || aiIndustry;
+
       const { data: result, error } = await supabase.functions.invoke("gemini-chat", {
         body: {
-          message: `You are a business card graphic designer. Generate a JSON response for a ${aiStyle} style business card for the ${aiIndustry} industry.
-Return ONLY valid JSON with this exact structure:
+          message: `You are an expert SVG business card designer. Generate a stunning ${aiTone} business card design for the ${aiIndustry} industry.
+
+Tone: ${toneDesc}
+Pattern style: ${styleDesc}
+Industry: ${industryDesc}
+Randomness seed: ${seed}
+
+Return ONLY a valid JSON object (no markdown, no explanation) with this EXACT structure:
 {
-  "svgPaths": ["<SVG path d attribute string>", "<another path>", "<another path>"],
+  "elements": [
+    { "type": "rect",    "x": 0, "y": 0, "width": 350, "height": 200, "fill": "#hexcolor", "fillOpacity": 1 },
+    { "type": "circle",  "cx": 290, "cy": 20, "r": 90, "fill": "#hexcolor", "fillOpacity": 0.25 },
+    { "type": "polygon", "points": "0,200 80,200 0,120", "fill": "#hexcolor", "fillOpacity": 0.4 },
+    { "type": "line",    "x1": 0, "y1": 160, "x2": 350, "y2": 120, "stroke": "#hexcolor", "strokeWidth": 1.5, "strokeOpacity": 0.3, "fillOpacity": 0 },
+    { "type": "ellipse", "cx": 310, "cy": 160, "rx": 60, "ry": 40, "fill": "#hexcolor", "fillOpacity": 0.15 },
+    { "type": "rect",    "x": -20, "y": -20, "width": 100, "height": 100, "rx_attr": 8, "fill": "#hexcolor", "fillOpacity": 0.2, "stroke": "#hexcolor", "strokeWidth": 1, "strokeOpacity": 0.5 }
+  ],
   "colors": ["#hexcolor1", "#hexcolor2", "#hexcolor3"],
   "bgColor": "#hexcolor",
-  "textColor": "#hexcolor"
+  "textColor": "#hexcolor",
+  "accentColor": "#hexcolor"
 }
-Rules:
-- svgPaths: 3-6 SVG path strings that fit within a 350x200 viewBox. Make ${aiStyle} shapes (triangles, circles, lines, polygons).
-- colors: 2-4 accent colors for the shapes
-- bgColor: background color of the card
-- textColor: readable text color on that background
-- Style: ${aiStyle}, Industry tone: ${aiIndustry}
-Return only JSON, no markdown or explanation.`,
+
+STRICT RULES:
+1. elements: 5-9 SVG elements. Use a MIX of types: rect, circle, polygon, line, ellipse.
+2. All coordinates must fit within 0-350 (x) and 0-200 (y) for the card viewBox. Elements can slightly overflow for effect.
+3. bgColor is the card background — make it rich and intentional.
+4. textColor must be highly readable on bgColor (high contrast).
+5. Vary fillOpacity between 0.1 and 0.5 for layered depth.
+6. The first element should be a full background rect (x:0, y:0, width:350, height:200) with fillOpacity:1 set to bgColor.
+7. Make it look like a real premium business card design — not random.
+Return ONLY the JSON.`,
         },
       });
       if (error) throw error;
@@ -919,11 +999,17 @@ Return only JSON, no markdown or explanation.`,
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
-        setAiDesignData(parsed as AiDesignData);
+        if (!parsed.elements) throw new Error("No elements in response");
+        const design: AiDesignData = {
+          ...parsed,
+          style: aiStyle,
+          industry: aiIndustry,
+        };
+        setAiDesignData(design);
         setTemplate("ai-design");
-        toast.success("AI design generated! Template switched to AI Design.");
+        toast.success("✨ AI design generated! Template set to AI Design.");
       } else {
-        toast.error("AI response wasn't valid JSON.");
+        toast.error("AI response wasn't valid JSON. Please try again.");
       }
     } catch (err) {
       console.error(err);
@@ -1410,32 +1496,66 @@ Return only JSON, no markdown or explanation.`,
                     <Sparkles size={13} className="text-[hsl(var(--gold))]" />
                     <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">AI Design Generator</span>
                     {aiDesignData && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
+                    {template === "ai-design" && aiDesignData && (
+                      <span className="text-[9px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold">Active</span>
+                    )}
                   </div>
                   <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${aiDesignOpen ? "rotate-180" : ""}`} />
                 </button>
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-3 pt-3">
-                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Generate geometric patterns, shapes, and lines for a unique AI-designed card.</p>
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                    Generate geometric shapes, triangles, lines, circles and architectural patterns for a unique business card via Gemini AI.
+                  </p>
 
+                  {/* Tone selector */}
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Tone</Label>
+                    <div className="grid grid-cols-4 gap-1.5">
+                      {[
+                        { id: "modern",  label: "Modern",  emoji: "⚡" },
+                        { id: "luxe",    label: "Luxe",    emoji: "✦" },
+                        { id: "tech",    label: "Tech",    emoji: "◈" },
+                        { id: "minimal", label: "Minimal", emoji: "○" },
+                      ].map(opt => (
+                        <button
+                          key={opt.id}
+                          onClick={() => setAiTone(opt.id)}
+                          className={`text-[10px] py-2 px-1 rounded-lg border font-semibold transition-all flex flex-col items-center gap-0.5 ${
+                            aiTone === opt.id
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                          }`}
+                        >
+                          <span className="text-base leading-none">{opt.emoji}</span>
+                          <span>{opt.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Industry selector */}
                   <div>
                     <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Industry</Label>
                     <div className="grid grid-cols-2 gap-1.5">
                       {[
-                        { id: "real-estate", label: "Real Estate" },
-                        { id: "technology", label: "Technology" },
-                        { id: "fashion", label: "Fashion" },
-                        { id: "finance", label: "Finance" },
-                        { id: "healthcare", label: "Healthcare" },
-                        { id: "creative", label: "Creative" },
+                        { id: "real-estate",  label: "🏙 Real Estate" },
+                        { id: "technology",   label: "💻 Technology" },
+                        { id: "fashion",      label: "👗 Fashion" },
+                        { id: "finance",      label: "📈 Finance" },
+                        { id: "healthcare",   label: "⚕ Healthcare" },
+                        { id: "creative",     label: "🎨 Creative" },
+                        { id: "law",          label: "⚖ Law" },
+                        { id: "hospitality",  label: "🏨 Hospitality" },
                       ].map(opt => (
                         <button
                           key={opt.id}
                           onClick={() => setAiIndustry(opt.id)}
-                          className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
+                          className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all text-left ${
                             aiIndustry === opt.id
                               ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
                           }`}
                         >
                           {opt.label}
@@ -1444,16 +1564,17 @@ Return only JSON, no markdown or explanation.`,
                     </div>
                   </div>
 
+                  {/* Style selector */}
                   <div>
-                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Style</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Pattern Style</Label>
                     <div className="grid grid-cols-3 gap-1.5">
                       {[
-                        { id: "geometric", label: "Geometric" },
-                        { id: "lines", label: "Lines" },
-                        { id: "minimalist", label: "Minimal" },
+                        { id: "geometric",  label: "Geometric" },
+                        { id: "lines",      label: "Lines" },
                         { id: "futuristic", label: "Futuristic" },
-                        { id: "organic", label: "Organic" },
-                        { id: "abstract", label: "Abstract" },
+                        { id: "organic",    label: "Organic" },
+                        { id: "abstract",   label: "Abstract" },
+                        { id: "waves",      label: "Waves" },
                       ].map(opt => (
                         <button
                           key={opt.id}
@@ -1461,7 +1582,7 @@ Return only JSON, no markdown or explanation.`,
                           className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
                             aiStyle === opt.id
                               ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
-                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
                           }`}
                         >
                           {opt.label}
@@ -1470,6 +1591,7 @@ Return only JSON, no markdown or explanation.`,
                     </div>
                   </div>
 
+                  {/* Generate / Regenerate buttons */}
                   <div className="flex gap-2">
                     <Button
                       onClick={handleGenerateDesign}
@@ -1478,23 +1600,56 @@ Return only JSON, no markdown or explanation.`,
                       style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))" }}
                     >
                       {isGeneratingDesign ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
-                      {isGeneratingDesign ? "Generating…" : "Generate Design"}
+                      {isGeneratingDesign ? "Generating…" : (aiDesignData ? "Regenerate" : "Generate Design")}
                     </Button>
                     {aiDesignData && (
                       <Button
-                        onClick={handleGenerateDesign}
+                        onClick={() => { setAiDesignData(null); if (template === "ai-design") setTemplate("modern"); }}
                         disabled={isGeneratingDesign}
                         variant="outline"
-                        className="h-9 text-xs gap-1"
+                        className="h-9 text-xs gap-1 text-red-500 border-red-200 hover:bg-red-50"
                       >
-                        <RefreshCw size={11} /> Regen
+                        Clear
                       </Button>
                     )}
                   </div>
 
+                  {/* Live mini-preview of AI design */}
                   {aiDesignData && (
-                    <div className="p-2 bg-[hsl(var(--muted))] rounded-lg">
-                      <p className="text-[10px] text-green-600 font-semibold">✓ AI design applied! Switch to "AI Design" template to preview.</p>
+                    <div className="rounded-xl overflow-hidden border border-[hsl(var(--gold)/0.3)] shadow-sm">
+                      <div className="bg-[hsl(var(--muted))] px-3 py-1.5 flex items-center justify-between">
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-[hsl(var(--muted-foreground))]">Live Preview</p>
+                        <p className="text-[9px] text-[hsl(var(--gold-dark))]">{aiDesignData.industry || aiIndustry} · {aiDesignData.style || aiStyle}</p>
+                      </div>
+                      <CardFace
+                        data={data}
+                        template="ai-design"
+                        primary={frontPrimary}
+                        secondary={frontSecondary}
+                        accent={frontAccent}
+                        side="front"
+                        scale={0.5}
+                        shapeStyle={{ aspectRatio: "3.5 / 2", borderRadius: 0 }}
+                        aiDesignData={aiDesignData}
+                      />
+                      <div className="bg-[hsl(var(--muted))] px-3 py-1.5 text-center">
+                        <button
+                          onClick={() => setTemplate("ai-design")}
+                          className="text-[9px] font-semibold text-[hsl(var(--gold-dark))] hover:underline"
+                        >
+                          {template === "ai-design" ? "✓ Applied to card" : "→ Apply to card"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {isGeneratingDesign && (
+                    <div className="flex items-center gap-2 p-3 bg-[hsl(var(--muted))] rounded-xl">
+                      <RefreshCw size={14} className="animate-spin text-[hsl(var(--gold))]" />
+                      <div>
+                        <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Generating AI design…</p>
+                        <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Gemini is creating {aiTone} {aiStyle} patterns for {aiIndustry}</p>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1658,9 +1813,9 @@ Return only JSON, no markdown or explanation.`,
           <div className="bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)] rounded-2xl p-4 text-xs text-[hsl(var(--muted-foreground))] space-y-1.5">
             <p className="font-semibold text-[hsl(var(--foreground))] text-[13px]">Tips</p>
             <p>🎨 <span className="font-medium text-[hsl(var(--foreground))]">Per-Side Colors</span> — Set different colors for Front and Back using the Colors panel.</p>
-            <p>🖼️ <span className="font-medium text-[hsl(var(--foreground))]">Logo</span> — Upload in Brand Assets. It appears on both sides. Enable "Edit Layout" to drag it.</p>
+            <p>🖼️ <span className="font-medium text-[hsl(var(--foreground))]">Logo</span> — Upload in Brand Assets. Appears on both sides. Enable "Edit Layout" to drag it.</p>
             <p>📱 <span className="font-medium text-[hsl(var(--foreground))]">QR Code</span> — Enable QR and it shows on both Front and Back automatically.</p>
-            <p>✨ <span className="font-medium text-[hsl(var(--foreground))]">AI Design</span> — Use the AI Design Generator to create geometric patterns, then select "AI Design" template.</p>
+            <p>✨ <span className="font-medium text-[hsl(var(--foreground))]">AI Design</span> — Pick Tone + Industry + Pattern Style, then click Generate. The design appears instantly on the card. Regenerate for variety.</p>
           </div>
         </div>
       </div>
