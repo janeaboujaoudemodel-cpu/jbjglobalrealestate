@@ -157,18 +157,22 @@ export default function StampGeneratorPage() {
   }
 
   const generateConcepts = useCallback(async (proj?: any) => {
+    // Always use the most up-to-date project state — critical after license auto-fill
     const p = proj || project;
     if (!p) return;
     setGenerating(true);
     setBlocked(false);
     setSvgOverrides({});
 
+    // Merge any latest project state so generation matches preview
+    const latestProject = { ...p, ...project };
+
     try {
       if (session?.access_token) {
         const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
-          body: JSON.stringify({ action: 'generate', project: p, projectId }),
+          body: JSON.stringify({ action: 'generate', project: latestProject, projectId }),
         });
         if (res.ok) {
           const json = await res.json();
@@ -198,7 +202,7 @@ export default function StampGeneratorPage() {
       }
     } catch (_) {}
 
-    const clientConcepts = generateStampConcepts(p);
+    const clientConcepts = generateStampConcepts(latestProject);
     if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); return; }
     setConcepts(clientConcepts);
     setGenerating(false);
@@ -647,14 +651,18 @@ export default function StampGeneratorPage() {
                 <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
                   <StampLicenseUploader
                     onExtracted={(data) => {
-                      setProject((prev: any) => ({
-                        ...prev,
+                      const updatedProject = {
+                        ...project,
                         ...(data.company_name && { company_name: data.company_name }),
                         ...(data.arabic_company_name && { arabic_company_name: data.arabic_company_name }),
                         ...(data.registration_number && { registration_number: data.registration_number }),
                         ...(data.city && { city_optional: data.city }),
-                      }));
+                      };
+                      setProject(updatedProject);
                       setLicenseOpen(false);
+                      // Auto-regenerate with the newly extracted data so generation matches the preview
+                      toast.info('Trade license data loaded — regenerating stamps…', { duration: 2500 });
+                      setTimeout(() => generateConcepts(updatedProject), 300);
                     }}
                   />
                 </div>

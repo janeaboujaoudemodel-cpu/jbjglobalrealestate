@@ -182,17 +182,19 @@ export function LiveStampPreview({
     const isRound = stampType === 'ROUND' || stampType === 'OVAL';
 
     if (isRound) {
-      // Arc text on top for company name — reduce arcR so text doesn't touch the border
-      const arcR = outerRx - 22;
+      // Arc text on top for company name — sweep 175° so text reaches both sides
+      const arcR = outerRx - 20;
       const topArcId = 'top-arc-lp';
-      const topArcPath = arcPath(cx, cy, arcR, -155, 130);
+      // Top arc: starts at -175° (left side), sweeps 175° clockwise to right side
+      const topArcPath = arcPath(cx, cy, arcR, -177, 174);
 
-      // Bottom arc: arabic city or city/country
+      // Bottom arc: mirrors top — starts at right side (3°), sweeps 174° clockwise
       const botArcId = 'bot-arc-lp';
-      const botArcPath = arcPath(cx, cy, arcR, 25, 130);
+      const botArcPath = arcPath(cx, cy, arcR, 3, 174);
 
-      const nameFontSize = Math.max(6, fitFontSize(displayName, 10, Math.PI * arcR * 0.72, 0.55));
-      const nameDisplay = trunc(displayName.toUpperCase(), 30);
+      // Larger font budget since text now spans ~175° (more arc length)
+      const nameFontSize = Math.max(6, fitFontSize(displayName, 11, Math.PI * arcR * 0.95, 0.55));
+      const nameDisplay = trunc(displayName.toUpperCase(), 36);
 
       textContent += `
         <defs>
@@ -204,28 +206,25 @@ export function LiveStampPreview({
         </text>`;
 
       if (isBilingual && arabicCompanyName) {
-        // Arabic company name on bottom arc in Arabic script
-        const arFontSize = Math.max(6, fitFontSize(arabicCompanyName, 9, Math.PI * arcR * 0.72, 0.65));
-        const arabicCity = city ? `${city}، الإمارات العربية المتحدة` : 'الإمارات العربية المتحدة';
-        // Show arabic company name on bottom arc
+        // Arabic company name on bottom arc — wider sweep = more space
+        const arFontSize = Math.max(6, fitFontSize(arabicCompanyName, 11, Math.PI * arcR * 0.95, 0.65));
         textContent += `
         <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${arFontSize}" fill="${goldInk}" letter-spacing="0.3">
-          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle" direction="rtl" unicode-bidi="bidi-override">${trunc(arabicCompanyName, 28)}</textPath>
+          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle" direction="rtl" unicode-bidi="bidi-override">${trunc(arabicCompanyName, 36)}</textPath>
         </text>`;
       } else if (isArabic) {
-        // Arabic-only mode: show arabic city at bottom
         const arabicCity = city ? `${city}، الإمارات العربية المتحدة` : 'الإمارات العربية المتحدة';
-        const cityFontSize = Math.max(6, fitFontSize(arabicCity, 8.5, Math.PI * arcR * 0.72, 0.65));
+        const cityFontSize = Math.max(6, fitFontSize(arabicCity, 10, Math.PI * arcR * 0.95, 0.65));
         textContent += `
         <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${cityFontSize}" fill="${goldInk}" letter-spacing="0.3">
-          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle" direction="rtl" unicode-bidi="bidi-override">${trunc(arabicCity, 28)}</textPath>
+          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle" direction="rtl" unicode-bidi="bidi-override">${trunc(arabicCity, 36)}</textPath>
         </text>`;
       } else if (density >= 2 && (city || country)) {
         const cityLine = [city, country].filter(Boolean).join(' · ').toUpperCase();
-        const cityFontSize = Math.max(6, fitFontSize(cityLine, 8.5, Math.PI * arcR * 0.72, 0.55));
+        const cityFontSize = Math.max(6, fitFontSize(cityLine, 10, Math.PI * arcR * 0.95, 0.55));
         textContent += `
         <text font-family="${fontFamily}" font-size="${cityFontSize}" fill="${goldInk}" letter-spacing="2">
-          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${trunc(cityLine, 28)}</textPath>
+          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${trunc(cityLine, 36)}</textPath>
         </text>`;
       }
 
