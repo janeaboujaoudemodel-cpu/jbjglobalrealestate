@@ -77,11 +77,26 @@ const TEMPLATES: { id: Template; label: string; desc: string; accent: string; bg
 ];
 
 const FONT_FAMILIES = [
-  { label: "Helvetica", value: "'Helvetica Neue', Arial, sans-serif" },
-  { label: "Georgia",   value: "Georgia, 'Times New Roman', serif" },
-  { label: "Garamond",  value: "Garamond, 'Palatino Linotype', serif" },
-  { label: "Courier",   value: "'Courier New', Courier, monospace" },
-  { label: "Futura",    value: "'Century Gothic', 'Trebuchet MS', sans-serif" },
+  { label: "Helvetica",   value: "'Helvetica Neue', Arial, sans-serif" },
+  { label: "Georgia",     value: "Georgia, 'Times New Roman', serif" },
+  { label: "Garamond",    value: "Garamond, 'Palatino Linotype', serif" },
+  { label: "Courier",     value: "'Courier New', Courier, monospace" },
+  { label: "Futura",      value: "'Century Gothic', 'Trebuchet MS', sans-serif" },
+  { label: "Roboto",      value: "'Roboto', 'Segoe UI', sans-serif" },
+  { label: "Open Sans",   value: "'Open Sans', 'Noto Sans', sans-serif" },
+  { label: "Lato",        value: "'Lato', 'Source Sans Pro', sans-serif" },
+  { label: "Montserrat",  value: "'Montserrat', 'Century Gothic', sans-serif" },
+  { label: "Raleway",     value: "'Raleway', 'Gill Sans', sans-serif" },
+  { label: "Playfair",    value: "'Playfair Display', 'Palatino', serif" },
+  { label: "Merriweather",value: "'Merriweather', 'Book Antiqua', serif" },
+  { label: "Nunito",      value: "'Nunito', 'Varela Round', sans-serif" },
+  { label: "Poppins",     value: "'Poppins', 'Futura', sans-serif" },
+  { label: "Inter",       value: "'Inter', 'Segoe UI', sans-serif" },
+  { label: "Source Code", value: "'Source Code Pro', 'Consolas', monospace" },
+  { label: "Crimson",     value: "'Crimson Text', 'Palatino Linotype', serif" },
+  { label: "Libre Baskerville", value: "'Libre Baskerville', 'Baskerville', serif" },
+  { label: "Ubuntu",      value: "'Ubuntu', 'Trebuchet MS', sans-serif" },
+  { label: "Josefin Sans",value: "'Josefin Sans', 'Century Gothic', sans-serif" },
 ];
 
 // ─── Shared sub-components ────────────────────────────────────────────────────

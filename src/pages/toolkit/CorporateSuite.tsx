@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   Stamp, CreditCard, FileText, FileEdit, Globe, Presentation,
   ArrowRight, Sparkles, ChevronRight, LayoutGrid, ImageIcon,
-  Building2, PenLine, ScanLine, Table2, FolderOpen,
+  Building2, PenLine, ScanLine, Table2, FolderOpen, Zap,
 } from "lucide-react";
 
 const tools = [
@@ -15,10 +15,12 @@ const tools = [
     icon: Stamp,
     href: "/toolkit/stamp-generator",
     badge: "AI",
-    badgeColor: "bg-amber-100 text-amber-800",
-    gradient: "from-amber-400 to-yellow-600",
-    glow: "shadow-amber-100",
-    iconBg: "from-amber-400 to-yellow-600",
+    badgeColor: "bg-amber-500/20 text-amber-300 border border-amber-500/30",
+    gradient: "from-amber-400/20 via-yellow-500/10 to-amber-600/5",
+    topBorder: "from-amber-400 to-yellow-500",
+    iconBg: "from-amber-400/30 to-yellow-600/20 border border-amber-500/30",
+    iconColor: "text-amber-300",
+    glow: "hover:shadow-[0_0_30px_rgba(251,191,36,0.15)]",
   },
   {
     id: "business-card",
@@ -28,23 +30,27 @@ const tools = [
     icon: CreditCard,
     href: "/toolkit/corporate-suite/business-card",
     badge: "AI",
-    badgeColor: "bg-blue-100 text-blue-800",
-    gradient: "from-blue-500 to-indigo-600",
-    glow: "shadow-blue-100",
-    iconBg: "from-blue-500 to-indigo-600",
+    badgeColor: "bg-blue-500/20 text-blue-300 border border-blue-500/30",
+    gradient: "from-blue-500/20 via-indigo-500/10 to-blue-600/5",
+    topBorder: "from-blue-400 to-indigo-500",
+    iconBg: "from-blue-500/30 to-indigo-600/20 border border-blue-500/30",
+    iconColor: "text-blue-300",
+    glow: "hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]",
   },
   {
     id: "cv-resume",
     title: "CV / Resume",
     subtitle: "AI resume builder + extract",
-    description: "Build a professional CV with AI-generated summary, 4 executive templates, upload-to-extract mode and PDF export.",
+    description: "Build a professional CV with AI-generated summary, 12 executive templates, upload-to-extract mode and PDF export.",
     icon: FileText,
     href: "/toolkit/corporate-suite/cv-resume",
     badge: "AI",
-    badgeColor: "bg-emerald-100 text-emerald-800",
-    gradient: "from-emerald-500 to-teal-600",
-    glow: "shadow-emerald-100",
-    iconBg: "from-emerald-500 to-teal-600",
+    badgeColor: "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30",
+    gradient: "from-emerald-500/20 via-teal-500/10 to-emerald-600/5",
+    topBorder: "from-emerald-400 to-teal-500",
+    iconBg: "from-emerald-500/30 to-teal-600/20 border border-emerald-500/30",
+    iconColor: "text-emerald-300",
+    glow: "hover:shadow-[0_0_30px_rgba(16,185,129,0.15)]",
   },
   {
     id: "cover-letter",
@@ -54,10 +60,12 @@ const tools = [
     icon: FileEdit,
     href: "/toolkit/corporate-suite/cover-letter",
     badge: "AI",
-    badgeColor: "bg-purple-100 text-purple-800",
-    gradient: "from-purple-500 to-violet-600",
-    glow: "shadow-purple-100",
-    iconBg: "from-purple-500 to-violet-600",
+    badgeColor: "bg-purple-500/20 text-purple-300 border border-purple-500/30",
+    gradient: "from-purple-500/20 via-violet-500/10 to-purple-600/5",
+    topBorder: "from-purple-400 to-violet-500",
+    iconBg: "from-purple-500/30 to-violet-600/20 border border-purple-500/30",
+    iconColor: "text-purple-300",
+    glow: "hover:shadow-[0_0_30px_rgba(139,92,246,0.15)]",
   },
   {
     id: "logo-creator",
@@ -67,10 +75,12 @@ const tools = [
     icon: ImageIcon,
     href: "/toolkit/corporate-suite/logo-creator",
     badge: "AI",
-    badgeColor: "bg-orange-100 text-orange-800",
-    gradient: "from-orange-400 to-red-500",
-    glow: "shadow-orange-100",
-    iconBg: "from-orange-400 to-red-500",
+    badgeColor: "bg-orange-500/20 text-orange-300 border border-orange-500/30",
+    gradient: "from-orange-400/20 via-red-500/10 to-orange-600/5",
+    topBorder: "from-orange-400 to-red-500",
+    iconBg: "from-orange-400/30 to-red-500/20 border border-orange-500/30",
+    iconColor: "text-orange-300",
+    glow: "hover:shadow-[0_0_30px_rgba(249,115,22,0.15)]",
   },
   {
     id: "company-profile",
@@ -80,23 +90,27 @@ const tools = [
     icon: Building2,
     href: "/toolkit/corporate-suite/company-profile",
     badge: "AI",
-    badgeColor: "bg-teal-100 text-teal-800",
-    gradient: "from-teal-500 to-cyan-600",
-    glow: "shadow-teal-100",
-    iconBg: "from-teal-500 to-cyan-600",
+    badgeColor: "bg-teal-500/20 text-teal-300 border border-teal-500/30",
+    gradient: "from-teal-500/20 via-cyan-500/10 to-teal-600/5",
+    topBorder: "from-teal-400 to-cyan-500",
+    iconBg: "from-teal-500/30 to-cyan-600/20 border border-teal-500/30",
+    iconColor: "text-teal-300",
+    glow: "hover:shadow-[0_0_30px_rgba(20,184,166,0.15)]",
   },
   {
     id: "presentation",
     title: "Presentation",
     subtitle: "Slide deck creator",
-    description: "Build professional slide decks with templates, AI-generated content and slide-by-slide editing. Export to PDF.",
+    description: "Build professional slide decks with Canva-style templates, AI-generated content and slide-by-slide editing. Export to PDF.",
     icon: Presentation,
     href: "/presentations",
     badge: "Pro",
-    badgeColor: "bg-rose-100 text-rose-800",
-    gradient: "from-rose-500 to-pink-600",
-    glow: "shadow-rose-100",
-    iconBg: "from-rose-500 to-pink-600",
+    badgeColor: "bg-rose-500/20 text-rose-300 border border-rose-500/30",
+    gradient: "from-rose-500/20 via-pink-500/10 to-rose-600/5",
+    topBorder: "from-rose-400 to-pink-500",
+    iconBg: "from-rose-500/30 to-pink-600/20 border border-rose-500/30",
+    iconColor: "text-rose-300",
+    glow: "hover:shadow-[0_0_30px_rgba(244,63,94,0.15)]",
   },
   {
     id: "landing-page",
@@ -106,10 +120,12 @@ const tools = [
     icon: Globe,
     href: "/toolkit/corporate-suite/landing-page",
     badge: "New",
-    badgeColor: "bg-cyan-100 text-cyan-800",
-    gradient: "from-cyan-500 to-sky-600",
-    glow: "shadow-cyan-100",
-    iconBg: "from-cyan-500 to-sky-600",
+    badgeColor: "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30",
+    gradient: "from-cyan-500/20 via-sky-500/10 to-cyan-600/5",
+    topBorder: "from-cyan-400 to-sky-500",
+    iconBg: "from-cyan-500/30 to-sky-600/20 border border-cyan-500/30",
+    iconColor: "text-cyan-300",
+    glow: "hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]",
   },
   {
     id: "e-sign",
@@ -119,10 +135,12 @@ const tools = [
     icon: PenLine,
     href: "/e-signature",
     badge: "Pro",
-    badgeColor: "bg-indigo-100 text-indigo-800",
-    gradient: "from-indigo-500 to-blue-600",
-    glow: "shadow-indigo-100",
-    iconBg: "from-indigo-500 to-blue-600",
+    badgeColor: "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30",
+    gradient: "from-indigo-500/20 via-blue-500/10 to-indigo-600/5",
+    topBorder: "from-indigo-400 to-blue-500",
+    iconBg: "from-indigo-500/30 to-blue-600/20 border border-indigo-500/30",
+    iconColor: "text-indigo-300",
+    glow: "hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]",
   },
   {
     id: "scan-sign",
@@ -132,10 +150,12 @@ const tools = [
     icon: ScanLine,
     href: "/document-scanner",
     badge: "AI",
-    badgeColor: "bg-slate-100 text-slate-800",
-    gradient: "from-slate-500 to-gray-600",
-    glow: "shadow-slate-100",
-    iconBg: "from-slate-500 to-gray-600",
+    badgeColor: "bg-slate-500/20 text-slate-300 border border-slate-500/30",
+    gradient: "from-slate-500/20 via-gray-500/10 to-slate-600/5",
+    topBorder: "from-slate-400 to-gray-500",
+    iconBg: "from-slate-500/30 to-gray-600/20 border border-slate-500/30",
+    iconColor: "text-slate-300",
+    glow: "hover:shadow-[0_0_30px_rgba(100,116,139,0.15)]",
   },
   {
     id: "spreadsheet",
@@ -145,10 +165,12 @@ const tools = [
     icon: Table2,
     href: "/spreadsheet",
     badge: "Pro",
-    badgeColor: "bg-green-100 text-green-800",
-    gradient: "from-green-500 to-emerald-600",
-    glow: "shadow-green-100",
-    iconBg: "from-green-500 to-emerald-600",
+    badgeColor: "bg-green-500/20 text-green-300 border border-green-500/30",
+    gradient: "from-green-500/20 via-emerald-500/10 to-green-600/5",
+    topBorder: "from-green-400 to-emerald-500",
+    iconBg: "from-green-500/30 to-emerald-600/20 border border-green-500/30",
+    iconColor: "text-green-300",
+    glow: "hover:shadow-[0_0_30px_rgba(34,197,94,0.15)]",
   },
   {
     id: "documents",
@@ -158,10 +180,12 @@ const tools = [
     icon: FolderOpen,
     href: "/documents",
     badge: "Pro",
-    badgeColor: "bg-yellow-100 text-yellow-800",
-    gradient: "from-yellow-400 to-orange-500",
-    glow: "shadow-yellow-100",
-    iconBg: "from-yellow-400 to-orange-500",
+    badgeColor: "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30",
+    gradient: "from-yellow-400/20 via-orange-500/10 to-yellow-600/5",
+    topBorder: "from-yellow-400 to-orange-400",
+    iconBg: "from-yellow-400/30 to-orange-500/20 border border-yellow-500/30",
+    iconColor: "text-yellow-300",
+    glow: "hover:shadow-[0_0_30px_rgba(234,179,8,0.15)]",
   },
 ];
 
@@ -169,26 +193,26 @@ export default function CorporateSuite() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen" style={{ background: "hsl(var(--pearl-1,48 30% 97%))" }}>
+    <div className="min-h-screen" style={{ background: "linear-gradient(135deg, #0a0a0f 0%, #0f0f1a 50%, #0a0a0f 100%)" }}>
       {/* ── Hero Header ──────────────────────────────────────── */}
-      <div className="relative overflow-hidden border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-sm">
-        {/* Gold shimmer */}
+      <div className="relative overflow-hidden border-b border-white/5">
+        {/* Champagne shimmer */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse 80% 60% at 10% 50%, hsl(var(--gold)/0.06) 0%, transparent 70%)",
+              "radial-gradient(ellipse 80% 60% at 10% 50%, rgba(212,175,55,0.08) 0%, transparent 70%)",
           }}
         />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold)/0.4)] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/40 to-transparent" />
 
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-8 pt-28 sm:pt-32">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-1.5 text-[11px] text-[hsl(var(--muted-foreground))] mb-6 select-none">
+          <div className="flex items-center gap-1.5 text-[11px] text-white/40 mb-6 select-none">
             <LayoutGrid size={11} />
             <span>Toolkit</span>
             <ChevronRight size={10} />
-            <span className="text-[hsl(var(--foreground))] font-medium">Corporate Suite</span>
+            <span className="text-white/70 font-medium">Corporate Suite</span>
           </div>
 
           <div className="flex items-start gap-5">
@@ -196,7 +220,8 @@ export default function CorporateSuite() {
             <div
               className="w-16 h-16 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-xl"
               style={{
-                background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))",
+                background: "linear-gradient(135deg, #C9A84C, #8B6914)",
+                boxShadow: "0 0 40px rgba(201,168,76,0.3)",
               }}
             >
               <Sparkles size={28} className="text-white" />
@@ -204,13 +229,13 @@ export default function CorporateSuite() {
 
             {/* Text */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[hsl(var(--gold-dark))] mb-1">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-1" style={{ color: "#C9A84C" }}>
                 JBJ Toolkit · Document Suite
               </p>
-              <h1 className="text-2xl sm:text-3xl font-bold text-[hsl(var(--foreground))] leading-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
                 Corporate Document Suite
               </h1>
-              <p className="text-[hsl(var(--muted-foreground))] mt-2 text-sm max-w-2xl leading-relaxed">
+              <p className="text-white/50 mt-2 text-sm max-w-2xl leading-relaxed">
                 12 professional tools — stamps, business cards, CVs, logos, company profiles, e-signatures,
                 spreadsheets and more. All AI-powered, all in one place.
               </p>
@@ -225,8 +250,8 @@ export default function CorporateSuite() {
               { label: "Export formats", value: "PDF, PNG, SVG, HTML" },
             ].map(s => (
               <div key={s.label} className="flex items-baseline gap-2">
-                <span className="text-xl font-bold text-[hsl(var(--foreground))]">{s.value}</span>
-                <span className="text-xs text-[hsl(var(--muted-foreground))]">{s.label}</span>
+                <span className="text-xl font-bold text-white">{s.value}</span>
+                <span className="text-xs text-white/40">{s.label}</span>
               </div>
             ))}
           </div>
@@ -245,10 +270,14 @@ export default function CorporateSuite() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05, duration: 0.3, ease: "easeOut" }}
                 onClick={() => navigate(tool.href)}
-                className={`group text-left bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))]`}
+                className={`group text-left rounded-2xl border border-white/8 shadow-lg transition-all duration-300 overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A84C] ${tool.glow}`}
+                style={{
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)",
+                  backdropFilter: "blur(10px)",
+                }}
               >
-                {/* Color accent top border */}
-                <div className={`h-[3px] w-full bg-gradient-to-r ${tool.gradient}`} />
+                {/* Champagne-gold gradient top border */}
+                <div className={`h-[2px] w-full bg-gradient-to-r ${tool.topBorder}`} />
 
                 <div className="p-6">
                   {/* Icon + Badge row */}
@@ -256,7 +285,7 @@ export default function CorporateSuite() {
                     <div
                       className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.iconBg} flex items-center justify-center shadow-md flex-shrink-0 group-hover:scale-105 transition-transform duration-300`}
                     >
-                      <Icon size={22} className="text-white" />
+                      <Icon size={22} className={tool.iconColor} />
                     </div>
                     <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${tool.badgeColor}`}>
                       {tool.badge}
@@ -264,21 +293,18 @@ export default function CorporateSuite() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-bold text-[hsl(var(--foreground))] text-[15px] leading-tight">
+                  <h3 className="font-bold text-white text-[15px] leading-tight">
                     {tool.title}
                   </h3>
-                  <p
-                    className="text-xs font-semibold mt-0.5 mb-3"
-                    style={{ color: `hsl(var(--gold-dark))` }}
-                  >
+                  <p className="text-xs font-semibold mt-0.5 mb-3" style={{ color: "#C9A84C" }}>
                     {tool.subtitle}
                   </p>
-                  <p className="text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
+                  <p className="text-xs text-white/50 leading-relaxed">
                     {tool.description}
                   </p>
 
                   {/* CTA */}
-                  <div className="mt-5 flex items-center gap-1.5 text-xs font-semibold text-[hsl(var(--foreground))] group-hover:text-[hsl(var(--gold-dark))] transition-colors">
+                  <div className="mt-5 flex items-center gap-1.5 text-xs font-semibold text-white/60 group-hover:text-[#C9A84C] transition-colors">
                     Open Tool
                     <ArrowRight
                       size={13}
@@ -292,9 +318,12 @@ export default function CorporateSuite() {
         </div>
 
         {/* Footer note */}
-        <p className="text-center text-[11px] text-[hsl(var(--muted-foreground))] mt-10">
-          All tools run securely in your browser. Files are exported locally — nothing leaves your device.
-        </p>
+        <div className="flex items-center justify-center gap-2 mt-10">
+          <Zap size={12} className="text-white/30" />
+          <p className="text-center text-[11px] text-white/30">
+            All tools run securely in your browser. Files are exported locally — nothing leaves your device.
+          </p>
+        </div>
       </div>
     </div>
   );
