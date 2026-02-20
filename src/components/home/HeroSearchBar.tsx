@@ -33,7 +33,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useDevelopers, useCommunities } from "@/hooks/useProjects";
+import { useDevelopers, useCommunities, useAreas } from "@/hooks/useProjects";
 import { cn } from "@/lib/utils";
 
 // Bedroom options - now up to 7+
@@ -407,6 +407,7 @@ const HeroSearchBar = () => {
 
   const { data: developers } = useDevelopers();
   const { data: communities } = useCommunities();
+  const { data: allAreas } = useAreas();
   
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -634,27 +635,27 @@ const HeroSearchBar = () => {
         </Popover>
 
         {/* Area Unit — Split toggle button (no dropdown) */}
-        <div className="flex items-stretch rounded-lg overflow-hidden border border-gold/40 backdrop-blur-sm text-sm shadow-lg h-[38px]">
+        <div className="flex items-stretch rounded-lg overflow-hidden border border-white/30 backdrop-blur-sm text-sm shadow-lg h-[38px]">
           <button
             onClick={() => { setAreaUnit('sqft'); setSizeRange('any'); }}
             className={cn(
               "flex items-center gap-1.5 px-4 transition-all font-semibold min-w-[56px] justify-center",
               areaUnit === 'sqft'
-                ? "bg-gradient-to-r from-gold to-gold-dark text-black"
-                : "bg-white/10 text-white hover:bg-white/20"
+                ? "bg-white/30 text-white"
+                : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
             )}
           >
             <Ruler className="w-3.5 h-3.5" />
             sqft
           </button>
-          <div className="w-px bg-gold/30" />
+          <div className="w-px bg-white/20" />
           <button
             onClick={() => { setAreaUnit('sqm'); setSizeRange('any'); }}
             className={cn(
               "flex items-center gap-1.5 px-4 transition-all font-semibold min-w-[56px] justify-center",
               areaUnit === 'sqm'
-                ? "bg-gradient-to-r from-gold to-gold-dark text-black"
-                : "bg-white/10 text-white hover:bg-white/20"
+                ? "bg-white/30 text-white"
+                : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
             )}
           >
             sqm
@@ -1062,22 +1063,40 @@ const HeroSearchBar = () => {
                   </div>
                 </div>
 
-                {/* Row 5: Community / Area */}
+                {/* Row 5: Community / Area — all areas from DB grouped by emirate */}
                 <div>
                   <label className="text-sm font-semibold text-black/80 mb-2 block">Community / Area</label>
-                  <Select value={communityId} onValueChange={setCommunityId}>
-                    <SelectTrigger className="h-11 bg-white border-gold/30">
-                      <SelectValue placeholder="All Areas" />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-60">
-                      <SelectItem value="all">All Areas</SelectItem>
-                      {communities?.sort((a, b) => a.name.localeCompare(b.name)).map((comm) => (
-                        <SelectItem key={comm.id} value={comm.id}>
-                          {comm.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="max-h-52 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-white">
+                    <button
+                      onClick={() => setCommunityId('all')}
+                      className={cn("w-full text-left px-3 py-2 text-sm transition-colors", communityId === 'all' ? "bg-gold/20 font-semibold text-black" : "text-black hover:bg-gold/10")}
+                    >
+                      All Areas
+                    </button>
+                    {(() => {
+                      const EMIRATE_ORDER = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ras Al Khaimah', 'Ajman', 'Fujairah', 'Umm Al Quwain'];
+                      const grouped: Record<string, typeof allAreas> = {};
+                      (allAreas || []).forEach(a => {
+                        const em = a.emirate?.replace(' Emirate', '') || 'Other';
+                        if (!grouped[em]) grouped[em] = [];
+                        grouped[em]!.push(a);
+                      });
+                      return EMIRATE_ORDER.filter(em => grouped[em]?.length).map(em => (
+                        <div key={em}>
+                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gold/80 bg-gold/5 border-y border-gold/10">{em}</div>
+                          {grouped[em]!.map(area => (
+                            <button
+                              key={area.id}
+                              onClick={() => setCommunityId(area.id)}
+                              className={cn("w-full text-left px-4 py-1.5 text-sm transition-colors", communityId === area.id ? "bg-gold/20 font-semibold text-black" : "text-black hover:bg-gold/10")}
+                            >
+                              {area.name}
+                            </button>
+                          ))}
+                        </div>
+                      ));
+                    })()}
+                  </div>
                 </div>
 
                 {/* AI Home Finder Link - Strong purple visibility */}

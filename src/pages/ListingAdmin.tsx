@@ -667,17 +667,22 @@ const ListingAdmin = () => {
                 >
                   🚨 Emergency Mirror
                 </TabsTrigger>
+                <TabsTrigger 
+                  value="dev-visibility"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                >
+                  <Building2 className="w-4 h-4 mr-2" />
+                  Developer Visibility
+                </TabsTrigger>
               </TabsList>
               
               <TabsContent value="reelly" className="mt-0">
                 <ReellyImportPanel />
               </TabsContent>
               <TabsContent value="approvals" className="mt-0">
-                {/* ProjectApprovalQueue shows project cards with photos */}
                 <ProjectApprovalQueue onRefresh={refetchProjects} />
               </TabsContent>
               <TabsContent value="updates" className="mt-0">
-                {/* PendingUpdatesQueue shows data table for updates */}
                 <PendingUpdatesQueue onRefresh={refetchProjects} />
               </TabsContent>
               <TabsContent value="external" className="mt-0">
@@ -685,6 +690,9 @@ const ListingAdmin = () => {
               </TabsContent>
               <TabsContent value="emergency" className="mt-0">
                 <EmergencyMirrorPanel />
+              </TabsContent>
+              <TabsContent value="dev-visibility" className="mt-0">
+                <DeveloperVisibilityPanel />
               </TabsContent>
             </Tabs>
           </div>
