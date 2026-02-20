@@ -1,157 +1,224 @@
 
-# Comprehensive Bug Fix and UI Refinement Plan
+# Comprehensive Bug Fix, UI Refinement, and Security Audit Plan
 
-This plan addresses all remaining tasks extracted from your recent prompts, organized by priority.
-
----
-
-## 1. Emoji Removal (Global Sweep)
-
-Several files still contain emojis that need to be stripped:
-
-### Compare.tsx (Property Comparison Page)
-- **Line 325**: `📊 Property Details Comparison` in download report HTML
-- **Line 352**: `⭐ Ratings & Analysis` in download report HTML  
-- **Line 367-368**: `✅ Pros` and `⚠️ Cons` in download report HTML
-- **Line 374**: `🏆 Our Recommendation` in download report HTML
-- **Line 383**: `💡 Investment Advice` in download report HTML
-- **Line 389**: `⚠️ Risk Factors` in download report HTML
-- **Line 396-398**: `📧`, `📞`, `🌐` in footer of download report HTML
-- **Line 740**: `🥇 Top 1`, `🥉 Top 2`, `🥈 Top 3` badge labels
-
-### Favorites.tsx
-- Replace all medal emojis (`🥇`, `🥈`, `🥉`) with text labels or Lucide icons (Crown, Medal, Award)
-
-### ComparisonBar.tsx
-- Replace all medal emojis with text-only labels
-
-### Other Files with Emojis
-- `SmartLeadAlerts.tsx` (line 292): `💡 Suggested` 
-- `ProjectIntegrationPanel.tsx`: `✅` in toast, `⭐ Featured`
-- `CustomerHappiness.tsx`: `⭐` and `💡` in toast messages
-- `Testimonials.tsx`: Star emojis in rating dropdown
-- `AdminLeads.tsx`: Multiple emojis in source labels
-- `FoundersAssistant.tsx`: `✅` and `⚠️` labels
-- `JBJDesignStudio.tsx`: `✉️`, `📞`, `🌐` in email signature HTML
-- `BeautyFilters.tsx`: `💡` and `⚠️` labels
-- `MarketingHub.tsx`: Various emojis in template names
-- `QuizResults.tsx`: Medal emojis in badge dropdown
-- `GuidedTour.tsx`: Medal emojis in description text
+This plan addresses all 21 tasks extracted from the prompt, organized by priority sections.
 
 ---
 
-## 2. Property Comparison Page - Premium Overhaul
+## Section 1: AI Property Comparison (Full Rebuild)
 
-### Photo Alignment
-- Set all project images in the comparison table header (`<th>`) to use a fixed `h-40` or `aspect-[16/9]` with `object-cover` so all photos are the same height
+### Task 1-3: Premium Layout, Alignment, and Color Fix
+**File: `src/pages/Compare.tsx`**
 
-### Location on One Line
-- Add `whitespace-nowrap overflow-hidden text-ellipsis` or `truncate` class to the Location row cells so they stay on a single line
+Current issues identified:
+- Border wrapper on line 711 uses `border-gold/30` which is correct champagne, but needs verification across all sub-elements
+- Project images use `h-40` (good) but cards may not align perfectly across columns
+- Location row has `whitespace-nowrap` and `text-ellipsis` but uses inline style rather than Tailwind truncate
 
-### Comparison Table as Excel-like Board
-- Add alternating row backgrounds (`even:bg-zinc-800/20 odd:bg-zinc-900/40`) for better readability
-- Add sticky first column styling improvements
+Changes:
+- Replace the outer wrapper border from `border-gold/30` to `border-[#C8A766]/40` for richer champagne tone
+- Enforce consistent card height in table headers by wrapping each project header cell content in a `flex flex-col` container with fixed image aspect ratio `aspect-[16/9] h-40`
+- Change Location cell to use Tailwind `truncate` class instead of separate whitespace/overflow/text-ellipsis classes
+- Ensure all borders, badges, and accent colors use the champagne palette (no purple, no yellow)
 
-### Pros/Cons in Green/Red with Like/Dislike
-- In the ratings cards, add ThumbsUp icon for Pros (green) and ThumbsDown icon for Cons (red)
-- Make Pros background `bg-green-950/30` and Cons `bg-red-950/30` (already partially done)
+### Task 4: AI Smart Analyzer Upgrade
+**File: `src/pages/Compare.tsx`**
 
-### Share with Team - Premium Export
-- The WhatsApp and Email share buttons are already present (lines 679-700)
-- Enhance the share content to include company header with: JBJ Global Real Estate branding, contact numbers, and a formatted summary of the comparison
+Changes:
+- When `isGenerating` is true, replace the simple "Analyzing..." text with a premium loading animation section showing: "Analyzing Property Intelligence..." with a pulsing Sparkles icon and a progress shimmer bar
+- Disable the comparison table interaction during generation with `pointer-events-none opacity-50`
+- The AI analysis already generates Pros (green with ThumbsUp), Cons (red with ThumbsDown), and recommendation data -- verify these render correctly
+- Add ROI estimate and rental yield display in the ratings cards if present in the AI response
 
----
+### Task 5: Share With Team Feature Enhancement
+**File: `src/pages/Compare.tsx`**
 
-## 3. AI Property Analyzer Border Color Fix
+Current state: WhatsApp and Email share buttons exist (lines 679-700) but content is basic.
 
-The user wants the AI Property Analyzer border in the Compare page to be **gold/champagne** (not yellow). The border wrapper on line 711 uses `border-gold/30` which renders as gold. Verify the `AIPropertyAnalyzer` component itself and `LegalDisclaimer variant="ai-tools"` use gold/champagne borders, not yellow or purple.
+Changes:
+- Enhance WhatsApp share text to include: JBJ Global Real Estate header, property names, key metrics (price, location, developer), contact info (+971 56 591 1000, www.JBJ.ae)
+- Enhance Email share body with professional formatting including company details, comparison ID (date-based), and a structured summary
+- The existing `downloadComprehensiveReport` function already generates a premium HTML report with company branding, contact info, and full comparison -- this serves as the PDF/export feature
+- Add a "Copy Link" button alongside WhatsApp and Email for easy sharing
 
----
+### Task 6: Champagne Active Style
+**File: `src/pages/Compare.tsx`**
 
-## 4. Homepage Mobile Fixes
-
-### Toolkit Card Buttons Overflow
-- Already partially fixed with `truncate` and `overflow-hidden` in `ToolkitShowcaseCard.tsx`
-- Reduce button padding further on mobile: `px-1.5 sm:px-3`
-- Reduce font to `text-[10px] sm:text-sm`
-
-### "View All Projects" Padding
-- Locate the Handpicked/Featured Properties section and increase bottom padding on the "View All Projects" link
-
-### "Find Your Starting Point" Mobile Layout  
-- Check card sizing on 390px viewport and ensure cards don't overflow or cramp
-
-### Explore Services Card Divider
-- The internal divider (line 362) uses `border-dashed border-gold/40` which is already differentiated from the outer section divider - verify visually
-
-### Financial Tools Duplicated Title
-- Search for the mortgage/financial section on the homepage and remove any duplicated heading
+- All active states (toggles, badges, buttons) already use champagne/gold palette
+- Verify no purple remnants exist anywhere in the component
 
 ---
 
-## 5. Video Loading Performance
+## Section 2: Mobile Fatal Error
 
-### WhyDubaiCapitalSection
-- Already changed to `preload="metadata"` 
-- Further optimize by using `preload="none"` and only loading when section enters viewport (IntersectionObserver lazy-load pattern)
+### Task 7: Fix "Importing a module script failed"
+**File: `src/components/AppErrorBoundary.tsx`**
 
-### Hero Section Loading
-- Already using deferred video loading strategy per memory
-- Ensure hero image uses `fetchPriority="high"` and `loading="eager"`
+Current state: Error boundary shows a champagne-themed card (good) but still displays the raw error message (`this.state.errorMessage`) which exposes technical details.
 
----
+Changes:
+- Remove the `<pre>` block that shows `this.state.errorMessage` -- never show technical errors to users
+- Replace with a gentle message: "Please check your internet connection and try again"
+- Add auto-retry logic: on mount, attempt `window.location.reload()` after 3 seconds if the error contains "module" or "import" (handles chunk loading failures from dynamic imports)
+- Ensure the error boundary catches `ChunkLoadError` specifically and triggers a silent page refresh
 
-## 6. Areas Section Improvements
-
-### "Areas We Cover" Title
-- Already has gold-champagne gradient text applied
-- Verify it renders correctly on mobile
-
-### Padding Under "View All Areas"  
-- Currently `mt-10 mb-4` - increase to `mt-10 mb-8` for more breathing room
+**File: `vite.config.ts`**
+- The current config already uses code splitting with `manualChunks` which can cause chunk loading errors on deployments
+- The `entryFileNames: "assets/app.js"` is good for cache stability but chunk names use `[hash]` which changes on each deploy
+- No changes needed here -- the fix is in the error boundary recovery logic
 
 ---
 
-## 7. Branded Loader Logo Fix
+## Section 3: Hero Section Performance
 
-- Currently using `jbj-monogram-light-transparent.png` - verify this is the correct asset without the square box behind the "B"
-- If the logo still shows a box, switch to `jbj-monogram-nobuffer.png` or `jbj-monogram-transparent.png`
+### Task: Hero Video Loading
+**Files: `src/components/PropertiesHeroVideo.tsx`, `src/components/home/WhyDubaiCapitalSection.tsx`**
+
+Current state: `WhyDubaiCapitalSection` uses `preload="metadata"` (good). `PropertiesHeroVideo` uses `preload="auto"` for the first video and `preload="none"` for others (good).
+
+Changes:
+- In `WhyDubaiCapitalSection`, change to `preload="none"` and add IntersectionObserver to only load when section enters viewport
+- Ensure hero section uses `min-h-[100vh]` and `min-h-[100dvh]` for full coverage (already present)
 
 ---
 
-## 8. Market Intelligence Book Image Loading
+## Section 4: Homepage Bugs
 
-- Find the market intelligence book section and ensure the image uses `loading="eager"` and `fetchPriority="high"` to prevent partial loading
+### Task 8: Sqft/Sqm Active Style
+**File: `src/components/home/HeroSearchBar.tsx`**
+
+Current state (lines 638-663): Active unit uses `bg-gradient-to-r from-[#C8A766] to-[#E8DCC8] text-black` which IS the champagne gradient with black text. This matches the search button style. No change needed -- already correct.
+
+### Task 9: Handpicked Projects Broken Images
+**File: `src/components/home/FeaturedListings.tsx`**
+
+Changes:
+- Add `loading="lazy"` and `onError` fallback to all project card images
+- Add a placeholder skeleton while images load
+
+### Task 10: View All Projects Padding
+**File: `src/components/home/FeaturedListings.tsx`**
+
+Current state (line 333): `mt-10` on the View All CTA. No bottom padding specified.
+
+Changes:
+- Add `mb-6` to the View All CTA wrapper for more breathing room below
+
+### Task 11: Find Your Starting Point Mobile Layout
+**File: `src/pages/Index.tsx`**
+
+The section starts at line 237. Changes:
+- Verify card grid uses responsive columns (`grid-cols-2 md:grid-cols-4`)
+- Ensure cards have `min-w-0` to prevent overflow on narrow screens
+- Add `gap-2 sm:gap-3` for tighter mobile spacing
+
+### Task 12: Explore Services Divider
+**File: `src/components/home/ExploreServicesCard.tsx`**
+
+Current state (line 362): Inner divider uses `border-t-2 border-dashed border-gold/40` which already differs from the outer `SectionDivider` component. This is already differentiated. No change needed.
 
 ---
 
-## 9. Support Ticket Email Confirmation Test
+## Section 5: Free Professional Tools Bugs
 
-- Verify the support ticket form submits correctly and triggers an email confirmation via the backend
+### Task 13: Button Overflow
+**File: `src/components/home/ToolkitShowcaseCard.tsx`**
+
+Current state (line 152): Already has `text-[10px] sm:text-sm px-1.5 sm:px-3 whitespace-nowrap overflow-hidden` with `<span className="truncate">`. This should be working. Will verify and ensure `min-w-0` is on parent flex container.
+
+### Task 14: Market Intelligence Book Image
+**File: `src/components/MarketReportHeroBook.tsx`**
+
+Current state (lines 78-84): Image already uses `loading="eager"` and `fetchPriority="high"`. The image is `luxury-villa-1.jpeg` which is a local asset (bundled), so it should load instantly.
+
+Changes:
+- Add `decoding="sync"` for immediate rendering
+- Increase the image height from `h-48 md:h-56` to `h-52 md:h-60` for better visibility
+
+### Task 15: Mortgage Calculator Duplicate Title
+Need to check if there's a duplicate heading on the homepage where the Mortgage Calculator tool card appears. The `ToolkitShowcaseCard` only shows it once. This may be a section-level duplication in `Index.tsx`.
+
+Changes:
+- Search `Index.tsx` for any duplicate "Financial Tools" or "Mortgage Calculator" heading and remove it
+
+### Task 16: Why Dubai Video Slow Load
+**File: `src/components/home/WhyDubaiCapitalSection.tsx`**
+
+Changes:
+- Change `preload="metadata"` to `preload="none"`
+- Add IntersectionObserver: only attach video `<source>` when section is within viewport
+- Add a static poster/thumbnail as immediate background
+
+### Task 17: Support Ticket Test
+- Will verify the support ticket edge function exists and test it via the curl tool
+- Check that RESEND_API_KEY is configured and email sends to both user and admin (SUPPORT@JBJ.AE)
+
+---
+
+## Section 6: Explore Area Section
+
+### Task 18: Area Guide Title Style
+**File: `src/components/home/AreasWeCover.tsx`**
+
+Current state (lines 41-50): Title already uses gold-champagne gradient text via inline styles. This is correct.
+
+### Task 19: Area Photos Performance
+Changes:
+- Add `loading="lazy"` to area card background images (currently using `backgroundImage` CSS -- convert to `<img>` with lazy loading for better performance)
+
+### Task 20: Padding Under View All Areas
+**File: `src/components/home/AreasWeCover.tsx`**
+
+Current state (line 123): `mt-10 mb-8`. This is already increased from the original `mb-4`.
+
+Changes:
+- Increase to `mt-10 mb-10` for more breathing room
+
+---
+
+## Section 7: Backend Security Audit
+
+### Task 21: Full Backend Audit
+
+Will perform:
+- Run the database linter to check RLS policies
+- Query recent database logs for errors
+- Verify edge function authorization headers
+- Check that no public endpoints expose sensitive data
+- Verify the `smart-ai-analysis` edge function requires JWT authentication
+- Verify email system configuration (RESEND_API_KEY secret exists)
+
+---
+
+## Performance Optimization Checklist
+
+Already implemented:
+- Code splitting via `manualChunks` in vite.config.ts
+- Lazy loading images with `loading="lazy"`
+- Hero assets with `fetchPriority="high"`
+- Video deferred loading with `preload="none"`/"metadata"
+
+Additional changes:
+- Add `decoding="async"` to non-critical images
+- Ensure all video sections use IntersectionObserver for deferred loading
+- Verify no duplicate API calls in React Query hooks (check staleTime settings)
 
 ---
 
 ## Technical Summary
 
-| File | Changes |
-|------|---------|
-| `src/pages/Compare.tsx` | Remove all emojis from download HTML, fix photo alignment, single-line locations, add ThumbsUp/Down icons, enhance share export |
-| `src/pages/Favorites.tsx` | Replace medal emojis with Lucide icons |
-| `src/components/ComparisonBar.tsx` | Replace medal emojis with text labels |
-| `src/pages/CustomerHappiness.tsx` | Remove emojis from toasts |
-| `src/pages/services/Testimonials.tsx` | Remove star emojis from dropdown |
-| `src/pages/AdminLeads.tsx` | Remove emojis from source labels |
-| `src/pages/FoundersAssistant.tsx` | Remove emojis from stat labels |
-| `src/pages/JBJDesignStudio.tsx` | Remove emojis from email signature HTML |
-| `src/pages/toolkit/BeautyFilters.tsx` | Remove emojis from section labels |
-| `src/pages/admin/MarketingHub.tsx` | Remove emojis from template names |
-| `src/pages/QuizResults.tsx` | Replace medal emojis |
-| `src/components/GuidedTour.tsx` | Replace medal emojis in text |
-| `src/components/crm/SmartLeadAlerts.tsx` | Remove emoji from suggested label |
-| `src/components/ai-video-studio/features/ProjectIntegrationPanel.tsx` | Remove emojis |
-| `src/components/home/ToolkitShowcaseCard.tsx` | Further reduce mobile button sizing |
-| `src/components/home/AreasWeCover.tsx` | Increase bottom padding |
-| `src/components/ui/BrandedLoader.tsx` | Verify correct logo asset |
-| Homepage sections | Fix duplicated financial tools title, book image loading |
+| Priority | File | Changes |
+|----------|------|---------|
+| Critical | `AppErrorBoundary.tsx` | Remove raw error display, add auto-retry for chunk errors |
+| Critical | `Compare.tsx` | Premium rebuild: alignment, champagne colors, enhanced sharing, loading animation |
+| High | `WhyDubaiCapitalSection.tsx` | IntersectionObserver lazy video loading |
+| High | `FeaturedListings.tsx` | Image error fallbacks, View All padding |
+| High | `MarketReportHeroBook.tsx` | Add `decoding="sync"`, increase image size |
+| Medium | `AreasWeCover.tsx` | Increase bottom padding |
+| Medium | `Index.tsx` | Fix Find Your Starting Point mobile layout, remove duplicate titles |
+| Medium | `ToolkitShowcaseCard.tsx` | Verify button overflow fix |
+| Low | `HeroSearchBar.tsx` | Already correct (champagne active style) |
+| Low | `ExploreServicesCard.tsx` | Already differentiated divider |
+| Audit | Backend | Run linter, check RLS, verify email config |
 
-Estimated scope: ~20 files to edit, primarily emoji removal and mobile layout polish.
+Estimated scope: 8-10 files to edit, plus backend security audit.
