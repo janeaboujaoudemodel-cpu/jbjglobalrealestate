@@ -182,50 +182,57 @@ export function LiveStampPreview({
     const isRound = stampType === 'ROUND' || stampType === 'OVAL';
 
     if (isRound) {
-      // Arc radius: pulled well inside the inner ring so text never touches the border
-      // innerRx already accounts for the ring gap; subtract extra padding for text clearance
+      // Arc radius: text sits snugly inside the inner ring
       const arcR = innerRx - 6;
       const topArcId = 'top-arc-lp';
-      // Top arc: starts at -160° (left), sweeps 160° clockwise — stays clear of the sides
-      const topArcPath = arcPath(cx, cy, arcR, -160, 160);
-
-      // Bottom arc: mirrors — starts at 20° (right side), sweeps 160° clockwise
       const botArcId = 'bot-arc-lp';
-      const botArcPath = arcPath(cx, cy, arcR, 20, 160);
+      const botArcRevId = 'bot-arc-rev-lp'; // reversed CCW path for Arabic RTL
 
-      // Arc circumference available ≈ r × angle_rad. Cap font tightly so text NEVER overflows.
-      const arcLen = arcR * (160 * Math.PI / 180); // ~2.79r
-      const nameFontSize = Math.min(10, Math.max(5, fitFontSize(displayName, 9.5, arcLen * 0.88, 0.58)));
-      const nameDisplay = trunc(displayName.toUpperCase(), 32);
+      // Top arc: -177.5° → sweep 175° clockwise (nearly full top semicircle)
+      const topArcPath = arcPath(cx, cy, arcR, -177.5, 175);
+
+      // Bottom arc: 2.5° → sweep 175° clockwise (nearly full bottom semicircle, for LTR text)
+      const botArcPath = arcPath(cx, cy, arcR, 2.5, 175);
+
+      // Reversed bottom arc for Arabic RTL: start at right side (177.5°) sweep -175° (CCW)
+      // This makes Arabic text flow naturally right-to-left along the bottom curve
+      const botArcRevPath = arcPath(cx, cy, arcR, 177.5, -175);
+
+      // Arc circumference ≈ r × angle_rad for 175°
+      const arcLen = arcR * (175 * Math.PI / 180);
+      const nameFontSize = Math.min(11, Math.max(5, fitFontSize(displayName, 10, arcLen * 0.88, 0.58)));
+      const nameDisplay = trunc(displayName.toUpperCase(), 36);
 
       textContent += `
         <defs>
           <path id="${topArcId}" d="${topArcPath}"/>
           <path id="${botArcId}" d="${botArcPath}"/>
+          <path id="${botArcRevId}" d="${botArcRevPath}"/>
         </defs>
         <text font-family="${fontFamily}" font-size="${nameFontSize}" fill="${goldInk}" letter-spacing="1.5" font-weight="600">
           <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${nameDisplay}</textPath>
         </text>`;
 
       if (isBilingual && arabicCompanyName) {
-        const arFontSize = Math.min(10, Math.max(5, fitFontSize(arabicCompanyName, 9.5, arcLen * 0.88, 0.65)));
+        // Arabic bottom arc uses the REVERSED path so RTL text reads naturally
+        const arFontSize = Math.min(11, Math.max(5, fitFontSize(arabicCompanyName, 10, arcLen * 0.88, 0.65)));
         textContent += `
-        <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${arFontSize}" fill="${goldInk}" letter-spacing="0.3">
-          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle" direction="rtl" unicode-bidi="bidi-override">${trunc(arabicCompanyName, 32)}</textPath>
+        <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${arFontSize}" fill="${goldInk}" letter-spacing="0.5">
+          <textPath href="#${botArcRevId}" startOffset="50%" text-anchor="middle">${trunc(arabicCompanyName, 36)}</textPath>
         </text>`;
       } else if (isArabic) {
         const arabicCity = city ? `${city}، الإمارات العربية المتحدة` : 'الإمارات العربية المتحدة';
-        const cityFontSize = Math.min(9, Math.max(5, fitFontSize(arabicCity, 9, arcLen * 0.88, 0.65)));
+        const cityFontSize = Math.min(10, Math.max(5, fitFontSize(arabicCity, 9.5, arcLen * 0.88, 0.65)));
         textContent += `
-        <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${cityFontSize}" fill="${goldInk}" letter-spacing="0.3">
-          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle" direction="rtl" unicode-bidi="bidi-override">${trunc(arabicCity, 32)}</textPath>
+        <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${cityFontSize}" fill="${goldInk}" letter-spacing="0.5">
+          <textPath href="#${botArcRevId}" startOffset="50%" text-anchor="middle">${trunc(arabicCity, 36)}</textPath>
         </text>`;
       } else if (density >= 2 && (city || country)) {
         const cityLine = [city, country].filter(Boolean).join(' · ').toUpperCase();
-        const cityFontSize = Math.min(9, Math.max(5, fitFontSize(cityLine, 9, arcLen * 0.88, 0.55)));
+        const cityFontSize = Math.min(10, Math.max(5, fitFontSize(cityLine, 9.5, arcLen * 0.88, 0.55)));
         textContent += `
         <text font-family="${fontFamily}" font-size="${cityFontSize}" fill="${goldInk}" letter-spacing="1.5">
-          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${trunc(cityLine, 32)}</textPath>
+          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${trunc(cityLine, 36)}</textPath>
         </text>`;
       }
 

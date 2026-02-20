@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, FileEdit, Sparkles, Download, RefreshCw } from "lucide-react";
+import { ArrowLeft, FileEdit, Sparkles, Download, RefreshCw, ImageIcon, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { BrandAssetLibrary, BrandAsset } from "@/components/corporate-suite/BrandAssetLibrary";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 
 type Tone = "professional" | "confident" | "casual";
 type Template = "standard" | "modern" | "executive";
@@ -18,6 +20,9 @@ export default function CoverLetterGenerator() {
   const [tone, setTone] = useState<Tone>("professional");
   const [template, setTemplate] = useState<Template>("standard");
   const [letter, setLetter] = useState("");
+  const [brandAssetOpen, setBrandAssetOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState("");
+  const [logoSize, setLogoSize] = useState(60);
   const [form, setForm] = useState({
     yourName: "", yourTitle: "", jobTitle: "", companyName: "", skills: "", experience: "",
   });
@@ -93,6 +98,37 @@ Write 3-4 paragraphs: Opening (why this role), Middle (key qualifications), Midd
       <div className="max-w-6xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Form */}
         <div className="space-y-5">
+          {/* Brand Assets */}
+          <Collapsible open={brandAssetOpen} onOpenChange={setBrandAssetOpen}>
+            <div className="bg-white rounded-xl border border-[hsl(var(--border))] overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-3 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <ImageIcon size={12} className="text-[hsl(var(--gold))]" />
+                    <span className="text-xs font-semibold text-[hsl(var(--muted-foreground))]">Brand Assets</span>
+                    {logoUrl && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
+                  </div>
+                  <ChevronDown size={12} className={`text-[hsl(var(--muted-foreground))] transition-transform ${brandAssetOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-3 pb-3 border-t border-[hsl(var(--border))]">
+                  <BrandAssetLibrary
+                    assetTypes={["monogram", "logo"]}
+                    selectedUrl={logoUrl}
+                    onSelect={asset => setLogoUrl(asset.file_url)}
+                    showSizeControl
+                    sizeValue={logoSize}
+                    onSizeChange={setLogoSize}
+                    sizeLabel="Logo Size"
+                    sizeMin={30}
+                    sizeMax={100}
+                  />
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
           {/* Template */}
           <div>
             <Label className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--muted-foreground))] mb-3 block">Style</Label>

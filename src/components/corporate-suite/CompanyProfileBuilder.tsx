@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, Building2, Sparkles, Download, Plus, Trash2,
-  ChevronRight, LayoutGrid, Loader2, User, Phone, Mail, Globe, MapPin,
+  ChevronRight, LayoutGrid, Loader2, User, Phone, Mail, Globe, MapPin, ImageIcon, ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
+import { BrandAssetLibrary, BrandAsset } from "@/components/corporate-suite/BrandAssetLibrary";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Template = "premium" | "executive" | "clean";
@@ -123,6 +125,9 @@ export default function CompanyProfileBuilder() {
   const [generating, setGenerating] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [activeTab, setActiveTab] = useState<"company" | "services" | "team" | "contact">("company");
+  const [brandAssetOpen, setBrandAssetOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState("");
+  const [logoSize, setLogoSize] = useState(80);
 
   const [data, setData] = useState<ProfileData>({
     companyName: "",
@@ -349,6 +354,37 @@ export default function CompanyProfileBuilder() {
       <div className="max-w-6xl mx-auto px-5 py-8 grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-8">
         {/* ── Left: Editor ── */}
         <div className="space-y-4">
+          {/* Brand Assets */}
+          <Collapsible open={brandAssetOpen} onOpenChange={setBrandAssetOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <ImageIcon size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Brand Assets</span>
+                    {logoUrl && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${brandAssetOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
+                  <BrandAssetLibrary
+                    assetTypes={["monogram", "logo"]}
+                    selectedUrl={logoUrl}
+                    onSelect={asset => setLogoUrl(asset.file_url)}
+                    showSizeControl
+                    sizeValue={logoSize}
+                    onSizeChange={setLogoSize}
+                    sizeLabel="Logo Size"
+                    sizeMin={40}
+                    sizeMax={160}
+                  />
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
           {/* Template picker */}
           <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-3">
             <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">Template</h3>
