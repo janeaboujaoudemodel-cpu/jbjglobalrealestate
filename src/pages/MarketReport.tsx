@@ -1015,7 +1015,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 5: 2025 FULL YEAR MARKET REVIEW -->
-  <div class="page">
+  <div class="page" id="page-5">
     <h2>2025 Full Year Market Review</h2>
     <p>Dubai's 2025 full-year performance set historic records, driven by global capital inflows, Golden Visa expansions, and a growing millionaire population choosing to make the UAE their home.</p>
     <div class="stat-grid">
@@ -1065,7 +1065,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 6: UAE GDP & GLOBAL RANKINGS (NEW) -->
-  <div class="page">
+  <div class="page" id="page-6">
     <h2>UAE GDP &amp; Global Rankings</h2>
     <p>The UAE is not just a real estate story — it is an economic powerhouse reshaping the global investment landscape.</p>
     <div class="stat-grid">
@@ -1120,7 +1120,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 7: DLD TRANSACTION DASHBOARD (LIVE) -->
-  <div class="page">
+  <div class="page" id="page-7">
     <h2>Dubai Transaction Dashboard</h2>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
       <p style="margin: 0; color: #6B6459;">Live market statistics from the Dubai Land Department. Data refreshed at download.</p>
@@ -1174,7 +1174,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 8: TOP AREAS BY VOLUME (DLD LIVE) -->
-  <div class="page">
+  <div class="page" id="page-8">
     <h2>Top Areas by Transaction Volume</h2>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
       <p style="margin: 0; color: #6B6459;">2026 YTD — ranked by total registered transactions (DLD).</p>
@@ -1204,7 +1204,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 9: TOP BUYER NATIONALITIES -->
-  <div class="page">
+  <div class="page" id="page-9">
     <h2>Top Buyer Nationalities</h2>
     <p style="color: #6B6459;">Dubai's buyer pool reflects its status as a global investment hub — attracting capital from every continent. 2026 YTD data from DLD.</p>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0;">
@@ -1228,7 +1228,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 10: PROPERTY TYPES & RENTAL YIELDS -->
-  <div class="page">
+  <div class="page" id="page-10">
     <h2>Property Types &amp; Rental Yields</h2>
     <p>The UAE real estate sector demonstrates remarkable resilience, driven by economic diversification and favorable policies.</p>
     <div class="chart-container">
@@ -1275,7 +1275,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 11: KEY INVESTMENT INDICATORS -->
-  <div class="page">
+  <div class="page" id="page-11">
     <h2>Key Investment Indicators</h2>
     <p>Successful real estate investment requires understanding and monitoring key market indicators.</p>
     <div class="two-col">
@@ -1322,7 +1322,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 12: COMMUNITY COMPARISON GUIDE -->
-  <div class="page">
+  <div class="page" id="page-12">
     <h2>Community Comparison Guide</h2>
     <p>Location drives long-term value. Use this framework to compare communities objectively.</p>
     <div class="table-wrapper">
@@ -1353,7 +1353,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 13: DEVELOPER FRAMEWORK -->
-  <div class="page">
+  <div class="page" id="page-13">
     <h2>Developer Analysis Framework</h2>
     <p>Choosing the right developer is crucial, especially for off-plan purchases. Use this framework.</p>
     <div class="table-wrapper">
@@ -1408,7 +1408,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 14: OFF-PLAN VS READY -->
-  <div class="page">
+  <div class="page" id="page-14">
     <h2>Off-Plan vs Ready Properties</h2>
     <p>Understanding the trade-offs is essential for aligning investments with your goals.</p>
     <div class="table-wrapper">
@@ -1449,7 +1449,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 15: DUE DILIGENCE CHECKLIST -->
-  <div class="page">
+  <div class="page" id="page-15">
     <h2>Due Diligence Checklist</h2>
     <p>Thorough due diligence protects your investment. Use this comprehensive checklist before every transaction.</p>
     <div class="two-col">
@@ -1514,7 +1514,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 16: MARKET OUTLOOK 2026 -->
-  <div class="page">
+  <div class="page" id="page-16">
     <h2>Market Outlook 2026</h2>
     <p>Based on 2025's exceptional performance and strong macroeconomic fundamentals, 2026 presents compelling selective opportunities.</p>
 
@@ -1562,7 +1562,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 17: RISK MANAGEMENT -->
-  <div class="page">
+  <div class="page" id="page-17">
     <h2>Risk Management</h2>
     <p>Every investment carries risk. Smart investors identify, assess, and mitigate risks proactively.</p>
     <div class="two-col">
@@ -1607,7 +1607,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 18: AI PROPERTY MATCHMAKER -->
-  <div class="page">
+  <div class="page" id="page-18">
     <h2>AI Property Matchmaker</h2>
     <p>JBJ Global Real Estate has developed an exclusive AI-powered Property Matchmaker to help buyers identify properties aligned with their specific criteria and investment goals.</p>
     <div style="background: linear-gradient(135deg, #1A1814 0%, #2C2A26 100%); border: 1px solid rgba(168,146,90,0.4); border-radius: 16px; padding: 28px; margin: 24px 0;">
@@ -1661,7 +1661,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 19: LATEST MARKET NEWS (LIVE) -->
-  <div class="page">
+  <div class="page" id="page-19">
     <h2>Latest Market News</h2>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px;">
       <p style="margin: 0; color: #6B6459;">The latest headlines from official UAE sources — updated at download.</p>
@@ -1684,7 +1684,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 20: FEATURED AREAS (LIVE) -->
-  <div class="page">
+  <div class="page" id="page-20">
     <h2>Featured Areas</h2>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
       <p style="margin: 0; color: #6B6459;">Top communities by transaction volume — live from our database.</p>
@@ -1711,7 +1711,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 21: FEATURED DEVELOPERS (LIVE) -->
-  <div class="page">
+  <div class="page" id="page-21">
     <h2>Featured Developers</h2>
     <p style="color: #6B6459;">Top-tier developers shaping Dubai's skyline — each backed by a proven delivery track record.</p>
     ${featuredDevelopers.length > 0 ? `
@@ -1743,7 +1743,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 22: FEATURED PROJECTS (LIVE) -->
-  <div class="page">
+  <div class="page" id="page-22">
     <h2>Featured Projects</h2>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
       <p style="margin: 0; color: #6B6459;">Latest published projects available through JBJ Global Real Estate.</p>
@@ -1773,7 +1773,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 23: EXPLORE ALL & CONTACT -->
-  <div class="page">
+  <div class="page" id="page-23">
     <h2>Explore JBJ.AE</h2>
     <p style="color: #6B6459; text-align: center; margin-bottom: 28px;">Everything you need in one place — properties, areas, developers, market intelligence, and AI tools.</p>
 
@@ -2065,7 +2065,7 @@ const MarketReport = () => {
                 title="UAE Real Estate Market Intelligence 2026"
                 srcDoc={bookHtml}
                 className="w-full h-[calc(88vh-52px)] bg-white"
-                sandbox="allow-same-origin allow-scripts"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
               />
             </div>
           </div>
