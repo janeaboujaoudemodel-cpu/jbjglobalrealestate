@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -157,6 +157,8 @@ export default function LogoCreator() {
     accent: customColors.accent || preset.accent,
   };
 
+  const generateRef = useRef<((seed?: number) => Promise<void>) | null>(null);
+
   const generate = useCallback(async (currentSeed?: number) => {
     if (!name.trim()) { toast.error("Please enter a company or personal name"); return; }
     setGenerating(true);
@@ -188,14 +190,17 @@ export default function LogoCreator() {
     }
   }, [name, description, industry, style, font, colors, seed]);
 
-  // Auto-regenerate when style/industry/font/color changes — only after first generation
+  // Keep ref in sync so the debounce effect always calls the latest version
+  useEffect(() => { generateRef.current = generate; }, [generate]);
+
+  // Auto-regenerate on parameter changes — only after first generation, 600ms debounce
   useEffect(() => {
-    if (!logo || !name.trim() || generating) return;
+    if (!logo || !name.trim()) return;
     const timer = setTimeout(() => {
       const nextSeed = seed + 1;
       setSeed(nextSeed);
-      generate(nextSeed);
-    }, 800);
+      generateRef.current?.(nextSeed);
+    }, 600);
     return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [style, industry, font, colorPreset]);
