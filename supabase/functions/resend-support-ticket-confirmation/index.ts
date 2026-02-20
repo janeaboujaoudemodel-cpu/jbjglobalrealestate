@@ -1,8 +1,26 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { Resend } from "npm:resend@2.0.0";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+// Standard Resend API endpoint (Tokyo region is DNS verification location only, API is global)
+const RESEND_API_URL = "https://api.resend.com/emails";
+
+async function sendEmail(payload: { from: string; to: string[]; subject: string; html: string }) {
+  const apiKey = Deno.env.get("RESEND_API_KEY");
+  const res = await fetch(RESEND_API_URL, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    console.error("Resend API error:", JSON.stringify(data));
+    return { error: data };
+  }
+  return { data };
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -130,13 +148,13 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send to customer AND admin copy in parallel
     const [customerResult, adminResult] = await Promise.allSettled([
-      resend.emails.send({
+      sendEmail({
         from: `JBJ Support <${VERIFIED_SENDER}>`,
         to: [email],
         subject: `[${ticket.ticket_number}] Your Support Ticket Confirmation (Resent)`,
         html: emailHtml,
       }),
-      resend.emails.send({
+      sendEmail({
         from: `JBJ Support <${VERIFIED_SENDER}>`,
         to: [ADMIN_EMAIL],
         subject: `[ADMIN COPY - RESENT] ${ticket.ticket_number} → ${email}`,

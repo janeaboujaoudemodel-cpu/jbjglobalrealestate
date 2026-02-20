@@ -1,8 +1,26 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { Resend } from "npm:resend@2.0.0";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+// Standard Resend API endpoint (Tokyo region is DNS verification location only, API is global)
+const RESEND_API_URL = "https://api.resend.com/emails";
+
+async function sendEmail(payload: { from: string; to: string[]; subject: string; html: string; bcc?: string[] }) {
+  const apiKey = Deno.env.get("RESEND_API_KEY");
+  const res = await fetch(RESEND_API_URL, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    console.error("Resend API error:", JSON.stringify(data));
+    return { error: data };
+  }
+  return { data };
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -472,14 +490,14 @@ const handler = async (req: Request): Promise<Response> => {
     // Send BOTH emails in parallel for faster response
     const [supportEmailResult, customerEmailResult] = await Promise.allSettled([
       // Support team email
-      resend.emails.send({
+      sendEmail({
         from: `JBJ Support <${VERIFIED_SENDER}>`,
         to: [OFFICIAL_EMAILS.support],
         subject: `[${ticket.ticket_number}] New Support Ticket: ${subject}`,
         html: supportEmailHtml,
       }),
       // Customer confirmation email
-      resend.emails.send({
+      sendEmail({
         from: `JBJ Support <${VERIFIED_SENDER}>`,
         to: [email],
         subject: `Ticket Received: ${ticket.ticket_number} - We're on it!`,
@@ -501,26 +519,21 @@ const handler = async (req: Request): Promise<Response> => {
       console.error("Failed to send support email:", supportEmailResult.reason);
     }
 
-    // Process customer email result - PROPERLY handle Resend's { data, error } response
+    // Process customer email result
     if (customerEmailResult.status === 'fulfilled') {
       const result = customerEmailResult.value as any;
-      // Resend SDK returns { data: { id: ... }, error: null } or { data: null, error: { ... } }
       if (result?.error) {
-        // Email failed - extract error message
         customerEmailError = result.error?.message || result.error?.name || JSON.stringify(result.error).substring(0, 200);
-        console.error("Customer email FAILED (Resend error):", result.error);
-      } else if (result?.data?.id || result?.id) {
-        // Email succeeded
+        console.error("Customer email FAILED:", result.error);
+      } else if (result?.data?.id) {
         customerEmailSent = true;
-        customerEmailMessageId = result?.data?.id || result?.id;
+        customerEmailMessageId = result.data.id;
         console.log("Customer confirmation email SENT successfully, ID:", customerEmailMessageId);
       } else {
-        // Unexpected response shape
         customerEmailError = "Unexpected email response format";
         console.error("Unexpected Resend response:", JSON.stringify(result));
       }
     } else {
-      // Promise rejected (network error, etc)
       customerEmailError = customerEmailResult.reason instanceof Error 
         ? customerEmailResult.reason.message.substring(0, 200) 
         : "Network error sending email";

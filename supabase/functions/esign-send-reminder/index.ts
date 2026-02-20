@@ -74,7 +74,7 @@ Deno.serve(async (req) => {
       return corsErrorResponse("No pending recipients to remind", 400, origin);
     }
 
-    const resend = resendApiKey ? new Resend(resendApiKey) : null;
+    const resend = resendApiKey ? new Resend(resendApiKey, { baseUrl: "https://api.ap.resend.com" }) : null;
     const baseUrl = Deno.env.get("SITE_URL") || "https://jbj.ae";
 
     for (const recipient of pendingRecipients) {
