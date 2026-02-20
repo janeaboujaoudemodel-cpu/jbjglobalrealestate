@@ -16656,6 +16656,36 @@ export type Database = {
         }
         Relationships: []
       }
+      shared_business_cards: {
+        Row: {
+          card_data: Json
+          created_at: string
+          expires_at: string | null
+          id: string
+          token: string
+          user_id: string
+          view_count: number
+        }
+        Insert: {
+          card_data: Json
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          token?: string
+          user_id: string
+          view_count?: number
+        }
+        Update: {
+          card_data?: Json
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          token?: string
+          user_id?: string
+          view_count?: number
+        }
+        Relationships: []
+      }
       shortlists: {
         Row: {
           created_at: string
@@ -22062,6 +22092,10 @@ export type Database = {
         Returns: boolean
       }
       has_verified_first_deal: { Args: { _user_id: string }; Returns: boolean }
+      increment_shared_card_views: {
+        Args: { card_token: string }
+        Returns: undefined
+      }
       is_active_crm_member: { Args: { _user_id: string }; Returns: boolean }
       is_authorized_staff: { Args: never; Returns: boolean }
       is_crm_admin: { Args: { _user_id: string }; Returns: boolean }

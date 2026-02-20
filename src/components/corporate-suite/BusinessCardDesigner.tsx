@@ -8,8 +8,11 @@ import {
   Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
   Save, Palette, Zap, Star, Cpu, Minus, Type, User,
-  ArrowLeft, ChevronRight,
+  ArrowLeft, ChevronRight, Share2, Copy, ExternalLink,
 } from "lucide-react";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
+} from "@/components/ui/dialog";
 import { StudioShell, type StudioSection } from "@/components/ui/StudioShell";
 import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import { Button } from "@/components/ui/button";
@@ -1040,6 +1043,9 @@ export default function BusinessCardDesigner() {
   const [side, setSide]         = useState<"front" | "back">("front");
   const [isExporting, setIsExporting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [shareToken, setShareToken] = useState<string | null>(null);
   const [brandAssetOpen, setBrandAssetOpen] = useState(false);
   const [colorOpen, setColorOpen] = useState(true);
   const [logoUrl, setLogoUrl]   = useState("");
@@ -1231,6 +1237,46 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     }
   };
 
+  const handleShareCard = async () => {
+    setIsSharing(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Please sign in to share your card."); return; }
+
+      const cardSnapshot = {
+        data,
+        frontTemplate,
+        frontColorIdx,
+        frontCustomColor,
+        cardShape,
+        logoUrl,
+        logoSize,
+        aiDesignData,
+        fontFamily: cardFontFamily,
+        fontWeight: cardFontBold ? "bold" : "800",
+        fontStyle: cardFontItalic ? "italic" : "normal",
+        nameFontSize: cardFontSize,
+        frontPrimary,
+        frontSecondary,
+        frontAccent,
+      };
+
+      const { data: inserted, error } = await supabase
+        .from("shared_business_cards")
+        .insert({ user_id: user.id, card_data: cardSnapshot as any })
+        .select("token")
+        .single();
+
+      if (error) throw error;
+      setShareToken(inserted.token);
+      setShareModalOpen(true);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to generate share link. Please try again.");
+    } finally {
+      setIsSharing(false);
+    }
+  };
 
   const fields: { key: keyof CardData; label: string; placeholder: string; icon: React.ReactNode; voiceKey?: boolean }[] = [
     { key: "name",    label: "Full Name",   placeholder: "Ahmed Al-Mansoori",            icon: <User size={12} />, voiceKey: true },
@@ -1309,6 +1355,16 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             </Button>
 
             <Button
+              onClick={handleShareCard}
+              disabled={isSharing}
+              variant="outline"
+              className="gap-1.5 h-8 text-xs font-semibold border-green-200 text-green-700 hover:bg-green-50"
+            >
+              {isSharing ? <RefreshCw size={12} className="animate-spin" /> : <Share2 size={12} />}
+              {isSharing ? "Generating…" : "Share"}
+            </Button>
+
+            <Button
               onClick={handleExport}
               disabled={isExporting}
               className="gap-2 h-8 text-xs font-semibold text-white hover:opacity-90 transition-opacity"
@@ -1320,6 +1376,86 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
           </div>
         </div>
       </div>
+
+      {/* ── Share Modal ─────────────────────────────────────────── */}
+      {shareToken && (
+        <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
+          <DialogContent className="max-w-sm">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Share2 size={16} className="text-green-600" />
+                Share Your Card
+              </DialogTitle>
+              <DialogDescription>
+                Anyone with this link can view your card and save your contact
+              </DialogDescription>
+            </DialogHeader>
+
+            {(() => {
+              const shareUrl = `${window.location.origin}/card/${shareToken}`;
+              const qrUrl = buildQrUrl(shareUrl, frontPrimary, "#ffffff", 160);
+              return (
+                <div className="space-y-4">
+                  {/* QR Code */}
+                  <div className="flex justify-center">
+                    <div className="p-3 bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm">
+                      <img src={qrUrl} alt="Share QR Code" className="w-40 h-40 rounded-lg" />
+                    </div>
+                  </div>
+
+                  {/* URL input + copy */}
+                  <div className="flex gap-2">
+                    <input
+                      readOnly
+                      value={shareUrl}
+                      className="flex-1 h-9 px-3 text-xs rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] select-all focus:outline-none"
+                      onClick={e => (e.target as HTMLInputElement).select()}
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-9 gap-1.5 text-xs"
+                      onClick={() => {
+                        navigator.clipboard.writeText(shareUrl);
+                        toast.success("Link copied!");
+                      }}
+                    >
+                      <Copy size={12} /> Copy
+                    </Button>
+                  </div>
+
+                  {/* Action buttons */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-9 gap-1.5 text-xs text-green-700 border-green-200 hover:bg-green-50"
+                      onClick={() => {
+                        const msg = encodeURIComponent(`Here's my digital business card: ${shareUrl}`);
+                        window.open(`https://wa.me/?text=${msg}`, "_blank");
+                      }}
+                    >
+                      💬 WhatsApp
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-9 gap-1.5 text-xs"
+                      onClick={() => window.open(shareUrl, "_blank")}
+                    >
+                      <ExternalLink size={12} /> Preview
+                    </Button>
+                  </div>
+
+                  <p className="text-[10px] text-center text-[hsl(var(--muted-foreground))]">
+                    Scan QR or share the link — recipients can tap "Save Contact" to add you instantly
+                  </p>
+                </div>
+              );
+            })()}
+          </DialogContent>
+        </Dialog>
+      )}
 
       {/* ── Main Content ───────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8 grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-8">
@@ -2019,7 +2155,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                 </span>
               )}
             </Label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             {/* Edit Layout toggle — always visible on mobile */}
             <button
               onClick={() => setEditLayout(v => !v)}
@@ -2032,6 +2168,16 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             >
               <Move size={11} />
               {editLayout ? "Done" : "Edit Layout"}
+            </button>
+            {/* Share button — visible in preview area for easy mobile access */}
+            <button
+              onClick={handleShareCard}
+              disabled={isSharing}
+              className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold transition-colors border border-green-200 bg-green-50 text-green-700 hover:bg-green-100 disabled:opacity-60"
+              title="Share card and get a shareable link"
+            >
+              {isSharing ? <RefreshCw size={11} className="animate-spin" /> : <Share2 size={11} />}
+              {isSharing ? "…" : "Share"}
             </button>
             <div className="flex rounded-lg border border-[hsl(var(--border))] overflow-hidden text-xs">
               {(["front", "back"] as const).map(s => (
@@ -2050,6 +2196,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               ))}
             </div>
           </div>
+          
           </div>
 
           {/* Card preview */}

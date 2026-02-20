@@ -365,6 +365,12 @@ const App = () => (
               <Route path="/403" element={<AccessDenied />} />
               {/* Hidden standalone pages - no header/footer */}
               <Route path="/card" element={<DigitalCard />} />
+              {/* Public shared business card page — no auth required */}
+              <Route path="/card/:token" element={
+                <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#C8A766]"></div></div>}>
+                  {React.createElement(React.lazy(() => import("./pages/SharedBusinessCard")))}
+                </Suspense>
+              } />
               
               {/* Public E-Signature Signing Page - No auth required */}
               <Route path="/sign/:token" element={
