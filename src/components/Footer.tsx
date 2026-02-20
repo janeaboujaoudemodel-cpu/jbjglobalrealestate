@@ -672,6 +672,22 @@ const Footer = () => {
                 {/* Market Intelligence */}
                 <FooterCard title="Market Intelligence" links={marketIntelLinks} />
 
+                {/* Creative Suites Hub */}
+                <FooterCard title="Creative Suites" links={[
+                  { href: "/toolkit/corporate-suite", label: "Corporate Suite" },
+                  { href: "/toolkit/property-suite", label: "Real Estate Suite" },
+                  { href: "/toolkit/video-suite", label: "Video Suite" },
+                  { href: "/toolkit/photo-suite", label: "Photo & Image Suite" },
+                  { href: "/toolkit/voice-suite", label: "Voice & Audio Suite" },
+                  { href: "/toolkit/pdf-suite", label: "PDF & Documents Suite" },
+                  { href: "/toolkit/stamp-generator", label: "AI Stamp Generator" },
+                  { href: "/toolkit/corporate-suite/business-card", label: "Business Card" },
+                  { href: "/toolkit/corporate-suite/cv-builder", label: "Resume / CV" },
+                  { href: "/toolkit/corporate-suite/cover-letter", label: "Cover Letter" },
+                  { href: "/e-signature", label: "JBJ E-Sign" },
+                  { href: "/toolkit/scan-sign", label: "Scan & Sign" },
+                ]} viewAllHref="/toolkit" viewAllLabel="View All Creative Tools →" />
+
                 {/* Broker Hub - conditional */}
                 {isBrokerMode && <FooterCard title="Broker Hub" links={brokerToolsLinks} />}
 
