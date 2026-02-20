@@ -182,16 +182,16 @@ export function LiveStampPreview({
     const isRound = stampType === 'ROUND' || stampType === 'OVAL';
 
     if (isRound) {
-      // Arc text on top for company name
-      const arcR = outerRx - 14;
+      // Arc text on top for company name — reduce arcR so text doesn't touch the border
+      const arcR = outerRx - 22;
       const topArcId = 'top-arc-lp';
       const topArcPath = arcPath(cx, cy, arcR, -155, 130);
 
-      // Bottom arc: registration or city
+      // Bottom arc: arabic city or city/country
       const botArcId = 'bot-arc-lp';
       const botArcPath = arcPath(cx, cy, arcR, 25, 130);
 
-      const nameFontSize = Math.max(7, fitFontSize(displayName, 11, Math.PI * arcR * 0.72, 0.55));
+      const nameFontSize = Math.max(6, fitFontSize(displayName, 10, Math.PI * arcR * 0.72, 0.55));
       const nameDisplay = trunc(displayName.toUpperCase(), 30);
 
       textContent += `
@@ -204,11 +204,21 @@ export function LiveStampPreview({
         </text>`;
 
       if (isBilingual && arabicCompanyName) {
-        // Arabic on bottom arc
-        const arFontSize = Math.max(7, fitFontSize(arabicCompanyName, 10, Math.PI * arcR * 0.72, 0.65));
+        // Arabic company name on bottom arc in Arabic script
+        const arFontSize = Math.max(6, fitFontSize(arabicCompanyName, 9, Math.PI * arcR * 0.72, 0.65));
+        const arabicCity = city ? `${city}، الإمارات العربية المتحدة` : 'الإمارات العربية المتحدة';
+        // Show arabic company name on bottom arc
         textContent += `
-        <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${arFontSize}" fill="${goldInk}" letter-spacing="0.5">
-          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle" direction="rtl">${trunc(arabicCompanyName, 28)}</textPath>
+        <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${arFontSize}" fill="${goldInk}" letter-spacing="0.3">
+          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle" direction="rtl" unicode-bidi="bidi-override">${trunc(arabicCompanyName, 28)}</textPath>
+        </text>`;
+      } else if (isArabic) {
+        // Arabic-only mode: show arabic city at bottom
+        const arabicCity = city ? `${city}، الإمارات العربية المتحدة` : 'الإمارات العربية المتحدة';
+        const cityFontSize = Math.max(6, fitFontSize(arabicCity, 8.5, Math.PI * arcR * 0.72, 0.65));
+        textContent += `
+        <text font-family="${FONT_FAMILIES.ARABIC_MODERN}" font-size="${cityFontSize}" fill="${goldInk}" letter-spacing="0.3">
+          <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle" direction="rtl" unicode-bidi="bidi-override">${trunc(arabicCity, 28)}</textPath>
         </text>`;
       } else if (density >= 2 && (city || country)) {
         const cityLine = [city, country].filter(Boolean).join(' · ').toUpperCase();

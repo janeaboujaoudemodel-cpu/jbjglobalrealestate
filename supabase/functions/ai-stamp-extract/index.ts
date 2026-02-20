@@ -32,11 +32,7 @@ serve(async (req) => {
       });
     }
 
-    // Gemini vision models only support image/* MIME types via inline data.
-    // For PDFs, we treat them as image/jpeg — if the file is actually a PDF the model
-    // will still read its embedded images. Explicitly forcing an image MIME avoids
-    // 400 errors from the gateway when application/pdf is sent as an inline data URL.
-    const effectiveMime = (mimeType && mimeType.startsWith('image/')) ? mimeType : 'image/jpeg';
+    const isPdf = mimeType === 'application/pdf';
 
     const prompt = `You are an expert OCR system analyzing a business document, trade license, or commercial registration certificate — most likely issued in the United Arab Emirates.
 
@@ -75,30 +71,37 @@ Rules:
 - For Arabic text, preserve exact Arabic characters including diacritics.
 - If a field is not clearly visible, omit it entirely — do not guess.`;
 
+    // Determine the correct MIME to send to the AI gateway.
+    // Gemini 2.5-flash supports application/pdf natively via inline data URL.
+    // For images, use the actual image MIME type.
+    const effectiveMime = isPdf ? 'application/pdf' : (mimeType && mimeType.startsWith('image/') ? mimeType : 'image/jpeg');
+
+    const requestBody = {
+      model: 'google/gemini-2.5-flash',
+      messages: [
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: prompt },
+            {
+              type: 'image_url',
+              image_url: {
+                url: `data:${effectiveMime};base64,${imageBase64}`,
+              },
+            },
+          ],
+        },
+      ],
+      max_tokens: 1024,
+    };
+
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [
-          {
-            role: 'user',
-            content: [
-              { type: 'text', text: prompt },
-              {
-                type: 'image_url',
-                image_url: {
-                  url: `data:${effectiveMime};base64,${imageBase64}`,
-                },
-              },
-            ],
-          },
-        ],
-        max_tokens: 1024,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     if (!response.ok) {
