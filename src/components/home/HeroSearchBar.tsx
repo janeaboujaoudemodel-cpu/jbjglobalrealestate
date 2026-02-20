@@ -98,9 +98,9 @@ const SALE_STATUS_OPTIONS = [
   { value: "Sold Out", label: "Sold Out", color: "bg-red-500" },
 ];
 
-// UAE Emirates + International priority countries
+// UAE Emirates only
 const UAE_EMIRATES = [
-  { value: "all", label: "All Locations" },
+  { value: "all", label: "All Emirates" },
   { value: "Dubai", label: "Dubai" },
   { value: "Abu Dhabi", label: "Abu Dhabi" },
   { value: "Sharjah", label: "Sharjah" },
@@ -108,11 +108,6 @@ const UAE_EMIRATES = [
   { value: "Ajman", label: "Ajman" },
   { value: "Fujairah", label: "Fujairah" },
   { value: "Umm Al Quwain", label: "Umm Al Quwain" },
-  // International priority countries
-  { value: "Cyprus", label: "Cyprus" },
-  { value: "Indonesia", label: "Indonesia" },
-  { value: "Oman", label: "Oman" },
-  { value: "Thailand", label: "Thailand" },
 ];
 
 // Sort options - Premium labels
@@ -757,6 +752,104 @@ const HeroSearchBar = () => {
                   {option.label}
                 </button>
               ))}
+            </PopoverContent>
+          </Popover>
+
+          {/* Premium Gradient Divider */}
+          <div className="h-8 w-px bg-gradient-to-b from-transparent via-white/40 to-transparent" />
+
+          {/* Emirates Dropdown — always visible in main bar */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="flex items-center gap-1 px-3 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
+                <MapPin className="w-3.5 h-3.5 text-gold" />
+                <span className="hidden md:inline">{emirate === 'all' ? 'Emirates' : emirate}</span>
+                <ChevronDown className="w-3.5 h-3.5 text-gold" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
+              side="bottom"
+              align="start"
+              sideOffset={4}
+            >
+              <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Emirates</div>
+              {UAE_EMIRATES.map((item) => (
+                <button
+                  key={item.value}
+                  onClick={() => setEmirate(item.value)}
+                  className={cn(
+                    "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors",
+                    emirate === item.value
+                      ? "bg-gold/20 text-black font-semibold border border-gold/40"
+                      : "text-black hover:bg-white/50"
+                  )}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </PopoverContent>
+          </Popover>
+
+          {/* Premium Gradient Divider */}
+          <div className="h-8 w-px bg-gradient-to-b from-transparent via-white/40 to-transparent" />
+
+          {/* Developer Dropdown — always visible in main bar with logos */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="flex items-center gap-1 px-3 h-12 text-white font-medium text-sm hover:bg-white/10 transition-colors whitespace-nowrap">
+                {developerId !== 'all' && developers?.find(d => d.id === developerId)?.logo_url ? (
+                  <img
+                    src={developers.find(d => d.id === developerId)?.logo_url!}
+                    alt=""
+                    className="w-4 h-4 object-contain rounded-sm bg-white"
+                  />
+                ) : (
+                  <svg className="w-3.5 h-3.5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                )}
+                <span className="hidden md:inline max-w-[80px] truncate">
+                  {developerId === 'all' ? 'Developer' : developers?.find(d => d.id === developerId)?.name || 'Developer'}
+                </span>
+                <ChevronDown className="w-3.5 h-3.5 text-gold" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-52 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999] max-h-72 overflow-y-auto jj-scrollbar-gold"
+              side="bottom"
+              align="start"
+              sideOffset={4}
+            >
+              <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Developer</div>
+              <button
+                onClick={() => setDeveloperId('all')}
+                className={cn(
+                  "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2",
+                  developerId === 'all' ? "bg-gold/20 text-black font-semibold border border-gold/40" : "text-black hover:bg-white/50"
+                )}
+              >
+                All Developers
+              </button>
+              {(developers || [])
+                .sort((a: any, b: any) => (a.rank ?? 999) - (b.rank ?? 999))
+                .map((dev: any) => (
+                  <button
+                    key={dev.id}
+                    onClick={() => setDeveloperId(dev.id)}
+                    className={cn(
+                      "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2",
+                      developerId === dev.id ? "bg-gold/20 text-black font-semibold border border-gold/40" : "text-black hover:bg-white/50"
+                    )}
+                  >
+                    {dev.logo_url ? (
+                      <img src={dev.logo_url} alt="" className="w-5 h-5 object-contain rounded-sm bg-white flex-shrink-0" />
+                    ) : (
+                      <span className="w-5 h-5 rounded-sm bg-gold/20 flex items-center justify-center flex-shrink-0 text-[9px] font-bold text-gold">
+                        {dev.name?.charAt(0)}
+                      </span>
+                    )}
+                    <span className="truncate">{dev.name}</span>
+                  </button>
+                ))}
             </PopoverContent>
           </Popover>
 
