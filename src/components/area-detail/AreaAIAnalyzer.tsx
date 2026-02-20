@@ -13,8 +13,13 @@ interface AreaAIAnalyzerProps {
 
 function extractSection(text: string, sectionName: string): string {
   const patterns = [
+    // Format: **1. Area Overview** (number inside bold — actual AI output)
+    new RegExp(`\\*\\*\\d+\\.\\s*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*\\d+\\.|$)`, 'i'),
+    // Format: 1. **Area Overview** (number outside bold)
     new RegExp(`\\d+\\.\\s*\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\d+\\.\\s*\\*\\*|$)`, 'i'),
+    // Format: ## Area Overview
     new RegExp(`##\\s*${sectionName}[:\\s]*([\\s\\S]*?)(?=##|\\d+\\.\\s*\\*\\*|$)`, 'i'),
+    // Format: **Area Overview**
     new RegExp(`\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*[A-Z]|\\d+\\.\\s*\\*\\*|$)`, 'i'),
   ];
   for (const pattern of patterns) {
