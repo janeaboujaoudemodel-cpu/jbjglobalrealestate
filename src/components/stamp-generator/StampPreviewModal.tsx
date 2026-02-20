@@ -36,15 +36,23 @@ export function StampPreviewModal({
     setDownloadingPng(true);
     try {
       let svg = displaySvg;
-      // Uniquify IDs
+      // Uniquify IDs to prevent cross-stamp collisions
       const token = Math.random().toString(36).slice(2, 7);
       svg = svg.replace(/\bid="([^"]+)"/g, (_, id) => `id="${token}_${id}"`);
       svg = svg.replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${token}_${id})`);
       svg = svg.replace(/href="#([^"]+)"/g, (_, id) => `href="#${token}_${id}"`);
+      // Ensure xmlns
       if (!svg.includes('xmlns=')) svg = svg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
-      svg = svg.replace(/<svg([^>]*)>/, (_, a) => `<svg${a.replace(/\bwidth="[^"]*"/, '').replace(/\bheight="[^"]*"/, '')} width="512" height="512">`);
-      const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
-      const blobUrl = URL.createObjectURL(blob);
+      if (!svg.includes('xmlns:xlink')) svg = svg.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+      // Set explicit 512×512 dimensions
+      svg = svg.replace(/<svg([^>]*)>/, (_, a) => {
+        const clean = a.replace(/\bwidth="[^"]*"/, '').replace(/\bheight="[^"]*"/, '');
+        return `<svg${clean} width="512" height="512">`;
+      });
+      // Use base64 data URL — avoids Blob URL canvas CORS taint
+      const b64 = btoa(unescape(encodeURIComponent(svg)));
+      const dataUrl = `data:image/svg+xml;base64,${b64}`;
+
       await new Promise<void>((resolve, reject) => {
         const img = document.createElement('img');
         img.onload = async () => {
@@ -55,18 +63,19 @@ export function StampPreviewModal({
             const ctx = canvas.getContext('2d')!;
             ctx.drawImage(img, 0, 0, 512, 512);
             canvas.toBlob(b => {
-              URL.revokeObjectURL(blobUrl);
               if (!b) { reject(new Error('toBlob null')); return; }
+              const url = URL.createObjectURL(b);
               const a = document.createElement('a');
-              a.href = URL.createObjectURL(b);
-              a.download = `${(companyName).toLowerCase().replace(/\s+/g, '_')}_stamp_preview.png`;
+              a.href = url;
+              a.download = `${companyName.toLowerCase().replace(/\s+/g, '_')}_stamp_preview.png`;
               document.body.appendChild(a); a.click(); document.body.removeChild(a);
+              setTimeout(() => URL.revokeObjectURL(url), 1000);
               resolve();
             }, 'image/png');
-          } catch (e) { URL.revokeObjectURL(blobUrl); reject(e); }
+          } catch (e) { reject(e); }
         };
-        img.onerror = () => { URL.revokeObjectURL(blobUrl); reject(new Error('SVG load failed')); };
-        img.src = blobUrl;
+        img.onerror = () => reject(new Error('SVG render failed'));
+        img.src = dataUrl;
       });
     } catch (err) {
       console.error('Preview PNG download failed:', err);
