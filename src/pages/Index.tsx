@@ -80,9 +80,9 @@ const Index = () => {
       )}
       
       {/* HERO SECTION - LUXURY CINEMATIC VIDEO - MUST BE 100vh */}
-      <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
+      <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-black">
         {/* Video Background - Luxury Dubai Drone Footage - Optimized for performance */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-black">
           {/* Fallback image - always visible as base layer for instant load */}
           <img 
             src={luxuryVillaHero} 
@@ -90,25 +90,26 @@ const Index = () => {
             className="absolute inset-0 w-full h-full object-cover"
             loading="eager"
             fetchPriority="high"
+            decoding="sync"
           />
           {/* Video overlays the image when it loads/plays - deferred for performance */}
           <video 
             ref={(el) => {
               if (el && !el.dataset.deferred) {
                 el.dataset.deferred = 'true';
-                // Defer video loading to prioritize initial page render
+                // Defer video loading to avoid competing with hero image & JS
                 setTimeout(() => {
-                el.preload = 'auto';
+                  el.preload = 'auto';
                   el.src = 'https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4';
                   el.load();
-                }, 2000);
+                }, 3000);
               }
             }}
             autoPlay 
             loop 
             muted 
             playsInline
-            preload="metadata"
+            preload="none"
             poster={luxuryVillaHero}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
@@ -117,22 +118,20 @@ const Index = () => {
               WebkitTransform: 'translateZ(0)',
               backfaceVisibility: 'hidden',
               opacity: 0,
-              transition: 'opacity 0.5s ease-in-out',
+              transition: 'opacity 1s ease-in-out',
             }}
             onCanPlay={(e) => {
-              // Fade in video when ready to play
               e.currentTarget.style.opacity = '1';
             }}
             onError={(e) => {
-              // Hide video on error, fallback image already visible
               e.currentTarget.style.display = 'none';
             }}
           >
             <source src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4" type="video/mp4" />
           </video>
-          {/* Video overlay gradient - above video (lightened for better video visibility) */}
+          {/* Video overlay gradient - above video */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60 z-[2]" />
-          {/* Additional cinematic vignette (lightened) */}
+          {/* Additional cinematic vignette */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 z-[2]" />
         </div>
         

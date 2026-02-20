@@ -1353,104 +1353,104 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('buy')}
                   onClick={() => handleMegaMenuClick('buy')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'buy' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'buy' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
                   }`}
                 >
                   Buy
-                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'buy' ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'buy' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
 
                 {/* Sell */}
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('sell')}
                   onClick={() => handleMegaMenuClick('sell')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'sell' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'sell' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
                   }`}
                 >
                   Sell
-                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'sell' ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'sell' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
 
                 {/* Rent */}
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('rent')}
                   onClick={() => handleMegaMenuClick('rent')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'rent' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'rent' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
                   }`}
                 >
                   Rent
-                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'rent' ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'rent' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
 
                 {/* Projects */}
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('projects')}
                   onClick={() => handleMegaMenuClick('projects')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'projects' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'projects' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
                   }`}
                 >
                   Projects
-                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'projects' ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'projects' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
 
                 {/* Areas */}
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('areas')}
                   onClick={() => handleMegaMenuClick('areas')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'areas' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'areas' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
                   }`}
                 >
                   Areas
-                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'areas' ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'areas' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
 
                 {/* Developers */}
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('developers')}
                   onClick={() => handleMegaMenuClick('developers')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'developers' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'developers' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
                   }`}
                 >
                   Developers
-                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'developers' ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'developers' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-[10px] px-0.5 lg:px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
 
                 {/* Insights (News & Market Intelligence) */}
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('insights')}
                   onClick={() => handleMegaMenuClick('insights')}
-                  className={`flex items-center gap-0.5 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'insights' ? 'text-gold' : 'text-white hover:text-gold'
                       : activeMegaMenu === 'insights' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
                   }`}
                 >
                   Insights
-                  <ChevronDown className={`w-3 h-3 transition-transform ${activeMegaMenu === 'insights' ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'insights' ? 'rotate-180' : ''}`} />
                 </button>
                 {/* Insights is the last item - no trailing separator */}
               </div>
