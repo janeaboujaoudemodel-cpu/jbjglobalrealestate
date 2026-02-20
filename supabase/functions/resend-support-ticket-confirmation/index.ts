@@ -10,6 +10,7 @@ const corsHeaders = {
 };
 
 const VERIFIED_SENDER = "NOREPLY@JBJ.AE";
+const ADMIN_EMAIL = "SUPPORT@JBJ.AE"; // Admin always receives a copy
 const OFFICIAL_EMAILS = {
   support: "SUPPORT@JBJ.AE",
   contact: "CONTACT@JBJ.AE",
@@ -127,22 +128,45 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    // Send the email
-    let emailSent = false;
-    let emailError: string | null = null;
-
-    try {
-      await resend.emails.send({
+    // Send to customer AND admin copy in parallel
+    const [customerResult, adminResult] = await Promise.allSettled([
+      resend.emails.send({
         from: `JBJ Support <${VERIFIED_SENDER}>`,
         to: [email],
         subject: `[${ticket.ticket_number}] Your Support Ticket Confirmation (Resent)`,
         html: emailHtml,
-      });
-      emailSent = true;
-      console.log("Confirmation email resent to:", email);
-    } catch (sendError) {
-      console.error("Failed to resend email:", sendError);
-      emailError = sendError.message || "Unknown error";
+      }),
+      resend.emails.send({
+        from: `JBJ Support <${VERIFIED_SENDER}>`,
+        to: [ADMIN_EMAIL],
+        subject: `[ADMIN COPY - RESENT] ${ticket.ticket_number} → ${email}`,
+        html: `<p><strong>Admin Copy:</strong> Confirmation resent to <strong>${email}</strong> (${ticket.full_name})</p><hr/>${emailHtml}`,
+      }),
+    ]);
+
+    // Properly check Resend SDK response (returns {data, error} not throws)
+    let emailSent = false;
+    let emailError: string | null = null;
+
+    if (customerResult.status === 'fulfilled') {
+      const result = customerResult.value as any;
+      if (result?.error) {
+        emailError = result.error?.message || JSON.stringify(result.error);
+        console.error("Resend error (customer):", result.error);
+      } else if (result?.data?.id || result?.id) {
+        emailSent = true;
+        console.log("Confirmation email resent successfully to:", email);
+      } else {
+        emailError = "Unexpected response from email provider";
+        console.error("Unexpected Resend response:", JSON.stringify(result));
+      }
+    } else {
+      emailError = customerResult.reason?.message || "Network error";
+      console.error("Failed to send resend email:", customerResult.reason);
+    }
+
+    if (adminResult.status === 'rejected') {
+      console.warn("Admin copy failed (non-critical):", adminResult.reason);
     }
 
     // Update ticket with confirmation status

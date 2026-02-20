@@ -33,70 +33,39 @@ export const NewsletterBrevo = ({
 
     try {
       const normalizedEmail = email.toLowerCase().trim();
-      
-      // Use backend edge function to save lead (bypasses RLS) with retry logic
-      let retryCount = 0;
-      const maxRetries = 2;
-      let success = false;
 
-      while (retryCount <= maxRetries && !success) {
-        try {
-          const { data: captureResult, error: captureError } = await supabase.functions.invoke('capture-lead', {
-            body: {
-              email: normalizedEmail,
-              fullName: name || null,
-              source: 'newsletter',
-              subSource: source.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-              pageSource: window.location.pathname,
-              contactType: 'client',
-            },
-          });
-
-          if (!captureError && !(captureResult as any)?.error) {
-            success = true;
-          } else {
-            throw captureError || new Error((captureResult as any)?.error);
-          }
-        } catch (err) {
-          retryCount++;
-          console.warn(`Lead capture attempt ${retryCount} failed:`, err);
-          if (retryCount <= maxRetries) {
-            await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
-          }
-        }
-      }
-
-      if (!success) {
-        toast.error('Something went wrong. Please try again.');
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Call Brevo integration edge function (best effort - don't block on failure)
-      try {
-        await supabase.functions.invoke('newsletter-subscribe', {
-          body: {
-            email,
-            name,
-            listId,
-            source,
-            attributes: {
-              SIGNUP_DATE: new Date().toISOString(),
-              SIGNUP_PAGE: window.location.pathname,
-            },
-          },
-        });
-      } catch (brevoError) {
-        console.warn('Brevo subscription warning:', brevoError);
-      }
-
+      // Show success immediately — fire-and-forget backend calls
       setIsSuccess(true);
       setShowSuccessModal(true);
       setEmail('');
       setName('');
-
-      // Reset success state after 5 seconds
       setTimeout(() => setIsSuccess(false), 5000);
+
+      // Fire background calls without awaiting (non-blocking)
+      supabase.functions.invoke('capture-lead', {
+        body: {
+          email: normalizedEmail,
+          fullName: name || null,
+          source: 'newsletter',
+          subSource: source.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+          pageSource: window.location.pathname,
+          contactType: 'client',
+        },
+      }).catch(err => console.warn('Lead capture warning:', err));
+
+      supabase.functions.invoke('newsletter-subscribe', {
+        body: {
+          email: normalizedEmail,
+          name,
+          listId,
+          source,
+          attributes: {
+            SIGNUP_DATE: new Date().toISOString(),
+            SIGNUP_PAGE: window.location.pathname,
+          },
+        },
+      }).catch(err => console.warn('Brevo subscription warning:', err));
+
     } catch (error: any) {
       console.error('Newsletter subscription error:', error);
       toast.error('Something went wrong. Please try again.');
