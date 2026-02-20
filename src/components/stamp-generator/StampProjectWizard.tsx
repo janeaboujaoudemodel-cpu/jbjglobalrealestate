@@ -251,7 +251,7 @@ export default function StampProjectWizard() {
     try { sessionStorage.removeItem('stamp-wizard-form'); sessionStorage.removeItem('stamp-wizard-step'); } catch { /* ignore */ }
     toast.success('Project created!');
     window.scrollTo({ top: 0, behavior: 'auto' });
-    navigate(`/toolkit/stamp-generator/${data.id}/generate`);
+    navigate(`/toolkit/stamp-generator/${data.id}/generate?fresh=1`);
   }
 
   return (

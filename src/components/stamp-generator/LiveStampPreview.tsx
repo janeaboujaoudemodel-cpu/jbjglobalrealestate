@@ -182,11 +182,13 @@ export function LiveStampPreview({
     const isRound = stampType === 'ROUND' || stampType === 'OVAL';
 
     if (isRound) {
-      // Arc radius: text sits snugly inside the inner ring
+      // Arc radius: text sits snugly inside the inner ring, with safe clearance
       const arcR = innerRx - 6;
+      const clipR = innerRx - 2; // clip all text content to prevent overflow
       const topArcId = 'top-arc-lp';
       const botArcId = 'bot-arc-lp';
       const botArcRevId = 'bot-arc-rev-lp'; // reversed CCW path for Arabic RTL
+      const clipId = 'lp-round-clip';
 
       // Top arc: -177.5° → sweep 175° clockwise (nearly full top semicircle)
       const topArcPath = arcPath(cx, cy, arcR, -177.5, 175);
@@ -205,10 +207,12 @@ export function LiveStampPreview({
 
       textContent += `
         <defs>
+          <clipPath id="${clipId}"><circle cx="${cx}" cy="${cy}" r="${clipR}"/></clipPath>
           <path id="${topArcId}" d="${topArcPath}"/>
           <path id="${botArcId}" d="${botArcPath}"/>
           <path id="${botArcRevId}" d="${botArcRevPath}"/>
         </defs>
+        <g clip-path="url(#${clipId})">
         <text font-family="${fontFamily}" font-size="${nameFontSize}" fill="${goldInk}" letter-spacing="1.5" font-weight="600">
           <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${nameDisplay}</textPath>
         </text>`;
@@ -264,6 +268,8 @@ export function LiveStampPreview({
         textContent += `<line x1="${cx - rl}" y1="${ry1}" x2="${cx + rl}" y2="${ry1}" stroke="${goldInk}" stroke-width="0.6" opacity="0.5"/>`;
         textContent += `<line x1="${cx - rl}" y1="${ry2}" x2="${cx + rl}" y2="${ry2}" stroke="${goldInk}" stroke-width="0.6" opacity="0.5"/>`;
       }
+      // Close clipPath group
+      textContent += `</g>`;
 
     } else {
       // Rectangular / Square: stacked text lines centered
