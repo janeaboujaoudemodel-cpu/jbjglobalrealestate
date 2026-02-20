@@ -414,6 +414,9 @@ export default function StampGeneratorPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/gallery`)} className="gap-1 text-xs">
+              <Layers size={12}/> Gallery
+            </Button>
             <Button variant="outline" size="sm" onClick={() => setChatOpen(v => !v)} className="gap-1 text-xs">
               <MessageSquare size={12}/> AI Designer
             </Button>
