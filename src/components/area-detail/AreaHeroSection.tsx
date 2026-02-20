@@ -1,14 +1,20 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MapPin, ChevronRight, TrendingUp, Building2, Users, BarChart3, Flame } from "lucide-react";
+import { MapPin, ChevronRight, TrendingUp, Building2, Users, BarChart3, Flame, Activity, ArrowUpRight } from "lucide-react";
 import { scrollToId } from "@/lib/scroll";
 import type { Area } from "@/hooks/useAreas";
 import { optimizeStorageImageUrl } from "@/lib/imageUtils";
 
+interface DLDAreaData {
+  area: string;
+  transactions: number;
+  change: string;
+}
 
 interface AreaHeroSectionProps {
   area: Area & { developer_count?: number; project_count_sale?: number; avg_price_sqft?: number; hero_image_url?: string; is_high_demand?: boolean };
   liveProjectCount?: number;
+  dldAreaData?: DLDAreaData;
 }
 
 const fadeInUp = {
@@ -21,8 +27,11 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
 };
 
-export const AreaHeroSection = ({ area, liveProjectCount }: AreaHeroSectionProps) => {
+export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHeroSectionProps) => {
   const heroImage = area.hero_image_url || area.image_url;
+
+  const changeNum = dldAreaData ? parseFloat(dldAreaData.change.replace('%', '')) : null;
+  const isPositive = changeNum !== null && changeNum >= 0;
 
   return (
     <section className="relative h-screen flex items-end overflow-hidden">
@@ -36,7 +45,23 @@ export const AreaHeroSection = ({ area, liveProjectCount }: AreaHeroSectionProps
       />
       
       {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20" />
+
+      {/* DLD Live Badge — top right */}
+      {dldAreaData && (
+        <motion.div
+          className="absolute top-6 right-6 z-20 hidden md:flex items-center gap-2 bg-black/60 backdrop-blur-md border border-gold/40 rounded-2xl px-4 py-2.5"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+          </span>
+          <span className="text-white/60 text-xs uppercase tracking-widest font-medium">DLD Live Data</span>
+        </motion.div>
+      )}
 
       <motion.div 
         className="relative z-10 container mx-auto px-4 pb-12"
@@ -44,8 +69,8 @@ export const AreaHeroSection = ({ area, liveProjectCount }: AreaHeroSectionProps
         animate="visible"
         variants={staggerContainer}
       >
-        {/* Title + Location */}
-        <motion.div className="flex items-center gap-2 mb-3" variants={fadeInUp}>
+        {/* Location + badges */}
+        <motion.div className="flex items-center gap-2 mb-3 flex-wrap" variants={fadeInUp}>
           <MapPin className="w-5 h-5 text-gold" />
           <span className="text-gold text-sm uppercase tracking-wider">{area.emirate}, UAE</span>
           {area.is_trending && (
@@ -69,7 +94,6 @@ export const AreaHeroSection = ({ area, liveProjectCount }: AreaHeroSectionProps
         >
           {area.name}
         </motion.h1>
-        
 
         {/* Breadcrumb */}
         <motion.nav className="flex items-center gap-2 text-sm mb-6" variants={fadeInUp}>
@@ -81,11 +105,12 @@ export const AreaHeroSection = ({ area, liveProjectCount }: AreaHeroSectionProps
         </motion.nav>
 
         {/* Stats Bar */}
-        <motion.div className="flex flex-wrap gap-4 md:gap-6" variants={fadeInUp}>
+        <motion.div className="flex flex-wrap gap-3 md:gap-4" variants={fadeInUp}>
+          {/* Projects */}
           {(liveProjectCount ?? area.project_count_sale ?? area.property_count ?? 0) > 0 && (
             <button
               onClick={() => scrollToId('projects-section')}
-              className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-white/20 transition-colors"
+              className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-white/20 hover:border-gold/40 transition-all duration-200"
             >
               <Building2 className="w-5 h-5 text-gold" />
               <div className="text-left">
@@ -94,10 +119,12 @@ export const AreaHeroSection = ({ area, liveProjectCount }: AreaHeroSectionProps
               </div>
             </button>
           )}
+
+          {/* Developers */}
           {(area.developer_count ?? 0) > 0 && (
             <button
               onClick={() => scrollToId('developers-section')}
-              className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-white/20 transition-colors"
+              className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-white/20 hover:border-gold/40 transition-all duration-200"
             >
               <Users className="w-5 h-5 text-gold" />
               <div className="text-left">
@@ -106,6 +133,8 @@ export const AreaHeroSection = ({ area, liveProjectCount }: AreaHeroSectionProps
               </div>
             </button>
           )}
+
+          {/* Avg Price/sqft */}
           {(area.avg_price_sqft ?? 0) > 0 && (
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
               <BarChart3 className="w-5 h-5 text-gold" />
@@ -115,7 +144,41 @@ export const AreaHeroSection = ({ area, liveProjectCount }: AreaHeroSectionProps
               </div>
             </div>
           )}
+
+          {/* DLD YTD Transactions */}
+          {dldAreaData && (
+            <>
+              <div className="flex items-center gap-2 bg-gradient-to-br from-gold/20 to-gold/10 backdrop-blur-sm border border-gold/40 rounded-xl px-5 py-3">
+                <Activity className="w-5 h-5 text-gold" />
+                <div>
+                  <div className="text-xl font-bold text-white">{dldAreaData.transactions.toLocaleString()}</div>
+                  <div className="text-zinc-300 text-xs">DLD Transactions (YTD)</div>
+                </div>
+              </div>
+
+              <div className={`flex items-center gap-2 backdrop-blur-sm border rounded-xl px-5 py-3 ${
+                isPositive
+                  ? 'bg-emerald-500/15 border-emerald-500/30'
+                  : 'bg-red-500/15 border-red-500/30'
+              }`}>
+                <ArrowUpRight className={`w-5 h-5 transition-transform ${isPositive ? 'text-emerald-400' : 'text-red-400 rotate-180'}`} />
+                <div>
+                  <div className={`text-xl font-bold ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
+                    {dldAreaData.change}
+                  </div>
+                  <div className="text-zinc-300 text-xs">YoY Growth</div>
+                </div>
+              </div>
+            </>
+          )}
         </motion.div>
+
+        {/* DLD source note */}
+        {dldAreaData && (
+          <motion.p className="mt-3 text-zinc-500 text-[10px] uppercase tracking-widest" variants={fadeInUp}>
+            ↑ Live data · Dubai Land Department (DLD) · 2026 YTD
+          </motion.p>
+        )}
       </motion.div>
     </section>
   );
