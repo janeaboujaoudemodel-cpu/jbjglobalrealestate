@@ -1,16 +1,14 @@
 /**
  * AreaGuides Component - Database-Driven Areas Index
- * Instant layout: no hero, filter bar fixed from load, vertical nav always visible
+ * Hero section on load, scroll-triggered vertical nav + filter bar
  */
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MapPin, Building2, TrendingUp, Flame, ArrowRight, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { MapPin, Building2, TrendingUp, Flame, ArrowRight, Loader2, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import jbjMonogram from "@/assets/jbj-monogram-light-bg.png";
 import { Badge } from "@/components/ui/badge";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import PropertiesVerticalNav from "@/components/navigation/PropertiesVerticalNav";
 
@@ -21,16 +19,29 @@ import { optimizeStorageImageUrl } from "@/lib/imageUtils";
 
 const ITEMS_PER_PAGE = 24;
 
+/** Normalize emirate label variants to canonical names */
+function normalizeEmirate(raw: string): string {
+  const lower = (raw || "").toLowerCase().trim();
+  if (lower.includes("abu dhabi")) return "Abu Dhabi";
+  if (lower.includes("ras al") || lower.includes("ras-al")) return "Ras Al Khaimah";
+  if (lower.includes("sharjah")) return "Sharjah";
+  if (lower.includes("ajman")) return "Ajman";
+  if (lower.includes("fujairah")) return "Fujairah";
+  if (lower.includes("umm")) return "Umm Al Quwain";
+  if (lower.includes("dubai")) return "Dubai";
+  return raw;
+}
+
 /** Generate page numbers with ellipsis */
-function getPageNumbers(current: number, total: number): (number | 'ellipsis')[] {
+function getPageNumbers(current: number, total: number): (number | "ellipsis")[] {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
-  const pages: (number | 'ellipsis')[] = [];
+  const pages: (number | "ellipsis")[] = [];
   pages.push(1);
-  if (current > 3) pages.push('ellipsis');
+  if (current > 3) pages.push("ellipsis");
   const start = Math.max(2, current - 1);
   const end = Math.min(total - 1, current + 1);
   for (let i = start; i <= end; i++) pages.push(i);
-  if (current < total - 2) pages.push('ellipsis');
+  if (current < total - 2) pages.push("ellipsis");
   pages.push(total);
   return pages;
 }
@@ -49,18 +60,52 @@ const staggerContainer = {
 };
 
 const AreaGuides = () => {
-  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>({...defaultShortcutFilters, sortBy: 'most_projects'});
+  const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>({...defaultShortcutFilters, sortBy: "most_projects"});
   const [currentPage, setCurrentPage] = useState(1);
+  const [pastHero, setPastHero] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   // Fetch REAL areas from database
   const { data: areas, isLoading, error } = useAreas();
-  const { data: emirates } = useEmiratesWithAreas();
 
-  // Immediately set filter-bar-fixed on mount — no hero, instant layout
+  // Hero intersection observer — switch header/nav when user scrolls past hero
   useEffect(() => {
-    document.body.classList.add('filter-bar-fixed');
-    return () => document.body.classList.remove('filter-bar-fixed');
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const heroVisible = entry.isIntersecting;
+        setPastHero(!heroVisible);
+        if (heroVisible) {
+          document.body.classList.remove("filter-bar-fixed");
+        } else {
+          document.body.classList.add("filter-bar-fixed");
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (heroRef.current) observer.observe(heroRef.current);
+    return () => {
+      observer.disconnect();
+      document.body.classList.remove("filter-bar-fixed");
+    };
   }, []);
+
+  const scrollToGrid = () => {
+    gridRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Count areas per emirate for hero badges
+  const emirateCounts = useMemo(() => {
+    if (!areas) return {};
+    const counts: Record<string, number> = {};
+    areas.forEach(a => {
+      const name = normalizeEmirate(a.emirate || "");
+      counts[name] = (counts[name] || 0) + 1;
+    });
+    return counts;
+  }, [areas]);
+
+  const heroEmiratesOrder = ["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah", "Ajman", "Fujairah", "Umm Al Quwain"];
 
   // Filter and sort areas from database
   const filteredAreas = useMemo(() => {
@@ -69,17 +114,20 @@ const AreaGuides = () => {
 
     const query = shortcutFilters.searchQuery?.trim().toLowerCase();
     if (query) {
-      filtered = filtered.filter(a => 
-        a.name.toLowerCase().includes(query) || 
+      filtered = filtered.filter(a =>
+        a.name.toLowerCase().includes(query) ||
         a.emirate?.toLowerCase().includes(query) ||
         a.description?.toLowerCase().includes(query)
       );
     }
 
-    // Filter by selected emirates
+    // Filter by selected emirates (normalized)
     if (shortcutFilters.emirates && shortcutFilters.emirates.length > 0) {
       filtered = filtered.filter(a =>
-        shortcutFilters.emirates.some(e => (a.emirate || '').toLowerCase().includes(e.toLowerCase()))
+        shortcutFilters.emirates.some(e =>
+          normalizeEmirate(a.emirate || "").toLowerCase() === e.toLowerCase() ||
+          (a.emirate || "").toLowerCase().includes(e.toLowerCase())
+        )
       );
     }
 
@@ -125,51 +173,141 @@ const AreaGuides = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
-      {/* Vertical Nav — always visible on desktop */}
-      <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
-        <PropertiesVerticalNav />
-      </div>
-
-      <SEOHead 
+      <SEOHead
         title="Areas in Dubai & UAE | JBJ Global Real Estate"
         description="Explore real estate areas across Dubai and the UAE. Browse properties by neighborhood with verified data."
         keywords="Dubai areas, Dubai neighborhoods, UAE property areas, Dubai real estate locations"
         canonicalPath="/areas"
       />
 
-      {/* Filter bar — always fixed top-0 */}
-      <section 
-        className="fixed top-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3"
-        style={{ left: '200px' }}
+      {/* ─── HERO SECTION ─── */}
+      <section
+        ref={heroRef}
+        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
       >
-        <div className="container mx-auto px-4 space-y-2">
-          <FilterShortcutBar
-            variant="light"
-            filters={shortcutFilters}
-            onFilterChange={setShortcutFilters}
-          />
+        {/* Background — UAE aerial */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=85')",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/85" />
+
+        {/* Hero Content */}
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-[hsl(var(--gold))] text-xs uppercase tracking-[0.35em] mb-6 block font-medium"
+          >
+            Explore UAE
+          </motion.span>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="text-white text-5xl md:text-7xl font-bold mb-6 leading-tight"
+            style={{ fontFamily: "Playfair Display, serif" }}
+          >
+            UAE Communities
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-10"
+          >
+            Discover the UAE's most prestigious communities across all seven emirates
+          </motion.p>
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            onClick={scrollToGrid}
+            className="inline-flex items-center gap-2 px-8 py-4 bg-[hsl(var(--gold))] text-black font-semibold rounded-xl hover:bg-[hsl(var(--gold))]/90 transition-all shadow-[0_10px_30px_rgba(200,167,102,0.4)] hover:shadow-[0_15px_40px_rgba(200,167,102,0.5)]"
+          >
+            Explore Areas
+            <ChevronDown className="w-5 h-5" />
+          </motion.button>
         </div>
+
+        {/* Emirates Count Badges */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="absolute bottom-10 left-0 right-0 flex justify-center flex-wrap gap-3 px-4"
+        >
+          {heroEmiratesOrder.map(emirate => {
+            const count = emirateCounts[emirate];
+            if (!count) return null;
+            return (
+              <div
+                key={emirate}
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full"
+              >
+                <MapPin className="w-3 h-3 text-[hsl(var(--gold))]" />
+                <span className="text-white text-xs font-medium">{emirate}</span>
+                <span className="text-[hsl(var(--gold))] text-xs font-bold">{count}</span>
+              </div>
+            );
+          })}
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40"
+        >
+          <ChevronDown className="w-6 h-6" />
+        </motion.div>
       </section>
 
-      {/* Spacer for fixed filter bar */}
-      <div className="h-[60px]" />
+      {/* ─── POST-HERO LAYOUT ─── */}
+      {pastHero && (
+        <>
+          {/* Vertical Nav */}
+          <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
+            <PropertiesVerticalNav />
+          </div>
 
-      {/* Gold divider between filters and cards */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+          {/* Filter bar — fixed top-0 when past hero */}
+          <section
+            className="fixed top-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3"
+            style={{ left: "200px" }}
+          >
+            <div className="container mx-auto px-4 space-y-2">
+              <FilterShortcutBar
+                variant="light"
+                filters={shortcutFilters}
+                onFilterChange={setShortcutFilters}
+              />
+            </div>
+          </section>
+          {/* Spacer for fixed filter bar */}
+          <div className="h-[60px]" />
+        </>
+      )}
 
-      {/* Areas Grid — edge-to-edge background */}
-      <section className="pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] min-h-screen">
-        <div className="lg:pl-[200px] px-4 sm:px-6 lg:px-8">
-          
+      {/* Gold divider */}
+      <div ref={gridRef} className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+
+      {/* Areas Grid */}
+      <section className={`pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] min-h-screen ${pastHero ? "lg:pl-[200px]" : ""}`}>
+        <div className="px-4 sm:px-6 lg:px-8">
+
           {/* Results count */}
           <div className="mb-6 flex items-center justify-between">
             <p className="text-black/70">
-              Showing <span className="text-gold font-medium">{paginatedAreas.length}</span> of{' '}
+              Showing <span className="text-gold font-medium">{paginatedAreas.length}</span> of{" "}
               <span className="text-gold font-medium">{filteredAreas.length}</span> areas
               {totalPages > 1 && (
                 <span className="text-black/40 ml-2">· Page {currentPage} of {totalPages}</span>
@@ -207,13 +345,13 @@ const AreaGuides = () => {
                         transition={{ duration: 0.3 }}
                         className="group rounded-xl overflow-hidden cursor-pointer flex flex-col h-full"
                         style={{
-                          border: '3px solid hsl(42 45% 59%)',
+                          border: "3px solid hsl(42 45% 59%)",
                           boxShadow: `
                             0 8px 32px rgba(200,167,102,0.25),
                             0 4px 16px rgba(0,0,0,0.15),
                             inset 0 1px 0 rgba(255,255,255,0.1)
                           `,
-                          perspective: '1000px',
+                          perspective: "1000px",
                         }}
                       >
                         {/* Photo Section */}
@@ -224,6 +362,13 @@ const AreaGuides = () => {
                               alt={area.name}
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                               loading={index < 8 ? "eager" : "lazy"}
+                              onError={(e) => {
+                                // Fall back to raw URL if optimization endpoint fails
+                                const rawUrl = area.hero_image_url || area.image_url;
+                                if (rawUrl && e.currentTarget.src !== rawUrl) {
+                                  e.currentTarget.src = rawUrl;
+                                }
+                              }}
                             />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
@@ -247,11 +392,11 @@ const AreaGuides = () => {
                             )}
                           </div>
 
-                          {/* Emirate Label */}
+                          {/* Emirate Label (normalized) */}
                           <div className="absolute top-3 left-3 z-10">
                             <Badge className="bg-black/70 text-white px-3 py-1 text-[10px] font-medium tracking-wider shadow-lg border border-gold/30">
                               <MapPin className="w-3 h-3 mr-1" />
-                              {area.emirate}
+                              {normalizeEmirate(area.emirate || "")}
                             </Badge>
                           </div>
                         </div>
@@ -266,10 +411,10 @@ const AreaGuides = () => {
                             {area.description ? (
                               <p className="text-zinc-600 text-xs line-clamp-2">
                                 {area.description
-                                  .replace(/!\[.*?\]\(.*?\)/g, '')
-                                  .replace(/provident\s*(estate)?/gi, '')
-                                  .replace(/reelly/gi, '')
-                                  .replace(/\s{2,}/g, ' ')
+                                  .replace(/!\[.*?\]\(.*?\)/g, "")
+                                  .replace(/provident\s*(estate)?/gi, "")
+                                  .replace(/reelly/gi, "")
+                                  .replace(/\s{2,}/g, " ")
                                   .trim()}
                               </p>
                             ) : (
@@ -328,7 +473,7 @@ const AreaGuides = () => {
                   </button>
 
                   {getPageNumbers(currentPage, totalPages).map((page, idx) =>
-                    page === 'ellipsis' ? (
+                    page === "ellipsis" ? (
                       <span key={`e-${idx}`} className="px-2 text-black/40">…</span>
                     ) : (
                       <button
@@ -336,8 +481,8 @@ const AreaGuides = () => {
                         onClick={() => handlePageChange(page)}
                         className={`w-10 h-10 rounded-lg text-sm font-medium transition-all ${
                           page === currentPage
-                            ? 'bg-gold text-black shadow-md'
-                            : 'bg-white/60 border border-gold/30 text-black/70 hover:bg-gold/20'
+                            ? "bg-gold text-black shadow-md"
+                            : "bg-white/60 border border-gold/30 text-black/70 hover:bg-gold/20"
                         }`}
                       >
                         {page}
@@ -361,13 +506,13 @@ const AreaGuides = () => {
       </section>
 
       {/* DLD Market Intelligence */}
-      <div className="lg:pl-[200px]">
+      <div className={pastHero ? "lg:pl-[200px]" : ""}>
         <DLDMarketWidget />
       </div>
 
       {/* CTA Section */}
-      <section id="ready-to-get-started" className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-        <div className="lg:pl-[200px] px-4 text-center">
+      <section id="ready-to-get-started" className={`py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark ${pastHero ? "lg:pl-[200px]" : ""}`}>
+        <div className="px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Can't Find What You're Looking For?
           </h2>
