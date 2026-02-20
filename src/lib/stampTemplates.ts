@@ -695,57 +695,100 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   }
 
   // ────────────────────────────────────────────────────────────────
-  // T12: Bilingual Logo Center — English top arc / Arabic bottom arc / Logo in center
-  // Appears for any project with UPLOADED_LOGO (or bilingual mode as bonus option)
+  // T12: Bilingual Logo Center — Clean double-ring, English top arc,
+  //      Arabic bottom arc, uploaded logo or monogram centred.
+  // Always generated; pushed to front if logo is uploaded.
   // ────────────────────────────────────────────────────────────────
   {
-    const outerR = R;
-    const bandR = R - 14;
-    const innerR = R - 18;
-    const ringR = R - 7;
-    const bottomArcR = R - 7;
+    // Ring geometry — clean, open (white background, no filled band)
+    const outerR  = R;           // 116 — outer ring
+    const midR    = R - 8;       // thin gap ring (decorative)
+    const innerR  = R - 16;      // inner ring / text path radius
+    const arcR    = R - 12;      // text sits just inside inner ring
+    const botArcR = R - 12;
+
     const displayArabic = arabicName || name;
-    const displayArabicCity = arabicCity || city;
-    const enFontSize = autoFontSize(name, 9, 22);
-    const arFontSize = autoFontSize(displayArabic, 10, 16);
-    const hasLogo = project.icon_style === 'UPLOADED_LOGO' && (project as any).uploaded_logo_url;
-    const logoUrl = hasLogo ? (project as any).uploaded_logo_url : null;
-    const logoSize = 54;
+    const enFontSize    = autoFontSize(name,           9.5, 22);
+    const arFontSize    = autoFontSize(displayArabic, 10,   16);
+
+    const hasLogo  = project.icon_style === 'UPLOADED_LOGO' && (project as any).uploaded_logo_url;
+    const logoUrl  = hasLogo ? (project as any).uploaded_logo_url : null;
+    const logoSize = 64;  // diameter of center artwork
+
+    // Center artwork: logo image or filled monogram disc
+    const centerArt = logoUrl
+      ? `<!-- logo circle frame -->
+         <circle cx="${cx}" cy="${cy}" r="${logoSize / 2 + 5}" fill="#ffffff" stroke="${COLOR}" stroke-width="1.4"/>
+         <image href="${logoUrl}"
+           x="${cx - logoSize / 2}" y="${cy - logoSize / 2}"
+           width="${logoSize}" height="${logoSize}"
+           clip-path="url(#t12clip)"
+           preserveAspectRatio="xMidYMid meet"/>
+         `
+      : `<!-- monogram disc -->
+         <circle cx="${cx}" cy="${cy}" r="${logoSize / 2 + 2}" fill="${COLOR}"/>
+         <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central"
+           font-family="${font}" font-size="28" font-weight="bold" fill="#ffffff"
+           letter-spacing="2">${mono}</text>
+         `;
+
+    // Horizontal thin dividers flanking the center disc
+    const divTop = cy - logoSize / 2 - 14;
+    const divBot = cy + logoSize / 2 + 14;
+
+    // City / country line — between logo and bottom arc
+    const cityLine = `<text x="${cx}" y="${divBot + 13}"
+      text-anchor="middle" font-family="${font}" font-size="7"
+      fill="${COLOR}" letter-spacing="4">${
+        project.city_optional ? project.city_optional.toUpperCase() : 'DUBAI'
+      } · ${(project.country_optional || 'UAE').toUpperCase()}</text>`;
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <clipPath id="t12logoClip">
+        <clipPath id="t12clip">
           <circle cx="${cx}" cy="${cy}" r="${logoSize / 2}"/>
         </clipPath>
       </defs>
-      <!-- Filled outer ring band -->
-      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
-      <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
-      <!-- Inner accent ring -->
-      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="1"/>
-      <!-- 4 cardinal dot ornaments on band -->
+
+      <!-- ── Double ring border ── -->
+      <circle cx="${cx}" cy="${cy}" r="${outerR}"  fill="none" stroke="${COLOR}" stroke-width="2.4"/>
+      <circle cx="${cx}" cy="${cy}" r="${midR}"    fill="none" stroke="${COLOR}" stroke-width="0.5"/>
+      <circle cx="${cx}" cy="${cy}" r="${innerR}"  fill="none" stroke="${COLOR}" stroke-width="1.2"/>
+
+      <!-- ── 4 cardinal diamond ornaments between double ring ── -->
       ${[0, 90, 180, 270].map(deg => {
         const rad = (deg * Math.PI) / 180;
-        const starCx = cx + (outerR - 7) * Math.cos(rad);
-        const starCy = cy + (outerR - 7) * Math.sin(rad);
-        return `<circle cx="${starCx}" cy="${starCy}" r="2" fill="#ffffff"/>`;
-      }).join('')}
-      <!-- English text — TOP arc (upper half) -->
-      ${ringText('t12top', cx, cy, ringR, `◆  ${name}  ◆`, font, enFontSize, '#ffffff', '25%', 1.6)}
-      <!-- Arabic text — BOTTOM arc (lower half) -->
-      ${bottomArcText('t12bot', cx, cy, bottomArcR, `◆  ${displayArabic}  ◆`, arabicFont, arFontSize, '#ffffff', 2)}
-      <!-- Center: logo image or monogram circle -->
-      ${logoUrl
-        ? `<circle cx="${cx}" cy="${cy}" r="${logoSize / 2 + 3}" fill="#ffffff" stroke="${COLOR}" stroke-width="1.2"/>
-           <image href="${logoUrl}" x="${cx - logoSize / 2}" y="${cy - logoSize / 2}" width="${logoSize}" height="${logoSize}" clip-path="url(#t12logoClip)" preserveAspectRatio="xMidYMid meet"/>`
-        : monogram(cx, cy, mono, font, 32, COLOR, COLOR)
-      }
-      <!-- City below logo -->
-      <text x="${cx}" y="${cy + logoSize / 2 + 16}" text-anchor="middle" font-family="${font}" font-size="7" fill="${COLOR}" letter-spacing="3.5">${project.city_optional ? project.city_optional.toUpperCase() : 'DUBAI'} · ${(project.country_optional || 'UAE').toUpperCase()}</text>
-      ${divider(cx, cy - logoSize / 2 - 12, COLOR, 22, 0.6)}
-      ${divider(cx, cy + logoSize / 2 + 24, COLOR, 22, 0.6)}
+        const ox = cx + (outerR - 4) * Math.cos(rad);
+        const oy = cy + (outerR - 4) * Math.sin(rad);
+        return `<polygon points="${ox},${oy - 3.5} ${ox + 3},${oy} ${ox},${oy + 3.5} ${ox - 3},${oy}" fill="${COLOR}"/>`;
+      }).join('\n      ')}
+
+      <!-- ── English company name — top arc ── -->
+      ${ringText('t12top', cx, cy, arcR, `◆  ${name}  ◆`, font, enFontSize, COLOR, '25%', 1.5)}
+
+      <!-- ── Arabic company name — bottom arc ── -->
+      ${bottomArcText('t12bot', cx, cy, botArcR, `◆  ${displayArabic}  ◆`, arabicFont, arFontSize, COLOR, 2)}
+
+      <!-- ── Thin horizontal rules flanking artwork ── -->
+      ${hRule(cx - 38, cx - logoSize / 2 - 8, divTop, COLOR, 0.6)}
+      ${hRule(cx + logoSize / 2 + 8, cx + 38, divTop, COLOR, 0.6)}
+      ${hRule(cx - 38, cx - logoSize / 2 - 8, divBot, COLOR, 0.6)}
+      ${hRule(cx + logoSize / 2 + 8, cx + 38, divBot, COLOR, 0.6)}
+
+      <!-- ── Center artwork (logo or monogram) ── -->
+      ${centerArt}
+
+      <!-- ── City · Country below artwork ── -->
+      ${cityLine}
     </svg>`;
-    concepts.push({ id: uid(), templateKey: 'bilingual-logo-center', label: 'Bilingual Logo Center', tags: ['bilingual', 'logo', 'premium', 'round', 'UAE'], svgSource: svg });
+
+    concepts.push({
+      id: uid(),
+      templateKey: 'bilingual-logo-center',
+      label: 'Bilingual Logo Center',
+      tags: ['bilingual', 'logo', 'premium', 'round', 'UAE'],
+      svgSource: svg,
+    });
   }
 
   return concepts;
