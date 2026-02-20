@@ -1,81 +1,68 @@
 
 
-# Fix: Expired Handover Filter + Missing Tools in Creative Suite
+# Add PWA Install Support to Exported Digital Card HTML
 
-## Problem 1: Old/Expired Projects Being Recommended
+## What This Does
 
-The AI Home Matchmaker (Quiz) and Recommended Projects section do NOT filter out projects with past handover dates. A project handed over in December 2016 still appears as a recommendation -- this is unacceptable because if the handover already passed, the project is effectively completed/sold.
+When you export a Digital card as HTML, the downloaded file will be installable as a home-screen app on both iOS and Android. The app icon will be automatically generated using the card's primary color as the background and the person's initials as the icon text -- matching the card's branding.
 
-### Fix
+## How It Works
 
-**Files to edit:** `src/pages/Quiz.tsx`, `src/components/project-detail/RecommendedProjects.tsx`, `src/pages/QuizResults.tsx`
+The exported HTML file is a standalone single file. Since there's no server hosting separate manifest/icon files, everything will be embedded inline using data URIs:
 
-Add a handover date expiry check in all three locations:
-- Parse `handover_date` and check if it's in the past (before today's date)
-- If the handover date contains a year earlier than 2026, or if parsing it as a date results in a date before today, exclude the project entirely
-- Handle various formats: "December 2016", "Q4 2025", "2024", "Ready" (Ready is always valid)
-- Logic: extract the year from `handover_date` using regex. If the year is less than 2026 (current year), treat it as expired and filter it out
-- "Ready" projects remain valid (already handed over and available)
-
-Specific changes:
-1. **Quiz.tsx** (line ~242): Add a new hard exclusion after the sold-out check:
-   - Extract year from `project.handover_date` 
-   - If year exists and year < 2026, return false (exclude)
-   
-2. **RecommendedProjects.tsx** (line ~28): Add the same handover expiry filter in the `useMemo` filter function, alongside the existing `sold` check
-
-3. **QuizResults.tsx** (line ~71): Add handover expiry filter in the post-query normalization/filter step
-
----
-
-## Problem 2: Missing Tools in Creative Suite
-
-The Creative Suite page (`/business-suite/creative`) only shows 4 tools: Document Generator, Translation Hub, Video Tour Script, Background Remover.
-
-The user expects to see ALL creative and corporate tools listed there as well -- specifically: Business Card Designer, Logo Maker, Presentation, Company Profile, CV/Resume Builder, and Cover Letter Generator.
-
-### Fix
-
-**File to edit:** `src/pages/business-suite/CreativeSuite.tsx`
-
-Add a second section called "Creative Suites" with tool cards for:
-- Presentation Editor (`/presentation`)
-- Business Card Designer (`/toolkit/corporate-suite/business-card`)
-- Logo Maker (`/toolkit/corporate-suite/logo`)
-- CV / Resume Builder (`/toolkit/corporate-suite/cv-builder`)
-- Cover Letter Generator (`/toolkit/corporate-suite/cover-letter`)
-- Company Profile (`/toolkit/corporate-suite/company-profile`)
-
-These will appear in a new grid section below the existing "All Tools" section, with a section divider labeled "Creative Suites" -- matching the existing layout pattern used in ProductivitySuite.tsx.
-
-Update the hero tool count from "4 Tools Included" to reflect the actual total (10 tools).
-
----
+1. **Inline SVG Icon** -- A 512x512 SVG icon generated from the card's primary color (background) and the person's initials (white text), encoded as a data URI
+2. **Inline Web App Manifest** -- A JSON manifest embedded as a `data:application/json` link, referencing the inline icon
+3. **Inline Service Worker** -- A minimal service worker registered via a Blob URL so the browser recognizes the page as installable
+4. **iOS Meta Tags** -- Apple-specific meta tags (`apple-mobile-web-app-capable`, `apple-touch-icon`) for Add to Home Screen support on Safari
 
 ## Technical Details
 
-### Handover Date Expiry Helper Function
+**File to edit:** `src/components/corporate-suite/BusinessCardDesigner.tsx`
 
+**Changes to the `exportDigitalCardAsHtml` function (lines 1089-1163):**
+
+In the `<head>` section, add:
+- `<meta name="apple-mobile-web-app-capable" content="yes">`
+- `<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">`
+- `<link rel="apple-touch-icon" href="DATA_URI_SVG_ICON">`
+- `<link rel="manifest" href="DATA_URI_MANIFEST">`
+
+The manifest JSON will contain:
 ```text
-function isHandoverExpired(handoverDate: string | null): boolean {
-  if (!handoverDate) return false;
-  const lower = handoverDate.toLowerCase();
-  if (lower.includes("ready")) return false;
-  const yearMatch = handoverDate.match(/\b(20\d{2})\b/);
-  if (yearMatch) {
-    const year = parseInt(yearMatch[1]);
-    return year < 2026; // current year
-  }
-  return false;
+{
+  "name": "[Person Name] — Digital Card",
+  "short_name": "[Initials] Card",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "[primary color]",
+  "theme_color": "[primary color]",
+  "icons": [{ "src": "DATA_URI_SVG", "sizes": "any", "type": "image/svg+xml" }]
 }
 ```
 
-### Files Changed Summary
+The SVG icon template:
+```text
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="[primaryColor]"/>
+  <text x="256" y="300" text-anchor="middle" 
+    font-family="[fontFamily]" font-size="200" font-weight="700" 
+    fill="#ffffff">[INITIALS]</text>
+</svg>
+```
 
-| File | Change |
-|------|--------|
-| `src/pages/Quiz.tsx` | Add handover expiry exclusion in `getRecommendations` filter |
-| `src/components/project-detail/RecommendedProjects.tsx` | Add handover expiry exclusion in `recommendedProjects` filter |
-| `src/pages/QuizResults.tsx` | Add handover expiry filter in post-query normalization |
-| `src/pages/business-suite/CreativeSuite.tsx` | Add 6 new tool cards in a "Creative Suites" section, update tool count |
+At the bottom of the `<script>` block, add a service worker registration:
+```text
+if('serviceWorker' in navigator){
+  var sw='self.addEventListener("fetch",function(e){e.respondWith(fetch(e.request))})';
+  var blob=new Blob([sw],{type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(function(){});
+}
+```
+
+**Helper logic** (added before the HTML template string):
+- Extract initials from the name (first letter of first + last word, uppercase)
+- Build the SVG string, then encode to a data URI
+- Build the manifest JSON object, then encode to a `data:application/json;base64,...` URI
+
+All changes are contained within the single `exportDigitalCardAsHtml` function -- no new files or dependencies needed.
 
