@@ -11,7 +11,7 @@ import {
   ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, 
   Users, Crown, Gift, TrendingUp, MapPin, Building, Home, 
   BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail, BarChart3,
-  ArrowLeft, ArrowUpRight, Heart, ListChecks, Layers, Brain
+  ArrowLeft, ArrowUpRight, Heart, ListChecks, Layers, Brain, ThumbsUp, ThumbsDown
 } from "lucide-react";
 import AIPropertyAnalyzer from "@/components/ai-tools/AIPropertyAnalyzer";
 import { Button } from "@/components/ui/button";
@@ -322,7 +322,7 @@ const Compare = () => {
       <p class="summary-text">${escapeHtml(aiAnalysis.summary)}</p>
     </div>
 
-    <h2>📊 Property Details Comparison</h2>
+    <h2>Property Details Comparison</h2>
     <table>
       <thead>
         <tr>
@@ -349,7 +349,7 @@ const Compare = () => {
       </tbody>
     </table>
 
-    <h2>⭐ Ratings & Analysis</h2>
+    <h2>Ratings & Analysis</h2>
     ${aiAnalysis.ratings.map(r => `
     <div class="rating-card">
       <div class="rating-header">
@@ -364,14 +364,14 @@ const Compare = () => {
         <div class="rating-item"><div class="rating-item-label">Developer</div><div class="rating-item-value">${renderStars(r.developerRating)}</div></div>
       </div>
       <div class="pros-cons">
-        <div class="pros"><h4>✅ Pros</h4><ul>${r.pros?.map(p => `<li>${escapeHtml(p)}</li>`).join('') || ''}</ul></div>
-        <div class="cons"><h4>⚠️ Cons</h4><ul>${r.cons?.map(c => `<li>${escapeHtml(c)}</li>`).join('') || ''}</ul></div>
+        <div class="pros"><h4>Pros</h4><ul>${r.pros?.map(p => `<li>${escapeHtml(p)}</li>`).join('') || ''}</ul></div>
+        <div class="cons"><h4>Cons</h4><ul>${r.cons?.map(c => `<li>${escapeHtml(c)}</li>`).join('') || ''}</ul></div>
       </div>
     </div>
     `).join('')}
 
     <div class="recommendation-box">
-      <h3>🏆 Our Recommendation: ${escapeHtml(aiAnalysis.recommendation.topChoice)}</h3>
+      <h3>Our Recommendation: ${escapeHtml(aiAnalysis.recommendation.topChoice)}</h3>
       <p>${escapeHtml(aiAnalysis.recommendation.reasoning)}</p>
       <div class="best-for">
         <div class="best-for-item"><div class="best-for-label">Best for Investors</div><div class="best-for-value">${escapeHtml(aiAnalysis.recommendation.bestFor.investors)}</div></div>
@@ -380,21 +380,21 @@ const Compare = () => {
         <div class="best-for-item"><div class="best-for-label">Best for Luxury Buyers</div><div class="best-for-value">${escapeHtml(aiAnalysis.recommendation.bestFor.luxuryBuyers)}</div></div>
       </div>
       <p style="margin-top:20px; background:rgba(0,0,0,0.2); padding:15px; border-radius:8px;">
-        <strong>💡 Investment Advice:</strong> ${escapeHtml(aiAnalysis.recommendation.investmentAdvice)}
+        <strong>Investment Advice:</strong> ${escapeHtml(aiAnalysis.recommendation.investmentAdvice)}
       </p>
     </div>
 
     ${aiAnalysis.recommendation.riskFactors?.length ? `
     <div class="risk-section">
-      <h4>⚠️ Risk Factors to Consider</h4>
+      <h4>Risk Factors to Consider</h4>
       <ul>${aiAnalysis.recommendation.riskFactors.map(r => `<li>${escapeHtml(r)}</li>`).join('')}</ul>
     </div>
     ` : ''}
 
     <div class="footer">
       <p><strong>JBJ Global Real Estate</strong> — Real Estate Brokerage</p>
-      <p>📧 Contact@JBJ.ae | 📞 +971 56 591 1000</p>
-      <p>🌐 www.JBJ.ae</p>
+      <p>Contact@JBJ.ae | +971 56 591 1000</p>
+      <p>www.JBJ.ae</p>
       <p style="margin-top:15px; font-size:12px;">Powered & Made by JBJ Global Real Estate — Real Estate Brokerage</p>
       <p style="margin-top:10px; font-size:11px; font-style:italic;">
         This report is for informational purposes only and is not legal, mortgage, financial, or investment advice.
@@ -737,13 +737,13 @@ const Compare = () => {
                                 badge === 'top2' ? 'bg-orange-600/20 text-orange-400' :
                                 'bg-gray-400/20 text-gray-300'
                               }`}>
-                                {badge === 'top1' ? '🥇 Top 1' : badge === 'top2' ? '🥉 Top 2' : '🥈 Top 3'}
+                                {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
                               </span>
                             )}
                             <img
                             src={project.images?.[0]?.image_url || "/placeholder.svg"}
                             alt={project.name}
-                            className="w-full aspect-video object-cover rounded-lg"
+                            className="w-full h-40 object-cover rounded-lg"
                           />
                           <h3 className="text-white font-semibold">{project.name}</h3>
                           <p className="text-zinc-500 text-sm">{project.developer?.name}</p>
@@ -794,12 +794,12 @@ const Compare = () => {
                     return "See project page";
                   }},
                 ].map((row) => (
-                  <tr key={row.label} className="border-b border-zinc-800/50 hover:bg-zinc-800/30">
+                  <tr key={row.label} className="border-b border-zinc-800/50 even:bg-zinc-800/20 odd:bg-zinc-900/40 hover:bg-zinc-800/30">
                     <td className="py-4 px-4 text-zinc-400 sticky left-0 bg-zinc-900 font-medium">
                       {row.label}
                     </td>
                     {projects.map((project) => (
-                      <td key={project.id} className="py-4 px-4 text-white text-sm">
+                      <td key={project.id} className={`py-4 px-4 text-white text-sm ${row.label === 'Location' ? 'whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]' : ''}`}>
                         {row.format(null, project)}
                       </td>
                     ))}
@@ -866,7 +866,7 @@ const Compare = () => {
                       <div className="grid grid-cols-2 gap-3">
                         <div className="bg-green-950/30 border border-green-900/30 rounded-lg p-3">
                           <div className="text-green-400 text-xs font-semibold mb-2 flex items-center gap-1">
-                            <CheckCircle className="w-3 h-3" /> Pros
+                            <ThumbsUp className="w-3 h-3" /> Pros
                           </div>
                           <ul className="text-xs text-zinc-400 space-y-1">
                             {rating.pros?.slice(0, 3).map((pro, i) => (
@@ -876,7 +876,7 @@ const Compare = () => {
                         </div>
                         <div className="bg-red-950/30 border border-red-900/30 rounded-lg p-3">
                           <div className="text-red-400 text-xs font-semibold mb-2 flex items-center gap-1">
-                            <AlertTriangle className="w-3 h-3" /> Cons
+                            <ThumbsDown className="w-3 h-3" /> Cons
                           </div>
                           <ul className="text-xs text-zinc-400 space-y-1">
                             {rating.cons?.slice(0, 3).map((con, i) => (

@@ -150,7 +150,7 @@ const SupportTicketForm = () => {
       const ticketNumber = data?.ticketNumber || "pending";
 
       toast({
-        title: "Ticket Submitted Successfully! 🎫",
+        title: "Ticket Submitted Successfully!",
         description: `Your support ticket #${ticketNumber} has been created. We'll get back to you within 24 hours.`,
       });
       setShowFeedback(true);
@@ -387,7 +387,7 @@ const FeedbackForm = () => {
       if (error) throw error;
 
       toast({
-        title: "Review Submitted! ⭐",
+        title: "Review Submitted!",
         description: "Thank you! Your review is pending approval. You'll receive 50 loyalty points once approved.",
       });
 

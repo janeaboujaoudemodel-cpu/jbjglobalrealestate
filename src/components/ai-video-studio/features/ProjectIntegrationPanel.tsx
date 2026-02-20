@@ -268,7 +268,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
       setResult(null);
       setStep('wizard');
       setUrlInput('');
-      toast.success(`✅ Scraped: "${ext.name}"`);
+      toast.success(`Scraped: "${ext.name}"`);
     } catch (err) {
       toast.error(`Import failed: ${err instanceof Error ? err.message : 'Could not scrape that URL'}`);
     } finally {
@@ -432,7 +432,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
       propertyName: name,
     });
 
-    toast.success(`🎬 "${name}" video ad added to timeline!`);
+    toast.success(`"${name}" video ad added to timeline!`);
     backToGrid();
   };
 

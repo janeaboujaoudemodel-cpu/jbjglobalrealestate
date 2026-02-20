@@ -120,7 +120,7 @@ const AreasWeCover = () => {
         </div>
 
         {/* View All Areas CTA */}
-        <div className="text-center mt-10 mb-4">
+        <div className="text-center mt-10 mb-8">
           <Link
             to="/areas"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"

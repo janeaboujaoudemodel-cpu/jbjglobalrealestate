@@ -608,7 +608,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                   <div className="space-y-4">
                     {/* Light */}
                     <div className="rounded-2xl p-4 space-y-4" style={{ background: I.surface, border: `1px solid ${I.border}` }}>
-                      <SectionLabel>💡 Light</SectionLabel>
+                      <SectionLabel>Light</SectionLabel>
                       {([
                         ['exposure','Exposure',Sun,-50,50],['brightness','Brightness',Sun,-50,50],
                         ['contrast','Contrast',Contrast,-50,50],['highlights','Highlights',Zap,-50,50],
@@ -749,7 +749,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                     </div>
                     <div className="rounded-2xl p-4" style={{ background: "rgba(99,102,241,0.04)", border: `1px solid rgba(99,102,241,0.15)` }}>
                       <p className="text-xs" style={{ color: I.dim }}>
-                        ⚠️ Body reshape AI adjustments preview the effect. Final rendering uses AI cloud processing for realistic warping.
+                        Body reshape AI adjustments preview the effect. Final rendering uses AI cloud processing for realistic warping.
                       </p>
                     </div>
                     <button onClick={() => { setBodyAdj({ ...DEFAULT_BODY }); toast.success('Body reset'); }}

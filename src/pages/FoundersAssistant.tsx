@@ -214,7 +214,7 @@ export default function FoundersAssistant() {
             >
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-zinc-500">🧭 Active Tasks</p>
+                  <p className="text-xs text-zinc-500">Active Tasks</p>
                   <p className="text-2xl font-bold text-gold">{stats.activeTasks}</p>
                 </div>
               </CardContent>
@@ -225,7 +225,7 @@ export default function FoundersAssistant() {
             >
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-zinc-500">✅ Completed</p>
+                  <p className="text-xs text-zinc-500">Completed</p>
                   <p className="text-2xl font-bold text-green-600">{stats.completedTasks}</p>
                 </div>
               </CardContent>
@@ -236,7 +236,7 @@ export default function FoundersAssistant() {
             >
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-zinc-500">⏳ Pending</p>
+                  <p className="text-xs text-zinc-500">Pending</p>
                   <p className="text-2xl font-bold text-amber-600">{stats.pendingTasks}</p>
                 </div>
               </CardContent>
@@ -247,7 +247,7 @@ export default function FoundersAssistant() {
             >
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-zinc-500">⚠️ Awaiting Approval</p>
+                  <p className="text-xs text-zinc-500">Awaiting Approval</p>
                   <p className="text-2xl font-bold text-orange-600">{stats.awaitingApproval}</p>
                 </div>
               </CardContent>
