@@ -100,7 +100,11 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
   const [mapView, setMapView] = useState<MapViewType>("satellite");
 
   const projectsWithCoords = useMemo(
-    () => projects.filter(p => p.latitude && p.longitude).map(p => ({
+    () => projects.filter(p =>
+      p.latitude != null && p.longitude != null &&
+      !isNaN(Number(p.latitude)) && !isNaN(Number(p.longitude)) &&
+      Number(p.latitude) !== 0 && Number(p.longitude) !== 0
+    ).map(p => ({
       ...p,
       lat: Number(p.latitude),
       lng: Number(p.longitude),
@@ -117,11 +121,11 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
 
   return (
     <MapErrorBoundary>
-      <div className="h-full w-full rounded-xl overflow-hidden border border-gold/30" style={{ touchAction: "none" }}>
+      <div className="h-full w-full rounded-xl overflow-hidden border border-gold/30" style={{ touchAction: "pan-y" }}>
         <MapContainer
           center={center}
           zoom={11}
-          scrollWheelZoom={true}
+          scrollWheelZoom={false}
           dragging={true}
           touchZoom={true}
           style={{ height: "100%", width: "100%" }}
