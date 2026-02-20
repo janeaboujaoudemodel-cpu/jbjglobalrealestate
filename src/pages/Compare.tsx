@@ -710,7 +710,7 @@ const Compare = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 pb-16">
         {/* Champagne/gold border wrapper */}
-        <div className="rounded-2xl border-2 border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.08)] p-6 bg-zinc-950/60 backdrop-blur-sm flex flex-col gap-8">
+        <div className="rounded-2xl border-2 border-[#C8A766]/40 shadow-[0_0_40px_rgba(200,167,102,0.08)] p-6 bg-zinc-950/60 backdrop-blur-sm flex flex-col gap-8">
           {/* Properties Count */}
           <div className="flex items-center gap-2 text-zinc-400">
             <span className="text-lg font-medium text-white">{projects.length}</span>
@@ -735,20 +735,22 @@ const Compare = () => {
                           <div className="flex flex-col gap-2">
                             {badge && (
                               <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
-                                badge === 'top1' ? 'bg-yellow-500/20 text-yellow-400' :
-                                badge === 'top2' ? 'bg-orange-600/20 text-orange-400' :
-                                'bg-gray-400/20 text-gray-300'
+                                badge === 'top1' ? 'bg-gold/20 text-gold' :
+                                badge === 'top2' ? 'bg-gold/15 text-gold/80' :
+                                'bg-gold/10 text-gold/60'
                               }`}>
                                 {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
                               </span>
                             )}
-                            <img
-                            src={project.images?.[0]?.image_url || "/placeholder.svg"}
-                            alt={project.name}
-                            className="w-full h-40 object-cover rounded-lg"
-                          />
-                          <h3 className="text-white font-semibold">{project.name}</h3>
-                          <p className="text-zinc-500 text-sm">{project.developer?.name}</p>
+                            <div className="aspect-[16/9] h-40 overflow-hidden rounded-lg">
+                              <img
+                                src={project.images?.[0]?.image_url || "/placeholder.svg"}
+                                alt={project.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <h3 className="text-white font-semibold">{project.name}</h3>
+                            <p className="text-zinc-500 text-sm truncate">{project.developer?.name}</p>
                         </div>
                       </th>
                     );
@@ -944,18 +946,20 @@ const Compare = () => {
             </div>
           ) : isGenerating ? (
             /* Premium loading state */
-            <div className="bg-gradient-to-br from-gold/5 to-zinc-900 rounded-2xl border border-gold/20 p-8">
+            <div className="bg-gradient-to-br from-gold/5 to-zinc-900 rounded-2xl border border-[#C8A766]/30 p-10">
               <div className="flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-[#E8DCC8] flex items-center justify-center mx-auto mb-4 animate-pulse">
-                  <Sparkles className="w-8 h-8 text-black" />
+                <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-gold to-[#E8DCC8] flex items-center justify-center mx-auto mb-6">
+                  <Sparkles className="w-10 h-10 text-black animate-pulse" />
+                  <div className="absolute inset-0 rounded-full border-2 border-gold/40 animate-ping" />
                 </div>
                 <h3 className="text-white text-2xl font-bold mb-2">Analyzing Property Intelligence...</h3>
                 <p className="text-zinc-400 max-w-md mx-auto mb-6">
-                  Our AI is comparing locations, pricing, ROI potential, and developer track records.
+                  Our AI is comparing locations, pricing, ROI potential, developer track records, and generating investment recommendations.
                 </p>
-                <div className="w-full max-w-xs h-2 bg-zinc-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-gold to-[#E8DCC8] rounded-full animate-pulse" style={{ width: '60%' }} />
+                <div className="w-full max-w-sm h-2 bg-zinc-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-gold via-[#E8DCC8] to-gold rounded-full animate-[shimmer_2s_ease-in-out_infinite]" style={{ width: '75%', backgroundSize: '200% 100%' }} />
                 </div>
+                <p className="text-zinc-600 text-xs mt-3">This may take 15-30 seconds</p>
               </div>
             </div>
           ) : (
@@ -1079,9 +1083,9 @@ const Compare = () => {
           </div>
 
           {/* AI Property Analyzer Integration */}
-          <div className="border-t border-gold/20 pt-8">
+          <div className="border-t border-[#C8A766]/20 pt-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-lg bg-gold/10 border border-gold/30">
+              <div className="p-2 rounded-lg bg-gold/10 border border-[#C8A766]/30">
                 <Brain className="w-6 h-6 text-gold" />
               </div>
               <div>
