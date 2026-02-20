@@ -890,7 +890,7 @@ const MarketReport = () => {
   </div>
 
   <!-- PAGE 2: COMPANY IDENTITY CARD + TABLE OF CONTENTS -->
-  <div class="page">
+  <div class="page" id="page-2">
 
     <!-- Premium Company Identity Card -->
     <div class="identity-card">
@@ -956,7 +956,7 @@ const MarketReport = () => {
 
   ${isFounderVisible ? `
   <!-- FOUNDER PAGE -->
-  <div class="page">
+  <div class="page" id="page-3">
     <div class="founder-section">
       <h2 style="text-align: center; border-bottom: none; margin-bottom: 36px;">From the Founder</h2>
       <img src="${founderProfessional}" alt="Jane Bou Jaoude" class="founder-image" onerror="this.style.display='none'" />
