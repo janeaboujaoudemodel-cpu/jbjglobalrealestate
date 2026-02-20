@@ -1,224 +1,81 @@
 
-# Comprehensive Bug Fix, UI Refinement, and Security Audit Plan
 
-This plan addresses all 21 tasks extracted from the prompt, organized by priority sections.
+# Fix: Expired Handover Filter + Missing Tools in Creative Suite
 
----
+## Problem 1: Old/Expired Projects Being Recommended
 
-## Section 1: AI Property Comparison (Full Rebuild)
+The AI Home Matchmaker (Quiz) and Recommended Projects section do NOT filter out projects with past handover dates. A project handed over in December 2016 still appears as a recommendation -- this is unacceptable because if the handover already passed, the project is effectively completed/sold.
 
-### Task 1-3: Premium Layout, Alignment, and Color Fix
-**File: `src/pages/Compare.tsx`**
+### Fix
 
-Current issues identified:
-- Border wrapper on line 711 uses `border-gold/30` which is correct champagne, but needs verification across all sub-elements
-- Project images use `h-40` (good) but cards may not align perfectly across columns
-- Location row has `whitespace-nowrap` and `text-ellipsis` but uses inline style rather than Tailwind truncate
+**Files to edit:** `src/pages/Quiz.tsx`, `src/components/project-detail/RecommendedProjects.tsx`, `src/pages/QuizResults.tsx`
 
-Changes:
-- Replace the outer wrapper border from `border-gold/30` to `border-[#C8A766]/40` for richer champagne tone
-- Enforce consistent card height in table headers by wrapping each project header cell content in a `flex flex-col` container with fixed image aspect ratio `aspect-[16/9] h-40`
-- Change Location cell to use Tailwind `truncate` class instead of separate whitespace/overflow/text-ellipsis classes
-- Ensure all borders, badges, and accent colors use the champagne palette (no purple, no yellow)
+Add a handover date expiry check in all three locations:
+- Parse `handover_date` and check if it's in the past (before today's date)
+- If the handover date contains a year earlier than 2026, or if parsing it as a date results in a date before today, exclude the project entirely
+- Handle various formats: "December 2016", "Q4 2025", "2024", "Ready" (Ready is always valid)
+- Logic: extract the year from `handover_date` using regex. If the year is less than 2026 (current year), treat it as expired and filter it out
+- "Ready" projects remain valid (already handed over and available)
 
-### Task 4: AI Smart Analyzer Upgrade
-**File: `src/pages/Compare.tsx`**
+Specific changes:
+1. **Quiz.tsx** (line ~242): Add a new hard exclusion after the sold-out check:
+   - Extract year from `project.handover_date` 
+   - If year exists and year < 2026, return false (exclude)
+   
+2. **RecommendedProjects.tsx** (line ~28): Add the same handover expiry filter in the `useMemo` filter function, alongside the existing `sold` check
 
-Changes:
-- When `isGenerating` is true, replace the simple "Analyzing..." text with a premium loading animation section showing: "Analyzing Property Intelligence..." with a pulsing Sparkles icon and a progress shimmer bar
-- Disable the comparison table interaction during generation with `pointer-events-none opacity-50`
-- The AI analysis already generates Pros (green with ThumbsUp), Cons (red with ThumbsDown), and recommendation data -- verify these render correctly
-- Add ROI estimate and rental yield display in the ratings cards if present in the AI response
-
-### Task 5: Share With Team Feature Enhancement
-**File: `src/pages/Compare.tsx`**
-
-Current state: WhatsApp and Email share buttons exist (lines 679-700) but content is basic.
-
-Changes:
-- Enhance WhatsApp share text to include: JBJ Global Real Estate header, property names, key metrics (price, location, developer), contact info (+971 56 591 1000, www.JBJ.ae)
-- Enhance Email share body with professional formatting including company details, comparison ID (date-based), and a structured summary
-- The existing `downloadComprehensiveReport` function already generates a premium HTML report with company branding, contact info, and full comparison -- this serves as the PDF/export feature
-- Add a "Copy Link" button alongside WhatsApp and Email for easy sharing
-
-### Task 6: Champagne Active Style
-**File: `src/pages/Compare.tsx`**
-
-- All active states (toggles, badges, buttons) already use champagne/gold palette
-- Verify no purple remnants exist anywhere in the component
+3. **QuizResults.tsx** (line ~71): Add handover expiry filter in the post-query normalization/filter step
 
 ---
 
-## Section 2: Mobile Fatal Error
+## Problem 2: Missing Tools in Creative Suite
 
-### Task 7: Fix "Importing a module script failed"
-**File: `src/components/AppErrorBoundary.tsx`**
+The Creative Suite page (`/business-suite/creative`) only shows 4 tools: Document Generator, Translation Hub, Video Tour Script, Background Remover.
 
-Current state: Error boundary shows a champagne-themed card (good) but still displays the raw error message (`this.state.errorMessage`) which exposes technical details.
+The user expects to see ALL creative and corporate tools listed there as well -- specifically: Business Card Designer, Logo Maker, Presentation, Company Profile, CV/Resume Builder, and Cover Letter Generator.
 
-Changes:
-- Remove the `<pre>` block that shows `this.state.errorMessage` -- never show technical errors to users
-- Replace with a gentle message: "Please check your internet connection and try again"
-- Add auto-retry logic: on mount, attempt `window.location.reload()` after 3 seconds if the error contains "module" or "import" (handles chunk loading failures from dynamic imports)
-- Ensure the error boundary catches `ChunkLoadError` specifically and triggers a silent page refresh
+### Fix
 
-**File: `vite.config.ts`**
-- The current config already uses code splitting with `manualChunks` which can cause chunk loading errors on deployments
-- The `entryFileNames: "assets/app.js"` is good for cache stability but chunk names use `[hash]` which changes on each deploy
-- No changes needed here -- the fix is in the error boundary recovery logic
+**File to edit:** `src/pages/business-suite/CreativeSuite.tsx`
 
----
+Add a second section called "Creative Suites" with tool cards for:
+- Presentation Editor (`/presentation`)
+- Business Card Designer (`/toolkit/corporate-suite/business-card`)
+- Logo Maker (`/toolkit/corporate-suite/logo`)
+- CV / Resume Builder (`/toolkit/corporate-suite/cv-builder`)
+- Cover Letter Generator (`/toolkit/corporate-suite/cover-letter`)
+- Company Profile (`/toolkit/corporate-suite/company-profile`)
 
-## Section 3: Hero Section Performance
+These will appear in a new grid section below the existing "All Tools" section, with a section divider labeled "Creative Suites" -- matching the existing layout pattern used in ProductivitySuite.tsx.
 
-### Task: Hero Video Loading
-**Files: `src/components/PropertiesHeroVideo.tsx`, `src/components/home/WhyDubaiCapitalSection.tsx`**
-
-Current state: `WhyDubaiCapitalSection` uses `preload="metadata"` (good). `PropertiesHeroVideo` uses `preload="auto"` for the first video and `preload="none"` for others (good).
-
-Changes:
-- In `WhyDubaiCapitalSection`, change to `preload="none"` and add IntersectionObserver to only load when section enters viewport
-- Ensure hero section uses `min-h-[100vh]` and `min-h-[100dvh]` for full coverage (already present)
+Update the hero tool count from "4 Tools Included" to reflect the actual total (10 tools).
 
 ---
 
-## Section 4: Homepage Bugs
+## Technical Details
 
-### Task 8: Sqft/Sqm Active Style
-**File: `src/components/home/HeroSearchBar.tsx`**
+### Handover Date Expiry Helper Function
 
-Current state (lines 638-663): Active unit uses `bg-gradient-to-r from-[#C8A766] to-[#E8DCC8] text-black` which IS the champagne gradient with black text. This matches the search button style. No change needed -- already correct.
+```text
+function isHandoverExpired(handoverDate: string | null): boolean {
+  if (!handoverDate) return false;
+  const lower = handoverDate.toLowerCase();
+  if (lower.includes("ready")) return false;
+  const yearMatch = handoverDate.match(/\b(20\d{2})\b/);
+  if (yearMatch) {
+    const year = parseInt(yearMatch[1]);
+    return year < 2026; // current year
+  }
+  return false;
+}
+```
 
-### Task 9: Handpicked Projects Broken Images
-**File: `src/components/home/FeaturedListings.tsx`**
+### Files Changed Summary
 
-Changes:
-- Add `loading="lazy"` and `onError` fallback to all project card images
-- Add a placeholder skeleton while images load
+| File | Change |
+|------|--------|
+| `src/pages/Quiz.tsx` | Add handover expiry exclusion in `getRecommendations` filter |
+| `src/components/project-detail/RecommendedProjects.tsx` | Add handover expiry exclusion in `recommendedProjects` filter |
+| `src/pages/QuizResults.tsx` | Add handover expiry filter in post-query normalization |
+| `src/pages/business-suite/CreativeSuite.tsx` | Add 6 new tool cards in a "Creative Suites" section, update tool count |
 
-### Task 10: View All Projects Padding
-**File: `src/components/home/FeaturedListings.tsx`**
-
-Current state (line 333): `mt-10` on the View All CTA. No bottom padding specified.
-
-Changes:
-- Add `mb-6` to the View All CTA wrapper for more breathing room below
-
-### Task 11: Find Your Starting Point Mobile Layout
-**File: `src/pages/Index.tsx`**
-
-The section starts at line 237. Changes:
-- Verify card grid uses responsive columns (`grid-cols-2 md:grid-cols-4`)
-- Ensure cards have `min-w-0` to prevent overflow on narrow screens
-- Add `gap-2 sm:gap-3` for tighter mobile spacing
-
-### Task 12: Explore Services Divider
-**File: `src/components/home/ExploreServicesCard.tsx`**
-
-Current state (line 362): Inner divider uses `border-t-2 border-dashed border-gold/40` which already differs from the outer `SectionDivider` component. This is already differentiated. No change needed.
-
----
-
-## Section 5: Free Professional Tools Bugs
-
-### Task 13: Button Overflow
-**File: `src/components/home/ToolkitShowcaseCard.tsx`**
-
-Current state (line 152): Already has `text-[10px] sm:text-sm px-1.5 sm:px-3 whitespace-nowrap overflow-hidden` with `<span className="truncate">`. This should be working. Will verify and ensure `min-w-0` is on parent flex container.
-
-### Task 14: Market Intelligence Book Image
-**File: `src/components/MarketReportHeroBook.tsx`**
-
-Current state (lines 78-84): Image already uses `loading="eager"` and `fetchPriority="high"`. The image is `luxury-villa-1.jpeg` which is a local asset (bundled), so it should load instantly.
-
-Changes:
-- Add `decoding="sync"` for immediate rendering
-- Increase the image height from `h-48 md:h-56` to `h-52 md:h-60` for better visibility
-
-### Task 15: Mortgage Calculator Duplicate Title
-Need to check if there's a duplicate heading on the homepage where the Mortgage Calculator tool card appears. The `ToolkitShowcaseCard` only shows it once. This may be a section-level duplication in `Index.tsx`.
-
-Changes:
-- Search `Index.tsx` for any duplicate "Financial Tools" or "Mortgage Calculator" heading and remove it
-
-### Task 16: Why Dubai Video Slow Load
-**File: `src/components/home/WhyDubaiCapitalSection.tsx`**
-
-Changes:
-- Change `preload="metadata"` to `preload="none"`
-- Add IntersectionObserver: only attach video `<source>` when section is within viewport
-- Add a static poster/thumbnail as immediate background
-
-### Task 17: Support Ticket Test
-- Will verify the support ticket edge function exists and test it via the curl tool
-- Check that RESEND_API_KEY is configured and email sends to both user and admin (SUPPORT@JBJ.AE)
-
----
-
-## Section 6: Explore Area Section
-
-### Task 18: Area Guide Title Style
-**File: `src/components/home/AreasWeCover.tsx`**
-
-Current state (lines 41-50): Title already uses gold-champagne gradient text via inline styles. This is correct.
-
-### Task 19: Area Photos Performance
-Changes:
-- Add `loading="lazy"` to area card background images (currently using `backgroundImage` CSS -- convert to `<img>` with lazy loading for better performance)
-
-### Task 20: Padding Under View All Areas
-**File: `src/components/home/AreasWeCover.tsx`**
-
-Current state (line 123): `mt-10 mb-8`. This is already increased from the original `mb-4`.
-
-Changes:
-- Increase to `mt-10 mb-10` for more breathing room
-
----
-
-## Section 7: Backend Security Audit
-
-### Task 21: Full Backend Audit
-
-Will perform:
-- Run the database linter to check RLS policies
-- Query recent database logs for errors
-- Verify edge function authorization headers
-- Check that no public endpoints expose sensitive data
-- Verify the `smart-ai-analysis` edge function requires JWT authentication
-- Verify email system configuration (RESEND_API_KEY secret exists)
-
----
-
-## Performance Optimization Checklist
-
-Already implemented:
-- Code splitting via `manualChunks` in vite.config.ts
-- Lazy loading images with `loading="lazy"`
-- Hero assets with `fetchPriority="high"`
-- Video deferred loading with `preload="none"`/"metadata"
-
-Additional changes:
-- Add `decoding="async"` to non-critical images
-- Ensure all video sections use IntersectionObserver for deferred loading
-- Verify no duplicate API calls in React Query hooks (check staleTime settings)
-
----
-
-## Technical Summary
-
-| Priority | File | Changes |
-|----------|------|---------|
-| Critical | `AppErrorBoundary.tsx` | Remove raw error display, add auto-retry for chunk errors |
-| Critical | `Compare.tsx` | Premium rebuild: alignment, champagne colors, enhanced sharing, loading animation |
-| High | `WhyDubaiCapitalSection.tsx` | IntersectionObserver lazy video loading |
-| High | `FeaturedListings.tsx` | Image error fallbacks, View All padding |
-| High | `MarketReportHeroBook.tsx` | Add `decoding="sync"`, increase image size |
-| Medium | `AreasWeCover.tsx` | Increase bottom padding |
-| Medium | `Index.tsx` | Fix Find Your Starting Point mobile layout, remove duplicate titles |
-| Medium | `ToolkitShowcaseCard.tsx` | Verify button overflow fix |
-| Low | `HeroSearchBar.tsx` | Already correct (champagne active style) |
-| Low | `ExploreServicesCard.tsx` | Already differentiated divider |
-| Audit | Backend | Run linter, check RLS, verify email config |
-
-Estimated scope: 8-10 files to edit, plus backend security audit.
