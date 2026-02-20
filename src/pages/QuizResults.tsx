@@ -340,7 +340,7 @@ Best regards`);
                   <div className="flex items-center gap-3 mb-6">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="border-white/40 text-white bg-white/10 hover:bg-white/20">
+                        <Button variant="outline" size="sm" className="border-purple-500 text-white bg-purple-600/30 hover:bg-purple-600/50">
                           <Award className="w-4 h-4 mr-2" />
                           {badges[projects[0].id] ? 'Change Badge' : 'Add Badge'}
                         </Button>
@@ -384,7 +384,7 @@ Best regards`);
               {projects.slice(1).map((project, index) => {
                 const badge = badges[project.id];
                 return (
-                  <div key={project.id} className="relative group flex flex-col h-full">
+                  <div key={project.id} className="relative group flex flex-col h-full border-2 border-purple-500/40 rounded-2xl overflow-hidden min-h-[420px]">
                     <div className="absolute -top-2 -left-2 z-10 w-8 h-8 bg-purple-900 rounded-full flex items-center justify-center border border-purple-700">
                       <span className="text-white text-sm font-bold">#{index + 2}</span>
                     </div>
@@ -405,7 +405,7 @@ Best regards`);
                     <div className="mt-2">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="w-full border-white/40 text-white bg-white/10 hover:bg-white/20 text-xs">
+                          <Button variant="outline" size="sm" className="w-full border-purple-500 text-white bg-purple-600/30 hover:bg-purple-600/50 text-xs">
                             <Award className="w-3 h-3 mr-1" />
                             {badge ? 'Change Badge' : 'Add Badge'}
                           </Button>

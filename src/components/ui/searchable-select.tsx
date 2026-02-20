@@ -72,7 +72,8 @@ export function SearchableSelect({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "w-full justify-between h-12 bg-white border-gold/30 text-black hover:bg-white hover:border-gold/60 hover:text-black rounded-lg",
+            "w-full justify-between h-12 rounded-lg",
+            !triggerClassName && "bg-white border-gold/30 text-black hover:bg-white hover:border-gold/60 hover:text-black",
             !value && "text-zinc-500",
             triggerClassName
           )}

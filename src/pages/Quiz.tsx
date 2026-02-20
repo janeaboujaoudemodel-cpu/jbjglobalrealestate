@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,6 +17,7 @@ import { SearchableSelect } from "@/components/ui/searchable-select";
 import { PaymentModal } from "@/components/PaymentModal";
 import { useQuizUsage } from "@/hooks/useQuizUsage";
 import { useMembership } from "@/hooks/useMembership";
+import { FounderContent } from "@/components/FounderContent";
 
 
 
@@ -89,7 +90,8 @@ const QUIZ_QUESTIONS = [
   {
     id: "location_type",
     question: "What type of location do you prefer?",
-    type: "single" as const,
+    type: "multiple" as const,
+    hasSelectAll: true,
     options: [
       { value: "beachfront", label: "Beachfront / Waterfront", icon: "🌊" },
       { value: "city-center", label: "City Center / Downtown", icon: "🌆" },
@@ -159,6 +161,26 @@ const Quiz = () => {
     preferredLanguage: "",
   });
   const estimatedTime = 45; // Reduced from 60 - streamlined quiz
+
+  // Auto-fill form data from logged-in user's profile
+  useEffect(() => {
+    if (user) {
+      supabase.from("profiles").select("*").eq("id", user.id).single()
+        .then(({ data }) => {
+          if (data) {
+            setFormData(prev => ({
+              fullName: (data as any).full_name || (data as any).display_name || prev.fullName,
+              email: user.email || prev.email,
+              phone: (data as any).phone || prev.phone,
+              nationality: (data as any).nationality || prev.nationality,
+              preferredLanguage: (data as any).preferred_language || prev.preferredLanguage,
+            }));
+          } else {
+            setFormData(prev => ({ ...prev, email: user.email || prev.email }));
+          }
+        });
+    }
+  }, [user]);
 
   const { data: allProjects } = useQuery({
     queryKey: ["all-projects-quiz"],
@@ -232,7 +254,12 @@ const Quiz = () => {
     if (currentStep < QUIZ_QUESTIONS.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      setShowForm(true);
+      // If logged in and all fields filled, skip form
+      if (user && isFormValid()) {
+        proceedToResults();
+      } else {
+        setShowForm(true);
+      }
     }
   };
 
@@ -240,13 +267,10 @@ const Quiz = () => {
     if (!allProjects?.length) return [];
 
     const filteredProjects = allProjects.filter((project) => {
-      // ── Hard exclusions ──────────────────────────────────────────────────
-      // Never recommend sold-out projects
       if (project.is_sold_out) return false;
       const saleStatusLower = (project.sale_status || "").toLowerCase();
       if (saleStatusLower.includes("sold") || saleStatusLower.includes("out_of_stock")) return false;
 
-      // Exclude projects with expired handover dates (year < 2026)
       if (project.handover_date) {
         const hLower = project.handover_date.toLowerCase();
         if (!hLower.includes("ready")) {
@@ -255,11 +279,8 @@ const Quiz = () => {
         }
       }
 
-      // Require cover image (use only cover_image_url — project_images join is not always loaded)
       if (!project.cover_image_url) return false;
 
-      // ── Budget filter ────────────────────────────────────────────────────
-      // If price_from is null, don't hard-exclude — just score lower
       const priceFrom = project.price_from;
       const budget = answers.budget;
 
@@ -271,8 +292,6 @@ const Quiz = () => {
         if (budget === "10m-plus" && priceFrom < 10000000) return false;
       }
 
-      // ── Bedroom filter ───────────────────────────────────────────────────
-      // Only apply bedroom filter if the project has bedroom data
       const bedrooms = answers.bedrooms;
       const minBr = project.bedrooms_min;
       const maxBr = project.bedrooms_max ?? minBr;
@@ -294,18 +313,21 @@ const Quiz = () => {
       .map((project) => {
         let score = 100;
 
-        // Data completeness bonuses
         if (project.price_from) score += 10;
         if (project.bedrooms_min != null) score += 5;
         if (project.cover_image_url || project.images?.[0]?.image_url) score += 5;
 
         const location = answers.location_type;
         const projectViews = project.views || [];
-        if (location === "beachfront" && projectViews.some((v: string) => v.toLowerCase().includes("sea") || v.toLowerCase().includes("beach"))) score += 20;
-        if (location === "city-center" && projectViews.some((v: string) => v.toLowerCase().includes("city") || v.toLowerCase().includes("skyline"))) score += 20;
-        if (location === "golf-community" && projectViews.some((v: string) => v.toLowerCase().includes("golf"))) score += 20;
-        if (location === "suburban" && projectViews.some((v: string) => v.toLowerCase().includes("garden"))) score += 20;
-        if (location === "flexible") score += 10;
+        // location_type is now multi-select — check array
+        const locationArr = Array.isArray(location) ? location : (location ? [location] : []);
+        locationArr.forEach((loc: string) => {
+          if (loc === "beachfront" && projectViews.some((v: string) => v.toLowerCase().includes("sea") || v.toLowerCase().includes("beach"))) score += 20;
+          if (loc === "city-center" && projectViews.some((v: string) => v.toLowerCase().includes("city") || v.toLowerCase().includes("skyline"))) score += 20;
+          if (loc === "golf-community" && projectViews.some((v: string) => v.toLowerCase().includes("golf"))) score += 20;
+          if (loc === "suburban" && projectViews.some((v: string) => v.toLowerCase().includes("garden"))) score += 20;
+          if (loc === "flexible") score += 10;
+        });
 
         const timeline = answers.timeline;
         const handover = project.handover_date?.toLowerCase() || "";
@@ -315,7 +337,6 @@ const Quiz = () => {
         if (timeline === "2027-plus" && (handover.includes("2027") || handover.includes("2028") || handover.includes("2029"))) score += 15;
         if (timeline === "flexible") score += 10;
 
-        // Score based on views_and_features combined question
         const preferredFeatures = answers.views_and_features as string[] || [];
         preferredFeatures.forEach((pf) => {
           if (pf.includes("view") && projectViews.some((v: string) => v.toLowerCase().includes(pf.replace("-view", "")))) score += 5;
@@ -323,7 +344,6 @@ const Quiz = () => {
           if (projectAmenities.some((a: string) => a.toLowerCase().includes(pf.replace("-", " ")))) score += 3;
         });
 
-        // Area matching
         const preferredAreas = answers.areas as string[] || [];
         const projectName = (project.name || "").toLowerCase();
         const projectLocation = (project.location || "").toLowerCase();
@@ -353,7 +373,6 @@ const Quiz = () => {
       const recommendations = getRecommendations();
       const sessionId = `quiz-${(crypto as any)?.randomUUID ? (crypto as any).randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`}`;
 
-      // Persist quiz responses only for authenticated users
       if (user?.id) {
         await supabase.from("quiz_responses").insert({
           user_id: user.id,
@@ -366,7 +385,6 @@ const Quiz = () => {
         });
       }
 
-      // Mark free usage
       markFreeUsed();
 
       const slugs = recommendations.slice(0, 5).map((p) => p.slug).join(",");
@@ -493,7 +511,9 @@ const Quiz = () => {
 
             <p className="text-purple-300/80 text-xs mt-8 leading-relaxed">
               Software developed and implemented by<br />
-              <span className="text-white font-medium">The Founder & CEO, Jane Bou Jaoude</span><br />
+              <FounderContent fallback={<span className="text-white font-medium">JBJ Global Real Estate Team</span>}>
+                <span className="text-white font-medium">The Founder & CEO, Jane Bou Jaoude</span>
+              </FounderContent><br />
               Designed exclusively for{" "}
               <span className="text-white font-medium">JBJ Global Real Estate</span>
             </p>
@@ -581,6 +601,8 @@ const Quiz = () => {
                     placeholder="Select your nationality"
                     searchPlaceholder="Search countries..."
                     priorityItem="United Arab Emirates"
+                    triggerClassName="bg-zinc-800/50 border-zinc-700 text-white hover:bg-zinc-700 hover:text-white"
+                    className="bg-zinc-900 border-zinc-700"
                   />
                 </div>
                 <div>
@@ -592,6 +614,8 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
+                    triggerClassName="bg-zinc-800/50 border-zinc-700 text-white hover:bg-zinc-700 hover:text-white"
+                    className="bg-zinc-900 border-zinc-700"
                   />
                 </div>
               </div>
@@ -641,7 +665,9 @@ const Quiz = () => {
 
               <p className="text-purple-300/60 text-xs text-center mt-6 leading-relaxed">
                 Software developed and implemented by<br />
-                <span className="text-white">The Founder & CEO, Jane Bou Jaoude</span><br />
+                <FounderContent fallback={<span className="text-white">JBJ Global Real Estate Team</span>}>
+                  <span className="text-white">The Founder & CEO, Jane Bou Jaoude</span>
+                </FounderContent><br />
                 Designed exclusively for <span className="text-white">JBJ Global Real Estate</span>
               </p>
             </div>
@@ -700,7 +726,7 @@ const Quiz = () => {
                 size="sm"
                 onClick={handleSelectAll}
                 disabled={allSelected()}
-                className="border-purple-500/50 text-white hover:bg-purple-500/10"
+                className="bg-white text-zinc-900 hover:bg-zinc-200 border-white/80 font-semibold disabled:opacity-50"
               >
                 Select All
               </Button>
@@ -709,7 +735,7 @@ const Quiz = () => {
                 size="sm"
                 onClick={handleClearAll}
                 disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
-                className="border-zinc-700 text-white hover:bg-zinc-800"
+                className="bg-white text-zinc-900 hover:bg-zinc-200 border-white/80 font-semibold disabled:opacity-50"
               >
                 Clear All
               </Button>
@@ -750,8 +776,16 @@ const Quiz = () => {
             })}
           </div>
 
-          {/* Navigation */}
-          <div className="flex justify-center mt-10">
+          {/* Navigation - Back & Next */}
+          <div className="flex justify-between mt-10 gap-4">
+            <Button
+              variant="outline"
+              onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
+              className="border-white/60 text-white bg-white/10 hover:bg-white/20 hover:text-white px-8 py-6 text-lg"
+            >
+              <ChevronLeft className="w-5 h-5 mr-2" />
+              Back
+            </Button>
             <Button
               onClick={handleNext}
               disabled={!isAnswered()}
