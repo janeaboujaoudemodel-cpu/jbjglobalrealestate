@@ -1086,14 +1086,40 @@ function exportDigitalCardAsHtml(
   const ctaBg = "#C8A766";
   const ctaText = "#fff";
 
+  // PWA: Extract initials
+  const nameParts = name.trim().split(/\s+/);
+  const initials = nameParts.length >= 2
+    ? (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()
+    : (nameParts[0]?.[0] || "?").toUpperCase();
+
+  // PWA: Build SVG icon as data URI
+  const pwaIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="96" fill="${primary}"/><text x="256" y="300" text-anchor="middle" font-family="${fontFamily}" font-size="200" font-weight="700" fill="#ffffff">${initials}</text></svg>`;
+  const pwaIconDataUri = `data:image/svg+xml;base64,${btoa(pwaIconSvg)}`;
+
+  // PWA: Build manifest as data URI
+  const pwaManifest = JSON.stringify({
+    name: `${name} — Digital Card`,
+    short_name: `${initials} Card`,
+    start_url: ".",
+    display: "standalone",
+    background_color: primary,
+    theme_color: primary,
+    icons: [{ src: pwaIconDataUri, sizes: "any", type: "image/svg+xml" }]
+  });
+  const pwaManifestDataUri = `data:application/json;base64,${btoa(pwaManifest)}`;
+
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="${primary}"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="description" content="Digital business card for ${name} — ${title} at ${company}"/>
 <title>${name} — Digital Card</title>
+<link rel="apple-touch-icon" href="${pwaIconDataUri}"/>
+<link rel="manifest" href="${pwaManifestDataUri}"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:24px 16px 48px;background:linear-gradient(160deg,#0f0f0f 0%,#1a1a1a 60%,#111 100%);font-family:${fontFamily};color:#fff}
@@ -1158,6 +1184,7 @@ function saveContact(){
   document.body.appendChild(a);a.click();
   setTimeout(function(){URL.revokeObjectURL(url);document.body.removeChild(a);},1000);
 }
+if('serviceWorker' in navigator){var sw='self.addEventListener("fetch",function(e){e.respondWith(fetch(e.request))})';var blob=new Blob([sw],{type:"application/javascript"});navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(function(){});}
 </script>
 </body>
 </html>`;
