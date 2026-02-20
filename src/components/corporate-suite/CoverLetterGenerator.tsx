@@ -5,6 +5,7 @@ import {
   ArrowLeft, FileEdit, Sparkles, Download, RefreshCw,
   ImageIcon, ChevronDown, Copy, Check, Pencil,
 } from "lucide-react";
+import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -218,6 +219,18 @@ export default function CoverLetterGenerator() {
   const setField = (k: keyof FormData) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => setForm(prev => ({ ...prev, [k]: e.target.value }));
+
+  const handleExtractedCoverLetter = (extracted: Record<string, unknown>) => {
+    setForm(prev => ({
+      ...prev,
+      yourName:    extracted.yourName    ? String(extracted.yourName)    : prev.yourName,
+      yourTitle:   extracted.yourTitle   ? String(extracted.yourTitle)   : prev.yourTitle,
+      jobTitle:    extracted.jobTitle    ? String(extracted.jobTitle)    : prev.jobTitle,
+      companyName: extracted.companyName ? String(extracted.companyName) : prev.companyName,
+      skills:      extracted.skills      ? String(extracted.skills)      : prev.skills,
+      experience:  extracted.experience  ? String(extracted.experience)  : prev.experience,
+    }));
+  };
 
   // ── Generate ────────────────────────────────────────────────────────────────
   const generate = async () => {
@@ -582,6 +595,14 @@ export default function CoverLetterGenerator() {
               ))}
             </div>
           </div>
+
+          {/* Scan Existing Cover Letter — AI pre-fill */}
+          <DocumentExtractorUpload
+            extractionType="cover_letter"
+            onExtracted={handleExtractedCoverLetter}
+            label="Scan Existing Cover Letter"
+            hint="Upload a PDF or photo of a cover letter to pre-fill your details instantly."
+          />
 
           {/* Your Info */}
           <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
