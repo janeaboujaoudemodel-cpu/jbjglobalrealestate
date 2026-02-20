@@ -1405,7 +1405,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
         });
         if (rpcErr) {
           if (rpcErr.message?.toLowerCase().includes("protected")) {
-            toast.error("🔒 This company name is exclusively protected and cannot be used.");
+          toast.error("This company name is exclusively protected and cannot be used.");
             setIsSaving(false); return;
           }
           // non-fatal RPC errors — allow save to proceed
@@ -1441,7 +1441,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
 
         if (licErr) {
           if (licErr.message?.toLowerCase().includes("protected")) {
-            toast.error("🔒 This company name is exclusively protected and cannot be used.");
+          toast.error("This company name is exclusively protected and cannot be used.");
             setIsSaving(false); return;
           }
           // license insert failure is non-fatal — card is already saved
@@ -1455,7 +1455,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     } catch (err: any) {
       console.error(err);
       if (err?.message?.toLowerCase().includes("protected")) {
-        toast.error("🔒 This company name is exclusively protected and cannot be used.");
+        toast.error("This company name is exclusively protected and cannot be used.");
       } else {
         toast.error("Save failed. Please try again.");
       }
