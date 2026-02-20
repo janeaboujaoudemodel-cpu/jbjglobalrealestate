@@ -9,6 +9,7 @@ import {
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
   Save, Palette, Zap, Star, Cpu, Minus,
 } from "lucide-react";
+import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -916,6 +917,19 @@ export default function BusinessCardDesigner() {
   const set = (k: keyof CardData) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setData(prev => ({ ...prev, [k]: e.target.value }));
 
+  const handleExtractedCard = (extracted: Record<string, unknown>) => {
+    setData(prev => ({
+      ...prev,
+      name:    extracted.name    ? String(extracted.name)    : prev.name,
+      title:   extracted.title   ? String(extracted.title)   : prev.title,
+      company: extracted.company ? String(extracted.company) : prev.company,
+      phone:   extracted.phone   ? String(extracted.phone)   : prev.phone,
+      email:   extracted.email   ? String(extracted.email)   : prev.email,
+      website: extracted.website ? String(extracted.website) : prev.website,
+      address: extracted.address ? String(extracted.address) : prev.address,
+    }));
+  };
+
   const handleFieldMove = (field: keyof typeof DEFAULT_FIELD_POSITIONS, pos: FieldPos) => {
     setFieldPositions(prev => ({ ...prev, [field]: pos }));
   };
@@ -1619,6 +1633,14 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               </CollapsibleContent>
             </div>
           </Collapsible>
+
+          {/* Scan Existing Card — AI pre-fill */}
+          <DocumentExtractorUpload
+            extractionType="business_card"
+            onExtracted={handleExtractedCard}
+            label="Scan Existing Card"
+            hint="Upload a photo or PDF of a business card to pre-fill all fields instantly."
+          />
 
           {/* Card info fields */}
           <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm space-y-3.5">

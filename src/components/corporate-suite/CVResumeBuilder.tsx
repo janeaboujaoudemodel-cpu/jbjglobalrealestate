@@ -6,6 +6,7 @@ import {
   ChevronRight, LayoutGrid, Check, RefreshCw, User, Briefcase,
   GraduationCap, Wrench, Languages, AlignLeft, ImageIcon, ChevronDown,
 } from "lucide-react";
+import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -709,6 +710,37 @@ export default function CVResumeBuilder() {
   const set = (k: keyof CVData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setData(prev => ({ ...prev, [k]: e.target.value }));
 
+  const handleExtractedCV = (extracted: Record<string, unknown>) => {
+    setData(prev => ({
+      ...prev,
+      name:      extracted.name      ? String(extracted.name)      : prev.name,
+      title:     extracted.title     ? String(extracted.title)     : prev.title,
+      email:     extracted.email     ? String(extracted.email)     : prev.email,
+      phone:     extracted.phone     ? String(extracted.phone)     : prev.phone,
+      location:  extracted.location  ? String(extracted.location)  : prev.location,
+      linkedin:  extracted.linkedin  ? String(extracted.linkedin)  : prev.linkedin,
+      website:   extracted.website   ? String(extracted.website)   : prev.website,
+      summary:   extracted.summary   ? String(extracted.summary)   : prev.summary,
+      skills:    extracted.skills    ? String(extracted.skills)    : prev.skills,
+      languages: extracted.languages ? String(extracted.languages) : prev.languages,
+      experience: Array.isArray(extracted.experience) && extracted.experience.length
+        ? (extracted.experience as Record<string, unknown>[]).map(e => ({
+            title:       String(e.title       ?? ""),
+            company:     String(e.company     ?? ""),
+            period:      String(e.period      ?? ""),
+            description: String(e.description ?? ""),
+          }))
+        : prev.experience,
+      education: Array.isArray(extracted.education) && extracted.education.length
+        ? (extracted.education as Record<string, unknown>[]).map(e => ({
+            degree:      String(e.degree      ?? ""),
+            institution: String(e.institution ?? ""),
+            year:        String(e.year        ?? ""),
+          }))
+        : prev.education,
+    }));
+  };
+
   const setExp = (i: number, k: keyof Experience, v: string) =>
     setData(prev => { const exp = [...prev.experience]; exp[i] = { ...exp[i], [k]: v }; return { ...prev, experience: exp }; });
 
@@ -810,6 +842,14 @@ export default function CVResumeBuilder() {
 
         {/* ── Left: Controls ────────────────────────────────────── */}
         <div className="space-y-4">
+
+          {/* Scan Existing CV — AI pre-fill */}
+          <DocumentExtractorUpload
+            extractionType="cv"
+            onExtracted={handleExtractedCV}
+            label="Scan Existing CV / Resume"
+            hint="Upload a PDF or photo of your current CV to pre-fill all fields with Gemini Vision."
+          />
 
           {/* Brand Assets panel */}
           <Collapsible open={brandAssetOpen} onOpenChange={setBrandAssetOpen}>
