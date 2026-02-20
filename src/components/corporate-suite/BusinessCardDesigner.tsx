@@ -25,6 +25,7 @@ import { BrandAssetLibrary } from "@/components/corporate-suite/BrandAssetLibrar
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 import { supabase } from "@/integrations/supabase/client";
+import DigitalLandingPageEditor, { EMPTY_LANDING_PAGE, type LandingPageData } from "@/components/corporate-suite/DigitalLandingPageEditor";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Template = "modern" | "classic" | "minimal" | "bold" | "creative" | "corporate" | "ai-design";
@@ -1051,6 +1052,7 @@ function exportDigitalCardAsHtml(
   fontWeight: string,
   fontStyle: string,
   nameFontSize: number | null,
+  landingPage?: LandingPageData,
 ): void {
   const name    = data.name    || "Your Name";
   const title   = data.title   || "Job Title";
@@ -1139,6 +1141,26 @@ body{min-height:100vh;display:flex;flex-direction:column;align-items:center;just
 .save-btn:hover{opacity:0.9}
 .footer{text-align:center;font-size:11px;color:#ffffff33;padding-top:8px}
 .footer a{color:#ffffff44;text-decoration:none}
+.lp-section{margin-top:24px}
+.lp-heading{font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ffffff55;margin-bottom:12px}
+.lp-bio{font-size:14px;line-height:1.6;color:#ffffffcc;background:#ffffff08;border:1px solid #ffffff12;border-radius:16px;padding:20px}
+.social-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.social-chip{display:flex;flex-direction:column;align-items:center;gap:6px;background:#ffffff0d;border:1px solid #ffffff15;border-radius:14px;padding:14px 8px;text-decoration:none;color:#fff;font-size:11px;transition:background 0.15s}
+.social-chip:hover{background:#ffffff1a}
+.social-chip .s-icon{font-size:22px}
+.social-chip .s-label{font-size:10px;opacity:0.6;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.featured-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.featured-card{min-width:220px;border-radius:16px;overflow:hidden;background:#ffffff0d;border:1px solid #ffffff15;text-decoration:none;color:#fff;flex-shrink:0;transition:transform 0.15s}
+.featured-card:hover{transform:scale(1.02)}
+.featured-img{width:100%;height:130px;object-fit:cover;background:#ffffff12}
+.featured-body{padding:14px}
+.featured-body h3{font-size:14px;font-weight:600;margin-bottom:4px}
+.featured-body p{font-size:11px;opacity:0.6}
+.testimonials-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.testimonial-card{min-width:240px;background:#ffffff0d;border:1px solid #ffffff15;border-radius:16px;padding:18px;flex-shrink:0}
+.testimonial-card .t-text{font-size:13px;line-height:1.5;color:#ffffffcc;margin-bottom:10px;font-style:italic}
+.testimonial-card .t-author{font-size:11px;font-weight:600;color:#ffffffaa}
+.testimonial-card .t-role{font-size:10px;color:#ffffff55}
 ${template==="minimal"?`.card-name{color:#111!important}.card{box-shadow:0 20px 60px rgba(0,0,0,0.3);}`:""}
 ${template==="bold"?`.card-name{text-transform:uppercase;letter-spacing:0.04em}`:""}
 </style>
@@ -1169,6 +1191,18 @@ ${template==="bold"?`.card-name{text-transform:uppercase;letter-spacing:0.04em}`
       <span>💾</span><span>Save Contact</span>
     </button>
   </div>
+
+  ${landingPage?.heroBio ? `<div class="lp-section"><div class="lp-heading">About</div><div class="lp-bio">${landingPage.heroBio.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br/>")}</div></div>` : ""}
+
+  ${landingPage?.socialLinks && landingPage.socialLinks.length > 0 ? `<div class="lp-section"><div class="lp-heading">Connect</div><div class="social-grid">${landingPage.socialLinks.map(s => `<a href="${s.url.startsWith("http") ? s.url : "https://"+s.url}" target="_blank" rel="noopener" class="social-chip"><span class="s-icon">${s.icon}</span><span class="s-label">${s.platform}</span></a>`).join("")}</div></div>` : ""}
+
+  ${landingPage?.featuredCards && landingPage.featuredCards.length > 0 ? `<div class="lp-section"><div class="lp-heading">Featured</div><div class="featured-scroll">${landingPage.featuredCards.map(c => {
+    const tag = c.link ? "a" : "div";
+    const href = c.link ? ` href="${c.link.startsWith("http") ? c.link : "https://"+c.link}" target="_blank" rel="noopener"` : "";
+    return `<${tag}${href} class="featured-card">${c.imageUrl ? `<img class="featured-img" src="${c.imageUrl}" alt="${c.title.replace(/"/g,"&quot;")}"/>` : `<div class="featured-img"></div>`}<div class="featured-body"><h3>${c.title}</h3>${c.subtitle ? `<p>${c.subtitle}</p>` : ""}</div></${tag}>`;
+  }).join("")}</div></div>` : ""}
+
+  ${landingPage?.testimonials && landingPage.testimonials.length > 0 ? `<div class="lp-section"><div class="lp-heading">What Clients Say</div><div class="testimonials-row">${landingPage.testimonials.map(t => `<div class="testimonial-card"><div class="t-text">"${t.text.replace(/</g,"&lt;").replace(/>/g,"&gt;")}"</div><div class="t-author">${t.name}</div>${t.role ? `<div class="t-role">${t.role}</div>` : ""}</div>`).join("")}</div></div>` : ""}
 
   <p class="footer">Built with <a href="/" target="_blank">JBJ Business Card Designer</a></p>
 </div>
@@ -1311,7 +1345,10 @@ export default function BusinessCardDesigner() {
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
   });
 
-  // Derived preset values
+  // Landing page data (Digital mode)
+  const [landingPageData, setLandingPageData] = useState<LandingPageData>({ ...EMPTY_LANDING_PAGE });
+  const [digitalTab, setDigitalTab] = useState<"card" | "landing">("card");
+
   const frontPreset = COLOR_PRESETS[frontColorIdx];
   const backPreset  = COLOR_PRESETS[backColorIdx];
   const frontPrimary   = frontCustomColor || frontPreset.primary;
@@ -1517,6 +1554,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
         cardFontBold ? "bold" : "800",
         cardFontItalic ? "italic" : "normal",
         cardFontSize,
+        landingPageData,
       );
       toast.success("Digital card HTML exported!");
     } catch (err) {
@@ -2600,14 +2638,44 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               {logoUrl && <span>· Logo on both sides</span>}
             </div>
 
-            {/* NFC / Digital mode tip banner + Export HTML button */}
+            {/* Digital mode tabs + landing page editor + export */}
             {cardShape === "digital" && (
               <div className="w-full space-y-3">
-                <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 p-3.5 text-xs text-blue-200 space-y-1">
-                  <p className="font-semibold text-blue-100 flex items-center gap-1.5">📱 NFC / Digital Card Mode</p>
-                  <p>Export as HTML to host your digital card page on any web host (Netlify, GitHub Pages, etc.).</p>
-                  <p className="opacity-70">Program that URL into an NFC sticker with any free NFC writer app — tap the sticker → phone opens your card → visitor taps Save Contact.</p>
+                {/* Tab switcher */}
+                <div className="flex rounded-xl border border-[hsl(var(--border))] overflow-hidden">
+                  {(["card", "landing"] as const).map(tab => (
+                    <button
+                      key={tab}
+                      onClick={() => setDigitalTab(tab)}
+                      className={`flex-1 py-2.5 text-xs font-semibold transition-all ${
+                        digitalTab === tab
+                          ? "bg-blue-600/30 text-blue-100 border-b-2 border-blue-400"
+                          : "bg-[#ffffff08] text-white/50 hover:text-white/70"
+                      }`}
+                    >
+                      {tab === "card" ? "📇 Card" : "📄 Landing Page"}
+                    </button>
+                  ))}
                 </div>
+
+                {digitalTab === "landing" && (
+                  <div className="rounded-xl border border-[hsl(var(--border))] bg-[#ffffff08] p-4">
+                    <DigitalLandingPageEditor
+                      data={landingPageData}
+                      onChange={setLandingPageData}
+                      primaryColor={frontPrimary}
+                    />
+                  </div>
+                )}
+
+                {digitalTab === "card" && (
+                  <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 p-3.5 text-xs text-blue-200 space-y-1">
+                    <p className="font-semibold text-blue-100 flex items-center gap-1.5">📱 NFC / Digital Card Mode</p>
+                    <p>Export as HTML to host your digital card page on any web host (Netlify, GitHub Pages, etc.).</p>
+                    <p className="opacity-70">Program that URL into an NFC sticker with any free NFC writer app — tap the sticker → phone opens your card → visitor taps Save Contact.</p>
+                  </div>
+                )}
+
                 <button
                   onClick={handleExportHtml}
                   disabled={isExportingHtml}
