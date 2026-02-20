@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Sparkles, ChevronRight, CreditCard, Info } from "lucide-react";
+import { Sparkles, ChevronRight, CreditCard } from "lucide-react";
 import { useProjects } from "@/hooks/useProjects";
 import { SafeImage } from "@/components/SafeImage";
 import { DeveloperLink } from "@/components/ui/developer-link";
@@ -54,56 +54,57 @@ export default function RecommendedProjects({
             <Sparkles className="w-6 h-6 text-gold" />
             <h2 className="text-2xl md:text-3xl font-bold text-black">Recommended Projects</h2>
           </div>
-          <Link 
-            to="/properties" 
+          <Link
+            to="/properties"
             className="text-gold hover:underline text-sm font-medium flex items-center gap-1"
           >
             View All <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Projects Grid — items-stretch ensures equal height columns */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           {recommendedProjects.map((project) => {
             const breakdown = (project as any).payment_breakdown;
-            const percentages = breakdown && Array.isArray(breakdown) 
+            const percentages = breakdown && Array.isArray(breakdown)
               ? breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number')
               : [];
             const paymentLabel = percentages.length > 0 ? percentages.join('/') : null;
             const saleStatus = (project as any).sale_status || "On Sale";
             const devLogo = (project.developer as any)?.logo_url;
 
+            // Location fallback: location → area_name → emirate
+            const displayLocation =
+              (project as any).location ||
+              (project as any).area_name ||
+              (project as any).emirate ||
+              null;
+
             return (
               <Link
                 key={project.id}
                 to={`/project/${project.slug}`}
-                className="group relative overflow-hidden rounded-xl border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold/60 transition-all shadow-sm"
+                className="group relative overflow-hidden rounded-xl border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold/60 transition-all shadow-sm flex flex-col h-full"
               >
                 {/* Image */}
-                <div className="aspect-[16/10] overflow-hidden relative">
+                <div className="aspect-[16/10] overflow-hidden relative flex-shrink-0">
                   <SafeImage
                     src={project.images?.[0]?.image_url || (project as any).cover_image_url}
                     alt={project.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
 
-                  {/* Top Badges Row */}
+                  {/* Top Badges Row — sale status + recommended only */}
                   <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       {/* Sale Status Badge */}
                       <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${
-                        saleStatus.toLowerCase().includes("sold") 
-                          ? "bg-red-500 text-white" 
+                        saleStatus.toLowerCase().includes("sold")
+                          ? "bg-red-500 text-white"
                           : "bg-emerald-500 text-white"
                       }`}>
                         {saleStatus}
                       </span>
-                      {/* Handover Date Badge */}
-                      {project.handover_date && (
-                        <span className="bg-handover text-handover-foreground px-2 py-0.5 rounded text-[11px] font-bold">
-                          {formatDisplayDate(project.handover_date)}
-                        </span>
-                      )}
                     </div>
                     {/* Recommended Badge */}
                     <span className="bg-gold/90 text-black px-2 py-0.5 rounded text-[11px] font-bold">
@@ -111,7 +112,7 @@ export default function RecommendedProjects({
                     </span>
                   </div>
 
-                  {/* Developer Logo Overlay - Bottom Left */}
+                  {/* Developer Logo — Bottom Left */}
                   {devLogo && (
                     <div className="absolute bottom-3 left-3 w-10 h-10 rounded-lg bg-white border border-gold/30 overflow-hidden shadow-md flex items-center justify-center p-1">
                       <SafeImage
@@ -121,14 +122,23 @@ export default function RecommendedProjects({
                       />
                     </div>
                   )}
+
+                  {/* Handover Date — Bottom Right */}
+                  {project.handover_date && (
+                    <div className="absolute bottom-3 right-3">
+                      <span className="bg-black/70 backdrop-blur-sm text-gold border border-gold/40 px-2 py-0.5 rounded text-[11px] font-bold">
+                        {formatDisplayDate(project.handover_date)}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
-                {/* Content */}
-                <div className="p-4">
+                {/* Content — flex-col flex-1 so it fills remaining card height */}
+                <div className="p-4 flex flex-col flex-1">
                   <h3 className="text-lg font-semibold text-black group-hover:text-gold transition-colors whitespace-normal break-words leading-tight mb-1">
                     {project.name}
                   </h3>
-                  
+
                   {project.developer && (
                     <DeveloperLink
                       name={project.developer.name}
@@ -137,17 +147,20 @@ export default function RecommendedProjects({
                     />
                   )}
 
-                  {project.location && (
-                    <p className="text-muted-foreground text-sm truncate mb-3">
-                      {project.location}
-                    </p>
-                  )}
+                  {/* Location with fallback — flex-1 so it takes up remaining space */}
+                  <div className="flex-1">
+                    {displayLocation && (
+                      <p className="text-muted-foreground text-sm truncate mt-1">
+                        {displayLocation}
+                      </p>
+                    )}
+                  </div>
 
-                  {/* Divider */}
-                  <div className="border-t border-gold/20 pt-3 flex items-center justify-between">
+                  {/* Divider + Price — always pinned to bottom via mt-auto */}
+                  <div className="border-t border-gold/20 pt-3 mt-4 flex items-center justify-between">
                     {/* Price */}
                     <p className="text-handover font-bold text-sm">
-                      {project.price_from 
+                      {project.price_from
                         ? `From ${formatPrice(project.price_from)}`
                         : "Price on request"
                       }
