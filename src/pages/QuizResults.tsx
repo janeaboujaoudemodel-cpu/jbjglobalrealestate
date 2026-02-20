@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, ArrowRight, RefreshCw, Download, Award, Share2, Users, X, Mail, Crown, Gift } from "lucide-react";
+import { Sparkles, ArrowRight, RefreshCw, Download, Award, Share2, Users, X, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ProjectCard from "@/components/ProjectCard";
@@ -52,13 +52,14 @@ const QuizResults = () => {
           community:communities(id, name, slug),
           documents:project_documents(id, file_url, file_name, document_type)
         `)
-        .in("slug", projectSlugs);
+        .in("slug", projectSlugs)
+        .neq("sale_status", "sold_out"); // exclude sold-out projects
 
       if (error) throw error;
-      
-      return data.sort((a, b) => {
-        return projectSlugs.indexOf(a.slug) - projectSlugs.indexOf(b.slug);
-      });
+
+      return (data || [])
+        .filter(p => p.cover_image_url || (p.images && p.images.length > 0)) // must have an image
+        .sort((a, b) => projectSlugs.indexOf(a.slug) - projectSlugs.indexOf(b.slug));
     },
     enabled: projectSlugs.length > 0,
   });
@@ -280,7 +281,7 @@ Best regards`);
               <div className="grid md:grid-cols-2">
                 <div className="aspect-[4/3] md:aspect-auto">
                   <img
-                    src={projects[0].cover_image_url || projects[0].images?.[0]?.image_url || "/placeholder.svg"}
+                    src={projects[0].cover_image_url || projects[0].images?.[0]?.image_url || "https://placehold.co/800x600/18181b/9333ea?text=JBJ+Global"}
                     alt={projects[0].name}
                     className="w-full h-full object-cover"
                   />
@@ -304,7 +305,9 @@ Best regards`);
                       <p className="text-zinc-500 text-sm">Bedrooms</p>
                       <p className="text-white text-xl font-semibold">
                         {projects[0].bedrooms_min != null && projects[0].bedrooms_max != null
-                          ? `${projects[0].bedrooms_min} - ${projects[0].bedrooms_max} BR`
+                          ? projects[0].bedrooms_min === 0
+                            ? `Studio${projects[0].bedrooms_max > 0 ? ` - ${projects[0].bedrooms_max} BR` : ''}`
+                            : `${projects[0].bedrooms_min} - ${projects[0].bedrooms_max} BR`
                           : "Type TBC"}
                       </p>
                     </div>
@@ -459,37 +462,17 @@ Best regards`);
 
         {/* Actions */}
         <div className="text-center">
-          {/* Free Use Banner */}
-          {false && isFreeUse && !hasActiveMembership && (
-            <div className="bg-gradient-to-r from-gold/20 to-gold/10 border border-gold/40 rounded-2xl p-6 mb-8 max-w-2xl mx-auto">
-              <div className="flex items-center justify-center gap-3 mb-3">
-                <Crown className="w-6 h-6 text-gold" />
-                <h3 className="text-white text-xl font-semibold">Want More AI Power?</h3>
-              </div>
-              <p className="text-zinc-400 mb-4">
-                You've used your free property match. Upgrade to VIP for unlimited regenerations and AI analysis!
-              </p>
-              <Button 
-                onClick={() => setShowVipModal(true)}
-                className="bg-gradient-to-r from-gold via-gold to-gold-dark text-black font-semibold hover:brightness-110 px-8 py-3"
-              >
-                <Crown className="w-5 h-5 mr-2" />
-                Upgrade to VIP — $100/year
-              </Button>
-            </div>
-          )}
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <Button 
               onClick={() => navigate("/quiz")}
-              variant="outline" 
-              className="font-semibold px-6 py-3 border-purple-400 text-white bg-purple-900/40 hover:bg-purple-800/40 hover:text-white"
+              className="font-semibold px-6 py-3 bg-purple-700 hover:bg-purple-600 text-white border-0"
             >
               <RefreshCw className="w-5 h-5 mr-2" />
               <span className="text-base">Regenerate with AI</span>
             </Button>
             <Link to="/">
-              <Button className="bg-white text-zinc-900 hover:bg-zinc-100">
+              <Button className="bg-white text-zinc-900 hover:bg-zinc-100 font-semibold px-6 py-3">
                 Browse All Properties
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
