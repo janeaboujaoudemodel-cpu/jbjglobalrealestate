@@ -126,8 +126,8 @@ function buildQrData(type: QrContentType, data: CardData, custom: string): strin
   switch (type) {
     case "vcard":
       return `BEGIN:VCARD\nVERSION:3.0\nFN:${data.name}\nORG:${data.company}\nTITLE:${data.title}\nTEL:${data.phone}\nEMAIL:${data.email}\nURL:${data.website}\nEND:VCARD`;
-    case "email": return `mailto:${data.email || custom}`;
-    case "phone": return `tel:${data.phone || custom}`;
+    case "email": return `mailto:${custom || data.email}`;
+    case "phone": return `tel:${custom || data.phone}`;
     case "url":   return custom || data.website || "https://";
     default:      return custom;
   }
@@ -193,6 +193,47 @@ function CardFace({
           {data.email   && <p style={{ fontSize: 8.5 * scale, color: primary, margin: 0 }}>{data.email}</p>}
           {data.website && <p style={{ fontSize: 8.5 * scale, color: primary, margin: 0 }}>{data.website}</p>}
           {data.address && <p style={{ fontSize: 8 * scale, color: "#888", margin: 0 }}>{data.address}</p>}
+        </div>
+      </div>
+    );
+  }
+
+  // ── TICKET ──────────────────────────────────────────────────
+  if (cardShape === "ticket" && side === "front") {
+    return (
+      <div style={{ ...baseStyle, background: "#fff", border: `2px solid ${primary}`, display: "flex", overflow: "hidden" }}>
+        {/* Left stub */}
+        <div style={{
+          width: "32%", background: primary, display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center", padding: `${10 * scale}px ${8 * scale}px`, gap: 6 * scale, flexShrink: 0,
+        }}>
+          <div style={{
+            width: 32 * scale, height: 32 * scale, borderRadius: "50%",
+            background: secondary, display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <span style={{ fontSize: 14 * scale, fontWeight: 800, color: primary }}>{initial}</span>
+          </div>
+          <p style={{ fontSize: 7 * scale, fontWeight: 700, color: secondary, opacity: 0.85, textAlign: "center", wordBreak: "break-word", margin: 0 }}>
+            {company}
+          </p>
+        </div>
+        {/* Perforation divider */}
+        <div style={{
+          width: 1, flexShrink: 0,
+          background: `repeating-linear-gradient(to bottom, ${primary}80 0px, ${primary}80 5px, transparent 5px, transparent 10px)`,
+        }} />
+        {/* Right body */}
+        <div style={{
+          flex: 1, padding: `${10 * scale}px ${14 * scale}px`,
+          display: "flex", flexDirection: "column", justifyContent: "center", gap: 4 * scale,
+        }}>
+          <h2 style={{ fontSize: resolvedNameSize * 0.7, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: "#111", margin: 0, lineHeight: 1.2 }}>{name}</h2>
+          <p style={{ fontSize: 8 * scale, color: primary, fontWeight: 600, margin: 0 }}>{title}</p>
+          <div style={{ borderTop: `1px solid ${primary}30`, paddingTop: 4 * scale, display: "flex", flexDirection: "column", gap: 2 * scale }}>
+            {data.email   && <p style={{ fontSize: 7 * scale, color: "#666", margin: 0 }}>@ {data.email}</p>}
+            {data.phone   && <p style={{ fontSize: 7 * scale, color: "#666", margin: 0 }}>☎ {data.phone}</p>}
+            {data.website && <p style={{ fontSize: 7 * scale, color: primary, margin: 0 }}>⬡ {data.website}</p>}
+          </div>
         </div>
       </div>
     );
@@ -506,6 +547,56 @@ function CardCanvas({
     window.addEventListener("mouseup", onUp);
   };
 
+  const startTouchDrag = (
+    type: "field" | "logo",
+    e: React.TouchEvent,
+    field?: keyof typeof DEFAULT_FIELD_POSITIONS
+  ) => {
+    if (!editLayout) return;
+    e.preventDefault();
+
+    const touch = e.touches[0];
+    const initX = type === "logo" ? logoPos.x : (field ? fieldPositions[field].x : 0);
+    const initY = type === "logo" ? logoPos.y : (field ? fieldPositions[field].y : 0);
+
+    dragging.current = { type, field, startX: touch.clientX, startY: touch.clientY, initX, initY };
+
+    const onMove = (te: TouchEvent) => {
+      if (!dragging.current || !containerRef.current) return;
+      te.preventDefault();
+      const t = te.touches[0];
+      const rect = containerRef.current.getBoundingClientRect();
+      const dx = ((t.clientX - dragging.current.startX) / rect.width) * 100;
+      const dy = ((t.clientY - dragging.current.startY) / rect.height) * 100;
+      let newX = Math.max(0, Math.min(88, dragging.current.initX + dx));
+      let newY = Math.max(0, Math.min(88, dragging.current.initY + dy));
+
+      const snapX = Math.abs(newX - 50) < SNAP_THRESHOLD ? 50 : newX;
+      const snapY = Math.abs(newY - 50) < SNAP_THRESHOLD ? 50 : newY;
+      setShowHGuide(Math.abs(newY - 50) < SNAP_THRESHOLD);
+      setShowVGuide(Math.abs(newX - 50) < SNAP_THRESHOLD);
+      newX = snapX;
+      newY = snapY;
+
+      if (dragging.current.type === "logo") {
+        onLogoMove({ x: newX, y: newY });
+      } else if (dragging.current.field) {
+        onFieldMove(dragging.current.field, { x: newX, y: newY });
+      }
+    };
+
+    const onEnd = () => {
+      dragging.current = null;
+      setShowHGuide(false);
+      setShowVGuide(false);
+      window.removeEventListener("touchmove", onMove);
+      window.removeEventListener("touchend", onEnd);
+    };
+
+    window.addEventListener("touchmove", onMove, { passive: false });
+    window.addEventListener("touchend", onEnd);
+  };
+
   const qrUrl = qrEnabled && qrData ? buildQrUrl(qrData, qrColor, qrBgColor, qrSize) : "";
 
   // Reset QR loading state when URL changes
@@ -539,6 +630,7 @@ function CardCanvas({
           src={logoUrl}
           alt="logo"
           onMouseDown={e => startDrag("logo", e)}
+          onTouchStart={e => startTouchDrag("logo", e)}
           style={{
             position: "absolute",
             left: `${logoPos.x}%`,
@@ -561,17 +653,17 @@ function CardCanvas({
       {/* Draggable field overlays — front side only */}
       {side === "front" && (
         <>
-          <div style={getFieldStyle("name")} onMouseDown={e => startDrag("field", e, "name")}>
+          <div style={getFieldStyle("name")} onMouseDown={e => startDrag("field", e, "name")} onTouchStart={e => startTouchDrag("field", e, "name")}>
             <span style={{ fontSize: "14px", fontWeight: 800, color: editLayout ? "#fff" : "transparent", whiteSpace: "nowrap" }}>
               {editLayout ? (data.name || "Your Name") : ""}
             </span>
           </div>
-          <div style={getFieldStyle("title")} onMouseDown={e => startDrag("field", e, "title")}>
+          <div style={getFieldStyle("title")} onMouseDown={e => startDrag("field", e, "title")} onTouchStart={e => startTouchDrag("field", e, "title")}>
             <span style={{ fontSize: "10px", color: editLayout ? "#fff" : "transparent", whiteSpace: "nowrap" }}>
               {editLayout ? (data.title || "Job Title") : ""}
             </span>
           </div>
-          <div style={getFieldStyle("company")} onMouseDown={e => startDrag("field", e, "company")}>
+          <div style={getFieldStyle("company")} onMouseDown={e => startDrag("field", e, "company")} onTouchStart={e => startTouchDrag("field", e, "company")}>
             <span style={{ fontSize: "9px", fontWeight: 700, color: editLayout ? "#fff" : "transparent", letterSpacing: 1.5, textTransform: "uppercase", whiteSpace: "nowrap" }}>
               {editLayout ? (data.company || "Company Name") : ""}
             </span>
@@ -1085,11 +1177,11 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
   const fields: { key: keyof CardData; label: string; placeholder: string; icon: React.ReactNode; voiceKey?: boolean }[] = [
     { key: "name",    label: "Full Name",   placeholder: "Ahmed Al-Mansoori",            icon: <span className="text-[10px]">👤</span>, voiceKey: true },
     { key: "title",   label: "Job Title",   placeholder: "Senior Real Estate Consultant",icon: <Building2 size={12} />, voiceKey: true },
-    { key: "company", label: "Company",     placeholder: "JBJ Global Real Estate",       icon: <Building2 size={12} />, voiceKey: true },
-    { key: "phone",   label: "Phone",       placeholder: "+971 50 123 4567",             icon: <Phone size={12} /> },
-    { key: "email",   label: "Email",       placeholder: "ahmed@company.ae",             icon: <Mail size={12} /> },
-    { key: "website", label: "Website",     placeholder: "www.company.ae",               icon: <Globe size={12} /> },
-    { key: "address", label: "Address",     placeholder: "Dubai, UAE",                   icon: <MapPin size={12} /> },
+    { key: "company", label: "Company",     placeholder: "Acme Corporation",             icon: <Building2 size={12} />, voiceKey: true },
+    { key: "phone",   label: "Phone",       placeholder: "+971 50 123 4567",             icon: <Phone size={12} />, voiceKey: true },
+    { key: "email",   label: "Email",       placeholder: "ahmed@company.ae",             icon: <Mail size={12} />, voiceKey: true },
+    { key: "website", label: "Website",     placeholder: "www.company.ae",               icon: <Globe size={12} />, voiceKey: true },
+    { key: "address", label: "Address",     placeholder: "Dubai, UAE",                   icon: <MapPin size={12} />, voiceKey: true },
   ];
 
   return (
@@ -1450,11 +1542,12 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                           ] as { id: QrContentType; label: string }[]).map(opt => (
                             <button
                               key={opt.id}
-                              onClick={() => {
+                               onClick={() => {
                                 setQrContentType(opt.id);
-                                if (opt.id === "url" && !qrCustomContent && data.website) {
-                                  setQrCustomContent(data.website);
-                                }
+                                setQrCustomContent("");
+                                if (opt.id === "url" && data.website) setQrCustomContent(data.website);
+                                if (opt.id === "email" && data.email) setQrCustomContent(data.email);
+                                if (opt.id === "phone" && data.phone) setQrCustomContent(data.phone);
                               }}
                               className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
                                 qrContentType === opt.id
@@ -1468,17 +1561,30 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                         </div>
                       </div>
 
-                      {(qrContentType === "url" || qrContentType === "text") && (
+                      {(qrContentType === "url" || qrContentType === "text" || qrContentType === "email" || qrContentType === "phone") && (
                         <div>
                           <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 block">
-                            {qrContentType === "url" ? "URL / Link" : "Custom Text"}
+                            {qrContentType === "url" ? "URL / Link" :
+                             qrContentType === "email" ? "Email Address" :
+                             qrContentType === "phone" ? "Phone Number" :
+                             "Custom Text"}
                           </Label>
                           <Input
                             value={qrCustomContent}
                             onChange={e => setQrCustomContent(e.target.value)}
-                            placeholder={qrContentType === "url" ? "https://yourwebsite.com" : "Custom message..."}
+                            placeholder={
+                              qrContentType === "url" ? "https://yourwebsite.com" :
+                              qrContentType === "email" ? data.email || "email@example.com" :
+                              qrContentType === "phone" ? data.phone || "+971 50 123 4567" :
+                              "Custom message..."
+                            }
                             className="h-8 text-xs"
                           />
+                          {(qrContentType === "email" || qrContentType === "phone") && !qrCustomContent && (
+                            <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">
+                              Using card {qrContentType} · Type above to override
+                            </p>
+                          )}
                         </div>
                       )}
                       {qrContentType === "vcard" && (
