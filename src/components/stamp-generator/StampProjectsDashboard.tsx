@@ -104,7 +104,7 @@ export default function StampProjectsDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] pt-24 sm:pt-28 lg:pt-32">
       {/* Header */}
-      <div className="border-b border-[hsl(var(--border))] bg-white/80 backdrop-blur-sm sticky top-24 sm:top-28 lg:top-32 z-10">
+      <div className="border-b border-[hsl(var(--border))] bg-white/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center">
