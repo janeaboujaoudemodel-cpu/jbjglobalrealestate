@@ -2,11 +2,11 @@
  * StampPreviewModal — Full-screen design preview
  * Shows the selected stamp on Business Card, Letterhead, and Envelope mockups
  */
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { StampSVGRenderer } from './StampSVGRenderer';
 import { StampTextEditor } from './StampTextEditor';
 import { Button } from '@/components/ui/button';
-import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2, Maximize2, Type } from 'lucide-react';
+import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2, Maximize2, Type, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { StampDesignConcept } from '@/lib/stampTemplates';
 
 interface Props {
@@ -31,6 +31,8 @@ export function StampPreviewModal({
   const [downloadingPng, setDownloadingPng] = useState(false);
   const [showTextEditor, setShowTextEditor] = useState(false);
   const [localSvg, setLocalSvg] = useState<string | null>(null);
+  // Monogram / logo interactive resize state
+  const [logoScale, setLogoScale] = useState(1.0);
   const displaySvg = localSvg || svgOverride || concept.svgSource;
 
   function handleSvgEdit(newSvg: string) {
@@ -121,14 +123,21 @@ export function StampPreviewModal({
 
         {/* Left: stamp large preview + info */}
         <div className="lg:w-80 flex-shrink-0 bg-[hsl(var(--pearl-1))] border-r border-[hsl(var(--border))] flex flex-col items-center pt-10 pb-6 px-6 gap-4">
-          <div className="relative bg-white rounded-3xl border border-[hsl(var(--border))] shadow-md p-6 flex items-center justify-center">
-            <button
-              onClick={() => setStampFullscreen(true)}
-              title="View fullscreen"
-              className="absolute top-2 right-2 p-1.5 rounded-lg bg-[hsl(var(--muted))] hover:bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))] transition-colors"
-            >
-              <Maximize2 size={14}/>
-            </button>
+        <div className="relative bg-white rounded-3xl border border-[hsl(var(--border))] shadow-md p-6 flex items-center justify-center">
+          <button
+            onClick={() => setStampFullscreen(true)}
+            title="View fullscreen"
+            className="absolute top-2 right-2 p-1.5 rounded-lg bg-[hsl(var(--muted))] hover:bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))] transition-colors"
+          >
+            <Maximize2 size={14}/>
+          </button>
+          {/* Interactive logo scale — click to zoom, drag handle to resize */}
+          <div
+            className="cursor-zoom-in select-none"
+            style={{ transform: `scale(${logoScale})`, transition: 'transform 0.15s ease' }}
+            onClick={() => setLogoScale(s => s >= 1.5 ? 1.0 : +(s + 0.15).toFixed(2))}
+            title="Click to zoom in · Slider below to resize"
+          >
             <StampSVGRenderer
               svgSource={displaySvg}
               tintColor={tintColor}
@@ -137,6 +146,26 @@ export function StampPreviewModal({
               size={220}
             />
           </div>
+        </div>
+        {/* Resize slider */}
+        <div className="w-full flex items-center gap-2 px-1">
+          <button onClick={() => setLogoScale(s => Math.max(0.5, +(s - 0.1).toFixed(2)))} className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]">
+            <ZoomOut size={14}/>
+          </button>
+          <input
+            type="range" min="0.5" max="2.0" step="0.05"
+            value={logoScale}
+            onChange={e => setLogoScale(parseFloat(e.target.value))}
+            className="flex-1 accent-[hsl(var(--gold))] h-1.5 cursor-pointer"
+          />
+          <button onClick={() => setLogoScale(s => Math.min(2.0, +(s + 0.1).toFixed(2)))} className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]">
+            <ZoomIn size={14}/>
+          </button>
+          <button onClick={() => setLogoScale(1.0)} title="Reset zoom" className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]">
+            <RotateCcw size={12}/>
+          </button>
+        </div>
+        <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Drag slider · Click stamp to zoom</p>
           <div className="text-center space-y-1">
             <p className="font-semibold text-[hsl(var(--foreground))]">{concept.label}</p>
             <p className="text-xs text-[hsl(var(--muted-foreground))]">{companyName}</p>
