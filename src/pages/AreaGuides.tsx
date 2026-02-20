@@ -4,7 +4,7 @@
  */
 
 import { useState, useMemo, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, Building2, TrendingUp, Flame, ArrowRight, Loader2, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import jbjMonogram from "@/assets/jbj-monogram-light-bg.png";
@@ -60,6 +60,7 @@ const staggerContainer = {
 };
 
 const AreaGuides = () => {
+  const navigate = useNavigate();
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>({...defaultShortcutFilters, sortBy: "most_projects"});
   const [currentPage, setCurrentPage] = useState(1);
   const [pastHero, setPastHero] = useState(false);
@@ -231,7 +232,7 @@ const AreaGuides = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
             onClick={scrollToGrid}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[hsl(var(--gold))] text-black font-semibold rounded-xl hover:bg-[hsl(var(--gold))]/90 transition-all shadow-[0_10px_30px_rgba(200,167,102,0.4)] hover:shadow-[0_15px_40px_rgba(200,167,102,0.5)]"
+            className="inline-flex items-center gap-2 px-8 py-4 border-2 border-gold text-gold font-medium rounded-xl hover:bg-gold hover:text-black transition-all"
           >
             Explore Areas
             <ChevronDown className="w-5 h-5" />
@@ -249,14 +250,18 @@ const AreaGuides = () => {
             const count = emirateCounts[emirate];
             if (!count) return null;
             return (
-              <div
+              <button
                 key={emirate}
-                className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full"
+                onClick={() => {
+                  setShortcutFilters(prev => ({ ...prev, emirates: [emirate] }));
+                  scrollToGrid();
+                }}
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-gold/20 hover:border-gold/50 transition-all cursor-pointer"
               >
                 <MapPin className="w-3 h-3 text-[hsl(var(--gold))]" />
                 <span className="text-white text-xs font-medium">{emirate}</span>
                 <span className="text-[hsl(var(--gold))] text-xs font-bold">{count}</span>
-              </div>
+              </button>
             );
           })}
         </motion.div>
@@ -272,30 +277,31 @@ const AreaGuides = () => {
       </section>
 
       {/* ─── POST-HERO LAYOUT ─── */}
+      {/* Vertical Nav — always present when past hero */}
       {pastHero && (
-        <>
-          {/* Vertical Nav */}
-          <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
-            <PropertiesVerticalNav />
-          </div>
-
-          {/* Filter bar — fixed top-0 when past hero */}
-          <section
-            className="fixed top-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3"
-            style={{ left: "200px" }}
-          >
-            <div className="container mx-auto px-4 space-y-2">
-              <FilterShortcutBar
-                variant="light"
-                filters={shortcutFilters}
-                onFilterChange={setShortcutFilters}
-              />
-            </div>
-          </section>
-          {/* Spacer for fixed filter bar */}
-          <div className="h-[60px]" />
-        </>
+        <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
+          <PropertiesVerticalNav />
+        </div>
       )}
+
+      {/* Filter bar — show inline below hero always, then fixed at top when past hero */}
+      <section
+        className={`${pastHero
+          ? "fixed top-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)]"
+          : "relative w-full z-[10]"
+        } bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-3`}
+        style={pastHero ? { left: "200px" } : {}}
+      >
+        <div className="px-4 space-y-2">
+          <FilterShortcutBar
+            variant="light"
+            filters={shortcutFilters}
+            onFilterChange={setShortcutFilters}
+          />
+        </div>
+      </section>
+      {/* Spacer for fixed filter bar */}
+      {pastHero && <div className="h-[60px]" />}
 
       {/* Gold divider */}
       <div ref={gridRef} className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
