@@ -1,192 +1,134 @@
 
-# Corporate Suite — Full Expansion + Stamp Typography Controls
+# Fix Stamp Arc Text + Add Monogram Asset Library Across All Corporate Suite Tools
 
-## What Exists Today & Where to Find It
+## Issues Being Fixed
 
-The Corporate Document Suite is already accessible at `/toolkit/corporate-suite`. Here is where every tool currently lives:
+### Issue 1 — Stamp Live Preview: Arabic Text Too Small, Text Not Filling Circle
 
-```text
-/toolkit/corporate-suite              → Hub with 6 tool cards
-/toolkit/corporate-suite/business-card → Business Card Designer (6 templates, PDF export)
-/toolkit/corporate-suite/cv-resume    → CV / Resume Builder (4 templates, AI summary, PDF)
-/toolkit/corporate-suite/cover-letter → Cover Letter Generator (AI-powered, 3 tones)
-/toolkit/corporate-suite/landing-page → Landing Page Builder (HTML export + DNS guide)
-/presentations                        → Presentations (Owner-only)
-/e-signature                          → JBJ E-Sign (DocuSign replacement)
-/document-scanner                     → Scan & Sign
-/spreadsheet                          → Spreadsheet tool
-/documents                            → Documents tool
+**Root cause in `LiveStampPreview.tsx`:**
+
+The arc sweep is currently **160°** from -160° to 160°. This leaves visible gaps at the 9 o'clock and 3 o'clock positions (sides of the circle). The text visually looks cramped and small because the arc it travels on is too short.
+
+The fix is to increase the sweep to **175°** (from -177.5° to 177.5°) so both English (top) and Arabic (bottom) arcs run nearly the full diameter of the circle, filling it horizontally. The font size budget is also adjusted upward since more arc length is now available.
+
+**Also:** When `iconStyle === 'UPLOADED_LOGO'`, the image size `innerRx * 0.55` is only ~55% of the inner ring — which is the correct center zone. This part is fine. The visual impression of it being "small" is that the arc text is not framing it properly. Once the arcs fill the circle, the center logo will look correctly proportioned.
+
+### Issue 2 — Business Card & All Tools: Missing Monogram/Logo Asset Panel
+
+No tool currently has a place to upload, save, and reuse a monogram/logo. The `design_assets` table already exists in the database (`id, user_id, project_id, name, asset_type, file_url, thumbnail_url, metadata, created_at`) — it just isn't used anywhere in the Corporate Suite.
+
+### Issue 3 — Arabic Text Direction in Bottom Arc
+
+The bottom arc currently goes from 20° sweeping 160° clockwise. For Arabic RTL text on the bottom arc, the text appears **left-to-right along the arc** which reads incorrectly. Arabic text on the bottom arc needs to be rendered on a **reversed path** (counter-clockwise) so characters flow right-to-left as expected, centered at the bottom.
+
+---
+
+## What Will Be Built
+
+### Part 1 — Fix Stamp Arc Text Coverage (`LiveStampPreview.tsx`)
+
+**Change the arc parameters:**
+- Top arc: start `-177.5°`, sweep `175°` (nearly full top semicircle)  
+- Bottom arc: start `2.5°`, sweep `175°` (nearly full bottom semicircle)  
+- Arc radius: keep `innerRx - 6` (text stays inside inner ring)  
+- Font size cap: raise from `Math.min(10, ...)` to `Math.min(11, ...)` now that more arc length is available  
+- Arabic bottom arc: use a **counter-clockwise** path so RTL text reads naturally
+
+**Arabic RTL arc fix:** SVG `textPath` doesn't natively support RTL arc direction. The workaround is to define the bottom Arabic arc path in **reverse** (clockwise from 180° going backwards, or using a separate reversed arc) and use `startOffset="50%"` with `text-anchor="middle"`. This makes Arabic flow from right-to-left along the bottom curve as expected.
+
+### Part 2 — Brand Asset Library (`BrandAssetLibrary.tsx` — New Shared Component)
+
+A reusable panel component that all Corporate Suite tools can embed. It:
+
+1. **Shows saved assets** from the `design_assets` table filtered by `asset_type` (`monogram`, `stamp`, `signature`, `logo`)
+2. **Lets users upload** a new asset (image file → stored in Lovable Cloud storage → URL saved in `design_assets`)
+3. **Insert/apply** an asset into the current tool's design with one click
+4. **Resize handle** — a slider (50%–200%) to scale the applied monogram within the current preview
+5. **Delete assets** from the library
+
+**Asset types supported:**
+- `monogram` — logo/monogram image
+- `stamp` — saved stamp PNG
+- `signature` — handwritten signature image
+- `logo` — full company logo
+
+**Storage:** Will use a `brand-assets` Lovable Cloud Storage bucket (public, read by owner only via RLS on `design_assets` table).
+
+### Part 3 — Embed Brand Asset Library in Business Card Designer
+
+Add a new "Brand Assets" collapsible section in the left panel of `BusinessCardDesigner.tsx` that:
+- Opens the `BrandAssetLibrary` panel
+- When a monogram is selected, it renders on the card preview in the `creative` template avatar spot and an overlay position on other templates
+- Exposes a size slider (50px–150px) to control the logo size on the card
+- Saves the selected asset URL to card data state
+
+### Part 4 — Embed Brand Asset Library in CV/Resume, Cover Letter, Company Profile
+
+Each tool gets the same "Brand Assets" panel (collapsible section in the sidebar) with:
+- A logo/monogram picker from the library
+- A size control
+- The selected logo renders in the appropriate template location (top-left of CV header, letterhead of cover letter, cover page of company profile)
+
+### Part 5 — Storage Bucket Creation (SQL Migration)
+
+```sql
+-- Create brand-assets storage bucket
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('brand-assets', 'brand-assets', false);
+
+-- RLS: Users can only see their own assets
+CREATE POLICY "Users read own brand assets"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'brand-assets' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Users upload own brand assets"
+ON storage.objects FOR INSERT
+WITH CHECK (bucket_id = 'brand-assets' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Users delete own brand assets"
+ON storage.objects FOR DELETE
+USING (bucket_id = 'brand-assets' AND auth.uid()::text = (storage.foldername(name))[1]);
 ```
 
-The Corporate Suite hub currently shows only 6 tools. It is missing: E-Sign, Scan & Sign, Spreadsheet, Documents, Logo Creator, Company Profile Builder, and AI voice input across all tools.
-
----
-
-## Everything This Plan Implements
-
-### Part 1 — Stamp Generator: Bold/Italic/Font Size Controls
-
-**File:** `src/components/stamp-generator/StampGeneratorPage.tsx`
-
-The stamp generator uses `STAMP_FONTS` (14 entries) and a live `fontFamily` state. The `LiveStampPreview.tsx` passes `fontFamily` to the SVG renderer. There is no bold, italic, or font-size control anywhere.
-
-**What to add:**
-- A **Bold toggle button** (B icon) that appends `font-weight: bold` to the SVG `<text>` attributes via a new `fontBold` state variable.
-- An **Italic toggle button** (I icon) that applies `font-style: italic` via a new `fontItalic` state.
-- A **Font Size slider** with a numeric input (range 6–16, default 10) that overrides the auto-fit `nameFontSize` calculated in `LiveStampPreview.tsx` when the user sets a manual value. A "Auto" checkbox/toggle resets to auto-fit.
-
-These controls go in the Typography section of the generator sidebar, next to the existing font family dropdown.
-
-**File: `src/components/stamp-generator/LiveStampPreview.tsx`**
-- Accept `fontBold?: boolean`, `fontItalic?: boolean`, `manualFontSize?: number | null` as new props.
-- When `manualFontSize` is set, skip the `fitFontSize()` calculation and use the manual value directly.
-- Apply `font-weight="${fontBold ? 'bold' : '600'}"` and `font-style="${fontItalic ? 'italic' : 'normal'}"` to all arc text elements.
-
----
-
-### Part 2 — Corporate Suite Hub: Expanded to 12 Tools
-
-**File:** `src/pages/toolkit/CorporateSuite.tsx`
-
-Expand the tools array from 6 to 12 cards by adding:
-
-| # | Tool | Route | Status |
-|---|------|--------|--------|
-| 1 | Company Stamp | `/toolkit/stamp-generator` | Existing |
-| 2 | Business Card | `/toolkit/corporate-suite/business-card` | Existing |
-| 3 | CV / Resume | `/toolkit/corporate-suite/cv-resume` | Existing |
-| 4 | Cover Letter | `/toolkit/corporate-suite/cover-letter` | Existing |
-| 5 | Landing Page | `/toolkit/corporate-suite/landing-page` | Existing |
-| 6 | Presentation | `/presentations` | Existing |
-| 7 | **Logo Creator** | `/toolkit/corporate-suite/logo-creator` | New |
-| 8 | **Company Profile** | `/toolkit/corporate-suite/company-profile` | New |
-| 9 | **E-Sign / DocuSign** | `/e-signature` | Existing (link) |
-| 10 | **Scan & Sign** | `/document-scanner` | Existing (link) |
-| 11 | **Spreadsheet** | `/spreadsheet` | Existing (link) |
-| 12 | **Documents** | `/documents` | Existing (link) |
-
-Cards for tools 9–12 are simple deep-links. Cards for 7–8 need new components.
-
----
-
-### Part 3 — AI Logo Creator (New Tool)
-
-**New file:** `src/components/corporate-suite/LogoCreator.tsx`
-**New route in App.tsx:** `/toolkit/corporate-suite/logo-creator`
-
-**Features:**
-- **Text input**: Company/personal name
-- **Industry/Tone selector**: Real Estate, Technology, Fashion, Healthcare, Finance, Personal Brand, Law, Creative, Restaurant — each maps to a visual style DNA
-- **Style selector**: Modern, Minimalist, Bold, Geometric, Vintage/Classic, Luxury, Playful
-- **Color palette selector**: Same 8-preset system as Business Card Designer
-- **AI Generation**: Calls the `gemini-chat` (or a new dedicated) edge function with a rich prompt that describes the logo as SVG instructions — the AI returns structured SVG or a detailed design spec, which the frontend renders as a CSS/SVG-based logo mark
-- **Regenerate button**: Re-calls AI with same or varied seed
-- **Live preview**: Shows the generated logo at multiple sizes (icon, card, banner)
-- **Export**: PNG (canvas capture) and SVG download
-- **Save / Delete / Duplicate project**: Uses `SaveProjectBar`
-- **Voice input**: `VoiceInputButton` on the name and description fields
-
-**AI approach**: Use `gemini-chat` edge function with a specialized prompt that returns a JSON description of SVG shapes + text layout, which the frontend renders as a clean SVG logo. This avoids binary image generation and produces scalable vector output.
-
----
-
-### Part 4 — Company Profile Builder (New Tool)
-
-**New file:** `src/components/corporate-suite/CompanyProfileBuilder.tsx`
-**New route in App.tsx:** `/toolkit/corporate-suite/company-profile`
-
-**Features:**
-- **Sections**: Company name, tagline, About Us, Services (add/remove), Team (add/remove), Contact, Social links, Logo upload
-- **3 PDF templates**: Premium (gold accent, full-bleed cover), Executive (dark blue, structured), Clean (white, minimal)
-- **AI content generator**: User writes a short description → Gemini Flash expands it into full "About Us" and "Services" paragraphs
-- **Live A4 preview** (scrollable multi-page)
-- **Export as PDF** via `pdf-lib` (multi-page)
-- **Save/Delete/Duplicate project** via `SaveProjectBar`
-- **Voice input** on description fields
-
----
-
-### Part 5 — AI Smart Extractor (Universal Upload-to-Extract)
-
-**This applies to: Business Card, CV/Resume, Cover Letter**
-
-For each tool, add an **"Extract from File"** mode alongside the existing form editor. A tab/toggle switches between:
-1. **Design Mode** — the existing editor (build from scratch)
-2. **Extract Mode** — upload an existing document, AI reads it, populates all fields
-
-**Implementation:**
-- Add a file `<input accept=".pdf,.jpg,.jpeg,.png">` in each tool
-- On upload, call a new edge function `document-extractor` (or reuse `gemini-chat` with the file base64-encoded) — Gemini Vision reads the image/PDF and returns structured JSON matching the tool's data schema
-- Populate all form fields from the extracted JSON
-- User can then edit the pre-filled form and switch to any template
-
-**New edge function:** `supabase/functions/document-extractor/index.ts`
-- Accepts: `{ file_base64: string, file_type: string, extraction_type: "cv" | "business_card" | "cover_letter" }`
-- Uses Gemini Vision (`gemini-2.5-flash`) to extract structured data
-- Returns typed JSON matching each tool's data interface
-
----
-
-### Part 6 — Voice Input Across All Corporate Suite Tools
-
-The `VoiceInputButton` component already exists at `src/components/ui/VoiceInputButton.tsx`. It calls the `voice-to-text` edge function.
-
-**Add to:**
-- `BusinessCardDesigner.tsx` — name, company, title fields
-- `CVResumeBuilder.tsx` — summary, experience description, skills fields
-- `CoverLetterGenerator.tsx` — skills, experience fields
-- `LogoCreator.tsx` — name, tone description fields
-- `CompanyProfileBuilder.tsx` — About Us, Services description fields
-
----
-
-### Part 7 — Bold/Size/Style Controls Applied to ALL Corporate Suite Tools
-
-**Universal typography control bar** — wherever there is formatted text output (CV preview, Cover Letter, Business Card) add:
-- **Bold toggle** (B icon)
-- **Font size +/−** with numeric display
-- **Font family selector** (3–4 options per tool)
-
-For the **CV Builder** specifically:
-- Add font family selector (4 options: serif, sans-serif, mono, humanist)
-- Add global font size scaling slider (80%–120%)
-
-For the **Business Card Designer**:
-- The template already scales via `scale` prop — add a name font-size override control
+The `design_assets` table already has RLS — just need to confirm policies exist (will verify and add if missing).
 
 ---
 
 ## Technical Architecture
 
-### New Files to Create:
+### Files to Create:
 ```
-src/components/corporate-suite/LogoCreator.tsx
-src/components/corporate-suite/CompanyProfileBuilder.tsx
-supabase/functions/document-extractor/index.ts
+src/components/corporate-suite/BrandAssetLibrary.tsx   ← New shared component
 ```
 
 ### Files to Edit:
 ```
-src/pages/toolkit/CorporateSuite.tsx          — Expand to 12 tools
-src/App.tsx                                   — Add 2 new routes
-src/components/stamp-generator/StampGeneratorPage.tsx  — Bold/Italic/Size controls
-src/components/stamp-generator/LiveStampPreview.tsx    — Accept new font props
-src/components/corporate-suite/BusinessCardDesigner.tsx — Extract mode + voice
-src/components/corporate-suite/CVResumeBuilder.tsx     — Extract mode + voice + font controls
-src/components/corporate-suite/CoverLetterGenerator.tsx — Extract mode + voice
+src/components/stamp-generator/LiveStampPreview.tsx         ← Fix arc sweep + Arabic RTL arc
+src/components/corporate-suite/BusinessCardDesigner.tsx     ← Add BrandAssetLibrary panel + logo on card
+src/components/corporate-suite/CVResumeBuilder.tsx          ← Add BrandAssetLibrary panel + logo in header
+src/components/corporate-suite/CoverLetterGenerator.tsx     ← Add BrandAssetLibrary panel + logo in letterhead
+src/components/corporate-suite/CompanyProfileBuilder.tsx    ← Add BrandAssetLibrary panel + logo on cover
 ```
 
-### No new database tables needed
-All tools are client-side with PDF export. The `document-extractor` edge function uses Lovable AI (Gemini Vision) via the existing `LOVABLE_API_KEY` — no extra secrets needed.
+### Database:
+- Create `brand-assets` storage bucket via SQL migration
+- Add RLS policies on `design_assets` if missing (the table exists but has no confirmed policies)
 
 ---
 
 ## Execution Order
 
-1. **Stamp font controls** — Bold/Italic/Size in `StampGeneratorPage` + `LiveStampPreview` (isolated change, immediate value)
-2. **Hub expansion** — Update `CorporateSuite.tsx` to show 12 cards (fast, no new components)
-3. **Logo Creator** — New component + route (highest-requested new tool)
-4. **Document Extractor edge function** — Powers extract-from-file for all tools
-5. **Extract mode in Business Card, CV, Cover Letter** — Upload → AI fill → edit
-6. **Company Profile Builder** — New component + route
-7. **Voice input** — Add `VoiceInputButton` to all tools
+1. **SQL Migration** — Create storage bucket + RLS policies
+2. **Fix `LiveStampPreview.tsx`** — Extend arcs to 175°, fix Arabic RTL direction
+3. **Build `BrandAssetLibrary.tsx`** — Upload, save, list, delete, resize assets
+4. **Embed in `BusinessCardDesigner.tsx`** — Logo panel + rendered on card
+5. **Embed in `CVResumeBuilder.tsx`**, `CoverLetterGenerator.tsx`, `CompanyProfileBuilder.tsx`
+
+---
+
+## Key Design Decisions
+
+- **No new table needed** — `design_assets` already exists with the perfect schema (`user_id`, `asset_type`, `file_url`, `name`)
+- **Storage path convention**: `{user_id}/{asset_type}/{filename}` — enforces RLS automatically
+- **Resize is client-side only** — the slider sets a CSS `transform: scale()` or inline `width/height` on the logo element in preview; the actual asset URL is stored
+- **Arabic arc fix approach**: Define a second arc path going counter-clockwise (sweeping negative degrees) for Arabic text so it reads right-to-left naturally along the bottom curve
