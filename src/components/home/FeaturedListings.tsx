@@ -330,7 +330,7 @@ const FeaturedListings = () => {
         </div>
 
         {/* View All CTA */}
-        <div className="text-center mt-10">
+        <div className="text-center mt-10 mb-6">
           <Link
             to="/properties"
             className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group"
