@@ -3,7 +3,7 @@
  * Full-screen hero, projects grid, developers, map, AI analyzer
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useParams, Link, Navigate } from "react-router-dom";
@@ -41,6 +41,26 @@ const AreaDetail = () => {
         .eq('is_published', true)
         .ilike('area_name', area.name);
       return count ?? 0;
+    },
+    enabled: !!area?.name,
+  });
+
+  // Live DLD transaction data for this area from dld_market_data
+  const { data: dldAreaData } = useQuery({
+    queryKey: ['dld-area-stats', area?.name],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('dld_market_data')
+        .select('data_json')
+        .eq('data_key', 'topAreas2026')
+        .maybeSingle();
+      if (!data?.data_json || !area?.name) return null;
+      const areas = data.data_json as Array<{ area: string; transactions: number; change: string }>;
+      const nameLower = area.name.toLowerCase();
+      // Try exact match, then partial match
+      const match = areas.find(a => a.area.toLowerCase() === nameLower)
+        || areas.find(a => nameLower.includes(a.area.toLowerCase()) || a.area.toLowerCase().includes(nameLower));
+      return match || null;
     },
     enabled: !!area?.name,
   });
@@ -150,7 +170,7 @@ const AreaDetail = () => {
       />
 
       {/* Full-Screen Hero with Real Photo */}
-      <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} />
+      <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
 
       {/* About This Area */}
       <AreaAboutSection area={area as any} />
