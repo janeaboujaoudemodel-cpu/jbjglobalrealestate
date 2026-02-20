@@ -1,6 +1,7 @@
 import React from 'react';
 import { 
-  Video, Image, FileText, Mic, Home, Sparkles, Stamp
+  Video, Image, FileText, Mic, Home, Sparkles, Stamp,
+  CreditCard, Palette, Award, Pen, Globe, Building2, Layers
 } from 'lucide-react';
 import {
   MegaMenuIconLink,
@@ -13,8 +14,20 @@ interface MegaMenuToolkitProps {
 }
 
 const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>(({ onClose }, ref) => {
-  // Master Suites - grouped by output type
-  const suites = [
+  // Creative Suites - one line shortcut row
+  const creativeSuites = [
+    {
+      icon: Building2,
+      title: 'Corporate Suite',
+      href: '/toolkit/corporate-suite',
+      description: 'Stamps, cards, CV, logos & docs',
+    },
+    {
+      icon: Home,
+      title: 'Real Estate Suite',
+      href: '/toolkit/property-suite',
+      description: 'Valuations, analytics & finder',
+    },
     {
       icon: Video,
       title: 'Video Suite',
@@ -23,52 +36,79 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
       flagship: true,
     },
     {
-      icon: Mic,
-      title: 'Voice & Audio Suite',
-      href: '/toolkit/voice-suite',
-      description: 'TTS, STT, cleanup & translate',
-    },
-    {
       icon: Image,
-      title: 'Photo & Image Suite',
+      title: 'Photo Suite',
       href: '/toolkit/photo-suite',
       description: 'Background, beauty, resize & design',
     },
     {
+      icon: Mic,
+      title: 'Voice & Audio',
+      href: '/toolkit/voice-suite',
+      description: 'TTS, STT, cleanup & translate',
+    },
+    {
       icon: FileText,
-      title: 'PDF & Documents Suite',
+      title: 'PDF & Documents',
       href: '/toolkit/pdf-suite',
       description: 'Edit, convert, scan & sign',
     },
-    {
-      icon: Home,
-      title: 'Property Intelligence',
-      href: '/toolkit/property-suite',
-      description: 'Home finder, valuations & analytics',
-    },
   ];
 
-  // New standalone tools
-  const standaloneTools = [
+  // AI Corporate Tools - next to stamp generator
+  const corporateTools = [
     {
-      icon: Sparkles,
+      icon: Stamp,
       title: 'AI Stamp Generator',
       href: '/toolkit/stamp-generator',
-      description: 'AI company seals · bilingual · SVG/PNG/PDF',
+      description: 'AI seals · bilingual · SVG/PNG/PDF',
+      isNew: true,
+    },
+    {
+      icon: CreditCard,
+      title: 'Business Card',
+      href: '/toolkit/corporate-suite/business-card',
+      description: 'Digital & print cards · 7 shapes',
+      isNew: true,
+    },
+    {
+      icon: Palette,
+      title: 'Logo Maker',
+      href: '/toolkit/corporate-suite/logo',
+      description: 'AI logo generation & branding',
       isNew: true,
     },
     {
       icon: FileText,
+      title: 'Resume / CV',
+      href: '/toolkit/corporate-suite/cv-builder',
+      description: '12 templates · AI summary',
+      isNew: true,
+    },
+    {
+      icon: Pen,
+      title: 'Cover Letter',
+      href: '/toolkit/corporate-suite/cover-letter',
+      description: 'AI-crafted · branded export',
+      isNew: true,
+    },
+    {
+      icon: Award,
+      title: 'Company Profile',
+      href: '/toolkit/corporate-suite/company-profile',
+      description: 'Multi-page A4 · smart scan',
+    },
+    {
+      icon: Globe,
       title: 'JBJ E-Sign',
       href: '/e-signature',
-      description: 'Contract signing · multi-signer · audit trail',
-      isNew: true,
+      description: 'Contract signing · audit trail',
     },
     {
       icon: FileText,
       title: 'Scan & Sign',
       href: '/toolkit/scan-sign',
-      description: 'Camera scan · signature · PDF export',
+      description: 'Camera scan · PDF export',
     },
   ];
 
@@ -90,30 +130,36 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
           </a>
         </div>
 
-        {/* 5 Suite Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          {suites.map((suite) => (
-            <MegaMenuIconLink
-              key={suite.href}
-              to={suite.href}
-              onClick={onClose}
-              icon={suite.icon}
-              title={suite.title}
-              description={suite.description}
-              emphasis={suite.flagship}
-            />
-          ))}
+        {/* Creative Suites Row - all 6 in one line */}
+        <div className="mb-1">
+          <div className="flex items-center gap-2 mb-2">
+            <Layers className="w-4 h-4 text-gold" />
+            <span className="text-xs font-bold text-gold tracking-[0.18em] uppercase">Creative Suites</span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+            {creativeSuites.map((suite) => (
+              <MegaMenuIconLink
+                key={suite.href}
+                to={suite.href}
+                onClick={onClose}
+                icon={suite.icon}
+                title={suite.title}
+                description={suite.description}
+                emphasis={suite.flagship}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* New AI Tools Row */}
+        {/* AI Corporate Tools Row */}
         <div className="mt-3 border-t border-gold/20 pt-3">
           <div className="flex items-center gap-2 mb-2">
             <Stamp className="w-4 h-4 text-gold" />
-            <span className="text-xs font-bold text-gold tracking-[0.18em] uppercase">New AI Tools</span>
-            <span className="text-[10px] bg-gold/20 text-gold border border-gold/30 rounded-full px-2 py-0.5 font-semibold">3 NEW</span>
+            <span className="text-xs font-bold text-gold tracking-[0.18em] uppercase">AI Corporate Tools</span>
+            <span className="text-[10px] bg-gold/20 text-gold border border-gold/30 rounded-full px-2 py-0.5 font-semibold">5 NEW</span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {standaloneTools.map((tool) => (
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
+            {corporateTools.map((tool) => (
               <MegaMenuIconLink
                 key={tool.href}
                 to={tool.href}
@@ -134,7 +180,7 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
                 FREE PROFESSIONAL TOOLS
               </p>
               <p className="text-white text-sm font-semibold mt-1">
-                5 suites + AI Stamp Generator + E-Sign + Scan & Sign — all free
+                6 suites + Stamp · Business Card · Logo · CV · Cover Letter · E-Sign — all free
               </p>
             </div>
             <a 
