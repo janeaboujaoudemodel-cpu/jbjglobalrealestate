@@ -47,16 +47,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return false;
     }
 
-    try {
-      setOwnerLoading(true);
-      setOwnerError(null);
-
-      // Create a timeout promise
+    const attemptVerify = async (): Promise<boolean> => {
       const timeoutPromise = new Promise<{ data: null; error: Error }>((_, reject) => {
-        setTimeout(() => reject(new Error("Owner verification timeout")), 10000);
+        setTimeout(() => reject(new Error("Owner verification timeout")), 15000);
       });
 
-      // Race between the actual call and timeout
       const result = await Promise.race([
         supabase.functions.invoke("verify-owner", {
           headers: {
@@ -67,15 +62,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ]);
 
       if (result.error) {
-        console.error("verify-owner error:", result.error);
-        setOwnerError(result.error.message || "Verification failed");
-        return false;
+        throw new Error(result.error.message || "Verification failed");
       }
 
-      const ownerStatus = result.data?.isOwner === true;
-      return ownerStatus;
+      return result.data?.isOwner === true;
+    };
+
+    try {
+      setOwnerLoading(true);
+      setOwnerError(null);
+
+      // Try up to 2 times (initial + 1 retry)
+      try {
+        return await attemptVerify();
+      } catch (firstErr) {
+        console.warn("verify-owner attempt 1 failed, retrying...", firstErr);
+        // Wait 1s then retry
+        await new Promise(r => setTimeout(r, 1000));
+        return await attemptVerify();
+      }
     } catch (err: any) {
-      console.error("verify-owner failed:", err);
+      console.error("verify-owner failed after retries:", err);
       setOwnerError(err?.message || "Verification failed");
       return false;
     } finally {
