@@ -18492,7 +18492,9 @@ export type Database = {
           activity_type: string
           created_at: string
           device_info: string | null
+          event_type: string | null
           id: string
+          lead_email: string | null
           page_path: string | null
           session_id: string | null
           tool_name: string | null
@@ -18503,7 +18505,9 @@ export type Database = {
           activity_type: string
           created_at?: string
           device_info?: string | null
+          event_type?: string | null
           id?: string
+          lead_email?: string | null
           page_path?: string | null
           session_id?: string | null
           tool_name?: string | null
@@ -18514,7 +18518,9 @@ export type Database = {
           activity_type?: string
           created_at?: string
           device_info?: string | null
+          event_type?: string | null
           id?: string
+          lead_email?: string | null
           page_path?: string | null
           session_id?: string | null
           tool_name?: string | null

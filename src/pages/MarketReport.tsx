@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect, useRef } from "react";
+import { useActivityTracking } from "@/hooks/useActivityTracking";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +47,7 @@ const MarketReport = () => {
   const { isLeadCaptured, leadData, captureLead } = useLeadCapture();
   const navigate = useNavigate();
   const { isFounderVisible } = useFounderVisibility();
+  const { trackEvent } = useActivityTracking();
 
   const [form, setForm] = useState({
     fullName: "",
@@ -1961,6 +1963,7 @@ const MarketReport = () => {
 
       const opened = await downloadBook(bookWindow);
       if (opened) {
+        trackEvent("book_download", { form_source: "new_lead", page: "/market-report" });
         toast.success("Your book is ready!");
         // Show CTA modal after a short delay
         setTimeout(() => {
@@ -1988,6 +1991,20 @@ const MarketReport = () => {
     const bookWindow = window.open("", "_blank");
     const opened = await downloadBook(bookWindow);
     if (opened) {
+      trackEvent("book_download", { form_source: "returning_lead", page: "/market-report" });
+      // Notify owner of returning user re-download in the background
+      void supabase.functions
+        .invoke("send-market-report-email", {
+          body: {
+            fullName: leadData?.fullName,
+            email: leadData?.email,
+            phone: leadData?.phone,
+            nationality: leadData?.nationality,
+            language: leadData?.language,
+            isReturning: true,
+          },
+        })
+        .catch(console.error);
       toast.success("Your book is ready!");
       // Show CTA modal after a short delay
       setTimeout(() => {
