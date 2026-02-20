@@ -1,189 +1,131 @@
 
-# Business Card Designer — Full Upgrade: Card Shapes, QR Code, Drag-to-Rearrange, AI Customization
+# Business Card Designer — Full Overhaul: Logo on Card, QR on Preview, Draggable Logo, Per-Side Colors, AI Design Templates, Alignment Guides
 
-## What Exists Today
+## Issues Identified (Root Causes)
 
-The Business Card Designer at `/toolkit/corporate-suite/business-card` currently has:
-- 6 design templates (Modern, Classic, Minimal, Bold, Creative, Corporate) — all horizontal, standard 3.5"×2" ratio
-- 8 color presets
-- Brand asset library (logo/monogram upload)
-- Front/back flip toggle
-- PDF export via pdf-lib
-- No QR code support
-- No card shape options (all are standard horizontal rectangles)
-- No drag-to-rearrange for text fields
-
-The project already uses `api.qrserver.com` for QR code generation (used in Certificate Generator and Market Report). No new library needed.
-
----
-
-## Everything This Plan Implements
-
-### Part 1 — Card Shape System (New)
-
-Add a `CardShape` type and a shape selector panel in the left sidebar. Each shape changes how the card's container is rendered in the preview.
-
-**7 Card Shapes:**
-
-| Shape | Aspect Ratio | Container Style |
-|---|---|---|
-| Horizontal | 3.5 / 2 | Standard rectangle (current default) |
-| Vertical | 2 / 3.5 | Portrait rectangle |
-| Square | 1 / 1 | Equal-width square |
-| Rounded Square | 1 / 1 | Extra large border-radius (40px) |
-| Wide | 4 / 1.5 | Ultra-wide panoramic |
-| Digital Screen | 9 / 16 | Phone-sized, tall vertical |
-| Ticket | 5 / 2 | Long horizontal like a boarding pass |
-
-For each shape, the `CardFace` component adapts font scaling and layout. A new `shapeStyle` helper function returns the container dimensions and border-radius override. The shape setting is stored in a `cardShape` state variable.
-
-Note: Triangle and true circle shapes would clip text unreadably — the design will offer "Rounded Square" (a squircle) as the closest practical rounded option, and digital screen format for modern vertical use cases.
-
-### Part 2 — QR Code Generator (New)
-
-Add a **QR Code** collapsible panel to the left sidebar with these controls:
-
-**QR Content options:**
-- URL / Website link
-- Contact card (vCard data: name, phone, email, company)
-- Custom text / message
-- Email address
-- Phone number
-
-**QR Styling controls:**
-- **Size slider**: 50px–200px
-- **Color picker**: Auto-sync with card's primary color (default) OR manual hex override
-- **Background color**: Transparent or white
-- **Placement**: Bottom-right, Bottom-left, Top-right, Center
-- **AI Describe**: A text field where user types e.g. "make it gold with rounded corners" → calls the `gemini-chat` edge function → returns updated color/size/style suggestions
-- **On/Off toggle**: Show or hide QR on card preview
-
-**QR Generation:** Uses the existing `api.qrserver.com` API with color parameters:
+### Bug 1 — Logo Not Showing on Card Preview
+In `CardCanvas` (line 382), the logo only renders when `side === "front"`:
+```typescript
+{logoUrl && side === "front" && (
 ```
-https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=...&color=C8A766&bgcolor=ffffff
+This means clicking "Back" hides the logo. Also the logo is a simple fixed-position overlay but is not passed to `CardFace` at all — so it never appears inside the card's own rendering. **Fix:** Show logo on both front and back, and make it independently draggable (separate from the text field drag system).
+
+### Bug 2 — QR Code Not Showing on Card Preview
+Looking at `CardCanvas` line 424:
+```typescript
+{qrEnabled && qrUrl && side === "front" && (
 ```
+The QR renders on the card canvas — but the `AnimatePresence` key includes the card state (template/color/side/shape), which causes a re-render that can reset or flicker the QR overlay. More critically, the QR image is a cross-origin fetch from `api.qrserver.com` which may fail silently. The QR also only appears on the `"front"` side. **Fix:** Enable QR on both front and back sides, ensure the image loads correctly with proper error handling, and add a visible loading state.
 
-The QR code is overlaid on the `CardFace` preview using `position: absolute` inside the card container wrapper. When exporting PDF, the QR image is fetched, converted to a data URL, embedded in the pdf-lib document, and drawn at the correct position.
+### Bug 3 — No Per-Side Color System
+Currently there is a single color preset (`colorIdx`) applied to both sides. The back side (`side === "back"` in `CardFace`) uses `primary` as background and `secondary` as text — this is the same color as the front.
 
-**Auto-color sync:** When the user changes the card color preset, the QR code foreground color automatically updates to match `preset.primary` (stripped of the `#`).
+## Everything Being Built
 
-### Part 3 — Drag-to-Rearrange Fields (New)
+### Fix 1 — Logo On Card (Both Sides) + Draggable Logo
+- Separate logo state from draggable text fields
+- Add `logoPos` state: `{ x: number, y: number }` as percentage (default top-right: `{ x: 80, y: 5 }`)
+- Logo is always shown on BOTH front and back — user can drag it independently
+- In edit layout mode, the logo also gets a dashed border and grab cursor
+- Logo drag uses the same mouse event system as text fields
 
-The card currently has a fixed layout per template. The user wants to move individual text elements (Name, Title, Company) around the card.
+### Fix 2 — QR Code on Preview (Both Sides, Reliable)
+- Remove the `side === "front"` restriction — QR shows on both front and back
+- Add `onLoad` / `onError` handlers to the QR `<img>` so the user sees a spinner while loading
+- Show a placeholder outline box with "QR Loading..." text until image loads
+- Ensure the AnimatePresence key does NOT force QR to re-mount unnecessarily (separate QR key from card key)
 
-**Implementation approach — Draggable field overlays:**
+### Fix 3 — Per-Side Color System with Color Wheel
+- Add `frontColorIdx` and `backColorIdx` as separate state variables (default: both 0)
+- The front/back toggle buttons become color-aware — show a colored dot to indicate the current side's color
+- In the Color section of the left panel, show two pickers: **"Front Color"** and **"Back Color"**, each with the 8 preset swatches AND a `<input type="color">` color wheel for fully custom color
+- The `CardCanvas` receives `backPrimary`, `backSecondary`, `backAccent` props and uses them when `side === "back"`
+- The QR auto-sync color uses the front card's primary color
 
-Add a new state `fieldPositions` that stores `{ name: {x, y}, title: {x, y}, company: {x, y} }` as percentage offsets (0–100). A new `CardCanvas` wrapper renders the `CardFace` as a background and overlays draggable text labels on top using `position: absolute`.
+### Fix 4 — AI-Generated Design Templates
+Add a new `"ai-generated"` template option. When selected:
+- A sidebar panel shows: **Industry** selector (Real Estate, Tech, Fashion, etc.), **Style** selector (Geometric, Lines, Minimalist, Futuristic, Organic), and a **Generate** button
+- Clicking Generate calls `gemini-chat` edge function with a prompt asking for SVG path data and design instructions
+- AI returns JSON with: `{ shapes: [...], colors: {...}, layout: "..." }` — describes geometric/decorative SVG elements
+- The `CardFace` for the `"ai-generated"` template renders these shapes as inline SVG on top of the card background
+- A **Regenerate** button re-calls AI with a different seed for variety
+- AI template is labeled `"AI Design"` in the template grid with a ✨ badge
 
-Each draggable label uses React's `onMouseDown` / `onMouseMove` / `onMouseUp` events to track drag position. The labels render with a dashed border in "edit mode" and clean with no border in preview mode. A toggle button "Edit Layout" / "Lock Layout" switches between modes.
+### Fix 5 — Alignment Guides
+When dragging any element (logo, name, title, company):
+- Show dashed alignment guide lines when the dragged element is within 5% of center (horizontal and vertical)
+- A horizontal center guide: a thin dashed line across the full card width at 50% height
+- A vertical center guide: a thin dashed line down the full card height at 50% width
+- Guides appear with a label "CENTER" and snap the element into place if within 5% distance
+- Color: gold dashed lines with 50% opacity
 
-A "Reset Layout" button restores default positions.
+### Fix 6 — Save and Adapt Button
+Add a **"Save Card"** button in the preview panel header that:
+- Saves the current card settings (data, template, colors, QR config, logo URL, shape) to the `design_assets` table as a JSON blob with `asset_type = "stamp"` (reusing existing infrastructure)
+- Shows a toast: "Card saved! You can reload it from Brand Assets."
 
-For simplicity and robustness, the draggable fields are rendered as absolutely-positioned overlays on the card preview — the underlying `CardFace` continues to render with placeholder invisible text, while the overlays show the actual text. This avoids reimplementing all 6 templates from scratch.
-
-### Part 4 — AI QR Customization (New)
-
-In the QR Code panel, add an "AI Style" input field:
-- User types a description (e.g. "dark blue, large, bottom right corner")
-- Calls the existing `gemini-chat` edge function with a structured prompt
-- AI returns JSON: `{ color: "#hex", bgColor: "#hex", size: number, position: "bottom-right" | ... }`
-- Frontend parses response and applies settings automatically
-- Voice input button (`VoiceInputButton`) on the AI describe field
-
-### Part 5 — Voice Input on Key Fields
-
-Add `VoiceInputButton` (already exists at `src/components/ui/VoiceInputButton.tsx`) to:
-- Full Name input
-- Job Title input
-- Company input
-- AI QR describe field
-
----
+### Fix 7 — QR on Back Side
+- When `side === "back"` and `qrEnabled`, the QR also renders on the back of the card
+- User controls remain the same — position and size apply to both sides
 
 ## Technical Architecture
 
-### State additions to `BusinessCardDesigner.tsx`:
-
+### New State Variables:
 ```typescript
-type CardShape = "horizontal" | "vertical" | "square" | "rounded-square" | "wide" | "digital" | "ticket";
+// Per-side colors
+const [frontColorIdx, setFrontColorIdx] = useState(0);
+const [backColorIdx, setBackColorIdx] = useState(0);
+const [frontCustomColor, setFrontCustomColor] = useState(""); // hex override
+const [backCustomColor, setBackCustomColor] = useState("");
 
-// QR Code state
-const [qrEnabled, setQrEnabled] = useState(false);
-const [qrContent, setQrContent] = useState(""); // URL or text
-const [qrSize, setQrSize] = useState(80);
-const [qrColor, setQrColor] = useState(""); // empty = auto-sync to preset
-const [qrPosition, setQrPosition] = useState<"bottom-right" | "bottom-left" | "top-right" | "top-left" | "center">("bottom-right");
-const [qrAiPrompt, setQrAiPrompt] = useState("");
-const [isAiStylingQr, setIsAiStylingQr] = useState(false);
+// Logo dragging
+const [logoPos, setLogoPos] = useState({ x: 78, y: 4 }); // % offsets
 
-// Card shape
-const [cardShape, setCardShape] = useState<CardShape>("horizontal");
-
-// Drag rearrange
-const [editLayout, setEditLayout] = useState(false);
-const [fieldPositions, setFieldPositions] = useState({
-  name:    { x: 10, y: 70 }, // % offsets
-  title:   { x: 10, y: 55 },
-  company: { x: 10, y: 42 },
-});
+// AI template
+const [aiTemplateStyle, setAiTemplateStyle] = useState("geometric");
+const [aiTemplateIndustry, setAiTemplateIndustry] = useState("real-estate");
+const [aiDesignData, setAiDesignData] = useState<null | { svgPaths: string[]; colors: string[] }>(null);
+const [isGeneratingDesign, setIsGeneratingDesign] = useState(false);
 ```
 
-### QR code URL builder:
-
+### CardCanvas Changes:
 ```typescript
-function buildQrUrl(data: string, color: string, size: number) {
-  const colorHex = color.replace("#", "") || preset.primary.replace("#", "");
-  return `https://api.qrserver.com/v1/create-qr-code/?size=${size*2}x${size*2}&data=${encodeURIComponent(data)}&color=${colorHex}&bgcolor=ffffff&margin=2`;
-}
+// Props now include:
+backPrimary: string;
+backSecondary: string;
+backAccent: string;
+logoPos: { x: number; y: number };
+onLogoMove: (pos: { x: number; y: number }) => void;
+showAlignGuides: boolean; // true when dragging and near center
 ```
 
-### Shape style helper:
-
+### Alignment Snap Logic:
 ```typescript
-function getShapeStyle(shape: CardShape): React.CSSProperties {
-  const shapes: Record<CardShape, React.CSSProperties> = {
-    "horizontal":    { aspectRatio: "3.5 / 2",  borderRadius: 12 },
-    "vertical":      { aspectRatio: "2 / 3.5",  borderRadius: 12 },
-    "square":        { aspectRatio: "1 / 1",    borderRadius: 12 },
-    "rounded-square":{ aspectRatio: "1 / 1",    borderRadius: 40 },
-    "wide":          { aspectRatio: "4 / 1.5",  borderRadius: 12 },
-    "digital":       { aspectRatio: "9 / 16",   borderRadius: 24 },
-    "ticket":        { aspectRatio: "5 / 2",    borderRadius: 8  },
-  };
-  return shapes[shape];
-}
+const SNAP_THRESHOLD = 5; // % distance
+const snapX = Math.abs(newX - 50) < SNAP_THRESHOLD ? 50 : newX;
+const snapY = Math.abs(newY - 50) < SNAP_THRESHOLD ? 50 : newY;
+const showHGuide = Math.abs(newY - 50) < SNAP_THRESHOLD;
+const showVGuide = Math.abs(newX - 50) < SNAP_THRESHOLD;
 ```
-
-### PDF export update:
-
-When QR is enabled, the export function:
-1. Fetches the QR image URL → converts to data URL via `fetch` + `FileReader`
-2. Embeds image bytes with `pdfDoc.embedPng()`
-3. Draws QR at the correct position on the front page before saving
-
----
 
 ## Files to Edit
 
-Only one file needs to change:
-
+Only one file changes:
 ```
 src/components/corporate-suite/BusinessCardDesigner.tsx   ← Full upgrade
 ```
 
-No new edge functions needed (QR via qrserver.com API, AI via existing gemini-chat edge function). No database changes needed.
+No new edge functions, no database changes.
 
----
+## Implementation Order Within The File
 
-## Implementation Plan (in order within the file)
-
-1. Add `CardShape` type and `CARD_SHAPES` array constant
-2. Add new state variables (cardShape, qr*, editLayout, fieldPositions)
-3. Update `CardFace` to accept `shapeStyle` prop and apply shape-based aspect ratio/radius
-4. Add `CardCanvas` wrapper component that overlays draggable fields on `CardFace`
-5. Add QR code overlay rendered on top of card preview (positioned per `qrPosition`)
-6. Add "Card Shape" selector panel in left sidebar (before Template picker)
-7. Add "QR Code" collapsible panel in left sidebar (after Brand Assets)
-8. Add "Edit Layout" toggle button in the preview header area
-9. Add voice input buttons on Name, Title, Company, and QR AI describe fields
-10. Update `exportCardAsPDF` to embed QR code image when `qrEnabled && qrContent`
+1. Add `frontColorIdx`, `backColorIdx`, `frontCustomColor`, `backCustomColor` state variables
+2. Add `logoPos` state and logo drag handler using same mouse event system
+3. Update `CardCanvas` to accept `backPrimary/Secondary/Accent`, use correct colors per side, show logo on BOTH sides, enable QR on BOTH sides, add alignment guide lines during drag
+4. Update `CardFace` `side === "back"` to accept and use `backPrimary`, `backSecondary`, `backAccent` 
+5. Add AI template type to `TEMPLATES` array and add `CardFace` rendering branch for it
+6. Add Color panel update: split into "Front Color" and "Back Color" sections with preset swatches + `<input type="color">` color wheel for each
+7. Add AI Design panel (new collapsible) with industry/style selector and Generate button
+8. Update `CardCanvas` call site to pass all new props
+9. Add "Save Card" button to header
+10. Fix QR preview: add `onError` handler, remove `side === "front"` restriction
