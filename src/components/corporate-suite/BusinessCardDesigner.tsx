@@ -981,6 +981,196 @@ async function exportCardAsPDF(
   URL.revokeObjectURL(url);
 }
 
+// ─── Phone Mockup ─────────────────────────────────────────────────────────────
+function PhoneMockup({ children }: { children: React.ReactNode }) {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  return (
+    <div className="relative mx-auto" style={{ width: 240 }}>
+      {/* Volume buttons */}
+      <div style={{ position: "absolute", left: -10, top: 72, width: 4, height: 28, background: "#2a2a2a", borderRadius: "2px 0 0 2px" }} />
+      <div style={{ position: "absolute", left: -10, top: 110, width: 4, height: 28, background: "#2a2a2a", borderRadius: "2px 0 0 2px" }} />
+      {/* Power button */}
+      <div style={{ position: "absolute", right: -10, top: 96, width: 4, height: 40, background: "#2a2a2a", borderRadius: "0 2px 2px 0" }} />
+      {/* Phone shell */}
+      <div style={{
+        border: "10px solid #1a1a1a",
+        borderRadius: 36,
+        boxShadow: "0 0 0 2px #333, 0 30px 80px rgba(0,0,0,0.5)",
+        background: "#1a1a1a",
+        overflow: "hidden",
+        position: "relative",
+      }}>
+        {/* Status bar */}
+        <div style={{
+          background: "#000",
+          padding: "8px 16px 6px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}>
+          <span style={{ color: "#fff", fontSize: 10, fontWeight: 600, fontFamily: "system-ui, sans-serif" }}>{timeStr}</span>
+          {/* Dynamic island pill */}
+          <div style={{ width: 72, height: 20, background: "#000", border: "1.5px solid #2a2a2a", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#1a1a1a", border: "1px solid #333" }} />
+          </div>
+          {/* Signal/battery icons */}
+          <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+            <div style={{ display: "flex", gap: 1.5, alignItems: "flex-end" }}>
+              {[4, 6, 8, 10].map((h, i) => (
+                <div key={i} style={{ width: 3, height: h, background: i < 3 ? "#fff" : "#555", borderRadius: 1 }} />
+              ))}
+            </div>
+            <div style={{ width: 20, height: 10, border: "1.5px solid #fff", borderRadius: 2, position: "relative", marginLeft: 2 }}>
+              <div style={{ position: "absolute", right: -3, top: "50%", transform: "translateY(-50%)", width: 2, height: 5, background: "#fff", borderRadius: "0 1px 1px 0" }} />
+              <div style={{ width: "70%", height: "100%", background: "#4ade80", borderRadius: 1 }} />
+            </div>
+          </div>
+        </div>
+        {/* Screen / card area */}
+        <div style={{ background: "#000" }}>
+          {children}
+        </div>
+        {/* Home indicator */}
+        <div style={{ background: "#000", padding: "8px 0 10px", display: "flex", justifyContent: "center" }}>
+          <div style={{ width: 80, height: 4, background: "#fff", borderRadius: 4, opacity: 0.5 }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── HTML Export ──────────────────────────────────────────────────────────────
+function exportDigitalCardAsHtml(
+  data: CardData,
+  template: Template,
+  primary: string,
+  secondary: string,
+  accent: string,
+  fontFamily: string,
+  fontWeight: string,
+  fontStyle: string,
+  nameFontSize: number | null,
+): void {
+  const name    = data.name    || "Your Name";
+  const title   = data.title   || "Job Title";
+  const company = data.company || "Company Name";
+
+  // vCard base64
+  const vcf = [
+    "BEGIN:VCARD", "VERSION:3.0",
+    `FN:${name}`, `ORG:${company}`, `TITLE:${title}`,
+    data.phone   ? `TEL:${data.phone}`    : "",
+    data.email   ? `EMAIL:${data.email}`  : "",
+    data.website ? `URL:${data.website}`  : "",
+    data.address ? `ADR:;;${data.address};;;;` : "",
+    "END:VCARD",
+  ].filter(Boolean).join("\n");
+  const vcfB64 = btoa(unescape(encodeURIComponent(vcf)));
+
+  const templateStyles: Record<Template, string> = {
+    modern:    `background:linear-gradient(135deg,${primary} 0%,${primary}dd 100%);color:${secondary};`,
+    classic:   `background:#ffffff;color:#111;border-left:6px solid ${primary};`,
+    minimal:   `background:#fafafa;color:#111;`,
+    bold:      `background:#0a0a0a;color:${primary};`,
+    creative:  `background:#ffffff;color:#111;`,
+    corporate: `background:linear-gradient(135deg,${primary} 0%,${primary}cc 100%);color:${secondary};`,
+    "ai-design":`background:linear-gradient(135deg,${primary} 0%,${primary}dd 100%);color:${secondary};`,
+  };
+
+  const cardStyle = templateStyles[template] || templateStyles.modern;
+  const nameColor = template === "bold" ? primary : (template === "classic" || template === "minimal" || template === "creative") ? "#111" : secondary;
+  const titleColor = template === "classic" ? "#555" : template === "minimal" ? "#666" : template === "bold" ? "#aaa" : `${secondary}cc`;
+  const companyColor = template === "classic" ? "#999" : template === "minimal" ? "#999" : template === "bold" ? "#444" : `${secondary}99`;
+
+  const ctaBg = "#C8A766";
+  const ctaText = "#fff";
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="theme-color" content="${primary}"/>
+<meta name="description" content="Digital business card for ${name} — ${title} at ${company}"/>
+<title>${name} — Digital Card</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:24px 16px 48px;background:linear-gradient(160deg,#0f0f0f 0%,#1a1a1a 60%,#111 100%);font-family:${fontFamily};color:#fff}
+.wrapper{width:100%;max-width:400px;display:flex;flex-direction:column;gap:20px}
+.card{width:100%;aspect-ratio:9/16;border-radius:24px;padding:32px 24px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 20px 60px rgba(0,0,0,0.5);position:relative;overflow:hidden;${cardStyle}}
+.card-top{}
+.card-name{font-size:${nameFontSize || 22}px;font-weight:${fontWeight};font-style:${fontStyle};color:${nameColor};line-height:1.2;margin-bottom:6px}
+.card-title{font-size:13px;font-weight:500;color:${titleColor};margin-bottom:4px}
+.card-company{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:${companyColor}}
+.card-bottom{display:flex;flex-direction:column;gap:6px}
+.card-contact{font-size:11px;opacity:0.75;color:inherit}
+.actions{display:flex;flex-direction:column;gap:10px}
+.action-row{display:flex;align-items:center;gap:14px;background:#ffffff0d;border:1px solid #ffffff15;border-radius:14px;padding:14px 18px;text-decoration:none;color:#fff;font-size:14px;font-weight:500;transition:background 0.15s}
+.action-row:hover{background:#ffffff1a}
+.action-icon{width:36px;height:36px;border-radius:10px;background:${primary}33;border:1px solid ${primary}55;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.save-btn{width:100%;padding:18px;background:${ctaBg};color:${ctaText};font-size:16px;font-weight:700;border:none;border-radius:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 24px ${ctaBg}66;transition:opacity 0.15s}
+.save-btn:hover{opacity:0.9}
+.footer{text-align:center;font-size:11px;color:#ffffff33;padding-top:8px}
+.footer a{color:#ffffff44;text-decoration:none}
+${template==="minimal"?`.card-name{color:#111!important}.card{box-shadow:0 20px 60px rgba(0,0,0,0.3);}`:""}
+${template==="bold"?`.card-name{text-transform:uppercase;letter-spacing:0.04em}`:""}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="card">
+    <div class="card-top">
+      <div class="card-name">${name}</div>
+      <div class="card-title">${title}</div>
+      <div class="card-company">${company}</div>
+    </div>
+    <div class="card-bottom">
+      ${data.phone   ? `<div class="card-contact">📞 ${data.phone}</div>` : ""}
+      ${data.email   ? `<div class="card-contact">✉ ${data.email}</div>` : ""}
+      ${data.website ? `<div class="card-contact">🌐 ${data.website}</div>` : ""}
+      ${data.address ? `<div class="card-contact">📍 ${data.address}</div>` : ""}
+    </div>
+  </div>
+
+  <div class="actions">
+    ${data.phone   ? `<a href="tel:${data.phone}" class="action-row"><span class="action-icon">📞</span><span>${data.phone}</span></a>` : ""}
+    ${data.email   ? `<a href="mailto:${data.email}" class="action-row"><span class="action-icon">✉</span><span>${data.email}</span></a>` : ""}
+    ${data.website ? `<a href="${data.website.startsWith("http") ? data.website : "https://"+data.website}" target="_blank" rel="noopener" class="action-row"><span class="action-icon">🌐</span><span>${data.website}</span></a>` : ""}
+    ${data.address ? `<a href="https://maps.google.com/?q=${encodeURIComponent(data.address)}" target="_blank" rel="noopener" class="action-row"><span class="action-icon">📍</span><span>${data.address}</span></a>` : ""}
+
+    <button class="save-btn" onclick="saveContact()">
+      <span>💾</span><span>Save Contact</span>
+    </button>
+  </div>
+
+  <p class="footer">Built with <a href="/" target="_blank">JBJ Business Card Designer</a></p>
+</div>
+<script>
+function saveContact(){
+  var b64="${vcfB64}";
+  var bin=atob(b64);var bytes=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  var blob=new Blob([bytes],{type:"text/vcard;charset=utf-8"});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  a.href=url;a.download="${(name).replace(/[^a-zA-Z0-9]/g, "-")}.vcf";
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);document.body.removeChild(a);},1000);
+}
+</script>
+</body>
+</html>`;
+
+  const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url;
+  a.download = `${(name).toLowerCase().replace(/\s+/g, "-")}-digital-card.html`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 // ─── Color Picker Section ─────────────────────────────────────────────────────
 function ColorPickerSection({
   label, colorIdx, customColor, onPresetChange, onCustomChange,
@@ -1042,6 +1232,7 @@ export default function BusinessCardDesigner() {
 
   const [side, setSide]         = useState<"front" | "back">("front");
   const [isExporting, setIsExporting] = useState(false);
+  const [isExportingHtml, setIsExportingHtml] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
@@ -1237,6 +1428,25 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     }
   };
 
+  const handleExportHtml = () => {
+    setIsExportingHtml(true);
+    try {
+      exportDigitalCardAsHtml(
+        data, frontTemplate, frontPrimary, frontSecondary, frontAccent,
+        cardFontFamily,
+        cardFontBold ? "bold" : "800",
+        cardFontItalic ? "italic" : "normal",
+        cardFontSize,
+      );
+      toast.success("Digital card HTML exported!");
+    } catch (err) {
+      console.error(err);
+      toast.error("HTML export failed. Please try again.");
+    } finally {
+      setIsExportingHtml(false);
+    }
+  };
+
   const handleShareCard = async () => {
     setIsSharing(true);
     try {
@@ -1335,8 +1545,8 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             </Button>
 
             <div className="hidden sm:flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                <CreditCard size={13} className="text-white" />
+              <div className="w-7 h-7 rounded-lg bg-[hsl(var(--primary))] flex items-center justify-center">
+                <CreditCard size={13} className="text-[hsl(var(--primary-foreground))]" />
               </div>
               <div>
                 <p className="text-xs font-semibold text-[hsl(var(--foreground))] leading-none">Business Card Designer</p>
@@ -1358,11 +1568,23 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               onClick={handleShareCard}
               disabled={isSharing}
               variant="outline"
-              className="gap-1.5 h-8 text-xs font-semibold border-green-200 text-green-700 hover:bg-green-50"
+              className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
             >
               {isSharing ? <RefreshCw size={12} className="animate-spin" /> : <Share2 size={12} />}
               {isSharing ? "Generating…" : "Share"}
             </Button>
+
+            {cardShape === "digital" && (
+              <Button
+                onClick={handleExportHtml}
+                disabled={isExportingHtml}
+                variant="outline"
+                className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.06)]"
+              >
+                {isExportingHtml ? <RefreshCw size={12} className="animate-spin" /> : <Download size={12} />}
+                {isExportingHtml ? "Exporting…" : "Export HTML"}
+              </Button>
+            )}
 
             <Button
               onClick={handleExport}
@@ -1383,7 +1605,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
           <DialogContent className="max-w-sm">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <Share2 size={16} className="text-green-600" />
+                <Share2 size={16} className="text-[hsl(var(--gold))]" />
                 Share Your Card
               </DialogTitle>
               <DialogDescription>
@@ -1429,7 +1651,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                     <Button
                       variant="outline"
                       size="sm"
-                      className="h-9 gap-1.5 text-xs text-green-700 border-green-200 hover:bg-green-50"
+                      className="h-9 gap-1.5 text-xs border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
                       onClick={() => {
                         const msg = encodeURIComponent(`Here's my digital business card: ${shareUrl}`);
                         window.open(`https://wa.me/?text=${msg}`, "_blank");
@@ -2200,59 +2422,115 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
           </div>
 
           {/* Card preview */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-8 shadow-sm flex flex-col items-center gap-4">
-            <div className="w-full max-w-[400px]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`${frontTemplate}-${backTemplate}-${frontColorIdx}-${backColorIdx}-${side}-${cardShape}`}
-                  initial={{ opacity: 0, rotateY: side === "back" ? -15 : 15, scale: 0.96 }}
-                  animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.97 }}
-                  transition={{ duration: 0.25, ease: "easeOut" }}
-                  style={{ perspective: 800 }}
-                >
-                  <CardCanvas
-                    data={data}
-                    template={frontTemplate}
-                    backTemplate={backTemplate}
-                    primary={frontPrimary}
-                    secondary={frontSecondary}
-                    accent={frontAccent}
-                    backPrimary={backPrimary}
-                    backSecondary={backSecondary}
-                    backAccent={backAccent}
-                    side={side}
-                    cardShape={cardShape}
-                    editLayout={editLayout}
-                    fieldPositions={fieldPositions}
-                    onFieldMove={handleFieldMove}
-                    qrEnabled={qrEnabled}
-                    qrData={qrDataStr}
-                    qrSize={qrSize}
-                    qrColor={effectiveQrColor}
-                    qrBgColor={qrBgColor}
-                    qrPosition={qrPosition}
-                    qrSide={qrSide}
-                    logoUrl={logoUrl}
-                    logoSize={logoSize}
-                    logoPos={logoPos}
-                    onLogoMove={setLogoPos}
-                    aiDesignData={aiDesignData}
-                    fontFamily={cardFontFamily}
-                    fontWeight={cardFontBold ? "bold" : undefined}
-                    fontStyle={cardFontItalic ? "italic" : undefined}
-                    nameFontSize={cardFontSize}
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <div className="flex items-center gap-3 text-[10px] text-[hsl(var(--muted-foreground))]">
+          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-8 shadow-sm flex flex-col items-center gap-4" style={cardShape === "digital" ? { background: "linear-gradient(160deg,#0f0f0f 0%,#1a1a1a 60%,#111 100%)" } : {}}>
+            {cardShape === "digital" ? (
+              <PhoneMockup>
+                <CardCanvas
+                  data={data}
+                  template={frontTemplate}
+                  backTemplate={backTemplate}
+                  primary={frontPrimary}
+                  secondary={frontSecondary}
+                  accent={frontAccent}
+                  backPrimary={backPrimary}
+                  backSecondary={backSecondary}
+                  backAccent={backAccent}
+                  side={side}
+                  cardShape={cardShape}
+                  editLayout={editLayout}
+                  fieldPositions={fieldPositions}
+                  onFieldMove={handleFieldMove}
+                  qrEnabled={qrEnabled}
+                  qrData={qrDataStr}
+                  qrSize={qrSize}
+                  qrColor={effectiveQrColor}
+                  qrBgColor={qrBgColor}
+                  qrPosition={qrPosition}
+                  qrSide={qrSide}
+                  logoUrl={logoUrl}
+                  logoSize={logoSize}
+                  logoPos={logoPos}
+                  onLogoMove={setLogoPos}
+                  aiDesignData={aiDesignData}
+                  fontFamily={cardFontFamily}
+                  fontWeight={cardFontBold ? "bold" : undefined}
+                  fontStyle={cardFontItalic ? "italic" : undefined}
+                  nameFontSize={cardFontSize}
+                />
+              </PhoneMockup>
+            ) : (
+              <div className="w-full max-w-[400px]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`${frontTemplate}-${backTemplate}-${frontColorIdx}-${backColorIdx}-${side}-${cardShape}`}
+                    initial={{ opacity: 0, rotateY: side === "back" ? -15 : 15, scale: 0.96 }}
+                    animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.97 }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                    style={{ perspective: 800 }}
+                  >
+                    <CardCanvas
+                      data={data}
+                      template={frontTemplate}
+                      backTemplate={backTemplate}
+                      primary={frontPrimary}
+                      secondary={frontSecondary}
+                      accent={frontAccent}
+                      backPrimary={backPrimary}
+                      backSecondary={backSecondary}
+                      backAccent={backAccent}
+                      side={side}
+                      cardShape={cardShape}
+                      editLayout={editLayout}
+                      fieldPositions={fieldPositions}
+                      onFieldMove={handleFieldMove}
+                      qrEnabled={qrEnabled}
+                      qrData={qrDataStr}
+                      qrSize={qrSize}
+                      qrColor={effectiveQrColor}
+                      qrBgColor={qrBgColor}
+                      qrPosition={qrPosition}
+                      qrSide={qrSide}
+                      logoUrl={logoUrl}
+                      logoSize={logoSize}
+                      logoPos={logoPos}
+                      onLogoMove={setLogoPos}
+                      aiDesignData={aiDesignData}
+                      fontFamily={cardFontFamily}
+                      fontWeight={cardFontBold ? "bold" : undefined}
+                      fontStyle={cardFontItalic ? "italic" : undefined}
+                      nameFontSize={cardFontSize}
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            )}
+            <div className={`flex items-center gap-3 text-[10px] ${cardShape === "digital" ? "text-white/40" : "text-[hsl(var(--muted-foreground))]"}`}>
               <span>{CARD_SHAPES.find(s => s.id === cardShape)?.label} · {CARD_SHAPES.find(s => s.id === cardShape)?.ratio}</span>
               <span>·</span>
               <span>F: {TEMPLATES.find(t => t.id === frontTemplate)?.label} · B: {TEMPLATES.find(t => t.id === backTemplate)?.label}</span>
               {qrEnabled && <span>· QR on both sides</span>}
               {logoUrl && <span>· Logo on both sides</span>}
             </div>
+
+            {/* NFC / Digital mode tip banner + Export HTML button */}
+            {cardShape === "digital" && (
+              <div className="w-full space-y-3">
+                <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 p-3.5 text-xs text-blue-200 space-y-1">
+                  <p className="font-semibold text-blue-100 flex items-center gap-1.5">📱 NFC / Digital Card Mode</p>
+                  <p>Export as HTML to host your digital card page on any web host (Netlify, GitHub Pages, etc.).</p>
+                  <p className="opacity-70">Program that URL into an NFC sticker with any free NFC writer app — tap the sticker → phone opens your card → visitor taps Save Contact.</p>
+                </div>
+                <button
+                  onClick={handleExportHtml}
+                  disabled={isExportingHtml}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold border border-blue-400/40 bg-blue-600/20 text-blue-200 hover:bg-blue-600/30 transition-colors disabled:opacity-60"
+                >
+                  {isExportingHtml ? <RefreshCw size={13} className="animate-spin" /> : <Download size={13} />}
+                  {isExportingHtml ? "Exporting…" : "Export HTML — Host as Digital Card"}
+                </button>
+              </div>
+            )}
           </div>
 
           {/* All templates mini grid */}
