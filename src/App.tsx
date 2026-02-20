@@ -713,6 +713,7 @@ const App = () => (
                 <Route path="/toolkit/corporate-suite/cv-resume" element={<CVResumeBuilder />} />
                 <Route path="/toolkit/corporate-suite/cover-letter" element={<CoverLetterGenerator />} />
                 <Route path="/toolkit/corporate-suite/landing-page" element={<LandingPageBuilder />} />
+                <Route path="/toolkit/corporate-suite/logo-creator" element={<LogoCreator />} />
 
                 {/* Creative Suite - Owner-only */}
                 <Route path="/studio" element={<OwnerGuard><Studio /></OwnerGuard>} />
