@@ -1,103 +1,238 @@
 
-# Business Card Designer — End-to-End Verification Plan
+# One-Tap Share & Save Contact — Business Card Designer
 
-## What Will Be Tested (And What the Code Shows)
+## What the User Wants
 
-This plan walks through every scenario the user asked to verify, with findings from the source code audit, identified bugs, and the exact fixes needed.
+A single prominent button in the Business Card Designer that, when tapped:
+1. Generates a shareable public link pointing to a hosted "digital card" page
+2. Shows a modal with the shareable link + a live QR code pointing at that link
+3. On mobile, tapping the QR code or the link loads the hosted card in the browser, where the visitor can instantly tap "Save Contact" to download a `.vcf` file to their phone's contacts
 
----
-
-## Scenario 1 — Touch Drag on Mobile (Name / Title / Company)
-
-### How it works in code
-The `CardCanvas` component has a `startTouchDrag()` handler (lines 564–612) that:
-1. Captures `e.touches[0]` as the start point
-2. Attaches `touchmove` and `touchend` to `window` with `{ passive: false }` (required to call `e.preventDefault()`)
-3. Converts pixel delta to percentage positions relative to the container `getBoundingClientRect()`
-4. Snaps to center at ±5% threshold and shows gold guide lines
-
-The draggable field overlays (lines 670–685) wire up `onTouchStart` to `startTouchDrag` for `name`, `title`, and `company`.
-
-**One bug found:** Touch drag only works when `editLayout === true`. But the **"Edit Layout" button is only visible in the sticky header at the top of the page** — on mobile this header scrolls offscreen. Once the user scrolls down to the card and tries to drag, `editLayout` is `false` and `startTouchDrag` returns immediately (line 569: `if (!editLayout) return`). 
-
-**Fix needed:** Repeat the "Edit Layout" toggle button directly above the card preview in the right panel (already at line 1974 there is a label but no button). Add a small "Edit Layout" toggle button next to the "Front / Back" side switcher in the preview section so it's always reachable on mobile without scrolling up.
+This is the standard pattern used by HiHello, Blinq, and Apple Wallet business cards.
 
 ---
 
-## Scenario 2 — Voice Input on All 7 Fields
+## Architecture Overview
 
-### How it works in code
-`fields` array (lines 1193–1201) defines 7 entries — name, title, company, phone, email, website, address — all with `voiceKey: true`.
-
-The render loop (lines 1944–1965) maps over `fields` and renders a `VoiceInputButton` for every entry where `f.voiceKey === true`. Since all 7 have `voiceKey: true`, all 7 get voice buttons.
-
-**Status: Fully implemented.** No fix needed.
-
-The `VoiceInputButton` component uses the `voice-to-text` edge function and correctly appends transcript to the specific field via `onTranscript={t => setData(prev => ({ ...prev, [f.key]: t }))}`.
-
----
-
-## Scenario 3 — Enable QR → Switch to Email Type → Override Input Appears
-
-### How it works in code
-Lines 1550–1630 control this flow:
-
-1. Toggle `Switch` → sets `qrEnabled = true`
-2. Content type grid (lines 1579–1602) has Email as a valid option. Clicking Email calls `setQrContentType('email')` and auto-populates `qrCustomContent` from `data.email` if it exists
-3. The override input renders at line 1605 via this condition:
-   ```
-   {(qrContentType === "url" || qrContentType === "text" || qrContentType === "email" || qrContentType === "phone") && (
-   ```
-   
-This correctly includes `"email"` so the override `Input` field will appear.
-
-4. The helper text at line 1624 shows "Using card email · Type above to override" when `qrContentType === "email"` and `!qrCustomContent` — giving the user clear feedback.
-
-**Status: Fully implemented.** No fix needed.
-
-**One UX improvement found:** The `buildQrData()` function (line 131–133) uses `custom || data.email`. When the user clicks "Email" and their email field is already set, `qrCustomContent` is pre-populated with `data.email` (line 1590). This means the input is pre-filled, which is correct and helpful.
+```text
+[Business Card Designer]
+         │
+         ▼ "Share Card" button tapped
+[Generate share token + save card snapshot to DB]
+         │
+         ▼ returns short token (e.g. "abc123")
+[Share modal opens]
+  ┌──────────────────────────────────────┐
+  │  https://app.com/card/abc123        │
+  │  [QR Code image]                    │
+  │  [Copy Link]  [WhatsApp]            │
+  └──────────────────────────────────────┘
+         │
+         ▼ recipient opens link on phone
+[/card/:token  →  SharedBusinessCard page]
+  ┌──────────────────────────────────────┐
+  │  [Card preview rendered in browser] │
+  │  [💾 Save Contact button]           │
+  └──────────────────────────────────────┘
+         │
+         ▼ "Save Contact" tapped
+[Download .vcf file → phone adds contact automatically]
+```
 
 ---
 
-## Scenario 4 — Switch to Ticket Shape → Stub Layout Renders
+## Database Change — New Table: `shared_business_cards`
 
-### How it works in code
-The `CardFace` component (lines 215–253) has a dedicated `if (cardShape === "ticket" && side === "front")` branch rendering:
-- A **left stub** (32% width, `primary` background, initial avatar circle + company name)
-- A **perforated divider** (1px wide, dashed linear-gradient)
-- A **right body** (flex-1, name/title/contact info)
+A new lightweight table stores the card snapshot under a random public token. No auth required to **read** a shared card (it's public by design), but only the authenticated owner can **create** one.
 
-The shape is selectable in the Card Shape grid (line 1306–1320) via the `CARD_SHAPES` constant (line 100: `{ id: "ticket", label: "Ticket", icon: <Ticket size={14} />, ratio: "5 / 2" }`).
+```sql
+CREATE TABLE public.shared_business_cards (
+  id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  token      text UNIQUE NOT NULL DEFAULT substr(md5(random()::text), 1, 10),
+  user_id    uuid NOT NULL,
+  card_data  jsonb NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  expires_at timestamptz,
+  view_count integer NOT NULL DEFAULT 0
+);
 
-**One bug found:** The `backTemplate` for the Ticket shape falls through to the generic `back` face renderer (line 255–271), which renders the primary color with the watermark company name in the center — this is correct. However, the ticket shape's back doesn't have a dedicated layout (no `if (cardShape === "ticket" && side === "back")` branch). The generic back is fine visually but doesn't maintain the ticket aesthetic (no stub on the back). This is a cosmetic gap, not a blocking bug.
+-- RLS: anyone can read by token, only owner can insert/delete
+ALTER TABLE public.shared_business_cards ENABLE ROW LEVEL SECURITY;
 
-**Second bug found:** `resolvedNameSize` for the ticket uses `nameFontSize * scale` or `18 * scale` (line 181). But on ticket shape the right body uses `resolvedNameSize * 0.7` (line 243). When `scale = 1`, this renders the name at ~12.6px which is correct for the narrow right panel. No issue.
+CREATE POLICY "Public read by token"
+  ON public.shared_business_cards FOR SELECT
+  USING (true);
 
-**Status: Structurally correct.** Renders with the correct 3-column stub layout.
+CREATE POLICY "Owner insert"
+  ON public.shared_business_cards FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Owner delete"
+  ON public.shared_business_cards FOR DELETE
+  USING (auth.uid() = user_id);
+```
+
+The `card_data` JSONB column stores everything needed to render the card on the public page:
+- `data` (name, title, company, phone, email, website, address)
+- `frontTemplate`, `frontColorIdx`, `frontCustomColor`
+- `cardShape`, `logoUrl`, `aiDesignData`
+- `fontFamily`, `fontWeight`, `fontStyle`, `nameFontSize`
 
 ---
 
-## Summary of Bugs Found and Fixes Required
+## New Files
 
-| # | Issue | Severity | Fix |
-|---|-------|----------|-----|
-| 1 | "Edit Layout" button only in sticky header — scrolls offscreen on mobile, making touch drag unreachable | Medium | Add a compact "Edit Layout" toggle button alongside the "Front / Back" switcher inside the card preview area (visible without scrolling) |
-| 2 | Ticket back side uses generic `primary` color block, no ticket-specific stub layout | Low (cosmetic) | Add `if (cardShape === "ticket" && side === "back")` branch in `CardFace` mirroring the stub aesthetic but reversed |
+### 1. `src/pages/SharedBusinessCard.tsx`
+The public-facing hosted card page. No auth required. Fetches from `shared_business_cards` by `token` URL param.
+
+**Layout:**
+- Full-screen centered on mobile, max-width 420px
+- Card rendered using the existing `CardFace` component (imported and reused)
+- Below the card: a single large gold "💾 Save Contact" button
+- The button triggers a `.vcf` download with all card fields filled (vCard 3.0)
+- A subtle "Made with JBJ Business Card Designer" footer with a link back to the designer
+
+**vCard generation** (identical pattern to `DigitalCard.tsx`):
+```typescript
+const vcf = [
+  'BEGIN:VCARD',
+  'VERSION:3.0',
+  `FN:${data.name}`,
+  `ORG:${data.company}`,
+  `TITLE:${data.title}`,
+  `TEL:${data.phone}`,
+  `EMAIL:${data.email}`,
+  `URL:${data.website}`,
+  `ADR:;;${data.address};;;;`,
+  'END:VCARD',
+].join('\n');
+```
+
+**View counter:** Each load increments `view_count` via `supabase.rpc()` or a simple `UPDATE ... WHERE token = $1`.
+
+### 2. Route addition in `src/App.tsx`
+```tsx
+<Route path="/card/:token" element={<SharedBusinessCard />} />
+```
+This is a **public route** — no auth guard.
 
 ---
 
-## Files to Change
+## Changes to `BusinessCardDesigner.tsx`
 
-| File | Change |
-|------|--------|
-| `src/components/corporate-suite/BusinessCardDesigner.tsx` | (1) Add "Edit Layout" toggle button in the preview area header row (line ~1971, alongside Front/Back switcher). (2) Add Ticket-back branch in `CardFace`. |
+### A. New state
+```typescript
+const [shareModalOpen, setShareModalOpen] = useState(false);
+const [shareToken, setShareToken] = useState<string | null>(null);
+const [isSharing, setIsSharing] = useState(false);
+```
 
-No backend changes. No new dependencies. No edge function changes.
+### B. `handleShareCard()` function
+1. Check if user is signed in; if not, toast "Please sign in to share"
+2. Call `supabase.from("shared_business_cards").insert({...})` with the full card snapshot
+3. On success, set `shareToken` to the returned `token` field
+4. Open `shareModalOpen = true`
+
+The share token returned from the DB insert is the `token` column (auto-generated by the SQL default). The public URL is `${window.location.origin}/card/${token}`.
+
+```typescript
+const handleShareCard = async () => {
+  setIsSharing(true);
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { toast.error("Please sign in to share."); return; }
+
+    const cardSnapshot = {
+      data,
+      frontTemplate, frontColorIdx, frontCustomColor,
+      cardShape, logoUrl, logoSize, aiDesignData,
+      fontFamily: cardFontFamily,
+      fontWeight: cardFontBold ? "bold" : "800",
+      fontStyle: cardFontItalic ? "italic" : "normal",
+      nameFontSize: cardFontSize,
+      frontPrimary, frontSecondary, frontAccent,
+    };
+
+    const { data: inserted, error } = await supabase
+      .from("shared_business_cards")
+      .insert({ user_id: user.id, card_data: cardSnapshot })
+      .select("token")
+      .single();
+
+    if (error) throw error;
+    setShareToken(inserted.token);
+    setShareModalOpen(true);
+  } catch (err) {
+    toast.error("Failed to generate share link. Please try again.");
+  } finally {
+    setIsSharing(false);
+  }
+};
+```
+
+### C. Share Button placement
+Added to the sticky header row, between "Save Card" and "Export PDF":
+```tsx
+<Button
+  onClick={handleShareCard}
+  disabled={isSharing}
+  variant="outline"
+  className="gap-1.5 h-8 text-xs font-semibold border-green-200 text-green-700 hover:bg-green-50"
+>
+  {isSharing ? <RefreshCw size={12} className="animate-spin" /> : <Share2 size={12} />}
+  {isSharing ? "Generating…" : "Share"}
+</Button>
+```
+
+Also added **inside the card preview section** (same area as the Edit Layout toggle added in the previous diff) so it's visible without scrolling on mobile.
+
+### D. Share Modal component (inline in the file)
+A `Dialog` from `@radix-ui/react-dialog` (already available as `@/components/ui/dialog`) showing:
+
+- **Title:** "Share Your Card"
+- **Share URL input** (read-only, with copy button)
+- **Live QR code** using the existing `buildQrUrl()` helper pointed at the share URL
+- Size: 180×180px, primary color, white background
+- **"Copy Link"** button → `navigator.clipboard.writeText(shareUrl)`
+- **"Share via WhatsApp"** button → `wa.me/?text=Here's my business card: ${shareUrl}`
+- **"Open in new tab"** button → preview what the recipient sees
+- Footer note: "Anyone with this link can view your card and save your contact"
+
+---
+
+## Files to Create/Modify
+
+| File | Action | Details |
+|---|---|---|
+| DB migration | **Create** | `shared_business_cards` table with RLS |
+| `src/pages/SharedBusinessCard.tsx` | **Create** | Public hosted card page with vCard download |
+| `src/App.tsx` | **Edit** | Add `/card/:token` public route |
+| `src/components/corporate-suite/BusinessCardDesigner.tsx` | **Edit** | Add `handleShareCard`, share modal, Share button |
+
+---
+
+## What Does NOT Change
+
+- All existing save/export functionality — unchanged
+- QR code system — unchanged (the share QR is a new separate QR in the modal only)
+- Card canvas, templates, colors, all other panels — unchanged
+- Auth system — unchanged (only reading a shared card is public; creating one requires auth)
+- No edge functions needed — all logic is client-side + direct DB calls
+
+---
+
+## Mobile "Save Contact" UX
+
+On iOS Safari: downloading a `.vcf` file triggers the native "Add Contact" sheet automatically.
+On Android Chrome: downloading a `.vcf` file opens the Contacts app to add it.
+
+This is the standard vCard approach used across the industry — no native app, no special permissions required, works in any browser.
 
 ---
 
 ## Implementation Order
 
-1. Add the "Edit Layout" toggle to the preview area (makes mobile touch drag actually reachable)
-2. Add the Ticket back-side layout (completes the Ticket shape's both-sides consistency)
-3. Both changes are in the same file — can be done in one pass
+1. DB migration → create `shared_business_cards` table with RLS
+2. Create `SharedBusinessCard.tsx` public page
+3. Add route in `App.tsx`
+4. Add share logic + modal + button in `BusinessCardDesigner.tsx`
