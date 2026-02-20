@@ -209,6 +209,7 @@ export default function LogoCreator() {
         asset_type: "logo",
         name: `${name} Logo`,
         file_url: dataUri,
+        thumbnail_url: dataUri,
       });
 
       if (error) throw error;

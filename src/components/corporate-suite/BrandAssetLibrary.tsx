@@ -262,11 +262,17 @@ export function BrandAssetLibrary({
   const handleDelete = async (asset: BrandAsset) => {
     if (!user) return;
     try {
-      // Extract path from URL
-      const url = new URL(asset.file_url);
-      const pathParts = url.pathname.split("/brand-assets/");
-      if (pathParts[1]) {
-        await supabase.storage.from("brand-assets").remove([pathParts[1]]);
+      // Only attempt storage removal for real https URLs (not data: URIs)
+      if (asset.file_url.startsWith("http")) {
+        try {
+          const url = new URL(asset.file_url);
+          const pathParts = url.pathname.split("/brand-assets/");
+          if (pathParts[1]) {
+            await supabase.storage.from("brand-assets").remove([pathParts[1]]);
+          }
+        } catch {
+          // ignore storage errors — still delete DB row
+        }
       }
       await supabase.from("design_assets").delete().eq("id", asset.id);
       setAssets(prev => prev.filter(a => a.id !== asset.id));
