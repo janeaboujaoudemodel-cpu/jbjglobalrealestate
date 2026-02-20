@@ -1200,7 +1200,7 @@ export default function CVResumeBuilder() {
                         onPhotoChange={url => setData(prev => ({ ...prev, photoUrl: url }))}
                       />
                       <div className="bg-[hsl(var(--gold)/0.05)] border border-[hsl(var(--gold)/0.2)] rounded-xl p-3 text-[10px] text-[hsl(var(--muted-foreground))]">
-                        <span className="font-semibold text-[hsl(var(--foreground))]">✨ AI Tip:</span> For best results, upload a photo with a clear subject. The AI background remover uses Gemini Vision.
+                        <span className="font-semibold text-[hsl(var(--foreground))]">AI Tip:</span> For best results, upload a photo with a clear subject. The AI background remover uses Gemini Vision.
                       </div>
                     </div>
                   )}

@@ -257,7 +257,7 @@ export default function ToolkitLanding() {
             <div className="mt-6 pt-6 border-t border-slate-700">
               <p className="text-xs text-slate-500">
                 By using these tools, you confirm you own the content or have permission to edit it. 
-                JBJ Global Real Estate is not responsible for misuse of these tools.
+                The platform operator is not responsible for misuse of these tools.
               </p>
             </div>
           </div>

@@ -7,7 +7,7 @@ import {
   LayoutGrid, Check, ImageIcon, ChevronDown, QrCode, Move,
   Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
-  Save, Palette, Zap, Star, Cpu, Minus, Type,
+  Save, Palette, Zap, Star, Cpu, Minus, Type, User,
 } from "lucide-react";
 import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import { Button } from "@/components/ui/button";
@@ -73,7 +73,7 @@ const TEMPLATES: { id: Template; label: string; desc: string; badge?: string }[]
   { id: "bold",      label: "Bold",      desc: "Dark, high contrast" },
   { id: "creative",  label: "Creative",  desc: "Geometric shape" },
   { id: "corporate", label: "Corporate", desc: "Formal + footer bar" },
-  { id: "ai-design", label: "AI Design", desc: "Generated patterns", badge: "✨" },
+  { id: "ai-design", label: "AI Design", desc: "Generated patterns", badge: "AI" },
 ];
 
 const COLOR_PRESETS: { primary: string; secondary: string; label: string; accent: string }[] = [
@@ -1188,7 +1188,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
 
 
   const fields: { key: keyof CardData; label: string; placeholder: string; icon: React.ReactNode; voiceKey?: boolean }[] = [
-    { key: "name",    label: "Full Name",   placeholder: "Ahmed Al-Mansoori",            icon: <span className="text-[10px]">👤</span>, voiceKey: true },
+    { key: "name",    label: "Full Name",   placeholder: "Ahmed Al-Mansoori",            icon: <User size={12} />, voiceKey: true },
     { key: "title",   label: "Job Title",   placeholder: "Senior Real Estate Consultant",icon: <Building2 size={12} />, voiceKey: true },
     { key: "company", label: "Company",     placeholder: "Acme Corporation",             icon: <Building2 size={12} />, voiceKey: true },
     { key: "phone",   label: "Phone",       placeholder: "+971 50 123 4567",             icon: <Phone size={12} />, voiceKey: true },
@@ -1779,22 +1779,21 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                     <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Tone</Label>
                     <div className="grid grid-cols-4 gap-1.5">
                       {[
-                        { id: "modern",  label: "Modern",  emoji: "⚡" },
-                        { id: "luxe",    label: "Luxe",    emoji: "✦" },
-                        { id: "tech",    label: "Tech",    emoji: "◈" },
-                        { id: "minimal", label: "Minimal", emoji: "○" },
+                        { id: "modern",  label: "Modern"  },
+                        { id: "luxe",    label: "Luxe"    },
+                        { id: "tech",    label: "Tech"    },
+                        { id: "minimal", label: "Minimal" },
                       ].map(opt => (
                         <button
                           key={opt.id}
                           onClick={() => setAiTone(opt.id)}
-                          className={`text-[10px] py-2 px-1 rounded-lg border font-semibold transition-all flex flex-col items-center gap-0.5 ${
+                          className={`text-[10px] py-2 px-1 rounded-lg border font-semibold transition-all ${
                             aiTone === opt.id
                               ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
                               : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
                           }`}
                         >
-                          <span className="text-base leading-none">{opt.emoji}</span>
-                          <span>{opt.label}</span>
+                          {opt.label}
                         </button>
                       ))}
                     </div>
@@ -1805,14 +1804,14 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                     <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Industry</Label>
                     <div className="grid grid-cols-2 gap-1.5">
                       {[
-                        { id: "real-estate",  label: "🏙 Real Estate" },
-                        { id: "technology",   label: "💻 Technology" },
-                        { id: "fashion",      label: "👗 Fashion" },
-                        { id: "finance",      label: "📈 Finance" },
-                        { id: "healthcare",   label: "⚕ Healthcare" },
-                        { id: "creative",     label: "🎨 Creative" },
-                        { id: "law",          label: "⚖ Law" },
-                        { id: "hospitality",  label: "🏨 Hospitality" },
+                        { id: "real-estate",  label: "Real Estate" },
+                        { id: "technology",   label: "Technology" },
+                        { id: "fashion",      label: "Fashion" },
+                        { id: "finance",      label: "Finance" },
+                        { id: "healthcare",   label: "Healthcare" },
+                        { id: "creative",     label: "Creative" },
+                        { id: "law",          label: "Law" },
+                        { id: "hospitality",  label: "Hospitality" },
                       ].map(opt => (
                         <button
                           key={opt.id}
@@ -2118,10 +2117,10 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
           {/* Tips */}
           <div className="bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)] rounded-2xl p-4 text-xs text-[hsl(var(--muted-foreground))] space-y-1.5">
             <p className="font-semibold text-[hsl(var(--foreground))] text-[13px]">Tips</p>
-            <p>🎨 <span className="font-medium text-[hsl(var(--foreground))]">Per-Side Colors</span> — Set different colors for Front and Back using the Colors panel.</p>
-            <p>🖼️ <span className="font-medium text-[hsl(var(--foreground))]">Logo</span> — Upload in Brand Assets. Appears on both sides. Enable "Edit Layout" to drag it.</p>
-            <p>📱 <span className="font-medium text-[hsl(var(--foreground))]">QR Code</span> — Enable QR and it shows on both Front and Back automatically.</p>
-            <p>✨ <span className="font-medium text-[hsl(var(--foreground))]">AI Design</span> — Pick Tone + Industry + Pattern Style, then click Generate. The design appears instantly on the card. Regenerate for variety.</p>
+            <p><span className="font-medium text-[hsl(var(--foreground))]">Per-Side Colors</span> — Set different colors for Front and Back using the Colors panel.</p>
+            <p><span className="font-medium text-[hsl(var(--foreground))]">Logo</span> — Upload in Brand Assets. Appears on both sides. Enable "Edit Layout" to drag it.</p>
+            <p><span className="font-medium text-[hsl(var(--foreground))]">QR Code</span> — Enable QR and it shows on both Front and Back automatically.</p>
+            <p><span className="font-medium text-[hsl(var(--foreground))]">AI Design</span> — Pick Tone + Industry + Pattern Style, then click Generate. The design appears instantly on the card. Regenerate for variety.</p>
           </div>
         </div>
       </div>

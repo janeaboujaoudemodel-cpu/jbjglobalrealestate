@@ -4814,6 +4814,39 @@ export type Database = {
           },
         ]
       }
+      design_licenses: {
+        Row: {
+          asset_type: string
+          company_name: string
+          created_at: string
+          id: string
+          license_code: string
+          trade_license_url: string | null
+          trade_license_verified: boolean
+          user_id: string
+        }
+        Insert: {
+          asset_type: string
+          company_name: string
+          created_at?: string
+          id?: string
+          license_code?: string
+          trade_license_url?: string | null
+          trade_license_verified?: boolean
+          user_id: string
+        }
+        Update: {
+          asset_type?: string
+          company_name?: string
+          created_at?: string
+          id?: string
+          license_code?: string
+          trade_license_url?: string | null
+          trade_license_verified?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
       design_project_palettes: {
         Row: {
           created_at: string
@@ -21765,6 +21798,14 @@ export type Database = {
           severity: string
           violations: string[]
         }[]
+      }
+      check_name_available: {
+        Args: {
+          _asset_type: string
+          _company_name: string
+          _requesting_user: string
+        }
+        Returns: boolean
       }
       check_rate_limit: {
         Args: {

@@ -346,7 +346,7 @@ export default function BrochureGeneratorPage() {
 
     // Footer
     page1.drawRectangle({ x: 0, y: 0, width, height: 50, color: rgb(...theme.primaryColor) });
-    page1.drawText('JBJ Global Real Estate', { x: 40, y: 18, size: 12, font: helveticaBold, color: rgb(1, 1, 1) });
+    page1.drawText(profileData?.name ? `${profileData.name}` : 'Your Company', { x: 40, y: 18, size: 12, font: helveticaBold, color: rgb(1, 1, 1) });
 
     return pdfDoc.save();
   };
@@ -375,7 +375,7 @@ export default function BrochureGeneratorPage() {
     }
 
     page.drawRectangle({ x: 0, y: 0, width, height: 50, color: rgb(...theme.primaryColor) });
-    page.drawText('JBJ Global Real Estate', { x: 40, y: 18, size: 12, font: helveticaBold, color: rgb(1, 1, 1) });
+    page.drawText(profileData.name || 'Your Company', { x: 40, y: 18, size: 12, font: helveticaBold, color: rgb(1, 1, 1) });
     return pdfDoc.save();
   };
 

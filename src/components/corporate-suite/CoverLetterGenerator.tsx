@@ -80,12 +80,12 @@ const TEMPLATES: {
 ];
 
 // ─── Tone options ─────────────────────────────────────────────────────────────
-const TONES: { id: Tone; label: string; emoji: string; desc: string }[] = [
-  { id: "professional", label: "Professional", emoji: "🎯", desc: "Formal & polished" },
-  { id: "confident",    label: "Confident",    emoji: "💪", desc: "Direct & assertive" },
-  { id: "enthusiastic", label: "Enthusiastic", emoji: "✨", desc: "Energetic & passionate" },
-  { id: "executive",    label: "Executive",    emoji: "👔", desc: "Strategic & authoritative" },
-  { id: "casual",       label: "Casual",       emoji: "😊", desc: "Warm & personable" },
+const TONES: { id: Tone; label: string; desc: string }[] = [
+  { id: "professional", label: "Professional", desc: "Formal & polished" },
+  { id: "confident",    label: "Confident",    desc: "Direct & assertive" },
+  { id: "enthusiastic", label: "Enthusiastic", desc: "Energetic & passionate" },
+  { id: "executive",    label: "Executive",    desc: "Strategic & authoritative" },
+  { id: "casual",       label: "Casual",       desc: "Warm & personable" },
 ];
 
 // ─── A4 Letter Preview ────────────────────────────────────────────────────────
@@ -629,7 +629,6 @@ export default function CoverLetterGenerator() {
                       : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white"
                   }`}
                 >
-                  <span className="text-sm">{t.emoji}</span>
                   <div>
                     <p className="text-xs font-semibold text-[hsl(var(--foreground))]">{t.label}</p>
                     <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{t.desc}</p>
@@ -683,7 +682,7 @@ export default function CoverLetterGenerator() {
               </div>
               <div>
                 <Label className="text-[10px] mb-1 block text-[hsl(var(--muted-foreground))]">Company *</Label>
-                <Input value={form.companyName} onChange={setField("companyName")} placeholder="JBJ Global" className="h-8 text-xs" />
+                <Input value={form.companyName} onChange={setField("companyName")} placeholder="e.g. Acme Corp" className="h-8 text-xs" />
               </div>
             </div>
             <div>
@@ -833,7 +832,7 @@ export default function CoverLetterGenerator() {
 
           {/* Tips */}
           <div className="bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)] rounded-xl p-4 text-xs space-y-2">
-            <p className="font-bold text-[hsl(var(--foreground))]">💡 Tips for Best Results</p>
+            <p className="font-bold text-[hsl(var(--foreground))]">Tips for Best Results</p>
             <ul className="space-y-1 text-[hsl(var(--muted-foreground))] list-disc list-inside">
               <li>Mention a specific achievement with numbers (e.g. "closed 200M AED")</li>
               <li>Use "Additional Notes" to add context the AI should reference</li>

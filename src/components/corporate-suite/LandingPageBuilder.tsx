@@ -65,9 +65,9 @@ function LandingPreview({ data }: { data: LPData }) {
       {/* Contact */}
       <div className="px-6 py-5 border-t border-gray-100">
         <div className="flex flex-wrap gap-3 text-xs text-gray-500 justify-center">
-          {data.phone && <span>📞 {data.phone}</span>}
-          {data.email && <span>✉ {data.email}</span>}
-          {data.address && <span>📍 {data.address}</span>}
+          {data.phone && <span>Phone: {data.phone}</span>}
+          {data.email && <span>Email: {data.email}</span>}
+          {data.address && <span>Address: {data.address}</span>}
         </div>
       </div>
 
@@ -133,9 +133,9 @@ export default function LandingPageBuilder() {
 </div>
 ${services.length ? `<div class="services"><h2>Our Services</h2><div class="services-grid">${services.map(s => `<div class="service-card">${s}</div>`).join("")}</div></div>` : ""}
 <div class="contact">
-  ${data.phone ? `<span>📞 ${data.phone}</span>` : ""}
-  ${data.email ? `<span>✉ ${data.email}</span>` : ""}
-  ${data.address ? `<span>📍 ${data.address}</span>` : ""}
+  ${data.phone ? `<span>Phone: ${data.phone}</span>` : ""}
+  ${data.email ? `<span>Email: ${data.email}</span>` : ""}
+  ${data.address ? `<span>Address: ${data.address}</span>` : ""}
 </div>
 <footer>© 2025 ${data.businessName} · All rights reserved</footer>
 </body>
@@ -191,7 +191,7 @@ ${services.length ? `<div class="services"><h2>Our Services</h2><div class="serv
           {/* Business Info */}
           <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
             <p className="text-xs font-semibold text-[hsl(var(--foreground))]">Business Information</p>
-            <div><Label className="text-xs mb-1 block">Business Name</Label><Input value={data.businessName} onChange={set("businessName")} placeholder="JBJ Global Real Estate" className="h-8 text-xs" /></div>
+            <div><Label className="text-xs mb-1 block">Business Name</Label><Input value={data.businessName} onChange={set("businessName")} placeholder="e.g. Acme Corporation" className="h-8 text-xs" /></div>
             <div><Label className="text-xs mb-1 block">Tagline</Label><Input value={data.tagline} onChange={set("tagline")} placeholder="Your Premier Real Estate Partner in Dubai" className="h-8 text-xs" /></div>
             <div><Label className="text-xs mb-1 block">Description</Label><Textarea value={data.description} onChange={set("description")} placeholder="Tell visitors what makes your business unique…" className="text-xs min-h-[70px]" /></div>
             <div><Label className="text-xs mb-1 block">Services (comma-separated)</Label><Input value={data.services} onChange={set("services")} placeholder="Buying, Selling, Rentals, Property Management, Investment" className="h-8 text-xs" /></div>
