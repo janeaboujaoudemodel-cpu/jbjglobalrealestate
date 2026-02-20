@@ -4,7 +4,7 @@ import { Brain, TrendingUp, BarChart3, Shield, Star, Building2, ThumbsUp, Thumbs
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 
 interface ProjectAIAnalyzerProps {
   projectName: string;
@@ -19,8 +19,13 @@ interface ProjectAIAnalyzerProps {
 
 function extractSection(text: string, sectionName: string): string {
   const patterns = [
+    // Format: **1. Area Overview** (number inside bold — actual AI output)
+    new RegExp(`\\*\\*\\d+\\.\\s*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*\\d+\\.|$)`, 'i'),
+    // Format: 1. **Area Overview** (number outside bold)
     new RegExp(`\\d+\\.\\s*\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\d+\\.\\s*\\*\\*|$)`, 'i'),
+    // Format: ## Area Overview
     new RegExp(`##\\s*${sectionName}[:\\s]*([\\s\\S]*?)(?=##|\\d+\\.\\s*\\*\\*|$)`, 'i'),
+    // Format: **Area Overview**
     new RegExp(`\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*[A-Z]|\\d+\\.\\s*\\*\\*|$)`, 'i'),
   ];
   for (const pattern of patterns) {
@@ -181,7 +186,7 @@ export const ProjectAIAnalyzer = ({
                 <div className="relative">
                   <div className="absolute inset-0 rounded-full bg-gold/20 blur-xl animate-pulse scale-150" />
                   <img
-                    src={jbjMonogramDark}
+                    src={jbjMonogramNobuffer}
                     alt="JBJ AI analyzing..."
                     className="relative w-20 h-20 object-contain"
                     style={{
