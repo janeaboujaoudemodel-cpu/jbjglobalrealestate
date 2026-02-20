@@ -5,7 +5,7 @@
 import React, { useState } from 'react';
 import { StampSVGRenderer } from './StampSVGRenderer';
 import { Button } from '@/components/ui/button';
-import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2 } from 'lucide-react';
+import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2, Maximize2 } from 'lucide-react';
 import { StampDesignConcept } from '@/lib/stampTemplates';
 
 interface Props {
@@ -25,6 +25,7 @@ export function StampPreviewModal({
   concept, project, tintColor, secondaryColor, accentColor, svgOverride, onBack, onSelectAndExport,
 }: Props) {
   const [activeView, setActiveView] = useState<MockupView>('business-card');
+  const [stampFullscreen, setStampFullscreen] = useState(false);
   const [downloadingPng, setDownloadingPng] = useState(false);
   const displaySvg = svgOverride || concept.svgSource;
   const companyName = project?.company_name || 'Company Name';
@@ -101,8 +102,15 @@ export function StampPreviewModal({
       <div className="flex-1 overflow-auto flex flex-col lg:flex-row">
 
         {/* Left: stamp large preview + info */}
-        <div className="lg:w-80 flex-shrink-0 bg-[hsl(var(--pearl-1))] border-r border-[hsl(var(--border))] flex flex-col items-center pt-4 pb-6 px-6 gap-4">
-          <div className="bg-white rounded-3xl border border-[hsl(var(--border))] shadow-md p-6 flex items-center justify-center">
+        <div className="lg:w-80 flex-shrink-0 bg-[hsl(var(--pearl-1))] border-r border-[hsl(var(--border))] flex flex-col items-center pt-10 pb-6 px-6 gap-4">
+          <div className="relative bg-white rounded-3xl border border-[hsl(var(--border))] shadow-md p-6 flex items-center justify-center">
+            <button
+              onClick={() => setStampFullscreen(true)}
+              title="View fullscreen"
+              className="absolute top-2 right-2 p-1.5 rounded-lg bg-[hsl(var(--muted))] hover:bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))] transition-colors"
+            >
+              <Maximize2 size={14}/>
+            </button>
             <StampSVGRenderer
               svgSource={displaySvg}
               tintColor={tintColor}
@@ -283,6 +291,31 @@ export function StampPreviewModal({
           </div>
         </div>
       </div>
+
+      {/* Fullscreen stamp overlay */}
+      {stampFullscreen && (
+        <div
+          className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center"
+          onClick={() => setStampFullscreen(false)}
+        >
+          <button
+            onClick={() => setStampFullscreen(false)}
+            className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+          >
+            <X size={22}/>
+          </button>
+          <div className="bg-white rounded-3xl p-10 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <StampSVGRenderer
+              svgSource={displaySvg}
+              tintColor={tintColor}
+              secondaryColor={secondaryColor}
+              accentColor={accentColor}
+              size={420}
+            />
+          </div>
+          <p className="absolute bottom-6 text-white/40 text-xs">Click outside to close</p>
+        </div>
+      )}
     </div>
   );
 }
