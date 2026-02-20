@@ -46,8 +46,10 @@ function ShapePreview({ type, selected }: { type: StampType; selected: boolean }
   const common = `flex items-center justify-center border-2 text-[7px] font-bold tracking-widest`;
   const style = { borderColor: color, color };
   if (type === 'ROUND')     return <div className={`${common} rounded-full w-12 h-12`} style={style}>JBJ</div>;
-  if (type === 'OVAL')      return <div className={`${common} rounded-full w-16 h-10`} style={style}>JBJ</div>;
-  if (type === 'RECTANGLE') return <div className={`${common} rounded-lg w-16 h-10`}  style={style}>JBJ</div>;
+  // True oval: wider than tall, using ellipse border-radius
+  if (type === 'OVAL')      return <div className={`${common} w-20 h-12`} style={{ ...style, borderRadius: '50% / 50%' }}>JBJ</div>;
+  // Rectangle: clearly wider than square
+  if (type === 'RECTANGLE') return <div className={`${common} rounded-md w-24 h-10`} style={style}>JBJ</div>;
   if (type === 'SQUARE')    return <div className={`${common} rounded-lg w-12 h-12`}  style={style}>JBJ</div>;
   return null;
 }
@@ -315,8 +317,18 @@ export default function StampProjectWizard() {
                   if (data.registration_number) set('registration_number_optional', data.registration_number);
                   const city = data.city || '';
                   if (city) set('city_optional', city);
-                  // Auto-fill arabic_city in "City, الإمارات العربية المتحدة" format
-                  const arabicCity = data.arabic_city || (city ? `${city}, الإمارات العربية المتحدة` : '');
+                  // Map English city names to Arabic — never put English in the Arabic field
+                  const ARABIC_CITY_MAP: Record<string, string> = {
+                    'dubai': 'دبي',
+                    'abu dhabi': 'أبوظبي',
+                    'sharjah': 'الشارقة',
+                    'ajman': 'عجمان',
+                    'ras al khaimah': 'رأس الخيمة',
+                    'fujairah': 'الفجيرة',
+                    'umm al quwain': 'أم القيوين',
+                  };
+                  const arabicCityName = (city ? ARABIC_CITY_MAP[city.toLowerCase()] : undefined) || data.arabic_city || city;
+                  const arabicCity = data.arabic_city || (arabicCityName ? `${arabicCityName}، الإمارات العربية المتحدة` : '');
                   if (arabicCity) set('arabic_city', arabicCity);
                   // Smart country correction: don't confuse owner nationality with company country
                   const rawCountry = data.country || '';

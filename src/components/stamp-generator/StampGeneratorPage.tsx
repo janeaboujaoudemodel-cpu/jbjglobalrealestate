@@ -614,17 +614,17 @@ export default function StampGeneratorPage() {
                         className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--foreground))] font-bold text-sm flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-all"
                       >−</button>
                       <input
-                        type="range" min={6} max={16} step={0.5}
+                        type="range" min={6} max={24} step={0.5}
                         value={manualFontSize ?? 10}
                         onChange={e => setManualFontSize(parseFloat(e.target.value))}
                         className="flex-1 accent-[hsl(var(--gold))]"
                       />
                       <button
-                        onClick={() => setManualFontSize(v => Math.min(16, (v ?? 10) + 1))}
+                        onClick={() => setManualFontSize(v => Math.min(24, (v ?? 10) + 1))}
                         className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--foreground))] font-bold text-sm flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-all"
                       >+</button>
                     </div>
-                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1.5">Range: 6–16 pt · Auto = fit to stamp</p>
+                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1.5">Range: 6–24 pt · Auto = fit to stamp</p>
                   </div>
 
                   <div className="border-t border-[hsl(var(--border))] pt-3">

@@ -126,10 +126,21 @@ function buildQrData(type: QrContentType, data: CardData, custom: string): strin
   switch (type) {
     case "vcard":
       return `BEGIN:VCARD\nVERSION:3.0\nFN:${data.name}\nORG:${data.company}\nTITLE:${data.title}\nTEL:${data.phone}\nEMAIL:${data.email}\nURL:${data.website}\nEND:VCARD`;
-    case "email": return `mailto:${custom || data.email}`;
-    case "phone": return `tel:${custom || data.phone}`;
-    case "url":   return custom || data.website || "https://";
-    default:      return custom;
+    case "email": {
+      const em = custom || data.email;
+      return em ? `mailto:${em}` : "";
+    }
+    case "phone": {
+      const ph = custom || data.phone;
+      return ph ? `tel:${ph}` : "";
+    }
+    case "url": {
+      const url = custom || data.website || "";
+      // Guard: bare scheme with no domain is invalid — return empty to suppress QR
+      if (!url || url === "https://" || url === "http://" || url.trim() === "") return "";
+      return url.startsWith("http") ? url : `https://${url}`;
+    }
+    default: return custom;
   }
 }
 
@@ -448,7 +459,7 @@ function CardCanvas({
   data, template, backTemplate, primary, secondary, accent, backPrimary, backSecondary, backAccent,
   side, cardShape,
   editLayout, fieldPositions, onFieldMove,
-  qrEnabled, qrData, qrSize, qrColor, qrBgColor, qrPosition,
+  qrEnabled, qrData, qrSize, qrColor, qrBgColor, qrPosition, qrSide,
   logoUrl, logoSize, logoPos, onLogoMove, aiDesignData,
   fontFamily, fontWeight, fontStyle, nameFontSize,
 }: {
@@ -458,6 +469,7 @@ function CardCanvas({
   fieldPositions: typeof DEFAULT_FIELD_POSITIONS;
   onFieldMove: (field: keyof typeof DEFAULT_FIELD_POSITIONS, pos: FieldPos) => void;
   qrEnabled: boolean; qrData: string; qrSize: number; qrColor: string; qrBgColor: string; qrPosition: QrPosition;
+  qrSide: "front" | "back" | "both";
   logoUrl: string; logoSize: number; logoPos: { x: number; y: number };
   onLogoMove: (pos: { x: number; y: number }) => void;
   aiDesignData: AiDesignData | null;
@@ -654,25 +666,25 @@ function CardCanvas({
       {side === "front" && (
         <>
           <div style={getFieldStyle("name")} onMouseDown={e => startDrag("field", e, "name")} onTouchStart={e => startTouchDrag("field", e, "name")}>
-            <span style={{ fontSize: "14px", fontWeight: 800, color: editLayout ? "#fff" : "transparent", whiteSpace: "nowrap" }}>
-              {editLayout ? (data.name || "Your Name") : ""}
+            <span style={{ fontSize: "9px", fontWeight: 700, color: editLayout ? "#fff" : "transparent", whiteSpace: "nowrap", letterSpacing: 0.5 }}>
+              {editLayout ? "≡ Name" : ""}
             </span>
           </div>
           <div style={getFieldStyle("title")} onMouseDown={e => startDrag("field", e, "title")} onTouchStart={e => startTouchDrag("field", e, "title")}>
-            <span style={{ fontSize: "10px", color: editLayout ? "#fff" : "transparent", whiteSpace: "nowrap" }}>
-              {editLayout ? (data.title || "Job Title") : ""}
+            <span style={{ fontSize: "9px", color: editLayout ? "#fff" : "transparent", whiteSpace: "nowrap" }}>
+              {editLayout ? "≡ Title" : ""}
             </span>
           </div>
           <div style={getFieldStyle("company")} onMouseDown={e => startDrag("field", e, "company")} onTouchStart={e => startTouchDrag("field", e, "company")}>
             <span style={{ fontSize: "9px", fontWeight: 700, color: editLayout ? "#fff" : "transparent", letterSpacing: 1.5, textTransform: "uppercase", whiteSpace: "nowrap" }}>
-              {editLayout ? (data.company || "Company Name") : ""}
+              {editLayout ? "≡ Company" : ""}
             </span>
           </div>
         </>
       )}
 
-      {/* QR Code overlay — shows on BOTH sides */}
-      {qrEnabled && qrUrl && (
+      {/* QR Code overlay — conditional on qrSide */}
+      {qrEnabled && qrUrl && (qrSide === "both" || qrSide === side) && (
         <div
           style={{
             position: "absolute",
@@ -1006,6 +1018,7 @@ export default function BusinessCardDesigner() {
   const [qrColor, setQrColor]           = useState("");
   const [qrBgColor, setQrBgColor]       = useState("#ffffff");
   const [qrPosition, setQrPosition]     = useState<QrPosition>("bottom-right");
+  const [qrSide, setQrSide]             = useState<"front" | "back" | "both">("both");
   const [qrAiPrompt, setQrAiPrompt]     = useState("");
   const [isAiStylingQr, setIsAiStylingQr] = useState(false);
 
@@ -1217,10 +1230,15 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               {editLayout ? "Lock Layout" : "Edit Layout"}
             </Button>
             <Button
-              variant="ghost" size="sm"
-              onClick={() => { setFieldPositions({ ...DEFAULT_FIELD_POSITIONS }); setLogoPos({ ...DEFAULT_LOGO_POS }); }}
-              className="h-8 text-xs gap-1.5 text-[hsl(var(--muted-foreground))]"
-              title="Reset positions"
+              variant="outline" size="sm"
+              onClick={() => {
+                setFieldPositions({ ...DEFAULT_FIELD_POSITIONS });
+                setLogoPos({ ...DEFAULT_LOGO_POS });
+                if (!editLayout) setEditLayout(true);
+                toast.success("Layout reset to defaults");
+              }}
+              className="h-8 text-xs gap-1.5 border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
+              title="Reset field & logo positions to defaults"
             >
               <RotateCcw size={12} /> Reset
             </Button>
@@ -1533,6 +1551,26 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
 
                   {qrEnabled && (
                     <>
+                      {/* Show QR on: Front / Back / Both */}
+                      <div>
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Show QR On</Label>
+                        <div className="flex rounded-lg border border-[hsl(var(--border))] overflow-hidden text-xs">
+                          {(["front", "back", "both"] as const).map(s => (
+                            <button
+                              key={s}
+                              onClick={() => setQrSide(s)}
+                              className={`flex-1 py-1.5 font-semibold capitalize transition-colors ${
+                                qrSide === s
+                                  ? "bg-[hsl(var(--foreground))] text-white"
+                                  : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]"
+                              }`}
+                            >
+                              {s}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
                       <div>
                         <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">QR Content Type</Label>
                         <div className="grid grid-cols-3 gap-1.5">
@@ -1698,10 +1736,12 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                           />
                           <div>
                             <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">QR Preview</p>
-                            <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">
-                              {qrContentType.toUpperCase()} · {qrSize}px · {qrPosition}
-                            </p>
-                            <p className="text-[9px] text-green-600 mt-0.5">Shows on both front & back</p>
+                             <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">
+                               {qrContentType.toUpperCase()} · {qrSize}px · {qrPosition}
+                             </p>
+                             <p className="text-[9px] text-green-600 mt-0.5">
+                               Shows on: {qrSide === "both" ? "Front & Back" : qrSide === "front" ? "Front only" : "Back only"}
+                             </p>
                           </div>
                         </div>
                       )}
@@ -1986,6 +2026,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                     qrColor={effectiveQrColor}
                     qrBgColor={qrBgColor}
                     qrPosition={qrPosition}
+                    qrSide={qrSide}
                     logoUrl={logoUrl}
                     logoSize={logoSize}
                     logoPos={logoPos}
