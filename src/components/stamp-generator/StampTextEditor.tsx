@@ -13,19 +13,44 @@ interface TextElement {
 }
 
 function extractTextElements(svgString: string): TextElement[] {
-  if (!svgString || typeof window === 'undefined') return [];
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(svgString, 'image/svg+xml');
-    const texts = Array.from(doc.querySelectorAll('text'));
-    return texts.map((el, i) => ({
-      index: i,
-      content: el.textContent?.trim() || '',
-      isTextPath: el.querySelector('textPath') !== null,
-    })).filter(el => el.content.length > 0);
-  } catch {
-    return [];
+  if (!svgString) return [];
+  // Method 1: DOMParser (preferred)
+  if (typeof window !== 'undefined' && typeof DOMParser !== 'undefined') {
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(svgString, 'image/svg+xml');
+      // Check for parse error
+      const parseErr = doc.querySelector('parsererror');
+      if (!parseErr) {
+        const texts = Array.from(doc.querySelectorAll('text'));
+        const results = texts.map((el, i) => ({
+          index: i,
+          content: el.textContent?.trim() || '',
+          isTextPath: el.querySelector('textPath') !== null,
+        })).filter(el => el.content.length > 0);
+        if (results.length > 0) return results;
+      }
+    } catch { /* fall through */ }
   }
+  // Method 2: Regex fallback — extract text content from <text ...>content</text> and <textPath>content</textPath>
+  const elements: TextElement[] = [];
+  const textTagRegex = /<text[\s>][^]*?<\/text>/gi;
+  let globalIdx = 0;
+  let match;
+  while ((match = textTagRegex.exec(svgString)) !== null) {
+    const block = match[0];
+    const isTextPath = /<textPath/i.test(block);
+    // Strip all inner tags to get text content
+    const content = block
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (content.length > 0) {
+      elements.push({ index: globalIdx, content, isTextPath });
+      globalIdx++;
+    }
+  }
+  return elements;
 }
 
 export function mutateTextElement(svgString: string, index: number, newContent: string | null): string {

@@ -4,8 +4,9 @@
  */
 import React, { useState } from 'react';
 import { StampSVGRenderer } from './StampSVGRenderer';
+import { StampTextEditor } from './StampTextEditor';
 import { Button } from '@/components/ui/button';
-import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2, Maximize2 } from 'lucide-react';
+import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2, Maximize2, Type } from 'lucide-react';
 import { StampDesignConcept } from '@/lib/stampTemplates';
 
 interface Props {
@@ -17,17 +18,25 @@ interface Props {
   svgOverride?: string;
   onBack: () => void;
   onSelectAndExport: () => void;
+  onSvgChange?: (newSvg: string) => void;
 }
 
 type MockupView = 'business-card' | 'letterhead' | 'envelope';
 
 export function StampPreviewModal({
-  concept, project, tintColor, secondaryColor, accentColor, svgOverride, onBack, onSelectAndExport,
+  concept, project, tintColor, secondaryColor, accentColor, svgOverride, onBack, onSelectAndExport, onSvgChange,
 }: Props) {
   const [activeView, setActiveView] = useState<MockupView>('business-card');
   const [stampFullscreen, setStampFullscreen] = useState(false);
   const [downloadingPng, setDownloadingPng] = useState(false);
-  const displaySvg = svgOverride || concept.svgSource;
+  const [showTextEditor, setShowTextEditor] = useState(false);
+  const [localSvg, setLocalSvg] = useState<string | null>(null);
+  const displaySvg = localSvg || svgOverride || concept.svgSource;
+
+  function handleSvgEdit(newSvg: string) {
+    setLocalSvg(newSvg);
+    onSvgChange?.(newSvg);
+  }
   const companyName = project?.company_name || 'Company Name';
   const arabicName = project?.arabic_company_name || '';
   const city = [project?.city_optional, project?.country_optional].filter(Boolean).join(', ') || 'UAE';
@@ -147,6 +156,22 @@ export function StampPreviewModal({
             {downloadingPng ? <Loader2 size={14} className="animate-spin"/> : <Download size={14}/>}
             {downloadingPng ? 'Downloading…' : 'Download Preview PNG'}
           </Button>
+          {/* Edit Text button */}
+          <Button
+            variant={showTextEditor ? 'default' : 'outline'}
+            onClick={() => setShowTextEditor(v => !v)}
+            className={`w-full gap-2 text-sm ${showTextEditor ? 'bg-[hsl(var(--gold))] text-white border-transparent' : ''}`}
+          >
+            <Type size={14}/> {showTextEditor ? 'Hide Text Editor' : 'Edit Text Elements'}
+          </Button>
+          {showTextEditor && (
+            <div className="w-full border border-[hsl(var(--border))] rounded-xl p-3 bg-[hsl(var(--pearl-1))]">
+              <StampTextEditor
+                svgSource={displaySvg}
+                onSvgChange={handleSvgEdit}
+              />
+            </div>
+          )}
         </div>
 
         {/* Right: mockup */}
