@@ -655,8 +655,8 @@ const Compare = () => {
                 <span className="relative flex items-center justify-center gap-2">
                   {isGenerating ? (
                     <>
-                      <Loader2 className="w-5 h-5 text-gold animate-spin" />
-                      <span className="text-black">Analyzing...</span>
+                      <Sparkles className="w-5 h-5 text-gold animate-pulse" />
+                      <span className="text-black">Analyzing Property Intelligence...</span>
                     </>
                   ) : (
                     <>
@@ -678,7 +678,8 @@ const Compare = () => {
                   </button>
                   <button
                     onClick={() => {
-                      const shareText = `Property Comparison Report - JBJ Global Real Estate\n\n${projects.map(p => p.name).join(' vs ')}\n\nView at: ${window.location.href}`;
+                      const projectSummary = projects.map(p => `- ${p.name} | ${p.developer?.name || 'N/A'} | ${p.location || 'Dubai'} | ${p.price_from ? `AED ${(p.price_from/1000000).toFixed(1)}M` : 'Price on request'}`).join('\n');
+                      const shareText = `JBJ GLOBAL REAL ESTATE\nAI Property Comparison Report\n\n${projectSummary}\n\nPrepared by JBJ Global Real Estate\n+971 56 591 1000 | www.JBJ.ae\n\nView: ${window.location.href}`;
                       const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                       window.open(whatsappUrl, '_blank');
                     }}
@@ -689,8 +690,9 @@ const Compare = () => {
                   </button>
                   <button
                     onClick={() => {
-                      const subject = encodeURIComponent(`Property Comparison - ${projects.map(p => p.name).join(' vs ')}`);
-                      const body = encodeURIComponent(`Hi,\n\nPlease find the property comparison analysis:\n\n${projects.map(p => `• ${p.name} - ${p.developer?.name || ''} - ${p.location || ''}`).join('\n')}\n\nPrepared by JBJ Global Real Estate\nwww.JBJ.ae | +971 56 591 1000\n\nView comparison: ${window.location.href}`);
+                      const subject = encodeURIComponent(`JBJ Global Real Estate — Property Comparison: ${projects.map(p => p.name).join(' vs ')}`);
+                      const projectLines = projects.map(p => `• ${p.name} — ${p.developer?.name || ''} — ${p.location || 'Dubai'} — ${p.price_from ? `AED ${(p.price_from/1000000).toFixed(1)}M` : 'Price on request'}`).join('\n');
+                      const body = encodeURIComponent(`Dear Investor,\n\nPlease find the AI-powered property comparison analysis:\n\n${projectLines}\n\nFor full details and AI recommendations, view the comparison:\n${window.location.href}\n\nBest regards,\nJBJ Global Real Estate\n+971 56 591 1000\nContact@JBJ.ae | www.JBJ.ae`);
                       window.location.href = `mailto:?subject=${subject}&body=${body}`;
                     }}
                     className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-zinc-800 hover:bg-zinc-700 text-white group"
@@ -799,7 +801,7 @@ const Compare = () => {
                       {row.label}
                     </td>
                     {projects.map((project) => (
-                      <td key={project.id} className={`py-4 px-4 text-white text-sm ${row.label === 'Location' ? 'whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]' : ''}`}>
+                      <td key={project.id} className={`py-4 px-4 text-white text-sm ${row.label === 'Location' ? 'truncate max-w-[200px]' : ''}`}>
                         {row.format(null, project)}
                       </td>
                     ))}
@@ -940,6 +942,22 @@ const Compare = () => {
                 )}
               </div>
             </div>
+          ) : isGenerating ? (
+            /* Premium loading state */
+            <div className="bg-gradient-to-br from-gold/5 to-zinc-900 rounded-2xl border border-gold/20 p-8">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-[#E8DCC8] flex items-center justify-center mx-auto mb-4 animate-pulse">
+                  <Sparkles className="w-8 h-8 text-black" />
+                </div>
+                <h3 className="text-white text-2xl font-bold mb-2">Analyzing Property Intelligence...</h3>
+                <p className="text-zinc-400 max-w-md mx-auto mb-6">
+                  Our AI is comparing locations, pricing, ROI potential, and developer track records.
+                </p>
+                <div className="w-full max-w-xs h-2 bg-zinc-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-gold to-[#E8DCC8] rounded-full animate-pulse" style={{ width: '60%' }} />
+                </div>
+              </div>
+            </div>
           ) : (
             <div className="bg-gradient-to-br from-gold/5 to-zinc-900 rounded-2xl border border-gold/20 p-8 text-center">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-[#E8DCC8] flex items-center justify-center mx-auto mb-4">
@@ -951,23 +969,14 @@ const Compare = () => {
               </p>
               <Button
                 onClick={generateSmartAnalysis}
-                disabled={isGenerating || projects.length < 2}
+                disabled={projects.length < 2}
                 size="lg"
                 className="bg-gradient-to-r from-gold to-[#E8DCC8] text-black hover:from-gold/90 hover:to-[#E8DCC8]/90 font-semibold"
               >
-                {isGenerating ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Generating Analysis...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    Generate AI Analysis
-                    {!hasActiveMembership && !hasUsedFreeCompare && (
-                      <Badge className="ml-2 bg-green-500 text-white text-xs">FREE</Badge>
-                    )}
-                  </>
+                <Sparkles className="w-5 h-5 mr-2" />
+                Generate AI Analysis
+                {!hasActiveMembership && !hasUsedFreeCompare && (
+                  <Badge className="ml-2 bg-green-500 text-white text-xs">FREE</Badge>
                 )}
               </Button>
               {projects.length < 2 && (

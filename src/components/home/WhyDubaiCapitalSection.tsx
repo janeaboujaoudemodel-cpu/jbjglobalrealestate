@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { T } from "@/components/ui/T";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
@@ -23,16 +23,36 @@ const stats = [
 
 export default function WhyDubaiCapitalSection() {
   const [currentScene, setCurrentScene] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // IntersectionObserver: only load videos when section is in viewport
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
+    if (!isVisible) return;
     const interval = setInterval(() => {
       setCurrentScene((prev) => (prev + 1) % scenes.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isVisible]);
 
   return (
-    <section className="relative h-screen min-h-[100vh] min-h-[100dvh] bg-black overflow-hidden">
+    <section ref={sectionRef} className="relative h-screen min-h-[100vh] min-h-[100dvh] bg-black overflow-hidden">
       {/* Full-frame video background - edge to edge with smooth crossfade */}
       <AnimatePresence mode="sync">
         <motion.div
@@ -43,16 +63,18 @@ export default function WhyDubaiCapitalSection() {
           transition={{ duration: 0.6 }}
           className="absolute inset-0"
         >
-          <video
-            className="absolute inset-0 w-full h-full object-cover"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-          >
-            <source src={scenes[currentScene].src} type="video/mp4" />
-          </video>
+          {isVisible && (
+            <video
+              className="absolute inset-0 w-full h-full object-cover"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="none"
+            >
+              <source src={scenes[currentScene].src} type="video/mp4" />
+            </video>
+          )}
           {/* Refined gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />

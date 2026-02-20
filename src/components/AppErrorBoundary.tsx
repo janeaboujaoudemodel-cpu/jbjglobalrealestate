@@ -1,22 +1,24 @@
 import React from "react";
-import { AlertTriangle, RefreshCcw, Home } from "lucide-react";
+import { RefreshCcw, Home } from "lucide-react";
 
 interface AppErrorBoundaryState {
   hasError: boolean;
   errorMessage?: string;
+  retryCount: number;
 }
 
 /**
  * Top-level error boundary that wraps the entire app.
- * Ensures users never see a blank white page - always shows a recovery UI.
+ * Silently retries on chunk/module loading failures.
+ * Never shows technical errors to users.
  */
 class AppErrorBoundary extends React.Component<
   { children: React.ReactNode },
   AppErrorBoundaryState
 > {
-  state: AppErrorBoundaryState = { hasError: false };
+  state: AppErrorBoundaryState = { hasError: false, retryCount: 0 };
 
-  static getDerivedStateFromError(error: unknown): AppErrorBoundaryState {
+  static getDerivedStateFromError(error: unknown): Partial<AppErrorBoundaryState> {
     const msg = error instanceof Error ? error.message : "Unknown error";
     return { hasError: true, errorMessage: msg };
   }
@@ -24,6 +26,20 @@ class AppErrorBoundary extends React.Component<
   componentDidCatch(error: unknown, info: React.ErrorInfo) {
     // eslint-disable-next-line no-console
     console.error("AppErrorBoundary caught error:", error, info);
+
+    const msg = error instanceof Error ? error.message : "";
+    const isChunkError =
+      msg.includes("module") ||
+      msg.includes("import") ||
+      msg.includes("chunk") ||
+      msg.includes("Loading") ||
+      msg.includes("Failed to fetch");
+
+    // Auto-retry once for chunk/module loading failures
+    if (isChunkError && this.state.retryCount < 1) {
+      this.setState((prev) => ({ retryCount: prev.retryCount + 1 }));
+      setTimeout(() => window.location.reload(), 2000);
+    }
   }
 
   private handleReload = () => {
@@ -61,34 +77,27 @@ class AppErrorBoundary extends React.Component<
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1rem" }}>
-              <AlertTriangle size={24} color="#C8A766" />
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "12px",
+                  background: "linear-gradient(135deg, #C8A766, #E8DCC8)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <RefreshCcw size={20} color="#1a1a1a" />
+              </div>
               <h1 style={{ fontSize: "1.25rem", fontWeight: 600, margin: 0, color: "#1a1a1a" }}>
                 We're getting things ready
               </h1>
             </div>
 
-            <p style={{ color: "#555", fontSize: "0.875rem", marginBottom: "1rem" }}>
-              The page is taking a moment to load. Please try refreshing or return to the homepage.
+            <p style={{ color: "#555", fontSize: "0.875rem", marginBottom: "1.5rem", lineHeight: 1.6 }}>
+              The page is taking a moment to load. Please check your internet connection and try refreshing, or return to the homepage.
             </p>
-
-            {this.state.errorMessage && (
-              <pre
-                style={{
-                  fontSize: "0.75rem",
-                  background: "rgba(200,167,102,0.1)",
-                  padding: "0.75rem",
-                  borderRadius: "8px",
-                  border: "1px solid rgba(200,167,102,0.3)",
-                  color: "#666",
-                  overflow: "auto",
-                  marginBottom: "1.5rem",
-                  whiteSpace: "pre-wrap",
-                  wordBreak: "break-word",
-                }}
-              >
-                {this.state.errorMessage}
-              </pre>
-            )}
 
             <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
               <button
