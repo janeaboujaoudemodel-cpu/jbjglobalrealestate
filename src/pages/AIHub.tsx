@@ -53,6 +53,7 @@ import {
   UserCheck
 } from "lucide-react";
 
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } }
@@ -283,6 +284,79 @@ const productivityTools = [
     description: "Generate professional company stamps — bilingual, multiple shapes, full export pack.",
     icon: Award,
     link: "/toolkit/stamp-generator",
+    category: "productivity" as ToolCategory,
+  },
+  // ── Corporate Suite Tools ──────────────────────────────────────────────────
+  {
+    id: "business-card",
+    title: "JBJ Business Card Designer",
+    description: "Design stunning business cards with AI extraction and 6 premium templates.",
+    icon: CreditCard,
+    link: "/toolkit/corporate-suite/business-card",
+    category: "productivity" as ToolCategory,
+  },
+  {
+    id: "cv-resume",
+    title: "JBJ CV / Resume Builder",
+    description: "Build a professional CV with AI-generated summary, 12 templates and PDF export.",
+    icon: User,
+    link: "/toolkit/corporate-suite/cv-resume",
+    category: "productivity" as ToolCategory,
+  },
+  {
+    id: "cover-letter",
+    title: "JBJ Cover Letter Generator",
+    description: "Generate tailored cover letters with Gemini AI. 3 layouts, export as PDF.",
+    icon: FileText,
+    link: "/toolkit/corporate-suite/cover-letter",
+    category: "productivity" as ToolCategory,
+  },
+  {
+    id: "logo-creator",
+    title: "JBJ AI Logo Creator",
+    description: "Generate professional logos with AI. Choose style, industry and colors. Export PNG & SVG.",
+    icon: Palette,
+    link: "/toolkit/corporate-suite/logo-creator",
+    category: "design" as ToolCategory,
+  },
+  {
+    id: "company-profile",
+    title: "JBJ Company Profile Builder",
+    description: "Build a multi-page company profile PDF with AI-expanded content and 3 premium templates.",
+    icon: Briefcase,
+    link: "/toolkit/corporate-suite/company-profile",
+    category: "productivity" as ToolCategory,
+  },
+  {
+    id: "presentation-tool",
+    title: "JBJ Presentation Builder",
+    description: "Build professional slide decks with Canva-style templates and AI-generated content.",
+    icon: Layers,
+    link: "/presentations",
+    category: "productivity" as ToolCategory,
+  },
+  {
+    id: "landing-page-builder",
+    title: "JBJ Landing Page Builder",
+    description: "Create a one-page business site with custom branding and HTML export.",
+    icon: Globe,
+    link: "/toolkit/corporate-suite/landing-page",
+    category: "design" as ToolCategory,
+  },
+  {
+    id: "spreadsheet-tool",
+    title: "JBJ Spreadsheet",
+    description: "Create and edit spreadsheets with formula support and Excel/CSV export.",
+    icon: FileText,
+    link: "/spreadsheet",
+    category: "productivity" as ToolCategory,
+  },
+  {
+    id: "documents-tool",
+    title: "JBJ Documents Editor",
+    description: "Rich text document editor with version history and export capabilities.",
+    icon: FolderOpen,
+    link: "/documents",
     category: "productivity" as ToolCategory,
   },
 ];
