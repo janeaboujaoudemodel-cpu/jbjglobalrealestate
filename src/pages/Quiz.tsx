@@ -246,6 +246,15 @@ const Quiz = () => {
       const saleStatusLower = (project.sale_status || "").toLowerCase();
       if (saleStatusLower.includes("sold") || saleStatusLower.includes("out_of_stock")) return false;
 
+      // Exclude projects with expired handover dates (year < 2026)
+      if (project.handover_date) {
+        const hLower = project.handover_date.toLowerCase();
+        if (!hLower.includes("ready")) {
+          const yearMatch = project.handover_date.match(/\b(20\d{2})\b/);
+          if (yearMatch && parseInt(yearMatch[1]) < 2026) return false;
+        }
+      }
+
       // Require cover image (use only cover_image_url — project_images join is not always loaded)
       if (!project.cover_image_url) return false;
 

@@ -1,4 +1,4 @@
-import { FileText, Languages, Video, Wand2, Sparkles } from "lucide-react";
+import { FileText, Languages, Video, Wand2, Sparkles, CreditCard, Palette, Presentation, UserRound, Mail, Building2 } from "lucide-react";
 import BusinessSuiteToolCard from "@/components/business-suite/BusinessSuiteToolCard";
 
 const tools = [
@@ -44,6 +44,69 @@ const tools = [
   },
 ];
 
+const creativeTools = [
+  {
+    icon: Presentation,
+    title: "Presentation Editor",
+    description: "Create stunning presentations with professional themes and dynamic slide layouts.",
+    href: "/presentation",
+    colorClass: "text-blue-700",
+    borderColorClass: "border-blue-500/40",
+    gradientFrom: "from-blue-600",
+    gradientTo: "to-indigo-600",
+  },
+  {
+    icon: CreditCard,
+    title: "Business Card Designer",
+    description: "Design professional business cards with multiple shapes, templates, and digital export.",
+    href: "/toolkit/corporate-suite/business-card",
+    colorClass: "text-emerald-700",
+    borderColorClass: "border-emerald-500/40",
+    gradientFrom: "from-emerald-600",
+    gradientTo: "to-teal-600",
+  },
+  {
+    icon: Palette,
+    title: "Logo Maker",
+    description: "Create unique logos with AI-powered design suggestions and customizable templates.",
+    href: "/toolkit/corporate-suite/logo",
+    colorClass: "text-violet-700",
+    borderColorClass: "border-violet-500/40",
+    gradientFrom: "from-violet-600",
+    gradientTo: "to-purple-600",
+  },
+  {
+    icon: UserRound,
+    title: "CV / Resume Builder",
+    description: "Build professional CVs and resumes with multiple templates and accent color options.",
+    href: "/toolkit/corporate-suite/cv-builder",
+    colorClass: "text-cyan-700",
+    borderColorClass: "border-cyan-500/40",
+    gradientFrom: "from-cyan-600",
+    gradientTo: "to-sky-600",
+  },
+  {
+    icon: Mail,
+    title: "Cover Letter Generator",
+    description: "Generate tailored cover letters that match your resume and target role.",
+    href: "/toolkit/corporate-suite/cover-letter",
+    colorClass: "text-orange-700",
+    borderColorClass: "border-orange-500/40",
+    gradientFrom: "from-orange-600",
+    gradientTo: "to-amber-600",
+  },
+  {
+    icon: Building2,
+    title: "Company Profile",
+    description: "Create comprehensive company profiles with branding, services, and team sections.",
+    href: "/toolkit/corporate-suite/company-profile",
+    colorClass: "text-teal-700",
+    borderColorClass: "border-teal-500/40",
+    gradientFrom: "from-teal-600",
+    gradientTo: "to-emerald-600",
+  },
+];
+
 const CreativeSuite = () => {
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #EDE0C8 40%, #DDD0B8 100%)' }}>
@@ -70,7 +133,7 @@ const CreativeSuite = () => {
           <div className="flex items-center justify-center gap-6 text-sm text-zinc-500">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-pink-400 rounded-full" />
-              4 Tools Included
+              10 Tools Included
             </span>
             <span className="text-zinc-300">|</span>
             <span className="flex items-center gap-2">
@@ -82,14 +145,28 @@ const CreativeSuite = () => {
       </div>
       
       {/* Tools Grid */}
-      <div className="max-w-5xl mx-auto px-4 pb-20">
+      <div className="max-w-5xl mx-auto px-4 pb-10">
         <div className="flex items-center gap-4 mb-8">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-          <span className="text-xs font-bold text-zinc-700 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-gold/40 bg-white/50">All Tools</span>
+          <span className="text-xs font-bold text-zinc-700 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-gold/40 bg-white/50">AI Tools</span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
           {tools.map((tool) => (
+            <BusinessSuiteToolCard key={tool.href} {...tool} />
+          ))}
+        </div>
+      </div>
+
+      {/* Creative Suites Grid */}
+      <div className="max-w-5xl mx-auto px-4 pb-20">
+        <div className="flex items-center gap-4 mb-8">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+          <span className="text-xs font-bold text-zinc-700 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-gold/40 bg-white/50">Creative Suites</span>
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {creativeTools.map((tool) => (
             <BusinessSuiteToolCard key={tool.href} {...tool} />
           ))}
         </div>

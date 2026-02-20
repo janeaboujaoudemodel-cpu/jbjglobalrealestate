@@ -29,6 +29,15 @@ export default function RecommendedProjects({
       if (p.id === currentProjectId) return false;
       const status = ((p as any).sale_status || "").toLowerCase();
       if (status.includes("sold")) return false;
+      // Exclude projects with expired handover dates (year < 2026)
+      const hd = p.handover_date;
+      if (hd) {
+        const hLower = hd.toLowerCase();
+        if (!hLower.includes("ready")) {
+          const yearMatch = hd.match(/\b(20\d{2})\b/);
+          if (yearMatch && parseInt(yearMatch[1]) < 2026) return false;
+        }
+      }
       return true;
     });
     const scored = otherProjects.map((p) => {
