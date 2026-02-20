@@ -633,42 +633,33 @@ const HeroSearchBar = () => {
           </PopoverContent>
         </Popover>
 
-        {/* Area Unit Dropdown - Opens upward */}
-        <Popover>
-          <PopoverTrigger asChild>
-            <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all text-sm">
-              <Ruler className="w-3.5 h-3.5 text-gold" />
-              <span className="font-medium">{areaUnit}</span>
-              <ChevronDown className="w-3 h-3 text-white/60" />
-            </button>
-          </PopoverTrigger>
-          <PopoverContent 
-            className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
-            side="top"
-            align="start"
-            sideOffset={4}
-            avoidCollisions={false}
+        {/* Area Unit — Split toggle button (no dropdown) */}
+        <div className="flex items-center rounded-lg overflow-hidden border border-white/20 backdrop-blur-sm text-sm shadow-lg">
+          <button
+            onClick={() => { setAreaUnit('sqft'); setSizeRange('any'); }}
+            className={cn(
+              "flex items-center gap-1.5 px-3 py-1.5 transition-all font-medium",
+              areaUnit === 'sqft'
+                ? "bg-gold text-black font-bold"
+                : "bg-white/10 text-white hover:bg-white/20"
+            )}
           >
-            <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Size Unit</div>
-            {(['sqft', 'sqm'] as const).map((u) => (
-              <button
-                key={u}
-                onClick={() => {
-                  setAreaUnit(u);
-                  setSizeRange('any');
-                }}
-                className={cn(
-                  "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors",
-                  areaUnit === u 
-                    ? "bg-gold/20 text-black font-semibold border border-gold/40" 
-                    : "text-black hover:bg-white/50"
-                )}
-              >
-                {u === 'sqft' ? 'Square Feet (sqft)' : 'Square Meters (sqm)'}
-              </button>
-            ))}
-          </PopoverContent>
-        </Popover>
+            <Ruler className="w-3.5 h-3.5" />
+            sqft
+          </button>
+          <div className="w-px h-5 bg-white/20" />
+          <button
+            onClick={() => { setAreaUnit('sqm'); setSizeRange('any'); }}
+            className={cn(
+              "flex items-center gap-1.5 px-3 py-1.5 transition-all font-medium",
+              areaUnit === 'sqm'
+                ? "bg-gold text-black font-bold"
+                : "bg-white/10 text-white hover:bg-white/20"
+            )}
+          >
+            sqm
+          </button>
+        </div>
       </div>
 
       {/* Main Search Bar - Responsive: Stack on mobile, single line on desktop */}
@@ -678,13 +669,13 @@ const HeroSearchBar = () => {
           {/* Location Search Input */}
           <div className="flex items-center flex-1 px-4">
             <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.5))' }} />
-            <input
+          <input
               type="text"
-              placeholder="Area, project or community"
+              placeholder="Area, project or community..."
               value={locationSearch}
               onChange={(e) => setLocationSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/50 px-3 text-sm font-medium min-w-0 w-full"
+              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/60 px-3 text-sm font-medium min-w-[140px] w-full"
             />
           </div>
           {/* Premium Gradient Divider */}
@@ -1044,22 +1035,31 @@ const HeroSearchBar = () => {
                   </div>
                 </div>
 
-                {/* Row 4: Developer */}
+                {/* Row 4: Developer — with logos */}
                 <div>
                   <label className="text-sm font-semibold text-black/80 mb-2 block">Developer</label>
-                  <Select value={developerId} onValueChange={setDeveloperId}>
-                    <SelectTrigger className="h-11 bg-white border-gold/30">
-                      <SelectValue placeholder="All Developers" />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-60">
-                      <SelectItem value="all">All Developers</SelectItem>
-                      {allDevelopers.map((dev) => (
-                        <SelectItem key={dev.id} value={dev.id}>
-                          {dev.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="max-h-48 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-white">
+                    <button
+                      onClick={() => setDeveloperId('all')}
+                      className={cn("w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors", developerId === 'all' ? "bg-gold/20 font-semibold text-black" : "text-black hover:bg-gold/10")}
+                    >
+                      All Developers
+                    </button>
+                    {(developers || []).sort((a: any, b: any) => (a.rank ?? 999) - (b.rank ?? 999)).map((dev: any) => (
+                      <button
+                        key={dev.id}
+                        onClick={() => setDeveloperId(dev.id)}
+                        className={cn("w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors", developerId === dev.id ? "bg-gold/20 font-semibold text-black" : "text-black hover:bg-gold/10")}
+                      >
+                        {dev.logo_url ? (
+                          <img src={dev.logo_url} alt="" className="w-5 h-5 object-contain rounded-sm bg-white flex-shrink-0" />
+                        ) : (
+                          <span className="w-5 h-5 rounded-sm bg-gold/20 flex items-center justify-center flex-shrink-0 text-[9px] font-bold text-gold">{dev.name?.charAt(0)}</span>
+                        )}
+                        <span className="truncate">{dev.name}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Row 5: Community / Area */}
@@ -1080,20 +1080,20 @@ const HeroSearchBar = () => {
                   </Select>
                 </div>
 
-                {/* AI Home Finder Link - Enhanced 3D visibility */}
+                {/* AI Home Finder Link - Strong purple visibility */}
                 <Link
                   to="/ai-hub"
-                  className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-purple-500/25 to-purple-600/15 border-2 border-purple-400/50 hover:border-purple-400 transition-all group shadow-[0_4px_20px_rgba(147,51,234,0.25)] hover:shadow-[0_6px_30px_rgba(147,51,234,0.4)] hover:-translate-y-0.5"
+                  className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-purple-700/60 to-purple-900/70 border-2 border-purple-500/80 hover:border-purple-400 transition-all group shadow-[0_4px_24px_rgba(109,40,217,0.5)] hover:shadow-[0_6px_36px_rgba(109,40,217,0.7)] hover:-translate-y-0.5"
                   onClick={() => setIsFiltersOpen(false)}
                 >
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-purple-500/30 to-purple-600/20 border border-purple-400/40 flex items-center justify-center shadow-[0_0_15px_rgba(147,51,234,0.3)] group-hover:shadow-[0_0_25px_rgba(147,51,234,0.5)] transition-all">
-                    <Sparkles className="w-5 h-5 text-purple-400 group-hover:text-purple-300 transition-colors" />
+                  <div className="w-11 h-11 rounded-full bg-purple-600 border-2 border-purple-400 flex items-center justify-center shadow-[0_0_20px_rgba(147,51,234,0.6)] group-hover:shadow-[0_0_30px_rgba(147,51,234,0.9)] transition-all">
+                    <Sparkles className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-black font-bold text-sm">Not sure what you're looking for?</p>
-                    <p className="text-black/70 text-xs">Try our AI Home Matchmaker for personalized recommendations</p>
+                    <p className="text-white font-bold text-sm">Not sure what you're looking for?</p>
+                    <p className="text-purple-200 text-xs">Try our AI Home Matchmaker for personalized recommendations</p>
                   </div>
-                  <ChevronDown className="w-5 h-5 text-purple-400 -rotate-90 group-hover:translate-x-1 transition-transform" />
+                  <ChevronDown className="w-5 h-5 text-purple-300 -rotate-90 group-hover:translate-x-1 transition-transform" />
                 </Link>
 
                 {/* Save & Load Filters */}
