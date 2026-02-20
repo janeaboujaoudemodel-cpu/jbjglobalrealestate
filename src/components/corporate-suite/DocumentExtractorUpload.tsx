@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  extractionType: "business_card" | "cv" | "cover_letter";
+  extractionType: "business_card" | "cv" | "cover_letter" | "company_profile";
   onExtracted: (data: Record<string, unknown>) => void;
   label?: string;
   hint?: string;

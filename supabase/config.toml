@@ -325,4 +325,6 @@ verify_jwt = false
 [functions.ai-card-design-generator]
 verify_jwt = false
 
+[functions.company-profile-ai]
+verify_jwt = false
 
