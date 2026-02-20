@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+// sessionStorage helpers for UI state persistence
+function ssGet<T>(key: string, fallback: T): T {
+  try { const v = sessionStorage.getItem(key); return v !== null ? JSON.parse(v) : fallback; } catch { return fallback; }
+}
+function ssSave(key: string, value: unknown) {
+  try { sessionStorage.setItem(key, JSON.stringify(value)); } catch {}
+}
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -73,6 +80,8 @@ export default function StampGeneratorPage() {
   const location = useLocation();
 
   const [project, setProject] = useState<any>(null);
+  const ssKey = (k: string) => `stamp-gen-${projectId}-${k}`;
+
   const [concepts, setConcepts] = useState<StampDesignConcept[]>([]);
   const [favoriteConcepts, setFavoriteConcepts] = useState<StampDesignConcept[]>([]);
   const [generating, setGenerating] = useState(false);
@@ -80,18 +89,33 @@ export default function StampGeneratorPage() {
   const [savedDesignId, setSavedDesignId] = useState<string | null>(null);
   const [blocked, setBlocked] = useState(false);
 
-  // Three-color system
-  const [primaryColor, setPrimaryColor] = useState('#B8860B');
-  const [secondaryColor, setSecondaryColor] = useState<string | undefined>(undefined);
-  const [accentColor, setAccentColor] = useState<string | undefined>(undefined);
+  // Three-color system — persisted
+  const [primaryColor, setPrimaryColorRaw] = useState(() => ssGet(ssKey('primaryColor'), '#B8860B'));
+  const [secondaryColor, setSecondaryColorRaw] = useState<string | undefined>(() => ssGet(ssKey('secondaryColor'), undefined));
+  const [accentColor, setAccentColorRaw] = useState<string | undefined>(() => ssGet(ssKey('accentColor'), undefined));
   const [activeStop, setActiveStop] = useState<ColorStop>('primary');
 
-  // Font family
-  const [fontFamily, setFontFamily] = useState<string>(STAMP_FONTS[0].value);
-  // Typography controls
-  const [fontBold, setFontBold] = useState(false);
-  const [fontItalic, setFontItalic] = useState(false);
-  const [manualFontSize, setManualFontSize] = useState<number | null>(null);
+  const setPrimaryColor = (v: string) => { setPrimaryColorRaw(v); ssSave(ssKey('primaryColor'), v); };
+  const setSecondaryColor = (v: string | undefined) => { setSecondaryColorRaw(v); ssSave(ssKey('secondaryColor'), v ?? null); };
+  const setAccentColor = (v: string | undefined) => { setAccentColorRaw(v); ssSave(ssKey('accentColor'), v ?? null); };
+
+  // Font family — persisted
+  const [fontFamily, setFontFamilyRaw] = useState<string>(() => ssGet(ssKey('fontFamily'), STAMP_FONTS[0].value));
+  const setFontFamily = (v: string) => { setFontFamilyRaw(v); ssSave(ssKey('fontFamily'), v); };
+
+  // Typography controls — persisted
+  const [fontBold, setFontBoldRaw] = useState(() => ssGet(ssKey('fontBold'), false));
+  const [fontItalic, setFontItalicRaw] = useState(() => ssGet(ssKey('fontItalic'), false));
+  const [manualFontSize, setManualFontSizeRaw] = useState<number | null>(() => ssGet(ssKey('fontSize'), null));
+  const setFontBold = (v: boolean | ((p: boolean) => boolean)) => {
+    setFontBoldRaw(prev => { const next = typeof v === 'function' ? v(prev) : v; ssSave(ssKey('fontBold'), next); return next; });
+  };
+  const setFontItalic = (v: boolean | ((p: boolean) => boolean)) => {
+    setFontItalicRaw(prev => { const next = typeof v === 'function' ? v(prev) : v; ssSave(ssKey('fontItalic'), next); return next; });
+  };
+  const setManualFontSize = (v: number | null | ((p: number | null) => number | null)) => {
+    setManualFontSizeRaw(prev => { const next = typeof v === 'function' ? v(prev) : v; ssSave(ssKey('fontSize'), next); return next; });
+  };
 
   // Left panel tab
   const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text' | 'centerart'>('color');
@@ -463,11 +487,12 @@ export default function StampGeneratorPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-6">
-        <div className="flex gap-6">
+      {/* ── 3-Column Studio Layout ─────────────────────────────────────── */}
+      <div className="max-w-[1600px] mx-auto px-4 pt-6 pb-8">
+        <div className="flex gap-4 items-start">
 
-          {/* ── Left Panel ─────────────────────────────────────────────── */}
-          <div className="hidden lg:flex flex-col gap-4 w-60 flex-shrink-0 sticky top-[calc(theme(spacing.32)+56px)] self-start max-h-[calc(100vh-200px)] overflow-y-auto">
+          {/* ── Left Panel: Style Controls ────────────────────────────── */}
+          <div className="hidden lg:flex flex-col gap-3 w-56 flex-shrink-0 sticky top-[calc(theme(spacing.32)+56px)] self-start max-h-[calc(100vh-200px)] overflow-y-auto">
             {/* Tab switcher */}
             <div className="flex bg-[hsl(var(--muted))] rounded-xl p-1 gap-1 flex-wrap">
               <button onClick={() => setLeftTab('color')}
@@ -516,7 +541,6 @@ export default function StampGeneratorPage() {
                   {/* Standard quick-picks row */}
                   <div className="pt-2 border-t border-[hsl(var(--border))]">
                     <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Standard Colors</p>
-                    {/* Gold versions */}
                     <div className="space-y-1.5">
                       <p className="text-[9px] text-[hsl(var(--muted-foreground))] font-medium">Gold</p>
                       <div className="flex gap-1.5">
@@ -543,42 +567,39 @@ export default function StampGeneratorPage() {
                         ))}
                       </div>
                     </div>
-                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-2">Active: {stopDefs.find(s => s.key === activeStop)?.label}</p>
-                  </div>
 
-                  {/* Palette Presets — apply all 3 stops at once */}
-                  <div className="pt-2 border-t border-[hsl(var(--border))]">
-                    <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Palette Presets</p>
-                    <div className="space-y-1.5">
-                      {PALETTE_PRESETS.map(p => (
-                        <button
-                          key={p.label}
-                          onClick={() => { setPrimaryColor(p.primary); setSecondaryColor(p.secondary); setAccentColor(p.accent); }}
-                          className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] hover:bg-[hsl(var(--gold)/0.03)] transition-all"
-                        >
-                          <div className="flex gap-0.5 flex-shrink-0">
-                            <div className="w-3.5 h-3.5 rounded-full border border-white/60 shadow-sm" style={{ backgroundColor: p.primary }}/>
-                            <div className="w-3.5 h-3.5 rounded-full border border-white/60 shadow-sm" style={{ backgroundColor: p.secondary }}/>
-                            <div className="w-3.5 h-3.5 rounded-full border border-white/60 shadow-sm" style={{ backgroundColor: p.accent }}/>
-                          </div>
-                          <span className="text-[10px] font-medium text-[hsl(var(--foreground))]">{p.label}</span>
-                        </button>
-                      ))}
+                    <div className="pt-2 border-t border-[hsl(var(--border))] mt-2">
+                      <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Palette Presets</p>
+                      <div className="space-y-1.5">
+                        {PALETTE_PRESETS.map(p => (
+                          <button
+                            key={p.label}
+                            onClick={() => { setPrimaryColor(p.primary); setSecondaryColor(p.secondary); setAccentColor(p.accent); }}
+                            className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] hover:bg-[hsl(var(--gold)/0.03)] transition-all"
+                          >
+                            <div className="flex gap-0.5 flex-shrink-0">
+                              <div className="w-3.5 h-3.5 rounded-full border border-white/60 shadow-sm" style={{ backgroundColor: p.primary }}/>
+                              <div className="w-3.5 h-3.5 rounded-full border border-white/60 shadow-sm" style={{ backgroundColor: p.secondary }}/>
+                              <div className="w-3.5 h-3.5 rounded-full border border-white/60 shadow-sm" style={{ backgroundColor: p.accent }}/>
+                            </div>
+                            <span className="text-[10px] font-medium text-[hsl(var(--foreground))]">{p.label}</span>
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Clear buttons */}
-                  <div className="flex gap-1.5 flex-wrap">
-                    {secondaryColor && (
-                      <button onClick={() => setSecondaryColor(undefined)} className="text-[10px] px-2 py-1 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)] transition-all">
-                        Clear Secondary
-                      </button>
-                    )}
-                    {accentColor && (
-                      <button onClick={() => setAccentColor(undefined)} className="text-[10px] px-2 py-1 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)] transition-all">
-                        Clear Accent
-                      </button>
-                    )}
+                    <div className="flex gap-1.5 flex-wrap mt-2">
+                      {secondaryColor && (
+                        <button onClick={() => setSecondaryColor(undefined)} className="text-[10px] px-2 py-1 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)] transition-all">
+                          Clear Secondary
+                        </button>
+                      )}
+                      {accentColor && (
+                        <button onClick={() => setAccentColor(undefined)} className="text-[10px] px-2 py-1 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)] transition-all">
+                          Clear Accent
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </>
               )}
@@ -587,74 +608,37 @@ export default function StampGeneratorPage() {
               {leftTab === 'fonts' && (
                 <div className="space-y-4">
                   <p className="text-xs font-semibold text-[hsl(var(--foreground))]">Typography</p>
-
-                  {/* Bold / Italic toggles */}
                   <div>
                     <p className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Style</p>
                     <div className="flex gap-2">
-                      <button
-                        onClick={() => setFontBold(v => !v)}
-                        className={`flex-1 py-2 rounded-xl border-2 text-sm font-bold transition-all ${fontBold ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--foreground))]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'}`}
-                        title="Bold text"
-                      >
-                        B
-                      </button>
-                      <button
-                        onClick={() => setFontItalic(v => !v)}
-                        className={`flex-1 py-2 rounded-xl border-2 text-sm italic font-medium transition-all ${fontItalic ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--foreground))]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'}`}
-                        title="Italic text"
-                      >
-                        I
-                      </button>
+                      <button onClick={() => setFontBold(v => !v)}
+                        className={`flex-1 py-2 rounded-xl border-2 text-sm font-bold transition-all ${fontBold ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--foreground))]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'}`}>B</button>
+                      <button onClick={() => setFontItalic(v => !v)}
+                        className={`flex-1 py-2 rounded-xl border-2 text-sm italic font-medium transition-all ${fontItalic ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--foreground))]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'}`}>I</button>
                     </div>
                   </div>
-
-                  {/* Font size */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <p className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Font Size</p>
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          onClick={() => setManualFontSize(null)}
-                          className={`text-[9px] px-1.5 py-0.5 rounded border transition-all ${manualFontSize === null ? 'border-[hsl(var(--gold))] text-[hsl(var(--gold-dark))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'}`}
-                        >
-                          Auto
-                        </button>
-                        {manualFontSize !== null && (
-                          <span className="text-[10px] font-bold text-[hsl(var(--foreground))]">{manualFontSize}pt</span>
-                        )}
-                      </div>
+                      <button onClick={() => setManualFontSize(null)}
+                        className={`text-[9px] px-1.5 py-0.5 rounded border transition-all ${manualFontSize === null ? 'border-[hsl(var(--gold))] text-[hsl(var(--gold-dark))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'}`}>Auto</button>
                     </div>
                     <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setManualFontSize(v => Math.max(6, (v ?? 10) - 1))}
-                        className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--foreground))] font-bold text-sm flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-all"
-                      >−</button>
-                      <input
-                        type="range" min={6} max={24} step={0.5}
-                        value={manualFontSize ?? 10}
-                        onChange={e => setManualFontSize(parseFloat(e.target.value))}
-                        className="flex-1 accent-[hsl(var(--gold))]"
-                      />
-                      <button
-                        onClick={() => setManualFontSize(v => Math.min(24, (v ?? 10) + 1))}
-                        className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--foreground))] font-bold text-sm flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-all"
-                      >+</button>
+                      <button onClick={() => setManualFontSize(v => Math.max(6, (v ?? 10) - 1))} className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--foreground))] font-bold text-sm flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-all">−</button>
+                      <input type="range" min={6} max={24} step={0.5} value={manualFontSize ?? 10}
+                        onChange={e => setManualFontSize(parseFloat(e.target.value))} className="flex-1 accent-[hsl(var(--gold))]"/>
+                      <button onClick={() => setManualFontSize(v => Math.min(24, (v ?? 10) + 1))} className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--foreground))] font-bold text-sm flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-all">+</button>
                     </div>
-                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1.5">Range: 6–24 pt · Auto = fit to stamp</p>
+                    {manualFontSize !== null && <p className="text-[10px] font-bold text-[hsl(var(--foreground))] mt-1">{manualFontSize}pt</p>}
                   </div>
-
                   <div className="border-t border-[hsl(var(--border))] pt-3">
                     <p className="text-[10px] text-[hsl(var(--muted-foreground))] mb-2">Font Family</p>
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       {STAMP_FONTS.map(f => (
                         <button key={f.value} onClick={() => setFontFamily(f.value)}
-                          className={`w-full text-left p-3 rounded-xl border-2 transition-all ${fontFamily === f.value ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'}`}>
+                          className={`w-full text-left p-2.5 rounded-xl border-2 transition-all ${fontFamily === f.value ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'}`}>
                           <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-xs font-medium text-[hsl(var(--foreground))]">{f.label.split(' (')[0]}</p>
-                              <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{f.label.match(/\(([^)]+)\)/)?.[1] || ''}</p>
-                            </div>
+                            <p className="text-xs font-medium text-[hsl(var(--foreground))]">{f.label.split(' (')[0]}</p>
                             <span className={`text-base text-[hsl(var(--foreground))] opacity-60 ${fontBold ? 'font-bold' : 'font-medium'} ${fontItalic ? 'italic' : ''}`} style={{ fontFamily: f.value }}>Aa</span>
                           </div>
                         </button>
@@ -668,10 +652,7 @@ export default function StampGeneratorPage() {
               {leftTab === 'text' && (
                 <>
                   {selectedSvg && selectedConcept ? (
-                    <StampTextEditor
-                      svgSource={selectedSvg}
-                      onSvgChange={(newSvg) => handleSvgTextChange(selectedConcept.id, newSvg)}
-                    />
+                    <StampTextEditor svgSource={selectedSvg} onSvgChange={(newSvg) => handleSvgTextChange(selectedConcept.id, newSvg)}/>
                   ) : (
                     <div className="text-center py-6 space-y-2">
                       <Type size={24} className="text-[hsl(var(--muted-foreground))] mx-auto"/>
@@ -685,62 +666,40 @@ export default function StampGeneratorPage() {
               {leftTab === 'centerart' && (
                 <div className="space-y-4">
                   <p className="text-xs font-semibold text-[hsl(var(--foreground))]">Center Artwork</p>
-
-                  {/* Icon Style selector */}
-                  <div>
-                    <p className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Style</p>
-                    <div className="flex flex-col gap-1.5">
-                      {([
-                        { val: 'NONE',          label: 'None' },
-                        { val: 'MONOGRAM',      label: 'Monogram' },
-                        { val: 'UPLOADED_LOGO', label: 'Upload Logo' },
-                      ] as const).map(opt => (
-                        <button
-                          key={opt.val}
-                          onClick={() => setLocalIconStyle(opt.val)}
-                          className={`w-full py-2 px-3 rounded-xl border-2 text-xs text-left transition-all ${localIconStyle === opt.val ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--foreground))]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.3)]'}`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
+                  <div className="space-y-1.5">
+                    {([
+                      { val: 'MONOGRAM' as const, label: 'Gold Monogram' },
+                      { val: 'UPLOADED_LOGO' as const, label: 'Upload Logo' },
+                      { val: 'NONE' as const, label: 'No Center Art' },
+                    ]).map(opt => (
+                      <button key={opt.val} onClick={() => setLocalIconStyle(opt.val)}
+                        className={`w-full py-2 px-3 rounded-xl border-2 text-xs text-left transition-all ${localIconStyle === opt.val ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--foreground))]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.3)]'}`}>
+                        {opt.label}
+                      </button>
+                    ))}
                   </div>
-
-                  {/* Monogram text input */}
                   {localIconStyle === 'MONOGRAM' && (
                     <div>
-                      <p className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Monogram Letters (1–3)</p>
-                      <input
-                        type="text"
-                        maxLength={3}
-                        value={localMonogramText}
+                      <p className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Monogram Letters</p>
+                      <input type="text" maxLength={3} value={localMonogramText}
                         onChange={e => setLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
                         placeholder={project?.company_name?.slice(0, 2) || 'AB'}
-                        className="w-full px-3 py-2 rounded-xl border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-lg font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))] transition-all"
-                      />
-                      <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">Leave blank to auto-generate from company name</p>
+                        className="w-full px-3 py-2 rounded-xl border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-lg font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))] transition-all"/>
                     </div>
                   )}
-
-                  {/* Logo uploader */}
                   {localIconStyle === 'UPLOADED_LOGO' && (
                     <div>
-                      <p className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Upload Logo</p>
-                      <label className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.04)] transition-all">
+                      <label className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))] transition-all">
                         <Upload size={20} className="text-[hsl(var(--gold))]"/>
                         <span className="text-xs text-[hsl(var(--muted-foreground))]">{localLogoUrl ? 'Change logo' : 'Click to upload'}</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
+                        <input type="file" accept="image/*" className="hidden"
                           onChange={e => {
                             const file = e.target.files?.[0];
                             if (!file) return;
                             const reader = new FileReader();
                             reader.onload = () => setLocalLogoUrl(reader.result as string);
                             reader.readAsDataURL(file);
-                          }}
-                        />
+                          }}/>
                       </label>
                       {localLogoUrl && (
                         <div className="mt-2 flex items-center gap-2">
@@ -750,16 +709,9 @@ export default function StampGeneratorPage() {
                       )}
                     </div>
                   )}
-
-                  {/* Apply button */}
                   <button
                     onClick={() => {
-                      const updated = {
-                        ...project,
-                        icon_style: localIconStyle,
-                        monogram_text: localMonogramText || null,
-                        uploaded_logo_url: localLogoUrl || null,
-                      };
+                      const updated = { ...project, icon_style: localIconStyle, monogram_text: localMonogramText || null, uploaded_logo_url: localLogoUrl || null };
                       setProject(updated);
                       toast.info('Applying center artwork…', { duration: 1500 });
                       generateConcepts(updated);
@@ -771,20 +723,160 @@ export default function StampGeneratorPage() {
                 </div>
               )}
             </div>
+          </div>
 
-            {/* Live preview of selected */}
-            {selectedSvg && (
-              <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
-                <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Selected Preview</p>
-                <div className="flex items-center justify-center py-2">
-                  <StampSVGRenderer svgSource={selectedSvg} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} size={140}/>
+          {/* ── Center: Always-Visible Live Preview ───────────────────── */}
+          <div className="hidden lg:flex flex-col w-72 xl:w-80 flex-shrink-0 sticky top-[calc(theme(spacing.32)+56px)] self-start gap-3">
+            {/* Preview canvas */}
+            <div className="bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.25)] shadow-lg overflow-hidden">
+              {/* Header */}
+              <div className="px-4 py-2.5 bg-gradient-to-r from-[hsl(var(--pearl-1))] to-white border-b border-[hsl(var(--border))] flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]"/>
+                  <span className="text-[11px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-widest">Live Preview</span>
+                </div>
+                {selectedId && (
+                  <Badge className="text-[9px] px-1.5 py-0 bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">
+                    <Check size={8} className="mr-0.5"/> Selected
+                  </Badge>
+                )}
+              </div>
+
+              {/* Large stamp preview — always centered */}
+              <div className="flex items-center justify-center py-8 px-6 min-h-[300px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
+                {generating ? (
+                  <div className="flex flex-col items-center gap-3 text-[hsl(var(--muted-foreground))]">
+                    <Loader2 size={32} className="animate-spin text-[hsl(var(--gold))]"/>
+                    <p className="text-xs font-medium">Generating designs…</p>
+                  </div>
+                ) : (selectedSvg || allConcepts[0]?.svgSource) ? (
+                  <StampSVGRenderer
+                    svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
+                    tintColor={primaryColor}
+                    secondaryColor={secondaryColor}
+                    accentColor={accentColor}
+                    fontFamily={fontFamily}
+                    fontWeight={fontBold ? 'bold' : 'normal'}
+                    fontStyle={fontItalic ? 'italic' : 'normal'}
+                    fontSize={manualFontSize}
+                    size={240}
+                  />
+                ) : (
+                  <div className="flex flex-col items-center gap-3 text-[hsl(var(--muted-foreground))]">
+                    <Stamp size={40} className="opacity-20"/>
+                    <p className="text-xs text-center">Select a design from the concepts grid to preview it here</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Quick actions */}
+              {(selectedSvg || allConcepts[0]) && !generating && (
+                <div className="border-t border-[hsl(var(--border))] px-4 py-3 flex gap-2">
+                  <Button
+                    size="sm"
+                    className="flex-1 h-8 text-[11px] bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1"
+                    onClick={() => {
+                      const c = selectedConcept || allConcepts[0];
+                      if (c) { setSelectedId(c.id); setPreviewConcept(c); }
+                    }}
+                  >
+                    <Wand2 size={10}/> Edit & Export
+                  </Button>
+                  {selectedId && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-8 px-3 text-[11px] border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.06)] gap-1"
+                      onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}
+                    >
+                      <Download size={10}/> Export
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Trade License Auto-Fill — in center column for visibility after upload */}
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] overflow-hidden">
+              <button
+                onClick={() => setLicenseOpen(v => !v)}
+                className="w-full flex items-center justify-between px-4 py-3 hover:bg-[hsl(var(--pearl-1))] transition-colors"
+              >
+                <div className="flex items-center gap-2">
+                  <Upload size={13} className="text-[hsl(var(--gold))]"/>
+                  <span className="text-xs font-medium text-[hsl(var(--foreground))]">AI Auto-Fill from License</span>
+                  <Badge className="text-[9px] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">Fast AI</Badge>
+                </div>
+                <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${licenseOpen ? 'rotate-180' : ''}`}/>
+              </button>
+              {licenseOpen && (
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
+                  <StampLicenseUploader
+                    onExtracted={(data) => {
+                      const updatedProject = {
+                        ...project,
+                        ...(data.company_name && { company_name: data.company_name }),
+                        ...(data.arabic_company_name && { arabic_company_name: data.arabic_company_name }),
+                        ...(data.registration_number && { registration_number: data.registration_number }),
+                        ...(data.city && { city_optional: data.city }),
+                      };
+                      setProject(updatedProject);
+                      setLicenseOpen(false);
+                      toast.info('Trade license loaded — regenerating stamps…', { duration: 2500 });
+                      setTimeout(() => generateConcepts(updatedProject), 300);
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Blocked warning */}
+            {blocked && (
+              <div className="flex items-center gap-3 p-3 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive">
+                <AlertTriangle size={16}/>
+                <div>
+                  <p className="font-semibold text-xs">Generation Blocked</p>
+                  <p className="text-[10px]">Government seals cannot be generated.</p>
                 </div>
               </div>
             )}
           </div>
 
-          {/* ── Main Content ──────────────────────────────────────── */}
-          <div className="flex-1 min-w-0 space-y-5">
+          {/* ── Right: Concepts Grid ───────────────────────────────────── */}
+          <div className="flex-1 min-w-0 space-y-4">
+
+            {/* Mobile trade license section */}
+            <div className="lg:hidden bg-white rounded-2xl border border-[hsl(var(--border))] overflow-hidden">
+              <button
+                onClick={() => setLicenseOpen(v => !v)}
+                className="w-full flex items-center justify-between px-4 py-3 hover:bg-[hsl(var(--pearl-1))] transition-colors"
+              >
+                <div className="flex items-center gap-2">
+                  <Upload size={14} className="text-[hsl(var(--gold))]"/>
+                  <span className="text-sm font-medium text-[hsl(var(--foreground))]">AI Auto-Fill from Trade License</span>
+                </div>
+                <ChevronDown size={14} className={`text-[hsl(var(--muted-foreground))] transition-transform ${licenseOpen ? 'rotate-180' : ''}`}/>
+              </button>
+              {licenseOpen && (
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
+                  <StampLicenseUploader
+                    onExtracted={(data) => {
+                      const updatedProject = {
+                        ...project,
+                        ...(data.company_name && { company_name: data.company_name }),
+                        ...(data.arabic_company_name && { arabic_company_name: data.arabic_company_name }),
+                        ...(data.registration_number && { registration_number: data.registration_number }),
+                        ...(data.city && { city_optional: data.city }),
+                      };
+                      setProject(updatedProject);
+                      setLicenseOpen(false);
+                      toast.info('Trade license data loaded — regenerating stamps…', { duration: 2500 });
+                      setTimeout(() => generateConcepts(updatedProject), 300);
+                    }}
+                  />
+                </div>
+              )}
+            </div>
 
             {/* Mobile color picker */}
             <div className="lg:hidden bg-white rounded-2xl border border-[hsl(var(--border))] p-4">
@@ -809,52 +901,22 @@ export default function StampGeneratorPage() {
               </div>
             </div>
 
-            {/* AI Trade License Auto-Fill */}
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] overflow-hidden">
-              <button
-                onClick={() => setLicenseOpen(v => !v)}
-                className="w-full flex items-center justify-between px-4 py-3 hover:bg-[hsl(var(--pearl-1))] transition-colors"
-              >
-                <div className="flex items-center gap-2">
-                  <Upload size={14} className="text-[hsl(var(--gold))]"/>
-                  <span className="text-sm font-medium text-[hsl(var(--foreground))]">AI Auto-Fill from Trade License</span>
-                  <Badge className="text-[10px] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">Upload PDF or Image</Badge>
-                </div>
-                <ChevronDown size={14} className={`text-[hsl(var(--muted-foreground))] transition-transform ${licenseOpen ? 'rotate-180' : ''}`}/>
-              </button>
-              {licenseOpen && (
-                <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
-                  <StampLicenseUploader
-                    onExtracted={(data) => {
-                      const updatedProject = {
-                        ...project,
-                        ...(data.company_name && { company_name: data.company_name }),
-                        ...(data.arabic_company_name && { arabic_company_name: data.arabic_company_name }),
-                        ...(data.registration_number && { registration_number: data.registration_number }),
-                        ...(data.city && { city_optional: data.city }),
-                      };
-                      setProject(updatedProject);
-                      setLicenseOpen(false);
-                      // Auto-regenerate with the newly extracted data so generation matches the preview
-                      toast.info('Trade license data loaded — regenerating stamps…', { duration: 2500 });
-                      setTimeout(() => generateConcepts(updatedProject), 300);
-                    }}
+            {/* Mobile live preview */}
+            <div className="lg:hidden bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.25)] p-4">
+              <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-3">Live Preview</p>
+              <div className="flex items-center justify-center min-h-[200px] bg-[hsl(var(--pearl-1))] rounded-xl">
+                {generating ? (
+                  <Loader2 size={28} className="animate-spin text-[hsl(var(--gold))]"/>
+                ) : (selectedSvg || allConcepts[0]?.svgSource) ? (
+                  <StampSVGRenderer
+                    svgSource={selectedSvg || allConcepts[0]?.svgSource || ''}
+                    tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor}
+                    fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'}
+                    fontSize={manualFontSize} size={180}
                   />
-                </div>
-              )}
-            </div>
-
-            {/* Blocked warning */}
-
-            {blocked && (
-              <div className="flex items-center gap-3 p-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive">
-                <AlertTriangle size={18}/>
-                <div>
-                  <p className="font-semibold text-sm">Generation Blocked</p>
-                  <p className="text-xs">Official government or authority seals cannot be generated.</p>
-                </div>
+                ) : <Stamp size={40} className="text-[hsl(var(--muted-foreground))] opacity-20"/>}
               </div>
-            )}
+            </div>
 
             {/* Favorites */}
             {favoriteConcepts.length > 0 && (
@@ -864,7 +926,7 @@ export default function StampGeneratorPage() {
                   <h2 className="font-semibold text-[hsl(var(--foreground))] text-sm">Saved Favorites ({favoriteConcepts.length})</h2>
                   <span className="text-[10px] text-[hsl(var(--muted-foreground))]">— preserved across regenerations</span>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {favoriteConcepts.map(c => (
                     <ConceptCard key={c.id} concept={c} svgOverride={svgOverrides[c.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
@@ -877,9 +939,9 @@ export default function StampGeneratorPage() {
 
             {/* Loading */}
             {generating && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {[1,2,3,4,5,6,7,8,9,10,11].map(i => (
-                  <div key={i} className="h-72 rounded-2xl bg-[hsl(var(--muted))] animate-pulse"/>
+                  <div key={i} className="h-64 rounded-2xl bg-[hsl(var(--muted))] animate-pulse"/>
                 ))}
               </div>
             )}
@@ -888,13 +950,13 @@ export default function StampGeneratorPage() {
             {!generating && !blocked && concepts.length > 0 && (
               <>
                 <div className="flex items-center justify-between">
-                  <h2 className="font-semibold text-[hsl(var(--foreground))]">
+                  <h2 className="font-semibold text-[hsl(var(--foreground))] text-sm">
                     {concepts.length} Stamp Concepts
-                    <span className="ml-2 text-xs font-normal text-[hsl(var(--muted-foreground))]">— click to preview, then export</span>
+                    <span className="ml-2 text-xs font-normal text-[hsl(var(--muted-foreground))]">— click to select & preview</span>
                   </h2>
                   {selectedId && <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]"><Check size={10} className="mr-1"/>Design Selected</Badge>}
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {concepts.map(concept => (
                     <ConceptCard key={concept.id} concept={concept} svgOverride={svgOverrides[concept.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
@@ -918,7 +980,7 @@ export default function StampGeneratorPage() {
 
             {/* Export CTA */}
             {selectedId && !generating && (
-              <div className="bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-[hsl(var(--champagne-1))] rounded-2xl border border-[hsl(var(--gold)/0.2)] p-6 flex items-center justify-between flex-wrap gap-4">
+              <div className="bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-[hsl(var(--champagne-1))] rounded-2xl border border-[hsl(var(--gold)/0.2)] p-5 flex items-center justify-between flex-wrap gap-4">
                 <div>
                   <p className="font-semibold text-[hsl(var(--foreground))]">Design selected — ready to export!</p>
                   <p className="text-sm text-[hsl(var(--muted-foreground))] mt-0.5">Download SVG, PNG, JPG, PDF + full brand pack</p>

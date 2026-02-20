@@ -77,7 +77,7 @@ Rules:
     const effectiveMime = isPdf ? 'application/pdf' : (mimeType && mimeType.startsWith('image/') ? mimeType : 'image/jpeg');
 
     const requestBody = {
-      model: 'google/gemini-2.5-flash',
+      model: 'google/gemini-2.5-flash-lite',
       messages: [
         {
           role: 'user',
