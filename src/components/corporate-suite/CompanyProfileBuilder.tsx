@@ -4,7 +4,7 @@ import {
   Building2, Sparkles, Download, Plus, Trash2,
   LayoutGrid, Loader2, User, Phone, Mail, Globe, MapPin, ImageIcon, ChevronDown,
   Globe2, CheckCircle2, AlertTriangle, Palette, GripHorizontal, ToggleLeft, ToggleRight,
-  Layers, Users, FileText,
+  Layers, Users, FileText, ArrowLeft, ChevronRight,
 } from "lucide-react";
 import { StudioShell, type StudioSection } from "@/components/ui/StudioShell";
 import { Button } from "@/components/ui/button";

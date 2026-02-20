@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Stamp, Building2, Palette, Image, Wand2, Check, Type, Upload, X, Globe, FileText } from 'lucide-react';
+import { Stamp, Building2, Palette, Image, Wand2, Check, Type, Upload, X, Globe, FileText, ChevronLeft, ChevronRight } from 'lucide-react';
 import { StudioShell, type StudioSection } from '@/components/ui/StudioShell';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
