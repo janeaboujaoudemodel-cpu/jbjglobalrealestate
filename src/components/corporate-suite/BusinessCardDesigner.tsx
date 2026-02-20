@@ -1459,7 +1459,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                     <Sparkles size={13} className="text-[hsl(var(--gold))]" />
                     <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">AI Design Generator</span>
                     {aiDesignData && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
-                    {template === "ai-design" && aiDesignData && (
+                    {activeTemplate === "ai-design" && aiDesignData && (
                       <span className="text-[9px] bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] px-1.5 py-0.5 rounded-full font-semibold">Active</span>
                     )}
                   </div>
@@ -1567,7 +1567,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                     </Button>
                     {aiDesignData && (
                       <Button
-                        onClick={() => { setAiDesignData(null); if (template === "ai-design") setTemplate("modern"); }}
+                        onClick={() => { setAiDesignData(null); if (activeTemplate === "ai-design") setActiveTemplate("modern"); }}
                         disabled={isGeneratingDesign}
                         variant="outline"
                         className="h-9 text-xs gap-1 text-red-500 border-red-200 hover:bg-red-50"
@@ -1597,10 +1597,10 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                       />
                       <div className="bg-[hsl(var(--muted))] px-3 py-1.5 text-center">
                         <button
-                          onClick={() => setTemplate("ai-design")}
+                          onClick={() => setActiveTemplate("ai-design")}
                           className="text-[9px] font-semibold text-[hsl(var(--gold-dark))] hover:underline"
                         >
-                          {template === "ai-design" ? "✓ Applied to card" : "→ Apply to card"}
+                          {activeTemplate === "ai-design" ? "✓ Applied to card" : "→ Apply to card"}
                         </button>
                       </div>
                     </div>
@@ -1684,7 +1684,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             <div className="w-full max-w-[400px]">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={`${template}-${frontColorIdx}-${backColorIdx}-${side}-${cardShape}`}
+                  key={`${frontTemplate}-${backTemplate}-${frontColorIdx}-${backColorIdx}-${side}-${cardShape}`}
                   initial={{ opacity: 0, rotateY: side === "back" ? -15 : 15, scale: 0.96 }}
                   animate={{ opacity: 1, rotateY: 0, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.97 }}
@@ -1693,7 +1693,8 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                 >
                   <CardCanvas
                     data={data}
-                    template={template}
+                    template={frontTemplate}
+                    backTemplate={backTemplate}
                     primary={frontPrimary}
                     secondary={frontSecondary}
                     accent={frontAccent}
@@ -1723,7 +1724,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             <div className="flex items-center gap-3 text-[10px] text-[hsl(var(--muted-foreground))]">
               <span>{CARD_SHAPES.find(s => s.id === cardShape)?.label} · {CARD_SHAPES.find(s => s.id === cardShape)?.ratio}</span>
               <span>·</span>
-              <span>{TEMPLATES.find(t => t.id === template)?.label} template</span>
+              <span>F: {TEMPLATES.find(t => t.id === frontTemplate)?.label} · B: {TEMPLATES.find(t => t.id === backTemplate)?.label}</span>
               {qrEnabled && <span>· QR on both sides</span>}
               {logoUrl && <span>· Logo on both sides</span>}
             </div>
@@ -1732,42 +1733,61 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
           {/* All templates mini grid */}
           <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm">
             <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-4 block">
-              All Templates Preview
+              All Templates Preview — click to set for {side === "front" ? "Front" : "Back"} side
             </Label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {TEMPLATES.map(t => (
-                <button
-                  key={t.id}
-                  onClick={() => setTemplate(t.id)}
-                  className={`relative rounded-xl overflow-hidden border-2 transition-all duration-200 ${
-                    template === t.id
-                      ? "border-[hsl(var(--gold))] shadow-md"
-                      : "border-transparent hover:border-[hsl(var(--border))]"
-                  }`}
-                >
-                  <CardFace
-                    data={data}
-                    template={t.id}
-                    primary={frontPrimary}
-                    secondary={frontSecondary}
-                    accent={frontAccent}
-                    side="front"
-                    scale={0.45}
-                    shapeStyle={{ aspectRatio: "3.5 / 2", borderRadius: 0 }}
-                    aiDesignData={t.id === "ai-design" ? aiDesignData : null}
-                  />
-                  {template === t.id && (
-                    <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center">
-                      <Check size={9} className="text-white" />
+                <div key={t.id} className="relative group">
+                  <div
+                    className={`relative rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                      frontTemplate === t.id || backTemplate === t.id
+                        ? "border-[hsl(var(--gold))] shadow-md"
+                        : "border-transparent hover:border-[hsl(var(--border))]"
+                    }`}
+                  >
+                    <CardFace
+                      data={data}
+                      template={t.id}
+                      primary={frontPrimary}
+                      secondary={frontSecondary}
+                      accent={frontAccent}
+                      side="front"
+                      scale={0.45}
+                      shapeStyle={{ aspectRatio: "3.5 / 2", borderRadius: 0 }}
+                      aiDesignData={t.id === "ai-design" ? aiDesignData : null}
+                    />
+                    {/* F/B badges */}
+                    <div className="absolute top-1 left-1 flex gap-0.5">
+                      {frontTemplate === t.id && (
+                        <span className="text-[8px] font-bold bg-[hsl(var(--gold))] text-white px-1 rounded">F</span>
+                      )}
+                      {backTemplate === t.id && (
+                        <span className="text-[8px] font-bold bg-[hsl(var(--foreground))] text-[hsl(var(--background))] px-1 rounded">B</span>
+                      )}
                     </div>
-                  )}
-                  {t.badge && (
-                    <div className="absolute top-1 left-1 text-[10px]">{t.badge}</div>
-                  )}
-                  <p className="absolute bottom-0 left-0 right-0 text-center text-[9px] font-semibold py-1 bg-black/40 text-white">
-                    {t.label}
-                  </p>
-                </button>
+                    {t.badge && (
+                      <div className="absolute top-1 right-1 text-[10px]">{t.badge}</div>
+                    )}
+                    <p className="absolute bottom-0 left-0 right-0 text-center text-[9px] font-semibold py-1 bg-black/40 text-white">
+                      {t.label}
+                    </p>
+                    {/* Hover overlay with Set Front / Set Back */}
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5">
+                      <button
+                        onClick={() => setFrontTemplate(t.id)}
+                        className="text-[9px] font-bold bg-[hsl(var(--gold))] text-white px-2 py-1 rounded-full hover:opacity-90"
+                      >
+                        Set Front
+                      </button>
+                      <button
+                        onClick={() => setBackTemplate(t.id)}
+                        className="text-[9px] font-bold bg-white text-black px-2 py-1 rounded-full hover:opacity-90"
+                      >
+                        Set Back
+                      </button>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
