@@ -1,238 +1,190 @@
 
-# One-Tap Share & Save Contact — Business Card Designer
+# NFC / Digital Card Mode — Business Card Designer
 
-## What the User Wants
+## What This Adds
 
-A single prominent button in the Business Card Designer that, when tapped:
-1. Generates a shareable public link pointing to a hosted "digital card" page
-2. Shows a modal with the shareable link + a live QR code pointing at that link
-3. On mobile, tapping the QR code or the link loads the hosted card in the browser, where the visitor can instantly tap "Save Contact" to download a `.vcf` file to their phone's contacts
+When the user selects the **Digital** card shape, two enhancements activate:
 
-This is the standard pattern used by HiHello, Blinq, and Apple Wallet business cards.
+1. **Phone mockup preview** — the card preview in the right panel is wrapped in an SVG-drawn phone frame (bezels, notch, home indicator), so the user sees exactly how their digital card looks on a handset screen.
 
----
-
-## Architecture Overview
-
-```text
-[Business Card Designer]
-         │
-         ▼ "Share Card" button tapped
-[Generate share token + save card snapshot to DB]
-         │
-         ▼ returns short token (e.g. "abc123")
-[Share modal opens]
-  ┌──────────────────────────────────────┐
-  │  https://app.com/card/abc123        │
-  │  [QR Code image]                    │
-  │  [Copy Link]  [WhatsApp]            │
-  └──────────────────────────────────────┘
-         │
-         ▼ recipient opens link on phone
-[/card/:token  →  SharedBusinessCard page]
-  ┌──────────────────────────────────────┐
-  │  [Card preview rendered in browser] │
-  │  [💾 Save Contact button]           │
-  └──────────────────────────────────────┘
-         │
-         ▼ "Save Contact" tapped
-[Download .vcf file → phone adds contact automatically]
-```
+2. **Export as HTML** — a new "Export HTML" button (visible only when shape is Digital) generates a complete, self-contained, mobile-optimised HTML file the user can download and host on any static hosting provider (GitHub Pages, Netlify, etc.) as their personal digital card landing page.
 
 ---
 
-## Database Change — New Table: `shared_business_cards`
+## Part 1 — Phone Mockup Preview
 
-A new lightweight table stores the card snapshot under a random public token. No auth required to **read** a shared card (it's public by design), but only the authenticated owner can **create** one.
-
-```sql
-CREATE TABLE public.shared_business_cards (
-  id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  token      text UNIQUE NOT NULL DEFAULT substr(md5(random()::text), 1, 10),
-  user_id    uuid NOT NULL,
-  card_data  jsonb NOT NULL,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  expires_at timestamptz,
-  view_count integer NOT NULL DEFAULT 0
-);
-
--- RLS: anyone can read by token, only owner can insert/delete
-ALTER TABLE public.shared_business_cards ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Public read by token"
-  ON public.shared_business_cards FOR SELECT
-  USING (true);
-
-CREATE POLICY "Owner insert"
-  ON public.shared_business_cards FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "Owner delete"
-  ON public.shared_business_cards FOR DELETE
-  USING (auth.uid() = user_id);
-```
-
-The `card_data` JSONB column stores everything needed to render the card on the public page:
-- `data` (name, title, company, phone, email, website, address)
-- `frontTemplate`, `frontColorIdx`, `frontCustomColor`
-- `cardShape`, `logoUrl`, `aiDesignData`
-- `fontFamily`, `fontWeight`, `fontStyle`, `nameFontSize`
-
----
-
-## New Files
-
-### 1. `src/pages/SharedBusinessCard.tsx`
-The public-facing hosted card page. No auth required. Fetches from `shared_business_cards` by `token` URL param.
-
-**Layout:**
-- Full-screen centered on mobile, max-width 420px
-- Card rendered using the existing `CardFace` component (imported and reused)
-- Below the card: a single large gold "💾 Save Contact" button
-- The button triggers a `.vcf` download with all card fields filled (vCard 3.0)
-- A subtle "Made with JBJ Business Card Designer" footer with a link back to the designer
-
-**vCard generation** (identical pattern to `DigitalCard.tsx`):
-```typescript
-const vcf = [
-  'BEGIN:VCARD',
-  'VERSION:3.0',
-  `FN:${data.name}`,
-  `ORG:${data.company}`,
-  `TITLE:${data.title}`,
-  `TEL:${data.phone}`,
-  `EMAIL:${data.email}`,
-  `URL:${data.website}`,
-  `ADR:;;${data.address};;;;`,
-  'END:VCARD',
-].join('\n');
-```
-
-**View counter:** Each load increments `view_count` via `supabase.rpc()` or a simple `UPDATE ... WHERE token = $1`.
-
-### 2. Route addition in `src/App.tsx`
+### Where it renders
+Line ~2202–2256 in `BusinessCardDesigner.tsx` contains the card preview area:
 ```tsx
-<Route path="/card/:token" element={<SharedBusinessCard />} />
+<div className="bg-white rounded-2xl border ... p-8 ... flex flex-col items-center gap-4">
+  <div className="w-full max-w-[400px]">
+    <AnimatePresence>
+      <motion.div ...>
+        <CardCanvas ... />
+      </motion.div>
+    </AnimatePresence>
+  </div>
 ```
-This is a **public route** — no auth guard.
+
+When `cardShape === "digital"`, we replace the plain `div.max-w-[400px]` wrapper with a new `PhoneMockup` component that draws the phone frame around the `CardCanvas`.
+
+### PhoneMockup component (new, inline in the file)
+
+Pure CSS/SVG — no extra dependency. The mockup is a `div` styled to look like a modern smartphone:
+
+```
+┌──────────────────────┐
+│   ●  (notch/island)  │   ← top bar with time + camera
+│                      │
+│  ┌────────────────┐  │
+│  │                │  │
+│  │   CardCanvas   │  │
+│  │   (9:16 card)  │  │
+│  │                │  │
+│  └────────────────┘  │
+│         ▬            │   ← home indicator
+└──────────────────────┘
+```
+
+Implementation approach:
+- Outer shell: `div` with `border-[10px] border-[#1a1a1a] rounded-[36px] shadow-[0_0_0_2px_#333,0_30px_80px_rgba(0,0,0,0.5)] bg-[#1a1a1a] overflow-hidden relative`
+- Top bar (status bar): `div` with flex, padding, tiny clock + camera pill — all non-interactive chrome
+- Screen area: `div bg-black` that contains the `CardCanvas` directly
+- Home indicator: short rounded white bar at bottom
+- Volume buttons: `position:absolute` thin `div`s on the left edge
+- Power button: thin `div` on the right edge
+
+The phone frame adds ~44px top (status bar) + 20px bottom (home bar) + 12px sides of chrome padding.
+
+The max width of the phone wrapper is `260px` to keep it proportional on the right panel.
+
+### State change needed
+No new state — only condition on `cardShape === "digital"` in the render at line 2203.
 
 ---
 
-## Changes to `BusinessCardDesigner.tsx`
+## Part 2 — Export as Mobile-Optimised HTML
 
-### A. New state
-```typescript
-const [shareModalOpen, setShareModalOpen] = useState(false);
-const [shareToken, setShareToken] = useState<string | null>(null);
-const [isSharing, setIsSharing] = useState(false);
+### New `exportDigitalCardAsHtml()` function
+
+A standalone function that takes all card state as arguments and returns a complete HTML string. The HTML string is then downloaded as a `.html` file using the standard `URL.createObjectURL(blob)` pattern already used by `exportCardAsPDF()`.
+
+### HTML file contents
+
+The exported file is **fully self-contained** — no external URLs except optional contact links. It renders identically to the live preview via inline CSS with no frameworks.
+
+Structure of the generated HTML:
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="${primaryColor}" />
+  <title>${name} — Digital Card</title>
+  <style>
+    /* Reset + variables */
+    /* Body: dark gradient bg matching SharedBusinessCard */
+    /* Card: rendered via pure CSS matching the chosen template */
+    /* Action buttons: phone/email/website/address clickable rows */
+    /* Save Contact button: big gold CTA */
+    /* Phone mockup CSS for the card preview section */
+    /* PWA-ready: @media prefers-color-scheme etc. */
+  </style>
+</head>
+<body>
+  <!-- Header: name + company -->
+  <!-- Card visual: template-specific HTML/CSS (no canvas, no React) -->
+  <!-- Action links: tel:, mailto:, https:// -->
+  <!-- Save Contact button: triggers inline base64-encoded .vcf download -->
+  <!-- Footer: "Built with JBJ Business Card Designer" -->
+  <script>
+    // Inline vCard download — no external fetch needed
+    function saveContact() { /* base64 vcf blob + anchor click */ }
+  </script>
+</body>
+</html>
 ```
 
-### B. `handleShareCard()` function
-1. Check if user is signed in; if not, toast "Please sign in to share"
-2. Call `supabase.from("shared_business_cards").insert({...})` with the full card snapshot
-3. On success, set `shareToken` to the returned `token` field
-4. Open `shareModalOpen = true`
+The vCard data is **baked inline as a base64 data URI** so the "Save Contact" button works even when hosted offline or without a server-side download endpoint.
 
-The share token returned from the DB insert is the `token` column (auto-generated by the SQL default). The public URL is `${window.location.origin}/card/${token}`.
+### Template rendering in HTML
 
-```typescript
-const handleShareCard = async () => {
-  setIsSharing(true);
-  try {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { toast.error("Please sign in to share."); return; }
+Each template is converted to an equivalent CSS-only representation:
+- `modern` → `background: linear-gradient(135deg, ${primary} 0%, ...)` with white text
+- `classic` → white background + left 6px border + primary color text
+- `minimal` → `#fafafa` + centered layout + accent underline
+- `bold` → dark `#0a0a0a` + primary colored name + uppercase styling
+- `creative` → white + circle avatar + primary colored title
+- `corporate` / `ai-design` / others → clean primary color gradient fallback
 
-    const cardSnapshot = {
-      data,
-      frontTemplate, frontColorIdx, frontCustomColor,
-      cardShape, logoUrl, logoSize, aiDesignData,
-      fontFamily: cardFontFamily,
-      fontWeight: cardFontBold ? "bold" : "800",
-      fontStyle: cardFontItalic ? "italic" : "normal",
-      nameFontSize: cardFontSize,
-      frontPrimary, frontSecondary, frontAccent,
-    };
+The card section in the HTML is a fixed-aspect `div` with `aspect-ratio: 9/16` matching the Digital shape ratio.
 
-    const { data: inserted, error } = await supabase
-      .from("shared_business_cards")
-      .insert({ user_id: user.id, card_data: cardSnapshot })
-      .select("token")
-      .single();
+### Button placement
 
-    if (error) throw error;
-    setShareToken(inserted.token);
-    setShareModalOpen(true);
-  } catch (err) {
-    toast.error("Failed to generate share link. Please try again.");
-  } finally {
-    setIsSharing(false);
-  }
-};
-```
+In the sticky header, alongside the existing "Export PDF" button, a new "Export HTML" button appears **only when `cardShape === "digital"`**:
 
-### C. Share Button placement
-Added to the sticky header row, between "Save Card" and "Export PDF":
 ```tsx
-<Button
-  onClick={handleShareCard}
-  disabled={isSharing}
-  variant="outline"
-  className="gap-1.5 h-8 text-xs font-semibold border-green-200 text-green-700 hover:bg-green-50"
->
-  {isSharing ? <RefreshCw size={12} className="animate-spin" /> : <Share2 size={12} />}
-  {isSharing ? "Generating…" : "Share"}
-</Button>
+{cardShape === "digital" && (
+  <Button
+    onClick={handleExportHtml}
+    disabled={isExportingHtml}
+    variant="outline"
+    className="gap-1.5 h-8 text-xs font-semibold border-blue-200 text-blue-700 hover:bg-blue-50"
+  >
+    {isExportingHtml ? <RefreshCw size={12} className="animate-spin" /> : <Download size={12} />}
+    {isExportingHtml ? "Exporting…" : "Export HTML"}
+  </Button>
+)}
 ```
 
-Also added **inside the card preview section** (same area as the Edit Layout toggle added in the previous diff) so it's visible without scrolling on mobile.
-
-### D. Share Modal component (inline in the file)
-A `Dialog` from `@radix-ui/react-dialog` (already available as `@/components/ui/dialog`) showing:
-
-- **Title:** "Share Your Card"
-- **Share URL input** (read-only, with copy button)
-- **Live QR code** using the existing `buildQrUrl()` helper pointed at the share URL
-- Size: 180×180px, primary color, white background
-- **"Copy Link"** button → `navigator.clipboard.writeText(shareUrl)`
-- **"Share via WhatsApp"** button → `wa.me/?text=Here's my business card: ${shareUrl}`
-- **"Open in new tab"** button → preview what the recipient sees
-- Footer note: "Anyone with this link can view your card and save your contact"
+A second, more prominent "Export HTML" button also appears inside the preview panel beneath the phone mockup (same way the Share button is duplicated in the preview area).
 
 ---
 
-## Files to Create/Modify
+## Part 3 — Digital Mode NFC Tip Banner
 
-| File | Action | Details |
-|---|---|---|
-| DB migration | **Create** | `shared_business_cards` table with RLS |
-| `src/pages/SharedBusinessCard.tsx` | **Create** | Public hosted card page with vCard download |
-| `src/App.tsx` | **Edit** | Add `/card/:token` public route |
-| `src/components/corporate-suite/BusinessCardDesigner.tsx` | **Edit** | Add `handleShareCard`, share modal, Share button |
+When `cardShape === "digital"`, show a small informational banner below the phone mockup inside the preview area:
 
----
+```
+┌─────────────────────────────────────────────────────┐
+│  📱 NFC / Digital Card Mode                         │
+│  Export HTML to host as your digital card page.     │
+│  Share the URL with an NFC tag to tap-to-connect.  │
+└─────────────────────────────────────────────────────┘
+```
 
-## What Does NOT Change
-
-- All existing save/export functionality — unchanged
-- QR code system — unchanged (the share QR is a new separate QR in the modal only)
-- Card canvas, templates, colors, all other panels — unchanged
-- Auth system — unchanged (only reading a shared card is public; creating one requires auth)
-- No edge functions needed — all logic is client-side + direct DB calls
+This educates the user on the NFC use case without requiring any NFC chip integration (the app cannot write to NFC chips; that requires a native app — but we explain users can program any NFC tag with the hosted URL using any free NFC writer app).
 
 ---
 
-## Mobile "Save Contact" UX
+## Files Changed
 
-On iOS Safari: downloading a `.vcf` file triggers the native "Add Contact" sheet automatically.
-On Android Chrome: downloading a `.vcf` file opens the Contacts app to add it.
+| File | Change |
+|---|---|
+| `src/components/corporate-suite/BusinessCardDesigner.tsx` | (1) Add `PhoneMockup` component (inline). (2) Wrap `CardCanvas` in `PhoneMockup` when `cardShape === "digital"`. (3) Add `handleExportHtml` + `exportDigitalCardAsHtml()` function. (4) Add "Export HTML" button to header + preview area. (5) Add NFC tip banner when Digital shape active. |
 
-This is the standard vCard approach used across the industry — no native app, no special permissions required, works in any browser.
+No backend changes. No new dependencies. No new files. No route changes.
 
 ---
 
 ## Implementation Order
 
-1. DB migration → create `shared_business_cards` table with RLS
-2. Create `SharedBusinessCard.tsx` public page
-3. Add route in `App.tsx`
-4. Add share logic + modal + button in `BusinessCardDesigner.tsx`
+1. Add `exportDigitalCardAsHtml()` function (pure function, can be done standalone)
+2. Add `handleExportHtml` state + handler in the main component
+3. Add `PhoneMockup` component (pure CSS, no props beyond `children`)
+4. In the preview area (line ~2202): add condition `cardShape === "digital"` to swap the plain wrapper for `PhoneMockup`
+5. Add the "Export HTML" button to the sticky header (condition-guarded)
+6. Add the "Export HTML" button + NFC tip banner in the preview panel below the mockup
+7. Add `isExportingHtml` state
+
+---
+
+## What the User Experiences
+
+1. User selects "Digital" from the Card Shape grid
+2. Preview area immediately changes to show the card inside a phone frame — they see the 9:16 portrait card sitting in a realistic handset
+3. User customises the card (template, colors, typography, QR code etc.) seeing it exactly as a phone visitor would
+4. User clicks "Export HTML" — a `.html` file downloads
+5. User drags the file to Netlify, pushes to GitHub Pages, or uploads to any web host → instant digital card page at a public URL
+6. User programs that URL into an NFC sticker (using any free NFC writer app) and attaches it to their physical card — tap the card → phone opens the digital card → tap "Save Contact"
