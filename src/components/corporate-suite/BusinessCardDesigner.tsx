@@ -7,6 +7,7 @@ import {
   LayoutGrid, Check, ImageIcon, ChevronDown, QrCode, Move,
   Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
+  Save, Palette,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,7 +21,7 @@ import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
 import { supabase } from "@/integrations/supabase/client";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-type Template = "modern" | "classic" | "minimal" | "bold" | "creative" | "corporate";
+type Template = "modern" | "classic" | "minimal" | "bold" | "creative" | "corporate" | "ai-design";
 type CardShape = "horizontal" | "vertical" | "square" | "rounded-square" | "wide" | "digital" | "ticket";
 type QrPosition = "bottom-right" | "bottom-left" | "top-right" | "top-left" | "center";
 type QrContentType = "url" | "vcard" | "text" | "email" | "phone";
@@ -37,14 +38,22 @@ interface CardData {
 
 interface FieldPos { x: number; y: number; }
 
+interface AiDesignData {
+  svgPaths: string[];
+  colors: string[];
+  bgColor: string;
+  textColor: string;
+}
+
 // ─── Constants ────────────────────────────────────────────────────────────────
-const TEMPLATES: { id: Template; label: string; desc: string }[] = [
+const TEMPLATES: { id: Template; label: string; desc: string; badge?: string }[] = [
   { id: "modern",    label: "Modern",    desc: "Full-bleed gradient" },
   { id: "classic",   label: "Classic",   desc: "White + color accent" },
   { id: "minimal",   label: "Minimal",   desc: "Clean & typographic" },
   { id: "bold",      label: "Bold",      desc: "Dark, high contrast" },
   { id: "creative",  label: "Creative",  desc: "Geometric shape" },
   { id: "corporate", label: "Corporate", desc: "Formal + footer bar" },
+  { id: "ai-design", label: "AI Design", desc: "Generated patterns", badge: "✨" },
 ];
 
 const COLOR_PRESETS: { primary: string; secondary: string; label: string; accent: string }[] = [
@@ -86,6 +95,8 @@ const DEFAULT_FIELD_POSITIONS = {
   title:   { x: 10, y: 52 },
   company: { x: 10, y: 40 },
 };
+const DEFAULT_LOGO_POS = { x: 78, y: 4 };
+const SNAP_THRESHOLD = 5;
 
 // ─── QR helpers ───────────────────────────────────────────────────────────────
 function buildQrData(type: QrContentType, data: CardData, custom: string): string {
@@ -115,11 +126,11 @@ const QR_POSITION_STYLE: Record<QrPosition, React.CSSProperties> = {
 
 // ─── Card Preview Component ───────────────────────────────────────────────────
 function CardFace({
-  data, template, primary, secondary, accent, side = "front", scale = 1, shapeStyle,
+  data, template, primary, secondary, accent, side = "front", scale = 1, shapeStyle, aiDesignData,
 }: {
   data: CardData; template: Template; primary: string;
   secondary: string; accent: string; side?: "front" | "back"; scale?: number;
-  shapeStyle?: React.CSSProperties;
+  shapeStyle?: React.CSSProperties; aiDesignData?: AiDesignData | null;
 }) {
   const name    = data.name    || "Your Name";
   const title   = data.title   || "Job Title";
@@ -151,6 +162,44 @@ function CardFace({
           fontSize: 8 * scale, color: secondary, opacity: 0.3, letterSpacing: 2,
         }}>
           {data.website || ""}
+        </div>
+      </div>
+    );
+  }
+
+  // ── AI DESIGN ───────────────────────────────────────────────
+  if (template === "ai-design") {
+    const bg = aiDesignData?.bgColor || primary;
+    const tc = aiDesignData?.textColor || secondary;
+    return (
+      <div style={{ ...baseStyle, background: bg, overflow: "hidden" }}>
+        {/* AI-generated SVG shapes */}
+        {aiDesignData?.svgPaths && (
+          <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "visible" }} viewBox="0 0 350 200" preserveAspectRatio="xMidYMid slice">
+            {aiDesignData.svgPaths.map((path, i) => (
+              <path key={i} d={path} fill={aiDesignData.colors?.[i % aiDesignData.colors.length] || accent} fillOpacity="0.3" />
+            ))}
+          </svg>
+        )}
+        {!aiDesignData && (
+          <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "visible" }} viewBox="0 0 350 200" preserveAspectRatio="xMidYMid slice">
+            <circle cx="300" cy="30" r="80" fill={accent} fillOpacity="0.18" />
+            <circle cx="320" cy="180" r="50" fill={secondary} fillOpacity="0.10" />
+            <polygon points="0,0 60,0 0,60" fill={secondary} fillOpacity="0.12" />
+            <line x1="0" y1="130" x2="350" y2="100" stroke={secondary} strokeOpacity="0.08" strokeWidth="2" />
+          </svg>
+        )}
+        <div style={{ position: "relative", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: `${20 * scale}px ${24 * scale}px` }}>
+          <div>
+            <p style={{ fontSize: 9 * scale, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: tc, opacity: 0.7, margin: 0 }}>{company}</p>
+            <h2 style={{ fontSize: 18 * scale, fontWeight: 800, color: tc, margin: `${4 * scale}px 0 ${2 * scale}px` }}>{name}</h2>
+            <p style={{ fontSize: 10 * scale, color: tc, opacity: 0.8, margin: 0 }}>{title}</p>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 3 * scale }}>
+            {data.phone   && <p style={{ fontSize: 8.5 * scale, color: tc, opacity: 0.75, margin: 0 }}>☎ {data.phone}</p>}
+            {data.email   && <p style={{ fontSize: 8.5 * scale, color: tc, opacity: 0.75, margin: 0 }}>@ {data.email}</p>}
+            {data.website && <p style={{ fontSize: 8.5 * scale, color: tc, opacity: 0.75, margin: 0 }}>⬡ {data.website}</p>}
+          </div>
         </div>
       </div>
     );
@@ -289,23 +338,42 @@ function CardFace({
   );
 }
 
-// ─── Card Canvas with draggable overlays & QR ─────────────────────────────────
+// ─── Card Canvas with draggable overlays, logo, QR & alignment guides ─────────
 function CardCanvas({
-  data, template, primary, secondary, accent, side, cardShape,
+  data, template, primary, secondary, accent, backPrimary, backSecondary, backAccent,
+  side, cardShape,
   editLayout, fieldPositions, onFieldMove,
   qrEnabled, qrData, qrSize, qrColor, qrBgColor, qrPosition,
-  logoUrl, logoSize,
+  logoUrl, logoSize, logoPos, onLogoMove, aiDesignData,
 }: {
   data: CardData; template: Template; primary: string; secondary: string; accent: string;
+  backPrimary: string; backSecondary: string; backAccent: string;
   side: "front" | "back"; cardShape: CardShape; editLayout: boolean;
   fieldPositions: typeof DEFAULT_FIELD_POSITIONS;
   onFieldMove: (field: keyof typeof DEFAULT_FIELD_POSITIONS, pos: FieldPos) => void;
   qrEnabled: boolean; qrData: string; qrSize: number; qrColor: string; qrBgColor: string; qrPosition: QrPosition;
-  logoUrl: string; logoSize: number;
+  logoUrl: string; logoSize: number; logoPos: { x: number; y: number };
+  onLogoMove: (pos: { x: number; y: number }) => void;
+  aiDesignData: AiDesignData | null;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const dragging = useRef<{ field: keyof typeof DEFAULT_FIELD_POSITIONS; startX: number; startY: number; initX: number; initY: number } | null>(null);
+  const dragging = useRef<{
+    type: "field" | "logo";
+    field?: keyof typeof DEFAULT_FIELD_POSITIONS;
+    startX: number; startY: number; initX: number; initY: number;
+  } | null>(null);
+
+  const [showHGuide, setShowHGuide] = useState(false);
+  const [showVGuide, setShowVGuide] = useState(false);
+  const [qrLoaded, setQrLoaded] = useState(false);
+  const [qrError, setQrError] = useState(false);
+
   const shapeStyle = getShapeStyle(cardShape);
+
+  // Use correct colors for current side
+  const activePrimary   = side === "back" ? backPrimary   : primary;
+  const activeSecondary = side === "back" ? backSecondary : secondary;
+  const activeAccent    = side === "back" ? backAccent    : accent;
 
   const getFieldStyle = (field: keyof typeof DEFAULT_FIELD_POSITIONS): React.CSSProperties => ({
     position: "absolute",
@@ -323,28 +391,47 @@ function CardCanvas({
     transition: editLayout ? "none" : "border 0.2s",
   });
 
-  const onMouseDown = (field: keyof typeof DEFAULT_FIELD_POSITIONS) => (e: React.MouseEvent) => {
+  const startDrag = (
+    type: "field" | "logo",
+    e: React.MouseEvent,
+    field?: keyof typeof DEFAULT_FIELD_POSITIONS
+  ) => {
     if (!editLayout) return;
     e.preventDefault();
-    dragging.current = {
-      field,
-      startX: e.clientX,
-      startY: e.clientY,
-      initX: fieldPositions[field].x,
-      initY: fieldPositions[field].y,
-    };
+    e.stopPropagation();
+
+    const initX = type === "logo" ? logoPos.x : (field ? fieldPositions[field].x : 0);
+    const initY = type === "logo" ? logoPos.y : (field ? fieldPositions[field].y : 0);
+
+    dragging.current = { type, field, startX: e.clientX, startY: e.clientY, initX, initY };
+
     const onMove = (me: MouseEvent) => {
       if (!dragging.current || !containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const dx = ((me.clientX - dragging.current.startX) / rect.width) * 100;
       const dy = ((me.clientY - dragging.current.startY) / rect.height) * 100;
-      onFieldMove(dragging.current.field, {
-        x: Math.max(0, Math.min(85, dragging.current.initX + dx)),
-        y: Math.max(0, Math.min(90, dragging.current.initY + dy)),
-      });
+      let newX = Math.max(0, Math.min(88, dragging.current.initX + dx));
+      let newY = Math.max(0, Math.min(88, dragging.current.initY + dy));
+
+      // Snap to center
+      const snapX = Math.abs(newX - 50) < SNAP_THRESHOLD ? 50 : newX;
+      const snapY = Math.abs(newY - 50) < SNAP_THRESHOLD ? 50 : newY;
+      setShowHGuide(Math.abs(newY - 50) < SNAP_THRESHOLD);
+      setShowVGuide(Math.abs(newX - 50) < SNAP_THRESHOLD);
+      newX = snapX;
+      newY = snapY;
+
+      if (dragging.current.type === "logo") {
+        onLogoMove({ x: newX, y: newY });
+      } else if (dragging.current.field) {
+        onFieldMove(dragging.current.field, { x: newX, y: newY });
+      }
     };
+
     const onUp = () => {
       dragging.current = null;
+      setShowHGuide(false);
+      setShowVGuide(false);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onUp);
     };
@@ -354,86 +441,141 @@ function CardCanvas({
 
   const qrUrl = qrEnabled && qrData ? buildQrUrl(qrData, qrColor, qrBgColor, qrSize) : "";
 
-  const getTextColor = () => {
-    const isDark = template === "bold";
-    const isLight = template === "classic" || template === "minimal" || template === "creative";
-    if (isLight) return "#111";
-    if (isDark) return primary;
-    return secondary;
-  };
-
-  const textColor = getTextColor();
-  const fs = (base: number) => `${base}px`;
+  // Reset QR loading state when URL changes
+  useEffect(() => {
+    setQrLoaded(false);
+    setQrError(false);
+  }, [qrUrl]);
 
   return (
     <div ref={containerRef} style={{ position: "relative", width: "100%" }}>
       <CardFace
         data={data}
         template={template}
-        primary={primary}
-        secondary={secondary}
-        accent={accent}
+        primary={activePrimary}
+        secondary={activeSecondary}
+        accent={activeAccent}
         side={side}
         scale={1}
         shapeStyle={shapeStyle}
+        aiDesignData={aiDesignData}
       />
 
-      {/* Logo overlay */}
-      {logoUrl && side === "front" && (
+      {/* Logo overlay — shows on BOTH front and back */}
+      {logoUrl && (
         <img
           src={logoUrl}
           alt="logo"
+          onMouseDown={e => startDrag("logo", e)}
           style={{
             position: "absolute",
-            top: 8,
-            right: 8,
+            left: `${logoPos.x}%`,
+            top: `${logoPos.y}%`,
             width: logoSize,
             height: logoSize,
             objectFit: "contain",
             borderRadius: 6,
-            zIndex: 5,
+            zIndex: 15,
+            cursor: editLayout ? "grab" : "default",
+            border: editLayout ? "1.5px dashed rgba(255,215,0,0.8)" : "none",
+            boxShadow: editLayout ? "0 0 0 2px rgba(255,215,0,0.3)" : "none",
+            userSelect: "none",
+            touchAction: "none",
           }}
+          draggable={false}
         />
       )}
 
-      {/* Draggable field overlays — only in edit mode or always for drag functionality */}
-      {side === "front" && (editLayout || true) && (
+      {/* Draggable field overlays — front side only */}
+      {side === "front" && (
         <>
-          {/* Name */}
-          <div style={getFieldStyle("name")} onMouseDown={onMouseDown("name")}>
-            <span style={{ fontSize: fs(14), fontWeight: 800, color: editLayout ? "#fff" : "transparent", whiteSpace: "nowrap" }}>
+          <div style={getFieldStyle("name")} onMouseDown={e => startDrag("field", e, "name")}>
+            <span style={{ fontSize: "14px", fontWeight: 800, color: editLayout ? "#fff" : "transparent", whiteSpace: "nowrap" }}>
               {editLayout ? (data.name || "Your Name") : ""}
             </span>
           </div>
-          {/* Title */}
-          <div style={getFieldStyle("title")} onMouseDown={onMouseDown("title")}>
-            <span style={{ fontSize: fs(10), color: editLayout ? "#fff" : "transparent", whiteSpace: "nowrap" }}>
+          <div style={getFieldStyle("title")} onMouseDown={e => startDrag("field", e, "title")}>
+            <span style={{ fontSize: "10px", color: editLayout ? "#fff" : "transparent", whiteSpace: "nowrap" }}>
               {editLayout ? (data.title || "Job Title") : ""}
             </span>
           </div>
-          {/* Company */}
-          <div style={getFieldStyle("company")} onMouseDown={onMouseDown("company")}>
-            <span style={{ fontSize: fs(9), fontWeight: 700, color: editLayout ? "#fff" : "transparent", letterSpacing: 1.5, textTransform: "uppercase", whiteSpace: "nowrap" }}>
+          <div style={getFieldStyle("company")} onMouseDown={e => startDrag("field", e, "company")}>
+            <span style={{ fontSize: "9px", fontWeight: 700, color: editLayout ? "#fff" : "transparent", letterSpacing: 1.5, textTransform: "uppercase", whiteSpace: "nowrap" }}>
               {editLayout ? (data.company || "Company Name") : ""}
             </span>
           </div>
         </>
       )}
 
-      {/* QR Code overlay */}
-      {qrEnabled && qrUrl && side === "front" && (
-        <img
-          src={qrUrl}
-          alt="QR Code"
+      {/* QR Code overlay — shows on BOTH sides */}
+      {qrEnabled && qrUrl && (
+        <div
           style={{
             position: "absolute",
             width: qrSize,
             height: qrSize,
-            borderRadius: 4,
             zIndex: 8,
             ...QR_POSITION_STYLE[qrPosition],
           }}
-        />
+        >
+          {!qrLoaded && !qrError && (
+            <div style={{
+              width: qrSize, height: qrSize,
+              background: "rgba(255,255,255,0.85)",
+              border: "1px dashed #ccc",
+              borderRadius: 4,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 8, color: "#999", textAlign: "center",
+            }}>
+              QR<br/>Loading…
+            </div>
+          )}
+          {qrError && (
+            <div style={{
+              width: qrSize, height: qrSize,
+              background: "rgba(255,255,255,0.85)",
+              border: "1px dashed #f00",
+              borderRadius: 4,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 8, color: "#f00", textAlign: "center",
+            }}>
+              QR<br/>Error
+            </div>
+          )}
+          <img
+            src={qrUrl}
+            alt="QR Code"
+            onLoad={() => setQrLoaded(true)}
+            onError={() => setQrError(true)}
+            style={{
+              width: qrSize, height: qrSize,
+              borderRadius: 4,
+              display: qrLoaded ? "block" : "none",
+            }}
+          />
+        </div>
+      )}
+
+      {/* Alignment guides */}
+      {editLayout && showHGuide && (
+        <div style={{
+          position: "absolute", left: 0, right: 0, top: "50%",
+          height: 1, background: "rgba(200,167,102,0.8)",
+          borderTop: "1px dashed rgba(200,167,102,0.8)",
+          zIndex: 20, pointerEvents: "none",
+        }}>
+          <span style={{ position: "absolute", left: "50%", transform: "translateX(-50%) translateY(-50%)", background: "#C8A766", color: "#fff", fontSize: 7, fontWeight: 700, padding: "1px 4px", borderRadius: 2, letterSpacing: 1 }}>CENTER</span>
+        </div>
+      )}
+      {editLayout && showVGuide && (
+        <div style={{
+          position: "absolute", top: 0, bottom: 0, left: "50%",
+          width: 1, background: "rgba(200,167,102,0.8)",
+          borderLeft: "1px dashed rgba(200,167,102,0.8)",
+          zIndex: 20, pointerEvents: "none",
+        }}>
+          <span style={{ position: "absolute", top: "50%", transform: "translateY(-50%) translateX(-50%)", background: "#C8A766", color: "#fff", fontSize: 7, fontWeight: 700, padding: "1px 4px", borderRadius: 2, letterSpacing: 1, whiteSpace: "nowrap" }}>CENTER</span>
+        </div>
       )}
     </div>
   );
@@ -443,9 +585,11 @@ function CardCanvas({
 async function exportCardAsPDF(
   data: CardData,
   template: Template,
-  primary: string,
-  secondary: string,
-  accent: string,
+  frontPrimary: string,
+  frontSecondary: string,
+  frontAccent: string,
+  backPrimary: string,
+  backSecondary: string,
   qrEnabled: boolean,
   qrData: string,
   qrColor: string,
@@ -456,36 +600,28 @@ async function exportCardAsPDF(
   const { PDFDocument, rgb, StandardFonts } = await import("pdf-lib");
 
   const W = 252, H = 144;
-
   const pdfDoc = await PDFDocument.create();
   const frontPage = pdfDoc.addPage([W, H]);
   const backPage  = pdfDoc.addPage([W, H]);
-
-  const helveticaBold    = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-  const helvetica        = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  const helvetica     = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
   function hex(h: string) {
     const c = h.replace("#", "");
-    return rgb(
-      parseInt(c.slice(0, 2), 16) / 255,
-      parseInt(c.slice(2, 4), 16) / 255,
-      parseInt(c.slice(4, 6), 16) / 255,
-    );
+    return rgb(parseInt(c.slice(0,2),16)/255, parseInt(c.slice(2,4),16)/255, parseInt(c.slice(4,6),16)/255);
   }
 
-  const pc    = hex(primary);
+  const pc    = hex(frontPrimary);
   const white = rgb(1, 1, 1);
   const black = rgb(0, 0, 0);
   const gray  = rgb(0.45, 0.45, 0.45);
   const lgray = rgb(0.65, 0.65, 0.65);
-
   const name    = data.name    || "Your Name";
   const title   = data.title   || "Job Title";
   const company = data.company || "Company Name";
-
   const fp = frontPage;
 
-  if (template === "modern") {
+  if (template === "modern" || template === "ai-design") {
     fp.drawRectangle({ x: 0, y: 0, width: W, height: H, color: pc });
     fp.drawText(company.toUpperCase(), { x: 16, y: H - 28, size: 6.5, font: helveticaBold, color: white, opacity: 0.6 });
     fp.drawText(name,    { x: 16, y: H - 50, size: 14, font: helveticaBold, color: white });
@@ -548,14 +684,14 @@ async function exportCardAsPDF(
     });
   }
 
-  // Embed QR if enabled
+  // Embed QR
   if (qrEnabled && qrData) {
     try {
-      const qrUrl = buildQrUrl(qrData, qrColor, qrBgColor, qrSize);
-      const resp = await fetch(qrUrl);
+      const qrImgUrl = buildQrUrl(qrData, qrColor, qrBgColor, qrSize);
+      const resp = await fetch(qrImgUrl);
       const arrBuf = await resp.arrayBuffer();
       const qrImg = await pdfDoc.embedPng(arrBuf);
-      const qrPt = (qrSize / 96) * 72; // px → pt
+      const qrPt = (qrSize / 96) * 72;
       const positions: Record<QrPosition, { x: number; y: number }> = {
         "bottom-right": { x: W - qrPt - 8, y: 8 },
         "bottom-left":  { x: 8,             y: 8 },
@@ -571,20 +707,22 @@ async function exportCardAsPDF(
   }
 
   // Back page
-  backPage.drawRectangle({ x: 0, y: 0, width: W, height: H, color: pc });
+  const bpc = hex(backPrimary);
+  const bsc = hex(backSecondary);
+  backPage.drawRectangle({ x: 0, y: 0, width: W, height: H, color: bpc });
   if (data.company) {
     const bkText = data.company.toUpperCase();
     backPage.drawText(bkText, {
       x: W / 2 - helveticaBold.widthOfTextAtSize(bkText, 20) / 2,
       y: H / 2 - 8,
-      size: 20, font: helveticaBold, color: white, opacity: 0.12,
+      size: 20, font: helveticaBold, color: bsc, opacity: 0.12,
     });
   }
   if (data.website) {
     backPage.drawText(data.website, {
       x: W - 16 - helvetica.widthOfTextAtSize(data.website, 7),
       y: 12,
-      size: 7, font: helvetica, color: white, opacity: 0.35,
+      size: 7, font: helvetica, color: bsc, opacity: 0.35,
     });
   }
 
@@ -598,16 +736,70 @@ async function exportCardAsPDF(
   URL.revokeObjectURL(url);
 }
 
+// ─── Color Picker Section ─────────────────────────────────────────────────────
+function ColorPickerSection({
+  label, colorIdx, customColor, onPresetChange, onCustomChange,
+}: {
+  label: string; colorIdx: number; customColor: string;
+  onPresetChange: (i: number) => void; onCustomChange: (hex: string) => void;
+}) {
+  const activeColor = customColor || COLOR_PRESETS[colorIdx].primary;
+  return (
+    <div>
+      <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">{label}</Label>
+      <div className="grid grid-cols-4 gap-1.5 mb-2">
+        {COLOR_PRESETS.map((c, i) => (
+          <button
+            key={i}
+            onClick={() => { onPresetChange(i); onCustomChange(""); }}
+            title={c.label}
+            className={`h-8 rounded-lg flex items-center justify-center text-[8px] font-semibold transition-all border-2 ${
+              colorIdx === i && !customColor ? "border-[hsl(var(--foreground))] scale-105 shadow-md" : "border-transparent hover:scale-105"
+            }`}
+            style={{ background: c.primary, color: c.secondary }}
+          >
+            {colorIdx === i && !customColor ? <Check size={10} /> : ""}
+          </button>
+        ))}
+      </div>
+      <div className="flex items-center gap-2">
+        <input
+          type="color"
+          value={activeColor}
+          onChange={e => onCustomChange(e.target.value)}
+          className="w-9 h-8 rounded-lg border border-[hsl(var(--border))] cursor-pointer p-0.5"
+          title="Custom color wheel"
+        />
+        <span className="text-[10px] text-[hsl(var(--muted-foreground))]">
+          {customColor ? `Custom: ${customColor}` : COLOR_PRESETS[colorIdx].label}
+        </span>
+        {customColor && (
+          <button onClick={() => onCustomChange("")} className="text-[9px] underline text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]">Reset</button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function BusinessCardDesigner() {
   const navigate = useNavigate();
   const [template, setTemplate] = useState<Template>("modern");
-  const [colorIdx, setColorIdx] = useState(0);
+
+  // Per-side colors
+  const [frontColorIdx, setFrontColorIdx] = useState(0);
+  const [backColorIdx,  setBackColorIdx]  = useState(6); // Onyx for back
+  const [frontCustomColor, setFrontCustomColor] = useState("");
+  const [backCustomColor,  setBackCustomColor]  = useState("");
+
   const [side, setSide]         = useState<"front" | "back">("front");
   const [isExporting, setIsExporting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [brandAssetOpen, setBrandAssetOpen] = useState(false);
+  const [colorOpen, setColorOpen] = useState(true);
   const [logoUrl, setLogoUrl]   = useState("");
-  const [logoSize, setLogoSize] = useState(80);
+  const [logoSize, setLogoSize] = useState(60);
+  const [logoPos, setLogoPos]   = useState({ ...DEFAULT_LOGO_POS });
 
   // Card shape
   const [cardShape, setCardShape] = useState<CardShape>("horizontal");
@@ -623,20 +815,34 @@ export default function BusinessCardDesigner() {
   const [qrContentType, setQrContentType] = useState<QrContentType>("url");
   const [qrCustomContent, setQrCustomContent] = useState("");
   const [qrSize, setQrSize]             = useState(80);
-  const [qrColor, setQrColor]           = useState("");   // empty = auto-sync
+  const [qrColor, setQrColor]           = useState("");
   const [qrBgColor, setQrBgColor]       = useState("#ffffff");
   const [qrPosition, setQrPosition]     = useState<QrPosition>("bottom-right");
   const [qrAiPrompt, setQrAiPrompt]     = useState("");
   const [isAiStylingQr, setIsAiStylingQr] = useState(false);
 
+  // AI Design template
+  const [aiDesignOpen, setAiDesignOpen] = useState(false);
+  const [aiIndustry, setAiIndustry] = useState("real-estate");
+  const [aiStyle, setAiStyle] = useState("geometric");
+  const [aiDesignData, setAiDesignData] = useState<AiDesignData | null>(null);
+  const [isGeneratingDesign, setIsGeneratingDesign] = useState(false);
+
   const [data, setData] = useState<CardData>({
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
   });
 
-  const preset = COLOR_PRESETS[colorIdx];
+  // Derived preset values
+  const frontPreset = COLOR_PRESETS[frontColorIdx];
+  const backPreset  = COLOR_PRESETS[backColorIdx];
+  const frontPrimary   = frontCustomColor || frontPreset.primary;
+  const frontSecondary = frontPreset.secondary;
+  const frontAccent    = frontPreset.accent;
+  const backPrimary    = backCustomColor  || backPreset.primary;
+  const backSecondary  = backPreset.secondary;
+  const backAccent     = backPreset.accent;
 
-  // Auto-sync QR color when preset changes
-  const effectiveQrColor = qrColor || preset.primary;
+  const effectiveQrColor = qrColor || frontPrimary;
 
   const set = (k: keyof CardData) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setData(prev => ({ ...prev, [k]: e.target.value }));
@@ -661,7 +867,7 @@ export default function BusinessCardDesigner() {
   "size": <number between 50-200>,
   "position": "<one of: bottom-right, bottom-left, top-right, top-left, center>"
 }
-The current card primary color is ${preset.primary}. Return only the JSON, no other text.`,
+The current card primary color is ${frontPrimary}. Return only the JSON, no other text.`,
         },
       });
       if (error) throw error;
@@ -685,11 +891,84 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
     }
   };
 
+  // AI Design generation
+  const handleGenerateDesign = async () => {
+    setIsGeneratingDesign(true);
+    try {
+      const { data: result, error } = await supabase.functions.invoke("gemini-chat", {
+        body: {
+          message: `You are a business card graphic designer. Generate a JSON response for a ${aiStyle} style business card for the ${aiIndustry} industry.
+Return ONLY valid JSON with this exact structure:
+{
+  "svgPaths": ["<SVG path d attribute string>", "<another path>", "<another path>"],
+  "colors": ["#hexcolor1", "#hexcolor2", "#hexcolor3"],
+  "bgColor": "#hexcolor",
+  "textColor": "#hexcolor"
+}
+Rules:
+- svgPaths: 3-6 SVG path strings that fit within a 350x200 viewBox. Make ${aiStyle} shapes (triangles, circles, lines, polygons).
+- colors: 2-4 accent colors for the shapes
+- bgColor: background color of the card
+- textColor: readable text color on that background
+- Style: ${aiStyle}, Industry tone: ${aiIndustry}
+Return only JSON, no markdown or explanation.`,
+        },
+      });
+      if (error) throw error;
+      const text = result?.reply || result?.message || result?.content || "";
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const parsed = JSON.parse(jsonMatch[0]);
+        setAiDesignData(parsed as AiDesignData);
+        setTemplate("ai-design");
+        toast.success("AI design generated! Template switched to AI Design.");
+      } else {
+        toast.error("AI response wasn't valid JSON.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Design generation failed. Please try again.");
+    } finally {
+      setIsGeneratingDesign(false);
+    }
+  };
+
+  // Save Card
+  const handleSaveCard = async () => {
+    setIsSaving(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("Please sign in to save."); return; }
+
+      const cardState = {
+        data, template, frontColorIdx, backColorIdx, frontCustomColor, backCustomColor,
+        cardShape, qrEnabled, qrContentType, qrCustomContent, qrSize, qrColor, qrBgColor, qrPosition,
+        logoUrl, logoSize, logoPos, aiDesignData,
+      };
+
+      await supabase.from("design_assets").insert({
+        user_id: user.id,
+        asset_type: "stamp",
+        file_url: "",
+        name: `Business Card — ${data.name || "Untitled"} — ${new Date().toLocaleDateString()}`,
+        metadata: cardState as any,
+      });
+
+      toast.success("Card saved! You can reload it from Brand Assets.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Save failed. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const handleExport = async () => {
     setIsExporting(true);
     try {
       await exportCardAsPDF(
-        data, template, preset.primary, preset.secondary, preset.accent,
+        data, template, frontPrimary, frontSecondary, frontAccent,
+        backPrimary, backSecondary,
         qrEnabled, qrDataStr, effectiveQrColor, qrBgColor, qrSize, qrPosition,
       );
       toast.success("Business card PDF exported!");
@@ -734,11 +1013,9 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Edit Layout toggle in header */}
+          <div className="flex items-center gap-2">
             <Button
-              variant="outline"
-              size="sm"
+              variant="outline" size="sm"
               onClick={() => setEditLayout(v => !v)}
               className={`gap-1.5 h-8 text-xs ${editLayout ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]" : ""}`}
             >
@@ -747,9 +1024,9 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
             </Button>
             <Button
               variant="ghost" size="sm"
-              onClick={() => setFieldPositions({ ...DEFAULT_FIELD_POSITIONS })}
+              onClick={() => { setFieldPositions({ ...DEFAULT_FIELD_POSITIONS }); setLogoPos({ ...DEFAULT_LOGO_POS }); }}
               className="h-8 text-xs gap-1.5 text-[hsl(var(--muted-foreground))]"
-              title="Reset field positions"
+              title="Reset positions"
             >
               <RotateCcw size={12} /> Reset
             </Button>
@@ -760,9 +1037,20 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
               </div>
               <div>
                 <p className="text-xs font-semibold text-[hsl(var(--foreground))] leading-none">Business Card Designer</p>
-                <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Shapes · QR · Drag · Export</p>
+                <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Shapes · QR · Drag · AI</p>
               </div>
             </div>
+
+            <Button
+              onClick={handleSaveCard}
+              disabled={isSaving}
+              variant="outline"
+              className="gap-1.5 h-8 text-xs font-semibold"
+            >
+              {isSaving ? <RefreshCw size={12} className="animate-spin" /> : <Save size={12} />}
+              {isSaving ? "Saving…" : "Save Card"}
+            </Button>
+
             <Button
               onClick={handleExport}
               disabled={isExporting}
@@ -779,10 +1067,10 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
       {/* ── Main Content ───────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8 grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-8">
 
-        {/* ── Left panel: Controls ────────────────────────────── */}
+        {/* ── Left panel ──────────────────────────────────────── */}
         <div className="space-y-4">
 
-          {/* Card Shape Selector */}
+          {/* Card Shape */}
           <Collapsible open={shapeOpen} onOpenChange={setShapeOpen}>
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
               <CollapsibleTrigger asChild>
@@ -810,12 +1098,8 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                             : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]"
                         }`}
                       >
-                        <span className={cardShape === s.id ? "text-[hsl(var(--gold))]" : "text-[hsl(var(--muted-foreground))]"}>
-                          {s.icon}
-                        </span>
-                        <span className={`text-[9px] font-semibold leading-none ${cardShape === s.id ? "text-[hsl(var(--gold-dark))]" : "text-[hsl(var(--muted-foreground))]"}`}>
-                          {s.label}
-                        </span>
+                        <span className={cardShape === s.id ? "text-[hsl(var(--gold))]" : "text-[hsl(var(--muted-foreground))]"}>{s.icon}</span>
+                        <span className={`text-[9px] font-semibold leading-none ${cardShape === s.id ? "text-[hsl(var(--gold-dark))]" : "text-[hsl(var(--muted-foreground))]"}`}>{s.label}</span>
                       </button>
                     ))}
                   </div>
@@ -845,6 +1129,9 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                       <Check size={8} className="text-white" />
                     </span>
                   )}
+                  {t.badge && (
+                    <span className="absolute top-1 left-1 text-[9px]">{t.badge}</span>
+                  )}
                   <p className={`text-xs font-semibold leading-none mb-0.5 ${template === t.id ? "text-[hsl(var(--gold-dark))]" : "text-[hsl(var(--foreground))]"}`}>
                     {t.label}
                   </p>
@@ -854,32 +1141,45 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
             </div>
           </div>
 
-          {/* Color preset picker */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm">
-            <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-3 block">
-              Color
-            </Label>
-            <div className="grid grid-cols-4 gap-2">
-              {COLOR_PRESETS.map((c, i) => (
-                <button
-                  key={i}
-                  onClick={() => { setColorIdx(i); if (!qrColor) {} /* auto-sync happens via effectiveQrColor */ }}
-                  title={c.label}
-                  className={`h-10 rounded-xl flex items-center justify-center text-[9px] font-semibold transition-all duration-200 border-2 ${
-                    colorIdx === i ? "border-[hsl(var(--foreground))] scale-105 shadow-md" : "border-transparent hover:scale-105"
-                  }`}
-                  style={{ background: c.primary, color: c.secondary }}
-                >
-                  {colorIdx === i ? <Check size={12} /> : c.label.split(" ")[0]}
+          {/* Per-Side Color System */}
+          <Collapsible open={colorOpen} onOpenChange={setColorOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Palette size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Colors</span>
+                    <div className="flex gap-1">
+                      <div className="w-3.5 h-3.5 rounded-full border border-white shadow-sm" style={{ background: frontPrimary }} title="Front" />
+                      <div className="w-3.5 h-3.5 rounded-full border border-white shadow-sm" style={{ background: backPrimary }} title="Back" />
+                    </div>
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${colorOpen ? "rotate-180" : ""}`} />
                 </button>
-              ))}
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
+                  <ColorPickerSection
+                    label="Front Color"
+                    colorIdx={frontColorIdx}
+                    customColor={frontCustomColor}
+                    onPresetChange={setFrontColorIdx}
+                    onCustomChange={setFrontCustomColor}
+                  />
+                  <div className="border-t border-[hsl(var(--border))]" />
+                  <ColorPickerSection
+                    label="Back Color"
+                    colorIdx={backColorIdx}
+                    customColor={backCustomColor}
+                    onPresetChange={setBackColorIdx}
+                    onCustomChange={setBackCustomColor}
+                  />
+                </div>
+              </CollapsibleContent>
             </div>
-            <p className="mt-2 text-[10px] text-[hsl(var(--muted-foreground))]">
-              Selected: <span className="font-semibold text-[hsl(var(--foreground))]">{COLOR_PRESETS[colorIdx].label}</span>
-            </p>
-          </div>
+          </Collapsible>
 
-          {/* Brand Assets panel */}
+          {/* Brand Assets */}
           <Collapsible open={brandAssetOpen} onOpenChange={setBrandAssetOpen}>
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
               <CollapsibleTrigger asChild>
@@ -894,7 +1194,7 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
-                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] py-2">Upload & save logos, monograms, signatures — reuse across all tools.</p>
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] py-2">Upload logos, monograms, signatures — shown on BOTH sides. Drag to reposition (Enable Edit Layout).</p>
                   <BrandAssetLibrary
                     assetTypes={["monogram", "logo", "signature"]}
                     selectedUrl={logoUrl}
@@ -903,9 +1203,17 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                     sizeValue={logoSize}
                     onSizeChange={setLogoSize}
                     sizeLabel="Logo Size"
-                    sizeMin={40}
-                    sizeMax={160}
+                    sizeMin={30}
+                    sizeMax={140}
                   />
+                  {logoUrl && (
+                    <button
+                      onClick={() => setLogoUrl("")}
+                      className="mt-2 text-[10px] text-red-500 hover:underline"
+                    >
+                      Remove logo from card
+                    </button>
+                  )}
                 </div>
               </CollapsibleContent>
             </div>
@@ -926,8 +1234,6 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
-
-                  {/* On/Off toggle */}
                   <div className="flex items-center justify-between">
                     <Label className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Show QR on Card</Label>
                     <Switch checked={qrEnabled} onCheckedChange={setQrEnabled} />
@@ -935,7 +1241,6 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
 
                   {qrEnabled && (
                     <>
-                      {/* Content type */}
                       <div>
                         <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">QR Content Type</Label>
                         <div className="grid grid-cols-3 gap-1.5">
@@ -958,7 +1263,6 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                         </div>
                       </div>
 
-                      {/* Custom content field (for url/text, vcard uses card data) */}
                       {(qrContentType === "url" || qrContentType === "text") && (
                         <div>
                           <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 block">
@@ -974,11 +1278,10 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                       )}
                       {qrContentType === "vcard" && (
                         <p className="text-[10px] text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] rounded-lg px-3 py-2">
-                          vCard QR will use your card information (name, phone, email, company) automatically.
+                          vCard QR uses your card info (name, phone, email, company) automatically.
                         </p>
                       )}
 
-                      {/* QR Color (manual or auto-sync) */}
                       <div>
                         <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 block">QR Color</Label>
                         <div className="flex items-center gap-2">
@@ -990,21 +1293,15 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                           />
                           <div className="flex-1">
                             <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
-                              {qrColor ? "Custom color" : `Auto-synced to ${preset.label}`}
+                              {qrColor ? "Custom color" : `Auto-synced to Front color`}
                             </p>
                           </div>
                           {qrColor && (
-                            <button
-                              onClick={() => setQrColor("")}
-                              className="text-[9px] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] underline"
-                            >
-                              Reset
-                            </button>
+                            <button onClick={() => setQrColor("")} className="text-[9px] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] underline">Reset</button>
                           )}
                         </div>
                       </div>
 
-                      {/* QR BG color */}
                       <div>
                         <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 block">Background</Label>
                         <div className="flex gap-2">
@@ -1026,19 +1323,11 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                         </div>
                       </div>
 
-                      {/* QR Size */}
                       <div>
-                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">
-                          Size: {qrSize}px
-                        </Label>
-                        <Slider
-                          min={40} max={180} step={4}
-                          value={[qrSize]}
-                          onValueChange={([v]) => setQrSize(v)}
-                        />
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Size: {qrSize}px</Label>
+                        <Slider min={40} max={180} step={4} value={[qrSize]} onValueChange={([v]) => setQrSize(v)} />
                       </div>
 
-                      {/* QR Position */}
                       <div>
                         <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Placement</Label>
                         <div className="grid grid-cols-3 gap-1.5">
@@ -1062,7 +1351,6 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                         </div>
                       </div>
 
-                      {/* AI Style */}
                       <div>
                         <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-1.5 flex items-center gap-1 block">
                           <Sparkles size={10} /> AI Style QR
@@ -1075,10 +1363,7 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                             className="h-8 text-xs flex-1"
                             onKeyDown={e => e.key === "Enter" && handleAiQrStyle()}
                           />
-                          <VoiceInputButton
-                            onTranscript={t => setQrAiPrompt(prev => prev ? `${prev} ${t}` : t)}
-                            size="sm"
-                          />
+                          <VoiceInputButton onTranscript={t => setQrAiPrompt(prev => prev ? `${prev} ${t}` : t)} size="sm" />
                           <Button
                             size="sm"
                             onClick={handleAiQrStyle}
@@ -1090,10 +1375,8 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                             {isAiStylingQr ? "..." : "Apply"}
                           </Button>
                         </div>
-                        <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">Describe the QR style and AI will apply it.</p>
                       </div>
 
-                      {/* QR Preview */}
                       {qrDataStr && (
                         <div className="flex items-center gap-3 p-3 bg-[hsl(var(--muted))] rounded-xl">
                           <img
@@ -1107,10 +1390,112 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                             <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">
                               {qrContentType.toUpperCase()} · {qrSize}px · {qrPosition}
                             </p>
+                            <p className="text-[9px] text-green-600 mt-0.5">Shows on both front & back</p>
                           </div>
                         </div>
                       )}
                     </>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* AI Design panel */}
+          <Collapsible open={aiDesignOpen} onOpenChange={setAiDesignOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Sparkles size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">AI Design Generator</span>
+                    {aiDesignData && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${aiDesignOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-3 pt-3">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Generate geometric patterns, shapes, and lines for a unique AI-designed card.</p>
+
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Industry</Label>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {[
+                        { id: "real-estate", label: "Real Estate" },
+                        { id: "technology", label: "Technology" },
+                        { id: "fashion", label: "Fashion" },
+                        { id: "finance", label: "Finance" },
+                        { id: "healthcare", label: "Healthcare" },
+                        { id: "creative", label: "Creative" },
+                      ].map(opt => (
+                        <button
+                          key={opt.id}
+                          onClick={() => setAiIndustry(opt.id)}
+                          className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
+                            aiIndustry === opt.id
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Style</Label>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {[
+                        { id: "geometric", label: "Geometric" },
+                        { id: "lines", label: "Lines" },
+                        { id: "minimalist", label: "Minimal" },
+                        { id: "futuristic", label: "Futuristic" },
+                        { id: "organic", label: "Organic" },
+                        { id: "abstract", label: "Abstract" },
+                      ].map(opt => (
+                        <button
+                          key={opt.id}
+                          onClick={() => setAiStyle(opt.id)}
+                          className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
+                            aiStyle === opt.id
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={handleGenerateDesign}
+                      disabled={isGeneratingDesign}
+                      className="flex-1 h-9 text-xs gap-2 font-semibold text-white"
+                      style={{ background: "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark)))" }}
+                    >
+                      {isGeneratingDesign ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                      {isGeneratingDesign ? "Generating…" : "Generate Design"}
+                    </Button>
+                    {aiDesignData && (
+                      <Button
+                        onClick={handleGenerateDesign}
+                        disabled={isGeneratingDesign}
+                        variant="outline"
+                        className="h-9 text-xs gap-1"
+                      >
+                        <RefreshCw size={11} /> Regen
+                      </Button>
+                    )}
+                  </div>
+
+                  {aiDesignData && (
+                    <div className="p-2 bg-[hsl(var(--muted))] rounded-lg">
+                      <p className="text-[10px] text-green-600 font-semibold">✓ AI design applied! Switch to "AI Design" template to preview.</p>
+                    </div>
                   )}
                 </div>
               </CollapsibleContent>
@@ -1147,15 +1532,14 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
           </div>
         </div>
 
-        {/* ── Right panel: Preview ────────────────────────────── */}
+        {/* ── Right panel: Preview ─────────────────────────────── */}
         <div className="space-y-5">
-          {/* Preview header + flip toggle */}
           <div className="flex items-center justify-between">
             <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] flex items-center gap-1.5">
               <Eye size={11} /> Live Preview
               {editLayout && (
                 <span className="ml-2 text-[9px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1">
-                  <Move size={9} /> Drag fields to rearrange
+                  <Move size={9} /> Drag fields/logo to rearrange
                 </span>
               )}
             </Label>
@@ -1164,12 +1548,13 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                 <button
                   key={s}
                   onClick={() => setSide(s)}
-                  className={`px-3 py-1.5 font-medium capitalize transition-colors ${
+                  className={`px-3 py-1.5 font-medium capitalize transition-colors flex items-center gap-1.5 ${
                     side === s
                       ? "bg-[hsl(var(--foreground))] text-white"
                       : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]"
                   }`}
                 >
+                  <div className="w-2 h-2 rounded-full" style={{ background: s === "front" ? frontPrimary : backPrimary }} />
                   {s}
                 </button>
               ))}
@@ -1181,7 +1566,7 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
             <div className="w-full max-w-[400px]">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={`${template}-${colorIdx}-${side}-${cardShape}`}
+                  key={`${template}-${frontColorIdx}-${backColorIdx}-${side}-${cardShape}`}
                   initial={{ opacity: 0, rotateY: side === "back" ? -15 : 15, scale: 0.96 }}
                   animate={{ opacity: 1, rotateY: 0, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.97 }}
@@ -1191,9 +1576,12 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                   <CardCanvas
                     data={data}
                     template={template}
-                    primary={preset.primary}
-                    secondary={preset.secondary}
-                    accent={preset.accent}
+                    primary={frontPrimary}
+                    secondary={frontSecondary}
+                    accent={frontAccent}
+                    backPrimary={backPrimary}
+                    backSecondary={backSecondary}
+                    backAccent={backAccent}
                     side={side}
                     cardShape={cardShape}
                     editLayout={editLayout}
@@ -1207,6 +1595,9 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                     qrPosition={qrPosition}
                     logoUrl={logoUrl}
                     logoSize={logoSize}
+                    logoPos={logoPos}
+                    onLogoMove={setLogoPos}
+                    aiDesignData={aiDesignData}
                   />
                 </motion.div>
               </AnimatePresence>
@@ -1215,7 +1606,8 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
               <span>{CARD_SHAPES.find(s => s.id === cardShape)?.label} · {CARD_SHAPES.find(s => s.id === cardShape)?.ratio}</span>
               <span>·</span>
               <span>{TEMPLATES.find(t => t.id === template)?.label} template</span>
-              {qrEnabled && <span>· QR {qrPosition}</span>}
+              {qrEnabled && <span>· QR on both sides</span>}
+              {logoUrl && <span>· Logo on both sides</span>}
             </div>
           </div>
 
@@ -1224,7 +1616,7 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
             <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-4 block">
               All Templates Preview
             </Label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {TEMPLATES.map(t => (
                 <button
                   key={t.id}
@@ -1238,17 +1630,21 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
                   <CardFace
                     data={data}
                     template={t.id}
-                    primary={preset.primary}
-                    secondary={preset.secondary}
-                    accent={preset.accent}
+                    primary={frontPrimary}
+                    secondary={frontSecondary}
+                    accent={frontAccent}
                     side="front"
                     scale={0.45}
                     shapeStyle={{ aspectRatio: "3.5 / 2", borderRadius: 0 }}
+                    aiDesignData={t.id === "ai-design" ? aiDesignData : null}
                   />
                   {template === t.id && (
                     <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center">
                       <Check size={9} className="text-white" />
                     </div>
+                  )}
+                  {t.badge && (
+                    <div className="absolute top-1 left-1 text-[10px]">{t.badge}</div>
                   )}
                   <p className="absolute bottom-0 left-0 right-0 text-center text-[9px] font-semibold py-1 bg-black/40 text-white">
                     {t.label}
@@ -1258,15 +1654,13 @@ The current card primary color is ${preset.primary}. Return only the JSON, no ot
             </div>
           </div>
 
-          {/* Export info */}
+          {/* Tips */}
           <div className="bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)] rounded-2xl p-4 text-xs text-[hsl(var(--muted-foreground))] space-y-1.5">
-            <p className="font-semibold text-[hsl(var(--foreground))] text-[13px]">Export Options</p>
-            <p>
-              <span className="font-medium text-[hsl(var(--foreground))]">PDF Export</span> — Downloads a 2-page PDF (front + back). QR code is embedded when enabled.
-            </p>
-            <p>
-              <span className="font-medium text-[hsl(var(--foreground))]">Edit Layout</span> — Toggle "Edit Layout" in the header to drag Name, Title, and Company fields around the card.
-            </p>
+            <p className="font-semibold text-[hsl(var(--foreground))] text-[13px]">Tips</p>
+            <p>🎨 <span className="font-medium text-[hsl(var(--foreground))]">Per-Side Colors</span> — Set different colors for Front and Back using the Colors panel.</p>
+            <p>🖼️ <span className="font-medium text-[hsl(var(--foreground))]">Logo</span> — Upload in Brand Assets. It appears on both sides. Enable "Edit Layout" to drag it.</p>
+            <p>📱 <span className="font-medium text-[hsl(var(--foreground))]">QR Code</span> — Enable QR and it shows on both Front and Back automatically.</p>
+            <p>✨ <span className="font-medium text-[hsl(var(--foreground))]">AI Design</span> — Use the AI Design Generator to create geometric patterns, then select "AI Design" template.</p>
           </div>
         </div>
       </div>
