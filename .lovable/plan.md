@@ -1,107 +1,72 @@
 
-# Fix JBJ AI Analyzers — Two Issues
-
-## Root Cause Analysis
-
-### Issue 1: Wrong Logo (Black Background)
-In `ProjectAIAnalyzer.tsx` line 7 and 183-184, it imports and uses `jbj-monogram-dark.png` — this is the version with a **dark/black background**. The correct asset for a light-background context is `jbj-monogram-nobuffer.png` (transparent background, no buffer padding), already used in the header. The fix is a one-line import change.
-
-### Issue 2: Analysis Arrives But Nothing Renders
-The network log confirms the edge function **is returning a complete `fullAnalysis` string** (status 200, full response body visible). The bug is entirely in the **client-side regex parsing**.
-
-The AI returns text in this format:
-```
-**1. Area Overview**
-Damac Hills is a master-planned...
-
-**2. Price Per Sqft**
-...
-```
-
-The number (`1.`) is **inside** the bold markers. But the `extractSection()` regex in `ProjectAIAnalyzer.tsx` expects the number **outside**:
-```typescript
-// Pattern 1 — WRONG: expects "1. **Area Overview**"
-new RegExp(`\\d+\\.\\s*\\*\\*${sectionName}\\*\\*`, 'i')
-```
-
-The actual format is `**1. Area Overview**` — so none of the three patterns match, all sections return `""`, all the conditional renders (`{sections?.overview && ...}`) evaluate to `false`, and the page shows nothing even though data loaded successfully.
-
-The same regex bug exists in `AreaAIAnalyzer.tsx`.
-
-### Issue 3: Developer Intelligence
-There is no dedicated Developer AI Analyzer component currently wired up. The user references it as a feature that was previously working. It needs to be confirmed whether this exists elsewhere in the codebase — and if it's missing, it needs to be created following the same pattern as `ProjectAIAnalyzer`.
+# Two Fixes: Recommended Project Cards + Premium AI Analyzer
 
 ---
 
-## Fixes
+## Part 1 — Recommended Project Cards: Symmetry & Layout Fixes
 
-### Fix 1 — Logo in ProjectAIAnalyzer.tsx
-**File:** `src/components/project-detail/ProjectAIAnalyzer.tsx`
+### Current Problems
+- Cards are different heights because the content section has variable-length titles, developer names, and location text that push the price divider down inconsistently.
+- Handover date badge is placed in the **top badges row** alongside "On Sale" — it visually competes and clutters the top-left.
+- Location is blank for projects like "Terwa Homes" and "Wyndham Garden Bucharest Airport Hotel" because their `location` field is `null` in the database, but `area_name` and `emirate` are available as fallbacks.
 
-Change line 7:
-```typescript
-// BEFORE:
-import jbjMonogramDark from "@/assets/jbj-monogram-dark.png";
+### Fixes for RecommendedProjects.tsx
 
-// AFTER:
-import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+**1. Equal Card Height (Symmetry)**
+Change the card `Link` wrapper to use `flex flex-col h-full` so every card stretches to the same height. Make the content section `flex flex-col flex-1` and push the price divider to the bottom with `mt-auto`.
+
+```
+Card (flex flex-col h-full)
+  ├─ Image section (fixed aspect ratio)
+  └─ Content section (flex flex-col flex-1)
+       ├─ Title
+       ├─ Developer
+       ├─ Location (flex-1 — grows to fill)
+       └─ Divider + Price + Payment Plan (mt-auto, always at bottom)
 ```
 
-Change line 184:
-```tsx
-// BEFORE:
-src={jbjMonogramDark}
+**2. Handover Date → Bottom Right Corner**
+Remove the handover date badge from the top badges row. Place it as an absolutely-positioned chip at `bottom-3 right-3` on the image, styled distinctly (dark/translucent gold background). The developer logo stays at `bottom-3 left-3`.
 
-// AFTER:
-src={jbjMonogramNobuffer}
-```
+**3. Location Fallback**
+Add a display helper that returns: `project.location ?? project.area_name ?? project.emirate ?? null`. This ensures "Terwa Homes" shows its `area_name` or emirate instead of a blank row.
 
-The `jbj-monogram-nobuffer.png` is the transparent-background version already confirmed present in `/src/assets/`.
+**4. Consistent Grid**
+Wrap the grid in `items-stretch` so all three columns always reach the same height, and the content stretches within each card.
 
 ---
 
-### Fix 2 — Section Regex in ProjectAIAnalyzer.tsx
-**File:** `src/components/project-detail/ProjectAIAnalyzer.tsx`
+## Part 2 — ProjectAIAnalyzer: Premium Upgrade
 
-The `extractSection` function (lines 20–31) needs an additional pattern to handle the `**1. Section Name**` format:
+### Current Problems
+- The "Price Per Sqft" card shows only 2 lines of cleaned text — no visual impact.
+- The "Supply vs Demand" card is similarly plain text.
+- The user previously saw area performance charts and richer data — this feels missing.
 
-```typescript
-function extractSection(text: string, sectionName: string): string {
-  const patterns = [
-    // Format: **1. Area Overview** (number inside bold — actual AI output)
-    new RegExp(`\\*\\*\\d+\\.\\s*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*\\d+\\.|$)`, 'i'),
-    // Format: 1. **Area Overview** (number outside bold)
-    new RegExp(`\\d+\\.\\s*\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\d+\\.\\s*\\*\\*|$)`, 'i'),
-    // Format: ## Area Overview
-    new RegExp(`##\\s*${sectionName}[:\\s]*([\\s\\S]*?)(?=##|\\d+\\.\\s*\\*\\*|$)`, 'i'),
-    // Format: **Area Overview**
-    new RegExp(`\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*[A-Z]|\\d+\\.\\s*\\*\\*|$)`, 'i'),
-  ];
-  for (const pattern of patterns) {
-    const match = text.match(pattern);
-    if (match?.[1]?.trim()) return match[1].trim();
-  }
-  return "";
-}
-```
+### Upgrade Plan for ProjectAIAnalyzer.tsx
 
-The first pattern is the new one that matches the actual AI response format. Since it's first in the array, it will always match first when the format is correct.
+**1. Price Per Sqft — Visual Bar Chart (Recharts)**
+Parse the AI text from `sections.pricePerSqft` to extract:
+- Current avg price/sqft (e.g. `AED 1,250/sqft`)
+- YoY change % (e.g. `+12%`)
 
----
+Display a horizontal bar chart using `recharts` `BarChart` with:
+- A single bar showing current price vs a benchmark (Dubai average: AED 1,400/sqft as reference)
+- Gold fill for the current area bar
+- A secondary bar in grey for "Dubai Avg"
+- Below the chart: the raw text detail for context
 
-### Fix 3 — Section Regex in AreaAIAnalyzer.tsx
-**File:** `src/components/area-detail/AreaAIAnalyzer.tsx`
+**2. Investment Metrics — Stat Pills**
+Parse `sections.investment` to extract rental yield % and capital appreciation %. Display as two large circular/pill stats side by side: "6.2% Rental Yield" and "8.1% Capital Appreciation" in gold on black backgrounds — replacing plain text.
 
-The same `extractSection` function exists at lines 14–25 with the same bug. Apply the identical fix — add the `**1. Section Name**` pattern as the first entry.
+**3. Supply vs Demand — Mini Progress Indicator**
+Parse absorption rate from the text (e.g. "85% absorption"). Show a thin horizontal progress bar (gold fill) with the percentage labeled, followed by the pipeline units text below.
 
----
+**4. Pros & Cons — Styled List Items**
+Enhance the Pros/Cons cards: parse bullet points from `cleanMarkdown()` output and render each as an individual pill-style row with a checkmark (✓) for pros in emerald and an ✗ for cons in red.
 
-### Fix 4 — Developer AI Analyzer
-**File:** Need to search and confirm.
-
-Based on the codebase search, there is no `DeveloperAIAnalyzer` component. The user says it was previously working. I'll create a `DeveloperAIAnalyzer.tsx` component that follows the same pattern as `ProjectAIAnalyzer.tsx` — it calls the same `ai-property-analyzer` edge function but with developer-specific context (developer name, total projects, flagship developments, areas of operation), and displays developer-focused sections (Developer Overview, Market Share, Project Pipeline, Investment Track Record, Pros, Cons, Rating).
-
-The component will be wired into the developer detail page wherever it previously existed.
+**5. Full Analysis Fallback**
+If any section is empty (regex miss), the card still renders but shows a subtle "Data not available" message instead of hiding entirely — preventing the "nothing renders" experience.
 
 ---
 
@@ -109,18 +74,32 @@ The component will be wired into the developer detail page wherever it previousl
 
 | File | Change |
 |---|---|
-| `src/components/project-detail/ProjectAIAnalyzer.tsx` | Fix logo (dark-bg → nobuffer/transparent), fix `extractSection` regex |
-| `src/components/area-detail/AreaAIAnalyzer.tsx` | Fix `extractSection` regex (same pattern fix) |
-| `src/components/developer-detail/DeveloperAIAnalyzer.tsx` | Create new component (or restore if it was deleted) |
-| Developer detail page | Wire in `DeveloperAIAnalyzer` if not already present |
+| `src/components/project-detail/RecommendedProjects.tsx` | Fix card symmetry (flex-col h-full), move handover date to bottom-right image corner, add location fallback (area_name → emirate), align divider at bottom |
+| `src/components/project-detail/ProjectAIAnalyzer.tsx` | Upgrade Price Per Sqft to Recharts bar chart, upgrade Investment Metrics to stat pills, upgrade Supply/Demand to progress bar, upgrade Pros/Cons to styled list rows, always render section cards even if data is sparse |
+
+No backend or edge function changes required.
 
 ---
 
-## What the User Will Experience After Fix
+## Visual Result
 
-1. **Logo** — The loading spinner in Project AI Intelligence shows the JBJ monogram with a transparent background, matching the header/footer logo.
-2. **Project AI Intelligence** — Scrolling to the section triggers analysis; the AI response arrives (already confirmed working at the network level), sections parse correctly, all 8 cards (Area Overview, Price Per Sqft, Supply vs Demand, Developer Landscape, Investment Metrics, Pros, Cons, Rating) render.
-3. **Area Intelligence** — Same fix applies; charts and cards render on area pages.
-4. **Developer Intelligence** — Restored component analyzes the developer's portfolio and renders insights on developer detail pages.
+**Recommended Cards (after fix):**
+```text
+┌─────────────────────────────┐  ┌─────────────────────────────┐  ┌─────────────────────────────┐
+│  [Image 16:10]              │  │  [Image 16:10]              │  │  [Image 16:10]              │
+│  [On Sale]     [Recommended]│  │  [On Sale]     [Recommended]│  │  [On Sale]     [Recommended]│
+│  [Dev Logo]   [Q4 2026 ▸]  │  │  [Dev Logo]   [Q2 2027 ▸]  │  │  [Dev Logo]   [Q1 2028 ▸]  │
+├─────────────────────────────┤  ├─────────────────────────────┤  ├─────────────────────────────┤
+│  Project Name               │  │  Project Name               │  │  Project Name               │
+│  by Developer               │  │  by Developer               │  │  by Developer               │
+│  Dubai Hills, Dubai  ← fill │  │  Bukadra, Meydan ← fill     │  │  Damac Hills ← fallback     │
+│  ─────────────────────────  │  │  ─────────────────────────  │  │  ─────────────────────────  │
+│  From AED 1.2M   [60/40]   │  │  From AED 2.1M   [70/30]   │  │  Price on request            │
+└─────────────────────────────┘  └─────────────────────────────┘  └─────────────────────────────┘
+         ↑ same height                  ↑ same height                   ↑ same height
+```
 
-No backend changes required — the edge function is working correctly (confirmed by the 200 response in network logs).
+**AI Analyzer Price Per Sqft (after fix):**
+- Gold bar chart comparing area avg vs Dubai avg
+- Current price highlighted in large gold text
+- YoY trend shown as a colored badge (green if positive)
