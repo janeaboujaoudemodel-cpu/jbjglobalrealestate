@@ -142,8 +142,12 @@ const prefetchProjectDetail = () => {
 
 const ProjectCard = ({ project }: { project: FeaturedProject }) => {
   const imageUrl = project.cover_image_url || project.images?.[0]?.image_url;
-  const logoUrl = (project.developer as any)?.logo_url;
   const devName = project.developer_name || '';
+  // Binghatti logo is locked to the canonical webp per branding policy
+  const rawLogoUrl = (project.developer as any)?.logo_url;
+  const logoUrl = devName.toLowerCase().includes('binghatti')
+    ? '/developers/logos/binghatti-logo.webp'
+    : rawLogoUrl;
   const [logoError, setLogoError] = useState(false);
 
   return (
