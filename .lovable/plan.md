@@ -1,185 +1,283 @@
 
-# Typography Controls — Stamp Generator + Business Card + CV Builder
+# Company Profile Builder — Smart URL Extraction, Color Palette System, Completion Score & Placeholder Cleanup
 
-## Summary
+## What We're Building
 
-The Stamp Generator already has a complete, fully-wired typography panel (Bold toggle, Italic toggle, Font Size +/− stepper with slider, Font Family picker — all feeding into `StampSVGRenderer` via props). The task is to replicate this same pattern in Business Card Designer and CV/Resume Builder, where no typography controls exist today.
-
----
-
-## Current State Analysis
-
-### Stamp Generator (COMPLETE — reference implementation)
-- State: `fontBold`, `fontItalic`, `manualFontSize`, `fontFamily`
-- UI: Bold B / Italic I toggle buttons (gold border when active), +/− size stepper with range slider, font family button list
-- Rendering: All 4 props flow into `StampSVGRenderer` via regex replacements on the SVG source
-- Location: "Fonts" tab of the left panel (lines 570–648)
-
-### Business Card Designer (MISSING)
-- `CardFace` component (line 170): `fontFamily` hardcoded to `'Helvetica Neue', Arial, sans-serif` inline in `baseStyle`
-- No `fontBold`, `fontItalic`, `fontSize` state exists
-- No typography panel in the left column
-- Fix: Add 3 state variables, a new "Typography" collapsible panel in the left column, and pass the values into `CardFace` as props that override the `baseStyle.fontFamily` and adjust the `fontWeight`/`fontStyle` on the name element
-
-### CV/Resume Builder (MISSING)
-- `CVPreview` component (line 44): accepts `{ data, template, scale }` — no font props
-- Each template hardcodes font families (Georgia for Executive, Helvetica for Modern, etc.)
-- No `fontBold`, `fontItalic`, `fontSize` state exists
-- Fix: Add 3 state variables, a typography collapsible panel, pass font props to `CVPreview`, and apply them in the preview renderer
+This is a major enhancement to the Company Profile Builder with 4 distinct feature groups, plus a new shared color palette system that feeds into all corporate suite tools.
 
 ---
 
-## Implementation Plan
+## Feature 1: Smart URL / Website Extraction
 
-### File 1: `src/components/corporate-suite/BusinessCardDesigner.tsx`
+### How It Works
+The user pastes their website URL → clicks "Generate from Website" → the system:
+1. Calls `firecrawl-scrape` with `formats: ["markdown", "branding"]` to get page content + brand colors
+2. Sends the scraped markdown to `company-profile-ai` (new action: `extract_from_url`) to parse company name, tagline, about us, services, team, contact info
+3. Extracts the brand color palette from Firecrawl's `branding.colors` response
+4. Auto-fills all form fields instantly
+5. Saves the extracted color palette to the `design_color_palettes` table for use across all tools
 
-**Step A — Add state (in the main component body, after existing state declarations ~line 893):**
+### New Action in `company-profile-ai/index.ts`
+Add `action === "extract_from_url"`:
 ```typescript
-// Typography
-const [cardFontFamily,  setCardFontFamily]  = useState("'Helvetica Neue', Arial, sans-serif");
-const [cardFontBold,    setCardFontBold]    = useState(false);
-const [cardFontItalic,  setCardFontItalic]  = useState(false);
-const [cardFontSize,    setCardFontSize]    = useState<number | null>(null); // null = auto
+// Takes: markdown (scraped content), url
+// Prompt: "Extract company profile data from this website content..."
+// Returns structured JSON: { companyName, tagline, aboutUs, services[], team[], phone, email, website, address, linkedin, instagram }
 ```
 
-**Step B — Update `CardFace` component signature to accept font props:**
-```typescript
-function CardFace({
-  data, template, primary, secondary, accent, side, scale, shapeStyle, aiDesignData, cardShape,
-  fontFamily, fontWeight, fontStyle, nameFontSize,
-}: { ..., fontFamily?: string; fontWeight?: string; fontStyle?: string; nameFontSize?: number | null }) {
+### UI: URL Input Panel (top of left column, above Document Extractor)
 ```
-
-In the `baseStyle` object (line 164), replace the hardcoded `fontFamily` with the prop:
-```typescript
-fontFamily: fontFamily || "'Helvetica Neue', Arial, sans-serif",
+┌──────────────────────────────────────────────┐
+│ 🌐  GENERATE FROM WEBSITE                    │
+├──────────────────────────────────────────────┤
+│  https://yourcompany.com              [→ Go] │
+│  [Extracting your company details...   ████] │
+└──────────────────────────────────────────────┘
 ```
+- Input field + "Extract" button
+- Progress: "Scanning website…" → "Extracting details…" → "Applying colors…" → Done toast
+- On success: fills all fields + shows "Colors saved to your palette" badge
 
-For the name element in each template, add:
-```typescript
-fontWeight: fontWeight || "800"   // default per-template, overridden when bold is on
-fontStyle:  fontStyle  || "normal"
-fontSize:   nameFontSize ? nameFontSize * scale : 18 * scale  // existing sizes scaled by prop
+### Firecrawl Dependency
+The existing `firecrawl-scrape` edge function is already deployed. We call it from the frontend via `supabase.functions.invoke("firecrawl-scrape", { body: { url, options: { formats: ["markdown", "branding"], onlyMainContent: true } } })`. If Firecrawl is not connected, we degrade gracefully — we only use the `company-profile-ai` AI extraction with a simpler fetch.
+
+---
+
+## Feature 2: Smart Color Palette System (Draggable, Full Color Wheel)
+
+### Database
+The `design_color_palettes` table already exists with the correct schema:
 ```
+id, user_id, name, description, colors (jsonb), is_default, is_public, created_at, updated_at
+```
+The `colors` field stores an array of `{ hex: string, name: string }` objects, so we add a `role` field: `{ hex: string, name: string, role: "primary" | "secondary" | "accent" | "background" | "text" }`.
 
-**Step C — Add "Typography" collapsible panel in the left column** (insert between Brand Assets and the Scan/Card Info panels — after line 1283, before the `DocumentExtractorUpload` at line 1638):
+No migration needed — the `colors` JSONB column is flexible.
 
-The panel follows the exact same Collapsible pattern as the Colors panel:
-- Collapsible header with a `Type` icon and "Typography" label
-- Inside: Bold **B** toggle, Italic *I* toggle (same button style as Stamp Generator)
-- Font size stepper: − / value / + buttons (min 8, max 18, step 0.5, null = auto)
-- Font family quick-select: 5 compact options — Helvetica, Georgia, Garamond, Courier, Impact
+### New Component: `WebsitePalettePanel.tsx`
+A self-contained panel embedded in `CompanyProfileBuilder` (also exportable for other tools) with:
 
-**Step D — Pass props to all `CardFace` usages** in the JSX (there are multiple render sites for the front/back previews and the AI design mini-preview). Each needs:
-```tsx
-fontFamily={cardFontFamily}
-fontWeight={cardFontBold ? "bold" : undefined}
-fontStyle={cardFontItalic ? "italic" : undefined}
-nameFontSize={cardFontSize}
+**Drag-and-Drop Role Assignment:**
+- 5 role slots displayed horizontally: Primary · Secondary · Accent · Background · Text
+- Color swatches are draggable between slots
+- Dragging a color to a different slot swaps the roles — the role labels stay fixed, only the color moves
+- Uses HTML5 drag-and-drop (no new library needed, we already have framer-motion for smooth animations)
+
+**Full Color Wheel (per swatch):**
+- Clicking any swatch opens an inline popover with:
+  - A native `<input type="color">` (full color wheel)
+  - Hex input field
+  - Opacity/alpha slider (0–100%)
+  - Preview swatch
+- Changes apply live to the preview
+
+**Palette Actions:**
+- "Save Palette" → upserts to `design_color_palettes` with name = "Website Palette — {companyName}"
+- "Apply to Template" → updates the active template's accent/bg colors in the preview
+- "Reset" → re-extracts from website or clears to defaults
+
+**Integration Points:**
+- When website is extracted → palette auto-populates
+- Palette is also accessible from Business Card Designer and Logo Creator (they already use `design_color_palettes` via `ColorPaletteManager`)
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  BRAND COLOR PALETTE                    [Save] [Apply]   │
+├──────────────────────────────────────────────────────────┤
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌───┐  ┌───┐  │
+│  │ #1A1A1A │  │ #C8A766 │  │ #F5F0E6 │  │   │  │   │  │
+│  │ Primary │  │Secondary│  │ Accent  │  │Bg │  │Txt│  │
+│  └─────────┘  └─────────┘  └─────────┘  └───┘  └───┘  │
+│  ↑ Drag to swap roles                                    │
+│                                                          │
+│  [Click any swatch to open color wheel]                  │
+└──────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-### File 2: `src/components/corporate-suite/CVResumeBuilder.tsx`
+## Feature 3: Completion Score Panel
 
-**Step A — Add state (after `logoSize` state at line 701):**
-```typescript
-const [cvFontFamily,  setCvFontFamily]  = useState("");  // "" = use template default
-const [cvFontBold,    setCvFontBold]    = useState(false);
-const [cvFontItalic,  setCvFontItalic]  = useState(false);
-const [cvFontSize,    setCvFontSize]    = useState<number | null>(null); // null = auto
-```
+### Scoring Logic (100 points total)
+The score is calculated in real time from `data` state:
 
-**Step B — Update `CVPreview` component signature:**
-```typescript
-function CVPreview({
-  data, template, scale,
-  fontFamily, fontWeight, fontStyle, fontSizeOverride,
-}: {
-  data: CVData; template: Template; scale?: number;
-  fontFamily?: string; fontWeight?: string; fontStyle?: string; fontSizeOverride?: number | null;
-}) {
-```
-
-In each template's outer `<div>` style, apply the font family override when provided:
-```typescript
-fontFamily: fontFamily || (template === "executive" ? "Georgia, serif" : "'Helvetica Neue', Arial, sans-serif"),
-```
-
-For the `name` heading `h1`/`h2` in each template, apply:
-```typescript
-fontWeight: fontWeight || "700",
-fontStyle: fontStyle || "normal",
-fontSize: fontSizeOverride ? fontSize(fontSizeOverride) : fontSize(20),  // existing default
-```
-
-**Step C — Add "Typography" collapsible panel in the left column** (insert after the Template picker panel, before the Section tabs panel — around line 910):
-
-Same pattern as Business Card — Collapsible with `Type` icon:
-- Bold **B** / Italic *I* toggle buttons
-- Font size stepper (min 8, max 24, null = auto per-template)
-- Font family picker: 4 options — Helvetica, Georgia, Garamond, Custom (type-in)
-
-**Step D — Pass font props to `CVPreview`** in the main JSX (the right column preview render) and in the `exportCVAsPDF` function to apply font settings to the PDF output as well.
-
----
-
-## Font Family Options
-
-Both tools will offer the same 5 clean font choices (compact button grid, no preview labels needed since the button text itself uses the font):
-
-| Label | Value |
+| Field | Points |
 |---|---|
-| Helvetica | `'Helvetica Neue', Arial, sans-serif` |
-| Georgia | `Georgia, 'Times New Roman', serif` |
-| Garamond | `Garamond, 'Palatino Linotype', serif` |
-| Courier | `'Courier New', Courier, monospace` |
-| Futura | `'Century Gothic', 'Trebuchet MS', sans-serif` |
+| Company Name | 10 |
+| Tagline | 8 |
+| About Us (>50 words) | 15 |
+| Logo uploaded | 10 |
+| ≥1 Service with title | 8 |
+| ≥1 Service with description | 7 |
+| ≥3 Services | 5 |
+| ≥1 Team member | 8 |
+| Phone | 5 |
+| Email | 7 |
+| Website | 5 |
+| Address | 5 |
+| LinkedIn | 4 |
+| Instagram | 3 |
+
+**Strength / Weakness Analysis:**
+Displayed below the score bar as two lists:
+
+- **Strengths** (green check icons): fields that are complete and above minimum
+- **Weaknesses** (orange warning icons): missing or thin fields with specific suggestions
+
+Example weaknesses:
+- "About Us is too short — click AI Expand for a professional paragraph"
+- "No team members added — profiles build trust with clients"
+- "Missing LinkedIn — add for professional credibility"
+
+### UI Location
+Placed in the **right column** above the Live Preview panel:
+
+```
+┌─────────────────────────────────────────────┐
+│ Profile Score                          72%  │
+│ ████████████████████░░░░░░░░░░░░░░░░░░░░░   │
+│                                             │
+│ ✓ Company name & tagline                    │
+│ ✓ About Us section complete                 │
+│ ⚠ Add at least 3 services for a full profile│
+│ ⚠ Missing logo — upload in Brand Assets     │
+└─────────────────────────────────────────────┘
+```
 
 ---
 
-## UI Pattern (matches Stamp Generator exactly)
+## Feature 4: Remove Placeholder Text
 
-```
-┌─────────────────────────────────────────┐
-│ ▲  TYPOGRAPHY                           │
-├─────────────────────────────────────────┤
-│ Style                                   │
-│ ┌──────┐  ┌──────┐                     │
-│ │  B   │  │  I   │  (toggle buttons)   │
-│ └──────┘  └──────┘                     │
-│                                         │
-│ Font Size              Auto  [12pt]     │
-│ [−]  ────────●──────────  [+]          │
-│ Range: 8–18 pt · Auto = template default│
-│                                         │
-│ Font Family                             │
-│ ┌────────────┐ ┌──────────────────────┐ │
-│ │  Helvetica │ │  Georgia             │ │
-│ └────────────┘ └──────────────────────┘ │
-│ ┌──────────┐ ┌───────────┐ ┌────────┐  │
-│ │ Garamond │ │  Courier  │ │ Futura │  │
-│ └──────────┘ └───────────┘ └────────┘  │
-└─────────────────────────────────────────┘
-```
+### Current Problem
+Inputs show `placeholder="JBJ Global Real Estate"` and `placeholder="Excellence in UAE Real Estate"` — the user's company name is hardcoded as example text.
 
-Active state: gold border + light gold background (matching existing `border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)]` pattern).
+### Fix
+Replace all placeholder text across the Company tab with neutral, generic examples:
+- Company Name: `"e.g. Acme Corporation"` → or empty placeholder `"Your company name"`
+- Tagline: `"e.g. Building trust since 2010"` 
+- About Us: `"Describe your company, mission, and values…"`
+- Services: `"e.g. Property Consulting"`
+- Website: `"https://www.yourcompany.com"`
+- Address: `"City, Country"`
+
+---
+
+## Auto-Detect from Website on First Load
+
+When the user has previously extracted a website and saved it (via `ai_tool_projects` or localStorage), or if their profile already has a `website` field set, we pre-fill the URL input field automatically so they can re-extract with one click.
+
+For **new sessions**: the URL input field is empty — no auto-population (the user must provide a URL).
 
 ---
 
 ## Files Changed
 
-| File | Changes | Scope |
+| File | Action | Details |
 |---|---|---|
-| `src/components/corporate-suite/BusinessCardDesigner.tsx` | Add 4 state vars, update `CardFace` props, add Typography collapsible panel, pass to all render sites | ~60 lines added |
-| `src/components/corporate-suite/CVResumeBuilder.tsx` | Add 4 state vars, update `CVPreview` props, add Typography collapsible panel, pass to preview + PDF export | ~60 lines added |
+| `supabase/functions/company-profile-ai/index.ts` | **Edit** | Add `extract_from_url` action that takes scraped markdown and returns structured profile JSON |
+| `src/components/corporate-suite/CompanyProfileBuilder.tsx` | **Rewrite** | Add URL input panel, color palette panel, completion score panel, fix placeholders, wire all new state |
 
-No edge function changes. No database changes. Stamp Generator is already complete and untouched.
+No new database migrations needed — `design_color_palettes` table already exists with JSONB `colors` column.
 
 ---
 
-## Key Behaviors After Implementation
+## Implementation Details
 
-1. **Stamp Generator** — unchanged, already works (Bold, Italic, Font Size, Font Family all wired up)
-2. **Business Card** — new "Typography" collapsible in the left column. Toggling Bold makes the cardholder name and contact fields heavier. Italic adds slant. Font size slider adjusts the name element. Font family changes the card's entire typeface. All changes appear live in the preview.
-3. **CV/Resume** — new "Typography" collapsible below the Template picker. Bold/Italic affect the name heading. Font family overrides the template's default face (e.g. switching Executive template from Georgia to Helvetica). Font size scales the name heading. All changes appear instantly in the live A4 preview.
+### `company-profile-ai` — New Action: `extract_from_url`
+
+```typescript
+} else if (action === "extract_from_url") {
+  systemPrompt = `You are a company profile extractor. Extract structured business information from website content. Return ONLY valid JSON, no explanation.`;
+  userPrompt = `Extract company profile information from this website content and return ONLY valid JSON:
+{
+  "companyName": "company name",
+  "tagline": "company tagline or slogan",
+  "aboutUs": "about us paragraph extracted from the page",
+  "services": [{"title": "service name", "description": "description"}],
+  "team": [{"name": "person name", "role": "title"}],
+  "phone": "phone number",
+  "email": "email address",
+  "website": "${url}",
+  "address": "physical address",
+  "linkedin": "linkedin URL",
+  "instagram": "instagram handle"
+}
+Website content:
+${markdown.slice(0, 8000)}
+Use empty string "" or [] for fields not found.`;
+```
+
+### Color Extraction from Firecrawl Branding
+
+```typescript
+// From firecrawl branding response:
+const brandColors = scrapedData?.data?.branding?.colors;
+if (brandColors) {
+  const palette = [
+    { hex: brandColors.primary || "#000000",    name: "Primary",    role: "primary" },
+    { hex: brandColors.secondary || "#666666",   name: "Secondary",  role: "secondary" },
+    { hex: brandColors.accent || "#C8A766",      name: "Accent",     role: "accent" },
+    { hex: brandColors.background || "#ffffff",  name: "Background", role: "background" },
+    { hex: brandColors.textPrimary || "#111111", name: "Text",       role: "text" },
+  ];
+  setWebsitePalette(palette);
+}
+```
+
+### Drag-and-Drop Color Role Swap
+
+```typescript
+// State: array of 5 colors in role order [primary, secondary, accent, bg, text]
+// On dragStart: store dragged index
+// On drop: swap colors[draggedIdx] with colors[droppedIdx]
+// Role labels never move — only the hex values swap
+```
+
+### Completion Score Calculation
+
+```typescript
+function calcScore(data: ProfileData, logoUrl: string): number {
+  let score = 0;
+  if (data.companyName)                     score += 10;
+  if (data.tagline)                         score += 8;
+  const wordCount = data.aboutUs.trim().split(/\s+/).length;
+  if (wordCount > 10)                       score += 8;
+  if (wordCount > 50)                       score += 7;
+  if (logoUrl)                              score += 10;
+  if (data.services.some(s => s.title))     score += 8;
+  if (data.services.some(s => s.description)) score += 7;
+  if (data.services.filter(s => s.title).length >= 3) score += 5;
+  if (data.team.some(m => m.name))          score += 8;
+  if (data.phone)                           score += 5;
+  if (data.email)                           score += 7;
+  if (data.website)                         score += 5;
+  if (data.address)                         score += 5;
+  if (data.linkedin)                        score += 4;
+  if (data.instagram)                       score += 3;
+  return score; // max 100
+}
+```
+
+---
+
+## User Flow After Implementation
+
+1. User opens `/toolkit/corporate-suite/company-profile`
+2. **URL panel** appears at top — user pastes `https://jbjglobalrealestate.com` and clicks "Extract"
+3. System scrapes the site, extracts colors and text via AI
+4. All fields auto-fill: company name, tagline, about us, services, contact info
+5. **Color palette panel** appears with 5 brand swatches — user can drag "Gold" from Accent to Primary if preferred
+6. **Completion score** shows instantly, e.g. 74% with specific next-step suggestions
+7. User fixes gaps (adds LinkedIn, more services), score climbs to 91%
+8. Exports PDF — template uses extracted brand colors
+9. Palette is saved and available in Business Card Designer and Logo Creator
+
+---
+
+## Graceful Degradation (No Firecrawl)
+
+If Firecrawl is not connected, the URL extraction falls back to:
+1. Using the AI gateway directly with a `fetch` of the URL (basic HTML) — less reliable but functional
+2. Color palette is skipped — user manually picks colors
+3. A banner shows: "For richer extraction including brand colors, connect Firecrawl in Settings"
+
