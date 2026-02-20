@@ -8,6 +8,7 @@ import {
   Download,
   Loader2,
   Image as ImageIcon,
+  Video,
   Trash2,
   Sparkles,
   Palette,
@@ -15,6 +16,8 @@ import {
   ZoomIn,
   Info,
   CheckCircle2,
+  Play,
+  Square,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -63,22 +66,18 @@ const AI_SCENES = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Advanced multi-pass background removal (client-side fallback)
+// AI-guided background removal (primary) + flood-fill fallback
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Adaptive BFS flood-fill with multi-pass refinement.
- *
- * Algorithm:
- * 1. Sample border pixels to build a statistical background color model (mean + variance)
- * 2. BFS flood-fill from all 4 borders — only spread to pixels within adaptive tolerance
- *    of BOTH the flood-fill parent AND the background color model
- * 3. Multi-pass: run 2 additional BFS passes at slightly tighter tolerance to refine edges
- * 4. Morphological close (dilate+erode) to fill holes inside the subject
- * 5. Edge feathering (box blur) for smooth anti-aliased edges
- * 6. Apply final alpha mask to original RGBA pixels
+ * AI-guided adaptive BFS flood-fill.
+ * Uses AI edge-function guidance (bgColorApprox, recommendedTolerance, hasFineDetails)
+ * to calibrate the removal algorithm precisely rather than blind border-sampling.
  */
-async function removeBackgroundFloodFill(file: File): Promise<string> {
+async function removeBackgroundAIGuided(
+  file: File,
+  guidance?: { bgColorApprox?: string; recommendedTolerance?: number; hasFineDetails?: boolean }
+): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     const url = URL.createObjectURL(file);
@@ -87,7 +86,7 @@ async function removeBackgroundFloodFill(file: File): Promise<string> {
       const W = img.naturalWidth;
       const H = img.naturalHeight;
 
-      // Work at reduced resolution for large images (faster, still good quality)
+      // Work at reduced resolution for processing
       const MAX_DIM = 1200;
       const scale = Math.min(1, MAX_DIM / Math.max(W, H));
       const CW = Math.round(W * scale);
@@ -101,46 +100,50 @@ async function removeBackgroundFloodFill(file: File): Promise<string> {
       URL.revokeObjectURL(url);
 
       const imageData = ctx.getImageData(0, 0, CW, CH);
-      const data = imageData.data; // RGBA flat array
+      const data = imageData.data;
 
       const idx = (x: number, y: number) => (y * CW + x) * 4;
 
-      // ── Step 1: Build background color model from border samples ──
-      const borderSamples: number[][] = [];
-      const sampleStep = Math.max(1, Math.floor(Math.min(CW, CH) / 40));
+      // ── Build background color model ──
+      // Use AI-provided color if available, otherwise sample border pixels
+      let mean = [255, 255, 255];
+      let BASE_TOLERANCE = guidance?.recommendedTolerance ?? 40;
 
-      // Sample all 4 borders
-      for (let x = 0; x < CW; x += sampleStep) {
-        const t = idx(x, 0);
-        borderSamples.push([data[t], data[t+1], data[t+2]]);
-        const b = idx(x, CH - 1);
-        borderSamples.push([data[b], data[b+1], data[b+2]]);
+      if (guidance?.bgColorApprox) {
+        // Parse hex color from AI guidance
+        const hex = guidance.bgColorApprox.replace('#', '');
+        if (hex.length === 6) {
+          mean = [
+            parseInt(hex.slice(0, 2), 16),
+            parseInt(hex.slice(2, 4), 16),
+            parseInt(hex.slice(4, 6), 16),
+          ];
+        }
+      } else {
+        // Fallback: sample border pixels
+        const borderSamples: number[][] = [];
+        const sampleStep = Math.max(1, Math.floor(Math.min(CW, CH) / 40));
+        for (let x = 0; x < CW; x += sampleStep) {
+          const t = idx(x, 0); borderSamples.push([data[t], data[t+1], data[t+2]]);
+          const b = idx(x, CH-1); borderSamples.push([data[b], data[b+1], data[b+2]]);
+        }
+        for (let y = 0; y < CH; y += sampleStep) {
+          const l = idx(0, y); borderSamples.push([data[l], data[l+1], data[l+2]]);
+          const r = idx(CW-1, y); borderSamples.push([data[r], data[r+1], data[r+2]]);
+        }
+        const n = borderSamples.length;
+        mean = [0, 0, 0];
+        for (const s of borderSamples) { mean[0] += s[0]; mean[1] += s[1]; mean[2] += s[2]; }
+        mean[0] /= n; mean[1] /= n; mean[2] /= n;
+        let variance = 0;
+        for (const s of borderSamples) {
+          variance += (s[0]-mean[0])**2 + (s[1]-mean[1])**2 + (s[2]-mean[2])**2;
+        }
+        variance /= n;
+        const bgStdDev = Math.sqrt(variance);
+        BASE_TOLERANCE = Math.min(65, Math.max(25, bgStdDev * 2.5 + 20));
       }
-      for (let y = 0; y < CH; y += sampleStep) {
-        const l = idx(0, y);
-        borderSamples.push([data[l], data[l+1], data[l+2]]);
-        const r = idx(CW - 1, y);
-        borderSamples.push([data[r], data[r+1], data[r+2]]);
-      }
 
-      // Compute mean and std deviation of border colors
-      const n = borderSamples.length;
-      const mean = [0, 0, 0];
-      for (const s of borderSamples) { mean[0] += s[0]; mean[1] += s[1]; mean[2] += s[2]; }
-      mean[0] /= n; mean[1] /= n; mean[2] /= n;
-
-      let variance = 0;
-      for (const s of borderSamples) {
-        variance += (s[0]-mean[0])**2 + (s[1]-mean[1])**2 + (s[2]-mean[2])**2;
-      }
-      variance /= n;
-      const bgStdDev = Math.sqrt(variance);
-
-      // Adaptive tolerance: tighter for uniform backgrounds, looser for gradient/complex
-      // Base tolerance scales with how varied the background is
-      const BASE_TOLERANCE = Math.min(60, Math.max(25, bgStdDev * 2.5 + 20));
-
-      // Distance from a pixel to the background color model
       const distToBg = (pi: number) => {
         const dr = data[pi] - mean[0];
         const dg = data[pi+1] - mean[1];
@@ -148,7 +151,6 @@ async function removeBackgroundFloodFill(file: File): Promise<string> {
         return Math.sqrt(dr*dr + dg*dg + db*db);
       };
 
-      // Euclidean distance between two pixel indices
       const distPixels = (i: number, j: number) => {
         const dr = data[i] - data[j];
         const dg = data[i+1] - data[j+1];
@@ -156,31 +158,25 @@ async function removeBackgroundFloodFill(file: File): Promise<string> {
         return Math.sqrt(dr*dr + dg*dg + db*db);
       };
 
-      // ── Step 2: Multi-pass BFS flood-fill ──
-      // Pass 1: generous tolerance (catch the main background)
-      // Pass 2: tighter (refine edges)
-      const PASSES = [BASE_TOLERANCE, BASE_TOLERANCE * 0.7];
-      const isBg = new Uint8Array(CW * CH); // 1 = confirmed background
+      // ── Multi-pass BFS flood-fill guided by AI tolerance ──
+      const PASSES = [BASE_TOLERANCE, BASE_TOLERANCE * 0.75];
+      const isBg = new Uint8Array(CW * CH);
 
       for (const TOLERANCE of PASSES) {
         const visited = new Uint8Array(CW * CH);
         const queue: number[] = [];
 
-        // Seed from borders — only seed pixels that are background-like
         for (let x = 0; x < CW; x++) {
-          const ti = idx(x, 0) / 4;
-          const bi = idx(x, CH-1) / 4;
+          const ti = idx(x, 0) / 4; const bi = idx(x, CH-1) / 4;
           if (!visited[ti]) { visited[ti] = 1; queue.push(ti * 4); }
           if (!visited[bi]) { visited[bi] = 1; queue.push(bi * 4); }
         }
         for (let y = 1; y < CH-1; y++) {
-          const li = idx(0, y) / 4;
-          const ri = idx(CW-1, y) / 4;
+          const li = idx(0, y) / 4; const ri = idx(CW-1, y) / 4;
           if (!visited[li]) { visited[li] = 1; queue.push(li * 4); }
           if (!visited[ri]) { visited[ri] = 1; queue.push(ri * 4); }
         }
 
-        // 8-connected BFS for better corner coverage
         const DIRS = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,-1],[-1,1],[1,1]];
         let head = 0;
         while (head < queue.length) {
@@ -196,11 +192,8 @@ async function removeBackgroundFloodFill(file: File): Promise<string> {
             const nFlat = ni / 4;
             if (visited[nFlat]) continue;
 
-            // A pixel is background if:
-            // 1. It's similar to its BFS neighbor (local continuity)
-            // 2. OR it's similar to the global background color model
             const localSimilar = distPixels(pi, ni) <= TOLERANCE;
-            const bgSimilar = distToBg(ni) <= BASE_TOLERANCE * 1.1;
+            const bgSimilar = distToBg(ni) <= BASE_TOLERANCE * 1.15;
 
             if (localSimilar && bgSimilar) {
               visited[nFlat] = 1;
@@ -209,56 +202,42 @@ async function removeBackgroundFloodFill(file: File): Promise<string> {
             }
           }
         }
-
-        // Merge this pass into the running background mask
-        for (let i = 0; i < CW * CH; i++) {
-          if (visited[i]) isBg[i] = 1;
-        }
+        for (let i = 0; i < CW * CH; i++) { if (visited[i]) isBg[i] = 1; }
       }
 
-      // ── Step 3: Build binary mask — background=0, subject=255 ──
       const mask = new Uint8Array(CW * CH);
-      for (let i = 0; i < CW * CH; i++) {
-        mask[i] = isBg[i] === 1 ? 0 : 255;
-      }
+      for (let i = 0; i < CW * CH; i++) { mask[i] = isBg[i] === 1 ? 0 : 255; }
 
-      // ── Step 4: Morphological close (dilate then erode) to fill holes ──
+      // ── Morphological close (dilate + erode) ──
       const morphOp = (src: Uint8Array, r: number, isMax: boolean) => {
         const out = new Uint8Array(src.length);
         const tmp = new Uint8Array(src.length);
-        // Horizontal pass
         for (let y = 0; y < CH; y++) {
           for (let x = 0; x < CW; x++) {
             let v = isMax ? 0 : 255;
-            for (let dx = -r; dx <= r; dx++) {
-              const nx = x + dx;
-              if (nx >= 0 && nx < CW) v = isMax ? Math.max(v, src[y*CW+nx]) : Math.min(v, src[y*CW+nx]);
-            }
+            for (let dx = -r; dx <= r; dx++) { const nx = x + dx; if (nx >= 0 && nx < CW) v = isMax ? Math.max(v, src[y*CW+nx]) : Math.min(v, src[y*CW+nx]); }
             tmp[y*CW+x] = v;
           }
         }
-        // Vertical pass
         for (let x = 0; x < CW; x++) {
           for (let y = 0; y < CH; y++) {
             let v = isMax ? 0 : 255;
-            for (let dy = -r; dy <= r; dy++) {
-              const ny = y + dy;
-              if (ny >= 0 && ny < CH) v = isMax ? Math.max(v, tmp[ny*CW+x]) : Math.min(v, tmp[ny*CW+x]);
-            }
+            for (let dy = -r; dy <= r; dy++) { const ny = y + dy; if (ny >= 0 && ny < CH) v = isMax ? Math.max(v, tmp[ny*CW+x]) : Math.min(v, tmp[ny*CW+x]); }
             out[y*CW+x] = v;
           }
         }
         return out;
       };
 
-      let refinedMask = morphOp(mask, 3, true);  // dilate — fill gaps
-      refinedMask = morphOp(refinedMask, 2, false); // erode — restore size
+      // For fine details (hair/fur), use smaller morph radius to preserve edges
+      const morphR = guidance?.hasFineDetails ? 2 : 3;
+      let refinedMask = morphOp(mask, morphR, true);
+      refinedMask = morphOp(refinedMask, morphR - 1, false);
 
-      // ── Step 5: Feather edges for smooth anti-aliasing ──
+      // ── Edge feathering ──
       const feather = (src: Uint8Array, r: number): Float32Array => {
         const tmp = new Float32Array(src.length);
         const out = new Float32Array(src.length);
-        // Horizontal box blur
         for (let y = 0; y < CH; y++) {
           let sum = 0, cnt = 0;
           for (let x = 0; x < r; x++) { sum += src[y*CW+x]; cnt++; }
@@ -268,7 +247,6 @@ async function removeBackgroundFloodFill(file: File): Promise<string> {
             tmp[y*CW+x] = sum / cnt;
           }
         }
-        // Vertical box blur
         for (let x = 0; x < CW; x++) {
           let sum = 0, cnt = 0;
           for (let y = 0; y < r; y++) { sum += tmp[y*CW+x]; cnt++; }
@@ -281,20 +259,19 @@ async function removeBackgroundFloodFill(file: File): Promise<string> {
         return out;
       };
 
-      const feathered = feather(refinedMask, 3);
+      // Tighter feather for fine details to preserve hair/fur
+      const featherR = guidance?.hasFineDetails ? 2 : 3;
+      const feathered = feather(refinedMask, featherR);
 
-      // ── Step 6: Apply alpha mask — render at ORIGINAL resolution ──
+      // ── Apply mask at original resolution ──
       const resultCanvas = document.createElement('canvas');
       resultCanvas.width = W;
       resultCanvas.height = H;
       const rctx = resultCanvas.getContext('2d')!;
-
-      // Draw original image at full res
       rctx.drawImage(img, 0, 0, W, H);
       const resultData = rctx.getImageData(0, 0, W, H);
       const rd = resultData.data;
 
-      // For each pixel in the original, bilinearly sample the feathered mask
       for (let y = 0; y < H; y++) {
         for (let x = 0; x < W; x++) {
           const mx = (x / W) * (CW - 1);
@@ -302,13 +279,11 @@ async function removeBackgroundFloodFill(file: File): Promise<string> {
           const mx0 = Math.floor(mx), mx1 = Math.min(mx0+1, CW-1);
           const my0 = Math.floor(my), my1 = Math.min(my0+1, CH-1);
           const fx = mx - mx0, fy = my - my0;
-          // Bilinear interpolation of feathered mask
           const alpha =
             feathered[my0*CW+mx0] * (1-fx) * (1-fy) +
             feathered[my0*CW+mx1] * fx * (1-fy) +
             feathered[my1*CW+mx0] * (1-fx) * fy +
             feathered[my1*CW+mx1] * fx * fy;
-
           rd[(y*W+x)*4+3] = Math.min(255, Math.max(0, Math.round(alpha)));
         }
       }
@@ -323,8 +298,7 @@ async function removeBackgroundFloodFill(file: File): Promise<string> {
   });
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Apply a background preset to an already-transparent cutout PNG
+
 // This NEVER re-runs removal — it just composites the transparent image over a color/gradient
 // ─────────────────────────────────────────────────────────────────────────────
 async function applyBackground(transparentDataUrl: string, backgroundId: string): Promise<string> {
@@ -416,10 +390,20 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
 
   const [selectedBackground, setSelectedBackground] = useState('transparent');
   const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
-  const [activeTab, setActiveTab] = useState<'remove' | 'generate'>('remove');
+  const [activeTab, setActiveTab] = useState<'remove' | 'generate' | 'video'>('remove');
   const [selectedScene, setSelectedScene] = useState(AI_SCENES[0]);
   const [customPrompt, setCustomPrompt] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+
+  // Video BG removal state
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [videoPreviewUrl, setVideoPreviewUrl] = useState<string | null>(null);
+  const [videoResult, setVideoResult] = useState<string | null>(null);
+  const [videoProgress, setVideoProgress] = useState(0);
+  const [videoProgressLabel, setVideoProgressLabel] = useState('');
+  const [isVideoProcessing, setIsVideoProcessing] = useState(false);
+  const [videoBackground, setVideoBackground] = useState('transparent');
 
   // When background preset changes and we already have a transparent cutout, instantly composite
   useEffect(() => {
@@ -529,50 +513,37 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
     setProgress(5);
     setProgressLabel('Preparing image...');
     try {
-      let transparent: string | null = null;
-      let aiSucceeded = false;
-
-      // Try AI removal first — resize image to keep payload small
+      // Step 1: Get AI guidance from the remove-background edge function
+      setProgress(15);
+      setProgressLabel('Analyzing with AI...');
+      let guidance: { bgColorApprox?: string; recommendedTolerance?: number; hasFineDetails?: boolean } | undefined;
       try {
-        setProgress(15);
-        setProgressLabel('Sending to AI model...');
         const resizedDataUrl = await resizeImageForAI(image, 1024);
-
-        const { data, error } = await supabase.functions.invoke('ai-background-remove', {
-          body: { mode: 'remove', image: resizedDataUrl }
+        const base64 = resizedDataUrl.split(',')[1];
+        const mimeType = resizedDataUrl.split(';')[0].split(':')[1];
+        const { data } = await supabase.functions.invoke('remove-background', {
+          body: { image_base64: base64, image_type: mimeType }
         });
-
-        if (!error && data?.success && data?.processedImage) {
-          transparent = data.processedImage;
-          aiSucceeded = true;
-          setProgress(88);
-          setProgressLabel('AI removal complete!');
-        } else {
-          const reason = data?.reason || (error?.message ?? 'unknown');
-          console.log('AI removal fallback reason:', reason);
+        if (data?.success && data?.guidance) {
+          guidance = data.guidance;
         }
-      } catch (aiErr) {
-        console.warn('AI removal error (using client-side fallback):', aiErr);
+      } catch {
+        // Guidance is optional — proceed without it
       }
 
-      if (!aiSucceeded) {
-        // Client-side adaptive flood-fill
-        setProgress(35);
-        setProgressLabel('Running smart background detection...');
-        transparent = await removeBackgroundFloodFill(image);
-        setProgress(82);
-        setProgressLabel('Finalizing cutout...');
-      }
-
-      setTransparentResult(transparent!);
-
-      setProgress(92);
+      // Step 2: Run AI-guided client-side removal
+      setProgress(35);
+      setProgressLabel(guidance ? 'AI-guided background removal...' : 'Running smart background detection...');
+      const transparent = await removeBackgroundAIGuided(image, guidance);
+      setProgress(85);
       setProgressLabel('Applying background...');
-      const composited = await applyBackground(transparent!, selectedBackground);
+      setTransparentResult(transparent);
+
+      const composited = await applyBackground(transparent, selectedBackground);
       setResult(composited);
       setProgress(100);
       setProgressLabel('Done!');
-      toast.success(aiSucceeded ? 'AI background removal complete!' : 'Background removed!');
+      toast.success(guidance ? 'AI-guided background removal complete!' : 'Background removed!');
     } catch (err) {
       toast.error('Failed to process image. Please try again.');
       console.error(err);
@@ -607,16 +578,15 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
       if (data?.error) throw new Error(data.error);
 
       if (data?.success && data?.processedImage) {
-        setTransparentResult(null); // AI generate creates a fully composited result
+        setTransparentResult(null);
         setResult(data.processedImage);
         setProgress(100);
         setProgressLabel('Done!');
         toast.success('AI background generated successfully!');
       } else if (data?.fallbackToRemoval) {
-        // AI couldn't generate — do client-side removal instead
         setProgress(50);
         setProgressLabel('Falling back to background removal...');
-        const transparent = await removeBackgroundFloodFill(image);
+        const transparent = await removeBackgroundAIGuided(image);
         setTransparentResult(transparent);
         const composited = await applyBackground(transparent, 'transparent');
         setResult(composited);
@@ -639,6 +609,155 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
       setIsGenerating(false);
     }
   };
+
+  // ── Video background removal using FFmpeg WASM ──
+  const handleVideoFileSelected = useCallback((file: File) => {
+    if (file.size > 200 * 1024 * 1024) { toast.error('Video too large. Maximum size is 200MB.'); return; }
+    if (!file.type.startsWith('video/')) { toast.error('Please upload a video file'); return; }
+    setVideoFile(file);
+    setVideoPreviewUrl(URL.createObjectURL(file));
+    setVideoResult(null);
+    setVideoProgress(0);
+    setVideoProgressLabel('');
+  }, []);
+
+  const handleVideoRemoveBackground = async () => {
+    if (!videoFile || !consent) { toast.error('Please upload a video and confirm consent'); return; }
+    setIsVideoProcessing(true);
+    setVideoProgress(5);
+    setVideoProgressLabel('Loading video processor...');
+
+    try {
+      const { FFmpeg } = await import('@ffmpeg/ffmpeg');
+      const { fetchFile, toBlobURL } = await import('@ffmpeg/util');
+      const ffmpeg = new FFmpeg();
+
+      setVideoProgress(10);
+      setVideoProgressLabel('Initializing FFmpeg...');
+
+      await ffmpeg.load({
+        coreURL: await toBlobURL('https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm/ffmpeg-core.js', 'text/javascript'),
+        wasmURL: await toBlobURL('https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm/ffmpeg-core.wasm', 'application/wasm'),
+      });
+
+      setVideoProgress(20);
+      setVideoProgressLabel('Loading video...');
+      await ffmpeg.writeFile('input.mp4', await fetchFile(videoFile));
+
+      // Extract first frame to get AI guidance for the background color
+      setVideoProgress(25);
+      setVideoProgressLabel('Sampling background with AI...');
+      await ffmpeg.exec(['-i', 'input.mp4', '-vframes', '1', '-f', 'image2', 'frame0.jpg']);
+      const frameData = await ffmpeg.readFile('frame0.jpg');
+      const frameBlob = new Blob([frameData as unknown as BlobPart], { type: 'image/jpeg' });
+      const frameFile = new File([frameBlob], 'frame0.jpg', { type: 'image/jpeg' });
+
+      // Get AI guidance from edge function on first frame
+      let bgColor = '#FFFFFF';
+      let tolerance = 40;
+      try {
+        const resized = await resizeImageForAI(frameFile, 512);
+        const base64 = resized.split(',')[1];
+        const mimeType = resized.split(';')[0].split(':')[1];
+        const { data } = await supabase.functions.invoke('remove-background', {
+          body: { image_base64: base64, image_type: mimeType }
+        });
+        if (data?.success && data?.guidance?.bgColorApprox) {
+          bgColor = data.guidance.bgColorApprox;
+          tolerance = data.guidance.recommendedTolerance ?? 40;
+        }
+      } catch { /* use defaults */ }
+
+      setVideoProgress(35);
+      setVideoProgressLabel('Extracting frames...');
+
+      // Get video duration info
+      let totalFrames = 0;
+      ffmpeg.on('log', ({ message }) => {
+        const match = message.match(/frame=\s*(\d+)/);
+        if (match) totalFrames = parseInt(match[1]);
+      });
+
+      // Apply chromakey-style background removal using detected color
+      // Parse hex to RGB for ffmpeg colorkey filter
+      const hex = bgColor.replace('#', '');
+      const r = parseInt(hex.slice(0,2),16);
+      const g = parseInt(hex.slice(2,4),16);
+      const b = parseInt(hex.slice(4,6),16);
+      const ffmpegColor = `0x${hex.padEnd(6, '0')}`;
+
+      // Normalize tolerance (0-80 scale → 0.0-0.5 ffmpeg scale)
+      const ffmpegTolerance = Math.min(0.5, Math.max(0.05, tolerance / 160));
+      const ffmpegSimilarity = ffmpegTolerance;
+      const ffmpegBlend = Math.min(0.1, ffmpegTolerance * 0.5);
+
+      setVideoProgress(40);
+      setVideoProgressLabel(`Removing background (color: ${bgColor})...`);
+
+      // Apply background removal with colorkey + background color
+      let outputFilter = '';
+      if (videoBackground === 'transparent') {
+        // Output as WebM with alpha channel
+        outputFilter = `colorkey=${ffmpegColor}:${ffmpegSimilarity}:${ffmpegBlend}`;
+        await ffmpeg.exec([
+          '-i', 'input.mp4',
+          '-vf', outputFilter,
+          '-c:v', 'libvpx-vp9',
+          '-pix_fmt', 'yuva420p',
+          '-auto-alt-ref', '0',
+          '-b:v', '2M',
+          'output.webm'
+        ]);
+        const data = await ffmpeg.readFile('output.webm');
+        const blob = new Blob([data as unknown as BlobPart], { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        setVideoResult(url);
+      } else {
+        // Apply solid background color
+        const bgMap: Record<string, string> = {
+          white: '0xFFFFFF', black: '0x000000', navy: '0x1E3A5F',
+          gray: '0x6B7280', 'gradient-blue': '0x3B82F6'
+        };
+        const bgFfmpegColor = bgMap[videoBackground] || '0x000000';
+        outputFilter = `[0:v]colorkey=${ffmpegColor}:${ffmpegSimilarity}:${ffmpegBlend}[fg];color=${bgFfmpegColor}:size=${r}x${b}[bg];[bg][fg]overlay=format=auto`;
+        // Simpler approach: apply colorkey and replace with background color
+        await ffmpeg.exec([
+          '-i', 'input.mp4',
+          '-vf', `colorkey=${ffmpegColor}:${ffmpegSimilarity}:${ffmpegBlend},split[main][alpha];[main]drawbox=0:0:iw:ih:${bgFfmpegColor}:fill[bg];[bg][alpha]alphamerge`,
+          '-c:v', 'libx264',
+          '-pix_fmt', 'yuv420p',
+          '-movflags', '+faststart',
+          'output.mp4'
+        ]);
+        const data = await ffmpeg.readFile('output.mp4');
+        const blob = new Blob([data as unknown as BlobPart], { type: 'video/mp4' });
+        const url = URL.createObjectURL(blob);
+        setVideoResult(url);
+      }
+
+      setVideoProgress(100);
+      setVideoProgressLabel('Done!');
+      toast.success('Video background removed!');
+    } catch (err) {
+      console.error('Video processing error:', err);
+      toast.error('Video processing failed. Try a shorter clip or smaller file.');
+    } finally {
+      setIsVideoProcessing(false);
+    }
+  };
+
+  const handleVideoDownload = () => {
+    if (!videoResult) return;
+    const a = document.createElement('a');
+    a.href = videoResult;
+    a.download = `bg-removed-${Date.now()}.${videoBackground === 'transparent' ? 'webm' : 'mp4'}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    toast.success('Video downloaded!');
+  };
+
+
 
   const handleDownload = () => {
     if (!result) return;
@@ -678,8 +797,9 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
 
   return (
     <div style={{ background: C.bg, minHeight: "100vh" }}>
-      {/* Hidden file input */}
+      {/* Hidden file inputs */}
       <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileInput} className="hidden" />
+      <input ref={videoInputRef} type="file" accept="video/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleVideoFileSelected(f); }} className="hidden" />
 
       {!embedded && (
         <header style={{ borderBottom: `1px solid ${C.border}`, background: C.surface }}>
@@ -856,13 +976,14 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             {/* Mode Tabs */}
             <div className="flex gap-1 p-1 rounded-xl" style={{ background: "rgba(99,102,241,0.06)", border: `1px solid ${C.border}` }}>
               {[
-                { id: 'remove', label: 'Remove Background', icon: Wand2 },
-                { id: 'generate', label: 'AI Generate Scene', icon: Sparkles },
+                { id: 'remove', label: 'Remove BG', icon: Wand2 },
+                { id: 'generate', label: 'AI Scene', icon: Sparkles },
+                { id: 'video', label: 'Video BG', icon: Video },
               ].map(tab => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as 'remove' | 'generate')}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-all"
+                  onClick={() => setActiveTab(tab.id as 'remove' | 'generate' | 'video')}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-sm font-medium transition-all"
                   style={{
                     background: activeTab === tab.id ? C.btnPrimary : 'rgba(255,255,255,0.07)',
                     color: 'white',
@@ -975,6 +1096,85 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               </div>
             )}
 
+            {/* ── VIDEO BG TAB ── */}
+            {activeTab === 'video' && (
+              <div className="space-y-4">
+                <div className="rounded-2xl p-5 space-y-4" style={{ background: C.surface, border: `1px solid ${C.border}` }}>
+                  <h3 className="text-white font-semibold flex items-center gap-2">
+                    <Video className="h-4 w-4" style={{ color: C.accentText }} />
+                    Video Background Removal
+                    <span className="ml-auto text-xs px-2 py-0.5 rounded-full" style={{ background: "rgba(99,102,241,0.15)", color: C.accentText }}>FFmpeg + AI</span>
+                  </h3>
+                  {/* Video Upload */}
+                  {!videoFile ? (
+                    <div
+                      onClick={() => videoInputRef.current?.click()}
+                      className="rounded-xl p-10 text-center cursor-pointer transition-all"
+                      style={{ border: `2px dashed ${C.border}`, background: "rgba(99,102,241,0.03)" }}
+                    >
+                      <Video className="h-10 w-10 mx-auto mb-3" style={{ color: "rgba(99,102,241,0.5)" }} />
+                      <p className="text-white font-medium mb-1">Drop your video here</p>
+                      <p className="text-xs mb-4" style={{ color: C.dimText }}>MP4, MOV, WebM · Max 200MB</p>
+                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white"
+                        style={{ background: C.btnPrimary }}>
+                        <Upload className="h-4 w-4" /> Browse Video
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="rounded-xl overflow-hidden" style={{ border: `1px solid ${C.border}` }}>
+                          <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText, borderBottom: `1px solid rgba(99,102,241,0.1)` }}>Original</div>
+                          <video src={videoPreviewUrl!} controls className="w-full" style={{ maxHeight: 200 }} />
+                        </div>
+                        <div className="rounded-xl overflow-hidden" style={{ border: `1px solid ${C.border}` }}>
+                          <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText, borderBottom: `1px solid rgba(99,102,241,0.1)` }}>Result</div>
+                          {videoResult ? (
+                            <video src={videoResult} controls className="w-full" style={{ maxHeight: 200 }} />
+                          ) : (
+                            <div className="flex items-center justify-center h-[140px]" style={{ color: C.dimText }}>
+                              {isVideoProcessing ? (
+                                <div className="text-center">
+                                  <Loader2 className="h-8 w-8 mx-auto mb-2 animate-spin" style={{ color: C.accentText }} />
+                                  <p className="text-xs">{videoProgressLabel}</p>
+                                  <p className="text-xs mt-1">{videoProgress}%</p>
+                                </div>
+                              ) : (
+                                <div className="text-center"><Video className="h-8 w-8 mx-auto mb-2 opacity-30" /><p className="text-xs">Result here</p></div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      {isVideoProcessing && (
+                        <div className="space-y-1">
+                          <Progress value={videoProgress} className="h-1.5" />
+                          <p className="text-xs text-center" style={{ color: C.accentText }}>{videoProgressLabel}</p>
+                        </div>
+                      )}
+                      {/* Background color for video */}
+                      <div>
+                        <p className="text-xs font-medium text-white/60 mb-2">Output background</p>
+                        <div className="flex flex-wrap gap-2">
+                          {BG_PRESETS.map(p => (
+                            <button key={p.id} onClick={() => setVideoBackground(p.id)}
+                              className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                              style={{ background: videoBackground === p.id ? "rgba(99,102,241,0.3)" : "rgba(255,255,255,0.08)", border: `1px solid ${videoBackground === p.id ? "rgba(99,102,241,0.7)" : "rgba(255,255,255,0.15)"}`, color: 'white' }}>
+                              {p.color ? <span className="inline-block w-3 h-3 rounded-sm mr-1 align-middle" style={{ background: p.color }} /> : p.icon + ' '}
+                              {p.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-xs rounded-lg px-3 py-2" style={{ background: "rgba(99,102,241,0.06)", color: C.accentText }}>
+                        ℹ️ AI samples the first frame to detect background color, then applies FFmpeg colorkey filter across all frames.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Consent */}
             <div className="flex items-start gap-3 p-4 rounded-xl"
               style={{ background: "rgba(99,102,241,0.04)", border: "1px solid rgba(99,102,241,0.15)" }}>
@@ -984,14 +1184,12 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               </label>
             </div>
 
-            {/* Whiten Clothing button — shown when a result exists */}
-            {result && (
+            {/* Whiten Clothing button — shown when a photo result exists */}
+            {result && activeTab !== 'video' && (
               <div className="rounded-2xl p-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.08)" }}>
                 <div className="flex items-center justify-between flex-wrap gap-3">
                   <div>
-                    <p className="text-white text-sm font-semibold flex items-center gap-2">
-                      👕 Whiten Clothing
-                    </p>
+                    <p className="text-white text-sm font-semibold flex items-center gap-2">👕 Whiten Clothing</p>
                     <p className="text-xs mt-0.5" style={{ color: C.dimText }}>Make white garments pure white — preserves skin tones</p>
                   </div>
                   <button
@@ -1000,8 +1198,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                       const img = new Image();
                       img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        canvas.width = img.naturalWidth;
-                        canvas.height = img.naturalHeight;
+                        canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
                         const ctx = canvas.getContext('2d', { willReadFrequently: true })!;
                         ctx.drawImage(img, 0, 0);
                         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -1009,28 +1206,24 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                         for (let i = 0; i < d.length; i += 4) {
                           const r = d[i], g = d[i+1], b = d[i+2];
                           const brightness = (r + g + b) / 3;
-                          const maxC = Math.max(r, g, b);
-                          const minC = Math.min(r, g, b);
+                          const maxC = Math.max(r, g, b), minC = Math.min(r, g, b);
                           const saturation = maxC === 0 ? 0 : (maxC - minC) / maxC;
                           if (brightness > 160 && saturation < 0.35) {
                             const strength = Math.min(1, Math.max(0, (brightness - 160) / 95)) * 0.9;
-                            d[i]   = Math.round(r + (255 - r) * strength);
+                            d[i] = Math.round(r + (255 - r) * strength);
                             d[i+1] = Math.round(g + (255 - g) * strength);
                             d[i+2] = Math.round(b + (255 - b) * strength);
                           }
                         }
                         ctx.putImageData(imageData, 0, 0);
-                        const newResult = canvas.toDataURL('image/png');
-                        setResult(newResult);
+                        setResult(canvas.toDataURL('image/png'));
                         toast.success('Clothing whitened!');
                       };
                       img.src = result;
                     }}
                     className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all"
-                    style={{ background: "linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 100%)", color: "#1E293B", boxShadow: "0 2px 12px rgba(255,255,255,0.15)" }}
-                  >
-                    👕 Whiten Now
-                  </button>
+                    style={{ background: "linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 100%)", color: "#1E293B" }}
+                  >👕 Whiten Now</button>
                 </div>
               </div>
             )}
@@ -1038,45 +1231,49 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3">
               {activeTab === 'remove' && !transparentResult && (
-                <button
-                  onClick={handleRemoveBackground}
-                  disabled={!consent || isLoading}
+                <button onClick={handleRemoveBackground} disabled={!consent || isLoading}
                   className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl text-white font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ background: C.btnPrimary, boxShadow: C.btnShadow }}
-                >
-                  {isProcessing
-                    ? <><Loader2 className="h-5 w-5 animate-spin" /> {progressLabel || `Processing ${Math.round(progress)}%`}</>
-                    : <><Wand2 className="h-5 w-5" /> Remove Background</>}
+                  style={{ background: C.btnPrimary, boxShadow: C.btnShadow }}>
+                  {isProcessing ? <><Loader2 className="h-5 w-5 animate-spin" /> {progressLabel || `Processing ${Math.round(progress)}%`}</> : <><Wand2 className="h-5 w-5" /> Remove Background</>}
                 </button>
               )}
               {activeTab === 'remove' && transparentResult && (
-                <button
-                  onClick={resetResult}
-                  className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-medium transition-all text-white"
-                  style={{ background: "rgba(255,255,255,0.14)", border: `1px solid rgba(255,255,255,0.35)` }}
-                >
+                <button onClick={resetResult} className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-medium transition-all text-white"
+                  style={{ background: "rgba(255,255,255,0.14)", border: `1px solid rgba(255,255,255,0.35)` }}>
                   <RefreshCw className="h-4 w-4" /> Re-process
                 </button>
               )}
               {activeTab === 'generate' && (
-                <button
-                  onClick={handleAIGenerate}
-                  disabled={!consent || isLoading}
+                <button onClick={handleAIGenerate} disabled={!consent || isLoading}
                   className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl text-white font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ background: "linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)", boxShadow: "0 4px 20px rgba(139,92,246,0.4)" }}
-                >
-                  {isGenerating
-                    ? <><Loader2 className="h-5 w-5 animate-spin" /> {progressLabel || `Generating Scene ${Math.round(progress)}%`}</>
-                    : <><Sparkles className="h-5 w-5" /> Generate AI Scene</>}
+                  style={{ background: "linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)", boxShadow: "0 4px 20px rgba(139,92,246,0.4)" }}>
+                  {isGenerating ? <><Loader2 className="h-5 w-5 animate-spin" /> {progressLabel || `Generating ${Math.round(progress)}%`}</> : <><Sparkles className="h-5 w-5" /> Generate AI Scene</>}
                 </button>
               )}
-              {result && (
-                <button
-                  onClick={handleDownload}
-                  className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-semibold text-white transition-all"
-                  style={{ background: "linear-gradient(135deg, #059669, #10B981)", boxShadow: "0 4px 16px rgba(16,185,129,0.35)" }}
-                >
+              {activeTab === 'video' && videoFile && (
+                <button onClick={handleVideoRemoveBackground} disabled={!consent || isVideoProcessing}
+                  className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl text-white font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ background: "linear-gradient(135deg, #0EA5E9 0%, #6366F1 100%)", boxShadow: "0 4px 20px rgba(14,165,233,0.4)" }}>
+                  {isVideoProcessing ? <><Loader2 className="h-5 w-5 animate-spin" /> {videoProgressLabel || `Processing ${videoProgress}%`}</> : <><Video className="h-5 w-5" /> Remove Video Background</>}
+                </button>
+              )}
+              {activeTab === 'video' && videoFile && (
+                <button onClick={() => { setVideoFile(null); setVideoPreviewUrl(null); setVideoResult(null); }}
+                  className="flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl text-sm font-medium text-white transition-all"
+                  style={{ background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.3)", color: "#f87171" }}>
+                  <Trash2 className="h-4 w-4" /> Clear
+                </button>
+              )}
+              {result && activeTab !== 'video' && (
+                <button onClick={handleDownload} className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-semibold text-white transition-all"
+                  style={{ background: "linear-gradient(135deg, #059669, #10B981)", boxShadow: "0 4px 16px rgba(16,185,129,0.35)" }}>
                   <Download className="h-4 w-4" /> Download PNG
+                </button>
+              )}
+              {videoResult && activeTab === 'video' && (
+                <button onClick={handleVideoDownload} className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-semibold text-white transition-all"
+                  style={{ background: "linear-gradient(135deg, #059669, #10B981)", boxShadow: "0 4px 16px rgba(16,185,129,0.35)" }}>
+                  <Download className="h-4 w-4" /> Download Video
                 </button>
               )}
             </div>
