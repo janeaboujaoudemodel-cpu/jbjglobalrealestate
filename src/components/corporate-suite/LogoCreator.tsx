@@ -384,7 +384,7 @@ export default function LogoCreator() {
           <VoiceInputButton onTranscript={t => setDescription(prev => prev ? prev + " " + t : t)} size="icon" className="shrink-0 mt-0.5" />
         </div>
       </div>
-      <Button onClick={() => generate()} disabled={generating || !name.trim()} className="w-full h-10 text-sm font-bold gap-2 text-white" style={{ background: "linear-gradient(135deg, #f97316, #ef4444)" }}>
+      <Button onClick={() => generate()} disabled={generating || !name.trim()} className="w-full h-10 text-sm font-bold gap-2 border border-[#C9A84C]/60" style={{ background: "linear-gradient(135deg, #1a1a1a, #2d2d2d)", color: "#C9A84C", boxShadow: "0 0 12px rgba(201,168,76,0.25)" }}>
         {generating ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
         {generating ? "Generating…" : logo ? "Regenerate" : "Generate Logo"}
       </Button>
@@ -397,9 +397,9 @@ export default function LogoCreator() {
         const Icon = ind.icon;
         return (
           <button key={ind.id} onClick={() => setIndustry(ind.id)}
-            className={`p-3 rounded-xl border-2 text-left transition-all ${industry === ind.id ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))] hover:border-orange-300"}`}>
+            className={`p-3 rounded-xl border-2 text-left transition-all ${industry === ind.id ? "border-[#C9A84C] bg-[#C9A84C]/10" : "border-[hsl(var(--border))] hover:border-[#C9A84C]/60"}`}>
             <div className="flex items-center gap-2 mb-1">
-              <Icon size={14} className={industry === ind.id ? "text-orange-500" : "text-[hsl(var(--muted-foreground))]"} />
+              <Icon size={14} className={industry === ind.id ? "text-[#C9A84C]" : "text-[hsl(var(--muted-foreground))]"} />
               <p className="text-xs font-semibold text-[hsl(var(--foreground))] leading-tight">{ind.label}</p>
             </div>
             <p className="text-[9px] text-[hsl(var(--muted-foreground))] pl-5 leading-tight">{ind.dna}</p>
@@ -413,7 +413,7 @@ export default function LogoCreator() {
     <div className="grid grid-cols-1 gap-2">
       {STYLES.map(s => (
         <button key={s.id} onClick={() => setStyle(s.id)}
-          className={`p-3 rounded-xl border-2 text-left transition-all ${style === s.id ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))] hover:border-orange-300"}`}>
+          className={`p-3 rounded-xl border-2 text-left transition-all ${style === s.id ? "border-[#C9A84C] bg-[#C9A84C]/10" : "border-[hsl(var(--border))] hover:border-[#C9A84C]/60"}`}>
           <p className="text-sm font-semibold text-[hsl(var(--foreground))]">{s.label}</p>
           <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{s.desc}</p>
         </button>
@@ -426,7 +426,7 @@ export default function LogoCreator() {
       <div className="grid grid-cols-4 gap-2">
         {COLOR_PRESETS.map((c, i) => (
           <button key={i} onClick={() => { setColorPreset(i); setCustomColors({ primary: "", secondary: "", accent: "" }); }}
-            className={`p-2 rounded-xl border-2 transition-all ${colorPreset === i && !customColors.primary ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))] hover:border-orange-300"}`}>
+            className={`p-2 rounded-xl border-2 transition-all ${colorPreset === i && !customColors.primary ? "border-[#C9A84C] bg-[#C9A84C]/10" : "border-[hsl(var(--border))] hover:border-[#C9A84C]/60"}`}>
             <div className="flex gap-0.5 justify-center mb-1.5">
               <div className="w-4 h-4 rounded-full border border-white/60 shadow-sm" style={{ background: c.primary }} />
               <div className="w-4 h-4 rounded-full border border-[hsl(var(--border))] shadow-sm" style={{ background: c.secondary }} />
@@ -449,7 +449,7 @@ export default function LogoCreator() {
           ))}
         </div>
         {(customColors.primary || customColors.secondary || customColors.accent) && (
-          <button onClick={() => setCustomColors({ primary: "", secondary: "", accent: "" })} className="text-[10px] text-orange-500 hover:underline mt-1">Reset to preset</button>
+          <button onClick={() => setCustomColors({ primary: "", secondary: "", accent: "" })} className="text-[10px] text-[#C9A84C] hover:underline mt-1">Reset to preset</button>
         )}
       </div>
     </div>
@@ -459,7 +459,7 @@ export default function LogoCreator() {
     <div className="grid grid-cols-1 gap-2">
       {FONTS.map((f, idx) => (
         <button key={`${f.value}-${idx}`} onClick={() => setFont(f.value)}
-          className={`p-3 rounded-xl border-2 text-left transition-all ${font === f.value && FONTS.findIndex(ff => ff.value === font) === idx ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))] hover:border-orange-300"}`}>
+          className={`p-3 rounded-xl border-2 text-left transition-all ${font === f.value && FONTS.findIndex(ff => ff.value === font) === idx ? "border-[#C9A84C] bg-[#C9A84C]/10" : "border-[hsl(var(--border))] hover:border-[#C9A84C]/60"}`}>
           <p className="text-sm font-semibold text-[hsl(var(--foreground))]" style={{ fontFamily: f.value }}>{f.label}</p>
           <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{f.desc}</p>
         </button>
@@ -497,14 +497,14 @@ export default function LogoCreator() {
           <div className="space-y-2">
             <Button onClick={downloadSVG} variant="outline" className="w-full gap-2 text-xs"><Download size={13} /> Download SVG</Button>
             <Button onClick={downloadPNG} variant="outline" className="w-full gap-2 text-xs"><Download size={13} /> Download PNG 512px</Button>
-            <Button onClick={downloadFullKit} disabled={downloadingKit} className="w-full gap-2 text-xs text-white" style={{ background: "linear-gradient(135deg, #f97316, #ef4444)" }}>
+            <Button onClick={downloadFullKit} disabled={downloadingKit} className="w-full gap-2 text-xs text-[#1a1a1a] font-semibold border border-[#C9A84C]/60" style={{ background: "linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)" }}>
               {downloadingKit ? <Loader2 size={13} className="animate-spin" /> : <Archive size={13} />}
               {downloadingKit ? "Packaging…" : "Full Kit (ZIP)"}
             </Button>
           </div>
           {/* Save to Assets */}
           <div className="space-y-2 pt-2 border-t border-[hsl(var(--border))]">
-            <Button onClick={handleSaveToAssets} disabled={saving} variant="outline" className="w-full gap-2 text-xs border-orange-300 text-orange-600 hover:bg-orange-50">
+            <Button onClick={handleSaveToAssets} disabled={saving} variant="outline" className="w-full gap-2 text-xs border-[#C9A84C]/60 text-[#C9A84C] hover:bg-[#C9A84C]/10">
               {saving ? <Loader2 size={14} className="animate-spin" /> : <Bookmark size={14} />}
               Save to Brand Assets
             </Button>
