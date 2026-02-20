@@ -1,6 +1,6 @@
 /**
  * Renders an SVG stamp concept inline with multi-color tinting support.
- * Supports primary + secondary + accent color, and font-family override.
+ * Supports primary + secondary + accent color, font-family, font-weight, font-style, and font-size overrides.
  */
 import React from 'react';
 import DOMPurify from 'dompurify';
@@ -15,6 +15,12 @@ interface Props {
   accentColor?: string;
   /** Font family override — replaces font-family in the SVG */
   fontFamily?: string;
+  /** Font weight override */
+  fontWeight?: 'normal' | 'bold';
+  /** Font style override */
+  fontStyle?: 'normal' | 'italic';
+  /** Font size override in px — skips values < 4px */
+  fontSize?: number | null;
   className?: string;
   size?: number;
 }
@@ -25,6 +31,9 @@ export function StampSVGRenderer({
   secondaryColor,
   accentColor,
   fontFamily,
+  fontWeight,
+  fontStyle,
+  fontSize,
   className = '',
   size = 240,
 }: Props) {
@@ -44,11 +53,32 @@ export function StampSVGRenderer({
     tinted = tinted.replace(/font-family:\s*[^;'"]+/gi, `font-family:${fontFamily}`);
   }
 
+  // Apply font-weight override
+  if (fontWeight) {
+    tinted = tinted.replace(/font-weight="[^"]*"/gi, `font-weight="${fontWeight}"`);
+    tinted = tinted.replace(/font-weight:\s*[^;'"]+/gi, `font-weight:${fontWeight}`);
+  }
+
+  // Apply font-style override
+  if (fontStyle) {
+    tinted = tinted.replace(/font-style="[^"]*"/gi, `font-style="${fontStyle}"`);
+    tinted = tinted.replace(/font-style:\s*[^;'"]+/gi, `font-style:${fontStyle}`);
+  }
+
+  // Apply font-size override — skip tiny values (< 4px) to preserve decorative elements
+  if (fontSize != null) {
+    tinted = tinted.replace(/font-size="(\d+(?:\.\d+)?)"/gi, (_, px) => {
+      const orig = parseFloat(px);
+      if (orig < 4) return `font-size="${px}"`;
+      return `font-size="${fontSize}"`;
+    });
+  }
+
   // Sanitize SVG before rendering — preserve clip-path, direction, unicode-bidi
   const clean = typeof window !== 'undefined'
     ? DOMPurify.sanitize(tinted, {
         USE_PROFILES: { svg: true, svgFilters: true },
-        ADD_ATTR: ['clip-path', 'dominant-baseline', 'unicode-bidi', 'direction', 'bidi-override', 'letter-spacing', 'text-anchor', 'font-weight', 'font-size', 'font-family'],
+        ADD_ATTR: ['clip-path', 'dominant-baseline', 'unicode-bidi', 'direction', 'bidi-override', 'letter-spacing', 'text-anchor', 'font-weight', 'font-size', 'font-family', 'font-style'],
         FORCE_BODY: false,
       })
     : tinted;

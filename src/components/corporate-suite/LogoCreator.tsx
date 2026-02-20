@@ -201,12 +201,15 @@ export default function LogoCreator() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { toast.error("Please log in to save assets"); return; }
 
+      const svgBase64 = btoa(unescape(encodeURIComponent(logo.svgContent)));
+      const dataUri = `data:image/svg+xml;base64,${svgBase64}`;
+
       const { error } = await supabase.from("design_assets").insert({
         user_id: session.user.id,
         asset_type: "logo",
         name: `${name} Logo`,
-        svg_content: logo.svgContent,
-      } as Parameters<typeof supabase.from>[0] extends "design_assets" ? never : never);
+        file_url: dataUri,
+      });
 
       if (error) throw error;
       toast.success("Saved to Brand Assets! It will appear in the Brand Asset Library.");

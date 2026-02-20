@@ -714,6 +714,7 @@ const App = () => (
                 <Route path="/toolkit/corporate-suite/cover-letter" element={<CoverLetterGenerator />} />
                 <Route path="/toolkit/corporate-suite/landing-page" element={<LandingPageBuilder />} />
                 <Route path="/toolkit/corporate-suite/logo-creator" element={<LogoCreator />} />
+                <Route path="/toolkit/corporate-suite/company-profile" element={<CompanyProfileBuilder />} />
 
                 {/* Creative Suite - Owner-only */}
                 <Route path="/studio" element={<OwnerGuard><Studio /></OwnerGuard>} />

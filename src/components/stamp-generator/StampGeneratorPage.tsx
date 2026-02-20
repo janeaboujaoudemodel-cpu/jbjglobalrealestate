@@ -665,7 +665,7 @@ export default function StampGeneratorPage() {
               <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
                 <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Selected Preview</p>
                 <div className="flex items-center justify-center py-2">
-                  <StampSVGRenderer svgSource={selectedSvg} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={`${fontBold ? 'font-weight:bold;' : ''}${fontItalic ? 'font-style:italic;' : ''}${fontFamily}`} size={140}/>
+                  <StampSVGRenderer svgSource={selectedSvg} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} size={140}/>
                 </div>
               </div>
             )}
@@ -756,6 +756,7 @@ export default function StampGeneratorPage() {
                   {favoriteConcepts.map(c => (
                     <ConceptCard key={c.id} concept={c} svgOverride={svgOverrides[c.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
+                      fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize}
                       togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText}/>
                   ))}
                 </div>
@@ -785,6 +786,7 @@ export default function StampGeneratorPage() {
                   {concepts.map(concept => (
                     <ConceptCard key={concept.id} concept={concept} svgOverride={svgOverrides[concept.id]}
                       selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
+                      fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize}
                       togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText}/>
                   ))}
                 </div>
@@ -974,7 +976,7 @@ export default function StampGeneratorPage() {
 
 // ─── Concept Card ─────────────────────────────────────────────────────────────
 function ConceptCard({
-  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, togglingFav, onSelect, onToggleFav, onEditText
+  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, togglingFav, onSelect, onToggleFav, onEditText
 }: {
   concept: StampDesignConcept;
   svgOverride?: string;
@@ -983,6 +985,9 @@ function ConceptCard({
   secondaryColor?: string;
   accentColor?: string;
   fontFamily?: string;
+  fontBold?: boolean;
+  fontItalic?: boolean;
+  manualFontSize?: number | null;
   togglingFav: string | null;
   onSelect: (c: StampDesignConcept) => void;
   onToggleFav: (c: StampDesignConcept) => void;
@@ -1009,7 +1014,7 @@ function ConceptCard({
             <Badge className="text-[9px] px-1.5 py-0 bg-amber-50 text-amber-700 border border-amber-200">edited</Badge>
           </div>
         )}
-        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} size={160}/>
+        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} size={160}/>
       </div>
       <div className="p-3 space-y-2">
         <p className="font-medium text-sm text-[hsl(var(--foreground))] truncate">{concept.label}</p>
