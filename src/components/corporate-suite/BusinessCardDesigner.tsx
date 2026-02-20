@@ -7,7 +7,7 @@ import {
   LayoutGrid, Check, ImageIcon, ChevronDown, QrCode, Move,
   Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
-  Save, Palette,
+  Save, Palette, Zap, Star, Cpu, Minus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,7 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Template = "modern" | "classic" | "minimal" | "bold" | "creative" | "corporate" | "ai-design";
-type CardShape = "horizontal" | "vertical" | "square" | "rounded-square" | "wide" | "digital" | "ticket";
+type CardShape = "horizontal" | "vertical" | "square" | "rounded-square" | "wide" | "digital" | "ticket" | "email-signature";
 type QrPosition = "bottom-right" | "bottom-left" | "top-right" | "top-left" | "center";
 type QrContentType = "url" | "vcard" | "text" | "email" | "phone";
 
@@ -76,24 +76,26 @@ const TEMPLATES: { id: Template; label: string; desc: string; badge?: string }[]
 ];
 
 const COLOR_PRESETS: { primary: string; secondary: string; label: string; accent: string }[] = [
-  { primary: "#C8A766", secondary: "#ffffff", label: "JBJ Gold",  accent: "#1a1a1a" },
-  { primary: "#1e3a8a", secondary: "#ffffff", label: "Navy Blue", accent: "#93c5fd" },
-  { primary: "#0f766e", secondary: "#ffffff", label: "Teal",      accent: "#99f6e4" },
-  { primary: "#7c3aed", secondary: "#ffffff", label: "Violet",    accent: "#ddd6fe" },
-  { primary: "#be123c", secondary: "#ffffff", label: "Crimson",   accent: "#fecdd3" },
-  { primary: "#334155", secondary: "#ffffff", label: "Slate",     accent: "#cbd5e1" },
-  { primary: "#111827", secondary: "#ffffff", label: "Onyx",      accent: "#d1d5db" },
-  { primary: "#065f46", secondary: "#ffffff", label: "Forest",    accent: "#6ee7b7" },
+  { primary: "#C8A766", secondary: "#ffffff", label: "JBJ Gold",   accent: "#1a1a1a" },
+  { primary: "#1e3a8a", secondary: "#ffffff", label: "Navy Blue",  accent: "#93c5fd" },
+  { primary: "#0f766e", secondary: "#ffffff", label: "Teal",       accent: "#99f6e4" },
+  { primary: "#7c3aed", secondary: "#ffffff", label: "Violet",     accent: "#ddd6fe" },
+  { primary: "#be123c", secondary: "#ffffff", label: "Crimson",    accent: "#fecdd3" },
+  { primary: "#334155", secondary: "#ffffff", label: "Slate",      accent: "#cbd5e1" },
+  { primary: "#111827", secondary: "#ffffff", label: "Onyx",       accent: "#d1d5db" },
+  { primary: "#065f46", secondary: "#ffffff", label: "Forest",     accent: "#6ee7b7" },
+  { primary: "#000000", secondary: "#C8A766", label: "Pure Black", accent: "#C8A766" },
 ];
 
 const CARD_SHAPES: { id: CardShape; label: string; icon: React.ReactNode; ratio: string }[] = [
-  { id: "horizontal",    label: "Horizontal",    icon: <RectangleHorizontal size={14} />, ratio: "3.5 / 2"  },
-  { id: "vertical",      label: "Vertical",      icon: <RectangleVertical size={14} />,   ratio: "2 / 3.5"  },
-  { id: "square",        label: "Square",        icon: <Square size={14} />,              ratio: "1 / 1"    },
-  { id: "rounded-square",label: "Rounded",       icon: <Square size={14} />,              ratio: "1 / 1"    },
-  { id: "wide",          label: "Wide",          icon: <Maximize2 size={14} />,           ratio: "4 / 1.5"  },
-  { id: "digital",       label: "Digital",       icon: <Monitor size={14} />,             ratio: "9 / 16"   },
-  { id: "ticket",        label: "Ticket",        icon: <Ticket size={14} />,              ratio: "5 / 2"    },
+  { id: "horizontal",      label: "Horizontal", icon: <RectangleHorizontal size={14} />, ratio: "3.5 / 2"  },
+  { id: "vertical",        label: "Vertical",   icon: <RectangleVertical size={14} />,   ratio: "2 / 3.5"  },
+  { id: "square",          label: "Square",     icon: <Square size={14} />,              ratio: "1 / 1"    },
+  { id: "rounded-square",  label: "Rounded",    icon: <Square size={14} />,              ratio: "1 / 1"    },
+  { id: "wide",            label: "Wide",       icon: <Maximize2 size={14} />,           ratio: "4 / 1.5"  },
+  { id: "digital",         label: "Digital",    icon: <Monitor size={14} />,             ratio: "9 / 16"   },
+  { id: "ticket",          label: "Ticket",     icon: <Ticket size={14} />,              ratio: "5 / 2"    },
+  { id: "email-signature", label: "Email Sig",  icon: <Mail size={14} />,               ratio: "600 / 200" },
 ];
 
 function getShapeStyle(shape: CardShape): React.CSSProperties {
@@ -105,6 +107,7 @@ function getShapeStyle(shape: CardShape): React.CSSProperties {
     "wide":           { aspectRatio: "4 / 1.5",  borderRadius: 12 },
     "digital":        { aspectRatio: "9 / 16",   borderRadius: 24 },
     "ticket":         { aspectRatio: "5 / 2",    borderRadius: 8  },
+    "email-signature":{ aspectRatio: "600 / 200", borderRadius: 8 },
   };
   return shapes[shape];
 }
@@ -145,11 +148,12 @@ const QR_POSITION_STYLE: Record<QrPosition, React.CSSProperties> = {
 
 // ─── Card Preview Component ───────────────────────────────────────────────────
 function CardFace({
-  data, template, primary, secondary, accent, side = "front", scale = 1, shapeStyle, aiDesignData,
+  data, template, primary, secondary, accent, side = "front", scale = 1, shapeStyle, aiDesignData, cardShape,
 }: {
   data: CardData; template: Template; primary: string;
   secondary: string; accent: string; side?: "front" | "back"; scale?: number;
   shapeStyle?: React.CSSProperties; aiDesignData?: AiDesignData | null;
+  cardShape?: CardShape;
 }) {
   const name    = data.name    || "Your Name";
   const title   = data.title   || "Job Title";
@@ -168,6 +172,25 @@ function CardFace({
     ...shapeStyle,
   };
 
+  // ── EMAIL SIGNATURE ─────────────────────────────────────────
+  if (cardShape === "email-signature" || shapeStyle?.aspectRatio === "600 / 200") {
+    return (
+      <div style={{ ...baseStyle, background: "#ffffff", border: `2px solid ${primary}`, display: "flex", alignItems: "center", padding: `${14 * scale}px ${20 * scale}px`, gap: 16 * scale }}>
+        <div style={{ borderRight: `3px solid ${primary}`, paddingRight: 16 * scale, minWidth: 120 * scale }}>
+          <p style={{ fontSize: 14 * scale, fontWeight: 800, color: primary, margin: 0, lineHeight: 1.2 }}>{name}</p>
+          <p style={{ fontSize: 9 * scale, color: "#555", margin: `${3 * scale}px 0 0`, fontWeight: 500 }}>{title}</p>
+          <p style={{ fontSize: 8.5 * scale, color: "#999", margin: `${2 * scale}px 0 0`, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" }}>{company}</p>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 3 * scale, flex: 1 }}>
+          {data.phone   && <p style={{ fontSize: 8.5 * scale, color: "#444", margin: 0 }}>T: {data.phone}</p>}
+          {data.email   && <p style={{ fontSize: 8.5 * scale, color: primary, margin: 0 }}>{data.email}</p>}
+          {data.website && <p style={{ fontSize: 8.5 * scale, color: primary, margin: 0 }}>{data.website}</p>}
+          {data.address && <p style={{ fontSize: 8 * scale, color: "#888", margin: 0 }}>{data.address}</p>}
+        </div>
+      </div>
+    );
+  }
+
   if (side === "back") {
     return (
       <div style={{ ...baseStyle, background: primary, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -185,6 +208,7 @@ function CardFace({
       </div>
     );
   }
+
 
   // ── AI DESIGN ───────────────────────────────────────────────
   if (template === "ai-design") {
@@ -373,13 +397,13 @@ function CardFace({
 
 // ─── Card Canvas with draggable overlays, logo, QR & alignment guides ─────────
 function CardCanvas({
-  data, template, primary, secondary, accent, backPrimary, backSecondary, backAccent,
+  data, template, backTemplate, primary, secondary, accent, backPrimary, backSecondary, backAccent,
   side, cardShape,
   editLayout, fieldPositions, onFieldMove,
   qrEnabled, qrData, qrSize, qrColor, qrBgColor, qrPosition,
   logoUrl, logoSize, logoPos, onLogoMove, aiDesignData,
 }: {
-  data: CardData; template: Template; primary: string; secondary: string; accent: string;
+  data: CardData; template: Template; backTemplate: Template; primary: string; secondary: string; accent: string;
   backPrimary: string; backSecondary: string; backAccent: string;
   side: "front" | "back"; cardShape: CardShape; editLayout: boolean;
   fieldPositions: typeof DEFAULT_FIELD_POSITIONS;
@@ -403,10 +427,11 @@ function CardCanvas({
 
   const shapeStyle = getShapeStyle(cardShape);
 
-  // Use correct colors for current side
+  // Use correct colors and template for current side
   const activePrimary   = side === "back" ? backPrimary   : primary;
   const activeSecondary = side === "back" ? backSecondary : secondary;
   const activeAccent    = side === "back" ? backAccent    : accent;
+  const activeTemplate  = side === "back" ? backTemplate  : template;
 
   const getFieldStyle = (field: keyof typeof DEFAULT_FIELD_POSITIONS): React.CSSProperties => ({
     position: "absolute",
@@ -484,7 +509,7 @@ function CardCanvas({
     <div ref={containerRef} style={{ position: "relative", width: "100%" }}>
       <CardFace
         data={data}
-        template={template}
+        template={activeTemplate}
         primary={activePrimary}
         secondary={activeSecondary}
         accent={activeAccent}
@@ -492,6 +517,7 @@ function CardCanvas({
         scale={1}
         shapeStyle={shapeStyle}
         aiDesignData={aiDesignData}
+        cardShape={cardShape}
       />
 
       {/* Logo overlay — shows on BOTH front and back */}
@@ -817,11 +843,13 @@ function ColorPickerSection({
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function BusinessCardDesigner() {
   const navigate = useNavigate();
-  const [template, setTemplate] = useState<Template>("modern");
+  // Per-side independent templates
+  const [frontTemplate, setFrontTemplate] = useState<Template>("modern");
+  const [backTemplate, setBackTemplate]   = useState<Template>("bold");
 
   // Per-side colors
   const [frontColorIdx, setFrontColorIdx] = useState(0);
-  const [backColorIdx,  setBackColorIdx]  = useState(6); // Onyx for back
+  const [backColorIdx,  setBackColorIdx]  = useState(8); // Pure black for back
   const [frontCustomColor, setFrontCustomColor] = useState("");
   const [backCustomColor,  setBackCustomColor]  = useState("");
 
@@ -878,6 +906,13 @@ export default function BusinessCardDesigner() {
 
   const effectiveQrColor = qrColor || frontPrimary;
 
+  // Derived: active template for current side (used by preview + template picker)
+  const activeTemplate = side === "front" ? frontTemplate : backTemplate;
+  const setActiveTemplate = (t: Template) => {
+    if (side === "front") setFrontTemplate(t);
+    else setBackTemplate(t);
+  };
+
   const set = (k: keyof CardData) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setData(prev => ({ ...prev, [k]: e.target.value }));
 
@@ -925,95 +960,25 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     }
   };
 
-  // AI Design generation
+  // AI Design generation — calls dedicated edge function
   const handleGenerateDesign = async () => {
     setIsGeneratingDesign(true);
     const seed = Math.random().toString(36).slice(2, 8);
     try {
-      const toneMap: Record<string, string> = {
-        modern:  "clean lines, bold geometry, high contrast, contemporary feel",
-        luxe:    "gold tones, elegant curves, refined opulence, dark rich backgrounds",
-        tech:    "neon accents, circuit-like lines, futuristic grids, dark backgrounds",
-        minimal: "sparse shapes, subtle transparency, maximum whitespace, muted palette",
-      };
-      const styleMap: Record<string, string> = {
-        geometric:  "triangles, hexagons, rectangles arranged in structured layouts",
-        lines:      "diagonal, horizontal and intersecting line patterns",
-        futuristic: "angular paths, perspective grids, sharp corner cuts",
-        organic:    "fluid curves, ellipses and soft rounded shapes",
-        abstract:   "asymmetric overlapping polygons and irregular forms",
-        waves:      "sine wave-like smooth curves and arcing paths",
-      };
-      const industryMap: Record<string, string> = {
-        "real-estate": "prestige, property, architecture — dark navy or warm gold tones",
-        "technology":  "innovation, digital, data — electric blue, charcoal, neon green",
-        "fashion":     "elegance, luxury, style — black, blush, deep purple",
-        "finance":     "trust, stability, wealth — dark green, navy, gold",
-        "healthcare":  "clean, care, professional — teal, white, soft blue",
-        "creative":    "vibrant, artistic, expressive — bold saturated colors",
-        "law":         "authority, trust, serious — dark charcoal, burgundy, gold",
-        "hospitality": "warmth, welcome, luxury — amber, cream, rich brown",
-      };
-      const toneDesc = toneMap[aiTone] || aiTone;
-      const styleDesc = styleMap[aiStyle] || aiStyle;
-      const industryDesc = industryMap[aiIndustry] || aiIndustry;
-
-      const { data: result, error } = await supabase.functions.invoke("gemini-chat", {
-        body: {
-          message: `You are an expert SVG business card designer. Generate a stunning ${aiTone} business card design for the ${aiIndustry} industry.
-
-Tone: ${toneDesc}
-Pattern style: ${styleDesc}
-Industry: ${industryDesc}
-Randomness seed: ${seed}
-
-Return ONLY a valid JSON object (no markdown, no explanation) with this EXACT structure:
-{
-  "elements": [
-    { "type": "rect",    "x": 0, "y": 0, "width": 350, "height": 200, "fill": "#hexcolor", "fillOpacity": 1 },
-    { "type": "circle",  "cx": 290, "cy": 20, "r": 90, "fill": "#hexcolor", "fillOpacity": 0.25 },
-    { "type": "polygon", "points": "0,200 80,200 0,120", "fill": "#hexcolor", "fillOpacity": 0.4 },
-    { "type": "line",    "x1": 0, "y1": 160, "x2": 350, "y2": 120, "stroke": "#hexcolor", "strokeWidth": 1.5, "strokeOpacity": 0.3, "fillOpacity": 0 },
-    { "type": "ellipse", "cx": 310, "cy": 160, "rx": 60, "ry": 40, "fill": "#hexcolor", "fillOpacity": 0.15 },
-    { "type": "rect",    "x": -20, "y": -20, "width": 100, "height": 100, "rx_attr": 8, "fill": "#hexcolor", "fillOpacity": 0.2, "stroke": "#hexcolor", "strokeWidth": 1, "strokeOpacity": 0.5 }
-  ],
-  "colors": ["#hexcolor1", "#hexcolor2", "#hexcolor3"],
-  "bgColor": "#hexcolor",
-  "textColor": "#hexcolor",
-  "accentColor": "#hexcolor"
-}
-
-STRICT RULES:
-1. elements: 5-9 SVG elements. Use a MIX of types: rect, circle, polygon, line, ellipse.
-2. All coordinates must fit within 0-350 (x) and 0-200 (y) for the card viewBox. Elements can slightly overflow for effect.
-3. bgColor is the card background — make it rich and intentional.
-4. textColor must be highly readable on bgColor (high contrast).
-5. Vary fillOpacity between 0.1 and 0.5 for layered depth.
-6. The first element should be a full background rect (x:0, y:0, width:350, height:200) with fillOpacity:1 set to bgColor.
-7. Make it look like a real premium business card design — not random.
-Return ONLY the JSON.`,
-        },
+      const { data: result, error } = await supabase.functions.invoke("ai-card-design-generator", {
+        body: { tone: aiTone, style: aiStyle, industry: aiIndustry, seed },
       });
       if (error) throw error;
-      const text = result?.reply || result?.message || result?.content || "";
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        const parsed = JSON.parse(jsonMatch[0]);
-        if (!parsed.elements) throw new Error("No elements in response");
-        const design: AiDesignData = {
-          ...parsed,
-          style: aiStyle,
-          industry: aiIndustry,
-        };
-        setAiDesignData(design);
-        setTemplate("ai-design");
-        toast.success("✨ AI design generated! Template set to AI Design.");
-      } else {
-        toast.error("AI response wasn't valid JSON. Please try again.");
-      }
-    } catch (err) {
+      if (!result?.elements) throw new Error("No elements in response");
+      const design: AiDesignData = { ...result, style: aiStyle, industry: aiIndustry };
+      setAiDesignData(design);
+      setActiveTemplate("ai-design");
+      toast.success("AI design generated!");
+    } catch (err: any) {
       console.error(err);
-      toast.error("Design generation failed. Please try again.");
+      if (err?.message?.includes("Rate limit")) toast.error("Rate limit exceeded. Please try again in a moment.");
+      else if (err?.message?.includes("credits")) toast.error("AI credits required. Please add credits to continue.");
+      else toast.error("Design generation failed. Please try again.");
     } finally {
       setIsGeneratingDesign(false);
     }
@@ -1025,21 +990,16 @@ Return ONLY the JSON.`,
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { toast.error("Please sign in to save."); return; }
-
       const cardState = {
-        data, template, frontColorIdx, backColorIdx, frontCustomColor, backCustomColor,
+        data, frontTemplate, backTemplate, frontColorIdx, backColorIdx, frontCustomColor, backCustomColor,
         cardShape, qrEnabled, qrContentType, qrCustomContent, qrSize, qrColor, qrBgColor, qrPosition,
         logoUrl, logoSize, logoPos, aiDesignData,
       };
-
       await supabase.from("design_assets").insert({
-        user_id: user.id,
-        asset_type: "stamp",
-        file_url: "",
+        user_id: user.id, asset_type: "stamp", file_url: "",
         name: `Business Card — ${data.name || "Untitled"} — ${new Date().toLocaleDateString()}`,
         metadata: cardState as any,
       });
-
       toast.success("Card saved! You can reload it from Brand Assets.");
     } catch (err) {
       console.error(err);
@@ -1053,7 +1013,7 @@ Return ONLY the JSON.`,
     setIsExporting(true);
     try {
       await exportCardAsPDF(
-        data, template, frontPrimary, frontSecondary, frontAccent,
+        data, frontTemplate, frontPrimary, frontSecondary, frontAccent,
         backPrimary, backSecondary,
         qrEnabled, qrDataStr, effectiveQrColor, qrBgColor, qrSize, qrPosition,
       );
@@ -1065,6 +1025,7 @@ Return ONLY the JSON.`,
       setIsExporting(false);
     }
   };
+
 
   const fields: { key: keyof CardData; label: string; placeholder: string; icon: React.ReactNode; voiceKey?: boolean }[] = [
     { key: "name",    label: "Full Name",   placeholder: "Ahmed Al-Mansoori",            icon: <span className="text-[10px]">👤</span>, voiceKey: true },
@@ -1194,31 +1155,32 @@ Return ONLY the JSON.`,
             </div>
           </Collapsible>
 
-          {/* Template picker */}
+          {/* Template picker — applies to active side */}
           <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm">
-            <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-3 block flex items-center gap-1.5">
+            <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-1 block flex items-center gap-1.5">
               <Layers size={11} /> Template
+              <span className="ml-auto text-[9px] font-semibold px-2 py-0.5 rounded-full bg-[hsl(var(--gold)/0.12)] text-[hsl(var(--gold-dark))]">
+                Editing: {side === "front" ? "Front" : "Back"}
+              </span>
             </Label>
+            <p className="text-[9px] text-[hsl(var(--muted-foreground))] mb-3">Click Front/Back toggle above to switch sides independently.</p>
             <div className="grid grid-cols-3 gap-2">
               {TEMPLATES.map(t => (
                 <button
                   key={t.id}
-                  onClick={() => setTemplate(t.id)}
+                  onClick={() => setActiveTemplate(t.id)}
                   className={`relative py-2.5 px-3 rounded-xl text-left border transition-all duration-200 ${
-                    template === t.id
+                    activeTemplate === t.id
                       ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]"
                       : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] hover:bg-[hsl(var(--muted))]"
                   }`}
                 >
-                  {template === t.id && (
+                  {activeTemplate === t.id && (
                     <span className="absolute top-1.5 right-1.5 w-3.5 h-3.5 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center">
                       <Check size={8} className="text-white" />
                     </span>
                   )}
-                  {t.badge && (
-                    <span className="absolute top-1 left-1 text-[9px]">{t.badge}</span>
-                  )}
-                  <p className={`text-xs font-semibold leading-none mb-0.5 ${template === t.id ? "text-[hsl(var(--gold-dark))]" : "text-[hsl(var(--foreground))]"}`}>
+                  <p className={`text-xs font-semibold leading-none mb-0.5 ${activeTemplate === t.id ? "text-[hsl(var(--gold-dark))]" : "text-[hsl(var(--foreground))]"}`}>
                     {t.label}
                   </p>
                   <p className="text-[9px] text-[hsl(var(--muted-foreground))]">{t.desc}</p>
@@ -1226,6 +1188,7 @@ Return ONLY the JSON.`,
               ))}
             </div>
           </div>
+
 
           {/* Per-Side Color System */}
           <Collapsible open={colorOpen} onOpenChange={setColorOpen}>
