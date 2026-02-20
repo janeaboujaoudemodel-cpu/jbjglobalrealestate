@@ -69,12 +69,13 @@ function wrapText(text: string, x: number, y: number, font: string, size: number
 }
 
 function ringText(id: string, cx: number, cy: number, r: number, text: string, font: string, fontSize: number, color: string, startOffset = '50%', letterSpacing = 1.8) {
+  // Top-arc path: starts from left (cx-r, cy), arcs over the top to right (cx+r, cy) — large-arc=1, sweep=1
   return `
     <defs>
-      <path id="${id}" d="M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r - 0.01} ${cy}"/>
+      <path id="${id}" d="M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}"/>
     </defs>
     <text font-family="${font}" font-size="${fontSize}" fill="${color}" letter-spacing="${letterSpacing}">
-      <textPath href="#${id}" startOffset="${startOffset}" text-anchor="middle">${text}</textPath>
+      <textPath href="#${id}" startOffset="50%" text-anchor="middle">${text}</textPath>
     </text>`;
 }
 
@@ -695,17 +696,15 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   }
 
   // ────────────────────────────────────────────────────────────────
-  // T12: Bilingual Logo Center — Clean double-ring, English top arc,
-  //      Arabic bottom arc, uploaded logo or monogram centred.
-  // Always generated; pushed to front if logo is uploaded.
+  // T12: Bilingual Logo Center — English top arc, Arabic bottom arc,
+  //      monogram or uploaded logo centred. ALWAYS FIRST in results.
   // ────────────────────────────────────────────────────────────────
   {
-    // Ring geometry — clean, open (white background, no filled band)
+    // Ring geometry
     const outerR  = R;           // 116 — outer ring
     const midR    = R - 8;       // thin gap ring (decorative)
-    const innerR  = R - 16;      // inner ring / text path radius
-    const arcR    = R - 12;      // text sits just inside inner ring
-    const botArcR = R - 12;
+    const innerR  = R - 16;      // inner ring
+    const arcR    = R - 11;      // radius for text path (inside inner ring)
 
     const displayArabic = arabicName || name;
     const enFontSize    = autoFontSize(name,           9.5, 22);
@@ -714,6 +713,18 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const hasLogo  = project.icon_style === 'UPLOADED_LOGO' && (project as any).uploaded_logo_url;
     const logoUrl  = hasLogo ? (project as any).uploaded_logo_url : null;
     const logoSize = 64;  // diameter of center artwork
+
+    // ── Top arc: English company name curves OVER the top ──
+    // SVG arc from left (cx-arcR, cy) → counterclockwise over top → right (cx+arcR, cy)
+    // large-arc=1, sweep=1 → upper semicircle, text reads left to right on top
+    const topArcId   = 't12top';
+    const topArcPath = `M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 1 1 ${cx + arcR} ${cy}`;
+
+    // ── Bottom arc: Arabic company name curves UNDER the bottom ──
+    // Start from right (cx+arcR, cy) → clockwise under bottom → left (cx-arcR, cy)
+    // large-arc=0, sweep=0 → lower semicircle, text reads right-to-left naturally
+    const botArcId   = 't12bot';
+    const botArcPath = `M ${cx + arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx - arcR} ${cy}`;
 
     // Center artwork: logo image or filled monogram disc
     const centerArt = logoUrl
@@ -732,7 +743,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
            letter-spacing="2">${mono}</text>
          `;
 
-    // Horizontal thin dividers flanking the center disc
+    // Thin horizontal dividers flanking the center disc
     const divTop = cy - logoSize / 2 - 14;
     const divBot = cy + logoSize / 2 + 14;
 
@@ -748,6 +759,10 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
         <clipPath id="t12clip">
           <circle cx="${cx}" cy="${cy}" r="${logoSize / 2}"/>
         </clipPath>
+        <!-- English top arc path -->
+        <path id="${topArcId}" d="${topArcPath}"/>
+        <!-- Arabic bottom arc path -->
+        <path id="${botArcId}" d="${botArcPath}"/>
       </defs>
 
       <!-- ── Double ring border ── -->
@@ -755,7 +770,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       <circle cx="${cx}" cy="${cy}" r="${midR}"    fill="none" stroke="${COLOR}" stroke-width="0.5"/>
       <circle cx="${cx}" cy="${cy}" r="${innerR}"  fill="none" stroke="${COLOR}" stroke-width="1.2"/>
 
-      <!-- ── 4 cardinal diamond ornaments between double ring ── -->
+      <!-- ── 4 cardinal diamond ornaments ── -->
       ${[0, 90, 180, 270].map(deg => {
         const rad = (deg * Math.PI) / 180;
         const ox = cx + (outerR - 4) * Math.cos(rad);
@@ -763,11 +778,15 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
         return `<polygon points="${ox},${oy - 3.5} ${ox + 3},${oy} ${ox},${oy + 3.5} ${ox - 3},${oy}" fill="${COLOR}"/>`;
       }).join('\n      ')}
 
-      <!-- ── English company name — top arc ── -->
-      ${ringText('t12top', cx, cy, arcR, `◆  ${name}  ◆`, font, enFontSize, COLOR, '25%', 1.5)}
+      <!-- ── English: curved OVER the TOP ── -->
+      <text font-family="${font}" font-size="${enFontSize}" fill="${COLOR}" letter-spacing="1.5" font-weight="600">
+        <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">◆  ${name}  ◆</textPath>
+      </text>
 
-      <!-- ── Arabic company name — bottom arc ── -->
-      ${bottomArcText('t12bot', cx, cy, botArcR, `◆  ${displayArabic}  ◆`, arabicFont, arFontSize, COLOR, 2)}
+      <!-- ── Arabic: curved UNDER the BOTTOM ── -->
+      <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${COLOR}" letter-spacing="1" font-weight="600" direction="rtl">
+        <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">◆  ${displayArabic}  ◆</textPath>
+      </text>
 
       <!-- ── Thin horizontal rules flanking artwork ── -->
       ${hRule(cx - 38, cx - logoSize / 2 - 8, divTop, COLOR, 0.6)}
@@ -782,7 +801,8 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       ${cityLine}
     </svg>`;
 
-    concepts.push({
+    // unshift → always appears FIRST in the concept grid
+    concepts.unshift({
       id: uid(),
       templateKey: 'bilingual-logo-center',
       label: 'Bilingual Logo Center',
