@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Plus, Stamp, Trash2, ExternalLink, Clock, CheckCircle2, Copy, Images } from 'lucide-react';
+import { Plus, Stamp, Trash2, ExternalLink, Clock, CheckCircle2, Copy, Images, History } from 'lucide-react';
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
@@ -115,12 +115,21 @@ export default function StampProjectsDashboard() {
               <p className="text-xs text-[hsl(var(--muted-foreground))]">{projects.length} project{projects.length !== 1 ? 's' : ''}</p>
             </div>
           </div>
-          <Button
-            onClick={() => navigate('/toolkit/stamp-generator/new')}
-            className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-2"
-          >
-            <Plus size={15}/> New Stamp Project
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              className="gap-1.5 text-sm"
+              onClick={() => navigate('/toolkit/stamp-generator/history')}
+            >
+              <History size={14}/> History
+            </Button>
+            <Button
+              onClick={() => navigate('/toolkit/stamp-generator/new')}
+              className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-2"
+            >
+              <Plus size={15}/> New Stamp Project
+            </Button>
+          </div>
         </div>
       </div>
 
