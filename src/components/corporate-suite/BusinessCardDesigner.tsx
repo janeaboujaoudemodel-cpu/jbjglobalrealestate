@@ -252,6 +252,48 @@ function CardFace({
     );
   }
 
+  // ── TICKET BACK ──────────────────────────────────────────────
+  if (cardShape === "ticket" && side === "back") {
+    return (
+      <div style={{ ...baseStyle, background: "#fff", border: `2px solid ${primary}`, display: "flex", overflow: "hidden" }}>
+        {/* Right info body */}
+        <div style={{
+          flex: 1, padding: `${10 * scale}px ${14 * scale}px`,
+          display: "flex", flexDirection: "column", justifyContent: "center", gap: 4 * scale,
+        }}>
+          <p style={{ fontSize: 8 * scale, fontWeight: 700, color: "#111", margin: 0, textTransform: "uppercase", letterSpacing: 2 }}>
+            {data.company || ""}
+          </p>
+          <div style={{ borderTop: `1px solid ${primary}30`, paddingTop: 4 * scale, display: "flex", flexDirection: "column", gap: 2 * scale }}>
+            {data.address && <p style={{ fontSize: 7 * scale, color: "#666", margin: 0 }}>{data.address}</p>}
+            {data.email   && <p style={{ fontSize: 7 * scale, color: "#666", margin: 0 }}>@ {data.email}</p>}
+            {data.phone   && <p style={{ fontSize: 7 * scale, color: "#666", margin: 0 }}>☎ {data.phone}</p>}
+          </div>
+        </div>
+        {/* Perforation divider */}
+        <div style={{
+          width: 1, flexShrink: 0,
+          background: `repeating-linear-gradient(to bottom, ${primary}80 0px, ${primary}80 5px, transparent 5px, transparent 10px)`,
+        }} />
+        {/* Right stub (mirrored) */}
+        <div style={{
+          width: "32%", background: primary, display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center", padding: `${10 * scale}px ${8 * scale}px`, gap: 6 * scale, flexShrink: 0,
+        }}>
+          <div style={{
+            width: 28 * scale, height: 28 * scale, borderRadius: "50%",
+            border: `2px solid ${secondary}`, display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <span style={{ fontSize: 10 * scale, fontWeight: 700, color: secondary }}>✓</span>
+          </div>
+          <p style={{ fontSize: 6 * scale, fontWeight: 600, color: secondary, opacity: 0.8, textAlign: "center", margin: 0, letterSpacing: 1, textTransform: "uppercase" }}>
+            {data.website || ""}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (side === "back") {
     return (
       <div style={{ ...baseStyle, background: primary, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -1977,6 +2019,20 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                 </span>
               )}
             </Label>
+          <div className="flex items-center gap-2">
+            {/* Edit Layout toggle — always visible on mobile */}
+            <button
+              onClick={() => setEditLayout(v => !v)}
+              className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold transition-colors border ${
+                editLayout
+                  ? "bg-amber-100 text-amber-700 border-amber-300"
+                  : "bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))] hover:bg-[hsl(var(--accent))]"
+              }`}
+              title={editLayout ? "Exit layout edit mode" : "Enter layout edit mode to drag fields"}
+            >
+              <Move size={11} />
+              {editLayout ? "Done" : "Edit Layout"}
+            </button>
             <div className="flex rounded-lg border border-[hsl(var(--border))] overflow-hidden text-xs">
               {(["front", "back"] as const).map(s => (
                 <button
@@ -1993,6 +2049,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                 </button>
               ))}
             </div>
+          </div>
           </div>
 
           {/* Card preview */}
