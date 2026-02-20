@@ -82,41 +82,7 @@ const VideoMusicSelector = ({ project, onUpdate, onNext }: VideoMusicSelectorPro
     setIsGenerating(true);
 
     try {
-      // Generate music using ElevenLabs
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-video-music`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({
-            prompt: `${preset.mood} background music for real estate property video, ${preset.description}`,
-            duration: Math.min(project.duration || 60, 120),
-          }),
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to generate music");
-
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-
-      onUpdate({
-        ...project,
-        music: {
-          url: audioUrl,
-          name: preset.name,
-          mood: preset.mood,
-        },
-      });
-
-      toast.success(`${preset.name} music added!`);
-    } catch (error) {
-      console.error("Music generation error:", error);
-      // Fallback to preset selection without actual audio
+      // Music preset selection (no external API call)
       onUpdate({
         ...project,
         music: {
