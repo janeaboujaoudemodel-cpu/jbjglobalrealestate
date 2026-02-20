@@ -6,7 +6,7 @@
  */
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Upload, Trash2, Check, ImageIcon, Loader2, Plus } from "lucide-react";
+import { Upload, Trash2, Check, ImageIcon, Loader2, Plus, Eraser, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -62,6 +62,13 @@ export function BrandAssetLibrary({
   const [activeType, setActiveType] = useState<AssetType>(assetTypes[0]);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  // ── Signature pad refs & state ──────────────────────────────────────────────
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const sigContainerRef = useRef<HTMLDivElement>(null);
+  const isDrawingRef = useRef(false);
+  const [hasDrawing, setHasDrawing] = useState(false);
+  const [savingDrawing, setSavingDrawing] = useState(false);
+
   const fetchAssets = useCallback(async () => {
     if (!user) return;
     setLoading(true);
@@ -85,6 +92,122 @@ export function BrandAssetLibrary({
   useEffect(() => {
     fetchAssets();
   }, [fetchAssets]);
+
+  // ── Canvas init (only when signature tab is active) ─────────────────────────
+  const initCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    const container = sigContainerRef.current;
+    if (!canvas || !container) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const rect = container.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = 130 * dpr;
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `130px`;
+    ctx.scale(dpr, dpr);
+    ctx.strokeStyle = "#1a1a1a";
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+  }, []);
+
+  useEffect(() => {
+    if (activeType !== "signature") return;
+    // Small delay to ensure the container has rendered
+    const timer = setTimeout(initCanvas, 50);
+    return () => clearTimeout(timer);
+  }, [activeType, initCanvas]);
+
+  // ── Canvas drawing helpers ──────────────────────────────────────────────────
+  const getXY = (e: React.MouseEvent | React.TouchEvent) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    const rect = canvas.getBoundingClientRect();
+    if ("touches" in e) {
+      return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+    }
+    return { x: (e as React.MouseEvent).clientX - rect.left, y: (e as React.MouseEvent).clientY - rect.top };
+  };
+
+  const startDraw = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) return;
+    isDrawingRef.current = true;
+    const { x, y } = getXY(e);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  };
+
+  const onDraw = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    if (!isDrawingRef.current) return;
+    const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) return;
+    const { x, y } = getXY(e);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    setHasDrawing(true);
+  };
+
+  const stopDraw = () => {
+    isDrawingRef.current = false;
+  };
+
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (!ctx || !canvas) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    setHasDrawing(false);
+  };
+
+  // ── Save drawn signature to library ────────────────────────────────────────
+  const saveDrawnSignature = async () => {
+    const canvas = canvasRef.current;
+    if (!canvas || !hasDrawing || !user) return;
+    setSavingDrawing(true);
+
+    canvas.toBlob(async (blob) => {
+      if (!blob) { setSavingDrawing(false); return; }
+      try {
+        const name = `Signature — ${new Date().toLocaleDateString("en-GB")}`;
+        const path = `${user.id}/signature/${Date.now()}.png`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("brand-assets")
+          .upload(path, blob, { contentType: "image/png", upsert: false });
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = supabase.storage.from("brand-assets").getPublicUrl(path);
+
+        const { data: inserted, error: dbError } = await supabase
+          .from("design_assets")
+          .insert({
+            user_id: user.id,
+            name,
+            asset_type: "signature",
+            file_url: urlData.publicUrl,
+            thumbnail_url: urlData.publicUrl,
+          })
+          .select()
+          .single();
+        if (dbError) throw dbError;
+
+        setAssets(prev => [inserted as BrandAsset, ...prev]);
+        if (inserted) onSelect(inserted as BrandAsset);
+        clearCanvas();
+        toast.success("Signature saved to Brand Library!");
+      } catch (err: any) {
+        toast.error(err?.message || "Failed to save signature");
+      } finally {
+        setSavingDrawing(false);
+      }
+    }, "image/png");
+  };
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -176,12 +299,68 @@ export function BrandAssetLibrary({
         </div>
       )}
 
+      {/* Signature draw pad — only shown on signature tab */}
+      {activeType === "signature" && (
+        <div className="space-y-2">
+          <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
+            Draw your signature
+          </p>
+          <div
+            ref={sigContainerRef}
+            className="border-2 border-dashed border-[hsl(var(--gold)/0.4)] rounded-xl bg-white overflow-hidden"
+          >
+            <canvas
+              ref={canvasRef}
+              className="w-full cursor-crosshair touch-none block"
+              style={{ height: "130px" }}
+              onMouseDown={startDraw}
+              onMouseMove={onDraw}
+              onMouseUp={stopDraw}
+              onMouseLeave={stopDraw}
+              onTouchStart={startDraw}
+              onTouchMove={onDraw}
+              onTouchEnd={stopDraw}
+            />
+            <div className="border-t border-[hsl(var(--border))] py-1.5 text-center text-[10px] text-[hsl(var(--muted-foreground))]">
+              Sign above this line
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={clearCanvas}
+              disabled={!hasDrawing}
+              className="flex-1 h-7 text-[10px] gap-1"
+            >
+              <Eraser size={11} /> Clear
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              onClick={saveDrawnSignature}
+              disabled={!hasDrawing || savingDrawing}
+              className="flex-1 h-7 text-[10px] gap-1 bg-[hsl(var(--gold))] text-white hover:bg-[hsl(var(--gold-dark))]"
+            >
+              {savingDrawing ? <Loader2 size={11} className="animate-spin" /> : <Save size={11} />}
+              {savingDrawing ? "Saving…" : "Save to Library"}
+            </Button>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex-1 h-px bg-[hsl(var(--border))]" />
+            <span className="text-[10px] text-[hsl(var(--muted-foreground))]">or upload an image</span>
+            <div className="flex-1 h-px bg-[hsl(var(--border))]" />
+          </div>
+        </div>
+      )}
+
       {/* Upload controls */}
       <div className="space-y-2">
         <Input
           value={assetName}
           onChange={e => setAssetName(e.target.value)}
-          placeholder={`Name this ${activeType}…`}
+          placeholder={activeType === "signature" ? "Name this signature…" : `Name this ${activeType}…`}
           className="h-7 text-xs"
         />
         <Button
