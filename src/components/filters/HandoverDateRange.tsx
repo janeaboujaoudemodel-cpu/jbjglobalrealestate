@@ -77,10 +77,13 @@ export function HandoverDateRange({
       </PopoverTrigger>
       <PopoverContent 
         className={cn(
-          "w-[260px] p-4",
+          "w-[280px] p-4",
           isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-white border-gold/20"
         )}
         align="start"
+        sideOffset={8}
+        avoidCollisions={true}
+        style={{ zIndex: 10500 }}
       >
         <div className="space-y-4">
           <h4 className={cn(
@@ -104,14 +107,14 @@ export function HandoverDateRange({
                 onValueChange={(val) => onFromYearChange(val === "any" ? null : parseInt(val))}
               >
                 <SelectTrigger className={cn(
-                  "h-10",
+                  "h-10 w-full",
                   isDark 
                     ? "bg-[#2a2a2a] border-[#3a3a3a] text-white"
                     : "bg-champagne-light border-gold/30 text-black"
                 )}>
                   <SelectValue placeholder="Any" />
                 </SelectTrigger>
-                <SelectContent className={isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : ""}>
+                <SelectContent position="popper" className={cn("z-[10600]", isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-white")}>
                   <SelectItem value="any" className={isDark ? "text-white hover:bg-[#2a2a2a]" : ""}>
                     Any
                   </SelectItem>
@@ -141,14 +144,14 @@ export function HandoverDateRange({
                 onValueChange={(val) => onToYearChange(val === "any" ? null : parseInt(val))}
               >
                 <SelectTrigger className={cn(
-                  "h-10",
+                  "h-10 w-full",
                   isDark 
                     ? "bg-[#2a2a2a] border-[#3a3a3a] text-white"
                     : "bg-champagne-light border-gold/30 text-black"
                 )}>
                   <SelectValue placeholder="Any" />
                 </SelectTrigger>
-                <SelectContent className={isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : ""}>
+                <SelectContent position="popper" className={cn("z-[10600]", isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-white")}>
                   <SelectItem value="any" className={isDark ? "text-white hover:bg-[#2a2a2a]" : ""}>
                     Any
                   </SelectItem>

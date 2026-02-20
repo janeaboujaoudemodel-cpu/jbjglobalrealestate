@@ -215,6 +215,8 @@ export function useProjects() {
 export function useProjectsListing() {
   return useQuery({
     queryKey: ["projects-listing"],
+    staleTime: 10 * 60 * 1000,  // 10 minutes — data stays fresh, no refetch on navigation
+    gcTime: 30 * 60 * 1000,     // 30 minutes — keep in cache
     queryFn: async () => {
       // Supabase limits to 1000 rows per query, so we paginate
       const PAGE_SIZE = 1000;
