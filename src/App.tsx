@@ -32,6 +32,12 @@ const VoiceSuite = lazy(() => import("./pages/toolkit/VoiceSuite"));
 const PhotoSuite = lazy(() => import("./pages/toolkit/PhotoSuite"));
 const PDFSuite = lazy(() => import("./pages/toolkit/PDFSuite"));
 const PropertySuite = lazy(() => import("./pages/toolkit/PropertySuite"));
+// NEW: Corporate Suite Pages
+const CorporateSuite = lazy(() => import("./pages/toolkit/CorporateSuite"));
+const BusinessCardDesigner = lazy(() => import("./components/corporate-suite/BusinessCardDesigner"));
+const CVResumeBuilder = lazy(() => import("./components/corporate-suite/CVResumeBuilder"));
+const CoverLetterGenerator = lazy(() => import("./components/corporate-suite/CoverLetterGenerator"));
+const LandingPageBuilder = lazy(() => import("./components/corporate-suite/LandingPageBuilder"));
 // NEW: Business Suite Pages
 const AllToolsSuite = lazy(() => import("./pages/business-suite/AllToolsSuite"));
 const RealEstateSuite = lazy(() => import("./pages/business-suite/RealEstateSuite"));
@@ -47,6 +53,7 @@ import { FounderVisibilityProvider } from "@/contexts/FounderVisibilityContext";
 import { UserModeProvider } from "@/contexts/UserModeContext";
 import { PodcastVisibilityProvider } from "@/contexts/PodcastVisibilityContext";
 import { ScrollToTopOnMount } from "@/components/ScrollToTop";
+import RouteResume from "@/components/RouteResume";
 import AdminBypass from "@/components/AdminBypass";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import OwnerGuard from "@/components/OwnerGuard";
@@ -345,6 +352,7 @@ const App = () => (
                   <ActiveLeadProvider>
                     <PopupCoordinatorProvider>
                     <ScrollToTopOnMount />
+                  <RouteResume />
                   <GlobalVisitorTracking />
                   
             {/* Auth route is always accessible for login */}
@@ -696,6 +704,13 @@ const App = () => (
                 <Route path="/toolkit/stamp-generator/:projectId/export/:designId" element={<StampExportPage />} />
                 <Route path="/toolkit/stamp-generator/:projectId/gallery" element={<StampGalleryPage />} />
                 <Route path="/toolkit/stamp-generator/history" element={<StampHistoryDashboard />} />
+
+                {/* Corporate Document Suite */}
+                <Route path="/toolkit/corporate-suite" element={<CorporateSuite />} />
+                <Route path="/toolkit/corporate-suite/business-card" element={<BusinessCardDesigner />} />
+                <Route path="/toolkit/corporate-suite/cv-resume" element={<CVResumeBuilder />} />
+                <Route path="/toolkit/corporate-suite/cover-letter" element={<CoverLetterGenerator />} />
+                <Route path="/toolkit/corporate-suite/landing-page" element={<LandingPageBuilder />} />
 
                 {/* Creative Suite - Owner-only */}
                 <Route path="/studio" element={<OwnerGuard><Studio /></OwnerGuard>} />

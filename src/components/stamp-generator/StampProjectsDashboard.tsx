@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Plus, Stamp, Trash2, ExternalLink, Clock, CheckCircle2, Copy, Images, History } from 'lucide-react';
+import { Plus, Stamp, Trash2, ExternalLink, Clock, CheckCircle2, Copy, Images, History, LayoutGrid } from 'lucide-react';
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
@@ -28,13 +28,22 @@ export default function StampProjectsDashboard() {
   const [projects, setProjects] = useState<StampProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
+  // Track whether we've waited at least one tick after auth resolved to prevent premature redirects
+  const authSettledRef = useRef(false);
 
   useEffect(() => {
-    // Wait for auth to finish loading before deciding what to do
+    // Still loading — wait
     if (authLoading) return;
+
+    // Auth has resolved at least once — mark settled
+    authSettledRef.current = true;
+
     if (!user) {
-      navigate('/auth?redirect=/toolkit/stamp-generator/projects', { replace: true });
-      return;
+      // Only redirect if we're sure auth has fully resolved (not just initial null state)
+      const timer = setTimeout(() => {
+        navigate('/auth?redirect=/toolkit/stamp-generator/projects', { replace: true });
+      }, 150); // tiny grace period to let session restore
+      return () => clearTimeout(timer);
     }
     fetchProjects();
   }, [user, authLoading]);
@@ -116,6 +125,14 @@ export default function StampProjectsDashboard() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5 text-xs"
+              onClick={() => navigate('/toolkit/corporate-suite')}
+            >
+              <LayoutGrid size={13}/> Corporate Suite
+            </Button>
             <Button
               variant="outline"
               className="gap-1.5 text-sm"
