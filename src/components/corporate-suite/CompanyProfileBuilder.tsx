@@ -61,15 +61,15 @@ interface TemplateConfig {
 }
 
 const TEMPLATES: TemplateConfig[] = [
-  { id: "premium",       label: "Premium Gold",    desc: "Gold accent, dark cover",      accent: "#C8A766", coverBg: "#0a0a0a", contentBg: "#f9f7f3", coverTextColor: "#ffffff", sectionStyle: "card", emoji: "✨" },
-  { id: "executive",     label: "Executive Blue",  desc: "Navy blue, structured",        accent: "#1e3a8a", coverBg: "#1e3a8a", contentBg: "#ffffff", coverTextColor: "#ffffff", sectionStyle: "list", emoji: "🏛️" },
-  { id: "clean",         label: "Clean White",     desc: "Minimal, professional",        accent: "#374151", coverBg: "#ffffff", contentBg: "#ffffff", coverTextColor: "#111111", sectionStyle: "underline", emoji: "⬜" },
-  { id: "corporate_red", label: "Corporate Red",   desc: "Bold red, high impact",        accent: "#dc2626", coverBg: "#7f1d1d", contentBg: "#ffffff", coverTextColor: "#ffffff", sectionStyle: "card", emoji: "🔴" },
-  { id: "modern_green",  label: "Modern Green",    desc: "Forest green, eco & trust",    accent: "#16a34a", coverBg: "#14532d", contentBg: "#f0fdf4", coverTextColor: "#ffffff", sectionStyle: "list", emoji: "🌿" },
-  { id: "luxury_black",  label: "Luxury Black",    desc: "All-black, silver accents",    accent: "#a1a1aa", coverBg: "#09090b", contentBg: "#18181b", coverTextColor: "#ffffff", sectionStyle: "underline", emoji: "🖤" },
-  { id: "cover_letter",  label: "Cover Letter",    desc: "Formal letter format",         accent: "#1d4ed8", coverBg: "#eff6ff", contentBg: "#ffffff", coverTextColor: "#1e3a8a", sectionStyle: "list", emoji: "✉️" },
-  { id: "copyright",     label: "Legal / Copyright", desc: "Official document style",   accent: "#292524", coverBg: "#f5f5f4", contentBg: "#fafaf9", coverTextColor: "#1c1917", sectionStyle: "underline", emoji: "⚖️" },
-  { id: "magazine",      label: "Magazine Style",  desc: "Editorial, full-bleed hero",   accent: "#e11d48", coverBg: "#881337", contentBg: "#ffffff", coverTextColor: "#ffffff", sectionStyle: "card", emoji: "📰" },
+  { id: "premium",       label: "Premium Gold",    desc: "Gold accent, dark cover",      accent: "#C8A766", coverBg: "#0a0a0a", contentBg: "#f9f7f3", coverTextColor: "#ffffff", sectionStyle: "card" },
+  { id: "executive",     label: "Executive Blue",  desc: "Navy blue, structured",        accent: "#1e3a8a", coverBg: "#1e3a8a", contentBg: "#ffffff", coverTextColor: "#ffffff", sectionStyle: "list" },
+  { id: "clean",         label: "Clean White",     desc: "Minimal, professional",        accent: "#374151", coverBg: "#ffffff", contentBg: "#ffffff", coverTextColor: "#111111", sectionStyle: "underline" },
+  { id: "corporate_red", label: "Corporate Red",   desc: "Bold red, high impact",        accent: "#dc2626", coverBg: "#7f1d1d", contentBg: "#ffffff", coverTextColor: "#ffffff", sectionStyle: "card" },
+  { id: "modern_green",  label: "Modern Green",    desc: "Forest green, eco & trust",    accent: "#16a34a", coverBg: "#14532d", contentBg: "#f0fdf4", coverTextColor: "#ffffff", sectionStyle: "list" },
+  { id: "luxury_black",  label: "Luxury Black",    desc: "All-black, silver accents",    accent: "#a1a1aa", coverBg: "#09090b", contentBg: "#18181b", coverTextColor: "#ffffff", sectionStyle: "underline" },
+  { id: "cover_letter",  label: "Cover Letter",    desc: "Formal letter format",         accent: "#1d4ed8", coverBg: "#eff6ff", contentBg: "#ffffff", coverTextColor: "#1e3a8a", sectionStyle: "list" },
+  { id: "copyright",     label: "Legal / Copyright", desc: "Official document style",   accent: "#292524", coverBg: "#f5f5f4", contentBg: "#fafaf9", coverTextColor: "#1c1917", sectionStyle: "underline" },
+  { id: "magazine",      label: "Magazine Style",  desc: "Editorial, full-bleed hero",   accent: "#e11d48", coverBg: "#881337", contentBg: "#ffffff", coverTextColor: "#ffffff", sectionStyle: "card" },
 ];
 
 const DEFAULT_PALETTE: PaletteColor[] = [
@@ -144,7 +144,7 @@ function getScoreItems(data: ProfileData, logoUrl: string) {
   else weaknesses.push("Add your services — show what you offer");
 
   if (data.services.some(s => s.description)) strengths.push("Service descriptions added");
-  else if (svcCount > 0) weaknesses.push("Add descriptions to your services — use AI ✨ per service");
+  else if (svcCount > 0) weaknesses.push("Add descriptions to your services — use AI per service");
 
   if (data.team.some(m => m.name)) strengths.push("Team members added");
   else weaknesses.push("No team members — profiles build trust with clients");
@@ -1224,7 +1224,7 @@ export default function CompanyProfileBuilder() {
                   )}
                 >
                   <div className="w-full h-5 rounded mb-1.5 border border-white/40 shadow-sm" style={{ background: `linear-gradient(135deg, ${t.coverBg}, ${t.accent})` }} />
-                  <p className="text-[8px] font-bold text-[hsl(var(--foreground))] leading-tight">{t.emoji} {t.label}</p>
+                  <p className="text-[8px] font-bold text-[hsl(var(--foreground))] leading-tight">{t.label}</p>
                   <p className="text-[7px] text-[hsl(var(--muted-foreground))] mt-0.5 leading-tight">{t.desc}</p>
                 </button>
               ))}
@@ -1388,7 +1388,7 @@ export default function CompanyProfileBuilder() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-bold text-[hsl(var(--foreground))] text-sm">Live Preview</h2>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] text-[hsl(var(--muted-foreground))] bg-white px-2 py-1 rounded-full border border-[hsl(var(--border))]">A4 · {cfg.emoji} {cfg.label}</span>
+                <span className="text-[10px] text-[hsl(var(--muted-foreground))] bg-white px-2 py-1 rounded-full border border-[hsl(var(--border))]">A4 · {cfg.label}</span>
               </div>
             </div>
             <div className="overflow-y-auto max-h-[800px] overflow-x-hidden">
