@@ -90,13 +90,15 @@ const TONES: { id: Tone; label: string; emoji: string; desc: string }[] = [
 
 // ─── A4 Letter Preview ────────────────────────────────────────────────────────
 function LetterPreview({
-  form, letter, template, logoUrl, logoSize, scale = 1,
+  form, letter, template, logoUrl, logoSize, signatureUrl, signatureSize, scale = 1,
 }: {
   form: FormData;
   letter: string;
   template: Template;
   logoUrl: string;
   logoSize: number;
+  signatureUrl?: string;
+  signatureSize?: number;
   scale?: number;
 }) {
   const cfg = TEMPLATES.find(t => t.id === template)!;
@@ -182,7 +184,23 @@ function LetterPreview({
         {letter && (
           <div style={{ marginTop: sp(16) }}>
             <p style={{ fontSize: fs(10.5) }}>Yours sincerely,</p>
-            <p style={{ fontSize: fs(12), fontWeight: 700, color: cfg.accentColor, marginTop: sp(10), borderTop: `1px solid ${cfg.dividerColor}`, paddingTop: sp(8), display: "inline-block" }}>
+            {signatureUrl ? (
+              <img
+                src={signatureUrl}
+                alt="Signature"
+                style={{
+                  height: sp((signatureSize ?? 80) * 0.55),
+                  maxWidth: sp(180),
+                  objectFit: "contain",
+                  display: "block",
+                  margin: `${sp(6)}px 0 ${sp(4)}px`,
+                  filter: "contrast(1.2)",
+                }}
+              />
+            ) : (
+              <div style={{ marginTop: sp(10), borderTop: `1px solid ${cfg.dividerColor}`, width: sp(140) }} />
+            )}
+            <p style={{ fontSize: fs(12), fontWeight: 700, color: cfg.accentColor, marginTop: sp(signatureUrl ? 2 : 8), display: "inline-block" }}>
               {form.yourName || "Your Name"}
             </p>
             {form.yourTitle && (
@@ -210,6 +228,8 @@ export default function CoverLetterGenerator() {
   const [brandAssetOpen, setBrandAssetOpen] = useState(false);
   const [logoUrl, setLogoUrl] = useState("");
   const [logoSize, setLogoSize] = useState(60);
+  const [signatureUrl, setSignatureUrl] = useState("");
+  const [signatureSize, setSignatureSize] = useState(80);
 
   const [form, setForm] = useState<FormData>({
     yourName: "", yourTitle: "", yourEmail: "", yourPhone: "",
@@ -435,10 +455,28 @@ export default function CoverLetterGenerator() {
       // Sign-off
       y -= 4;
       page.drawText("Yours sincerely,", { x: margin, y, font: regularFont, size: 10.5, color: dark });
-      y -= 28;
-      // Signature line
-      page.drawLine({ start: { x: margin, y }, end: { x: margin + 140, y }, thickness: 0.8, color: accent });
       y -= 14;
+
+      // Signature image or line
+      if (signatureUrl) {
+        try {
+          const sigBytes = await fetch(signatureUrl).then(r => r.arrayBuffer());
+          const sigImage = await pdfDoc.embedPng(sigBytes);
+          const targetH = Math.round((signatureSize / 100) * 48);
+          const aspect = sigImage.width / sigImage.height;
+          const sigW = Math.round(targetH * aspect);
+          const sigH = targetH;
+          page.drawImage(sigImage, { x: margin, y: y - sigH + 6, width: sigW, height: sigH });
+          y -= sigH + 6;
+        } catch {
+          page.drawLine({ start: { x: margin, y }, end: { x: margin + 140, y }, thickness: 0.8, color: accent });
+          y -= 14;
+        }
+      } else {
+        page.drawLine({ start: { x: margin, y }, end: { x: margin + 140, y }, thickness: 0.8, color: accent });
+        y -= 14;
+      }
+
       page.drawText(form.yourName || "Your Name", { x: margin, y, font: boldFont, size: 12, color: accent });
       if (form.yourTitle) {
         y -= 14;
@@ -521,15 +559,21 @@ export default function CoverLetterGenerator() {
               <CollapsibleContent>
                 <div className="px-3 pb-3 border-t border-[hsl(var(--border))]">
                   <BrandAssetLibrary
-                    assetTypes={["monogram", "logo"]}
-                    selectedUrl={logoUrl}
-                    onSelect={asset => setLogoUrl(asset.file_url)}
+                    assetTypes={["monogram", "logo", "signature"]}
+                    selectedUrl={logoUrl || signatureUrl}
+                    onSelect={asset => {
+                      if (asset.asset_type === "signature") {
+                        setSignatureUrl(asset.file_url || "");
+                      } else {
+                        setLogoUrl(asset.file_url || "");
+                      }
+                    }}
                     showSizeControl
-                    sizeValue={logoSize}
-                    onSizeChange={setLogoSize}
-                    sizeLabel="Logo Size"
+                    sizeValue={signatureUrl ? signatureSize : logoSize}
+                    onSizeChange={signatureUrl ? setSignatureSize : setLogoSize}
+                    sizeLabel={signatureUrl ? "Signature Size (px)" : "Logo Size"}
                     sizeMin={30}
-                    sizeMax={100}
+                    sizeMax={160}
                   />
                 </div>
               </CollapsibleContent>
@@ -748,6 +792,8 @@ export default function CoverLetterGenerator() {
                 template={template}
                 logoUrl={logoUrl}
                 logoSize={logoSize}
+                signatureUrl={signatureUrl}
+                signatureSize={signatureSize}
                 scale={0.9}
               />
             </motion.div>
@@ -773,6 +819,8 @@ export default function CoverLetterGenerator() {
                     template={t.id}
                     logoUrl={logoUrl}
                     logoSize={logoSize}
+                    signatureUrl={signatureUrl}
+                    signatureSize={signatureSize}
                     scale={0.22}
                   />
                   <p className="text-[9px] font-semibold text-center py-1 bg-[hsl(var(--muted)/0.4)] text-[hsl(var(--muted-foreground))]">
