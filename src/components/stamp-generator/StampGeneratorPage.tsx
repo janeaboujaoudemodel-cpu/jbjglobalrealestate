@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -70,6 +70,7 @@ export default function StampGeneratorPage() {
   const { projectId } = useParams<{ projectId: string }>();
   const { user, session } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [project, setProject] = useState<any>(null);
   const [concepts, setConcepts] = useState<StampDesignConcept[]>([]);
@@ -93,7 +94,12 @@ export default function StampGeneratorPage() {
   const [manualFontSize, setManualFontSize] = useState<number | null>(null);
 
   // Left panel tab
-  const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text'>('color');
+  const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text' | 'centerart'>('color');
+
+  // Center Art controls (monogram/logo override on the generate page)
+  const [localIconStyle, setLocalIconStyle] = useState<'NONE' | 'MONOGRAM' | 'UPLOADED_LOGO'>('MONOGRAM');
+  const [localMonogramText, setLocalMonogramText] = useState<string>('');
+  const [localLogoUrl, setLocalLogoUrl] = useState<string>('');
 
   // Preview modal
   const [previewConcept, setPreviewConcept] = useState<StampDesignConcept | null>(null);
@@ -136,6 +142,13 @@ export default function StampGeneratorPage() {
     if (error || !data) { toast.error('Project not found'); navigate('/toolkit/stamp-generator'); return; }
     setProject(data);
 
+    // Sync Center Art controls from project
+    setLocalIconStyle((data.icon_style as any) || 'MONOGRAM');
+    setLocalMonogramText(data.monogram_text || '');
+    setLocalLogoUrl((data as any).uploaded_logo_url || '');
+
+    const isFresh = new URLSearchParams(location.search).get('fresh') === '1';
+
     const { data: existing } = await supabase
       .from('stamp_designs')
       .select('id, svg_source, template_key, is_favorite')
@@ -143,7 +156,7 @@ export default function StampGeneratorPage() {
       .order('created_at', { ascending: false })
       .limit(20);
 
-    if (existing && existing.length > 0) {
+    if (!isFresh && existing && existing.length > 0) {
       const toDesign = (d: any): StampDesignConcept => ({
         id: d.id,
         templateKey: d.template_key || 'classic-double',
@@ -456,7 +469,7 @@ export default function StampGeneratorPage() {
           {/* ── Left Panel ─────────────────────────────────────────────── */}
           <div className="hidden lg:flex flex-col gap-4 w-60 flex-shrink-0 sticky top-[calc(theme(spacing.32)+56px)] self-start max-h-[calc(100vh-200px)] overflow-y-auto">
             {/* Tab switcher */}
-            <div className="flex bg-[hsl(var(--muted))] rounded-xl p-1 gap-1">
+            <div className="flex bg-[hsl(var(--muted))] rounded-xl p-1 gap-1 flex-wrap">
               <button onClick={() => setLeftTab('color')}
                 className={`flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium transition-all ${leftTab === 'color' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
                 <Palette size={10}/> Colors
@@ -468,6 +481,10 @@ export default function StampGeneratorPage() {
               <button onClick={() => setLeftTab('text')}
                 className={`flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium transition-all ${leftTab === 'text' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
                 <Type size={10}/> Text
+              </button>
+              <button onClick={() => setLeftTab('centerart')}
+                className={`flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium transition-all ${leftTab === 'centerart' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
+                <Stamp size={10}/> Art
               </button>
             </div>
 
@@ -662,6 +679,96 @@ export default function StampGeneratorPage() {
                     </div>
                   )}
                 </>
+              )}
+
+              {/* ── Center Art tab ── */}
+              {leftTab === 'centerart' && (
+                <div className="space-y-4">
+                  <p className="text-xs font-semibold text-[hsl(var(--foreground))]">Center Artwork</p>
+
+                  {/* Icon Style selector */}
+                  <div>
+                    <p className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Style</p>
+                    <div className="flex flex-col gap-1.5">
+                      {([
+                        { val: 'NONE',          label: 'None' },
+                        { val: 'MONOGRAM',      label: 'Monogram' },
+                        { val: 'UPLOADED_LOGO', label: 'Upload Logo' },
+                      ] as const).map(opt => (
+                        <button
+                          key={opt.val}
+                          onClick={() => setLocalIconStyle(opt.val)}
+                          className={`w-full py-2 px-3 rounded-xl border-2 text-xs text-left transition-all ${localIconStyle === opt.val ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--foreground))]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.3)]'}`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Monogram text input */}
+                  {localIconStyle === 'MONOGRAM' && (
+                    <div>
+                      <p className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Monogram Letters (1–3)</p>
+                      <input
+                        type="text"
+                        maxLength={3}
+                        value={localMonogramText}
+                        onChange={e => setLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
+                        placeholder={project?.company_name?.slice(0, 2) || 'AB'}
+                        className="w-full px-3 py-2 rounded-xl border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-lg font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))] transition-all"
+                      />
+                      <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">Leave blank to auto-generate from company name</p>
+                    </div>
+                  )}
+
+                  {/* Logo uploader */}
+                  {localIconStyle === 'UPLOADED_LOGO' && (
+                    <div>
+                      <p className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Upload Logo</p>
+                      <label className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.04)] transition-all">
+                        <Upload size={20} className="text-[hsl(var(--gold))]"/>
+                        <span className="text-xs text-[hsl(var(--muted-foreground))]">{localLogoUrl ? 'Change logo' : 'Click to upload'}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={e => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            const reader = new FileReader();
+                            reader.onload = () => setLocalLogoUrl(reader.result as string);
+                            reader.readAsDataURL(file);
+                          }}
+                        />
+                      </label>
+                      {localLogoUrl && (
+                        <div className="mt-2 flex items-center gap-2">
+                          <img src={localLogoUrl} alt="Logo preview" className="w-12 h-12 rounded-lg object-contain border border-[hsl(var(--border))]"/>
+                          <button onClick={() => setLocalLogoUrl('')} className="text-[10px] text-destructive underline">Remove</button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Apply button */}
+                  <button
+                    onClick={() => {
+                      const updated = {
+                        ...project,
+                        icon_style: localIconStyle,
+                        monogram_text: localMonogramText || null,
+                        uploaded_logo_url: localLogoUrl || null,
+                      };
+                      setProject(updated);
+                      toast.info('Applying center artwork…', { duration: 1500 });
+                      generateConcepts(updated);
+                    }}
+                    className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:opacity-90 transition-all"
+                  >
+                    <Wand2 size={12}/> Apply to Stamps
+                  </button>
+                </div>
               )}
             </div>
 

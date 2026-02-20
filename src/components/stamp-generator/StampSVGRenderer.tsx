@@ -75,11 +75,16 @@ export function StampSVGRenderer({
     });
   }
 
-  // Sanitize SVG before rendering — preserve clip-path, direction, unicode-bidi
+  // Sanitize SVG before rendering — preserve clip-path, direction, unicode-bidi, image href
   const clean = typeof window !== 'undefined'
     ? DOMPurify.sanitize(tinted, {
         USE_PROFILES: { svg: true, svgFilters: true },
-        ADD_ATTR: ['clip-path', 'dominant-baseline', 'unicode-bidi', 'direction', 'bidi-override', 'letter-spacing', 'text-anchor', 'font-weight', 'font-size', 'font-family', 'font-style'],
+        ADD_TAGS: ['image'],
+        ADD_ATTR: [
+          'clip-path', 'dominant-baseline', 'unicode-bidi', 'direction', 'bidi-override',
+          'letter-spacing', 'text-anchor', 'font-weight', 'font-size', 'font-family', 'font-style',
+          'href', 'xlink:href', 'preserveAspectRatio',
+        ],
         FORCE_BODY: false,
       })
     : tinted;

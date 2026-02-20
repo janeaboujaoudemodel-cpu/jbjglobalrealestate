@@ -179,7 +179,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
       <!-- Inner accent ring -->
-      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="1.2"/>
+      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="#2a3a5c" stroke-width="1.2"/>
       <!-- Subtle center fill -->
       <circle cx="${cx}" cy="${cy}" r="${innerR - 4}" fill="url(#t1bg)"/>
       <!-- Cardinal star ornaments on band -->
@@ -284,8 +284,8 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       <circle cx="${cx}" cy="${cy}" r="${r1}" fill="${COLOR}"/>
       <circle cx="${cx}" cy="${cy}" r="${r2}" fill="#ffffff"/>
       <!-- Accent rings -->
-      <circle cx="${cx}" cy="${cy}" r="${r3}" fill="none" stroke="${COLOR}" stroke-width="1.8"/>
-      <circle cx="${cx}" cy="${cy}" r="${r4}" fill="none" stroke="${COLOR}" stroke-width="0.5"/>
+      <circle cx="${cx}" cy="${cy}" r="${r3}" fill="none" stroke="#2a3a5c" stroke-width="1.8"/>
+      <circle cx="${cx}" cy="${cy}" r="${r4}" fill="none" stroke="#2a3a5c" stroke-width="0.5"/>
       <!-- Ring text in band -->
       ${ringText('t3ring', cx, cy, ringR, `★  ${name}  ★  ${city}  ★`, font, 8, '#ffffff', '50%', 1.5)}
       <!-- Top & bottom ornament dots on outer ring -->
@@ -385,7 +385,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
-      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${COLOR}" stroke-width="0.9"/>
+      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="#2a3a5c" stroke-width="0.9"/>
       <!-- Center divider with ornament -->
       ${hRule(cx - 70, cx + 70, cy + 2, COLOR, 1.2)}
       <text x="${cx}" y="${cy + 7}" text-anchor="middle" font-family="${font}" font-size="7" fill="${COLOR}">✦</text>
@@ -460,7 +460,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
       <!-- Inner accent ring -->
-      <circle cx="${cx}" cy="${cy}" r="${bandR - 5}" fill="url(#t7bg)" stroke="${COLOR}" stroke-width="0.6"/>
+      <circle cx="${cx}" cy="${cy}" r="${bandR - 5}" fill="url(#t7bg)" stroke="#2a3a5c" stroke-width="0.6"/>
       <!-- Ring text: name on top arc, city on bottom arc -->
       ${ringText('t7top', cx, cy, ringTextR, `◆  ${ringName}  ◆`, font, 7.5, '#ffffff', '50%', 1.4)}
       ${bottomArcText('t7bot', cx, cy, ringTextR, `◆  ${ringCity}  ◆`, font, 7.5, '#ffffff', 1.4)}
@@ -704,7 +704,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const outerR  = R;           // 116 — outer ring
     const midR    = R - 8;       // thin gap ring (decorative)
     const innerR  = R - 16;      // inner ring
-    const arcR    = R - 11;      // radius for text path (inside inner ring)
+    const arcR    = R - 17;      // radius for text path — safe zone: 17px from outer to prevent touching border
 
     const displayArabic = arabicName || name;
     // English: base 10pt, reduce for long names (max 26 chars before scaling)
@@ -749,14 +749,21 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const divTop = cy - logoSize / 2 - 14;
     const divBot = cy + logoSize / 2 + 14;
 
-    // City / country line — between logo and bottom arc, with optional reg number + elegant divider
+    // Safe vertical limit: text must stay at least 10px inside the inner ring
+    const maxTextY = cy + innerR - 10;
+
+    // City / country line — clamp to safe zone
     const cityStr = `${project.city_optional ? project.city_optional.toUpperCase() : 'DUBAI'} · ${(project.country_optional || 'UAE').toUpperCase()}`;
+    const cityY = Math.min(divBot + 17, maxTextY);
+    const regNoY = divBot + 28;
+    const showRegNo = regNo && regNoY <= maxTextY;
+
     const cityLine = `
       ${divider(cx, divBot + 6, COLOR, 22)}
-      <text x="${cx}" y="${divBot + 17}"
+      <text x="${cx}" y="${cityY}"
         text-anchor="middle" font-family="${font}" font-size="7"
         fill="${COLOR}" letter-spacing="4">${cityStr}</text>
-      ${regNo ? `<text x="${cx}" y="${divBot + 28}"
+      ${showRegNo ? `<text x="${cx}" y="${regNoY}"
         text-anchor="middle" font-family="${font}" font-size="6"
         fill="${COLOR}" letter-spacing="2">${regNo}</text>` : ''}
     `;
@@ -774,8 +781,8 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
 
       <!-- ── Double ring border ── -->
       <circle cx="${cx}" cy="${cy}" r="${outerR}"  fill="none" stroke="${COLOR}" stroke-width="2.4"/>
-      <circle cx="${cx}" cy="${cy}" r="${midR}"    fill="none" stroke="${COLOR}" stroke-width="0.5"/>
-      <circle cx="${cx}" cy="${cy}" r="${innerR}"  fill="none" stroke="${COLOR}" stroke-width="1.2"/>
+      <circle cx="${cx}" cy="${cy}" r="${midR}"    fill="none" stroke="#2a3a5c" stroke-width="0.5"/>
+      <circle cx="${cx}" cy="${cy}" r="${innerR}"  fill="none" stroke="#2a3a5c" stroke-width="1.2"/>
 
       <!-- ── 4 cardinal diamond ornaments ── -->
       ${[0, 90, 180, 270].map(deg => {
