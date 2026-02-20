@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, FileText, Plus, Trash2, Sparkles, Download,
   ChevronRight, LayoutGrid, Check, RefreshCw, User, Briefcase,
-  GraduationCap, Wrench, Languages, AlignLeft, ImageIcon, ChevronDown,
+  GraduationCap, Wrench, Languages, AlignLeft, ImageIcon, ChevronDown, Type,
 } from "lucide-react";
 import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import { Button } from "@/components/ui/button";
@@ -41,7 +41,7 @@ const TEMPLATES: { id: Template; label: string; desc: string; accent: string; bg
 ];
 
 // ─── Live Preview ─────────────────────────────────────────────────────────────
-function CVPreview({ data, template, scale = 1 }: { data: CVData; template: Template; scale?: number }) {
+function CVPreview({ data, template, scale = 1, fontFamily, fontWeight, fontStyle, fontSizeOverride }: { data: CVData; template: Template; scale?: number; fontFamily?: string; fontWeight?: string; fontStyle?: string; fontSizeOverride?: number | null }) {
   const cfg = TEMPLATES.find(t => t.id === template)!;
   const { accent, bg } = cfg;
   const white = "#ffffff";
@@ -57,9 +57,14 @@ function CVPreview({ data, template, scale = 1 }: { data: CVData; template: Temp
   const contactItems = [data.email, data.phone, data.location, data.linkedin, data.website].filter(Boolean);
 
   // ── EXECUTIVE: Dark left sidebar ──────────────────────────────────────
+  const resolvedFamily = fontFamily || (template === "executive" || template === "classic" ? "Georgia, 'Times New Roman', serif" : "'Helvetica Neue', Arial, sans-serif");
+  const resolvedWeight = fontWeight || "700";
+  const resolvedStyle  = fontStyle  || "normal";
+  const resolvedNameSz = fontSizeOverride != null ? fontSizeOverride * scale : null;
+
   if (template === "executive") {
     return (
-      <div style={{ display: "flex", background: bg, fontFamily: "Georgia, serif", fontSize: fontSize(10), color: dkgray, minHeight: 400 * scale, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8 }}>
+      <div style={{ display: "flex", background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: dkgray, minHeight: 400 * scale, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8 }}>
         {/* Sidebar */}
         <div style={{ width: 110 * scale, background: accent, color: white, padding: `${24 * scale}px ${16 * scale}px`, flexShrink: 0 }}>
           {/* Monogram */}
@@ -84,7 +89,7 @@ function CVPreview({ data, template, scale = 1 }: { data: CVData; template: Temp
 
         {/* Main */}
         <div style={{ flex: 1, padding: `${24 * scale}px ${px}px` }}>
-          <h1 style={{ fontSize: fontSize(20), fontWeight: 700, color: accent, margin: 0 }}>{name}</h1>
+          <h1 style={{ fontSize: resolvedNameSz ?? fontSize(20), fontWeight: resolvedWeight, fontStyle: resolvedStyle, color: accent, margin: 0 }}>{name}</h1>
           <p style={{ fontSize: fontSize(10), color: gray, marginTop: 3 * scale, marginBottom: 16 * scale }}>{title}</p>
 
           {data.summary && (
@@ -114,10 +119,10 @@ function CVPreview({ data, template, scale = 1 }: { data: CVData; template: Temp
   // ── MODERN: Blue header bar ────────────────────────────────────────────
   if (template === "modern") {
     return (
-      <div style={{ background: bg, fontFamily: "'Helvetica Neue', Arial, sans-serif", fontSize: fontSize(10), color: dkgray, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8, overflow: "hidden" }}>
+      <div style={{ background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: dkgray, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8, overflow: "hidden" }}>
         {/* Header */}
         <div style={{ background: accent, color: white, padding: `${22 * scale}px ${px}px` }}>
-          <h1 style={{ fontSize: fontSize(22), fontWeight: 800, margin: 0 }}>{name}</h1>
+          <h1 style={{ fontSize: resolvedNameSz ?? fontSize(22), fontWeight: resolvedWeight, fontStyle: resolvedStyle, margin: 0 }}>{name}</h1>
           <p style={{ fontSize: fontSize(10), opacity: 0.8, marginTop: 3 * scale, marginBottom: 10 * scale }}>{title}</p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: `${4 * scale}px ${16 * scale}px` }}>
             {contactItems.map((c, i) => <span key={i} style={{ fontSize: fontSize(8), opacity: 0.75 }}>{c}</span>)}
@@ -170,7 +175,7 @@ function CVPreview({ data, template, scale = 1 }: { data: CVData; template: Temp
   // ── CLASSIC: Clean monochrome ──────────────────────────────────────────
   if (template === "classic") {
     return (
-      <div style={{ background: bg, fontFamily: "Georgia, 'Times New Roman', serif", fontSize: fontSize(10), color: "#111", padding: `${px}px`, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8 }}>
+      <div style={{ background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: "#111", padding: `${px}px`, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8 }}>
         <div style={{ textAlign: "center", marginBottom: 16 * scale, borderBottom: "2px solid #111", paddingBottom: 14 * scale }}>
           <h1 style={{ fontSize: fontSize(24), fontWeight: 700, textTransform: "uppercase", letterSpacing: 3, margin: 0 }}>{name}</h1>
           <p style={{ fontSize: fontSize(10), color: gray, marginTop: 4 * scale }}>{title}</p>
@@ -215,14 +220,14 @@ function CVPreview({ data, template, scale = 1 }: { data: CVData; template: Temp
 
   // ── CREATIVE: Violet + bold ────────────────────────────────────────────
   return (
-    <div style={{ background: bg, fontFamily: "'Helvetica Neue', Arial, sans-serif", fontSize: fontSize(10), color: dkgray, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8, overflow: "hidden" }}>
+    <div style={{ background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: dkgray, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8, overflow: "hidden" }}>
       {/* Top accent bar */}
       <div style={{ height: 5 * scale, background: `linear-gradient(90deg, ${accent}, #c026d3)` }} />
       <div style={{ padding: `${22 * scale}px ${px}px` }}>
         {/* Name area */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 * scale }}>
           <div>
-            <h1 style={{ fontSize: fontSize(26), fontWeight: 900, color: accent, margin: 0, lineHeight: 1.1 }}>{name}</h1>
+            <h1 style={{ fontSize: resolvedNameSz ?? fontSize(26), fontWeight: resolvedWeight, fontStyle: resolvedStyle, color: accent, margin: 0, lineHeight: 1.1 }}>{name}</h1>
             <p style={{ fontSize: fontSize(11), color: gray, marginTop: 4 * scale }}>{title}</p>
           </div>
           <div style={{ textAlign: "right" }}>
@@ -699,6 +704,12 @@ export default function CVResumeBuilder() {
   const [brandAssetOpen,    setBrandAssetOpen]    = useState(false);
   const [logoUrl,           setLogoUrl]           = useState("");
   const [logoSize,          setLogoSize]          = useState(80);
+  // Typography
+  const [typoOpen,          setTypoOpen]          = useState(false);
+  const [cvFontFamily,      setCvFontFamily]      = useState("");
+  const [cvFontBold,        setCvFontBold]        = useState(false);
+  const [cvFontItalic,      setCvFontItalic]      = useState(false);
+  const [cvFontSize,        setCvFontSize]        = useState<number | null>(null);
   const [data, setData] = useState<CVData>({
     name: "", title: "", email: "", phone: "", location: "", linkedin: "", website: "",
     summary: "",
