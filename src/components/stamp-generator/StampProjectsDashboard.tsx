@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Plus, Stamp, Trash2, ExternalLink, Clock, CheckCircle2, Copy } from 'lucide-react';
+import { Plus, Stamp, Trash2, ExternalLink, Clock, CheckCircle2, Copy, Images } from 'lucide-react';
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
@@ -188,6 +188,15 @@ export default function StampProjectsDashboard() {
                       onClick={() => navigate(`/toolkit/stamp-generator/${project.id}/generate`)}
                     >
                       <ExternalLink size={11} className="mr-1"/> Open
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-7 px-2 text-xs gap-1"
+                      title="Browse Gallery"
+                      onClick={() => navigate(`/toolkit/stamp-generator/${project.id}/gallery`)}
+                    >
+                      <Images size={11}/> Gallery
                     </Button>
                     <Button
                       size="sm"

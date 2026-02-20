@@ -20,6 +20,7 @@ const StampProjectsDashboard = lazy(() => import("./components/stamp-generator/S
 const StampProjectWizard = lazy(() => import("./components/stamp-generator/StampProjectWizard"));
 const StampGeneratorMain = lazy(() => import("./components/stamp-generator/StampGeneratorPage"));
 const StampExportPage = lazy(() => import("./components/stamp-generator/StampExportPage"));
+const StampGalleryPage = lazy(() => import("./components/stamp-generator/StampGalleryPage"));
 const CaptionsTranslate = lazy(() => import("./pages/toolkit/CaptionsTranslate"));
 const BackgroundAI = lazy(() => import("./pages/toolkit/BackgroundAI"));
 const BeautyFilters = lazy(() => import("./pages/toolkit/BeautyFilters"));
@@ -692,6 +693,7 @@ const App = () => (
                 <Route path="/toolkit/stamp-generator/new" element={<StampProjectWizard />} />
                 <Route path="/toolkit/stamp-generator/:projectId/generate" element={<StampGeneratorMain />} />
                 <Route path="/toolkit/stamp-generator/:projectId/export/:designId" element={<StampExportPage />} />
+                <Route path="/toolkit/stamp-generator/:projectId/gallery" element={<StampGalleryPage />} />
 
                 {/* Creative Suite - Owner-only */}
                 <Route path="/studio" element={<OwnerGuard><Studio /></OwnerGuard>} />
