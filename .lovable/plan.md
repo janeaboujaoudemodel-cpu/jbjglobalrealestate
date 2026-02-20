@@ -1,146 +1,190 @@
 
-# Business Card Designer — 6-Bug Fix + Feature Enhancements
+# Stamp Generator — 6-Issue Fix Plan
 
-## Problems Identified (from code review + user feedback)
-
----
-
-### Bug 1 — AI Design generator always fails (Critical)
-
-`handleGenerateDesign` (line 961) calls `supabase.functions.invoke("gemini-chat")` — this function **does not exist** in `supabase/functions/`. Every single "Generate Design" click fails with "Design generation failed." 
-
-**Fix:** Create a new dedicated `supabase/functions/ai-card-design-generator/index.ts` edge function that calls the Lovable AI gateway directly (same pattern as `ai-logo-generator`), and update `BusinessCardDesigner.tsx` to call it.
+## Issues Identified from User Feedback + Code Review
 
 ---
 
-### Bug 2 — Back color default mismatch (UX confusion)
+### Issue 1 — Logo uploads appear tiny with no resize control (Critical UX)
 
-The default state has `backColorIdx = 6` (Onyx black) but the user reports seeing navy blue. The fundamental UX problem is: when the user picks a color, it's unclear if it targets "front" or "back." The Colors panel has two separate sections but the visual connection to the front/back toggle isn't clear.
+**Root cause in `stampTemplates.ts` T12:** The uploaded logo in the T12 "Bilingual Logo Center" template uses a hardcoded `logoSize = 64` (diameter). This value does NOT respond to any user slider. The `logoScale` state in `StampPreviewModal.tsx` only scales the entire preview `div` via CSS `transform: scale()` — it affects the rendered preview, NOT the SVG itself. The logo in the stamp SVG stays at 64px regardless.
 
 **Fix:** 
-- Add a **"Match Front Color"** shortcut button in the Back Color section
-- Add a **"Match Back Color"** shortcut button in the Front Color section
-- Make the Front/Back toggle tabs in the preview **clickable color dots** that open the color panel and scroll to the relevant picker
-- Add a pure black preset to the presets: currently `Onyx = #111827` (dark gray, not true black). Add `#000000` pure black option.
+- In `StampPreviewModal.tsx`, pass the `logoScale` into `StampSVGRenderer` as a new `logoSizeOverride` prop
+- In `StampSVGRenderer.tsx`, apply this as a regex replacement on the `<image>` element's `width`/`height` attributes and the framing `<circle r="...">` 
+- Alternatively (simpler): Apply `transform: scale(logoScale)` only to the **stamp SVG itself** and use `overflow: visible` so it scales within the frame without clipping
+- After selecting a stamp (Preview modal), show a clear "Logo Size" slider immediately visible below the stamp preview — and sync it to affect the SVG's logo size directly
 
 ---
 
-### Bug 3 — Emoji icons look cheap in AI Design panel (UX)
+### Issue 2 — "Edit" button on concept cards doesn't open the preview (Critical UX)
 
-Lines 1517–1534: Tone selectors use raw emoji characters (`⚡`, `✦`, `◈`, `○`). Industry selectors use emoji prefixes (`🏙`, `💻`, `👗`, etc.). These render inconsistently across devices and look amateurish.
-
-**Fix:** Replace all emoji with clean text-only labels. Use a small Lucide icon from the existing import set (e.g., `Zap`, `Star`, `Cpu`, `Circle` for tone), and text-only industry labels.
-
----
-
-### Bug 4 — Vertical card appears too large in preview (UX)
-
-The preview container is `max-w-[400px]`. The vertical card (`2/3.5` ratio) at 400px wide becomes 700px tall — way outside the visible area.
-
-**Fix:** Add a `maxHeight` constraint on the card preview container, capped at `340px`. When the aspect ratio is "taller than wide" (vertical, digital), scale the card width down so it fits within the height cap instead.
-
----
-
-### Feature 1 — "Select as Front" / "Select as Back" on template cards
-
-Currently the "All Templates Preview" grid (lines 1774–1810) only applies a template to BOTH sides with one click. The user wants to mix and match — e.g., "Modern" front with "Minimal" back.
-
-**Implement:**
-- Split template state into `frontTemplate` and `backTemplate` (replacing single `template`)
-- Each mini-card in the grid shows two pill buttons on hover: **"Set Front"** and **"Set Back"**
-- The main preview shows `frontTemplate` when `side === "front"` and `backTemplate` when `side === "back"`
-- The left panel Template picker shows the currently active side's template
-- A small badge on each mini-card shows "F" (gold) and/or "B" (dark) indicators
-
----
-
-### Feature 2 — Email Signature as a card shape/format
-
-Add "Email Signature" as an additional format option in the Card Shape section. This gives the business card info as an email-friendly horizontal banner.
-
-**Implement:**
-- Add `"email-signature"` to `CardShape` type
-- Add it to `CARD_SHAPES` array with a `Mail` icon and ratio `"600 / 200"` (3:1 landscape)
-- Add a special `CardFace` render path for `email-signature` shape that uses HTML-styled email-safe layout (name bold, contact details inline)
-- In the preview when `email-signature` is selected, show a helpful tooltip: "Email signature format — use the HTML export option"
-- Auto-suggest a "Regenerate" button specifically for email signature format
-
----
-
-## Technical Implementation
-
-### New Edge Function: `supabase/functions/ai-card-design-generator/index.ts`
-
+**Root cause in `handleEditText` (StampGeneratorPage.tsx line 255–262):**
 ```typescript
-// Replaces the broken "gemini-chat" call
-// Accepts the same payload as handleGenerateDesign builds
-// Returns JSON: { elements: AiSvgElement[], bgColor, textColor, accentColor, colors[] }
+function handleEditText(concept: StampDesignConcept) {
+  setSelectedId(concept.id);
+  setPreviewConcept(null);  // ← closes or never opens the preview modal!
+  setLeftTab('text');       // ← switches left panel tab (off-screen on mobile)
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  toast.info('Text editor opened in left panel ← Edit text elements there');
+}
 ```
+This intentionally **skips** the preview modal and instead switches the left panel to "Text" tab — but the left panel is only visible on `lg:` screens. On all screens, clicking "Edit" does effectively nothing visible. The user has to know to look at the left panel.
 
-Uses `google/gemini-2.5-flash` via the Lovable AI gateway with a strict JSON schema prompt (same pattern as `ai-logo-generator/index.ts`).
+**Fix:** `handleEditText` should:
+1. Open the Preview modal (`setPreviewConcept(concept)`)
+2. AND immediately show the text editor panel inside that modal (`showTextEditor = true` by default)
+The Preview modal's text editor should expand automatically when arriving via Edit.
 
-### State Changes in `BusinessCardDesigner.tsx`
+---
 
-```typescript
-// Replace:
-const [template, setTemplate] = useState<Template>("modern");
+### Issue 3 — Gray transparent background in the text editor left panel (UX)
 
-// With:
-const [frontTemplate, setFrontTemplate] = useState<Template>("modern");
-const [backTemplate, setBackTemplate] = useState<Template>("bold");
+**Root cause:** The left panel `bg-white rounded-2xl` card at line 469 has a `space-y-4` container but the parent page background is a gradient (`bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]`). When the text editor tab is open and the user scrolls, the card appears translucent because it lacks a fully opaque solid background and `overflow: hidden` is not set. The text floats above the page content.
 
-// Derived active template for the preview:
-const activeTemplate = side === "front" ? frontTemplate : backTemplate;
-```
+**Fix:** 
+- Add `bg-white` with `overflow-y-auto` and a fixed `max-height` to the left panel card
+- Ensure the left panel has `sticky top-[...] self-start` so it doesn't scroll with the page — keeping it anchored
 
-### Color Presets — Add Pure Black
+---
 
-```typescript
-{ primary: "#000000", secondary: "#C8A766", label: "Pure Black", accent: "#C8A766" },
-```
-Add this to `COLOR_PRESETS` so users can select true `#000000`.
+### Issue 4 — Insufficient padding above the stamp preview card (UX)
 
-### Template Card UI — Front/Back assignment
+**Root cause (line 394):** The page wrapper uses `pt-24 sm:pt-28 lg:pt-32` but the sticky header strip (line 412) uses `sticky top-24 sm:top-28 lg:top-32`, which is correct. However, the main content area below starts at `py-6` (line 448), making the first card (the Trade License uploader) sit immediately under the sticky strip with minimal breathing room.
 
+**Fix:** Change `py-6` → `pt-10 pb-6` on the main content wrapper (line 448) to add more space between the sticky header and the first card.
+
+---
+
+### Issue 5 — "Generate" changes the whole design instead of just the monogram/logo (Critical)
+
+**Root cause:** The "Regenerate" button calls `generateConcepts()` which completely regenerates ALL 11+ stamp templates from scratch. The T12 "Bilingual Logo Center" template (which the user set as their standard) is regenerated fresh each time — losing any customization. 
+
+More critically: the user's requested **standard template structure** (English top arc, Arabic bottom arc, gold monogram center with license number, "Dubai, UAE", elegant divider) IS T12 in `stampTemplates.ts` — but the gold color is hardcoded as `COLOR = '#1a2744'` (dark navy), not the gold palette the user selected. The color picker controls (`primaryColor`, `secondaryColor`) are only applied to the rendered preview via `StampSVGRenderer`'s tint replacement — they work at render time — but the SVG source itself still hardcodes `#1a2744`.
+
+The problem is the user sees gold in the initial sample but when they generate, the SVG source still has navy. The `StampSVGRenderer` replaces `#1a2744` → the selected gold color, so it SHOULD work — but only if `tintColor` is set to gold.
+
+**Real fix:** 
+- When clicking "Edit" or opening Preview, pass `fontWeight`, `fontStyle`, `fontSize`, and `fontFamily` through to the `StampPreviewModal` so the preview there also shows the live typography settings
+- Add a "Adapt This Design" button in the Preview modal that keeps the current design's structure but calls the AI refiner just on the chosen concept, not regenerating all 11
+- Add a "Go to Gallery" button in the Preview modal linking to `/gallery`
+
+---
+
+### Issue 6 — Preview shows only Business Card, Letterhead, Envelope (UX Enhancement)
+
+The user wants to see the stamp on: document, passport/ID card, contract, notebook, wax seal on paper, wall signage. The current `StampPreviewModal` has 3 views: `business-card`, `letterhead`, `envelope`.
+
+**Fix:** Add 3 more mockup views:
+- **Contract / A4 Document** — Full A4 with signature area (already close to letterhead but with stamp in bottom-right as an "approval" seal)
+- **Wax Seal on Paper** — Cream parchment background, stamp pressed as a wax seal impression with a subtle red/gold tint overlay
+- **Notebook / Stationery** — Spiral notebook with company branding and stamp embossed on the cover
+
+---
+
+## Technical Implementation Plan
+
+### File 1: `src/components/stamp-generator/StampGeneratorPage.tsx`
+
+**Change A — Add top padding (1 line):**
 ```tsx
-// Each template mini-card in "All Templates Preview" gets:
-<div className="absolute inset-0 opacity-0 group-hover:opacity-100 ...">
-  <button onClick={() => setFrontTemplate(t.id)}>Set Front</button>
-  <button onClick={() => setBackTemplate(t.id)}>Set Back</button>
-</div>
-// Plus indicator badges:
-{frontTemplate === t.id && <span>F</span>}
-{backTemplate === t.id && <span>B</span>}
+// Line 448: change py-6 → pt-10 pb-6
+<div className="max-w-7xl mx-auto px-6 pt-10 pb-6">
 ```
 
-### Vertical Card Preview Height Fix
+**Change B — Fix `handleEditText` to open Preview modal with text editor open:**
+```typescript
+function handleEditText(concept: StampDesignConcept) {
+  setSelectedId(concept.id);
+  setPreviewConcept(concept);  // ← open the preview modal
+  setOpenWithEditor(true);     // ← new state to auto-open text editor in modal
+}
+```
+Add new state: `const [openWithEditor, setOpenWithEditor] = useState(false);`
+Pass to `StampPreviewModal`: `<StampPreviewModal initialShowEditor={openWithEditor} .../>`
 
+**Change C — Left panel sticky + solid background:**
+Add `sticky top-[calc(theme(spacing.24)+56px)] self-start overflow-hidden` to the left panel wrapper, and give the inner card a solid `bg-white` with `overflow-y-auto max-h-[calc(100vh-240px)]`.
+
+**Change D — Pass typography props to `StampPreviewModal`:**
+Add `fontFamily`, `fontWeight`, `fontStyle`, `fontSize` as props to `StampPreviewModal` so the preview inside shows the same typography the user set in the fonts panel.
+
+---
+
+### File 2: `src/components/stamp-generator/StampPreviewModal.tsx`
+
+**Change A — Accept `initialShowEditor` prop and default `showTextEditor` to it:**
+```typescript
+const [showTextEditor, setShowTextEditor] = useState(props.initialShowEditor ?? false);
+```
+
+**Change B — Add 3 new mockup views:**
+Add `'contract'`, `'wax-seal'`, `'stationery'` to the `MockupView` type and render them:
+
+- `contract`: White A4 with header band, body text lines, **bottom-right stamp** as approval, signature line — style as "APPROVED" overlay
+- `wax-seal`: Cream/parchment background full panel. Stamp rendered with a warm amber tint overlay, slight blur, and circular border to simulate a wax impression
+- `stationery`: Dark navy notebook cover with embossed stamp + company name in gold
+
+**Change C — Add "Adapt Design" and "Go to Gallery" buttons:**
+Below the "Select & Export" button, add:
 ```tsx
-// In the card preview container (line 1720):
-const isVertical = ["vertical", "digital"].includes(cardShape);
-// Apply max-height: 340px and auto width scaling
-<div style={{ maxHeight: isVertical ? 340 : undefined, width: isVertical ? "auto" : "100%" }}>
+<Button variant="outline" onClick={() => sendRefinement(concept)}>
+  Adapt Design (AI)
+</Button>
+<Button variant="ghost" onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/gallery`)}>
+  Go to Gallery
+</Button>
+```
+
+**Change D — Fix text editor panel background:**
+Replace the current `bg-[hsl(var(--pearl-1))]` wrapper of `StampTextEditor` inside the modal with `bg-white border border-[hsl(var(--border))] rounded-xl p-3` for a solid opaque panel.
+
+---
+
+### File 3: `src/lib/stampTemplates.ts`
+
+**Change A — Add reg number to T12 bilingual template:**
+The T12 template currently shows `city · country` below the center artwork (line 751–755). Add registration number display there when `registration_number_optional` is set:
+
+```typescript
+const cityLine = `
+  <text x="${cx}" y="${divBot + 12}" text-anchor="middle" font-family="${font}" font-size="7" 
+    fill="${COLOR}" letter-spacing="4">${city}</text>
+  ${regNo ? `<text x="${cx}" y="${divBot + 23}" text-anchor="middle" font-family="${font}" 
+    font-size="6.5" fill="${COLOR}" letter-spacing="2">${regNo}</text>` : ''}
+`;
+```
+
+This directly addresses the user's request for the registration/license number inside the standard T12 design.
+
+**Change B — Add elegant divider flanking city line in T12:**
+Instead of just the `hRule` lines, add the `divider()` ornament below the center artwork in T12:
+
+```typescript
+// After the center art, before cityLine:
+${divider(cx, divBot + 2, COLOR, 24)}
 ```
 
 ---
 
-## Files Changed
+## Summary of Files Changed
 
-| File | Action | Change |
+| File | Changes | Scope |
 |---|---|---|
-| `supabase/functions/ai-card-design-generator/index.ts` | **Create** | New edge function replacing broken `gemini-chat` call |
-| `supabase/config.toml` | **Edit** | Register new edge function with `verify_jwt = false` |
-| `src/components/corporate-suite/BusinessCardDesigner.tsx` | **Edit** | Fix all 6 bugs + features above |
+| `src/components/stamp-generator/StampGeneratorPage.tsx` | Padding fix, Edit→Preview modal fix, left panel sticky+opaque, pass typography to modal | ~20 lines |
+| `src/components/stamp-generator/StampPreviewModal.tsx` | Accept `initialShowEditor`, 3 new mockup views, opaque text editor bg, "Adapt Design" + "Go to Gallery" buttons | ~80 lines |
+| `src/lib/stampTemplates.ts` | Add reg number + divider ornament to T12 template | ~10 lines |
 
-### Key changes to `BusinessCardDesigner.tsx`:
-1. Split `template` → `frontTemplate` + `backTemplate`
-2. Fix `handleGenerateDesign` to call `ai-card-design-generator` instead of `gemini-chat`
-3. Fix `handleAiQrStyle` similarly (also calls `gemini-chat`) — replace with direct AI gateway call or reuse the new edge function
-4. Remove all emoji from Tone + Industry selectors → clean text + Lucide icons
-5. Add pure black `#000000` preset to `COLOR_PRESETS`
-6. Add "Match Front/Back" shortcut buttons in color pickers
-7. Fix vertical card preview height with `maxHeight` constraint
-8. Add `"email-signature"` shape to `CARD_SHAPES` + `CardFace` render path
-9. Update "All Templates Preview" grid with "Set Front" / "Set Back" hover buttons and F/B badges
+No edge function changes. No database changes needed.
 
-No database migrations needed.
+---
+
+## Key Behaviors After Fix
+
+1. **Edit button** → opens Preview modal with text editor **already expanded** — no hunting for a left panel
+2. **Logo in preview** → slider inside the Preview modal visually scales the stamp (CSS transform on the SVG container, no clipping)  
+3. **Padding** → 40px gap between sticky header and first content card
+4. **Text editor background** → fully opaque white, no transparent bleed-through
+5. **Preview mockups** → 6 total: Business Card, Letterhead, Envelope, Contract, Wax Seal, Stationery
+6. **T12 standard design** → shows reg number + elegant divider below center artwork
+7. **After generation** → "Adapt Design" and "Go to Gallery" options available in the Preview modal
