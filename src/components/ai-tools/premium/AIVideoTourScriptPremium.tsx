@@ -23,19 +23,19 @@ import AIToolPremiumLayout from "../AIToolPremiumLayout";
 import AIToolGuide from "../AIToolGuide";
 
 const AUDIENCES = [
-  { value: "luxury-buyer", label: "Luxury Buyer", icon: "👑" },
-  { value: "investor", label: "Investor", icon: "💰" },
-  { value: "first-time-buyer", label: "First-Time Buyer", icon: "🏠" },
-  { value: "family", label: "Family", icon: "👨‍👩‍👧‍👦" },
-  { value: "expat", label: "Expat / Relocating", icon: "✈️" },
+  { value: "luxury-buyer", label: "Luxury Buyer" },
+  { value: "investor", label: "Investor" },
+  { value: "first-time-buyer", label: "First-Time Buyer" },
+  { value: "family", label: "Family" },
+  { value: "expat", label: "Expat / Relocating" },
 ];
 
 const TONES = [
-  { value: "professional", label: "Professional & Polished", icon: "💼" },
-  { value: "casual", label: "Casual & Friendly", icon: "😊" },
-  { value: "luxury", label: "Ultra-Luxury", icon: "✨" },
-  { value: "energetic", label: "Energetic & Exciting", icon: "⚡" },
-  { value: "storytelling", label: "Storytelling", icon: "📖" },
+  { value: "professional", label: "Professional & Polished" },
+  { value: "casual", label: "Casual & Friendly" },
+  { value: "luxury", label: "Ultra-Luxury" },
+  { value: "energetic", label: "Energetic & Exciting" },
+  { value: "storytelling", label: "Storytelling" },
 ];
 
 const AIVideoTourScriptPremium = () => {
@@ -184,8 +184,7 @@ ${response.script}
                           : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-600"
                       }`}
                     >
-                      <span className="text-lg block">{audience.icon}</span>
-                      <span className="text-xs">{audience.label}</span>
+                      <span className="text-xs font-medium">{audience.label}</span>
                     </button>
                   ))}
                 </div>
@@ -196,7 +195,7 @@ ${response.script}
                   <SelectContentDark className="border-pink-500/30">
                     {AUDIENCES.map((a) => (
                       <SelectItemDark key={a.value} value={a.value}>
-                        {a.icon} {a.label}
+                        {a.label}
                       </SelectItemDark>
                     ))}
                   </SelectContentDark>
@@ -213,7 +212,7 @@ ${response.script}
                     <SelectContentDark className="border-pink-500/30">
                       {TONES.map((t) => (
                         <SelectItemDark key={t.value} value={t.value}>
-                          {t.icon} {t.label}
+                          {t.label}
                         </SelectItemDark>
                       ))}
                     </SelectContentDark>

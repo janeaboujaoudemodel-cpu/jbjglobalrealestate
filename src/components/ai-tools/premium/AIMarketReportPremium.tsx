@@ -169,11 +169,11 @@ ${response.report}
                       <SelectValue />
                     </SelectTriggerDark>
                     <SelectContentDark className="border-indigo-500/30">
-                      <SelectItemDark value="general">📊 General Overview</SelectItemDark>
-                      <SelectItemDark value="investment">💰 Investment Analysis</SelectItemDark>
-                      <SelectItemDark value="rental">🏠 Rental Market</SelectItemDark>
-                      <SelectItemDark value="development">🏗️ New Developments</SelectItemDark>
-                      <SelectItemDark value="price-trends">📈 Price Trends</SelectItemDark>
+                      <SelectItemDark value="general">General Overview</SelectItemDark>
+                      <SelectItemDark value="investment">Investment Analysis</SelectItemDark>
+                      <SelectItemDark value="rental">Rental Market</SelectItemDark>
+                      <SelectItemDark value="development">New Developments</SelectItemDark>
+                      <SelectItemDark value="price-trends">Price Trends</SelectItemDark>
                     </SelectContentDark>
                   </Select>
                 </div>

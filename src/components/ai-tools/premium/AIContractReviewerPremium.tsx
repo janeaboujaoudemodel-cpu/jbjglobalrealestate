@@ -23,12 +23,12 @@ import AIToolPremiumLayout from "../AIToolPremiumLayout";
 import AIToolGuide from "../AIToolGuide";
 
 const CONTRACT_TYPES = [
-  { value: "sale", label: "Sale & Purchase Agreement (SPA)", icon: "📝" },
-  { value: "mou", label: "Memorandum of Understanding", icon: "🤝" },
-  { value: "tenancy", label: "Tenancy Contract", icon: "🏠" },
-  { value: "agency", label: "Agency Agreement", icon: "🏢" },
-  { value: "reservation", label: "Reservation Agreement", icon: "📋" },
-  { value: "other", label: "Other", icon: "📄" },
+  { value: "sale", label: "Sale & Purchase Agreement (SPA)" },
+  { value: "mou", label: "Memorandum of Understanding" },
+  { value: "tenancy", label: "Tenancy Contract" },
+  { value: "agency", label: "Agency Agreement" },
+  { value: "reservation", label: "Reservation Agreement" },
+  { value: "other", label: "Other" },
 ];
 
 const AIContractReviewerPremium = () => {
@@ -132,7 +132,7 @@ const AIContractReviewerPremium = () => {
                 <SelectContentDark className="border-red-500/30">
                   {CONTRACT_TYPES.map((type) => (
                     <SelectItemDark key={type.value} value={type.value}>
-                      {type.icon} {type.label}
+                      {type.label}
                     </SelectItemDark>
                   ))}
                 </SelectContentDark>

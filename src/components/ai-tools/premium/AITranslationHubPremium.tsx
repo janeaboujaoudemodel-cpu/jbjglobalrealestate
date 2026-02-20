@@ -172,11 +172,11 @@ const AITranslationHubPremium = () => {
                   <SelectValue />
                 </SelectTriggerDark>
                 <SelectContentDark className="border-amber-500/30">
-                  <SelectItemDark value="real-estate">🏠 Real Estate</SelectItemDark>
-                  <SelectItemDark value="legal">⚖️ Legal / Contracts</SelectItemDark>
-                  <SelectItemDark value="marketing">📣 Marketing</SelectItemDark>
-                  <SelectItemDark value="formal">💼 Formal / Business</SelectItemDark>
-                  <SelectItemDark value="casual">💬 Casual / Conversational</SelectItemDark>
+                  <SelectItemDark value="real-estate">Real Estate</SelectItemDark>
+                  <SelectItemDark value="legal">Legal / Contracts</SelectItemDark>
+                  <SelectItemDark value="marketing">Marketing</SelectItemDark>
+                  <SelectItemDark value="formal">Formal / Business</SelectItemDark>
+                  <SelectItemDark value="casual">Casual / Conversational</SelectItemDark>
                 </SelectContentDark>
               </Select>
             </CardContent>

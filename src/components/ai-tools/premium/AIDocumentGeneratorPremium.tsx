@@ -195,11 +195,11 @@ const DOCUMENT_TYPE_CONFIGS: Record<string, DocTypeConfig> = {
 const QUICK_TYPES = ["listing", "email-follow-up", "sms", "social-media"];
 
 const TONES = [
-  { value: "professional", label: "💼 Professional", desc: "Formal and business-like" },
-  { value: "friendly", label: "😊 Friendly", desc: "Warm and approachable" },
-  { value: "luxury", label: "✨ Ultra-Luxury", desc: "Exclusive and sophisticated" },
-  { value: "urgent", label: "⚡ Urgent", desc: "Time-sensitive and action-oriented" },
-  { value: "casual", label: "💬 Casual", desc: "Relaxed and conversational" },
+  { value: "professional", label: "Professional", desc: "Formal and business-like" },
+  { value: "friendly", label: "Friendly", desc: "Warm and approachable" },
+  { value: "luxury", label: "Ultra-Luxury", desc: "Exclusive and sophisticated" },
+  { value: "urgent", label: "Urgent", desc: "Time-sensitive and action-oriented" },
+  { value: "casual", label: "Casual", desc: "Relaxed and conversational" },
 ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
