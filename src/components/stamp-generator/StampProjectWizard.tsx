@@ -348,7 +348,7 @@ export default function StampProjectWizard() {
                 </div>
                 <div className="sm:col-span-2">
                   <Label className="text-xs font-medium mb-1.5 block">Company Name <span className="text-destructive">*</span></Label>
-                  <Input value={form.company_name} onChange={e => set('company_name', e.target.value)} placeholder="JBJ Global Real Estate LLC"/>
+                  <Input value={form.company_name} onChange={e => set('company_name', e.target.value)} placeholder="e.g. Acme Properties LLC"/>
                 </div>
                 <div>
                   <Label className="text-xs font-medium mb-1.5 block">Trade Name</Label>

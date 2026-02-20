@@ -707,8 +707,10 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const arcR    = R - 11;      // radius for text path (inside inner ring)
 
     const displayArabic = arabicName || name;
-    const enFontSize    = autoFontSize(name,           9.5, 22);
-    const arFontSize    = autoFontSize(displayArabic, 10,   16);
+    // English: base 10pt, reduce for long names (max 26 chars before scaling)
+    const enFontSize    = autoFontSize(name,           10,   26);
+    // Arabic: base 11pt, wider threshold — Arabic glyphs are naturally larger
+    const arFontSize    = autoFontSize(displayArabic, 11,   20);
 
     const hasLogo  = project.icon_style === 'UPLOADED_LOGO' && (project as any).uploaded_logo_url;
     const logoUrl  = hasLogo ? (project as any).uploaded_logo_url : null;
@@ -784,13 +786,13 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       }).join('\n      ')}
 
       <!-- ── English: curved OVER the TOP ── -->
-      <text font-family="${font}" font-size="${enFontSize}" fill="${COLOR}" letter-spacing="1.5" font-weight="600">
-        <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">◆  ${name}  ◆</textPath>
+      <text font-family="${font}" font-size="${enFontSize}" fill="${COLOR}" letter-spacing="2" font-weight="700">
+        <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${name}</textPath>
       </text>
 
-      <!-- ── Arabic: curved UNDER the BOTTOM ── -->
-      <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${COLOR}" letter-spacing="1" font-weight="600" direction="rtl">
-        <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">◆  ${displayArabic}  ◆</textPath>
+      <!-- ── Arabic: curved UNDER the BOTTOM (path goes right→left so RTL text reads naturally) ── -->
+      <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${COLOR}" letter-spacing="1.5" font-weight="600">
+        <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
       </text>
 
       <!-- ── Thin horizontal rules flanking artwork ── -->
