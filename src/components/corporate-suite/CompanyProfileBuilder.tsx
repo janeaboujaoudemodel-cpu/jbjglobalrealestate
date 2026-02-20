@@ -1,10 +1,12 @@
 import { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  ArrowLeft, Building2, Sparkles, Download, Plus, Trash2,
-  ChevronRight, LayoutGrid, Loader2, User, Phone, Mail, Globe, MapPin, ImageIcon, ChevronDown,
+  Building2, Sparkles, Download, Plus, Trash2,
+  LayoutGrid, Loader2, User, Phone, Mail, Globe, MapPin, ImageIcon, ChevronDown,
   Globe2, CheckCircle2, AlertTriangle, Palette, GripHorizontal, ToggleLeft, ToggleRight,
+  Layers, Users, FileText,
 } from "lucide-react";
+import { StudioShell, type StudioSection } from "@/components/ui/StudioShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -564,6 +566,7 @@ function ColorSwatchEditor({
 // ─── Main Component ────────────────────────────────────────────────────────────
 export default function CompanyProfileBuilder() {
   const navigate = useNavigate();
+  const [activeSection, setActiveSection] = useState("company");
   const [template, setTemplate] = useState<Template>("premium");
   const [generating, setGenerating] = useState(false);
   const [expandingIdx, setExpandingIdx] = useState<number | null>(null);

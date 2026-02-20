@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Stamp, ChevronRight, ChevronLeft, Building2, Palette, Image, Wand2, Check, Type, Upload, X } from 'lucide-react';
+import { Stamp, Building2, Palette, Image, Wand2, Check, Type, Upload, X, Globe, FileText } from 'lucide-react';
+import { StudioShell, type StudioSection } from '@/components/ui/StudioShell';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
 
@@ -164,6 +165,7 @@ const STEPS = ['Company Details', 'Stamp Style', 'Logo / Monogram'];
 export default function StampProjectWizard() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [activeSection, setActiveSection] = useState("company");
   const [emailUppercase, setEmailUppercase] = useState(true);
   const logoInputRef = useRef<HTMLInputElement>(null);
   const [logoPreview, setLogoPreview] = useState<string>('');

@@ -2,11 +2,12 @@ import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft, ImageIcon, Sparkles, RefreshCw, Download,
-  ChevronRight, LayoutGrid, Loader2, Bookmark, Type,
-  Maximize2, X, Building2, Cpu, Scale, Palette, UtensilsCrossed,
+  ImageIcon, Sparkles, RefreshCw, Download,
+  Loader2, Bookmark, Type,
+  Maximize2, Building2, Cpu, Scale, Palette, UtensilsCrossed,
   User, Briefcase, Heart, Archive,
 } from "lucide-react";
+import { StudioShell, type StudioSection } from "@/components/ui/StudioShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -125,6 +126,7 @@ function svgToPng(svgContent: string, size: number, bgColor?: string): Promise<B
 // ─── Main Component ────────────────────────────────────────────────────────────
 export default function LogoCreator() {
   const navigate = useNavigate();
+  const [activeSection, setActiveSection] = useState("brand");
 
   // Inputs
   const [name, setName] = useState("");
@@ -364,423 +366,302 @@ export default function LogoCreator() {
     return "Brand";
   };
 
-  return (
-    <div className="min-h-screen" style={{ background: "hsl(var(--pearl-1,48 30% 97%))" }}>
-      {/* Header */}
-      <div className="border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/toolkit/corporate-suite")} className="gap-1.5">
-              <ArrowLeft size={15} /> Back
-            </Button>
-            <div className="w-px h-5 bg-[hsl(var(--border))]" />
-            <div className="flex items-center gap-2">
-              <LayoutGrid size={11} className="text-[hsl(var(--muted-foreground))]" />
-              <ChevronRight size={10} className="text-[hsl(var(--muted-foreground))]" />
-              <span className="text-xs text-[hsl(var(--muted-foreground))]">Corporate Suite</span>
-              <ChevronRight size={10} className="text-[hsl(var(--muted-foreground))]" />
-              <span className="text-xs font-semibold text-[hsl(var(--foreground))]">Logo Creator</span>
-            </div>
-          </div>
-          <div className="flex gap-2">
-            {logo && (
-              <>
-                <Button variant="outline" size="sm" onClick={downloadSVG} className="gap-1.5 text-xs">
-                  <Download size={13} /> SVG
-                </Button>
-                <Button variant="outline" size="sm" onClick={downloadPNG} className="gap-1.5 text-xs">
-                  <Download size={13} /> PNG
-                </Button>
-              </>
-            )}
-          </div>
+  // ─── Studio Sections ─────────────────────────────────────────────────────────
+
+  const brandPanel = (
+    <div className="space-y-4">
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-[hsl(var(--muted-foreground))]">Company / Name *</label>
+        <div className="flex gap-2">
+          <Input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Acme Corporation" className="flex-1 text-sm" />
+          <VoiceInputButton onTranscript={setName} size="icon" className="shrink-0" />
         </div>
       </div>
-
-      <div className="max-w-6xl mx-auto px-5 py-8 grid grid-cols-1 lg:grid-cols-[420px_1fr] gap-8">
-        {/* ── Left: Controls ── */}
-        <div className="space-y-5">
-          {/* Brand Identity */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4">
-            <h2 className="font-bold text-[hsl(var(--foreground))] flex items-center gap-2">
-              <ImageIcon size={16} className="text-orange-500" /> Brand Identity
-            </h2>
-            <div className="space-y-1.5">
-              <Label className="text-xs">Company / Name *</Label>
-              <div className="flex gap-2">
-                <Input
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  placeholder="e.g. Acme Corporation"
-                  className="flex-1 text-sm"
-                />
-                <VoiceInputButton onTranscript={setName} size="icon" className="shrink-0" />
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs">Description / Tagline (optional)</Label>
-              <div className="flex gap-2 items-start">
-                <Textarea
-                  value={description}
-                  onChange={e => setDescription(e.target.value)}
-                  placeholder="e.g. Premium property consultancy with 10+ years experience..."
-                  rows={2}
-                  className="flex-1 text-sm resize-none"
-                />
-                <VoiceInputButton onTranscript={t => setDescription(prev => prev ? prev + " " + t : t)} size="icon" className="shrink-0 mt-0.5" />
-              </div>
-            </div>
-          </div>
-
-          {/* Industry */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-3">
-            <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">Industry / Tone</h3>
-            <div className="grid grid-cols-3 gap-2">
-              {INDUSTRIES.map(ind => {
-                const Icon = ind.icon;
-                return (
-                  <button
-                    key={ind.id}
-                    onClick={() => setIndustry(ind.id)}
-                    className={`p-2.5 rounded-xl border-2 text-center transition-all ${industry === ind.id ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))] hover:border-orange-300"}`}
-                  >
-                    <div className="flex justify-center mb-1">
-                      <Icon size={16} className={industry === ind.id ? "text-orange-500" : "text-[hsl(var(--muted-foreground))]"} />
-                    </div>
-                    <p className="text-[9px] font-semibold text-[hsl(var(--foreground))] leading-tight">{ind.label}</p>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Style */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-3">
-            <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">Visual Style</h3>
-            <div className="grid grid-cols-2 gap-2">
-              {STYLES.map(s => (
-                <button
-                  key={s.id}
-                  onClick={() => setStyle(s.id)}
-                  className={`p-3 rounded-xl border-2 text-left transition-all ${style === s.id ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))] hover:border-orange-300"}`}
-                >
-                  <p className="text-xs font-semibold text-[hsl(var(--foreground))]">{s.label}</p>
-                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{s.desc}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Typography */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-3">
-            <h3 className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
-              <Type size={14} className="text-orange-500" /> Typography
-            </h3>
-            <div className="grid grid-cols-2 gap-2">
-              {FONTS.map((f, idx) => (
-                <button
-                  key={`${f.value}-${idx}`}
-                  onClick={() => setFont(f.value)}
-                  className={`p-3 rounded-xl border-2 text-left transition-all ${font === f.value && FONTS.findIndex(ff => ff.value === font) === idx ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))] hover:border-orange-300"}`}
-                >
-                  <p className="text-xs font-semibold text-[hsl(var(--foreground))]" style={{ fontFamily: f.value }}>{f.label}</p>
-                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{f.desc}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Colors */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-3">
-            <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">Color Palette</h3>
-            <div className="grid grid-cols-4 gap-2">
-              {COLOR_PRESETS.map((c, i) => (
-                <button
-                  key={i}
-                  onClick={() => { setColorPreset(i); setCustomColors({ primary: "", secondary: "", accent: "" }); }}
-                  className={`p-2 rounded-xl border-2 transition-all ${colorPreset === i && !customColors.primary ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))] hover:border-orange-300"}`}
-                >
-                  <div className="flex gap-0.5 justify-center mb-1.5">
-                    <div className="w-4 h-4 rounded-full border border-white/60 shadow-sm" style={{ background: c.primary }} />
-                    <div className="w-4 h-4 rounded-full border border-[hsl(var(--border))] shadow-sm" style={{ background: c.secondary }} />
-                    <div className="w-4 h-4 rounded-full border border-white/60 shadow-sm" style={{ background: c.accent }} />
-                  </div>
-                  <p className="text-[8px] text-center text-[hsl(var(--muted-foreground))] leading-tight">{c.label}</p>
-                </button>
-              ))}
-            </div>
-
-            {/* Custom color wheels */}
-            <div className="pt-2 border-t border-[hsl(var(--border))]">
-              <p className="text-[10px] text-[hsl(var(--muted-foreground))] mb-2">Custom Colors</p>
-              <div className="grid grid-cols-3 gap-2">
-                {(["primary", "secondary", "accent"] as const).map(key => (
-                  <div key={key} className="flex flex-col items-center gap-1">
-                    <div className="relative w-8 h-8 rounded-full border-2 border-[hsl(var(--border))] overflow-hidden cursor-pointer"
-                      style={{ background: customColors[key] || colors[key] }}>
-                      <input
-                        type="color"
-                        value={customColors[key] || colors[key]}
-                        onChange={e => setCustomColors(prev => ({ ...prev, [key]: e.target.value }))}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                      />
-                    </div>
-                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] capitalize">{key}</p>
-                  </div>
-                ))}
-              </div>
-              {(customColors.primary || customColors.secondary || customColors.accent) && (
-                <button
-                  onClick={() => setCustomColors({ primary: "", secondary: "", accent: "" })}
-                  className="text-[10px] text-orange-500 hover:underline mt-1"
-                >
-                  Reset to preset
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Generate button */}
-          <Button
-            onClick={() => generate()}
-            disabled={generating || !name.trim()}
-            className="w-full h-12 text-sm font-bold gap-2 bg-gradient-to-r from-orange-500 to-red-500 hover:opacity-90 text-white shadow-lg"
-          >
-            {generating ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
-            {generating ? "Generating Logo..." : "Generate Logo"}
-          </Button>
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-[hsl(var(--muted-foreground))]">Description / Tagline (optional)</label>
+        <div className="flex gap-2 items-start">
+          <Textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="e.g. Premium property consultancy..." rows={3} className="flex-1 text-sm resize-none" />
+          <VoiceInputButton onTranscript={t => setDescription(prev => prev ? prev + " " + t : t)} size="icon" className="shrink-0 mt-0.5" />
         </div>
+      </div>
+      <Button onClick={() => generate()} disabled={generating || !name.trim()} className="w-full h-10 text-sm font-bold gap-2 text-white" style={{ background: "linear-gradient(135deg, #f97316, #ef4444)" }}>
+        {generating ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
+        {generating ? "Generating…" : logo ? "Regenerate" : "Generate Logo"}
+      </Button>
+    </div>
+  );
 
-        {/* ── Right: Preview ── */}
-        <div className="space-y-5">
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-6 space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="font-bold text-[hsl(var(--foreground))]">Logo Preview</h2>
-              {logo && (
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={() => setFullscreenOpen(true)} className="gap-1.5 text-xs">
-                    <Maximize2 size={13} /> Fullscreen
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={regenerate} disabled={generating} className="gap-1.5 text-xs">
-                    <RefreshCw size={13} className={generating ? "animate-spin" : ""} />
-                    Regenerate
-                  </Button>
-                </div>
-              )}
+  const industryPanel = (
+    <div className="grid grid-cols-2 gap-2">
+      {INDUSTRIES.map(ind => {
+        const Icon = ind.icon;
+        return (
+          <button key={ind.id} onClick={() => setIndustry(ind.id)}
+            className={`p-3 rounded-xl border-2 text-left transition-all ${industry === ind.id ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))] hover:border-orange-300"}`}>
+            <div className="flex items-center gap-2 mb-1">
+              <Icon size={14} className={industry === ind.id ? "text-orange-500" : "text-[hsl(var(--muted-foreground))]"} />
+              <p className="text-xs font-semibold text-[hsl(var(--foreground))] leading-tight">{ind.label}</p>
             </div>
+            <p className="text-[9px] text-[hsl(var(--muted-foreground))] pl-5 leading-tight">{ind.dna}</p>
+          </button>
+        );
+      })}
+    </div>
+  );
 
-            {generating ? (
-              <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center">
-                  <Loader2 size={28} className="text-orange-500 animate-spin" />
-                </div>
-                <p className="text-sm text-[hsl(var(--muted-foreground))]">AI is designing your logo...</p>
-                <p className="text-xs text-[hsl(var(--muted-foreground))] opacity-60">This usually takes 10–20 seconds</p>
+  const stylePanel = (
+    <div className="grid grid-cols-1 gap-2">
+      {STYLES.map(s => (
+        <button key={s.id} onClick={() => setStyle(s.id)}
+          className={`p-3 rounded-xl border-2 text-left transition-all ${style === s.id ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))] hover:border-orange-300"}`}>
+          <p className="text-sm font-semibold text-[hsl(var(--foreground))]">{s.label}</p>
+          <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{s.desc}</p>
+        </button>
+      ))}
+    </div>
+  );
+
+  const colorsPanel = (
+    <div className="space-y-4">
+      <div className="grid grid-cols-4 gap-2">
+        {COLOR_PRESETS.map((c, i) => (
+          <button key={i} onClick={() => { setColorPreset(i); setCustomColors({ primary: "", secondary: "", accent: "" }); }}
+            className={`p-2 rounded-xl border-2 transition-all ${colorPreset === i && !customColors.primary ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))] hover:border-orange-300"}`}>
+            <div className="flex gap-0.5 justify-center mb-1.5">
+              <div className="w-4 h-4 rounded-full border border-white/60 shadow-sm" style={{ background: c.primary }} />
+              <div className="w-4 h-4 rounded-full border border-[hsl(var(--border))] shadow-sm" style={{ background: c.secondary }} />
+              <div className="w-4 h-4 rounded-full border border-white/60 shadow-sm" style={{ background: c.accent }} />
+            </div>
+            <p className="text-[8px] text-center text-[hsl(var(--muted-foreground))] leading-tight">{c.label}</p>
+          </button>
+        ))}
+      </div>
+      <div className="pt-2 border-t border-[hsl(var(--border))]">
+        <p className="text-[10px] text-[hsl(var(--muted-foreground))] mb-2">Custom Colors</p>
+        <div className="grid grid-cols-3 gap-2">
+          {(["primary", "secondary", "accent"] as const).map(key => (
+            <div key={key} className="flex flex-col items-center gap-1">
+              <div className="relative w-8 h-8 rounded-full border-2 border-[hsl(var(--border))] overflow-hidden cursor-pointer" style={{ background: customColors[key] || colors[key] }}>
+                <input type="color" value={customColors[key] || colors[key]} onChange={e => setCustomColors(prev => ({ ...prev, [key]: e.target.value }))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
               </div>
-            ) : logo ? (
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={logo.timestamp}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center gap-8"
-                >
-                  {/* Large preview with clickable fullscreen */}
-                  <button
-                    onClick={() => setFullscreenOpen(true)}
-                    className="rounded-2xl border-2 border-[hsl(var(--border))] bg-[hsl(var(--pearl-1,48_30%_97%))] p-8 flex items-center justify-center shadow-inner hover:border-orange-300 transition-colors group relative w-full"
-                  >
-                    <LogoPreview svgContent={logo.svgContent} size={240} />
-                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="bg-black/60 rounded-lg px-2 py-1 flex items-center gap-1">
-                        <Maximize2 size={11} className="text-white" />
-                        <span className="text-[10px] text-white">Fullscreen</span>
-                      </div>
-                    </div>
-                  </button>
+              <p className="text-[9px] text-[hsl(var(--muted-foreground))] capitalize">{key}</p>
+            </div>
+          ))}
+        </div>
+        {(customColors.primary || customColors.secondary || customColors.accent) && (
+          <button onClick={() => setCustomColors({ primary: "", secondary: "", accent: "" })} className="text-[10px] text-orange-500 hover:underline mt-1">Reset to preset</button>
+        )}
+      </div>
+    </div>
+  );
 
-                  {/* Size variants */}
-                  <div className="w-full">
-                    <p className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-4">Size Variants</p>
-                    <div className="flex items-end gap-6 flex-wrap">
-                      {[{ label: "Icon (32)", size: 32 }, { label: "Small (64)", size: 64 }, { label: "Medium (128)", size: 128 }].map(v => (
-                        <div key={v.size} className="flex flex-col items-center gap-2">
-                          <div className="rounded-xl border border-[hsl(var(--border))] bg-white p-2 flex items-center justify-center shadow-sm" style={{ width: v.size + 16, height: v.size + 16 }}>
-                            <LogoPreview svgContent={logo.svgContent} size={v.size} />
-                          </div>
-                          <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{v.label}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+  const typographyPanel = (
+    <div className="grid grid-cols-1 gap-2">
+      {FONTS.map((f, idx) => (
+        <button key={`${f.value}-${idx}`} onClick={() => setFont(f.value)}
+          className={`p-3 rounded-xl border-2 text-left transition-all ${font === f.value && FONTS.findIndex(ff => ff.value === font) === idx ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))] hover:border-orange-300"}`}>
+          <p className="text-sm font-semibold text-[hsl(var(--foreground))]" style={{ fontFamily: f.value }}>{f.label}</p>
+          <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{f.desc}</p>
+        </button>
+      ))}
+    </div>
+  );
 
-                  {/* Background variants — clickable */}
-                  <div className="w-full">
-                    <p className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-4">Background Variants</p>
-                    <div className="flex gap-3">
-                      {(["white", "black", "brand"] as const).map(bg => (
-                        <button
-                          key={bg}
-                          onClick={() => setPreviewBg(bg)}
-                          className={`flex-1 rounded-xl p-4 flex flex-col items-center justify-center border-2 transition-all gap-2 ${previewBg === bg ? "border-orange-400 ring-2 ring-orange-200" : "border-[hsl(var(--border))] hover:border-orange-300"}`}
-                          style={{ background: bg === "white" ? "#fff" : bg === "black" ? "#111" : colors.primary }}
-                        >
-                          <LogoPreview svgContent={logo.svgContent} size={80} />
-                          <span className="text-[9px] font-semibold" style={{ color: bg === "white" ? "#666" : "#fff" }}>{bgLabel(bg)}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* License code display */}
-                  {licenseCode && (
-                    <div className="w-full bg-green-50 border border-green-200 rounded-xl p-4 text-center space-y-1">
-                      <p className="text-xs text-green-700 font-semibold">Design Licensed</p>
-                      <p className="text-sm font-mono font-bold text-green-800">{licenseCode}</p>
-                      <p className="text-[10px] text-green-600">This logo is exclusively registered to your account. Keep your license code safe.</p>
-                    </div>
-                  )}
-
-                  {/* Export buttons */}
-                  <div className="flex gap-3 w-full flex-wrap">
-                    <Button onClick={downloadSVG} variant="outline" className="flex-1 gap-2 min-w-[120px] text-xs">
-                      <Download size={14} /> SVG
-                    </Button>
-                    <Button onClick={downloadPNG} variant="outline" className="flex-1 gap-2 min-w-[120px] text-xs">
-                      <Download size={14} /> PNG 512px
-                    </Button>
-                    <Button
-                      onClick={downloadFullKit}
-                      disabled={downloadingKit}
-                      className="flex-1 gap-2 min-w-[120px] text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white hover:opacity-90"
-                    >
-                      {downloadingKit ? <Loader2 size={14} className="animate-spin" /> : <Archive size={14} />}
-                      {downloadingKit ? "Packaging..." : "Full Kit (ZIP)"}
-                    </Button>
-                  </div>
-
-                  <div className="flex gap-3 w-full flex-wrap">
-                    <Button
-                      onClick={handleSaveToAssets}
-                      disabled={saving}
-                      variant="outline"
-                      className="flex-1 gap-2 min-w-[130px] border-orange-300 text-orange-600 hover:bg-orange-50"
-                    >
-                      {saving ? <Loader2 size={15} className="animate-spin" /> : <Bookmark size={15} />}
-                      Save to Brand Assets
-                    </Button>
-                  </div>
-
-                  {justSaved && (
-                    <button
-                      onClick={() => navigate("/toolkit/corporate-suite")}
-                      className="text-xs text-orange-600 hover:underline flex items-center gap-1"
-                    >
-                      <Bookmark size={12} /> View in Brand Assets
-                    </button>
-                  )}
-                </motion.div>
-              </AnimatePresence>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <div className="w-20 h-20 rounded-full bg-orange-50 border-2 border-dashed border-orange-200 flex items-center justify-center">
-                  <ImageIcon size={32} className="text-orange-300" />
-                </div>
-                <div className="text-center">
-                  <p className="font-medium text-[hsl(var(--foreground))]">Ready to generate</p>
-                  <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1">Fill in your brand details and click Generate Logo</p>
-                </div>
-              </div>
+  const exportPanel = (
+    <div className="space-y-4">
+      {logo ? (
+        <>
+          {/* Background variants */}
+          <div>
+            <p className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-3">Background</p>
+            <div className="flex gap-2">
+              {(["white", "black", "brand"] as const).map(bg => (
+                <button key={bg} onClick={() => setPreviewBg(bg)}
+                  className={`flex-1 rounded-xl p-3 flex flex-col items-center justify-center border-2 transition-all gap-2 ${previewBg === bg ? "border-orange-400 ring-2 ring-orange-200" : "border-[hsl(var(--border))] hover:border-orange-300"}`}
+                  style={{ background: bg === "white" ? "#fff" : bg === "black" ? "#111" : colors.primary }}>
+                  <LogoPreview svgContent={logo.svgContent} size={40} />
+                  <span className="text-[9px] font-semibold" style={{ color: bg === "white" ? "#666" : "#fff" }}>{bgLabel(bg)}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          {/* License code */}
+          {licenseCode && (
+            <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center space-y-1">
+              <p className="text-xs text-green-700 font-semibold">Design Licensed</p>
+              <p className="text-sm font-mono font-bold text-green-800">{licenseCode}</p>
+              <p className="text-[10px] text-green-600">Exclusively registered to your account.</p>
+            </div>
+          )}
+          {/* Downloads */}
+          <div className="space-y-2">
+            <Button onClick={downloadSVG} variant="outline" className="w-full gap-2 text-xs"><Download size={13} /> Download SVG</Button>
+            <Button onClick={downloadPNG} variant="outline" className="w-full gap-2 text-xs"><Download size={13} /> Download PNG 512px</Button>
+            <Button onClick={downloadFullKit} disabled={downloadingKit} className="w-full gap-2 text-xs text-white" style={{ background: "linear-gradient(135deg, #f97316, #ef4444)" }}>
+              {downloadingKit ? <Loader2 size={13} className="animate-spin" /> : <Archive size={13} />}
+              {downloadingKit ? "Packaging…" : "Full Kit (ZIP)"}
+            </Button>
+          </div>
+          {/* Save to Assets */}
+          <div className="space-y-2 pt-2 border-t border-[hsl(var(--border))]">
+            <Button onClick={handleSaveToAssets} disabled={saving} variant="outline" className="w-full gap-2 text-xs border-orange-300 text-orange-600 hover:bg-orange-50">
+              {saving ? <Loader2 size={14} className="animate-spin" /> : <Bookmark size={14} />}
+              Save to Brand Assets
+            </Button>
+            {justSaved && (
+              <button onClick={() => navigate("/toolkit/corporate-suite")} className="text-xs text-orange-600 hover:underline flex items-center gap-1 w-full justify-center">
+                <Bookmark size={12} /> View in Brand Assets
+              </button>
             )}
           </div>
-
-          {/* Variations history strip */}
-          {logoHistory.length > 0 && (
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5">
-              <p className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-3">
-                Recent Variations ({logoHistory.length})
-              </p>
-              <div className="flex gap-3">
+          {/* Fullscreen */}
+          <Button onClick={() => setFullscreenOpen(true)} variant="outline" className="w-full gap-2 text-xs">
+            <Maximize2 size={13} /> Fullscreen Preview
+          </Button>
+          {/* Regenerate */}
+          <Button onClick={regenerate} disabled={generating} variant="ghost" className="w-full gap-2 text-xs">
+            <RefreshCw size={13} className={generating ? "animate-spin" : ""} /> Regenerate
+          </Button>
+          {/* History strip */}
+          {logoHistory.length > 1 && (
+            <div>
+              <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Recent Variations ({logoHistory.length})</p>
+              <div className="flex gap-2">
                 {logoHistory.map((h, i) => (
-                  <button
-                    key={h.timestamp}
-                    onClick={() => setLogo(h)}
-                    className={`relative flex-1 rounded-xl border-2 p-2 transition-all hover:border-orange-400 ${logo?.timestamp === h.timestamp ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))]"}`}
-                    title={`Variation ${logoHistory.length - i}`}
-                  >
-                    <div className="flex items-center justify-center" style={{ height: 72 }}>
-                      <LogoPreview svgContent={h.svgContent} size={64} />
+                  <button key={h.timestamp} onClick={() => setLogo(h)}
+                    className={`relative flex-1 rounded-xl border-2 p-2 transition-all hover:border-orange-400 ${logo?.timestamp === h.timestamp ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))]"}`}>
+                    <div className="flex items-center justify-center" style={{ height: 56 }}>
+                      <LogoPreview svgContent={h.svgContent} size={48} />
                     </div>
-                    {logo?.timestamp === h.timestamp && (
-                      <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-orange-500 flex items-center justify-center">
-                        <span className="text-[8px] text-white font-bold">✓</span>
-                      </div>
-                    )}
                     <p className="text-[9px] text-center text-[hsl(var(--muted-foreground))] mt-1">V{logoHistory.length - i}</p>
                   </button>
                 ))}
               </div>
             </div>
           )}
+        </>
+      ) : (
+        <div className="flex flex-col items-center gap-3 py-8 text-center">
+          <Archive size={28} className="text-[hsl(var(--muted-foreground))]" />
+          <p className="text-sm text-[hsl(var(--muted-foreground))]">Generate a logo first to see export options.</p>
         </div>
-      </div>
+      )}
+    </div>
+  );
+
+  const sections: StudioSection[] = [
+    { id: "brand",      label: "Brand",    icon: <ImageIcon size={16} />,  panel: brandPanel },
+    { id: "industry",   label: "Industry", icon: <Building2 size={16} />,  panel: industryPanel },
+    { id: "style",      label: "Style",    icon: <Sparkles size={16} />,   panel: stylePanel },
+    { id: "colors",     label: "Colors",   icon: <Palette size={16} />,    panel: colorsPanel },
+    { id: "typography", label: "Font",     icon: <Type size={16} />,       panel: typographyPanel },
+    { id: "export",     label: "Export",   icon: <Archive size={16} />,    panel: exportPanel },
+  ];
+
+  // ─── Live Preview (canvas center) ────────────────────────────────────────────
+  const canvasPreview = (
+    <div className="flex flex-col items-center gap-6 py-6">
+      {generating ? (
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-20 h-20 rounded-full bg-orange-100 flex items-center justify-center">
+            <Loader2 size={32} className="text-orange-500 animate-spin" />
+          </div>
+          <p className="text-sm text-[hsl(var(--muted-foreground))]">AI is designing your logo…</p>
+          <p className="text-xs text-[hsl(var(--muted-foreground))] opacity-60">This usually takes 10–20 seconds</p>
+        </div>
+      ) : logo ? (
+        <AnimatePresence mode="wait">
+          <motion.div key={logo.timestamp} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center gap-6">
+            {/* Main preview */}
+            <button onClick={() => setFullscreenOpen(true)}
+              className="rounded-2xl border-2 border-[hsl(var(--border))] p-8 flex items-center justify-center shadow-inner hover:border-orange-300 transition-colors group relative"
+              style={{ background: previewBg === "white" ? "#fff" : previewBg === "black" ? "#111" : colors.primary }}>
+              <LogoPreview svgContent={logo.svgContent} size={260} />
+              <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="bg-black/60 rounded-lg px-2 py-1 flex items-center gap-1">
+                  <Maximize2 size={11} className="text-white" />
+                  <span className="text-[10px] text-white">Fullscreen</span>
+                </div>
+              </div>
+            </button>
+            {/* Size variants row */}
+            <div className="flex items-end gap-6 flex-wrap justify-center">
+              {[{ label: "Favicon (32)", size: 32 }, { label: "Small (64)", size: 64 }, { label: "Medium (128)", size: 128 }].map(v => (
+                <div key={v.size} className="flex flex-col items-center gap-2">
+                  <div className="rounded-xl border border-[hsl(var(--border))] bg-white p-2 flex items-center justify-center shadow-sm" style={{ width: v.size + 16, height: v.size + 16 }}>
+                    <LogoPreview svgContent={logo.svgContent} size={v.size} />
+                  </div>
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{v.label}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      ) : (
+        <div className="flex flex-col items-center gap-4 py-16">
+          <div className="w-24 h-24 rounded-full border-2 border-dashed border-orange-200 bg-orange-50 flex items-center justify-center">
+            <ImageIcon size={36} className="text-orange-300" />
+          </div>
+          <div className="text-center">
+            <p className="font-semibold text-[hsl(var(--foreground))]">Ready to generate</p>
+            <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1">Select Brand Name in the left panel, enter your name, then click Generate</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <>
+      <StudioShell
+        toolName="Logo Creator"
+        toolIcon={<ImageIcon size={14} />}
+        toolColor="#f97316"
+        sections={sections}
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
+        preview={canvasPreview}
+        onExport={logo ? downloadSVG : undefined}
+        exportLabel="SVG"
+        breadcrumb="Corporate Suite"
+        previewBg="hsl(var(--muted)/0.5)"
+      />
 
       {/* Fullscreen Modal */}
       <Dialog open={fullscreenOpen} onOpenChange={setFullscreenOpen}>
         <DialogContent className="max-w-4xl w-full">
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="font-bold text-lg text-[hsl(var(--foreground))]">Logo Preview</h2>
-            </div>
-
-            {/* Background tabs */}
+            <h2 className="font-bold text-lg text-[hsl(var(--foreground))]">Logo Preview</h2>
             <div className="flex gap-2 flex-wrap">
               {(["white", "black", "brand", "transparent"] as const).map(bg => (
-                <button
-                  key={bg}
-                  onClick={() => setFullscreenBg(bg)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold border-2 transition-all capitalize ${fullscreenBg === bg ? "border-orange-400 bg-orange-50 text-orange-700" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-orange-300"}`}
-                >
+                <button key={bg} onClick={() => setFullscreenBg(bg)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold border-2 transition-all capitalize ${fullscreenBg === bg ? "border-orange-400 bg-orange-50 text-orange-700" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-orange-300"}`}>
                   {bg === "brand" ? "Brand Color" : bg.charAt(0).toUpperCase() + bg.slice(1)}
                 </button>
               ))}
             </div>
-
-            {/* Large logo display */}
             {logo && (
-              <div
-                className="rounded-2xl flex items-center justify-center p-12 min-h-[300px] border border-[hsl(var(--border))]"
-                style={{
-                  background: bgForFullscreen(fullscreenBg),
-                  backgroundImage: fullscreenBg === "transparent" ? "repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 0 0 / 20px 20px" : undefined,
-                }}
-              >
+              <div className="rounded-2xl flex items-center justify-center p-12 min-h-[300px] border border-[hsl(var(--border))]"
+                style={{ background: bgForFullscreen(fullscreenBg), backgroundImage: fullscreenBg === "transparent" ? "repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 0 0 / 20px 20px" : undefined }}>
                 <LogoPreview svgContent={logo.svgContent} size={300} />
               </div>
             )}
-
-            {/* Business card mockup */}
             <div className="space-y-2">
               <p className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Business Card Mockup</p>
               <div className="rounded-xl overflow-hidden shadow-lg flex" style={{ width: 350, height: 200, background: colors.primary }}>
                 <div className="flex-1 p-6 flex flex-col justify-between">
-                  <div className="flex justify-start">
-                    {logo && <LogoPreview svgContent={logo.svgContent} size={48} />}
-                  </div>
+                  <div>{logo && <LogoPreview svgContent={logo.svgContent} size={48} />}</div>
                   <div>
                     <p className="text-white font-bold text-sm" style={{ fontFamily: font }}>{name || "Company Name"}</p>
                     <p className="text-white/70 text-xs mt-0.5">Professional Services</p>
                   </div>
                 </div>
-                <div className="w-1 bg-white/20" />
                 <div className="w-24 flex flex-col justify-center items-center gap-1 p-2">
                   <div className="text-white/60 text-[9px] text-center">www.company.com</div>
                   <div className="text-white/60 text-[9px] text-center">info@company.com</div>
                 </div>
               </div>
             </div>
-
-            {/* Letterhead mockup */}
             <div className="space-y-2">
               <p className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Letterhead Mockup</p>
               <div className="rounded-xl border border-[hsl(var(--border))] bg-white p-6 space-y-3" style={{ maxWidth: 500 }}>
@@ -792,15 +673,13 @@ export default function LogoCreator() {
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <div className="h-2 rounded bg-gray-100 w-full" />
-                  <div className="h-2 rounded bg-gray-100 w-4/5" />
-                  <div className="h-2 rounded bg-gray-100 w-3/4" />
+                  <div className="h-2 rounded bg-gray-100 w-full" /><div className="h-2 rounded bg-gray-100 w-4/5" /><div className="h-2 rounded bg-gray-100 w-3/4" />
                 </div>
               </div>
             </div>
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }

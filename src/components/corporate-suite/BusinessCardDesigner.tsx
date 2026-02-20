@@ -2,13 +2,14 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft, Download, CreditCard, Phone, Mail, Globe,
-  MapPin, Building2, RefreshCw, Eye, Layers, ChevronRight,
+  Download, CreditCard, Phone, Mail, Globe,
+  MapPin, Building2, RefreshCw, Eye, Layers,
   LayoutGrid, Check, ImageIcon, ChevronDown, QrCode, Move,
   Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
   Save, Palette, Zap, Star, Cpu, Minus, Type, User,
 } from "lucide-react";
+import { StudioShell, type StudioSection } from "@/components/ui/StudioShell";
 import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -982,6 +983,7 @@ function ColorPickerSection({
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function BusinessCardDesigner() {
   const navigate = useNavigate();
+  const [activeSection, setActiveSection] = useState("template");
   // Per-side independent templates
   const [frontTemplate, setFrontTemplate] = useState<Template>("modern");
   const [backTemplate, setBackTemplate]   = useState<Template>("bold");
