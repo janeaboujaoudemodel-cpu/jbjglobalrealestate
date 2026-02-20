@@ -31,18 +31,18 @@ const BusinessSuiteToolCard = ({
     >
       <Link
         to={href}
-        className={`flex flex-col h-full p-6 rounded-xl bg-zinc-900/80 border ${borderColorClass} hover:border-opacity-60 transition-all duration-300 group`}
+        className={`flex flex-col h-full p-5 rounded-2xl bg-white/70 backdrop-blur-sm border-2 ${borderColorClass} hover:border-gold/60 hover:shadow-[0_8px_32px_rgba(200,167,102,0.25)] transition-all duration-300 group`}
       >
-        <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${gradientFrom} ${gradientTo} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}>
+        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradientFrom} ${gradientTo} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-md flex-shrink-0`}>
           <Icon className="w-6 h-6 text-white" />
         </div>
-        <h3 className={`text-lg font-bold ${colorClass} mb-2 group-hover:text-white transition-colors`}>
+        <h3 className={`text-base font-bold text-zinc-900 group-hover:text-gold mb-2 transition-colors`}>
           {title}
         </h3>
-        <p className="text-sm text-zinc-400 leading-relaxed flex-grow min-h-[60px]">
+        <p className="text-sm text-zinc-600 leading-relaxed flex-grow min-h-[60px]">
           {description}
         </p>
-        <div className={`mt-4 text-sm font-medium ${colorClass} group-hover:translate-x-1 transition-transform inline-flex items-center gap-1`}>
+        <div className="mt-4 text-sm font-semibold text-gold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
           Open Tool →
         </div>
       </Link>
@@ -51,3 +51,4 @@ const BusinessSuiteToolCard = ({
 };
 
 export default BusinessSuiteToolCard;
+

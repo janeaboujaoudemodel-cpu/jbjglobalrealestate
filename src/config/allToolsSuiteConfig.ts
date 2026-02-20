@@ -8,7 +8,7 @@ import {
   Home, Mail, Languages, Video, FileText, FileSearch, CalendarDays,
   Palette, DollarSign, Users, MessageSquare, Sparkles, Phone,
   CreditCard, Layers, PenTool, Share2, FileAudio, Target,
-  Briefcase, Wand2, Image, Mic, Camera, Scissors
+  Briefcase, Wand2, Image, Mic, Camera, Scissors, Stamp, Pen, Globe, Award
 } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
 
@@ -66,7 +66,15 @@ export const toolColorThemes: Record<string, {
   'document-generator': { bg: 'bg-lime-950/40', accent: 'text-lime-400', border: 'border-lime-500/30', gradient: 'from-lime-500/20 to-lime-950/40', ring: 'ring-lime-500/30' },
   'contract-reviewer': { bg: 'bg-red-950/40', accent: 'text-red-400', border: 'border-red-500/30', gradient: 'from-red-500/20 to-red-950/40', ring: 'ring-red-500/30' },
   
-  // Productivity
+  // Productivity / Corporate
+  'ai-stamp': { bg: 'bg-amber-950/40', accent: 'text-amber-400', border: 'border-amber-500/30', gradient: 'from-amber-500/20 to-amber-950/40', ring: 'ring-amber-500/30' },
+  'business-card-designer': { bg: 'bg-gold/10', accent: 'text-yellow-400', border: 'border-yellow-500/30', gradient: 'from-yellow-500/20 to-amber-950/40', ring: 'ring-yellow-500/30' },
+  'logo-maker': { bg: 'bg-purple-950/40', accent: 'text-purple-400', border: 'border-purple-500/30', gradient: 'from-purple-500/20 to-purple-950/40', ring: 'ring-purple-500/30' },
+  'cv-builder': { bg: 'bg-emerald-950/40', accent: 'text-emerald-400', border: 'border-emerald-500/30', gradient: 'from-emerald-500/20 to-emerald-950/40', ring: 'ring-emerald-500/30' },
+  'cover-letter': { bg: 'bg-sky-950/40', accent: 'text-sky-400', border: 'border-sky-500/30', gradient: 'from-sky-500/20 to-sky-950/40', ring: 'ring-sky-500/30' },
+  'company-profile': { bg: 'bg-rose-950/40', accent: 'text-rose-400', border: 'border-rose-500/30', gradient: 'from-rose-500/20 to-rose-950/40', ring: 'ring-rose-500/30' },
+  'e-sign': { bg: 'bg-cyan-950/40', accent: 'text-cyan-400', border: 'border-cyan-500/30', gradient: 'from-cyan-500/20 to-cyan-950/40', ring: 'ring-cyan-500/30' },
+  'scan-sign': { bg: 'bg-orange-950/40', accent: 'text-orange-400', border: 'border-orange-500/30', gradient: 'from-orange-500/20 to-orange-950/40', ring: 'ring-orange-500/30' },
   'meeting-summarizer': { bg: 'bg-violet-950/40', accent: 'text-violet-400', border: 'border-violet-500/30', gradient: 'from-violet-500/20 to-violet-950/40', ring: 'ring-violet-500/30' },
   'call-summarizer': { bg: 'bg-violet-950/40', accent: 'text-violet-400', border: 'border-violet-500/30', gradient: 'from-violet-500/20 to-violet-950/40', ring: 'ring-violet-500/30' },
   'lead-qualification': { bg: 'bg-purple-950/40', accent: 'text-purple-400', border: 'border-purple-500/30', gradient: 'from-purple-500/20 to-purple-950/40', ring: 'ring-purple-500/30' },
@@ -153,6 +161,14 @@ export const ALL_TOOL_CATEGORIES: ToolCategory[] = [
     icon: CalendarDays,
     color: 'violet',
     tools: [
+      { id: 'ai-stamp', name: 'AI Stamp Generator', icon: Stamp, description: 'Create bilingual professional company stamps and seals', href: '/toolkit/stamp-generator' },
+      { id: 'business-card-designer', name: 'Business Card Designer', icon: CreditCard, description: 'Design premium digital and print-ready business cards', href: '/toolkit/corporate-suite/business-card' },
+      { id: 'logo-maker', name: 'Logo Maker', icon: Palette, description: 'Generate AI-powered company logos with custom branding', href: '/toolkit/corporate-suite/logo' },
+      { id: 'cv-builder', name: 'Resume Builder', icon: FileText, description: 'Build professional CVs with 12 international templates', href: '/toolkit/corporate-suite/cv-builder' },
+      { id: 'cover-letter', name: 'Cover Letter Generator', icon: Pen, description: 'AI-crafted cover letters tailored to any role', href: '/toolkit/corporate-suite/cover-letter' },
+      { id: 'company-profile', name: 'Company Profile', icon: Award, description: 'Create multi-page A4 company profiles with AI', href: '/toolkit/corporate-suite/company-profile' },
+      { id: 'e-sign', name: 'JBJ E-Sign', icon: Globe, description: 'Professional contract signing with multi-signer support', href: '/e-signature' },
+      { id: 'scan-sign', name: 'Scan & Sign', icon: Image, description: 'Scan documents, add signature, export as PDF', href: '/toolkit/scan-sign' },
       { id: 'meeting-summarizer', name: 'Meeting Summarizer', icon: FileAudio, description: 'Summarize meetings and extract action items', href: '/ai-meeting-summarizer' },
       { id: 'call-summarizer', name: 'Call Summarizer', icon: Phone, description: 'Summarize call recordings and notes', href: '/ai-call-summarizer' },
       { id: 'lead-qualification', name: 'Lead Qualification', icon: Target, description: 'Automatically qualify and score leads', href: '/ai-lead-qualification' },
