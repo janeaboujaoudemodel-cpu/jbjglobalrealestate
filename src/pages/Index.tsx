@@ -246,7 +246,7 @@ const Index = () => {
           </div>
 
           {/* Audience Entry Cards - Full set with 11 cards */}
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-11 gap-2.5 md:gap-3 w-full mb-6 md:mb-10">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-11 gap-3 md:gap-4 w-full mb-6 md:mb-10">
             {[
               { to: "/buyer-guide", icon: Heart, label: t('hero.buyers') },
               { to: "/seller-guide", icon: Target, label: t('hero.sellers') },
@@ -261,12 +261,13 @@ const Index = () => {
               { to: "/join", icon: GraduationCap, label: t('hero.careers') },
             ].map((card) => (
               <Link key={card.to} to={card.to} className="group">
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold rounded-xl p-3 md:p-4 text-center hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1 shadow-[0_4px_16px_rgba(200,167,102,0.2)] transition-all duration-300 aspect-square flex items-center justify-center">
-                  <div className="flex flex-col items-center gap-1.5 md:gap-2">
-                    <div className="w-9 h-9 md:w-10 md:h-10 bg-black rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md">
-                      <card.icon className="w-4 h-4 md:w-5 md:h-5 text-gold" />
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold rounded-2xl p-4 md:p-5 text-center hover:shadow-[0_12px_40px_rgba(200,167,102,0.5)] hover:-translate-y-1.5 shadow-[0_4px_20px_rgba(200,167,102,0.25)] transition-all duration-300 aspect-square flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-gold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+                  <div className="relative flex flex-col items-center gap-2.5 md:gap-3">
+                    <div className="w-12 h-12 md:w-14 md:h-14 bg-black rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] transition-all duration-300 shadow-lg">
+                      <card.icon className="w-5 h-5 md:w-6 md:h-6 text-gold" />
                     </div>
-                    <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
+                    <h4 className="text-black group-hover:text-gold text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
                   </div>
                 </div>
               </Link>
