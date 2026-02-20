@@ -133,9 +133,11 @@ function PhotoBubble({ url, size, accent, name }: { url: string; size: number; a
 function CVPreview({
   data, template, scale = 1,
   fontFamily, fontWeight: fwProp, fontStyle: fsProp, fontSizeOverride,
+  logoUrl, logoSize = 80,
 }: {
   data: CVData; template: Template; scale?: number;
   fontFamily?: string; fontWeight?: string; fontStyle?: string; fontSizeOverride?: number | null;
+  logoUrl?: string; logoSize?: number;
 }) {
   const cfg = TEMPLATES.find(t => t.id === template)!;
   const { accent, bg } = cfg;
@@ -160,6 +162,15 @@ function CVPreview({
   const resolvedWeight = fwProp   || "700";
   const resolvedStyle  = fsProp   || "normal";
   const resolvedNameSz = fontSizeOverride != null ? fontSizeOverride * scale : null;
+
+  const logoH = logoUrl ? (logoSize / 100) * 48 * scale : 0;
+  const LogoBadge = logoUrl ? (
+    <img
+      src={logoUrl}
+      alt="Logo"
+      style={{ height: logoH, maxWidth: 120 * scale, objectFit: "contain", flexShrink: 0 }}
+    />
+  ) : null;
 
   // ── EXECUTIVE ─────────────────────────────────────────────────────────
   if (template === "executive") {
@@ -189,8 +200,13 @@ function CVPreview({
           </>}
         </div>
         <div style={{ flex: 1, padding: `${24 * scale}px ${px}px` }}>
-          <h1 style={{ fontSize: resolvedNameSz ?? fontSize(20), fontWeight: resolvedWeight, fontStyle: resolvedStyle, color: accent, margin: 0 }}>{name}</h1>
-          <p style={{ fontSize: fontSize(10), color: gray, marginTop: 3 * scale, marginBottom: 16 * scale }}>{title}</p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <h1 style={{ fontSize: resolvedNameSz ?? fontSize(20), fontWeight: resolvedWeight, fontStyle: resolvedStyle, color: accent, margin: 0 }}>{name}</h1>
+              <p style={{ fontSize: fontSize(10), color: gray, marginTop: 3 * scale, marginBottom: 16 * scale }}>{title}</p>
+            </div>
+            {LogoBadge}
+          </div>
           {data.summary && <Section label="Summary" accent={accent} scale={scale}><p style={{ fontSize: fontSize(9), color: gray, lineHeight: 1.6 }}>{data.summary}</p></Section>}
           {data.experience.some(e => e.title) && <Section label="Experience" accent={accent} scale={scale}>{data.experience.filter(e => e.title).map((exp, i) => <ExpEntry key={i} exp={exp} accent={accent} gray={gray} lgray={lgray} scale={scale} />)}</Section>}
           {data.education.some(e => e.degree) && <Section label="Education" accent={accent} scale={scale}>{data.education.filter(e => e.degree).map((edu, i) => <EduEntry key={i} edu={edu} accent={accent} gray={gray} lgray={lgray} scale={scale} />)}</Section>}
@@ -213,6 +229,7 @@ function CVPreview({
               {allLinks.slice(0, 5).map((c, i) => <span key={i} style={{ fontSize: fontSize(8), opacity: 0.75 }}>{c}</span>)}
             </div>
           </div>
+          {LogoBadge && <div style={{ opacity: 0.9 }}>{LogoBadge}</div>}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 160px", gap: 0 }}>
           <div style={{ padding: `${20 * scale}px ${px}px`, borderRight: "1px solid #e5e7eb" }}>
@@ -234,10 +251,11 @@ function CVPreview({
   if (template === "classic") {
     return (
       <div style={{ background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: "#111", padding: `${px}px`, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8 }}>
-        <div style={{ textAlign: "center", marginBottom: 16 * scale, borderBottom: "2px solid #111", paddingBottom: 14 * scale }}>
+        <div style={{ marginBottom: 16 * scale, borderBottom: "2px solid #111", paddingBottom: 14 * scale }}>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: logoUrl ? 6 * scale : 0 }}>{LogoBadge}</div>
           {data.photoUrl && <img src={data.photoUrl} alt="Profile" style={{ width: 52 * scale, height: 52 * scale, borderRadius: "50%", objectFit: "cover", margin: `0 auto ${8 * scale}px`, display: "block", border: "2px solid #ccc" }} />}
-          <h1 style={{ fontSize: resolvedNameSz ?? fontSize(24), fontWeight: resolvedWeight, fontStyle: resolvedStyle, textTransform: "uppercase", letterSpacing: 3, margin: 0 }}>{name}</h1>
-          <p style={{ fontSize: fontSize(10), color: gray, marginTop: 4 * scale }}>{title}</p>
+          <h1 style={{ fontSize: resolvedNameSz ?? fontSize(24), fontWeight: resolvedWeight, fontStyle: resolvedStyle, textTransform: "uppercase", letterSpacing: 3, margin: 0, textAlign: "center" }}>{name}</h1>
+          <p style={{ fontSize: fontSize(10), color: gray, marginTop: 4 * scale, textAlign: "center" }}>{title}</p>
           <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: `${3 * scale}px ${14 * scale}px`, marginTop: 8 * scale }}>
             {allLinks.map((c, i) => <span key={i} style={{ fontSize: fontSize(8), color: gray }}>{c}</span>)}
           </div>
@@ -268,6 +286,7 @@ function CVPreview({
               </div>
             </div>
             <div style={{ textAlign: "right" }}>
+              {LogoBadge && <div style={{ marginBottom: 4 * scale, display: "flex", justifyContent: "flex-end" }}>{LogoBadge}</div>}
               {allLinks.slice(0, 4).map((c, i) => <p key={i} style={{ fontSize: fontSize(7.5), color: gray, margin: `${2 * scale}px 0` }}>{c}</p>)}
             </div>
           </div>
@@ -293,8 +312,13 @@ function CVPreview({
     return (
       <div style={{ background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: "#111", padding: `${px}px`, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8 }}>
         <div style={{ borderBottom: `2px solid ${accent}`, paddingBottom: 12 * scale, marginBottom: 16 * scale }}>
-          <h1 style={{ fontSize: resolvedNameSz ?? fontSize(22), fontWeight: 700, color: accent, margin: 0, letterSpacing: 0.5 }}>{name}</h1>
-          <p style={{ fontSize: fontSize(9), color: "#555", marginTop: 3 * scale }}>{title}</p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <h1 style={{ fontSize: resolvedNameSz ?? fontSize(22), fontWeight: 700, color: accent, margin: 0, letterSpacing: 0.5 }}>{name}</h1>
+              <p style={{ fontSize: fontSize(9), color: "#555", marginTop: 3 * scale }}>{title}</p>
+            </div>
+            {LogoBadge}
+          </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: `${2 * scale}px ${16 * scale}px`, marginTop: 6 * scale }}>
             {allLinks.map((c, i) => <span key={i} style={{ fontSize: fontSize(8), color: "#555" }}>{c}</span>)}
           </div>
@@ -311,8 +335,13 @@ function CVPreview({
   if (template === "ats") {
     return (
       <div style={{ background: bg, fontFamily: "'Arial', sans-serif", fontSize: fontSize(10), color: "#111", padding: `${px}px`, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8 }}>
-        <h1 style={{ fontSize: resolvedNameSz ?? fontSize(20), fontWeight: 700, color: "#111", margin: 0 }}>{name}</h1>
-        <p style={{ fontSize: fontSize(10), color: "#555", marginTop: 3 * scale }}>{title}</p>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 * scale }}>
+          <div>
+            <h1 style={{ fontSize: resolvedNameSz ?? fontSize(20), fontWeight: 700, color: "#111", margin: 0 }}>{name}</h1>
+            <p style={{ fontSize: fontSize(10), color: "#555", marginTop: 3 * scale }}>{title}</p>
+          </div>
+          {LogoBadge}
+        </div>
         <p style={{ fontSize: fontSize(8.5), color: "#555", marginTop: 5 * scale }}>{allLinks.join("  |  ")}</p>
         <hr style={{ border: "none", borderTop: "1px solid #999", margin: `${12 * scale}px 0` }} />
         {data.summary && <><p style={{ fontSize: fontSize(9), fontWeight: 700, textTransform: "uppercase", marginBottom: 5 * scale }}>Professional Summary</p><p style={{ fontSize: fontSize(9), color: "#333", lineHeight: 1.6, marginBottom: 14 * scale }}>{data.summary}</p></>}
@@ -335,8 +364,13 @@ function CVPreview({
           {data.languages && <><p style={{ fontSize: fontSize(7.5), fontWeight: 700, opacity: 0.6, textTransform: "uppercase", marginTop: 14 * scale, marginBottom: 6 * scale }}>Languages</p><p style={{ fontSize: fontSize(7.5), opacity: 0.8 }}>{data.languages}</p></>}
         </div>
         <div style={{ flex: 1, padding: `${24 * scale}px ${px}px` }}>
-          <h1 style={{ fontSize: resolvedNameSz ?? fontSize(20), fontWeight: resolvedWeight, fontStyle: resolvedStyle, color: accent, margin: 0 }}>{name}</h1>
-          <p style={{ fontSize: fontSize(10), color: gray, marginTop: 3 * scale, marginBottom: 16 * scale }}>{title}</p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <h1 style={{ fontSize: resolvedNameSz ?? fontSize(20), fontWeight: resolvedWeight, fontStyle: resolvedStyle, color: accent, margin: 0 }}>{name}</h1>
+              <p style={{ fontSize: fontSize(10), color: gray, marginTop: 3 * scale, marginBottom: 16 * scale }}>{title}</p>
+            </div>
+            {LogoBadge}
+          </div>
           {data.summary && <Section label="Summary" accent={accent} scale={scale}><p style={{ fontSize: fontSize(9), color: gray, lineHeight: 1.6 }}>{data.summary}</p></Section>}
           {data.experience.some(e => e.title) && <><p style={{ fontSize: 8.5 * scale, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: accent, marginBottom: 10 * scale }}>Experience</p>{data.experience.filter(e => e.title).map((exp, i) => (
             <div key={i} style={{ display: "flex", gap: 10 * scale, marginBottom: 12 * scale }}>
@@ -363,10 +397,11 @@ function CVPreview({
       <div style={{ background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: dkgray, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8, overflow: "hidden" }}>
         <div style={{ background: accent, padding: `${20 * scale}px ${px}px`, display: "flex", alignItems: "center", gap: 14 * scale }}>
           {data.photoUrl && <img src={data.photoUrl} alt="Profile" style={{ width: 52 * scale, height: 52 * scale, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(255,255,255,0.4)", flexShrink: 0 }} />}
-          <div>
+          <div style={{ flex: 1 }}>
             <h1 style={{ fontSize: resolvedNameSz ?? fontSize(22), fontWeight: resolvedWeight, fontStyle: resolvedStyle, color: white, margin: 0 }}>{name}</h1>
             <p style={{ fontSize: fontSize(10), color: white, opacity: 0.8, marginTop: 3 * scale }}>{title}</p>
           </div>
+          {LogoBadge && <div style={{ opacity: 0.9 }}>{LogoBadge}</div>}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 130px", gap: 0 }}>
           <div style={{ padding: `${20 * scale}px ${px}px`, borderRight: "1px solid #eee" }}>
@@ -395,7 +430,10 @@ function CVPreview({
             <h1 style={{ fontSize: resolvedNameSz ?? fontSize(24), fontWeight: 300, color: "#111", margin: 0, letterSpacing: -0.5 }}>{name}</h1>
             <p style={{ fontSize: fontSize(10), color: gray, marginTop: 4 * scale, fontWeight: 400 }}>{title}</p>
           </div>
-          {data.photoUrl && <img src={data.photoUrl} alt="Profile" style={{ width: 46 * scale, height: 46 * scale, borderRadius: 6, objectFit: "cover", border: "1px solid #e5e7eb" }} />}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 * scale }}>
+            {data.photoUrl && <img src={data.photoUrl} alt="Profile" style={{ width: 46 * scale, height: 46 * scale, borderRadius: 6, objectFit: "cover", border: "1px solid #e5e7eb" }} />}
+            {LogoBadge}
+          </div>
         </div>
         <div style={{ display: "flex", gap: `${3 * scale}px ${16 * scale}px`, flexWrap: "wrap", marginBottom: 20 * scale }}>
           {allLinks.map((c, i) => <span key={i} style={{ fontSize: fontSize(8), color: gray }}>{c}</span>)}
@@ -413,11 +451,16 @@ function CVPreview({
   if (template === "bold") {
     return (
       <div style={{ background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: "#111", boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8, overflow: "hidden" }}>
-        <div style={{ background: accent, padding: `${28 * scale}px ${px}px`, position: "relative" }}>
-          {data.photoUrl && <img src={data.photoUrl} alt="Profile" style={{ position: "absolute", right: px, top: "50%", transform: "translateY(-50%)", width: 56 * scale, height: 56 * scale, borderRadius: "50%", objectFit: "cover", border: "3px solid rgba(255,255,255,0.5)" }} />}
-          <p style={{ fontSize: fontSize(8), fontWeight: 700, textTransform: "uppercase", letterSpacing: 3, color: "rgba(255,255,255,0.5)", marginBottom: 4 * scale }}>Curriculum Vitae</p>
-          <h1 style={{ fontSize: resolvedNameSz ?? fontSize(28), fontWeight: 900, color: white, margin: 0, lineHeight: 1 }}>{name}</h1>
-          <p style={{ fontSize: fontSize(12), color: "rgba(255,255,255,0.75)", marginTop: 6 * scale }}>{title}</p>
+        <div style={{ background: accent, padding: `${28 * scale}px ${px}px`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <p style={{ fontSize: fontSize(8), fontWeight: 700, textTransform: "uppercase", letterSpacing: 3, color: "rgba(255,255,255,0.5)", marginBottom: 4 * scale }}>Curriculum Vitae</p>
+            <h1 style={{ fontSize: resolvedNameSz ?? fontSize(28), fontWeight: 900, color: white, margin: 0, lineHeight: 1 }}>{name}</h1>
+            <p style={{ fontSize: fontSize(12), color: "rgba(255,255,255,0.75)", marginTop: 6 * scale }}>{title}</p>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 * scale }}>
+            {data.photoUrl && <img src={data.photoUrl} alt="Profile" style={{ width: 56 * scale, height: 56 * scale, borderRadius: "50%", objectFit: "cover", border: "3px solid rgba(255,255,255,0.5)" }} />}
+            {LogoBadge && <div style={{ opacity: 0.9 }}>{LogoBadge}</div>}
+          </div>
         </div>
         <div style={{ background: `${accent}15`, padding: `${8 * scale}px ${px}px`, display: "flex", flexWrap: "wrap", gap: `${4 * scale}px ${16 * scale}px` }}>
           {allLinks.map((c, i) => <span key={i} style={{ fontSize: fontSize(8), color: "#555" }}>{c}</span>)}
@@ -443,12 +486,15 @@ function CVPreview({
     return (
       <div style={{ background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: "#111", boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8, overflow: "hidden" }}>
         <div style={{ background: accent, height: 8 * scale }} />
-        <div style={{ padding: `${20 * scale}px ${px}px`, display: "flex", justifyContent: "space-between", borderBottom: `2px solid ${accent}` }}>
+        <div style={{ padding: `${20 * scale}px ${px}px`, display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: `2px solid ${accent}` }}>
           <div>
             <h1 style={{ fontSize: resolvedNameSz ?? fontSize(22), fontWeight: 700, color: accent, margin: 0 }}>{name}</h1>
             <p style={{ fontSize: fontSize(10), color: "#444", marginTop: 4 * scale }}>{title}</p>
           </div>
-          {data.photoUrl && <img src={data.photoUrl} alt="Profile" style={{ width: 52 * scale, height: 62 * scale, objectFit: "cover", border: `2px solid ${accent}` }} />}
+          <div style={{ display: "flex", alignItems: "center", gap: 10 * scale }}>
+            {LogoBadge}
+            {data.photoUrl && <img src={data.photoUrl} alt="Profile" style={{ width: 52 * scale, height: 62 * scale, objectFit: "cover", border: `2px solid ${accent}` }} />}
+          </div>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", padding: `${16 * scale}px ${px}px`, gap: 14 * scale }}>
           <div>
@@ -473,10 +519,11 @@ function CVPreview({
   // ── ACADEMIC ──────────────────────────────────────────────────────────
   return (
     <div style={{ background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: "#1a1a2e", padding: `${px}px`, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8 }}>
-      <div style={{ textAlign: "center", marginBottom: 18 * scale }}>
+      <div style={{ marginBottom: 18 * scale }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: logoUrl ? 6 * scale : 0 }}>{LogoBadge}</div>
         {data.photoUrl && <img src={data.photoUrl} alt="Profile" style={{ width: 56 * scale, height: 56 * scale, borderRadius: "50%", objectFit: "cover", margin: `0 auto ${10 * scale}px`, display: "block", border: `2px solid ${accent}` }} />}
-        <h1 style={{ fontSize: resolvedNameSz ?? fontSize(22), fontWeight: 700, color: accent, margin: 0 }}>{name}</h1>
-        <p style={{ fontSize: fontSize(10), color: "#555", marginTop: 4 * scale, fontStyle: "italic" }}>{title}</p>
+        <h1 style={{ fontSize: resolvedNameSz ?? fontSize(22), fontWeight: 700, color: accent, margin: 0, textAlign: "center" }}>{name}</h1>
+        <p style={{ fontSize: fontSize(10), color: "#555", marginTop: 4 * scale, fontStyle: "italic", textAlign: "center" }}>{title}</p>
         <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: `${3 * scale}px ${16 * scale}px`, marginTop: 8 * scale }}>
           {allLinks.map((c, i) => <span key={i} style={{ fontSize: fontSize(8), color: "#666" }}>{c}</span>)}
         </div>
@@ -962,7 +1009,7 @@ export default function CVResumeBuilder() {
                     selectedUrl={logoUrl}
                     onSelect={asset => setLogoUrl(asset.file_url)}
                     showSizeControl sizeValue={logoSize} onSizeChange={setLogoSize}
-                    sizeLabel="Logo Size" sizeMin={30} sizeMax={120}
+                    sizeLabel="Logo Width (px)" sizeMin={30} sizeMax={120}
                   />
                 </div>
               </CollapsibleContent>
@@ -1307,6 +1354,8 @@ export default function CVResumeBuilder() {
                 fontWeight={cvFontBold   ? "bold"   : undefined}
                 fontStyle ={cvFontItalic ? "italic" : undefined}
                 fontSizeOverride={cvFontSize}
+                logoUrl={logoUrl || undefined}
+                logoSize={logoSize}
               />
             </motion.div>
           </AnimatePresence>
@@ -1327,6 +1376,8 @@ export default function CVResumeBuilder() {
                     fontWeight={cvFontBold   ? "bold"   : undefined}
                     fontStyle ={cvFontItalic ? "italic" : undefined}
                     fontSizeOverride={cvFontSize}
+                    logoUrl={logoUrl || undefined}
+                    logoSize={logoSize}
                   />
                   {template === t.id && (
                     <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center">
