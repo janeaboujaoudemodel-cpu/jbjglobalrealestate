@@ -49,19 +49,22 @@ function autoFontSize(text: string, base: number, maxChars = 20): number {
 }
 
 function wrapText(text: string, x: number, y: number, font: string, size: number, color: string, letterSpacing = 1.2): string {
+  // Single line: ≤24 chars
   if (text.length <= 24) {
     return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="${size}" font-weight="bold" fill="${color}" letter-spacing="${letterSpacing}">${text}</text>`;
   }
+  // Two lines: find best split near middle at a word boundary
   const mid = Math.floor(text.length / 2);
   let split = text.lastIndexOf(' ', mid);
-  if (split < 3) split = text.indexOf(' ', mid);
+  if (split < 2) split = text.indexOf(' ', mid);
   if (split < 0) split = mid;
   const line1 = text.slice(0, split).trim();
   const line2 = text.slice(split).trim();
   const lineH = size * 1.3;
+  // tspans straddle y: top at y - lineH/2, bottom at y + lineH/2
   return `<text text-anchor="middle" font-family="${font}" font-weight="bold" fill="${color}" letter-spacing="${letterSpacing}">
-    <tspan x="${x}" y="${y - lineH / 2}" font-size="${size}">${line1}</tspan>
-    <tspan x="${x}" y="${y + lineH / 2}" font-size="${size}">${line2}</tspan>
+    <tspan x="${x}" dy="0" y="${y - lineH / 2}" font-size="${size}">${line1}</tspan>
+    <tspan x="${x}" dy="${lineH}" font-size="${size}">${line2}</tspan>
   </text>`;
 }
 
@@ -202,40 +205,48 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   }
 
   // ────────────────────────────────────────────────────────────────
-  // T2: Modern Minimal — radial gradient fill, clean geometric lines
+  // T2: Modern Minimal — clean circle, safe-zone enforced text layout
   // ────────────────────────────────────────────────────────────────
   {
     const r = R - 8;
-    // Safe zone: text must stay within r - 20px from center edge
-    const safeR = r - 20;
-    // chordHalf: max half-width of a horizontal line at y-coordinate that stays inside circle r
-    const chordHalf = (ry: number, cy_: number, y: number) =>
-      Math.sqrt(Math.max(0, ry * ry - (y - cy_) ** 2)) - 4;
-    const nameFontSize = autoFontSize(name, 11, 20);
-    const monoY = cy - Math.round(safeR * 0.5);
+    // safeR: text must stay strictly within this radius from centre
+    const safeR = r - 14;
 
-    // For two-line names the bottom tspan lands at nameY + nameFontSize*1.3/2
-    // Clamp nameY so that tspan bottom stays within cy + safeR - 12
-    let nameY = hasMono ? cy + 4 : cy - 10;
-    if (name.length > 24) {
-      nameY = Math.min(nameY, cy + safeR - nameFontSize * 1.3 - 12);
-    } else {
-      nameY = Math.min(nameY, cy + safeR - 8);
-    }
+    // chordHalf: half-width of a horizontal line at absolute y that stays inside circle r
+    const chordHalf = (ry: number, y: number) =>
+      Math.max(0, Math.sqrt(Math.max(0, ry * ry - (y - cy) ** 2)) - 6);
 
-    // cityY: relative to the BOTTOM of the last name tspan, not the centre
-    const nameTspanBottom = name.length > 24
-      ? nameY + (nameFontSize * 1.3) / 2
-      : nameY + nameFontSize / 2;
+    // --- Font sizing: reduce more aggressively for very long names ---
+    const nameFontSize = name.length <= 20 ? 11
+      : name.length <= 28 ? 9.5
+      : name.length <= 36 ? 8
+      : 7;
+
     const cityFontSize = 7.5;
-    const cityY = Math.min(nameTspanBottom + cityFontSize + 8, cy + safeR - cityFontSize - 6);
-    const regY = Math.min(cityY + cityFontSize + 6, cy + safeR - 6);
+    const isLong = name.length > 24; // two-line wrap
+    // lineH as computed by wrapText
+    const lineH = nameFontSize * 1.3;
 
-    // Pre-compute chord widths for each hRule so lines never exit the circle
-    const ruleAboveY = nameY - 14;
-    const ruleAbove2Y = nameY - 12;
-    const ruleAbovePad = chordHalf(r - 4, cy, ruleAboveY);
-    const ruleAbove2Pad = chordHalf(r - 4, cy, ruleAbove2Y);
+    // Place name block centred. For two-line, nameY is the centre of both tspans.
+    // Bottom of text block = nameY + lineH/2 (two-line) or nameY + nameFontSize/2 (one-line)
+    // Top of text block = nameY - lineH/2 (two-line) or nameY - nameFontSize/2 (one-line)
+    // We want the centre roughly at cy - 8 but clamped so nothing exits safeR.
+    const textHalfH = isLong ? lineH / 2 : nameFontSize / 2;
+    const idealNameY = cy - 8;
+    const maxNameY = cy + safeR - textHalfH - 10;
+    const minNameY = cy - safeR + textHalfH + 10;
+    const nameY = Math.min(maxNameY, Math.max(minNameY, idealNameY));
+
+    const textBottom = nameY + textHalfH;
+    const cityY = Math.min(textBottom + cityFontSize + 7, cy + safeR - cityFontSize - 4);
+    const regY = Math.min(cityY + cityFontSize + 6, cy + safeR - 4);
+
+    // Horizontal rules: sit 12px above the top of the text block, clamp to chord
+    const ruleTopY = nameY - textHalfH - 13;
+    const ruleTopY2 = ruleTopY + 3;
+    const ruleClampR = r - 3;
+    const rulePad = chordHalf(ruleClampR, ruleTopY);
+    const rulePad2 = Math.max(0, chordHalf(ruleClampR, ruleTopY2) - 8);
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -243,14 +254,14 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
           <stop offset="0%" stop-color="${COLOR}" stop-opacity="0.03"/>
           <stop offset="100%" stop-color="${COLOR}" stop-opacity="0.08"/>
         </radialGradient>
-        <clipPath id="t2clip"><circle cx="${cx}" cy="${cy}" r="${r - 4}"/></clipPath>
+        <clipPath id="t2clip"><circle cx="${cx}" cy="${cy}" r="${safeR}"/></clipPath>
       </defs>
       <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#t2bg)" stroke="${COLOR}" stroke-width="2"/>
       <circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="${COLOR}" stroke-width="0.5" stroke-dasharray="2,3"/>
       <g clip-path="url(#t2clip)">
-        ${hRule(cx - ruleAbovePad, cx + ruleAbovePad, ruleAboveY, COLOR, 1.2)}
-        ${hRule(cx - ruleAbove2Pad + 8, cx + ruleAbove2Pad - 8, ruleAbove2Y, COLOR, 0.4)}
-        ${hasMono ? monogram(cx, monoY, mono, font, 28, COLOR) : ''}
+        ${rulePad > 4 ? hRule(cx - rulePad, cx + rulePad, ruleTopY, COLOR, 1.2) : ''}
+        ${rulePad2 > 4 ? hRule(cx - rulePad2, cx + rulePad2, ruleTopY2, COLOR, 0.4) : ''}
+        ${hasMono ? monogram(cx, cy - safeR * 0.5, mono, font, 26, COLOR) : ''}
         ${wrapText(name, cx, nameY, font, nameFontSize, COLOR, 2)}
         <text x="${cx}" y="${cityY}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="${cityFontSize}" fill="${COLOR}" letter-spacing="3.5">${city}</text>
         ${regNo && project.density >= 3 && regY < cy + safeR - 2 ? `<text x="${cx}" y="${regY}" text-anchor="middle" font-family="${font}" font-size="6" fill="${COLOR}">${regNo}</text>` : ''}
@@ -398,16 +409,41 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   }
 
   // ────────────────────────────────────────────────────────────────
-  // T7: Geometric Modern — filled outer ring band, bold ring text inside band, center text safe
+  // T7: Geometric Modern — filled outer ring band, safe center text
   // ────────────────────────────────────────────────────────────────
   {
     const outerR = R - 4;
     const bandR = outerR - 16; // inner edge of filled ring
     const ringTextR = outerR - 8; // text sits inside the filled band
-    const nameFontSize = autoFontSize(name, 10.5, 20);
-    // Diamond safe zone: rotated rect half-diag must be <= bandR - 10 to stay inside circle
+
+    // Center safe zone: text must stay strictly inside bandR - 8
+    const innerSafeR = bandR - 8;
+
+    // Font size: aggressively scale for long names that must fit in a rectangle inside a circle
+    // Max text width available = 2 * innerSafeR * 0.9 (rectangle inscribed)
+    const maxW = innerSafeR * 1.8;
+    // Approximate: chars * fontSize * 0.6 <= maxW → fontSize = maxW / (chars * 0.6)
+    const rawFontSize = name.length > 0 ? Math.min(10.5, maxW / (name.length * 0.6)) : 10.5;
+    const nameFontSize = Math.max(6.5, rawFontSize);
+
+    // Ring text: limit length to prevent arc overflow
+    const ringName = name.length > 30 ? name.slice(0, 28) + '…' : name;
+    const ringCity = city.length > 20 ? city.slice(0, 18) + '…' : city;
+
+    // Center rectangle dimensions: width dynamically fits inside circle
+    // For two-line text: height = nameFontSize * 1.3 * 2 + 12
+    const isLong = name.length > 24;
+    const rectW = Math.min(88, Math.floor(innerSafeR * 1.8));
+    const rectH = isLong ? Math.min(52, Math.floor(nameFontSize * 1.3 * 2 + 16)) : Math.min(40, Math.floor(nameFontSize + 16));
+    const halfW = rectW / 2;
+    const halfH = rectH / 2;
+
+    // Diamond safe zone for monogram
     const maxDiamondHalf = Math.floor((bandR - 10) / Math.SQRT2);
     const diamondHalf = Math.min(32, maxDiamondHalf);
+
+    // nameY at centre of the rectangle
+    const nameY = cy;
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -415,79 +451,102 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
           <stop offset="0%" stop-color="${COLOR}" stop-opacity="0.04"/>
           <stop offset="100%" stop-color="${COLOR}" stop-opacity="0.10"/>
         </radialGradient>
+        <clipPath id="t7clip">
+          <rect x="${cx - halfW + 2}" y="${cy - halfH + 2}" width="${rectW - 4}" height="${rectH - 4}"/>
+        </clipPath>
       </defs>
       <!-- Filled outer ring band -->
       <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${COLOR}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
       <!-- Inner accent ring -->
       <circle cx="${cx}" cy="${cy}" r="${bandR - 5}" fill="url(#t7bg)" stroke="${COLOR}" stroke-width="0.6"/>
-      <!-- Ring text: name on top arc, city on bottom arc (separated to prevent overlap) -->
-      ${ringText('t7top', cx, cy, ringTextR, `◆  ${name}  ◆`, font, 7.5, '#ffffff', '50%', 1.4)}
-      ${bottomArcText('t7bot', cx, cy, ringTextR, `◆  ${city}  ◆`, font, 7.5, '#ffffff', 1.4)}
-      <!-- Center: monogram or inner rectangle frame + text -->
+      <!-- Ring text: name on top arc, city on bottom arc -->
+      ${ringText('t7top', cx, cy, ringTextR, `◆  ${ringName}  ◆`, font, 7.5, '#ffffff', '50%', 1.4)}
+      ${bottomArcText('t7bot', cx, cy, ringTextR, `◆  ${ringCity}  ◆`, font, 7.5, '#ffffff', 1.4)}
+      <!-- Center: monogram or rect frame + text clipped to safe area -->
       ${hasMono
         ? `<rect x="${cx - diamondHalf}" y="${cy - diamondHalf}" width="${diamondHalf * 2}" height="${diamondHalf * 2}" fill="none" stroke="${COLOR}" stroke-width="1.4" transform="rotate(45, ${cx}, ${cy})"/>
            ${monogram(cx, cy - 2, mono, font, Math.min(26, diamondHalf - 6), COLOR)}`
-        : `<rect x="${cx - 47}" y="${cy - 24}" width="94" height="48" rx="2" fill="none" stroke="${COLOR}" stroke-width="1.2"/>
-           <rect x="${cx - 42}" y="${cy - 19}" width="84" height="38" rx="1" fill="none" stroke="${COLOR}" stroke-width="0.4"/>
-           ${wrapText(name, cx, cy, font, nameFontSize, COLOR, 1.8)}`
+        : `<rect x="${cx - halfW}" y="${cy - halfH}" width="${rectW}" height="${rectH}" rx="2" fill="none" stroke="${COLOR}" stroke-width="1.2"/>
+           <rect x="${cx - halfW + 4}" y="${cy - halfH + 4}" width="${rectW - 8}" height="${rectH - 8}" rx="1" fill="none" stroke="${COLOR}" stroke-width="0.4"/>
+           <g clip-path="url(#t7clip)">
+             ${wrapText(name, cx, nameY, font, nameFontSize, COLOR, 1.8)}
+           </g>`
       }
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'geometric-modern', label: 'Geometric Modern', tags: ['geometric', 'modern', 'architectural'], svgSource: svg });
   }
 
   // ────────────────────────────────────────────────────────────────
-  // T8: Square Premium — filled header band, double border, corner ornaments
+  // T8: Square Premium — filled header/footer bands, strict content zone
   // ────────────────────────────────────────────────────────────────
   {
     const s = 106;
     const x1 = cx - s, y1 = cy - s;
-    const nameFontSize = autoFontSize(name, 10.5, 20);
     const hdrH = 28, ftrH = 22;
+    const borderPad = 6;
 
-    // Safe content zone: between header bottom and footer top (with extra padding)
-    const contentTop = y1 + 6 + hdrH + 10;
-    const contentBot = y1 + s * 2 - 6 - ftrH - 10;
+    // Safe content zone strictly between header bottom and footer top
+    const contentTop = y1 + borderPad + hdrH + 8;
+    const contentBot = y1 + s * 2 - borderPad - ftrH - 8;
     const contentH = contentBot - contentTop;
     const contentCy = contentTop + contentH / 2;
-    // Strictly clamp all text within safe zone
-    const monoSize = Math.min(30, Math.floor(contentH * 0.3));
-    const monoY = Math.min(contentTop + monoSize + 2, contentCy - 10);
-    // nameY: truly centred — for two-line case shift up by half a line so tspans straddle contentCy
-    const nameY = hasMono
-      ? Math.min(monoY + monoSize * 0.8 + 6, contentBot - 28)
-      : name.length > 22
-        ? Math.min(contentCy - nameFontSize * 0.65, contentBot - nameFontSize * 1.3 - 10)
-        : contentCy;
-    // t8clip enforces the content zone so nothing leaks into header/footer
+    const contentW = s * 2 - borderPad * 2 - 16; // inner usable width
+
+    // Font sizing: fit name width inside contentW
+    // wrapText splits at >24 chars so worst-case line ≈ half the name
+    const longestLineChars = name.length > 24 ? Math.ceil(name.length / 2) : name.length;
+    const rawFs = Math.min(10.5, contentW / (longestLineChars * 0.62));
+    const nameFontSize = Math.max(6.5, rawFs);
+
+    const isLong = name.length > 24;
+    const lineH = nameFontSize * 1.3;
+
+    // nameY: centre of the name block (tspans straddle this for two-line)
+    // Bottom of block = nameY + lineH/2 (two-line) or nameY + nameFontSize/2 (one-line)
+    const nameBlockHalfH = isLong ? lineH / 2 : nameFontSize / 2;
+
+    const monoSize = Math.min(28, Math.floor(contentH * 0.28));
+
+    let nameY: number;
+    if (hasMono) {
+      const monoY = contentTop + monoSize + 2;
+      nameY = Math.min(monoY + monoSize * 0.8 + 6, contentBot - nameBlockHalfH - 6);
+    } else {
+      // Centre the block inside the content zone
+      const idealNameY = contentCy;
+      nameY = Math.min(idealNameY, contentBot - nameBlockHalfH - 6);
+      nameY = Math.max(nameY, contentTop + nameBlockHalfH + 6);
+    }
+
     const clipId = 't8clip';
-    const clipX = x1 + 6;
-    const clipW = s * 2 - 12;
+    const clipX = x1 + borderPad + 4;
+    const clipW = s * 2 - borderPad * 2 - 8;
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <clipPath id="${clipId}">
-          <rect x="${clipX}" y="${contentTop}" width="${clipW}" height="${contentBot - contentTop}"/>
+          <rect x="${clipX}" y="${contentTop}" width="${clipW}" height="${contentH}"/>
         </clipPath>
       </defs>
       <rect x="${x1}" y="${y1}" width="${s * 2}" height="${s * 2}" rx="3" fill="none" stroke="${COLOR}" stroke-width="2.8"/>
-      <rect x="${x1 + 6}" y="${y1 + 6}" width="${s * 2 - 12}" height="${s * 2 - 12}" rx="1" fill="none" stroke="${COLOR}" stroke-width="0.8"/>
+      <rect x="${x1 + borderPad}" y="${y1 + borderPad}" width="${s * 2 - borderPad * 2}" height="${s * 2 - borderPad * 2}" rx="1" fill="none" stroke="${COLOR}" stroke-width="0.8"/>
       <!-- Filled header -->
-      <rect x="${x1 + 6}" y="${y1 + 6}" width="${s * 2 - 12}" height="${hdrH}" rx="1" fill="${COLOR}"/>
-      <text x="${cx}" y="${y1 + 6 + hdrH / 2 + 1}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="8" fill="#ffffff" letter-spacing="3">OFFICIAL STAMP</text>
+      <rect x="${x1 + borderPad}" y="${y1 + borderPad}" width="${s * 2 - borderPad * 2}" height="${hdrH}" rx="1" fill="${COLOR}"/>
+      <text x="${cx}" y="${y1 + borderPad + hdrH / 2 + 1}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="8" fill="#ffffff" letter-spacing="3">OFFICIAL STAMP</text>
       <!-- Corner dots -->
-      <circle cx="${x1 + 6}" cy="${y1 + 6}" r="2" fill="${COLOR}"/>
-      <circle cx="${x1 + s * 2 - 6}" cy="${y1 + 6}" r="2" fill="${COLOR}"/>
-      <circle cx="${x1 + 6}" cy="${y1 + s * 2 - 6}" r="2" fill="${COLOR}"/>
-      <circle cx="${x1 + s * 2 - 6}" cy="${y1 + s * 2 - 6}" r="2" fill="${COLOR}"/>
-      <!-- Filled footer — city shown once here, not duplicated in content zone -->
-      <rect x="${x1 + 6}" y="${y1 + s * 2 - 6 - ftrH}" width="${s * 2 - 12}" height="${ftrH}" rx="1" fill="${COLOR}"/>
-      <text x="${cx}" y="${y1 + s * 2 - 6 - ftrH / 2 + 1}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="7" fill="#ffffff" letter-spacing="2">${city}</text>
-      <!-- Center content clipped to safe zone (no city duplicate) -->
+      <circle cx="${x1 + borderPad}" cy="${y1 + borderPad}" r="2" fill="${COLOR}"/>
+      <circle cx="${x1 + s * 2 - borderPad}" cy="${y1 + borderPad}" r="2" fill="${COLOR}"/>
+      <circle cx="${x1 + borderPad}" cy="${y1 + s * 2 - borderPad}" r="2" fill="${COLOR}"/>
+      <circle cx="${x1 + s * 2 - borderPad}" cy="${y1 + s * 2 - borderPad}" r="2" fill="${COLOR}"/>
+      <!-- Filled footer with city -->
+      <rect x="${x1 + borderPad}" y="${y1 + s * 2 - borderPad - ftrH}" width="${s * 2 - borderPad * 2}" height="${ftrH}" rx="1" fill="${COLOR}"/>
+      <text x="${cx}" y="${y1 + s * 2 - borderPad - ftrH / 2 + 1}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="7" fill="#ffffff" letter-spacing="2">${city}</text>
+      <!-- Center content strictly clipped -->
       <g clip-path="url(#${clipId})">
-        ${hasMono ? monogram(cx, monoY, mono, font, monoSize, COLOR) : ''}
+        ${hasMono ? monogram(cx, contentTop + monoSize + 2, mono, font, monoSize, COLOR) : ''}
         ${wrapText(name, cx, nameY, font, nameFontSize, COLOR, 1.5)}
-        ${regNo && project.density >= 3 ? `<text x="${cx}" y="${Math.min(nameY + nameFontSize * 1.3 + 12, contentBot - 4)}" text-anchor="middle" font-family="${font}" font-size="6" fill="${COLOR}">${regNo}</text>` : ''}
+        ${regNo && project.density >= 3 ? `<text x="${cx}" y="${Math.min(nameY + nameBlockHalfH + 10, contentBot - 4)}" text-anchor="middle" font-family="${font}" font-size="6" fill="${COLOR}">${regNo}</text>` : ''}
       </g>
     </svg>`;
     concepts.push({ id: uid(), templateKey: 'square-premium', label: 'Square Premium', tags: ['square', 'corporate', 'premium'], svgSource: svg });
