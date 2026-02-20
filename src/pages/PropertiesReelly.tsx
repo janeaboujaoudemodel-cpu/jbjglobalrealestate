@@ -202,8 +202,8 @@ const PropertiesReelly = () => {
     return applyShortcutFilters(mergedProjects, shortcutFilters);
   }, [mergedProjects, shortcutFilters]);
 
-  // Total count
-  const totalCount = dbProjectsMapped.length || mergedProjects.length;
+  // Total count — use raw DB length immediately on arrival (before cover_image filter)
+  const totalCount = dbProjects?.length ?? dbProjectsMapped.length;
 
   // Apply URL params on mount
   useEffect(() => {
@@ -339,75 +339,83 @@ const PropertiesReelly = () => {
       {/* Divider */}
       <div className="h-1 bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-      {/* Results Section - split-screen in map mode */}
-      {isMapMode ? (
-        <section className="relative bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden" style={{ minHeight: '600px', maxHeight: '85vh' }}>
-          <div className="flex flex-col md:flex-row h-full" style={{ minHeight: '600px', maxHeight: '85vh' }}>
-            {/* Left: Scrollable card list */}
-            <div className="w-full md:w-1/2 h-[420px] md:h-full overflow-y-auto jj-scrollbar-gold bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-              <div className="p-4 pt-3 pb-6">
-                <div className="mb-4 flex items-center justify-between">
-                  <p className="text-black/70 text-sm">
-                    Showing <span className="text-gold font-medium">{sortedProjects.length}</span> of{' '}
-                    <span className="text-gold font-medium">{totalCount.toLocaleString()}</span> properties
-                  </p>
-                </div>
-
-                {(isLoading && isDbLoading) ? (
-                  <ProjectGridSkeleton count={4} />
-                ) : sortedProjects.length > 0 ? (
-                  <div className="grid grid-cols-1 gap-4">
-                    {sortedProjects.map((project) => (
-                      <ReellyProjectCard
-                        key={project.id}
-                        project={project}
-                        currency={currency}
-                        sizeUnit={sizeUnit}
-                        compact
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <Search className="w-10 h-10 text-gold mx-auto mb-3" />
-                    <p className="text-black/60">No properties found</p>
-                  </div>
-                )}
+      {/* Pre-render map hidden in background so Leaflet initialises before user switches to map mode */}
+      <div style={{ display: isMapMode ? 'block' : 'none', minHeight: '600px', maxHeight: '85vh' }} className="relative bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden">
+        <div className="flex flex-col md:flex-row" style={{ minHeight: '600px', maxHeight: '85vh' }}>
+          {/* Left: Scrollable card list */}
+          <div className="w-full md:w-1/2 h-[420px] md:h-full overflow-y-auto jj-scrollbar-gold bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+            <div className="p-4 pt-3 pb-6">
+              <div className="mb-4 flex items-center justify-between">
+                <p className="text-black/70 text-sm">
+                  {isDbLoading ? (
+                    <span className="text-black/40 animate-pulse">Loading properties…</span>
+                  ) : (
+                    <>Showing <span className="text-gold font-medium">{sortedProjects.length}</span> of{' '}
+                    <span className="text-gold font-medium">{totalCount.toLocaleString()}</span> properties</>
+                  )}
+                </p>
               </div>
-            </div>
 
-            {/* Right: Map */}
-            <div className="w-full md:w-1/2 h-[420px] md:h-full">
-              <PropertiesMapView
-                projects={unifiedProjects}
-                hoveredProjectId={hoveredProjectId}
-                onProjectHover={setHoveredProjectId}
-                onProjectClick={(id) => {
-                  const project = sortedProjects.find(p => String(p.id) === id);
-                  if (project) window.open(`/project/${project.slug}`, '_blank');
-                }}
-              />
+              {isDbLoading ? (
+                <ProjectGridSkeleton count={4} />
+              ) : sortedProjects.length > 0 ? (
+                <div className="grid grid-cols-1 gap-4">
+                  {sortedProjects.map((project) => (
+                    <ReellyProjectCard
+                      key={project.id}
+                      project={project}
+                      currency={currency}
+                      sizeUnit={sizeUnit}
+                      compact
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <Search className="w-10 h-10 text-gold mx-auto mb-3" />
+                  <p className="text-black/60">No properties found</p>
+                </div>
+              )}
             </div>
           </div>
-        </section>
-      ) : (
-      /* Standard list mode — edge-to-edge background, 2-col grid, pagination */
+
+          {/* Right: Map — always rendered so Leaflet pre-warms */}
+          <div className="w-full md:w-1/2 h-[420px] md:h-full">
+            <PropertiesMapView
+              projects={unifiedProjects}
+              hoveredProjectId={hoveredProjectId}
+              onProjectHover={setHoveredProjectId}
+              onProjectClick={(id) => {
+                const project = sortedProjects.find(p => String(p.id) === id);
+                if (project) window.open(`/project/${project.slug}`, '_blank');
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Standard list mode — edge-to-edge background, 2-col grid, pagination */}
+      {!isMapMode && (
         <section className="py-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark min-h-screen">
           <div className={`${showStickyNav ? 'lg:pl-[200px]' : ''} px-4 sm:px-6 lg:px-8`}>
             
             {/* Results Count */}
             <div className="mb-6 flex items-center justify-between">
-              <p className="text-black/70">
-                Showing <span className="text-gold font-medium">{paginatedProjects.length}</span> of{' '}
-                <span className="text-gold font-medium">{sortedProjects.length.toLocaleString()}</span> properties
-                {totalPages > 1 && (
-                  <span className="text-black/40 ml-2">· Page {currentPage} of {totalPages}</span>
-                )}
-              </p>
+              {isDbLoading ? (
+                <p className="text-black/40 animate-pulse">Loading curated developments…</p>
+              ) : (
+                <p className="text-black/70">
+                  Showing <span className="text-gold font-medium">{paginatedProjects.length}</span> of{' '}
+                  <span className="text-gold font-medium">{sortedProjects.length.toLocaleString()}</span> properties
+                  {totalPages > 1 && (
+                    <span className="text-black/40 ml-2">· Page {currentPage} of {totalPages}</span>
+                  )}
+                </p>
+              )}
             </div>
 
             {/* Projects Grid — 2 columns max */}
-            {(isLoading && isDbLoading) ? (
+            {isDbLoading ? (
               <ProjectGridSkeleton count={6} />
             ) : isError ? (
               <div className="text-center py-20 px-4">
