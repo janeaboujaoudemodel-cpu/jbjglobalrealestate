@@ -55,20 +55,20 @@ export const ProjectAIAnalyzer = ({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const hasTriggered = useRef(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleAnalyze = useCallback(async () => {
+    if (hasTriggered.current) return; // idempotent guard inside the function too
     hasTriggered.current = true;
     setIsAnalyzing(true);
     setHasTimedOut(false);
     setErrorMsg(null);
 
-    timeoutRef.current = setTimeout(() => {
+    const hardTimeout = setTimeout(() => {
       setHasTimedOut(true);
+      setIsAnalyzing(false);
     }, 45000);
 
     try {
-      // Build context string for the AI
       const contextParts = [`Project: ${projectName}`, `Area: ${areaName}`];
       if (developer) contextParts.push(`Developer: ${developer}`);
       if (priceFrom) contextParts.push(`Starting Price: AED ${priceFrom.toLocaleString()}`);
@@ -85,8 +85,9 @@ export const ProjectAIAnalyzer = ({
       setAnalysis(data?.fullAnalysis || "Analysis not available.");
     } catch {
       setErrorMsg("Unable to generate analysis at this time. Please try again.");
+      hasTriggered.current = false; // allow retry
     } finally {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      clearTimeout(hardTimeout);
       setIsAnalyzing(false);
       setHasTimedOut(false);
     }
@@ -99,6 +100,7 @@ export const ProjectAIAnalyzer = ({
     handleAnalyze();
   }, [handleAnalyze]);
 
+  // Intersection observer — set visible once
   useEffect(() => {
     if (!sectionRef.current) return;
     const observer = new IntersectionObserver(
@@ -109,11 +111,13 @@ export const ProjectAIAnalyzer = ({
     return () => observer.disconnect();
   }, []);
 
+  // Trigger analysis exactly once when section becomes visible
   useEffect(() => {
-    if (isVisible && !hasTriggered.current && !isAnalyzing && !analysis) {
+    if (isVisible && !hasTriggered.current && !analysis) {
       handleAnalyze();
     }
-  }, [isVisible, isAnalyzing, analysis, handleAnalyze]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVisible]); // intentionally only depend on isVisible — handleAnalyze is stable via useCallback
 
   const sections = analysis ? {
     overview: extractSection(analysis, "Area Overview"),
@@ -163,7 +167,7 @@ export const ProjectAIAnalyzer = ({
           </div>
         ) : !analysis ? (
           <div className="text-center py-8">
-            {hasTimedOut ? (
+          {hasTimedOut ? (
               <div className="space-y-4">
                 <p className="text-zinc-500 text-sm">Analysis is taking longer than expected.</p>
                 <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
@@ -172,15 +176,44 @@ export const ProjectAIAnalyzer = ({
                 </Button>
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-4 py-8">
-                <img
-                  src={jbjMonogramDark}
-                  alt="Analyzing..."
-                  className="w-16 h-16 object-contain animate-pulse"
-                  style={{ filter: "drop-shadow(0 0 12px rgba(200,167,102,0.5))" }}
-                />
-                <p className="text-zinc-500 text-sm">JBJ AI is analyzing {projectName}...</p>
-                <div className="w-32 h-0.5 bg-gradient-to-r from-transparent via-yellow-600 to-transparent animate-pulse" />
+              <div className="flex flex-col items-center gap-5 py-12">
+                {/* JBJ Monogram with gold glow pulse */}
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-full bg-gold/20 blur-xl animate-pulse scale-150" />
+                  <img
+                    src={jbjMonogramDark}
+                    alt="JBJ AI analyzing..."
+                    className="relative w-20 h-20 object-contain"
+                    style={{
+                      animation: "jbj-breathe 2s ease-in-out infinite",
+                      filter: "drop-shadow(0 0 16px rgba(184,134,11,0.6))",
+                    }}
+                  />
+                </div>
+                {/* Shimmer text */}
+                <div className="text-center space-y-2">
+                  <p className="text-sm font-medium text-zinc-600">
+                    JBJ AI is analyzing <span className="text-gold font-semibold">{projectName}</span>
+                  </p>
+                  <p className="text-xs text-zinc-400">Pulling market data, price trends & investment signals…</p>
+                </div>
+                {/* Gold shimmer bar */}
+                <div className="w-48 h-px overflow-hidden rounded-full bg-zinc-200">
+                  <div
+                    className="h-full bg-gradient-to-r from-transparent via-gold to-transparent"
+                    style={{ animation: "shimmer-slide 1.8s ease-in-out infinite", width: "60%" }}
+                  />
+                </div>
+                <style>{`
+                  @keyframes jbj-breathe {
+                    0%, 100% { transform: scale(1); opacity: 0.85; }
+                    50% { transform: scale(1.08); opacity: 1; }
+                  }
+                  @keyframes shimmer-slide {
+                    0% { transform: translateX(-100%); }
+                    100% { transform: translateX(280%); }
+                  }
+                `}</style>
               </div>
             )}
           </div>
