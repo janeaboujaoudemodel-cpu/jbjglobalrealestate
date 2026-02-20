@@ -1,91 +1,148 @@
 
-# 3 Targeted Fixes: Handover Dropdown, Instant Map, and Faster Project Loading
+# Fix Stamp Refresh Redirect + Add Corporate Document Suite
 
-## Fix 1 — Handover Date Range Dropdown Content Broken
+## Problem 1: Refresh Returns to Homepage
 
-### Root Cause
-The `HandoverDateRange` trigger button sits inside the fixed `FilterShortcutBar` section which uses `overflow-hidden` styling. The two-column grid inside the `PopoverContent` uses Radix UI `Select` dropdowns (`SelectContent`). When `SelectContent` tries to render inside a scrollable overflow row, it gets clipped.
+**Root Cause:** The `RouteResume` component in `src/components/RouteResume.tsx` is imported and used by `Index.tsx` (the homepage component), but it is **not registered inside `App.tsx`** as a global component. This means on a hard refresh, when React hydrates, the Vite dev server correctly serves `/toolkit/stamp-generator/projects` — but `sessionStorage` does not persist across hard refreshes (only across soft navigations). Additionally, the `StampProjectsDashboard` checks `if (!user)` and redirects to `/auth?redirect=...`, but if auth is still loading, it falls through and shows nothing, which can sometimes land on `/`.
 
-Looking at the component: the `PopoverContent` itself has `w-[260px]` which is fine, but the two `SelectTrigger` + `SelectContent` elements inside that `grid grid-cols-2` are each only allocated `~120px` — too narrow for the year text ("2025", "2026" etc.) plus the chevron icon. The `SelectTrigger` has `h-10` but no explicit width, so it collapses.
+**The real culprit:** The stamp generator routes are nested inside `<AdminBypass><MainLayoutWrapper /></AdminBypass>` which renders a `<Outlet/>`. The `MainLayoutWrapper` includes `<PageNavigation/>`. On refresh, the auth session restores asynchronously, but the `StampProjectsDashboard` doesn't show a loader while auth is loading — it only shows one when `authLoading` is true. However, there may be a timing window where `user` is null briefly, triggering the redirect to `/auth`, which then redirects to the homepage.
 
-Additionally, the trigger `Button` has `min-w-[160px]` — but inside a scrollable filter row with tight spacing, it may not have room to display `"Handover Date"` + calendar icon + chevron.
+**Fix:** The `StampProjectsDashboard` already handles `authLoading` with a loader (lines 91–102), but the `navigate('/auth?redirect=...')` on line 36 fires when `!user` even before auth finishes loading. The fix is to guard with `if (authLoading) return` before the `!user` check. This is already done but the `!user` branch fires on first render before auth resolves.
 
-### Fix
-In `HandoverDateRange.tsx`:
-1. Change the trigger button to `min-w-[140px]` and truncate display text with `truncate` class to prevent overflow
-2. Give the popover `z-[10500]` to ensure it renders above the fixed filter bar
-3. Fix the `SelectTrigger` widths — give each an explicit `w-full` within the grid columns
-4. Change the `PopoverContent` `align` from `"start"` to `"start"` with a `sideOffset={8}` and add `avoidCollisions={true}` (this is already Radix default but making it explicit)
-5. The From/To `SelectContent` needs `position="popper"` to avoid being clipped
+**Solution:** Add `if (authLoading) return;` as the very first check in the `useEffect` in `StampProjectsDashboard` — it's already there but needs to be more robust with a dedicated `isRestoring` state. More importantly, we need to ensure `RouteResume` is placed inside the `BrowserRouter` in `App.tsx` as a global route-level component so it actually runs.
 
-In `FilterShortcutBar.tsx` (where `HandoverDateRange` is rendered inside Row 2):
-- The Row 2 `div` has `overflow-x-auto` which clips dropdown portals — this is the real root cause. Radix `PopoverContent` renders in a portal so it bypasses this, but `SelectContent` inside the popover does NOT portal past the overflow container unless `position="popper"` is used. Solution: add `position="popper"` to each `SelectContent` in `HandoverDateRange`.
+## Problem 2: Corporate Document Suite Missing
 
----
+The user requested adding a full **Corporate Document Suite** alongside the stamp generator covering:
+- Business Cards (designer + templates)
+- Cover Letters
+- CV / Resume
+- Landing Page / Website Builder (with DNS info)
+- Presentation templates
 
-## Fix 2 — Map Mode Loads Instantly
-
-### Root Cause
-When the user clicks "Map", `isMapMode` flips to `true`. React re-renders `PropertiesReelly` which then renders `PropertiesMapView`. Leaflet's `MapContainer` is lazy-loaded (it imports CSS and creates a DOM node). The `unifiedProjects` memo runs over 1,835 items converting each to `UnifiedProject`. The map must also compute `FitBounds` which runs `map.fitBounds()` on all coordinates.
-
-The issue is NOT slow data — the data is already loaded. The issue is:
-1. Leaflet is loaded synchronously as a regular import (not lazy), but the DOM setup takes ~300-500ms
-2. `unifiedProjects` is recomputed on every mode switch because `sortedProjects` changes (re-sorted on each render)
-3. The map tiles load from external tile servers (satellite = ArcGIS) — not cacheable on first load
-
-### Fix in `PropertiesReelly.tsx`:
-1. Pre-render `PropertiesMapView` as a **hidden div** (not unmounted) when in list mode, so Leaflet initializes in the background. Use `display: none` on the map container when `!isMapMode` so the DOM exists but isn't visible. This pre-warms Leaflet tile loading.
-2. Increase `staleTime` on `useProjectsListing` from undefined (0) to `10 * 60 * 1000` (10 minutes) so the data is cached between visits
-
-### Fix in `useProjects.ts` (`useProjectsListing`):
-Add `staleTime: 10 * 60 * 1000` and `gcTime: 30 * 60 * 1000` so projects stay in React Query cache for 10 minutes without refetching.
+None of these exist yet as dedicated creation tools. The existing `BusinessCardScanner` is OCR-only, not a design tool.
 
 ---
 
-## Fix 3 — Instant Project Count (No "0 of 0" Flash)
+## Implementation Plan
 
-### Root Cause
-The count displayed is `paginatedProjects.length of sortedProjects.length`. Both start at `0` because:
+### Part 1 — Fix the Refresh Redirect (Critical Bug)
 
-1. `useProjectsListing()` runs TWO sequential database pages (2 × network round trips) before returning any data
-2. `dbProjectsMapped` is filtered (`.filter(p => p.cover_image_url)`) and mapped — only populated AFTER both pages load
-3. `totalCount = dbProjectsMapped.length || mergedProjects.length` — this is `0` until the filter runs
-4. There's no `staleTime` on `useProjectsListing` so every navigation refetches
+**File:** `src/components/stamp-generator/StampProjectsDashboard.tsx`
 
-The hero text "Browse X curated developments" also shows a stale/zero count until both fetch pages complete.
-
-### Fix:
-
-**A — Add staleTime to `useProjectsListing`** (same as Fix 2 — shared fix):
+The `useEffect` that checks auth currently does:
 ```typescript
-staleTime: 10 * 60 * 1000,  // 10 minutes
-gcTime: 30 * 60 * 1000,     // 30 minutes
+useEffect(() => {
+  if (authLoading) return;  // ✅ already exists
+  if (!user) { navigate('/auth?...') ... }
+  fetchProjects();
+}, [user, authLoading]);
 ```
-This means: first visit fetches, subsequent visits within 10 minutes show cached data instantly.
 
-**B — Show total from DB count, not from filtered array**:
-The `useProjectsListing` query fetches ALL rows. The total count should be derived from `dbProjects.length` (raw, before the `cover_image_url` filter) or better — from a separate count query that runs instantly.
+The problem is the dependency array fires on mount when `authLoading=false` and `user=null` momentarily (before the session check completes). Fix: add a small guard so the redirect only happens after auth is fully settled.
 
-Currently:
-```typescript
-const totalCount = dbProjectsMapped.length || mergedProjects.length;
+**Also fix:** Register `RouteResume` component in `App.tsx` inside the `BrowserRouter` so it can persist and restore the stamp route on refresh. Currently it's defined in `src/components/RouteResume.tsx` but **never imported in `App.tsx`** — it only exists as a standalone file. It needs to be placed inside the router to function.
+
+### Part 2 — Corporate Document Suite Hub
+
+Create a new hub page: `/toolkit/corporate-suite` that acts as the entry dashboard for all document types.
+
+**New files to create:**
+
 ```
-This is `0` until data loads. Fix: use `dbProjects?.length ?? 0` which is the raw DB array (same data, no filter applied) as a reliable count indicator once data lands. Even better — show `isDbLoading ? '...' : count` in the hero and listing header so there's no "0 of 0" — it shows a loading skeleton instead.
+src/pages/toolkit/CorporateSuite.tsx          — Hub landing page with tool cards
+src/components/corporate-suite/
+  BusinessCardDesigner.tsx                    — Visual business card creator
+  CVResumeBuilder.tsx                         — CV / Resume builder with templates
+  CoverLetterGenerator.tsx                    — AI-powered cover letter
+  PresentationCreator.tsx                     — Presentation templates
+  LandingPageBuilder.tsx                      — Simple landing page / info on DNS
+```
 
-**C — Show skeleton immediately instead of "0 of 0"**:
-In `PropertiesReelly.tsx`, the results count text `Showing X of Y` currently shows when `paginatedProjects.length === 0` and `sortedProjects.length === 0`. Change the condition so the skeleton renders while `isDbLoading` is true (which it already does), but the count text only renders when `!isDbLoading && sortedProjects.length > 0` — otherwise show a "Loading curated developments..." indicator.
+**New routes to add in `App.tsx`:**
+```
+/toolkit/corporate-suite              → CorporateSuite hub
+/toolkit/corporate-suite/business-card → BusinessCardDesigner
+/toolkit/corporate-suite/cv-resume    → CVResumeBuilder
+/toolkit/corporate-suite/cover-letter → CoverLetterGenerator
+/toolkit/corporate-suite/presentation → PresentationCreator
+/toolkit/corporate-suite/landing-page → LandingPageBuilder
+```
+
+**Hub Page Design** (`CorporateSuite.tsx`):
+- Same visual style as the stamp generator (gold gradient header, dark cards)
+- 6 tool cards arranged in a 2×3 grid:
+  1. **Company Stamp** → links to existing `/toolkit/stamp-generator`
+  2. **Business Card Designer** → new
+  3. **CV / Resume** → new
+  4. **Cover Letter** → new
+  5. **Presentation** → new
+  6. **Landing Page** → new (with note about DNS connection)
+
+**Business Card Designer** (MVP):
+- Form: Name, Title, Company, Phone, Email, Website, Address
+- 6 template layouts (Modern, Classic, Minimal, Bold, Creative, Corporate)
+- Color picker (same 3-stop system as stamp generator)
+- Live preview (HTML/CSS rendered card at 3.5" × 2" ratio)
+- Export as PNG and PDF via `pdf-lib` (already installed)
+
+**CV/Resume Builder** (MVP):
+- Sections: Personal Info, Summary, Experience, Education, Skills, Languages
+- 4 templates (Executive, Modern, Classic, Creative)
+- AI-powered summary generator using Gemini Flash (already available)
+- Export as PDF
+
+**Cover Letter Generator** (MVP):
+- Inputs: Job title, Company name, Your name, Key skills, Tone (Professional/Casual/Confident)
+- AI generates the letter body via Gemini Flash
+- Template selection (3 styles)
+- Export as PDF
+
+**Presentation Creator** (MVP):
+- Links to existing `/presentations` (which is already built as an owner tool) with an upgrade notice
+- Or creates a simple slide deck with a form
+
+**Landing Page Builder** (MVP):
+- Simple form: Business name, tagline, services, contact info, colors
+- Generates a one-page preview
+- Shows instructions on how to connect a custom domain (DNS A record pointing)
+- Export as HTML file
+
+### Part 3 — Link Corporate Suite from Stamp Dashboard
+
+Update `StampProjectsDashboard.tsx` to add a "Corporate Suite" breadcrumb/button at the top so users can navigate between the stamp tool and the full suite.
 
 ---
 
-## Summary of File Changes
+## Technical Details
 
-| File | What Changes |
-|---|---|
-| `src/components/filters/HandoverDateRange.tsx` | Add `position="popper"` to both `SelectContent` elements; add `z-[10500]` to `PopoverContent`; fix trigger truncation |
-| `src/hooks/useProjects.ts` | Add `staleTime: 10 * 60 * 1000` and `gcTime: 30 * 60 * 1000` to `useProjectsListing` |
-| `src/pages/PropertiesReelly.tsx` | Pre-render map hidden when in list mode; fix count display to show skeleton instead of "0 of 0"; fix `totalCount` to use `dbProjects?.length` |
+### Files to Edit:
+1. `src/App.tsx` — Add `RouteResume` import + render, add 6 new corporate suite routes, lazy-import new pages
+2. `src/components/stamp-generator/StampProjectsDashboard.tsx` — Fix the auth guard timing bug, add corporate suite navigation link
 
-## What This Does NOT Change
-- No structural changes to filters, layout, or the map component itself
-- The project detail page (Reelly parity) requires the emergency data mirror to run first — the structure is already correct, the data just needs to be backfilled via the admin panel
-- No database migrations needed
+### Files to Create:
+3. `src/pages/toolkit/CorporateSuite.tsx` — Hub page
+4. `src/components/corporate-suite/BusinessCardDesigner.tsx` — Business card tool
+5. `src/components/corporate-suite/CVResumeBuilder.tsx` — CV/Resume tool
+6. `src/components/corporate-suite/CoverLetterGenerator.tsx` — Cover letter tool
+7. `src/components/corporate-suite/LandingPageBuilder.tsx` — Landing page tool
+
+### No new database tables needed
+All tools will use the browser (PDF-lib for export, Gemini for AI text generation). Projects can optionally be saved to the existing pattern once the MVP is validated.
+
+### Priority Order:
+1. Fix refresh redirect bug (immediate UX fix)
+2. Corporate Suite hub page
+3. Business Card Designer (most requested)
+4. CV/Resume Builder
+5. Cover Letter Generator
+6. Landing Page Builder
+
+---
+
+## Visual Design Language (Consistent with Stamp Generator)
+- Background: `bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]`
+- Cards: `bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm`
+- Accent: `from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))]`
+- Icons: Lucide React
+- Motion: Framer Motion for card hover effects
