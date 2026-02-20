@@ -4,12 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, Download, CreditCard, Phone, Mail, Globe,
   MapPin, Building2, RefreshCw, Eye, Layers, ChevronRight,
-  LayoutGrid, Check,
+  LayoutGrid, Check, ImageIcon, ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { BrandAssetLibrary, BrandAsset } from "@/components/corporate-suite/BrandAssetLibrary";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Template = "modern" | "classic" | "minimal" | "bold" | "creative" | "corporate";
@@ -375,6 +377,9 @@ export default function BusinessCardDesigner() {
   const [colorIdx, setColorIdx] = useState(0);
   const [side, setSide]         = useState<"front" | "back">("front");
   const [isExporting, setIsExporting] = useState(false);
+  const [brandAssetOpen, setBrandAssetOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState("");
+  const [logoSize, setLogoSize] = useState(80);
   const [data, setData] = useState<CardData>({
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
   });
@@ -515,6 +520,38 @@ export default function BusinessCardDesigner() {
               Selected: <span className="font-semibold text-[hsl(var(--foreground))]">{COLOR_PRESETS[colorIdx].label}</span>
             </p>
           </div>
+
+          {/* Brand Assets panel */}
+          <Collapsible open={brandAssetOpen} onOpenChange={setBrandAssetOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <ImageIcon size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Brand Assets</span>
+                    {logoUrl && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${brandAssetOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))] py-2">Upload & save logos, monograms, signatures — reuse across all tools.</p>
+                  <BrandAssetLibrary
+                    assetTypes={["monogram", "logo", "signature"]}
+                    selectedUrl={logoUrl}
+                    onSelect={asset => setLogoUrl(asset.file_url)}
+                    showSizeControl
+                    sizeValue={logoSize}
+                    onSizeChange={setLogoSize}
+                    sizeLabel="Logo Size"
+                    sizeMin={40}
+                    sizeMax={160}
+                  />
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
 
           {/* Card info fields */}
           <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm space-y-3.5">
