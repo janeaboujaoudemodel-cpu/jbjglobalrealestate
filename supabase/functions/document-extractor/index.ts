@@ -67,6 +67,22 @@ Use empty string "" or [] for fields not found. No explanation, just the JSON.`,
   "experience": "experience summary mentioned"
 }
 Use empty string "" for fields not found. No explanation, just the JSON.`,
+
+      company_profile: `Extract all information from this company profile, brochure, or business document and return ONLY valid JSON:
+{
+  "companyName": "company name",
+  "tagline": "tagline or slogan",
+  "aboutUs": "about us or company overview text",
+  "services": [{"title": "service name", "description": "service description"}],
+  "team": [{"name": "person full name", "role": "job title or role"}],
+  "phone": "phone number",
+  "email": "email address",
+  "website": "website URL",
+  "address": "physical address",
+  "linkedin": "LinkedIn URL or handle",
+  "instagram": "Instagram handle"
+}
+Use empty string "" for missing text fields and [] for missing arrays. No explanation, just the JSON.`,
     };
 
     const prompt = schemas[extraction_type];
