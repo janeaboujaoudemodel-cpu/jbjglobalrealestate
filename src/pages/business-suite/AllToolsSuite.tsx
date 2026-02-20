@@ -45,7 +45,7 @@ const AllToolsSuite = () => {
           {/* Decorative elements */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(200,167,102,0.08),transparent_70%)]" />
           
-          <div className="relative max-w-7xl mx-auto px-4 py-8 sm:py-12">
+          <div className="relative max-w-7xl mx-auto px-4 pt-8 pb-6 sm:pt-12 sm:pb-8">
             {/* Back link */}
             <Link
               to="/toolkit"
@@ -55,18 +55,20 @@ const AllToolsSuite = () => {
               <span className="text-sm">Back to Toolkit</span>
             </Link>
             
-            {/* Title */}
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center">
-                <Sparkles className="w-7 h-7 text-gold" />
-              </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
-                  All <span className="bg-gradient-to-r from-gold via-amber-400 to-gold bg-clip-text text-transparent">Tools Suite</span>
-                </h1>
-                <p className="text-zinc-400 text-sm sm:text-base mt-1">
-                  Access all AI and productivity tools in one place
-                </p>
+            {/* Title + Search row */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center shrink-0">
+                  <Sparkles className="w-7 h-7 text-gold" />
+                </div>
+                <div>
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
+                    All <span className="bg-gradient-to-r from-gold via-amber-400 to-gold bg-clip-text text-transparent">Tools Suite</span>
+                  </h1>
+                  <p className="text-zinc-400 text-sm mt-1">
+                    Access all AI and productivity tools in one place
+                  </p>
+                </div>
               </div>
             </div>
           </div>

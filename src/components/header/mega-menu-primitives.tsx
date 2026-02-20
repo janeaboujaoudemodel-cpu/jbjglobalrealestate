@@ -75,11 +75,13 @@ export function MegaMenuFeaturedCard({
 }: MegaMenuFeaturedCardProps) {
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
-  // Auto-play video immediately on mount (not on hover)
+  // Play video immediately on mount for instant display
   React.useEffect(() => {
-    if (videoRef.current && video) {
-      videoRef.current.play().catch(() => {});
-    }
+    const vid = videoRef.current;
+    if (!vid || !video) return;
+    // Load and play eagerly — the mega menu is already open when this mounts
+    vid.load();
+    vid.play().catch(() => {});
   }, [video]);
 
   return (
@@ -94,16 +96,16 @@ export function MegaMenuFeaturedCard({
         className
       )}
     >
-      {/* Video background (if provided) - hidden until hover on desktop */}
+      {/* Video background — eager load, plays immediately on open */}
       {video && (
         <video
           ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-100 z-[1]"
+          className="absolute inset-0 w-full h-full object-cover z-[1]"
           src={video}
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
         />
       )}
       {/* Static image background */}

@@ -260,13 +260,13 @@ const Index = () => {
               { to: "/join", icon: GraduationCap, label: t('hero.careers') },
             ].map((card) => (
               <Link key={card.to} to={card.to} className="group">
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold rounded-2xl p-4 md:p-5 text-center hover:shadow-[0_12px_40px_rgba(200,167,102,0.5)] hover:-translate-y-1.5 shadow-[0_4px_20px_rgba(200,167,102,0.25)] transition-all duration-300 aspect-square flex items-center justify-center relative overflow-hidden">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold rounded-2xl p-3 md:p-4 text-center hover:shadow-[0_12px_40px_rgba(200,167,102,0.5)] hover:-translate-y-1.5 shadow-[0_4px_20px_rgba(200,167,102,0.25)] transition-all duration-300 aspect-square flex items-center justify-center relative overflow-hidden min-h-0">
                   <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-gold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
-                  <div className="relative flex flex-col items-center gap-2.5 md:gap-3">
-                    <div className="w-12 h-12 md:w-14 md:h-14 bg-black rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] transition-all duration-300 shadow-lg">
-                      <card.icon className="w-5 h-5 md:w-6 md:h-6 text-gold" />
+                  <div className="relative flex flex-col items-center gap-1.5 md:gap-2 w-full">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-black rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] transition-all duration-300 shadow-lg shrink-0">
+                      <card.icon className="w-4 h-4 md:w-5 md:h-5 text-gold" />
                     </div>
-                    <h4 className="text-black group-hover:text-gold text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
+                    <h4 className="text-black group-hover:text-gold text-[10px] md:text-xs font-bold transition-colors leading-tight tracking-wide text-center line-clamp-2 w-full">{card.label}</h4>
                   </div>
                 </div>
               </Link>
