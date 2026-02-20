@@ -53,32 +53,33 @@ class AppErrorBoundary extends React.Component<
             style={{
               maxWidth: "500px",
               width: "100%",
-              background: "#1a1a1a",
-              borderRadius: "12px",
+              background: "linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)",
+              borderRadius: "16px",
               padding: "2rem",
-              border: "1px solid #333",
+              border: "2px solid rgba(200,167,102,0.5)",
+              boxShadow: "0 12px 40px rgba(200,167,102,0.25)",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1rem" }}>
-              <AlertTriangle size={24} color="#ef4444" />
-              <h1 style={{ fontSize: "1.25rem", fontWeight: 600, margin: 0 }}>
-                Something went wrong
+              <AlertTriangle size={24} color="#C8A766" />
+              <h1 style={{ fontSize: "1.25rem", fontWeight: 600, margin: 0, color: "#1a1a1a" }}>
+                We're getting things ready
               </h1>
             </div>
 
-            <p style={{ color: "#a1a1aa", fontSize: "0.875rem", marginBottom: "1rem" }}>
-              We encountered an unexpected error. Please try refreshing the page or return to the homepage.
+            <p style={{ color: "#555", fontSize: "0.875rem", marginBottom: "1rem" }}>
+              The page is taking a moment to load. Please try refreshing or return to the homepage.
             </p>
 
             {this.state.errorMessage && (
               <pre
                 style={{
                   fontSize: "0.75rem",
-                  background: "#0f0f0f",
+                  background: "rgba(200,167,102,0.1)",
                   padding: "0.75rem",
-                  borderRadius: "6px",
-                  border: "1px solid #333",
-                  color: "#a1a1aa",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(200,167,102,0.3)",
+                  color: "#666",
                   overflow: "auto",
                   marginBottom: "1.5rem",
                   whiteSpace: "pre-wrap",
@@ -97,13 +98,14 @@ class AppErrorBoundary extends React.Component<
                   alignItems: "center",
                   gap: "0.5rem",
                   padding: "0.625rem 1.25rem",
-                  background: "#d4af37",
-                  color: "#0a0a0a",
+                  background: "linear-gradient(135deg, #C8A766, #E8DCC8)",
+                  color: "#1a1a1a",
                   border: "none",
-                  borderRadius: "6px",
-                  fontWeight: 500,
+                  borderRadius: "8px",
+                  fontWeight: 600,
                   cursor: "pointer",
                   fontSize: "0.875rem",
+                  boxShadow: "0 4px 12px rgba(200,167,102,0.3)",
                 }}
               >
                 <RefreshCcw size={16} />
@@ -117,10 +119,10 @@ class AppErrorBoundary extends React.Component<
                   gap: "0.5rem",
                   padding: "0.625rem 1.25rem",
                   background: "transparent",
-                  color: "#d4af37",
-                  border: "1px solid #d4af37",
-                  borderRadius: "6px",
-                  fontWeight: 500,
+                  color: "#1a1a1a",
+                  border: "2px solid rgba(200,167,102,0.6)",
+                  borderRadius: "8px",
+                  fontWeight: 600,
                   cursor: "pointer",
                   fontSize: "0.875rem",
                 }}
