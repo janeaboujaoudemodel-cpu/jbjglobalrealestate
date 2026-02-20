@@ -27,23 +27,27 @@ function resolveAppAssetUrl(src?: string): string | undefined {
   return src;
 }
 
-export function SafeImage({ fallbackSrc, onError, ...props }: SafeImageProps) {
-  const resolvedSrc = typeof props.src === "string" ? resolveAppAssetUrl(props.src) : props.src;
-  const resolvedFallback = resolveAppAssetUrl(fallbackSrc);
+export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
+  ({ fallbackSrc, onError, ...props }, ref) => {
+    const resolvedSrc = typeof props.src === "string" ? resolveAppAssetUrl(props.src) : props.src;
+    const resolvedFallback = resolveAppAssetUrl(fallbackSrc);
 
-  return (
-    <img
-      {...props}
-      src={resolvedSrc}
-      loading={props.loading ?? "lazy"}
-      decoding={props.decoding ?? "async"}
-      referrerPolicy="no-referrer"
-      onError={(e) => {
-        if (resolvedFallback && e.currentTarget.src !== resolvedFallback) {
-          e.currentTarget.src = resolvedFallback;
-        }
-        onError?.(e);
-      }}
-    />
-  );
-}
+    return (
+      <img
+        ref={ref}
+        {...props}
+        src={resolvedSrc}
+        loading={props.loading ?? "lazy"}
+        decoding={props.decoding ?? "async"}
+        referrerPolicy="no-referrer"
+        onError={(e) => {
+          if (resolvedFallback && e.currentTarget.src !== resolvedFallback) {
+            e.currentTarget.src = resolvedFallback;
+          }
+          onError?.(e);
+        }}
+      />
+    );
+  }
+);
+SafeImage.displayName = "SafeImage";
