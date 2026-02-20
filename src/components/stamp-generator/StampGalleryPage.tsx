@@ -1,9 +1,10 @@
 /**
  * StampGalleryPage — Full-screen showcase for all stamp concepts in a project.
  * Features: masonry grid, full-screen lightbox with pinch/wheel zoom,
- * 3-stop color switcher, one-click PNG / SVG / PDF export without leaving the page.
+ * 3-stop color switcher, one-click PNG / SVG / PDF export without leaving the page,
+ * and multi-select batch export (up to 5 designs → single ZIP with per-design folders).
  */
-import React, { useState, useEffect, useRef, useCallback, WheelEvent } from 'react';
+import React, { useState, useEffect, useRef, WheelEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12,10 +13,12 @@ import { StampColorWheel } from './StampColorWheel';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import JSZip from 'jszip';
 import {
   ArrowLeft, Download, X, ZoomIn, ZoomOut, RotateCcw,
   ChevronLeft, ChevronRight, Palette, Stamp, Loader2,
-  Heart, FileImage, FileText, File, Package, Check
+  Heart, FileImage, FileText, File, Package, Check,
+  CheckSquare, Square
 } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -29,7 +32,7 @@ interface DesignRow {
 
 type ColorStop = 'primary' | 'secondary' | 'accent';
 
-// ─── Export helpers (same battle-tested pipeline as StampExportPage) ──────────
+// ─── Export helpers ───────────────────────────────────────────────────────────
 function uniquifyIds(svg: string): string {
   const t = Math.random().toString(36).slice(2, 7);
   return svg
@@ -93,17 +96,23 @@ function triggerDownload(blob: Blob, filename: string) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+function slugify(s: string) {
+  return (s || 'stamp').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+}
+
 // ─── Palette presets ──────────────────────────────────────────────────────────
 const COLOR_PRESETS = [
-  { label: 'JBJ Gold',   hex: '#B8860B' },
-  { label: 'Navy',       hex: '#1a2744' },
-  { label: 'Obsidian',   hex: '#0d0d0d' },
-  { label: 'Crimson',    hex: '#8B0000' },
-  { label: 'Forest',     hex: '#1B4332' },
-  { label: 'Purple',     hex: '#4B0082' },
-  { label: 'Copper',     hex: '#7C4A00' },
-  { label: 'Teal',       hex: '#0D5C63' },
+  { label: 'JBJ Gold',  hex: '#B8860B' },
+  { label: 'Navy',      hex: '#1a2744' },
+  { label: 'Obsidian',  hex: '#0d0d0d' },
+  { label: 'Crimson',   hex: '#8B0000' },
+  { label: 'Forest',    hex: '#1B4332' },
+  { label: 'Purple',    hex: '#4B0082' },
+  { label: 'Copper',    hex: '#7C4A00' },
+  { label: 'Teal',      hex: '#0D5C63' },
 ];
+
+const MAX_BATCH = 5;
 
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function StampGalleryPage() {
@@ -129,9 +138,15 @@ export default function StampGalleryPage() {
   const isDragging = useRef(false);
   const dragStart = useRef({ mx: 0, my: 0, px: 0, py: 0 });
 
-  // Export
+  // Single-export tracking
   const [exporting, setExporting] = useState<Record<string, boolean>>({});
   const [exported, setExported] = useState<Record<string, boolean>>({});
+
+  // Batch selection
+  const [batchMode, setBatchMode] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [batchExporting, setBatchExporting] = useState(false);
+  const [batchProgress, setBatchProgress] = useState<{ done: number; total: number } | null>(null);
 
   // Load
   useEffect(() => {
@@ -163,35 +178,28 @@ export default function StampGalleryPage() {
     return () => window.removeEventListener('keydown', onKey);
   }, [lightboxIdx, designs.length]);
 
-  function openLightbox(idx: number) {
-    setLightboxIdx(idx);
-    setZoom(1);
-    setPan({ x: 0, y: 0 });
-  }
+  function openLightbox(idx: number) { setLightboxIdx(idx); setZoom(1); setPan({ x: 0, y: 0 }); }
   function closeLightbox() { setLightboxIdx(null); setZoom(1); setPan({ x: 0, y: 0 }); }
   function goNext() {
     if (lightboxIdx === null) return;
-    const next = (lightboxIdx + 1) % designs.length;
-    setLightboxIdx(next); setZoom(1); setPan({ x: 0, y: 0 });
+    setLightboxIdx((lightboxIdx + 1) % designs.length); setZoom(1); setPan({ x: 0, y: 0 });
   }
   function goPrev() {
     if (lightboxIdx === null) return;
-    const prev = (lightboxIdx - 1 + designs.length) % designs.length;
-    setLightboxIdx(prev); setZoom(1); setPan({ x: 0, y: 0 });
+    setLightboxIdx((lightboxIdx - 1 + designs.length) % designs.length); setZoom(1); setPan({ x: 0, y: 0 });
   }
 
-  // Wheel zoom
   function handleWheel(e: WheelEvent<HTMLDivElement>) {
     e.preventDefault();
     setZoom(z => Math.min(Math.max(z - e.deltaY * 0.001, 0.25), 5));
   }
 
-  // Pan drag
   function onDragStart(e: React.MouseEvent) {
     if (zoom <= 1) return;
     isDragging.current = true;
     dragStart.current = { mx: e.clientX, my: e.clientY, px: pan.x, py: pan.y };
   }
+
   useEffect(() => {
     function onMove(e: MouseEvent) {
       if (!isDragging.current) return;
@@ -217,18 +225,18 @@ export default function StampGalleryPage() {
     { key: 'accent',    label: 'Accent',    color: accentColor   || '#B8860B' },
   ];
 
-  // Export helpers
+  // ── Single export helpers ──────────────────────────────────────────────────
   async function exportPNG(design: DesignRow, size = 1024) {
     const key = `png_${design.id}`;
     setExporting(s => ({ ...s, [key]: true }));
     try {
       const svg = tintSvg(design.svg_source, primaryColor, secondaryColor, accentColor);
       const blob = await svgToPngBlob(svg, size, true);
-      const slug = (project?.company_name || 'stamp').toLowerCase().replace(/\s+/g, '_');
+      const slug = slugify(project?.company_name);
       triggerDownload(blob, `${slug}_stamp_${size}px.png`);
       setExported(s => ({ ...s, [key]: true }));
       toast.success(`PNG ${size}px downloaded!`);
-    } catch (e) { toast.error('PNG export failed'); }
+    } catch { toast.error('PNG export failed'); }
     setExporting(s => ({ ...s, [key]: false }));
   }
 
@@ -238,11 +246,11 @@ export default function StampGalleryPage() {
     try {
       const svg = tintSvg(design.svg_source, primaryColor, secondaryColor, accentColor);
       const blob = new Blob([svg], { type: 'image/svg+xml' });
-      const slug = (project?.company_name || 'stamp').toLowerCase().replace(/\s+/g, '_');
+      const slug = slugify(project?.company_name);
       triggerDownload(blob, `${slug}_stamp.svg`);
       setExported(s => ({ ...s, [key]: true }));
       toast.success('SVG downloaded!');
-    } catch (e) { toast.error('SVG export failed'); }
+    } catch { toast.error('SVG export failed'); }
     setExporting(s => ({ ...s, [key]: false }));
   }
 
@@ -252,11 +260,11 @@ export default function StampGalleryPage() {
     try {
       const svg = tintSvg(design.svg_source, primaryColor, secondaryColor, accentColor);
       const blob = await svgToPdfBlob(svg);
-      const slug = (project?.company_name || 'stamp').toLowerCase().replace(/\s+/g, '_');
+      const slug = slugify(project?.company_name);
       triggerDownload(blob, `${slug}_stamp_print.pdf`);
       setExported(s => ({ ...s, [key]: true }));
       toast.success('PDF downloaded!');
-    } catch (e) { toast.error('PDF export failed'); }
+    } catch { toast.error('PDF export failed'); }
     setExporting(s => ({ ...s, [key]: false }));
   }
 
@@ -265,9 +273,101 @@ export default function StampGalleryPage() {
     await supabase.from('stamp_designs').update({ is_favorite: newVal }).eq('id', design.id);
     setDesigns(prev => {
       const updated = prev.map(d => d.id === design.id ? { ...d, is_favorite: newVal } : d);
-      // Re-sort: favorites first
       return [...updated.filter(d => d.is_favorite), ...updated.filter(d => !d.is_favorite)];
     });
+  }
+
+  // ── Batch selection helpers ────────────────────────────────────────────────
+  function toggleSelect(id: string) {
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        if (next.size >= MAX_BATCH) {
+          toast.warning(`Max ${MAX_BATCH} designs at once`);
+          return prev;
+        }
+        next.add(id);
+      }
+      return next;
+    });
+  }
+
+  function clearBatch() {
+    setBatchMode(false);
+    setSelected(new Set());
+    setBatchProgress(null);
+  }
+
+  // ── Batch ZIP export ───────────────────────────────────────────────────────
+  async function runBatchExport() {
+    if (selected.size === 0) { toast.warning('Select at least one design'); return; }
+    setBatchExporting(true);
+
+    const companySlug = slugify(project?.company_name || 'stamp');
+    const zip = new JSZip();
+    const selectedDesigns = designs.filter(d => selected.has(d.id));
+    const total = selectedDesigns.length * 4; // SVG + PNG512 + PNG1024 + PDF
+    let done = 0;
+
+    setBatchProgress({ done: 0, total });
+
+    const tick = () => { done++; setBatchProgress({ done, total }); };
+
+    try {
+      for (let i = 0; i < selectedDesigns.length; i++) {
+        const design = selectedDesigns[i];
+        const label = (design.template_key || 'stamp').replace(/-/g, '_');
+        const folderName = `${String(i + 1).padStart(2, '0')}_${label}`;
+        const folder = zip.folder(folderName)!;
+
+        const tinted = tintSvg(design.svg_source, primaryColor, secondaryColor, accentColor);
+
+        // SVG
+        folder.file(`${companySlug}_${label}.svg`, tinted);
+        tick();
+
+        // PNG 512
+        const png512 = await svgToPngBlob(tinted, 512, true);
+        folder.file(`${companySlug}_${label}_512px.png`, await png512.arrayBuffer());
+        tick();
+
+        // PNG 1024
+        const png1024 = await svgToPngBlob(tinted, 1024, true);
+        folder.file(`${companySlug}_${label}_1024px.png`, await png1024.arrayBuffer());
+        tick();
+
+        // PDF
+        const pdf = await svgToPdfBlob(tinted);
+        folder.file(`${companySlug}_${label}_print.pdf`, await pdf.arrayBuffer());
+        tick();
+      }
+
+      // Add a README
+      const date = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      zip.file('README.txt',
+        `Stamp Export Pack\n` +
+        `Company: ${project?.company_name || ''}\n` +
+        `Exported: ${date}\n` +
+        `Designs: ${selectedDesigns.length}\n\n` +
+        `Each folder contains:\n` +
+        `  • stamp.svg       — Vector (scalable to any size)\n` +
+        `  • stamp_512px.png — Transparent background PNG\n` +
+        `  • stamp_1024px.png— High-res transparent PNG\n` +
+        `  • stamp_print.pdf — Print-ready at 300pt\n`
+      );
+
+      const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+      triggerDownload(zipBlob, `${companySlug}_stamp_pack_${selectedDesigns.length}designs.zip`);
+      toast.success(`ZIP exported — ${selectedDesigns.length} stamp${selectedDesigns.length > 1 ? 's' : ''} packed!`);
+      clearBatch();
+    } catch (e: any) {
+      toast.error('Batch export failed: ' + (e?.message || 'Unknown error'));
+    }
+
+    setBatchExporting(false);
+    setBatchProgress(null);
   }
 
   // Current lightbox design
@@ -290,7 +390,7 @@ export default function StampGalleryPage() {
   return (
     <div className="min-h-screen bg-[hsl(var(--pearl-1))]">
 
-      {/* ── Sticky header ───────────────────────────────────────────────────── */}
+      {/* ── Sticky header ─────────────────────────────────────────────────── */}
       <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-sm border-b border-[hsl(var(--border))] pt-24 sm:pt-28 lg:pt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3 min-w-0">
@@ -304,8 +404,8 @@ export default function StampGalleryPage() {
             </div>
           </div>
 
-          {/* Color stop selector */}
           <div className="flex items-center gap-2">
+            {/* Color stop selector */}
             <div className="flex items-center gap-1 bg-[hsl(var(--muted))] rounded-xl p-1">
               {stopDefs.map(s => (
                 <button
@@ -325,31 +425,30 @@ export default function StampGalleryPage() {
             {/* Quick presets */}
             <div className="hidden sm:flex items-center gap-1">
               {COLOR_PRESETS.slice(0, 5).map(p => (
-                <button
-                  key={p.hex}
-                  onClick={() => setActiveColor(p.hex)}
-                  title={p.label}
+                <button key={p.hex} onClick={() => setActiveColor(p.hex)} title={p.label}
                   className="w-6 h-6 rounded-full border-2 border-white shadow-sm hover:scale-110 transition-transform"
-                  style={{ backgroundColor: p.hex }}
-                />
+                  style={{ backgroundColor: p.hex }}/>
               ))}
             </div>
 
-            {/* Color wheel toggle */}
-            <Button
-              size="sm"
-              variant={colorPanelOpen ? 'default' : 'outline'}
+            <Button size="sm" variant={colorPanelOpen ? 'default' : 'outline'}
               onClick={() => setColorPanelOpen(o => !o)}
-              className={`gap-1.5 h-8 text-xs shrink-0 ${colorPanelOpen ? 'bg-[hsl(var(--gold))] text-white border-transparent' : ''}`}
-            >
+              className={`gap-1.5 h-8 text-xs shrink-0 ${colorPanelOpen ? 'bg-[hsl(var(--gold))] text-white border-transparent' : ''}`}>
               <Palette size={13}/> <span className="hidden sm:inline">Color</span>
             </Button>
 
-            <Button
-              size="sm"
+            {/* Batch mode toggle */}
+            <Button size="sm"
+              variant={batchMode ? 'default' : 'outline'}
+              onClick={() => { setBatchMode(m => !m); if (batchMode) setSelected(new Set()); }}
+              className={`gap-1.5 h-8 text-xs shrink-0 ${batchMode ? 'bg-[hsl(var(--foreground))] text-white border-transparent' : ''}`}
+              title="Select multiple designs for batch ZIP export">
+              <CheckSquare size={13}/> <span className="hidden sm:inline">Batch</span>
+            </Button>
+
+            <Button size="sm"
               className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1.5 h-8 text-xs shrink-0"
-              onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/generate`)}
-            >
+              onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/generate`)}>
               <Stamp size={13}/> Studio
             </Button>
           </div>
@@ -359,51 +458,31 @@ export default function StampGalleryPage() {
         {colorPanelOpen && (
           <div className="border-t border-[hsl(var(--border))] bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-start gap-6">
-              {/* Stop tabs */}
               <div className="flex flex-col gap-2">
                 <p className="text-[10px] uppercase tracking-widest text-[hsl(var(--muted-foreground))] font-semibold">Color Stop</p>
                 {stopDefs.map(s => (
-                  <button
-                    key={s.key}
-                    onClick={() => setActiveStop(s.key)}
+                  <button key={s.key} onClick={() => setActiveStop(s.key)}
                     className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                       activeStop === s.key
                         ? 'bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]'
                         : 'bg-transparent text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'
-                    }`}
-                  >
-                    <div className="w-4 h-4 rounded-full border border-black/10" style={{ backgroundColor: s.color }}/>
-                    {s.label}
+                    }`}>
+                    <div className="w-4 h-4 rounded-full border border-black/10" style={{ backgroundColor: s.color }}/>{s.label}
                   </button>
                 ))}
               </div>
-
-              {/* Wheel */}
-              <StampColorWheel
-                key={activeStop}
-                color={activeColor}
-                onChange={setActiveColor}
-                label={`${stopDefs.find(s => s.key === activeStop)?.label} Color`}
-                size={140}
-              />
-
-              {/* Preset swatches */}
+              <StampColorWheel key={activeStop} color={activeColor} onChange={setActiveColor}
+                label={`${stopDefs.find(s => s.key === activeStop)?.label} Color`} size={140}/>
               <div className="space-y-2">
                 <p className="text-[10px] uppercase tracking-widest text-[hsl(var(--muted-foreground))] font-semibold">Quick Presets</p>
                 <div className="grid grid-cols-4 gap-2">
                   {COLOR_PRESETS.map(p => (
-                    <button
-                      key={p.hex}
-                      onClick={() => setActiveColor(p.hex)}
-                      title={p.label}
+                    <button key={p.hex} onClick={() => setActiveColor(p.hex)} title={p.label}
                       className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 ${activeColor === p.hex ? 'border-[hsl(var(--gold))] scale-110' : 'border-white shadow-sm'}`}
-                      style={{ backgroundColor: p.hex }}
-                    />
+                      style={{ backgroundColor: p.hex }}/>
                   ))}
                 </div>
               </div>
-
-              {/* Close */}
               <button onClick={() => setColorPanelOpen(false)} className="ml-auto self-start p-1 rounded-lg hover:bg-[hsl(var(--muted))] transition-colors">
                 <X size={16} className="text-[hsl(var(--muted-foreground))]"/>
               </button>
@@ -412,7 +491,85 @@ export default function StampGalleryPage() {
         )}
       </div>
 
-      {/* ── Gallery grid ────────────────────────────────────────────────────── */}
+      {/* ── Batch export bar (floats above gallery when active) ──────────── */}
+      {batchMode && (
+        <div className="sticky top-[var(--header-h,80px)] z-20">
+          <div className={`mx-4 sm:mx-6 mt-4 rounded-2xl border-2 shadow-lg transition-all ${
+            selected.size > 0
+              ? 'border-[hsl(var(--gold))] bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-[hsl(var(--champagne-1)/0.6)] backdrop-blur-sm'
+              : 'border-[hsl(var(--border))] bg-white/80 backdrop-blur-sm'
+          }`}>
+            <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center gap-3">
+              {/* Instructions / count */}
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <div className="flex gap-1">
+                  {Array.from({ length: MAX_BATCH }).map((_, i) => (
+                    <div key={i} className={`w-5 h-5 rounded flex items-center justify-center border text-[9px] font-bold transition-all ${
+                      i < selected.size
+                        ? 'bg-[hsl(var(--gold))] border-[hsl(var(--gold))] text-white'
+                        : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'
+                    }`}>{i < selected.size ? '✓' : i + 1}</div>
+                  ))}
+                </div>
+                <p className="text-sm font-medium text-[hsl(var(--foreground))]">
+                  {selected.size === 0
+                    ? `Click stamps to select (up to ${MAX_BATCH})`
+                    : `${selected.size} of ${MAX_BATCH} selected`}
+                </p>
+                {selected.size > 0 && (
+                  <p className="text-xs text-[hsl(var(--muted-foreground))] hidden sm:block">
+                    → Each exported as: SVG + PNG 512px + PNG 1024px + PDF
+                  </p>
+                )}
+              </div>
+
+              {/* Progress bar while exporting */}
+              {batchExporting && batchProgress && (
+                <div className="flex-1 min-w-40">
+                  <div className="flex items-center justify-between text-[10px] text-[hsl(var(--muted-foreground))] mb-1">
+                    <span>Generating files…</span>
+                    <span>{batchProgress.done}/{batchProgress.total}</span>
+                  </div>
+                  <div className="h-1.5 bg-[hsl(var(--muted))] rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] rounded-full transition-all duration-300"
+                      style={{ width: `${(batchProgress.done / batchProgress.total) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Actions */}
+              <div className="flex items-center gap-2 shrink-0">
+                {selected.size > 0 && (
+                  <Button size="sm" variant="ghost" className="h-8 text-xs gap-1 text-[hsl(var(--muted-foreground))]"
+                    onClick={() => setSelected(new Set())} disabled={batchExporting}>
+                    <X size={12}/> Clear
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  disabled={selected.size === 0 || batchExporting}
+                  className="h-8 text-xs gap-1.5 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 disabled:opacity-40"
+                  onClick={runBatchExport}
+                >
+                  {batchExporting ? (
+                    <><Loader2 size={12} className="animate-spin"/> Exporting…</>
+                  ) : (
+                    <><Package size={12}/> Export {selected.size > 0 ? `${selected.size} ` : ''}as ZIP</>
+                  )}
+                </Button>
+                <Button size="sm" variant="ghost" className="h-8 text-xs text-[hsl(var(--muted-foreground))]"
+                  onClick={clearBatch} disabled={batchExporting}>
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Gallery grid ──────────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {designs.length === 0 ? (
           <div className="text-center py-24 space-y-4">
@@ -431,15 +588,28 @@ export default function StampGalleryPage() {
             {designs.map((design, idx) => {
               const tinted = tintSvg(design.svg_source, primaryColor, secondaryColor, accentColor);
               const label = (design.template_key || 'stamp').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+              const isSelected = selected.has(design.id);
+              const isMaxed = selected.size >= MAX_BATCH && !isSelected;
+
               return (
                 <div
                   key={design.id}
-                  className="group bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden flex flex-col"
+                  className={`group bg-white rounded-2xl border-2 shadow-sm transition-all duration-200 overflow-hidden flex flex-col ${
+                    isSelected
+                      ? 'border-[hsl(var(--gold))] shadow-[0_0_0_3px_hsl(var(--gold)/0.2)]'
+                      : batchMode && isMaxed
+                        ? 'border-[hsl(var(--border))] opacity-50'
+                        : 'border-[hsl(var(--border))] hover:shadow-lg hover:border-[hsl(var(--gold)/0.4)]'
+                  }`}
                 >
-                  {/* Stamp preview — click to open lightbox */}
+                  {/* Stamp preview */}
                   <div
-                    className="relative aspect-square bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1)/0.5)] flex items-center justify-center cursor-zoom-in overflow-hidden"
-                    onClick={() => openLightbox(idx)}
+                    className="relative aspect-square bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1)/0.5)] flex items-center justify-center overflow-hidden"
+                    style={{ cursor: batchMode ? (isMaxed ? 'not-allowed' : 'pointer') : 'zoom-in' }}
+                    onClick={() => {
+                      if (batchMode) { if (!isMaxed || isSelected) toggleSelect(design.id); }
+                      else openLightbox(idx);
+                    }}
                   >
                     <StampSVGRenderer
                       svgSource={tinted}
@@ -450,12 +620,31 @@ export default function StampGalleryPage() {
                       className="transition-transform duration-200 group-hover:scale-105"
                     />
 
-                    {/* Hover overlay */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                      <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 rounded-full p-2 shadow-lg">
-                        <ZoomIn size={16} className="text-[hsl(var(--foreground))]"/>
+                    {/* Batch select overlay */}
+                    {batchMode && (
+                      <div className={`absolute inset-0 flex items-center justify-center transition-all ${
+                        isSelected ? 'bg-[hsl(var(--gold)/0.15)]' : 'bg-transparent'
+                      }`}>
+                        <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center shadow-lg transition-all ${
+                          isSelected
+                            ? 'bg-[hsl(var(--gold))] border-[hsl(var(--gold))] scale-110'
+                            : 'bg-white/80 border-[hsl(var(--border))] opacity-70 group-hover:opacity-100'
+                        }`}>
+                          {isSelected
+                            ? <Check size={16} className="text-white font-bold"/>
+                            : <Square size={14} className="text-[hsl(var(--muted-foreground))]"/>}
+                        </div>
                       </div>
-                    </div>
+                    )}
+
+                    {/* Hover overlay (non-batch) */}
+                    {!batchMode && (
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 rounded-full p-2 shadow-lg">
+                          <ZoomIn size={16} className="text-[hsl(var(--foreground))]"/>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Favorite badge */}
                     {design.is_favorite && (
@@ -465,57 +654,71 @@ export default function StampGalleryPage() {
                         </div>
                       </div>
                     )}
+
+                    {/* Selected index badge */}
+                    {isSelected && batchMode && (
+                      <div className="absolute top-2 right-2">
+                        <div className="min-w-5 h-5 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center shadow px-1">
+                          <span className="text-white text-[10px] font-bold">
+                            {Array.from(selected).indexOf(design.id) + 1}
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Card footer */}
                   <div className="px-3 py-2.5 space-y-2">
                     <p className="text-[11px] font-medium text-[hsl(var(--foreground))] leading-tight line-clamp-1">{label}</p>
 
-                    {/* Quick export row */}
-                    <div className="flex items-center gap-1">
-                      {/* PNG */}
+                    {/* Quick export row (hidden in batch mode) */}
+                    {!batchMode && (
+                      <div className="flex items-center gap-1">
+                        <button onClick={() => exportPNG(design, 1024)} disabled={exporting[`png_${design.id}`]}
+                          title="Download PNG 1024px"
+                          className="flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] transition-all text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))]">
+                          {exporting[`png_${design.id}`] ? <Loader2 size={9} className="animate-spin"/> : exported[`png_${design.id}`] ? <Check size={9} className="text-green-600"/> : <FileImage size={9}/>}
+                          PNG
+                        </button>
+                        <button onClick={() => exportSVG(design)} disabled={exporting[`svg_${design.id}`]}
+                          title="Download SVG"
+                          className="flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] transition-all text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))]">
+                          {exporting[`svg_${design.id}`] ? <Loader2 size={9} className="animate-spin"/> : exported[`svg_${design.id}`] ? <Check size={9} className="text-green-600"/> : <File size={9}/>}
+                          SVG
+                        </button>
+                        <button onClick={() => exportPDF(design)} disabled={exporting[`pdf_${design.id}`]}
+                          title="Download PDF"
+                          className="flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] transition-all text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))]">
+                          {exporting[`pdf_${design.id}`] ? <Loader2 size={9} className="animate-spin"/> : exported[`pdf_${design.id}`] ? <Check size={9} className="text-green-600"/> : <FileText size={9}/>}
+                          PDF
+                        </button>
+                        <button onClick={() => toggleFavorite(design)}
+                          title={design.is_favorite ? 'Unfavorite' : 'Favorite'}
+                          className={`h-6 w-6 rounded-md flex items-center justify-center border transition-all ${
+                            design.is_favorite
+                              ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold))]'
+                              : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]'
+                          }`}>
+                          <Heart size={9} className={design.is_favorite ? 'fill-current' : ''}/>
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Batch mode footer: show select CTA */}
+                    {batchMode && (
                       <button
-                        onClick={() => exportPNG(design, 1024)}
-                        disabled={exporting[`png_${design.id}`]}
-                        title="Download PNG 1024px"
-                        className="flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] transition-all text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))]"
-                      >
-                        {exporting[`png_${design.id}`] ? <Loader2 size={9} className="animate-spin"/> : exported[`png_${design.id}`] ? <Check size={9} className="text-green-600"/> : <FileImage size={9}/>}
-                        PNG
+                        onClick={() => { if (!isMaxed || isSelected) toggleSelect(design.id); }}
+                        disabled={isMaxed && !isSelected}
+                        className={`w-full h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-1 border transition-all ${
+                          isSelected
+                            ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]'
+                            : isMaxed
+                              ? 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] opacity-50'
+                              : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)] hover:text-[hsl(var(--gold-dark))]'
+                        }`}>
+                        {isSelected ? <><Check size={9}/> Selected</> : <><Square size={9}/> Select</>}
                       </button>
-                      {/* SVG */}
-                      <button
-                        onClick={() => exportSVG(design)}
-                        disabled={exporting[`svg_${design.id}`]}
-                        title="Download SVG"
-                        className="flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] transition-all text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))]"
-                      >
-                        {exporting[`svg_${design.id}`] ? <Loader2 size={9} className="animate-spin"/> : exported[`svg_${design.id}`] ? <Check size={9} className="text-green-600"/> : <File size={9}/>}
-                        SVG
-                      </button>
-                      {/* PDF */}
-                      <button
-                        onClick={() => exportPDF(design)}
-                        disabled={exporting[`pdf_${design.id}`]}
-                        title="Download PDF"
-                        className="flex-1 h-6 rounded-md text-[10px] font-medium flex items-center justify-center gap-0.5 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] hover:bg-[hsl(var(--gold)/0.06)] transition-all text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))]"
-                      >
-                        {exporting[`pdf_${design.id}`] ? <Loader2 size={9} className="animate-spin"/> : exported[`pdf_${design.id}`] ? <Check size={9} className="text-green-600"/> : <FileText size={9}/>}
-                        PDF
-                      </button>
-                      {/* Fav */}
-                      <button
-                        onClick={() => toggleFavorite(design)}
-                        title={design.is_favorite ? 'Unfavorite' : 'Favorite'}
-                        className={`h-6 w-6 rounded-md flex items-center justify-center border transition-all ${
-                          design.is_favorite
-                            ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold))]'
-                            : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]'
-                        }`}
-                      >
-                        <Heart size={9} className={design.is_favorite ? 'fill-current' : ''}/>
-                      </button>
-                    </div>
+                    )}
                   </div>
                 </div>
               );
@@ -524,10 +727,9 @@ export default function StampGalleryPage() {
         )}
       </div>
 
-      {/* ── Lightbox ─────────────────────────────────────────────────────────── */}
+      {/* ── Lightbox ─────────────────────────────────────────────────────── */}
       {lightboxIdx !== null && lbDesign && (
         <div className="fixed inset-0 z-[9999] bg-black/95 flex flex-col" onWheel={handleWheel}>
-
           {/* Lightbox header */}
           <div className="flex-shrink-0 bg-black/60 backdrop-blur-sm px-4 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
@@ -543,91 +745,57 @@ export default function StampGalleryPage() {
             </div>
 
             <div className="flex items-center gap-2 flex-shrink-0">
-              {/* Zoom controls */}
               <div className="flex items-center gap-1 bg-white/10 rounded-lg p-1">
                 <button onClick={() => setZoom(z => Math.max(z - 0.25, 0.25))} className="p-1.5 rounded hover:bg-white/20 text-white transition-colors"><ZoomOut size={14}/></button>
                 <span className="text-white/80 text-xs font-mono w-12 text-center">{Math.round(zoom * 100)}%</span>
                 <button onClick={() => setZoom(z => Math.min(z + 0.25, 5))} className="p-1.5 rounded hover:bg-white/20 text-white transition-colors"><ZoomIn size={14}/></button>
                 <button onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }} className="p-1.5 rounded hover:bg-white/20 text-white/60 hover:text-white transition-colors"><RotateCcw size={13}/></button>
               </div>
-
-              {/* Favorite */}
-              <button
-                onClick={() => toggleFavorite(lbDesign)}
-                className={`p-2 rounded-lg transition-colors ${lbDesign.is_favorite ? 'bg-[hsl(var(--gold))] text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
-              >
+              <button onClick={() => toggleFavorite(lbDesign)}
+                className={`p-2 rounded-lg transition-colors ${lbDesign.is_favorite ? 'bg-[hsl(var(--gold))] text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}>
                 <Heart size={15} className={lbDesign.is_favorite ? 'fill-white' : ''}/>
               </button>
-
-              {/* Export buttons */}
-              <button
-                onClick={() => exportPNG(lbDesign, 1024)}
-                disabled={exporting[`png_${lbDesign.id}`]}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-colors"
-              >
+              <button onClick={() => exportPNG(lbDesign, 1024)} disabled={exporting[`png_${lbDesign.id}`]}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-colors">
                 {exporting[`png_${lbDesign.id}`] ? <Loader2 size={12} className="animate-spin"/> : <FileImage size={12}/>} PNG
               </button>
-              <button
-                onClick={() => exportSVG(lbDesign)}
-                disabled={exporting[`svg_${lbDesign.id}`]}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-colors"
-              >
+              <button onClick={() => exportSVG(lbDesign)} disabled={exporting[`svg_${lbDesign.id}`]}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-colors">
                 {exporting[`svg_${lbDesign.id}`] ? <Loader2 size={12} className="animate-spin"/> : <File size={12}/>} SVG
               </button>
-              <button
-                onClick={() => exportPDF(lbDesign)}
-                disabled={exporting[`pdf_${lbDesign.id}`]}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[hsl(var(--gold))] hover:opacity-90 text-white text-xs font-medium transition-colors"
-              >
+              <button onClick={() => exportPDF(lbDesign)} disabled={exporting[`pdf_${lbDesign.id}`]}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[hsl(var(--gold))] hover:opacity-90 text-white text-xs font-medium transition-colors">
                 {exporting[`pdf_${lbDesign.id}`] ? <Loader2 size={12} className="animate-spin"/> : <FileText size={12}/>} PDF
               </button>
             </div>
           </div>
 
           {/* Lightbox canvas */}
-          <div
-            className="flex-1 flex items-center justify-center overflow-hidden relative select-none"
+          <div className="flex-1 flex items-center justify-center overflow-hidden relative select-none"
             onMouseDown={onDragStart}
-            style={{ cursor: zoom > 1 ? (isDragging.current ? 'grabbing' : 'grab') : 'default' }}
-          >
-            <div
-              style={{
-                transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-                transformOrigin: 'center',
-                transition: isDragging.current ? 'none' : 'transform 0.15s ease',
-                willChange: 'transform',
-              }}
-            >
+            style={{ cursor: zoom > 1 ? (isDragging.current ? 'grabbing' : 'grab') : 'default' }}>
+            <div style={{
+              transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+              transformOrigin: 'center',
+              transition: isDragging.current ? 'none' : 'transform 0.15s ease',
+              willChange: 'transform',
+            }}>
               <div className="bg-white rounded-3xl p-10 shadow-2xl">
-                <StampSVGRenderer
-                  svgSource={lbSvg}
-                  tintColor={primaryColor}
-                  secondaryColor={secondaryColor}
-                  accentColor={accentColor}
-                  size={380}
-                />
+                <StampSVGRenderer svgSource={lbSvg} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} size={380}/>
               </div>
             </div>
 
-            {/* Prev / Next arrows */}
             {designs.length > 1 && (
               <>
-                <button
-                  onClick={goPrev}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors backdrop-blur-sm"
-                >
+                <button onClick={goPrev} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors backdrop-blur-sm">
                   <ChevronLeft size={22}/>
                 </button>
-                <button
-                  onClick={goNext}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors backdrop-blur-sm"
-                >
+                <button onClick={goNext} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors backdrop-blur-sm">
                   <ChevronRight size={22}/>
                 </button>
               </>
             )}
 
-            {/* Zoom hint */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/30 text-[10px] pointer-events-none">
               Scroll to zoom · Arrow keys to navigate · Esc to close
             </div>
@@ -639,15 +807,13 @@ export default function StampGalleryPage() {
               {designs.map((d, i) => {
                 const t = tintSvg(d.svg_source, primaryColor, secondaryColor, accentColor);
                 return (
-                  <button
-                    key={d.id}
+                  <button key={d.id}
                     onClick={() => { setLightboxIdx(i); setZoom(1); setPan({ x: 0, y: 0 }); }}
                     className={`rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
                       i === lightboxIdx
                         ? 'border-[hsl(var(--gold))] scale-105 shadow-[0_0_0_2px_hsl(var(--gold)/0.4)]'
                         : 'border-white/20 opacity-60 hover:opacity-100 hover:border-white/50'
-                    }`}
-                  >
+                    }`}>
                     <div className="w-14 h-14 bg-white flex items-center justify-center">
                       <StampSVGRenderer svgSource={t} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} size={52}/>
                     </div>
