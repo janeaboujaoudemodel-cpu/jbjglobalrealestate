@@ -477,7 +477,7 @@ export default function LogoCreator() {
             <div className="flex gap-2">
               {(["white", "black", "brand"] as const).map(bg => (
                 <button key={bg} onClick={() => setPreviewBg(bg)}
-                  className={`flex-1 rounded-xl p-3 flex flex-col items-center justify-center border-2 transition-all gap-2 ${previewBg === bg ? "border-orange-400 ring-2 ring-orange-200" : "border-[hsl(var(--border))] hover:border-orange-300"}`}
+                  className={`flex-1 rounded-xl p-3 flex flex-col items-center justify-center border-2 transition-all gap-2 ${previewBg === bg ? "border-[#C9A84C] ring-2 ring-[#C9A84C]/20" : "border-[hsl(var(--border))] hover:border-[#C9A84C]/60"}`}
                   style={{ background: bg === "white" ? "#fff" : bg === "black" ? "#111" : colors.primary }}>
                   <LogoPreview svgContent={logo.svgContent} size={40} />
                   <span className="text-[9px] font-semibold" style={{ color: bg === "white" ? "#666" : "#fff" }}>{bgLabel(bg)}</span>
@@ -509,7 +509,7 @@ export default function LogoCreator() {
               Save to Brand Assets
             </Button>
             {justSaved && (
-              <button onClick={() => navigate("/toolkit/corporate-suite")} className="text-xs text-orange-600 hover:underline flex items-center gap-1 w-full justify-center">
+              <button onClick={() => navigate("/toolkit/corporate-suite")} className="text-xs text-[#C9A84C] hover:underline flex items-center gap-1 w-full justify-center">
                 <Bookmark size={12} /> View in Brand Assets
               </button>
             )}
@@ -529,7 +529,7 @@ export default function LogoCreator() {
               <div className="flex gap-2">
                 {logoHistory.map((h, i) => (
                   <button key={h.timestamp} onClick={() => setLogo(h)}
-                    className={`relative flex-1 rounded-xl border-2 p-2 transition-all hover:border-orange-400 ${logo?.timestamp === h.timestamp ? "border-orange-400 bg-orange-50" : "border-[hsl(var(--border))]"}`}>
+                    className={`relative flex-1 rounded-xl border-2 p-2 transition-all hover:border-[#C9A84C]/60 ${logo?.timestamp === h.timestamp ? "border-[#C9A84C] bg-[#C9A84C]/10" : "border-[hsl(var(--border))]"}`}>
                     <div className="flex items-center justify-center" style={{ height: 56 }}>
                       <LogoPreview svgContent={h.svgContent} size={48} />
                     </div>
