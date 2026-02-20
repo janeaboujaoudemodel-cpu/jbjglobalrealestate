@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
 
+    <!-- Critical: prevent white flash before JS loads -->
+    <style>
+      html, body, #root { background-color: #000; margin: 0; padding: 0; }
+      #root { min-height: 100vh; }
+    </style>
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,9 +29,10 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#0a0a0a" />
 
-    <!-- DNS Prefetch -->
+    <!-- DNS Prefetch for external services -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com" />
     <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="//mdafrewypkkrildjgtey.supabase.co" />
   </head>
 
   <body>
