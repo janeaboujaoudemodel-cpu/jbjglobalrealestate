@@ -289,6 +289,7 @@ function CVPreview({
             {data.certifications && <Section label="Certs" accent={accent} scale={scale}><p style={{ fontSize: fontSize(8), color: gray }}>{data.certifications}</p></Section>}
           </div>
         </div>
+        {QrFooter}
       </div>
     );
   }
@@ -313,6 +314,7 @@ function CVPreview({
           {data.skills && <Section label="Core Skills" accent={accent} scale={scale} classic><p style={{ fontSize: fontSize(9), color: dkgray }}>{data.skills}</p></Section>}
           {data.languages && <Section label="Languages" accent={accent} scale={scale} classic><p style={{ fontSize: fontSize(9), color: dkgray }}>{data.languages}</p></Section>}
         </div>
+        {QrFooter}
       </div>
     );
   }
@@ -348,6 +350,7 @@ function CVPreview({
               {data.languages && <Section label="Languages" accent={accent} scale={scale}>{data.languages.split(",").map((l, i) => <p key={i} style={{ fontSize: fontSize(8), color: gray, margin: `${3 * scale}px 0` }}>{l.trim()}</p>)}</Section>}
             </div>
           </div>
+          {QrFooter}
         </div>
       </div>
     );
@@ -373,6 +376,7 @@ function CVPreview({
         {data.experience.some(e => e.title) && <><p style={{ fontSize: fontSize(9), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: accent, borderBottom: `1px solid ${accent}40`, paddingBottom: 2 * scale, marginBottom: 8 * scale }}>Experience</p>{data.experience.filter(e => e.title).map((exp, i) => <div key={i} style={{ marginBottom: 10 * scale }}><div style={{ display: "flex", justifyContent: "space-between" }}><p style={{ fontSize: fontSize(10), fontWeight: 700 }}>{exp.company}</p><p style={{ fontSize: fontSize(8.5), color: "#555" }}>{exp.period}</p></div><p style={{ fontSize: fontSize(9), fontStyle: "italic", color: "#444", margin: `${2 * scale}px 0` }}>{exp.title}</p>{exp.description && <p style={{ fontSize: fontSize(8.5), color: "#555", lineHeight: 1.5 }}>{exp.description}</p>}</div>)}</>}
         {data.education.some(e => e.degree) && <><p style={{ fontSize: fontSize(9), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: accent, borderBottom: `1px solid ${accent}40`, paddingBottom: 2 * scale, marginBottom: 8 * scale, marginTop: 14 * scale }}>Education</p>{data.education.filter(e => e.degree).map((edu, i) => <div key={i} style={{ marginBottom: 8 * scale }}><div style={{ display: "flex", justifyContent: "space-between" }}><p style={{ fontSize: fontSize(10), fontWeight: 700 }}>{edu.institution}</p><p style={{ fontSize: fontSize(8.5), color: "#555" }}>{edu.year}</p></div><p style={{ fontSize: fontSize(9), fontStyle: "italic", color: "#444" }}>{edu.degree}</p></div>)}</>}
         {data.skills && <><p style={{ fontSize: fontSize(9), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: accent, borderBottom: `1px solid ${accent}40`, paddingBottom: 2 * scale, marginBottom: 6 * scale, marginTop: 14 * scale }}>Skills</p><p style={{ fontSize: fontSize(9), color: "#555" }}>{data.skills}</p></>}
+        {QrFooter}
       </div>
     );
   }
@@ -394,6 +398,7 @@ function CVPreview({
         {data.skills && <><p style={{ fontSize: fontSize(9), fontWeight: 700, textTransform: "uppercase", marginBottom: 5 * scale }}>Core Competencies</p><p style={{ fontSize: fontSize(9), color: "#333", marginBottom: 14 * scale }}>{data.skills}</p></>}
         {data.experience.some(e => e.title) && <><p style={{ fontSize: fontSize(9), fontWeight: 700, textTransform: "uppercase", marginBottom: 8 * scale }}>Professional Experience</p>{data.experience.filter(e => e.title).map((exp, i) => <div key={i} style={{ marginBottom: 10 * scale }}><div style={{ display: "flex", justifyContent: "space-between" }}><p style={{ fontSize: fontSize(9.5), fontWeight: 700 }}>{exp.title} — {exp.company}</p><p style={{ fontSize: fontSize(8.5), color: "#555" }}>{exp.period}</p></div>{exp.description && <p style={{ fontSize: fontSize(8.5), color: "#444", lineHeight: 1.5, marginTop: 3 * scale }}>{exp.description}</p>}</div>)}</>}
         {data.education.some(e => e.degree) && <><p style={{ fontSize: fontSize(9), fontWeight: 700, textTransform: "uppercase", marginBottom: 8 * scale, marginTop: 12 * scale }}>Education</p>{data.education.filter(e => e.degree).map((edu, i) => <div key={i} style={{ marginBottom: 6 * scale }}><div style={{ display: "flex", justifyContent: "space-between" }}><p style={{ fontSize: fontSize(9.5), fontWeight: 700 }}>{edu.degree} — {edu.institution}</p><p style={{ fontSize: fontSize(8.5), color: "#555" }}>{edu.year}</p></div></div>)}</>}
+        {QrFooter}
       </div>
     );
   }
@@ -401,38 +406,41 @@ function CVPreview({
   // ── TIMELINE ──────────────────────────────────────────────────────────
   if (template === "timeline") {
     return (
-      <div style={{ display: "flex", background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: dkgray, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8, overflow: "hidden" }}>
-        <div style={{ width: 90 * scale, background: accent, color: white, padding: `${24 * scale}px ${12 * scale}px`, flexShrink: 0 }}>
-          <PhotoBubble url={data.photoUrl} size={44 * scale} accent={accent} name={name} />
-          <p style={{ fontSize: fontSize(8), fontWeight: 700, marginTop: 12 * scale, marginBottom: 8 * scale, opacity: 0.6, textTransform: "uppercase", letterSpacing: 1 }}>Contact</p>
-          {[data.email, data.phone, data.location].filter(Boolean).map((c, i) => <p key={i} style={{ fontSize: fontSize(7), opacity: 0.8, marginBottom: 4 * scale, wordBreak: "break-all" }}>{c}</p>)}
-          {data.skills && <><p style={{ fontSize: fontSize(7.5), fontWeight: 700, opacity: 0.6, textTransform: "uppercase", marginTop: 14 * scale, marginBottom: 6 * scale }}>Skills</p>{data.skills.split(",").slice(0, 8).map((s, i) => <p key={i} style={{ fontSize: fontSize(7.5), opacity: 0.8, marginBottom: 3 * scale }}>{s.trim()}</p>)}</>}
-          {data.languages && <><p style={{ fontSize: fontSize(7.5), fontWeight: 700, opacity: 0.6, textTransform: "uppercase", marginTop: 14 * scale, marginBottom: 6 * scale }}>Languages</p><p style={{ fontSize: fontSize(7.5), opacity: 0.8 }}>{data.languages}</p></>}
-        </div>
-        <div style={{ flex: 1, padding: `${24 * scale}px ${px}px` }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <div>
-              <h1 style={{ fontSize: resolvedNameSz ?? fontSize(20), fontWeight: resolvedWeight, fontStyle: resolvedStyle, color: accent, margin: 0 }}>{name}</h1>
-              <p style={{ fontSize: fontSize(10), color: gray, marginTop: 3 * scale, marginBottom: 16 * scale }}>{title}</p>
-            </div>
-            {LogoBadge}
+      <div style={{ display: "flex", flexDirection: "column", background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: dkgray, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8, overflow: "hidden" }}>
+        <div style={{ display: "flex" }}>
+          <div style={{ width: 90 * scale, background: accent, color: white, padding: `${24 * scale}px ${12 * scale}px`, flexShrink: 0 }}>
+            <PhotoBubble url={data.photoUrl} size={44 * scale} accent={accent} name={name} />
+            <p style={{ fontSize: fontSize(8), fontWeight: 700, marginTop: 12 * scale, marginBottom: 8 * scale, opacity: 0.6, textTransform: "uppercase", letterSpacing: 1 }}>Contact</p>
+            {[data.email, data.phone, data.location].filter(Boolean).map((c, i) => <p key={i} style={{ fontSize: fontSize(7), opacity: 0.8, marginBottom: 4 * scale, wordBreak: "break-all" }}>{c}</p>)}
+            {data.skills && <><p style={{ fontSize: fontSize(7.5), fontWeight: 700, opacity: 0.6, textTransform: "uppercase", marginTop: 14 * scale, marginBottom: 6 * scale }}>Skills</p>{data.skills.split(",").slice(0, 8).map((s, i) => <p key={i} style={{ fontSize: fontSize(7.5), opacity: 0.8, marginBottom: 3 * scale }}>{s.trim()}</p>)}</>}
+            {data.languages && <><p style={{ fontSize: fontSize(7.5), fontWeight: 700, opacity: 0.6, textTransform: "uppercase", marginTop: 14 * scale, marginBottom: 6 * scale }}>Languages</p><p style={{ fontSize: fontSize(7.5), opacity: 0.8 }}>{data.languages}</p></>}
           </div>
-          {data.summary && <Section label="Summary" accent={accent} scale={scale}><p style={{ fontSize: fontSize(9), color: gray, lineHeight: 1.6 }}>{data.summary}</p></Section>}
-          {data.experience.some(e => e.title) && <><p style={{ fontSize: 8.5 * scale, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: accent, marginBottom: 10 * scale }}>Experience</p>{data.experience.filter(e => e.title).map((exp, i) => (
-            <div key={i} style={{ display: "flex", gap: 10 * scale, marginBottom: 12 * scale }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
-                <div style={{ width: 8 * scale, height: 8 * scale, borderRadius: "50%", background: accent, flexShrink: 0 }} />
-                {i < data.experience.filter(e => e.title).length - 1 && <div style={{ width: 1.5, flex: 1, background: `${accent}30`, marginTop: 3 * scale }} />}
+          <div style={{ flex: 1, padding: `${24 * scale}px ${px}px` }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div>
+                <h1 style={{ fontSize: resolvedNameSz ?? fontSize(20), fontWeight: resolvedWeight, fontStyle: resolvedStyle, color: accent, margin: 0 }}>{name}</h1>
+                <p style={{ fontSize: fontSize(10), color: gray, marginTop: 3 * scale, marginBottom: 16 * scale }}>{title}</p>
               </div>
-              <div style={{ paddingBottom: 10 * scale }}>
-                <p style={{ fontSize: 9.5 * scale, fontWeight: 700 }}>{exp.title}</p>
-                <p style={{ fontSize: 8.5 * scale, color: accent, opacity: 0.8 }}>{exp.company} · {exp.period}</p>
-                {exp.description && <p style={{ fontSize: 8.5 * scale, color: gray, lineHeight: 1.5, marginTop: 3 * scale }}>{exp.description}</p>}
-              </div>
+              {LogoBadge}
             </div>
-          ))}</>}
-          {data.education.some(e => e.degree) && <Section label="Education" accent={accent} scale={scale}>{data.education.filter(e => e.degree).map((edu, i) => <EduEntry key={i} edu={edu} accent={accent} gray={gray} lgray={lgray} scale={scale} />)}</Section>}
+            {data.summary && <Section label="Summary" accent={accent} scale={scale}><p style={{ fontSize: fontSize(9), color: gray, lineHeight: 1.6 }}>{data.summary}</p></Section>}
+            {data.experience.some(e => e.title) && <><p style={{ fontSize: 8.5 * scale, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: accent, marginBottom: 10 * scale }}>Experience</p>{data.experience.filter(e => e.title).map((exp, i) => (
+              <div key={i} style={{ display: "flex", gap: 10 * scale, marginBottom: 12 * scale }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
+                  <div style={{ width: 8 * scale, height: 8 * scale, borderRadius: "50%", background: accent, flexShrink: 0 }} />
+                  {i < data.experience.filter(e => e.title).length - 1 && <div style={{ width: 1.5, flex: 1, background: `${accent}30`, marginTop: 3 * scale }} />}
+                </div>
+                <div style={{ paddingBottom: 10 * scale }}>
+                  <p style={{ fontSize: 9.5 * scale, fontWeight: 700 }}>{exp.title}</p>
+                  <p style={{ fontSize: 8.5 * scale, color: accent, opacity: 0.8 }}>{exp.company} · {exp.period}</p>
+                  {exp.description && <p style={{ fontSize: 8.5 * scale, color: gray, lineHeight: 1.5, marginTop: 3 * scale }}>{exp.description}</p>}
+                </div>
+              </div>
+            ))}</>}
+            {data.education.some(e => e.degree) && <Section label="Education" accent={accent} scale={scale}>{data.education.filter(e => e.degree).map((edu, i) => <EduEntry key={i} edu={edu} accent={accent} gray={gray} lgray={lgray} scale={scale} />)}</Section>}
+          </div>
         </div>
+        {QrFooter}
       </div>
     );
   }
@@ -463,6 +471,7 @@ function CVPreview({
             {(data.linkedin || data.github || data.website) && <><p style={{ fontSize: fontSize(8), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.2, color: accent, marginBottom: 6 * scale, marginTop: 14 * scale }}>Links</p>{data.linkedin && <p style={{ fontSize: fontSize(7.5), color: gray, marginBottom: 3 * scale }}>LinkedIn</p>}{data.github && <p style={{ fontSize: fontSize(7.5), color: gray, marginBottom: 3 * scale }}>GitHub</p>}{data.website && <p style={{ fontSize: fontSize(7.5), color: gray }}>Portfolio</p>}</>}
           </div>
         </div>
+        {QrFooter}
       </div>
     );
   }
@@ -489,6 +498,7 @@ function CVPreview({
         {data.experience.some(e => e.title) && <><p style={{ fontSize: fontSize(8), fontWeight: 600, textTransform: "uppercase", letterSpacing: 2, color: "#aaa", marginBottom: 10 * scale }}>Experience</p>{data.experience.filter(e => e.title).map((exp, i) => <div key={i} style={{ marginBottom: 12 * scale }}><div style={{ display: "flex", justifyContent: "space-between" }}><p style={{ fontSize: fontSize(9.5), fontWeight: 500 }}>{exp.title}</p><p style={{ fontSize: fontSize(8), color: gray }}>{exp.period}</p></div><p style={{ fontSize: fontSize(8.5), color: gray, marginTop: 2 * scale }}>{exp.company}</p>{exp.description && <p style={{ fontSize: fontSize(8.5), color: "#555", lineHeight: 1.5, marginTop: 3 * scale }}>{exp.description}</p>}</div>)}</>}
         {data.education.some(e => e.degree) && <><p style={{ fontSize: fontSize(8), fontWeight: 600, textTransform: "uppercase", letterSpacing: 2, color: "#aaa", marginBottom: 10 * scale, marginTop: 16 * scale }}>Education</p>{data.education.filter(e => e.degree).map((edu, i) => <div key={i} style={{ marginBottom: 8 * scale }}><div style={{ display: "flex", justifyContent: "space-between" }}><p style={{ fontSize: fontSize(9.5), fontWeight: 500 }}>{edu.degree}</p><p style={{ fontSize: fontSize(8), color: gray }}>{edu.year}</p></div><p style={{ fontSize: fontSize(8.5), color: gray }}>{edu.institution}</p></div>)}</>}
         {data.skills && <><p style={{ fontSize: fontSize(8), fontWeight: 600, textTransform: "uppercase", letterSpacing: 2, color: "#aaa", marginBottom: 8 * scale, marginTop: 16 * scale }}>Skills</p><p style={{ fontSize: fontSize(9), color: "#555" }}>{data.skills}</p></>}
+        {QrFooter}
       </div>
     );
   }
@@ -523,6 +533,7 @@ function CVPreview({
             </div>
           </div>
         </div>
+        {QrFooter}
       </div>
     );
   }
@@ -558,6 +569,7 @@ function CVPreview({
             {data.education.some(e => e.degree) && <><p style={{ fontSize: fontSize(8.5), fontWeight: 700, textTransform: "uppercase", color: accent, marginBottom: 8 * scale, marginTop: 14 * scale }}>Education</p>{data.education.filter(e => e.degree).map((edu, i) => <div key={i} style={{ marginBottom: 8 * scale }}><div style={{ display: "flex", justifyContent: "space-between" }}><p style={{ fontSize: fontSize(9), fontWeight: 600 }}>{edu.degree}</p><p style={{ fontSize: fontSize(8), color: "#888" }}>{edu.year}</p></div><p style={{ fontSize: fontSize(8.5), color: "#666" }}>{edu.institution}</p></div>)}</>}
           </div>
         </div>
+        {QrFooter}
       </div>
     );
   }
@@ -704,7 +716,7 @@ function PhotoUploadPanel({
 }
 
 // ─── PDF Export ───────────────────────────────────────────────────────────────
-async function exportCVAsPDF(data: CVData, template: Template) {
+async function exportCVAsPDF(data: CVData, template: Template, options?: { qrEnabled?: boolean; qrData?: string; qrColor?: string; qrSize?: number }) {
   const { PDFDocument, rgb, StandardFonts } = await import("pdf-lib");
   const W = 595, H = 842;
   const pdfDoc = await PDFDocument.create();
@@ -807,6 +819,23 @@ async function exportCVAsPDF(data: CVData, template: Template) {
     if (data.skills) { y -= 4; page.drawLine({ start: { x: 36, y }, end: { x: W - 36, y }, thickness: 0.5, color: rgb(0.8,0.8,0.8) }); y -= 16; page.drawText("CORE SKILLS", { x: 36, y, size: 8, font: bold, color: black }); y -= 13; page.drawText(data.skills, { x: 36, y, size: 9, font: regular, color: dkgray }); }
   }
 
+  // Embed QR code in PDF if enabled
+  if (options?.qrEnabled && options?.qrData) {
+    try {
+      const qrImgUrl = buildCVQrUrl(options.qrData, options.qrColor || "#000000", 200);
+      const resp = await fetch(qrImgUrl);
+      const buf  = await resp.arrayBuffer();
+      const qrPdfImage = await pdfDoc.embedPng(new Uint8Array(buf));
+      const qrPx = Math.max(48, Math.min(120, options.qrSize ?? 64));
+      page.drawImage(qrPdfImage, { x: W - qrPx - 20, y: 16, width: qrPx, height: qrPx });
+      const c = (options.qrColor || "#9ca3af").replace("#", "");
+      const qrClr = rgb(parseInt(c.slice(0,2),16)/255, parseInt(c.slice(2,4),16)/255, parseInt(c.slice(4,6),16)/255);
+      page.drawText("SCAN TO CONNECT", { x: W - qrPx - 20, y: qrPx + 22, size: 6, font: bold, color: qrClr, opacity: 0.6 });
+    } catch {
+      // Silent fail — don't block PDF export
+    }
+  }
+
   const pdfBytes = await pdfDoc.save();
   const blob = new Blob([pdfBytes.buffer as ArrayBuffer], { type: "application/pdf" });
   const url  = URL.createObjectURL(blob);
@@ -880,6 +909,11 @@ export default function CVResumeBuilder() {
     photoUrl: "",
   });
 
+  // Derived QR values (after data state)
+  const cvQrData = (data.name || data.email) ? buildCVQrData(data) : "";
+  const cvQrColor_ = cvQrColor || (TEMPLATES.find(t => t.id === template)?.accent ?? "#111827");
+  const cvQrUrl = cvQrEnabled && cvQrData ? buildCVQrUrl(cvQrData, cvQrColor_, cvQrSize) : "";
+
   const set = (k: keyof CVData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setData(prev => ({ ...prev, [k]: e.target.value }));
 
@@ -952,7 +986,7 @@ export default function CVResumeBuilder() {
     setExportMenuOpen(false);
     try {
       if (format === "pdf") {
-        await exportCVAsPDF(data, template);
+        await exportCVAsPDF(data, template, { qrEnabled: cvQrEnabled, qrData: cvQrData, qrColor: cvQrColor_, qrSize: cvQrSize });
         toast.success("CV exported as PDF!");
       } else {
         await exportCVAsImage(format);
@@ -1152,6 +1186,51 @@ export default function CVResumeBuilder() {
                       ))}
                     </div>
                   </div>
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* QR Code */}
+          <Collapsible open={cvQrOpen} onOpenChange={setCvQrOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <QrCode size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">QR Code</span>
+                    {cvQrEnabled && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
+                  </div>
+                  <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
+                    <Switch checked={cvQrEnabled} onCheckedChange={setCvQrEnabled} />
+                    <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${cvQrOpen ? "rotate-180" : ""}`} />
+                  </div>
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 pt-3 border-t border-[hsl(var(--border))] space-y-4">
+                  <div className="bg-[hsl(var(--gold)/0.05)] border border-[hsl(var(--gold)/0.2)] rounded-xl p-3 text-[10px] text-[hsl(var(--muted-foreground))]">
+                    Adds a vCard QR to the CV footer. Recipients scan to save your contact instantly — same logic as your Business Card.
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">QR Size</p>
+                      <span className="text-[10px] font-mono">{cvQrSize}px</span>
+                    </div>
+                    <input type="range" min={40} max={120} step={4} value={cvQrSize} onChange={e => setCvQrSize(Number(e.target.value))} className="w-full h-1.5 accent-[hsl(var(--gold))]" />
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))] mb-2">QR Colour</p>
+                    <div className="flex items-center gap-3">
+                      <input type="color" value={cvQrColor_} onChange={e => setCvQrColor(e.target.value)} className="w-8 h-8 rounded-lg cursor-pointer border border-[hsl(var(--border))]" />
+                      <button onClick={() => setCvQrColor("")} className="text-[9px] text-[hsl(var(--gold-dark))] hover:underline">Reset to template colour</button>
+                    </div>
+                  </div>
+                  {cvQrEnabled && cvQrUrl && (
+                    <div className="flex justify-center">
+                      <img src={cvQrUrl} alt="QR preview" className="rounded-lg border border-[hsl(var(--border))]" style={{ width: cvQrSize, height: cvQrSize }} />
+                    </div>
+                  )}
                 </div>
               </CollapsibleContent>
             </div>
@@ -1408,6 +1487,10 @@ export default function CVResumeBuilder() {
                 fontSizeOverride={cvFontSize}
                 logoUrl={logoUrl || undefined}
                 logoSize={logoSize}
+                qrEnabled={cvQrEnabled}
+                qrUrl={cvQrUrl}
+                qrSize={cvQrSize}
+                qrAccent={cvQrColor_}
               />
             </motion.div>
           </AnimatePresence>
