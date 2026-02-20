@@ -49,6 +49,7 @@ import { ExtractionJobsPanel } from "@/components/listing-admin/ExtractionJobsPa
 import SyncDashboard from "@/components/listing-admin/SyncDashboard";
 import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel";
 import { SourceCountsPanel } from "@/components/listing-admin/SourceCountsPanel";
+import { EmergencyMirrorPanel } from "@/components/listing-admin/EmergencyMirrorPanel";
 // OffPlanInquiryCTA removed from admin per user request
 import { RefreshCw, Globe, Check } from "lucide-react";
 
@@ -116,7 +117,7 @@ const ListingAdmin = () => {
     }
     
     // Handle syncTab URL param for Data Ops sub-tabs (updated tab names)
-    if (syncTab && ['reelly', 'approvals', 'updates', 'external'].includes(syncTab)) {
+    if (syncTab && ['reelly', 'approvals', 'updates', 'external', 'emergency'].includes(syncTab)) {
       setDataOpsTab(syncTab);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -660,6 +661,12 @@ const ListingAdmin = () => {
                   <Database className="w-4 h-4 mr-2" />
                   External Sources
                 </TabsTrigger>
+                <TabsTrigger 
+                  value="emergency"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-100 data-[state=active]:to-red-200 data-[state=active]:text-red-800 text-red-600"
+                >
+                  🚨 Emergency Mirror
+                </TabsTrigger>
               </TabsList>
               
               <TabsContent value="reelly" className="mt-0">
@@ -675,6 +682,9 @@ const ListingAdmin = () => {
               </TabsContent>
               <TabsContent value="external" className="mt-0">
                 <ExtractionJobsPanel />
+              </TabsContent>
+              <TabsContent value="emergency" className="mt-0">
+                <EmergencyMirrorPanel />
               </TabsContent>
             </Tabs>
           </div>
