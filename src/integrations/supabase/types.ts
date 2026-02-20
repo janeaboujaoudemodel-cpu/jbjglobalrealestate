@@ -5431,6 +5431,7 @@ export type Database = {
           founded_year: number | null
           headquarters: string | null
           id: string
+          is_hidden: boolean | null
           license_number: string | null
           logo_bg_color: string | null
           logo_url: string | null
@@ -5459,6 +5460,7 @@ export type Database = {
           founded_year?: number | null
           headquarters?: string | null
           id?: string
+          is_hidden?: boolean | null
           license_number?: string | null
           logo_bg_color?: string | null
           logo_url?: string | null
@@ -5487,6 +5489,7 @@ export type Database = {
           founded_year?: number | null
           headquarters?: string | null
           id?: string
+          is_hidden?: boolean | null
           license_number?: string | null
           logo_bg_color?: string | null
           logo_url?: string | null

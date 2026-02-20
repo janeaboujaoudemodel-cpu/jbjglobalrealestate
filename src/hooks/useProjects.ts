@@ -156,15 +156,20 @@ export function useCommunities() {
   });
 }
 
-export function useDevelopers() {
+export function useDevelopers(includeHidden = false) {
   return useQuery({
-    queryKey: ["developers"],
+    queryKey: ["developers", includeHidden],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("developers")
         .select("*")
         .order("rank");
       
+      if (!includeHidden) {
+        query = query.or("is_hidden.is.null,is_hidden.eq.false");
+      }
+      
+      const { data, error } = await query;
       if (error) throw error;
       return data as unknown as Developer[];
     },
@@ -350,5 +355,27 @@ export function useDeveloper(developerSlug: string) {
       return data as unknown as Developer | null;
     },
     enabled: !!developerSlug,
+  });
+}
+
+export interface AreaItem {
+  id: string;
+  name: string;
+  slug: string;
+  emirate: string;
+}
+
+export function useAreas() {
+  return useQuery({
+    queryKey: ["areas-all"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("areas")
+        .select("id, name, slug, emirate")
+        .eq("is_active", true)
+        .order("name");
+      if (error) throw error;
+      return data as AreaItem[];
+    },
   });
 }
