@@ -53,12 +53,23 @@ const QuizResults = () => {
           documents:project_documents(id, file_url, file_name, document_type)
         `)
         .in("slug", projectSlugs)
-        .neq("sale_status", "sold_out"); // exclude sold-out projects
+        .not("is_sold_out", "eq", true)
+        .not("sale_status", "ilike", "%sold%");
 
       if (error) throw error;
 
-      return (data || [])
-        .filter(p => p.cover_image_url || (p.images && p.images.length > 0)) // must have an image
+      // Normalize images: inject cover_image_url as first image if project_images is empty
+      const normalized = (data || []).map(p => ({
+        ...p,
+        images: p.images?.length > 0
+          ? p.images
+          : p.cover_image_url
+            ? [{ id: "cover", image_url: p.cover_image_url, alt_text: p.name, display_order: 0 }]
+            : [],
+      }));
+
+      return normalized
+        .filter(p => p.cover_image_url || p.images.length > 0) // must have an image
         .sort((a, b) => projectSlugs.indexOf(a.slug) - projectSlugs.indexOf(b.slug));
     },
     enabled: projectSlugs.length > 0,
@@ -244,7 +255,7 @@ Best regards`);
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button
               onClick={handleDownloadReport}
-              className="bg-white/10 border border-white/30 text-white hover:bg-white/20"
+              className="bg-white text-zinc-900 hover:bg-zinc-100 font-semibold shadow-md"
             >
               <Download className="w-4 h-4 mr-2" />
               Download Report
@@ -317,7 +328,7 @@ Best regards`);
                   <div className="flex items-center gap-3 mb-6">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="border-purple-400/60 text-purple-200 hover:bg-purple-800/40">
+                        <Button variant="outline" size="sm" className="border-white/40 text-white bg-white/10 hover:bg-white/20">
                           <Award className="w-4 h-4 mr-2" />
                           {badges[projects[0].id] ? 'Change Badge' : 'Add Badge'}
                         </Button>
@@ -361,7 +372,7 @@ Best regards`);
               {projects.slice(1).map((project, index) => {
                 const badge = badges[project.id];
                 return (
-                  <div key={project.id} className="relative group">
+                  <div key={project.id} className="relative group flex flex-col h-full">
                     <div className="absolute -top-2 -left-2 z-10 w-8 h-8 bg-purple-900 rounded-full flex items-center justify-center border border-purple-700">
                       <span className="text-white text-sm font-bold">#{index + 2}</span>
                     </div>
@@ -375,15 +386,17 @@ Best regards`);
                     <div className="absolute top-3 right-3 z-10">
                       <FavoriteButton projectId={project.id} size="sm" showShortlist={true} />
                     </div>
-                    <ProjectCard project={project} currency="AED" sizeUnit="sqft" />
+                    <div className="flex-1">
+                      <ProjectCard project={project} currency="AED" sizeUnit="sqft" />
+                    </div>
                     {/* Badge Assignment */}
                     <div className="mt-2">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="w-full border-purple-400/60 text-purple-200 hover:bg-purple-800/40 text-xs">
-                             <Award className="w-3 h-3 mr-1" />
-                             {badge ? 'Change Badge' : 'Add Badge'}
-                           </Button>
+                          <Button variant="outline" size="sm" className="w-full border-white/40 text-white bg-white/10 hover:bg-white/20 text-xs">
+                            <Award className="w-3 h-3 mr-1" />
+                            {badge ? 'Change Badge' : 'Add Badge'}
+                          </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="bg-zinc-900 border-purple-900/30">
                           <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-yellow-400 hover:bg-purple-900/30">
@@ -412,65 +425,84 @@ Best regards`);
 
         {/* Action Cards */}
         <div className="border border-purple-500/40 rounded-2xl p-6 bg-purple-950/20 mb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* AI Comparison Card */}
-          <div className="bg-zinc-900/80 rounded-2xl p-6 border border-purple-900/30 backdrop-blur-sm">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30">
-                <Sparkles className="w-6 h-6 text-white" />
+          <h3 className="text-white text-lg font-semibold mb-5 flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-purple-400" />
+            Want More AI Power?
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* AI Comparison Card */}
+            <div className="bg-zinc-900/80 rounded-2xl p-6 border border-purple-900/30 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold">AI Comparison</h3>
+                  <p className="text-zinc-500 text-sm">Instant analysis</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-white font-semibold">AI Comparison</h3>
-                <p className="text-zinc-500 text-sm">Instant analysis</p>
-              </div>
+              <p className="text-zinc-400 text-sm mb-4">
+                Generate an AI-powered comparison table with star ratings, price analysis, and recommendations.
+              </p>
+              <Link to="/compare">
+                <Button className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white shadow-lg shadow-purple-500/20">
+                  Compare with AI
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
             </div>
-            <p className="text-zinc-400 text-sm mb-4">
-              Generate an AI-powered comparison table with star ratings, price analysis, and recommendations.
-            </p>
-            <Link to="/compare">
-              <Button className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white shadow-lg shadow-purple-500/20">
-                Compare with AI
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
 
-          {/* Professional Evaluation Card */}
-          <div className="bg-zinc-900/80 rounded-2xl p-6 border border-purple-900/30 backdrop-blur-sm">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg shadow-gold/30">
-                <Users className="w-6 h-6 text-black" />
+            {/* Professional Evaluation Card */}
+            <div className="bg-zinc-900/80 rounded-2xl p-6 border border-purple-900/30 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg shadow-gold/30">
+                  <Users className="w-6 h-6 text-black" />
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold">Property Consultant</h3>
+                  <p className="text-zinc-500 text-sm">Expert consultation</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-white font-semibold">Property Consultant</h3>
-                <p className="text-zinc-500 text-sm">Expert consultation</p>
-              </div>
+              <p className="text-zinc-400 text-sm mb-4">
+                Request a personalized evaluation from our property consultants with detailed market insights.
+              </p>
+              <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
+                <Button className="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2">
+                  <Users className="w-5 h-5 text-white" />
+                  Request Evaluation
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </a>
             </div>
-            <p className="text-zinc-400 text-sm mb-4">
-              Request a personalized evaluation from our property consultants with detailed market insights.
-            </p>
-            <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
-              <Button className="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2 py-3">
-                <Users className="w-5 h-5 text-white" />
-                <span className="text-base">Request Evaluation</span>
-                <ArrowRight className="w-5 h-5" />
+
+            {/* Regenerate / AI Finder Card */}
+            <div className="bg-zinc-900/80 rounded-2xl p-6 border border-purple-900/30 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-700 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                  <RefreshCw className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold">AI Home Finder</h3>
+                  <p className="text-zinc-500 text-sm">New search</p>
+                </div>
+              </div>
+              <p className="text-zinc-400 text-sm mb-4">
+                Not satisfied? Retake the AI quiz with different preferences to discover new matches.
+              </p>
+              <Button
+                onClick={() => navigate("/quiz")}
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-500 hover:to-purple-600 text-white font-semibold shadow-lg shadow-indigo-500/20"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Regenerate with AI
               </Button>
-            </a>
+            </div>
           </div>
         </div>
-        </div>
 
-        {/* Actions */}
+        {/* Footer */}
         <div className="text-center">
-
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-            <Button 
-              onClick={() => navigate("/quiz")}
-              className="font-semibold px-6 py-3 bg-purple-700 hover:bg-purple-600 text-white border-0"
-            >
-              <RefreshCw className="w-5 h-5 mr-2" />
-              <span className="text-base">Regenerate with AI</span>
-            </Button>
             <Link to="/">
               <Button className="bg-white text-zinc-900 hover:bg-zinc-100 font-semibold px-6 py-3">
                 Browse All Properties
@@ -478,7 +510,6 @@ Best regards`);
               </Button>
             </Link>
           </div>
-          
           <p className="text-purple-300/80 text-xs">
             Powered & Made by{" "}
             <span className="text-white font-medium">JBJ Global Real Estate</span>
