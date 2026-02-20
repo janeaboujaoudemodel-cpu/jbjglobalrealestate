@@ -557,7 +557,7 @@ const HeroSearchBar = () => {
         {/* Buy/Rent Dropdown - Opens upward */}
         <Popover>
           <PopoverTrigger asChild>
-            <button className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/20 backdrop-blur-md border border-white/40 text-white hover:bg-white/30 transition-all text-sm font-semibold shadow-lg">
+            <button className="flex items-center gap-2 h-[38px] px-4 rounded-lg bg-white/20 backdrop-blur-md border border-white/40 text-white hover:bg-white/30 transition-all text-sm font-semibold shadow-lg">
               <Home className="w-4 h-4 text-gold" />
               <span className="font-semibold">{purpose === 'buy' ? 'Buy' : 'Rent'}</span>
               <ChevronDown className="w-3.5 h-3.5 text-white/80" />
@@ -594,7 +594,7 @@ const HeroSearchBar = () => {
         {/* Currency Dropdown - Opens upward with scroll */}
         <Popover>
           <PopoverTrigger asChild>
-            <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-gold/40 text-white hover:bg-white/20 transition-all text-sm font-semibold min-w-[56px] justify-center">
+            <button className="flex items-center gap-2 h-[38px] px-4 rounded-lg bg-white/10 backdrop-blur-sm border border-gold/40 text-white hover:bg-white/20 transition-all text-sm font-semibold min-w-[64px] justify-center">
               <DollarSign className="w-3.5 h-3.5 text-gold" />
               <span className="font-semibold">{currentCurrency.code}</span>
               <ChevronDown className="w-3 h-3 text-white/60" />
@@ -634,11 +634,11 @@ const HeroSearchBar = () => {
         </Popover>
 
         {/* Area Unit — Split toggle button (no dropdown) */}
-        <div className="flex items-center rounded-lg overflow-hidden border border-gold/40 backdrop-blur-sm text-sm shadow-lg">
+        <div className="flex items-stretch rounded-lg overflow-hidden border border-gold/40 backdrop-blur-sm text-sm shadow-lg h-[38px]">
           <button
             onClick={() => { setAreaUnit('sqft'); setSizeRange('any'); }}
             className={cn(
-              "flex items-center gap-1.5 px-4 py-2 transition-all font-semibold min-w-[56px] justify-center",
+              "flex items-center gap-1.5 px-4 transition-all font-semibold min-w-[56px] justify-center",
               areaUnit === 'sqft'
                 ? "bg-gradient-to-r from-gold to-gold-dark text-black"
                 : "bg-white/10 text-white hover:bg-white/20"
@@ -647,11 +647,11 @@ const HeroSearchBar = () => {
             <Ruler className="w-3.5 h-3.5" />
             sqft
           </button>
-          <div className="w-px h-5 bg-gold/30" />
+          <div className="w-px bg-gold/30" />
           <button
             onClick={() => { setAreaUnit('sqm'); setSizeRange('any'); }}
             className={cn(
-              "flex items-center gap-1.5 px-4 py-2 transition-all font-semibold min-w-[56px] justify-center",
+              "flex items-center gap-1.5 px-4 transition-all font-semibold min-w-[56px] justify-center",
               areaUnit === 'sqm'
                 ? "bg-gradient-to-r from-gold to-gold-dark text-black"
                 : "bg-white/10 text-white hover:bg-white/20"
@@ -675,7 +675,7 @@ const HeroSearchBar = () => {
               value={locationSearch}
               onChange={(e) => setLocationSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/60 px-3 text-sm font-medium min-w-[140px] w-full"
+              className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white px-3 text-sm font-medium min-w-[180px] w-full"
             />
           </div>
           {/* Premium Gradient Divider */}
