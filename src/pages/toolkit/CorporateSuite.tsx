@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Stamp, CreditCard, FileText, FileEdit, Globe, Presentation,
-  ArrowRight, Sparkles, ChevronRight, LayoutGrid,
+  ArrowRight, Sparkles, ChevronRight, LayoutGrid, ImageIcon,
+  Building2, PenLine, ScanLine, Table2, FolderOpen,
 } from "lucide-react";
 
 const tools = [
@@ -22,11 +23,11 @@ const tools = [
   {
     id: "business-card",
     title: "Business Card",
-    subtitle: "Visual card designer",
-    description: "Design stunning business cards with 6 templates, custom color system, live preview at 3.5\"×2\" ratio and PDF export.",
+    subtitle: "Visual card designer + AI extract",
+    description: "Design stunning business cards with 6 templates, AI smart extractor from photo, live 3.5\"×2\" preview and PDF export.",
     icon: CreditCard,
     href: "/toolkit/corporate-suite/business-card",
-    badge: "New",
+    badge: "AI",
     badgeColor: "bg-blue-100 text-blue-800",
     gradient: "from-blue-500 to-indigo-600",
     glow: "shadow-blue-100",
@@ -35,8 +36,8 @@ const tools = [
   {
     id: "cv-resume",
     title: "CV / Resume",
-    subtitle: "AI resume builder",
-    description: "Build a professional CV with AI-generated summary, 4 executive templates, section-by-section editor and PDF export.",
+    subtitle: "AI resume builder + extract",
+    description: "Build a professional CV with AI-generated summary, 4 executive templates, upload-to-extract mode and PDF export.",
     icon: FileText,
     href: "/toolkit/corporate-suite/cv-resume",
     badge: "AI",
@@ -48,8 +49,8 @@ const tools = [
   {
     id: "cover-letter",
     title: "Cover Letter",
-    subtitle: "AI cover letter generator",
-    description: "Generate tailored cover letters with Gemini AI. Choose tone (Professional/Confident/Casual), 3 layouts, export as PDF.",
+    subtitle: "AI cover letter + extract",
+    description: "Generate tailored cover letters with Gemini AI. Upload existing letter to extract and redesign. 3 layouts, export as PDF.",
     icon: FileEdit,
     href: "/toolkit/corporate-suite/cover-letter",
     badge: "AI",
@@ -57,6 +58,32 @@ const tools = [
     gradient: "from-purple-500 to-violet-600",
     glow: "shadow-purple-100",
     iconBg: "from-purple-500 to-violet-600",
+  },
+  {
+    id: "logo-creator",
+    title: "Logo Creator",
+    subtitle: "AI logo generator",
+    description: "Generate professional logos using AI. Choose industry tone, style, and colors. Export PNG & SVG. Regenerate with one click.",
+    icon: ImageIcon,
+    href: "/toolkit/corporate-suite/logo-creator",
+    badge: "AI",
+    badgeColor: "bg-orange-100 text-orange-800",
+    gradient: "from-orange-400 to-red-500",
+    glow: "shadow-orange-100",
+    iconBg: "from-orange-400 to-red-500",
+  },
+  {
+    id: "company-profile",
+    title: "Company Profile",
+    subtitle: "AI profile builder",
+    description: "Build a multi-page company profile PDF with AI-expanded content. 3 premium templates, team, services, and contact sections.",
+    icon: Building2,
+    href: "/toolkit/corporate-suite/company-profile",
+    badge: "AI",
+    badgeColor: "bg-teal-100 text-teal-800",
+    gradient: "from-teal-500 to-cyan-600",
+    glow: "shadow-teal-100",
+    iconBg: "from-teal-500 to-cyan-600",
   },
   {
     id: "presentation",
@@ -83,6 +110,58 @@ const tools = [
     gradient: "from-cyan-500 to-sky-600",
     glow: "shadow-cyan-100",
     iconBg: "from-cyan-500 to-sky-600",
+  },
+  {
+    id: "e-sign",
+    title: "E-Sign / DocuSign",
+    subtitle: "Digital signature workflow",
+    description: "Send documents for signature with multi-signer workflows, AI auto-detect fields, audit trail PDF, and reminder system.",
+    icon: PenLine,
+    href: "/e-signature",
+    badge: "Pro",
+    badgeColor: "bg-indigo-100 text-indigo-800",
+    gradient: "from-indigo-500 to-blue-600",
+    glow: "shadow-indigo-100",
+    iconBg: "from-indigo-500 to-blue-600",
+  },
+  {
+    id: "scan-sign",
+    title: "Scan & Sign",
+    subtitle: "Document scanning + signing",
+    description: "Scan physical documents, sign digitally, and export as PDF. AI-powered document processing and signature placement.",
+    icon: ScanLine,
+    href: "/document-scanner",
+    badge: "AI",
+    badgeColor: "bg-slate-100 text-slate-800",
+    gradient: "from-slate-500 to-gray-600",
+    glow: "shadow-slate-100",
+    iconBg: "from-slate-500 to-gray-600",
+  },
+  {
+    id: "spreadsheet",
+    title: "Spreadsheet",
+    subtitle: "Smart spreadsheet tool",
+    description: "Create and edit spreadsheets with formula support, export to Excel/CSV. Fully featured data management tool.",
+    icon: Table2,
+    href: "/spreadsheet",
+    badge: "Pro",
+    badgeColor: "bg-green-100 text-green-800",
+    gradient: "from-green-500 to-emerald-600",
+    glow: "shadow-green-100",
+    iconBg: "from-green-500 to-emerald-600",
+  },
+  {
+    id: "documents",
+    title: "Documents",
+    subtitle: "Document management",
+    description: "Create, store and manage your business documents. Rich text editor with export capabilities and version history.",
+    icon: FolderOpen,
+    href: "/documents",
+    badge: "Pro",
+    badgeColor: "bg-yellow-100 text-yellow-800",
+    gradient: "from-yellow-400 to-orange-500",
+    glow: "shadow-yellow-100",
+    iconBg: "from-yellow-400 to-orange-500",
   },
 ];
 
@@ -132,8 +211,8 @@ export default function CorporateSuite() {
                 Corporate Document Suite
               </h1>
               <p className="text-[hsl(var(--muted-foreground))] mt-2 text-sm max-w-2xl leading-relaxed">
-                Professional tools to create company stamps, business cards, CVs, cover letters,
-                presentations and landing pages — all AI-powered, all in one place.
+                12 professional tools — stamps, business cards, CVs, logos, company profiles, e-signatures,
+                spreadsheets and more. All AI-powered, all in one place.
               </p>
             </div>
           </div>
@@ -141,9 +220,9 @@ export default function CorporateSuite() {
           {/* Stats bar */}
           <div className="mt-8 flex flex-wrap gap-6">
             {[
-              { label: "Tools", value: "6" },
-              { label: "AI-Powered", value: "4" },
-              { label: "Export formats", value: "PDF, PNG, HTML" },
+              { label: "Tools", value: "12" },
+              { label: "AI-Powered", value: "8" },
+              { label: "Export formats", value: "PDF, PNG, SVG, HTML" },
             ].map(s => (
               <div key={s.label} className="flex items-baseline gap-2">
                 <span className="text-xl font-bold text-[hsl(var(--foreground))]">{s.value}</span>
@@ -164,13 +243,12 @@ export default function CorporateSuite() {
                 key={tool.id}
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.07, duration: 0.35, ease: "easeOut" }}
+                transition={{ delay: i * 0.05, duration: 0.3, ease: "easeOut" }}
                 onClick={() => navigate(tool.href)}
-                className={`group text-left bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm hover:shadow-xl hover:${tool.glow} transition-all duration-300 overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))]`}
-                style={{ borderTop: `3px solid` }}
+                className={`group text-left bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))]`}
               >
                 {/* Color accent top border */}
-                <div className={`h-[3px] w-full bg-gradient-to-r ${tool.gradient} -mt-[1px]`} />
+                <div className={`h-[3px] w-full bg-gradient-to-r ${tool.gradient}`} />
 
                 <div className="p-6">
                   {/* Icon + Badge row */}

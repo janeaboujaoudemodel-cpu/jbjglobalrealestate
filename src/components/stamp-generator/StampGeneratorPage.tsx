@@ -87,6 +87,10 @@ export default function StampGeneratorPage() {
 
   // Font family
   const [fontFamily, setFontFamily] = useState<string>(STAMP_FONTS[0].value);
+  // Typography controls
+  const [fontBold, setFontBold] = useState(false);
+  const [fontItalic, setFontItalic] = useState(false);
+  const [manualFontSize, setManualFontSize] = useState<number | null>(null);
 
   // Left panel tab
   const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text'>('color');
@@ -559,22 +563,81 @@ export default function StampGeneratorPage() {
 
               {/* ── Fonts tab ── */}
               {leftTab === 'fonts' && (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <p className="text-xs font-semibold text-[hsl(var(--foreground))]">Typography</p>
-                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Choose the font style applied to your stamp text.</p>
-                  <div className="space-y-2">
-                    {STAMP_FONTS.map(f => (
-                      <button key={f.value} onClick={() => setFontFamily(f.value)}
-                        className={`w-full text-left p-3 rounded-xl border-2 transition-all ${fontFamily === f.value ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'}`}>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-xs font-medium text-[hsl(var(--foreground))]">{f.label.split(' (')[0]}</p>
-                            <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{f.label.match(/\(([^)]+)\)/)?.[1] || ''}</p>
-                          </div>
-                          <span className="text-base font-bold text-[hsl(var(--foreground))] opacity-60" style={{ fontFamily: f.value }}>Aa</span>
-                        </div>
+
+                  {/* Bold / Italic toggles */}
+                  <div>
+                    <p className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Style</p>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setFontBold(v => !v)}
+                        className={`flex-1 py-2 rounded-xl border-2 text-sm font-bold transition-all ${fontBold ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--foreground))]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'}`}
+                        title="Bold text"
+                      >
+                        B
                       </button>
-                    ))}
+                      <button
+                        onClick={() => setFontItalic(v => !v)}
+                        className={`flex-1 py-2 rounded-xl border-2 text-sm italic font-medium transition-all ${fontItalic ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--foreground))]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'}`}
+                        title="Italic text"
+                      >
+                        I
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Font size */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Font Size</p>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => setManualFontSize(null)}
+                          className={`text-[9px] px-1.5 py-0.5 rounded border transition-all ${manualFontSize === null ? 'border-[hsl(var(--gold))] text-[hsl(var(--gold-dark))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'}`}
+                        >
+                          Auto
+                        </button>
+                        {manualFontSize !== null && (
+                          <span className="text-[10px] font-bold text-[hsl(var(--foreground))]">{manualFontSize}pt</span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setManualFontSize(v => Math.max(6, (v ?? 10) - 1))}
+                        className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--foreground))] font-bold text-sm flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-all"
+                      >−</button>
+                      <input
+                        type="range" min={6} max={16} step={0.5}
+                        value={manualFontSize ?? 10}
+                        onChange={e => setManualFontSize(parseFloat(e.target.value))}
+                        className="flex-1 accent-[hsl(var(--gold))]"
+                      />
+                      <button
+                        onClick={() => setManualFontSize(v => Math.min(16, (v ?? 10) + 1))}
+                        className="w-7 h-7 rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--foreground))] font-bold text-sm flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-all"
+                      >+</button>
+                    </div>
+                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1.5">Range: 6–16 pt · Auto = fit to stamp</p>
+                  </div>
+
+                  <div className="border-t border-[hsl(var(--border))] pt-3">
+                    <p className="text-[10px] text-[hsl(var(--muted-foreground))] mb-2">Font Family</p>
+                    <div className="space-y-2">
+                      {STAMP_FONTS.map(f => (
+                        <button key={f.value} onClick={() => setFontFamily(f.value)}
+                          className={`w-full text-left p-3 rounded-xl border-2 transition-all ${fontFamily === f.value ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'}`}>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-xs font-medium text-[hsl(var(--foreground))]">{f.label.split(' (')[0]}</p>
+                              <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{f.label.match(/\(([^)]+)\)/)?.[1] || ''}</p>
+                            </div>
+                            <span className={`text-base text-[hsl(var(--foreground))] opacity-60 ${fontBold ? 'font-bold' : 'font-medium'} ${fontItalic ? 'italic' : ''}`} style={{ fontFamily: f.value }}>Aa</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
@@ -602,7 +665,7 @@ export default function StampGeneratorPage() {
               <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
                 <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Selected Preview</p>
                 <div className="flex items-center justify-center py-2">
-                  <StampSVGRenderer svgSource={selectedSvg} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} size={140}/>
+                  <StampSVGRenderer svgSource={selectedSvg} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={`${fontBold ? 'font-weight:bold;' : ''}${fontItalic ? 'font-style:italic;' : ''}${fontFamily}`} size={140}/>
                 </div>
               </div>
             )}

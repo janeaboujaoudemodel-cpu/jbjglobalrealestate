@@ -38,6 +38,8 @@ const BusinessCardDesigner = lazy(() => import("./components/corporate-suite/Bus
 const CVResumeBuilder = lazy(() => import("./components/corporate-suite/CVResumeBuilder"));
 const CoverLetterGenerator = lazy(() => import("./components/corporate-suite/CoverLetterGenerator"));
 const LandingPageBuilder = lazy(() => import("./components/corporate-suite/LandingPageBuilder"));
+const LogoCreator = lazy(() => import("./components/corporate-suite/LogoCreator"));
+const CompanyProfileBuilder = lazy(() => import("./components/corporate-suite/CompanyProfileBuilder"));
 // NEW: Business Suite Pages
 const AllToolsSuite = lazy(() => import("./pages/business-suite/AllToolsSuite"));
 const RealEstateSuite = lazy(() => import("./pages/business-suite/RealEstateSuite"));
