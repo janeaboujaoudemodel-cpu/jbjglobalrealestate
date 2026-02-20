@@ -7,7 +7,7 @@ import {
   LayoutGrid, Check, ImageIcon, ChevronDown, QrCode, Move,
   Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
-  Save, Palette, Zap, Star, Cpu, Minus,
+  Save, Palette, Zap, Star, Cpu, Minus, Type,
 } from "lucide-react";
 import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import { Button } from "@/components/ui/button";
@@ -150,16 +150,22 @@ const QR_POSITION_STYLE: Record<QrPosition, React.CSSProperties> = {
 // ─── Card Preview Component ───────────────────────────────────────────────────
 function CardFace({
   data, template, primary, secondary, accent, side = "front", scale = 1, shapeStyle, aiDesignData, cardShape,
+  fontFamily, fontWeight, fontStyle, nameFontSize,
 }: {
   data: CardData; template: Template; primary: string;
   secondary: string; accent: string; side?: "front" | "back"; scale?: number;
   shapeStyle?: React.CSSProperties; aiDesignData?: AiDesignData | null;
   cardShape?: CardShape;
+  fontFamily?: string; fontWeight?: string; fontStyle?: string; nameFontSize?: number | null;
 }) {
   const name    = data.name    || "Your Name";
   const title   = data.title   || "Job Title";
   const company = data.company || "Company Name";
   const initial = name.charAt(0).toUpperCase();
+
+  const resolvedFontWeight = fontWeight || "800";
+  const resolvedFontStyle  = fontStyle  || "normal";
+  const resolvedNameSize   = nameFontSize != null ? nameFontSize * scale : 18 * scale;
 
   const baseStyle: React.CSSProperties = {
     width: "100%",
@@ -167,7 +173,7 @@ function CardFace({
     borderRadius: 12,
     overflow: "hidden",
     boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
-    fontFamily: "'Helvetica Neue', Arial, sans-serif",
+    fontFamily: fontFamily || "'Helvetica Neue', Arial, sans-serif",
     position: "relative",
     userSelect: "none",
     ...shapeStyle,
@@ -178,7 +184,7 @@ function CardFace({
     return (
       <div style={{ ...baseStyle, background: "#ffffff", border: `2px solid ${primary}`, display: "flex", alignItems: "center", padding: `${14 * scale}px ${20 * scale}px`, gap: 16 * scale }}>
         <div style={{ borderRight: `3px solid ${primary}`, paddingRight: 16 * scale, minWidth: 120 * scale }}>
-          <p style={{ fontSize: 14 * scale, fontWeight: 800, color: primary, margin: 0, lineHeight: 1.2 }}>{name}</p>
+          <p style={{ fontSize: resolvedNameSize * 0.78, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: primary, margin: 0, lineHeight: 1.2 }}>{name}</p>
           <p style={{ fontSize: 9 * scale, color: "#555", margin: `${3 * scale}px 0 0`, fontWeight: 500 }}>{title}</p>
           <p style={{ fontSize: 8.5 * scale, color: "#999", margin: `${2 * scale}px 0 0`, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" }}>{company}</p>
         </div>
@@ -250,7 +256,7 @@ function CardFace({
         <div style={{ position: "relative", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: `${20 * scale}px ${24 * scale}px` }}>
           <div>
             <p style={{ fontSize: 9 * scale, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: tc, opacity: 0.65, margin: 0 }}>{company}</p>
-            <h2 style={{ fontSize: 18 * scale, fontWeight: 800, color: tc, margin: `${4 * scale}px 0 ${2 * scale}px` }}>{name}</h2>
+            <h2 style={{ fontSize: resolvedNameSize, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: tc, margin: `${4 * scale}px 0 ${2 * scale}px` }}>{name}</h2>
             <p style={{ fontSize: 10 * scale, color: tc, opacity: 0.8, margin: 0 }}>{title}</p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 3 * scale }}>
@@ -272,7 +278,7 @@ function CardFace({
         <div style={{ position: "relative", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: `${20 * scale}px ${24 * scale}px` }}>
           <div>
             <p style={{ fontSize: 9 * scale, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: secondary, opacity: 0.65, margin: 0 }}>{company}</p>
-            <h2 style={{ fontSize: 18 * scale, fontWeight: 800, color: secondary, margin: `${4 * scale}px 0 ${2 * scale}px` }}>{name}</h2>
+            <h2 style={{ fontSize: resolvedNameSize, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: secondary, margin: `${4 * scale}px 0 ${2 * scale}px` }}>{name}</h2>
             <p style={{ fontSize: 10 * scale, color: secondary, opacity: 0.8, margin: 0 }}>{title}</p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 3 * scale }}>
@@ -292,7 +298,7 @@ function CardFace({
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 6, background: primary }} />
         <div style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: `${18 * scale}px ${20 * scale}px ${18 * scale}px ${24 * scale}px` }}>
           <div>
-            <h2 style={{ fontSize: 17 * scale, fontWeight: 800, color: primary, margin: `0 0 ${2 * scale}px` }}>{name}</h2>
+            <h2 style={{ fontSize: resolvedNameSize * 0.94, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: primary, margin: `0 0 ${2 * scale}px` }}>{name}</h2>
             <p style={{ fontSize: 10 * scale, color: "#555", margin: `0 0 ${4 * scale}px` }}>{title}</p>
             <p style={{ fontSize: 8.5 * scale, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#aaa", margin: 0 }}>{company}</p>
           </div>
@@ -311,7 +317,7 @@ function CardFace({
     return (
       <div style={{ ...baseStyle, background: "#fafafa" }}>
         <div style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", padding: `${20 * scale}px ${28 * scale}px` }}>
-          <h2 style={{ fontSize: 20 * scale, fontWeight: 300, letterSpacing: 1, color: "#111", margin: `0 0 ${8 * scale}px` }}>{name}</h2>
+          <h2 style={{ fontSize: resolvedNameSize * 1.1, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, letterSpacing: 1, color: "#111", margin: `0 0 ${8 * scale}px` }}>{name}</h2>
           <div style={{ width: 28, height: 2, background: primary, marginBottom: 8 * scale }} />
           <p style={{ fontSize: 9.5 * scale, color: "#666", margin: `0 0 ${12 * scale}px` }}>{title} · {company}</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 3 * scale }}>
@@ -331,7 +337,7 @@ function CardFace({
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${primary}, ${accent})` }} />
         <div style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: `${22 * scale}px ${24 * scale}px ${18 * scale}px` }}>
           <div>
-            <h2 style={{ fontSize: 20 * scale, fontWeight: 900, textTransform: "uppercase", letterSpacing: 1, color: primary, margin: `0 0 ${3 * scale}px` }}>{name}</h2>
+            <h2 style={{ fontSize: resolvedNameSize * 1.1, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, textTransform: "uppercase", letterSpacing: 1, color: primary, margin: `0 0 ${3 * scale}px` }}>{name}</h2>
             <p style={{ fontSize: 9 * scale, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, color: "#aaa", margin: 0 }}>{title}</p>
           </div>
           <div>
@@ -357,7 +363,7 @@ function CardFace({
             <div style={{ width: 36 * scale, height: 36 * scale, borderRadius: "50%", background: primary, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 8 * scale }}>
               <span style={{ fontSize: 15 * scale, fontWeight: 800, color: secondary }}>{initial}</span>
             </div>
-            <h2 style={{ fontSize: 15 * scale, fontWeight: 800, color: "#111", margin: `0 0 ${2 * scale}px` }}>{name}</h2>
+            <h2 style={{ fontSize: resolvedNameSize * 0.83, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: "#111", margin: `0 0 ${2 * scale}px` }}>{name}</h2>
             <p style={{ fontSize: 9 * scale, color: primary, fontWeight: 600, margin: `0 0 ${2 * scale}px` }}>{title}</p>
             <p style={{ fontSize: 8.5 * scale, color: "#999", margin: `0 0 ${10 * scale}px` }}>{company}</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 2.5 * scale }}>
@@ -377,7 +383,7 @@ function CardFace({
         <div style={{ flex: 1, display: "flex", alignItems: "center", padding: `${14 * scale}px ${24 * scale}px` }}>
           <div>
             <p style={{ fontSize: 8 * scale, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", opacity: 0.55, margin: `0 0 ${4 * scale}px` }}>{company}</p>
-            <h2 style={{ fontSize: 18 * scale, fontWeight: 800, margin: `0 0 ${3 * scale}px` }}>{name}</h2>
+            <h2 style={{ fontSize: resolvedNameSize, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, margin: `0 0 ${3 * scale}px` }}>{name}</h2>
             <p style={{ fontSize: 10 * scale, opacity: 0.8, margin: 0 }}>{title}</p>
           </div>
         </div>
@@ -403,6 +409,7 @@ function CardCanvas({
   editLayout, fieldPositions, onFieldMove,
   qrEnabled, qrData, qrSize, qrColor, qrBgColor, qrPosition,
   logoUrl, logoSize, logoPos, onLogoMove, aiDesignData,
+  fontFamily, fontWeight, fontStyle, nameFontSize,
 }: {
   data: CardData; template: Template; backTemplate: Template; primary: string; secondary: string; accent: string;
   backPrimary: string; backSecondary: string; backAccent: string;
@@ -413,6 +420,7 @@ function CardCanvas({
   logoUrl: string; logoSize: number; logoPos: { x: number; y: number };
   onLogoMove: (pos: { x: number; y: number }) => void;
   aiDesignData: AiDesignData | null;
+  fontFamily?: string; fontWeight?: string; fontStyle?: string; nameFontSize?: number | null;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef<{
@@ -519,6 +527,10 @@ function CardCanvas({
         shapeStyle={shapeStyle}
         aiDesignData={aiDesignData}
         cardShape={cardShape}
+        fontFamily={fontFamily}
+        fontWeight={fontWeight}
+        fontStyle={fontStyle}
+        nameFontSize={nameFontSize}
       />
 
       {/* Logo overlay — shows on BOTH front and back */}
@@ -890,6 +902,13 @@ export default function BusinessCardDesigner() {
   const [aiStyle, setAiStyle] = useState("geometric");
   const [aiDesignData, setAiDesignData] = useState<AiDesignData | null>(null);
   const [isGeneratingDesign, setIsGeneratingDesign] = useState(false);
+
+  // Typography
+  const [typographyOpen, setTypographyOpen] = useState(false);
+  const [cardFontFamily, setCardFontFamily] = useState("'Helvetica Neue', Arial, sans-serif");
+  const [cardFontBold, setCardFontBold] = useState(false);
+  const [cardFontItalic, setCardFontItalic] = useState(false);
+  const [cardFontSize, setCardFontSize] = useState<number | null>(null);
 
   const [data, setData] = useState<CardData>({
     name: "", title: "", company: "", phone: "", email: "", website: "", address: "",
@@ -1282,8 +1301,104 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
             </div>
           </Collapsible>
 
+          {/* Typography panel */}
+          <Collapsible open={typographyOpen} onOpenChange={setTypographyOpen}>
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Type size={13} className="text-[hsl(var(--gold))]" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Typography</span>
+                    {(cardFontBold || cardFontItalic || cardFontSize != null) && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
+                  </div>
+                  <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${typographyOpen ? "rotate-180" : ""}`} />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 border-t border-[hsl(var(--border))] space-y-4 pt-3">
+                  {/* Bold / Italic toggles */}
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Style</Label>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setCardFontBold(v => !v)}
+                        className={`w-10 h-10 rounded-lg border-2 font-bold text-sm transition-all ${cardFontBold ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"}`}
+                      >
+                        B
+                      </button>
+                      <button
+                        onClick={() => setCardFontItalic(v => !v)}
+                        className={`w-10 h-10 rounded-lg border-2 italic font-semibold text-sm transition-all ${cardFontItalic ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]" : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]"}`}
+                      >
+                        I
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Font size stepper */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))]">Font Size</Label>
+                      <div className="flex items-center gap-1.5">
+                        {cardFontSize != null && (
+                          <button onClick={() => setCardFontSize(null)} className="text-[9px] text-[hsl(var(--muted-foreground))] underline hover:text-[hsl(var(--foreground))]">Auto</button>
+                        )}
+                        <span className="text-[10px] font-semibold text-[hsl(var(--foreground))]">{cardFontSize != null ? `${cardFontSize}pt` : "Auto"}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setCardFontSize(v => Math.max(8, (v ?? 18) - 0.5))}
+                        className="w-8 h-8 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-colors"
+                      ><Minus size={12} /></button>
+                      <div className="flex-1">
+                        <Slider
+                          min={8} max={18} step={0.5}
+                          value={[cardFontSize ?? 18]}
+                          onValueChange={([v]) => setCardFontSize(v)}
+                        />
+                      </div>
+                      <button
+                        onClick={() => setCardFontSize(v => Math.min(18, (v ?? 18) + 0.5))}
+                        className="w-8 h-8 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center hover:border-[hsl(var(--gold)/0.5)] transition-colors text-lg leading-none"
+                      >+</button>
+                    </div>
+                  </div>
+
+                  {/* Font family picker */}
+                  <div>
+                    <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">Font Family</Label>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {([
+                        { label: "Helvetica", value: "'Helvetica Neue', Arial, sans-serif" },
+                        { label: "Georgia",   value: "Georgia, 'Times New Roman', serif" },
+                        { label: "Garamond",  value: "Garamond, 'Palatino Linotype', serif" },
+                        { label: "Courier",   value: "'Courier New', Courier, monospace" },
+                        { label: "Futura",    value: "'Century Gothic', 'Trebuchet MS', sans-serif" },
+                      ] as { label: string; value: string }[]).map(f => (
+                        <button
+                          key={f.value}
+                          onClick={() => setCardFontFamily(f.value)}
+                          className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all text-left truncate ${
+                            cardFontFamily === f.value
+                              ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
+                              : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.4)]"
+                          }`}
+                          style={{ fontFamily: f.value }}
+                        >
+                          {f.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
           {/* QR Code panel */}
           <Collapsible open={qrOpen} onOpenChange={setQrOpen}>
+
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
               <CollapsibleTrigger asChild>
                 <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
@@ -1608,6 +1723,10 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                         scale={0.5}
                         shapeStyle={{ aspectRatio: "3.5 / 2", borderRadius: 0 }}
                         aiDesignData={aiDesignData}
+                        fontFamily={cardFontFamily}
+                        fontWeight={cardFontBold ? "bold" : undefined}
+                        fontStyle={cardFontItalic ? "italic" : undefined}
+                        nameFontSize={cardFontSize}
                       />
                       <div className="bg-[hsl(var(--muted))] px-3 py-1.5 text-center">
                         <button
@@ -1739,6 +1858,10 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                     logoPos={logoPos}
                     onLogoMove={setLogoPos}
                     aiDesignData={aiDesignData}
+                    fontFamily={cardFontFamily}
+                    fontWeight={cardFontBold ? "bold" : undefined}
+                    fontStyle={cardFontItalic ? "italic" : undefined}
+                    nameFontSize={cardFontSize}
                   />
                 </motion.div>
               </AnimatePresence>
@@ -1777,6 +1900,10 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                       scale={0.45}
                       shapeStyle={{ aspectRatio: "3.5 / 2", borderRadius: 0 }}
                       aiDesignData={t.id === "ai-design" ? aiDesignData : null}
+                      fontFamily={cardFontFamily}
+                      fontWeight={cardFontBold ? "bold" : undefined}
+                      fontStyle={cardFontItalic ? "italic" : undefined}
+                      nameFontSize={cardFontSize}
                     />
                     {/* F/B badges */}
                     <div className="absolute top-1 left-1 flex gap-0.5">
