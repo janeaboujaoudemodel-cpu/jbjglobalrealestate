@@ -1,164 +1,146 @@
 
-# Verification Report & Fix Plan — Corporate Suite
+# Business Card Designer — 6-Bug Fix + Feature Enhancements
 
-## Findings Summary
-
-### Issues Found (4 bugs to fix)
+## Problems Identified (from code review + user feedback)
 
 ---
 
-### Bug 1 — Company Profile route is missing (Critical)
+### Bug 1 — AI Design generator always fails (Critical)
 
-`CompanyProfileBuilder` is imported in `App.tsx` (line 42) but has **no registered route**. The Corporate Suite hub card points to `/toolkit/corporate-suite/company-profile`, but navigating there shows a blank page.
+`handleGenerateDesign` (line 961) calls `supabase.functions.invoke("gemini-chat")` — this function **does not exist** in `supabase/functions/`. Every single "Generate Design" click fails with "Design generation failed." 
 
-**Fix:** Add one route line in `App.tsx`.
+**Fix:** Create a new dedicated `supabase/functions/ai-card-design-generator/index.ts` edge function that calls the Lovable AI gateway directly (same pattern as `ai-logo-generator`), and update `BusinessCardDesigner.tsx` to call it.
 
 ---
 
-### Bug 2 — Logo Creator "Save to Brand Assets" will fail at runtime (Critical)
+### Bug 2 — Back color default mismatch (UX confusion)
 
-The `design_assets` table schema (from the live database) has:
+The default state has `backColorIdx = 6` (Onyx black) but the user reports seeing navy blue. The fundamental UX problem is: when the user picks a color, it's unclear if it targets "front" or "back." The Colors panel has two separate sections but the visual connection to the front/back toggle isn't clear.
 
-```
-file_url: string  ← REQUIRED (not nullable)
-```
+**Fix:** 
+- Add a **"Match Front Color"** shortcut button in the Back Color section
+- Add a **"Match Back Color"** shortcut button in the Front Color section
+- Make the Front/Back toggle tabs in the preview **clickable color dots** that open the color panel and scroll to the relevant picker
+- Add a pure black preset to the presets: currently `Onyx = #111827` (dark gray, not true black). Add `#000000` pure black option.
 
-There is **no `svg_content` column**. `LogoCreator.tsx` line 204–209 does:
+---
+
+### Bug 3 — Emoji icons look cheap in AI Design panel (UX)
+
+Lines 1517–1534: Tone selectors use raw emoji characters (`⚡`, `✦`, `◈`, `○`). Industry selectors use emoji prefixes (`🏙`, `💻`, `👗`, etc.). These render inconsistently across devices and look amateurish.
+
+**Fix:** Replace all emoji with clean text-only labels. Use a small Lucide icon from the existing import set (e.g., `Zap`, `Star`, `Cpu`, `Circle` for tone), and text-only industry labels.
+
+---
+
+### Bug 4 — Vertical card appears too large in preview (UX)
+
+The preview container is `max-w-[400px]`. The vertical card (`2/3.5` ratio) at 400px wide becomes 700px tall — way outside the visible area.
+
+**Fix:** Add a `maxHeight` constraint on the card preview container, capped at `340px`. When the aspect ratio is "taller than wide" (vertical, digital), scale the card width down so it fits within the height cap instead.
+
+---
+
+### Feature 1 — "Select as Front" / "Select as Back" on template cards
+
+Currently the "All Templates Preview" grid (lines 1774–1810) only applies a template to BOTH sides with one click. The user wants to mix and match — e.g., "Modern" front with "Minimal" back.
+
+**Implement:**
+- Split template state into `frontTemplate` and `backTemplate` (replacing single `template`)
+- Each mini-card in the grid shows two pill buttons on hover: **"Set Front"** and **"Set Back"**
+- The main preview shows `frontTemplate` when `side === "front"` and `backTemplate` when `side === "back"`
+- The left panel Template picker shows the currently active side's template
+- A small badge on each mini-card shows "F" (gold) and/or "B" (dark) indicators
+
+---
+
+### Feature 2 — Email Signature as a card shape/format
+
+Add "Email Signature" as an additional format option in the Card Shape section. This gives the business card info as an email-friendly horizontal banner.
+
+**Implement:**
+- Add `"email-signature"` to `CardShape` type
+- Add it to `CARD_SHAPES` array with a `Mail` icon and ratio `"600 / 200"` (3:1 landscape)
+- Add a special `CardFace` render path for `email-signature` shape that uses HTML-styled email-safe layout (name bold, contact details inline)
+- In the preview when `email-signature` is selected, show a helpful tooltip: "Email signature format — use the HTML export option"
+- Auto-suggest a "Regenerate" button specifically for email signature format
+
+---
+
+## Technical Implementation
+
+### New Edge Function: `supabase/functions/ai-card-design-generator/index.ts`
+
 ```typescript
-await supabase.from("design_assets").insert({
-  svg_content: logo.svgContent,   // column doesn't exist
-  // file_url is missing entirely — required field!
-} as ... never);                  // TypeScript cast hack to hide the error
+// Replaces the broken "gemini-chat" call
+// Accepts the same payload as handleGenerateDesign builds
+// Returns JSON: { elements: AiSvgElement[], bgColor, textColor, accentColor, colors[] }
 ```
 
-This will throw a Supabase error every time. The SVG content needs to be stored differently — either as a data URL in `file_url`, or uploaded to storage as a `.svg` file.
+Uses `google/gemini-2.5-flash` via the Lovable AI gateway with a strict JSON schema prompt (same pattern as `ai-logo-generator/index.ts`).
 
-**Fix:** Store the SVG as a data URI in `file_url` (e.g., `data:image/svg+xml;base64,...`) which is a valid URL string and fits the column. Remove the broken `as never` cast.
+### State Changes in `BusinessCardDesigner.tsx`
 
----
+```typescript
+// Replace:
+const [template, setTemplate] = useState<Template>("modern");
 
-### Bug 3 — Stamp Bold/Italic/FontSize controls have no effect on the stamp grid (Critical)
+// With:
+const [frontTemplate, setFrontTemplate] = useState<Template>("modern");
+const [backTemplate, setBackTemplate] = useState<Template>("bold");
 
-The UI for Bold, Italic, and Font Size exists and the state variables (`fontBold`, `fontItalic`, `manualFontSize`) update correctly — but they are **never applied to the SVG renderer**:
+// Derived active template for the preview:
+const activeTemplate = side === "front" ? frontTemplate : backTemplate;
+```
 
-- `StampSVGRenderer` only has one typography prop: `fontFamily`. It has no `fontWeight`, `fontStyle`, or `fontSize` props.
-- The concept grid's `ConceptCard` (line 1012) only passes `fontFamily` — never passes bold/italic/size.
-- The "Selected Preview" panel (line 668) does a broken workaround: it concatenates CSS properties into the fontFamily string (`font-weight:bold;Arial`), which won't work because `StampSVGRenderer` replaces `font-family="..."` attribute values, not inline style properties.
+### Color Presets — Add Pure Black
 
-**Fix (three-part):**
-1. Add `fontWeight`, `fontStyle`, `fontSize` props to `StampSVGRenderer` — apply them via regex replacements on the SVG source (replacing `font-weight="..."`, `font-style="..."`, and `font-size="..."` attributes).
-2. Pass `fontBold`, `fontItalic`, `manualFontSize` through `ConceptCard` to `StampSVGRenderer`.
-3. Fix the "Selected Preview" rendering call to pass them separately.
+```typescript
+{ primary: "#000000", secondary: "#C8A766", label: "Pure Black", accent: "#C8A766" },
+```
+Add this to `COLOR_PRESETS` so users can select true `#000000`.
 
----
+### Template Card UI — Front/Back assignment
 
-### Bug 4 — "Company Profile" hub card exists but tool has no dedicated builder route
-
-The Corporate Suite hub shows 12 tools including "Company Profile" pointing to `/toolkit/corporate-suite/company-profile`. The `CompanyProfileBuilder` component exists at `src/components/corporate-suite/CompanyProfileBuilder.tsx` but is unused — no route is registered.
-
-This is the same as Bug 1 (missing route for `CompanyProfileBuilder`).
-
----
-
-## What is NOT broken
-
-- Logo Creator page itself loads correctly (route is registered at line 716).
-- Logo generation via `ai-logo-generator` edge function is wired up properly.
-- Stamp color system, font family selector, text editor, and favorites all work.
-- Bold/Italic/FontSize **UI controls** render correctly and toggle state — only the SVG rendering doesn't respond.
-- All other Corporate Suite tools have valid routes.
-
----
-
-## Technical Implementation Plan
-
-### File 1: `src/App.tsx`
-Add missing route:
 ```tsx
-<Route path="/toolkit/corporate-suite/company-profile" element={<CompanyProfileBuilder />} />
+// Each template mini-card in "All Templates Preview" gets:
+<div className="absolute inset-0 opacity-0 group-hover:opacity-100 ...">
+  <button onClick={() => setFrontTemplate(t.id)}>Set Front</button>
+  <button onClick={() => setBackTemplate(t.id)}>Set Back</button>
+</div>
+// Plus indicator badges:
+{frontTemplate === t.id && <span>F</span>}
+{backTemplate === t.id && <span>B</span>}
 ```
 
-### File 2: `src/components/corporate-suite/LogoCreator.tsx`
-Fix `handleSaveToAssets` to store SVG as a base64 data URI in `file_url`:
-```typescript
-const svgBase64 = btoa(unescape(encodeURIComponent(logo.svgContent)));
-const dataUri = `data:image/svg+xml;base64,${svgBase64}`;
+### Vertical Card Preview Height Fix
 
-await supabase.from("design_assets").insert({
-  user_id: session.user.id,
-  asset_type: "logo",
-  name: `${name} Logo`,
-  file_url: dataUri,        // required field — store SVG as data URI
-});
-```
-
-### File 3: `src/components/stamp-generator/StampSVGRenderer.tsx`
-Add 3 new props and apply them via regex on the SVG source:
-```typescript
-interface Props {
-  // ... existing ...
-  fontWeight?: "normal" | "bold";
-  fontStyle?: "normal" | "italic";
-  fontSize?: number | null;  // pt value, null = no override
-}
-
-// Inside the component, after fontFamily replacement:
-if (fontWeight) {
-  tinted = tinted.replace(/font-weight="[^"]*"/gi, `font-weight="${fontWeight}"`);
-  tinted = tinted.replace(/font-weight:\s*[^;'"]+/gi, `font-weight:${fontWeight}`);
-}
-if (fontStyle) {
-  tinted = tinted.replace(/font-style="[^"]*"/gi, `font-style="${fontStyle}"`);
-  tinted = tinted.replace(/font-style:\s*[^;'"]+/gi, `font-style:${fontStyle}`);
-}
-if (fontSize != null) {
-  // SVG font-size is in px; 10pt ≈ 13.3px but stamps use relative px values
-  // We scale: replace existing font-size values proportionally
-  // Simpler: override all non-tiny font-size attrs (> 4px)
-  tinted = tinted.replace(/font-size="(\d+(?:\.\d+)?)"/gi, (_, px) => {
-    const orig = parseFloat(px);
-    if (orig < 4) return `font-size="${px}"`;
-    return `font-size="${fontSize}"`;
-  });
-}
-```
-
-### File 4: `src/components/stamp-generator/StampGeneratorPage.tsx`
-Pass bold/italic/size from state through to `ConceptCard` and the Selected Preview renderer:
 ```tsx
-// ConceptCard interface — add 3 new props:
-fontBold?: boolean;
-fontItalic?: boolean;
-manualFontSize?: number | null;
-
-// In ConceptCard's StampSVGRenderer call:
-<StampSVGRenderer
-  fontFamily={fontFamily}
-  fontWeight={fontBold ? "bold" : "normal"}
-  fontStyle={fontItalic ? "italic" : "normal"}
-  fontSize={manualFontSize}
-  ...
-/>
-
-// In "Selected Preview" panel (line 668) — fix broken string concatenation:
-<StampSVGRenderer
-  fontFamily={fontFamily}
-  fontWeight={fontBold ? "bold" : "normal"}
-  fontStyle={fontItalic ? "italic" : "normal"}
-  fontSize={manualFontSize}
-  ...
-/>
+// In the card preview container (line 1720):
+const isVertical = ["vertical", "digital"].includes(cardShape);
+// Apply max-height: 340px and auto width scaling
+<div style={{ maxHeight: isVertical ? 340 : undefined, width: isVertical ? "auto" : "100%" }}>
 ```
 
 ---
 
 ## Files Changed
 
-| File | Change | Scope |
+| File | Action | Change |
 |---|---|---|
-| `src/App.tsx` | Add `CompanyProfileBuilder` route | 1 line |
-| `src/components/corporate-suite/LogoCreator.tsx` | Fix `handleSaveToAssets` to use `file_url` | ~8 lines |
-| `src/components/stamp-generator/StampSVGRenderer.tsx` | Add `fontWeight`, `fontStyle`, `fontSize` props + regex replacements | ~20 lines |
-| `src/components/stamp-generator/StampGeneratorPage.tsx` | Pass bold/italic/size to `ConceptCard` and both `StampSVGRenderer` calls | ~15 lines |
+| `supabase/functions/ai-card-design-generator/index.ts` | **Create** | New edge function replacing broken `gemini-chat` call |
+| `supabase/config.toml` | **Edit** | Register new edge function with `verify_jwt = false` |
+| `src/components/corporate-suite/BusinessCardDesigner.tsx` | **Edit** | Fix all 6 bugs + features above |
 
-No database migrations needed. No new edge functions needed.
+### Key changes to `BusinessCardDesigner.tsx`:
+1. Split `template` → `frontTemplate` + `backTemplate`
+2. Fix `handleGenerateDesign` to call `ai-card-design-generator` instead of `gemini-chat`
+3. Fix `handleAiQrStyle` similarly (also calls `gemini-chat`) — replace with direct AI gateway call or reuse the new edge function
+4. Remove all emoji from Tone + Industry selectors → clean text + Lucide icons
+5. Add pure black `#000000` preset to `COLOR_PRESETS`
+6. Add "Match Front/Back" shortcut buttons in color pickers
+7. Fix vertical card preview height with `maxHeight` constraint
+8. Add `"email-signature"` shape to `CARD_SHAPES` + `CardFace` render path
+9. Update "All Templates Preview" grid with "Set Front" / "Set Back" hover buttons and F/B badges
+
+No database migrations needed.
