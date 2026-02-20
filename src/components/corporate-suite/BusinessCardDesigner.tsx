@@ -798,6 +798,28 @@ async function exportCardAsPDF(
     });
   }
 
+  // Embed QR on back page (reuse already-fetched qrImg from front page block)
+  if (qrEnabled && qrData) {
+    try {
+      const qrImgUrl = buildQrUrl(qrData, qrColor, qrBgColor, qrSize);
+      const resp = await fetch(qrImgUrl);
+      const arrBuf = await resp.arrayBuffer();
+      const qrImg = await pdfDoc.embedPng(arrBuf);
+      const qrPt = (qrSize / 96) * 72;
+      const positions: Record<QrPosition, { x: number; y: number }> = {
+        "bottom-right": { x: W - qrPt - 8, y: 8 },
+        "bottom-left":  { x: 8,             y: 8 },
+        "top-right":    { x: W - qrPt - 8, y: H - qrPt - 8 },
+        "top-left":     { x: 8,             y: H - qrPt - 8 },
+        "center":       { x: W / 2 - qrPt / 2, y: H / 2 - qrPt / 2 },
+      };
+      const pos = positions[qrPosition];
+      backPage.drawImage(qrImg, { x: pos.x, y: pos.y, width: qrPt, height: qrPt });
+    } catch (err) {
+      console.warn("QR back page embed failed:", err);
+    }
+  }
+
   const pdfBytes = await pdfDoc.save();
   const blob = new Blob([pdfBytes.buffer as ArrayBuffer], { type: "application/pdf" });
   const url  = URL.createObjectURL(blob);
@@ -1428,7 +1450,12 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
                           ] as { id: QrContentType; label: string }[]).map(opt => (
                             <button
                               key={opt.id}
-                              onClick={() => setQrContentType(opt.id)}
+                              onClick={() => {
+                                setQrContentType(opt.id);
+                                if (opt.id === "url" && !qrCustomContent && data.website) {
+                                  setQrCustomContent(data.website);
+                                }
+                              }}
                               className={`text-[10px] py-1.5 px-2 rounded-lg border font-semibold transition-all ${
                                 qrContentType === opt.id
                                   ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]"
