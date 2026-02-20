@@ -1,134 +1,189 @@
 
-# Fix Stamp Arc Text + Add Monogram Asset Library Across All Corporate Suite Tools
+# Business Card Designer — Full Upgrade: Card Shapes, QR Code, Drag-to-Rearrange, AI Customization
 
-## Issues Being Fixed
+## What Exists Today
 
-### Issue 1 — Stamp Live Preview: Arabic Text Too Small, Text Not Filling Circle
+The Business Card Designer at `/toolkit/corporate-suite/business-card` currently has:
+- 6 design templates (Modern, Classic, Minimal, Bold, Creative, Corporate) — all horizontal, standard 3.5"×2" ratio
+- 8 color presets
+- Brand asset library (logo/monogram upload)
+- Front/back flip toggle
+- PDF export via pdf-lib
+- No QR code support
+- No card shape options (all are standard horizontal rectangles)
+- No drag-to-rearrange for text fields
 
-**Root cause in `LiveStampPreview.tsx`:**
-
-The arc sweep is currently **160°** from -160° to 160°. This leaves visible gaps at the 9 o'clock and 3 o'clock positions (sides of the circle). The text visually looks cramped and small because the arc it travels on is too short.
-
-The fix is to increase the sweep to **175°** (from -177.5° to 177.5°) so both English (top) and Arabic (bottom) arcs run nearly the full diameter of the circle, filling it horizontally. The font size budget is also adjusted upward since more arc length is now available.
-
-**Also:** When `iconStyle === 'UPLOADED_LOGO'`, the image size `innerRx * 0.55` is only ~55% of the inner ring — which is the correct center zone. This part is fine. The visual impression of it being "small" is that the arc text is not framing it properly. Once the arcs fill the circle, the center logo will look correctly proportioned.
-
-### Issue 2 — Business Card & All Tools: Missing Monogram/Logo Asset Panel
-
-No tool currently has a place to upload, save, and reuse a monogram/logo. The `design_assets` table already exists in the database (`id, user_id, project_id, name, asset_type, file_url, thumbnail_url, metadata, created_at`) — it just isn't used anywhere in the Corporate Suite.
-
-### Issue 3 — Arabic Text Direction in Bottom Arc
-
-The bottom arc currently goes from 20° sweeping 160° clockwise. For Arabic RTL text on the bottom arc, the text appears **left-to-right along the arc** which reads incorrectly. Arabic text on the bottom arc needs to be rendered on a **reversed path** (counter-clockwise) so characters flow right-to-left as expected, centered at the bottom.
+The project already uses `api.qrserver.com` for QR code generation (used in Certificate Generator and Market Report). No new library needed.
 
 ---
 
-## What Will Be Built
+## Everything This Plan Implements
 
-### Part 1 — Fix Stamp Arc Text Coverage (`LiveStampPreview.tsx`)
+### Part 1 — Card Shape System (New)
 
-**Change the arc parameters:**
-- Top arc: start `-177.5°`, sweep `175°` (nearly full top semicircle)  
-- Bottom arc: start `2.5°`, sweep `175°` (nearly full bottom semicircle)  
-- Arc radius: keep `innerRx - 6` (text stays inside inner ring)  
-- Font size cap: raise from `Math.min(10, ...)` to `Math.min(11, ...)` now that more arc length is available  
-- Arabic bottom arc: use a **counter-clockwise** path so RTL text reads naturally
+Add a `CardShape` type and a shape selector panel in the left sidebar. Each shape changes how the card's container is rendered in the preview.
 
-**Arabic RTL arc fix:** SVG `textPath` doesn't natively support RTL arc direction. The workaround is to define the bottom Arabic arc path in **reverse** (clockwise from 180° going backwards, or using a separate reversed arc) and use `startOffset="50%"` with `text-anchor="middle"`. This makes Arabic flow from right-to-left along the bottom curve as expected.
+**7 Card Shapes:**
 
-### Part 2 — Brand Asset Library (`BrandAssetLibrary.tsx` — New Shared Component)
+| Shape | Aspect Ratio | Container Style |
+|---|---|---|
+| Horizontal | 3.5 / 2 | Standard rectangle (current default) |
+| Vertical | 2 / 3.5 | Portrait rectangle |
+| Square | 1 / 1 | Equal-width square |
+| Rounded Square | 1 / 1 | Extra large border-radius (40px) |
+| Wide | 4 / 1.5 | Ultra-wide panoramic |
+| Digital Screen | 9 / 16 | Phone-sized, tall vertical |
+| Ticket | 5 / 2 | Long horizontal like a boarding pass |
 
-A reusable panel component that all Corporate Suite tools can embed. It:
+For each shape, the `CardFace` component adapts font scaling and layout. A new `shapeStyle` helper function returns the container dimensions and border-radius override. The shape setting is stored in a `cardShape` state variable.
 
-1. **Shows saved assets** from the `design_assets` table filtered by `asset_type` (`monogram`, `stamp`, `signature`, `logo`)
-2. **Lets users upload** a new asset (image file → stored in Lovable Cloud storage → URL saved in `design_assets`)
-3. **Insert/apply** an asset into the current tool's design with one click
-4. **Resize handle** — a slider (50%–200%) to scale the applied monogram within the current preview
-5. **Delete assets** from the library
+Note: Triangle and true circle shapes would clip text unreadably — the design will offer "Rounded Square" (a squircle) as the closest practical rounded option, and digital screen format for modern vertical use cases.
 
-**Asset types supported:**
-- `monogram` — logo/monogram image
-- `stamp` — saved stamp PNG
-- `signature` — handwritten signature image
-- `logo` — full company logo
+### Part 2 — QR Code Generator (New)
 
-**Storage:** Will use a `brand-assets` Lovable Cloud Storage bucket (public, read by owner only via RLS on `design_assets` table).
+Add a **QR Code** collapsible panel to the left sidebar with these controls:
 
-### Part 3 — Embed Brand Asset Library in Business Card Designer
+**QR Content options:**
+- URL / Website link
+- Contact card (vCard data: name, phone, email, company)
+- Custom text / message
+- Email address
+- Phone number
 
-Add a new "Brand Assets" collapsible section in the left panel of `BusinessCardDesigner.tsx` that:
-- Opens the `BrandAssetLibrary` panel
-- When a monogram is selected, it renders on the card preview in the `creative` template avatar spot and an overlay position on other templates
-- Exposes a size slider (50px–150px) to control the logo size on the card
-- Saves the selected asset URL to card data state
+**QR Styling controls:**
+- **Size slider**: 50px–200px
+- **Color picker**: Auto-sync with card's primary color (default) OR manual hex override
+- **Background color**: Transparent or white
+- **Placement**: Bottom-right, Bottom-left, Top-right, Center
+- **AI Describe**: A text field where user types e.g. "make it gold with rounded corners" → calls the `gemini-chat` edge function → returns updated color/size/style suggestions
+- **On/Off toggle**: Show or hide QR on card preview
 
-### Part 4 — Embed Brand Asset Library in CV/Resume, Cover Letter, Company Profile
-
-Each tool gets the same "Brand Assets" panel (collapsible section in the sidebar) with:
-- A logo/monogram picker from the library
-- A size control
-- The selected logo renders in the appropriate template location (top-left of CV header, letterhead of cover letter, cover page of company profile)
-
-### Part 5 — Storage Bucket Creation (SQL Migration)
-
-```sql
--- Create brand-assets storage bucket
-INSERT INTO storage.buckets (id, name, public)
-VALUES ('brand-assets', 'brand-assets', false);
-
--- RLS: Users can only see their own assets
-CREATE POLICY "Users read own brand assets"
-ON storage.objects FOR SELECT
-USING (bucket_id = 'brand-assets' AND auth.uid()::text = (storage.foldername(name))[1]);
-
-CREATE POLICY "Users upload own brand assets"
-ON storage.objects FOR INSERT
-WITH CHECK (bucket_id = 'brand-assets' AND auth.uid()::text = (storage.foldername(name))[1]);
-
-CREATE POLICY "Users delete own brand assets"
-ON storage.objects FOR DELETE
-USING (bucket_id = 'brand-assets' AND auth.uid()::text = (storage.foldername(name))[1]);
+**QR Generation:** Uses the existing `api.qrserver.com` API with color parameters:
+```
+https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=...&color=C8A766&bgcolor=ffffff
 ```
 
-The `design_assets` table already has RLS — just need to confirm policies exist (will verify and add if missing).
+The QR code is overlaid on the `CardFace` preview using `position: absolute` inside the card container wrapper. When exporting PDF, the QR image is fetched, converted to a data URL, embedded in the pdf-lib document, and drawn at the correct position.
+
+**Auto-color sync:** When the user changes the card color preset, the QR code foreground color automatically updates to match `preset.primary` (stripped of the `#`).
+
+### Part 3 — Drag-to-Rearrange Fields (New)
+
+The card currently has a fixed layout per template. The user wants to move individual text elements (Name, Title, Company) around the card.
+
+**Implementation approach — Draggable field overlays:**
+
+Add a new state `fieldPositions` that stores `{ name: {x, y}, title: {x, y}, company: {x, y} }` as percentage offsets (0–100). A new `CardCanvas` wrapper renders the `CardFace` as a background and overlays draggable text labels on top using `position: absolute`.
+
+Each draggable label uses React's `onMouseDown` / `onMouseMove` / `onMouseUp` events to track drag position. The labels render with a dashed border in "edit mode" and clean with no border in preview mode. A toggle button "Edit Layout" / "Lock Layout" switches between modes.
+
+A "Reset Layout" button restores default positions.
+
+For simplicity and robustness, the draggable fields are rendered as absolutely-positioned overlays on the card preview — the underlying `CardFace` continues to render with placeholder invisible text, while the overlays show the actual text. This avoids reimplementing all 6 templates from scratch.
+
+### Part 4 — AI QR Customization (New)
+
+In the QR Code panel, add an "AI Style" input field:
+- User types a description (e.g. "dark blue, large, bottom right corner")
+- Calls the existing `gemini-chat` edge function with a structured prompt
+- AI returns JSON: `{ color: "#hex", bgColor: "#hex", size: number, position: "bottom-right" | ... }`
+- Frontend parses response and applies settings automatically
+- Voice input button (`VoiceInputButton`) on the AI describe field
+
+### Part 5 — Voice Input on Key Fields
+
+Add `VoiceInputButton` (already exists at `src/components/ui/VoiceInputButton.tsx`) to:
+- Full Name input
+- Job Title input
+- Company input
+- AI QR describe field
 
 ---
 
 ## Technical Architecture
 
-### Files to Create:
-```
-src/components/corporate-suite/BrandAssetLibrary.tsx   ← New shared component
+### State additions to `BusinessCardDesigner.tsx`:
+
+```typescript
+type CardShape = "horizontal" | "vertical" | "square" | "rounded-square" | "wide" | "digital" | "ticket";
+
+// QR Code state
+const [qrEnabled, setQrEnabled] = useState(false);
+const [qrContent, setQrContent] = useState(""); // URL or text
+const [qrSize, setQrSize] = useState(80);
+const [qrColor, setQrColor] = useState(""); // empty = auto-sync to preset
+const [qrPosition, setQrPosition] = useState<"bottom-right" | "bottom-left" | "top-right" | "top-left" | "center">("bottom-right");
+const [qrAiPrompt, setQrAiPrompt] = useState("");
+const [isAiStylingQr, setIsAiStylingQr] = useState(false);
+
+// Card shape
+const [cardShape, setCardShape] = useState<CardShape>("horizontal");
+
+// Drag rearrange
+const [editLayout, setEditLayout] = useState(false);
+const [fieldPositions, setFieldPositions] = useState({
+  name:    { x: 10, y: 70 }, // % offsets
+  title:   { x: 10, y: 55 },
+  company: { x: 10, y: 42 },
+});
 ```
 
-### Files to Edit:
-```
-src/components/stamp-generator/LiveStampPreview.tsx         ← Fix arc sweep + Arabic RTL arc
-src/components/corporate-suite/BusinessCardDesigner.tsx     ← Add BrandAssetLibrary panel + logo on card
-src/components/corporate-suite/CVResumeBuilder.tsx          ← Add BrandAssetLibrary panel + logo in header
-src/components/corporate-suite/CoverLetterGenerator.tsx     ← Add BrandAssetLibrary panel + logo in letterhead
-src/components/corporate-suite/CompanyProfileBuilder.tsx    ← Add BrandAssetLibrary panel + logo on cover
+### QR code URL builder:
+
+```typescript
+function buildQrUrl(data: string, color: string, size: number) {
+  const colorHex = color.replace("#", "") || preset.primary.replace("#", "");
+  return `https://api.qrserver.com/v1/create-qr-code/?size=${size*2}x${size*2}&data=${encodeURIComponent(data)}&color=${colorHex}&bgcolor=ffffff&margin=2`;
+}
 ```
 
-### Database:
-- Create `brand-assets` storage bucket via SQL migration
-- Add RLS policies on `design_assets` if missing (the table exists but has no confirmed policies)
+### Shape style helper:
+
+```typescript
+function getShapeStyle(shape: CardShape): React.CSSProperties {
+  const shapes: Record<CardShape, React.CSSProperties> = {
+    "horizontal":    { aspectRatio: "3.5 / 2",  borderRadius: 12 },
+    "vertical":      { aspectRatio: "2 / 3.5",  borderRadius: 12 },
+    "square":        { aspectRatio: "1 / 1",    borderRadius: 12 },
+    "rounded-square":{ aspectRatio: "1 / 1",    borderRadius: 40 },
+    "wide":          { aspectRatio: "4 / 1.5",  borderRadius: 12 },
+    "digital":       { aspectRatio: "9 / 16",   borderRadius: 24 },
+    "ticket":        { aspectRatio: "5 / 2",    borderRadius: 8  },
+  };
+  return shapes[shape];
+}
+```
+
+### PDF export update:
+
+When QR is enabled, the export function:
+1. Fetches the QR image URL → converts to data URL via `fetch` + `FileReader`
+2. Embeds image bytes with `pdfDoc.embedPng()`
+3. Draws QR at the correct position on the front page before saving
 
 ---
 
-## Execution Order
+## Files to Edit
 
-1. **SQL Migration** — Create storage bucket + RLS policies
-2. **Fix `LiveStampPreview.tsx`** — Extend arcs to 175°, fix Arabic RTL direction
-3. **Build `BrandAssetLibrary.tsx`** — Upload, save, list, delete, resize assets
-4. **Embed in `BusinessCardDesigner.tsx`** — Logo panel + rendered on card
-5. **Embed in `CVResumeBuilder.tsx`**, `CoverLetterGenerator.tsx`, `CompanyProfileBuilder.tsx`
+Only one file needs to change:
+
+```
+src/components/corporate-suite/BusinessCardDesigner.tsx   ← Full upgrade
+```
+
+No new edge functions needed (QR via qrserver.com API, AI via existing gemini-chat edge function). No database changes needed.
 
 ---
 
-## Key Design Decisions
+## Implementation Plan (in order within the file)
 
-- **No new table needed** — `design_assets` already exists with the perfect schema (`user_id`, `asset_type`, `file_url`, `name`)
-- **Storage path convention**: `{user_id}/{asset_type}/{filename}` — enforces RLS automatically
-- **Resize is client-side only** — the slider sets a CSS `transform: scale()` or inline `width/height` on the logo element in preview; the actual asset URL is stored
-- **Arabic arc fix approach**: Define a second arc path going counter-clockwise (sweeping negative degrees) for Arabic text so it reads right-to-left naturally along the bottom curve
+1. Add `CardShape` type and `CARD_SHAPES` array constant
+2. Add new state variables (cardShape, qr*, editLayout, fieldPositions)
+3. Update `CardFace` to accept `shapeStyle` prop and apply shape-based aspect ratio/radius
+4. Add `CardCanvas` wrapper component that overlays draggable fields on `CardFace`
+5. Add QR code overlay rendered on top of card preview (positioned per `qrPosition`)
+6. Add "Card Shape" selector panel in left sidebar (before Template picker)
+7. Add "QR Code" collapsible panel in left sidebar (after Brand Assets)
+8. Add "Edit Layout" toggle button in the preview header area
+9. Add voice input buttons on Name, Title, Company, and QR AI describe fields
+10. Update `exportCardAsPDF` to embed QR code image when `qrEnabled && qrContent`
