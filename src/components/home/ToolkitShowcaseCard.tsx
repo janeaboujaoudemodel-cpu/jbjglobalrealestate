@@ -149,7 +149,7 @@ export function ToolkitShowcaseCard() {
                         </p>
 
                         {/* CTA */}
-                        <Button size="sm" className="mt-auto w-full justify-center bg-gold hover:bg-gold/90 text-black font-semibold border-0 text-xs sm:text-sm px-2 sm:px-3 whitespace-nowrap overflow-hidden">
+                        <Button size="sm" className="mt-auto w-full justify-center bg-gold hover:bg-gold/90 text-black font-semibold border-0 text-[10px] sm:text-sm px-1.5 sm:px-3 whitespace-nowrap overflow-hidden">
                           <span className="truncate">{tool.cta}</span>
                           <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2 text-black flex-shrink-0" />
                         </Button>

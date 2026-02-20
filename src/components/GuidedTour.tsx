@@ -130,7 +130,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
       iconBg: "from-gold/30 to-amber-500/10",
       iconBorder: "border-gold/40",
       title: "Assign Badges",
-      description: "In Favorites → Shortlist tab, click 'Add Badge' to rank: 🥇 Gold (Top 1), 🥈 Silver (Top 2), 🥉 Bronze (Top 3).",
+      description: "In Favorites → Shortlist tab, click 'Add Badge' to rank: Gold (Top 1), Silver (Top 2), Bronze (Top 3).",
       link: "/favorites",
       linkLabel: "Assign Badges"
     },

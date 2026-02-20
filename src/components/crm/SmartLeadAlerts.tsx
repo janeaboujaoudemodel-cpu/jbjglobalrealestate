@@ -195,11 +195,11 @@ const SmartLeadAlerts = ({ userId, limit = 10 }: SmartLeadAlertsProps) => {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case 'high':
-        return <Badge className="bg-red-500 text-white text-[10px]">🔴 HIGH</Badge>;
+        return <Badge className="bg-red-500 text-white text-[10px]">HIGH</Badge>;
       case 'medium':
-        return <Badge className="bg-amber-500 text-white text-[10px]">🟡 MEDIUM</Badge>;
+        return <Badge className="bg-amber-500 text-white text-[10px]">MEDIUM</Badge>;
       default:
-        return <Badge variant="secondary" className="text-[10px]">🟢 LOW</Badge>;
+        return <Badge variant="secondary" className="text-[10px]">LOW</Badge>;
     }
   };
 
@@ -289,7 +289,7 @@ const SmartLeadAlerts = ({ userId, limit = 10 }: SmartLeadAlertsProps) => {
                   <p className="text-xs text-muted-foreground mb-2">{alert.message}</p>
                   
                   <div className="p-2 rounded bg-black/20 mb-3">
-                    <p className="text-[10px] text-muted-foreground">💡 Suggested:</p>
+                    <p className="text-[10px] text-muted-foreground">Suggested:</p>
                     <p className="text-xs text-foreground">{alert.suggestedAction}</p>
                   </div>
 

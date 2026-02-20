@@ -246,11 +246,11 @@ const JBJDesignStudio: React.FC = () => {
               <p style="margin: 2px 0 8px; font-size: 12px; color: #D4AF37;">${signatureData.title || 'Real Estate Consultant'}</p>
               <p style="margin: 0; font-size: 12px;"><strong>JBJ Global Real Estate</strong></p>
               <p style="margin: 4px 0; font-size: 11px;">
-                ✉️ <a href="mailto:${signatureData.email}" style="color: #1A1A1A; text-decoration: none;">${signatureData.email}</a>
+                <a href="mailto:${signatureData.email}" style="color: #1A1A1A; text-decoration: none;">${signatureData.email}</a>
               </p>
-              ${signatureData.phone ? `<p style="margin: 4px 0; font-size: 11px;">📞 <a href="tel:${signatureData.phone}" style="color: #1A1A1A; text-decoration: none;">${signatureData.phone}</a></p>` : ''}
+              ${signatureData.phone ? `<p style="margin: 4px 0; font-size: 11px;"><a href="tel:${signatureData.phone}" style="color: #1A1A1A; text-decoration: none;">${signatureData.phone}</a></p>` : ''}
               <p style="margin: 4px 0; font-size: 11px;">
-                🌐 <a href="https://${signatureData.website}" style="color: #D4AF37; text-decoration: none;">${signatureData.website}</a>
+                <a href="https://${signatureData.website}" style="color: #D4AF37; text-decoration: none;">${signatureData.website}</a>
               </p>
             </td>
           </tr>

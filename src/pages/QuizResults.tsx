@@ -335,13 +335,13 @@ Best regards`);
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="bg-zinc-900 border-purple-900/30">
                         <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top1')} className="text-yellow-400 hover:bg-purple-900/30">
-                          🥇 Top 1 — Gold
+                          Top 1 — Gold
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top2')} className="text-gray-300 hover:bg-purple-900/30">
-                          🥈 Top 2 — Silver
+                          Top 2 — Silver
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top3')} className="text-amber-500 hover:bg-purple-900/30">
-                          🥉 Top 3 — Bronze
+                          Top 3 — Bronze
                         </DropdownMenuItem>
                         {badges[projects[0].id] && (
                           <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, null)} className="text-zinc-400 hover:bg-purple-900/30">
@@ -400,13 +400,13 @@ Best regards`);
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="bg-zinc-900 border-purple-900/30">
                           <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-yellow-400 hover:bg-purple-900/30">
-                            🥇 Top 1 — Gold
+                            Top 1 — Gold
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top2')} className="text-gray-300 hover:bg-purple-900/30">
-                            🥈 Top 2 — Silver
+                            Top 2 — Silver
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top3')} className="text-amber-500 hover:bg-purple-900/30">
-                            🥉 Top 3 — Bronze
+                            Top 3 — Bronze
                           </DropdownMenuItem>
                           {badge && (
                             <DropdownMenuItem onClick={() => handleSetBadge(project.id, null)} className="text-zinc-400 hover:bg-purple-900/30">

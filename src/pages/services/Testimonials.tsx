@@ -530,11 +530,11 @@ const Testimonials = () => {
                           <SelectValue placeholder="Select rating" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="5">⭐⭐⭐⭐⭐ (5 Stars)</SelectItem>
-                          <SelectItem value="4">⭐⭐⭐⭐ (4 Stars)</SelectItem>
-                          <SelectItem value="3">⭐⭐⭐ (3 Stars)</SelectItem>
-                          <SelectItem value="2">⭐⭐ (2 Stars)</SelectItem>
-                          <SelectItem value="1">⭐ (1 Star)</SelectItem>
+                          <SelectItem value="5">5 Stars — Excellent</SelectItem>
+                          <SelectItem value="4">4 Stars — Great</SelectItem>
+                          <SelectItem value="3">3 Stars — Good</SelectItem>
+                          <SelectItem value="2">2 Stars — Fair</SelectItem>
+                          <SelectItem value="1">1 Star — Poor</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
