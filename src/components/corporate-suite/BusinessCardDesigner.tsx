@@ -8,6 +8,7 @@ import {
   Lock, Unlock, RotateCcw, Sparkles, RectangleHorizontal,
   RectangleVertical, Square, Maximize2, Monitor, Ticket,
   Save, Palette, Zap, Star, Cpu, Minus, Type, User,
+  ArrowLeft, ChevronRight,
 } from "lucide-react";
 import { StudioShell, type StudioSection } from "@/components/ui/StudioShell";
 import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
