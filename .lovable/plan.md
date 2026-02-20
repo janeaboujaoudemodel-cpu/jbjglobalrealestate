@@ -1,136 +1,209 @@
 
-# Brand Asset Library — End-to-End Fix Plan
+# Signature Pad in Brand Asset Library
 
-## What Was Tested & What Was Found
+## What We're Building
 
-### Test: Upload monogram PNG in Business Card → save → open CV Builder → verify logo appears in header with working size slider
-
-### Result: FAIL — 2 critical bugs found
+A fully integrated **draw-your-signature** panel inside the `BrandAssetLibrary` component. When a user is on the "Signature" tab, instead of seeing only a file upload button, they will see a live canvas pad where they can draw with a mouse (desktop) or their finger (mobile). After drawing, they click **Save to Library** — the canvas is converted to a transparent PNG, uploaded to the `brand-assets` storage bucket, saved to `design_assets` with `asset_type = "signature"`, and auto-selected. The saved signature then appears in the asset grid and can be inserted into any document exactly like a logo.
 
 ---
 
-## Bug 1 (CRITICAL): Logo never renders in the CV Preview
+## Architecture Overview
 
-The `CVPreview` component (line 133–138 of `CVResumeBuilder.tsx`) accepts these props:
+```text
+BrandAssetLibrary
+├── Tabs: [Monogram] [Logo] [Signature] [Stamp]
+│
+└── Signature Tab (NEW)
+    ├── Draw Pad (canvas) — 280 × 130px, transparent bg
+    │   ├── Mouse: mousedown/mousemove/mouseup
+    │   └── Touch: touchstart/touchmove/touchend (e.preventDefault)
+    ├── Stroke Style: dark navy ink, 2.5px round cap
+    ├── Toolbar: [Clear] [Save to Library ▶]
+    ├── "Or upload an image" file picker fallback (existing)
+    └── Saved signatures grid (existing BrandAsset grid)
 ```
-data, template, scale, fontFamily, fontWeight, fontStyle, fontSizeOverride
-```
-
-`logoUrl` and `logoSize` are **completely absent** from the props. The state variables are declared (lines 765–766), and the `BrandAssetLibrary` correctly writes to `setLogoUrl` and `setLogoSize`. But when `CVPreview` is called (lines 1304–1310 and 1325–1330), **neither `logoUrl` nor `logoSize` is ever passed in**. The logo is uploaded, saved, even selected — but never shown anywhere in the preview or the PDF export.
-
-The fix requires:
-1. Add `logoUrl?: string` and `logoSize?: number` to the `CVPreview` props interface
-2. Inside each of the 12 template render blocks, add a small logo `<img>` positioned in the header area
-3. Pass `logoUrl={logoUrl}` and `logoSize={logoSize}` at both `CVPreview` call sites (lines 1304 and 1325)
 
 ---
 
-## Bug 2 (MINOR): RLS SELECT policy on storage missing `UPDATE`
+## Where Saved Signatures Appear
 
-The `brand-assets` storage bucket is `public: true` (confirmed in DB), meaning uploaded files are accessible via their public URL without auth. The SELECT RLS policy restricts reads to the owner's folder but since files are public, this is fine — uploaded monograms **will** be accessible cross-tool by URL. No fix needed here.
+Once saved, a signature asset can be applied in:
+
+| Tool | How signature is used |
+|---|---|
+| **Cover Letter Generator** | Rendered as an `<img>` in the sign-off block above "Yours sincerely," (replaces the plain underline) |
+| **Business Card Designer** | Already accepts `"signature"` in `assetTypes` — appears on card as a draggable image |
+| **Company Profile Builder** | Can be added via Brand Assets panel as a visual element |
+| **CV/Resume Builder** | Can be inserted in the header or footer (same logo mechanism) |
+
+The sign-off upgrade in **Cover Letter Generator** is the highest-value insertion point — it is the only document that has a dedicated signature line. We will wire it there as a concrete demonstration.
 
 ---
 
-## Bug 3 (UX): Size slider in CV Builder shows `%` label but `sizeMin=30, sizeMax=120`
+## Technical Details
 
-The slider label reads `"Logo Size"` with a `%` suffix (from `BrandAssetLibrary` line 287: `{sizeValue}%`). But the range is `30–120` — which is actually a pixel-based width. The label should say `px` not `%`, or the range should be `50–200%`. This is confusing to users. Fix: change `sizeLabel` to `"Logo Width (px)"` in the CV Builder call.
+### Change 1 — `BrandAssetLibrary.tsx` (primary file)
 
----
-
-## Implementation Plan
-
-### File: `src/components/corporate-suite/CVResumeBuilder.tsx`
-
-**Change 1 — Add `logoUrl` and `logoSize` to `CVPreview` props** (lines 133–138):
+**New state inside the component (only active when `activeType === "signature"`):**
 ```typescript
-function CVPreview({
-  data, template, scale = 1,
-  fontFamily, fontWeight: fwProp, fontStyle: fsProp, fontSizeOverride,
-  logoUrl, logoSize = 80,
-}: {
-  data: CVData; template: Template; scale?: number;
-  fontFamily?: string; fontWeight?: string; fontStyle?: string; fontSizeOverride?: number | null;
-  logoUrl?: string; logoSize?: number;
-}) {
+const canvasRef    = useRef<HTMLCanvasElement>(null);
+const containerRef = useRef<HTMLDivElement>(null);
+const [isDrawing, setIsDrawing] = useState(false);
+const [hasDrawing, setHasDrawing] = useState(false);
+const [savingDrawing, setSavingDrawing] = useState(false);
 ```
 
-**Change 2 — Render logo in each template's header block**
+**Canvas init** (called on mount and on resize, only when signature tab is active):
+- Sets canvas dimensions using `devicePixelRatio` for crisp Retina rendering (same pattern as existing `ESignaturePad.tsx`)
+- Fills background as **transparent** (no `fillRect`) so the saved PNG has a clear background — critical for placing on any document color
 
-A `LogoBadge` helper renders the logo consistently across templates:
+**Drawing handlers** (copy from the production-tested `ESignaturePad.tsx` that already exists):
+- `startDrawing`, `draw`, `stopDrawing` — mouse + touch dual support
+- `e.preventDefault()` on touch events to prevent scroll conflicts on mobile
+- Stroke style: `#1a1a1a`, `lineWidth: 2.5`, `lineCap: "round"`, `lineJoin: "round"`
+
+**`saveDrawnSignature()` function:**
 ```typescript
-const LogoBadge = logoUrl ? (
-  <img 
-    src={logoUrl} 
-    alt="Logo"
-    style={{ 
-      height: (logoSize / 100) * 48 * scale,  // scale relative to base 48px
-      maxWidth: 120 * scale, 
-      objectFit: "contain",
-      flexShrink: 0
-    }} 
-  />
-) : null;
+const saveDrawnSignature = async () => {
+  const canvas = canvasRef.current;
+  if (!canvas || !hasDrawing || !user) return;
+  setSavingDrawing(true);
+  
+  // Convert canvas to Blob (PNG with transparency preserved)
+  canvas.toBlob(async (blob) => {
+    if (!blob) return;
+    const name = `Signature — ${new Date().toLocaleDateString("en-GB")}`;
+    const path = `${user.id}/signature/${Date.now()}.png`;
+    
+    const { error: uploadError } = await supabase.storage
+      .from("brand-assets")
+      .upload(path, blob, { contentType: "image/png", upsert: false });
+    if (uploadError) { toast.error("Save failed"); setSavingDrawing(false); return; }
+    
+    const { data: urlData } = supabase.storage.from("brand-assets").getPublicUrl(path);
+    
+    const { data: inserted, error: dbError } = await supabase
+      .from("design_assets")
+      .insert({ user_id: user.id, name, asset_type: "signature", file_url: urlData.publicUrl, thumbnail_url: urlData.publicUrl })
+      .select().single();
+    if (dbError) { toast.error("DB save failed"); setSavingDrawing(false); return; }
+    
+    setAssets(prev => [inserted as BrandAsset, ...prev]);
+    if (inserted) onSelect(inserted as BrandAsset);
+    clearCanvas();
+    toast.success("Signature saved to Brand Library!");
+    setSavingDrawing(false);
+  }, "image/png");
+};
 ```
 
-Each template's header gets the logo in an appropriate corner position:
-- **Executive**: top-right of the white content area header (alongside name)
-- **Modern/Bold/TwoCol**: inside the colored header bar, right-aligned
-- **Classic/Harvard/ATS/Minimal/etc.**: above the centered name block, right-aligned
+**UI rendered when `activeType === "signature"`:**
 
-**Change 3 — Pass logo props at both render sites** (lines 1304 and 1325):
+```text
+┌──────────────────────────────────────────────┐
+│  Draw your signature below                   │
+│ ┌────────────────────────────────────────┐  │
+│ │                                        │  │
+│ │         [canvas drawing area]          │  │
+│ │  _____________________________         │  │
+│ │    Sign above this line                │  │
+│ └────────────────────────────────────────┘  │
+│  [Clear]          [Save to Library  →]       │
+│                                              │
+│  — or upload an image —                      │
+│  [Upload signature file]                     │
+└──────────────────────────────────────────────┘
+```
+
+Below this panel, the existing **asset grid** shows all previously saved signatures (both drawn and uploaded).
+
+**One important UX detail**: The canvas is only initialized when `activeType === "signature"`. A `useEffect` with `[activeType]` dependency calls `initCanvas()` only then, and a `ResizeObserver` on `containerRef` keeps dimensions correct when the panel is collapsed/expanded.
+
+---
+
+### Change 2 — `CoverLetterGenerator.tsx` (signature insertion)
+
+**New state:**
 ```typescript
-<CVPreview
-  data={data} template={template} scale={0.85}
-  fontFamily={cvFontFamily || undefined}
-  fontWeight={cvFontBold   ? "bold"   : undefined}
-  fontStyle ={cvFontItalic ? "italic" : undefined}
-  fontSizeOverride={cvFontSize}
-  logoUrl={logoUrl || undefined}
-  logoSize={logoSize}
+const [signatureUrl, setSignatureUrl] = useState("");
+const [signatureSize, setSignatureSize] = useState(80);
+```
+
+**Update the `BrandAssetLibrary` call** inside the Brand Assets collapsible panel to include signatures, and add a second `onSelect` callback that handles `asset_type === "signature"` separately from logos:
+
+```typescript
+<BrandAssetLibrary
+  assetTypes={["monogram", "logo", "signature"]}
+  selectedUrl={logoUrl || signatureUrl}
+  onSelect={asset => {
+    if (asset.asset_type === "signature") {
+      setSignatureUrl(asset.file_url);
+    } else {
+      setLogoUrl(asset.file_url);
+    }
+  }}
+  ...
 />
 ```
 
-**Change 4 — Fix size slider label** (line 965):
+**Update `LetterPreview`** — add `signatureUrl` and `signatureSize` props. In the sign-off block (currently line ~182–191), replace the plain underline with:
+
+```tsx
+{/* Sign-off */}
+{letter && (
+  <div style={{ marginTop: sp(16) }}>
+    <p style={{ fontSize: fs(10.5) }}>Yours sincerely,</p>
+    {signatureUrl ? (
+      <img
+        src={signatureUrl}
+        alt="Signature"
+        style={{ height: sp(signatureSize * 0.6), maxWidth: sp(180), objectFit: "contain", display: "block", margin: `${sp(6)}px 0 ${sp(4)}px` }}
+      />
+    ) : (
+      <div style={{ marginTop: sp(10), borderTop: `1px solid ${cfg.dividerColor}`, paddingTop: sp(8), width: 140 }} />
+    )}
+    <p style={{ fontSize: fs(12), fontWeight: 700, color: cfg.accentColor }}>
+      {form.yourName || "Your Name"}
+    </p>
+  </div>
+)}
 ```
-sizeLabel="Logo Width (px)"
+
+**Update PDF export** (`exportPDF` function, currently around line 437–440): where `page.drawLine` draws the signature underline, add an image embed when `signatureUrl` is set:
+```typescript
+// If signature image exists, embed it above the typed name
+if (signatureUrl) {
+  const sigImageBytes = await fetch(signatureUrl).then(r => r.arrayBuffer());
+  const sigImage = await pdfDoc.embedPng(sigImageBytes);
+  const sigDims = sigImage.scale(signatureSize / 160);
+  page.drawImage(sigImage, { x: margin, y: y - sigDims.height + 10, width: sigDims.width, height: sigDims.height });
+  y -= sigDims.height + 4;
+} else {
+  page.drawLine({ start: { x: margin, y }, end: { x: margin + 140, y }, thickness: 0.8, color: accent });
+  y -= 14;
+}
 ```
-(instead of `"Logo Size"` which displays with `%`)
 
 ---
 
-## How It Works After the Fix
+## Files Changed
 
-```text
-User in Business Card Designer:
-  1. Opens Brand Assets panel
-  2. Uploads "JBJ_monogram.png" → saved to brand-assets bucket + design_assets table
-  3. Clicks "Use" → gold checkmark appears, logo renders on card
-
-User switches to CV Builder:
-  1. Opens Brand Assets panel
-  2. The SAME "JBJ_monogram.png" appears in the grid (shared DB/storage by user_id)
-  3. Clicks it → logoUrl state set
-  4. Live preview updates — logo appears in CV header at correct position for template
-  5. Size slider (30–120 px) controls the logo width in real time
-  6. Export PDF includes the logo in the header
-```
-
----
-
-## Files to Change
-
-| File | Lines Changed | What |
-|---|---|---|
-| `src/components/corporate-suite/CVResumeBuilder.tsx` | ~133–138, ~1304–1310, ~1325–1330, ~965 | Add `logoUrl`/`logoSize` props to `CVPreview`, render logo in all 12 templates, pass props at call sites, fix size label |
-
-No database changes, no edge function changes, no new dependencies.
-
----
-
-## Template-by-Template Logo Placement
-
-| Template | Logo Position |
+| File | Type of Change |
 |---|---|
-| Executive | Top-right of white content area, aligned with name |
-| Modern, Bold, TwoCol | Inside colored header bar, far right |
-| Classic, Harvard, ATS, Minimal, Europass, Academic, Creative, Timeline | Top-right corner, above the name block |
+| `src/components/corporate-suite/BrandAssetLibrary.tsx` | Add signature draw pad with canvas, save-to-library flow, conditional rendering when signature tab active |
+| `src/components/corporate-suite/CoverLetterGenerator.tsx` | Add `signatureUrl`/`signatureSize` state; update `LetterPreview` sign-off block; update PDF export to embed signature image |
+
+**No database migration needed** — `design_assets` table already has `asset_type` as a freeform text column and `"signature"` is already a known value in the codebase. The `brand-assets` storage bucket already exists.
+
+---
+
+## Mobile Behaviour
+
+The canvas uses `touch-none` CSS class to disable browser scroll interference during drawing. The `touchstart`/`touchmove`/`touchend` handlers call `e.preventDefault()` to fully capture finger input. The canvas height is set to `130px` — tall enough to write comfortably on mobile without taking over the screen.
+
+---
+
+## Implementation Sequence
+
+1. Update `BrandAssetLibrary.tsx` — add canvas refs, drawing state, `initCanvas`, drawing handlers, `saveDrawnSignature`, conditional UI block for signature tab
+2. Update `CoverLetterGenerator.tsx` — add signature state, update `BrandAssetLibrary` call, update `LetterPreview` sign-off, update PDF export
