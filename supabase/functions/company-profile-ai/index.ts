@@ -71,7 +71,7 @@ Return only the description text, no labels.`;
           { role: "user", content: userPrompt },
         ],
         stream: false,
-        max_tokens: 400,
+        max_tokens: action === "extract_from_url" ? 1200 : 500,
       }),
     });
 
