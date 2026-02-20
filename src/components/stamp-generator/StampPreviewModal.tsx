@@ -1,12 +1,13 @@
 /**
  * StampPreviewModal — Full-screen design preview
- * Shows the selected stamp on Business Card, Letterhead, and Envelope mockups
+ * Shows the selected stamp on Business Card, Letterhead, Envelope, Contract, Wax Seal, and Stationery mockups
  */
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { StampSVGRenderer } from './StampSVGRenderer';
 import { StampTextEditor } from './StampTextEditor';
 import { Button } from '@/components/ui/button';
-import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2, Maximize2, Type, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+import { X, ArrowLeft, Download, CreditCard, FileText, Mail, Loader2, Maximize2, Type, ZoomIn, ZoomOut, RotateCcw, Scroll, Stamp, BookOpen, Layers } from 'lucide-react';
 import { StampDesignConcept } from '@/lib/stampTemplates';
 
 interface Props {
@@ -19,19 +20,26 @@ interface Props {
   onBack: () => void;
   onSelectAndExport: () => void;
   onSvgChange?: (newSvg: string) => void;
+  initialShowEditor?: boolean;
+  fontFamily?: string;
+  fontWeight?: 'normal' | 'bold';
+  fontStyle?: 'normal' | 'italic';
+  fontSize?: number | null;
+  projectId?: string;
 }
 
-type MockupView = 'business-card' | 'letterhead' | 'envelope';
+type MockupView = 'business-card' | 'letterhead' | 'envelope' | 'contract' | 'wax-seal' | 'stationery';
 
 export function StampPreviewModal({
   concept, project, tintColor, secondaryColor, accentColor, svgOverride, onBack, onSelectAndExport, onSvgChange,
+  initialShowEditor = false, fontFamily, fontWeight, fontStyle, fontSize, projectId,
 }: Props) {
+  const navigate = useNavigate();
   const [activeView, setActiveView] = useState<MockupView>('business-card');
   const [stampFullscreen, setStampFullscreen] = useState(false);
   const [downloadingPng, setDownloadingPng] = useState(false);
-  const [showTextEditor, setShowTextEditor] = useState(false);
+  const [showTextEditor, setShowTextEditor] = useState(initialShowEditor);
   const [localSvg, setLocalSvg] = useState<string | null>(null);
-  // Monogram / logo interactive resize state
   const [logoScale, setLogoScale] = useState(1.0);
   const displaySvg = localSvg || svgOverride || concept.svgSource;
 
@@ -47,23 +55,18 @@ export function StampPreviewModal({
     setDownloadingPng(true);
     try {
       let svg = displaySvg;
-      // Uniquify IDs to prevent cross-stamp collisions
       const token = Math.random().toString(36).slice(2, 7);
       svg = svg.replace(/\bid="([^"]+)"/g, (_, id) => `id="${token}_${id}"`);
       svg = svg.replace(/url\(#([^)]+)\)/g, (_, id) => `url(#${token}_${id})`);
       svg = svg.replace(/href="#([^"]+)"/g, (_, id) => `href="#${token}_${id}"`);
-      // Ensure xmlns
       if (!svg.includes('xmlns=')) svg = svg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
       if (!svg.includes('xmlns:xlink')) svg = svg.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
-      // Set explicit 512×512 dimensions
       svg = svg.replace(/<svg([^>]*)>/, (_, a) => {
         const clean = a.replace(/\bwidth="[^"]*"/, '').replace(/\bheight="[^"]*"/, '');
         return `<svg${clean} width="512" height="512">`;
       });
-      // Use base64 data URL — avoids Blob URL canvas CORS taint
       const b64 = btoa(unescape(encodeURIComponent(svg)));
       const dataUrl = `data:image/svg+xml;base64,${b64}`;
-
       await new Promise<void>((resolve, reject) => {
         const img = document.createElement('img');
         img.onload = async () => {
@@ -96,8 +99,11 @@ export function StampPreviewModal({
 
   const views: { key: MockupView; label: string; icon: React.ElementType }[] = [
     { key: 'business-card', label: 'Business Card', icon: CreditCard },
-    { key: 'letterhead', label: 'Letterhead', icon: FileText },
-    { key: 'envelope', label: 'Envelope', icon: Mail },
+    { key: 'letterhead',    label: 'Letterhead',    icon: FileText },
+    { key: 'envelope',      label: 'Envelope',      icon: Mail },
+    { key: 'contract',      label: 'Contract',      icon: Scroll },
+    { key: 'wax-seal',      label: 'Wax Seal',      icon: Stamp },
+    { key: 'stationery',    label: 'Stationery',    icon: BookOpen },
   ];
 
   return (
@@ -111,62 +117,63 @@ export function StampPreviewModal({
           <div className="w-px h-5 bg-[hsl(var(--border))]"/>
           <span className="font-semibold text-[hsl(var(--foreground))] text-sm">{concept.label}</span>
         </div>
-        <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-1.5 hover:bg-[hsl(var(--muted))] rounded-lg transition-colors">
-            <X size={18} className="text-[hsl(var(--muted-foreground))]"/>
-          </button>
-        </div>
+        <button onClick={onBack} className="p-1.5 hover:bg-[hsl(var(--muted))] rounded-lg transition-colors">
+          <X size={18} className="text-[hsl(var(--muted-foreground))]"/>
+        </button>
       </div>
 
       {/* Body */}
       <div className="flex-1 overflow-auto flex flex-col lg:flex-row">
 
-        {/* Left: stamp large preview + info */}
-        <div className="lg:w-80 flex-shrink-0 bg-[hsl(var(--pearl-1))] border-r border-[hsl(var(--border))] flex flex-col items-center pt-10 pb-6 px-6 gap-4">
-        <div className="relative bg-white rounded-3xl border border-[hsl(var(--border))] shadow-md p-6 flex items-center justify-center">
-          <button
-            onClick={() => setStampFullscreen(true)}
-            title="View fullscreen"
-            className="absolute top-2 right-2 p-1.5 rounded-lg bg-[hsl(var(--muted))] hover:bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))] transition-colors"
-          >
-            <Maximize2 size={14}/>
-          </button>
-          {/* Interactive logo scale — click to zoom, drag handle to resize */}
-          <div
-            className="cursor-zoom-in select-none"
-            style={{ transform: `scale(${logoScale})`, transition: 'transform 0.15s ease' }}
-            onClick={() => setLogoScale(s => s >= 1.5 ? 1.0 : +(s + 0.15).toFixed(2))}
-            title="Click to zoom in · Slider below to resize"
-          >
-            <StampSVGRenderer
-              svgSource={displaySvg}
-              tintColor={tintColor}
-              secondaryColor={secondaryColor}
-              accentColor={accentColor}
-              size={220}
-            />
+        {/* Left: stamp large preview + controls */}
+        <div className="lg:w-80 flex-shrink-0 bg-white border-r border-[hsl(var(--border))] flex flex-col items-center pt-8 pb-6 px-6 gap-4 overflow-y-auto">
+          <div className="relative bg-[hsl(var(--pearl-1))] rounded-3xl border border-[hsl(var(--border))] shadow-md p-6 flex items-center justify-center w-full">
+            <button
+              onClick={() => setStampFullscreen(true)}
+              title="View fullscreen"
+              className="absolute top-2 right-2 p-1.5 rounded-lg bg-[hsl(var(--muted))] hover:bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))] transition-colors"
+            >
+              <Maximize2 size={14}/>
+            </button>
+            <div
+              className="cursor-zoom-in select-none flex items-center justify-center"
+              style={{ transform: `scale(${logoScale})`, transition: 'transform 0.15s ease', transformOrigin: 'center' }}
+              onClick={() => setLogoScale(s => s >= 1.5 ? 1.0 : +(s + 0.15).toFixed(2))}
+              title="Click to zoom in · Slider below to resize"
+            >
+              <StampSVGRenderer
+                svgSource={displaySvg}
+                tintColor={tintColor}
+                secondaryColor={secondaryColor}
+                accentColor={accentColor}
+                fontFamily={fontFamily}
+                fontWeight={fontWeight}
+                fontStyle={fontStyle}
+                fontSize={fontSize}
+                size={220}
+              />
+            </div>
           </div>
-        </div>
-        {/* Resize slider */}
-        <div className="w-full flex items-center gap-2 px-1">
-          <button onClick={() => setLogoScale(s => Math.max(0.5, +(s - 0.1).toFixed(2)))} className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]">
-            <ZoomOut size={14}/>
-          </button>
-          <input
-            type="range" min="0.5" max="2.0" step="0.05"
-            value={logoScale}
-            onChange={e => setLogoScale(parseFloat(e.target.value))}
-            className="flex-1 accent-[hsl(var(--gold))] h-1.5 cursor-pointer"
-          />
-          <button onClick={() => setLogoScale(s => Math.min(2.0, +(s + 0.1).toFixed(2)))} className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]">
-            <ZoomIn size={14}/>
-          </button>
-          <button onClick={() => setLogoScale(1.0)} title="Reset zoom" className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]">
-            <RotateCcw size={12}/>
-          </button>
-        </div>
-        <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Drag slider · Click stamp to zoom</p>
-          <div className="text-center space-y-1">
+          {/* Resize slider */}
+          <div className="w-full flex items-center gap-2 px-1">
+            <button onClick={() => setLogoScale(s => Math.max(0.5, +(s - 0.1).toFixed(2)))} className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]">
+              <ZoomOut size={14}/>
+            </button>
+            <input
+              type="range" min="0.5" max="2.0" step="0.05"
+              value={logoScale}
+              onChange={e => setLogoScale(parseFloat(e.target.value))}
+              className="flex-1 accent-[hsl(var(--gold))] h-1.5 cursor-pointer"
+            />
+            <button onClick={() => setLogoScale(s => Math.min(2.0, +(s + 0.1).toFixed(2)))} className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]">
+              <ZoomIn size={14}/>
+            </button>
+            <button onClick={() => setLogoScale(1.0)} title="Reset zoom" className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]">
+              <RotateCcw size={12}/>
+            </button>
+          </div>
+          <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Drag slider · Click stamp to zoom</p>
+          <div className="text-center space-y-0.5">
             <p className="font-semibold text-[hsl(var(--foreground))]">{concept.label}</p>
             <p className="text-xs text-[hsl(var(--muted-foreground))]">{companyName}</p>
           </div>
@@ -185,7 +192,16 @@ export function StampPreviewModal({
             {downloadingPng ? <Loader2 size={14} className="animate-spin"/> : <Download size={14}/>}
             {downloadingPng ? 'Downloading…' : 'Download Preview PNG'}
           </Button>
-          {/* Edit Text button */}
+          {projectId && (
+            <Button
+              variant="ghost"
+              onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/gallery`)}
+              className="w-full gap-2 text-sm"
+            >
+              <Layers size={14}/> Go to Gallery
+            </Button>
+          )}
+          {/* Edit Text toggle */}
           <Button
             variant={showTextEditor ? 'default' : 'outline'}
             onClick={() => setShowTextEditor(v => !v)}
@@ -194,7 +210,7 @@ export function StampPreviewModal({
             <Type size={14}/> {showTextEditor ? 'Hide Text Editor' : 'Edit Text Elements'}
           </Button>
           {showTextEditor && (
-            <div className="w-full border border-[hsl(var(--border))] rounded-xl p-3 bg-[hsl(var(--pearl-1))]">
+            <div className="w-full border border-[hsl(var(--border))] rounded-xl p-3 bg-white">
               <StampTextEditor
                 svgSource={displaySvg}
                 onSvgChange={handleSvgEdit}
@@ -206,18 +222,18 @@ export function StampPreviewModal({
         {/* Right: mockup */}
         <div className="flex-1 flex flex-col">
           {/* View tabs */}
-          <div className="flex-shrink-0 bg-white border-b border-[hsl(var(--border))] px-6 py-2 flex gap-1">
+          <div className="flex-shrink-0 bg-white border-b border-[hsl(var(--border))] px-4 py-2 flex gap-1 flex-wrap">
             {views.map(v => (
               <button
                 key={v.key}
                 onClick={() => setActiveView(v.key)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
                   activeView === v.key
                     ? 'bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]'
                     : 'text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'
                 }`}
               >
-                <v.icon size={14}/> {v.label}
+                <v.icon size={13}/> {v.label}
               </button>
             ))}
           </div>
@@ -229,7 +245,6 @@ export function StampPreviewModal({
             {activeView === 'business-card' && (
               <div className="w-full max-w-xl">
                 <p className="text-xs text-[hsl(var(--muted-foreground))] text-center mb-4 uppercase tracking-wide">Business Card Preview</p>
-                {/* Front */}
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl" style={{ aspectRatio: '1.75 / 1', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
                   <div className="absolute inset-0 p-7 flex items-stretch">
                     <div className="flex-1 flex flex-col justify-between">
@@ -248,15 +263,11 @@ export function StampPreviewModal({
                       </div>
                     </div>
                   </div>
-                  {/* Decorative accent line */}
                   <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: `linear-gradient(90deg, ${tintColor}88, ${tintColor}ff, ${tintColor}44)` }}/>
                 </div>
-                {/* Back */}
                 <div className="mt-4 relative rounded-2xl overflow-hidden shadow-xl flex items-center justify-center" style={{ aspectRatio: '1.75 / 1', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
                   <div className="absolute inset-0" style={{ background: `radial-gradient(circle at center, ${tintColor}28 0%, transparent 70%)` }}/>
-                  <div style={{ background: 'transparent' }}>
-                    <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={120}/>
-                  </div>
+                  <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={120}/>
                 </div>
                 <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center mt-2">Front (top) · Back (bottom)</p>
               </div>
@@ -267,7 +278,6 @@ export function StampPreviewModal({
               <div className="w-full max-w-lg">
                 <p className="text-xs text-[hsl(var(--muted-foreground))] text-center mb-4 uppercase tracking-wide">A4 Letterhead Preview</p>
                 <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-[hsl(var(--border))]" style={{ aspectRatio: '0.707 / 1' }}>
-                  {/* Header band */}
                   <div style={{ backgroundColor: tintColor }} className="px-8 py-5 flex items-center justify-between">
                     <div>
                       <p className="text-white font-bold text-base leading-tight">{companyName}</p>
@@ -276,12 +286,10 @@ export function StampPreviewModal({
                     </div>
                     <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={70}/>
                   </div>
-
-                  {/* Document body */}
                   <div className="px-8 py-6 space-y-4">
                     <div className="space-y-1">
                       <div className="h-2 w-32 rounded bg-gray-200"/>
-                      <div className="h-1.5 w-48 rounded bg-gray-150"/>
+                      <div className="h-1.5 w-48 rounded bg-gray-100"/>
                     </div>
                     <div className="space-y-1.5">
                       {[0.9, 0.75, 0.85, 0.6, 0.8, 0.7, 0.88, 0.65].map((w, i) => (
@@ -293,8 +301,6 @@ export function StampPreviewModal({
                         <div key={i} className="h-1.5 rounded bg-gray-200" style={{ width: `${w * 100}%` }}/>
                       ))}
                     </div>
-
-                    {/* Signature area */}
                     <div className="mt-8 flex items-end justify-between">
                       <div>
                         <div className="h-px w-24 bg-gray-400"/>
@@ -305,8 +311,6 @@ export function StampPreviewModal({
                       </div>
                     </div>
                   </div>
-
-                  {/* Footer */}
                   <div style={{ backgroundColor: `${tintColor}22` }} className="px-8 py-2 border-t border-gray-100">
                     <p className="text-xs text-gray-400 text-center">{companyName} · {city}</p>
                   </div>
@@ -319,34 +323,130 @@ export function StampPreviewModal({
               <div className="w-full max-w-2xl">
                 <p className="text-xs text-[hsl(var(--muted-foreground))] text-center mb-4 uppercase tracking-wide">Envelope Preview</p>
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-[hsl(var(--border))]" style={{ aspectRatio: '2.15 / 1', background: 'linear-gradient(135deg, #f5f0e8 0%, #ede8da 100%)' }}>
-                  {/* V-flap at top */}
                   <div className="absolute top-0 left-0 right-0 flex justify-center pointer-events-none">
                     <div style={{ width: 0, height: 0, borderLeft: '50vw solid transparent', borderRight: '50vw solid transparent', borderTop: '80px solid rgba(200,185,160,0.5)' }}/>
                   </div>
-
-                  {/* Return address (top-left) */}
                   <div className="absolute top-5 left-7 space-y-0.5">
                     <p className="text-gray-700 font-bold text-xs">{companyName}</p>
                     <p className="text-gray-500 text-[10px]">{city}</p>
                   </div>
-
-                  {/* Stamp seal (top-right corner — postage area) */}
                   <div className="absolute top-5 right-7 opacity-90">
                     <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={72}/>
                   </div>
-
-                  {/* Recipient address (center) */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center space-y-0.5">
                       <div className="h-2 w-36 rounded bg-gray-300 mx-auto"/>
-                      <div className="h-1.5 w-28 rounded bg-gray-250 mx-auto"/>
+                      <div className="h-1.5 w-28 rounded bg-gray-200 mx-auto"/>
                       <div className="h-1.5 w-24 rounded bg-gray-200 mx-auto"/>
                     </div>
                   </div>
-
-                  {/* Wax-seal center-bottom */}
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-70">
                     <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={56}/>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Contract / A4 Document Mockup */}
+            {activeView === 'contract' && (
+              <div className="w-full max-w-lg">
+                <p className="text-xs text-[hsl(var(--muted-foreground))] text-center mb-4 uppercase tracking-wide">Contract / Approval Seal Preview</p>
+                <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-[hsl(var(--border))]" style={{ aspectRatio: '0.707 / 1' }}>
+                  <div style={{ backgroundColor: tintColor }} className="h-2 w-full"/>
+                  <div className="px-8 pt-6 pb-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <div className="h-2.5 w-28 rounded bg-gray-800 mb-1.5"/>
+                        <div className="h-1.5 w-16 rounded bg-gray-300"/>
+                      </div>
+                      <p className="text-[10px] text-gray-400 font-mono">DOC-2024-001</p>
+                    </div>
+                    <div className="space-y-1.5 mb-4">
+                      {[0.92, 0.78, 0.88, 0.65, 0.83, 0.7, 0.9, 0.6, 0.85, 0.72, 0.88, 0.58].map((w, i) => (
+                        <div key={i} className="h-1.5 rounded bg-gray-200" style={{ width: `${w * 100}%` }}/>
+                      ))}
+                    </div>
+                    <div className="space-y-1.5 mb-6">
+                      {[0.8, 0.68, 0.9, 0.55].map((w, i) => (
+                        <div key={i} className="h-1.5 rounded bg-gray-200" style={{ width: `${w * 100}%` }}/>
+                      ))}
+                    </div>
+                    <div className="flex items-end justify-between pt-4 border-t border-gray-200">
+                      <div className="space-y-1">
+                        <div className="h-px w-28 bg-gray-400"/>
+                        <div className="h-1.5 w-20 rounded bg-gray-200"/>
+                        <p className="text-[9px] text-gray-400">Authorized Signature</p>
+                      </div>
+                      <div className="relative flex items-center justify-center" style={{ transform: 'rotate(-8deg)' }}>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} size={80}/>
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ backgroundColor: `${tintColor}11` }} className="px-8 py-2 border-t border-gray-100">
+                    <p className="text-[9px] text-gray-400 text-center">{companyName} · {city} · Official Document</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Wax Seal Mockup */}
+            {activeView === 'wax-seal' && (
+              <div className="w-full max-w-lg flex flex-col items-center gap-6">
+                <p className="text-xs text-[hsl(var(--muted-foreground))] text-center uppercase tracking-wide">Wax Seal Impression</p>
+                <div className="w-full rounded-3xl shadow-2xl overflow-hidden flex items-center justify-center p-12" style={{ background: 'linear-gradient(135deg, #f5edd8 0%, #ede0c4 40%, #e8d8b0 100%)', minHeight: 300 }}>
+                  <div className="flex flex-col items-center gap-6">
+                    <div className="relative flex items-center justify-center">
+                      <div
+                        className="absolute rounded-full"
+                        style={{
+                          width: 200, height: 200,
+                          background: `radial-gradient(circle at 35% 35%, ${tintColor}cc, ${tintColor}ff 60%, ${tintColor}99)`,
+                          boxShadow: `0 8px 32px ${tintColor}66, inset 0 2px 8px rgba(255,255,255,0.15), inset 0 -4px 12px rgba(0,0,0,0.3)`,
+                        }}
+                      />
+                      <div className="relative z-10" style={{ filter: 'brightness(0) invert(1) opacity(0.85)' }}>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" size={160}/>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="h-px w-16" style={{ backgroundColor: `${tintColor}66` }}/>
+                      <p className="text-xs tracking-widest uppercase" style={{ color: `${tintColor}cc`, fontFamily: 'Georgia, serif' }}>{companyName}</p>
+                      <div className="h-px w-16" style={{ backgroundColor: `${tintColor}66` }}/>
+                    </div>
+                    <p className="text-[10px] tracking-widest uppercase text-amber-700/50">{city}</p>
+                  </div>
+                </div>
+                <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center">Wax seal impression — how your stamp appears on premium stationery</p>
+              </div>
+            )}
+
+            {/* Stationery / Notebook Mockup */}
+            {activeView === 'stationery' && (
+              <div className="w-full max-w-md flex flex-col items-center gap-4">
+                <p className="text-xs text-[hsl(var(--muted-foreground))] text-center mb-2 uppercase tracking-wide">Stationery / Notebook Cover</p>
+                <div
+                  className="w-full rounded-2xl shadow-2xl overflow-hidden relative"
+                  style={{ aspectRatio: '0.75 / 1', background: `linear-gradient(160deg, ${tintColor}f0 0%, ${tintColor}dd 100%)` }}
+                >
+                  {/* Spiral binding on left */}
+                  <div className="absolute left-0 top-0 bottom-0 w-7 flex flex-col justify-around items-center py-4" style={{ background: 'rgba(0,0,0,0.2)' }}>
+                    {Array.from({ length: 12 }).map((_, i) => (
+                      <div key={i} className="w-4 h-4 rounded-full border-2 border-white/40 bg-white/10"/>
+                    ))}
+                  </div>
+                  {/* Cover content */}
+                  <div className="ml-8 h-full flex flex-col items-center justify-center gap-5 p-6">
+                    <div className="relative flex items-center justify-center p-4 rounded-full" style={{ background: 'rgba(255,255,255,0.08)', boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.2)' }}>
+                      <div style={{ filter: 'brightness(0) invert(1) opacity(0.9)' }}>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" size={130}/>
+                      </div>
+                    </div>
+                    <div className="text-center space-y-1.5">
+                      <p className="text-white font-bold text-lg tracking-wider" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>{companyName}</p>
+                      {arabicName && <p className="text-white/70 text-sm" dir="rtl">{arabicName}</p>}
+                      <div className="h-px w-24 mx-auto" style={{ background: 'rgba(255,255,255,0.3)' }}/>
+                      <p className="text-white/60 text-xs tracking-widest uppercase">{city}</p>
+                    </div>
                   </div>
                 </div>
               </div>

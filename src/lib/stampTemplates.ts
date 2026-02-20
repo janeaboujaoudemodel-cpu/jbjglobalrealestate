@@ -747,12 +747,17 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const divTop = cy - logoSize / 2 - 14;
     const divBot = cy + logoSize / 2 + 14;
 
-    // City / country line — between logo and bottom arc
-    const cityLine = `<text x="${cx}" y="${divBot + 13}"
-      text-anchor="middle" font-family="${font}" font-size="7"
-      fill="${COLOR}" letter-spacing="4">${
-        project.city_optional ? project.city_optional.toUpperCase() : 'DUBAI'
-      } · ${(project.country_optional || 'UAE').toUpperCase()}</text>`;
+    // City / country line — between logo and bottom arc, with optional reg number + elegant divider
+    const cityStr = `${project.city_optional ? project.city_optional.toUpperCase() : 'DUBAI'} · ${(project.country_optional || 'UAE').toUpperCase()}`;
+    const cityLine = `
+      ${divider(cx, divBot + 6, COLOR, 22)}
+      <text x="${cx}" y="${divBot + 17}"
+        text-anchor="middle" font-family="${font}" font-size="7"
+        fill="${COLOR}" letter-spacing="4">${cityStr}</text>
+      ${regNo ? `<text x="${cx}" y="${divBot + 28}"
+        text-anchor="middle" font-family="${font}" font-size="6"
+        fill="${COLOR}" letter-spacing="2">${regNo}</text>` : ''}
+    `;
 
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
