@@ -136,6 +136,7 @@ export default function PropertiesVerticalNav() {
     <>
       <div
         className="w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex flex-col h-full"
+        style={{ borderRight: "1px solid hsl(42 45% 59% / 0.3)" }}
       >
         {/* Logo - Links to homepage */}
         <Link to="/" className="p-4 border-b border-gold/20 flex items-center gap-3 hover:opacity-80 transition-opacity">
@@ -146,8 +147,11 @@ export default function PropertiesVerticalNav() {
           </div>
         </Link>
 
-        {/* Nav Items */}
-        <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto jj-scrollbar-gold">
+        {/* Nav Items — always-visible gold scrollbar to indicate scrollability */}
+        <nav
+          className="flex-1 py-3 px-2 space-y-0.5 overflow-y-scroll jj-scrollbar-gold"
+          style={{ scrollbarGutter: "stable" }}
+        >
           {NAV_ITEMS.map((item) => {
             const isActive = location.pathname === item.href || (item.href === "/properties" && location.pathname.startsWith("/properties"));
             const Icon = item.icon;

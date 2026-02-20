@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, MapPin, Building2, DollarSign, Filter } from "lucide-react";
+import { Search, MapPin, Building2, DollarSign, Filter, BedDouble } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,7 +21,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
   const navigate = useNavigate();
   const { data: developers } = useDevelopers();
 
-  // Show ALL developers sorted by rank (top to lowest)
+  // Premium developers first by rank, then rest
   const allDevelopersSorted = useMemo(() => {
     if (!developers) return [];
     return [...developers].sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
@@ -30,23 +30,20 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
   const [keyword, setKeyword] = useState("");
   const [location, setLocation] = useState<string | null>(null);
   const [developerId, setDeveloperId] = useState<string | null>(null);
+  const [beds, setBeds] = useState<string | null>(null);
   const [priceRange, setPriceRange] = useState<string | null>(null);
-  const [sizeUnit, setSizeUnit] = useState<"sqft" | "sqm">("sqft");
-  const [currency, setCurrency] = useState<string>("AED");
 
   const handleSearch = () => {
     const params = new URLSearchParams();
     if (keyword) params.append("q", keyword);
     if (location) params.append("emirate", location);
     if (developerId) params.append("developer", developerId);
+    if (beds) params.append("beds", beds);
     if (priceRange) {
       const [min, max] = priceRange.split("-");
       if (min) params.append("priceMin", min);
       if (max && max !== "500000000") params.append("priceMax", max);
     }
-    params.append("sizeUnit", sizeUnit);
-    params.append("currency", currency);
-
     navigate(`/properties?${params.toString()}`);
   };
 
@@ -76,7 +73,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
     >
       <div className="flex flex-wrap items-center gap-3">
         {/* Keyword Search */}
-        <div className="relative flex-1 min-w-[180px]">
+        <div className="relative flex-1 min-w-[160px]">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
           <Input
             placeholder="Keyword"
@@ -87,24 +84,27 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
           />
         </div>
 
-        {/* Location */}
+        {/* Emirates / Location */}
         <Select value={location || "all"} onValueChange={(value) => setLocation(value === "all" ? null : value)}>
           <SelectTriggerDark className="w-[140px] h-12 rounded-lg">
             <MapPin className="w-4 h-4 mr-2 text-zinc-500" />
-            <SelectValue placeholder="Location" />
+            <SelectValue placeholder="Emirates" />
           </SelectTriggerDark>
           <SelectContentDark>
-            <SelectItemDark value="all">All Locations</SelectItemDark>
+            <SelectItemDark value="all">All Emirates</SelectItemDark>
             <SelectItemDark value="Dubai">Dubai</SelectItemDark>
             <SelectItemDark value="Abu Dhabi">Abu Dhabi</SelectItemDark>
             <SelectItemDark value="Sharjah">Sharjah</SelectItemDark>
             <SelectItemDark value="Ras Al Khaimah">Ras Al Khaimah</SelectItemDark>
+            <SelectItemDark value="Ajman">Ajman</SelectItemDark>
+            <SelectItemDark value="Fujairah">Fujairah</SelectItemDark>
+            <SelectItemDark value="Umm Al Quwain">Umm Al Quwain</SelectItemDark>
           </SelectContentDark>
         </Select>
 
-        {/* Developer - All developers sorted by rank (top to lowest) */}
+        {/* Developer — always in main bar, premium devs first with logos */}
         <Select value={developerId || "all"} onValueChange={(value) => setDeveloperId(value === "all" ? null : value)}>
-          <SelectTriggerDark className="w-[140px] h-12 rounded-lg">
+          <SelectTriggerDark className="w-[160px] h-12 rounded-lg">
             <Building2 className="w-4 h-4 mr-2 text-zinc-500" />
             <SelectValue placeholder="Developer" />
           </SelectTriggerDark>
@@ -114,14 +114,37 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
               <SelectItemDark key={dev.id} value={dev.id}>
                 <span className="flex items-center gap-2">
                   {dev.logo_url ? (
-                    <img src={dev.logo_url} alt="" className="w-5 h-5 object-contain rounded-sm flex-shrink-0" />
+                    <img
+                      src={dev.logo_url}
+                      alt={dev.name}
+                      className="w-5 h-5 object-contain rounded-sm flex-shrink-0 bg-white"
+                    />
                   ) : (
-                    <Building2 className="w-4 h-4 text-zinc-500 flex-shrink-0" />
+                    <span className="w-5 h-5 rounded-sm bg-gold/20 flex items-center justify-center flex-shrink-0 text-[9px] font-bold text-gold">
+                      {dev.name.charAt(0)}
+                    </span>
                   )}
-                  {dev.name}
+                  <span className="truncate max-w-[100px]">{dev.name}</span>
                 </span>
               </SelectItemDark>
             ))}
+          </SelectContentDark>
+        </Select>
+
+        {/* Beds */}
+        <Select value={beds || "all"} onValueChange={(value) => setBeds(value === "all" ? null : value)}>
+          <SelectTriggerDark className="w-[110px] h-12 rounded-lg">
+            <BedDouble className="w-4 h-4 mr-2 text-zinc-500" />
+            <SelectValue placeholder="Beds" />
+          </SelectTriggerDark>
+          <SelectContentDark>
+            <SelectItemDark value="all">Any Beds</SelectItemDark>
+            <SelectItemDark value="studio">Studio</SelectItemDark>
+            <SelectItemDark value="1">1 Bed</SelectItemDark>
+            <SelectItemDark value="2">2 Beds</SelectItemDark>
+            <SelectItemDark value="3">3 Beds</SelectItemDark>
+            <SelectItemDark value="4">4 Beds</SelectItemDark>
+            <SelectItemDark value="5">5+ Beds</SelectItemDark>
           </SelectContentDark>
         </Select>
 
@@ -134,35 +157,10 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
           <SelectContentDark>
             <SelectItemDark value="all">Any Price</SelectItemDark>
             <SelectItemDark value="0-1000000">Under 1M</SelectItemDark>
-            <SelectItemDark value="1000000-3000000">1M - 3M</SelectItemDark>
-            <SelectItemDark value="3000000-5000000">3M - 5M</SelectItemDark>
-            <SelectItemDark value="5000000-10000000">5M - 10M</SelectItemDark>
+            <SelectItemDark value="1000000-3000000">1M – 3M</SelectItemDark>
+            <SelectItemDark value="3000000-5000000">3M – 5M</SelectItemDark>
+            <SelectItemDark value="5000000-10000000">5M – 10M</SelectItemDark>
             <SelectItemDark value="10000000-500000000">10M+</SelectItemDark>
-          </SelectContentDark>
-        </Select>
-
-        {/* Size Unit */}
-        <Select value={sizeUnit} onValueChange={(value) => setSizeUnit(value as "sqft" | "sqm")}>
-          <SelectTriggerDark className="w-[90px] h-12 rounded-lg">
-            <SelectValue />
-          </SelectTriggerDark>
-          <SelectContentDark>
-            <SelectItemDark value="sqft">sq ft</SelectItemDark>
-            <SelectItemDark value="sqm">sq m</SelectItemDark>
-          </SelectContentDark>
-        </Select>
-
-        {/* Currency */}
-        <Select value={currency} onValueChange={(value) => setCurrency(value)}>
-          <SelectTriggerDark className="w-[90px] h-12 rounded-lg">
-            <SelectValue />
-          </SelectTriggerDark>
-          <SelectContentDark>
-            <SelectItemDark value="AED">AED</SelectItemDark>
-            <SelectItemDark value="USD">USD</SelectItemDark>
-            <SelectItemDark value="EUR">EUR</SelectItemDark>
-            <SelectItemDark value="GBP">GBP</SelectItemDark>
-            <SelectItemDark value="INR">INR</SelectItemDark>
           </SelectContentDark>
         </Select>
 
@@ -175,9 +173,9 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
           <Filter className="w-4 h-4" />
         </Button>
 
-        {/* Search Button - Gold Glow */}
-        <Button 
-          onClick={handleSearch} 
+        {/* Search Button */}
+        <Button
+          onClick={handleSearch}
           className="h-12 px-8 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-black font-bold hover:brightness-110 hover:shadow-[0_0_25px_rgba(200,167,102,0.6)] transition-all duration-300 shadow-[0_0_15px_rgba(200,167,102,0.4)] cursor-pointer"
         >
           SEARCH
@@ -188,4 +186,3 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
 };
 
 export default PropertySearchBar;
-
