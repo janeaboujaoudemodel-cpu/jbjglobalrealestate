@@ -1234,6 +1234,7 @@ export default function BusinessCardDesigner() {
   const [isExporting, setIsExporting] = useState(false);
   const [isExportingHtml, setIsExportingHtml] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [cardLicenseCode, setCardLicenseCode] = useState<string | null>(null);
   const [isSharing, setIsSharing] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [shareToken, setShareToken] = useState<string | null>(null);
@@ -1391,21 +1392,73 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     setIsSaving(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { toast.error("Please sign in to save."); return; }
+      if (!user) { toast.error("Please sign in to save."); setIsSaving(false); return; }
+
+      const companyName = data.company?.trim() || "";
+
+      // ── Brand protection: check if name is available ──────────
+      if (companyName) {
+        const { data: available, error: rpcErr } = await supabase.rpc("check_name_available", {
+          _company_name: companyName,
+          _asset_type: "business_card",
+          _requesting_user: user.id,
+        });
+        if (rpcErr) {
+          if (rpcErr.message?.toLowerCase().includes("protected")) {
+            toast.error("🔒 This company name is exclusively protected and cannot be used.");
+            setIsSaving(false); return;
+          }
+          // non-fatal RPC errors — allow save to proceed
+        } else if (available === false) {
+          toast.error("This company name is already licensed by another user.");
+          setIsSaving(false); return;
+        }
+      }
+
       const cardState = {
         data, frontTemplate, backTemplate, frontColorIdx, backColorIdx, frontCustomColor, backCustomColor,
         cardShape, qrEnabled, qrContentType, qrCustomContent, qrSize, qrColor, qrBgColor, qrPosition,
         logoUrl, logoSize, logoPos, aiDesignData,
       };
-      await supabase.from("design_assets").insert({
-        user_id: user.id, asset_type: "stamp", file_url: "",
+
+      // ── Save to design_assets ──────────────────────────────────
+      const { data: asset, error: assetErr } = await supabase.from("design_assets").insert({
+        user_id: user.id, asset_type: "business_card", file_url: "",
         name: `Business Card — ${data.name || "Untitled"} — ${new Date().toLocaleDateString()}`,
         metadata: cardState as any,
-      });
-      toast.success("Card saved! You can reload it from Brand Assets.");
-    } catch (err) {
+      }).select("id").single();
+
+      if (assetErr) throw assetErr;
+
+      // ── Register design license ────────────────────────────────
+      if (companyName && asset?.id) {
+        const { data: lic, error: licErr } = await supabase.from("design_licenses").insert({
+          user_id: user.id,
+          asset_id: asset.id,
+          asset_type: "business_card",
+          company_name: companyName,
+        }).select("license_code").single();
+
+        if (licErr) {
+          if (licErr.message?.toLowerCase().includes("protected")) {
+            toast.error("🔒 This company name is exclusively protected and cannot be used.");
+            setIsSaving(false); return;
+          }
+          // license insert failure is non-fatal — card is already saved
+          console.warn("License insert warning:", licErr.message);
+        } else if (lic?.license_code) {
+          setCardLicenseCode(lic.license_code);
+        }
+      }
+
+      toast.success("Card saved to Brand Assets!");
+    } catch (err: any) {
       console.error(err);
-      toast.error("Save failed. Please try again.");
+      if (err?.message?.toLowerCase().includes("protected")) {
+        toast.error("🔒 This company name is exclusively protected and cannot be used.");
+      } else {
+        toast.error("Save failed. Please try again.");
+      }
     } finally {
       setIsSaving(false);
     }
@@ -1554,15 +1607,22 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
               </div>
             </div>
 
-            <Button
-              onClick={handleSaveCard}
-              disabled={isSaving}
-              variant="outline"
-              className="gap-1.5 h-8 text-xs font-semibold"
-            >
-              {isSaving ? <RefreshCw size={12} className="animate-spin" /> : <Save size={12} />}
-              {isSaving ? "Saving…" : "Save Card"}
-            </Button>
+            <div className="flex flex-col items-end gap-1">
+              <Button
+                onClick={handleSaveCard}
+                disabled={isSaving}
+                variant="outline"
+                className="gap-1.5 h-8 text-xs font-semibold border-[#C9A84C]/60 text-[#C9A84C] hover:bg-[#C9A84C]/10"
+              >
+                {isSaving ? <RefreshCw size={12} className="animate-spin" /> : <Save size={12} />}
+                {isSaving ? "Saving…" : "Save Card"}
+              </Button>
+              {cardLicenseCode && (
+                <span className="text-[9px] font-mono font-bold text-green-700 bg-green-50 border border-green-200 rounded px-1.5 py-0.5">
+                  {cardLicenseCode}
+                </span>
+              )}
+            </div>
 
             <Button
               onClick={handleShareCard}
