@@ -5,8 +5,9 @@ import {
   ArrowLeft, FileText, Plus, Trash2, Sparkles, Download,
   ChevronRight, LayoutGrid, Check, RefreshCw, User, Briefcase,
   GraduationCap, Wrench, Languages, AlignLeft, ImageIcon, ChevronDown, Type,
-  Link2, Camera, X, Loader2, Image as ImageLucide, Minus, Bold, Italic,
+  Link2, Camera, X, Loader2, Image as ImageLucide, Minus, Bold, Italic, QrCode,
 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +17,25 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { BrandAssetLibrary } from "@/components/corporate-suite/BrandAssetLibrary";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
+
+// ─── QR helpers (same vCard logic as Business Card Designer) ─────────────────
+function buildCVQrData(data: { name: string; title: string; email: string; phone: string; website: string; location: string }): string {
+  return [
+    "BEGIN:VCARD", "VERSION:3.0",
+    `FN:${data.name}`,
+    data.title    && `TITLE:${data.title}`,
+    data.email    && `EMAIL:${data.email}`,
+    data.phone    && `TEL:${data.phone}`,
+    data.website  && `URL:${data.website}`,
+    data.location && `ADR:;;${data.location};;;;`,
+    "END:VCARD",
+  ].filter(Boolean).join("\n");
+}
+
+function buildCVQrUrl(qrData: string, color: string, size: number): string {
+  const colorHex = color.replace("#", "");
+  return `https://api.qrserver.com/v1/create-qr-code/?size=${size * 2}x${size * 2}&data=${encodeURIComponent(qrData)}&color=${colorHex}&bgcolor=ffffff&margin=2`;
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Template =
@@ -134,10 +154,12 @@ function CVPreview({
   data, template, scale = 1,
   fontFamily, fontWeight: fwProp, fontStyle: fsProp, fontSizeOverride,
   logoUrl, logoSize = 80,
+  qrEnabled, qrUrl, qrSize = 64, qrAccent,
 }: {
   data: CVData; template: Template; scale?: number;
   fontFamily?: string; fontWeight?: string; fontStyle?: string; fontSizeOverride?: number | null;
   logoUrl?: string; logoSize?: number;
+  qrEnabled?: boolean; qrUrl?: string; qrSize?: number; qrAccent?: string;
 }) {
   const cfg = TEMPLATES.find(t => t.id === template)!;
   const { accent, bg } = cfg;
@@ -172,46 +194,70 @@ function CVPreview({
     />
   ) : null;
 
-  // ── EXECUTIVE ─────────────────────────────────────────────────────────
+  // Reusable QR footer strip
+  const qrEffectiveAccent = qrAccent || accent;
+  const QrFooter = qrEnabled && qrUrl ? (
+    <div style={{
+      borderTop: `1px solid ${qrEffectiveAccent}25`,
+      marginTop: 10 * scale,
+      padding: `${7 * scale}px ${px}px`,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-end",
+      gap: 8 * scale,
+      background: `${qrEffectiveAccent}05`,
+    }}>
+      <div style={{ textAlign: "right" }}>
+        <p style={{ fontSize: 6.5 * scale, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: qrEffectiveAccent, opacity: 0.65, margin: 0 }}>Scan to Connect</p>
+        {data.email && <p style={{ fontSize: 6 * scale, color: "#9ca3af", marginTop: 1 * scale, margin: `${1 * scale}px 0 0` }}>{data.email}</p>}
+      </div>
+      <img src={qrUrl} alt="QR" crossOrigin="anonymous" style={{ width: qrSize * scale, height: qrSize * scale, flexShrink: 0, borderRadius: 3 }} />
+    </div>
+  ) : null;
+
+
   if (template === "executive") {
     return (
-      <div style={{ display: "flex", background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: dkgray, minHeight: 400 * scale, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8 }}>
-        <div style={{ width: 110 * scale, background: accent, color: white, padding: `${24 * scale}px ${16 * scale}px`, flexShrink: 0 }}>
-          {data.photoUrl ? (
-            <img src={data.photoUrl} alt="Profile" style={{ width: 44 * scale, height: 44 * scale, borderRadius: "50%", objectFit: "cover", marginBottom: 12 * scale, border: "2px solid rgba(255,255,255,0.3)" }} />
-          ) : (
-            <div style={{ width: 44 * scale, height: 44 * scale, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 * scale, fontSize: fontSize(18), fontWeight: 700 }}>{name.charAt(0)}</div>
-          )}
-          <p style={{ fontSize: fontSize(7), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, opacity: 0.5, marginBottom: 16 * scale }}>Contact</p>
-          {[data.email, data.phone, data.location].filter(Boolean).map((c, i) => <p key={i} style={{ fontSize: fontSize(7.5), opacity: 0.8, marginBottom: 5 * scale, wordBreak: "break-all" }}>{c}</p>)}
-          {(data.linkedin || data.website || data.github) && <>
-            <p style={{ fontSize: fontSize(7), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, opacity: 0.5, marginTop: 12 * scale, marginBottom: 6 * scale }}>Links</p>
-            {data.linkedin && <p style={{ fontSize: fontSize(7), opacity: 0.75, marginBottom: 4 * scale, wordBreak: "break-all" }}>linkedin</p>}
-            {data.github   && <p style={{ fontSize: fontSize(7), opacity: 0.75, marginBottom: 4 * scale }}>github</p>}
-            {data.website  && <p style={{ fontSize: fontSize(7), opacity: 0.75, marginBottom: 4 * scale }}>portfolio</p>}
-          </>}
-          {data.skills && <>
-            <p style={{ fontSize: fontSize(7), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, opacity: 0.5, marginTop: 18 * scale, marginBottom: 10 * scale }}>Skills</p>
-            {data.skills.split(",").map((s, i) => <p key={i} style={{ fontSize: fontSize(7.5), opacity: 0.8, marginBottom: 4 * scale }}>{s.trim()}</p>)}
-          </>}
-          {data.languages && <>
-            <p style={{ fontSize: fontSize(7), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, opacity: 0.5, marginTop: 18 * scale, marginBottom: 6 * scale }}>Languages</p>
-            <p style={{ fontSize: fontSize(7.5), opacity: 0.8 }}>{data.languages}</p>
-          </>}
-        </div>
-        <div style={{ flex: 1, padding: `${24 * scale}px ${px}px` }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <div>
-              <h1 style={{ fontSize: resolvedNameSz ?? fontSize(20), fontWeight: resolvedWeight, fontStyle: resolvedStyle, color: accent, margin: 0 }}>{name}</h1>
-              <p style={{ fontSize: fontSize(10), color: gray, marginTop: 3 * scale, marginBottom: 16 * scale }}>{title}</p>
-            </div>
-            {LogoBadge}
+      <div style={{ display: "flex", flexDirection: "column", background: bg, fontFamily: resolvedFamily, fontSize: fontSize(10), color: dkgray, boxShadow: "0 4px 24px rgba(0,0,0,0.12)", borderRadius: 8 }}>
+        <div style={{ display: "flex", minHeight: 400 * scale }}>
+          <div style={{ width: 110 * scale, background: accent, color: white, padding: `${24 * scale}px ${16 * scale}px`, flexShrink: 0 }}>
+            {data.photoUrl ? (
+              <img src={data.photoUrl} alt="Profile" style={{ width: 44 * scale, height: 44 * scale, borderRadius: "50%", objectFit: "cover", marginBottom: 12 * scale, border: "2px solid rgba(255,255,255,0.3)" }} />
+            ) : (
+              <div style={{ width: 44 * scale, height: 44 * scale, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 * scale, fontSize: fontSize(18), fontWeight: 700 }}>{name.charAt(0)}</div>
+            )}
+            <p style={{ fontSize: fontSize(7), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, opacity: 0.5, marginBottom: 16 * scale }}>Contact</p>
+            {[data.email, data.phone, data.location].filter(Boolean).map((c, i) => <p key={i} style={{ fontSize: fontSize(7.5), opacity: 0.8, marginBottom: 5 * scale, wordBreak: "break-all" }}>{c}</p>)}
+            {(data.linkedin || data.website || data.github) && <>
+              <p style={{ fontSize: fontSize(7), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, opacity: 0.5, marginTop: 12 * scale, marginBottom: 6 * scale }}>Links</p>
+              {data.linkedin && <p style={{ fontSize: fontSize(7), opacity: 0.75, marginBottom: 4 * scale, wordBreak: "break-all" }}>linkedin</p>}
+              {data.github   && <p style={{ fontSize: fontSize(7), opacity: 0.75, marginBottom: 4 * scale }}>github</p>}
+              {data.website  && <p style={{ fontSize: fontSize(7), opacity: 0.75, marginBottom: 4 * scale }}>portfolio</p>}
+            </>}
+            {data.skills && <>
+              <p style={{ fontSize: fontSize(7), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, opacity: 0.5, marginTop: 18 * scale, marginBottom: 10 * scale }}>Skills</p>
+              {data.skills.split(",").map((s, i) => <p key={i} style={{ fontSize: fontSize(7.5), opacity: 0.8, marginBottom: 4 * scale }}>{s.trim()}</p>)}
+            </>}
+            {data.languages && <>
+              <p style={{ fontSize: fontSize(7), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, opacity: 0.5, marginTop: 18 * scale, marginBottom: 6 * scale }}>Languages</p>
+              <p style={{ fontSize: fontSize(7.5), opacity: 0.8 }}>{data.languages}</p>
+            </>}
           </div>
-          {data.summary && <Section label="Summary" accent={accent} scale={scale}><p style={{ fontSize: fontSize(9), color: gray, lineHeight: 1.6 }}>{data.summary}</p></Section>}
-          {data.experience.some(e => e.title) && <Section label="Experience" accent={accent} scale={scale}>{data.experience.filter(e => e.title).map((exp, i) => <ExpEntry key={i} exp={exp} accent={accent} gray={gray} lgray={lgray} scale={scale} />)}</Section>}
-          {data.education.some(e => e.degree) && <Section label="Education" accent={accent} scale={scale}>{data.education.filter(e => e.degree).map((edu, i) => <EduEntry key={i} edu={edu} accent={accent} gray={gray} lgray={lgray} scale={scale} />)}</Section>}
-          {data.certifications && <Section label="Certifications" accent={accent} scale={scale}><p style={{ fontSize: fontSize(9), color: gray }}>{data.certifications}</p></Section>}
+          <div style={{ flex: 1, padding: `${24 * scale}px ${px}px` }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div>
+                <h1 style={{ fontSize: resolvedNameSz ?? fontSize(20), fontWeight: resolvedWeight, fontStyle: resolvedStyle, color: accent, margin: 0 }}>{name}</h1>
+                <p style={{ fontSize: fontSize(10), color: gray, marginTop: 3 * scale, marginBottom: 16 * scale }}>{title}</p>
+              </div>
+              {LogoBadge}
+            </div>
+            {data.summary && <Section label="Summary" accent={accent} scale={scale}><p style={{ fontSize: fontSize(9), color: gray, lineHeight: 1.6 }}>{data.summary}</p></Section>}
+            {data.experience.some(e => e.title) && <Section label="Experience" accent={accent} scale={scale}>{data.experience.filter(e => e.title).map((exp, i) => <ExpEntry key={i} exp={exp} accent={accent} gray={gray} lgray={lgray} scale={scale} />)}</Section>}
+            {data.education.some(e => e.degree) && <Section label="Education" accent={accent} scale={scale}>{data.education.filter(e => e.degree).map((edu, i) => <EduEntry key={i} edu={edu} accent={accent} gray={gray} lgray={lgray} scale={scale} />)}</Section>}
+            {data.certifications && <Section label="Certifications" accent={accent} scale={scale}><p style={{ fontSize: fontSize(9), color: gray }}>{data.certifications}</p></Section>}
+          </div>
         </div>
+        {QrFooter}
       </div>
     );
   }
@@ -534,6 +580,7 @@ function CVPreview({
       {data.experience.some(e => e.title) && <><p style={{ fontSize: fontSize(9), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: accent, marginBottom: 8 * scale }}>Academic / Professional Experience</p>{data.experience.filter(e => e.title).map((exp, i) => <div key={i} style={{ marginBottom: 10 * scale }}><div style={{ display: "flex", justifyContent: "space-between" }}><p style={{ fontSize: fontSize(9.5), fontWeight: 700 }}>{exp.title}</p><p style={{ fontSize: fontSize(8.5), color: "#888" }}>{exp.period}</p></div><p style={{ fontSize: fontSize(9), color: "#666", fontStyle: "italic" }}>{exp.company}</p>{exp.description && <p style={{ fontSize: fontSize(8.5), color: "#555", lineHeight: 1.5, marginTop: 3 * scale }}>{exp.description}</p>}</div>)}</>}
       {data.skills && <><div style={{ height: 0.5, background: "#e0e0e0", marginTop: 14 * scale, marginBottom: 14 * scale }} /><p style={{ fontSize: fontSize(9), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: accent, marginBottom: 6 * scale }}>Technical Skills</p><p style={{ fontSize: fontSize(9), color: "#555" }}>{data.skills}</p></>}
       {data.certifications && <><p style={{ fontSize: fontSize(9), fontWeight: 700, textTransform: "uppercase", letterSpacing: 1.5, color: accent, marginBottom: 6 * scale, marginTop: 12 * scale }}>Certifications / Publications</p><p style={{ fontSize: fontSize(9), color: "#555" }}>{data.certifications}</p></>}
+      {QrFooter}
     </div>
   );
 }
@@ -816,6 +863,11 @@ export default function CVResumeBuilder() {
   const [cvFontBold,   setCvFontBold]   = useState(false);
   const [cvFontItalic, setCvFontItalic] = useState(false);
   const [cvFontSize,   setCvFontSize]   = useState<number | null>(null);
+  // QR Code
+  const [cvQrEnabled, setCvQrEnabled] = useState(false);
+  const [cvQrSize,    setCvQrSize]    = useState(64);
+  const [cvQrColor,   setCvQrColor]   = useState("");
+  const [cvQrOpen,    setCvQrOpen]    = useState(false);
 
   const [data, setData] = useState<CVData>({
     name: "", title: "", email: "", phone: "", location: "",
