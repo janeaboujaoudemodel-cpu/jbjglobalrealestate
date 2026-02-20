@@ -53,14 +53,15 @@ export function StampSVGRenderer({
     tinted = tinted.replace(/font-family:\s*[^;'"]+/gi, `font-family:${fontFamily}`);
   }
 
-  // Apply font-weight override
-  if (fontWeight) {
+  // Apply font-weight override — only force when explicitly set to bold;
+  // passing 'normal' would clobber template weights, so skip it.
+  if (fontWeight === 'bold') {
     tinted = tinted.replace(/font-weight="[^"]*"/gi, `font-weight="${fontWeight}"`);
     tinted = tinted.replace(/font-weight:\s*[^;'"]+/gi, `font-weight:${fontWeight}`);
   }
 
-  // Apply font-style override
-  if (fontStyle) {
+  // Apply font-style override — only force when explicitly set to italic.
+  if (fontStyle === 'italic') {
     tinted = tinted.replace(/font-style="[^"]*"/gi, `font-style="${fontStyle}"`);
     tinted = tinted.replace(/font-style:\s*[^;'"]+/gi, `font-style:${fontStyle}`);
   }
