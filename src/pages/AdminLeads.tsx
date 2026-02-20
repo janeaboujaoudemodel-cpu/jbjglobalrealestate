@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
+import LeadActivityTimeline from "@/components/admin/LeadActivityTimeline";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -56,6 +57,7 @@ import {
   MessageCircle,
   PhoneCall,
   Video,
+  Activity,
 } from "lucide-react";
 import { format } from "date-fns";
 import LeadStatusBadge, { PIPELINE_STATUSES, getStatusInfo } from "@/components/crm/LeadStatusBadge";
@@ -113,6 +115,7 @@ const AdminLeads = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [selectedConversation, setSelectedConversation] = useState<ChatConversation | null>(null);
   const [activeTab, setActiveTab] = useState<"leads" | "chats">("leads");
+  const [leadDetailTab, setLeadDetailTab] = useState<"details" | "activity">("details");
 
   // Source type categories
   const WEBSITE_SOURCES = ['ai_chat_support', 'ai_matchmaker', 'contact_form', 'newsletter', 'inquiry_form', 'quiz', 'login', 'signup', 'book', 'video', 'ai_hub', 'property_inquiry', 'website', 'chat'];
@@ -308,6 +311,7 @@ const AdminLeads = () => {
   // Handle lead selection
   const handleSelectLead = useCallback((lead: Lead) => {
     setSelectedLead(lead);
+    setLeadDetailTab("details");
   }, []);
 
   // Handle conversation selection
@@ -823,117 +827,157 @@ const AdminLeads = () => {
         </div>
       </main>
 
-      {/* Lead Detail Modal - Enhanced with Contact Actions */}
+      {/* Lead Detail Modal - Tabbed: Details + Activity Timeline */}
       <Dialog open={!!selectedLead} onOpenChange={() => setSelectedLead(null)}>
-        <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-2xl">
-          <DialogHeader>
+        <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+          <DialogHeader className="flex-shrink-0">
             <DialogTitle className="text-xl font-bold flex items-center gap-3">
-              Lead Details
+              {selectedLead?.full_name || "Lead Details"}
               {selectedLead?.vip && (
                 <Badge className="bg-gold/20 text-gold border-gold/30">VIP</Badge>
               )}
             </DialogTitle>
           </DialogHeader>
+
           {selectedLead && (
-            <div className="space-y-6">
-              {/* Contact Quick Actions */}
-              <div className="flex flex-wrap gap-2 p-4 bg-zinc-950 rounded-xl border border-zinc-800">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <a
-                        href={`https://wa.me/${selectedLead.phone_e164?.replace(/[^0-9]/g, '')}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 ${
-                          selectedLead.phone_e164 
-                            ? 'bg-green-600 hover:bg-green-700 text-white' 
-                            : 'bg-zinc-800 text-gray-500 cursor-not-allowed'
-                        }`}
-                        onClick={(e) => !selectedLead.phone_e164 && e.preventDefault()}
-                      >
-                        <MessageCircle className="w-4 h-4" />
-                        WhatsApp
-                      </a>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      {selectedLead.phone_e164 ? `Message ${selectedLead.phone_e164}` : 'No phone available'}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <a
-                        href={`tel:${selectedLead.phone_e164}`}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 ${
-                          selectedLead.phone_e164 
-                            ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                            : 'bg-zinc-800 text-gray-500 cursor-not-allowed'
-                        }`}
-                        onClick={(e) => !selectedLead.phone_e164 && e.preventDefault()}
-                      >
-                        <PhoneCall className="w-4 h-4" />
-                        Call
-                      </a>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      {selectedLead.phone_e164 ? `Call ${selectedLead.phone_e164}` : 'No phone available'}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <a
-                        href={`mailto:${selectedLead.email_lower}`}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 ${
-                          selectedLead.email_lower 
-                            ? 'bg-purple-600 hover:bg-purple-700 text-white' 
-                            : 'bg-zinc-800 text-gray-500 cursor-not-allowed'
-                        }`}
-                        onClick={(e) => !selectedLead.email_lower && e.preventDefault()}
-                      >
-                        <Mail className="w-4 h-4" />
-                        Email
-                      </a>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      {selectedLead.email_lower ? `Email ${selectedLead.email_lower}` : 'No email available'}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+            <div className="flex flex-col flex-1 min-h-0 gap-4">
+              {/* Tab bar */}
+              <div className="flex gap-1 bg-zinc-950 rounded-lg p-1 flex-shrink-0 border border-zinc-800">
+                <button
+                  onClick={() => setLeadDetailTab("details")}
+                  className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+                    leadDetailTab === "details"
+                      ? "bg-zinc-800 text-white shadow"
+                      : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <Eye className="w-3.5 h-3.5" />
+                    Lead Details
+                  </span>
+                </button>
+                <button
+                  onClick={() => setLeadDetailTab("activity")}
+                  className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+                    leadDetailTab === "activity"
+                      ? "bg-gold text-black shadow"
+                      : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <Activity className="w-3.5 h-3.5" />
+                    Activity Timeline
+                  </span>
+                </button>
               </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-3 bg-zinc-950 rounded-lg">
-                  <p className="text-gray-400 text-sm mb-1">Full Name</p>
-                  <p className="text-white font-medium text-lg">{selectedLead.full_name || "Not provided"}</p>
-                </div>
-                <div className="p-3 bg-zinc-950 rounded-lg">
-                  <p className="text-gray-400 text-sm mb-1">Email</p>
-                  <p className="text-white">{selectedLead.email_lower || "Not provided"}</p>
-                </div>
-                <div className="p-3 bg-zinc-950 rounded-lg">
-                  <p className="text-gray-400 text-sm mb-1">Phone</p>
-                  <p className="text-white">{selectedLead.phone_e164 || "Not provided"}</p>
-                </div>
-                <div className="p-3 bg-zinc-950 rounded-lg">
-                  <p className="text-gray-400 text-sm mb-1">Source</p>
-                  <Badge variant="outline" className="text-gray-300 border-zinc-700">
-                    {getSourceDisplayName(selectedLead.lead_source_type)}
-                  </Badge>
-                </div>
-                <div className="p-3 bg-zinc-950 rounded-lg">
-                  <p className="text-gray-400 text-sm mb-1">Status</p>
-                  <LeadStatusBadge status={selectedLead.pipeline_stage || "new"} size="sm" />
-                </div>
-                <div className="p-3 bg-zinc-950 rounded-lg">
-                  <p className="text-gray-400 text-sm mb-1">Created</p>
-                  <p className="text-white">{format(new Date(selectedLead.created_at), "PPpp")}</p>
-                </div>
+
+              {/* Tab Content */}
+              <div className="flex-1 min-h-0 overflow-y-auto">
+                {leadDetailTab === "details" ? (
+                  <div className="space-y-5">
+                    {/* Contact Quick Actions */}
+                    <div className="flex flex-wrap gap-2 p-4 bg-zinc-950 rounded-xl border border-zinc-800">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <a
+                              href={`https://wa.me/${selectedLead.phone_e164?.replace(/[^0-9]/g, '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 ${
+                                selectedLead.phone_e164
+                                  ? 'bg-green-600 hover:bg-green-700 text-white'
+                                  : 'bg-zinc-800 text-gray-500 cursor-not-allowed'
+                              }`}
+                              onClick={(e) => !selectedLead.phone_e164 && e.preventDefault()}
+                            >
+                              <MessageCircle className="w-4 h-4" />
+                              WhatsApp
+                            </a>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {selectedLead.phone_e164 ? `Message ${selectedLead.phone_e164}` : 'No phone available'}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <a
+                              href={`tel:${selectedLead.phone_e164}`}
+                              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 ${
+                                selectedLead.phone_e164
+                                  ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                                  : 'bg-zinc-800 text-gray-500 cursor-not-allowed'
+                              }`}
+                              onClick={(e) => !selectedLead.phone_e164 && e.preventDefault()}
+                            >
+                              <PhoneCall className="w-4 h-4" />
+                              Call
+                            </a>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {selectedLead.phone_e164 ? `Call ${selectedLead.phone_e164}` : 'No phone available'}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <a
+                              href={`mailto:${selectedLead.email_lower}`}
+                              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 ${
+                                selectedLead.email_lower
+                                  ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                                  : 'bg-zinc-800 text-gray-500 cursor-not-allowed'
+                              }`}
+                              onClick={(e) => !selectedLead.email_lower && e.preventDefault()}
+                            >
+                              <Mail className="w-4 h-4" />
+                              Email
+                            </a>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {selectedLead.email_lower ? `Email ${selectedLead.email_lower}` : 'No email available'}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="p-3 bg-zinc-950 rounded-lg">
+                        <p className="text-gray-400 text-sm mb-1">Full Name</p>
+                        <p className="text-white font-medium text-lg">{selectedLead.full_name || "Not provided"}</p>
+                      </div>
+                      <div className="p-3 bg-zinc-950 rounded-lg">
+                        <p className="text-gray-400 text-sm mb-1">Email</p>
+                        <p className="text-white">{selectedLead.email_lower || "Not provided"}</p>
+                      </div>
+                      <div className="p-3 bg-zinc-950 rounded-lg">
+                        <p className="text-gray-400 text-sm mb-1">Phone</p>
+                        <p className="text-white">{selectedLead.phone_e164 || "Not provided"}</p>
+                      </div>
+                      <div className="p-3 bg-zinc-950 rounded-lg">
+                        <p className="text-gray-400 text-sm mb-1">Source</p>
+                        <Badge variant="outline" className="text-gray-300 border-zinc-700">
+                          {getSourceDisplayName(selectedLead.lead_source_type)}
+                        </Badge>
+                      </div>
+                      <div className="p-3 bg-zinc-950 rounded-lg">
+                        <p className="text-gray-400 text-sm mb-1">Status</p>
+                        <LeadStatusBadge status={selectedLead.pipeline_stage || "new"} size="sm" />
+                      </div>
+                      <div className="p-3 bg-zinc-950 rounded-lg">
+                        <p className="text-gray-400 text-sm mb-1">Created</p>
+                        <p className="text-white">{format(new Date(selectedLead.created_at), "PPpp")}</p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <LeadActivityTimeline email={selectedLead.email_lower} />
+                )}
               </div>
             </div>
           )}
