@@ -63,7 +63,7 @@ Deno.serve(async (req) => {
     }
 
     // Initialize Resend if available
-    const resend = resendApiKey ? new Resend(resendApiKey) : null;
+    const resend = resendApiKey ? new Resend(resendApiKey, { baseUrl: "https://api.ap.resend.com" }) : null;
 
     const baseUrl = Deno.env.get("SITE_URL") || "https://jbj.ae";
 

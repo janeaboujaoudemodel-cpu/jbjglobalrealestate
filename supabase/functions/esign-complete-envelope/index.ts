@@ -397,7 +397,7 @@ Deno.serve(async (req) => {
       .eq("id", envelope.id);
 
     // ── Send completion emails ─────────────────────────────────────────────
-    const resend = resendApiKey ? new Resend(resendApiKey) : null;
+    const resend = resendApiKey ? new Resend(resendApiKey, { baseUrl: "https://api.ap.resend.com" }) : null;
     const baseUrl = Deno.env.get("SITE_URL") || "https://jbj.ae";
 
     const completionEmailHtml = `
