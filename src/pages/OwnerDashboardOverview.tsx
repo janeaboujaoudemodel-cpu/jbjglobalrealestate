@@ -54,7 +54,7 @@ interface KPICardProps {
 function KPICard({ title, value, icon, trend, loading, onClick }: KPICardProps) {
   return (
     <Card 
-      className={`bg-gradient-to-br from-zinc-900/90 to-zinc-900/70 border-zinc-800/80 hover:border-gold/50 transition-all duration-300 shadow-lg shadow-black/30 hover:shadow-gold/10 ${onClick ? 'cursor-pointer' : ''}`}
+      className={`bg-white/80 border-2 border-[#C9A84C]/30 hover:border-[#C9A84C]/50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-[#C9A84C]/10 ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
@@ -65,18 +65,18 @@ function KPICard({ title, value, icon, trend, loading, onClick }: KPICardProps) 
         <div className="flex items-start justify-between">
           <div>
             {loading ? (
-              <Skeleton className="h-8 w-16 bg-zinc-700/50 mb-1" />
+              <Skeleton className="h-8 w-16 bg-[#C9A84C]/10 mb-1" />
             ) : (
-              <p className="text-3xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">{value}</p>
+              <p className="text-3xl font-bold text-black">{value}</p>
             )}
-            <p className="text-sm text-zinc-400 mt-1 font-medium">{title}</p>
+            <p className="text-sm text-zinc-600 mt-1 font-medium">{title}</p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center border border-gold/20 shadow-lg shadow-gold/5">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C9A84C]/20 to-[#C9A84C]/10 flex items-center justify-center border border-[#C9A84C]/20 shadow-sm">
             {icon}
           </div>
         </div>
         {trend && (
-          <p className="text-xs text-emerald-400 mt-3 flex items-center gap-1 font-medium">
+          <p className="text-xs text-emerald-600 mt-3 flex items-center gap-1 font-medium">
             <TrendingUp className="h-3 w-3" /> {trend}
           </p>
         )}
@@ -101,17 +101,17 @@ interface LeadRowProps {
 function LeadRow({ lead, onOpen }: LeadRowProps) {
   return (
     <div 
-      className="p-4 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors cursor-pointer group border border-zinc-700/50 hover:border-gold/30"
+      className="p-4 rounded-lg bg-[#FDFBF7] hover:bg-[#C9A84C]/5 transition-colors cursor-pointer group border border-[#C9A84C]/20 hover:border-[#C9A84C]/40"
       onClick={() => onOpen(lead.id)}
     >
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
-          <span className="text-gold font-semibold text-sm">
+        <div className="w-10 h-10 rounded-full bg-[#C9A84C]/20 flex items-center justify-center flex-shrink-0">
+          <span className="text-[#C9A84C] font-semibold text-sm">
             {lead.full_name.charAt(0).toUpperCase()}
           </span>
         </div>
         <div className="min-w-0 flex-1">
-          <p className="font-medium text-white truncate text-sm">{lead.full_name}</p>
+          <p className="font-medium text-black truncate text-sm">{lead.full_name}</p>
           <span className="text-xs text-zinc-500">
             {formatDistanceToNow(new Date(lead.created_at), { addSuffix: true })}
           </span>
@@ -119,12 +119,12 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
       </div>
       <div className="flex items-center gap-2 flex-wrap">
         {lead.source && (
-          <Badge variant="secondary" className="bg-zinc-700 text-zinc-300 text-xs">
+          <Badge variant="secondary" className="bg-[#C9A84C]/10 text-zinc-700 text-xs border border-[#C9A84C]/20">
             {lead.source}
           </Badge>
         )}
         {lead.email_lower && (
-          <span className="flex items-center gap-1 text-xs text-zinc-400 truncate">
+          <span className="flex items-center gap-1 text-xs text-zinc-500 truncate">
             <Mail className="h-3 w-3" /> {lead.email_lower}
           </span>
         )}
@@ -133,7 +133,7 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="text-gold hover:text-gold hover:bg-gold/10 text-xs h-7"
+          className="text-[#C9A84C] hover:text-[#B8973F] hover:bg-[#C9A84C]/10 text-xs h-7"
           onClick={(e) => { e.stopPropagation(); onOpen(lead.id); }}
         >
           Open <ExternalLink className="h-3 w-3 ml-1" />
@@ -156,16 +156,16 @@ interface ConversationRowProps {
 
 function ConversationRow({ conversation }: ConversationRowProps) {
   return (
-    <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50">
+    <div className="flex items-center justify-between p-4 rounded-lg bg-[#FDFBF7] border border-[#C9A84C]/10">
       <div className="flex items-center gap-3 min-w-0">
-        <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0">
-          <MessageSquare className="h-4 w-4 text-purple-400" />
+        <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+          <MessageSquare className="h-4 w-4 text-purple-600" />
         </div>
         <div className="min-w-0">
-          <p className="font-medium text-white text-sm truncate">
+          <p className="font-medium text-black text-sm truncate">
             {conversation.user_name || conversation.user_email}
           </p>
-          <p className="text-xs text-zinc-400 truncate">
+          <p className="text-xs text-zinc-500 truncate">
             {conversation.page_source || 'Website chat'}
           </p>
         </div>
@@ -175,8 +175,8 @@ function ConversationRow({ conversation }: ConversationRowProps) {
           variant="secondary" 
           className={`text-xs ${
             conversation.status === 'active' 
-              ? 'bg-emerald-500/20 text-emerald-400' 
-              : 'bg-zinc-700 text-zinc-400'
+              ? 'bg-emerald-100 text-emerald-700' 
+              : 'bg-zinc-100 text-zinc-600'
           }`}
         >
           {conversation.status}
@@ -208,35 +208,35 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
   const displayName = item.type === 'task' ? item.title : item.full_name;
   
   return (
-    <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50">
+    <div className="flex items-center justify-between p-4 rounded-lg bg-[#FDFBF7] border border-[#C9A84C]/10">
       <div className="flex items-center gap-3 min-w-0 flex-1">
         {item.type === 'task' && onComplete ? (
           <button
             onClick={(e) => { e.stopPropagation(); onComplete(item.id); }}
             className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 transition-colors ${
               item.status === 'completed' 
-                ? 'bg-gold border-gold' 
-                : 'border-zinc-600 hover:border-gold'
+                ? 'bg-[#C9A84C] border-[#C9A84C]' 
+                : 'border-[#C9A84C]/40 hover:border-[#C9A84C]'
             }`}
           >
-            {item.status === 'completed' && <CheckSquare className="h-3 w-3 text-black" />}
+            {item.status === 'completed' && <CheckSquare className="h-3 w-3 text-white" />}
           </button>
         ) : (
-          <div className="w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
-            <Clock className="h-3 w-3 text-amber-400" />
+          <div className="w-5 h-5 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+            <Clock className="h-3 w-3 text-amber-600" />
           </div>
         )}
         <div className="min-w-0">
-          <p className={`font-medium text-sm truncate ${item.status === 'completed' ? 'text-zinc-500 line-through' : 'text-white'}`}>
+          <p className={`font-medium text-sm truncate ${item.status === 'completed' ? 'text-zinc-400 line-through' : 'text-black'}`}>
             {displayName}
           </p>
           {(item as any).lead_context && (
-            <p className="text-xs text-gold/70 truncate">
+            <p className="text-xs text-[#C9A84C]/70 truncate">
               Lead: {(item as any).lead_context}
             </p>
           )}
           {item.due_at && (
-            <p className={`text-xs flex items-center gap-1 ${isOverdue ? 'text-red-400' : 'text-zinc-400'}`}>
+            <p className={`text-xs flex items-center gap-1 ${isOverdue ? 'text-red-500' : 'text-zinc-500'}`}>
               <Calendar className="h-3 w-3" />
               {format(new Date(item.due_at), 'MMM d, h:mm a')}
               {isOverdue && <AlertCircle className="h-3 w-3 ml-1" />}
@@ -251,7 +251,7 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="text-gold hover:text-gold hover:bg-gold/10"
+          className="text-[#C9A84C] hover:text-[#B8973F] hover:bg-[#C9A84C]/10"
           onClick={() => onOpen(item.id)}
         >
           Open
@@ -316,7 +316,6 @@ export default function OwnerDashboardOverview() {
         if (error) throw error;
         return count || 0;
       } catch {
-        // Table missing or permission denied - graceful fallback
         return 0;
       }
     },
@@ -375,7 +374,6 @@ export default function OwnerDashboardOverview() {
           .limit(10);
         
         if (!tasksError && tasks && tasks.length > 0) {
-          // Fetch lead names for tasks that have lead_id
           const leadIds = tasks.filter(t => t.lead_id).map(t => t.lead_id);
           let leadMap: Record<string, string> = {};
           if (leadIds.length > 0) {
@@ -393,9 +391,7 @@ export default function OwnerDashboardOverview() {
             lead_context: t.lead_id ? leadMap[t.lead_id] || null : null 
           }));
         }
-      } catch {
-        // Tasks table missing
-      }
+      } catch {}
       
       try {
         const { data: leads } = await supabase
@@ -454,15 +450,15 @@ export default function OwnerDashboardOverview() {
 
   return (
     <div className="space-y-8">
-      {/* Command Center Header - Enhanced with gradient accent */}
+      {/* Command Center Header */}
       <div className="mb-4">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-1 h-8 bg-gradient-to-b from-gold to-gold/40 rounded-full" />
-          <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+          <div className="w-1 h-8 bg-gradient-to-b from-[#C9A84C] to-[#C9A84C]/40 rounded-full" />
+          <h1 className="text-2xl md:text-3xl font-bold text-black tracking-tight">
             Owner Command Center
           </h1>
         </div>
-        <p className="text-zinc-400 mt-1 ml-4 text-sm md:text-base">
+        <p className="text-zinc-600 mt-1 ml-4 text-sm md:text-base">
           Welcome back, Jane Bou Jaoude — Your integrated CRM dashboard
         </p>
       </div>
@@ -472,28 +468,28 @@ export default function OwnerDashboardOverview() {
         <KPICard
           title="Total Leads"
           value={totalLeads ?? '—'}
-          icon={<Users className="h-6 w-6 text-gold" />}
+          icon={<Users className="h-6 w-6 text-[#C9A84C]" />}
           loading={loadingLeads}
           onClick={() => setActiveTab('leads')}
         />
         <KPICard
           title="New This Week"
           value={newLeadsThisWeek ?? '—'}
-          icon={<UserPlus className="h-6 w-6 text-emerald-400" />}
+          icon={<UserPlus className="h-6 w-6 text-emerald-600" />}
           loading={loadingNewLeads}
           onClick={() => setActiveTab('leads')}
         />
         <KPICard
           title="Pending Tasks"
           value={pendingTasks ?? '—'}
-          icon={<CheckSquare className="h-6 w-6 text-amber-400" />}
+          icon={<CheckSquare className="h-6 w-6 text-amber-600" />}
           loading={loadingTasks}
           onClick={() => navigate('/owner/crm/tasks')}
         />
         <KPICard
           title="Active Chats"
           value={activeConversations ?? '—'}
-          icon={<MessageSquare className="h-6 w-6 text-purple-400" />}
+          icon={<MessageSquare className="h-6 w-6 text-purple-600" />}
           loading={loadingConversations}
           onClick={() => navigate('/owner/inbox')}
         />
@@ -502,72 +498,70 @@ export default function OwnerDashboardOverview() {
       {/* Quick Actions Grid */}
       <QuickActionsGrid />
 
-      {/* Main Tabbed Content - Enhanced styling */}
+      {/* Main Tabbed Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="bg-zinc-900/80 border border-zinc-800/80 p-1.5 mb-6 flex-wrap gap-1 rounded-xl shadow-lg shadow-black/20">
+        <TabsList className="bg-white/80 border-2 border-[#C9A84C]/30 p-1.5 mb-6 flex-wrap gap-1 rounded-xl shadow-sm">
           <TabsTrigger 
             value="overview" 
-            className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
           >
             <LayoutDashboard className="h-4 w-4 mr-2" />
             Overview
           </TabsTrigger>
           <TabsTrigger 
             value="leads"
-            className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
           >
             <Users className="h-4 w-4 mr-2" />
             All Leads
           </TabsTrigger>
           <TabsTrigger 
             value="flagged"
-            className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
           >
             <Flag className="h-4 w-4 mr-2" />
             Flagged
           </TabsTrigger>
           <TabsTrigger 
             value="vip"
-            className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
           >
             <Crown className="h-4 w-4 mr-2" />
             VIP Leads
           </TabsTrigger>
           <TabsTrigger 
             value="employees"
-            className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
           >
             <Briefcase className="h-4 w-4 mr-2" />
             Employees Hub
           </TabsTrigger>
           <TabsTrigger 
             value="audit"
-            className="tab-trigger-champagne text-zinc-300 data-[state=active]:text-black"
+            className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
           >
             <Shield className="h-4 w-4 mr-2" />
             Audit Logs
           </TabsTrigger>
         </TabsList>
 
-        {/* Overview Tab - Original Content */}
+        {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">
-          {/* CRM Dashboard Cards */}
           <CRMDashboardCards userId={user?.id || ""} hasOwnerAccess={true} />
 
-          {/* Main Content Grid */}
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Newest Leads */}
-            <Card className="bg-zinc-900/80 border-zinc-800 lg:col-span-2">
+            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 lg:col-span-2 shadow-sm">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="text-lg text-white">Newest Leads</CardTitle>
-                  <CardDescription className="text-zinc-400">Most recent contacts</CardDescription>
+                  <CardTitle className="text-lg text-black">Newest Leads</CardTitle>
+                  <CardDescription className="text-zinc-500">Most recent contacts</CardDescription>
                 </div>
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   onClick={() => setActiveTab('leads')}
-                  className="text-gold hover:text-gold hover:bg-gold/10"
+                  className="text-[#C9A84C] hover:text-[#B8973F] hover:bg-[#C9A84C]/10"
                 >
                   View All <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
@@ -576,7 +570,7 @@ export default function OwnerDashboardOverview() {
                 {loadingNewestLeads ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
                     {Array.from({ length: 6 }).map((_, i) => (
-                      <Skeleton key={i} className="h-32 bg-zinc-800 rounded-lg" />
+                      <Skeleton key={i} className="h-32 bg-[#C9A84C]/10 rounded-lg" />
                     ))}
                   </div>
                 ) : newestLeads && newestLeads.length > 0 ? (
@@ -591,7 +585,7 @@ export default function OwnerDashboardOverview() {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <Users className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
+                    <Users className="h-12 w-12 text-[#C9A84C]/40 mx-auto mb-3" />
                     <p className="text-zinc-500">No leads yet</p>
                     <Button 
                       variant="secondary" 
@@ -607,20 +601,20 @@ export default function OwnerDashboardOverview() {
             </Card>
 
             {/* Needs Follow-up */}
-            <Card className="bg-zinc-900/80 border-zinc-800">
+            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="text-lg text-white flex items-center gap-2">
-                    <Clock className="h-5 w-5 text-amber-400" />
+                  <CardTitle className="text-lg text-black flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-amber-600" />
                     Needs Follow-up
                   </CardTitle>
-                  <CardDescription className="text-zinc-400">Pending items</CardDescription>
+                  <CardDescription className="text-zinc-500">Pending items</CardDescription>
                 </div>
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   onClick={() => navigate('/owner/crm/tasks')}
-                  className="text-gold hover:text-gold hover:bg-gold/10"
+                  className="text-[#C9A84C] hover:text-[#B8973F] hover:bg-[#C9A84C]/10"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
@@ -628,7 +622,7 @@ export default function OwnerDashboardOverview() {
               <CardContent className="space-y-2">
                 {loadingFollowUp ? (
                   Array.from({ length: 4 }).map((_, i) => (
-                    <Skeleton key={i} className="h-14 bg-zinc-800" />
+                    <Skeleton key={i} className="h-14 bg-[#C9A84C]/10" />
                   ))
                 ) : followUpItems && followUpItems.length > 0 ? (
                   followUpItems.map((item: any) => (
@@ -641,7 +635,7 @@ export default function OwnerDashboardOverview() {
                   ))
                 ) : (
                   <div className="text-center py-6">
-                    <CheckSquare className="h-10 w-10 text-zinc-600 mx-auto mb-2" />
+                    <CheckSquare className="h-10 w-10 text-[#C9A84C]/40 mx-auto mb-2" />
                     <p className="text-sm text-zinc-500">All caught up!</p>
                   </div>
                 )}
@@ -650,19 +644,19 @@ export default function OwnerDashboardOverview() {
           </div>
 
           {/* Recent Conversations */}
-          <Card className="bg-zinc-900/80 border-zinc-800">
+          <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
             <CardHeader>
-              <CardTitle className="text-lg text-white flex items-center gap-2">
-                <Activity className="h-5 w-5 text-purple-400" />
+              <CardTitle className="text-lg text-black flex items-center gap-2">
+                <Activity className="h-5 w-5 text-purple-600" />
                 Recent Conversations
               </CardTitle>
-              <CardDescription className="text-zinc-400">Website chat sessions (last 10)</CardDescription>
+              <CardDescription className="text-zinc-500">Website chat sessions (last 10)</CardDescription>
             </CardHeader>
             <CardContent>
               {loadingRecentConvos ? (
                 <div className="grid md:grid-cols-2 gap-2">
                   {Array.from({ length: 4 }).map((_, i) => (
-                    <Skeleton key={i} className="h-16 bg-zinc-800" />
+                    <Skeleton key={i} className="h-16 bg-[#C9A84C]/10" />
                   ))}
                 </div>
               ) : recentConversations && recentConversations.length > 0 ? (
@@ -673,26 +667,23 @@ export default function OwnerDashboardOverview() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <MessageSquare className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
+                  <MessageSquare className="h-12 w-12 text-[#C9A84C]/40 mx-auto mb-3" />
                   <p className="text-zinc-500">No conversations yet</p>
                 </div>
               )}
             </CardContent>
           </Card>
 
-          {/* Integration Widgets */}
           <IntegrationWidgets />
-
-          {/* Department Shortcuts */}
           <DepartmentShortcuts />
         </TabsContent>
 
         {/* All Leads Tab */}
         <TabsContent value="leads" className="space-y-4">
-          <Card className="bg-zinc-900/80 border-zinc-800">
+          <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
             <CardHeader>
-              <CardTitle className="text-lg text-white">All Leads</CardTitle>
-              <CardDescription className="text-zinc-400">Complete lead management</CardDescription>
+              <CardTitle className="text-lg text-black">All Leads</CardTitle>
+              <CardDescription className="text-zinc-500">Complete lead management</CardDescription>
             </CardHeader>
             <CardContent>
               <CRMLeadsTableV2 
@@ -707,13 +698,13 @@ export default function OwnerDashboardOverview() {
 
         {/* Flagged Leads Tab */}
         <TabsContent value="flagged" className="space-y-4">
-          <Card className="bg-zinc-900/80 border-zinc-800">
+          <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
             <CardHeader>
-              <CardTitle className="text-lg text-white flex items-center gap-2">
-                <Flag className="h-5 w-5 text-red-400" />
+              <CardTitle className="text-lg text-black flex items-center gap-2">
+                <Flag className="h-5 w-5 text-red-500" />
                 Flagged Leads
               </CardTitle>
-              <CardDescription className="text-zinc-400">Leads requiring attention</CardDescription>
+              <CardDescription className="text-zinc-500">Leads requiring attention</CardDescription>
             </CardHeader>
             <CardContent>
               <FlaggedLeadsView 
@@ -727,13 +718,13 @@ export default function OwnerDashboardOverview() {
 
         {/* VIP Leads Tab */}
         <TabsContent value="vip" className="space-y-4">
-          <Card className="bg-zinc-900/80 border-zinc-800">
+          <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
             <CardHeader>
-              <CardTitle className="text-lg text-white flex items-center gap-2">
-                <Crown className="h-5 w-5 text-gold" />
+              <CardTitle className="text-lg text-black flex items-center gap-2">
+                <Crown className="h-5 w-5 text-[#C9A84C]" />
                 VIP Leads
               </CardTitle>
-              <CardDescription className="text-zinc-400">High-value contacts</CardDescription>
+              <CardDescription className="text-zinc-500">High-value contacts</CardDescription>
             </CardHeader>
             <CardContent>
               <CRMLeadsTableV2 
@@ -748,13 +739,13 @@ export default function OwnerDashboardOverview() {
 
         {/* Employees Hub Tab */}
         <TabsContent value="employees" className="space-y-4">
-          <Card className="bg-zinc-900/80 border-zinc-800">
+          <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
             <CardHeader>
-              <CardTitle className="text-lg text-white flex items-center gap-2">
-                <Briefcase className="h-5 w-5 text-blue-400" />
+              <CardTitle className="text-lg text-black flex items-center gap-2">
+                <Briefcase className="h-5 w-5 text-blue-600" />
                 Employees Hub
               </CardTitle>
-              <CardDescription className="text-zinc-400">Team management</CardDescription>
+              <CardDescription className="text-zinc-500">Team management</CardDescription>
             </CardHeader>
             <CardContent>
               <EmployeesHub userId={user?.id || ""} />
@@ -764,18 +755,18 @@ export default function OwnerDashboardOverview() {
 
         {/* Audit Logs Tab */}
         <TabsContent value="audit" className="space-y-4">
-          <Card className="bg-zinc-900/80 border-zinc-800">
+          <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
             <CardHeader>
-              <CardTitle className="text-lg text-white flex items-center gap-2">
-                <Shield className="h-5 w-5 text-purple-400" />
+              <CardTitle className="text-lg text-black flex items-center gap-2">
+                <Shield className="h-5 w-5 text-purple-600" />
                 Audit Logs
               </CardTitle>
-              <CardDescription className="text-zinc-400">System activity tracking</CardDescription>
+              <CardDescription className="text-zinc-500">System activity tracking</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-12">
-                <Shield className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
-                <p className="text-zinc-400 mb-4">View audit logs for all CRM activity</p>
+                <Shield className="h-12 w-12 text-[#C9A84C]/40 mx-auto mb-3" />
+                <p className="text-zinc-500 mb-4">View audit logs for all CRM activity</p>
                 <Button 
                   variant="secondary"
                   onClick={() => navigate('/owner/admin')}
