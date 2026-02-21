@@ -126,7 +126,7 @@ export function StampPreviewModal({
       <div className="flex-1 overflow-auto flex flex-col lg:flex-row">
 
         {/* Left: stamp large preview + controls */}
-        <div className="lg:w-80 flex-shrink-0 bg-white border-r border-[hsl(var(--border))] flex flex-col items-center pt-8 pb-6 px-6 gap-4 overflow-y-auto">
+        <div className="lg:w-80 flex-shrink-0 bg-white border-r border-[hsl(var(--border))] flex flex-col items-center pt-12 pb-6 px-6 gap-4 overflow-y-auto">
           <div className="relative bg-[hsl(var(--pearl-1))] rounded-3xl border border-[hsl(var(--border))] shadow-md p-6 flex items-center justify-center w-full">
             <button
               onClick={() => setStampFullscreen(true)}
@@ -138,8 +138,18 @@ export function StampPreviewModal({
             <div
               className="cursor-zoom-in select-none flex items-center justify-center"
               style={{ transform: `scale(${logoScale})`, transition: 'transform 0.15s ease', transformOrigin: 'center' }}
-              onClick={() => setLogoScale(s => s >= 1.5 ? 1.0 : +(s + 0.15).toFixed(2))}
-              title="Click to zoom in · Slider below to resize"
+              onClick={() => {
+                if (logoScale >= 1.5) {
+                  // Auto-scroll to mockup area instead of resetting
+                  const mockupArea = document.querySelector('[data-mockup-area]');
+                  if (mockupArea) {
+                    mockupArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                } else {
+                  setLogoScale(s => +(s + 0.15).toFixed(2));
+                }
+              }}
+              title="Click to zoom in · At max zoom, scrolls to document mockups"
             >
               <StampSVGRenderer
                 svgSource={displaySvg}
@@ -239,7 +249,7 @@ export function StampPreviewModal({
           </div>
 
           {/* Mockup area */}
-          <div className="flex-1 flex items-center justify-center p-10 bg-[hsl(var(--pearl-2))]">
+          <div data-mockup-area className="flex-1 flex items-center justify-center p-10 bg-white min-h-full">
 
             {/* Business Card Mockup */}
             {activeView === 'business-card' && (

@@ -157,7 +157,12 @@ async function svgToPdf(svgString: string, transparent: boolean): Promise<Blob> 
 function tintSvgFull(svgString: string, primary: string, secondary?: string, accent?: string): string {
   let s = svgString.replace(/#1a2744/gi, primary);
   if (secondary) s = s.replace(/#2a3a5c/gi, secondary);
-  if (accent) s = s.replace(/(dominant-baseline="central"[^>]*fill=")[^"]+(")/g, `$1${accent}$2`);
+  if (accent) {
+    s = s.replace(/#8b6914/gi, accent);
+    s = s.replace(/(dominant-baseline="central"[^>]*fill=")[^"]+(")/g, `$1${accent}$2`);
+  } else if (secondary) {
+    s = s.replace(/#8b6914/gi, secondary);
+  }
   return s;
 }
 
@@ -193,6 +198,9 @@ const PACK_COLORS = [
   { label: 'Forest Green', hex: '#1B4332' },
   { label: 'Royal Purple', hex: '#4B0082' },
   { label: 'Gold', hex: '#856404' },
+  { label: 'White', hex: '#ffffff' },
+  { label: 'Silver Embossed', hex: '#C0C0C0' },
+  { label: 'Bronze', hex: '#8B4513' },
 ];
 
 const PRESET_COLORS = [
@@ -202,6 +210,9 @@ const PRESET_COLORS = [
   { label: 'Dark Red', hex: '#8B0000' },
   { label: 'Purple', hex: '#4B0082' },
   { label: 'Forest', hex: '#1B4332' },
+  { label: 'White', hex: '#ffffff' },
+  { label: 'Silver', hex: '#C0C0C0' },
+  { label: 'Bronze', hex: '#8B4513' },
 ];
 
 type ColorStop = 'primary' | 'secondary' | 'accent';
@@ -359,46 +370,81 @@ export default function StampExportPage() {
     if (options.formats.length === 0) { toast.error('Select at least one format'); return; }
     setGenerating(true);
     setFileStatuses({});
-    let successCount = 0, failCount = 0;
 
     try {
+      const zip = new JSZip();
+      let fileCount = 0;
+
       if (options.formats.includes('svg')) {
-        await downloadSVG(); successCount++;
-        await new Promise(r => setTimeout(r, 200));
+        zip.file(`${companySlug}_stamp.svg`, tintedSvg);
+        setFileStatuses(s => ({ ...s, svg: 'ok' }));
+        fileCount++;
       }
 
       for (const size of options.sizes) {
         if (options.formats.includes('png')) {
-          const blob = await downloadPNGFile(size);
-          if (blob) successCount++; else failCount++;
-          await new Promise(r => setTimeout(r, 200));
+          try {
+            const blob = await svgToPng(tintedSvg, size, options.transparent);
+            zip.file(`${companySlug}_stamp_${size}px${options.transparent ? '_transparent' : ''}.png`, blob);
+            setFileStatuses(s => ({ ...s, [`png_${size}`]: 'ok' }));
+            fileCount++;
+          } catch (err) {
+            console.error(`PNG ${size}px failed:`, err);
+            setFileStatuses(s => ({ ...s, [`png_${size}`]: 'error' }));
+          }
         }
         if (options.formats.includes('jpg')) {
-          const ok = await downloadJPGFile(size);
-          if (ok) successCount++; else failCount++;
-          await new Promise(r => setTimeout(r, 200));
+          try {
+            const pngBlob = await svgToPng(tintedSvg, size, false);
+            const jpgBlob = await pngToJpeg(pngBlob);
+            zip.file(`${companySlug}_stamp_${size}px.jpg`, jpgBlob);
+            setFileStatuses(s => ({ ...s, [`jpg_${size}`]: 'ok' }));
+            fileCount++;
+          } catch (err) {
+            console.error(`JPG ${size}px failed:`, err);
+            setFileStatuses(s => ({ ...s, [`jpg_${size}`]: 'error' }));
+          }
         }
         if (options.formats.includes('webp')) {
-          const ok = await downloadWebpFile(size);
-          if (ok) successCount++; else failCount++;
-          await new Promise(r => setTimeout(r, 200));
+          try {
+            const pngBlob = await svgToPng(tintedSvg, size, options.transparent);
+            const webpBlob = await pngToWebp(pngBlob, options.transparent);
+            zip.file(`${companySlug}_stamp_${size}px${options.transparent ? '_transparent' : ''}.webp`, webpBlob);
+            setFileStatuses(s => ({ ...s, [`webp_${size}`]: 'ok' }));
+            fileCount++;
+          } catch (err) {
+            console.error(`WEBP ${size}px failed:`, err);
+            setFileStatuses(s => ({ ...s, [`webp_${size}`]: 'error' }));
+          }
         }
       }
 
       if (options.formats.includes('pdf')) {
-        const ok = await downloadPDFFile();
-        if (ok) successCount++; else failCount++;
+        try {
+          const blob = await svgToPdf(tintedSvg, options.transparent);
+          zip.file(`${companySlug}_stamp_print_300dpi.pdf`, blob);
+          setFileStatuses(s => ({ ...s, pdf: 'ok' }));
+          fileCount++;
+        } catch (err) {
+          console.error('PDF failed:', err);
+          setFileStatuses(s => ({ ...s, pdf: 'error' }));
+        }
       }
+
+      // Generate and download the ZIP
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      triggerDownload(zipBlob, `${companySlug}_stamp_export.zip`);
 
       // Log export
       await supabase.from('stamp_exports').insert({
         design_id: designId!, user_id: user!.id, includes: options as any, status: 'ready',
       });
 
+      const failCount = Object.values(fileStatuses).filter(s => s === 'error').length;
       if (failCount === 0) {
-        toast.success(`✅ ${successCount} file${successCount !== 1 ? 's' : ''} downloaded!`);
+        toast.success(`✅ ${fileCount} file${fileCount !== 1 ? 's' : ''} bundled into ZIP!`);
       } else {
-        toast.warning(`Downloaded ${successCount} files. ${failCount} failed.`);
+        toast.warning(`ZIP contains ${fileCount} files. ${failCount} failed.`);
       }
     } catch (err) {
       console.error('Bundle error:', err);
@@ -693,12 +739,31 @@ export default function StampExportPage() {
                       return (
                         <button key={c.hex} onClick={() => togglePackColor(c)}
                           className={`flex items-center gap-2 p-2 rounded-lg border text-xs transition-all ${selected ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'}`}>
-                          <div className="w-4 h-4 rounded-full flex-shrink-0 border border-white shadow-sm" style={{ backgroundColor: c.hex }}/>
+                          <div className={`w-4 h-4 rounded-full flex-shrink-0 shadow-sm ${c.hex === '#ffffff' ? 'border-2 border-[hsl(var(--border))]' : 'border border-white'}`} style={{ backgroundColor: c.hex }}/>
                           <span className="font-medium truncate text-[hsl(var(--foreground))]">{c.label}</span>
                           {selected && <span className="ml-auto text-[hsl(var(--gold))]">✓</span>}
                         </button>
                       );
                     })}
+                  </div>
+
+                  {/* Custom color picker for pack */}
+                  <div className="pt-2 border-t border-[hsl(var(--border))]">
+                    <p className="text-[10px] text-[hsl(var(--muted-foreground))] mb-2">Or pick a custom color:</p>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        className="w-8 h-8 rounded-lg border border-[hsl(var(--border))] cursor-pointer"
+                        onChange={e => {
+                          const hex = e.target.value;
+                          const label = `Custom ${hex.slice(1, 4).toUpperCase()}`;
+                          if (!packColors.some(p => p.hex === hex)) {
+                            togglePackColor({ label, hex });
+                          }
+                        }}
+                      />
+                      <span className="text-[10px] text-[hsl(var(--muted-foreground))]">Click to add custom color to pack</span>
+                    </div>
                   </div>
 
                   {packColors.length > 0 && (

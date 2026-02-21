@@ -118,7 +118,7 @@ export default function StampGeneratorPage() {
   };
 
   // Left panel tab
-  const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text' | 'centerart'>('color');
+  const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text' | 'centerart' | 'logo'>('color');
 
   // Center Art controls (monogram/logo override on the generate page)
   const [localIconStyle, setLocalIconStyle] = useState<'NONE' | 'MONOGRAM' | 'UPLOADED_LOGO'>('MONOGRAM');
@@ -511,6 +511,10 @@ export default function StampGeneratorPage() {
                 className={`flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium transition-all ${leftTab === 'centerart' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
                 <Stamp size={10}/> Art
               </button>
+              <button onClick={() => setLeftTab('logo')}
+                className={`flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium transition-all ${leftTab === 'logo' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
+                <Upload size={10}/> Logo
+              </button>
             </div>
 
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-4 overflow-hidden">
@@ -719,6 +723,68 @@ export default function StampGeneratorPage() {
                     className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:opacity-90 transition-all"
                   >
                     <Wand2 size={12}/> Apply to Stamps
+                  </button>
+                </div>
+              )}
+
+              {/* ── Logo/Monogram tab ── */}
+              {leftTab === 'logo' && (
+                <div className="space-y-4">
+                  <p className="text-xs font-semibold text-[hsl(var(--foreground))]">Logo / Monogram</p>
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Upload your company logo or set monogram initials for the center of the stamp.</p>
+                  <div className="space-y-1.5">
+                    {([
+                      { val: 'UPLOADED_LOGO' as const, label: '📷 Upload Logo' },
+                      { val: 'MONOGRAM' as const, label: '✦ Gold Monogram' },
+                      { val: 'NONE' as const, label: '⊘ No Center Art' },
+                    ]).map(opt => (
+                      <button key={opt.val} onClick={() => setLocalIconStyle(opt.val)}
+                        className={`w-full py-2 px-3 rounded-xl border-2 text-xs text-left transition-all ${localIconStyle === opt.val ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--foreground))]' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.3)]'}`}>
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                  {localIconStyle === 'UPLOADED_LOGO' && (
+                    <div>
+                      <label className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))] transition-all">
+                        <Upload size={20} className="text-[hsl(var(--gold))]"/>
+                        <span className="text-xs text-[hsl(var(--muted-foreground))]">{localLogoUrl ? 'Change logo' : 'Click to upload logo'}</span>
+                        <input type="file" accept="image/*" className="hidden"
+                          onChange={e => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            const reader = new FileReader();
+                            reader.onload = () => setLocalLogoUrl(reader.result as string);
+                            reader.readAsDataURL(file);
+                          }}/>
+                      </label>
+                      {localLogoUrl && (
+                        <div className="mt-2 flex items-center gap-2">
+                          <img src={localLogoUrl} alt="Logo preview" className="w-12 h-12 rounded-lg object-contain border border-[hsl(var(--border))]"/>
+                          <button onClick={() => setLocalLogoUrl('')} className="text-[10px] text-destructive underline">Remove</button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {localIconStyle === 'MONOGRAM' && (
+                    <div>
+                      <p className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Monogram (1-3 letters)</p>
+                      <input type="text" maxLength={3} value={localMonogramText}
+                        onChange={e => setLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
+                        placeholder={project?.company_name?.slice(0, 2) || 'AB'}
+                        className="w-full px-3 py-2 rounded-xl border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-lg font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))] transition-all"/>
+                    </div>
+                  )}
+                  <button
+                    onClick={() => {
+                      const updated = { ...project, icon_style: localIconStyle, monogram_text: localMonogramText || null, uploaded_logo_url: localLogoUrl || null };
+                      setProject(updated);
+                      toast.info('Applying logo/monogram…', { duration: 1500 });
+                      generateConcepts(updated);
+                    }}
+                    className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:opacity-90 transition-all"
+                  >
+                    <Wand2 size={12}/> Apply Logo to Stamps
                   </button>
                 </div>
               )}
