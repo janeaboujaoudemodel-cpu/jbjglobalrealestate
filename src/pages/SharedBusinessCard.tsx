@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Download, CreditCard, RefreshCw } from "lucide-react";
+import { Download, CreditCard, RefreshCw, Eye } from "lucide-react";
 
 // ─── Minimal type mirrors (no import from designer to keep this page standalone) ─
 type Template = "modern" | "classic" | "minimal" | "bold" | "creative" | "corporate" | "ai-design";
@@ -339,6 +339,17 @@ function buildVCard(data: CardData): string {
   ].filter(Boolean).join("\r\n");
 }
 
+// ─── Link click tracker ──────────────────────────────────────────────────────
+function trackLinkClick(cardToken: string, linkType: string, linkValue?: string) {
+  supabase.from("card_link_clicks").insert({
+    card_token: cardToken,
+    link_type: linkType,
+    link_value: linkValue || null,
+    user_agent: navigator.userAgent,
+    referrer: document.referrer || null,
+  }).then(() => {});
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function SharedBusinessCard() {
   const { token } = useParams<{ token: string }>();
@@ -346,6 +357,7 @@ export default function SharedBusinessCard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [viewCount, setViewCount] = useState<number>(0);
 
   useEffect(() => {
     if (!token) { setError("Invalid link."); setLoading(false); return; }
@@ -354,16 +366,23 @@ export default function SharedBusinessCard() {
       try {
         const { data, error: fetchErr } = await supabase
           .from("shared_business_cards")
-          .select("card_data")
+          .select("card_data, view_count")
           .eq("token", token)
           .single();
 
         if (fetchErr || !data) throw new Error("Card not found.");
 
         setSnapshot(data.card_data as unknown as CardSnapshot);
+        setViewCount((data.view_count || 0) + 1); // +1 for current view
 
         // Increment view count (fire & forget)
         supabase.rpc("increment_shared_card_views", { card_token: token }).then(() => {});
+
+        // Check if this visit came from a QR scan (referrer heuristic)
+        const ref = document.referrer || "";
+        if (!ref || ref.includes("qr") || ref.includes("scan")) {
+          trackLinkClick(token, "qr_scan");
+        }
       } catch (err: any) {
         setError(err.message || "Failed to load card.");
       } finally {
@@ -375,8 +394,9 @@ export default function SharedBusinessCard() {
   }, [token]);
 
   const handleSaveContact = () => {
-    if (!snapshot) return;
+    if (!snapshot || !token) return;
     setSaving(true);
+    trackLinkClick(token, "save_contact");
     try {
       const vcf = buildVCard(snapshot.data);
       const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8" });
@@ -391,6 +411,10 @@ export default function SharedBusinessCard() {
     } finally {
       setTimeout(() => setSaving(false), 800);
     }
+  };
+
+  const handleLinkClick = (type: string, value: string) => {
+    if (token) trackLinkClick(token, type, value);
   };
 
   if (loading) {
@@ -435,6 +459,11 @@ export default function SharedBusinessCard() {
             <CreditCard size={13} className="text-white" />
           </div>
           <span className="text-white/70 text-sm font-medium">Digital Business Card</span>
+          {/* Subtle view count badge */}
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px]">
+            <Eye size={10} />
+            {viewCount}
+          </span>
         </div>
         {cardData.company && (
           <p className="text-white/40 text-xs uppercase tracking-widest">{cardData.company}</p>
@@ -457,22 +486,36 @@ export default function SharedBusinessCard() {
         )}
       </div>
 
-      {/* Contact info summary */}
+      {/* Contact info summary — with click tracking */}
       <div className="mt-6 w-full max-w-[420px] space-y-2">
         {cardData.phone && (
-          <a href={`tel:${cardData.phone}`} className="flex items-center gap-3 bg-white/5 hover:bg-white/10 transition-colors rounded-xl px-4 py-3 text-white/80 text-sm">
+          <a
+            href={`tel:${cardData.phone}`}
+            onClick={() => handleLinkClick("phone", cardData.phone)}
+            className="flex items-center gap-3 bg-white/5 hover:bg-white/10 transition-colors rounded-xl px-4 py-3 text-white/80 text-sm"
+          >
             <span className="text-base">📞</span>
             <span>{cardData.phone}</span>
           </a>
         )}
         {cardData.email && (
-          <a href={`mailto:${cardData.email}`} className="flex items-center gap-3 bg-white/5 hover:bg-white/10 transition-colors rounded-xl px-4 py-3 text-white/80 text-sm">
+          <a
+            href={`mailto:${cardData.email}`}
+            onClick={() => handleLinkClick("email", cardData.email)}
+            className="flex items-center gap-3 bg-white/5 hover:bg-white/10 transition-colors rounded-xl px-4 py-3 text-white/80 text-sm"
+          >
             <span className="text-base">✉️</span>
             <span>{cardData.email}</span>
           </a>
         )}
         {cardData.website && (
-          <a href={cardData.website.startsWith("http") ? cardData.website : `https://${cardData.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white/5 hover:bg-white/10 transition-colors rounded-xl px-4 py-3 text-white/80 text-sm">
+          <a
+            href={cardData.website.startsWith("http") ? cardData.website : `https://${cardData.website}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => handleLinkClick("website", cardData.website)}
+            className="flex items-center gap-3 bg-white/5 hover:bg-white/10 transition-colors rounded-xl px-4 py-3 text-white/80 text-sm"
+          >
             <span className="text-base">🌐</span>
             <span>{cardData.website}</span>
           </a>
