@@ -594,12 +594,15 @@ const AIChatWidget = ({ isCollapsed, onToggleCollapse, onMinimize, showAttention
     } else {
       // Map shortcut to service type and proceed to agent
       const serviceMap: Record<ShortcutType, string> = {
-        'submit_cv': 'careers',
+        'submit_cv': 'cv_submission',
         'buy_property': 'real_estate',
+        'sell_property': 'sell_property',
         'rent_property': 'holiday_homes',
+        'list_for_rent': 'rent_property',
         'property_management': 'partner_intro',
         'design_services': 'design_build',
-        'legal_partners': 'partner_intro',
+        'guides': 'guides',
+        'ai_tools': 'ai_tools',
         'general_inquiry': 'general',
       };
       
