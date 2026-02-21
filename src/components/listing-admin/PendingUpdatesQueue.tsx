@@ -4,14 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { Check, X, Clock, AlertCircle, RefreshCw, Database } from "lucide-react";
+import { Check, X, Clock, RefreshCw, Database, Building, MapPin, Eye, ChevronDown, ChevronUp } from "lucide-react";
 import { format } from "date-fns";
 
 interface PendingUpdate {
   id: string;
-  listing_id: string;
+  listing_id: string | null;
   listing_table: string;
   field_name: string;
   current_value: string | null;
@@ -26,6 +25,18 @@ interface PendingUpdate {
   };
 }
 
+interface ParsedProject {
+  project_name?: string;
+  emirate?: string;
+  status?: string;
+  developer?: string;
+  area?: string;
+  price_from?: number;
+  price_to?: number;
+  bedrooms?: string;
+  property_type?: string;
+}
+
 interface PendingUpdatesQueueProps {
   onRefresh?: () => void;
 }
@@ -33,7 +44,9 @@ interface PendingUpdatesQueueProps {
 export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
   const [updates, setUpdates] = useState<PendingUpdate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [processingId, setProcessingId] = useState<string | null>(null);
+  const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [batchProcessing, setBatchProcessing] = useState(false);
   const { toast } = useToast();
 
   const fetchPendingUpdates = async () => {
@@ -67,142 +80,124 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
     fetchPendingUpdates();
   }, []);
 
-  const handleApprove = async (update: PendingUpdate) => {
-    setProcessingId(update.id);
+  const parseProposedValue = (value: string): ParsedProject => {
     try {
-      // Apply the update to the actual listing
-      const updateData: Record<string, any> = {};
-      
-      if (update.field_name === "amenities_additions") {
-        // Special handling for amenities - merge arrays for projects table
-        if (update.listing_table === "projects") {
+      return JSON.parse(value);
+    } catch {
+      return { project_name: value };
+    }
+  };
+
+  const handleApprove = async (update: PendingUpdate) => {
+    setProcessingIds(prev => new Set(prev).add(update.id));
+    try {
+      if (update.change_type === "create" && update.field_name === "new_project") {
+        const parsed = parseProposedValue(update.proposed_value);
+        const projectName = parsed.project_name || "Unnamed Project";
+        const slug = projectName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+        const { error: insertError } = await supabase
+          .from("projects")
+          .insert({
+            name: projectName,
+            slug: slug,
+            emirate: parsed.emirate || "Dubai",
+            status: parsed.status || "Off-Plan",
+            is_published: false,
+            source: "provident_discovery",
+          });
+
+        if (insertError) throw insertError;
+      } else {
+        // Field update logic
+        const updateData: Record<string, any> = {};
+        if (update.field_name === "amenities_additions" && update.listing_table === "projects") {
           const { data: listing } = await supabase
             .from("projects")
             .select("amenities")
-            .eq("id", update.listing_id)
+            .eq("id", update.listing_id!)
             .single();
-          
           const existingAmenities = (listing as any)?.amenities || [];
           const newAmenities = JSON.parse(update.proposed_value);
           updateData.amenities = [...existingAmenities, ...newAmenities];
         } else {
-          // For other tables, just set the new value
           updateData[update.field_name] = update.proposed_value;
         }
-      } else {
-        updateData[update.field_name] = update.proposed_value;
+
+        if (update.listing_table === "projects") {
+          const { error } = await supabase.from("projects").update(updateData).eq("id", update.listing_id!);
+          if (error) throw error;
+        }
       }
 
-      // Update the listing based on table type
-      let updateError: any = null;
-      if (update.listing_table === "projects") {
-        const result = await supabase
-          .from("projects")
-          .update(updateData)
-          .eq("id", update.listing_id);
-        updateError = result.error;
-      } else if (update.listing_table === "rental_listings") {
-        const result = await supabase
-          .from("rental_listings")
-          .update(updateData)
-          .eq("id", update.listing_id);
-        updateError = result.error;
-      } else if (update.listing_table === "seller_listings") {
-        const result = await supabase
-          .from("seller_listings")
-          .update(updateData)
-          .eq("id", update.listing_id);
-        updateError = result.error;
-      }
-
-      if (updateError) throw updateError;
-
-      // Mark as approved
       const { error: statusError } = await supabase
         .from("listing_pending_updates")
-        .update({
-          status: "approved",
-          reviewed_at: new Date().toISOString(),
-        })
+        .update({ status: "approved", reviewed_at: new Date().toISOString() })
         .eq("id", update.id);
 
       if (statusError) throw statusError;
 
-      toast({
-        title: "Update Approved",
-        description: `${update.field_name} has been updated successfully`,
-      });
-
-      fetchPendingUpdates();
+      setUpdates(prev => prev.filter(u => u.id !== update.id));
+      toast({ title: "Approved", description: `${parseProposedValue(update.proposed_value).project_name || update.field_name} approved` });
       onRefresh?.();
     } catch (error) {
-      console.error("Error approving update:", error);
-      toast({
-        title: "Error",
-        description: "Failed to apply update",
-        variant: "destructive",
-      });
+      console.error("Error approving:", error);
+      toast({ title: "Error", description: "Failed to approve", variant: "destructive" });
     } finally {
-      setProcessingId(null);
+      setProcessingIds(prev => { const n = new Set(prev); n.delete(update.id); return n; });
     }
   };
 
-  const handleReject = async (update: PendingUpdate, reason?: string) => {
-    setProcessingId(update.id);
+  const handleReject = async (update: PendingUpdate) => {
+    setProcessingIds(prev => new Set(prev).add(update.id));
     try {
       const { error } = await supabase
         .from("listing_pending_updates")
-        .update({
-          status: "rejected",
-          reviewed_at: new Date().toISOString(),
-          review_notes: reason || "Rejected by admin",
-        })
+        .update({ status: "rejected", reviewed_at: new Date().toISOString(), review_notes: "Rejected by admin" })
         .eq("id", update.id);
-
       if (error) throw error;
 
-      toast({
-        title: "Update Rejected",
-        description: "The proposed change has been rejected",
-      });
-
-      fetchPendingUpdates();
+      setUpdates(prev => prev.filter(u => u.id !== update.id));
+      toast({ title: "Rejected", description: "Project has been rejected" });
     } catch (error) {
-      console.error("Error rejecting update:", error);
-      toast({
-        title: "Error",
-        description: "Failed to reject update",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Failed to reject", variant: "destructive" });
     } finally {
-      setProcessingId(null);
+      setProcessingIds(prev => { const n = new Set(prev); n.delete(update.id); return n; });
     }
   };
 
-  const getConfidenceBadge = (score: number) => {
-    if (score >= 0.9) return <Badge className="bg-green-500">High ({Math.round(score * 100)}%)</Badge>;
-    if (score >= 0.75) return <Badge className="bg-yellow-500">Medium ({Math.round(score * 100)}%)</Badge>;
-    return <Badge className="bg-orange-500">Low ({Math.round(score * 100)}%)</Badge>;
+  const handleApproveAll = async () => {
+    setBatchProcessing(true);
+    let approved = 0;
+    for (const update of updates) {
+      try {
+        await handleApprove(update);
+        approved++;
+      } catch { /* continue */ }
+    }
+    setBatchProcessing(false);
+    toast({ title: "Batch Complete", description: `${approved} projects approved` });
+    fetchPendingUpdates();
   };
 
-  const formatFieldName = (field: string) => {
-    return field
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, l => l.toUpperCase());
-  };
+  const totalPending = updates.length;
+
+  // Separate new project discoveries from field updates
+  const newProjects = updates.filter(u => u.change_type === "create" && u.field_name === "new_project");
+  const fieldUpdates = updates.filter(u => !(u.change_type === "create" && u.field_name === "new_project"));
 
   if (isLoading) {
     return (
-      <Card>
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Database className="h-5 w-5" />
-            Pending Updates Queue
+          <CardTitle className="flex items-center gap-2 text-foreground">
+            <Database className="h-5 w-5 text-gold" />
+            Pending Projects & Updates
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-8">
-            <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
+            <RefreshCw className="h-6 w-6 animate-spin text-gold" />
           </div>
         </CardContent>
       </Card>
@@ -214,98 +209,217 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="flex items-center gap-2 text-foreground">
           <Database className="h-5 w-5 text-gold" />
-          Pending Updates Queue
-          {updates.length > 0 && (
-            <Badge variant="secondary" className="bg-amber-100 text-amber-800">{updates.length}</Badge>
+          Pending Projects & Updates
+          {totalPending > 0 && (
+            <Badge variant="secondary" className="bg-amber-100 text-amber-800 text-sm">{totalPending}</Badge>
           )}
         </CardTitle>
-        <Button variant="outline" size="sm" onClick={fetchPendingUpdates} className="border-gold/30 hover:bg-gold/10">
-          <RefreshCw className="h-4 w-4 mr-2" />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-2">
+          {newProjects.length > 5 && (
+            <Button
+              size="sm"
+              onClick={handleApproveAll}
+              disabled={batchProcessing}
+              className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/40 hover:border-gold/60"
+            >
+              <Check className="h-4 w-4 mr-1" />
+              Approve All ({newProjects.length})
+            </Button>
+          )}
+          <Button variant="outline" size="sm" onClick={fetchPendingUpdates} className="border-gold/30 hover:bg-gold/10">
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Refresh
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
-        {updates.length === 0 ? (
+        {totalPending === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
             <Check className="h-12 w-12 mb-4 text-emerald-500" />
             <p className="text-lg font-medium text-foreground">All caught up!</p>
-            <p className="text-sm">No pending updates require your review</p>
+            <p className="text-sm">No pending projects or updates require your review</p>
           </div>
         ) : (
-          <ScrollArea className="h-[400px] pr-4">
-            <div className="space-y-4">
-              {updates.map((update) => (
-                  <div
-                    key={update.id}
-                    className="border border-gold/20 rounded-lg p-4 bg-white/50 hover:bg-white/80 transition-colors"
-                  >
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium text-zinc-900">
-                          {formatFieldName(update.field_name)}
-                        </span>
-                        {getConfidenceBadge(update.confidence_score)}
-                      </div>
-                      <p className="text-sm text-zinc-600">
-                        Matched via: {update.match_method?.replace(/_/g, " ")}
-                      </p>
-                      {update.source?.name && (
-                        <p className="text-xs text-zinc-500 mt-1">
-                          Source: {update.source.name}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-zinc-500">
-                      <Clock className="h-3 w-3" />
-                      {format(new Date(update.created_at), "MMM d, h:mm a")}
-                    </div>
-                  </div>
+          <div className="space-y-6">
+            {/* New Project Discoveries */}
+            {newProjects.length > 0 && (
+              <div>
+                <h3 className="text-sm font-semibold text-zinc-700 mb-3 flex items-center gap-2">
+                  <Building className="h-4 w-4 text-gold" />
+                  New Project Discoveries
+                  <Badge className="bg-gold/20 text-gold border border-gold/30 text-xs">{newProjects.length}</Badge>
+                </h3>
+                <ScrollArea className="h-[500px] pr-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {newProjects.map((update) => {
+                      const parsed = parseProposedValue(update.proposed_value);
+                      const isExpanded = expandedId === update.id;
+                      const isProcessing = processingIds.has(update.id);
 
-                  <Separator className="my-3" />
+                      return (
+                        <div
+                          key={update.id}
+                          className="border border-gold/20 rounded-xl bg-white/70 hover:bg-white/90 transition-all overflow-hidden"
+                        >
+                          {/* Project Card Header */}
+                          <div className="p-4">
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="flex-1">
+                                <h4 className="font-semibold text-zinc-900 text-sm leading-tight">
+                                  {parsed.project_name || "Unnamed Project"}
+                                </h4>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <MapPin className="h-3 w-3 text-gold" />
+                                  <span className="text-xs text-zinc-600">{parsed.emirate || "Dubai"}</span>
+                                </div>
+                              </div>
+                              <Badge className={`text-[10px] px-2 py-0.5 ${
+                                parsed.status === "Off-Plan"
+                                  ? "bg-blue-50 text-blue-700 border border-blue-200"
+                                  : parsed.status === "Ready"
+                                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                    : "bg-zinc-100 text-zinc-600 border border-zinc-200"
+                              }`}>
+                                {parsed.status || "Off-Plan"}
+                              </Badge>
+                            </div>
 
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <p className="text-xs text-zinc-500 mb-1">Current Value</p>
-                      <div className="bg-white border border-zinc-200 rounded p-2 text-sm min-h-[40px] text-zinc-900">
-                        {update.current_value || (
-                          <span className="text-zinc-400 italic">Empty</span>
-                        )}
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-xs text-zinc-500 mb-1">Proposed Value</p>
-                      <div className="bg-emerald-50 border border-emerald-200 rounded p-2 text-sm min-h-[40px] text-zinc-900">
-                        {update.proposed_value}
-                      </div>
-                    </div>
-                  </div>
+                            {/* Source & Date */}
+                            <div className="flex items-center justify-between mt-2">
+                              <span className="text-[10px] text-zinc-500">
+                                {update.source?.name || "External Source"}
+                              </span>
+                              <div className="flex items-center gap-1 text-[10px] text-zinc-400">
+                                <Clock className="h-3 w-3" />
+                                {format(new Date(update.created_at), "MMM d, yyyy")}
+                              </div>
+                            </div>
 
-                  <div className="flex items-center gap-2 justify-end">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleReject(update)}
-                      disabled={processingId === update.id}
-                      className="border-red-200 text-red-600 hover:bg-red-50"
-                    >
-                      <X className="h-4 w-4 mr-1" />
-                      Reject
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => handleApprove(update)}
-                      disabled={processingId === update.id}
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                    >
-                      <Check className="h-4 w-4 mr-1" />
-                      Approve
-                    </Button>
+                            {/* Preview Toggle */}
+                            <button
+                              onClick={() => setExpandedId(isExpanded ? null : update.id)}
+                              className="flex items-center gap-1 text-[11px] text-gold hover:text-gold/80 mt-2 transition-colors"
+                            >
+                              <Eye className="h-3 w-3" />
+                              {isExpanded ? "Hide" : "Preview"} listing card
+                              {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                            </button>
+                          </div>
+
+                          {/* Expanded Preview - How it would look on the portal */}
+                          {isExpanded && (
+                            <div className="border-t border-gold/10 bg-zinc-50 p-3">
+                              <p className="text-[10px] text-zinc-500 mb-2 font-medium">Portal Card Preview:</p>
+                              <div className="rounded-lg border border-zinc-200 bg-white overflow-hidden shadow-sm">
+                                <div className="h-28 bg-gradient-to-br from-zinc-200 to-zinc-300 flex items-center justify-center">
+                                  <Building className="h-8 w-8 text-zinc-400" />
+                                  <span className="text-xs text-zinc-500 ml-2">Image pending enrichment</span>
+                                </div>
+                                <div className="p-3">
+                                  <h5 className="font-semibold text-sm text-zinc-900">{parsed.project_name}</h5>
+                                  <p className="text-xs text-zinc-500 flex items-center gap-1 mt-1">
+                                    <MapPin className="h-3 w-3" /> {parsed.area || parsed.emirate || "Dubai"}
+                                  </p>
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <Badge className="bg-blue-50 text-blue-700 border border-blue-200 text-[10px]">
+                                      {parsed.status || "Off-Plan"}
+                                    </Badge>
+                                    {parsed.property_type && (
+                                      <Badge className="bg-zinc-100 text-zinc-600 text-[10px]">{parsed.property_type}</Badge>
+                                    )}
+                                  </div>
+                                  {parsed.price_from && (
+                                    <p className="text-sm font-semibold text-gold mt-2">
+                                      From AED {parsed.price_from.toLocaleString()}
+                                    </p>
+                                  )}
+                                  <p className="text-[10px] text-zinc-400 mt-2 italic">
+                                    After approval, this project will be enriched with images, floor plans, and details from Reelly API during the next sync cycle.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Actions */}
+                          <div className="flex items-center gap-2 justify-end p-3 pt-0">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleReject(update)}
+                              disabled={isProcessing}
+                              className="border-red-200 text-red-600 hover:bg-red-50 h-7 text-xs"
+                            >
+                              <X className="h-3 w-3 mr-1" />
+                              Reject
+                            </Button>
+                            <Button
+                              size="sm"
+                              onClick={() => handleApprove(update)}
+                              disabled={isProcessing}
+                              className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/40 hover:border-gold/60 h-7 text-xs"
+                            >
+                              <Check className="h-3 w-3 mr-1" />
+                              Approve & Enrich
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                </div>
-              ))}
-            </div>
-          </ScrollArea>
+                </ScrollArea>
+              </div>
+            )}
+
+            {/* Field Updates (if any) */}
+            {fieldUpdates.length > 0 && (
+              <div>
+                <h3 className="text-sm font-semibold text-zinc-700 mb-3">
+                  Field Updates
+                  <Badge className="ml-2 bg-zinc-100 text-zinc-600 text-xs">{fieldUpdates.length}</Badge>
+                </h3>
+                <ScrollArea className="h-[300px] pr-2">
+                  <div className="space-y-3">
+                    {fieldUpdates.map((update) => (
+                      <div key={update.id} className="border border-gold/20 rounded-lg p-4 bg-white/50">
+                        <div className="flex items-start justify-between mb-2">
+                          <span className="font-medium text-zinc-900 text-sm">
+                            {update.field_name.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
+                          </span>
+                          <div className="flex items-center gap-1 text-xs text-zinc-500">
+                            <Clock className="h-3 w-3" />
+                            {format(new Date(update.created_at), "MMM d, h:mm a")}
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3 mb-3">
+                          <div>
+                            <p className="text-[10px] text-zinc-500 mb-1">Current</p>
+                            <div className="bg-white border border-zinc-200 rounded p-2 text-xs text-zinc-900">
+                              {update.current_value || <span className="text-zinc-400 italic">Empty</span>}
+                            </div>
+                          </div>
+                          <div>
+                            <p className="text-[10px] text-zinc-500 mb-1">Proposed</p>
+                            <div className="bg-emerald-50 border border-emerald-200 rounded p-2 text-xs text-zinc-900">
+                              {update.proposed_value}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 justify-end">
+                          <Button variant="outline" size="sm" onClick={() => handleReject(update)} disabled={processingIds.has(update.id)} className="border-red-200 text-red-600 hover:bg-red-50 h-7 text-xs">
+                            <X className="h-3 w-3 mr-1" /> Reject
+                          </Button>
+                          <Button size="sm" onClick={() => handleApprove(update)} disabled={processingIds.has(update.id)} className="bg-emerald-600 hover:bg-emerald-700 text-white h-7 text-xs">
+                            <Check className="h-3 w-3 mr-1" /> Approve
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </div>
+            )}
+          </div>
         )}
       </CardContent>
     </Card>
