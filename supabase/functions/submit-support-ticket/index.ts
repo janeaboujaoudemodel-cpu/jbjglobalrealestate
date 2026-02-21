@@ -228,7 +228,7 @@ const handler = async (req: Request): Promise<Response> => {
       critical: { hours: 4, label: "2-4 hours", color: "#dc2626", bgColor: "#fef2f2" },
       high: { hours: 12, label: "8-12 hours", color: "#ea580c", bgColor: "#fff7ed" },
       normal: { hours: 48, label: "24-48 hours", color: "#2563eb", bgColor: "#eff6ff" },
-      low: { hours: 72, label: "48-72 hours", color: "#6b7280", bgColor: "#f9fafb" }
+      low: { hours: 72, label: "48-72 hours", color: "#16a34a", bgColor: "#f0fdf4" }
     };
     const priorityInfo = priorityConfig[aiAnalyzedPriority] || priorityConfig.normal;
     const slaDueDate = new Date(now.getTime() + priorityInfo.hours * 60 * 60 * 1000);

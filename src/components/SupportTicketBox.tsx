@@ -73,7 +73,7 @@ const SERVICE_CATEGORIES = [
 ];
 
 const PRIORITY_LEVELS = [
-  { value: "low", label: "Low", color: "text-zinc-500", description: "Minor issue, no urgency" },
+  { value: "low", label: "Low", color: "text-green-500", description: "Minor issue, no urgency" },
   { value: "normal", label: "Normal", color: "text-blue-500", description: "Standard priority" },
   { value: "high", label: "High", color: "text-orange-500", description: "Significant impact" },
   { value: "critical", label: "Critical", color: "text-red-500", description: "Blocking/Urgent" },
@@ -507,7 +507,7 @@ const SupportTicketBox = () => {
                         </DialogTitle>
                       </DialogHeader>
 
-                      <div className="flex-1 pr-2 pb-4 -webkit-overflow-scrolling-touch">
+                      <div ref={(el) => { if (el && isSubmitted) el.scrollTop = 0; }} className="flex-1 pr-2 pb-4 -webkit-overflow-scrolling-touch">
                         <AnimatePresence mode="wait">
                           {isSubmitted ? (
                             <motion.div
@@ -516,7 +516,7 @@ const SupportTicketBox = () => {
                               animate={{ opacity: 1, scale: 1, y: 0 }}
                               exit={{ opacity: 0, scale: 0.9 }}
                               transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                              className="py-8 text-center"
+                              className="py-4 text-center"
                             >
                               {/* Animated success icon with pulsing glow */}
                               <motion.div
@@ -896,43 +896,95 @@ const SupportTicketBox = () => {
                                 </label>
                               </div>
 
-                              {/* Attachment List with upload status */}
+                              {/* Attachment List with preview & quick view */}
                               {attachments.length > 0 && (
                                 <div className="mt-3 space-y-2">
-                                  {attachments.map((file, index) => (
-                                    <div
-                                      key={index}
-                                      className={`flex items-center justify-between rounded-lg px-3 py-2 transition-colors ${
-                                        uploadStatuses[index] === 'error' 
-                                          ? 'bg-red-50 border border-red-200' 
-                                          : uploadStatuses[index] === 'done'
-                                          ? 'bg-green-50 border border-green-200'
-                                          : 'bg-zinc-50'
-                                      }`}
-                                    >
-                                      <div className="flex items-center gap-2">
-                                        {getFileIcon(file)}
-                                        <span className="text-sm text-zinc-700 truncate max-w-[150px]">
-                                          {file.name}
-                                        </span>
-                                        <span className="text-xs text-zinc-400">
-                                          ({(file.size / 1024 / 1024).toFixed(2)}MB)
-                                        </span>
-                                        {/* Upload status indicator */}
-                                        {isSubmitting && getUploadStatusIcon(index)}
-                                      </div>
-                                      <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-6 w-6"
-                                        onClick={() => removeAttachment(index)}
-                                        disabled={isSubmitting}
+                                  {attachments.map((file, index) => {
+                                    const isImage = file.type.startsWith('image/');
+                                    const previewUrl = isImage ? URL.createObjectURL(file) : null;
+                                    return (
+                                      <div
+                                        key={index}
+                                        className={`flex items-center justify-between rounded-lg px-3 py-2 transition-colors ${
+                                          uploadStatuses[index] === 'error' 
+                                            ? 'bg-red-50 border border-red-200' 
+                                            : uploadStatuses[index] === 'done'
+                                            ? 'bg-green-50 border border-green-200'
+                                            : 'bg-zinc-50'
+                                        }`}
                                       >
-                                        <X className="w-4 h-4" />
-                                      </Button>
-                                    </div>
-                                  ))}
+                                        <div className="flex items-center gap-2 min-w-0">
+                                          {/* Thumbnail preview for images */}
+                                          {previewUrl ? (
+                                            <img src={previewUrl} alt={file.name} className="w-10 h-10 rounded object-cover border border-zinc-200 flex-shrink-0" />
+                                          ) : (
+                                            getFileIcon(file)
+                                          )}
+                                          <div className="min-w-0">
+                                            <span className="text-sm text-zinc-700 truncate block max-w-[140px]">
+                                              {file.name}
+                                            </span>
+                                            <span className="text-xs text-zinc-400">
+                                              {(file.size / 1024 / 1024).toFixed(2)}MB
+                                            </span>
+                                          </div>
+                                          {isSubmitting && getUploadStatusIcon(index)}
+                                        </div>
+                                        <div className="flex items-center gap-1 flex-shrink-0">
+                                          {/* Quick View Button */}
+                                          <Dialog>
+                                            <DialogTrigger asChild>
+                                              <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-7 w-7 text-gold hover:bg-gold/10"
+                                                title="Quick View"
+                                              >
+                                                <FileText className="w-4 h-4" />
+                                              </Button>
+                                            </DialogTrigger>
+                                            <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto bg-white z-[10060]">
+                                              <DialogHeader>
+                                                <DialogTitle className="text-sm truncate">{file.name}</DialogTitle>
+                                              </DialogHeader>
+                                              <div className="mt-2">
+                                                {isImage && previewUrl ? (
+                                                  <img src={previewUrl} alt={file.name} className="w-full rounded-lg" />
+                                                ) : file.type === 'application/pdf' ? (
+                                                  <iframe
+                                                    src={URL.createObjectURL(file)}
+                                                    className="w-full h-[60vh] rounded-lg border"
+                                                    title={file.name}
+                                                  />
+                                                ) : file.type.startsWith('video/') ? (
+                                                  <video controls className="w-full rounded-lg">
+                                                    <source src={URL.createObjectURL(file)} type={file.type} />
+                                                  </video>
+                                                ) : (
+                                                  <div className="text-center py-10 text-zinc-500">
+                                                    <FileText className="w-12 h-12 mx-auto mb-3 text-zinc-300" />
+                                                    <p className="text-sm">Preview not available for this file type</p>
+                                                    <p className="text-xs mt-1">{file.type || 'Unknown type'} • {(file.size / 1024 / 1024).toFixed(2)}MB</p>
+                                                  </div>
+                                                )}
+                                              </div>
+                                            </DialogContent>
+                                          </Dialog>
+                                          <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-6 w-6"
+                                            onClick={() => removeAttachment(index)}
+                                            disabled={isSubmitting}
+                                          >
+                                            <X className="w-4 h-4" />
+                                          </Button>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               )}
                             </div>
