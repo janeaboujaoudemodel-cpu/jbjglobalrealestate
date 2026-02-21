@@ -55,6 +55,50 @@ async function mirrorImage(
   }
 }
 
+// ── Mirror a document/brochure to Supabase Storage ────────────────────────────
+async function mirrorDocument(
+  supabase: ReturnType<typeof createClient>,
+  docUrl: string,
+  reellyId: number,
+  filename: string,
+): Promise<string | null> {
+  try {
+    // Convert Google Drive sharing links to direct download
+    let downloadUrl = docUrl;
+    if (docUrl.includes("drive.google.com")) {
+      const match = docUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (match) downloadUrl = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+    }
+
+    const res = await fetch(downloadUrl, { signal: AbortSignal.timeout(30000) });
+    if (!res.ok) return null;
+    const buffer = await res.arrayBuffer();
+    if (buffer.byteLength < 100) return null; // Skip empty/tiny files
+
+    const contentType = res.headers.get("content-type") || "application/pdf";
+    let ext = "pdf";
+    if (contentType.includes("doc")) ext = "docx";
+    else if (contentType.includes("xlsx") || contentType.includes("spreadsheet")) ext = "xlsx";
+
+    const safeName = filename.replace(/[^a-z0-9_-]/gi, "_").slice(0, 60);
+    const path = `projects/${reellyId}/docs/${safeName}.${ext}`;
+
+    const { error } = await supabase.storage.from(STORAGE_BUCKET).upload(path, buffer, {
+      contentType,
+      upsert: true,
+    });
+    if (error) {
+      console.warn(`[mirrorDocument] Upload failed for ${path}:`, error.message);
+      return null;
+    }
+    const { data: { publicUrl } } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(path);
+    return publicUrl;
+  } catch (e) {
+    console.warn(`[mirrorDocument] Error for ${docUrl}:`, e);
+    return null;
+  }
+}
+
 // ── Compute bedrooms_min / bedrooms_max from unit_types array ──────────────────
 function computeBedroomRange(units: ReturnType<typeof extractUnitTypes>): { min: number | null; max: number | null } {
   const bedroomValues = units
@@ -75,6 +119,11 @@ function computePriceRange(units: ReturnType<typeof extractUnitTypes>, projectMi
   const fallbackTo   = projectMaxPrice > 0 ? projectMaxPrice : null;
   if (!prices.length) return { from: fallbackFrom, to: fallbackTo };
   return { from: Math.min(...prices), to: Math.max(...prices) };
+}
+
+// ── Check if a URL is already mirrored to our storage ─────────────────────────
+function isLocalUrl(url: string): boolean {
+  return url.includes("mdafrewypkkrildjgtey") || url.includes("supabase");
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -101,10 +150,9 @@ Deno.serve(async (req) => {
 
     // ── "specific" mode: process given reelly IDs ─────────────────────────────
     if (mode === "specific" && projectIds.length) {
-      const results = { updated: 0, failed: 0, imagesStored: 0 };
+      const results = { updated: 0, failed: 0, imagesStored: 0, docsStored: 0 };
 
       for (const reellyId of projectIds.slice(0, batchSize)) {
-        // Fetch the DB project record first to get its UUID
         const { data: dbProject } = await supabase
           .from("projects")
           .select("id")
@@ -221,47 +269,48 @@ Deno.serve(async (req) => {
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // ── "batch" mode (default): process projects with missing data ────────────
-    // Prioritize: no images OR no bedrooms OR no price
+    // ── "batch" mode (default): process projects with ANY missing data ────────
+    // Expanded query: missing bedrooms, price, cover, amenities, unit_types, or external cover URLs
     const { data: projects } = await supabase
       .from("projects")
-      .select("id, reelly_id, name, cover_image_url, bedrooms_min, price_from")
+      .select("id, reelly_id, name, cover_image_url, bedrooms_min, price_from, amenities, unit_types")
       .not("reelly_id", "is", null)
       .eq("is_published", true)
-      .or("cover_image_url.is.null,bedrooms_min.is.null,price_from.is.null")
+      .or("cover_image_url.is.null,bedrooms_min.is.null,price_from.is.null,amenities.is.null,unit_types.is.null")
       .limit(batchSize);
 
     if (!projects?.length) {
-      // Try all projects for image mirroring
-      const { data: allProjects } = await supabase
+      // Secondary: find projects with external (non-local) cover images to mirror
+      const { data: externalProjects } = await supabase
         .from("projects")
         .select("id, reelly_id, name, cover_image_url")
         .not("reelly_id", "is", null)
         .eq("is_published", true)
+        .not("cover_image_url", "like", "%mdafrewypkkrildjgtey%")
+        .not("cover_image_url", "is", null)
         .limit(batchSize);
 
-      if (!allProjects?.length) {
-        return new Response(JSON.stringify({ success: true, message: "All projects have complete data", processed: 0 }), {
+      if (!externalProjects?.length) {
+        return new Response(JSON.stringify({ success: true, message: "All projects have complete local data", processed: 0 }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
-      // Use allProjects as fallback
-      const results = { updated: 0, failed: 0, imagesStored: 0 };
-      for (const project of allProjects) {
+      const results = { updated: 0, failed: 0, imagesStored: 0, docsStored: 0 };
+      for (const project of externalProjects) {
         const detail = await fetchDetail(apiKey, project.reelly_id);
         if (!detail) { results.failed++; continue; }
-        const updateData = await buildUpdateData(supabase, detail, project.reelly_id, mirrorImages, results, project.id);
+        const updateData = await buildUpdateData(supabase, detail, project.reelly_id, true, results, project.id);
         const { error } = await supabase.from("projects").update(updateData).eq("id", project.id);
-        if (error) { console.error(`[batch-all] Update error for ${project.id}:`, error.message); results.failed++; } else results.updated++;
+        if (error) { console.error(`[batch-mirror] Update error for ${project.id}:`, error.message); results.failed++; } else results.updated++;
         await new Promise(r => setTimeout(r, 300));
       }
-      return new Response(JSON.stringify({ success: true, mode: "batch-all", ...results }), {
+      return new Response(JSON.stringify({ success: true, mode: "batch-mirror-external", ...results }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const results = { updated: 0, failed: 0, imagesStored: 0, processed: projects.length };
+    const results = { updated: 0, failed: 0, imagesStored: 0, docsStored: 0, processed: projects.length };
     for (const project of projects) {
       const detail = await fetchDetail(apiKey, project.reelly_id);
       if (!detail) { results.failed++; continue; }
@@ -286,6 +335,7 @@ Deno.serve(async (req) => {
 // ─────────────────────────────────────────────────────────────────────────────
 // BUILD UPDATE DATA — Only updates valid `projects` columns.
 // Images go into project_images table; documents into project_documents table.
+// Floor plans mirrored to storage and saved in floor_plan_types column.
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function buildUpdateData(
@@ -293,13 +343,14 @@ async function buildUpdateData(
   detail: ReellyProject,
   reellyId: number,
   mirrorImages: boolean,
-  results: { imagesStored: number },
+  results: { imagesStored: number; docsStored?: number },
   projectId?: string,
 ): Promise<Record<string, unknown>> {
   const units     = extractUnitTypes(detail);
   const amenities = extractAmenities(detail);
   const images    = extractGalleryImages(detail);
   const docs      = extractDocuments(detail);
+  const floors    = extractFloorPlans(detail);
   const videos    = extractVideos(detail);
   const bedrooms  = computeBedroomRange(units);
   const prices    = computePriceRange(units, detail.min_price, detail.max_price);
@@ -322,7 +373,7 @@ async function buildUpdateData(
   if ((detail as any).highlights?.length) updateData.highlights = (detail as any).highlights;
   if ((detail as any).faqs?.length)       updateData.faqs       = (detail as any).faqs;
 
-  // ── Cover image ────────────────────────────────────────────────────────────
+  // ── Cover image — always mirror to local storage ───────────────────────────
   const coverUrl = detail.cover_image?.url;
   if (mirrorImages && coverUrl) {
     const mirrored = await mirrorImage(supabase, coverUrl, reellyId, "cover");
@@ -334,13 +385,13 @@ async function buildUpdateData(
     updateData.cover_image_url = images[0].url;
   }
 
-  // ── Sync images into project_images table ──────────────────────────────────
+  // ── Sync gallery images into project_images table (mirror each to storage) ─
   if (projectId && images.length) {
     const imageRows: Array<{ project_id: string; image_url: string; alt_text: string; display_order: number }> = [];
     let i = 0;
     for (const img of images.slice(0, 20)) {
       let finalUrl = img.url;
-      if (mirrorImages) {
+      if (mirrorImages && !isLocalUrl(finalUrl)) {
         const mirrored = await mirrorImage(supabase, img.url, reellyId, `img-${i}`);
         if (mirrored) { finalUrl = mirrored; results.imagesStored++; }
       }
@@ -348,7 +399,6 @@ async function buildUpdateData(
       i++;
       await new Promise(r => setTimeout(r, 80));
     }
-    // Delete existing and re-insert fresh images
     await supabase.from("project_images").delete().eq("project_id", projectId);
     if (imageRows.length) {
       const { error: imgErr } = await supabase.from("project_images").insert(imageRows);
@@ -357,22 +407,78 @@ async function buildUpdateData(
     }
   }
 
-  // ── Sync documents into project_documents table ────────────────────────────
+  // ── Sync documents/brochures — mirror to storage ───────────────────────────
   if (projectId && docs.length) {
     await supabase.from("project_documents").delete().eq("project_id", projectId);
-    const docRows = docs.slice(0, 20).map((doc: any, idx: number) => ({
-      project_id: projectId,
-      file_url: doc.url || doc.file_url || "",
-      file_name: doc.name || doc.file_name || `Document ${idx + 1}`,
-      document_type: doc.type || doc.document_type || "brochure",
-      display_order: idx,
-    })).filter((d: any) => d.file_url);
+    const docRows: Array<{ project_id: string; file_url: string; file_name: string; document_type: string; display_order: number }> = [];
+
+    for (let idx = 0; idx < Math.min(docs.length, 20); idx++) {
+      const doc = docs[idx];
+      let finalUrl = doc.url;
+      if (mirrorImages && finalUrl && !isLocalUrl(finalUrl)) {
+        const mirrored = await mirrorDocument(supabase, finalUrl, reellyId, `doc-${idx}-${doc.name?.replace(/[^a-z0-9]/gi, '_') || idx}`);
+        if (mirrored) {
+          finalUrl = mirrored;
+          if (results.docsStored != null) results.docsStored++;
+        }
+      }
+      if (finalUrl) {
+        docRows.push({
+          project_id: projectId,
+          file_url: finalUrl,
+          file_name: doc.name || `Document ${idx + 1}`,
+          document_type: doc.type || "brochure",
+          display_order: idx,
+        });
+      }
+    }
 
     if (docRows.length) {
       const { error: docErr } = await supabase.from("project_documents").insert(docRows);
       if (docErr) console.warn(`[buildUpdateData] project_documents insert error for project ${projectId}:`, docErr.message);
       else console.log(`[buildUpdateData] Inserted ${docRows.length} documents for project ${projectId}`);
     }
+  }
+
+  // ── Mirror floor plan images to storage and save in floor_plan_types ───────
+  if (floors.length) {
+    const mirroredFloors: Array<{ type: string; url: string; label: string; bedrooms?: number }> = [];
+
+    for (let idx = 0; idx < Math.min(floors.length, 20); idx++) {
+      const fp = floors[idx];
+      let finalUrl = fp.url;
+      if (mirrorImages && finalUrl && !isLocalUrl(finalUrl)) {
+        const mirrored = await mirrorImage(supabase, finalUrl, reellyId, `floorplan-${idx}`);
+        if (mirrored) { finalUrl = mirrored; results.imagesStored++; }
+      }
+      mirroredFloors.push({ ...fp, url: finalUrl });
+
+      // Also insert floor plans as documents for easy download
+      if (projectId && finalUrl) {
+        await supabase.from("project_documents").upsert({
+          project_id: projectId,
+          file_url: finalUrl,
+          file_name: fp.label || `Floor Plan ${idx + 1}`,
+          document_type: "floor_plan",
+          display_order: 100 + idx,
+        }, { onConflict: "project_id,file_url", ignoreDuplicates: true }).then(() => {});
+      }
+    }
+
+    updateData.floor_plan_types = mirroredFloors;
+  }
+
+  // ── Mirror unit type layout URLs to storage ────────────────────────────────
+  if (mirrorImages && units.length) {
+    for (let idx = 0; idx < units.length; idx++) {
+      const u = units[idx];
+      if (u.layout_url && !isLocalUrl(u.layout_url)) {
+        const mirrored = await mirrorImage(supabase, u.layout_url, reellyId, `layout-${idx}`);
+        if (mirrored) { u.layout_url = mirrored; results.imagesStored++; }
+      }
+    }
+    // Re-set unit_types with mirrored layout URLs
+    updateData.unit_types = units;
   }
 
   return updateData;
