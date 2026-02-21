@@ -1,47 +1,70 @@
 
+# Admin Chat Intelligence - Complete Fix and Upgrade
 
-# Chat Support - Final Fixes
+## Problems Identified
 
-## 1. Mobile Keyboard Bug (Root Cause Found)
+### 1. CV Download Shows "Upstream Download Failed"
+The `documents` storage bucket is set to **private**, but the CV submission code uses `getPublicUrl()` which generates a URL that only works for public buckets. When the admin dashboard tries to download via the proxy, the upstream fetch fails because the bucket requires authentication.
 
-The previous fix wrapped `ChatMessages` in `React.memo` and used a native `<input>`, but the **actual root cause** was never fixed:
+**Fix:** Make the `documents` bucket public (it stores CV files that need to be accessible), OR use signed URLs instead of public URLs.
 
-In `AIChatWidget.tsx` line 785:
-```
-onInputChange={(val) => setInput(val)}
-```
+### 2. Chat Transcripts Are Empty (messages: [])
+All 6 existing conversations have `messages: []`. The `saveMessagesToDb` function works correctly and the RLS policy exists, but these conversations were created **before** the UPDATE policy was added. The messages were never saved because the database rejected the updates silently.
 
-This creates a **new arrow function on every render**, which means `React.memo` on `ChatMessages` is completely bypassed -- the component still re-renders on every keystroke, causing the mobile keyboard to dismiss.
+**Fix:** The save mechanism is now working for new conversations. For the admin dashboard, we need to also pull from `chat_history` table (which logs individual messages with session IDs) as a fallback data source when `chat_conversations.messages` is empty.
 
-**Fix:** Replace the inline arrow with a stable reference -- either pass `setInput` directly or wrap it in `useCallback`. Same issue applies to the `onSend` and `onSubmitToTeam` handlers if they are not already stable.
+### 3. CV Not Showing Inline (Opens New Page with Error)
+The current CV download link opens in a new tab (`target="_blank"`). You want the CV to display inline in the dashboard with AI summary and scoring, matching the CVCenter style in the Employee Hub.
 
-## 2. CV Upload -- Already Fixed
+**Fix:** Replace the download link with an inline CV viewer panel that shows:
+- Candidate details (name, email, phone)
+- AI-generated summary of the CV
+- AI scoring/ranking
+- Inline PDF preview using an iframe
+- Action buttons (download, approve, reject)
 
-The CV submission component already shows file name and size immediately upon selection (line 261-262) and uses a `Loader2` spinner instead of fake progress. No further changes needed here.
+### 4. CV Submissions Not Appearing in Employee Hub
+The CVCenter component fetches from `hr_applications` table, but the chat widget saves to `hr_cv_submissions` table. These are two separate tables, so chat-submitted CVs never appear in the Employee Hub.
 
-## 3. AI Knowledge Base -- Stream Endpoint Still Minimal
+**Fix:** Modify CVCenter's `fetchCVs` function to ALSO query `hr_cv_submissions` and merge results into the same list. This ensures all CVs (from careers portal AND chat widget) appear in one unified view.
 
-The `ai-chat-support` edge function has the full expanded knowledge base (areas, developers, buying/selling/rental processes, fees, Golden Visa, ROI). However, `ai-chat-stream` (the **primary** endpoint used for streaming responses) still has a **condensed 20-line version** of the knowledge base (lines 126-147). This means the AI gives less informed answers when streaming works (which is the default path).
+### 5. UI Styling Needs Gold/Champagne Theme
+The current dashboard uses a dark zinc theme. Need to ensure active tab buttons are clearly visible and the overall aesthetic matches the platform's champagne gold standard.
 
-**Fix:** Copy the full `WEBSITE_KNOWLEDGE` from `ai-chat-support` into `ai-chat-stream`.
+**Fix:** Refine active tab styling with stronger gold borders and backgrounds. Ensure dropdown selects don't show blue hover states. Apply the champagne gold design system consistently.
 
-## 4. Where to Find Saved Chats
+---
 
-All chat data is already being saved and an admin dashboard exists:
+## Technical Implementation
 
-- **Admin Panel**: `/admin/chat-conversations` -- Shows all conversations with transcripts, user contact details, service type, and ratings
-- **CV Submissions**: Stored in `hr_cv_submissions` table, files in the `documents` storage bucket under `cv-submissions/`
-- **Lead Data**: `/admin/leads` -- All captured leads with full contact details
-- **Chat History Logs**: `chat_history` table stores individual messages with session IDs
+### File 1: Database Migration - Make Documents Bucket Public
+- Update the `documents` storage bucket to `public = true`
+- This allows CV PDF URLs to be accessible without authentication
 
-## Technical Changes
+### File 2: `src/pages/admin/AdminChatDashboard.tsx` (Major Rewrite)
+- **CV Viewer Panel:** Replace the download link with an inline viewer modal that shows:
+  - Candidate info card (name, email, phone, date, source)
+  - Embedded PDF preview via iframe (using the direct storage URL)
+  - AI summary section (generated on-the-fly via Gemini if not cached)
+  - AI scoring with visual indicators
+  - Action buttons: Download, Approve, Reject, Schedule Interview
+- **Chat History Fallback:** When a conversation's `messages` array is empty, query the `chat_history` table using the conversation's time range and email to find logged messages
+- **Active Tab Styling:** Ensure the active tab has a solid gold background with black text (not subtle gold/20 opacity), and inactive tabs show clear zinc styling without blue hover
+- **Service Filter:** Ensure all service types render correctly with proper labels
 
-### File 1: `src/components/AIChatWidget.tsx`
-- Wrap `onInputChange` in `useCallback` or pass `setInput` directly to prevent re-renders
-- Ensure all callback props passed to memoized children are stable references
+### File 3: `src/components/crm/CVCenter.tsx`
+- Modify `fetchCVs` to also query `hr_cv_submissions` table
+- Transform `hr_cv_submissions` records to match the `CVEntry` interface
+- Merge both data sources, deduplicate by email, sort by date
+- Chat-widget CVs will appear with source label "Chat Widget"
 
-### File 2: `supabase/functions/ai-chat-stream/index.ts`
-- Replace the condensed `WEBSITE_KNOWLEDGE` (lines 126-147) with the full expanded version from `ai-chat-support` (covering all areas, developers, processes, fees, FAQs)
+### File 4: Edge Function or Inline Logic for CV AI Summary
+- When viewing a CV in the admin dashboard, call the existing document-extractor or a lightweight Gemini function to:
+  - Generate a 2-3 sentence summary of the candidate
+  - Score the CV on a 1-10 scale based on relevance to real estate
+  - Extract key skills and experience
+- Cache the results in the `hr_cv_submissions` table (add `ai_summary`, `ai_ranking` columns if not present)
 
-These are the only two changes needed -- the mobile keyboard fix is a one-line change, and the knowledge sync is a copy-paste of the knowledge constant.
-
+### Database Changes
+1. Make `documents` bucket public: `UPDATE storage.buckets SET public = true WHERE id = 'documents'`
+2. Add AI columns to `hr_cv_submissions` if missing: `ai_summary TEXT`, `ai_ranking INTEGER DEFAULT 0`
