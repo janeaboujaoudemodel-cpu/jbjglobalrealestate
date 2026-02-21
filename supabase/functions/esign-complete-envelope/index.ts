@@ -1,6 +1,6 @@
 import { corsHeaders, getCorsHeaders, corsJsonResponse, corsErrorResponse } from "../_shared/cors-utils.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { Resend } from "npm:resend@2.0.0";
+
 import { PDFDocument, rgb, StandardFonts } from "npm:pdf-lib@1.17.1";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -397,7 +397,7 @@ Deno.serve(async (req) => {
       .eq("id", envelope.id);
 
     // ── Send completion emails ─────────────────────────────────────────────
-    const resend = resendApiKey ? new Resend(resendApiKey, { baseUrl: "https://api.ap.resend.com" }) : null;
+    // Use direct fetch to Resend global API
     const baseUrl = Deno.env.get("SITE_URL") || "https://jbj.ae";
 
     const completionEmailHtml = `
@@ -476,15 +476,21 @@ Deno.serve(async (req) => {
       ...envelope.esign_recipients.map((r: any) => r.email),
     ];
 
-    if (resend) {
+    if (resendApiKey) {
       for (const email of allEmails) {
         try {
-          await resend.emails.send({
-            from: "JBJ E-Signature <noreply@jbj.ae>",
-            to: email,
-            subject: `Signed: ${envelope.name}`,
-            html: completionEmailHtml,
+          const res = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+              from: "JBJ E-Signature <info@jbj.ae>",
+              to: [email],
+              subject: `Signed: ${envelope.name}`,
+              html: completionEmailHtml,
+            }),
           });
+          const resData = await res.json();
+          if (!res.ok) console.error("Resend API error:", JSON.stringify(resData));
         } catch (emailError) {
           console.error("Failed to send completion email to", email, emailError);
         }

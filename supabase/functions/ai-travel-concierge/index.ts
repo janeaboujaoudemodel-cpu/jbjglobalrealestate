@@ -189,7 +189,7 @@ async function sendAutoBlockNotification(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "JBJ Security <NOREPLY@JBJ.AE>",
+        from: "JBJ Security <info@jbj.ae>",
         to: ["CONTACT@JBJ.AE"],
         subject: `[Security Alert] IP Auto-Blocked: ${clientIp}`,
         html: `

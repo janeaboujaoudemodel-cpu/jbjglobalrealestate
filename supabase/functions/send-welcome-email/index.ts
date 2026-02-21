@@ -173,7 +173,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: "JBJ Global Real Estate <NOREPLY@JBJ.AE>",
+        from: "JBJ Global Real Estate <info@jbj.ae>",
         to: [email],
         subject: subjectByRole[role],
         html: `

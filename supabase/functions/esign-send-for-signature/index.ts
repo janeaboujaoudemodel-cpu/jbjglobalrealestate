@@ -1,6 +1,5 @@
 import { corsHeaders, getCorsHeaders, corsJsonResponse, corsErrorResponse } from "../_shared/cors-utils.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { Resend } from "npm:resend@2.0.0";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -62,8 +61,7 @@ Deno.serve(async (req) => {
       return corsErrorResponse("No recipients found", 400, origin);
     }
 
-    // Initialize Resend if available
-    const resend = resendApiKey ? new Resend(resendApiKey, { baseUrl: "https://api.ap.resend.com" }) : null;
+    // Use direct fetch to Resend global API (SDK AP endpoint causes issues)
 
     const baseUrl = Deno.env.get("SITE_URL") || "https://jbj.ae";
 
@@ -141,15 +139,21 @@ Deno.serve(async (req) => {
 </body>
 </html>`;
 
-      // Send email via Resend
-      if (resend) {
+      // Send email via Resend (direct fetch to global API)
+      if (resendApiKey) {
         try {
-          await resend.emails.send({
-            from: "JBJ E-Signature <noreply@jbj.ae>",
-            to: recipient.email,
-            subject: envelope.email_subject || `Please sign: ${envelope.name}`,
-            html: emailHtml,
+          const res = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+              from: "JBJ E-Signature <info@jbj.ae>",
+              to: [recipient.email],
+              subject: envelope.email_subject || `Please sign: ${envelope.name}`,
+              html: emailHtml,
+            }),
           });
+          const resData = await res.json();
+          if (!res.ok) console.error("Resend API error:", JSON.stringify(resData));
         } catch (emailError) {
           console.error("Failed to send email to", recipient.email, emailError);
         }
