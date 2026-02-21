@@ -3,15 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
-interface ClickData {
-  element: string;
-  elementId?: string;
-  elementClass?: string;
-  href?: string;
-  text?: string;
-  buttonType?: string;
-}
-
+// ── Device / Browser helpers ──
 const getDeviceType = (): string => {
   const width = window.innerWidth;
   if (width < 768) return 'mobile';
@@ -39,20 +31,9 @@ const getOS = (): string => {
   return 'Unknown';
 };
 
-const getScreenResolution = (): string => {
-  return `${window.screen.width}x${window.screen.height}`;
-};
-
-const getViewportSize = (): string => {
-  return `${window.innerWidth}x${window.innerHeight}`;
-};
-
 const getTimezone = (): string => {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone;
-};
-
-const getLanguages = (): string[] => {
-  return navigator.languages ? [...navigator.languages] : [navigator.language];
+  try { return Intl.DateTimeFormat().resolvedOptions().timeZone; }
+  catch { return 'Unknown'; }
 };
 
 export const getSessionId = (): string => {
@@ -65,131 +46,163 @@ export const getSessionId = (): string => {
   return sessionId;
 };
 
+// ── Batched event queue for user_events (high-perf) ──
+interface QueuedUserEvent {
+  user_id: string | null;
+  session_id: string;
+  event_name: string;
+  page_path: string;
+  element_id: string | null;
+  metadata: Record<string, unknown>;
+}
+
+const USER_EVENT_QUEUE: QueuedUserEvent[] = [];
+let userEventFlushTimer: ReturnType<typeof setTimeout> | null = null;
+const FLUSH_INTERVAL = 4000;
+const MAX_BATCH = 25;
+
+async function flushUserEvents() {
+  if (USER_EVENT_QUEUE.length === 0) return;
+  const batch = USER_EVENT_QUEUE.splice(0, MAX_BATCH);
+  try {
+    await supabase.from('user_events').insert(
+      batch.map(e => ({ ...e, metadata: e.metadata as any })) as any[]
+    );
+  } catch (err) {
+    console.warn('[Activity] Batch flush error:', err);
+  }
+}
+
+function scheduleUserEventFlush() {
+  if (userEventFlushTimer) return;
+  userEventFlushTimer = setTimeout(() => {
+    userEventFlushTimer = null;
+    flushUserEvents();
+  }, FLUSH_INTERVAL);
+}
+
+// ── Throttle helper ──
+function throttle<T extends (...args: any[]) => void>(fn: T, ms: number): T {
+  let last = 0;
+  return ((...args: any[]) => {
+    const now = Date.now();
+    if (now - last >= ms) { last = now; fn(...args); }
+  }) as T;
+}
+
+/**
+ * GlobalVisitorTracking — unified tracking component.
+ * Writes to BOTH legacy visitor_* tables AND new user_events + user_sessions tables.
+ * Points are auto-awarded via DB trigger (award_points_on_event).
+ */
 export const GlobalVisitorTracking = () => {
   const location = useLocation();
   const { user } = useAuth();
   const hasInitialized = useRef(false);
-  const clickCount = useRef(0);
+  const sessionCreated = useRef(false);
   const scrollDepth = useRef(0);
   const pageEntryTime = useRef(Date.now());
 
-  // Initialize or update session - using insert with error handling
-  const initSession = useCallback(async () => {
+  // ── Queue a user event (batched insert) ──
+  const queueUserEvent = useCallback((
+    eventName: string,
+    metadata: Record<string, unknown> = {},
+    elementId?: string
+  ) => {
+    USER_EVENT_QUEUE.push({
+      user_id: user?.id || null,
+      session_id: getSessionId(),
+      event_name: eventName,
+      page_path: location.pathname,
+      element_id: elementId || null,
+      metadata,
+    });
+    if (USER_EVENT_QUEUE.length >= MAX_BATCH) {
+      flushUserEvents();
+    } else {
+      scheduleUserEventFlush();
+    }
+  }, [user, location.pathname]);
+
+  // ── Create user_sessions row ──
+  const initUserSession = useCallback(async () => {
+    if (sessionCreated.current) return;
+    sessionCreated.current = true;
+
+    const sessionId = getSessionId();
+    const urlParams = new URLSearchParams(window.location.search);
+
+    try {
+      await supabase.from('user_sessions').insert({
+        user_id: user?.id || null,
+        session_id: sessionId,
+        device_type: getDeviceType(),
+        os: getOS(),
+        browser: getBrowserInfo(),
+        user_agent: navigator.userAgent.substring(0, 500),
+        timezone: getTimezone(),
+        referrer: document.referrer || null,
+        utm_source: urlParams.get('utm_source') || null,
+        utm_medium: urlParams.get('utm_medium') || null,
+        utm_campaign: urlParams.get('utm_campaign') || null,
+        is_authenticated: !!user,
+      } as any);
+    } catch {
+      // Session may already exist (page reload) — update instead
+      await supabase.from('user_sessions').update({
+        user_id: user?.id || null,
+        is_authenticated: !!user,
+      } as any).eq('session_id', sessionId);
+    }
+  }, [user]);
+
+  // ── Legacy visitor_sessions init ──
+  const initLegacySession = useCallback(async () => {
     if (hasInitialized.current) return;
     hasInitialized.current = true;
 
     const sessionId = getSessionId();
-    
     try {
-      const sessionData = {
-        session_id: sessionId,
-        device_type: getDeviceType(),
-        browser: getBrowserInfo(),
-        os: getOS(),
-        referrer: document.referrer || null,
-        landing_page: location.pathname,
-        pages_visited: 1,
-        user_id: user?.id || null,
-        user_agent: navigator.userAgent,
-      };
-
-      // Try insert first, if it fails (duplicate), just update
       const { error: insertError } = await supabase
         .from('visitor_sessions')
-        .insert(sessionData as any);
+        .insert({
+          session_id: sessionId,
+          device_type: getDeviceType(),
+          browser: getBrowserInfo(),
+          os: getOS(),
+          referrer: document.referrer || null,
+          landing_page: location.pathname,
+          pages_visited: 1,
+          user_id: user?.id || null,
+          user_agent: navigator.userAgent,
+        } as any);
 
       if (insertError) {
-        // Session already exists, update it instead
-        await supabase
-          .from('visitor_sessions')
-          .update({
-            last_activity_at: new Date().toISOString(),
-            user_id: user?.id || null,
-          })
+        await supabase.from('visitor_sessions')
+          .update({ last_activity_at: new Date().toISOString(), user_id: user?.id || null })
           .eq('session_id', sessionId);
       }
-
-      console.log('[Tracking] Session initialized:', sessionId);
-    } catch (error) {
-      // Silently fail for tracking - don't break the app
-      console.warn('[Tracking] Session init error:', error);
-    }
+    } catch { /* silent */ }
   }, [location.pathname, user]);
 
-  // Track every click on the page
-  const handleGlobalClick = useCallback(async (event: MouseEvent) => {
-    const target = event.target as HTMLElement;
-    if (!target) return;
-
-    clickCount.current += 1;
-    const sessionId = getSessionId();
-
-    // Get element details
-    const clickData: ClickData = {
-      element: target.tagName.toLowerCase(),
-      elementId: target.id || undefined,
-      elementClass: target.className || undefined,
-      text: target.textContent?.slice(0, 100) || undefined,
-    };
-
-    // Check for links
-    const linkElement = target.closest('a');
-    if (linkElement) {
-      clickData.href = linkElement.href;
-      clickData.element = 'link';
-    }
-
-    // Check for buttons
-    const buttonElement = target.closest('button');
-    if (buttonElement) {
-      clickData.element = 'button';
-      clickData.buttonType = buttonElement.type || 'button';
-      clickData.text = buttonElement.textContent?.slice(0, 100) || undefined;
-    }
-
-    // Check for downloads
-    if (linkElement?.hasAttribute('download') || linkElement?.href?.includes('/download')) {
-      clickData.element = 'download_link';
-    }
-
-    try {
-      await supabase.from('visitor_events').insert({
-        session_id: sessionId,
-        event_type: 'click',
-        event_name: `Clicked ${clickData.element}`,
-        page_path: location.pathname,
-        element_id: clickData.elementId || null,
-        element_class: clickData.elementClass || null,
-        element_text: clickData.text || null,
-        event_data: clickData as any,
-      } as any);
-    } catch (error) {
-      // Silently fail for non-critical tracking
-    }
-  }, [location.pathname]);
-
-  // Track scroll depth
-  const handleScroll = useCallback(() => {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const currentDepth = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
-    
-    if (currentDepth > scrollDepth.current) {
-      scrollDepth.current = currentDepth;
-    }
-  }, []);
-
-  // Track page view with time spent on previous page
+  // ── Track page view ──
   const trackPageView = useCallback(async () => {
     const sessionId = getSessionId();
     const path = location.pathname;
-    const timeOnPreviousPage = Math.floor((Date.now() - pageEntryTime.current) / 1000);
-    
-    // Reset for new page
+    const timeOnPrevPage = Math.floor((Date.now() - pageEntryTime.current) / 1000);
+    const prevScroll = scrollDepth.current;
     pageEntryTime.current = Date.now();
-    const previousScrollDepth = scrollDepth.current;
     scrollDepth.current = 0;
 
+    // Queue to new user_events table (points auto-awarded by DB trigger)
+    queueUserEvent('page_view', {
+      title: document.title,
+      referrer: document.referrer,
+      time_on_previous_page: timeOnPrevPage,
+      scroll_depth_previous: prevScroll,
+    });
+
+    // Legacy visitor_events
     try {
       await supabase.from('visitor_events').insert({
         session_id: sessionId,
@@ -199,76 +212,155 @@ export const GlobalVisitorTracking = () => {
         event_data: {
           page_url: window.location.href,
           title: document.title,
-          time_on_previous_page_seconds: timeOnPreviousPage,
-          scroll_depth_on_previous_page: previousScrollDepth,
+          time_on_previous_page_seconds: timeOnPrevPage,
+          scroll_depth_on_previous_page: prevScroll,
           referrer: document.referrer,
         },
       } as any);
 
-      // Update session
       const pagesVisited = parseInt(sessionStorage.getItem('pages_visited') || '0') + 1;
       sessionStorage.setItem('pages_visited', pagesVisited.toString());
 
-      await supabase
-        .from('visitor_sessions')
-        .update({
-          pages_visited: pagesVisited,
-          last_activity_at: new Date().toISOString(),
-        })
+      await supabase.from('visitor_sessions')
+        .update({ pages_visited: pagesVisited, last_activity_at: new Date().toISOString() })
         .eq('session_id', sessionId);
-    } catch (error) {
-      console.error('[Tracking] Page view error:', error);
-    }
-  }, [location.pathname]);
 
-  // Update session on exit - fire and forget (no await since beforeunload)
+      // Also update new user_sessions pages count
+      await supabase.from('user_sessions')
+        .update({ pages_visited: pagesVisited } as any)
+        .eq('session_id', sessionId);
+    } catch { /* silent */ }
+  }, [location.pathname, queueUserEvent]);
+
+  // ── Track clicks (throttled to max 1/second to avoid spam) ──
+  const handleGlobalClick = useCallback(throttle(async (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    if (!target) return;
+
+    const sessionId = getSessionId();
+    const linkEl = target.closest('a');
+    const btnEl = target.closest('button');
+    
+    let elementType = target.tagName.toLowerCase();
+    let text = target.textContent?.slice(0, 100) || '';
+    
+    if (linkEl) { elementType = 'link'; text = linkEl.textContent?.slice(0, 100) || ''; }
+    if (btnEl) { elementType = 'button'; text = btnEl.textContent?.slice(0, 100) || ''; }
+
+    // Queue to user_events
+    queueUserEvent('click', { element: elementType, text }, target.id || undefined);
+
+    // Legacy visitor_events
+    try {
+      await supabase.from('visitor_events').insert({
+        session_id: sessionId,
+        event_type: 'click',
+        event_name: `Clicked ${elementType}`,
+        page_path: location.pathname,
+        element_id: target.id || null,
+        element_text: text || null,
+        event_data: { element: elementType, text, href: linkEl?.href },
+      } as any);
+    } catch { /* silent */ }
+  }, 1000), [location.pathname, queueUserEvent]);
+
+  // ── Track scroll depth ──
+  const handleScroll = useCallback(() => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const currentDepth = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+    if (currentDepth > scrollDepth.current) scrollDepth.current = currentDepth;
+  }, []);
+
+  // ── Handle exit / tab close ──
   const handleBeforeUnload = useCallback(() => {
+    // Flush pending events
+    flushUserEvents();
+
     const sessionId = getSessionId();
     const sessionStartTime = parseInt(sessionStorage.getItem('session_start_time') || Date.now().toString());
     const totalTimeSpent = Math.floor((Date.now() - sessionStartTime) / 1000);
 
-    // Best-effort update - fire and forget pattern
-    // Using void to explicitly ignore the promise result
+    // Update new user_sessions
+    const data = JSON.stringify({
+      ended_at: new Date().toISOString(),
+      duration_seconds: totalTimeSpent,
+    });
+
+    // sendBeacon for reliability on page close
+    if (navigator.sendBeacon) {
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/user_sessions?session_id=eq.${encodeURIComponent(sessionId)}`;
+      navigator.sendBeacon(url, new Blob([data], { type: 'application/json' }));
+    }
+
+    // Legacy update
     void (async () => {
       try {
-        await supabase
-          .from('visitor_sessions')
-          .update({
-            total_time_spent: totalTimeSpent,
-            last_activity_at: new Date().toISOString(),
-            scroll_depth_max: scrollDepth.current,
-          })
+        await supabase.from('visitor_sessions')
+          .update({ total_time_spent: totalTimeSpent, last_activity_at: new Date().toISOString(), scroll_depth_max: scrollDepth.current })
           .eq('session_id', sessionId);
-      } catch {
-        // Silent fail - tracking shouldn't break UX
-      }
+      } catch { /* silent */ }
     })();
   }, []);
 
-  // Initialize on mount
+  // ── Track visibility change (mobile background) ──
+  const handleVisibilityChange = useCallback(() => {
+    if (document.visibilityState === 'hidden') {
+      flushUserEvents();
+      const sessionId = getSessionId();
+      const sessionStartTime = parseInt(sessionStorage.getItem('session_start_time') || Date.now().toString());
+      const totalTimeSpent = Math.floor((Date.now() - sessionStartTime) / 1000);
+      
+      void supabase.from('user_sessions')
+        .update({ duration_seconds: totalTimeSpent } as any)
+        .eq('session_id', sessionId);
+    }
+  }, []);
+
+  // ── Initialize ──
   useEffect(() => {
-    initSession();
-  }, [initSession]);
+    initLegacySession();
+    initUserSession();
+  }, [initLegacySession, initUserSession]);
+
+  // ── When user authenticates mid-session, update session records ──
+  useEffect(() => {
+    if (!user?.id) return;
+    const sessionId = getSessionId();
+    
+    // Update user_sessions with user_id
+    void supabase.from('user_sessions')
+      .update({ user_id: user.id, is_authenticated: true } as any)
+      .eq('session_id', sessionId);
+
+    // Update legacy visitor_sessions
+    void supabase.from('visitor_sessions')
+      .update({ user_id: user.id })
+      .eq('session_id', sessionId);
+
+    // Queue login event
+    queueUserEvent('login', { method: 'session_restore' });
+  }, [user?.id, queueUserEvent]);
 
   // Track page views
-  useEffect(() => {
-    trackPageView();
-  }, [trackPageView]);
+  useEffect(() => { trackPageView(); }, [trackPageView]);
 
-  // Add global event listeners
+  // Global event listeners
   useEffect(() => {
     window.addEventListener('click', handleGlobalClick);
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('beforeunload', handleBeforeUnload);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       window.removeEventListener('click', handleGlobalClick);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('beforeunload', handleBeforeUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [handleGlobalClick, handleScroll, handleBeforeUnload]);
+  }, [handleGlobalClick, handleScroll, handleBeforeUnload, handleVisibilityChange]);
 
-  return null; // This component doesn't render anything
+  return null;
 };
 
 export default GlobalVisitorTracking;

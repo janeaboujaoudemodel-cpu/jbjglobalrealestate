@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_points_config: {
+        Row: {
+          created_at: string
+          description: string | null
+          event_name: string
+          id: string
+          is_active: boolean | null
+          points: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          event_name: string
+          id?: string
+          is_active?: boolean | null
+          points?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          event_name?: string
+          id?: string
+          is_active?: boolean | null
+          points?: number
+        }
+        Relationships: []
+      }
       addon_tools: {
         Row: {
           category: string
@@ -19238,6 +19265,51 @@ export type Database = {
         }
         Relationships: []
       }
+      user_daily_activity: {
+        Row: {
+          created_at: string
+          day_date: string
+          first_seen_at: string | null
+          id: string
+          last_seen_at: string | null
+          points_earned: number | null
+          sessions_count: number | null
+          streak_day_number: number | null
+          total_duration_seconds: number | null
+          total_events: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          day_date: string
+          first_seen_at?: string | null
+          id?: string
+          last_seen_at?: string | null
+          points_earned?: number | null
+          sessions_count?: number | null
+          streak_day_number?: number | null
+          total_duration_seconds?: number | null
+          total_events?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          day_date?: string
+          first_seen_at?: string | null
+          id?: string
+          last_seen_at?: string | null
+          points_earned?: number | null
+          sessions_count?: number | null
+          streak_day_number?: number | null
+          total_duration_seconds?: number | null
+          total_events?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_downloads: {
         Row: {
           created_at: string
@@ -19283,6 +19355,45 @@ export type Database = {
         }
         Relationships: []
       }
+      user_events: {
+        Row: {
+          created_at: string
+          element_id: string | null
+          event_name: string
+          event_time: string
+          id: string
+          metadata: Json | null
+          page_path: string | null
+          points_awarded: number | null
+          session_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          element_id?: string | null
+          event_name: string
+          event_time?: string
+          id?: string
+          metadata?: Json | null
+          page_path?: string | null
+          points_awarded?: number | null
+          session_id: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          element_id?: string | null
+          event_name?: string
+          event_time?: string
+          id?: string
+          metadata?: Json | null
+          page_path?: string | null
+          points_awarded?: number | null
+          session_id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_feedback: {
         Row: {
           action_ref_id: string | null
@@ -19310,6 +19421,72 @@ export type Database = {
           id?: string
           rating?: number
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_interest_profile: {
+        Row: {
+          avg_budget_estimate: number | null
+          created_at: string
+          current_streak: number | null
+          device_mix: Json | null
+          engagement_score: number | null
+          id: string
+          intent_score: number | null
+          last_active_at: string | null
+          last_updated_at: string | null
+          longest_streak: number | null
+          preferred_areas: string[] | null
+          preferred_bedrooms: number[] | null
+          preferred_property_types: string[] | null
+          tools_used: string[] | null
+          top_pages: string[] | null
+          total_points: number | null
+          total_sessions: number | null
+          total_time_seconds: number | null
+          user_id: string
+        }
+        Insert: {
+          avg_budget_estimate?: number | null
+          created_at?: string
+          current_streak?: number | null
+          device_mix?: Json | null
+          engagement_score?: number | null
+          id?: string
+          intent_score?: number | null
+          last_active_at?: string | null
+          last_updated_at?: string | null
+          longest_streak?: number | null
+          preferred_areas?: string[] | null
+          preferred_bedrooms?: number[] | null
+          preferred_property_types?: string[] | null
+          tools_used?: string[] | null
+          top_pages?: string[] | null
+          total_points?: number | null
+          total_sessions?: number | null
+          total_time_seconds?: number | null
+          user_id: string
+        }
+        Update: {
+          avg_budget_estimate?: number | null
+          created_at?: string
+          current_streak?: number | null
+          device_mix?: Json | null
+          engagement_score?: number | null
+          id?: string
+          intent_score?: number | null
+          last_active_at?: string | null
+          last_updated_at?: string | null
+          longest_streak?: number | null
+          preferred_areas?: string[] | null
+          preferred_bedrooms?: number[] | null
+          preferred_property_types?: string[] | null
+          tools_used?: string[] | null
+          top_pages?: string[] | null
+          total_points?: number | null
+          total_sessions?: number | null
+          total_time_seconds?: number | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -19422,6 +19599,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_points_ledger: {
+        Row: {
+          created_at: string
+          daily_total: number | null
+          event_id: string | null
+          id: string
+          points: number
+          reason: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          daily_total?: number | null
+          event_id?: string | null
+          id?: string
+          points?: number
+          reason: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          daily_total?: number | null
+          event_id?: string | null
+          id?: string
+          points?: number
+          reason?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_points_ledger_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "user_events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_preferences: {
         Row: {
@@ -19642,6 +19857,78 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_sessions: {
+        Row: {
+          browser: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          device_type: string | null
+          duration_seconds: number | null
+          ended_at: string | null
+          id: string
+          ip_hash: string | null
+          is_authenticated: boolean | null
+          os: string | null
+          pages_visited: number | null
+          referrer: string | null
+          session_id: string
+          started_at: string
+          timezone: string | null
+          user_agent: string | null
+          user_id: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          ip_hash?: string | null
+          is_authenticated?: boolean | null
+          os?: string | null
+          pages_visited?: number | null
+          referrer?: string | null
+          session_id: string
+          started_at?: string
+          timezone?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          ip_hash?: string | null
+          is_authenticated?: boolean | null
+          os?: string | null
+          pages_visited?: number | null
+          referrer?: string | null
+          session_id?: string
+          started_at?: string
+          timezone?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
         }
         Relationships: []
       }

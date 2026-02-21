@@ -1,82 +1,83 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { usePointsLedger } from "@/hooks/usePointsLedger";
+import { useActivityStats } from "@/hooks/useActivityStats";
 import { SEOHead } from "@/components/SEOHead";
-import { Loader2, ArrowLeft, Activity, Calendar, Flame, TrendingUp, Clock } from "lucide-react";
+import { Loader2, ArrowLeft, Activity, Calendar, Flame, TrendingUp, Clock, Smartphone, Monitor, Tablet, Zap, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useEffect, useMemo } from "react";
-import { format, formatDistanceToNow } from "date-fns";
+import { useEffect, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+import { motion } from "framer-motion";
+
+const EVENT_LABELS: Record<string, string> = {
+  page_view: "Viewed a page",
+  click: "Interaction",
+  login: "Logged in",
+  search: "Searched",
+  listing_view: "Viewed listing",
+  property_view: "Viewed property",
+  community_view: "Viewed community",
+  favorite: "Saved to favorites",
+  lead_submit: "Submitted inquiry",
+  ai_tool_used: "Used AI tool",
+  tool_use: "Used a tool",
+  form_submission: "Submitted a form",
+  filter_change: "Applied filter",
+  compare_used: "Used compare tool",
+  download: "Downloaded document",
+  click_call: "Clicked call",
+  click_whatsapp: "Clicked WhatsApp",
+  click_email: "Clicked email",
+};
+
+const EVENT_COLORS: Record<string, string> = {
+  page_view: "text-blue-500",
+  click: "text-zinc-500",
+  login: "text-emerald-500",
+  search: "text-purple-500",
+  listing_view: "text-gold",
+  property_view: "text-gold",
+  favorite: "text-red-500",
+  lead_submit: "text-emerald-600",
+  ai_tool_used: "text-purple-600",
+};
+
+const DeviceIcon = ({ device }: { device: string }) => {
+  if (device === 'mobile') return <Smartphone className="w-4 h-4" />;
+  if (device === 'tablet') return <Tablet className="w-4 h-4" />;
+  return <Monitor className="w-4 h-4" />;
+};
+
+const AnimatedCounter = ({ value }: { value: number }) => {
+  const [displayed, setDisplayed] = useState(0);
+  useEffect(() => {
+    if (value === 0) { setDisplayed(0); return; }
+    const duration = 800;
+    const steps = 30;
+    const increment = value / steps;
+    let current = 0;
+    const interval = setInterval(() => {
+      current += increment;
+      if (current >= value) { setDisplayed(value); clearInterval(interval); }
+      else setDisplayed(Math.round(current));
+    }, duration / steps);
+    return () => clearInterval(interval);
+  }, [value]);
+  return <span>{displayed.toLocaleString()}</span>;
+};
 
 const MyDashboardActivity = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const { entries, isLoading } = usePointsLedger();
+  const { data: stats, isLoading } = useActivityStats();
+  const [chartMode, setChartMode] = useState<'events' | 'points'>('events');
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/auth?redirect=/my-dashboard/activity');
-    }
+    if (!authLoading && !user) navigate('/auth?redirect=/my-dashboard/activity');
   }, [user, authLoading, navigate]);
-
-  // Calculate activity stats
-  const stats = useMemo(() => {
-    if (!entries || entries.length === 0) {
-      return { daysActive: 0, currentStreak: 0, weeklyPoints: 0, totalActivities: 0 };
-    }
-
-    const now = new Date();
-    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-
-    const activeDays = new Set<string>();
-    let weeklyPoints = 0;
-
-    entries.forEach(entry => {
-      const entryDate = new Date(entry.created_at);
-      if (entryDate >= thirtyDaysAgo) {
-        activeDays.add(entryDate.toDateString());
-      }
-      if (entryDate >= oneWeekAgo) {
-        weeklyPoints += entry.points_delta;
-      }
-    });
-
-    // Calculate streak
-    const sortedDates = Array.from(activeDays)
-      .map(d => new Date(d))
-      .sort((a, b) => b.getTime() - a.getTime());
-
-    let currentStreak = 0;
-    const today = new Date().toDateString();
-    const yesterday = new Date(Date.now() - 86400000).toDateString();
-
-    if (sortedDates.length > 0) {
-      const latestDate = sortedDates[0].toDateString();
-      if (latestDate === today || latestDate === yesterday) {
-        currentStreak = 1;
-        for (let i = 1; i < sortedDates.length; i++) {
-          const prevDate = sortedDates[i - 1];
-          const currDate = sortedDates[i];
-          const diffDays = Math.round((prevDate.getTime() - currDate.getTime()) / 86400000);
-          if (diffDays === 1) {
-            currentStreak++;
-          } else {
-            break;
-          }
-        }
-      }
-    }
-
-    return {
-      daysActive: activeDays.size,
-      currentStreak,
-      weeklyPoints,
-      totalActivities: entries.length,
-    };
-  }, [entries]);
 
   if (authLoading || isLoading) {
     return (
@@ -86,9 +87,13 @@ const MyDashboardActivity = () => {
     );
   }
 
-  if (!user) {
-    return null;
-  }
+  if (!user || !stats) return null;
+
+  const formatDuration = (seconds: number) => {
+    if (seconds < 60) return `${seconds}s`;
+    if (seconds < 3600) return `${Math.round(seconds / 60)}m`;
+    return `${Math.round(seconds / 3600)}h ${Math.round((seconds % 3600) / 60)}m`;
+  };
 
   return (
     <>
@@ -97,113 +102,204 @@ const MyDashboardActivity = () => {
         description="View your activity history and engagement on the platform."
       />
       
-      <div className="min-h-screen bg-black">
-        <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
-          <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0d0d0d 100%)' }}>
+        <div className="mx-3 md:mx-4 lg:mx-6 my-6 rounded-2xl border border-gold/30 overflow-hidden"
+          style={{ background: 'linear-gradient(145deg, rgba(20,18,14,0.95) 0%, rgba(30,26,20,0.9) 50%, rgba(15,13,10,0.95) 100%)' }}
+        >
+          <div className="container mx-auto px-4 py-8 max-w-5xl">
             {/* Back Button */}
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate('/my-dashboard')}
-              className="mb-6 text-gold hover:text-gold/80"
-            >
+            <Button variant="ghost" onClick={() => navigate('/my-dashboard')} className="mb-6 text-gold hover:text-gold/80">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Dashboard
             </Button>
 
             {/* Header */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-foreground" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                My <span className="text-gold">Activity</span>
+              <h1 className="text-3xl font-bold" style={{ fontFamily: 'Poppins, sans-serif', background: 'linear-gradient(135deg, #FFFFFF 0%, #F5EBD7 40%, #C8A766 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                My Activity Intelligence
               </h1>
-              <p className="text-muted-foreground mt-2">
-                View your activity history and engagement on the platform.
-              </p>
+              <p className="text-zinc-400 mt-2">Real-time behavioral analytics and engagement tracking.</p>
             </div>
 
-            {/* Stats Cards */}
+            {/* Stats Cards — 4 columns */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <Card className="border-gold/20 bg-gold/5">
+              {[
+                { icon: Calendar, label: 'Days Active (30d)', value: stats.daysActive30d, color: 'from-blue-500/20 to-blue-600/10' },
+                { icon: Flame, label: 'Day Streak', value: stats.currentStreak, color: 'from-orange-500/20 to-red-500/10' },
+                { icon: TrendingUp, label: 'Points This Week', value: stats.pointsThisWeek, color: 'from-emerald-500/20 to-emerald-600/10' },
+                { icon: Activity, label: 'Activities (30d)', value: stats.totalActivities30d, color: 'from-gold/20 to-gold/10' },
+              ].map((stat, i) => (
+                <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
+                  <Card className={`border-gold/20 bg-gradient-to-br ${stat.color} backdrop-blur-sm`}>
+                    <CardContent className="p-4 text-center">
+                      <stat.icon className="w-6 h-6 text-gold mx-auto mb-2" />
+                      <p className="text-2xl font-bold text-white"><AnimatedCounter value={stat.value} /></p>
+                      <p className="text-xs text-zinc-400">{stat.label}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Secondary stats row */}
+            <div className="grid grid-cols-3 gap-4 mb-8">
+              <Card className="border-gold/20 bg-white/5">
                 <CardContent className="p-4 text-center">
-                  <Calendar className="w-6 h-6 text-gold mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-foreground">{stats.daysActive}</p>
-                  <p className="text-xs text-muted-foreground">Days Active (30d)</p>
+                  <Zap className="w-5 h-5 text-gold mx-auto mb-1" />
+                  <p className="text-xl font-bold text-white"><AnimatedCounter value={stats.totalPoints} /></p>
+                  <p className="text-xs text-zinc-400">Total Points</p>
                 </CardContent>
               </Card>
-              
-              <Card className="border-gold/20 bg-gold/5">
+              <Card className="border-gold/20 bg-white/5">
                 <CardContent className="p-4 text-center">
-                  <Flame className="w-6 h-6 text-gold mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-foreground">{stats.currentStreak}</p>
-                  <p className="text-xs text-muted-foreground">Day Streak</p>
+                  <BarChart3 className="w-5 h-5 text-gold mx-auto mb-1" />
+                  <p className="text-xl font-bold text-white"><AnimatedCounter value={stats.totalSessions} /></p>
+                  <p className="text-xs text-zinc-400">Total Sessions</p>
                 </CardContent>
               </Card>
-              
-              <Card className="border-gold/20 bg-gold/5">
+              <Card className="border-gold/20 bg-white/5">
                 <CardContent className="p-4 text-center">
-                  <TrendingUp className="w-6 h-6 text-gold mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-foreground">{stats.weeklyPoints}</p>
-                  <p className="text-xs text-muted-foreground">Points This Week</p>
-                </CardContent>
-              </Card>
-              
-              <Card className="border-gold/20 bg-gold/5">
-                <CardContent className="p-4 text-center">
-                  <Activity className="w-6 h-6 text-gold mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-foreground">{stats.totalActivities}</p>
-                  <p className="text-xs text-muted-foreground">Total Activities</p>
+                  <Clock className="w-5 h-5 text-gold mx-auto mb-1" />
+                  <p className="text-xl font-bold text-white">{formatDuration(stats.avgSessionDuration)}</p>
+                  <p className="text-xs text-zinc-400">Avg Session</p>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Activity Timeline */}
-            <Card className="border-border">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-gold" />
-                  Recent Activity
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {entries && entries.length > 0 ? (
-                  <ScrollArea className="h-[400px] pr-4">
-                    <div className="space-y-4">
-                      {entries.slice(0, 50).map((entry, index) => (
-                        <div 
-                          key={entry.id || index} 
-                          className="flex items-start gap-4 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
-                        >
-                          <div className="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center shrink-0">
-                            <Activity className="w-4 h-4 text-gold" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground truncate">
-                              {(entry as any).reason || (entry as any).action_type || 'Activity'}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {formatDistanceToNow(new Date(entry.created_at), { addSuffix: true })}
-                            </p>
-                          </div>
-                          <Badge 
-                            variant="outline" 
-                            className={entry.points_delta >= 0 ? 'text-emerald-600 border-emerald-500/30' : 'text-red-600 border-red-500/30'}
-                          >
-                            {entry.points_delta >= 0 ? '+' : ''}{entry.points_delta} pts
-                          </Badge>
-                        </div>
-                      ))}
+            {/* Activity Chart */}
+            {stats.dailyActivity.length > 0 && (
+              <Card className="border-gold/20 bg-white/5 mb-8">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-white flex items-center gap-2">
+                      <BarChart3 className="w-5 h-5 text-gold" />
+                      Daily Activity
+                    </CardTitle>
+                    <div className="flex gap-1">
+                      <Button size="sm" variant={chartMode === 'events' ? 'default' : 'ghost'}
+                        className={chartMode === 'events' ? 'bg-gold text-black hover:bg-gold/90 h-7 text-xs' : 'text-zinc-400 h-7 text-xs'}
+                        onClick={() => setChartMode('events')}>Events</Button>
+                      <Button size="sm" variant={chartMode === 'points' ? 'default' : 'ghost'}
+                        className={chartMode === 'points' ? 'bg-gold text-black hover:bg-gold/90 h-7 text-xs' : 'text-zinc-400 h-7 text-xs'}
+                        onClick={() => setChartMode('points')}>Points</Button>
                     </div>
-                  </ScrollArea>
-                ) : (
-                  <div className="text-center py-12">
-                    <Activity className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
-                    <p className="text-muted-foreground">No activity recorded yet.</p>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Start exploring properties to earn points!
-                    </p>
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={200}>
+                    <AreaChart data={stats.dailyActivity}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(200,167,102,0.1)" />
+                      <XAxis dataKey="date" tick={{ fill: '#999', fontSize: 10 }} tickFormatter={d => d.slice(5)} />
+                      <YAxis tick={{ fill: '#999', fontSize: 10 }} />
+                      <Tooltip 
+                        contentStyle={{ background: '#1a1a1a', border: '1px solid rgba(200,167,102,0.3)', borderRadius: 8, color: '#fff' }}
+                        labelFormatter={l => `Date: ${l}`}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey={chartMode}
+                        stroke="#C8A766"
+                        fill="url(#goldGradient)"
+                        strokeWidth={2}
+                      />
+                      <defs>
+                        <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#C8A766" stopOpacity={0.4} />
+                          <stop offset="100%" stopColor="#C8A766" stopOpacity={0.05} />
+                        </linearGradient>
+                      </defs>
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Device Mix + Recent Activity side by side */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {/* Device Mix */}
+              {stats.deviceMix.length > 0 && (
+                <Card className="border-gold/20 bg-white/5">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-white text-sm">Device Mix</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {stats.deviceMix.map(d => {
+                        const total = stats.deviceMix.reduce((s, x) => s + x.count, 0);
+                        const pct = total > 0 ? Math.round((d.count / total) * 100) : 0;
+                        return (
+                          <div key={d.device} className="flex items-center gap-3">
+                            <DeviceIcon device={d.device} />
+                            <div className="flex-1">
+                              <div className="flex justify-between text-sm mb-1">
+                                <span className="text-zinc-300 capitalize">{d.device}</span>
+                                <span className="text-gold font-semibold">{pct}%</span>
+                              </div>
+                              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-gold to-gold/60 rounded-full transition-all" style={{ width: `${pct}%` }} />
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Recent Activity Timeline */}
+              <Card className="border-gold/20 bg-white/5 md:col-span-2">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-gold" />
+                    Recent Activity
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {stats.recentEvents.length > 0 ? (
+                    <ScrollArea className="h-[300px] pr-4">
+                      <div className="space-y-2">
+                        {stats.recentEvents
+                          .filter(e => e.event_name !== 'click') // filter out noise
+                          .slice(0, 30)
+                          .map((event, index) => (
+                          <motion.div
+                            key={event.id}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.02 }}
+                            className="flex items-center gap-3 p-2.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+                          >
+                            <div className={`w-8 h-8 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center shrink-0 ${EVENT_COLORS[event.event_name] || 'text-gold'}`}>
+                              <Activity className="w-3.5 h-3.5" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-zinc-200 truncate">
+                                {EVENT_LABELS[event.event_name] || event.event_name}
+                              </p>
+                              <p className="text-xs text-zinc-500 truncate">
+                                {event.page_path} · {formatDistanceToNow(new Date(event.created_at), { addSuffix: true })}
+                              </p>
+                            </div>
+                            {event.points_awarded > 0 && (
+                              <Badge variant="outline" className="text-emerald-400 border-emerald-500/30 text-xs shrink-0">
+                                +{event.points_awarded} pts
+                              </Badge>
+                            )}
+                          </motion.div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  ) : (
+                    <div className="text-center py-12">
+                      <Activity className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+                      <p className="text-zinc-400">Activity is being recorded live.</p>
+                      <p className="text-sm text-zinc-500 mt-1">Browse the platform to see your activity appear here.</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
