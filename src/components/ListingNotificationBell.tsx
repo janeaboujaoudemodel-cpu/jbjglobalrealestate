@@ -13,7 +13,12 @@ interface ListingNotification {
   listing_id: string | null;
 }
 
-const ListingNotificationBell = () => {
+interface ListingNotificationBellProps {
+  onOpen?: () => void;
+  forceClose?: boolean;
+}
+
+const ListingNotificationBell = ({ onOpen, forceClose }: ListingNotificationBellProps = {}) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<ListingNotification[]>([]);
@@ -25,6 +30,14 @@ const ListingNotificationBell = () => {
     if (!user) return;
     fetchNotifications();
   }, [user]);
+
+  // Force close when another dropdown opens
+  useEffect(() => {
+    if (forceClose) {
+      setOpen(false);
+      setPinned(false);
+    }
+  }, [forceClose]);
 
   // Close on outside click only if not pinned by click
   useEffect(() => {
@@ -77,7 +90,12 @@ const ListingNotificationBell = () => {
     <div
       ref={containerRef}
       className="relative"
-      onMouseEnter={() => { if (!pinned) setOpen(true); }}
+      onMouseEnter={() => { 
+        if (!pinned) {
+          setOpen(true);
+          onOpen?.();
+        }
+      }}
       onMouseLeave={() => { if (!pinned) setOpen(false); }}
     >
       {/* Bell trigger */}
@@ -89,6 +107,7 @@ const ListingNotificationBell = () => {
           } else {
             setPinned(true);
             setOpen(true);
+            onOpen?.();
           }
         }}
         className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10 relative"
@@ -108,7 +127,7 @@ const ListingNotificationBell = () => {
       {/* Dropdown */}
       {open && (
         <div
-          className="absolute right-0 top-full mt-2 w-80 bg-white border-2 border-gold/40 rounded-xl shadow-xl shadow-gold/10 z-[10001] overflow-hidden"
+          className="absolute right-0 top-full mt-3 w-80 bg-white border-2 border-gold/40 rounded-xl shadow-xl shadow-gold/10 z-[10001] overflow-hidden"
         >
           {/* Header */}
           <div className="p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7] flex items-center justify-between">
