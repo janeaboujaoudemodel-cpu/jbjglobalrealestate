@@ -574,7 +574,7 @@ const CRM = () => {
 
             {/* Leads Section with Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="bg-white/80 border-2 border-gold/30 p-1 mb-4 flex-wrap">
+              <TabsList className="bg-white/80 border-2 border-gold/30 p-1 mb-4 w-full flex gap-1 overflow-x-auto">
                 <TabsTrigger 
                   value="all" 
                   className="tab-trigger-champagne text-black"
@@ -615,6 +615,7 @@ const CRM = () => {
                   userId={user?.id || ""} 
                   filterType="all"
                   onRefresh={handleRefresh}
+                  isOwner={isCRMOwner}
                 />
               </TabsContent>
 
@@ -632,6 +633,7 @@ const CRM = () => {
                   userId={user?.id || ""} 
                   filterType="vip"
                   onRefresh={handleRefresh}
+                  isOwner={isCRMOwner}
                 />
               </TabsContent>
 

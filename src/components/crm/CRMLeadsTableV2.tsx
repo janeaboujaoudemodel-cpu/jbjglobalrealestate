@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { formatDisplayDate } from "@/utils/formatDate";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -393,12 +394,34 @@ ${signature}`);
 
   const selectedIds = useMemo(() => Array.from(selected), [selected]);
 
+  const formatSourceLabel = (raw: string): string => {
+    if (raw.startsWith("document_download_brochure")) return "Brochure Download";
+    if (raw.startsWith("document_download")) return "Document Download";
+    const map: Record<string, string> = {
+      newsletter: "Newsletter",
+      ai_chat_support: "AI Chat",
+      market_report_download: "Market Report",
+      register_interest: "Register Interest",
+      matchmaker: "Matchmaker",
+      contact_form: "Contact Form",
+      ai_phone: "AI Phone",
+      referral: "Referral",
+      broker: "Broker",
+      manual: "Manual Entry",
+      website: "Website",
+    };
+    return map[raw] || raw.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  };
+
   const renderSource = (lead: Lead) => {
-    // Manual leads should show "Manual Entry" not "website · Web Form"
+    // Use the specific `source` field first for accurate labelling
+    if ((lead as any).source) {
+      return formatSourceLabel((lead as any).source);
+    }
     if (lead.lead_source_type === "manual" || (!lead.lead_source_type && !lead.crm_lead_sources)) {
       return "Manual Entry";
     }
-    if (lead.lead_source_type === "website") return "Website · Web Form";
+    if (lead.lead_source_type === "website") return "Website";
     const s = lead.crm_lead_sources;
     if (s?.source_group || s?.source_name) {
       return `${s.source_group || "Import"} · ${s.source_name || ""}`.trim();
@@ -446,7 +469,7 @@ ${signature}`);
       />
 
       <div className="w-full overflow-x-auto rounded-lg border border-border bg-card">
-        <Table className="min-w-[1200px]">
+        <Table className="min-w-[1300px]">
           <TableHeader>
             <TableRow>
               <TableHead className="w-12">
@@ -465,8 +488,9 @@ ${signature}`);
               <TableHead className="w-[140px]">Phone</TableHead>
               <TableHead className="min-w-[200px]">Email</TableHead>
               <TableHead>Source</TableHead>
-              <TableHead className="w-[120px]">Status</TableHead>
-              <TableHead className="w-28">VIP</TableHead>
+              <TableHead className="w-[160px]">Status</TableHead>
+              <TableHead className="w-[100px]">Date</TableHead>
+              <TableHead className="w-20">VIP</TableHead>
               <TableHead>Assigned Broker</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -474,13 +498,13 @@ ${signature}`);
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={9} className="py-10 text-center text-muted-foreground">
+                <TableCell colSpan={10} className="py-10 text-center text-muted-foreground">
                   Loading leads…
                 </TableCell>
               </TableRow>
             ) : filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={9} className="py-10 text-center text-muted-foreground">
+                <TableCell colSpan={10} className="py-10 text-center text-muted-foreground">
                   No leads found.
                 </TableCell>
               </TableRow>
@@ -522,22 +546,21 @@ ${signature}`);
                     </TableCell>
                     <TableCell className="text-sm text-foreground whitespace-nowrap">{renderSource(lead)}</TableCell>
                     <TableCell>
-                      {/* Compact Status Badge - expands on click */}
                       <select
                         value={status}
                         onChange={(e) => handleStatusChange(lead.id, e.target.value)}
-                        className="h-7 w-full max-w-[110px] rounded-full border px-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-ring appearance-none cursor-pointer"
+                        className="h-8 w-full min-w-[140px] max-w-[160px] rounded-full border px-3 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-ring appearance-none cursor-pointer"
                         style={{
                           backgroundColor: groupedStatuses.positive.some(s => s.value === status) 
-                            ? 'rgba(34, 197, 94, 0.2)' 
+                            ? 'rgba(34, 197, 94, 0.15)' 
                             : groupedStatuses.neutral.some(s => s.value === status) 
-                              ? 'rgba(245, 158, 11, 0.2)' 
-                              : 'rgba(239, 68, 68, 0.2)',
+                              ? 'rgba(245, 158, 11, 0.15)' 
+                              : 'rgba(239, 68, 68, 0.15)',
                           color: groupedStatuses.positive.some(s => s.value === status) 
-                            ? '#22C55E' 
+                            ? '#16a34a' 
                             : groupedStatuses.neutral.some(s => s.value === status) 
-                              ? '#F59E0B' 
-                              : '#EF4444',
+                              ? '#d97706' 
+                              : '#dc2626',
                           borderColor: groupedStatuses.positive.some(s => s.value === status) 
                             ? 'rgba(34, 197, 94, 0.4)' 
                             : groupedStatuses.neutral.some(s => s.value === status) 
@@ -567,6 +590,9 @@ ${signature}`);
                           ))}
                         </optgroup>
                       </select>
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
+                      {formatDisplayDate(lead.created_at)}
                     </TableCell>
                     <TableCell>
                       <Button
