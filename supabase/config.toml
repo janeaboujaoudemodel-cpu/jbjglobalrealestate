@@ -328,3 +328,9 @@ verify_jwt = false
 [functions.company-profile-ai]
 verify_jwt = false
 
+[functions.send-ticket-status-email]
+verify_jwt = false
+
+[functions.submit-ticket-survey]
+verify_jwt = false
+

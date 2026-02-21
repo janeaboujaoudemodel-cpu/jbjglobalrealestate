@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import TicketSurveysTab from "./TicketSurveysTab";
 import {
   Star,
   MessageSquareHeart,
