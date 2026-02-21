@@ -69,7 +69,7 @@ const staggerContainer = {
 
 // Category definitions with styles - MATCHING BROKER HUB
 // GLOW RULE: Category glow on normal load → Gold glow on hover
-type ToolCategory = 'property' | 'productivity' | 'marketing' | 'design';
+type ToolCategory = 'property' | 'productivity' | 'marketing' | 'design' | 'corporate';
 
 const CATEGORY_META: Record<ToolCategory, {
   label: string;
@@ -118,12 +118,21 @@ const CATEGORY_META: Record<ToolCategory, {
     label: "Design &",
     coloredLabel: "Media",
     badgeClass: "bg-pink-500/30 text-pink-200 border-pink-400/50",
-    // GLOW ON NORMAL LOAD (pink), WHITE GLOW ON HOVER
     cardClass: "bg-pink-900/80 border-2 border-pink-500/50 shadow-[0_0_25px_rgba(236,72,153,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
     iconWrapClass: "bg-pink-500/30 border border-pink-400/40",
     iconClass: "text-pink-300",
     arrowClass: "text-pink-300 group-hover:text-white",
     glowClass: "border-pink-500/50 shadow-[0_0_25px_rgba(236,72,153,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
+  },
+  corporate: {
+    label: "Corporate",
+    coloredLabel: "Suite Tools",
+    badgeClass: "bg-teal-500/30 text-teal-200 border-teal-400/50",
+    cardClass: "bg-teal-900/80 border-2 border-teal-500/50 shadow-[0_0_25px_rgba(20,184,166,0.4)] hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)]",
+    iconWrapClass: "bg-teal-500/30 border border-teal-400/40",
+    iconClass: "text-teal-300",
+    arrowClass: "text-teal-300 group-hover:text-white",
+    glowClass: "border-teal-500/50 shadow-[0_0_25px_rgba(20,184,166,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.2)] hover:border-white",
   },
 };
 
@@ -262,38 +271,22 @@ const productivityTools = [
     link: "/ai-calendar",
     category: "productivity" as ToolCategory,
   },
-  {
-    id: "scan-sign",
-    title: "JBJ Scan & Sign",
-    description: "Camera scan, handwritten signature & PDF export.",
-    icon: FileSignature,
-    link: "/toolkit/scan-sign",
-    category: "productivity" as ToolCategory,
-  },
-  {
-    id: "esign",
-    title: "JBJ E-Sign",
-    description: "DocuSign-style contract signing with multi-signer workflows and audit trails.",
-    icon: Handshake,
-    link: "/e-signature",
-    category: "productivity" as ToolCategory,
-  },
+  // ── Corporate Suite Tools (12 tools) ─────────────────────────────────────
   {
     id: "stamp-generator",
     title: "JBJ AI Stamp Generator",
     description: "Generate professional company stamps — bilingual, multiple shapes, full export pack.",
     icon: Award,
     link: "/toolkit/stamp-generator",
-    category: "productivity" as ToolCategory,
+    category: "corporate" as ToolCategory,
   },
-  // ── Corporate Suite Tools ──────────────────────────────────────────────────
   {
     id: "business-card",
     title: "JBJ Business Card Designer",
     description: "Design stunning business cards with AI extraction and 6 premium templates.",
     icon: CreditCard,
     link: "/toolkit/corporate-suite/business-card",
-    category: "productivity" as ToolCategory,
+    category: "corporate" as ToolCategory,
   },
   {
     id: "cv-resume",
@@ -301,7 +294,7 @@ const productivityTools = [
     description: "Build a professional CV with AI-generated summary, 12 templates and PDF export.",
     icon: User,
     link: "/toolkit/corporate-suite/cv-resume",
-    category: "productivity" as ToolCategory,
+    category: "corporate" as ToolCategory,
   },
   {
     id: "cover-letter",
@@ -309,7 +302,7 @@ const productivityTools = [
     description: "Generate tailored cover letters with Gemini AI. 3 layouts, export as PDF.",
     icon: FileText,
     link: "/toolkit/corporate-suite/cover-letter",
-    category: "productivity" as ToolCategory,
+    category: "corporate" as ToolCategory,
   },
   {
     id: "logo-creator",
@@ -317,7 +310,7 @@ const productivityTools = [
     description: "Generate professional logos with AI. Choose style, industry and colors. Export PNG & SVG.",
     icon: Palette,
     link: "/toolkit/corporate-suite/logo-creator",
-    category: "design" as ToolCategory,
+    category: "corporate" as ToolCategory,
   },
   {
     id: "company-profile",
@@ -325,7 +318,7 @@ const productivityTools = [
     description: "Build a multi-page company profile PDF with AI-expanded content and 3 premium templates.",
     icon: Briefcase,
     link: "/toolkit/corporate-suite/company-profile",
-    category: "productivity" as ToolCategory,
+    category: "corporate" as ToolCategory,
   },
   {
     id: "presentation-tool",
@@ -333,7 +326,7 @@ const productivityTools = [
     description: "Build professional slide decks with Canva-style templates and AI-generated content.",
     icon: Layers,
     link: "/presentations",
-    category: "productivity" as ToolCategory,
+    category: "corporate" as ToolCategory,
   },
   {
     id: "landing-page-builder",
@@ -341,7 +334,23 @@ const productivityTools = [
     description: "Create a one-page business site with custom branding and HTML export.",
     icon: Globe,
     link: "/toolkit/corporate-suite/landing-page",
-    category: "design" as ToolCategory,
+    category: "corporate" as ToolCategory,
+  },
+  {
+    id: "esign",
+    title: "JBJ E-Sign",
+    description: "DocuSign-style contract signing with multi-signer workflows and audit trails.",
+    icon: Handshake,
+    link: "/e-signature",
+    category: "corporate" as ToolCategory,
+  },
+  {
+    id: "scan-sign",
+    title: "JBJ Scan & Sign",
+    description: "Camera scan, handwritten signature & PDF export.",
+    icon: FileSignature,
+    link: "/toolkit/scan-sign",
+    category: "corporate" as ToolCategory,
   },
   {
     id: "spreadsheet-tool",
@@ -349,7 +358,7 @@ const productivityTools = [
     description: "Create and edit spreadsheets with formula support and Excel/CSV export.",
     icon: FileText,
     link: "/spreadsheet",
-    category: "productivity" as ToolCategory,
+    category: "corporate" as ToolCategory,
   },
   {
     id: "documents-tool",
@@ -357,7 +366,7 @@ const productivityTools = [
     description: "Rich text document editor with version history and export capabilities.",
     icon: FolderOpen,
     link: "/documents",
-    category: "productivity" as ToolCategory,
+    category: "corporate" as ToolCategory,
   },
 ];
 
@@ -827,7 +836,7 @@ const AIHub = () => {
                   />
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {(['all', 'property', 'productivity', 'design', 'marketing'] as const).map(cat => (
+                  {(['all', 'property', 'corporate', 'productivity', 'design', 'marketing'] as const).map(cat => (
                     <button
                       key={cat}
                       onClick={() => setToolFilter(cat)}
@@ -867,7 +876,7 @@ const AIHub = () => {
         <SectionDivider />
 
         {/* CATEGORY SECTIONS - Active color layer with filled cards */}
-        {(['property', 'productivity', 'design', 'marketing'] as ToolCategory[]).map((category) => {
+        {(['property', 'productivity', 'corporate', 'design', 'marketing'] as ToolCategory[]).map((category) => {
           const meta = CATEGORY_META[category];
           const categoryTools = toolsByCategory[category] || [];
           if (categoryTools.length === 0) return null;
@@ -878,6 +887,7 @@ const AIHub = () => {
             productivity: 'bg-gradient-to-br from-blue-900/90 via-blue-900/80 to-blue-950/90',
             design: 'bg-gradient-to-br from-pink-900/90 via-pink-900/80 to-pink-950/90',
             marketing: 'bg-gradient-to-br from-amber-900/90 via-amber-900/80 to-amber-950/90',
+            corporate: 'bg-gradient-to-br from-teal-900/90 via-teal-900/80 to-teal-950/90',
           };
 
           return (
