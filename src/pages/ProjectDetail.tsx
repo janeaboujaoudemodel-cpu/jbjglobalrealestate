@@ -105,8 +105,8 @@ const asUnitTypes = (
     const entry = grouped.get(label) || { count: 0, sizes: [], prices: [] };
     entry.count++;
     
-    const sizeFrom = typeof o.size_from === "number" ? o.size_from : (typeof o.size === "number" ? o.size : null);
-    const sizeTo = typeof o.size_to === "number" ? o.size_to : null;
+    const sizeFrom = typeof o.size_from === "number" ? o.size_from : (typeof o.size_min === "number" ? o.size_min : (typeof o.size === "number" ? o.size : null));
+    const sizeTo = typeof o.size_to === "number" ? o.size_to : (typeof o.size_max === "number" ? o.size_max : null);
     const priceFrom = typeof o.price_from === "number" ? o.price_from : (typeof o.price === "number" ? o.price : null);
     const priceTo = typeof o.price_to === "number" ? o.price_to : null;
     

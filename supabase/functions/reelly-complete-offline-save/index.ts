@@ -197,6 +197,30 @@ Deno.serve(async (req) => {
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
+    // ── "raw_diagnostic" mode: show raw API response for units ──────────────
+    if (mode === "raw_diagnostic" && projectIds.length) {
+      const detail = await fetchDetail(apiKey, projectIds[0]);
+      if (!detail) {
+        return new Response(JSON.stringify({ success: false, error: "Failed to fetch" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      return new Response(JSON.stringify({
+        success: true,
+        reelly_id: projectIds[0],
+        raw_units: detail.units || null,
+        raw_unit_types: detail.unit_types || null,
+        raw_typical_units: detail.typical_units || null,
+        raw_buildings: detail.buildings?.slice(0, 2) || null,
+        extracted_unit_types: extractUnitTypes(detail),
+        project_min_price: detail.min_price,
+        project_max_price: detail.max_price,
+        project_min_size: detail.min_size,
+        project_max_size: detail.max_size,
+        units_count: detail.units_count,
+      }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
     // ── "batch" mode (default): process projects with missing data ────────────
     // Prioritize: no images OR no bedrooms OR no price
     const { data: projects } = await supabase
