@@ -123,11 +123,11 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
   };
 
   return (
-    <nav className="p-2 space-y-4 overflow-y-auto flex-1">
+    <nav className="p-2 space-y-4 overflow-y-auto flex-1 jj-scrollbar-gold">
       {NAV_SECTIONS.map((section) => (
         <div key={section.label}>
           {!collapsed && (
-            <p className="text-[10px] uppercase tracking-widest text-zinc-500 font-semibold px-3 mb-1.5">
+            <p className="text-[10px] uppercase tracking-widest text-[#C9A84C] font-semibold px-3 mb-1.5">
               {section.label}
             </p>
           )}
@@ -139,8 +139,8 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
                 className={cn(
                   "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
                   isActivePath(item.path)
-                    ? "bg-gold/10 text-gold border border-gold/20"
-                    : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                    ? "bg-[#C9A84C]/10 text-[#C9A84C] border border-[#C9A84C]/20"
+                    : "text-zinc-700 hover:text-black hover:bg-[#C9A84C]/10"
                 )}
                 title={collapsed ? item.label : undefined}
               >
@@ -149,7 +149,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
                   <>
                     <span className="flex-1 text-left truncate">{item.label}</span>
                     {item.badge && (
-                      <span className="bg-gold/20 text-gold text-xs px-1.5 py-0.5 rounded-full">
+                      <span className="bg-[#C9A84C]/20 text-[#C9A84C] text-xs px-1.5 py-0.5 rounded-full">
                         {item.badge}
                       </span>
                     )}
