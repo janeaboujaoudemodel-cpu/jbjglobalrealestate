@@ -42,6 +42,7 @@ import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
+import ListingNotificationBell from "@/components/ListingNotificationBell";
 
 // Mega Menu Components
 import MegaMenuBuy from "@/components/header/MegaMenuBuy";
@@ -1532,6 +1533,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
               {/* Divider */}
               <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gold/40'} to-transparent`} />
+
+              {/* Listing Notification Bell */}
+              <ListingNotificationBell />
 
               {/* Account Icon - triggers mega menu on hover (desktop only) */}
               <button

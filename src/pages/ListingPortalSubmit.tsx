@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,49 +10,89 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import {
   ArrowLeft, ArrowRight, Check, Upload, Sparkles, Home, Building,
-  Hotel, Key, FileText, Camera, Phone, Mail, User as UserIcon
+  Hotel, Key, FileText, Camera, Loader2, Wand2, X, Eye,
+  MapPin, Bed, Bath, Maximize, DollarSign, Calendar, Star,
+  CheckCircle2, AlertCircle, Image, File, Trash2, Plus, RefreshCw
 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const steps = ['Type', 'Details', 'Photos', 'Documents', 'Contact', 'Review'];
+// Types
+interface ExtractedListing {
+  title: string;
+  description: string;
+  listing_type: string;
+  listing_category: string;
+  property_type: string;
+  developer_name: string;
+  project_name: string;
+  location: string;
+  emirate: string;
+  area: string;
+  bedrooms: number | null;
+  bathrooms: number | null;
+  area_sqft: number | null;
+  price: number | null;
+  price_per_sqft: number | null;
+  furnishing: string;
+  handover_date: string;
+  payment_plan: string;
+  amenities: string[];
+  key_features: string[];
+  floor_plans_detected: number;
+  gallery_images_detected: number;
+  confidence_score: number;
+  extracted_highlights: string[];
+}
 
-const listingTypes = [
-  { id: 'sale', label: 'For Sale', icon: Home, desc: 'Sell a property' },
-  { id: 'yearly_rent', label: 'Yearly Rent', icon: Key, desc: 'Long-term rental' },
-  { id: 'short_term_rental', label: 'Short-term Rental', icon: Hotel, desc: 'Monthly/weekly' },
-  { id: 'holiday_home', label: 'Holiday Home', icon: Building, desc: 'Vacation rental' },
+interface UploadedDoc {
+  id: string;
+  file: File;
+  name: string;
+  type: 'image' | 'pdf' | 'document';
+  preview?: string;
+  status: 'pending' | 'uploading' | 'ready';
+}
+
+const listingCategories = [
+  { id: 'resale', label: 'Resale', icon: Home, desc: 'Secondary market property' },
+  { id: 'ready', label: 'Ready to Move', icon: Building, desc: 'Completed property' },
+  { id: 'off_plan', label: 'Off-Plan', icon: Calendar, desc: 'Under construction' },
+  { id: 'land', label: 'Land', icon: MapPin, desc: 'Plot or land for sale' },
+  { id: 'rental', label: 'Rental', icon: Key, desc: 'For rent' },
+  { id: 'holiday_home', label: 'Holiday Home', icon: Hotel, desc: 'Short-term rental' },
 ];
 
-const propertyTypes = ['Apartment', 'Villa', 'Townhouse', 'Penthouse', 'Studio', 'Duplex', 'Land', 'Commercial'];
+const propertyTypes = ['Apartment', 'Villa', 'Townhouse', 'Penthouse', 'Studio', 'Duplex', 'Land', 'Office', 'Warehouse', 'Shop'];
 const furnishingOptions = ['Furnished', 'Unfurnished', 'Semi-Furnished'];
 const emirates = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman', 'Ras Al Khaimah', 'Fujairah', 'Umm Al Quwain'];
 
 const ListingPortalSubmit = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [currentStep, setCurrentStep] = useState(0);
-  const [submitting, setSubmitting] = useState(false);
+  
+  // Phases: upload → extracting → review → submitting → success
+  const [phase, setPhase] = useState<'upload' | 'extracting' | 'review' | 'submitting' | 'success'>('upload');
+  const [listingCategory, setListingCategory] = useState('resale');
+  const [uploadedDocs, setUploadedDocs] = useState<UploadedDoc[]>([]);
+  const [extractedData, setExtractedData] = useState<ExtractedListing | null>(null);
+  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
+  const [submittedId, setSubmittedId] = useState<string | null>(null);
+  
+  // Editable form state (populated from AI extraction)
+  const [form, setForm] = useState({
+    title: '', description: '', listing_type: 'sale', listing_category: 'resale',
+    property_type: '', developer_name: '', project_name: '',
+    location: '', emirate: 'Dubai', area: '',
+    bedrooms: '', bathrooms: '', area_sqft: '', price: '',
+    furnishing: '', handover_date: '', payment_plan: '',
+    amenities: [] as string[], key_features: [] as string[],
+  });
 
-  // Form data
-  const [listingType, setListingType] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [location, setLocation] = useState('');
-  const [emirate, setEmirate] = useState('');
-  const [price, setPrice] = useState('');
-  const [bedrooms, setBedrooms] = useState('');
-  const [bathrooms, setBathrooms] = useState('');
-  const [areaSqft, setAreaSqft] = useState('');
-  const [propertyType, setPropertyType] = useState('');
-  const [furnishing, setFurnishing] = useState('');
-  const [rentFrequency, setRentFrequency] = useState('yearly');
-  const [cheques, setCheques] = useState('');
-  const [images, setImages] = useState<string[]>([]);
-  const [titleDeedUrl, setTitleDeedUrl] = useState('');
-  const [passportUrl, setPassportUrl] = useState('');
-  const [useCompanyContact, setUseCompanyContact] = useState(true);
-  const [contactName, setContactName] = useState('');
-  const [contactPhone, setContactPhone] = useState('');
-  const [contactEmail, setContactEmail] = useState('');
+  const handleFileDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    addFiles(files);
+  }, []);
 
   if (!user) {
     return (
@@ -67,394 +107,730 @@ const ListingPortalSubmit = () => {
     );
   }
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    if (images.length + files.length > 10) {
-      toast.error('Maximum 10 images allowed');
-      return;
-    }
-    for (const file of files) {
-      if (!file.type.startsWith('image/') || file.size > 5 * 1024 * 1024) continue;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        setImages(prev => [...prev, ev.target?.result as string]);
+    addFiles(files);
+  };
+
+  const addFiles = (files: File[]) => {
+    const newDocs: UploadedDoc[] = files.map(file => {
+      const isImage = file.type.startsWith('image/');
+      const isPdf = file.type === 'application/pdf';
+      return {
+        id: crypto.randomUUID(),
+        file,
+        name: file.name,
+        type: isImage ? 'image' : isPdf ? 'pdf' : 'document',
+        preview: isImage ? URL.createObjectURL(file) : undefined,
+        status: 'pending' as const,
       };
+    });
+    setUploadedDocs(prev => [...prev, ...newDocs]);
+  };
+
+  const removeDoc = (id: string) => {
+    setUploadedDocs(prev => prev.filter(d => d.id !== id));
+  };
+
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64 = result.split(',')[1];
+        resolve(base64);
+      };
+      reader.onerror = reject;
       reader.readAsDataURL(file);
-    }
+    });
   };
 
-  const uploadDocToStorage = async (dataUrl: string, folder: string): Promise<string | null> => {
-    if (!user?.id) return null;
-    try {
-      const base64Content = dataUrl.replace(/^data:\w+\/\w+;base64,/, '');
-      const binaryString = atob(base64Content);
-      const bytes = new Uint8Array(binaryString.length);
-      for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
-      const mimeMatch = dataUrl.match(/^data:(\w+\/\w+);base64,/);
-      const mimeType = mimeMatch ? mimeMatch[1] : 'application/pdf';
-      const ext = mimeType.split('/')[1] || 'pdf';
-      const blob = new Blob([bytes], { type: mimeType });
-      const fileName = `${user.id}/${folder}/${Date.now()}.${ext}`;
-      const { error } = await supabase.storage.from('portal-documents').upload(fileName, blob, { contentType: mimeType });
-      if (error) throw error;
-      const { data: urlData } = supabase.storage.from('portal-documents').getPublicUrl(fileName);
-      return urlData.publicUrl;
-    } catch (e) {
-      console.error('Upload error:', e);
-      return null;
-    }
-  };
-
-  const handleDocUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'deed' | 'passport') => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = async (ev) => {
-      const dataUrl = ev.target?.result as string;
-      const url = await uploadDocToStorage(dataUrl, type);
-      if (url) {
-        if (type === 'deed') setTitleDeedUrl(url);
-        else setPassportUrl(url);
-        toast.success(`${type === 'deed' ? 'Title deed' : 'Passport'} uploaded`);
-      } else {
-        toast.error('Upload failed');
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleSubmit = async () => {
-    if (!title.trim() || !listingType) {
-      toast.error('Please fill in required fields');
+  const runAIExtraction = async () => {
+    if (uploadedDocs.length === 0) {
+      toast.error('Please upload at least one document');
       return;
     }
-    setSubmitting(true);
+    
+    setPhase('extracting');
+    
     try {
-      const { error } = await supabase.from('portal_listings').insert({
-        user_id: user.id,
-        listing_type: listingType,
-        title, description, location, emirate,
-        price: price ? parseFloat(price) : null,
-        bedrooms: bedrooms ? parseInt(bedrooms) : null,
-        bathrooms: bathrooms ? parseInt(bathrooms) : null,
-        area_sqft: areaSqft ? parseFloat(areaSqft) : null,
-        property_type: propertyType,
-        furnishing,
-        rent_frequency: listingType !== 'sale' ? rentFrequency : null,
-        cheques: cheques ? parseInt(cheques) : null,
-        images,
-        title_deed_url: titleDeedUrl || null,
-        passport_copy_url: passportUrl || null,
-        use_company_contact: useCompanyContact,
-        contact_name: useCompanyContact ? null : contactName,
-        contact_phone: useCompanyContact ? null : contactPhone,
-        contact_email: useCompanyContact ? null : contactEmail,
-        status: 'pending',
+      // Convert files to base64 for the AI
+      const documents = [];
+      const imageUrls: string[] = [];
+
+      for (const doc of uploadedDocs) {
+        const base64 = await fileToBase64(doc.file);
+        
+        if (doc.type === 'image') {
+          documents.push({
+            type: 'image',
+            name: doc.name,
+            base64,
+            mime_type: doc.file.type,
+          });
+          
+          // Upload image to storage for the gallery
+          const fileName = `${user.id}/listings/${Date.now()}_${doc.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+          const { error } = await supabase.storage
+            .from('listing-documents')
+            .upload(fileName, doc.file, { contentType: doc.file.type });
+          
+          if (!error) {
+            const { data: urlData } = supabase.storage
+              .from('listing-documents')
+              .getPublicUrl(fileName);
+            imageUrls.push(urlData.publicUrl);
+          }
+        } else if (doc.type === 'pdf') {
+          // For PDFs, send as image (Gemini can read PDFs as images)
+          documents.push({
+            type: 'image',
+            name: doc.name,
+            base64,
+            mime_type: 'application/pdf',
+          });
+          
+          // Also upload PDF to storage
+          const fileName = `${user.id}/listings/${Date.now()}_${doc.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+          await supabase.storage
+            .from('listing-documents')
+            .upload(fileName, doc.file, { contentType: doc.file.type });
+        } else {
+          // Text-based docs
+          documents.push({
+            type: 'text',
+            name: doc.name,
+            content: await doc.file.text(),
+          });
+        }
+      }
+
+      setUploadedImageUrls(imageUrls);
+
+      // Call AI extraction
+      const { data, error } = await supabase.functions.invoke('ai-listing-extractor', {
+        body: { documents, listing_category: listingCategory }
       });
 
       if (error) throw error;
+      if (!data?.success) throw new Error(data?.error || 'Extraction failed');
 
-      // Update points
-      const { data: existingPoints } = await supabase
-        .from('portal_points')
-        .select('*')
-        .eq('user_id', user.id)
+      const extracted = data.data as ExtractedListing;
+      setExtractedData(extracted);
+
+      // Populate form with extracted data
+      setForm({
+        title: extracted.title || '',
+        description: extracted.description || '',
+        listing_type: extracted.listing_type || 'sale',
+        listing_category: extracted.listing_category || listingCategory,
+        property_type: extracted.property_type || '',
+        developer_name: extracted.developer_name || '',
+        project_name: extracted.project_name || '',
+        location: extracted.location || '',
+        emirate: extracted.emirate || 'Dubai',
+        area: extracted.area || '',
+        bedrooms: extracted.bedrooms?.toString() || '',
+        bathrooms: extracted.bathrooms?.toString() || '',
+        area_sqft: extracted.area_sqft?.toString() || '',
+        price: extracted.price?.toString() || '',
+        furnishing: extracted.furnishing || '',
+        handover_date: extracted.handover_date || '',
+        payment_plan: extracted.payment_plan || '',
+        amenities: extracted.amenities || [],
+        key_features: extracted.key_features || [],
+      });
+
+      setPhase('review');
+      toast.success(`AI extracted ${Object.values(extracted).filter(v => v !== null && v !== '' && v !== undefined).length} fields from your documents!`);
+
+    } catch (err: any) {
+      console.error('Extraction error:', err);
+      toast.error(err.message || 'AI extraction failed. You can fill in details manually.');
+      // Fall back to manual entry
+      setPhase('review');
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!form.title.trim()) {
+      toast.error('Please provide a listing title');
+      return;
+    }
+    
+    setPhase('submitting');
+    
+    try {
+      const { data, error } = await supabase
+        .from('portal_listings')
+        .insert({
+          user_id: user.id,
+          listing_type: form.listing_type,
+          listing_category: form.listing_category,
+          title: form.title,
+          description: form.description,
+          location: form.location,
+          emirate: form.emirate,
+          area: form.area,
+          price: form.price ? parseFloat(form.price) : null,
+          currency: 'AED',
+          bedrooms: form.bedrooms ? parseInt(form.bedrooms) : null,
+          bathrooms: form.bathrooms ? parseInt(form.bathrooms) : null,
+          area_sqft: form.area_sqft ? parseFloat(form.area_sqft) : null,
+          property_type: form.property_type,
+          furnishing: form.furnishing,
+          images: uploadedImageUrls,
+          developer_name: form.developer_name || null,
+          project_name: form.project_name || null,
+          handover_date: form.handover_date || null,
+          payment_plan: form.payment_plan || null,
+          amenities: form.amenities,
+          key_features: form.key_features,
+          ai_extracted_data: extractedData || {},
+          ai_quality_score: extractedData?.confidence_score || 0,
+          source_documents: uploadedDocs.map(d => ({ name: d.name, type: d.type })),
+          gallery_images: uploadedImageUrls,
+          status: 'pending',
+        } as any)
+        .select()
         .single();
 
-      if (existingPoints) {
-        await supabase.from('portal_points').update({
-          total_listings: (existingPoints.total_listings || 0) + 1,
-        }).eq('user_id', user.id);
-      } else {
-        await supabase.from('portal_points').insert({
-          user_id: user.id,
-          total_listings: 1,
-        });
-      }
+      if (error) throw error;
 
-      toast.success('Listing submitted! Pending approval.');
-      navigate('/listing-portal/my-listings');
-    } catch (error) {
-      console.error(error);
-      toast.error('Failed to submit listing');
-    } finally {
-      setSubmitting(false);
+      setSubmittedId(data.id);
+      setPhase('success');
+      toast.success('Listing submitted for approval!');
+
+    } catch (err: any) {
+      console.error('Submit error:', err);
+      toast.error('Failed to submit listing. Please try again.');
+      setPhase('review');
     }
   };
 
-  const canNext = () => {
-    switch (currentStep) {
-      case 0: return !!listingType;
-      case 1: return !!title.trim();
-      default: return true;
-    }
-  };
+  // ========== SUCCESS PHASE ==========
+  if (phase === 'success') {
+    return (
+      <section className="min-h-screen bg-black pt-24 pb-16">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-2xl mx-auto text-center"
+          >
+            <div className="w-20 h-20 bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/30">
+              <CheckCircle2 className="w-10 h-10 text-emerald-400" />
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-4">Listing Submitted Successfully!</h1>
+            <p className="text-zinc-400 mb-8">
+              Your listing has been submitted for review. You'll receive a notification once it's approved and published on the portal.
+            </p>
+            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 mb-8 text-left">
+              <h3 className="text-fuchsia-400 font-semibold mb-3">What Happens Next?</h3>
+              <ul className="space-y-2 text-zinc-300 text-sm">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-fuchsia-400 mt-0.5 flex-shrink-0" />
+                  <span>Our team will review your listing details and documents</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-fuchsia-400 mt-0.5 flex-shrink-0" />
+                  <span>You'll see the approval status in your dashboard & notifications</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-fuchsia-400 mt-0.5 flex-shrink-0" />
+                  <span>Once approved, your listing goes live on the JBJ Portal</span>
+                </li>
+              </ul>
+            </div>
+            <div className="flex gap-3 justify-center">
+              <Button onClick={() => navigate('/listing-portal/my-listings')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white">
+                View My Listings
+              </Button>
+              <Button onClick={() => navigate('/listing-portal')} variant="outline" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
+                Back to Portal
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="relative w-full min-h-screen bg-black">
       <div className="relative py-12 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-900/20 via-black to-purple-900/15" />
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-3xl mx-auto">
             <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-zinc-400 mb-4">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
             </Button>
-            <h1 className="text-2xl font-bold text-white mb-6">Submit Your Listing</h1>
 
-            {/* Progress */}
-            <div className="flex gap-1 mb-8">
-              {steps.map((s, i) => (
-                <div key={s} className="flex-1">
-                  <div className={`h-1.5 rounded-full ${i <= currentStep ? 'bg-fuchsia-500' : 'bg-zinc-800'}`} />
-                  <p className={`text-[10px] mt-1 ${i <= currentStep ? 'text-fuchsia-400' : 'text-zinc-600'}`}>{s}</p>
-                </div>
-              ))}
+            {/* Header */}
+            <div className="text-center mb-8">
+              <Badge className="mb-3 bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30 px-4 py-1.5">
+                <Wand2 className="w-3.5 h-3.5 mr-2" /> AI-Powered
+              </Badge>
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                Smart Listing Creator
+              </h1>
+              <p className="text-zinc-400 text-sm">
+                Upload your documents and let AI create a professional listing for you
+              </p>
             </div>
 
-            <motion.div
-              key={currentStep}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl p-6"
-            >
-              {/* Step 0: Type */}
-              {currentStep === 0 && (
-                <div className="space-y-4">
-                  <h2 className="text-white font-semibold">What type of listing?</h2>
-                  <div className="grid grid-cols-2 gap-3">
-                    {listingTypes.map(t => {
-                      const Icon = t.icon;
-                      return (
-                        <button
-                          key={t.id}
-                          onClick={() => setListingType(t.id)}
-                          className={`p-4 rounded-xl border text-left transition-all ${
-                            listingType === t.id
-                              ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-white'
-                              : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600'
-                          }`}
-                        >
-                          <Icon className="w-5 h-5 mb-2" />
-                          <div className="font-medium text-sm">{t.label}</div>
-                          <div className="text-xs text-zinc-500">{t.desc}</div>
-                        </button>
-                      );
-                    })}
+            {/* Progress indicator */}
+            <div className="flex gap-2 mb-8">
+              {['Upload', 'AI Extract', 'Review & Edit', 'Submit'].map((step, i) => {
+                const stepIndex = phase === 'upload' ? 0 : phase === 'extracting' ? 1 : phase === 'review' ? 2 : 3;
+                return (
+                  <div key={step} className="flex-1">
+                    <div className={`h-1.5 rounded-full transition-all ${i <= stepIndex ? 'bg-fuchsia-500' : 'bg-zinc-800'}`} />
+                    <p className={`text-[10px] mt-1 text-center ${i <= stepIndex ? 'text-fuchsia-400' : 'text-zinc-600'}`}>{step}</p>
                   </div>
-                </div>
-              )}
+                );
+              })}
+            </div>
 
-              {/* Step 1: Details */}
-              {currentStep === 1 && (
-                <div className="space-y-4">
-                  <h2 className="text-white font-semibold">Property Details</h2>
-                  <div>
-                    <label className="text-xs text-zinc-400 mb-1 block">Title *</label>
-                    <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Luxury 2BR in Downtown" className="bg-zinc-800/50 border-zinc-600 text-white" />
-                  </div>
-                  <div>
-                    <label className="text-xs text-zinc-400 mb-1 block">Description</label>
-                    <Textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Describe the property..." className="bg-zinc-800/50 border-zinc-600 text-white min-h-[80px]" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-xs text-zinc-400 mb-1 block">Emirate</label>
-                      <select value={emirate} onChange={e => setEmirate(e.target.value)} className="w-full bg-zinc-800/50 border border-zinc-600 text-white rounded-lg px-3 py-2 text-sm">
-                        <option value="">Select</option>
-                        {emirates.map(em => <option key={em} value={em}>{em}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="text-xs text-zinc-400 mb-1 block">Location</label>
-                      <Input value={location} onChange={e => setLocation(e.target.value)} placeholder="Area/community" className="bg-zinc-800/50 border-zinc-600 text-white" />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-xs text-zinc-400 mb-1 block">Property Type</label>
-                      <select value={propertyType} onChange={e => setPropertyType(e.target.value)} className="w-full bg-zinc-800/50 border border-zinc-600 text-white rounded-lg px-3 py-2 text-sm">
-                        <option value="">Select</option>
-                        {propertyTypes.map(pt => <option key={pt} value={pt}>{pt}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="text-xs text-zinc-400 mb-1 block">Price (AED)</label>
-                      <Input type="number" value={price} onChange={e => setPrice(e.target.value)} placeholder="0" className="bg-zinc-800/50 border-zinc-600 text-white" />
+            <AnimatePresence mode="wait">
+              {/* ========== UPLOAD PHASE ========== */}
+              {phase === 'upload' && (
+                <motion.div
+                  key="upload"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
+                >
+                  {/* Category Selection */}
+                  <div className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-2xl p-6">
+                    <h2 className="text-white font-semibold mb-4">What type of listing?</h2>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {listingCategories.map(cat => {
+                        const Icon = cat.icon;
+                        return (
+                          <button
+                            key={cat.id}
+                            onClick={() => setListingCategory(cat.id)}
+                            className={`p-4 rounded-xl border text-left transition-all ${
+                              listingCategory === cat.id
+                                ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-white'
+                                : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600'
+                            }`}
+                          >
+                            <Icon className="w-5 h-5 mb-2" />
+                            <div className="font-medium text-sm">{cat.label}</div>
+                            <div className="text-xs text-zinc-500">{cat.desc}</div>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    <div>
-                      <label className="text-xs text-zinc-400 mb-1 block">Bedrooms</label>
-                      <Input type="number" value={bedrooms} onChange={e => setBedrooms(e.target.value)} className="bg-zinc-800/50 border-zinc-600 text-white" />
+
+                  {/* Upload Zone */}
+                  <div className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-2xl p-6">
+                    <h2 className="text-white font-semibold mb-2">Upload Documents</h2>
+                    <p className="text-zinc-500 text-xs mb-4">
+                      Upload PDF brochures, floor plans, fact sheets, property photos, Word docs, Excel files — AI will extract everything
+                    </p>
+                    
+                    <div
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={handleFileDrop}
+                      className="border-2 border-dashed border-fuchsia-500/30 rounded-xl p-8 text-center hover:border-fuchsia-500/60 transition-all cursor-pointer"
+                      onClick={() => document.getElementById('file-input')?.click()}
+                    >
+                      <Upload className="w-10 h-10 text-fuchsia-400 mx-auto mb-3" />
+                      <p className="text-white font-medium mb-1">Drop files here or click to browse</p>
+                      <p className="text-zinc-500 text-xs">
+                        PDF, JPG, PNG, DOCX, XLSX — up to 20MB each
+                      </p>
+                      <input
+                        id="file-input"
+                        type="file"
+                        multiple
+                        accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt"
+                        onChange={handleFileSelect}
+                        className="hidden"
+                      />
                     </div>
-                    <div>
-                      <label className="text-xs text-zinc-400 mb-1 block">Bathrooms</label>
-                      <Input type="number" value={bathrooms} onChange={e => setBathrooms(e.target.value)} className="bg-zinc-800/50 border-zinc-600 text-white" />
-                    </div>
-                    <div>
-                      <label className="text-xs text-zinc-400 mb-1 block">Area (sqft)</label>
-                      <Input type="number" value={areaSqft} onChange={e => setAreaSqft(e.target.value)} className="bg-zinc-800/50 border-zinc-600 text-white" />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-xs text-zinc-400 mb-1 block">Furnishing</label>
-                      <select value={furnishing} onChange={e => setFurnishing(e.target.value)} className="w-full bg-zinc-800/50 border border-zinc-600 text-white rounded-lg px-3 py-2 text-sm">
-                        <option value="">Select</option>
-                        {furnishingOptions.map(f => <option key={f} value={f}>{f}</option>)}
-                      </select>
-                    </div>
-                    {listingType !== 'sale' && (
-                      <div>
-                        <label className="text-xs text-zinc-400 mb-1 block">Cheques</label>
-                        <Input type="number" value={cheques} onChange={e => setCheques(e.target.value)} placeholder="1-12" className="bg-zinc-800/50 border-zinc-600 text-white" />
+
+                    {/* Uploaded Files List */}
+                    {uploadedDocs.length > 0 && (
+                      <div className="mt-4 space-y-2">
+                        {uploadedDocs.map(doc => (
+                          <div key={doc.id} className="flex items-center gap-3 bg-zinc-800/50 border border-zinc-700 rounded-lg p-3">
+                            {doc.preview ? (
+                              <img src={doc.preview} alt="" className="w-10 h-10 rounded object-cover" />
+                            ) : doc.type === 'pdf' ? (
+                              <div className="w-10 h-10 bg-red-500/20 rounded flex items-center justify-center">
+                                <FileText className="w-5 h-5 text-red-400" />
+                              </div>
+                            ) : (
+                              <div className="w-10 h-10 bg-blue-500/20 rounded flex items-center justify-center">
+                                <File className="w-5 h-5 text-blue-400" />
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-white text-sm truncate">{doc.name}</p>
+                              <p className="text-zinc-500 text-xs">
+                                {(doc.file.size / 1024 / 1024).toFixed(1)} MB · {doc.type.toUpperCase()}
+                              </p>
+                            </div>
+                            <button onClick={() => removeDoc(doc.id)} className="p-1.5 hover:bg-zinc-700 rounded-lg">
+                              <X className="w-4 h-4 text-zinc-400" />
+                            </button>
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>
-                </div>
+
+                  {/* Extract Button */}
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={runAIExtraction}
+                      disabled={uploadedDocs.length === 0}
+                      className="flex-1 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white h-12 text-base"
+                    >
+                      <Sparkles className="w-5 h-5 mr-2" />
+                      Extract with AI ({uploadedDocs.length} {uploadedDocs.length === 1 ? 'file' : 'files'})
+                    </Button>
+                    <Button
+                      onClick={() => setPhase('review')}
+                      variant="outline"
+                      className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 h-12"
+                    >
+                      Skip — Fill Manually
+                    </Button>
+                  </div>
+                </motion.div>
               )}
 
-              {/* Step 2: Photos */}
-              {currentStep === 2 && (
-                <div className="space-y-4">
-                  <h2 className="text-white font-semibold">Photos (up to 10)</h2>
-                  <div className="grid grid-cols-3 gap-3">
-                    {images.map((img, i) => (
-                      <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-zinc-700">
-                        <img src={img} alt="" className="w-full h-full object-cover" />
-                        <button onClick={() => setImages(prev => prev.filter((_, idx) => idx !== i))} className="absolute top-1 right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">×</button>
-                      </div>
+              {/* ========== EXTRACTING PHASE ========== */}
+              {phase === 'extracting' && (
+                <motion.div
+                  key="extracting"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-2xl p-12 text-center"
+                >
+                  <div className="relative w-16 h-16 mx-auto mb-6">
+                    <div className="absolute inset-0 border-2 border-fuchsia-500/30 border-t-fuchsia-500 rounded-full animate-spin" />
+                    <Wand2 className="w-8 h-8 text-fuchsia-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                  </div>
+                  <h2 className="text-white text-xl font-bold mb-2">AI is analyzing your documents...</h2>
+                  <p className="text-zinc-400 text-sm mb-6">
+                    Extracting property details, images, floor plans, and generating your listing
+                  </p>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {['Reading documents', 'Detecting images', 'Extracting details', 'Generating description'].map((step, i) => (
+                      <Badge key={step} className="bg-fuchsia-500/10 text-fuchsia-300 border-fuchsia-500/20">
+                        <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
+                        {step}
+                      </Badge>
                     ))}
-                    {images.length < 10 && (
-                      <label className="aspect-square rounded-lg border-2 border-dashed border-fuchsia-500/30 flex flex-col items-center justify-center cursor-pointer hover:border-fuchsia-500/60">
-                        <Camera className="w-6 h-6 text-fuchsia-400 mb-1" />
-                        <span className="text-xs text-zinc-500">Add Photo</span>
-                        <input type="file" accept="image/*" multiple onChange={handleImageUpload} className="hidden" />
-                      </label>
-                    )}
                   </div>
-                </div>
+                </motion.div>
               )}
 
-              {/* Step 3: Documents */}
-              {currentStep === 3 && (
-                <div className="space-y-4">
-                  <h2 className="text-white font-semibold">Documents</h2>
-                  <div className="space-y-3">
-                    <div className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-4">
-                      <label className="text-sm text-white font-medium mb-2 block">Title Deed</label>
-                      {titleDeedUrl ? (
-                        <div className="flex items-center gap-2 text-emerald-400 text-sm">
-                          <Check className="w-4 h-4" /> Uploaded
-                        </div>
+              {/* ========== REVIEW PHASE ========== */}
+              {phase === 'review' && (
+                <motion.div
+                  key="review"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="space-y-6"
+                >
+                  {/* AI Confidence Banner */}
+                  {extractedData && (
+                    <div className={`flex items-center gap-3 p-4 rounded-xl border ${
+                      extractedData.confidence_score >= 80 
+                        ? 'bg-emerald-500/10 border-emerald-500/30' 
+                        : extractedData.confidence_score >= 50 
+                        ? 'bg-amber-500/10 border-amber-500/30' 
+                        : 'bg-red-500/10 border-red-500/30'
+                    }`}>
+                      {extractedData.confidence_score >= 80 ? (
+                        <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
                       ) : (
-                        <label className="flex items-center gap-2 text-fuchsia-400 text-sm cursor-pointer">
-                          <Upload className="w-4 h-4" /> Upload document
-                          <input type="file" accept="image/*,.pdf" onChange={e => handleDocUpload(e, 'deed')} className="hidden" />
-                        </label>
+                        <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0" />
                       )}
-                    </div>
-                    <div className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-4">
-                      <label className="text-sm text-white font-medium mb-2 block">Passport Copy</label>
-                      {passportUrl ? (
-                        <div className="flex items-center gap-2 text-emerald-400 text-sm">
-                          <Check className="w-4 h-4" /> Uploaded
-                        </div>
-                      ) : (
-                        <label className="flex items-center gap-2 text-fuchsia-400 text-sm cursor-pointer">
-                          <Upload className="w-4 h-4" /> Upload document
-                          <input type="file" accept="image/*,.pdf" onChange={e => handleDocUpload(e, 'passport')} className="hidden" />
-                        </label>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 4: Contact */}
-              {currentStep === 4 && (
-                <div className="space-y-4">
-                  <h2 className="text-white font-semibold">Contact Preference</h2>
-                  <div className="space-y-3">
-                    <button
-                      onClick={() => setUseCompanyContact(true)}
-                      className={`w-full p-4 rounded-xl border text-left transition-all ${
-                        useCompanyContact ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-white' : 'bg-zinc-800/50 border-zinc-700 text-zinc-400'
-                      }`}
-                    >
-                      <div className="font-medium text-sm">Use JBJ Contact Details</div>
-                      <div className="text-xs text-zinc-500 mt-1">Free — JBJ handles inquiries and connects you with buyers</div>
-                    </button>
-                    <button
-                      onClick={() => setUseCompanyContact(false)}
-                      className={`w-full p-4 rounded-xl border text-left transition-all ${
-                        !useCompanyContact ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-white' : 'bg-zinc-800/50 border-zinc-700 text-zinc-400'
-                      }`}
-                    >
-                      <div className="font-medium text-sm">Use My Own Contact</div>
-                      <div className="text-xs text-zinc-500 mt-1">Paid tier — your details shown on the listing</div>
-                    </button>
-                  </div>
-                  {!useCompanyContact && (
-                    <div className="space-y-3 pt-2">
-                      <Input value={contactName} onChange={e => setContactName(e.target.value)} placeholder="Your name" className="bg-zinc-800/50 border-zinc-600 text-white" />
-                      <Input value={contactPhone} onChange={e => setContactPhone(e.target.value)} placeholder="Phone number" className="bg-zinc-800/50 border-zinc-600 text-white" />
-                      <Input value={contactEmail} onChange={e => setContactEmail(e.target.value)} placeholder="Email address" className="bg-zinc-800/50 border-zinc-600 text-white" />
+                      <div className="flex-1">
+                        <p className="text-white text-sm font-medium">
+                          AI Confidence: {extractedData.confidence_score}%
+                        </p>
+                        <p className="text-zinc-400 text-xs">
+                          {extractedData.confidence_score >= 80 
+                            ? 'High confidence — review and submit' 
+                            : 'Please review and edit the details below'}
+                        </p>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => { setPhase('upload'); }}
+                        className="text-zinc-400 hover:text-white"
+                      >
+                        <RefreshCw className="w-4 h-4 mr-1" /> Re-extract
+                      </Button>
                     </div>
                   )}
-                </div>
+
+                  {/* Gallery Preview */}
+                  {uploadedImageUrls.length > 0 && (
+                    <div className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-2xl p-6">
+                      <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+                        <Image className="w-4 h-4 text-fuchsia-400" />
+                        Gallery ({uploadedImageUrls.length} photos)
+                      </h3>
+                      <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
+                        {uploadedImageUrls.map((url, i) => (
+                          <div key={i} className="aspect-square rounded-lg overflow-hidden border border-zinc-700">
+                            <img src={url} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Main Details Form */}
+                  <div className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-2xl p-6 space-y-4">
+                    <h3 className="text-white font-semibold mb-1">Listing Details</h3>
+                    
+                    <div>
+                      <label className="text-xs text-zinc-400 mb-1 block">Title *</label>
+                      <Input
+                        value={form.title}
+                        onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                        placeholder="e.g. Luxury 3BR Villa in Palm Jumeirah"
+                        className="bg-zinc-800/50 border-zinc-600 text-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs text-zinc-400 mb-1 block">Description</label>
+                      <Textarea
+                        value={form.description}
+                        onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+                        placeholder="Property description..."
+                        className="bg-zinc-800/50 border-zinc-600 text-white min-h-[100px]"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Category</label>
+                        <Select value={form.listing_category} onValueChange={v => setForm(f => ({ ...f, listing_category: v }))}>
+                          <SelectTrigger className="bg-zinc-800/50 border-zinc-600 text-white">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {listingCategories.map(c => <SelectItem key={c.id} value={c.id}>{c.label}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Property Type</label>
+                        <Select value={form.property_type} onValueChange={v => setForm(f => ({ ...f, property_type: v }))}>
+                          <SelectTrigger className="bg-zinc-800/50 border-zinc-600 text-white">
+                            <SelectValue placeholder="Select" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {propertyTypes.map(t => <SelectItem key={t} value={t.toLowerCase()}>{t}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Developer</label>
+                        <Input
+                          value={form.developer_name}
+                          onChange={e => setForm(f => ({ ...f, developer_name: e.target.value }))}
+                          placeholder="e.g. Emaar"
+                          className="bg-zinc-800/50 border-zinc-600 text-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Project / Building</label>
+                        <Input
+                          value={form.project_name}
+                          onChange={e => setForm(f => ({ ...f, project_name: e.target.value }))}
+                          placeholder="e.g. Creek Harbour"
+                          className="bg-zinc-800/50 border-zinc-600 text-white"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Emirate</label>
+                        <Select value={form.emirate} onValueChange={v => setForm(f => ({ ...f, emirate: v }))}>
+                          <SelectTrigger className="bg-zinc-800/50 border-zinc-600 text-white">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {emirates.map(e => <SelectItem key={e} value={e}>{e}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Location / Area</label>
+                        <Input
+                          value={form.location}
+                          onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
+                          placeholder="e.g. Dubai Marina"
+                          className="bg-zinc-800/50 border-zinc-600 text-white"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-4 gap-3">
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Price (AED)</label>
+                        <Input
+                          type="number"
+                          value={form.price}
+                          onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
+                          className="bg-zinc-800/50 border-zinc-600 text-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Bedrooms</label>
+                        <Input
+                          type="number"
+                          value={form.bedrooms}
+                          onChange={e => setForm(f => ({ ...f, bedrooms: e.target.value }))}
+                          className="bg-zinc-800/50 border-zinc-600 text-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Bathrooms</label>
+                        <Input
+                          type="number"
+                          value={form.bathrooms}
+                          onChange={e => setForm(f => ({ ...f, bathrooms: e.target.value }))}
+                          className="bg-zinc-800/50 border-zinc-600 text-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Area (sqft)</label>
+                        <Input
+                          type="number"
+                          value={form.area_sqft}
+                          onChange={e => setForm(f => ({ ...f, area_sqft: e.target.value }))}
+                          className="bg-zinc-800/50 border-zinc-600 text-white"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3">
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Furnishing</label>
+                        <Select value={form.furnishing} onValueChange={v => setForm(f => ({ ...f, furnishing: v }))}>
+                          <SelectTrigger className="bg-zinc-800/50 border-zinc-600 text-white">
+                            <SelectValue placeholder="Select" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {furnishingOptions.map(f => <SelectItem key={f} value={f.toLowerCase().replace(' ', '_')}>{f}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Handover</label>
+                        <Input
+                          value={form.handover_date}
+                          onChange={e => setForm(f => ({ ...f, handover_date: e.target.value }))}
+                          placeholder="e.g. Q4 2026"
+                          className="bg-zinc-800/50 border-zinc-600 text-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-zinc-400 mb-1 block">Payment Plan</label>
+                        <Input
+                          value={form.payment_plan}
+                          onChange={e => setForm(f => ({ ...f, payment_plan: e.target.value }))}
+                          placeholder="e.g. 60/40"
+                          className="bg-zinc-800/50 border-zinc-600 text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Key Features */}
+                  {form.key_features.length > 0 && (
+                    <div className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-2xl p-6">
+                      <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+                        <Star className="w-4 h-4 text-fuchsia-400" />
+                        Key Features
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {form.key_features.map((f, i) => (
+                          <Badge key={i} className="bg-fuchsia-500/10 text-fuchsia-300 border-fuchsia-500/20 px-3 py-1">
+                            {f}
+                            <button onClick={() => setForm(prev => ({ ...prev, key_features: prev.key_features.filter((_, idx) => idx !== i) }))} className="ml-2">
+                              <X className="w-3 h-3" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Amenities */}
+                  {form.amenities.length > 0 && (
+                    <div className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-2xl p-6">
+                      <h3 className="text-white font-semibold mb-3">Amenities</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {form.amenities.map((a, i) => (
+                          <Badge key={i} className="bg-zinc-800 text-zinc-300 border-zinc-700 px-3 py-1">
+                            {a}
+                            <button onClick={() => setForm(prev => ({ ...prev, amenities: prev.amenities.filter((_, idx) => idx !== i) }))} className="ml-2">
+                              <X className="w-3 h-3" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Submit Actions */}
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => setPhase('upload')}
+                      variant="outline"
+                      className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 h-12"
+                    >
+                      <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                    </Button>
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={!form.title.trim()}
+                      className="flex-1 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white h-12 text-base"
+                    >
+                      <Check className="w-5 h-5 mr-2" />
+                      Submit for Approval
+                    </Button>
+                  </div>
+                </motion.div>
               )}
 
-              {/* Step 5: Review */}
-              {currentStep === 5 && (
-                <div className="space-y-4">
-                  <h2 className="text-white font-semibold">Review Your Listing</h2>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between"><span className="text-zinc-500">Type:</span><span className="text-white">{listingTypes.find(t => t.id === listingType)?.label}</span></div>
-                    <div className="flex justify-between"><span className="text-zinc-500">Title:</span><span className="text-white">{title}</span></div>
-                    {emirate && <div className="flex justify-between"><span className="text-zinc-500">Emirate:</span><span className="text-white">{emirate}</span></div>}
-                    {location && <div className="flex justify-between"><span className="text-zinc-500">Location:</span><span className="text-white">{location}</span></div>}
-                    {price && <div className="flex justify-between"><span className="text-zinc-500">Price:</span><span className="text-fuchsia-400 font-bold">AED {parseInt(price).toLocaleString()}</span></div>}
-                    {propertyType && <div className="flex justify-between"><span className="text-zinc-500">Type:</span><span className="text-white">{propertyType}</span></div>}
-                    <div className="flex justify-between"><span className="text-zinc-500">Photos:</span><span className="text-white">{images.length}</span></div>
-                    <div className="flex justify-between"><span className="text-zinc-500">Contact:</span><span className="text-white">{useCompanyContact ? 'JBJ Contact' : 'Own Contact'}</span></div>
-                  </div>
-                  <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 text-amber-300 text-xs">
-                    Your listing will be submitted for review. Once approved, it will appear on the portal.
-                  </div>
-                </div>
-              )}
-            </motion.div>
-
-            {/* Navigation */}
-            <div className="flex justify-between mt-6">
-              <Button
-                onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
-                disabled={currentStep === 0}
-                variant="outline"
-                className="border-zinc-600 text-zinc-400"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" /> Back
-              </Button>
-              {currentStep < 5 ? (
-                <Button
-                  onClick={() => setCurrentStep(prev => prev + 1)}
-                  disabled={!canNext()}
-                  className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white"
+              {/* ========== SUBMITTING PHASE ========== */}
+              {phase === 'submitting' && (
+                <motion.div
+                  key="submitting"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="bg-zinc-900/60 border border-fuchsia-500/20 rounded-2xl p-12 text-center"
                 >
-                  Next <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleSubmit}
-                  disabled={submitting}
-                  className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white"
-                >
-                  {submitting ? 'Submitting...' : 'Submit Listing'}
-                  <Check className="w-4 h-4 ml-2" />
-                </Button>
+                  <Loader2 className="w-12 h-12 text-fuchsia-400 animate-spin mx-auto mb-4" />
+                  <h2 className="text-white text-xl font-bold">Submitting your listing...</h2>
+                </motion.div>
               )}
-            </div>
+            </AnimatePresence>
           </div>
         </div>
       </div>

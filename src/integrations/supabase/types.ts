@@ -14249,6 +14249,11 @@ export type Database = {
       portal_listings: {
         Row: {
           admin_notes: string | null
+          ai_extracted_data: Json | null
+          ai_quality_score: number | null
+          amenities: Json | null
+          approved_at: string | null
+          approved_by: string | null
           area: string | null
           area_sqft: number | null
           bathrooms: number | null
@@ -14260,27 +14265,44 @@ export type Database = {
           created_at: string
           currency: string | null
           description: string | null
+          developer_name: string | null
           emirate: string | null
           featured_until: string | null
+          floor_plan_images: Json | null
           furnishing: string | null
+          gallery_images: Json | null
+          handover_date: string | null
           id: string
           images: Json | null
+          inquiry_count: number | null
           is_featured: boolean | null
+          key_features: Json | null
+          listing_category: string | null
           listing_type: string
           location: string | null
           passport_copy_url: string | null
+          payment_plan: string | null
           price: number | null
+          project_name: string | null
           property_type: string | null
+          rejection_reason: string | null
           rent_frequency: string | null
+          source_documents: Json | null
           status: string | null
           title: string
           title_deed_url: string | null
           updated_at: string
           use_company_contact: boolean | null
           user_id: string
+          view_count: number | null
         }
         Insert: {
           admin_notes?: string | null
+          ai_extracted_data?: Json | null
+          ai_quality_score?: number | null
+          amenities?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
           area?: string | null
           area_sqft?: number | null
           bathrooms?: number | null
@@ -14292,27 +14314,44 @@ export type Database = {
           created_at?: string
           currency?: string | null
           description?: string | null
+          developer_name?: string | null
           emirate?: string | null
           featured_until?: string | null
+          floor_plan_images?: Json | null
           furnishing?: string | null
+          gallery_images?: Json | null
+          handover_date?: string | null
           id?: string
           images?: Json | null
+          inquiry_count?: number | null
           is_featured?: boolean | null
+          key_features?: Json | null
+          listing_category?: string | null
           listing_type?: string
           location?: string | null
           passport_copy_url?: string | null
+          payment_plan?: string | null
           price?: number | null
+          project_name?: string | null
           property_type?: string | null
+          rejection_reason?: string | null
           rent_frequency?: string | null
+          source_documents?: Json | null
           status?: string | null
           title: string
           title_deed_url?: string | null
           updated_at?: string
           use_company_contact?: boolean | null
           user_id: string
+          view_count?: number | null
         }
         Update: {
           admin_notes?: string | null
+          ai_extracted_data?: Json | null
+          ai_quality_score?: number | null
+          amenities?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
           area?: string | null
           area_sqft?: number | null
           bathrooms?: number | null
@@ -14324,24 +14363,36 @@ export type Database = {
           created_at?: string
           currency?: string | null
           description?: string | null
+          developer_name?: string | null
           emirate?: string | null
           featured_until?: string | null
+          floor_plan_images?: Json | null
           furnishing?: string | null
+          gallery_images?: Json | null
+          handover_date?: string | null
           id?: string
           images?: Json | null
+          inquiry_count?: number | null
           is_featured?: boolean | null
+          key_features?: Json | null
+          listing_category?: string | null
           listing_type?: string
           location?: string | null
           passport_copy_url?: string | null
+          payment_plan?: string | null
           price?: number | null
+          project_name?: string | null
           property_type?: string | null
+          rejection_reason?: string | null
           rent_frequency?: string | null
+          source_documents?: Json | null
           status?: string | null
           title?: string
           title_deed_url?: string | null
           updated_at?: string
           use_company_contact?: boolean | null
           user_id?: string
+          view_count?: number | null
         }
         Relationships: []
       }
@@ -18877,6 +18928,47 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      user_listing_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean | null
+          listing_id: string | null
+          message: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          listing_id?: string | null
+          message?: string | null
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          listing_id?: string | null
+          message?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_listing_notifications_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "portal_listings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_notifications: {
         Row: {
