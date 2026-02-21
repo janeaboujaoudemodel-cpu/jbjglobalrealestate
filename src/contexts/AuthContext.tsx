@@ -72,21 +72,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setOwnerLoading(true);
       setOwnerError(null);
 
+      let result = false;
       // Try up to 2 times (initial + 1 retry)
       try {
-        return await attemptVerify();
+        result = await attemptVerify();
       } catch (firstErr) {
         console.warn("verify-owner attempt 1 failed, retrying...", firstErr);
         // Wait 1s then retry
         await new Promise(r => setTimeout(r, 1000));
-        return await attemptVerify();
+        result = await attemptVerify();
       }
+
+      // CRITICAL: Set isOwner BEFORE ownerLoading=false to prevent
+      // a render frame where ownerLoading=false but isOwner is still false,
+      // which causes OwnerGuard to redirect to /403.
+      setIsOwner(result);
+      setOwnerLoading(false);
+      return result;
     } catch (err: any) {
       console.error("verify-owner failed after retries:", err);
       setOwnerError(err?.message || "Verification failed");
-      return false;
-    } finally {
+      setIsOwner(false);
       setOwnerLoading(false);
+      return false;
     }
   }, []);
 
@@ -121,12 +129,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Mark auth as done loading, but owner verification may still be running
       setLoading(false);
 
-      // Now verify owner status
+      // Now verify owner status (isOwner is set inside verifyOwner)
       const ownerStatus = await verifyOwner(nextSession);
 
       if (!mounted || seq !== applySeq) return;
-
-      setIsOwner(ownerStatus);
 
       if (nextSession?.user?.email) {
         console.info("Owner check resolved", {
