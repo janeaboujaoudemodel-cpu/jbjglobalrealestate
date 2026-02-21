@@ -82,6 +82,7 @@ export function StampSVGRenderer({
   }
 
   // Sanitize SVG before rendering — preserve clip-path, direction, unicode-bidi, image href
+  // Allow data: URIs for uploaded logos (DOMPurify strips them by default)
   const clean = typeof window !== 'undefined'
     ? DOMPurify.sanitize(tinted, {
         USE_PROFILES: { svg: true, svgFilters: true },
@@ -89,8 +90,10 @@ export function StampSVGRenderer({
         ADD_ATTR: [
           'clip-path', 'dominant-baseline', 'unicode-bidi', 'direction', 'bidi-override',
           'letter-spacing', 'text-anchor', 'font-weight', 'font-size', 'font-family', 'font-style',
-          'href', 'xlink:href', 'preserveAspectRatio',
+          'href', 'xlink:href', 'preserveAspectRatio', 'textLength', 'lengthAdjust',
         ],
+        ADD_DATA_URI_TAGS: ['image'],
+        ADD_URI_SAFE_ATTR: ['href', 'xlink:href'],
         FORCE_BODY: false,
       })
     : tinted;

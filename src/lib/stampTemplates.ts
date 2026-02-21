@@ -49,17 +49,21 @@ function autoFontSize(text: string, base: number, maxChars = 20): number {
 }
 
 function wrapText(text: string, x: number, y: number, font: string, size: number, color: string, letterSpacing = 1.2): string {
+  // Truncate very long text to prevent overflow
+  const maxLen = 48;
+  const displayText = text.length > maxLen ? text.slice(0, maxLen - 1) + '…' : text;
+  
   // Single line: ≤24 chars
-  if (text.length <= 24) {
-    return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="${size}" font-weight="bold" fill="${color}" letter-spacing="${letterSpacing}">${text}</text>`;
+  if (displayText.length <= 24) {
+    return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-family="${font}" font-size="${size}" font-weight="bold" fill="${color}" letter-spacing="${letterSpacing}">${displayText}</text>`;
   }
   // Two lines: find best split near middle at a word boundary
-  const mid = Math.floor(text.length / 2);
-  let split = text.lastIndexOf(' ', mid);
-  if (split < 2) split = text.indexOf(' ', mid);
+  const mid = Math.floor(displayText.length / 2);
+  let split = displayText.lastIndexOf(' ', mid);
+  if (split < 2) split = displayText.indexOf(' ', mid);
   if (split < 0) split = mid;
-  const line1 = text.slice(0, split).trim();
-  const line2 = text.slice(split).trim();
+  const line1 = displayText.slice(0, split).trim();
+  const line2 = displayText.slice(split).trim();
   const lineH = size * 1.3;
   // tspans straddle y: top at y - lineH/2, bottom at y + lineH/2
   return `<text text-anchor="middle" font-family="${font}" font-weight="bold" fill="${color}" letter-spacing="${letterSpacing}">
@@ -69,23 +73,29 @@ function wrapText(text: string, x: number, y: number, font: string, size: number
 }
 
 function ringText(id: string, cx: number, cy: number, r: number, text: string, font: string, fontSize: number, color: string, startOffset = '50%', letterSpacing = 1.8) {
+  // Truncate ring text to prevent arc overflow
+  const maxArcChars = Math.floor((r * Math.PI) / (fontSize * 0.65));
+  const displayText = text.length > maxArcChars ? text.slice(0, maxArcChars - 1) + '…' : text;
   // Top-arc path: starts from left (cx-r, cy), arcs over the top to right (cx+r, cy) — large-arc=1, sweep=1
   return `
     <defs>
       <path id="${id}" d="M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}"/>
     </defs>
     <text font-family="${font}" font-size="${fontSize}" fill="${color}" letter-spacing="${letterSpacing}">
-      <textPath href="#${id}" startOffset="50%" text-anchor="middle">${text}</textPath>
+      <textPath href="#${id}" startOffset="50%" text-anchor="middle">${displayText}</textPath>
     </text>`;
 }
 
 function bottomArcText(id: string, cx: number, cy: number, r: number, text: string, font: string, fontSize: number, color: string, letterSpacing = 2) {
+  // Truncate bottom arc text to prevent overflow
+  const maxArcChars = Math.floor((r * Math.PI) / (fontSize * 0.65));
+  const displayText = text.length > maxArcChars ? text.slice(0, maxArcChars - 1) + '…' : text;
   return `
     <defs>
       <path id="${id}" d="M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${cx + r} ${cy}"/>
     </defs>
     <text font-family="${font}" font-size="${fontSize}" fill="${color}" letter-spacing="${letterSpacing}">
-      <textPath href="#${id}" startOffset="50%" text-anchor="middle">${text}</textPath>
+      <textPath href="#${id}" startOffset="50%" text-anchor="middle">${displayText}</textPath>
     </text>`;
 }
 
