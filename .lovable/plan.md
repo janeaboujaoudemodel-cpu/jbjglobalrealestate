@@ -1,93 +1,122 @@
 
-# Comprehensive Fix: Founder Sidebar, Project Count, Alerts UI, Seller Listing Sale/Rent, and Champagne Theme
+# Comprehensive Listing Portal, Emergency Mirror, and Smart Listing Enhancements
 
 ## Overview
-This plan addresses all outstanding issues: the Founder section placement in the sidebar, inaccurate project counts, alerts dropdown styling, the Seller Listing page needing a sale/rent selection step, and enforcing the Champagne Gold UI standard across remaining pages.
+This plan covers: (A) Listing Portal filter layout fix, (B) Emergency Mirror panel UI fix to champagne theme, (C) Smart Listing Creator with AI Price Predictor, approval workflow, pricing/commission model, and role selection, (D) Notification bell fix.
 
 ---
 
-## 1. Founder Section in Sidebar - Move Next to Podcast Studio
+## 1. Listing Portal - Filter Layout Fix
 
-**Problem:** The "Founder & Podcast" nav item exists under a separate "FOUNDER" section at the bottom of the sidebar, far from the "Studio" item. It's hard to find.
+**Current state:** 5 filter buttons (All, For Sale, Yearly Rent, Short-term, Holiday Home) already appear on one row and look correct.
 
-**Fix in `OwnerSidebarNav.tsx`:**
-- Move the Founder & Podcast item into the "CREATIVE" section, right after "Studio"
-- Add a second item "Podcast Controls" with a Mic icon for direct access
-- Remove the standalone "FOUNDER" section
-- Result: The CREATIVE section becomes:
-  - Studio
-  - Founder & Podcast (with User icon)
-  - Kanban Board
-  - Marketing Hub
+**Change:** Keep all 5 on one line but reorganize: Row 1 = All, For Sale, Yearly Rent (spread evenly). Row 2 = Short-term Rental, Holiday Home (centered, each taking half width).
+
+**File:** `src/pages/ListingPortal.tsx`
+- Split the `typeFilters` array into two rows
+- Row 1: All, For Sale, Yearly Rent -- `flex justify-center gap-2`
+- Row 2: Short-term, Holiday Home -- `flex justify-center gap-2` centered with `max-w-md mx-auto`
 
 ---
 
-## 2. Total Projects Count - Show Accurate Published Count
+## 2. Emergency Mirror Panel - Champagne Theme Fix
 
-**Problem:** The Admin Overview Dashboard shows 2,525 total projects, but the database has only 1,849 published. The query counts ALL projects including unpublished/pending ones.
+**Current state:** Uses dark zinc-900/zinc-800 backgrounds, red-950 warning banners, purple-400 icons -- completely clashing with the champagne admin theme.
 
-**Fix in `AdminOverviewDashboard.tsx`:**
-- Change the projects query from:
-  ```
-  supabase.from("projects").select("id", { count: "exact", head: true })
-  ```
-  to:
-  ```
-  supabase.from("projects").select("id", { count: "exact", head: true }).eq("is_published", true)
-  ```
-- Update the label from "Total Projects" to "Published Projects" for clarity
+**File:** `src/components/listing-admin/EmergencyMirrorPanel.tsx`
+- Replace `bg-red-950/40 border-red-500/40` warning banner with `bg-amber-50/80 border-2 border-gold/40` with gold text
+- Replace `bg-zinc-900 border-zinc-700` cards with `bg-white border-2 border-gold/30` (champagne cards)
+- Replace all `text-white` with `text-black`, `text-zinc-400` with `text-zinc-600`
+- Replace `bg-zinc-800` stat boxes with `bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20`
+- Replace `text-purple-400` icon color with `text-gold`
+- Replace `bg-red-700` start button with `bg-gold hover:bg-gold/90 text-black`
+- Remove emoji from the "Emergency Mirror" tab trigger in `ListingAdmin.tsx` (line 669) and style it with champagne active state
 
 ---
 
-## 3. Alerts Dropdown - Add Border and Champagne UI
+## 3. Smart Listing Creator - Full Workflow Enhancement
 
-**Problem:** The alerts dropdown in the Chat Dashboard lacks borders and uses old red/amber styling that doesn't match the Champagne Gold standard.
+This is the largest section covering the AI listing flow, price predictor, approval workflow, pricing model, and role selection.
 
-**Fix in `AdminChatDashboard.tsx`:**
-- Add `border-2 border-gold/30 rounded-xl` to alert cards
-- Update the alert banner from `border-red-200 bg-red-50/80` to a champagne-compatible style with gold accent borders
-- Style priority badges using the champagne palette (gold for critical, stone for medium)
+### 3A. AI Price Predictor Step
+
+**New step** inserted between "AI Extraction" and "Review & Edit" in the listing submission flow.
+
+**File:** `src/pages/ListingPortalSubmit.tsx` (or wherever the AI listing form lives)
+- After AI extracts listing data, show a "Price Predictor" step
+- Button calls the existing `property-evaluation` edge function with the extracted data
+- Displays predicted price range, project completion status, and market insights
+- Also attempts to pull completion data from the projects table (linked by project name matching)
+
+### 3B. Listing Card Preview (like project cards)
+
+After extraction + price prediction, generate a full **listing card preview** that looks identical to the project cards on the website:
+- Thumbnail image, title, location, bedrooms, bathrooms, area sqft, price
+- Clicking the card opens a **detailed page** showing all extracted info: description, amenities, floor plans, documents, inspection time, completion date, payment plan
+- User can "Review & Edit" any field before submitting
+
+### 3C. Role Selection
+
+**Files:** `src/pages/SellerListing.tsx`, AI listing form
+- Add a "Your Role" field in Step 1 (Seller Details) with options:
+  - Property Owner
+  - Broker
+  - Investor
+  - Representative (POA)
+- Already partially exists as `seller_type` with values `owner`, `broker`, `poa` -- add `investor` and `representative`
+
+### 3D. Multi-Stage Approval Workflow
+
+**Database migration:** Create `listing_approvals` table:
+```sql
+CREATE TABLE listing_approvals (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  listing_id UUID NOT NULL,
+  listing_type TEXT NOT NULL, -- 'seller_listing' or 'portal_listing'
+  step INTEGER NOT NULL,
+  role TEXT NOT NULL,
+  approver_name TEXT,
+  approved_at TIMESTAMPTZ,
+  approved_by UUID REFERENCES auth.users(id),
+  status TEXT DEFAULT 'pending', -- 'pending', 'approved', 'rejected'
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+ALTER TABLE listing_approvals ENABLE ROW LEVEL SECURITY;
+```
+
+**Approval chain** (reusing the existing `listing-approval-workflow.ts` config):
+1. Admin (Sarah Mitchell) -- Step 1
+2. Managing Director (David Thornton) -- Step 2
+3. Executive Assistant (Amanda Clarke) -- Step 3
+4. Founder (Jane Bou Jaoude) -- Step 4
+
+**Owner bypass:** If the authenticated user is the Owner (`isOwner` from AuthContext), skip steps 1-3 and only show step 4 (self-approval). One click to approve and publish.
+
+### 3E. Listing Pricing & Commission Model
+
+Based on competitor research (Property Finder, Bayut, Dubizzle charge approximately AED 300-500 per listing), JBJ will charge half price.
+
+**Two pricing options** shown after submission:
+1. **Direct Contact** (AED 150-250): User's own phone/email shown on the listing. User pays upfront.
+2. **Commission-Based** (Free to list): JBJ contact details shown. JBJ charges 1% commission on successful sale, 5% on rental.
+
+**Implementation:** Add `contact_mode` field (`direct` | `commission`) and `listing_fee` to seller_listings and portal_listings tables. Show a pricing selection card after the Review step, before final submission.
+
+### 3F. AI Photo Enhancement
+
+When photos are insufficient, the system will:
+- Search the `projects` table by matching project/building name to find existing gallery images
+- Display found photos alongside uploaded ones for the user to select
 
 ---
 
-## 4. Seller Listing - Add Sale/Rent Selection Step
+## 4. Notification Bell - Overlap Fix
 
-**Problem:** The Seller Listing page (`/seller-listing`) only says "List Your Property for Sale" with no option to list for rent. Per the Listing Portal pattern, after choosing Manual vs AI, users should choose "List for Sale" or "List for Rent."
-
-**Fix in `SellerListing.tsx`:**
-- Add a pre-form selection screen with two cards (matching Listing Portal style):
-  - "List for Sale" card (with DollarSign icon)
-  - "List for Rent" card (with Home icon)
-- Store the selection in form state as `listing_purpose: 'sale' | 'rent'`
-- Update the page title dynamically: "List Your Property for Sale" or "List Your Property for Rent"
-- Adjust form fields based on selection:
-  - For rent: Show "Monthly Rent" instead of "Target Selling Price", add "Lease Duration" field
-  - For sale: Keep existing fields
-- Style these cards identically to the Listing Portal's two-card layout (white bg, gold borders, hover effects)
-
----
-
-## 5. Listing Portal - Add Sale/Rent Sub-Selection After AI/Manual Choice
-
-**Problem:** The Listing Portal shows Manual vs AI cards but doesn't ask if the user wants to list for sale or rent before proceeding.
-
-**Fix in `ListingPortal.tsx`:**
-- After the user clicks Manual or AI, show a second step with two cards:
-  - "For Sale" 
-  - "For Rent"
-- Pass the selection as a URL parameter (e.g., `/seller-listing?purpose=sale` or `/listing-portal/submit?purpose=rent`)
-- The downstream forms will read this parameter and configure accordingly
-
----
-
-## 6. Enforce Champagne Gold UI on Remaining Pages
-
-**Problem:** The `ListingPortalMyListings.tsx` page uses purple/fuchsia buttons (`from-fuchsia-600 to-purple-600`), violating the champagne standard.
-
-**Fix:**
-- Replace all `from-fuchsia-600 to-purple-600` with `bg-gold hover:bg-gold/90 text-black`
-- Update any remaining dark backgrounds to champagne gradients
-- Ensure the page matches the Listing Portal's champagne aesthetic
+**File:** `src/components/ListingNotificationBell.tsx`
+- Ensure the dropdown has `right-0` positioning (not overlapping the language/globe icon)
+- Add `mt-2` gap between the bell and dropdown
+- Verify z-index `z-[10001]` is working correctly
 
 ---
 
@@ -95,9 +124,26 @@ This plan addresses all outstanding issues: the Founder section placement in the
 
 | File | Change |
 |------|--------|
-| `src/components/owner-dashboard/OwnerSidebarNav.tsx` | Move Founder into CREATIVE section next to Studio |
-| `src/components/admin/AdminOverviewDashboard.tsx` | Fix project count query to filter `is_published = true` |
-| `src/pages/admin/AdminChatDashboard.tsx` | Add champagne-styled borders to alerts dropdown |
-| `src/pages/SellerListing.tsx` | Add sale/rent selection cards before the form |
-| `src/pages/ListingPortal.tsx` | Add sale/rent sub-selection after Manual/AI choice |
-| `src/pages/ListingPortalMyListings.tsx` | Replace purple/fuchsia buttons with champagne gold |
+| `src/pages/ListingPortal.tsx` | Split filter buttons into 2 centered rows |
+| `src/components/listing-admin/EmergencyMirrorPanel.tsx` | Full champagne theme conversion |
+| `src/pages/ListingAdmin.tsx` | Remove emoji from Emergency Mirror tab, champagne styling |
+| `src/pages/SellerListing.tsx` | Add investor/representative roles, approval workflow UI |
+| `src/pages/ListingPortalSubmit.tsx` | Add Price Predictor step, listing card preview, approval flow |
+| `src/components/ListingNotificationBell.tsx` | Fix dropdown positioning |
+| Database migration | `listing_approvals` table + `contact_mode`/`listing_fee` columns |
+| `src/config/listing-approval-workflow.ts` | Already exists, will reuse for listing approvals |
+
+---
+
+## Execution Order
+
+1. Emergency Mirror champagne fix (quick visual fix)
+2. Filter layout fix (quick visual fix)
+3. Notification bell positioning fix
+4. Database migration for approval and pricing fields
+5. Role selection additions
+6. AI Price Predictor integration
+7. Listing card preview generation
+8. Multi-stage approval workflow UI
+9. Pricing/commission selection step
+10. Owner bypass logic
