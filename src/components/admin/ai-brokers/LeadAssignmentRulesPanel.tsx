@@ -172,8 +172,8 @@ export function LeadAssignmentRulesPanel() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-white text-xl font-semibold">Lead Assignment Rules</h2>
-          <p className="text-gray-400 text-sm mt-1">
+          <h2 className="text-black text-xl font-semibold">Lead Assignment Rules</h2>
+          <p className="text-black/60 text-sm mt-1">
             Configure how leads are automatically assigned to AI brokers
           </p>
         </div>
@@ -187,9 +187,9 @@ export function LeadAssignmentRulesPanel() {
               Add Rule
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-zinc-900 border-zinc-700 max-w-lg">
+          <DialogContent className="max-w-lg">
             <DialogHeader>
-              <DialogTitle className="text-white">
+              <DialogTitle className="text-black">
                 {editingRule ? "Edit Rule" : "Create Assignment Rule"}
               </DialogTitle>
             </DialogHeader>
@@ -210,39 +210,39 @@ export function LeadAssignmentRulesPanel() {
         {rules.map((rule, index) => (
           <Card
             key={rule.id}
-            className={`bg-zinc-900 border-zinc-800 ${
+            className={`bg-white border-2 border-gold/30 ${
               !rule.is_active ? "opacity-60" : ""
             }`}
           >
             <CardContent className="p-4">
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-gray-500">
+                <div className="flex items-center gap-2 text-black/40">
                   <GripVertical className="h-4 w-4" />
                   <span className="text-sm font-medium">#{rule.priority}</span>
                 </div>
 
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-white font-medium">{rule.name}</h3>
+                    <h3 className="text-black font-medium">{rule.name}</h3>
                     <Badge
                       variant="outline"
                       className={`text-xs ${
                         rule.assignment_method === "round_robin"
-                          ? "border-blue-500 text-blue-400"
+                          ? "border-blue-500 text-blue-600"
                           : rule.assignment_method === "specific"
-                          ? "border-purple-500 text-purple-400"
-                          : "border-green-500 text-green-400"
+                          ? "border-purple-500 text-purple-600"
+                          : "border-green-500 text-green-600"
                       }`}
                     >
                       {rule.assignment_method?.replace("_", " ")}
                     </Badge>
                   </div>
                   {rule.description && (
-                    <p className="text-gray-400 text-sm mt-1">
+                    <p className="text-black/60 text-sm mt-1">
                       {rule.description}
                     </p>
                   )}
-                  <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-4 mt-2 text-sm text-black/40">
                     {rule.assigned_broker_id && (
                       <span className="flex items-center gap-1">
                         <Users className="h-3 w-3" />
@@ -279,7 +279,7 @@ export function LeadAssignmentRulesPanel() {
                       setEditingRule(rule);
                       setIsDialogOpen(true);
                     }}
-                    className="text-gray-400 hover:text-white"
+                    className="text-black/60 hover:text-black"
                   >
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -287,7 +287,7 @@ export function LeadAssignmentRulesPanel() {
                     variant="ghost"
                     size="icon"
                     onClick={() => handleDeleteRule(rule.id)}
-                    className="text-gray-400 hover:text-red-500"
+                    className="text-black/60 hover:text-red-500"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -298,10 +298,10 @@ export function LeadAssignmentRulesPanel() {
         ))}
 
         {rules.length === 0 && (
-          <Card className="bg-zinc-900 border-zinc-800 border-dashed">
+          <Card className="bg-white border-2 border-gold/30 border-dashed">
             <CardContent className="flex flex-col items-center justify-center py-12">
-              <Users className="h-12 w-12 text-gray-600 mb-4" />
-              <p className="text-gray-400 text-center">
+              <Users className="h-12 w-12 text-gold mb-4" />
+              <p className="text-black/60 text-center">
                 No assignment rules configured.
                 <br />
                 Create a rule to automatically assign leads to AI brokers.
@@ -335,42 +335,42 @@ function RuleForm({ rule, brokers, onSave, onCancel }: RuleFormProps) {
   return (
     <div className="space-y-4 mt-4">
       <div>
-        <Label className="text-gray-300">Rule Name</Label>
+        <Label className="text-black">Rule Name</Label>
         <Input
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="bg-zinc-800 border-zinc-700 text-white mt-1"
+          className="mt-1"
           placeholder="e.g., High-value leads to James"
         />
       </div>
 
       <div>
-        <Label className="text-gray-300">Description</Label>
+        <Label className="text-black">Description</Label>
         <Input
           value={formData.description}
           onChange={(e) =>
             setFormData({ ...formData, description: e.target.value })
           }
-          className="bg-zinc-800 border-zinc-700 text-white mt-1"
+          className="mt-1"
           placeholder="Optional description..."
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label className="text-gray-300">Priority</Label>
+          <Label className="text-black">Priority</Label>
           <Input
             type="number"
             value={formData.priority}
             onChange={(e) =>
               setFormData({ ...formData, priority: parseInt(e.target.value) || 1 })
             }
-            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+            className="mt-1"
             min={1}
           />
         </div>
         <div>
-          <Label className="text-gray-300">Max Leads/Day</Label>
+          <Label className="text-black">Max Leads/Day</Label>
           <Input
             type="number"
             value={formData.max_leads_per_day}
@@ -380,23 +380,23 @@ function RuleForm({ rule, brokers, onSave, onCancel }: RuleFormProps) {
                 max_leads_per_day: parseInt(e.target.value) || 100,
               })
             }
-            className="bg-zinc-800 border-zinc-700 text-white mt-1"
+            className="mt-1"
           />
         </div>
       </div>
 
       <div>
-        <Label className="text-gray-300">Assignment Method</Label>
+        <Label className="text-black">Assignment Method</Label>
         <Select
           value={formData.assignment_method}
           onValueChange={(value) =>
             setFormData({ ...formData, assignment_method: value })
           }
         >
-          <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+          <SelectTrigger className="mt-1">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-zinc-900 border-zinc-700">
+          <SelectContent>
             <SelectItem value="round_robin">Round Robin</SelectItem>
             <SelectItem value="specific">Specific Broker</SelectItem>
             <SelectItem value="load_balanced">Load Balanced</SelectItem>
@@ -406,17 +406,17 @@ function RuleForm({ rule, brokers, onSave, onCancel }: RuleFormProps) {
 
       {formData.assignment_method === "specific" && (
         <div>
-          <Label className="text-gray-300">Assign To</Label>
+          <Label className="text-black">Assign To</Label>
           <Select
             value={formData.assigned_broker_id}
             onValueChange={(value) =>
               setFormData({ ...formData, assigned_broker_id: value })
             }
           >
-            <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+            <SelectTrigger className="mt-1">
               <SelectValue placeholder="Select broker..." />
             </SelectTrigger>
-            <SelectContent className="bg-zinc-900 border-zinc-700">
+            <SelectContent>
               {brokers.map((broker) => (
                 <SelectItem key={broker.id} value={broker.id}>
                   {broker.name}
@@ -427,7 +427,7 @@ function RuleForm({ rule, brokers, onSave, onCancel }: RuleFormProps) {
         </div>
       )}
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-zinc-800">
+      <div className="flex justify-end gap-3 pt-4 border-t border-gold/20">
         <Button
           variant="secondary"
           onClick={onCancel}

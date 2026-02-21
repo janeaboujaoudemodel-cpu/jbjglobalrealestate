@@ -24,7 +24,6 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
     );
   });
 
-  // Sort by hierarchy level
   const sortedMembers = [...filteredMembers].sort((a, b) => 
     (a.hierarchyLevel || 5) - (b.hierarchyLevel || 5)
   );
@@ -34,8 +33,8 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
       {/* Team Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">IT Department Team</h2>
-          <p className="text-zinc-400">Managing technology infrastructure and security</p>
+          <h2 className="text-2xl font-bold text-black">IT Department Team</h2>
+          <p className="text-black/60">Managing technology infrastructure and security</p>
         </div>
         <Badge className="bg-gold/20 text-gold border border-gold/30 px-4 py-2">
           <Monitor className="w-4 h-4 mr-2" />
@@ -52,16 +51,16 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
           >
-            <Card className="bg-zinc-900/50 border-gold/20 hover:border-gold/40 transition-all group overflow-hidden">
+            <Card className="bg-white border-2 border-gold/30 hover:border-gold/50 transition-all group overflow-hidden">
               <div className="relative">
                 {/* Status Indicator */}
                 <div className={`absolute top-3 right-3 w-3 h-3 rounded-full ${
                   member.status === 'online' ? 'bg-green-500' :
-                  member.status === 'away' ? 'bg-yellow-500' : 'bg-zinc-500'
-                } ring-2 ring-zinc-900 z-10`} />
+                  member.status === 'away' ? 'bg-yellow-500' : 'bg-zinc-400'
+                } ring-2 ring-white z-10`} />
                 
                 {/* Photo */}
-                <div className="aspect-square overflow-hidden bg-zinc-800">
+                <div className="aspect-square overflow-hidden bg-gold/10">
                   <img 
                     src={member.avatar} 
                     alt={member.name}
@@ -80,21 +79,21 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
               <CardContent className="pt-4">
                 <div className="space-y-2">
                   <div>
-                    <h3 className="font-semibold text-white group-hover:text-gold transition-colors">
+                    <h3 className="font-semibold text-black group-hover:text-gold transition-colors">
                       {member.name}
                     </h3>
                     <p className="text-sm text-gold">{member.role}</p>
                   </div>
 
                   {member.nationality && (
-                    <div className="flex items-center gap-2 text-sm text-zinc-400">
+                    <div className="flex items-center gap-2 text-sm text-black/60">
                       <Globe className="w-4 h-4" />
                       <span>{member.nationality}</span>
                     </div>
                   )}
 
                   {member.languages && member.languages.length > 0 && (
-                    <div className="flex items-center gap-2 text-sm text-zinc-400">
+                    <div className="flex items-center gap-2 text-sm text-black/60">
                       <Languages className="w-4 h-4" />
                       <span className="truncate">{member.languages.slice(0, 3).join(', ')}</span>
                     </div>
@@ -106,7 +105,7 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
                         <Badge 
                           key={spec} 
                           variant="outline" 
-                          className="text-xs border-gold/30 text-zinc-300"
+                          className="text-xs border-gold/30 text-black/70"
                         >
                           {spec}
                         </Badge>
@@ -121,10 +120,10 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
       </div>
 
       {filteredMembers.length === 0 && (
-        <Card className="bg-zinc-900/50 border-gold/20">
+        <Card className="bg-white border-2 border-gold/30">
           <CardContent className="py-12 text-center">
-            <User className="w-12 h-12 text-zinc-500 mx-auto mb-4" />
-            <p className="text-zinc-400">No team members found</p>
+            <User className="w-12 h-12 text-gold mx-auto mb-4" />
+            <p className="text-black/60">No team members found</p>
           </CardContent>
         </Card>
       )}

@@ -369,7 +369,7 @@ const Admin = () => {
       <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center shadow-lg shadow-gold/20">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C9A84C] to-[#B8973F] flex items-center justify-center shadow-lg shadow-gold/20">
               <Shield className="w-6 h-6 text-black" />
             </div>
             <div>
@@ -512,11 +512,9 @@ const Admin = () => {
           </TabsContent>
 
           <TabsContent value="ai-assistant" className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="space-y-6">
               <AdminAIAssistant />
-              <div className="space-y-6">
-                <AIBrokersDashboard />
-              </div>
+              <AIBrokersDashboard />
             </div>
           </TabsContent>
 
