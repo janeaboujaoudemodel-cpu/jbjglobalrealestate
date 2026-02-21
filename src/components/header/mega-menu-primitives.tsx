@@ -182,15 +182,15 @@ type MegaMenuSectionTitleProps = {
 export const MegaMenuSectionTitle = React.forwardRef<HTMLDivElement, MegaMenuSectionTitleProps>(
   ({ icon: Icon, title, rightSlot }, ref) => {
     return (
-      <div ref={ref} className="mb-3">
+      <div ref={ref} className="mb-3 h-[36px] flex flex-col justify-end">
         <div className="flex items-center justify-center pb-2">
-          <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2">
-            <Icon className="w-4 h-4 text-gold" />
+          <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2 whitespace-nowrap">
+            <Icon className="w-4 h-4 text-gold shrink-0" />
             {title}
           </h4>
           {rightSlot}
         </div>
-        <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        <div className="h-[1px] w-full bg-gold/40" />
       </div>
     );
   }
