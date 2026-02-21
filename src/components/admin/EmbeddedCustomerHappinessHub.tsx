@@ -27,7 +27,9 @@ import {
   Eye,
   ThumbsUp,
   ThumbsDown,
+  ClipboardCheck,
 } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { EmbeddedSupportTickets } from "./EmbeddedSupportTickets";
 
 interface Review {
@@ -311,6 +313,10 @@ export const EmbeddedCustomerHappinessHub = () => {
             <Ticket className="w-4 h-4 mr-2" />
             Tickets
           </TabsTrigger>
+          <TabsTrigger value="surveys" className="tab-trigger-champagne text-black">
+            <ClipboardCheck className="w-4 h-4 mr-2" />
+            Surveys
+          </TabsTrigger>
           <TabsTrigger value="reviews" className="tab-trigger-champagne text-black">
             <MessageSquareHeart className="w-4 h-4 mr-2" />
             Reviews ({pendingReviews})
@@ -328,6 +334,11 @@ export const EmbeddedCustomerHappinessHub = () => {
         {/* Tickets Tab - Reuse existing component */}
         <TabsContent value="tickets">
           <EmbeddedSupportTickets />
+        </TabsContent>
+
+        {/* Surveys Tab */}
+        <TabsContent value="surveys">
+          <TicketSurveysTab />
         </TabsContent>
 
         {/* Reviews Tab */}

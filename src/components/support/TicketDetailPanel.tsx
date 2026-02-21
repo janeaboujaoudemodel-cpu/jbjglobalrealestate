@@ -182,6 +182,13 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
     aiSuggestions.clearSuggestions();
   }, [ticketId]);
 
+  // Auto "in_review" when admin views an open ticket
+  useEffect(() => {
+    if (data?.ticket && data.ticket.status === "open") {
+      updateStatus.mutate({ ticketId: data.ticket.id, status: "in_progress" });
+    }
+  }, [data?.ticket?.id, data?.ticket?.status]);
+
   if (!ticketId) {
     return (
       <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-zinc-900/80 to-zinc-950/80 rounded-xl border border-gold/20">
