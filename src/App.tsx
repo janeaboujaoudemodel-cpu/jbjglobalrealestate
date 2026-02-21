@@ -49,6 +49,7 @@ const ProductivitySuite = lazy(() => import("./pages/business-suite/Productivity
 const SuitesHub = lazy(() => import("./pages/business-suite/SuitesHub"));
 const EducationHub = lazy(() => import("./pages/EducationHub"));
 const AdminChatDashboard = lazy(() => import("./pages/admin/AdminChatDashboard"));
+const AdminIntelligence = lazy(() => import("./pages/admin/AdminIntelligence"));
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ActiveLeadProvider } from "@/contexts/ActiveLeadContext";
@@ -652,6 +653,7 @@ const App = () => (
                 <Route path="/onboarding/module/:moduleId" element={<OnboardingModule />} />
                 <Route path="/admin/onboarding" element={<OwnerGuard><AdminOnboarding /></OwnerGuard>} />
                 <Route path="/admin/roles" element={<OwnerGuard><AdminRoleManagement /></OwnerGuard>} />
+                <Route path="/admin/intelligence" element={<OwnerGuard><AdminIntelligence /></OwnerGuard>} />
                 <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
                 <Route path="/map" element={<PropertyMap />} />
                 <Route path="/admin/developers" element={<OwnerGuard><AdminDevelopers /></OwnerGuard>} />
