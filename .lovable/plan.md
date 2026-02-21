@@ -1,100 +1,146 @@
 
-# Comprehensive Fix Plan -- Add New Lead Form, CRM Layout, Homepage Performance & Video Scenes
 
-This plan addresses all reported issues across the CRM and homepage in a single pass.
+# Comprehensive Fix Plan -- Owner Command Center UI, Project Detail Gallery, Amenities, Floor Plans & Data Preservation
 
----
-
-## 1. Add New Lead Form (`CRMLeadModal.tsx`)
-
-**Problems**: Form is cropped at bottom, padding issues around birthday, no auto-save, no flags on language/nationality/city, no searchable dropdowns.
-
-**Fixes**:
-- Change `DialogContent` to use `max-h-[90vh] overflow-y-auto` so the form scrolls within the dialog and is never cropped
-- Add consistent `space-y-3` padding between all fields including birthday label and input
-- Replace plain `Input` for **Nationality** with a searchable `Command`-based dropdown listing all countries with flag emojis (e.g. "British", "Emirati", "Indian")
-- Replace **Preferred Language** `Select` with a searchable `Command`-based dropdown with flag emojis (e.g. "English", "Arabic", "Russian")
-- Replace **Country** `Input` with a searchable `Command`-based dropdown with flag emojis
-- Replace **City** `Input` with a searchable `Command`-based dropdown (populated based on selected country, with common cities)
-- Add `useFormAutoSave` hook integration (already exists in codebase at `src/hooks/useFormAutoSave.ts`) to auto-save all form fields to localStorage, restoring on re-open
-- Create a shared data file `src/data/countries.ts` with country names, codes, flag emojis, nationalities, languages, and major cities
+This plan addresses all reported issues in a single coordinated pass.
 
 ---
 
-## 2. Team Communication Attach Button (`CRMCommunicationPanel.tsx`)
+## 1. Owner Sidebar: Fix Scroll Position on Navigation
 
-**Problem**: The Paperclip (attach) button at line 452-454 is a ghost button with no `onClick` handler -- clicking it does nothing.
+**Problem**: Clicking a nav item (e.g., "Research Users") causes the sidebar to scroll to the top, losing the user's position.
+
+**Fix** (`src/components/owner-dashboard/OwnerSidebarNav.tsx`):
+- After navigation, use a `useEffect` + `useRef` to scroll the active nav item into view (`scrollIntoView({ block: 'nearest' })`)
+- Add `ref` to each nav button and on location change, find the active item and scroll it into view without disturbing the page
+
+---
+
+## 2. Owner Command Center: Full UI Audit & Layout Fixes
+
+**Problem**: Content overflows cards, boxes look vertically compressed, text breaks out of containers across all owner sections.
+
+**Files to fix**:
+
+| Page/Component | Issue | Fix |
+|---|---|---|
+| `OwnerDashboardOverview.tsx` | Cards may overflow, KPI cards misaligned | Ensure all cards use `overflow-hidden`, text uses `truncate`/`break-words`, grid uses responsive `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` |
+| `CRMLeadDetail.tsx` | Already fixed to 3-column, but verify no overflow | Add `overflow-hidden` and `min-w-0` to all grid children |
+| `QuickActionsGrid.tsx` | Buttons may overflow their containers | Add `overflow-hidden truncate` to labels, ensure consistent card heights |
+| `DepartmentShortcuts.tsx` | Cards may stack vertically | Ensure horizontal grid layout with `min-w-0` on children |
+| `IntegrationWidgets.tsx` | Content may break out | Add `overflow-hidden` constraints |
+| All `/owner/*` pages | Various overflow/layout issues | Add global overflow guards: `min-w-0 overflow-hidden` on all card content areas |
+
+**Approach**: Create a reusable card wrapper pattern with `overflow-hidden min-w-0` and apply it consistently across all owner sub-pages. Each page will be reviewed and fixed for:
+- Text truncation on long content
+- Grid responsiveness (no vertical stacking on desktop)
+- Card height consistency
+- Button/action containment within cards
+
+---
+
+## 3. Page Refresh Redirect Fix (Global)
+
+**Problem**: Refreshing the page redirects to the homepage instead of staying on the current page.
+
+**Root cause**: The `RouteResume` component in `src/components/RouteResume.tsx` uses `sessionStorage` to persist routes, but it only restores if `location.pathname === "/"`. The issue is likely that on hard refresh, the browser correctly loads the URL but some auth guard or redirect kicks the user to `/`.
+
+**Fix** (`src/components/RouteResume.tsx` + auth guards):
+- Audit all auth-protected route guards to ensure they wait for auth session to settle before redirecting (the `authSettledRef` pattern from the memory)
+- Ensure `RouteResume` correctly saves and restores deep links including `/owner/*` paths
+- Verify that the Owner shell's auth check doesn't prematurely redirect during hydration
+
+---
+
+## 4. Project Detail: Gallery Lightbox Landscape Fix
+
+**Problem**: Expanded/fullscreen gallery images open in vertical orientation with background content visible and moving.
+
+**Fix** (`src/components/ImageCarousel.tsx`):
+- Change fullscreen `DialogContent` to use `aspect-[16/9]` container with `object-contain` (not `object-cover`) so landscape images display correctly
+- Add `backdrop-blur-xl bg-black/90` overlay to prevent background content from showing through
+- Remove `object-cover` from fullscreen image (line 218) and replace with `object-contain` to preserve aspect ratio
+- Add `DialogOverlay` with blur effect
+
+---
+
+## 5. Amenities: Fix Alignment & Broken Photos
+
+**Problem**: Amenity cards are misaligned (some higher than others), and some show broken/fake photos.
+
+**Fix** (`src/components/project-detail/AmenitiesWithPhotos.tsx`):
+- Force all cards to have a fixed height image container (`h-24`) regardless of whether photo exists -- use a fallback icon-only card with the same height
+- Replace the current variable-height layout (photo cards have `h-24` image + text, non-photo cards have `pt-4 pb-2` icon + text) with a uniform card height
+- All cards will use the same structure: fixed-height top area (either photo or icon placeholder at same height) + fixed-height label area
+- The existing Unsplash photo mapping is curated and accurate (pool, gym, spa, etc.) -- these are generic representative photos, not "fake" photos. They will remain as fallbacks.
+
+---
+
+## 6. Floor Plans, Videos & Documents: Data Extraction & Preservation
+
+**Problem**: Floor plans are all empty arrays (`[]`), videos are all null, documents only have brochures. The Reelly API key will be deactivated soon.
+
+**Current state** (from database analysis):
+- 1,838 published projects with Reelly IDs
+- 1,838 have detail_fetched_at (details were fetched)
+- 0 have video_url populated
+- 0 have non-empty floor_plan_types
+- 13,118 images stored in project_images
+- 669 documents (all brochures)
+
+**Root cause**: The `extractFloorPlans` function works correctly, but the Reelly API may not return floor plan data for most projects (the `floor_plans` array in the API response is likely empty). Similarly, `extractVideos` looks for `video_reviews` which may not be populated.
 
 **Fix**:
-- Add a hidden `<input type="file">` ref
-- Wire the Paperclip button's `onClick` to trigger the file input
-- On file select, show a toast confirming the file name (full upload integration would require storage, but the button will at least open the file picker and acknowledge the selection)
+- Create a new edge function `reelly-emergency-full-extract` that:
+  1. Fetches ALL fields from Reelly API for each project (including `typical_units`, `floor_plans`, `video_reviews`, `documents`, `brochures`, `marketing_brochure`)
+  2. Saves raw API response JSON to a new `reelly_raw_data` JSONB column on projects table for permanent preservation
+  3. Mirrors all floor plan images/PDFs to local storage
+  4. Mirrors all video URLs
+  5. Mirrors all documents (brochures, payment plans, fact sheets)
+  6. Processes in batches with progress tracking
+- Add a `reelly_raw_data` JSONB column to the `projects` table to store the complete API response
+- Also add `video_urls` JSONB column if not present
+- Run this extraction before the API key is deactivated
 
 ---
 
-## 3. CRM Vertical Sidebar
+## 7. Project Detail: Show Floor Plans & Payment Plans Premium UI
 
-**Problem**: User wants a persistent vertical sidebar in the CRM (like the Owner Command Center) so they don't have to navigate back each time.
+**Problem**: Floor plans and payment plans are not displaying even when data exists.
 
-**Fix**:
-- The CRM already has `CRMToolsSidebar` imported. Verify it renders persistently on the left side with the same champagne gold styling. If it's toggled/hidden by default, make it visible by default on desktop with a collapse toggle.
-
----
-
-## 4. Mortgage Calculator Duplicate Title (`Index.tsx` + `MortgageCalculator.tsx`)
-
-**Problem**: The homepage section at line 478 shows "Mortgage Calculator" as its own heading, then the `<MortgageCalculator compact />` component renders in compact mode (no internal title), BUT the section heading at line 478-479 is fine -- it shows "Mortgage" in black and "Calculator" in gold. The issue is likely that the non-compact header (lines 201-212) is also rendering. 
-
-**Fix**:
-- The compact mode (line 99) returns early before the non-compact header, so the homepage should only show one title. Investigate if `compact` prop is missing. Looking at line 487: `<MortgageCalculator compact />` -- this is correct. The duplicate may come from the section heading AND the compact cards having similar styling. Will verify and ensure only ONE title ("Mortgage" in black + "Calculator" in gold) appears.
+**Fix** (`src/components/project-detail/ProjectDetailLayout.tsx`):
+- The floor plans section already renders when `floorPlanDocs.length > 0 || floor_plan_types?.length > 0` -- once data is populated via the extraction (step 6), these will appear
+- For payment plans: Verify `PaymentPlanVisualization` renders with the existing `payment_breakdown` and `payment_plan` data
+- Add a "Request Floor Plans" CTA when no floor plans are available, with the existing email/WhatsApp contact methods
 
 ---
 
-## 5. Why Dubai Section -- Remove Photo, Fix Video Loading (`WhyDubaiCapitalSection.tsx`)
+## 8. Project Detail: Loading Speed
 
-**Problem**: Shows a static photo of Burj Khalifa before video loads; video takes time to load.
+**Problem**: Project pages take too long to load.
 
-**Fix**:
-- Add `preload="auto"` for the first video scene to start loading immediately
-- Use `poster` attribute with a dark/black poster or gradient so no static photo appears
-- Ensure crossfade only triggers after `canplay` event fires
-
----
-
-## 6. Remove "Burj Al Arab Aerial" Video Scene Completely
-
-**Problem**: The `burj-al-arab-aerial.mp4` scene (described as "Icon tower" between Burj Khalifa and Palm scenes) must be deleted from the entire website.
-
-**Files affected**:
-- `src/components/PropertiesHeroVideo.tsx` -- Remove `burjAlArabVideo` from `VIDEO_SCENES` array (keep only downtown/burj-khalifa scene)
-- `src/components/header/MegaMenuDevelopers.tsx` -- Replace `burjAlArabVideo` import with a different premium video (e.g. `why-dubai-downtown-burj-khalifa.mp4` or `dubai-landmarks-hero.mp4`)
-- `src/components/home/WhyDubaiCapitalSection.tsx` -- This file does NOT use burj-al-arab-aerial (it uses downtown, burj-khalifa-day-to-night, and atlantis-palm), so the "second scene" complaint may refer to `burj-khalifa-day-to-night.mp4`. Since user says to keep Burj Khalifa and Palm but remove the middle one, the WhyDubai section is fine (3 scenes: downtown, burj-khalifa, atlantis-palm). The issue is only in PropertiesHeroVideo and MegaMenuDevelopers.
-
-**Replacement**: Use `dubai-landmarks-hero.mp4` for the MegaMenuDevelopers featured card video.
+**Fix** (`src/pages/ProjectDetail.tsx`):
+- The `useProject` hook fetches from local DB which should be fast
+- The `useReellyProjectBySlug` is only used as fallback when DB project is missing
+- Add `staleTime: 10 * 60 * 1000` to the project query for aggressive caching
+- Ensure images use `loading="lazy"` for below-fold content
 
 ---
 
-## 7. Homepage Loading Performance
-
-**Problem**: Navigation from CRM to homepage is slow; videos and content sections take time.
-
-**Fix**:
-- Ensure videos use `preload="none"` with IntersectionObserver (already implemented in WhyDubaiCapitalSection)
-- For PropertiesHeroVideo, reduce to 1 scene (removing burj-al-arab), which cuts loading in half
-- Add `fetchPriority="high"` to first visible content images
-- Use `Suspense` boundaries already in place -- verify they have lightweight fallbacks
-
----
-
-## Files Modified
+## Technical Summary
 
 | File | Changes |
-|------|---------|
-| `src/components/crm/CRMLeadModal.tsx` | Scrollable dialog, auto-save, searchable flag dropdowns for nationality/language/country/city, padding fixes |
-| `src/data/countries.ts` | NEW -- Country data with flags, nationalities, languages, cities |
-| `src/components/crm/CRMCommunicationPanel.tsx` | Wire attach button to file input |
-| `src/pages/CRM.tsx` | Ensure CRMToolsSidebar is visible by default on desktop |
-| `src/pages/Index.tsx` | Remove duplicate mortgage title if present |
-| `src/components/home/WhyDubaiCapitalSection.tsx` | Video preload optimization |
-| `src/components/PropertiesHeroVideo.tsx` | Remove burj-al-arab scene, keep only downtown scene |
-| `src/components/header/MegaMenuDevelopers.tsx` | Replace burj-al-arab video with dubai-landmarks-hero |
+|---|---|
+| `src/components/owner-dashboard/OwnerSidebarNav.tsx` | Auto-scroll active nav item into view on route change |
+| `src/pages/OwnerDashboardOverview.tsx` | Overflow guards, card layout fixes, responsive grids |
+| `src/components/owner-dashboard/QuickActionsGrid.tsx` | Text truncation, overflow containment |
+| `src/components/owner-dashboard/DepartmentShortcuts.tsx` | Horizontal layout enforcement |
+| `src/components/owner-dashboard/IntegrationWidgets.tsx` | Overflow containment |
+| `src/pages/CRMLeadDetail.tsx` | min-w-0 overflow guards on grid children |
+| `src/components/RouteResume.tsx` | Improved route persistence for owner paths |
+| `src/components/ImageCarousel.tsx` | Landscape fullscreen with blur backdrop, object-contain |
+| `src/components/project-detail/AmenitiesWithPhotos.tsx` | Uniform card heights, aligned layout |
+| `supabase/functions/reelly-emergency-full-extract/index.ts` | NEW -- Full API data extraction and local storage preservation |
+| `src/pages/ProjectDetail.tsx` | Aggressive query caching for faster loads |
+| Database migration | Add `reelly_raw_data` JSONB column to projects table |
+
