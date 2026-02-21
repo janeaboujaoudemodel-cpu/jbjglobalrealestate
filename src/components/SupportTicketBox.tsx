@@ -499,15 +499,15 @@ const SupportTicketBox = () => {
                       </Button>
                     </DialogTrigger>
 
-                    <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-lg max-h-[85vh] z-[10050] overflow-y-auto flex flex-col shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)]">
-                      <DialogHeader className="sticky top-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] z-10 pb-4 -mx-6 px-6 -mt-6 pt-6 border-b border-gold/20">
+                    <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-lg max-h-[85vh] z-[10050] flex flex-col overflow-hidden shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)] p-0">
+                      <DialogHeader className="flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] z-10 pb-4 px-6 pt-6 border-b border-gold/20">
                         <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
                           <Headphones className="w-5 h-5 text-red-500" />
                           {isSubmitted ? "Ticket Created!" : "Create Support Ticket"}
                         </DialogTitle>
                       </DialogHeader>
 
-                      <div ref={(el) => { if (el && isSubmitted) el.scrollTop = 0; }} className="flex-1 pr-2 pb-4 -webkit-overflow-scrolling-touch">
+                      <div ref={(el) => { if (el && isSubmitted) el.scrollTop = 0; }} className="flex-1 overflow-y-auto px-6 pr-4 pb-6 -webkit-overflow-scrolling-touch">
                         <AnimatePresence mode="wait">
                           {isSubmitted ? (
                             <motion.div
