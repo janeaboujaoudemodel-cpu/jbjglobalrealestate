@@ -38,8 +38,8 @@ export const NewsletterBrevo = ({
       const normalizedEmail = email.toLowerCase().trim();
       setSubmittedEmail(normalizedEmail);
 
-      // Call the smart newsletter-subscribe endpoint
-      const { data, error } = await supabase.functions.invoke('newsletter-subscribe', {
+      // Fire BOTH calls in parallel for speed — don't wait for capture-lead
+      const subscribePromise = supabase.functions.invoke('newsletter-subscribe', {
         body: {
           email: normalizedEmail,
           name: name || undefined,
@@ -49,8 +49,6 @@ export const NewsletterBrevo = ({
           gdpr_consent: true,
         },
       });
-
-      if (error) throw error;
 
       // Fire capture-lead in background (non-blocking)
       supabase.functions.invoke('capture-lead', {
@@ -64,11 +62,13 @@ export const NewsletterBrevo = ({
         },
       }).catch(err => console.warn('Lead capture warning:', err));
 
+      const { data, error } = await subscribePromise;
+
+      if (error) throw error;
+
       if (data?.requiresDetails) {
-        // Unknown user — show detail collection modal
         setShowDetailModal(true);
       } else {
-        // Known user — show success immediately
         setIsSuccess(true);
         setShowSuccessModal(true);
         setEmail('');

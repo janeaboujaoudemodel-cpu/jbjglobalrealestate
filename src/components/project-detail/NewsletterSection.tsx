@@ -16,11 +16,6 @@ const newsletterSchema = z.object({
 
 type NewsletterFormData = z.infer<typeof newsletterSchema>;
 
-/**
- * Newsletter subscription section - "Stay in the loop".
- * Appears before the footer on project detail pages.
- * Uses backend edge function for secure lead capture.
- */
 export function NewsletterSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -38,8 +33,17 @@ export function NewsletterSection() {
     try {
       const normalizedEmail = data.email.toLowerCase().trim();
       
-      // Use backend edge function to capture lead (bypasses RLS)
-      const { data: result, error } = await supabase.functions.invoke('capture-lead', {
+      // Fire both in parallel — newsletter-subscribe handles the welcome email
+      const subscribePromise = supabase.functions.invoke('newsletter-subscribe', {
+        body: {
+          email: normalizedEmail,
+          source: 'project_detail',
+          page_source: location.pathname,
+        },
+      });
+
+      // Fire capture-lead in background (non-blocking)
+      supabase.functions.invoke('capture-lead', {
         body: {
           email: normalizedEmail,
           source: 'newsletter',
@@ -47,34 +51,15 @@ export function NewsletterSection() {
           pageSource: location.pathname,
           contactType: 'client',
         },
-      });
+      }).catch(err => console.warn('Lead capture warning:', err));
+
+      const { data: result, error } = await subscribePromise;
 
       if (error) {
         console.error("Newsletter subscription failed:", error);
         toast.error("Something went wrong. Please try again.");
         setIsSubmitting(false);
         return;
-      }
-
-      if ((result as any)?.error) {
-        console.error("Newsletter subscription failed:", (result as any).error);
-        toast.error("Something went wrong. Please try again.");
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Also try to sync with Brevo (best effort - don't block on failure)
-      try {
-        await supabase.functions.invoke('newsletter-subscribe', {
-          body: {
-            email: normalizedEmail,
-            source: 'project_detail',
-            source_page: location.pathname,
-          },
-        });
-      } catch (brevoError) {
-        console.warn('Brevo sync warning:', brevoError);
-        // Don't fail the overall flow if Brevo sync fails
       }
 
       setIsSuccess(true);
@@ -145,7 +130,6 @@ export function NewsletterSection() {
             </Form>
           )}
 
-          {/* Terms & Privacy links */}
           <p className="text-xs text-muted-foreground mt-4">
             By subscribing, you agree to our{" "}
             <Link to="/terms" className="text-gold hover:underline">Terms of Service</Link>

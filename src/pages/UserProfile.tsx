@@ -226,6 +226,16 @@ const UserProfile = () => {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+
+      // Send password change confirmation email (non-blocking)
+      supabase.functions.invoke('send-password-change-confirmation', {
+        body: {
+          email: user?.email,
+          name: user?.user_metadata?.full_name || user?.user_metadata?.name || null,
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString(),
+        },
+      }).catch(err => console.warn('Password change email warning:', err));
     } catch (error: any) {
       console.error("Error changing password:", error);
       toast.error(error.message || "Failed to change password");
