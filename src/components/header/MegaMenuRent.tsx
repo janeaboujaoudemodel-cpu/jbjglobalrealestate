@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, Home, Castle, Building, Briefcase, Eye, FileText, Key, Calendar, Shield } from 'lucide-react';
+import { Building2, Home, Castle, Building, Briefcase, Eye, FileText, Key, Calendar, Shield, ClipboardCheck } from 'lucide-react';
 import menuLuxuryVilla from '@/assets/menu-luxury-villa.jpg';
 import dubaiRentalVideo from '@/assets/videos/dubai-rental-hero.mp4';
 import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
@@ -22,6 +22,7 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
     { label: 'Rental Index', href: '/rental-index', icon: Key },
     { label: 'Property Management', href: '/services/property-management', icon: Shield },
     { label: 'Short-term Rentals', href: '/services/short-term-rentals', icon: Calendar },
+    { label: 'List Your Rental', href: '/listing-portal/submit', icon: ClipboardCheck },
   ];
 
   return (

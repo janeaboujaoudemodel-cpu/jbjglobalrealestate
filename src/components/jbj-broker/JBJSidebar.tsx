@@ -9,6 +9,7 @@ import {
   Settings,
   LogOut,
   Home,
+  Upload,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -33,6 +34,7 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
   const navItems = [
     { id: "leads", label: "My Leads", icon: Users, path: "/jbj-broker-dashboard" },
     { id: "messages", label: "Messages", icon: MessageSquare, path: "/jbj-broker-messages" },
+    { id: "listings", label: "Listing Portal", icon: Upload, path: "/listing-portal/submit" },
     { id: "reports", label: "Reports", icon: BarChart3, path: "/jbj-broker-reports" },
   ];
 
