@@ -17,6 +17,7 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showScrollBottom, setShowScrollBottom] = useState(true);
   const isStampGenerator = location.pathname.includes('/stamp-generator/');
+  const isMarketingHub = location.pathname.includes('/marketing-hub');
   const [stack, setStack] = useState<string[]>(() => {
     try {
       const raw = sessionStorage.getItem("nav-stack");
@@ -111,7 +112,7 @@ const PageNavigation = forwardRef<HTMLDivElement, Record<string, never>>((_, ref
         "fixed bottom-20 sm:bottom-6 z-[9990] flex flex-col gap-2 sm:gap-3",
         // Explicit pointer-events-auto on container
         "pointer-events-auto",
-        isRTL ? "right-6" : "left-6"
+        isRTL ? "right-6" : isMarketingHub ? "right-6" : "left-6"
       )}
       style={{ touchAction: "manipulation" }}
     >
