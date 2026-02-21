@@ -2621,6 +2621,92 @@ export type Database = {
         }
         Relationships: []
       }
+      campaign_members: {
+        Row: {
+          campaign_id: string
+          id: string
+          match_reason: string | null
+          matched_at: string | null
+          removed_at: string | null
+          send_result: Json | null
+          send_status: string | null
+          sent_at: string | null
+          user_id: string
+        }
+        Insert: {
+          campaign_id: string
+          id?: string
+          match_reason?: string | null
+          matched_at?: string | null
+          removed_at?: string | null
+          send_result?: Json | null
+          send_status?: string | null
+          sent_at?: string | null
+          user_id: string
+        }
+        Update: {
+          campaign_id?: string
+          id?: string
+          match_reason?: string | null
+          matched_at?: string | null
+          removed_at?: string | null
+          send_result?: Json | null
+          send_status?: string | null
+          sent_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_members_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaigns: {
+        Row: {
+          audience_count: number | null
+          completed_at: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          launched_at: string | null
+          name: string
+          segment_rules: Json | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          audience_count?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          launched_at?: string | null
+          name: string
+          segment_rules?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          audience_count?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          launched_at?: string | null
+          name?: string
+          segment_rules?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       card_link_clicks: {
         Row: {
           card_token: string
@@ -2973,6 +3059,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      commission_rates: {
+        Row: {
+          created_at: string | null
+          id: string
+          property_type: string
+          rate_percent: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          property_type: string
+          rate_percent?: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          property_type?: string
+          rate_percent?: number
+        }
+        Relationships: []
       }
       communities: {
         Row: {
@@ -19427,66 +19534,114 @@ export type Database = {
       user_interest_profile: {
         Row: {
           avg_budget_estimate: number | null
+          compares_count_30d: number | null
+          confidence_score: number | null
+          contact_clicks_30d: number | null
+          conversion_probability: number | null
           created_at: string
           current_streak: number | null
           device_mix: Json | null
           engagement_score: number | null
+          estimated_ticket_aed: number | null
+          feature_diversity: number | null
           id: string
           intent_score: number | null
           last_active_at: string | null
           last_updated_at: string | null
+          lead_count_30d: number | null
           longest_streak: number | null
           preferred_areas: string[] | null
           preferred_bedrooms: number[] | null
           preferred_property_types: string[] | null
+          revenue_potential: number | null
+          saves_count_30d: number | null
+          searches_30d: number | null
+          sessions_last_7d: number | null
+          time_to_conversion_days: number | null
           tools_used: string[] | null
           top_pages: string[] | null
           total_points: number | null
           total_sessions: number | null
           total_time_seconds: number | null
           user_id: string
+          vip_override: boolean | null
+          vip_override_by: string | null
+          vip_tier: string | null
+          vip_tier_reason: string | null
         }
         Insert: {
           avg_budget_estimate?: number | null
+          compares_count_30d?: number | null
+          confidence_score?: number | null
+          contact_clicks_30d?: number | null
+          conversion_probability?: number | null
           created_at?: string
           current_streak?: number | null
           device_mix?: Json | null
           engagement_score?: number | null
+          estimated_ticket_aed?: number | null
+          feature_diversity?: number | null
           id?: string
           intent_score?: number | null
           last_active_at?: string | null
           last_updated_at?: string | null
+          lead_count_30d?: number | null
           longest_streak?: number | null
           preferred_areas?: string[] | null
           preferred_bedrooms?: number[] | null
           preferred_property_types?: string[] | null
+          revenue_potential?: number | null
+          saves_count_30d?: number | null
+          searches_30d?: number | null
+          sessions_last_7d?: number | null
+          time_to_conversion_days?: number | null
           tools_used?: string[] | null
           top_pages?: string[] | null
           total_points?: number | null
           total_sessions?: number | null
           total_time_seconds?: number | null
           user_id: string
+          vip_override?: boolean | null
+          vip_override_by?: string | null
+          vip_tier?: string | null
+          vip_tier_reason?: string | null
         }
         Update: {
           avg_budget_estimate?: number | null
+          compares_count_30d?: number | null
+          confidence_score?: number | null
+          contact_clicks_30d?: number | null
+          conversion_probability?: number | null
           created_at?: string
           current_streak?: number | null
           device_mix?: Json | null
           engagement_score?: number | null
+          estimated_ticket_aed?: number | null
+          feature_diversity?: number | null
           id?: string
           intent_score?: number | null
           last_active_at?: string | null
           last_updated_at?: string | null
+          lead_count_30d?: number | null
           longest_streak?: number | null
           preferred_areas?: string[] | null
           preferred_bedrooms?: number[] | null
           preferred_property_types?: string[] | null
+          revenue_potential?: number | null
+          saves_count_30d?: number | null
+          searches_30d?: number | null
+          sessions_last_7d?: number | null
+          time_to_conversion_days?: number | null
           tools_used?: string[] | null
           top_pages?: string[] | null
           total_points?: number | null
           total_sessions?: number | null
           total_time_seconds?: number | null
           user_id?: string
+          vip_override?: boolean | null
+          vip_override_by?: string | null
+          vip_tier?: string | null
+          vip_tier_reason?: string | null
         }
         Relationships: []
       }
@@ -20803,6 +20958,48 @@ export type Database = {
           name?: string
           points_required?: number
           reward_type?: string
+        }
+        Relationships: []
+      }
+      vip_reservations: {
+        Row: {
+          admin_notes: string | null
+          assigned_staff_id: string | null
+          assigned_staff_name: string | null
+          created_at: string | null
+          id: string
+          notes: string | null
+          preferred_date: string | null
+          reservation_type: string
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          assigned_staff_id?: string | null
+          assigned_staff_name?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          preferred_date?: string | null
+          reservation_type: string
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          assigned_staff_id?: string | null
+          assigned_staff_name?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          preferred_date?: string | null
+          reservation_type?: string
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }

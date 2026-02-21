@@ -51,6 +51,7 @@ interface QueuedUserEvent {
   user_id: string | null;
   session_id: string;
   event_name: string;
+  event_time: string;
   page_path: string;
   element_id: string | null;
   metadata: Record<string, unknown>;
@@ -113,6 +114,7 @@ export const GlobalVisitorTracking = () => {
       user_id: user?.id || null,
       session_id: getSessionId(),
       event_name: eventName,
+      event_time: new Date().toISOString(),
       page_path: location.pathname,
       element_id: elementId || null,
       metadata,
