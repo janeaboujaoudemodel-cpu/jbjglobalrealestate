@@ -4846,6 +4846,7 @@ export type Database = {
       }
       design_licenses: {
         Row: {
+          asset_id: string | null
           asset_type: string
           company_name: string
           created_at: string
@@ -4856,6 +4857,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          asset_id?: string | null
           asset_type: string
           company_name: string
           created_at?: string
@@ -4866,6 +4868,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          asset_id?: string | null
           asset_type?: string
           company_name?: string
           created_at?: string
@@ -4875,7 +4878,15 @@ export type Database = {
           trade_license_verified?: boolean
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "design_licenses_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "design_assets"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       design_project_palettes: {
         Row: {
