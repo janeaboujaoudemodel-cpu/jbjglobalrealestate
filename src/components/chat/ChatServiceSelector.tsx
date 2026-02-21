@@ -46,20 +46,20 @@ const ChatServiceSelector = ({ userFirstName, isExistingUser, onSelectService }:
         {isExistingUser ? <T>Or chat with our team:</T> : <T>Select a topic to get started:</T>}
       </p>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2">
         {SERVICES.map((service) => {
           const Icon = service.icon;
           return (
             <button
               key={service.id}
               onClick={() => onSelectService(service.id)}
-              className="p-4 bg-white/5 hover:bg-gold/10 border border-zinc-700 hover:border-gold/50 rounded-xl text-left transition-all duration-300 group"
+              className="p-3 bg-white/5 hover:bg-gold/10 border border-zinc-700 hover:border-gold/50 rounded-xl text-left transition-all duration-300 group"
             >
-              <div className="w-10 h-10 rounded-lg bg-gold/10 group-hover:bg-gold/20 flex items-center justify-center mb-3">
-                <Icon className="w-5 h-5 text-gold" />
+              <div className="w-8 h-8 rounded-lg bg-gold/10 group-hover:bg-gold/20 flex items-center justify-center mb-2">
+                <Icon className="w-4 h-4 text-gold" />
               </div>
-              <h5 className="text-white text-sm font-medium mb-1"><T>{service.label}</T></h5>
-              <p className="text-zinc-500 text-xs"><T>{service.description}</T></p>
+              <h5 className="text-white text-xs font-medium mb-0.5"><T>{service.label}</T></h5>
+              <p className="text-zinc-500 text-[10px] leading-tight"><T>{service.description}</T></p>
             </button>
           );
         })}

@@ -59,10 +59,15 @@ export const getRandomAgent = () => {
 export const AGENT = AGENTS[0]; // Natalia as default
 
 export const SERVICES: ServiceOption[] = [
-  { id: 'real_estate', icon: Building2, label: 'Property Sales & Rentals', description: 'Brokerage for buying, selling, renting' },
+  { id: 'real_estate', icon: Building2, label: 'Property Sales & Rentals', description: 'Buy, sell, or rent properties' },
   { id: 'holiday_homes', icon: Home, label: 'Holiday Homes', description: 'Short-term rental support' },
+  { id: 'sell_property', icon: Building2, label: 'Sell Your Property', description: 'List your property for sale' },
+  { id: 'rent_property', icon: Home, label: 'List for Rent', description: 'List your property for rent' },
   { id: 'partner_intro', icon: Scale, label: 'Partner Introductions', description: 'Legal, mortgage, property management' },
-  { id: 'design_build', icon: Paintbrush, label: 'Design & Build', description: 'Architecture, interior, fit-out partners' },
+  { id: 'design_build', icon: Paintbrush, label: 'Design & Build', description: 'Architecture, interior, fit-out' },
+  { id: 'guides', icon: Plane, label: 'Guides & Resources', description: 'Dubai guides, visa, golden visa' },
+  { id: 'ai_tools', icon: MessageCircle, label: 'AI Tools & Features', description: 'Property finder, measure, explore' },
+  { id: 'cv_submission', icon: Scale, label: 'Submit Your CV', description: 'Career opportunities with us' },
   { id: 'general', icon: MessageCircle, label: 'General Inquiry', description: 'Other questions' },
 ];
 

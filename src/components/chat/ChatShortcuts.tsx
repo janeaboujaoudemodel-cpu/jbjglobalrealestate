@@ -1,7 +1,7 @@
-import { Briefcase, Building2, Home, Paintbrush, Scale, MessageCircle, FileText } from 'lucide-react';
+import { Briefcase, Building2, Home, Paintbrush, Scale, MessageCircle, FileText, Plane, Compass, Ruler } from 'lucide-react';
 import { T } from '@/components/ui/T';
 
-export type ShortcutType = 'submit_cv' | 'buy_property' | 'rent_property' | 'property_management' | 'design_services' | 'legal_partners' | 'general_inquiry';
+export type ShortcutType = 'submit_cv' | 'buy_property' | 'sell_property' | 'rent_property' | 'list_for_rent' | 'property_management' | 'design_services' | 'guides' | 'ai_tools' | 'general_inquiry';
 
 interface ChatShortcutsProps {
   onSelectShortcut: (shortcut: ShortcutType) => void;
@@ -9,11 +9,15 @@ interface ChatShortcutsProps {
 }
 
 const SHORTCUTS = [
-  { id: 'submit_cv' as ShortcutType, icon: FileText, label: 'Submit Your CV', description: 'Apply to join our team', color: 'text-blue-500' },
   { id: 'buy_property' as ShortcutType, icon: Building2, label: 'Buy Property', description: 'Explore properties for sale', color: 'text-gold' },
+  { id: 'sell_property' as ShortcutType, icon: Building2, label: 'Sell Your Property', description: 'List your property for sale', color: 'text-amber-600' },
   { id: 'rent_property' as ShortcutType, icon: Home, label: 'Rent Property', description: 'Find your perfect rental', color: 'text-green-500' },
+  { id: 'list_for_rent' as ShortcutType, icon: Home, label: 'List for Rent', description: 'List your property for rent', color: 'text-emerald-600' },
   { id: 'property_management' as ShortcutType, icon: Scale, label: 'Property Management', description: 'Manage your investments', color: 'text-purple-500' },
   { id: 'design_services' as ShortcutType, icon: Paintbrush, label: 'Design & Build', description: 'Interior & architecture', color: 'text-pink-500' },
+  { id: 'guides' as ShortcutType, icon: Plane, label: 'Guides & Resources', description: 'Dubai guides, visa, golden visa', color: 'text-sky-500' },
+  { id: 'ai_tools' as ShortcutType, icon: Compass, label: 'AI Tools & Features', description: 'Property finder, measure, explore', color: 'text-indigo-500' },
+  { id: 'submit_cv' as ShortcutType, icon: FileText, label: 'Submit Your CV', description: 'Career opportunities with us', color: 'text-blue-500' },
   { id: 'general_inquiry' as ShortcutType, icon: MessageCircle, label: 'General Inquiry', description: 'Other questions', color: 'text-zinc-500' },
 ];
 
