@@ -191,6 +191,14 @@ const TOOLS: ToolItem[] = [
     tier: "free",
     category: "property",
   },
+  {
+    name: "JBJ Listing Portal",
+    description: "AI-powered property listing submission",
+    icon: FolderOpen,
+    link: "/listing-portal/submit",
+    tier: "free",
+    category: "property",
+  },
 
   // Marketing - Removed JBJ News Reporter (internal automation, not user tool)
   {
