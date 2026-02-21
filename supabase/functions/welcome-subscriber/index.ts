@@ -89,17 +89,25 @@ const handler = async (req: Request): Promise<Response> => {
 </td></tr>
 
 <!-- Footer -->
-<tr><td style="background-color:#f5f5f5;padding:28px 30px;text-align:center;border-top:1px solid #e5e5e5;">
-<p style="margin:0 0 8px;font-size:13px;color:#666;">You can turn email notifications on/off anytime from your account settings.</p>
-<p style="margin:0 0 8px;font-size:13px;color:#666;">You can unsubscribe or resubscribe anytime.</p>
+<tr><td style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);padding:28px 30px;text-align:center;">
+<!-- Logo: J on black circle -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:12px;">
+<tr><td style="width:48px;height:48px;border-radius:50%;background:#000000;color:#ffffff;text-align:center;line-height:48px;font-size:24px;font-weight:bold;font-family:'Georgia',serif;border:2px solid #C8A766;">J</td></tr>
+</table>
+<p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
+<p style="color:#888;font-size:12px;margin:0 0 4px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
+<p style="color:#C8A766;font-size:22px;font-weight:bold;margin:12px 0;letter-spacing:1px;">175+ Countries &bull; 2,400+ Cities &bull; 12,000+ Clients Served</p>
+<p style="margin:0 0 8px;font-size:13px;color:#888;">You can turn email notifications on/off anytime from your account settings.</p>
+<p style="margin:0 0 8px;font-size:13px;color:#888;">You can unsubscribe or resubscribe anytime.</p>
 <p style="margin:16px 0 0;">
-<a href="${unsubUrl}" style="color:#999;font-size:12px;text-decoration:underline;">Unsubscribe</a>
-<span style="color:#ccc;margin:0 8px;">|</span>
-<a href="${prefsUrl}" style="color:#999;font-size:12px;text-decoration:underline;">Manage Preferences</a>
-<span style="color:#ccc;margin:0 8px;">|</span>
-<a href="mailto:contact@jbj.ae" style="color:#999;font-size:12px;text-decoration:underline;">Contact Us</a>
+<a href="${unsubUrl}" style="color:#C8A766;font-size:12px;text-decoration:underline;">Unsubscribe</a>
+<span style="color:#555;margin:0 8px;">|</span>
+<a href="${prefsUrl}" style="color:#C8A766;font-size:12px;text-decoration:underline;">Manage Preferences</a>
+<span style="color:#555;margin:0 8px;">|</span>
+<a href="mailto:contact@jbj.ae" style="color:#C8A766;font-size:12px;text-decoration:underline;">Contact Us</a>
 </p>
-<p style="margin:16px 0 0;font-size:11px;color:#aaa;">
+<p style="margin:16px 0 0;font-size:11px;color:#666;">
+Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span><br/>
 © ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.<br/>
 Dubai, United Arab Emirates<br/><br/>
 You are receiving this email because you opted in on jbj.ae.
@@ -119,7 +127,7 @@ You are receiving this email because you opted in on jbj.ae.
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "JBJ Global Real Estate <info@jbj.ae>",
+        from: "JBJ Global Real Estate <noreply@jbj.ae>",
         reply_to: "contact@jbj.ae",
         to: [email],
         subject: "Welcome to Stay in the Loop — JBJ Global Real Estate",
