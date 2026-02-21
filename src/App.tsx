@@ -699,6 +699,9 @@ const App = () => (
                 {/* Reopen Ticket - Public for email links */}
                 <Route path="/reopen-ticket" element={<ReopenTicket />} />
                 
+                {/* Ticket Survey - Public */}
+                <Route path="/ticket-survey" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("./pages/TicketSurvey")))}</Suspense>} />
+                
                 {/* Communication & Productivity Tools - Owner-only */}
                 <Route path="/automations" element={<OwnerGuard><Automations /></OwnerGuard>} />
                 <Route path="/company-comm" element={<OwnerGuard><CompanyComm /></OwnerGuard>} />

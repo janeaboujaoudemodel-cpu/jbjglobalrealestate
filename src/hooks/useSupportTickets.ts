@@ -140,6 +140,17 @@ export function useUpdateTicketStatus() {
         .eq("id", ticketId);
 
       if (error) throw error;
+
+      // Send status update email for in_progress and resolved
+      if (status === "in_progress" || status === "resolved") {
+        try {
+          await supabase.functions.invoke("send-ticket-status-email", {
+            body: { ticketId, newStatus: status },
+          });
+        } catch (emailErr) {
+          console.error("Status email failed (non-critical):", emailErr);
+        }
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["support-tickets"] });

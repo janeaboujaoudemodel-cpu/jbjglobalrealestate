@@ -98,15 +98,12 @@ const handler = async (req: Request): Promise<Response> => {
     const analyzePriority = (desc: string, subj: string, userPriority: string): string => {
       const text = `${desc} ${subj}`.toLowerCase();
       
-      // Critical keywords
       const criticalKeywords = ['urgent', 'emergency', 'cannot access', 'locked out', 'security breach', 
         'data loss', 'payment failed', 'money lost', 'critical', 'immediately', 'down', 'not working at all'];
       
-      // High priority keywords  
       const highKeywords = ['important', 'asap', 'broken', 'error', 'failed', 'stuck', 'blocked',
         'cannot login', 'not loading', 'crash', 'freeze'];
       
-      // Low priority keywords
       const lowKeywords = ['suggestion', 'feature request', 'would be nice', 'minor', 'small issue',
         'when you have time', 'not urgent'];
       
@@ -241,7 +238,10 @@ const handler = async (req: Request): Promise<Response> => {
     const whatsappMessage = encodeURIComponent(`Hi JBJ Support Team, I'm following up on my ticket ${ticket.ticket_number}. My issue: ${subject}`);
     const whatsappLink = `https://wa.me/971565911000?text=${whatsappMessage}`;
 
-    // Send confirmation email to customer with enhanced design
+    // Survey link
+    const surveyLink = `https://jbjglobalrealestate.lovable.app/ticket-survey?ticket=${encodeURIComponent(ticket.ticket_number)}&email=${encodeURIComponent(email)}`;
+
+    // Send confirmation email to customer with premium champagne design
     const customerEmailHtml = `<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -254,7 +254,7 @@ const handler = async (req: Request): Promise<Response> => {
 body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
 table,td{mso-table-lspace:0;mso-table-rspace:0;}
 img{-ms-interpolation-mode:bicubic;border:0;height:auto;line-height:100%;outline:none;text-decoration:none;}
-body{margin:0;padding:0;width:100%!important;background-color:#f5f0e6;}
+body{margin:0;padding:0;width:100%!important;background-color:#F5EBD7;}
 @media only screen and (max-width:620px){
 .wrapper{width:100%!important;padding:0 8px!important;}
 .hero-pad{padding:32px 20px!important;}
@@ -265,27 +265,66 @@ body{margin:0;padding:0;width:100%!important;background-color:#f5f0e6;}
 .stack{display:block!important;width:100%!important;padding:6px 0!important;text-align:center!important;}
 .hide-mobile{display:none!important;}
 .mobile-center{text-align:center!important;}
+.card-cell{display:block!important;width:100%!important;padding:4px 0!important;}
 }
 </style>
 </head>
-<body style="margin:0;padding:0;background-color:#f5f0e6;font-family:'Segoe UI',Arial,Helvetica,sans-serif;line-height:1.6;color:#333333;">
+<body style="margin:0;padding:0;background-color:#F5EBD7;font-family:'Segoe UI',Arial,Helvetica,sans-serif;line-height:1.6;color:#333333;">
 <!-- Outer wrapper -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f5f0e6;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F5EBD7;">
 <tr><td align="center" style="padding:24px 16px;">
 
 <!-- Main Container 600px -->
-<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+<table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#FFFFFF 0%,#FDFBF7 50%,#F5F0E6 100%);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(200,167,102,0.15);">
 
-<!-- HERO -->
-<tr><td class="hero-pad" style="background:linear-gradient(135deg,#000000 0%,#1a1a1a 50%,#2d2d2d 100%);padding:40px 32px;text-align:center;">
+<!-- HERO - Champagne Gold Gradient with Rounded Corners -->
+<tr><td class="hero-pad" style="background:linear-gradient(135deg,#C8A766 0%,#B8956E 50%,#A07D4A 100%);padding:40px 32px;text-align:center;border-radius:20px 20px 0 0;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="font-size:28px;font-weight:bold;color:#C8A766;padding-bottom:8px;font-family:'Segoe UI',Arial,sans-serif;">JBJ Global Real Estate</td></tr>
-<tr><td style="font-size:16px;color:#ffffff;padding-bottom:24px;">Support Ticket Confirmation</td></tr>
-<tr><td style="border-top:1px solid rgba(200,167,102,0.3);padding-top:20px;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-<td class="stack" style="text-align:center;padding:4px 8px;"><a href="tel:+971565911000" style="color:#C8A766;text-decoration:none;font-size:13px;">📞 +971 56 591 1000</a></td>
-<td class="stack" style="text-align:center;padding:4px 8px;"><a href="mailto:${OFFICIAL_EMAILS.support}" style="color:#C8A766;text-decoration:none;font-size:13px;">✉️ ${OFFICIAL_EMAILS.support}</a></td>
-</tr></table>
+<tr><td style="font-size:28px;font-weight:bold;color:#1a1a1a;padding-bottom:8px;font-family:'Segoe UI',Arial,sans-serif;">JBJ Global Real Estate</td></tr>
+<tr><td style="font-size:16px;color:#2d2d2d;padding-bottom:24px;font-weight:500;">Support Ticket Confirmation</td></tr>
+<!-- Premium Gradient Divider -->
+<tr><td style="padding-bottom:20px;">
+<table role="presentation" width="80%" cellpadding="0" cellspacing="0" border="0" align="center">
+<tr><td style="height:3px;background:linear-gradient(90deg,transparent 0%,#1a1a1a 20%,#1a1a1a 80%,transparent 100%);border-radius:2px;"></td></tr>
+</table>
+</td></tr>
+<!-- Contact Info with Premium Icon Badges -->
+<tr><td>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td class="stack" style="text-align:center;padding:4px 8px;vertical-align:top;">
+<a href="tel:+971565911000" style="color:#1a1a1a;text-decoration:none;font-size:13px;">
+<span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#1a1a1a;color:#C8A766;text-align:center;line-height:28px;font-size:14px;margin-bottom:4px;">&#9742;</span><br>
++971 56 591 1000
+</a>
+</td>
+<td class="stack" style="text-align:center;padding:4px 8px;vertical-align:top;">
+<a href="mailto:${OFFICIAL_EMAILS.support}" style="color:#1a1a1a;text-decoration:none;font-size:13px;">
+<span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#1a1a1a;color:#C8A766;text-align:center;line-height:28px;font-size:14px;margin-bottom:4px;">&#9993;</span><br>
+${OFFICIAL_EMAILS.support}
+</a>
+</td>
+</tr>
+</table>
+</td></tr>
+<!-- Additional Contact Emails -->
+<tr><td style="padding-top:12px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td class="stack" style="text-align:center;padding:3px 6px;vertical-align:top;">
+<a href="mailto:${OFFICIAL_EMAILS.contact}" style="color:#2d2d2d;text-decoration:none;font-size:11px;font-weight:600;">${OFFICIAL_EMAILS.contact}</a><br>
+<span style="color:#4a3f2f;font-size:10px;">General Inquiries</span>
+</td>
+<td class="stack" style="text-align:center;padding:3px 6px;vertical-align:top;">
+<a href="mailto:${OFFICIAL_EMAILS.partnerships}" style="color:#2d2d2d;text-decoration:none;font-size:11px;font-weight:600;">${OFFICIAL_EMAILS.partnerships}</a><br>
+<span style="color:#4a3f2f;font-size:10px;">Partnerships</span>
+</td>
+<td class="stack" style="text-align:center;padding:3px 6px;vertical-align:top;">
+<a href="mailto:${OFFICIAL_EMAILS.careers}" style="color:#2d2d2d;text-decoration:none;font-size:11px;font-weight:600;">${OFFICIAL_EMAILS.careers}</a><br>
+<span style="color:#4a3f2f;font-size:10px;">Careers</span>
+</td>
+</tr>
+</table>
 </td></tr>
 </table>
 </td></tr>
@@ -303,7 +342,7 @@ body{margin:0;padding:0;width:100%!important;background-color:#f5f0e6;}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
 <tr>
 <td width="33%" style="text-align:center;vertical-align:top;padding:0 4px;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;text-align:center;line-height:40px;font-size:16px;font-weight:bold;">✓</td></tr></table>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;text-align:center;line-height:40px;font-size:16px;font-weight:bold;">&#10003;</td></tr></table>
 <p style="font-size:11px;color:#C8A766;text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 0;font-weight:600;">Received</p>
 </td>
 <td width="33%" style="text-align:center;vertical-align:top;padding:0 4px;">
@@ -321,14 +360,16 @@ body{margin:0;padding:0;width:100%!important;background-color:#f5f0e6;}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:32px;">
 <tr><td style="padding:24px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="font-size:16px;font-weight:bold;color:#1a1a1a;padding-bottom:16px;border-bottom:1px solid #C8A766;">🎫 Your Ticket Number</td></tr>
+<tr><td style="font-size:16px;font-weight:bold;color:#1a1a1a;padding-bottom:16px;border-bottom:1px solid #C8A766;">
+<span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;text-align:center;line-height:24px;font-size:12px;margin-right:8px;">&#9733;</span>
+Your Ticket Number</td></tr>
 <tr><td style="padding-top:16px;text-align:center;">
 <span class="ticket-num" style="font-size:24px;font-weight:bold;color:#C8A766;letter-spacing:3px;font-family:'Courier New',monospace;word-break:break-all;">${ticket.ticket_number}</span>
 </td></tr>
 <tr><td style="padding-top:16px;text-align:center;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
 <td class="stack" style="padding:4px 6px;"><span style="display:inline-block;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;background:${priorityInfo.bgColor};color:${priorityInfo.color};border:1px solid ${priorityInfo.color};white-space:nowrap;">${aiAnalyzedPriority.toUpperCase()} PRIORITY</span></td>
-<td class="stack" style="padding:4px 6px;"><span style="display:inline-block;background:#000;color:#C8A766;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;">⏱️ Response within ${priorityInfo.label}</span></td>
+<td class="stack" style="padding:4px 6px;"><span style="display:inline-block;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;">&#9201; Response within ${priorityInfo.label}</span></td>
 </tr></table>
 </td></tr>
 </table>
@@ -339,10 +380,10 @@ body{margin:0;padding:0;width:100%!important;background-color:#f5f0e6;}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
 <tr>
 <td class="btn-cell" width="50%" style="padding:0 6px 0 0;">
-<a href="${whatsappLink}" class="btn-full" style="display:block;padding:16px 16px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;text-align:center;background:linear-gradient(135deg,#25D366,#128C7E);color:#ffffff;">💬 WhatsApp Follow-up</a>
+<a href="${whatsappLink}" class="btn-full" style="display:block;padding:16px 16px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;text-align:center;background:linear-gradient(135deg,#FDFBF7,#F5F0E6);color:#25D366;border:2px solid #25D366;">&#128172; WhatsApp Follow-up</a>
 </td>
 <td class="btn-cell" width="50%" style="padding:0 0 0 6px;">
-<a href="tel:+971565911000" class="btn-full" style="display:block;padding:16px 16px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;text-align:center;background:linear-gradient(135deg,#000,#1a1a1a);color:#C8A766;border:2px solid #C8A766;">📞 Call Support</a>
+<a href="tel:+971565911000" class="btn-full" style="display:block;padding:16px 16px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;text-align:center;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;">&#9742; Call Support</a>
 </td>
 </tr>
 </table>
@@ -351,7 +392,9 @@ body{margin:0;padding:0;width:100%!important;background-color:#f5f0e6;}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:32px;">
 <tr><td style="padding:24px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="font-size:16px;font-weight:bold;color:#1a1a1a;padding-bottom:16px;border-bottom:1px solid #C8A766;">📋 Ticket Summary</td></tr>
+<tr><td style="font-size:16px;font-weight:bold;color:#1a1a1a;padding-bottom:16px;border-bottom:1px solid #C8A766;">
+<span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;text-align:center;line-height:24px;font-size:12px;margin-right:8px;">&#9998;</span>
+Ticket Summary</td></tr>
 </table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;">
 <tr style="border-bottom:1px solid #e8e8e8;"><td style="padding:10px 0;color:#666;font-size:13px;">Ticket Number</td><td style="padding:10px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-align:right;">${ticket.ticket_number}</td></tr>
@@ -365,14 +408,14 @@ body{margin:0;padding:0;width:100%!important;background-color:#f5f0e6;}
 </table>
 
 <!-- What happens next -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f9f9f9;border-radius:10px;margin-bottom:32px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:10px;margin-bottom:32px;border:1px solid #C8A766;">
 <tr><td style="padding:24px;">
 <p style="font-weight:bold;color:#1a1a1a;margin:0 0 12px;font-size:15px;">What happens next?</p>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="padding:4px 0;font-size:13px;color:#555;">• Our support team will review your ticket within <strong>${priorityInfo.label}</strong></td></tr>
-<tr><td style="padding:4px 0;font-size:13px;color:#555;">• You'll receive updates via email as we progress</td></tr>
-<tr><td style="padding:4px 0;font-size:13px;color:#555;">• Use WhatsApp for urgent follow-ups (include your ticket number)</td></tr>
-<tr><td style="padding:4px 0;font-size:13px;color:#555;">• Rate your experience once resolved - your feedback matters!</td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Our support team will review your ticket within <strong>${priorityInfo.label}</strong></td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; You'll receive updates via email as we progress</td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Use WhatsApp for urgent follow-ups (include your ticket number)</td></tr>
+<tr><td style="padding:4px 0;font-size:13px;color:#555;">&#8226; Rate your experience once resolved - your feedback matters!</td></tr>
 </table>
 </td></tr>
 </table>
@@ -380,60 +423,96 @@ body{margin:0;padding:0;width:100%!important;background-color:#f5f0e6;}
 <!-- Warning Box -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fffbeb;border:1px solid #f59e0b;border-radius:10px;margin-bottom:32px;">
 <tr><td style="padding:20px 24px;">
-<p style="margin:0;font-size:13px;color:#92400e;line-height:1.6;"><strong>⚠️ Important:</strong> This is an automatic email generated from our system. <strong>Please do not reply to this email</strong> as we won't receive your message.</p>
+<p style="margin:0;font-size:13px;color:#92400e;line-height:1.6;"><strong>&#9888;&#65039; Important:</strong> This is an automatic email generated from our system. <strong>Please do not reply to this email</strong> as we won't receive your message.</p>
 </td></tr>
 </table>
 
-<!-- Contact Hero -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#000,#1a1a1a);border-radius:12px;margin-bottom:32px;">
+<!-- Need to Follow Up? - Premium Champagne -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#C8A766 0%,#B8956E 50%,#A07D4A 100%);border-radius:12px;margin-bottom:32px;border:2px solid #D4B87A;">
 <tr><td style="padding:32px 24px;text-align:center;">
-<p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 8px;">Need to Follow Up?</p>
-<p style="color:#aaa;font-size:13px;margin:0 0 20px;">Copy your ticket number and include it in the subject line</p>
+<p style="color:#1a1a1a;font-size:18px;font-weight:bold;margin:0 0 8px;">Need to Follow Up?</p>
+<p style="color:#2d2d2d;font-size:13px;margin:0 0 20px;">Copy your ticket number and include it in the subject line</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td class="stack" width="50%" style="text-align:center;padding:8px;vertical-align:top;">
-<a href="mailto:${OFFICIAL_EMAILS.support}?subject=[Ticket: ${ticket.ticket_number}] Follow-up" style="color:#fff;text-decoration:none;font-size:13px;">
-<span style="font-size:20px;">✉️</span><br>
-<span style="color:#fff;">${OFFICIAL_EMAILS.support}</span><br>
-<span style="color:#C8A766;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Support Email</span>
+<a href="mailto:${OFFICIAL_EMAILS.support}?subject=[Ticket: ${ticket.ticket_number}] Follow-up" style="color:#1a1a1a;text-decoration:none;font-size:13px;">
+<span style="display:inline-block;width:36px;height:36px;border-radius:50%;background:#1a1a1a;color:#C8A766;text-align:center;line-height:36px;font-size:18px;margin-bottom:6px;">&#9993;</span><br>
+<span style="color:#1a1a1a;font-weight:600;">${OFFICIAL_EMAILS.support}</span><br>
+<span style="color:#2d2d2d;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Support Email</span>
 </a>
 </td>
 <td class="stack" width="50%" style="text-align:center;padding:8px;vertical-align:top;">
-<a href="tel:+971565911000" style="color:#fff;text-decoration:none;font-size:13px;">
-<span style="font-size:20px;">📞</span><br>
-+971 56 591 1000<br>
-<span style="color:#C8A766;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Direct Line</span>
+<a href="tel:+971565911000" style="color:#1a1a1a;text-decoration:none;font-size:13px;">
+<span style="display:inline-block;width:36px;height:36px;border-radius:50%;background:#1a1a1a;color:#C8A766;text-align:center;line-height:36px;font-size:18px;margin-bottom:6px;">&#9742;</span><br>
+<span style="font-weight:600;">+971 56 591 1000</span><br>
+<span style="color:#2d2d2d;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Direct Line</span>
 </a>
 </td>
 </tr>
 </table>
 <!-- Social Links -->
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-top:20px;border-top:1px solid rgba(200,167,102,0.3);padding-top:16px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-top:20px;border-top:1px solid rgba(26,26,26,0.2);padding-top:16px;">
 <tr>
-<td style="padding:4px 6px;"><a href="https://instagram.com/jbj.ae" style="display:inline-block;padding:6px 14px;background:rgba(200,167,102,0.1);border:1px solid #C8A766;border-radius:20px;color:#C8A766;text-decoration:none;font-size:12px;">Instagram</a></td>
-<td style="padding:4px 6px;"><a href="https://facebook.com/jbjglobal" style="display:inline-block;padding:6px 14px;background:rgba(200,167,102,0.1);border:1px solid #C8A766;border-radius:20px;color:#C8A766;text-decoration:none;font-size:12px;">Facebook</a></td>
-<td style="padding:4px 6px;"><a href="https://linkedin.com/company/jbjglobal" style="display:inline-block;padding:6px 14px;background:rgba(200,167,102,0.1);border:1px solid #C8A766;border-radius:20px;color:#C8A766;text-decoration:none;font-size:12px;">LinkedIn</a></td>
+<td style="padding:4px 6px;"><a href="https://instagram.com/jbj.ae" style="display:inline-block;padding:6px 14px;background:rgba(26,26,26,0.1);border:1px solid #1a1a1a;border-radius:20px;color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;">Instagram</a></td>
+<td style="padding:4px 6px;"><a href="https://facebook.com/jbjglobal" style="display:inline-block;padding:6px 14px;background:rgba(26,26,26,0.1);border:1px solid #1a1a1a;border-radius:20px;color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;">Facebook</a></td>
+<td style="padding:4px 6px;"><a href="https://linkedin.com/company/jbjglobal" style="display:inline-block;padding:6px 14px;background:rgba(26,26,26,0.1);border:1px solid #1a1a1a;border-radius:20px;color:#1a1a1a;text-decoration:none;font-size:12px;font-weight:600;">LinkedIn</a></td>
 </tr>
 </table>
 </td></tr>
 </table>
 
-<!-- Quick Links -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f9f9f9;border-radius:12px;margin-bottom:32px;">
+<!-- Explore While You Wait - 3x2 Grid Cards -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border-radius:12px;margin-bottom:32px;border:1px solid #C8A766;">
 <tr><td style="padding:24px;text-align:center;">
-<p style="color:#1a1a1a;font-size:16px;font-weight:bold;margin:0 0 16px;">🔗 Explore While You Wait</p>
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+<p style="color:#1a1a1a;font-size:16px;font-weight:bold;margin:0 0 16px;">
+<span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#C8A766,#B8956E);color:#fff;text-align:center;line-height:24px;font-size:12px;margin-right:8px;">&#128279;</span>
+Explore While You Wait</p>
+<!-- Row 1 -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
-<td style="padding:4px 6px;"><a href="https://jbj.ae/properties" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:13px;padding:6px 14px;border:1px solid #C8A766;border-radius:6px;">Properties</a></td>
-<td style="padding:4px 6px;"><a href="https://jbj.ae/services" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:13px;padding:6px 14px;border:1px solid #C8A766;border-radius:6px;">Services</a></td>
-<td style="padding:4px 6px;"><a href="https://jbj.ae/about" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:13px;padding:6px 14px;border:1px solid #C8A766;border-radius:6px;">About Us</a></td>
-</tr>
-<tr>
-<td style="padding:4px 6px;"><a href="https://jbj.ae/market-intelligence" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:13px;padding:6px 14px;border:1px solid #C8A766;border-radius:6px;">Market Intel</a></td>
-<td style="padding:4px 6px;"><a href="https://jbj.ae/buyer-guide" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:13px;padding:6px 14px;border:1px solid #C8A766;border-radius:6px;">Buyer Guide</a></td>
-<td style="padding:4px 6px;"><a href="https://jbj.ae/contact" style="display:inline-block;color:#C8A766;text-decoration:none;font-size:13px;padding:6px 14px;border:1px solid #C8A766;border-radius:6px;">Contact</a></td>
+<td class="card-cell" width="33%" style="padding:4px;">
+<a href="https://jbj.ae/properties" style="display:block;padding:16px 8px;background:#ffffff;border:2px solid #C8A766;border-radius:10px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:600;text-align:center;">Properties</a>
+</td>
+<td class="card-cell" width="33%" style="padding:4px;">
+<a href="https://jbj.ae/services" style="display:block;padding:16px 8px;background:#ffffff;border:2px solid #C8A766;border-radius:10px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:600;text-align:center;">Services</a>
+</td>
+<td class="card-cell" width="33%" style="padding:4px;">
+<a href="https://jbj.ae/about" style="display:block;padding:16px 8px;background:#ffffff;border:2px solid #C8A766;border-radius:10px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:600;text-align:center;">About Us</a>
+</td>
 </tr>
 </table>
+<!-- Row 2 -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td class="card-cell" width="33%" style="padding:4px;">
+<a href="https://jbj.ae/market-intelligence" style="display:block;padding:16px 8px;background:#ffffff;border:2px solid #C8A766;border-radius:10px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:600;text-align:center;">Market Intel</a>
+</td>
+<td class="card-cell" width="33%" style="padding:4px;">
+<a href="https://jbj.ae/buyer-guide" style="display:block;padding:16px 8px;background:#ffffff;border:2px solid #C8A766;border-radius:10px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:600;text-align:center;">Buyer Guide</a>
+</td>
+<td class="card-cell" width="33%" style="padding:4px;">
+<a href="https://jbj.ae/contact" style="display:block;padding:16px 8px;background:#ffffff;border:2px solid #C8A766;border-radius:10px;text-decoration:none;color:#1a1a1a;font-size:13px;font-weight:600;text-align:center;">Contact</a>
+</td>
+</tr>
+</table>
+</td></tr>
+</table>
+
+<!-- Rate Your Experience -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:12px;margin-bottom:32px;">
+<tr><td style="padding:24px;text-align:center;">
+<p style="color:#1a1a1a;font-size:16px;font-weight:bold;margin:0 0 8px;">Rate Your Experience</p>
+<p style="color:#666;font-size:13px;margin:0 0 16px;">How was your ticket submission experience?</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+<tr>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=1" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=2" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=3" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=4" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+<td style="padding:0 4px;"><a href="${surveyLink}&rating=5" style="font-size:28px;text-decoration:none;color:#C8A766;">&#9733;</a></td>
+</tr>
+</table>
+<p style="margin:12px 0 0;"><a href="${surveyLink}" style="color:#C8A766;font-size:12px;text-decoration:underline;">Complete Full Survey &amp; Earn 50 Points</a></p>
 </td></tr>
 </table>
 
@@ -445,11 +524,12 @@ body{margin:0;padding:0;width:100%!important;background-color:#f5f0e6;}
 </td></tr>
 
 <!-- FOOTER -->
-<tr><td style="background:#1a1a1a;text-align:center;padding:32px 24px;">
-<p style="color:#C8A766;font-size:16px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
-<p style="color:#666;font-size:11px;margin:0 0 16px;">First Global Real Estate Platform of Its Kind</p>
+<tr><td style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);text-align:center;padding:32px 24px;border-radius:0 0 20px 20px;">
+<p style="color:#C8A766;font-size:18px;font-weight:bold;margin:0 0 6px;">JBJ Global Real Estate</p>
+<p style="color:#888;font-size:12px;margin:0 0 4px;font-style:italic;">The Only Global AI-Powered Real Estate Intelligence Platform</p>
+<p style="color:#C8A766;font-size:22px;font-weight:bold;margin:12px 0;letter-spacing:1px;">41+ Countries &bull; 200+ Cities</p>
 <p style="color:#888;font-size:12px;margin:0 0 4px;">Developed, Created &amp; Implemented by The Founder &amp; CEO, <span style="color:#C8A766;">Jane Bou Jaoude</span></p>
-<p style="color:#888;font-size:12px;margin:16px 0 0;">© 2026 JBJ Global Real Estate. All rights reserved.</p>
+<p style="color:#888;font-size:12px;margin:16px 0 0;">&copy; 2026 JBJ Global Real Estate. All rights reserved.</p>
 <p style="color:#666;font-size:10px;margin:10px 0 0;"><strong>This is an automated confirmation. Do not reply to this email.</strong></p>
 </td></tr>
 
@@ -482,7 +562,6 @@ body{margin:0;padding:0;width:100%!important;background-color:#f5f0e6;}
     // Process support email result
     if (supportEmailResult.status === 'fulfilled') {
       const result = supportEmailResult.value as any;
-      // Resend returns { data, error } - check for error field
       if (result?.error) {
         console.error("Support email failed:", result.error);
       } else {

@@ -18630,6 +18630,71 @@ export type Database = {
           },
         ]
       }
+      ticket_surveys: {
+        Row: {
+          created_at: string
+          ease_of_submission: number
+          email: string
+          full_name: string
+          id: string
+          overall_rating: number
+          phone: string | null
+          points_awarded: number
+          resolution_quality: number
+          response_speed: number
+          suggestions: string | null
+          ticket_id: string | null
+          ticket_number: string
+          user_id: string | null
+          website_smartness: number
+          would_recommend: boolean
+        }
+        Insert: {
+          created_at?: string
+          ease_of_submission: number
+          email: string
+          full_name: string
+          id?: string
+          overall_rating: number
+          phone?: string | null
+          points_awarded?: number
+          resolution_quality: number
+          response_speed: number
+          suggestions?: string | null
+          ticket_id?: string | null
+          ticket_number: string
+          user_id?: string | null
+          website_smartness: number
+          would_recommend?: boolean
+        }
+        Update: {
+          created_at?: string
+          ease_of_submission?: number
+          email?: string
+          full_name?: string
+          id?: string
+          overall_rating?: number
+          phone?: string | null
+          points_awarded?: number
+          resolution_quality?: number
+          response_speed?: number
+          suggestions?: string | null
+          ticket_id?: string | null
+          ticket_number?: string
+          user_id?: string | null
+          website_smartness?: number
+          would_recommend?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_surveys_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tier_definitions: {
         Row: {
           badge_color: string | null
