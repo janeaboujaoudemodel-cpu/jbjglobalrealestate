@@ -1,174 +1,230 @@
 
 
-# Admin Panel Comprehensive UI Fix: IT Department, AI Assistant, Marketing Hub, PWA, and Founder Section
+# Comprehensive Admin Panel UI Fix: Champagne Gold Theme Enforcement Across All Sections
 
 ## Overview
-This plan addresses all reported UI issues across the Admin Panel (Owner Panel), focusing on champagne gold theme compliance, broken layouts, missing sections, and functional fixes.
+This plan fixes all reported UI issues across 12+ admin panel sections. The core problem is that many components still use the old dark theme (zinc-900, text-white, text-gray-400) instead of the mandated Champagne Gold standard (bg-white, border-gold/30, text-black).
 
 ---
 
-## 1. IT Department - Champagne Theme Fix
+## 1. Admin Assistant Tab Layout Fix
 
-**File: `src/components/it-department/NewJoinerApplicationsList.tsx`**
+**Problem:** Two-column layout (AdminAIAssistant + AIBrokersDashboard) crammed into small space, content overflows.
 
-### 1A. Filter Bar - Remove White Text
-- Line 237-252: Change filter label from `text-zinc-400` to `text-black/60`
-- Change SelectTrigger from `bg-zinc-900/50 border-gold/20 text-white` to `bg-white border-2 border-gold/30 text-black`
-- Change SelectContent from `bg-zinc-900 border-gold/30` to `bg-white border-2 border-gold/30`
-- Change all SelectItem from `text-white hover:bg-gold/20` to `text-black hover:bg-gold/10`
+**File: `src/pages/Admin.tsx` (lines 514-521)**
+- Change from side-by-side 2-column grid to stacked vertical layout
+- Remove nested grid, place AdminAIAssistant full-width on top, AIBrokersDashboard full-width below
+- Replace: `grid grid-cols-1 lg:grid-cols-2 gap-6` with `space-y-6` (single column, stacked)
 
-### 1B. Application Cards - Champagne Theme
-- Line 257-262: "No applications found" card: Change from `bg-zinc-900/50` to `bg-white border-2 border-gold/30`, icon from `text-zinc-500` to `text-gold`, text from `text-zinc-400` to `text-black/60`
-- Line 278: Card backgrounds from `bg-zinc-900/50 border-gold/20` to `bg-white border-2 border-gold/30`
-- Line 282: Avatar background from `bg-zinc-800` to `bg-gold/10`
-- Line 296: Name from `text-white` to `text-black`
-- All `text-zinc-400` detail text to `text-black/60`
-- DropdownMenu content from `bg-zinc-900 border-gold/30` to `bg-white border-2 border-gold/30`
-- DropdownMenuItem from `text-white hover:bg-gold/20` to `text-black hover:bg-gold/10`
-
-### 1C. Details Dialog - Champagne Theme
-- Line 373: Dialog from `bg-zinc-900 border-gold/30 text-white` to `bg-white border-2 border-gold/30 text-black`
-- All internal `text-white` to `text-black`, `text-zinc-400` labels to `text-black/60`
-- IT Notes background from `bg-zinc-800/50` to `bg-gold/5 border border-gold/20`
-
-### 1D. Credentials Dialog (lines 443+)
-- Same champagne conversion for the credentials creation dialog
+**File: `src/components/admin/AdminAIAssistant.tsx` (line 177)**
+- Change title from "AI Admin Assistant" to "Admin Assistant"
 
 ---
 
-## 2. AI Assistant Tab - Layout and Theme Fix
+## 2. Pipeline Analytics Panel - Champagne Conversion
 
-**File: `src/pages/Admin.tsx` (lines 510-516)**
+**File: `src/components/admin/ai-brokers/PipelineAnalyticsPanel.tsx`**
 
-### 2A. Remove "AI" prefix from Brokers title
-- Change the AI Assistant tab layout: currently `AdminAIAssistant` and `AIBrokersDashboard` are side by side in a 2-col grid
-- The AI Brokers section title "AI Brokers" needs to become just "Admin Assistant" area
+All 4 summary cards (lines 204-249): Replace `bg-zinc-900 border-zinc-800` with `bg-white border-2 border-gold/30`, `text-gray-400` with `text-black/60`, `text-white` with `text-black`.
 
-**File: `src/components/admin/ai-brokers/AIBrokersDashboard.tsx`**
+All 3 pipeline breakdown cards (lines 252-330): Same conversion:
+- Card: `bg-zinc-900 border-zinc-800` to `bg-white border-2 border-gold/30`
+- Title: `text-white` to `text-black`
+- Labels: `text-gray-400` to `text-black/60`
+- Values: `text-white` to `text-black`
+- Progress bar bg: `bg-zinc-800` to `bg-zinc-200`
+- Border-t: `border-zinc-800` to `border-gold/20`
+- Broker names: `text-gray-300` to `text-black`
+- Badge: `border-zinc-700` to `border-gold/30`
+- SLA badge: `bg-emerald-900 text-emerald-300` to `bg-emerald-100 text-emerald-700`
 
-### 2B. AI Brokers Dashboard - Champagne Theme
-- Line 160: Title from `text-white` to `text-black`, remove Bot AI icon prefix
-- Line 162: Subtitle from `text-gray-400` to `text-black/60`
-- Line 170: Refresh button from `border-zinc-700 text-gray-300 hover:bg-zinc-800` to `border-gold/30 text-black hover:bg-gold/10`
-- Lines 181-225: Summary stat cards from `bg-zinc-900 border-zinc-800` to `bg-white border-2 border-gold/30`
-- All `text-white` to `text-black`, `text-gray-400` to `text-black/60`
-- TabsList from `bg-zinc-900 border border-zinc-800` to `bg-white/80 border-2 border-gold/30`
-
-**File: `src/components/admin/ai-brokers/AIBrokerCard.tsx`**
-- Full champagne conversion: card from `bg-zinc-900 border-zinc-800` to `bg-white border-2 border-gold/30`
-- All `text-white` to `text-black`, `text-gray-400/500` to `text-black/60`
-- Stat boxes from `bg-zinc-800/50` to `bg-gold/5 border border-gold/20`
-- Quick action buttons from `border-zinc-700 text-gray-300 hover:bg-zinc-800` to `border-gold/30 text-black hover:bg-gold/10`
+Pipeline legend card (lines 334-352): Same conversion.
 
 ---
 
-## 3. Admin Header Fixes
+## 3. Lead Assignment Rules Panel - Champagne Conversion
 
-**File: `src/pages/Admin.tsx`**
+**File: `src/components/admin/ai-brokers/LeadAssignmentRulesPanel.tsx`**
 
-### 3A. Notification Bell - Make Functional
-- Line 396-403: Currently shows a static "5" badge that does nothing. Remove the fake count or connect it to real notification data
-
-### 3B. Search/Command Palette - Fix ⌘K Display
-- Line 384-393: The `kbd` element with `⌘K` uses `bg-gold/10 text-gold` which should work, but ensure proper font rendering. The search box needs proper border contrast
+- Line 175: Title `text-white` to `text-black`
+- Line 177: Description `text-gray-400` to `text-black/60`
+- Line 190: Dialog `bg-zinc-900 border-zinc-700` to `bg-white border-2 border-gold/30`
+- Line 193: Dialog title `text-white` to `text-black`
+- Lines 211-215: Rule cards `bg-zinc-900 border-zinc-800` to `bg-white border-2 border-gold/30`
+- Line 226: Rule name `text-white` to `text-black`
+- Line 241: Description `text-gray-400` to `text-black/60`
+- Lines 245-256: Detail text `text-gray-500` to `text-black/40`
+- Lines 276-293: Edit/delete buttons from gray to gold-themed
+- Empty state card (lines 301-310): Same conversion
+- RuleForm (lines 324-445): All `text-gray-300` labels to `text-black`, inputs from `bg-zinc-800 border-zinc-700 text-white` to `bg-white border-2 border-gold/30 text-black`, SelectContent from `bg-zinc-900 border-zinc-700` to `bg-white border-2 border-gold/30`, border-t from `border-zinc-800` to `border-gold/20`
 
 ---
 
-## 4. Founder Section Tab - Add to Admin Panel
+## 4. Rate Limit Dashboard - Champagne Conversion
 
-**File: `src/pages/Admin.tsx`**
+**File: `src/components/admin/RateLimitDashboard.tsx`**
 
-Currently the FounderVisibilityToggle and PodcastVisibilityToggle are buried inside the "Security" tab (line 524-528). The user wants a dedicated "Founder" tab next to "Podcast Studio".
+- Line 215: Title `text-white` to `text-black`
+- Line 219: Description `text-gray-400` to `text-black/60`
+- Lines 224-265: Buttons from `border-zinc-700 text-white hover:bg-zinc-800` to `border-gold/30 text-black hover:bg-gold/10`
+- Lines 271-298: All 4 stat cards from `bg-zinc-900 border-zinc-800` to `bg-white border-2 border-gold/30`, `text-gray-400` to `text-black/60`, `text-white` to `text-black`
+- Lines 302-326: Blocked alert from `bg-red-950/30 border-red-800/50` to `bg-red-50 border-2 border-red-300`
+- Lines 329-410: Table card from `bg-zinc-900 border-zinc-800` to `bg-white border-2 border-gold/30`, header from `bg-zinc-950` to `bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6]`, all table text from gray/white to black
+- Lines 413-429: Config card same conversion
+- Replace `SelectTriggerDark/SelectContentDark/SelectItemDark` with standard `SelectTrigger/SelectContent/SelectItem` using champagne styling
 
-### Changes:
-- Add a new TabsTrigger after "Podcast Studio" (line 499-502):
+---
+
+## 5. IP Blocklist Dashboard - Champagne Conversion
+
+**File: `src/components/admin/IPBlocklistDashboard.tsx`**
+
+- Line 244: Title `text-white` to `text-black`
+- Line 248: Description `text-gray-400` to `text-black/60`
+- Lines 253-274: Buttons same champagne conversion
+- Lines 282-283: Dialog from `bg-zinc-900 border-zinc-800 text-white` to `bg-white border-2 border-gold/30 text-black`
+- All form labels from `text-gray-300` to `text-black`, inputs from `bg-zinc-950 border-zinc-700 text-white` to `bg-white border-2 border-gold/30 text-black`
+- Lines 347-376: All 4 stat cards same conversion as Rate Limits
+- Line 385: Search input from `bg-zinc-900 border-zinc-700 text-white` to `bg-white border-2 border-gold/30 text-black`
+- Lines 390-472: Table same conversion as Rate Limits
+
+---
+
+## 6. Marketing Settings Dashboard - Champagne Conversion
+
+**File: `src/components/admin/MarketingSettingsDashboard.tsx`**
+
+- Line 173: Title `text-white` to `text-black`
+- Line 175: Description `text-zinc-400` to `text-black/60`
+- Line 127: IntegrationCard from `bg-zinc-900/50 border-zinc-800` to `bg-white border-2 border-gold/30`
+- Line 135: CardTitle from `text-white` to `text-black`
+- Line 136: CardDescription from `text-zinc-500` to `text-black/40`
+- Line 147: Label from `text-zinc-400` to `text-black/60`
+- Line 152: Input from `bg-zinc-950 border-zinc-700 text-white` to `bg-white border-2 border-gold/30 text-black`
+- Lines 198-218: TabsList from `bg-zinc-900 border border-zinc-800` to `bg-white/80 border-2 border-gold/30`
+- Tab triggers: active state from `data-[state=active]:bg-gold` (keep this, it's correct) but ensure inactive text is `text-black`
+- Line 295: Info box from `bg-emerald-900/20 border border-emerald-700/30` to `bg-emerald-50 border-2 border-emerald-300`
+- Lines 345-354: Zapier instructions from `bg-zinc-800/50 border border-zinc-700` to `bg-gold/5 border border-gold/20`, text from `text-white`/`text-zinc-400` to `text-black`/`text-black/60`
+- Lines 382-412: Integration Status card same conversion
+
+---
+
+## 7. IT Department - Fix Remaining Issues
+
+### 7A. IT Tasks - Champagne Conversion
+**File: `src/components/it-department/ITTasksList.tsx`**
+
+- Line 11: Replace `SelectContentDark, SelectItemDark, SelectTriggerDark` with standard champagne-styled selects
+- Lines 147-167: Select triggers/content from dark to `bg-white border-2 border-gold/30 text-black`
+- Lines 172-177: Empty state card from `bg-zinc-900/50` to `bg-white border-2 border-gold/30`, text from `text-zinc-400/500` to `text-black/60`
+- Lines 195-200: Task cards from `bg-zinc-900/50 border-gold/20` to `bg-white border-2 border-gold/30`
+- All `text-white` to `text-black`, `text-zinc-400` to `text-black/60`
+- Filter label from `text-zinc-400` to `text-black/60`
+
+### 7B. IT Team Directory - Fix White Text
+**File: `src/components/it-department/ITTeamDirectory.tsx`**
+
+- Line 45: Title `text-white` to `text-black`
+- Line 46: Description `text-zinc-400` to `text-black/60`
+- Lines 61-63: Cards from `bg-zinc-900/50 border-gold/20` to `bg-white border-2 border-gold/30`
+- Line 79: Name `text-white` to `text-black`
+- Lines 86-92: Details `text-zinc-400` to `text-black/60`
+- Line 100: Badge `text-zinc-300` to `text-black/70`
+- Lines 107-112: Empty state from `bg-zinc-900/50` to `bg-white border-2 border-gold/30`
+- Photo container from `bg-zinc-800` to `bg-gold/10`
+
+### 7C. IT Department Active Tab Color
+**File: `src/components/admin/EmbeddedITDepartment.tsx` (lines 136-144)**
+- Change tab active state from `data-[state=active]:bg-gold` to champagne gradient: `data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8]`
+
+---
+
+## 8. Podcast Studio (Voice Recorder) - Champagne Conversion
+
+**File: `src/components/admin/VoiceRecorder.tsx`**
+
+- Line 172: Card from `bg-zinc-900 border-zinc-800` to `bg-white border-2 border-gold/30`
+- Line 174: Title `text-gold` stays but ensure it reads on white bg
+- Line 179: Description from `text-zinc-400` to `text-black/60`
+- Line 209: Select from `bg-zinc-800 border-zinc-700 text-white` to `bg-white border-2 border-gold/30 text-black`
+- Line 216: Instruction box from `bg-zinc-800/50 border-zinc-700` to `bg-gold/5 border border-gold/20`
+- Line 218: Title keep `text-gold`
+- Line 220: Text from `text-white` to `text-black`
+- Line 222: Note from `text-zinc-500` to `text-black/50`
+- Line 260: Heading from `text-white` to `text-black`
+- Line 265: Recording item from `bg-zinc-800` to `bg-gold/5 border border-gold/20`
+- Line 281: Name from `text-white` to `text-black`
+- Line 283: Duration from `text-zinc-500` to `text-black/40`
+- Lines 315-323: Tips box from `bg-zinc-800/30 border-zinc-700/50` to `bg-gold/5 border border-gold/20`, text from `text-white`/`text-zinc-400` to `text-black`/`text-black/60`
+
+---
+
+## 9. Owner Panel Header Icon Fix
+
+**File: `src/pages/Admin.tsx` (lines 372-373)**
+- The icon container uses `bg-gradient-to-br from-gold to-amber-600` -- this creates the "orange/yellow" look
+- Change to `bg-gradient-to-br from-[#C9A84C] to-[#B8973F]` for a cleaner gold (not orange)
+
+---
+
+## 10. Properties Tab - Fix Description Truncation and Brochure Visibility
+
+**File: `src/pages/Admin.tsx` (lines 684-706)**
+- Project description shows "..." because only name/developer/location are displayed. Add a truncated description line under the project name:
   ```
-  <TabsTrigger value="founder" className="tab-trigger-champagne text-black">
-    <Crown className="w-4 h-4 mr-2" />
-    Founder
-  </TabsTrigger>
+  <p className="text-xs text-zinc-500 line-clamp-1 max-w-md">{project.description || 'No description'}</p>
   ```
-- Add corresponding TabsContent with FounderVisibilityToggle, PodcastVisibilityToggle, and CompanyProfileDownload (move from Security tab)
-- Remove lines 523-528 from the Security tab
+- For the brochure button visibility: The SmartDocumentUploader header should use champagne styling. The "Select Document" button inside needs `bg-gold text-black` instead of blending with background.
 
 ---
 
-## 5. PWA Analytics - Make Device/Platform Clickable
+## 11. Support Tickets - Fix Card Click Not Opening Detail
 
-**File: `src/components/admin/PWAAnalyticsDashboard.tsx`**
-
-Lines 242-266: "By Device" and "By Platform" are just static headings. Convert them to clickable tabs:
-- Add a local state `pwaView: 'device' | 'platform'`
-- Make "By Device" and "By Platform" into two toggle buttons with champagne active state
-- Show the corresponding breakdown based on selection
+**File: `src/components/admin/EmbeddedSupportTickets.tsx`**
+- The stat cards already have `onClick` handlers (lines 157-234) that change filters - they work correctly
+- The ticket row click (line 403) sets `setSelectedTicketId(ticket.id)` which should open TicketDetailPanel
+- Check if TicketDetailPanel renders based on `selectedTicketId` - it should be in the layout (line 343 flex gap)
 
 ---
 
-## 6. Marketing Hub - Sidebar Alignment and Templates Upgrade
+## 12. HR Hub - CVs Collected Click Functionality
 
-**File: `src/pages/admin/MarketingHub.tsx`**
-
-### 6A. Sidebar "AI Command" Alignment
-- The sidebar header (line 214-227) shows "AI Command" text. Align it visually with the Marketing Hub header height by matching padding
-
-### 6B. Templates - Remove Emojis, Add Premium Icons
-- Lines 538-561: Replace all emoji icons with Lucide icons:
-  - New Listing: `Building2`
-  - Monthly Newsletter: `FileText`
-  - Price Reduction: `TrendingUp`
-  - Open House: `Calendar`
-  - Market Update: `BarChart3`
-  - Thank You: `Heart`
-- Add more templates: Welcome Email, Property Inquiry Response, Event Invitation, Referral Request, Holiday Greeting, Anniversary Follow-up, Investment Opportunity, Broker Onboarding
-- Style icon containers as `w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/20 flex items-center justify-center border border-gold/30` (matching the AI tools card style)
-
-### 6C. AI Tools - Add All Missing Tools
-- Lines 398-414: Add missing tools:
-  - AI Call Summarizer (`/ai/call-summarizer`)
-  - AI Document Analyzer (`/ai/document-analyzer`)
-  - AI Property Evaluation (`/ai/property-evaluation`)
-  - AI Presentation Generator (`/ai/presentation-generator`)
-  - Marketing Creative Suite (`/studio`)
-  - AI Video Studio (`/toolkit/ai-video-studio`)
-
-### 6D. Sidebar AI Tools - Add Missing Entries
-- Lines 55-66: Add the same missing tools to the sidebar nav list
-
----
-
-## 7. AI Brokers Dashboard - Message Filters Black Text
-
-**File: `src/components/admin/ai-brokers/MessageFiltersPanel.tsx`**
-- Convert all white text to black text throughout the component
-- Apply champagne card styling
-
----
-
-## 8. Tab-Trigger-Champagne - Rename AI Assistant Tab
-
-**File: `src/pages/Admin.tsx` (line 439-442)**
-- Change tab label from "AI Assistant" to "Admin Assistant" (remove "AI" prefix as per user request)
+**File: `src/components/admin/EmbeddedHRDashboard.tsx` (lines 68-81)**
+- The CVs Collected card is not clickable. Add `onClick` handler to switch to the CV Center tab:
+  ```
+  onClick={() => setActiveTab('cv-center')}
+  className="cursor-pointer hover:border-amber-500/60 active:scale-95 transition-all"
+  ```
 
 ---
 
 ## Technical Summary
 
-| File | Changes |
-|------|---------|
-| `src/components/it-department/NewJoinerApplicationsList.tsx` | Full champagne conversion: filters, cards, dialogs |
-| `src/pages/Admin.tsx` | Add Founder tab, rename AI Assistant tab, fix notification bell |
-| `src/components/admin/ai-brokers/AIBrokersDashboard.tsx` | Champagne theme, rename title |
-| `src/components/admin/ai-brokers/AIBrokerCard.tsx` | Full champagne conversion |
-| `src/components/admin/ai-brokers/MessageFiltersPanel.tsx` | Black text, champagne cards |
-| `src/components/admin/PWAAnalyticsDashboard.tsx` | Clickable Device/Platform toggle |
-| `src/pages/admin/MarketingHub.tsx` | Templates icons, add all AI tools, sidebar alignment |
+| # | File | Issue | Fix |
+|---|------|-------|-----|
+| 1 | Admin.tsx | AI Assistant layout cramped | Stack vertically, rename title |
+| 2 | PipelineAnalyticsPanel.tsx | Gray cards, white text | Full champagne conversion |
+| 3 | LeadAssignmentRulesPanel.tsx | Gray cards, white title | Full champagne conversion |
+| 4 | RateLimitDashboard.tsx | Gray UI, black text, non-clickable | Full champagne conversion |
+| 5 | IPBlocklistDashboard.tsx | Black/gray color scheme | Full champagne conversion |
+| 6 | MarketingSettingsDashboard.tsx | Old gray boxes, white title | Full champagne conversion |
+| 7 | ITTasksList.tsx | Dark selects, gray cards | Champagne selects and cards |
+| 8 | ITTeamDirectory.tsx | White text on bright bg | Black text, champagne cards |
+| 9 | EmbeddedITDepartment.tsx | Old gold active tab color | Champagne gradient active state |
+| 10 | VoiceRecorder.tsx | Gray podcast studio UI | Full champagne conversion |
+| 11 | Admin.tsx (header) | Orange/yellow icon | Cleaner gold gradient |
+| 12 | Admin.tsx (properties) | Description shows "..." | Show truncated description |
+| 13 | EmbeddedHRDashboard.tsx | CVs card not clickable | Add onClick to switch tab |
 
 ## Execution Order
-1. IT Department champagne fix (NewJoinerApplicationsList)
-2. Admin Panel: Add Founder tab, rename AI Assistant
-3. AI Brokers Dashboard + Card champagne conversion
-4. Message Filters black text fix
-5. PWA clickable device/platform tabs
-6. Marketing Hub templates + tools upgrade
-7. Notification bell fix
+
+1. Admin.tsx: Layout fix (stacked columns), header icon, properties description
+2. PipelineAnalyticsPanel.tsx: Full champagne conversion
+3. LeadAssignmentRulesPanel.tsx: Full champagne conversion
+4. RateLimitDashboard.tsx: Full champagne conversion
+5. IPBlocklistDashboard.tsx: Full champagne conversion
+6. MarketingSettingsDashboard.tsx: Full champagne conversion
+7. ITTasksList.tsx + ITTeamDirectory.tsx + EmbeddedITDepartment.tsx: Champagne fixes
+8. VoiceRecorder.tsx: Podcast studio champagne conversion
+9. EmbeddedHRDashboard.tsx: CV card click handler
 
