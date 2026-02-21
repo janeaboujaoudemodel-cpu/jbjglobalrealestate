@@ -116,10 +116,10 @@ const getStatusConfig = (status: string | null) => {
 
 const getPriorityConfig = (level: string) => {
   switch (level) {
-    case 'critical': return { icon: AlertTriangle, color: 'text-red-600', bg: 'bg-red-50 border-red-200' };
-    case 'high': return { icon: AlertCircle, color: 'text-orange-600', bg: 'bg-orange-50 border-orange-200' };
-    case 'medium': return { icon: Bell, color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200' };
-    default: return { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-200' };
+    case 'critical': return { icon: AlertTriangle, color: 'text-red-600', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[#C9A84C]/40' };
+    case 'high': return { icon: AlertCircle, color: 'text-[#C9A84C]', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[#C9A84C]/30' };
+    case 'medium': return { icon: Bell, color: 'text-stone-600', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-stone-300' };
+    default: return { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-emerald-300' };
   }
 };
 

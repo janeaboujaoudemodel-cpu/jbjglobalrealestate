@@ -9,7 +9,7 @@ import { SEOHead } from '@/components/SEOHead';
 import {
   Search, MapPin, Bed, Bath, Maximize, ArrowRight, Plus,
   Sparkles, Building, Home, Hotel, FileText, Wand2,
-  ClipboardCheck, Upload, Eye, Star
+  ClipboardCheck, Upload, Eye, Star, DollarSign
 } from 'lucide-react';
 
 interface Listing {
@@ -42,6 +42,15 @@ const ListingPortal = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [selectedMethod, setSelectedMethod] = useState<'manual' | 'ai' | null>(null);
+
+  const handlePurposeSelect = (purpose: 'sale' | 'rent') => {
+    if (selectedMethod === 'manual') {
+      navigate(`/seller-listing?purpose=${purpose}`);
+    } else {
+      navigate(`/listing-portal/submit?purpose=${purpose}`);
+    }
+  };
 
   useEffect(() => {
     fetchListings();
@@ -116,94 +125,156 @@ const ListingPortal = () => {
             </motion.div>
 
             {/* Two Cards: Manual vs AI — with background layer */}
-            <div className="max-w-4xl mx-auto mb-16">
-              <div className="relative">
-                {/* Background layer behind cards */}
-                <div className="absolute inset-0 -m-4 rounded-3xl bg-white/50 border border-gold/20 shadow-[0_8px_40px_rgba(200,167,102,0.12)]" />
-                
-                <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
-                  {/* Manual Listing Card */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 }}
-                    onClick={() => navigate('/seller-listing')}
-                    className="group cursor-pointer bg-white border-2 border-gold/30 rounded-2xl p-8 hover:border-gold/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] relative overflow-hidden"
-                  >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gold/8 to-transparent rounded-bl-full" />
-                    <div className="relative z-10">
-                      <div className="w-14 h-14 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mb-5">
-                        <ClipboardCheck className="w-7 h-7 text-gold" />
+            {!selectedMethod ? (
+              <div className="max-w-4xl mx-auto mb-16">
+                <div className="relative">
+                  <div className="absolute inset-0 -m-4 rounded-3xl bg-white/50 border border-gold/20 shadow-[0_8px_40px_rgba(200,167,102,0.12)]" />
+                  <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
+                    {/* Manual Listing Card */}
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 }}
+                      onClick={() => setSelectedMethod('manual')}
+                      className="group cursor-pointer bg-white border-2 border-gold/30 rounded-2xl p-8 hover:border-gold/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] relative overflow-hidden"
+                    >
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gold/8 to-transparent rounded-bl-full" />
+                      <div className="relative z-10">
+                        <div className="w-14 h-14 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mb-5">
+                          <ClipboardCheck className="w-7 h-7 text-gold" />
+                        </div>
+                        <h2 className="text-xl font-bold text-black mb-2">Manual Listing</h2>
+                        <p className="text-zinc-600 text-sm mb-4 leading-relaxed">
+                          Fill in your property details step by step. Upload photos, documents, and set your price manually with full control.
+                        </p>
+                        <ul className="space-y-2 mb-6">
+                          <li className="flex items-center gap-2 text-zinc-700 text-sm">
+                            <FileText className="w-4 h-4 text-gold" />
+                            Step-by-step guided form
+                          </li>
+                          <li className="flex items-center gap-2 text-zinc-700 text-sm">
+                            <Upload className="w-4 h-4 text-gold" />
+                            Upload photos & documents
+                          </li>
+                          <li className="flex items-center gap-2 text-zinc-700 text-sm">
+                            <Star className="w-4 h-4 text-gold" />
+                            AI description generator included
+                          </li>
+                        </ul>
+                        <div className="flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
+                          <span>Start Manual Listing</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
                       </div>
-                      <h2 className="text-xl font-bold text-black mb-2">Manual Listing</h2>
-                      <p className="text-zinc-600 text-sm mb-4 leading-relaxed">
-                        Fill in your property details step by step. Upload photos, documents, and set your price manually with full control.
-                      </p>
-                      <ul className="space-y-2 mb-6">
-                        <li className="flex items-center gap-2 text-zinc-700 text-sm">
-                          <FileText className="w-4 h-4 text-gold" />
-                          Step-by-step guided form
-                        </li>
-                        <li className="flex items-center gap-2 text-zinc-700 text-sm">
-                          <Upload className="w-4 h-4 text-gold" />
-                          Upload photos & documents
-                        </li>
-                        <li className="flex items-center gap-2 text-zinc-700 text-sm">
-                          <Star className="w-4 h-4 text-gold" />
-                          AI description generator included
-                        </li>
-                      </ul>
-                      <div className="flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
-                        <span>Start Manual Listing</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </motion.div>
+                    </motion.div>
 
-                  {/* AI Listing Card — same gold theme, not purple */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 }}
-                    onClick={() => navigate('/listing-portal/submit')}
-                    className="group cursor-pointer bg-white border-2 border-gold/30 rounded-2xl p-8 hover:border-gold/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] relative overflow-hidden"
-                  >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gold/8 to-transparent rounded-bl-full" />
-                    <Badge className="absolute top-4 right-4 bg-gold/15 text-gold border-gold/40 text-xs">
-                      <Sparkles className="w-3 h-3 mr-1" />
-                      AI Powered
-                    </Badge>
-                    <div className="relative z-10">
-                      <div className="w-14 h-14 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mb-5">
-                        <Wand2 className="w-7 h-7 text-gold" />
+                    {/* AI Listing Card */}
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 }}
+                      onClick={() => setSelectedMethod('ai')}
+                      className="group cursor-pointer bg-white border-2 border-gold/30 rounded-2xl p-8 hover:border-gold/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] relative overflow-hidden"
+                    >
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gold/8 to-transparent rounded-bl-full" />
+                      <Badge className="absolute top-4 right-4 bg-gold/15 text-gold border-gold/40 text-xs">
+                        <Sparkles className="w-3 h-3 mr-1" />
+                        AI Powered
+                      </Badge>
+                      <div className="relative z-10">
+                        <div className="w-14 h-14 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mb-5">
+                          <Wand2 className="w-7 h-7 text-gold" />
+                        </div>
+                        <h2 className="text-xl font-bold text-black mb-2">List with AI</h2>
+                        <p className="text-zinc-600 text-sm mb-4 leading-relaxed">
+                          Upload brochures, photos, or documents and let AI extract all property details automatically.
+                        </p>
+                        <ul className="space-y-2 mb-6">
+                          <li className="flex items-center gap-2 text-zinc-700 text-sm">
+                            <Wand2 className="w-4 h-4 text-gold" />
+                            AI extracts all property data
+                          </li>
+                          <li className="flex items-center gap-2 text-zinc-700 text-sm">
+                            <Eye className="w-4 h-4 text-gold" />
+                            Review & edit before submitting
+                          </li>
+                          <li className="flex items-center gap-2 text-zinc-700 text-sm">
+                            <Sparkles className="w-4 h-4 text-gold" />
+                            Supports brochures, PDFs & images
+                          </li>
+                        </ul>
+                        <div className="flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
+                          <span>Start AI Listing</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
                       </div>
-                      <h2 className="text-xl font-bold text-black mb-2">List with AI</h2>
-                      <p className="text-zinc-600 text-sm mb-4 leading-relaxed">
-                        Upload brochures, photos, or documents and let AI extract all property details automatically. Review and submit in minutes.
-                      </p>
-                      <ul className="space-y-2 mb-6">
-                        <li className="flex items-center gap-2 text-zinc-700 text-sm">
-                          <Wand2 className="w-4 h-4 text-gold" />
-                          AI extracts all property data
-                        </li>
-                        <li className="flex items-center gap-2 text-zinc-700 text-sm">
-                          <Eye className="w-4 h-4 text-gold" />
-                          Review & edit before submitting
-                        </li>
-                        <li className="flex items-center gap-2 text-zinc-700 text-sm">
-                          <Sparkles className="w-4 h-4 text-gold" />
-                          Supports brochures, PDFs & images
-                        </li>
-                      </ul>
-                      <div className="flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
-                        <span>Start AI Listing</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </motion.div>
+                    </motion.div>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              /* Sale / Rent Selection Step */
+              <div className="max-w-4xl mx-auto mb-16">
+                <div className="relative">
+                  <div className="absolute inset-0 -m-4 rounded-3xl bg-white/50 border border-gold/20 shadow-[0_8px_40px_rgba(200,167,102,0.12)]" />
+                  <div className="relative p-4">
+                    <button
+                      onClick={() => setSelectedMethod(null)}
+                      className="flex items-center gap-2 text-zinc-500 hover:text-gold text-sm mb-6 transition-colors"
+                    >
+                      <ArrowRight className="w-4 h-4 rotate-180" />
+                      Back to listing method
+                    </button>
+                    <h2 className="text-xl font-bold text-black text-center mb-2">
+                      What would you like to list for?
+                    </h2>
+                    <p className="text-zinc-500 text-sm text-center mb-8">
+                      Choose whether you're listing your property for sale or for rent
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        onClick={() => handlePurposeSelect('sale')}
+                        className="group cursor-pointer bg-white border-2 border-gold/30 rounded-2xl p-8 hover:border-gold/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] text-center"
+                      >
+                        <div className="w-16 h-16 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-5">
+                          <DollarSign className="w-8 h-8 text-gold" />
+                        </div>
+                        <h3 className="text-xl font-bold text-black mb-2">List for Sale</h3>
+                        <p className="text-zinc-600 text-sm mb-4">
+                          Sell your property at the best market price with professional listing support.
+                        </p>
+                        <div className="flex items-center justify-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
+                          <span>Continue</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
+                      </motion.div>
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        onClick={() => handlePurposeSelect('rent')}
+                        className="group cursor-pointer bg-white border-2 border-gold/30 rounded-2xl p-8 hover:border-gold/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] text-center"
+                      >
+                        <div className="w-16 h-16 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-5">
+                          <Home className="w-8 h-8 text-gold" />
+                        </div>
+                        <h3 className="text-xl font-bold text-black mb-2">List for Rent</h3>
+                        <p className="text-zinc-600 text-sm mb-4">
+                          Find reliable tenants for your property with our rental listing service.
+                        </p>
+                        <div className="flex items-center justify-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
+                          <span>Continue</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
+                      </motion.div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* My Listings Button — solid, not faded */}
             <div className="text-center mb-8">
